@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · 91 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · 89 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 15
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 5
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 8
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -184,7 +184,7 @@ Voici pourquoi le v33 ne pouvait plus servir. Ces écarts ne sont pas des négli
 **Aucune suite de tests ne savait simuler un appel anonyme**
 
 - *Ce que dit la documentation* — des dizaines de tests annoncent « rejet `auth` (28000) : appel anonyme » et passaient au vert
-- *Ce que dit la base ou le dépôt* — `set_config('request.jwt.claims', NULL)` ne met pas NULL mais la chaîne vide, et les helpers `auth.uid()`, `auth.role()`, `auth.email()` du stub de CI castaient en `jsonb` **avant** de la neutraliser : `''::jsonb` levait une erreur de syntaxe là où la vraie fonction Supabase renvoie NULL. Les tests éprouvaient donc un plantage du banc d'essai, et leur garde-fou (`SQLERRM LIKE '%uthenticat%'`) ne pouvait pas correspondre. `auth.jwt()`, quatre lignes plus bas, avait la forme correcte depuis toujours. **Corrigé le 29/08.**
+- *Ce que dit la base ou le dépôt* — `set_config('request.jwt.claims', NULL)` ne met pas NULL mais la chaîne vide, et les helpers `auth.uid()`, `auth.role()`, `auth.email()` du stub de CI castaient en `jsonb` **avant** de la neutraliser : `''::jsonb` levait une erreur de syntaxe là où la vraie fonction Supabase renvoie NULL. Les tests éprouvaient donc un plantage du banc d'essai, et leur garde-fou (`SQLERRM LIKE '%uthenticat%'`) ne pouvait pas correspondre. `auth.jwt()`, quatre lignes plus bas, avait la forme correcte depuis toujours. **Corrigé le 29/08.** Le harnais passe au vert de bout en bout depuis le 29/08 au soir, sur 45 suites.
 
 ### Chiffre ou affirmation faux
 
@@ -211,7 +211,7 @@ Voici pourquoi le v33 ne pouvait plus servir. Ces écarts ne sont pas des négli
 **Des identifiants de comptes réels servaient de fixtures de test**
 
 - *Ce que dit la documentation* — `tests/sql/README.md` les présentait comme des personas — « Xavier », « Lívia », « Arthur », « Patricia »
-- *Ce que dit la base ou le dépôt* — Le même README les datait : « UUIDs BLMF, **vérifiés le 11/05/2026** ». Ils avaient été relevés en base réelle, et **trois des quatre correspondaient à des lignes existantes en production**. Les prénoms, eux, étaient fictifs — ce qui est le vrai piège : une étiquette inventée sur une ligne réelle éteint la vigilance au lieu de l'appeler. Les suites tournent en `BEGIN/ROLLBACK` sur une base jetable, donc rien n'est arrivé, mais la convention qui rendait cela sûr n'était écrite nulle part. **Corrigé le 29/08** — 89 remplacements sur 12 fichiers, personas synthétiques fournies par le seed. Reste à rendre la règle mécanique : item **I14**.
+- *Ce que dit la base ou le dépôt* — Le même README les datait : « UUIDs BLMF, **vérifiés le 11/05/2026** ». Ils avaient été relevés en base réelle, et **trois des quatre correspondaient à des lignes existantes en production**. Les prénoms, eux, étaient fictifs — ce qui est le vrai piège : une étiquette inventée sur une ligne réelle éteint la vigilance au lieu de l'appeler. Les suites tournent en `BEGIN/ROLLBACK` sur une base jetable, donc rien n'est arrivé, mais la convention qui rendait cela sûr n'était écrite nulle part. **Corrigé le 29/08** — 89 remplacements sur 12 fichiers, personas synthétiques fournies par le seed. La règle est mécanique depuis la nuit du 29/08 : sixième règle bloquante du hook, liste blanche lue dans le seed, doctrine `DOC-FIXT-1` (item **I14**, soldé).
 
 ### Jamais écrit nulle part
 
@@ -1660,15 +1660,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **I4** | Finir le témoin de provenance des sauvegardes | `P1` | Ouvert |
 | **I5** | Faire savoir qu'un workflow a échoué | `P1` | Ouvert |
 | **I6** | Purger les relevés de la sonde de santé | `P2` | Ouvert |
-| **I7** | Solder ce que la réactivation des six suites SQL a mis au jour | `P1` | En cours |
 | **I8** | Mettre `deploy/README.md` en accord avec ce qui a été exécuté | `P2` | Ouvert |
 | **I9** | Corriger les trois migrations horodatées dans le futur | `P2` | Ouvert |
 | **I10** | Nettoyer les traces de Turnstile et les fichiers de rebut | `P2` | Ouvert |
 | **I11** | Sortir de `node:20`, en fin de maintenance | `P2` | Ouvert |
 | **I12** | Automatiser le rafraîchissement du miroir froid | `P2` | Ouvert |
 | **I13** | Finir la bascule vers le nouveau moteur de pages | `P3` | Ouvert |
-| **I14** | Interdire mécaniquement les identifiants de production dans les tests | `P1` | Ouvert |
-| **I15** | Réécrire les trois suites de circulation d'avant la CI | `P2` | Ouvert |
+| **I15** | Réécrire les trois suites de circulation d'avant la CI | `P2` | En cours |
 
 #### I1 — Aligner l'image GoTrue sur l'état réel des migrations d'authentification
 
@@ -1789,26 +1787,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `Relevé du 29/08/2026` · `REGISTRE §38 OPS`*
 
-#### I7 — Solder ce que la réactivation des six suites SQL a mis au jour
-
-`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
-
-**État vérifié au 29/08.** Les six suites absentes de `ci-suites.txt` ont été remises au manifeste le 29/08. Elles ont rougi, et c'était l'information cherchée : **35 échecs, quatre causes, dont une seule tenait au produit**. (1) Le stub d'authentification ne savait pas simuler l'anonyme — `set_config('request.jwt.claims', NULL)` met la chaîne vide, et `auth.uid()/role()/email()` castaient en `jsonb` avant de la neutraliser, si bien qu'`''::jsonb` levait une erreur de syntaxe là où la vraie fonction Supabase renvoie NULL : **aucune suite du corpus ne testait le rejet d'un appel anonyme**. (2) Le seed ne contenait ni lecteur ni exemplaire : une douzaine de SKIP laissaient tous les chemins nominaux de la circulation non éprouvés, et `paquetA1` échouait dès son setup. (3) Quatre tests avaient tort contre un produit qui avait raison — `NULL` attendu d'un prédicat qui refuse en `false`, dix helpers réclamés ouverts à `anon` alors que le durcissement de juillet en a fermé six, `administrador` exigé comme rôle de bibliothèque alors qu'il n'en est pas un, un helper canonique cherché sous un nom qui n'existe pas. (4) `paquetA` et `paquetA1` se terminaient par un `SELECT` d'une chaîne **constante** annonçant « 15/15 tests passent », imprimée même après un échec ; `paquet25` réussissait 28/28 et était comptée rouge faute de bilan à la convention.
-
-**Ce que c'est.** Le stub, le seed, les quatre tests et les trois bilans sont corrigés et poussés. Reste à confirmer un run vert de bout en bout, puis à décider du sort des onze SKIP restants de `paquet19` — écrire les chemins nominaux qu'ils décrivent, ou dire pourquoi ils resteront hors CI.
-
-**Pourquoi ça compte.** Une suite présente mais non exécutée est pire qu'une suite absente : elle donne l'impression que le domaine est couvert. Et ce que la réactivation a montré vaut au-delà de ces six suites — c'est le **banc d'essai** qui ne savait pas produire un appel anonyme ni un emprunt, pas le produit qui était cassé.
-
-**Ce qui compte comme fini.**
-
-- `ci-suites.txt` liste les 45 suites et le harnais passe au vert de bout en bout.
-- Les onze SKIP de `paquet19` ont un verdict écrit : écrits, ou justifiés.
-- Le stub `storage` est posé à côté des stubs `auth` et `vault`. **Fait** — visible au journal de CI.
-
-**Dépendances.** Aucune.
-
-*Renvois : `Relevé du 29/08/2026` · `Journaux de CI sql-tests du 29/08/2026` · `PLAN_DE_MARCHE §8 §9`*
-
 #### I8 — Mettre `deploy/README.md` en accord avec ce qui a été exécuté
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
@@ -1927,45 +1905,26 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `PLAN_migration_git_pages_2026-08-19` · `RUNBOOK_exploitation_v0.3`*
 
-#### I14 — Interdire mécaniquement les identifiants de production dans les tests
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, PowerShell (hooks Windows)
-
-**État vérifié au 29/08.** Trois suites désignaient leurs acteurs par des UUID **relevés en base réelle** le 11/05/2026, et `tests/sql/README.md` en donnait la table de correspondance. Trois des quatre correspondaient à des lignes existantes en production. Corrigé le 29/08 — 89 remplacements sur 12 fichiers, personas synthétiques fournies par le seed — mais **rien n'empêche que cela recommence** : la règle ne vit aujourd'hui que dans un encadré du README.
-
-**Ce que c'est.** Ajouter une sixième règle bloquante au hook `pre-commit` : dans `tests/sql/`, tout UUID hors d'une liste blanche synthétique est refusé. Une dizaine de lignes de PowerShell.
-
-**Pourquoi ça compte.** Le vrai piège n'était pas l'exposition, c'était l'**étiquette**. Le README nommait « Patricia » une ligne bien réelle : qui lit croit manipuler une fixture. Les suites tournent en `BEGIN/ROLLBACK` sur une base jetable, donc rien n'est arrivé — mais la convention qui rendait cela sûr n'était écrite nulle part. Une étiquette fictive sur une ligne réelle éteint la vigilance au lieu de l'appeler.
-
-**Ce qui compte comme fini.**
-
-- Le hook refuse un UUID non synthétique ajouté à `tests/sql/`.
-- La liste blanche est celle du seed, et elle est citée depuis le seed plutôt que recopiée.
-- La règle est portée au REGISTRE : une fixture relevée en production est une donnée de production.
-
-**Dépendances.** Aucune. Se pose sur le hook existant, qui porte déjà cinq règles bloquantes.
-
-*Renvois : `Constat du 29/08/2026` · `tests/sql/README.md` · `.githooks/pre-commit.ps1`*
-
 #### I15 — Réécrire les trois suites de circulation d'avant la CI
 
-`P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **En cours** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL
 
-**État vérifié au 29/08.** `paquet19`, `paquet24` et `paquet25` sont des artefacts écrits pour le SQL Editor, avant que la CI existe. Elles en portent toutes les marques : onze SKIP dans la seule `paquet19`, fixtures autrefois prélevées en production, bilans hétérogènes — l'une ne disait son succès qu'en `NOTICE` —, et des gardes qui reconnaissent une erreur en cherchant une sous-chaîne dans son message plutôt que son code.
+**État vérifié au 29/08.** `paquet19`, `paquet24` et `paquet25` sont des artefacts écrits pour le SQL Editor, avant que la CI existe. **Première passe faite le 30/08** : le seed fournit désormais un monde de circulation complet — deux emprunts (un ouvert, un clos), un emprunt de la coordination, une consulta en `em_preparacao` et une réservation active, sur **trois holdings distincts** parce que le modèle porte deux invariants croisés (on ne réserve pas ce qui est en consulta, on ne consulte pas ce qui est réservé) et que les entasser fabriquerait un état que le produit refuse. Les SKIP sont passés de vingt et un à quelques-uns. Restent les défauts de **conception** : des gardes qui reconnaissent une erreur par une sous-chaîne de son message plutôt que par son code, et onze branches de `paquet25` qui se désactivent au motif que « la simulation de JWT ne marche pas dans le SQL Editor » — vestige d'un temps où il n'y avait pas de CI, et faux depuis que le stub d'authentification est réparé.
 
-**Ce que c'est.** Les reprendre sur le modèle des suites récentes : acteurs demandés au seed, bilan à la convention, une erreur reconnue par son code. Écrire les chemins nominaux que les SKIP décrivent, maintenant que le seed fournit un exemplaire.
+**Ce que c'est.** Reprendre chaque garde d'erreur pour qu'elle teste un code, pas une phrase — et supprimer les onze branches `jwt sim`, qui mentent sur ce que la CI sait faire. Écrire les deux chemins nominaux encore annoncés « E2E non écrit » dans `emprestimos` et `reservas`.
 
 **Pourquoi ça compte.** Elles couvrent le cœur de la circulation — emprunts et consultations. Les rafistoler a permis de savoir ce qu'elles cachaient ; les rafistoler encore reviendrait à entretenir un filet dont on connaît les trous. Une garde qui reconnaît une erreur à une sous-chaîne se tait le jour où le message change de langue.
 
 **Ce qui compte comme fini.**
 
-- Les trois suites ne portent plus de SKIP non justifié.
-- Chaque garde d'erreur teste un code, pas une phrase.
+- Aucune branche `jwt sim` ne subsiste : la simulation de JWT fonctionne, et une suite ne se désactive pas sur une croyance périmée.
+- Chaque garde d'erreur teste un code (`loan_not_found`, `loan_action_not_allowed`…), pas une sous-chaîne de message — un message change de langue, un code non.
+- Les deux chemins nominaux `emprestimos` et `reservas` sont écrits, ou l'on dit pourquoi ils ne le seront pas.
 - Les trois bilans suivent la convention `NOM OK : N/N`.
 
-**Dépendances.** Dépend de **I7** (le run vert de référence) et du seed étoffé, déjà en place.
+**Dépendances.** Aucune. **I7** a livré le run vert de référence et le seed étoffé ; les onze SKIP de `paquet19` relèvent désormais de cet item.
 
-*Renvois : `Journaux de CI sql-tests du 29/08/2026` · `tests/sql/paquet19_loan_wrappers_tests.sql`*
+*Renvois : `Journaux de CI sql-tests des 29 et 30/08/2026` · `supabase/seed.sql` · `tests/sql/paquet19_loan_wrappers_tests.sql`*
 
 ---
 
@@ -2285,8 +2244,10 @@ Ces entrées figuraient dans le v33, dans `ETAT-AVANCEMENT-multisessions`, dans 
 | A5 | Configuration git à deux URL de poussée | **Déjà corrigé.** Constaté le 29/08 dans `.git/config` : `origin` ne porte qu'une seule URL de poussée (Codeberg) et GitHub est un remote nommé à part. Le correctif prévu après les quatre incidents du 19/08 a été appliqué. Il n'y a plus d'alias `git publish-app` : on pousse sur les deux remotes explicitement. |
 | B1 | Huit tables du schéma `ingest` sans RLS | **Livré le 29/08** — migration `20260830140000_ingest_ne_depend_plus_d_un_grant`, suite `ingest_ferme_tests.sql` (7 tests) au manifeste, hook `pre-commit` étendu à `ingest`. Vérifié en base après déploiement : 10 tables sous RLS, aucune en FORCE, les 2 172 lignes de staging et les 2 084 liens intacts. **Mais la fiche avait tort sur l'essentiel** : `anon` et `authenticated` n'ont jamais eu `USAGE` sur ce schéma, donc aucune faille n'était ouverte. Le paquet est un second verrou, pas une correction — et la « priorité haute » annoncée reposait sur l'absence de RLS sans avoir regardé les droits. |
 | A4 | Une porte d'entrée pour qui veut aider sans coder | **Livré le 29/08** — `AIDER.md` à la racine, en français, portugais et anglais : sept entrées, chacune avec son identifiant de backlog, ce qu'elle demande, ce qu'elle apporte et **le chiffre du jour**. C'est ce que la page `/contribuer` du site ne fait pas, à raison : elle est générique et intemporelle. Deux erreurs de `CONTRIBUTING.md` corrigées au passage — il renvoyait vers `specs/REGISTRE_decisions.md`, chemin inexistant (le fichier est dans `docs/specs/`), deux fois, en français et en anglais ; et il annonçait encore Woodpecker. |
-| B3 | Les sept vues `api` restées hors des policies | Soldé le 29/08 (migration `20260830160000`, en base). Les quatre vues gazette/lettre passent en `security_invoker`. Les deux vues de gouvernance restent volontairement hors policies — en invoker, la jointure sur `profiles` renverrait NULL à l'administrateur·rice qui doit décider — et portent désormais dans la vue la clause de visibilité reprise de la policy des tables de base. `library_email_identity` n'est accordée à aucun rôle applicatif. Suite `vues_api_definer_tests.sql`, 5 tests, dont un garde-fou qui refuse toute vue NOUVELLE hors des deux dérogations nommées. État vérifié : 65 vues en invoker, 3 restantes toutes commentées `API-VUES-DEFINER`. |
+| B3 | Les sept vues `api` restées hors des policies | Soldé le 29/08 (migration `20260830160000`), **puis corrigé le 30/08** (`20260830180000`). Les quatre vues gazette/lettre sont passées en `security_invoker` dès le premier jour. Les deux vues de gouvernance avaient été gardées hors des policies avec la clause de visibilité recopiée dans la vue : motif exact — en invoker, la jointure sur `profiles` renvoie NULL à l'administratrice qui doit décider — mais c'était le **symptôme d'une policy manquante**, pas une raison de contourner. L'advisor Supabase le signalait en `ERROR`, à raison. Le lendemain, deux policies étroites ont remplacé la dérogation : `profiles_select_gouvernance_en_cours` (les personnes concernées par une délibération **en cours**, admins réseau et personne visée) et `rls_crv_select` élargie à la personne visée — qui, sans elle, aurait lu **« 0 vote » au lieu du décompte réel**, un chiffre faux et silencieux. État vérifié en base : **une seule** vue hors des policies (`library_email_identity`, accordée à aucun rôle applicatif). Suite `vues_api_definer_tests.sql`, 7 tests. |
 | J5 | Les incohérences du corpus documentaire | Soldé le 29/08. `PRIV` quitte le §17 qu'il partageait avec `IMP` et devient §42 sans renuméroter le normatif déjà inscrit (`#HYG-REG-1`) ; le §2 `MAP` porte son renvoi vers le §34 ; les sept specs orphelines sont référencées dans `docs/specs/INDEX.md` ; Woodpecker corrigé en Forgejo Actions ; les chiffres de `docs/INDEX.md` remis au réel (970 lignes, 44 sections, 42 specs, 10 locales). Et les deux identifiants cités depuis juin sans jamais figurer à la table des doctrines — `DOC-COLLECTIVE-1`, `USER-EMAIL-1` — y sont inscrits, le second après vérification du trigger en base. REGISTRE en v0.5. |
+| I7 | Les six suites SQL oubliées de l'intégration continue | Soldé le 29/08 au soir. Les six suites sont au manifeste — 45 en tout — et **le harnais passe au vert de bout en bout**. Elles ont d'abord produit 35 échecs pour **quatre causes, dont une seule tenait au produit**. (1) Le stub d'authentification castait `current_setting('request.jwt.claims')` en `jsonb` avant de neutraliser la chaîne vide, si bien qu'`''::jsonb` levait une erreur là où la vraie fonction Supabase renvoie NULL : **aucune suite du corpus ne testait le rejet d'un appel anonyme**, elles éprouvaient un plantage du banc d'essai. (2) Le seed n'avait ni lecteur ni exemplaire. (3) Quatre tests avaient tort contre un produit qui avait raison, et leur correction les a rendus **plus** exigeants — le partage `anon`/`authenticated` est désormais gardé dans les deux sens, et le refus d'`administrador` est testé pour lui-même. (4) `paquetA` et `paquetA1` se terminaient par un `SELECT` d'une chaîne **constante** annonçant « 15/15 tests passent », imprimée même après un échec ; `paquet19`, `paquet25` et `paquet26` réussissaient et étaient comptées rouges faute d'un bilan à la forme que lit la CI — l'une d'elles sur deux espaces autour d'une barre oblique. Le sort des onze SKIP restants passe à **I15**, où il relève de la réécriture. |
+| I14 | Les identifiants de production dans les fixtures de test | Soldé le 29/08 dans la nuit, le jour même du constat. Sixième règle bloquante du hook `pre-commit` : dans `tests/sql/`, tout UUID d'apparence réelle absent du seed est refusé. La liste blanche est **lue** dans `supabase/seed.sql` plutôt que recopiée — ajouter un acteur, c'est l'ajouter au seed ; les valeurs visiblement synthétiques restent tolérées pour que chaque suite forge ses fixtures dans sa transaction. Doctrine `DOC-FIXT-1` au REGISTRE (v0.6). En s'installant, la règle a fait sortir `cleanup-frt-2026-05-15.sql` de `tests/sql/` : script de ménage ponctuel qui nommait légitimement une bibliothèque réelle — un script de maintenance doit nommer du réel, c'est sa place parmi des fixtures qui était fausse. Il part en archive, vérification faite que la bibliothèque n'existe plus. **Limite assumée** : le seed contient l'identifiant réel de BLMF, dont dépend la suite cotisation ; la règle le tolère parce qu'il est au seed, pas parce qu'il serait synthétique. |
 
 ---
 
@@ -2318,4 +2279,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, 2026-08-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 91 items sur 11 domaines. Chaque état a été vérifié le 29/08/2026 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c`. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, 2026-08-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 89 items sur 11 domaines. Chaque état a été vérifié le 29/08/2026 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c`. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

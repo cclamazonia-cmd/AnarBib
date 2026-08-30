@@ -204,3 +204,96 @@ BEGIN
 
   RAISE NOTICE 'seed circulation : 1 emprunt ouvert (lectrice A), 1 emprunt clos (lecteur B)';
 END $$;
+
+-- ===========================================================================
+-- Une consulta et une réservation — les deux derniers manques
+-- Ajoutés le 30/08/2026 (backlog v34, item I15, seconde passe).
+--
+-- Après les deux emprunts, il restait sept SKIP, tous de la même famille :
+-- « pas de consulta active BLMF », « pas de consulta non-terminale », « pas de
+-- consulta solicitada/em_preparacao », « pas de consulta de la lectrice A »,
+-- « pas de réservation active BLMF », « Xavier n'a aucun emprunt ouvert ».
+--
+-- UN HOLDING PAR SITUATION, et c'est délibéré. Le modèle porte deux invariants
+-- croisés — on ne réserve pas ce qui est en consulta, on ne consulte pas ce qui
+-- est réservé — et ce sont précisément eux que `paquet24` C.2 et C.3 éprouvent.
+-- Les entasser sur un même holding, c'est fabriquer un état que le produit
+-- refuse et rendre les tests illisibles. Trois holdings :
+--   holding 1 → les emprunts (lectrice A ouvert, lecteur B clos, coordination)
+--   holding 2 → la consulta de la lectrice A, en `em_preparacao`
+--   holding 3 → la réservation active du lecteur B
+-- ===========================================================================
+
+DO $$
+DECLARE
+  c_blmf      constant uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';
+  c_coord     constant uuid := '11111111-1111-1111-1111-111111111111';
+  c_leitora_a constant uuid := '33333333-3333-3333-3333-333333333333';
+  c_leitor_b  constant uuid := '44444444-4444-4444-4444-444444444444';
+  v_h1 bigint; v_b1 bigint;
+  v_h2 bigint; v_b2 bigint; v_i2 bigint;
+  v_h3 bigint; v_b3 bigint; v_i3 bigint;
+  v_i_coord bigint;
+  v_emp bigint; v_cons bigint; v_res bigint;
+BEGIN
+  SELECT h.id, h.book_id INTO v_h1, v_b1
+    FROM public.book_holdings h WHERE h.library_id = c_blmf ORDER BY h.id LIMIT 1;
+
+  -- --- Emprunt de la coordination, sur un exemplaire du holding 1 ---------
+  INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, circulation_policy, visibility)
+  VALUES ('TEST-CIRC-1', 'TESTE-000003', c_blmf, v_h1, 'ambos', 'public')
+  RETURNING id INTO v_i_coord;
+
+  INSERT INTO public.emprestimos_v2 (user_id, library_id, status_global, due_at)
+  VALUES (c_coord, c_blmf, 'aberto', (current_date + 21))
+  RETURNING id INTO v_emp;
+
+  INSERT INTO public.emprestimo_itens_v2
+    (emprestimo_id, line_no, sub_id, book_id, item_id, holding_id, bib_ref, titulo_cache, item_status, due_at)
+  VALUES (v_emp, 1, 'TESTE-EMP-3.1', v_b1, v_i_coord, v_h1,
+          'TEST-CIRC-1', 'Obra de teste — circulação', 'aberto', (current_date + 21));
+
+  -- --- Holding 2 : la consulta de la lectrice A --------------------------
+  INSERT INTO public.books (titulo, bib_ref, tipo_material, circulation_default, loanable)
+  VALUES ('Obra de teste — consulta local', 'TEST-CONS-1', 'livro', 'consulta', false)
+  RETURNING id INTO v_b2;
+  INSERT INTO public.book_holdings (book_id, library_id, exemplares_total, available_count)
+  VALUES (v_b2, c_blmf, 1, 1) RETURNING id INTO v_h2;
+  INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, circulation_policy, visibility)
+  VALUES ('TEST-CONS-1', 'TESTE-000004', c_blmf, v_h2, 'consulta', 'public')
+  RETURNING id INTO v_i2;
+
+  INSERT INTO public.consultas_locais_v2 (user_id, library_id, status_global, notes)
+  VALUES (c_leitora_a, c_blmf, 'ativa', 'Fixture de seed — consulta en preparation')
+  RETURNING id INTO v_cons;
+
+  INSERT INTO public.consulta_linhas_v2
+    (consulta_id, line_no, book_id, holding_id, item_id, bib_ref, titulo_cache, item_status, expires_at)
+  VALUES (v_cons, 1, v_b2, v_h2, v_i2, 'TEST-CONS-1',
+          'Obra de teste — consulta local', 'ativa', (now() + interval '30 days'));
+
+  -- `em_preparacao` : etape non terminale, celle que cherchent C.5/C.6 et D.4.
+  INSERT INTO public.consulta_item_workflow_v2 (consulta_id, line_no, workflow_stage, workflow_note)
+  VALUES (v_cons, 1, 'em_preparacao', 'Fixture de seed');
+
+  -- --- Holding 3 : la réservation du lecteur B ---------------------------
+  INSERT INTO public.books (titulo, bib_ref, tipo_material, circulation_default, loanable)
+  VALUES ('Obra de teste — reserva', 'TEST-RES-1', 'livro', 'emprestavel', true)
+  RETURNING id INTO v_b3;
+  INSERT INTO public.book_holdings (book_id, library_id, exemplares_total, available_count)
+  VALUES (v_b3, c_blmf, 1, 1) RETURNING id INTO v_h3;
+  INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, circulation_policy, visibility)
+  VALUES ('TEST-RES-1', 'TESTE-000005', c_blmf, v_h3, 'emprestavel', 'public')
+  RETURNING id INTO v_i3;
+
+  INSERT INTO public.reservas_v2 (user_id, library_id, status_global, notes)
+  VALUES (c_leitor_b, c_blmf, 'ativa', 'Fixture de seed — reserve active')
+  RETURNING id INTO v_res;
+
+  INSERT INTO public.reserva_linhas_v2
+    (reserva_id, line_no, sub_id, book_id, holding_id, item_id, bib_ref, titulo_cache, item_status, expires_at)
+  VALUES (v_res, 1, 'TESTE-RES-1.1', v_b3, v_h3, v_i3, 'TEST-RES-1',
+          'Obra de teste — reserva', 'ativa', (now() + interval '7 days'));
+
+  RAISE NOTICE 'seed circulation : + 1 emprunt coordination, 1 consulta (em_preparacao), 1 reservation active';
+END $$;

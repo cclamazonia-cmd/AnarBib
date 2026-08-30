@@ -1002,8 +1002,8 @@
           "pt": "dezenas de testes anunciam «recusa `auth` (28000): chamada anônima» e passavam em verde"
         },
         "reel": {
-          "fr": "`set_config('request.jwt.claims', NULL)` ne met pas NULL mais la chaîne vide, et les helpers `auth.uid()`, `auth.role()`, `auth.email()` du stub de CI castaient en `jsonb` **avant** de la neutraliser : `''::jsonb` levait une erreur de syntaxe là où la vraie fonction Supabase renvoie NULL. Les tests éprouvaient donc un plantage du banc d'essai, et leur garde-fou (`SQLERRM LIKE '%uthenticat%'`) ne pouvait pas correspondre. `auth.jwt()`, quatre lignes plus bas, avait la forme correcte depuis toujours. **Corrigé le 29/08.**",
-          "pt": "`set_config('request.jwt.claims', NULL)` não põe NULL mas a cadeia vazia, e os helpers `auth.uid()`, `auth.role()`, `auth.email()` do stub de CI convertiam em `jsonb` **antes** de neutralizá-la: `''::jsonb` levantava erro de sintaxe onde a função real do Supabase devolve NULL. Os testes provavam portanto uma pane do banco de ensaio, e sua salvaguarda (`SQLERRM LIKE '%uthenticat%'`) não podia corresponder. `auth.jwt()`, quatro linhas abaixo, tinha a forma correta desde sempre. **Corrigido em 29/08.**"
+          "fr": "`set_config('request.jwt.claims', NULL)` ne met pas NULL mais la chaîne vide, et les helpers `auth.uid()`, `auth.role()`, `auth.email()` du stub de CI castaient en `jsonb` **avant** de la neutraliser : `''::jsonb` levait une erreur de syntaxe là où la vraie fonction Supabase renvoie NULL. Les tests éprouvaient donc un plantage du banc d'essai, et leur garde-fou (`SQLERRM LIKE '%uthenticat%'`) ne pouvait pas correspondre. `auth.jwt()`, quatre lignes plus bas, avait la forme correcte depuis toujours. **Corrigé le 29/08.** Le harnais passe au vert de bout en bout depuis le 29/08 au soir, sur 45 suites.",
+          "pt": "`set_config('request.jwt.claims', NULL)` não põe NULL mas a cadeia vazia, e os helpers `auth.uid()`, `auth.role()`, `auth.email()` do stub de CI convertiam em `jsonb` **antes** de neutralizá-la: `''::jsonb` levantava erro de sintaxe onde a função real do Supabase devolve NULL. Os testes provavam portanto uma pane do banco de ensaio, e sua salvaguarda (`SQLERRM LIKE '%uthenticat%'`) não podia corresponder. `auth.jwt()`, quatro linhas abaixo, tinha a forma correta desde sempre. **Corrigido em 29/08.** O arnês passa em verde de ponta a ponta desde 29/08 à noite, sobre 45 suítes."
         }
       },
       {
@@ -1017,8 +1017,8 @@
           "pt": "`tests/sql/README.md` apresentava-os como personas — «Xavier», «Lívia», «Arthur», «Patricia»"
         },
         "reel": {
-          "fr": "Le même README les datait : « UUIDs BLMF, **vérifiés le 11/05/2026** ». Ils avaient été relevés en base réelle, et **trois des quatre correspondaient à des lignes existantes en production**. Les prénoms, eux, étaient fictifs — ce qui est le vrai piège : une étiquette inventée sur une ligne réelle éteint la vigilance au lieu de l'appeler. Les suites tournent en `BEGIN/ROLLBACK` sur une base jetable, donc rien n'est arrivé, mais la convention qui rendait cela sûr n'était écrite nulle part. **Corrigé le 29/08** — 89 remplacements sur 12 fichiers, personas synthétiques fournies par le seed. Reste à rendre la règle mécanique : item **I14**.",
-          "pt": "O mesmo README os datava: «UUIDs BLMF, **verificados em 11/05/2026**». Tinham sido colhidos na base real, e **três dos quatro correspondiam a linhas existentes em produção**. Os nomes, esses, eram fictícios — o que é a verdadeira armadilha: um rótulo inventado sobre uma linha real apaga a vigilância em vez de convocá-la. As suítes rodam em `BEGIN/ROLLBACK` sobre uma base descartável, então nada aconteceu, mas a convenção que tornava isso seguro não estava escrita em lugar nenhum. **Corrigido em 29/08** — 89 substituições em 12 arquivos, personas sintéticas fornecidas pelo seed. Falta tornar a regra mecânica: item **I14**."
+          "fr": "Le même README les datait : « UUIDs BLMF, **vérifiés le 11/05/2026** ». Ils avaient été relevés en base réelle, et **trois des quatre correspondaient à des lignes existantes en production**. Les prénoms, eux, étaient fictifs — ce qui est le vrai piège : une étiquette inventée sur une ligne réelle éteint la vigilance au lieu de l'appeler. Les suites tournent en `BEGIN/ROLLBACK` sur une base jetable, donc rien n'est arrivé, mais la convention qui rendait cela sûr n'était écrite nulle part. **Corrigé le 29/08** — 89 remplacements sur 12 fichiers, personas synthétiques fournies par le seed. La règle est mécanique depuis la nuit du 29/08 : sixième règle bloquante du hook, liste blanche lue dans le seed, doctrine `DOC-FIXT-1` (item **I14**, soldé).",
+          "pt": "O mesmo README os datava: «UUIDs BLMF, **verificados em 11/05/2026**». Tinham sido colhidos na base real, e **três dos quatro correspondiam a linhas existentes em produção**. Os nomes, esses, eram fictícios — o que é a verdadeira armadilha: um rótulo inventado sobre uma linha real apaga a vigilância em vez de convocá-la. As suítes rodam em `BEGIN/ROLLBACK` sobre uma base descartável, então nada aconteceu, mas a convenção que tornava isso seguro não estava escrita em lugar nenhum. **Corrigido em 29/08** — 89 substituições em 12 arquivos, personas sintéticas fornecidas pelo seed. A regra é mecânica desde a noite de 29/08: sexta regra bloqueante do hook, lista branca lida no seed, doutrina `DOC-FIXT-1` (item **I14**, encerrado)."
         }
       }
     ],
@@ -1331,8 +1331,8 @@
           "pt": "As sete views `api` que continuavam fora das policies"
         },
         {
-          "fr": "Soldé le 29/08 (migration `20260830160000`, en base). Les quatre vues gazette/lettre passent en `security_invoker`. Les deux vues de gouvernance restent volontairement hors policies — en invoker, la jointure sur `profiles` renverrait NULL à l'administrateur·rice qui doit décider — et portent désormais dans la vue la clause de visibilité reprise de la policy des tables de base. `library_email_identity` n'est accordée à aucun rôle applicatif. Suite `vues_api_definer_tests.sql`, 5 tests, dont un garde-fou qui refuse toute vue NOUVELLE hors des deux dérogations nommées. État vérifié : 65 vues en invoker, 3 restantes toutes commentées `API-VUES-DEFINER`.",
-          "pt": "Encerrado em 29/08 (migração `20260830160000`, em base). As quatro views gazeta/carta passam a `security_invoker`. As duas views de governança permanecem voluntariamente fora das policies — em invoker, o join em `profiles` devolveria NULL a quem administra e precisa decidir — e trazem agora na própria view a cláusula de visibilidade retomada da policy das tabelas de base. `library_email_identity` não é concedida a nenhum papel aplicativo. Suíte `vues_api_definer_tests.sql`, 5 testes, entre eles uma salvaguarda que recusa qualquer view NOVA fora das duas derrogações nomeadas. Estado verificado: 65 views em invoker, 3 restantes todas comentadas `API-VUES-DEFINER`."
+          "fr": "Soldé le 29/08 (migration `20260830160000`), **puis corrigé le 30/08** (`20260830180000`). Les quatre vues gazette/lettre sont passées en `security_invoker` dès le premier jour. Les deux vues de gouvernance avaient été gardées hors des policies avec la clause de visibilité recopiée dans la vue : motif exact — en invoker, la jointure sur `profiles` renvoie NULL à l'administratrice qui doit décider — mais c'était le **symptôme d'une policy manquante**, pas une raison de contourner. L'advisor Supabase le signalait en `ERROR`, à raison. Le lendemain, deux policies étroites ont remplacé la dérogation : `profiles_select_gouvernance_en_cours` (les personnes concernées par une délibération **en cours**, admins réseau et personne visée) et `rls_crv_select` élargie à la personne visée — qui, sans elle, aurait lu **« 0 vote » au lieu du décompte réel**, un chiffre faux et silencieux. État vérifié en base : **une seule** vue hors des policies (`library_email_identity`, accordée à aucun rôle applicatif). Suite `vues_api_definer_tests.sql`, 7 tests.",
+          "pt": "Encerrado em 29/08 (migração `20260830160000`), **e corrigido em 30/08** (`20260830180000`). As quatro views gazeta/carta passaram a `security_invoker` já no primeiro dia. As duas views de governança tinham sido mantidas fora das policies com a cláusula de visibilidade recopiada na view: motivo exato — em invoker, o join em `profiles` devolve NULL a quem administra e precisa decidir — mas era o **sintoma de uma policy ausente**, não uma razão para contornar. O advisor do Supabase assinalava-o em `ERROR`, com razão. No dia seguinte, duas policies estreitas substituíram a derrogação: `profiles_select_gouvernance_en_cours` (as pessoas envolvidas numa deliberação **em curso**, admins de rede e pessoa visada) e `rls_crv_select` alargada à pessoa visada — que, sem ela, teria lido **«0 votos» em vez da contagem real**, um número falso e silencioso. Estado verificado em base: **uma única** view fora das policies (`library_email_identity`, concedida a nenhum papel aplicativo). Suíte `vues_api_definer_tests.sql`, 7 testes."
         }
       ],
       [
@@ -1344,6 +1344,28 @@
         {
           "fr": "Soldé le 29/08. `PRIV` quitte le §17 qu'il partageait avec `IMP` et devient §42 sans renuméroter le normatif déjà inscrit (`#HYG-REG-1`) ; le §2 `MAP` porte son renvoi vers le §34 ; les sept specs orphelines sont référencées dans `docs/specs/INDEX.md` ; Woodpecker corrigé en Forgejo Actions ; les chiffres de `docs/INDEX.md` remis au réel (970 lignes, 44 sections, 42 specs, 10 locales). Et les deux identifiants cités depuis juin sans jamais figurer à la table des doctrines — `DOC-COLLECTIVE-1`, `USER-EMAIL-1` — y sont inscrits, le second après vérification du trigger en base. REGISTRE en v0.5.",
           "pt": "Encerrado em 29/08. `PRIV` deixa a §17 que dividia com `IMP` e passa a §42 sem renumerar o normativo já inscrito (`#HYG-REG-1`); a §2 `MAP` traz sua remissão à §34; as sete specs órfãs estão referenciadas em `docs/specs/INDEX.md`; Woodpecker corrigido para Forgejo Actions; os números de `docs/INDEX.md` repostos no real (970 linhas, 44 seções, 42 specs, 10 locales). E os dois identificadores citados desde junho sem nunca constarem da tabela das doutrinas — `DOC-COLLECTIVE-1`, `USER-EMAIL-1` — estão nela inscritos, o segundo após verificação do trigger em base. REGISTRO em v0.5."
+        }
+      ],
+      [
+        "I7",
+        {
+          "fr": "Les six suites SQL oubliées de l'intégration continue",
+          "pt": "As seis suítes SQL esquecidas da integração contínua"
+        },
+        {
+          "fr": "Soldé le 29/08 au soir. Les six suites sont au manifeste — 45 en tout — et **le harnais passe au vert de bout en bout**. Elles ont d'abord produit 35 échecs pour **quatre causes, dont une seule tenait au produit**. (1) Le stub d'authentification castait `current_setting('request.jwt.claims')` en `jsonb` avant de neutraliser la chaîne vide, si bien qu'`''::jsonb` levait une erreur là où la vraie fonction Supabase renvoie NULL : **aucune suite du corpus ne testait le rejet d'un appel anonyme**, elles éprouvaient un plantage du banc d'essai. (2) Le seed n'avait ni lecteur ni exemplaire. (3) Quatre tests avaient tort contre un produit qui avait raison, et leur correction les a rendus **plus** exigeants — le partage `anon`/`authenticated` est désormais gardé dans les deux sens, et le refus d'`administrador` est testé pour lui-même. (4) `paquetA` et `paquetA1` se terminaient par un `SELECT` d'une chaîne **constante** annonçant « 15/15 tests passent », imprimée même après un échec ; `paquet19`, `paquet25` et `paquet26` réussissaient et étaient comptées rouges faute d'un bilan à la forme que lit la CI — l'une d'elles sur deux espaces autour d'une barre oblique. Le sort des onze SKIP restants passe à **I15**, où il relève de la réécriture.",
+          "pt": "Encerrado em 29/08 à noite. As seis suítes estão no manifesto — 45 ao todo — e **o arnês passa em verde de ponta a ponta**. Produziram primeiro 35 falhas por **quatro causas, das quais só uma dizia respeito ao produto**. (1) O stub de autenticação convertia `current_setting('request.jwt.claims')` em `jsonb` antes de neutralizar a cadeia vazia, de modo que `''::jsonb` levantava erro onde a função real do Supabase devolve NULL: **nenhuma suíte do corpus testava a recusa de uma chamada anônima**, provavam uma pane do banco de ensaio. (2) O seed não tinha nem leitor nem exemplar. (3) Quatro testes estavam errados contra um produto que estava certo, e sua correção tornou-os **mais** exigentes — a partilha `anon`/`authenticated` é agora guardada nos dois sentidos, e a recusa de `administrador` é testada por si mesma. (4) `paquetA` e `paquetA1` terminavam com um `SELECT` de uma cadeia **constante** anunciando «15/15 testes passam», impressa mesmo após uma falha; `paquet19`, `paquet25` e `paquet26` passavam e eram contadas vermelhas por falta de um balanço na forma que a CI lê — uma delas por dois espaços em torno de uma barra. A sorte dos onze SKIP restantes passa a **I15**, onde cabe à reescrita."
+        }
+      ],
+      [
+        "I14",
+        {
+          "fr": "Les identifiants de production dans les fixtures de test",
+          "pt": "Os identificadores de produção nas fixtures de teste"
+        },
+        {
+          "fr": "Soldé le 29/08 dans la nuit, le jour même du constat. Sixième règle bloquante du hook `pre-commit` : dans `tests/sql/`, tout UUID d'apparence réelle absent du seed est refusé. La liste blanche est **lue** dans `supabase/seed.sql` plutôt que recopiée — ajouter un acteur, c'est l'ajouter au seed ; les valeurs visiblement synthétiques restent tolérées pour que chaque suite forge ses fixtures dans sa transaction. Doctrine `DOC-FIXT-1` au REGISTRE (v0.6). En s'installant, la règle a fait sortir `cleanup-frt-2026-05-15.sql` de `tests/sql/` : script de ménage ponctuel qui nommait légitimement une bibliothèque réelle — un script de maintenance doit nommer du réel, c'est sa place parmi des fixtures qui était fausse. Il part en archive, vérification faite que la bibliothèque n'existe plus. **Limite assumée** : le seed contient l'identifiant réel de BLMF, dont dépend la suite cotisation ; la règle le tolère parce qu'il est au seed, pas parce qu'il serait synthétique.",
+          "pt": "Encerrado em 29/08 durante a noite, no mesmo dia da constatação. Sexta regra bloqueante do hook `pre-commit`: em `tests/sql/`, todo UUID de aparência real ausente do seed é recusado. A lista branca é **lida** em `supabase/seed.sql` em vez de recopiada — acrescentar um ator é acrescentá-lo ao seed; os valores visivelmente sintéticos permanecem tolerados para que cada suíte forje suas fixtures na sua transação. Doutrina `DOC-FIXT-1` no REGISTRO (v0.6). Ao instalar-se, a regra fez sair `cleanup-frt-2026-05-15.sql` de `tests/sql/`: script de limpeza pontual que nomeava legitimamente uma biblioteca real — um script de manutenção deve nomear o real, era o seu lugar entre fixtures que estava errado. Vai para arquivo, verificado que a biblioteca já não existe. **Limite assumido**: o seed contém o identificador real da BLMF, de que depende a suíte de mensalidades; a regra tolera-o porque está no seed, não porque fosse sintético."
         }
       ]
     ]
@@ -4489,53 +4511,6 @@
       ]
     },
     {
-      "id": "I7",
-      "d": "I",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Solder ce que la réactivation des six suites SQL a mis au jour",
-        "pt": "Liquidar o que a reativação das seis suítes SQL trouxe à tona"
-      },
-      "v": {
-        "fr": "Les six suites absentes de `ci-suites.txt` ont été remises au manifeste le 29/08. Elles ont rougi, et c'était l'information cherchée : **35 échecs, quatre causes, dont une seule tenait au produit**. (1) Le stub d'authentification ne savait pas simuler l'anonyme — `set_config('request.jwt.claims', NULL)` met la chaîne vide, et `auth.uid()/role()/email()` castaient en `jsonb` avant de la neutraliser, si bien qu'`''::jsonb` levait une erreur de syntaxe là où la vraie fonction Supabase renvoie NULL : **aucune suite du corpus ne testait le rejet d'un appel anonyme**. (2) Le seed ne contenait ni lecteur ni exemplaire : une douzaine de SKIP laissaient tous les chemins nominaux de la circulation non éprouvés, et `paquetA1` échouait dès son setup. (3) Quatre tests avaient tort contre un produit qui avait raison — `NULL` attendu d'un prédicat qui refuse en `false`, dix helpers réclamés ouverts à `anon` alors que le durcissement de juillet en a fermé six, `administrador` exigé comme rôle de bibliothèque alors qu'il n'en est pas un, un helper canonique cherché sous un nom qui n'existe pas. (4) `paquetA` et `paquetA1` se terminaient par un `SELECT` d'une chaîne **constante** annonçant « 15/15 tests passent », imprimée même après un échec ; `paquet25` réussissait 28/28 et était comptée rouge faute de bilan à la convention.",
-        "pt": "As seis suítes ausentes de `ci-suites.txt` voltaram ao manifesto em 29/08. Ficaram vermelhas, e era essa a informação buscada: **35 falhas, quatro causas, das quais só uma dizia respeito ao produto**. (1) O stub de autenticação não sabia simular o anônimo — `set_config('request.jwt.claims', NULL)` põe a cadeia vazia, e `auth.uid()/role()/email()` convertiam em `jsonb` antes de neutralizá-la, de modo que `''::jsonb` levantava erro de sintaxe onde a função real do Supabase devolve NULL: **nenhuma suíte do corpus testava a recusa de uma chamada anônima**. (2) O seed não continha nem leitor nem exemplar: uma dúzia de SKIP deixava todos os caminhos nominais da circulação sem prova, e `paquetA1` falhava já no setup. (3) Quatro testes estavam errados contra um produto que estava certo — `NULL` esperado de um predicado que recusa em `false`, dez helpers exigidos abertos a `anon` quando o endurecimento de julho fechou seis, `administrador` exigido como papel de biblioteca quando não o é, um helper canônico procurado sob um nome inexistente. (4) `paquetA` e `paquetA1` terminavam com um `SELECT` de uma cadeia **constante** anunciando «15/15 testes passam», impressa mesmo após uma falha; `paquet25` passava 28/28 e era contada vermelha por falta de balanço à convenção."
-      },
-      "w": {
-        "fr": "Le stub, le seed, les quatre tests et les trois bilans sont corrigés et poussés. Reste à confirmer un run vert de bout en bout, puis à décider du sort des onze SKIP restants de `paquet19` — écrire les chemins nominaux qu'ils décrivent, ou dire pourquoi ils resteront hors CI.",
-        "pt": "O stub, o seed, os quatro testes e os três balanços estão corrigidos e enviados. Falta confirmar uma execução verde de ponta a ponta, e depois decidir a sorte dos onze SKIP restantes de `paquet19` — escrever os caminhos nominais que descrevem, ou dizer por que ficarão fora da CI."
-      },
-      "y": {
-        "fr": "Une suite présente mais non exécutée est pire qu'une suite absente : elle donne l'impression que le domaine est couvert. Et ce que la réactivation a montré vaut au-delà de ces six suites — c'est le **banc d'essai** qui ne savait pas produire un appel anonyme ni un emprunt, pas le produit qui était cassé.",
-        "pt": "Uma suíte presente mas não executada é pior que uma suíte ausente: dá a impressão de que o domínio está coberto. E o que a reativação mostrou vale além destas seis suítes — era o **banco de ensaio** que não sabia produzir uma chamada anônima nem um empréstimo, não o produto que estava quebrado."
-      },
-      "f": {
-        "fr": [
-          "`ci-suites.txt` liste les 45 suites et le harnais passe au vert de bout en bout.",
-          "Les onze SKIP de `paquet19` ont un verdict écrit : écrits, ou justifiés.",
-          "Le stub `storage` est posé à côté des stubs `auth` et `vault`. **Fait** — visible au journal de CI."
-        ],
-        "pt": [
-          "`ci-suites.txt` lista as 45 suítes e o arnês passa em verde de ponta a ponta.",
-          "Os onze SKIP de `paquet19` têm veredicto escrito: escritos, ou justificados.",
-          "O stub `storage` está posto ao lado dos stubs `auth` e `vault`. **Feito** — visível no log de CI."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "Relevé du 29/08/2026",
-        "Journaux de CI sql-tests du 29/08/2026",
-        "PLAN_DE_MARCHE §8 §9"
-      ]
-    },
-    {
       "id": "I8",
       "d": "I",
       "p": "P2",
@@ -4808,58 +4783,10 @@
       ]
     },
     {
-      "id": "I14",
-      "d": "I",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql",
-        "powershell"
-      ],
-      "t": {
-        "fr": "Interdire mécaniquement les identifiants de production dans les tests",
-        "pt": "Proibir mecanicamente os identificadores de produção nos testes"
-      },
-      "v": {
-        "fr": "Trois suites désignaient leurs acteurs par des UUID **relevés en base réelle** le 11/05/2026, et `tests/sql/README.md` en donnait la table de correspondance. Trois des quatre correspondaient à des lignes existantes en production. Corrigé le 29/08 — 89 remplacements sur 12 fichiers, personas synthétiques fournies par le seed — mais **rien n'empêche que cela recommence** : la règle ne vit aujourd'hui que dans un encadré du README.",
-        "pt": "Três suítes designavam seus atores por UUID **colhidos na base real** em 11/05/2026, e `tests/sql/README.md` dava a tabela de correspondência. Três dos quatro correspondiam a linhas existentes em produção. Corrigido em 29/08 — 89 substituições em 12 arquivos, personas sintéticas fornecidas pelo seed — mas **nada impede que recomece**: a regra hoje só vive num quadro do README."
-      },
-      "w": {
-        "fr": "Ajouter une sixième règle bloquante au hook `pre-commit` : dans `tests/sql/`, tout UUID hors d'une liste blanche synthétique est refusé. Une dizaine de lignes de PowerShell.",
-        "pt": "Acrescentar uma sexta regra bloqueante ao hook `pre-commit`: em `tests/sql/`, todo UUID fora de uma lista branca sintética é recusado. Uma dezena de linhas de PowerShell."
-      },
-      "y": {
-        "fr": "Le vrai piège n'était pas l'exposition, c'était l'**étiquette**. Le README nommait « Patricia » une ligne bien réelle : qui lit croit manipuler une fixture. Les suites tournent en `BEGIN/ROLLBACK` sur une base jetable, donc rien n'est arrivé — mais la convention qui rendait cela sûr n'était écrite nulle part. Une étiquette fictive sur une ligne réelle éteint la vigilance au lieu de l'appeler.",
-        "pt": "A verdadeira armadilha não era a exposição, era o **rótulo**. O README chamava «Patricia» uma linha bem real: quem lê pensa manipular uma fixture. As suítes rodam em `BEGIN/ROLLBACK` sobre uma base descartável, então nada aconteceu — mas a convenção que tornava isso seguro não estava escrita em lugar nenhum. Um rótulo fictício sobre uma linha real apaga a vigilância em vez de convocá-la."
-      },
-      "f": {
-        "fr": [
-          "Le hook refuse un UUID non synthétique ajouté à `tests/sql/`.",
-          "La liste blanche est celle du seed, et elle est citée depuis le seed plutôt que recopiée.",
-          "La règle est portée au REGISTRE : une fixture relevée en production est une donnée de production."
-        ],
-        "pt": [
-          "O hook recusa um UUID não sintético acrescentado a `tests/sql/`.",
-          "A lista branca é a do seed, e é citada a partir do seed em vez de recopiada.",
-          "A regra é levada ao REGISTRO: uma fixture colhida em produção é um dado de produção."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Se pose sur le hook existant, qui porte déjà cinq règles bloquantes.",
-        "pt": "Nenhuma. Assenta no hook existente, que já traz cinco regras bloqueantes."
-      },
-      "r": [
-        "Constat du 29/08/2026",
-        "tests/sql/README.md",
-        ".githooks/pre-commit.ps1"
-      ]
-    },
-    {
       "id": "I15",
       "d": "I",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "L",
       "sk": [
         "sql"
@@ -4869,12 +4796,12 @@
         "pt": "Reescrever as três suítes de circulação anteriores à CI"
       },
       "v": {
-        "fr": "`paquet19`, `paquet24` et `paquet25` sont des artefacts écrits pour le SQL Editor, avant que la CI existe. Elles en portent toutes les marques : onze SKIP dans la seule `paquet19`, fixtures autrefois prélevées en production, bilans hétérogènes — l'une ne disait son succès qu'en `NOTICE` —, et des gardes qui reconnaissent une erreur en cherchant une sous-chaîne dans son message plutôt que son code.",
-        "pt": "`paquet19`, `paquet24` e `paquet25` são artefatos escritos para o SQL Editor, antes de a CI existir. Trazem todas as marcas disso: onze SKIP só em `paquet19`, fixtures outrora colhidas em produção, balanços heterogêneos — uma delas só dizia seu sucesso em `NOTICE` —, e guardas que reconhecem um erro procurando uma subcadeia na mensagem em vez do seu código."
+        "fr": "`paquet19`, `paquet24` et `paquet25` sont des artefacts écrits pour le SQL Editor, avant que la CI existe. **Première passe faite le 30/08** : le seed fournit désormais un monde de circulation complet — deux emprunts (un ouvert, un clos), un emprunt de la coordination, une consulta en `em_preparacao` et une réservation active, sur **trois holdings distincts** parce que le modèle porte deux invariants croisés (on ne réserve pas ce qui est en consulta, on ne consulte pas ce qui est réservé) et que les entasser fabriquerait un état que le produit refuse. Les SKIP sont passés de vingt et un à quelques-uns. Restent les défauts de **conception** : des gardes qui reconnaissent une erreur par une sous-chaîne de son message plutôt que par son code, et onze branches de `paquet25` qui se désactivent au motif que « la simulation de JWT ne marche pas dans le SQL Editor » — vestige d'un temps où il n'y avait pas de CI, et faux depuis que le stub d'authentification est réparé.",
+        "pt": "`paquet19`, `paquet24` e `paquet25` são artefatos escritos para o SQL Editor, antes de a CI existir. **Primeira passagem feita em 30/08**: o seed fornece agora um mundo de circulação completo — dois empréstimos (um aberto, um fechado), um empréstimo da coordenação, uma consulta em `em_preparacao` e uma reserva ativa, sobre **três holdings distintos** porque o modelo traz dois invariantes cruzados (não se reserva o que está em consulta, não se consulta o que está reservado) e amontoá-los fabricaria um estado que o produto recusa. Os SKIP passaram de vinte e um a alguns. Restam os defeitos de **concepção**: guardas que reconhecem um erro por uma subcadeia da mensagem em vez do seu código, e onze ramos de `paquet25` que se desativam alegando que «a simulação de JWT não funciona no SQL Editor» — vestígio de um tempo sem CI, e falso desde que o stub de autenticação foi reparado."
       },
       "w": {
-        "fr": "Les reprendre sur le modèle des suites récentes : acteurs demandés au seed, bilan à la convention, une erreur reconnue par son code. Écrire les chemins nominaux que les SKIP décrivent, maintenant que le seed fournit un exemplaire.",
-        "pt": "Retomá-las no modelo das suítes recentes: atores pedidos ao seed, balanço à convenção, um erro reconhecido pelo seu código. Escrever os caminhos nominais que os SKIP descrevem, agora que o seed fornece um exemplar."
+        "fr": "Reprendre chaque garde d'erreur pour qu'elle teste un code, pas une phrase — et supprimer les onze branches `jwt sim`, qui mentent sur ce que la CI sait faire. Écrire les deux chemins nominaux encore annoncés « E2E non écrit » dans `emprestimos` et `reservas`.",
+        "pt": "Retomar cada guarda de erro para que teste um código, não uma frase — e suprimir os onze ramos `jwt sim`, que mentem sobre o que a CI sabe fazer. Escrever os dois caminhos nominais ainda anunciados «E2E não escrito» em `emprestimos` e `reservas`."
       },
       "y": {
         "fr": "Elles couvrent le cœur de la circulation — emprunts et consultations. Les rafistoler a permis de savoir ce qu'elles cachaient ; les rafistoler encore reviendrait à entretenir un filet dont on connaît les trous. Une garde qui reconnaît une erreur à une sous-chaîne se tait le jour où le message change de langue.",
@@ -4882,22 +4809,25 @@
       },
       "f": {
         "fr": [
-          "Les trois suites ne portent plus de SKIP non justifié.",
-          "Chaque garde d'erreur teste un code, pas une phrase.",
+          "Aucune branche `jwt sim` ne subsiste : la simulation de JWT fonctionne, et une suite ne se désactive pas sur une croyance périmée.",
+          "Chaque garde d'erreur teste un code (`loan_not_found`, `loan_action_not_allowed`…), pas une sous-chaîne de message — un message change de langue, un code non.",
+          "Les deux chemins nominaux `emprestimos` et `reservas` sont écrits, ou l'on dit pourquoi ils ne le seront pas.",
           "Les trois bilans suivent la convention `NOM OK : N/N`."
         ],
         "pt": [
-          "As três suítes não trazem mais SKIP injustificado.",
-          "Cada guarda de erro testa um código, não uma frase.",
+          "Nenhum ramo `jwt sim` subsiste: a simulação de JWT funciona, e uma suíte não se desativa por uma crença vencida.",
+          "Cada guarda de erro testa um código (`loan_not_found`, `loan_action_not_allowed`…), não uma subcadeia de mensagem — uma mensagem muda de língua, um código não.",
+          "Os dois caminhos nominais `emprestimos` e `reservas` estão escritos, ou diz-se por que não estarão.",
           "Os três balanços seguem a convenção `NOME OK : N/N`."
         ]
       },
       "dep": {
-        "fr": "Dépend de **I7** (le run vert de référence) et du seed étoffé, déjà en place.",
-        "pt": "Depende de **I7** (a execução verde de referência) e do seed enriquecido, já no lugar."
+        "fr": "Aucune. **I7** a livré le run vert de référence et le seed étoffé ; les onze SKIP de `paquet19` relèvent désormais de cet item.",
+        "pt": "Nenhuma. **I7** entregou a execução verde de referência e o seed enriquecido; os onze SKIP de `paquet19` cabem agora a este item."
       },
       "r": [
-        "Journaux de CI sql-tests du 29/08/2026",
+        "Journaux de CI sql-tests des 29 et 30/08/2026",
+        "supabase/seed.sql",
         "tests/sql/paquet19_loan_wrappers_tests.sql"
       ]
     },
