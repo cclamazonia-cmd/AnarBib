@@ -1434,6 +1434,17 @@
           "fr": "**Corrigé et clos le 30/08 — et le constat était en dessous de la vérité.** L'item relevait trois affirmations fausses : BLMF en `full_sigb`, BTL en `informal`, `BLT-test` en `informal`, le tout « vérifié en prod ». Relevé sur `public.libraries` le 30/08 : les **cinq** bibliothèques — `blmf`, `blmf-teste`, `btl`, `cira-marseille`, `mleg` — sont **toutes** en `circulation_mode = full_sigb`. La spec ne se trompait pas sur trois lignes : elle illustrait une **diversité de profils qui n'existe pas**.\n\nCe qui en découle vaut plus que la correction elle-même. La doctrine reste juste — elle décrit ce que le produit fait selon le profil — mais les comportements adaptatifs `informal` et `off` **n'ont jamais été éprouvés sur une bibliothèque réelle**, contrairement à ce que « validés au paquet E.0-E.5 » laissait entendre. Ce qui a été validé l'a été sur des bascules de test, pas sur un usage. La ligne le dit désormais, avec la date du relevé.",
           "pt": "**Corrigido e encerrado em 30/08 — e o constato ficava aquém da verdade.** O item apontava três afirmações falsas. Levantamento em `public.libraries` a 30/08: as **cinco** bibliotecas estão **todas** em `circulation_mode = full_sigb`. A spec não errava em três linhas: ilustrava uma **diversidade de perfis que não existe**.\n\nO que daí decorre vale mais que a correção. A doutrina continua justa, mas os comportamentos adaptativos `informal` e `off` **nunca foram experimentados numa biblioteca real**, ao contrário do que «validados no pacote E.0-E.5» deixava entender. A linha di-lo agora, com a data do levantamento."
         }
+      ],
+      [
+        "J1",
+        {
+          "fr": "Les chiffres de `CLAUDE.md` et du `README.md`",
+          "pt": "Os números de `CLAUDE.md` e do `README.md`"
+        },
+        {
+          "fr": "**Clos le 30/08, et par la seconde branche de l'alternative que l'item posait lui-même** — « peut-être un renvoi vers le backlog vaut-il mieux qu'une copie ».\n\nLe matin, la section d'état du `README` a été recomptée en base et son titre neutralisé : il annonçait « État au 7 juillet » tout en décrivant des faits d'août, ce qui est la façon la plus discrète de vieillir — le lecteur date le contenu d'après le titre. **Le soir du même jour, le recomptage du matin était déjà faux** : « 224 migrations, la dernière étant `20260830180000` » alors que la base en portait **231**, la dernière étant `20260830210000`. Sept migrations en douze heures, et rien dans un `README` ne signale qu'un nombre a vieilli.\n\nLa démonstration étant faite en une journée, les chiffres cèdent la place à un **renvoi vers `docs/backlogs/`**, qui porte une photo datée et dit d'où vient chaque nombre. **Un renvoi ne périme pas ; une copie, si.**\n\n`CLAUDE.md` a reçu les mêmes corrections, mais il est gitignoré depuis le 23/07 : **rien de ce qui n'y est écrit n'atteint un·e contributeur·rice**, et tout y disparaît au re-clonage. Le `README` le dit déjà à sa section Architecture. C'est un argument de plus pour que l'état chiffré vive au dépôt, et un seul endroit.",
+          "pt": "**Encerrado em 30/08, e pelo segundo ramo da alternativa que o próprio item colocava** — «talvez uma remissão para o backlog valha mais que uma cópia».\n\nDe manhã, a secção de estado do `README` foi recontada no banco e o seu título neutralizado. **À noite do mesmo dia, a recontagem da manhã já estava errada**: «224 migrações» quando o banco tinha **231**. Sete migrações em doze horas, e nada num `README` assinala que um número envelheceu.\n\nFeita a demonstração num só dia, os números cedem lugar a uma **remissão para `docs/backlogs/`**, que traz uma foto datada. **Uma remissão não caduca; uma cópia, sim.**\n\n`CLAUDE.md` recebeu as mesmas correções, mas está gitignorado desde 23/07: **nada do que aí se escreve chega a quem contribui**. É mais um argumento para que o estado numérico viva no repositório, e num único lugar."
+        }
       ]
     ]
   },
@@ -4863,52 +4874,6 @@
         "public.fn_provision_preactive_library",
         "supabase/migrations/20260510000000_baseline_live.sql (logique de slug d’origine)",
         "library_commons.library_slug, chemin de stockage themes/<slug>/"
-      ]
-    },
-    {
-      "id": "J1",
-      "d": "J",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Mettre à jour les chiffres de `CLAUDE.md` et du `README.md`",
-        "pt": "Atualizar os números de `CLAUDE.md` e do `README.md`"
-      },
-      "v": {
-        "fr": "`CLAUDE.md` se trompe sur sept chiffres — dont la ligne `verify_jwt`, qui décrit une protection inexistante (voir **B6**). La section d'état du `README.md` est **datée du 7 juillet 2026**, soit 345 commits en arrière.",
-        "pt": "`CLAUDE.md` erra em sete números — entre eles a linha `verify_jwt`, que descreve uma proteção inexistente (ver **B6**). A seção de estado do `README.md` está **datada de 7 de julho de 2026**, ou seja 345 commits atrás."
-      },
-      "w": {
-        "fr": "Reprendre la photo chiffrée de ce backlog et l'y reporter, en datant chaque chiffre. Puis décider si ces chiffres ont leur place dans un document qu'on ne relit pas : peut-être un renvoi vers le backlog vaut-il mieux qu'une copie.",
-        "pt": "Retomar a foto numérica deste backlog e transpô-la, datando cada número. Depois decidir se esses números têm lugar num documento que não se relê: talvez uma remissão ao backlog valha mais que uma cópia."
-      },
-      "y": {
-        "fr": "`CLAUDE.md` n'est pas versionné — il vit sur une seule machine, retiré du dépôt le 07/07. Ses chiffres faux ne sont donc corrigibles que par une personne, et invisibles pour toutes les autres. C'est un cas particulier de **A2**.",
-        "pt": "`CLAUDE.md` não é versionado — vive numa única máquina, retirado do repositório em 07/07. Seus números falsos só são corrigíveis por uma pessoa, e invisíveis para todas as outras. É um caso particular de **A2**."
-      },
-      "f": {
-        "fr": [
-          "Les sept chiffres sont corrigés et datés.",
-          "La section d'état du `README.md` porte une date récente.",
-          "Une décision est prise sur l'endroit où ces chiffres doivent vivre — un seul."
-        ],
-        "pt": [
-          "Os sete números estão corrigidos e datados.",
-          "A seção de estado do `README.md` traz uma data recente.",
-          "Uma decisão é tomada sobre o lugar onde esses números devem viver — um só."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "Relevé du 29/08/2026",
-        "CLAUDE.md"
       ]
     },
     {

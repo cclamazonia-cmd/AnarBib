@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -24,7 +24,7 @@
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 11
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 4
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 8
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -2119,32 +2119,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 | | | | |
 |---|---|---|---|
-| **J1** | Atualizar os números de `CLAUDE.md` e do `README.md` | `P1` | Aberto |
 | **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
 | **J4** | Reescrever a seção 14 da spec de governança dos papéis | `P1` | Aberto |
 | **J6** | Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria | `P2` | Aberto |
-
-#### J1 — Atualizar os números de `CLAUDE.md` e do `README.md`
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** `CLAUDE.md` erra em sete números — entre eles a linha `verify_jwt`, que descreve uma proteção inexistente (ver **B6**). A seção de estado do `README.md` está **datada de 7 de julho de 2026**, ou seja 345 commits atrás.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Retomar a foto numérica deste backlog e transpô-la, datando cada número. Depois decidir se esses números têm lugar num documento que não se relê: talvez uma remissão ao backlog valha mais que uma cópia.
-
-**Por que importa.** `CLAUDE.md` não é versionado — vive numa única máquina, retirado do repositório em 07/07. Seus números falsos só são corrigíveis por uma pessoa, e invisíveis para todas as outras. É um caso particular de **A2**.
-
-**O que conta como terminado.**
-
-- Os sete números estão corrigidos e datados.
-- A seção de estado do `README.md` traz uma data recente.
-- Uma decisão é tomada sobre o lugar onde esses números devem viver — um só.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `Relevé du 29/08/2026` · `CLAUDE.md`*
 
 #### J2 — Reparar o índice dos backlogs e decidir a convenção de arquivamento
 
@@ -2453,6 +2430,13 @@ O que estava errado eram os **números do comentário**, datados de 07/05, e os 
 | J3 | As afirmações falsas da spec das consultas | **Corrigido e encerrado em 30/08 — e o constato ficava aquém da verdade.** O item apontava três afirmações falsas. Levantamento em `public.libraries` a 30/08: as **cinco** bibliotecas estão **todas** em `circulation_mode = full_sigb`. A spec não errava em três linhas: ilustrava uma **diversidade de perfis que não existe**.
 
 O que daí decorre vale mais que a correção. A doutrina continua justa, mas os comportamentos adaptativos `informal` e `off` **nunca foram experimentados numa biblioteca real**, ao contrário do que «validados no pacote E.0-E.5» deixava entender. A linha di-lo agora, com a data do levantamento. |
+| J1 | Os números de `CLAUDE.md` e do `README.md` | **Encerrado em 30/08, e pelo segundo ramo da alternativa que o próprio item colocava** — «talvez uma remissão para o backlog valha mais que uma cópia».
+
+De manhã, a secção de estado do `README` foi recontada no banco e o seu título neutralizado. **À noite do mesmo dia, a recontagem da manhã já estava errada**: «224 migrações» quando o banco tinha **231**. Sete migrações em doze horas, e nada num `README` assinala que um número envelheceu.
+
+Feita a demonstração num só dia, os números cedem lugar a uma **remissão para `docs/backlogs/`**, que traz uma foto datada. **Uma remissão não caduca; uma cópia, sim.**
+
+`CLAUDE.md` recebeu as mesmas correções, mas está gitignorado desde 23/07: **nada do que aí se escreve chega a quem contribui**. É mais um argumento para que o estado numérico viva no repositório, e num único lugar. |
 
 ---
 
@@ -2484,4 +2468,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

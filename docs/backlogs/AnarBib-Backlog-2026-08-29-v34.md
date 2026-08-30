@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-30** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-30** · 85 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -24,7 +24,7 @@
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 4
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 8
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -2121,32 +2121,9 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 | | | | |
 |---|---|---|---|
-| **J1** | Mettre à jour les chiffres de `CLAUDE.md` et du `README.md` | `P1` | Ouvert |
 | **J2** | Réparer l'index des backlogs et trancher la convention d'archivage | `P2` | Ouvert |
 | **J4** | Réécrire la section 14 de la spec de gouvernance des rôles | `P1` | Ouvert |
 | **J6** | Écrire les cinq doctrines internalisées là où un tiers les trouverait | `P2` | Ouvert |
-
-#### J1 — Mettre à jour les chiffres de `CLAUDE.md` et du `README.md`
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** `CLAUDE.md` se trompe sur sept chiffres — dont la ligne `verify_jwt`, qui décrit une protection inexistante (voir **B6**). La section d'état du `README.md` est **datée du 7 juillet 2026**, soit 345 commits en arrière.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Reprendre la photo chiffrée de ce backlog et l'y reporter, en datant chaque chiffre. Puis décider si ces chiffres ont leur place dans un document qu'on ne relit pas : peut-être un renvoi vers le backlog vaut-il mieux qu'une copie.
-
-**Pourquoi ça compte.** `CLAUDE.md` n'est pas versionné — il vit sur une seule machine, retiré du dépôt le 07/07. Ses chiffres faux ne sont donc corrigibles que par une personne, et invisibles pour toutes les autres. C'est un cas particulier de **A2**.
-
-**Ce qui compte comme fini.**
-
-- Les sept chiffres sont corrigés et datés.
-- La section d'état du `README.md` porte une date récente.
-- Une décision est prise sur l'endroit où ces chiffres doivent vivre — un seul.
-
-**Dépendances.** Aucune.
-
-*Renvois : `Relevé du 29/08/2026` · `CLAUDE.md`*
 
 #### J2 — Réparer l'index des backlogs et trancher la convention d'archivage
 
@@ -2455,6 +2432,13 @@ Ce qui était faux, ce sont les **chiffres du commentaire** — « 17 en `false`
 | J3 | Les affirmations fausses de la spec des consultations | **Corrigé et clos le 30/08 — et le constat était en dessous de la vérité.** L'item relevait trois affirmations fausses : BLMF en `full_sigb`, BTL en `informal`, `BLT-test` en `informal`, le tout « vérifié en prod ». Relevé sur `public.libraries` le 30/08 : les **cinq** bibliothèques — `blmf`, `blmf-teste`, `btl`, `cira-marseille`, `mleg` — sont **toutes** en `circulation_mode = full_sigb`. La spec ne se trompait pas sur trois lignes : elle illustrait une **diversité de profils qui n'existe pas**.
 
 Ce qui en découle vaut plus que la correction elle-même. La doctrine reste juste — elle décrit ce que le produit fait selon le profil — mais les comportements adaptatifs `informal` et `off` **n'ont jamais été éprouvés sur une bibliothèque réelle**, contrairement à ce que « validés au paquet E.0-E.5 » laissait entendre. Ce qui a été validé l'a été sur des bascules de test, pas sur un usage. La ligne le dit désormais, avec la date du relevé. |
+| J1 | Les chiffres de `CLAUDE.md` et du `README.md` | **Clos le 30/08, et par la seconde branche de l'alternative que l'item posait lui-même** — « peut-être un renvoi vers le backlog vaut-il mieux qu'une copie ».
+
+Le matin, la section d'état du `README` a été recomptée en base et son titre neutralisé : il annonçait « État au 7 juillet » tout en décrivant des faits d'août, ce qui est la façon la plus discrète de vieillir — le lecteur date le contenu d'après le titre. **Le soir du même jour, le recomptage du matin était déjà faux** : « 224 migrations, la dernière étant `20260830180000` » alors que la base en portait **231**, la dernière étant `20260830210000`. Sept migrations en douze heures, et rien dans un `README` ne signale qu'un nombre a vieilli.
+
+La démonstration étant faite en une journée, les chiffres cèdent la place à un **renvoi vers `docs/backlogs/`**, qui porte une photo datée et dit d'où vient chaque nombre. **Un renvoi ne périme pas ; une copie, si.**
+
+`CLAUDE.md` a reçu les mêmes corrections, mais il est gitignoré depuis le 23/07 : **rien de ce qui n'y est écrit n'atteint un·e contributeur·rice**, et tout y disparaît au re-clonage. Le `README` le dit déjà à sa section Architecture. C'est un argument de plus pour que l'état chiffré vive au dépôt, et un seul endroit. |
 
 ---
 
@@ -2486,4 +2470,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 85 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
