@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 11
@@ -1321,6 +1321,7 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
 | **F4** | Verificar os lembretes de vencimento e as cobranças de atraso | `P1` | Aberto |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
+| **F7** | Treze segredos de função estão declarados e vazios, sem que se saiba quais o são de propósito | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1452,6 +1453,45 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 **Dependências.** Nenhuma. O levantamento está feito — está neste item. O que resta é uma decisão de alcance, não uma investigação.
 
 *Remissões : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026` · `src/tests/notify-internal-task-signature.test.js`*
+
+#### F7 — Treze segredos de função estão declarados e vazios, sem que se saiba quais o são de propósito
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Levantado em 30/08 ao verificar outra coisa — que o segredo dos avisos de tarefa era o mesmo dos dois lados.
+
+`supabase secrets list` não mostra os valores mas a sua **impressão SHA-256**. Ora `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` é a impressão da **cadeia vazia** — e treze segredos carregam-na.
+
+No painel, um segredo vazio e um segredo preenchido parecem-se: ambos existem, ambos mostram um valor mascarado. **Só a impressão os distingue.**
+
+**Dois estão vazios de propósito, e é verificável:** os dois `*_INTERNAL_REDIRECT_EMAIL`. É assim que o reencaminhamento dos avisos internos fica inativo — em 30/08, a notificação de inscrição da BTL foi mesmo para o endereço real da biblioteca, precisamente porque este segredo está vazio.
+
+**Onze estão numa cadeia de recurso**, portanto sem consequência visível: `_shared/core/env.ts` lê `ADMIN_NAME || LIBRARY_ADMIN_NAME || ANARBIB_ADMIN_NAME || …`, e as variantes `ANARBIB_*` / `NETWORK_*` estão preenchidas.
+
+**Exceto uma.** `REGIMENTO_URL` está vazio, e os seus dois recursos — `ANARBIB_REGIMENTO_URL`, `NETWORK_REGIMENTO_URL` — **não existem de todo** na lista. A constante vale portanto a cadeia vazia, e `footerPadrao` omite pura e simplesmente a linha «Regimento: abrir» de todos os e-mails que a usam. A ligação para o regulamento da biblioteca nunca foi mostrada.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** **Primeiro o único que tem consequência**: decidir se a ligação para o regulamento deve figurar no rodapé dos e-mails. Se sim, preencher `REGIMENTO_URL` — uma só variável, e a linha aparece. Se não, retirar o código que a espera em `footerPadrao`, em vez de deixar um ramo morto.
+
+**Depois a limpeza**: para cada um dos outros doze, decidir entre *vazio de propósito* e *nunca preenchido*. Os dois reencaminhamentos estão claramente no primeiro caso — merecem um comentário algures, porque um segredo vazio que É o ajuste é exatamente o género de coisa que se «repara» por engano. Os outros dez são duplicados de cadeias de recurso: se não servem, suprimi-los vale mais do que mantê-los vazios.
+
+**E reter a técnica**, porque não custa nada: `supabase secrets list` publica um SHA-256, `sha256()` é nativo do lado da base. Comparar um segredo de função e um segredo do vault, ou detetar os vazios, faz-se portanto sem que valor nenhum seja lido por ninguém.
+
+**Por que importa.** Porque um segredo vazio não se assinala. Não há erro no arranque, nem linha de registo: a constante vale `""`, o recurso joga ou não, e o e-mail parte com um campo a menos que ninguém repara — é o caso de `REGIMENTO_URL` desde sempre.
+
+E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazios **de propósito**, e é esse vazio que faz o ajuste. Quem «completasse os segredos em falta» sem saber quais são deliberados voltaria a ligar o reencaminhamento dos avisos de inscrição sem dar por isso.
+
+**O que conta como terminado.**
+
+- O destino da ligação «Regimento» está decidido: a variável está preenchida, ou o código que a espera é retirado.
+- Cada um dos outros doze segredos vazios está classificado — desejado, a preencher, ou a suprimir.
+- Os dois reencaminhamentos têm uma nota escrita a dizer que o seu vazio É o ajuste.
+- O método de comparação por impressão está anotado num sítio recuperável.
+
+**Dependências.** Nenhuma. O levantamento está feito e cabe no item; o que resta exige sobretudo saber o que se queria.
+
+*Remissões : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
 
 ---
 
@@ -2465,4 +2505,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
