@@ -132,10 +132,26 @@ BEGIN
       IF v_n = 1 THEN v_passed:=v_passed+1;
       ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||v_n||' ligne(s) active(s) au lieu d''une'); END IF;
 
-      -- 2.03 — la meme demande une seconde fois est refusee comme doublon.
-      -- Invariant peu couteux et vite casse : sans lui, une double soumission
-      -- du formulaire pose deux reserves sur le meme exemplaire.
-      v_t:='2.03 une seconde reserva sur le meme holding est refusee';
+      -- 2.03 — la meme demande une seconde fois est refusee. L'INVARIANT est
+      -- « on ne pose pas deux reserves sur le meme exemplaire » : sans lui, une
+      -- double soumission du formulaire en pose deux.
+      --
+      -- MAIS PAS PAR LA GARDE QU'ON CROIT (constat du 30/08). La premiere
+      -- ecriture attendait « Ja existe reserva ativa ». La CI a repondu « Sem
+      -- exemplares disponiveis ». Elle a raison, et l'ordre des gardes de
+      -- fn_v2_create_reserva_by_holdings l'explique :
+      --   manquant > hors-bibliotheque > non pretable > DISPONIBILITE > doublon
+      -- Or la reserva de 2.01 compte dans `reservas_ativas` : le solde
+      -- 3 exemplaires - 2 emprunts - 1 reserve tombe a zero, et la garde de
+      -- disponibilite se declenche AVANT celle du doublon.
+      --
+      -- C'est le meme enseignement qu'en 6.03 de paquet19, ou RLS ferme avant
+      -- le controle d'appartenance : ce qui protege n'est pas toujours la garde
+      -- qui porte le nom du risque. On teste donc le refus REEL. La garde de
+      -- doublon n'est atteignable qu'avec un holding gardant un exemplaire
+      -- libre APRES la premiere reserve — le seed n'en fournit pas, et en
+      -- fabriquer un pour ce seul test coûterait plus qu'il ne rapporte.
+      v_t:='2.03 une seconde reserva est refusee (par la disponibilite, pas par le doublon)';
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims',
@@ -146,8 +162,15 @@ BEGIN
         v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : le doublon a ete accepte');
       EXCEPTION WHEN OTHERS THEN
         RESET ROLE;
-        IF SQLERRM LIKE '%Já existe reserva ativa%' OR SQLERRM LIKE '%existe reserva ativa%' THEN
+        IF SQLERRM LIKE '%Sem exemplares disponíveis%' THEN
           v_passed:=v_passed+1;
+        ELSIF SQLERRM LIKE '%existe reserva ativa%' THEN
+          -- Refus par le doublon : le solde de disponibilite a change, donc le
+          -- seed a change. Ce n'est pas une regression du produit, mais le test
+          -- ne garde plus ce qu'il annonce — relire le commentaire ci-dessus.
+          v_failed:=v_failed+1;
+          v_failures:=v_failures||(v_t||' : refuse par le doublon et non par la disponibilite'
+            ||' -- le solde d''exemplaires du seed a change, ce test doit etre relu');
         ELSE
           v_failed:=v_failed+1;
           v_failures:=v_failures||(v_t||' : refuse pour une autre raison -> '||SQLERRM);
