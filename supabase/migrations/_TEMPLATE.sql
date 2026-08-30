@@ -9,8 +9,20 @@
 --
 --   [ ] Si création de fonction SECURITY DEFINER :
 --       [ ] SET search_path = public, pg_catalog
---       [ ] REVOKE EXECUTE ... FROM PUBLIC
+--       [ ] REVOKE EXECUTE ... FROM PUBLIC, anon, authenticated
+--           /!\ LES TROIS. Deux mécanismes INDÉPENDANTS donnent l'accès :
+--           le grant hérité de PUBLIC, et les grants DIRECTS à anon/
+--           authenticated posés par les ALTER DEFAULT PRIVILEGES de Supabase
+--           sur le schéma `public`. Révoquer l'un laisse l'autre.
+--           Vécu le 30/08/2026 : fn_library_ensure_mail_channel est arrivée en
+--           prod ouverte à anon avec un REVOKE FROM PUBLIC en bonne et due
+--           forme — cette ligne ne disait que PUBLIC. Rattrapée par le T10 de
+--           tests/sql/grants_herites_tests.sql, corrigée par 20260830210000.
 --       [ ] GRANT EXECUTE ... TO <rôle ciblé>
+--           Une fonction RETURNS trigger n'en a besoin pour PERSONNE : le
+--           privilège n'est vérifié qu'à la création du trigger, jamais au
+--           déclenchement.
+--       [ ] DO block de garde : has_function_privilege('anon', …) = false
 --       [ ] Exception helpers RLS anon-lisibles : GRANT TO anon conservé
 --
 --   [ ] Si création de table dans public :
