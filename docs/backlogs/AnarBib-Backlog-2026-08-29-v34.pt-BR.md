@@ -16,14 +16,14 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 12
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 13
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 12
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 8
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -368,6 +368,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P2` | A verificar |
 | **B12** | Elucidar as três ações críticas interbibliotecas que ficaram em `skipped` | `P2` | A verificar |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
+| **B15** | Uma renovação recusada não diz nada a quem não lê o `ok` | `P2` | A verificar |
 
 #### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
 
@@ -647,6 +648,33 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 **Dependências.** **Bloqueado por A2.** Não começar antes.
 
 *Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
+
+#### B15 — Uma renovação recusada não diz nada a quem não lê o `ok`
+
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado verificado em 29/08.** Encontrado em 30/08 pelo caminho E2E dos empréstimos (item **I15**), e não por uma releitura de código. `api.renew_my_loan` **nunca levanta**: retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. Numa biblioteca sem conjunto de regras de circulação ativo, retorna `{ok:false, reason:'not_renewable'}` — e a chamada *tem sucesso*, do ponto de vista do PostgREST como do cliente.
+
+O contrato é respeitado e documentado. Mas uma interface que não inspeciona `ok` mostrará «renovado» a uma leitora para quem nada mudou. O teste viveu isso: afirmava «o vencimento recua», viu um vencimento imóvel, e **nenhum erro**.
+
+**O que é.** Duas perguntas, nesta ordem. **A primeira é de verificação**: o front inspeciona `ok` nos retornos de `renew_my_loan`, `advance_consulta`, `advance_reservation` e demais RPC que devolvem um estado em vez de levantar? Enquanto não se olhar, não se sabe se há defeito.
+
+**A segunda é de doutrina**: uma recusa previsível deve levantar ou devolver um estado? Ambas se defendem — levantar corta o lote em curso, devolver um estado permite tratar linha a linha, que é justamente o que faz `skipped`. Se a resposta for «devolver um estado», então a regra que falta não está no banco: é que **toda interface deve ler o `ok`**, e isso escreve-se no `REGISTRE_decisions`.
+
+**Por que importa.** Porque uma recusa muda é o pior dos três estados possíveis. Um erro vê-se; uma recusa nomeada explica-se à pessoa no balcão; um `ok:false` ignorado dá uma confirmação no ecrã e uma data inalterada no banco. É a leitora que descobre a diferença, atrasada.
+
+E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontrado isto. Foi preciso que um teste executasse o caminho inteiro e comparasse o que obtém com o que espera.
+
+**O que conta como terminado.**
+
+- As RPC que devolvem um estado em vez de levantar estão inventariadas.
+- Para cada uma, sabe-se se o front lê o `ok`.
+- A regra está escrita no `REGISTRE_decisions` — levantar, ou devolver um estado que quem chama DEVE ler.
+- As divergências encontradas são corrigidas, no front ou no banco conforme a regra adotada.
+
+**Dependências.** Nenhuma. O inventário faz-se numa consulta; a verificação no front exige ler as chamadas correspondentes.
+
+*Remissões : `tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)` · `public.fn_v2_extend_core` · `REGISTRE_decisions DOC-RPC-3`*
 
 ---
 
@@ -1733,7 +1761,6 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 | **I11** | Sair do `node:20`, em fim de manutenção | `P2` | Aberto |
 | **I12** | Automatizar a atualização do espelho frio | `P2` | Aberto |
 | **I13** | Terminar a migração para o novo motor de páginas | `P3` | Aberto |
-| **I15** | Reescrever as três suítes de circulação anteriores à CI | `P2` | Em curso |
 
 #### I1 — Alinhar a imagem GoTrue com o estado real das migrações de autenticação
 
@@ -1971,48 +1998,6 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 **Dependências.** P1, não P0 — a versão histórica não tem data de encerramento anunciada.
 
 *Remissões : `PLAN_migration_git_pages_2026-08-19` · `RUNBOOK_exploitation_v0.3`*
-
-#### I15 — Reescrever as três suítes de circulação anteriores à CI
-
-`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado verificado em 29/08.** `paquet19`, `paquet24` e `paquet25` são artefatos escritos para o SQL Editor, antes de a CI existir.
-
-**Primeira passagem, 30/08 (manhã).** O seed fornece agora um mundo de circulação completo — dois empréstimos (um aberto, um fechado), um empréstimo da coordenação, uma consulta em `em_preparacao` e uma reserva ativa, sobre **três holdings distintos** porque o modelo traz dois invariantes cruzados (não se reserva o que está em consulta, não se consulta o que está reservado). Os SKIP passaram de vinte e um a alguns.
-
-**Segunda passagem, 30/08 (tarde).** O que os doze ramos `jwt sim` escondiam era pior que eles:
-
-1. **O balanço de `paquet25` excluía os skips do denominador.** Doze testes tratavam `not_authenticated` como um skip embora esperassem outra coisa. Se o stub de autenticação regredisse, esses doze passariam de PASSE a SKIP e a suíte anunciaria **`OK : 20/20`** em vez de `OK : 32/32`. Verde, mais curta, muda sobre a falha — e o portão da CI, que procura `OK : N/N`, a teria encontrado. O mesmo defeito existia em `paquet_emprestimos` e `paquet_reservas`.
-2. **Seis guardas procuravam um texto de HINT em `SQLERRM`**, que carrega a MENSAGEM. `not_your_loan` tem por hint «Voce so pode renovar seus proprios emprestimos»; `SQLERRM` vale `not_your_loan`. Cláusulas mortas — duas delas tornavam sempre verdadeira uma condição cujo `ELSE` contava **qualquer outra falha como sucesso**.
-3. **Três testes não podiam falhar**: 6.04 e 6.05 de `paquet19` (que esperam um sucesso, com um `ELSE v_passed` final) e 1.04 de `paquet_reservas`, cujos *dois* ramos contavam um sucesso — e cujo ramo `EXCEPTION` estava morto, já que a função não contém nenhum `RAISE`.
-4. Duas etiquetas nomeavam pessoas reais (`v_xavier_loan_id`, `v_livia_loan_id`) embora designassem os personas sintéticos do seed: a anonimização de 29/08 substituíra os UUID e deixara os prenomes.
-
-**O que é.** **Feito.** Os doze ramos `jwt sim` retirados; os três denominadores corrigidos; as seis guardas de hint substituídas pelo código levantado; os três testes infalíveis reescritos; as etiquetas renomeadas; e o **caminho E2E dos empréstimos escrito** (`paquet_emprestimos` seção 3, cinco testes: empréstimo no balcão → cabeçalho aberto com uma linha → renovação pelo leitor → devolução total → *o exemplar não carrega mais linha aberta*, o invariante que o resto do caminho não verifica).
-
-De passagem, uma lição que só a CI podia dar: ao apertar 6.03/7.03/7.05 sobre `not_your_loan`, ela respondeu `loan_not_found` três vezes. `fn_get_loan_context` é `SECURITY INVOKER` — sob RLS, um leitor não *vê* o empréstimo de outro, logo a recusa cai antes do controle de pertencimento. **E é a recusa mais forte**: não diz que o empréstimo existe. Se esses três testes virassem um dia para `not_your_loan`, seria a RLS que teria deixado de esconder os empréstimos alheios.
-
-O teste 3.03 corrigiu aliás a sua própria primeira escrita: afirmava «o vencimento recua» e a CI respondeu «inalterado, e nenhuma exceção». `api.renew_my_loan` não levanta — retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. O teste observava o efeito ignorando o contrato. Agora afirma o contrato e a **implicação**: *se* a renovação vinga, *então* o vencimento recuou — um `ok:true` sem vencimento que se mexa fá-lo ficar vermelho. A razão da recusa vai para o log da CI por um `RAISE NOTICE`, para se saber o que semear sem reabrir uma investigação.
-
-**Resta.** O caminho E2E das reservas. Duas regras do modelo devem ser estabelecidas antes: o que preenche `v_unavailable` em `fn_v2_create_reserva_by_holdings` (reserva-se quando um exemplar está livre, ou apenas quando tudo saiu?), e o que retorna `api.resolve_circulation_rule(p_mode := 'reservation')` para `blmf-test`, que não tem nenhuma política de circulação configurada — se `reservation_allowed` for falso por padrão, será preciso enriquecer o seed com uma política antes de qualquer teste. O SKIP restante nomeia esses dois pontos.
-
-**Por que importa.** Cobrem o coração da circulação — empréstimos e consultas. Mas a lição desta passagem ultrapassa essas três suítes: **um teste verde não é um teste que passa, é um teste que poderia ter falhado.** Três não eram capazes disso, e um balanço inteiro podia encolher sem que ninguém visse. Uma rede cujas malhas ausentes não se contam não é uma rede.
-
-E um motivo de skip descreve um estado passado e sobrevive a ele: o do caminho E2E dos empréstimos dizia «exemplar necessário» dois meses depois de o seed ter fornecido um.
-
-**O que conta como terminado.**
-
-- ✔ Nenhum ramo `jwt sim` subsiste: num teste que simulou uma sessão, `not_authenticated` é uma FALHA.
-- ✔ Os denominadores de `paquet25`, `paquet_emprestimos` e `paquet_reservas` incluem os skips — um teste que vira SKIP faz o número cair em vez de desaparecer.
-- ✔ Nenhuma guarda procura um texto de HINT em `SQLERRM`: testa-se o código levantado, que É a mensagem. O hint lê-se com `GET STACKED DIAGNOSTICS … = PG_EXCEPTION_HINT`.
-- ✔ Nenhum teste conta um sucesso em todos os seus ramos.
-- ✔ O caminho E2E dos empréstimos está escrito e verde (5 testes: empréstimo no balcão → cabeçalho aberto → renovação → devolução total → o exemplar é liberado).
-- ☐ O caminho E2E das reservas está escrito — ou as duas regras que o impedem estão estabelecidas e o seed enriquecido em consequência.
-- ✔ Os balanços seguem a convenção `NOME OK : N/N`.
-- ☐ **Questão em aberto, levantada pelo teste 3.03**: numa biblioteca sem conjunto de regras de circulação ativo, `api.renew_my_loan` recusa **sem ruído** — não levanta, retorna `{ok:false, reason:…}`. O contrato é respeitado, mas uma recusa muda custa mais que uma recusa nomeada: quem chama e não lê o `ok` acredita ter renovado. A decidir — e se for um defeito, merece item próprio em vez de uma linha aqui.
-
-**Dependências.** Nenhuma. **I7** entregou a execução verde de referência e o seed enriquecido; os onze SKIP de `paquet19` cabem agora a este item.
-
-*Remissões : `Journaux de CI sql-tests des 29 et 30/08/2026` · `supabase/seed.sql` · `tests/sql/paquet19_loan_wrappers_tests.sql (note en tete : les deux refus possibles)` · `tests/sql/paquet25_consulta_wrappers_tests.sql (chapeau de la section B)` · `tests/sql/paquet_emprestimos_tests.sql section 3`*
 
 ---
 
@@ -2336,6 +2321,7 @@ Estas entradas constavam no v33, em `ETAT-AVANCEMENT-multisessions`, em `ETAT-la
 | J5 | As incoerências do corpus documental | Encerrado em 29/08. `PRIV` deixa a §17 que dividia com `IMP` e passa a §42 sem renumerar o normativo já inscrito (`#HYG-REG-1`); a §2 `MAP` traz sua remissão à §34; as sete specs órfãs estão referenciadas em `docs/specs/INDEX.md`; Woodpecker corrigido para Forgejo Actions; os números de `docs/INDEX.md` repostos no real (970 linhas, 44 seções, 42 specs, 10 locales). E os dois identificadores citados desde junho sem nunca constarem da tabela das doutrinas — `DOC-COLLECTIVE-1`, `USER-EMAIL-1` — estão nela inscritos, o segundo após verificação do trigger em base. REGISTRO em v0.5. |
 | I7 | As seis suítes SQL esquecidas da integração contínua | Encerrado em 29/08 à noite. As seis suítes estão no manifesto — 45 ao todo — e **o arnês passa em verde de ponta a ponta**. Produziram primeiro 35 falhas por **quatro causas, das quais só uma dizia respeito ao produto**. (1) O stub de autenticação convertia `current_setting('request.jwt.claims')` em `jsonb` antes de neutralizar a cadeia vazia, de modo que `''::jsonb` levantava erro onde a função real do Supabase devolve NULL: **nenhuma suíte do corpus testava a recusa de uma chamada anônima**, provavam uma pane do banco de ensaio. (2) O seed não tinha nem leitor nem exemplar. (3) Quatro testes estavam errados contra um produto que estava certo, e sua correção tornou-os **mais** exigentes — a partilha `anon`/`authenticated` é agora guardada nos dois sentidos, e a recusa de `administrador` é testada por si mesma. (4) `paquetA` e `paquetA1` terminavam com um `SELECT` de uma cadeia **constante** anunciando «15/15 testes passam», impressa mesmo após uma falha; `paquet19`, `paquet25` e `paquet26` passavam e eram contadas vermelhas por falta de um balanço na forma que a CI lê — uma delas por dois espaços em torno de uma barra. A sorte dos onze SKIP restantes passa a **I15**, onde cabe à reescrita. |
 | I14 | Os identificadores de produção nas fixtures de teste | Encerrado em 29/08 durante a noite, no mesmo dia da constatação. Sexta regra bloqueante do hook `pre-commit`: em `tests/sql/`, todo UUID de aparência real ausente do seed é recusado. A lista branca é **lida** em `supabase/seed.sql` em vez de recopiada — acrescentar um ator é acrescentá-lo ao seed; os valores visivelmente sintéticos permanecem tolerados para que cada suíte forje suas fixtures na sua transação. Doutrina `DOC-FIXT-1` no REGISTRO (v0.6). Ao instalar-se, a regra fez sair `cleanup-frt-2026-05-15.sql` de `tests/sql/`: script de limpeza pontual que nomeava legitimamente uma biblioteca real — um script de manutenção deve nomear o real, era o seu lugar entre fixtures que estava errado. Vai para arquivo, verificado que a biblioteca já não existe. **Limite assumido**: o seed contém o identificador real da BLMF, de que depende a suíte de mensalidades; a regra tolera-o porque está no seed, não porque fosse sintético. |
+| I15 | As três suítes de circulação anteriores à CI, e os dois caminhos E2E | **Saldado em 30/08.** Doze ramos `jwt sim` retirados; os denominadores de `paquet25`, `paquet_emprestimos` e `paquet_reservas` incluem agora os skips — sem o que uma regressão do stub de autenticação teria feito uma suíte passar de `32/32` a `20/20` continuando verde; seis guardas que procuravam um texto de HINT em `SQLERRM` (que carrega a MENSAGEM) substituídas pelo código levantado; três testes que contavam sucesso em todos os seus ramos reescritos; duas etiquetas que nomeavam pessoas renomeadas. Os **dois caminhos E2E estão escritos** — empréstimos e reservas — e o seed traz o conjunto de regras de circulação sem o qual renovar era impossível. Nenhum SKIP nas cinco suítes. **O que o dia ensinou, três vezes: o produto tinha razão e o teste lia o campo errado.** A questão de produto que daí sai — uma recusa que não levanta — tornou-se o item **B15**. |
 
 ---
 
