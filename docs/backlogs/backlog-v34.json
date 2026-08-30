@@ -1456,6 +1456,17 @@
           "fr": "**Clos le 30/08 — le travail avait été fait le 26/08, seul le pointeur ne l'avait pas suivi.** L'item demandait de réécrire les §14 et §5.3, qui listaient « à implémenter » des objets tournant en production. C'est déjà fait : la spec porte **v1.4.1 (26/08/2026)**, son §14 est refait sur état constaté, et il va plus loin que l'item ne demandait — il note que la liste précédente annonçait « à faire » des objets présents dans le dump de référence **antérieur de cinq jours**, et il distingue **« livré » de « éprouvé »** : le circuit d'invitation était livré depuis deux mois et n'avait jamais servi, zéro ligne au 26/08. Son §14.2 nomme même les deux affirmations qu'il n'a **pas** vérifiées, plutôt que de les recopier comme si elles l'étaient.\n\nCe qui restait faux était l'**index des specs**, qui annonçait v1.3 (24/05) — trois mois et une refonte en arrière. Corrigé, avec la mention de l'écart. Un second écart a été trouvé au passage : `spec-migration-mail-resend`, index v0.4 contre v0.6 dans le fichier archivé.\n\nContrôle mécanique fait sur les **48 liens** de l'index : **aucun lien mort**. La quatrième fois de la journée qu'un item du backlog décrivait le pointeur et non l'objet — après B6, J1 et J3.",
           "pt": "**Encerrado em 30/08 — o trabalho fora feito em 26/08, apenas o ponteiro não o seguira.** A spec traz **v1.4.1 (26/08/2026)**, o seu §14 está refeito sobre estado constatado, e vai além do que o item pedia: distingue **«entregue» de «experimentado»** — o circuito de convite estava entregue havia dois meses e nunca servira, zero linhas em 26/08. O §14.2 nomeia mesmo as duas afirmações que **não** verificou.\n\nO que continuava errado era o **índice das specs**, que anunciava v1.3 (24/05). Corrigido. Um segundo desvio foi encontrado: `spec-migration-mail-resend`, índice v0.4 contra v0.6 no ficheiro arquivado.\n\nControlo mecânico sobre os **48 links** do índice: **nenhum link morto**. Quarta vez no dia em que um item do backlog descrevia o ponteiro e não o objeto."
         }
+      ],
+      [
+        "B16",
+        {
+          "fr": "Le slug d'une bibliothèque perdait ses majuscules et ses accents",
+          "pt": "O slug de uma biblioteca perdia as maiúsculas e os acentos"
+        },
+        {
+          "fr": "**Corrigé et clos le 30/08, le jour même de son ouverture — et le constat était en dessous de la vérité.** L'item disait « perd ses majuscules » en citant la première lettre. Mesuré en base : ce sont **toutes** les majuscules qui tombaient, `lower()` étant appliqué après le filtre `[^a-z0-9]`. « Biblioteca Terra Livre » ne donnait pas `iblioteca-terra-livre` mais **`iblioteca-erra-ivre`**. Les accents tombaient dans le même filtre, le `translate()` censé les replier étant un no-op : « Associação Cultural Ñandú » donnait `associa-o-cultural-and`.\n\nLe calcul sort du corps de `fn_provision_preactive_library` pour devenir `fn_library_slug_from_name`, nommée et testable seule : minuscules d'abord, accents repliés par `extensions.unaccent` (l'extension était déjà installée), tout le reste en tirets. Vérifié en provisionnant réellement une bibliothèque de test en transaction annulée — « Associação Cultural Ñandú » ressort en `associacao-cultural-nandu`.\n\n**Les slugs existants ne sont pas renommés**, et c'est écrit dans la migration : un slug vit dans les URL publiques, dans `library_commons.library_slug` et dans le chemin de stockage `themes/<slug>/logo.png`. Les renommer casserait les trois d'un coup, dont l'affichage des logos. La correction ne vaut que pour les bibliothèques à venir.\n\nSuite `tests/sql/slug_biblioteca_tests.sql`, 7 tests. Le T5 est celui qui compte sur la durée : il refuse qu'on réinsère le calcul dans le corps de la fonction de provisionnement, ce qui réintroduirait le défaut sans qu'aucun voyant ne rougisse.",
+          "pt": "**Corrigido e encerrado em 30/08, no próprio dia da abertura — e o constato ficava aquém da verdade.** O item dizia «perde as maiúsculas» citando a primeira letra. Medido em base: caíam **todas** as maiúsculas, sendo `lower()` aplicado depois do filtro `[^a-z0-9]`. «Biblioteca Terra Livre» não dava `iblioteca-terra-livre` mas **`iblioteca-erra-ivre`**. Os acentos caíam no mesmo filtro, sendo o `translate()` destinado a dobrá-los um no-op: «Associação Cultural Ñandú» dava `associa-o-cultural-and`.\n\nO cálculo sai do corpo de `fn_provision_preactive_library` para se tornar `fn_library_slug_from_name`, nomeada e testável sozinha: minúsculas primeiro, acentos dobrados por `extensions.unaccent` (a extensão já estava instalada), todo o resto em traços. Verificado provisionando realmente uma biblioteca de teste em transação anulada — «Associação Cultural Ñandú» sai em `associacao-cultural-nandu`.\n\n**Os slugs existentes não são renomeados**, e isso está escrito na migração: um slug vive nos URL públicos, em `library_commons.library_slug` e no caminho de armazenamento `themes/<slug>/logo.png`. Renomeá-los quebraria os três de uma vez, incluindo a exibição dos logótipos. A correção vale apenas para as bibliotecas por vir.\n\nSuíte `tests/sql/slug_biblioteca_tests.sql`, 7 testes. O T5 é o que conta a longo prazo: recusa que se reinsira o cálculo no corpo da função de provisionamento, o que reintroduziria o defeito sem que nenhuma luz acendesse."
+        }
       ]
     ]
   },
@@ -4839,55 +4850,6 @@
       }
     },
     {
-      "id": "B16",
-      "d": "B",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Le slug d'une bibliothèque perd ses majuscules à la création",
-        "pt": "O slug de uma biblioteca perde as maiúsculas na criação"
-      },
-      "v": {
-        "fr": "Trouvé le 30/08 en **exerçant** `fn_provision_preactive_library` sur une demande de test, pas en relisant le code. Une bibliothèque nommée « Biblioteca de teste » ressort avec le slug `iblioteca-de-teste` : le B a disparu.\n\nLa cause tient à l'ordre des opérations. Dans la fabrication du slug, `lower()` est appliqué **après** `regexp_replace(…, '[^a-z0-9]+', '-', 'g')`. Une majuscule n'appartenant pas à `a-z`, elle est remplacée par un tiret **avant** d'avoir été minusculée — puis le tiret de tête est coupé par le `trim`. « Terra Livre » donnerait `erra-livre`.\n\nLe `translate()` qui précède est par ailleurs un **no-op** : ses deux arguments de correspondance sont la même chaîne, caractère pour caractère. Il était visiblement censé replier les accentués sur leur équivalent sans accent ; il ne replie rien, et ces caractères sont ensuite mangés par le même `regexp_replace`. « Associação » donnerait `associa-o`.",
-        "pt": "Encontrado em 30/08 **exercitando** `fn_provision_preactive_library` sobre um pedido de teste, não relendo o código. Uma biblioteca chamada «Biblioteca de teste» sai com o slug `iblioteca-de-teste`: o B desapareceu.\n\nA causa está na ordem das operações. Na fabricação do slug, `lower()` é aplicado **depois** de `regexp_replace(…, '[^a-z0-9]+', '-', 'g')`. Uma maiúscula não pertencendo a `a-z`, é substituída por um traço **antes** de ter sido minusculada — e o traço inicial é cortado pelo `trim`. «Terra Livre» daria `erra-livre`.\n\nO `translate()` que precede é além disso um **no-op**: os seus dois argumentos de correspondência são a mesma cadeia, caractere por caractere. Estava visivelmente destinado a dobrar os acentuados sobre o equivalente sem acento; não dobra nada, e esses caracteres são depois comidos pelo mesmo `regexp_replace`. «Associação» daria `associa-o`."
-      },
-      "w": {
-        "fr": "Deux corrections dans la fabrication du slug, et une décision.\n\n**Corriger l'ordre** : minusculer *avant* de filtrer, c'est-à-dire `regexp_replace(lower(…), '[^a-z0-9]+', '-', 'g')` au lieu de `lower(regexp_replace(…))`.\n\n**Trancher le sort du `translate()`** : soit lui donner une vraie table de correspondance (accentués → non accentués), soit le remplacer par `unaccent()` si l'extension est disponible, soit l'enlever et assumer que les accents deviennent des tirets — mais alors l'écrire, plutôt que de laisser croire qu'ils sont repliés.\n\n**Décider pour l'existant** : les slugs actuels (`blmf`, `btl`, `mleg`, `cira-marseille`) ont été posés à la main et sont corrects. Un slug vit dans les URL, dans `library_commons.library_slug` et dans le chemin de stockage `themes/<slug>/` — le renommer casserait les trois. La correction ne devrait donc valoir que pour les bibliothèques à venir, ce qui se dit explicitement dans la migration.",
-        "pt": "Duas correções na fabricação do slug, e uma decisão.\n\n**Corrigir a ordem**: minusculizar *antes* de filtrar, ou seja `regexp_replace(lower(…), '[^a-z0-9]+', '-', 'g')` em vez de `lower(regexp_replace(…))`.\n\n**Decidir o destino do `translate()`**: ou dar-lhe uma verdadeira tabela de correspondência (acentuados → sem acento), ou substituí-lo por `unaccent()` se a extensão estiver disponível, ou retirá-lo e assumir que os acentos viram traços — mas então escrevê-lo, em vez de deixar crer que são dobrados.\n\n**Decidir sobre o existente**: os slugs atuais (`blmf`, `btl`, `mleg`, `cira-marseille`) foram postos à mão e estão corretos. Um slug vive nos URL, em `library_commons.library_slug` e no caminho de armazenamento `themes/<slug>/` — renomeá-lo quebraria os três. A correção deveria portanto valer apenas para as bibliotecas por vir, o que se diz explicitamente na migração."
-      },
-      "y": {
-        "fr": "Parce que le défaut ne mord pas aujourd'hui et mordra bientôt. Les quatre bibliothèques du réseau ont leur slug posé à la main : rien n'est cassé. Mais toute bibliothèque qui arrivera par le parcours d'adhésion — c'est-à-dire celles qu'on espère après Bologne — passera par cette fonction, et repartira avec un slug amputé de sa première lettre.\n\nEt parce qu'un slug n'est pas cosmétique : il est dans les URL publiques, dans l'identité d'expédition des courriels, et dans la convention de chemin du stockage `themes/<slug>/logo.png`. Un slug amputé ne se voit pas tout de suite — il se découvre le jour où le logo de la biblio n'apparaît nulle part.",
-        "pt": "Porque o defeito não morde hoje e morderá em breve. As quatro bibliotecas da rede têm o seu slug posto à mão: nada está quebrado. Mas toda biblioteca que chegar pelo percurso de adesão — isto é, as que esperamos depois de Bolonha — passará por esta função, e sairá com um slug amputado da primeira letra.\n\nE porque um slug não é cosmético: está nos URL públicos, na identidade de expedição dos e-mails, e na convenção de caminho do armazenamento `themes/<slug>/logo.png`. Um slug amputado não se vê logo — descobre-se no dia em que o logótipo da biblioteca não aparece em lado nenhum."
-      },
-      "f": {
-        "fr": [
-          "Le slug fabriqué conserve toutes les lettres du nom, majuscules comprises.",
-          "Le sort des caractères accentués est tranché et écrit dans la migration.",
-          "Un test SQL exerce la fabrication sur un nom à majuscules et un nom accentué, et compare au slug attendu.",
-          "La décision sur les slugs existants est écrite : on ne les renomme pas, et pourquoi."
-        ],
-        "pt": [
-          "O slug fabricado conserva todas as letras do nome, maiúsculas incluídas.",
-          "O destino dos caracteres acentuados está decidido e escrito na migração.",
-          "Um teste SQL exercita a fabricação sobre um nome com maiúsculas e um nome acentuado, e compara ao slug esperado.",
-          "A decisão sobre os slugs existentes está escrita: não os renomeamos, e porquê."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. La correction tient en une ligne ; c'est la décision sur les accents et sur l'existant qui demande d'être posée avant.",
-        "pt": "Nenhuma. A correção cabe numa linha; é a decisão sobre os acentos e sobre o existente que precisa de ser posta antes."
-      },
-      "r": [
-        "public.fn_provision_preactive_library",
-        "supabase/migrations/20260510000000_baseline_live.sql (logique de slug d’origine)",
-        "library_commons.library_slug, chemin de stockage themes/<slug>/"
-      ]
-    },
-    {
       "id": "J2",
       "d": "J",
       "p": "P2",
@@ -5337,6 +5299,55 @@
       },
       "r": [
         "ORIENTATION_outils_bibliotheques_militantes_2026-08-26"
+      ]
+    },
+    {
+      "id": "F6",
+      "d": "F",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Trois arbres `_shared` pour les fonctions, et deux routages de courriel qui divergent",
+        "pt": "Três árvores `_shared` para as funções, e dois roteamentos de e-mail que divergem"
+      },
+      "v": {
+        "fr": "Relevé le 30/08 en exportant un helper de `supabase/functions/_shared/context/library-mail-routing.ts` pour que `register` s'en serve.\n\nIl existe **trois** répertoires `_shared` sous `supabase/functions/` : le canonique (44 fichiers), plus deux copies privées — `notify-internal-task/_shared` (12 fichiers) et `catalog_metadata_lookup/_shared`. Ce ne sont pas des liens symboliques : ce sont de vraies copies, et elles ont dérivé. Les deux `library-mail-routing.ts` diffèrent de **139 lignes**.\n\nLe détail qui a mis la puce à l'oreille : la copie de `notify-internal-task` contient déjà une fonction **privée** nommée `resolveLibraryLogoUrl` — une variante plus ancienne du même calcul. Le helper que le canonique exporte désormais porte donc le même nom qu'une fonction différente, à deux répertoires de distance.",
+        "pt": "Levantado em 30/08 ao exportar um helper de `supabase/functions/_shared/context/library-mail-routing.ts` para que `register` o usasse.\n\nExistem **três** diretórios `_shared` sob `supabase/functions/`: o canónico (44 ficheiros), mais duas cópias privadas — `notify-internal-task/_shared` (12 ficheiros) e `catalog_metadata_lookup/_shared`. Não são ligações simbólicas: são cópias reais, e divergiram. Os dois `library-mail-routing.ts` diferem em **139 linhas**.\n\nO detalhe que deu o alerta: a cópia de `notify-internal-task` já contém uma função **privada** chamada `resolveLibraryLogoUrl` — uma variante mais antiga do mesmo cálculo. O helper que o canónico agora exporta tem portanto o mesmo nome que uma função diferente, a dois diretórios de distância."
+      },
+      "w": {
+        "fr": "**D'abord comprendre pourquoi les copies existent.** Un `_shared` privé sous une fonction est peut-être délibéré (isoler un déploiement, figer une version), peut-être un accident de copier-coller. La réponse décide de tout le reste, et elle n'est écrite nulle part.\n\n**Puis mesurer l'écart utile** : sur les 139 lignes de différence, combien sont du fond (logo, transport, extinction) et combien de la forme ? Un diff commenté suffit.\n\n**Enfin trancher** : réunir sur le canonique, ou assumer les copies en le disant dans un en-tête de chaque fichier. Les deux se défendent — ce qui ne se défend pas, c'est l'état actuel, où l'on ne sait pas laquelle fait foi.",
+        "pt": "**Primeiro compreender porque existem as cópias.** Um `_shared` privado sob uma função talvez seja deliberado (isolar um deploy, fixar uma versão), talvez um acidente de copiar-colar. A resposta decide todo o resto, e não está escrita em lado nenhum.\n\n**Depois medir a diferença útil**: das 139 linhas de diferença, quantas são de fundo (logótipo, transporte, extinção) e quantas de forma? Um diff comentado basta.\n\n**Enfim decidir**: reunir no canónico, ou assumir as cópias dizendo-o num cabeçalho de cada ficheiro. Ambas se defendem — o que não se defende é o estado atual, em que não se sabe qual faz fé."
+      },
+      "y": {
+        "fr": "Parce que le routage du courriel est justement l'endroit où une divergence ne se voit pas. Un logo résolu autrement, une règle d'extinction appliquée dans une copie et pas dans l'autre : le message part quand même, et personne ne compare deux courriels envoyés par deux fonctions différentes.\n\nC'est exactement ce qui vient de se produire à l'échelle d'une seule colonne — `register` résolvait le logo autrement que toutes les autres fonctions, et l'écart a tenu des mois. Ici l'écart porte sur 139 lignes.",
+        "pt": "Porque o roteamento do e-mail é justamente o sítio onde uma divergência não se vê. Um logótipo resolvido de outra forma, uma regra de extinção aplicada numa cópia e não na outra: a mensagem parte na mesma, e ninguém compara dois e-mails enviados por duas funções diferentes.\n\nÉ exatamente o que acaba de acontecer à escala de uma única coluna — `register` resolvia o logótipo de forma diferente de todas as outras funções, e a diferença durou meses. Aqui a diferença é de 139 linhas."
+      },
+      "f": {
+        "fr": [
+          "La raison d'être de chaque `_shared` privé est écrite, ou la copie est supprimée.",
+          "L'écart de fond entre les deux `library-mail-routing.ts` est inventorié, ligne par ligne.",
+          "La collision de nom sur `resolveLibraryLogoUrl` est levée, dans un sens ou dans l'autre.",
+          "Un lecteur qui ouvre l'un des trois fichiers sait, dès l'en-tête, lequel fait foi."
+        ],
+        "pt": [
+          "A razão de ser de cada `_shared` privado está escrita, ou a cópia é suprimida.",
+          "A diferença de fundo entre os dois `library-mail-routing.ts` está inventariada, linha a linha.",
+          "A colisão de nome sobre `resolveLibraryLogoUrl` está resolvida, num sentido ou noutro.",
+          "Quem abre um dos três ficheiros sabe, já pelo cabeçalho, qual faz fé."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune technique. La seule dépendance est une réponse : les copies sont-elles voulues ?",
+        "pt": "Nenhuma técnica. A única dependência é uma resposta: as cópias são desejadas?"
+      },
+      "r": [
+        "supabase/functions/_shared/context/library-mail-routing.ts",
+        "supabase/functions/notify-internal-task/_shared/context/library-mail-routing.ts",
+        "supabase/functions/catalog_metadata_lookup/_shared/"
       ]
     }
   ]

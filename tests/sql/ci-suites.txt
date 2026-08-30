@@ -206,3 +206,9 @@ tests/sql/vues_api_definer_tests.sql
 # le test qui compte — il prouve que les valeurs posees sont exactement le
 # repli deja applique par le code, donc que la migration ne change aucun envoi.
 tests/sql/canal_invariant_tests.sql
+
+# B16 : le calcul du slug sort du corps de fn_provision_preactive_library pour
+# etre testable seul. T5 est le garde-fou qui compte sur la duree — il refuse
+# qu on reinsere le calcul dans le corps, ce qui reintroduirait le defaut sans
+# qu aucun voyant ne rougisse.
+tests/sql/slug_biblioteca_tests.sql

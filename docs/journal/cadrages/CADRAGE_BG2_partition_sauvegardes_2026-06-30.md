@@ -90,7 +90,7 @@ Par défaut, **tout le reste**. Principaux clusters :
 - **Autorités / thésaurus** : `subjects`, `subject_relations`, `authority_proposal*`, `ficedl_thesaurus_terms`.
 - **Référentiels** : tous les `catalog_ref_*`, `catalog_partners*`, `catalog_audit_log`, `catalog_batches`.
 - **Config bibliothèque** : `libraries`, `library_themes*`, `library_circulation_policy_*`, `library_membership_rules`, `library_*_policies`, `library_notification_profiles`, `library_opening_hours`, `library_retention_policies`, `library_service_state`, `library_constitution_progress`, `library_document_governance`, `library_regulation_documents`, `library_profile_*`, `library_unarchive_log`.
-- **Coordonnées institutionnelles (BG2-7)** : `library_commons`, `library_contact_profiles`, `library_public_contact`, `library_email_identity`, `library_mail_channels`.
+- **Coordonnées institutionnelles (BG2-7)** : `library_commons`, `library_contact_profiles`, `library_public_contact`, `library_mail_channels`. *(`library_email_identity` retirée le 30/08/2026 — la table a été supprimée par la migration `20260830194926`, l'identité d'expédition étant désormais dérivée de `libraries` ⋈ `library_commons` par la vue `api.library_email_identity`. Une vue ne se sauvegarde pas : ses sources le sont, et elles sont déjà dans cette ligne. Retirée en conséquence de `deploy/bg2-known-tables.txt`.)*
 - **Réseau / cercles** : `circles`, `circle_*`, `oai_opening_*`.
 - **Partenariats** : `library_partnerships`, `partnership_rights`, `partnership_break_log`, `partner_source_*`.
 - **Édition** : `gazette_issues*`, `gazette_sources`, `gazette_build_jobs`, `lettre_issues*`.

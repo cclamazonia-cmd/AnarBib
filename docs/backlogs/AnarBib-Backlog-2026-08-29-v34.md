@@ -16,11 +16,11 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 12
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 11
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
@@ -373,7 +373,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B12** | Un envoi non effectué ne dit pas pourquoi : les `skipped` de `team_notification_outbox` | `P2` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B15** | Un renouvellement refusé ne dit rien à qui ne lit pas le `ok` | `P2` | À vérifier |
-| **B16** | Le slug d'une bibliothèque perd ses majuscules à la création | `P1` | Ouvert |
 
 #### B2 — Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`
 
@@ -672,41 +671,6 @@ Et parce que la façon dont c'est apparu vaut d'être notée : aucune relecture 
 **Dépendances.** Aucune. Le recensement se fait en une requête ; la vérification côté front demande de lire les appels correspondants.
 
 *Renvois : `tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)` · `public.fn_v2_extend_core` · `REGISTRE_decisions DOC-RPC-3`*
-
-#### B16 — Le slug d'une bibliothèque perd ses majuscules à la création
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Trouvé le 30/08 en **exerçant** `fn_provision_preactive_library` sur une demande de test, pas en relisant le code. Une bibliothèque nommée « Biblioteca de teste » ressort avec le slug `iblioteca-de-teste` : le B a disparu.
-
-La cause tient à l'ordre des opérations. Dans la fabrication du slug, `lower()` est appliqué **après** `regexp_replace(…, '[^a-z0-9]+', '-', 'g')`. Une majuscule n'appartenant pas à `a-z`, elle est remplacée par un tiret **avant** d'avoir été minusculée — puis le tiret de tête est coupé par le `trim`. « Terra Livre » donnerait `erra-livre`.
-
-Le `translate()` qui précède est par ailleurs un **no-op** : ses deux arguments de correspondance sont la même chaîne, caractère pour caractère. Il était visiblement censé replier les accentués sur leur équivalent sans accent ; il ne replie rien, et ces caractères sont ensuite mangés par le même `regexp_replace`. « Associação » donnerait `associa-o`.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Deux corrections dans la fabrication du slug, et une décision.
-
-**Corriger l'ordre** : minusculer *avant* de filtrer, c'est-à-dire `regexp_replace(lower(…), '[^a-z0-9]+', '-', 'g')` au lieu de `lower(regexp_replace(…))`.
-
-**Trancher le sort du `translate()`** : soit lui donner une vraie table de correspondance (accentués → non accentués), soit le remplacer par `unaccent()` si l'extension est disponible, soit l'enlever et assumer que les accents deviennent des tirets — mais alors l'écrire, plutôt que de laisser croire qu'ils sont repliés.
-
-**Décider pour l'existant** : les slugs actuels (`blmf`, `btl`, `mleg`, `cira-marseille`) ont été posés à la main et sont corrects. Un slug vit dans les URL, dans `library_commons.library_slug` et dans le chemin de stockage `themes/<slug>/` — le renommer casserait les trois. La correction ne devrait donc valoir que pour les bibliothèques à venir, ce qui se dit explicitement dans la migration.
-
-**Pourquoi ça compte.** Parce que le défaut ne mord pas aujourd'hui et mordra bientôt. Les quatre bibliothèques du réseau ont leur slug posé à la main : rien n'est cassé. Mais toute bibliothèque qui arrivera par le parcours d'adhésion — c'est-à-dire celles qu'on espère après Bologne — passera par cette fonction, et repartira avec un slug amputé de sa première lettre.
-
-Et parce qu'un slug n'est pas cosmétique : il est dans les URL publiques, dans l'identité d'expédition des courriels, et dans la convention de chemin du stockage `themes/<slug>/logo.png`. Un slug amputé ne se voit pas tout de suite — il se découvre le jour où le logo de la biblio n'apparaît nulle part.
-
-**Ce qui compte comme fini.**
-
-- Le slug fabriqué conserve toutes les lettres du nom, majuscules comprises.
-- Le sort des caractères accentués est tranché et écrit dans la migration.
-- Un test SQL exerce la fabrication sur un nom à majuscules et un nom accentué, et compare au slug attendu.
-- La décision sur les slugs existants est écrite : on ne les renomme pas, et pourquoi.
-
-**Dépendances.** Aucune. La correction tient en une ligne ; c'est la décision sur les accents et sur l'existant qui demande d'être posée avant.
-
-*Renvois : `public.fn_provision_preactive_library` · `supabase/migrations/20260510000000_baseline_live.sql (logique de slug d’origine)` · `library_commons.library_slug, chemin de stockage themes/<slug>/`*
 
 ---
 
@@ -1358,6 +1322,7 @@ Et parce qu'un slug n'est pas cosmétique : il est dans les URL publiques, dans 
 | **F2** | Corriger le gabarit des courriels d'alerte d'exploitation | `P1` | Ouvert |
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
 | **F4** | Vérifier les rappels d'échéance et les relances de retard | `P1` | Ouvert |
+| **F6** | Trois arbres `_shared` pour les fonctions, et deux routages de courriel qui divergent | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1446,6 +1411,39 @@ Et parce qu'un slug n'est pas cosmétique : il est dans les URL publiques, dans 
 **Dépendances.** Se vérifie en même temps que **F1**.
 
 *Renvois : `spec-flux-emprunts.md §10.2` · `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3` · `PLAN_formation_coordination_BLMF §5`*
+
+#### F6 — Trois arbres `_shared` pour les fonctions, et deux routages de courriel qui divergent
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
+
+**État.** Relevé le 30/08 en exportant un helper de `supabase/functions/_shared/context/library-mail-routing.ts` pour que `register` s'en serve.
+
+Il existe **trois** répertoires `_shared` sous `supabase/functions/` : le canonique (44 fichiers), plus deux copies privées — `notify-internal-task/_shared` (12 fichiers) et `catalog_metadata_lookup/_shared`. Ce ne sont pas des liens symboliques : ce sont de vraies copies, et elles ont dérivé. Les deux `library-mail-routing.ts` diffèrent de **139 lignes**.
+
+Le détail qui a mis la puce à l'oreille : la copie de `notify-internal-task` contient déjà une fonction **privée** nommée `resolveLibraryLogoUrl` — une variante plus ancienne du même calcul. Le helper que le canonique exporte désormais porte donc le même nom qu'une fonction différente, à deux répertoires de distance.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** **D'abord comprendre pourquoi les copies existent.** Un `_shared` privé sous une fonction est peut-être délibéré (isoler un déploiement, figer une version), peut-être un accident de copier-coller. La réponse décide de tout le reste, et elle n'est écrite nulle part.
+
+**Puis mesurer l'écart utile** : sur les 139 lignes de différence, combien sont du fond (logo, transport, extinction) et combien de la forme ? Un diff commenté suffit.
+
+**Enfin trancher** : réunir sur le canonique, ou assumer les copies en le disant dans un en-tête de chaque fichier. Les deux se défendent — ce qui ne se défend pas, c'est l'état actuel, où l'on ne sait pas laquelle fait foi.
+
+**Pourquoi ça compte.** Parce que le routage du courriel est justement l'endroit où une divergence ne se voit pas. Un logo résolu autrement, une règle d'extinction appliquée dans une copie et pas dans l'autre : le message part quand même, et personne ne compare deux courriels envoyés par deux fonctions différentes.
+
+C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne — `register` résolvait le logo autrement que toutes les autres fonctions, et l'écart a tenu des mois. Ici l'écart porte sur 139 lignes.
+
+**Ce qui compte comme fini.**
+
+- La raison d'être de chaque `_shared` privé est écrite, ou la copie est supprimée.
+- L'écart de fond entre les deux `library-mail-routing.ts` est inventorié, ligne par ligne.
+- La collision de nom sur `resolveLibraryLogoUrl` est levée, dans un sens ou dans l'autre.
+- Un lecteur qui ouvre l'un des trois fichiers sait, dès l'en-tête, lequel fait foi.
+
+**Dépendances.** Aucune technique. La seule dépendance est une réponse : les copies sont-elles voulues ?
+
+*Renvois : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/context/library-mail-routing.ts` · `supabase/functions/catalog_metadata_lookup/_shared/`*
 
 ---
 
@@ -2421,6 +2419,13 @@ La démonstration étant faite en une journée, les chiffres cèdent la place à
 Ce qui restait faux était l'**index des specs**, qui annonçait v1.3 (24/05) — trois mois et une refonte en arrière. Corrigé, avec la mention de l'écart. Un second écart a été trouvé au passage : `spec-migration-mail-resend`, index v0.4 contre v0.6 dans le fichier archivé.
 
 Contrôle mécanique fait sur les **48 liens** de l'index : **aucun lien mort**. La quatrième fois de la journée qu'un item du backlog décrivait le pointeur et non l'objet — après B6, J1 et J3. |
+| B16 | Le slug d'une bibliothèque perdait ses majuscules et ses accents | **Corrigé et clos le 30/08, le jour même de son ouverture — et le constat était en dessous de la vérité.** L'item disait « perd ses majuscules » en citant la première lettre. Mesuré en base : ce sont **toutes** les majuscules qui tombaient, `lower()` étant appliqué après le filtre `[^a-z0-9]`. « Biblioteca Terra Livre » ne donnait pas `iblioteca-terra-livre` mais **`iblioteca-erra-ivre`**. Les accents tombaient dans le même filtre, le `translate()` censé les replier étant un no-op : « Associação Cultural Ñandú » donnait `associa-o-cultural-and`.
+
+Le calcul sort du corps de `fn_provision_preactive_library` pour devenir `fn_library_slug_from_name`, nommée et testable seule : minuscules d'abord, accents repliés par `extensions.unaccent` (l'extension était déjà installée), tout le reste en tirets. Vérifié en provisionnant réellement une bibliothèque de test en transaction annulée — « Associação Cultural Ñandú » ressort en `associacao-cultural-nandu`.
+
+**Les slugs existants ne sont pas renommés**, et c'est écrit dans la migration : un slug vit dans les URL publiques, dans `library_commons.library_slug` et dans le chemin de stockage `themes/<slug>/logo.png`. Les renommer casserait les trois d'un coup, dont l'affichage des logos. La correction ne vaut que pour les bibliothèques à venir.
+
+Suite `tests/sql/slug_biblioteca_tests.sql`, 7 tests. Le T5 est celui qui compte sur la durée : il refuse qu'on réinsère le calcul dans le corps de la fonction de provisionnement, ce qui réintroduirait le défaut sans qu'aucun voyant ne rougisse. |
 
 ---
 

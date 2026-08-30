@@ -91,6 +91,13 @@ Tables concernées (15) : `auth_rate_limits`, `authority_proposal_notification_o
 `library_request_notification_events`, `loan_midpoint_message_log`,
 `membership_expiry_notifications`, `user_history_retention_preferences`.
 
+> **Note du 30/08/2026.** `library_email_identity` (ligne 21 du tableau) n'existe
+> plus : la table a été supprimée par la migration `20260830194926`. C'était une
+> copie figée de champs que `api.library_email_identity` dérive de `libraries` ⋈
+> `library_commons`, et rien ne les synchronisait. Le constat de juin reste
+> exact **à sa date** — il est conservé tel quel — mais la table qu'il décrit
+> n'est plus à auditer. Les quatorze autres sont inchangées.
+
 Les tables Scénario C **non-PII** restent volontairement sans policy (deny-all
 implicite + `REVOKE` + `COMMENT`), conformément à la règle de garde ci-dessous.
 
