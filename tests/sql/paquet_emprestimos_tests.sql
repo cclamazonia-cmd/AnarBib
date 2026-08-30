@@ -268,9 +268,10 @@ BEGIN
     -- canal vers le journal de CI — sa ligne de bilan. C'est aussi pourquoi un
     -- test qui se desactive en silence est indetectable : il n'a aucun moyen
     -- de le dire. Constat du 30/08/2026 (item I15).
-    RAISE EXCEPTION 'EMPRESTIMOS OK : %/% tests passés (% skips)%%', v_passed, (v_passed+v_failed+v_skipped), v_skipped,
-      CASE WHEN v_skipped>0 THEN ' | SKIPS: '||array_to_string(v_skips,' ; ') ELSE '' END,
-      v_info;
+    -- Un seul emplacement en fin de format : `%%` serait un pour-cent LITTERAL,
+    -- pas une quatrieme substitution. Les deux textes sont donc concatenes.
+    RAISE EXCEPTION 'EMPRESTIMOS OK : %/% tests passés (% skips)%', v_passed, (v_passed+v_failed+v_skipped), v_skipped,
+      (CASE WHEN v_skipped>0 THEN ' | SKIPS: '||array_to_string(v_skips,' ; ') ELSE '' END) || v_info;
   ELSE
     RAISE EXCEPTION 'EMPRESTIMOS ECHEC : %/% OK, % échec(s) | %', v_passed, (v_passed+v_failed), v_failed, array_to_string(v_failures,' || ');
   END IF;
