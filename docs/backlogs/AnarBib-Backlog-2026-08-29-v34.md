@@ -1974,24 +1974,45 @@ Les oracles trouvés en mai avaient tous la même forme : un identifiant en para
 
 #### I15 — Réécrire les trois suites de circulation d'avant la CI
 
-`P2` Courant · État : **En cours** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
 
-**État vérifié au 29/08.** `paquet19`, `paquet24` et `paquet25` sont des artefacts écrits pour le SQL Editor, avant que la CI existe. **Première passe faite le 30/08** : le seed fournit désormais un monde de circulation complet — deux emprunts (un ouvert, un clos), un emprunt de la coordination, une consulta en `em_preparacao` et une réservation active, sur **trois holdings distincts** parce que le modèle porte deux invariants croisés (on ne réserve pas ce qui est en consulta, on ne consulte pas ce qui est réservé) et que les entasser fabriquerait un état que le produit refuse. Les SKIP sont passés de vingt et un à quelques-uns. Restent les défauts de **conception** : des gardes qui reconnaissent une erreur par une sous-chaîne de son message plutôt que par son code, et onze branches de `paquet25` qui se désactivent au motif que « la simulation de JWT ne marche pas dans le SQL Editor » — vestige d'un temps où il n'y avait pas de CI, et faux depuis que le stub d'authentification est réparé.
+**État vérifié au 29/08.** `paquet19`, `paquet24` et `paquet25` sont des artefacts écrits pour le SQL Editor, avant que la CI existe.
 
-**Ce que c'est.** Reprendre chaque garde d'erreur pour qu'elle teste un code, pas une phrase — et supprimer les onze branches `jwt sim`, qui mentent sur ce que la CI sait faire. Écrire les deux chemins nominaux encore annoncés « E2E non écrit » dans `emprestimos` et `reservas`.
+**Première passe, 30/08 (matin).** Le seed fournit désormais un monde de circulation complet — deux emprunts (un ouvert, un clos), un emprunt de la coordination, une consulta en `em_preparacao` et une réservation active, sur **trois holdings distincts** parce que le modèle porte deux invariants croisés (on ne réserve pas ce qui est en consulta, on ne consulte pas ce qui est réservé). Les SKIP sont passés de vingt et un à quelques-uns.
 
-**Pourquoi ça compte.** Elles couvrent le cœur de la circulation — emprunts et consultations. Les rafistoler a permis de savoir ce qu'elles cachaient ; les rafistoler encore reviendrait à entretenir un filet dont on connaît les trous. Une garde qui reconnaît une erreur à une sous-chaîne se tait le jour où le message change de langue.
+**Seconde passe, 30/08 (après-midi).** Ce que les douze branches `jwt sim` cachaient était pire qu'elles :
+
+1. **Le bilan de `paquet25` excluait les skips de son dénominateur.** Douze tests traitaient `not_authenticated` comme un skip alors qu'ils attendaient autre chose. Si le stub d'authentification régressait, ces douze passaient de PASSE à SKIP et la suite annonçait **`OK : 20/20`** au lieu de `OK : 32/32`. Verte, plus courte, muette sur la panne — et le portillon de la CI, qui cherche `OK : N/N`, l'aurait trouvée. Le même défaut existait dans `paquet_emprestimos` et `paquet_reservas`.
+2. **Six gardes cherchaient un texte de HINT dans `SQLERRM`**, qui porte le MESSAGE. `not_your_loan` a pour hint « Voce so pode renovar seus proprios emprestimos » ; `SQLERRM` vaut `not_your_loan`. Clauses mortes — dont deux rendaient toujours vraie une condition dont le `ELSE` comptait **tout autre échec comme un succès**.
+3. **Trois tests ne pouvaient pas échouer** : 6.04 et 6.05 de `paquet19` (qui attendent un succès, avec un `ELSE v_passed` final) et 1.04 de `paquet_reservas`, dont les *deux* branches comptaient un succès — et dont la branche `EXCEPTION` était morte, la fonction ne contenant aucun `RAISE`.
+4. Deux étiquettes nommaient des personnes réelles (`v_xavier_loan_id`, `v_livia_loan_id`) alors qu'elles désignaient les personas synthétiques du seed : l'anonymisation du 29/08 avait remplacé les UUID et laissé les prénoms.
+
+**Ce que c'est.** **Fait.** Les douze branches `jwt sim` retirées ; les trois dénominateurs corrigés ; les six gardes de hint remplacées par le code levé ; les trois tests infaillibles réécrits ; les étiquettes renommées ; et le **chemin E2E des emprunts écrit** (`paquet_emprestimos` section 3, cinq tests : prêt au comptoir → entête ouverte à une ligne → renouvellement par le lecteur → retour total → *l'exemplaire ne porte plus de ligne ouverte*, l'invariant que le reste du chemin ne vérifie pas).
+
+Au passage, une leçon que seule la CI pouvait donner : en resserrant 6.03/7.03/7.05 sur `not_your_loan`, elle a répondu `loan_not_found` trois fois. `fn_get_loan_context` est `SECURITY INVOKER` — sous RLS, un lecteur ne *voit* pas l'emprunt d'un autre, donc le refus tombe avant le contrôle d'appartenance. **Et c'est le refus le plus fort** : il ne dit pas que l'emprunt existe. Si ces trois tests viraient un jour à `not_your_loan`, ce serait RLS qui aurait cessé de cacher les emprunts des autres.
+
+Le test 3.03 a d'ailleurs corrigé sa propre première écriture : il affirmait « l'échéance recule » et la CI a répondu « inchangée, et aucune exception ». `api.renew_my_loan` ne lève pas — elle rend un jsonb `{ok, reason, new_due_date, renewed, skipped}`. Le test observait l'effet en ignorant le contrat. Il affirme désormais le contrat, et l'**implication** : *si* le renouvellement aboutit, *alors* l'échéance a reculé — un `ok:true` sans échéance qui bouge le fait rougir. La raison du refus part dans le journal de CI par un `RAISE NOTICE`, pour qu'on sache quoi seeder sans relancer une enquête.
+
+**Reste.** Le chemin E2E des réservations. Deux règles du modèle doivent être établies d'abord : ce qui remplit `v_unavailable` dans `fn_v2_create_reserva_by_holdings` (réserve-t-on quand un exemplaire est libre, ou seulement quand tout est sorti ?), et ce que rend `api.resolve_circulation_rule(p_mode := 'reservation')` pour `blmf-test`, qui n'a aucune politique de circulation configurée — si `reservation_allowed` y est faux par défaut, il faudra étoffer le seed d'une politique avant tout test. Le SKIP restant nomme ces deux points.
+
+**Pourquoi ça compte.** Elles couvrent le cœur de la circulation — emprunts et consultations. Mais la leçon de cette passe dépasse ces trois suites : **un test vert n'est pas un test qui passe, c'est un test qui aurait pu échouer.** Trois n'en étaient pas capables, et un bilan entier pouvait rétrécir sans que personne ne le voie. Un filet dont on ne compte pas les mailles absentes n'est pas un filet.
+
+Et un motif de skip décrit un état passé et lui survit : celui du chemin E2E des emprunts disait « exemplaire requis » deux mois après que le seed en eut fourni.
 
 **Ce qui compte comme fini.**
 
-- Aucune branche `jwt sim` ne subsiste : la simulation de JWT fonctionne, et une suite ne se désactive pas sur une croyance périmée.
-- Chaque garde d'erreur teste un code (`loan_not_found`, `loan_action_not_allowed`…), pas une sous-chaîne de message — un message change de langue, un code non.
-- Les deux chemins nominaux `emprestimos` et `reservas` sont écrits, ou l'on dit pourquoi ils ne le seront pas.
-- Les trois bilans suivent la convention `NOM OK : N/N`.
+- ✔ Aucune branche `jwt sim` ne subsiste : dans un test qui a simulé une session, `not_authenticated` est un ÉCHEC.
+- ✔ Les dénominateurs de `paquet25`, `paquet_emprestimos` et `paquet_reservas` incluent les skips — un test qui bascule en SKIP fait baisser le chiffre au lieu de disparaître.
+- ✔ Aucune garde ne cherche un texte de HINT dans `SQLERRM` : on teste le code levé, qui EST le message. Le hint se lit avec `GET STACKED DIAGNOSTICS … = PG_EXCEPTION_HINT`.
+- ✔ Aucun test ne compte un succès dans toutes ses branches.
+- ✔ Le chemin E2E des emprunts est écrit et vert (5 tests : prêt au comptoir → entête ouverte → renouvellement → retour total → l'exemplaire est libéré).
+- ☐ Le chemin E2E des réservations est écrit — ou les deux règles qui l'en empêchent sont établies et le seed étoffé en conséquence.
+- ✔ Les bilans suivent la convention `NOM OK : N/N`.
+- ☐ **Question ouverte, levée par le test 3.03** : dans une bibliothèque sans jeu de règles de circulation actif, `api.renew_my_loan` refuse **sans bruit** — elle ne lève pas, elle rend `{ok:false, reason:…}`. Le contrat est respecté, mais un refus muet coûte plus cher qu'un refus nommé : l'appelante qui ne lit pas le `ok` croit avoir renouvelé. À trancher — et si c'est un défaut, il mérite son propre item plutôt qu'une ligne ici.
 
 **Dépendances.** Aucune. **I7** a livré le run vert de référence et le seed étoffé ; les onze SKIP de `paquet19` relèvent désormais de cet item.
 
-*Renvois : `Journaux de CI sql-tests des 29 et 30/08/2026` · `supabase/seed.sql` · `tests/sql/paquet19_loan_wrappers_tests.sql`*
+*Renvois : `Journaux de CI sql-tests des 29 et 30/08/2026` · `supabase/seed.sql` · `tests/sql/paquet19_loan_wrappers_tests.sql (note en tete : les deux refus possibles)` · `tests/sql/paquet25_consulta_wrappers_tests.sql (chapeau de la section B)` · `tests/sql/paquet_emprestimos_tests.sql section 3`*
 
 ---
 

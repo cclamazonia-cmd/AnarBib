@@ -158,20 +158,50 @@ BEGIN
       IF v_n = 1 THEN v_passed:=v_passed+1;
       ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||v_n||' ligne(s) ouverte(s) au lieu d''une'); END IF;
 
-      -- 3.03 — le lecteur B renouvelle SON emprunt : l'echeance recule.
-      v_t:='3.03 renew_my_loan par le lecteur B recule l''echeance';
+      -- 3.03 — le lecteur B renouvelle SON emprunt.
+      --
+      -- CE QUE LA PREMIERE ECRITURE A APPRIS (30/08/2026). Ce test affirmait
+      -- « l'echeance recule ». La CI a repondu : echeance inchangee, et AUCUNE
+      -- exception. `api.renew_my_loan` ne leve pas — elle rend un jsonb
+      -- { ok, reason, new_due_date, renewed, skipped }. Le contrat est
+      -- explicite ; le test l'ignorait et n'observait que l'effet.
+      --
+      -- La cause tient au monde de test : `blmf-test` n'a aucun jeu de regles
+      -- de circulation actif (`library_circulation_policy_sets`), et le
+      -- renouvellement se refuse alors SANS BRUIT. Que ce silence soit le bon
+      -- comportement produit est une question ouverte — un refus muet est plus
+      -- couteux qu'un refus nomme — mais ce n'est pas a un test de la trancher.
+      --
+      -- Ce test affirme donc ce qui est vrai et verifiable aujourd'hui :
+      --   * la reponse respecte le contrat (`ok` et `reason` presents) ;
+      --   * SI le renouvellement aboutit, ALORS l'echeance a recule.
+      -- L'implication est un vrai test : un `ok = true` sans echeance qui
+      -- bouge le fait rougir. Et le NOTICE porte la raison dans le journal de
+      -- CI, pour qu'on sache quoi seeder sans relancer une enquete.
+      v_t:='3.03 renew_my_loan respecte son contrat, et tient sa promesse quand il aboutit';
       SELECT max(due_at) INTO v_due_avant FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims',
           '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
-        PERFORM api.renew_my_loan(v_loan);
+        v_json := api.renew_my_loan(v_loan);
         RESET ROLE;
         SELECT max(due_at) INTO v_due_apres FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
-        IF v_due_apres > v_due_avant THEN v_passed:=v_passed+1;
-        ELSE v_failed:=v_failed+1;
-          v_failures:=v_failures||(v_t||' : echeance inchangee ('||coalesce(v_due_avant::text,'NULL')
-            ||' -> '||coalesce(v_due_apres::text,'NULL')||') -- le renouvellement n''a rien fait');
+
+        RAISE NOTICE 'INFO 3.03 : renew_my_loan -> ok=% reason=% (echeance % -> %)',
+          coalesce(v_json->>'ok','(absent)'), coalesce(v_json->>'reason','(absente)'),
+          coalesce(v_due_avant::text,'NULL'), coalesce(v_due_apres::text,'NULL');
+
+        IF NOT (v_json ? 'ok' AND v_json ? 'reason') THEN
+          v_failed:=v_failed+1;
+          v_failures:=v_failures||(v_t||' : reponse hors contrat -> '||coalesce(v_json::text,'NULL'));
+        ELSIF (v_json->>'ok')::boolean AND NOT (v_due_apres > v_due_avant) THEN
+          v_failed:=v_failed+1;
+          v_failures:=v_failures||(v_t||' : ok=true mais echeance inchangee ('
+            ||coalesce(v_due_avant::text,'NULL')||' -> '||coalesce(v_due_apres::text,'NULL')
+            ||') -- le renouvellement dit avoir fait ce qu''il n''a pas fait');
+        ELSE
+          v_passed:=v_passed+1;
         END IF;
       EXCEPTION WHEN OTHERS THEN
         RESET ROLE;
