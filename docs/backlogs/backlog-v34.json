@@ -1390,6 +1390,17 @@
           "fr": "**Vérifié et clos le 30/08.** Le mécanisme est implémenté, et mieux que ne le disait la spec : `fn_expire_negotiation_timeout()` **lit le délai par bibliothèque** dans `library_notification_policies.reservation_negotiation_timeout_days` au lieu de le figer, la colonne porte exactement le `DEFAULT 21` et le `CHECK BETWEEN 7 AND 60` décrits au §5 de la spec, et les trois bibliothèques du réseau sont à 21 jours. Le cron `anarbib-reservation-expire-negotiation` tourne toutes les heures. La spec portait encore « À valider avant implémentation » : son en-tête est corrigé le même jour, en distinguant ce qui est **bâti** de ce qui reste à **voter** — le principe politique de la négociation symétrique n'a pas été soumis au CCLA sous cette forme.",
           "pt": "**Verificado e encerrado em 30/08.** O mecanismo está implementado, e melhor do que dizia a spec: `fn_expire_negotiation_timeout()` **lê o prazo por biblioteca** em vez de fixá-lo, a coluna traz exatamente o `DEFAULT 21` e o `CHECK BETWEEN 7 AND 60` do §5, e as três bibliotecas estão em 21 dias. O cron roda de hora em hora. O cabeçalho da spec, que ainda dizia «a validar antes da implementação», foi corrigido no mesmo dia, distinguindo o que está **construído** do que falta **votar**."
         }
+      ],
+      [
+        "I9",
+        {
+          "fr": "Les migrations horodatées dans le futur",
+          "pt": "As migrações datadas no futuro"
+        },
+        {
+          "fr": "**Clos le 30/08 par une règle, pas par une correction.** L'item signalait trois migrations datées en avance. Vérification faite le 30/08 : elles n'y sont plus — **mais parce que l'heure les a rattrapées**, pas parce qu'on les a corrigées. Un item qui se résout par l'écoulement du temps ne se résout pas, il repousse : le soir même, deux nouvelles migrations apparaissaient, datées de 20:30 et 21:00 UTC alors qu'il était 19:15. Corriger les trois fichiers nommés n'aurait donc rien réglé. **Huitième règle du hook `pre-commit`** : une migration ajoutée dont l'horodatage dépasse l'heure UTC réelle (tolérance 60 s pour l'écart d'horloges WSL/Windows) est refusée. Ce que coûtait le défaut, tant que l'heure n'avait pas passé : toute migration écrite entre-temps à l'heure réelle trie **avant** celle du futur et sera rejouée après elle en CI — l'ordre du dépôt cesse d'être l'ordre d'application, même dégât qu'une collision par un autre chemin. Complète `DOC-DEPLOY-4`.",
+          "pt": "**Encerrado em 30/08 por uma regra, não por uma correção.** O item apontava três migrações datadas com antecedência. Verificação em 30/08: já não estão — **mas porque a hora as alcançou**, não porque foram corrigidas. Um item que se resolve pela passagem do tempo não se resolve, adia-se: na mesma noite apareciam duas novas, datadas de 20:30 e 21:00 UTC quando eram 19:15. **Oitava regra do hook `pre-commit`**: uma migração adicionada cujo carimbo ultrapassa a hora UTC real (tolerância de 60 s) é recusada. Completa `DOC-DEPLOY-4`."
+        }
       ]
     ]
   },
@@ -4594,50 +4605,6 @@
       "r": [
         "deploy/README.md",
         "Commits 57321385, 35c03dd5, 90266600"
-      ]
-    },
-    {
-      "id": "I9",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Corriger les trois migrations horodatées dans le futur",
-        "pt": "Corrigir as três migrações datadas no futuro"
-      },
-      "v": {
-        "fr": "`20260830090000`, `20260830110000` et `20260830130000` sont appliquées en production alors que la date du jour est le **29/08**. Elles portent un horodatage du lendemain.",
-        "pt": "`20260830090000`, `20260830110000` e `20260830130000` estão aplicadas em produção enquanto a data de hoje é **29/08**. Trazem um carimbo do dia seguinte."
-      },
-      "w": {
-        "fr": "Rien à défaire — les migrations sont appliquées et fonctionnent. Ce qu'il faut, c'est comprendre d'où vient le décalage (fuseau horaire du poste, ou choix manuel) et poser un garde-fou.",
-        "pt": "Nada a desfazer — as migrações estão aplicadas e funcionam. O que é preciso é compreender de onde vem o descompasso (fuso horário da estação, ou escolha manual) e colocar uma guarda."
-      },
-      "y": {
-        "fr": "Le nom d'une migration est aussi sa position dans l'ordre de rejeu. Un horodatage en avance sur l'horloge crée une fenêtre où une migration écrite plus tard trie avant elle. La doctrine dit déjà de vérifier l'horodatage UTC avant de choisir — le garde-fou manque.",
-        "pt": "O nome de uma migração é também sua posição na ordem de reexecução. Um carimbo adiantado em relação ao relógio cria uma janela em que uma migração escrita depois ordena antes dela. A doutrina já diz para verificar o carimbo UTC antes de escolher — a guarda falta."
-      },
-      "f": {
-        "fr": [
-          "La cause est identifiée.",
-          "Le hook `pre-commit` refuse une migration dont l'horodatage est dans le futur."
-        ],
-        "pt": [
-          "A causa está identificada.",
-          "O hook `pre-commit` recusa uma migração cujo carimbo esteja no futuro."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "Relevé du 29/08/2026",
-        "REPRISE_claude_code_conventions_2026-08-20"
       ]
     },
     {

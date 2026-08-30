@@ -288,6 +288,32 @@ if ($stagedMigrations) {
             }
         }
 
+        # ---- Huitieme regle : pas d'horodatage dans le futur -------------
+        # Ajoutee le 30/08/2026 (item I9). Le backlog portait « trois migrations
+        # horodatees dans le futur » depuis le 29/08. Elles n'y sont plus -- mais
+        # parce que L'HEURE LES A RATTRAPEES, pas parce qu'on les a corrigees. Un
+        # item qui se resout par l'ecoulement du temps ne se resout pas : il
+        # repousse. Le 30/08 au soir, deux nouvelles sont apparues, datees de
+        # 20:30 et 21:00 UTC alors qu'il etait 19:15.
+        #
+        # Ce que ca coute, tant que l'heure n'a pas passe : `supabase db push`
+        # applique la migration, mais toute migration ecrite ENTRE-TEMPS avec
+        # l'heure reelle trie AVANT elle et sera rejouee apres en CI -- l'ordre
+        # du depot cesse d'etre l'ordre d'application. C'est le meme degat qu'une
+        # collision, par un autre chemin.
+        #
+        # Tolerance de 60 secondes : le fichier est cree avant d'etre commite, et
+        # les horloges WSL/Windows ne sont pas toujours au meme instant.
+        $maintenant = (Get-Date).ToUniversalTime().AddSeconds(60).ToString('yyyyMMddHHmmss')
+        if ($addedAll -contains $file -and $version -gt $maintenant) {
+            $violations += @{
+                File   = $file
+                Rule   = "Horodatage dans le futur ($version > $maintenant UTC)"
+                Detail = "Une migration s'horodate a l'instant ou on l'ecrit, en UTC : (Get-Date).ToUniversalTime().ToString('yyyyMMddHHmmss'). Datee en avance, elle trie apres des migrations qui n'existent pas encore -- et l'ordre du depot cesse d'etre l'ordre d'application."
+                Doc    = "DOC-DEPLOY-4 - backlog I9"
+            }
+        }
+
         $homonymes = @($existantes[$version] | Where-Object { $_ -ne $nom })
         if ($homonymes.Count -gt 0) {
             $violations += @{
