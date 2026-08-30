@@ -1322,7 +1322,7 @@ Et parce que la façon dont c'est apparu vaut d'être notée : aucune relecture 
 | **F2** | Corriger le gabarit des courriels d'alerte d'exploitation | `P1` | Ouvert |
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
 | **F4** | Vérifier les rappels d'échéance et les relances de retard | `P1` | Ouvert |
-| **F6** | Trois arbres `_shared` pour les fonctions, et deux routages de courriel qui divergent | `P2` | Ouvert |
+| **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1412,23 +1412,29 @@ Et parce que la façon dont c'est apparu vaut d'être notée : aucune relecture 
 
 *Renvois : `spec-flux-emprunts.md §10.2` · `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3` · `PLAN_formation_coordination_BLMF §5`*
 
-#### F6 — Trois arbres `_shared` pour les fonctions, et deux routages de courriel qui divergent
+#### F6 — `notify-internal-task` tourne sur une copie gelée de toute la pile courriel
 
 `P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
 
-**État.** Relevé le 30/08 en exportant un helper de `supabase/functions/_shared/context/library-mail-routing.ts` pour que `register` s'en serve.
+**État.** **Mesuré le 30/08, après ouverture de l'item.** Il y a bien trois arbres `_shared` sous `supabase/functions/`, mais ils ne pèsent pas le même poids : celui de `catalog_metadata_lookup` ne contient qu'un `cors.ts` sans équivalent canonique — ce n'est pas une duplication. Le cas réel est `notify-internal-task`.
 
-Il existe **trois** répertoires `_shared` sous `supabase/functions/` : le canonique (44 fichiers), plus deux copies privées — `notify-internal-task/_shared` (12 fichiers) et `catalog_metadata_lookup/_shared`. Ce ne sont pas des liens symboliques : ce sont de vraies copies, et elles ont dérivé. Les deux `library-mail-routing.ts` diffèrent de **139 lignes**.
+Ses 12 fichiers se répartissent ainsi : **3 sont légitimement privés** (`data/internal-tasks.ts`, `handlers/internal-task.ts`, `i18n/task-mail-strings.ts`, absents du canonique) et **9 sont de l'infrastructure dupliquée, toute divergente** — `library-mail-routing` (116 lignes d'écart), `library-notification-context` (122), `mail/layout` (140), `transport/email` (121), `shared/format` (89), `context/policies` (42), `core/webhook` (30), `core/env` (10), `shared/branding` (4). Environ **694 lignes** au total.
 
-Le détail qui a mis la puce à l'oreille : la copie de `notify-internal-task` contient déjà une fonction **privée** nommée `resolveLibraryLogoUrl` — une variante plus ancienne du même calcul. Le helper que le canonique exporte désormais porte donc le même nom qu'une fonction différente, à deux répertoires de distance.
+**Pourquoi ces copies existent : la question n'a pas de réponse dans le dépôt.** Elles apparaissent dans le TOUT PREMIER commit (`e6ec991a`, 21/08/2026) — 1 479 fichiers et 615 892 insertions sous un message qui parle d'un bouton de l'écran de catalogage. C'est l'import initial du dépôt : l'histoire ne commence pas avant. Aucune décision n'est écrite nulle part.
+
+**Ce qui diverge vraiment, vérifié :** le canonique résout la signature de pied de page en `signature_short_i18n[locale]` avec repli sur `signature_short` ; la copie ne connaît que `signature_short`, et son `resolveMailRouting` n'accepte même pas de locale. **La BLMF a `signature_short_i18n` rempli en six langues.** Ses avis de tâche interne sont donc signés « Equipe da BLMF » quelle que soit la langue de la personne, là où tous les autres courriels de la même bibliothèque disent « L'équipe de la BLMF » à qui lit en français.
+
+**Ce qui NE diverge pas, vérifié aussi :** `transportDisabledReason` est identique octet pour octet dans les deux copies, et le contexte de la copie lit bien `channel_active`. L'interrupteur d'envoi rendu réel le 30/08 est donc honoré ici comme ailleurs. `policyEnabled` et `resolveNetworkLogoUrl`, présents dans la copie seule, ne sont appelés par personne.
 
 *Constat du 29/08, non revérifié depuis.*
 
-**Ce que c'est.** **D'abord comprendre pourquoi les copies existent.** Un `_shared` privé sous une fonction est peut-être délibéré (isoler un déploiement, figer une version), peut-être un accident de copier-coller. La réponse décide de tout le reste, et elle n'est écrite nulle part.
+**Ce que c'est.** La première question de l'item — *pourquoi ces copies existent* — est close : elles précèdent l'histoire du dépôt, aucune décision n'est écrite. Il faut donc trancher **sur le fond**, pas par archéologie.
 
-**Puis mesurer l'écart utile** : sur les 139 lignes de différence, combien sont du fond (logo, transport, extinction) et combien de la forme ? Un diff commenté suffit.
+**Le plus petit geste utile**, si on ne veut pas ouvrir le chantier : donner à `resolveMailRouting` de la copie le paramètre `locale` et la lecture de `signature_short_i18n`, à l'identique du canonique. Ça referme la seule divergence dont on a constaté l'effet.
 
-**Enfin trancher** : réunir sur le canonique, ou assumer les copies en le disant dans un en-tête de chaque fichier. Les deux se défendent — ce qui ne se défend pas, c'est l'état actuel, où l'on ne sait pas laquelle fait foi.
+**Le geste complet** : faire pointer les 9 fichiers d'infrastructure de `notify-internal-task` vers `../../_shared/`, et ne garder en propre que les 3 fichiers de tâches. Le risque n'est pas nul — 694 lignes d'écart contiennent peut-être d'autres différences voulues — donc chaque fichier se reprend un par un, en comparant les envois avant/après sur un avis de tâche réel.
+
+**Et dans les deux cas** : écrire en tête de `notify-internal-task/_shared/` ce qui y vit et pourquoi, pour que la prochaine personne n'ait pas à refaire ce relevé.
 
 **Pourquoi ça compte.** Parce que le routage du courriel est justement l'endroit où une divergence ne se voit pas. Un logo résolu autrement, une règle d'extinction appliquée dans une copie et pas dans l'autre : le message part quand même, et personne ne compare deux courriels envoyés par deux fonctions différentes.
 
@@ -1436,14 +1442,14 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 **Ce qui compte comme fini.**
 
-- La raison d'être de chaque `_shared` privé est écrite, ou la copie est supprimée.
-- L'écart de fond entre les deux `library-mail-routing.ts` est inventorié, ligne par ligne.
-- La collision de nom sur `resolveLibraryLogoUrl` est levée, dans un sens ou dans l'autre.
-- Un lecteur qui ouvre l'un des trois fichiers sait, dès l'en-tête, lequel fait foi.
+- La divergence de signature localisée est refermée : un avis de tâche à la BLMF est signé dans la langue de qui le lit.
+- Le sort des 9 fichiers d'infrastructure dupliqués est tranché — réunis, ou assumés par écrit.
+- Un en-tête dans `notify-internal-task/_shared/` dit ce qui y vit et pourquoi.
+- La collision de nom sur `resolveLibraryLogoUrl` est levée.
 
-**Dépendances.** Aucune technique. La seule dépendance est une réponse : les copies sont-elles voulues ?
+**Dépendances.** Aucune. Le relevé est fait — il est dans cet item. Ce qui reste est une décision de portée, pas une enquête.
 
-*Renvois : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/context/library-mail-routing.ts` · `supabase/functions/catalog_metadata_lookup/_shared/`*
+*Renvois : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026`*
 
 ---
 

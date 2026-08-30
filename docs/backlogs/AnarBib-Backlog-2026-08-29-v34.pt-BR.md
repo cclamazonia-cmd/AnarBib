@@ -1320,7 +1320,7 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 | **F2** | Corrigir o template dos e-mails de alerta de operação | `P1` | Aberto |
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
 | **F4** | Verificar os lembretes de vencimento e as cobranças de atraso | `P1` | Aberto |
-| **F6** | Três árvores `_shared` para as funções, e dois roteamentos de e-mail que divergem | `P2` | Aberto |
+| **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1410,23 +1410,29 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 *Remissões : `spec-flux-emprunts.md §10.2` · `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3` · `PLAN_formation_coordination_BLMF §5`*
 
-#### F6 — Três árvores `_shared` para as funções, e dois roteamentos de e-mail que divergem
+#### F6 — `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript
 
-**Estado.** Levantado em 30/08 ao exportar um helper de `supabase/functions/_shared/context/library-mail-routing.ts` para que `register` o usasse.
+**Estado.** **Medido em 30/08, depois da abertura do item.** Há de facto três árvores `_shared` sob `supabase/functions/`, mas não pesam o mesmo: a de `catalog_metadata_lookup` contém apenas um `cors.ts` sem equivalente canónico — não é duplicação. O caso real é `notify-internal-task`.
 
-Existem **três** diretórios `_shared` sob `supabase/functions/`: o canónico (44 ficheiros), mais duas cópias privadas — `notify-internal-task/_shared` (12 ficheiros) e `catalog_metadata_lookup/_shared`. Não são ligações simbólicas: são cópias reais, e divergiram. Os dois `library-mail-routing.ts` diferem em **139 linhas**.
+Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data/internal-tasks.ts`, `handlers/internal-task.ts`, `i18n/task-mail-strings.ts`, ausentes do canónico) e **9 são infraestrutura duplicada, toda divergente** — `library-mail-routing` (116 linhas de diferença), `library-notification-context` (122), `mail/layout` (140), `transport/email` (121), `shared/format` (89), `context/policies` (42), `core/webhook` (30), `core/env` (10), `shared/branding` (4). Cerca de **694 linhas** ao todo.
 
-O detalhe que deu o alerta: a cópia de `notify-internal-task` já contém uma função **privada** chamada `resolveLibraryLogoUrl` — uma variante mais antiga do mesmo cálculo. O helper que o canónico agora exporta tem portanto o mesmo nome que uma função diferente, a dois diretórios de distância.
+**Porque existem estas cópias: a pergunta não tem resposta no repositório.** Aparecem no PRIMEIRO commit (`e6ec991a`, 21/08/2026) — 1 479 ficheiros e 615 892 inserções sob uma mensagem que fala de um botão do ecrã de catalogação. É a importação inicial: a história não começa antes. Nenhuma decisão está escrita em lado nenhum.
+
+**O que diverge realmente, verificado:** o canónico resolve a assinatura de rodapé em `signature_short_i18n[locale]` com recurso a `signature_short`; a cópia só conhece `signature_short`, e o seu `resolveMailRouting` nem sequer aceita uma locale. **A BLMF tem `signature_short_i18n` preenchido em seis línguas.** Os seus avisos de tarefa interna são portanto assinados «Equipe da BLMF» seja qual for a língua da pessoa, ao passo que todos os outros e-mails da mesma biblioteca dizem «L'équipe de la BLMF» a quem lê em francês.
+
+**O que NÃO diverge, também verificado:** `transportDisabledReason` é idêntico byte a byte nas duas cópias, e o contexto da cópia lê bem `channel_active`. O interruptor de envio tornado real em 30/08 é portanto honrado aqui como noutro sítio. `policyEnabled` e `resolveNetworkLogoUrl`, presentes só na cópia, não são chamados por ninguém.
 
 *Constato de 29/08, não reverificado desde então.*
 
-**O que é.** **Primeiro compreender porque existem as cópias.** Um `_shared` privado sob uma função talvez seja deliberado (isolar um deploy, fixar uma versão), talvez um acidente de copiar-colar. A resposta decide todo o resto, e não está escrita em lado nenhum.
+**O que é.** A primeira pergunta do item — *porque existem estas cópias* — está encerrada: precedem a história do repositório, nenhuma decisão está escrita. É preciso portanto decidir **pelo mérito**, não por arqueologia.
 
-**Depois medir a diferença útil**: das 139 linhas de diferença, quantas são de fundo (logótipo, transporte, extinção) e quantas de forma? Um diff comentado basta.
+**O menor gesto útil**, se não se quiser abrir o canteiro: dar ao `resolveMailRouting` da cópia o parâmetro `locale` e a leitura de `signature_short_i18n`, igual ao canónico. Isso fecha a única divergência cujo efeito foi constatado.
 
-**Enfim decidir**: reunir no canónico, ou assumir as cópias dizendo-o num cabeçalho de cada ficheiro. Ambas se defendem — o que não se defende é o estado atual, em que não se sabe qual faz fé.
+**O gesto completo**: fazer os 9 ficheiros de infraestrutura de `notify-internal-task` apontarem para `../../_shared/`, e guardar em próprio apenas os 3 ficheiros de tarefas. O risco não é nulo — 694 linhas de diferença talvez contenham outras diferenças desejadas — portanto cada ficheiro retoma-se um a um, comparando os envios antes/depois num aviso de tarefa real.
+
+**E nos dois casos**: escrever no cabeçalho de `notify-internal-task/_shared/` o que ali vive e porquê, para que a próxima pessoa não tenha de refazer este levantamento.
 
 **Por que importa.** Porque o roteamento do e-mail é justamente o sítio onde uma divergência não se vê. Um logótipo resolvido de outra forma, uma regra de extinção aplicada numa cópia e não na outra: a mensagem parte na mesma, e ninguém compara dois e-mails enviados por duas funções diferentes.
 
@@ -1434,14 +1440,14 @@ O detalhe que deu o alerta: a cópia de `notify-internal-task` já contém uma f
 
 **O que conta como terminado.**
 
-- A razão de ser de cada `_shared` privado está escrita, ou a cópia é suprimida.
-- A diferença de fundo entre os dois `library-mail-routing.ts` está inventariada, linha a linha.
-- A colisão de nome sobre `resolveLibraryLogoUrl` está resolvida, num sentido ou noutro.
-- Quem abre um dos três ficheiros sabe, já pelo cabeçalho, qual faz fé.
+- A divergência de assinatura localizada está fechada: um aviso de tarefa na BLMF é assinado na língua de quem o lê.
+- O destino dos 9 ficheiros de infraestrutura duplicados está decidido — reunidos, ou assumidos por escrito.
+- Um cabeçalho em `notify-internal-task/_shared/` diz o que ali vive e porquê.
+- A colisão de nome sobre `resolveLibraryLogoUrl` está resolvida.
 
-**Dependências.** Nenhuma técnica. A única dependência é uma resposta: as cópias são desejadas?
+**Dependências.** Nenhuma. O levantamento está feito — está neste item. O que resta é uma decisão de alcance, não uma investigação.
 
-*Remissões : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/context/library-mail-routing.ts` · `supabase/functions/catalog_metadata_lookup/_shared/`*
+*Remissões : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026`*
 
 ---
 
