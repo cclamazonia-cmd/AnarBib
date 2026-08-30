@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-30** · 87 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-30** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 12
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 11
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -360,7 +360,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B14** | Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated` | `P2` | Ouvert |
 | **B4** | Examiner les quatre tables à RLS sans policy qui ne sont pas du transit | `P2` | Ouvert |
 | **B5** | Résorber les neuf policies qui réévaluent `auth.*()` par ligne | `P2` | Ouvert |
-| **B6** | Réconcilier `config.toml` avec les 48 fonctions réellement déployées | `P1` | Ouvert |
 | **B7** | Départager les homonymes de fonctions entre `ingest` et `public` | `P2` | Ouvert |
 | **B9** | Purger le schéma `backup_2026_05_07` | `P2` | Ouvert |
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
@@ -493,26 +492,6 @@ Les oracles trouvés en mai avaient tous la même forme : un identifiant en para
 **Dépendances.** Aucune.
 
 *Renvois : `Advisors performance, relevé du 29/08/2026`*
-
-#### B6 — Réconcilier `config.toml` avec les 48 fonctions réellement déployées
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, administration système
-
-**État vérifié au 29/08.** `supabase/config.toml` porte **31 sections `[functions.*]`, toutes à `verify_jwt = false`, aucune à `true`**. Les commentaires du fichier annoncent « 17 en `false` et 6 en `true` » ; `CLAUDE.md` annonce « 36 dont 5 à `true` ». Les trois se contredisent, et **18 des 48 fonctions déployées ne sont pas déclarées du tout**.
-
-**Ce que c'est.** Établir la liste réelle des 48 fonctions et, pour chacune, ce qui doit la protéger : JWT de la plateforme, secret de webhook, ou rien parce qu'elle est publique par nature. Écrire cette liste dans `config.toml` et corriger les commentaires et `CLAUDE.md`.
-
-**Pourquoi ça compte.** C'est la seule ligne de la documentation qui décrit une protection **qui n'existe pas**. Les 18 fonctions non déclarées reposent sur le comportement par défaut de la plateforme — un comportement qui disparaîtra le jour de la bascule auto-hébergée, où c'est le routeur `main` qui décidera, en refus par défaut.
-
-**Ce qui compte comme fini.**
-
-- `config.toml` déclare les 48 fonctions déployées, sans exception.
-- Chaque `verify_jwt = false` porte une ligne de commentaire disant ce qui protège la fonction à la place.
-- Le routeur `main` a été relu contre cette liste.
-
-**Dépendances.** Prérequis de **I3** (test du routeur `main`).
-
-*Renvois : `Relevé du 29/08/2026` · `deploy/README.md` · `supabase/functions/main/index.ts`*
 
 #### B7 — Départager les homonymes de fonctions entre `ingest` et `public`
 
@@ -2282,6 +2261,11 @@ Ces entrées figuraient dans le v33, dans `ETAT-AVANCEMENT-multisessions`, dans 
 Mais la vérification a trouvé autre chose, qui valait le détour. **La façade énumère ses colonnes** : ajouter une colonne à `api.my_access` ne la fait pas apparaître dans `public.my_access`, qui continue de projeter la liste écrite le jour de sa création. Et **31 fonctions déclarent `v_actor public.my_access%rowtype`** — la forme de la façade est devenue un *type*. Une divergence ne lèverait donc rien : les 31 compileraient et ne verraient simplement jamais la colonne neuve. Une divergence par **omission**, la seule qui ne fasse aucun bruit.
 
 Au 30/08 les deux couples concordent (20/20 et 13/13 colonnes). Gardé par le **T8** de `vues_api_definer_tests.sql`, qui n'y répare rien mais empêche que ça cesse d'être vrai sans que personne ne le voie. |
+| B6 | `config.toml` et les 48 fonctions déployées | **Réconcilié et clos le 30/08 — le fichier était juste depuis le début.** L'item annonçait que « 18 des 48 fonctions déployées ne sont pas déclarées du tout ». Comparaison faite, section par section, contre `supabase functions list` : **31 déclarées, toutes à `false`, et toutes à `false` en production ; 17 non déclarées, toutes à `true` en production. Aucun désaccord, dans aucun sens** — pas une déclaration orpheline, pas une valeur divergente.
+
+La conclusion de l'item reposait sur un contresens : **ne pas déclarer une fonction n'est pas un oubli, c'est la façon de lui laisser le défaut de la plateforme** — et ce défaut est le réglage le *plus fermé*. Déclarer les 48 ajouterait du bruit et une seconde source de vérité à tenir à jour. La doctrine écrite en tête du fichier disait déjà exactement cela.
+
+Ce qui était faux, ce sont les **chiffres du commentaire** — « 17 en `false` et 6 en `true` », datés du 07/05 — et ceux de `CLAUDE.md`. Trois documents se contredisaient au sujet d'un fichier qui, lui, avait raison. Le commentaire est refait, daté, et dit désormais où est la source de vérité : la liste des sections `[functions.*]`, pas la prose qui la commente. |
 
 ---
 
@@ -2313,4 +2297,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 87 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

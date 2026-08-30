@@ -17,9 +17,25 @@ project_id = "anarbib"
 #   - verify_jwt non déclaré      pour les fonctions appelées par le frontend
 #     (default = true)           authentifié (utilisent le JWT Supabase Auth).
 #
-# Inventaire au 2026-05-07 (cf. supabase functions list) :
+# RÉCONCILIÉ LE 2026-08-30 (item B6). Le fichier était JUSTE ; ce sont les
+# chiffres de ce commentaire qui avaient vieilli, et le backlog en avait conclu
+# à tort que « 18 des 48 fonctions déployées ne sont pas déclarées du tout ».
+# Ne pas déclarer une fonction n'est pas un oubli : c'est la façon de lui laisser
+# le défaut de la plateforme, qui est le réglage le PLUS fermé. Déclarer les 48
+# ajouterait du bruit et une seconde source de vérité à tenir à jour.
 #
-#   verify_jwt: false  (17 fonctions, déclarées ci-dessous)
+# Relevé du 2026-08-30 (48 fonctions déployées, `supabase functions list`) :
+#   * 31 déclarées ici, toutes à false, et toutes à false en production ;
+#   * 17 non déclarées, toutes à true en production (le défaut) ;
+#   * AUCUN désaccord entre ce fichier et la production, dans un sens ou dans
+#     l'autre — aucune déclaration orpheline, aucune valeur divergente.
+# Les listes nominatives ci-dessous datent du 07/05 et n'ont pas été refaites :
+# elles illustrent la règle, elles ne l'inventorient plus. La source de vérité
+# est la liste des sections [functions.*] de ce fichier, pas ce commentaire.
+#
+# Inventaire illustratif au 2026-05-07 :
+#
+#   verify_jwt: false  (déclarées ci-dessous — 31 au 30/08/2026)
 #     - notify-event, notify-internal-task, notify-library-request,
 #       notify-weekly-report, notify-network-weekly-report,
 #       notify-mid-loan-reading, notify-document-permission-request,
@@ -30,7 +46,7 @@ project_id = "anarbib"
 #        = endpoint OAI-PMH moissonnable par des harvesters externes sans JWT,
 #        gate applicatif via fn_oai_harvestable_* — paquet OAI-O2, 12/06/2026)
 #
-#   verify_jwt: true   (6 fonctions, AUCUNE déclaration nécessaire)
+#   verify_jwt: true   (AUCUNE déclaration nécessaire — 17 au 30/08/2026)
 #     - register (création de compte, JWT Supabase obligatoire)
 #     - probe-partner-catalog
 #     - catalog_metadata_lookup

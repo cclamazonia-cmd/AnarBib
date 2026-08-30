@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 87 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 12
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -360,7 +360,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B14** | Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated` | `P2` | Aberto |
 | **B4** | Examinar as quatro tabelas com RLS sem policy que não são de trânsito | `P2` | Aberto |
 | **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | Aberto |
-| **B6** | Reconciliar `config.toml` com as 48 funções realmente implantadas | `P1` | Aberto |
 | **B7** | Desambiguar os homônimos de funções entre `ingest` e `public` | `P2` | Aberto |
 | **B9** | Purgar o esquema `backup_2026_05_07` | `P2` | Aberto |
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
@@ -493,26 +492,6 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 **Dependências.** Nenhuma.
 
 *Remissões : `Advisors performance, relevé du 29/08/2026`*
-
-#### B6 — Reconciliar `config.toml` com as 48 funções realmente implantadas
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, administração de sistemas
-
-**Estado verificado em 29/08.** `supabase/config.toml` traz **31 seções `[functions.*]`, todas em `verify_jwt = false`, nenhuma em `true`**. Os comentários do arquivo anunciam «17 em `false` e 6 em `true`»; `CLAUDE.md` anuncia «36 das quais 5 em `true`». Os três se contradizem, e **18 das 48 funções implantadas não estão declaradas de forma alguma**.
-
-**O que é.** Estabelecer a lista real das 48 funções e, para cada uma, o que deve protegê-la: JWT da plataforma, segredo de webhook, ou nada porque é pública por natureza. Escrever essa lista em `config.toml` e corrigir os comentários e o `CLAUDE.md`.
-
-**Por que importa.** É a única linha da documentação que descreve uma proteção **que não existe**. As 18 funções não declaradas dependem do comportamento padrão da plataforma — um comportamento que desaparecerá no dia da migração auto-hospedada, onde é o roteador `main` que decidirá, em recusa por omissão.
-
-**O que conta como terminado.**
-
-- `config.toml` declara as 48 funções implantadas, sem exceção.
-- Cada `verify_jwt = false` traz uma linha de comentário dizendo o que protege a função no lugar.
-- O roteador `main` foi relido contra essa lista.
-
-**Dependências.** Pré-requisito de **I3** (teste do roteador `main`).
-
-*Remissões : `Relevé du 29/08/2026` · `deploy/README.md` · `supabase/functions/main/index.ts`*
 
 #### B7 — Desambiguar os homônimos de funções entre `ingest` e `public`
 
@@ -2280,6 +2259,11 @@ Estas entradas constavam no v33, em `ETAT-AVANCEMENT-multisessions`, em `ETAT-la
 Mas a verificação encontrou outra coisa. **A fachada enumera as suas colunas**: acrescentar uma coluna a `api.my_access` não a faz aparecer em `public.my_access`. E **31 funções declaram `v_actor public.my_access%rowtype`** — a forma da fachada tornou-se um *tipo*. Uma divergência não levantaria nada: as 31 compilariam e nunca veriam a coluna nova. Uma divergência por **omissão**, a única que não faz barulho.
 
 Em 30/08 os dois pares concordam (20/20 e 13/13 colunas). Guardado pelo **T8** de `vues_api_definer_tests.sql`. |
+| B6 | `config.toml` e as 48 funções implantadas | **Reconciliado e encerrado em 30/08 — o ficheiro estava certo desde o início.** O item anunciava que «18 das 48 funções implantadas não estão declaradas». Comparação feita contra `supabase functions list`: **31 declaradas, todas a `false`, e todas a `false` em produção; 17 não declaradas, todas a `true` em produção. Nenhum desacordo.**
+
+A conclusão do item assentava num contrassenso: **não declarar uma função não é um esquecimento, é a forma de lhe deixar o padrão da plataforma** — e esse padrão é o ajuste *mais fechado*. A doutrina escrita no topo do ficheiro já dizia exatamente isso.
+
+O que estava errado eram os **números do comentário**, datados de 07/05, e os de `CLAUDE.md`. Três documentos contradiziam-se a respeito de um ficheiro que tinha razão. O comentário foi refeito, datado, e diz agora onde está a fonte de verdade: a lista das secções `[functions.*]`, não a prosa que a comenta. |
 
 ---
 
@@ -2311,4 +2295,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 87 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
