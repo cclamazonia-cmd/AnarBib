@@ -25,6 +25,16 @@ function pubUrl(v) {
     return "";
   }
 }
+// LOGO-UNE-SOURCE (30/08/2026) — exporte pour que `register` resolve le logo
+// d une biblio EXACTEMENT comme toutes les fonctions notify-*. Elle lisait
+// jusqu ici `libraries.logo_url`, une source a elle seule : pour la BLMF et la
+// BTL c etait une URL noblogs.org, une image differente de celle que l app et
+// tous les autres courriels affichent, hebergee hors du stockage — donc jamais
+// inlinee en base64 par inlineLogosInHtml (qui ne cible que supabase.co), donc
+// chargee a distance a chaque ouverture de message, 475 Ko pour la BLMF.
+export function resolveLibraryLogoUrl(ctx) {
+  return libLogo(ctx);
+}
 function libLogo(ctx) {
   if (ctx?.use_library_logo === false) return "";
   const fk = pubUrl(ctx?.logo_file_key);

@@ -3,7 +3,7 @@ import { verifierSolution } from '../_shared/altcha.ts';
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
-import { transportDisabledReason } from "../_shared/context/library-mail-routing.ts";
+import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/context/library-mail-routing.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -711,7 +711,7 @@ serve(async (req)=>{
           library_slug: effectiveLibrarySlug
         }, 400);
       }
-      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, logo_url, reader_cards_enabled, reader_validation_mode, is_active, accepts_public_signup, visibility_level").eq("slug", effectiveLibrarySlug).maybeSingle();
+      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, reader_cards_enabled, reader_validation_mode, is_active, accepts_public_signup, visibility_level").eq("slug", effectiveLibrarySlug).maybeSingle();
       if (libraryRowError || !foundLibraryRow?.id) {
         console.error("register: library not found in libraries", {
           librarySlug: effectiveLibrarySlug,
@@ -1084,7 +1084,17 @@ serve(async (req)=>{
     // pas de logo ; cas logo_url NULL/vide : firstNonEmptyString normalise en
     // chaîne vide et buildLogoTable omet la cellule (repli « pas de logo »).
     const anarbibLogoUrl = MAIL_BRAND.anarbibLogoUrl;
-    const libraryLogoUrl = mailIsWithoutLibrary ? "" : firstNonEmptyString(libraryRow?.logo_url);
+    // LOGO-UNE-SOURCE (30/08/2026) — le logo vient desormais de l identite
+    // d expedition (library_commons via api.library_email_identity : logo_file_key
+    // d abord, logo_url absolue en repli), resolu par le MEME helper que les
+    // fonctions notify-*. Auparavant register lisait `libraries.logo_url`, dont
+    // elle etait l unique lectrice : quatre copies du logo existaient, celle-la
+    // pointait pour la BLMF et la BTL vers noblogs.org — une autre image que
+    // celle de l app, hors stockage, donc jamais inlinee en base64 et rechargee
+    // a distance a chaque ouverture. `libraries.logo_url` n a plus aucun lecteur,
+    // ni en SQL (aucune vue n en depend) ni dans le frontend, qui passe tout
+    // entier par resolveLibraryLogo de src/lib/theme.js sur library_commons.
+    const libraryLogoUrl = mailIsWithoutLibrary ? "" : resolveLibraryLogoUrl(libraryMeta);
     const replyToEmail = ANARBIB_REPLY_TO_EMAIL;
     const senderEmail = senderEmailEnv;
     const senderDisplayName = mailIsWithoutLibrary ? "AnarBib" : `AnarBib · ${displayName}`;
