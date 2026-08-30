@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 90 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 89 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 4
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 12
@@ -365,8 +365,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B8** | Desambiguar as views que existem em duplicata entre `public` e `api` | `P2` | Aberto |
 | **B9** | Purgar o esquema `backup_2026_05_07` | `P2` | Aberto |
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
-| **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P2` | A verificar |
-| **B12** | Elucidar as três ações críticas interbibliotecas que ficaram em `skipped` | `P2` | A verificar |
+| **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
+| **B12** | Um envio não efetuado não diz por quê: os `skipped` de `team_notification_outbox` | `P2` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B15** | Uma renovação recusada não diz nada a quem não lê o `ok` | `P2` | A verificar |
 
@@ -594,9 +594,11 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 #### B11 — Compreender `user_wishlist`: uma linha viva para 9 092 inserções
 
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** A tabela `public.user_wishlist` carrega **1 linha viva** para **9 092 inserções acumuladas**. É a relação escrita/exclusão mais extrema do banco, por duas ordens de grandeza.
+**Estado verificado em 29/08.** **Medido em 30/08: 1 linha viva, 9 092 inserções, 9 082 supressões.** A razão não é uma fuga de escrita mas um **ciclo**: quase tudo o que entra volta a sair. Nove mil idas e voltas para uma única linha sobrevivente não se parece com um uso de leitoras — a rede não tem esse volume.
+
+A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a seguir»**.
 
 **O que é.** Encontrar o que escreve e apaga: um teste reexecutado, um carregamento de página que insere e depois cancela, um componente React que chama a RPC a cada renderização. Olhar `OPAC-W1`, cuja nota diz «resta `WITH CHECK`».
 
@@ -611,24 +613,29 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 *Remissões : `REGISTRE §18 OPAC-W1` · `Relevé du 29/08/2026`*
 
-#### B12 — Elucidar as três ações críticas interbibliotecas que ficaram em `skipped`
+#### B12 — Um envio não efetuado não diz por quê: os `skipped` de `team_notification_outbox`
 
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
 
-**Estado verificado em 29/08.** Três linhas de `network.cross_library_critical_action` estão em `status = 'skipped'` desde 08/06/2026, com `attempts = 1`, `last_error` nulo e um `pg_net_request_id` presente. O apontamento é de 26/08 e não foi instruído.
+**Estado verificado em 29/08.** **Reformulado em 30/08 após verificação: o item designava uma tabela que não existe.** Falava de «três linhas de `network.cross_library_critical_action` em `status = 'skipped'`». Essa relação não existe, e a única tabela de nome vizinho não tem nenhuma das colunas citadas. O constato fora copiado sobre o objeto errado na reescrita v34.
 
-**O que é.** Cruzar os `pg_net_request_id` com os logs de `notify-event` para saber se a chamada saiu, se falhou, ou se foi deliberadamente ignorada. Depois decidir: reexecutar, ou encerrar com o motivo.
+As linhas existem, mas em **`public.team_notification_outbox`** — e são **quatro**, não três: três de 08/06/2026 e **uma de 30/08/2026**. Não é uma curiosidade histórica: ainda acontece.
 
-**Por que importa.** Estas linhas rastreiam ações de administração de rede que tocam uma biblioteca diferente da pessoa que age. Um status `skipped` sem erro é ou uma notificação que nunca saiu, ou um rastro mal registrado. Ambos merecem ser sabidos.
+Cada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error` **nulo**. O pedido partiu, e a linha não está em erro: está `skipped` porque algo decidiu não enviar. **Mas a razão não está escrita em lugar nenhum.**
+
+**O que é.** Acrescentar à outbox uma coluna que carregue a razão do salto — `skip_reason` — e preenchê-la onde a decisão é tomada. `last_error` não pode fazer esse papel: um salto deliberado não é um erro. Depois retomar as quatro linhas existentes: com a razão, saber-se-á se é preciso reenviar ou encerrar.
+
+**Por que importa.** Aplicação direta de `DOC-SILENCE-1`, firmado no mesmo dia: **um dispositivo que não age deve dizê-lo.** Uma notificação de equipe não enviada sem razão escrita é uma pessoa que não foi avisada e um registro que não sabe explicá-lo.
 
 **O que conta como terminado.**
 
-- As três linhas têm uma explicação escrita.
-- Se o mecanismo pode pular uma notificação em silêncio, está corrigido.
+- A outbox traz uma razão de salto, distinta de `last_error`.
+- As quatro linhas `skipped` têm um veredicto: reenviadas, ou encerradas com o motivo.
+- O caminho que decide saltar escreve a razão no mesmo lugar em que decide.
 
 **Dependências.** Ligado a **F1** (auditoria da cadeia de e-mail).
 
-*Remissões : `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §4`*
+*Remissões : `public.team_notification_outbox` · `REGISTRE_decisions DOC-SILENCE-1` · `_shared/context/library-mail-routing.ts`*
 
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
@@ -1271,8 +1278,7 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 | **F1** | Auditar a cadeia de e-mail de ponta a ponta | `P1` | Aberto |
 | **F2** | Corrigir o template dos e-mails de alerta de operação | `P1` | Aberto |
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
-| **F4** | Verificar os lembretes de vencimento e as cobranças de atraso | `P2` | A verificar |
-| **F5** | Verificar se o prazo de negociação de 21 dias está de fato aplicado | `P2` | A verificar |
+| **F4** | Verificar os lembretes de vencimento e as cobranças de atraso | `P1` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1335,9 +1341,11 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 #### F4 — Verificar os lembretes de vencimento e as cobranças de atraso
 
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
 **Estado verificado em 29/08.** `spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.
+
+**Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar.
 
 **O que é.** Verificar no banco se os lembretes saem por outro caminho, e senão, decidir: implementá-los, ou emendar a spec. Um empréstimo atrasado que não dispara nada é um empréstimo que ninguém cobra.
 
@@ -1352,25 +1360,6 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 *Remissões : `spec-flux-emprunts.md §10.2` · `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3` · `PLAN_formation_coordination_BLMF §5`*
 
-#### F5 — Verificar se o prazo de negociação de 21 dias está de fato aplicado
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado verificado em 29/08.** O cron `anarbib-reservation-expire-negotiation` roda a cada hora (`25 * * * *`) — enquanto a spec de reserva v2 dava esse prazo como **não implementado**. O mecanismo existe portanto; o que ele faz exatamente não foi verificado.
-
-**O que é.** Ler `fn_expire_negotiation_timeout()`, verificar o prazo que aplica, e corrigir a spec ou a função conforme o que se encontrar.
-
-**Por que importa.** Um desvio do mesmo tipo já foi encontrado: a spec e o material de formação anunciavam uma expiração das reservas a cada seis horas, enquanto o cron roda **a cada hora**. O material foi corrigido, a spec não necessariamente.
-
-**O que conta como terminado.**
-
-- O prazo real está escrito na spec.
-- As frequências anunciadas nos materiais de formação correspondem aos crons reais.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3` · `spec-workflow-reservation-v2-negotiation.md`*
-
 ---
 
 ### G — Rede, governança, federação
@@ -1383,7 +1372,7 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 | **G2** | Decidir politicamente o desvio entre P2 e P8 sobre a promoção a coordenador·a | `P1` | Decisão coletiva |
 | **G3** | Testar o circuito de promoção colegiada em `blmf-teste` | `P1` | Aberto |
 | **G4** | Exercer os quatro e-mails de equipe jamais enviados | `P1` | Aberto |
-| **G5** | Esclarecer o estatuto da Biblioteca Terra Livre | `P2` | A verificar |
+| **G5** | O que `is_test_mode` realmente comanda na Biblioteca Terra Livre | `P2` | Aberto |
 | **G6** | Dar uma tela ao empréstimo entre bibliotecas | `P2` | Aberto |
 | **G7** | Decidir a admissão da Biblioteca SOLIDAIRES | `P1` | Bloqueado |
 | **G8** | Completar a cartografia com os arquivos identificados alhures | `P2` | Aberto |
@@ -1470,13 +1459,15 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 *Remissões : `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §2`*
 
-#### G5 — Esclarecer o estatuto da Biblioteca Terra Livre
+#### G5 — O que `is_test_mode` realmente comanda na Biblioteca Terra Livre
 
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : deliberação coletiva
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** A BTL traz `is_test_mode = true` e `email_delivery_mode = 'test_only'`, **embora contenha 2 187 exemplares** — o maior acervo da rede — e esteja publicada na rede. Postura deliberada, ou resíduo de configuração?
+**Estado verificado em 29/08.** **Verificado em 30/08, e o item reduz-se a metade.** O constato assentava em `library_commons.email_delivery_mode = 'test_only'`. Ora **nenhum caminho de envio lê essa coluna**: é o seletor inerte retirado no mesmo dia. O verdadeiro comutador é `library_mail_channels`, e diz outra coisa — a BTL tem `delivery_mode = 'platform_shared'` e `active = true`. **O correio da BTL parte normalmente, e sempre partiu.**
 
-**O que é.** Perguntar à BTL o que ela quer, depois alinhar a configuração. Se o modo de teste for deliberado, escrevê-lo em algum lugar para que ninguém o «corrija».
+Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa biblioteca de 2 187 exemplares publicada na rede. O que a lê, e o que ela muda?
+
+**O que é.** Procurar o que lê `libraries.is_test_mode` — no banco e no front. Três saídas, e é preciso decidir entre elas: ou a coluna comanda algo real, e é preciso perguntar à BTL o que quer; ou não comanda nada, e é um segundo seletor inerte a retirar (`DOC-SILENCE-1`); ou serve apenas a um filtro de exibição, e o seu nome mente sobre o alcance.
 
 **Por que importa.** Em modo de teste, os e-mails não saem. Uma biblioteca com 2 187 exemplares publicados cujas leitoras não recebem nenhuma notificação é ou uma escolha, ou uma pane silenciosa há meses. A BTL entrou na rede com um estatuto «experimental» assumido — mas um estatuto político e um ajuste técnico não são a mesma coisa.
 
@@ -2322,6 +2313,7 @@ Estas entradas constavam no v33, em `ETAT-AVANCEMENT-multisessions`, em `ETAT-la
 | I7 | As seis suítes SQL esquecidas da integração contínua | Encerrado em 29/08 à noite. As seis suítes estão no manifesto — 45 ao todo — e **o arnês passa em verde de ponta a ponta**. Produziram primeiro 35 falhas por **quatro causas, das quais só uma dizia respeito ao produto**. (1) O stub de autenticação convertia `current_setting('request.jwt.claims')` em `jsonb` antes de neutralizar a cadeia vazia, de modo que `''::jsonb` levantava erro onde a função real do Supabase devolve NULL: **nenhuma suíte do corpus testava a recusa de uma chamada anônima**, provavam uma pane do banco de ensaio. (2) O seed não tinha nem leitor nem exemplar. (3) Quatro testes estavam errados contra um produto que estava certo, e sua correção tornou-os **mais** exigentes — a partilha `anon`/`authenticated` é agora guardada nos dois sentidos, e a recusa de `administrador` é testada por si mesma. (4) `paquetA` e `paquetA1` terminavam com um `SELECT` de uma cadeia **constante** anunciando «15/15 testes passam», impressa mesmo após uma falha; `paquet19`, `paquet25` e `paquet26` passavam e eram contadas vermelhas por falta de um balanço na forma que a CI lê — uma delas por dois espaços em torno de uma barra. A sorte dos onze SKIP restantes passa a **I15**, onde cabe à reescrita. |
 | I14 | Os identificadores de produção nas fixtures de teste | Encerrado em 29/08 durante a noite, no mesmo dia da constatação. Sexta regra bloqueante do hook `pre-commit`: em `tests/sql/`, todo UUID de aparência real ausente do seed é recusado. A lista branca é **lida** em `supabase/seed.sql` em vez de recopiada — acrescentar um ator é acrescentá-lo ao seed; os valores visivelmente sintéticos permanecem tolerados para que cada suíte forje suas fixtures na sua transação. Doutrina `DOC-FIXT-1` no REGISTRO (v0.6). Ao instalar-se, a regra fez sair `cleanup-frt-2026-05-15.sql` de `tests/sql/`: script de limpeza pontual que nomeava legitimamente uma biblioteca real — um script de manutenção deve nomear o real, era o seu lugar entre fixtures que estava errado. Vai para arquivo, verificado que a biblioteca já não existe. **Limite assumido**: o seed contém o identificador real da BLMF, de que depende a suíte de mensalidades; a regra tolera-o porque está no seed, não porque fosse sintético. |
 | I15 | As três suítes de circulação anteriores à CI, e os dois caminhos E2E | **Saldado em 30/08.** Doze ramos `jwt sim` retirados; os denominadores de `paquet25`, `paquet_emprestimos` e `paquet_reservas` incluem agora os skips — sem o que uma regressão do stub de autenticação teria feito uma suíte passar de `32/32` a `20/20` continuando verde; seis guardas que procuravam um texto de HINT em `SQLERRM` (que carrega a MENSAGEM) substituídas pelo código levantado; três testes que contavam sucesso em todos os seus ramos reescritos; duas etiquetas que nomeavam pessoas renomeadas. Os **dois caminhos E2E estão escritos** — empréstimos e reservas — e o seed traz o conjunto de regras de circulação sem o qual renovar era impossível. Nenhum SKIP nas cinco suítes. **O que o dia ensinou, três vezes: o produto tinha razão e o teste lia o campo errado.** A questão de produto que daí sai — uma recusa que não levanta — tornou-se o item **B15**. |
+| F5 | O prazo de negociação de 21 dias das reservas | **Verificado e encerrado em 30/08.** O mecanismo está implementado, e melhor do que dizia a spec: `fn_expire_negotiation_timeout()` **lê o prazo por biblioteca** em vez de fixá-lo, a coluna traz exatamente o `DEFAULT 21` e o `CHECK BETWEEN 7 AND 60` do §5, e as três bibliotecas estão em 21 dias. O cron roda de hora em hora. O cabeçalho da spec, que ainda dizia «a validar antes da implementação», foi corrigido no mesmo dia, distinguindo o que está **construído** do que falta **votar**. |
 
 ---
 
@@ -2353,4 +2345,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 90 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

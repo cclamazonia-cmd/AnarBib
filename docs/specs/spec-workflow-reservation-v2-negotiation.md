@@ -1,8 +1,17 @@
 # Workflow réservation v2 — Négociation symétrique
 
-> **Statut** : proposition pour discussion collective au CCLA.
+> **Statut** : proposition de mai 2026 — **le délai de négociation a été implémenté**, vérifié
+> en production le 30/08/2026 (item `F5`). La colonne
+> `library_notification_policies.reservation_negotiation_timeout_days` existe avec exactement le
+> `DEFAULT 21` et le `CHECK BETWEEN 7 AND 60` décrits au §5 ; le cron
+> `anarbib-reservation-expire-negotiation` tourne toutes les heures et appelle
+> `fn_expire_negotiation_timeout()`, qui **lit le délai par bibliothèque** au lieu de le figer —
+> les trois bibliothèques du réseau sont à 21 jours. Le backlog v34 donnait ce délai pour
+> « non implémenté » : c'était faux, et cette ligne le corrige.
+>
+> **Reste à valider collectivement** : le principe politique (§1) et le reste du modèle de
+> négociation symétrique. Ce qui est bâti n'est pas ce qui est voté.
 > **Auteur·rice** : AnarBib · Mai 2026.
-> **À valider avant implémentation.**
 
 ---
 

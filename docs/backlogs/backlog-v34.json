@@ -1379,6 +1379,17 @@
           "fr": "**Soldé le 30/08.** Douze branches `jwt sim` retirées ; les dénominateurs de `paquet25`, `paquet_emprestimos` et `paquet_reservas` incluent désormais les skips — sans quoi une régression du stub d'authentification aurait fait passer une suite de `32/32` à `20/20` en restant verte ; six gardes qui cherchaient un texte de HINT dans `SQLERRM` (qui porte le MESSAGE) remplacées par le code levé ; trois tests qui comptaient un succès dans toutes leurs branches réécrits ; deux étiquettes qui nommaient des personnes renommées. Les **deux chemins E2E sont écrits** — emprunts (prêt → entête ouverte → renouvellement → retour → exemplaire libéré) et réservations (création → refus du second envoi → annulation → invariant entête↔lignes) — et le seed porte le jeu de règles de circulation sans lequel renouveler était impossible. Plus aucun SKIP dans les cinq suites. **Ce que la journée a appris, trois fois : le produit avait raison et le test lisait le mauvais champ** — le hint au lieu du message, l'effet au lieu du contrat, `due_at` au lieu de `extended_until`. Et deux fois, la garde qui protège n'était pas celle qui porte le nom du risque : RLS ferme avant le contrôle d'appartenance, la disponibilité ferme avant le doublon. La question de produit qui en sort — un refus qui ne lève pas — est devenue l'item **B15**.",
           "pt": "**Saldado em 30/08.** Doze ramos `jwt sim` retirados; os denominadores de `paquet25`, `paquet_emprestimos` e `paquet_reservas` incluem agora os skips — sem o que uma regressão do stub de autenticação teria feito uma suíte passar de `32/32` a `20/20` continuando verde; seis guardas que procuravam um texto de HINT em `SQLERRM` (que carrega a MENSAGEM) substituídas pelo código levantado; três testes que contavam sucesso em todos os seus ramos reescritos; duas etiquetas que nomeavam pessoas renomeadas. Os **dois caminhos E2E estão escritos** — empréstimos e reservas — e o seed traz o conjunto de regras de circulação sem o qual renovar era impossível. Nenhum SKIP nas cinco suítes. **O que o dia ensinou, três vezes: o produto tinha razão e o teste lia o campo errado.** A questão de produto que daí sai — uma recusa que não levanta — tornou-se o item **B15**."
         }
+      ],
+      [
+        "F5",
+        {
+          "fr": "Le délai de négociation de 21 jours des réservations",
+          "pt": "O prazo de negociação de 21 dias das reservas"
+        },
+        {
+          "fr": "**Vérifié et clos le 30/08.** Le mécanisme est implémenté, et mieux que ne le disait la spec : `fn_expire_negotiation_timeout()` **lit le délai par bibliothèque** dans `library_notification_policies.reservation_negotiation_timeout_days` au lieu de le figer, la colonne porte exactement le `DEFAULT 21` et le `CHECK BETWEEN 7 AND 60` décrits au §5 de la spec, et les trois bibliothèques du réseau sont à 21 jours. Le cron `anarbib-reservation-expire-negotiation` tourne toutes les heures. La spec portait encore « À valider avant implémentation » : son en-tête est corrigé le même jour, en distinguant ce qui est **bâti** de ce qui reste à **voter** — le principe politique de la négociation symétrique n'a pas été soumis au CCLA sous cette forme.",
+          "pt": "**Verificado e encerrado em 30/08.** O mecanismo está implementado, e melhor do que dizia a spec: `fn_expire_negotiation_timeout()` **lê o prazo por biblioteca** em vez de fixá-lo, a coluna traz exatamente o `DEFAULT 21` e o `CHECK BETWEEN 7 AND 60` do §5, e as três bibliotecas estão em 21 dias. O cron roda de hora em hora. O cabeçalho da spec, que ainda dizia «a validar antes da implementação», foi corrigido no mesmo dia, distinguindo o que está **construído** do que falta **votar**."
+        }
       ]
     ]
   },
@@ -1944,8 +1955,8 @@
     {
       "id": "B11",
       "d": "B",
-      "p": "P2",
-      "s": "a-verifier",
+      "p": "P3",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "sql"
@@ -1955,8 +1966,8 @@
         "pt": "Compreender `user_wishlist`: uma linha viva para 9 092 inserções"
       },
       "v": {
-        "fr": "La table `public.user_wishlist` porte **1 ligne vivante** pour **9 092 insertions cumulées**. C'est le rapport écriture/suppression le plus extrême de la base, de deux ordres de grandeur.",
-        "pt": "A tabela `public.user_wishlist` carrega **1 linha viva** para **9 092 inserções acumuladas**. É a relação escrita/exclusão mais extrema do banco, por duas ordens de grandeza."
+        "fr": "**Mesuré le 30/08 : 1 ligne vivante, 9 092 insertions, 9 082 suppressions.** Le rapport n'est donc pas une fuite d'écriture mais un **cycle** : presque tout ce qui entre ressort. Une liste d'envies dont on retire ce qu'on ajoute, à raison de neuf mille allers-retours pour une seule ligne survivante, ne ressemble pas à un usage de lectrices — le réseau n'a pas ce volume.\n\nLa question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui écrit puis efface aussitôt »** : un test rejoué en boucle, un composant qui insère à chaque rendu et nettoie derrière lui, ou un chargement de page qui bascule l'état deux fois.",
+        "pt": "**Medido em 30/08: 1 linha viva, 9 092 inserções, 9 082 supressões.** A razão não é uma fuga de escrita mas um **ciclo**: quase tudo o que entra volta a sair. Nove mil idas e voltas para uma única linha sobrevivente não se parece com um uso de leitoras — a rede não tem esse volume.\n\nA pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a seguir»**."
       },
       "w": {
         "fr": "Trouver ce qui écrit et efface : un test rejoué, un chargement de page qui insère puis annule, un composant React qui appelle la RPC à chaque rendu. Regarder `OPAC-W1`, dont la note dit « reste `WITH CHECK` ».",
@@ -1989,36 +2000,38 @@
       "id": "B12",
       "d": "B",
       "p": "P2",
-      "s": "a-verifier",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "sql",
         "deno"
       ],
       "t": {
-        "fr": "Élucider les trois actions critiques inter-bibliothèques restées en `skipped`",
-        "pt": "Elucidar as três ações críticas interbibliotecas que ficaram em `skipped`"
+        "fr": "Un envoi non effectué ne dit pas pourquoi : les `skipped` de `team_notification_outbox`",
+        "pt": "Um envio não efetuado não diz por quê: os `skipped` de `team_notification_outbox`"
       },
       "v": {
-        "fr": "Trois lignes de `network.cross_library_critical_action` sont en `status = 'skipped'` depuis le 08/06/2026, avec `attempts = 1`, `last_error` nul et un `pg_net_request_id` présent. Le signalement date du 26/08 et n'a pas été instruit.",
-        "pt": "Três linhas de `network.cross_library_critical_action` estão em `status = 'skipped'` desde 08/06/2026, com `attempts = 1`, `last_error` nulo e um `pg_net_request_id` presente. O apontamento é de 26/08 e não foi instruído."
+        "fr": "**Reformulé le 30/08 après vérification : l'item désignait une table qui n'existe pas.** Il parlait de « trois lignes de `network.cross_library_critical_action` en `status = 'skipped'` ». Cette relation n'existe pas dans la base, et la seule table au nom voisin — `public.network_admin_cross_library_actions_log` — n'a **aucune** colonne `status`, `attempts`, `last_error` ni `pg_net_request_id`. Le constat avait été recopié sur le mauvais objet lors de la réécriture v34.\n\nLes lignes existent bel et bien, mais dans **`public.team_notification_outbox`** — et elles sont **quatre**, pas trois : trois du 08/06/2026, et **une du 30/08/2026**. Ce n'est donc pas une curiosité historique : ça se produit encore.\n\nChacune porte `attempts = 1`, un `pg_net_request_id` **présent**, et `last_error` **nul**. La requête est donc partie, et la ligne n'est pas en erreur : elle est marquée `skipped` parce que quelque chose a décidé de ne pas envoyer — vraisemblablement `transportDisabledReason`. **Mais la raison n'est écrite nulle part** : l'outbox n'a pas de colonne pour elle, et `last_error` est nul puisqu'il ne s'agit pas d'une erreur.",
+        "pt": "**Reformulado em 30/08 após verificação: o item designava uma tabela que não existe.** Falava de «três linhas de `network.cross_library_critical_action` em `status = 'skipped'`». Essa relação não existe, e a única tabela de nome vizinho não tem nenhuma das colunas citadas. O constato fora copiado sobre o objeto errado na reescrita v34.\n\nAs linhas existem, mas em **`public.team_notification_outbox`** — e são **quatro**, não três: três de 08/06/2026 e **uma de 30/08/2026**. Não é uma curiosidade histórica: ainda acontece.\n\nCada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error` **nulo**. O pedido partiu, e a linha não está em erro: está `skipped` porque algo decidiu não enviar. **Mas a razão não está escrita em lugar nenhum.**"
       },
       "w": {
-        "fr": "Croiser les `pg_net_request_id` avec les journaux de `notify-event` pour savoir si l'appel est parti, s'il a échoué, ou s'il a été volontairement ignoré. Puis décider : rejouer, ou clore avec la raison.",
-        "pt": "Cruzar os `pg_net_request_id` com os logs de `notify-event` para saber se a chamada saiu, se falhou, ou se foi deliberadamente ignorada. Depois decidir: reexecutar, ou encerrar com o motivo."
+        "fr": "Ajouter à l'outbox une colonne qui porte la raison du saut — `skip_reason` — et la renseigner là où la décision se prend. `last_error` ne peut pas jouer ce rôle : un saut délibéré n'est pas une erreur, et les confondre reviendrait à faire sonner l'alerte sur un comportement voulu.\n\nPuis reprendre les quatre lignes existantes : avec la raison, on saura s'il faut rejouer ou clore. Sans elle, on ne peut que deviner — et c'est exactement pour ça que l'item a dormi depuis juin.",
+        "pt": "Acrescentar à outbox uma coluna que carregue a razão do salto — `skip_reason` — e preenchê-la onde a decisão é tomada. `last_error` não pode fazer esse papel: um salto deliberado não é um erro. Depois retomar as quatro linhas existentes: com a razão, saber-se-á se é preciso reenviar ou encerrar."
       },
       "y": {
-        "fr": "Ces lignes tracent des actions d'administration réseau qui touchent une bibliothèque autre que celle de la personne qui agit. Un statut `skipped` sans erreur, c'est soit une notification qui n'est jamais partie, soit une trace mal posée. Les deux méritent d'être sues.",
-        "pt": "Estas linhas rastreiam ações de administração de rede que tocam uma biblioteca diferente da pessoa que age. Um status `skipped` sem erro é ou uma notificação que nunca saiu, ou um rastro mal registrado. Ambos merecem ser sabidos."
+        "fr": "Application directe de `DOC-SILENCE-1`, acté le même jour : **un dispositif qui n'agit pas doit le dire.** Une notification d'équipe non partie sans raison écrite, c'est une personne qui n'a pas été prévenue et un journal qui ne sait pas l'expliquer. Et c'est la quatrième occurrence de cette forme en une journée — sélecteur inerte, `ok:false` ignoré, skips hors dénominateur, et maintenant un saut sans motif.",
+        "pt": "Aplicação direta de `DOC-SILENCE-1`, firmado no mesmo dia: **um dispositivo que não age deve dizê-lo.** Uma notificação de equipe não enviada sem razão escrita é uma pessoa que não foi avisada e um registro que não sabe explicá-lo."
       },
       "f": {
         "fr": [
-          "Les trois lignes ont une explication écrite.",
-          "Si le mécanisme peut sauter une notification en silence, il est corrigé."
+          "L'outbox porte une raison de saut, distincte de `last_error`.",
+          "Les quatre lignes `skipped` ont un verdict : rejouées, ou closes avec leur motif.",
+          "Le chemin qui décide de sauter écrit la raison au même endroit qu'il décide."
         ],
         "pt": [
-          "As três linhas têm uma explicação escrita.",
-          "Se o mecanismo pode pular uma notificação em silêncio, está corrigido."
+          "A outbox traz uma razão de salto, distinta de `last_error`.",
+          "As quatro linhas `skipped` têm um veredicto: reenviadas, ou encerradas com o motivo.",
+          "O caminho que decide saltar escreve a razão no mesmo lugar em que decide."
         ]
       },
       "dep": {
@@ -2026,7 +2039,9 @@
         "pt": "Ligado a **F1** (auditoria da cadeia de e-mail)."
       },
       "r": [
-        "VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §4"
+        "public.team_notification_outbox",
+        "REGISTRE_decisions DOC-SILENCE-1",
+        "_shared/context/library-mail-routing.ts"
       ]
     },
     {
@@ -3442,8 +3457,8 @@
     {
       "id": "F4",
       "d": "F",
-      "p": "P2",
-      "s": "a-verifier",
+      "p": "P1",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "sql"
@@ -3453,8 +3468,8 @@
         "pt": "Verificar os lembretes de vencimento e as cobranças de atraso"
       },
       "v": {
-        "fr": "`spec-flux-emprunts.md` §10.2 prévoit des rappels à J-5, J-3 et le jour même, puis des relances à J+1, J+7 et J+30. **Aucun job dédié n'est identifiable** parmi les 36 crons ; le seul voisin est `anarbib-notify-mid-loan-reading-daily`, qui fait autre chose. `membership_expiry_notifications` n'a jamais reçu la moindre ligne.",
-        "pt": "`spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa."
+        "fr": "`spec-flux-emprunts.md` §10.2 prévoit des rappels à J-5, J-3 et le jour même, puis des relances à J+1, J+7 et J+30. **Aucun job dédié n'est identifiable** parmi les 36 crons ; le seul voisin est `anarbib-notify-mid-loan-reading-daily`, qui fait autre chose. `membership_expiry_notifications` n'a jamais reçu la moindre ligne.\n\n**Vérifié le 30/08 : le manque est confirmé.** Les onze crons dont le nom évoque une échéance ou une relance ont été relus un par un — cooptation, adhésions, invitations d'équipe, votes OAI, réservations, autorités, cercles, et `anarbib-peb-detect-overdue-daily` qui concerne le **prêt entre bibliothèques**, pas le prêt aux lectrices. **Aucun ne rappelle une échéance d'emprunt ni ne relance un retard.** Le doute est levé : ce n'est plus un item à vérifier, c'est une décision à prendre.",
+        "pt": "`spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.\n\n**Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar."
       },
       "w": {
         "fr": "Vérifier en base si les rappels partent par un autre chemin, et sinon, décider : les implémenter, ou amender la spec. Un emprunt en retard qui ne déclenche rien est un emprunt que personne ne réclame.",
@@ -3482,50 +3497,6 @@
         "spec-flux-emprunts.md §10.2",
         "VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3",
         "PLAN_formation_coordination_BLMF §5"
-      ]
-    },
-    {
-      "id": "F5",
-      "d": "F",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Vérifier que le délai de négociation de 21 jours est bien appliqué",
-        "pt": "Verificar se o prazo de negociação de 21 dias está de fato aplicado"
-      },
-      "v": {
-        "fr": "Le cron `anarbib-reservation-expire-negotiation` tourne toutes les heures (`25 * * * *`) — alors que la spec de réservation v2 donnait ce délai comme **non implémenté**. Le mécanisme existe donc ; ce qu'il fait exactement n'a pas été vérifié.",
-        "pt": "O cron `anarbib-reservation-expire-negotiation` roda a cada hora (`25 * * * *`) — enquanto a spec de reserva v2 dava esse prazo como **não implementado**. O mecanismo existe portanto; o que ele faz exatamente não foi verificado."
-      },
-      "w": {
-        "fr": "Lire `fn_expire_negotiation_timeout()`, vérifier le délai qu'elle applique, et corriger la spec ou la fonction selon ce qu'on trouve.",
-        "pt": "Ler `fn_expire_negotiation_timeout()`, verificar o prazo que aplica, e corrigir a spec ou a função conforme o que se encontrar."
-      },
-      "y": {
-        "fr": "Un écart du même type a déjà été trouvé : la spec et le support de formation annonçaient une expiration des réservations toutes les six heures, alors que le cron tourne **toutes les heures**. Le support a été corrigé, la spec pas forcément.",
-        "pt": "Um desvio do mesmo tipo já foi encontrado: a spec e o material de formação anunciavam uma expiração das reservas a cada seis horas, enquanto o cron roda **a cada hora**. O material foi corrigido, a spec não necessariamente."
-      },
-      "f": {
-        "fr": [
-          "Le délai réel est écrit dans la spec.",
-          "Les fréquences annoncées dans les supports de formation correspondent aux crons réels."
-        ],
-        "pt": [
-          "O prazo real está escrito na spec.",
-          "As frequências anunciadas nos materiais de formação correspondem aos crons reais."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3",
-        "spec-workflow-reservation-v2-negotiation.md"
       ]
     },
     {
@@ -3716,22 +3687,22 @@
       "id": "G5",
       "d": "G",
       "p": "P2",
-      "s": "a-verifier",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "collectif"
       ],
       "t": {
-        "fr": "Clarifier le statut de la Biblioteca Terra Livre",
-        "pt": "Esclarecer o estatuto da Biblioteca Terra Livre"
+        "fr": "Ce que commande vraiment `is_test_mode` sur la Biblioteca Terra Livre",
+        "pt": "O que `is_test_mode` realmente comanda na Biblioteca Terra Livre"
       },
       "v": {
-        "fr": "La BTL porte `is_test_mode = true` et `email_delivery_mode = 'test_only'`, **alors qu'elle contient 2 187 exemplaires** — le plus gros fonds du réseau — et qu'elle est publiée sur le réseau. Posture voulue, ou reliquat de configuration ?",
-        "pt": "A BTL traz `is_test_mode = true` e `email_delivery_mode = 'test_only'`, **embora contenha 2 187 exemplares** — o maior acervo da rede — e esteja publicada na rede. Postura deliberada, ou resíduo de configuração?"
+        "fr": "**Vérifié le 30/08, et l'item se réduit de moitié.** Le constat reposait sur `library_commons.email_delivery_mode = 'test_only'`. Or **aucun chemin d'envoi ne lit cette colonne** : c'est le sélecteur inerte retiré le jour même côté interface. Le vrai commutateur est `library_mail_channels`, et il dit autre chose — la BTL y porte `delivery_mode = 'platform_shared'` et `active = true`. **Le courrier de la BTL part normalement, et depuis toujours.** Il n'y a donc rien à clarifier de ce côté : la bibliothèque n'était pas en mode d'essai, elle le paraissait.\n\nCe qui reste tient en une question : la colonne `libraries.is_test_mode`, toujours à `true` sur une bibliothèque de 2 187 exemplaires publiée au réseau. Qu'est-ce qui la lit, et qu'est-ce qu'elle change ?",
+        "pt": "**Verificado em 30/08, e o item reduz-se a metade.** O constato assentava em `library_commons.email_delivery_mode = 'test_only'`. Ora **nenhum caminho de envio lê essa coluna**: é o seletor inerte retirado no mesmo dia. O verdadeiro comutador é `library_mail_channels`, e diz outra coisa — a BTL tem `delivery_mode = 'platform_shared'` e `active = true`. **O correio da BTL parte normalmente, e sempre partiu.**\n\nResta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa biblioteca de 2 187 exemplares publicada na rede. O que a lê, e o que ela muda?"
       },
       "w": {
-        "fr": "Demander à la BTL ce qu'elle veut, puis aligner la configuration. Si le mode d'essai est voulu, l'écrire quelque part pour que personne ne le « corrige ».",
-        "pt": "Perguntar à BTL o que ela quer, depois alinhar a configuração. Se o modo de teste for deliberado, escrevê-lo em algum lugar para que ninguém o «corrija»."
+        "fr": "Chercher ce qui lit `libraries.is_test_mode` — en base et dans le front. Trois issues, et il faut trancher entre elles plutôt que de laisser le champ tel quel : ou bien la colonne commande quelque chose de réel, et il faut demander à la BTL ce qu'elle veut ; ou bien elle ne commande rien, et c'est un second sélecteur inerte à retirer (`DOC-SILENCE-1`) ; ou bien elle ne sert qu'à un filtre d'affichage, et son nom ment sur sa portée.",
+        "pt": "Procurar o que lê `libraries.is_test_mode` — no banco e no front. Três saídas, e é preciso decidir entre elas: ou a coluna comanda algo real, e é preciso perguntar à BTL o que quer; ou não comanda nada, e é um segundo seletor inerte a retirar (`DOC-SILENCE-1`); ou serve apenas a um filtro de exibição, e o seu nome mente sobre o alcance."
       },
       "y": {
         "fr": "En mode d'essai, les courriels ne partent pas. Une bibliothèque avec 2 187 exemplaires publiés dont les lectrices ne reçoivent aucune notification, c'est soit un choix, soit une panne silencieuse depuis des mois. La BTL a rejoint le réseau avec un statut « expérimental » assumé — mais un statut politique et un réglage technique ne sont pas la même chose.",
