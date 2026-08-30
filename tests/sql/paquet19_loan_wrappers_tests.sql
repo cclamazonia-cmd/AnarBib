@@ -28,6 +28,28 @@
 -- NOTE sur « emprunt inexistant » (29/08/2026, backlog v34, item I7).
 -- Les wrappers levent un CODE machine -- `loan_not_found` -- et non une phrase
 -- portugaise. Les gardes de 4.02, 5.02 et 8.03 ne cherchaient que
+-- DEUX REFUS POSSIBLES, ET LE BON N'EST PAS CELUI QU'ON CROIT (I15, 30/08).
+-- Les tests 6.03, 7.03 et 7.05 font agir le lecteur B sur un emprunt de la
+-- lectrice A. La garde acceptait `not_your_loan` OU `loan_not_found` OU tout
+-- 42501 ; en resserrant, on a d'abord exige `not_your_loan` -- et la CI a
+-- repondu `loan_not_found` trois fois.
+--
+-- Elle avait raison. `fn_get_loan_context` est SECURITY INVOKER : un simple
+-- SELECT sur `emprestimos_v2`. Sous RLS, le lecteur B ne VOIT pas l'emprunt
+-- de la lectrice A, donc le contexte revient vide et le wrapper leve
+-- `loan_not_found` AVANT d'atteindre le controle d'appartenance.
+-- `not_your_loan` n'est atteignable que par qui voit l'emprunt sans le
+-- posseder -- le staff, un admin reseau.
+--
+-- Et c'est le refus le PLUS FORT des deux : il ne dit pas au lecteur B que
+-- l'emprunt existe. `not_your_loan` serait un oracle d'existence, de la meme
+-- famille que les cinq fermes par l'audit du 18/05. Si ces trois tests
+-- viraient un jour a `not_your_loan`, ce ne serait pas un detail de message :
+-- ce serait RLS qui aurait cesse de cacher les emprunts des autres.
+--
+-- La lecon n'est donc pas « resserrer les gardes ». C'est que resserrer OBLIGE
+-- a nommer le mecanisme qui refuse -- et qu'on ne le connait pas toujours.
+--
 -- SQLERRM PORTE LE MESSAGE, JAMAIS LE HINT (I15, 30/08/2026). Six gardes de
 -- cette suite cherchaient « seus proprios » dans SQLERRM. Ce texte est le HINT
 -- de `not_your_loan` ; SQLERRM vaut `not_your_loan`. Les six clauses etaient
@@ -507,7 +529,10 @@ BEGIN
         PERFORM api.renew_my_loan(v_leitora_a_loan_id);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ECHEC CRITIQUE OWNERSHIP');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%not_your_loan%' THEN v_passed := v_passed + 1;
+        -- `loan_not_found`, et PAS `not_your_loan` : voir la note sur les
+        -- deux refus, en tete de fichier. C'est RLS qui ferme, avant que le
+        -- controle d'appartenance ne soit atteint.
+        IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -592,7 +617,10 @@ BEGIN
         PERFORM api.schedule_loan_return(v_leitora_a_loan_id, ARRAY[1]::integer[], now() + interval '1 day');
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas planifier sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%not_your_loan%' THEN v_passed := v_passed + 1;
+        -- `loan_not_found`, et PAS `not_your_loan` : voir la note sur les
+        -- deux refus, en tete de fichier. C'est RLS qui ferme, avant que le
+        -- controle d'appartenance ne soit atteint.
+        IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -621,7 +649,10 @@ BEGIN
         PERFORM api.clear_loan_return_schedule(v_leitora_a_loan_id, ARRAY[1]::integer[]);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas annuler sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%not_your_loan%' THEN v_passed := v_passed + 1;
+        -- `loan_not_found`, et PAS `not_your_loan` : voir la note sur les
+        -- deux refus, en tete de fichier. C'est RLS qui ferme, avant que le
+        -- controle d'appartenance ne soit atteint.
+        IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;

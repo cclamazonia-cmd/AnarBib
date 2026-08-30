@@ -72,7 +72,7 @@ function markdown(k) {
 
   p(`# ${L(D.meta.title, k)} — ${L(D.meta.subtitle, k)}`);
   p();
-  p(`**${D.meta.date}** · ${items.length} ${t.total} · ${t.lang_other}`);
+  p(`**${D.meta.date}**${D.meta.maj ? (k === 'fr' ? ` · mis à jour le **${D.meta.maj}**` : ` · atualizado em **${D.meta.maj}**`) : ''} · ${items.length} ${t.total} · ${t.lang_other}`);
   p();
   p(`> ${k === 'fr'
     ? "Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main."
@@ -178,8 +178,8 @@ function markdown(k) {
 
   p(`## ${t.colophon}`); p();
   p(k === 'fr'
-    ? `Backlog v34, ${D.meta.date}. Remplace \`${D.meta.previous}\`. ${items.length} items sur ${D.domains.length} domaines. Chaque état a été vérifié le 29/08/2026 contre la base de production en lecture seule et contre le dépôt Codeberg au commit \`1d00ed2c\`. Ce document n'arbitre rien : le \`REGISTRE_decisions.md\` fait foi.`
-    : `Backlog v34, ${D.meta.date}. Substitui \`${D.meta.previous}\`. ${items.length} itens em ${D.domains.length} domínios. Cada estado foi verificado em 29/08/2026 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit \`1d00ed2c\`. Este documento não arbitra nada: o \`REGISTRE_decisions.md\` faz fé.`);
+    ? `Backlog v34, écrit le ${D.meta.date}${D.meta.maj ? `, mis à jour le ${D.meta.maj}` : ''}. Remplace \`${D.meta.previous}\`. ${items.length} items sur ${D.domains.length} domaines. L'état de départ a été vérifié le ${D.meta.date} contre la base de production en lecture seule et contre le dépôt Codeberg au commit \`1d00ed2c\` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le \`REGISTRE_decisions.md\` fait foi.`
+    : `Backlog v34, escrito em ${D.meta.date}${D.meta.maj ? `, atualizado em ${D.meta.maj}` : ''}. Substitui \`${D.meta.previous}\`. ${items.length} itens em ${D.domains.length} domínios. O estado inicial foi verificado em ${D.meta.date} contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit \`1d00ed2c\`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o \`REGISTRE_decisions.md\` faz fé.`);
   p();
   return out.join('\n');
 }
@@ -426,11 +426,14 @@ function render(){
   const t=D.T[K];
   document.documentElement.lang = K==='fr' ? 'fr' : 'pt-BR';
   document.getElementById('eyb').textContent = K==='fr'
-    ? 'AnarBib · état vérifié le 29 août 2026'
-    : 'AnarBib · estado verificado em 29 de agosto de 2026';
+    ? 'AnarBib · backlog v34' + (D.meta.maj ? ' · à jour au ' + D.meta.maj : '')
+    : 'AnarBib · backlog v34' + (D.meta.maj ? ' · atualizado em ' + D.meta.maj : '');
   document.getElementById('ttl').textContent=L(D.meta.title,K);
   document.getElementById('sub').textContent=L(D.meta.subtitle,K);
-  document.getElementById('mta').textContent=D.meta.date+' · '+D.items.length+' '+t.total
+  document.getElementById('mta').textContent=
+    (K==='fr'?'écrit le ':'escrito em ')+D.meta.date
+    +(D.meta.maj?(K==='fr'?', mis à jour le ':', atualizado em ')+D.meta.maj:'')
+    +' · '+D.items.length+' '+t.total
     +' · '+(K==='fr'?'remplace ':'substitui ')+D.meta.previous;
   bar();
   const shown=D.items.filter(match);
