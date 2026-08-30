@@ -138,10 +138,11 @@ export default function AtelierConstituicaoPage() {
     if (!libraryId) return cfg;
     const yn = b => t({ id: b ? 'common.yes' : 'common.no' });
     try {
-      const [{ data: lib }, { data: ss }, { data: lc }] = await Promise.all([
+      const [{ data: lib }, { data: ss }, { data: lc }, { data: mc }] = await Promise.all([
         supabase.from('libraries').select('cataloging_classification_system, cataloging_mandatory_fields, cataloging_policy_notes, accepts_public_signup, reader_validation_mode, membership_enabled').eq('id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('service_mode, allows_new_loans, allows_new_reservations, public_message').eq('library_id', libraryId).maybeSingle(),
-        supabase.from('library_commons').select('contact_email, reply_to_email, email_delivery_mode').eq('library_id', libraryId).maybeSingle(),
+        supabase.from('library_commons').select('contact_email, reply_to_email').eq('library_id', libraryId).maybeSingle(),
+        supabase.from('library_mail_channels').select('delivery_mode, active').eq('library_id', libraryId).maybeSingle(),
       ]);
       if (ss) {
         const e = [];
@@ -167,7 +168,12 @@ export default function AtelierConstituicaoPage() {
         const e = [];
         if (lc.contact_email) e.push(`${t({ id: 'biblioteca.comms.sendEmail' })} : ${lc.contact_email}`);
         if (lc.reply_to_email) e.push(`${t({ id: 'biblioteca.identity.replyEmail' })} : ${lc.reply_to_email}`);
-        e.push(`${t({ id: 'biblioteca.comms.sendMode' })} : ${t({ id: `biblioteca.comms.sendMode.${lc.email_delivery_mode || 'normal'}` })}`);
+        // INTERRUPTEUR-UNIQUE (30/08/2026) : le regimento annoncait le « modo de
+        // envio » lu sur library_commons.email_delivery_mode, colonne qui n'est
+        // appliquee nulle part. Un reglement interieur ne doit pas consigner un
+        // reglage sans effet : on imprime desormais l'etat reel du canal.
+        e.push(`${t({ id: 'biblioteca.comms.transport' })} : ${t({ id: `biblioteca.comms.transport.${mc?.delivery_mode && mc.delivery_mode !== 'disabled' ? mc.delivery_mode : 'platform_shared'}` })}`);
+        e.push(`${t({ id: 'biblioteca.comms.channelActive' })} : ${yn(mc ? mc.active !== false && mc.delivery_mode !== 'disabled' : true)}`);
         cfg[7] = e;
       }
     } catch { /* best-effort : PDF générique si lecture KO */ }

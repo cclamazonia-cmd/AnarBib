@@ -456,8 +456,15 @@ export default function BibliotecaPage() {
   async function saveComms() {
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
-      if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, email_delivery_mode:commons.email_delivery_mode }).eq('library_id', libraryId);
-      if (mailChannel) await supabase.from('library_mail_channels').update({ admin_notification_email:mailChannel.admin_notification_email, weekly_report_email:mailChannel.weekly_report_email, severe_alert_email:mailChannel.severe_alert_email, delivery_mode:mailChannel.delivery_mode }).eq('library_id', libraryId);
+      // INTERRUPTEUR-UNIQUE (30/08/2026) : `email_delivery_mode` (library_commons)
+      // n'etait applique NULLE PART — ni par les fonctions notify-*, ni par register.
+      // L'ecran affichait donc un selecteur « Modo de envio » qui ne coupait rien,
+      // juste au-dessus des vrais champs du canal. Il est retire ; le seul
+      // commutateur est desormais celui de library_mail_channels (`active` pour
+      // couper, `delivery_mode` pour le transport), honore par transportDisabledReason
+      // dans _shared/context/library-mail-routing.ts.
+      if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email }).eq('library_id', libraryId);
+      if (mailChannel) await supabase.from('library_mail_channels').update({ admin_notification_email:mailChannel.admin_notification_email, weekly_report_email:mailChannel.weekly_report_email, severe_alert_email:mailChannel.severe_alert_email, delivery_mode:mailChannel.delivery_mode||'platform_shared', active:mailChannel.active!==false }).eq('library_id', libraryId);
       if (notifPolicy) {
         // PATCH 08/05/2026 paquet 3A : sauvegarde aussi les 2 paramètres de
         // négociation symétrique (toggle + timeout). Validation timeout côté
@@ -1575,11 +1582,6 @@ export default function BibliotecaPage() {
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.displayName' })}</label><input type="text" value={commons.display_name||''} onChange={e=>setC('display_name',e.target.value)} style={fs} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.sendEmail' })}</label><input type="email" value={commons.contact_email||''} onChange={e=>setC('contact_email',e.target.value)} style={fs} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.replyEmail' })}</label><input type="email" value={commons.reply_to_email||''} onChange={e=>setC('reply_to_email',e.target.value)} style={fs} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.sendMode' })}</label>
-                <select value={commons.email_delivery_mode||'normal'} onChange={e=>setC('email_delivery_mode',e.target.value)} style={fs}>
-                  <option value="normal">{t({ id: 'biblioteca.comms.sendMode.normal' })}</option><option value="test_only">{t({ id: 'biblioteca.comms.sendMode.test_only' })}</option><option value="disabled">{t({ id: 'biblioteca.comms.sendMode.disabled' })}</option>
-                </select>
-              </div>
             </div>
           </div>}
           {mailChannel && <div style={bx}>
@@ -1588,6 +1590,14 @@ export default function BibliotecaPage() {
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.adminEmail' })}</label><input type="email" value={mailChannel.admin_notification_email||''} onChange={e=>setMC('admin_notification_email',e.target.value)} style={fs} placeholder="admin@biblioteca.org" /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.weeklyEmail' })}</label><input type="email" value={mailChannel.weekly_report_email||''} onChange={e=>setMC('weekly_report_email',e.target.value)} style={fs} placeholder="equipe@biblioteca.org" /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.alertEmail' })}</label><input type="email" value={mailChannel.severe_alert_email||''} onChange={e=>setMC('severe_alert_email',e.target.value)} style={fs} placeholder="urgente@biblioteca.org" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.transport' })}</label>
+                <select value={mailChannel.delivery_mode||'platform_shared'} onChange={e=>setMC('delivery_mode',e.target.value)} style={fs}>
+                  <option value="platform_shared">{t({ id: 'biblioteca.comms.transport.platform_shared' })}</option>
+                  <option value="platform_shared_local_reply">{t({ id: 'biblioteca.comms.transport.platform_shared_local_reply' })}</option>
+                  <option value="library_own_transport">{t({ id: 'biblioteca.comms.transport.library_own_transport' })}</option>
+                </select>
+              </div>
+              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={{...ls,display:'flex',gap:8,alignItems:'flex-start'}}><input type="checkbox" checked={mailChannel.active!==false} onChange={e=>setMC('active',e.target.checked)} style={{marginTop:3}} /> <span><span>{t({id:'biblioteca.comms.channelActive'})}</span><br/><span style={{fontSize:'.8rem',color:'var(--brand-muted)',fontWeight:400}}>{t({id:'biblioteca.comms.channelActive.hint'})}</span></span></label></div>
             </div>
           </div>}
           {/* EA-20 : editeur du profil de contact de la biblioteca

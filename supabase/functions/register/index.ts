@@ -3,6 +3,7 @@ import { verifierSolution } from '../_shared/altcha.ts';
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
+import { transportDisabledReason } from "../_shared/context/library-mail-routing.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -113,6 +114,28 @@ function readEnvString(name, fallback = "") {
 function resolveLibraryInternalRedirectEmail(librarySlug) {
   const envKey = `${normalizeSlug(librarySlug).toUpperCase()}_INTERNAL_REDIRECT_EMAIL`;
   return readEnvEmail(envKey);
+}
+// ROUTAGE-CANAL (30/08/2026) — lit le canal de notification officiel de la
+// biblio (vue v_library_notification_context, alimentee par library_mail_channels).
+// Defensif : en cas d echec de lecture on renvoie null, ce qui vaut « on envoie ».
+// Une panne de vue ne doit JAMAIS eteindre silencieusement les notifications
+// d une bibliotheque — le silence est le pire mode de defaillance ici, parce
+// que personne ne le remarque.
+async function loadLibraryChannelContext(admin, libraryId) {
+  const id = String(libraryId || "").trim();
+  if (!id) return null;
+  try {
+    const { data, error } = await admin
+      .from("v_library_notification_context")
+      .select("delivery_mode, channel_active, admin_notification_email")
+      .eq("library_id", id)
+      .maybeSingle();
+    if (error) throw error;
+    return data || null;
+  } catch (e) {
+    console.warn("register: lecture du canal de notification impossible (envoi maintenu)", e);
+    return null;
+  }
 }
 function buildLogoTable({ anarbibLogoUrl, libraryLogoUrl, libraryName, includeLibraryLogo }) {
   const safeLibraryName = escapeHtml(libraryName || "Biblioteca");
@@ -1028,8 +1051,34 @@ serve(async (req)=>{
     const senderEmail = senderEmailEnv;
     const senderDisplayName = mailIsWithoutLibrary ? "AnarBib" : `AnarBib · ${displayName}`;
     const libraryInternalRedirectEmail = mailIsWithoutLibrary ? "" : resolveLibraryInternalRedirectEmail(effectiveLibrarySlug);
-    const effectiveLibraryInternalRecipients = mailIsWithoutLibrary ? [] : uniqueEmails([
-      libraryInternalRedirectEmail || contactEmail
+    // ROUTAGE-CANAL (30/08/2026) — `register` etait la SEULE fonction du reseau a
+    // router ses notifications internes hors du canal officiel de la biblio.
+    // Elle lisait `library_email_identity.contact_email` (une TROISIEME copie de
+    // l adresse) et n honorait aucun interrupteur : une biblio reglee sur
+    // `delivery_mode=disabled` dans `library_mail_channels` — le seul commutateur
+    // reellement applique, cf. `_shared/context/library-mail-routing.ts` — recevait
+    // quand meme ses « Novo cadastro ». Toutes les autres fonctions passent par
+    // `safeSendEmail`, qui refuse l envoi via `transportDisabledReason`.
+    //
+    // Piege a ne pas reproduire : `library_commons.email_delivery_mode`
+    // (normal|test_only|disabled), affiche par l ecran « e-mails », n est applique
+    // NULLE PART. Il partage la valeur `disabled` avec le vrai commutateur mais ne
+    // decrit PAS la meme chose (volume d envoi vs transport) — c est ce qui l a
+    // fait passer pour un interrupteur pendant des mois.
+    //
+    // On aligne ici : meme source d adresse (`admin_notification_email`), meme
+    // regle d extinction. `contact_email` reste en repli pour qu une biblio sans
+    // ligne de canal ne perde pas ses notifications.
+    //
+    // Portee du garde-fou : le mail interne BIBLIO seulement. Le mail de
+    // bienvenue de la personne inscrite et la copie admin du reseau ne sont pas
+    // gouvernes par le transport d une biblio — le compte existe sur AnarBib
+    // meme si la biblio a coupe ses propres notifications.
+    const libraryChannelCtx = mailIsWithoutLibrary ? null : await loadLibraryChannelContext(admin, libraryRow?.id);
+    const channelDisabledReason = libraryChannelCtx ? transportDisabledReason(libraryChannelCtx) : null;
+    const channelAdminEmail = normalizeEmail(libraryChannelCtx?.admin_notification_email);
+    const effectiveLibraryInternalRecipients = (mailIsWithoutLibrary || channelDisabledReason) ? [] : uniqueEmails([
+      libraryInternalRedirectEmail || channelAdminEmail || contactEmail
     ]);
     const adminRecipients = uniqueEmails([
       ANARBIB_ADMIN_EMAIL
@@ -1039,9 +1088,15 @@ serve(async (req)=>{
       signup_intent: signupIntent,
       display_name: displayName,
       configured_contact_email: contactEmail,
+      channel_admin_email: channelAdminEmail || null,
+      channel_delivery_mode: libraryChannelCtx?.delivery_mode ?? null,
+      channel_disabled_reason: channelDisabledReason,
       effective_library_internal_recipients: effectiveLibraryInternalRecipients,
       admin_recipients: adminRecipients,
-      email_delivery_mode: emailDeliveryMode,
+      // `email_delivery_mode` n est applique nulle part : journalise pour memoire
+      // uniquement, sous un nom qui dit ce qu il vaut. Le vrai commutateur est
+      // `channel_delivery_mode` ci-dessus.
+      inert_email_delivery_mode: emailDeliveryMode,
       is_test_mode: isTestMode
     });
     const userMailHtml = buildUserMail({
