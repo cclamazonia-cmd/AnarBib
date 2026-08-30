@@ -291,8 +291,15 @@ td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--line);ve
 .f dt{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:500;font-size:13.5px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-top:14px}
 .f dd{margin:2px 0 0;max-width:74ch}
-.f ul{margin:4px 0 0;padding-left:19px}
+.f dd p{margin:0 0 9px}
+.f dd p:last-child{margin-bottom:0}
+.f ul,.f ol{margin:4px 0 9px;padding-left:19px}
+.f dd>ol:last-child,.f dd>ul:last-child{margin-bottom:0}
 .f li{margin:4px 0;max-width:72ch}
+pre{background:var(--chip);border-left:2px solid var(--line);padding:10px 13px;
+  margin:9px 0;overflow-x:auto;max-width:74ch}
+pre code{background:none;padding:0;font-size:.84em;line-height:1.5;
+  white-space:pre;word-break:normal}
 .refs{font-size:12.5px;color:var(--mut);margin-top:15px;font-style:italic;max-width:none}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
   background:var(--chip);padding:1px 5px;border-radius:2px;word-break:break-word}
@@ -327,8 +334,36 @@ let K = 'fr';
 const st = { dom:'all', prio:'all', q:'' };
 const L=(o,k)=>o&&typeof o==='object'&&!Array.isArray(o)?(o[k]??o.fr??''):o;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const md=s=>esc(s).replace(/\`([^\`]+)\`/g,'<code>$1</code>')
+// Rendu markdown minimal, cote client. Trois niveaux seulement :
+// l'inline (code, gras, italique), les blocs separes par une ligne vide,
+// et les listes. Ajout du 30/08/2026 : les blocs de code delimites par trois
+// accents graves. Un item de backlog qui donne une requete a copier-coller
+// est un item qu'on peut utiliser sans le retaper -- c'etait la raison d'etre
+// de ce fichier.
+const inl=s=>esc(s).replace(/\`([^\`]+)\`/g,'<code>$1</code>')
   .replace(/\\*\\*([^*]+)\\*\\*/g,'<strong>$1</strong>').replace(/\\*([^*]+)\\*/g,'<em>$1</em>');
+const md=s=>{
+  const parts=String(s==null?'':s).split(/\`\`\`/);
+  let out='';
+  parts.forEach((seg,idx)=>{
+    if(idx%2===1){
+      out+='<pre><code>'+esc(seg.replace(/^[a-z]*\\n/,'').replace(/\\n$/,''))+'</code></pre>';
+      return;
+    }
+    seg.split(/\\n{2,}/).forEach(blk=>{
+      const b=blk.trim();
+      if(!b) return;
+      const li=b.split(/\\n/);
+      if(li.every(l=>/^\\d+\\.\\s/.test(l)))
+        out+='<ol>'+li.map(l=>'<li>'+inl(l.replace(/^\\d+\\.\\s/,''))+'</li>').join('')+'</ol>';
+      else if(li.every(l=>/^[-*]\\s/.test(l)))
+        out+='<ul>'+li.map(l=>'<li>'+inl(l.replace(/^[-*]\\s/,''))+'</li>').join('')+'</ul>';
+      else
+        out+='<p>'+inl(b).replace(/\\n/g,'<br>')+'</p>';
+    });
+  });
+  return out;
+};
 const lab=(l,key)=>{const e=D[l].find(x=>x.key===key);return e?L(e.label,K):key;};
 
 function bar(){

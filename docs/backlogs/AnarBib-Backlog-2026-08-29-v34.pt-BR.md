@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · 89 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · 90 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 12
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -356,7 +356,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B2** | Triar as 142 funções `SECURITY DEFINER` do esquema `api` | `P1` | Aberto |
+| **B2** | Triar as 36 funções `SECURITY DEFINER` abertas a `anon` | `P1` | Aberto |
+| **B14** | Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated` | `P2` | Aberto |
 | **B4** | Examinar as quatro tabelas com RLS sem policy que não são de trânsito | `P2` | Aberto |
 | **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | Aberto |
 | **B6** | Reconciliar `config.toml` com as 48 funções realmente implantadas | `P1` | Aberto |
@@ -368,26 +369,77 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B12** | Elucidar as três ações críticas interbibliotecas que ficaram em `skipped` | `P2` | A verificar |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 
-#### B2 — Triar as 142 funções `SECURITY DEFINER` do esquema `api`
+#### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
 
-`P1` Prioritário · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** A auditoria de 20/08 revisou as funções de `public` uma a uma e fechou cinco falhas reais. **Não abrangia `api`.** O esquema `api` conta 184 funções das quais **142 em `SECURITY DEFINER`**, todas chamáveis pelo papel `authenticated` via `/rest/v1/rpc/`.
+**Estado verificado em 29/08.** Completado em 30/08. O Security Advisor do Supabase mostra **500 avisos**; a exportação CSV diz: são **dois lints e nada mais** — `anon_security_definer_function_executable` (0028) e `authenticated_security_definer_function_executable` (0029). Contado em produção: **36** funções executáveis por `anon`, **464** por `authenticated`, total exatamente 500. As 36 são **todas** objeto de um `GRANT … TO anon` explícito: nenhuma herda de `PUBLIC`. Não são 36 esquecimentos, são 36 decisões escritas em alguma migração.
 
-**O que é.** Retomar o critério de auditoria já estabelecido — *o que ela retorna, a partir de qual parâmetro, e o que impede um terceiro de pedi-lo?* — e aplicá-lo às 142. Procurar `auth.uid()` no corpo não prova nada.
+Relidas uma a uma, dividem-se em três grupos de tamanhos muito desiguais:
 
-**Por que importa.** É a metade não auditada da superfície de API do projeto. As cinco falhas encontradas em `public` eram oráculos — número para e-mail, identificador para nome — e nada diz que `api` não carregue outros.
+1. **Cinco intocáveis.** `user_can_act_as_staff_on_library`, `fn_library_visible_to_caller`, `user_can_engage_library`, `fn_caller_is_network_admin`, `fn_caller_is_library_staff` são chamadas por **107 policies RLS, das quais 39 avaliadas por `anon`**. Retirar-lhes `EXECUTE` não fecha nada: faz a leitura pública falhar com `permission denied for function`. O aviso 0028 é aqui o preço de uma arquitetura, não um defeito.
+2. **Uns vinte usos anônimos reais**: catálogo público (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), os quatro leitores de modo, a coleta OAI, o percurso de candidatura de uma biblioteca por token (`fn_get_library_request_claim_context`, `fn_consume_library_request_claim`, `fn_submit_library_request*`).
+3. **Três grants mortos**, e é aí que está o defeito real: `search_authors_by_name`, `search_publishers_by_name` e `remove_library_regulation_document` **recusam `anon` no próprio corpo** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`). O grant contradiz a função.
+
+**O que é.** Retomar o critério já enunciado pelo endurecimento de 02/07/2026 — *ler um modo é público, julgar um direito não é* — mas com a correção que este levantamento impõe: **um predicado de direito chamado por uma policy avaliada por `anon` deve permanecer aberto a `anon`.** A regra completa é portanto: está aberto a `anon` o que serve uma página pública, ou o que uma policy avaliada por `anon` chama. Nada mais.
+
+Três lotes, nesta ordem:
+
+1. `REVOKE EXECUTE … FROM anon` nos três grants mortos. Nenhuma mudança de comportamento: as funções já recusavam.
+2. Um `COMMENT ON FUNCTION` nas cinco intocáveis, dizendo *por quê* e citando a contagem de policies. Sem esse comentário, a próxima leitura do painel recomeçará este trabalho — ou pior, fará o revoke.
+3. Passar as ~28 restantes pelo crivo da pergunta de auditoria de 18/05: *o que ela retorna, a partir de qual parâmetro, e o que impede um terceiro não conectado de pedi-lo?*
+
+**Antes de qualquer `REVOKE`, verificar:**
+```sql
+SELECT c.relname, p.polname, p.polroles::regrole[]
+  FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid
+ WHERE coalesce(pg_get_expr(p.polqual, p.polrelid), '')
+     || coalesce(pg_get_expr(p.polwithcheck, p.polrelid), '')
+       LIKE '%nome_da_funcao%';
+```
+
+**Por que importa.** Porque um grant que o corpo contradiz é exatamente o que deixa de ser relido. No dia em que alguém retirar a guarda `auth.uid() is null` de `remove_library_regulation_document` para consertar outra coisa, o `GRANT … TO anon` ainda estará lá, e ninguém o terá colocado naquele dia. A segurança raramente depende de uma única linha: depende de duas linhas não se contradizerem.
+
+E porque 500 avisos que não se sabe ler têm um custo próprio: tornam o painel inutilizável, portanto escondem o 501º.
 
 **O que conta como terminado.**
 
-- As 142 funções têm um veredicto escrito: legítima, a restringir, ou a suprimir.
-- As funções a restringir perderam seu `EXECUTE` por migração.
-- O relatório vive em `docs/journal/audits/`, no formato do de 20/08.
-- Atenção: cinco funções carregam 106 policies RLS e **nunca** devem perder seu `EXECUTE`, inclusive `anon`.
+- Os três grants mortos são retirados por migração; nenhuma suíte fica vermelha.
+- As cinco intocáveis levam um `COMMENT ON FUNCTION` que nomeia a razão e a contagem de policies.
+- As ~28 restantes têm um veredicto escrito em `docs/journal/audits/`.
+- Uma suíte SQL guarda o invariante: *nenhuma função aberta a `anon` fora de uma lista nomeada* — no modelo do TEST 15 de `paquetA`, que já guarda a partilha nos dois sentidos sobre dez helpers.
+- O lint 0028 cai ao tamanho dessa lista, e esse número está escrito em algum lugar. Um aviso esperado deixa de ser um aviso.
 
-**Dependências.** Faz-se por lotes. Um lote de vinte funções já é útil.
+**Dependências.** Os lotes 1 e 2 cabem numa noite e não dependem de nada. O lote 3 é uma revisão, faz-se em pacotes de dez.
 
-*Remissões : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18`*
+*Remissões : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `migration 20260702103557 (durcissement advisor 0028)` · `tests/sql/paquetA_profils_tests.sql TEST 13 et TEST 15`*
+
+#### B14 — Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated`
+
+`P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL
+
+**Estado verificado em 29/08.** A outra parte dos 500 avisos do advisor: o lint 0029, **464 funções** — 138 em `api` de 142, 326 em `public` de 498. A auditoria de 18/05 revisou uma parte de `public` e fechou cinco falhas reais; **não abrangia `api`.**
+
+Este número nunca descerá a zero e não é esse o objetivo. Toda a superfície de escrita da aplicação é feita de RPC `SECURITY DEFINER` atrás de `api` (doutrina `DOC-RPC-3`): o advisor sinaliza a arquitetura, que não pode conhecer. Contá-lo como 464 problemas seria um erro de leitura; não o contar de todo seria outro.
+
+**O que é.** O critério não é *«é `SECURITY DEFINER`?»* — todas são, por construção. É: **o que pode pedir uma desconhecida que apenas se cadastrou?** Uma conta `authenticated` obtém-se em três cliques; não prova pertencimento a nenhuma biblioteca.
+
+Retomar a pergunta de auditoria de 18/05 — *o que ela retorna, a partir de qual parâmetro, e o que impede um terceiro de pedi-lo?* — e aplicá-la às 138 funções de `api` primeiro, que são a superfície exposta por `/rest/v1/rpc/`. Procurar `auth.uid()` no corpo não prova nada: as cinco falhas de maio continham-no.
+
+Os oráculos encontrados em maio tinham todos a mesma forma: um identificador como parâmetro, um dado nominativo no retorno. Procurar essa forma prioritariamente.
+
+**Por que importa.** É a metade não auditada da superfície de API do projeto. As cinco falhas encontradas em `public` eram oráculos — número para e-mail, identificador para nome — e nada diz que `api` não carregue outros. Para uma biblioteca militante, um oráculo que devolve um nome a partir de um número não é um defeito técnico: é uma lista de pessoas.
+
+**O que conta como terminado.**
+
+- As 138 funções de `api` têm um veredicto escrito: legítima, a restringir, ou a suprimir.
+- As funções a restringir perderam seu `EXECUTE` por migração, após verificação de que nenhuma policy as chama.
+- O relatório vive em `docs/journal/audits/`, no formato do de 18/05.
+- O resto de `public` segue, em pacotes.
+
+**Dependências.** Faz-se em lotes. Um lote de vinte funções já é útil. Não começa antes de B2, cujo lote 2 estabelece o vocabulário dos comentários.
+
+*Remissões : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `REGISTRE_decisions DOC-RPC-3`*
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
 
@@ -2279,4 +2331,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, 2026-08-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. Cada estado foi verificado em 29/08/2026 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, 2026-08-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 90 itens em 11 domínios. Cada estado foi verificado em 29/08/2026 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

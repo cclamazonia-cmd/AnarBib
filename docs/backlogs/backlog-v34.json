@@ -1518,48 +1518,102 @@
       "d": "B",
       "p": "P1",
       "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`",
+        "pt": "Triar as 36 funções `SECURITY DEFINER` abertas a `anon`"
+      },
+      "v": {
+        "fr": "Complété le 30/08. Le Security Advisor de Supabase affiche **500 avertissements** ; l'export CSV le dit : ce sont **deux lints et rien d'autre** — `anon_security_definer_function_executable` (0028) et `authenticated_security_definer_function_executable` (0029). Compté en production : **36** fonctions exécutables par `anon`, **464** par `authenticated`, total exactement 500. Les 36 sont **toutes** l'objet d'un `GRANT … TO anon` explicite : aucune n'hérite de `PUBLIC`. Ce ne sont pas 36 oublis, ce sont 36 décisions écrites quelque part dans une migration.\n\nRelues une par une, elles se répartissent en trois groupes de tailles très inégales :\n\n1. **Cinq intouchables.** `user_can_act_as_staff_on_library`, `fn_library_visible_to_caller`, `user_can_engage_library`, `fn_caller_is_network_admin`, `fn_caller_is_library_staff` sont appelées par **107 policies RLS, dont 39 sont évaluées par `anon`**. Leur retirer `EXECUTE` ne ferme rien : cela fait échouer la lecture publique avec `permission denied for function`. L'avertissement 0028 est ici le prix d'une architecture, pas un défaut.\n2. **Une vingtaine d'usages anonymes réels** : catalogue public (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), les quatre lecteurs de mode, le moissonnage OAI, le parcours de candidature d'une bibliothèque par jeton (`fn_get_library_request_claim_context`, `fn_consume_library_request_claim`, `fn_submit_library_request*`).\n3. **Trois grants morts**, et c'est là qu'est le vrai défaut : `search_authors_by_name`, `search_publishers_by_name` et `remove_library_regulation_document` **refusent `anon` dans leur propre corps** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`). Le grant contredit la fonction.",
+        "pt": "Completado em 30/08. O Security Advisor do Supabase mostra **500 avisos**; a exportação CSV diz: são **dois lints e nada mais** — `anon_security_definer_function_executable` (0028) e `authenticated_security_definer_function_executable` (0029). Contado em produção: **36** funções executáveis por `anon`, **464** por `authenticated`, total exatamente 500. As 36 são **todas** objeto de um `GRANT … TO anon` explícito: nenhuma herda de `PUBLIC`. Não são 36 esquecimentos, são 36 decisões escritas em alguma migração.\n\nRelidas uma a uma, dividem-se em três grupos de tamanhos muito desiguais:\n\n1. **Cinco intocáveis.** `user_can_act_as_staff_on_library`, `fn_library_visible_to_caller`, `user_can_engage_library`, `fn_caller_is_network_admin`, `fn_caller_is_library_staff` são chamadas por **107 policies RLS, das quais 39 avaliadas por `anon`**. Retirar-lhes `EXECUTE` não fecha nada: faz a leitura pública falhar com `permission denied for function`. O aviso 0028 é aqui o preço de uma arquitetura, não um defeito.\n2. **Uns vinte usos anônimos reais**: catálogo público (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), os quatro leitores de modo, a coleta OAI, o percurso de candidatura de uma biblioteca por token (`fn_get_library_request_claim_context`, `fn_consume_library_request_claim`, `fn_submit_library_request*`).\n3. **Três grants mortos**, e é aí que está o defeito real: `search_authors_by_name`, `search_publishers_by_name` e `remove_library_regulation_document` **recusam `anon` no próprio corpo** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`). O grant contradiz a função."
+      },
+      "w": {
+        "fr": "Reprendre le critère déjà énoncé par le durcissement du 02/07/2026 — *lire un mode est public, juger un droit ne l'est pas* — mais avec la correction que ce relevé impose : **un prédicat de droit appelé par une policy évaluée par `anon` doit rester ouvert à `anon`.** La règle complète est donc : est ouvert à `anon` ce qui sert une page publique, ou ce qu'une policy évaluée par `anon` appelle. Rien d'autre.\n\nTrois lots, dans cet ordre :\n\n1. `REVOKE EXECUTE … FROM anon` sur les trois grants morts. Aucun changement de comportement : les fonctions refusaient déjà.\n2. Un `COMMENT ON FUNCTION` sur les cinq intouchables, qui dit *pourquoi* et cite le décompte de policies. Sans ce commentaire, la prochaine lecture du tableau de bord recommencera ce travail — ou pire, fera le revoke.\n3. Passer les ~28 restantes au crible de la question d'audit du 18/05 : *que renvoie-t-elle, à partir de quel paramètre, et qu'est-ce qui interdit à un tiers non connecté de le demander ?*\n\n**Avant tout `REVOKE`, vérifier :**\n```sql\nSELECT c.relname, p.polname, p.polroles::regrole[]\n  FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid\n WHERE coalesce(pg_get_expr(p.polqual, p.polrelid), '')\n     || coalesce(pg_get_expr(p.polwithcheck, p.polrelid), '')\n       LIKE '%nom_de_la_fonction%';\n```",
+        "pt": "Retomar o critério já enunciado pelo endurecimento de 02/07/2026 — *ler um modo é público, julgar um direito não é* — mas com a correção que este levantamento impõe: **um predicado de direito chamado por uma policy avaliada por `anon` deve permanecer aberto a `anon`.** A regra completa é portanto: está aberto a `anon` o que serve uma página pública, ou o que uma policy avaliada por `anon` chama. Nada mais.\n\nTrês lotes, nesta ordem:\n\n1. `REVOKE EXECUTE … FROM anon` nos três grants mortos. Nenhuma mudança de comportamento: as funções já recusavam.\n2. Um `COMMENT ON FUNCTION` nas cinco intocáveis, dizendo *por quê* e citando a contagem de policies. Sem esse comentário, a próxima leitura do painel recomeçará este trabalho — ou pior, fará o revoke.\n3. Passar as ~28 restantes pelo crivo da pergunta de auditoria de 18/05: *o que ela retorna, a partir de qual parâmetro, e o que impede um terceiro não conectado de pedi-lo?*\n\n**Antes de qualquer `REVOKE`, verificar:**\n```sql\nSELECT c.relname, p.polname, p.polroles::regrole[]\n  FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid\n WHERE coalesce(pg_get_expr(p.polqual, p.polrelid), '')\n     || coalesce(pg_get_expr(p.polwithcheck, p.polrelid), '')\n       LIKE '%nome_da_funcao%';\n```"
+      },
+      "y": {
+        "fr": "Parce qu'un grant que le corps contredit est exactement ce qui cesse d'être relu. Le jour où quelqu'un retire la garde `auth.uid() is null` de `remove_library_regulation_document` pour réparer autre chose, le `GRANT … TO anon` sera toujours là, et personne ne l'aura mis ce jour-là. La sécurité tient rarement à une seule ligne : elle tient à ce que deux lignes ne se contredisent pas.\n\nEt parce que 500 avertissements qu'on ne sait pas lire ont un coût propre : ils rendent le tableau de bord inutilisable, donc ils cachent le 501ᵉ.",
+        "pt": "Porque um grant que o corpo contradiz é exatamente o que deixa de ser relido. No dia em que alguém retirar a guarda `auth.uid() is null` de `remove_library_regulation_document` para consertar outra coisa, o `GRANT … TO anon` ainda estará lá, e ninguém o terá colocado naquele dia. A segurança raramente depende de uma única linha: depende de duas linhas não se contradizerem.\n\nE porque 500 avisos que não se sabe ler têm um custo próprio: tornam o painel inutilizável, portanto escondem o 501º."
+      },
+      "f": {
+        "fr": [
+          "Les trois grants morts sont retirés par migration ; aucune suite ne rougit.",
+          "Les cinq intouchables portent un `COMMENT ON FUNCTION` qui nomme la raison et le décompte de policies.",
+          "Les ~28 restantes ont un verdict écrit dans `docs/journal/audits/`.",
+          "Une suite SQL garde l'invariant : *aucune fonction ouverte à `anon` hors d'une liste nommée* — sur le modèle du TEST 15 de `paquetA`, qui garde déjà le partage dans les deux sens sur dix helpers.",
+          "Le lint 0028 tombe à la taille de cette liste, et ce nombre est écrit quelque part. Un avertissement attendu n'est plus un avertissement."
+        ],
+        "pt": [
+          "Os três grants mortos são retirados por migração; nenhuma suíte fica vermelha.",
+          "As cinco intocáveis levam um `COMMENT ON FUNCTION` que nomeia a razão e a contagem de policies.",
+          "As ~28 restantes têm um veredicto escrito em `docs/journal/audits/`.",
+          "Uma suíte SQL guarda o invariante: *nenhuma função aberta a `anon` fora de uma lista nomeada* — no modelo do TEST 15 de `paquetA`, que já guarda a partilha nos dois sentidos sobre dez helpers.",
+          "O lint 0028 cai ao tamanho dessa lista, e esse número está escrito em algum lugar. Um aviso esperado deixa de ser um aviso."
+        ]
+      },
+      "dep": {
+        "fr": "Les lots 1 et 2 tiennent dans une soirée et ne dépendent de rien. Le lot 3 est une revue, il se fait par paquets de dix.",
+        "pt": "Os lotes 1 e 2 cabem numa noite e não dependem de nada. O lote 3 é uma revisão, faz-se em pacotes de dez."
+      },
+      "r": [
+        "PLAN_DE_MARCHE §8",
+        "PLAN_DE_MARCHE règle 13.3",
+        "AUDIT_securite_fonctions_privees_2026-05-18",
+        "migration 20260702103557 (durcissement advisor 0028)",
+        "tests/sql/paquetA_profils_tests.sql TEST 13 et TEST 15"
+      ]
+    },
+    {
+      "id": "B14",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
       "e": "L",
       "sk": [
         "sql"
       ],
       "t": {
-        "fr": "Trier les 142 fonctions `SECURITY DEFINER` du schéma `api`",
-        "pt": "Triar as 142 funções `SECURITY DEFINER` do esquema `api`"
+        "fr": "Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated`",
+        "pt": "Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated`"
       },
       "v": {
-        "fr": "L'audit du 20/08 a passé en revue les fonctions de `public` une par une et fermé cinq failles réelles. **Il ne portait pas sur `api`.** Le schéma `api` compte 184 fonctions dont **142 en `SECURITY DEFINER`**, toutes appelables par le rôle `authenticated` via `/rest/v1/rpc/`.",
-        "pt": "A auditoria de 20/08 revisou as funções de `public` uma a uma e fechou cinco falhas reais. **Não abrangia `api`.** O esquema `api` conta 184 funções das quais **142 em `SECURITY DEFINER`**, todas chamáveis pelo papel `authenticated` via `/rest/v1/rpc/`."
+        "fr": "L'autre part des 500 avertissements de l'advisor : le lint 0029, **464 fonctions** — 138 dans `api` sur 142, 326 dans `public` sur 498. L'audit du 18/05 a passé en revue une partie de `public` et fermé cinq failles réelles ; **il ne portait pas sur `api`.**\n\nCe nombre ne descendra jamais à zéro et ce n'est pas l'objectif. Toute la surface d'écriture de l'application est faite de RPC `SECURITY DEFINER` derrière `api` (doctrine `DOC-RPC-3`) : l'advisor signale l'architecture, qu'il ne peut pas connaître. Le compter comme 464 problèmes serait une erreur de lecture ; ne pas le compter du tout en serait une autre.",
+        "pt": "A outra parte dos 500 avisos do advisor: o lint 0029, **464 funções** — 138 em `api` de 142, 326 em `public` de 498. A auditoria de 18/05 revisou uma parte de `public` e fechou cinco falhas reais; **não abrangia `api`.**\n\nEste número nunca descerá a zero e não é esse o objetivo. Toda a superfície de escrita da aplicação é feita de RPC `SECURITY DEFINER` atrás de `api` (doutrina `DOC-RPC-3`): o advisor sinaliza a arquitetura, que não pode conhecer. Contá-lo como 464 problemas seria um erro de leitura; não o contar de todo seria outro."
       },
       "w": {
-        "fr": "Reprendre le critère d'audit déjà établi — *que renvoie-t-elle, à partir de quel paramètre, et qu'est-ce qui interdit à un tiers de le demander ?* — et l'appliquer aux 142. Chercher `auth.uid()` dans le corps ne prouve rien.",
-        "pt": "Retomar o critério de auditoria já estabelecido — *o que ela retorna, a partir de qual parâmetro, e o que impede um terceiro de pedi-lo?* — e aplicá-lo às 142. Procurar `auth.uid()` no corpo não prova nada."
+        "fr": "Le critère n'est pas *« est-elle `SECURITY DEFINER` ? »* — elles le sont toutes, par construction. C'est : **que peut demander une inconnue qui s'est simplement inscrite ?** Un compte `authenticated` s'obtient en trois clics ; il ne prouve l'appartenance à aucune bibliothèque.\n\nReprendre la question d'audit du 18/05 — *que renvoie-t-elle, à partir de quel paramètre, et qu'est-ce qui interdit à un tiers de le demander ?* — et l'appliquer aux 138 fonctions de `api` d'abord, qui sont la surface exposée par `/rest/v1/rpc/`. Chercher `auth.uid()` dans le corps ne prouve rien : les cinq failles de mai en contenaient.\n\nLes oracles trouvés en mai avaient tous la même forme : un identifiant en paramètre, une donnée nominative en retour. Chercher cette forme en priorité.",
+        "pt": "O critério não é *«é `SECURITY DEFINER`?»* — todas são, por construção. É: **o que pode pedir uma desconhecida que apenas se cadastrou?** Uma conta `authenticated` obtém-se em três cliques; não prova pertencimento a nenhuma biblioteca.\n\nRetomar a pergunta de auditoria de 18/05 — *o que ela retorna, a partir de qual parâmetro, e o que impede um terceiro de pedi-lo?* — e aplicá-la às 138 funções de `api` primeiro, que são a superfície exposta por `/rest/v1/rpc/`. Procurar `auth.uid()` no corpo não prova nada: as cinco falhas de maio continham-no.\n\nOs oráculos encontrados em maio tinham todos a mesma forma: um identificador como parâmetro, um dado nominativo no retorno. Procurar essa forma prioritariamente."
       },
       "y": {
-        "fr": "C'est la moitié non auditée de la surface d'API du projet. Les cinq failles trouvées dans `public` étaient des oracles — numéro vers courriel, identifiant vers nom — et rien ne dit que `api` n'en porte pas.",
-        "pt": "É a metade não auditada da superfície de API do projeto. As cinco falhas encontradas em `public` eram oráculos — número para e-mail, identificador para nome — e nada diz que `api` não carregue outros."
+        "fr": "C'est la moitié non auditée de la surface d'API du projet. Les cinq failles trouvées dans `public` étaient des oracles — numéro vers courriel, identifiant vers nom — et rien ne dit que `api` n'en porte pas. Pour une bibliothèque militante, un oracle qui rend un nom à partir d'un numéro n'est pas un défaut technique : c'est une liste de personnes.",
+        "pt": "É a metade não auditada da superfície de API do projeto. As cinco falhas encontradas em `public` eram oráculos — número para e-mail, identificador para nome — e nada diz que `api` não carregue outros. Para uma biblioteca militante, um oráculo que devolve um nome a partir de um número não é um defeito técnico: é uma lista de pessoas."
       },
       "f": {
         "fr": [
-          "Les 142 fonctions ont un verdict écrit : légitime, à restreindre, ou à supprimer.",
-          "Les fonctions à restreindre ont perdu leur `EXECUTE` par migration.",
-          "Le compte rendu vit dans `docs/journal/audits/`, au format de celui du 20/08.",
-          "Attention : cinq fonctions portent 106 policies RLS et ne doivent **jamais** perdre leur `EXECUTE`, `anon` compris."
+          "Les 138 fonctions de `api` ont un verdict écrit : légitime, à restreindre, ou à supprimer.",
+          "Les fonctions à restreindre ont perdu leur `EXECUTE` par migration, après vérification qu'aucune policy ne les appelle.",
+          "Le compte rendu vit dans `docs/journal/audits/`, au format de celui du 18/05.",
+          "Le reste de `public` suit, par paquets."
         ],
         "pt": [
-          "As 142 funções têm um veredicto escrito: legítima, a restringir, ou a suprimir.",
-          "As funções a restringir perderam seu `EXECUTE` por migração.",
-          "O relatório vive em `docs/journal/audits/`, no formato do de 20/08.",
-          "Atenção: cinco funções carregam 106 policies RLS e **nunca** devem perder seu `EXECUTE`, inclusive `anon`."
+          "As 138 funções de `api` têm um veredicto escrito: legítima, a restringir, ou a suprimir.",
+          "As funções a restringir perderam seu `EXECUTE` por migração, após verificação de que nenhuma policy as chama.",
+          "O relatório vive em `docs/journal/audits/`, no formato do de 18/05.",
+          "O resto de `public` segue, em pacotes."
         ]
       },
       "dep": {
-        "fr": "Se fait par lots. Un lot de vingt fonctions est déjà utile.",
-        "pt": "Faz-se por lotes. Um lote de vinte funções já é útil."
+        "fr": "Se fait par lots. Un lot de vingt fonctions est déjà utile. Ne commence pas avant B2, dont le lot 2 pose le vocabulaire des commentaires.",
+        "pt": "Faz-se em lotes. Um lote de vinte funções já é útil. Não começa antes de B2, cujo lote 2 estabelece o vocabulário dos comentários."
       },
       "r": [
         "PLAN_DE_MARCHE §8",
         "PLAN_DE_MARCHE règle 13.3",
-        "AUDIT_securite_fonctions_privees_2026-05-18"
+        "AUDIT_securite_fonctions_privees_2026-05-18",
+        "REGISTRE_decisions DOC-RPC-3"
       ]
     },
     {
