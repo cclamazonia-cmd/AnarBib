@@ -182,14 +182,26 @@ BEGIN
       -- bouge le fait rougir. Et le NOTICE porte la raison dans le journal de
       -- CI, pour qu'on sache quoi seeder sans relancer une enquete.
       v_t:='3.03 renew_my_loan aboutit et recule l''echeance';
-      SELECT max(due_at) INTO v_due_avant FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
+      -- L'ECHEANCE EFFECTIVE EST `coalesce(extended_until, due_at)`, PAS `due_at`.
+      -- Un renouvellement n'ECRASE pas la date initiale : il ecrit dans
+      -- `extended_until` et laisse `due_at` temoin de la date d'origine. C'est
+      -- la forme que `fn_v2_extend_core` lit elle-meme
+      -- (`COALESCE(i.extended_until, i.due_at) AS current_due`), et c'est un bon
+      -- modele : on sait depuis quand, et de combien, un pret a ete prolonge.
+      -- La premiere ecriture mesurait `due_at` et concluait « le renouvellement
+      -- n'a rien fait » alors qu'il avait tout fait -- la notification
+      -- `emprestimo_v2_prorrogado` etait meme partie. Un test mesure ce que le
+      -- produit ecrit, pas ce qu'on croit qu'il ecrit.
+      SELECT max(coalesce(extended_until, due_at)) INTO v_due_avant
+        FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims',
           '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
         v_json := api.renew_my_loan(v_loan);
         RESET ROLE;
-        SELECT max(due_at) INTO v_due_apres FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
+        SELECT max(coalesce(extended_until, due_at)) INTO v_due_apres
+          FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
 
         -- Un RAISE NOTICE ne sort PAS : `run-sql-suites.sh` ne retient que la
         -- ligne « … OK : N/N ». L'information voyage donc dans le bilan.
