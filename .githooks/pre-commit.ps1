@@ -32,8 +32,17 @@ $stagedSqlFiles = $stagedAll | Where-Object { $_ -like "*.sql" }
 # comptes releves en production.
 $stagedTestFiles = $stagedAll | Where-Object { $_ -replace "\\", "/" -like "tests/sql/*" }
 
-if (-not $stagedSqlFiles -and -not $stagedTestFiles) {
-    # Ni SQL ni fichier de test stage, rien a verifier
+# Regle 7 : les migrations stagees, pour la collision d'horodatage.
+# La convention de format (horodatage a la seconde) ne s'applique qu'aux
+# migrations AJOUTEES : retoucher le commentaire d'une vieille migration ne
+# doit pas obliger a la renommer -- et la renommer la ferait rejouer.
+$addedAll = git diff --cached --name-only --diff-filter=A
+$stagedMigrations = $stagedAll | Where-Object {
+    ($_ -replace "\\", "/") -like "supabase/migrations/*" -and $_ -like "*.sql"
+}
+
+if (-not $stagedSqlFiles -and -not $stagedTestFiles -and -not $stagedMigrations) {
+    # Rien de pertinent stage, rien a verifier
     exit 0
 }
 
@@ -201,9 +210,89 @@ if ($stagedTestFiles) {
     }
 }
 
+# =========================================================================
+# ---- Test 7 : collision d'horodatage entre migrations ------------------
+# =========================================================================
+# Ajoute le 30/08/2026, le jour ou le cas s'est produit.
+#
+# POURQUOI. Une migration a ete horodatee 20260830090000 alors que ce prefixe
+# etait deja pris. Deux symptomes, une seule cause, et aucun des deux ne
+# s'annonce :
+#   * en production, `supabase db push` indexe par VERSION -- voyant le
+#     numero deja inscrit a schema_migrations, il a saute le fichier SANS
+#     RIEN DIRE. Deploiement vert, migration jamais executee ;
+#   * en CI, ou tout est rejoue depuis zero dans l'ordre des noms de
+#     fichiers, l'ordre alphabetique a place la nouvelle migration AVANT
+#     celle dont elle dependait.
+#
+# Une collision de version est donc pire qu'une erreur : c'est un succes
+# apparent. Elle ne coute rien a detecter -- le prefixe suffit.
+# DOC-DEPLOY-1 : migrations horodatees UTC, verifier avant de choisir.
+if ($stagedMigrations) {
+    # Les versions deja presentes au depot, hors fichiers en cours d'ajout.
+    $existantes = @{}
+    if (Test-Path "supabase/migrations") {
+        Get-ChildItem "supabase/migrations" -Filter "*.sql" -File | ForEach-Object {
+            if ($_.Name -match '^(\d{14})_') {
+                $v = $Matches[1]
+                if (-not $existantes.ContainsKey($v)) { $existantes[$v] = @() }
+                $existantes[$v] += $_.Name
+            }
+        }
+    }
+
+    foreach ($file in $stagedMigrations) {
+        $nom = Split-Path $file -Leaf
+        # Les fichiers prefixes par _ ne sont pas des migrations : le gabarit
+        # (_TEMPLATE.sql) et les scripts de retour arriere (_rollback_*.sql),
+        # qui portent en NOM la version qu'ils annulent et ne doivent surtout
+        # pas etre horodates comme une migration -- ils seraient rejoues.
+        if ($nom -like "_*") { continue }
+        if ($nom -notmatch '^(\d{14})_') {
+            $violations += @{
+                File   = $file
+                Rule   = "Migration sans horodatage a 14 chiffres"
+                Detail = "Le nom doit commencer par AAAAMMJJHHMMSS_ (UTC). C'est ce prefixe qui ordonne la sequence en CI et qui identifie la migration en production."
+                Doc    = "DOC-DEPLOY-1"
+            }
+            continue
+        }
+        $version = $Matches[1]
+
+        # ---- Horodatage a la seconde reelle, pas a l'heure ronde ---------
+        # Ajoute le 30/08/2026, sur la remarque de Xavier -- et c'est une
+        # meilleure parade que la detection de collision elle-meme : une
+        # collision se DETECTE, une convention l'EMPECHE.
+        # Le depot portait les deux usages : 154 migrations a la seconde
+        # (l'usage d'origine) et 70 a l'heure ronde. L'habitude des heures
+        # rondes s'est installee en aout, et elle revient a choisir a la main
+        # dans un jeu de douze creneaux par jour, de memoire. C'est exactement
+        # ce qui a produit la collision du 30/08.
+        # Ne s'applique qu'aux migrations AJOUTEES.
+        if ($addedAll -contains $file -and $version -match '0000$') {
+            $violations += @{
+                File   = $file
+                Rule   = "Horodatage a l'heure ronde ($version)"
+                Detail = "Prendre l'heure UTC reelle, a la seconde : (Get-Date).ToUniversalTime().ToString('yyyyMMddHHmmss'). Une heure ronde revient a choisir de memoire dans douze creneaux par jour -- c'est ainsi qu'on se retrouve a deux sur le meme numero, et supabase db push saute alors le fichier sans rien dire."
+                Doc    = "DOC-DEPLOY-4"
+            }
+        }
+
+        $homonymes = @($existantes[$version] | Where-Object { $_ -ne $nom })
+        if ($homonymes.Count -gt 0) {
+            $violations += @{
+                File   = $file
+                Rule   = "Horodatage $version deja pris par $($homonymes -join ', ')"
+                Detail = "supabase db push indexe par version : il sauterait ce fichier SANS ERREUR -- deploiement vert, migration jamais executee. Et en CI l'ordre alphabetique deciderait laquelle passe en premier. Choisir un horodatage libre, posterieur au dernier utilise."
+                Doc    = "DOC-DEPLOY-1 - backlog v34"
+            }
+        }
+    }
+}
+
 # Resume
 if ($violations.Count -eq 0) {
-    Write-Host "[OK] Aucune violation doctrinale detectee ($($stagedSqlFiles.Count) fichier(s) SQL, $($stagedTestFiles.Count) fichier(s) de tests)." -ForegroundColor Green
+    Write-Host "[OK] Aucune violation doctrinale detectee ($($stagedSqlFiles.Count) fichier(s) SQL, $($stagedTestFiles.Count) de tests, $($stagedMigrations.Count) migration(s))." -ForegroundColor Green
     Write-Host ""
     exit 0
 }

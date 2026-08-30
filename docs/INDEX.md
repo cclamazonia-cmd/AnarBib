@@ -18,7 +18,7 @@ En cas de doute ou de conflit apparent entre deux documents : **lire le REGISTRE
 
 Cette règle a été formalisée par l'**audit de cohérence du corpus du 02/06/2026** (`journal/audits/AUDIT_coherence_corpus_2026-06-02.md`), qui a constaté que les drifts détectés relèvent quasi tous d'une même pathologie : un fait transverse (locales, doctrine de déploiement…) recopié dans chaque spec au lieu d'être cité depuis un foyer unique. Le REGISTRE est ce foyer.
 
-**Conséquence pour la lecture** : un nouveau venu lit le REGISTRE (971 lignes au 29/08/2026, condensé) avant tout autre document — il y trouve les doctrines transverses et les arbitrages structurants. Il a plus que doublé depuis juin : 44 titres de section au 29/08/2026, `§BG2` (sauvegardes) comprise.
+**Conséquence pour la lecture** : un nouveau venu lit le REGISTRE (972 lignes au 30/08/2026, condensé) avant tout autre document — il y trouve les doctrines transverses et les arbitrages structurants. Il a plus que doublé depuis juin : 44 titres de section au 29/08/2026, `§BG2` (sauvegardes) comprise.
 
 ---
 
@@ -28,7 +28,7 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 
 | Document | Rôle | Statut |
 |---|---|---|
-| [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.6 du 29/08/2026 — 🟢 référence normative |
+| [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.7 du 30/08/2026 — 🟢 référence normative |
 | [`governance/guide-gouvernance-fr.md`](./governance/) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau (foyer FR ; 9 traductions dans `governance/`). | v1.0 du 11/05/2026 — 🟢 référence |
 | [`GLB/AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. | v17 du 29/05/2026 — 🟢 référence (livre blanc vivant) |
 | [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.0 (avril 2026) — 🟢 stable |

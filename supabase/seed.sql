@@ -123,3 +123,84 @@ BEGIN
 
   RAISE NOTICE 'seed circulation : livre %, holding %, 1 exemplaire sur BLMF', v_book_id, v_holding_id;
 END $$;
+
+-- ===========================================================================
+-- Deux emprunts : un ouvert, un clos
+-- Ajoutés le 30/08/2026 (backlog v34, item I15).
+--
+-- POURQUOI. Douze SKIP disséminés dans `paquet19`, `paquet24`, `paquet25`,
+-- `cotisation` et `granulaire` disaient tous la même chose : « aucun emprunt
+-- en base ». Autrement dit, aucun chemin nominal de la circulation — le cœur
+-- du logiciel — n'était éprouvé, et une suite qui SKIP se lit comme une suite
+-- qui passe. Le seed fournit désormais de quoi les écrire.
+--
+--   * la lectrice A porte un emprunt OUVERT, échéance dans 14 jours. Il rend
+--     testables : la prolongation par la propriétaire, le refus opposé à
+--     quelqu'un d'autre (le lecteur B sur l'emprunt de la lectrice A —
+--     l'invariant d'appartenance, qui n'était jusqu'ici jamais exercé),
+--     l'agenda de retour, et le renouvellement d'un membre à cotisation
+--     restreinte.
+--   * le lecteur B porte un emprunt CLOS, rendu il y a trois jours. Il rend
+--     testable le refus d'agir sur un emprunt déjà terminé, qui n'a pas la
+--     même cause que le refus opposé à un inconnu et méritait son propre cas.
+--
+-- Un exemplaire par emprunt : rien n'interdirait de les faire porter par le
+-- même, mais deux exemplaires évitent de dépendre d'une hypothèse sur ce que
+-- la base autorise, et coûtent une ligne.
+-- ===========================================================================
+
+DO $$
+DECLARE
+  c_blmf      constant uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';
+  c_leitora_a constant uuid := '33333333-3333-3333-3333-333333333333';
+  c_leitor_b  constant uuid := '44444444-4444-4444-4444-444444444444';
+  v_holding_id bigint;
+  v_book_id    bigint;
+  v_item_1     bigint;
+  v_item_2     bigint;
+  v_emp        bigint;
+BEGIN
+  SELECT h.id, h.book_id INTO v_holding_id, v_book_id
+    FROM public.book_holdings h
+   WHERE h.library_id = c_blmf
+   ORDER BY h.id
+   LIMIT 1;
+
+  IF v_holding_id IS NULL THEN
+    RAISE EXCEPTION 'seed : aucun holding BLMF — le bloc de circulation ci-dessus n''a pas tourné';
+  END IF;
+
+  SELECT id INTO v_item_1 FROM public.exemplares WHERE tombo = 'TESTE-000001';
+
+  INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id,
+                                 circulation_policy, visibility)
+  VALUES ('TEST-CIRC-1', 'TESTE-000002', c_blmf, v_holding_id, 'ambos', 'public')
+  RETURNING id INTO v_item_2;
+
+  -- Emprunt OUVERT — lectrice A
+  INSERT INTO public.emprestimos_v2 (user_id, library_id, status_global, due_at)
+  VALUES (c_leitora_a, c_blmf, 'aberto', (current_date + 14))
+  RETURNING id INTO v_emp;
+
+  INSERT INTO public.emprestimo_itens_v2
+    (emprestimo_id, line_no, sub_id, book_id, item_id, holding_id,
+     bib_ref, titulo_cache, item_status, due_at)
+  VALUES
+    (v_emp, 1, 'TESTE-EMP-1.1', v_book_id, v_item_1, v_holding_id,
+     'TEST-CIRC-1', 'Obra de teste — circulação', 'aberto', (current_date + 14));
+
+  -- Emprunt CLOS — lecteur B, rendu il y a trois jours
+  INSERT INTO public.emprestimos_v2 (user_id, library_id, status_global, due_at)
+  VALUES (c_leitor_b, c_blmf, 'encerrado', (current_date - 10))
+  RETURNING id INTO v_emp;
+
+  INSERT INTO public.emprestimo_itens_v2
+    (emprestimo_id, line_no, sub_id, book_id, item_id, holding_id,
+     bib_ref, titulo_cache, item_status, due_at, returned_at)
+  VALUES
+    (v_emp, 1, 'TESTE-EMP-2.1', v_book_id, v_item_2, v_holding_id,
+     'TEST-CIRC-1', 'Obra de teste — circulação', 'devolvido', (current_date - 10),
+     (now() - interval '3 days'));
+
+  RAISE NOTICE 'seed circulation : 1 emprunt ouvert (lectrice A), 1 emprunt clos (lecteur B)';
+END $$;
