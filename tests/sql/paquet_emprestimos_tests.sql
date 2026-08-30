@@ -21,6 +21,9 @@ DECLARE
   c_coord    constant uuid := '11111111-1111-1111-1111-111111111111';
   c_leitor_b constant uuid := '44444444-4444-4444-4444-444444444444';
   v_loan bigint; v_due_avant date; v_due_apres date; v_n int; v_txt text;
+  -- Ce que la suite veut faire remonter en plus de son compte. Voir la note
+  -- « CE QUI SORT D'UNE SUITE » au bilan.
+  v_info text := '';
 BEGIN
   -- ── SECTION 1 : matrice fn_check_loan_action (pure, déterministe) ──
   -- create_loan_at_counter = staff (librarian|coordenador) uniquement
@@ -188,9 +191,11 @@ BEGIN
         RESET ROLE;
         SELECT max(due_at) INTO v_due_apres FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
 
-        RAISE NOTICE 'INFO 3.03 : renew_my_loan -> ok=% reason=% (echeance % -> %)',
+        -- Un RAISE NOTICE ne sort PAS : `run-sql-suites.sh` ne retient que la
+        -- ligne « … OK : N/N ». L'information voyage donc dans le bilan.
+        v_info := v_info || format(' | 3.03 renew: ok=%s reason=%s (echeance %s -> %s)',
           coalesce(v_json->>'ok','(absent)'), coalesce(v_json->>'reason','(absente)'),
-          coalesce(v_due_avant::text,'NULL'), coalesce(v_due_apres::text,'NULL');
+          coalesce(v_due_avant::text,'NULL'), coalesce(v_due_apres::text,'NULL'));
 
         IF NOT (v_json ? 'ok' AND v_json ? 'reason') THEN
           v_failed:=v_failed+1;
@@ -257,8 +262,15 @@ BEGIN
     -- Denominateur incluant les skips (30/08/2026, item I15) : sans cela, un
     -- test qui bascule de PASSE a SKIP disparait des deux termes et la suite
     -- reste verte en testant moins.
-    RAISE EXCEPTION 'EMPRESTIMOS OK : %/% tests passés (% skips)%', v_passed, (v_passed+v_failed+v_skipped), v_skipped,
-      CASE WHEN v_skipped>0 THEN ' | SKIPS: '||array_to_string(v_skips,' ; ') ELSE '' END;
+    -- CE QUI SORT D'UNE SUITE. `run-sql-suites.sh` ne conserve qu'UNE ligne par
+    -- suite : celle qui correspond au motif « OK : N/N ». Tout le reste de la
+    -- sortie psql, NOTICE compris, est jeté. Une suite n'a donc qu'un seul
+    -- canal vers le journal de CI — sa ligne de bilan. C'est aussi pourquoi un
+    -- test qui se desactive en silence est indetectable : il n'a aucun moyen
+    -- de le dire. Constat du 30/08/2026 (item I15).
+    RAISE EXCEPTION 'EMPRESTIMOS OK : %/% tests passés (% skips)%%', v_passed, (v_passed+v_failed+v_skipped), v_skipped,
+      CASE WHEN v_skipped>0 THEN ' | SKIPS: '||array_to_string(v_skips,' ; ') ELSE '' END,
+      v_info;
   ELSE
     RAISE EXCEPTION 'EMPRESTIMOS ECHEC : %/% OK, % échec(s) | %', v_passed, (v_passed+v_failed), v_failed, array_to_string(v_failures,' || ');
   END IF;
