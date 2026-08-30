@@ -290,9 +290,13 @@ BEGIN
   VALUES (c_leitor_b, c_blmf, 'ativa', 'Fixture de seed — reserve active')
   RETURNING id INTO v_res;
 
+  -- `sub_id` est GENERATED ALWAYS ici (`reserva_id || '.' || line_no`), comme
+  -- dans `consulta_linhas_v2` -- mais PAS dans `emprestimo_itens_v2`, ou la
+  -- colonne est ordinaire. Trois tables soeurs, deux regimes : c'est la raison
+  -- pour laquelle on ne recopie pas une liste de colonnes d'une table a l'autre.
   INSERT INTO public.reserva_linhas_v2
-    (reserva_id, line_no, sub_id, book_id, holding_id, item_id, bib_ref, titulo_cache, item_status, expires_at)
-  VALUES (v_res, 1, 'TESTE-RES-1.1', v_b3, v_h3, v_i3, 'TEST-RES-1',
+    (reserva_id, line_no, book_id, holding_id, item_id, bib_ref, titulo_cache, item_status, expires_at)
+  VALUES (v_res, 1, v_b3, v_h3, v_i3, 'TEST-RES-1',
           'Obra de teste — reserva', 'ativa', (now() + interval '7 days'));
 
   RAISE NOTICE 'seed circulation : + 1 emprunt coordination, 1 consulta (em_preparacao), 1 reservation active';
