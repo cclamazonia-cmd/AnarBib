@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-30** · 85 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-30** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 11
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 12
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -373,6 +373,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B12** | Un envoi non effectué ne dit pas pourquoi : les `skipped` de `team_notification_outbox` | `P2` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B15** | Un renouvellement refusé ne dit rien à qui ne lit pas le `ok` | `P2` | À vérifier |
+| **B16** | Le slug d'une bibliothèque perd ses majuscules à la création | `P1` | Ouvert |
 
 #### B2 — Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`
 
@@ -671,6 +672,41 @@ Et parce que la façon dont c'est apparu vaut d'être notée : aucune relecture 
 **Dépendances.** Aucune. Le recensement se fait en une requête ; la vérification côté front demande de lire les appels correspondants.
 
 *Renvois : `tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)` · `public.fn_v2_extend_core` · `REGISTRE_decisions DOC-RPC-3`*
+
+#### B16 — Le slug d'une bibliothèque perd ses majuscules à la création
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Trouvé le 30/08 en **exerçant** `fn_provision_preactive_library` sur une demande de test, pas en relisant le code. Une bibliothèque nommée « Biblioteca de teste » ressort avec le slug `iblioteca-de-teste` : le B a disparu.
+
+La cause tient à l'ordre des opérations. Dans la fabrication du slug, `lower()` est appliqué **après** `regexp_replace(…, '[^a-z0-9]+', '-', 'g')`. Une majuscule n'appartenant pas à `a-z`, elle est remplacée par un tiret **avant** d'avoir été minusculée — puis le tiret de tête est coupé par le `trim`. « Terra Livre » donnerait `erra-livre`.
+
+Le `translate()` qui précède est par ailleurs un **no-op** : ses deux arguments de correspondance sont la même chaîne, caractère pour caractère. Il était visiblement censé replier les accentués sur leur équivalent sans accent ; il ne replie rien, et ces caractères sont ensuite mangés par le même `regexp_replace`. « Associação » donnerait `associa-o`.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Deux corrections dans la fabrication du slug, et une décision.
+
+**Corriger l'ordre** : minusculer *avant* de filtrer, c'est-à-dire `regexp_replace(lower(…), '[^a-z0-9]+', '-', 'g')` au lieu de `lower(regexp_replace(…))`.
+
+**Trancher le sort du `translate()`** : soit lui donner une vraie table de correspondance (accentués → non accentués), soit le remplacer par `unaccent()` si l'extension est disponible, soit l'enlever et assumer que les accents deviennent des tirets — mais alors l'écrire, plutôt que de laisser croire qu'ils sont repliés.
+
+**Décider pour l'existant** : les slugs actuels (`blmf`, `btl`, `mleg`, `cira-marseille`) ont été posés à la main et sont corrects. Un slug vit dans les URL, dans `library_commons.library_slug` et dans le chemin de stockage `themes/<slug>/` — le renommer casserait les trois. La correction ne devrait donc valoir que pour les bibliothèques à venir, ce qui se dit explicitement dans la migration.
+
+**Pourquoi ça compte.** Parce que le défaut ne mord pas aujourd'hui et mordra bientôt. Les quatre bibliothèques du réseau ont leur slug posé à la main : rien n'est cassé. Mais toute bibliothèque qui arrivera par le parcours d'adhésion — c'est-à-dire celles qu'on espère après Bologne — passera par cette fonction, et repartira avec un slug amputé de sa première lettre.
+
+Et parce qu'un slug n'est pas cosmétique : il est dans les URL publiques, dans l'identité d'expédition des courriels, et dans la convention de chemin du stockage `themes/<slug>/logo.png`. Un slug amputé ne se voit pas tout de suite — il se découvre le jour où le logo de la biblio n'apparaît nulle part.
+
+**Ce qui compte comme fini.**
+
+- Le slug fabriqué conserve toutes les lettres du nom, majuscules comprises.
+- Le sort des caractères accentués est tranché et écrit dans la migration.
+- Un test SQL exerce la fabrication sur un nom à majuscules et un nom accentué, et compare au slug attendu.
+- La décision sur les slugs existants est écrite : on ne les renomme pas, et pourquoi.
+
+**Dépendances.** Aucune. La correction tient en une ligne ; c'est la décision sur les accents et sur l'existant qui demande d'être posée avant.
+
+*Renvois : `public.fn_provision_preactive_library` · `supabase/migrations/20260510000000_baseline_live.sql (logique de slug d’origine)` · `library_commons.library_slug, chemin de stockage themes/<slug>/`*
 
 ---
 
@@ -2450,4 +2486,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 85 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

@@ -4817,6 +4817,55 @@
       }
     },
     {
+      "id": "B16",
+      "d": "B",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Le slug d'une bibliothèque perd ses majuscules à la création",
+        "pt": "O slug de uma biblioteca perde as maiúsculas na criação"
+      },
+      "v": {
+        "fr": "Trouvé le 30/08 en **exerçant** `fn_provision_preactive_library` sur une demande de test, pas en relisant le code. Une bibliothèque nommée « Biblioteca de teste » ressort avec le slug `iblioteca-de-teste` : le B a disparu.\n\nLa cause tient à l'ordre des opérations. Dans la fabrication du slug, `lower()` est appliqué **après** `regexp_replace(…, '[^a-z0-9]+', '-', 'g')`. Une majuscule n'appartenant pas à `a-z`, elle est remplacée par un tiret **avant** d'avoir été minusculée — puis le tiret de tête est coupé par le `trim`. « Terra Livre » donnerait `erra-livre`.\n\nLe `translate()` qui précède est par ailleurs un **no-op** : ses deux arguments de correspondance sont la même chaîne, caractère pour caractère. Il était visiblement censé replier les accentués sur leur équivalent sans accent ; il ne replie rien, et ces caractères sont ensuite mangés par le même `regexp_replace`. « Associação » donnerait `associa-o`.",
+        "pt": "Encontrado em 30/08 **exercitando** `fn_provision_preactive_library` sobre um pedido de teste, não relendo o código. Uma biblioteca chamada «Biblioteca de teste» sai com o slug `iblioteca-de-teste`: o B desapareceu.\n\nA causa está na ordem das operações. Na fabricação do slug, `lower()` é aplicado **depois** de `regexp_replace(…, '[^a-z0-9]+', '-', 'g')`. Uma maiúscula não pertencendo a `a-z`, é substituída por um traço **antes** de ter sido minusculada — e o traço inicial é cortado pelo `trim`. «Terra Livre» daria `erra-livre`.\n\nO `translate()` que precede é além disso um **no-op**: os seus dois argumentos de correspondência são a mesma cadeia, caractere por caractere. Estava visivelmente destinado a dobrar os acentuados sobre o equivalente sem acento; não dobra nada, e esses caracteres são depois comidos pelo mesmo `regexp_replace`. «Associação» daria `associa-o`."
+      },
+      "w": {
+        "fr": "Deux corrections dans la fabrication du slug, et une décision.\n\n**Corriger l'ordre** : minusculer *avant* de filtrer, c'est-à-dire `regexp_replace(lower(…), '[^a-z0-9]+', '-', 'g')` au lieu de `lower(regexp_replace(…))`.\n\n**Trancher le sort du `translate()`** : soit lui donner une vraie table de correspondance (accentués → non accentués), soit le remplacer par `unaccent()` si l'extension est disponible, soit l'enlever et assumer que les accents deviennent des tirets — mais alors l'écrire, plutôt que de laisser croire qu'ils sont repliés.\n\n**Décider pour l'existant** : les slugs actuels (`blmf`, `btl`, `mleg`, `cira-marseille`) ont été posés à la main et sont corrects. Un slug vit dans les URL, dans `library_commons.library_slug` et dans le chemin de stockage `themes/<slug>/` — le renommer casserait les trois. La correction ne devrait donc valoir que pour les bibliothèques à venir, ce qui se dit explicitement dans la migration.",
+        "pt": "Duas correções na fabricação do slug, e uma decisão.\n\n**Corrigir a ordem**: minusculizar *antes* de filtrar, ou seja `regexp_replace(lower(…), '[^a-z0-9]+', '-', 'g')` em vez de `lower(regexp_replace(…))`.\n\n**Decidir o destino do `translate()`**: ou dar-lhe uma verdadeira tabela de correspondência (acentuados → sem acento), ou substituí-lo por `unaccent()` se a extensão estiver disponível, ou retirá-lo e assumir que os acentos viram traços — mas então escrevê-lo, em vez de deixar crer que são dobrados.\n\n**Decidir sobre o existente**: os slugs atuais (`blmf`, `btl`, `mleg`, `cira-marseille`) foram postos à mão e estão corretos. Um slug vive nos URL, em `library_commons.library_slug` e no caminho de armazenamento `themes/<slug>/` — renomeá-lo quebraria os três. A correção deveria portanto valer apenas para as bibliotecas por vir, o que se diz explicitamente na migração."
+      },
+      "y": {
+        "fr": "Parce que le défaut ne mord pas aujourd'hui et mordra bientôt. Les quatre bibliothèques du réseau ont leur slug posé à la main : rien n'est cassé. Mais toute bibliothèque qui arrivera par le parcours d'adhésion — c'est-à-dire celles qu'on espère après Bologne — passera par cette fonction, et repartira avec un slug amputé de sa première lettre.\n\nEt parce qu'un slug n'est pas cosmétique : il est dans les URL publiques, dans l'identité d'expédition des courriels, et dans la convention de chemin du stockage `themes/<slug>/logo.png`. Un slug amputé ne se voit pas tout de suite — il se découvre le jour où le logo de la biblio n'apparaît nulle part.",
+        "pt": "Porque o defeito não morde hoje e morderá em breve. As quatro bibliotecas da rede têm o seu slug posto à mão: nada está quebrado. Mas toda biblioteca que chegar pelo percurso de adesão — isto é, as que esperamos depois de Bolonha — passará por esta função, e sairá com um slug amputado da primeira letra.\n\nE porque um slug não é cosmético: está nos URL públicos, na identidade de expedição dos e-mails, e na convenção de caminho do armazenamento `themes/<slug>/logo.png`. Um slug amputado não se vê logo — descobre-se no dia em que o logótipo da biblioteca não aparece em lado nenhum."
+      },
+      "f": {
+        "fr": [
+          "Le slug fabriqué conserve toutes les lettres du nom, majuscules comprises.",
+          "Le sort des caractères accentués est tranché et écrit dans la migration.",
+          "Un test SQL exerce la fabrication sur un nom à majuscules et un nom accentué, et compare au slug attendu.",
+          "La décision sur les slugs existants est écrite : on ne les renomme pas, et pourquoi."
+        ],
+        "pt": [
+          "O slug fabricado conserva todas as letras do nome, maiúsculas incluídas.",
+          "O destino dos caracteres acentuados está decidido e escrito na migração.",
+          "Um teste SQL exercita a fabricação sobre um nome com maiúsculas e um nome acentuado, e compara ao slug esperado.",
+          "A decisão sobre os slugs existentes está escrita: não os renomeamos, e porquê."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. La correction tient en une ligne ; c'est la décision sur les accents et sur l'existant qui demande d'être posée avant.",
+        "pt": "Nenhuma. A correção cabe numa linha; é a decisão sobre os acentos e sobre o existente que precisa de ser posta antes."
+      },
+      "r": [
+        "public.fn_provision_preactive_library",
+        "supabase/migrations/20260510000000_baseline_live.sql (logique de slug d’origine)",
+        "library_commons.library_slug, chemin de stockage themes/<slug>/"
+      ]
+    },
+    {
       "id": "J1",
       "d": "J",
       "p": "P1",

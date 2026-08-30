@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 12
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -373,6 +373,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B12** | Um envio não efetuado não diz por quê: os `skipped` de `team_notification_outbox` | `P2` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B15** | Uma renovação recusada não diz nada a quem não lê o `ok` | `P2` | A verificar |
+| **B16** | O slug de uma biblioteca perde as maiúsculas na criação | `P1` | Aberto |
 
 #### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
 
@@ -669,6 +670,41 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 **Dependências.** Nenhuma. O inventário faz-se numa consulta; a verificação no front exige ler as chamadas correspondentes.
 
 *Remissões : `tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)` · `public.fn_v2_extend_core` · `REGISTRE_decisions DOC-RPC-3`*
+
+#### B16 — O slug de uma biblioteca perde as maiúsculas na criação
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Encontrado em 30/08 **exercitando** `fn_provision_preactive_library` sobre um pedido de teste, não relendo o código. Uma biblioteca chamada «Biblioteca de teste» sai com o slug `iblioteca-de-teste`: o B desapareceu.
+
+A causa está na ordem das operações. Na fabricação do slug, `lower()` é aplicado **depois** de `regexp_replace(…, '[^a-z0-9]+', '-', 'g')`. Uma maiúscula não pertencendo a `a-z`, é substituída por um traço **antes** de ter sido minusculada — e o traço inicial é cortado pelo `trim`. «Terra Livre» daria `erra-livre`.
+
+O `translate()` que precede é além disso um **no-op**: os seus dois argumentos de correspondência são a mesma cadeia, caractere por caractere. Estava visivelmente destinado a dobrar os acentuados sobre o equivalente sem acento; não dobra nada, e esses caracteres são depois comidos pelo mesmo `regexp_replace`. «Associação» daria `associa-o`.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Duas correções na fabricação do slug, e uma decisão.
+
+**Corrigir a ordem**: minusculizar *antes* de filtrar, ou seja `regexp_replace(lower(…), '[^a-z0-9]+', '-', 'g')` em vez de `lower(regexp_replace(…))`.
+
+**Decidir o destino do `translate()`**: ou dar-lhe uma verdadeira tabela de correspondência (acentuados → sem acento), ou substituí-lo por `unaccent()` se a extensão estiver disponível, ou retirá-lo e assumir que os acentos viram traços — mas então escrevê-lo, em vez de deixar crer que são dobrados.
+
+**Decidir sobre o existente**: os slugs atuais (`blmf`, `btl`, `mleg`, `cira-marseille`) foram postos à mão e estão corretos. Um slug vive nos URL, em `library_commons.library_slug` e no caminho de armazenamento `themes/<slug>/` — renomeá-lo quebraria os três. A correção deveria portanto valer apenas para as bibliotecas por vir, o que se diz explicitamente na migração.
+
+**Por que importa.** Porque o defeito não morde hoje e morderá em breve. As quatro bibliotecas da rede têm o seu slug posto à mão: nada está quebrado. Mas toda biblioteca que chegar pelo percurso de adesão — isto é, as que esperamos depois de Bolonha — passará por esta função, e sairá com um slug amputado da primeira letra.
+
+E porque um slug não é cosmético: está nos URL públicos, na identidade de expedição dos e-mails, e na convenção de caminho do armazenamento `themes/<slug>/logo.png`. Um slug amputado não se vê logo — descobre-se no dia em que o logótipo da biblioteca não aparece em lado nenhum.
+
+**O que conta como terminado.**
+
+- O slug fabricado conserva todas as letras do nome, maiúsculas incluídas.
+- O destino dos caracteres acentuados está decidido e escrito na migração.
+- Um teste SQL exercita a fabricação sobre um nome com maiúsculas e um nome acentuado, e compara ao slug esperado.
+- A decisão sobre os slugs existentes está escrita: não os renomeamos, e porquê.
+
+**Dependências.** Nenhuma. A correção cabe numa linha; é a decisão sobre os acentos e sobre o existente que precisa de ser posta antes.
+
+*Remissões : `public.fn_provision_preactive_library` · `supabase/migrations/20260510000000_baseline_live.sql (logique de slug d’origine)` · `library_commons.library_slug, chemin de stockage themes/<slug>/`*
 
 ---
 
@@ -2448,4 +2484,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
