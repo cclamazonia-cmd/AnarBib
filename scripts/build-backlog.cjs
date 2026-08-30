@@ -33,7 +33,9 @@ const T = {
     calendrier: 'Le calendrier contraint', regles: 'Dix règles payées par un incident',
     chantiers: 'Les chantiers', clotures: 'Clôtures et entrées caduques',
     nonouvert: "Ce qui n'est pas au backlog", maintenance: 'Maintenance de ce document',
-    etat: 'État vérifié au 29/08', quoi: "Ce que c'est", pourquoi: 'Pourquoi ça compte',
+    etat: 'État', quoi: "Ce que c'est", pourquoi: 'Pourquoi ça compte',
+    verif_non: 'Constat du 29/08, non revérifié depuis',
+    verif_oui: 'Vérifié',
     fini: 'Ce qui compte comme fini', demande: 'Ce que ça demande', dep: 'Dépendances',
     refs: 'Renvois', prio: 'Priorité', statut: 'État', charge: 'Charge',
     dit: 'Ce que dit la documentation', reel: 'Ce que dit la base ou le dépôt',
@@ -46,7 +48,9 @@ const T = {
     calendrier: 'O calendário restrito', regles: 'Dez regras pagas por um incidente',
     chantiers: 'Os canteiros', clotures: 'Encerramentos e entradas caducas',
     nonouvert: 'O que não está no backlog', maintenance: 'Manutenção deste documento',
-    etat: 'Estado verificado em 29/08', quoi: 'O que é', pourquoi: 'Por que importa',
+    etat: 'Estado', quoi: 'O que é', pourquoi: 'Por que importa',
+    verif_non: 'Constato de 29/08, não reverificado desde então',
+    verif_oui: 'Verificado',
     fini: 'O que conta como terminado', demande: 'O que exige', dep: 'Dependências',
     refs: 'Remissões', prio: 'Prioridade', statut: 'Estado', charge: 'Carga',
     dit: 'O que diz a documentação', reel: 'O que diz o banco ou o repositório',
@@ -156,6 +160,9 @@ function markdown(k) {
       p(`\`${i.p}\` ${lab(D.priorities, i.p, k)} · ${t.statut} : **${lab(D.states, i.s, k)}** · ${t.charge} : ${lab(D.efforts, i.e, k)} · ${t.demande} : ${i.sk.map((s) => lab(D.skills, s, k)).join(', ')}`);
       p();
       p(`**${t.etat}.** ${L(i.v, k)}`); p();
+      p(i.verif
+        ? `*${t.verif_oui} : ${L(i.verif, k)}*`
+        : `*${t.verif_non}.*`); p();
       p(`**${t.quoi}.** ${L(i.w, k)}`); p();
       p(`**${t.pourquoi}.** ${L(i.y, k)}`); p();
       p(`**${t.fini}.**`); p();
@@ -301,6 +308,7 @@ pre{background:var(--chip);border-left:2px solid var(--line);padding:10px 13px;
 pre code{background:none;padding:0;font-size:.84em;line-height:1.5;
   white-space:pre;word-break:normal}
 .refs{font-size:12.5px;color:var(--mut);margin-top:15px;font-style:italic;max-width:none}
+.prov{font-size:12.5px;color:var(--mut);font-style:italic;margin:6px 0 0}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
   background:var(--chip);padding:1px 5px;border-radius:2px;word-break:break-word}
 .count{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);
@@ -413,7 +421,8 @@ function card(i){
   h+='<span class="chip">'+lab('efforts',i.e)+'</span>';
   i.sk.forEach(s=>{h+='<span class="chip">'+lab('skills',s)+'</span>';});
   h+='</div><dl class="f">';
-  h+='<dt>'+t.etat+'</dt><dd>'+md(L(i.v,K))+'</dd>';
+  h+='<dt>'+t.etat+'</dt><dd>'+md(L(i.v,K))
+    +'<p class="prov">'+(i.verif ? esc(t.verif_oui+' : ')+md(L(i.verif,K)) : esc(t.verif_non+'.'))+'</p>'+'</dd>';
   h+='<dt>'+t.quoi+'</dt><dd>'+md(L(i.w,K))+'</dd>';
   h+='<dt>'+t.pourquoi+'</dt><dd>'+md(L(i.y,K))+'</dd>';
   h+='<dt>'+t.fini+'</dt><dd><ul>'+(L(i.f,K)||[]).map(f=>'<li>'+md(f)+'</li>').join('')+'</ul></dd>';

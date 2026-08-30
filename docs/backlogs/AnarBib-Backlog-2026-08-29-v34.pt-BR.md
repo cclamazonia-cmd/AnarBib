@@ -292,7 +292,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 `P0` Estrutural · Estado : **Decisão coletiva** · Carga : não estimado · O que exige : deliberação coletiva, nenhuma competência técnica
 
-**Estado verificado em 29/08.** Verificado no banco em 29/08: a rede conta com **um único administrador**. As tabelas `network_administrators`, `network_administrator_cooptation_proposals` e `network_administrator_cooptation_votes` estão vazias após algumas inserções históricas.
+**Estado.** Verificado no banco em 29/08: a rede conta com **um único administrador**. As tabelas `network_administrators`, `network_administrator_cooptation_proposals` e `network_administrator_cooptation_votes` estão vazias após algumas inserções históricas.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Encontrar e cooptar mais duas pessoas, em dois coletivos diferentes, dispostas a carregar as decisões federais: admissão de uma biblioteca, arbitragem entre bibliotecas, abertura da coleta.
 
@@ -312,7 +314,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 `P0` Estrutural · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas, SQL / PostgreSQL, React / JavaScript
 
-**Estado verificado em 29/08.** Nunca feito. `deploy/README.md`, `deploy/REPETITION.md` e `deploy/bootstrap.sh` existem e foram executados — **apenas na máquina do mantenedor**.
+**Estado.** Nunca feito. `deploy/README.md`, `deploy/REPETITION.md` e `deploy/bootstrap.sh` existem e foram executados — **apenas na máquina do mantenedor**.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Clonar o repositório numa máquina de terceiro, subir a pilha completa seguindo `deploy/README.md`, e escrever o que quebra. Nenhum segredo, nenhum acesso, nenhuma coordenação: a pilha se reconstrói a partir do repositório sozinho. Docker, uma máquina, uma noite.
 
@@ -332,7 +336,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 `P0` Estrutural · Estado : **Aberto** · Carga : várias semanas · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** `.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa.
+**Estado.** `.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Rodar o runner em outro lugar que não uma estação de trabalho pessoal: máquina do provedor, segunda máquina da rede, ou runner compartilhado. A lógica de implantação já está extraída em `scripts/ci/deployer-backend.sh` e é reexecutável à mão — metade do trabalho está feita.
 
@@ -372,7 +378,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 `P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** **Lotes 1 e 2 entregues em 30/08** — migração `20260830181207_un_grant_que_la_fonction_contredit`, testes `T8`/`T9` em `grants_herites_tests.sql`, CI verde, implantado. O contador do advisor passou de **500 para 497**: três exatamente, como anunciado. Restam os lotes 3 e 4.
+**Estado.** **Lotes 1 e 2 entregues em 30/08** — migração `20260830181207_un_grant_que_la_fonction_contredit`, testes `T8`/`T9` em `grants_herites_tests.sql`, CI verde, implantado. O contador do advisor passou de **500 para 497**: três exatamente, como anunciado. Restam os lotes 3 e 4.
 
 Completado em 30/08. O Security Advisor do Supabase mostra **500 avisos**; a exportação CSV diz: são **dois lints e nada mais** — `anon_security_definer_function_executable` (0028) e `authenticated_security_definer_function_executable` (0029). Contado em produção: **36** funções executáveis por `anon`, **464** por `authenticated`, total exatamente 500.
 
@@ -392,6 +398,8 @@ Relidas uma a uma, as 36 dividem-se em três grupos muito desiguais:
 1. **Cinco intocáveis.** `user_can_act_as_staff_on_library`, `fn_library_visible_to_caller`, `user_can_engage_library`, `fn_caller_is_network_admin`, `fn_caller_is_library_staff` são chamadas por **107 policies RLS, das quais 39 avaliadas por `anon`**. Retirar-lhes `EXECUTE` não fecha nada: faz a leitura pública falhar com `permission denied for function`.
 2. **Uns vinte usos anônimos reais**: catálogo público (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), os quatro leitores de modo, a coleta OAI, o percurso de candidatura de uma biblioteca por token.
 3. **Três grants que a própria função contradiz**: `search_authors_by_name`, `search_publishers_by_name` e `remove_library_regulation_document` **recusam `anon` no próprio corpo** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`).
+
+*Verificado : 30/08 — as 33 funções revistas uma a uma contra o banco; veredictos em `docs/journal/audits/AUDIT_execute_anon_2026-08-30.md`. Lotes 1, 2 e 4 entregues, guardados por T10.*
 
 **O que é.** A regra, corrigida por este levantamento: **está aberto a `anon` o que serve uma página pública, ou o que uma policy avaliada por `anon` chama. Nada mais — e sobretudo não por padrão.**
 
@@ -432,9 +440,11 @@ E porque um grant que o corpo da função contradiz é exatamente o que deixa de
 
 `P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** A outra parte dos 500 avisos do advisor: o lint 0029, **464 funções** — 138 em `api` de 142, 326 em `public` de 498. A auditoria de 18/05 revisou uma parte de `public` e fechou cinco falhas reais; **não abrangia `api`.**
+**Estado.** A outra parte dos 500 avisos do advisor: o lint 0029, **464 funções** — 138 em `api` de 142, 326 em `public` de 498. A auditoria de 18/05 revisou uma parte de `public` e fechou cinco falhas reais; **não abrangia `api`.**
 
 Como para `anon` (item **B2**), este número é antes de tudo o efeito de um padrão de esquema: `ALTER DEFAULT PRIVILEGES … GRANT ALL ON FUNCTIONS TO … authenticated` aplica-se a toda função criada em `public`. A diferença é que aqui o padrão é **quase sempre o que se quer**: a superfície de escrita da aplicação é feita de RPC `SECURITY DEFINER` atrás de `api`, chamadas por pessoas conectadas (doutrina `DOC-RPC-3`). O número não descerá a zero, e não é esse o objetivo. O advisor sinaliza uma arquitetura que não pode conhecer.
+
+*Verificado : 30/08 — contagem direta: 138 funções de `api` em 142 e 326 de `public` em 498 abertas a `authenticated`. A auditoria em si continua por fazer.*
 
 **O que é.** O critério não é *«é `SECURITY DEFINER`?»* — todas são, por construção. É: **o que pode pedir uma desconhecida que apenas se cadastrou?** Uma conta `authenticated` obtém-se em três cliques; não prova pertencimento a nenhuma biblioteca.
 
@@ -459,7 +469,9 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** 15 tabelas têm RLS ativado e zero policy. Onze são tabelas de trânsito ou vazias. Quatro não são: `author_name_aliases` (**1 647 linhas**), `library_themes` (3 linhas), `library_theme_configs`, `interlibrary_loan_events`.
+**Estado.** 15 tabelas têm RLS ativado e zero policy. Onze são tabelas de trânsito ou vazias. Quatro não são: `author_name_aliases` (**1 647 linhas**), `library_themes` (3 linhas), `library_theme_configs`, `interlibrary_loan_events`.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Para cada uma, decidir: ou o acesso passa por uma RPC e a ausência de policy está correta — escrevê-lo em comentário SQL —, ou uma leitura legítima é hoje impossível e falta uma policy ou uma função.
 
@@ -478,7 +490,9 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** A migração `20260703203953_perf_rls_initplan_wrap_auth_calls` tratou as policies de então. Nove policies escritas desde então escapam: `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports` (1), `authority_duplicate_reports` (1), `author_not_duplicate` (1).
+**Estado.** A migração `20260703203953_perf_rls_initplan_wrap_auth_calls` tratou as policies de então. Nove policies escritas desde então escapam: `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports` (1), `authority_duplicate_reports` (1), `author_not_duplicate` (1).
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Envolver as chamadas `auth.uid()` / `auth.jwt()` num sub-select, como a migração de julho fez para as outras.
 
@@ -497,7 +511,9 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** Quatro nomes de função existem nos dois esquemas com assinaturas e semânticas diferentes: `fn_bulk_create_book_drafts_from_run`, `fn_bulk_set_partner_catalog_editorial_decision`, `fn_set_partner_catalog_editorial_decision`, e `set_updated_at()`. Nenhuma duplicata de assinatura num mesmo esquema — o problema é o nome compartilhado.
+**Estado.** Quatro nomes de função existem nos dois esquemas com assinaturas e semânticas diferentes: `fn_bulk_create_book_drafts_from_run`, `fn_bulk_set_partner_catalog_editorial_decision`, `fn_set_partner_catalog_editorial_decision`, e `set_updated_at()`. Nenhuma duplicata de assinatura num mesmo esquema — o problema é o nome compartilhado.
+
+*Verificado : 30/08 — quatro homónimos levantados: `set_updated_at` (trivial) e três que tocam nas decisões editoriais sobre catálogo parceiro. Os corpos não foram comparados.*
 
 **O que é.** Verificar qual das duas é chamada pelo front e pelas RPC, renomear a que não é, ou suprimir a versão morta. `set_updated_at()` é um trigger banal e pode ficar.
 
@@ -516,7 +532,9 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** Seis tabelas, **todas com zero linha e zero inserção desde a criação**, sem chave primária, sem RLS: `emprestimos_v2`, `emprestimo_itens_v2`, `reservas_v2`, `reserva_linhas_v2`, `reserva_item_workflow_v2`, `loan_midpoint_message_log`. A decisão `BG2-9` prescreve essa purga desde junho.
+**Estado.** Seis tabelas, **todas com zero linha e zero inserção desde a criação**, sem chave primária, sem RLS: `emprestimos_v2`, `emprestimo_itens_v2`, `reservas_v2`, `reserva_linhas_v2`, `reserva_item_workflow_v2`, `loan_midpoint_message_log`. A decisão `BG2-9` prescreve essa purga desde junho.
+
+*Verificado : 30/08 — o esquema pesa 6 tabelas e 0,1 Mo. O que ainda o lê não foi procurado.*
 
 **O que é.** `DROP SCHEMA backup_2026_05_07 CASCADE` por migração, após confirmar uma última vez que as seis tabelas estão vazias.
 
@@ -535,7 +553,9 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 `P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** 256 avisos de performance em 29/08. As tabelas mais carregadas de índices não usados são `library_partnerships` (6), `books` (5), `membership_payments` (4). As 24 policies permissivas duplicadas incidem todas sobre o papel `authenticated` em `SELECT`, em tabelas centrais (`books`, `authors`, `exemplares`, `subjects`, `works`).
+**Estado.** 256 avisos de performance em 29/08. As tabelas mais carregadas de índices não usados são `library_partnerships` (6), `books` (5), `membership_payments` (4). As 24 policies permissivas duplicadas incidem todas sobre o papel `authenticated` em `SELECT`, em tabelas centrais (`books`, `authors`, `exemplares`, `subjects`, `works`).
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Três passagens distintas, a não misturar: fundir os pares de policies permissivas; indexar as chaves estrangeiras que realmente servem; só suprimir um índice não usado se se compreender por que foi criado.
 
@@ -555,9 +575,11 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 `P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** **Medido em 30/08: 1 linha viva, 9 092 inserções, 9 082 supressões.** A razão não é uma fuga de escrita mas um **ciclo**: quase tudo o que entra volta a sair. Nove mil idas e voltas para uma única linha sobrevivente não se parece com um uso de leitoras — a rede não tem esse volume.
+**Estado.** **Medido em 30/08: 1 linha viva, 9 092 inserções, 9 082 supressões.** A razão não é uma fuga de escrita mas um **ciclo**: quase tudo o que entra volta a sair. Nove mil idas e voltas para uma única linha sobrevivente não se parece com um uso de leitoras — a rede não tem esse volume.
 
 A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a seguir»**.
+
+*Verificado : 30/08 — `pg_stat_user_tables`: 1 linha viva, 9 092 inserções, 9 082 supressões. O que escreve e depois apaga continua desconhecido.*
 
 **O que é.** Encontrar o que escreve e apaga: um teste reexecutado, um carregamento de página que insere e depois cancela, um componente React que chama a RPC a cada renderização. Olhar `OPAC-W1`, cuja nota diz «resta `WITH CHECK`».
 
@@ -576,11 +598,13 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
 
-**Estado verificado em 29/08.** **Reformulado em 30/08 após verificação: o item designava uma tabela que não existe.** Falava de «três linhas de `network.cross_library_critical_action` em `status = 'skipped'`». Essa relação não existe, e a única tabela de nome vizinho não tem nenhuma das colunas citadas. O constato fora copiado sobre o objeto errado na reescrita v34.
+**Estado.** **Reformulado em 30/08 após verificação: o item designava uma tabela que não existe.** Falava de «três linhas de `network.cross_library_critical_action` em `status = 'skipped'`». Essa relação não existe, e a única tabela de nome vizinho não tem nenhuma das colunas citadas. O constato fora copiado sobre o objeto errado na reescrita v34.
 
 As linhas existem, mas em **`public.team_notification_outbox`** — e são **quatro**, não três: três de 08/06/2026 e **uma de 30/08/2026**. Não é uma curiosidade histórica: ainda acontece.
 
 Cada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error` **nulo**. O pedido partiu, e a linha não está em erro: está `skipped` porque algo decidiu não enviar. **Mas a razão não está escrita em lugar nenhum.**
+
+*Verificado : 30/08 — a tabela nomeada pelo item não existe; as quatro linhas estão em `public.team_notification_outbox`, uma delas de 30/08. Constato refeito, causa não instruída.*
 
 **O que é.** Acrescentar à outbox uma coluna que carregue a razão do salto — `skip_reason` — e preenchê-la onde a decisão é tomada. `last_error` não pode fazer esse papel: um salto deliberado não é um erro. Depois retomar as quatro linhas existentes: com a razão, saber-se-á se é preciso reenviar ou encerrar.
 
@@ -600,7 +624,9 @@ Cada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error`
 
 `P3` Adiado · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL, administração de sistemas
 
-**Estado verificado em 29/08.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146.
+**Estado.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Ou reconstruir um `baseline` a partir do esquema atual e arquivar as migrações anteriores, ou assumir a cadeia longa e documentar por quê. A reexecução completa leva hoje cerca de 25 minutos, medido.
 
@@ -619,9 +645,11 @@ Cada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error`
 
 `P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** Encontrado em 30/08 pelo caminho E2E dos empréstimos (item **I15**), e não por uma releitura de código. `api.renew_my_loan` **nunca levanta**: retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. Numa biblioteca sem conjunto de regras de circulação ativo, retorna `{ok:false, reason:'not_renewable'}` — e a chamada *tem sucesso*, do ponto de vista do PostgREST como do cliente.
+**Estado.** Encontrado em 30/08 pelo caminho E2E dos empréstimos (item **I15**), e não por uma releitura de código. `api.renew_my_loan` **nunca levanta**: retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. Numa biblioteca sem conjunto de regras de circulação ativo, retorna `{ok:false, reason:'not_renewable'}` — e a chamada *tem sucesso*, do ponto de vista do PostgREST como do cliente.
 
 O contrato é respeitado e documentado. Mas uma interface que não inspeciona `ok` mostrará «renovado» a uma leitora para quem nada mudou. O teste viveu isso: afirmava «o vencimento recua», viu um vencimento imóvel, e **nenhum erro**.
+
+*Verificado : 30/08 — encontrado pela execução do teste 3.03 de `paquet_emprestimos`, que obteve `ok=false reason=not_renewable` sem exceção. O inventário das RPC em causa continua por fazer.*
 
 **O que é.** Duas perguntas, nesta ordem. **A primeira é de verificação**: o front inspeciona `ok` nos retornos de `renew_my_loan`, `advance_consulta`, `advance_reservation` e demais RPC que devolvem um estado em vez de levantar? Enquanto não se olhar, não se sabe se há defeito.
 
@@ -665,7 +693,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, biblioteconomia
 
-**Estado verificado em 29/08.** Verificado em 29/08: **35 assuntos foram criados no banco em 27/08** e os alinhamentos FICEDL passaram de 51 para **98**. Mas `docs/drafts/20260828_sujets_solidaires_ficedl.sql` continua em `docs/drafts/`, fora de `supabase/migrations/`. Uma instância nova, portanto, não terá esses assuntos.
+**Estado.** Verificado em 29/08: **35 assuntos foram criados no banco em 27/08** e os alinhamentos FICEDL passaram de 51 para **98**. Mas `docs/drafts/20260828_sujets_solidaires_ficedl.sql` continua em `docs/drafts/`, fora de `supabase/migrations/`. Uma instância nova, portanto, não terá esses assuntos.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Comparar o conteúdo do rascunho ao estado real do banco, transformá-lo numa migração idempotente que não recrie o que existe, e guardá-la em `supabase/migrations/`. Ou decidir que esses assuntos são próprios de uma biblioteca e não devem embarcar — mas escrevê-lo.
 
@@ -685,7 +715,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Bloqueado** · Carga : alguns dias · O que exige : biblioteconomia, SQL / PostgreSQL
 
-**Estado verificado em 29/08.** 1 685 registros em `SOLIDAIRES_import_test.csv`. Os cabeçalhos seguem `spec-catalogacao-fiche-et-paliers` e **nunca foram confrontados com o importador**. **Decisão de Xavier, 29/08: a importação só se fará se a candidatura da SOLIDAIRES for aceita por várias pessoas administradoras de rede.** O prazo de fim de agosto cai, portanto, e a ordem dos dois canteiros se inverte em relação às notas de agosto: a admissão primeiro, a importação depois.
+**Estado.** 1 685 registros em `SOLIDAIRES_import_test.csv`. Os cabeçalhos seguem `spec-catalogacao-fiche-et-paliers` e **nunca foram confrontados com o importador**. **Decisão de Xavier, 29/08: a importação só se fará se a candidatura da SOLIDAIRES for aceita por várias pessoas administradoras de rede.** O prazo de fim de agosto cai, portanto, e a ordem dos dois canteiros se inverte em relação às notas de agosto: a admissão primeiro, a importação depois.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Adaptar os cabeçalhos ao formato realmente esperado (cerca de uma hora), passar o arquivo **pela ferramenta de importação do repositório e não por `INSERT` à mão**, revisar umas vinte fichas ao acaso, e depois fazer uma demonstração em videoconferência com tela compartilhada.
 
@@ -707,7 +739,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : várias semanas · O que exige : biblioteconomia
 
-**Estado verificado em 29/08.** As 19 migrações `conventions_*` estão aplicadas desde 21/08: os referenciais estão normalizados, as mecânicas seguras foram passadas, a fila de verificação existe e o aplicativo permite trabalhar nela. **O que resta é a parte que nenhuma máquina faz.**
+**Estado.** As 19 migrações `conventions_*` estão aplicadas desde 21/08: os referenciais estão normalizados, as mecânicas seguras foram passadas, a fila de verificação existe e o aplicativo permite trabalhar nela. **O que resta é a parte que nenhuma máquina faz.**
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Retomar as três tabelas de revisão do esquema `conv_backup` — `titres_a_revoir_20260820` (211), `autorites_casse_a_revoir_20260820` (1 274), `autorites_patronyme_a_revoir_20260820` (22) — e tratá-las ficha por ficha a partir da Oficina de autoridades.
 
@@ -727,7 +761,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
 
-**Estado verificado em 29/08.** **722 fichas de 1 305 (55 %) não têm `country`.** Ora, é `country` que comanda a regra de entrada do nome: sem ele, a detecção dos duplos sobrenomes hispânicos só vê uma fração dos casos. Os 22 apontamentos são um **piso**, não um total.
+**Estado.** **722 fichas de 1 305 (55 %) não têm `country`.** Ora, é `country` que comanda a regra de entrada do nome: sem ele, a detecção dos duplos sobrenomes hispânicos só vê uma fração dos casos. Os 22 apontamentos são um **piso**, não um total.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Preencher `country` por lotes, a partir dos registros, das fontes externas já conectadas (Wikidata, VIAF) e do conhecimento do acervo. Depois reexecutar a detecção dos sobrenomes.
 
@@ -746,7 +782,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : biblioteconomia, SQL / PostgreSQL
 
-**Estado verificado em 29/08.** `CONV-O3` está aberto: depreciar `books.autor` agora, ou na Oficina? O campo coexiste com a tabela `authors` e carrega os mesmos defeitos **piores** — encontram-se lá `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. A auditoria de 20/08 o deixou explicitamente fora do perímetro: sua dívida não está quantificada.
+**Estado.** `CONV-O3` está aberto: depreciar `books.autor` agora, ou na Oficina? O campo coexiste com a tabela `authors` e carrega os mesmos defeitos **piores** — encontram-se lá `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. A auditoria de 20/08 o deixou explicitamente fora do perímetro: sua dívida não está quantificada.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Primeiro quantificar: quantos registros têm um `autor` sem contribuidor vinculado, e como é o conteúdo. Depois decidir: depreciação imediata com migração dos valores recuperáveis, ou conservação como forma transcrita no sentido do `P3` dos periódicos.
 
@@ -766,7 +804,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, biblioteconomia
 
-**Estado verificado em 29/08.** O banco sabe normalizar; a interface de digitação ainda não assiste. Três dispositivos estão especificados e não entregues: o assistente de separação do nome (§7.1), o botão «Normalizar maiúsculas» com pré-visualização (§7.2), e a fila de controles de coerência em segundo plano (§7.3).
+**Estado.** O banco sabe normalizar; a interface de digitação ainda não assiste. Três dispositivos estão especificados e não entregues: o assistente de separação do nome (§7.1), o botão «Normalizar maiúsculas» com pré-visualização (§7.2), e a fila de controles de coerência em segundo plano (§7.3).
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Três telas, nesta ordem de valor: o botão de normalização de caixa (o mais simples, ativo só se a língua estiver preenchida); o assistente de separação, que propõe palavra por palavra com um botão «Corrigir» e uma explicação de uma linha; a fila de controles, que sinaliza sem bloquear.
 
@@ -786,7 +826,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia, nenhuma competência técnica
 
-**Estado verificado em 29/08.** Verificado em 29/08: **1 127 registros indexados de 2 676**, ou seja 42 %. 1 284 atribuições distribuídas em 89 assuntos locais. Do lado público anônimo, a cobertura é ainda mais baixa.
+**Estado.** Verificado em 29/08: **1 127 registros indexados de 2 676**, ou seja 42 %. 1 284 atribuições distribuídas em 89 assuntos locais. Do lado público anônimo, a cobertura é ainda mais baixa.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Indexar, registro por registro, com o vocabulário local e o tesauro FICEDL já carregado. Nenhuma competência técnica: é um trabalho de biblioteca, feito a partir do aplicativo.
 
@@ -806,7 +848,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P3` Adiado · Estado : **Aberto** · Carga : várias semanas · O que exige : biblioteconomia
 
-**Estado verificado em 29/08.** De 1 305 autoridades: **726 (56 %) sem data de nascimento**, cerca de **1 272 (98 %) sem identificador VIAF, ISNI ou Wikidata**, cerca de **1 275 (98 %) sem `variant_forms`**.
+**Estado.** De 1 305 autoridades: **726 (56 %) sem data de nascimento**, cerca de **1 272 (98 %) sem identificador VIAF, ISNI ou Wikidata**, cerca de **1 275 (98 %) sem `variant_forms`**.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Passagens de enriquecimento pelas fontes já conectadas, com revisão. Os pseudônimos militantes são um caso à parte: a entrada se faz pela forma mais conhecida do movimento, com remissão a partir do nome civil, **nunca o contrário**.
 
@@ -825,7 +869,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : biblioteconomia
 
-**Estado verificado em 29/08.** `CONV-6` continua «a confirmar» e `CONV-O1` a `CONV-O8` estão abertos. Dois deles carregam trabalho quantificado: `CONV-O7` (o tipo de autoridade existe mas continua ilegível pelo SQL — **16 vereditos de coletividades faltam**) e `CONV-O8` (a cisão de autoridade não existe — **3 separações faltam**).
+**Estado.** `CONV-6` continua «a confirmar» e `CONV-O1` a `CONV-O8` estão abertos. Dois deles carregam trabalho quantificado: `CONV-O7` (o tipo de autoridade existe mas continua ilegível pelo SQL — **16 vereditos de coletividades faltam**) e `CONV-O8` (a cisão de autoridade não existe — **3 separações faltam**).
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Decidir as oito numa sessão, apoiando-se no acervo real: `name_lang` distinto de `country` ou não, convenções das coletividades, destino de `books.autor` (ver **C5**), critério de mudança para EDTF, perímetro da tela de verificação, e os dois lotes manuais.
 
@@ -844,7 +890,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** `digital_assets.rights_status` é um **estado de workflow** (`to_review`, `public_domain_confirmed`) que comanda a visibilidade. O vocabulário de direitos autorais leva o mesmo nome desde a migração `20260820235000_vocabulaire_rights_status`. Dois sentidos, um nome.
+**Estado.** `digital_assets.rights_status` é um **estado de workflow** (`to_review`, `public_domain_confirmed`) que comanda a visibilidade. O vocabulário de direitos autorais leva o mesmo nome desde a migração `20260820235000_vocabulaire_rights_status`. Dois sentidos, um nome.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Renomear a coluna de workflow — `review_state` por exemplo — e propagar ao front e às RPC. O vocabulário de direitos guarda o nome, já que é ele que fala de direitos.
 
@@ -878,7 +926,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : biblioteconomia, SQL / PostgreSQL
 
-**Estado verificado em 29/08.** `spec-periodiques-v0.1` (27/08) anuncia «nove pacotes a entregar». **Os nove foram entregues em 27 e 28/08**, num dia: `serials`, RPC, anti-falsos-duplicados, estado de coleção, entrada na Oficina, retomada dos registros existentes, UI de catalogação, página pública, e os rótulos nas dez línguas.
+**Estado.** `spec-periodiques-v0.1` (27/08) anuncia «nove pacotes a entregar». **Os nove foram entregues em 27 e 28/08**, num dia: `serials`, RPC, anti-falsos-duplicados, estado de coleção, entrada na Oficina, retomada dos registros existentes, UI de catalogação, página pública, e os rótulos nas dez línguas.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Reler a spec, marcar os nove pacotes como entregues, depois verificar uma a uma as seis guardas anunciadas — anticiclo de filiação limitado a 20 saltos, reciprocidade predecessor/sucessor por trigger, proibição de `serial_id` num não-fascículo, simetria do importador diante da coluna gerada, fusão dos estados de coleção sem sobrescrita, ordem de classificação.
 
@@ -898,7 +948,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : biblioteconomia
 
-**Estado verificado em 29/08.** Cinco arbitragens ficaram pendentes na spec, com uma inclinação escrita para cada uma: vocabulário de `periodicidade` livre ou fechado; filiação n-n ou dois vínculos simples; `serials` deve levar um `library_id`; promoção automática de um título proposto; página pública dedicada ou faceta.
+**Estado.** Cinco arbitragens ficaram pendentes na spec, com uma inclinação escrita para cada uma: vocabulário de `periodicidade` livre ou fechado; filiação n-n ou dois vínculos simples; `serials` deve levar um `library_id`; promoção automática de um título proposto; página pública dedicada ou faceta.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Decidi-las sobre casos reais em vez de no abstrato — o acervo Anarchief (cerca de cem títulos desde 1860) e o acervo SOLIDAIRES (12 títulos, 91 fascículos) são a matéria para testar.
 
@@ -917,7 +969,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Bloqueado** · Carga : alguns dias · O que exige : biblioteconomia
 
-**Estado verificado em 29/08.** O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo.
+**Estado.** O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente.
 
@@ -937,7 +991,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : um canteiro longo · O que exige : biblioteconomia, React / JavaScript, deliberação coletiva
 
-**Estado verificado em 29/08.** Nada existe. O modelo de registro herdado da biblioteconomia do livro não sabe descrever esse material, e o AnarBib não é exceção. É a necessidade **pior atendida**, para uma parte enorme dos nossos acervos.
+**Estado.** Nada existe. O modelo de registro herdado da biblioteconomia do livro não sabe descrever esse material, e o AnarBib não é exceção. É a necessidade **pior atendida**, para uma parte enorme dos nossos acervos.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Este material não tem ISBN, nem editora, frequentemente nem autor nem título. É visual tanto quanto textual: um cartaz não se resume à sua ocerização. O canteiro começa por reflexão documental — o que se descreve, com quê, e para quem — antes de qualquer tabela.
 
@@ -957,7 +1013,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
 
-**Estado verificado em 29/08.** A regra está registrada e cabe numa frase: «captura-se em tons de cinza, entrega-se em bitonal, só se mantém on-line o que é entregue». Os tetos dos buckets estão em produção. **A ferramenta de derivação não foi escolhida**, e a ficha prática de uma página não está escrita.
+**Estado.** A regra está registrada e cabe numa frase: «captura-se em tons de cinza, entrega-se em bitonal, só se mantém on-line o que é entregue». Os tetos dos buckets estão em produção. **A ferramenta de derivação não foi escolhida**, e a ficha prática de uma página não está escrita.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Comparar ScanTailor + `img2pdf` com `unpaper` ou ImageMagick em dez obras reais e variadas, medir o peso e a legibilidade, escolher. Depois escrever a ficha: três ajustes, cinco controles, nada mais.
 
@@ -977,7 +1035,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, Deno / TypeScript
 
-**Estado verificado em 29/08.** `epubjs ^0.3.93` é a única dependência claramente pré-1.0 num caminho crítico — o leitor EPUB, `src/lib/reader/epubEngine.js` e `src/components/viewers/EpubReader.jsx`. A biblioteca não teve publicação maior há anos.
+**Estado.** `epubjs ^0.3.93` é a única dependência claramente pré-1.0 num caminho crítico — o leitor EPUB, `src/lib/reader/epubEngine.js` e `src/components/viewers/EpubReader.jsx`. A biblioteca não teve publicação maior há anos.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Avaliar o que quebra hoje, o que quebrará com os navegadores futuros, e se existe uma alternativa livre mantida. Decidir entre fixar e assumir, ou substituir.
 
@@ -1016,7 +1076,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : nenhuma competência técnica, React / JavaScript
 
-**Estado verificado em 29/08.** Funcionalidades de acessibilidade estão implementadas: painel de ajustes em todas as páginas desde 26/08, `html lang` que segue a língua exibida (WCAG 3.1.1) com seu teste, campos de 16 px no mínimo, alvos táteis de 44 px, `viewport-fit=cover`. **Nenhuma auditoria de acessibilidade independente foi jamais conduzida.**
+**Estado.** Funcionalidades de acessibilidade estão implementadas: painel de ajustes em todas as páginas desde 26/08, `html lang` que segue a língua exibida (WCAG 3.1.1) com seu teste, campos de 16 px no mínimo, alvos táteis de 44 px, `viewport-fit=cover`. **Nenhuma auditoria de acessibilidade independente foi jamais conduzida.**
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Fazer percorrer os percursos principais — buscar, abrir um registro, reservar, cadastrar-se — por uma pessoa que use um leitor de tela ou navegação só por teclado, e escrever o que trava.
 
@@ -1036,7 +1098,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : língua materna
 
-**Estado verificado em 29/08.** As dez locales estão em paridade estrita de chaves — 6 177 cada uma, verificada na integração contínua desde 27/08. Mas as **convenções** de duas delas não estão decididas: o neerlandês está em estado de rascunho, o grego resta a definir. O teste de paridade não vê isso: conta as chaves, não a justeza delas.
+**Estado.** As dez locales estão em paridade estrita de chaves — 6 177 cada uma, verificada na integração contínua desde 27/08. Mas as **convenções** de duas delas não estão decididas: o neerlandês está em estado de rascunho, o grego resta a definir. O teste de paridade não vê isso: conta as chaves, não a justeza delas.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Uma falante ou um falante nativo retoma a carta de linguagem inclusiva, decide a forma neutra para sua língua, e revisa as 6 177 cadeias com prioridade nas telas mais vistas.
 
@@ -1056,7 +1120,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Decisão coletiva** · Carga : alguns dias · O que exige : língua materna, deliberação coletiva
 
-**Estado verificado em 29/08.** `DOC-ADDR-1` fixa o tratamento informal como registro da interface. Na prática, **`nl` e `el` tratam por «tu», as outras oito por «você» formal**. A divergência está documentada e assumida como «um canteiro a decidir, não a sofrer de passagem numa correção».
+**Estado.** `DOC-ADDR-1` fixa o tratamento informal como registro da interface. Na prática, **`nl` e `el` tratam por «tu», as outras oito por «você» formal**. A divergência está documentada e assumida como «um canteiro a decidir, não a sofrer de passagem numa correção».
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Decidir uma vez para as dez, levando em conta que o valor político do tratamento informal não é o mesmo em cada língua, depois passar as locales envolvidas numa única operação.
 
@@ -1075,7 +1141,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna
 
-**Estado verificado em 29/08.** `it.json` não está conforme à convenção do asterisco final: os pares irregulares como `lettore` / `lettrice` não se reduzem a `lettor*`. O teste de carta verifica uma só coisa no italiano — que `camerata` e `camerati` nunca apareçam, termo fascista, falha dura — e nada mais.
+**Estado.** `it.json` não está conforme à convenção do asterisco final: os pares irregulares como `lettore` / `lettrice` não se reduzem a `lettor*`. O teste de carta verifica uma só coisa no italiano — que `camerata` e `camerati` nunca apareçam, termo fascista, falha dura — e nada mais.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Decidir o tratamento dos pares irregulares com um falante nativo, depois aplicá-lo às cadeias envolvidas. É um trabalho de língua, não de código.
 
@@ -1095,7 +1163,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
 
-**Estado verificado em 29/08.** É a **única exceção antirrastreamento restante**: os ladrilhos de `tile.openstreetmap.org` são carregados pelo navegador da visitante, que entrega portanto seu endereço IP a um terceiro. A intenção de retransmitir já está **anunciada publicamente** na chave `privacy.s6.maptiles` das dez locales.
+**Estado.** É a **única exceção antirrastreamento restante**: os ladrilhos de `tile.openstreetmap.org` são carregados pelo navegador da visitante, que entrega portanto seu endereço IP a um terceiro. A intenção de retransmitir já está **anunciada publicamente** na chave `privacy.s6.maptiles` das dez locales.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Retomar o modelo já em vigor para o Nominatim: um relé do lado servidor, com cache, e o endereço do relé na configuração do front.
 
@@ -1114,7 +1184,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript
 
-**Estado verificado em 29/08.** `BookDraftForm.jsx` tem **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único.
+**Estado.** `BookDraftForm.jsx` tem **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
 
@@ -1134,7 +1206,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
 
-**Estado verificado em 29/08.** `document.title` não se atualiza durante uma navegação dentro do aplicativo; só muda no recarregamento completo da página.
+**Estado.** `document.title` não se atualiza durante uma navegação dentro do aplicativo; só muda no recarregamento completo da página.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Definir o título a cada mudança de rota, a partir das chaves i18n existentes.
 
@@ -1153,7 +1227,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
 
-**Estado verificado em 29/08.** `titre.ttf` pesa 1 MB e `accent.ttf` 484 KB; as duas são carregadas sem pré-carregamento declarado, sem `font-display: swap`, e sem `preconnect` para o Supabase.
+**Estado.** `titre.ttf` pesa 1 MB e `accent.ttf` 484 KB; as duas são carregadas sem pré-carregamento declarado, sem `font-display: swap`, e sem `preconnect` para o Supabase.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Adicionar `font-display: swap`, pré-carregar apenas a fonte de título, subconjuntar os arquivos aos caracteres realmente usados — dez línguas incluindo o grego, então o subconjunto não é trivial.
 
@@ -1172,7 +1248,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript
 
-**Estado verificado em 29/08.** As fases A, B e C estão entregues e a doutrina graduada está registrada. Três questões continuam abertas no REGISTRO: `MOB-Q1` (24 grades declaradas em linha no JSX com trilhas `fr` nuas), `MOB-Q2` (20 media queries herdadas a repatriar em `src/styles/mobile.css`), `MOB-Q3` (as abas Validações e Inventário a converter em cartões).
+**Estado.** As fases A, B e C estão entregues e a doutrina graduada está registrada. Três questões continuam abertas no REGISTRO: `MOB-Q1` (24 grades declaradas em linha no JSX com trilhas `fr` nuas), `MOB-Q2` (20 media queries herdadas a repatriar em `src/styles/mobile.css`), `MOB-Q3` (as abas Validações e Inventário a converter em cartões).
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Três passagens mecânicas, nesta ordem de valor: as 24 grades (`minmax(0, Nfr)` em toda parte, é a regra `MOB-1`), as duas abas em cartões segundo o padrão entregue, depois o repatriamento das media queries.
 
@@ -1192,7 +1270,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript
 
-**Estado verificado em 29/08.** A base de campo está entregue: aplicativo instalável, leitura de códigos QR e ISBN, inventário, layout adaptativo. Três elementos restam, herdados do v32 e não reverificados desde então: o plantão móvel (P3), a notificação push (P5), e a prancha de códigos QR em formato A4.
+**Estado.** A base de campo está entregue: aplicativo instalável, leitura de códigos QR e ISBN, inventário, layout adaptativo. Três elementos restam, herdados do v32 e não reverificados desde então: o plantão móvel (P3), a notificação push (P5), e a prancha de códigos QR em formato A4.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Começar verificando qual dos três ainda é uma falta real. A notificação push levanta uma questão de fundo antes de uma questão de código: pressupõe um serviço de terceiro, o que a doutrina antirrastreamento examina de perto.
 
@@ -1211,7 +1291,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P3` Adiado · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : deliberação coletiva, React / JavaScript
 
-**Estado verificado em 29/08.** `#OPAC5` (folksonomia, tags postas pelas leitoras) está bloqueado numa decisão de comunidade e de privacidade. `#OPAC11` (feed RSS de busca) está adiado por razão antirrastreamento. Os dois estão abertos desde maio e nunca foram instruídos.
+**Estado.** `#OPAC5` (folksonomia, tags postas pelas leitoras) está bloqueado numa decisão de comunidade e de privacidade. `#OPAC11` (feed RSS de busca) está adiado por razão antirrastreamento. Os dois estão abertos desde maio e nunca foram instruídos.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Instruí-los de uma vez: o que uma tag pública revela sobre quem a pôs, e o que um feed RSS revela sobre quem o segue? Depois decidir, ou fechar.
 
@@ -1243,7 +1325,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
 
-**Estado verificado em 29/08.** **14 funções `notify-*` implantadas**, cinco filas, seis gatilhos de despacho. Três filas nunca receberam uma única inserção: `authority_proposal_notification_outbox`, `membership_expiry_notifications`, `painel_internal_task_invitation_outbox`. Uma quarta, `painel_internal_task_notification_outbox`, está vazia após 34 inserções cuja última é de 04/06. Ninguém jamais auditou o conjunto.
+**Estado.** **14 funções `notify-*` implantadas**, cinco filas, seis gatilhos de despacho. Três filas nunca receberam uma única inserção: `authority_proposal_notification_outbox`, `membership_expiry_notifications`, `painel_internal_task_invitation_outbox`. Uma quarta, `painel_internal_task_notification_outbox`, está vazia após 34 inserções cuja última é de 04/06. Ninguém jamais auditou o conjunto.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Traçar o mapa: para cada evento de negócio, qual gatilho, qual fila, qual função, qual template, quais dez línguas. Depois marcar os ramos mortos e os ramos nunca percorridos.
 
@@ -1263,7 +1347,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
 
-**Estado verificado em 29/08.** Os e-mails de alerta de operação — backup em falha, incidente de sonda — usam o template destinado às leitoras. Terminam portanto com «entre em contato com a biblioteca» seguido de um número de telefone.
+**Estado.** Os e-mails de alerta de operação — backup em falha, incidente de sonda — usam o template destinado às leitoras. Terminam portanto com «entre em contato com a biblioteca» seguido de um número de telefone.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Um template de operação distinto: sem rodapé destinado ao público, o comando a executar, e o link para a seção do runbook.
 
@@ -1282,7 +1368,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript
 
-**Estado verificado em 29/08.** Quatro funções fazem resumos: `notify-weekly-report`, `notify-network-weekly-report`, `notify-cross-library-digest`, `notify-rede-digest`. Três funções servem documentos: `read-pdf`, `read-digital-asset`, `read-ill-shared-asset`. Duas exportam lotes: `export-catalog-lote`, `export-fonds-bundle`. E `mail-i18n-test`, função de teste, está implantada em produção na versão 1553.
+**Estado.** Quatro funções fazem resumos: `notify-weekly-report`, `notify-network-weekly-report`, `notify-cross-library-digest`, `notify-rede-digest`. Três funções servem documentos: `read-pdf`, `read-digital-asset`, `read-ill-shared-asset`. Duas exportam lotes: `export-catalog-lote`, `export-fonds-bundle`. E `mail-i18n-test`, função de teste, está implantada em produção na versão 1553.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Verificar o que cada uma faz de fato antes de concluir pela redundância — provavelmente têm destinatários e alcances diferentes. Depois fundir o que deve sê-lo, e retirar `mail-i18n-test` da produção.
 
@@ -1302,9 +1390,11 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** `spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.
+**Estado.** `spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.
 
 **Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar.
+
+*Verificado : 30/08 — os onze crons cujo nome evoca um vencimento relidos um a um: nenhum diz respeito ao empréstimo às leitoras. A falta está confirmada.*
 
 **O que é.** Verificar no banco se os lembretes saem por outro caminho, e senão, decidir: implementá-los, ou emendar a spec. Um empréstimo atrasado que não dispara nada é um empréstimo que ninguém cobra.
 
@@ -1342,7 +1432,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P0` Estrutural · Estado : **Aberto** · Carga : várias semanas · O que exige : deliberação coletiva, nenhuma competência técnica
 
-**Estado verificado em 29/08.** Verificado em 29/08: **62 tabelas de negócio nunca receberam uma única inserção.** Sete blocos inteiros são atingidos — assembleias da rede (3 tabelas), notas de leitura (2), propostas e objeções de autoridade (3), referenciais de catalogação `catalog_ref_*` (8 de 9), governança dos perfis de biblioteca (4, **enquanto dois crons rodam sobre elas a cada quinze minutos**), deliberação sobre os pedidos de adesão (5, incluindo `library_request_votes` e `library_request_messages`).
+**Estado.** Verificado em 29/08: **62 tabelas de negócio nunca receberam uma única inserção.** Sete blocos inteiros são atingidos — assembleias da rede (3 tabelas), notas de leitura (2), propostas e objeções de autoridade (3), referenciais de catalogação `catalog_ref_*` (8 de 9), governança dos perfis de biblioteca (4, **enquanto dois crons rodam sobre elas a cada quinze minutos**), deliberação sobre os pedidos de adesão (5, incluindo `library_request_votes` e `library_request_messages`).
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Escolher um bloco e percorrê-lo de verdade, do primeiro ao último gesto: realizar uma assembleia da rede, depositar uma nota de leitura, propor uma autoridade e deixar alguém objetar, fazer deliberar um pedido de adesão. Registrar o que falta, o que surpreende, o que trava.
 
@@ -1362,7 +1454,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** A migração `20260826120000` **está em produção** e decide no sentido de P2: colegialidade obrigatória, ratificação prévia, recuo a uma assinatura quando há uma só pessoa coordenadora, consentimento explícito da pessoa promovida, exclusão dessa pessoa da contagem do quórum. **Mas a decisão política nunca foi tomada.**
+**Estado.** A migração `20260826120000` **está em produção** e decide no sentido de P2: colegialidade obrigatória, ratificação prévia, recuo a uma assinatura quando há uma só pessoa coordenadora, consentimento explícito da pessoa promovida, exclusão dessa pessoa da contagem do quórum. **Mas a decisão política nunca foi tomada.**
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Levar a questão ao coletivo. Três opções estão escritas: não mudar nada no código e corrigir o texto de P2; estender o caminho A como o código fez; ou manter a promoção direta mas torná-la visível com um prazo de objeção.
 
@@ -1382,7 +1476,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** A migração está em produção; o runbook de implantação em onze etapas está portanto caduco. O que resta é o **ensaio em seis passos em `blmf-teste`**, nunca feito. Ora, `library_team_invitations` traz **zero linha** desde sua criação: o circuito que a migração torna obrigatório nunca foi percorrido uma única vez.
+**Estado.** A migração está em produção; o runbook de implantação em onze etapas está portanto caduco. O que resta é o **ensaio em seis passos em `blmf-teste`**, nunca feito. Ora, `library_team_invitations` traz **zero linha** desde sua criação: o circuito que a migração torna obrigatório nunca foi percorrido uma única vez.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Os seis passos na biblioteca de teste `blmf-teste`, cujos e-mails estão cortados (`email_delivery_mode = 'disabled'`). **Se um passo falhar, não fazer nada na BLMF.**
 
@@ -1402,7 +1498,9 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** Quatro e-mails existem, estão ligados, e nunca passaram em produção: `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. O mecanismo funciona — `team_notification_outbox` conta 21 envios e zero falha — mas esses quatro nunca foram disparados.
+**Estado.** Quatro e-mails existem, estão ligados, e nunca passaram em produção: `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. O mecanismo funciona — `team_notification_outbox` conta 21 envios e zero falha — mas esses quatro nunca foram disparados.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Provocar cada um dos quatro casos em `blmf-teste`, ler o e-mail recebido, verificar que diz o que deve dizer nas dez línguas.
 
@@ -1422,9 +1520,11 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** **Verificado em 30/08, e o item reduz-se a metade.** O constato assentava em `library_commons.email_delivery_mode = 'test_only'`. Ora **nenhum caminho de envio lê essa coluna**: é o seletor inerte retirado no mesmo dia. O verdadeiro comutador é `library_mail_channels`, e diz outra coisa — a BTL tem `delivery_mode = 'platform_shared'` e `active = true`. **O correio da BTL parte normalmente, e sempre partiu.**
+**Estado.** **Verificado em 30/08, e o item reduz-se a metade.** O constato assentava em `library_commons.email_delivery_mode = 'test_only'`. Ora **nenhum caminho de envio lê essa coluna**: é o seletor inerte retirado no mesmo dia. O verdadeiro comutador é `library_mail_channels`, e diz outra coisa — a BTL tem `delivery_mode = 'platform_shared'` e `active = true`. **O correio da BTL parte normalmente, e sempre partiu.**
 
 Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa biblioteca de 2 187 exemplares publicada na rede. O que a lê, e o que ela muda?
+
+*Verificado : 30/08 — `library_mail_channels` consultada: a BTL está em `platform_shared` / `active = true`. O que `is_test_mode` comanda não foi procurado.*
 
 **O que é.** Procurar o que lê `libraries.is_test_mode` — no banco e no front. Três saídas, e é preciso decidir entre elas: ou a coluna comanda algo real, e é preciso perguntar à BTL o que quer; ou não comanda nada, e é um segundo seletor inerte a retirar (`DOC-SILENCE-1`); ou serve apenas a um filtro de exibição, e o seu nome mente sobre o alcance.
 
@@ -1443,7 +1543,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, biblioteconomia
 
-**Estado verificado em 29/08.** O ciclo de vida do empréstimo entre bibliotecas está especificado e implementado no banco: máquina de estados travada, quatro triggers, cron `anarbib-peb-detect-overdue-daily` ativo. **Nenhuma tela existe.** O banco traz 2 empréstimos para 20 inserções históricas.
+**Estado.** O ciclo de vida do empréstimo entre bibliotecas está especificado e implementado no banco: máquina de estados travada, quatro triggers, cron `anarbib-peb-detect-overdue-daily` ativo. **Nenhuma tela existe.** O banco traz 2 empréstimos para 20 inserções históricas.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Uma tela de pedido do lado da biblioteca solicitante, uma tela de tratamento do lado da emprestadora, e a exibição do estado para as duas. As views `interlibrary_loans_painel_ui` e `interlibrary_loan_items_ui` já existem.
 
@@ -1462,7 +1564,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Bloqueado** · Carga : não estimado · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** Decisão federal **deliberadamente adiada**, por não poder ser tomada em conjunto. Prazo previsto: outubro ou novembro, depois de Bolonha.
+**Estado.** Decisão federal **deliberadamente adiada**, por não poder ser tomada em conjunto. Prazo previsto: outubro ou novembro, depois de Bolonha.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Uma vez concluído **A1**, instruir o pedido em conjunto e decidir.
 
@@ -1482,7 +1586,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia, nenhuma competência técnica
 
-**Estado verificado em 29/08.** `cartography_entries` traz 187 fichas e o arquivo `anarbib_bibliotheques_libertaires.geojson` conta 121. Nove arquivos identificados na rede NORLA não foram confrontados com essa lista.
+**Estado.** `cartography_entries` traz 187 fichas e o arquivo `anarbib_bibliotheques_libertaires.geojson` conta 121. Nove arquivos identificados na rede NORLA não foram confrontados com essa lista.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Verificar quais das nove já constam, e fazer entrar as ausentes com `source = "FICEDL"` ou `"NORLA"` conforme sua proveniência.
 
@@ -1501,7 +1607,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P3` Adiado · Estado : **Congelado** · Carga : várias semanas · O que exige : React / JavaScript
 
-**Estado verificado em 29/08.** As arbitragens estão decididas desde 18/06: tabela dedicada, i18n híbrida, mapa público como rota do aplicativo, motor Leaflet, OpenStreetMap e Nominatim auto-hospedados, entradas não membros exibidas com um filtro claro. `MAP-I` (estatuto do empréstimo entre bibliotecas no mapa interno) e `MAP-J` (autodeclaração «adicionar minha biblioteca» com moderação) continuam adiados.
+**Estado.** As arbitragens estão decididas desde 18/06: tabela dedicada, i18n híbrida, mapa público como rota do aplicativo, motor Leaflet, OpenStreetMap e Nominatim auto-hospedados, entradas não membros exibidas com um filtro claro. `MAP-I` (estatuto do empréstimo entre bibliotecas no mapa interno) e `MAP-J` (autodeclaração «adicionar minha biblioteca» com moderação) continuam adiados.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Retomar a spec v1.0 quando a janela se abrir. Atenção: o REGISTRO traz **duas seções `MAP`** — a §2 é um esqueleto onde tudo está aberto, a §34 é a versão decidida. A §2 não tem carimbo de supersessão nem remissão à §34: **é a §34 que vale**.
 
@@ -1520,7 +1628,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** Três pontos estão marcados 🔴 «a resolver o mais rápido possível» desde junho e não se moveram: `#111` (avaliação colaborativa de uma pessoa administradora de rede, dormente), `ONBO-Q13` (transferência técnica do mandato de coordenação), e o acabamento do módulo 10 da oficina de onboarding.
+**Estado.** Três pontos estão marcados 🔴 «a resolver o mais rápido possível» desde junho e não se moveram: `#111` (avaliação colaborativa de uma pessoa administradora de rede, dormente), `ONBO-Q13` (transferência técnica do mandato de coordenação), e o acabamento do módulo 10 da oficina de onboarding.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Os três se tratam juntos porque carregam a mesma questão: o que acontece quando alguém chega, e quando alguém sai?
 
@@ -1556,7 +1666,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, biblioteconomia
 
-**Estado verificado em 29/08.** `parseDescriptor` sai por retorno antecipado antes de alcançar o título de página quando uma ficha não tem bloco de tradução. Resultado: **158 descritores da faceta «datas», ou seja um quarto do tesauro, são registrados como identificadores nus, sem rótulo, portanto não alinháveis.** Seus vínculos com os catálogos se perdem da mesma forma. A correção `ficedl_scrape_titre_dates.patch` existe, passa `node --check`, e **nunca foi testada contra o site**.
+**Estado.** `parseDescriptor` sai por retorno antecipado antes de alcançar o título de página quando uma ficha não tem bloco de tradução. Resultado: **158 descritores da faceta «datas», ou seja um quarto do tesauro, são registrados como identificadores nus, sem rótulo, portanto não alinháveis.** Seus vínculos com os catálogos se perdem da mesma forma. A correção `ficedl_scrape_titre_dates.patch` existe, passa `node --check`, e **nunca foi testada contra o site**.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Aplicar a correção, que capta o título de página antes dos retornos antecipados e o guarda num campo `title_fr` **distinto de `labels`** — uma data tem um rótulo canônico mas não uma tradução.
 
@@ -1576,7 +1688,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Bloqueado** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** A exportação completa dos 620 descritores nos dois formatos está a **uma noite de trabalho** — assim que as sete questões tiverem resposta. Estão escritas e ninguém ainda as colocou.
+**Estado.** A exportação completa dos 620 descritores nos dois formatos está a **uma noite de trabalho** — assim que as sete questões tiverem resposta. Estão escritas e ninguém ainda as colocou.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** As sete: a forma dos identificadores; **a hierarquia, que é a verdadeira questão**; o estatuto da faceta «datas»; o destino dos 2 842 vínculos para seis catálogos; o grego romanizado; a licença; e a maneira como o arquivo se regenera.
 
@@ -1596,7 +1710,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia, Deno / TypeScript
 
-**Estado verificado em 29/08.** 98 alinhamentos existem no banco entre os assuntos locais e os descritores FICEDL, em `exact` ou `close`. O vocabulário de assunto do AnarBib já está exposto em SKOS. **As correspondências para a FICEDL não estão.**
+**Estado.** 98 alinhamentos existem no banco entre os assuntos locais e os descritores FICEDL, em `exact` ou `close`. O vocabulário de assunto do AnarBib já está exposto em SKOS. **As correspondências para a FICEDL não estão.**
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Expor `subject_ficedl_links` em `skos:exactMatch` e `skos:closeMatch`. **Um alinhamento parcial vale mais que nenhum alinhamento** — é a convenção 2 do texto de interoperabilidade, e se aplica primeiro a nós.
 
@@ -1616,7 +1732,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
 
-**Estado verificado em 29/08.** O ponto de acesso OAI-PMH está implantado. **OPDS não existe.** Ora, «os fluxos OPDS existem de um lado e de outro mas não apontam para lugar nenhum», e é a convenção 1 do texto proposto aos outros catálogos.
+**Estado.** O ponto de acesso OAI-PMH está implantado. **OPDS não existe.** Ora, «os fluxos OPDS existem de um lado e de outro mas não apontam para lugar nenhum», e é a convenção 1 do texto proposto aos outros catálogos.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Um fluxo OPDS 1.2 ou 2.0 sobre o catálogo público, com as facetas já disponíveis. Algumas horas para um primeiro fluxo.
 
@@ -1635,7 +1753,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, administração de sistemas
 
-**Estado verificado em 29/08.** O caminho está executável desde 28/08: função `harvest-oai-pmh` implantada, cron `anarbib-oai-harvest-weekly` posto. **O cron nunca rodou** — primeira ocorrência prevista para terça-feira às 04h20. E o ponto de acesso `oai-pmh-provider` **nunca foi coletado de fora**.
+**Estado.** O caminho está executável desde 28/08: função `harvest-oai-pmh` implantada, cron `anarbib-oai-harvest-weekly` posto. **O cron nunca rodou** — primeira ocorrência prevista para terça-feira às 04h20. E o ponto de acesso `oai-pmh-provider` **nunca foi coletado de fora**.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Esperar a primeira passagem do cron e ler o que ela traz. Em paralelo, coletar nosso próprio ponto de acesso a partir de uma máquina de terceiro, com um cliente OAI padrão, e verificar que os registros estão conformes.
 
@@ -1655,7 +1775,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia, deliberação coletiva
 
-**Estado verificado em 29/08.** A NORLA construiu seu vocabulário — com suas facetas *Tactics* e *Social Movement* — **sem vínculo com o tesauro FICEDL**. Dois vocabulários militantes, construídos em paralelo, que se ignoram. Além disso, as 11 categorias temáticas do AnarcosyndicalismeBOOK não estão alinhadas a nada.
+**Estado.** A NORLA construiu seu vocabulário — com suas facetas *Tactics* e *Social Movement* — **sem vínculo com o tesauro FICEDL**. Dois vocabulários militantes, construídos em paralelo, que se ignoram. Além disso, as 11 categorias temáticas do AnarcosyndicalismeBOOK não estão alinhadas a nada.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Começar pelo menor e mais viável: as 11 categorias do AnarcosyndicalismeBOOK, **um primeiro passo concreto, delimitado, viável numa noite** — e como o tesauro já está em dez línguas, o alinhamento vale simultaneamente para as dez. Depois abrir a conversa com a NORLA.
 
@@ -1675,7 +1797,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` é um **rascunho que não compromete ninguém e nunca foi discutido com nenhuma organização**. Propõe quatro convenções e um pedido único à FICEDL.
+**Estado.** `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` é um **rascunho que não compromete ninguém e nunca foi discutido com nenhuma organização**. Propõe quatro convenções e um pedido único à FICEDL.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Retirar as notas de trabalho, levar o texto a Bolonha, e deixá-lo ser retomado coletivamente — ou arquivado.
 
@@ -1715,7 +1839,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Congelado** · Carga : alguns dias · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** A produção traz **77 migrações `auth`**, a última datada de 25/06. A imagem fixada em `deploy/.env` é `GOTRUE_TAG=v2.189.0`, que traz **69**. `deploy/.env.example` indica `v2.192.0`. A diferença é um **bloqueio de correção**, não de conforto.
+**Estado.** A produção traz **77 migrações `auth`**, a última datada de 25/06. A imagem fixada em `deploy/.env` é `GOTRUE_TAG=v2.189.0`, que traz **69**. `deploy/.env.example` indica `v2.192.0`. A diferença é um **bloqueio de correção**, não de conforto.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Um método que **se mede e não se adivinha**: subir um patamar, iniciar num volume virgem, `select count(*) from auth.schema_migrations;`, recomeçar até atingir pelo menos 77.
 
@@ -1735,7 +1861,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Congelado** · Carga : várias semanas · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** A pilha está reduzida de doze a **seis contêineres** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), as versões estão fixadas, `bootstrap.sh` foi executado de verdade em 26/08 com oito defeitos levantados e corrigidos, e o ensaio de 18/08 reexecutou 124 migrações e restaurou um dump de produção em 17 segundos. Reconstrução completa medida: **25 minutos**.
+**Estado.** A pilha está reduzida de doze a **seis contêineres** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), as versões estão fixadas, `bootstrap.sh` foi executado de verdade em 26/08 com oito defeitos levantados e corrigidos, e o ensaio de 18/08 reexecutou 124 migrações e restaurou um dump de produção em 17 segundos. Reconstrução completa medida: **25 minutos**.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** O que resta: desacoplar a cadeia de implantação da integração contínua (**extração, não criação** — `scripts/ci/deployer-backend.sh` já existe), colocar um proxy reverso com túnel na frente da pilha, passar de tags para impressões `sha256`, e refazer o ensaio a frio um mês depois para verificar que nada divergiu.
 
@@ -1756,7 +1884,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Congelado** · Carga : uma noite · O que exige : Deno / TypeScript
 
-**Estado verificado em 29/08.** `supabase/functions/main/index.ts` existe (6,9 KB), lê `config.toml` na inicialização, aplica uma **recusa por omissão** — só as dispensas `verify_jwt = false` são lidas, todo o resto exige um token — e recusa iniciar se o arquivo for ilegível. **Os quatro testes previstos não foram feitos.**
+**Estado.** `supabase/functions/main/index.ts` existe (6,9 KB), lê `config.toml` na inicialização, aplica uma **recusa por omissão** — só as dispensas `verify_jwt = false` são lidas, todo o resto exige um token — e recusa iniciar se o arquivo for ilegível. **Os quatro testes previstos não foram feitos.**
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Os quatro testes da etapa 5 de `deploy/REPETITION.md`: função protegida sem cabeçalho de autorização → 401; com um token válido → 200; `health-probe` sem token → 200; nome inexistente → 404.
 
@@ -1775,7 +1905,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** A migração `20260827180000_temoin_sauvegarde_provenance.sql` está **testada num PostgreSQL 16 descartável, com sete controles passados, mas nunca executada contra a produção**. A correção `health_probe_provenance.patch` **não se aplica**: `patch failed … index.ts:286`. Foi produzida contra o espelho GitHub.
+**Estado.** A migração `20260827180000_temoin_sauvegarde_provenance.sql` está **testada num PostgreSQL 16 descartável, com sete controles passados, mas nunca executada contra a produção**. A correção `health_probe_provenance.patch` **não se aplica**: `patch failed … index.ts:286`. Foi produzida contra o espelho GitHub.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Desempatar o conflito por `git hash-object` no arquivo alvo, comparado ao blob de base `0d00dc0e016fdfb86ef314e4e707abd4a84d1d2c`. **Impressão idêntica → `git apply --3way` passa. Impressão diferente → refazer a correção à mão sobre a versão real: não forçar, não sobrescrever.** Depois implantar `health-probe`.
 
@@ -1795,7 +1927,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** Um job de alerta existe nos dois workflows: abre uma issue na forja, com antiduplicação. No entanto `sql-tests` **ficou vermelho de 17 a 20 de agosto sem que ninguém visse**. A constatação escrita é clara: «mesmo ponto cego dos backups, e não está coberto».
+**Estado.** Um job de alerta existe nos dois workflows: abre uma issue na forja, com antiduplicação. No entanto `sql-tests` **ficou vermelho de 17 a 20 de agosto sem que ninguém visse**. A constatação escrita é clara: «mesmo ponto cego dos backups, e não está coberto».
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Fazer o alerta sair da forja: um e-mail, ou o mesmo canal dos alertas de backup. Uma issue aberta num repositório que ninguém vigia não alerta ninguém.
 
@@ -1815,7 +1949,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** `service_health_probes` traz **13 932 linhas** e cresce 288 por dia, sem nenhum cron de purga — enquanto sete outras purgas existem nos 36 jobs.
+**Estado.** `service_health_probes` traz **13 932 linhas** e cresce 288 por dia, sem nenhum cron de purga — enquanto sete outras purgas existem nos 36 jobs.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Um cron de purga no modelo de `anarbib-catalog-audit-snapshot-purge`, com uma retenção a decidir — trinta dias provavelmente bastam, já que os incidentes são conservados à parte em `service_health_incidents`.
 
@@ -1834,7 +1970,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** O documento afirma em negrito: «Nada disso ainda rodou». Três commits de 26/08 descrevem execuções reais com oito defeitos levantados. Além disso `bootstrap.sh` tem **oito etapas** mais uma «7 bis» e uma verificação, onde o README anuncia sete; e o README declara `notify-cross-library-digest` «ausente do repositório» quando ela está lá.
+**Estado.** O documento afirma em negrito: «Nada disso ainda rodou». Três commits de 26/08 descrevem execuções reais com oito defeitos levantados. Além disso `bootstrap.sh` tem **oito etapas** mais uma «7 bis» e uma verificação, onde o README anuncia sete; e o README declara `notify-cross-library-digest` «ausente do repositório» quando ela está lá.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Reescrever a seção de estado a partir dos diários de execução de 26/08, corrigir a contagem de etapas, e retirar a afirmação sobre `notify-cross-library-digest`.
 
@@ -1854,7 +1992,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** O Turnstile foi inteiramente retirado do código em 20/08 — sua reaparição seria uma regressão. Mas **chaves de teste subsistem** em `.env.example` (duas entradas), `.env.local`, `deploy/functions.env`, uma referência em `package.json`, e um segredo no Vault. Além disso `tmp-ficedl/` (754 KB, duplicata exata de um arquivo versionado) fica na raiz, e `docs/drafts/` está versionado sem regra.
+**Estado.** O Turnstile foi inteiramente retirado do código em 20/08 — sua reaparição seria uma regressão. Mas **chaves de teste subsistem** em `.env.example` (duas entradas), `.env.local`, `deploy/functions.env`, uma referência em `package.json`, e um segredo no Vault. Além disso `tmp-ficedl/` (754 KB, duplicata exata de um arquivo versionado) fica na raiz, e `docs/drafts/` está versionado sem regra.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Retirar os cinco rastros, suprimir `tmp-ficedl/` (ignorado pelo git desde 28/08, portanto sem risco), e decidir o estatuto de `docs/drafts/`: ou é uma antecâmara e se ignora, ou é conteúdo e se documenta.
 
@@ -1874,7 +2014,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** Os três jobs de integração contínua rodam num contêiner `node:20`, cuja janela de manutenção de longo prazo terminou em abril de 2026. É o ponto de fim de vida mais claro da cadeia.
+**Estado.** Os três jobs de integração contínua rodam num contêiner `node:20`, cuja janela de manutenção de longo prazo terminou em abril de 2026. É o ponto de fim de vida mais claro da cadeia.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Passar para a versão em manutenção longa seguinte, verificar que o build, os testes e o lint passam, e que a CLI Supabase fixada `v2.98.1` se instala nela.
 
@@ -1893,7 +2035,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** O espelho frio `anarbib-mirror.git` existe na estação de trabalho e sua atualização é manual. As unidades systemd `anarbib-mirror-refresh.service` e `.timer` estão versionadas em `deploy/ops/` mas sua entrada em serviço não está confirmada.
+**Estado.** O espelho frio `anarbib-mirror.git` existe na estação de trabalho e sua atualização é manual. As unidades systemd `anarbib-mirror-refresh.service` e `.timer` estão versionadas em `deploy/ops/` mas sua entrada em serviço não está confirmada.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Verificar se o temporizador roda, e senão colocá-lo em serviço. Registrar o frescor do espelho em algum lugar legível.
 
@@ -1912,7 +2056,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas
 
-**Estado verificado em 29/08.** A etapa 0 é conclusiva desde 20/08: `test.anarbib.org` é servido pelo novo motor em paralelo. A cadeia de integração contínua já usa a ação `git-pages`. **O Codeberg Pages em versão histórica está em modo de manutenção, não em fim de vida** — a documentação diz que continuará funcionando indefinidamente.
+**Estado.** A etapa 0 é conclusiva desde 20/08: `test.anarbib.org` é servido pelo novo motor em paralelo. A cadeia de integração contínua já usa a ação `git-pages`. **O Codeberg Pages em versão histórica está em modo de manutenção, não em fim de vida** — a documentação diz que continuará funcionando indefinidamente.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Colocar o registro TXT de lista branca, criar `public/_redirects` com a regra de reescrita, verificar que uma rota desconhecida retorna 200 com o conteúdo certo, depois limpar **somente após** verificação verde.
 
@@ -1947,7 +2093,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado verificado em 29/08.** `CLAUDE.md` erra em sete números — entre eles a linha `verify_jwt`, que descreve uma proteção inexistente (ver **B6**). A seção de estado do `README.md` está **datada de 7 de julho de 2026**, ou seja 345 commits atrás.
+**Estado.** `CLAUDE.md` erra em sete números — entre eles a linha `verify_jwt`, que descreve uma proteção inexistente (ver **B6**). A seção de estado do `README.md` está **datada de 7 de julho de 2026**, ou seja 345 commits atrás.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Retomar a foto numérica deste backlog e transpô-la, datando cada número. Depois decidir se esses números têm lugar num documento que não se relê: talvez uma remissão ao backlog valha mais que uma cópia.
 
@@ -1967,7 +2115,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado verificado em 29/08.** A tabela de histórico de `docs/backlogs/INDEX.md` para no v31: **a linha do v32 falta**, embora o arquivo esteja em `archive/`. E duas convenções de nomenclatura dos arquivos coexistem — com ou sem o prefixo `-archive-` —, ponto aberto explícito jamais levado ao REGISTRO.
+**Estado.** A tabela de histórico de `docs/backlogs/INDEX.md` para no v31: **a linha do v32 falta**, embora o arquivo esteja em `archive/`. E duas convenções de nomenclatura dos arquivos coexistem — com ou sem o prefixo `-archive-` —, ponto aberto explícito jamais levado ao REGISTRO.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Acrescentar a linha do v32, as do v33 e do v34, e decidir a convenção de arquivamento numa frase inscrita no REGISTRO.
 
@@ -1986,7 +2136,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado verificado em 29/08.** `spec-flux-consultations-v2.2.md` afirma, seção perfis, que a BLMF está em `full_sigb`, a BTL em `informal` e `BLT-test` em `informal`, tudo «verificado em prod». **As três são falsas hoje**: `BLT-test` não existe no banco, e a BTL está em `full_sigb`.
+**Estado.** `spec-flux-consultations-v2.2.md` afirma, seção perfis, que a BLMF está em `full_sigb`, a BTL em `informal` e `BLT-test` em `informal`, tudo «verificado em prod». **As três são falsas hoje**: `BLT-test` não existe no banco, e a BTL está em `full_sigb`.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Levantar o estado real das cinco bibliotecas e transpô-lo, com a data do levantamento.
 
@@ -2005,7 +2157,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado verificado em 29/08.** `spec-gouvernance-roles.md` §14 lista como «a implementar» coisas **que rodam em produção**: a tabela de auditoria `library_membership_audit` (alimentada, oito entradas recentes), as colunas de carência `pending_removal_until` e `pending_removal_requested_by`, os e-mails `team.*` (21 envios, zero falha), e os dois crons `anarbib-team-pending-removal-complete` e `anarbib-team-inactive-cleanup`.
+**Estado.** `spec-gouvernance-roles.md` §14 lista como «a implementar» coisas **que rodam em produção**: a tabela de auditoria `library_membership_audit` (alimentada, oito entradas recentes), as colunas de carência `pending_removal_until` e `pending_removal_requested_by`, os e-mails `team.*` (21 envios, zero falha), e os dois crons `anarbib-team-pending-removal-complete` e `anarbib-team-inactive-cleanup`.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Reescrever as duas seções conforme o estado verificado de 26/08, e atualizar a versão — o REGISTRO já cita uma v1.4 que o índice das specs ignora.
 
@@ -2025,7 +2179,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado verificado em 29/08.** Cinco regras de concepção são aplicadas em toda parte e escritas em nenhum lugar acessível: a ordem das atualizações numa RPC (o relato antes do estado), a distinção entre `workflow_note` e `schedule_reply_note`, a proibição de `async` em `onAuthStateChange`, as armadilhas de codificação sob PowerShell, e o contrato `actionBox` da função de renderização dos e-mails.
+**Estado.** Cinco regras de concepção são aplicadas em toda parte e escritas em nenhum lugar acessível: a ordem das atualizações numa RPC (o relato antes do estado), a distinção entre `workflow_note` e `schedule_reply_note`, a proibição de `async` em `onAuthStateChange`, as armadilhas de codificação sob PowerShell, e o contrato `actionBox` da função de renderização dos e-mails.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Escrevê-las no repositório, não num arquivo local. Uma página basta; cada uma cabe em três linhas e um exemplo.
 
@@ -2061,7 +2217,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P0` Estrutural · Estado : **Bloqueado** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** Um projeto de ata está redigido e arquivado. Não foi adotado. **É o preliminar político à abertura de qualquer canal de arrecadação: nada se move antes.**
+**Estado.** Um projeto de ata está redigido e arquivado. Não foi adotado. **É o preliminar político à abertura de qualquer canal de arrecadação: nada se move antes.**
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** A ata deve fazer quatro coisas: criar o fundo, designar nominalmente a pessoa que detém a chave Pix, designar a pessoa depositária da parte europeia, e fixar o princípio do relatório anual.
 
@@ -2082,7 +2240,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Bloqueado** · Carga : alguns dias · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** O Liberapay está no ar e recebeu sua primeira doação em 27/08. O encarte «apoiar financeiramente» está publicado nas dez locales e nomeia o Liberapay como único canal aberto. **Pix e IBAN dormem** num bloco de comentário HTML entre os marcadores `ENCART-DORMANT-START` e `ENCART-DORMANT-END`.
+**Estado.** O Liberapay está no ar e recebeu sua primeira doação em 27/08. O encarte «apoiar financeiramente» está publicado nas dez locales e nomeia o Liberapay como único canal aberto. **Pix e IBAN dormem** num bloco de comentário HTML entre os marcadores `ENCART-DORMANT-START` e `ENCART-DORMANT-END`.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Lado Brasil: uma chave aleatória dedicada criada pela pessoa mandatada, e a abertura de uma conta no CNPJ — uma cooperativa de crédito é mais coerente que um banco comercial. Lado Europa: decidir qual conta recebe. Depois preencher os modelos, retirar os dois marcadores de comentário, e suprimir os dois parágrafos «em abertura».
 
@@ -2103,7 +2263,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado verificado em 29/08.** `FINANCES.md` está na raiz do repositório vitrine e dez páginas públicas são geradas a partir dele, por língua. O gerador sinaliza nominalmente toda célula não traduzida. Uma tabela distinta traz o que uma pessoa adiantou antes de o fundo existir — cerca de **228 € de março a agosto de 2026** — e a questão de saber se é uma dívida a reembolsar fica para a assembleia.
+**Estado.** `FINANCES.md` está na raiz do repositório vitrine e dez páginas públicas são geradas a partir dele, por língua. O gerador sinaliza nominalmente toda célula não traduzida. Uma tabela distinta traz o que uma pessoa adiantou antes de o fundo existir — cerca de **228 € de março a agosto de 2026** — e a questão de saber se é uma dívida a reembolsar fica para a assembleia.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Registrar cada receita e cada despesa continuamente, e reexecutar o gerador após cada edição.
 
@@ -2122,7 +2284,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado verificado em 29/08.** As páginas escritas à mão trazem `<html lang="pt-BR">`; `tools/build-privacy-pages.cjs` emite `lang="pt"`. **As páginas têm razão, o script está errado.**
+**Estado.** As páginas escritas à mão trazem `<html lang="pt-BR">`; `tools/build-privacy-pages.cjs` emite `lang="pt"`. **As páginas têm razão, o script está errado.**
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Corrigir o script para que emita a etiqueta completa, e verificar que o gerador das páginas de contas, construído no mesmo modelo, não reproduza o defeito.
 
@@ -2141,7 +2305,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** Oficina AnarBib em 12/09 pela manhã, assembleia aberta em 13. Um conjunto de 29 slides italiano-inglês está pronto, assim como um folheto manifesto bilíngue. Três objetivos anunciados: a gênese e a concepção, o panorama das funcionalidades, e **um chamado à participação**.
+**Estado.** Oficina AnarBib em 12/09 pela manhã, assembleia aberta em 13. Um conjunto de 29 slides italiano-inglês está pronto, assim como um folheto manifesto bilíngue. Três objetivos anunciados: a gênese e a concepção, o panorama das funcionalidades, e **um chamado à participação**.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Pedir o horário de intervenção à assembleia do dia 13, cronometrar a versão italiana em voz alta, imprimir o material em papel — nem todo mundo abre um PDF numa sala —, e ensaiar a demonstração **off-line**, caso a rede falte.
 
@@ -2161,7 +2327,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** **A mensagem foi enviada** — por volta de 19/08, três semanas antes do encontro, exatamente a janela visada: cedo o bastante para que olhassem o AnarBib sem que fosse urgente. **A oficina AnarBib é de manhã, a oficina leftove.rs à tarde do dia 12/09, mesma sala, mesmo dia.** O que continua aberto são as respostas e a preparação do dia.
+**Estado.** **A mensagem foi enviada** — por volta de 19/08, três semanas antes do encontro, exatamente a janela visada: cedo o bastante para que olhassem o AnarBib sem que fosse urgente. **A oficina AnarBib é de manhã, a oficina leftove.rs à tarde do dia 12/09, mesma sala, mesmo dia.** O que continua aberto são as respostas e a preparação do dia.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Retomar o contato se necessário, e preparar as três perguntas feitas para que sejam discutidas no local: o vocabulário de assuntos, o perfil de digitalização (eles têm 16 000 documentos ocerizados), e a NORLA e a cartografia. Mais a pergunta sobre auto-hospedagem ao coletivo técnico presente.
 
@@ -2180,7 +2348,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Em curso** · Carga : várias semanas · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** O material está entregue: 89 slides em português do Brasil, seis módulos, três encontros, seis exercícios práticos, notas de animação em cada slide. Nenhuma das duas pessoas é bibliotecária ou informática.
+**Estado.** O material está entregue: 89 slides em português do Brasil, seis módulos, três encontros, seis exercícios práticos, notas de animação em cada slide. Nenhuma das duas pessoas é bibliotecária ou informática.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Antes do primeiro encontro: criar em `blmf-teste` as duas contas de coordenação, uma ou duas contas de leitura fictícias, e as cinco fichas defeituosas do exercício 2. Depois o acompanhamento de oito semanas: cinco fichas por semana **todas com sua proveniência**, um dia de balcão por semana, uma consulta conduzida de ponta a ponta com negociação real, e o voto do perfil da biblioteca levado à assembleia.
 
@@ -2200,7 +2370,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : deliberação coletiva
 
-**Estado verificado em 29/08.** `ORIENTATION_outils_bibliotheques_militantes_2026-08-26` é um **esqueleto destinado a ser cossinado**. Seis pontos estão explicitamente a verificar ou decidir, e a seção final — a que carrega o chamado — resta escrever.
+**Estado.** `ORIENTATION_outils_bibliotheques_militantes_2026-08-26` é um **esqueleto destinado a ser cossinado**. Seis pontos estão explicitamente a verificar ou decidir, e a seção final — a que carrega o chamado — resta escrever.
+
+*Constato de 29/08, não reverificado desde então.*
 
 **O que é.** Listar alguns provedores associativos, verificar a vitalidade atual do PMB, verificar a licença exata do Pandora e o que implica a entrada de um arquivo parceiro, verificar o endereço de contato da rede ALN, decidir a linha «catálogo consultável, sem empréstimo» da tabela, fazer completar a descrição do AnarcosyndicalismeBOOK, e **escrever juntos a seção final «O que falta» — é o chamado**.
 

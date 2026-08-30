@@ -1623,7 +1623,11 @@
         "migration 20260702103557 (durcissement advisor 0028)",
         "baseline 20260510000000 lignes 61206-61220 (ALTER DEFAULT PRIVILEGES)",
         "tests/sql/paquetA_profils_tests.sql TEST 13 et TEST 15"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — les 33 fonctions passées une par une contre la base ; verdicts dans `docs/journal/audits/AUDIT_execute_anon_2026-08-30.md`. Lots 1, 2 et 4 livrés, gardés par T10.",
+        "pt": "30/08 — as 33 funções revistas uma a uma contra o banco; veredictos em `docs/journal/audits/AUDIT_execute_anon_2026-08-30.md`. Lotes 1, 2 e 4 entregues, guardados por T10."
+      }
     },
     {
       "id": "B14",
@@ -1673,7 +1677,11 @@
         "PLAN_DE_MARCHE règle 13.3",
         "AUDIT_securite_fonctions_privees_2026-05-18",
         "REGISTRE_decisions DOC-RPC-3"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — comptage direct : 138 fonctions de `api` sur 142 et 326 de `public` sur 498 ouvertes à `authenticated`. L'audit lui-même reste à faire.",
+        "pt": "30/08 — contagem direta: 138 funções de `api` em 142 e 326 de `public` em 498 abertas a `authenticated`. A auditoria em si continua por fazer."
+      }
     },
     {
       "id": "B4",
@@ -1803,7 +1811,11 @@
       },
       "r": [
         "Relevé du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — quatre homonymes relevés : `set_updated_at` (trivial) et trois qui touchent aux décisions éditoriales sur catalogue partenaire. Les corps n'ont pas été comparés.",
+        "pt": "30/08 — quatro homónimos levantados: `set_updated_at` (trivial) e três que tocam nas decisões editoriais sobre catálogo parceiro. Os corpos não foram comparados."
+      }
     },
     {
       "id": "B9",
@@ -1846,7 +1858,11 @@
       },
       "r": [
         "REGISTRE §BG2 BG2-9"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — le schéma pèse 6 tables et 0,1 Mo. Ce qui le lit encore n'a pas été cherché.",
+        "pt": "30/08 — o esquema pesa 6 tabelas e 0,1 Mo. O que ainda o lê não foi procurado."
+      }
     },
     {
       "id": "B10",
@@ -1936,7 +1952,11 @@
       "r": [
         "REGISTRE §18 OPAC-W1",
         "Relevé du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — `pg_stat_user_tables` : 1 ligne vivante, 9 092 insertions, 9 082 suppressions. Ce qui écrit puis efface reste inconnu.",
+        "pt": "30/08 — `pg_stat_user_tables`: 1 linha viva, 9 092 inserções, 9 082 supressões. O que escreve e depois apaga continua desconhecido."
+      }
     },
     {
       "id": "B12",
@@ -1984,7 +2004,11 @@
         "public.team_notification_outbox",
         "REGISTRE_decisions DOC-SILENCE-1",
         "_shared/context/library-mail-routing.ts"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — la table nommée par l'item n'existe pas ; les quatre lignes sont dans `public.team_notification_outbox`, dont une du 30/08. Constat refait, cause non instruite.",
+        "pt": "30/08 — a tabela nomeada pelo item não existe; as quatro linhas estão em `public.team_notification_outbox`, uma delas de 30/08. Constato refeito, causa não instruída."
+      }
     },
     {
       "id": "B13",
@@ -3439,7 +3463,11 @@
         "spec-flux-emprunts.md §10.2",
         "VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3",
         "PLAN_formation_coordination_BLMF §5"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — les onze crons dont le nom évoque une échéance relus un par un : aucun ne concerne le prêt aux lectrices. Le manque est confirmé.",
+        "pt": "30/08 — os onze crons cujo nome evoca um vencimento relidos um a um: nenhum diz respeito ao empréstimo às leitoras. A falta está confirmada."
+      }
     },
     {
       "id": "G1",
@@ -3666,7 +3694,11 @@
       },
       "r": [
         "PLAN_formation_coordination_BLMF §8"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — `library_mail_channels` interrogée : la BTL est à `platform_shared` / `active = true`. Ce que commande `is_test_mode` n'a pas été cherché.",
+        "pt": "30/08 — `library_mail_channels` consultada: a BTL está em `platform_shared` / `active = true`. O que `is_test_mode` comanda não foi procurado."
+      }
     },
     {
       "id": "G6",
@@ -4767,7 +4799,11 @@
         "tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)",
         "public.fn_v2_extend_core",
         "REGISTRE_decisions DOC-RPC-3"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — trouvé par l'exécution du test 3.03 de `paquet_emprestimos`, qui a obtenu `ok=false reason=not_renewable` sans exception. Le recensement des RPC concernées reste à faire.",
+        "pt": "30/08 — encontrado pela execução do teste 3.03 de `paquet_emprestimos`, que obteve `ok=false reason=not_renewable` sem exceção. O inventário das RPC em causa continua por fazer."
+      }
     },
     {
       "id": "J1",
