@@ -356,7 +356,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B2** | Triar as 36 funções `SECURITY DEFINER` abertas a `anon` | `P1` | Aberto |
+| **B2** | Triar as 36 funções `SECURITY DEFINER` abertas a `anon` | `P1` | Em curso |
 | **B14** | Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated` | `P2` | Aberto |
 | **B4** | Examinar as quatro tabelas com RLS sem policy que não são de trânsito | `P2` | Aberto |
 | **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | Aberto |
@@ -371,9 +371,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** Completado em 30/08. O Security Advisor do Supabase mostra **500 avisos**; a exportação CSV diz: são **dois lints e nada mais** — `anon_security_definer_function_executable` (0028) e `authenticated_security_definer_function_executable` (0029). Contado em produção: **36** funções executáveis por `anon`, **464** por `authenticated`, total exatamente 500.
+**Estado verificado em 29/08.** **Lotes 1 e 2 entregues em 30/08** — migração `20260830181207_un_grant_que_la_fonction_contredit`, testes `T8`/`T9` em `grants_herites_tests.sql`, CI verde, implantado. O contador do advisor passou de **500 para 497**: três exatamente, como anunciado. Restam os lotes 3 e 4.
+
+Completado em 30/08. O Security Advisor do Supabase mostra **500 avisos**; a exportação CSV diz: são **dois lints e nada mais** — `anon_security_definer_function_executable` (0028) e `authenticated_security_definer_function_executable` (0029). Contado em produção: **36** funções executáveis por `anon`, **464** por `authenticated`, total exatamente 500.
 
 **Não são 36 decisões.** O esquema `public` carrega, desde a base Supabase:
 
@@ -398,7 +400,7 @@ Quatro lotes, nesta ordem:
 
 1. `REVOKE EXECUTE … FROM anon` nos três grants que a função contradiz. Nenhuma mudança de comportamento: já recusavam.
 2. Um `COMMENT ON FUNCTION` nas cinco intocáveis, dizendo *por quê* e citando a contagem datada de policies. Sem ele, a próxima leitura do painel refará este trabalho — ou fará o revoke.
-3. **Inverter o padrão do esquema**: `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;`. Não muda nada nas 621 funções existentes — apenas nas seguintes. A partir daí, abrir a `anon` é um ato escrito, e uma abertura esquecida quebra uma página pública de forma visível em vez de expor uma função em silêncio. É uma decisão de doutrina: pede uma entrada no `REGISTRE_decisions`, não apenas uma migração.
+3. **Inverter o padrão do esquema**: `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;`. Não muda nada nas 621 funções existentes — apenas nas seguintes. A partir daí, abrir a `anon` é um ato escrito, e uma abertura esquecida quebra uma página pública de forma visível em vez de expor uma função em silêncio. É uma decisão de doutrina: pede uma entrada no `REGISTRE_decisions`, não apenas uma migração. **E tem um limite conhecido**: o cabeçalho de `grants_herites_tests.sql` o anota desde 29/08 para as tabelas — o padrão posto por `supabase_admin` não é modificável a partir de uma migração. O de `postgres` é, e é ele que se aplica às funções criadas pelas migrações; mas a plataforma pode repô-lo. Daí o último critério de fim: uma suíte, não apenas um `ALTER`.
 4. Passar as ~28 restantes pelo crivo da pergunta de auditoria de 18/05: *o que ela retorna, a partir de qual parâmetro, e o que impede um terceiro não conectado de pedi-lo?*
 
 **Antes de qualquer `REVOKE` nominal, verificar:**

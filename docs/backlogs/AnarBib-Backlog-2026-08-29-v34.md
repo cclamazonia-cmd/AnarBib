@@ -356,7 +356,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **B2** | Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon` | `P1` | Ouvert |
+| **B2** | Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon` | `P1` | En cours |
 | **B14** | Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated` | `P2` | Ouvert |
 | **B4** | Examiner les quatre tables à RLS sans policy qui ne sont pas du transit | `P2` | Ouvert |
 | **B5** | Résorber les neuf policies qui réévaluent `auth.*()` par ligne | `P2` | Ouvert |
@@ -371,9 +371,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### B2 — Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
 
-**État vérifié au 29/08.** Complété le 30/08. Le Security Advisor de Supabase affiche **500 avertissements** ; l'export CSV le dit : ce sont **deux lints et rien d'autre** — `anon_security_definer_function_executable` (0028) et `authenticated_security_definer_function_executable` (0029). Compté en production : **36** fonctions exécutables par `anon`, **464** par `authenticated`, total exactement 500.
+**État vérifié au 29/08.** **Lots 1 et 2 livrés le 30/08** — migration `20260830181207_un_grant_que_la_fonction_contredit`, tests `T8`/`T9` dans `grants_herites_tests.sql`, CI verte, déployé. Le compteur de l'advisor est passé de **500 à 497** : trois exactement, comme annoncé. Restent les lots 3 et 4.
+
+Complété le 30/08. Le Security Advisor de Supabase affiche **500 avertissements** ; l'export CSV le dit : ce sont **deux lints et rien d'autre** — `anon_security_definer_function_executable` (0028) et `authenticated_security_definer_function_executable` (0029). Compté en production : **36** fonctions exécutables par `anon`, **464** par `authenticated`, total exactement 500.
 
 **Ce ne sont pas 36 décisions.** Le schéma `public` porte, depuis le socle Supabase :
 
@@ -398,7 +400,7 @@ Quatre lots, dans cet ordre :
 
 1. `REVOKE EXECUTE … FROM anon` sur les trois grants que la fonction contredit. Aucun changement de comportement : elles refusaient déjà.
 2. Un `COMMENT ON FUNCTION` sur les cinq intouchables, qui dit *pourquoi* et cite le décompte de policies daté. Sans lui, la prochaine lecture du tableau de bord refera ce travail — ou fera le revoke.
-3. **Retourner le défaut du schéma** : `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;`. Ne change rien aux 621 fonctions existantes — seulement aux suivantes. À partir de là, ouvrir à `anon` est un acte écrit, et une ouverture oubliée casse une page publique de façon visible au lieu d'exposer une fonction en silence. C'est une décision de doctrine : elle demande une entrée au `REGISTRE_decisions`, pas seulement une migration.
+3. **Retourner le défaut du schéma** : `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;`. Ne change rien aux 621 fonctions existantes — seulement aux suivantes. À partir de là, ouvrir à `anon` est un acte écrit, et une ouverture oubliée casse une page publique de façon visible au lieu d'exposer une fonction en silence. C'est une décision de doctrine : elle demande une entrée au `REGISTRE_decisions`, pas seulement une migration. **Et elle a une limite connue** : le chapeau de `grants_herites_tests.sql` la note depuis le 29/08 pour les tables — le défaut posé par `supabase_admin` n'est pas modifiable depuis une migration. Celui de `postgres` l'est, et c'est celui qui s'applique aux fonctions créées par les migrations ; mais la plateforme peut le reposer. D'où le dernier critère de fin : une suite, pas seulement un `ALTER`.
 4. Passer les ~28 restantes au crible de la question d'audit du 18/05 : *que renvoie-t-elle, à partir de quel paramètre, et qu'est-ce qui interdit à un tiers non connecté de le demander ?*
 
 **Avant tout `REVOKE` nominatif, vérifier :**
