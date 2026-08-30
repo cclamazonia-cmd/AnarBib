@@ -5,8 +5,10 @@
 --
 -- Couvre les GARDES de fn_v2_create_reserva_by_holdings (SECDEF) + le câblage de
 -- fn_v2_refresh_reserva_status_global. Le happy-path E2E (create→annulation +
--- invariant entête↔lignes) est en SKIP tant que le seed ne fournit pas de
--- holding/exemplaire (à étoffer). Fixtures dynamiques (pas d'UUID en dur).
+-- invariant entête↔lignes) reste en SKIP, mais plus pour la raison écrite en
+-- juin : le seed fournit désormais holdings et exemplaires. Deux règles du
+-- modèle restent à établir — voir le commentaire de la section 2.xx.
+-- Fixtures dynamiques (pas d'UUID en dur).
 --   Bilan OK : 'RESERVAS OK : N/N tests passés (S skips)'
 -- =====================================================================
 DO $$
@@ -53,25 +55,62 @@ BEGIN
   PERFORM set_config('request.jwt.claims','',true);
   END IF;
 
-  -- 1.04 — fn_v2_refresh_reserva_status_global est câblée (callable, pas de crash sur id absent)
-  v_t:='1.04 refresh_reserva_status_global câblée';
+  -- 1.04 — fn_v2_refresh_reserva_status_global est câblée.
+  -- Réécrit le 30/08/2026 (item I15). Les DEUX branches comptaient un succès :
+  -- « renvoie sans planter = OK » et « lève proprement = OK aussi ». Un test
+  -- dont toutes les issues passent ne teste rien — et sa branche EXCEPTION
+  -- était morte de toute façon : la fonction ne contient aucun RAISE.
+  -- On sépare ce que « câblée » veut dire en deux affirmations vérifiables.
+  v_t:='1.04a refresh_reserva_status_global existe avec la signature attendue';
+  IF to_regprocedure('public.fn_v2_refresh_reserva_status_global(bigint)') IS NOT NULL THEN
+    v_passed:=v_passed+1;
+  ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : introuvable (renommée ? signature changée ?)'); END IF;
+
+  v_t:='1.04b refresh_reserva_status_global ne lève pas sur un id absent';
   BEGIN
     v_txt := public.fn_v2_refresh_reserva_status_global(999999999);
-    v_passed:=v_passed+1;  -- renvoie (NULL/texte) sans planter = OK
+    v_passed:=v_passed+1;
   EXCEPTION WHEN OTHERS THEN
-    v_passed:=v_passed+1;  -- lève proprement sur id absent = OK aussi (les deux acceptables)
+    v_failed:=v_failed+1;
+    v_failures:=v_failures||(v_t||' : a levé ['||SQLSTATE||'] '||SQLERRM
+      ||' — le rafraîchissement est appelé depuis des triggers, il doit tolérer une ligne disparue');
   END;
 
-  -- 2.xx — happy-path create→annulation + invariant entête↔lignes (SKIP : pas de holding seedé)
-  SELECT id INTO v_holding FROM public.book_holdings WHERE library_id=c_blmf LIMIT 1;
+  -- 2.xx — happy-path create→annulation + invariant entête↔lignes.
+  -- TOUJOURS EN SKIP au 30/08/2026, mais le motif change — et c'est le sujet.
+  -- L'ancien disait « exemplaire + workflow requis » : faux depuis que le seed
+  -- fournit livres, holdings et exemplaires. Le pendant côté emprunts a été
+  -- écrit ce jour-là (paquet_emprestimos section 3), toutes ses préconditions
+  -- ayant été vérifiées une par une.
+  --
+  -- Ici DEUX règles restent à établir avant d'écrire quoi que ce soit :
+  --   1. ce qui remplit `v_unavailable` dans fn_v2_create_reserva_by_holdings
+  --      (« Sem exemplares disponíveis para reserva ») : réserve-t-on quand un
+  --      exemplaire est libre, ou seulement quand tout est sorti ? Le seed pose
+  --      un exemplaire libre sur TEST-CIRC-1 ; la réponse décide du holding.
+  --   2. ce que rend `api.resolve_circulation_rule(p_mode := 'reservation')`
+  --      pour `blmf-test`, qui n'a aucune politique de circulation configurée.
+  --      Si `reservation_allowed` y est faux par défaut, aucun E2E réservation
+  --      n'est possible sans étoffer le seed d'une politique.
+  --
+  -- Écrire le test avant de trancher ces deux points, ce serait parier — et un
+  -- test qui échoue pour une précondition non tenue coûte plus cher qu'un skip
+  -- qui dit ce qu'il attend. Celui-ci le dit.
+  SELECT h.id INTO v_holding
+    FROM public.book_holdings h JOIN public.books b ON b.id = h.book_id
+   WHERE h.library_id = c_blmf AND b.bib_ref = 'TEST-CIRC-1'
+   LIMIT 1;
   IF v_holding IS NULL THEN
-    v_skipped:=v_skipped+1; v_skips:=v_skips|| text '2.xx happy-path : aucun book_holding BLMF seedé (étoffer seed.sql)';
+    v_skipped:=v_skipped+1;
+    v_skips:=v_skips|| text '2.xx : le seed ne fournit plus le holding TEST-CIRC-1 (supabase/seed.sql)';
   ELSE
-    v_skipped:=v_skipped+1; v_skips:=v_skips|| text '2.xx happy-path : holding présent, E2E à écrire (exemplaire + workflow requis)';
+    v_skipped:=v_skipped+1;
+    v_skips:=v_skips|| text '2.xx happy-path : deux règles à établir d''abord — remplissage de v_unavailable, et reservation_allowed pour une biblio sans politique de circulation (voir le commentaire du test)';
   END IF;
 
   IF v_failed = 0 THEN
-    RAISE EXCEPTION 'RESERVAS OK : %/% tests passés (% skips)%', v_passed, (v_passed+v_failed), v_skipped,
+    -- Dénominateur incluant les skips (30/08/2026, item I15).
+    RAISE EXCEPTION 'RESERVAS OK : %/% tests passés (% skips)%', v_passed, (v_passed+v_failed+v_skipped), v_skipped,
       CASE WHEN v_skipped>0 THEN ' | SKIPS: '||array_to_string(v_skips,' ; ') ELSE '' END;
   ELSE
     RAISE EXCEPTION 'RESERVAS ECHEC : %/% OK, % échec(s) | %', v_passed, (v_passed+v_failed), v_failed, array_to_string(v_failures,' || ');

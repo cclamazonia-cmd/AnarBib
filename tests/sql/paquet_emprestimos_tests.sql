@@ -6,8 +6,10 @@
 --
 -- Couvre : (1) la MATRICE d'autorisation fn_check_loan_action (action × rôle ×
 -- statut — déterministe, sans fixture) ; (2) les GARDES des wrappers api.* (anon /
--- non-staff / non-propriétaire rejetés). Le happy-path E2E (create→renew→return)
--- est en SKIP tant que le seed ne fournit pas de holding/exemplaire (à étoffer).
+-- non-staff / non-propriétaire rejetés) ; (3) le happy-path E2E complet
+-- create→renew→return, écrit le 30/08/2026 (item I15) une fois que le seed a
+-- fourni livre, holding et exemplaires. Il était en SKIP depuis le 19/06 pour
+-- « exemplaire requis » — motif devenu faux sans que personne ne le relise.
 --   Bilan OK : 'EMPRESTIMOS OK : N/N tests passés (S skips)'
 -- =====================================================================
 DO $$
@@ -16,6 +18,9 @@ DECLARE
   v_failures text[] := ARRAY[]::text[]; v_skips text[] := ARRAY[]::text[]; v_t text;
   c_blmf constant uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';
   v_outsider uuid; v_holding bigint; v_ok boolean; v_json jsonb;
+  c_coord    constant uuid := '11111111-1111-1111-1111-111111111111';
+  c_leitor_b constant uuid := '44444444-4444-4444-4444-444444444444';
+  v_loan bigint; v_due_avant date; v_due_apres date; v_n int; v_txt text;
 BEGIN
   -- ── SECTION 1 : matrice fn_check_loan_action (pure, déterministe) ──
   -- create_loan_at_counter = staff (librarian|coordenador) uniquement
@@ -103,17 +108,126 @@ BEGIN
   PERFORM set_config('request.jwt.claims','',true);
   END IF;
 
-  -- ── SECTION 3 : happy-path create→renew→return (SKIP si pas de holding seedé) ──
-  SELECT id INTO v_holding FROM public.book_holdings WHERE library_id=c_blmf LIMIT 1;
+  -- ── SECTION 3 : happy-path create→renew→return, de bout en bout ──
+  -- Ecrite le 30/08/2026 (item I15). Elle etait en SKIP depuis le 19/06 avec
+  -- le motif « exemplaire requis » : vrai a l'epoque, faux depuis que le seed
+  -- fournit livre, holding et exemplaires. Un motif de skip decrit un etat
+  -- passe et lui survit ; celui-ci a tenu deux mois apres sa peremption.
+  --
+  -- Le holding est choisi PAR SA REFERENCE, pas par LIMIT 1 : le seed en pose
+  -- trois sur BLMF, et deux sont volontairement bloques (l'un sous consulta,
+  -- l'autre sous reservation). Un LIMIT 1 tombait sur l'un d'eux une fois sur
+  -- trois et le test aurait echoue pour une raison etrangere a ce qu'il teste.
+  SELECT h.id INTO v_holding
+    FROM public.book_holdings h JOIN public.books b ON b.id = h.book_id
+   WHERE h.library_id = c_blmf AND b.bib_ref = 'TEST-CIRC-1'
+   LIMIT 1;
+
   IF v_holding IS NULL THEN
-    v_skipped:=v_skipped+1; v_skips:=v_skips|| text '3.xx happy-path : aucun book_holding BLMF seedé (étoffer seed.sql : livre+holding+exemplaire)';
+    v_skipped:=v_skipped+1;
+    v_skips:=v_skips|| text '3.xx : le seed ne fournit plus le holding TEST-CIRC-1 (supabase/seed.sql)';
   ELSE
-    v_skipped:=v_skipped+1; v_skips:=v_skips|| text '3.xx happy-path : holding présent mais E2E non encore écrit (exemplaire requis)';
+    -- 3.01 — la coordination prete au comptoir pour le lecteur B.
+    v_t:='3.01 create_loan_at_counter par la coordination';
+    BEGIN
+      SET LOCAL ROLE authenticated;
+      PERFORM set_config('request.jwt.claims',
+        '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
+      SELECT emprestimo_id INTO v_loan
+        FROM api.create_loan_at_counter(c_leitor_b, ARRAY[v_holding]::bigint[], NULL, 'E2E paquet emprestimos')
+       LIMIT 1;
+      RESET ROLE;
+      IF v_loan IS NULL THEN
+        v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : aucun emprestimo_id renvoye');
+      ELSE v_passed:=v_passed+1; END IF;
+    EXCEPTION WHEN OTHERS THEN
+      RESET ROLE;
+      v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : ['||SQLSTATE||'] '||SQLERRM);
+    END;
+
+    IF v_loan IS NULL THEN
+      v_skipped:=v_skipped+1;
+      v_skips:=v_skips|| text '3.02-3.05 : sans emprunt cree, la suite du chemin n''a rien a verifier';
+    ELSE
+      -- 3.02 — l'entete est ouverte et porte exactement une ligne ouverte.
+      v_t:='3.02 l''emprunt cree est aberto avec une ligne aberto';
+      RESET ROLE;
+      SELECT count(*) INTO v_n
+        FROM public.emprestimos_v2 e JOIN public.emprestimo_itens_v2 i ON i.emprestimo_id = e.id
+       WHERE e.id = v_loan AND e.status_global = 'aberto' AND i.item_status = 'aberto';
+      IF v_n = 1 THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||v_n||' ligne(s) ouverte(s) au lieu d''une'); END IF;
+
+      -- 3.03 — le lecteur B renouvelle SON emprunt : l'echeance recule.
+      v_t:='3.03 renew_my_loan par le lecteur B recule l''echeance';
+      SELECT max(due_at) INTO v_due_avant FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
+      BEGIN
+        SET LOCAL ROLE authenticated;
+        PERFORM set_config('request.jwt.claims',
+          '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
+        PERFORM api.renew_my_loan(v_loan);
+        RESET ROLE;
+        SELECT max(due_at) INTO v_due_apres FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
+        IF v_due_apres > v_due_avant THEN v_passed:=v_passed+1;
+        ELSE v_failed:=v_failed+1;
+          v_failures:=v_failures||(v_t||' : echeance inchangee ('||coalesce(v_due_avant::text,'NULL')
+            ||' -> '||coalesce(v_due_apres::text,'NULL')||') -- le renouvellement n''a rien fait');
+        END IF;
+      EXCEPTION WHEN OTHERS THEN
+        RESET ROLE;
+        v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : ['||SQLSTATE||'] '||SQLERRM);
+      END;
+
+      -- 3.04 — la coordination rend la totalite : entete close, ligne rendue.
+      v_t:='3.04 return_loan_total par la coordination clot l''emprunt';
+      BEGIN
+        SET LOCAL ROLE authenticated;
+        PERFORM set_config('request.jwt.claims',
+          '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
+        -- Second argument a NULL, comme en 2.04 : sa semantique (note ? motif
+        -- code ?) n'est pas etablie ici, et un test ne doit pas parier dessus.
+        PERFORM api.return_loan_total(v_loan, NULL);
+        RESET ROLE;
+        SELECT count(*) INTO v_n
+          FROM public.emprestimos_v2 e JOIN public.emprestimo_itens_v2 i ON i.emprestimo_id = e.id
+         WHERE e.id = v_loan AND e.status_global = 'encerrado' AND i.item_status = 'devolvido';
+        IF v_n = 1 THEN v_passed:=v_passed+1;
+        ELSE
+          SELECT e.status_global||'/'||coalesce(string_agg(i.item_status,','),'(aucune ligne)')
+            INTO v_txt
+            FROM public.emprestimos_v2 e LEFT JOIN public.emprestimo_itens_v2 i ON i.emprestimo_id = e.id
+           WHERE e.id = v_loan GROUP BY e.status_global;
+          v_failed:=v_failed+1;
+          v_failures:=v_failures||(v_t||' : etat obtenu '||coalesce(v_txt,'(emprunt introuvable)'));
+        END IF;
+      EXCEPTION WHEN OTHERS THEN
+        RESET ROLE;
+        v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : ['||SQLSTATE||'] '||SQLERRM);
+      END;
+
+      -- 3.05 — l'exemplaire est de nouveau pretable.
+      -- C'est l'invariant que le reste du chemin ne verifie pas : un retour qui
+      -- clot l'entete sans liberer l'exemplaire laisse un fantome au rayon.
+      v_t:='3.05 l''exemplaire rendu ne porte plus de ligne ouverte';
+      RESET ROLE;
+      SELECT count(*) INTO v_n
+        FROM public.emprestimo_itens_v2 i
+        JOIN public.exemplares e ON e.id = i.item_id
+       WHERE e.holding_id = v_holding AND i.item_status = 'aberto' AND i.emprestimo_id = v_loan;
+      IF v_n = 0 THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||v_n||' ligne(s) encore ouverte(s)'); END IF;
+    END IF;
   END IF;
+
+  RESET ROLE;
+  PERFORM set_config('request.jwt.claims','',true);
 
   -- ── BILAN ──
   IF v_failed = 0 THEN
-    RAISE EXCEPTION 'EMPRESTIMOS OK : %/% tests passés (% skips)%', v_passed, (v_passed+v_failed), v_skipped,
+    -- Denominateur incluant les skips (30/08/2026, item I15) : sans cela, un
+    -- test qui bascule de PASSE a SKIP disparait des deux termes et la suite
+    -- reste verte en testant moins.
+    RAISE EXCEPTION 'EMPRESTIMOS OK : %/% tests passés (% skips)%', v_passed, (v_passed+v_failed+v_skipped), v_skipped,
       CASE WHEN v_skipped>0 THEN ' | SKIPS: '||array_to_string(v_skips,' ; ') ELSE '' END;
   ELSE
     RAISE EXCEPTION 'EMPRESTIMOS ECHEC : %/% OK, % échec(s) | %', v_passed, (v_passed+v_failed), v_failed, array_to_string(v_failures,' || ');
