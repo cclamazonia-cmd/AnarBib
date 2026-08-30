@@ -1416,7 +1416,11 @@ Et parce que la façon dont c'est apparu vaut d'être notée : aucune relecture 
 
 `P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
 
-**État.** **Mesuré le 30/08, après ouverture de l'item.** Il y a bien trois arbres `_shared` sous `supabase/functions/`, mais ils ne pèsent pas le même poids : celui de `catalog_metadata_lookup` ne contient qu'un `cors.ts` sans équivalent canonique — ce n'est pas une duplication. Le cas réel est `notify-internal-task`.
+**État.** **La divergence de signature est refermée le 30/08.** `resolveMailRouting` de la copie accepte désormais une locale et lit `signature_short_i18n[locale]`, à l'identique du canonique ; `renderEmail` la transmet, et les trois envois du gestionnaire passent la leur — elle était déjà calculée quatre lignes plus haut à chaque fois, par `normalizeTaskLocale`. Un avis de tâche à la BLMF est maintenant signé dans la langue de qui le lit. Gardé par `src/tests/notify-internal-task-signature.test.js`, 6 tests qui exercent le vrai fichier sur le contexte réel de la BLMF — dont un qui vérifie que **sans locale, le comportement est exactement celui d'avant**.
+
+**Ce qui reste ouvert, et c'est le gros :** les 9 fichiers d'infrastructure dupliqués. Le relevé ci-dessous ne bouge pas.
+
+**Mesuré le 30/08, après ouverture de l'item.** Il y a bien trois arbres `_shared` sous `supabase/functions/`, mais ils ne pèsent pas le même poids : celui de `catalog_metadata_lookup` ne contient qu'un `cors.ts` sans équivalent canonique — ce n'est pas une duplication. Le cas réel est `notify-internal-task`.
 
 Ses 12 fichiers se répartissent ainsi : **3 sont légitimement privés** (`data/internal-tasks.ts`, `handlers/internal-task.ts`, `i18n/task-mail-strings.ts`, absents du canonique) et **9 sont de l'infrastructure dupliquée, toute divergente** — `library-mail-routing` (116 lignes d'écart), `library-notification-context` (122), `mail/layout` (140), `transport/email` (121), `shared/format` (89), `context/policies` (42), `core/webhook` (30), `core/env` (10), `shared/branding` (4). Environ **694 lignes** au total.
 
@@ -1442,14 +1446,14 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 **Ce qui compte comme fini.**
 
-- La divergence de signature localisée est refermée : un avis de tâche à la BLMF est signé dans la langue de qui le lit.
+- ~~La divergence de signature localisée est refermée~~ — fait le 30/08, gardé par 6 tests.
 - Le sort des 9 fichiers d'infrastructure dupliqués est tranché — réunis, ou assumés par écrit.
 - Un en-tête dans `notify-internal-task/_shared/` dit ce qui y vit et pourquoi.
 - La collision de nom sur `resolveLibraryLogoUrl` est levée.
 
 **Dépendances.** Aucune. Le relevé est fait — il est dans cet item. Ce qui reste est une décision de portée, pas une enquête.
 
-*Renvois : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026`*
+*Renvois : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026` · `src/tests/notify-internal-task-signature.test.js`*
 
 ---
 

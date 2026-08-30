@@ -14,7 +14,10 @@ export function footerPadrao(context) {
   return pieces.join("<br>");
 }
 export function renderEmail(opts) {
-  const routing = resolveMailRouting(opts.context);
+  // opts.locale : ajoutee le 30/08/2026 (item F6) pour que la signature de pied
+  // de page suive la langue du message. Absente, le comportement est celui
+  // d'avant — repli sur `signature_short`.
+  const routing = resolveMailRouting(opts.context, opts.locale ?? null);
   const pre = opts.preheader ? esc(opts.preheader) : "";
   const greeting = opts.greeting ? `<p style="margin:0 0 12px;font-size:16px;line-height:1.5;">${esc(opts.greeting)}</p>` : "";
   const details = opts.details?.length ? `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:14px 0 0;border-collapse:collapse;">

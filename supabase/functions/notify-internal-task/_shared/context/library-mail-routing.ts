@@ -59,11 +59,27 @@ export function policyEnabled(ctx, key, fallback = true) {
   const value = ctx?.[key];
   return typeof value === "boolean" ? value : fallback;
 }
-export function resolveMailRouting(ctx) {
+export function resolveMailRouting(ctx, locale = null) {
   const senderName = String(ctx?.sender_display_name || (ctx?.use_library_name_as_sender !== false ? ctx?.library_short_name || ctx?.library_name || "" : "") || SENDER_NAME).trim() || SENDER_NAME;
   const replyToEmail = String(ctx?.delivery_mode === "platform_shared_local_reply" || ctx?.delivery_mode === "library_own_transport" ? ctx?.reply_to_email || ctx?.admin_notification_email || "" : "").trim() || null;
   const footerPieces = [];
-  if (ctx?.signature_short) footerPieces.push(String(ctx.signature_short).trim());
+  // SIGNATURE-LOCALISEE (30/08/2026, item F6). Cette copie ne lisait que
+  // `signature_short`, le champ texte simple, et ne recevait meme pas de locale
+  // — alors que le module canonique prefere `signature_short_i18n[locale]`
+  // depuis le chantier i18n layout. Consequence constatee : la BLMF a sa
+  // signature courte en SIX langues, et ses avis de tache interne partaient
+  // signes « Equipe da BLMF » a tout le monde, quand tous ses autres courriels
+  // disaient « L'equipe de la BLMF » a qui lit en francais.
+  //
+  // La locale existait pourtant a chaque envoi (normalizeTaskLocale, depuis
+  // preferred_language ou default_locale) : elle n'etait simplement jamais
+  // transmise jusqu'ici. Repli inchange sur `signature_short` quand la biblio
+  // n'a pas rempli la version localisee, ou quand aucune locale n'est passee.
+  const sigI18n = (ctx?.signature_short_i18n && typeof ctx.signature_short_i18n === "object") ? ctx.signature_short_i18n : null;
+  const sigForLocale = locale && sigI18n ? String(sigI18n[locale] || "").trim() : "";
+  const sigFallback = String(ctx?.signature_short || "").trim();
+  const sig = sigForLocale || sigFallback;
+  if (sig) footerPieces.push(sig);
   if (ctx?.footer_local) footerPieces.push(String(ctx.footer_local).trim());
   if (!footerPieces.length) footerPieces.push(FOOTER_TEXT);
   const networkLogoUrl = resolveNetworkLogoUrl();

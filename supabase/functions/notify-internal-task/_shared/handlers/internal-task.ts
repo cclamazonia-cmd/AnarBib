@@ -239,7 +239,8 @@ async function handleTaskLevelNotice(payload, taskId, recipientRole) {
     introHtml: email.introHtml,
     details: email.details,
     footerHtml: footerPadrao(notificationContext),
-    context: notificationContext
+    context: notificationContext,
+    locale
   });
   const brandedSubject = applyBrandingText(email.subject, notificationContext);
   const label = recipientRole === "library" ? "task_library_notice" : "task_owner_notice";
@@ -367,7 +368,8 @@ async function handleTaskInvitation(payload, taskId) {
     introHtml: email.introHtml,
     details: email.details,
     footerHtml: footerPadrao(notificationContext),
-    context: notificationContext
+    context: notificationContext,
+    locale
   });
   const brandedSubject = applyBrandingText(email.subject, notificationContext);
   const result = taskAlertsEnabled(notificationContext) ? await safeSendEmail(target, brandedSubject, html, text, "task_invitation", notificationContext) : skippedEmailResult("task_invitation", "task_alerts_disabled", recipientEmail);
@@ -452,7 +454,8 @@ export async function handleInternalTaskNotification(payload) {
     introHtml: email.introHtml,
     details: email.details,
     footerHtml: footerPadrao(ctx),
-    context: ctx
+    context: ctx,
+    locale
   });
   const brandedSubject = applyBrandingText(email.subject, ctx);
   const result = taskAlertsEnabled(ctx) ? await safeSendEmail(target, brandedSubject, html, text, "task_owner", ctx) : skippedEmailResult("task_owner", "task_alerts_disabled", ownerEmail);
