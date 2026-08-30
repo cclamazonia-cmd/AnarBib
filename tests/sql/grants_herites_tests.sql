@@ -20,6 +20,13 @@
 --
 -- T3 est un test de NON-ACTION : le nettoyage ne doit pas avoir rogne les
 -- droits metier. Un REVOKE trop large passerait T1 et T2 sans broncher.
+--
+-- T8 et T9, ajoutes le 30/08/2026 (item B2), portent la meme logique sur les
+-- droits EXECUTE des FONCTIONS -- ou le meme ALTER DEFAULT PRIVILEGES accorde
+-- `anon` sur chaque fonction neuve. T9 garde dans le sens inverse des autres :
+-- cinq fonctions ne doivent JAMAIS perdre `anon`, parce que des policies
+-- evaluees par `anon` les appellent. Les fermer ne fermerait rien -- ca ferait
+-- echouer la lecture publique.
 --   Bilan OK : 'GRANTS-HERITES OK : N/N'
 -- =====================================================================
 DO $$
@@ -143,6 +150,59 @@ BEGIN
                       AND g.privilege_type = 'SELECT');
     IF v_n = 0 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' -> '||left(v_txt, 200)); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- T8 et T9 : les droits EXECUTE sur les fonctions (item B2, 30/08/2026).
+  -- Meme logique que T1 : le schema `public` porte un ALTER DEFAULT PRIVILEGES
+  -- qui accorde EXECUTE a `anon` sur CHAQUE fonction neuve. Un REVOKE ponctuel
+  -- ne tient donc que jusqu'au prochain CREATE OR REPLACE FUNCTION -- qui,
+  -- lui, ne recree pas l'ACL, mais un DROP + CREATE si. C'est une liste qui se
+  -- verifie, pas une intention.
+  v_t := 'T8 les trois fonctions dont le corps refuse anon ne lui sont plus accordees';
+  -- search_authors_by_name et search_publishers_by_name levent « Acesso restrito
+  -- ao staff de catalogacao. » ; remove_library_regulation_document leve
+  -- « authentication required ». Le grant contredisait la fonction.
+  BEGIN
+    SELECT count(*), coalesce(string_agg(f.sig, ', ' ORDER BY f.sig), '')
+      INTO v_n, v_txt
+      FROM (VALUES
+        ('public.search_authors_by_name(text,integer)'),
+        ('public.search_publishers_by_name(text,integer)'),
+        ('public.remove_library_regulation_document(bigint)')
+      ) AS f(sig)
+     WHERE has_function_privilege('anon', f.sig::regprocedure, 'EXECUTE');
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : rouvert(es) a anon -> '||v_txt);
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T9 les cinq fonctions appelees par des policies evaluees par anon lui restent accordees';
+  -- LE TEST LE PLUS IMPORTANT DE CETTE SUITE, et il garde dans l'autre sens.
+  -- Ces cinq-la sont appelees DEPUIS L'INTERIEUR de 107 policies RLS, dont 39
+  -- evaluees par `anon`. Leur retirer EXECUTE ne ferme rien : la lecture
+  -- publique echoue avec « permission denied for function » et le catalogue
+  -- cesse de s'afficher. Quiconque lit « 36 avertissements 0028 » sur le
+  -- tableau de bord et decide de faire le menage tombera sur ce test avant de
+  -- tomber sur un catalogue vide.
+  BEGIN
+    SELECT count(*), coalesce(string_agg(f.sig, ', ' ORDER BY f.sig), '')
+      INTO v_n, v_txt
+      FROM (VALUES
+        ('public.user_can_act_as_staff_on_library(uuid)'),
+        ('public.user_can_engage_library(uuid)'),
+        ('public.fn_caller_is_network_admin()'),
+        ('public.fn_library_visible_to_caller(uuid)'),
+        ('public.fn_caller_is_library_staff(uuid)')
+      ) AS f(sig)
+     WHERE NOT has_function_privilege('anon', f.sig::regprocedure, 'EXECUTE');
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : fermee(s) a anon -> '||v_txt
+        ||' -- la lecture publique echouera avec « permission denied for function »');
+    END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
