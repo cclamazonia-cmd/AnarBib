@@ -371,25 +371,37 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### B2 — Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
 
-**État vérifié au 29/08.** Complété le 30/08. Le Security Advisor de Supabase affiche **500 avertissements** ; l'export CSV le dit : ce sont **deux lints et rien d'autre** — `anon_security_definer_function_executable` (0028) et `authenticated_security_definer_function_executable` (0029). Compté en production : **36** fonctions exécutables par `anon`, **464** par `authenticated`, total exactement 500. Les 36 sont **toutes** l'objet d'un `GRANT … TO anon` explicite : aucune n'hérite de `PUBLIC`. Ce ne sont pas 36 oublis, ce sont 36 décisions écrites quelque part dans une migration.
+**État vérifié au 29/08.** Complété le 30/08. Le Security Advisor de Supabase affiche **500 avertissements** ; l'export CSV le dit : ce sont **deux lints et rien d'autre** — `anon_security_definer_function_executable` (0028) et `authenticated_security_definer_function_executable` (0029). Compté en production : **36** fonctions exécutables par `anon`, **464** par `authenticated`, total exactement 500.
 
-Relues une par une, elles se répartissent en trois groupes de tailles très inégales :
+**Ce ne sont pas 36 décisions.** Le schéma `public` porte, depuis le socle Supabase :
 
-1. **Cinq intouchables.** `user_can_act_as_staff_on_library`, `fn_library_visible_to_caller`, `user_can_engage_library`, `fn_caller_is_network_admin`, `fn_caller_is_library_staff` sont appelées par **107 policies RLS, dont 39 sont évaluées par `anon`**. Leur retirer `EXECUTE` ne ferme rien : cela fait échouer la lecture publique avec `permission denied for function`. L'avertissement 0028 est ici le prix d'une architecture, pas un défaut.
-2. **Une vingtaine d'usages anonymes réels** : catalogue public (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), les quatre lecteurs de mode, le moissonnage OAI, le parcours de candidature d'une bibliothèque par jeton (`fn_get_library_request_claim_context`, `fn_consume_library_request_claim`, `fn_submit_library_request*`).
-3. **Trois grants morts**, et c'est là qu'est le vrai défaut : `search_authors_by_name`, `search_publishers_by_name` et `remove_library_regulation_document` **refusent `anon` dans leur propre corps** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`). Le grant contredit la fonction.
+```sql
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
+  GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
+```
 
-**Ce que c'est.** Reprendre le critère déjà énoncé par le durcissement du 02/07/2026 — *lire un mode est public, juger un droit ne l'est pas* — mais avec la correction que ce relevé impose : **un prédicat de droit appelé par une policy évaluée par `anon` doit rester ouvert à `anon`.** La règle complète est donc : est ouvert à `anon` ce qui sert une page publique, ou ce qu'une policy évaluée par `anon` appelle. Rien d'autre.
+Les 621 fonctions de `public` appartiennent toutes à `postgres`. **Toute fonction créée dans `public` naît donc exécutable par `anon`**, sans qu'aucune migration ne l'ait demandé. Ce défaut figure dans le baseline (`20260510000000_baseline_live.sql`), donc la CI le rejoue à l'identique : ce n'est pas une dérive de production.
 
-Trois lots, dans cet ordre :
+La contre-preuve est dans le dépôt : **141 lignes `REVOKE … anon`** réparties dans les migrations, et trois lots de durcissement en masse les 17, 19 et 20/08. Le projet corrige ce défaut une fonction à la fois depuis des mois. Il en reste 79 ouvertes à `anon` dans `public` (33 en `SECURITY DEFINER`, 46 en `SECURITY INVOKER`, où la RLS s'applique encore), plus 3 dans `api`.
 
-1. `REVOKE EXECUTE … FROM anon` sur les trois grants morts. Aucun changement de comportement : les fonctions refusaient déjà.
-2. Un `COMMENT ON FUNCTION` sur les cinq intouchables, qui dit *pourquoi* et cite le décompte de policies. Sans ce commentaire, la prochaine lecture du tableau de bord recommencera ce travail — ou pire, fera le revoke.
-3. Passer les ~28 restantes au crible de la question d'audit du 18/05 : *que renvoie-t-elle, à partir de quel paramètre, et qu'est-ce qui interdit à un tiers non connecté de le demander ?*
+Relues une par une, les 36 se répartissent en trois groupes très inégaux :
 
-**Avant tout `REVOKE`, vérifier :**
+1. **Cinq intouchables.** `user_can_act_as_staff_on_library`, `fn_library_visible_to_caller`, `user_can_engage_library`, `fn_caller_is_network_admin`, `fn_caller_is_library_staff` sont appelées par **107 policies RLS, dont 39 évaluées par `anon`**. Leur retirer `EXECUTE` ne ferme rien : cela fait échouer la lecture publique avec `permission denied for function`.
+2. **Une vingtaine d'usages anonymes réels** : catalogue public (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), les quatre lecteurs de mode, le moissonnage OAI, le parcours de candidature d'une bibliothèque par jeton.
+3. **Trois grants que la fonction elle-même contredit** : `search_authors_by_name`, `search_publishers_by_name` et `remove_library_regulation_document` **refusent `anon` dans leur propre corps** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`).
+
+**Ce que c'est.** La règle, corrigée par ce relevé : **est ouvert à `anon` ce qui sert une page publique, ou ce qu'une policy évaluée par `anon` appelle. Rien d'autre — et surtout pas par défaut.**
+
+Quatre lots, dans cet ordre :
+
+1. `REVOKE EXECUTE … FROM anon` sur les trois grants que la fonction contredit. Aucun changement de comportement : elles refusaient déjà.
+2. Un `COMMENT ON FUNCTION` sur les cinq intouchables, qui dit *pourquoi* et cite le décompte de policies daté. Sans lui, la prochaine lecture du tableau de bord refera ce travail — ou fera le revoke.
+3. **Retourner le défaut du schéma** : `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;`. Ne change rien aux 621 fonctions existantes — seulement aux suivantes. À partir de là, ouvrir à `anon` est un acte écrit, et une ouverture oubliée casse une page publique de façon visible au lieu d'exposer une fonction en silence. C'est une décision de doctrine : elle demande une entrée au `REGISTRE_decisions`, pas seulement une migration.
+4. Passer les ~28 restantes au crible de la question d'audit du 18/05 : *que renvoie-t-elle, à partir de quel paramètre, et qu'est-ce qui interdit à un tiers non connecté de le demander ?*
+
+**Avant tout `REVOKE` nominatif, vérifier :**
 ```sql
 SELECT c.relname, p.polname, p.polroles::regrole[]
   FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid
@@ -398,21 +410,22 @@ SELECT c.relname, p.polname, p.polroles::regrole[]
        LIKE '%nom_de_la_fonction%';
 ```
 
-**Pourquoi ça compte.** Parce qu'un grant que le corps contredit est exactement ce qui cesse d'être relu. Le jour où quelqu'un retire la garde `auth.uid() is null` de `remove_library_regulation_document` pour réparer autre chose, le `GRANT … TO anon` sera toujours là, et personne ne l'aura mis ce jour-là. La sécurité tient rarement à une seule ligne : elle tient à ce que deux lignes ne se contredisent pas.
+**Pourquoi ça compte.** Parce qu'un défaut permissif ne se voit jamais. Une fonction créée demain dans `public` sera exécutable par `anon` sans que personne ne l'ait décidé, et le seul endroit où cela apparaîtra est un compteur à trois chiffres sur un tableau de bord que plus personne ne lit. Les 141 `REVOKE` du dépôt sont la trace de cette lutte, menée à la main, sans jamais retourner la cause.
 
-Et parce que 500 avertissements qu'on ne sait pas lire ont un coût propre : ils rendent le tableau de bord inutilisable, donc ils cachent le 501ᵉ.
+Et parce qu'un grant que le corps de la fonction contredit est exactement ce qui cesse d'être relu. Le jour où quelqu'un retire la garde `auth.uid() is null` de `remove_library_regulation_document` pour réparer autre chose, le grant sera toujours là — et personne ne l'aura mis ce jour-là.
 
 **Ce qui compte comme fini.**
 
 - Les trois grants morts sont retirés par migration ; aucune suite ne rougit.
-- Les cinq intouchables portent un `COMMENT ON FUNCTION` qui nomme la raison et le décompte de policies.
+- Les cinq intouchables portent un `COMMENT ON FUNCTION` qui nomme la raison et le décompte daté de policies.
+- Le privilège par défaut de `public` ne donne plus `EXECUTE` à `anon` sur les fonctions à venir, et la décision est écrite au `REGISTRE_decisions`.
 - Les ~28 restantes ont un verdict écrit dans `docs/journal/audits/`.
 - Une suite SQL garde l'invariant : *aucune fonction ouverte à `anon` hors d'une liste nommée* — sur le modèle du TEST 15 de `paquetA`, qui garde déjà le partage dans les deux sens sur dix helpers.
 - Le lint 0028 tombe à la taille de cette liste, et ce nombre est écrit quelque part. Un avertissement attendu n'est plus un avertissement.
 
-**Dépendances.** Les lots 1 et 2 tiennent dans une soirée et ne dépendent de rien. Le lot 3 est une revue, il se fait par paquets de dix.
+**Dépendances.** Les lots 1 et 2 tiennent dans une soirée et ne dépendent de rien. Le lot 3 est une décision de doctrine — il ne se prend pas seul et se pose après le lot 4, quand on sait ce qui doit rester ouvert. Le lot 4 est une revue, par paquets de dix.
 
-*Renvois : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `migration 20260702103557 (durcissement advisor 0028)` · `tests/sql/paquetA_profils_tests.sql TEST 13 et TEST 15`*
+*Renvois : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `migration 20260702103557 (durcissement advisor 0028)` · `baseline 20260510000000 lignes 61206-61220 (ALTER DEFAULT PRIVILEGES)` · `tests/sql/paquetA_profils_tests.sql TEST 13 et TEST 15`*
 
 #### B14 — Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated`
 
@@ -420,7 +433,7 @@ Et parce que 500 avertissements qu'on ne sait pas lire ont un coût propre : ils
 
 **État vérifié au 29/08.** L'autre part des 500 avertissements de l'advisor : le lint 0029, **464 fonctions** — 138 dans `api` sur 142, 326 dans `public` sur 498. L'audit du 18/05 a passé en revue une partie de `public` et fermé cinq failles réelles ; **il ne portait pas sur `api`.**
 
-Ce nombre ne descendra jamais à zéro et ce n'est pas l'objectif. Toute la surface d'écriture de l'application est faite de RPC `SECURITY DEFINER` derrière `api` (doctrine `DOC-RPC-3`) : l'advisor signale l'architecture, qu'il ne peut pas connaître. Le compter comme 464 problèmes serait une erreur de lecture ; ne pas le compter du tout en serait une autre.
+Comme pour `anon` (item **B2**), ce nombre est d'abord l'effet d'un défaut de schéma : `ALTER DEFAULT PRIVILEGES … GRANT ALL ON FUNCTIONS TO … authenticated` s'applique à toute fonction créée dans `public`. La différence est qu'ici, le défaut est **presque toujours celui qu'on veut** : la surface d'écriture de l'application est faite de RPC `SECURITY DEFINER` derrière `api`, appelées par des personnes connectées (doctrine `DOC-RPC-3`). Le nombre ne descendra pas à zéro, et ce n'est pas l'objectif. L'advisor signale une architecture qu'il ne peut pas connaître.
 
 **Ce que c'est.** Le critère n'est pas *« est-elle `SECURITY DEFINER` ? »* — elles le sont toutes, par construction. C'est : **que peut demander une inconnue qui s'est simplement inscrite ?** Un compte `authenticated` s'obtient en trois clics ; il ne prouve l'appartenance à aucune bibliothèque.
 
