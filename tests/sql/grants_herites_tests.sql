@@ -205,6 +205,80 @@ BEGIN
     END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- ─────────────────────────────────────────────────────────────────
+  -- T10 : LA LISTE NOMMEE (item B2, lot 4, 30/08/2026).
+  -- Ce test est la conclusion de l'audit du 30/08 et la condition du lot 3.
+  --
+  -- Le schema `public` porte un ALTER DEFAULT PRIVILEGES qui accorde EXECUTE a
+  -- `anon` sur CHAQUE fonction neuve. Le depot porte 141 REVOKE : le projet
+  -- lutte contre ce defaut une fonction a la fois depuis des mois, sans jamais
+  -- retourner la cause. Retourner le defaut est le lot 3 -- et il n'est sur
+  -- QU'AVEC CE TEST : si l'ALTER casse un acces legitime, c'est ici qu'on le
+  -- verra, pas sur une page publique.
+  --
+  -- La liste est ouverte dans les DEUX SENS, comme le TEST 15 de paquetA :
+  --   * une fonction ouverte a `anon` hors liste = une exposition non decidee ;
+  --   * une fonction de la liste fermee a `anon` = un acces public casse.
+  -- Ajouter une entree ici doit etre un acte, pas un effet de bord. Chaque nom
+  -- a un verdict ecrit dans docs/journal/audits/AUDIT_execute_anon_2026-08-30.md.
+  v_t := 'T10 les fonctions SECURITY DEFINER ouvertes a anon sont exactement celles de la liste nommee';
+  BEGIN
+    WITH nommees(fn) AS (VALUES
+      ('api.audio_tracklist_public'),
+      ('api.search_catalog_v1'),
+      ('api.subject_related_v1'),
+      ('public.fn_book_due_dates'),
+      ('public.fn_book_restricted_pdf_state'),
+      ('public.fn_book_restricted_pdf_state_for_current_user'),
+      ('public.fn_caller_is_library_staff'),
+      ('public.fn_caller_is_network_admin'),
+      ('public.fn_consume_library_request_claim'),
+      ('public.fn_current_user_is_member_of_holding_library'),
+      ('public.fn_get_library_request_claim_context'),
+      ('public.fn_library_catalog_mode'),
+      ('public.fn_library_circulation_mode'),
+      ('public.fn_library_governance_mode'),
+      ('public.fn_library_network_mode'),
+      ('public.fn_library_visible_to_caller'),
+      ('public.fn_oai_harvestable_libraries'),
+      ('public.fn_oai_harvestable_records'),
+      ('public.fn_oai_library_is_harvest_eligible'),
+      ('public.fn_reading_notes_enabled_for'),
+      ('public.fn_serial_caller_is_library_staff'),
+      ('public.fn_submit_library_request'),
+      ('public.fn_submit_library_request_via_claim'),
+      ('public.get_accessible_digital_asset_by_id_v2'),
+      ('public.get_book_contributors_public'),
+      ('public.get_book_primary_public_digital_asset_v2'),
+      ('public.list_catalog_libraries'),
+      ('public.user_can_act_as_staff_on_library'),
+      ('public.user_can_engage_library')
+    ), reelles AS (
+      SELECT DISTINCT n.nspname||'.'||p.proname AS fn
+        FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+       WHERE p.prosecdef AND n.nspname IN ('api','public')
+         AND has_function_privilege('anon', p.oid, 'EXECUTE')
+    )
+    SELECT
+      coalesce(string_agg(x.fn||' ('||x.sens||')', ', ' ORDER BY x.fn), ''),
+      count(*)
+      INTO v_txt, v_n
+      FROM (
+        SELECT fn, 'ouverte hors liste' AS sens FROM reelles
+         WHERE fn NOT IN (SELECT fn FROM nommees)
+        UNION ALL
+        SELECT fn, 'attendue mais fermee' FROM nommees
+         WHERE fn NOT IN (SELECT fn FROM reelles)
+      ) x;
+
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : '||v_n||' ecart(s) -> '||left(v_txt, 400)
+        ||' | une ouverture hors liste est une exposition non decidee ; une fermeture'
+        ||' d''une entree de la liste casse un acces public');
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'GRANTS-HERITES OK : %/% tests passés', v_passed, (v_passed+v_failed);
   ELSE

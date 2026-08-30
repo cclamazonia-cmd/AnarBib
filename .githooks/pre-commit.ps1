@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # =========================================================================
 # Hook git pre-commit AnarBib - Verification doctrine creation objets
 # =========================================================================
@@ -81,7 +81,17 @@ foreach ($file in $stagedSqlFiles) {
     # n'y retape jamais une fonction). Sans le "? optionnel, ces corps etaient
     # signales alors que leur search_path est bel et bien epingle. Faux positif
     # constate le 28/08/2026 sur chemin_oai_pmh_executable et aligner_le_bouton.
-    if ($scan -match "(?i)SECURITY\s+DEFINER" -and
+    # Faux positif n.3, constate le 30/08/2026 : le scan retire les commentaires
+    # `--` mais PAS les chaines de caracteres. « SECURITY DEFINER » ecrit dans un
+    # COMMENT ON FUNCTION ou dans un libelle de test declenchait la regle sur des
+    # fichiers qui ne CREENT aucune fonction -- une migration de REVOKE, une suite
+    # de tests. On ajoute donc la premisse de la doctrine : la regle ne s'applique
+    # qu'a un fichier qui cree ou modifie une fonction. On ne retire pas les
+    # chaines du scan, exprès : une fonction creee en SQL dynamique vit dans une
+    # chaine, et celle-la doit rester attrapee.
+    $cree_une_fonction = $scan -match "(?i)(CREATE\s+(OR\s+REPLACE\s+)?FUNCTION|ALTER\s+FUNCTION)"
+    if ($cree_une_fonction -and
+        $scan -match "(?i)SECURITY\s+DEFINER" -and
         $scan -notmatch '(?i)SET\s+"?search_path"?') {
         $violations += @{
             File   = $file
