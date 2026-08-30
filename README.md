@@ -19,7 +19,7 @@ The application is in production and used by the Biblioteca Libertária Maxwell 
 
 ## Sommaire / Table of contents
 
-- État au 7 juillet 2026 / State as of 7 July 2026
+- État du projet / Project status
 - Démarrage rapide / Quick start
 - Architecture
 - Configuration
@@ -38,11 +38,13 @@ The application is in production and used by the Biblioteca Libertária Maxwell 
 
 ---
 
-## État au 7 juillet 2026 / State as of 7 July 2026
+## État du projet / Project status
 
-### État au 7 juillet 2026 (FR)
+### État au 30 août 2026 (FR)
 
-Chantiers livrés depuis fin juin 2026 (24 juin → 7 juillet) — vérifiés sur le backend de production et le repo :
+> **Sur la date de cette section.** Elle s'intitulait « État au 7 juillet 2026 » tout en décrivant des faits d'août — l'anti-bot Altcha du 20/08, des migrations « jusqu'au 2026-08-21 ». Elle avait été complétée sans que son titre bouge, ce qui est la façon la plus discrète de vieillir : le lecteur date le contenu d'après le titre. Titre neutralisé le 30/08/2026, chiffres recomptés en base le même jour (item **J1**).
+
+Chantiers livrés depuis fin juin 2026 — vérifiés sur le backend de production et le dépôt :
 
 - **Événements de bibliothèque** — Nouvel onglet Événements dans l'espace bibliothèque (lectures publiques, débats, ateliers), présentés en lecture au compte lecteur, avis in-app « nouvel événement à la bibliothèque », **opt-out par lecteur**, **publication différée** et **deep-link** vers l'avis (table `library_events`, migrations `library_events`, `notify_library_event_created`, `library_events_notif_prefs_and_deferred`, handler dans `notify-event`).
 - **Dépôt de garantie** — Registre des cautions remboursables par bibliothèque : AnarBib **trace sans séquestrer** les fonds (zéro donnée bancaire) — `library_deposit_rules` (règles gérées par le coordenador), `loan_deposits` (Paquet DEPOT-GARANTIE Phase 1, 30/06).
@@ -51,7 +53,7 @@ Chantiers livrés depuis fin juin 2026 (24 juin → 7 juillet) — vérifiés su
 - **Automatisation de la Gazette** — Build mensuel et **traduction automatique des contributions** (`translate-gazette-submission`) désormais pilotés par des tâches **pg_cron actives**.
 - **Registre RGPD & politique de confidentialité unifiée** — Source unique app + site vitrine, sous-traitants à jour (anti-bot **Altcha auto-hébergé** depuis le 20/08/2026 — plus aucune dépendance Cloudflare directe), auto-suppression des prêts clos après rétention, pseudonymisation BG2-14 (`erasure_log`).
 - **Consolidation des performances RLS** — Fusion des policies permissives multiples par table/rôle (migrations `perf_consolidate_permissive_policies_*`, 04/07).
-- **Backend** : **46 Edge Functions** Deno et **172 migrations** SQL (baseline + incréments) appliquées jusqu'au **2026-08-21** ; base de **184 tables**, **767 fonctions/routines** (594 dans `public`, 173 dans `api`), **31 tâches pg_cron** actives sur 32 ; suite Vitest verte (**90 tests**, 4 fichiers). *(Chiffres mesurés le 21/08/2026 — voir la note de méthode en pied de page.)*
+- **Backend** *(recompté en base le 30/08/2026)* : **49 Edge Functions** Deno (dont `main`, non déployée) et **224 migrations** SQL appliquées, la dernière étant `20260830180000` ; base de **187 tables** dans `public` — **aucune sans RLS** —, **805 routines** (621 dans `public`, 184 dans `api`), **68 vues** dans `api` dont une seule hors des policies, **36 tâches cron** et **16 buckets** Storage. *Ces chiffres bougent chaque semaine : le foyer qui fait foi est la « photo » du backlog courant (`docs/backlogs/backlog-v34.html`), datée et engendrée depuis une source unique. Ici, ils ne sont qu'un ordre de grandeur.*
 
 Chantiers structurants consolidés (mai–juin 2026, toujours en place) :
 
@@ -72,7 +74,7 @@ AnarBib est né d'un besoin réel du milieu et d'un mainteneur unique dont les c
 
 Le détail des chantiers en cours, des dettes et des priorités vit dans le backlog courant (`docs/backlogs/`, voir `INDEX.md` pour la version courante) et le `REGISTRE_decisions.md` des specs.
 
-### State as of 7 July 2026 (EN)
+### Status as of 30 August 2026 (EN)
 
 Work delivered since late June 2026 (24 June → 7 July) — verified against the production backend and the repo:
 
@@ -83,7 +85,7 @@ Work delivered since late June 2026 (24 June → 7 July) — verified against th
 - **Gazette automation** — Monthly build and **automatic translation of contributions** (`translate-gazette-submission`) now driven by **active pg_cron jobs**.
 - **GDPR register & unified privacy policy** — Single source for app + project website, subprocessors up to date (**self-hosted Altcha** anti-bot since 2026-08-20 — no direct Cloudflare dependency left), auto-deletion of closed loans after retention, BG2-14 pseudonymization (`erasure_log`).
 - **RLS performance consolidation** — Merging of multiple permissive policies per table/role (`perf_consolidate_permissive_policies_*` migrations, 04/07).
-- **Backend**: **46 Deno Edge Functions** and **172 SQL migrations** (baseline + increments) applied through **2026-08-21**; database of **184 tables**, **767 functions/routines** (594 in `public`, 173 in `api`), **31 active pg_cron jobs** out of 32; Vitest suite green (**90 tests**, 4 files). *(Measured on 2026-08-21 — see the method note in the footer.)*
+- **Backend** *(recounted against the database on 2026-08-30)*: **49** Deno Edge Functions (including `main`, not deployed) and **224** SQL migrations applied, the latest being `20260830180000`; **187 tables** in `public` — **none without RLS** —, **805 routines** (621 in `public`, 184 in `api`), **68 views** in `api` of which only one sits outside the policies, **36 cron jobs** and **16 Storage buckets**. *These figures move every week: the single home of record is the dated snapshot in the current backlog (`docs/backlogs/backlog-v34.html`), generated from a single source. Here they are an order of magnitude, nothing more.*
 
 Structural work consolidated (May–June 2026, still in place):
 
@@ -271,7 +273,7 @@ anarbib/
 └── README.md             # Ce fichier
 ```
 
-> ℹ️ `CLAUDE.md` et le dossier `.claude/` existent en local chez le mainteneur mais **ne sont plus versionnés** (voir État au 7 juillet 2026).
+> ℹ️ `CLAUDE.md` et le dossier `.claude/` existent en local chez le mainteneur mais **ne sont plus versionnés** (décision du 23/07/2026, `.gitignore:88` ; voir la section « État du projet »). Conséquence à garder en tête : **rien de ce qui n'est écrit que dans `CLAUDE.md` n'atteint un·e contributeur·rice**, et tout y disparaît au re-clonage. Ce qui doit être partagé va au dépôt — le backlog pour l'état chiffré, le REGISTRE pour les doctrines.
 
 ### Architecture (EN)
 
@@ -783,6 +785,6 @@ The project is carried by a small collective but welcomes occasional or regular 
 
 ---
 
-Dernière mise à jour / Last updated : **21 août 2026 / 21 August 2026** — anti-bot **Altcha auto-hébergé** en remplacement de Cloudflare Turnstile (dernière dépendance hors auto-hébergement, et dernier transfert hors-UE) ; audit complet des fonctions `SECURITY DEFINER` des schémas `public` et `api`, **six failles réelles fermées** ; chaîne de sauvegarde #BG2 versée au dépôt, secrets du Vault sauvegardés, **observateur externe** et alarme de tir interrompu éprouvés dans les deux sens ; pile auto-hébergée `deploy/` et `bootstrap.sh` — la reconstruction depuis le dépôt seul passe de bout en bout ; bascule de `app.anarbib.org` vers **Codeberg Git Pages** ; profil de numérisation arrêté et plafonds de taille posés sur les seaux Storage ; nouveau logo, notes de lecture, dédoublonnage du catalogue, récapitulatif hebdomadaire inter-bibliothèques. Backend à **46 Edge Functions** et **172 migrations** appliquées jusqu'au 2026-08-21 (base : **184 tables**, **767 routines**, **31 crons actifs sur 32**) ; suite Vitest verte (**90 tests**). Sur l'usage de l'IA, voir la section dédiée plus haut — `CLAUDE.md` et `.claude/` restent hors du suivi git depuis le 07/07/2026, ce qui a retiré l'outillage du dépôt sans mettre fin à l'assistance. / Self-hosted **Altcha** anti-bot replacing Cloudflare Turnstile (the last non-self-hosted dependency, and the last non-EU transfer); full audit of `SECURITY DEFINER` functions in both `public` and `api`, **six real vulnerabilities closed**; #BG2 backup chain committed to the repository, Vault secrets backed up, **external observer** and interrupted-run alarm both proven in both directions; self-hosted `deploy/` stack and `bootstrap.sh` — rebuilding from the repository alone now passes end to end; `app.anarbib.org` migrated to **Codeberg Git Pages**; digitisation profile settled and size caps set on Storage buckets; new logo, reading notes, catalogue deduplication, weekly cross-library digest. Backend at **46 Edge Functions** and **172 migrations** applied through 2026-08-21 (db: **184 tables**, **767 routines**, **31 active crons out of 32**); Vitest suite green (**90 tests**). On AI usage, see the dedicated section above — `CLAUDE.md` and `.claude/` have been outside git tracking since 2026-07-07, which removed the tooling from the repository without ending the assistance.
+Dernière mise à jour / Last updated : **30 août 2026 / 30 August 2026** — chiffres du backend recomptés en base et section d'état re-datée (item J1) ; auparavant 21 août 2026 — anti-bot **Altcha auto-hébergé** en remplacement de Cloudflare Turnstile (dernière dépendance hors auto-hébergement, et dernier transfert hors-UE) ; audit complet des fonctions `SECURITY DEFINER` des schémas `public` et `api`, **six failles réelles fermées** ; chaîne de sauvegarde #BG2 versée au dépôt, secrets du Vault sauvegardés, **observateur externe** et alarme de tir interrompu éprouvés dans les deux sens ; pile auto-hébergée `deploy/` et `bootstrap.sh` — la reconstruction depuis le dépôt seul passe de bout en bout ; bascule de `app.anarbib.org` vers **Codeberg Git Pages** ; profil de numérisation arrêté et plafonds de taille posés sur les seaux Storage ; nouveau logo, notes de lecture, dédoublonnage du catalogue, récapitulatif hebdomadaire inter-bibliothèques. Backend à **46 Edge Functions** et **172 migrations** appliquées jusqu'au 2026-08-21 (base : **184 tables**, **767 routines**, **31 crons actifs sur 32**) ; suite Vitest verte (**90 tests**). Sur l'usage de l'IA, voir la section dédiée plus haut — `CLAUDE.md` et `.claude/` restent hors du suivi git depuis le 07/07/2026, ce qui a retiré l'outillage du dépôt sans mettre fin à l'assistance. / Self-hosted **Altcha** anti-bot replacing Cloudflare Turnstile (the last non-self-hosted dependency, and the last non-EU transfer); full audit of `SECURITY DEFINER` functions in both `public` and `api`, **six real vulnerabilities closed**; #BG2 backup chain committed to the repository, Vault secrets backed up, **external observer** and interrupted-run alarm both proven in both directions; self-hosted `deploy/` stack and `bootstrap.sh` — rebuilding from the repository alone now passes end to end; `app.anarbib.org` migrated to **Codeberg Git Pages**; digitisation profile settled and size caps set on Storage buckets; new logo, reading notes, catalogue deduplication, weekly cross-library digest. Backend at **46 Edge Functions** and **172 migrations** applied through 2026-08-21 (db: **184 tables**, **767 routines**, **31 active crons out of 32**); Vitest suite green (**90 tests**). On AI usage, see the dedicated section above — `CLAUDE.md` and `.claude/` have been outside git tracking since 2026-07-07, which removed the tooling from the repository without ending the assistance.
 
 > **Note de méthode / Method note.** Les chiffres ci-dessus portent leur date de mesure, et c'est délibéré : ce dépôt bouge plus vite que ses relevés. Entre le 20 et le 21 août 2026, trois documents internes donnaient 138, 161 et 173 migrations — tous justes le jour où ils ont été écrits. Un chiffre sans date vieillit sans le dire. / The figures above carry their measurement date, deliberately: this repository moves faster than the documents that describe it. Between 20 and 21 August 2026, three internal documents gave 138, 161 and 173 migrations — each correct on the day it was written. An undated figure ages silently.
