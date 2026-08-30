@@ -35,6 +35,18 @@
 -- bon contrat : c'est lui que le frontend teste.
 -- Les autres gardes de cette suite n'ont pas ete touchees : elles passaient.
 
+-- POURQUOI CES TESTS ACCEPTENT `loan_not_found` (30/08/2026, item I15).
+-- Tant que le seed n'avait aucun emprunt, ces cas SKIPaient : personne n'avait
+-- jamais vu ce que le produit repond vraiment. Il repond `loan_not_found`, et
+-- c'est JUSTE. Les wrappers de api sont SECURITY INVOKER et passent par
+-- `fn_get_loan_context`, qui lit `emprestimos_v2` sous les policies : pour une
+-- lectrice qui n'est pas proprietaire, l'emprunt d'autrui n'existe tout
+-- simplement pas. « Pas a toi » et « pas la » sont donc indistinguables de
+-- l'exterieur -- et c'est une propriete voulue, pas un pis-aller : sans elle,
+-- on pourrait sonder les identifiants pour decouvrir qui a emprunte quoi.
+-- Le refus d'AUTORISATION (`loan_action_not_allowed`, 42501) est un autre cas,
+-- qui suppose de VOIR l'emprunt : il est desormais eprouve pour lui-meme en
+-- 4.09, ou la lectrice A agit sur son PROPRE emprunt.
 DO $$
 DECLARE
   v_passed int := 0;
@@ -160,9 +172,17 @@ BEGIN
 
   v_test_name := '2.02 fn_get_loan_context emprunt existant';
   BEGIN
-    SELECT id INTO v_test_emprestimo_id FROM public.emprestimos_v2 LIMIT 1;
+    -- Cible explicite depuis le 30/08/2026 : l'emprunt OUVERT de la lectrice A,
+    -- plutot qu'un « LIMIT 1 » sans ORDER BY. Ce test-ci veut seulement UN
+    -- emprunt existant, mais un jeu d'essai qui grandit rend la ligne tiree
+    -- imprevisible, et un test qui n'a pas choisi son sujet ne dit plus ce
+    -- qu'il eprouve.
+    SELECT id INTO v_test_emprestimo_id
+      FROM public.emprestimos_v2
+     WHERE user_id = c_leitora_a AND status_global = 'aberto'
+     ORDER BY id LIMIT 1;
     IF v_test_emprestimo_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : aucun emprunt en base');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
     ELSE
       SELECT * INTO v_ctx FROM public.fn_get_loan_context(v_test_emprestimo_id);
       IF v_ctx.library_id IS NOT NULL AND v_ctx.leitor_user_id IS NOT NULL AND v_ctx.status_global IS NOT NULL THEN v_passed := v_passed + 1;
@@ -261,9 +281,17 @@ BEGIN
 
   v_test_name := '4.03 return_total rejette leitor';
   BEGIN
-    SELECT id INTO v_test_emprestimo_id FROM public.emprestimos_v2 LIMIT 1;
+    -- Cible explicite depuis le 30/08/2026 : l'emprunt OUVERT de la lectrice A.
+    -- Le test prenait « un emprunt, LIMIT 1 » sans ORDER BY -- il pouvait donc
+    -- tomber sur l'emprunt du lecteur B lui-meme, et n'eprouvait alors plus
+    -- rien du tout. Un test d'appartenance doit choisir a qui appartient la
+    -- chose.
+    SELECT id INTO v_test_emprestimo_id
+      FROM public.emprestimos_v2
+     WHERE user_id = c_leitora_a AND status_global = 'aberto'
+     ORDER BY id LIMIT 1;
     IF v_test_emprestimo_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : aucun emprunt en base');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
@@ -271,7 +299,35 @@ BEGIN
         PERFORM api.return_loan_total(v_test_emprestimo_id);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas retourner');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
+        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
+        ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
+      END;
+    END IF;
+  END;
+
+  -- Ajoute le 30/08/2026 (item I15) : le pendant de 4.03. Ici la lectrice A
+  -- VOIT son emprunt -- il est a elle -- et se voit refuser l'action parce
+  -- qu'elle n'a pas le role pour. C'est le refus d'AUTORISATION, distinct du
+  -- refus d'EXISTENCE que renvoie 4.03. Aucun test ne le couvrait.
+  v_test_name := '4.09 return_total refuse a la proprietaire elle-meme (role, pas visibilite)';
+  BEGIN
+    SELECT id INTO v_test_emprestimo_id
+      FROM public.emprestimos_v2
+     WHERE user_id = c_leitora_a AND status_global = 'aberto'
+     ORDER BY id LIMIT 1;
+    IF v_test_emprestimo_id IS NULL THEN
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
+    ELSE
+      BEGIN
+        SET LOCAL ROLE authenticated;
+        PERFORM set_config('request.jwt.claims', '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
+        PERFORM api.return_loan_total(v_test_emprestimo_id);
+        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : une lectrice ne rend pas elle-meme au comptoir');
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLSTATE = '42501' OR SQLERRM LIKE '%loan_action_not_allowed%' THEN v_passed := v_passed + 1;
+        ELSIF SQLERRM LIKE '%loan_not_found%' THEN
+          v_failed := v_failed + 1;
+          v_failures := v_failures || (v_test_name || ' : la proprietaire ne voit pas son propre emprunt — regression de policy');
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -324,9 +380,17 @@ BEGIN
 
   v_test_name := '4.08 return_partial rejette leitor';
   BEGIN
-    SELECT id INTO v_test_emprestimo_id FROM public.emprestimos_v2 LIMIT 1;
+    -- Cible explicite depuis le 30/08/2026 : l'emprunt OUVERT de la lectrice A.
+    -- Le test prenait « un emprunt, LIMIT 1 » sans ORDER BY -- il pouvait donc
+    -- tomber sur l'emprunt du lecteur B lui-meme, et n'eprouvait alors plus
+    -- rien du tout. Un test d'appartenance doit choisir a qui appartient la
+    -- chose.
+    SELECT id INTO v_test_emprestimo_id
+      FROM public.emprestimos_v2
+     WHERE user_id = c_leitora_a AND status_global = 'aberto'
+     ORDER BY id LIMIT 1;
     IF v_test_emprestimo_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : aucun emprunt en base');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
@@ -334,7 +398,7 @@ BEGIN
         PERFORM api.return_loan_partial(v_test_emprestimo_id, ARRAY[1]::integer[]);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : la lectrice A ne doit pas retourner');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
+        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -368,9 +432,17 @@ BEGIN
 
   v_test_name := '5.03 extend rejette leitor';
   BEGIN
-    SELECT id INTO v_test_emprestimo_id FROM public.emprestimos_v2 LIMIT 1;
+    -- Cible explicite depuis le 30/08/2026 : l'emprunt OUVERT de la lectrice A.
+    -- Le test prenait « un emprunt, LIMIT 1 » sans ORDER BY -- il pouvait donc
+    -- tomber sur l'emprunt du lecteur B lui-meme, et n'eprouvait alors plus
+    -- rien du tout. Un test d'appartenance doit choisir a qui appartient la
+    -- chose.
+    SELECT id INTO v_test_emprestimo_id
+      FROM public.emprestimos_v2
+     WHERE user_id = c_leitora_a AND status_global = 'aberto'
+     ORDER BY id LIMIT 1;
     IF v_test_emprestimo_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : aucun emprunt en base');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
@@ -378,7 +450,7 @@ BEGIN
         PERFORM api.extend_loan_as_library(v_test_emprestimo_id);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas prolonger');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
+        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -419,7 +491,7 @@ BEGIN
         PERFORM api.renew_my_loan(v_livia_loan_id);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ECHEC CRITIQUE OWNERSHIP');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%nao encontrado%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
+        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%loan_not_found%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -499,7 +571,7 @@ BEGIN
         PERFORM api.schedule_loan_return(v_livia_loan_id, ARRAY[1]::integer[], now() + interval '1 day');
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas planifier sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%nao encontrado%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
+        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%loan_not_found%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -528,7 +600,7 @@ BEGIN
         PERFORM api.clear_loan_return_schedule(v_livia_loan_id, ARRAY[1]::integer[]);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas annuler sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%nao encontrado%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
+        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%loan_not_found%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -559,9 +631,17 @@ BEGIN
 
   v_test_name := '8.02 mark_missed rejette leitor';
   BEGIN
-    SELECT id INTO v_test_emprestimo_id FROM public.emprestimos_v2 LIMIT 1;
+    -- Cible explicite depuis le 30/08/2026 : l'emprunt OUVERT de la lectrice A.
+    -- Le test prenait « un emprunt, LIMIT 1 » sans ORDER BY -- il pouvait donc
+    -- tomber sur l'emprunt du lecteur B lui-meme, et n'eprouvait alors plus
+    -- rien du tout. Un test d'appartenance doit choisir a qui appartient la
+    -- chose.
+    SELECT id INTO v_test_emprestimo_id
+      FROM public.emprestimos_v2
+     WHERE user_id = c_leitora_a AND status_global = 'aberto'
+     ORDER BY id LIMIT 1;
     IF v_test_emprestimo_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : aucun emprunt en base');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
@@ -569,7 +649,7 @@ BEGIN
         PERFORM api.mark_loan_return_missed(v_test_emprestimo_id, ARRAY[1]::integer[]);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas marker');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
+        IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
