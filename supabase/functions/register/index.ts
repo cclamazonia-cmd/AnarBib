@@ -692,7 +692,16 @@ serve(async (req)=>{
         is_active: true
       };
     } else {
-      const { data: foundLibraryMeta, error: libraryError } = await admin.from("library_email_identity").select("*").eq("library_slug", effectiveLibrarySlug).eq("is_active", true).maybeSingle();
+      // FOYER-UNIQUE (30/08/2026) — on lit desormais la VUE api.library_email_identity,
+      // qui DERIVE l identite d expedition de libraries JOIN library_commons, et non
+      // plus la table public.library_email_identity, copie figee des memes champs que
+      // rien ne synchronisait. La derive n etait pas theorique : la table portait
+      // encore, pour la BLMF et la BTL, un logo_url pointant vers l ancien site de
+      // staging sur github.io. La vue existait depuis le baseline et son commentaire
+      // disait deja qu elle etait « lue par les fonctions d envoi de courriel » — elle
+      // ne l etait par personne, faute d un GRANT (pose par 20260830193050, a
+      // service_role seul : elle reconstitue l annuaire des bibliotheques).
+      const { data: foundLibraryMeta, error: libraryError } = await admin.schema("api").from("library_email_identity").select("*").eq("library_slug", effectiveLibrarySlug).eq("is_active", true).maybeSingle();
       if (libraryError || !foundLibraryMeta) {
         console.error("register: invalid library", {
           librarySlug: effectiveLibrarySlug,
@@ -704,7 +713,7 @@ serve(async (req)=>{
           library_slug: effectiveLibrarySlug
         }, 400);
       }
-      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, logo_url, reader_cards_enabled, reader_validation_mode").eq("slug", effectiveLibrarySlug).maybeSingle();
+      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, logo_url, reader_cards_enabled, reader_validation_mode, is_active, accepts_public_signup, visibility_level").eq("slug", effectiveLibrarySlug).maybeSingle();
       if (libraryRowError || !foundLibraryRow?.id) {
         console.error("register: library not found in libraries", {
           librarySlug: effectiveLibrarySlug,
@@ -715,6 +724,38 @@ serve(async (req)=>{
           detail: "No libraries row found for the requested library slug.",
           library_slug: effectiveLibrarySlug
         }, 400);
+      }
+      // ELIGIBILITE-ENONCEE (30/08/2026) — `register` ne verifiait NI
+      // accepts_public_signup NI visibility_level. Le seul obstacle a une
+      // inscription forgee sur une bibliotheque privee et fermee etait l absence
+      // ACCIDENTELLE de sa ligne dans la table public.library_email_identity : un
+      // accident, pas une regle. La vue, elle, rend toutes les bibliotheques — donc
+      // basculer dessus sans enoncer la regle aurait ouvert ce que l accident
+      // fermait. Aucun trigger sur user_library_memberships ne rattrape, et cette
+      // fonction ecrit en service_role, donc la RLS ne s applique pas non plus.
+      //
+      // Le predicat est repris a l identique de la vue v_libraries_for_signup, qui
+      // est ce que le frontend propose : is_active AND accepts_public_signup AND
+      // visibility_level = 'public'. Les trois bibliotheques ouvertes au 30/08
+      // (blmf, btl, mleg) le verifient deja — enoncer la regle ne change donc rien
+      // pour personne, et ferme le trou.
+      if (foundLibraryRow.is_active !== true
+        || foundLibraryRow.accepts_public_signup !== true
+        || String(foundLibraryRow.visibility_level || "") !== "public") {
+        console.warn("register: inscription refusee, bibliotheque fermee au public", {
+          librarySlug: effectiveLibrarySlug,
+          is_active: foundLibraryRow.is_active,
+          accepts_public_signup: foundLibraryRow.accepts_public_signup,
+          visibility_level: foundLibraryRow.visibility_level
+        });
+        // Pas de cleanupAuthUser ici : ce controle passe AVANT la creation du
+        // compte auth (userId n existe qu a partir de la ligne 752). Refuser tot,
+        // c est ne rien avoir a nettoyer.
+        return json({
+          error: "LIBRARY_NOT_OPEN_TO_SIGNUP",
+          detail: "This library does not accept public reader signups.",
+          library_slug: effectiveLibrarySlug
+        }, 403);
       }
       libraryMeta = foundLibraryMeta;
       libraryRow = foundLibraryRow;

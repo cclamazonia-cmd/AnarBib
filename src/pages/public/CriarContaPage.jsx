@@ -294,7 +294,17 @@ export default function CriarContaPage() {
         let userMsg;
         if (code === 'EMAIL_ALREADY_REGISTERED' || /already|exists|já/i.test(code)) {
           userMsg = t({id:'auth.create.emailAlreadyRegistered'});
-        } else if (code === 'INVALID_LIBRARY' || code === 'LIBRARY_NOT_FOUND') {
+        // LIBRARY_NOT_OPEN_TO_SIGNUP (30/08/2026) : la biblio existe mais
+        // n'accepte pas les inscriptions publiques. Le cas ne devrait jamais
+        // se voir depuis cet ecran — la liste ne propose que les biblios de
+        // v_libraries_for_signup, qui porte le meme predicat — mais la regle
+        // est desormais enoncee cote serveur, donc une requete forgee ou un
+        // slug reste dans l'URL apres un changement de reglage tombe ici.
+        // Meme message que les deux autres : « pas encore configuree,
+        // contactez la coordination » decrit bien la situation vue de la
+        // personne, et evite une cle i18n de plus dans dix langues pour un
+        // ecran que personne ne devrait atteindre.
+        } else if (code === 'INVALID_LIBRARY' || code === 'LIBRARY_NOT_FOUND' || code === 'LIBRARY_NOT_OPEN_TO_SIGNUP') {
           userMsg = t({id:'auth.create.errorLibraryNotReady'});
         } else if (code === 'CREATE_USER_FAILED') {
           userMsg = t({id:'auth.create.errorCreateFailed'});
