@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 88 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 87 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 13
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 12
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -362,7 +362,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | Aberto |
 | **B6** | Reconciliar `config.toml` com as 48 funções realmente implantadas | `P1` | Aberto |
 | **B7** | Desambiguar os homônimos de funções entre `ingest` e `public` | `P2` | Aberto |
-| **B8** | Desambiguar as views que existem em duplicata entre `public` e `api` | `P2` | Aberto |
 | **B9** | Purgar o esquema `backup_2026_05_07` | `P2` | Aberto |
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
@@ -529,25 +528,6 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 - As três funções de negócio homônimas estão desambiguadas.
 - Nenhuma depende da ordem do `search_path` para ser resolvida corretamente.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `Relevé du 29/08/2026`*
-
-#### B8 — Desambiguar as views que existem em duplicata entre `public` e `api`
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado verificado em 29/08.** Quatro pares de views homônimas ou quase: `public.my_access` / `api.my_access`, `public.my_session_context` / `api.my_session_context`, `public.v_library_service_public` / `api.library_service_public`, `public.v_book_detail_public_v2` / `api.catalog_book_detail_public_v2`. E em `public`, `catalog_partners_policy_flags` coexiste com `catalog_partners_policy_flags_v2`.
-
-**O que é.** Verificar qual é lida pelo front — o esquema exposto pelo PostgREST é `public,api,storage` — e suprimir as outras, ou explicitar que a view `public` é a base e a view `api` a exposição.
-
-**Por que importa.** Duas views do mesmo nome em dois esquemas ambos expostos pelo PostgREST é uma ambiguidade na chamada. E uma view `_v2` que nunca substituiu sua `v1` é código morto que se parece com código vivo.
-
-**O que conta como terminado.**
-
-- Cada par tem um veredicto: base + exposição assumidas, ou supressão da morta.
-- A view `_v2` substituiu a antecessora, ou o contrário.
 
 **Dependências.** Nenhuma.
 
@@ -2295,6 +2275,11 @@ Estas entradas constavam no v33, em `ETAT-AVANCEMENT-multisessions`, em `ETAT-la
 | I15 | As três suítes de circulação anteriores à CI, e os dois caminhos E2E | **Saldado em 30/08.** Doze ramos `jwt sim` retirados; os denominadores de `paquet25`, `paquet_emprestimos` e `paquet_reservas` incluem agora os skips — sem o que uma regressão do stub de autenticação teria feito uma suíte passar de `32/32` a `20/20` continuando verde; seis guardas que procuravam um texto de HINT em `SQLERRM` (que carrega a MENSAGEM) substituídas pelo código levantado; três testes que contavam sucesso em todos os seus ramos reescritos; duas etiquetas que nomeavam pessoas renomeadas. Os **dois caminhos E2E estão escritos** — empréstimos e reservas — e o seed traz o conjunto de regras de circulação sem o qual renovar era impossível. Nenhum SKIP nas cinco suítes. **O que o dia ensinou, três vezes: o produto tinha razão e o teste lia o campo errado.** A questão de produto que daí sai — uma recusa que não levanta — tornou-se o item **B15**. |
 | F5 | O prazo de negociação de 21 dias das reservas | **Verificado e encerrado em 30/08.** O mecanismo está implementado, e melhor do que dizia a spec: `fn_expire_negotiation_timeout()` **lê o prazo por biblioteca** em vez de fixá-lo, a coluna traz exatamente o `DEFAULT 21` e o `CHECK BETWEEN 7 AND 60` do §5, e as três bibliotecas estão em 21 dias. O cron roda de hora em hora. O cabeçalho da spec, que ainda dizia «a validar antes da implementação», foi corrigido no mesmo dia, distinguindo o que está **construído** do que falta **votar**. |
 | I9 | As migrações datadas no futuro | **Encerrado em 30/08 por uma regra, não por uma correção.** O item apontava três migrações datadas com antecedência. Verificação em 30/08: já não estão — **mas porque a hora as alcançou**, não porque foram corrigidas. Um item que se resolve pela passagem do tempo não se resolve, adia-se: na mesma noite apareciam duas novas, datadas de 20:30 e 21:00 UTC quando eram 19:15. **Oitava regra do hook `pre-commit`**: uma migração adicionada cujo carimbo ultrapassa a hora UTC real (tolerância de 60 s) é recusada. Completa `DOC-DEPLOY-4`. |
+| B8 | As views «em duplicado» entre `public` e `api` | **Verificado e encerrado em 30/08 — o item errava o diagnóstico.** `my_access` e `my_session_context` não existem em duplicado: as versões de `public` são **projeções** das de `api` (300 caracteres contra 2 100). Um só foco, uma fachada por cima: está bem construído.
+
+Mas a verificação encontrou outra coisa. **A fachada enumera as suas colunas**: acrescentar uma coluna a `api.my_access` não a faz aparecer em `public.my_access`. E **31 funções declaram `v_actor public.my_access%rowtype`** — a forma da fachada tornou-se um *tipo*. Uma divergência não levantaria nada: as 31 compilariam e nunca veriam a coluna nova. Uma divergência por **omissão**, a única que não faz barulho.
+
+Em 30/08 os dois pares concordam (20/20 e 13/13 colunas). Guardado pelo **T8** de `vues_api_definer_tests.sql`. |
 
 ---
 
@@ -2326,4 +2311,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 88 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 87 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -1401,6 +1401,17 @@
           "fr": "**Clos le 30/08 par une règle, pas par une correction.** L'item signalait trois migrations datées en avance. Vérification faite le 30/08 : elles n'y sont plus — **mais parce que l'heure les a rattrapées**, pas parce qu'on les a corrigées. Un item qui se résout par l'écoulement du temps ne se résout pas, il repousse : le soir même, deux nouvelles migrations apparaissaient, datées de 20:30 et 21:00 UTC alors qu'il était 19:15. Corriger les trois fichiers nommés n'aurait donc rien réglé. **Huitième règle du hook `pre-commit`** : une migration ajoutée dont l'horodatage dépasse l'heure UTC réelle (tolérance 60 s pour l'écart d'horloges WSL/Windows) est refusée. Ce que coûtait le défaut, tant que l'heure n'avait pas passé : toute migration écrite entre-temps à l'heure réelle trie **avant** celle du futur et sera rejouée après elle en CI — l'ordre du dépôt cesse d'être l'ordre d'application, même dégât qu'une collision par un autre chemin. Complète `DOC-DEPLOY-4`.",
           "pt": "**Encerrado em 30/08 por uma regra, não por uma correção.** O item apontava três migrações datadas com antecedência. Verificação em 30/08: já não estão — **mas porque a hora as alcançou**, não porque foram corrigidas. Um item que se resolve pela passagem do tempo não se resolve, adia-se: na mesma noite apareciam duas novas, datadas de 20:30 e 21:00 UTC quando eram 19:15. **Oitava regra do hook `pre-commit`**: uma migração adicionada cujo carimbo ultrapassa a hora UTC real (tolerância de 60 s) é recusada. Completa `DOC-DEPLOY-4`."
         }
+      ],
+      [
+        "B8",
+        {
+          "fr": "Les vues « en double » entre `public` et `api`",
+          "pt": "As views «em duplicado» entre `public` e `api`"
+        },
+        {
+          "fr": "**Vérifié et clos le 30/08 — l'item se trompait de diagnostic.** `my_access` et `my_session_context` n'existent pas en double : les versions de `public` sont des **projections** de celles de `api` (300 caractères contre 2 100). Un seul foyer, une façade par-dessus : c'est bien construit, il n'y a rien à réconcilier.\n\nMais la vérification a trouvé autre chose, qui valait le détour. **La façade énumère ses colonnes** : ajouter une colonne à `api.my_access` ne la fait pas apparaître dans `public.my_access`, qui continue de projeter la liste écrite le jour de sa création. Et **31 fonctions déclarent `v_actor public.my_access%rowtype`** — la forme de la façade est devenue un *type*. Une divergence ne lèverait donc rien : les 31 compileraient et ne verraient simplement jamais la colonne neuve. Une divergence par **omission**, la seule qui ne fasse aucun bruit.\n\nAu 30/08 les deux couples concordent (20/20 et 13/13 colonnes). Gardé par le **T8** de `vues_api_definer_tests.sql`, qui n'y répare rien mais empêche que ça cesse d'être vrai sans que personne ne le voie.",
+          "pt": "**Verificado e encerrado em 30/08 — o item errava o diagnóstico.** `my_access` e `my_session_context` não existem em duplicado: as versões de `public` são **projeções** das de `api` (300 caracteres contra 2 100). Um só foco, uma fachada por cima: está bem construído.\n\nMas a verificação encontrou outra coisa. **A fachada enumera as suas colunas**: acrescentar uma coluna a `api.my_access` não a faz aparecer em `public.my_access`. E **31 funções declaram `v_actor public.my_access%rowtype`** — a forma da fachada tornou-se um *tipo*. Uma divergência não levantaria nada: as 31 compilariam e nunca veriam a coluna nova. Uma divergência por **omissão**, a única que não faz barulho.\n\nEm 30/08 os dois pares concordam (20/20 e 13/13 colunas). Guardado pelo **T8** de `vues_api_definer_tests.sql`."
+        }
       ]
     ]
   },
@@ -1821,49 +1832,6 @@
         "pt": [
           "As três funções de negócio homônimas estão desambiguadas.",
           "Nenhuma depende da ordem do `search_path` para ser resolvida corretamente."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "Relevé du 29/08/2026"
-      ]
-    },
-    {
-      "id": "B8",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Départager les vues qui existent en double entre `public` et `api`",
-        "pt": "Desambiguar as views que existem em duplicata entre `public` e `api`"
-      },
-      "v": {
-        "fr": "Quatre paires de vues homonymes ou quasi : `public.my_access` / `api.my_access`, `public.my_session_context` / `api.my_session_context`, `public.v_library_service_public` / `api.library_service_public`, `public.v_book_detail_public_v2` / `api.catalog_book_detail_public_v2`. Et dans `public`, `catalog_partners_policy_flags` coexiste avec `catalog_partners_policy_flags_v2`.",
-        "pt": "Quatro pares de views homônimas ou quase: `public.my_access` / `api.my_access`, `public.my_session_context` / `api.my_session_context`, `public.v_library_service_public` / `api.library_service_public`, `public.v_book_detail_public_v2` / `api.catalog_book_detail_public_v2`. E em `public`, `catalog_partners_policy_flags` coexiste com `catalog_partners_policy_flags_v2`."
-      },
-      "w": {
-        "fr": "Vérifier laquelle est lue par le front — le schéma exposé par PostgREST est `public,api,storage` — et supprimer les autres, ou expliciter que la vue `public` est le socle et la vue `api` l'exposition.",
-        "pt": "Verificar qual é lida pelo front — o esquema exposto pelo PostgREST é `public,api,storage` — e suprimir as outras, ou explicitar que a view `public` é a base e a view `api` a exposição."
-      },
-      "y": {
-        "fr": "Deux vues du même nom dans deux schémas tous deux exposés par PostgREST, c'est une ambiguïté à l'appel. Et une vue `_v2` qui n'a jamais remplacé sa `v1` est du code mort qui ressemble à du code vivant.",
-        "pt": "Duas views do mesmo nome em dois esquemas ambos expostos pelo PostgREST é uma ambiguidade na chamada. E uma view `_v2` que nunca substituiu sua `v1` é código morto que se parece com código vivo."
-      },
-      "f": {
-        "fr": [
-          "Chaque paire a un verdict : socle + exposition assumés, ou suppression de la morte.",
-          "La vue `_v2` a remplacé sa devancière, ou l'inverse."
-        ],
-        "pt": [
-          "Cada par tem um veredicto: base + exposição assumidas, ou supressão da morta.",
-          "A view `_v2` substituiu a antecessora, ou o contrário."
         ]
       },
       "dep": {

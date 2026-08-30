@@ -1,5 +1,6 @@
 -- =====================================================================
--- AnarBib — Tests : les vues de `api` et les droits qui les portent
+-- AnarBib — Tests : les vues de `api`, les droits qui les portent, et la
+--                   fidelite des facades que `public` en tire
 -- Date    : 2026-08-29, revu le 30/08  ·  Item B3
 -- Ref     : 20260830160000 (paquet API-VUES-DEFINER)
 --           20260830090000 (le droit de voir se declare)
@@ -137,6 +138,52 @@ BEGIN
                       AND g.privilege_type = 'SELECT');
     IF v_n = 0 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' -> '||left(v_txt, 200)); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T8 les facades de public exposent exactement les colonnes de leur source dans api';
+  -- Ajoute le 30/08/2026 (item B8). L'item annoncait « des vues qui existent en
+  -- double entre public et api ». Ce ne sont pas des doublons : `public.my_access`
+  -- et `public.my_session_context` sont des PROJECTIONS de leurs homonymes de
+  -- `api`. Un seul foyer, une facade par-dessus -- c'est bien construit.
+  --
+  -- Mais la facade ENUMERE ses colonnes. Ajouter une colonne a `api.my_access`
+  -- ne la fait pas apparaitre dans `public.my_access` : la vue continue de
+  -- projeter la liste ecrite le jour de sa creation. Et 31 fonctions declarent
+  -- `v_actor public.my_access%rowtype` -- la forme de la facade est devenue un
+  -- TYPE. Une divergence ne leverait donc rien : elles compileraient, et ne
+  -- verraient simplement jamais la colonne neuve.
+  --
+  -- Au 30/08 les deux couples concordent (20/20 et 13/13 colonnes). Ce test ne
+  -- repare rien : il empeche que ca cesse d'etre vrai sans que personne ne le
+  -- voie. C'est une divergence par OMISSION, la seule qui ne fasse aucun bruit.
+  BEGIN
+    SELECT count(*), coalesce(string_agg(x.detail, ' | ' ORDER BY x.detail), '')
+      INTO v_n, v_txt
+      FROM (
+        SELECT f.vue||' : '||f.sens||' -> '||f.colonne AS detail
+          FROM (
+            SELECT c.table_name AS vue, 'absente de la facade public' AS sens, c.column_name AS colonne
+              FROM information_schema.columns c
+             WHERE c.table_schema='api' AND c.table_name IN ('my_access','my_session_context')
+               AND NOT EXISTS (SELECT 1 FROM information_schema.columns p
+                                WHERE p.table_schema='public' AND p.table_name=c.table_name
+                                  AND p.column_name=c.column_name)
+            UNION ALL
+            SELECT p.table_name, 'en trop dans la facade public', p.column_name
+              FROM information_schema.columns p
+             WHERE p.table_schema='public' AND p.table_name IN ('my_access','my_session_context')
+               AND NOT EXISTS (SELECT 1 FROM information_schema.columns c
+                                WHERE c.table_schema='api' AND c.table_name=p.table_name
+                                  AND c.column_name=p.column_name)
+          ) f
+      ) x;
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : '||v_n||' ecart(s) -> '||left(v_txt, 300)
+        ||' | 31 fonctions declarent public.my_access%rowtype : une colonne absente de la facade'
+        ||' leur reste invisible sans qu''aucune erreur ne soit levee');
+    END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-30** · 88 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-30** · 87 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 13
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 12
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -362,7 +362,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B5** | Résorber les neuf policies qui réévaluent `auth.*()` par ligne | `P2` | Ouvert |
 | **B6** | Réconcilier `config.toml` avec les 48 fonctions réellement déployées | `P1` | Ouvert |
 | **B7** | Départager les homonymes de fonctions entre `ingest` et `public` | `P2` | Ouvert |
-| **B8** | Départager les vues qui existent en double entre `public` et `api` | `P2` | Ouvert |
 | **B9** | Purger le schéma `backup_2026_05_07` | `P2` | Ouvert |
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
@@ -529,25 +528,6 @@ Les oracles trouvés en mai avaient tous la même forme : un identifiant en para
 
 - Les trois fonctions métier homonymes sont départagées.
 - Aucune ne dépend de l'ordre du `search_path` pour être résolue correctement.
-
-**Dépendances.** Aucune.
-
-*Renvois : `Relevé du 29/08/2026`*
-
-#### B8 — Départager les vues qui existent en double entre `public` et `api`
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État vérifié au 29/08.** Quatre paires de vues homonymes ou quasi : `public.my_access` / `api.my_access`, `public.my_session_context` / `api.my_session_context`, `public.v_library_service_public` / `api.library_service_public`, `public.v_book_detail_public_v2` / `api.catalog_book_detail_public_v2`. Et dans `public`, `catalog_partners_policy_flags` coexiste avec `catalog_partners_policy_flags_v2`.
-
-**Ce que c'est.** Vérifier laquelle est lue par le front — le schéma exposé par PostgREST est `public,api,storage` — et supprimer les autres, ou expliciter que la vue `public` est le socle et la vue `api` l'exposition.
-
-**Pourquoi ça compte.** Deux vues du même nom dans deux schémas tous deux exposés par PostgREST, c'est une ambiguïté à l'appel. Et une vue `_v2` qui n'a jamais remplacé sa `v1` est du code mort qui ressemble à du code vivant.
-
-**Ce qui compte comme fini.**
-
-- Chaque paire a un verdict : socle + exposition assumés, ou suppression de la morte.
-- La vue `_v2` a remplacé sa devancière, ou l'inverse.
 
 **Dépendances.** Aucune.
 
@@ -2297,6 +2277,11 @@ Ces entrées figuraient dans le v33, dans `ETAT-AVANCEMENT-multisessions`, dans 
 | I15 | Les trois suites de circulation d'avant la CI, et les deux chemins E2E | **Soldé le 30/08.** Douze branches `jwt sim` retirées ; les dénominateurs de `paquet25`, `paquet_emprestimos` et `paquet_reservas` incluent désormais les skips — sans quoi une régression du stub d'authentification aurait fait passer une suite de `32/32` à `20/20` en restant verte ; six gardes qui cherchaient un texte de HINT dans `SQLERRM` (qui porte le MESSAGE) remplacées par le code levé ; trois tests qui comptaient un succès dans toutes leurs branches réécrits ; deux étiquettes qui nommaient des personnes renommées. Les **deux chemins E2E sont écrits** — emprunts (prêt → entête ouverte → renouvellement → retour → exemplaire libéré) et réservations (création → refus du second envoi → annulation → invariant entête↔lignes) — et le seed porte le jeu de règles de circulation sans lequel renouveler était impossible. Plus aucun SKIP dans les cinq suites. **Ce que la journée a appris, trois fois : le produit avait raison et le test lisait le mauvais champ** — le hint au lieu du message, l'effet au lieu du contrat, `due_at` au lieu de `extended_until`. Et deux fois, la garde qui protège n'était pas celle qui porte le nom du risque : RLS ferme avant le contrôle d'appartenance, la disponibilité ferme avant le doublon. La question de produit qui en sort — un refus qui ne lève pas — est devenue l'item **B15**. |
 | F5 | Le délai de négociation de 21 jours des réservations | **Vérifié et clos le 30/08.** Le mécanisme est implémenté, et mieux que ne le disait la spec : `fn_expire_negotiation_timeout()` **lit le délai par bibliothèque** dans `library_notification_policies.reservation_negotiation_timeout_days` au lieu de le figer, la colonne porte exactement le `DEFAULT 21` et le `CHECK BETWEEN 7 AND 60` décrits au §5 de la spec, et les trois bibliothèques du réseau sont à 21 jours. Le cron `anarbib-reservation-expire-negotiation` tourne toutes les heures. La spec portait encore « À valider avant implémentation » : son en-tête est corrigé le même jour, en distinguant ce qui est **bâti** de ce qui reste à **voter** — le principe politique de la négociation symétrique n'a pas été soumis au CCLA sous cette forme. |
 | I9 | Les migrations horodatées dans le futur | **Clos le 30/08 par une règle, pas par une correction.** L'item signalait trois migrations datées en avance. Vérification faite le 30/08 : elles n'y sont plus — **mais parce que l'heure les a rattrapées**, pas parce qu'on les a corrigées. Un item qui se résout par l'écoulement du temps ne se résout pas, il repousse : le soir même, deux nouvelles migrations apparaissaient, datées de 20:30 et 21:00 UTC alors qu'il était 19:15. Corriger les trois fichiers nommés n'aurait donc rien réglé. **Huitième règle du hook `pre-commit`** : une migration ajoutée dont l'horodatage dépasse l'heure UTC réelle (tolérance 60 s pour l'écart d'horloges WSL/Windows) est refusée. Ce que coûtait le défaut, tant que l'heure n'avait pas passé : toute migration écrite entre-temps à l'heure réelle trie **avant** celle du futur et sera rejouée après elle en CI — l'ordre du dépôt cesse d'être l'ordre d'application, même dégât qu'une collision par un autre chemin. Complète `DOC-DEPLOY-4`. |
+| B8 | Les vues « en double » entre `public` et `api` | **Vérifié et clos le 30/08 — l'item se trompait de diagnostic.** `my_access` et `my_session_context` n'existent pas en double : les versions de `public` sont des **projections** de celles de `api` (300 caractères contre 2 100). Un seul foyer, une façade par-dessus : c'est bien construit, il n'y a rien à réconcilier.
+
+Mais la vérification a trouvé autre chose, qui valait le détour. **La façade énumère ses colonnes** : ajouter une colonne à `api.my_access` ne la fait pas apparaître dans `public.my_access`, qui continue de projeter la liste écrite le jour de sa création. Et **31 fonctions déclarent `v_actor public.my_access%rowtype`** — la forme de la façade est devenue un *type*. Une divergence ne lèverait donc rien : les 31 compileraient et ne verraient simplement jamais la colonne neuve. Une divergence par **omission**, la seule qui ne fasse aucun bruit.
+
+Au 30/08 les deux couples concordent (20/20 et 13/13 colonnes). Gardé par le **T8** de `vues_api_definer_tests.sql`, qui n'y répare rien mais empêche que ça cesse d'être vrai sans que personne ne le voie. |
 
 ---
 
@@ -2328,4 +2313,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 88 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 87 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
