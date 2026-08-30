@@ -98,7 +98,6 @@ library_constitution_progress
 library_contact_profiles
 library_deposit_rules
 library_document_governance
-library_email_identity
 library_events
 library_mail_channels
 library_membership_audit

@@ -573,7 +573,6 @@ serve(async (req)=>{
     const requestedLibraryContactEmail = normalizeEmail(body?.library_contact_email);
     const requestedLibraryReplyToEmail = normalizeEmail(body?.library_reply_to_email);
     const requestedLibraryAddress = String(body?.library_address || "").trim();
-    const requestedLibraryEmailDeliveryMode = String(body?.library_email_delivery_mode || "normal").trim();
     const requestedLibraryIsTestMode = body?.library_is_test_mode === true;
     const preferredLoginIdentifier = String(body?.preferred_login_identifier || "public_id").trim();
     // Locale du destinataire pour le mail de bienvenue.
@@ -687,7 +686,6 @@ serve(async (req)=>{
         contact_email: requestedLibraryContactEmail || "",
         reply_to_email: requestedLibraryReplyToEmail || ANARBIB_REPLY_TO_EMAIL,
         postal_address: requestedLibraryAddress || "",
-        email_delivery_mode: requestedLibraryEmailDeliveryMode || "normal",
         is_test_mode: requestedLibraryIsTestMode,
         is_active: true
       };
@@ -1077,7 +1075,6 @@ serve(async (req)=>{
     const displayName = firstNonEmptyString(libraryMeta?.display_name, libraryRow?.name, requestedLibraryName, mailIsWithoutLibrary ? "AnarBib" : effectiveLibrarySlug);
     const contactEmail = normalizeEmail(libraryMeta?.contact_email);
     const postalAddress = String(libraryMeta?.postal_address || "").trim();
-    const emailDeliveryMode = String(libraryMeta?.email_delivery_mode || "normal").trim();
     const isTestMode = libraryMeta?.is_test_mode === true;
     // #153.C : le logo de la biblio est résolu depuis son contexte (la base)
     // — colonne libraries.logo_url, lue dans le select de libraryRow — et non
@@ -1102,10 +1099,12 @@ serve(async (req)=>{
     // `safeSendEmail`, qui refuse l envoi via `transportDisabledReason`.
     //
     // Piege a ne pas reproduire : `library_commons.email_delivery_mode`
-    // (normal|test_only|disabled), affiche par l ecran « e-mails », n est applique
-    // NULLE PART. Il partage la valeur `disabled` avec le vrai commutateur mais ne
-    // decrit PAS la meme chose (volume d envoi vs transport) — c est ce qui l a
-    // fait passer pour un interrupteur pendant des mois.
+    // (normal|test_only|disabled) n etait applique NULLE PART, alors que l ecran
+    // « e-mails » l affichait comme un selecteur « Modo de envio ». Il partageait
+    // la valeur `disabled` avec le vrai commutateur sans decrire la meme chose
+    // (volume d envoi vs transport) — c est ce qui l a fait passer pour un
+    // interrupteur pendant des mois. La colonne a ete supprimee le 30/08/2026,
+    // pour qu aucune relecture future ne la reprenne pour un reglage.
     //
     // On aligne ici : meme source d adresse (`admin_notification_email`), meme
     // regle d extinction. `contact_email` reste en repli pour qu une biblio sans
@@ -1134,10 +1133,6 @@ serve(async (req)=>{
       channel_disabled_reason: channelDisabledReason,
       effective_library_internal_recipients: effectiveLibraryInternalRecipients,
       admin_recipients: adminRecipients,
-      // `email_delivery_mode` n est applique nulle part : journalise pour memoire
-      // uniquement, sous un nom qui dit ce qu il vaut. Le vrai commutateur est
-      // `channel_delivery_mode` ci-dessus.
-      inert_email_delivery_mode: emailDeliveryMode,
       is_test_mode: isTestMode
     });
     const userMailHtml = buildUserMail({
