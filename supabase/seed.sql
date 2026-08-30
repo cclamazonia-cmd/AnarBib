@@ -254,13 +254,21 @@ BEGIN
           'TEST-CIRC-1', 'Obra de teste — circulação', 'aberto', (current_date + 21));
 
   -- --- Holding 2 : la consulta de la lectrice A --------------------------
+  -- L'ouvrage est EMPRUNTABLE, et c'est delibere. L'invariant que garde le
+  -- test C.3 de paquet24 est : « un exemplaire pretable, mais actuellement en
+  -- consultation sur place, ne se prete pas ». Avec un ouvrage non pretable,
+  -- fn_v2_create_emprestimo_by_holdings refuse des le controle de pretabilite
+  -- -- « Referencia(s) nao emprestavel(is) » -- et n'atteint jamais le
+  -- controle de consulta. Le test passait alors a cote de ce qu'il annonce.
+  -- Un fixture qui fait echouer la fonction pour la mauvaise raison est pire
+  -- qu'un fixture absent : il rend le test vert sur un invariant non teste.
   INSERT INTO public.books (titulo, bib_ref, tipo_material, circulation_default, loanable)
-  VALUES ('Obra de teste — consulta local', 'TEST-CONS-1', 'livro', 'consulta', false)
+  VALUES ('Obra de teste — emprestável, mas em consulta local', 'TEST-CONS-1', 'livro', 'emprestavel', true)
   RETURNING id INTO v_b2;
   INSERT INTO public.book_holdings (book_id, library_id, exemplares_total, available_count)
   VALUES (v_b2, c_blmf, 1, 1) RETURNING id INTO v_h2;
   INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, circulation_policy, visibility)
-  VALUES ('TEST-CONS-1', 'TESTE-000004', c_blmf, v_h2, 'consulta', 'public')
+  VALUES ('TEST-CONS-1', 'TESTE-000004', c_blmf, v_h2, 'emprestavel', 'public')
   RETURNING id INTO v_i2;
 
   INSERT INTO public.consultas_locais_v2 (user_id, library_id, status_global, notes)
@@ -270,7 +278,7 @@ BEGIN
   INSERT INTO public.consulta_linhas_v2
     (consulta_id, line_no, book_id, holding_id, item_id, bib_ref, titulo_cache, item_status, expires_at)
   VALUES (v_cons, 1, v_b2, v_h2, v_i2, 'TEST-CONS-1',
-          'Obra de teste — consulta local', 'ativa', (now() + interval '30 days'));
+          'Obra de teste — emprestável, mas em consulta local', 'ativa', (now() + interval '30 days'));
 
   -- `em_preparacao` : etape non terminale, celle que cherchent C.5/C.6 et D.4.
   INSERT INTO public.consulta_item_workflow_v2 (consulta_id, line_no, workflow_stage, workflow_note)
