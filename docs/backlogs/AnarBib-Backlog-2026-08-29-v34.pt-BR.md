@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-31** · 83 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
@@ -60,7 +60,7 @@ Esse trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `1d00ed2c`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados.
 
-**Frescor dos constatos em 2026-08-31.** **58 itens de 83** trazem uma verificação datada própria (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C4, C5, C7, C8, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2, K4). Os **25** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-08-31.** **59 itens de 84** trazem uma verificação datada própria (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C4, C5, C7, C8, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2, K4). Os **25** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -661,7 +661,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Dependências.** Esclarecido por **B12**. Ressoa com **A1**. Partilha o vocabulário com o resumo semanal, o que **alivia F6**.
 
-*Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6`*
+*Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6` · `item F8`*
 
 ---
 
@@ -1315,6 +1315,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F7** | Treze segredos de função estão declarados e vazios, sem que se saiba quais o são de propósito | `P2` | Aberto |
+| **F8** | O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1490,6 +1491,28 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 **Dependências.** Nenhuma. O levantamento está feito e cabe no item; o que resta exige sobretudo saber o que se queria.
 
 *Remissões : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
+
+#### F8 — O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Trinta e seis crons enviam correio via `notifications.anarbib.org` e ninguém nunca tinha levantado SPF, DKIM nem DMARC. Feito em 31/08: **o domínio está em regra para enviar.** O caminho de retorno vive em `send.` (MX SES `eu-west-1`, SPF `include:amazonses.com`); a chave DKIM `resend._domainkey` está publicada; DMARC existe no subdomínio e no pai. Dois resíduos de uma época deixada: os dois DMARC trazem `rua=mailto:rua@dmarc.brevo.com` — **os relatórios agregados vão para a Brevo, que nada mais no projeto menciona** — e o TXT guarda um `brevo-code` de verificação. A política é `p=none`: nada é imposto, o que não atrapalha o envio.
+
+*Verificado : 31/08 — três `Resolve-DnsName`, mais o `send.` e o pai: SPF em `send.`, DKIM publicado, DMARC `p=none` com `rua` Brevo nos dois níveis, `brevo-code` residual.*
+
+**O que é.** Decidir o destino dos resíduos Brevo e da política DMARC. Nada bloqueia o e-mail de 10/09.
+
+**Por que importa.** Um canal de relatórios que aponta para um prestador deixado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`): se a autenticação se degradasse amanhã, os relatórios iriam para uma caixa que ninguém lê.
+
+**O que conta como terminado.**
+
+- O destino `rua` tem um veredito: redirecionado para uma caixa lida, ou retirado com a razão escrita.
+- O `brevo-code` residual é retirado, ou sua presença justificada.
+- A eventual passagem de `p=none` a uma política restritiva tem um veredito escrito — não antes de os relatórios serem lidos em algum lugar.
+
+**Dependências.** Acesso DNS do domínio (registrar). Nenhuma dependência de código.
+
+*Remissões : `item F1` · `item B17` · `REGISTRE DOC-SILENCE-1` · `notifications.anarbib.org` · `send.notifications.anarbib.org`*
 
 ---
 
@@ -2519,4 +2542,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 83 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -4993,7 +4993,8 @@
         "public.fn_is_critical_action_type",
         "REGISTRE DOC-RECENS-1",
         "item B12",
-        "item F6"
+        "item F6",
+        "item F8"
       ],
       "verif": {
         "fr": "31/08 — instruit, **corrigé**, livré et **éprouvé en envoi réel le jour même**. Cinq sources : la base (4 lignes en file ; `#72` passée à `sent` à 15 h 23 h 35, `skip_reason` à `NULL`), la réponse HTTP de `notify-event` (`200`, `recipients_count: 3`, trois `ok: true`), **le courriel reçu et relu** (identité réseau, qualifiant de proposition correct), le code (aucune branche pour cet event avant ce jour ; un récapitulatif hebdomadaire qui sert les mêmes destinataires depuis le 17/08), et le déclencheur `trg_team_outbox_dispatch`, `AFTER INSERT` sans rejeu. **Reste à éprouver sur un type d'action sans autre canal.**",
@@ -5575,6 +5576,59 @@
       "verif": {
         "fr": "31/08 — `supabase secrets list` rejoué : les treize mêmes secrets portent l'empreinte de la chaîne vide, ni plus ni moins. `REGIMENTO_URL` toujours vide, ses deux replis toujours absents : la ligne « Regimento » manque toujours des courriels.",
         "pt": "31/08 — `supabase secrets list` refeito: os mesmos treze segredos com a impressão da cadeia vazia. `REGIMENTO_URL` segue vazio e sem fallback."
+      }
+    },
+    {
+      "id": "F8",
+      "d": "F",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Le domaine d'envoi, relevé : en règle pour envoyer, ses rapports partent chez Brevo",
+        "pt": "O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo"
+      },
+      "v": {
+        "fr": "Trente-six crons envoient du courrier via `notifications.anarbib.org` et personne n'avait jamais relevé SPF, DKIM ni DMARC — non parce qu'un indice inquiétait (il n'y en a plus depuis le retrait du constat de la corbeille, B17), mais parce que le relevé n'avait jamais été fait. Fait le 31/08 : **le domaine est en règle pour envoyer.** Le chemin de retour vit sur `send.notifications.anarbib.org` (MX `feedback-smtp.eu-west-1.amazonses.com`, SPF `v=spf1 include:amazonses.com ~all`) ; la clé DKIM `resend._domainkey` est publiée ; DMARC existe sur le sous-domaine et sur le parent. Deux résidus d'une époque quittée, en revanche : les deux enregistrements DMARC portent `rua=mailto:rua@dmarc.brevo.com` — **les rapports agrégés partent chez Brevo, que plus rien d'autre dans le projet ne mentionne** — et le TXT du sous-domaine garde un `brevo-code` de vérification. La politique est `p=none` : rien n'est imposé aux destinataires, ce qui ne gêne pas l'envoi.",
+        "pt": "Trinta e seis crons enviam correio via `notifications.anarbib.org` e ninguém nunca tinha levantado SPF, DKIM nem DMARC. Feito em 31/08: **o domínio está em regra para enviar.** O caminho de retorno vive em `send.` (MX SES `eu-west-1`, SPF `include:amazonses.com`); a chave DKIM `resend._domainkey` está publicada; DMARC existe no subdomínio e no pai. Dois resíduos de uma época deixada: os dois DMARC trazem `rua=mailto:rua@dmarc.brevo.com` — **os relatórios agregados vão para a Brevo, que nada mais no projeto menciona** — e o TXT guarda um `brevo-code` de verificação. A política é `p=none`: nada é imposto, o que não atrapalha o envio."
+      },
+      "w": {
+        "fr": "Décider du sort des résidus Brevo et de la politique DMARC. Rien ne bloque le courriel du 10/09.",
+        "pt": "Decidir o destino dos resíduos Brevo e da política DMARC. Nada bloqueia o e-mail de 10/09."
+      },
+      "y": {
+        "fr": "Un canal de rapports qui pointe chez un prestataire quitté est un dispositif de surveillance qui se tait (`DOC-SILENCE-1`) : si l'authentification se dégradait demain — clé retirée, SPF cassé par une retouche DNS — les rapports qui le diraient partiraient dans une boîte que personne ne lit.",
+        "pt": "Um canal de relatórios que aponta para um prestador deixado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`): se a autenticação se degradasse amanhã, os relatórios iriam para uma caixa que ninguém lê."
+      },
+      "f": {
+        "fr": [
+          "La destination `rua` a un verdict : redirigée vers une boîte lue du réseau, ou retirée avec la raison écrite.",
+          "Le `brevo-code` résiduel est retiré, ou sa présence justifiée.",
+          "Le passage éventuel de `p=none` à une politique contraignante a un verdict écrit — pas avant que les rapports soient lus quelque part."
+        ],
+        "pt": [
+          "O destino `rua` tem um veredito: redirecionado para uma caixa lida, ou retirado com a razão escrita.",
+          "O `brevo-code` residual é retirado, ou sua presença justificada.",
+          "A eventual passagem de `p=none` a uma política restritiva tem um veredito escrito — não antes de os relatórios serem lidos em algum lugar."
+        ]
+      },
+      "dep": {
+        "fr": "Accès DNS du domaine (registrar). Aucune dépendance de code.",
+        "pt": "Acesso DNS do domínio (registrar). Nenhuma dependência de código."
+      },
+      "r": [
+        "item F1",
+        "item B17",
+        "REGISTRE DOC-SILENCE-1",
+        "notifications.anarbib.org",
+        "send.notifications.anarbib.org"
+      ],
+      "verif": {
+        "fr": "31/08 — trois `Resolve-DnsName` (TXT du sous-domaine, `resend._domainkey`, `_dmarc`), plus les emplacements `send.` et le parent : SPF porté par `send.` (SES `eu-west-1`), DKIM publié, DMARC `p=none` avec `rua` Brevo aux deux niveaux, `brevo-code` résiduel.",
+        "pt": "31/08 — três `Resolve-DnsName`, mais o `send.` e o pai: SPF em `send.`, DKIM publicado, DMARC `p=none` com `rua` Brevo nos dois níveis, `brevo-code` residual."
       }
     }
   ]

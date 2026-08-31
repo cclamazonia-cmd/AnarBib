@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-31** · 83 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-31** · 84 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 10
@@ -60,7 +60,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **29 août 2026**. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `1d00ed2c`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés.
 
-**Fraîcheur des constats au 2026-08-31.** **58 items sur 83** portent une vérification datée qui leur est propre (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C4, C5, C7, C8, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2, K4). Les **25** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-08-31.** **59 items sur 84** portent une vérification datée qui leur est propre (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C4, C5, C7, C8, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2, K4). Les **25** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -675,7 +675,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **Dépendances.** Éclairé par **B12** (la raison du saut est écrite). Résonne avec **A1** : un seul administrateur réseau, donc un seul émetteur possible de ces actions. Partage son vocabulaire avec le récapitulatif hebdomadaire, ce qui **allège F6** d'un fichier au lieu de l'alourdir.
 
-*Renvois : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6`*
+*Renvois : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6` · `item F8`*
 
 ---
 
@@ -1329,6 +1329,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 | **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 | **F7** | Treize secrets de fonction sont déclarés et vides, sans qu'on sache lesquels le sont exprès | `P2` | Ouvert |
+| **F8** | Le domaine d'envoi, relevé : en règle pour envoyer, ses rapports partent chez Brevo | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1520,6 +1521,28 @@ Et parce que l'inverse est plus dangereux encore : les deux redirections sont vi
 **Dépendances.** Aucune. Le relevé est fait et tient dans l'item ; ce qui reste demande surtout de savoir ce qu'on voulait.
 
 *Renvois : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
+
+#### F8 — Le domaine d'envoi, relevé : en règle pour envoyer, ses rapports partent chez Brevo
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** Trente-six crons envoient du courrier via `notifications.anarbib.org` et personne n'avait jamais relevé SPF, DKIM ni DMARC — non parce qu'un indice inquiétait (il n'y en a plus depuis le retrait du constat de la corbeille, B17), mais parce que le relevé n'avait jamais été fait. Fait le 31/08 : **le domaine est en règle pour envoyer.** Le chemin de retour vit sur `send.notifications.anarbib.org` (MX `feedback-smtp.eu-west-1.amazonses.com`, SPF `v=spf1 include:amazonses.com ~all`) ; la clé DKIM `resend._domainkey` est publiée ; DMARC existe sur le sous-domaine et sur le parent. Deux résidus d'une époque quittée, en revanche : les deux enregistrements DMARC portent `rua=mailto:rua@dmarc.brevo.com` — **les rapports agrégés partent chez Brevo, que plus rien d'autre dans le projet ne mentionne** — et le TXT du sous-domaine garde un `brevo-code` de vérification. La politique est `p=none` : rien n'est imposé aux destinataires, ce qui ne gêne pas l'envoi.
+
+*Vérifié : 31/08 — trois `Resolve-DnsName` (TXT du sous-domaine, `resend._domainkey`, `_dmarc`), plus les emplacements `send.` et le parent : SPF porté par `send.` (SES `eu-west-1`), DKIM publié, DMARC `p=none` avec `rua` Brevo aux deux niveaux, `brevo-code` résiduel.*
+
+**Ce que c'est.** Décider du sort des résidus Brevo et de la politique DMARC. Rien ne bloque le courriel du 10/09.
+
+**Pourquoi ça compte.** Un canal de rapports qui pointe chez un prestataire quitté est un dispositif de surveillance qui se tait (`DOC-SILENCE-1`) : si l'authentification se dégradait demain — clé retirée, SPF cassé par une retouche DNS — les rapports qui le diraient partiraient dans une boîte que personne ne lit.
+
+**Ce qui compte comme fini.**
+
+- La destination `rua` a un verdict : redirigée vers une boîte lue du réseau, ou retirée avec la raison écrite.
+- Le `brevo-code` résiduel est retiré, ou sa présence justifiée.
+- Le passage éventuel de `p=none` à une politique contraignante a un verdict écrit — pas avant que les rapports soient lus quelque part.
+
+**Dépendances.** Accès DNS du domaine (registrar). Aucune dépendance de code.
+
+*Renvois : `item F1` · `item B17` · `REGISTRE DOC-SILENCE-1` · `notifications.anarbib.org` · `send.notifications.anarbib.org`*
 
 ---
 
@@ -2555,4 +2578,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 83 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 84 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
