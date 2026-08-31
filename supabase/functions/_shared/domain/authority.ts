@@ -43,6 +43,17 @@ async function markOutboxFailed(id: number, msg: string) {
     .update({ status: "failed", last_error: String(msg).slice(0, 500) })
     .eq("id", id);
 }
+// B12 / DOC-SILENCE-1. Jusqu'au 31/08 cette table marquait `sent` QUOI QU'IL
+// ARRIVE, y compris quand routeAuthorityEvent venait de retourner
+// { skipped: "unknown_event" } ou { sent: 0, skipped: "no_recipients" } : elle
+// n'affirmait pas seulement qu'elle ignorait pourquoi rien n'etait parti, elle
+// affirmait que quelque chose etait parti. Son enum de statut n'avait meme pas
+// le mot `skipped` -- ajoute par la migration 20260831090412.
+async function markOutboxSkipped(id: number, reason: string) {
+  await supabaseAdmin.from(OUTBOX)
+    .update({ status: "skipped", skip_reason: String(reason || "raison_non_precisee") })
+    .eq("id", id);
+}
 
 // ─── Chargements ──────────────────────────────────────────────────────────────
 async function loadProfiles(userIds: string[]) {
@@ -135,7 +146,13 @@ export async function handleAuthorityEvent(recordId: number) {
 
   try {
     const result = await routeAuthorityEvent(event, payload);
-    await markOutboxSent(row.id);
+    // `skipped` est renseigne par routeAuthorityEvent quand aucun courriel n'a
+    // ete emis : event inconnu, ou aucun destinataire apres exclusions.
+    if (result?.skipped) {
+      await markOutboxSkipped(row.id, String(result.skipped));
+    } else {
+      await markOutboxSent(row.id);
+    }
     return { ok: true, event, ...result };
   } catch (e) {
     await markOutboxFailed(row.id, (e as Error)?.message || String(e));

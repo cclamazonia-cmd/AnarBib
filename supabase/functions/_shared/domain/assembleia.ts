@@ -23,10 +23,15 @@ import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.t
 const ASSEMBLEIAS_URL = "https://app.anarbib.org/federacao/assembleias";
 const PROFILE_COLS = "id,email,first_name,last_name,preferred_language";
 
-async function markOutbox(outboxId, status, errorMsg) {
+// B12 / DOC-SILENCE-1 : trois statuts, trois formes. `failed` porte son
+// message d'erreur ; `skipped` porte sa raison dans `skip_reason` et surtout
+// PAS de `sent_at`, puisque rien n'est parti ; `sent` seul date un envoi.
+async function markOutbox(outboxId, status, detail) {
   const patch = status === "failed"
-    ? { status: "failed", last_error: errorMsg }
-    : { status, sent_at: new Date().toISOString() };
+    ? { status: "failed", last_error: detail }
+    : status === "skipped"
+      ? { status: "skipped", skip_reason: String(detail || "raison_non_precisee") }
+      : { status, sent_at: new Date().toISOString() };
   await supabaseAdmin.from("team_notification_outbox").update(patch).eq("id", outboxId);
 }
 
@@ -110,12 +115,12 @@ export async function handleAssembleiaEvent(recordId) {
       });
     } else {
       console.warn(`[assembleia] unknown event: ${event}`);
-      await markOutbox(row.id, "skipped");
-      return { ok: true, ignored: true, event };
+      await markOutbox(row.id, "skipped", "unknown_assembleia_event");
+      return { ok: true, ignored: true, reason: "unknown_assembleia_event", event };
     }
 
     if (recipients.length === 0) {
-      await markOutbox(row.id, "skipped");
+      await markOutbox(row.id, "skipped", "no_recipients");
       return { ok: true, event, recipients_count: 0, results: [] };
     }
 

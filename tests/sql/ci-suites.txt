@@ -212,3 +212,8 @@ tests/sql/canal_invariant_tests.sql
 # qu on reinsere le calcul dans le corps, ce qui reintroduirait le defaut sans
 # qu aucun voyant ne rougisse.
 tests/sql/slug_biblioteca_tests.sql
+
+# B12 : un envoi non effectué dit pourquoi. T4 à T7 ECRIVENT — vérifier que la
+# colonne existe ne prouve rien, ce qui compte est que la base REFUSE une ligne
+# sautée sans raison. T8 est le garde-fou sur la durée.
+tests/sql/outbox_raison_du_saut_tests.sql

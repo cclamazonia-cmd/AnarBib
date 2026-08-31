@@ -72,10 +72,15 @@ async function markOutboxFailed(outboxId, errorMsg) {
 // #153.E LP-C : fan-out vide (handler réussi mais aucun destinataire). Statut
 // distinct de 'sent' pour que la table d'audit ne prétende pas qu'un mail est
 // parti. 'skipped' autorisé par la migration 20260527180000_outbox_status_skipped.
-async function markOutboxSkipped(outboxId) {
+// B12 / DOC-SILENCE-1 : un saut doit dire pourquoi. `reason` part dans la
+// colonne `skip_reason`, distincte de `last_error` -- un saut delibere n'est
+// pas une panne. Et `sent_at` n'est PAS pose : dans un journal, il veut dire
+// « un courriel est parti », et rien n'est parti. Les deux CHECK de la
+// migration 20260831090412 refusent l'oubli.
+async function markOutboxSkipped(outboxId, reason) {
   await supabaseAdmin.from("team_notification_outbox").update({
     status: "skipped",
-    sent_at: new Date().toISOString()
+    skip_reason: String(reason || "raison_non_precisee")
   }).eq("id", outboxId);
 }
 
@@ -214,7 +219,7 @@ export async function handleNetworkEvent(recordId) {
     } else {
       console.warn(`[network] unknown event: ${event}`);
       // #153.E LP-C : event non reconnu = aucun mail émis → skipped, pas sent.
-      await markOutboxSkipped(row.id);
+      await markOutboxSkipped(row.id, "unknown_network_event");
       return {
         ok: true,
         ignored: true,
@@ -225,7 +230,7 @@ export async function handleNetworkEvent(recordId) {
     // #153.E LP-C : fan-out vide (handler réussi, recipients_count === 0) →
     // 'skipped' et non 'sent', pour ne pas faire croire qu'un mail est parti.
     if (result?.recipients_count === 0) {
-      await markOutboxSkipped(row.id);
+      await markOutboxSkipped(row.id, "no_recipients");
     } else {
       await markOutboxSent(row.id);
     }

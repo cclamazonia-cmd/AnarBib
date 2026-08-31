@@ -50,8 +50,12 @@ async function fetchLocaleBody(issueId, locale) {
 async function markOutboxSent(id) {
   await supabaseAdmin.from(OUTBOX).update({ status: "sent", sent_at: new Date().toISOString() }).eq("id", id);
 }
-async function markOutboxSkipped(id) {
-  await supabaseAdmin.from(OUTBOX).update({ status: "skipped", sent_at: new Date().toISOString() }).eq("id", id);
+// B12 / DOC-SILENCE-1 : un saut doit dire pourquoi. La raison part dans
+// `skip_reason`, distincte de `last_error` -- un saut delibere n'est pas une
+// panne. Et pas de `sent_at` : dans un journal, il veut dire « un courriel est
+// parti ». Les CHECK de la migration 20260831090412 refusent l'oubli.
+async function markOutboxSkipped(id, reason) {
+  await supabaseAdmin.from(OUTBOX).update({ status: "skipped", skip_reason: String(reason || "raison_non_precisee") }).eq("id", id);
 }
 async function markOutboxFailed(id, errorMsg) {
   await supabaseAdmin.from(OUTBOX).update({ status: "failed", last_error: errorMsg }).eq("id", id);
@@ -74,10 +78,10 @@ export async function handleLettreEvent(recordId) {
       result = await handleIssueSent(payload, ctx);
     } else {
       console.warn(`[lettre] unknown event: ${event}`);
-      await markOutboxSkipped(outbox.id);
+      await markOutboxSkipped(outbox.id, "unknown_lettre_event");
       return { ok: true, ignored: true, reason: "unknown_lettre_event", event };
     }
-    if (result?.recipients_count === 0) await markOutboxSkipped(outbox.id);
+    if (result?.recipients_count === 0) await markOutboxSkipped(outbox.id, "no_recipients");
     else await markOutboxSent(outbox.id);
     return { ok: true, event, ...result };
   } catch (err) {

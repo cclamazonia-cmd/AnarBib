@@ -31,8 +31,10 @@ function safeUrl(u) {
 async function markOutboxSent(id) {
   await supabaseAdmin.from(OUTBOX).update({ status: "sent", sent_at: new Date().toISOString() }).eq("id", id);
 }
-async function markOutboxSkipped(id) {
-  await supabaseAdmin.from(OUTBOX).update({ status: "skipped", sent_at: new Date().toISOString() }).eq("id", id);
+// B12 / DOC-SILENCE-1 : la raison dans `skip_reason`, et pas de `sent_at`
+// sur une ligne dont aucun courriel n'est parti.
+async function markOutboxSkipped(id, reason) {
+  await supabaseAdmin.from(OUTBOX).update({ status: "skipped", skip_reason: String(reason || "raison_non_precisee") }).eq("id", id);
 }
 async function markOutboxFailed(id, errorMsg) {
   await supabaseAdmin.from(OUTBOX).update({ status: "failed", last_error: errorMsg }).eq("id", id);
@@ -50,7 +52,7 @@ export async function handleCartographyEvent(recordId) {
   try {
     if (event !== "cartography.submission_received") {
       console.warn(`[cartography] unknown event: ${event}`);
-      await markOutboxSkipped(outbox.id);
+      await markOutboxSkipped(outbox.id, "unknown_cartography_event");
       return { ok: true, ignored: true, reason: "unknown_cartography_event", event };
     }
 

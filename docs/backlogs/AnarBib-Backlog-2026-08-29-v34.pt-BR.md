@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-31** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 12
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -370,9 +370,10 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B9** | Purgar o esquema `backup_2026_05_07` | `P2` | Aberto |
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
-| **B12** | Um envio não efetuado não diz por quê: os `skipped` de `team_notification_outbox` | `P2` | Aberto |
+| **B12** | Um envio não efetuado não diz porquê — e num caso, a tabela afirma o contrário | `P2` | Em curso |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B15** | Uma renovação recusada não diz nada a quem não lê o `ok` | `P2` | A verificar |
+| **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Aberto |
 
 #### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
 
@@ -594,9 +595,9 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 *Remissões : `REGISTRE §18 OPAC-W1` · `Relevé du 29/08/2026`*
 
-#### B12 — Um envio não efetuado não diz por quê: os `skipped` de `team_notification_outbox`
+#### B12 — Um envio não efetuado não diz porquê — e num caso, a tabela afirma o contrário
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
 
 **Estado.** **Reformulado em 30/08 após verificação: o item designava uma tabela que não existe.** Falava de «três linhas de `network.cross_library_critical_action` em `status = 'skipped'`». Essa relação não existe, e a única tabela de nome vizinho não tem nenhuma das colunas citadas. O constato fora copiado sobre o objeto errado na reescrita v34.
 
@@ -604,21 +605,24 @@ As linhas existem, mas em **`public.team_notification_outbox`** — e são **qua
 
 Cada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error` **nulo**. O pedido partiu, e a linha não está em erro: está `skipped` porque algo decidiu não enviar. **Mas a razão não está escrita em lugar nenhum.**
 
-*Verificado : 30/08 — a tabela nomeada pelo item não existe; as quatro linhas estão em `public.team_notification_outbox`, uma delas de 30/08. Constato refeito, causa não instruída.*
+**Instruído em 31/08, e o constato era pequeno demais.** As quatro linhas têm todas o **mesmo** evento, `network.cross_library_critical_action`, e são as **únicas** desse evento: nunca partiu desde 8 de junho. A causa é um handler em falta em `_shared/domain/network.ts` — item **B17**. E o silêncio não estava confinado a esse evento: cinco tabelas de outbox perdiam a razão do salto, e `authority.ts` marcava **`sent`** aconteça o que acontecer. **Entregue em 31/08**: coluna `skip_reason` nas cinco tabelas, dois `CHECK` por tabela, `skipped` acrescentado ao enum de `authority`, e os sete sítios do código que saltam escrevem a sua razão.
 
-**O que é.** Acrescentar à outbox uma coluna que carregue a razão do salto — `skip_reason` — e preenchê-la onde a decisão é tomada. `last_error` não pode fazer esse papel: um salto deliberado não é um erro. Depois retomar as quatro linhas existentes: com a razão, saber-se-á se é preciso reenviar ou encerrar.
+*Verificado : 31/08 — levantamento em produção: 4 linhas `skipped` em 28, todas do mesmo evento, 0 envios desde 08/06. Entregue no mesmo dia; **a CI ainda não correu**.*
+
+**O que é.** Ver a CI verde na suíte `outbox_raison_du_saut_tests.sql`, depois implantar e verificar **em base** que as quatro linhas retomadas têm `unknown_network_event` e já não têm `sent_at`.
 
 **Por que importa.** Aplicação direta de `DOC-SILENCE-1`, firmado no mesmo dia: **um dispositivo que não age deve dizê-lo.** Uma notificação de equipe não enviada sem razão escrita é uma pessoa que não foi avisada e um registro que não sabe explicá-lo.
 
 **O que conta como terminado.**
 
-- A outbox traz uma razão de salto, distinta de `last_error`.
-- As quatro linhas `skipped` têm um veredicto: reenviadas, ou encerradas com o motivo.
-- O caminho que decide saltar escreve a razão no mesmo lugar em que decide.
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
 
 **Dependências.** Ligado a **F1** (auditoria da cadeia de e-mail).
 
-*Remissões : `public.team_notification_outbox` · `REGISTRE_decisions DOC-SILENCE-1` · `_shared/context/library-mail-routing.ts`*
+*Remissões : `public.team_notification_outbox` · `REGISTRE_decisions DOC-SILENCE-1` · `_shared/domain/{team,network,assembleia,authority,gazette,lettre,cartography}.ts` · `migration 20260831090412` · `tests/sql/outbox_raison_du_saut_tests.sql`*
 
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
@@ -669,6 +673,33 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 **Dependências.** Nenhuma. O inventário faz-se numa consulta; a verificação no front exige ler as chamadas correspondentes.
 
 *Remissões : `tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)` · `public.fn_v2_extend_core` · `REGISTRE_decisions DOC-RPC-3`*
+
+#### B17 — O aviso que devia tornar visíveis as ações de um administrador de rede não existe
+
+`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, i18n
+
+**Estado.** **Encontrado em 31/08 ao instruir B12.** A spec `spec-administrateur-reseau-v0.4` §6.3 escreve: «*Se ação crítica → INSERT na outbox do evento `network.cross_library_critical_action` → **e-mail imediato aos coordenadores ativos da biblioteca***». Esse e-mail nunca partiu.
+
+O gatilho SQL funciona: quatro linhas foram enfileiradas, a última em **30/08/2026**. Mas `_shared/domain/network.ts` conhece onze eventos `network.*` e **não esse**: cai no `else` final, que regista na consola, marca `skipped` e devolve `{ ok: true }`.
+
+**O que isto vale politicamente.** É a notificação que avisa uma biblioteca de que um administrador de rede acaba de agir em sua casa — o contrapeso ao único poder transversal da rede. Há hoje **um só** administrador (`A1`, P0). Não é um defeito de envio, é um defeito de governação.
+
+*Verificado : 31/08 — estabelecido sobre duas fontes: a base e o código. Constato novo, não herdado da v34.*
+
+**O que é.** Escrever `handleCrossLibraryCriticalAction` em `_shared/domain/network.ts`, no modelo dos onze handlers existentes: destinatários = coordenadores **ativos** da biblioteca visada. Depois as cadeias i18n nas dez locales — é o grosso do trabalho. Por fim, decidir o destino das quatro linhas em espera.
+
+**Por que importa.** Um poder transversal sem rasto visível para quem o sofre não é um poder controlado. A spec entendeu-o e escreveu-o; o código nunca o fez.
+
+**O que conta como terminado.**
+
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
+
+**Dependências.** Esclarecido por **B12**. Ressoa com **A1**.
+
+*Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `_shared/domain/network.ts` · `public.team_notification_outbox` · `item B12`*
 
 ---
 
@@ -2493,4 +2524,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
