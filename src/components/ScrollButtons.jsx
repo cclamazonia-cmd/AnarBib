@@ -15,8 +15,11 @@ import { useIntl } from 'react-intl';
    - le bouton « bas » n'apparaît que s'il reste du contenu en dessous ;
    - si la page n'est pas défilable, aucun bouton ne s'affiche.
 
-   Routes exclues : la liseuse (/ler*) gère son propre défilement ; le
-   catalogue (/ et /catalogo*) a déjà ses boutons de saut de tableau.
+   Route exclue : la liseuse (/ler*) gère son propre défilement.
+   Le catalogue N'EST PAS exclu : ses flèches ↑/↓ d'en-tête de tableau ne
+   défilent que le conteneur du tableau (scrollTable), pas la page — or la
+   zone de facettes au-dessus est longue. L'exclure privait la page de tout
+   moyen de remonter/descendre (constaté le 31/08/2026, desktop et mobile).
    ════════════════════════════════════════════════════════════════════════ */
 
 // Seuil en pixels au-delà duquel on considère qu'il « reste » du contenu.
@@ -30,11 +33,8 @@ export default function ScrollButtons() {
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
 
-  // Routes exclues : liseuse et catalogue (qui a ses propres boutons).
-  const isExcluded =
-    pathname === '/' ||
-    pathname.startsWith('/catalogo') ||
-    pathname.startsWith('/ler');
+  // Route exclue : la liseuse seulement (cf. en-tête).
+  const isExcluded = pathname.startsWith('/ler');
 
   // Recalcule l'état des deux boutons en fonction de la position de défilement.
   const evaluate = useCallback(() => {
@@ -51,9 +51,16 @@ export default function ScrollButtons() {
     evaluate();
     window.addEventListener('scroll', evaluate, { passive: true });
     window.addEventListener('resize', evaluate);
+    // Le contenu arrive souvent APRÈS le montage (catalogue : facettes puis
+    // tableau chargés en async). Sans observer, la page devient défilable
+    // sans qu'aucun événement scroll/resize ne relance evaluate(), et le
+    // bouton « bas » n'apparaît jamais tant qu'on n'a pas déjà défilé.
+    const ro = new ResizeObserver(evaluate);
+    ro.observe(document.body);
     return () => {
       window.removeEventListener('scroll', evaluate);
       window.removeEventListener('resize', evaluate);
+      ro.disconnect();
     };
   }, [isExcluded, pathname, evaluate]);
 
