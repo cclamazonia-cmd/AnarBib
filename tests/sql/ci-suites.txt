@@ -222,3 +222,10 @@ tests/sql/outbox_raison_du_saut_tests.sql
 # rappel ne peut pas partir deux fois, ce qu'une contrainte déclarée ne prouve
 # pas. T5 refuse que l'ancien mi-parcours revienne à côté du nouveau.
 tests/sql/rappels_echeance_tests.sql
+
+# Les crons attendus sont planifiés, et eux seuls. Suite rendue possible le
+# 31/08/2026 par tests/sql/_ci_setup_cron_stub.sql : jusque-là la base de test
+# n'avait pas de schéma `cron`, donc AUCUN des trente-six crons de production
+# n'était couvert. Elle énonce ce que produit le DÉPÔT rejoué, pas l'état de la
+# production — son bilan le redit à chaque passage.
+tests/sql/crons_planifies_tests.sql

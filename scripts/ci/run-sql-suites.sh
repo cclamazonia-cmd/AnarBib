@@ -44,6 +44,11 @@ TEST_DB="anarbib_test"
 AUTHSTUB="tests/sql/_ci_setup_auth_stub.sql"
 VAULTSTUB="tests/sql/_ci_setup_vault_stub.sql"
 STORAGESTUB="tests/sql/_ci_setup_storage_stub.sql"
+# Le stub `cron` reproduit l'INTERFACE de pg_cron (table job + schedule/
+# unschedule/alter_job), jamais son service : il permet de vérifier qu'une
+# migration PLANIFIE bien un job, et rien de plus. Lire son en-tête avant de
+# lui faire dire davantage.
+CRONSTUB="tests/sql/_ci_setup_cron_stub.sql"
 SEED="supabase/seed.sql"
 MANIFEST="${SQL_SUITES_MANIFEST:-tests/sql/ci-suites.txt}"
 # Classement des tables pour la sauvegarde #BG2 (cf. filet plus bas). Source de
@@ -55,6 +60,7 @@ command -v psql >/dev/null 2>&1 || fail "psql introuvable (installer postgresql-
 [ -f "$AUTHSTUB" ] || fail "stub auth absent : $AUTHSTUB"
 [ -f "$VAULTSTUB" ] || fail "stub vault absent : $VAULTSTUB"
 [ -f "$STORAGESTUB" ] || fail "stub storage absent : $STORAGESTUB"
+[ -f "$CRONSTUB" ] || fail "stub cron absent : $CRONSTUB"
 [ -f "$SEED" ]     || fail "seed absent : $SEED"
 [ -f "$MANIFEST" ] || fail "manifeste absent : $MANIFEST"
 
@@ -85,6 +91,7 @@ PADMIN -v ON_ERROR_STOP=1 -q -c "CREATE DATABASE $TEST_DB TEMPLATE template0;" >
 apply authstub "$AUTHSTUB"; echo "stub auth appliqué"
 apply vaultstub "$VAULTSTUB"; echo "stub vault appliqué"
 apply storagestub "$STORAGESTUB"; echo "stub storage appliqué"
+apply cronstub "$CRONSTUB"; echo "stub cron appliqué"
 # Toutes les migrations dans l'ordre lexicographique (baseline d'abord, puis
 # forward). [0-9]* ignore _TEMPLATE.sql et tout fichier hors convention.
 shopt -s nullglob

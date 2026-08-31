@@ -61246,8 +61246,17 @@ DECLARE
   r record;
   v_jobid bigint;
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
-    RAISE NOTICE 'BASELINE: pg_cron absent — jobs non planifiés (schéma seul).';
+  -- Garde par le SCHÉMA, pas par l'extension (31/08/2026). En production les
+  -- deux disent la même chose. Sur le banc d'essai, non : depuis
+  -- tests/sql/_ci_setup_cron_stub.sql, le schéma `cron` et son interface
+  -- existent alors qu'aucune extension n'est installée. Garder l'ancien test
+  -- sur pg_extension revenait à sauter ce bloc en CI — donc à n'y planifier
+  -- AUCUN des jobs du socle, et à rendre vacuement vrai tout test qui vérifie
+  -- qu'un ancien job a bien été retiré : on ne peut pas retirer ce qui n'a
+  -- jamais été posé. Ce que ce bloc plante en CI reste une ligne dans une
+  -- table de test, que personne n'exécutera (cf. en-tête du stub).
+  IF to_regnamespace('cron') IS NULL THEN
+    RAISE NOTICE 'BASELINE: schéma cron absent — jobs non planifiés (schéma seul).';
     RETURN;
   END IF;
   FOR r IN
