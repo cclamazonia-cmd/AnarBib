@@ -638,7 +638,9 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Provado em 31/08 às 15h23: o e-mail partiu e foi lido.** A linha `#72` reproduzida, `notify-event` respondeu `200` com `recipients_count: 3`. A mensagem traz a identidade **AnarBib**, não a da biblioteca, e diz *«Promoção ao papel de coordenação (proposta, 2 ratificação(ões) necessária(s) — nada feito ainda)»*. A linha passou a `sent`, `skip_reason` de volta a `NULL`.
 
-**Duas coisas vistas ao provar.** *(a)* Para este único tipo de ação, **três canais falam do mesmo gesto** — o convite a endossar na véspera, o resumo semanal às 10h30 e o aviso imediato às 15h23. Os outros seis tipos críticos não têm nenhum antes de segunda-feira: é aí que o andar imediato ganha os seus sete dias. Questão em aberto. *(b)* O e-mail foi encontrado **na lixeira** da caixa destinatária. A verificar: um aviso que chega ao lixo é um aviso que não chega.
+**Uma coisa vista ao provar.** Para este único tipo de ação, **três canais falam do mesmo gesto** — o convite a endossar na véspera, o resumo semanal às 10h30 e o aviso imediato às 15h23. Os outros seis tipos críticos não têm nenhum antes de segunda-feira: é aí que o andar imediato ganha os seus sete dias, e é aí que falta prová-lo. Questão em aberto.
+
+*(Uma segunda observação — o e-mail encontrado na lixeira — foi retirada na mesma noite: era um gesto deliberado de arrumação, não uma medida. Ver `DOC-CONSTAT-1`.)*
 
 *Verificado : 31/08 — instruído, **corrigido**, entregue e **provado em envio real no mesmo dia**, sobre cinco fontes, incluindo **o e-mail recebido e relido**. **Falta provar sobre um tipo de ação sem outro canal.***
 
