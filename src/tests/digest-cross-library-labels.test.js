@@ -48,6 +48,11 @@ const ACTIONS = [
   'update_library_membership_rules',
   'update_library_retention_policies',
   'update_library_service_state',
+  // Ces deux-là avaient échappé au premier relevé : les fonctions de
+  // réattribution passent leurs arguments positionnellement, la bibliothèque
+  // d'abord, donc aucune des deux formes d'appel cherchées ne les attrapait.
+  'reassign_book_to_library',
+  'reassign_book_from_to_library',
 ];
 const OBJETS = [
   'library',
@@ -56,6 +61,7 @@ const OBJETS = [
   'library_service_state',
   'library_team_invitation',
   'user_library_membership',
+  'book',
 ];
 
 describe('le récapitulatif parle humain, dans les dix langues', () => {

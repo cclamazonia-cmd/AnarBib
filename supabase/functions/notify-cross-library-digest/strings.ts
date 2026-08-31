@@ -50,6 +50,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Vínculo de uma pessoa com a biblioteca",
     "stage.proposed": "proposta, {count} ratificação(ões) necessária(s) — nada feito ainda",
     "stage.proposed.sansCompte": "proposta — nada feito ainda",
+    "action.reassign_book_to_library": "Reatribuição de uma obra a esta biblioteca",
+    "action.reassign_book_from_to_library": "Transferência de uma obra de outra biblioteca para esta",
+    "target.book": "Obra",
   },
   fr: {
     subtitle: "Transparence du réseau · récapitulatif automatique",
@@ -85,6 +88,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Rattachement d'une personne à la bibliothèque",
     "stage.proposed": "proposition, {count} ratification(s) requise(s) — rien n'est encore fait",
     "stage.proposed.sansCompte": "proposition — rien n'est encore fait",
+    "action.reassign_book_to_library": "Réattribution d'un ouvrage à cette bibliothèque",
+    "action.reassign_book_from_to_library": "Transfert d'un ouvrage d'une autre bibliothèque vers celle-ci",
+    "target.book": "Ouvrage",
   },
   es: {
     subtitle: "Transparencia de la red · resumen automático",
@@ -120,6 +126,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Vínculo de una persona con la biblioteca",
     "stage.proposed": "propuesta, {count} ratificación(es) necesaria(s) — nada hecho todavía",
     "stage.proposed.sansCompte": "propuesta — nada hecho todavía",
+    "action.reassign_book_to_library": "Reasignación de una obra a esta biblioteca",
+    "action.reassign_book_from_to_library": "Traslado de una obra de otra biblioteca a esta",
+    "target.book": "Obra",
   },
   en: {
     subtitle: "Network transparency · automatic summary",
@@ -155,6 +164,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Someone's attachment to the library",
     "stage.proposed": "proposal, {count} ratification(s) required — nothing done yet",
     "stage.proposed.sansCompte": "proposal — nothing done yet",
+    "action.reassign_book_to_library": "Reassignment of a work to this library",
+    "action.reassign_book_from_to_library": "Transfer of a work from another library to this one",
+    "target.book": "Work",
   },
   it: {
     subtitle: "Trasparenza della rete · riepilogo automatico",
@@ -190,6 +202,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Legame di una persona con la biblioteca",
     "stage.proposed": "proposta, {count} ratifica/he necessaria/e — nulla è ancora fatto",
     "stage.proposed.sansCompte": "proposta — nulla è ancora fatto",
+    "action.reassign_book_to_library": "Riassegnazione di un'opera a questa biblioteca",
+    "action.reassign_book_from_to_library": "Trasferimento di un'opera da un'altra biblioteca a questa",
+    "target.book": "Opera",
   },
   de: {
     subtitle: "Transparenz des Netzwerks · automatische Zusammenfassung",
@@ -225,6 +240,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Zugehörigkeit einer Person zur Bibliothek",
     "stage.proposed": "Vorschlag, {count} Bestätigung(en) nötig — noch nichts geschehen",
     "stage.proposed.sansCompte": "Vorschlag — noch nichts geschehen",
+    "action.reassign_book_to_library": "Zuordnung eines Werks zu dieser Bibliothek",
+    "action.reassign_book_from_to_library": "Übertragung eines Werks aus einer anderen Bibliothek hierher",
+    "target.book": "Werk",
   },
   ca: {
     subtitle: "Transparència de la xarxa · resum automàtic",
@@ -260,6 +278,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Vincle d'una persona amb la biblioteca",
     "stage.proposed": "proposta, {count} ratificació(ns) necessària(es) — encara no s'ha fet res",
     "stage.proposed.sansCompte": "proposta — encara no s'ha fet res",
+    "action.reassign_book_to_library": "Reassignació d'una obra a aquesta biblioteca",
+    "action.reassign_book_from_to_library": "Trasllat d'una obra d'una altra biblioteca cap a aquesta",
+    "target.book": "Obra",
   },
   eo: {
     subtitle: "Travidebleco de la reto · aŭtomata resumo",
@@ -295,6 +316,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Ligo de persono al la biblioteko",
     "stage.proposed": "propono, {count} ratifiko(j) necesa(j) — nenio ankoraŭ farita",
     "stage.proposed.sansCompte": "propono — nenio ankoraŭ farita",
+    "action.reassign_book_to_library": "Reasigno de verko al ĉi tiu biblioteko",
+    "action.reassign_book_from_to_library": "Translokigo de verko el alia biblioteko al ĉi tiu",
+    "target.book": "Verko",
   },
   nl: {
     subtitle: "Transparantie van het netwerk · automatische samenvatting",
@@ -330,6 +354,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Band van iemand met de bibliotheek",
     "stage.proposed": "voorstel, {count} bekrachtiging(en) nodig — nog niets gebeurd",
     "stage.proposed.sansCompte": "voorstel — nog niets gebeurd",
+    "action.reassign_book_to_library": "Toewijzing van een werk aan deze bibliotheek",
+    "action.reassign_book_from_to_library": "Overdracht van een werk van een andere bibliotheek naar deze",
+    "target.book": "Werk",
   },
   el: {
     subtitle: "Διαφάνεια του δικτύου · αυτόματη σύνοψη",
@@ -365,6 +392,9 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.user_library_membership": "Σύνδεση ατόμου με τη βιβλιοθήκη",
     "stage.proposed": "πρόταση, {count} επικύρωση(εις) απαιτούνται — τίποτα δεν έγινε ακόμη",
     "stage.proposed.sansCompte": "πρόταση — τίποτα δεν έγινε ακόμη",
+    "action.reassign_book_to_library": "Ανακατανομή έργου σε αυτή τη βιβλιοθήκη",
+    "action.reassign_book_from_to_library": "Μεταφορά έργου από άλλη βιβλιοθήκη σε αυτή",
+    "target.book": "Έργο",
   },
 };
 
