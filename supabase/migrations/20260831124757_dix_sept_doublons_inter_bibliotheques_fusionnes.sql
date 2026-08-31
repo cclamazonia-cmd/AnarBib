@@ -1,7 +1,7 @@
 -- =====================================================================
 -- AnarBib -- Dix-sept doublons inter-bibliotheques fusionnes
 -- Date    : 2026-08-31  ·  Chantier doublons
--- Depend  : 20260831150000 (le raffinement P4 qui les a rendus visibles)
+-- Depend  : 20260831124714 (le raffinement P4 qui les a rendus visibles)
 --
 -- Ces 17 paires sont le motif exact du cas 2335/2641 (« O Anarquismo na
 -- Escola, no Teatro, na Poesia ») : la MEME edition (annee identique,
@@ -17,7 +17,7 @@
 -- sujets aussi. Les holdings et exemplaires du doublon basculent sur le
 -- canonique : AUCUNE bibliotheque ne perd sa detention (la fusion du
 -- 2026-06-06, hors depot, avait perdu des exemplaires BTL -- reparee par
--- 20260831151000 ; celle-ci suit les etapes de public.merge_book, completees
+-- 20260831124823 ; celle-ci suit les etapes de public.merge_book, completees
 -- des tables apparues depuis : book_subjects, audio_tracks,
 -- ill_digital_shares, ingest.partner_catalog_staging_rows).
 --
