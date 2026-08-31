@@ -44,7 +44,7 @@
 BEGIN;
 
 -- ---------------------------------------------------------------------
--- 1. La colonne qui manquait, et les deux gardes, sur les cinq tables
+-- 1. La colonne qui manquait
 -- ---------------------------------------------------------------------
 DO $$
 DECLARE
@@ -66,16 +66,6 @@ BEGIN
       'unknown_<domaine>_event, no_recipients. DISTINCTE de last_error : un saut '
       'delibere n''est pas une panne, et les confondre ferait sonner l''alerte sur un '
       'comportement voulu. Item B12, doctrine DOC-SILENCE-1.');
-
-    EXECUTE format('ALTER TABLE public.%I DROP CONSTRAINT IF EXISTS %I', t, t || '_skip_reason_chk');
-    EXECUTE format(
-      'ALTER TABLE public.%I ADD CONSTRAINT %I CHECK (status <> ''skipped'' OR skip_reason IS NOT NULL)',
-      t, t || '_skip_reason_chk');
-
-    EXECUTE format('ALTER TABLE public.%I DROP CONSTRAINT IF EXISTS %I', t, t || '_skipped_sent_at_chk');
-    EXECUTE format(
-      'ALTER TABLE public.%I ADD CONSTRAINT %I CHECK (status <> ''skipped'' OR sent_at IS NULL)',
-      t, t || '_skipped_sent_at_chk');
   END LOOP;
 END $$;
 
@@ -92,7 +82,7 @@ ALTER TABLE public.authority_proposal_notification_outbox
        CHECK (status = ANY (ARRAY['queued'::text, 'sent'::text, 'failed'::text, 'skipped'::text]));
 
 -- ---------------------------------------------------------------------
--- 3. Reprise des lignes existantes
+-- 3. Reprise des lignes existantes -- AVANT de poser la garde
 -- ---------------------------------------------------------------------
 -- Les quatre lignes sautees de production portent toutes le meme event, et
 -- leur raison a ete etablie en LISANT LE CODE, pas en relisant un journal --
@@ -126,6 +116,45 @@ BEGIN
       'UPDATE public.%I SET skip_reason = %L, sent_at = NULL '
       'WHERE status = ''skipped'' AND skip_reason IS NULL',
       t, 'raison_non_consignee_avant_B12');
+  END LOOP;
+END $$;
+
+-- ---------------------------------------------------------------------
+-- 4. Les gardes -- EN DERNIER, et c'est le point de la reprise
+-- ---------------------------------------------------------------------
+-- ORDRE. Une premiere version de cette migration posait les CHECK avant la
+-- reprise des lignes. Sur une base RECONSTRUITE -- celle de la CI, qui part du
+-- baseline et du seed -- il n'y a aucune ligne sautee, donc rien ne casse et
+-- la suite passe au vert. Sur la PRODUCTION, la contrainte a trouve les quatre
+-- lignes qu'elle est justement chargee de faire disparaitre :
+--
+--   ERROR: check constraint "team_notification_outbox_skip_reason_chk"
+--          is violated by some row (SQLSTATE 23514)
+--
+-- Une migration qui ne casse que sur des donnees existantes est INVISIBLE a un
+-- banc d'essai qui part de zero. La CI ne pouvait pas le dire ; seul `db push`
+-- le pouvait. D'ou la regle : colonne, puis reprise, puis garde -- jamais
+-- l'inverse.
+DO $$
+DECLARE
+  t text;
+BEGIN
+  FOREACH t IN ARRAY ARRAY[
+    'team_notification_outbox',
+    'authority_proposal_notification_outbox',
+    'cartography_submission_notification_outbox',
+    'gazette_submission_notification_outbox',
+    'lettre_notification_outbox'
+  ] LOOP
+    EXECUTE format('ALTER TABLE public.%I DROP CONSTRAINT IF EXISTS %I', t, t || '_skip_reason_chk');
+    EXECUTE format(
+      'ALTER TABLE public.%I ADD CONSTRAINT %I CHECK (status <> ''skipped'' OR skip_reason IS NOT NULL)',
+      t, t || '_skip_reason_chk');
+
+    EXECUTE format('ALTER TABLE public.%I DROP CONSTRAINT IF EXISTS %I', t, t || '_skipped_sent_at_chk');
+    EXECUTE format(
+      'ALTER TABLE public.%I ADD CONSTRAINT %I CHECK (status <> ''skipped'' OR sent_at IS NULL)',
+      t, t || '_skipped_sent_at_chk');
   END LOOP;
 END $$;
 
