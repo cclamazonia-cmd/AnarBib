@@ -2017,14 +2017,19 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Posto em 31/08**: um job `acquittement` nos dois workflows, simetrico de `alerte`, que fecha o ticket com o marcador **exato** quando o run volta ao verde, com um comentario que diz o commit e o run. `continue-on-error`, como `alerte`. Doutrina `OPS-8`.
 
-*Verificado : 31/08 — levantamento na propria forja: 24 tickets `[CI rouge]`, nenhum aberto, dez datados de 30/08; e-mails confirmados recebidos pelo mantenedor. O constato escrito era falso no sentido inverso. Correcao posta no mesmo dia, **ainda nao provada**.*
+**Provado em 31/08, e a prova encontrou mais dois defeitos.** O vai-e-vem foi visto: ticket `#27` aberto às 09:56:31 por um run vermelho, fechado às 10:06:58 por `acquittement`. Mas o terceiro vermelho da hora não abriu **nenhum** ticket: **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. O Codeberg limita a dois tickets de título semelhante por hora. E o job mostrava **`Job succeeded`**: o alerta calava-se sobre a sua própria avaria.
 
-**O que é.** Provar o job `acquittement` nos dois sentidos, como a licao de metodo exige: quebrar de proposito uma suite, verificar que **um so** ticket se abre mesmo depois de varios pushes vermelhos, reparar, e depois verificar que o ticket se fecha **sozinho** com o seu comentario. Enquanto esse vai-e-vem nao for visto, o job nao esta entregue.
+**Refundição no mesmo dia**: um só ticket por workflow, aberto no primeiro vermelho, **reaberto** nos seguintes, fechado no retorno ao verde; `continue-on-error` retirado de `alerte`. Doutrina `OPS-8`, corolário.
+
+*Verificado : 31/08 — o constato escrito era falso (o alerta transbordava em vez de faltar), e a prova encontrou dois defeitos que a releitura não vira: o tecto de dois tickets por hora da forja, e um alerta que se declara bem-sucedido depois de um 429. Correção posta e **em prova**.*
+
+**O que é.** Terminar a prova com a suíte descartável `tests/sql/epreuve_acquittement_tests.sql`, já no lugar e já vermelha: um push deve **reabrir** o ticket único, um segundo push vermelho não deve fazer **nada**, e a remoção da suíte deve fechá-lo. Depois retirar a suíte e a sua linha de manifesto.
 
 **Por que importa.** O princípio já está escrito para os backups: **um alarme jamais disparado não é um alarme.** E um pipeline que falha uma vez em duas deixa de ser lido — que é exatamente o que aconteceu.
 
 **O que conta como terminado.**
 
+- [object Object]
 - [object Object]
 - [object Object]
 - [object Object]

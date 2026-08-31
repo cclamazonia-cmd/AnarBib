@@ -2027,14 +2027,19 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **Posé le 31/08** : un job `acquittement` dans les deux workflows, symétrique de `alerte`, qui referme le ticket portant le marqueur **exact** quand le run repasse au vert, avec un commentaire qui dit le commit et le run. `continue-on-error`, comme `alerte` : un acquittement cassé ne doit pas faire rougir un run vert. Doctrine `OPS-8`.
 
-*Vérifié : 31/08 — relevé sur la forge elle-même : 24 tickets `[CI rouge]`, aucun ouvert, dix datés du 30/08 ; courriels confirmés reçus par le mainteneur. Le constat écrit était faux dans l'autre sens. Correctif posé le jour même, **pas encore éprouvé**.*
+**Éprouvé le 31/08, et l'épreuve a trouvé deux défauts de plus.** Le va-et-vient a été vu : ticket `#27` ouvert à 09:56:31 par un run rouge, refermé à 10:06:58 par `acquittement`, une seconde après son commentaire — la condition en crochets `needs['sql-tests'].result`, jamais exercée jusque-là, a donc tourné. Mais le troisième rouge de l'heure n'a ouvert **aucun** ticket : **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. Codeberg plafonne à deux tickets de titre semblable par heure — l'angle mort du 17-20/08 se rouvrait donc tout seul dès qu'une heure devenait chargée. Et le job affichait **`Job succeeded`** : `continue-on-error` plus `|| echo 000` faisaient taire l'alerte sur sa propre panne.
 
-**Ce que c'est.** Éprouver le job `acquittement` dans les deux sens, comme la leçon de méthode l'exige : casser volontairement une suite, vérifier qu'**un seul** ticket s'ouvre même après plusieurs pushs rouges, réparer, puis vérifier que le ticket se referme **tout seul** avec son commentaire. Tant que ce va-et-vient n'a pas été vu, le job n'est pas livré.
+**Refonte le même jour** : un seul ticket par workflow, ouvert au premier rouge, **rouvert** aux suivants, refermé au retour au vert ; `continue-on-error` retiré de `alerte`. Doctrine `OPS-8`, corollaire.
+
+*Vérifié : 31/08 — le constat écrit était faux (l'alerte débordait au lieu de manquer), et l'épreuve a trouvé deux défauts que la relecture n'avait pas vus : le plafond de deux tickets par heure de la forge, et une alerte qui se déclare réussie après un 429. Correctif posé et **en cours d'épreuve** : la suite jetable est en place et le dépôt est rouge.*
+
+**Ce que c'est.** Finir l'épreuve avec la suite jetable `tests/sql/epreuve_acquittement_tests.sql`, déjà en place et déjà rouge : un push doit **rouvrir** le ticket unique, un second push rouge ne doit **rien** faire, et le retrait de la suite doit le refermer. Puis retirer la suite et sa ligne de manifeste — elle n'a pas vocation à rester.
 
 **Pourquoi ça compte.** Le principe est déjà écrit pour les sauvegardes : **une alarme jamais déclenchée n'est pas une alarme.** Et un pipeline qui échoue une fois sur deux cesse d'être lu — ce qui est exactement ce qui s'est passé.
 
 **Ce qui compte comme fini.**
 
+- [object Object]
 - [object Object]
 - [object Object]
 - [object Object]

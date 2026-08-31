@@ -243,46 +243,64 @@ jobs:
         run: |
           ./scripts/ci/deployer-backend.sh --migrations
 
-  # ── Alerte : la forge doit DIRE qu'un workflow a echoue ─────────────────
+  # ── Alerte : un seul ticket par workflow, rouvert et referme ────────────
   #
-  # PLAN_DE_MARCHE §8. `sql-tests` est reste rouge du 17 au 20/08 sans que
-  # personne le voie : un run rouge dans une liste ne se remarque pas. Une
-  # issue, si — le depot est suivi, donc Forgejo envoie un courriel. C'est le
-  # meme angle mort que les sauvegardes, et il n'etait pas couvert.
+  # OPS-6 ouvrait un ticket NEUF a chaque episode rouge. Deux defauts, tous
+  # deux constates le 31/08 en EXECUTANT, pas en relisant.
   #
-  # AUCUN SECRET A CREER : Forgejo Actions injecte automatiquement GITEA_TOKEN,
-  # limite a ce depot. Rien a poser dans l'interface de la forge.
+  # 1. LA FORGE REFUSE. Codeberg limite les tickets de titre semblable a DEUX
+  #    par heure et par autrice : « NewIssue: posted 2 similairy named issues
+  #    in the last hour: rate limited », HTTP 429. Le troisieme rouge d'une
+  #    heure chargee n'alerte donc personne — l'angle mort du 17-20/08,
+  #    reconstitue par la protection censee le fermer.
   #
-  # ANTI-DOUBLON : on n'ouvre rien si une issue ouverte porte deja le marqueur,
-  # sinon chaque push rouge en creerait une. Refermer l'issue vaut acquittement ;
-  # si le rouge revient ensuite, une nouvelle sera ouverte.
+  # 2. L'ALERTE SE TAISAIT SUR SA PROPRE PANNE. `continue-on-error` plus un
+  #    `|| echo 000` rendaient le job VERT apres ce 429. DOC-SILENCE-1 viole a
+  #    l'interieur meme du dispositif d'alerte. Le `continue-on-error` est
+  #    donc RETIRE ici : sur le chemin de l'echec il n'y a rien a masquer, le
+  #    run est deja rouge. Il reste sur `acquittement`, qui tourne sur un run
+  #    vert et ne doit pas le faire rougir.
   #
-  # `continue-on-error` : une alerte cassee ne doit jamais masquer l'echec reel
-  # qu'elle signale.
+  # D'OU CE MODELE : un seul ticket par workflow, pour toujours. Ouvert au
+  # premier rouge, ROUVERT aux suivants, referme par `acquittement` au retour
+  # au vert. Son etat est le miroir vivant de la sante de la CI ; ses
+  # commentaires en sont le journal des episodes, avec leurs commits. La
+  # limite de la forge ne peut plus se declencher, puisqu'on ne cree plus
+  # jamais de second ticket. Et l'anti-doublon n'est plus une comparaison de
+  # chaines : c'est l'etat du ticket.
+  #
+  # `sort=recentupdate` : le ticket est touche a chaque episode, il reste donc
+  # en tete des 50 lus. S'il en sortait un jour, on retomberait sur la
+  # creation — degradation, pas panne.
   alerte:
     needs: [app, backend]
     if: failure()
     runs-on: anarbib-local
     container:
       image: node:20
-    continue-on-error: true
     steps:
-      - name: Ouvrir une issue si le rouge n'est pas deja signale
+      - name: Ouvrir ou rouvrir le ticket de rouge
         env:
           FORGE_TOKEN: ${{ secrets.GITEA_TOKEN }}
         run: |
           set -u
           if [ -z "${FORGE_TOKEN:-}" ]; then
-            echo "GITEA_TOKEN absent : alerte impossible (verifier que les Actions ont le droit d'ecrire les tickets)."
-            exit 0
+            echo "::error::GITEA_TOKEN absent : ce rouge n'est signale nulle part."
+            exit 1
           fi
           API="${GITHUB_SERVER_URL}/api/v1/repos/${GITHUB_REPOSITORY}"
           MARQUEUR="[CI rouge] ci"
           RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-          OUVERTES=$(curl -sS -H "Authorization: token ${FORGE_TOKEN}"             "${API}/issues?state=open&limit=50" || echo '')
-          if printf '%s' "$OUVERTES" | grep -qF "$MARQUEUR"; then
-            echo "Une issue ouverte porte deja le marqueur : pas de doublon."
+          curl -sS -o /tmp/tickets.json -H "Authorization: token ${FORGE_TOKEN}" "${API}/issues?state=all&limit=50&sort=recentupdate" || { echo "::error::lecture des tickets impossible : ce rouge n'est signale nulle part."; exit 1; }
+
+          # Titre EXACT. Le plus recemment touche gagne, et il porte son etat.
+          LIGNE=$(node -e 'const fs=require("fs");let l=[];try{l=JSON.parse(fs.readFileSync("/tmp/tickets.json","utf8"))}catch(e){};const h=Array.isArray(l)?l.find(i=>i&&i.title===process.argv[1]):null;process.stdout.write(h?(h.number+" "+h.state):"")' "$MARQUEUR")
+          NUM="${LIGNE%% *}"
+          ETAT="${LIGNE##* }"
+
+          if [ "$ETAT" = "open" ]; then
+            echo "Ticket #${NUM} deja ouvert : cet episode rouge est deja signale, rien a faire."
             exit 0
           fi
 
@@ -291,16 +309,34 @@ jobs:
           - Commit : ${GITHUB_SHA}
           - Run : ${RUN_URL}
 
-          Cette issue est ouverte automatiquement parce qu'un run rouge passe
-          inapercu (vecu du 17 au 20/08/2026). **La refermer vaut acquittement** :
-          tant qu'elle reste ouverte, aucune nouvelle ne sera creee."
+          Ce ticket est le temoin unique du workflow : il s'ouvre au rouge et se
+          referme au retour au vert (REGISTRE OPS-8). Le refermer a la main veut
+          dire « je l'ai vu et j'accepte que ca reste rouge »."
 
-          # Echappement JSON par node : l'image node:20 le garantit, pas python3.
-          node -e 'const fs=require("fs");fs.writeFileSync("/tmp/issue.json",JSON.stringify({title:process.argv[1],body:process.argv[2]}))'             "$MARQUEUR" "$CORPS"
+          node -e 'const fs=require("fs");fs.writeFileSync("/tmp/corps.json",JSON.stringify({body:process.argv[1]}))' "$CORPS"
 
-          CODE=$(curl -sS -o /tmp/reponse.json -w '%{http_code}' -X POST             -H "Authorization: token ${FORGE_TOKEN}"             -H "Content-Type: application/json"             --data @/tmp/issue.json "${API}/issues" || echo 000)
-          echo "Creation de l'issue : HTTP ${CODE}"
-          [ "$CODE" = "201" ] || head -c 400 /tmp/reponse.json
+          if [ -n "$NUM" ]; then
+            C1=$(curl -sS -o /tmp/r1.json -w '%{http_code}' -X POST -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data @/tmp/corps.json "${API}/issues/${NUM}/comments" || echo 000)
+            C2=$(curl -sS -o /tmp/r2.json -w '%{http_code}' -X PATCH -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data '{"state":"open"}' "${API}/issues/${NUM}" || echo 000)
+            echo "Reouverture du ticket #${NUM} : commentaire HTTP ${C1}, etat HTTP ${C2}"
+            case "$C2" in
+              200|201) ;;
+              *) echo "::error::le ticket #${NUM} n'a pas ete rouvert (HTTP ${C2}) : ce rouge n'est signale nulle part."
+                 head -c 400 /tmp/r2.json; exit 1 ;;
+            esac
+            exit 0
+          fi
+
+          # Aucun ticket ne porte encore ce marqueur : c'est le premier de la
+          # vie du workflow. Ce chemin ne devrait servir qu'une fois.
+          node -e 'const fs=require("fs");const c=JSON.parse(fs.readFileSync("/tmp/corps.json","utf8"));fs.writeFileSync("/tmp/issue.json",JSON.stringify({title:process.argv[1],body:c.body}))' "$MARQUEUR"
+          CODE=$(curl -sS -o /tmp/r3.json -w '%{http_code}' -X POST -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data @/tmp/issue.json "${API}/issues" || echo 000)
+          echo "Creation du ticket : HTTP ${CODE}"
+          case "$CODE" in
+            200|201) ;;
+            *) echo "::error::aucun ticket cree (HTTP ${CODE}) : ce rouge n'est signale nulle part."
+               head -c 400 /tmp/r3.json; exit 1 ;;
+          esac
 
   # ── Acquittement : c'est le retour au vert qui referme, pas un clic ─────
   #

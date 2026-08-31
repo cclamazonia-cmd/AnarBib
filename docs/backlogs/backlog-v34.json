@@ -4492,12 +4492,12 @@
         "pt": "Um alerta de CI que se repete a cada iteracao ja nao alerta"
       },
       "v": {
-        "fr": "**Le constat d'origine était faux, et faux dans l'autre sens.** Il disait qu'un rouge passait inaperçu. Vérifié sur la forge le 31/08 : elle porte **24 tickets `[CI rouge]`, aucun ouvert**, et les dix plus récents datent tous du 30/08 — l'alerte d'`OPS-6` a tiré dix fois dans la seule journée où l'on travaillait, et les courriels sont bien partis. Ce que l'item demandait — faire sortir le signal de la forge — **était déjà fait**.\n\n**Le vrai défaut est le déluge.** L'anti-doublon ne joue que tant que le ticket reste *ouvert* : le refermer pour dire « j'ai vu » réarme l'alarme pour l'itération suivante. Dix tickets et dix courriels **pour un seul et même rouge**, refermés à la main. C'est la panne qu'`OPS-6` voulait éviter, arrivée par l'autre bout — *« un pipeline qui échoue une fois sur deux cesse d'être lu »*.\n\n**Posé le 31/08** : un job `acquittement` dans les deux workflows, symétrique de `alerte`, qui referme le ticket portant le marqueur **exact** quand le run repasse au vert, avec un commentaire qui dit le commit et le run. `continue-on-error`, comme `alerte` : un acquittement cassé ne doit pas faire rougir un run vert. Doctrine `OPS-8`.",
-        "pt": "**O constato de origem era falso, e falso no sentido inverso.** Dizia que um vermelho passava despercebido. Verificado na forja em 31/08: ela contem **24 tickets `[CI rouge]`, nenhum aberto**, e os dez mais recentes datam todos de 30/08 — o alerta de `OPS-6` disparou dez vezes no unico dia em que se trabalhava, e os e-mails partiram. O que o item pedia — fazer sair o sinal da forja — **ja estava feito**.\n\n**O verdadeiro defeito e o diluvio.** O anti-duplicado so joga enquanto o ticket fica *aberto*: fecha-lo para dizer «eu vi» rearma o alarme para a iteracao seguinte. Dez tickets e dez e-mails **para um so e mesmo vermelho**, fechados a mao. E a avaria que `OPS-6` queria evitar, chegada pelo outro lado.\n\n**Posto em 31/08**: um job `acquittement` nos dois workflows, simetrico de `alerte`, que fecha o ticket com o marcador **exato** quando o run volta ao verde, com um comentario que diz o commit e o run. `continue-on-error`, como `alerte`. Doutrina `OPS-8`."
+        "fr": "**Le constat d'origine était faux, et faux dans l'autre sens.** Il disait qu'un rouge passait inaperçu. Vérifié sur la forge le 31/08 : elle porte **24 tickets `[CI rouge]`, aucun ouvert**, et les dix plus récents datent tous du 30/08 — l'alerte d'`OPS-6` a tiré dix fois dans la seule journée où l'on travaillait, et les courriels sont bien partis. Ce que l'item demandait — faire sortir le signal de la forge — **était déjà fait**.\n\n**Le vrai défaut est le déluge.** L'anti-doublon ne joue que tant que le ticket reste *ouvert* : le refermer pour dire « j'ai vu » réarme l'alarme pour l'itération suivante. Dix tickets et dix courriels **pour un seul et même rouge**, refermés à la main. C'est la panne qu'`OPS-6` voulait éviter, arrivée par l'autre bout — *« un pipeline qui échoue une fois sur deux cesse d'être lu »*.\n\n**Posé le 31/08** : un job `acquittement` dans les deux workflows, symétrique de `alerte`, qui referme le ticket portant le marqueur **exact** quand le run repasse au vert, avec un commentaire qui dit le commit et le run. `continue-on-error`, comme `alerte` : un acquittement cassé ne doit pas faire rougir un run vert. Doctrine `OPS-8`.\n\n**Éprouvé le 31/08, et l'épreuve a trouvé deux défauts de plus.** Le va-et-vient a été vu : ticket `#27` ouvert à 09:56:31 par un run rouge, refermé à 10:06:58 par `acquittement`, une seconde après son commentaire — la condition en crochets `needs['sql-tests'].result`, jamais exercée jusque-là, a donc tourné. Mais le troisième rouge de l'heure n'a ouvert **aucun** ticket : **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. Codeberg plafonne à deux tickets de titre semblable par heure — l'angle mort du 17-20/08 se rouvrait donc tout seul dès qu'une heure devenait chargée. Et le job affichait **`Job succeeded`** : `continue-on-error` plus `|| echo 000` faisaient taire l'alerte sur sa propre panne.\n\n**Refonte le même jour** : un seul ticket par workflow, ouvert au premier rouge, **rouvert** aux suivants, refermé au retour au vert ; `continue-on-error` retiré de `alerte`. Doctrine `OPS-8`, corollaire.",
+        "pt": "**O constato de origem era falso, e falso no sentido inverso.** Dizia que um vermelho passava despercebido. Verificado na forja em 31/08: ela contem **24 tickets `[CI rouge]`, nenhum aberto**, e os dez mais recentes datam todos de 30/08 — o alerta de `OPS-6` disparou dez vezes no unico dia em que se trabalhava, e os e-mails partiram. O que o item pedia — fazer sair o sinal da forja — **ja estava feito**.\n\n**O verdadeiro defeito e o diluvio.** O anti-duplicado so joga enquanto o ticket fica *aberto*: fecha-lo para dizer «eu vi» rearma o alarme para a iteracao seguinte. Dez tickets e dez e-mails **para um so e mesmo vermelho**, fechados a mao. E a avaria que `OPS-6` queria evitar, chegada pelo outro lado.\n\n**Posto em 31/08**: um job `acquittement` nos dois workflows, simetrico de `alerte`, que fecha o ticket com o marcador **exato** quando o run volta ao verde, com um comentario que diz o commit e o run. `continue-on-error`, como `alerte`. Doutrina `OPS-8`.\n\n**Provado em 31/08, e a prova encontrou mais dois defeitos.** O vai-e-vem foi visto: ticket `#27` aberto às 09:56:31 por um run vermelho, fechado às 10:06:58 por `acquittement`. Mas o terceiro vermelho da hora não abriu **nenhum** ticket: **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. O Codeberg limita a dois tickets de título semelhante por hora. E o job mostrava **`Job succeeded`**: o alerta calava-se sobre a sua própria avaria.\n\n**Refundição no mesmo dia**: um só ticket por workflow, aberto no primeiro vermelho, **reaberto** nos seguintes, fechado no retorno ao verde; `continue-on-error` retirado de `alerte`. Doutrina `OPS-8`, corolário."
       },
       "w": {
-        "fr": "Éprouver le job `acquittement` dans les deux sens, comme la leçon de méthode l'exige : casser volontairement une suite, vérifier qu'**un seul** ticket s'ouvre même après plusieurs pushs rouges, réparer, puis vérifier que le ticket se referme **tout seul** avec son commentaire. Tant que ce va-et-vient n'a pas été vu, le job n'est pas livré.",
-        "pt": "Provar o job `acquittement` nos dois sentidos, como a licao de metodo exige: quebrar de proposito uma suite, verificar que **um so** ticket se abre mesmo depois de varios pushes vermelhos, reparar, e depois verificar que o ticket se fecha **sozinho** com o seu comentario. Enquanto esse vai-e-vem nao for visto, o job nao esta entregue."
+        "fr": "Finir l'épreuve avec la suite jetable `tests/sql/epreuve_acquittement_tests.sql`, déjà en place et déjà rouge : un push doit **rouvrir** le ticket unique, un second push rouge ne doit **rien** faire, et le retrait de la suite doit le refermer. Puis retirer la suite et sa ligne de manifeste — elle n'a pas vocation à rester.",
+        "pt": "Terminar a prova com a suíte descartável `tests/sql/epreuve_acquittement_tests.sql`, já no lugar e já vermelha: um push deve **reabrir** o ticket único, um segundo push vermelho não deve fazer **nada**, e a remoção da suíte deve fechá-lo. Depois retirar a suíte e a sua linha de manifesto."
       },
       "y": {
         "fr": "Le principe est déjà écrit pour les sauvegardes : **une alarme jamais déclenchée n'est pas une alarme.** Et un pipeline qui échoue une fois sur deux cesse d'être lu — ce qui est exactement ce qui s'est passé.",
@@ -4505,20 +4505,24 @@
       },
       "f": [
         {
-          "fr": "~~Un échec de workflow produit un signal hors de la forge~~ — fait, et vérifié le 31/08 : 24 tickets, courriels reçus.",
-          "pt": "~~Uma falha de workflow produz um sinal fora da forja~~ — feito, e verificado em 31/08: 24 tickets, e-mails recebidos."
+          "fr": "~~Un échec de workflow produit un signal hors de la forge~~ — fait, vérifié le 31/08 : courriels reçus.",
+          "pt": "~~Uma falha de workflow produz um sinal fora da forja~~ — feito, verificado em 31/08."
         },
         {
-          "fr": "Un épisode rouge donne **un** ticket, pas un par push.",
-          "pt": "Um episodio vermelho da **um** ticket, nao um por push."
+          "fr": "~~Le ticket se referme par le retour au vert, pas par un clic~~ — vu sur `#27`, commentaire à 10:06:57, fermeture à 10:06:58.",
+          "pt": "~~O ticket fecha-se pelo retorno ao verde, não por um clique~~ — visto no `#27`."
         },
         {
-          "fr": "Le ticket se referme par le retour au vert, pas par un clic.",
-          "pt": "O ticket fecha-se pelo retorno ao verde, nao por um clique."
+          "fr": "Un épisode rouge donne **un** ticket, pas un par push — et la limite de la forge ne peut plus l'empêcher.",
+          "pt": "Um episódio vermelho dá **um** ticket, não um por push — e o limite da forja já não o pode impedir."
         },
         {
-          "fr": "Le va-et-vient rouge → vert a été **vu**, pas supposé. Leçon de méthode déjà payée : **ne pas livrer de CI sans l'avoir vue passer au vert et au rouge.**",
-          "pt": "O vai-e-vem vermelho → verde foi **visto**, nao suposto. Licao de metodo ja paga: **nao entregar CI sem a ter visto passar ao verde e ao vermelho.**"
+          "fr": "Une alerte qui échoue **rougit**, au lieu d'afficher `Job succeeded`.",
+          "pt": "Um alerta que falha **fica vermelho**, em vez de mostrar `Job succeeded`."
+        },
+        {
+          "fr": "Le va-et-vient a été **vu**, pas supposé. Leçon de méthode déjà payée : **ne pas livrer de CI sans l'avoir vue passer au vert et au rouge.**",
+          "pt": "O vai-e-vem foi **visto**, não suposto."
         }
       ],
       "dep": {
@@ -4531,8 +4535,8 @@
         "forge : issues 16 à 25, 30/08/2026"
       ],
       "verif": {
-        "fr": "31/08 — relevé sur la forge elle-même : 24 tickets `[CI rouge]`, aucun ouvert, dix datés du 30/08 ; courriels confirmés reçus par le mainteneur. Le constat écrit était faux dans l'autre sens. Correctif posé le jour même, **pas encore éprouvé**.",
-        "pt": "31/08 — levantamento na propria forja: 24 tickets `[CI rouge]`, nenhum aberto, dez datados de 30/08; e-mails confirmados recebidos pelo mantenedor. O constato escrito era falso no sentido inverso. Correcao posta no mesmo dia, **ainda nao provada**."
+        "fr": "31/08 — le constat écrit était faux (l'alerte débordait au lieu de manquer), et l'épreuve a trouvé deux défauts que la relecture n'avait pas vus : le plafond de deux tickets par heure de la forge, et une alerte qui se déclare réussie après un 429. Correctif posé et **en cours d'épreuve** : la suite jetable est en place et le dépôt est rouge.",
+        "pt": "31/08 — o constato escrito era falso (o alerta transbordava em vez de faltar), e a prova encontrou dois defeitos que a releitura não vira: o tecto de dois tickets por hora da forja, e um alerta que se declara bem-sucedido depois de um 429. Correção posta e **em prova**."
       }
     },
     {
