@@ -10,6 +10,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button, Spinner } from '@/components/ui';
 import { normalizePublicId } from '@/lib/publicId';
+import { readSessionEndNotice } from '@/lib/sessionEndNotice';
 
 
 // Paquet 25.6 — destination apres login / force-change.
@@ -40,6 +41,12 @@ export default function LoginPage() {
   // Capturee une seule fois au mount du composant. Si l'usager change d'URL
   // pendant le flow login (peu probable), on garde la destination initiale.
   const nextUrl = getSafeNextUrl(searchParams);
+  // Pourquoi la session s'est terminee. La query string ne suffit pas : elle
+  // disparait au premier rechargement, et elle n'est jamais ecrite quand la
+  // session meurt sans que l'app soit la pour le voir (navigateur ferme — les
+  // tokens de l'equipe vivent en sessionStorage). On lit donc aussi le marqueur
+  // persistant, une seule fois au montage pour que l'avis ne clignote pas.
+  const [endNotice] = useState(() => (reason === 'idle' ? 'idle' : readSessionEndNotice()));
   // Profile + session via AuthContext (paquet 25.6 fix deadlock + zombie session).
   // Au lieu de fetcher profiles depuis handleLogin (double requete qui creait
   // un deadlock supabase-js sporadique), on attend que AuthContext charge tout
@@ -441,20 +448,34 @@ export default function LoginPage() {
     <PageShell>
       <Topbar />
       <div style={{ maxWidth: 480, margin: '40px auto', padding: '0 16px' }}>
-        {reason === 'idle' && (
+        {/* La condition `!user` n'est pas decorative : le marqueur survit tant
+            qu'on ne s'est pas reconnecte·e, donc quelqu'un de deja connecte·e
+            qui atterrit ici (URL tapee, retour arriere) verrait s'afficher une
+            seconde l'annonce d'une deconnexion qui n'a pas eu lieu. On attend
+            aussi la fin du chargement d'AuthContext : avant, `user` est null
+            sans que cela veuille dire quoi que ce soit. */}
+        {endNotice && !authLoading && !user && (
+          // Fond OPAQUE et couleur de texte explicite, volontairement.
+          // L'ancien rgba(..., 0.08) posait le bandeau a 8 % d'opacite par-dessus
+          // la photo de fond de la bibliotheque : l'avis existait, il ne se
+          // voyait pas. Et var(--brand-fg) suit le theme de chaque biblio, donc
+          // pouvait rendre un texte sombre sur ce panneau deja sombre.
           <div
             role="alert"
             style={{
               marginBottom: 16,
-              padding: '12px 16px',
+              padding: '14px 16px',
               borderRadius: 8,
-              background: 'rgba(185, 0, 31, 0.08)',
-              border: '1px solid rgba(185, 0, 31, 0.3)',
-              color: 'var(--brand-fg, #e8e2d6)',
-              fontSize: '.9rem',
+              background: '#2a0b10',
+              border: '1px solid rgba(185, 0, 31, 0.6)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.45)',
+              color: '#f7efe3',
+              fontSize: '.92rem',
+              fontWeight: 600,
+              lineHeight: 1.45,
             }}
           >
-            {t({ id: 'login.reason.idle' })}
+            {t({ id: endNotice === 'idle' ? 'login.reason.idle' : 'login.reason.sessionEnded' })}
           </div>
         )}
         <Card>

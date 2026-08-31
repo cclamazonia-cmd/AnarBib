@@ -3575,6 +3575,7 @@
   "libctx.hint": "Les accions (reserves, préstecs, consultes) s'apliquen a aquesta biblioteca.",
   "libctx.label": "Biblioteca actual",
   "login.reason.idle": "Se us ha desconnectat després de 60 minuts d'inactivitat. Torneu a iniciar la sessió per continuar.",
+  "login.reason.sessionEnded": "La vostra sessió ha acabat: les sessions de l'equip de la biblioteca no es conserven en tancar el navegador. Torneu a iniciar la sessió per continuar.",
   "material.arquivo": "Arxius",
   "material.audio": "Àudio",
   "material.audiovisual": "Audiovisual",

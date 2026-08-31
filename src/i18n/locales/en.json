@@ -3575,6 +3575,7 @@
   "libctx.hint": "Actions (reservations, loans, consultations) apply to this library.",
   "libctx.label": "Current library",
   "login.reason.idle": "You were signed out after 60 minutes of inactivity. Please sign in again to continue.",
+  "login.reason.sessionEnded": "Your session has ended: library team sessions are not kept when the browser is closed. Please sign in again to continue.",
   "material.arquivo": "Archive",
   "material.audio": "Audio",
   "material.audiovisual": "Audiovisual",

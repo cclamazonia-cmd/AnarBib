@@ -35,6 +35,11 @@ export function useIdleTimer({
   idleMinutes = 60,
   warningSeconds = 60,
   onTimeout,
+  // Appelee a chaque relance du minuteur, donc a chaque activite reelle.
+  // Sert a horodater la derniere activite AILLEURS que dans ce composant, pour
+  // qu'on puisse encore expliquer la deconnexion quand l'app n'etait plus la
+  // pour la prononcer (cf. src/lib/sessionEndNotice.js).
+  onActivity,
 }) {
   const [showWarning, setShowWarning] = useState(false);
   const [secondsRemaining, setSecondsRemaining] = useState(warningSeconds);
@@ -48,12 +53,14 @@ export function useIdleTimer({
   const countdownIntervalRef = useRef(null);
   const lastActivityRef = useRef(Date.now());
   const onTimeoutRef = useRef(onTimeout);
+  const onActivityRef = useRef(onActivity);
   const showWarningRef = useRef(false);
   const idleMinutesRef = useRef(idleMinutes);
   const warningSecondsRef = useRef(warningSeconds);
 
   // Sync refs avec les props (sans rejouer le useEffect principal)
   useEffect(() => { onTimeoutRef.current = onTimeout; }, [onTimeout]);
+  useEffect(() => { onActivityRef.current = onActivity; }, [onActivity]);
   useEffect(() => { idleMinutesRef.current = idleMinutes; }, [idleMinutes]);
   useEffect(() => { warningSecondsRef.current = warningSeconds; }, [warningSeconds]);
 
@@ -83,6 +90,10 @@ export function useIdleTimer({
   const startIdleTimer = useCallback(() => {
     clearAllTimers();
     setShowWarningSafe(false);
+
+    // Point de passage unique de toute activite : handleActivity, stayLoggedIn
+    // et le montage relancent tous le minuteur par ici.
+    if (onActivityRef.current) onActivityRef.current();
 
     const idleMinutesNow = idleMinutesRef.current;
     const warningSecondsNow = warningSecondsRef.current;

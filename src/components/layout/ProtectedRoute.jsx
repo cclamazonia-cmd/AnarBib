@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { readSessionEndNotice } from '@/lib/sessionEndNotice';
 import { Spinner } from '@/components/ui';
 
 // ONBO — pages accessibles pendant la constitution. Tant que le compte est
@@ -32,6 +33,14 @@ export function ProtectedRoute({ children }) {
   }
 
   if (!user) {
+    // Une session qui vient de s'eteindre n'a pas de compte a creer. /cadastro
+    // reste la porte des vrais nouveaux venus ; celui ou celle qu'on vient de
+    // deconnecter va vers /login, seule page qui sache dire POURQUOI. Sans ca,
+    // la course entre cette redirection et celle du minuteur decidait, au
+    // hasard, si l'explication s'affichait ou non.
+    if (readSessionEndNotice()) {
+      return <Navigate to="/login" replace />;
+    }
     return <Navigate to="/cadastro" replace />;
   }
 

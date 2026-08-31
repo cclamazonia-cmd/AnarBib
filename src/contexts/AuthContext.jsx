@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useRef, useState, useCallback } f
 import { supabase } from '@/lib/supabase';
 import { syncLocaleFromProfile } from '@/i18n';
 import { clearStaffSession } from '@/lib/staffStorage';
+import { clearSessionAlive, clearSessionEndNotice } from '@/lib/sessionEndNotice';
 
 const AuthContext = createContext({
   session: null,
@@ -204,6 +205,12 @@ export function AuthProvider({ children }) {
         // Lien de récupération MDP : on marque le mode recovery (persistant) pour que
         // LoginPage affiche le formulaire « nouveau mot de passe » ET que ProtectedRoute
         // BLOQUE tout accès à l'app tant que le MDP n'est pas changé.
+        // Reconnexion reussie : l'avis « vous avez ete deconnecte·e » a fait son
+        // office, on l'efface. Uniquement sur SIGNED_IN : INITIAL_SESSION se
+        // declenche a chaque demarrage et effacerait un avis pas encore lu.
+        if (event === 'SIGNED_IN') {
+          clearSessionEndNotice();
+        }
         if (event === 'PASSWORD_RECOVERY') {
           try { localStorage.setItem('anarbib:pw-recovery', '1'); } catch { /* ignore */ }
           setRecovery(true);
@@ -232,6 +239,11 @@ export function AuthProvider({ children }) {
   const signOut = async () => {
     await supabase.auth.signOut();
     clearStaffSession();
+    // Deconnexion voulue : on efface le battement sans poser de raison, pour ne
+    // pas expliquer au prochain passage un depart que l'usager·e a decide.
+    // N'efface PAS un avis explicite deja pose — le minuteur ecrit le sien
+    // AVANT d'appeler signOut, justement pour qu'il survive a ce nettoyage.
+    clearSessionAlive();
     setSession(null);
     setProfile(null);
     syncedForUserRef.current = null;

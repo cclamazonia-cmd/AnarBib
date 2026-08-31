@@ -3575,6 +3575,7 @@
   "libctx.hint": "La agoj (rezervoj, pruntoj, konsultoj) validas por ĉi tiu biblioteko.",
   "libctx.label": "Aktuala biblioteko",
   "login.reason.idle": "Vi estis elsalutita post 60 minutoj da senaktiveco. Reensalutu por daŭrigi.",
+  "login.reason.sessionEnded": "Via seanco finiĝis: seancoj de la biblioteka teamo ne konserviĝas kiam la retumilo fermiĝas. Reensalutu por daŭrigi.",
   "material.arquivo": "Arkivo",
   "material.audio": "Aŭdio",
   "material.audiovisual": "Aŭdvida",

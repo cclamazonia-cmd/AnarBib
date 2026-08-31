@@ -3575,6 +3575,7 @@
   "libctx.hint": "Las acciones (reservas, préstamos, consultas) se aplican a esta biblioteca.",
   "libctx.label": "Biblioteca actual",
   "login.reason.idle": "Fue desconectade tras 60 minutos de inactividad. Vuelva a conectarse para continuar.",
+  "login.reason.sessionEnded": "Su sesión ha terminado: las sesiones del equipo de la biblioteca no se conservan al cerrar el navegador. Vuelva a conectarse para continuar.",
   "material.arquivo": "Archivo",
   "material.audio": "Audio",
   "material.audiovisual": "Audiovisual",

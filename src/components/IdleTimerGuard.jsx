@@ -29,6 +29,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useIdleTimer } from '@/hooks/useIdleTimer';
 import { isStaffSession, markStaffSession, migrateTokensToSessionStorage } from '@/lib/staffStorage';
+import { markSessionAlive, noteSessionEnded } from '@/lib/sessionEndNotice';
 import IdleWarningModal from '@/components/IdleWarningModal';
 
 const IDLE_MINUTES = 60;
@@ -66,6 +67,10 @@ export default function IdleTimerGuard({ children }) {
   }, [isStaff]);
 
   const handleTimeout = useCallback(async () => {
+    // AVANT le signOut, et avant toute navigation : le `?reason=idle` ci-dessous
+    // ne survit pas au premier rechargement, et il n'est pas ecrit du tout si
+    // une autre redirection gagne la course. Le marqueur persistant, lui, tient.
+    noteSessionEnded('idle');
     try {
       await signOut();
     } catch (err) {
@@ -82,6 +87,11 @@ export default function IdleTimerGuard({ children }) {
       idleMinutes: IDLE_MINUTES,
       warningSeconds: WARNING_SECONDS,
       onTimeout: handleTimeout,
+      // Horodate la derniere activite hors de React. Sans ce battement, une
+      // session staff qui meurt a la fermeture du navigateur (les tokens sont
+      // en sessionStorage, cf. staffStorage.js) laisse l'usager·e devant un
+      // ecran de connexion nu, sans un mot d'explication.
+      onActivity: markSessionAlive,
     });
 
   return (

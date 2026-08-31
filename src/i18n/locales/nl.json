@@ -3575,6 +3575,7 @@
   "libctx.hint": "Acties (reserveringen, leningen, raadplegingen) gelden voor deze bibliotheek.",
   "libctx.label": "Huidige bibliotheek",
   "login.reason.idle": "Je bent na 60 minuten inactiviteit afgemeld. Meld je opnieuw aan om verder te gaan.",
+  "login.reason.sessionEnded": "Je sessie is beëindigd: sessies van het bibliotheekteam blijven niet bewaard als de browser wordt gesloten. Meld je opnieuw aan om verder te gaan.",
   "material.arquivo": "Archief",
   "material.audio": "Audio",
   "material.audiovisual": "Audiovisueel",
