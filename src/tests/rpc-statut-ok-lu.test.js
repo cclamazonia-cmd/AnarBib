@@ -14,6 +14,29 @@
 // lots) ; ce qui est imposé, c'est de le lire. Un appel est conforme s'il
 // appelle `assertRpcOk`, ou s'il inspecte `ok` lui-même.
 //
+// D'OÙ VIENT `RPC_A_STATUT`, ET CE QU'ELLE NE VOIT PAS.
+//
+// Une liste en dur dont personne ne connaît la provenance devient fausse en
+// silence. Voici donc la requête qui l'a produite, le 31/08/2026 :
+//
+//   select n.nspname, p.proname
+//     from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+//    where n.nspname in ('api','public')
+//      and pg_get_function_result(p.oid) in ('jsonb','json')
+//      and p.prosrc ~* '''ok''';
+//
+// SON ANGLE MORT, mesuré : la requête ne voit que les fonctions qui
+// CONSTRUISENT le statut. Elle manque les FAÇADES, qui le relaient sans le
+// contenir — et ce sont elles que le front appelle. `api.renew_my_loan` relaie
+// `fn_v2_extend_core` à deux sauts ; `fn_import_dispatch` relaie
+// `ingest.fn_dispatch_partner_catalog_import`. Les deux ont été ajoutées à la
+// main, et l'une d'elles ne l'aurait jamais été sans une relecture de code.
+//
+// Corollaire : une entrée ajoutée à la main doit dire POURQUOI la requête ne
+// l'a pas trouvée. Une entrée retirée doit dire ce qui a été vérifié en base —
+// c'est ainsi qu'`advance_reservation` est sortie (elle rend un `integer` et
+// lève : il n'y a aucun `ok` à lire).
+//
 // LA DETTE EST NOMMÉE, PAS CACHÉE — et elle est vide depuis le 31/08/2026.
 // Les quatre sites déclarés ont été repris le jour même, après vérification EN
 // BASE de ce que chaque fonction rend réellement. Trois relevaient bien de la
@@ -54,6 +77,12 @@ const RPC_A_STATUT = new Set([
   'fn_import_set_adapter_overrides', 'fn_import_set_profile', 'fn_partner_register_deposit_source',
   'fn_publish_digital_asset_from_resource', 'fn_restore_deleted_draft',
   'fn_team_promote_to_librarian',
+  // Ajoutée le 31/08/2026 : façade à DEUX SAUTS, invisible à la requête
+  // ci-dessous. Elle ne construit aucun statut — elle relaie
+  // `ingest.fn_dispatch_partner_catalog_import`, qui rend `{ok:true, …}`
+  // ou lève. Six refus au total entre les deux niveaux, et l'appel du
+  // front n'en attrapait aucun.
+  'fn_import_dispatch',
 ]);
 
 // Dette déclarée : AUCUNE au 31/08/2026. Le dispositif reste — c'est lui qui

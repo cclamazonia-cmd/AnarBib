@@ -357,7 +357,17 @@ export default function ImportacoesPage() {
         assertRpcOk(profileData);
       }
       setMsg({ text: t({ id: 'importacoes.runCreatedDispatching' }, { id: runId }), kind: 'info' });
-      await supabase.rpc('fn_import_dispatch', { p_run_id: Number(runId) });
+      // DOC-RPC-4. Cet appel ignorait `error` autant que ses deux voisins, mais
+      // il rate DAVANTAGE : `fn_import_dispatch` lève quatre refus (accès
+      // bibliothécaire, coordenador requis, run introuvable, run d'une autre
+      // bibliothèque) puis relaie `ingest.fn_dispatch_partner_catalog_import`,
+      // qui en lève deux de plus — dont « secret d'import absent du vault ».
+      // Six refus au total, aucun `ok:false` : le relais rend `{ok:true, …}` ou
+      // il lève. Sans cette ligne, l'écran affichait « run expédié » dans les
+      // six cas, et l'import n'avait pas commencé.
+      const { data: dispatchData, error: dispatchErr } = await supabase.rpc('fn_import_dispatch', { p_run_id: Number(runId) });
+      if (dispatchErr) throw dispatchErr;
+      assertRpcOk(dispatchData);
 
       setMsg({ text: t({ id: 'importacoes.runDispatched' }, { id: runId }), kind: 'ok' });
       setFile(null);

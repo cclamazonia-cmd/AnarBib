@@ -135,7 +135,13 @@ export default function ImportWizard() {
       assertRpcOk(created);
       const newRunId = created?.run_id;
       if (!newRunId) throw new Error(t({ id: 'importacoes.noRunId' }));
-      await supabase.rpc('fn_import_dispatch', { p_run_id: Number(newRunId) });
+      // DOC-RPC-4, même défaut qu'en ligne 360 d'ImportacoesPage : six refus
+      // levés entre `fn_import_dispatch` et le relais `ingest.fn_dispatch_...`,
+      // et aucun n'était attrapé. Ici l'assistant enchaînait sur l'étape 3 en
+      // annonçant la source « prête », alors que rien n'était parti.
+      const { data: dispatched, error: dispatchErr } = await supabase.rpc('fn_import_dispatch', { p_run_id: Number(newRunId) });
+      if (dispatchErr) throw dispatchErr;
+      assertRpcOk(dispatched);
       setRunId(Number(newRunId));
       setMsg({ text: t({ id: 'importacoes.wizard.source.ready' }, { id: newRunId }), kind: 'ok' });
       setStep(3);
