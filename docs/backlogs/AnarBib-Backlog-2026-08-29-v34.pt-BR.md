@@ -1310,7 +1310,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | | | | |
 |---|---|---|---|
 | **F1** | Auditar a cadeia de e-mail de ponta a ponta | `P1` | Aberto |
-| **F2** | Corrigir o template dos e-mails de alerta de operação | `P1` | Aberto |
+| **F2** | Corrigir o template dos e-mails de alerta de operação | `P1` | A verificar |
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
 | **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
@@ -1341,11 +1341,11 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 #### F2 — Corrigir o template dos e-mails de alerta de operação
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
 
 **Estado.** Os e-mails de alerta de operação — backup em falha, incidente de sonda — usam o template destinado às leitoras. Terminam portanto com «entre em contato com a biblioteca» seguido de um número de telefone.
 
-*Verificado : 31/08 — lido no código: `health-probe` usa o gabarito de leitora (`renderEmail` + `footerPadrao`, com telefone). Nenhum gabarito de operação existe.*
+*Verificado : 31/08 — lido no código: `health-probe` usa o gabarito de leitora (`renderEmail` + `footerPadrao`, com telefone). Nenhum gabarito de operação existe. **Entregue na mesma noite** (commit `4b1d8a86`): `footerOps` em `layout.ts`, ligado em `alerter()` de `health-probe`. A armadilha pega no caminho: a **versão texto** de `renderEmail` fabricava seu próprio rodapé (telefone incluído) sem olhar o `footerHtml` — coberta por `footerTextLines`, guardada por teste nos dois sentidos. Verificado no bundle implantado.*
 
 **O que é.** Um template de operação distinto: sem rodapé destinado ao público, o comando a executar, e o link para a seção do runbook.
 
@@ -1353,7 +1353,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **O que conta como terminado.**
 
-- Um template de operação existe, distinto do template de leitora.
+- ~~Um gabarito de operação existe, distinto do gabarito de leitora~~ — `footerOps` (HTML **e** versão texto), entregue em 31/08.
 - Um alerta de teste foi recebido e relido por alguém que não escreveu o código.
 
 **Dependências.** Deve preceder a conclusão de **A1**.

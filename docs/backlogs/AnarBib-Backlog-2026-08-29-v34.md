@@ -1324,7 +1324,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 | | | | |
 |---|---|---|---|
 | **F1** | Auditer la chaîne de courriel de bout en bout | `P1` | Ouvert |
-| **F2** | Corriger le gabarit des courriels d'alerte d'exploitation | `P1` | Ouvert |
+| **F2** | Corriger le gabarit des courriels d'alerte d'exploitation | `P1` | À vérifier |
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
 | **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
@@ -1355,11 +1355,11 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 #### F2 — Corriger le gabarit des courriels d'alerte d'exploitation
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
 
 **État.** Les courriels d'alerte d'exploitation — sauvegarde en échec, incident de sonde — utilisent le gabarit destiné aux lectrices. Ils finissent donc par « contacte la bibliothèque » suivi d'un numéro de téléphone.
 
-*Vérifié : 31/08 — lu dans le code : `health-probe/index.ts` passe par `renderEmail` + `footerPadrao` de `_shared/mail/layout.ts` — le gabarit lectrice, qui pousse le libellé téléphone (`layout.ts:28`). Aucun gabarit d'exploitation dans `_shared/mail/`.*
+*Vérifié : 31/08 — lu dans le code : `health-probe/index.ts` passe par `renderEmail` + `footerPadrao` de `_shared/mail/layout.ts` — le gabarit lectrice, qui pousse le libellé téléphone (`layout.ts:28`). Aucun gabarit d'exploitation dans `_shared/mail/`. **Livré le soir même** (commit `4b1d8a86`, CI verte) : `footerOps` dans `layout.ts` — d'où vient l'alerte, où regarder, et OPS-8 (« rien à acquitter, l'incident se clôt seul ») — branché dans `alerter()` de `health-probe`, l'entonnoir unique des huit envois d'alerte. Le piège attrapé en chemin : la **version texte** de `renderEmail` fabriquait son propre pied (téléphone compris) sans regarder `footerHtml` — couverte par `footerTextLines`, gardée dans les deux sens par `mail-footer-ops.test.js` (téléphone absent du pied ops, présent dans le pied lectrice). Vérifié dans le bundle déployé : `footerOps` présent, `footerPadrao(NETWORK_CTX)` disparu.*
 
 **Ce que c'est.** Un gabarit d'exploitation distinct : pas de pied de page destiné au public, la commande à lancer, et le lien vers la section du runbook.
 
@@ -1367,7 +1367,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **Ce qui compte comme fini.**
 
-- Un gabarit d'exploitation existe, distinct du gabarit lectrice.
+- ~~Un gabarit d'exploitation existe, distinct du gabarit lectrice~~ — `footerOps` (HTML **et** version texte), trois clés dans les dix locales, livré et déployé le 31/08.
 - Une alerte de test a été reçue et relue par quelqu'un qui n'a pas écrit le code.
 
 **Dépendances.** Doit précéder l'aboutissement de **A1**.

@@ -3484,7 +3484,7 @@
       "id": "F2",
       "d": "F",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "deno"
@@ -3507,11 +3507,11 @@
       },
       "f": {
         "fr": [
-          "Un gabarit d'exploitation existe, distinct du gabarit lectrice.",
+          "~~Un gabarit d'exploitation existe, distinct du gabarit lectrice~~ — `footerOps` (HTML **et** version texte), trois clés dans les dix locales, livré et déployé le 31/08.",
           "Une alerte de test a été reçue et relue par quelqu'un qui n'a pas écrit le code."
         ],
         "pt": [
-          "Um template de operação existe, distinto do template de leitora.",
+          "~~Um gabarito de operação existe, distinto do gabarito de leitora~~ — `footerOps` (HTML **e** versão texto), entregue em 31/08.",
           "Um alerta de teste foi recebido e relido por alguém que não escreveu o código."
         ]
       },
@@ -3524,8 +3524,8 @@
         "PLAN_DE_MARCHE §8"
       ],
       "verif": {
-        "fr": "31/08 — lu dans le code : `health-probe/index.ts` passe par `renderEmail` + `footerPadrao` de `_shared/mail/layout.ts` — le gabarit lectrice, qui pousse le libellé téléphone (`layout.ts:28`). Aucun gabarit d'exploitation dans `_shared/mail/`.",
-        "pt": "31/08 — lido no código: `health-probe` usa o gabarito de leitora (`renderEmail` + `footerPadrao`, com telefone). Nenhum gabarito de operação existe."
+        "fr": "31/08 — lu dans le code : `health-probe/index.ts` passe par `renderEmail` + `footerPadrao` de `_shared/mail/layout.ts` — le gabarit lectrice, qui pousse le libellé téléphone (`layout.ts:28`). Aucun gabarit d'exploitation dans `_shared/mail/`. **Livré le soir même** (commit `4b1d8a86`, CI verte) : `footerOps` dans `layout.ts` — d'où vient l'alerte, où regarder, et OPS-8 (« rien à acquitter, l'incident se clôt seul ») — branché dans `alerter()` de `health-probe`, l'entonnoir unique des huit envois d'alerte. Le piège attrapé en chemin : la **version texte** de `renderEmail` fabriquait son propre pied (téléphone compris) sans regarder `footerHtml` — couverte par `footerTextLines`, gardée dans les deux sens par `mail-footer-ops.test.js` (téléphone absent du pied ops, présent dans le pied lectrice). Vérifié dans le bundle déployé : `footerOps` présent, `footerPadrao(NETWORK_CTX)` disparu.",
+        "pt": "31/08 — lido no código: `health-probe` usa o gabarito de leitora (`renderEmail` + `footerPadrao`, com telefone). Nenhum gabarito de operação existe. **Entregue na mesma noite** (commit `4b1d8a86`): `footerOps` em `layout.ts`, ligado em `alerter()` de `health-probe`. A armadilha pega no caminho: a **versão texto** de `renderEmail` fabricava seu próprio rodapé (telefone incluído) sem olhar o `footerHtml` — coberta por `footerTextLines`, guardada por teste nos dois sentidos. Verificado no bundle implantado."
       }
     },
     {
