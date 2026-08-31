@@ -12,6 +12,7 @@ import './BookPage.css';
 import { citeAuthorString, citeAuthorList, buildCitations, buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
 import { languageLabel } from '@/lib/languages';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
 const STORAGE_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/';
@@ -301,12 +302,13 @@ export default function BookPage() {
     setReserveStatus(t({ id: 'book.reserve.consult.sending' }));
     setReserveError(false);
     try {
-      const { error } = await supabase.schema('api').rpc('create_consulta_local', {
+      const { data: rpcData, error } = await supabase.schema('api').rpc('create_consulta_local', {
         p_user_id: user.id,
         p_holding_ids: [sessionCtx.session_holding_id],
         p_notes: '@@note:book.reserve.consult.note', // Route B : code système (décodé à l'affichage)
       });
       if (error) throw error;
+      assertRpcOk(rpcData);
       setReserveStatus(t({ id: 'book.reserve.consult.success' }));
     } catch (err) { setReserveError(true); setReserveStatus(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) })); }
   }

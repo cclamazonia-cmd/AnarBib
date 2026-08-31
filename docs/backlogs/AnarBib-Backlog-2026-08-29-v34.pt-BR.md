@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-31** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 12
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -370,9 +370,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B9** | Purgar o esquema `backup_2026_05_07` | `P2` | Aberto |
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
-| **B12** | Um envio não efetuado não diz porquê — e num caso, a tabela afirma o contrário | `P2` | Em curso |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B15** | Uma renovação recusada não diz nada a quem não lê o `ok` | `P2` | A verificar |
+| **B15** | Uma recusa que parece um sucesso: 26 chamadas em 34 não liam o `ok` | `P1` | Em curso |
 | **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Aberto |
 
 #### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
@@ -595,35 +594,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 *Remissões : `REGISTRE §18 OPAC-W1` · `Relevé du 29/08/2026`*
 
-#### B12 — Um envio não efetuado não diz porquê — e num caso, a tabela afirma o contrário
-
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
-
-**Estado.** **Reformulado em 30/08 após verificação: o item designava uma tabela que não existe.** Falava de «três linhas de `network.cross_library_critical_action` em `status = 'skipped'`». Essa relação não existe, e a única tabela de nome vizinho não tem nenhuma das colunas citadas. O constato fora copiado sobre o objeto errado na reescrita v34.
-
-As linhas existem, mas em **`public.team_notification_outbox`** — e são **quatro**, não três: três de 08/06/2026 e **uma de 30/08/2026**. Não é uma curiosidade histórica: ainda acontece.
-
-Cada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error` **nulo**. O pedido partiu, e a linha não está em erro: está `skipped` porque algo decidiu não enviar. **Mas a razão não está escrita em lugar nenhum.**
-
-**Instruído em 31/08, e o constato era pequeno demais.** As quatro linhas têm todas o **mesmo** evento, `network.cross_library_critical_action`, e são as **únicas** desse evento: nunca partiu desde 8 de junho. A causa é um handler em falta em `_shared/domain/network.ts` — item **B17**. E o silêncio não estava confinado a esse evento: cinco tabelas de outbox perdiam a razão do salto, e `authority.ts` marcava **`sent`** aconteça o que acontecer. **Entregue em 31/08**: coluna `skip_reason` nas cinco tabelas, dois `CHECK` por tabela, `skipped` acrescentado ao enum de `authority`, e os sete sítios do código que saltam escrevem a sua razão.
-
-*Verificado : 31/08 — levantamento em produção: 4 linhas `skipped` em 28, todas do mesmo evento, 0 envios desde 08/06. Entregue no mesmo dia; **a CI ainda não correu**.*
-
-**O que é.** Ver a CI verde na suíte `outbox_raison_du_saut_tests.sql`, depois implantar e verificar **em base** que as quatro linhas retomadas têm `unknown_network_event` e já não têm `sent_at`.
-
-**Por que importa.** Aplicação direta de `DOC-SILENCE-1`, firmado no mesmo dia: **um dispositivo que não age deve dizê-lo.** Uma notificação de equipe não enviada sem razão escrita é uma pessoa que não foi avisada e um registro que não sabe explicá-lo.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Ligado a **F1** (auditoria da cadeia de e-mail).
-
-*Remissões : `public.team_notification_outbox` · `REGISTRE_decisions DOC-SILENCE-1` · `_shared/domain/{team,network,assembleia,authority,gazette,lettre,cartography}.ts` · `migration 20260831090412` · `tests/sql/outbox_raison_du_saut_tests.sql`*
-
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
 `P3` Adiado · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL, administração de sistemas
@@ -645,19 +615,19 @@ Cada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error`
 
 *Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
 
-#### B15 — Uma renovação recusada não diz nada a quem não lê o `ok`
+#### B15 — Uma recusa que parece um sucesso: 26 chamadas em 34 não liam o `ok`
 
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** Encontrado em 30/08 pelo caminho E2E dos empréstimos (item **I15**), e não por uma releitura de código. `api.renew_my_loan` **nunca levanta**: retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. Numa biblioteca sem conjunto de regras de circulação ativo, retorna `{ok:false, reason:'not_renewable'}` — e a chamada *tem sucesso*, do ponto de vista do PostgREST como do cliente.
 
 O contrato é respeitado e documentado. Mas uma interface que não inspeciona `ok` mostrará «renovado» a uma leitora para quem nada mudou. O teste viveu isso: afirmava «o vencimento recua», viu um vencimento imóvel, e **nenhum erro**.
 
-*Verificado : 30/08 — encontrado pela execução do teste 3.03 de `paquet_emprestimos`, que obteve `ok=false reason=not_renewable` sem exceção. O inventário das RPC em causa continua por fazer.*
+**Recenseado em 31/08, e o constato inverteu-se.** `renew_my_loan`, que deu origem ao item, é das poucas que **leem** o `ok`. São **34 RPC de estado** chamadas pelo front, e **26 chamadas não inspecionam `ok`** — dezoito deitam fora a carga útil na desestruturação. **Entregue em 31/08**: `assertRpcOk(data)`, 23 guardas, 4 sítios em dívida declarada. Doutrina `DOC-RPC-4`.
 
-**O que é.** Duas perguntas, nesta ordem. **A primeira é de verificação**: o front inspeciona `ok` nos retornos de `renew_my_loan`, `advance_consulta`, `advance_reservation` e demais RPC que devolvem um estado em vez de levantar? Enquanto não se olhar, não se sabe se há defeito.
+*Verificado : 31/08 — recenseamento cruzado base × repositório, três sítios relidos à mão. Entregue no mesmo dia; lint a 0 erros, **testes não corridos localmente** — decide a CI.*
 
-**A segunda é de doutrina**: uma recusa previsível deve levantar ou devolver um estado? Ambas se defendem — levantar corta o lote em curso, devolver um estado permite tratar linha a linha, que é justamente o que faz `skipped`. Se a resposta for «devolver um estado», então a regra que falta não está no banco: é que **toda interface deve ler o `ok`**, e isso escreve-se no `REGISTRE_decisions`.
+**O que é.** Ver a CI verde em `src/tests/rpc-statut-ok-lu.test.js`, depois retomar os quatro sítios em dívida.
 
 **Por que importa.** Porque uma recusa muda é o pior dos três estados possíveis. Um erro vê-se; uma recusa nomeada explica-se à pessoa no balcão; um `ok:false` ignorado dá uma confirmação no ecrã e uma data inalterada no banco. É a leitora que descobre a diferença, atrasada.
 
@@ -665,14 +635,15 @@ E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontr
 
 **O que conta como terminado.**
 
-- As RPC que devolvem um estado em vez de levantar estão inventariadas.
-- Para cada uma, sabe-se se o front lê o `ok`.
-- A regra está escrita no `REGISTRE_decisions` — levantar, ou devolver um estado que quem chama DEVE ler.
-- As divergências encontradas são corrigidas, no front ou no banco conforme a regra adotada.
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
 
 **Dependências.** Nenhuma. O inventário faz-se numa consulta; a verificação no front exige ler as chamadas correspondentes.
 
-*Remissões : `tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)` · `public.fn_v2_extend_core` · `REGISTRE_decisions DOC-RPC-3`*
+*Remissões : `src/lib/rpcStatus.js` · `src/tests/rpc-statut-ok-lu.test.js` · `REGISTRE_decisions DOC-RPC-4 et DOC-SILENCE-1` · `src/lib/localizeError.js`*
 
 #### B17 — O aviso que devia tornar visíveis as ações de um administrador de rede não existe
 
@@ -2493,6 +2464,17 @@ Suíte `tests/sql/slug_biblioteca_tests.sql`, 7 testes. O T5 é o que conta a lo
 **Provado de ponta a ponta, cinco estados, cinco observações**, com uma suíte descartável escrita para falhar e retirada no mesmo dia: vermelho → ticket aberto; verde → fechado uma segunda depois do seu comentário; vermelho → *reaberto* (HTTP 201/201); vermelho de novo com o ticket já aberto → **nada**, e o job di-lo; verde → fechado. A condição em parênteses rectos `needs['sql-tests'].result`, nunca exercitada até então, funcionou.
 
 Doutrina `OPS-8`: **a acusação de recepção de um alerta é o estado do sistema, não um gesto humano repetido.** |
+| B12 | Um envio não efetuado não dizia porquê — e num caso, a tabela afirmava o contrário | **Encerrado em 31/08.** O constato não era falso, era pequeno demais.
+
+**As quatro linhas são um só evento**: `network.cross_library_critical_action`, e são as únicas desse evento — nunca partiu desde 8 de junho. A causa é um handler ausente em `_shared/domain/network.ts`, que devolve **`ok: true`**. Tornou-se o item **B17**, em P1: a spec §6.3 prometia «e-mail imediato aos coordenadores ativos da biblioteca», o contrapeso ao único poder transversal da rede.
+
+**O silêncio não estava confinado a esse evento**: cinco das sete tabelas de outbox perdiam a razão do salto, que o código nomeia antes de a deitar fora. E `authority.ts` marcava **`sent`** aconteça o que acontecer — não ignorava que um envio faltara, **afirmava que ocorrera**.
+
+**Entregue**: coluna `skip_reason` nas cinco tabelas, dois `CHECK` por tabela, `skipped` no enum de `authority`, os sete sítios do código corrigidos, as quatro linhas retomadas. Suíte `outbox_raison_du_saut_tests.sql`, 8 testes, quatro dos quais **escrevem**.
+
+**Verificado em produção**: 5 colunas, 10 guardas, 4 linhas retomadas, 0 linhas mudas.
+
+**E a falha pelo caminho valeu uma doutrina.** A primeira versão punha as guardas *antes* da retoma: verde em CI, recusada pela produção. A CI não podia vê-lo, reconstrói uma base vazia. Daí `DOC-MIGR-1`. |
 
 ---
 
@@ -2524,4 +2506,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

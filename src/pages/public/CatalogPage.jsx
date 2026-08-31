@@ -17,6 +17,7 @@ import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './CatalogPage.css';
 import { languageOptions } from '@/lib/languages';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 const PAGE_SIZE = 100;
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''); // #OPAC10 parcours A–Z
@@ -744,6 +745,7 @@ export default function CatalogPage() {
         p_notes: '@@note:catalog.quickReserve.note', // Route B : code système (décodé à l'affichage)
       });
       if (createRes.error) throw createRes.error;
+      assertRpcOk(createRes.data);
 
       // Succès : on marque le livre comme réservé pour éviter le double clic
       setReserveState(s => ({ ...s, [key]: 'done' }));
@@ -786,6 +788,7 @@ export default function CatalogPage() {
         p_notes: '@@note:catalog.quickConsulta.note', // Route B : code système (décodé à l'affichage)
       });
       if (createRes.error) throw createRes.error;
+      assertRpcOk(createRes.data);
 
       // Succes
       setConsultaState(s => ({ ...s, [key]: 'done' }));

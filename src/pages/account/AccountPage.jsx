@@ -42,6 +42,7 @@ const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
 const TabEventos = lazy(() => import('@/pages/account/TabEventos'));
 import MyPartnershipsConsentSection from '@/components/account/MyPartnershipsConsentSection';
 import { formatPublicId } from '@/lib/publicId';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 // ── ContaTabHeader (chantier #CL — recommandation B, refresh par onglet, 31/05/2026) ───
 // Header standard pour les onglets de la page Conta qui méritent un bouton refresh.
@@ -958,7 +959,7 @@ export default function AccountPage() {
   const handleDismissConsultaCancelled = async (c) => {
     if (!c?.consulta_id) return;
     try {
-      const { error } = await supabase.schema('api').rpc('dismiss_consulta_cancelled', {
+      const { data: rpcData, error } = await supabase.schema('api').rpc('dismiss_consulta_cancelled', {
         p_consulta_id: c.consulta_id,
         p_line_nos: [c.line_no || 1],
         p_note: null
@@ -967,6 +968,7 @@ export default function AccountPage() {
         console.error('dismiss_consulta_cancelled error:', error);
         return;
       }
+      assertRpcOk(rpcData);
       await loadData();
     } catch (err) {
       console.error('dismiss_consulta_cancelled exception:', err);
@@ -978,7 +980,7 @@ export default function AccountPage() {
     if (!cancelTarget?.consulta_id) return;
     setCancelling(true);
     try {
-      const { error } = await supabase.schema('api').rpc('cancel_consulta_as_reader', {
+      const { data: rpcData, error } = await supabase.schema('api').rpc('cancel_consulta_as_reader', {
         p_consulta_id: cancelTarget.consulta_id,
         p_line_nos: [cancelTarget.line_no || 1],
       });
@@ -987,6 +989,7 @@ export default function AccountPage() {
         alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
         return;
       }
+      assertRpcOk(rpcData);
       setCancelTarget(null);
       await loadData();
     } catch (err) {
@@ -1002,7 +1005,7 @@ export default function AccountPage() {
     if (!c?.consulta_id || replying) return;
     setReplying(true);
     try {
-      const { error } = await supabase.schema('api').rpc('reply_consulta_schedule', {
+      const { data: rpcData, error } = await supabase.schema('api').rpc('reply_consulta_schedule', {
         p_consulta_id: c.consulta_id,
         p_line_nos: [c.line_no || 1],
         p_reply: 'confirmado_leitor',
@@ -1013,6 +1016,7 @@ export default function AccountPage() {
         alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
         return;
       }
+      assertRpcOk(rpcData);
       await loadData();
     } catch (err) {
       console.error('reply_consulta_schedule (confirm) exception:', err);
@@ -1045,7 +1049,7 @@ export default function AccountPage() {
     }
     setReplying(true);
     try {
-      const { error } = await supabase.schema('api').rpc('reply_consulta_schedule', {
+      const { data: rpcData, error } = await supabase.schema('api').rpc('reply_consulta_schedule', {
         p_consulta_id: refuseTarget.consulta_id,
         p_line_nos: [refuseTarget.line_no || 1],
         p_reply: 'recusado_leitor',
@@ -1056,6 +1060,7 @@ export default function AccountPage() {
         alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
         return;
       }
+      assertRpcOk(rpcData);
       setRefuseTarget(null);
       await loadData();
     } catch (err) {

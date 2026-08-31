@@ -19,6 +19,7 @@ import PanelOnboarding from '@/components/painel/PanelOnboarding';
 import { fmtD, useSort } from './_shared';
 import { normalizePublicId } from '@/lib/publicId';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
 const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
 const TabConsultasLocais = lazy(() => import('./tabs/TabConsultasLocais'));
@@ -1099,8 +1100,9 @@ export default function PanelPage() {
         params.p_consultation_ends_at = scheduleParams.endsAt || null;
         params.p_consultation_timezone = scheduleParams.timezone || null;
       }
-      const { error } = await supabase.schema('api').rpc('advance_consulta', params);
+      const { data: rpcData, error } = await supabase.schema('api').rpc('advance_consulta', params);
       if (error) throw error;
+      assertRpcOk(rpcData);
       loadConsultas();
     } catch (e) {
       // opts.rethrow : laisse l'appelant (modal de planification) afficher inline

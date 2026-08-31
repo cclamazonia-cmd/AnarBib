@@ -10,6 +10,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './ImportacoesPage.css';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
 const ACCEPTED_EXTENSIONS = '.csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.xlsx,.xls,.ods,.pdf,.json,.xml,.zip,.marc,.marcxml';
@@ -321,6 +322,7 @@ export default function ImportacoesPage() {
         p_detected_format: detectFileKind(file.name),
       });
       if (createErr) throw createErr;
+      assertRpcOk(createData);
       const runId = createData?.run_id;
       if (!runId) throw new Error(t({ id: 'importacoes.noRunId' }));
 
@@ -359,6 +361,7 @@ export default function ImportacoesPage() {
         p_partner_name: name,
       });
       if (error) throw error;
+      assertRpcOk(data);
       await loadSources();
       if (data?.source_id) setSourceId(String(data.source_id));
       setMsg({
@@ -391,6 +394,7 @@ export default function ImportacoesPage() {
         p_column_mappings: mappings, p_default_values: defaults,
       });
       if (error) throw error;
+      assertRpcOk(data);
       setMsg({ text: t({ id: 'importacoes.adapter.profileCreated' }, { name: profileName.trim() }), kind: 'ok' });
       setProfileName(''); setProfileMapRows([{ field: 'title', column: '' }]); setProfileDefRows([{ field: 'language', value: '' }]);
       setProfileFormOpen(false);
@@ -403,8 +407,9 @@ export default function ImportacoesPage() {
   async function handleDeleteProfile(id) {
     if (!window.confirm(t({ id: 'importacoes.adapter.profileDeleteConfirm' }))) return;
     try {
-      const { error } = await supabase.rpc('fn_import_profile_delete', { p_profile_id: Number(id) });
+      const { data: rpcData, error } = await supabase.rpc('fn_import_profile_delete', { p_profile_id: Number(id) });
       if (error) throw error;
+      assertRpcOk(rpcData);
       if (String(id) === adapterProfile) setAdapterProfile('');
       await reloadProfiles();
     } catch (err) {
@@ -521,8 +526,9 @@ export default function ImportacoesPage() {
     if (!window.confirm(t({ id: 'importacoes.deleteRunConfirm' }, { id: runId }))) return;
     setMsg({ text: t({ id: 'importacoes.deletingRun' }), kind: 'info' });
     try {
-      const { error } = await supabase.rpc('fn_import_delete_run', { p_run_id: Number(runId) });
+      const { data: rpcData, error } = await supabase.rpc('fn_import_delete_run', { p_run_id: Number(runId) });
       if (error) throw error;
+      assertRpcOk(rpcData);
       setMsg({ text: t({ id: 'importacoes.runDeleted' }), kind: 'ok' });
       if (selectedRunId === runId) { setSelectedRunId(null); setRunRows([]); }
       await loadRuns();
@@ -535,8 +541,9 @@ export default function ImportacoesPage() {
   async function handleArchiveRun(runId, archived) {
     setMsg({ text: t({ id: 'importacoes.archiving' }), kind: 'info' });
     try {
-      const { error } = await supabase.rpc('fn_import_archive_run', { p_run_id: Number(runId), p_archived: archived });
+      const { data: rpcData, error } = await supabase.rpc('fn_import_archive_run', { p_run_id: Number(runId), p_archived: archived });
       if (error) throw error;
+      assertRpcOk(rpcData);
       setMsg({ text: t({ id: archived ? 'importacoes.runArchived' : 'importacoes.runUnarchived' }), kind: 'ok' });
       await loadRuns();
     } catch (err) {
@@ -572,6 +579,7 @@ export default function ImportacoesPage() {
         p_source_id: Number(sourceId),
       });
       if (error) throw error;
+      assertRpcOk(data);
       if (data?.note) {
         setMsg({ text: data.note, kind: 'info' });
       } else {
@@ -798,8 +806,9 @@ export default function ImportacoesPage() {
   async function handlePublishResource(res) {
     setPubPromotingId(res.resource_id);
     try {
-      const { error } = await supabase.rpc('fn_publish_digital_asset_from_resource', { p_resource_id: res.resource_id });
+      const { data: rpcData, error } = await supabase.rpc('fn_publish_digital_asset_from_resource', { p_resource_id: res.resource_id });
       if (error) throw error;
+      assertRpcOk(rpcData);
       setPubResources((prev) => prev.filter((r) => r.resource_id !== res.resource_id));
       setMsg({ text: t({ id: 'importacoes.export.curate.validated' }, { title: res.book_title || res.label || '—' }), kind: 'ok' });
       if (fondsCount != null) await loadFondsEligibleCount();
@@ -827,8 +836,9 @@ export default function ImportacoesPage() {
     let ok = 0, fail = 0;
     for (const id of ids) {
       try {
-        const { error } = await supabase.rpc('fn_publish_digital_asset_from_resource', { p_resource_id: id });
+        const { data: rpcData, error } = await supabase.rpc('fn_publish_digital_asset_from_resource', { p_resource_id: id });
         if (error) throw error;
+        assertRpcOk(rpcData);
         ok += 1;
       } catch { fail += 1; }
     }
@@ -962,8 +972,9 @@ export default function ImportacoesPage() {
     setConfirmingId(asset.asset_id);
     setMsg({ text: t({ id: 'importacoes.export.verified.confirming' }), kind: 'info' });
     try {
-      const { error } = await supabase.rpc('fn_confirm_digital_asset_rights', { p_asset_id: asset.asset_id });
+      const { data: rpcData, error } = await supabase.rpc('fn_confirm_digital_asset_rights', { p_asset_id: asset.asset_id });
       if (error) throw error;
+      assertRpcOk(rpcData);
       setVerifiedAssets((prev) => prev.map((a) => (a.asset_id === asset.asset_id ? { ...a, rights_status: 'public_domain_confirmed' } : a)));
       setMsg({ text: t({ id: 'importacoes.export.verified.confirmedDP' }, { title: asset.book_title || '—' }), kind: 'ok' });
     } catch (err) {

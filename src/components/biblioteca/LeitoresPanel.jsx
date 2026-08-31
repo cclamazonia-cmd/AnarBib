@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 /**
  * LeitoresPanel — liste des lectrices et lecteurs d'une bibliothèque.
@@ -61,11 +62,12 @@ export default function LeitoresPanel({ libraryId }) {
     setBusyUserId(reader.user_id);
     setMsg({ text: '', kind: '' });
     try {
-      const { error } = await supabase.rpc('fn_team_promote_to_librarian', {
+      const { data: rpcData, error } = await supabase.rpc('fn_team_promote_to_librarian', {
         p_user_id: reader.user_id,
         p_library_id: libraryId,
       });
       if (error) throw error;
+      assertRpcOk(rpcData);
       setMsg({ text: t({ id: 'biblioteca.leitores.promoteSuccess' }, { name }), kind: 'ok' });
       await load();
     } catch (err) {

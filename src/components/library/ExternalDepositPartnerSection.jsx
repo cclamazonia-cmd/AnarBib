@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 /**
  * ExternalDepositPartnerSection
@@ -80,6 +81,7 @@ export default function ExternalDepositPartnerSection({ libraryId, canEdit }) {
         p_import_authorized: importAuth,
       });
       if (error) throw error;
+      assertRpcOk(data);
       setMsg({
         kind: 'ok',
         text: t({ id: data?.partner_created ? 'biblioteca.extPartner.created' : 'biblioteca.extPartner.linked' }, { name: name.trim() }),

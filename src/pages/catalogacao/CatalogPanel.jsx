@@ -8,6 +8,7 @@ import Modal from '@/components/ui/Modal';
 import CatalogDuplicatesModal from './CatalogDuplicatesModal';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -174,6 +175,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       try {
         const { data, error } = await supabase.rpc('discard_book_cascade', { p_book_id: id });
         if (error) throw error;
+        assertRpcOk(data);
         if (data?.book_deleted) {
           setMsg({ text: t({ id: 'catalogacao.catalog.discardDone' }, { label }), kind: 'ok' });
         } else {

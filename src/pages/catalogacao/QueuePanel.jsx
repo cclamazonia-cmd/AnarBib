@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import DuplicateCompareModal from './DuplicateCompareModal';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 // Labels resolved inside component via t()
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
@@ -501,6 +502,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     try {
       const { data, error } = await supabase.rpc('fn_restore_deleted_draft', { p_audit_id: auditId });
       if (error) throw error;
+      assertRpcOk(data);
       setMsg({ text: t({ id: 'catalogacao.queue.restoreDeletedResult' }, { id: data?.draft_id ?? auditId }), kind: 'ok' });
       await loadTrash(); await loadDeleted(); await loadQueue();
       onChanged?.();

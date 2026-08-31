@@ -1478,6 +1478,17 @@
           "fr": "**Clos le 31/08 — et c'est le premier item de la série fermé parce que le problème est résolu, non parce que le constat était faux.** Le constat, lui, l'était aussi : il disait qu'un rouge de CI passait inaperçu. La forge portait 24 tickets `[CI rouge]`, dix pour la seule journée du 30/08, et les courriels étaient bien partis. L'alerte ne manquait pas — **elle débordait**.\n\n**La cause n'était pas dans le code mais dans l'usage qu'il imposait.** L'anti-doublon d'`OPS-6` ne joue que tant que le ticket reste *ouvert* ; or la convention écrite disait « refermer vaut acquittement », et pendant une soirée de mise au point refermer veut dire « j'ai vu ». Chaque clic réarmait l'alarme pour l'itération suivante : dix tickets et dix courriels **pour un seul et même rouge**. C'est très exactement la panne qu'`OPS-6` voulait éviter — *un pipeline qui échoue une fois sur deux cesse d'être lu* — arrivée par l'autre bout.\n\n**L'épreuve a trouvé deux défauts que la relecture n'avait pas vus.** Le troisième rouge d'une heure n'a ouvert aucun ticket : **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. Codeberg plafonne à deux tickets de titre semblable par heure — la protection censée fermer l'angle mort du 17-20/08 le rouvrait donc d'elle-même dès qu'une heure devenait chargée, c'est-à-dire précisément quand on en a besoin. Et le job affichait **`Job succeeded`** : un `continue-on-error` et un `|| echo 000` faisaient que l'alerte se taisait sur sa propre panne. `DOC-SILENCE-1` violé à l'intérieur du dispositif d'alerte.\n\n**Livré** : un job `acquittement` symétrique de `alerte` dans les deux workflows, et `alerte` refondu autour d'un modèle différent — **un seul ticket par workflow, pour toujours**. Ouvert au premier rouge, **rouvert** aux suivants avec le commit et le run en commentaire, refermé au retour au vert. Son état est le miroir vivant de la santé de la CI, ses commentaires en sont le journal. La limite de la forge devient inatteignable puisqu'on ne crée plus jamais de second ticket, et l'anti-doublon cesse d'être une comparaison de chaînes pour devenir un état. `continue-on-error` retiré de `alerte` — sur le chemin de l'échec il n'y a rien à masquer — et conservé sur `acquittement`, qui tourne sur un run vert.\n\n**Éprouvé de bout en bout, cinq états, cinq observations**, à l'aide d'une suite jetable écrite pour échouer puis retirée le jour même. Rouge → ticket ouvert. Vert → `Fermeture du ticket #27 : HTTP 200`, refermé une seconde après son propre commentaire. Rouge → `Reouverture du ticket #27 : commentaire HTTP 201, etat HTTP 201`. Rouge encore, ticket déjà ouvert → `Ticket #27 deja ouvert : cet episode rouge est deja signale, rien a faire.` — aucun courriel, aucun commentaire, aucun ticket neuf. Vert → `Fermeture du ticket #27 : HTTP 201`. La condition en crochets `needs['sql-tests'].result`, jamais exercée jusque-là, a tourné pour de bon.\n\nDoctrine `OPS-8` : **l'acquittement d'une alerte est l'état du système, pas un geste humain répété.** Revers exact de `DOC-SILENCE-1` — un dispositif qui parle sans arrêt ne dit plus rien ; dans les deux cas ce qui manque n'est pas le mécanisme, c'est la restitution.",
           "pt": "**Encerrado em 31/08 — e é o primeiro item da série fechado porque o problema foi resolvido, e não porque o constato era falso.** O constato também o era: dizia que um vermelho de CI passava despercebido. A forja continha 24 tickets `[CI rouge]`, dez só no dia 30/08, e os e-mails tinham partido. O alerta não faltava — **transbordava**.\n\n**A causa não estava no código mas no uso que ele impunha.** O anti-duplicado de `OPS-6` só joga enquanto o ticket fica *aberto*; ora a convenção escrita dizia «fechar vale acusação de recepção», e numa noite de afinação fechar quer dizer «eu vi». Cada clique rearmava o alarme para a iteração seguinte: dez tickets e dez e-mails **para um só e mesmo vermelho**.\n\n**A prova encontrou dois defeitos que a releitura não vira.** O terceiro vermelho de uma hora não abriu ticket nenhum: **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. O Codeberg limita a dois tickets de título semelhante por hora. E o job mostrava **`Job succeeded`**: um `continue-on-error` e um `|| echo 000` faziam com que o alerta se calasse sobre a sua própria avaria — `DOC-SILENCE-1` violado dentro do próprio dispositivo de alerta.\n\n**Entregue**: um job `acquittement` simétrico de `alerte` nos dois workflows, e `alerte` refundido em torno de outro modelo — **um só ticket por workflow, para sempre**. Aberto no primeiro vermelho, **reaberto** nos seguintes com o commit e o run em comentário, fechado no retorno ao verde. O seu estado é o espelho vivo da saúde da CI, os seus comentários o diário. `continue-on-error` retirado de `alerte`, conservado em `acquittement`.\n\n**Provado de ponta a ponta, cinco estados, cinco observações**, com uma suíte descartável escrita para falhar e retirada no mesmo dia: vermelho → ticket aberto; verde → fechado uma segunda depois do seu comentário; vermelho → *reaberto* (HTTP 201/201); vermelho de novo com o ticket já aberto → **nada**, e o job di-lo; verde → fechado. A condição em parênteses rectos `needs['sql-tests'].result`, nunca exercitada até então, funcionou.\n\nDoutrina `OPS-8`: **a acusação de recepção de um alerta é o estado do sistema, não um gesto humano repetido.**"
         }
+      ],
+      [
+        "B12",
+        {
+          "fr": "Un envoi non effectué ne disait pas pourquoi — et dans un cas, la table affirmait le contraire",
+          "pt": "Um envio não efetuado não dizia porquê — e num caso, a tabela afirmava o contrário"
+        },
+        {
+          "fr": "**Clos le 31/08.** Le constat n'était pas faux, il était trop petit — et l'instruction a sorti trois choses.\n\n**Les quatre lignes sont un seul event.** Elles portent toutes `network.cross_library_critical_action`, et ce sont les **seules** de cet event : il n'est jamais parti depuis le 8 juin, quand tous les autres partent à 100 %. La cause est un handler absent dans `_shared/domain/network.ts` — onze events `network.*` y sont traités, pas celui-là. Il tombe dans le `else` final, journalise en console, marque `skipped` et retourne **`ok: true`**. C'est devenu l'item **B17**, en P1 : la spec §6.3 promettait « mail immédiat aux coordenadores actifs de la biblio », c'est-à-dire le contrepoids au seul pouvoir transverse du réseau. Pas un défaut d'envoi, un défaut de gouvernance.\n\n**Le silence n'était pas cantonné à cet event.** Le dépôt compte **sept** tables d'outbox ; cinq ont un handler qui peut décider de ne pas envoyer, et **aucune** ne recevait la raison — que le code nomme pourtant (`unknown_*_event`, `no_recipients`) avant de la jeter faute d'une colonne. Toutes posaient `sent_at` sur une ligne dont rien n'était parti.\n\n**Et `authority.ts` faisait pire.** Il marquait **`sent`** quoi qu'il arrive, y compris quand son propre routage venait de retourner `{skipped: \"unknown_event\"}`. Sa table n'ignorait pas qu'un envoi avait manqué : **elle affirmait qu'il avait eu lieu**. Son enum de statut n'avait même pas le mot `skipped` — il n'avait pas le vocabulaire pour dire la vérité.\n\n**Livré** : colonne `skip_reason` sur les cinq tables ; deux `CHECK` par table — pas de saut sans raison, pas de `sent_at` sur un saut — pour que l'oubli soit **impossible** plutôt que déconseillé ; `skipped` ajouté à l'enum d'`authority` ; les sept sites du code qui sautent écrivent leur raison ; les quatre lignes reprises. Suite `outbox_raison_du_saut_tests.sql`, 8 tests dont quatre qui **écrivent** — vérifier qu'une colonne existe ne prouve rien, ce qui doit rester vrai c'est que la base **refuse** une ligne muette.\n\n**Vérifié en production après déploiement** : 5 colonnes, 10 gardes, 4 lignes portant `unknown_network_event` avec `sent_at` à `NULL`, 0 ligne muette.\n\n**Et l'échec en chemin a valu une doctrine.** La première version posait les gardes *avant* la reprise : verte en CI, refusée par la production — `check constraint … is violated by some row`. La CI ne pouvait pas le voir, elle reconstruit une base vide. **Une migration qui ne casse que sur des données existantes est invisible à un banc d'essai qui part de zéro.** D'où `DOC-MIGR-1` : colonne, puis reprise, puis garde — jamais l'inverse.\n\nHors portée, délibérément : les deux tables `painel_internal_task_*`, servies par la copie gelée de la pile courriel (**F6**).",
+          "pt": "**Encerrado em 31/08.** O constato não era falso, era pequeno demais.\n\n**As quatro linhas são um só evento**: `network.cross_library_critical_action`, e são as únicas desse evento — nunca partiu desde 8 de junho. A causa é um handler ausente em `_shared/domain/network.ts`, que devolve **`ok: true`**. Tornou-se o item **B17**, em P1: a spec §6.3 prometia «e-mail imediato aos coordenadores ativos da biblioteca», o contrapeso ao único poder transversal da rede.\n\n**O silêncio não estava confinado a esse evento**: cinco das sete tabelas de outbox perdiam a razão do salto, que o código nomeia antes de a deitar fora. E `authority.ts` marcava **`sent`** aconteça o que acontecer — não ignorava que um envio faltara, **afirmava que ocorrera**.\n\n**Entregue**: coluna `skip_reason` nas cinco tabelas, dois `CHECK` por tabela, `skipped` no enum de `authority`, os sete sítios do código corrigidos, as quatro linhas retomadas. Suíte `outbox_raison_du_saut_tests.sql`, 8 testes, quatro dos quais **escrevem**.\n\n**Verificado em produção**: 5 colunas, 10 guardas, 4 linhas retomadas, 0 linhas mudas.\n\n**E a falha pelo caminho valeu uma doutrina.** A primeira versão punha as guardas *antes* da retoma: verde em CI, recusada pela produção. A CI não podia vê-lo, reconstrói uma base vazia. Daí `DOC-MIGR-1`."
+        }
       ]
     ]
   },
@@ -2011,66 +2022,6 @@
       "verif": {
         "fr": "30/08 — `pg_stat_user_tables` : 1 ligne vivante, 9 092 insertions, 9 082 suppressions. Ce qui écrit puis efface reste inconnu.",
         "pt": "30/08 — `pg_stat_user_tables`: 1 linha viva, 9 092 inserções, 9 082 supressões. O que escreve e depois apaga continua desconhecido."
-      }
-    },
-    {
-      "id": "B12",
-      "d": "B",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "sql",
-        "deno"
-      ],
-      "t": {
-        "fr": "Un envoi non effectué ne dit pas pourquoi — et dans un cas, la table affirme le contraire",
-        "pt": "Um envio não efetuado não diz porquê — e num caso, a tabela afirma o contrário"
-      },
-      "v": {
-        "fr": "**Reformulé le 30/08 après vérification : l'item désignait une table qui n'existe pas.** Il parlait de « trois lignes de `network.cross_library_critical_action` en `status = 'skipped'` ». Cette relation n'existe pas dans la base, et la seule table au nom voisin — `public.network_admin_cross_library_actions_log` — n'a **aucune** colonne `status`, `attempts`, `last_error` ni `pg_net_request_id`. Le constat avait été recopié sur le mauvais objet lors de la réécriture v34.\n\nLes lignes existent bel et bien, mais dans **`public.team_notification_outbox`** — et elles sont **quatre**, pas trois : trois du 08/06/2026, et **une du 30/08/2026**. Ce n'est donc pas une curiosité historique : ça se produit encore.\n\nChacune porte `attempts = 1`, un `pg_net_request_id` **présent**, et `last_error` **nul**. La requête est donc partie, et la ligne n'est pas en erreur : elle est marquée `skipped` parce que quelque chose a décidé de ne pas envoyer — vraisemblablement `transportDisabledReason`. **Mais la raison n'est écrite nulle part** : l'outbox n'a pas de colonne pour elle, et `last_error` est nul puisqu'il ne s'agit pas d'une erreur.\n\n**Instruit le 31/08, et le constat était trop petit.** Les quatre lignes portent toutes le **même** event, `network.cross_library_critical_action`, et ce sont les **seules** de cet event : il n'est jamais parti depuis le 8 juin, quand tous les autres partent à 100 %. La cause est un handler manquant dans `_shared/domain/network.ts` — l'event tombe dans le `else` final, qui journalise en console, marque `skipped` et retourne **`ok: true`**. Le handler est un item à part, **B17**.\n\n**Et le silence n'était pas cantonné à cet event.** Le dépôt compte **sept** tables d'outbox ; cinq ont un handler qui peut décider de ne pas envoyer, et **aucune** ne recevait la raison, que le code nomme pourtant (`unknown_*_event`, `no_recipients`) avant de la jeter. Toutes posaient `sent_at` sur une ligne dont rien n'était parti. Et `authority.ts` faisait pire : il marquait **`sent`** quoi qu'il arrive, y compris quand son propre routage venait de retourner `{skipped: \"unknown_event\"}` — sa table n'ignorait pas qu'un envoi avait manqué, **elle affirmait qu'il avait eu lieu**. Son `status` n'acceptait même pas la valeur `skipped`.\n\n**Livré le 31/08** : colonne `skip_reason` sur les cinq tables, deux `CHECK` par table — pas de saut sans raison, pas de `sent_at` sur un saut —, `skipped` ajouté à l'enum d'`authority`, les sept sites du code qui sautent écrivent désormais leur raison, et les quatre lignes de production sont reprises. Les deux tables `painel_internal_task_*` restent hors portée : elles sont servies par la copie gelée de la pile courriel, terrain de **F6**.",
-        "pt": "**Reformulado em 30/08 após verificação: o item designava uma tabela que não existe.** Falava de «três linhas de `network.cross_library_critical_action` em `status = 'skipped'`». Essa relação não existe, e a única tabela de nome vizinho não tem nenhuma das colunas citadas. O constato fora copiado sobre o objeto errado na reescrita v34.\n\nAs linhas existem, mas em **`public.team_notification_outbox`** — e são **quatro**, não três: três de 08/06/2026 e **uma de 30/08/2026**. Não é uma curiosidade histórica: ainda acontece.\n\nCada uma traz `attempts = 1`, um `pg_net_request_id` **presente** e `last_error` **nulo**. O pedido partiu, e a linha não está em erro: está `skipped` porque algo decidiu não enviar. **Mas a razão não está escrita em lugar nenhum.**\n\n**Instruído em 31/08, e o constato era pequeno demais.** As quatro linhas têm todas o **mesmo** evento, `network.cross_library_critical_action`, e são as **únicas** desse evento: nunca partiu desde 8 de junho. A causa é um handler em falta em `_shared/domain/network.ts` — item **B17**. E o silêncio não estava confinado a esse evento: cinco tabelas de outbox perdiam a razão do salto, e `authority.ts` marcava **`sent`** aconteça o que acontecer. **Entregue em 31/08**: coluna `skip_reason` nas cinco tabelas, dois `CHECK` por tabela, `skipped` acrescentado ao enum de `authority`, e os sete sítios do código que saltam escrevem a sua razão."
-      },
-      "w": {
-        "fr": "Voir la CI verte sur la suite `outbox_raison_du_saut_tests.sql`, puis déployer et vérifier **en base** que les quatre lignes reprises portent bien `unknown_network_event` et n'ont plus de `sent_at`.",
-        "pt": "Ver a CI verde na suíte `outbox_raison_du_saut_tests.sql`, depois implantar e verificar **em base** que as quatro linhas retomadas têm `unknown_network_event` e já não têm `sent_at`."
-      },
-      "y": {
-        "fr": "Application directe de `DOC-SILENCE-1`, acté le même jour : **un dispositif qui n'agit pas doit le dire.** Une notification d'équipe non partie sans raison écrite, c'est une personne qui n'a pas été prévenue et un journal qui ne sait pas l'expliquer. Et c'est la quatrième occurrence de cette forme en une journée — sélecteur inerte, `ok:false` ignoré, skips hors dénominateur, et maintenant un saut sans motif.",
-        "pt": "Aplicação direta de `DOC-SILENCE-1`, firmado no mesmo dia: **um dispositivo que não age deve dizê-lo.** Uma notificação de equipe não enviada sem razão escrita é uma pessoa que não foi avisada e um registro que não sabe explicá-lo."
-      },
-      "f": [
-        {
-          "fr": "L'outbox porte une raison de saut, distincte de `last_error` — sur les **cinq** tables, pas une.",
-          "pt": "A outbox tem uma razão de salto, distinta de `last_error` — nas **cinco** tabelas."
-        },
-        {
-          "fr": "La base **refuse** une ligne sautée muette, au lieu de compter sur la discipline.",
-          "pt": "A base **recusa** uma linha saltada muda."
-        },
-        {
-          "fr": "Aucune table n'affirme plus un envoi qui n'a pas eu lieu.",
-          "pt": "Nenhuma tabela afirma um envio que não ocorreu."
-        },
-        {
-          "fr": "Les quatre lignes existantes ont leur verdict : la raison est écrite, la reprise se décidera dessus.",
-          "pt": "As quatro linhas existentes têm o seu veredicto."
-        }
-      ],
-      "dep": {
-        "fr": "Lié à **F1** (audit de la chaîne de courriel).",
-        "pt": "Ligado a **F1** (auditoria da cadeia de e-mail)."
-      },
-      "r": [
-        "public.team_notification_outbox",
-        "REGISTRE_decisions DOC-SILENCE-1",
-        "_shared/domain/{team,network,assembleia,authority,gazette,lettre,cartography}.ts",
-        "migration 20260831090412",
-        "tests/sql/outbox_raison_du_saut_tests.sql"
-      ],
-      "verif": {
-        "fr": "31/08 — relevé en production : 4 lignes `skipped` sur 28, toutes du même event, 0 envoi pour cet event depuis le 08/06. Sept tables d'outbox recensées, cinq concernées, sept sites de code corrigés. Livré le jour même ; **la CI n'a pas encore tourné dessus**.",
-        "pt": "31/08 — levantamento em produção: 4 linhas `skipped` em 28, todas do mesmo evento, 0 envios desde 08/06. Entregue no mesmo dia; **a CI ainda não correu**."
       }
     },
     {
@@ -4772,54 +4723,63 @@
     {
       "id": "B15",
       "d": "B",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "S",
+      "p": "P1",
+      "s": "en-cours",
+      "e": "M",
       "sk": [
         "sql"
       ],
       "t": {
-        "fr": "Un renouvellement refusé ne dit rien à qui ne lit pas le `ok`",
-        "pt": "Uma renovação recusada não diz nada a quem não lê o `ok`"
+        "fr": "Un refus qui ressemble à un succès : 26 appels sur 34 ne lisaient pas le `ok`",
+        "pt": "Uma recusa que parece um sucesso: 26 chamadas em 34 não liam o `ok`"
       },
       "v": {
-        "fr": "Trouvé le 30/08 par le chemin E2E des emprunts (item **I15**), et pas par une relecture de code. `api.renew_my_loan` **ne lève jamais** : elle rend un jsonb `{ok, reason, new_due_date, renewed, skipped}`. Dans une bibliothèque sans jeu de règles de circulation actif, elle rend `{ok:false, reason:'not_renewable'}` — et l'appel *réussit*, du point de vue de PostgREST comme du client.\n\nLe contrat est respecté et documenté. Mais une interface qui n'inspecte pas `ok` affichera « renouvelé » à une lectrice dont rien n'a bougé. Le test l'a vécu : il affirmait « l'échéance recule », il a vu une échéance immobile, et **aucune erreur**.",
-        "pt": "Encontrado em 30/08 pelo caminho E2E dos empréstimos (item **I15**), e não por uma releitura de código. `api.renew_my_loan` **nunca levanta**: retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. Numa biblioteca sem conjunto de regras de circulação ativo, retorna `{ok:false, reason:'not_renewable'}` — e a chamada *tem sucesso*, do ponto de vista do PostgREST como do cliente.\n\nO contrato é respeitado e documentado. Mas uma interface que não inspeciona `ok` mostrará «renovado» a uma leitora para quem nada mudou. O teste viveu isso: afirmava «o vencimento recua», viu um vencimento imóvel, e **nenhum erro**."
+        "fr": "Trouvé le 30/08 par le chemin E2E des emprunts (item **I15**), et pas par une relecture de code. `api.renew_my_loan` **ne lève jamais** : elle rend un jsonb `{ok, reason, new_due_date, renewed, skipped}`. Dans une bibliothèque sans jeu de règles de circulation actif, elle rend `{ok:false, reason:'not_renewable'}` — et l'appel *réussit*, du point de vue de PostgREST comme du client.\n\nLe contrat est respecté et documenté. Mais une interface qui n'inspecte pas `ok` affichera « renouvelé » à une lectrice dont rien n'a bougé. Le test l'a vécu : il affirmait « l'échéance recule », il a vu une échéance immobile, et **aucune erreur**.\n\n**Recensé le 31/08, et le constat s'est retourné.** `renew_my_loan`, qui a fait naître l'item, est l'une des rares qui **lisent** le `ok`. Le défaut est ailleurs, et il est massif : **34 RPC à statut sont appelées par le front, et 26 appels n'inspectent pas `ok`**. Dix-huit écrivent `const { error } = await supabase.rpc(...)` — la charge utile est jetée à la destructuration, le `ok` n'est pas seulement non lu, il est **inatteignable**. Trois de ces sites relus à la main pour vérifier l'outil : le motif est identique. Le pire, `BookPage.jsx`, affiche `book.reserve.consult.success` sur un `ok:false` — une confirmation de consultation à quelqu'un dont rien n'a été créé ; `LeitoresPanel` fait de même avec « promue ».\n\n**Doctrine tranchée** (`DOC-RPC-4`) : le contrat de statut est gardé — il permet le traitement ligne par ligne des lots — et lire le `ok` devient obligatoire.\n\n**Livré le 31/08, sans une seule chaîne i18n nouvelle** : `src/lib/rpcStatus.js` expose `assertRpcOk(data)`, qui lève un `Error` portant le `reason`. `localizeError` n'ayant aucune liste blanche, ce code est traduit s'il a une clé et retombe sinon sur le message contextuel de l'action — on entre dans le chemin d'erreur **déjà en place**. **23 gardes posées** ; **4 sites en dette déclarée**, nommés et justifiés dans le test.",
+        "pt": "Encontrado em 30/08 pelo caminho E2E dos empréstimos (item **I15**), e não por uma releitura de código. `api.renew_my_loan` **nunca levanta**: retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. Numa biblioteca sem conjunto de regras de circulação ativo, retorna `{ok:false, reason:'not_renewable'}` — e a chamada *tem sucesso*, do ponto de vista do PostgREST como do cliente.\n\nO contrato é respeitado e documentado. Mas uma interface que não inspeciona `ok` mostrará «renovado» a uma leitora para quem nada mudou. O teste viveu isso: afirmava «o vencimento recua», viu um vencimento imóvel, e **nenhum erro**.\n\n**Recenseado em 31/08, e o constato inverteu-se.** `renew_my_loan`, que deu origem ao item, é das poucas que **leem** o `ok`. São **34 RPC de estado** chamadas pelo front, e **26 chamadas não inspecionam `ok`** — dezoito deitam fora a carga útil na desestruturação. **Entregue em 31/08**: `assertRpcOk(data)`, 23 guardas, 4 sítios em dívida declarada. Doutrina `DOC-RPC-4`."
       },
       "w": {
-        "fr": "Deux questions, dans cet ordre. **La première est de vérification** : le front inspecte-t-il `ok` sur les retours de `renew_my_loan`, `advance_consulta`, `advance_reservation` et les autres RPC qui rendent un statut au lieu de lever ? Tant qu'on n'a pas regardé, on ne sait pas s'il y a un défaut.\n\n**La seconde est de doctrine** : un refus prévisible doit-il lever ou rendre un statut ? Les deux se défendent — lever coupe le lot en cours, rendre un statut permet de traiter ligne par ligne, ce que fait précisément `skipped`. Si la réponse est « rendre un statut », alors la règle qui manque n'est pas dans la base : c'est que **toute interface doit lire le `ok`**, et cela s'écrit au `REGISTRE_decisions`.",
-        "pt": "Duas perguntas, nesta ordem. **A primeira é de verificação**: o front inspeciona `ok` nos retornos de `renew_my_loan`, `advance_consulta`, `advance_reservation` e demais RPC que devolvem um estado em vez de levantar? Enquanto não se olhar, não se sabe se há defeito.\n\n**A segunda é de doutrina**: uma recusa previsível deve levantar ou devolver um estado? Ambas se defendem — levantar corta o lote em curso, devolver um estado permite tratar linha a linha, que é justamente o que faz `skipped`. Se a resposta for «devolver um estado», então a regra que falta não está no banco: é que **toda interface deve ler o `ok`**, e isso escreve-se no `REGISTRE_decisions`."
+        "fr": "Voir la CI verte sur `src/tests/rpc-statut-ok-lu.test.js`, puis reprendre les quatre sites en dette : deux demandent de restructurer un `let error` partagé entre branches, deux sont des appels sans aucune destructuration — les reprendre, c'est décider quoi faire d'un échec, pas seulement lire un `ok`.",
+        "pt": "Ver a CI verde em `src/tests/rpc-statut-ok-lu.test.js`, depois retomar os quatro sítios em dívida."
       },
       "y": {
         "fr": "Parce qu'un refus muet est le pire des trois états possibles. Une erreur se voit ; un refus nommé s'explique à la personne au comptoir ; un `ok:false` ignoré donne une confirmation à l'écran et une date inchangée en base. C'est la lectrice qui découvre l'écart, en retard.\n\nEt parce que la façon dont c'est apparu vaut d'être notée : aucune relecture n'aurait trouvé ça. Il a fallu qu'un test exécute le chemin en entier et compare ce qu'il obtient à ce qu'il attend.",
         "pt": "Porque uma recusa muda é o pior dos três estados possíveis. Um erro vê-se; uma recusa nomeada explica-se à pessoa no balcão; um `ok:false` ignorado dá uma confirmação no ecrã e uma data inalterada no banco. É a leitora que descobre a diferença, atrasada.\n\nE porque a forma como isto apareceu merece nota: nenhuma releitura teria encontrado isto. Foi preciso que um teste executasse o caminho inteiro e comparasse o que obtém com o que espera."
       },
-      "f": {
-        "fr": [
-          "Les RPC qui rendent un statut au lieu de lever sont recensées.",
-          "Pour chacune, on sait si le front lit le `ok`.",
-          "La règle est écrite au `REGISTRE_decisions` — lever, ou rendre un statut que l'appelante DOIT lire.",
-          "Les écarts trouvés sont corrigés, côté front ou côté base selon la règle retenue."
-        ],
-        "pt": [
-          "As RPC que devolvem um estado em vez de levantar estão inventariadas.",
-          "Para cada uma, sabe-se se o front lê o `ok`.",
-          "A regra está escrita no `REGISTRE_decisions` — levantar, ou devolver um estado que quem chama DEVE ler.",
-          "As divergências encontradas são corrigidas, no front ou no banco conforme a regra adotada."
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Les RPC qui rendent un statut sont recensées~~ — 34, relevées en base.",
+          "pt": "~~As RPC de estado estão recenseadas~~ — 34."
+        },
+        {
+          "fr": "~~Pour chacune, on sait si le front lit le `ok`~~ — 26 appels sur 34 ne le lisaient pas.",
+          "pt": "~~Sabe-se se o front lê o `ok`~~ — 26 em 34 não liam."
+        },
+        {
+          "fr": "~~La règle est écrite au `REGISTRE`~~ — `DOC-RPC-4`.",
+          "pt": "~~A regra está escrita no `REGISTRE`~~ — `DOC-RPC-4`."
+        },
+        {
+          "fr": "Les écarts sont corrigés : 23 posés, 4 en dette **nommée** qu'un test empêche de grandir.",
+          "pt": "Os desvios estão corrigidos: 23 postos, 4 em dívida nomeada."
+        },
+        {
+          "fr": "La CI a tourné dessus.",
+          "pt": "A CI correu sobre isto."
+        }
+      ],
       "dep": {
         "fr": "Aucune. Le recensement se fait en une requête ; la vérification côté front demande de lire les appels correspondants.",
         "pt": "Nenhuma. O inventário faz-se numa consulta; a verificação no front exige ler as chamadas correspondentes."
       },
       "r": [
-        "tests/sql/paquet_emprestimos_tests.sql section 3 (test 3.03)",
-        "public.fn_v2_extend_core",
-        "REGISTRE_decisions DOC-RPC-3"
+        "src/lib/rpcStatus.js",
+        "src/tests/rpc-statut-ok-lu.test.js",
+        "REGISTRE_decisions DOC-RPC-4 et DOC-SILENCE-1",
+        "src/lib/localizeError.js"
       ],
       "verif": {
-        "fr": "30/08 — trouvé par l'exécution du test 3.03 de `paquet_emprestimos`, qui a obtenu `ok=false reason=not_renewable` sans exception. Le recensement des RPC concernées reste à faire.",
-        "pt": "30/08 — encontrado pela execução do teste 3.03 de `paquet_emprestimos`, que obteve `ok=false reason=not_renewable` sem exceção. O inventário das RPC em causa continua por fazer."
+        "fr": "31/08 — recensement croisé base (34 RPC rendant `{ok,…}`) × dépôt (appels `.rpc()` du front), trois sites relus à la main pour valider l'outil. Livré le jour même ; lint à 0 erreur, **tests non joués localement** (le binding natif de rollup manque dans le VM du pont) — c'est la CI qui tranche.",
+        "pt": "31/08 — recenseamento cruzado base × repositório, três sítios relidos à mão. Entregue no mesmo dia; lint a 0 erros, **testes não corridos localmente** — decide a CI."
       }
     },
     {

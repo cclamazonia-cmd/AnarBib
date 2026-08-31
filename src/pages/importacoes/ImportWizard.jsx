@@ -7,6 +7,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import './ImportacoesPage.css';
+import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 // =============================================================================
 // ImportWizard — assistant « Novo import » (IMP-8).
@@ -131,6 +132,7 @@ export default function ImportWizard() {
         p_detected_format: detectFileKind(file.name),
       });
       if (createErr) throw createErr;
+      assertRpcOk(created);
       const newRunId = created?.run_id;
       if (!newRunId) throw new Error(t({ id: 'importacoes.noRunId' }));
       await supabase.rpc('fn_import_dispatch', { p_run_id: Number(newRunId) });
