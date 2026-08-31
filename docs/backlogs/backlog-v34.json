@@ -2257,7 +2257,11 @@
       "r": [
         "AUDIT_conventions_catalographiques_2026-08-20",
         "REGISTRE §37 CONV"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — la file `catalog_review_queue` mesurée, 310 lignes : le lot **patronymes est terminé** (20 validés, 2 écartés, 0 à revoir — les 9 suffixes de filiation, donnés pour le défaut le plus grave, sont derrière), `autorite_casse` presque (3 à revoir sur 61), `titre_casse` porte le gros du reste (174 à revoir sur 211), et un quatrième lot `autorite_collectivite` s'est ajouté (2 à revoir sur 16). **179 verdicts humains restent.**",
+        "pt": "31/08 — a fila `catalog_review_queue` medida, 310 linhas: o lote de **patronímicos está terminado** (0 a rever), `autorite_casse` quase (3 a rever), `titre_casse` carrega o grosso (174 a rever), e um quarto lote `autorite_collectivite` (2 a rever). **Restam 179 vereditos humanos.**"
+      }
     },
     {
       "id": "C4",
@@ -2544,7 +2548,11 @@
       },
       "r": [
         "REGISTRE §37 CONV-6, CONV-O1..O8"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes.",
+        "pt": "31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si."
+      }
     },
     {
       "id": "C10",
