@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-31** · 84 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-31** · 83 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 11
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 10
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -371,7 +371,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
-| **B15** | Un refus qui ressemble à un succès : 26 appels sur 34 ne lisaient pas le `ok` | `P1` | En cours |
 | **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | Ouvert |
 
 #### B2 — Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`
@@ -614,40 +613,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 **Dépendances.** **Bloqué par A2.** Ne pas commencer avant.
 
 *Renvois : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
-
-#### B15 — Un refus qui ressemble à un succès : 26 appels sur 34 ne lisaient pas le `ok`
-
-`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Trouvé le 30/08 par le chemin E2E des emprunts (item **I15**), et pas par une relecture de code. `api.renew_my_loan` **ne lève jamais** : elle rend un jsonb `{ok, reason, new_due_date, renewed, skipped}`. Dans une bibliothèque sans jeu de règles de circulation actif, elle rend `{ok:false, reason:'not_renewable'}` — et l'appel *réussit*, du point de vue de PostgREST comme du client.
-
-Le contrat est respecté et documenté. Mais une interface qui n'inspecte pas `ok` affichera « renouvelé » à une lectrice dont rien n'a bougé. Le test l'a vécu : il affirmait « l'échéance recule », il a vu une échéance immobile, et **aucune erreur**.
-
-**Recensé le 31/08, et le constat s'est retourné.** `renew_my_loan`, qui a fait naître l'item, est l'une des rares qui **lisent** le `ok`. Le défaut est ailleurs, et il est massif : **34 RPC à statut sont appelées par le front, et 26 appels n'inspectent pas `ok`**. Dix-huit écrivent `const { error } = await supabase.rpc(...)` — la charge utile est jetée à la destructuration, le `ok` n'est pas seulement non lu, il est **inatteignable**. Trois de ces sites relus à la main pour vérifier l'outil : le motif est identique. Le pire, `BookPage.jsx`, affiche `book.reserve.consult.success` sur un `ok:false` — une confirmation de consultation à quelqu'un dont rien n'a été créé ; `LeitoresPanel` fait de même avec « promue ».
-
-**Doctrine tranchée** (`DOC-RPC-4`) : le contrat de statut est gardé — il permet le traitement ligne par ligne des lots — et lire le `ok` devient obligatoire.
-
-**Livré le 31/08, sans une seule chaîne i18n nouvelle** : `src/lib/rpcStatus.js` expose `assertRpcOk(data)`, qui lève un `Error` portant le `reason`. `localizeError` n'ayant aucune liste blanche, ce code est traduit s'il a une clé et retombe sinon sur le message contextuel de l'action — on entre dans le chemin d'erreur **déjà en place**. **23 gardes posées** ; **4 sites en dette déclarée**, nommés et justifiés dans le test.
-
-*Vérifié : 31/08 — recensement croisé base (34 RPC rendant `{ok,…}`) × dépôt (appels `.rpc()` du front), trois sites relus à la main pour valider l'outil. Livré le jour même ; lint à 0 erreur, **tests non joués localement** (le binding natif de rollup manque dans le VM du pont) — c'est la CI qui tranche.*
-
-**Ce que c'est.** Voir la CI verte sur `src/tests/rpc-statut-ok-lu.test.js`, puis reprendre les quatre sites en dette : deux demandent de restructurer un `let error` partagé entre branches, deux sont des appels sans aucune destructuration — les reprendre, c'est décider quoi faire d'un échec, pas seulement lire un `ok`.
-
-**Pourquoi ça compte.** Parce qu'un refus muet est le pire des trois états possibles. Une erreur se voit ; un refus nommé s'explique à la personne au comptoir ; un `ok:false` ignoré donne une confirmation à l'écran et une date inchangée en base. C'est la lectrice qui découvre l'écart, en retard.
-
-Et parce que la façon dont c'est apparu vaut d'être notée : aucune relecture n'aurait trouvé ça. Il a fallu qu'un test exécute le chemin en entier et compare ce qu'il obtient à ce qu'il attend.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Aucune. Le recensement se fait en une requête ; la vérification côté front demande de lire les appels correspondants.
-
-*Renvois : `src/lib/rpcStatus.js` · `src/tests/rpc-statut-ok-lu.test.js` · `REGISTRE_decisions DOC-RPC-4 et DOC-SILENCE-1` · `src/lib/localizeError.js`*
 
 #### B17 — L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas
 
@@ -2493,6 +2458,19 @@ Doctrine `OPS-8` : **l'acquittement d'une alerte est l'état du système, pas un
 **Et l'échec en chemin a valu une doctrine.** La première version posait les gardes *avant* la reprise : verte en CI, refusée par la production — `check constraint … is violated by some row`. La CI ne pouvait pas le voir, elle reconstruit une base vide. **Une migration qui ne casse que sur des données existantes est invisible à un banc d'essai qui part de zéro.** D'où `DOC-MIGR-1` : colonne, puis reprise, puis garde — jamais l'inverse.
 
 Hors portée, délibérément : les deux tables `painel_internal_task_*`, servies par la copie gelée de la pile courriel (**F6**). |
+| B15 | Un refus qui ressemblait à un succès : 26 appels sur 34 ne lisaient pas le `ok` | **Clos le 31/08 — et le recensement a retourné l'item.** `api.renew_my_loan`, citée comme le cas fautif qui a fait naître B15, est l'une des rares **conformes** : le front y lit bien le `ok`. Le défaut était ailleurs, et bien plus large.
+
+**Le relevé.** 34 RPC appelées par le front rendent `{ok, reason, …}` au lieu de lever. **26 appels n'inspectaient pas `ok`**, et dix-huit écrivaient `const { error } = await supabase.rpc(...)` : la charge utile jetée à la destructuration, le `ok` non pas ignoré mais **inatteignable**. Trois sites relus à la main pour vérifier que l'outil ne mentait pas — motif identique. `BookPage` affichait « consultation demandée » sur un `ok:false` ; `LeitoresPanel`, « promue » pour une promotion qui n'avait pas eu lieu ; quatre autres étaient dans `AccountPage`, côté lectrice.
+
+**La doctrine, tranchée** (`DOC-RPC-4`, qui règle la question laissée ouverte par `DOC-SILENCE-1` *(b)*). Le contrat de statut est **gardé** : une RPC qui lève coupe le lot en cours, une RPC qui rend un statut permet le traitement ligne par ligne — c'est exactement ce que fait `skipped` dans les paquets multi-lignes. On ne casse pas ce contrat pour vingt-six appels distraits ; on impose de le lire.
+
+**Et le correctif n'a coûté aucune chaîne i18n.** `src/lib/rpcStatus.js` expose `assertRpcOk(data)`, qui lève un `Error` portant le `reason` en message. On entre alors dans le chemin d'erreur **déjà en place** : le `try/catch` de l'appelante, `localizeError`, le toast. `localizeError` n'ayant aucune liste blanche, le code est traduit via `panel.apiError.<reason>` s'il existe et retombe sinon sur la clé contextuelle de l'action. Ce qui avait déjà une clé s'affiche mieux qu'avant ; rien de neuf à traduire dans dix locales.
+
+**23 gardes posées. 4 sites laissés, et nommés** : deux demandent de restructurer un `let error` partagé entre branches, deux sont des appels sans aucune destructuration — les reprendre, c'est décider quoi faire d'un échec, pas seulement lire un `ok`. Les forcer aurait été la correction mécanique qui casse en silence.
+
+**Ce qui remplace un item de suivi** : `src/tests/rpc-statut-ok-lu.test.js` échoue si un appel à une RPC à statut ignore le résultat. La dette est une liste explicite, chaque entrée avec sa raison, et un **second test refuse une entrée devenue sans objet** — la liste ne peut donc que rétrécir. C'est le test qui porte la dette, pas un item qui dormirait.
+
+CI verte : lint et suite unitaire. |
 
 ---
 
@@ -2524,4 +2502,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 84 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 83 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

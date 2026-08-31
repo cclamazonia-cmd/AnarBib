@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-31** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 83 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 10
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -371,7 +371,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B15** | Uma recusa que parece um sucesso: 26 chamadas em 34 não liam o `ok` | `P1` | Em curso |
 | **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Aberto |
 
 #### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
@@ -614,36 +613,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **Dependências.** **Bloqueado por A2.** Não começar antes.
 
 *Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
-
-#### B15 — Uma recusa que parece um sucesso: 26 chamadas em 34 não liam o `ok`
-
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado.** Encontrado em 30/08 pelo caminho E2E dos empréstimos (item **I15**), e não por uma releitura de código. `api.renew_my_loan` **nunca levanta**: retorna um jsonb `{ok, reason, new_due_date, renewed, skipped}`. Numa biblioteca sem conjunto de regras de circulação ativo, retorna `{ok:false, reason:'not_renewable'}` — e a chamada *tem sucesso*, do ponto de vista do PostgREST como do cliente.
-
-O contrato é respeitado e documentado. Mas uma interface que não inspeciona `ok` mostrará «renovado» a uma leitora para quem nada mudou. O teste viveu isso: afirmava «o vencimento recua», viu um vencimento imóvel, e **nenhum erro**.
-
-**Recenseado em 31/08, e o constato inverteu-se.** `renew_my_loan`, que deu origem ao item, é das poucas que **leem** o `ok`. São **34 RPC de estado** chamadas pelo front, e **26 chamadas não inspecionam `ok`** — dezoito deitam fora a carga útil na desestruturação. **Entregue em 31/08**: `assertRpcOk(data)`, 23 guardas, 4 sítios em dívida declarada. Doutrina `DOC-RPC-4`.
-
-*Verificado : 31/08 — recenseamento cruzado base × repositório, três sítios relidos à mão. Entregue no mesmo dia; lint a 0 erros, **testes não corridos localmente** — decide a CI.*
-
-**O que é.** Ver a CI verde em `src/tests/rpc-statut-ok-lu.test.js`, depois retomar os quatro sítios em dívida.
-
-**Por que importa.** Porque uma recusa muda é o pior dos três estados possíveis. Um erro vê-se; uma recusa nomeada explica-se à pessoa no balcão; um `ok:false` ignorado dá uma confirmação no ecrã e uma data inalterada no banco. É a leitora que descobre a diferença, atrasada.
-
-E porque a forma como isto apareceu merece nota: nenhuma releitura teria encontrado isto. Foi preciso que um teste executasse o caminho inteiro e comparasse o que obtém com o que espera.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Nenhuma. O inventário faz-se numa consulta; a verificação no front exige ler as chamadas correspondentes.
-
-*Remissões : `src/lib/rpcStatus.js` · `src/tests/rpc-statut-ok-lu.test.js` · `REGISTRE_decisions DOC-RPC-4 et DOC-SILENCE-1` · `src/lib/localizeError.js`*
 
 #### B17 — O aviso que devia tornar visíveis as ações de um administrador de rede não existe
 
@@ -2475,6 +2444,17 @@ Doutrina `OPS-8`: **a acusação de recepção de um alerta é o estado do siste
 **Verificado em produção**: 5 colunas, 10 guardas, 4 linhas retomadas, 0 linhas mudas.
 
 **E a falha pelo caminho valeu uma doutrina.** A primeira versão punha as guardas *antes* da retoma: verde em CI, recusada pela produção. A CI não podia vê-lo, reconstrói uma base vazia. Daí `DOC-MIGR-1`. |
+| B15 | Uma recusa que parecia um sucesso: 26 chamadas em 34 não liam o `ok` | **Encerrado em 31/08 — e o recenseamento inverteu o item.** `api.renew_my_loan`, citada como o caso culpado que deu origem a B15, é das poucas **conformes**.
+
+**O levantamento.** 34 RPC chamadas pelo front devolvem `{ok, reason, …}` em vez de levantar. **26 chamadas não inspecionavam `ok`**, e dezoito escreviam `const { error } = await supabase.rpc(...)`: a carga útil deitada fora na desestruturação, o `ok` **inatingível**. `BookPage` mostrava «consulta pedida» num `ok:false`.
+
+**A doutrina** (`DOC-RPC-4`): o contrato de estado é **mantido** — permite o tratamento linha a linha dos lotes — e ler o `ok` passa a ser obrigatório.
+
+**E não custou uma única cadeia i18n**: `assertRpcOk(data)` levanta um `Error` com o `reason`, entrando no caminho de erro já existente; `localizeError` não tem lista branca.
+
+**23 guardas postas, 4 sítios deixados e nomeados.** `src/tests/rpc-statut-ok-lu.test.js` falha se uma chamada ignorar o estado, e um segundo teste recusa uma entrada de dívida sem objeto — a lista só pode encolher.
+
+CI verde. |
 
 ---
 
@@ -2506,4 +2486,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 83 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
