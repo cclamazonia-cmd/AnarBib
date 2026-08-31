@@ -676,6 +676,8 @@ Aucun chemin actuel : si un bibliothécaire crée un emprunt par erreur, il doit
 ### 11.1 Invariants à préserver
 
 1. **`available_count` cohérent en tout temps** : tout passage `aberto` ↔ `devolvido` recalcule via `fn_v2_recompute_from_emprestimo_lines`.
+   > **La formule, écrite ici parce qu'elle ne vivait que dans le corps d'une fonction de cent lignes.** `available_count` = exemplaires du fonds dont `visibility = 'public'` **moins** les emprunts ouverts **moins les réservations actives** **moins les prêts interbibliothèques sortis**. Les deux derniers termes sont ceux qu'on oublie : le 31/08/2026, en vérifiant le premier emprunt réel du réseau, ils ont fait conclure trois fois de suite — et à tort — qu'un exemplaire était « perdu ». Un exemplaire à `0` n'est pas forcément une anomalie : il peut être en PEB. À rapprocher de `spec` §2.5 et de `fn_v2_recompute_holdings_availability`.
+   > **Et deux colonnes, deux niveaux.** `emprestimo_itens_v2.holding_id` référence le **fonds** (`book_holdings`, « ce livre dans cette bibliothèque ») ; `item_id` référence l'**exemplaire physique** (`exemplares`). Les deux sont normales. Joindre `item_id` sur `book_holdings` donne des rapprochements qui ont l'air justes et ne le sont pas.
 2. **Pas de double emprunt sur le même item** : la création vérifie qu'aucun `emprestimo_itens_v2` ouvert n'existe pour l'`item_id`.
 3. **Cotisation à jour vérifiée à la création ET au renouvellement** : `fn_is_loan_blocked_by_dues` aux deux endroits.
 4. **Notification au plus une fois par transition** : les triggers utilisent `IS DISTINCT FROM` pour éviter les doublons.
