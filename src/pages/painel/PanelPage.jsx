@@ -516,7 +516,15 @@ export default function PanelPage() {
   const loadTasks = useCallback(async () => {
     if (!libraryId) return;
     try {
-      const { data: tasksData } = await supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).in('status', ['pendente', 'em_andamento']).order('priority').order('due_date').limit(50);
+      // ETATS-VIVANTS (31/08/2026, item F6). Le filtre ne connaissait que
+      // 'pendente' et 'em_andamento' — deux etats sur les sept que le cycle de
+      // vie compte. Une tache passee en 'bloqueada' DISPARAISSAIT donc de
+      // l'ecran, sans que personne ne sache ou elle etait allee : pas un defaut
+      // d'affichage, une tache perdue. 'pendente' n'existe plus (la colonne a
+      // desormais une CHECK et vaut 'aberta' par defaut) ; les quatre etats
+      // vivants sont retenus, les trois etats de sortie — concluida, cancelada,
+      // arquivada — restent hors du tableau de bord, ce qui est leur place.
+      const { data: tasksData } = await supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).in('status', ['aberta', 'a_fazer', 'em_andamento', 'bloqueada']).order('priority').order('due_date').limit(50);
       setInternalTasks(tasksData || []);
     } catch (e) { console.error('Painel tasks reload error:', e); }
   }, [libraryId]);
