@@ -1467,6 +1467,17 @@
           "fr": "**Corrigé et clos le 30/08, le jour même de son ouverture — et le constat était en dessous de la vérité.** L'item disait « perd ses majuscules » en citant la première lettre. Mesuré en base : ce sont **toutes** les majuscules qui tombaient, `lower()` étant appliqué après le filtre `[^a-z0-9]`. « Biblioteca Terra Livre » ne donnait pas `iblioteca-terra-livre` mais **`iblioteca-erra-ivre`**. Les accents tombaient dans le même filtre, le `translate()` censé les replier étant un no-op : « Associação Cultural Ñandú » donnait `associa-o-cultural-and`.\n\nLe calcul sort du corps de `fn_provision_preactive_library` pour devenir `fn_library_slug_from_name`, nommée et testable seule : minuscules d'abord, accents repliés par `extensions.unaccent` (l'extension était déjà installée), tout le reste en tirets. Vérifié en provisionnant réellement une bibliothèque de test en transaction annulée — « Associação Cultural Ñandú » ressort en `associacao-cultural-nandu`.\n\n**Les slugs existants ne sont pas renommés**, et c'est écrit dans la migration : un slug vit dans les URL publiques, dans `library_commons.library_slug` et dans le chemin de stockage `themes/<slug>/logo.png`. Les renommer casserait les trois d'un coup, dont l'affichage des logos. La correction ne vaut que pour les bibliothèques à venir.\n\nSuite `tests/sql/slug_biblioteca_tests.sql`, 7 tests. Le T5 est celui qui compte sur la durée : il refuse qu'on réinsère le calcul dans le corps de la fonction de provisionnement, ce qui réintroduirait le défaut sans qu'aucun voyant ne rougisse.",
           "pt": "**Corrigido e encerrado em 30/08, no próprio dia da abertura — e o constato ficava aquém da verdade.** O item dizia «perde as maiúsculas» citando a primeira letra. Medido em base: caíam **todas** as maiúsculas, sendo `lower()` aplicado depois do filtro `[^a-z0-9]`. «Biblioteca Terra Livre» não dava `iblioteca-terra-livre` mas **`iblioteca-erra-ivre`**. Os acentos caíam no mesmo filtro, sendo o `translate()` destinado a dobrá-los um no-op: «Associação Cultural Ñandú» dava `associa-o-cultural-and`.\n\nO cálculo sai do corpo de `fn_provision_preactive_library` para se tornar `fn_library_slug_from_name`, nomeada e testável sozinha: minúsculas primeiro, acentos dobrados por `extensions.unaccent` (a extensão já estava instalada), todo o resto em traços. Verificado provisionando realmente uma biblioteca de teste em transação anulada — «Associação Cultural Ñandú» sai em `associacao-cultural-nandu`.\n\n**Os slugs existentes não são renomeados**, e isso está escrito na migração: um slug vive nos URL públicos, em `library_commons.library_slug` e no caminho de armazenamento `themes/<slug>/logo.png`. Renomeá-los quebraria os três de uma vez, incluindo a exibição dos logótipos. A correção vale apenas para as bibliotecas por vir.\n\nSuíte `tests/sql/slug_biblioteca_tests.sql`, 7 testes. O T5 é o que conta a longo prazo: recusa que se reinsira o cálculo no corpo da função de provisionamento, o que reintroduziria o defeito sem que nenhuma luz acendesse."
         }
+      ],
+      [
+        "I5",
+        {
+          "fr": "Une alerte de CI qui se répète à chaque itération n'alerte plus",
+          "pt": "Um alerta de CI que se repete a cada iteração já não alerta"
+        },
+        {
+          "fr": "**Clos le 31/08 — et c'est le premier item de la série fermé parce que le problème est résolu, non parce que le constat était faux.** Le constat, lui, l'était aussi : il disait qu'un rouge de CI passait inaperçu. La forge portait 24 tickets `[CI rouge]`, dix pour la seule journée du 30/08, et les courriels étaient bien partis. L'alerte ne manquait pas — **elle débordait**.\n\n**La cause n'était pas dans le code mais dans l'usage qu'il imposait.** L'anti-doublon d'`OPS-6` ne joue que tant que le ticket reste *ouvert* ; or la convention écrite disait « refermer vaut acquittement », et pendant une soirée de mise au point refermer veut dire « j'ai vu ». Chaque clic réarmait l'alarme pour l'itération suivante : dix tickets et dix courriels **pour un seul et même rouge**. C'est très exactement la panne qu'`OPS-6` voulait éviter — *un pipeline qui échoue une fois sur deux cesse d'être lu* — arrivée par l'autre bout.\n\n**L'épreuve a trouvé deux défauts que la relecture n'avait pas vus.** Le troisième rouge d'une heure n'a ouvert aucun ticket : **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. Codeberg plafonne à deux tickets de titre semblable par heure — la protection censée fermer l'angle mort du 17-20/08 le rouvrait donc d'elle-même dès qu'une heure devenait chargée, c'est-à-dire précisément quand on en a besoin. Et le job affichait **`Job succeeded`** : un `continue-on-error` et un `|| echo 000` faisaient que l'alerte se taisait sur sa propre panne. `DOC-SILENCE-1` violé à l'intérieur du dispositif d'alerte.\n\n**Livré** : un job `acquittement` symétrique de `alerte` dans les deux workflows, et `alerte` refondu autour d'un modèle différent — **un seul ticket par workflow, pour toujours**. Ouvert au premier rouge, **rouvert** aux suivants avec le commit et le run en commentaire, refermé au retour au vert. Son état est le miroir vivant de la santé de la CI, ses commentaires en sont le journal. La limite de la forge devient inatteignable puisqu'on ne crée plus jamais de second ticket, et l'anti-doublon cesse d'être une comparaison de chaînes pour devenir un état. `continue-on-error` retiré de `alerte` — sur le chemin de l'échec il n'y a rien à masquer — et conservé sur `acquittement`, qui tourne sur un run vert.\n\n**Éprouvé de bout en bout, cinq états, cinq observations**, à l'aide d'une suite jetable écrite pour échouer puis retirée le jour même. Rouge → ticket ouvert. Vert → `Fermeture du ticket #27 : HTTP 200`, refermé une seconde après son propre commentaire. Rouge → `Reouverture du ticket #27 : commentaire HTTP 201, etat HTTP 201`. Rouge encore, ticket déjà ouvert → `Ticket #27 deja ouvert : cet episode rouge est deja signale, rien a faire.` — aucun courriel, aucun commentaire, aucun ticket neuf. Vert → `Fermeture du ticket #27 : HTTP 201`. La condition en crochets `needs['sql-tests'].result`, jamais exercée jusque-là, a tourné pour de bon.\n\nDoctrine `OPS-8` : **l'acquittement d'une alerte est l'état du système, pas un geste humain répété.** Revers exact de `DOC-SILENCE-1` — un dispositif qui parle sans arrêt ne dit plus rien ; dans les deux cas ce qui manque n'est pas le mécanisme, c'est la restitution.",
+          "pt": "**Encerrado em 31/08 — e é o primeiro item da série fechado porque o problema foi resolvido, e não porque o constato era falso.** O constato também o era: dizia que um vermelho de CI passava despercebido. A forja continha 24 tickets `[CI rouge]`, dez só no dia 30/08, e os e-mails tinham partido. O alerta não faltava — **transbordava**.\n\n**A causa não estava no código mas no uso que ele impunha.** O anti-duplicado de `OPS-6` só joga enquanto o ticket fica *aberto*; ora a convenção escrita dizia «fechar vale acusação de recepção», e numa noite de afinação fechar quer dizer «eu vi». Cada clique rearmava o alarme para a iteração seguinte: dez tickets e dez e-mails **para um só e mesmo vermelho**.\n\n**A prova encontrou dois defeitos que a releitura não vira.** O terceiro vermelho de uma hora não abriu ticket nenhum: **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. O Codeberg limita a dois tickets de título semelhante por hora. E o job mostrava **`Job succeeded`**: um `continue-on-error` e um `|| echo 000` faziam com que o alerta se calasse sobre a sua própria avaria — `DOC-SILENCE-1` violado dentro do próprio dispositivo de alerta.\n\n**Entregue**: um job `acquittement` simétrico de `alerte` nos dois workflows, e `alerte` refundido em torno de outro modelo — **um só ticket por workflow, para sempre**. Aberto no primeiro vermelho, **reaberto** nos seguintes com o commit e o run em comentário, fechado no retorno ao verde. O seu estado é o espelho vivo da saúde da CI, os seus comentários o diário. `continue-on-error` retirado de `alerte`, conservado em `acquittement`.\n\n**Provado de ponta a ponta, cinco estados, cinco observações**, com uma suíte descartável escrita para falhar e retirada no mesmo dia: vermelho → ticket aberto; verde → fechado uma segunda depois do seu comentário; vermelho → *reaberto* (HTTP 201/201); vermelho de novo com o ticket já aberto → **nada**, e o job di-lo; verde → fechado. A condição em parênteses rectos `needs['sql-tests'].result`, nunca exercitada até então, funcionou.\n\nDoutrina `OPS-8`: **a acusação de recepção de um alerta é o estado do sistema, não um gesto humano repetido.**"
+        }
       ]
     ]
   },
@@ -4477,67 +4488,6 @@
         "NOTE_temoin_sauvegarde_2026-08-27",
         "REPRISE_claude_code_2026-08-27 chantier 1"
       ]
-    },
-    {
-      "id": "I5",
-      "d": "I",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Une alerte de CI qui se répète à chaque itération n'alerte plus",
-        "pt": "Um alerta de CI que se repete a cada iteracao ja nao alerta"
-      },
-      "v": {
-        "fr": "**Le constat d'origine était faux, et faux dans l'autre sens.** Il disait qu'un rouge passait inaperçu. Vérifié sur la forge le 31/08 : elle porte **24 tickets `[CI rouge]`, aucun ouvert**, et les dix plus récents datent tous du 30/08 — l'alerte d'`OPS-6` a tiré dix fois dans la seule journée où l'on travaillait, et les courriels sont bien partis. Ce que l'item demandait — faire sortir le signal de la forge — **était déjà fait**.\n\n**Le vrai défaut est le déluge.** L'anti-doublon ne joue que tant que le ticket reste *ouvert* : le refermer pour dire « j'ai vu » réarme l'alarme pour l'itération suivante. Dix tickets et dix courriels **pour un seul et même rouge**, refermés à la main. C'est la panne qu'`OPS-6` voulait éviter, arrivée par l'autre bout — *« un pipeline qui échoue une fois sur deux cesse d'être lu »*.\n\n**Posé le 31/08** : un job `acquittement` dans les deux workflows, symétrique de `alerte`, qui referme le ticket portant le marqueur **exact** quand le run repasse au vert, avec un commentaire qui dit le commit et le run. `continue-on-error`, comme `alerte` : un acquittement cassé ne doit pas faire rougir un run vert. Doctrine `OPS-8`.\n\n**Éprouvé le 31/08, et l'épreuve a trouvé deux défauts de plus.** Le va-et-vient a été vu : ticket `#27` ouvert à 09:56:31 par un run rouge, refermé à 10:06:58 par `acquittement`, une seconde après son commentaire — la condition en crochets `needs['sql-tests'].result`, jamais exercée jusque-là, a donc tourné. Mais le troisième rouge de l'heure n'a ouvert **aucun** ticket : **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. Codeberg plafonne à deux tickets de titre semblable par heure — l'angle mort du 17-20/08 se rouvrait donc tout seul dès qu'une heure devenait chargée. Et le job affichait **`Job succeeded`** : `continue-on-error` plus `|| echo 000` faisaient taire l'alerte sur sa propre panne.\n\n**Refonte le même jour** : un seul ticket par workflow, ouvert au premier rouge, **rouvert** aux suivants, refermé au retour au vert ; `continue-on-error` retiré de `alerte`. Doctrine `OPS-8`, corollaire.",
-        "pt": "**O constato de origem era falso, e falso no sentido inverso.** Dizia que um vermelho passava despercebido. Verificado na forja em 31/08: ela contem **24 tickets `[CI rouge]`, nenhum aberto**, e os dez mais recentes datam todos de 30/08 — o alerta de `OPS-6` disparou dez vezes no unico dia em que se trabalhava, e os e-mails partiram. O que o item pedia — fazer sair o sinal da forja — **ja estava feito**.\n\n**O verdadeiro defeito e o diluvio.** O anti-duplicado so joga enquanto o ticket fica *aberto*: fecha-lo para dizer «eu vi» rearma o alarme para a iteracao seguinte. Dez tickets e dez e-mails **para um so e mesmo vermelho**, fechados a mao. E a avaria que `OPS-6` queria evitar, chegada pelo outro lado.\n\n**Posto em 31/08**: um job `acquittement` nos dois workflows, simetrico de `alerte`, que fecha o ticket com o marcador **exato** quando o run volta ao verde, com um comentario que diz o commit e o run. `continue-on-error`, como `alerte`. Doutrina `OPS-8`.\n\n**Provado em 31/08, e a prova encontrou mais dois defeitos.** O vai-e-vem foi visto: ticket `#27` aberto às 09:56:31 por um run vermelho, fechado às 10:06:58 por `acquittement`. Mas o terceiro vermelho da hora não abriu **nenhum** ticket: **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. O Codeberg limita a dois tickets de título semelhante por hora. E o job mostrava **`Job succeeded`**: o alerta calava-se sobre a sua própria avaria.\n\n**Refundição no mesmo dia**: um só ticket por workflow, aberto no primeiro vermelho, **reaberto** nos seguintes, fechado no retorno ao verde; `continue-on-error` retirado de `alerte`. Doutrina `OPS-8`, corolário."
-      },
-      "w": {
-        "fr": "Finir l'épreuve avec la suite jetable `tests/sql/epreuve_acquittement_tests.sql`, déjà en place et déjà rouge : un push doit **rouvrir** le ticket unique, un second push rouge ne doit **rien** faire, et le retrait de la suite doit le refermer. Puis retirer la suite et sa ligne de manifeste — elle n'a pas vocation à rester.",
-        "pt": "Terminar a prova com a suíte descartável `tests/sql/epreuve_acquittement_tests.sql`, já no lugar e já vermelha: um push deve **reabrir** o ticket único, um segundo push vermelho não deve fazer **nada**, e a remoção da suíte deve fechá-lo. Depois retirar a suíte e a sua linha de manifesto."
-      },
-      "y": {
-        "fr": "Le principe est déjà écrit pour les sauvegardes : **une alarme jamais déclenchée n'est pas une alarme.** Et un pipeline qui échoue une fois sur deux cesse d'être lu — ce qui est exactement ce qui s'est passé.",
-        "pt": "O princípio já está escrito para os backups: **um alarme jamais disparado não é um alarme.** E um pipeline que falha uma vez em duas deixa de ser lido — que é exatamente o que aconteceu."
-      },
-      "f": [
-        {
-          "fr": "~~Un échec de workflow produit un signal hors de la forge~~ — fait, vérifié le 31/08 : courriels reçus.",
-          "pt": "~~Uma falha de workflow produz um sinal fora da forja~~ — feito, verificado em 31/08."
-        },
-        {
-          "fr": "~~Le ticket se referme par le retour au vert, pas par un clic~~ — vu sur `#27`, commentaire à 10:06:57, fermeture à 10:06:58.",
-          "pt": "~~O ticket fecha-se pelo retorno ao verde, não por um clique~~ — visto no `#27`."
-        },
-        {
-          "fr": "Un épisode rouge donne **un** ticket, pas un par push — et la limite de la forge ne peut plus l'empêcher.",
-          "pt": "Um episódio vermelho dá **um** ticket, não um por push — e o limite da forja já não o pode impedir."
-        },
-        {
-          "fr": "Une alerte qui échoue **rougit**, au lieu d'afficher `Job succeeded`.",
-          "pt": "Um alerta que falha **fica vermelho**, em vez de mostrar `Job succeeded`."
-        },
-        {
-          "fr": "Le va-et-vient a été **vu**, pas supposé. Leçon de méthode déjà payée : **ne pas livrer de CI sans l'avoir vue passer au vert et au rouge.**",
-          "pt": "O vai-e-vem foi **visto**, não suposto."
-        }
-      ],
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "RUNBOOK_exploitation_v0.3 §7 §9.3",
-        "REGISTRE §38 OPS-6 et OPS-8",
-        "forge : issues 16 à 25, 30/08/2026"
-      ],
-      "verif": {
-        "fr": "31/08 — le constat écrit était faux (l'alerte débordait au lieu de manquer), et l'épreuve a trouvé deux défauts que la relecture n'avait pas vus : le plafond de deux tickets par heure de la forge, et une alerte qui se déclare réussie après un 429. Correctif posé et **en cours d'épreuve** : la suite jetable est en place et le dépôt est rouge.",
-        "pt": "31/08 — o constato escrito era falso (o alerta transbordava em vez de faltar), e a prova encontrou dois defeitos que a releitura não vira: o tecto de dois tickets por hora da forja, e um alerta que se declara bem-sucedido depois de um 429. Correção posta e **em prova**."
-      }
     },
     {
       "id": "I6",

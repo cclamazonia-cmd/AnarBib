@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-31** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 11
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 8
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -1911,7 +1911,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Congelado |
 | **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Congelado |
 | **I4** | Terminar a testemunha de proveniência dos backups | `P1` | Aberto |
-| **I5** | Um alerta de CI que se repete a cada iteracao ja nao alerta | `P1` | Em curso |
 | **I6** | Purgar os registros da sonda de saúde | `P2` | Aberto |
 | **I8** | Pôr `deploy/README.md` de acordo com o que foi executado | `P2` | Aberto |
 | **I10** | Limpar os rastros do Turnstile e os arquivos de refugo | `P2` | Aberto |
@@ -2006,38 +2005,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** Não confundir com o `snapshot_id` nulo em cinco linhas: o remédio cabe em três linhas mas **`anarbib-bg2.sh` vive na estação de trabalho, fora do repositório** — é para sinalizar, não para tentar a partir do repositório.
 
 *Remissões : `NOTE_temoin_sauvegarde_2026-08-27` · `REPRISE_claude_code_2026-08-27 chantier 1`*
-
-#### I5 — Um alerta de CI que se repete a cada iteracao ja nao alerta
-
-`P1` Prioritário · Estado : **Em curso** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** **O constato de origem era falso, e falso no sentido inverso.** Dizia que um vermelho passava despercebido. Verificado na forja em 31/08: ela contem **24 tickets `[CI rouge]`, nenhum aberto**, e os dez mais recentes datam todos de 30/08 — o alerta de `OPS-6` disparou dez vezes no unico dia em que se trabalhava, e os e-mails partiram. O que o item pedia — fazer sair o sinal da forja — **ja estava feito**.
-
-**O verdadeiro defeito e o diluvio.** O anti-duplicado so joga enquanto o ticket fica *aberto*: fecha-lo para dizer «eu vi» rearma o alarme para a iteracao seguinte. Dez tickets e dez e-mails **para um so e mesmo vermelho**, fechados a mao. E a avaria que `OPS-6` queria evitar, chegada pelo outro lado.
-
-**Posto em 31/08**: um job `acquittement` nos dois workflows, simetrico de `alerte`, que fecha o ticket com o marcador **exato** quando o run volta ao verde, com um comentario que diz o commit e o run. `continue-on-error`, como `alerte`. Doutrina `OPS-8`.
-
-**Provado em 31/08, e a prova encontrou mais dois defeitos.** O vai-e-vem foi visto: ticket `#27` aberto às 09:56:31 por um run vermelho, fechado às 10:06:58 por `acquittement`. Mas o terceiro vermelho da hora não abriu **nenhum** ticket: **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. O Codeberg limita a dois tickets de título semelhante por hora. E o job mostrava **`Job succeeded`**: o alerta calava-se sobre a sua própria avaria.
-
-**Refundição no mesmo dia**: um só ticket por workflow, aberto no primeiro vermelho, **reaberto** nos seguintes, fechado no retorno ao verde; `continue-on-error` retirado de `alerte`. Doutrina `OPS-8`, corolário.
-
-*Verificado : 31/08 — o constato escrito era falso (o alerta transbordava em vez de faltar), e a prova encontrou dois defeitos que a releitura não vira: o tecto de dois tickets por hora da forja, e um alerta que se declara bem-sucedido depois de um 429. Correção posta e **em prova**.*
-
-**O que é.** Terminar a prova com a suíte descartável `tests/sql/epreuve_acquittement_tests.sql`, já no lugar e já vermelha: um push deve **reabrir** o ticket único, um segundo push vermelho não deve fazer **nada**, e a remoção da suíte deve fechá-lo. Depois retirar a suíte e a sua linha de manifesto.
-
-**Por que importa.** O princípio já está escrito para os backups: **um alarme jamais disparado não é um alarme.** E um pipeline que falha uma vez em duas deixa de ser lido — que é exatamente o que aconteceu.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Nenhuma.
-
-*Remissões : `RUNBOOK_exploitation_v0.3 §7 §9.3` · `REGISTRE §38 OPS-6 et OPS-8` · `forge : issues 16 à 25, 30/08/2026`*
 
 #### I6 — Purgar os registros da sonda de saúde
 
@@ -2484,6 +2451,17 @@ O cálculo sai do corpo de `fn_provision_preactive_library` para se tornar `fn_l
 **Os slugs existentes não são renomeados**, e isso está escrito na migração: um slug vive nos URL públicos, em `library_commons.library_slug` e no caminho de armazenamento `themes/<slug>/logo.png`. Renomeá-los quebraria os três de uma vez, incluindo a exibição dos logótipos. A correção vale apenas para as bibliotecas por vir.
 
 Suíte `tests/sql/slug_biblioteca_tests.sql`, 7 testes. O T5 é o que conta a longo prazo: recusa que se reinsira o cálculo no corpo da função de provisionamento, o que reintroduziria o defeito sem que nenhuma luz acendesse. |
+| I5 | Um alerta de CI que se repete a cada iteração já não alerta | **Encerrado em 31/08 — e é o primeiro item da série fechado porque o problema foi resolvido, e não porque o constato era falso.** O constato também o era: dizia que um vermelho de CI passava despercebido. A forja continha 24 tickets `[CI rouge]`, dez só no dia 30/08, e os e-mails tinham partido. O alerta não faltava — **transbordava**.
+
+**A causa não estava no código mas no uso que ele impunha.** O anti-duplicado de `OPS-6` só joga enquanto o ticket fica *aberto*; ora a convenção escrita dizia «fechar vale acusação de recepção», e numa noite de afinação fechar quer dizer «eu vi». Cada clique rearmava o alarme para a iteração seguinte: dez tickets e dez e-mails **para um só e mesmo vermelho**.
+
+**A prova encontrou dois defeitos que a releitura não vira.** O terceiro vermelho de uma hora não abriu ticket nenhum: **HTTP 429**, *« posted 2 similairy named issues in the last hour: rate limited »*. O Codeberg limita a dois tickets de título semelhante por hora. E o job mostrava **`Job succeeded`**: um `continue-on-error` e um `|| echo 000` faziam com que o alerta se calasse sobre a sua própria avaria — `DOC-SILENCE-1` violado dentro do próprio dispositivo de alerta.
+
+**Entregue**: um job `acquittement` simétrico de `alerte` nos dois workflows, e `alerte` refundido em torno de outro modelo — **um só ticket por workflow, para sempre**. Aberto no primeiro vermelho, **reaberto** nos seguintes com o commit e o run em comentário, fechado no retorno ao verde. O seu estado é o espelho vivo da saúde da CI, os seus comentários o diário. `continue-on-error` retirado de `alerte`, conservado em `acquittement`.
+
+**Provado de ponta a ponta, cinco estados, cinco observações**, com uma suíte descartável escrita para falhar e retirada no mesmo dia: vermelho → ticket aberto; verde → fechado uma segunda depois do seu comentário; vermelho → *reaberto* (HTTP 201/201); vermelho de novo com o ticket já aberto → **nada**, e o job di-lo; verde → fechado. A condição em parênteses rectos `needs['sql-tests'].result`, nunca exercitada até então, funcionou.
+
+Doutrina `OPS-8`: **a acusação de recepção de um alerta é o estado do sistema, não um gesto humano repetido.** |
 
 ---
 
@@ -2515,4 +2493,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
