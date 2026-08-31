@@ -398,7 +398,9 @@ Relidas uma a uma, as 36 dividem-se em três grupos muito desiguais:
 2. **Uns vinte usos anônimos reais**: catálogo público (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), os quatro leitores de modo, a coleta OAI, o percurso de candidatura de uma biblioteca por token.
 3. **Três grants que a própria função contradiz**: `search_authors_by_name`, `search_publishers_by_name` e `remove_library_regulation_document` **recusam `anon` no próprio corpo** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`).
 
-*Verificado : 30/08 — as 33 funções revistas uma a uma contra o banco; veredictos em `docs/journal/audits/AUDIT_execute_anon_2026-08-30.md`. Lotes 1, 2 e 4 entregues, guardados por T10.*
+**Lote 3 entregue em 31/08 — a causa está invertida.** `ALTER DEFAULT PRIVILEGES … REVOKE EXECUTE ON FUNCTIONS FROM anon`: uma função criada em `public` **nasce agora fechada a `anon`**. Nenhuma das 621 existentes mudou. **Armadilha nomeada**: nunca revogar *todos* os papéis do defeito — uma entrada `pg_default_acl` vazia é **apagada**, e o defeito nativo `PUBLIC=X` regressa. Guardado pelo `T11`.
+
+*Verificado : 31/08 — lotes 1, 2 e 3 entregues e verificados em base. Resta a triagem de `authenticated`, item **B14**.*
 
 **O que é.** A regra, corrigida por este levantamento: **está aberto a `anon` o que serve uma página pública, ou o que uma policy avaliada por `anon` chama. Nada mais — e sobretudo não por padrão.**
 

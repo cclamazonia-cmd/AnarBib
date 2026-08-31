@@ -279,6 +279,43 @@ BEGIN
     END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- ─────────────────────────────────────────────────────────────────
+  -- T11 -- La CAUSE, pas les symptomes (item B2 lot 3, 31/08/2026)
+  --
+  -- Les 141 lignes `REVOKE ... FROM anon` du depot combattaient un a un les
+  -- effets d'un privilege par defaut jamais retourne : toute fonction creee
+  -- dans `public` naissait executable par `anon`. La migration
+  -- 20260831105114 l'a retourne. Ce test garde le retournement -- et il le
+  -- garde DANS LES DEUX SENS, parce que les deux erreurs possibles sont
+  -- graves et opposees.
+  --
+  -- (a) `anon` revient dans le defaut  -> on recommence a ouvrir sans decider.
+  -- (b) l'entree DISPARAIT             -> pire encore, et contre-intuitif :
+  --     une entree `pg_default_acl` vide est supprimee par Postgres, et le
+  --     defaut NATIF revient -- lequel accorde EXECUTE a `PUBLIC`. Croire
+  --     fermer en revoquant tout, c'est ouvrir a tout le monde.
+  v_t := 'T11 une fonction nait fermee a anon, et l''entree de defaut survit';
+  BEGIN
+    SELECT d.defaclacl::text INTO v_txt
+      FROM pg_default_acl d JOIN pg_namespace n ON n.oid = d.defaclnamespace
+     WHERE pg_get_userbyid(d.defaclrole) = 'postgres'
+       AND n.nspname = 'public' AND d.defaclobjtype = 'f';
+
+    IF v_txt IS NULL THEN
+      v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : l''entree pg_default_acl a disparu -- le defaut'
+        ||' natif PUBLIC=X reprend, ce qui OUVRE au lieu de fermer');
+    ELSIF v_txt LIKE '%anon=%' THEN
+      v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : anon est revenu dans le defaut -> '||v_txt);
+    ELSIF v_txt NOT LIKE '%authenticated=X%' OR v_txt NOT LIKE '%service_role=X%' THEN
+      v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : le defaut a perdu authenticated ou service_role -> '||v_txt);
+    ELSE
+      v_passed := v_passed+1;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'GRANTS-HERITES OK : %/% tests passés', v_passed, (v_passed+v_failed);
   ELSE

@@ -398,7 +398,15 @@ Relues une par une, les 36 se répartissent en trois groupes très inégaux :
 2. **Une vingtaine d'usages anonymes réels** : catalogue public (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), les quatre lecteurs de mode, le moissonnage OAI, le parcours de candidature d'une bibliothèque par jeton.
 3. **Trois grants que la fonction elle-même contredit** : `search_authors_by_name`, `search_publishers_by_name` et `remove_library_regulation_document` **refusent `anon` dans leur propre corps** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`).
 
-*Vérifié : 30/08 — les 33 fonctions passées une par une contre la base ; verdicts dans `docs/journal/audits/AUDIT_execute_anon_2026-08-30.md`. Lots 1, 2 et 4 livrés, gardés par T10.*
+**Lot 3 livré le 31/08 — la cause est retournée.** `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon` : une fonction créée dans `public` **naît désormais fermée à `anon`**. Aucune des 621 existantes n'a bougé.
+
+**Deux vérifications faites avant d'écrire ont corrigé le constat.** *(a)* `pg_default_acl` porte **deux** entrées sur les fonctions de `public` — une pour `postgres`, une pour `supabase_admin`. Nos migrations tournent en `postgres` et les fonctions lui appartiennent : c'est celle-là qui décide ; l'autre est hors de notre portée et ne s'appliquerait qu'à une fonction créée par `supabase_admin`, ce que le dépôt ne fait jamais. *(b)* **Aucune des 621 fonctions n'a d'ACL nulle**, et c'est ce qui rend l'opération sûre : dès qu'une entrée `pg_default_acl` existe, elle **remplace** le défaut natif de PostgreSQL — lequel accorde `EXECUTE` à `PUBLIC`. Retirer `anon` ne fait donc pas retomber sur `PUBLIC`.
+
+**Le piège, nommé pour qu'il ne se retrouve pas :** ne jamais révoquer *tous* les rôles du défaut. Une entrée devenue vide est **supprimée** par Postgres, et le défaut natif `PUBLIC=X` reprend — on croirait fermer et on ouvrirait à tout le monde. `postgres`, `authenticated` et `service_role` restent pour que la ligne survive. Le même piège attend **B14**.
+
+**Ce qui change pour la suite** : une fonction servant une page publique doit porter un `GRANT EXECUTE … TO anon` explicite (`DOC-OBJ-2`, corollaire). Une ligne oubliée casse la page avec `permission denied for function` — visible et réparable, jamais silencieux. Gardé par le `T11` de `grants_herites_tests.sql`, dans les deux sens.
+
+*Vérifié : 31/08 — lots 1, 2 et 3 livrés et vérifiés en base ; `pg_default_acl` relevé avant écriture (deux entrées, pas une), et l'absence d'ACL nulle sur les 621 fonctions vérifiée pour s'assurer que la fermeture ne retombe pas sur `PUBLIC`. Reste le tri des fonctions ouvertes à `authenticated`, qui est l'item **B14**.*
 
 **Ce que c'est.** La règle, corrigée par ce relevé : **est ouvert à `anon` ce qui sert une page publique, ou ce qu'une policy évaluée par `anon` appelle. Rien d'autre — et surtout pas par défaut.**
 
