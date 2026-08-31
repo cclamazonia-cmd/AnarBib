@@ -22,6 +22,11 @@
 //   - network.cooptation_completed (→ target + proposeur + autres admins, mails distincts)
 //   - network.cooptation_reminder  (→ proposeur + admins n'ayant pas voté, 2 mails distincts)
 //
+// Event ajouté le 31/08/2026 — item B17, étage immédiat de la transparence
+// inter-bibliothèques (spec-administrateur-reseau-v0.4 §6.3) :
+//   - network.cross_library_critical_action (→ coordenador·es actif·ves de la
+//     biblio visée, hors acteur·rice). Voir domain/cross_library.ts.
+//
 // Events ajoutés en #114.B étape 3b — bloc retrait collectif :
 //   - network.collective_removal_proposed     (→ autres admins, target jamais notifié)
 //   - network.collective_removal_vote_cast    (→ autres admins + proposeur si 1er vote)
@@ -52,13 +57,22 @@ import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { handleLibraryProfileEvent } from "./library_profile.ts";
+import { handleCrossLibraryCriticalAction } from "./cross_library.ts";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
 async function markOutboxSent(outboxId) {
   await supabaseAdmin.from("team_notification_outbox").update({
     status: "sent",
-    sent_at: new Date().toISOString()
+    sent_at: new Date().toISOString(),
+    // B17, 31/08/2026 : `skip_reason` est efface ici. Une ligne rejouee apres
+    // un saut porterait sinon les deux a la fois -- « envoye » ET « saute
+    // parce que l'event etait inconnu ». Les deux CHECK de la migration
+    // 20260831090412 ne l'interdisent pas : ils ne contraignent que le statut
+    // `skipped`. C'est donc au code de ne pas laisser le journal se
+    // contredire. Le motif du saut a servi tant que le saut durait ; il cesse
+    // d'etre vrai a la seconde ou le courriel part.
+    skip_reason: null
   }).eq("id", outboxId);
 }
 
@@ -214,6 +228,11 @@ export async function handleNetworkEvent(recordId) {
       result = await handleCollectiveRemovalCancelled(payload, ctx, bt);
     } else if (event === "network.collective_removal_executed") {
       result = await handleCollectiveRemovalExecuted(payload, ctx, bt);
+    } else if (event === "network.cross_library_critical_action") {
+      // B17 — l'etage IMMEDIAT du dispositif de transparence inter-biblios.
+      // Le trigger SQL mettait en file depuis le 8 juin ; il n'y avait personne
+      // au bout. Les quatre lignes tombaient dans le `else` ci-dessous.
+      result = await handleCrossLibraryCriticalAction(payload);
     } else if (event.startsWith("network.library_profile.")) {
       return await handleLibraryProfileEvent(row.id);
     } else {

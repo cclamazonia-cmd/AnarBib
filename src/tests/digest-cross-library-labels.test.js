@@ -16,13 +16,18 @@
 //
 // Ce test garde les deux dimensions : les 14 libellés existent, dans les 10
 // locales, et aucun ne rend l'identifiant brut.
+//
+// 31/08/2026 (B17) : le fichier de chaînes a quitté notify-cross-library-digest/
+// pour _shared/i18n/, parce que l'étage IMMÉDIAT du même dispositif le lit
+// désormais aussi. Deux étages, un seul vocabulaire — sans quoi le même geste
+// aurait pu porter deux noms selon l'heure à laquelle on l'apprend.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 
 const SRC = new URL(
-  '../../supabase/functions/notify-cross-library-digest/strings.ts',
+  '../../supabase/functions/_shared/i18n/cross-library-strings.ts',
   import.meta.url,
 );
 
@@ -131,6 +136,40 @@ describe('le récapitulatif parle humain, dans les dix langues', () => {
       expect(sansCompte, `${loc} / sansCompte`).toBeTruthy();
       expect(sansCompte, `${loc} : ne doit pas réclamer un nombre`).not.toContain('{count}');
     }
+  });
+
+  it("sert l'étage immédiat dans les dix langues, avec le nom de la biblio", () => {
+    const { STRINGS, tr } = charger();
+    // B17, 31/08/2026 : l'avertissement immédiat réutilise le vocabulaire du
+    // récapitulatif (action.*, target.*, col.*, stage.*) et n'ajoute que son
+    // propre cadre. Ces trois clés-là sont donc tout ce qu'il faut garder.
+    for (const loc of LOCALES) {
+      for (const k of ['immediate.subject', 'immediate.title', 'immediate.intro']) {
+        expect(STRINGS[loc][k], `${loc} / ${k}`).toBeTruthy();
+      }
+      // Un avertissement qui ne nomme pas la bibliothèque touchée ne sert à
+      // rien : une coordination peut siéger dans plusieurs.
+      for (const k of ['immediate.subject', 'immediate.intro']) {
+        const rendu = tr(loc, k, { library: 'BLMF' });
+        expect(rendu, `${loc} / ${k} : {library} resté brut`).not.toContain('{library}');
+        expect(rendu, `${loc} / ${k} : la biblio n'est pas nommée`).toContain('BLMF');
+      }
+    }
+  });
+
+  it("qualifie une proposition comme telle des deux côtés du dispositif", () => {
+    const { qualifiantEtape } = charger();
+    // Le même helper sert au récapitulatif et à l'avertissement immédiat : si
+    // les deux étages divergeaient, l'un annoncerait accompli ce que l'autre
+    // dit en attente. C'est la ligne #72 de l'outbox, celle du 30/08.
+    for (const loc of LOCALES) {
+      const q = qualifiantEtape({ stage: 'proposed', required_ratifications: 2 }, loc);
+      expect(q, `${loc} : proposition non qualifiée`).toBeTruthy();
+      expect(q, `${loc} : le nombre manque`).toContain('2');
+    }
+    // Une action accomplie ne porte aucun qualifiant.
+    expect(qualifiantEtape({ status_after: 'active' }, 'fr')).toBe('');
+    expect(qualifiantEtape(null, 'fr')).toBe('');
   });
 
   it('ne laisse pas une locale retomber en portugais sans le dire', () => {

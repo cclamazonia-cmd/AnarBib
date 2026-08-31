@@ -11,9 +11,18 @@
 // technique — d'où un ton factuel, sans dramatisation.
 //
 // Le dispositif a deux étages, complémentaires :
-//   1. IMMÉDIAT — le trigger `trg_cross_lib_log_critical_notification` prévient
-//      les coordinateur·rices de la bibliothèque concernée dès qu'une action
-//      marquée critique est journalisée. Couvre l'urgent.
+//   1. IMMÉDIAT — le trigger `trg_cross_lib_log_critical_notification` met en
+//      file un event `network.cross_library_critical_action` dès qu'une action
+//      marquée critique est journalisée ; `_shared/domain/cross_library.ts` le
+//      relève et prévient les coordinateur·rices de la bibliothèque. Couvre
+//      l'urgent.
+//      ATTENTION À CE QUI EST ÉCRIT ICI. Ce commentaire affirmait ce qui
+//      précède depuis le 17/08 — et c'était faux : le trigger mettait bien en
+//      file depuis le 8 juin, mais aucun handler ne relevait cet event, et les
+//      quatre lignes accumulées étaient marquées `skipped`. L'étage immédiat
+//      n'existe que depuis le 31/08/2026 (item B17). Pendant deux semaines,
+//      ce fichier a décrit comme acquis un étage absent, et c'est en le lisant
+//      qu'on aurait pu croire le dispositif complet.
 //   2. HEBDOMADAIRE — la présente fonction. Couvre le routinier, pour qu'une
 //      accumulation de petites actions ne passe pas inaperçue.
 //
@@ -41,7 +50,7 @@ import { serveJsonWebhook } from '../_shared/core/webhook.ts';
 import { supabaseAdmin } from '../_shared/core/env.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
-import { tr, normalizeLocale } from './strings.ts';
+import { tr, normalizeLocale, qualifiantEtape } from '../_shared/i18n/cross-library-strings.ts';
 
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_CROSS_LIBRARY_DIGEST') || '').trim();
 
@@ -83,27 +92,11 @@ type Action = {
   payload: Record<string, unknown> | null;
 };
 
-/**
- * Qualifie une action qui n'est PAS accomplie.
- *
- * `team_promote_to_coordenador` couvre deux choses que seul le payload sépare :
- * une promotion faite (`status_after: 'active'`) et une PROPOSITION soumise à
- * ratification collégiale (`stage: 'proposed'`). Le récapitulatif du 30/08 en
- * portait une du second type — deux ratifications attendues, rien de fait — et
- * l'annonçait comme un fait accompli.
- *
- * Rendre lisible une information fausse est un recul : l'identifiant brut
- * n'induisait personne en erreur. On dit donc explicitement que rien n'est
- * fait, et combien de signatures manquent.
- */
+// Le qualifiant « proposition, N ratifications requises » vit desormais dans
+// _shared/i18n/cross-library-strings.ts : l'etage immediat (B17) doit dire la
+// meme chose que celui-ci, et deux copies auraient diverge.
 function qualifiant(a: Action, locale: string): string {
-  const stage = String((a.payload as Record<string, unknown>)?.stage ?? '');
-  if (stage !== 'proposed') return '';
-  const n = Number((a.payload as Record<string, unknown>)?.required_ratifications);
-  const txt = Number.isFinite(n) && n > 0
-    ? tr(locale, 'stage.proposed', { count: String(n) })
-    : tr(locale, 'stage.proposed.sansCompte');
-  return ` (${txt})`;
+  return qualifiantEtape(a.payload, locale);
 }
 
 /** Tableau HTML des actions, colonnes adaptées au destinataire. */

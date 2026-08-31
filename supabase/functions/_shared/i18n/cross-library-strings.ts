@@ -1,5 +1,11 @@
-// strings.ts — chaînes localisées du récapitulatif hebdomadaire des actions
-// inter-bibliothèques.
+// cross-library-strings.ts — chaînes localisées des avertissements d'actions
+// inter-bibliothèques, aux DEUX étages du dispositif.
+//
+// Vivait sous notify-cross-library-digest/ tant qu'il n'y avait qu'un étage.
+// Déplacé ici le 31/08/2026 (item B17) quand l'étage immédiat a enfin été
+// écrit : les deux fonctions lisent le même fichier plutôt que d'en tenir
+// chacune une copie. C'est la leçon de F6, appliquée avant que la divergence
+// n'existe au lieu d'après.
 //
 // Ce n'est pas une notification de service : c'est un instrument de
 // TRANSPARENCE. Les administrateur·rices réseau disposent de droits élevés sur
@@ -32,6 +38,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Biblioteca",
     "col.target": "Objeto",
     critical: "crítica",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Ação da rede na biblioteca {library}",
+    "immediate.title": "Uma ação da rede na sua biblioteca",
+    "immediate.intro": "Uma pessoa da administração da rede acaba de realizar uma ação marcada como crítica na biblioteca {library}. Este aviso chega de imediato, para que o que se decide de fora seja visível de dentro. O resumo semanal continua a chegar às segundas-feiras.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Promoção ao papel de coordenação",
@@ -70,6 +82,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Bibliothèque",
     "col.target": "Objet",
     critical: "critique",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Action du réseau dans la bibliothèque {library}",
+    "immediate.title": "Une action du réseau dans votre bibliothèque",
+    "immediate.intro": "Une personne de l'administration du réseau vient de mener une action marquée critique dans la bibliothèque {library}. Cet avertissement part immédiatement, pour que ce qui se décide du dehors soit visible du dedans. Le récapitulatif hebdomadaire continue d'arriver le lundi.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Passage au rôle de coordination",
@@ -108,6 +126,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Biblioteca",
     "col.target": "Objeto",
     critical: "crítica",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Acción de la red en la biblioteca {library}",
+    "immediate.title": "Una acción de la red en vuestra biblioteca",
+    "immediate.intro": "Una persona de la administración de la red acaba de realizar una acción marcada como crítica en la biblioteca {library}. Este aviso llega de inmediato, para que lo que se decide desde fuera sea visible desde dentro. El resumen semanal sigue llegando los lunes.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Paso al rol de coordinación",
@@ -146,6 +170,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Library",
     "col.target": "Object",
     critical: "critical",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Network action at {library}",
+    "immediate.title": "A network action in your library",
+    "immediate.intro": "Someone from the network administration has just carried out an action marked critical at {library}. This warning goes out immediately, so that what is decided from outside is visible from inside. The weekly summary still arrives on Mondays.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Moved to the coordination role",
@@ -184,6 +214,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Biblioteca",
     "col.target": "Oggetto",
     critical: "critica",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Azione della rete nella biblioteca {library}",
+    "immediate.title": "Un'azione della rete nella vostra biblioteca",
+    "immediate.intro": "Una persona dell'amministrazione della rete ha appena compiuto un'azione contrassegnata come critica nella biblioteca {library}. Questo avviso parte subito, perché ciò che si decide da fuori sia visibile da dentro. Il riepilogo settimanale continua ad arrivare il lunedì.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Passaggio al ruolo di coordinamento",
@@ -222,6 +258,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Bibliothek",
     "col.target": "Gegenstand",
     critical: "kritisch",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Netzwerk-Aktion in der Bibliothek {library}",
+    "immediate.title": "Eine Netzwerk-Aktion in eurer Bibliothek",
+    "immediate.intro": "Eine Person der Netzwerkverwaltung hat soeben eine als kritisch markierte Aktion in der Bibliothek {library} durchgeführt. Dieser Hinweis geht sofort hinaus, damit sichtbar wird, was von außen entschieden wird. Die wöchentliche Übersicht kommt weiterhin montags.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Wechsel in die Koordinationsrolle",
@@ -260,6 +302,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Biblioteca",
     "col.target": "Objecte",
     critical: "crítica",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Acció de la xarxa a la biblioteca {library}",
+    "immediate.title": "Una acció de la xarxa a la vostra biblioteca",
+    "immediate.intro": "Una persona de l'administració de la xarxa acaba de dur a terme una acció marcada com a crítica a la biblioteca {library}. Aquest avís surt immediatament, perquè allò que es decideix des de fora sigui visible des de dins. El resum setmanal continua arribant els dilluns.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Pas al rol de coordinació",
@@ -298,6 +346,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Biblioteko",
     "col.target": "Objekto",
     critical: "kritika",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Reta ago en la biblioteko {library}",
+    "immediate.title": "Reta ago en via biblioteko",
+    "immediate.intro": "Persono de la reta administrado ĵus faris agon markitan kiel kritika en la biblioteko {library}. Ĉi tiu averto foriras tuj, por ke tio, kio estas decidita de ekstere, estu videbla de interne. La semajna resumo plu alvenas lunde.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Transiro al la kunordiga rolo",
@@ -336,6 +390,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Bibliotheek",
     "col.target": "Voorwerp",
     critical: "kritiek",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Netwerkactie in bibliotheek {library}",
+    "immediate.title": "Een netwerkactie in jullie bibliotheek",
+    "immediate.intro": "Iemand van het netwerkbeheer heeft zojuist een als kritiek gemarkeerde actie uitgevoerd in bibliotheek {library}. Deze waarschuwing vertrekt onmiddellijk, zodat wat van buitenaf wordt beslist van binnenuit zichtbaar is. Het wekelijkse overzicht komt nog steeds op maandag.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Overgang naar de coördinatierol",
@@ -374,6 +434,12 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "col.where": "Βιβλιοθήκη",
     "col.target": "Αντικείμενο",
     critical: "κρίσιμη",
+    // Etage IMMEDIAT (B17, 31/08/2026) : le meme vocabulaire que le
+    // recapitulatif hebdomadaire, pour que les deux etages nomment les
+    // memes gestes de la meme facon.
+    "immediate.subject": "Ενέργεια του δικτύου στη βιβλιοθήκη {library}",
+    "immediate.title": "Μια ενέργεια του δικτύου στη βιβλιοθήκη σας",
+    "immediate.intro": "Ένα άτομο από τη διαχείριση του δικτύου μόλις πραγματοποίησε μια ενέργεια που έχει επισημανθεί ως κρίσιμη στη βιβλιοθήκη {library}. Αυτή η ειδοποίηση φεύγει αμέσως, ώστε αυτό που αποφασίζεται απ' έξω να είναι ορατό από μέσα. Η εβδομαδιαία σύνοψη συνεχίζει να φτάνει τις Δευτέρες.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
     "action.team_promote_to_coordenador": "Μετάβαση στον ρόλο του συντονισμού",
@@ -412,4 +478,34 @@ export function normalizeLocale(lang: string | null | undefined): string {
   const base = l.split("-")[0];
   if (STRINGS[base]) return base;
   return FALLBACK_LOCALE;
+}
+
+/**
+ * Qualifie une action qui n'est PAS accomplie.
+ *
+ * `team_promote_to_coordenador` couvre deux choses que seul le payload sépare :
+ * une promotion faite (`status_after: 'active'`) et une PROPOSITION soumise à
+ * ratification collégiale (`stage: 'proposed'`). Le récapitulatif du 30/08 en
+ * portait une du second type — deux ratifications attendues, rien de fait — et
+ * l'annonçait comme un fait accompli.
+ *
+ * Rendre lisible une information fausse est un recul : l'identifiant brut
+ * n'induisait personne en erreur. On dit donc explicitement que rien n'est
+ * fait, et combien de signatures manquent.
+ *
+ * Vit ici depuis le 31/08/2026 (B17) : les deux étages du dispositif doivent
+ * qualifier une proposition de la même façon, sinon l'avertissement immédiat
+ * annoncerait comme accompli ce que le récapitulatif du lundi dira en attente.
+ */
+export function qualifiantEtape(
+  payload: Record<string, unknown> | null | undefined,
+  locale: string,
+): string {
+  const stage = String(payload?.stage ?? "");
+  if (stage !== "proposed") return "";
+  const n = Number(payload?.required_ratifications);
+  const txt = Number.isFinite(n) && n > 0
+    ? tr(locale, "stage.proposed", { count: String(n) })
+    : tr(locale, "stage.proposed.sansCompte");
+  return ` (${txt})`;
 }
