@@ -1051,8 +1051,25 @@ export default function PanelPage() {
   async function extendLoan(empId) {
     try {
       // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
-      const { error } = await supabase.schema('api').rpc('extend_loan_as_library', { p_emprestimo_id: empId });
+      // DOC-RPC-4. Ce site et son jumeau `extendLoanItem` sont le pendant STAFF
+      // de `renew_my_loan`, le cas qui a fondé DOC-SILENCE-1 — et ils étaient
+      // restés en l'état parce que la requête du relevé ne voit pas les façades
+      // à deux sauts : `api.extend_loan_as_library` →
+      // `public.fn_v2_extend_emprestimo_once` → `public.fn_v2_extend_core`,
+      // qui est la seule à poser `ok`.
+      // Vérifié en base le 31/08/2026 : `fn_v2_extend_core` ne lève JAMAIS. Elle
+      // rend `ok:false` sur huit refus d'entrée (`not_authenticated`, `not_found`,
+      // `circulation_disabled`, `dues_blocked`, `no_active_membership`,
+      // `restricted`) et, ligne à ligne, sur `overdue`, `reserved_by_other`,
+      // `not_renewable`, `quota_exceeded`, `already_extended` — son `ok` final
+      // vaut `v_any_renewed`, donc « faux » dès qu'aucune ligne n'a bougé.
+      // Avec `const { error }`, la charge utile était jetée à la destructuration :
+      // le `ok` n'était pas ignoré, il était INATTEIGNABLE. La bibliothécaire
+      // cliquait « prolonger », rien ne levait, `loadLoans()` rafraîchissait, et
+      // l'échéance n'avait pas bougé — sans un mot.
+      const { data, error } = await supabase.schema('api').rpc('extend_loan_as_library', { p_emprestimo_id: empId });
       if (error) throw error;
+      assertRpcOk(data);
       loadLoans();
     } catch (e) {
       notifyError(localizeError(e, t, 'panel.loan.extendError'), e);
@@ -1073,10 +1090,13 @@ export default function PanelPage() {
   async function extendLoanItem(empId, lineNo) {
     try {
       // Granularité Phase 4 : extension PAR ITEM via wrapper api.* (non-DEFINER).
-      const { error } = await supabase.schema('api').rpc('extend_loan_item_as_library', {
+      // Même défaut et même correctif qu'`extendLoan` ci-dessus, où le pourquoi
+      // est écrit en entier — même chaîne à deux sauts jusqu'à `fn_v2_extend_core`.
+      const { data, error } = await supabase.schema('api').rpc('extend_loan_item_as_library', {
         p_emprestimo_id: empId, p_line_no: lineNo,
       });
       if (error) throw error;
+      assertRpcOk(data);
       loadLoans();
     } catch (e) {
       notifyError(localizeError(e, t, 'panel.loan.extendError'), e);

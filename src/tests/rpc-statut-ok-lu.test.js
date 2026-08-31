@@ -37,6 +37,61 @@
 // c'est ainsi qu'`advance_reservation` est sortie (elle rend un `integer` et
 // lève : il n'y a aucun `ok` à lire).
 //
+// L'ANGLE MORT A ÉTÉ MESURÉ, PAS SEULEMENT NOMMÉ — ET IL CACHAIT DEUX AUTRES
+// SITES (même jour, en production).
+//
+// Ci-dessus, deux façades sont citées parce qu'on les connaissait. Savoir s'il
+// n'y en a que deux demande de le demander à la base : sans quoi on referme la
+// liste sur une impression, ce que le corollaire d'au-dessus interdit
+// précisément. La délégation se suit donc par récursion, sur les 259 noms
+// réellement appelés par le front (`.rpc('…')` relevés dans `src/`) :
+//
+//   with recursive chaine(racine, niveau, courant, pose_ok, suite) as (
+//     select f.sch||'.'||f.nom, 0, f.sch||'.'||f.nom, f.pose_ok, f.delegue
+//       from _fn f join _appeles a on a.nom = f.nom
+//      where f.sch in ('public','api') and f.ret = 'jsonb'
+//     union all
+//     select c.racine, c.niveau+1, g.sch||'.'||g.nom, g.pose_ok, g.delegue
+//       from chaine c join _fn g on g.sch||'.'||g.nom = c.suite
+//      where c.niveau < 5)
+//   select racine, max(niveau), string_agg(courant, ' -> ' order by niveau)
+//     from chaine group by racine
+//    having max(niveau) > 0 and bool_or(pose_ok);
+//
+//   -- `_fn` : delegue = substring(prosrc from
+//   --   '(?i)return[[:space:]]+([a-z0-9_]+\.[a-z0-9_]+)[[:space:]]*\(')
+//
+// CINQ façades portent un `ok` dans leur chaîne, pas deux :
+//
+//   api.renew_my_loan               → fn_renew_my_loan            → fn_v2_extend_core
+//   api.renew_my_loan_item          → fn_renew_my_loan_item       → fn_v2_extend_core
+//   api.extend_loan_as_library      → fn_v2_extend_emprestimo_once      → (idem)
+//   api.extend_loan_item_as_library → fn_v2_extend_emprestimo_item_once → (idem)
+//   public.fn_import_dispatch       → ingest.fn_dispatch_partner_catalog_import
+//
+// Les deux `extend_*_as_library` MANQUAIENT, et pas comme garde de contrat :
+// `fn_v2_extend_core` ne lève jamais, elle rend `ok:false` sur onze motifs, et
+// son `ok` final vaut `v_any_renewed`. Les deux appels du Painel s'écrivaient
+// `const { error } = …` — la charge utile jetée à la destructuration, le `ok`
+// INATTEIGNABLE. C'est mot pour mot `renew_my_loan`, le cas qui a fondé
+// DOC-SILENCE-1, dans sa version STAFF : une bibliothécaire prolongeait un prêt
+// en retard ou réservé par quelqu'un d'autre, rien ne levait, la liste se
+// rafraîchissait, et l'échéance n'avait pas bougé. Repris ici.
+//
+// Quatre autres façades délèguent sans qu'aucun `ok` n'apparaisse dans leur
+// chaîne — `fn_import_promote`, `fn_import_reconcile_duplicates`,
+// `fn_import_set_editorial`, `fn_set_retention_policy` : elles lèvent sur refus
+// et rendent une charge utile sans statut. Les inscrire créerait une dette
+// imaginaire, l'erreur exacte commise sur `advance_reservation`.
+//
+// DEUX PIÈGES DE LA REQUÊTE, PAYÉS COMPTANT. (1) Un premier jet écrivait la
+// délégation `[a-z_]+\.[a-z_]+` : il manquait `fn_v2_extend_core`, dont le nom
+// porte un CHIFFRE, donc les quatre chaînes de prêt d'un coup — la requête
+// censée mesurer l'angle mort avait le sien. (2) Suivre un seul niveau ne
+// suffit pas : ces mêmes chaînes font DEUX sauts. D'où la récursion. Une liste
+// tirée d'une requête hérite des angles morts de la requête ; c'est pour ça
+// qu'on écrit la requête ici, et non son seul résultat.
+//
 // LA DETTE EST NOMMÉE, PAS CACHÉE — et elle est vide depuis le 31/08/2026.
 // Les quatre sites déclarés ont été repris le jour même, après vérification EN
 // BASE de ce que chaque fonction rend réellement. Trois relevaient bien de la
@@ -66,6 +121,10 @@ import { join } from 'node:path';
 // correct. L'inscrire ici obligeait à déclarer une dette qui n'existait pas.
 const RPC_A_STATUT = new Set([
   'advance_consulta', 'cancel_consulta_as_reader',
+  // Ajoutées le 31/08/2026 : façades à DEUX sauts vers `fn_v2_extend_core`,
+  // invisibles aux deux requêtes précédentes (voir l'en-tête). Pendant staff de
+  // `renew_my_loan`, et défaut vivant au moment de l'ajout.
+  'extend_loan_as_library', 'extend_loan_item_as_library',
   'create_consulta_local', 'dismiss_consulta_cancelled', 'reply_consulta_schedule',
   'renew_my_loan', 'discard_book_cascade', 'freeze_account', 'unfreeze_account',
   'restrict_member', 'unrestrict_member', 'get_member_restriction',
