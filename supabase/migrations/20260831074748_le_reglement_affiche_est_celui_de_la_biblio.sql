@@ -39,7 +39,33 @@
 
 BEGIN;
 
-CREATE OR REPLACE VIEW public.v_library_notification_context AS
+-- CORRECTIF DU 31/08, une heure apres la premiere version de ce fichier.
+--
+-- `WITH (security_invoker = true)` N'ETAIT PAS LA, et son absence n'est pas
+-- neutre : `CREATE OR REPLACE VIEW` REINITIALISE les options de la vue quand la
+-- clause WITH est omise. La vue etait `security_invoker` depuis le baseline ;
+-- ma premiere version l'a donc fait retomber en SECURITY DEFINER — c'est-a-dire
+-- lue avec les droits du proprietaire, RLS des tables sous-jacentes contournee.
+--
+-- Or cette vue est accordee en SELECT a `anon` et `authenticated`. Pendant une
+-- heure, n'importe quel visiteur NON CONNECTE pouvait donc lire, pour chaque
+-- bibliotheque du reseau : adresse de reponse, adresse de notification admin,
+-- adresse du rapport hebdomadaire, adresse des alertes graves. L'annuaire
+-- complet des contacts, exactement le trou que l'audit de juillet avait ferme.
+--
+-- Referme en production par un ALTER VIEW des la detection ; la clause est
+-- posee ici pour que le rejeu depuis zero ne repasse jamais par l'etat definer.
+--
+-- LA LECON : ajouter une colonne a une vue n'est pas une operation anodine.
+-- CREATE OR REPLACE preserve les DROITS mais pas les OPTIONS — donc il faut
+-- reecrire la clause WITH a chaque fois, sous peine de changer le modele de
+-- securite en croyant ne toucher qu'a la liste des colonnes.
+--
+-- C'est le T7 de tests/sql/grants_herites_tests.sql qui l'a vu, en refusant
+-- toute vue hors des policies lisible par anon ou authenticated. Le garde-fou
+-- a fait exactement son travail.
+CREATE OR REPLACE VIEW public.v_library_notification_context
+WITH (security_invoker = true) AS
  SELECT l.id AS library_id,
     l.slug,
     l.name AS library_name,
@@ -118,6 +144,16 @@ BEGIN
      AND column_name IN ('regulation_bucket','regulation_path');
   IF v_n <> 2 THEN
     RAISE EXCEPTION 'les deux colonnes de reglement ne sont pas exposees (%)', v_n;
+  END IF;
+
+  -- Le modele de securite de la vue, garde ici parce que c'est precisement ce
+  -- qu'une premiere version de ce fichier avait perdu sans le dire.
+  IF coalesce((SELECT option_value FROM pg_class c
+                 JOIN pg_namespace ns ON ns.oid = c.relnamespace
+                 CROSS JOIN pg_options_to_table(c.reloptions)
+                WHERE ns.nspname='public' AND c.relname='v_library_notification_context'
+                  AND option_name='security_invoker'), 'false') <> 'true' THEN
+    RAISE EXCEPTION 'la vue a perdu security_invoker : elle serait lue avec les droits du proprietaire, RLS contournee, alors qu''elle est accordee a anon';
   END IF;
 
   -- Une biblio par ligne, toujours : le LATERAL ne doit pas dupliquer.
