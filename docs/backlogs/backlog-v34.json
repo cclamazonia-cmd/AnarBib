@@ -1522,6 +1522,17 @@
           "fr": "**Clos le 31/08 au soir — et le constat était faux à moitié.** Les correspondances FICEDL étaient déjà exposées en SKOS : `skosExport.js` émettait `skos:exactMatch`/`closeMatch` depuis le 30/06, alimenté par `api.thesaurus_export_v1`. Ce qui manquait n'était pas l'export, c'était **l'adresse** — le fichier n'existait qu'en bouton de téléchargement, introuvable pour une machine. Livré : `scripts/build-thesaurus-skos.mjs` sur le patron de l'instantané du catalogue (prebuild, RPC `anon`, même sérialiseur que le bouton — aucune divergence possible, échec silencieux qui ne casse pas le build). **Vérifié en ligne après déploiement** : `app.anarbib.org/thesaurus.ttl` répond 200 en `text/turtle` (et `.jsonld` aussi), 51 alignements, `exactMatch` distinct de `closeMatch`, rien d'affirmé sur la hiérarchie FICEDL (le vocabulaire ne connaît qu'`exact` et `close`, et c'est voulu tant que H2 attend). Les 47 liens restants portent sur les 35 sujets SOLIDAIRES encore `proposto` : ils entreront dans le fichier à leur promotion, sans un geste. Commit `472db13b`.",
           "pt": "**Encerrado em 31/08 à noite — e o constato estava meio errado.** As correspondências já eram exportadas em SKOS (`exactMatch`/`closeMatch` desde 30/06); o que faltava era o **endereço** — só existia um botão de download. Entregue: `build-thesaurus-skos.mjs` no padrão do snapshot do catálogo, mesmo serializador que o botão. **Verificado online**: `app.anarbib.org/thesaurus.ttl` responde 200 em `text/turtle`, 51 alinhamentos, `exactMatch` distinto de `closeMatch`, nada sobre a hierarquia FICEDL. Os 47 vínculos restantes esperam a promoção dos 35 assuntos `proposto`. Commit `472db13b`."
         }
+      ],
+      [
+        "F2",
+        {
+          "fr": "Corriger le gabarit des courriels d'alerte d'exploitation",
+          "pt": "Corrigir o template dos e-mails de alerta de operação"
+        },
+        {
+          "fr": "**Clos le 31/08 au soir, livré et éprouvé en conditions réelles dans la même soirée.** Les alertes d'exploitation partaient avec le pied de page lectrice — « En cas de question, contacte la bibliothèque » suivi du téléphone : on disait à l'opérateur·rice de se téléphoner à soi-même. Livré : `footerOps` dans `layout.ts` (d'où vient l'alerte, où regarder, et OPS-8 — rien à acquitter, l'incident se clôt seul), trois clés dans les dix locales, branché dans `alerter()` de `health-probe`, l'entonnoir unique des huit envois. **Le piège attrapé en chemin** : la version texte de `renderEmail` fabriquait son propre pied (téléphone compris) sans regarder `footerHtml` — couverte par `footerTextLines`, gardée dans les deux sens par `mail-footer-ops.test.js`. **Éprouvé sur une alerte réelle** : incident d'essai `#9` ouvert à la main à 18 h 40 UTC (raison traçant l'essai dans la ligne même), refermé par la sonde elle-même à 18 h 45 — quatre minutes, zéro acquittement, exactement ce que le pied de page promet — et les deux courriels **reçus et relus par Xavier**, qui n'a pas écrit le code. Commits `4b1d8a86` et `12d4b760`.",
+          "pt": "**Encerrado em 31/08 à noite, entregue e provado em condições reais na mesma noite.** Os alertas de operação partiam com o rodapé de leitora — « entre em contato com a biblioteca » e o telefone: dizia-se à pessoa operadora para telefonar a si mesma. Entregue: `footerOps` (origem do alerta, onde olhar, OPS-8 — nada a confirmar, o incidente fecha sozinho), dez locales, ligado no funil único dos oito envios. **A armadilha pega no caminho**: a versão texto de `renderEmail` fabricava seu próprio rodapé sem olhar o `footerHtml` — coberta por `footerTextLines`, guardada por teste. **Provado num alerta real**: incidente de ensaio `#9` aberto à mão às 18h40 UTC, fechado pela própria sonda às 18h45 — quatro minutos, zero confirmação — e os dois e-mails **recebidos e relidos por Xavier**, que não escreveu o código. Commits `4b1d8a86` e `12d4b760`."
+        }
       ]
     ]
   },
@@ -3478,54 +3489,6 @@
       "verif": {
         "fr": "31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit.",
         "pt": "31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria."
-      }
-    },
-    {
-      "id": "F2",
-      "d": "F",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Corriger le gabarit des courriels d'alerte d'exploitation",
-        "pt": "Corrigir o template dos e-mails de alerta de operação"
-      },
-      "v": {
-        "fr": "Les courriels d'alerte d'exploitation — sauvegarde en échec, incident de sonde — utilisent le gabarit destiné aux lectrices. Ils finissent donc par « contacte la bibliothèque » suivi d'un numéro de téléphone.",
-        "pt": "Os e-mails de alerta de operação — backup em falha, incidente de sonda — usam o template destinado às leitoras. Terminam portanto com «entre em contato com a biblioteca» seguido de um número de telefone."
-      },
-      "w": {
-        "fr": "Un gabarit d'exploitation distinct : pas de pied de page destiné au public, la commande à lancer, et le lien vers la section du runbook.",
-        "pt": "Um template de operação distinto: sem rodapé destinado ao público, o comando a executar, e o link para a seção do runbook."
-      },
-      "y": {
-        "fr": "**À corriger avant qu'un second administrateur réseau existe.** Aujourd'hui une seule personne reçoit ces alertes et sait les lire ; le jour où **A1** aboutit, elles partent à quelqu'un qui découvrira un courriel d'incident lui conseillant d'appeler la bibliothèque.",
-        "pt": "**A corrigir antes que um segundo administrador de rede exista.** Hoje uma só pessoa recebe esses alertas e sabe lê-los; no dia em que **A1** for concluído, eles chegarão a alguém que descobrirá um e-mail de incidente aconselhando a ligar para a biblioteca."
-      },
-      "f": {
-        "fr": [
-          "~~Un gabarit d'exploitation existe, distinct du gabarit lectrice~~ — `footerOps` (HTML **et** version texte), trois clés dans les dix locales, livré et déployé le 31/08.",
-          "Une alerte de test a été reçue et relue par quelqu'un qui n'a pas écrit le code."
-        ],
-        "pt": [
-          "~~Um gabarito de operação existe, distinto do gabarito de leitora~~ — `footerOps` (HTML **e** versão texto), entregue em 31/08.",
-          "Um alerta de teste foi recebido e relido por alguém que não escreveu o código."
-        ]
-      },
-      "dep": {
-        "fr": "Doit précéder l'aboutissement de **A1**.",
-        "pt": "Deve preceder a conclusão de **A1**."
-      },
-      "r": [
-        "RUNBOOK_exploitation_v0.3 §7",
-        "PLAN_DE_MARCHE §8"
-      ],
-      "verif": {
-        "fr": "31/08 — lu dans le code : `health-probe/index.ts` passe par `renderEmail` + `footerPadrao` de `_shared/mail/layout.ts` — le gabarit lectrice, qui pousse le libellé téléphone (`layout.ts:28`). Aucun gabarit d'exploitation dans `_shared/mail/`. **Livré le soir même** (commit `4b1d8a86`, CI verte) : `footerOps` dans `layout.ts` — d'où vient l'alerte, où regarder, et OPS-8 (« rien à acquitter, l'incident se clôt seul ») — branché dans `alerter()` de `health-probe`, l'entonnoir unique des huit envois d'alerte. Le piège attrapé en chemin : la **version texte** de `renderEmail` fabriquait son propre pied (téléphone compris) sans regarder `footerHtml` — couverte par `footerTextLines`, gardée dans les deux sens par `mail-footer-ops.test.js` (téléphone absent du pied ops, présent dans le pied lectrice). Vérifié dans le bundle déployé : `footerOps` présent, `footerPadrao(NETWORK_CTX)` disparu.",
-        "pt": "31/08 — lido no código: `health-probe` usa o gabarito de leitora (`renderEmail` + `footerPadrao`, com telefone). Nenhum gabarito de operação existe. **Entregue na mesma noite** (commit `4b1d8a86`): `footerOps` em `layout.ts`, ligado em `alerter()` de `health-probe`. A armadilha pega no caminho: a **versão texto** de `renderEmail` fabricava seu próprio rodapé (telefone incluído) sem olhar o `footerHtml` — coberta por `footerTextLines`, guardada por teste nos dois sentidos. Verificado no bundle implantado."
       }
     },
     {
