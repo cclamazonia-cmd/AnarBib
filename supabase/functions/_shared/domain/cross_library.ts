@@ -47,6 +47,11 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { tr, normalizeLocale, qualifiantEtape } from "../i18n/cross-library-strings.ts";
+// La salutation nominative vient du fichier i18n central, qui la porte deja
+// dans les dix locales. Le recapitulatif hebdomadaire dit « Ola! » tout court
+// parce qu'il s'adresse a une coordination ; celui-ci ecrit a une personne
+// nommee, comme le reste de la pile courriel.
+import { greeting } from "../i18n/mail-strings.ts";
 
 // Identique au récapitulatif : expéditeur réseau, pas d'identité de biblio.
 const NETWORK_CTX = {
@@ -144,7 +149,7 @@ export async function handleCrossLibraryCriticalAction(payload: Record<string, u
       locale,
       preheader: titre,
       title: titre,
-      greeting: tr(locale, "greeting"),
+      greeting: greeting(locale, p.first_name || undefined),
       introHtml,
       details,
       footerHtml: footerPadrao(NETWORK_CTX, locale),
