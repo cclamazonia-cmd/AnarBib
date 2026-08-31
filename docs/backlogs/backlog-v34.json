@@ -1710,8 +1710,8 @@
         "tests/sql/paquetA_profils_tests.sql TEST 13 et TEST 15"
       ],
       "verif": {
-        "fr": "31/08 — lots 1, 2 et 3 livrés et vérifiés en base ; `pg_default_acl` relevé avant écriture (deux entrées, pas une), et l'absence d'ACL nulle sur les 621 fonctions vérifiée pour s'assurer que la fermeture ne retombe pas sur `PUBLIC`. Reste le tri des fonctions ouvertes à `authenticated`, qui est l'item **B14**.",
-        "pt": "31/08 — lotes 1, 2 e 3 entregues e verificados em base. Resta a triagem de `authenticated`, item **B14**."
+        "fr": "31/08 — lots 1, 2 et 3 livrés et vérifiés en base ; `pg_default_acl` relevé avant écriture (deux entrées, pas une), et l'absence d'ACL nulle sur les 621 fonctions vérifiée pour s'assurer que la fermeture ne retombe pas sur `PUBLIC`. Reste le tri des fonctions ouvertes à `authenticated`, qui est l'item **B14**. **01/09 — nuance remesurée** : des deux entrées, seule celle `FOR ROLE postgres` est retournée — l'entrée `FOR ROLE supabase_admin` accorde toujours `EXECUTE` à `anon`. Les migrations passent par `postgres`, donc tout ce que le projet crée naît fermé ; une fonction créée par `supabase_admin` (plateforme, extensions) naîtrait encore ouverte. B14 devra traiter **les deux** entrées.",
+        "pt": "31/08 — lotes 1, 2 e 3 entregues e verificados em base. Resta a triagem de `authenticated`, item **B14**. **01/09 — nuance remedida**: das duas entradas, só a `FOR ROLE postgres` foi revertida — a `FOR ROLE supabase_admin` ainda concede `EXECUTE` a `anon`. As migrações passam por `postgres`; uma função criada por `supabase_admin` ainda nasceria aberta. B14 deverá tratar **as duas** entradas."
       }
     },
     {
@@ -1767,8 +1767,8 @@
         "tests/sql/grants_herites_tests.sql T11"
       ],
       "verif": {
-        "fr": "31/08 — relu à la lumière du lot 3 de **B2**, livré le jour même : le défaut de `public` sur les fonctions porte désormais `postgres`, `authenticated`, `service_role` — `anon` retiré, la ligne `pg_default_acl` vérifiée présente après coup. Le comptage du 30/08 (138 de `api` sur 142, 326 de `public` sur 498) n'a pas été refait ; **l'audit lui-même reste entier**.",
-        "pt": "31/08 — relido à luz do lote 3 de **B2**, entregue no mesmo dia: o padrão de `public` traz agora `postgres`, `authenticated`, `service_role`. A contagem de 30/08 não foi refeita; **a auditoria em si continua inteira**."
+        "fr": "31/08 — relu à la lumière du lot 3 de **B2**, livré le jour même : le défaut de `public` sur les fonctions porte désormais `postgres`, `authenticated`, `service_role` — `anon` retiré, la ligne `pg_default_acl` vérifiée présente après coup. Le comptage du 30/08 (138 de `api` sur 142, 326 de `public` sur 498) n'a pas été refait ; **l'audit lui-même reste entier**. **01/09** : `pg_default_acl` relu — l'entrée `FOR ROLE supabase_admin` porte toujours `EXECUTE` pour `anon` et `authenticated`. Le retournement de B2 ne couvre que ce que `postgres` crée : traiter les **deux** entrées, et éviter deux fois le piège de l'entrée vidée.",
+        "pt": "31/08 — relido à luz do lote 3 de **B2**, entregue no mesmo dia: o padrão de `public` traz agora `postgres`, `authenticated`, `service_role`. A contagem de 30/08 não foi refeita; **a auditoria em si continua inteira**. **01/09**: `pg_default_acl` relido — a entrada `FOR ROLE supabase_admin` ainda traz `EXECUTE` para `anon` e `authenticated`. Tratar as **duas** entradas, evitando duas vezes a armadilha da entrada esvaziada."
       }
     },
     {

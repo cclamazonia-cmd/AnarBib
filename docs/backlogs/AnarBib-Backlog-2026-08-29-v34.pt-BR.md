@@ -402,7 +402,7 @@ Relidas uma a uma, as 36 dividem-se em três grupos muito desiguais:
 
 **Lote 3 entregue em 31/08 — a causa está invertida.** `ALTER DEFAULT PRIVILEGES … REVOKE EXECUTE ON FUNCTIONS FROM anon`: uma função criada em `public` **nasce agora fechada a `anon`**. Nenhuma das 621 existentes mudou. **Armadilha nomeada**: nunca revogar *todos* os papéis do defeito — uma entrada `pg_default_acl` vazia é **apagada**, e o defeito nativo `PUBLIC=X` regressa. Guardado pelo `T11`.
 
-*Verificado : 31/08 — lotes 1, 2 e 3 entregues e verificados em base. Resta a triagem de `authenticated`, item **B14**.*
+*Verificado : 31/08 — lotes 1, 2 e 3 entregues e verificados em base. Resta a triagem de `authenticated`, item **B14**. **01/09 — nuance remedida**: das duas entradas, só a `FOR ROLE postgres` foi revertida — a `FOR ROLE supabase_admin` ainda concede `EXECUTE` a `anon`. As migrações passam por `postgres`; uma função criada por `supabase_admin` ainda nasceria aberta. B14 deverá tratar **as duas** entradas.*
 
 **O que é.** A regra, corrigida por este levantamento: **está aberto a `anon` o que serve uma página pública, ou o que uma policy avaliada por `anon` chama. Nada mais — e sobretudo não por padrão.**
 
@@ -453,7 +453,7 @@ Como para `anon` (item **B2**), este número é antes de tudo o efeito de um pad
 
 O trabalho real de B14 não é um `ALTER`: é a auditoria das 138 funções de `api`.
 
-*Verificado : 31/08 — relido à luz do lote 3 de **B2**, entregue no mesmo dia: o padrão de `public` traz agora `postgres`, `authenticated`, `service_role`. A contagem de 30/08 não foi refeita; **a auditoria em si continua inteira**.*
+*Verificado : 31/08 — relido à luz do lote 3 de **B2**, entregue no mesmo dia: o padrão de `public` traz agora `postgres`, `authenticated`, `service_role`. A contagem de 30/08 não foi refeita; **a auditoria em si continua inteira**. **01/09**: `pg_default_acl` relido — a entrada `FOR ROLE supabase_admin` ainda traz `EXECUTE` para `anon` e `authenticated`. Tratar as **duas** entradas, evitando duas vezes a armadilha da entrada esvaziada.*
 
 **O que é.** O critério não é *«é `SECURITY DEFINER`?»* — todas são, por construção. É: **o que pode pedir uma desconhecida que apenas se cadastrou?** Uma conta `authenticated` obtém-se em três cliques; não prova pertencimento a nenhuma biblioteca.
 

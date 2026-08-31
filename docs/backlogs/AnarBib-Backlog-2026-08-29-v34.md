@@ -408,7 +408,7 @@ Relues une par une, les 36 se répartissent en trois groupes très inégaux :
 
 **Ce qui change pour la suite** : une fonction servant une page publique doit porter un `GRANT EXECUTE … TO anon` explicite (`DOC-OBJ-2`, corollaire). Une ligne oubliée casse la page avec `permission denied for function` — visible et réparable, jamais silencieux. Gardé par le `T11` de `grants_herites_tests.sql`, dans les deux sens.
 
-*Vérifié : 31/08 — lots 1, 2 et 3 livrés et vérifiés en base ; `pg_default_acl` relevé avant écriture (deux entrées, pas une), et l'absence d'ACL nulle sur les 621 fonctions vérifiée pour s'assurer que la fermeture ne retombe pas sur `PUBLIC`. Reste le tri des fonctions ouvertes à `authenticated`, qui est l'item **B14**.*
+*Vérifié : 31/08 — lots 1, 2 et 3 livrés et vérifiés en base ; `pg_default_acl` relevé avant écriture (deux entrées, pas une), et l'absence d'ACL nulle sur les 621 fonctions vérifiée pour s'assurer que la fermeture ne retombe pas sur `PUBLIC`. Reste le tri des fonctions ouvertes à `authenticated`, qui est l'item **B14**. **01/09 — nuance remesurée** : des deux entrées, seule celle `FOR ROLE postgres` est retournée — l'entrée `FOR ROLE supabase_admin` accorde toujours `EXECUTE` à `anon`. Les migrations passent par `postgres`, donc tout ce que le projet crée naît fermé ; une fonction créée par `supabase_admin` (plateforme, extensions) naîtrait encore ouverte. B14 devra traiter **les deux** entrées.*
 
 **Ce que c'est.** La règle, corrigée par ce relevé : **est ouvert à `anon` ce qui sert une page publique, ou ce qu'une policy évaluée par `anon` appelle. Rien d'autre — et surtout pas par défaut.**
 
@@ -459,7 +459,7 @@ Comme pour `anon` (item **B2**), ce nombre est d'abord l'effet d'un défaut de s
 
 Le travail réel de B14 n'est donc pas un `ALTER` — c'est l'audit des 138 fonctions de `api`, une par une. Le défaut n'y sera retourné, si jamais il l'est, qu'à la fin.
 
-*Vérifié : 31/08 — relu à la lumière du lot 3 de **B2**, livré le jour même : le défaut de `public` sur les fonctions porte désormais `postgres`, `authenticated`, `service_role` — `anon` retiré, la ligne `pg_default_acl` vérifiée présente après coup. Le comptage du 30/08 (138 de `api` sur 142, 326 de `public` sur 498) n'a pas été refait ; **l'audit lui-même reste entier**.*
+*Vérifié : 31/08 — relu à la lumière du lot 3 de **B2**, livré le jour même : le défaut de `public` sur les fonctions porte désormais `postgres`, `authenticated`, `service_role` — `anon` retiré, la ligne `pg_default_acl` vérifiée présente après coup. Le comptage du 30/08 (138 de `api` sur 142, 326 de `public` sur 498) n'a pas été refait ; **l'audit lui-même reste entier**. **01/09** : `pg_default_acl` relu — l'entrée `FOR ROLE supabase_admin` porte toujours `EXECUTE` pour `anon` et `authenticated`. Le retournement de B2 ne couvre que ce que `postgres` crée : traiter les **deux** entrées, et éviter deux fois le piège de l'entrée vidée.*
 
 **Ce que c'est.** Le critère n'est pas *« est-elle `SECURITY DEFINER` ? »* — elles le sont toutes, par construction. C'est : **que peut demander une inconnue qui s'est simplement inscrite ?** Un compte `authenticated` s'obtient en trois clics ; il ne prouve l'appartenance à aucune bibliothèque.
 
