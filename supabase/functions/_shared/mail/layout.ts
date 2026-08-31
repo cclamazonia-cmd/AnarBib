@@ -30,6 +30,24 @@ export function footerPadrao(ctx, locale = null) {
   else p.push(tMail(locale, "layout.footerContact"));
   return p.join("<br>");
 }
+// F2 (01/09/2026). Les alertes d'exploitation — sonde en échec, sauvegarde
+// incohérente — partaient avec le pied de page lectrice : « En cas de
+// question, contacte la bibliothèque » suivi du téléphone. Dire à
+// l'opérateur·rice de se téléphoner à soi-même n'est pas un pied de page,
+// c'est un bug de destinataire. Celui-ci dit d'où vient l'alerte, où
+// regarder, et rappelle OPS-8 : rien à acquitter, l'incident se clôt seul au
+// retour au vert. Rendre AUSSI `textLines` n'est pas du zèle : la version
+// texte de renderEmail fabrique son propre pied (téléphone compris) sans
+// regarder `footerHtml` — passer l'un sans l'autre remettrait le téléphone
+// dans la moitié des clients mail.
+export function footerOps(locale = "fr") {
+  const lignes = [
+    tMail(locale, "layout.opsSource"),
+    tMail(locale, "layout.opsWhereToLook"),
+    tMail(locale, "layout.opsAck"),
+  ];
+  return { html: lignes.map((l) => esc(l)).join("<br>"), textLines: lignes };
+}
 export function renderEmail(opts) {
   const locale = opts.locale || null;
   const r = resolveMailRouting(opts.context, locale);
@@ -69,10 +87,16 @@ export function renderEmail(opts) {
   tl.push(opts.introHtml.replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>\s*<p>/gi, "\n\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim(), "");
   if (opts.details?.length) for (const d of opts.details)tl.push(`${d.label}: ${d.value}`);
   tl.push("");
-  // Version texte : meme regle, meme source que la version HTML.
-  const regTxt = regulationUrl(opts.context);
-  if (regTxt) tl.push(`${tMail(locale, "layout.regimentoLabel")}: ${regTxt}`);
-  if (LIBRARIAN_PHONE) tl.push(`${tMail(locale, "layout.phoneLabel")}: ${LIBRARIAN_PHONE}`);
+  // Version texte : meme regle, meme source que la version HTML. Un pied
+  // d'exploitation (footerTextLines) REMPLACE reglement et telephone — les
+  // deux versions doivent dire la meme chose (F2).
+  if (opts.footerTextLines?.length) {
+    for (const l of opts.footerTextLines) tl.push(l);
+  } else {
+    const regTxt = regulationUrl(opts.context);
+    if (regTxt) tl.push(`${tMail(locale, "layout.regimentoLabel")}: ${regTxt}`);
+    if (LIBRARIAN_PHONE) tl.push(`${tMail(locale, "layout.phoneLabel")}: ${LIBRARIAN_PHONE}`);
+  }
   tl.push(tMail(locale, "layout.footerText"));
   return {
     html,

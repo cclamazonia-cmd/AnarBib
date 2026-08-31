@@ -670,6 +670,47 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Κράτησε αυτό το μήνυμα."
   },
 
+  // ===== F2 (01/09/2026) — pied de page d'exploitation =====
+  // Les alertes de la sonde partaient avec le pied lectrice (« contacte la
+  // bibliothèque » + téléphone) : un bug de destinataire, pas de ton. Ces
+  // trois lignes disent d'où vient l'alerte, où regarder, et OPS-8.
+  "layout.opsSource": {
+    "pt-BR": "Alerta de operação, emitido pela sonda health-probe (controle automático a cada 5 minutos).",
+    fr: "Alerte d'exploitation, émise par la sonde health-probe (contrôle automatique toutes les 5 minutes).",
+    es: "Alerta de operación, emitida por la sonda health-probe (control automático cada 5 minutos).",
+    en: "Operations alert, issued by the health-probe check (automatic, every 5 minutes).",
+    it: "Avviso operativo, emesso dalla sonda health-probe (controllo automatico ogni 5 minuti).",
+    de: "Betriebsalarm, ausgelöst von der Sonde health-probe (automatische Prüfung alle 5 Minuten).",
+    ca: "Alerta d'operació, emesa per la sonda health-probe (control automàtic cada 5 minuts).",
+    eo: "Funkciiga averto, sendita de la sondilo health-probe (aŭtomata kontrolo ĉiujn 5 minutojn).",
+    nl: "Beheermelding, afgegeven door de health-probe-controle (automatisch, elke 5 minuten).",
+    el: "Ειδοποίηση λειτουργίας από τον έλεγχο health-probe (αυτόματα, κάθε 5 λεπτά)."
+  },
+  "layout.opsWhereToLook": {
+    "pt-BR": "Onde olhar: a tabela service_health_incidents, os registros backup_heartbeats e o diário da máquina que hospeda os backups.",
+    fr: "Où regarder : la table service_health_incidents, les témoins backup_heartbeats, et le journal du poste qui héberge les sauvegardes.",
+    es: "Dónde mirar: la tabla service_health_incidents, los registros backup_heartbeats y el diario de la máquina que aloja las copias.",
+    en: "Where to look: the service_health_incidents table, the backup_heartbeats records, and the journal of the machine hosting the backups.",
+    it: "Dove guardare: la tabella service_health_incidents, i registri backup_heartbeats e il diario della macchina che ospita i backup.",
+    de: "Wo nachsehen: die Tabelle service_health_incidents, die backup_heartbeats-Einträge und das Journal des Rechners, der die Sicherungen trägt.",
+    ca: "On mirar: la taula service_health_incidents, els registres backup_heartbeats i el diari de la màquina que allotja les còpies.",
+    eo: "Kie rigardi: la tabelo service_health_incidents, la registroj backup_heartbeats, kaj la protokolo de la maŝino kiu gastigas la savkopiojn.",
+    nl: "Waar te kijken: de tabel service_health_incidents, de backup_heartbeats-records en het journaal van de machine met de back-ups.",
+    el: "Πού να κοιτάξεις: στον πίνακα service_health_incidents, στις εγγραφές backup_heartbeats και στο ημερολόγιο του μηχανήματος με τα αντίγραφα."
+  },
+  "layout.opsAck": {
+    "pt-BR": "Nada a confirmar: o incidente se fecha sozinho quando tudo volta ao verde, e uma mensagem de incidente fechado virá em seguida.",
+    fr: "Rien à acquitter : l'incident se clôt seul au retour au vert, un message « incident clos » suivra.",
+    es: "Nada que confirmar: el incidente se cierra solo al volver al verde, y seguirá un mensaje de incidente cerrado.",
+    en: "Nothing to acknowledge: the incident closes itself once checks are green again, and an incident-closed message will follow.",
+    it: "Niente da confermare: l'incidente si chiude da solo al ritorno al verde, seguirà un messaggio di incidente chiuso.",
+    de: "Nichts zu quittieren: der Vorfall schließt sich von selbst, sobald alles wieder grün ist; eine Nachricht über den geschlossenen Vorfall folgt.",
+    ca: "Res a confirmar: l'incident es tanca sol quan tot torna al verd, i seguirà un missatge d'incident tancat.",
+    eo: "Nenio konfirmenda: la incidento fermiĝas mem kiam ĉio reverdiĝas, kaj mesaĝo pri fermita incidento sekvos.",
+    nl: "Niets te bevestigen: het incident sluit zichzelf zodra alles weer groen is; een bericht over het gesloten incident volgt.",
+    el: "Τίποτα προς επιβεβαίωση: το συμβάν κλείνει μόνο του όταν όλα ξαναγίνουν πράσινα· θα ακολουθήσει μήνυμα ότι το συμβάν έκλεισε."
+  },
+
   // ===== Chantier i18n layout 2B (18/05/2026) — labels footer générique =====
   "layout.phoneLabel": {
     "pt-BR": "Telefone",

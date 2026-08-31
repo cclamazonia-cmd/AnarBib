@@ -19,7 +19,7 @@
 // notify-security-notice.
 
 import { supabaseAdmin } from '../_shared/core/env.ts';
-import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
+import { renderEmail, footerOps } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
 
 const BASE = (Deno.env.get('SUPABASE_URL') ?? '').replace(/\/+$/, '');
@@ -172,11 +172,15 @@ async function destinataires() {
 
 async function alerter(sujet: string, titre: string, corpsHtml: string) {
   const cibles = await destinataires();
+  // F2 : pied d'exploitation, pas le pied lectrice — ces messages vont aux
+  // operateur·rices du reseau, pas a une lectrice de bibliotheque.
+  const ops = footerOps('fr');
   const { html, text } = renderEmail({
     preheader: sujet,
     title: titre,
     introHtml: corpsHtml,
-    footerHtml: footerPadrao(NETWORK_CTX, 'fr'),
+    footerHtml: ops.html,
+    footerTextLines: ops.textLines,
     context: NETWORK_CTX,
     locale: 'fr',
   });
