@@ -250,7 +250,6 @@ BEGIN
       ('public.get_accessible_digital_asset_by_id_v2'),
       ('public.get_book_contributors_public'),
       ('public.get_book_primary_public_digital_asset_v2'),
-      ('public.list_catalog_libraries'),
       ('public.user_can_act_as_staff_on_library'),
       ('public.user_can_engage_library')
     ), reelles AS (
