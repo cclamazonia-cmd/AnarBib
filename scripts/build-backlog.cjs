@@ -68,6 +68,30 @@ const slug = (s) => s.toLowerCase().replace(/[^\p{L}\p{N} _-]/gu, '').replace(/ 
 const items = D.items;
 const byDomain = (dk) => items.filter((i) => i.d === dk);
 
+// --------------------------------------------------------------- fraîcheur
+// Combien d'items reposent sur une mesure qui leur est propre, et combien
+// portent encore le relevé du 29/08. Calculé à chaque engendrement : cette
+// ligne ne peut pas vieillir sans se corriger elle-même. Écrite le 31/08,
+// après une journée où quatre constats instruits sur cinq se sont révélés
+// faux ou incomplets — le nombre importe moins que sa visibilité.
+const natKey = (id) => id.replace(/\d+/g, (n) => n.padStart(4, '0'));
+const dates = items.filter((i) => i.verif).map((i) => i.id)
+  .sort((a, b) => natKey(a).localeCompare(natKey(b)));
+const D_TOT = items.length, D_OUI = dates.length, D_NON = D_TOT - D_OUI;
+D.etat.fraicheur = {
+  fr: `**Fraîcheur des constats au ${D.meta.maj || D.meta.date}.** `
+    + `**${D_OUI} items sur ${D_TOT}** portent une vérification datée qui leur est propre `
+    + `(${dates.join(', ')}). Les **${D_NON}** autres reposent encore sur le relevé du ${D.meta.date} `
+    + `et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : `
+    + `il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. `
+    + `Cette ligne est recalculée à chaque engendrement du document.`,
+  pt: `**Frescor dos constatos em ${D.meta.maj || D.meta.date}.** `
+    + `**${D_OUI} itens de ${D_TOT}** trazem uma verificação datada própria `
+    + `(${dates.join(', ')}). Os **${D_NON}** outros ainda repousam sobre o levantamento de ${D.meta.date} `
+    + `e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: `
+    + `é apenas velho, e a diferença vê-se aqui em vez de no uso. `
+    + `Esta linha é recalculada a cada geração do documento.`,
+};
 // ---------------------------------------------------------------- markdown
 function markdown(k) {
   const t = T[k];
@@ -112,7 +136,7 @@ function markdown(k) {
   p(`## ${t.howto}`); p(); p(L(D.sections.howto, k)); p(); p('---'); p();
 
   // photo
-  p(`## ${t.photo}`); p(); p(L(D.etat.photo_intro, k)); p();
+  p(`## ${t.photo}`); p(); p(L(D.etat.photo_intro, k)); p(); p(L(D.etat.fraicheur, k)); p();
   D.etat.photo.forEach((g) => {
     p(`### ${L(g.g, k)}`); p();
     p('| | | |'); p('|---|---:|---|');
@@ -450,6 +474,7 @@ function render(){
 
   if(st.dom==='all'&&st.prio==='all'&&!st.q){
     h+='<h2>'+t.photo+'</h2><p class="note">'+md(L(D.etat.photo_intro,K))+'</p>';
+    h+='<p class="note">'+md(L(D.etat.fraicheur,K))+'</p>';
     D.etat.photo.forEach(g=>{
       h+='<h3>'+L(g.g,K)+'</h3><div class="tbl"><table class="photo"><tbody>';
       g.rows.forEach(r=>{h+='<tr><td>'+md(L(r[0],K))+'</td><td>'+r[1]+'</td><td>'+md(L(r[2],K))+'</td></tr>';});
