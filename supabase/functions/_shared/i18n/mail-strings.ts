@@ -695,6 +695,18 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Reglement",
     el: "Κανονισμός"
   },
+  "layout.regimentoOpen": {
+    "pt-BR": "abrir",
+    fr: "ouvrir",
+    es: "abrir",
+    en: "open",
+    it: "aprire",
+    de: "öffnen",
+    ca: "obrir",
+    eo: "malfermi",
+    nl: "openen",
+    el: "άνοιγμα"
+  },
   "layout.footerText": {
     "pt-BR": "Mensagem automática da biblioteca. Responda apenas se o campo de resposta indicar um contato local.",
     fr: "Message automatique de la bibliothèque. Réponds uniquement si le champ de réponse indique un contact local.",

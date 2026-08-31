@@ -25,6 +25,23 @@ function pubUrl(v) {
     return "";
   }
 }
+// REGLEMENT-PAR-BIBLIO (31/08/2026) — `pubUrl` ci-dessus est cable sur le seau
+// des assets d interface. Le reglement d une bibliotheque vit dans un AUTRE
+// seau public (`library-regimentos-public`), et la vue de contexte annonce
+// lequel : on expose donc un constructeur qui prend le seau en argument.
+// Volontairement sans repli sur un seau par defaut — un chemin sans seau est
+// une donnee incomplete, pas une valeur a deviner.
+export function publicStorageUrl(bucket, path) {
+  const b = String(bucket || "").trim();
+  const k = String(path || "").trim().replace(/^\/+/, "");
+  if (!b || !k) return "";
+  try {
+    const { data } = supabaseAdmin.storage.from(b).getPublicUrl(k);
+    return String(data?.publicUrl || "").trim();
+  } catch {
+    return "";
+  }
+}
 // LOGO-UNE-SOURCE (30/08/2026) — exporte pour que `register` resolve le logo
 // d une biblio EXACTEMENT comme toutes les fonctions notify-*. Elle lisait
 // jusqu ici `libraries.logo_url`, une source a elle seule : pour la BLMF et la

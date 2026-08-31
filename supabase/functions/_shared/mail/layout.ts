@@ -1,13 +1,30 @@
-import { LIBRARIAN_PHONE, REGIMENTO_URL } from "../core/env.ts";
-import { resolveMailRouting } from "../context/library-mail-routing.ts";
+import { LIBRARIAN_PHONE } from "../core/env.ts";
+import { publicStorageUrl, resolveMailRouting } from "../context/library-mail-routing.ts";
 import { esc } from "../shared/format.ts";
 import { tMail } from "../i18n/mail-strings.ts";
 // Chantier i18n layout (2A, 18/05/2026) : footerPadrao et renderEmail acceptent
 // désormais une `locale` pour router toutes les chaînes layout.* via tMail.
 // FOOTER_TEXT env var n'est plus lu (option Q-L2 (b)).
+// REGLEMENT-PAR-BIBLIO (31/08/2026, item F7). Le lien venait d une variable
+// d environnement globale, vide — et ses deux replis n existaient meme pas. La
+// ligne n a donc JAMAIS ete affichee dans un seul message.
+//
+// Elle supposait de surcroit un reglement unique, du reseau. AnarBib n en a pas
+// et n en aura pas : ce sont les bibliotheques qui definissent le leur. Une
+// variable globale ne pouvait pas porter la bonne valeur — au mieux une valeur
+// fausse pour toutes sauf une.
+//
+// Le lien vient desormais du reglement PUBLIE et ACTIF de la bibliotheque,
+// annonce par la vue de contexte (regulation_bucket + regulation_path). Une
+// biblio sans reglement n a pas de ligne — pas une ligne vide, pas un lien
+// mort : rien, ce qui est exact.
+export function regulationUrl(ctx) {
+  return publicStorageUrl(ctx?.regulation_bucket, ctx?.regulation_path);
+}
 export function footerPadrao(ctx, locale = null) {
   const p = [];
-  if (REGIMENTO_URL) p.push(`${esc(tMail(locale, "layout.regimentoLabel"))}: <a href="${esc(REGIMENTO_URL)}" style="color:#fff;text-decoration:underline;">abrir</a>`);
+  const reg = regulationUrl(ctx);
+  if (reg) p.push(`${esc(tMail(locale, "layout.regimentoLabel"))}: <a href="${esc(reg)}" style="color:#fff;text-decoration:underline;">${esc(tMail(locale, "layout.regimentoOpen"))}</a>`);
   if (LIBRARIAN_PHONE) p.push(`${esc(tMail(locale, "layout.phoneLabel"))}: <b>${esc(LIBRARIAN_PHONE)}</b>`);
   if (ctx?.footer_local) p.push(String(ctx.footer_local).trim());
   else p.push(tMail(locale, "layout.footerContact"));
@@ -52,7 +69,9 @@ export function renderEmail(opts) {
   tl.push(opts.introHtml.replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>\s*<p>/gi, "\n\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim(), "");
   if (opts.details?.length) for (const d of opts.details)tl.push(`${d.label}: ${d.value}`);
   tl.push("");
-  if (REGIMENTO_URL) tl.push(`${tMail(locale, "layout.regimentoLabel")}: ${REGIMENTO_URL}`);
+  // Version texte : meme regle, meme source que la version HTML.
+  const regTxt = regulationUrl(opts.context);
+  if (regTxt) tl.push(`${tMail(locale, "layout.regimentoLabel")}: ${regTxt}`);
   if (LIBRARIAN_PHONE) tl.push(`${tMail(locale, "layout.phoneLabel")}: ${LIBRARIAN_PHONE}`);
   tl.push(tMail(locale, "layout.footerText"));
   return {
