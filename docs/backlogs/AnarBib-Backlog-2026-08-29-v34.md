@@ -364,7 +364,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **B14** | Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated` | `P2` | Ouvert |
+| **B14** | Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated` | `P2` | En cours |
 | **B4** | Examiner les quatre tables à RLS sans policy qui ne sont pas du transit | `P2` | Ouvert |
 | **B5** | Résorber les neuf policies qui réévaluent `auth.*()` par ligne | `P2` | À vérifier |
 | **B7** | Départager les homonymes de fonctions entre `ingest` et `public` | `P2` | Ouvert |
@@ -376,7 +376,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### B14 — Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated`
 
-`P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **En cours** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL
 
 **État.** L'autre part des 500 avertissements de l'advisor : le lint 0029, **464 fonctions** — 138 dans `api` sur 142, 326 dans `public` sur 498. L'audit du 18/05 a passé en revue une partie de `public` et fermé cinq failles réelles ; **il ne portait pas sur `api`.**
 
@@ -388,7 +388,7 @@ Comme pour `anon` (item **B2**), ce nombre est d'abord l'effet d'un défaut de s
 
 Le travail réel de B14 n'est donc pas un `ALTER` — c'est l'audit des 138 fonctions de `api`, une par une. Le défaut n'y sera retourné, si jamais il l'est, qu'à la fin.
 
-*Vérifié : 31/08 — relu à la lumière du lot 3 de **B2**, livré le jour même : le défaut de `public` sur les fonctions porte désormais `postgres`, `authenticated`, `service_role` — `anon` retiré, la ligne `pg_default_acl` vérifiée présente après coup. Le comptage du 30/08 (138 de `api` sur 142, 326 de `public` sur 498) n'a pas été refait ; **l'audit lui-même reste entier**. **01/09** : `pg_default_acl` relu — l'entrée `FOR ROLE supabase_admin` porte toujours `EXECUTE` pour `anon` et `authenticated`. Le retournement de B2 ne couvre que ce que `postgres` crée : traiter les **deux** entrées, et éviter deux fois le piège de l'entrée vidée.*
+*Vérifié : 31/08 — relu à la lumière du lot 3 de **B2**, livré le jour même : le défaut de `public` sur les fonctions porte désormais `postgres`, `authenticated`, `service_role` — `anon` retiré, la ligne `pg_default_acl` vérifiée présente après coup. Le comptage du 30/08 (138 de `api` sur 142, 326 de `public` sur 498) n'a pas été refait ; **l'audit lui-même reste entier**. **01/09** : `pg_default_acl` relu — l'entrée `FOR ROLE supabase_admin` porte toujours `EXECUTE` pour `anon` et `authenticated`. Le retournement de B2 ne couvre que ce que `postgres` crée : traiter les **deux** entrées, et éviter deux fois le piège de l'entrée vidée. **01/09 au soir — le lot `api` est entamé, et la première prise est une fuite réelle.** Les 138 recensées et triées (51 à prédicat délégué, 63 à `auth.uid()` direct, 24 sans garde visible) ; la pile « sans garde » passée en entier : 23 délèguent leur garde (le regex ne voyait pas `resolve_managed_library_id`, `user_can_manage_library`, `fn_constitution_guard` — DOC-RECENS-1 appliqué au tri lui-même), et **une seule était vraie** : `get_due_date_for_loan` lisait l'état de cotisation de n'importe quel UUID — la forme exacte de mai, un identifiant en paramètre, une donnée nominative en retour. La garde existait dans la fonction *suivante* ; le bloc fautif s'exécutait avant. **Fuite dormante** (aucune biblio n'a `membership_enabled`), corrigée avant la case à cocher : migration `20260831201011`, suite `b14_api_cotisation_autrui_tests` (4 tests, l'effet et non le code), CI verte, vérifiée en prod. Audit : `AUDIT_execute_authenticated_2026-09-01.md`. Restent les 63 + 51 à lire par paquets, puis `public`.*
 
 **Ce que c'est.** Le critère n'est pas *« est-elle `SECURITY DEFINER` ? »* — elles le sont toutes, par construction. C'est : **que peut demander une inconnue qui s'est simplement inscrite ?** Un compte `authenticated` s'obtient en trois clics ; il ne prouve l'appartenance à aucune bibliothèque.
 

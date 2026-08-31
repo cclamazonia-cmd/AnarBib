@@ -364,7 +364,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B14** | Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated` | `P2` | Aberto |
+| **B14** | Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated` | `P2` | Em curso |
 | **B4** | Examinar as quatro tabelas com RLS sem policy que não são de trânsito | `P2` | Aberto |
 | **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | A verificar |
 | **B7** | Desambiguar os homônimos de funções entre `ingest` e `public` | `P2` | Aberto |
@@ -376,7 +376,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B14 — Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated`
 
-`P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **Em curso** · Carga : várias semanas · O que exige : SQL / PostgreSQL
 
 **Estado.** A outra parte dos 500 avisos do advisor: o lint 0029, **464 funções** — 138 em `api` de 142, 326 em `public` de 498. A auditoria de 18/05 revisou uma parte de `public` e fechou cinco falhas reais; **não abrangia `api`.**
 
@@ -388,7 +388,7 @@ Como para `anon` (item **B2**), este número é antes de tudo o efeito de um pad
 
 O trabalho real de B14 não é um `ALTER`: é a auditoria das 138 funções de `api`.
 
-*Verificado : 31/08 — relido à luz do lote 3 de **B2**, entregue no mesmo dia: o padrão de `public` traz agora `postgres`, `authenticated`, `service_role`. A contagem de 30/08 não foi refeita; **a auditoria em si continua inteira**. **01/09**: `pg_default_acl` relido — a entrada `FOR ROLE supabase_admin` ainda traz `EXECUTE` para `anon` e `authenticated`. Tratar as **duas** entradas, evitando duas vezes a armadilha da entrada esvaziada.*
+*Verificado : 31/08 — relido à luz do lote 3 de **B2**, entregue no mesmo dia: o padrão de `public` traz agora `postgres`, `authenticated`, `service_role`. A contagem de 30/08 não foi refeita; **a auditoria em si continua inteira**. **01/09**: `pg_default_acl` relido — a entrada `FOR ROLE supabase_admin` ainda traz `EXECUTE` para `anon` e `authenticated`. Tratar as **duas** entradas, evitando duas vezes a armadilha da entrada esvaziada. **01/09 à noite — o lote `api` foi iniciado, e a primeira presa é um vazamento real.** As 138 recenseadas e triadas; a pilha « sem guarda visível » lida por inteiro: 23 delegam a guarda, e **uma só era verdadeira**: `get_due_date_for_loan` lia o estado de cotização de qualquer UUID — a forma exata de maio. Vazamento dormante (nenhuma biblioteca tem `membership_enabled`), corrigido antes da caixa de seleção: migração `20260831201011`, suíte de 4 testes, CI verde. Restam as 63 + 51 por pacotes, depois `public`.*
 
 **O que é.** O critério não é *«é `SECURITY DEFINER`?»* — todas são, por construção. É: **o que pode pedir uma desconhecida que apenas se cadastrou?** Uma conta `authenticated` obtém-se em três cliques; não prova pertencimento a nenhuma biblioteca.
 
