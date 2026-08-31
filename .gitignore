@@ -92,6 +92,8 @@ _handoff/
 # (npm run prebuild). Pas versionné pour éviter un fichier de ~300 ko qui
 # changerait à chaque déploiement.
 public/catalogue-snapshot.json
+public/thesaurus.ttl
+public/thesaurus.jsonld
 
 # Pile auto-hebergee (secrets) — ajoute le 2026-08-17, corrige le 2026-08-18.
 # Seuls les fichiers REMPLIS sont ignores ; les modeles .example sont versionnes,

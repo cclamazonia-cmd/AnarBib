@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "snapshot": "node scripts/build-catalogue-snapshot.mjs",
-    "prebuild": "node scripts/build-catalogue-snapshot.mjs",
+    "prebuild": "node scripts/build-catalogue-snapshot.mjs && node scripts/build-thesaurus-skos.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
