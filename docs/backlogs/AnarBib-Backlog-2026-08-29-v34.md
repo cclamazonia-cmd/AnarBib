@@ -648,18 +648,25 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **Neuf types d'action, pas sept.** `fn_is_critical_action_type()` en énumère sept ; deux RPC de réattribution d'ouvrage passent `p_is_critical := true` en dur. Les dix libellés couvrent les neuf.
 
-*Vérifié : 31/08 — établi puis **corrigé** le même jour, sur quatre sources : la base (4 lignes en file, 0 envoi, dernière du 30/08 ; invitation `ebd78fb9` encore `ready` ; cron du récapitulatif exécuté avec succès le 31/08 à 8 h 30), le code (aucune branche pour cet event ; mais un récapitulatif hebdomadaire qui sert les mêmes destinataires), les destinataires réels (3 coordenador·es actif·ves à la BTL, 1 à la MLEG, aucune n'étant l'acteur·rice), et le déclencheur SQL `trg_team_outbox_dispatch`, qui est un `AFTER INSERT` sans rejeu. Livré ; **pas encore éprouvé en envoi réel** — 325 vérifications de chaînes passent hors ligne, ce qui n'est pas la même chose.*
+**Éprouvé le 31/08 à 15 h 23 : le courriel est parti et il a été lu.** La ligne `#72` rejouée, `notify-event` a répondu `200` avec `recipients_count: 3` et trois `ok: true` — les trois coordenador·es actif·ves de la Terra Livre. Le message reçu porte l'identité **AnarBib**, pas celle de la bibliothèque (à comparer avec l'invitation à endosser de la veille, qui porte le logo de la Terra Livre : la distinction se voit à l'œil nu, et c'est tout l'objet). Il dit *« Promoção ao papel de coordenação (proposta, 2 ratificação(ões) necessária(s) — nada feito ainda) »* : le qualifiant partagé avec le récapitulatif fait son travail, l'avertissement n'annonce pas un fait accompli. La ligne est passée à `sent`, `sent_at` rempli, `skip_reason` revenu à `NULL`.
 
-**Ce que c'est.** **Déployer**, puis **rejouer la seule ligne qui décrit quelque chose de vivant** : `#72` (30/08), qui porte l'invitation `ebd78fb9` — statut `ready`, `resolved_at` nul, expire le 29/09, attend deux ratifications. Les trois coordenador·es de la BTL doivent l'apprendre.
+**Deux choses vues en éprouvant, qui ne sont pas dans le code.**
 
-**Les trois lignes de juin ne sont pas retouchées.** Leur `skip_reason` dit `unknown_network_event`, et c'est exact : ce jour-là, l'event était inconnu du handler. Le réécrire en septembre pour dire « on a choisi de ne pas rejouer » falsifierait un journal au lieu de le compléter — la décision se consigne ici et au `REGISTRE`, pas dans la ligne d'audit.
+*(a)* **Un recouvrement partiel, pour ce seul type d'action.** La destinataire a reçu le même jour le récapitulatif hebdomadaire à 10 h 30 et l'avertissement immédiat à 15 h 23, tous deux sur la même promotion — plus, la veille, l'invitation à endosser, qui nommait déjà Xavier comme proposeur. C'est un artefact du rejeu (en régime normal l'immédiat précède le lundi de plusieurs jours), mais il montre que pour `team_promote_to_coordenador` **trois canaux parlent du même geste**. Les six autres types critiques n'en ont qu'un : `team_suspend_member`, `team_request_remove_member`, `update_library`, les deux réattributions d'ouvrage et les changements de politique n'envoient rien à personne avant le lundi. **C'est là que l'étage immédiat gagne ses sept jours** — et c'est là qu'il faudra l'éprouver ensuite. Question ouverte, une occurrence ne suffit pas à trancher : faut-il taire l'immédiat quand une invitation a déjà été émise pour la même entité ? Relève d'`OPS-8`, pas d'un correctif.
 
-**Le rejeu ne peut pas passer par un changement de statut** : `trg_team_outbox_dispatch` est un `AFTER INSERT` et rien ne repasse sur les lignes existantes. Il faut refaire le `net.http_post` vers `notify-event` avec `{event, record_id: 72}`, exactement comme le fait le déclencheur.
+*(b)* **Le courriel a été trouvé dans la corbeille** de la boîte Hotmail destinataire. Peut-être un geste de la personne, peut-être un classement automatique. À vérifier avant de compter sur ce canal pour une alerte de gouvernance : un avertissement qui arrive dans la corbeille est un avertissement qui n'arrive pas. **C'est un item à ouvrir, pas une retouche de B17.**
+
+*Vérifié : 31/08 — instruit, **corrigé**, livré et **éprouvé en envoi réel le jour même**. Cinq sources : la base (4 lignes en file ; `#72` passée à `sent` à 15 h 23 h 35, `skip_reason` à `NULL`), la réponse HTTP de `notify-event` (`200`, `recipients_count: 3`, trois `ok: true`), **le courriel reçu et relu** (identité réseau, qualifiant de proposition correct), le code (aucune branche pour cet event avant ce jour ; un récapitulatif hebdomadaire qui sert les mêmes destinataires depuis le 17/08), et le déclencheur `trg_team_outbox_dispatch`, `AFTER INSERT` sans rejeu. **Reste à éprouver sur un type d'action sans autre canal.***
+
+**Ce que c'est.** **Il reste une chose, et une seule** : éprouver sur un type d'action qui n'a pas d'autre canal. La promotion collégiale en a trois ; une suspension n'en a aucun avant le lundi. Tant que l'étage immédiat n'a été vu qu'au seul endroit où il fait doublon, on n'a pas éprouvé ce pour quoi il a été écrit.
+
+**Les trois lignes de juin ne sont pas retouchées.** Leur `skip_reason` dit `unknown_network_event`, et c'est exact : ce jour-là, l'event était inconnu du handler. Le réécrire en septembre falsifierait un journal au lieu de le compléter.
 
 **Pourquoi ça compte.** Un pouvoir transverse sans trace visible par celles qui le subissent n'est pas un pouvoir contrôlé. La spec l'avait compris et l'avait écrit ; le code ne l'a jamais fait. À Bologne, c'est exactement le genre d'écart qu'on ne peut pas présenter comme acquis.
 
 **Ce qui compte comme fini.**
 
+- [object Object]
 - [object Object]
 - [object Object]
 - [object Object]

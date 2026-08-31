@@ -636,16 +636,21 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Entregue em 31/08.** `_shared/domain/cross_library.ts`, ligado a `handleNetworkEvent`. Os rótulos das dez ações não foram reescritos: o ficheiro de cadeias mudou-se para `_shared/i18n/cross-library-strings.ts` e é lido pelos dois andares.
 
-*Verificado : 31/08 — estabelecido e depois **corrigido** no mesmo dia, sobre quatro fontes: o banco, o código, os destinatários reais (3 na BTL, 1 na MLEG) e o gatilho `AFTER INSERT` sem reprodução. Entregue; **ainda não provado em envio real**.*
+**Provado em 31/08 às 15h23: o e-mail partiu e foi lido.** A linha `#72` reproduzida, `notify-event` respondeu `200` com `recipients_count: 3`. A mensagem traz a identidade **AnarBib**, não a da biblioteca, e diz *«Promoção ao papel de coordenação (proposta, 2 ratificação(ões) necessária(s) — nada feito ainda)»*. A linha passou a `sent`, `skip_reason` de volta a `NULL`.
 
-**O que é.** **Implantar**, depois **reproduzir apenas a linha viva**: `#72` (30/08), cujo convite `ebd78fb9` está `ready` e aguarda duas ratificações. As três coordenadoras da BTL devem sabê-lo.
+**Duas coisas vistas ao provar.** *(a)* Para este único tipo de ação, **três canais falam do mesmo gesto** — o convite a endossar na véspera, o resumo semanal às 10h30 e o aviso imediato às 15h23. Os outros seis tipos críticos não têm nenhum antes de segunda-feira: é aí que o andar imediato ganha os seus sete dias. Questão em aberto. *(b)* O e-mail foi encontrado **na lixeira** da caixa destinatária. A verificar: um aviso que chega ao lixo é um aviso que não chega.
 
-**As três linhas de junho não são retocadas**: o seu `skip_reason` é exato. Reescrevê-lo falsificaria um registro. **A reprodução não passa por uma mudança de estado**: o gatilho é `AFTER INSERT`.
+*Verificado : 31/08 — instruído, **corrigido**, entregue e **provado em envio real no mesmo dia**, sobre cinco fontes, incluindo **o e-mail recebido e relido**. **Falta provar sobre um tipo de ação sem outro canal.***
+
+**O que é.** **Resta uma coisa, e uma só**: provar sobre um tipo de ação sem outro canal — uma suspensão não tem nenhum antes de segunda-feira.
+
+**As três linhas de junho não são retocadas**: o seu `skip_reason` é exato.
 
 **Por que importa.** Um poder transversal sem rasto visível para quem o sofre não é um poder controlado. A spec entendeu-o e escreveu-o; o código nunca o fez.
 
 **O que conta como terminado.**
 
+- [object Object]
 - [object Object]
 - [object Object]
 - [object Object]
