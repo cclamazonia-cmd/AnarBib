@@ -1500,6 +1500,17 @@
           "fr": "**Clos le 31/08 — et le recensement a retourné l'item.** `api.renew_my_loan`, citée comme le cas fautif qui a fait naître B15, est l'une des rares **conformes** : le front y lit bien le `ok`. Le défaut était ailleurs, et bien plus large.\n\n**Le relevé.** 34 RPC appelées par le front rendent `{ok, reason, …}` au lieu de lever. **26 appels n'inspectaient pas `ok`**, et dix-huit écrivaient `const { error } = await supabase.rpc(...)` : la charge utile jetée à la destructuration, le `ok` non pas ignoré mais **inatteignable**. Trois sites relus à la main pour vérifier que l'outil ne mentait pas — motif identique. `BookPage` affichait « consultation demandée » sur un `ok:false` ; `LeitoresPanel`, « promue » pour une promotion qui n'avait pas eu lieu ; quatre autres étaient dans `AccountPage`, côté lectrice.\n\n**La doctrine, tranchée** (`DOC-RPC-4`, qui règle la question laissée ouverte par `DOC-SILENCE-1` *(b)*). Le contrat de statut est **gardé** : une RPC qui lève coupe le lot en cours, une RPC qui rend un statut permet le traitement ligne par ligne — c'est exactement ce que fait `skipped` dans les paquets multi-lignes. On ne casse pas ce contrat pour vingt-six appels distraits ; on impose de le lire.\n\n**Et le correctif n'a coûté aucune chaîne i18n.** `src/lib/rpcStatus.js` expose `assertRpcOk(data)`, qui lève un `Error` portant le `reason` en message. On entre alors dans le chemin d'erreur **déjà en place** : le `try/catch` de l'appelante, `localizeError`, le toast. `localizeError` n'ayant aucune liste blanche, le code est traduit via `panel.apiError.<reason>` s'il existe et retombe sinon sur la clé contextuelle de l'action. Ce qui avait déjà une clé s'affiche mieux qu'avant ; rien de neuf à traduire dans dix locales.\n\n**23 gardes posées. 4 sites laissés, et nommés** : deux demandent de restructurer un `let error` partagé entre branches, deux sont des appels sans aucune destructuration — les reprendre, c'est décider quoi faire d'un échec, pas seulement lire un `ok`. Les forcer aurait été la correction mécanique qui casse en silence.\n\n**Ce qui remplace un item de suivi** : `src/tests/rpc-statut-ok-lu.test.js` échoue si un appel à une RPC à statut ignore le résultat. La dette est une liste explicite, chaque entrée avec sa raison, et un **second test refuse une entrée devenue sans objet** — la liste ne peut donc que rétrécir. C'est le test qui porte la dette, pas un item qui dormirait.\n\nCI verte : lint et suite unitaire.",
           "pt": "**Encerrado em 31/08 — e o recenseamento inverteu o item.** `api.renew_my_loan`, citada como o caso culpado que deu origem a B15, é das poucas **conformes**.\n\n**O levantamento.** 34 RPC chamadas pelo front devolvem `{ok, reason, …}` em vez de levantar. **26 chamadas não inspecionavam `ok`**, e dezoito escreviam `const { error } = await supabase.rpc(...)`: a carga útil deitada fora na desestruturação, o `ok` **inatingível**. `BookPage` mostrava «consulta pedida» num `ok:false`.\n\n**A doutrina** (`DOC-RPC-4`): o contrato de estado é **mantido** — permite o tratamento linha a linha dos lotes — e ler o `ok` passa a ser obrigatório.\n\n**E não custou uma única cadeia i18n**: `assertRpcOk(data)` levanta um `Error` com o `reason`, entrando no caminho de erro já existente; `localizeError` não tem lista branca.\n\n**23 guardas postas, 4 sítios deixados e nomeados.** `src/tests/rpc-statut-ok-lu.test.js` falha se uma chamada ignorar o estado, e um segundo teste recusa uma entrada de dívida sem objeto — a lista só pode encolher.\n\nCI verde."
         }
+      ],
+      [
+        "K4",
+        {
+          "fr": "Corriger le générateur des pages de vie privée sur la langue déclarée",
+          "pt": "Corrigir o gerador das páginas de privacidade sobre a língua declarada"
+        },
+        {
+          "fr": "**Clos le 31/08 au soir, corrigé dans la foulée de la campagne de revérification.** Le générateur émettait `lang=\"pt\"` là où tout le texte est en portugais du Brésil ; les pages écrites à la main portaient `pt-BR` et avaient raison. Le modèle du correctif dormait à la ligne d'à côté : `build-finances-pages.cjs` faisait la conversion depuis toujours (`HTML_LANG`). Carte posée dans le générateur de vie privée, dix pages régénérées — seule `pt/privacidade` change de langue, et la régénération a resynchronisé au passage l'en-tête des dix pages avec leur chrome, qui avait dérivé (« Appli », « Aplicativo »). **Vérifié en ligne après publication** : `anarbib.org/pt/privacidade` sert `lang=\"pt-BR\"`. Commit `2fb4796` du dépôt vitrine.",
+          "pt": "**Encerrado em 31/08 à noite.** O gerador emitia `lang=\"pt\"` onde todo o texto é em português do Brasil; as páginas à mão traziam `pt-BR` e tinham razão. O modelo do corretivo dormia na linha ao lado (`HTML_LANG` de `build-finances-pages.cjs`). Dez páginas regeradas, cabeçalhos ressincronizados de passagem. **Verificado online**: `anarbib.org/pt/privacidade` serve `lang=\"pt-BR\"`. Commit `2fb4796` do repositório vitrine."
+        }
       ]
     ]
   },
@@ -1823,7 +1834,7 @@
       "id": "B5",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -1846,12 +1857,12 @@
       },
       "f": {
         "fr": [
-          "Le lint `auth_rls_initplan` ne remonte plus aucun avis.",
-          "Le patron d'enveloppement est rappelé dans le modèle de migration."
+          "~~Le lint `auth_rls_initplan` ne remonte plus aucun avis~~ — re-mesuré à zéro le 31/08 après déploiement de `20260831171526`.",
+          "~~Le patron d'enveloppement est rappelé dans le modèle de migration~~ — l'exemple du `_TEMPLATE.sql` est corrigé et porte le rappel (c'était lui, la source des neuf)."
         ],
         "pt": [
-          "O lint `auth_rls_initplan` não retorna mais nenhum aviso.",
-          "O padrão de envolvimento é lembrado no modelo de migração."
+          "~~O lint `auth_rls_initplan` não aponta mais nenhum aviso~~ — remedido a zero em 31/08 após implantação.",
+          "~~O padrão de envelopamento está lembrado no modelo de migração~~ — o exemplo do `_TEMPLATE.sql` está corrigido (era ele a fonte das nove)."
         ]
       },
       "dep": {
@@ -1862,8 +1873,8 @@
         "Advisors performance, relevé du 29/08/2026"
       ],
       "verif": {
-        "fr": "31/08 — le lint `auth_rls_initplan` remonte exactement les neuf policies nommées : `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports`, `authority_duplicate_reports`, `author_not_duplicate` (1 chacune).",
-        "pt": "31/08 — o lint `auth_rls_initplan` aponta exatamente as nove policies nomeadas."
+        "fr": "31/08 — les neuf policies relevées une à une dans `pg_policies` (définitions exactes), puis **livré le soir même** : la migration `20260831171526` rejoue le bloc idempotent du 03/07 sur toutes les policies de `public`, et la **source de la dérive** — l'exemple nu du `_TEMPLATE.sql`, que les neuf avaient copié — est corrigée dans le même commit (`f2665afd`). Advisor re-mesuré après déploiement : `auth_rls_initplan` à zéro.",
+        "pt": "31/08 — as nove policies levantadas uma a uma, depois **entregue na mesma noite**: a migração `20260831171526` reproduz o bloco idempotente de 03/07, e a **fonte da deriva** — o exemplo nu do `_TEMPLATE.sql` — está corrigida no mesmo commit. Advisor remedido após implantação: `auth_rls_initplan` a zero."
       }
     },
     {
@@ -4644,7 +4655,7 @@
       "id": "I6",
       "d": "I",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -4654,8 +4665,8 @@
         "pt": "Purgar os registros da sonda de saúde"
       },
       "v": {
-        "fr": "`service_health_probes` porte **13 932 lignes** et croît de 288 par jour, sans aucun cron de purge — alors que sept autres purges existent dans les 36 jobs.",
-        "pt": "`service_health_probes` traz **13 932 linhas** e cresce 288 por dia, sem nenhum cron de purga — enquanto sete outras purgas existem nos 36 jobs."
+        "fr": "**Constat corrigé le 31/08 au soir : la purge existe — elle vit dans la sonde elle-même, pas dans un cron.** `health-probe/index.ts` supprime à chaque tour les relevés de plus de `RETENTION_JOURS = 30` jours (vérifié dans le source déployé, pas seulement au dépôt). Elle n'a encore jamais rien supprimé — `n_tup_del = 0` pour 16 268 insertions — pour une raison simple : la table est née le 17/08, plus jeune que sa rétention. Le relevé initial cherchait un *cron* de purge ; le dispositif était dans le corps de la fonction. La forme `DOC-RECENS-1`, une fois de plus — et écrire le cron demandé aurait fait une purge en double.",
+        "pt": "**Constato corrigido em 31/08 à noite: a purga existe — vive na própria sonda, não num cron.** `health-probe` apaga a cada volta os registros com mais de 30 dias (verificado no código implantado). Nunca apagou nada (`n_tup_del = 0` para 16 268 inserções): a tabela nasceu em 17/08, mais jovem que sua retenção. O levantamento procurava um *cron*; o dispositivo estava no corpo da função — `DOC-RECENS-1` de novo. Escrever o cron pedido teria feito uma purga em dobro."
       },
       "w": {
         "fr": "Un cron de purge sur le modèle de `anarbib-catalog-audit-snapshot-purge`, avec une rétention à décider — trente jours suffisent probablement, les incidents étant conservés à part dans `service_health_incidents`.",
@@ -4667,12 +4678,14 @@
       },
       "f": {
         "fr": [
-          "Un cron de purge existe, avec une rétention écrite.",
-          "`service_health_incidents` n'est pas touchée par la purge."
+          "~~Un cron de purge existe, avec une rétention écrite~~ — la purge existe depuis l'origine, dans la fonction elle-même, rétention écrite de 30 jours ; le cron demandé aurait fait doublon.",
+          "~~`service_health_incidents` n'est pas touchée par la purge~~ — vérifié : la purge ne vise que `service_health_probes`.",
+          "La purge a supprimé pour de vrai : `n_tup_del > 0`, à relever après le 16/09."
         ],
         "pt": [
-          "Um cron de purga existe, com uma retenção escrita.",
-          "`service_health_incidents` não é tocada pela purga."
+          "~~Um cron de purga existe, com uma retenção escrita~~ — a purga existe desde a origem, na própria função, retenção de 30 dias; o cron pedido faria dobro.",
+          "~~`service_health_incidents` não é tocada pela purga~~ — verificado: a purga só visa `service_health_probes`.",
+          "A purga apagou de verdade: `n_tup_del > 0`, a levantar depois de 16/09."
         ]
       },
       "dep": {
@@ -4684,8 +4697,8 @@
         "REGISTRE §38 OPS"
       ],
       "verif": {
-        "fr": "31/08 — 16 088 relevés (13 932 au 29/08 : la croissance d'environ 288 par jour se confirme), le plus ancien du 17/08, et toujours aucun cron de purge dédié.",
-        "pt": "31/08 — 16 088 registros (13 932 em 29/08), o mais antigo de 17/08, e ainda nenhum cron de purga."
+        "fr": "31/08 — source déployé de `health-probe` relu (`RETENTION_JOURS = 30`, purge en fin de tour) ; `pg_stat_user_tables` : 16 268 insertions, **0 suppression**, plus ancien relevé du 17/08 — la naissance de la table, pas un effet de purge. Premier effet attendu vers le **16/09** : c'est là que le constat se prouve.",
+        "pt": "31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**."
       }
     },
     {
@@ -5247,54 +5260,6 @@
         "PLAN_financement_AnarBib_2026-08-25",
         "tools/build-finances-pages.cjs"
       ]
-    },
-    {
-      "id": "K4",
-      "d": "K",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Corriger le générateur des pages de vie privée sur la langue déclarée",
-        "pt": "Corrigir o gerador das páginas de privacidade sobre a língua declarada"
-      },
-      "v": {
-        "fr": "Les pages écrites à la main portent `<html lang=\"pt-BR\">` ; `tools/build-privacy-pages.cjs` émet `lang=\"pt\"`. **Les pages ont raison, le script a tort.**",
-        "pt": "As páginas escritas à mão trazem `<html lang=\"pt-BR\">`; `tools/build-privacy-pages.cjs` emite `lang=\"pt\"`. **As páginas têm razão, o script está errado.**"
-      },
-      "w": {
-        "fr": "Corriger le script pour qu'il émette l'étiquette complète, et vérifier que le générateur des pages de comptes, bâti sur le même modèle, ne reproduit pas le défaut.",
-        "pt": "Corrigir o script para que emita a etiqueta completa, e verificar que o gerador das páginas de contas, construído no mesmo modelo, não reproduza o defeito."
-      },
-      "y": {
-        "fr": "L'attribut de langue est ce qu'utilisent les lecteurs d'écran pour choisir leur prononciation. `pt` fera lire du portugais du Portugal à un public brésilien. C'est le même critère WCAG 3.1.1 que le projet a déjà corrigé côté application.",
-        "pt": "O atributo de língua é o que os leitores de tela usam para escolher sua pronúncia. `pt` fará ler português de Portugal para um público brasileiro. É o mesmo critério WCAG 3.1.1 que o projeto já corrigiu do lado do aplicativo."
-      },
-      "f": {
-        "fr": [
-          "Le script émet l'étiquette complète.",
-          "Les pages engendrées et les pages écrites à la main concordent."
-        ],
-        "pt": [
-          "O script emite a etiqueta completa.",
-          "As páginas geradas e as páginas escritas à mão concordam."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "Dépôt vitrine anarbib/pages",
-        "tools/build-privacy-pages.cjs"
-      ],
-      "verif": {
-        "fr": "31/08 — `tools/build-privacy-pages.cjs:243` émet toujours `lang` brut, et la page engendrée `pt/privacidade/` porte `lang=\"pt\"` là où les pages écrites à la main (`index.html`, `pt/index.html`) portent `lang=\"pt-BR\"`. Le générateur des finances fait, lui, la conversion (`HTML_LANG[lang]`) : le modèle du correctif est déjà dans le dépôt, à la ligne 252 du fichier voisin.",
-        "pt": "31/08 — `build-privacy-pages.cjs:243` ainda emite `lang` bruto (`pt`), enquanto as páginas à mão trazem `pt-BR`. O gerador de finanças faz a conversão (`HTML_LANG[lang]`): o modelo do corretivo já está no repositório."
-      }
     },
     {
       "id": "K5",

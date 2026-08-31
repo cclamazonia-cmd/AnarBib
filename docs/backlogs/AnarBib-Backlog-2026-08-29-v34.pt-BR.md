@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-31** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 83 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -25,7 +25,7 @@
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
-    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 8
+    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
 - [Manutenção deste documento](#manutenção-deste-documento)
@@ -60,7 +60,7 @@ Esse trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `1d00ed2c`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados.
 
-**Frescor dos constatos em 2026-08-31.** **61 itens de 84** trazem uma verificação datada própria (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2, K4). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-08-31.** **60 itens de 83** trazem uma verificação datada própria (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -367,7 +367,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B2** | Triar as 36 funções `SECURITY DEFINER` abertas a `anon` | `P1` | Em curso |
 | **B14** | Auditar as 464 funções `SECURITY DEFINER` abertas a `authenticated` | `P2` | Aberto |
 | **B4** | Examinar as quatro tabelas com RLS sem policy que não são de trânsito | `P2` | Aberto |
-| **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | Aberto |
+| **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | A verificar |
 | **B7** | Desambiguar os homônimos de funções entre `ingest` e `public` | `P2` | Aberto |
 | **B9** | Purgar o esquema `backup_2026_05_07` | `P2` | Aberto |
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
@@ -497,11 +497,11 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 #### B5 — Resolver as nove policies que reavaliam `auth.*()` por linha
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
 **Estado.** A migração `20260703203953_perf_rls_initplan_wrap_auth_calls` tratou as policies de então. Nove policies escritas desde então escapam: `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports` (1), `authority_duplicate_reports` (1), `author_not_duplicate` (1).
 
-*Verificado : 31/08 — o lint `auth_rls_initplan` aponta exatamente as nove policies nomeadas.*
+*Verificado : 31/08 — as nove policies levantadas uma a uma, depois **entregue na mesma noite**: a migração `20260831171526` reproduz o bloco idempotente de 03/07, e a **fonte da deriva** — o exemplo nu do `_TEMPLATE.sql` — está corrigida no mesmo commit. Advisor remedido após implantação: `auth_rls_initplan` a zero.*
 
 **O que é.** Envolver as chamadas `auth.uid()` / `auth.jwt()` num sub-select, como a migração de julho fez para as outras.
 
@@ -509,8 +509,8 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 **O que conta como terminado.**
 
-- O lint `auth_rls_initplan` não retorna mais nenhum aviso.
-- O padrão de envolvimento é lembrado no modelo de migração.
+- ~~O lint `auth_rls_initplan` não aponta mais nenhum aviso~~ — remedido a zero em 31/08 após implantação.
+- ~~O padrão de envelopamento está lembrado no modelo de migração~~ — o exemplo do `_TEMPLATE.sql` está corrigido (era ele a fonte das nove).
 
 **Dependências.** Nenhuma.
 
@@ -1938,7 +1938,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Congelado |
 | **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Congelado |
 | **I4** | Terminar a testemunha de proveniência dos backups | `P1` | Aberto |
-| **I6** | Purgar os registros da sonda de saúde | `P2` | Aberto |
+| **I6** | Purgar os registros da sonda de saúde | `P2` | A verificar |
 | **I8** | Pôr `deploy/README.md` de acordo com o que foi executado | `P2` | Aberto |
 | **I10** | Limpar os rastros do Turnstile e os arquivos de refugo | `P2` | Aberto |
 | **I11** | Sair do `node:20`, em fim de manutenção | `P2` | Aberto |
@@ -2035,11 +2035,11 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 #### I6 — Purgar os registros da sonda de saúde
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado.** `service_health_probes` traz **13 932 linhas** e cresce 288 por dia, sem nenhum cron de purga — enquanto sete outras purgas existem nos 36 jobs.
+**Estado.** **Constato corrigido em 31/08 à noite: a purga existe — vive na própria sonda, não num cron.** `health-probe` apaga a cada volta os registros com mais de 30 dias (verificado no código implantado). Nunca apagou nada (`n_tup_del = 0` para 16 268 inserções): a tabela nasceu em 17/08, mais jovem que sua retenção. O levantamento procurava um *cron*; o dispositivo estava no corpo da função — `DOC-RECENS-1` de novo. Escrever o cron pedido teria feito uma purga em dobro.
 
-*Verificado : 31/08 — 16 088 registros (13 932 em 29/08), o mais antigo de 17/08, e ainda nenhum cron de purga.*
+*Verificado : 31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**.*
 
 **O que é.** Um cron de purga no modelo de `anarbib-catalog-audit-snapshot-purge`, com uma retenção a decidir — trinta dias provavelmente bastam, já que os incidentes são conservados à parte em `service_health_incidents`.
 
@@ -2047,8 +2047,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **O que conta como terminado.**
 
-- Um cron de purga existe, com uma retenção escrita.
-- `service_health_incidents` não é tocada pela purga.
+- ~~Um cron de purga existe, com uma retenção escrita~~ — a purga existe desde a origem, na própria função, retenção de 30 dias; o cron pedido faria dobro.
+- ~~`service_health_incidents` não é tocada pela purga~~ — verificado: a purga só visa `service_health_probes`.
+- A purga apagou de verdade: `n_tup_del > 0`, a levantar depois de 16/09.
 
 **Dependências.** Nenhuma.
 
@@ -2227,7 +2228,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | **K1** | Fazer adotar a ata de criação do Fundo AnarBib | `P0` | Bloqueado |
 | **K2** | Abrir os canais de arrecadação dormentes | `P1` | Bloqueado |
 | **K3** | Manter o registro público das contas | `P2` | Aberto |
-| **K4** | Corrigir o gerador das páginas de privacidade sobre a língua declarada | `P2` | Aberto |
 | **K5** | Realizar a intervenção de Bolonha e tirar as consequências | `P1` | Em curso |
 | **K6** | Preparar o encontro com leftove.rs e May Day Rooms | `P2` | Em curso |
 | **K7** | Conduzir a formação das duas coordenações BLMF até a autonomia | `P1` | Em curso |
@@ -2299,27 +2299,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** Independente de **K1** e **K2**.
 
 *Remissões : `PLAN_financement_AnarBib_2026-08-25` · `tools/build-finances-pages.cjs`*
-
-#### K4 — Corrigir o gerador das páginas de privacidade sobre a língua declarada
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** As páginas escritas à mão trazem `<html lang="pt-BR">`; `tools/build-privacy-pages.cjs` emite `lang="pt"`. **As páginas têm razão, o script está errado.**
-
-*Verificado : 31/08 — `build-privacy-pages.cjs:243` ainda emite `lang` bruto (`pt`), enquanto as páginas à mão trazem `pt-BR`. O gerador de finanças faz a conversão (`HTML_LANG[lang]`): o modelo do corretivo já está no repositório.*
-
-**O que é.** Corrigir o script para que emita a etiqueta completa, e verificar que o gerador das páginas de contas, construído no mesmo modelo, não reproduza o defeito.
-
-**Por que importa.** O atributo de língua é o que os leitores de tela usam para escolher sua pronúncia. `pt` fará ler português de Portugal para um público brasileiro. É o mesmo critério WCAG 3.1.1 que o projeto já corrigiu do lado do aplicativo.
-
-**O que conta como terminado.**
-
-- O script emite a etiqueta completa.
-- As páginas geradas e as páginas escritas à mão concordam.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `Dépôt vitrine anarbib/pages` · `tools/build-privacy-pages.cjs`*
 
 #### K5 — Realizar a intervenção de Bolonha e tirar as consequências
 
@@ -2511,6 +2490,7 @@ Doutrina `OPS-8`: **a acusação de recepção de um alerta é o estado do siste
 **23 guardas postas, 4 sítios deixados e nomeados.** `src/tests/rpc-statut-ok-lu.test.js` falha se uma chamada ignorar o estado, e um segundo teste recusa uma entrada de dívida sem objeto — a lista só pode encolher.
 
 CI verde. |
+| K4 | Corrigir o gerador das páginas de privacidade sobre a língua declarada | **Encerrado em 31/08 à noite.** O gerador emitia `lang="pt"` onde todo o texto é em português do Brasil; as páginas à mão traziam `pt-BR` e tinham razão. O modelo do corretivo dormia na linha ao lado (`HTML_LANG` de `build-finances-pages.cjs`). Dez páginas regeradas, cabeçalhos ressincronizados de passagem. **Verificado online**: `anarbib.org/pt/privacidade` serve `lang="pt-BR"`. Commit `2fb4796` do repositório vitrine. |
 
 ---
 
@@ -2542,4 +2522,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 83 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
