@@ -212,9 +212,3 @@ tests/sql/canal_invariant_tests.sql
 # qu on reinsere le calcul dans le corps, ce qui reintroduirait le defaut sans
 # qu aucun voyant ne rougisse.
 tests/sql/slug_biblioteca_tests.sql
-
-# ÉPREUVE JETABLE du 31/08 — item I5, doctrine OPS-8. Ce fichier échoue
-# EXPRÈS, pour vérifier qu'un second push rouge n'ouvre pas un second ticket
-# tant que le premier reste ouvert. Il doit être retiré le jour même, avec
-# la suite qu'il désigne.
-tests/sql/epreuve_acquittement_tests.sql
