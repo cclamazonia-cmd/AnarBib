@@ -327,16 +327,34 @@ export default function ImportacoesPage() {
       if (!runId) throw new Error(t({ id: 'importacoes.noRunId' }));
 
       // Adaptateur : si l'usager a forcé un axe, on le pose sur le run avant le dispatch.
+      //
+      // DETTE B15 LEVÉE (31/08/2026). Ces deux appels ne jetaient pas seulement
+      // le `ok` : ils ne regardaient RIEN, pas même `error`. Or les deux
+      // fonctions LÈVENT sur refus — vérifié en base le 31/08 :
+      // coordenador requis, forced_format hors marc/ris/csv/tsv,
+      // forced_vocabulary hors unimarc/marc21, profil d'une autre bibliothèque.
+      // Le refus repartait donc en silence et le run était dispatché avec
+      // l'axe demandé NON POSÉ : l'import tournait sur un autre adaptateur que
+      // celui choisi, et personne ne pouvait le savoir avant de lire le résultat.
+      //
+      // Ce qu'on décide de faire d'un échec : ARRÊTER. Un import muet sur le
+      // mauvais adaptateur coûte plus cher qu'un import qui ne part pas. Le
+      // `throw` rejoint le catch en bas de la fonction (toast localizeError) ;
+      // le run reste créé et non dispatché, donc reprenable.
       if (adapterFormat !== 'auto' || adapterVocabulary !== 'auto') {
-        await supabase.rpc('fn_import_set_adapter_overrides', {
+        const { data: overridesData, error: overridesErr } = await supabase.rpc('fn_import_set_adapter_overrides', {
           p_run_id: Number(runId),
           p_forced_format: adapterFormat === 'auto' ? null : adapterFormat,
           p_forced_vocabulary: adapterVocabulary === 'auto' ? null : adapterVocabulary,
         });
+        if (overridesErr) throw overridesErr;
+        assertRpcOk(overridesData);
       }
       // Adaptateur (axe Perfil) : associe le profil choisi au run (après les overrides, qui remplacent).
       if (adapterProfile) {
-        await supabase.rpc('fn_import_set_profile', { p_run_id: Number(runId), p_profile_id: Number(adapterProfile) });
+        const { data: profileData, error: profileErr } = await supabase.rpc('fn_import_set_profile', { p_run_id: Number(runId), p_profile_id: Number(adapterProfile) });
+        if (profileErr) throw profileErr;
+        assertRpcOk(profileData);
       }
       setMsg({ text: t({ id: 'importacoes.runCreatedDispatching' }, { id: runId }), kind: 'info' });
       await supabase.rpc('fn_import_dispatch', { p_run_id: Number(runId) });

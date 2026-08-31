@@ -14,9 +14,20 @@
 // lots) ; ce qui est imposé, c'est de le lire. Un appel est conforme s'il
 // appelle `assertRpcOk`, ou s'il inspecte `ok` lui-même.
 //
-// LA DETTE EST NOMMÉE, PAS CACHÉE. Quatre sites resistent à la correction
-// mécanique et sont listés ci-dessous avec leur raison. La liste ne doit que
-// RÉTRÉCIR : y ajouter une ligne demande de le justifier ici.
+// LA DETTE EST NOMMÉE, PAS CACHÉE — et elle est vide depuis le 31/08/2026.
+// Les quatre sites déclarés ont été repris le jour même, après vérification EN
+// BASE de ce que chaque fonction rend réellement. Trois relevaient bien de la
+// doctrine ; le quatrième reposait sur un relevé faux (voir plus bas
+// `advance_reservation`). La liste ne doit que RÉTRÉCIR : y ajouter une ligne
+// demande de le justifier ici.
+//
+// CE QUE LA REPRISE A CORRIGÉ, ET CE QU'ELLE N'A PAS CORRIGÉ. Sur les deux
+// appels d'ImportacoesPage, le défaut était vivant et plus grave que l'énoncé :
+// ils ignoraient `error` autant que `ok`, donc un refus (coordenador requis,
+// format invalide) laissait l'import partir avec l'adaptateur NON posé. Sur
+// AccountPage, `api.create_consulta_local` lève sur refus et ne rend jamais
+// `ok:false` : lier la charge utile y est une garde de contrat, pas la
+// réparation d'une panne. Dire lequel est lequel fait partie du travail.
 // ─────────────────────────────────────────────────────────────────────────────
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -24,8 +35,14 @@ import { join } from 'node:path';
 
 // RPC dont le contrat rend `{ ok, … }` — relevé en base le 31/08/2026 :
 // fonctions de `api` et `public` rendant un jsonb dont le corps pose une clé `ok`.
+// `advance_reservation` a été RETIRÉE de cette liste le 31/08/2026 : le relevé
+// initial la comptait à tort. Vérifié en base, `api.advance_reservation` rend
+// un `integer` (le nombre de lignes avancées) et LÈVE sur refus
+// (`transition_not_allowed`, `target_stage_has_dedicated_rpc`…) — il n'y a
+// aucun `ok` à lire, et le code du Painel qui la lit déjà via `error` est
+// correct. L'inscrire ici obligeait à déclarer une dette qui n'existait pas.
 const RPC_A_STATUT = new Set([
-  'advance_consulta', 'advance_reservation', 'cancel_consulta_as_reader',
+  'advance_consulta', 'cancel_consulta_as_reader',
   'create_consulta_local', 'dismiss_consulta_cancelled', 'reply_consulta_schedule',
   'renew_my_loan', 'discard_book_cascade', 'freeze_account', 'unfreeze_account',
   'restrict_member', 'unrestrict_member', 'get_member_restriction',
@@ -39,18 +56,12 @@ const RPC_A_STATUT = new Set([
   'fn_team_promote_to_librarian',
 ]);
 
-// Dette déclarée au 31/08/2026. Chaque entrée porte sa raison.
-const DETTE = new Set([
-  // `let error` partagé entre deux branches (consulta / réservation) : lier la
-  // charge utile demande de restructurer la fonction, pas d'ajouter une ligne.
-  'src/pages/account/AccountPage.jsx::create_consulta_local',
-  // Idem, dans une boucle à plusieurs branches du Painel.
-  'src/pages/painel/PanelPage.jsx::advance_reservation',
-  // Appels sans aucune destructuration : ils ignorent même `error`. Les
-  // reprendre, c'est décider quoi faire d'un échec, pas seulement lire `ok`.
-  'src/pages/importacoes/ImportacoesPage.jsx::fn_import_set_adapter_overrides',
-  'src/pages/importacoes/ImportacoesPage.jsx::fn_import_set_profile',
-]);
+// Dette déclarée : AUCUNE au 31/08/2026. Le dispositif reste — c'est lui qui
+// rend le prochain contournement coûteux : y inscrire un site oblige à écrire
+// ici pourquoi, sous une ligne qui dit que la liste était vide. Le second test
+// refuse par ailleurs une entrée devenue sans objet, pour que la liste ne
+// puisse pas rétrécir sur le papier seulement.
+const DETTE = new Set([]);
 
 function fichiersSource(dir, acc = []) {
   for (const e of readdirSync(dir)) {

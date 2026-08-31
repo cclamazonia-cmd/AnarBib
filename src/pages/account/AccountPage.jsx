@@ -771,21 +771,34 @@ export default function AccountPage() {
       setReserveMsg(isConsultation ? t({ id: 'account.reserve.creatingConsult' }) : t({ id: 'account.reserve.creatingLoan' }));
       // Paquet 27.A.1 (14/05/2026) : migration consulta vers wrapper api.* SECURITY INVOKER.
       // Le call reservation reste sur l'ancienne fn DEFINER (autre chantier).
-      let error;
+      // DETTE B15 LEVÉE (31/08/2026). Le `let error` partagé ne retenait que
+      // l'erreur : la charge utile des deux branches était jetée à la
+      // destructuration, donc le `ok` de create_consulta_local était
+      // INATTEIGNABLE. Lier `data` à côté suffisait — la fonction n'avait pas
+      // besoin d'être restructurée.
+      // Ce que ça corrige, exactement : vérifié en base le 31/08,
+      // api.create_consulta_local rend `{ok:true, consulta_id}` et LÈVE sur
+      // refus. Aucune panne vivante ici, donc ; c'est une garde de CONTRAT —
+      // le jour où la fonction rendra `ok:false`, l'écran ne dira plus
+      // « consultation enregistrée » à quelqu'un dont rien n'a été créé.
+      // `assertRpcOk` ne fait rien quand la charge utile n'a pas de `ok`, donc
+      // la branche réservation la traverse sans bruit.
+      let data, error;
       if (isConsultation) {
-        ({ error } = await supabase.schema('api').rpc('create_consulta_local', {
+        ({ data, error } = await supabase.schema('api').rpc('create_consulta_local', {
           p_user_id: user.id,
           p_holding_ids: holdingIds,
           p_notes: '@@note:account.reserve.noteConsult', // Route B : code système (décodé à l'affichage)
         }));
       } else {
-        ({ error } = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
+        ({ data, error } = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
           p_user_id: user.id,
           p_holding_ids: holdingIds,
           p_notes: '@@note:account.reserve.noteLoan', // Route B : code système (décodé à l'affichage)
         }));
       }
       if (error) throw error;
+      assertRpcOk(data);
 
       setReserveMsg(isConsultation
         ? t({id:'account.reserve.consultationRegistered'},{count:refs.length})
