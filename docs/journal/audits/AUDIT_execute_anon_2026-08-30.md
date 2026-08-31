@@ -175,3 +175,27 @@ un test qui le dira, pas une page publique.
 
 Et le lint 0028 aura une valeur attendue — **28**. Un avertissement attendu n'est
 plus un avertissement.
+
+---
+
+## Addendum — 01/09/2026 : les cinq verdicts sont exécutés, le compte est tenu
+
+**C.1 à C.4** ont été fermées le soir même de l'audit (migration
+`20260830191108_une_deliberation_en_cours_n_est_pas_publique`).
+
+**C.5 (`list_catalog_libraries`) est tranchée le 01/09, par les faits.** L'unique
+appelant est `BookDraftForm.jsx` — le choix de la bibliothèque cible au
+catalogage, réservé aux administrateur·rices réseau **par décision** (17/08,
+flux création œuvre/édition). La garde du corps est donc voulue ; c'est le nom
+qui promettait trop, et il porte désormais un `COMMENT` qui le dit. Pour `anon`
+la fonction rendait une liste vide : grant mort, retiré sans changement de
+comportement (migration `20260831195348`). Aucune policy ne la cite.
+
+**Remesuré après déploiement** : 28 fonctions `SECURITY DEFINER` exécutables par
+`anon` dans `api` + `public`, zéro hors de la liste nommée du `T10`, zéro
+attendue-mais-fermée — et le **lint 0028 affiche 28**, la valeur attendue
+annoncée par cet audit. Un avertissement attendu n'est plus un avertissement.
+
+Le défaut du schéma est retourné depuis le 31/08 (`20260831105114`, entrée
+`FOR ROLE postgres` seulement — celle de `supabase_admin` reste ouverte et
+revient à **B14**). La doctrine est au REGISTRE : `DOC-GRANT-1`.

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-31** · 81 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-31** · 80 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 10
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 9
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -60,7 +60,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **29 août 2026**. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `1d00ed2c`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés.
 
-**Fraîcheur des constats au 2026-08-31.** **58 items sur 81** portent une vérification datée qui leur est propre (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-08-31.** **57 items sur 80** portent une vérification datée qui leur est propre (A1, A3, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -364,7 +364,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **B2** | Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon` | `P1` | En cours |
 | **B14** | Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated` | `P2` | Ouvert |
 | **B4** | Examiner les quatre tables à RLS sans policy qui ne sont pas du transit | `P2` | Ouvert |
 | **B5** | Résorber les neuf policies qui réévaluent `auth.*()` par ligne | `P2` | À vérifier |
@@ -374,76 +373,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | En cours |
-
-#### B2 — Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`
-
-`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
-
-**État.** **Lots 1 et 2 livrés le 30/08** — migration `20260830181207_un_grant_que_la_fonction_contredit`, tests `T8`/`T9` dans `grants_herites_tests.sql`, CI verte, déployé. Le compteur de l'advisor est passé de **500 à 497** : trois exactement, comme annoncé. Restent les lots 3 et 4.
-
-Complété le 30/08. Le Security Advisor de Supabase affiche **500 avertissements** ; l'export CSV le dit : ce sont **deux lints et rien d'autre** — `anon_security_definer_function_executable` (0028) et `authenticated_security_definer_function_executable` (0029). Compté en production : **36** fonctions exécutables par `anon`, **464** par `authenticated`, total exactement 500.
-
-**Ce ne sont pas 36 décisions.** Le schéma `public` porte, depuis le socle Supabase :
-
-```sql
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
-  GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
-```
-
-Les 621 fonctions de `public` appartiennent toutes à `postgres`. **Toute fonction créée dans `public` naît donc exécutable par `anon`**, sans qu'aucune migration ne l'ait demandé. Ce défaut figure dans le baseline (`20260510000000_baseline_live.sql`), donc la CI le rejoue à l'identique : ce n'est pas une dérive de production.
-
-La contre-preuve est dans le dépôt : **141 lignes `REVOKE … anon`** réparties dans les migrations, et trois lots de durcissement en masse les 17, 19 et 20/08. Le projet corrige ce défaut une fonction à la fois depuis des mois. Il en reste 79 ouvertes à `anon` dans `public` (33 en `SECURITY DEFINER`, 46 en `SECURITY INVOKER`, où la RLS s'applique encore), plus 3 dans `api`.
-
-Relues une par une, les 36 se répartissent en trois groupes très inégaux :
-
-1. **Cinq intouchables.** `user_can_act_as_staff_on_library`, `fn_library_visible_to_caller`, `user_can_engage_library`, `fn_caller_is_network_admin`, `fn_caller_is_library_staff` sont appelées par **107 policies RLS, dont 39 évaluées par `anon`**. Leur retirer `EXECUTE` ne ferme rien : cela fait échouer la lecture publique avec `permission denied for function`.
-2. **Une vingtaine d'usages anonymes réels** : catalogue public (`api.search_catalog_v1`, `api.audio_tracklist_public`, `api.subject_related_v1`), les quatre lecteurs de mode, le moissonnage OAI, le parcours de candidature d'une bibliothèque par jeton.
-3. **Trois grants que la fonction elle-même contredit** : `search_authors_by_name`, `search_publishers_by_name` et `remove_library_regulation_document` **refusent `anon` dans leur propre corps** (`RAISE EXCEPTION 'Acesso restrito ao staff de catalogacao.'`, `'authentication required'`).
-
-**Lot 3 livré le 31/08 — la cause est retournée.** `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon` : une fonction créée dans `public` **naît désormais fermée à `anon`**. Aucune des 621 existantes n'a bougé.
-
-**Deux vérifications faites avant d'écrire ont corrigé le constat.** *(a)* `pg_default_acl` porte **deux** entrées sur les fonctions de `public` — une pour `postgres`, une pour `supabase_admin`. Nos migrations tournent en `postgres` et les fonctions lui appartiennent : c'est celle-là qui décide ; l'autre est hors de notre portée et ne s'appliquerait qu'à une fonction créée par `supabase_admin`, ce que le dépôt ne fait jamais. *(b)* **Aucune des 621 fonctions n'a d'ACL nulle**, et c'est ce qui rend l'opération sûre : dès qu'une entrée `pg_default_acl` existe, elle **remplace** le défaut natif de PostgreSQL — lequel accorde `EXECUTE` à `PUBLIC`. Retirer `anon` ne fait donc pas retomber sur `PUBLIC`.
-
-**Le piège, nommé pour qu'il ne se retrouve pas :** ne jamais révoquer *tous* les rôles du défaut. Une entrée devenue vide est **supprimée** par Postgres, et le défaut natif `PUBLIC=X` reprend — on croirait fermer et on ouvrirait à tout le monde. `postgres`, `authenticated` et `service_role` restent pour que la ligne survive. Le même piège attend **B14**.
-
-**Ce qui change pour la suite** : une fonction servant une page publique doit porter un `GRANT EXECUTE … TO anon` explicite (`DOC-OBJ-2`, corollaire). Une ligne oubliée casse la page avec `permission denied for function` — visible et réparable, jamais silencieux. Gardé par le `T11` de `grants_herites_tests.sql`, dans les deux sens.
-
-*Vérifié : 31/08 — lots 1, 2 et 3 livrés et vérifiés en base ; `pg_default_acl` relevé avant écriture (deux entrées, pas une), et l'absence d'ACL nulle sur les 621 fonctions vérifiée pour s'assurer que la fermeture ne retombe pas sur `PUBLIC`. Reste le tri des fonctions ouvertes à `authenticated`, qui est l'item **B14**. **01/09 — nuance remesurée** : des deux entrées, seule celle `FOR ROLE postgres` est retournée — l'entrée `FOR ROLE supabase_admin` accorde toujours `EXECUTE` à `anon`. Les migrations passent par `postgres`, donc tout ce que le projet crée naît fermé ; une fonction créée par `supabase_admin` (plateforme, extensions) naîtrait encore ouverte. B14 devra traiter **les deux** entrées.*
-
-**Ce que c'est.** La règle, corrigée par ce relevé : **est ouvert à `anon` ce qui sert une page publique, ou ce qu'une policy évaluée par `anon` appelle. Rien d'autre — et surtout pas par défaut.**
-
-Quatre lots, dans cet ordre :
-
-1. `REVOKE EXECUTE … FROM anon` sur les trois grants que la fonction contredit. Aucun changement de comportement : elles refusaient déjà.
-2. Un `COMMENT ON FUNCTION` sur les cinq intouchables, qui dit *pourquoi* et cite le décompte de policies daté. Sans lui, la prochaine lecture du tableau de bord refera ce travail — ou fera le revoke.
-3. **Retourner le défaut du schéma** : `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;`. Ne change rien aux 621 fonctions existantes — seulement aux suivantes. À partir de là, ouvrir à `anon` est un acte écrit, et une ouverture oubliée casse une page publique de façon visible au lieu d'exposer une fonction en silence. C'est une décision de doctrine : elle demande une entrée au `REGISTRE_decisions`, pas seulement une migration. **Et elle a une limite connue** : le chapeau de `grants_herites_tests.sql` la note depuis le 29/08 pour les tables — le défaut posé par `supabase_admin` n'est pas modifiable depuis une migration. Celui de `postgres` l'est, et c'est celui qui s'applique aux fonctions créées par les migrations ; mais la plateforme peut le reposer. D'où le dernier critère de fin : une suite, pas seulement un `ALTER`.
-4. Passer les ~28 restantes au crible de la question d'audit du 18/05 : *que renvoie-t-elle, à partir de quel paramètre, et qu'est-ce qui interdit à un tiers non connecté de le demander ?*
-
-**Avant tout `REVOKE` nominatif, vérifier :**
-```sql
-SELECT c.relname, p.polname, p.polroles::regrole[]
-  FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid
- WHERE coalesce(pg_get_expr(p.polqual, p.polrelid), '')
-     || coalesce(pg_get_expr(p.polwithcheck, p.polrelid), '')
-       LIKE '%nom_de_la_fonction%';
-```
-
-**Pourquoi ça compte.** Parce qu'un défaut permissif ne se voit jamais. Une fonction créée demain dans `public` sera exécutable par `anon` sans que personne ne l'ait décidé, et le seul endroit où cela apparaîtra est un compteur à trois chiffres sur un tableau de bord que plus personne ne lit. Les 141 `REVOKE` du dépôt sont la trace de cette lutte, menée à la main, sans jamais retourner la cause.
-
-Et parce qu'un grant que le corps de la fonction contredit est exactement ce qui cesse d'être relu. Le jour où quelqu'un retire la garde `auth.uid() is null` de `remove_library_regulation_document` pour réparer autre chose, le grant sera toujours là — et personne ne l'aura mis ce jour-là.
-
-**Ce qui compte comme fini.**
-
-- Les trois grants morts sont retirés par migration ; aucune suite ne rougit.
-- Les cinq intouchables portent un `COMMENT ON FUNCTION` qui nomme la raison et le décompte daté de policies.
-- Le privilège par défaut de `public` ne donne plus `EXECUTE` à `anon` sur les fonctions à venir, et la décision est écrite au `REGISTRE_decisions`.
-- Les ~28 restantes ont un verdict écrit dans `docs/journal/audits/`.
-- Une suite SQL garde l'invariant : *aucune fonction ouverte à `anon` hors d'une liste nommée* — sur le modèle du TEST 15 de `paquetA`, qui garde déjà le partage dans les deux sens sur dix helpers.
-- Le lint 0028 tombe à la taille de cette liste, et ce nombre est écrit quelque part. Un avertissement attendu n'est plus un avertissement.
-
-**Dépendances.** Les lots 1 et 2 tiennent dans une soirée et ne dépendent de rien. Le lot 3 est une décision de doctrine — il ne se prend pas seul et se pose après le lot 4, quand on sait ce qui doit rester ouvert. Le lot 4 est une revue, par paquets de dix.
-
-*Renvois : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `migration 20260702103557 (durcissement advisor 0028)` · `baseline 20260510000000 lignes 61206-61220 (ALTER DEFAULT PRIVILEGES)` · `tests/sql/paquetA_profils_tests.sql TEST 13 et TEST 15`*
 
 #### B14 — Auditer les 464 fonctions `SECURITY DEFINER` ouvertes à `authenticated`
 
@@ -2484,6 +2413,7 @@ CI verte : lint et suite unitaire. |
 | K4 | Corriger le générateur des pages de vie privée sur la langue déclarée | **Clos le 31/08 au soir, corrigé dans la foulée de la campagne de revérification.** Le générateur émettait `lang="pt"` là où tout le texte est en portugais du Brésil ; les pages écrites à la main portaient `pt-BR` et avaient raison. Le modèle du correctif dormait à la ligne d'à côté : `build-finances-pages.cjs` faisait la conversion depuis toujours (`HTML_LANG`). Carte posée dans le générateur de vie privée, dix pages régénérées — seule `pt/privacidade` change de langue, et la régénération a resynchronisé au passage l'en-tête des dix pages avec leur chrome, qui avait dérivé (« Appli », « Aplicativo »). **Vérifié en ligne après publication** : `anarbib.org/pt/privacidade` sert `lang="pt-BR"`. Commit `2fb4796` du dépôt vitrine. |
 | H3 | Publier les correspondances vers le thésaurus FICEDL en SKOS | **Clos le 31/08 au soir — et le constat était faux à moitié.** Les correspondances FICEDL étaient déjà exposées en SKOS : `skosExport.js` émettait `skos:exactMatch`/`closeMatch` depuis le 30/06, alimenté par `api.thesaurus_export_v1`. Ce qui manquait n'était pas l'export, c'était **l'adresse** — le fichier n'existait qu'en bouton de téléchargement, introuvable pour une machine. Livré : `scripts/build-thesaurus-skos.mjs` sur le patron de l'instantané du catalogue (prebuild, RPC `anon`, même sérialiseur que le bouton — aucune divergence possible, échec silencieux qui ne casse pas le build). **Vérifié en ligne après déploiement** : `app.anarbib.org/thesaurus.ttl` répond 200 en `text/turtle` (et `.jsonld` aussi), 51 alignements, `exactMatch` distinct de `closeMatch`, rien d'affirmé sur la hiérarchie FICEDL (le vocabulaire ne connaît qu'`exact` et `close`, et c'est voulu tant que H2 attend). Les 47 liens restants portent sur les 35 sujets SOLIDAIRES encore `proposto` : ils entreront dans le fichier à leur promotion, sans un geste. Commit `472db13b`. |
 | F2 | Corriger le gabarit des courriels d'alerte d'exploitation | **Clos le 31/08 au soir, livré et éprouvé en conditions réelles dans la même soirée.** Les alertes d'exploitation partaient avec le pied de page lectrice — « En cas de question, contacte la bibliothèque » suivi du téléphone : on disait à l'opérateur·rice de se téléphoner à soi-même. Livré : `footerOps` dans `layout.ts` (d'où vient l'alerte, où regarder, et OPS-8 — rien à acquitter, l'incident se clôt seul), trois clés dans les dix locales, branché dans `alerter()` de `health-probe`, l'entonnoir unique des huit envois. **Le piège attrapé en chemin** : la version texte de `renderEmail` fabriquait son propre pied (téléphone compris) sans regarder `footerHtml` — couverte par `footerTextLines`, gardée dans les deux sens par `mail-footer-ops.test.js`. **Éprouvé sur une alerte réelle** : incident d'essai `#9` ouvert à la main à 18 h 40 UTC (raison traçant l'essai dans la ligne même), refermé par la sonde elle-même à 18 h 45 — quatre minutes, zéro acquittement, exactement ce que le pied de page promet — et les deux courriels **reçus et relus par Xavier**, qui n'a pas écrit le code. Commits `4b1d8a86` et `12d4b760`. |
+| B2 | Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon` | **Clos le 01/09, les quatre lots exécutés et le compte tenu.** Lot 1 (30/08) : les trois grants que la fonction contredisait, retirés. Lot 2 : les cinq intouchables — 107 policies, dont 39 évaluées par `anon` — commentées et gardées par T8/T9. Lot 4 : les 33 relues une à une contre la question du 18/05 (`AUDIT_execute_anon_2026-08-30.md`) — 5 intouchables, 23 légitimes, 5 à traiter ; C.1–C.4 fermées le soir même (`20260830191108`, dont l'oracle de délibération et l'énumération du réseau par les fuseaux), C.5 tranchée le 01/09 par les faits : l'unique appelant est le choix de bibliothèque cible du catalogage, admin réseau **par décision du 17/08** — garde voulue, nom documenté par `COMMENT`, grant mort retiré (`20260831195348`). Lot 3 (31/08) : le défaut du schéma retourné (`20260831105114`) — une fonction créée dans `public` naît fermée à `anon` ; doctrine au REGISTRE (`DOC-GRANT-1`), pièges nommés (l'entrée `pg_default_acl` qui ne doit jamais se vider ; l'entrée `FOR ROLE supabase_admin` qui reste et revient à B14). **L'invariant est gardé** : la liste nommée du T10 compte 28 fonctions, dans les deux sens, et **le lint 0028 affiche exactement 28** — remesuré après déploiement. Un avertissement attendu n'est plus un avertissement. Le tri des 464 d'`authenticated` est B14. |
 
 ---
 
@@ -2515,4 +2445,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 81 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 80 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
