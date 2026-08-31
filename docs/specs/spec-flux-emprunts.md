@@ -86,11 +86,20 @@ Le routage côté Edge Function `notify-event` consomme ces événements (handle
 Trois toggles directement liés aux emprunts :
 
 - `loan_lifecycle_enabled` — création/retour/prorogation
-- `loan_reminders_enabled` — rappels J-5, J-3, jour J avant échéance
-- `loan_overdue_enabled` — relances J+1, J+7, J+30 après échéance
+- `loan_reminders_enabled` — rappel **J-3** et **jour J** avant échéance *(amendé le 31/08/2026, cf. §10.2)*
+- `loan_overdue_enabled` — relance **J+7** après échéance *(amendé le 31/08/2026, cf. §10.2)*
 - `admin_copy_loans_enabled` — copie carbone aux bibliothécaires
 
 Default : tous à `true`.
+
+> ⚠️ **Ce défaut n'est pas une décision.** Relevé le 31/08/2026 : les trois
+> bibliothèques dotées d'une politique ont `loan_reminders_enabled` et
+> `loan_overdue_enabled` à `true` — non parce qu'elles les ont activés, mais
+> parce qu'ils naissent activés. Or **aucun envoi correspondant n'existait**.
+> Trois bibliothèques se croyaient donc couvertes par un dispositif absent.
+> C'est le cas *(a)* de `DOC-SILENCE-1` : un contrôle affiché doit commander ce
+> qu'il prétend commander. Le manque est comblé par `F4` ; le défaut à `true`
+> reste, mais il commande désormais quelque chose.
 
 ### 2.5 Surfaces UI existantes
 
@@ -616,9 +625,41 @@ Commit unique : `spec flux emprunts phases 1-6 : DB + api wrappers + notificatio
 
 Décision (10/05/2026) : **colonne dédiée `renewals_used int NOT NULL DEFAULT 0`**, avec trigger qui maintient `extended_once` en sync pour ne pas casser le frontend qui le consulte. Les fonctions `fn_renew_my_loan` et `fn_v2_extend_emprestimo_once` incrémentent `renewals_used`. Permet d'honorer les politiques de circulation où `renewal_max_count > 1`. Détails d'implémentation en §4.3.
 
-### 10.2 Rappels de fin de prêt et relances de retard
+### 10.2 Rappels de fin de prêt et relances de retard *(tranché le 31/08/2026)*
 
-Hors périmètre de cette spec : il existe déjà `fn_cron_notify_*` et les toggles `loan_reminders_enabled` / `loan_overdue_enabled`. Dette à confirmer dans une session ultérieure : sont-ils branchés et testés ?
+**La dette est levée, et la réponse était non.** La question posée ici — « sont-ils
+branchés et testés ? » — a été instruite le 31/08/2026, en base et dans le dépôt.
+
+**Le verdict.** Les trente-six crons ont été relus ; aucun ne rappelle une échéance
+d'emprunt ni ne relance un retard. Le seul voisin, `anarbib-notify-mid-loan-reading-daily`,
+propose une lecture en cours de prêt — autre chose. `anarbib-peb-detect-overdue-daily`
+concerne le prêt **entre bibliothèques**, pas le prêt aux lectrices. Les deux
+toggles du §2.4 ne commandaient donc rien, et trois bibliothèques les avaient
+à `true` sans le savoir.
+
+**La décision, et pourquoi elle réduit le nombre d'envois.** Six moments étaient
+écrits : J-5, J-3, jour J, puis J+1, J+7, J+30. On en garde **trois** :
+
+| Moment | Ce qu'il dit |
+|---|---|
+| **J-3** | l'échéance approche, le renouvellement est encore possible |
+| **jour J** | c'est aujourd'hui |
+| **J+7** | le livre manque à la bibliothèque depuis une semaine |
+
+Le motif est `OPS-8`, acté le même jour : **un signal qui se répète cesse d'être
+lu.** Nous l'avons vérifié sur nous-mêmes — dix courriels d'alerte pour un seul
+incident, refermés par réflexe. Six courriels pour un livre en retard produiraient
+le même émoussement chez une lectrice, à une différence près : elle peut cesser
+d'emprunter. J-5 double J-3 sans rien ajouter ; J+1 arrive avant qu'un retard d'un
+jour signifie quoi que ce soit ; J+30 s'adresse à une situation qui n'est plus un
+oubli mais une conversation à avoir de personne à personne, et qu'un courriel
+automatique dessert.
+
+**Implémentation** : item `F4`. La chaîne existe déjà — `notify-mid-loan-reading`
+interroge `emprestimos_v2` sur `due_at`, résout items, profils (avec
+`consent_email`) et contexte courriel de la bibliothèque, et rend le message dans
+les dix langues. Les rappels réutilisent cette chaîne ; ce qui s'ajoute, ce sont
+des fenêtres de dates et des textes.
 
 ### 10.3 Import historique
 
