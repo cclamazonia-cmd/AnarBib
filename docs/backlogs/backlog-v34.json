@@ -1550,7 +1550,11 @@
         "docs/CHANTIERS_OUVERTS.md §7",
         "REGISTRE §1 RES-D11",
         "CALENDRIER_bologne_2026-08-27"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `network_administrators` : 1 ligne. Rien n'a bougé.",
+        "pt": "31/08 — `network_administrators`: 1 linha. Nada mudou."
+      }
     },
     {
       "id": "A2",
@@ -1644,7 +1648,11 @@
       "r": [
         "CLAUDE.md, piège connu n°1",
         "REPRISE_bascule_autohebergee_2026-08-26"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé.",
+        "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local` em `.forgejo/workflows/`. Nada mudou."
+      }
     },
     {
       "id": "B2",
@@ -1805,7 +1813,11 @@
       "r": [
         "PLAN_DE_MARCHE §8",
         "MATRICE_rls_deny_all_2026-06-23"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 14 tables à RLS sans policy (15 au 29/08). Les quatre nommées y sont toujours : `author_name_aliases` (1 647 lignes vivantes), `library_themes` (3), `library_theme_configs` (0), `interlibrary_loan_events` (0).",
+        "pt": "31/08 — 14 tabelas com RLS sem policy (15 em 29/08). As quatro nomeadas continuam lá, `author_name_aliases` com 1 647 linhas vivas."
+      }
     },
     {
       "id": "B5",
@@ -1848,7 +1860,11 @@
       },
       "r": [
         "Advisors performance, relevé du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — le lint `auth_rls_initplan` remonte exactement les neuf policies nommées : `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports`, `authority_duplicate_reports`, `author_not_duplicate` (1 chacune).",
+        "pt": "31/08 — o lint `auth_rls_initplan` aponta exatamente as nove policies nomeadas."
+      }
     },
     {
       "id": "B7",
@@ -1988,7 +2004,11 @@
       "r": [
         "ETAT-lancement-consolide-2026-07-03 §2 item 7",
         "Advisors performance du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 254 avis : 167 index inutilisés, 38 clés étrangères non indexées, **25** tables en policies permissives en double (`book_reading_notes` s'y est ajoutée avec les notes de lecture), 14 tables sans clé primaire, 1 avis de connexions.",
+        "pt": "31/08 — 254 avisos: 167 índices sem uso, 38 chaves estrangeiras sem índice, **25** tabelas com policies permissivas em dobro (`book_reading_notes` entrou na lista), 14 sem chave primária."
+      }
     },
     {
       "id": "B11",
@@ -2081,7 +2101,11 @@
       "r": [
         "ETAT-AVANCEMENT-multisessions",
         "docs/schema/baseline_schema_2026-06-11.sql"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul.",
+        "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08."
+      }
     },
     {
       "id": "C1",
@@ -2128,7 +2152,11 @@
       "r": [
         "REPRISE_claude_code_2026-08-27 chantier 2",
         "REGISTRE §30 THES"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 89 sujets et 98 alignements en base ; `docs/drafts/20260828_sujets_solidaires_ficedl.sql` est toujours hors de `supabase/migrations/`. Le constat tient tel quel.",
+        "pt": "31/08 — 89 assuntos e 98 alinhamentos no banco; o SQL continua em `docs/drafts/`, fora das migrações."
+      }
     },
     {
       "id": "C2",
@@ -2145,8 +2173,8 @@
         "pt": "Importar o acervo SOLIDAIRES pela ferramenta de importação, e registrar o que quebra"
       },
       "v": {
-        "fr": "1 685 notices dans `SOLIDAIRES_import_test.csv`. Les en-têtes suivent `spec-catalogacao-fiche-et-paliers` et **n'ont jamais été confrontés à l'importeur**. **Décision de Xavier, 29/08 : l'import ne se fera que si la candidature de SOLIDAIRES est acceptée par plusieurs administrateur·rices réseau.** L'échéance de fin août tombe donc, et l'ordre des deux chantiers s'inverse par rapport aux notes d'août : l'admission d'abord, l'import ensuite.",
-        "pt": "1 685 registros em `SOLIDAIRES_import_test.csv`. Os cabeçalhos seguem `spec-catalogacao-fiche-et-paliers` e **nunca foram confrontados com o importador**. **Decisão de Xavier, 29/08: a importação só se fará se a candidatura da SOLIDAIRES for aceita por várias pessoas administradoras de rede.** O prazo de fim de agosto cai, portanto, e a ordem dos dois canteiros se inverte em relação às notas de agosto: a admissão primeiro, a importação depois."
+        "fr": "1 685 notices dans `SOLIDAIRES_import_test.csv`. **Constat corrigé le 31/08 : le fichier a bel et bien été confronté à l'importeur.** `book_drafts` porte 1 673 brouillons de source `SOLIDAIRES_import_v2.csv`, créés en un seul lot le 29/08 à 1 h 48 — la nuit précédant l'écriture du constat « jamais confrontés ». Tous sont à l'état `draft`, **aucun n'est publié** : le catalogue public n'est pas touché. La décision de Xavier (29/08) reste entière pour la suite : pas de promotion tant que la candidature de SOLIDAIRES n'est pas acceptée à plusieurs (G7). Ce qui reste de l'item n'est donc plus « importer », mais consigner ce que l'import a cassé, puis promouvoir après l'admission.",
+        "pt": "1 685 registros em `SOLIDAIRES_import_test.csv`. **Constato corrigido em 31/08: o arquivo foi sim confrontado com o importador.** `book_drafts` traz 1 673 rascunhos da fonte `SOLIDAIRES_import_v2.csv`, criados num único lote na noite anterior à escrita do constato « nunca confrontados ». Todos `draft`, **nenhum publicado**: o catálogo público não foi tocado. A decisão de Xavier (29/08) permanece: nenhuma promoção antes da admissão (G7). O que resta não é mais « importar », mas consignar o que quebrou e promover depois da admissão."
       },
       "w": {
         "fr": "Adapter les en-têtes au format réellement attendu (environ une heure), faire passer le fichier **par l'outil d'import du dépôt et non par des `INSERT` à la main**, relire une vingtaine de fiches au hasard, puis faire une démonstration en visio écran partagé.",
@@ -2179,7 +2207,11 @@
       "r": [
         "REPRISE_claude_code_2026-08-27 chantier 2",
         "CALENDRIER_bologne_2026-08-27"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue.",
+        "pt": "31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo."
+      }
     },
     {
       "id": "C3",
@@ -2269,7 +2301,11 @@
       "r": [
         "AUDIT_conventions_catalographiques_2026-08-20 A5",
         "REGISTRE §37 CONV-7"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 726 fiches sur 1 305 sans `country` (55,6 %) : quatre de plus qu'au 29/08. La dette avance plus vite que sa résorption.",
+        "pt": "31/08 — 726 de 1 305 fichas sem `country` (55,6 %): quatro a mais que em 29/08."
+      }
     },
     {
       "id": "C5",
@@ -2299,12 +2335,12 @@
       },
       "f": {
         "fr": [
-          "La dette est chiffrée.",
+          "~~La dette est chiffrée~~ — 31/08 : 2 653 `autor` non vides, 1 629 distincts, 231 livres sans aucun lien `authors`.",
           "Une décision est inscrite au REGISTRE, dans un sens ou dans l'autre.",
           "Si dépréciation : le champ n'est plus écrit par aucun formulaire."
         ],
         "pt": [
-          "A dívida está quantificada.",
+          "~~A dívida está quantificada~~ — 31/08: 2 653 `autor` não vazios, 1 629 distintos, 231 livros sem vínculo com `authors`.",
           "Uma decisão está inscrita no REGISTRO, num sentido ou no outro.",
           "Se depreciação: o campo não é mais escrito por nenhum formulário."
         ]
@@ -2316,7 +2352,11 @@
       "r": [
         "REGISTRE §37 CONV-O3",
         "AUDIT_conventions_catalographiques_2026-08-20"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes.",
+        "pt": "31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria."
+      }
     },
     {
       "id": "C6",
@@ -2409,7 +2449,11 @@
       "r": [
         "AnarBib-Backlog-2026-06-17-v33 §5",
         "ETAT-lancement-consolide-2026-07-03 §2 item 6"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 1 122 notices indexées sur 2 659 (42,2 %), 1 279 affectations, 89 sujets. Les quatre comptes ont légèrement baissé depuis le 29/08 : les fusions de doublons du 31/08 ont retiré des notices, pas des indexations.",
+        "pt": "31/08 — 1 122 de 2 659 registros indexados (42,2 %), 1 279 atribuições, 89 assuntos. As fusões de duplicatas de 31/08 explicam a leve queda."
+      }
     },
     {
       "id": "C8",
@@ -2453,7 +2497,11 @@
       "r": [
         "AUDIT_conventions_catalographiques_2026-08-20 A7-A9",
         "REGISTRE §12 CAT-D6"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — sur 1 305 autorités : 728 sans année de naissance (56 %), 1 276 sans identifiant VIAF, ISNI ou Wikidata (98 %), 1 280 sans `variant_forms` (98 %). Le constat tient.",
+        "pt": "31/08 — de 1 305 autoridades: 728 sem ano de nascimento, 1 276 sem identificador externo, 1 280 sem `variant_forms`. O constato se mantém."
+      }
     },
     {
       "id": "C9",
@@ -2540,7 +2588,11 @@
       "r": [
         "PLAN_DE_MARCHE §8",
         "DECISION_profil_numerisation_2026-08-20"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.",
+        "pt": "31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo."
+      }
     },
     {
       "id": "D1",
@@ -2587,7 +2639,11 @@
       "r": [
         "spec-periodiques-v0.1 §11 §14",
         "Migrations 20260827163000 à 20260827210000"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — toujours 4 titres de périodiques et 7 fascicules rattachés en base. Rien n'a bougé depuis la livraison ; la révision de la spec reste à faire.",
+        "pt": "31/08 — ainda 4 títulos e 7 fascículos no banco. A revisão da spec continua por fazer."
+      }
     },
     {
       "id": "D2",
@@ -2676,7 +2732,11 @@
       "r": [
         "spec-periodiques-v0.1 §10",
         "REPRISE_claude_code_2026-08-27"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — les 1 673 brouillons SOLIDAIRES sont en base (voir C2) et **aucun ne porte de `serial_id`** : le rattachement des fascicules n'a pas commencé. Toujours derrière G7.",
+        "pt": "31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou."
+      }
     },
     {
       "id": "D4",
@@ -2814,7 +2874,11 @@
       "r": [
         "package.json",
         "Relevé du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `package.json` : `epubjs ^0.3.93`, inchangé.",
+        "pt": "31/08 — `package.json`: `epubjs ^0.3.93`, sem mudança."
+      }
     },
     {
       "id": "E1",
@@ -2907,7 +2971,11 @@
       "r": [
         "docs/CHANTIERS_OUVERTS.md §5",
         "docs/notes-audit/anarbib-charte-langage-inclusif-v2.md"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — les dix fichiers `anarbib-charte-langage-inclusif-v2-*.md` existent depuis le 05/06, `nl` et `el` compris ; mais dedans, la convention `nl` est marquée « provisoire » et la `el` « à définir avec une personne locutrice grecque militante ». Les documents existent, les décisions non : le constat tient sur le fond.",
+        "pt": "31/08 — os dez arquivos da carta v2 existem desde 05/06, `nl` e `el` incluídos; mas dentro deles a convenção `nl` está marcada « provisória » e a `el` « a definir com uma pessoa falante de grego militante ». Os documentos existem, as decisões não."
+      }
     },
     {
       "id": "E3",
@@ -3043,7 +3111,11 @@
         "VERIF_confidentialite_tiers_2026-08-20",
         "PLAN_DE_MARCHE §8",
         "scripts/nominatim/"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — trois fichiers chargent encore `tile.openstreetmap.org` côté client : `CartographyEditModal.jsx:70`, `CartographyMap.jsx:181`, `CartografiaAjouterPage.jsx:66`.",
+        "pt": "31/08 — três arquivos ainda carregam `tile.openstreetmap.org` do lado do navegador."
+      }
     },
     {
       "id": "E6",
@@ -3089,7 +3161,11 @@
       "r": [
         "AnarBib-Backlog-2026-06-17-v33 §2.5",
         "Relevé du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — les cinq mêmes fichiers, aux tailles voisines : `BookDraftForm.jsx` 197 Ko, `BibliotecaPage.jsx` 186 Ko, `AccountPage.jsx` 155 Ko, `PanelPage.jsx` 116 Ko, `ImportacoesPage.jsx` 111 Ko.",
+        "pt": "31/08 — os cinco mesmos arquivos, com tamanhos vizinhos (197, 186, 155, 116 e 111 KB)."
+      }
     },
     {
       "id": "E7",
@@ -3105,8 +3181,8 @@
         "pt": "Corrigir o título de página que não segue a navegação"
       },
       "v": {
-        "fr": "`document.title` ne se met pas à jour lors d'une navigation dans l'application ; il ne change qu'au rechargement complet de la page.",
-        "pt": "`document.title` não se atualiza durante uma navegação dentro do aplicativo; só muda no recarregamento completo da página."
+        "fr": "**Constat corrigé le 31/08 : il était faux depuis mai.** Le hook `src/lib/useDocumentTitle.js` met à jour `document.title` à la navigation depuis le **05/05/2026** (commit `c4865278`), et 32 pages sur 79 l'utilisent. Ce qui reste n'est pas « le titre ne suit pas » : c'est la couverture des 47 pages sans hook — dont il faut d'abord dire combien sont des routes réelles — et le test promis, qui n'existe pas.",
+        "pt": "**Constato corrigido em 31/08: estava errado desde maio.** O hook `src/lib/useDocumentTitle.js` atualiza `document.title` na navegação desde **05/05/2026**, e 32 páginas de 79 o usam. O que resta é a cobertura das 47 páginas sem hook e o teste prometido, que não existe."
       },
       "w": {
         "fr": "Poser le titre à chaque changement de route, à partir des clés i18n existantes.",
@@ -3132,7 +3208,11 @@
       },
       "r": [
         "Mémoire de projet, dette technique"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — mesuré dans le dépôt : hook présent depuis le 05/05, 32 usages sous `src/pages/`, aucun test de titre dans `src/tests/`.",
+        "pt": "31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título."
+      }
     },
     {
       "id": "E8",
@@ -3148,8 +3228,8 @@
         "pt": "Carregar as duas fontes sem bloquear a exibição"
       },
       "v": {
-        "fr": "`titre.ttf` pèse 1 Mo et `accent.ttf` 484 Ko ; les deux sont chargées sans préchargement déclaré, sans `font-display: swap`, et sans `preconnect` vers Supabase.",
-        "pt": "`titre.ttf` pesa 1 MB e `accent.ttf` 484 KB; as duas são carregadas sem pré-carregamento declarado, sem `font-display: swap`, e sem `preconnect` para o Supabase."
+        "fr": "**Constat corrigé le 31/08 : il décrivait un état mort depuis mai.** `titre.ttf` (1 Mo) et `accent.ttf` (484 Ko) ont disparu le **06/05/2026** (commit `dba21cd3`, auto-hébergement Bitter + Fira Sans) — il n'en reste qu'un commentaire dans `src/lib/theme.js:198`. Depuis : 19 fichiers woff2 auto-hébergés dans `public/fonts/` (1,3 Mo en tout), `font-display: swap` sur toutes les faces de `src/styles/fonts.css`, préchargement des deux fichiers du premier rendu dans `index.html`. Il ne reste de l'item que la mesure avant/après jamais consignée — candidat à la clôture.",
+        "pt": "**Constato corrigido em 31/08: descrevia um estado morto desde maio.** `titre.ttf` e `accent.ttf` desapareceram em **06/05/2026** — resta só um comentário em `theme.js:198`. Desde então: 19 arquivos woff2 auto-hospedados (1,3 MB), `font-display: swap` em todas as faces, pré-carregamento dos dois arquivos críticos. Resta só a medição antes/depois nunca consignada — candidato a encerramento."
       },
       "w": {
         "fr": "Ajouter `font-display: swap`, précharger la police de titre seule, sous-ensembler les fichiers aux caractères réellement utilisés — dix langues dont le grec, donc le sous-ensemble n'est pas trivial.",
@@ -3161,11 +3241,11 @@
       },
       "f": {
         "fr": [
-          "Le texte s'affiche avant les polices, avec une substitution acceptable.",
+          "~~Le texte s'affiche avant les polices, avec une substitution acceptable~~ — `font-display: swap` sur toutes les faces depuis le 06/05 (`src/styles/fonts.css`).",
           "Le poids total des polices chargées à la première visite est mesuré avant et après."
         ],
         "pt": [
-          "O texto aparece antes das fontes, com uma substituição aceitável.",
+          "~~O texto aparece antes das fontes, com uma substituição aceitável~~ — `font-display: swap` em todas as faces desde 06/05.",
           "O peso total das fontes carregadas na primeira visita é medido antes e depois."
         ]
       },
@@ -3176,7 +3256,11 @@
       "r": [
         "Mémoire de projet, dette technique",
         "REGISTRE §39 IDENT"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — mesuré dans le dépôt : fichiers de `public/fonts/`, `src/styles/fonts.css`, `index.html:47-48`, historique git.",
+        "pt": "31/08 — medido no repositório: arquivos, CSS, `index.html`, histórico git."
+      }
     },
     {
       "id": "E9",
@@ -3205,12 +3289,12 @@
       },
       "f": {
         "fr": [
-          "Aucune grille du JSX ne porte de piste `fr` nue.",
+          "~~Aucune grille du JSX ne porte de piste `fr` nue~~ — 31/08 : plus une seule, la dernière occurrence est un commentaire qui rappelle la règle.",
           "Les deux onglets sont en cartes sous 640 px.",
           "Les requêtes de média héritées vivent dans `mobile.css`."
         ],
         "pt": [
-          "Nenhuma grade do JSX traz trilha `fr` nua.",
+          "~~Nenhuma grade do JSX traz trilha `fr` nua~~ — 31/08: nenhuma resta, a última ocorrência é um comentário.",
           "As duas abas estão em cartões abaixo de 640 px.",
           "As media queries herdadas vivem em `mobile.css`."
         ]
@@ -3221,7 +3305,11 @@
       },
       "r": [
         "REGISTRE §36 MOB-Q1..Q3"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré.",
+        "pt": "31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido."
+      }
     },
     {
       "id": "E10",
@@ -3356,7 +3444,11 @@
       "r": [
         "Mémoire de projet, reliquats de la chaîne courriel",
         "AUDITORIA_NOTIFY_FUNCTIONS_2026-05-06"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit.",
+        "pt": "31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria."
+      }
     },
     {
       "id": "F2",
@@ -3400,7 +3492,11 @@
       "r": [
         "RUNBOOK_exploitation_v0.3 §7",
         "PLAN_DE_MARCHE §8"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — lu dans le code : `health-probe/index.ts` passe par `renderEmail` + `footerPadrao` de `_shared/mail/layout.ts` — le gabarit lectrice, qui pousse le libellé téléphone (`layout.ts:28`). Aucun gabarit d'exploitation dans `_shared/mail/`.",
+        "pt": "31/08 — lido no código: `health-probe` usa o gabarito de leitora (`renderEmail` + `footerPadrao`, com telefone). Nenhum gabarito de operação existe."
+      }
     },
     {
       "id": "F3",
@@ -3446,7 +3542,11 @@
       "r": [
         "PLAN_DE_MARCHE §8",
         "Relevé du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `mail-i18n-test` est toujours déployée en production (version 1 566, retouchée le jour même par un déploiement groupé). Le dépôt compte 50 dossiers de fonctions hors `_shared`, et `config.toml` porte 38 déclarations `verify_jwt`.",
+        "pt": "31/08 — `mail-i18n-test` continua implantada (versão 1 566). O repositório tem 50 pastas de funções e 38 declarações `verify_jwt`."
+      }
     },
     {
       "id": "F4",
@@ -3610,7 +3710,11 @@
       "r": [
         "ECART_cosignature_promotion_coordenador_2026-08-26 §5",
         "REGISTRE §41 GOUV-1"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — la migration `20260826120000` figure bien au registre de production. Rien de neuf mesurable sur la décision politique elle-même.",
+        "pt": "31/08 — a migração `20260826120000` está no registro de produção. Nada de novo mensurável sobre a decisão política."
+      }
     },
     {
       "id": "G3",
@@ -3626,8 +3730,8 @@
         "pt": "Testar o circuito de promoção colegiada em `blmf-teste`"
       },
       "v": {
-        "fr": "La migration est en production ; le runbook de déploiement en onze étapes est donc caduc. Ce qui reste est la **répétition en six pas sur `blmf-teste`**, jamais faite. Or `library_team_invitations` porte **zéro ligne** depuis sa création : le circuit que la migration rend obligatoire n'a jamais été emprunté une seule fois.",
-        "pt": "A migração está em produção; o runbook de implantação em onze etapas está portanto caduco. O que resta é o **ensaio em seis passos em `blmf-teste`**, nunca feito. Ora, `library_team_invitations` traz **zero linha** desde sua criação: o circuito que a migração torna obrigatório nunca foi percorrido uma única vez."
+        "fr": "**Constat corrigé le 31/08 : le circuit est en train d'être emprunté pour la première fois — en réel, pas en répétition.** `library_team_invitations` porte une ligne : l'invitation `ebd78fb9` au rôle `coordenador` sur la **BTL**, proposée le 30/08, ratifiée (statut `ready`, courriel `team.invitation_ready` parti le 30/08), non encore acceptée, expiration le 29/09. C'est elle qui a produit la ligne `#72` de B17. La répétition en six pas sur `blmf-teste`, elle, n'a toujours pas eu lieu : une promotion réelle essuie les plâtres à sa place.",
+        "pt": "**Constato corrigido em 31/08: o circuito está sendo percorrido pela primeira vez — em real, não em ensaio.** `library_team_invitations` traz uma linha: convite `ebd78fb9` ao papel `coordenador` na **BTL**, proposto em 30/08, ratificado (status `ready`, e-mail enviado), ainda não aceito, expira em 29/09. Foi ele que produziu a linha `#72` de B17. O ensaio em seis passos em `blmf-teste` continua por fazer: uma promoção real está estreando o circuito em seu lugar."
       },
       "w": {
         "fr": "Les six pas sur la bibliothèque d'essai `blmf-teste`, dont les courriels sont coupés (`email_delivery_mode = 'disabled'`). **Si un pas échoue, ne rien faire sur la BLMF.**",
@@ -3656,7 +3760,11 @@
       "r": [
         "RUNBOOK_deploiement_collegialite_coordenador_2026-08-26 étape 10",
         "MIGRATION_collegialite_coordenador_2026-08-26"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — mesuré en base : la ligne d'invitation, l'event `team.invitation_ready` envoyé, et la ligne `#72` partie le jour même (voir B17).",
+        "pt": "31/08 — medido no banco: a linha do convite, o evento enviado, e a linha `#72` de B17 partida no mesmo dia."
+      }
     },
     {
       "id": "G4",
@@ -3701,7 +3809,11 @@
       },
       "r": [
         "VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §2"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `team_notification_outbox` : 25 envois, 0 échec — et toujours **aucune** ligne pour `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. Le mécanisme continue de faire ses preuves à côté (deux events de plus depuis le 29/08) ; ces quatre-là n'ont jamais été déclenchés.",
+        "pt": "31/08 — `team_notification_outbox`: 25 envios, 0 falha — e ainda **nenhuma** linha para os quatro e-mails. Nunca disparados."
+      }
     },
     {
       "id": "G5",
@@ -3794,7 +3906,11 @@
         "spec-cycle-vie-peb.md",
         "PLAN_formation_coordination_BLMF §5",
         "REGISTRE §14 PEB"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `interlibrary_loans_v2` : 2 prêts vivants pour 20 insertions historiques, comme au 29/08.",
+        "pt": "31/08 — `interlibrary_loans_v2`: 2 empréstimos vivos para 20 inserções, como em 29/08."
+      }
     },
     {
       "id": "G7",
@@ -3885,7 +4001,11 @@
       "r": [
         "VEILLE_leftovers_maydayrooms_2026-08-19 §3.4",
         "REGISTRE §34 MAP-E"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 187 fiches en base, inchangé. Le fichier public a changé d'adresse et de contenu : `data/carte-publique.geojson` du dépôt vitrine, **109** entrées (l'item en citait 121 sous l'ancien nom). Les neuf archives NORLA restent à confronter.",
+        "pt": "31/08 — 187 fichas no banco. O arquivo público mudou de endereço: `data/carte-publique.geojson` no repositório vitrine, **109** entradas (o item citava 121). As nove NORLA seguem por confrontar."
+      }
     },
     {
       "id": "G9",
@@ -4022,7 +4142,11 @@
       "r": [
         "REPRISE_claude_code_2026-08-27 chantier 3",
         "NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — précision au constat : les 158 descripteurs de la facette « dates » sont sans libellé dans le **JSON d'aspiration** (`tmp-ficedl/ficedl_thesaurus.json` : 620 termes, 158/158 nus) ; la table `ficedl_thesaurus_terms`, elle, n'en porte **aucun** — 462 lignes, facettes sujets et géo seulement. En base ils ne sont pas « nus » : ils manquent. Le correctif n'a toujours pas été éprouvé contre le site.",
+        "pt": "31/08 — precisão: os 158 descritores de datas estão sem rótulo no **JSON de aspiração** (620 termos); a tabela não traz **nenhum** deles — 462 linhas, só facetas assuntos e geo. No banco eles não estão « nus »: faltam. O corretivo segue sem prova contra o site."
+      }
     },
     {
       "id": "H2",
@@ -4114,7 +4238,11 @@
       "r": [
         "docs/CHANTIERS_OUVERTS.md §4",
         "CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26 convention 2"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 98 alignements en base : 44 `exact`, 54 `close`. Le constat tient.",
+        "pt": "31/08 — 98 alinhamentos: 44 `exact`, 54 `close`."
+      }
     },
     {
       "id": "H4",
@@ -4158,7 +4286,11 @@
       "r": [
         "docs/CHANTIERS_OUVERTS.md §4",
         "CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26 convention 1"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — aucune occurrence d'OPDS dans `src/` ni `supabase/functions/`. Rien n'existe, comme écrit.",
+        "pt": "31/08 — nenhuma ocorrência de OPDS em `src/` nem `supabase/functions/`."
+      }
     },
     {
       "id": "H5",
@@ -4206,7 +4338,11 @@
         "Relevé du 29/08/2026",
         "REPRISE_bascule_autohebergee_2026-08-26",
         "spec-oai-provider-gouvernance.md"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — le cron `anarbib-oai-harvest-weekly` (`20 4 * * 2`, actif) n'a aucune exécution à son journal. Première occurrence attendue le mardi 01/09 à 4 h 20.",
+        "pt": "31/08 — o cron (`20 4 * * 2`, ativo) não tem nenhuma execução no registro. Primeira esperada em 01/09."
+      }
     },
     {
       "id": "H6",
@@ -4314,8 +4450,8 @@
         "pt": "Alinhar a imagem GoTrue com o estado real das migrações de autenticação"
       },
       "v": {
-        "fr": "La production porte **77 migrations `auth`**, la dernière datée du 25/06. L'image épinglée dans `deploy/.env` est `GOTRUE_TAG=v2.189.0`, qui en porte **69**. `deploy/.env.example` indique `v2.192.0`. L'écart est un **bloquant de correction**, pas de confort.",
-        "pt": "A produção traz **77 migrações `auth`**, a última datada de 25/06. A imagem fixada em `deploy/.env` é `GOTRUE_TAG=v2.189.0`, que traz **69**. `deploy/.env.example` indica `v2.192.0`. A diferença é um **bloqueio de correção**, não de conforto."
+        "fr": "La production porte **77 migrations `auth`** (remesuré le 31/08), la dernière datée du 25/06. **Le constat sur l'épinglage est périmé : `deploy/.env` et `deploy/.env.example` portent tous deux `GOTRUE_TAG=v2.192.0` désormais.** Ce que v2.192.0 embarque comme migrations n'a pas été mesuré : l'alignement reste à prouver, et l'item reste gelé avec I2.",
+        "pt": "A produção traz **77 migrações `auth`** (remedido em 31/08). **O constato sobre a fixação caducou: `deploy/.env` e `.env.example` trazem ambos `GOTRUE_TAG=v2.192.0`.** O que a v2.192.0 embarca não foi medido: o alinhamento continua por provar."
       },
       "w": {
         "fr": "Une méthode qui **se mesure et ne se devine pas** : monter d'un palier, démarrer sur un volume vierge, `select count(*) from auth.schema_migrations;`, recommencer jusqu'à atteindre au moins 77.",
@@ -4343,7 +4479,11 @@
       },
       "r": [
         "REPRISE_bascule_autohebergee_2026-08-26 §1"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `auth.schema_migrations` : 77 ; `deploy/.env` et `.env.example` relus : `v2.192.0` des deux côtés.",
+        "pt": "31/08 — `auth.schema_migrations`: 77; `deploy/.env` e `.env.example` relidos: `v2.192.0` dos dois lados."
+      }
     },
     {
       "id": "I2",
@@ -4436,7 +4576,11 @@
       "r": [
         "deploy/README.md",
         "deploy/REPETITION.md étape 5"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `supabase/functions/main/index.ts` : 6 885 octets, présent ; aucun test ne le mentionne dans `src/tests/` ni `tests/`. Le constat tient.",
+        "pt": "31/08 — `main/index.ts`: 6 885 bytes, presente; nenhum teste o menciona."
+      }
     },
     {
       "id": "I4",
@@ -4482,7 +4626,11 @@
       "r": [
         "NOTE_temoin_sauvegarde_2026-08-27",
         "REPRISE_claude_code_2026-08-27 chantier 1"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — la version `20260827180000` n'est ni dans `supabase/migrations/` ni au registre de production (0 ligne). Le fichier n'a pas été retrouvé dans le dépôt. Le mot « provenance » apparaît en revanche dix fois dans le `health-probe/index.ts` du dépôt : la part fonction existe au moins en partie ; la part base, nulle part. Échéance du 28/08 échue.",
+        "pt": "31/08 — a versão `20260827180000` não está nem no repositório nem no registro de produção. « provenance » aparece dez vezes no `health-probe` do repositório: a parte função existe ao menos em parte; a parte banco, em lugar nenhum."
+      }
     },
     {
       "id": "I6",
@@ -4526,7 +4674,11 @@
       "r": [
         "Relevé du 29/08/2026",
         "REGISTRE §38 OPS"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 16 088 relevés (13 932 au 29/08 : la croissance d'environ 288 par jour se confirme), le plus ancien du 17/08, et toujours aucun cron de purge dédié.",
+        "pt": "31/08 — 16 088 registros (13 932 em 29/08), o mais antigo de 17/08, e ainda nenhum cron de purga."
+      }
     },
     {
       "id": "I8",
@@ -4572,7 +4724,11 @@
       "r": [
         "deploy/README.md",
         "Commits 57321385, 35c03dd5, 90266600"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `deploy/README.md` affirme toujours « Rien de tout ceci n'a encore tourné » et déclare toujours `notify-cross-library-digest` absente du dépôt. Le constat tient mot pour mot.",
+        "pt": "31/08 — `deploy/README.md` ainda afirma que nada rodou e ainda declara `notify-cross-library-digest` ausente do repositório."
+      }
     },
     {
       "id": "I10",
@@ -4619,7 +4775,11 @@
         "RUNBOOK_exploitation_v0.3 §9.8",
         "PLAN_DE_MARCHE §7.4",
         "Relevé du 29/08/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — le ménage a avancé sans que l'item le sache : plus aucune trace Turnstile dans `package.json`, `.env.local`, `deploy/functions.env` ni au Vault ; `.env.example` n'en garde qu'une mention historique en commentaire. Restent : le secret de fonction `TURNSTILE_SECRET_KEY` (posé le 05/05), `tmp-ficedl/` (740 Ko) à la racine, et `docs/drafts/` sans règle (2 fichiers).",
+        "pt": "31/08 — a limpeza avançou: nenhum traço Turnstile em `package.json`, `.env.local`, `functions.env` nem no Vault. Restam: o segredo de função `TURNSTILE_SECRET_KEY`, `tmp-ficedl/` (740 KB) e `docs/drafts/` sem regra."
+      }
     },
     {
       "id": "I11",
@@ -4663,7 +4823,11 @@
       "r": [
         ".forgejo/workflows/ci.yml",
         "package.json"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — 7 occurrences de `node:20` dans les deux workflows. Rien n'a bougé.",
+        "pt": "31/08 — 7 ocorrências de `node:20` nos dois workflows. Nada mudou."
+      }
     },
     {
       "id": "I12",
@@ -4706,7 +4870,11 @@
       },
       "r": [
         "RUNBOOK_exploitation_v0.3 §4 §9.1"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée.",
+        "pt": "31/08 — as unidades estão versionadas em `deploy/ops/systemd/`. O espelho frio traz um HEAD de 30/08 às 16h — no máximo um dia de atraso — mas nada daqui distingue um timer ativo de um refresh manual."
+      }
     },
     {
       "id": "I13",
@@ -4754,7 +4922,11 @@
       "r": [
         "PLAN_migration_git_pages_2026-08-19",
         "RUNBOOK_exploitation_v0.3"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — une partie du nettoyage est déjà faite : la branche `pages` n'existe plus sur la forge, `public/.domains` a disparu, et `public/CNAME` est bien préservé. Restent à confirmer le service lui-même et les secrets devenus inutiles.",
+        "pt": "31/08 — parte da limpeza já está feita: o branch `pages` não existe mais, `public/.domains` sumiu, `public/CNAME` preservado."
+      }
     },
     {
       "id": "B17",
@@ -4842,8 +5014,8 @@
         "pt": "Reparar o índice dos backlogs e decidir a convenção de arquivamento"
       },
       "v": {
-        "fr": "Le tableau d'historique de `docs/backlogs/INDEX.md` s'arrête au v31 : **la ligne du v32 manque**, alors que le fichier est bien dans `archive/`. Et deux conventions de nommage des archives coexistent — avec ou sans le préfixe `-archive-` —, point ouvert explicite jamais porté au REGISTRE.",
-        "pt": "A tabela de histórico de `docs/backlogs/INDEX.md` para no v31: **a linha do v32 falta**, embora o arquivo esteja em `archive/`. E duas convenções de nomenclatura dos arquivos coexistem — com ou sem o prefixo `-archive-` —, ponto aberto explícito jamais levado ao REGISTRO."
+        "fr": "**Corrigé le 31/08 : la ligne du v32 est rétablie depuis le 29/08** (`INDEX.md`, avec la note « elle manquait à ce tableau depuis juin »). Restent : les deux conventions de nommage qui coexistent — 9 archives avec le préfixe `-archive-`, 27 sans — et un en-tête d'INDEX qui dérive déjà : « 90 items » puis « les items restent 84 » dans le même paragraphe, quand le JSON en compte 83.",
+        "pt": "**Corrigido em 31/08: a linha do v32 está restabelecida desde 29/08.** Restam: as duas convenções de nomenclatura (9 arquivos com prefixo `-archive-`, 27 sem) e um cabeçalho do INDEX que já deriva (« 90 itens », « restam 84 », quando o JSON conta 83)."
       },
       "w": {
         "fr": "Ajouter la ligne du v32, celles du v33 et du v34, et trancher la convention d'archivage en une phrase inscrite au REGISTRE.",
@@ -4869,7 +5041,11 @@
       },
       "r": [
         "docs/backlogs/INDEX.md"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `INDEX.md` relu, archives comptées : 9 avec le préfixe `-archive-`, 27 sans.",
+        "pt": "31/08 — `INDEX.md` relido, arquivos contados: 9 com prefixo `-archive-`, 27 sem."
+      }
     },
     {
       "id": "J6",
@@ -4913,7 +5089,11 @@
       "r": [
         "CLAUDE.md, doctrines internalisées",
         "PLAN_DE_MARCHE §8"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `CONTRIBUTING.md` existe, mais aucune occurrence d'`actionBox` ni de `workflow_note` n'y est atteignable. Le constat tient.",
+        "pt": "31/08 — `CONTRIBUTING.md` existe, mas nenhuma ocorrência de `actionBox` nem `workflow_note` é alcançável dali."
+      }
     },
     {
       "id": "K1",
@@ -5009,7 +5189,11 @@
       "r": [
         "PLAN_financement_AnarBib_2026-08-25",
         "FINANCES.md"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — les marqueurs `ENCART-DORMANT-START` sont en place dans les dix fichiers du dépôt vitrine. Rien de neuf mesurable d'ici sur Pix, IBAN ou Wero.",
+        "pt": "31/08 — os marcadores `ENCART-DORMANT-START` estão nos dez arquivos do repositório vitrine."
+      }
     },
     {
       "id": "K3",
@@ -5097,7 +5281,11 @@
       "r": [
         "Dépôt vitrine anarbib/pages",
         "tools/build-privacy-pages.cjs"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `tools/build-privacy-pages.cjs:243` émet toujours `lang` brut, et la page engendrée `pt/privacidade/` porte `lang=\"pt\"` là où les pages écrites à la main (`index.html`, `pt/index.html`) portent `lang=\"pt-BR\"`. Le générateur des finances fait, lui, la conversion (`HTML_LANG[lang]`) : le modèle du correctif est déjà dans le dépôt, à la ligne 252 du fichier voisin.",
+        "pt": "31/08 — `build-privacy-pages.cjs:243` ainda emite `lang` bruto (`pt`), enquanto as páginas à mão trazem `pt-BR`. O gerador de finanças faz a conversão (`HTML_LANG[lang]`): o modelo do corretivo já está no repositório."
+      }
     },
     {
       "id": "K5",
@@ -5383,7 +5571,11 @@
         "empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "supabase/functions/_shared/core/env.ts (chaînes de repli)",
         "footerPadrao — ligne « Regimento », jamais affichée"
-      ]
+      ],
+      "verif": {
+        "fr": "31/08 — `supabase secrets list` rejoué : les treize mêmes secrets portent l'empreinte de la chaîne vide, ni plus ni moins. `REGIMENTO_URL` toujours vide, ses deux replis toujours absents : la ligne « Regimento » manque toujours des courriels.",
+        "pt": "31/08 — `supabase secrets list` refeito: os mesmos treze segredos com a impressão da cadeia vazia. `REGIMENTO_URL` segue vazio e sem fallback."
+      }
     }
   ]
 }

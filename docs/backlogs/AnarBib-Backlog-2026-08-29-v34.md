@@ -60,7 +60,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **29 août 2026**. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `1d00ed2c`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés.
 
-**Fraîcheur des constats au 2026-08-31.** **10 items sur 83** portent une vérification datée qui leur est propre (B2, B7, B9, B11, B14, B17, F4, F6, G1, G5). Les **73** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-08-31.** **58 items sur 83** portent une vérification datée qui leur est propre (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C4, C5, C7, C8, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2, K4). Les **25** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -296,7 +296,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Vérifié en base le 29/08 : le réseau compte **un seul administrateur**. Les tables `network_administrators`, `network_administrator_cooptation_proposals` et `network_administrator_cooptation_votes` sont vides après quelques insertions historiques.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `network_administrators` : 1 ligne. Rien n'a bougé.*
 
 **Ce que c'est.** Trouver et coopter deux personnes de plus, dans deux collectifs différents, disposées à porter les décisions fédérales : admission d'une bibliothèque, arbitrage entre bibliothèques, ouverture de la moisson.
 
@@ -340,7 +340,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé.*
 
 **Ce que c'est.** Faire tourner le runner ailleurs que sur un poste de travail personnel : machine de l'hébergeur, seconde machine du réseau, ou runner partagé. La logique de déploiement est déjà extraite dans `scripts/ci/deployer-backend.sh` et rejouable à la main — la moitié du travail est faite.
 
@@ -486,7 +486,7 @@ Les oracles trouvés en mai avaient tous la même forme : un identifiant en para
 
 **État.** 15 tables ont RLS activé et zéro policy. Onze sont des tables de transit ou vides. Quatre ne le sont pas : `author_name_aliases` (**1 647 lignes**), `library_themes` (3 lignes), `library_theme_configs`, `interlibrary_loan_events`.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 14 tables à RLS sans policy (15 au 29/08). Les quatre nommées y sont toujours : `author_name_aliases` (1 647 lignes vivantes), `library_themes` (3), `library_theme_configs` (0), `interlibrary_loan_events` (0).*
 
 **Ce que c'est.** Pour chacune, trancher : soit l'accès passe par une RPC et l'absence de policy est correcte — l'écrire en commentaire SQL —, soit une lecture légitime est aujourd'hui impossible et il manque une policy ou une fonction.
 
@@ -507,7 +507,7 @@ Les oracles trouvés en mai avaient tous la même forme : un identifiant en para
 
 **État.** La migration `20260703203953_perf_rls_initplan_wrap_auth_calls` a traité les policies d'alors. Neuf policies écrites depuis y échappent : `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports` (1), `authority_duplicate_reports` (1), `author_not_duplicate` (1).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — le lint `auth_rls_initplan` remonte exactement les neuf policies nommées : `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports`, `authority_duplicate_reports`, `author_not_duplicate` (1 chacune).*
 
 **Ce que c'est.** Envelopper les appels `auth.uid()` / `auth.jwt()` dans un sous-select, comme la migration de juillet l'a fait pour les autres.
 
@@ -570,7 +570,7 @@ Les oracles trouvés en mai avaient tous la même forme : un identifiant en para
 
 **État.** 256 avis de performance au 29/08. Les tables les plus chargées en index inutilisés sont `library_partnerships` (6), `books` (5), `membership_payments` (4). Les 24 policies permissives en double portent toutes sur le rôle `authenticated` en `SELECT`, sur des tables centrales (`books`, `authors`, `exemplares`, `subjects`, `works`).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 254 avis : 167 index inutilisés, 38 clés étrangères non indexées, **25** tables en policies permissives en double (`book_reading_notes` s'y est ajoutée avec les notes de lecture), 14 tables sans clé primaire, 1 avis de connexions.*
 
 **Ce que c'est.** Trois passes distinctes, à ne pas mélanger : fusionner les paires de policies permissives ; indexer les clés étrangères qui servent réellement ; ne supprimer un index inutilisé que si l'on comprend pourquoi il avait été créé.
 
@@ -615,7 +615,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 **État.** 221 migrations appliquées, dont la première est un `baseline_live` de **2,4 Mo** — le plus gros fichier du dépôt. Le squash est marqué « décidé, non commencé » depuis le 20/08, à une époque où le compte était de 146.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul.*
 
 **Ce que c'est.** Soit reconstruire un `baseline` à partir du schéma courant et archiver les migrations antérieures, soit assumer la chaîne longue et documenter pourquoi. Le rejeu complet prend aujourd'hui environ 25 minutes, mesuré.
 
@@ -702,7 +702,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Vérifié le 29/08 : **35 sujets ont été créés en base le 27/08** et les alignements FICEDL sont passés de 51 à **98**. Mais `docs/drafts/20260828_sujets_solidaires_ficedl.sql` est toujours dans `docs/drafts/`, hors de `supabase/migrations/`. Une instance neuve n'aura donc pas ces sujets.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 89 sujets et 98 alignements en base ; `docs/drafts/20260828_sujets_solidaires_ficedl.sql` est toujours hors de `supabase/migrations/`. Le constat tient tel quel.*
 
 **Ce que c'est.** Comparer le contenu du brouillon à l'état réel de la base, en faire une migration idempotente qui ne recrée pas ce qui existe, et la ranger dans `supabase/migrations/`. Ou décider que ces sujets sont propres à une bibliothèque et n'ont pas à embarquer — mais l'écrire.
 
@@ -722,9 +722,9 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 `P1` Prioritaire · État : **Bloqué** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
 
-**État.** 1 685 notices dans `SOLIDAIRES_import_test.csv`. Les en-têtes suivent `spec-catalogacao-fiche-et-paliers` et **n'ont jamais été confrontés à l'importeur**. **Décision de Xavier, 29/08 : l'import ne se fera que si la candidature de SOLIDAIRES est acceptée par plusieurs administrateur·rices réseau.** L'échéance de fin août tombe donc, et l'ordre des deux chantiers s'inverse par rapport aux notes d'août : l'admission d'abord, l'import ensuite.
+**État.** 1 685 notices dans `SOLIDAIRES_import_test.csv`. **Constat corrigé le 31/08 : le fichier a bel et bien été confronté à l'importeur.** `book_drafts` porte 1 673 brouillons de source `SOLIDAIRES_import_v2.csv`, créés en un seul lot le 29/08 à 1 h 48 — la nuit précédant l'écriture du constat « jamais confrontés ». Tous sont à l'état `draft`, **aucun n'est publié** : le catalogue public n'est pas touché. La décision de Xavier (29/08) reste entière pour la suite : pas de promotion tant que la candidature de SOLIDAIRES n'est pas acceptée à plusieurs (G7). Ce qui reste de l'item n'est donc plus « importer », mais consigner ce que l'import a cassé, puis promouvoir après l'admission.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue.*
 
 **Ce que c'est.** Adapter les en-têtes au format réellement attendu (environ une heure), faire passer le fichier **par l'outil d'import du dépôt et non par des `INSERT` à la main**, relire une vingtaine de fiches au hasard, puis faire une démonstration en visio écran partagé.
 
@@ -770,7 +770,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** **722 fiches sur 1 305 (55 %) n'ont pas de `country`.** Or c'est `country` qui pilote la règle d'entrée du nom : sans lui, la détection des doubles patronymes hispaniques ne voit qu'une fraction des cas. Les 22 signalements sont un **plancher**, pas un total.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 726 fiches sur 1 305 sans `country` (55,6 %) : quatre de plus qu'au 29/08. La dette avance plus vite que sa résorption.*
 
 **Ce que c'est.** Renseigner `country` par lots, à partir des notices, des sources externes déjà branchées (Wikidata, VIAF) et de la connaissance du fonds. Puis rejouer la détection des patronymes.
 
@@ -791,7 +791,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** `CONV-O3` est ouvert : déprécier `books.autor` maintenant, ou à l'Atelier ? Le champ coexiste avec la table `authors` et porte les mêmes défauts **en pire** — on y trouve `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. L'audit du 20/08 l'a explicitement laissé hors périmètre : sa dette n'est pas chiffrée.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes.*
 
 **Ce que c'est.** D'abord chiffrer : combien de notices ont un `autor` sans contributeur lié, et à quoi ressemble le contenu. Puis trancher : dépréciation immédiate avec migration des valeurs récupérables, ou conservation comme forme transcrite au sens de `P3` des périodiques.
 
@@ -799,7 +799,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **Ce qui compte comme fini.**
 
-- La dette est chiffrée.
+- ~~La dette est chiffrée~~ — 31/08 : 2 653 `autor` non vides, 1 629 distincts, 231 livres sans aucun lien `authors`.
 - Une décision est inscrite au REGISTRE, dans un sens ou dans l'autre.
 - Si dépréciation : le champ n'est plus écrit par aucun formulaire.
 
@@ -835,7 +835,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Vérifié le 29/08 : **1 127 notices indexées sur 2 676**, soit 42 %. 1 284 affectations réparties sur 89 sujets locaux. Côté public anonyme, la couverture est encore plus basse.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 1 122 notices indexées sur 2 659 (42,2 %), 1 279 affectations, 89 sujets. Les quatre comptes ont légèrement baissé depuis le 29/08 : les fusions de doublons du 31/08 ont retiré des notices, pas des indexations.*
 
 **Ce que c'est.** Indexer, notice par notice, avec le vocabulaire local et le thésaurus FICEDL déjà chargé. Aucune compétence technique : c'est un travail de bibliothèque, fait depuis l'application.
 
@@ -857,7 +857,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Sur 1 305 autorités : **726 (56 %) sans date de naissance**, environ **1 272 (98 %) sans identifiant VIAF, ISNI ou Wikidata**, environ **1 275 (98 %) sans `variant_forms`**. Le code d'enrichissement existe et fonctionne ; la couverture est de l'ordre de 1 à 2 %.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — sur 1 305 autorités : 728 sans année de naissance (56 %), 1 276 sans identifiant VIAF, ISNI ou Wikidata (98 %), 1 280 sans `variant_forms` (98 %). Le constat tient.*
 
 **Ce que c'est.** Passes d'enrichissement par les sources déjà branchées, avec relecture. Les pseudonymes militants sont un cas à part : l'entrée se fait à la forme la plus connue du mouvement, avec renvoi depuis le nom civil, **jamais l'inverse**.
 
@@ -899,7 +899,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** `digital_assets.rights_status` est un **état de workflow** (`to_review`, `public_domain_confirmed`) qui commande la visibilité. Le vocabulaire des droits d'auteur porte le même nom depuis la migration `20260820235000_vocabulaire_rights_status`. Deux sens, un nom.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.*
 
 **Ce que c'est.** Renommer la colonne de workflow — `review_state` par exemple — et propager au front et aux RPC. Le vocabulaire des droits garde le nom, puisque c'est lui qui parle de droits.
 
@@ -935,7 +935,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** `spec-periodiques-v0.1` (27/08) annonce « neuf paquets à livrer ». **Les neuf ont été livrés les 27 et 28/08**, en une journée : `serials`, RPC, anti-faux-doublons, état de collection, entrée dans l'Atelier, reprise des notices existantes, UI de catalogage, page publique, et les libellés dans les dix langues. La base porte 4 titres et 7 fascicules rattachés.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — toujours 4 titres de périodiques et 7 fascicules rattachés en base. Rien n'a bougé depuis la livraison ; la révision de la spec reste à faire.*
 
 **Ce que c'est.** Relire la spec, marquer les neuf paquets comme livrés, puis vérifier une par une les six gardes annoncées — anti-cycle de filiation borné à 20 sauts, réciprocité prédécesseur/successeur par trigger, interdiction de `serial_id` sur un non-fascicule, symétrie de l'importeur face à la colonne générée, fusion des états de collection sans écrasement, ordre de tri.
 
@@ -978,7 +978,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Le fichier SOLIDAIRES porte déjà des colonnes `revue` et `numero` : **12 titres à créer, 91 fascicules à lier**. En plus, **87 monographies portent « n° » dans leur titre** et sont marquées par un drapeau `numero_dans_titre` : ce sont des candidates au rattachement.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — les 1 673 brouillons SOLIDAIRES sont en base (voir C2) et **aucun ne porte de `serial_id`** : le rattachement des fascicules n'a pas commencé. Toujours derrière G7.*
 
 **Ce que c'est.** Créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.
 
@@ -1044,7 +1044,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** `epubjs ^0.3.93` est la seule dépendance clairement pré-1.0 sur un chemin critique — le lecteur EPUB, `src/lib/reader/epubEngine.js` et `src/components/viewers/EpubReader.jsx`. La bibliothèque n'a pas connu de publication majeure depuis des années.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `package.json` : `epubjs ^0.3.93`, inchangé.*
 
 **Ce que c'est.** Évaluer ce qui casse aujourd'hui, ce qui cassera avec les navigateurs à venir, et s'il existe une alternative libre maintenue. Décider entre épingler et assumer, ou remplacer.
 
@@ -1107,7 +1107,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Les dix locales sont à parité stricte de clés — 6 177 chacune, vérifiée en intégration continue depuis le 27/08. Mais les **conventions** de deux d'entre elles ne sont pas tranchées : le néerlandais est à l'état de brouillon, le grec reste à définir. Le test de parité ne voit pas ça : il compte les clés, pas leur justesse.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — les dix fichiers `anarbib-charte-langage-inclusif-v2-*.md` existent depuis le 05/06, `nl` et `el` compris ; mais dedans, la convention `nl` est marquée « provisoire » et la `el` « à définir avec une personne locutrice grecque militante ». Les documents existent, les décisions non : le constat tient sur le fond.*
 
 **Ce que c'est.** Une locutrice ou un locuteur natif reprend la charte de langage inclusif, décide de la forme neutre pour sa langue, et relit les 6 177 chaînes en priorité sur les écrans les plus vus.
 
@@ -1172,7 +1172,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** C'est la **seule exception anti-pistage restante** : les tuiles de `tile.openstreetmap.org` sont chargées par le navigateur de la visiteuse, qui livre donc son adresse IP à un tiers. L'intention de relayer est **déjà annoncée publiquement** dans la clé `privacy.s6.maptiles` des dix locales.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — trois fichiers chargent encore `tile.openstreetmap.org` côté client : `CartographyEditModal.jsx:70`, `CartographyMap.jsx:181`, `CartografiaAjouterPage.jsx:66`.*
 
 **Ce que c'est.** Reprendre le modèle déjà en place pour Nominatim : un relais côté serveur, avec cache, et l'adresse du relais dans la configuration du front.
 
@@ -1193,7 +1193,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** `BookDraftForm.jsx` fait **197 Ko**, `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154 Ko, `PanelPage.jsx` 114 Ko, `ImportacoesPage.jsx` 109 Ko. 29 des 38 routes sont déjà en chargement paresseux, et `vite.config.js` déclare quatre lots de dépendances — le problème n'est pas le chargement initial, c'est la taille d'un fichier unique.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — les cinq mêmes fichiers, aux tailles voisines : `BookDraftForm.jsx` 197 Ko, `BibliotecaPage.jsx` 186 Ko, `AccountPage.jsx` 155 Ko, `PanelPage.jsx` 116 Ko, `ImportacoesPage.jsx` 111 Ko.*
 
 **Ce que c'est.** Extraire les sous-formulaires et les onglets en composants séparés, sans changer le comportement. Commencer par `BookDraftForm`, le plus gros et le plus édité.
 
@@ -1213,9 +1213,9 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
 
-**État.** `document.title` ne se met pas à jour lors d'une navigation dans l'application ; il ne change qu'au rechargement complet de la page.
+**État.** **Constat corrigé le 31/08 : il était faux depuis mai.** Le hook `src/lib/useDocumentTitle.js` met à jour `document.title` à la navigation depuis le **05/05/2026** (commit `c4865278`), et 32 pages sur 79 l'utilisent. Ce qui reste n'est pas « le titre ne suit pas » : c'est la couverture des 47 pages sans hook — dont il faut d'abord dire combien sont des routes réelles — et le test promis, qui n'existe pas.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — mesuré dans le dépôt : hook présent depuis le 05/05, 32 usages sous `src/pages/`, aucun test de titre dans `src/tests/`.*
 
 **Ce que c'est.** Poser le titre à chaque changement de route, à partir des clés i18n existantes.
 
@@ -1234,9 +1234,9 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
 
-**État.** `titre.ttf` pèse 1 Mo et `accent.ttf` 484 Ko ; les deux sont chargées sans préchargement déclaré, sans `font-display: swap`, et sans `preconnect` vers Supabase.
+**État.** **Constat corrigé le 31/08 : il décrivait un état mort depuis mai.** `titre.ttf` (1 Mo) et `accent.ttf` (484 Ko) ont disparu le **06/05/2026** (commit `dba21cd3`, auto-hébergement Bitter + Fira Sans) — il n'en reste qu'un commentaire dans `src/lib/theme.js:198`. Depuis : 19 fichiers woff2 auto-hébergés dans `public/fonts/` (1,3 Mo en tout), `font-display: swap` sur toutes les faces de `src/styles/fonts.css`, préchargement des deux fichiers du premier rendu dans `index.html`. Il ne reste de l'item que la mesure avant/après jamais consignée — candidat à la clôture.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — mesuré dans le dépôt : fichiers de `public/fonts/`, `src/styles/fonts.css`, `index.html:47-48`, historique git.*
 
 **Ce que c'est.** Ajouter `font-display: swap`, précharger la police de titre seule, sous-ensembler les fichiers aux caractères réellement utilisés — dix langues dont le grec, donc le sous-ensemble n'est pas trivial.
 
@@ -1244,7 +1244,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **Ce qui compte comme fini.**
 
-- Le texte s'affiche avant les polices, avec une substitution acceptable.
+- ~~Le texte s'affiche avant les polices, avec une substitution acceptable~~ — `font-display: swap` sur toutes les faces depuis le 06/05 (`src/styles/fonts.css`).
 - Le poids total des polices chargées à la première visite est mesuré avant et après.
 
 **Dépendances.** Ne pas toucher à l'identité visuelle : `IDENT-1` à `IDENT-4` sont actés.
@@ -1257,7 +1257,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Les phases A, B et C sont livrées et la doctrine graduée est actée. Trois questions restent ouvertes au REGISTRE : `MOB-Q1` (24 grilles déclarées en ligne dans le JSX avec des pistes `fr` nues), `MOB-Q2` (20 requêtes de média héritées à rapatrier dans `src/styles/mobile.css`), `MOB-Q3` (les onglets Validações et Inventário à convertir en cartes).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré.*
 
 **Ce que c'est.** Trois passes mécaniques, dans cet ordre de valeur : les 24 grilles (`minmax(0, Nfr)` partout, c'est la règle `MOB-1`), les deux onglets en cartes selon le patron livré, puis le rapatriement des requêtes de média.
 
@@ -1265,7 +1265,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **Ce qui compte comme fini.**
 
-- Aucune grille du JSX ne porte de piste `fr` nue.
+- ~~Aucune grille du JSX ne porte de piste `fr` nue~~ — 31/08 : plus une seule, la dernière occurrence est un commentaire qui rappelle la règle.
 - Les deux onglets sont en cartes sous 640 px.
 - Les requêtes de média héritées vivent dans `mobile.css`.
 
@@ -1336,7 +1336,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** **14 fonctions `notify-*` déployées**, cinq files d'attente, six déclencheurs de dépêche. Trois files n'ont jamais reçu la moindre insertion : `authority_proposal_notification_outbox`, `membership_expiry_notifications`, `painel_internal_task_invitation_outbox`. Une quatrième, `painel_internal_task_notification_outbox`, est vide après 34 insertions dont la dernière date du 04/06. Personne n'a jamais audité l'ensemble.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit.*
 
 **Ce que c'est.** Dresser la carte : pour chaque événement métier, quel déclencheur, quelle file, quelle fonction, quel gabarit, quelles dix langues. Puis marquer les branches mortes et les branches jamais empruntées.
 
@@ -1358,7 +1358,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Les courriels d'alerte d'exploitation — sauvegarde en échec, incident de sonde — utilisent le gabarit destiné aux lectrices. Ils finissent donc par « contacte la bibliothèque » suivi d'un numéro de téléphone.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — lu dans le code : `health-probe/index.ts` passe par `renderEmail` + `footerPadrao` de `_shared/mail/layout.ts` — le gabarit lectrice, qui pousse le libellé téléphone (`layout.ts:28`). Aucun gabarit d'exploitation dans `_shared/mail/`.*
 
 **Ce que c'est.** Un gabarit d'exploitation distinct : pas de pied de page destiné au public, la commande à lancer, et le lien vers la section du runbook.
 
@@ -1379,7 +1379,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 **État.** Quatre fonctions font des récapitulatifs : `notify-weekly-report`, `notify-network-weekly-report`, `notify-cross-library-digest`, `notify-rede-digest`. Trois fonctions servent des documents : `read-pdf`, `read-digital-asset`, `read-ill-shared-asset`. Deux exportent des lots : `export-catalog-lote`, `export-fonds-bundle`. Et `mail-i18n-test`, fonction de test, est déployée en production en version 1553.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `mail-i18n-test` est toujours déployée en production (version 1 566, retouchée le jour même par un déploiement groupé). Le dépôt compte 50 dossiers de fonctions hors `_shared`, et `config.toml` porte 38 déclarations `verify_jwt`.*
 
 **Ce que c'est.** Vérifier ce que chacune fait vraiment avant de conclure à la redondance — elles ont probablement des destinataires et des portées différentes. Puis fusionner ce qui doit l'être, et retirer `mail-i18n-test` de la production.
 
@@ -1498,7 +1498,7 @@ Dans le tableau de bord, un secret vide et un secret renseigné se ressemblent :
 
 **Sauf une.** `REGIMENTO_URL` est vide, et ses deux replis — `ANARBIB_REGIMENTO_URL`, `NETWORK_REGIMENTO_URL` — **n'existent pas du tout** dans la liste. La constante vaut donc la chaîne vide, et `footerPadrao` omet purement et simplement la ligne « Regimento : ouvrir » de tous les courriels qui l'utilisent. Le lien vers le règlement de la bibliothèque n'a jamais été affiché.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `supabase secrets list` rejoué : les treize mêmes secrets portent l'empreinte de la chaîne vide, ni plus ni moins. `REGIMENTO_URL` toujours vide, ses deux replis toujours absents : la ligne « Regimento » manque toujours des courriels.*
 
 **Ce que c'est.** **D'abord le seul qui a une conséquence** : décider si le lien vers le règlement doit figurer au pied des courriels. Si oui, renseigner `REGIMENTO_URL` — une seule variable, et la ligne apparaît. Si non, retirer le code qui l'attend dans `footerPadrao`, plutôt que de laisser une branche morte.
 
@@ -1574,7 +1574,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La migration `20260826120000` **est en production** et tranche dans le sens de P2 : collégialité obligatoire, ratification préalable, repli à une signature quand il n'y a qu'une seule personne coordinatrice, consentement explicite de la personne promue, exclusion de cette personne du décompte du quorum. **Mais la décision politique n'a jamais été prise.**
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — la migration `20260826120000` figure bien au registre de production. Rien de neuf mesurable sur la décision politique elle-même.*
 
 **Ce que c'est.** Porter la question au collectif. Trois options sont écrites : ne rien changer au code et corriger le texte de P2 ; étendre le chemin A comme le code l'a fait ; ou garder la promotion directe mais la rendre visible avec un délai d'objection.
 
@@ -1594,9 +1594,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective
 
-**État.** La migration est en production ; le runbook de déploiement en onze étapes est donc caduc. Ce qui reste est la **répétition en six pas sur `blmf-teste`**, jamais faite. Or `library_team_invitations` porte **zéro ligne** depuis sa création : le circuit que la migration rend obligatoire n'a jamais été emprunté une seule fois.
+**État.** **Constat corrigé le 31/08 : le circuit est en train d'être emprunté pour la première fois — en réel, pas en répétition.** `library_team_invitations` porte une ligne : l'invitation `ebd78fb9` au rôle `coordenador` sur la **BTL**, proposée le 30/08, ratifiée (statut `ready`, courriel `team.invitation_ready` parti le 30/08), non encore acceptée, expiration le 29/09. C'est elle qui a produit la ligne `#72` de B17. La répétition en six pas sur `blmf-teste`, elle, n'a toujours pas eu lieu : une promotion réelle essuie les plâtres à sa place.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — mesuré en base : la ligne d'invitation, l'event `team.invitation_ready` envoyé, et la ligne `#72` partie le jour même (voir B17).*
 
 **Ce que c'est.** Les six pas sur la bibliothèque d'essai `blmf-teste`, dont les courriels sont coupés (`email_delivery_mode = 'disabled'`). **Si un pas échoue, ne rien faire sur la BLMF.**
 
@@ -1618,7 +1618,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Quatre courriels existent, sont câblés, et ne sont jamais passés en production : `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. Le mécanisme fonctionne — `team_notification_outbox` compte 21 envois et zéro échec — mais ces quatre-là n'ont jamais été déclenchés.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `team_notification_outbox` : 25 envois, 0 échec — et toujours **aucune** ligne pour `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. Le mécanisme continue de faire ses preuves à côté (deux events de plus depuis le 29/08) ; ces quatre-là n'ont jamais été déclenchés.*
 
 **Ce que c'est.** Provoquer chacun des quatre cas sur `blmf-teste`, lire le courriel reçu, vérifier qu'il dit ce qu'il doit dire dans les dix langues.
 
@@ -1663,7 +1663,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Le cycle de vie du prêt entre bibliothèques est spécifié et implémenté en base : machine à états verrouillée, quatre triggers, cron `anarbib-peb-detect-overdue-daily` actif. **Aucun écran n'existe.** La base porte 2 prêts pour 20 insertions historiques.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `interlibrary_loans_v2` : 2 prêts vivants pour 20 insertions historiques, comme au 29/08.*
 
 **Ce que c'est.** Un écran de demande côté bibliothèque emprunteuse, un écran de traitement côté prêteuse, et l'affichage de l'état pour les deux. Les vues `interlibrary_loans_painel_ui` et `interlibrary_loan_items_ui` existent déjà.
 
@@ -1706,7 +1706,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** `cartography_entries` porte 187 fiches et le fichier `anarbib_bibliotheques_libertaires.geojson` en compte 121. Neuf archives repérées dans le réseau NORLA n'ont pas été confrontées à cette liste.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 187 fiches en base, inchangé. Le fichier public a changé d'adresse et de contenu : `data/carte-publique.geojson` du dépôt vitrine, **109** entrées (l'item en citait 121 sous l'ancien nom). Les neuf archives NORLA restent à confronter.*
 
 **Ce que c'est.** Vérifier lesquelles des neuf figurent déjà, et faire entrer les manquantes avec `source = "FICEDL"` ou `"NORLA"` selon leur provenance.
 
@@ -1786,7 +1786,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** `parseDescriptor` sort par retour précoce avant d'atteindre le titre de page quand une fiche n'a pas de bloc de traduction. Résultat : **158 descripteurs de la facette « dates », soit un quart du thésaurus, sont enregistrés comme identifiants nus, sans libellé, donc non alignables.** Leurs liens vers les catalogues se perdent de la même façon. Le correctif `ficedl_scrape_titre_dates.patch` existe, passe `node --check`, et **n'a jamais été éprouvé contre le site**.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — précision au constat : les 158 descripteurs de la facette « dates » sont sans libellé dans le **JSON d'aspiration** (`tmp-ficedl/ficedl_thesaurus.json` : 620 termes, 158/158 nus) ; la table `ficedl_thesaurus_terms`, elle, n'en porte **aucun** — 462 lignes, facettes sujets et géo seulement. En base ils ne sont pas « nus » : ils manquent. Le correctif n'a toujours pas été éprouvé contre le site.*
 
 **Ce que c'est.** Appliquer le correctif, qui relève le titre de page avant les retours précoces et le range dans un champ `title_fr` **distinct de `labels`** — une date a un libellé canonique mais pas de traduction.
 
@@ -1830,7 +1830,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** 98 alignements existent en base entre les sujets locaux et les descripteurs FICEDL, en `exact` ou `close`. Le vocabulaire matière d'AnarBib est déjà exposé en SKOS. **Les correspondances vers la FICEDL ne le sont pas.**
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 98 alignements en base : 44 `exact`, 54 `close`. Le constat tient.*
 
 **Ce que c'est.** Exposer `subject_ficedl_links` en `skos:exactMatch` et `skos:closeMatch`. **Un alignement partiel vaut mieux que pas d'alignement** — c'est la convention 2 du texte d'interopérabilité, et elle s'applique d'abord à nous.
 
@@ -1852,7 +1852,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Le point d'accès OAI-PMH est déployé. **OPDS n'existe pas.** Or « les flux OPDS existent de part et d'autre mais ne pointent nulle part », et c'est la convention 1 du texte proposé aux autres catalogues.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — aucune occurrence d'OPDS dans `src/` ni `supabase/functions/`. Rien n'existe, comme écrit.*
 
 **Ce que c'est.** Un flux OPDS 1.2 ou 2.0 sur le catalogue public, avec les facettes déjà disponibles. Quelques heures pour un premier flux.
 
@@ -1873,7 +1873,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Le chemin est exécutable depuis le 28/08 : fonction `harvest-oai-pmh` déployée, cron `anarbib-oai-harvest-weekly` posé. **Le cron n'a jamais tourné** — première occurrence prévue mardi à 04h20. Et le point d'accès `oai-pmh-provider` **n'a jamais été moissonné depuis l'extérieur**.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — le cron `anarbib-oai-harvest-weekly` (`20 4 * * 2`, actif) n'a aucune exécution à son journal. Première occurrence attendue le mardi 01/09 à 4 h 20.*
 
 **Ce que c'est.** Attendre le premier passage du cron et lire ce qu'il ramène. En parallèle, moissonner notre propre point d'accès depuis une machine tierce, avec un client OAI standard, et vérifier que les enregistrements sont conformes.
 
@@ -1956,9 +1956,9 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 `P1` Prioritaire · État : **Gelé** · Charge : quelques jours · Ce que ça demande : administration système
 
-**État.** La production porte **77 migrations `auth`**, la dernière datée du 25/06. L'image épinglée dans `deploy/.env` est `GOTRUE_TAG=v2.189.0`, qui en porte **69**. `deploy/.env.example` indique `v2.192.0`. L'écart est un **bloquant de correction**, pas de confort.
+**État.** La production porte **77 migrations `auth`** (remesuré le 31/08), la dernière datée du 25/06. **Le constat sur l'épinglage est périmé : `deploy/.env` et `deploy/.env.example` portent tous deux `GOTRUE_TAG=v2.192.0` désormais.** Ce que v2.192.0 embarque comme migrations n'a pas été mesuré : l'alignement reste à prouver, et l'item reste gelé avec I2.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `auth.schema_migrations` : 77 ; `deploy/.env` et `.env.example` relus : `v2.192.0` des deux côtés.*
 
 **Ce que c'est.** Une méthode qui **se mesure et ne se devine pas** : monter d'un palier, démarrer sur un volume vierge, `select count(*) from auth.schema_migrations;`, recommencer jusqu'à atteindre au moins 77.
 
@@ -2003,7 +2003,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** `supabase/functions/main/index.ts` existe (6,9 Ko), lit `config.toml` au démarrage, applique un **refus par défaut** — seules les dispenses `verify_jwt = false` sont lues, tout le reste exige un jeton — et refuse de démarrer si le fichier est illisible. **Les quatre tests prévus n'ont pas été passés.**
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `supabase/functions/main/index.ts` : 6 885 octets, présent ; aucun test ne le mentionne dans `src/tests/` ni `tests/`. Le constat tient.*
 
 **Ce que c'est.** Les quatre tests de l'étape 5 de `deploy/REPETITION.md` : fonction protégée sans en-tête d'autorisation → 401 ; avec un jeton valide → 200 ; `health-probe` sans jeton → 200 ; nom inexistant → 404.
 
@@ -2024,7 +2024,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** La migration `20260827180000_temoin_sauvegarde_provenance.sql` est **éprouvée sur un PostgreSQL 16 jetable, avec sept contrôles passés, mais jamais jouée contre la production**. Le correctif `health_probe_provenance.patch` **ne s'applique pas** : `patch failed … index.ts:286`. Il a été produit contre le miroir GitHub. Échéance du 28/08, donc échue.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — la version `20260827180000` n'est ni dans `supabase/migrations/` ni au registre de production (0 ligne). Le fichier n'a pas été retrouvé dans le dépôt. Le mot « provenance » apparaît en revanche dix fois dans le `health-probe/index.ts` du dépôt : la part fonction existe au moins en partie ; la part base, nulle part. Échéance du 28/08 échue.*
 
 **Ce que c'est.** Départager le conflit par `git hash-object` sur le fichier cible, comparé au blob de base `0d00dc0e016fdfb86ef314e4e707abd4a84d1d2c`. **Empreinte identique → `git apply --3way` passe. Empreinte différente → refaire le correctif à la main sur la version réelle : ne pas forcer, ne pas écraser.** Puis déployer `health-probe`.
 
@@ -2046,7 +2046,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** `service_health_probes` porte **13 932 lignes** et croît de 288 par jour, sans aucun cron de purge — alors que sept autres purges existent dans les 36 jobs.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 16 088 relevés (13 932 au 29/08 : la croissance d'environ 288 par jour se confirme), le plus ancien du 17/08, et toujours aucun cron de purge dédié.*
 
 **Ce que c'est.** Un cron de purge sur le modèle de `anarbib-catalog-audit-snapshot-purge`, avec une rétention à décider — trente jours suffisent probablement, les incidents étant conservés à part dans `service_health_incidents`.
 
@@ -2067,7 +2067,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Le document affirme en gras : « Rien de tout ceci n'a encore tourné ». Trois commits du 26/08 décrivent des exécutions réelles avec huit défauts relevés. Par ailleurs `bootstrap.sh` a **huit étapes** plus une « 7 bis » et une vérification, là où le README en annonce sept ; et le README déclare `notify-cross-library-digest` « absente du dépôt » alors qu'elle y est.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `deploy/README.md` affirme toujours « Rien de tout ceci n'a encore tourné » et déclare toujours `notify-cross-library-digest` absente du dépôt. Le constat tient mot pour mot.*
 
 **Ce que c'est.** Réécrire la section d'état à partir des journaux d'exécution du 26/08, corriger le compte d'étapes, et retirer l'affirmation sur `notify-cross-library-digest`.
 
@@ -2089,7 +2089,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Turnstile a été entièrement retiré du code le 20/08 — sa réapparition serait une régression. Mais des **clés de test subsistent** dans `.env.example` (deux entrées), `.env.local`, `deploy/functions.env`, une référence dans `package.json`, et un secret au Vault. Par ailleurs `tmp-ficedl/` (754 Ko, doublon exact d'un fichier versionné) traîne à la racine, et `docs/drafts/` est versionné sans règle.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — le ménage a avancé sans que l'item le sache : plus aucune trace Turnstile dans `package.json`, `.env.local`, `deploy/functions.env` ni au Vault ; `.env.example` n'en garde qu'une mention historique en commentaire. Restent : le secret de fonction `TURNSTILE_SECRET_KEY` (posé le 05/05), `tmp-ficedl/` (740 Ko) à la racine, et `docs/drafts/` sans règle (2 fichiers).*
 
 **Ce que c'est.** Retirer les cinq traces, supprimer `tmp-ficedl/` (ignoré par git depuis le 28/08, donc sans risque), et décider du statut de `docs/drafts/` : soit c'est un sas et il s'ignore, soit c'est du contenu et il se documente.
 
@@ -2111,7 +2111,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Les trois jobs d'intégration continue tournent dans un conteneur `node:20`, dont la fenêtre de maintenance à long terme s'est achevée en avril 2026. C'est le point de fin de vie le plus net de la chaîne.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — 7 occurrences de `node:20` dans les deux workflows. Rien n'a bougé.*
 
 **Ce que c'est.** Passer à la version en maintenance longue suivante, vérifier que le build, les tests et le lint passent, et que la CLI Supabase épinglée `v2.98.1` s'y installe.
 
@@ -2132,7 +2132,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Le miroir froid `anarbib-mirror.git` existe sur le poste de travail et son rafraîchissement est manuel. Les unités systemd `anarbib-mirror-refresh.service` et `.timer` sont versionnées dans `deploy/ops/` mais leur mise en service n'est pas confirmée.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée.*
 
 **Ce que c'est.** Vérifier que le minuteur tourne, et sinon le mettre en service. Consigner la fraîcheur du miroir quelque part de lisible.
 
@@ -2153,7 +2153,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** L'étape 0 est concluante depuis le 20/08 : `test.anarbib.org` est servi par le nouveau moteur en parallèle. La chaîne d'intégration continue utilise déjà l'action `git-pages`. **Codeberg Pages en version historique est en mode maintenance, pas en fin de vie** — la documentation dit qu'il continuera de fonctionner indéfiniment. D'où la priorité basse.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — une partie du nettoyage est déjà faite : la branche `pages` n'existe plus sur la forge, `public/.domains` a disparu, et `public/CNAME` est bien préservé. Restent à confirmer le service lui-même et les secrets devenus inutiles.*
 
 **Ce que c'est.** Poser l'enregistrement TXT de liste blanche, créer `public/_redirects` avec la règle de réécriture, vérifier qu'une route inconnue renvoie 200 avec le bon contenu, puis nettoyer **seulement après** vérification verte.
 
@@ -2185,9 +2185,9 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
 
-**État.** Le tableau d'historique de `docs/backlogs/INDEX.md` s'arrête au v31 : **la ligne du v32 manque**, alors que le fichier est bien dans `archive/`. Et deux conventions de nommage des archives coexistent — avec ou sans le préfixe `-archive-` —, point ouvert explicite jamais porté au REGISTRE.
+**État.** **Corrigé le 31/08 : la ligne du v32 est rétablie depuis le 29/08** (`INDEX.md`, avec la note « elle manquait à ce tableau depuis juin »). Restent : les deux conventions de nommage qui coexistent — 9 archives avec le préfixe `-archive-`, 27 sans — et un en-tête d'INDEX qui dérive déjà : « 90 items » puis « les items restent 84 » dans le même paragraphe, quand le JSON en compte 83.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `INDEX.md` relu, archives comptées : 9 avec le préfixe `-archive-`, 27 sans.*
 
 **Ce que c'est.** Ajouter la ligne du v32, celles du v33 et du v34, et trancher la convention d'archivage en une phrase inscrite au REGISTRE.
 
@@ -2208,7 +2208,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Cinq règles de conception sont appliquées partout et écrites nulle part d'accessible : l'ordre des mises à jour dans une RPC (le récit avant l'état), la distinction entre `workflow_note` et `schedule_reply_note`, l'interdiction d'`async` dans `onAuthStateChange`, les pièges d'encodage sous PowerShell, et le contrat `actionBox` de la fonction de rendu des courriels.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `CONTRIBUTING.md` existe, mais aucune occurrence d'`actionBox` ni de `workflow_note` n'y est atteignable. Le constat tient.*
 
 **Ce que c'est.** Les écrire dans le dépôt, pas dans un fichier local. Une page suffit ; chacune tient en trois lignes et un exemple.
 
@@ -2269,7 +2269,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Liberapay est en ligne et a reçu son premier don le 27/08. L'encart « soutenir financièrement » est publié dans les dix locales et nomme Liberapay comme unique canal ouvert. **Pix et IBAN dorment** dans un bloc de commentaire HTML entre les marqueurs `ENCART-DORMANT-START` et `ENCART-DORMANT-END`. Wero est en attente d'une réponse de l'établissement bancaire.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — les marqueurs `ENCART-DORMANT-START` sont en place dans les dix fichiers du dépôt vitrine. Rien de neuf mesurable d'ici sur Pix, IBAN ou Wero.*
 
 **Ce que c'est.** Côté Brésil : une clé aléatoire dédiée créée par la personne mandatée, et l'ouverture d'un compte au numéro d'entreprise — une coopérative de crédit est plus cohérente qu'une banque commerciale. Côté Europe : décider quel compte reçoit. Puis remplir les gabarits, retirer les deux marqueurs de commentaire, et supprimer les deux paragraphes « en cours d'ouverture ».
 
@@ -2313,7 +2313,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 **État.** Les pages écrites à la main portent `<html lang="pt-BR">` ; `tools/build-privacy-pages.cjs` émet `lang="pt"`. **Les pages ont raison, le script a tort.**
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 31/08 — `tools/build-privacy-pages.cjs:243` émet toujours `lang` brut, et la page engendrée `pt/privacidade/` porte `lang="pt"` là où les pages écrites à la main (`index.html`, `pt/index.html`) portent `lang="pt-BR"`. Le générateur des finances fait, lui, la conversion (`HTML_LANG[lang]`) : le modèle du correctif est déjà dans le dépôt, à la ligne 252 du fichier voisin.*
 
 **Ce que c'est.** Corriger le script pour qu'il émette l'étiquette complète, et vérifier que le générateur des pages de comptes, bâti sur le même modèle, ne reproduit pas le défaut.
 

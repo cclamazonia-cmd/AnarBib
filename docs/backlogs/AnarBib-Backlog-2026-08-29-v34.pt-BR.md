@@ -60,7 +60,7 @@ Esse trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `1d00ed2c`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados.
 
-**Frescor dos constatos em 2026-08-31.** **10 itens de 83** trazem uma verificação datada própria (B2, B7, B9, B11, B14, B17, F4, F6, G1, G5). Os **73** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-08-31.** **58 itens de 83** trazem uma verificação datada própria (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C4, C5, C7, C8, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2, K4). Os **25** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -296,7 +296,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Verificado no banco em 29/08: a rede conta com **um único administrador**. As tabelas `network_administrators`, `network_administrator_cooptation_proposals` e `network_administrator_cooptation_votes` estão vazias após algumas inserções históricas.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `network_administrators`: 1 linha. Nada mudou.*
 
 **O que é.** Encontrar e cooptar mais duas pessoas, em dois coletivos diferentes, dispostas a carregar as decisões federais: admissão de uma biblioteca, arbitragem entre bibliotecas, abertura da coleta.
 
@@ -340,7 +340,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 7 ocorrências de `runs-on: anarbib-local` em `.forgejo/workflows/`. Nada mudou.*
 
 **O que é.** Rodar o runner em outro lugar que não uma estação de trabalho pessoal: máquina do provedor, segunda máquina da rede, ou runner compartilhado. A lógica de implantação já está extraída em `scripts/ci/deployer-backend.sh` e é reexecutável à mão — metade do trabalho está feita.
 
@@ -480,7 +480,7 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 **Estado.** 15 tabelas têm RLS ativado e zero policy. Onze são tabelas de trânsito ou vazias. Quatro não são: `author_name_aliases` (**1 647 linhas**), `library_themes` (3 linhas), `library_theme_configs`, `interlibrary_loan_events`.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 14 tabelas com RLS sem policy (15 em 29/08). As quatro nomeadas continuam lá, `author_name_aliases` com 1 647 linhas vivas.*
 
 **O que é.** Para cada uma, decidir: ou o acesso passa por uma RPC e a ausência de policy está correta — escrevê-lo em comentário SQL —, ou uma leitura legítima é hoje impossível e falta uma policy ou uma função.
 
@@ -501,7 +501,7 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 **Estado.** A migração `20260703203953_perf_rls_initplan_wrap_auth_calls` tratou as policies de então. Nove policies escritas desde então escapam: `book_reading_notes` (4), `book_reading_note_reports` (2), `catalog_duplicate_reports` (1), `authority_duplicate_reports` (1), `author_not_duplicate` (1).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — o lint `auth_rls_initplan` aponta exatamente as nove policies nomeadas.*
 
 **O que é.** Envolver as chamadas `auth.uid()` / `auth.jwt()` num sub-select, como a migração de julho fez para as outras.
 
@@ -564,7 +564,7 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 
 **Estado.** 256 avisos de performance em 29/08. As tabelas mais carregadas de índices não usados são `library_partnerships` (6), `books` (5), `membership_payments` (4). As 24 policies permissivas duplicadas incidem todas sobre o papel `authenticated` em `SELECT`, em tabelas centrais (`books`, `authors`, `exemplares`, `subjects`, `works`).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 254 avisos: 167 índices sem uso, 38 chaves estrangeiras sem índice, **25** tabelas com policies permissivas em dobro (`book_reading_notes` entrou na lista), 14 sem chave primária.*
 
 **O que é.** Três passagens distintas, a não misturar: fundir os pares de policies permissivas; indexar as chaves estrangeiras que realmente servem; só suprimir um índice não usado se se compreender por que foi criado.
 
@@ -609,7 +609,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08.*
 
 **O que é.** Ou reconstruir um `baseline` a partir do esquema atual e arquivar as migrações anteriores, ou assumir a cadeia longa e documentar por quê. A reexecução completa leva hoje cerca de 25 minutos, medido.
 
@@ -686,7 +686,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** Verificado em 29/08: **35 assuntos foram criados no banco em 27/08** e os alinhamentos FICEDL passaram de 51 para **98**. Mas `docs/drafts/20260828_sujets_solidaires_ficedl.sql` continua em `docs/drafts/`, fora de `supabase/migrations/`. Uma instância nova, portanto, não terá esses assuntos.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 89 assuntos e 98 alinhamentos no banco; o SQL continua em `docs/drafts/`, fora das migrações.*
 
 **O que é.** Comparar o conteúdo do rascunho ao estado real do banco, transformá-lo numa migração idempotente que não recrie o que existe, e guardá-la em `supabase/migrations/`. Ou decidir que esses assuntos são próprios de uma biblioteca e não devem embarcar — mas escrevê-lo.
 
@@ -706,9 +706,9 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 `P1` Prioritário · Estado : **Bloqueado** · Carga : alguns dias · O que exige : biblioteconomia, SQL / PostgreSQL
 
-**Estado.** 1 685 registros em `SOLIDAIRES_import_test.csv`. Os cabeçalhos seguem `spec-catalogacao-fiche-et-paliers` e **nunca foram confrontados com o importador**. **Decisão de Xavier, 29/08: a importação só se fará se a candidatura da SOLIDAIRES for aceita por várias pessoas administradoras de rede.** O prazo de fim de agosto cai, portanto, e a ordem dos dois canteiros se inverte em relação às notas de agosto: a admissão primeiro, a importação depois.
+**Estado.** 1 685 registros em `SOLIDAIRES_import_test.csv`. **Constato corrigido em 31/08: o arquivo foi sim confrontado com o importador.** `book_drafts` traz 1 673 rascunhos da fonte `SOLIDAIRES_import_v2.csv`, criados num único lote na noite anterior à escrita do constato « nunca confrontados ». Todos `draft`, **nenhum publicado**: o catálogo público não foi tocado. A decisão de Xavier (29/08) permanece: nenhuma promoção antes da admissão (G7). O que resta não é mais « importar », mas consignar o que quebrou e promover depois da admissão.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo.*
 
 **O que é.** Adaptar os cabeçalhos ao formato realmente esperado (cerca de uma hora), passar o arquivo **pela ferramenta de importação do repositório e não por `INSERT` à mão**, revisar umas vinte fichas ao acaso, e depois fazer uma demonstração em videoconferência com tela compartilhada.
 
@@ -754,7 +754,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** **722 fichas de 1 305 (55 %) não têm `country`.** Ora, é `country` que comanda a regra de entrada do nome: sem ele, a detecção dos duplos sobrenomes hispânicos só vê uma fração dos casos. Os 22 apontamentos são um **piso**, não um total.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 726 de 1 305 fichas sem `country` (55,6 %): quatro a mais que em 29/08.*
 
 **O que é.** Preencher `country` por lotes, a partir dos registros, das fontes externas já conectadas (Wikidata, VIAF) e do conhecimento do acervo. Depois reexecutar a detecção dos sobrenomes.
 
@@ -775,7 +775,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `CONV-O3` está aberto: depreciar `books.autor` agora, ou na Oficina? O campo coexiste com a tabela `authors` e carrega os mesmos defeitos **piores** — encontram-se lá `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. A auditoria de 20/08 o deixou explicitamente fora do perímetro: sua dívida não está quantificada.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria.*
 
 **O que é.** Primeiro quantificar: quantos registros têm um `autor` sem contribuidor vinculado, e como é o conteúdo. Depois decidir: depreciação imediata com migração dos valores recuperáveis, ou conservação como forma transcrita no sentido do `P3` dos periódicos.
 
@@ -783,7 +783,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **O que conta como terminado.**
 
-- A dívida está quantificada.
+- ~~A dívida está quantificada~~ — 31/08: 2 653 `autor` não vazios, 1 629 distintos, 231 livros sem vínculo com `authors`.
 - Uma decisão está inscrita no REGISTRO, num sentido ou no outro.
 - Se depreciação: o campo não é mais escrito por nenhum formulário.
 
@@ -819,7 +819,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** Verificado em 29/08: **1 127 registros indexados de 2 676**, ou seja 42 %. 1 284 atribuições distribuídas em 89 assuntos locais. Do lado público anônimo, a cobertura é ainda mais baixa.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 1 122 de 2 659 registros indexados (42,2 %), 1 279 atribuições, 89 assuntos. As fusões de duplicatas de 31/08 explicam a leve queda.*
 
 **O que é.** Indexar, registro por registro, com o vocabulário local e o tesauro FICEDL já carregado. Nenhuma competência técnica: é um trabalho de biblioteca, feito a partir do aplicativo.
 
@@ -841,7 +841,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** De 1 305 autoridades: **726 (56 %) sem data de nascimento**, cerca de **1 272 (98 %) sem identificador VIAF, ISNI ou Wikidata**, cerca de **1 275 (98 %) sem `variant_forms`**.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — de 1 305 autoridades: 728 sem ano de nascimento, 1 276 sem identificador externo, 1 280 sem `variant_forms`. O constato se mantém.*
 
 **O que é.** Passagens de enriquecimento pelas fontes já conectadas, com revisão. Os pseudônimos militantes são um caso à parte: a entrada se faz pela forma mais conhecida do movimento, com remissão a partir do nome civil, **nunca o contrário**.
 
@@ -883,7 +883,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `digital_assets.rights_status` é um **estado de workflow** (`to_review`, `public_domain_confirmed`) que comanda a visibilidade. O vocabulário de direitos autorais leva o mesmo nome desde a migração `20260820235000_vocabulaire_rights_status`. Dois sentidos, um nome.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo.*
 
 **O que é.** Renomear a coluna de workflow — `review_state` por exemplo — e propagar ao front e às RPC. O vocabulário de direitos guarda o nome, já que é ele que fala de direitos.
 
@@ -919,7 +919,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `spec-periodiques-v0.1` (27/08) anuncia «nove pacotes a entregar». **Os nove foram entregues em 27 e 28/08**, num dia: `serials`, RPC, anti-falsos-duplicados, estado de coleção, entrada na Oficina, retomada dos registros existentes, UI de catalogação, página pública, e os rótulos nas dez línguas.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — ainda 4 títulos e 7 fascículos no banco. A revisão da spec continua por fazer.*
 
 **O que é.** Reler a spec, marcar os nove pacotes como entregues, depois verificar uma a uma as seis guardas anunciadas — anticiclo de filiação limitado a 20 saltos, reciprocidade predecessor/sucessor por trigger, proibição de `serial_id` num não-fascículo, simetria do importador diante da coluna gerada, fusão dos estados de coleção sem sobrescrita, ordem de classificação.
 
@@ -962,7 +962,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou.*
 
 **O que é.** Criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente.
 
@@ -1028,7 +1028,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `epubjs ^0.3.93` é a única dependência claramente pré-1.0 num caminho crítico — o leitor EPUB, `src/lib/reader/epubEngine.js` e `src/components/viewers/EpubReader.jsx`. A biblioteca não teve publicação maior há anos.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `package.json`: `epubjs ^0.3.93`, sem mudança.*
 
 **O que é.** Avaliar o que quebra hoje, o que quebrará com os navegadores futuros, e se existe uma alternativa livre mantida. Decidir entre fixar e assumir, ou substituir.
 
@@ -1091,7 +1091,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** As dez locales estão em paridade estrita de chaves — 6 177 cada uma, verificada na integração contínua desde 27/08. Mas as **convenções** de duas delas não estão decididas: o neerlandês está em estado de rascunho, o grego resta a definir. O teste de paridade não vê isso: conta as chaves, não a justeza delas.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — os dez arquivos da carta v2 existem desde 05/06, `nl` e `el` incluídos; mas dentro deles a convenção `nl` está marcada « provisória » e a `el` « a definir com uma pessoa falante de grego militante ». Os documentos existem, as decisões não.*
 
 **O que é.** Uma falante ou um falante nativo retoma a carta de linguagem inclusiva, decide a forma neutra para sua língua, e revisa as 6 177 cadeias com prioridade nas telas mais vistas.
 
@@ -1156,7 +1156,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** É a **única exceção antirrastreamento restante**: os ladrilhos de `tile.openstreetmap.org` são carregados pelo navegador da visitante, que entrega portanto seu endereço IP a um terceiro. A intenção de retransmitir já está **anunciada publicamente** na chave `privacy.s6.maptiles` das dez locales.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — três arquivos ainda carregam `tile.openstreetmap.org` do lado do navegador.*
 
 **O que é.** Retomar o modelo já em vigor para o Nominatim: um relé do lado servidor, com cache, e o endereço do relé na configuração do front.
 
@@ -1177,7 +1177,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `BookDraftForm.jsx` tem **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — os cinco mesmos arquivos, com tamanhos vizinhos (197, 186, 155, 116 e 111 KB).*
 
 **O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
 
@@ -1197,9 +1197,9 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
 
-**Estado.** `document.title` não se atualiza durante uma navegação dentro do aplicativo; só muda no recarregamento completo da página.
+**Estado.** **Constato corrigido em 31/08: estava errado desde maio.** O hook `src/lib/useDocumentTitle.js` atualiza `document.title` na navegação desde **05/05/2026**, e 32 páginas de 79 o usam. O que resta é a cobertura das 47 páginas sem hook e o teste prometido, que não existe.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título.*
 
 **O que é.** Definir o título a cada mudança de rota, a partir das chaves i18n existentes.
 
@@ -1218,9 +1218,9 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
 
-**Estado.** `titre.ttf` pesa 1 MB e `accent.ttf` 484 KB; as duas são carregadas sem pré-carregamento declarado, sem `font-display: swap`, e sem `preconnect` para o Supabase.
+**Estado.** **Constato corrigido em 31/08: descrevia um estado morto desde maio.** `titre.ttf` e `accent.ttf` desapareceram em **06/05/2026** — resta só um comentário em `theme.js:198`. Desde então: 19 arquivos woff2 auto-hospedados (1,3 MB), `font-display: swap` em todas as faces, pré-carregamento dos dois arquivos críticos. Resta só a medição antes/depois nunca consignada — candidato a encerramento.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — medido no repositório: arquivos, CSS, `index.html`, histórico git.*
 
 **O que é.** Adicionar `font-display: swap`, pré-carregar apenas a fonte de título, subconjuntar os arquivos aos caracteres realmente usados — dez línguas incluindo o grego, então o subconjunto não é trivial.
 
@@ -1228,7 +1228,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **O que conta como terminado.**
 
-- O texto aparece antes das fontes, com uma substituição aceitável.
+- ~~O texto aparece antes das fontes, com uma substituição aceitável~~ — `font-display: swap` em todas as faces desde 06/05.
 - O peso total das fontes carregadas na primeira visita é medido antes e depois.
 
 **Dependências.** Não tocar na identidade visual: `IDENT-1` a `IDENT-4` estão registrados.
@@ -1241,7 +1241,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** As fases A, B e C estão entregues e a doutrina graduada está registrada. Três questões continuam abertas no REGISTRO: `MOB-Q1` (24 grades declaradas em linha no JSX com trilhas `fr` nuas), `MOB-Q2` (20 media queries herdadas a repatriar em `src/styles/mobile.css`), `MOB-Q3` (as abas Validações e Inventário a converter em cartões).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido.*
 
 **O que é.** Três passagens mecânicas, nesta ordem de valor: as 24 grades (`minmax(0, Nfr)` em toda parte, é a regra `MOB-1`), as duas abas em cartões segundo o padrão entregue, depois o repatriamento das media queries.
 
@@ -1249,7 +1249,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **O que conta como terminado.**
 
-- Nenhuma grade do JSX traz trilha `fr` nua.
+- ~~Nenhuma grade do JSX traz trilha `fr` nua~~ — 31/08: nenhuma resta, a última ocorrência é um comentário.
 - As duas abas estão em cartões abaixo de 640 px.
 - As media queries herdadas vivem em `mobile.css`.
 
@@ -1320,7 +1320,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** **14 funções `notify-*` implantadas**, cinco filas, seis gatilhos de despacho. Três filas nunca receberam uma única inserção: `authority_proposal_notification_outbox`, `membership_expiry_notifications`, `painel_internal_task_invitation_outbox`. Uma quarta, `painel_internal_task_notification_outbox`, está vazia após 34 inserções cuja última é de 04/06. Ninguém jamais auditou o conjunto.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria.*
 
 **O que é.** Traçar o mapa: para cada evento de negócio, qual gatilho, qual fila, qual função, qual template, quais dez línguas. Depois marcar os ramos mortos e os ramos nunca percorridos.
 
@@ -1342,7 +1342,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** Os e-mails de alerta de operação — backup em falha, incidente de sonda — usam o template destinado às leitoras. Terminam portanto com «entre em contato com a biblioteca» seguido de um número de telefone.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — lido no código: `health-probe` usa o gabarito de leitora (`renderEmail` + `footerPadrao`, com telefone). Nenhum gabarito de operação existe.*
 
 **O que é.** Um template de operação distinto: sem rodapé destinado ao público, o comando a executar, e o link para a seção do runbook.
 
@@ -1363,7 +1363,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** Quatro funções fazem resumos: `notify-weekly-report`, `notify-network-weekly-report`, `notify-cross-library-digest`, `notify-rede-digest`. Três funções servem documentos: `read-pdf`, `read-digital-asset`, `read-ill-shared-asset`. Duas exportam lotes: `export-catalog-lote`, `export-fonds-bundle`. E `mail-i18n-test`, função de teste, está implantada em produção na versão 1553.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `mail-i18n-test` continua implantada (versão 1 566). O repositório tem 50 pastas de funções e 38 declarações `verify_jwt`.*
 
 **O que é.** Verificar o que cada uma faz de fato antes de concluir pela redundância — provavelmente têm destinatários e alcances diferentes. Depois fundir o que deve sê-lo, e retirar `mail-i18n-test` da produção.
 
@@ -1466,7 +1466,7 @@ No painel, um segredo vazio e um segredo preenchido parecem-se: ambos existem, a
 
 **Exceto uma.** `REGIMENTO_URL` está vazio, e os seus dois recursos — `ANARBIB_REGIMENTO_URL`, `NETWORK_REGIMENTO_URL` — **não existem de todo** na lista. A constante vale portanto a cadeia vazia, e `footerPadrao` omite pura e simplesmente a linha «Regimento: abrir» de todos os e-mails que a usam. A ligação para o regulamento da biblioteca nunca foi mostrada.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `supabase secrets list` refeito: os mesmos treze segredos com a impressão da cadeia vazia. `REGIMENTO_URL` segue vazio e sem fallback.*
 
 **O que é.** **Primeiro o único que tem consequência**: decidir se a ligação para o regulamento deve figurar no rodapé dos e-mails. Se sim, preencher `REGIMENTO_URL` — uma só variável, e a linha aparece. Se não, retirar o código que a espera em `footerPadrao`, em vez de deixar um ramo morto.
 
@@ -1542,7 +1542,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A migração `20260826120000` **está em produção** e decide no sentido de P2: colegialidade obrigatória, ratificação prévia, recuo a uma assinatura quando há uma só pessoa coordenadora, consentimento explícito da pessoa promovida, exclusão dessa pessoa da contagem do quórum. **Mas a decisão política nunca foi tomada.**
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — a migração `20260826120000` está no registro de produção. Nada de novo mensurável sobre a decisão política.*
 
 **O que é.** Levar a questão ao coletivo. Três opções estão escritas: não mudar nada no código e corrigir o texto de P2; estender o caminho A como o código fez; ou manter a promoção direta mas torná-la visível com um prazo de objeção.
 
@@ -1562,9 +1562,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
 
-**Estado.** A migração está em produção; o runbook de implantação em onze etapas está portanto caduco. O que resta é o **ensaio em seis passos em `blmf-teste`**, nunca feito. Ora, `library_team_invitations` traz **zero linha** desde sua criação: o circuito que a migração torna obrigatório nunca foi percorrido uma única vez.
+**Estado.** **Constato corrigido em 31/08: o circuito está sendo percorrido pela primeira vez — em real, não em ensaio.** `library_team_invitations` traz uma linha: convite `ebd78fb9` ao papel `coordenador` na **BTL**, proposto em 30/08, ratificado (status `ready`, e-mail enviado), ainda não aceito, expira em 29/09. Foi ele que produziu a linha `#72` de B17. O ensaio em seis passos em `blmf-teste` continua por fazer: uma promoção real está estreando o circuito em seu lugar.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — medido no banco: a linha do convite, o evento enviado, e a linha `#72` de B17 partida no mesmo dia.*
 
 **O que é.** Os seis passos na biblioteca de teste `blmf-teste`, cujos e-mails estão cortados (`email_delivery_mode = 'disabled'`). **Se um passo falhar, não fazer nada na BLMF.**
 
@@ -1586,7 +1586,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Quatro e-mails existem, estão ligados, e nunca passaram em produção: `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. O mecanismo funciona — `team_notification_outbox` conta 21 envios e zero falha — mas esses quatro nunca foram disparados.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `team_notification_outbox`: 25 envios, 0 falha — e ainda **nenhuma** linha para os quatro e-mails. Nunca disparados.*
 
 **O que é.** Provocar cada um dos quatro casos em `blmf-teste`, ler o e-mail recebido, verificar que diz o que deve dizer nas dez línguas.
 
@@ -1631,7 +1631,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** O ciclo de vida do empréstimo entre bibliotecas está especificado e implementado no banco: máquina de estados travada, quatro triggers, cron `anarbib-peb-detect-overdue-daily` ativo. **Nenhuma tela existe.** O banco traz 2 empréstimos para 20 inserções históricas.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `interlibrary_loans_v2`: 2 empréstimos vivos para 20 inserções, como em 29/08.*
 
 **O que é.** Uma tela de pedido do lado da biblioteca solicitante, uma tela de tratamento do lado da emprestadora, e a exibição do estado para as duas. As views `interlibrary_loans_painel_ui` e `interlibrary_loan_items_ui` já existem.
 
@@ -1674,7 +1674,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** `cartography_entries` traz 187 fichas e o arquivo `anarbib_bibliotheques_libertaires.geojson` conta 121. Nove arquivos identificados na rede NORLA não foram confrontados com essa lista.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 187 fichas no banco. O arquivo público mudou de endereço: `data/carte-publique.geojson` no repositório vitrine, **109** entradas (o item citava 121). As nove NORLA seguem por confrontar.*
 
 **O que é.** Verificar quais das nove já constam, e fazer entrar as ausentes com `source = "FICEDL"` ou `"NORLA"` conforme sua proveniência.
 
@@ -1754,7 +1754,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** `parseDescriptor` sai por retorno antecipado antes de alcançar o título de página quando uma ficha não tem bloco de tradução. Resultado: **158 descritores da faceta «datas», ou seja um quarto do tesauro, são registrados como identificadores nus, sem rótulo, portanto não alinháveis.** Seus vínculos com os catálogos se perdem da mesma forma. A correção `ficedl_scrape_titre_dates.patch` existe, passa `node --check`, e **nunca foi testada contra o site**.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — precisão: os 158 descritores de datas estão sem rótulo no **JSON de aspiração** (620 termos); a tabela não traz **nenhum** deles — 462 linhas, só facetas assuntos e geo. No banco eles não estão « nus »: faltam. O corretivo segue sem prova contra o site.*
 
 **O que é.** Aplicar a correção, que capta o título de página antes dos retornos antecipados e o guarda num campo `title_fr` **distinto de `labels`** — uma data tem um rótulo canônico mas não uma tradução.
 
@@ -1798,7 +1798,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** 98 alinhamentos existem no banco entre os assuntos locais e os descritores FICEDL, em `exact` ou `close`. O vocabulário de assunto do AnarBib já está exposto em SKOS. **As correspondências para a FICEDL não estão.**
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 98 alinhamentos: 44 `exact`, 54 `close`.*
 
 **O que é.** Expor `subject_ficedl_links` em `skos:exactMatch` e `skos:closeMatch`. **Um alinhamento parcial vale mais que nenhum alinhamento** — é a convenção 2 do texto de interoperabilidade, e se aplica primeiro a nós.
 
@@ -1820,7 +1820,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** O ponto de acesso OAI-PMH está implantado. **OPDS não existe.** Ora, «os fluxos OPDS existem de um lado e de outro mas não apontam para lugar nenhum», e é a convenção 1 do texto proposto aos outros catálogos.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — nenhuma ocorrência de OPDS em `src/` nem `supabase/functions/`.*
 
 **O que é.** Um fluxo OPDS 1.2 ou 2.0 sobre o catálogo público, com as facetas já disponíveis. Algumas horas para um primeiro fluxo.
 
@@ -1841,7 +1841,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** O caminho está executável desde 28/08: função `harvest-oai-pmh` implantada, cron `anarbib-oai-harvest-weekly` posto. **O cron nunca rodou** — primeira ocorrência prevista para terça-feira às 04h20. E o ponto de acesso `oai-pmh-provider` **nunca foi coletado de fora**.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — o cron (`20 4 * * 2`, ativo) não tem nenhuma execução no registro. Primeira esperada em 01/09.*
 
 **O que é.** Esperar a primeira passagem do cron e ler o que ela traz. Em paralelo, coletar nosso próprio ponto de acesso a partir de uma máquina de terceiro, com um cliente OAI padrão, e verificar que os registros estão conformes.
 
@@ -1924,9 +1924,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P1` Prioritário · Estado : **Congelado** · Carga : alguns dias · O que exige : administração de sistemas
 
-**Estado.** A produção traz **77 migrações `auth`**, a última datada de 25/06. A imagem fixada em `deploy/.env` é `GOTRUE_TAG=v2.189.0`, que traz **69**. `deploy/.env.example` indica `v2.192.0`. A diferença é um **bloqueio de correção**, não de conforto.
+**Estado.** A produção traz **77 migrações `auth`** (remedido em 31/08). **O constato sobre a fixação caducou: `deploy/.env` e `.env.example` trazem ambos `GOTRUE_TAG=v2.192.0`.** O que a v2.192.0 embarca não foi medido: o alinhamento continua por provar.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `auth.schema_migrations`: 77; `deploy/.env` e `.env.example` relidos: `v2.192.0` dos dois lados.*
 
 **O que é.** Um método que **se mede e não se adivinha**: subir um patamar, iniciar num volume virgem, `select count(*) from auth.schema_migrations;`, recomeçar até atingir pelo menos 77.
 
@@ -1971,7 +1971,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** `supabase/functions/main/index.ts` existe (6,9 KB), lê `config.toml` na inicialização, aplica uma **recusa por omissão** — só as dispensas `verify_jwt = false` são lidas, todo o resto exige um token — e recusa iniciar se o arquivo for ilegível. **Os quatro testes previstos não foram feitos.**
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `main/index.ts`: 6 885 bytes, presente; nenhum teste o menciona.*
 
 **O que é.** Os quatro testes da etapa 5 de `deploy/REPETITION.md`: função protegida sem cabeçalho de autorização → 401; com um token válido → 200; `health-probe` sem token → 200; nome inexistente → 404.
 
@@ -1992,7 +1992,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** A migração `20260827180000_temoin_sauvegarde_provenance.sql` está **testada num PostgreSQL 16 descartável, com sete controles passados, mas nunca executada contra a produção**. A correção `health_probe_provenance.patch` **não se aplica**: `patch failed … index.ts:286`. Foi produzida contra o espelho GitHub.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — a versão `20260827180000` não está nem no repositório nem no registro de produção. « provenance » aparece dez vezes no `health-probe` do repositório: a parte função existe ao menos em parte; a parte banco, em lugar nenhum.*
 
 **O que é.** Desempatar o conflito por `git hash-object` no arquivo alvo, comparado ao blob de base `0d00dc0e016fdfb86ef314e4e707abd4a84d1d2c`. **Impressão idêntica → `git apply --3way` passa. Impressão diferente → refazer a correção à mão sobre a versão real: não forçar, não sobrescrever.** Depois implantar `health-probe`.
 
@@ -2014,7 +2014,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** `service_health_probes` traz **13 932 linhas** e cresce 288 por dia, sem nenhum cron de purga — enquanto sete outras purgas existem nos 36 jobs.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 16 088 registros (13 932 em 29/08), o mais antigo de 17/08, e ainda nenhum cron de purga.*
 
 **O que é.** Um cron de purga no modelo de `anarbib-catalog-audit-snapshot-purge`, com uma retenção a decidir — trinta dias provavelmente bastam, já que os incidentes são conservados à parte em `service_health_incidents`.
 
@@ -2035,7 +2035,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** O documento afirma em negrito: «Nada disso ainda rodou». Três commits de 26/08 descrevem execuções reais com oito defeitos levantados. Além disso `bootstrap.sh` tem **oito etapas** mais uma «7 bis» e uma verificação, onde o README anuncia sete; e o README declara `notify-cross-library-digest` «ausente do repositório» quando ela está lá.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `deploy/README.md` ainda afirma que nada rodou e ainda declara `notify-cross-library-digest` ausente do repositório.*
 
 **O que é.** Reescrever a seção de estado a partir dos diários de execução de 26/08, corrigir a contagem de etapas, e retirar a afirmação sobre `notify-cross-library-digest`.
 
@@ -2057,7 +2057,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** O Turnstile foi inteiramente retirado do código em 20/08 — sua reaparição seria uma regressão. Mas **chaves de teste subsistem** em `.env.example` (duas entradas), `.env.local`, `deploy/functions.env`, uma referência em `package.json`, e um segredo no Vault. Além disso `tmp-ficedl/` (754 KB, duplicata exata de um arquivo versionado) fica na raiz, e `docs/drafts/` está versionado sem regra.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — a limpeza avançou: nenhum traço Turnstile em `package.json`, `.env.local`, `functions.env` nem no Vault. Restam: o segredo de função `TURNSTILE_SECRET_KEY`, `tmp-ficedl/` (740 KB) e `docs/drafts/` sem regra.*
 
 **O que é.** Retirar os cinco rastros, suprimir `tmp-ficedl/` (ignorado pelo git desde 28/08, portanto sem risco), e decidir o estatuto de `docs/drafts/`: ou é uma antecâmara e se ignora, ou é conteúdo e se documenta.
 
@@ -2079,7 +2079,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** Os três jobs de integração contínua rodam num contêiner `node:20`, cuja janela de manutenção de longo prazo terminou em abril de 2026. É o ponto de fim de vida mais claro da cadeia.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — 7 ocorrências de `node:20` nos dois workflows. Nada mudou.*
 
 **O que é.** Passar para a versão em manutenção longa seguinte, verificar que o build, os testes e o lint passam, e que a CLI Supabase fixada `v2.98.1` se instala nela.
 
@@ -2100,7 +2100,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** O espelho frio `anarbib-mirror.git` existe na estação de trabalho e sua atualização é manual. As unidades systemd `anarbib-mirror-refresh.service` e `.timer` estão versionadas em `deploy/ops/` mas sua entrada em serviço não está confirmada.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — as unidades estão versionadas em `deploy/ops/systemd/`. O espelho frio traz um HEAD de 30/08 às 16h — no máximo um dia de atraso — mas nada daqui distingue um timer ativo de um refresh manual.*
 
 **O que é.** Verificar se o temporizador roda, e senão colocá-lo em serviço. Registrar o frescor do espelho em algum lugar legível.
 
@@ -2121,7 +2121,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** A etapa 0 é conclusiva desde 20/08: `test.anarbib.org` é servido pelo novo motor em paralelo. A cadeia de integração contínua já usa a ação `git-pages`. **O Codeberg Pages em versão histórica está em modo de manutenção, não em fim de vida** — a documentação diz que continuará funcionando indefinidamente.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — parte da limpeza já está feita: o branch `pages` não existe mais, `public/.domains` sumiu, `public/CNAME` preservado.*
 
 **O que é.** Colocar o registro TXT de lista branca, criar `public/_redirects` com a regra de reescrita, verificar que uma rota desconhecida retorna 200 com o conteúdo certo, depois limpar **somente após** verificação verde.
 
@@ -2153,9 +2153,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado.** A tabela de histórico de `docs/backlogs/INDEX.md` para no v31: **a linha do v32 falta**, embora o arquivo esteja em `archive/`. E duas convenções de nomenclatura dos arquivos coexistem — com ou sem o prefixo `-archive-` —, ponto aberto explícito jamais levado ao REGISTRO.
+**Estado.** **Corrigido em 31/08: a linha do v32 está restabelecida desde 29/08.** Restam: as duas convenções de nomenclatura (9 arquivos com prefixo `-archive-`, 27 sem) e um cabeçalho do INDEX que já deriva (« 90 itens », « restam 84 », quando o JSON conta 83).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `INDEX.md` relido, arquivos contados: 9 com prefixo `-archive-`, 27 sem.*
 
 **O que é.** Acrescentar a linha do v32, as do v33 e do v34, e decidir a convenção de arquivamento numa frase inscrita no REGISTRO.
 
@@ -2176,7 +2176,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** Cinco regras de concepção são aplicadas em toda parte e escritas em nenhum lugar acessível: a ordem das atualizações numa RPC (o relato antes do estado), a distinção entre `workflow_note` e `schedule_reply_note`, a proibição de `async` em `onAuthStateChange`, as armadilhas de codificação sob PowerShell, e o contrato `actionBox` da função de renderização dos e-mails.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `CONTRIBUTING.md` existe, mas nenhuma ocorrência de `actionBox` nem `workflow_note` é alcançável dali.*
 
 **O que é.** Escrevê-las no repositório, não num arquivo local. Uma página basta; cada uma cabe em três linhas e um exemplo.
 
@@ -2237,7 +2237,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** O Liberapay está no ar e recebeu sua primeira doação em 27/08. O encarte «apoiar financeiramente» está publicado nas dez locales e nomeia o Liberapay como único canal aberto. **Pix e IBAN dormem** num bloco de comentário HTML entre os marcadores `ENCART-DORMANT-START` e `ENCART-DORMANT-END`.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — os marcadores `ENCART-DORMANT-START` estão nos dez arquivos do repositório vitrine.*
 
 **O que é.** Lado Brasil: uma chave aleatória dedicada criada pela pessoa mandatada, e a abertura de uma conta no CNPJ — uma cooperativa de crédito é mais coerente que um banco comercial. Lado Europa: decidir qual conta recebe. Depois preencher os modelos, retirar os dois marcadores de comentário, e suprimir os dois parágrafos «em abertura».
 
@@ -2281,7 +2281,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 **Estado.** As páginas escritas à mão trazem `<html lang="pt-BR">`; `tools/build-privacy-pages.cjs` emite `lang="pt"`. **As páginas têm razão, o script está errado.**
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 31/08 — `build-privacy-pages.cjs:243` ainda emite `lang` bruto (`pt`), enquanto as páginas à mão trazem `pt-BR`. O gerador de finanças faz a conversão (`HTML_LANG[lang]`): o modelo do corretivo já está no repositório.*
 
 **O que é.** Corrigir o script para que emita a etiqueta completa, e verificar que o gerador das páginas de contas, construído no mesmo modelo, não reproduza o defeito.
 
