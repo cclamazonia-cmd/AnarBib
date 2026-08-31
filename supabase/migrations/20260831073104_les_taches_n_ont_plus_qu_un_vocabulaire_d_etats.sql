@@ -72,7 +72,7 @@ COMMENT ON COLUMN public.painel_internal_tasks.status IS
 -- Vérification (doctrine)
 -- -------------------------------------------------------------------------
 DO $$
-DECLARE v_def text;
+DECLARE v_def text; v_etat text;
 BEGIN
   SELECT column_default INTO v_def FROM information_schema.columns
    WHERE table_schema='public' AND table_name='painel_internal_tasks' AND column_name='status';
@@ -86,13 +86,39 @@ BEGIN
     RAISE EXCEPTION 'la CHECK sur status est absente';
   END IF;
 
-  -- Elle doit refuser ce qu'elle est censee refuser.
+  -- CORRECTIF DU 31/08, quelques minutes apres la premiere version : cette
+  -- verification insérait une tache de sonde pour prouver que la CHECK refuse
+  -- 'pendente'. Elle passait en production et cassait la CI.
+  --
+  -- La raison est ecrite dans le depot depuis longtemps : les migrations sont
+  -- appliquees AVANT le seed. En CI, `libraries` est donc VIDE quand ce bloc
+  -- s'execute ; `(SELECT id FROM libraries LIMIT 1)` vaut NULL ; library_id est
+  -- NOT NULL ; l'insert leve `not_null_violation` — que le `WHEN
+  -- check_violation` ne rattrape pas. La migration s'arretait, la
+  -- reconstruction du schema avec elle, et les 40 suites ne tournaient meme pas.
+  --
+  -- Une migration ne verifie que ce qui est STRUCTUREL : ici, que la contrainte
+  -- nomme les sept etats et ne nomme pas 'pendente'. C'est aussi concluant, et
+  -- ca ne demande aucune donnee. Le controle fonctionnel — inserer et voir
+  -- refuser — a sa place dans tests/sql, qui tourne apres le seed.
+  DECLARE v_def text;
   BEGIN
-    INSERT INTO public.painel_internal_tasks (library_id, title, status)
-    VALUES ((SELECT id FROM public.libraries LIMIT 1), 'sonde', 'pendente');
-    RAISE EXCEPTION 'la CHECK a laisse passer un etat hors vocabulaire';
-  EXCEPTION
-    WHEN check_violation THEN NULL;  -- attendu
+    SELECT pg_get_constraintdef(oid) INTO v_def FROM pg_constraint
+     WHERE conrelid='public.painel_internal_tasks'::regclass
+       AND conname='painel_internal_tasks_status_check';
+    IF v_def IS NULL THEN
+      RAISE EXCEPTION 'la CHECK sur status est absente';
+    END IF;
+    IF v_def LIKE '%pendente%' THEN
+      RAISE EXCEPTION 'la CHECK nomme encore pendente : %', v_def;
+    END IF;
+    FOREACH v_etat IN ARRAY ARRAY['aberta','a_fazer','em_andamento','bloqueada',
+                                  'concluida','cancelada','arquivada']
+    LOOP
+      IF v_def NOT LIKE '%'||v_etat||'%' THEN
+        RAISE EXCEPTION 'la CHECK ne nomme pas l etat % : %', v_etat, v_def;
+      END IF;
+    END LOOP;
   END;
 END $$;
 
