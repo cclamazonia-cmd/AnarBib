@@ -140,13 +140,18 @@ beforeAll(() => {
   git(travail, 'add', '-A');
   git(travail, 'commit', '--quiet', '-m', 'c1 — état initial');
   git(travail, 'push', '--quiet', '-u', 'origin', 'main');
-});
+}, 30_000); // meme raison que le timeout du describe : une dizaine de spawns git
 
 afterAll(() => {
   if (racine) rmSync(racine, { recursive: true, force: true });
 });
 
-describe('deployer-backend.sh — le marqueur de ce qui est réellement déployé', () => {
+// 30 s et non les 5 s par defaut : chaque cas paie un clone git + le script
+// entier en sous-processus bash. Sur le poste Windows, ou chaque spawn coute
+// dix fois le prix Linux, 5 s tombent en timeout des que la machine est
+// chargee. Un plafond n'est pas une assertion : l'elargir ne prouve rien de
+// moins, ca retire seulement un faux rouge local.
+describe('deployer-backend.sh — le marqueur de ce qui est réellement déployé', { timeout: 30_000 }, () => {
   it('pose le marqueur au premier passage, et déploie tout faute de référence', () => {
     const c1 = git(travail, 'rev-parse', 'HEAD');
     const { sortie, code, deployees } = runCI();

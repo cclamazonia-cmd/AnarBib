@@ -124,13 +124,20 @@ lire_marqueur() {
 
   local refspec="+refs/tags/${NOM_MARQUEUR}:refs/tags/${NOM_MARQUEUR}"
   if depot_superficiel; then
-    # `--deepen=25` d'un seul coup : il ramene le tag ET recule la frontiere de
-    # `main` de 25 commits. Le premier sert a DECIDER (comparaison d'arbres), le
-    # second seulement a RACONTER (enumerer les commits couverts). Mesure du
-    # 27/08 sur ce depot : ~1 Mo, 0,4 s — le journal ne coute rien.
-    git fetch --deepen=25 --force origin "$refspec" \
+    # `--deepen=25` : il recule la frontiere de `main` de 25 commits (pour
+    # RACONTER — enumerer les commits couverts) et ramene le tag (pour DECIDER —
+    # comparaison d'arbres). Mesure du 27/08 sur ce depot : ~1 Mo, 0,4 s — le
+    # journal ne coute rien.
+    #
+    # DEUX fetchs, surtout pas un seul : sur git Windows (2.55.0.windows.5,
+    # constate le 31/08/2026), un `--deepen` dont le refspec mele le tag et main
+    # rend 0 SANS reculer la frontiere de main. Aucun repli ne se declenche
+    # alors, et l'enumeration se tait (« la reference n'est pas un ancetre »).
+    # Separes, chacun fait son travail — sur ce poste comme sur le runner.
+    git fetch --deepen=25 --force origin \
       "+refs/heads/main:refs/remotes/origin/main" >/dev/null 2>&1 \
-      || git fetch --deepen=25 --force origin "$refspec" >/dev/null 2>&1 \
+      || git fetch --deepen=25 origin >/dev/null 2>&1
+    git fetch --deepen=25 --force origin "$refspec" >/dev/null 2>&1 \
       || git fetch --depth=1 --force origin "$refspec" >/dev/null 2>&1
   else
     git fetch --force origin "$refspec" >/dev/null 2>&1
