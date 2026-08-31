@@ -60,6 +60,8 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **29 août 2026**. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `1d00ed2c`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés.
 
+**Fraîcheur des constats au 2026-08-31.** **10 items sur 83** portent une vérification datée qui leur est propre (B2, B7, B9, B11, B14, B17, F4, F6, G1, G5). Les **73** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+
 ### Base
 
 | | | |
@@ -451,7 +453,13 @@ Et parce qu'un grant que le corps de la fonction contredit est exactement ce qui
 
 Comme pour `anon` (item **B2**), ce nombre est d'abord l'effet d'un défaut de schéma : `ALTER DEFAULT PRIVILEGES … GRANT ALL ON FUNCTIONS TO … authenticated` s'applique à toute fonction créée dans `public`. La différence est qu'ici, le défaut est **presque toujours celui qu'on veut** : la surface d'écriture de l'application est faite de RPC `SECURITY DEFINER` derrière `api`, appelées par des personnes connectées (doctrine `DOC-RPC-3`). Le nombre ne descendra pas à zéro, et ce n'est pas l'objectif. L'advisor signale une architecture qu'il ne peut pas connaître.
 
-*Vérifié : 30/08 — comptage direct : 138 fonctions de `api` sur 142 et 326 de `public` sur 498 ouvertes à `authenticated`. L'audit lui-même reste à faire.*
+**Ce que le lot 3 de B2 change ici (31/08).** Le défaut du schéma a été retourné pour `anon` : une fonction créée dans `public` naît désormais fermée à ce rôle. **Rien n'a été fait pour `authenticated`, et rien ne doit l'être à l'aveugle** — c'est toute la différence entre les deux items. Fermer `authenticated` par défaut casserait la surface d'écriture de l'application, faite de RPC `SECURITY DEFINER` derrière `api` appelées par des personnes connectées : la panne serait immédiate, générale, et sans rapport avec une décision de sécurité.
+
+**Et le piège nommé dans B2 vaut ici, en pire.** Une entrée `pg_default_acl` devenue vide est *supprimée* par PostgreSQL, et le défaut natif `PUBLIC=X` reprend la main : on croirait fermer, on ouvrirait à tout le monde. Après le lot 3, la ligne de `postgres` sur les fonctions de `public` ne porte plus que `postgres`, `authenticated` et `service_role`. **Retirer `authenticated` sans en laisser d'autres viderait la ligne** — et rendrait exécutables par n'importe qui les fonctions que le lot 3 vient de protéger pour l'avenir. Si cet item aboutit un jour à un `ALTER DEFAULT PRIVILEGES`, il devra retirer `authenticated` *et* laisser `postgres` et `service_role`, puis **vérifier que la ligne existe encore** : le bloc de vérification de la migration `20260831105114` est écrit pour être recopié.
+
+Le travail réel de B14 n'est donc pas un `ALTER` — c'est l'audit des 138 fonctions de `api`, une par une. Le défaut n'y sera retourné, si jamais il l'est, qu'à la fin.
+
+*Vérifié : 31/08 — relu à la lumière du lot 3 de **B2**, livré le jour même : le défaut de `public` sur les fonctions porte désormais `postgres`, `authenticated`, `service_role` — `anon` retiré, la ligne `pg_default_acl` vérifiée présente après coup. Le comptage du 30/08 (138 de `api` sur 142, 326 de `public` sur 498) n'a pas été refait ; **l'audit lui-même reste entier**.*
 
 **Ce que c'est.** Le critère n'est pas *« est-elle `SECURITY DEFINER` ? »* — elles le sont toutes, par construction. C'est : **que peut demander une inconnue qui s'est simplement inscrite ?** Un compte `authenticated` s'obtient en trois clics ; il ne prouve l'appartenance à aucune bibliothèque.
 
@@ -468,9 +476,9 @@ Les oracles trouvés en mai avaient tous la même forme : un identifiant en para
 - Le compte rendu vit dans `docs/journal/audits/`, au format de celui du 18/05.
 - Le reste de `public` suit, par paquets.
 
-**Dépendances.** Se fait par lots. Un lot de vingt fonctions est déjà utile. Ne commence pas avant B2, dont le lot 2 pose le vocabulaire des commentaires.
+**Dépendances.** Se fait par lots. Un lot de vingt fonctions est déjà utile. Ne commence pas avant **B2**, dont le lot 2 pose le vocabulaire des commentaires et dont le lot 3 pose le piège à ne pas répéter.
 
-*Renvois : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `REGISTRE_decisions DOC-RPC-3`*
+*Renvois : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `REGISTRE_decisions DOC-RPC-3` · `item B2, lot 3` · `migration 20260831105114` · `tests/sql/grants_herites_tests.sql T11`*
 
 #### B4 — Examiner les quatre tables à RLS sans policy qui ne sont pas du transit
 
@@ -1520,7 +1528,13 @@ Et parce que l'inverse est plus dangereux encore : les deux redirections sont vi
 
 **État.** Vérifié le 29/08 : **62 tables métier n'ont jamais reçu la moindre insertion.** Sept blocs entiers sont concernés — assemblées du réseau (3 tables), notes de lecture (2), propositions et objections d'autorité (3), référentiels de catalogage `catalog_ref_*` (8 sur 9), gouvernance des profils de bibliothèque (4, **alors que deux crons tournent dessus toutes les quinze minutes**), délibération sur les demandes d'adhésion (5, dont `library_request_votes` et `library_request_messages`).
 
-*Constat du 29/08, non revérifié depuis.*
+**Remesuré le 31/08 : toujours 62, et ce n'est pas une bonne nouvelle.** Le compte n'a pas bougé en deux jours — 62 tables de `public` sur 189 n'ont jamais reçu la moindre insertion. Mais ce n'est pas la même liste : `loan_cycle_notifications`, née ce matin avec les rappels d'échéance, y est entrée **le jour de sa création**. Un circuit livré aujourd'hui rejoint aussitôt la colonne des circuits jamais empruntés — c'est exactement le mécanisme que cet item nomme, et il continue de tourner pendant qu'on le décrit.
+
+**Un premier livre circule.** L'emprunt **#69** a été ouvert ce matin à 11 h 43 à la BLMF — item 84, *O Anarquismo na Escola, no Teatro, na Poesia* d'Edgar Rodrigues, échéance **21/09**. Il donne au bloc *notes de lecture* sa première chance réelle : le mi-parcours calculé par `notify-loan-cycle` tombe le **10 septembre**, et l'invitation à déposer une note sous pseudonyme partira ce jour-là (item **F4**). `book_reading_notes` est encore à zéro ligne ; si elle en porte une le 11, un des sept blocs sera sorti de cette liste pour de bon — et pas parce qu'on l'aura décidé, parce que quelqu'un l'aura emprunté.
+
+Les six autres blocs sont inchangés au 31/08, vérifiés table par table : assemblées du réseau (3), propositions et objections d'autorité (3), référentiels `catalog_ref_*` (8), gouvernance des profils de bibliothèque (4, **et les deux crons tournent toujours dessus toutes les quinze minutes**), délibération des demandes d'adhésion (5). Tous à zéro insertion.
+
+*Vérifié : 31/08 — remesuré en production : **62 tables de `public` sur 189** à zéro insertion (`pg_stat_user_tables.n_tup_ins`, croisé avec un décompte de lignes sur les tables citées). Le compte est stable, la liste ne l'est pas — `loan_cycle_notifications` y est entrée le jour de sa naissance. Emprunt **#69** ouvert à la BLMF ; l'invitation à écrire une note de lecture est attendue le **10/09**, et c'est la première sortie possible de cette liste.*
 
 **Ce que c'est.** Choisir un bloc et l'emprunter pour de vrai, du premier geste au dernier : tenir une assemblée du réseau, déposer une note de lecture, proposer une autorité et laisser quelqu'un objecter, faire délibérer une demande d'adhésion. Consigner ce qui manque, ce qui surprend, ce qui bloque.
 
@@ -1534,7 +1548,7 @@ Et parce que l'inverse est plus dangereux encore : les deux redirections sont vi
 
 **Dépendances.** Le bloc « assemblée » dépend de **A1**. Les autres non.
 
-*Renvois : `Relevé du 29/08/2026` · `REGISTRE §32 AG, §28 ATE, §26 ONBO`*
+*Renvois : `Relevé du 29/08/2026` · `REGISTRE §32 AG, §28 ATE, §26 ONBO` · `emprunt #69 (BLMF, item 84, échéance 21/09)` · `item F4` · `public.book_reading_notes`*
 
 #### G2 — Trancher politiquement l'écart entre P2 et P8 sur la promotion à coordenador·a
 

@@ -60,6 +60,8 @@ Esse trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `1d00ed2c`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados.
 
+**Frescor dos constatos em 2026-08-31.** **10 itens de 83** trazem uma verificação datada própria (B2, B7, B9, B11, B14, B17, F4, F6, G1, G5). Os **73** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+
 ### Banco
 
 | | | |
@@ -445,7 +447,13 @@ E porque um grant que o corpo da função contradiz é exatamente o que deixa de
 
 Como para `anon` (item **B2**), este número é antes de tudo o efeito de um padrão de esquema: `ALTER DEFAULT PRIVILEGES … GRANT ALL ON FUNCTIONS TO … authenticated` aplica-se a toda função criada em `public`. A diferença é que aqui o padrão é **quase sempre o que se quer**: a superfície de escrita da aplicação é feita de RPC `SECURITY DEFINER` atrás de `api`, chamadas por pessoas conectadas (doutrina `DOC-RPC-3`). O número não descerá a zero, e não é esse o objetivo. O advisor sinaliza uma arquitetura que não pode conhecer.
 
-*Verificado : 30/08 — contagem direta: 138 funções de `api` em 142 e 326 de `public` em 498 abertas a `authenticated`. A auditoria em si continua por fazer.*
+**O que o lote 3 de B2 muda aqui (31/08).** O padrão do esquema foi invertido para `anon`. **Nada foi feito para `authenticated`, e nada deve ser feito às cegas** — fechar `authenticated` por padrão quebraria a superfície de escrita da aplicação.
+
+**E a armadilha nomeada em B2 vale aqui, pior.** Uma entrada `pg_default_acl` vazia é *apagada* pelo PostgreSQL, e o padrão nativo `PUBLIC=X` retoma. Depois do lote 3, a linha de `postgres` traz apenas `postgres`, `authenticated` e `service_role`: **retirar `authenticated` sem deixar outros esvaziaria a linha**. Se este item chegar um dia a um `ALTER DEFAULT PRIVILEGES`, deverá deixar `postgres` e `service_role`, e **verificar que a linha ainda existe** — o bloco de verificação da migração `20260831105114` está escrito para ser copiado.
+
+O trabalho real de B14 não é um `ALTER`: é a auditoria das 138 funções de `api`.
+
+*Verificado : 31/08 — relido à luz do lote 3 de **B2**, entregue no mesmo dia: o padrão de `public` traz agora `postgres`, `authenticated`, `service_role`. A contagem de 30/08 não foi refeita; **a auditoria em si continua inteira**.*
 
 **O que é.** O critério não é *«é `SECURITY DEFINER`?»* — todas são, por construção. É: **o que pode pedir uma desconhecida que apenas se cadastrou?** Uma conta `authenticated` obtém-se em três cliques; não prova pertencimento a nenhuma biblioteca.
 
@@ -462,9 +470,9 @@ Os oráculos encontrados em maio tinham todos a mesma forma: um identificador co
 - O relatório vive em `docs/journal/audits/`, no formato do de 18/05.
 - O resto de `public` segue, em pacotes.
 
-**Dependências.** Faz-se em lotes. Um lote de vinte funções já é útil. Não começa antes de B2, cujo lote 2 estabelece o vocabulário dos comentários.
+**Dependências.** Faz-se em lotes. Um lote de vinte funções já é útil. Não começa antes de **B2**, cujo lote 2 estabelece o vocabulário dos comentários e cujo lote 3 nomeia a armadilha a não repetir.
 
-*Remissões : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `REGISTRE_decisions DOC-RPC-3`*
+*Remissões : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18` · `REGISTRE_decisions DOC-RPC-3` · `item B2, lot 3` · `migration 20260831105114` · `tests/sql/grants_herites_tests.sql T11`*
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
 
@@ -1496,7 +1504,13 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 
 **Estado.** Verificado em 29/08: **62 tabelas de negócio nunca receberam uma única inserção.** Sete blocos inteiros são atingidos — assembleias da rede (3 tabelas), notas de leitura (2), propostas e objeções de autoridade (3), referenciais de catalogação `catalog_ref_*` (8 de 9), governança dos perfis de biblioteca (4, **enquanto dois crons rodam sobre elas a cada quinze minutos**), deliberação sobre os pedidos de adesão (5, incluindo `library_request_votes` e `library_request_messages`).
 
-*Constato de 29/08, não reverificado desde então.*
+**Remedido em 31/08: ainda 62, e não é boa notícia.** A conta não mudou em dois dias — 62 tabelas de `public` em 189 nunca receberam uma inserção. Mas não é a mesma lista: `loan_cycle_notifications`, nascida esta manhã com os lembretes de vencimento, entrou nela **no dia da sua criação**. Um circuito entregue hoje junta-se de imediato à coluna dos circuitos jamais percorridos.
+
+**Um primeiro livro circula.** O empréstimo **#69** foi aberto esta manhã na BLMF — item 84, *O Anarquismo na Escola, no Teatro, na Poesia*, de Edgar Rodrigues, vencimento **21/09**. Dá ao bloco *notas de leitura* a sua primeira hipótese real: o meio-percurso calculado por `notify-loan-cycle` cai em **10 de setembro**, e o convite a deixar uma nota sob pseudónimo parte nesse dia (item **F4**). `book_reading_notes` continua a zero linhas.
+
+Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: assembleias da rede (3), propostas e objeções de autoridade (3), referenciais `catalog_ref_*` (8), governança dos perfis (4, **e os dois crons continuam a rodar sobre elas a cada quinze minutos**), deliberação dos pedidos de adesão (5). Todos a zero inserções.
+
+*Verificado : 31/08 — remedido em produção: **62 tabelas de `public` em 189** a zero inserções. A conta é estável, a lista não. Empréstimo **#69** aberto na BLMF; o convite a escrever uma nota de leitura é esperado em **10/09**.*
 
 **O que é.** Escolher um bloco e percorrê-lo de verdade, do primeiro ao último gesto: realizar uma assembleia da rede, depositar uma nota de leitura, propor uma autoridade e deixar alguém objetar, fazer deliberar um pedido de adesão. Registrar o que falta, o que surpreende, o que trava.
 
@@ -1510,7 +1524,7 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 
 **Dependências.** O bloco «assembleia» depende de **A1**. Os outros não.
 
-*Remissões : `Relevé du 29/08/2026` · `REGISTRE §32 AG, §28 ATE, §26 ONBO`*
+*Remissões : `Relevé du 29/08/2026` · `REGISTRE §32 AG, §28 ATE, §26 ONBO` · `emprunt #69 (BLMF, item 84, échéance 21/09)` · `item F4` · `public.book_reading_notes`*
 
 #### G2 — Decidir politicamente o desvio entre P2 e P8 sobre a promoção a coordenador·a
 
