@@ -109,9 +109,18 @@ function tableau(
         '<tr>' +
         td(esc(jour(a.created_at, locale))) +
         td(esc(noms.get(a.actor_user_id) || '—')) +
-        td(esc(a.action_type) + marque) +
+        // LANGAGE HUMAIN (31/08/2026). Ces deux colonnes affichaient l'identifiant
+        // de code tel quel : « team_promote_to_coordenador », « library_team_invitation ».
+        // Le récapitulatif s'adresse aux coordinations des bibliothèques, pas à
+        // qui a écrit la base — et c'est un instrument de transparence : il rate
+        // sa cible s'il faut connaître le schéma pour le lire.
+        //
+        // `tr` replie sur la clé elle-même quand elle manque : un type d'action
+        // ajouté plus tard sans son libellé s'affichera donc en identifiant,
+        // visiblement, plutôt que de disparaître dans une case vide.
+        td(esc(tr(locale, `action.${a.action_type}`)) + marque) +
         (avecColonneBiblio ? td(esc(biblios.get(a.library_id) || '—')) : '') +
-        td(esc(a.target_entity_type || '—')) +
+        td(esc(a.target_entity_type ? tr(locale, `target.${a.target_entity_type}`) : '—')) +
         '</tr>'
       );
     })
