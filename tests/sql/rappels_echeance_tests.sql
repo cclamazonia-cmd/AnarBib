@@ -26,6 +26,8 @@ DECLARE
   v_passed int := 0;
   v_failed int := 0;
   v_failures text[] := '{}';
+  v_skipped int := 0;
+  v_skips text[] := '{}';
   v_t text;
   v_n int;
   v_item bigint;
@@ -84,8 +86,18 @@ BEGIN
   -- ─────────────────────────────────────────────────────────────────
   -- Deux crons vivants, ce serait deux courriels le meme jour a la meme
   -- personne. L'ancien est remplace, pas double.
+  -- CE QUE CE BANC D'ESSAI NE PEUT PAS DIRE. La base reconstruite en CI n'a pas
+  -- `pg_cron` : aucun des trente-six crons de production n'y est verifiable.
+  -- On l'annonce dans le bilan a chaque passage plutot que de le taire --
+  -- DOC-SILENCE-1 (c), ce qui se desactive compte dans le denominateur. Tant
+  -- que cette ligne s'affiche, personne ne peut croire que nos crons sont testes.
   v_t := 'T5 un seul cron de cycle, et l''ancien mi-parcours ne revient pas';
   BEGIN
+    IF to_regnamespace('cron') IS NULL THEN
+      v_skipped := v_skipped+1;
+      v_skips := v_skips||(v_t||' : pg_cron absent de ce banc d''essai -- AUCUN cron n''y est verifiable');
+      RAISE NOTICE 'RAPPELS-ECHEANCE : T5 non verifiable ici (pg_cron absent).';
+    ELSE
     SELECT count(*) INTO v_n FROM cron.job WHERE jobname='anarbib-notify-loan-cycle-daily';
     IF v_n <> 1 THEN
       v_failed := v_failed+1; v_failures := v_failures||(v_t||' : cron du cycle absent ou en double ('||v_n||')');
@@ -94,6 +106,7 @@ BEGIN
       IF v_n <> 0 THEN
         v_failed := v_failed+1; v_failures := v_failures||(v_t||' : l''ancien mi-parcours tourne encore');
       ELSE v_passed := v_passed+1; END IF;
+    END IF;
     END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
@@ -133,10 +146,15 @@ BEGIN
     END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- Le denominateur inclut les ignores : une suite qui retrecit sans que le
+  -- chiffre bouge est une suite qui ment (DOC-SILENCE-1 (c)).
   IF v_failed = 0 THEN
-    RAISE EXCEPTION 'RAPPELS-ECHEANCE OK : %/% tests passés', v_passed, (v_passed+v_failed);
+    RAISE EXCEPTION 'RAPPELS-ECHEANCE OK : %/% tests passés (% ignoré(s)%)',
+      v_passed, (v_passed+v_failed+v_skipped), v_skipped,
+      CASE WHEN v_skipped > 0 THEN ' — ' || array_to_string(v_skips, ' || ') ELSE '' END;
   ELSE
-    RAISE EXCEPTION 'RAPPELS-ECHEANCE ECHEC : %/% OK, % échec(s) | %',
-      v_passed, (v_passed+v_failed), v_failed, array_to_string(v_failures, ' || ');
+    RAISE EXCEPTION 'RAPPELS-ECHEANCE ECHEC : %/% OK, % échec(s), % ignoré(s) | %',
+      v_passed, (v_passed+v_failed+v_skipped), v_failed, v_skipped,
+      array_to_string(v_failures || v_skips, ' || ');
   END IF;
 END $$;

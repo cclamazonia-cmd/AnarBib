@@ -125,8 +125,26 @@ $fn$;
 
 REVOKE EXECUTE ON FUNCTION public.fn_cron_notify_loan_cycle() FROM PUBLIC, anon, authenticated;
 
+-- LE BANC D'ESSAI N'A PAS pg_cron, ET C'EST UNE LIMITE, PAS UN DETAIL.
+-- La base reconstruite en CI ne connait pas le schema `cron` : aucune migration
+-- ne peut y planifier un job, et par consequent AUCUN des trente-six crons de
+-- production n'est couvert par un test. Cette migration a rougi la-dessus au
+-- premier essai (`relation "cron.job" does not exist`).
+--
+-- La convention de la maison (cf. 20260619001820) enveloppe le bloc dans un
+-- `EXCEPTION WHEN OTHERS THEN RAISE WARNING`. On ne la reprend PAS telle quelle :
+-- elle avale aussi un echec en PRODUCTION, ou un cron non planifie doit crier.
+-- On distingue donc les deux cas au lieu de les confondre :
+--   * schema `cron` absent  -> on est sur le banc d'essai : NOTICE, on passe ;
+--   * schema `cron` present -> on planifie, et toute erreur remonte.
 DO $$
 BEGIN
+  IF to_regnamespace('cron') IS NULL THEN
+    RAISE NOTICE 'pg_cron absent : planification sautee (banc d''essai). '
+                 'En production, le job anarbib-notify-loan-cycle-daily DOIT exister.';
+    RETURN;
+  END IF;
+
   -- Le nouveau cron, 9h15 UTC -- apres les crons de resolution de 3h et avant
   -- le reste de la journee.
   IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'anarbib-notify-loan-cycle-daily') THEN
@@ -163,13 +181,20 @@ BEGIN
     RAISE EXCEPTION 'ECHEC : les droits de la trace ne sont pas ceux voulus';
   END IF;
 
-  SELECT count(*) INTO v_n FROM cron.job WHERE jobname = 'anarbib-notify-loan-cycle-daily';
-  IF v_n <> 1 THEN RAISE EXCEPTION 'ECHEC : le cron quotidien n''est pas planifie'; END IF;
+  -- La verification du cron ne vaut que la ou pg_cron existe. Ailleurs, on le
+  -- DIT au lieu de laisser croire qu'on a verifie.
+  IF to_regnamespace('cron') IS NULL THEN
+    RAISE NOTICE 'OK (partiel) : table, droits et interrupteur en place. '
+                 'La planification n''a PAS ete verifiee : pg_cron est absent de cette base.';
+  ELSE
+    SELECT count(*) INTO v_n FROM cron.job WHERE jobname = 'anarbib-notify-loan-cycle-daily';
+    IF v_n <> 1 THEN RAISE EXCEPTION 'ECHEC : le cron quotidien n''est pas planifie'; END IF;
 
-  SELECT count(*) INTO v_n FROM cron.job WHERE jobname = 'anarbib-notify-mid-loan-reading-daily';
-  IF v_n <> 0 THEN RAISE EXCEPTION 'ECHEC : l''ancien mi-parcours tourne encore -- deux courriels partiraient'; END IF;
+    SELECT count(*) INTO v_n FROM cron.job WHERE jobname = 'anarbib-notify-mid-loan-reading-daily';
+    IF v_n <> 0 THEN RAISE EXCEPTION 'ECHEC : l''ancien mi-parcours tourne encore -- deux courriels partiraient'; END IF;
 
-  RAISE NOTICE 'OK : trois rappels et une invitation, un seul cron, au plus un envoi par item et par moment.';
+    RAISE NOTICE 'OK : trois rappels et une invitation, un seul cron, au plus un envoi par item et par moment.';
+  END IF;
 END $$;
 
 COMMIT;
