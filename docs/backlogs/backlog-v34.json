@@ -1511,6 +1511,17 @@
           "fr": "**Clos le 31/08 au soir, corrigé dans la foulée de la campagne de revérification.** Le générateur émettait `lang=\"pt\"` là où tout le texte est en portugais du Brésil ; les pages écrites à la main portaient `pt-BR` et avaient raison. Le modèle du correctif dormait à la ligne d'à côté : `build-finances-pages.cjs` faisait la conversion depuis toujours (`HTML_LANG`). Carte posée dans le générateur de vie privée, dix pages régénérées — seule `pt/privacidade` change de langue, et la régénération a resynchronisé au passage l'en-tête des dix pages avec leur chrome, qui avait dérivé (« Appli », « Aplicativo »). **Vérifié en ligne après publication** : `anarbib.org/pt/privacidade` sert `lang=\"pt-BR\"`. Commit `2fb4796` du dépôt vitrine.",
           "pt": "**Encerrado em 31/08 à noite.** O gerador emitia `lang=\"pt\"` onde todo o texto é em português do Brasil; as páginas à mão traziam `pt-BR` e tinham razão. O modelo do corretivo dormia na linha ao lado (`HTML_LANG` de `build-finances-pages.cjs`). Dez páginas regeradas, cabeçalhos ressincronizados de passagem. **Verificado online**: `anarbib.org/pt/privacidade` serve `lang=\"pt-BR\"`. Commit `2fb4796` do repositório vitrine."
         }
+      ],
+      [
+        "H3",
+        {
+          "fr": "Publier les correspondances vers le thésaurus FICEDL en SKOS",
+          "pt": "Publicar as correspondências para o tesauro FICEDL em SKOS"
+        },
+        {
+          "fr": "**Clos le 31/08 au soir — et le constat était faux à moitié.** Les correspondances FICEDL étaient déjà exposées en SKOS : `skosExport.js` émettait `skos:exactMatch`/`closeMatch` depuis le 30/06, alimenté par `api.thesaurus_export_v1`. Ce qui manquait n'était pas l'export, c'était **l'adresse** — le fichier n'existait qu'en bouton de téléchargement, introuvable pour une machine. Livré : `scripts/build-thesaurus-skos.mjs` sur le patron de l'instantané du catalogue (prebuild, RPC `anon`, même sérialiseur que le bouton — aucune divergence possible, échec silencieux qui ne casse pas le build). **Vérifié en ligne après déploiement** : `app.anarbib.org/thesaurus.ttl` répond 200 en `text/turtle` (et `.jsonld` aussi), 51 alignements, `exactMatch` distinct de `closeMatch`, rien d'affirmé sur la hiérarchie FICEDL (le vocabulaire ne connaît qu'`exact` et `close`, et c'est voulu tant que H2 attend). Les 47 liens restants portent sur les 35 sujets SOLIDAIRES encore `proposto` : ils entreront dans le fichier à leur promotion, sans un geste. Commit `472db13b`.",
+          "pt": "**Encerrado em 31/08 à noite — e o constato estava meio errado.** As correspondências já eram exportadas em SKOS (`exactMatch`/`closeMatch` desde 30/06); o que faltava era o **endereço** — só existia um botão de download. Entregue: `build-thesaurus-skos.mjs` no padrão do snapshot do catálogo, mesmo serializador que o botão. **Verificado online**: `app.anarbib.org/thesaurus.ttl` responde 200 em `text/turtle`, 51 alinhamentos, `exactMatch` distinto de `closeMatch`, nada sobre a hierarquia FICEDL. Os 47 vínculos restantes esperam a promoção dos 35 assuntos `proposto`. Commit `472db13b`."
+        }
       ]
     ]
   },
@@ -3214,11 +3225,11 @@
       "f": {
         "fr": [
           "Le titre suit la route, dans les dix langues.",
-          "Un test le vérifie, sur le modèle de `documentLanguage.test.js`."
+          "~~Un test le vérifie, sur le modèle de `documentLanguage.test.js`~~ — `src/tests/documentTitle.test.js`, six cas dont la navigation et le non-retour au démontage, livré le 31/08 (commit `e442f97c`)."
         ],
         "pt": [
           "O título segue a rota, nas dez línguas.",
-          "Um teste o verifica, no modelo de `documentLanguage.test.js`."
+          "~~Um teste o verifica, no modelo de `documentLanguage.test.js`~~ — `src/tests/documentTitle.test.js`, seis casos, entregue em 31/08."
         ]
       },
       "dep": {
@@ -3229,8 +3240,8 @@
         "Mémoire de projet, dette technique"
       ],
       "verif": {
-        "fr": "31/08 — mesuré dans le dépôt : hook présent depuis le 05/05, 32 usages sous `src/pages/`, aucun test de titre dans `src/tests/`.",
-        "pt": "31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título."
+        "fr": "31/08 — mesuré dans le dépôt : hook présent depuis le 05/05, 32 usages sous `src/pages/`, aucun test de titre dans `src/tests/`. Le soir même : le test promis est écrit et vert (6 cas — format, repli, navigation, titre dynamique, non-retour au démontage).",
+        "pt": "31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título. Na mesma noite: o teste prometido está escrito e verde (6 casos)."
       }
     },
     {
@@ -3310,12 +3321,12 @@
         "fr": [
           "~~Aucune grille du JSX ne porte de piste `fr` nue~~ — 31/08 : plus une seule, la dernière occurrence est un commentaire qui rappelle la règle.",
           "Les deux onglets sont en cartes sous 640 px.",
-          "Les requêtes de média héritées vivent dans `mobile.css`."
+          "~~Les requêtes de média héritées vivent dans `mobile.css`~~ — les 20 héritées y sont ; les 8 restantes ont chacune une raison d'être ailleurs (4 dans des documents engendrés — étiquettes, gazette, impression du catalogue — dont le CSS d'impression voyage avec le document ; 1 dans `breakpoints.css`, la source canonique des paliers ; 1 dans le CSS du composant tabbar, aligné sur le palier 640). Verdict du 31/08."
         ],
         "pt": [
           "~~Nenhuma grade do JSX traz trilha `fr` nua~~ — 31/08: nenhuma resta, a última ocorrência é um comentário.",
           "As duas abas estão em cartões abaixo de 640 px.",
-          "As media queries herdadas vivem em `mobile.css`."
+          "~~As media queries herdadas vivem em `mobile.css`~~ — as 20 herdadas estão lá; as 8 restantes têm cada uma razão de estar onde estão (documentos gerados, fonte canônica dos breakpoints, componente tabbar). Veredito de 31/08."
         ]
       },
       "dep": {
@@ -3326,8 +3337,8 @@
         "REGISTRE §36 MOB-Q1..Q3"
       ],
       "verif": {
-        "fr": "31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré.",
-        "pt": "31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido."
+        "fr": "31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré. Verdict posé le soir même sur `MOB-Q2` : rien à rapatrier, chaque requête restante est à sa place (voir le critère barré). Reste `MOB-Q3`.",
+        "pt": "31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido. Veredito posto na mesma noite sobre `MOB-Q2`: nada a repatriar. Resta `MOB-Q3`."
       }
     },
     {
@@ -4211,57 +4222,6 @@
       "r": [
         "NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
       ]
-    },
-    {
-      "id": "H3",
-      "d": "H",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "biblio",
-        "deno"
-      ],
-      "t": {
-        "fr": "Publier les correspondances vers le thésaurus FICEDL en SKOS",
-        "pt": "Publicar as correspondências para o tesauro FICEDL em SKOS"
-      },
-      "v": {
-        "fr": "98 alignements existent en base entre les sujets locaux et les descripteurs FICEDL, en `exact` ou `close`. Le vocabulaire matière d'AnarBib est déjà exposé en SKOS. **Les correspondances vers la FICEDL ne le sont pas.**",
-        "pt": "98 alinhamentos existem no banco entre os assuntos locais e os descritores FICEDL, em `exact` ou `close`. O vocabulário de assunto do AnarBib já está exposto em SKOS. **As correspondências para a FICEDL não estão.**"
-      },
-      "w": {
-        "fr": "Exposer `subject_ficedl_links` en `skos:exactMatch` et `skos:closeMatch`. **Un alignement partiel vaut mieux que pas d'alignement** — c'est la convention 2 du texte d'interopérabilité, et elle s'applique d'abord à nous.",
-        "pt": "Expor `subject_ficedl_links` em `skos:exactMatch` e `skos:closeMatch`. **Um alinhamento parcial vale mais que nenhum alinhamento** — é a convenção 2 do texto de interoperabilidade, e se aplica primeiro a nós."
-      },
-      "y": {
-        "fr": "C'est ce qui permet qu'un fonds catalogué avec un vocabulaire local reste trouvable par qui ne connaît pas ce vocabulaire — et dans dix langues, puisque le thésaurus est déjà traduit. Quelques heures pour un premier flux.",
-        "pt": "É o que permite que um acervo catalogado com um vocabulário local continue encontrável por quem não conhece esse vocabulário — e em dez línguas, já que o tesauro já está traduzido. Algumas horas para um primeiro fluxo."
-      },
-      "f": {
-        "fr": [
-          "Un fichier SKOS est servi par l'application, à une adresse stable.",
-          "Il distingue `exactMatch` de `closeMatch`.",
-          "Il n'affirme rien sur la hiérarchie tant que **H2** n'a pas répondu."
-        ],
-        "pt": [
-          "Um arquivo SKOS é servido pelo aplicativo, num endereço estável.",
-          "Distingue `exactMatch` de `closeMatch`.",
-          "Não afirma nada sobre a hierarquia enquanto **H2** não tiver respondido."
-        ]
-      },
-      "dep": {
-        "fr": "La partie hiérarchie dépend de **H2**. La partie correspondances, non.",
-        "pt": "A parte hierarquia depende de **H2**. A parte correspondências, não."
-      },
-      "r": [
-        "docs/CHANTIERS_OUVERTS.md §4",
-        "CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26 convention 2"
-      ],
-      "verif": {
-        "fr": "31/08 — 98 alignements en base : 44 `exact`, 54 `close`. Le constat tient.",
-        "pt": "31/08 — 98 alinhamentos: 44 `exact`, 54 `close`."
-      }
     },
     {
       "id": "H4",

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-31** · 83 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 82 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 6
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
@@ -60,7 +60,7 @@ Esse trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `1d00ed2c`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados.
 
-**Frescor dos constatos em 2026-08-31.** **60 itens de 83** trazem uma verificação datada própria (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H3, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-08-31.** **59 itens de 82** trazem uma verificação datada própria (A1, A3, B2, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F2, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1201,7 +1201,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** **Constato corrigido em 31/08: estava errado desde maio.** O hook `src/lib/useDocumentTitle.js` atualiza `document.title` na navegação desde **05/05/2026**, e 32 páginas de 79 o usam. O que resta é a cobertura das 47 páginas sem hook e o teste prometido, que não existe.
 
-*Verificado : 31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título.*
+*Verificado : 31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título. Na mesma noite: o teste prometido está escrito e verde (6 casos).*
 
 **O que é.** Definir o título a cada mudança de rota, a partir das chaves i18n existentes.
 
@@ -1210,7 +1210,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **O que conta como terminado.**
 
 - O título segue a rota, nas dez línguas.
-- Um teste o verifica, no modelo de `documentLanguage.test.js`.
+- ~~Um teste o verifica, no modelo de `documentLanguage.test.js`~~ — `src/tests/documentTitle.test.js`, seis casos, entregue em 31/08.
 
 **Dependências.** Complemento natural de **E1**.
 
@@ -1243,7 +1243,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** As fases A, B e C estão entregues e a doutrina graduada está registrada. Três questões continuam abertas no REGISTRO: `MOB-Q1` (24 grades declaradas em linha no JSX com trilhas `fr` nuas), `MOB-Q2` (20 media queries herdadas a repatriar em `src/styles/mobile.css`), `MOB-Q3` (as abas Validações e Inventário a converter em cartões).
 
-*Verificado : 31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido.*
+*Verificado : 31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido. Veredito posto na mesma noite sobre `MOB-Q2`: nada a repatriar. Resta `MOB-Q3`.*
 
 **O que é.** Três passagens mecânicas, nesta ordem de valor: as 24 grades (`minmax(0, Nfr)` em toda parte, é a regra `MOB-1`), as duas abas em cartões segundo o padrão entregue, depois o repatriamento das media queries.
 
@@ -1253,7 +1253,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 - ~~Nenhuma grade do JSX traz trilha `fr` nua~~ — 31/08: nenhuma resta, a última ocorrência é um comentário.
 - As duas abas estão em cartões abaixo de 640 px.
-- As media queries herdadas vivem em `mobile.css`.
+- ~~As media queries herdadas vivem em `mobile.css`~~ — as 20 herdadas estão lá; as 8 restantes têm cada uma razão de estar onde estão (documentos gerados, fonte canônica dos breakpoints, componente tabbar). Veredito de 31/08.
 
 **Dependências.** Nenhuma. Canteiro divisível em três.
 
@@ -1767,7 +1767,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 |---|---|---|---|
 | **H1** | Reparar a coleta dos 158 descritores de datas do tesauro | `P1` | Aberto |
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
-| **H3** | Publicar as correspondências para o tesauro FICEDL em SKOS | `P1` | Aberto |
 | **H4** | Expor o catálogo em OPDS | `P1` | Aberto |
 | **H5** | Testar a coleta OAI-PMH nos dois sentidos | `P2` | Aberto |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
@@ -1816,28 +1815,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** Bloqueia **H3**. A colocar em Bolonha ou antes.
 
 *Remissões : `NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
-
-#### H3 — Publicar as correspondências para o tesauro FICEDL em SKOS
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia, Deno / TypeScript
-
-**Estado.** 98 alinhamentos existem no banco entre os assuntos locais e os descritores FICEDL, em `exact` ou `close`. O vocabulário de assunto do AnarBib já está exposto em SKOS. **As correspondências para a FICEDL não estão.**
-
-*Verificado : 31/08 — 98 alinhamentos: 44 `exact`, 54 `close`.*
-
-**O que é.** Expor `subject_ficedl_links` em `skos:exactMatch` e `skos:closeMatch`. **Um alinhamento parcial vale mais que nenhum alinhamento** — é a convenção 2 do texto de interoperabilidade, e se aplica primeiro a nós.
-
-**Por que importa.** É o que permite que um acervo catalogado com um vocabulário local continue encontrável por quem não conhece esse vocabulário — e em dez línguas, já que o tesauro já está traduzido. Algumas horas para um primeiro fluxo.
-
-**O que conta como terminado.**
-
-- Um arquivo SKOS é servido pelo aplicativo, num endereço estável.
-- Distingue `exactMatch` de `closeMatch`.
-- Não afirma nada sobre a hierarquia enquanto **H2** não tiver respondido.
-
-**Dependências.** A parte hierarquia depende de **H2**. A parte correspondências, não.
-
-*Remissões : `docs/CHANTIERS_OUVERTS.md §4` · `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26 convention 2`*
 
 #### H4 — Expor o catálogo em OPDS
 
@@ -2491,6 +2468,7 @@ Doutrina `OPS-8`: **a acusação de recepção de um alerta é o estado do siste
 
 CI verde. |
 | K4 | Corrigir o gerador das páginas de privacidade sobre a língua declarada | **Encerrado em 31/08 à noite.** O gerador emitia `lang="pt"` onde todo o texto é em português do Brasil; as páginas à mão traziam `pt-BR` e tinham razão. O modelo do corretivo dormia na linha ao lado (`HTML_LANG` de `build-finances-pages.cjs`). Dez páginas regeradas, cabeçalhos ressincronizados de passagem. **Verificado online**: `anarbib.org/pt/privacidade` serve `lang="pt-BR"`. Commit `2fb4796` do repositório vitrine. |
+| H3 | Publicar as correspondências para o tesauro FICEDL em SKOS | **Encerrado em 31/08 à noite — e o constato estava meio errado.** As correspondências já eram exportadas em SKOS (`exactMatch`/`closeMatch` desde 30/06); o que faltava era o **endereço** — só existia um botão de download. Entregue: `build-thesaurus-skos.mjs` no padrão do snapshot do catálogo, mesmo serializador que o botão. **Verificado online**: `app.anarbib.org/thesaurus.ttl` responde 200 em `text/turtle`, 51 alinhamentos, `exactMatch` distinto de `closeMatch`, nada sobre a hierarquia FICEDL. Os 47 vínculos restantes esperam a promoção dos 35 assuntos `proposto`. Commit `472db13b`. |
 
 ---
 
@@ -2522,4 +2500,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 83 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 82 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
