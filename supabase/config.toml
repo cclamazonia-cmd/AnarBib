@@ -79,6 +79,13 @@ verify_jwt = false
 [functions.notify-mid-loan-reading]
 verify_jwt = false
 
+# Les trois rappels d'echeance et l'invitation a ecrire une note de lecture.
+# Remplace notify-mid-loan-reading (dont le cron est desactive par la migration
+# 20260831111700). Appelee par le cron anarbib-notify-loan-cycle-daily via
+# net.http_post, donc sans JWT ; l'authentification passe par x-webhook-secret.
+[functions.notify-loan-cycle]
+verify_jwt = false
+
 [functions.notify-document-permission-request]
 verify_jwt = false
 

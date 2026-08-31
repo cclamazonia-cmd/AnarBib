@@ -1292,7 +1292,7 @@ O gatilho SQL funciona: quatro linhas foram enfileiradas, a última em **30/08/2
 | **F1** | Auditar a cadeia de e-mail de ponta a ponta | `P1` | Aberto |
 | **F2** | Corrigir o template dos e-mails de alerta de operação | `P1` | Aberto |
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
-| **F4** | Verificar os lembretes de vencimento e as cobranças de atraso | `P1` | Aberto |
+| **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F7** | Treze segredos de função estão declarados e vazios, sem que se saiba quais o são de propósito | `P2` | Aberto |
 
@@ -1361,28 +1361,33 @@ O gatilho SQL funciona: quatro linhas foram enfileiradas, a última em **30/08/2
 
 *Remissões : `PLAN_DE_MARCHE §8` · `Relevé du 29/08/2026`*
 
-#### F4 — Verificar os lembretes de vencimento e as cobranças de atraso
+#### F4 — Três bibliotecas tinham ativado lembretes que ninguém enviava
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** `spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.
 
 **Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar.
 
-*Verificado : 30/08 — os onze crons cujo nome evoca um vencimento relidos um a um: nenhum diz respeito ao empréstimo às leitoras. A falta está confirmada.*
+**Instruído e entregue em 31/08.** Os lembretes não existiam — mas **os interruptores que os comandam existiam**, e as três bibliotecas com política tinham-nos a `true` sem o saber. Seis momentos passam a **três** (`DOC-RAPPEL-1`). Um quarto envio substitui `notify-mid-loan-reading`, que perguntava «Como vai a leitura?» **em português fixo**: agora convida a deixar uma **nota de leitura sob pseudónimo** no catálogo. **Entregue**: EF `notify-loan-cycle`, tabela `loan_cycle_notifications` com unicidade (item, momento), suíte `rappels_echeance_tests.sql`.
 
-**O que é.** Verificar no banco se os lembretes saem por outro caminho, e senão, decidir: implementá-los, ou emendar a spec. Um empréstimo atrasado que não dispara nada é um empréstimo que ninguém cobra.
+*Verificado : 31/08 — levantamento em base e no repositório. Entregue no mesmo dia; **ainda não provado em envio real**.*
+
+**O que é.** Ver a CI verde, implantar, depois **provar a sério**: criar um empréstimo com vencimento a J-3 e verificar que um e-mail parte, na língua certa, uma só vez.
 
 **Por que importa.** O acompanhamento de oito semanas da formação BLMF prevê que uma consulta seja conduzida de ponta a ponta com negociação real: é o momento em que a ausência de lembrete aparecerá. Melhor saber antes.
 
 **O que conta como terminado.**
 
-- Um veredicto escrito: os lembretes existem por tal caminho, ou não existem.
-- Se ausentes: ou implementados, ou a spec emendada.
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
 
 **Dependências.** Verifica-se ao mesmo tempo que **F1**.
 
-*Remissões : `spec-flux-emprunts.md §10.2` · `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3` · `PLAN_formation_coordination_BLMF §5`*
+*Remissões : `spec-flux-emprunts §2.4 et §10.2` · `REGISTRE DOC-RAPPEL-1, OPS-8, DOC-SILENCE-1` · `supabase/functions/notify-loan-cycle/` · `migration 20260831111700` · `tests/sql/rappels_echeance_tests.sql` · `public.book_reading_notes`*
 
 #### F6 — `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail
 

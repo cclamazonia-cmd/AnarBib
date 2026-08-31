@@ -7717,6 +7717,169 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   "invitation.signature": { "pt-BR": "Saudações libertárias,<br>A coordenação do AnarBib", fr: "Salutations libertaires,<br>La coordination d'AnarBib", es: "Saludos libertarios,<br>La coordinación de AnarBib", en: "Libertarian greetings,<br>The AnarBib coordination", it: "Saluti libertari,<br>Il coordinamento di AnarBib", de: "Libertäre Grüße,<br>Die Koordination von AnarBib", ca: "Salutacions llibertàries,<br>La coordinació d'AnarBib", eo: "Liberecanaj salutoj,<br>La kunordigo de AnarBib", nl: "Libertaire groeten,<br>De coördinatie van AnarBib", el: "Ελευθεριακοί χαιρετισμοί,<br>Ο συντονισμός του AnarBib" },
   "invitation.fallback": { "pt-BR": "Se o botão não funcionar, copiem este link no navegador:", fr: "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :", es: "Si el botón no funciona, copien este enlace en el navegador:", en: "If the button does not work, copy this link into your browser:", it: "Se il pulsante non funziona, copiate questo link nel browser:", de: "Falls die Schaltfläche nicht funktioniert, kopiert diesen Link in euren Browser:", ca: "Si el botó no funciona, copieu aquest enllaç al navegador:", eo: "Se la butono ne funkcias, kopiu ĉi tiun ligilon en vian retumilon:", nl: "Als de knop niet werkt, kopieer deze link in jullie browser:", el: "Αν το κουμπί δεν λειτουργεί, αντιγράψτε αυτόν τον σύνδεσμο στον περιηγητή σας:" },
   "invitation.accompanying": { "pt-BR": "Recado da coordenação:", fr: "Mot de la coordination :", es: "Mensaje de la coordinación:", en: "A word from the coordination:", it: "Messaggio del coordinamento:", de: "Ein Wort der Koordination:", ca: "Missatge de la coordinació:", eo: "Vorto de la kunordigo:", nl: "Bericht van de coördinatie:", el: "Μήνυμα από τον συντονισμό:" },
+
+  // ── Cycle de l'emprunt : rappels, relance, invitation à écrire ────────────
+  //
+  // Item F4 + doctrine DOC-RAPPEL-1 (31/08/2026). TROIS moments, pas six :
+  // J-3, le jour de l'échéance, J+7. Un signal qui se répète cesse d'être lu
+  // (OPS-8) — et une lectrice émoussée, elle, cesse d'emprunter.
+  //
+  // REGISTRE. On ne réclame pas, on rappelle qu'un livre circule. Pas de
+  // « veuillez », pas de pénalité : pour le retard, quelqu'un attend, et la
+  // porte reste ouverte si la personne a une difficulté. C'est une biblio de
+  // réseau libertaire, pas un service de recouvrement.
+
+  "loan.reminder.d3.sub": {
+    "pt-BR": "Faltam três dias — {libraryName}",
+    fr: "Encore trois jours — {libraryName}",
+    es: "Faltan tres días — {libraryName}",
+    en: "Three days left — {libraryName}",
+    it: "Ancora tre giorni — {libraryName}",
+    de: "Noch drei Tage — {libraryName}",
+    ca: "Falten tres dies — {libraryName}",
+    eo: "Restas tri tagoj — {libraryName}",
+    nl: "Nog drie dagen — {libraryName}",
+    el: "Απομένουν τρεις μέρες — {libraryName}",
+  },
+  "loan.reminder.d3.intro": {
+    "pt-BR": "O empréstimo de <b>{title}</b> vence em <b>{dueDate}</b>. Se ainda precisar do livro, dá para renovar pela sua conta; se já terminou, ele volta a ficar disponível para quem estiver esperando.",
+    fr: "Le prêt de <b>{title}</b> arrive à échéance le <b>{dueDate}</b>. Si tu en as encore besoin, le renouvellement se fait depuis ton compte ; si tu as fini, le livre redevient disponible pour la personne suivante.",
+    es: "El préstamo de <b>{title}</b> vence el <b>{dueDate}</b>. Si todavía lo necesitás, podés renovarlo desde tu cuenta; si ya terminaste, el libro vuelve a estar disponible para quien esté esperando.",
+    en: "Your loan of <b>{title}</b> is due on <b>{dueDate}</b>. If you still need it, you can renew from your account; if you have finished, the book becomes available again for whoever is waiting.",
+    it: "Il prestito di <b>{title}</b> scade il <b>{dueDate}</b>. Se ti serve ancora, puoi rinnovarlo dal tuo profilo; se hai finito, il libro torna disponibile per chi lo aspetta.",
+    de: "Deine Ausleihe von <b>{title}</b> läuft am <b>{dueDate}</b> ab. Wenn du das Buch noch brauchst, kannst du in deinem Konto verlängern; wenn du fertig bist, steht es wieder für die nächste Person bereit.",
+    ca: "El préstec de <b>{title}</b> venç el <b>{dueDate}</b>. Si encara el necessites, el pots renovar des del teu compte; si ja has acabat, el llibre torna a estar disponible per a qui l'estigui esperant.",
+    eo: "La prunto de <b>{title}</b> finiĝas je <b>{dueDate}</b>. Se vi ankoraŭ bezonas ĝin, vi povas renovigi el via konto; se vi finis, la libro denove disponeblas por tiu, kiu atendas ĝin.",
+    nl: "Je lening van <b>{title}</b> loopt af op <b>{dueDate}</b>. Heb je het boek nog nodig, dan verleng je het vanuit je account; ben je klaar, dan is het weer beschikbaar voor wie erop wacht.",
+    el: "Ο δανεισμός του <b>{title}</b> λήγει στις <b>{dueDate}</b>. Αν το χρειάζεσαι ακόμη, μπορείς να τον ανανεώσεις από τον λογαριασμό σου· αν τελείωσες, το βιβλίο ξαναγίνεται διαθέσιμο για όποια ή όποιον περιμένει.",
+  },
+  "loan.reminder.d3.cta": {
+    "pt-BR": "Ver meus empréstimos",
+    fr: "Voir mes emprunts",
+    es: "Ver mis préstamos",
+    en: "See my loans",
+    it: "I miei prestiti",
+    de: "Meine Ausleihen",
+    ca: "Veure els meus préstecs",
+    eo: "Vidi miajn pruntojn",
+    nl: "Mijn leningen",
+    el: "Οι δανεισμοί μου",
+  },
+
+  "loan.reminder.d0.sub": {
+    "pt-BR": "A devolução é hoje — {libraryName}",
+    fr: "Le retour, c'est aujourd'hui — {libraryName}",
+    es: "La devolución es hoy — {libraryName}",
+    en: "Due back today — {libraryName}",
+    it: "La restituzione è oggi — {libraryName}",
+    de: "Heute zurückzugeben — {libraryName}",
+    ca: "La devolució és avui — {libraryName}",
+    eo: "La redono estas hodiaŭ — {libraryName}",
+    nl: "Vandaag terugbrengen — {libraryName}",
+    el: "Η επιστροφή είναι σήμερα — {libraryName}",
+  },
+  "loan.reminder.d0.intro": {
+    "pt-BR": "<b>{title}</b> vence hoje. Renovar leva um minuto, e devolver também: a biblioteca funciona porque os livros circulam.",
+    fr: "<b>{title}</b> arrive à échéance aujourd'hui. Renouveler prend une minute, rendre aussi : la bibliothèque tient parce que les livres circulent.",
+    es: "<b>{title}</b> vence hoy. Renovar lleva un minuto, devolver también: la biblioteca funciona porque los libros circulan.",
+    en: "<b>{title}</b> is due today. Renewing takes a minute, and so does bringing it back: the library works because books circulate.",
+    it: "<b>{title}</b> scade oggi. Rinnovare richiede un minuto, restituire anche: la biblioteca funziona perché i libri circolano.",
+    de: "<b>{title}</b> ist heute fällig. Verlängern dauert eine Minute, Zurückbringen auch: die Bibliothek lebt davon, dass Bücher zirkulieren.",
+    ca: "<b>{title}</b> venç avui. Renovar és qüestió d'un minut, i tornar-lo també: la biblioteca funciona perquè els llibres circulen.",
+    eo: "<b>{title}</b> finiĝas hodiaŭ. Renovigi daŭras unu minuton, kaj redoni ankaŭ: la biblioteko funkcias ĉar la libroj cirkulas.",
+    nl: "<b>{title}</b> moet vandaag terug. Verlengen kost een minuut, terugbrengen ook: de bibliotheek werkt doordat boeken circuleren.",
+    el: "Το <b>{title}</b> λήγει σήμερα. Η ανανέωση παίρνει ένα λεπτό, το ίδιο και η επιστροφή: η βιβλιοθήκη λειτουργεί επειδή τα βιβλία κυκλοφορούν.",
+  },
+  "loan.reminder.d0.cta": {
+    "pt-BR": "Renovar ou devolver",
+    fr: "Renouveler ou rendre",
+    es: "Renovar o devolver",
+    en: "Renew or return",
+    it: "Rinnovare o restituire",
+    de: "Verlängern oder zurückgeben",
+    ca: "Renovar o tornar",
+    eo: "Renovigi aŭ redoni",
+    nl: "Verlengen of terugbrengen",
+    el: "Ανανέωση ή επιστροφή",
+  },
+
+  "loan.overdue.d7.sub": {
+    "pt-BR": "{title} está com você há uma semana a mais",
+    fr: "{title} est chez toi depuis une semaine de trop",
+    es: "{title} está con vos hace una semana de más",
+    en: "{title} has been with you a week longer",
+    it: "{title} è da te da una settimana in più",
+    de: "{title} ist eine Woche länger bei dir",
+    ca: "{title} fa una setmana de més que el tens",
+    eo: "{title} estas ĉe vi ekde unu semajno tro",
+    nl: "{title} is een week te lang bij jou",
+    el: "Το {title} είναι μαζί σου μία εβδομάδα παραπάνω",
+  },
+  "loan.overdue.d7.intro": {
+    "pt-BR": "<b>{title}</b> deveria ter voltado em <b>{dueDate}</b>. Não é cobrança: é um lembrete de que alguém pode estar esperando por ele. Se houver qualquer dificuldade — o livro sumiu, a semana virou, a vida aconteceu — escreva para a biblioteca. A gente se organiza.",
+    fr: "<b>{title}</b> devait revenir le <b>{dueDate}</b>. Ce n'est pas une relance de recouvrement : c'est un rappel que quelqu'un l'attend peut-être. En cas de difficulté — le livre a disparu, la semaine a filé, la vie s'en est mêlée — écris à la bibliothèque. On s'arrange.",
+    es: "<b>{title}</b> tenía que volver el <b>{dueDate}</b>. No es un reclamo: es un recordatorio de que alguien puede estar esperándolo. Si hay alguna dificultad — el libro se perdió, la semana voló, la vida pasó — escribile a la biblioteca. Nos arreglamos.",
+    en: "<b>{title}</b> was due back on <b>{dueDate}</b>. This is not a debt notice: it is a reminder that someone may be waiting for it. If anything got in the way — the book went missing, the week ran away, life happened — write to the library. We will work it out.",
+    it: "<b>{title}</b> doveva tornare il <b>{dueDate}</b>. Non è un sollecito di pagamento: è un promemoria che qualcun* potrebbe aspettarlo. Se c'è una difficoltà — il libro è sparito, la settimana è volata, la vita è successa — scrivi alla biblioteca. Ci organizziamo.",
+    de: "<b>{title}</b> sollte am <b>{dueDate}</b> zurück sein. Das ist keine Mahnung: es ist eine Erinnerung daran, dass jemand darauf warten könnte. Wenn etwas dazwischenkam — das Buch ist verschwunden, die Woche verflogen, das Leben passiert — schreib der Bibliothek. Wir finden eine Lösung.",
+    ca: "<b>{title}</b> havia de tornar el <b>{dueDate}</b>. No és una reclamació: és un recordatori que algú pot estar esperant-lo. Si hi ha cap dificultat — el llibre s'ha perdut, la setmana ha volat, la vida ha passat — escriu a la biblioteca. Ja ens organitzem.",
+    eo: "<b>{title}</b> devis reveni je <b>{dueDate}</b>. Tio ne estas monpostulo: estas memorigo, ke iu eble atendas ĝin. Se io malhelpis — la libro malaperis, la semajno forflugis, la vivo okazis — skribu al la biblioteko. Ni aranĝos.",
+    nl: "<b>{title}</b> moest terug op <b>{dueDate}</b>. Dit is geen aanmaning: het is een herinnering dat iemand er misschien op wacht. Loopt er iets — het boek is zoek, de week vloog om, het leven kwam ertussen — schrijf dan naar de bibliotheek. We komen eruit.",
+    el: "Το <b>{title}</b> έπρεπε να επιστραφεί στις <b>{dueDate}</b>. Δεν είναι όχληση: είναι μια υπενθύμιση ότι κάποια ή κάποιος μπορεί να το περιμένει. Αν προέκυψε κάτι — χάθηκε το βιβλίο, πέρασε η εβδομάδα, συνέβη η ζωή — γράψε στη βιβλιοθήκη. Θα τα βρούμε.",
+  },
+  "loan.overdue.d7.cta": {
+    "pt-BR": "Ver meus empréstimos",
+    fr: "Voir mes emprunts",
+    es: "Ver mis préstamos",
+    en: "See my loans",
+    it: "I miei prestiti",
+    de: "Meine Ausleihen",
+    ca: "Veure els meus préstecs",
+    eo: "Vidi miajn pruntojn",
+    nl: "Mijn leningen",
+    el: "Οι δανεισμοί μου",
+  },
+
+  // Remplace l'ancien « Como vai a leitura ? », qui posait une question à
+  // laquelle un courriel ne permet pas de répondre. Ici on propose un geste
+  // qui laisse quelque chose au réseau — et la table `book_reading_notes`,
+  // construite et déployée, n'avait jamais reçu une seule ligne.
+  "loan.note_invite.sub": {
+    "pt-BR": "Uma nota sobre {title}? — {libraryName}",
+    fr: "Une note sur {title} ? — {libraryName}",
+    es: "¿Una nota sobre {title}? — {libraryName}",
+    en: "A note on {title}? — {libraryName}",
+    it: "Una nota su {title}? — {libraryName}",
+    de: "Eine Notiz zu {title}? — {libraryName}",
+    ca: "Una nota sobre {title}? — {libraryName}",
+    eo: "Noto pri {title}? — {libraryName}",
+    nl: "Een notitie over {title}? — {libraryName}",
+    el: "Μια σημείωση για το {title}; — {libraryName}",
+  },
+  "loan.note_invite.intro": {
+    "pt-BR": "Você está na metade do empréstimo de <b>{title}</b>. Se o livro deu o que pensar, deixe uma <b>nota de leitura</b> no catálogo da rede: ela aparece na página da obra, sob o pseudônimo que você escolher, e serve a quem pegar o livro depois. Não é resenha nem obrigação — duas linhas já ajudam.",
+    fr: "Tu es à mi-chemin de ton emprunt de <b>{title}</b>. Si le livre t'a donné à penser, laisse une <b>note de lecture</b> dans le catalogue du réseau : elle s'affiche sur la page de l'œuvre, sous le pseudonyme de ton choix, et sert à la personne qui empruntera après toi. Ce n'est ni une critique ni une obligation — deux lignes suffisent.",
+    es: "Estás a mitad del préstamo de <b>{title}</b>. Si el libro te dio para pensar, dejá una <b>nota de lectura</b> en el catálogo de la red: aparece en la página de la obra, con el seudónimo que elijas, y le sirve a quien lo saque después. No es una reseña ni una obligación — dos líneas ya ayudan.",
+    en: "You are halfway through your loan of <b>{title}</b>. If the book gave you something to think about, leave a <b>reading note</b> in the network catalogue: it appears on the work's page, under the pseudonym you choose, and it helps whoever borrows it next. It is not a review and not a duty — two lines are plenty.",
+    it: "Sei a metà del prestito di <b>{title}</b>. Se il libro ti ha dato da pensare, lascia una <b>nota di lettura</b> nel catalogo della rete: compare nella pagina dell'opera, con lo pseudonimo che scegli, e serve a chi lo prenderà dopo di te. Non è una recensione né un obbligo — due righe bastano.",
+    de: "Du bist auf halbem Weg durch deine Ausleihe von <b>{title}</b>. Wenn dir das Buch zu denken gegeben hat, hinterlass eine <b>Lesenotiz</b> im Katalog des Netzwerks: sie erscheint auf der Seite des Werks, unter dem Pseudonym deiner Wahl, und hilft der Person, die es als Nächstes ausleiht. Keine Rezension, keine Pflicht — zwei Zeilen genügen.",
+    ca: "Ets a mig camí del préstec de <b>{title}</b>. Si el llibre t'ha donat què pensar, deixa una <b>nota de lectura</b> al catàleg de la xarxa: apareix a la pàgina de l'obra, amb el pseudònim que triïs, i serveix a qui l'agafi després. No és una ressenya ni una obligació — dues línies ja ajuden.",
+    eo: "Vi estas ĉe la mezo de via prunto de <b>{title}</b>. Se la libro pensigis vin, lasu <b>legonoton</b> en la katalogo de la reto: ĝi aperas sur la paĝo de la verko, sub la kaŝnomo, kiun vi elektas, kaj utilas al tiu, kiu pruntos ĝin poste. Ĝi estas nek recenzo nek devo — du linioj jam helpas.",
+    nl: "Je bent halverwege je lening van <b>{title}</b>. Heeft het boek je aan het denken gezet, laat dan een <b>leesnotitie</b> achter in de catalogus van het netwerk: ze verschijnt op de pagina van het werk, onder het pseudoniem dat je kiest, en helpt wie het na jou leent. Geen recensie en geen plicht — twee regels zijn genoeg.",
+    el: "Είσαι στα μισά του δανεισμού του <b>{title}</b>. Αν το βιβλίο σού έδωσε τροφή για σκέψη, άφησε μια <b>σημείωση ανάγνωσης</b> στον κατάλογο του δικτύου: εμφανίζεται στη σελίδα του έργου, με το ψευδώνυμο που θα διαλέξεις, και χρησιμεύει σε όποια ή όποιον το δανειστεί μετά. Δεν είναι κριτική ούτε υποχρέωση — δύο γραμμές αρκούν.",
+  },
+  "loan.note_invite.cta": {
+    "pt-BR": "Escrever uma nota",
+    fr: "Écrire une note",
+    es: "Escribir una nota",
+    en: "Write a note",
+    it: "Scrivere una nota",
+    de: "Eine Notiz schreiben",
+    ca: "Escriure una nota",
+    eo: "Skribi noton",
+    nl: "Een notitie schrijven",
+    el: "Γράψε μια σημείωση",
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";

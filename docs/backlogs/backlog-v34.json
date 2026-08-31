@@ -3449,49 +3449,64 @@
       "id": "F4",
       "d": "F",
       "p": "P1",
-      "s": "ouvert",
-      "e": "S",
+      "s": "en-cours",
+      "e": "M",
       "sk": [
         "sql"
       ],
       "t": {
-        "fr": "Vérifier les rappels d'échéance et les relances de retard",
-        "pt": "Verificar os lembretes de vencimento e as cobranças de atraso"
+        "fr": "Trois bibliothèques avaient activé des rappels que personne n'envoyait",
+        "pt": "Três bibliotecas tinham ativado lembretes que ninguém enviava"
       },
       "v": {
-        "fr": "`spec-flux-emprunts.md` §10.2 prévoit des rappels à J-5, J-3 et le jour même, puis des relances à J+1, J+7 et J+30. **Aucun job dédié n'est identifiable** parmi les 36 crons ; le seul voisin est `anarbib-notify-mid-loan-reading-daily`, qui fait autre chose. `membership_expiry_notifications` n'a jamais reçu la moindre ligne.\n\n**Vérifié le 30/08 : le manque est confirmé.** Les onze crons dont le nom évoque une échéance ou une relance ont été relus un par un — cooptation, adhésions, invitations d'équipe, votes OAI, réservations, autorités, cercles, et `anarbib-peb-detect-overdue-daily` qui concerne le **prêt entre bibliothèques**, pas le prêt aux lectrices. **Aucun ne rappelle une échéance d'emprunt ni ne relance un retard.** Le doute est levé : ce n'est plus un item à vérifier, c'est une décision à prendre.",
-        "pt": "`spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.\n\n**Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar."
+        "fr": "`spec-flux-emprunts.md` §10.2 prévoit des rappels à J-5, J-3 et le jour même, puis des relances à J+1, J+7 et J+30. **Aucun job dédié n'est identifiable** parmi les 36 crons ; le seul voisin est `anarbib-notify-mid-loan-reading-daily`, qui fait autre chose. `membership_expiry_notifications` n'a jamais reçu la moindre ligne.\n\n**Vérifié le 30/08 : le manque est confirmé.** Les onze crons dont le nom évoque une échéance ou une relance ont été relus un par un — cooptation, adhésions, invitations d'équipe, votes OAI, réservations, autorités, cercles, et `anarbib-peb-detect-overdue-daily` qui concerne le **prêt entre bibliothèques**, pas le prêt aux lectrices. **Aucun ne rappelle une échéance d'emprunt ni ne relance un retard.** Le doute est levé : ce n'est plus un item à vérifier, c'est une décision à prendre.\n\n**Instruit et livré le 31/08 — et le constat était encore trop petit.** Les rappels n'existaient pas, c'était établi. Ce qui ne l'était pas : **les interrupteurs qui les commandent, eux, existent**. `library_notification_policies` porte `loan_reminders_enabled` et `loan_overdue_enabled`, exposés dans `v_library_notification_context` — la vue que lit la pile courriel. En production, **les trois bibliothèques dotées d'une politique les ont à `true`** : non parce qu'elles les ont activés, mais parce qu'ils naissent activés (« Default : tous à `true` », §2.4). Trois bibliothèques se croyaient couvertes par un dispositif absent — cas *(a)* de `DOC-SILENCE-1`, et même mécanique que le privilège `anon` retourné le même jour.\n\n**La référence de l'item était fausse** : la règle n'est pas au §10.2 — qui dit « hors périmètre, dette à confirmer » — mais au **§2.4**. Les deux sections sont amendées.\n\n**Six moments deviennent trois** (`DOC-RAPPEL-1`) : J-3, le jour de l'échéance, J+7. Motif `OPS-8` — un signal qui se répète cesse d'être lu, et une lectrice émoussée ne referme pas un ticket, elle cesse d'emprunter.\n\n**Un quatrième envoi en remplace un autre.** `notify-mid-loan-reading` demandait « Como vai a leitura? » — une question à laquelle un courriel ne permet pas de répondre — **en portugais en dur**, quelle que soit la langue de la lectrice. À mi-parcours, on invite désormais à déposer une **note de lecture sous pseudonyme** dans le catalogue : `book_reading_notes` est construite, déployée, et n'avait jamais reçu une seule ligne, et l'écran d'écriture existe déjà sur la page de l'œuvre. Son cron est désactivé — garder les deux, ce serait deux courriels le même jour.\n\n**Livré** : EF `notify-loan-cycle` (quatre moments, dix locales, 120 chaînes), table `loan_cycle_notifications` avec unicité (item, moment) — sans elle un cron rejoué enverrait deux fois le même rappel —, interrupteur `reading_notes_invite_enabled` né en même temps que l'envoi qu'il gouverne, cron quotidien à 9h15 UTC, suite `rappels_echeance_tests.sql` (7 tests, dont un qui écrit).",
+        "pt": "`spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.\n\n**Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar.\n\n**Instruído e entregue em 31/08.** Os lembretes não existiam — mas **os interruptores que os comandam existiam**, e as três bibliotecas com política tinham-nos a `true` sem o saber. Seis momentos passam a **três** (`DOC-RAPPEL-1`). Um quarto envio substitui `notify-mid-loan-reading`, que perguntava «Como vai a leitura?» **em português fixo**: agora convida a deixar uma **nota de leitura sob pseudónimo** no catálogo. **Entregue**: EF `notify-loan-cycle`, tabela `loan_cycle_notifications` com unicidade (item, momento), suíte `rappels_echeance_tests.sql`."
       },
       "w": {
-        "fr": "Vérifier en base si les rappels partent par un autre chemin, et sinon, décider : les implémenter, ou amender la spec. Un emprunt en retard qui ne déclenche rien est un emprunt que personne ne réclame.",
-        "pt": "Verificar no banco se os lembretes saem por outro caminho, e senão, decidir: implementá-los, ou emendar a spec. Um empréstimo atrasado que não dispara nada é um empréstimo que ninguém cobra."
+        "fr": "Voir la CI verte, déployer, puis **éprouver pour de bon** : créer un emprunt dont l'échéance tombe à J-3 et vérifier qu'un courriel part, dans la bonne langue, une seule fois. C'est la leçon d'`I5` : ne pas livrer un envoi sans l'avoir vu partir.",
+        "pt": "Ver a CI verde, implantar, depois **provar a sério**: criar um empréstimo com vencimento a J-3 e verificar que um e-mail parte, na língua certa, uma só vez."
       },
       "y": {
         "fr": "Le suivi de huit semaines de la formation BLMF prévoit qu'une consulta soit menée de bout en bout avec négociation réelle : c'est le moment où l'absence de rappel se verra. Autant le savoir avant.",
         "pt": "O acompanhamento de oito semanas da formação BLMF prevê que uma consulta seja conduzida de ponta a ponta com negociação real: é o momento em que a ausência de lembrete aparecerá. Melhor saber antes."
       },
-      "f": {
-        "fr": [
-          "Un verdict écrit : les rappels existent par tel chemin, ou ils n'existent pas.",
-          "Si absents : soit implémentés, soit la spec amendée."
-        ],
-        "pt": [
-          "Um veredicto escrito: os lembretes existem por tal caminho, ou não existem.",
-          "Se ausentes: ou implementados, ou a spec emendada."
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Un verdict écrit~~ — ils n'existaient pas, et trois bibliothèques croyaient le contraire.",
+          "pt": "~~Um veredicto escrito~~."
+        },
+        {
+          "fr": "~~Soit implémentés, soit la spec amendée~~ — les deux : spec ramenée à trois moments, puis implémentés.",
+          "pt": "~~Implementados ou spec emendada~~ — ambos."
+        },
+        {
+          "fr": "Chaque interrupteur commande un envoi réel, et chaque envoi a son interrupteur.",
+          "pt": "Cada interruptor comanda um envio real."
+        },
+        {
+          "fr": "Un rappel ne part **qu'une fois** par item et par moment.",
+          "pt": "Um lembrete parte **uma só vez**."
+        },
+        {
+          "fr": "Un envoi a été **vu partir**, dans la langue de la destinataire.",
+          "pt": "Um envio foi **visto partir**, na língua da destinatária."
+        }
+      ],
       "dep": {
         "fr": "Se vérifie en même temps que **F1**.",
         "pt": "Verifica-se ao mesmo tempo que **F1**."
       },
       "r": [
-        "spec-flux-emprunts.md §10.2",
-        "VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3",
-        "PLAN_formation_coordination_BLMF §5"
+        "spec-flux-emprunts §2.4 et §10.2",
+        "REGISTRE DOC-RAPPEL-1, OPS-8, DOC-SILENCE-1",
+        "supabase/functions/notify-loan-cycle/",
+        "migration 20260831111700",
+        "tests/sql/rappels_echeance_tests.sql",
+        "public.book_reading_notes"
       ],
       "verif": {
-        "fr": "30/08 — les onze crons dont le nom évoque une échéance relus un par un : aucun ne concerne le prêt aux lectrices. Le manque est confirmé.",
-        "pt": "30/08 — os onze crons cujo nome evoca um vencimento relidos um a um: nenhum diz respeito ao empréstimo às leitoras. A falta está confirmada."
+        "fr": "31/08 — relevé en base (36 crons relus, aucun pour le prêt aux lectrices ; 3 bibliothèques avec les deux interrupteurs à `true` ; `book_reading_notes` à zéro ligne) et dans le dépôt (l'ancien mi-parcours écrit en portugais en dur, aucune colonne de blog nulle part). Livré le jour même ; **pas encore éprouvé en envoi réel**.",
+        "pt": "31/08 — levantamento em base e no repositório. Entregue no mesmo dia; **ainda não provado em envio real**."
       }
     },
     {

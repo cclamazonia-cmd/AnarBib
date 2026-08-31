@@ -1300,7 +1300,7 @@ Depuis B12, au moins ces lignes **disent** pourquoi elles n'ont pas été envoy�
 | **F1** | Auditer la chaîne de courriel de bout en bout | `P1` | Ouvert |
 | **F2** | Corriger le gabarit des courriels d'alerte d'exploitation | `P1` | Ouvert |
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
-| **F4** | Vérifier les rappels d'échéance et les relances de retard | `P1` | Ouvert |
+| **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 | **F7** | Treize secrets de fonction sont déclarés et vides, sans qu'on sache lesquels le sont exprès | `P2` | Ouvert |
 
@@ -1369,28 +1369,41 @@ Depuis B12, au moins ces lignes **disent** pourquoi elles n'ont pas été envoy�
 
 *Renvois : `PLAN_DE_MARCHE §8` · `Relevé du 29/08/2026`*
 
-#### F4 — Vérifier les rappels d'échéance et les relances de retard
+#### F4 — Trois bibliothèques avaient activé des rappels que personne n'envoyait
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
 
 **État.** `spec-flux-emprunts.md` §10.2 prévoit des rappels à J-5, J-3 et le jour même, puis des relances à J+1, J+7 et J+30. **Aucun job dédié n'est identifiable** parmi les 36 crons ; le seul voisin est `anarbib-notify-mid-loan-reading-daily`, qui fait autre chose. `membership_expiry_notifications` n'a jamais reçu la moindre ligne.
 
 **Vérifié le 30/08 : le manque est confirmé.** Les onze crons dont le nom évoque une échéance ou une relance ont été relus un par un — cooptation, adhésions, invitations d'équipe, votes OAI, réservations, autorités, cercles, et `anarbib-peb-detect-overdue-daily` qui concerne le **prêt entre bibliothèques**, pas le prêt aux lectrices. **Aucun ne rappelle une échéance d'emprunt ni ne relance un retard.** Le doute est levé : ce n'est plus un item à vérifier, c'est une décision à prendre.
 
-*Vérifié : 30/08 — les onze crons dont le nom évoque une échéance relus un par un : aucun ne concerne le prêt aux lectrices. Le manque est confirmé.*
+**Instruit et livré le 31/08 — et le constat était encore trop petit.** Les rappels n'existaient pas, c'était établi. Ce qui ne l'était pas : **les interrupteurs qui les commandent, eux, existent**. `library_notification_policies` porte `loan_reminders_enabled` et `loan_overdue_enabled`, exposés dans `v_library_notification_context` — la vue que lit la pile courriel. En production, **les trois bibliothèques dotées d'une politique les ont à `true`** : non parce qu'elles les ont activés, mais parce qu'ils naissent activés (« Default : tous à `true` », §2.4). Trois bibliothèques se croyaient couvertes par un dispositif absent — cas *(a)* de `DOC-SILENCE-1`, et même mécanique que le privilège `anon` retourné le même jour.
 
-**Ce que c'est.** Vérifier en base si les rappels partent par un autre chemin, et sinon, décider : les implémenter, ou amender la spec. Un emprunt en retard qui ne déclenche rien est un emprunt que personne ne réclame.
+**La référence de l'item était fausse** : la règle n'est pas au §10.2 — qui dit « hors périmètre, dette à confirmer » — mais au **§2.4**. Les deux sections sont amendées.
+
+**Six moments deviennent trois** (`DOC-RAPPEL-1`) : J-3, le jour de l'échéance, J+7. Motif `OPS-8` — un signal qui se répète cesse d'être lu, et une lectrice émoussée ne referme pas un ticket, elle cesse d'emprunter.
+
+**Un quatrième envoi en remplace un autre.** `notify-mid-loan-reading` demandait « Como vai a leitura? » — une question à laquelle un courriel ne permet pas de répondre — **en portugais en dur**, quelle que soit la langue de la lectrice. À mi-parcours, on invite désormais à déposer une **note de lecture sous pseudonyme** dans le catalogue : `book_reading_notes` est construite, déployée, et n'avait jamais reçu une seule ligne, et l'écran d'écriture existe déjà sur la page de l'œuvre. Son cron est désactivé — garder les deux, ce serait deux courriels le même jour.
+
+**Livré** : EF `notify-loan-cycle` (quatre moments, dix locales, 120 chaînes), table `loan_cycle_notifications` avec unicité (item, moment) — sans elle un cron rejoué enverrait deux fois le même rappel —, interrupteur `reading_notes_invite_enabled` né en même temps que l'envoi qu'il gouverne, cron quotidien à 9h15 UTC, suite `rappels_echeance_tests.sql` (7 tests, dont un qui écrit).
+
+*Vérifié : 31/08 — relevé en base (36 crons relus, aucun pour le prêt aux lectrices ; 3 bibliothèques avec les deux interrupteurs à `true` ; `book_reading_notes` à zéro ligne) et dans le dépôt (l'ancien mi-parcours écrit en portugais en dur, aucune colonne de blog nulle part). Livré le jour même ; **pas encore éprouvé en envoi réel**.*
+
+**Ce que c'est.** Voir la CI verte, déployer, puis **éprouver pour de bon** : créer un emprunt dont l'échéance tombe à J-3 et vérifier qu'un courriel part, dans la bonne langue, une seule fois. C'est la leçon d'`I5` : ne pas livrer un envoi sans l'avoir vu partir.
 
 **Pourquoi ça compte.** Le suivi de huit semaines de la formation BLMF prévoit qu'une consulta soit menée de bout en bout avec négociation réelle : c'est le moment où l'absence de rappel se verra. Autant le savoir avant.
 
 **Ce qui compte comme fini.**
 
-- Un verdict écrit : les rappels existent par tel chemin, ou ils n'existent pas.
-- Si absents : soit implémentés, soit la spec amendée.
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
 
 **Dépendances.** Se vérifie en même temps que **F1**.
 
-*Renvois : `spec-flux-emprunts.md §10.2` · `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §3` · `PLAN_formation_coordination_BLMF §5`*
+*Renvois : `spec-flux-emprunts §2.4 et §10.2` · `REGISTRE DOC-RAPPEL-1, OPS-8, DOC-SILENCE-1` · `supabase/functions/notify-loan-cycle/` · `migration 20260831111700` · `tests/sql/rappels_echeance_tests.sql` · `public.book_reading_notes`*
 
 #### F6 — `notify-internal-task` tourne sur une copie gelée de toute la pile courriel
 

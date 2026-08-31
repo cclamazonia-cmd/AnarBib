@@ -217,3 +217,8 @@ tests/sql/slug_biblioteca_tests.sql
 # colonne existe ne prouve rien, ce qui compte est que la base REFUSE une ligne
 # sautée sans raison. T8 est le garde-fou sur la durée.
 tests/sql/outbox_raison_du_saut_tests.sql
+
+# F4 : les rappels d'échéance existent enfin. T6 ÉCRIT — il vérifie qu'un même
+# rappel ne peut pas partir deux fois, ce qu'une contrainte déclarée ne prouve
+# pas. T5 refuse que l'ancien mi-parcours revienne à côté du nouveau.
+tests/sql/rappels_echeance_tests.sql

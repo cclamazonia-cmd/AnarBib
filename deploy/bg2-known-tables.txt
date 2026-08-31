@@ -184,3 +184,4 @@ user_notifications
 user_wishlist
 work_expressions
 works
+loan_cycle_notifications
