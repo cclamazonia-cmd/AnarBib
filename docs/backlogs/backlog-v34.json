@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-08-30"
+    "maj": "2026-08-31"
   },
   "domains": [
     {
@@ -4482,47 +4482,58 @@
       "id": "I5",
       "d": "I",
       "p": "P1",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "sysadmin"
       ],
       "t": {
-        "fr": "Faire savoir qu'un workflow a échoué",
-        "pt": "Fazer saber que um workflow falhou"
+        "fr": "Une alerte de CI qui se répète à chaque itération n'alerte plus",
+        "pt": "Um alerta de CI que se repete a cada iteracao ja nao alerta"
       },
       "v": {
-        "fr": "Un job d'alerte existe dans les deux workflows : il ouvre une issue sur la forge, avec anti-doublon. Pourtant `sql-tests` **est resté rouge du 17 au 20 août sans que personne le voie**. Le constat écrit est clair : « même angle mort que les sauvegardes, et il n'est pas couvert ».",
-        "pt": "Um job de alerta existe nos dois workflows: abre uma issue na forja, com antiduplicação. No entanto `sql-tests` **ficou vermelho de 17 a 20 de agosto sem que ninguém visse**. A constatação escrita é clara: «mesmo ponto cego dos backups, e não está coberto»."
+        "fr": "**Le constat d'origine était faux, et faux dans l'autre sens.** Il disait qu'un rouge passait inaperçu. Vérifié sur la forge le 31/08 : elle porte **24 tickets `[CI rouge]`, aucun ouvert**, et les dix plus récents datent tous du 30/08 — l'alerte d'`OPS-6` a tiré dix fois dans la seule journée où l'on travaillait, et les courriels sont bien partis. Ce que l'item demandait — faire sortir le signal de la forge — **était déjà fait**.\n\n**Le vrai défaut est le déluge.** L'anti-doublon ne joue que tant que le ticket reste *ouvert* : le refermer pour dire « j'ai vu » réarme l'alarme pour l'itération suivante. Dix tickets et dix courriels **pour un seul et même rouge**, refermés à la main. C'est la panne qu'`OPS-6` voulait éviter, arrivée par l'autre bout — *« un pipeline qui échoue une fois sur deux cesse d'être lu »*.\n\n**Posé le 31/08** : un job `acquittement` dans les deux workflows, symétrique de `alerte`, qui referme le ticket portant le marqueur **exact** quand le run repasse au vert, avec un commentaire qui dit le commit et le run. `continue-on-error`, comme `alerte` : un acquittement cassé ne doit pas faire rougir un run vert. Doctrine `OPS-8`.",
+        "pt": "**O constato de origem era falso, e falso no sentido inverso.** Dizia que um vermelho passava despercebido. Verificado na forja em 31/08: ela contem **24 tickets `[CI rouge]`, nenhum aberto**, e os dez mais recentes datam todos de 30/08 — o alerta de `OPS-6` disparou dez vezes no unico dia em que se trabalhava, e os e-mails partiram. O que o item pedia — fazer sair o sinal da forja — **ja estava feito**.\n\n**O verdadeiro defeito e o diluvio.** O anti-duplicado so joga enquanto o ticket fica *aberto*: fecha-lo para dizer «eu vi» rearma o alarme para a iteracao seguinte. Dez tickets e dez e-mails **para um so e mesmo vermelho**, fechados a mao. E a avaria que `OPS-6` queria evitar, chegada pelo outro lado.\n\n**Posto em 31/08**: um job `acquittement` nos dois workflows, simetrico de `alerte`, que fecha o ticket com o marcador **exato** quando o run volta ao verde, com um comentario que diz o commit e o run. `continue-on-error`, como `alerte`. Doutrina `OPS-8`."
       },
       "w": {
-        "fr": "Faire sortir l'alerte de la forge : un courriel, ou le même canal que les alertes de sauvegarde. Une issue ouverte sur un dépôt que personne ne surveille n'alerte personne.",
-        "pt": "Fazer o alerta sair da forja: um e-mail, ou o mesmo canal dos alertas de backup. Uma issue aberta num repositório que ninguém vigia não alerta ninguém."
+        "fr": "Éprouver le job `acquittement` dans les deux sens, comme la leçon de méthode l'exige : casser volontairement une suite, vérifier qu'**un seul** ticket s'ouvre même après plusieurs pushs rouges, réparer, puis vérifier que le ticket se referme **tout seul** avec son commentaire. Tant que ce va-et-vient n'a pas été vu, le job n'est pas livré.",
+        "pt": "Provar o job `acquittement` nos dois sentidos, como a licao de metodo exige: quebrar de proposito uma suite, verificar que **um so** ticket se abre mesmo depois de varios pushes vermelhos, reparar, e depois verificar que o ticket se fecha **sozinho** com o seu comentario. Enquanto esse vai-e-vem nao for visto, o job nao esta entregue."
       },
       "y": {
         "fr": "Le principe est déjà écrit pour les sauvegardes : **une alarme jamais déclenchée n'est pas une alarme.** Et un pipeline qui échoue une fois sur deux cesse d'être lu — ce qui est exactement ce qui s'est passé.",
         "pt": "O princípio já está escrito para os backups: **um alarme jamais disparado não é um alarme.** E um pipeline que falha uma vez em duas deixa de ser lido — que é exatamente o que aconteceu."
       },
-      "f": {
-        "fr": [
-          "Un échec de workflow produit un signal hors de la forge.",
-          "Le signal a été éprouvé en le déclenchant volontairement.",
-          "Leçon de méthode déjà payée : **ne pas livrer de CI sans l'avoir vue passer au vert et au rouge.**"
-        ],
-        "pt": [
-          "Uma falha de workflow produz um sinal fora da forja.",
-          "O sinal foi testado disparando-o deliberadamente.",
-          "Lição de método já paga: **não entregar CI sem tê-la visto passar em verde e em vermelho.**"
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Un échec de workflow produit un signal hors de la forge~~ — fait, et vérifié le 31/08 : 24 tickets, courriels reçus.",
+          "pt": "~~Uma falha de workflow produz um sinal fora da forja~~ — feito, e verificado em 31/08: 24 tickets, e-mails recebidos."
+        },
+        {
+          "fr": "Un épisode rouge donne **un** ticket, pas un par push.",
+          "pt": "Um episodio vermelho da **um** ticket, nao um por push."
+        },
+        {
+          "fr": "Le ticket se referme par le retour au vert, pas par un clic.",
+          "pt": "O ticket fecha-se pelo retorno ao verde, nao por um clique."
+        },
+        {
+          "fr": "Le va-et-vient rouge → vert a été **vu**, pas supposé. Leçon de méthode déjà payée : **ne pas livrer de CI sans l'avoir vue passer au vert et au rouge.**",
+          "pt": "O vai-e-vem vermelho → verde foi **visto**, nao suposto. Licao de metodo ja paga: **nao entregar CI sem a ter visto passar ao verde e ao vermelho.**"
+        }
+      ],
       "dep": {
         "fr": "Aucune.",
         "pt": "Nenhuma."
       },
       "r": [
         "RUNBOOK_exploitation_v0.3 §7 §9.3",
-        "REGISTRE §38 OPS-6"
-      ]
+        "REGISTRE §38 OPS-6 et OPS-8",
+        "forge : issues 16 à 25, 30/08/2026"
+      ],
+      "verif": {
+        "fr": "31/08 — relevé sur la forge elle-même : 24 tickets `[CI rouge]`, aucun ouvert, dix datés du 30/08 ; courriels confirmés reçus par le mainteneur. Le constat écrit était faux dans l'autre sens. Correctif posé le jour même, **pas encore éprouvé**.",
+        "pt": "31/08 — levantamento na propria forja: 24 tickets `[CI rouge]`, nenhum aberto, dez datados de 30/08; e-mails confirmados recebidos pelo mantenedor. O constato escrito era falso no sentido inverso. Correcao posta no mesmo dia, **ainda nao provada**."
+      }
     },
     {
       "id": "I6",

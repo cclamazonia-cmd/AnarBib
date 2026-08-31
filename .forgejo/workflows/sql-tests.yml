@@ -138,3 +138,65 @@ jobs:
           CODE=$(curl -sS -o /tmp/reponse.json -w '%{http_code}' -X POST             -H "Authorization: token ${FORGE_TOKEN}"             -H "Content-Type: application/json"             --data @/tmp/issue.json "${API}/issues" || echo 000)
           echo "Creation de l'issue : HTTP ${CODE}"
           [ "$CODE" = "201" ] || head -c 400 /tmp/reponse.json
+
+  # ── Acquittement : c'est le retour au vert qui referme, pas un clic ─────
+  #
+  # Le 30/08, dix tickets [CI rouge] ont ete ouverts et refermes a la main
+  # dans la seule journee, pour un seul et meme rouge. L'anti-doublon ne joue
+  # que tant que le ticket reste OUVERT : le refermer pour dire « j'ai vu »
+  # rearme l'alarme pour l'iteration d'apres. Une alerte dont l'acquittement
+  # est un geste humain repete n'est plus une alerte (REGISTRE OPS-8).
+  #
+  # Desormais : un episode rouge = un ticket, referme par le retour au vert.
+  # Refermer a la main reprend son sens propre — « je l'ai vu et j'accepte
+  # que ca reste rouge » — et doit redevenir rare.
+  #
+  # `continue-on-error` : un acquittement casse ne doit jamais faire rougir un
+  # run qui est vert. Symetrique de la regle du job `alerte`.
+  acquittement:
+    needs: [sql-tests]
+    if: ${{ !cancelled() && needs['sql-tests'].result == 'success' }}
+    runs-on: anarbib-local
+    container:
+      image: node:20
+    continue-on-error: true
+    steps:
+      - name: Refermer le ticket de rouge s'il y en a un
+        env:
+          FORGE_TOKEN: ${{ secrets.GITEA_TOKEN }}
+        run: |
+          set -u
+          if [ -z "${FORGE_TOKEN:-}" ]; then
+            echo "GITEA_TOKEN absent : acquittement impossible."
+            exit 0
+          fi
+          API="${GITHUB_SERVER_URL}/api/v1/repos/${GITHUB_REPOSITORY}"
+          MARQUEUR="[CI rouge] sql-tests"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          curl -sS -o /tmp/ouvertes.json -H "Authorization: token ${FORGE_TOKEN}" "${API}/issues?state=open&limit=50" || { echo "Lecture des tickets impossible : rien acquitte."; exit 0; }
+
+          # Titre EXACT, pas une sous-chaine : « [CI rouge] ci » ne doit jamais
+          # refermer « [CI rouge] sql-tests », et reciproquement. Le job
+          # `alerte` peut se permettre un grep, celui-ci non : il FERME.
+          NUM=$(node -e 'const fs=require("fs");let l=[];try{l=JSON.parse(fs.readFileSync("/tmp/ouvertes.json","utf8"))}catch(e){};const h=Array.isArray(l)?l.find(i=>i&&i.title===process.argv[1]):null;process.stdout.write(h?String(h.number):"")' "$MARQUEUR")
+
+          if [ -z "$NUM" ]; then
+            echo "Aucun ticket ouvert ne porte le marqueur : rien a acquitter."
+            exit 0
+          fi
+
+          CORPS="Vert a nouveau sur \`${GITHUB_REF_NAME}\`.
+
+          - Commit : ${GITHUB_SHA}
+          - Run : ${RUN_URL}
+
+          Referme automatiquement : l'acquittement d'une alerte est le retour au
+          vert, pas un clic (REGISTRE OPS-8)."
+
+          node -e 'const fs=require("fs");fs.writeFileSync("/tmp/commentaire.json",JSON.stringify({body:process.argv[1]}))' "$CORPS"
+          curl -sS -o /dev/null -X POST -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data @/tmp/commentaire.json "${API}/issues/${NUM}/comments" || echo "Commentaire non depose : on referme quand meme."
+
+          CODE=$(curl -sS -o /tmp/reponse.json -w '%{http_code}' -X PATCH -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data '{"state":"closed"}' "${API}/issues/${NUM}" || echo 000)
+          echo "Fermeture du ticket #${NUM} : HTTP ${CODE}"
+          { [ "$CODE" = "200" ] || [ "$CODE" = "201" ]; } || head -c 400 /tmp/reponse.json

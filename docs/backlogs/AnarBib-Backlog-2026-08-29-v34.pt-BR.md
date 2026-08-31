@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-31** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -1911,7 +1911,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Congelado |
 | **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Congelado |
 | **I4** | Terminar a testemunha de proveniência dos backups | `P1` | Aberto |
-| **I5** | Fazer saber que um workflow falhou | `P1` | Aberto |
+| **I5** | Um alerta de CI que se repete a cada iteracao ja nao alerta | `P1` | Em curso |
 | **I6** | Purgar os registros da sonda de saúde | `P2` | Aberto |
 | **I8** | Pôr `deploy/README.md` de acordo com o que foi executado | `P2` | Aberto |
 | **I10** | Limpar os rastros do Turnstile e os arquivos de refugo | `P2` | Aberto |
@@ -2007,27 +2007,32 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 *Remissões : `NOTE_temoin_sauvegarde_2026-08-27` · `REPRISE_claude_code_2026-08-27 chantier 1`*
 
-#### I5 — Fazer saber que um workflow falhou
+#### I5 — Um alerta de CI que se repete a cada iteracao ja nao alerta
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+`P1` Prioritário · Estado : **Em curso** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado.** Um job de alerta existe nos dois workflows: abre uma issue na forja, com antiduplicação. No entanto `sql-tests` **ficou vermelho de 17 a 20 de agosto sem que ninguém visse**. A constatação escrita é clara: «mesmo ponto cego dos backups, e não está coberto».
+**Estado.** **O constato de origem era falso, e falso no sentido inverso.** Dizia que um vermelho passava despercebido. Verificado na forja em 31/08: ela contem **24 tickets `[CI rouge]`, nenhum aberto**, e os dez mais recentes datam todos de 30/08 — o alerta de `OPS-6` disparou dez vezes no unico dia em que se trabalhava, e os e-mails partiram. O que o item pedia — fazer sair o sinal da forja — **ja estava feito**.
 
-*Constato de 29/08, não reverificado desde então.*
+**O verdadeiro defeito e o diluvio.** O anti-duplicado so joga enquanto o ticket fica *aberto*: fecha-lo para dizer «eu vi» rearma o alarme para a iteracao seguinte. Dez tickets e dez e-mails **para um so e mesmo vermelho**, fechados a mao. E a avaria que `OPS-6` queria evitar, chegada pelo outro lado.
 
-**O que é.** Fazer o alerta sair da forja: um e-mail, ou o mesmo canal dos alertas de backup. Uma issue aberta num repositório que ninguém vigia não alerta ninguém.
+**Posto em 31/08**: um job `acquittement` nos dois workflows, simetrico de `alerte`, que fecha o ticket com o marcador **exato** quando o run volta ao verde, com um comentario que diz o commit e o run. `continue-on-error`, como `alerte`. Doutrina `OPS-8`.
+
+*Verificado : 31/08 — levantamento na propria forja: 24 tickets `[CI rouge]`, nenhum aberto, dez datados de 30/08; e-mails confirmados recebidos pelo mantenedor. O constato escrito era falso no sentido inverso. Correcao posta no mesmo dia, **ainda nao provada**.*
+
+**O que é.** Provar o job `acquittement` nos dois sentidos, como a licao de metodo exige: quebrar de proposito uma suite, verificar que **um so** ticket se abre mesmo depois de varios pushes vermelhos, reparar, e depois verificar que o ticket se fecha **sozinho** com o seu comentario. Enquanto esse vai-e-vem nao for visto, o job nao esta entregue.
 
 **Por que importa.** O princípio já está escrito para os backups: **um alarme jamais disparado não é um alarme.** E um pipeline que falha uma vez em duas deixa de ser lido — que é exatamente o que aconteceu.
 
 **O que conta como terminado.**
 
-- Uma falha de workflow produz um sinal fora da forja.
-- O sinal foi testado disparando-o deliberadamente.
-- Lição de método já paga: **não entregar CI sem tê-la visto passar em verde e em vermelho.**
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
 
 **Dependências.** Nenhuma.
 
-*Remissões : `RUNBOOK_exploitation_v0.3 §7 §9.3` · `REGISTRE §38 OPS-6`*
+*Remissões : `RUNBOOK_exploitation_v0.3 §7 §9.3` · `REGISTRE §38 OPS-6 et OPS-8` · `forge : issues 16 à 25, 30/08/2026`*
 
 #### I6 — Purgar os registros da sonda de saúde
 
@@ -2505,4 +2510,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-31. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

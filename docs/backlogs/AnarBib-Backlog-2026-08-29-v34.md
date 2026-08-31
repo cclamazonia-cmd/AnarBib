@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-30** · 85 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-31** · 85 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -1921,7 +1921,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Gelé |
 | **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Gelé |
 | **I4** | Finir le témoin de provenance des sauvegardes | `P1` | Ouvert |
-| **I5** | Faire savoir qu'un workflow a échoué | `P1` | Ouvert |
+| **I5** | Une alerte de CI qui se répète à chaque itération n'alerte plus | `P1` | En cours |
 | **I6** | Purger les relevés de la sonde de santé | `P2` | Ouvert |
 | **I8** | Mettre `deploy/README.md` en accord avec ce qui a été exécuté | `P2` | Ouvert |
 | **I10** | Nettoyer les traces de Turnstile et les fichiers de rebut | `P2` | Ouvert |
@@ -2017,27 +2017,32 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 *Renvois : `NOTE_temoin_sauvegarde_2026-08-27` · `REPRISE_claude_code_2026-08-27 chantier 1`*
 
-#### I5 — Faire savoir qu'un workflow a échoué
+#### I5 — Une alerte de CI qui se répète à chaque itération n'alerte plus
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+`P1` Prioritaire · État : **En cours** · Charge : une soirée · Ce que ça demande : administration système
 
-**État.** Un job d'alerte existe dans les deux workflows : il ouvre une issue sur la forge, avec anti-doublon. Pourtant `sql-tests` **est resté rouge du 17 au 20 août sans que personne le voie**. Le constat écrit est clair : « même angle mort que les sauvegardes, et il n'est pas couvert ».
+**État.** **Le constat d'origine était faux, et faux dans l'autre sens.** Il disait qu'un rouge passait inaperçu. Vérifié sur la forge le 31/08 : elle porte **24 tickets `[CI rouge]`, aucun ouvert**, et les dix plus récents datent tous du 30/08 — l'alerte d'`OPS-6` a tiré dix fois dans la seule journée où l'on travaillait, et les courriels sont bien partis. Ce que l'item demandait — faire sortir le signal de la forge — **était déjà fait**.
 
-*Constat du 29/08, non revérifié depuis.*
+**Le vrai défaut est le déluge.** L'anti-doublon ne joue que tant que le ticket reste *ouvert* : le refermer pour dire « j'ai vu » réarme l'alarme pour l'itération suivante. Dix tickets et dix courriels **pour un seul et même rouge**, refermés à la main. C'est la panne qu'`OPS-6` voulait éviter, arrivée par l'autre bout — *« un pipeline qui échoue une fois sur deux cesse d'être lu »*.
 
-**Ce que c'est.** Faire sortir l'alerte de la forge : un courriel, ou le même canal que les alertes de sauvegarde. Une issue ouverte sur un dépôt que personne ne surveille n'alerte personne.
+**Posé le 31/08** : un job `acquittement` dans les deux workflows, symétrique de `alerte`, qui referme le ticket portant le marqueur **exact** quand le run repasse au vert, avec un commentaire qui dit le commit et le run. `continue-on-error`, comme `alerte` : un acquittement cassé ne doit pas faire rougir un run vert. Doctrine `OPS-8`.
+
+*Vérifié : 31/08 — relevé sur la forge elle-même : 24 tickets `[CI rouge]`, aucun ouvert, dix datés du 30/08 ; courriels confirmés reçus par le mainteneur. Le constat écrit était faux dans l'autre sens. Correctif posé le jour même, **pas encore éprouvé**.*
+
+**Ce que c'est.** Éprouver le job `acquittement` dans les deux sens, comme la leçon de méthode l'exige : casser volontairement une suite, vérifier qu'**un seul** ticket s'ouvre même après plusieurs pushs rouges, réparer, puis vérifier que le ticket se referme **tout seul** avec son commentaire. Tant que ce va-et-vient n'a pas été vu, le job n'est pas livré.
 
 **Pourquoi ça compte.** Le principe est déjà écrit pour les sauvegardes : **une alarme jamais déclenchée n'est pas une alarme.** Et un pipeline qui échoue une fois sur deux cesse d'être lu — ce qui est exactement ce qui s'est passé.
 
 **Ce qui compte comme fini.**
 
-- Un échec de workflow produit un signal hors de la forge.
-- Le signal a été éprouvé en le déclenchant volontairement.
-- Leçon de méthode déjà payée : **ne pas livrer de CI sans l'avoir vue passer au vert et au rouge.**
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
 
 **Dépendances.** Aucune.
 
-*Renvois : `RUNBOOK_exploitation_v0.3 §7 §9.3` · `REGISTRE §38 OPS-6`*
+*Renvois : `RUNBOOK_exploitation_v0.3 §7 §9.3` · `REGISTRE §38 OPS-6 et OPS-8` · `forge : issues 16 à 25, 30/08/2026`*
 
 #### I6 — Purger les relevés de la sonde de santé
 
@@ -2515,4 +2520,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 85 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 85 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
