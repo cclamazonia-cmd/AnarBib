@@ -78,7 +78,33 @@ type Action = {
   target_entity_type: string | null;
   library_id: string;
   actor_user_id: string;
+  // Le payload porte l'etat reel de l'action. Sans lui, une PROPOSITION soumise
+  // a ratification et une promotion ACCOMPLIE s'affichent a l'identique.
+  payload: Record<string, unknown> | null;
 };
+
+/**
+ * Qualifie une action qui n'est PAS accomplie.
+ *
+ * `team_promote_to_coordenador` couvre deux choses que seul le payload sépare :
+ * une promotion faite (`status_after: 'active'`) et une PROPOSITION soumise à
+ * ratification collégiale (`stage: 'proposed'`). Le récapitulatif du 30/08 en
+ * portait une du second type — deux ratifications attendues, rien de fait — et
+ * l'annonçait comme un fait accompli.
+ *
+ * Rendre lisible une information fausse est un recul : l'identifiant brut
+ * n'induisait personne en erreur. On dit donc explicitement que rien n'est
+ * fait, et combien de signatures manquent.
+ */
+function qualifiant(a: Action, locale: string): string {
+  const stage = String((a.payload as Record<string, unknown>)?.stage ?? '');
+  if (stage !== 'proposed') return '';
+  const n = Number((a.payload as Record<string, unknown>)?.required_ratifications);
+  const txt = Number.isFinite(n) && n > 0
+    ? tr(locale, 'stage.proposed', { count: String(n) })
+    : tr(locale, 'stage.proposed.sansCompte');
+  return ` (${txt})`;
+}
 
 /** Tableau HTML des actions, colonnes adaptées au destinataire. */
 function tableau(
@@ -118,7 +144,7 @@ function tableau(
         // `tr` replie sur la clé elle-même quand elle manque : un type d'action
         // ajouté plus tard sans son libellé s'affichera donc en identifiant,
         // visiblement, plutôt que de disparaître dans une case vide.
-        td(esc(tr(locale, `action.${a.action_type}`)) + marque) +
+        td(esc(tr(locale, `action.${a.action_type}`) + qualifiant(a, locale)) + marque) +
         (avecColonneBiblio ? td(esc(biblios.get(a.library_id) || '—')) : '') +
         td(esc(a.target_entity_type ? tr(locale, `target.${a.target_entity_type}`) : '—')) +
         '</tr>'
@@ -147,7 +173,7 @@ Deno.serve((req) =>
 
     const { data: actionsBrutes, error: errActions } = await supabaseAdmin
       .from('network_admin_cross_library_actions_log')
-      .select('id, created_at, action_type, is_critical, target_entity_type, library_id, actor_user_id')
+      .select('id, created_at, action_type, is_critical, target_entity_type, library_id, actor_user_id, payload')
       .gte('created_at', `${debut}T00:00:00Z`)
       .lte('created_at', borneFin)
       .order('created_at', { ascending: true });

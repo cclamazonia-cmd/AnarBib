@@ -48,6 +48,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Estado de serviço",
     "target.library_team_invitation": "Convite para a equipe",
     "target.user_library_membership": "Vínculo de uma pessoa com a biblioteca",
+    "stage.proposed": "proposta, {count} ratificação(ões) necessária(s) — nada feito ainda",
+    "stage.proposed.sansCompte": "proposta — nada feito ainda",
   },
   fr: {
     subtitle: "Transparence du réseau · récapitulatif automatique",
@@ -81,6 +83,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "État de service",
     "target.library_team_invitation": "Invitation dans l'équipe",
     "target.user_library_membership": "Rattachement d'une personne à la bibliothèque",
+    "stage.proposed": "proposition, {count} ratification(s) requise(s) — rien n'est encore fait",
+    "stage.proposed.sansCompte": "proposition — rien n'est encore fait",
   },
   es: {
     subtitle: "Transparencia de la red · resumen automático",
@@ -114,6 +118,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Estado de servicio",
     "target.library_team_invitation": "Invitación al equipo",
     "target.user_library_membership": "Vínculo de una persona con la biblioteca",
+    "stage.proposed": "propuesta, {count} ratificación(es) necesaria(s) — nada hecho todavía",
+    "stage.proposed.sansCompte": "propuesta — nada hecho todavía",
   },
   en: {
     subtitle: "Network transparency · automatic summary",
@@ -147,6 +153,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Service state",
     "target.library_team_invitation": "Team invitation",
     "target.user_library_membership": "Someone's attachment to the library",
+    "stage.proposed": "proposal, {count} ratification(s) required — nothing done yet",
+    "stage.proposed.sansCompte": "proposal — nothing done yet",
   },
   it: {
     subtitle: "Trasparenza della rete · riepilogo automatico",
@@ -180,6 +188,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Stato di servizio",
     "target.library_team_invitation": "Invito nel gruppo",
     "target.user_library_membership": "Legame di una persona con la biblioteca",
+    "stage.proposed": "proposta, {count} ratifica/he necessaria/e — nulla è ancora fatto",
+    "stage.proposed.sansCompte": "proposta — nulla è ancora fatto",
   },
   de: {
     subtitle: "Transparenz des Netzwerks · automatische Zusammenfassung",
@@ -213,6 +223,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Betriebszustand",
     "target.library_team_invitation": "Einladung ins Team",
     "target.user_library_membership": "Zugehörigkeit einer Person zur Bibliothek",
+    "stage.proposed": "Vorschlag, {count} Bestätigung(en) nötig — noch nichts geschehen",
+    "stage.proposed.sansCompte": "Vorschlag — noch nichts geschehen",
   },
   ca: {
     subtitle: "Transparència de la xarxa · resum automàtic",
@@ -246,6 +258,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Estat de servei",
     "target.library_team_invitation": "Invitació a l'equip",
     "target.user_library_membership": "Vincle d'una persona amb la biblioteca",
+    "stage.proposed": "proposta, {count} ratificació(ns) necessària(es) — encara no s'ha fet res",
+    "stage.proposed.sansCompte": "proposta — encara no s'ha fet res",
   },
   eo: {
     subtitle: "Travidebleco de la reto · aŭtomata resumo",
@@ -279,6 +293,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Serva stato",
     "target.library_team_invitation": "Invito en la teamon",
     "target.user_library_membership": "Ligo de persono al la biblioteko",
+    "stage.proposed": "propono, {count} ratifiko(j) necesa(j) — nenio ankoraŭ farita",
+    "stage.proposed.sansCompte": "propono — nenio ankoraŭ farita",
   },
   nl: {
     subtitle: "Transparantie van het netwerk · automatische samenvatting",
@@ -312,6 +328,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Dienstverleningsstatus",
     "target.library_team_invitation": "Uitnodiging voor het team",
     "target.user_library_membership": "Band van iemand met de bibliotheek",
+    "stage.proposed": "voorstel, {count} bekrachtiging(en) nodig — nog niets gebeurd",
+    "stage.proposed.sansCompte": "voorstel — nog niets gebeurd",
   },
   el: {
     subtitle: "Διαφάνεια του δικτύου · αυτόματη σύνοψη",
@@ -345,6 +363,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "target.library_service_state": "Κατάσταση λειτουργίας",
     "target.library_team_invitation": "Πρόσκληση στην ομάδα",
     "target.user_library_membership": "Σύνδεση ατόμου με τη βιβλιοθήκη",
+    "stage.proposed": "πρόταση, {count} επικύρωση(εις) απαιτούνται — τίποτα δεν έγινε ακόμη",
+    "stage.proposed.sansCompte": "πρόταση — τίποτα δεν έγινε ακόμη",
   },
 };
 

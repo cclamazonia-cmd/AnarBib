@@ -107,6 +107,26 @@ describe('le récapitulatif parle humain, dans les dix langues', () => {
     expect(tr('fr', 'action.type_invente_demain')).toBe('action.type_invente_demain');
   });
 
+  it("dit qu'une proposition n'est pas un acte accompli, dans les dix langues", () => {
+    const { tr } = charger();
+    // `team_promote_to_coordenador` couvre DEUX choses que seul le payload
+    // sépare : une promotion faite, et une proposition soumise à ratification
+    // collégiale. Le récapitulatif du 30/08 en portait une du second type et
+    // l'annonçait comme un fait accompli — rendre lisible une information
+    // fausse est un recul sur l'identifiant brut, qui n'induisait personne
+    // en erreur.
+    for (const loc of LOCALES) {
+      const avecCompte = tr(loc, 'stage.proposed', { count: '2' });
+      expect(avecCompte, `${loc} / stage.proposed`).toBeTruthy();
+      expect(avecCompte, `${loc} : le nombre n'est pas substitué`).toContain('2');
+      expect(avecCompte, `${loc} : placeholder resté brut`).not.toContain('{count}');
+
+      const sansCompte = tr(loc, 'stage.proposed.sansCompte');
+      expect(sansCompte, `${loc} / sansCompte`).toBeTruthy();
+      expect(sansCompte, `${loc} : ne doit pas réclamer un nombre`).not.toContain('{count}');
+    }
+  });
+
   it('ne laisse pas une locale retomber en portugais sans le dire', () => {
     const { tr } = charger();
     // Si de/el n'existaient pas, tr replierait sur pt-BR : on vérifie que non.
