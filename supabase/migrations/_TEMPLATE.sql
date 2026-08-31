@@ -112,11 +112,15 @@ GRANT ALL ON public.ma_nouvelle_table TO service_role;
 
 ALTER TABLE public.ma_nouvelle_table ENABLE ROW LEVEL SECURITY;
 
+-- Dans une policy, TOUJOURS emballer auth.*() en (select auth.*()) : nu, il est
+-- réévalué À CHAQUE LIGNE (advisor auth_rls_initplan) ; emballé, une fois par
+-- requête. Neuf policies écrites entre le 03/07 et le 29/08 ont copié l'ancien
+-- exemple nu de ce modèle — rejouées par 20260831171526. Sémantiquement neutre.
 CREATE POLICY "ma_nouvelle_table_select_owner"
   ON public.ma_nouvelle_table
   FOR SELECT
   TO authenticated
-  USING (user_id = auth.uid());
+  USING (user_id = (select auth.uid()));
 
 -- Autres policies selon les besoins métier
 -- CREATE POLICY ... FOR INSERT TO authenticated WITH CHECK (...);
