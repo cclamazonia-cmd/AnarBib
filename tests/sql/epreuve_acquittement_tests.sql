@@ -46,7 +46,7 @@ BEGIN
       v_passed := v_passed + 1;
     ELSE
       v_failed := v_failed + 1;
-      v_failures := v_failures || (v_t || ' : echec voulu, premier rouge de l''epreuve I5');
+      v_failures := v_failures || (v_t || ' : echec voulu, SECOND rouge de l''epreuve I5 : le ticket #27 etant deja ouvert, aucun nouveau ticket ne doit apparaitre et le job alerte doit le dire');
     END IF;
   EXCEPTION WHEN OTHERS THEN
     v_failed := v_failed + 1;
