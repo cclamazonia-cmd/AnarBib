@@ -373,7 +373,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
-| **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | Ouvert |
+| **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | En cours |
 
 #### B2 — Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon`
 
@@ -632,19 +632,29 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 #### B17 — L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, i18n
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, i18n
 
-**État.** **Trouvé le 31/08 en instruisant B12.** La spec `spec-administrateur-reseau-v0.4` §6.3 l'écrit : « *Si action critique → INSERT dans outbox d'event `network.cross_library_critical_action` → **mail immédiat aux coordenadores actifs de la biblio*** ». Ce mail n'est jamais parti.
+**État.** **Trouvé le 31/08 en instruisant B12, et le constat était faux par excès.** La spec `spec-administrateur-reseau-v0.4` §6.3 l'écrit : « *Si action critique → INSERT dans outbox d'event `network.cross_library_critical_action` → **mail immédiat aux coordenadores actifs de la biblio*** ». Ce mail-là n'est jamais parti. Le déclencheur SQL fonctionne — quatre lignes en file, la dernière du **30/08/2026** — mais `_shared/domain/network.ts` connaissait onze events `network.*` et pas celui-là : il tombait dans le `else` final, marqué `skipped`.
 
-Le déclencheur SQL fonctionne : quatre lignes ont été mises en file, la dernière le **30/08/2026**. Mais `_shared/domain/network.ts` connaît onze events `network.*` et **pas celui-là** : il tombe dans le `else` final, qui journalise en console, marque la ligne `skipped` et retourne `{ ok: true, ignored: true }`. Quatre occurrences depuis le 8 juin, quatre fois rien.
+**Ce qui manquait au constat, trouvé le soir même.** Le dispositif a **deux étages**, et l'autre marche. `notify-cross-library-digest`, écrite le 17/08, envoie chaque lundi à 8 h 30 le récapitulatif hebdomadaire des actions inter-bibliothèques — **aux mêmes destinataires** (les coordenador·es actif·ves de chaque biblio touchée), dans leur langue, avec des libellés humains pour les dix types d'action. Le cron a tourné le 31/08 à 8 h 30 comme les lundis précédents.
 
-**Ce que ça vaut politiquement.** C'est la notification qui prévient une bibliothèque qu'un administrateur réseau vient d'agir chez elle — le contrepoids au seul pouvoir transverse du réseau. Il y a aujourd'hui **un seul** administrateur (`A1`, P0), et l'avertissement qui devait rendre ses actions visibles à celles qui les subissent n'a jamais fonctionné. Ce n'est pas un défaut d'envoi, c'est un défaut de gouvernance.
+Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event** : le récapitulatif ne lit pas l'outbox, il lit la table de journal `network_admin_cross_library_actions_log`. Aucun `grep` sur `cross_library_critical_action` ne pouvait le trouver — d'où `DOC-RECENS-1`.
 
-Depuis B12, au moins ces lignes **disent** pourquoi elles n'ont pas été envoyées. Ça ne les envoie pas.
+**Le manque réel n'était donc pas la visibilité, mais le délai** : jusqu'à sept jours entre une action décidée du dehors et le moment où la bibliothèque l'apprend. Pour une promotion, l'attente est tenable ; pour `team_suspend_member` ou `team_request_remove_member`, elle ne l'est pas.
 
-*Vérifié : 31/08 — établi sur deux sources : la base (4 lignes en file, 0 envoi pour cet event, dernière du 30/08) et le code (aucune branche pour cet event dans `handleNetworkEvent`). Constat neuf, non hérité de la v34.*
+**Et l'en-tête de `notify-cross-library-digest` affirmait depuis le 17/08 que l'étage immédiat fonctionnait.** Un commentaire qui décrit un mécanisme absent est exactement ce qui fait qu'on ne le cherche pas.
 
-**Ce que c'est.** Écrire `handleCrossLibraryCriticalAction` dans `_shared/domain/network.ts`, sur le modèle des onze handlers existants : destinataires = coordenadores **actifs** de la bibliothèque visée (`payload.library_id`), corps portant l'action, l'autrice et l'objet touché. Puis les chaînes i18n `mail.network.cross_library_critical_action.*` dans les dix locales — c'est le gros du travail. Enfin, décider du sort des quatre lignes en attente : rejouer, ou clore avec leur motif.
+**Livré le 31/08.** `_shared/domain/cross_library.ts` (handler, destinataires = coordenador·es actif·ves hors acteur·rice, identité d'expéditeur *réseau* et non *bibliothèque*), branché dans `handleNetworkEvent`. Les libellés des dix actions et six objets **ne sont pas réécrits** : le fichier de chaînes du récapitulatif a quitté `notify-cross-library-digest/` pour `_shared/i18n/cross-library-strings.ts`, lu par les deux étages — trois nouvelles clés × dix locales au lieu de cent vingt, et surtout aucune divergence possible entre ce que les deux étages appellent le même geste. Le qualifiant « proposition, N ratifications requises — rien n'est encore fait » est partagé lui aussi.
+
+**Neuf types d'action, pas sept.** `fn_is_critical_action_type()` en énumère sept ; deux RPC de réattribution d'ouvrage passent `p_is_critical := true` en dur. Les dix libellés couvrent les neuf.
+
+*Vérifié : 31/08 — établi puis **corrigé** le même jour, sur quatre sources : la base (4 lignes en file, 0 envoi, dernière du 30/08 ; invitation `ebd78fb9` encore `ready` ; cron du récapitulatif exécuté avec succès le 31/08 à 8 h 30), le code (aucune branche pour cet event ; mais un récapitulatif hebdomadaire qui sert les mêmes destinataires), les destinataires réels (3 coordenador·es actif·ves à la BTL, 1 à la MLEG, aucune n'étant l'acteur·rice), et le déclencheur SQL `trg_team_outbox_dispatch`, qui est un `AFTER INSERT` sans rejeu. Livré ; **pas encore éprouvé en envoi réel** — 325 vérifications de chaînes passent hors ligne, ce qui n'est pas la même chose.*
+
+**Ce que c'est.** **Déployer**, puis **rejouer la seule ligne qui décrit quelque chose de vivant** : `#72` (30/08), qui porte l'invitation `ebd78fb9` — statut `ready`, `resolved_at` nul, expire le 29/09, attend deux ratifications. Les trois coordenador·es de la BTL doivent l'apprendre.
+
+**Les trois lignes de juin ne sont pas retouchées.** Leur `skip_reason` dit `unknown_network_event`, et c'est exact : ce jour-là, l'event était inconnu du handler. Le réécrire en septembre pour dire « on a choisi de ne pas rejouer » falsifierait un journal au lieu de le compléter — la décision se consigne ici et au `REGISTRE`, pas dans la ligne d'audit.
+
+**Le rejeu ne peut pas passer par un changement de statut** : `trg_team_outbox_dispatch` est un `AFTER INSERT` et rien ne repasse sur les lignes existantes. Il faut refaire le `net.http_post` vers `notify-event` avec `{event, record_id: 72}`, exactement comme le fait le déclencheur.
 
 **Pourquoi ça compte.** Un pouvoir transverse sans trace visible par celles qui le subissent n'est pas un pouvoir contrôlé. La spec l'avait compris et l'avait écrit ; le code ne l'a jamais fait. À Bologne, c'est exactement le genre d'écart qu'on ne peut pas présenter comme acquis.
 
@@ -654,10 +664,11 @@ Depuis B12, au moins ces lignes **disent** pourquoi elles n'ont pas été envoy�
 - [object Object]
 - [object Object]
 - [object Object]
+- [object Object]
 
-**Dépendances.** Éclairé par **B12** (la raison du saut est désormais écrite). Résonne avec **A1** : un seul administrateur réseau.
+**Dépendances.** Éclairé par **B12** (la raison du saut est écrite). Résonne avec **A1** : un seul administrateur réseau, donc un seul émetteur possible de ces actions. Partage son vocabulaire avec le récapitulatif hebdomadaire, ce qui **allège F6** d'un fichier au lieu de l'alourdir.
 
-*Renvois : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `_shared/domain/network.ts` · `public.team_notification_outbox` · `item B12`*
+*Renvois : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6`*
 
 ---
 

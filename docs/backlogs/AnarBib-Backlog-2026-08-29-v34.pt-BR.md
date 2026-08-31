@@ -373,7 +373,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Aberto |
+| **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Em curso |
 
 #### B2 — Triar as 36 funções `SECURITY DEFINER` abertas a `anon`
 
@@ -626,17 +626,21 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 #### B17 — O aviso que devia tornar visíveis as ações de um administrador de rede não existe
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, i18n
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : Deno / TypeScript, i18n
 
-**Estado.** **Encontrado em 31/08 ao instruir B12.** A spec `spec-administrateur-reseau-v0.4` §6.3 escreve: «*Se ação crítica → INSERT na outbox do evento `network.cross_library_critical_action` → **e-mail imediato aos coordenadores ativos da biblioteca***». Esse e-mail nunca partiu.
+**Estado.** **Encontrado em 31/08 ao instruir B12, e o constato estava errado por excesso.** A spec §6.3 prevê um **e-mail imediato** aos coordenadores da biblioteca quando um administrador de rede age nela. Esse e-mail nunca partiu: o gatilho SQL enfileirava desde 8 de junho, mas nenhum handler tratava o evento.
 
-O gatilho SQL funciona: quatro linhas foram enfileiradas, a última em **30/08/2026**. Mas `_shared/domain/network.ts` conhece onze eventos `network.*` e **não esse**: cai no `else` final, que regista na consola, marca `skipped` e devolve `{ ok: true }`.
+**O que faltava ao constato.** O dispositivo tem **dois andares**, e o outro funciona: `notify-cross-library-digest`, escrita em 17/08, envia toda segunda-feira o resumo semanal **aos mesmos destinatários**. O primeiro levantamento não a viu porque procurava o **nome do evento**: o resumo lê a tabela de registro, não a outbox. Daí `DOC-RECENS-1`.
 
-**O que isto vale politicamente.** É a notificação que avisa uma biblioteca de que um administrador de rede acaba de agir em sua casa — o contrapeso ao único poder transversal da rede. Há hoje **um só** administrador (`A1`, P0). Não é um defeito de envio, é um defeito de governação.
+**A falta real não era a visibilidade, mas o prazo**: até sete dias. Para uma promoção, é tolerável; para `team_suspend_member`, não.
 
-*Verificado : 31/08 — estabelecido sobre duas fontes: a base e o código. Constato novo, não herdado da v34.*
+**Entregue em 31/08.** `_shared/domain/cross_library.ts`, ligado a `handleNetworkEvent`. Os rótulos das dez ações não foram reescritos: o ficheiro de cadeias mudou-se para `_shared/i18n/cross-library-strings.ts` e é lido pelos dois andares.
 
-**O que é.** Escrever `handleCrossLibraryCriticalAction` em `_shared/domain/network.ts`, no modelo dos onze handlers existentes: destinatários = coordenadores **ativos** da biblioteca visada. Depois as cadeias i18n nas dez locales — é o grosso do trabalho. Por fim, decidir o destino das quatro linhas em espera.
+*Verificado : 31/08 — estabelecido e depois **corrigido** no mesmo dia, sobre quatro fontes: o banco, o código, os destinatários reais (3 na BTL, 1 na MLEG) e o gatilho `AFTER INSERT` sem reprodução. Entregue; **ainda não provado em envio real**.*
+
+**O que é.** **Implantar**, depois **reproduzir apenas a linha viva**: `#72` (30/08), cujo convite `ebd78fb9` está `ready` e aguarda duas ratificações. As três coordenadoras da BTL devem sabê-lo.
+
+**As três linhas de junho não são retocadas**: o seu `skip_reason` é exato. Reescrevê-lo falsificaria um registro. **A reprodução não passa por uma mudança de estado**: o gatilho é `AFTER INSERT`.
 
 **Por que importa.** Um poder transversal sem rasto visível para quem o sofre não é um poder controlado. A spec entendeu-o e escreveu-o; o código nunca o fez.
 
@@ -646,10 +650,11 @@ O gatilho SQL funciona: quatro linhas foram enfileiradas, a última em **30/08/2
 - [object Object]
 - [object Object]
 - [object Object]
+- [object Object]
 
-**Dependências.** Esclarecido por **B12**. Ressoa com **A1**.
+**Dependências.** Esclarecido por **B12**. Ressoa com **A1**. Partilha o vocabulário com o resumo semanal, o que **alivia F6**.
 
-*Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `_shared/domain/network.ts` · `public.team_notification_outbox` · `item B12`*
+*Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6`*
 
 ---
 
