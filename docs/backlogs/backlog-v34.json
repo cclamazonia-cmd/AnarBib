@@ -14,7 +14,7 @@
     "maj": "2026-09-01",
     "releve": {
       "date": "2026-09-01",
-      "commit": "780cac8a"
+      "commit": "c7222379"
     }
   },
   "domains": [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "257",
+            "269",
             {
-              "fr": "257 fichiers au dépôt : **tout est déployé**, y compris l'arbitrage des périodiques — retenu en local jusqu'à l'envoi du préavis aux quatre personnes concernées, poussé le 01/09 une fois le préavis parti",
-              "pt": "257 arquivos no repositório: **tudo implantado**, inclusive o arbítrio dos periódicos — retido em local até o envio do aviso prévio às quatro pessoas, enviado em 01/09 uma vez o aviso partido"
+              "fr": "269 fichiers au dépôt en fin de journée ; les appliquées suivent au rythme de la CI — l'écart d'un train de pushes du soir n'est pas le piège n°4, rien n'est appliqué à la main",
+              "pt": "269 arquivos no repositório ao fim do dia; as aplicadas seguem no ritmo da CI — a defasagem de um trem de pushes noturno não é a armadilha nº 4, nada é aplicado à mão"
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 417",
+            "2 473",
             {
-              "fr": "152 depuis le relevé du 29/08 — l'essentiel est la campagne de vérification du backlog et les sept paquets de l'audit **B14**",
-              "pt": "152 desde o levantamento de 29/08 — a maior parte é a campanha de verificação do backlog e os sete pacotes da auditoria **B14**"
+              "fr": "208 depuis le relevé du 29/08 — la campagne de vérification, les onze paquets de B14, le chantier des clés et le circuit collégial, menés par deux sessions en parallèle sur la même journée",
+              "pt": "208 desde o levantamento de 29/08 — a campanha de verificação, os onze pacotes do B14, o canteiro das chaves e o circuito colegiado, conduzidos por duas sessões em paralelo no mesmo dia"
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "349 + 62",
+            "353 + 64",
             {
-              "fr": "**349 cas JavaScript** dans 25 fichiers — chiffre donné par l'exécution, non par un grep des déclarations. **62 suites SQL, toutes en CI** — neuf sont nées du seul audit B14, clos le 01/09",
-              "pt": "**349 casos JavaScript** em 25 arquivos — número dado pela execução, não por um grep das declarações. **62 suítes SQL, todas na CI** — nove nasceram só da auditoria B14, encerrada em 01/09"
+              "fr": "**353 cas JavaScript** dans 26 fichiers — chiffre donné par l'exécution — et **64 suites SQL, toutes en CI**. Douze suites sont nées le 1ᵉʳ septembre seul",
+              "pt": "**353 casos JavaScript** em 26 arquivos — número dado pela execução — e **64 suítes SQL, todas na CI**. Doze suítes nasceram só em 1º de setembro"
             }
           ],
           [

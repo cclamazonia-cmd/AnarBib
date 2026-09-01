@@ -72,7 +72,7 @@ Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior 
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
 | Funções aplicativas | **854** | `public` 628 · `api` 184 · `ingest` 34 · `private` 8. Sendo **666 SECURITY DEFINER**, **nenhuma** sem `search_path` fixado. **315** das de `public` seguem expostas a `authenticated`: é a superfície do item **B14** |
-| Migrações aplicadas | **257** | 257 arquivos no repositório: **tudo implantado**, inclusive o arbítrio dos periódicos — retido em local até o envio do aviso prévio às quatro pessoas, enviado em 01/09 uma vez o aviso partido |
+| Migrações aplicadas | **269** | 269 arquivos no repositório ao fim do dia; as aplicadas seguem no ritmo da CI — a defasagem de um trem de pushes noturno não é a armadilha nº 4, nada é aplicado à mão |
 | Jobs `pg_cron` | **36** | **todos ativos**; cobertos na CI desde 31/08 por `crons_planifies_tests` (faltava o stub `cron`, então nenhum dos 36 estava guardado) |
 | Avisos de segurança | **505** | 0 ERROR · **453** + 28 WARN sobre funções DEFINER expostas · 24 INFO « RLS sem policy ». Os `anon` caíram de 36 para 28 (lote **B2**) e os `authenticated` de 464 para **453** ao longo dos onze pacotes do **B14**, encerrado em 01/09 — cada queda é uma função fechada por uma razão escrita, e **as 453 restantes foram todas lidas, sua razão de exposição escrita** (ver `AUDIT_execute_authenticated_2026-09-01`) |
 | Avisos de desempenho | **243** | 166 índices não usados · 38 chaves estrangeiras sem índice · 25 policies permissivas · 14 tabelas sem chave primária · **0 `auth_rls_initplan`** — eram 9 em 29/08, a reaplicação do wrap (item **B5**) fechou todos |
@@ -108,10 +108,10 @@ Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior 
 
 | | | |
 |---|---:|---|
-| Commits | **2 417** | 152 desde o levantamento de 29/08 — a maior parte é a campanha de verificação do backlog e os sete pacotes da auditoria **B14** |
+| Commits | **2 473** | 208 desde o levantamento de 29/08 — a campanha de verificação, os onze pacotes do B14, o canteiro das chaves e o circuito colegiado, conduzidos por duas sessões em paralelo no mesmo dia |
 | Arquivos `src/` | **290** | 79 páginas, 89 componentes |
 | Chaves i18n | **6 179** | × 10 locales, paridade estrita verificada na CI |
-| Testes | **349 + 62** | **349 casos JavaScript** em 25 arquivos — número dado pela execução, não por um grep das declarações. **62 suítes SQL, todas na CI** — nove nasceram só da auditoria B14, encerrada em 01/09 |
+| Testes | **353 + 64** | **353 casos JavaScript** em 26 arquivos — número dado pela execução — e **64 suítes SQL, todas na CI**. Doze suítes nasceram só em 1º de setembro |
 | Marcadores de dívida | **6** | sendo 4 em `src/` — eram 17 em 29/08. Nenhum é uma tarefa aberta: a dívida não está nos comentários, está neste backlog |
 
 ---
@@ -2359,4 +2359,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 77 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 77 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c7222379`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

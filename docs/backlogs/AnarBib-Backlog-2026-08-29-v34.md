@@ -72,7 +72,7 @@ Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent dat
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
 | Fonctions applicatives | **854** | `public` 628 · `api` 184 · `ingest` 34 · `private` 8. Dont **666 SECURITY DEFINER**, **aucune** sans `search_path` épinglé. **315** de celles de `public` restent exposées à `authenticated` : c'est la surface de l'item **B14** |
-| Migrations appliquées | **257** | 257 fichiers au dépôt : **tout est déployé**, y compris l'arbitrage des périodiques — retenu en local jusqu'à l'envoi du préavis aux quatre personnes concernées, poussé le 01/09 une fois le préavis parti |
+| Migrations appliquées | **269** | 269 fichiers au dépôt en fin de journée ; les appliquées suivent au rythme de la CI — l'écart d'un train de pushes du soir n'est pas le piège n°4, rien n'est appliqué à la main |
 | Jobs `pg_cron` | **36** | **tous actifs** ; couverts en CI depuis le 31/08 par `crons_planifies_tests` (le stub `cron` manquait, donc aucun des 36 n'était gardé) |
 | Avis de sécurité | **505** | 0 ERROR · **453** + 28 WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Les `anon` sont passés de 36 à 28 (lot **B2**) et les `authenticated` de 464 à **453** au fil des onze paquets de **B14**, clos le 01/09 — chaque baisse est une fonction fermée pour une raison écrite, et **les 453 restantes sont toutes lues, leur raison d'être exposée écrite** (voir `AUDIT_execute_authenticated_2026-09-01`) |
 | Avis de performance | **243** | 166 index inutilisés · 38 clés étrangères non indexées · 25 policies permissives · 14 tables sans clé primaire · **0 `auth_rls_initplan`** — ils étaient 9 le 29/08, le rejeu du wrap (item **B5**) les a tous fermés |
@@ -108,10 +108,10 @@ Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent dat
 
 | | | |
 |---|---:|---|
-| Commits | **2 417** | 152 depuis le relevé du 29/08 — l'essentiel est la campagne de vérification du backlog et les sept paquets de l'audit **B14** |
+| Commits | **2 473** | 208 depuis le relevé du 29/08 — la campagne de vérification, les onze paquets de B14, le chantier des clés et le circuit collégial, menés par deux sessions en parallèle sur la même journée |
 | Fichiers `src/` | **290** | 79 pages, 89 composants |
 | Clés i18n | **6 179** | × 10 locales, parité stricte vérifiée en CI |
-| Tests | **349 + 62** | **349 cas JavaScript** dans 25 fichiers — chiffre donné par l'exécution, non par un grep des déclarations. **62 suites SQL, toutes en CI** — neuf sont nées du seul audit B14, clos le 01/09 |
+| Tests | **353 + 64** | **353 cas JavaScript** dans 26 fichiers — chiffre donné par l'exécution — et **64 suites SQL, toutes en CI**. Douze suites sont nées le 1ᵉʳ septembre seul |
 | Marqueurs de dette | **6** | dont 4 dans `src/` — ils étaient 17 le 29/08. Aucun n'est une tâche ouverte : la dette n'est pas dans les commentaires, elle est dans ce backlog |
 
 ---
@@ -2389,4 +2389,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 77 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 77 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `c7222379` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
