@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.8 — 2026-09-01 (le rôle quitté cesse de se confondre avec le compte délaissé)
+**Version** : 1.9 — 2026-09-01 (le circuit collégial ne dépend plus du seul courriel)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -17,6 +17,7 @@
 - **v1.6 (2026-09-01, même jour)** : **T1 (`reader` → `librarian`) cesse d'être unilatérale.** Dernier chemin du modèle où UNE personne donnait un rôle staff à une autre sans endossement ni consentement — devenu indéfendable après GOUV-1 (T2 collégiale) et GOUV-11 (même le saut est collégial). `fn_team_promote_to_librarian` est condamnée (`collegiality_required`, même doctrine que GOUV-4) ; l'accueil passe par le circuit d'invitation, construit pour lui à l'origine. Examen GOUV-7 (les autorisations d'arrivée comparées à celles de départ) : l'admin réseau perd le pouvoir de fabriquer un·e librarian directement — perte **assumée**, son rattrapage d'une biblio sans staff actif passe désormais par le saut collégial (§6.4 réécrit ; l'ancienne voie (a) était de toute façon inopérante depuis la v1.4 faute de librarian *actif* à proposer). Sections amendées : §5.1, §5.2, §6.4, §6.8, §6.11, §7.3, §11.2, §15.1. Décision : `GOUV-13` (registre v0.9, arbitrage Xavier du 01/09 au soir). Implémentation : migration `20260901175233`, tests `tests/sql/t1_accueil_collegial_tests.sql`, front `LeitoresPanel`/`TeamActionModal`/`roles.js`/`teamMutations`.
 - **v1.7 (2026-09-01, même jour)** : **v2 du saut collégial — ergonomie** (`GOUV-14`, arbitrage Xavier : les trois reports de la v1, sans le verrou Q5). (a) **UI de réglage** dans l'onglet Équipe (`GovernanceSettings`) : réglages visibles de tout le staff (P5), bascule du saut réservée coordenador+/admin réseau, `team_admission_mode` en lecture seule ; la Q2 de GOUV-11 (« en base tant que la demande ne se répète pas ») est relevée. `LeitoresPanel` relit le réglage **en base** à chaque chargement — le cache de session du contexte serait en retard après une bascule. (b) **Les mails du circuit disent le saut** : variantes `team.invitation_coord_proposed_direct.intro` / `team.invitation_coord_ready_direct.intro` ; la détection se fait **côté EF** (membership librarian actif de la cible interrogé au moment de l'envoi), sans élargir les payloads SQL. (c) **Atterrissage du self-demote** : la modale offre le choix librarian/lecteur·rice, `reader` présélectionné quand l'audit de la personne porte `from_role='reader'` (elle n'a jamais exercé librarian). Sections amendées : §5.4, §6.12, §8.2. Aucune migration.
 - **v1.8 (2026-09-01, même jour)** : **`status='inactive'` cesse de porter deux sens.** Le §4.5 de cette spec listait lui-même « lectures multiples possibles » — sortie volontaire, carence expirée, compte abandonné — sans voir que c'était le symptôme : un statut qui admet plusieurs lectures n'est pas un statut, c'est une ambiguïté qu'il faut redéduire à chaque fois. Constaté à l'écran : « Sans connexion depuis plus de 270 jours » affiché sur un rôle quitté dix minutes plus tôt. Nouveau statut **`vacated`** (§4.5bis), posé par `fn_team_self_demote` ; `inactive` garde le seul sens du cron T9. Le sélecteur de bibliothèque, par ailleurs, quitte le seul `/conta` pour `/biblioteca` et `/painel` — avec remontage du panneau à la bascule, sans lequel un emprunt en cours aurait pu changer de bibliothèque en chemin. Sections amendées : §4.5, §4.5bis (nouveau), §5.4. Décisions : `GOUV-15`, `GOUV-16` (registre v0.11). Implémentation : migration `20260901220000`, front `TeamPanel`/`roles.js`/`BibliotecaPage`/`PanelPage`.
+- **v1.9 (2026-09-01, même jour)** : **le circuit collégial se dit dans l'application.** Les événements `team.*` ne partaient que dans `team_notification_outbox` → `notify-event` → e-mail : aucune des huit fonctions écrivant dans `user_notifications` n'était un événement de gouvernance. Pour savoir qu'une proposition attendait son endossement, il fallait recevoir le mail ou aller regarder l'écran d'équipe par hasard. Or depuis `GOUV-11` et `GOUV-13`, **toute** nomination au staff passe par ce circuit — et `fn_team_expire_invitations` la referme au bout de 30 jours : une proposition pouvait naître, être ignorée et mourir sans qu'aucun être humain n'ait su qu'elle existait. Déclencheur sur `library_team_invitations` doublant les deux étapes d'une notification in-app (§8.6). Le rattrapage a immédiatement fait apparaître une proposition **réelle**, entièrement endossée, en attente d'acceptation depuis deux jours sur BTL. Décision : `GOUV-17` (registre v0.12). Implémentation : migration `20260901234500`, front `NotificationBell`. Reste ouvert : le rappel avant péremption.
 
 ---
 
@@ -893,6 +894,31 @@ Le pattern actuel de `notify-event` est :
 - Pattern doctrinal : **un INSERT par event**, fan-out réalisé par l'Edge Function en lisant le payload JSONB
 
 ---
+
+### 8.6. Doublage in-app du circuit collégial *(nouveau v1.9)*
+
+Les mails décrits ci-dessus restent le canal principal, mais **ils ne sont plus le seul**. Un
+déclencheur sur `library_team_invitations` dépose une entrée dans `user_notifications` — celle
+que lit la cloche — à deux moments :
+
+| Étape | Destinataires | Lien |
+|---|---|---|
+| Proposition déposée | staff actif de la biblio, **moins** qui propose (son endossement est déjà enregistré) et **moins** la personne visée (elle ne peut pas ratifier sa propre invitation) | `/biblioteca` — écran d'équipe |
+| Quorum atteint (`ready`) | la personne concernée, elle seule | `/conta?tab=biblios` |
+
+**Pourquoi un déclencheur et non un ajout dans les RPC** : la notification in-app ne doit pas
+emprunter le chemin du mail, sinon elle tombe précisément quand on a besoin d'elle — biblio dont
+la distribution est coupée, adresse périmée, message en indésirables. Le déclencheur couvre en
+outre les chemins futurs : toute invitation créée ou passée à `ready`, par quelque fonction que
+ce soit, se dira dans l'application.
+
+**Langue** : `title` et `body` stockent des **clés i18n**, pas du texte. La cloche traduit au
+rendu, donc chacun·e lit dans sa langue et rien n'est figé à l'insertion (`DOC-I18N-1`). Motif
+repris de `fn_replicate_reserva_pronta_to_inapp`, qui fait déjà cela pour la circulation.
+
+**Reste ouvert** : aucun rappel avant péremption. Une proposition oubliée se refermera toujours
+en silence au bout de 30 jours — la cloche dit qu'elle existe, pas qu'elle va expirer. Le sujet
+rouvre la doctrine des relances et n'a pas été tranché (cf. `GOUV-17`).
 
 ## 9. Interface utilisateur·rice
 
