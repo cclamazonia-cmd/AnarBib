@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 78 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 77 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 6
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 5
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 10
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-09-01.** **55 items sur 78** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **54 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -82,8 +82,8 @@ Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent dat
 
 | | | |
 |---|---:|---|
-| Dossiers au dépôt | **50** | + `_shared` ; la 50ᵉ est le routeur `main`, **jamais déployé sur Supabase, et c'est voulu** — il ne sert que la pile auto-hébergée |
-| Déclarations `verify_jwt` | **38** | **toutes à `false`** : les fonctions protégées le sont par le défaut de la plateforme, pas par une déclaration. Réconcilier ce fichier avec les fonctions réellement déployées reste l'item **B6** |
+| Dossiers au dépôt | **51** | + `_shared` ; dont le routeur `main`, **jamais déployé sur Supabase, et c'est voulu** — il ne sert que la pile auto-hébergée |
+| Déclarations `verify_jwt` | **36** | **toutes à `false`** — compte des lignes `^verify_jwt = `, pas des occurrences du mot (les commentaires en parlent aussi, et c'est ainsi que le chiffre a dérivé deux fois). Les fonctions protégées le sont par le défaut de la plateforme ; réconcilier ce fichier avec les fonctions déployées reste l'item **B6** |
 
 ### Catalogue
 
@@ -1649,7 +1649,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 |---|---|---|---|
 | **H1** | Réparer l'aspiration des 158 descripteurs de dates du thésaurus | `P1` | Ouvert |
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
-| **H4** | Exposer le catalogue en OPDS | `P1` | Ouvert |
 | **H5** | Éprouver la moisson OAI-PMH dans les deux sens | `P2` | Ouvert |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
 | **H7** | Décider du sort du texte de conventions d'interopérabilité | `P1` | Décision collective |
@@ -1697,27 +1696,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 **Dépendances.** Bloque **H3**. À poser à Bologne ou avant.
 
 *Renvois : `NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
-
-#### H4 — Exposer le catalogue en OPDS
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
-
-**État.** Le point d'accès OAI-PMH est déployé. **OPDS n'existe pas.** Or « les flux OPDS existent de part et d'autre mais ne pointent nulle part », et c'est la convention 1 du texte proposé aux autres catalogues.
-
-*Vérifié : 31/08 — aucune occurrence d'OPDS dans `src/` ni `supabase/functions/`. Rien n'existe, comme écrit.*
-
-**Ce que c'est.** Un flux OPDS 1.2 ou 2.0 sur le catalogue public, avec les facettes déjà disponibles. Quelques heures pour un premier flux.
-
-**Pourquoi ça compte.** OPDS est ce que lisent les liseuses et les applications de lecture. C'est le format par lequel un fonds numérisé devient consultable sans passer par notre interface — et c'est la première des quatre conventions qu'AnarBib propose aux autres. **Il serait difficile de la proposer sans l'appliquer.**
-
-**Ce qui compte comme fini.**
-
-- Un flux OPDS est servi et lisible par au moins un client réel.
-- Il respecte la visibilité : rien qui ne soit déjà public ne sort.
-
-**Dépendances.** Aucune.
-
-*Renvois : `docs/CHANTIERS_OUVERTS.md §4` · `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26 convention 1`*
 
 #### H5 — Éprouver la moisson OAI-PMH dans les deux sens
 
@@ -2361,6 +2339,7 @@ CI verte : lint et suite unitaire. |
 | B2 | Trier les 36 fonctions `SECURITY DEFINER` ouvertes à `anon` | **Clos le 01/09, les quatre lots exécutés et le compte tenu.** Lot 1 (30/08) : les trois grants que la fonction contredisait, retirés. Lot 2 : les cinq intouchables — 107 policies, dont 39 évaluées par `anon` — commentées et gardées par T8/T9. Lot 4 : les 33 relues une à une contre la question du 18/05 (`AUDIT_execute_anon_2026-08-30.md`) — 5 intouchables, 23 légitimes, 5 à traiter ; C.1–C.4 fermées le soir même (`20260830191108`, dont l'oracle de délibération et l'énumération du réseau par les fuseaux), C.5 tranchée le 01/09 par les faits : l'unique appelant est le choix de bibliothèque cible du catalogage, admin réseau **par décision du 17/08** — garde voulue, nom documenté par `COMMENT`, grant mort retiré (`20260831195348`). Lot 3 (31/08) : le défaut du schéma retourné (`20260831105114`) — une fonction créée dans `public` naît fermée à `anon` ; doctrine au REGISTRE (`DOC-GRANT-1`), pièges nommés (l'entrée `pg_default_acl` qui ne doit jamais se vider ; l'entrée `FOR ROLE supabase_admin` qui reste et revient à B14). **L'invariant est gardé** : la liste nommée du T10 compte 28 fonctions, dans les deux sens, et **le lint 0028 affiche exactement 28** — remesuré après déploiement. Un avertissement attendu n'est plus un avertissement. Le tri des 464 d'`authenticated` est B14. |
 | B5 | Résorber les neuf policies qui réévaluent `auth.*()` par ligne | **Clos le 01/09/2026, sur mesure et non sur intention.** L'item demandait de résorber les neuf policies qui réévaluaient `auth.*()` **par ligne** au lieu d'une fois par requête. Le wrap idempotent du 03/07 existait déjà : il avait été écrit, puis la dérive était revenue par l'exemple nu du `_TEMPLATE.sql`, que les neuf avaient recopié. Le rejeu du 31/08 (`20260831171526`) referme les neuf **et** corrige la source — sans quoi la dixième serait née du même modèle. <br><br>**Ce qui autorise la clôture est un chiffre, pas un commit** : l'advisor de performance comptait 9 `auth_rls_initplan` le 29/08 ; il en compte **0** le 01/09, remesuré deux fois dans la journée, avant et après les paquets de `B14`. C'est la seule preuve qui vaut ici — une migration appliquée ne dit pas que le défaut a disparu, elle dit qu'on a agi. |
 | B14 | Auditer les fonctions `SECURITY DEFINER` ouvertes à `authenticated` | **Clos le 01/09/2026, en onze paquets et une journée, par la clôture à deux chemins de `DOC-RECENS-1`** : dix critères thématiques (`api` 138/138, `public` 315/315), le complément des critères **vide** après lecture des 24 fonctions qu'il rendait, et les schémas hors hypothèse balayés — `private` (6 lues, et le dernier constat du lot y vivait : la carte réseau montrait 79 entrées non publiques, dont de possibles attentes de consentement, à tout compte authentifié) et `ingest` (0 exposée). **459 fonctions lues en tout.** Fuites corrigées, toutes dormantes : deux sur `api`, le foyer derrière la façade, la volumétrie des fonds (`fn_next_tombo`), une écriture sans garde, la vue `my_access` (37 fonctions ouvraient le panneau de la mauvaise bibliothèque), 23 oracles d'existence, 5 fonctions mortes dont une joignant identité et rôle militant, la carte réseau. **Trois décisions collectives** posées et tranchées le jour même (refus muets, arbitrage des périodiques — après préavis aux quatre personnes —, carte réseau aux membres). **Neuf suites de garde** nées du lot, toutes en CI : le lot n'a pas corrigé, il a rendu chaque invariant regardable. Coût assumé : quatre CI rouges, tous la même faute sous trois formes — changer ce qu'une fonction dit, rend ou a le droit de faire sans chercher qui l'observe — d'où les trois volets de `DOC-MSG-1` et deux corollaires de `DOC-RECENS-1`. L'advisor 0029 passe de 464 à 453, **et ce chiffre n'est plus un avertissement : chacune des 453 restantes a été lue, et sa raison d'être exposée est écrite.** La chronique complète, paquet par paquet, vit dans `AUDIT_execute_authenticated_2026-09-01.md`. |
+| H4 | Exposer le catalogue en OPDS | **Clos le 01/09/2026, onze jours avant Bologne, sur épreuve réelle.** Le flux OPDS 1.2 est vivant : `/functions/v1/opds` (navigation) et `/opds/all` (acquisition) — les **18 documents numériques publics** du catalogue, lisibles par toute application de lecture sans passer par notre interface. La convention n°1 du texte d'interopérabilité (« les flux OPDS existent de part et d'autre mais ne pointent nulle part ») est **tenue avant d'être proposée**. Prouvé au `curl` : Atom conforme, 18 entrées aux titres tous distincts (les six tomes de Reclus se départagent par volume et sous-titre), langues normalisées (7 fr, 7 pt-BR, 2 es, 2 it — `language_code` avait dérivé, `idioma` fait foi), droits et attribution Gallica/BnF portés, couvertures liées, lien retour vers `/livro/<bib_ref>`, et un PDF réellement servi (10,4 Mo, apostrophes et espaces des chemins URL-encodés). Autodécouverte posée dans `index.html`. **Le périmètre est strict et gardé** : uniquement `access_scope='publico'` actif — le prédicat même de `documents_numeriques_tests` ; le flux ne crée aucun accès, il rend trouvable ce qui est déjà public. **Deux constats au passage** : `book_digital_resources` ne porte **aucune clé étrangère** — pas même vers `books` — d'où une jointure en deux requêtes dans la fonction (l'embed PostgREST exige une FK) ; à poser un jour, pas à la veille de Bologne. Et le premier déploiement a répondu 500 sur `/all` : *l'épreuve au `curl` fait partie de la livraison*, pas de la vérification d'après. |
 
 ---
 
@@ -2392,4 +2371,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 78 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 77 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
