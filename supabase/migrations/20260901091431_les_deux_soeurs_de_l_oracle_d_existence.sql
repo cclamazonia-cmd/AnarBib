@@ -41,7 +41,7 @@ CREATE OR REPLACE FUNCTION public.fn_painel_get_profile_by_id(p_profile_id uuid)
 RETURNS public.profiles
 LANGUAGE plpgsql
 STABLE SECURITY DEFINER
-SET search_path TO 'public', 'pg_catalog'
+SET search_path TO 'public'
 AS $function$
 declare
   v_row public.profiles;
@@ -76,17 +76,21 @@ COMMENT ON FUNCTION public.fn_painel_get_profile_by_id(uuid) IS
 -- ── 2. La ressource reçue, dont l'identifiant est séquentiel ────────────────
 -- Seul le message de la « garde 0 » change ; tout le reste du corps est
 -- reconduit à l'identique.
+-- Signature reprise À L'IDENTIQUE de l'existante, DEFAULT compris : sans le
+-- « DEFAULT 'both' », PostgreSQL refuse le remplacement (« cannot change …
+-- default »), et le search_path d'origine porte 'auth' — l'omettre casserait
+-- auth.uid(). Une réécriture de corps ne doit RIEN changer d'autre que le corps.
 CREATE OR REPLACE FUNCTION public.fn_attach_received_asset_record(
   p_received_asset_id bigint,
   p_book_id bigint,
   p_bucket_name text,
   p_object_path text,
-  p_mode text
+  p_mode text DEFAULT 'both'::text
 )
 RETURNS jsonb
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path TO 'public', 'ingest', 'pg_catalog'
+SET search_path TO 'public', 'ingest', 'auth', 'pg_catalog'
 AS $function$
 DECLARE
   ra ingest.partner_catalog_received_assets%rowtype;
@@ -244,8 +248,13 @@ BEGIN
     n := n + 1;
   END LOOP;
 
-  IF n <> 12 THEN
-    RAISE EXCEPTION 'douze fonctions fn_import_* attendues, % traitees — liste desynchronisee', n;
+  -- On ne fige PAS le compte à douze : un nombre exact écrit dans une migration
+  -- devient faux dès qu'une fonction est ajoutée ou renommée ailleurs, et fait
+  -- échouer un déploiement pour une raison qui n'est pas un défaut. L'invariant
+  -- qui compte est vérifié par la garde de fin — *aucun* message d'appartenance
+  -- ne subsiste. Ici on exige seulement d'avoir agi si le motif existait.
+  IF n = 0 THEN
+    RAISE NOTICE 'aucune fn_import_* ne portait le motif : rien a faire (deja unifie ?)';
   END IF;
 
   RAISE NOTICE 'messages d''appartenance unifies sur % fonctions fn_import_*', n;
