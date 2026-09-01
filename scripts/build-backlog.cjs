@@ -10,6 +10,13 @@
  * Ne modifiez JAMAIS les .md à la main : ils sont écrasés à chaque exécution.
  * Modifiez le JSON, relancez ce script, commitez les fichiers ensemble.
  *
+ * Champs d'un item : id, d, p, s, e, sk, t, v (requis pour être lisible) ;
+ * w, y, f, dep, r (blocs facultatifs — omis s'ils manquent) ; verif (daté).
+ * Jusqu'au 01/09/2026 un item sans `r` faisait PLANTER ce script, et un item
+ * sans `w`/`y`/`dep` écrivait « undefined » dans les deux backlogs publiés
+ * sans que rien ne le signale. Un générateur qui produit un livrable public
+ * ne doit ni s'interrompre ni mentir sur un champ absent : il l'omet.
+ *
  * Usage : node scripts/build-backlog.cjs [chemin/vers/backlog-v34.json]
  */
 
@@ -205,19 +212,20 @@ function markdown(k) {
     p();
     list.forEach((i) => {
       p(`#### ${i.id} — ${L(i.t, k)}`); p();
-      p(`\`${i.p}\` ${lab(D.priorities, i.p, k)} · ${t.statut} : **${lab(D.states, i.s, k)}** · ${t.charge} : ${lab(D.efforts, i.e, k)} · ${t.demande} : ${i.sk.map((s) => lab(D.skills, s, k)).join(', ')}`);
+      p(`\`${i.p}\` ${lab(D.priorities, i.p, k)} · ${t.statut} : **${lab(D.states, i.s, k)}** · ${t.charge} : ${lab(D.efforts, i.e, k)} · ${t.demande} : ${(i.sk || []).map((s) => lab(D.skills, s, k)).join(', ')}`);
       p();
       p(`**${t.etat}.** ${L(i.v, k)}`); p();
       p(i.verif
         ? `*${t.verif_oui} : ${L(i.verif, k)}*`
         : `*${t.verif_non}.*`); p();
-      p(`**${t.quoi}.** ${L(i.w, k)}`); p();
-      p(`**${t.pourquoi}.** ${L(i.y, k)}`); p();
-      p(`**${t.fini}.**`); p();
-      (L(i.f, k) || []).forEach((f) => p(`- ${f}`));
-      p();
-      p(`**${t.dep}.** ${L(i.dep, k)}`); p();
-      p(`*${t.refs} : ${i.r.map((r) => `\`${r}\``).join(' · ')}*`); p();
+      if (L(i.w, k)) { p(`**${t.quoi}.** ${L(i.w, k)}`); p(); }
+      if (L(i.y, k)) { p(`**${t.pourquoi}.** ${L(i.y, k)}`); p(); }
+      const fini = L(i.f, k) || [];
+      if (fini.length) { p(`**${t.fini}.**`); p(); fini.forEach((f) => p(`- ${f}`)); p(); }
+      if (L(i.dep, k)) { p(`**${t.dep}.** ${L(i.dep, k)}`); p(); }
+      if ((i.r || []).length) {
+        p(`*${t.refs} : ${i.r.map((r) => `\`${r}\``).join(' · ')}*`); p();
+      }
     });
     p('---'); p();
   });
@@ -456,7 +464,7 @@ document.getElementById('bar').addEventListener('input',ev=>{
 function match(i){
   if(st.dom!=='all'&&i.d!==st.dom)return false;
   if(st.prio!=='all'&&i.p!==st.prio)return false;
-  if(st.q){const s=(i.id+' '+L(i.t,K)+' '+L(i.w,K)+' '+L(i.v,K)+' '+L(i.y,K)+' '+i.r.join(' ')).toLowerCase();
+  if(st.q){const s=(i.id+' '+L(i.t,K)+' '+L(i.w,K)+' '+L(i.v,K)+' '+L(i.y,K)+' '+(i.r||[]).join(' ')).toLowerCase();
     if(!s.includes(st.q.toLowerCase()))return false;}
   return true;
 }
@@ -467,15 +475,18 @@ function card(i){
   h+='<div class="chips"><span class="chip pr">'+i.p+' · '+lab('priorities',i.p)+'</span>';
   h+='<span class="chip">'+lab('states',i.s)+'</span>';
   h+='<span class="chip">'+lab('efforts',i.e)+'</span>';
-  i.sk.forEach(s=>{h+='<span class="chip">'+lab('skills',s)+'</span>';});
+  (i.sk||[]).forEach(s=>{h+='<span class="chip">'+lab('skills',s)+'</span>';});
   h+='</div><dl class="f">';
   h+='<dt>'+t.etat+'</dt><dd>'+md(L(i.v,K))
     +'<p class="prov">'+(i.verif ? esc(t.verif_oui+' : ')+md(L(i.verif,K)) : esc(t.verif_non+'.'))+'</p>'+'</dd>';
-  h+='<dt>'+t.quoi+'</dt><dd>'+md(L(i.w,K))+'</dd>';
-  h+='<dt>'+t.pourquoi+'</dt><dd>'+md(L(i.y,K))+'</dd>';
-  h+='<dt>'+t.fini+'</dt><dd><ul>'+(L(i.f,K)||[]).map(f=>'<li>'+md(f)+'</li>').join('')+'</ul></dd>';
-  h+='<dt>'+t.dep+'</dt><dd>'+md(L(i.dep,K))+'</dd>';
-  h+='</dl><p class="refs">'+t.refs+' : '+i.r.map(r=>'<code>'+esc(r)+'</code>').join(' · ')+'</p></article>';
+  if(L(i.w,K)) h+='<dt>'+t.quoi+'</dt><dd>'+md(L(i.w,K))+'</dd>';
+  if(L(i.y,K)) h+='<dt>'+t.pourquoi+'</dt><dd>'+md(L(i.y,K))+'</dd>';
+  const fini=(L(i.f,K)||[]);
+  if(fini.length) h+='<dt>'+t.fini+'</dt><dd><ul>'+fini.map(f=>'<li>'+md(f)+'</li>').join('')+'</ul></dd>';
+  if(L(i.dep,K)) h+='<dt>'+t.dep+'</dt><dd>'+md(L(i.dep,K))+'</dd>';
+  h+='</dl>';
+  if((i.r||[]).length) h+='<p class="refs">'+t.refs+' : '+i.r.map(r=>'<code>'+esc(r)+'</code>').join(' · ')+'</p>';
+  h+='</article>';
   return h;
 }
 
