@@ -267,8 +267,9 @@ De spec rollenbestuur formaliseert negen overgangen, hier beknopt weergegeven. D
 
 | # | Overgang | Wie | Mechanisme |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Coördinator+ | Coöptatie |
-| T2 | `librarian` → `coordenador` | Coördinator+ | Coöptatie |
+| T1 | `reader` → `librarian` | Voorstel (lid van het lokale team) → steun (quorum) → **aanvaarding** (de betrokkene) | Collegiale coöptatie, via het uitnodigingstraject |
+| T2 | `librarian` → `coordenador` | Voorstel (lokale coord OF netwerkadmin) → steun (ander teamlid) → **aanvaarding** (de betrokkene) | Collegiale coöptatie, via het uitnodigingstraject |
+| T2b | `reader` → `coordenador` (**collegiale sprong**) | Identiek aan T2 — alleen als de bibliotheek de optie heeft geactiveerd | Collegiale coöptatie; optie per bibliotheek, standaard uitgeschakeld |
 | T3 | `coordenador` → `librarian` | Zichzelf OF andere coördinatoren | Zelfdegradatie OF collegiaal terugtrekken met wachttijd |
 | T4 | `librarian` → `reader` (vrijwillig) | Zichzelf | Zelfdegradatie |
 | T5 | `librarian` → `reader` (collectief) | Coördinator+ | `pending_removal` met wachttijd 7 dagen |
@@ -279,7 +280,7 @@ De spec rollenbestuur formaliseert negen overgangen, hier beknopt weergegeven. D
 
 Drie principes structureren deze tabel:
 
-- **Toetreding verloopt via coöptatie** (T1, T2). Niemand promoveert zichzelf.
+- **De toegang loopt via collegiale coöptatie** (T1, T2) — en T2b waar de bibliotheek ervoor koos: een voorstel, de steun van het team volgens het quorum, en daarna de **aanvaarding door de betrokkene**. Niemand bevordert zichzelf — en niemand wordt bevorderd zonder het eigen woord *(herzieningen van 26/08 en 01/09/2026)*.
 - **Vrijwillig vertrek is altijd mogelijk** (T3 zelf, T4). Niemand blijft gevangen in een functie die die persoon niet meer wil uitoefenen.
 - **Opgelegde uittreding wordt vertraagd door de wachttijd** (T5). Zeven dagen om eventueel collegiaal terugkomen mogelijk te maken.
 
@@ -352,63 +353,65 @@ Dit hoofdstuk behandelt de overgangen T1 (`reader` → `librarian`) en T2 (`libr
 
 ## 5.1. Het politieke principe
 
-> **P2 — Coöptatie voor personeelsrollen.** Toetreding tot een team gebeurt door coöptatie van de bestaande coördinatoren. Het is aan het politieke collectief om te beslissen wie wordt toegelaten; de coördinator is slechts de hand die de beslissing in het SIGB uitvoert.
+> **P2 — Coöptatie voor de staff-rollen.** Toetreding tot een team gebeurt door coöptatie. Het is aan het politieke collectief om te beslissen wie wordt toegelaten; het SIGB is slechts de hand die de beslissing uitvoert.
 
-Dit betekent dat **klikken op "Promoveren"** geen persoonlijke beslissing is van de coördinator die klikt. Het is de **technische uitvoering** van een beslissing die is genomen — of moet worden genomen — door het politieke collectief van de bibliotheek. De doctrine van het netwerk over "wanneer precies" de beslissing moet worden genomen is opzettelijk niet beslecht door deze gids: elke bibliotheek maakt haar eigen doctrine (zie §5.4).
+Dit betekent dat **een voorstel indienen** geen persoonlijke beslissing is van wie klikt: het is de **technische uitvoering** van een beslissing die door het collectief van de bibliotheek is genomen — of genomen moet worden. Sinds de herzieningen van de zomer van 2026 weerspiegelt het SIGB zelf deze collegialiteit: **geen enkele staff-rol wordt nog met één klik gegeven**. Elke toetreding gaat door drie stappen — voorstel, steun, **aanvaarding door de betrokkene**. De doctrine over het «wanneer precies» de beslissing genomen moet worden, laat deze gids bewust open: elke bibliotheek maakt haar eigen (zie §5.4).
 
-## 5.2. Iemand als `librarian` laten intreden (T1)
+## 5.2. Iemand binnenhalen als `librarian` (T1)
 
-### Voorwaarden
-
-- De persoon heeft een AnarBib-account (die persoon is ergens in het netwerk ingeschreven).
-- Die persoon heeft nog geen actief `librarian`- of `coordenador`-lidmaatschap in dezelfde bibliotheek.
-- Die persoon kan al dan niet een actief `reader`-lidmaatschap in dezelfde bibliotheek hebben. Zo ja, dit bestaande lidmaatschap blijft parallel actief (meervoudig lidmaatschap toegestaan).
-
-### Procedure in het SIGB
-
-1. Ga naar `/biblioteca`, tabblad **Team** (zichtbaar voor `coordenador+`).
-2. Als de persoon al lezer van de bibliotheek is, klik **"Uitnodigen in het team"** op diens rij. Als die persoon nog geen lezer is, gebruik de zoekbalk bovenaan of — als die nog geen account heeft — gebruik de workflow voor uitnodiging per e-mail (binnenkort beschikbaar, zie `spec-invitation-equipe.md`).
-3. Kies de rol `librarian`.
-4. Bevestig de modal. Een veld "Reden" is optioneel — het dient om in het auditlog de context van de coöptatie te vermelden (bijvoorbeeld "beslissing AV van 04/05", of "coöptatie in kleine kring, te valideren op de volgende AV").
-5. Het SIGB voert uit:
-   - Aanmaken van een rij `user_library_memberships` met `role='librarian'`, `status='active'`.
-   - E-mail aan de betrokken persoon: "Je bent benoemd als librarian van [bibliotheek] door [u]".
-   - E-mail aan alle actieve coördinatoren van de bibliotheek.
-   - Invoer in het auditlog: `action='promoted_to_librarian'`.
-
-### Onmiddellijk effect
-
-De persoon ontvangt, zonder vertraging, de rechten van `librarian`: beheer van leningen, validatie van inschrijvingen, toegang tot persoonlijke gegevens van de lezers van de bibliotheek, enz. Die persoon ontvangt niet de rechten om de publieke identiteit of de configuratie te wijzigen — die zijn voorbehouden aan `coordenador+`.
-
-### Technische kant
-
-Betrokken RPC: `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
-
-## 5.3. Een `librarian` promoveren tot `coordenador` (T2)
+Sinds 1 september 2026 is de verwelkoming **collegiaal van begin tot eind**: niemand wordt nog met een klik «benoemd». Er wordt een **voorstel** ingediend, het team **steunt** het volgens het quorum van de bibliotheek, en de betrokkene **aanvaardt** — of weigert, of laat het voorstel verlopen (30 dagen). Niets doen is een antwoord: het voorstel sluit zichzelf.
 
 ### Voorwaarden
 
-- De persoon heeft een actief `librarian`-lidmaatschap (`active`) in de bibliotheek.
-- Die persoon heeft nog geen actief `coordenador`-lidmaatschap in dezelfde bibliotheek.
+- De persoon heeft een AnarBib-account.
+- Ze heeft nog geen actief staff-lidmaatschap (`librarian` of `coordenador`) in de bibliotheek.
+- Normaal geval: ze is lezer van de bibliotheek. De verwelkoming aanvaardt ook iemand zonder lokaal lidmaatschap.
 
 ### Procedure in het SIGB
 
-1. Ga naar `/biblioteca`, tabblad **Team**.
-2. Klik op de rij van de persoon **"Promoveren"** → **"coordenador"**.
-3. Bevestig de modal. Het veld "Reden" is optioneel.
-4. Het SIGB voert uit:
-   - Aanmaken (of reactivering) van een `coordenador`-rij `active`. De oude `librarian`-rij blijft parallel actief (meervoudig lidmaatschap; zie §5.6).
-   - E-mail aan de persoon.
-   - E-mail aan alle actieve coördinatoren.
-   - Invoer in het auditlog: `action='promoted_to_coordenador'`.
+1. Ga naar `/biblioteca`, tabblad **Team** → «Verwelkomen in het team» (via publieke ID), of tabblad **Lezers** → «Voordragen voor het team» op de rij van de persoon.
+2. Bevestig het venster: een **voorstel** wordt ingediend — er wordt in deze fase niets bevorderd.
+3. Het team steunt, volgens het quorum van de bibliotheek (zichtbaar in de «Governance-instellingen» van het tabblad Team): bij «medeondertekening» 2 steunen, waarvan minstens één van de coördinatie — het voorstel zelf telt als één.
+4. De persoon ontvangt de uitnodiging en **aanvaardt** (in haar account, «Mijn bibliotheken»), of weigert.
+5. Bij aanvaarding voert het SIGB uit: actieve `librarian`-regel; de `reader`-regel, indien aanwezig, wordt **gesloten** (rollen zijn exclusief — de rol `librarian` omvat de rol `reader`); mails naar de persoon en de hele coördinatie; auditlog `promoted_to_librarian`.
 
-### Onmiddellijk effect
+### Effect bij aanvaarding
 
-De persoon ontvangt, bovenop de rechten van `librarian`, de coördinatierechten: wijziging van de publieke identiteit, de configuratie, de contributieregelingen, en alle teambestuursacties.
+De persoon krijgt de `librarian`-rechten: uitleenbeheer, validatie van inschrijvingen, toegang tot de persoonsgegevens van de lezers van de bibliotheek, enz. Ze krijgt niet de rechten om de publieke identiteit of de configuratie te wijzigen — die blijven voorbehouden aan `coordenador+`.
 
 ### Technische kant
 
-Betrokken RPC: `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
+RPC's van het traject: `fn_team_propose_invitation(p_library_id, p_invited_public_id, 'librarian')` → `fn_team_ratify_invitation(p_invitation_id)` → `fn_team_accept_invitation(p_invitation_id)` (of `fn_team_decline_invitation`). De oude directe bevordering (`fn_team_promote_to_librarian`) is sinds 01/09/2026 **buiten werking gesteld**: ze weigert en wijst naar het collegiale pad.
+
+## 5.3. Een `librarian` voordragen voor de coördinatie (T2)
+
+Zelfde traject, zelfde logica (herziening van 26/08/2026): **voorstel → steun → aanvaarding**. Coördinatie geef je niet alleen door, en ze wordt ook niet opgelegd: het is een last, en die aanvaard je.
+
+### Voorwaarden
+
+- De persoon heeft een actief `librarian`-lidmaatschap in de bibliotheek — **of**, als de bibliotheek de **collegiale sprong** heeft geactiveerd (zie hieronder), een actief `reader`-lidmaatschap.
+- Ze heeft nog geen actief `coordenador`-lidmaatschap, en geen lopende uitnodiging.
+
+### Procedure in het SIGB
+
+1. Tabblad **Team**, rij van de persoon → **«Voordragen als coördinator»** (of, voor een sprong, tabblad **Lezers** → «Voordragen voor de coördinatie»).
+2. Een ander teamlid steunt (de betrokkene telt niet mee voor het quorum: zij aanvaardt, zij steunt niet).
+3. De persoon ontvangt een mail die de last noemt wat ze is, en **aanvaardt** — weigeren kost niets, en het later doorgeven blijft een recht.
+4. Bij aanvaarding: actieve `coordenador`-regel; de lagere actieve regel (`librarian` of, bij een sprong, `reader`) wordt gesloten; auditlog `promoted_to_coordenador`, met de herkomst (`from_role`).
+
+### De collegiale sprong: lezer → coördinatie (optie per bibliotheek)
+
+Voor bibliotheken die als **horizontaal collectief** werken — waar toetreden tot het collectief betekent de coördinatie delen — dwong de ladder `reader` → `librarian` → `coordenador` een doorgangsrang af zonder realiteit in de groep. Sinds 1 september 2026 kan een bibliotheek toestaan dat het coördinatievoorstel rechtstreeks een **actieve lezer** betreft:
+
+- **Het is de keuze van elke bibliotheek**, standaard uitgeschakeld. De instelling wordt omgeschakeld in het tabblad **Team**, blok «Governance-instellingen» — zichtbaar voor het hele team, omschakelbaar door de coördinatie. Activeer ze op besluit van jullie collectief, niet uit gemak.
+- **Het collegiale traject geldt volledig**: voorstel, steun volgens het quorum, aanvaarding. De sprong verkort de ladder, nooit de instemmingen.
+- **De prijs om te kennen**: de persoon krijgt in één keer toegang tot de persoonsgegevens van de lezers, tot de configuratie en tot het teambeheer — zonder de oefenperiode die de `librarian`-stap gaf. Dat is coherent waar vertrouwen in de vergadering wordt opgebouwd, buiten de software.
+- **De mails zeggen het**: de steun voor een sprong wordt met kennis van zaken gevraagd («nog geen teamlid»), en de betrokkene weet dat ze rechtstreeks in de coördinatie zou binnenkomen.
+- **Op elk moment uit te schakelen**: de ladder wordt weer de enige weg, en open sprong-voorstellen zullen bij de aanvaarding mislukken.
+
+### Technische kant
+
+Zelfde RPC-traject als de verwelkoming, met `p_role = 'coordenador'`. Instelling: `libraries.allow_direct_coordenador`. De oude `fn_team_promote_to_coordenador` is sinds 26/08/2026 buiten werking.
 
 ## 5.4. De politieke vraag: wanneer klikken?
 
@@ -448,25 +451,21 @@ Twee mogelijke modi, gekozen door elke bibliotheek in haar configuratie:
 - Wat men "verifieert" bij een fysieke validatie is **geen** identiteitscontrole in administratieve zin. Het is een ontmoeting. Elke bibliotheek bepaalt de politieke betekenis ervan. Voor sommigen is het "we wisselen even om te controleren dat die persoon geen politieagent of fascist is". Voor anderen is het "we stellen de bibliotheek voor, haar werking, haar regels". Voor weer anderen is het gewoon "we ontmoeten elkaar in het echt zodat de relatie belichaamd is".
 - Een bibliotheek kan **van modus wisselen** op elk moment (`coordenador+`). De wijziging maakt bestaande validaties niet ongeldig.
 
-## 5.6. Het meervoudig lidmaatschap: aandachtspunt
+## 5.6. De exclusieve rol, een aandachtspunt
 
-Een technische bijzonderheid om te begrijpen: een persoon kan **meerdere rijen** lidmaatschap hebben in dezelfde bibliotheek, met verschillende rollen. Voltairine kan bijvoorbeeld tegelijk `reader` en `librarian` zijn van BLMF. Dit wordt mogelijk gemaakt door de UNIQUE-beperking op het drietal `(user_id, library_id, role)`.
+Een persoon heeft slechts **één actieve rol** per bibliotheek (doctrine aangenomen op 20/05/2026). Een bevordering **sluit** de regel van de lagere rang (die gaat naar `removed`); een terugzetting heractiveert de trede eronder — of direct `reader`, naar keuze van de persoon. De geschiedenis gaat niet verloren: ze wordt volledig gedragen door de niet-actieve regels en door de auditlog. In de interface zoals in de database is de getoonde rol dus **de** rol, zonder dubbelzinnigheid. *(Eerdere versies van deze gids beschreven een «multi-membership» van gecumuleerde actieve regels: dat is achterhaald sinds mei 2026.)*
 
-**Waarom deze mogelijkheid**: ze bewaart de geschiedenis. Als Voltairine morgen van `librarian` naar `reader` degradeert, gaat diens `librarian`-rij naar `inactive` maar de `reader`-rij blijft — zonder een nieuwe inschrijving vanaf nul te hoeven aanmaken.
+## 5.7. Fouten en waarborgen
 
-**Praktisch gevolg**: in de UI wordt de persoon **één keer** weergegeven, met diens **hoogste actieve rol** (administrador > coordenador > librarian > reader). In het auditlog wordt echter elke rij afzonderlijk getoond.
+Enkele gevallen die regelmatig voorkomen:
 
-## 5.7. Fouten en veiligheidsmechanismen
+**«Het SIGB zegt me dat de persoon al teamlid is.»** Dat is waarschijnlijk waar. Het traject weigert expliciet een voorstel gericht op een actief teamlid — of op een `coordenador` die al in functie is, bij een coördinatievoorstel. Controleer het tabblad **Team**.
 
-Enkele gevallen die men regelmatig tegenkomt:
+**«Ik zie de persoon niet in de lijst.»** Drie mogelijke gevallen: (a) ze heeft nog geen AnarBib-account; (b) ze heeft een account maar is geen lezer van jullie bibliotheek (voor een verwelkoming werkt de uitnodiging via publieke ID toch; voor een sprong moet ze eerst actieve lezer zijn); (c) ze wordt weggefilterd door de zoekopdracht — probeer haar exacte e-mail.
 
-**"Het SIGB zegt me dat de persoon al librarian is."** Dat klopt waarschijnlijk. Controleer het tabblad **Team**: als de persoon er al als librarian in staat, probeert u die te promoveren naar hetzelfde niveau; het SIGB geeft een stille succesmelding terug (`{ok: true, no_change: true}`) omdat er niets te doen is.
+**«Ik heb per ongeluk een voorstel ingediend.»** Er is niets veranderd zolang het niet aanvaard is: trek het in via het tabblad **Team**, of laat het verlopen (30 dagen). Als het al aanvaard is, geldt hoofdstuk 6 (verwijdering met wachttijd, of de persoon geeft door).
 
-**"Ik zie die persoon niet in de lijst."** Drie mogelijke gevallen: (a) die heeft nog geen AnarBib-account (de workflow voor uitnodiging per e-mail gebruiken, binnenkort beschikbaar); (b) die heeft een account maar is bij geen enkele bibliotheek ingeschreven (die moet zich eerst als `reader` bij uw bibliotheek inschrijven); (c) die bevindt zich in het netwerk maar is gefilterd door de zoekfunctie — probeer met het exacte e-mailadres.
-
-**"Ik heb per ongeluk op Promoveren geklikt."** Geen paniek. Gebruik **"Verwijdering aanvragen"** om een wachttijd van 7 dagen te openen (zie hoofdstuk 6), of vraag de persoon om op **"Ik doe een stap terug"** te klikken (onmiddellijke zelfdegradatie). Vermeld "manipulatiefout" als reden.
-
-**"De persoon ontvangt de e-mail niet."** Controleer eerst de spelling van diens e-mailadres in diens profiel, en vraag die om de spammap te controleren. Als het probleem aanhoudt, meldt dit aan een netwerkbeheerder: het is waarschijnlijk een e-mailconfiguratieprobleem dat moet worden onderzocht.
+**«De persoon ontvangt de mail niet.»** Controleer eerst de spelling van haar e-mail in haar profiel, en vraag haar in de spam te kijken. Blijft het probleem, spreek dan een netwerkadmin aan: waarschijnlijk een mailconfiguratieprobleem om te onderzoeken.
 
 ## 5.8. Als de regel u stoort
 
@@ -545,6 +544,8 @@ Politiek gezien is dit belangrijk : het SIGB **belet je vertrek niet**. Maar het
 ### Technische kant
 
 RPC : `fn_team_self_demote(p_library_id uuid, p_target_role text DEFAULT 'librarian')`.
+
+*(collegiale sprong v2 — 01/09/2026)* Als je via de **collegiale sprong** (rechtstreeks vanuit lezer) in de coördinatie bent gekomen, selecteert het venster «Ik geef door» vooraf «het team verlaten»: je hebt de rol librarian nooit uitgeoefend, en niets verplicht je om «af te dalen» naar een onbekende rol. De keuze blijft volledig vrij.
 
 ## 6.3. Het terugtrekken van een `librarian` aanvragen (T5)
 

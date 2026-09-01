@@ -267,8 +267,9 @@ L'especificació de governança dels rols formalitza nou transicions, llistades 
 
 | # | Transició | Qui | Mecanisme |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Coord+ | Cooptació |
-| T2 | `librarian` → `coordenador` | Coord+ | Cooptació |
+| T1 | `reader` → `librarian` | Proposta (membre de l'equip local) → aval (quòrum) → **acceptació** (la persona afectada) | Cooptació col·legiada, via el circuit d'invitació |
+| T2 | `librarian` → `coordenador` | Proposta (coord local O admin de xarxa) → aval (una altra persona de l'equip) → **acceptació** (la persona afectada) | Cooptació col·legiada, via el circuit d'invitació |
+| T2b | `reader` → `coordenador` (**salt col·legiat**) | Idèntic a T2 — només si la biblioteca ha activat l'opció | Cooptació col·legiada; opció per biblioteca, desactivada per defecte |
 | T3 | `coordenador` → `librarian` | Pròpia persona O altres coords | Auto-retro O retirada col·legiada amb carència |
 | T4 | `librarian` → `reader` (voluntari) | Pròpia persona | Auto-retro |
 | T5 | `librarian` → `reader` (col·lectiu) | Coord+ | `pending_removal` amb carència 7 dies |
@@ -279,7 +280,7 @@ L'especificació de governança dels rols formalitza nou transicions, llistades 
 
 Tres principis estructuren aquesta taula:
 
-- **L'entrada passa per la cooptació** (T1, T2). Ningú no es promou a si mateix.
+- **L'entrada passa per la cooptació col·legiada** (T1, T2) — i T2b on la biblioteca l'ha triada: una proposta, l'aval de l'equip segons el quòrum, i després l'**acceptació de la persona afectada**. Ningú no es promou a si mateix — i ningú no és promogut sense la seva paraula *(refoses del 26/08 i del 01/09/2026)*.
 - **La sortida voluntària és sempre possible** (T3 auto, T4). Ningú no queda atrapat en una funció que ja no vol exercir.
 - **La sortida imposada és frenada per la carència** (T5). Set dies per permetre l'eventual marxa enrere col·legiada.
 
@@ -352,63 +353,65 @@ Aquest capítol cobreix les transicions T1 (`reader` → `librarian`) i T2 (`lib
 
 ## 5.1. El principi polític
 
-> **P2 — Cooptació per als rols staff.** L'entrada en un equip es fa per cooptació dels coordenadores existents. És al col·lectiu polític de decidir qui és admès; le coordinador-a no és més que la mà que executa la decisió al SIGB.
+> **P2 — Cooptació per als rols staff.** L'entrada en un equip es fa per cooptació. És el col·lectiu polític qui decideix qui és admès; el SIGB només és la mà que executa la decisió.
 
-Això significa que **clicar «Promocionar»** no és una decisió personal de le coord que clica. És l'**execució tècnica** d'una decisió que ha estat presa — o ha de ser-ho — pel col·lectiu polític de la biblio. La doctrina de la xarxa sobre el «quan exactament» la decisió ha de ser presa no és deliberadament resoluda per aquesta guia: cada biblio fa la seva pròpia doctrina (vegeu §5.4).
+Això significa que **registrar una proposta** no és una decisió personal de qui fa clic: és l'**execució tècnica** d'una decisió que ha estat presa — o que ha de ser presa — pel col·lectiu de la biblioteca. Des de les refoses de l'estiu de 2026, el mateix SIGB reflecteix aquesta col·legialitat: **cap rol staff no es dona ja amb un clic**. Tota entrada passa per tres temps — proposta, aval, **acceptació de la persona afectada**. La doctrina sobre el «quan exactament» s'ha de prendre la decisió no queda deliberadament tancada per aquesta guia: cada biblioteca fa la seva (vegeu §5.4).
 
 ## 5.2. Per fer entrar algú com a `librarian` (T1)
 
-### Precondicions
-
-- La persona té un compte AnarBib (està inscrita en algun lloc de la xarxa).
-- No té ja una membership `librarian` o `coordenador` activa a la mateixa biblio.
-- Pot tenir, o no, ja una membership `reader` a la mateixa biblio. Si és així, aquesta membership existent continuarà activa en paral·lel (multi-membership autoritzada).
-
-### Procediment al SIGB
-
-1. Anar a `/biblioteca`, pestanya **Equip** (visible als `coordenador+`).
-2. Si la persona ja és lectora-a-e de la biblio, clicar **«Convidar a l'equip»** a la seva fila. Si encara no és lectora-a-e, usar la cerca a la barra superior o — si encara no té compte — passar pel flux d'invitació per correu electrònic (pendent, cf. `spec-invitation-equipe.md`).
-3. Triar el rol `librarian`.
-4. Confirmar la modal. Un camp «Raó» és opcional — serveix per inscriure a l'audit log el context de la cooptació (per exemple «decisió AG del 04/05», o «cooptació en cercle reduït, a validar a la pròxima AG»).
-5. El SIGB executa:
-   - Creació d'una fila `user_library_memberships` amb `role='librarian'`, `status='active'`.
-   - Correu a la persona concernida: «Has estat nomenada librarian de [biblio] per [vosaltres]».
-   - Correu a tots-es les coordenadores actius-ves de la biblio.
-   - Entrada a l'audit log: `action='promoted_to_librarian'`.
-
-### Efecte immediat
-
-La persona rep, sense demora, els permisos de `librarian`: gestió dels préstecs, validació de les inscripcions, accés a les dades personals dels lector-a-es de la biblio, etc. No rep els permisos de modificació de la identitat pública ni de la configuració — aquests estan reservats als `coordenador+`.
-
-### Costat tècnic
-
-RPC concernida: `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
-
-## 5.3. Per promocionar un-a `librarian` a `coordenador` (T2)
+Des de l'1 de setembre de 2026, l'acollida és **col·legiada de cap a cap**: ja no es «nomena» ningú amb un clic. Es registra una **proposta**, l'equip l'**avala** segons el quòrum de la biblioteca, i la persona afectada **accepta** — o rebutja, o deixa expirar la proposta (30 dies). No fer res és una resposta: la proposta es tanca sola.
 
 ### Precondicions
 
-- La persona té una membership `librarian` `active` a la biblio.
-- No té ja una membership `coordenador` activa a la mateixa biblio.
+- La persona té un compte AnarBib.
+- No té ja una membresia staff (`librarian` o `coordenador`) activa a la biblioteca.
+- Cas nominal: és lectora de la biblioteca. L'acollida accepta també una persona sense adhesió local.
 
 ### Procediment al SIGB
 
-1. Anar a `/biblioteca`, pestanya **Equip**.
-2. A la fila de la persona, clicar **«Promocionar»** → **«coordenador»**.
-3. Confirmar la modal. El camp «Raó» és opcional.
-4. El SIGB executa:
-   - Creació (o reactivació) d'una fila `coordenador` `active`. L'antiga fila `librarian` continua activa en paral·lel (multi-membership; vegeu §5.6).
-   - Correu a la persona.
-   - Correu a tots-es les coordenadores actius-ves.
-   - Entrada a l'audit log: `action='promoted_to_coordenador'`.
+1. Anar a `/biblioteca`, pestanya **Equip** → «Acollir a l'equip» (per identificador públic), o pestanya **Lectors·es** → «Proposar per a l'equip» a la fila de la persona.
+2. Confirmar el diàleg: es registra una **proposta** — res no es promou en aquesta etapa.
+3. L'equip avala, segons el quòrum de la biblioteca (visible als «Ajustos de governança» de la pestanya Equip): en «cosignatura», 2 avals incl. almenys un de la coordinació — la mateixa proposta compta com un.
+4. La persona rep la invitació i **accepta** (al seu compte, «Les meves biblioteques»), o rebutja.
+5. A l'acceptació, el SIGB executa: línia `librarian` activa; la línia `reader`, si existia, es **tanca** (els rols són exclusius — el rol `librarian` engloba el rol `reader`); correus a la persona i a tota la coordinació; audit log `promoted_to_librarian`.
 
-### Efecte immediat
+### Efecte a l'acceptació
 
-La persona rep, a més dels seus permisos de `librarian`, els permisos de coordinació: modificació de la identitat pública, de la configuració, de les regles de quotes, i totes les accions de governança d'equip.
+La persona rep els permisos de `librarian`: gestió de préstecs, validació d'inscripcions, accés a les dades personals dels lectors i lectores de la biblioteca, etc. No rep els permisos de modificació de la identitat pública ni de la configuració — reservats a `coordenador+`.
 
 ### Costat tècnic
 
-RPC concernida: `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
+RPCs del circuit: `fn_team_propose_invitation(p_library_id, p_invited_public_id, 'librarian')` → `fn_team_ratify_invitation(p_invitation_id)` → `fn_team_accept_invitation(p_invitation_id)` (o `fn_team_decline_invitation`). L'antiga promoció directa (`fn_team_promote_to_librarian`) està **condemnada** des del 01/09/2026: rebutja, indicant el camí col·legiat.
+
+## 5.3. Per proposar un·a `librarian` a la coordinació (T2)
+
+Mateix circuit, mateixa lògica (refosa del 26/08/2026): **proposta → aval → acceptació**. La coordinació no es dona en solitari, i tampoc no s'imposa: és una càrrega, i s'accepta.
+
+### Precondicions
+
+- La persona té una membresia `librarian` `active` a la biblioteca — **o**, si la biblioteca ha activat el **salt col·legiat** (vegeu més avall), una membresia `reader` `active`.
+- No té ja una membresia `coordenador` activa, ni una invitació en curs.
+
+### Procediment al SIGB
+
+1. Pestanya **Equip**, fila de la persona → **«Proposar com a coordinador-a-e»** (o, per a un salt, pestanya **Lectors·es** → «Proposar per a la coordinació»).
+2. Una altra persona de l'equip avala (la persona afectada no compta al quòrum: ella accepta, no avala).
+3. La persona rep un correu que anomena la càrrega pel que és, i **accepta** — rebutjar no costa res, i passar el relleu continuarà sent un dret després.
+4. A l'acceptació: línia `coordenador` activa; la línia activa inferior (`librarian` o, en un salt, `reader`) es tanca; audit log `promoted_to_coordenador`, amb la procedència (`from_role`).
+
+### El salt col·legiat: lector·a → coordinació (opció per biblioteca)
+
+Per a les biblioteques que funcionen en **col·lectiu horitzontal** — on unir-se al col·lectiu és compartir la coordinació — l'escala `reader` → `librarian` → `coordenador` imposava un grau de pas sense realitat al grup. Des de l'1 de setembre de 2026, una biblioteca pot autoritzar que la proposta de coordinació s'adreci directament a un·a **lector·a actiu·va**:
+
+- **És una tria de cada biblioteca**, desactivada per defecte. L'ajust es commuta a la pestanya **Equip**, bloc «Ajustos de governança» — visible per a tot l'equip, commutable per la coordinació. Activeu-lo per decisió del vostre col·lectiu, no per comoditat.
+- **El circuit col·legiat s'aplica íntegrament**: proposta, aval segons el quòrum, acceptació. El salt escurça l'escala, mai els consentiments.
+- **El preu a conèixer**: la persona rep d'un sol gest l'accés a les dades personals dels lectors i lectores, a la configuració i a la gestió de l'equip — sense el període d'exercici que donava l'etapa `librarian`. És coherent allà on la confiança es construeix en assemblea, fora del programari.
+- **Els correus ho diuen**: l'aval d'un salt es demana amb coneixement de causa («encara fora de l'equip»), i la persona afectada sap que entraria directament a la coordinació.
+- **Desactivable en qualsevol moment**: l'escala torna a ser l'única via, i les propostes de salt obertes fallaran a l'acceptació.
+
+### Costat tècnic
+
+Mateix circuit RPC que l'acollida, amb `p_role = 'coordenador'`. Ajust: `libraries.allow_direct_coordenador`. L'antiga `fn_team_promote_to_coordenador` està condemnada des del 26/08/2026.
 
 ## 5.4. La qüestió política: quan clicar?
 
@@ -448,25 +451,21 @@ Dos modes possibles, triats per cada biblio a la seva configuració:
 - El que es «verifica» durant una validació física **no** és un control d'identitat en el sentit administratiu. És una trobada. Cada biblio en defineix el sentit polític. Per a algunes, és «intercanviem una mica per verificar que la persona no és un-a policia o un-a feixista». Per a d'altres, és «presentem la biblio, el seu funcionament, les seves regles». Per a d'altres encara, és simplement «ens veiem en persona per tal que la relació sigui encarnada».
 - Una biblio pot **canviar de mode** en qualsevol moment (`coordenador+`). El canvi no invalida les validacions existents.
 
-## 5.6. El multi-membership, punt d'atenció
+## 5.6. El rol exclusiu, punt d'atenció
 
-Una particularitat tècnica a comprendre: una persona pot tenir **diverses files** de membership a la mateixa biblio, amb rols diferents. Per exemple, Voltairine pot ser alhora `reader` i `librarian` de BLMF. Això és possible gràcies a la restricció UNIQUE sobre el triplet `(user_id, library_id, role)`.
-
-**Per què aquesta possibilitat:** preserva l'historial. Si demà Voltairine es retrogradi de `librarian` a `reader`, la seva fila `librarian` passa a `inactive` però la fila `reader` continua — sense haver de recrear una nova inscripció des de zero.
-
-**Conseqüència pràctica:** a la UI, es mostra la persona **una sola vegada**, amb el seu rol **de nivell més alt actiu** (administrador > coordenador > librarian > reader). A l'audit log, en canvi, es veu cada fila per separat.
+Una persona només té **un rol actiu** per biblioteca (doctrina adoptada el 20/05/2026). Una promoció **tanca** la línia de rang inferior (passa a `removed`); una retrogradació reactiva l'esglaó de sota — o `reader` directament, a tria de la persona. L'historial no es perd: el porten íntegrament les línies no actives i l'audit log. A la interfície com a la base, el rol mostrat és per tant **el** rol, sense ambigüitat. *(Les versions anteriors d'aquesta guia descrivien un «multi-membership» de línies actives acumulades: està obsolet des del maig de 2026.)*
 
 ## 5.7. Errors i salvaguardes
 
-Alguns casos que es troben regularment:
+Alguns casos que es troben amb regularitat:
 
-**«El SIGB em diu que la persona ja és librarian.»** Probablement és cert. Verifiqueu la pestanya **Equip**: si la persona ja hi figura com a librarian, esteu intentant promocionar-la al mateix nivell; el SIGB retorna un èxit silenciós (`{ok: true, no_change: true}`) perquè no hi ha res a fer.
+**«El SIGB em diu que la persona ja és de l'equip.»** Probablement és cert. El circuit rebutja explícitament una proposta adreçada a un membre actiu de l'equip — o a un·a `coordenador` ja en funcions, per a una proposta de coordinació. Verifiqueu la pestanya **Equip**.
 
-**«No veig la persona a la llista.»** Tres casos possibles: (a) encara no té compte AnarBib (usar el flux d'invitació per correu pendent); (b) té un compte però no està inscrita a cap biblio (ha d'inscriure's a la vostra biblio com a `reader` primer); (c) és a la xarxa però filtrada per la cerca — provar amb el seu correu electrònic exacte.
+**«No veig la persona a la llista.»** Tres casos possibles: (a) encara no té compte AnarBib; (b) té compte però no és lectora de la vostra biblioteca (per a una acollida, la invitació per identificador públic funciona igualment; per a un salt, primer ha de ser lectora activa); (c) la filtra la cerca — provar amb el seu email exacte.
 
-**«He clicat per error en Promocionar.»** Sense pànic. Usar **«Sol·licitar la retirada»** per obrir un període de carència de 7 dies (cf. capítol 6), o demanar a la persona que cliqui **«Cedo el relleu»** (auto-retrogressió immediata). Indicar «error de manipulació» com a raó.
+**«He registrat una proposta per error.»** Res no ha canviat mentre no sigui acceptada: revoqueu-la des de la pestanya **Equip**, o deixeu-la expirar (30 dies). Si ja ha estat acceptada, s'aplica el capítol 6 (retirada amb carència, o la persona passa el relleu).
 
-**«La persona no rep el correu.»** Verificar primer l'ortografia del seu correu electrònic al seu perfil, i demanar-li que miri el correu brossa. Si el problema persisteix, parlar-ne amb un-a admin de xarxa: probablement és un problema de configuració de correu a investigar.
+**«La persona no rep el correu.»** Verifiqueu primer l'ortografia del seu email al perfil, i demaneu-li que miri l'spam. Si el problema persisteix, parleu-ne amb un·a admin de xarxa: probablement és un problema de configuració de correu a investigar.
 
 ## 5.8. Si la regla us molesta
 
@@ -545,6 +544,8 @@ Políticament, és important : el SIGB **no impedeix** la vostra marxa. Però in
 ### Aspecte tècnic
 
 RPC : `fn_team_self_demote(p_library_id uuid, p_target_role text DEFAULT 'librarian')`.
+
+*(v2 del salt col·legiat — 01/09/2026)* Si heu arribat a la coordinació per **salt col·legiat** (directament des de lector·a), el diàleg «Passo el relleu» preselecciona «deixar l'equip»: mai no heu exercit com a librarian, i res no us obliga a «baixar» a un rol desconegut. La tria continua sent enterament lliure.
 
 ## 6.3. Demanar la retirada d'un-a-e librarian (T5)
 

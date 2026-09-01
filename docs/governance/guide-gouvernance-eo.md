@@ -267,8 +267,9 @@ La rolorega spec formaligas naŭ transirojn, listita ĉi tie kompakte. La operac
 
 | # | Transiro | Kiu | Mekanismo |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Koordinad-in-o+ | Kooptado |
-| T2 | `librarian` → `coordenador` | Koordinad-in-o+ | Kooptado |
+| T1 | `reader` → `librarian` | Propono (persono de la loka teamo) → aprobo (kvorumo) → **akcepto** (la koncernata persono) | Kolegia kunopto, per la invita cirkvito |
+| T2 | `librarian` → `coordenador` | Propono (loka kunordigant-in-o AŬ reta administranto) → aprobo (alia persono de la teamo) → **akcepto** (la koncernata persono) | Kolegia kunopto, per la invita cirkvito |
+| T2b | `reader` → `coordenador` (**kolegia salto**) | Sama kiel T2 — nur se la biblioteko aktivigis la opcion | Kolegia kunopto; opcio laŭ biblioteko, defaŭlte malaktiva |
 | T3 | `coordenador` → `librarian` | Mem AŬ aliaj koordinad-in-oj | Aŭtoretrogrado AŬ kolegifa forigo kun karenco |
 | T4 | `librarian` → `reader` (libervola) | Mem | Aŭtoretrogrado |
 | T5 | `librarian` → `reader` (kolektiva) | Koordinad-in-o+ | `pending_removal` kun 7-taga karenco |
@@ -279,7 +280,7 @@ La rolorega spec formaligas naŭ transirojn, listita ĉi tie kompakte. La operac
 
 Tri principoj strukturas ĉi tiun tabelon:
 
-- **La eniro okazas per kooptado** (T1, T2). Neniu mem-promociigas sin.
+- **La eniro pasas tra kolegia kunopto** (T1, T2) — kaj T2b kie la biblioteko ĝin elektis: propono, aprobo de la teamo laŭ la kvorumo, poste la **akcepto de la koncernata persono**. Neniu promocias sin mem — kaj neniu estas promociata sen sia vorto *(refaroj de la 26/08 kaj 01/09/2026)*.
 - **La libervola eliro estas ĉiam ebla** (T3 aŭto, T4). Neniu restas kaptita en funkcio, kiun ri ne volas plu ekzerci.
 - **La devigata eliro estas malakcelata per karenco** (T5). Sep tagoj por permesi eventualan kolektivan ŝanĝon de trakto.
 
@@ -352,63 +353,65 @@ Gvidilo, kiu ne povas esti modifita, ne estas gvidilo, ĝi estas dogmo. La proje
 
 ## 5.1. La politika principo
 
-> **P2 — Kooptado por staff-roloj.** La eniro en teamon okazas per kooptado de la ekzistantaj koordinad-in-oj. La politika kolektivo decidas, kiu estas akceptita; la koordinad-in-o estas nur la mano, kiu plenumas la decidon en la SIGB.
+> **P2 — Kunopto por la teamaj roloj.** La eniro en teamon okazas per kunopto. Estas la politika kolektivo kiu decidas kiu estas akceptata; la SIGB estas nur la mano kiu plenumas la decidon.
 
-Tio signifas, ke **alklaki «Promocii»** ne estas persona decido de la koordinad-in-o, kiu alklakas. Ĝi estas la **teknika plenumado** de decido, kiu estis prenita — aŭ devas esti prenita — de la politika kolektivo de la biblioteko. La doktriino de la reto pri «kiam ekzakte» la decido devas esti prenita estas intencie ne difinita de ĉi tiu gvidilo: ĉiu biblioteko faras sian propran doktrinecon (vidu §5.4).
+Tio signifas ke **registri proponon** ne estas persona decido de tiu kiu klakas: ĝi estas la **teknika plenumo** de decido kiu estis farita — aŭ devas esti farita — de la kolektivo de la biblioteko. Ekde la refaroj de la somero 2026, la SIGB mem spegulas tiun kolegiecon: **neniu teama rolo plu doniĝas per unu klako**. Ĉiu eniro pasas tra tri tempoj — propono, aprobo, **akcepto de la koncernata persono**. La doktrino pri la «kiam ekzakte» la decido devas esti farita restas intence netranĉita de ĉi tiu gvidilo: ĉiu biblioteko faras la sian (vidu §5.4).
 
-## 5.2. Por enkonduki iun kiel `librarian` (T1)
+## 5.2. Por enirigi iun kiel `librarian` (T1)
 
-### Antaŭkondiĉoj
-
-- La persono havas AnarBib-konton (ri estas aliĝita ie en la reto).
-- Ri ne jam havas aktivan `librarian` aŭ `coordenador`-membreclinion en la sama biblioteko.
-- Ri povas, aŭ ne, jam havi `reader`-membreclinion en la sama biblioteko. Se jes, ĉi tiu ekzistanta membreco restos aktiva paralele (plurobla membreco permesata).
-
-### Proceduro en la SIGB
-
-1. Iri al `/biblioteca`, langeto **Equipe** (videbla al `coordenador+`).
-2. Se la persono jam estas reader de la biblioteko, alklaki **«Inviti en la teamon»** sur ria linio. Se ri ankoraŭ ne estas reader, uzi la serĉon en la supera strio aŭ — se ri ankoraŭ ne havas konton — uzadi la invitadon per retmesaĝa laborflumo (venonta, cf. `spec-invitation-equipe.md`).
-3. Elekti la rolon `librarian`.
-4. Konfirmi la modalan fenestron. Kampo «Kialo» estas laŭvola — ĝi servas por enskribigi en la revizian protokolon la kuntekston de la kooptado (ekz. «AG-decido de 04/05», aŭ «kooptado en malgranda cirklo, konfirmenda ĉe la venonta ĠK»).
-5. La SIGB plenumas:
-   - Kreo de `user_library_memberships`-linio kun `role='librarian'`, `status='active'`.
-   - Retmesaĝo al la koncerna persono: «Vi estis nomumita librarian de [biblioteko] de [vi]».
-   - Retmesaĝo al ĉiuj aktivaj koordinad-in-oj de la biblioteko.
-   - Eniro en la revizian protokolon: `action='promoted_to_librarian'`.
-
-### Tuja efiko
-
-La persono ricevas, sen prokrasto, la permesojn de `librarian`: pruntadministrado, aliĝvalidado, aliro al personaj datumoj de la legant-in-oj de la biblioteko, ktp. Ri ne ricevas la permesojn por modifi la publikan identecon nek la agordon — tiuj estas rezervitaj al `coordenador+`.
-
-### Teknika flanko
-
-Koncernata RPC: `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
-
-## 5.3. Por promocii librarian al `coordenador` (T2)
+Ekde la 1-a de septembro 2026, la akcepto en la teamon estas **kolegia de komenco ĝis fino**: oni plu «nomumas» neniun per klako. Oni registras **proponon**, la teamo ĝin **aprobas** laŭ la kvorumo de la biblioteko, kaj la koncernata persono **akceptas** — aŭ rifuzas, aŭ lasas la proponon eksvalidiĝi (30 tagoj). Fari nenion estas respondo: la propono fermiĝas mem.
 
 ### Antaŭkondiĉoj
 
-- La persono havas `librarian`-membreclinion `active` en la biblioteko.
-- Ri ne jam havas aktivan `coordenador`-membreclinion en la sama biblioteko.
+- La persono havas AnarBib-konton.
+- Ŝli ne jam havas aktivan teaman membrecon (`librarian` aŭ `coordenador`) en la biblioteko.
+- Nominala kazo: ŝli estas leganto de la biblioteko. La akcepto ankaŭ eblas por persono sen loka membreco.
 
 ### Proceduro en la SIGB
 
-1. Iri al `/biblioteca`, langeto **Equipe**.
-2. Sur la linio de la persono, alklaki **«Promocii»** → **«coordenador»**.
-3. Konfirmi la modalan fenestron. Kampo «Kialo» estas laŭvola.
-4. La SIGB plenumas:
-   - Kreo (aŭ reaktivigo) de `coordenador`-linio `active`. La malnova `librarian`-linio restas aktiva paralele (plurobla membreco; vidu §5.6).
-   - Retmesaĝo al la persono.
-   - Retmesaĝo al ĉiuj aktivaj koordinad-in-oj.
-   - Eniro en la revizian protokolon: `action='promoted_to_coordenador'`.
+1. Iri al `/biblioteca`, langeto **Teamo** → «Akcepti en la teamon» (per publika identigilo), aŭ langeto **Legantoj** → «Proponi al la teamo» sur la linio de la persono.
+2. Konfirmi la dialogon: **propono** estas registrita — nenio estas promociita en ĉi tiu etapo.
+3. La teamo aprobas, laŭ la kvorumo de la biblioteko (videbla en la «Agordoj de regado» de la langeto Teamo): ĉe «kunsubskribo», 2 aproboj inkl. almenaŭ unu de la kunordigo — la propono mem kalkuliĝas kiel unu.
+4. La persono ricevas la inviton kaj **akceptas** (en sia konto, «Miaj bibliotekoj»), aŭ rifuzas.
+5. Ĉe la akcepto, la SIGB plenumas: aktiva `librarian`-linio; la `reader`-linio, se ĝi ekzistis, estas **fermita** (la roloj estas ekskluzivaj — la rolo `librarian` ampleksas la rolon `reader`); retmesaĝoj al la persono kaj al la tuta kunordigo; kontrola protokolo `promoted_to_librarian`.
 
-### Tuja efiko
+### Efiko ĉe la akcepto
 
-La persono ricevas, aldone al siaj `librarian`-permesoj, la koordinajn permesojn: modifo de la publika identeco, de la agordado, de la kotizaj reguloj, kaj ĉiujn teaman regadan agojn.
+La persono ricevas la permesojn de `librarian`: administrado de pruntoj, validigo de enskribiĝoj, aliro al la personaj datumoj de la legantoj de la biblioteko, ktp. Ŝli ne ricevas la permesojn modifi la publikan identecon nek la agordojn — tiuj restas rezervitaj al `coordenador+`.
 
 ### Teknika flanko
 
-Koncernata RPC: `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
+RPC-oj de la cirkvito: `fn_team_propose_invitation(p_library_id, p_invited_public_id, 'librarian')` → `fn_team_ratify_invitation(p_invitation_id)` → `fn_team_accept_invitation(p_invitation_id)` (aŭ `fn_team_decline_invitation`). La malnova rekta promocio (`fn_team_promote_to_librarian`) estas **kondamnita** ekde la 01/09/2026: ĝi rifuzas, montrante la kolegian vojon.
+
+## 5.3. Por proponi `librarian`-on al la kunordigo (T2)
+
+Sama cirkvito, sama logiko (refaro de la 26/08/2026): **propono → aprobo → akcepto**. Kunordigo ne doniĝas sole, kaj ĝi ankaŭ ne trudiĝas: ĝi estas ŝarĝo, kaj ĝi akceptiĝas.
+
+### Antaŭkondiĉoj
+
+- La persono havas aktivan `librarian`-membrecon en la biblioteko — **aŭ**, se la biblioteko aktivigis la **kolegian salton** (vidu sube), aktivan `reader`-membrecon.
+- Ŝli ne jam havas aktivan `coordenador`-membrecon, nek kurantan inviton.
+
+### Proceduro en la SIGB
+
+1. Langeto **Teamo**, linio de la persono → **«Proponi kiel kunordigant-in-o»** (aŭ, por salto, langeto **Legantoj** → «Proponi al la kunordigo»).
+2. Alia persono de la teamo aprobas (la koncernata persono ne kalkuliĝas en la kvorumo: ŝli akceptas, ne aprobas).
+3. La persono ricevas retmesaĝon kiu nomas la ŝarĝon tio kio ĝi estas, kaj **akceptas** — rifuzi kostas nenion, kaj transdoni restos rajto poste.
+4. Ĉe la akcepto: aktiva `coordenador`-linio; la malsupra aktiva linio (`librarian` aŭ, ĉe salto, `reader`) fermiĝas; kontrola protokolo `promoted_to_coordenador`, kun la deveno (`from_role`).
+
+### La kolegia salto: leganto → kunordigo (opcio laŭ biblioteko)
+
+Por la bibliotekoj kiuj funkcias kiel **horizontala kolektivo** — kie aliĝi al la kolektivo signifas kundividi la kunordigon — la ŝtuparo `reader` → `librarian` → `coordenador` trudis trairan rangon sen realo en la grupo. Ekde la 1-a de septembro 2026, biblioteko povas permesi ke la propono de kunordigo celu rekte **aktivan leganton**:
+
+- **Ĝi estas elekto de ĉiu biblioteko**, defaŭlte malaktiva. La agordo ŝaltiĝas en la langeto **Teamo**, bloko «Agordoj de regado» — videbla por la tuta teamo, ŝaltebla de la kunordigo. Aktivigu ĝin laŭ decido de via kolektivo, ne pro oportuneco.
+- **La kolegia cirkvito plene aplikiĝas**: propono, aprobo laŭ la kvorumo, akcepto. La salto mallongigas la ŝtuparon, neniam la konsentojn.
+- **La prezo konenda**: la persono ricevas per unu gesto aliron al la personaj datumoj de la legantoj, al la agordoj kaj al la administrado de la teamo — sen la ekzerca periodo kiun donis la etapo `librarian`. Tio koheras tie kie la fido konstruiĝas en asembleo, ekster la programaro.
+- **La retmesaĝoj tion diras**: la aprobo de salto estas petata kun scio de la afero («ankoraŭ ekster la teamo»), kaj la koncernata persono scias ke ŝli enirus rekte ĉe la kunordigo.
+- **Malaktivigebla iam ajn**: la ŝtuparo refariĝas la sola vojo, kaj malfermitaj salto-proponoj malsukcesos ĉe la akcepto.
+
+### Teknika flanko
+
+Sama RPC-cirkvito kiel la akcepto en la teamon, kun `p_role = 'coordenador'`. Agordo: `libraries.allow_direct_coordenador`. La malnova `fn_team_promote_to_coordenador` estas kondamnita ekde la 26/08/2026.
 
 ## 5.4. La politika demando: kiam alklaki?
 
@@ -448,25 +451,21 @@ Du eblaj reĝimoj, elektitaj de ĉiu biblioteko en sia agordado:
 - Tio, kion oni «kontrolas» dum fizika validado, **ne** estas identeca kontrolo en la administra senco. Ĝi estas renkontiĝo. Ĉiu biblioteko difinas ĝian politikan signifon. Por kelkaj, ĝi estas «oni interŝanĝas iom por kontroli, ke la persono ne estas flik-in-o aŭ faŝist-in-o». Por aliaj, ĝi estas «oni prezentas la bibliotekon, ĝian funkcionadon, ĝiajn regulojn». Por ankoraŭ aliaj, ĝi estas simple «oni renkontiĝas vere, por ke la rilato estu enkorpigita».
 - Biblioteko povas **ŝanĝi reĝimon** ĉiutempe (`coordenador+`). La ŝanĝo ne invalidacias ekzistantajn validadojn.
 
-## 5.6. La plurobla membreco, atentpunkto
+## 5.6. La ekskluziva rolo, atentindaĵo
 
-Teknika apecialeco por kompreni: persono povas havi **plurajn liniojn** de membreco en la sama biblioteko kun malsamaj roloj. Ekzemple, Voltairine povas esti samtempe `reader` kaj `librarian` de BLMF. Tion ebligas la UNIQUE-limo sur la trioplo `(user_id, library_id, role)`.
+Persono havas nur **unu aktivan rolon** por biblioteko (doktrino adoptita la 20/05/2026). Promocio **fermas** la linion de malsupra rango (ĝi iĝas `removed`); malpromocio reaktivigas la ŝtupon sube — aŭ rekte `reader`, laŭ elekto de la persono. La historio ne perdiĝas: ĝin plene portas la ne-aktivaj linioj kaj la kontrola protokolo. En la interfaco kiel en la datumbazo, la montrata rolo do estas **la** rolo, sen ambigueco. *(Antaŭaj versioj de ĉi tiu gvidilo priskribis «mult-membrecon» kun kumulitaj aktivaj linioj: tio estas eksmoda ekde majo 2026.)*
 
-**Kial tiu eblo:** ĝi konservas la historion. Se morgaŭ Voltairine retrograde sin de `librarian` al `reader`, ria `librarian`-linio transiras al `inactive` sed la `reader`-linio restas — sen neceso rekrei novan aliĝon de nulo.
+## 5.7. Eraroj kaj sekurigiloj
 
-**Praktika konsekvence:** en la uzantinterfaco, oni montras la personon **unufoje**, kun ria **plej alta aktiva rolo** (administrador > coordenador > librarian > reader). En la revizian protokolon, aliflanke, oni vidas ĉiun linion aparte.
+Kelkaj kazoj kiuj regule renkontiĝas:
 
-## 5.7. Eraroj kaj gardrimedoj
+**«La SIGB diras al mi ke la persono jam estas en la teamo.»** Tio verŝajne veras. La cirkvito eksplicite rifuzas proponon celantan aktivan teamanon — aŭ jam oficantan `coordenador`-on, ĉe propono de kunordigo. Kontrolu la langeton **Teamo**.
 
-Kelkaj kazoj, kiujn oni renkontas regule:
+**«Mi ne vidas la personon en la listo.»** Tri eblaj kazoj: (a) ŝli ankoraŭ ne havas AnarBib-konton; (b) ŝli havas konton sed ne estas leganto de via biblioteko (por akcepto en la teamon, la invito per publika identigilo tamen funkcias; por salto, ŝli unue devas esti aktiva leganto); (c) la serĉo ŝlin filtras — provu per la ekzakta retadreso.
 
-**«La SIGB diras, ke la persono jam estas librarian.»** Tio verŝajne estas vera. Kontrolu la langedon **Equipe**: se la persono jam aperas tie kiel librarian, vi provas promocii rin al la sama nivelo, la SIGB redonas siletan sukceson (`{ok: true, no_change: true}`) ĉar nenio estas farenda.
+**«Mi registris proponon erare.»** Nenio ŝanĝiĝis dum ĝi ne estas akceptita: revoku ĝin el la langeto **Teamo**, aŭ lasu ĝin eksvalidiĝi (30 tagoj). Se ĝi jam estis akceptita, aplikiĝas la ĉapitro 6 (retiro kun atendotempo, aŭ la persono transdonas).
 
-**«Mi ne vidas la personon en la listo.»** Tri eblaj kazoj: (a) ri ankoraŭ ne havas AnarBib-konton (uzu la invitad-per-retmesaĝa laborfluo venonta); (b) ri havas konton sed ne estas aliĝita en neniu biblioteko (ri devas aliĝi al via biblioteko kiel `reader` unue); (c) ri estas en la reto sed filtrita de la serĉo — provu per ria ekzakta retpoŝtadreso.
-
-**«Mi erare alklikis Promocii.»** Ne paniku. Uzu **«Peti forigon»** por malfermi 7-tagan karencperiodon (cf. ĉapitro 6), aŭ petu la personon alklaki **«Mi transdonu»** (tuja aŭtoretrogrado). Mencii «manipula eraro» kiel kialon.
-
-**«La persono ne ricevas la retmesaĝon.»** Unue kontrolu la literumadon de ria retpoŝtadreso en ria profilo, kaj petu rin rigardi la spaman dosierujon. Se la problemo persistas, parolu kun ret-administrant-in-o: ĝi estas verŝajne retpoŝta konfiguracia problemo por esplori.
+**«La persono ne ricevas la retmesaĝon.»** Unue kontrolu la skribon de la retadreso en la profilo, kaj petu ŝlin rigardi la spamon. Se la problemo daŭras, parolu kun reta administranto: verŝajne temas pri retpoŝta agorda problemo esplorenda.
 
 ## 5.8. Se la regulo ĝenas vin
 
@@ -545,6 +544,8 @@ Politike, tio estas grava : la SIGB **ne malhelpas** vian forladon. Sed ĝi info
 ### Teknika flanko
 
 RPC : `fn_team_self_demote(p_library_id uuid, p_target_role text DEFAULT 'librarian')`.
+
+*(kolegia salto v2 — 01/09/2026)* Se vi alvenis al la kunordigo per **kolegia salto** (rekte de leganto), la dialogo «Mi transdonas» antaŭelektas «forlasi la teamon»: vi neniam plenumis la rolon librarian, kaj nenio devigas vin «malsupreniri» al nekonata rolo. La elekto restas tute libera.
 
 ## 6.3. Peti la elirejon de `librarian` (T5)
 

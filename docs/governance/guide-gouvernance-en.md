@@ -267,8 +267,9 @@ The roles governance spec formalises nine transitions, listed here in condensed 
 
 | # | Transition | Who | Mechanism |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Coordinator+ | Co-optation |
-| T2 | `librarian` → `coordenador` | Coordinator+ | Co-optation |
+| T1 | `reader` → `librarian` | Proposal (local staff member) → endorsement (quorum) → **acceptance** (the person concerned) | Collegial co-optation, via the invitation circuit |
+| T2 | `librarian` → `coordenador` | Proposal (local coord OR network admin) → endorsement (another staff member) → **acceptance** (the person concerned) | Collegial co-optation, via the invitation circuit |
+| T2b | `reader` → `coordenador` (**collegial jump**) | Same as T2 — only if the library has enabled the option | Collegial co-optation; per-library option, disabled by default |
 | T3 | `coordenador` → `librarian` | Self OR other coordinators | Self-downgrade OR collegial removal with grace period |
 | T4 | `librarian` → `reader` (voluntary) | Self | Self-downgrade |
 | T5 | `librarian` → `reader` (collective) | Coordinator+ | `pending_removal` with 7-day grace period |
@@ -279,7 +280,7 @@ The roles governance spec formalises nine transitions, listed here in condensed 
 
 Three principles structure this table:
 
-- **Entry goes through co-optation** (T1, T2). No one promotes themselves.
+- **Entry goes through collegial co-optation** (T1, T2) — and T2b where the library has chosen it: a proposal, the team's endorsement according to the quorum, then the **acceptance of the person concerned**. Nobody promotes themselves — and nobody is promoted without their word *(overhauls of 26/08 and 01/09/2026)*.
 - **Voluntary exit is always possible** (T3 self, T4). No one is trapped in a role they no longer wish to fulfil.
 - **Imposed exit is slowed by the grace period** (T5). Seven days to allow for possible collegial reconsideration.
 
@@ -352,63 +353,65 @@ This chapter covers transitions T1 (`reader` → `librarian`) and T2 (`librarian
 
 ## 5.1. The political principle
 
-> **P2 — Co-optation for staff roles.** Entry into a team happens by co-optation from the existing coordinators. It is for the political collective to decide who is admitted; the coordinator is merely the hand that executes the decision in the ILS.
+> **P2 — Co-optation for staff roles.** Entry into a team happens by co-optation. It is for the political collective to decide who is admitted; the ILS is only the hand that executes the decision.
 
-This means that **clicking "Promote"** is not a personal decision by the coordinator who clicks. It is the **technical execution** of a decision that has been made — or must be made — by the library's political collective. The network's doctrine on "exactly when" the decision must be made is deliberately left unresolved by this guide: each library establishes its own doctrine (see §5.4).
+This means that **submitting a proposal** is not a personal decision of whoever clicks: it is the **technical execution** of a decision that has been made — or must be made — by the library's collective. Since the summer 2026 overhauls, the ILS itself reflects this collegiality: **no staff role is handed out with a single click any more**. Every entry goes through three steps — proposal, endorsement, **acceptance by the person concerned**. The doctrine on *when exactly* the decision must be made is deliberately not settled by this guide: each library makes its own (see §5.4).
 
-## 5.2. To bring someone in as a `librarian` (T1)
+## 5.2. Bringing someone in as a `librarian` (T1)
 
-### Preconditions
-
-- The person has an AnarBib account (they are registered somewhere in the network).
-- They do not already have an active `librarian` or `coordenador` membership in the same library.
-- They may or may not already have a `reader` membership in the same library. If so, that existing membership will remain active in parallel (multi-membership is permitted).
-
-### Procedure in the ILS
-
-1. Go to `/biblioteca`, **Team** tab (visible to `coordenador+`).
-2. If the person is already a reader of the library, click **"Invite to team"** on their row. If they are not yet a reader, use the search in the top bar — or, if they do not yet have an account, use the email invitation workflow (coming soon, see `spec-invitation-equipe.md`).
-3. Choose the `librarian` role.
-4. Confirm the modal. A "Reason" field is optional — it serves to record in the audit log the context of the co-optation (for example "GA decision of 04/05" or "co-optation in restricted circle, to be ratified at the next GA").
-5. The ILS executes:
-   - Creation of a `user_library_memberships` row with `role='librarian'`, `status='active'`.
-   - Email to the person: "You have been appointed librarian of [library] by [you]".
-   - Email to all active coordinators of the library.
-   - Audit log entry: `action='promoted_to_librarian'`.
-
-### Immediate effect
-
-The person receives, without delay, the `librarian` permissions: loan management, registration validation, access to the personal data of the library's readers, etc. They do not receive permissions to modify the public identity or configuration — those are reserved for `coordenador+`.
-
-### Technical side
-
-RPC involved: `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
-
-## 5.3. To promote a `librarian` to `coordenador` (T2)
+Since 1 September 2026, joining the team is **collegial from end to end**: nobody is "appointed" with a click any more. A **proposal** is submitted, the team **endorses** it according to the library's quorum, and the person concerned **accepts** — or declines, or lets the proposal expire (30 days). Doing nothing is an answer: the proposal closes by itself.
 
 ### Preconditions
 
-- The person has an `active` `librarian` membership in the library.
-- They do not already have an active `coordenador` membership in the same library.
+- The person has an AnarBib account.
+- They do not already have an active staff membership (`librarian` or `coordenador`) in the library.
+- Nominal case: they are a reader of the library. The welcome also accepts a person with no local membership.
 
 ### Procedure in the ILS
 
-1. Go to `/biblioteca`, **Team** tab.
-2. On the person's row, click **"Promote"** → **"coordenador"**.
-3. Confirm the modal. The "Reason" field is optional.
-4. The ILS executes:
-   - Creation (or reactivation) of an `active` `coordenador` row. The former `librarian` row remains active in parallel (multi-membership; see §5.6).
-   - Email to the person.
-   - Email to all active coordinators.
-   - Audit log entry: `action='promoted_to_coordenador'`.
+1. Go to `/biblioteca`, **Team** tab → "Welcome into the team" (by public ID), or **Readers** tab → "Propose for the team" on the person's row.
+2. Confirm the dialog: a **proposal** is submitted — nothing is promoted at this stage.
+3. The team endorses, according to the library's quorum (visible in the Team tab's "Governance settings"): under "co-signature", 2 endorsements incl. at least one from the coordination — the proposal itself counts as one.
+4. The person receives the invitation and **accepts** (in their account, "My libraries"), or declines.
+5. On acceptance, the ILS executes: an active `librarian` line; the `reader` line, if any, is **closed** (roles are exclusive — the `librarian` role encompasses the `reader` role); emails to the person and to the whole coordination; audit log `promoted_to_librarian`.
 
-### Immediate effect
+### Effect on acceptance
 
-The person receives, in addition to their `librarian` permissions, the coordination permissions: modification of public identity, configuration, membership rules, and all team governance actions.
+The person receives the `librarian` permissions: loan management, registration validation, access to the personal data of the library's readers, etc. They do not receive the permissions to modify the public identity or the configuration — those are reserved to `coordenador+`.
 
 ### Technical side
 
-RPC involved: `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
+Circuit RPCs: `fn_team_propose_invitation(p_library_id, p_invited_public_id, 'librarian')` → `fn_team_ratify_invitation(p_invitation_id)` → `fn_team_accept_invitation(p_invitation_id)` (or `fn_team_decline_invitation`). The old direct promotion (`fn_team_promote_to_librarian`) has been **condemned** since 01/09/2026: it refuses, pointing to the collegial path.
+
+## 5.3. Proposing a `librarian` for coordination (T2)
+
+Same circuit, same logic (overhaul of 26/08/2026): **proposal → endorsement → acceptance**. Coordination is not handed out alone, and it is not imposed either: it is a burden, and it is accepted.
+
+### Preconditions
+
+- The person has an active `librarian` membership in the library — **or**, if the library has enabled the **collegial jump** (see below), an active `reader` membership.
+- They do not already have an active `coordenador` membership, nor a live invitation.
+
+### Procedure in the ILS
+
+1. **Team** tab, the person's row → **"Propose as coordinator"** (or, for a jump, **Readers** tab → "Propose for coordination").
+2. Another staff member endorses (the person concerned does not count towards the quorum: they accept, they do not endorse).
+3. The person receives an email that names the burden for what it is, and **accepts** — declining costs nothing, and stepping back will remain a right afterwards.
+4. On acceptance: active `coordenador` line; the lower active line (`librarian` or, on a jump, `reader`) is closed; audit log `promoted_to_coordenador`, with the origin (`from_role`).
+
+### The collegial jump: reader → coordination (per-library option)
+
+For libraries that work as a **horizontal collective** — where joining the collective means sharing coordination — the `reader` → `librarian` → `coordenador` ladder imposed a transitional rank with no reality in the group. Since 1 September 2026, a library can allow the coordination proposal to target an **active reader** directly:
+
+- **It is each library's choice**, disabled by default. The setting is toggled in the **Team** tab, "Governance settings" block — visible to all staff, toggled by the coordination. Enable it on your collective's decision, not for convenience.
+- **The collegial circuit fully applies**: proposal, endorsement according to the quorum, acceptance. The jump shortens the ladder, never the consents.
+- **The price to know**: the person receives, in one move, access to readers' personal data, to the configuration and to team management — without the period of practice the `librarian` step used to give. This is coherent where trust is built in assembly, outside the software.
+- **The emails say it**: endorsement of a jump is requested knowingly ("not yet on the team"), and the person concerned knows they would enter directly at coordination.
+- **Can be disabled at any time**: the ladder becomes the only path again, and open jump proposals will fail at acceptance.
+
+### Technical side
+
+Same RPC circuit as the welcome, with `p_role = 'coordenador'`. Setting: `libraries.allow_direct_coordenador`. The old `fn_team_promote_to_coordenador` has been condemned since 26/08/2026.
 
 ## 5.4. The political question: when to click?
 
@@ -448,25 +451,21 @@ Two modes are possible, chosen by each library in its configuration:
 - What is "checked" during a physical validation is **not** an identity check in the administrative sense. It is a meeting. Each library defines its political meaning. For some, it means "we chat a bit to check the person is not a cop or a fascist". For others, it means "we present the library, how it works, its rules". For still others, it simply means "we meet in person so that the relationship is embodied".
 - A library can **change mode** at any time (`coordenador+`). The change does not invalidate existing validations.
 
-## 5.6. Multi-membership: a point to be aware of
+## 5.6. The exclusive role, a point of attention
 
-A technical particularity to understand: a person can have **several** membership rows in the same library, with different roles. For example, Voltairine can be both a `reader` and a `librarian` at BLMF. This is made possible by the UNIQUE constraint on the triplet `(user_id, library_id, role)`.
-
-**Why this possibility:** it preserves history. If Voltairine downgrades from `librarian` to `reader` tomorrow, their `librarian` row moves to `inactive` but the `reader` row remains — without having to recreate a new registration from scratch.
-
-**Practical consequence:** in the UI, the person is displayed **only once**, with their **highest active role** (administrador > coordenador > librarian > reader). In the audit log, however, each row is visible separately.
+A person has only **one active role** per library (doctrine adopted on 20/05/2026). A promotion **closes** the lower-rank line (it goes to `removed`); a demotion reactivates the rung below — or `reader` directly, at the person's choice. History is not lost: it is fully carried by the non-active lines and by the audit log. In the interface as in the database, the displayed role is therefore **the** role, without ambiguity. *(Earlier versions of this guide described a "multi-membership" of accumulated active lines: that has been obsolete since May 2026.)*
 
 ## 5.7. Errors and safeguards
 
 A few cases that come up regularly:
 
-**"The ILS tells me the person is already a librarian."** This is probably true. Check the **Team** tab: if the person already appears there as a librarian, you are trying to promote them to the same level; the ILS returns a silent success (`{ok: true, no_change: true}`) because there is nothing to do.
+**"The ILS tells me the person is already a team member."** That is probably true. The circuit explicitly refuses a proposal targeting an active team member — or a `coordenador` already in place, for a coordination proposal. Check the **Team** tab.
 
-**"I can't see the person in the list."** Three possible cases: (a) they do not yet have an AnarBib account (use the email invitation workflow, coming soon); (b) they have an account but are not registered in any library (they must register at your library as a `reader` first); (c) they are in the network but filtered out by the search — try their exact email address.
+**"I cannot see the person in the list."** Three possible cases: (a) they do not have an AnarBib account yet; (b) they have an account but are not a reader of your library (for a welcome, the invitation by public ID still works; for a jump, they must first be an active reader); (c) they are filtered out by the search — try their exact email.
 
-**"I accidentally clicked Promote."** Do not panic. Use **"Request removal"** to open a 7-day grace period (see chapter 6), or ask the person to click **"Step down"** (immediate self-downgrade). Indicate "accidental click" as the reason.
+**"I submitted a proposal by mistake."** Nothing has changed as long as it is not accepted: revoke it from the **Team** tab, or let it expire (30 days). If it has already been accepted, chapter 6 applies (removal with cooling-off, or the person steps back).
 
-**"The person is not receiving the email."** First check the spelling of their email in their profile, and ask them to check their spam folder. If the problem persists, speak to a network admin: it is likely a mail configuration issue to investigate.
+**"The person does not receive the email."** First check the spelling of their email in their profile, and ask them to look in their spam. If the problem persists, talk to a network admin: it is probably a mail configuration issue to investigate.
 
 ## 5.8. If this chapter's rules bother you
 
@@ -545,6 +544,8 @@ Politically, this is important: the SIGB **does not prevent** your departure. Bu
 ### Technical side
 
 RPC: `fn_team_self_demote(p_library_id uuid, p_target_role text DEFAULT 'librarian')`.
+
+*(collegial jump v2 — 01/09/2026)* If you arrived at coordination through the **collegial jump** (directly from reader), the "I step back" dialog preselects "leave the team": you have never held the librarian role, and nothing obliges you to "step down" onto an unknown role. The choice remains entirely free.
 
 ## 6.3. Requesting the withdrawal of a `librarian` (T5)
 

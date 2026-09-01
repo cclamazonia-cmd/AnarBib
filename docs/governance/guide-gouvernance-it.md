@@ -267,8 +267,9 @@ La spec di governance dei ruoli formalizza nove transizioni, elencate qui in for
 
 | # | Transizione | Chi | Meccanismo |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Coord+ | Cooptazione |
-| T2 | `librarian` → `coordenador` | Coord+ | Cooptazione |
+| T1 | `reader` → `librarian` | Proposta (persona della squadra locale) → avallo (quorum) → **accettazione** (l'interessat*) | Cooptazione collegiale, via il circuito d'invito |
+| T2 | `librarian` → `coordenador` | Proposta (coord locale O admin di rete) → avallo (altra persona della squadra) → **accettazione** (l'interessat*) | Cooptazione collegiale, via il circuito d'invito |
+| T2b | `reader` → `coordenador` (**salto collegiale**) | Identico a T2 — solo se la biblioteca ha attivato l'opzione | Cooptazione collegiale; opzione per biblioteca, disattivata per default |
 | T3 | `coordenador` → `librarian` | Sé stess* OPPURE altri/e coord | Auto-retrocessione OPPURE rimozione collegiale con carenza |
 | T4 | `librarian` → `reader` (volontario) | Sé stess* | Auto-retrocessione |
 | T5 | `librarian` → `reader` (collettivo) | Coord+ | `pending_removal` con carenza 7g |
@@ -279,7 +280,7 @@ La spec di governance dei ruoli formalizza nove transizioni, elencate qui in for
 
 Tre principi strutturano questa tabella:
 
-- **L'ingresso passa per la cooptazione** (T1, T2). Nessun* si promuove da sol*.
+- **L'ingresso passa per la cooptazione collegiale** (T1, T2) — e T2b dove la biblioteca l'ha scelta: una proposta, l'avallo della squadra secondo il quorum, poi l'**accettazione della persona interessata**. Nessun* si promuove da sol* — e nessun* viene promoss* senza la propria parola *(rifusioni del 26/08 e del 01/09/2026)*.
 - **L'uscita volontaria è sempre possibile** (T3 auto, T4). Nessun* resta intrappolat* in una funzione che non vuole più esercitare.
 - **L'uscita imposta è rallentata dalla carenza** (T5). Sette giorni per permettere un eventuale ripensamento collegiale.
 
@@ -352,63 +353,65 @@ Questo capitolo copre le transizioni T1 (`reader` → `librarian`) e T2 (`librar
 
 ## 5.1. Il principio politico
 
-> **P2 — Cooptazione per i ruoli staff.** L'ingresso in un team avviene per cooptazione dei/delle coordenadores esistenti. Spetta al collettivo politico decidere chi è ammess*; il/la coordenador/a è solo la mano che esegue la decisione nel SIGB.
+> **P2 — Cooptazione per i ruoli staff.** L'ingresso in una squadra avviene per cooptazione. È il collettivo politico a decidere chi è ammess*; il SIGB è solo la mano che esegue la decisione.
 
-Ciò significa che **cliccare su «Promuovi»** non è una decisione personale del/della coord che clicca. È l'**esecuzione tecnica** di una decisione che è stata presa — o deve essere presa — dal collettivo politico della biblioteca. La dottrina della rete sul «quando esattamente» la decisione deve essere presa non è volutamente definita da questa guida: ogni biblioteca elabora la propria dottrina (vedere §5.4).
+Questo significa che **depositare una proposta** non è una decisione personale di chi clicca: è l'**esecuzione tecnica** di una decisione che è stata presa — o deve essere presa — dal collettivo della biblioteca. Dalle rifusioni dell'estate 2026, il SIGB stesso riflette questa collegialità: **nessun ruolo staff si dà più con un clic**. Ogni ingresso passa per tre tempi — proposta, avallo, **accettazione della persona interessata**. La dottrina sul «quando esattamente» la decisione debba essere presa non è volutamente definita da questa guida: ogni biblioteca fa la propria (vedi §5.4).
 
-## 5.2. Per fare entrare qualcun* come `librarian` (T1)
+## 5.2. Far entrare qualcun* come `librarian` (T1)
 
-### Precondizioni
-
-- La persona ha un account AnarBib (è iscritta da qualche parte nella rete).
-- Non ha già una membership `librarian` o `coordenador` attiva nella stessa biblioteca.
-- Può, o meno, avere già una membership `reader` nella stessa biblioteca. In caso affermativo, questa membership esistente resterà attiva in parallelo (multi-membership autorizzata).
-
-### Procedura nel SIGB
-
-1. Andare in `/biblioteca`, scheda **Equipe** (visibile ai `coordenador+`).
-2. Se la persona è già reader della biblioteca, cliccare **«Invita nel team»** sulla sua riga. Se non è ancora reader, usare la ricerca nella barra superiore oppure — se non ha ancora un account — passare per il workflow di invito via email (in arrivo, cfr. `spec-invitation-equipe.md`).
-3. Scegliere il ruolo `librarian`.
-4. Confermare la modale. Un campo «Motivo» è opzionale — serve a iscrivere nell'audit log il contesto della cooptazione (ad esempio «decisione assemblea del 04/05», o «cooptazione in cerchio ristretto, da validare alla prossima assemblea»).
-5. Il SIGB esegue:
-   - Creazione di una riga `user_library_memberships` con `role='librarian'`, `status='active'`.
-   - Email alla persona interessata: «Sei stat* nominat* librarian di [biblioteca] da [voi]».
-   - Email a tutt* i/le coordenadores attiv* della biblioteca.
-   - Voce nell'audit log: `action='promoted_to_librarian'`.
-
-### Effetto immediato
-
-La persona riceve, senza ritardo, i permessi di `librarian`: gestione dei prestiti, validazione delle iscrizioni, accesso ai dati personali dei lettori/trici della biblioteca, ecc. Non riceve i permessi di modifica dell'identità pubblica né della configurazione — questi sono riservati ai `coordenador+`.
-
-### Lato tecnico
-
-RPC interessata: `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
-
-## 5.3. Per promuovere un/una `librarian` a `coordenador` (T2)
+Dal 1º settembre 2026, l'accoglienza è **collegiale da cima a fondo**: non si «nomina» più nessun* con un clic. Si deposita una **proposta**, la squadra la **avalla** secondo il quorum della biblioteca, e la persona interessata **accetta** — o rifiuta, o lascia scadere la proposta (30 giorni). Non fare nulla è una risposta: la proposta si chiude da sola.
 
 ### Precondizioni
 
-- La persona ha una membership `librarian` `active` nella biblioteca.
-- Non ha già una membership `coordenador` attiva nella stessa biblioteca.
+- La persona ha un account AnarBib.
+- Non ha già una membership staff (`librarian` o `coordenador`) attiva nella biblioteca.
+- Caso nominale: è lettrice della biblioteca. L'accoglienza accetta anche una persona senza adesione locale.
 
 ### Procedura nel SIGB
 
-1. Andare in `/biblioteca`, scheda **Equipe**.
-2. Sulla riga della persona, cliccare **«Promuovi»** → **«coordenador»**.
-3. Confermare la modale. Il campo «Motivo» è opzionale.
-4. Il SIGB esegue:
-   - Creazione (o riattivazione) di una riga `coordenador` `active`. La vecchia riga `librarian` resta attiva in parallelo (multi-membership; vedere §5.6).
-   - Email alla persona.
-   - Email a tutt* i/le coordenadores attiv*.
-   - Voce nell'audit log: `action='promoted_to_coordenador'`.
+1. Andare in `/biblioteca`, scheda **Squadra** → «Accogliere nella squadra» (per identificativo pubblico), o scheda **Lettori·trici** → «Proporre per la squadra» sulla riga della persona.
+2. Confermare la finestra: una **proposta** è depositata — nulla viene promosso in questa fase.
+3. La squadra avalla, secondo il quorum della biblioteca (visibile nelle «Impostazioni di governance» della scheda Squadra): in «cofirma», 2 avalli incl. almeno uno del coordinamento — la proposta stessa conta come uno.
+4. La persona riceve l'invito e **accetta** (nel suo account, «Le mie biblioteche»), o rifiuta.
+5. All'accettazione, il SIGB esegue: riga `librarian` attiva; la riga `reader`, se esisteva, viene **chiusa** (i ruoli sono esclusivi — il ruolo `librarian` ingloba il ruolo `reader`); email alla persona e a tutto il coordinamento; audit log `promoted_to_librarian`.
 
-### Effetto immediato
+### Effetto all'accettazione
 
-La persona riceve, in aggiunta ai suoi permessi di `librarian`, i permessi di coordinamento: modifica dell'identità pubblica, della configurazione, delle regole di quota associativa, e tutte le azioni di governance del team.
+La persona riceve i permessi di `librarian`: gestione dei prestiti, validazione delle iscrizioni, accesso ai dati personali di lettori e lettrici della biblioteca, ecc. Non riceve i permessi di modifica dell'identità pubblica né della configurazione — riservati a `coordenador+`.
 
 ### Lato tecnico
 
-RPC interessata: `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid, p_reason text DEFAULT NULL)`.
+RPC del circuito: `fn_team_propose_invitation(p_library_id, p_invited_public_id, 'librarian')` → `fn_team_ratify_invitation(p_invitation_id)` → `fn_team_accept_invitation(p_invitation_id)` (o `fn_team_decline_invitation`). La vecchia promozione diretta (`fn_team_promote_to_librarian`) è **condannata** dal 01/09/2026: rifiuta, indicando il cammino collegiale.
+
+## 5.3. Proporre un* `librarian` al coordinamento (T2)
+
+Stesso circuito, stessa logica (rifusione del 26/08/2026): **proposta → avallo → accettazione**. Il coordinamento non si dà da sol*, e nemmeno si impone: è un carico, e si accetta.
+
+### Precondizioni
+
+- La persona ha una membership `librarian` `active` nella biblioteca — **o**, se la biblioteca ha attivato il **salto collegiale** (vedi sotto), una membership `reader` `active`.
+- Non ha già una membership `coordenador` attiva, né un invito in corso.
+
+### Procedura nel SIGB
+
+1. Scheda **Squadra**, riga della persona → **«Proporre come coordinatori*»** (o, per un salto, scheda **Lettori·trici** → «Proporre al coordinamento»).
+2. Un'altra persona della squadra avalla (la persona interessata non conta nel quorum: lei accetta, non avalla).
+3. La persona riceve un'email che nomina il carico per quello che è, e **accetta** — rifiutare non costa nulla, e passare la mano resterà un diritto in seguito.
+4. All'accettazione: riga `coordenador` attiva; la riga attiva inferiore (`librarian` o, in un salto, `reader`) si chiude; audit log `promoted_to_coordenador`, con la provenienza (`from_role`).
+
+### Il salto collegiale: lettore·trice → coordinamento (opzione per biblioteca)
+
+Per le biblioteche che funzionano come **collettivo orizzontale** — dove entrare nel collettivo è condividere il coordinamento — la scala `reader` → `librarian` → `coordenador` imponeva un grado di passaggio senza realtà nel gruppo. Dal 1º settembre 2026, una biblioteca può autorizzare che la proposta di coordinamento riguardi direttamente un* **lettore·trice attiv***:
+
+- **È una scelta di ogni biblioteca**, disattivata per default. L'impostazione si commuta nella scheda **Squadra**, blocco «Impostazioni di governance» — visibile a tutta la squadra, commutabile dal coordinamento. Attivatela su decisione del vostro collettivo, non per comodità.
+- **Il circuito collegiale si applica integralmente**: proposta, avallo secondo il quorum, accettazione. Il salto accorcia la scala, mai i consensi.
+- **Il prezzo da conoscere**: la persona riceve in un solo gesto l'accesso ai dati personali di lettori e lettrici, alla configurazione e alla gestione della squadra — senza il periodo di esercizio che dava la tappa `librarian`. È coerente là dove la fiducia si costruisce in assemblea, fuori dal software.
+- **Le email lo dicono**: l'avallo di un salto viene chiesto con cognizione di causa («non ancora nella squadra»), e la persona interessata sa che entrerebbe direttamente al coordinamento.
+- **Disattivabile in ogni momento**: la scala torna a essere l'unica via, e le proposte di salto aperte falliranno all'accettazione.
+
+### Lato tecnico
+
+Stesso circuito RPC dell'accoglienza, con `p_role = 'coordenador'`. Impostazione: `libraries.allow_direct_coordenador`. La vecchia `fn_team_promote_to_coordenador` è condannata dal 26/08/2026.
 
 ## 5.4. La questione politica: quando cliccare?
 
@@ -448,25 +451,21 @@ Due modalità possibili, scelte da ogni biblioteca nella propria configurazione:
 - Ciò che si «verifica» durante una validazione fisica **non** è un controllo d'identità in senso amministrativo. È un incontro. Ogni biblioteca ne definisce il senso politico. Per alcune è «ci scambiamo due parole per verificare che la persona non sia un/una sbirr* o un/una fascist*». Per altre è «presentiamo la biblioteca, il suo funzionamento, le sue regole». Per altre ancora è semplicemente «ci vediamo di persona perché la relazione sia incarnata».
 - Una biblioteca può **cambiare modalità** in qualsiasi momento (`coordenador+`). Il cambiamento non invalida le validazioni esistenti.
 
-## 5.6. La multi-membership, punto di attenzione
+## 5.6. Il ruolo esclusivo, punto d'attenzione
 
-Una particolarità tecnica da comprendere: una persona può avere **più righe** di membership nella stessa biblioteca, con ruoli diversi. Per esempio, Voltairine può essere allo stesso tempo `reader` e `librarian` di BLMF. Ciò è reso possibile dal vincolo UNIQUE sul triplo `(user_id, library_id, role)`.
-
-**Perché questa possibilità:** preserva la cronologia. Se domani Voltairine si retrocede da `librarian` a `reader`, la sua riga `librarian` passa a `inactive` ma la riga `reader` resta — senza dover ricreare una nuova iscrizione da zero.
-
-**Conseguenza pratica:** nell'UI, si visualizza la persona **una sola volta**, con il suo ruolo **di livello più alto attivo** (administrador > coordenador > librarian > reader). Nell'audit log, invece, si vede ogni riga separatamente.
+Una persona ha solo **un ruolo attivo** per biblioteca (dottrina adottata il 20/05/2026). Una promozione **chiude** la riga di rango inferiore (passa a `removed`); una retrocessione riattiva il gradino sotto — o `reader` direttamente, a scelta della persona. La storia non si perde: è portata integralmente dalle righe non attive e dall'audit log. Nell'interfaccia come nella base, il ruolo mostrato è quindi **il** ruolo, senza ambiguità. *(Le versioni precedenti di questa guida descrivevano un «multi-membership» di righe attive cumulate: è superato dal maggio 2026.)*
 
 ## 5.7. Errori e salvaguardie
 
 Alcuni casi che si incontrano regolarmente:
 
-**«Il SIGB mi dice che la persona è già librarian.»** È probabilmente vero. Verificate la scheda **Equipe**: se la persona vi figura già come librarian, state cercando di promuoverla allo stesso livello, il SIGB restituisce un successo silenzioso (`{ok: true, no_change: true}`) perché non c'è nulla da fare.
+**«Il SIGB mi dice che la persona è già nella squadra.»** Probabilmente è vero. Il circuito rifiuta esplicitamente una proposta che riguarda una persona attiva della squadra — o un* `coordenador` già in carica, per una proposta di coordinamento. Verificate la scheda **Squadra**.
 
-**«Non vedo la persona nell'elenco.»** Tre casi possibili: (a) non ha ancora un account AnarBib (usare il workflow di invito via mail in arrivo); (b) ha un account ma non è iscritta in nessuna biblioteca (deve iscriversi alla vostra biblioteca come `reader` prima); (c) è nella rete ma filtrata dalla ricerca — provare con la sua email esatta.
+**«Non vedo la persona nella lista.»** Tre casi possibili: (a) non ha ancora un account AnarBib; (b) ha un account ma non è lettrice della vostra biblioteca (per un'accoglienza, l'invito per identificativo pubblico funziona comunque; per un salto, deve prima essere lettrice attiva); (c) è filtrata dalla ricerca — provare con la sua email esatta.
 
-**«Ho cliccato per errore su Promuovi.»** Niente panico. Usare **«Richiedi la rimozione»** per aprire un periodo di carenza di 7 giorni (cfr. capitolo 6), oppure chiedere alla persona di cliccare **«Passo il testimone»** (auto-retrocessione immediata). Indicare «errore di manipolazione» come motivo.
+**«Ho depositato una proposta per errore.»** Nulla è cambiato finché non è accettata: revocatela dalla scheda **Squadra**, o lasciatela scadere (30 giorni). Se è già stata accettata, si applica il capitolo 6 (ritiro con carenza, o la persona passa la mano).
 
-**«La persona non riceve la mail.»** Verificare prima l'ortografia della sua email nel suo profilo, e chiederle di controllare la posta indesiderata. Se il problema persiste, parlarne con un/una admin di rete: è probabilmente un problema di configurazione mail da investigare.
+**«La persona non riceve l'email.»** Verificare prima l'ortografia della sua email nel profilo, e chiederle di guardare nello spam. Se il problema persiste, parlarne con un* admin di rete: probabilmente è un problema di configurazione mail da investigare.
 
 ## 5.8. Se la regola vi pesa
 
@@ -545,6 +544,8 @@ Dal punto di vista politico, è importante : il SIGB **non impedisce** la parten
 ### Lato tecnico
 
 RPC : `fn_team_self_demote(p_library_id uuid, p_target_role text DEFAULT 'librarian')`.
+
+*(v2 del salto collegiale — 01/09/2026)* Se siete arrivat* al coordinamento per **salto collegiale** (direttamente da lettore·trice), la finestra «Passo la mano» preseleziona «lasciare la squadra»: non avete mai esercitato come librarian, e nulla vi obbliga a «scendere» su un ruolo sconosciuto. La scelta resta interamente libera.
 
 ## 6.3. Richiedere il ritiro di un*/a `librarian` (T5)
 
