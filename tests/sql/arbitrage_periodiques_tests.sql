@@ -32,6 +32,7 @@ DECLARE
   v_lib uuid;
   v_serial bigint;
   v_msg text;
+  v_n int;
 BEGIN
   -- ---------------------------------------------------------------------
   -- T1 — les trois gestes d'arbitrage exigent l'arbitre
@@ -105,15 +106,29 @@ BEGIN
   -- ---------------------------------------------------------------------
   v_t := 'T3 le catalogage des revues n a pas ete ferme au passage';
   BEGIN
-    SELECT string_agg(p.proname, ', ' ORDER BY p.proname) INTO v_manque
+    -- Les cinq fn_serial_* vivent dans `api`, les deux de signalement dans
+    -- `public` : chercher les sept dans `public` seul faisait passer les cinq
+    -- premières À VIDE — un test qui ne trouve pas l'objet qu'il garde ne garde
+    -- rien. Corrigé le 01/09, le jour même de l'écriture, en comptant les sept
+    -- (v_n) EN PLUS de vérifier leur garde : l'absence devient un échec, plus
+    -- un silence.
+    SELECT count(*),
+           string_agg(p.proname, ', ' ORDER BY p.proname)
+             FILTER (WHERE p.prosrc !~ 'fn_caller_is_staff'
+                        OR NOT has_function_privilege('authenticated', p.oid, 'EXECUTE'))
+      INTO v_n, v_manque
       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
-     WHERE n.nspname = 'public'
+     WHERE n.nspname IN ('public','api')
        AND p.proname IN ('fn_serial_create','fn_serial_update','fn_serial_attach_issue',
                          'fn_serial_detach_issue','fn_serial_set_filiation',
-                         'suggest_serial_duplicates','list_serials_not_duplicate')
-       AND p.prosrc !~ 'fn_caller_is_staff';
+                         'suggest_serial_duplicates','list_serials_not_duplicate');
 
-    IF v_manque IS NULL THEN v_passed := v_passed + 1;
+    IF v_n <> 7 THEN
+      v_failed := v_failed + 1;
+      v_failures := v_failures || (v_t || ' : ' || v_n || '/7 fonctions trouvees'
+        || ' | une fonction de catalogage a disparu ou change de schema —'
+        || ' ce test la cherchait dans le mauvais et passait a vide');
+    ELSIF v_manque IS NULL THEN v_passed := v_passed + 1;
     ELSE
       v_failed := v_failed + 1;
       v_failures := v_failures || (v_t || ' : ferme sur -> ' || v_manque
