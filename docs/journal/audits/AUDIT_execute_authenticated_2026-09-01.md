@@ -476,3 +476,73 @@ la garde des policies, et ne disent rien qu'une page publique ne dise déjà.
 
 **69 des 326 lues. Restent 257** — les fonctions à garde apparente, à passer par
 paquets selon les mêmes critères.
+
+
+# Paquet 2 de `public` — les nominatives (19 lues, 01/09)
+
+Critère : un identifiant de **personne** en paramètre, autre chose qu'un booléen
+en retour. Dix-neuf fonctions.
+
+## Les écritures et les lectures sont gardées
+
+`fn_list_membership_payments_for_user` filtre sur la bibliothèque active de
+l'appelant·e ; les `fn_team_*` (promotion, suspension, retrait) gardent par
+`user_can_manage_library` de la bibliothèque cible ; les `fn_v2_create_*`
+refusent explicitement d'agir pour autrui (« vous ne pouvez créer que pour votre
+propre compte ») ; les `fn_import_*` et `upsert_library_*` gardent par
+coordination.
+
+`fn_painel_reader_other_memberships` mérite une mention : elle ne révèle les
+autres appartenances d'une lectrice **que** si un partenariat porte le droit
+« transparence ». Une observation cependant, notée sans être corrigée : sans ce
+droit, les colonnes sont nulles mais **la ligne existe** — on apprend donc le
+*nombre* d'autres appartenances, sinon lesquelles. C'est peut-être voulu (le
+champ s'appelle `enriched`), mais ce n'est écrit nulle part.
+
+## La prise : quatorze sœurs de l'oracle d'existence
+
+`fn_painel_get_profile_by_id` distinguait « compte trouvé, mais pas dans votre
+bibliothèque » de « rien trouvé » — **la jumelle exacte** de celle corrigée au
+paquet 1. J'avais corrigé une fonction sans chercher ses sœurs.
+
+Cherchées par le MOTIF, il y en avait une deuxième
+(`fn_attach_received_asset_record`, sur un **bigint séquentiel** : en
+incrémentant on compte les fonds reçus dans le réseau), puis **douze de plus**
+quand la suite de test a cherché le message **sans ses accents** — toute la
+famille `fn_import_*`, « Run % introuvable » contre « Run % nao pertence a esta
+biblioteca », sur des identifiants séquentiels eux aussi : l'activité de
+catalogage des autres bibliothèques.
+
+*Chercher un texte dans une base multilingue doit couvrir les variantes
+d'accentuation.* Le « second chemin » était lui-même incomplet — et c'est le
+test, en cherchant plus large que moi, qui l'a montré.
+
+Les quatorze sont corrigées par substitution vérifiée (`20260901091431`), sans
+qu'aucun corps ne soit recopié. Gardé par
+`tests/sql/b14_oracle_existence_forme_tests.sql`, qui vérifie la **forme** —
+donc attrapera la quinzième — et dont le T3 garde la doctrine inverse là où elle
+est écrite : `api.resolve_reader_card` doit continuer de rendre deux fois le
+même motif.
+
+## Ce que cette migration a coûté — trois rouges sur `main`
+
+Il faut l'écrire, parce que c'est la partie instructive.
+
+| Rouge | Cause réelle | Ce que j'avais fait |
+|---|---|---|
+| 1 | `DEFAULT 'both'` omis en **recopiant** le corps d'une fonction | recopié un corps pour changer trois mots |
+| 2 | (le même correctif, poussé **sans être éprouvé**) | supposé la cause au lieu de la vérifier |
+| 3 | une suite existante assertait le **libellé** du message changé | pas cherché qui assertait ces messages |
+
+Le troisième n'était visible que dans le log du run — fourni par Xavier — qui
+dit exactement : *« T10 une source d'une AUTRE bibliotheque est refusee :
+mauvaise erreur Source 3 introuvable »*. Les quatre suites `B14` y passaient
+toutes ; c'est une suite d'août qui tombait.
+
+Deux règles en sont sorties, au REGISTRE sous `DOC-MSG-1` : **un message
+d'erreur est un contrat** (chercher qui l'asserte avant de le changer), et **ne
+pas recopier un corps de fonction** (partir de `pg_get_functiondef`). Plus une
+troisième, qui est la vraie : *une cause certaine se vérifie quand même* — elle
+l'était, et il en restait une autre derrière.
+
+**88 des 326 de `public` lues** (69 + 19). Restent 238.
