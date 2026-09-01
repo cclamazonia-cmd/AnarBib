@@ -812,3 +812,81 @@ collectivement**, comme la question des gardes en `WHERE` du paquet 3.
 
 *(L'enjeu pratique est petit aujourd'hui — 4 périodiques en base — et c'est le
 bon moment pour décider, avant qu'il ne le soit plus.)*
+
+---
+
+# Les deux questions ont été tranchées le jour même
+
+Les deux points laissés ouverts par les paquets 3 et 5 ont été posés en formulaire
+et décidés le 01/09/2026.
+
+## 1. Les gardes en `WHERE` rejoignent `DOC-SILENCE-1`
+
+**Décidé : on aligne.** Les cinq fonctions lèvent désormais `42501` au lieu de
+rendre une liste vide.
+
+La forme du correctif n'est pas celle qu'on attendait. Ces cinq sont en
+`LANGUAGE sql` : pas de bloc `IF` possible, et les convertir en `plpgsql`
+demanderait de réécrire cinq corps pour n'y changer qu'une garde — ce que
+`DOC-MSG-1` interdit depuis qu'il a coûté trois rouges. On garde donc le `WHERE`,
+avec un **prédicat levant** (`fn_assert_*`), substitué depuis
+`pg_get_functiondef`.
+
+**Ce qui a été vérifié avant d'y compter** : un prédicat levant dans un `WHERE`
+se déclenche-t-il quand la relation est **vide** ? C'est le seul cas qui compte.
+Mesuré sur deux tables temporaires : `table_vide=LEVEE`, `table_pleine=LEVEE`.
+**La limite est écrite parce qu'elle est réelle** — cela dépend du plan choisi.
+D'où une suite qui **appelle** les cinq fonctions plutôt que de relire leur
+définition : le jour où un plan change, le test rougit.
+
+**Le piège symétrique**, plus dangereux que le défaut lui-même : dans
+`list_catalog_libraries` et `fn_team_list_invitations`, le même prédicat
+**élargit** un accès (« … OR admin réseau »). Une substitution par motif y aurait
+transformé la navigation ordinaire en erreur. La liste corrigée est nominative,
+et une garde de fin refuse la migration si un `fn_assert_` apparaît dans ces
+deux-là.
+
+### Ce que cette correction a coûté — un quatrième rouge, et une règle élargie
+
+`sql-tests` est passé au rouge sur ce commit. Deux suites vérifiaient qu'un
+compte non autorisé reçoit **zéro ligne** — `mentions_orphelines_tests.sql` T10
+et `invitation_claims_lot2_tests.sql` T18 : exactement le comportement que la
+décision retirait.
+
+J'avais pourtant appliqué `DOC-MSG-1` : `grep -rn "SQLERRM" tests/sql/` pour
+vérifier qu'aucune suite n'assertait les **messages**. Je ne l'ai pas fait pour
+le **comportement**. *Passer de « rend du vide » à « lève » casse tout autant ce
+qui l'atteste, et se cherche de la même façon.* La règle a été élargie en
+conséquence : avant de changer le comportement observable d'une fonction — son
+message, sa valeur de retour, ou le fait même de lever — chercher qui l'observe.
+
+Le correctif a été poussé après avoir vérifié que **tous** les autres appels de
+ces deux fonctions (lot2 T14–T17, lot3a T6) tournent sous JWT d'admin réseau —
+pour ne pas enchaîner un second rouge sur une seconde supposition. Le log de CI,
+lu ensuite, l'a confirmé sans écart : deux suites rouges, les deux corrigées, et
+les trois nouvelles suites du jour vertes.
+
+## 2. L'arbitrage des périodiques rejoint celui des livres — après préavis
+
+**Décidé : on aligne, en prévenant.** Les trois fonctions passent à
+`fn_is_dedup_arbiter()`, avec le libellé de refus déjà employé par `merge_book`.
+
+Cataloguer une revue et **signaler** un doublon restent ouverts au catalogage :
+c'est la moitié de la décision, et elle suit DOUBLONS P8 (« le test 1 garde
+l'OUVERTURE du geste »). Repérer un doublon et trancher un doublon sont deux
+actes différents.
+
+**La migration est écrite, éprouvée et volontairement non poussée** : elle retire
+un pouvoir à quatre personnes nommées, et le dépôt a déjà posé la règle à propos
+des identifiants de lecteur·rice — *changer quelque chose qui appartient à
+quelqu'un sans le lui annoncer n'a pas sa place dans un déploiement automatique.*
+Le préavis, rédigé en pt-BR (la langue des quatre), attend son envoi. Détail dans
+`docs/journal/arbitrages/DECISION_arbitrage_periodiques_2026-09-01.md`.
+
+> **Ce que cet écart enseigne, et qui dépasse les périodiques** : une décision
+> prise dans un chantier ne se propage pas toute seule au chantier suivant. Elle
+> était écrite, appliquée à trois fonctions, gardée par une suite — et trois mois
+> plus tard un nouveau domaine du même modèle (une autorité, ses doublons, sa
+> fusion) est né sans elle. Aucune relecture ne l'aurait attrapée : le code des
+> périodiques est cohérent avec lui-même. Seule une question posée à l'ensemble —
+> *qui peut détruire quoi ?* — pouvait faire apparaître la divergence.
