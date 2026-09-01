@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-09-01.** **54 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **55 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1390,16 +1390,26 @@ Et parce que l'inverse est plus dangereux encore : les deux redirections sont vi
 
 Tracé en `GOUV-17b` au registre des décisions, statut ouvert.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 01/09 au soir — constat posé et vérifié en base le jour même : les huit fonctions écrivant dans `user_notifications` recensées, aucune de gouvernance ; `fn_team_expire_invitations` confirmée active au cron de 03 h 20.*
 
-**Ce que c'est.** undefined
+**Ce que c'est.** Trancher d'abord, coder ensuite. **Décider combien de rappels, à quel moment, et à qui** — puis les poser dans une fonction appelée par le cron existant, qui balaie déjà les invitations tous les jours.
 
-**Pourquoi ça compte.** undefined
+Le précédent réseau (`RES-Q3`) donne une base : deux rappels, à J+14 et J+25 d'une fenêtre de 60 jours — soit aux deux tiers puis à la veille. Transposé à 30 jours, ça ferait J+20 et J+27, à confirmer.
+
+À décider aussi : **qui** est relancé. La personne dont on attend l'endossement, celle dont on attend l'acceptation, ou les deux ? Et faut-il prévenir qui a proposé que sa proposition va tomber ?
+
+**Pourquoi ça compte.** Parce qu'une proposition qui expire faute de rappel ne ressemble à rien : ni à un refus, ni à un accord, ni à une erreur. L'écran redevient propre et personne ne sait qu'une question a été posée.
+
+Ce n'est plus un détail depuis que **toute** nomination au staff passe par ce circuit. Le collectif est censé trancher ; s'il ne tranche pas parce qu'on ne lui a rien redemandé, c'est le silence qui décide à sa place — l'inverse exact de ce que la collégialité cherchait à obtenir.
 
 **Ce qui compte comme fini.**
 
+- Le nombre de rappels et leurs échéances sont écrits quelque part de normatif, pas seulement dans le code.
+- Les destinataires de chaque rappel sont décidés, y compris le cas de la personne qui a proposé.
+- Un rappel part effectivement, vérifié sur une invitation réelle et pas seulement en test.
+- L'expiration silencieuse ne peut plus se produire sans qu'au moins un rappel ait été émis.
 
-**Dépendances.** undefined
+**Dépendances.** Aucune technique : le cron, la table des invitations et la notification in-app existent tous. La dépendance est une décision — celle de `GOUV-17b`, qui rouvre la doctrine des relances.
 
 *Renvois : `REGISTRE §41 GOUV-17b (ouvert, 01/09/2026)` · `RES-Q3 — precedent reseau : expiration 60 jours, rappels J+14 et J+25` · `spec-gouvernance-roles §8.6 (doublage in-app) et §12.3 (peremption)` · `supabase/migrations/20260826120000 — fn_team_expire_invitations, cron 03 h 20` · `supabase/migrations/20260901234500 — notification in-app du circuit collegial`*
 

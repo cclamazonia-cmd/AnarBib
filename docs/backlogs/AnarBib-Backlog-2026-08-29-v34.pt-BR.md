@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **54 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **55 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1366,16 +1366,26 @@ Isso pesa mais desde que **toda** nomeação à equipe passa por esse circuito (
 
 Registrado em `GOUV-17b` no registro de decisões, estado aberto.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 01/09 à noite — constatação feita e verificada na base no mesmo dia: as oito funções que escrevem em `user_notifications` levantadas, nenhuma de governança; `fn_team_expire_invitations` confirmada ativa no cron das 03h20.*
 
-**O que é.** undefined
+**O que é.** Decidir primeiro, programar depois. **Definir quantos lembretes, em que momento e para quem** — e depois inscrevê-los numa função chamada pelo cron existente, que já varre os convites todos os dias.
 
-**Por que importa.** undefined
+O precedente da rede (`RES-Q3`) dá uma base: dois lembretes, em D+14 e D+25 de uma janela de 60 dias — ou seja, aos dois terços e na véspera. Transposto para 30 dias, daria D+20 e D+27, a confirmar.
+
+Também a decidir: **quem** é lembrado. A pessoa de quem se espera o endosso, aquela de quem se espera a aceitação, ou ambas? E é preciso avisar quem propôs que a sua proposta vai cair?
+
+**Por que importa.** Porque uma proposta que expira por falta de lembrete não se parece com nada: nem com uma recusa, nem com um acordo, nem com um erro. A tela volta a ficar limpa e ninguém sabe que uma pergunta foi feita.
+
+Deixou de ser um detalhe desde que **toda** nomeação à equipe passa por esse circuito. O coletivo deveria decidir; se não decide porque nada lhe foi relembrado, é o silêncio que decide em seu lugar — exatamente o contrário do que a colegialidade buscava.
 
 **O que conta como terminado.**
 
+- O número de lembretes e seus prazos estão escritos em algum lugar normativo, não apenas no código.
+- Os destinatários de cada lembrete estão decididos, incluindo o caso de quem propôs.
+- Um lembrete sai de fato, verificado num convite real e não apenas em teste.
+- A expiração silenciosa não pode mais ocorrer sem que ao menos um lembrete tenha sido emitido.
 
-**Dependências.** undefined
+**Dependências.** Nenhuma técnica: o cron, a tabela de convites e a notificação in-app já existem. A dependência é uma decisão — a de `GOUV-17b`, que reabre a doutrina dos lembretes.
 
 *Remissões : `REGISTRE §41 GOUV-17b (ouvert, 01/09/2026)` · `RES-Q3 — precedent reseau : expiration 60 jours, rappels J+14 et J+25` · `spec-gouvernance-roles §8.6 (doublage in-app) et §12.3 (peremption)` · `supabase/migrations/20260826120000 — fn_team_expire_invitations, cron 03 h 20` · `supabase/migrations/20260901234500 — notification in-app du circuit collegial`*
 
