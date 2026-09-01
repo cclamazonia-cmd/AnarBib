@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 76 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 77 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 4
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-09-01.** **54 items sur 76** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **54 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1202,6 +1202,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 | **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 | **F7** | Treize secrets de fonction sont déclarés et vides, sans qu'on sache lesquels le sont exprès | `P2` | Ouvert |
+| **F8** | Une proposition d'équipe oubliée se referme en silence : rien ne rappelle qu'elle va expirer | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1372,6 +1373,35 @@ Et parce que l'inverse est plus dangereux encore : les deux redirections sont vi
 **Dépendances.** Aucune. Le relevé est fait et tient dans l'item ; ce qui reste demande surtout de savoir ce qu'on voulait.
 
 *Renvois : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
+
+#### F8 — Une proposition d'équipe oubliée se referme en silence : rien ne rappelle qu'elle va expirer
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Depuis le 01/09, le circuit collégial se dit dans l'application : une pastille apparaît sur la cloche quand une proposition attend un endossement, et quand elle attend une acceptation (`GOUV-17`, migration `20260901234500`). **La cloche dit qu'une proposition existe. Elle ne dit pas qu'elle va expirer.**
+
+`fn_team_expire_invitations` referme les invitations à 30 jours, tous les jours à 03 h 20. C'est correct — une question laissée sans réponse pendant un mois doit se refermer. Mais sans relance, une proposition peut encore mourir sans que personne n'ait décidé quoi que ce soit : simplement parce que la notification a été vue une fois, un soir de fatigue, puis recouverte par d'autres.
+
+Ça compte davantage depuis que **toute** nomination au staff passe par ce circuit (`GOUV-11` pour le saut, `GOUV-13` pour l'accueil). Une promotion qui n'aboutit pas faute de relance n'est pas un refus du collectif : c'est un silence qu'on a laissé faire office de refus.
+
+**Ce qui manque n'est pas la technique, c'est l'arbitrage** : combien de rappels, à quel moment, à qui — et que faire du bruit que ça produit sur des équipes de trois personnes. Ça rouvre la doctrine des relances.
+
+**Le précédent existe déjà et devrait servir de point de départ** : `RES-Q3` a tranché la même question pour les cooptations du réseau — expiration à 60 jours, rappels à J+14 et J+25. Il ne s'agit donc pas d'inventer une doctrine mais de décider si elle se transporte telle quelle au circuit local, dont la fenêtre est de 30 jours et non de 60.
+
+Tracé en `GOUV-17b` au registre des décisions, statut ouvert.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** undefined
+
+**Pourquoi ça compte.** undefined
+
+**Ce qui compte comme fini.**
+
+
+**Dépendances.** undefined
+
+*Renvois : `REGISTRE §41 GOUV-17b (ouvert, 01/09/2026)` · `RES-Q3 — precedent reseau : expiration 60 jours, rappels J+14 et J+25` · `spec-gouvernance-roles §8.6 (doublage in-app) et §12.3 (peremption)` · `supabase/migrations/20260826120000 — fn_team_expire_invitations, cron 03 h 20` · `supabase/migrations/20260901234500 — notification in-app du circuit collegial`*
 
 ---
 
@@ -2349,4 +2379,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 76 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 77 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

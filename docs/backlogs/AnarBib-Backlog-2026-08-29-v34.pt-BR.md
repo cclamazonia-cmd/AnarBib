@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 76 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 77 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 4
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **54 itens de 76** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **54 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1194,6 +1194,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F7** | Treze segredos de função estão declarados e vazios, sem que se saiba quais o são de propósito | `P2` | Aberto |
+| **F8** | Uma proposta de equipe esquecida se fecha em silêncio: nada lembra que ela vai expirar | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1348,6 +1349,35 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 **Dependências.** Nenhuma. O levantamento está feito e cabe no item; o que resta exige sobretudo saber o que se queria.
 
 *Remissões : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
+
+#### F8 — Uma proposta de equipe esquecida se fecha em silêncio: nada lembra que ela vai expirar
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Desde 01/09, o circuito colegiado se anuncia no aplicativo: aparece um marcador no sino quando uma proposta espera um endosso, e quando espera uma aceitação (`GOUV-17`, migração `20260901234500`). **O sino diz que uma proposta existe. Não diz que ela vai expirar.**
+
+`fn_team_expire_invitations` fecha os convites em 30 dias, todos os dias às 03h20. Está correto — uma pergunta deixada sem resposta durante um mês deve se fechar. Mas sem lembrete, uma proposta ainda pode morrer sem que ninguém tenha decidido nada: simplesmente porque a notificação foi vista uma vez, numa noite de cansaço, e depois coberta por outras.
+
+Isso pesa mais desde que **toda** nomeação à equipe passa por esse circuito (`GOUV-11` para o salto, `GOUV-13` para o acolhimento). Uma promoção que não se conclui por falta de lembrete não é uma recusa do coletivo: é um silêncio que se deixou fazer as vezes de recusa.
+
+**O que falta não é a técnica, é o arbítrio**: quantos lembretes, em que momento, para quem — e o que fazer com o ruído que isso produz em equipes de três pessoas. Reabre a doutrina dos lembretes.
+
+**O precedente já existe e deveria servir de ponto de partida**: `RES-Q3` decidiu a mesma questão para as cooptações da rede — expiração em 60 dias, lembretes em D+14 e D+25. Não se trata, portanto, de inventar uma doutrina, mas de decidir se ela se transporta tal e qual ao circuito local, cuja janela é de 30 dias e não de 60.
+
+Registrado em `GOUV-17b` no registro de decisões, estado aberto.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** undefined
+
+**Por que importa.** undefined
+
+**O que conta como terminado.**
+
+
+**Dependências.** undefined
+
+*Remissões : `REGISTRE §41 GOUV-17b (ouvert, 01/09/2026)` · `RES-Q3 — precedent reseau : expiration 60 jours, rappels J+14 et J+25` · `spec-gouvernance-roles §8.6 (doublage in-app) et §12.3 (peremption)` · `supabase/migrations/20260826120000 — fn_team_expire_invitations, cron 03 h 20` · `supabase/migrations/20260901234500 — notification in-app du circuit collegial`*
 
 ---
 
@@ -2319,4 +2349,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 76 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 77 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

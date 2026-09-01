@@ -5360,6 +5360,31 @@
         "fr": "31/08 — `supabase secrets list` rejoué : les treize mêmes secrets portent l'empreinte de la chaîne vide, ni plus ni moins. `REGIMENTO_URL` toujours vide, ses deux replis toujours absents : la ligne « Regimento » manque toujours des courriels.",
         "pt": "31/08 — `supabase secrets list` refeito: os mesmos treze segredos com a impressão da cadeia vazia. `REGIMENTO_URL` segue vazio e sem fallback."
       }
+    },
+    {
+      "id": "F8",
+      "d": "F",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Une proposition d'équipe oubliée se referme en silence : rien ne rappelle qu'elle va expirer",
+        "pt": "Uma proposta de equipe esquecida se fecha em silêncio: nada lembra que ela vai expirar"
+      },
+      "v": {
+        "fr": "Depuis le 01/09, le circuit collégial se dit dans l'application : une pastille apparaît sur la cloche quand une proposition attend un endossement, et quand elle attend une acceptation (`GOUV-17`, migration `20260901234500`). **La cloche dit qu'une proposition existe. Elle ne dit pas qu'elle va expirer.**\n\n`fn_team_expire_invitations` referme les invitations à 30 jours, tous les jours à 03 h 20. C'est correct — une question laissée sans réponse pendant un mois doit se refermer. Mais sans relance, une proposition peut encore mourir sans que personne n'ait décidé quoi que ce soit : simplement parce que la notification a été vue une fois, un soir de fatigue, puis recouverte par d'autres.\n\nÇa compte davantage depuis que **toute** nomination au staff passe par ce circuit (`GOUV-11` pour le saut, `GOUV-13` pour l'accueil). Une promotion qui n'aboutit pas faute de relance n'est pas un refus du collectif : c'est un silence qu'on a laissé faire office de refus.\n\n**Ce qui manque n'est pas la technique, c'est l'arbitrage** : combien de rappels, à quel moment, à qui — et que faire du bruit que ça produit sur des équipes de trois personnes. Ça rouvre la doctrine des relances.\n\n**Le précédent existe déjà et devrait servir de point de départ** : `RES-Q3` a tranché la même question pour les cooptations du réseau — expiration à 60 jours, rappels à J+14 et J+25. Il ne s'agit donc pas d'inventer une doctrine mais de décider si elle se transporte telle quelle au circuit local, dont la fenêtre est de 30 jours et non de 60.\n\nTracé en `GOUV-17b` au registre des décisions, statut ouvert.",
+        "pt": "Desde 01/09, o circuito colegiado se anuncia no aplicativo: aparece um marcador no sino quando uma proposta espera um endosso, e quando espera uma aceitação (`GOUV-17`, migração `20260901234500`). **O sino diz que uma proposta existe. Não diz que ela vai expirar.**\n\n`fn_team_expire_invitations` fecha os convites em 30 dias, todos os dias às 03h20. Está correto — uma pergunta deixada sem resposta durante um mês deve se fechar. Mas sem lembrete, uma proposta ainda pode morrer sem que ninguém tenha decidido nada: simplesmente porque a notificação foi vista uma vez, numa noite de cansaço, e depois coberta por outras.\n\nIsso pesa mais desde que **toda** nomeação à equipe passa por esse circuito (`GOUV-11` para o salto, `GOUV-13` para o acolhimento). Uma promoção que não se conclui por falta de lembrete não é uma recusa do coletivo: é um silêncio que se deixou fazer as vezes de recusa.\n\n**O que falta não é a técnica, é o arbítrio**: quantos lembretes, em que momento, para quem — e o que fazer com o ruído que isso produz em equipes de três pessoas. Reabre a doutrina dos lembretes.\n\n**O precedente já existe e deveria servir de ponto de partida**: `RES-Q3` decidiu a mesma questão para as cooptações da rede — expiração em 60 dias, lembretes em D+14 e D+25. Não se trata, portanto, de inventar uma doutrina, mas de decidir se ela se transporta tal e qual ao circuito local, cuja janela é de 30 dias e não de 60.\n\nRegistrado em `GOUV-17b` no registro de decisões, estado aberto."
+      },
+      "r": [
+        "REGISTRE §41 GOUV-17b (ouvert, 01/09/2026)",
+        "RES-Q3 — precedent reseau : expiration 60 jours, rappels J+14 et J+25",
+        "spec-gouvernance-roles §8.6 (doublage in-app) et §12.3 (peremption)",
+        "supabase/migrations/20260826120000 — fn_team_expire_invitations, cron 03 h 20",
+        "supabase/migrations/20260901234500 — notification in-app du circuit collegial"
+      ]
     }
   ]
 }
