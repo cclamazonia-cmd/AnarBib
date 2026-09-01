@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Levi la suspendon",
   "team.modal.warningSelfDemote": "Atento: post la forlaso de la kunordigo, vi ne plu povos administri la teamon nek modifi la agordojn de la biblioteko. Alia kunordigant-in-o aŭ administrant-in-o devos repromocii vin, laŭokaze.",
   "team.noMatch": "Neniu membro kongruas kun la filtriloj.",
+  "team.note.coordProposed": "Transiro al la kunordigo proponita — {count} el {required} aproboj. Nenio ŝanĝiĝas ĝis la procezo finiĝas.",
+  "team.note.coordProposedReady": "Transiro al la kunordigo preta — mankas nur la akcepto de la koncernata persono.",
   "team.note.inactiveExplain": "Sen konekto de pli ol 270 tagoj. La sistemo paŭzigis la aliron.",
   "team.note.removalIn": "Forigo efektiva post {days} {days, plural, one {tago} other {tagoj}}.",
   "team.note.removalToday": "Forigo efektiva hodiaŭ.",

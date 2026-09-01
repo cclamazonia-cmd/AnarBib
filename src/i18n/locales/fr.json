@@ -4999,6 +4999,8 @@
   "team.modal.title.unsuspend": "Lever la suspension",
   "team.modal.warningSelfDemote": "Attention : après avoir quitté la coordination, vous ne pourrez plus gérer l'équipe ni modifier les paramètres de la bibliothèque. Un·e autre coordinateur·rice ou administrateur·rice devra vous promouvoir à nouveau, le cas échéant.",
   "team.noMatch": "Aucun·e membre ne correspond aux filtres.",
+  "team.note.coordProposed": "Passage à la coordination proposé — {count} endossement sur {required}. Rien ne change tant que le circuit n'a pas abouti.",
+  "team.note.coordProposedReady": "Passage à la coordination prêt — il ne manque que l'acceptation de la personne concernée.",
   "team.note.inactiveExplain": "Sans connexion depuis plus de 270 jours. L'accès a été mis en pause par le système.",
   "team.note.removalIn": "Retrait effectif dans {days} {days, plural, one {jour} other {jours}}.",
   "team.note.removalToday": "Retrait effectif aujourd'hui.",

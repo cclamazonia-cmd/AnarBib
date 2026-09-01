@@ -121,6 +121,14 @@
   opacity: .55;
 }
 
+/* Passage à la coordination proposé : la ligne est EN SUSPENS — ni promue, ni
+   tout à fait inchangée. Atténuation légère et liseré d'attente, pas le .55
+   d'un rôle clos : ici il se passe quelque chose, et ça doit rester lisible. */
+.ab-team-row[data-pending-coord="true"] {
+  border-left: 3px solid var(--color-warn, #fbbf24);
+  opacity: .82;
+}
+
 .ab-team-row__main {
   flex: 1;
   min-width: 0;

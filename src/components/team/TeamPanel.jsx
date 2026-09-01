@@ -246,8 +246,24 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
       }
       g.memberships.push(m);
     }
+
+    // Rapprochement memberships <-> invitations vivantes. `fn_team_list_invitations`
+    // renvoie `invited_public_id`, les memberships portent `profiles.public_id` :
+    // les deux jeux sont DÉJÀ chargés, aucune requête supplémentaire n'est faite.
+    const invByPublicId = new Map();
+    for (const inv of invitations) {
+      const key = String(inv?.invited_public_id || '').trim().toUpperCase();
+      if (key) invByPublicId.set(key, inv);
+    }
+    for (const g of order) {
+      const key = String(g.profile?.public_id || '').trim().toUpperCase();
+      g.pendingInvitation = key ? (invByPublicId.get(key) || null) : null;
+      // Sert à distinguer les deux sens de `status='inactive'` (cf. plus bas) :
+      // compte délaissé par le cron, ou rôle quitté par une rétrogradation.
+      g.hasActiveRole = g.memberships.some((m) => m.status === 'active');
+    }
     return order;
-  }, [filtered, user?.id]);
+  }, [filtered, user?.id, invitations]);
 
   // ── Handlers d'action ─────────────────────────────────
   const handleActionSelected = useCallback((membership, actionDescriptor) => {
@@ -394,6 +410,8 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
               key={g.userId}
               group={g}
               index={i}
+              pendingInvitation={g.pendingInvitation}
+              hasActiveRole={g.hasActiveRole}
               showLibrary={scope === 'network'}
               observerRole={observerRole}
               observerUserId={user?.id}
@@ -519,6 +537,8 @@ function CountCard({ label, count, kind = 'default' }) {
 function TeamPersonGroup({
   group,
   index,
+  pendingInvitation,
+  hasActiveRole,
   showLibrary,
   observerRole,
   observerUserId,
@@ -535,6 +555,8 @@ function TeamPersonGroup({
       <TeamMembershipRow
         membership={group.memberships[0]}
         index={index}
+        pendingInvitation={pendingInvitation}
+        hasActiveRole={hasActiveRole}
         showLibrary={showLibrary}
         isCurrentUser={group.isCurrentUser}
         observerRole={observerRole}
@@ -568,6 +590,8 @@ function TeamPersonGroup({
             key={sm.id}
             membership={sm}
             subRow
+            pendingInvitation={pendingInvitation}
+            hasActiveRole={hasActiveRole}
             showLibrary={showLibrary}
             isCurrentUser={group.isCurrentUser}
             observerRole={observerRole}
@@ -585,6 +609,8 @@ function TeamMembershipRow({
   membership: m,
   index,
   subRow = false,
+  pendingInvitation = null,
+  hasActiveRole = false,
   showLibrary,
   isCurrentUser,
   observerRole,
@@ -618,6 +644,18 @@ function TeamMembershipRow({
     scope,
   }), [observerRole, observerUserId, m.role, m.user_id, eff, scope]);
 
+  // Une invitation vivante existe déjà pour cette personne : reproposer se
+  // ferait refuser par la base (`conflict: an active invitation already exists
+  // for this person`). Mieux vaut ne pas offrir le geste que de laisser
+  // remonter une erreur brute. `availableTeamActions` reste une fonction de
+  // PERMISSION — elle n'a pas à connaître l'état des invitations en cours.
+  const shownActions = useMemo(
+    () => (pendingInvitation
+      ? actions.filter((a) => a.action !== 'propose_coordenador')
+      : actions),
+    [actions, pendingInvitation],
+  );
+
   // En sous-ligne, le nom + l'e-mail sont déjà affichés au niveau du groupe ;
   // on ne répète ici que biblio · date d'adhésion.
   const metaParts = [];
@@ -626,7 +664,15 @@ function TeamMembershipRow({
   if (memberSince) metaParts.push(t({ id: 'team.memberSince' }, { date: memberSince }));
 
   return (
-    <div className="ab-team-row" data-status={eff} style={subRow ? subRowStyle() : rowStyle(index)}>
+    <div
+      className="ab-team-row"
+      data-status={eff}
+      data-pending-coord={
+        pendingInvitation?.role_proposed === 'coordenador' && eff === 'active'
+          ? 'true' : undefined
+      }
+      style={subRow ? subRowStyle() : rowStyle(index)}
+    >
       <div className="ab-team-row__main">
         {!subRow && (
           <div className="ab-team-row__name">
@@ -654,7 +700,29 @@ function TeamMembershipRow({
               : t({ id: 'team.note.removalIn' }, { days: daysUntilRemoval })}
           </div>
         )}
-        {eff === 'inactive' && (
+        {/* L'état intermédiaire du circuit collégial (migration 20260826120000) :
+            la promotion est proposée mais RIEN n'a changé. Sans cette mention, la
+            ligne est stricto sensu identique à ce qu'elle était avant le clic, et
+            on croit l'action ratée. */}
+        {pendingInvitation?.role_proposed === 'coordenador' && eff === 'active' && (
+          <div className="ab-team-row__note ab-team-row__note--warn">
+            {t({
+              id: pendingInvitation.status === 'ready'
+                ? 'team.note.coordProposedReady'
+                : 'team.note.coordProposed',
+            }, {
+              count: pendingInvitation.ratifications_count,
+              required: pendingInvitation.required_ratifications,
+            })}
+          </div>
+        )}
+        {/* `status='inactive'` porte DEUX sens : compte délaissé (cron T9) et rôle
+            quitté par une rétrogradation (fn_team_self_demote met le rôle supérieur
+            à 'inactive'). Le texte ci-dessous ne vaut que pour le premier. Si la
+            personne a un autre rôle actif ici, elle n'a rien délaissé du tout —
+            l'afficher racontait à l'équipe une histoire fausse sur quelqu'un qui
+            venait simplement de passer la main (P3). */}
+        {eff === 'inactive' && !hasActiveRole && (
           <div className="ab-team-row__note ab-team-row__note--muted">
             {t({ id: 'team.note.inactiveExplain' })}
           </div>
@@ -669,7 +737,7 @@ function TeamMembershipRow({
         </span>
         {/* Menu d'actions (rendu uniquement si actions.length > 0) */}
         <TeamActionsMenu
-          actions={actions}
+          actions={shownActions}
           onSelectAction={(a) => onActionSelected(m, a)}
         />
       </div>

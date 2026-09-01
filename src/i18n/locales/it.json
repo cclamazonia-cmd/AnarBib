@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Revocare la sospensione",
   "team.modal.warningSelfDemote": "Attenzione: dopo aver lasciato il coordinamento, non potrai più gestire la squadra né modificare i parametri della biblioteca. Un* altr* coordinatori* o amministratori* dovrà promuoverti di nuovo, se necessario.",
   "team.noMatch": "Nessun* compagn* corrisponde ai filtri.",
+  "team.note.coordProposed": "Passaggio al coordinamento proposto — {count} di {required} avalli. Nulla cambia finché il percorso non si conclude.",
+  "team.note.coordProposedReady": "Passaggio al coordinamento pronto — manca solo l'accettazione della persona interessata.",
   "team.note.inactiveExplain": "Senza accesso da più di 270 giorni. L'accesso è stato sospeso dal sistema.",
   "team.note.removalIn": "Ritiro effettivo tra {days} {days, plural, one {giorno} other {giorni}}.",
   "team.note.removalToday": "Ritiro effettivo oggi.",

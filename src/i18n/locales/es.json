@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Levantar la suspensión",
   "team.modal.warningSelfDemote": "Atención: después de salir de la coordinación, ya no podrás gestionar le equipe ni modificar los parámetros de la biblioteca. Otre coordinadore o administradore deberá promoverte de nuevo, si fuera necesario.",
   "team.noMatch": "Ningune integrante coincide con les filtros.",
+  "team.note.coordProposed": "Paso a la coordinación propuesto — {count} de {required} respaldos. Nada cambia mientras el circuito no concluya.",
+  "team.note.coordProposedReady": "Paso a la coordinación listo — solo falta la aceptación de la persona concernida.",
   "team.note.inactiveExplain": "Sin conexión hace más de 270 días. El acceso fue pausado por le sistema.",
   "team.note.removalIn": "Retiro efectivo en {days} {days, plural, one {día} other {días}}.",
   "team.note.removalToday": "Retiro efectivo hoy.",

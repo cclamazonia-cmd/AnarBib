@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Lift suspension",
   "team.modal.warningSelfDemote": "Warning: after stepping down from coordination, you will no longer be able to manage the team or change the library's settings. Another coordinator or administrator will need to promote you back if necessary.",
   "team.noMatch": "No team member matches the filters.",
+  "team.note.coordProposed": "Step into coordination proposed — {count} of {required} endorsements. Nothing changes until the process completes.",
+  "team.note.coordProposedReady": "Step into coordination ready — only the concerned person's acceptance is missing.",
   "team.note.inactiveExplain": "No login for over 270 days. Access has been paused by the system.",
   "team.note.removalIn": "Removal effective in {days} {days, plural, one {day} other {days}}.",
   "team.note.removalToday": "Removal effective today.",

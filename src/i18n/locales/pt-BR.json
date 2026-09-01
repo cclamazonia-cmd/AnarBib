@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Levantar suspensão",
   "team.modal.warningSelfDemote": "Atenção: após sair da coordenação, você não poderá mais gerir a equipe nem alterar os parâmetros da biblioteca. Outr(o/a/e) coordenador(a/e) ou administrador(a/e) precisará promover você novamente, se for necessário.",
   "team.noMatch": "Nenhum(a/e) membre corresponde aos filtros.",
+  "team.note.coordProposed": "Passagem à coordenação proposta — {count} de {required} endossos. Nada muda enquanto o circuito não se concluir.",
+  "team.note.coordProposedReady": "Passagem à coordenação pronta — falta apenas a aceitação da pessoa concernida.",
   "team.note.inactiveExplain": "Sem conexão há mais de 270 dias. O acesso foi pausado pel(o/a/e) sistema.",
   "team.note.removalIn": "Retirada efetiva em {days} {days, plural, one {dia} other {dias}}.",
   "team.note.removalToday": "Retirada efetiva hoje.",

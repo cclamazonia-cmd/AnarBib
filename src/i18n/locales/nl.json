@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Schorsing opheffen",
   "team.modal.warningSelfDemote": "Let op: na het terugtreden uit de coördinatie kun je het team niet meer beheren of de instellingen van de bibliotheek wijzigen. Een andere coördinator of beheerder moet je indien nodig opnieuw bevorderen.",
   "team.noMatch": "Geen teamlid komt overeen met de filters.",
+  "team.note.coordProposed": "Overstap naar de coördinatie voorgesteld — {count} van {required} steunbetuigingen. Er verandert niets zolang het traject niet is afgerond.",
+  "team.note.coordProposedReady": "Overstap naar de coördinatie klaar — alleen de aanvaarding door de betrokken persoon ontbreekt.",
   "team.note.inactiveExplain": "Meer dan 270 dagen niet ingelogd. De toegang is door het systeem gepauzeerd.",
   "team.note.removalIn": "Verwijdering van kracht over {days} {days, plural, one {dag} other {dagen}}.",
   "team.note.removalToday": "Verwijdering vandaag van kracht.",

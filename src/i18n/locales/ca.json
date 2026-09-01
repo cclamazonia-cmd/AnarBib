@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Aixecar la suspensió",
   "team.modal.warningSelfDemote": "Atenció: després de deixar la coordinació, ja no podreu gestionar l'equip ni modificar els paràmetres de la biblioteca. Un-a-e altre-a-e coordinador-a-e o administrador-a-e us haurà de tornar a promoure, si escau.",
   "team.noMatch": "Cap membre coincideix amb els filtres.",
+  "team.note.coordProposed": "Pas a la coordinació proposat — {count} de {required} avals. Res no canvia mentre el circuit no s'hagi completat.",
+  "team.note.coordProposedReady": "Pas a la coordinació a punt — només falta l'acceptació de la persona concernida.",
   "team.note.inactiveExplain": "Sense connexió des de fa més de 270 dies. El sistema ha posat l'accés en pausa.",
   "team.note.removalIn": "Retirada efectiva d'aquí a {days} {days, plural, one {dia} other {dies}}.",
   "team.note.removalToday": "Retirada efectiva avui.",

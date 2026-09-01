@@ -4993,6 +4993,8 @@
   "team.modal.title.unsuspend": "Suspendierung aufheben",
   "team.modal.warningSelfDemote": "Achtung: Nach dem Austritt aus der Koordination kannst du das Team nicht mehr verwalten und die Bibliotheksparameter nicht mehr ändern. Eine andere Koordinator*in oder Administrator*in muss dich gegebenenfalls erneut befördern.",
   "team.noMatch": "Keine Genoss*innen entsprechen den Filtern.",
+  "team.note.coordProposed": "Wechsel in die Koordination vorgeschlagen — {count} von {required} Befürwortungen. Nichts ändert sich, solange der Ablauf nicht abgeschlossen ist.",
+  "team.note.coordProposedReady": "Wechsel in die Koordination bereit — es fehlt nur die Zustimmung der betroffenen Person.",
   "team.note.inactiveExplain": "Mehr als 270 Tage ohne Anmeldung. Der Zugang wurde vom System pausiert.",
   "team.note.removalIn": "Austritt wirksam in {days} {days, plural, one {Tag} other {Tagen}}.",
   "team.note.removalToday": "Austritt heute wirksam.",
