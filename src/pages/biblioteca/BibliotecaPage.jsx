@@ -2213,8 +2213,9 @@ export default function BibliotecaPage() {
 
         {/* ═══ 5bis. Leitoras·es ═══════════════════════ */}
         {/* Phase B2bis 11/05/2026 : onglet distinct des lectrices et lecteurs
-            de la biblio, avec promotion → librarian via la RPC
-            fn_team_promote_to_librarian (déclenche l'event militant). */}
+            de la biblio. GOUV-13 (01/09/2026) : l'accueil dans l'équipe s'y
+            PROPOSE via le circuit d'invitation (fn_team_propose_invitation,
+            p_role='librarian') — la promotion directe est condamnée. */}
         {tab==='leitores' && (
           <LeitoresPanel libraryId={libraryId} />
         )}

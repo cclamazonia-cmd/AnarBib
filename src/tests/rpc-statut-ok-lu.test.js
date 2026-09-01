@@ -135,7 +135,10 @@ const RPC_A_STATUT = new Set([
   'fn_import_profile_create', 'fn_import_profile_delete', 'fn_import_register_deposit_source',
   'fn_import_set_adapter_overrides', 'fn_import_set_profile', 'fn_partner_register_deposit_source',
   'fn_publish_digital_asset_from_resource', 'fn_restore_deleted_draft',
-  'fn_team_promote_to_librarian',
+  // fn_team_promote_to_librarian retirée le 01/09/2026 (GOUV-13) : la RPC
+  // est condamnée (collegiality_required) et plus aucun site ne l'appelle —
+  // l'accueil passe par fn_team_propose_invitation (déjà couverte via
+  // assertRpcOk chez ses appelants).
   // Ajoutée le 31/08/2026 : façade à DEUX SAUTS, invisible à la requête
   // ci-dessous. Elle ne construit aucun statut — elle relaie
   // `ingest.fn_dispatch_partner_catalog_import`, qui rend `{ok:true, …}`

@@ -284,3 +284,8 @@ tests/sql/crons_planifies_tests.sql
 # réglage OFF par défaut, reader actif strict, circuit complet, revérification
 # à l'acceptation, non-régression de l'échelle. Réf. 20260901162610.
 tests/sql/saut_collegial_tests.sql
+
+# L'accueil aussi est collégial (GOUV-13, 01/09/2026) : la promotion directe
+# reader -> librarian lève collegiality_required, le circuit d'invitation
+# est le seul chemin. Réf. 20260901175233.
+tests/sql/t1_accueil_collegial_tests.sql

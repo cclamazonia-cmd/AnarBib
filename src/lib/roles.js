@@ -168,14 +168,11 @@ export function availableTeamActions(ctx) {
   // ─── Actions selon le status courant de la cible ───
   if (targetStatus === 'active' && !targetHasPendingRemoval) {
     // Promotion
-    if (targetRole === 'reader') {
-      actions.push({
-        action: 'promote_to_librarian',
-        label: 'team.action.promoteToLibrarian',
-        kind: 'primary',
-        requiresReason: false,
-      });
-    } else if (targetRole === 'librarian') {
+    // GOUV-13 (01/09/2026) : plus d'action directe sur une cible reader —
+    // l'accueil passe par le circuit d'invitation (TeamInviteModal /
+    // LeitoresPanel). Branche de toute façon inatteignable ici :
+    // fn_team_list_memberships ne retourne que librarian/coordenador.
+    if (targetRole === 'librarian') {
       // Collégialité (migration 20260826120000) : ce n'est plus une promotion
       // immédiate mais une proposition soumise à ratification puis acceptation.
       actions.push({

@@ -9,7 +9,7 @@
 // l'UI, la DB rejette.
 //
 // Phase B1 :
-//   - promoteToLibrarian, proposeCoordenadorPromotion
+//   - proposeCoordenadorPromotion (promoteToLibrarian retirée — GOUV-13)
 //   - selfDemote (non-admin)
 //   - suspendMember, unsuspendMember
 //
@@ -71,13 +71,9 @@ export function useTeamMutations() {
   }, []);
 
   // ─── Phase B1 : promotions ─────────────────────────────────────────────
-  const promoteToLibrarian = useCallback(
-    (userId, libraryId) => callRpc('fn_team_promote_to_librarian', {
-      p_user_id: userId,
-      p_library_id: libraryId,
-    }),
-    [callRpc]
-  );
+  // GOUV-13 (01/09/2026) : promoteToLibrarian est retirée — l'accueil passe
+  // par proposeInvitation (fn_team_propose_invitation, p_role='librarian') ;
+  // fn_team_promote_to_librarian lève désormais collegiality_required.
 
   // Depuis la migration 20260826120000 (collégialité), la promotion à
   // coordenador n'est plus un geste unilatéral : elle passe par le workflow
@@ -185,8 +181,7 @@ export function useTeamMutations() {
 
   return {
     loading,
-    // Phase B1
-    promoteToLibrarian,
+    // Phase B1 (promoteToLibrarian retirée — GOUV-13)
     proposeCoordenadorPromotion,
     selfDemote,
     suspendMember,

@@ -9,9 +9,12 @@ import { assertRpcOk } from '../../lib/rpcStatus.js';
  * LeitoresPanel — liste des lectrices et lecteurs d'une bibliothèque.
  *
  * Affiche les membres ayant role='reader' et status='active' pour la biblio
- * courante. Permet aux coordenadores et administradores de promouvoir un
- * lecteur au rôle de bibliothécaire via la RPC fn_team_promote_to_librarian
- * (déclenche l'event team.promoted_to_librarian et son mail militant).
+ * courante. Permet aux coordenadores et administradores de PROPOSER un·e
+ * lecteur·rice dans l'équipe via le circuit d'invitation
+ * (fn_team_propose_invitation, p_role='librarian') — depuis GOUV-13
+ * (01/09/2026), l'accueil aussi est collégial : endossement selon quorum,
+ * puis acceptation par la personne concernée. La promotion directe
+ * (fn_team_promote_to_librarian) est condamnée et lève collegiality_required.
  *
  * Pourquoi un composant dédié plutôt que d'étendre TeamPanel :
  *   - TeamPanel a pour vocation politique de montrer "qui engage la biblio".
@@ -63,21 +66,23 @@ export default function LeitoresPanel({ libraryId }) {
 
   useEffect(() => { load(); }, [load]);
 
-  async function promoteToLibrarian(reader) {
+  // GOUV-13 — l'accueil passe par le circuit collégial : on dépose une
+  // proposition, rien n'est promu ici. La RPC porte toutes les gardes.
+  async function proposeLibrarian(reader) {
     const name = `${reader.profiles?.first_name||''} ${reader.profiles?.last_name||''}`.trim() || reader.profiles?.email || '—';
-    const confirmMsg = t({ id: 'biblioteca.leitores.promoteConfirm' }, { name });
+    const confirmMsg = t({ id: 'biblioteca.leitores.proposeLibrarianConfirm' }, { name });
     if (!window.confirm(confirmMsg)) return;
     setBusyUserId(reader.user_id);
     setMsg({ text: '', kind: '' });
     try {
-      const { data: rpcData, error } = await supabase.rpc('fn_team_promote_to_librarian', {
-        p_user_id: reader.user_id,
+      const { data: rpcData, error } = await supabase.rpc('fn_team_propose_invitation', {
         p_library_id: libraryId,
+        p_invited_public_id: reader.profiles?.public_id,
+        p_role: 'librarian',
       });
       if (error) throw error;
       assertRpcOk(rpcData);
-      setMsg({ text: t({ id: 'biblioteca.leitores.promoteSuccess' }, { name }), kind: 'ok' });
-      await load();
+      setMsg({ text: t({ id: 'biblioteca.leitores.proposeLibrarianSuccess' }, { name }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
@@ -249,12 +254,12 @@ export default function LeitoresPanel({ libraryId }) {
                       <button
                         className="cat-btn primary"
                         style={{ fontSize:'.78rem', padding:'4px 10px' }}
-                        onClick={() => promoteToLibrarian(r)}
+                        onClick={() => proposeLibrarian(r)}
                         disabled={isBusy}
                       >
                         {isBusy
                           ? t({ id: 'common.loading' })
-                          : t({ id: 'biblioteca.leitores.promote' })}
+                          : t({ id: 'biblioteca.leitores.proposeLibrarian' })}
                       </button>
                       {canProposeCoord && (
                         <button

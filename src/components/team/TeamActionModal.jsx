@@ -81,9 +81,9 @@ export default function TeamActionModal({
 
     let result;
     switch (action.action) {
-      case 'promote_to_librarian':
-        result = await mutations.promoteToLibrarian(membership.user_id, membership.library_id);
-        break;
+      // GOUV-13 (01/09/2026) : le cas 'promote_to_librarian' est retiré —
+      // l'accueil passe par le circuit d'invitation (TeamInviteModal /
+      // LeitoresPanel), la promotion directe est condamnée côté DB.
       case 'propose_coordenador': {
         const publicId = membership.profiles?.public_id;
         if (!publicId) {
@@ -235,14 +235,6 @@ export default function TeamActionModal({
 
 function buildConfig(actionType, t) {
   switch (actionType) {
-    case 'promote_to_librarian':
-      return {
-        title: t({ id: 'team.modal.title.promoteToLibrarian' }),
-        description: t({ id: 'team.modal.description.promoteToLibrarian' }),
-        confirmLabel: t({ id: 'team.modal.confirm.promote' }),
-        kind: 'positive',
-        buttonKind: 'primary',
-      };
     case 'propose_coordenador':
       return {
         title: t({ id: 'team.modal.title.proposeCoordenador' }),
