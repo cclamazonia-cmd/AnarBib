@@ -890,3 +890,110 @@ Le préavis, rédigé en pt-BR (la langue des quatre), attend son envoi. Détail
 > fusion) est né sans elle. Aucune relecture ne l'aurait attrapée : le code des
 > périodiques est cohérent avec lui-même. Seule une question posée à l'ensemble —
 > *qui peut détruire quoi ?* — pouvait faire apparaître la divergence.
+
+---
+
+# `public`, paquet 6 — ce qui trahit n'est pas le mot, c'est l'ordre
+
+Le paquet 2 avait fermé quatorze oracles d'existence en cherchant le **motif du
+message** : d'abord « não pertence », puis la même chose sans les accents. Ce
+paquet en trouve **neuf de plus**, et aucune ne dit « pertence ». Elles disent
+« Acesso restrito », « Você não tem permissão », « Este empréstimo pertence a
+outra pessoa ».
+
+**Chercher un vocabulaire ne trouve que ce qui parle la même langue.**
+
+## Le critère qui les atteint
+
+Il est structurel, et il se mesure : **un test d'existence placé avant le
+contrôle de droit**, sur un identifiant qu'on peut deviner. Relevé en comparant,
+dans chaque corps, la position du premier refus « ça n'existe pas » et celle du
+premier refus « tu n'as pas le droit », sur toute la surface exposée à
+`authenticated`. Seize fonctions dans ce cas, dont **neuf sur un identifiant
+séquentiel**.
+
+*Le paquet 2 cherchait un mot ; il fallait chercher un ordre.* C'est
+`DOC-RECENS-1` d'un cran plus haut : là-bas, l'inventaire se croyait complet
+parce qu'il partait d'une liste de noms ; ici, il se croyait complet parce qu'il
+partait d'une liste de mots.
+
+## Pourquoi on n'inverse pas l'ordre
+
+Le remède évident — garder d'abord, lire ensuite — est **impossible** : la garde
+porte sur la bibliothèque **de l'objet**, qu'il faut donc avoir lu pour la
+connaître. C'est même la bonne forme, celle que le paquet 5 a désignée comme
+modèle (`fn_import_set_profile` garde sur `v_run.library_id`, pas sur une
+bibliothèque de session).
+
+On unifie donc ce que les deux refus **disent**, et l'identifiant sort du
+message : le rendre est déjà une confirmation qu'on l'a lu.
+
+| Fonction | Identifiant | Ce qu'on pouvait distinguer |
+|---|---|---|
+| `fn_confirm_digital_asset_rights` | `bigint` | l'asset existe / vous n'y avez pas droit |
+| `fn_publish_digital_asset_from_resource` | `bigint` | idem, sur les ressources |
+| `fn_attach_received_asset_record` | `bigint` | *(troisième message resté du paquet 2)* |
+| `fn_import_set_adapter_overrides` | `bigint` | le run existe / il est d'une autre bibliothèque |
+| `fn_import_set_profile` | `bigint` | idem |
+| `fn_set_circulation_limits` | `bigint` | le jeu de règles existe / il est d'ailleurs |
+| `discard_exemplar` | `bigint` | l'exemplaire existe / il est d'ailleurs |
+| `fn_v2_schedule_emprestimo_return` | `bigint` | l'emprunt existe / il est à quelqu'un d'autre |
+| `fn_v2_clear_emprestimo_return_schedule` | `bigint` | idem |
+
+## Une correction du paquet 2 était à moitié faite
+
+`fn_attach_received_asset_record` a été corrigée **le matin même** : deux de ses
+trois refus unifiés. Le troisième — « Acesso restrito ao coordenador da
+biblioteca detentora » — est resté, et **un seul suffit à rouvrir l'oracle**. La
+suite écrite ce matin passait au vert, parce qu'elle demandait « le motif a-t-il
+disparu ? ».
+
+La bonne question est : **reste-t-il deux refus distinguables ?** C'est celle que
+pose `oracle_existence_ordre_tests.sql`. *Une fonction corrigée n'est pas une
+fonction close.*
+
+## Un défaut de ma substitution, attrapé à l'essai à blanc
+
+Ma première version remplaçait les motifs **globalement** sur les neuf fonctions.
+`fn_publish_digital_asset_from_resource` et `fn_confirm_digital_asset_rights`
+partagent le refus « Acesso restrito ao coordenador da biblioteca detentora »
+mais **pas leur objet** : l'une parle d'un « Recurso digital », l'autre d'un
+« Asset ». L'unification globale aurait fait dire à la première le message de la
+seconde — un refus unifié, mais sur le mauvais nom. Corrigé en substitution
+ciblée par fonction, avant écriture, parce que l'essai à blanc rend les neuf
+corps et qu'on les relit.
+
+## Ce qui n'est pas touché, et pourquoi
+
+* **les identifiants `uuid`** (`fn_partnership_accept`, `update_exemplar_labels`,
+  `api.resubmit_membership`) : deux refus distincts y sont sans portée, un uuid
+  ne se devine pas. Les corriger serait du bruit — et une suite qui rougit sur
+  des cas sains est une suite qu'on cesse de lire ;
+* `fn_v2_mark_emprestimo_return_missed` : ses refus sont des refus de **rôle**,
+  pas des tests d'existence ;
+* le message de rôle de `discard_exemplar` : il tombe **avant** toute lecture, il
+  ne dit donc rien sur l'existence de l'exemplaire.
+
+## Vérification
+
+`DOC-MSG-1` appliqué dans sa forme élargie du matin — aux messages **et** au
+comportement : `grep` sur `tests/` et sur le front pour les huit libellés
+touchés, **aucune assertion**. Le front traduit par `localizeError` sans liste
+blanche : ces textes sont affichés tels quels, il n'y a pas de table de
+correspondance à casser. Éprouvé en transaction annulée :
+`ORACLE_EXISTENCE_ORDRE OK : 3/3`, production vérifiée intacte après coup.
+
+## Le lot `api` repasse l'épreuve du nouveau critère
+
+Le lot `api` avait été clos avec l'**ancien** critère — la recherche par motif.
+Un critère neuf est une occasion de rouvrir ce qu'on croyait fermé, et c'est
+exactement ce que `DOC-RECENS-1` demande : contrôler par un second chemin.
+
+Le critère structurel a donc été rejoué sur les 138 fonctions d'`api`. Il en
+sort **une seule** — `api.fn_assembleia_order_item` — dont l'objet est désigné
+par un **uuid** ; son `integer` n'est qu'un rang d'affichage. Hors périmètre,
+pour la même raison que les autres uuid.
+
+**Le lot `api` tient donc aussi avec le nouveau critère.** Ce n'est pas un
+résultat nul : c'est la seule façon de savoir qu'une clôture prononcée avec un
+outil plus faible n'était pas prématurée.
