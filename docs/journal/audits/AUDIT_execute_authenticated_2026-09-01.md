@@ -388,3 +388,91 @@ périmètre (paquet 3).
 
 **138 des 138** fonctions du lot `api` ont un verdict écrit (24, 15, 21, 45, 32) ;
 **deux fuites réelles** trouvées et corrigées, toutes deux dormantes — et un défaut introduit par le second correctif, attrapé par sa propre suite avant d'avoir servi. Le lot `api` est clos. Reste le schéma `public` — **326 fonctions**, dont l'audit du 18/05 n'avait vu qu'une partie. Les cinq critères éprouvés ici s'y transposent, dans le même ordre : ils ont produit trois prises sur `api` et ont fermé la liste sans trou.
+
+
+---
+---
+
+# LOT `public` — 326 fonctions
+
+Même méthode, mêmes critères. Premier tri : **69 sans garde visible** sur 326.
+
+# Paquet 1 de `public` — les helpers sans garde (69 lues, 01/09)
+
+## La prise principale : le foyer derrière la façade
+
+Le matin même, le paquet 1 du lot `api` avait fermé `api.get_due_date_for_loan`,
+qui lisait l'état de cotisation de n'importe quel UUID. **Le helper qu'elle
+appelle, `fn_is_loan_blocked_by_dues`, est lui-même exposé à `authenticated`.**
+On pouvait donc poser la même question directement à
+`/rest/v1/rpc/fn_is_loan_blocked_by_dues`, sans passer par la façade corrigée.
+
+*Corriger un chemin ne corrige pas ce qu'il traversait.* C'est `DOC-RECENS-1`
+appliqué aux correctifs eux-mêmes, et c'est la leçon la plus utile de la
+journée : après avoir fermé une fonction, il faut remonter ce qu'elle appelle.
+
+Éprouvé en production avant écriture (elle répond à un tiers ni concerné ni
+staff — elle ne consulte jamais `auth.uid()`), corrigé par une garde dans le
+corps, et **vérifié après déploiement sur les trois chemins** : la personne
+concernée répond, le staff de sa bibliothèque répond, un tiers reçoit `42501`.
+
+## Un oracle exploitable aujourd'hui — sans case à cocher
+
+`fn_painel_find_profile_by_lookup` gardait bien l'**accès**
+(`can_manage_profile_from_my_libraries`) mais distinguait deux refus : « compte
+trouvé, mais pas dans votre bibliothèque » d'un côté, « rien trouvé » de
+l'autre. **Le premier message confirme qu'un compte existe dans le réseau.**
+Toute personne inscrite pouvait tester une adresse e-mail et le savoir.
+
+Contrairement aux quatre fuites précédentes, celle-ci n'était **pas dormante** :
+il suffisait d'un compte. Dans un réseau de bibliothèques anarchistes, confirmer
+qu'une adresse appartient à quelqu'un du réseau n'est pas une donnée technique.
+
+C'est l'exact contraire de `api.resolve_reader_card` (paquet 4 du lot `api`),
+qui rend **volontairement** le même motif dans les deux cas. Les deux formes
+cohabitaient dans la même base ; celle-ci était la mauvaise. **CLAUDE.md
+signalait cette fonction depuis mai** comme prioritaire pour l'audit
+d'énumération — c'est fait.
+
+## Quatre helpers internes qui n'avaient rien à faire sur la surface
+
+Fermés à `authenticated` : `fn_membership_can_engage_circulation` (le même
+oracle en pire — il distingue `restricted` de `dues`),
+`fn_network_notify_event` (émission vers l'outbox réseau : exposé, il laissait
+injecter des événements), `fn_purge_audit_draft_snapshots` (purge d'audit à
+90 jours, déclenchable par n'importe qui), et
+`get_library_contact_for_cooperation` — qui rend courriel, téléphone, WhatsApp
+et adresse postale de **n'importe quelle** bibliothèque, sans aucune garde, et
+qui **n'a aucun appelant** : ni front, ni fonction, ni policy. Même famille que
+la fuite d'annuaire fermée en août pour `anon`.
+
+Aucun n'est appelé par le front, aucun n'est cité par une policy : le `REVOKE`
+ne casse rien. **326 → 322 fonctions exposées.**
+
+## Un faux positif de mon propre recensement
+
+Le relevé des appelants (`prosrc ~ 'fn_is_loan_blocked_by_dues'`) faisait
+apparaître `api.confirm_pickup_v1`, qui est **SECURITY INVOKER** — un `REVOKE`
+l'aurait cassée. Vérification faite : elle ne l'appelle pas, elle la **cite dans
+un commentaire** et délègue à une fonction DEFINER. *Chercher un appel par le
+texte du corps trouve aussi les commentaires.* La garde a tout de même été mise
+dans le corps plutôt qu'un `REVOKE` — défense en profondeur, et `DOC-RPC-3`.
+
+## Le reste des 69 : des gardes que le tri ne connaissait pas
+
+Comme au paquet 1 du lot `api`, la majorité des « sans garde visible » en
+avaient une, sous un nom que le regex ignorait : `fn_is_dedup_arbiter()` (les
+fusions et démarquages de doublons), `my_access.can_access_painel`
+(`fn_partner_search`, `fn_import_list_run_rows`),
+`can_manage_profile_from_my_libraries`. Et trois fonctions sont des **stubs
+dépréciés qui lèvent** — `fn_team_promote_to_coordenador`,
+`fn_team_promote_to_administrador`, `fn_network_admin_request_removal` : la
+bonne façon de retirer une fonction, elle refuse en expliquant par quoi elle est
+remplacée au lieu de disparaître.
+
+Les prédicats de configuration (`fn_library_*_mode`, `fn_library_has_*`,
+`fn_reading_notes_enabled_for`…) n'ont pas de garde **par nature** : ils *sont*
+la garde des policies, et ne disent rien qu'une page publique ne dise déjà.
+
+**69 des 326 lues. Restent 257** — les fonctions à garde apparente, à passer par
+paquets selon les mêmes critères.
