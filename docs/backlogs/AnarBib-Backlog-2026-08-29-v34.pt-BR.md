@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 82 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 81 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -21,7 +21,7 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 5
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **59 itens de 82** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **58 itens de 81** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G4, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1428,7 +1428,6 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 |---|---|---|---|
 | **G1** | Percorrer os circuitos construídos e jamais usados | `P0` | Aberto |
 | **G2** | Decidir politicamente o desvio entre P2 e P8 sobre a promoção a coordenador·a | `P1` | Decisão coletiva |
-| **G3** | Testar o circuito de promoção colegiada em `blmf-teste` | `P1` | Aberto |
 | **G4** | Exercer os quatro e-mails de equipe jamais enviados | `P1` | Aberto |
 | **G5** | O que `is_test_mode` realmente comanda na Biblioteca Terra Livre | `P2` | Aberto |
 | **G6** | Dar uma tela ao empréstimo entre bibliotecas | `P2` | Aberto |
@@ -1486,28 +1485,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Questão aberta desde 26/08. Bloqueia **G3** se a resposta for «voltar atrás».
 
 *Remissões : `ECART_cosignature_promotion_coordenador_2026-08-26 §5` · `REGISTRE §41 GOUV-1`*
-
-#### G3 — Testar o circuito de promoção colegiada em `blmf-teste`
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
-
-**Estado.** **Constato corrigido em 31/08: o circuito está sendo percorrido pela primeira vez — em real, não em ensaio.** `library_team_invitations` traz uma linha: convite `ebd78fb9` ao papel `coordenador` na **BTL**, proposto em 30/08, ratificado (status `ready`, e-mail enviado), ainda não aceito, expira em 29/09. Foi ele que produziu a linha `#72` de B17. O ensaio em seis passos em `blmf-teste` continua por fazer: uma promoção real está estreando o circuito em seu lugar.
-
-*Verificado : 31/08 — medido no banco: a linha do convite, o evento enviado, e a linha `#72` de B17 partida no mesmo dia.*
-
-**O que é.** Os seis passos na biblioteca de teste `blmf-teste`, cujos e-mails estão cortados (`email_delivery_mode = 'disabled'`). **Se um passo falhar, não fazer nada na BLMF.**
-
-**Por que importa.** O ajuste `team_admission_mode = 'cosignature'` da BLMF **nunca teve efeito sobre nada**: as treze promoções ao papel de bibliotecário·a e as cinco à coordenação passaram todas pela promoção direta. O custo real da escolha adotada, escrito preto no branco, é que «o workflow de convite, jamais exercido, torna-se de repente o caminho crítico».
-
-**O que conta como terminado.**
-
-- Os seis passos foram feitos em `blmf-teste`, com o resultado de cada um escrito.
-- Uma promoção real percorreu o circuito na BLMF.
-- Atenção: `blmf-teste` **não é um banco separado** — é uma biblioteca no mesmo projeto.
-
-**Dependências.** Depende de **G2** se o coletivo decidir voltar atrás.
-
-*Remissões : `RUNBOOK_deploiement_collegialite_coordenador_2026-08-26 étape 10` · `MIGRATION_collegialite_coordenador_2026-08-26`*
 
 #### G4 — Exercer os quatro e-mails de equipe jamais enviados
 
@@ -2420,6 +2397,7 @@ CI verde. |
 | B5 | Resolver as nove policies que reavaliam `auth.*()` por linha | **Encerrado em 01/09/2026, por medição e não por intenção.** O item pedia para resolver as nove policies que reavaliavam `auth.*()` **por linha** em vez de uma vez por consulta. O wrap idempotente de 03/07 já existia: fora escrito, e depois o desvio voltou pelo exemplo cru do `_TEMPLATE.sql`, que as nove haviam copiado. A reaplicação de 31/08 (`20260831171526`) fecha as nove **e** corrige a fonte — sem isso, a décima nasceria do mesmo modelo. <br><br>**O que autoriza o encerramento é um número, não um commit**: o advisor de desempenho contava 9 `auth_rls_initplan` em 29/08; conta **0** em 01/09, remedido duas vezes no dia, antes e depois dos pacotes do `B14`. É a única prova que vale aqui — uma migração aplicada não diz que o defeito sumiu, diz que se agiu. |
 | B14 | Auditar as funções `SECURITY DEFINER` abertas a `authenticated` | **Encerrado em 01/09/2026, em onze pacotes e um dia, pelo fechamento de dois caminhos do `DOC-RECENS-1`**: dez critérios temáticos (`api` 138/138, `public` 315/315), o complemento dos critérios **vazio** após a leitura das 24 funções que ele devolvia, e os esquemas fora da hipótese varridos — `private` (6 lidas, e o último constato do lote vivia ali: o mapa da rede mostrava 79 entradas não públicas, entre elas possíveis esperas de consentimento, a qualquer conta autenticada) e `ingest` (0 exposta). **459 funções lidas ao todo.** Vazamentos corrigidos, todos dormentes: dois em `api`, o foco atrás da fachada, a volumetria dos acervos (`fn_next_tombo`), uma escrita sem guarda, a view `my_access` (37 funções abriam o painel da biblioteca errada), 23 oráculos de existência, 5 funções mortas — uma delas juntava identidade e papel militante —, o mapa da rede. **Três decisões coletivas** postas e decididas no mesmo dia (recusas mudas, arbítrio dos periódicos — após aviso prévio às quatro pessoas —, mapa da rede para membros). **Nove suítes de guarda** nascidas do lote, todas na CI: o lote não corrigiu, tornou cada invariante observável. Custo assumido: quatro CIs vermelhas, todas a mesma falta em três formas — mudar o que uma função diz, devolve ou tem direito de fazer sem procurar quem a observa — daí os três volets do `DOC-MSG-1` e dois corolários do `DOC-RECENS-1`. O advisor 0029 cai de 464 para 453, **e esse número já não é um aviso: cada uma das 453 restantes foi lida, e sua razão de estar exposta está escrita.** A crônica completa, pacote por pacote, vive em `AUDIT_execute_authenticated_2026-09-01.md`. |
 | H4 | Expor o catálogo em OPDS | **Encerrado em 01/09/2026, onze dias antes de Bolonha, com prova real.** O fluxo OPDS 1.2 está vivo: `/functions/v1/opds` (navegação) e `/opds/all` (aquisição) — os **18 documentos digitais públicos** do catálogo, legíveis por qualquer aplicativo de leitura sem passar pela nossa interface. A convenção nº 1 do texto de interoperabilidade (« os fluxos OPDS existem de ambos os lados mas não apontam para lugar nenhum ») está **cumprida antes de ser proposta**. Provado no `curl`: Atom conforme, 18 entradas com títulos todos distintos (os seis tomos de Reclus se distinguem por volume e subtítulo), línguas normalizadas (7 fr, 7 pt-BR, 2 es, 2 it — `language_code` havia derivado, `idioma` faz fé), direitos e atribuição Gallica/BnF presentes, capas ligadas, link de volta para `/livro/<bib_ref>`, e um PDF realmente servido (10,4 MB, apóstrofos e espaços dos caminhos URL-codificados). Autodescoberta posta no `index.html`. **O perímetro é estrito e guardado**: apenas `access_scope='publico'` ativo — o mesmo predicado de `documents_numeriques_tests`; o fluxo não cria acesso algum, torna encontrável o que já é público. **Dois constatos de passagem**: `book_digital_resources` não porta **nenhuma chave estrangeira** — nem para `books` — daí uma junção em duas consultas na função (o embed do PostgREST exige uma FK); a colocar um dia, não na véspera de Bolonha. E o primeiro deploy respondeu 500 no `/all`: *a prova no `curl` faz parte da entrega*, não da verificação de depois. |
+| G3 | Testar o circuito de promoção colegiada em `blmf-teste` | **Encerrado em 01/09/2026 à noite: o circuito foi percorrido passo a passo em `blmf-teste`, e validou de quebra a funcionalidade entregue horas antes.** Sete passos, o negativo primeiro: (0) o salto colegiado reader → coordenador(a/e) é **recusado** enquanto `allow_direct_coordenador` está desligado — mensagem histórica conservada; (1) opt-in ligado só na biblioteca de ensaio; (2) proposta de Voltairine (reader) à coordenação por um coordenador — e o mecanismo se revela: **a assinatura de quem propõe conta como a primeira das duas** (« cosignature » ao pé da letra); (3) Voltairine não pode ratificar a própria promoção (recusa); (4) segunda assinatura → `ready`; (5) aceitação pela interessada, sob o próprio JWT, com reverificação do opt-in; (6) estado final conforme: `coordenador:active`, a linha `reader` **fechada** (papel exclusivo), auditoria `promoted_to_coordenador [from reader]` + `removal_completed` — o `from_role` que GOUV-11/12 prometia. Os três eventos de outbox partiram para a função de envio. **Uma ressalva, dita**: o não-envio efetivo (e-mails `disabled` na biblioteca de ensaio) não pôde ser observado na mesma noite — a API de logs Edge respondia em erro — mas a caixa destinatária é uma caixa de teste real conferível num relance, e a prova do **conteúdo** dos e-mails de equipe é justamente o objeto de `G4`, que segue aberto. O ajuste `team_admission_mode='cosignature'` da BLMF, nunca exercido até aqui, tem agora um circuito provado de ponta a ponta; o convite real da BTL (`ebd78fb9`) está em `ready` e só espera o gesto da pessoa envolvida. O opt-in fica ligado apenas em `blmf-teste` — é a caixa de areia, e `G4` vai usá-la. |
 
 ---
 
@@ -2451,4 +2429,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 82 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 81 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
