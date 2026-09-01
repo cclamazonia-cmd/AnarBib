@@ -1,16 +1,20 @@
 # Périodiques — l'état livré (v1.0)
 
-**1ᵉʳ septembre 2026.** Ce document remplace `spec-periodiques-v0.1`, que le
-backlog citait avec ses numéros de section (§11, §14) et qui est **introuvable**
-— ni dans ce dépôt, ni dans les archives de travail. Il a probablement vécu
-comme document de session, jamais versé au corpus. Plutôt que de réviser un
-fantôme, ce texte décrit **ce qui est**, depuis le code et la production —
-c'est une spec *a posteriori*, et elle l'assume : ici, le code fait foi et le
-document le suit, pas l'inverse.
+**1ᵉʳ septembre 2026.** Ce document remplace `spec-periodiques-v0.1`, d'abord
+crue perdue — le fichier vivait dans les téléchargements, a été collé en
+session le 27/08 (« On met ça en œuvre »), puis supprimé sans jamais être versé
+au dépôt. **Retrouvée le soir même, intégrale, dans le transcript de cette
+session**, elle est archivée telle quelle :
+[`archive-spec-periodiques-v0.1-retrouvee.md`](archive-spec-periodiques-v0.1-retrouvee.md).
+Elle reste un document d'intention (« cadré, non implémenté ») ; le présent
+texte décrit **ce qui est**, depuis le code et la production — ici, le code
+fait foi et le document le suit, pas l'inverse.
 
-> **Leçon d'inventaire** (`DOC-RECENS-1`) : un item de backlog peut référencer
-> un document avec une précision de citation (« §11 §14 ») sans que ce document
-> existe nulle part. La précision n'est pas une preuve d'existence.
+> **Leçon d'inventaire** (`DOC-RECENS-1`) : un document de travail qui ne passe
+> jamais par le dépôt est invisible à toutes les recherches de fichiers — il
+> n'a survécu que parce qu'une session l'avait avalé en entier. Ce qui sert de
+> référence à un item de backlog doit être versé quelque part de durable, le
+> jour où il sert.
 
 ## Ce qui est livré (les neuf paquets, 27–28/08/2026)
 
