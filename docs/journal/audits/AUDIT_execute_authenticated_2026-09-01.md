@@ -1147,3 +1147,74 @@ test qui énumère plusieurs objets doit garder ce qui est vrai de chacun**, jam
 ce qui n'est vrai que du premier. Sinon il bloquera un jour un correctif juste —
 et il faudra choisir entre défaire le correctif et défaire le test, ce qui est
 exactement le moment où l'on cesse de croire aux tests.
+
+---
+
+# `public`, paquet 8 — agir ou lire pour autrui : rien à corriger
+
+Critère de ce paquet : les fonctions qui **acceptent un identifiant de personne**
+en paramètre. C'est la classe qui avait donné la prise du lot `api`
+(`api.get_member_restriction`) — lire ou agir sur la chose de quelqu'un d'autre.
+
+**19 fonctions** dans ce cas, dont 11 qui écrivent. Cinq ne citent même pas
+`auth.uid()` : elles ne peuvent donc pas savoir qui appelle. C'est le signal le
+plus fort du critère — et il produit ici deux faux positifs instructifs.
+
+## Deux pierres tombales, et ce qu'elles apprennent au détecteur
+
+`fn_team_promote_to_coordenador` et `fn_network_admin_request_removal` n'ont ni
+`auth.uid()` ni prédicat. Elles ne gardent rien parce qu'elles **ne font rien** :
+
+```
+'collegiality_required: direct promotion to coordenador is disabled'
+  HINT: Use fn_team_propose_invitation(…, 'coordenador'), then
+        fn_team_ratify_invitation() by another staff member, then
+        fn_team_accept_invitation() by the person concerned.
+```
+
+Ce ne sont pas des fonctions abandonnées : ce sont des **décisions de gouvernance
+matérialisées dans le code**. La promotion directe à la coordination a été
+désactivée au profit d'un parcours collégial en trois temps, et la fonction qui
+la faisait a été remplacée par un refus **qui indique le chemin**. Idem pour le
+retrait d'un·e admin réseau, renvoyé vers le vote à l'unanimité.
+
+> **Ce que le détecteur doit apprendre** : une fonction dont le corps ne fait que
+> lever est un faux positif structurel de *tout* critère « sans garde » — elle
+> n'a rien à garder. Le paquet 4 avait déjà rencontré `fn_caller_is_administrador`
+> sous cette forme. Un critère de sûreté doit exclure les pierres tombales, sinon
+> il crie à chaque décision bien prise.
+
+## Le modèle du schéma, et il est ici
+
+`fn_painel_reader_other_memberships` rend les **autres rattachements** d'une
+lectrice — l'information la plus sensible qu'un réseau de bibliothèques
+militantes puisse détenir sur quelqu'un. Elle est construite en quatre temps :
+
+1. l'appelante doit être staff de la bibliothèque **qui regarde** ;
+2. la personne doit être rattachée à **cette** bibliothèque — sinon `RETURN`, sans
+   rien dire ;
+3. chaque autre rattachement n'est nommé que si **trois conditions cumulatives**
+   sont réunies : partenariat **actif**, droit `transparence` **explicitement
+   accordé** sur ce partenariat, et **consentement valide de la personne** ;
+4. sinon la ligne est rendue avec toutes ses colonnes à `NULL`.
+
+Le point 4 pourrait passer pour une fuite — le nombre d'autres rattachements
+reste visible. Il ne l'est pas : le front le documente comme un choix, *« minimal
+par défaut (compte sans identité), enrichi uniquement sous partenariat actif ∧
+droit transparence ∧ consentement »*. L'écran dit donc « il y a autre chose, et
+tu n'as pas le droit de le voir » — ce qui est **vrai**, et ce qui laisse à la
+personne concernée la décision d'en dire plus.
+
+*C'est la forme à imiter partout où une donnée appartient à quelqu'un : le
+consentement n'est pas une case en plus de la garde, c'est un terme de la garde.*
+
+## Résultat
+
+**Aucune faille sur les 19.** Les quatorze qui citent `auth.uid()` comparent
+toutes le paramètre à l'appelante ou passent par un prédicat de bibliothèque ;
+`user_has_library_staff_role` prend un `p_user_id` parce que c'est un prédicat de
+base, appelé avec `auth.uid()` par ses appelants.
+
+Un paquet sans correctif n'est pas un paquet sans résultat : c'est ce qui permet
+de dire que la classe est passée. Le lot `api` avait connu la même chose à son
+paquet 5, et c'est le signe que la surface commence à converger.
