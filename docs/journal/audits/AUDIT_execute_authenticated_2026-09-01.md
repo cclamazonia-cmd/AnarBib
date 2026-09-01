@@ -1339,3 +1339,86 @@ elle signe pour tout le monde* ; T4 la revalidation du PEB reste en place.
   quelle** bibliothèque (`can_access_catalogacao` est global). Cohérent avec la
   confiance réseau du catalogage — le staff voit déjà tout le catalogue — mais
   c'est un choix, et il est maintenant écrit.
+
+---
+
+# `public`, paquet 11 — la passe de complétude, et la clôture
+
+## Le complément des dix critères
+
+Dix paquets thématiques ne prouvent rien tant qu'on n'a pas compté **ce
+qu'aucun n'a lu**. Le complément — l'union des dix critères, inversée — rend
+**24 fonctions**. Six étaient en réalité déjà lues et corrigées (le complément
+mesure mes regex, pas mes lectures) ; les dix-huit autres, lues une à une, sont
+**toutes gardées et de la bonne forme** — la garde calculée depuis l'objet lu.
+La seule sans aucun contrôle, `fn_peb_authorized`, est un pur prédicat de
+configuration : deux bibliothèques fédérées, circulation active. Rien de
+personnel, rien de volumétrique.
+
+## Le dernier schéma jamais regardé : `private`
+
+Tous les paquets filtraient `public` et `api`. Or `authenticated` a `USAGE` sur
+**`private`**, qui expose **6 fonctions `SECURITY DEFINER`** — servies au
+travers des vues invoker d'`api` (le schéma n'est pas dans PostgREST : le grant
+n'existe que pour ce chemin). Cinq sont des aides de catalogue anodines.
+
+La sixième est **le dernier constat du lot** :
+
+> `private.fn_cartography_network_rows` — le corps de la carte réseau — rendait
+> **toutes** les entrées de cartographie, dont les **79 non publiques** (sur
+> 187), à tout compte authentifié. L'inscription est ouverte : n'importe qui
+> sait créer un compte. Et une entrée `statut_public = false` peut être **en
+> attente de consentement** — la doctrine des mentions orphelines exige le
+> consentement avant d'exposer un collectif, et cette carte l'exposait à qui
+> savait s'inscrire.
+
+Décision collective du 01/09 : **les entrées non publiques sont pour les membres
+actifs.** Corrigé à la source (migration `20260901153019`), éprouvé chiffres à
+l'appui — sans adhésion : 108 (les publiques) ; membre : 187 — et gardé par
+`cartographie_reseau_membres_tests`, dont le T2 tient le bord opposé : un compte
+sans adhésion voit *encore* la carte publique, car une garde qui montrerait
+moins que la page visiteurs serait un écran cassé.
+
+*Le dernier trou du lot n'était ni dans `public` ni dans `api` : il était dans
+le schéma que la question « quelles fonctions de `public` et `api` ? » ne
+pouvait pas voir. Un périmètre d'audit est une hypothèse comme une autre — la
+passe de complétude sert aussi à l'éprouver.*
+
+---
+
+# CLÔTURE DE `B14`
+
+La clôture à deux chemins (`DOC-RECENS-1`) est faite :
+
+| Chemin | Résultat |
+|---|---|
+| dix critères thématiques | `api` 138/138 · `public` 315/315, chaque paquet documenté ci-dessus |
+| complément des critères | **vide** après lecture des 24 |
+| schémas hors hypothèse | `private` 6/6 lues · `ingest` 0 exposée (pas de `USAGE`) |
+
+**Le bilan du lot entier — `api` + `public` + `private`, 459 fonctions :**
+
+- **Fuites réelles corrigées** : `api.get_due_date_for_loan`,
+  `api.get_member_restriction`, le foyer `fn_is_loan_blocked_by_dues`,
+  `fn_next_tombo` (volumétrie des fonds), `link_book_contributors_to_authors`
+  (écriture sans garde), la vue `my_access` (37 fonctions ouvraient le panneau
+  de la mauvaise bibliothèque), 23 oracles d'existence (14 par motif + 9 par
+  ordre), 5 fonctions mortes fermées dont une qui joignait identité et rôle
+  militant, la carte réseau (79 entrées non publiques). Toutes **dormantes** —
+  aucune trace d'exploitation.
+- **Décisions collectives posées et tranchées le même jour** : les refus muets
+  (alignés sur `DOC-SILENCE-1`), l'arbitrage des périodiques (aligné après
+  préavis), la carte réseau (membres actifs).
+- **Neuf suites de garde nées du lot**, toutes en CI — le lot ne s'est pas
+  contenté de corriger, il a rendu chaque invariant regardable.
+- **Ce que le lot a coûté, et appris** : quatre CI rouges, tous par la même
+  faute sous trois formes — changer ce qu'une fonction dit, rend, ou a le droit
+  de faire sans chercher qui l'observe. `DOC-MSG-1` porte désormais les trois
+  volets, et `DOC-RECENS-1` deux corollaires (un recensement par vocabulaire ne
+  trouve que ce qui parle sa langue ; une fonction corrigée n'est pas une
+  fonction close).
+
+L'advisor 0029 passe de 464 à 453 — et ce chiffre n'est plus un avertissement :
+**chacune des 453 restantes a été lue, et sa raison d'être exposée est écrite.**
+L'advisor signale une architecture qu'il ne peut pas connaître ; ce document la
+connaît.
