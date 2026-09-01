@@ -1452,7 +1452,7 @@ Et parce que l'inverse est plus dangereux encore : les deux redirections sont vi
 |---|---|---|---|
 | **G1** | Emprunter les circuits construits et jamais utilisés | `P0` | Ouvert |
 | **G2** | Trancher politiquement l'écart entre P2 et P8 sur la promotion à coordenador·a | `P1` | Décision collective |
-| **G4** | Exercer les quatre courriels d'équipe jamais envoyés | `P1` | Ouvert |
+| **G4** | Exercer les quatre courriels d'équipe jamais envoyés | `P1` | À vérifier |
 | **G5** | Ce que commande vraiment `is_test_mode` sur la Biblioteca Terra Livre | `P2` | Ouvert |
 | **G6** | Donner un écran au prêt entre bibliothèques | `P2` | Ouvert |
 | **G7** | Décider de l'admission de la Bibliothèque SOLIDAIRES | `P1` | Bloqué |
@@ -1512,11 +1512,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### G4 — Exercer les quatre courriels d'équipe jamais envoyés
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : délibération collective
 
 **État.** Quatre courriels existent, sont câblés, et ne sont jamais passés en production : `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. Le mécanisme fonctionne — `team_notification_outbox` compte 21 envois et zéro échec — mais ces quatre-là n'ont jamais été déclenchés.
 
-*Vérifié : 31/08 — `team_notification_outbox` : 25 envois, 0 échec — et toujours **aucune** ligne pour `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. Le mécanisme continue de faire ses preuves à côté (deux events de plus depuis le 29/08) ; ces quatre-là n'ont jamais été déclenchés.*
+*Vérifié : 31/08 — `team_notification_outbox` : 25 envois, 0 échec — et toujours **aucune** ligne pour `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. Le mécanisme continue de faire ses preuves à côté (deux events de plus depuis le 29/08) ; ces quatre-là n'ont jamais été déclenchés. **Épreuve jouée le 01/09/2026 au soir, sur `blmf-teste`, avec un protocole de confinement** : quatre des six membres de la coordination d'essai sont de VRAIES personnes (les stagiaires de la formation), et `self_demoted` diffuse à toute la coordination — la salle a donc été vidée par rétrogradation directe silencieuse (aucun trigger de la table n'envoie, vérifié), la livraison allumée (`platform_shared`) avec copie admin vers un alias contrôlé, puis TOUT restauré à l'identique. **Sept événements partis, `sent` dans l'outbox** : `removal_requested`, `removal_cancelled`, `suspended`, `unsuspended`, `self_demoted`, `inactive_warning_30d` — les quatre visés plus deux bonus jamais partis non plus. L'avertissement d'inactivité a été enfilé directement dans l'outbox avec le payload que le scanner nocturne aurait produit : c'est le COURRIEL que G4 éprouve, pas le compteur de jours — le scanner est global au réseau et tourne chaque nuit, le déclencher à la main aurait exigé de falsifier des dates d'audit. **Nuance apprise** : `self_demote` passe le rôle quitté en `inactive` là où la promotion l'avait `removed` — deux états de fermeture pour un même geste de sortie. **Reste à lire, et c'est le cœur de l'item** : 5 courriels pt-BR sur la boîte de test de Voltairine, 1 courriel fr (`self_demoted`) sur celle de Xavier, et les copies admin (locale biblio) sur l'alias. Dix langues : les gabarits vivent dans `mail-strings.ts` côté fonctions — **hors du périmètre de la garde de parité i18n du front**, à vérifier séparément.*
 
 **Ce que c'est.** Provoquer chacun des quatre cas sur `blmf-teste`, lire le courriel reçu, vérifier qu'il dit ce qu'il doit dire dans les dix langues.
 

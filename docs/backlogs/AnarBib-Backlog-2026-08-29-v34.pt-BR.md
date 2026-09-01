@@ -1428,7 +1428,7 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 |---|---|---|---|
 | **G1** | Percorrer os circuitos construídos e jamais usados | `P0` | Aberto |
 | **G2** | Decidir politicamente o desvio entre P2 e P8 sobre a promoção a coordenador·a | `P1` | Decisão coletiva |
-| **G4** | Exercer os quatro e-mails de equipe jamais enviados | `P1` | Aberto |
+| **G4** | Exercer os quatro e-mails de equipe jamais enviados | `P1` | A verificar |
 | **G5** | O que `is_test_mode` realmente comanda na Biblioteca Terra Livre | `P2` | Aberto |
 | **G6** | Dar uma tela ao empréstimo entre bibliotecas | `P2` | Aberto |
 | **G7** | Decidir a admissão da Biblioteca SOLIDAIRES | `P1` | Bloqueado |
@@ -1488,11 +1488,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### G4 — Exercer os quatro e-mails de equipe jamais enviados
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : deliberação coletiva
 
 **Estado.** Quatro e-mails existem, estão ligados, e nunca passaram em produção: `team.self_demoted`, `team.suspended`, `team.removal_requested`, `team.inactive_warning_*`. O mecanismo funciona — `team_notification_outbox` conta 21 envios e zero falha — mas esses quatro nunca foram disparados.
 
-*Verificado : 31/08 — `team_notification_outbox`: 25 envios, 0 falha — e ainda **nenhuma** linha para os quatro e-mails. Nunca disparados.*
+*Verificado : 31/08 — `team_notification_outbox`: 25 envios, 0 falha — e ainda **nenhuma** linha para os quatro e-mails. Nunca disparados. **Prova executada em 01/09/2026 à noite, em `blmf-teste`, com protocolo de contenção**: quatro dos seis membros da coordenação de ensaio são pessoas REAIS (estagiárias da formação), e `self_demoted` difunde a toda a coordenação — a sala foi então esvaziada por rebaixamento direto silencioso (nenhum trigger da tabela envia, verificado), a entrega ligada (`platform_shared`) com cópia admin para um alias controlado, e TUDO restaurado ao idêntico. **Sete eventos partiram, `sent` na outbox**: `removal_requested`, `removal_cancelled`, `suspended`, `unsuspended`, `self_demoted`, `inactive_warning_30d` — os quatro visados mais dois bônus que também nunca haviam partido. O aviso de inatividade foi enfileirado direto na outbox com o payload que o scanner noturno teria produzido: é o E-MAIL que o G4 prova, não o contador de dias — o scanner é global à rede e roda toda noite, dispará-lo à mão exigiria falsificar datas de auditoria. **Nuance aprendida**: `self_demote` põe o papel deixado em `inactive` onde a promoção o havia `removed` — dois estados de fechamento para um mesmo gesto de saída. **Falta ler, e é o coração do item**: 5 e-mails pt-BR na caixa de teste de Voltairine, 1 e-mail fr (`self_demoted`) na de Xavier, e as cópias admin (locale da biblio) no alias. Dez línguas: os gabaritos vivem em `mail-strings.ts` do lado das funções — **fora do perímetro da guarda de paridade i18n do front**, a verificar em separado.*
 
 **O que é.** Provocar cada um dos quatro casos em `blmf-teste`, ler o e-mail recebido, verificar que diz o que deve dizer nas dez línguas.
 
