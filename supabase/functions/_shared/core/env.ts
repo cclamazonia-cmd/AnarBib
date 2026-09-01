@@ -1,6 +1,9 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { secretKey } from "./secret-key.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.4";
 export const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-export const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+// Nom conserve : 10 fonctions importent ce symbole. Ce n'est plus la cle
+// legacy mais la cle secrete nommee « default » (cf. secret-key.ts).
+export const SUPABASE_SERVICE_ROLE_KEY = secretKey();
 export const WEBHOOK_SECRET = (Deno.env.get("WEBHOOK_SECRET_NOTIFY_EVENT") || "").trim();
 // R.7 : variables sender harmonisees sur le couple canonique SENDER_EMAIL /
 // SENDER_NAME (les anciens fallbacks ANARBIB_*/NETWORK_*/LIBRARY_* etaient

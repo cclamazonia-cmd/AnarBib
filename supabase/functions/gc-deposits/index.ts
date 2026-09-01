@@ -10,6 +10,7 @@
 // puis met deposit_path à NULL (marque purgé, évite la re-purge). Ne touche JAMAIS aux dépôts
 // non attachés (en attente d'attache). verify_jwt=false (cf. config.toml) : auth x-import-secret.
 
+import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const DEPOSIT_BUCKET = 'partner-catalog-deposits';
@@ -44,7 +45,7 @@ Deno.serve(async (req) => {
   const dryRun = body?.dry_run === true;
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const serviceKey = secretKey();
   if (!supabaseUrl || !serviceKey) return json({ error: 'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY' }, 500);
   const service = createClient(supabaseUrl, serviceKey, { auth: { autoRefreshToken: false, persistSession: false } });
 

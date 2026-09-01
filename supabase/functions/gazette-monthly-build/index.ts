@@ -26,9 +26,10 @@
 // Le pipeline se rejoue étape par étape sur un brouillon, jamais sur un numéro paru.
 //
 // Déploiement : supabase functions deploy gazette-monthly-build --no-verify-jwt
-// Secrets requis : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (défaut), ANTHROPIC_API_KEY.
+// Secrets requis : SUPABASE_URL, SUPABASE_SECRET_KEYS (défaut), ANTHROPIC_API_KEY.
 // Appel protégé par un en-tête partagé X-Cron-Secret == secret GAZETTE_CRON_SECRET.
 
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
@@ -48,7 +49,7 @@ async function loadSources() {
 }
 const ANTHROPIC_MODEL = "claude-opus-4-8"; // ajuster si besoin
 const sb = createClient(
-  Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  Deno.env.get("SUPABASE_URL")!, secretKey()!,
   { auth: { persistSession: false } },
 );
 

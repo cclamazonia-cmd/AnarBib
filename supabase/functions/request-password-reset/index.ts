@@ -14,10 +14,11 @@
 // Appelée depuis le formulaire « mot de passe oublié » via supabase.functions.invoke,
 // qui envoie la clé anon (un JWT valide) → la garde verify_jwt=true est satisfaite.
 // ============================================================================
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
-const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+const SERVICE_ROLE = secretKey() ?? "";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const SENDER_EMAIL = (Deno.env.get("SENDER_EMAIL") || "no-reply@notifications.anarbib.org").trim();
 const SENDER_NAME = (Deno.env.get("SENDER_NAME") || Deno.env.get("BRAND_NAME") || "AnarBib").trim();

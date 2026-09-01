@@ -8,8 +8,9 @@
 // ou appelable ponctuellement avec { submission_id }.
 //
 // Déploiement : supabase functions deploy translate-gazette-submission --no-verify-jwt
-// Secrets : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (défaut), ANTHROPIC_API_KEY, GAZETTE_CRON_SECRET.
+// Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (défaut), ANTHROPIC_API_KEY, GAZETTE_CRON_SECRET.
 
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
@@ -17,7 +18,7 @@ const ANTHROPIC_MODEL = "claude-opus-4-8";
 const BATCH = 3; // brèves traduites par tick
 
 const sb = createClient(
-  Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  Deno.env.get("SUPABASE_URL")!, secretKey()!,
   { auth: { persistSession: false } },
 );
 

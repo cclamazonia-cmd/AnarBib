@@ -9,8 +9,9 @@
 // Rien n'apparaît publiquement : la coordination modère, et l'opt-in reste requis (MAP-E).
 //
 // Déploiement : supabase functions deploy submit-cartography-entry --no-verify-jwt
-// Secrets : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (par défaut), ALTCHA_HMAC_SECRET.
+// Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), ALTCHA_HMAC_SECRET.
 
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
 
@@ -39,7 +40,7 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
   const sb = createClient(
-    Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    Deno.env.get("SUPABASE_URL")!, secretKey()!,
     { auth: { persistSession: false } },
   );
 

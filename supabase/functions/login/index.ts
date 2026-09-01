@@ -14,10 +14,11 @@
 //
 // Variables d'env requises (à configurer via supabase secrets set) :
 //   - SUPABASE_URL              (auto)
-//   - SUPABASE_SERVICE_ROLE_KEY (auto)
+//   - SUPABASE_SECRET_KEYS (auto, cle « default »)
 //   - SUPABASE_ANON_KEY         (auto)
 // ═══════════════════════════════════════════════════════════════════════════
 
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // ─── Configuration ──────────────────────────────────────────
@@ -239,7 +240,7 @@ Deno.serve(async (req: Request) => {
     // Client Supabase avec service_role (contourne RLS pour auth_rate_limits)
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      secretKey() ?? "",
     );
 
     // ─── Rate limit par IP, avant toute autre opération ────────

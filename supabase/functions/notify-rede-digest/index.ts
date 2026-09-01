@@ -15,6 +15,7 @@
 // dans la fenêtre). Déclenché par pg_cron (fn_rede_digest_call → net.http_post),
 // authentifié par WEBHOOK_SECRET_NOTIFY_REDE_DIGEST (verify_jwt=false). Envoi Resend.
 // ============================================================================
+import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { tMail, greeting } from "../_shared/i18n/mail-strings.ts";
 
@@ -141,7 +142,7 @@ Deno.serve(async (req) => {
     if (!got || got !== expected) return json(401, { ok: false, error: "Unauthorized" });
 
     const supabaseUrl = mustEnv("SUPABASE_URL");
-    const sb = createClient(supabaseUrl, mustEnv("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
+    const sb = createClient(supabaseUrl, mustSecretKey(), { auth: { persistSession: false } });
 
     // Fenêtre : [since, until). Défaut = 7 derniers jours.
     const until = body?.until ? new Date(body.until) : new Date();

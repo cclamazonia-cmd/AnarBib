@@ -2,12 +2,13 @@
 // EF PUBLIQUE (verify_jwt=false) — désabonnement 1-clic de la Lettre de la fédération.
 // Depuis le pied de chaque envoi : valide le token stable (RPC api.fn_lettre_unsubscribe),
 // retire le consentement, rend une page localisée. Aucun login. service_role (bypass RLS).
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { tMail } from "../_shared/i18n/mail-strings.ts";
 
 const sb = createClient(
   Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  secretKey()!,
   { auth: { persistSession: false } },
 );
 const APP_URL = "https://app.anarbib.org";

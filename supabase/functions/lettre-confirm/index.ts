@@ -3,12 +3,13 @@
 // fédération. 1-clic depuis l'e-mail : valide le token, pose le consentement (RPC
 // api.fn_lettre_confirm), rend une page localisée. Aucun login. service_role pour
 // lire la locale (bypass RLS). Idempotent (token usage unique côté RPC).
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { tMail } from "../_shared/i18n/mail-strings.ts";
 
 const sb = createClient(
   Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  secretKey()!,
   { auth: { persistSession: false } },
 );
 const APP_URL = "https://app.anarbib.org";

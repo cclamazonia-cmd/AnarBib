@@ -1,9 +1,10 @@
+import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = mustEnv("SUPABASE_SERVICE_ROLE_KEY");
+const SUPABASE_SERVICE_ROLE_KEY = mustSecretKey();
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_LIBRARY_REQUEST");
 const ADMIN_EMAIL = (Deno.env.get("ADMIN_EMAIL") || "").trim();
 const ADMIN_NAME = (Deno.env.get("ADMIN_NAME") || "").trim() || "Coordenação do AnarBib";

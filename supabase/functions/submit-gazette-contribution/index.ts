@@ -7,8 +7,9 @@
 // (→ e-mail à fede@anarbib.org). Aucune clé secrète n'est exposée : appel depuis le front via la clé anon.
 //
 // Déploiement : supabase functions deploy submit-gazette-contribution --no-verify-jwt
-// Secrets : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (présents par défaut dans l'env EF).
+// Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (présents par défaut dans l'env EF).
 
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
@@ -38,7 +39,7 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
   const sb = createClient(
-    Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    Deno.env.get("SUPABASE_URL")!, secretKey()!,
     { auth: { persistSession: false } },
   );
 

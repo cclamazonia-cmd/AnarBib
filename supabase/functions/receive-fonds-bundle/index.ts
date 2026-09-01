@@ -14,6 +14,7 @@
 // le run a detected_format='zip'. Auth : x-import-secret (ANARBIB_PARTNER_IMPORT_SECRET).
 // verify_jwt=false (cf. config.toml) — l'auth interne custom remplace le JWT.
 
+import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import JSZip from 'npm:jszip@3';
 
@@ -59,7 +60,7 @@ Deno.serve(async (req) => {
   if (!providedSecret || providedSecret !== expectedSecret) return json({ error: 'Unauthorized' }, 401);
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const serviceKey = secretKey();
   if (!supabaseUrl || !serviceKey) return json({ error: 'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY' }, 500);
 
   const admin = createClient(supabaseUrl, serviceKey, { auth: { autoRefreshToken: false, persistSession: false } });

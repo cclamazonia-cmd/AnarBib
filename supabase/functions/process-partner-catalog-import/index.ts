@@ -1,3 +1,4 @@
+import { secretKey } from '../_shared/core/secret-key.ts';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { parseMarcFile, MARC_PARSER_VERSION } from './marc.ts';
@@ -539,7 +540,7 @@ Deno.serve(async (req)=>{
     }, 401);
   }
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const serviceRoleKey = secretKey();
   if (!supabaseUrl || !serviceRoleKey) {
     return json({
       error: 'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY'

@@ -26,6 +26,13 @@ const CODE = transformSync(readFileSync(SRC, 'utf8'), {
   loader: 'ts', format: 'cjs', target: 'es2022',
 }).code;
 
+// Le vrai module de lecture de cle, pas un stub : son repli sur
+// SUPABASE_SERVICE_ROLE_KEY (seule cle de l'ENV ci-dessous) reste exerce.
+const CLE_SRC = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
+const CLE_CODE = transformSync(readFileSync(CLE_SRC, 'utf8'), {
+  loader: 'ts', format: 'cjs', target: 'es2022',
+}).code;
+
 const SECRET = 's3cr3t-de-test';
 const ENV = {
   SUPABASE_URL: 'http://stub', SUPABASE_SERVICE_ROLE_KEY: 'stub',
@@ -95,6 +102,13 @@ function monterEF(etat) {
   const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
   const fetchStub = async () => new Response('<rss></rss>', { status: 200 });
   const requireStub = (spec) => {
+    if (spec.endsWith('secret-key.ts')) {
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(
+        requireStub, m, m.exports, DenoStub,
+      );
+      return m.exports;
+    }
     if (!spec.includes('supabase-js')) throw new Error(`import inattendu : ${spec}`);
     return { createClient: () => ({ from: requete }) };
   };

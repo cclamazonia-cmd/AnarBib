@@ -13,6 +13,7 @@
 // Requête : POST { library_id, format?='json'|'csv'|'marcxml', book_ids?, target_library_id? }
 // Auth    : JWT requis (verify_jwt par défaut) ; le RPC re-valide le rôle.
 
+import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import JSZip from 'npm:jszip@3';
 import { serializeCatalog, SUPPORTED_FORMATS } from '../export-catalog-lote/serialize.ts';
@@ -59,7 +60,7 @@ Deno.serve(async (req) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const serviceKey = secretKey();
   if (!supabaseUrl || !anonKey || !serviceKey) return json({ error: 'Server misconfigured.' }, 500);
 
   // Client usager (relaie le JWT) : le RPC gate coordenador via auth.uid().

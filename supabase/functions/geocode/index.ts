@@ -8,8 +8,9 @@
 //
 // Auth : verify_jwt par défaut (true) — requiert un JWT projet valide. Rate-limité par IP
 // (réutilise public.auth_rate_limits) contre l'abus du géocodeur.
-// Secrets : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (par défaut), NOMINATIM_URL (à définir).
+// Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), NOMINATIM_URL (à définir).
 
+import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const CORS = {
@@ -40,7 +41,7 @@ Deno.serve(async (req) => {
   if (q.length < 3 || q.length > 300) return json({ error: "bad_query" }, 422);
 
   const sb = createClient(
-    Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    Deno.env.get("SUPABASE_URL")!, secretKey()!,
     { auth: { persistSession: false } },
   );
 

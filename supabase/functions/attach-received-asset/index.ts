@@ -9,6 +9,7 @@
 // Déclenché depuis le panneau « Attacher les fichiers reçus » (face Export) par un·e
 // coordenador. verify_jwt par défaut (true) : JWT usager requis et relayé à la RPC (gate).
 
+import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const DEPOSIT_BUCKET = 'partner-catalog-deposits';
@@ -48,7 +49,7 @@ Deno.serve(async (req) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const serviceKey = secretKey();
   if (!supabaseUrl || !anonKey || !serviceKey) return json({ error: 'Server misconfigured.' }, 500);
 
   const userClient = createClient(supabaseUrl, anonKey, {

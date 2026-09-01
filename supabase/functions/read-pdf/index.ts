@@ -1,3 +1,4 @@
+import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -30,7 +31,7 @@ Deno.serve(async (req)=>{
   }
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
-  const supabaseServiceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const supabaseServiceRoleKey = secretKey();
   if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey) {
     return json(500, {
       error: 'missing_edge_env'

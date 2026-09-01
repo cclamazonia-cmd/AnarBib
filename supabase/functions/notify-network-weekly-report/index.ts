@@ -1,4 +1,5 @@
 // supabase/functions/notify-network-weekly-report/index.ts
+import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const PAGE_SIZE = 1000;
@@ -312,7 +313,7 @@ serve(async (req)=>{
     const endExclusiveISO = addDaysISO(weekEnd, 1);
     const weekEndPlusOneDate = endExclusiveISO.slice(0, 10);
     const supabaseUrl = mustEnv("SUPABASE_URL");
-    const serviceKey = mustEnv("SUPABASE_SERVICE_ROLE_KEY");
+    const serviceKey = mustSecretKey();
     const sb = createClient(supabaseUrl, serviceKey, {
       auth: {
         persistSession: false

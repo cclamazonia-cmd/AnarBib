@@ -30,6 +30,7 @@ import { transformSync } from 'esbuild';
 const SRC = new URL('../../supabase/functions/harvest-oai-pmh/index.ts', import.meta.url);
 const MARC = new URL('../../supabase/functions/process-partner-catalog-import/marc.ts', import.meta.url);
 const OAI = new URL('../../supabase/functions/harvest-oai-pmh/oai.ts', import.meta.url);
+const CLE = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
 
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), {
   loader: 'ts', format: 'cjs', target: 'es2022',
@@ -146,6 +147,9 @@ function monterEF(etat, reponses) {
     if (spec.includes('supabase-js')) return { createClient: () => client('public') };
     if (spec.endsWith('marc.ts')) return evaluer(cjs(MARC), {});
     if (spec.endsWith('oai.ts')) return evaluer(cjs(OAI), {});
+    // Le vrai module, pas un stub : son repli sur SUPABASE_SERVICE_ROLE_KEY
+    // (seule cle presente dans l'ENV du banc) doit rester exerce.
+    if (spec.endsWith('secret-key.ts')) return evaluer(cjs(CLE), {});
     if (spec.includes('edge-runtime.d.ts')) return {};
     throw new Error(`import inattendu : ${spec}`);
   };

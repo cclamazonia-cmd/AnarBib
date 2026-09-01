@@ -13,6 +13,7 @@
 //
 // Réf. : http://www.openarchives.org/OAI/openarchivesprotocol.html
 
+import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { OAI_FORMATS, xmlEscape } from '../_shared/oai/metadata.ts';
 
@@ -98,7 +99,7 @@ Deno.serve(async (req) => {
   }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const serviceKey = secretKey();
   if (!supabaseUrl || !serviceKey) {
     return oaiError(baseUrl, 'badArgument', 'Server misconfigured.');
   }
