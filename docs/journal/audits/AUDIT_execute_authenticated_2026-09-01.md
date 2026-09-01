@@ -1270,3 +1270,72 @@ leur garde : *une exception sans garde n'est plus une exception, c'est un trou.*
 Le T2 vérifie aussi `PUBLIC`, parce que le défaut natif de Postgres accorde
 EXECUTE à PUBLIC sur toute fonction neuve, et qu'une recréation sans REVOKE y
 retomberait. Éprouvée en production : **4/4**.
+
+---
+
+# `public`, paquet 10 — les documents numériques : la chaîne est saine, son talon est le rangement
+
+Dernière famille concrète : **ce qui donne accès aux fichiers** — accesseurs
+d'assets, URLs signées, partages de numérisation PEB, et les policies RLS de
+`storage.objects`, bucket par bucket (16 buckets, 8 publics, 8 privés).
+
+## Une fausse piste, et ce qu'elle a appris
+
+La policy SELECT de `pdf-restrito` n'admet que le staff (`can_access_catalogacao`),
+alors que la RPC `get_accessible_digital_asset_by_id_v2` promet l'accès à toute
+lectrice `conta_ativa` membre d'une bibliothèque détentrice. J'ai d'abord conclu
+à une promesse cassée — un écran qui montre un PDF que le storage refuse de
+servir.
+
+C'était faux, et la vraie architecture vaut d'être écrite :
+
+1. l'EF `read-digital-asset` appelle la RPC **avec le JWT de l'appelante** —
+   c'est la garde SQL qui décide (`publico` / `conta_ativa` + rattachement) ;
+2. si la RPC accorde, l'EF signe l'URL **en `service_role`**, TTL court —
+   la policy storage n'est pas le portier du lectorat, **la RPC l'est** ;
+3. la policy staff de `pdf-restrito` n'est que le second chemin, pour l'accès
+   direct du catalogage.
+
+Et l'EF pousse le soin jusqu'à masquer `source_url` d'un document restreint
+servi depuis le stockage — la provenance d'un document restreint est elle-même
+une information.
+
+## Le PEB numérique : la propriété révocable
+
+`fn_ill_signed_url` est un modèle : staff de la bibliothèque **réceptrice**
+seulement, flux `transmis` exigé, et **revalidation du droit de partenariat au
+moment de l'accès** — rompre le partenariat coupe l'accès aux reçus déjà
+transmis (PARTNER-D5). Un droit qui ne se revalide pas à l'accès n'est révocable
+que de nom.
+
+Mesuré au passage : `digital_assets` ne peut recevoir que des ressources
+*publiques* (`fn_publish_digital_asset_from_resource` refuse le reste) — le
+dispositif PEB garde donc l'accès au *service*, pas des octets secrets, et c'est
+cohérent.
+
+## Le talon : le rangement, que rien ne gardait
+
+La chaîne entière repose sur un invariant que personne n'avait écrit : **un
+asset `conta_ativa` doit vivre dans un bucket non-public**. Catalogué par erreur
+dans `anarbib-pdf-public`, il serait servi par l'URL publique du bucket — sans
+RPC, sans EF, mondialement — et **rien ne casserait** : le parcours normal via
+l'EF continuerait de fonctionner. Ce qui rend l'exposition silencieuse est
+précisément que rien ne casse quand elle se produit. Même chose pour le flag
+`public` d'un bucket restreint : une bascule, un clic de dashboard, tout le
+contenu exposé.
+
+D'où `documents_numeriques_tests.sql` : T1 aucun asset non-`publico` dans un
+bucket public ; T2 les trois buckets restreints gardent `public = false` ; T3 la
+RPC garde ses deux conditions — *l'EF signe tout ce qu'elle rend : sans elles,
+elle signe pour tout le monde* ; T4 la revalidation du PEB reste en place.
+Éprouvée en production : **4/4**.
+
+## Deux observations, sans correctif
+
+* Les **4 objets** de `anarbib-media-restricted` ne sont atteignables par
+  personne : aucune policy SELECT, aucun asset ne les référence. Probable
+  reliquat — à trier un jour, rien ne fuit.
+* La policy de `pdf-restrito` ouvre la lecture directe au staff de **n'importe
+  quelle** bibliothèque (`can_access_catalogacao` est global). Cohérent avec la
+  confiance réseau du catalogage — le staff voit déjà tout le catalogue — mais
+  c'est un choix, et il est maintenant écrit.
