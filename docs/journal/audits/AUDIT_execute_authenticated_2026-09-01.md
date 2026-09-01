@@ -262,7 +262,66 @@ Gardé par `tests/sql/b14_api_refus_muet_listes_tests.sql`, qui vérifie la
 arrivera avec un `RETURN;` nu), plus l'effet sur le seul cas atteignable et la
 preuve que le staff passe toujours.
 
+# Paquet 4 — les écritures sur un objet (45 fonctions, 01/09)
+
+Critère posé par le paquet 3 : les **écritures prenant un identifiant d'objet**
+et non de personne — `p_book_id`, `p_draft_id`, `p_reserva_id`, `p_proposal_id`,
+`p_entry_id`… La forme où l'on *agit sur la chose d'autrui* plutôt que de la
+lire, et où un défaut ne fuit pas : il modifie.
+
+## Résultat : aucune faille sur les 45
+
+**C'est le premier paquet qui ne trouve rien, et il faut le dire.** Trois
+paquets d'affilée avaient produit une prise ; celui-ci n'en produit aucune, et
+ce n'est pas faute d'avoir cherché la même forme. Les écritures sont la partie
+la mieux gardée du schéma `api` — ce qui est cohérent : elles ont été écrites
+en sachant qu'elles écrivaient.
+
+## La doctrine implicite qu'elles suivent — constatée, jamais écrite
+
+Les 45 appliquent la même règle, sans qu'aucun document ne l'énonce : **la garde
+suit la propriété de l'objet, pas le rang de l'appelant.**
+
+| L'objet appartient à… | Garde constatée | Exemples |
+|---|---|---|
+| une **personne** | propriété vérifiée (`v_owner <> v_uid` → refus) | `fn_confirm_pickup_slot_as_reader`, `fn_propose_pickup_slot_as_reader`, `fn_authority_withdraw`, `fn_request_solicitante_message` |
+| une **bibliothèque** | garde *par cette* bibliothèque | `fn_serial_upsert_holdings` (`fn_team_caller_is_coordenador(p_library_id)`), `fn_cartography_update_self`, `fn_circle_create` |
+| le **réseau** (commun) | rôle de catalogage, sans bibliothèque | `merge_draft_into_book`, `fn_serial_update`, les `fn_subject_*`, `conv_revue_decide` |
+| l'**assemblée / la fédération** | admin réseau | les `fn_request_*`, `fn_cartography_delete`, `fn_approve_library_request` |
+
+Le troisième cas est celui qui ressemble à un oubli et n'en est pas un : une
+notice de livre, un sujet, un titre de revue sont des **communs du réseau** —
+même raison que `conv_revue_list` au paquet 3 (`catalog_review_queue` n'a pas de
+`library_id`). Ce qui appartient à une bibliothèque est gardé par bibliothèque ;
+ce qui appartient à tout le monde est gardé par le métier.
+
+## Trois formes à imiter
+
+- **`attach_exemplar` ne prend pas la bibliothèque en paramètre** : elle la
+  déduit du membership actif principal de l'appelant·e. On ne peut donc pas
+  rattacher un exemplaire au fonds d'autrui — non parce que c'est vérifié, mais
+  parce que ce n'est pas *demandable*. C'est l'héritage de l'incident de juillet
+  (un exemplaire MLEG rattaché à un holding BLMF). **La garde la plus sûre est
+  celle qu'on ne peut pas contourner parce que le paramètre n'existe pas.**
+- **`resolve_reader_card` rend le même motif pour « pas staff » et pour « jeton
+  inconnu »**, et son commentaire dit pourquoi : sans cela, un appelant
+  distinguerait « carte existante ailleurs » de « carte inexistante » — une
+  énumération de cartes par essais. *La banalité du motif est le contrôle.*
+- **`fn_authority_object` vérifie deux choses** : qu'on coordonne bien la
+  bibliothèque au nom de laquelle on objecte (`user_can_manage_library`), **et**
+  que cette bibliothèque est concernée par l'autorité en cause
+  (`fn_library_uses_authority`). Le mandat *et* l'intérêt à agir — dans une
+  délibération fédérale, les deux sont nécessaires.
+
+## Une limite fonctionnelle, pas une faille
+
+`attach_exemplar` déduit la bibliothèque du membership `is_primary = true` : une
+personne staff de deux bibliothèques ne peut cataloguer que dans sa principale.
+C'est une contrainte connue du flux de création (la bibliothèque cible se choisit
+en admin réseau, décision du 17/08), pas un défaut de garde — noté ici pour que
+la prochaine lecture ne le prenne pas pour un oubli.
+
 ## Compte d'avancement du lot `api`
 
-**60 des 138** fonctions ont un verdict écrit (24 au paquet 1, 15 au paquet 2, 21 au paquet 3) ;
-**deux fuites réelles** trouvées et corrigées, toutes deux dormantes — et un défaut introduit par le second correctif, attrapé par sa propre suite avant d'avoir servi. Restent 78 à lire, par paquets. Prochain critère de tri suggéré : les fonctions d'**écriture** prenant un identifiant d'objet (et non de personne) — `p_book_id`, `p_draft_id`, `p_reserva_id` : la forme où l'on agit sur la chose d'autrui plutôt que de la lire.
+**105 des 138** fonctions ont un verdict écrit (24, 15, 21 puis 45) ;
+**deux fuites réelles** trouvées et corrigées, toutes deux dormantes — et un défaut introduit par le second correctif, attrapé par sa propre suite avant d'avoir servi. Restent 33 à lire. Pour le reste (33 fonctions sans paramètre d'objet ni de personne : bascules de réglage, compteurs, helpers d'écran), le critère de tri n'a plus grand-chose à trier — les lire en une fois, puis passer au schéma `public` (326), où l'audit du 18/05 n'avait vu qu'une partie.
