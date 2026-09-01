@@ -694,3 +694,121 @@ fermées. C'est délibéré, et c'est ce qui rend la suite utile : un correctif 
 
 **177 des 322 exposées lues.** Restent **145** — à ne pas confondre avec le 145
 erroné de l'encadré ci-dessus, qui comptait des lues.
+
+---
+
+# `public`, paquet 5 — le décalage n'était pas dans les fonctions
+
+Ce paquet cherchait, parmi les fonctions qui **écrivent** et portent une garde,
+le décalage classique entre l'objet gardé et l'objet écrit : celui de la faille
+exemplaires/holdings de juillet, où un exemplaire MLEG pendait au holding d'une
+autre bibliothèque.
+
+## Les fonctions sont saines — et se ressemblent
+
+Lues une à une, elles suivent toutes la même forme, la bonne : **la garde se
+calcule à partir de l'objet lu, jamais d'un paramètre.**
+`fn_partnership_accept` lit le partenariat puis vérifie la coordination de la
+bibliothèque *destinataire* ; `fn_partnership_break` accepte l'une ou l'autre
+des deux parties ; `fn_team_ratify_invitation` déduit la bibliothèque de
+l'invitation, et refuse en plus que la personne visée ratifie sa propre
+promotion. `fn_record_deposit` et `fn_record_membership_payment` vont plus loin :
+**elles n'acceptent aucune bibliothèque en paramètre**, elle est déduite de la
+session — il n'y a donc aucun décalage possible, puisqu'il n'y a qu'une
+bibliothèque dans toute la fonction.
+
+Et les deux `fn_v2_create_*_by_holdings`, dont le tri automatique ne voyait
+qu'un contrôle métier (`fn_library_has_circulation`), portent en fait la garde
+d'un geste de lecteur·rice : *« você só pode criar pedidos para sua própria
+conta »*. C'est la bonne garde pour ce geste-là — pas un manque.
+
+## La prise : `api.my_access` répond à deux questions comme si c'en était une
+
+Le décalage n'était dans aucune fonction. Il était dans la vue qu'elles
+interrogent toutes.
+
+| Colonne | Question réellement posée |
+|---|---|
+| `can_access_painel` | « as-tu un rôle staff **quelque part** ? » (`has_any_staff_membership OR is_network_admin`) |
+| `library_id` | « quelle est ta bibliothèque **principale** ? » (`ORDER BY is_primary DESC, created_at, slug LIMIT 1`) |
+
+**Trente-sept fonctions lisent ces deux colonnes ensemble, dont vingt-quatre qui
+écrivent** : toute la circulation (`fn_v2_*`), tout l'argent (`fn_record_*`,
+`fn_refund_deposit`, `fn_retain_deposit`), tout l'import. Elles vérifient
+`v_actor.library_id` et n'ont aucun moyen de savoir que l'autorisation vient
+d'ailleurs.
+
+Une personne bibliothécaire à A et **simple lectrice** à B, avec B pour
+bibliothèque principale, obtenait le panneau de B.
+
+### Démontré, pas supposé
+
+En transaction annulée sur la production, en armant le cas — l'adhésion
+lectrice désignée principale :
+
+| | `library_slug` | `can_access_painel` |
+|---|---|---|
+| état sain d'aujourd'hui | `blmf` | `true` |
+| **défaut armé, vue d'alors** | **`btl`** | **`true`** |
+| défaut armé, vue corrigée | `blmf` (`role=librarian`) | `true` |
+
+Mesuré : **une** personne cumule aujourd'hui un rôle staff dans une bibliothèque
+et une adhésion non-staff dans une autre. Elle est sauve par le tri — son
+adhésion staff porte `is_primary`. Ce qui l'armerait n'est pas une attaque :
+c'est **désigner l'autre bibliothèque comme principale**, un geste ordinaire
+offert par l'interface. Zéro personne exploitable, un clic pour le devenir.
+
+### Le correctif ne peut rien casser, par construction
+
+L'adhésion effective **préfère une adhésion staff** (`is_staff DESC` avant
+`is_primary DESC`), et `can_access_painel` se calcule sur **cette** adhésion.
+Les deux ensemble sont *équivalents* à l'ancien calcul : si un rôle staff existe
+quelque part, le nouveau tri garantit que l'adhésion effective est celle-là.
+Personne ne perd un accès — non par chance mesurée, mais par construction. La
+mesure le confirme quand même : sur 14 personnes actives, **zéro** voit sa
+bibliothèque changer.
+
+## La forme à imiter, trouvée dans le même paquet
+
+`resolve_managed_library_id` était déjà immunisé, et dit pourquoi : quand il
+prend la bibliothèque dans `my_access`, il **revérifie**
+`user_can_manage_library()` dessus au lieu de lui faire confiance. Les
+vingt-quatre autres font confiance. *Une valeur qui vient d'une vue de session
+n'est pas une autorisation ; c'est une candidature.*
+
+## Mon propre tri était trop étroit — refermé par le second chemin
+
+Ce paquet a d'abord listé **53** écritures gardées, à partir d'une liste de douze
+prédicats. L'introspection du vocabulaire réel en donne **67** : quatorze de
+plus, plus huit que les recouvrements masquaient — vingt-deux fonctions
+supplémentaires, gardées par `user_can_manage_library`,
+`can_manage_library_circulation_policies`, `fn_caller_is_staff`,
+`can_manage_library_regulation_documents`, `can_manage_library_contact_profile`.
+**C'est exactement le défaut que le paquet 4 venait de corriger, refait un paquet
+plus tard.** Le contrôle par un second chemin ne dispense pas de le refaire à
+chaque tri : il n'est pas acquis une fois pour toutes.
+
+Les vingt-deux sont saines quant au décalage garde/objet, mais l'une des gardes
+mérite un constat à part.
+
+## Un écart de doctrine, mesuré et laissé à décider
+
+| Geste destructeur | Garde | Qui peut |
+|---|---|---|
+| `merge_book`, `merge_author` | `fn_is_dedup_arbiter()` | admin réseau **ou coordenador** |
+| `merge_serial`, `mark_serials_not_duplicate`, `unmark_serials_not_duplicate` | `fn_caller_is_staff()` | **librarian** ou coordenador |
+
+Le chantier DOUBLONS P4 avait tranché : *l'arbitrage destructeur est réservé à
+la coordination*. Les périodiques, livrés le 27/08, n'ont pas repris cette
+décision — leur fusion accepte le rôle `librarian`. **Quatre personnes** sont
+aujourd'hui `librarian` sans être `coordenador` : elles ont sur les revues un
+pouvoir de destruction que la même doctrine leur refuse sur les livres.
+
+Je ne l'ai **pas corrigé** : ce n'est pas une fuite (ce sont des membres du
+staff du réseau), c'est un arbitrage de gouvernance déjà rendu ailleurs, et
+l'appliquer retirerait un pouvoir à quatre personnes sans les prévenir — ce que
+ce projet refuse de faire dans un déploiement automatique. **À trancher
+collectivement**, comme la question des gardes en `WHERE` du paquet 3.
+
+*(L'enjeu pratique est petit aujourd'hui — 4 périodiques en base — et c'est le
+bon moment pour décider, avant qu'il ne le soit plus.)*
