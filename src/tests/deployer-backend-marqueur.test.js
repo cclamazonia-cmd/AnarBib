@@ -185,6 +185,25 @@ describe('deployer-backend.sh — le marqueur de ce qui est réellement déploy�
     expect(marqueurSurOrigine()).toBe(c2);
   });
 
+  it('redéploie tout quand seul supabase/config.toml change (l’angle mort du 01/09/2026)', () => {
+    // c152e7fa ne changeait QUE config.toml (verify_jwt=false pour trois
+    // fonctions) : aucun fichier sous supabase/functions/, étape sautée en
+    // vert, et le changement de config n'a jamais pris effet — c'est
+    // `functions deploy` qui pousse les réglages [functions.*] vers la
+    // plateforme. Le diff doit donc surveiller aussi config.toml.
+    const c2b = commiter(
+      'supabase/config.toml',
+      '[functions.alpha]\nverify_jwt = false\n',
+      'c2b — config.toml seul (verify_jwt)',
+    );
+    const { sortie, code, deployees } = runCI();
+
+    expect(code).toBe(0);
+    expect(deployees.sort()).toEqual(['alpha', 'beta']);
+    expect(sortie).toContain('supabase/config.toml');
+    expect(marqueurSurOrigine()).toBe(c2b);
+  });
+
   it('déploie la fonction d’un push qui n’a jamais eu son run (le trou du 27/08/2026)', () => {
     // c3 modifie une fonction — et n'obtient AUCUN run, comme e316e005.
     const c3 = commiter('supabase/functions/alpha/index.ts', '// alpha v2\n', 'c3 — touche alpha, sans run');

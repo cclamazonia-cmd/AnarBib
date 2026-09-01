@@ -241,6 +241,18 @@ if [ "$FONCTIONS" = "1" ]; then
   # commits : une histoire reecrite ou tronquee ne peut pas la fausser, au pire
   # elle empeche d'ENUMERER les commits couverts — ce que le journal dit alors.
   #
+  # ⚠️ supabase/config.toml FAIT PARTIE du deploiement (incident du 01/09/2026).
+  # Le commit c152e7fa ne changeait QUE config.toml (verify_jwt=false pour
+  # login/register/request-password-reset) : aucun fichier sous
+  # supabase/functions/, donc etape sautee EN VERT — et le changement n'a jamais
+  # pris effet, car c'est `functions deploy` qui pousse le verify_jwt (et les
+  # autres reglages [functions.*]) vers la plateforme. Rattrape a la main. Le
+  # diff surveille donc AUSSI supabase/config.toml, et on redeploie TOUT quand
+  # il a bouge : trier les seules sections [functions.*] modifiees serait le
+  # meme piege que le raffinement « seulement les fonctions modifiees »
+  # ci-dessus — un tri fin qui se trompe une fois coute bien plus que cinq
+  # minutes de redeploiement.
+  #
   # Si le point de comparaison est introuvable (marqueur jamais pose, branche
   # neuve, force-push, historique tronque), on NE saute PAS : mieux vaut cinq
   # minutes perdues qu'une fonction non deployee. En cas de doute, tout deployer.
@@ -293,9 +305,9 @@ if [ "$FONCTIONS" = "1" ]; then
       echo "    elle, reste juste : elle compare les arbres et non les commits."
     fi
 
-    MODIFS=$(git diff --name-only "$BASE" "$ICI" -- supabase/functions/ 2>/dev/null)
+    MODIFS=$(git diff --name-only "$BASE" "$ICI" -- supabase/functions/ supabase/config.toml 2>/dev/null)
     if [ -n "$MODIFS" ]; then
-      echo "→ fichiers modifies sous supabase/functions/ :"
+      echo "→ fichiers declencheurs modifies (supabase/functions/ ou config.toml) :"
       printf '%s\n' "$MODIFS" | sed 's/^/    /'
     else
       DEPLOYER_TOUT=0
@@ -303,7 +315,7 @@ if [ "$FONCTIONS" = "1" ]; then
   fi
 
   if [ "$DEPLOYER_TOUT" = "0" ]; then
-    echo "→ aucune fonction Edge modifiee depuis $ORIGINE_BASE — etape sautee"
+    echo "→ aucune fonction Edge ni config.toml modifie depuis $ORIGINE_BASE — etape sautee"
     echo "✓ Edge Functions inchangees"
   else
     n_deployees=0
