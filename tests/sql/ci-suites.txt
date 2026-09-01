@@ -16,6 +16,11 @@ tests/sql/b14_api_cotisation_autrui_tests.sql
 tests/sql/b14_api_gel_global_borne_tests.sql
 tests/sql/b14_api_refus_muet_listes_tests.sql
 tests/sql/b14_oracle_existence_forme_tests.sql
+# B14 paquet 4 : deux invariants de sens OPPOSÉ tenus ensemble — deux fonctions
+# du catalogage gardées dans le corps mais laissées exécutables (les révoquer
+# donnerait un écran mort), deux fonctions sans appelant en session fermées dans
+# le droit. Un correctif qui « uniformiserait » les quatre casse un des deux.
+tests/sql/b14_gardes_ecriture_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
