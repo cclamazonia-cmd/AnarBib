@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.4.1 — 2026-08-26 (T2 collégiale ; garde de proposition corrigée)
+**Version** : 1.5 — 2026-09-01 (saut collégial `reader` → `coordenador`, opt-in par biblio)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -13,6 +13,7 @@
 
 - **v1.4 (2026-08-26)** : **T2 (`librarian` → `coordenador`) cesse d'être unilatérale.** La promotion reposait sur la seule autorisation `user_can_manage_library()` : un·e coordenador·a pouvait en faire un·e autre, seul·e et sans le consentement de l'intéressé·e — ce qui contredisait P2 (cooptation pour **les deux** rôles staff) et P3 (une charge s'accepte, elle ne s'impose pas). Elle emprunte désormais le circuit d'invitation déjà en place : proposition → ratification par une autre personne du staff → acceptation par la personne concernée. `fn_team_promote_to_coordenador` est conservée mais lève `collegiality_required` : un échec bruyant vaut mieux qu'un succès qui ne promeut plus rien. Sections amendées : §5.1, §5.3, §6.1, §6.5, §7.3, §8.2, §8.3, §11.2, §12.3, §15. §14 **entièrement refait** — l'état des lots datait du 15/05/2026 et annonçait « à faire » des objets déjà livrés au 10/05. Implémentation : migrations `20260826120000` et `20260826130000`, front `feat(team)` du 26/08. Registre : `GOUV-1` à `GOUV-6`.
 - **v1.4.1 (2026-08-26, même jour)** : correction d'une **erreur de la v1.4 elle-même**. La v1.4 annonçait, en §5.3, §6.1 et §6.5, qu'un·e administrateur·rice réseau pouvait *proposer* un passage à la coordination. C'était l'intention de la migration, pas son code : `fn_team_propose_invitation` s'ouvre sur `user_can_manage_library_notifications`, qui exige un membership **local** et ne connaît pas les admins réseau. La bascule de T2 sur ce circuit avait donc **supprimé** un droit dont disposait l'ancienne `fn_team_promote_to_coordenador` — et rendu impossible le rattrapage d'une biblio sans coordenador (§6.1). Rétabli par la migration `20260826160000`, pour le seul `p_role = 'coordenador'` : l'accueil garde la garde qu'il a toujours eue. Complété le même jour par `20260826180000` : `fn_team_list_invitations` était restée fermée aux admins réseau, qui obtenaient donc le message de succès de leur proposition puis **une liste vide** — proposer sans pouvoir relire est une action à l'aveugle. Registre : `GOUV-7`, `GOUV-10`.
+- **v1.5 (2026-09-01)** : **le saut collégial `reader` → `coordenador` devient possible, en opt-in par biblio** (`libraries.allow_direct_coordenador`, défaut désactivé). La précondition « on ne saute pas de reader à coordenador » était un **héritage d'implémentation** de l'ancienne `fn_team_promote_to_coordenador`, pas un principe — aucun de P1–P8 n'exige une échelle progressive, et deux asymétries la déjugeaient : T1 directe reste unilatérale, et `fn_team_self_demote` autorise la redescente directe jusqu'à `reader`. Pour un collectif horizontal (cas BTL), l'échelle imposait un grade de passage sans réalité dans le groupe (contraire à P1) et faisait exécuter en deux circuits une seule décision d'AG (P8). Le circuit collégial s'applique **intégralement** au saut : proposition → ratification selon quorum → acceptation ; cible = reader `status='active'` **strict** ; à l'acceptation, la ligne active inférieure se ferme quelle qu'elle soit, et l'audit porte `metadata.from_role`. Sections amendées : §3.1, §5.1, §5.3, §6.12 (nouveau), §10.1, §15.6 (nouveau). Décision : cadrage `CADRAGE_promotion_directe_reader_coordenador_2026-09-01` ; registre `GOUV-11`/`GOUV-12` (v0.8). Implémentation : migration `20260901162610`, tests `tests/sql/saut_collegial_tests.sql`, front `LeitoresPanel` + `LibraryContext`.
 
 ---
 
@@ -137,7 +138,7 @@ CHECK (role = ANY (ARRAY['reader', 'librarian', 'coordenador']))
 - Modifier ses propres données personnelles
 - Demander la migration ou suppression de son compte
 
-**Contexte spec** : ce rôle est concerné par cette spec uniquement comme **point de départ et d'arrivée** (entrée dans l'équipe = passage reader→librarian, sortie = passage librarian→reader).
+**Contexte spec** : ce rôle est concerné par cette spec uniquement comme **point de départ et d'arrivée** (entrée dans l'équipe = passage reader→librarian, sortie = passage librarian→reader). *(v1.5)* Là où la biblio a activé le **saut collégial** (`allow_direct_coordenador`, cf. §5.3 et §6.12), un·e reader `active` peut aussi être proposé·e directement à la coordination — via le même circuit collégial, jamais unilatéralement.
 
 ### 3.2. `librarian`
 
@@ -283,6 +284,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 |---|---|---|---|
 | T1 | `reader` → `librarian` | Coordenador local **OU** admin réseau actif | Cooptation (P2) |
 | T2 | `librarian` → `coordenador` | **Trois personnes distinctes** *(v1.4)* : qui propose (coordenador local **OU** admin réseau actif), qui ratifie (autre membre du staff), qui accepte (l'intéressé·e) | Cooptation collégiale (P2), via le circuit d'invitation |
+| T2b *(v1.5)* | `reader` → `coordenador` (**saut collégial**, seulement si la biblio a activé `allow_direct_coordenador`) | Identique à T2 — mêmes trois personnes, même circuit, même quorum | Cooptation collégiale (P2) ; opt-in par biblio (P7), défaut désactivé |
 | T3 | `coordenador` → `librarian` | Soi-même + autres coordenadores locaux | Auto-rétro ou retrait collégial |
 | T4 | `librarian` → `reader` (volontaire) | Soi-même | Auto-rétro (P3) |
 | T5 | `librarian` → `reader` (par le collectif) | Coordenador local **OU** admin réseau (avec carence 7j) | `pending_removal` |
@@ -365,12 +367,23 @@ pratique, à connaître avant de s'étonner : dans une petite équipe, la propos
 directement à `ready` sans qu'un second geste soit visible. Ce n'est pas un contournement du
 principe, c'est le quorum tel qu'il a toujours été défini.
 
-**Préconditions** :
+**Préconditions** *(élargies v1.5 — GOUV-11/GOUV-12)* :
 
-- La personne cible a une membership `librarian` `active` dans cette biblio — on ne saute pas de
-  `reader` à `coordenador` (précondition héritée de l'ancienne RPC).
+- La personne cible a une membership `librarian` `active` dans cette biblio — **ou**, si la biblio
+  a activé le **saut collégial** (`libraries.allow_direct_coordenador`, opt-in, défaut désactivé),
+  une membership `reader` `status='active'` **strict**. Le filtre vise `active`, jamais
+  « pas `pending` » : une inscription non validée n'est pas propulsable à la coordination. Pas
+  d'entrée directe depuis l'extérieur — l'ancrage local d'abord. L'ancienne règle « on ne saute
+  pas de `reader` à `coordenador` » était une précondition héritée de l'ancienne RPC, pas un
+  principe : la cooptation (P2) est portée par le circuit, qui s'applique intégralement au saut.
 - Elle n'a pas déjà une membership `coordenador` `active` dans cette biblio.
 - Aucune invitation vivante (`pending_ratification` / `ready`) ne la concerne déjà sur cette biblio.
+
+> **Le prix du saut, à dire au collectif qui l'active** : l'étape `librarian` servait de sas de
+> fait — exercice du quotidien avant les pouvoirs de configuration. Avec le saut, une personne
+> reçoit en un geste l'accès aux données personnelles, la configuration et la gestion d'équipe.
+> C'est cohérent là où la confiance se construit hors logiciel (l'AG coopte, le SIGB exécute) ;
+> c'est pourquoi le réglage est un choix **par biblio** (P7) et non un défaut réseau.
 
 **Effet de la proposition** : **aucun changement de rôle.** Une ligne `library_team_invitations`
 est créée avec `role_proposed = 'coordenador'`, `status = 'pending_ratification'` et
@@ -380,14 +393,19 @@ et non à l'acceptation — celle-ci est le fait de la personne visée, pas un a
 Event `team.invitation_proposed`, ou `team.invitation_ready` si le quorum est déjà atteint, avec
 `role_proposed` au payload.
 
-**Effet de l'acceptation** *(inchangé depuis la v1.2 — doctrine rôle exclusif)* :
+**Effet de l'acceptation** *(doctrine rôle exclusif, généralisée v1.5)* :
 
+- La précondition est **revérifiée sous sa forme élargie** : la personne a pu être retirée de
+  l'équipe — ou la biblio a pu désactiver le saut — entre la proposition et l'acceptation
 - Création (ou réactivation) d'une ligne `coordenador` `active`
-- **Fermeture du membership `librarian`** : passage à `status='removed'`, avec une entrée d'audit
-  `removal_completed` sur le rôle `librarian`
+- **Fermeture de la ligne active inférieure, quelle qu'elle soit** (`librarian` ou, sur un saut,
+  `reader`) : passage à `status='removed'`, avec une entrée d'audit `removal_completed` sur le
+  rôle fermé
 - Audit log : entrée `promoted_to_coordenador`, `metadata.via = 'team_invitation_accepted'`, avec
-  `invitation_id`, `proposed_by` et `required_ratifications` — la trace dit désormais *par quel
-  chemin* la promotion est passée, pas seulement qu'elle a eu lieu
+  `invitation_id`, `proposed_by`, `required_ratifications` et *(v1.5)* `from_role`
+  (`'librarian'` ou `'reader'`) — la trace dit *par quel chemin* la promotion est passée, y
+  compris d'où venait la personne ; le traçage transverse de la proposition porte le même
+  `from_role` dans son payload
 - Event `team.promoted_to_coordenador` — personne + coordenadores
 
 **Péremption** : une proposition non aboutie expire au bout de 30 jours, balayée par le cron
@@ -632,6 +650,27 @@ Les RPC de cette spec vérifient en début d'exécution le `governance_mode` de 
 - `governance_mode = 'full_governance'` : doctrine intégrale, toutes les RPC actives.
 
 **Implémentation** : à prévoir au paquet F de la spec profils. En attendant, toutes les biblios fonctionnent implicitement en `full_governance`.
+
+### 6.12. *(Nouveau v1.5)* Saut collégial : cas-limites propres au réglage
+
+- **La biblio désactive le saut entre la proposition et l'acceptation** : l'acceptation échoue
+  (`precondition_failed`), car la précondition élargie est revérifiée au moment d'accepter.
+  L'invitation reste `ready` jusqu'à sa péremption (30 j) ; le collectif peut réactiver le
+  réglage, ou la proposition se referme d'elle-même.
+- **Biblio à coordination unique** : la règle de bootstrap du quorum (moins de 2 staff hors
+  personne visée ⇒ 1 endossement) s'applique au saut comme au reste — une proposition d'une seule
+  personne + l'acceptation suffisent alors. C'est une règle assumée du circuit (GOUV-12), et
+  l'opt-in par biblio neutralise le cas tant qu'une telle biblio n'active pas le réglage ; à
+  réévaluer si l'une le fait.
+- **Redescente d'une personne venue directement de `reader`** : `fn_team_self_demote` accepte
+  `reader` comme cible — la personne n'est pas obligée de « redescendre » sur un rôle
+  (`librarian`) qu'elle n'a jamais exercé.
+- **Admin réseau** : son droit de *proposer* une coordination (§5.3, garde `20260826160000`)
+  s'applique mécaniquement au saut **si et seulement si** la biblio a activé le réglage. C'est un
+  choix documenté, pas un effet de bord.
+- **Activation du réglage** : en base, sur décision du collectif (précédent :
+  `team_admission_mode`, qui n'a pas non plus d'UI). Une UI de réglage ne sera envisagée que si
+  la demande se répète (GOUV-11, Q2).
 
 ---
 
@@ -897,7 +936,11 @@ Toutes les chaînes UI utilisent le pattern i18n existant (`useIntl`, `t({id: 'b
 
 ## 10. Modèle de données
 
-### 10.1. Modifications de la table existante *(actualisé v1.1)*
+### 10.1. Modifications de la table existante *(actualisé v1.1 ; complété v1.5)*
+
+**Table `libraries`** *(v1.5)* : colonne `allow_direct_coordenador boolean NOT NULL DEFAULT false`
+(migration `20260901162610`) — opt-in du saut collégial `reader` → `coordenador` (§5.3, §6.12).
+Se règle en base, comme `team_admission_mode`.
 
 **Table `user_library_memberships`** : modifications appliquées en plusieurs paquets entre le 5/05/2026 et le 13/05/2026.
 
@@ -1329,6 +1372,28 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 > 7. Quand le collectif a décidé, un·e admin réseau **propose** la promotion via `fn_team_propose_invitation` (rôle `coordenador`, autorisé par le droit transverse) ; elle est ensuite ratifiée par un·e membre du staff de BLMF, puis acceptée par la personne visée *(v1.4)*. L'action est tracée dans `network_admin_cross_library_actions_log` (action critique : promotion staff) + mail immédiat aux librarians de BLMF.
 
 **Différence avec v1.0** : en v1.0, le scénario mentionnait une « modification SQL directe » par Xavier (admin AnarBib). Depuis le paquet F admin réseau, l'admin réseau passe par la RPC normale, avec autorisation transparente et trace automatique. Plus de bypass SQL, plus de phrase rituelle bloquante.
+
+### 15.6. *(Nouveau v1.5)* Nestor rejoint le collectif — et la coordination
+
+> La BTL fonctionne en collectif horizontal : rejoindre le collectif, c'est partager la
+> coordination. Son collectif a demandé l'activation du saut collégial
+> (`allow_direct_coordenador = true`, posé en base sur décision d'AG). Nestor, lecteur inscrit et
+> validé en présentiel (`reader` `active`), est coopté par l'AG.
+>
+> 1. Une coordinatrice ouvre `/biblioteca`, onglet lecteur·rices, et clique
+>    « Proposer à la coordination » sur la ligne de Nestor. Rien n'est promu : une proposition
+>    est déposée (`fn_team_propose_invitation`, rôle `coordenador`).
+> 2. Un autre membre du staff endosse (quorum `cosignature` : 2, dont ≥ 1 coordenador — la
+>    proposeuse compte pour un).
+> 3. Nestor reçoit la notification, accepte. Sa ligne `reader` se ferme
+>    (`removal_completed`, rôle exclusif), sa ligne `coordenador` s'ouvre, l'audit porte
+>    `from_role = 'reader'`.
+> 4. Toute la coordination est notifiée (P6). L'AG n'a été modélisée nulle part (P8) : le SIGB a
+>    exécuté sa décision, en trois gestes au lieu de six.
+>
+> Si le collectif de la BTL revenait sur son choix, remettre le réglage à `false` suffit :
+> l'échelle redevient la seule voie, et les propositions de saut encore ouvertes échouent à
+> l'acceptation (§6.12).
 
 ---
 
