@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 78 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 77 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -18,7 +18,7 @@
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 9
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 6
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-09-01.** **55 items sur 78** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **54 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -819,34 +819,11 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 | | | | |
 |---|---|---|---|
-| **D1** | Réviser la spec des périodiques contre ce qui a été livré | `P1` | À vérifier |
 | **D2** | Trancher les cinq questions restées ouvertes sur les périodiques | `P2` | Décision collective |
 | **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P2` | Bloqué |
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D6** | Reprendre ou remplacer le lecteur EPUB | `P3` | Ouvert |
-
-#### D1 — Réviser la spec des périodiques contre ce qui a été livré
-
-`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
-
-**État.** `spec-periodiques-v0.1` (27/08) annonce « neuf paquets à livrer ». **Les neuf ont été livrés les 27 et 28/08**, en une journée : `serials`, RPC, anti-faux-doublons, état de collection, entrée dans l'Atelier, reprise des notices existantes, UI de catalogage, page publique, et les libellés dans les dix langues. La base porte 4 titres et 7 fascicules rattachés.
-
-*Vérifié : 31/08 — toujours 4 titres de périodiques et 7 fascicules rattachés en base. Rien n'a bougé depuis la livraison ; la révision de la spec reste à faire.*
-
-**Ce que c'est.** Relire la spec, marquer les neuf paquets comme livrés, puis vérifier une par une les six gardes annoncées — anti-cycle de filiation borné à 20 sauts, réciprocité prédécesseur/successeur par trigger, interdiction de `serial_id` sur un non-fascicule, symétrie de l'importeur face à la colonne générée, fusion des états de collection sans écrasement, ordre de tri.
-
-**Pourquoi ça compte.** Une spec qui dit « à livrer » sur du code livré fait exactement le dégât inverse d'une spec en retard : elle fait refaire. Et les six gardes sont ce qui distingue un sous-système qui tient d'un sous-système qui casse au premier import de masse.
-
-**Ce qui compte comme fini.**
-
-- La spec passe en v1.0 et décrit l'état livré.
-- Les six gardes sont vérifiées en base, avec le résultat écrit.
-- La garde `G2` (réciprocité) est bien un trigger : « la discipline ne survit pas à six mois ».
-
-**Dépendances.** Prérequis de **D2**.
-
-*Renvois : `spec-periodiques-v0.1 §11 §14` · `Migrations 20260827163000 à 20260827210000`*
 
 #### D2 — Trancher les cinq questions restées ouvertes sur les périodiques
 
@@ -2362,6 +2339,7 @@ CI verte : lint et suite unitaire. |
 | G4 | Exercer les quatre courriels d'équipe jamais envoyés | **Clos le 01/09/2026 au soir, sur envoi réel ET lecture par la coordination (« rien à redire »).** Les quatre courriels les plus délicats du système — jamais partis en production — sont partis et ont été lus, plus deux bonus jamais servis non plus (`removal_cancelled`, `unsuspended`) : cinq en pt-BR chez la persona visée, la diffusion `self_demoted` en français chez l'autre coordination, les copies admin en locale de la bibliothèque sur un alias contrôlé. **Le protocole de confinement a tenu deux fois** : quatre des six membres de la coordination d'essai sont de vraies personnes — salle vidée par rétrogradation directe silencieuse avant chaque diffusion, tout restauré à l'identique après. **Le premier tir a fait mouche en échouant** : aucun courriel reçu, parce que le canal porte DEUX interrupteurs sur la même ligne (`delivery_mode` et `active`) et qu'un seul avait été tourné — même famille que le faux interrupteur du 30/08 : *deux interrupteurs pour un seul geste finissent toujours par n'être tournés qu'à moitié*. Le diagnostic a pris trois requêtes parce que chaque saut portait sa raison (`skipped: delivery_disabled`) dans la réponse : **la doctrine B12 prouvée en situation réelle**. Au rejeu, les deux voyants vérifiés dans la vue que la fonction lit (`v_library_notification_context`) AVANT de tirer. **L'angle mort des dix langues est fermé dans la foulée** : les gabarits vivent dans `mail-strings.ts`, hors du périmètre de la garde de parité du front — mesuré 648 clés toutes complètes sur les dix locales, et gardé désormais par `src/tests/mail-strings-parity.test.js` (dont la première exécution a attrapé un faux positif exemplaire : l'en-tête du fichier qui énonce « JAMAIS camerata »). Nuance consignée au passage : `self_demote` passe le rôle quitté en `inactive` là où la promotion l'avait `removed`. |
 | F8 | Le domaine d'envoi, relevé : en règle pour envoyer, ses rapports partent chez Brevo | **Clos le 01/09/2026, sur deux relevés DNS encadrant les gestes — neuf jours avant l'échéance du 10/09.** Le relevé du matin (jamais fait auparavant) a confirmé l'item mot pour mot : **en règle pour envoyer** — SPF porté par le sous-domaine Resend (`send.notifications` : `v=spf1 include:amazonses.com` + MX feedback SES), DKIM présent (sélecteur `resend`) — mais DMARC en `p=none` avec `rua` chez **Brevo**, le prestataire quitté, sur le sous-domaine ET la racine : les rapports d'authentification partaient chez quelqu'un d'autre, et un canal de rapports qui pointe chez un prestataire quitté est un dispositif de surveillance qui se tait (`DOC-SILENCE-1`). Plus deux TXT `brevo-code` résiduels, jetons de vérification qui disaient publiquement « ce domaine a été chez Brevo ». **Les gestes, faits par la coordination chez OVH le jour même, vérifiés au relevé du soir via un résolveur externe** : les deux `_dmarc` pointent vers `admins@anarbib.org` (déjà destinataire des alertes santé), les deux `brevo-code` ont disparu, et rien d'autre n'a bougé — le SPF OVH de la racine (les boîtes `admins@` en dépendent) et toute la zone Resend sont intacts. **La politique DMARC est décidée, pas différée** : `p=none` maintenu le temps de lire les premiers rapports — qui arrivent désormais chez nous, quotidiennement, en petits XML zippés — et le durcissement (`quarantine`) se tranchera sur leur contenu, dans quelques semaines. Le critère est écrit ; il n'y a plus de décision en suspens, seulement un rendez-vous. |
 | C1 | Faire entrer les 35 sujets SOLIDAIRES dans les migrations | **Clos le 01/09/2026, par décision écrite plutôt que par migration** — c'était l'une des deux issues que l'item prévoyait, et la doctrine FICEDL du 26/08 la commandait : *le vocabulaire fédéral embarque, les sujets locaux et leurs alignements n'embarquent pas*. État mesuré le jour de la décision : **35 sujets** `solidaires-*` en base, tous `proposto`, **47 alignements** FICEDL (sur 98). Le brouillon le disait lui-même — « les libellés sont ceux du collectif, non retraduits » : un vocabulaire *situé*, que traduire ou normaliser pour l'embarquer trahirait. Une installation neuve naît avec le thésaurus ; chaque bibliothèque apporte ses mots, et les alignements font le pont. Le brouillon SQL est rangé en archive (`docs/drafts/archive/`), la décision est datée (`DECISION_sujets_solidaires_2026-09-01.md`) avec sa clause de révision : si d'autres bibliothèques adoptent un jour ces rubriques telles quelles, c'est le critère « fédéral » qui commande, pas le préfixe — et la migration se réécrira depuis la base, pas depuis le brouillon. |
+| D1 | Réviser la spec des périodiques contre ce qui a été livré | **Clos le 01/09/2026 — et le premier constat est que la spec à réviser n'existe pas.** `spec-periodiques-v0.1`, citée par cet item avec ses numéros de section (§11, §14), est **introuvable** — ni au dépôt, ni dans les archives de travail : elle a probablement vécu comme document de session, jamais versé au corpus. *La précision d'une citation n'est pas une preuve d'existence* (`DOC-RECENS-1`). Plutôt que de réviser un fantôme, l'état livré est écrit depuis le code : `docs/specs/spec-periodiques-v1.0-etat-livre.md` — une spec *a posteriori* qui l'assume, où le code fait foi et le document le suit. **Les six gardes annoncées sont vérifiées une à une** : l'anti-cycle borné à 20 sauts relu à la ligne (`WHILE v_hops < 20`, trigger `serials_filiation_no_cycle`), la réciprocité par trigger (`serials_filiation_symmetry`), l'interdiction du `serial_id` hors fascicule (`books_serial_id_requires_periodico`), la clé `issue_key` **générée** qu'aucun chemin d'import ne référence, l'état déclaré/calculé en colonnes séparées, l'index de tri. Et surtout : **les six sont exercées en continu** par `periodiques_tests.sql` (35/35 en CI, verte encore ce soir) — la preuve n'est pas le document, c'est la suite, à chaque commit. Le document nouveau porte aussi le changement du jour (arbitrage aligné sur les livres) et les trois gestes manuels restants, qui ne sont pas des défauts. |
 
 ---
 
@@ -2393,4 +2371,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 78 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 77 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

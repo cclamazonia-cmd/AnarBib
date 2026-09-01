@@ -1614,6 +1614,17 @@
           "fr": "**Clos le 01/09/2026, par décision écrite plutôt que par migration** — c'était l'une des deux issues que l'item prévoyait, et la doctrine FICEDL du 26/08 la commandait : *le vocabulaire fédéral embarque, les sujets locaux et leurs alignements n'embarquent pas*. État mesuré le jour de la décision : **35 sujets** `solidaires-*` en base, tous `proposto`, **47 alignements** FICEDL (sur 98). Le brouillon le disait lui-même — « les libellés sont ceux du collectif, non retraduits » : un vocabulaire *situé*, que traduire ou normaliser pour l'embarquer trahirait. Une installation neuve naît avec le thésaurus ; chaque bibliothèque apporte ses mots, et les alignements font le pont. Le brouillon SQL est rangé en archive (`docs/drafts/archive/`), la décision est datée (`DECISION_sujets_solidaires_2026-09-01.md`) avec sa clause de révision : si d'autres bibliothèques adoptent un jour ces rubriques telles quelles, c'est le critère « fédéral » qui commande, pas le préfixe — et la migration se réécrira depuis la base, pas depuis le brouillon.",
           "pt": "**Encerrado em 01/09/2026, por decisão escrita em vez de migração** — era uma das duas saídas que o item previa, e a doutrina FICEDL de 26/08 a comandava: *o vocabulário federal embarca, os assuntos locais e seus alinhamentos não embarcam*. Estado medido no dia da decisão: **35 assuntos** `solidaires-*` no banco, todos `proposto`, **47 alinhamentos** FICEDL (de 98). O rascunho o dizia por si — « os rótulos são os do coletivo, não retraduzidos »: um vocabulário *situado*, que traduzir ou normalizar para embarcar trairia. Uma instalação nova nasce com o tesauro; cada biblioteca traz suas palavras, e os alinhamentos fazem a ponte. O rascunho SQL foi guardado em arquivo (`docs/drafts/archive/`), a decisão está datada (`DECISION_sujets_solidaires_2026-09-01.md`) com sua cláusula de revisão: se outras bibliotecas um dia adotarem essas rubricas tal e qual, é o critério « federal » que comanda, não o prefixo — e a migração se reescreverá a partir do banco, não do rascunho."
         }
+      ],
+      [
+        "D1",
+        {
+          "fr": "Réviser la spec des périodiques contre ce qui a été livré",
+          "pt": "Revisar a spec dos periódicos contra o que foi entregue"
+        },
+        {
+          "fr": "**Clos le 01/09/2026 — et le premier constat est que la spec à réviser n'existe pas.** `spec-periodiques-v0.1`, citée par cet item avec ses numéros de section (§11, §14), est **introuvable** — ni au dépôt, ni dans les archives de travail : elle a probablement vécu comme document de session, jamais versé au corpus. *La précision d'une citation n'est pas une preuve d'existence* (`DOC-RECENS-1`). Plutôt que de réviser un fantôme, l'état livré est écrit depuis le code : `docs/specs/spec-periodiques-v1.0-etat-livre.md` — une spec *a posteriori* qui l'assume, où le code fait foi et le document le suit. **Les six gardes annoncées sont vérifiées une à une** : l'anti-cycle borné à 20 sauts relu à la ligne (`WHILE v_hops < 20`, trigger `serials_filiation_no_cycle`), la réciprocité par trigger (`serials_filiation_symmetry`), l'interdiction du `serial_id` hors fascicule (`books_serial_id_requires_periodico`), la clé `issue_key` **générée** qu'aucun chemin d'import ne référence, l'état déclaré/calculé en colonnes séparées, l'index de tri. Et surtout : **les six sont exercées en continu** par `periodiques_tests.sql` (35/35 en CI, verte encore ce soir) — la preuve n'est pas le document, c'est la suite, à chaque commit. Le document nouveau porte aussi le changement du jour (arbitrage aligné sur les livres) et les trois gestes manuels restants, qui ne sont pas des défauts.",
+          "pt": "**Encerrado em 01/09/2026 — e o primeiro constato é que a spec a revisar não existe.** `spec-periodiques-v0.1`, citada por este item com seus números de seção (§11, §14), está **em parte alguma** — nem no repositório, nem nos arquivos de trabalho: provavelmente viveu como documento de sessão, nunca versado ao corpus. *A precisão de uma citação não é prova de existência* (`DOC-RECENS-1`). Em vez de revisar um fantasma, o estado entregue foi escrito a partir do código: `docs/specs/spec-periodiques-v1.0-etat-livre.md` — uma spec *a posteriori* que o assume, onde o código faz fé e o documento o segue. **As seis guardas anunciadas foram verificadas uma a uma**: o anticiclo limitado a 20 saltos relido na linha (`WHILE v_hops < 20`), a reciprocidade por trigger, a proibição do `serial_id` fora de fascículo, a chave `issue_key` **gerada** que nenhum caminho de importação referencia, o estado declarado/calculado em colunas separadas, o índice de ordenação. E sobretudo: **as seis são exercidas continuamente** por `periodiques_tests.sql` (35/35 na CI, verde ainda esta noite) — a prova não é o documento, é a suíte, a cada commit. O documento novo porta também a mudança do dia (arbítrio alinhado aos livros) e os três gestos manuais restantes, que não são defeitos."
+        }
       ]
     ]
   },
@@ -2499,57 +2510,6 @@
       "verif": {
         "fr": "31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.",
         "pt": "31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo."
-      }
-    },
-    {
-      "id": "D1",
-      "d": "D",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "biblio",
-        "sql"
-      ],
-      "t": {
-        "fr": "Réviser la spec des périodiques contre ce qui a été livré",
-        "pt": "Revisar a spec dos periódicos contra o que foi entregue"
-      },
-      "v": {
-        "fr": "`spec-periodiques-v0.1` (27/08) annonce « neuf paquets à livrer ». **Les neuf ont été livrés les 27 et 28/08**, en une journée : `serials`, RPC, anti-faux-doublons, état de collection, entrée dans l'Atelier, reprise des notices existantes, UI de catalogage, page publique, et les libellés dans les dix langues. La base porte 4 titres et 7 fascicules rattachés.",
-        "pt": "`spec-periodiques-v0.1` (27/08) anuncia «nove pacotes a entregar». **Os nove foram entregues em 27 e 28/08**, num dia: `serials`, RPC, anti-falsos-duplicados, estado de coleção, entrada na Oficina, retomada dos registros existentes, UI de catalogação, página pública, e os rótulos nas dez línguas."
-      },
-      "w": {
-        "fr": "Relire la spec, marquer les neuf paquets comme livrés, puis vérifier une par une les six gardes annoncées — anti-cycle de filiation borné à 20 sauts, réciprocité prédécesseur/successeur par trigger, interdiction de `serial_id` sur un non-fascicule, symétrie de l'importeur face à la colonne générée, fusion des états de collection sans écrasement, ordre de tri.",
-        "pt": "Reler a spec, marcar os nove pacotes como entregues, depois verificar uma a uma as seis guardas anunciadas — anticiclo de filiação limitado a 20 saltos, reciprocidade predecessor/sucessor por trigger, proibição de `serial_id` num não-fascículo, simetria do importador diante da coluna gerada, fusão dos estados de coleção sem sobrescrita, ordem de classificação."
-      },
-      "y": {
-        "fr": "Une spec qui dit « à livrer » sur du code livré fait exactement le dégât inverse d'une spec en retard : elle fait refaire. Et les six gardes sont ce qui distingue un sous-système qui tient d'un sous-système qui casse au premier import de masse.",
-        "pt": "Uma spec que diz «a entregar» sobre código entregue causa exatamente o dano inverso de uma spec atrasada: faz refazer. E as seis guardas são o que distingue um subsistema que aguenta de um subsistema que quebra na primeira importação em massa."
-      },
-      "f": {
-        "fr": [
-          "La spec passe en v1.0 et décrit l'état livré.",
-          "Les six gardes sont vérifiées en base, avec le résultat écrit.",
-          "La garde `G2` (réciprocité) est bien un trigger : « la discipline ne survit pas à six mois »."
-        ],
-        "pt": [
-          "A spec passa a v1.0 e descreve o estado entregue.",
-          "As seis guardas estão verificadas no banco, com o resultado escrito.",
-          "A guarda `G2` (reciprocidade) é de fato um trigger: «a disciplina não sobrevive a seis meses»."
-        ]
-      },
-      "dep": {
-        "fr": "Prérequis de **D2**.",
-        "pt": "Pré-requisito de **D2**."
-      },
-      "r": [
-        "spec-periodiques-v0.1 §11 §14",
-        "Migrations 20260827163000 à 20260827210000"
-      ],
-      "verif": {
-        "fr": "31/08 — toujours 4 titres de périodiques et 7 fascicules rattachés en base. Rien n'a bougé depuis la livraison ; la révision de la spec reste à faire.",
-        "pt": "31/08 — ainda 4 títulos e 7 fascículos no banco. A revisão da spec continua por fazer."
       }
     },
     {
