@@ -50,6 +50,12 @@ tests/sql/salle_des_machines_tests.sql
 # moitie de la decision — cataloguer et signaler restent ouverts — et T4 garde
 # que les deux familles refusent dans les memes termes.
 tests/sql/arbitrage_periodiques_tests.sql
+# B14 paquet 10 : un document restreint ne vit jamais dans un bucket public.
+# Le talon de la chaine d acces (RPC-portier -> EF qui signe en service_role)
+# est le RANGEMENT : un asset conta_ativa dans un bucket public serait servi
+# par l URL publique, sans RPC ni EF, et RIEN ne casserait — le parcours normal
+# continuerait de fonctionner. T4 garde la propriete revocable du PEB numerique.
+tests/sql/documents_numeriques_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
