@@ -6,6 +6,7 @@ import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import LibraryContextBanner from '@/components/LibraryContextBanner';
 import LibraryProfileBanner from '@/components/LibraryProfileBanner';
 import TransitionsPanel from '@/components/TransitionsPanel';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -1421,6 +1422,15 @@ export default function BibliotecaPage() {
       </Hero>
 
       <div className="catalogacao-wrap" style={{ maxWidth:1100, margin:'0 auto' }}>
+
+        {/* Décision du 01/09/2026 : le sélecteur de bibliothèque vivait UNIQUEMENT
+            sur /conta, c'est-à-dire sur le profil de lectrice — alors que c'est
+            ici qu'on a besoin d'en changer. Il ne s'affiche qu'à partir de deux
+            appartenances, et sa source reste les appartenances : aucun droit
+            n'est élargi, le contrôle est simplement posé là où il sert.
+            Les bibliothécaires atteignent cette page (seuls certains onglets
+            sont coordOnly), le sélecteur leur est donc accessible aussi. */}
+        <LibraryContextBanner />
 
         <div className="cat-statusbar" style={{ marginBottom:16 }}>
           {[[t({id:'catalog.stats.documents'}),stats.books],[t({id:'catalog.stats.authorities'}),stats.authors],[t({id:'catalog.stats.exemplars'}),stats.exemplars],[t({id:'catalog.stats.readers'}),stats.readers],[t({id:'catalog.stats.loans'}),stats.loansOpen]].map(([l,v])=>

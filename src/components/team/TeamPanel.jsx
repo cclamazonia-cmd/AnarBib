@@ -177,7 +177,7 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
   // une vue d'ensemble même quand un filtre masque des lignes).
   const counts = useMemo(() => {
     const byRole = { librarian: 0, coordenador: 0, administrador: 0 };
-    const byStatus = { active: 0, suspended: 0, pending_removal: 0, inactive: 0, removed: 0 };
+    const byStatus = { active: 0, suspended: 0, pending_removal: 0, inactive: 0, vacated: 0, removed: 0 };
     for (const m of memberships) {
       if (byRole[m.role] !== undefined) byRole[m.role] += 1;
       const eff = effectiveStatus(m);
@@ -258,9 +258,6 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
     for (const g of order) {
       const key = String(g.profile?.public_id || '').trim().toUpperCase();
       g.pendingInvitation = key ? (invByPublicId.get(key) || null) : null;
-      // Sert à distinguer les deux sens de `status='inactive'` (cf. plus bas) :
-      // compte délaissé par le cron, ou rôle quitté par une rétrogradation.
-      g.hasActiveRole = g.memberships.some((m) => m.status === 'active');
     }
     return order;
   }, [filtered, user?.id, invitations]);
@@ -351,6 +348,13 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
             kind="muted"
           />
         )}
+        {counts.byStatus.vacated > 0 && (
+          <CountCard
+            label={t({ id: 'team.status.vacated' })}
+            count={counts.byStatus.vacated}
+            kind="muted"
+          />
+        )}
       </div>
 
       {/* ── Barre de filtres ─────────────────────────────── */}
@@ -377,6 +381,7 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
           <option value="suspended">{t({ id: 'team.status.suspended' })}</option>
           <option value="pending_removal">{t({ id: 'team.status.pending_removal' })}</option>
           <option value="inactive">{t({ id: 'team.status.inactive' })}</option>
+          <option value="vacated">{t({ id: 'team.status.vacated' })}</option>
         </select>
         {scope === 'network' && distinctLibraries.length > 1 && (
           <select value={libraryFilter} onChange={e => setLibraryFilter(e.target.value)} className="ab-team-select">
@@ -411,7 +416,6 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
               group={g}
               index={i}
               pendingInvitation={g.pendingInvitation}
-              hasActiveRole={g.hasActiveRole}
               showLibrary={scope === 'network'}
               observerRole={observerRole}
               observerUserId={user?.id}
@@ -538,7 +542,6 @@ function TeamPersonGroup({
   group,
   index,
   pendingInvitation,
-  hasActiveRole,
   showLibrary,
   observerRole,
   observerUserId,
@@ -556,7 +559,6 @@ function TeamPersonGroup({
         membership={group.memberships[0]}
         index={index}
         pendingInvitation={pendingInvitation}
-        hasActiveRole={hasActiveRole}
         showLibrary={showLibrary}
         isCurrentUser={group.isCurrentUser}
         observerRole={observerRole}
@@ -591,7 +593,6 @@ function TeamPersonGroup({
             membership={sm}
             subRow
             pendingInvitation={pendingInvitation}
-            hasActiveRole={hasActiveRole}
             showLibrary={showLibrary}
             isCurrentUser={group.isCurrentUser}
             observerRole={observerRole}
@@ -610,7 +611,6 @@ function TeamMembershipRow({
   index,
   subRow = false,
   pendingInvitation = null,
-  hasActiveRole = false,
   showLibrary,
   isCurrentUser,
   observerRole,
@@ -716,15 +716,20 @@ function TeamMembershipRow({
             })}
           </div>
         )}
-        {/* `status='inactive'` porte DEUX sens : compte délaissé (cron T9) et rôle
-            quitté par une rétrogradation (fn_team_self_demote met le rôle supérieur
-            à 'inactive'). Le texte ci-dessous ne vaut que pour le premier. Si la
-            personne a un autre rôle actif ici, elle n'a rien délaissé du tout —
-            l'afficher racontait à l'équipe une histoire fausse sur quelqu'un qui
-            venait simplement de passer la main (P3). */}
-        {eff === 'inactive' && !hasActiveRole && (
+        {/* Depuis la migration 20260901220000, les deux sens sont distingués EN
+            BASE et non plus déduits ici : `inactive` = compte délaissé, mis en
+            pause par le cron T9 ; `vacated` = rôle quitté volontairement (P3).
+            La déduction « a-t-elle un autre rôle actif ? » qui tenait lieu de
+            correctif le 01/09 est retirée — elle ne valait que dans cet écran,
+            et tout autre lecteur de la donnée se trompait. */}
+        {eff === 'inactive' && (
           <div className="ab-team-row__note ab-team-row__note--muted">
             {t({ id: 'team.note.inactiveExplain' })}
+          </div>
+        )}
+        {eff === 'vacated' && (
+          <div className="ab-team-row__note ab-team-row__note--muted">
+            {t({ id: 'team.note.vacatedExplain' })}
           </div>
         )}
       </div>

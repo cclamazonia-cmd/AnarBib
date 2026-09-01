@@ -84,6 +84,9 @@ export function statusBadgeKind(status) {
     case 'suspended': return 'warn';
     case 'pending_removal': return 'warn';
     case 'inactive': return 'warn';
+    // Rôle quitté volontairement (P3) : ni alerte ni sanction — une information.
+    // À ne pas confondre avec 'inactive', qui signale un compte délaissé.
+    case 'vacated': return 'info';
     case 'removed': return 'danger';
     default: return 'info';
   }

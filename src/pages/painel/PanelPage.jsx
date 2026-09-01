@@ -6,6 +6,7 @@ import { localizeError } from '@/lib/localizeError';
 import { decodeSystemNote } from '@/lib/systemNotes';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import LibraryContextBanner from '@/components/LibraryContextBanner';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, Skeleton } from '@/components/ui';
 import { parseAddressText } from '@/lib/addressFormat';
@@ -36,7 +37,7 @@ const TabRecolement      = lazy(() => import('./tabs/TabRecolement'));
 // Workflow labels and stage lists are built inside the component using t()
 // ═══════════════════════════════════════════════════════════
 
-export default function PanelPage() {
+function PanelPageInner() {
   const { user } = useAuth();
   const { libraryId, libraryName, role, circulation_mode, membership_enabled, isNetworkAdmin } = useLibrary();
   const availability = usePanelAvailability();
@@ -1769,6 +1770,7 @@ export default function PanelPage() {
   return (
     <PageShell>
       <Topbar />
+      <LibraryContextBanner />
       <Hero title={t({ id: 'panel.title' })} subtitle={libraryName || t({ id: 'panel.subtitle' })}>
         {/* EA-01 niveau 2 (refonte Hero B.3, 29/05/2026) :
             ligne saillante "N items demandent action → Voir la synthèse",
@@ -2294,4 +2296,24 @@ export default function PanelPage() {
       </Modal>
     </PageShell>
   );
+}
+
+// ────────────────────────────────────────────────────────────
+// Remontage au changement de bibliothèque (01/09/2026)
+//
+// Le sélecteur est désormais monté sur cette page. Or le panneau garde ses
+// opérations en cours dans des useState ordinaires — borrowerLookup, loanRefs,
+// loanPreview, returnId — et rien ne les remettait à zéro : seuls le fuseau
+// horaire et la liste des tâches réagissaient à `libraryId`. Un emprunt
+// composé pour la biblio A aurait donc survécu à une bascule vers B, et serait
+// parti avec le library_id de B au moment de valider.
+//
+// Ce `key` règle le problème par construction plutôt que par vigilance : React
+// démonte et remonte tout le panneau à chaque changement, donc aucun état
+// d'opération ne peut traverser une bascule. Ne pas le retirer sans retirer
+// aussi le sélecteur ci-dessus.
+// ────────────────────────────────────────────────────────────
+export default function PanelPage() {
+  const { libraryId } = useLibrary();
+  return <PanelPageInner key={libraryId || 'sans-biblio'} />;
 }

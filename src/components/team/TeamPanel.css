@@ -117,6 +117,7 @@
 }
 
 .ab-team-row[data-status="inactive"],
+.ab-team-row[data-status="vacated"],
 .ab-team-row[data-status="removed"] {
   opacity: .55;
 }
