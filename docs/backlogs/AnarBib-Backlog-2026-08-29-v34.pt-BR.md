@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **54 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **55 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, H7, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1558,7 +1558,7 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H5** | Testar a coleta OAI-PMH nos dois sentidos | `P2` | Aberto |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
-| **H7** | Decidir o destino do texto de convenções de interoperabilidade | `P1` | Decisão coletiva |
+| **H7** | Decidir o destino do texto de convenções de interoperabilidade | `P1` | Bloqueado |
 
 #### H1 — Reparar a coleta dos 158 descritores de datas do tesauro
 
@@ -1650,11 +1650,11 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 
 #### H7 — Decidir o destino do texto de convenções de interoperabilidade
 
-`P1` Prioritário · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : deliberação coletiva
+`P1` Prioritário · Estado : **Bloqueado** · Carga : uma noite · O que exige : deliberação coletiva
 
 **Estado.** `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` é um **rascunho que não compromete ninguém e nunca foi discutido com nenhuma organização**. Propõe quatro convenções e um pedido único à FICEDL.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado :  **01/09/2026 — a decisão foi tomada, e o objeto desapareceu.** A coordenação decidiu « levar a Bolonha ». Mas o próprio texto — `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` — está **em parte alguma**: nem no repositório, nem no disco de trabalho, nem na pasta Bologna. É o **segundo documento fantasma da mesma noite** (com `spec-periodiques-v0.1`, item D1): o v34 o cita com conteúdo preciso, e nada o atesta em lugar nenhum. Duas saídas, na mão da coordenação: **reencontrar o texto** (outra máquina, uma troca de e-mail, uma sessão passada) — ou **reescrevê-lo a dois**, e matéria não falta: a convenção nº 1 é conhecida (« os fluxos OPDS existem de ambos os lados mas não apontam para lugar nenhum ») e o OPDS entregue hoje já é sua demonstração, o SKOS do H3 está servido em URLs estáveis, e o argumentário de reciprocidade do tesauro (17/06) porta o pedido à FICEDL. Reescrever quatro convenções não é gesto de máquina sozinha: é uma posição levada diante de outras organizações.*
 
 **O que é.** Retirar as notas de trabalho, levar o texto a Bolonha, e deixá-lo ser retomado coletivamente — ou arquivado.
 

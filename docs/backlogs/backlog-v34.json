@@ -4016,7 +4016,7 @@
       "id": "H7",
       "d": "H",
       "p": "P1",
-      "s": "decision",
+      "s": "bloque",
       "e": "S",
       "sk": [
         "collectif"
@@ -4055,7 +4055,11 @@
       },
       "r": [
         "CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26"
-      ]
+      ],
+      "verif": {
+        "fr": " **01/09/2026 — la décision est prise, et l'objet a disparu.** La coordination a tranché « porter à Bologne ». Mais le texte lui-même — `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` — est **introuvable** : ni au dépôt, ni sur le disque de travail, ni dans le dossier Bologna. C'est le **deuxième document fantôme du même soir** (avec `spec-periodiques-v0.1`, item D1) : le v34 le cite avec un contenu précis, et rien ne l'atteste nulle part. Deux issues, à la main de la coordination : **retrouver le texte** (une autre machine, un échange de courriel, une session passée) — ou **le réécrire à deux**, et la matière ne manque pas : la convention n°1 est connue (« les flux OPDS existent de part et d'autre mais ne pointent nulle part ») et l'OPDS livré aujourd'hui en est déjà la démonstration, le SKOS de H3 est servi à des URLs stables, et l'argumentaire de réciprocité du thésaurus (17/06) porte la demande FICEDL. Réécrire quatre conventions n'est pas un geste de machine seule : c'est une position portée devant d'autres organisations.",
+        "pt": " **01/09/2026 — a decisão foi tomada, e o objeto desapareceu.** A coordenação decidiu « levar a Bolonha ». Mas o próprio texto — `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` — está **em parte alguma**: nem no repositório, nem no disco de trabalho, nem na pasta Bologna. É o **segundo documento fantasma da mesma noite** (com `spec-periodiques-v0.1`, item D1): o v34 o cita com conteúdo preciso, e nada o atesta em lugar nenhum. Duas saídas, na mão da coordenação: **reencontrar o texto** (outra máquina, uma troca de e-mail, uma sessão passada) — ou **reescrevê-lo a dois**, e matéria não falta: a convenção nº 1 é conhecida (« os fluxos OPDS existem de ambos os lados mas não apontam para lugar nenhum ») e o OPDS entregue hoje já é sua demonstração, o SKOS do H3 está servido em URLs estáveis, e o argumentário de reciprocidade do tesauro (17/06) porta o pedido à FICEDL. Reescrever quatro convenções não é gesto de máquina sozinha: é uma posição levada diante de outras organizações."
+      }
     },
     {
       "id": "I1",

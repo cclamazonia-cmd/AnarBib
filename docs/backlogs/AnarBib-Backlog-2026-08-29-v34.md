@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-09-01.** **54 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **55 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, H7, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1582,7 +1582,7 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H5** | Éprouver la moisson OAI-PMH dans les deux sens | `P2` | Ouvert |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
-| **H7** | Décider du sort du texte de conventions d'interopérabilité | `P1` | Décision collective |
+| **H7** | Décider du sort du texte de conventions d'interopérabilité | `P1` | Bloqué |
 
 #### H1 — Réparer l'aspiration des 158 descripteurs de dates du thésaurus
 
@@ -1674,11 +1674,11 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 
 #### H7 — Décider du sort du texte de conventions d'interopérabilité
 
-`P1` Prioritaire · État : **Décision collective** · Charge : une soirée · Ce que ça demande : délibération collective
+`P1` Prioritaire · État : **Bloqué** · Charge : une soirée · Ce que ça demande : délibération collective
 
 **État.** `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` est un **brouillon qui n'engage personne et n'a jamais été discuté avec aucune organisation**. Il propose quatre conventions et une demande unique à la FICEDL.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié :  **01/09/2026 — la décision est prise, et l'objet a disparu.** La coordination a tranché « porter à Bologne ». Mais le texte lui-même — `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` — est **introuvable** : ni au dépôt, ni sur le disque de travail, ni dans le dossier Bologna. C'est le **deuxième document fantôme du même soir** (avec `spec-periodiques-v0.1`, item D1) : le v34 le cite avec un contenu précis, et rien ne l'atteste nulle part. Deux issues, à la main de la coordination : **retrouver le texte** (une autre machine, un échange de courriel, une session passée) — ou **le réécrire à deux**, et la matière ne manque pas : la convention n°1 est connue (« les flux OPDS existent de part et d'autre mais ne pointent nulle part ») et l'OPDS livré aujourd'hui en est déjà la démonstration, le SKOS de H3 est servi à des URLs stables, et l'argumentaire de réciprocité du thésaurus (17/06) porte la demande FICEDL. Réécrire quatre conventions n'est pas un geste de machine seule : c'est une position portée devant d'autres organisations.*
 
 **Ce que c'est.** Retirer les notes de travail, porter le texte à Bologne, et le laisser être repris collectivement — ou rangé.
 
