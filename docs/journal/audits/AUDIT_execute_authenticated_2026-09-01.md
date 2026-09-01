@@ -321,7 +321,70 @@ C'est une contrainte connue du flux de création (la bibliothèque cible se choi
 en admin réseau, décision du 17/08), pas un défaut de garde — noté ici pour que
 la prochaine lecture ne le prenne pas pour un oubli.
 
+# Paquet 5 — le reste, et la clôture du lot `api` (32 fonctions, 01/09)
+
+Les 32 restantes n'avaient plus de forme commune à trier : bascules de réglage,
+actes de diffusion, helpers d'écran, gestes sur soi. Lues en une fois.
+
+## Aucune faille — et la doctrine du paquet 4 tient sur les cas extrêmes
+
+Les deux actes les plus lourds du réseau sont les mieux gardés :
+`fn_gazette_broadcast` et `fn_lettre_issue_send` — qui écrivent à *tout le
+monde* — exigent `network_staff` actif, une garde plus étroite qu'admin réseau.
+À l'autre bout, `fn_lettre_cancel`, `fn_lettre_request_optin` et
+`fn_clear_my_signup_metadata_field` n'agissent que sur `auth.uid()`.
+
+Entre les deux, la règle de propriété se vérifie encore :
+`set_reader_message_inbox_state` charge le `library_id` **du message** avant de
+garder dessus (`user_has_library_staff_role`) ; `suggest_next_reader_number` et
+`get_last_assigned_reader_identity` gardent sur la bibliothèque passée ;
+`merge_book_drafts` garde sans bibliothèque, comme `merge_draft_into_book` —
+même raison, les brouillons sont un commun de catalogage.
+
+`fn_assembleia_unvolunteer` mérite une note : elle n'a **aucune garde
+explicite**, et c'est correct — son `WHERE user_id = auth.uid()` *est* la garde.
+Se désister d'un volontariat qu'on n'a pas ne fait rien, ce qui est le bon
+comportement ; ce n'est pas un refus muet au sens du paquet 3, parce qu'on ne
+demande rien à personne. Un `DELETE` borné à soi n'a pas besoin d'un `IF`.
+
+## Une observation, pas un défaut
+
+Deux réglages de la même bibliothèque n'ont pas la même garde :
+`fn_upsert_library_opening_hours` demande `user_can_manage_library`
+(coordination) là où `fn_set_library_theme_active` se contente de
+`user_can_engage_library`. C'est défendable — les horaires engagent la
+bibliothèque auprès du public, le thème est cosmétique — mais l'écart n'est
+écrit nulle part. Noté ici pour que la prochaine lecture n'y voie pas un oubli,
+comme les 23 fausses alertes du paquet 1.
+
+# Clôture du lot `api`
+
+**138 sur 138 ont un verdict écrit.** Le bouclage a été vérifié par le second
+chemin exigé par `DOC-RECENS-1` : la liste des fonctions lues confrontée à
+`pg_proc` rend **zéro non-lue et zéro nom fantôme** — aucune fonction oubliée,
+et aucune fonction citée qui n'existerait pas.
+
+| Paquet | Critère | Lues | Trouvé |
+|---|---|---:|---|
+| 1 | sans garde visible | 24 | `get_due_date_for_loan` — cotisation d'autrui *(dormante)* |
+| 2 | nominatives | 15 | `get_member_restriction` — gel global de tout UUID *(dormante)*, + le défaut du correctif |
+| 3 | listes à paramètre de portée | 21 | six refus muets *(dont un atteignable par l'interface)* |
+| 4 | écritures sur objet | 45 | — |
+| 5 | le reste | 32 | — |
+
+**Deux fuites réelles, six silences, zéro sur les 77 écritures et réglages.**
+Les deux fuites étaient **dormantes** : l'une attendait qu'une bibliothèque
+active les cotisations, l'autre qu'un premier gel réseau soit posé. La leçon du
+lot tient en une phrase — *la question utile n'est pas « est-ce exploitable
+aujourd'hui ? » mais « qu'est-ce qui l'armerait ? »*, car la réponse est
+souvent une case à cocher dans un écran de configuration.
+
+Et le motif qui revient dans les trois prises : **une garde qui vérifie une
+relation que la requête suivante n'utilise pas** — dans la fonction d'après
+(paquet 1), deux blocs plus haut (paquet 2), ou pour un rôle mais pas pour le
+périmètre (paquet 3).
+
 ## Compte d'avancement du lot `api`
 
-**105 des 138** fonctions ont un verdict écrit (24, 15, 21 puis 45) ;
-**deux fuites réelles** trouvées et corrigées, toutes deux dormantes — et un défaut introduit par le second correctif, attrapé par sa propre suite avant d'avoir servi. Restent 33 à lire. Pour le reste (33 fonctions sans paramètre d'objet ni de personne : bascules de réglage, compteurs, helpers d'écran), le critère de tri n'a plus grand-chose à trier — les lire en une fois, puis passer au schéma `public` (326), où l'audit du 18/05 n'avait vu qu'une partie.
+**138 des 138** fonctions du lot `api` ont un verdict écrit (24, 15, 21, 45, 32) ;
+**deux fuites réelles** trouvées et corrigées, toutes deux dormantes — et un défaut introduit par le second correctif, attrapé par sa propre suite avant d'avoir servi. Le lot `api` est clos. Reste le schéma `public` — **326 fonctions**, dont l'audit du 18/05 n'avait vu qu'une partie. Les cinq critères éprouvés ici s'y transposent, dans le même ordre : ils ont produit trois prises sur `api` et ont fermé la liste sans trou.
