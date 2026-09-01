@@ -177,14 +177,23 @@ BEGIN
     ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||v_n||' colonne(s) sensibles exposees'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||SQLERRM); END;
 
-  v_t := 'T18 un non-admin ne voit aucune invitation';
+  -- ATTENDU CHANGÉ LE 01/09/2026, ET C'EST VOULU. Ce test exigeait « zero
+  -- ligne » : c'etait la garde en WHERE de la fonction, qui rendait du vide au
+  -- lieu de refuser. Decision collective du 01/09 (DOC-SILENCE-1) : un refus se
+  -- dit. Une liste vide affirmait « aucune candidature n'attend » a qui n'avait
+  -- pas le droit de la voir — et le jour ou une candidature manquerait, personne
+  -- ne saurait laquelle des deux phrases est vraie. Le test garde donc le REFUS.
+  -- Il rejoint le T1 et le T9 de cette meme suite, qui exigeaient deja un refus
+  -- explicite pour emettre et pour revoquer : lire s'aligne enfin sur ecrire.
+  v_t := 'T18 un non-admin se voit REFUSER la liste (et non servir du vide)';
   BEGIN
     PERFORM set_config('request.jwt.claims',
       json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     SELECT count(*) INTO v_n FROM public.fn_list_library_request_invitations(true);
-    IF v_n = 0 THEN v_passed:=v_passed+1;
-    ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' got '||v_n); END IF;
-  EXCEPTION WHEN OTHERS THEN v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||SQLERRM); END;
+    v_failed:=v_failed+1;
+    v_failures:=v_failures||(v_t||' : liste servie ('||v_n||' ligne(s)) au lieu d''un refus');
+  EXCEPTION WHEN insufficient_privilege THEN v_passed:=v_passed+1;
+            WHEN OTHERS THEN v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : mauvaise erreur -> '||SQLERRM); END;
 
   IF v_failed = 0 THEN RAISE EXCEPTION 'INV-L2 OK : %/% tests passés', v_passed, (v_passed+v_failed);
   ELSE RAISE EXCEPTION 'INV-L2 ECHEC : %/% OK, % échec(s) | %', v_passed,(v_passed+v_failed),v_failed,array_to_string(v_failures,' || '); END IF;

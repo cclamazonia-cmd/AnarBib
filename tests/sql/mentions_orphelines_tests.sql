@@ -123,14 +123,23 @@ BEGIN
     ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : Bo encore nommee apres effacement'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||SQLERRM); END;
 
-  v_t := 'T10 un non-admin ne voit aucune mention';
+  -- ATTENDU CHANGÉ LE 01/09/2026, ET C'EST VOULU. Ce test exigeait « zero
+  -- ligne » : c'etait la garde en WHERE de la fonction, qui rendait du vide au
+  -- lieu de refuser. Decision collective du 01/09 (DOC-SILENCE-1) : un refus se
+  -- dit. Une liste vide n'est pas rien, c'est une phrase — « aucune mention
+  -- orpheline n'attend » — et personne ne pouvait la distinguer d'un manque de
+  -- droit. La fonction leve desormais 42501. Le test garde donc le REFUS, pas
+  -- le silence ; le vide reste verifie par les tests precedents, sous le JWT de
+  -- la coordination, ou un zero est un vrai zero.
+  v_t := 'T10 un non-admin se voit REFUSER la liste (et non servir du vide)';
   BEGIN
     PERFORM set_config('request.jwt.claims',
       json_build_object('sub', v_a, 'role', 'authenticated')::text, true);
     SELECT count(*) INTO v_n FROM public.fn_list_orphan_library_mentions();
-    IF v_n = 0 THEN v_passed:=v_passed+1;
-    ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' got '||v_n); END IF;
-  EXCEPTION WHEN OTHERS THEN v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||SQLERRM); END;
+    v_failed:=v_failed+1;
+    v_failures:=v_failures||(v_t||' : liste servie ('||v_n||' ligne(s)) au lieu d''un refus');
+  EXCEPTION WHEN insufficient_privilege THEN v_passed:=v_passed+1;
+            WHEN OTHERS THEN v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : mauvaise erreur -> '||SQLERRM); END;
 
   v_t := 'T11 la fonction n''est pas appelable en anonyme';
   BEGIN
