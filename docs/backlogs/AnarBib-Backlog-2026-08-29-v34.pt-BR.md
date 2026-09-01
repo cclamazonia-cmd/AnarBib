@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 80 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 79 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 5
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **57 itens de 80** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **56 itens de 79** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1240,7 +1240,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F7** | Treze segredos de função estão declarados e vazios, sem que se saiba quais o são de propósito | `P2` | Aberto |
-| **F8** | O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1395,28 +1394,6 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 **Dependências.** Nenhuma. O levantamento está feito e cabe no item; o que resta exige sobretudo saber o que se queria.
 
 *Remissões : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
-
-#### F8 — O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** Trinta e seis crons enviam correio via `notifications.anarbib.org` e ninguém nunca tinha levantado SPF, DKIM nem DMARC. Feito em 31/08: **o domínio está em regra para enviar.** O caminho de retorno vive em `send.` (MX SES `eu-west-1`, SPF `include:amazonses.com`); a chave DKIM `resend._domainkey` está publicada; DMARC existe no subdomínio e no pai. Dois resíduos de uma época deixada: os dois DMARC trazem `rua=mailto:rua@dmarc.brevo.com` — **os relatórios agregados vão para a Brevo, que nada mais no projeto menciona** — e o TXT guarda um `brevo-code` de verificação. A política é `p=none`: nada é imposto, o que não atrapalha o envio.
-
-*Verificado : 31/08 — três `Resolve-DnsName`, mais o `send.` e o pai: SPF em `send.`, DKIM publicado, DMARC `p=none` com `rua` Brevo nos dois níveis, `brevo-code` residual. **Levantamento feito em 01/09/2026** (Resolve-DnsName, somente leitura). **Em regra para enviar**: SPF no subdomínio Resend (`send.notifications`: `v=spf1 include:amazonses.com ~all` + MX feedback SES) e DKIM presente (seletor `resend`). **Os dois defeitos anunciados estão confirmados**: (1) DMARC em `p=none` com `rua=mailto:rua@dmarc.brevo.com` — no subdomínio E em `anarbib.org`: os relatórios de autenticação partem para o provedor abandonado, que os lê no nosso lugar; (2) resíduos Brevo (`brevo-code:…`) nas duas zonas, mais um `include:mx.ovh.com` na raiz. Falta fazer, dois gestos DNS na OVH: apontar o `rua` para uma caixa da rede (`admins@anarbib.org`, já destinatária dos alertas de saúde) mantendo `p=none` enquanto se leem alguns relatórios, e limpar os dois TXT `brevo-code`.*
-
-**O que é.** Decidir o destino dos resíduos Brevo e da política DMARC. Nada bloqueia o e-mail de 10/09.
-
-**Por que importa.** Um canal de relatórios que aponta para um prestador deixado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`): se a autenticação se degradasse amanhã, os relatórios iriam para uma caixa que ninguém lê.
-
-**O que conta como terminado.**
-
-- O destino `rua` tem um veredito: redirecionado para uma caixa lida, ou retirado com a razão escrita.
-- O `brevo-code` residual é retirado, ou sua presença justificada.
-- A eventual passagem de `p=none` a uma política restritiva tem um veredito escrito — não antes de os relatórios serem lidos em algum lugar.
-
-**Dependências.** Acesso DNS do domínio (registrar). Nenhuma dependência de código.
-
-*Remissões : `item F1` · `item B17` · `REGISTRE DOC-SILENCE-1` · `notifications.anarbib.org` · `send.notifications.anarbib.org`*
 
 ---
 
@@ -2376,6 +2353,7 @@ CI verde. |
 | H4 | Expor o catálogo em OPDS | **Encerrado em 01/09/2026, onze dias antes de Bolonha, com prova real.** O fluxo OPDS 1.2 está vivo: `/functions/v1/opds` (navegação) e `/opds/all` (aquisição) — os **18 documentos digitais públicos** do catálogo, legíveis por qualquer aplicativo de leitura sem passar pela nossa interface. A convenção nº 1 do texto de interoperabilidade (« os fluxos OPDS existem de ambos os lados mas não apontam para lugar nenhum ») está **cumprida antes de ser proposta**. Provado no `curl`: Atom conforme, 18 entradas com títulos todos distintos (os seis tomos de Reclus se distinguem por volume e subtítulo), línguas normalizadas (7 fr, 7 pt-BR, 2 es, 2 it — `language_code` havia derivado, `idioma` faz fé), direitos e atribuição Gallica/BnF presentes, capas ligadas, link de volta para `/livro/<bib_ref>`, e um PDF realmente servido (10,4 MB, apóstrofos e espaços dos caminhos URL-codificados). Autodescoberta posta no `index.html`. **O perímetro é estrito e guardado**: apenas `access_scope='publico'` ativo — o mesmo predicado de `documents_numeriques_tests`; o fluxo não cria acesso algum, torna encontrável o que já é público. **Dois constatos de passagem**: `book_digital_resources` não porta **nenhuma chave estrangeira** — nem para `books` — daí uma junção em duas consultas na função (o embed do PostgREST exige uma FK); a colocar um dia, não na véspera de Bolonha. E o primeiro deploy respondeu 500 no `/all`: *a prova no `curl` faz parte da entrega*, não da verificação de depois. |
 | G3 | Testar o circuito de promoção colegiada em `blmf-teste` | **Encerrado em 01/09/2026 à noite: o circuito foi percorrido passo a passo em `blmf-teste`, e validou de quebra a funcionalidade entregue horas antes.** Sete passos, o negativo primeiro: (0) o salto colegiado reader → coordenador(a/e) é **recusado** enquanto `allow_direct_coordenador` está desligado — mensagem histórica conservada; (1) opt-in ligado só na biblioteca de ensaio; (2) proposta de Voltairine (reader) à coordenação por um coordenador — e o mecanismo se revela: **a assinatura de quem propõe conta como a primeira das duas** (« cosignature » ao pé da letra); (3) Voltairine não pode ratificar a própria promoção (recusa); (4) segunda assinatura → `ready`; (5) aceitação pela interessada, sob o próprio JWT, com reverificação do opt-in; (6) estado final conforme: `coordenador:active`, a linha `reader` **fechada** (papel exclusivo), auditoria `promoted_to_coordenador [from reader]` + `removal_completed` — o `from_role` que GOUV-11/12 prometia. Os três eventos de outbox partiram para a função de envio. **Uma ressalva, dita**: o não-envio efetivo (e-mails `disabled` na biblioteca de ensaio) não pôde ser observado na mesma noite — a API de logs Edge respondia em erro — mas a caixa destinatária é uma caixa de teste real conferível num relance, e a prova do **conteúdo** dos e-mails de equipe é justamente o objeto de `G4`, que segue aberto. O ajuste `team_admission_mode='cosignature'` da BLMF, nunca exercido até aqui, tem agora um circuito provado de ponta a ponta; o convite real da BTL (`ebd78fb9`) está em `ready` e só espera o gesto da pessoa envolvida. O opt-in fica ligado apenas em `blmf-teste` — é a caixa de areia, e `G4` vai usá-la. |
 | G4 | Exercer os quatro e-mails de equipe jamais enviados | **Encerrado em 01/09/2026 à noite, com envio real E leitura pela coordenação (« nada a apontar »).** Os quatro e-mails mais delicados do sistema — nunca enviados em produção — partiram e foram lidos, mais dois bônus também inéditos (`removal_cancelled`, `unsuspended`): cinco em pt-BR na caixa da persona visada, a difusão `self_demoted` em francês na outra coordenação, as cópias admin na locale da biblioteca num alias controlado. **O protocolo de contenção segurou duas vezes**: quatro dos seis membros da coordenação de ensaio são pessoas reais — sala esvaziada por rebaixamento direto silencioso antes de cada difusão, tudo restaurado ao idêntico depois. **O primeiro disparo acertou ao falhar**: nenhum e-mail recebido, porque o canal porta DOIS interruptores na mesma linha (`delivery_mode` e `active`) e só um havia sido girado — mesma família do falso interruptor de 30/08: *dois interruptores para um só gesto acabam sempre girados pela metade*. O diagnóstico levou três consultas porque cada salto trazia sua razão (`skipped: delivery_disabled`) na resposta: **a doutrina B12 provada em situação real**. Na repetição, os dois sinais verificados na view que a função lê (`v_library_notification_context`) ANTES de disparar. **O ângulo morto das dez línguas foi fechado em seguida**: os gabaritos vivem em `mail-strings.ts`, fora do perímetro da guarda de paridade do front — medidas 648 chaves todas completas nas dez locales, e guardadas agora por `src/tests/mail-strings-parity.test.js` (cuja primeira execução apanhou um falso positivo exemplar: o cabeçalho do arquivo que enuncia « JAMAIS camerata »). Nuance registrada de passagem: `self_demote` põe o papel deixado em `inactive` onde a promoção o havia `removed`. |
+| F8 | O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo | **Encerrado em 01/09/2026, com dois levantamentos DNS emoldurando os gestos — nove dias antes do prazo de 10/09.** O levantamento da manhã (nunca feito antes) confirmou o item palavra por palavra: **em regra para enviar** — SPF no subdomínio Resend (`send.notifications`: `v=spf1 include:amazonses.com` + MX feedback SES), DKIM presente (seletor `resend`) — mas DMARC em `p=none` com `rua` na **Brevo**, o provedor abandonado, no subdomínio E na raiz: os relatórios de autenticação partiam para outra parte, e um canal de relatórios que aponta para um provedor abandonado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`). Mais dois TXT `brevo-code` residuais, fichas de verificação que diziam publicamente « este domínio esteve na Brevo ». **Os gestos, feitos pela coordenação na OVH no mesmo dia, verificados no levantamento da noite via resolvedor externo**: os dois `_dmarc` apontam para `admins@anarbib.org` (já destinatária dos alertas de saúde), os dois `brevo-code` desapareceram, e nada mais se moveu — o SPF OVH da raiz (as caixas `admins@` dependem dele) e toda a zona Resend estão intactos. **A política DMARC está decidida, não adiada**: `p=none` mantido enquanto se leem os primeiros relatórios — que agora chegam a nós, diariamente, em pequenos XML zipados — e o endurecimento (`quarantine`) será decidido sobre o conteúdo deles, em algumas semanas. O critério está escrito; não há mais decisão pendente, apenas um encontro marcado. |
 
 ---
 
@@ -2407,4 +2385,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 80 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 79 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

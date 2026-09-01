@@ -1592,6 +1592,17 @@
           "fr": "**Clos le 01/09/2026 au soir, sur envoi réel ET lecture par la coordination (« rien à redire »).** Les quatre courriels les plus délicats du système — jamais partis en production — sont partis et ont été lus, plus deux bonus jamais servis non plus (`removal_cancelled`, `unsuspended`) : cinq en pt-BR chez la persona visée, la diffusion `self_demoted` en français chez l'autre coordination, les copies admin en locale de la bibliothèque sur un alias contrôlé. **Le protocole de confinement a tenu deux fois** : quatre des six membres de la coordination d'essai sont de vraies personnes — salle vidée par rétrogradation directe silencieuse avant chaque diffusion, tout restauré à l'identique après. **Le premier tir a fait mouche en échouant** : aucun courriel reçu, parce que le canal porte DEUX interrupteurs sur la même ligne (`delivery_mode` et `active`) et qu'un seul avait été tourné — même famille que le faux interrupteur du 30/08 : *deux interrupteurs pour un seul geste finissent toujours par n'être tournés qu'à moitié*. Le diagnostic a pris trois requêtes parce que chaque saut portait sa raison (`skipped: delivery_disabled`) dans la réponse : **la doctrine B12 prouvée en situation réelle**. Au rejeu, les deux voyants vérifiés dans la vue que la fonction lit (`v_library_notification_context`) AVANT de tirer. **L'angle mort des dix langues est fermé dans la foulée** : les gabarits vivent dans `mail-strings.ts`, hors du périmètre de la garde de parité du front — mesuré 648 clés toutes complètes sur les dix locales, et gardé désormais par `src/tests/mail-strings-parity.test.js` (dont la première exécution a attrapé un faux positif exemplaire : l'en-tête du fichier qui énonce « JAMAIS camerata »). Nuance consignée au passage : `self_demote` passe le rôle quitté en `inactive` là où la promotion l'avait `removed`.",
           "pt": "**Encerrado em 01/09/2026 à noite, com envio real E leitura pela coordenação (« nada a apontar »).** Os quatro e-mails mais delicados do sistema — nunca enviados em produção — partiram e foram lidos, mais dois bônus também inéditos (`removal_cancelled`, `unsuspended`): cinco em pt-BR na caixa da persona visada, a difusão `self_demoted` em francês na outra coordenação, as cópias admin na locale da biblioteca num alias controlado. **O protocolo de contenção segurou duas vezes**: quatro dos seis membros da coordenação de ensaio são pessoas reais — sala esvaziada por rebaixamento direto silencioso antes de cada difusão, tudo restaurado ao idêntico depois. **O primeiro disparo acertou ao falhar**: nenhum e-mail recebido, porque o canal porta DOIS interruptores na mesma linha (`delivery_mode` e `active`) e só um havia sido girado — mesma família do falso interruptor de 30/08: *dois interruptores para um só gesto acabam sempre girados pela metade*. O diagnóstico levou três consultas porque cada salto trazia sua razão (`skipped: delivery_disabled`) na resposta: **a doutrina B12 provada em situação real**. Na repetição, os dois sinais verificados na view que a função lê (`v_library_notification_context`) ANTES de disparar. **O ângulo morto das dez línguas foi fechado em seguida**: os gabaritos vivem em `mail-strings.ts`, fora do perímetro da guarda de paridade do front — medidas 648 chaves todas completas nas dez locales, e guardadas agora por `src/tests/mail-strings-parity.test.js` (cuja primeira execução apanhou um falso positivo exemplar: o cabeçalho do arquivo que enuncia « JAMAIS camerata »). Nuance registrada de passagem: `self_demote` põe o papel deixado em `inactive` onde a promoção o havia `removed`."
         }
+      ],
+      [
+        "F8",
+        {
+          "fr": "Le domaine d'envoi, relevé : en règle pour envoyer, ses rapports partent chez Brevo",
+          "pt": "O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo"
+        },
+        {
+          "fr": "**Clos le 01/09/2026, sur deux relevés DNS encadrant les gestes — neuf jours avant l'échéance du 10/09.** Le relevé du matin (jamais fait auparavant) a confirmé l'item mot pour mot : **en règle pour envoyer** — SPF porté par le sous-domaine Resend (`send.notifications` : `v=spf1 include:amazonses.com` + MX feedback SES), DKIM présent (sélecteur `resend`) — mais DMARC en `p=none` avec `rua` chez **Brevo**, le prestataire quitté, sur le sous-domaine ET la racine : les rapports d'authentification partaient chez quelqu'un d'autre, et un canal de rapports qui pointe chez un prestataire quitté est un dispositif de surveillance qui se tait (`DOC-SILENCE-1`). Plus deux TXT `brevo-code` résiduels, jetons de vérification qui disaient publiquement « ce domaine a été chez Brevo ». **Les gestes, faits par la coordination chez OVH le jour même, vérifiés au relevé du soir via un résolveur externe** : les deux `_dmarc` pointent vers `admins@anarbib.org` (déjà destinataire des alertes santé), les deux `brevo-code` ont disparu, et rien d'autre n'a bougé — le SPF OVH de la racine (les boîtes `admins@` en dépendent) et toute la zone Resend sont intacts. **La politique DMARC est décidée, pas différée** : `p=none` maintenu le temps de lire les premiers rapports — qui arrivent désormais chez nous, quotidiennement, en petits XML zippés — et le durcissement (`quarantine`) se tranchera sur leur contenu, dans quelques semaines. Le critère est écrit ; il n'y a plus de décision en suspens, seulement un rendez-vous.",
+          "pt": "**Encerrado em 01/09/2026, com dois levantamentos DNS emoldurando os gestos — nove dias antes do prazo de 10/09.** O levantamento da manhã (nunca feito antes) confirmou o item palavra por palavra: **em regra para enviar** — SPF no subdomínio Resend (`send.notifications`: `v=spf1 include:amazonses.com` + MX feedback SES), DKIM presente (seletor `resend`) — mas DMARC em `p=none` com `rua` na **Brevo**, o provedor abandonado, no subdomínio E na raiz: os relatórios de autenticação partiam para outra parte, e um canal de relatórios que aponta para um provedor abandonado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`). Mais dois TXT `brevo-code` residuais, fichas de verificação que diziam publicamente « este domínio esteve na Brevo ». **Os gestos, feitos pela coordenação na OVH no mesmo dia, verificados no levantamento da noite via resolvedor externo**: os dois `_dmarc` apontam para `admins@anarbib.org` (já destinatária dos alertas de saúde), os dois `brevo-code` desapareceram, e nada mais se moveu — o SPF OVH da raiz (as caixas `admins@` dependem dele) e toda a zona Resend estão intactos. **A política DMARC está decidida, não adiada**: `p=none` mantido enquanto se leem os primeiros relatórios — que agora chegam a nós, diariamente, em pequenos XML zipados — e o endurecimento (`quarantine`) será decidido sobre o conteúdo deles, em algumas semanas. O critério está escrito; não há mais decisão pendente, apenas um encontro marcado."
+        }
       ]
     ]
   },
@@ -5462,59 +5473,6 @@
       "verif": {
         "fr": "31/08 — `supabase secrets list` rejoué : les treize mêmes secrets portent l'empreinte de la chaîne vide, ni plus ni moins. `REGIMENTO_URL` toujours vide, ses deux replis toujours absents : la ligne « Regimento » manque toujours des courriels.",
         "pt": "31/08 — `supabase secrets list` refeito: os mesmos treze segredos com a impressão da cadeia vazia. `REGIMENTO_URL` segue vazio e sem fallback."
-      }
-    },
-    {
-      "id": "F8",
-      "d": "F",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Le domaine d'envoi, relevé : en règle pour envoyer, ses rapports partent chez Brevo",
-        "pt": "O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo"
-      },
-      "v": {
-        "fr": "Trente-six crons envoient du courrier via `notifications.anarbib.org` et personne n'avait jamais relevé SPF, DKIM ni DMARC — non parce qu'un indice inquiétait (il n'y en a plus depuis le retrait du constat de la corbeille, B17), mais parce que le relevé n'avait jamais été fait. Fait le 31/08 : **le domaine est en règle pour envoyer.** Le chemin de retour vit sur `send.notifications.anarbib.org` (MX `feedback-smtp.eu-west-1.amazonses.com`, SPF `v=spf1 include:amazonses.com ~all`) ; la clé DKIM `resend._domainkey` est publiée ; DMARC existe sur le sous-domaine et sur le parent. Deux résidus d'une époque quittée, en revanche : les deux enregistrements DMARC portent `rua=mailto:rua@dmarc.brevo.com` — **les rapports agrégés partent chez Brevo, que plus rien d'autre dans le projet ne mentionne** — et le TXT du sous-domaine garde un `brevo-code` de vérification. La politique est `p=none` : rien n'est imposé aux destinataires, ce qui ne gêne pas l'envoi.",
-        "pt": "Trinta e seis crons enviam correio via `notifications.anarbib.org` e ninguém nunca tinha levantado SPF, DKIM nem DMARC. Feito em 31/08: **o domínio está em regra para enviar.** O caminho de retorno vive em `send.` (MX SES `eu-west-1`, SPF `include:amazonses.com`); a chave DKIM `resend._domainkey` está publicada; DMARC existe no subdomínio e no pai. Dois resíduos de uma época deixada: os dois DMARC trazem `rua=mailto:rua@dmarc.brevo.com` — **os relatórios agregados vão para a Brevo, que nada mais no projeto menciona** — e o TXT guarda um `brevo-code` de verificação. A política é `p=none`: nada é imposto, o que não atrapalha o envio."
-      },
-      "w": {
-        "fr": "Décider du sort des résidus Brevo et de la politique DMARC. Rien ne bloque le courriel du 10/09.",
-        "pt": "Decidir o destino dos resíduos Brevo e da política DMARC. Nada bloqueia o e-mail de 10/09."
-      },
-      "y": {
-        "fr": "Un canal de rapports qui pointe chez un prestataire quitté est un dispositif de surveillance qui se tait (`DOC-SILENCE-1`) : si l'authentification se dégradait demain — clé retirée, SPF cassé par une retouche DNS — les rapports qui le diraient partiraient dans une boîte que personne ne lit.",
-        "pt": "Um canal de relatórios que aponta para um prestador deixado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`): se a autenticação se degradasse amanhã, os relatórios iriam para uma caixa que ninguém lê."
-      },
-      "f": {
-        "fr": [
-          "La destination `rua` a un verdict : redirigée vers une boîte lue du réseau, ou retirée avec la raison écrite.",
-          "Le `brevo-code` résiduel est retiré, ou sa présence justifiée.",
-          "Le passage éventuel de `p=none` à une politique contraignante a un verdict écrit — pas avant que les rapports soient lus quelque part."
-        ],
-        "pt": [
-          "O destino `rua` tem um veredito: redirecionado para uma caixa lida, ou retirado com a razão escrita.",
-          "O `brevo-code` residual é retirado, ou sua presença justificada.",
-          "A eventual passagem de `p=none` a uma política restritiva tem um veredito escrito — não antes de os relatórios serem lidos em algum lugar."
-        ]
-      },
-      "dep": {
-        "fr": "Accès DNS du domaine (registrar). Aucune dépendance de code.",
-        "pt": "Acesso DNS do domínio (registrar). Nenhuma dependência de código."
-      },
-      "r": [
-        "item F1",
-        "item B17",
-        "REGISTRE DOC-SILENCE-1",
-        "notifications.anarbib.org",
-        "send.notifications.anarbib.org"
-      ],
-      "verif": {
-        "fr": "31/08 — trois `Resolve-DnsName` (TXT du sous-domaine, `resend._domainkey`, `_dmarc`), plus les emplacements `send.` et le parent : SPF porté par `send.` (SES `eu-west-1`), DKIM publié, DMARC `p=none` avec `rua` Brevo aux deux niveaux, `brevo-code` résiduel. **Relevé fait le 01/09/2026** (Resolve-DnsName, lecture seule). **En règle pour envoyer** : SPF porté par le sous-domaine Resend (`send.notifications` : `v=spf1 include:amazonses.com ~all` + MX feedback SES) et DKIM présent (sélecteur `resend`). **Les deux défauts annoncés sont confirmés** : (1) DMARC en `p=none` avec `rua=mailto:rua@dmarc.brevo.com` — sur le sous-domaine ET sur `anarbib.org` : les rapports d'authentification partent chez le prestataire quitté, qui les lit à notre place ; (2) résidus Brevo (`brevo-code:…`) sur les deux zones, plus un `include:mx.ovh.com` sur la racine. Reste à faire, deux gestes DNS chez OVH : pointer le `rua` vers une boîte du réseau (`admins@anarbib.org`, déjà destinataire des alertes santé) en gardant `p=none` le temps de lire quelques rapports, et purger les deux TXT `brevo-code`.",
-        "pt": "31/08 — três `Resolve-DnsName`, mais o `send.` e o pai: SPF em `send.`, DKIM publicado, DMARC `p=none` com `rua` Brevo nos dois níveis, `brevo-code` residual. **Levantamento feito em 01/09/2026** (Resolve-DnsName, somente leitura). **Em regra para enviar**: SPF no subdomínio Resend (`send.notifications`: `v=spf1 include:amazonses.com ~all` + MX feedback SES) e DKIM presente (seletor `resend`). **Os dois defeitos anunciados estão confirmados**: (1) DMARC em `p=none` com `rua=mailto:rua@dmarc.brevo.com` — no subdomínio E em `anarbib.org`: os relatórios de autenticação partem para o provedor abandonado, que os lê no nosso lugar; (2) resíduos Brevo (`brevo-code:…`) nas duas zonas, mais um `include:mx.ovh.com` na raiz. Falta fazer, dois gestos DNS na OVH: apontar o `rua` para uma caixa da rede (`admins@anarbib.org`, já destinatária dos alertas de saúde) mantendo `p=none` enquanto se leem alguns relatórios, e limpar os dois TXT `brevo-code`."
       }
     }
   ]
