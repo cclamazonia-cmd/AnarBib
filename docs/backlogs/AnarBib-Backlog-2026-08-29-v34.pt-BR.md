@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 79 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 78 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 9
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **56 itens de 79** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **55 itens de 78** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -597,7 +597,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 | | | | |
 |---|---|---|---|
-| **C1** | Fazer os 35 assuntos SOLIDAIRES entrarem nas migrações | `P1` | Aberto |
 | **C2** | Importar o acervo SOLIDAIRES pela ferramenta de importação, e registrar o que quebra | `P1` | Bloqueado |
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C4** | Preencher os países ausentes em 722 fichas de autoridade | `P2` | Aberto |
@@ -607,28 +606,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **C8** | Enriquecer as autoridades: datas, identificadores externos, formas variantes | `P3` | Aberto |
 | **C9** | Fechar as oito questões abertas das convenções catalográficas | `P2` | Decisão coletiva |
 | **C10** | Renomear uma das duas colunas `rights_status` | `P2` | Aberto |
-
-#### C1 — Fazer os 35 assuntos SOLIDAIRES entrarem nas migrações
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, biblioteconomia
-
-**Estado.** Verificado em 29/08: **35 assuntos foram criados no banco em 27/08** e os alinhamentos FICEDL passaram de 51 para **98**. Mas `docs/drafts/20260828_sujets_solidaires_ficedl.sql` continua em `docs/drafts/`, fora de `supabase/migrations/`. Uma instância nova, portanto, não terá esses assuntos.
-
-*Verificado : 31/08 — 89 assuntos e 98 alinhamentos no banco; o SQL continua em `docs/drafts/`, fora das migrações.*
-
-**O que é.** Comparar o conteúdo do rascunho ao estado real do banco, transformá-lo numa migração idempotente que não recrie o que existe, e guardá-la em `supabase/migrations/`. Ou decidir que esses assuntos são próprios de uma biblioteca e não devem embarcar — mas escrevê-lo.
-
-**Por que importa.** É exatamente a questão decidida em 26/08 para o tesauro FICEDL: o vocabulário federal embarca, os assuntos locais e seu alinhamento não embarcam, porque são o acervo e o ato de cada coletivo. Se essa regra vale aqui, é preciso dizê-lo; senão, a migração falta. Nos dois casos, o desvio entre `docs/drafts/` e o banco é uma dívida de rastreabilidade.
-
-**O que conta como terminado.**
-
-- `docs/drafts/20260828_sujets_solidaires_ficedl.sql` desapareceu: ou virou migração, ou foi arquivado com o motivo.
-- A contagem de controle está escrita: 89 assuntos, 98 alinhamentos em 29/08.
-- Lembrete: `subject_ficedl_links.match_type` só aceita `exact` e `close` — não existe `broad`.
-
-**Dependências.** Ligado a **C2** (importação do acervo SOLIDAIRES).
-
-*Remissões : `REPRISE_claude_code_2026-08-27 chantier 2` · `REGISTRE §30 THES`*
 
 #### C2 — Importar o acervo SOLIDAIRES pela ferramenta de importação, e registrar o que quebra
 
@@ -2354,6 +2331,7 @@ CI verde. |
 | G3 | Testar o circuito de promoção colegiada em `blmf-teste` | **Encerrado em 01/09/2026 à noite: o circuito foi percorrido passo a passo em `blmf-teste`, e validou de quebra a funcionalidade entregue horas antes.** Sete passos, o negativo primeiro: (0) o salto colegiado reader → coordenador(a/e) é **recusado** enquanto `allow_direct_coordenador` está desligado — mensagem histórica conservada; (1) opt-in ligado só na biblioteca de ensaio; (2) proposta de Voltairine (reader) à coordenação por um coordenador — e o mecanismo se revela: **a assinatura de quem propõe conta como a primeira das duas** (« cosignature » ao pé da letra); (3) Voltairine não pode ratificar a própria promoção (recusa); (4) segunda assinatura → `ready`; (5) aceitação pela interessada, sob o próprio JWT, com reverificação do opt-in; (6) estado final conforme: `coordenador:active`, a linha `reader` **fechada** (papel exclusivo), auditoria `promoted_to_coordenador [from reader]` + `removal_completed` — o `from_role` que GOUV-11/12 prometia. Os três eventos de outbox partiram para a função de envio. **Uma ressalva, dita**: o não-envio efetivo (e-mails `disabled` na biblioteca de ensaio) não pôde ser observado na mesma noite — a API de logs Edge respondia em erro — mas a caixa destinatária é uma caixa de teste real conferível num relance, e a prova do **conteúdo** dos e-mails de equipe é justamente o objeto de `G4`, que segue aberto. O ajuste `team_admission_mode='cosignature'` da BLMF, nunca exercido até aqui, tem agora um circuito provado de ponta a ponta; o convite real da BTL (`ebd78fb9`) está em `ready` e só espera o gesto da pessoa envolvida. O opt-in fica ligado apenas em `blmf-teste` — é a caixa de areia, e `G4` vai usá-la. |
 | G4 | Exercer os quatro e-mails de equipe jamais enviados | **Encerrado em 01/09/2026 à noite, com envio real E leitura pela coordenação (« nada a apontar »).** Os quatro e-mails mais delicados do sistema — nunca enviados em produção — partiram e foram lidos, mais dois bônus também inéditos (`removal_cancelled`, `unsuspended`): cinco em pt-BR na caixa da persona visada, a difusão `self_demoted` em francês na outra coordenação, as cópias admin na locale da biblioteca num alias controlado. **O protocolo de contenção segurou duas vezes**: quatro dos seis membros da coordenação de ensaio são pessoas reais — sala esvaziada por rebaixamento direto silencioso antes de cada difusão, tudo restaurado ao idêntico depois. **O primeiro disparo acertou ao falhar**: nenhum e-mail recebido, porque o canal porta DOIS interruptores na mesma linha (`delivery_mode` e `active`) e só um havia sido girado — mesma família do falso interruptor de 30/08: *dois interruptores para um só gesto acabam sempre girados pela metade*. O diagnóstico levou três consultas porque cada salto trazia sua razão (`skipped: delivery_disabled`) na resposta: **a doutrina B12 provada em situação real**. Na repetição, os dois sinais verificados na view que a função lê (`v_library_notification_context`) ANTES de disparar. **O ângulo morto das dez línguas foi fechado em seguida**: os gabaritos vivem em `mail-strings.ts`, fora do perímetro da guarda de paridade do front — medidas 648 chaves todas completas nas dez locales, e guardadas agora por `src/tests/mail-strings-parity.test.js` (cuja primeira execução apanhou um falso positivo exemplar: o cabeçalho do arquivo que enuncia « JAMAIS camerata »). Nuance registrada de passagem: `self_demote` põe o papel deixado em `inactive` onde a promoção o havia `removed`. |
 | F8 | O domínio de envio, verificado: em regra para enviar, seus relatórios vão para a Brevo | **Encerrado em 01/09/2026, com dois levantamentos DNS emoldurando os gestos — nove dias antes do prazo de 10/09.** O levantamento da manhã (nunca feito antes) confirmou o item palavra por palavra: **em regra para enviar** — SPF no subdomínio Resend (`send.notifications`: `v=spf1 include:amazonses.com` + MX feedback SES), DKIM presente (seletor `resend`) — mas DMARC em `p=none` com `rua` na **Brevo**, o provedor abandonado, no subdomínio E na raiz: os relatórios de autenticação partiam para outra parte, e um canal de relatórios que aponta para um provedor abandonado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`). Mais dois TXT `brevo-code` residuais, fichas de verificação que diziam publicamente « este domínio esteve na Brevo ». **Os gestos, feitos pela coordenação na OVH no mesmo dia, verificados no levantamento da noite via resolvedor externo**: os dois `_dmarc` apontam para `admins@anarbib.org` (já destinatária dos alertas de saúde), os dois `brevo-code` desapareceram, e nada mais se moveu — o SPF OVH da raiz (as caixas `admins@` dependem dele) e toda a zona Resend estão intactos. **A política DMARC está decidida, não adiada**: `p=none` mantido enquanto se leem os primeiros relatórios — que agora chegam a nós, diariamente, em pequenos XML zipados — e o endurecimento (`quarantine`) será decidido sobre o conteúdo deles, em algumas semanas. O critério está escrito; não há mais decisão pendente, apenas um encontro marcado. |
+| C1 | Fazer os 35 assuntos SOLIDAIRES entrarem nas migrações | **Encerrado em 01/09/2026, por decisão escrita em vez de migração** — era uma das duas saídas que o item previa, e a doutrina FICEDL de 26/08 a comandava: *o vocabulário federal embarca, os assuntos locais e seus alinhamentos não embarcam*. Estado medido no dia da decisão: **35 assuntos** `solidaires-*` no banco, todos `proposto`, **47 alinhamentos** FICEDL (de 98). O rascunho o dizia por si — « os rótulos são os do coletivo, não retraduzidos »: um vocabulário *situado*, que traduzir ou normalizar para embarcar trairia. Uma instalação nova nasce com o tesauro; cada biblioteca traz suas palavras, e os alinhamentos fazem a ponte. O rascunho SQL foi guardado em arquivo (`docs/drafts/archive/`), a decisão está datada (`DECISION_sujets_solidaires_2026-09-01.md`) com sua cláusula de revisão: se outras bibliotecas um dia adotarem essas rubricas tal e qual, é o critério « federal » que comanda, não o prefixo — e a migração se reescreverá a partir do banco, não do rascunho. |
 
 ---
 
@@ -2385,4 +2363,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 79 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 78 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

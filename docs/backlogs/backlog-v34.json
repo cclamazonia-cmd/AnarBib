@@ -1603,6 +1603,17 @@
           "fr": "**Clos le 01/09/2026, sur deux relevés DNS encadrant les gestes — neuf jours avant l'échéance du 10/09.** Le relevé du matin (jamais fait auparavant) a confirmé l'item mot pour mot : **en règle pour envoyer** — SPF porté par le sous-domaine Resend (`send.notifications` : `v=spf1 include:amazonses.com` + MX feedback SES), DKIM présent (sélecteur `resend`) — mais DMARC en `p=none` avec `rua` chez **Brevo**, le prestataire quitté, sur le sous-domaine ET la racine : les rapports d'authentification partaient chez quelqu'un d'autre, et un canal de rapports qui pointe chez un prestataire quitté est un dispositif de surveillance qui se tait (`DOC-SILENCE-1`). Plus deux TXT `brevo-code` résiduels, jetons de vérification qui disaient publiquement « ce domaine a été chez Brevo ». **Les gestes, faits par la coordination chez OVH le jour même, vérifiés au relevé du soir via un résolveur externe** : les deux `_dmarc` pointent vers `admins@anarbib.org` (déjà destinataire des alertes santé), les deux `brevo-code` ont disparu, et rien d'autre n'a bougé — le SPF OVH de la racine (les boîtes `admins@` en dépendent) et toute la zone Resend sont intacts. **La politique DMARC est décidée, pas différée** : `p=none` maintenu le temps de lire les premiers rapports — qui arrivent désormais chez nous, quotidiennement, en petits XML zippés — et le durcissement (`quarantine`) se tranchera sur leur contenu, dans quelques semaines. Le critère est écrit ; il n'y a plus de décision en suspens, seulement un rendez-vous.",
           "pt": "**Encerrado em 01/09/2026, com dois levantamentos DNS emoldurando os gestos — nove dias antes do prazo de 10/09.** O levantamento da manhã (nunca feito antes) confirmou o item palavra por palavra: **em regra para enviar** — SPF no subdomínio Resend (`send.notifications`: `v=spf1 include:amazonses.com` + MX feedback SES), DKIM presente (seletor `resend`) — mas DMARC em `p=none` com `rua` na **Brevo**, o provedor abandonado, no subdomínio E na raiz: os relatórios de autenticação partiam para outra parte, e um canal de relatórios que aponta para um provedor abandonado é um dispositivo de vigilância que se cala (`DOC-SILENCE-1`). Mais dois TXT `brevo-code` residuais, fichas de verificação que diziam publicamente « este domínio esteve na Brevo ». **Os gestos, feitos pela coordenação na OVH no mesmo dia, verificados no levantamento da noite via resolvedor externo**: os dois `_dmarc` apontam para `admins@anarbib.org` (já destinatária dos alertas de saúde), os dois `brevo-code` desapareceram, e nada mais se moveu — o SPF OVH da raiz (as caixas `admins@` dependem dele) e toda a zona Resend estão intactos. **A política DMARC está decidida, não adiada**: `p=none` mantido enquanto se leem os primeiros relatórios — que agora chegam a nós, diariamente, em pequenos XML zipados — e o endurecimento (`quarantine`) será decidido sobre o conteúdo deles, em algumas semanas. O critério está escrito; não há mais decisão pendente, apenas um encontro marcado."
         }
+      ],
+      [
+        "C1",
+        {
+          "fr": "Faire entrer les 35 sujets SOLIDAIRES dans les migrations",
+          "pt": "Fazer os 35 assuntos SOLIDAIRES entrarem nas migrações"
+        },
+        {
+          "fr": "**Clos le 01/09/2026, par décision écrite plutôt que par migration** — c'était l'une des deux issues que l'item prévoyait, et la doctrine FICEDL du 26/08 la commandait : *le vocabulaire fédéral embarque, les sujets locaux et leurs alignements n'embarquent pas*. État mesuré le jour de la décision : **35 sujets** `solidaires-*` en base, tous `proposto`, **47 alignements** FICEDL (sur 98). Le brouillon le disait lui-même — « les libellés sont ceux du collectif, non retraduits » : un vocabulaire *situé*, que traduire ou normaliser pour l'embarquer trahirait. Une installation neuve naît avec le thésaurus ; chaque bibliothèque apporte ses mots, et les alignements font le pont. Le brouillon SQL est rangé en archive (`docs/drafts/archive/`), la décision est datée (`DECISION_sujets_solidaires_2026-09-01.md`) avec sa clause de révision : si d'autres bibliothèques adoptent un jour ces rubriques telles quelles, c'est le critère « fédéral » qui commande, pas le préfixe — et la migration se réécrira depuis la base, pas depuis le brouillon.",
+          "pt": "**Encerrado em 01/09/2026, por decisão escrita em vez de migração** — era uma das duas saídas que o item previa, e a doutrina FICEDL de 26/08 a comandava: *o vocabulário federal embarca, os assuntos locais e seus alinhamentos não embarcam*. Estado medido no dia da decisão: **35 assuntos** `solidaires-*` no banco, todos `proposto`, **47 alinhamentos** FICEDL (de 98). O rascunho o dizia por si — « os rótulos são os do coletivo, não retraduzidos »: um vocabulário *situado*, que traduzir ou normalizar para embarcar trairia. Uma instalação nova nasce com o tesauro; cada biblioteca traz suas palavras, e os alinhamentos fazem a ponte. O rascunho SQL foi guardado em arquivo (`docs/drafts/archive/`), a decisão está datada (`DECISION_sujets_solidaires_2026-09-01.md`) com sua cláusula de revisão: se outras bibliotecas um dia adotarem essas rubricas tal e qual, é o critério « federal » que comanda, não o prefixo — e a migração se reescreverá a partir do banco, não do rascunho."
+        }
       ]
     ]
   },
@@ -2044,57 +2055,6 @@
       "verif": {
         "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul.",
         "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08."
-      }
-    },
-    {
-      "id": "C1",
-      "d": "C",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql",
-        "biblio"
-      ],
-      "t": {
-        "fr": "Faire entrer les 35 sujets SOLIDAIRES dans les migrations",
-        "pt": "Fazer os 35 assuntos SOLIDAIRES entrarem nas migrações"
-      },
-      "v": {
-        "fr": "Vérifié le 29/08 : **35 sujets ont été créés en base le 27/08** et les alignements FICEDL sont passés de 51 à **98**. Mais `docs/drafts/20260828_sujets_solidaires_ficedl.sql` est toujours dans `docs/drafts/`, hors de `supabase/migrations/`. Une instance neuve n'aura donc pas ces sujets.",
-        "pt": "Verificado em 29/08: **35 assuntos foram criados no banco em 27/08** e os alinhamentos FICEDL passaram de 51 para **98**. Mas `docs/drafts/20260828_sujets_solidaires_ficedl.sql` continua em `docs/drafts/`, fora de `supabase/migrations/`. Uma instância nova, portanto, não terá esses assuntos."
-      },
-      "w": {
-        "fr": "Comparer le contenu du brouillon à l'état réel de la base, en faire une migration idempotente qui ne recrée pas ce qui existe, et la ranger dans `supabase/migrations/`. Ou décider que ces sujets sont propres à une bibliothèque et n'ont pas à embarquer — mais l'écrire.",
-        "pt": "Comparar o conteúdo do rascunho ao estado real do banco, transformá-lo numa migração idempotente que não recrie o que existe, e guardá-la em `supabase/migrations/`. Ou decidir que esses assuntos são próprios de uma biblioteca e não devem embarcar — mas escrevê-lo."
-      },
-      "y": {
-        "fr": "C'est exactement la question tranchée le 26/08 pour le thésaurus FICEDL : le vocabulaire fédéral embarque, les sujets locaux et leur alignement n'embarquent pas, parce que ce sont le fonds et l'acte de chaque collectif. Si cette règle vaut ici, il faut le dire ; sinon, la migration manque. Dans les deux cas, l'écart entre `docs/drafts/` et la base est une dette de traçabilité.",
-        "pt": "É exatamente a questão decidida em 26/08 para o tesauro FICEDL: o vocabulário federal embarca, os assuntos locais e seu alinhamento não embarcam, porque são o acervo e o ato de cada coletivo. Se essa regra vale aqui, é preciso dizê-lo; senão, a migração falta. Nos dois casos, o desvio entre `docs/drafts/` e o banco é uma dívida de rastreabilidade."
-      },
-      "f": {
-        "fr": [
-          "`docs/drafts/20260828_sujets_solidaires_ficedl.sql` a disparu : soit devenu migration, soit archivé avec la raison.",
-          "Le compte de contrôle est écrit : 89 sujets, 98 alignements au 29/08.",
-          "Rappel : `subject_ficedl_links.match_type` n'accepte que `exact` et `close` — il n'y a pas de `broad`."
-        ],
-        "pt": [
-          "`docs/drafts/20260828_sujets_solidaires_ficedl.sql` desapareceu: ou virou migração, ou foi arquivado com o motivo.",
-          "A contagem de controle está escrita: 89 assuntos, 98 alinhamentos em 29/08.",
-          "Lembrete: `subject_ficedl_links.match_type` só aceita `exact` e `close` — não existe `broad`."
-        ]
-      },
-      "dep": {
-        "fr": "Lié à **C2** (import du fonds SOLIDAIRES).",
-        "pt": "Ligado a **C2** (importação do acervo SOLIDAIRES)."
-      },
-      "r": [
-        "REPRISE_claude_code_2026-08-27 chantier 2",
-        "REGISTRE §30 THES"
-      ],
-      "verif": {
-        "fr": "31/08 — 89 sujets et 98 alignements en base ; `docs/drafts/20260828_sujets_solidaires_ficedl.sql` est toujours hors de `supabase/migrations/`. Le constat tient tel quel.",
-        "pt": "31/08 — 89 assuntos e 98 alinhamentos no banco; o SQL continua em `docs/drafts/`, fora das migrações."
       }
     },
     {
