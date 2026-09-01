@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 77 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 76 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 4
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **55 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **54 itens de 76** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1194,7 +1194,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F7** | Treze segredos de função estão declarados e vazios, sem que se saiba quais o são de propósito | `P2` | Aberto |
-| **F8** | Uma proposta de equipe esquecida se fecha em silêncio: nada lembra que ela vai expirar | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1349,45 +1348,6 @@ E porque o inverso é ainda mais perigoso: os dois reencaminhamentos estão vazi
 **Dependências.** Nenhuma. O levantamento está feito e cabe no item; o que resta exige sobretudo saber o que se queria.
 
 *Remissões : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
-
-#### F8 — Uma proposta de equipe esquecida se fecha em silêncio: nada lembra que ela vai expirar
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Desde 01/09, o circuito colegiado se anuncia no aplicativo: aparece um marcador no sino quando uma proposta espera um endosso, e quando espera uma aceitação (`GOUV-17`, migração `20260901234500`). **O sino diz que uma proposta existe. Não diz que ela vai expirar.**
-
-`fn_team_expire_invitations` fecha os convites em 30 dias, todos os dias às 03h20. Está correto — uma pergunta deixada sem resposta durante um mês deve se fechar. Mas sem lembrete, uma proposta ainda pode morrer sem que ninguém tenha decidido nada: simplesmente porque a notificação foi vista uma vez, numa noite de cansaço, e depois coberta por outras.
-
-Isso pesa mais desde que **toda** nomeação à equipe passa por esse circuito (`GOUV-11` para o salto, `GOUV-13` para o acolhimento). Uma promoção que não se conclui por falta de lembrete não é uma recusa do coletivo: é um silêncio que se deixou fazer as vezes de recusa.
-
-**O que falta não é a técnica, é o arbítrio**: quantos lembretes, em que momento, para quem — e o que fazer com o ruído que isso produz em equipes de três pessoas. Reabre a doutrina dos lembretes.
-
-**O precedente já existe e deveria servir de ponto de partida**: `RES-Q3` decidiu a mesma questão para as cooptações da rede — expiração em 60 dias, lembretes em D+14 e D+25. Não se trata, portanto, de inventar uma doutrina, mas de decidir se ela se transporta tal e qual ao circuito local, cuja janela é de 30 dias e não de 60.
-
-Registrado em `GOUV-17b` no registro de decisões, estado aberto.
-
-*Verificado : 01/09 à noite — constatação feita e verificada na base no mesmo dia: as oito funções que escrevem em `user_notifications` levantadas, nenhuma de governança; `fn_team_expire_invitations` confirmada ativa no cron das 03h20.*
-
-**O que é.** Decidir primeiro, programar depois. **Definir quantos lembretes, em que momento e para quem** — e depois inscrevê-los numa função chamada pelo cron existente, que já varre os convites todos os dias.
-
-O precedente da rede (`RES-Q3`) dá uma base: dois lembretes, em D+14 e D+25 de uma janela de 60 dias — ou seja, aos dois terços e na véspera. Transposto para 30 dias, daria D+20 e D+27, a confirmar.
-
-Também a decidir: **quem** é lembrado. A pessoa de quem se espera o endosso, aquela de quem se espera a aceitação, ou ambas? E é preciso avisar quem propôs que a sua proposta vai cair?
-
-**Por que importa.** Porque uma proposta que expira por falta de lembrete não se parece com nada: nem com uma recusa, nem com um acordo, nem com um erro. A tela volta a ficar limpa e ninguém sabe que uma pergunta foi feita.
-
-Deixou de ser um detalhe desde que **toda** nomeação à equipe passa por esse circuito. O coletivo deveria decidir; se não decide porque nada lhe foi relembrado, é o silêncio que decide em seu lugar — exatamente o contrário do que a colegialidade buscava.
-
-**O que conta como terminado.**
-
-- O número de lembretes e seus prazos estão escritos em algum lugar normativo, não apenas no código.
-- Os destinatários de cada lembrete estão decididos, incluindo o caso de quem propôs.
-- Um lembrete sai de fato, verificado num convite real e não apenas em teste.
-- A expiração silenciosa não pode mais ocorrer sem que ao menos um lembrete tenha sido emitido.
-
-**Dependências.** Nenhuma técnica: o cron, a tabela de convites e a notificação in-app já existem. A dependência é uma decisão — a de `GOUV-17b`, que reabre a doutrina dos lembretes.
-
-*Remissões : `REGISTRE §41 GOUV-17b (ouvert, 01/09/2026)` · `RES-Q3 — precedent reseau : expiration 60 jours, rappels J+14 et J+25` · `spec-gouvernance-roles §8.6 (doublage in-app) et §12.3 (peremption)` · `supabase/migrations/20260826120000 — fn_team_expire_invitations, cron 03 h 20` · `supabase/migrations/20260901234500 — notification in-app du circuit collegial`*
 
 ---
 
@@ -2328,6 +2288,17 @@ CI verde. |
 | C1 | Fazer os 35 assuntos SOLIDAIRES entrarem nas migrações | **Encerrado em 01/09/2026, por decisão escrita em vez de migração** — era uma das duas saídas que o item previa, e a doutrina FICEDL de 26/08 a comandava: *o vocabulário federal embarca, os assuntos locais e seus alinhamentos não embarcam*. Estado medido no dia da decisão: **35 assuntos** `solidaires-*` no banco, todos `proposto`, **47 alinhamentos** FICEDL (de 98). O rascunho o dizia por si — « os rótulos são os do coletivo, não retraduzidos »: um vocabulário *situado*, que traduzir ou normalizar para embarcar trairia. Uma instalação nova nasce com o tesauro; cada biblioteca traz suas palavras, e os alinhamentos fazem a ponte. O rascunho SQL foi guardado em arquivo (`docs/drafts/archive/`), a decisão está datada (`DECISION_sujets_solidaires_2026-09-01.md`) com sua cláusula de revisão: se outras bibliotecas um dia adotarem essas rubricas tal e qual, é o critério « federal » que comanda, não o prefixo — e a migração se reescreverá a partir do banco, não do rascunho. |
 | D1 | Revisar a spec dos periódicos contra o que foi entregue | **Encerrado em 01/09/2026 — e o primeiro constato é que a spec a revisar não existe.** `spec-periodiques-v0.1`, citada por este item com seus números de seção (§11, §14), está **em parte alguma** — nem no repositório, nem nos arquivos de trabalho: havia vivido em Downloads, colada em sessão em 27/08 (« On met ça en œuvre »), e o arquivo foi depois apagado — **reencontrada na mesma noite, íntegra (391 linhas), no transcript daquela sessão**, e arquivada: `docs/specs/archive-spec-periodiques-v0.1-retrouvee.md`. Os §11 e §14 citados existem, as seis guardas estão no §9. *A precisão de uma citação não é prova de existência* (`DOC-RECENS-1`). Em vez de revisar um fantasma, o estado entregue foi escrito a partir do código: `docs/specs/spec-periodiques-v1.0-etat-livre.md` — uma spec *a posteriori* que o assume, onde o código faz fé e o documento o segue. **As seis guardas anunciadas foram verificadas uma a uma**: o anticiclo limitado a 20 saltos relido na linha (`WHILE v_hops < 20`), a reciprocidade por trigger, a proibição do `serial_id` fora de fascículo, a chave `issue_key` **gerada** que nenhum caminho de importação referencia, o estado declarado/calculado em colunas separadas, o índice de ordenação. E sobretudo: **as seis são exercidas continuamente** por `periodiques_tests.sql` (35/35 na CI, verde ainda esta noite) — a prova não é o documento, é a suíte, a cada commit. O documento novo porta também a mudança do dia (arbítrio alinhado aos livros) e os três gestos manuais restantes, que não são defeitos. |
 | H7 | Decidir o destino do texto de convenções de interoperabilidade | **Encerrado em 01/09/2026, ao fim de uma noite de caça: decidido, perdido, reencontrado, preparado.** A coordenação decidiu « levar a Bolonha » — e o texto se revelou perdido: nunca no git, nunca como anexo de sessão (inventário integral, Windows e WSL), nunca escrito por ferramenta. A investigação estabeleceu que ele nunca passou pelas máquinas: escrito numa **conversa claude.ai de 26/08**, como o próprio v34 (o export PDF de 29/08 às 20:08 na pasta E: é a assinatura). **Reencontrado na mesma noite pela coordenação nessa conversa**, exportado, e versado ao repositório em dois exemplares com papéis claros: o original intacto, notas de trabalho incluídas (`docs/journal/cadrages/CONVENTIONS_interop_catalogues_libertaires_brouillon-original_2026-08-26.md`); e a **versão a levar** (`docs/CONVENTIONS_interoperabilite_catalogues_libertaires.md`), cujos dois únicos cortes são os que o próprio texto se ordenava — a seção « Notas de trabalho *(a retirar antes da difusão)* » e a nota entre colchetes sobre a auditoria a anexar. O chapéu « este texto não compromete ninguém » permanece: é sua política, não uma nota. **E ele chega a Bolonha com suas provas**: a convenção nº 1 (OPDS) é cumprida pelo AnarBib desde a manhã do mesmo dia, a nº 2 (SKOS) desde o H3 — o texto já não propõe, mostra. Mesma lição da spec dos periódicos, duas vezes na mesma noite: *o que serve de referência a um item deve ser versado em lugar durável, no dia em que serve.* |
+| F8 (rappel avant péremption) | O lembrete antes da expiração: uma proposta de equipe não pode mais morrer em silêncio | **Encerrado em 02/09/2026, entregue na noite de 01 para 02.** O item dizia que o sino anunciava a existência de uma proposta sem nunca dizer que ela ia expirar, e que `fn_team_expire_invitations` fechava aos 30 dias sem uma palavra — um silêncio fazendo as vezes de recusa, quando **toda** nomeação à equipe passa por esse circuito desde `GOUV-11` e `GOUV-13`.
+
+**O arbítrio descartou a transposição mecânica do precedente da rede.** `RES-Q3` coloca seus lembretes em D+14 e D+25 de uma janela de 60 dias, ou seja, na sua **primeira metade**: prazos feitos para manter o impulso de um voto por unanimidade. Transpostos proporcionalmente para 30 dias (D+7 e D+12), teriam deixado **dezoito dias de silêncio antes da expiração** — justamente o buraco a tapar. Retido em vez disso: **um lembrete em D+21**, nove dias restantes, e **um aviso na expiração**. Este último vale mais que um segundo lembrete: repetir apenas repete, ao passo que o aviso transforma um desaparecimento silencioso em fato registrado. Seu texto diz o que o silêncio significava — « não é uma recusa: ninguém decidiu; ela pode ser reapresentada ».
+
+**Quem propôs é avisad(o/a/e) nos dois casos.** A objeção era que essa pessoa não pode desbloquear nada sozinha, logo culpa sem poder. É o contrário: devolve-lhe o único poder que conta aqui, ir falar com as pessoas (`DOC-COLLECTIVE-1`, `RES-D9`).
+
+**Medidas datadas.** Migração `20260901213921`, com carimbo no segundo UTC real (`DOC-DEPLOY-4`). **Nenhuma coluna acrescentada**: como o cron passa uma vez por dia, o lembrete dispara na igualdade de data `created_at + 21 dias` = hoje — uma vez, uma só, sem marcador « já lembrado » que pudesse desandar. Cron `anarbib-team-invitations-remind` às **09h35 UTC**, verificado ativo em `cron.job` após o deploy. `fn_team_expire_invitations` passa de um `UPDATE` global a um laço — é preciso saber **quem** avisar. Os dois canais: in-app (`user_notifications`, a via que controlamos, todo o objeto de `GOUV-17`) e e-mail.
+
+**O que foi verificado, e o que ainda não.** 64 suítes SQL verdes antes do push — entre elas `crons_planifies_tests.sql`, que **recusou a migração** enquanto o novo cron não estava ali declarado: a proteção fez o seu trabalho. Após o deploy, `fn_team_invitation_remind()` foi **realmente executada** contra o esquema de produção: retorno `0`, nenhuma notificação escrita — nenhum convite atingia D+21 naquele dia. Isso estabelece que o caminho executa, ainda não que ele lembra. **A primeira execução real está datada**: 20/09/2026 para o convite da BTL pendente desde 30/08, depois 22/09 para o de `blmf-teste`. É nessas datas que o item será posto à prova, e não antes.
+
+**Continua em aberto, fora do escopo deste item**: nada. O lembrete antes da expiração era o único ponto deixado em suspenso por `GOUV-17`, e `GOUV-17b` pode passar de aberto a decidido. |
 
 ---
 
@@ -2359,4 +2330,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 77 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c7222379`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 76 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c7222379`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
