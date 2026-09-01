@@ -56,6 +56,12 @@ tests/sql/arbitrage_periodiques_tests.sql
 # par l URL publique, sans RPC ni EF, et RIEN ne casserait — le parcours normal
 # continuerait de fonctionner. T4 garde la propriete revocable du PEB numerique.
 tests/sql/documents_numeriques_tests.sql
+# B14 paquet 11 (cloture) : la carte en travail est pour les membres. 79 des
+# 187 entrees de cartographie etaient non publiques et visibles de tout compte
+# — l inscription etant ouverte, « savoir creer un compte » suffisait a voir ce
+# qui peut attendre un consentement. T2 et T3 tiennent les deux bords : le
+# compte sans adhesion voit ENCORE la carte publique, le membre voit TOUT.
+tests/sql/cartographie_reseau_membres_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
