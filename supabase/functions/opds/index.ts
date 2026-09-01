@@ -175,9 +175,14 @@ Deno.serve(async (req) => {
     const db = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
+    // Deux requêtes et une jointure ici : `book_digital_resources` ne porte
+    // AUCUNE clé étrangère (constaté le 01/09 — pas même vers `books`), donc
+    // l'embed PostgREST `books(...)` ne peut pas exister. Le jour où la FK
+    // sera posée, l'embed redeviendra possible ; en attendant, deux allers
+    // valent mieux qu'un schéma modifié à la veille de Bologne.
     const { data, error } = await db
       .from("book_digital_resources")
-      .select("id, book_id, mime_type, storage_bucket, storage_path, language_code, rights_status, attribution_text, updated_at, books(titulo, subtitulo, volume, autor, ano, idioma, bib_ref, cover_object_path, editora)")
+      .select("id, book_id, mime_type, storage_bucket, storage_path, language_code, rights_status, attribution_text, updated_at")
       .match(PUBLIC_PREDICATE)
       .order("updated_at", { ascending: false })
       .order("id", { ascending: false })
@@ -185,7 +190,18 @@ Deno.serve(async (req) => {
 
     if (error) return json(500, { ok: false, error: error.message });
 
-    const rows = (data ?? []) as unknown as Row[];
+    const bare = (data ?? []) as unknown as Omit<Row, "books">[];
+    const bookIds = [...new Set(bare.map((r) => r.book_id).filter(Boolean))];
+    const booksById = new Map<number, Row["books"]>();
+    if (bookIds.length) {
+      const { data: books, error: bErr } = await db
+        .from("books")
+        .select("id, titulo, subtitulo, volume, autor, ano, idioma, bib_ref, cover_object_path, editora")
+        .in("id", bookIds);
+      if (bErr) return json(500, { ok: false, error: bErr.message });
+      for (const b of books ?? []) booksById.set((b as { id: number }).id, b as Row["books"]);
+    }
+    const rows: Row[] = bare.map((r) => ({ ...r, books: booksById.get(r.book_id) ?? null }));
     const entries = rows.map(entryXml).join("\n");
     const updated = rows.length ? atomDate(rows[0].updated_at) : atomDate(null);
     const feed = `<?xml version="1.0" encoding="UTF-8"?>
