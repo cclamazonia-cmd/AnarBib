@@ -997,3 +997,153 @@ pour la même raison que les autres uuid.
 **Le lot `api` tient donc aussi avec le nouveau critère.** Ce n'est pas un
 résultat nul : c'est la seule façon de savoir qu'une clôture prononcée avec un
 outil plus faible n'était pas prématurée.
+
+---
+
+# `public`, paquet 7 — fermer ce que personne n'appelle
+
+## Les fonctions qui rendent une identité
+
+Dernière classe, la plus sensible dans un réseau militant : les **lectures qui
+rendent des données nominatives**. Sur 211 lectures exposées, 17 touchent
+`profiles` ou `auth.users`, et **14 rendent une identité**.
+
+Treize sont gardées — filtre sur `auth.uid()`, sur la bibliothèque active, ou
+sur un rôle. `fn_list_membership_payments_for_user` est même exemplaire : elle
+exige le panneau **et** filtre sur `mp.library_id = v_actor.library_id`, donc on
+ne voit que les cotisations de sa propre bibliothèque.
+
+La quatorzième n'a **aucune garde** :
+
+> `fn_assembleia_facilitator_name(p_user_id uuid)` rend **prénom et nom** pour
+> l'identifiant demandé — et ne répond que si la personne est facilitatrice
+> d'assemblée. Elle joint donc une **identité** à un **rôle militant**.
+
+Elle figure dans `CLAUDE.md` parmi les « fuites réelles fermées » du 17/08. Elle
+l'avait été **pour `anon`**. Personne n'avait regardé `authenticated` — c'est
+tout l'objet de `B14`, et c'en est le meilleur exemple : *une fuite fermée d'un
+côté est une fuite ouverte de l'autre tant qu'on n'a pas nommé le côté.*
+
+## Le critère « personne ne l'appelle », et son piège
+
+Une RPC est appelée par le **front**, pas par une autre fonction : « sans
+appelant en base » ne veut rien dire tout seul. Le critère utile croise les
+deux — sans appelant en base **et** absente du dépôt.
+
+* **227** fonctions exposées n'ont aucun appelant en base (ni fonction, ni
+  policy, ni trigger) ;
+* **53** n'apparaissent nulle part dans `src/`, `supabase/functions/`, `scripts/`.
+
+**Ce critère aurait pu être faux, et j'ai failli le croire faux à tort.** Le
+front appelle certaines RPC par une variable (`supabase.rpc(fn, …)`) : si un nom
+était **construit** par concaténation, aucune recherche textuelle ne le verrait,
+et une fonction vivante paraîtrait morte. J'ai donc cherché le motif —
+`rpc(\`…${…}\`)`, `'fn_' + …` — et il n'existe pas : les `fn` dynamiques sont
+toujours des littéraux choisis dans un ternaire, et les wrappers
+(`callRpc(rpcName, …)`) reçoivent le nom en clair de leur appelant. Le critère
+tient.
+
+*Vérifier qu'un critère peut être faux fait partie du critère.*
+
+## Ce qui est fermé, et ce qui ne l'est pas
+
+**Les 53 ne sont pas révoquées.** Beaucoup sont des fonctions livrées qui
+attendent leur écran — tout le prêt entre bibliothèques (`fn_v2_*_interbibliotecas`),
+le parcours de candidature (`fn_review_library_request`). Les fermer casserait un
+chantier en cours au lieu de protéger quoi que ce soit. C'est une décision de
+priorité, pas un oubli, et la liste est ci-dessous pour qu'elle soit reprise.
+
+**Cinq sont fermées** — celles que le dépôt lui-même désigne comme dépréciées ou
+remplacées, et qui touchent toutes à l'identité :
+
+| Fonction | Pourquoi |
+|---|---|
+| `fn_assembleia_facilitator_name` | aucune garde, identité + rôle militant |
+| `fn_painel_find_profile_by_email` | remplacée par `…_by_lookup` |
+| `fn_painel_get_profile_by_id` | idem |
+| `fn_caller_is_administrador` | son corps ne fait que lever « deprecated: use `fn_caller_is_network_admin` » |
+| `fn_team_promote_to_administrador` | « RPC dépréciée en D.8 » selon `teamMutations.js` |
+
+> **Une ironie qui vaut leçon.** Les deux fonctions du panneau ont reçu **ce
+> matin même** le correctif d'oracle du paquet 2 — messages unifiés, migration
+> éprouvée, suite de tests. Elles ne sont appelées par personne. *Le correctif
+> était juste ; la cible ne l'était pas.* Un audit qui trie par forme trouve de
+> vrais défauts sur des fonctions mortes, et le seul moyen de le savoir est de
+> demander qui appelle — question qu'il vaut mieux poser **avant** d'écrire la
+> migration que trois paquets plus tard.
+
+## Les 53 sans appelant — chantier à reprendre
+
+`assign_book_to_work`, `fn_activate_approved_library_request`, `fn_book_due_dates`,
+`fn_book_restricted_digital_state`, `fn_can_engage_library_for_storage`,
+`fn_circle_member_count`, `fn_import_process_deposit`,
+`fn_import_register_oai_source`, `fn_import_set_rows_review`,
+`fn_is_cross_library_action`, `fn_library_has_staff_roles`,
+`fn_library_publishes_catalog`, `fn_library_uses_governance`,
+`fn_network_admin_request_removal`, `fn_network_dashboard_summary`,
+`fn_network_discard_library_request`, `fn_network_get_library_request`,
+`fn_network_library_metrics`, `fn_network_list_library_requests`,
+`fn_notify_document_permission_request_now`, `fn_notify_library_request_now`,
+`fn_required_governance_for_transition`, `fn_review_library_request`,
+`fn_unarchive_transaction`, les huit `fn_v2_*_interbibliotecas`,
+`get_book_primary_accessible_digital_asset_v2`, `list_authors_not_duplicate`,
+`mark_authors_not_duplicate`, `merge_author_with_fields`,
+`preview_library_notification`, `preview_merge_author`,
+`set_library_regulation_document_active`, `set_library_theme_config_by_library_id`,
+`suggest_authority_duplicates`, `suggest_subject_duplicates`,
+`test_library_mail_channel`, `unlink_author_book`, `unmark_authors_not_duplicate`,
+`upsert_library_notification_policies`, `upsert_library_notification_profile`,
+`upsert_library_regulation_document`.
+
+Trois questions à leur poser, dans cet ordre : *l'écran existe-t-il ailleurs
+qu'ici ?* — *la fonction attend-elle un écran à venir ?* — *ou est-elle morte ?*
+Les cinq fermées aujourd'hui sont celles dont le dépôt répondait déjà.
+
+## Une garde en `WHERE` qui reste, et pourquoi
+
+`fn_network_resolve_public_id` garde dans son `WHERE`, comme les cinq alignées ce
+matin. Elle n'a **pas** été alignée, et son commentaire dit pourquoi : *« un
+appelant sans droit obtient NULL, indiscernable de "numéro inconnu". Pas
+d'oracle. »*
+
+L'argument est différent de celui des cinq autres, et il tient : **une liste
+vide affirme « il n'y a rien », une valeur nulle dit « pas de résultat »** — la
+première est fausse pour qui n'a pas le droit de voir, la seconde est vraie dans
+les deux cas. La décision du matin visait les listes qui mentent. Appliquer la
+règle ici la transformerait en réflexe.
+
+*Toutes les gardes en `WHERE` ne se valent pas : ce qui compte n'est pas la
+forme du contrôle, c'est ce que le silence affirme.*
+
+## Ce que ce paquet a coûté — un rouge, et le troisième volet d'une règle
+
+`sql-tests` est passé au rouge sur la révocation. La suite en cause est
+`b14_oracle_existence_forme_tests.sql`, **écrite le matin même**, dont le `T2`
+exigeait que **les trois** fonctions restent exposées — dont
+`fn_painel_get_profile_by_id`, que le paquet 7 venait de fermer.
+
+**La faute n'est pas la révocation, c'est l'hypothèse du test.** Il supposait que
+les trois servaient un écran ; deux n'en servent aucun. Il gardait donc d'une
+fonction ce qui n'était vrai que d'une autre — transformant une propriété locale
+en invariant global.
+
+C'est la **troisième occurrence du même motif dans la journée** :
+
+| | Ce qui a changé | Ce qui l'attestait |
+|---|---|---|
+| matin | un **message** de refus | `import_candidat_institutionnel_tests` T10 |
+| midi | un **comportement** (vide → lève) | `mentions_orphelines` T10, `invitation_claims_lot2` T18 |
+| après-midi | un **droit** (`EXECUTE`) | `b14_oracle_existence_forme` T2 |
+
+`DOC-MSG-1` couvrait le premier, a été élargi au deuxième à midi, et gagne le
+troisième ici. Sa forme complète : *avant de changer ce qu'une fonction **dit**,
+ce qu'elle **rend**, ou ce qu'elle a le **droit** de faire, chercher qui
+l'observe.* Pour les droits, la commande est
+`grep -rn "has_function_privilege" tests/sql/` — faite cette fois, et une seule
+suite était concernée.
+
+Et un corollaire sur l'écriture des tests, que cette journée a payé cher : **un
+test qui énumère plusieurs objets doit garder ce qui est vrai de chacun**, jamais
+ce qui n'est vrai que du premier. Sinon il bloquera un jour un correctif juste —
+et il faudra choisir entre défaire le correctif et défaire le test, ce qui est
+exactement le moment où l'on cesse de croire aux tests.
