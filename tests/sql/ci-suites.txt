@@ -26,6 +26,13 @@ tests/sql/b14_gardes_ecriture_tests.sql
 # ensemble, dont 24 qui écrivent. Le correctif tient à un mot dans un ORDER BY :
 # T3 garde la forme, T1 garde l'effet, et il faut les deux.
 tests/sql/my_access_biblio_effective_tests.sql
+# Decision du 01/09 : les cinq gardes en WHERE rejoignent DOC-SILENCE-1. Cette
+# suite APPELLE les fonctions au lieu de relire leur corps — la garde est un
+# predicat levant dans un WHERE, ce qui repose sur le plan choisi. T2 tient
+# l'autre moitie (l'admin reseau lit toujours) et T3 le piege symetrique : dans
+# d'autres fonctions le meme predicat ELARGIT un acces, et le rendre levant y
+# casserait la navigation.
+tests/sql/refus_reseau_se_dit_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
