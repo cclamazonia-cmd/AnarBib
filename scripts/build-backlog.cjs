@@ -29,7 +29,7 @@ const LANGS = [
 const T = {
   fr: {
     toc: 'Sommaire', intro: 'Pourquoi une réécriture', howto: "Mode d'emploi",
-    photo: "L'état réel au 29 août 2026", ecarts: 'Écarts relevés entre le réel et l\'écrit',
+    photo: "L'état réel", ecarts: 'Écarts relevés entre le réel et l\'écrit',
     calendrier: 'Le calendrier contraint', regles: 'Dix règles payées par un incident',
     chantiers: 'Les chantiers', clotures: 'Clôtures et entrées caduques',
     nonouvert: "Ce qui n'est pas au backlog", maintenance: 'Maintenance de ce document',
@@ -44,7 +44,7 @@ const T = {
   },
   pt: {
     toc: 'Sumário', intro: 'Por que uma reescrita', howto: 'Modo de usar',
-    photo: 'O estado real em 29 de agosto de 2026', ecarts: 'Desvios levantados entre o real e o escrito',
+    photo: 'O estado real', ecarts: 'Desvios levantados entre o real e o escrito',
     calendrier: 'O calendário restrito', regles: 'Dez regras pagas por um incidente',
     chantiers: 'Os canteiros', clotures: 'Encerramentos e entradas caducas',
     nonouvert: 'O que não está no backlog', maintenance: 'Manutenção deste documento',
@@ -58,6 +58,30 @@ const T = {
     lang_other: 'Version française : `AnarBib-Backlog-2026-08-29-v34.md`',
   },
 };
+
+// ------------------------------------------------------------------ relevé
+// La date et le commit du relevé vivent dans le JSON, pas dans ce script.
+// Ils y étaient codés en dur — « L'état réel au 29 août 2026 » et le commit
+// `1d00ed2c` — et sont restés justes trois jours : le titre annonçait une date
+// pendant que le tableau en dessous portait d'autres chiffres. Un en-tête qui
+// ne peut pas suivre sa source finit toujours par la contredire.
+const RELEVE = D.meta.releve || { date: D.meta.date, commit: '1d00ed2c' };
+const MOIS = {
+  fr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+  pt: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+};
+const dateLongue = (iso, k) => {
+  const [a, m, j] = iso.split('-').map(Number);
+  // « 1er » et non « 1ᵉʳ » : cette date entre dans un TITRE, dont la forge
+  // engendre l'ancre du sommaire. Les lettres modificatives Unicode (ᵉ, ʳ) ne
+  // sont pas slugifiées de la même façon partout, et un lien de sommaire mort
+  // ne se voit qu'au clic. La typographie fine reste dans le corps du texte.
+  return k === 'fr'
+    ? `${j === 1 ? '1er' : j} ${MOIS.fr[m - 1]} ${a}`
+    : `${j}º de ${MOIS.pt[m - 1]} de ${a}`.replace(/^(\d+)º de/, (s, n) => (n === '1' ? '1º de' : `${n} de`));
+};
+T.fr.photo += ' au ' + dateLongue(RELEVE.date, 'fr');
+T.pt.photo += ' em ' + dateLongue(RELEVE.date, 'pt');
 
 const L = (o, k) => (o && typeof o === 'object' && !Array.isArray(o) ? (o[k] ?? o.fr ?? '') : o);
 const lab = (list, key, k) => { const e = list.find((x) => x.key === key); return e ? L(e.label, k) : key; };
@@ -209,8 +233,8 @@ function markdown(k) {
 
   p(`## ${t.colophon}`); p();
   p(k === 'fr'
-    ? `Backlog v34, écrit le ${D.meta.date}${D.meta.maj ? `, mis à jour le ${D.meta.maj}` : ''}. Remplace \`${D.meta.previous}\`. ${items.length} items sur ${D.domains.length} domaines. L'état de départ a été vérifié le ${D.meta.date} contre la base de production en lecture seule et contre le dépôt Codeberg au commit \`1d00ed2c\` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le \`REGISTRE_decisions.md\` fait foi.`
-    : `Backlog v34, escrito em ${D.meta.date}${D.meta.maj ? `, atualizado em ${D.meta.maj}` : ''}. Substitui \`${D.meta.previous}\`. ${items.length} itens em ${D.domains.length} domínios. O estado inicial foi verificado em ${D.meta.date} contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit \`1d00ed2c\`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o \`REGISTRE_decisions.md\` faz fé.`);
+    ? `Backlog v34, écrit le ${D.meta.date}${D.meta.maj ? `, mis à jour le ${D.meta.maj}` : ''}. Remplace \`${D.meta.previous}\`. ${items.length} items sur ${D.domains.length} domaines. L'état chiffré a été relevé le ${RELEVE.date} contre la base de production en lecture seule et contre le dépôt Codeberg au commit \`${RELEVE.commit}\` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le \`REGISTRE_decisions.md\` fait foi.`
+    : `Backlog v34, escrito em ${D.meta.date}${D.meta.maj ? `, atualizado em ${D.meta.maj}` : ''}. Substitui \`${D.meta.previous}\`. ${items.length} itens em ${D.domains.length} domínios. O estado numérico foi levantado em ${RELEVE.date} contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit \`${RELEVE.commit}\`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o \`REGISTRE_decisions.md\` faz fé.`);
   p();
   return out.join('\n');
 }

@@ -11,7 +11,11 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-08-31"
+    "maj": "2026-09-01",
+    "releve": {
+      "date": "2026-09-01",
+      "commit": "de66d94d"
+    }
   },
   "domains": [
     {
@@ -330,8 +334,8 @@
   ],
   "sections": {
     "intro": {
-      "fr": "Ce document remplace le backlog v33 du 17 juin 2026. Entre les deux, **216 des 221 migrations appliquées en production** ont été écrites, ainsi que 655 commits. Le v33 portait un bandeau d'avertissement de fraîcheur ajouté le 28 août ; il ne suffisait plus.\n\nLe v34 n'est pas une mise à jour du v33 : c'est une **réécriture sur état vérifié**. Chaque affirmation d'état a été relue le 29 août 2026 contre deux sources primaires — la base de données de production interrogée en lecture seule, et le dépôt Codeberg au commit `1d00ed2c`. Aucun item n'a été reporté sur la foi d'un document.\n\nCe travail a produit un résultat qui commande la lecture de tout le reste : **la documentation se trompe dans les deux sens**. Elle déclare ouverts des chantiers livrés depuis des semaines, et elle déclare livrées des choses que personne n'a jamais exercées. La section « Écarts relevés » les nomme un par un.",
-      "pt": "Este documento substitui o backlog v33 de 17 de junho de 2026. Entre os dois, **216 das 221 migrações aplicadas em produção** foram escritas, além de 655 commits. O v33 trazia um aviso de frescor acrescentado em 28 de agosto; já não bastava.\n\nO v34 não é uma atualização do v33: é uma **reescrita sobre estado verificado**. Cada afirmação de estado foi relida em 29 de agosto de 2026 contra duas fontes primárias — o banco de dados de produção consultado em somente-leitura, e o repositório Codeberg no commit `1d00ed2c`. Nenhum item foi transportado com base na fé de um documento.\n\nEsse trabalho produziu um resultado que comanda a leitura de todo o resto: **a documentação erra nos dois sentidos**. Ela declara abertos canteiros entregues há semanas, e declara entregues coisas que ninguém jamais exerceu. A seção «Desvios levantados» nomeia cada um deles."
+      "fr": "Ce document remplace le backlog v33 du 17 juin 2026. Le v33 portait un bandeau d'avertissement de fraîcheur ajouté le 28 août ; il ne suffisait plus.\n\nLe v34 n'est pas une mise à jour du v33 : c'est une **réécriture sur état vérifié**. À sa rédaction, le 29 août 2026, chaque affirmation d'état a été relue contre deux sources primaires — la base de production interrogée en lecture seule, et le dépôt Codeberg au commit `1d00ed2c`. Aucun item n'a été reporté sur la foi d'un document. Entre le v33 et ce jour-là, 216 des 221 migrations alors appliquées avaient été écrites, ainsi que 655 commits.\n\n**Ce paragraphe raconte une genèse, pas un état.** Les chiffres qui décrivent le présent vivent dans « L'état réel », relevé à part et daté ; celui-ci a été refait le 1er septembre 2026, et la moitié des valeurs du 29 août avaient bougé en trois jours. Confondre les deux est exactement l'erreur qui a rendu le v33 inutilisable.\n\nCe travail a produit un résultat qui commande la lecture de tout le reste : **la documentation se trompe dans les deux sens**. Elle déclare ouverts des chantiers livrés depuis des semaines, et elle déclare livrées des choses que personne n'a jamais exercées. La section « Écarts relevés » les nomme un par un.",
+      "pt": "Este documento substitui o backlog v33 de 17 de junho de 2026. O v33 trazia uma faixa de aviso de frescor acrescentada em 28 de agosto; já não bastava.\n\nO v34 não é uma atualização do v33: é uma **reescrita sobre estado verificado**. Na sua redação, em 29 de agosto de 2026, cada afirmação de estado foi relida contra duas fontes primárias — o banco de produção consultado em somente-leitura e o repositório Codeberg no commit `1d00ed2c`. Nenhum item foi transportado com base na fé de um documento. Entre o v33 e aquele dia, 216 das 221 migrações então aplicadas haviam sido escritas, além de 655 commits.\n\n**Este parágrafo conta uma gênese, não um estado.** Os números que descrevem o presente vivem em « O estado real », levantado à parte e datado; ele foi refeito em 1º de setembro de 2026, e metade dos valores de 29 de agosto havia mudado em três dias. Confundir os dois é exatamente o erro que tornou o v33 inutilizável.\n\nEste trabalho produziu um resultado que comanda a leitura de todo o resto: **a documentação erra nos dois sentidos**. Declara abertos canteiros entregues há semanas, e declara entregues coisas que ninguém jamais exerceu. A seção « Desvios levantados » os nomeia um a um."
     },
     "howto": {
       "fr": "**Ce document n'arbitre rien.** La préséance documentaire du projet reste celle de `docs/INDEX.md` : le `REGISTRE_decisions.md` fait foi, puis la spec du domaine, puis ce backlog. Si une ligne d'ici contredit le REGISTRE, c'est le REGISTRE qui a raison et cette ligne est un défaut à signaler.\n\n**Pour commencer sans rien demander à personne**, lisez `docs/CHANTIERS_OUVERTS.md` : sept portes d'entrée qui ne demandent aucune coordination. Le présent backlog est ce qui vient après, quand on veut savoir ce qui reste et pourquoi.\n\n**Avant de prendre un item, ouvrez un ticket sur Codeberg.** Deux personnes qui écrivent le même correctif, c'est une soirée perdue pour l'une des deux. C'est la seule règle de coordination du projet, et elle tient en une ligne.\n\n**Chaque fiche dit six choses** : ce que c'est, l'état vérifié au 29/08, pourquoi ça compte, ce qui compte comme fini, ce que ça demande, et ce dont ça dépend. Si l'une manque, la fiche est incomplète — dites-le plutôt que de deviner.\n\n**Les identifiants ne sont jamais réutilisés.** Un item soldé garde son numéro et passe à la section des clôtures. Les renvois entre crochets pointent vers le REGISTRE, une spec ou un identifiant hérité d'un backlog antérieur : ils permettent de retrouver la trace, ils ne font pas autorité par eux-mêmes.",
@@ -356,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **29 août 2026**. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `1d00ed2c`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés.",
-      "pt": "Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `1d00ed2c`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados."
+      "fr": "Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.",
+      "pt": "Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era."
     },
     "photo": [
       {
@@ -373,8 +377,8 @@
             },
             "187",
             {
-              "fr": "toutes avec RLS activé, 279 policies sur 174 tables",
-              "pt": "todas com RLS ativado, 279 policies em 174 tabelas"
+              "fr": "toutes avec RLS activé, 279 policies sur **173** tables",
+              "pt": "todas com RLS ativado, 279 policies em **173** tabelas"
             }
           ],
           [
@@ -384,8 +388,8 @@
             },
             "10",
             {
-              "fr": "8 étaient sans RLS le 29/08 au matin — **les 10 le sont depuis le soir** (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE`",
-              "pt": "8 estavam sem RLS na manhã de 29/08 — **as 10 estão desde a noite** (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele"
+              "fr": "toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE`",
+              "pt": "todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele"
             }
           ],
           [
@@ -395,8 +399,8 @@
             },
             "68",
             {
-              "fr": "**65 SECURITY INVOKER**, 3 DEFINER — les trois assumées et commentées `API-VUES-DEFINER` (item **B3**, soldé le 29/08)",
-              "pt": "**65 SECURITY INVOKER**, 3 DEFINER — les trois assumées et commentées `API-VUES-DEFINER` (item **B3**, soldé le 29/08)"
+              "fr": "**67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde",
+              "pt": "**67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda"
             }
           ],
           [
@@ -404,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "847",
+            "854",
             {
-              "fr": "dont **664 SECURITY DEFINER** ; aucune sans `search_path` épinglé",
-              "pt": "das quais **664 SECURITY DEFINER**; nenhuma sem `search_path` fixado"
+              "fr": "`public` 628 · `api` 184 · `ingest` 34 · `private` 8. Dont **666 SECURITY DEFINER** ; **aucune** sans `search_path` épinglé",
+              "pt": "`public` 628 · `api` 184 · `ingest` 34 · `private` 8. Sendo **666 SECURITY DEFINER**; **nenhuma** sem `search_path` fixado"
             }
           ],
           [
@@ -415,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "221",
+            "254",
             {
-              "fr": "224 fichiers au dépôt ; 3 horodatées au 30/08 (item **I9**)",
-              "pt": "224 arquivos no repositório; 3 datadas em 30/08 (item **I9**)"
+              "fr": "254 fichiers au dépôt : **tout est déployé**. Une 255ᵉ est écrite et éprouvée mais volontairement non poussée — elle retire un pouvoir à quatre personnes et attend leur préavis (voir `DECISION_arbitrage_periodiques_2026-09-01`)",
+              "pt": "254 arquivos no repositório: **tudo está implantado**. Uma 255ª está escrita e testada mas deliberadamente não enviada — ela retira um poder de quatro pessoas e aguarda o aviso prévio (ver `DECISION_arbitrage_periodiques_2026-09-01`)"
             }
           ],
           [
@@ -428,8 +432,8 @@
             },
             "36",
             {
-              "fr": "**tous actifs** ; 0 échec depuis le 17/08 ; 1 jamais exécuté (`oai-harvest-weekly`)",
-              "pt": "**todos ativos**; 0 falha desde 17/08; 1 nunca executado (`oai-harvest-weekly`)"
+              "fr": "**tous actifs** ; couverts en CI depuis le 31/08 par `crons_planifies_tests` (le stub `cron` manquait, donc aucun des 36 n'était gardé)",
+              "pt": "**todos ativos**; cobertos na CI desde 31/08 por `crons_planifies_tests` (faltava o stub `cron`, então nenhum dos 36 estava guardado)"
             }
           ],
           [
@@ -437,21 +441,21 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "515",
+            "510",
             {
-              "fr": "0 ERROR · 464 + 36 WARN sur les fonctions DEFINER exposées · 15 INFO RLS sans policy",
-              "pt": "0 ERROR · 464 + 36 WARN sobre as funções DEFINER expostas · 15 INFO RLS sem policy"
+              "fr": "0 ERROR · 458 + 28 WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Les `anon` passent de 36 à **28** (lot **B2**) et les `authenticated` de 464 à **458** (**B14**, paquets 1 et 4)",
+              "pt": "0 ERROR · 458 + 28 WARN sobre funções DEFINER expostas · 24 INFO « RLS sem policy ». Os `anon` caem de 36 para **28** (lote **B2**) e os `authenticated` de 464 para **458** (**B14**, pacotes 1 e 4)"
             }
           ],
           [
             {
               "fr": "Avis de performance",
-              "pt": "Avisos de performance"
+              "pt": "Avisos de desempenho"
             },
-            "256",
+            "243",
             {
-              "fr": "170 index inutilisés · 38 clés étrangères non indexées · 24 policies permissives · 9 `auth_rls_initplan`",
-              "pt": "170 índices não usados · 38 chaves estrangeiras não indexadas · 24 policies permissivas · 9 `auth_rls_initplan`"
+              "fr": "166 index inutilisés · 38 clés étrangères non indexées · 25 policies permissives · 14 tables sans clé primaire · **0 `auth_rls_initplan`** — ils étaient 9 le 29/08, le rejeu du wrap (item **B5**) les a tous fermés",
+              "pt": "166 índices não usados · 38 chaves estrangeiras sem índice · 25 policies permissivas · 14 tabelas sem chave primária · **0 `auth_rls_initplan`** — eram 9 em 29/08, a reaplicação do wrap (item **B5**) fechou todos"
             }
           ],
           [
@@ -461,8 +465,8 @@
             },
             "2",
             {
-              "fr": "`backup_2026_05_07` (6 tables vides) et `conv_backup` (7 tables de revue humaine)",
-              "pt": "`backup_2026_05_07` (6 tabelas vazias) e `conv_backup` (7 tabelas de revisão humana)"
+              "fr": "`backup_2026_05_07` et `conv_backup` — inchangés depuis le 29/08",
+              "pt": "`backup_2026_05_07` e `conv_backup` — inalterados desde 29/08"
             }
           ]
         ]
@@ -475,24 +479,13 @@
         "rows": [
           [
             {
-              "fr": "Déployées et actives",
-              "pt": "Implantadas e ativas"
-            },
-            "48",
-            {
-              "fr": "toutes redéployées en bloc le 28/08 à 02h24",
-              "pt": "todas reimplantadas em bloco em 28/08 às 02h24"
-            }
-          ],
-          [
-            {
               "fr": "Dossiers au dépôt",
               "pt": "Pastas no repositório"
             },
-            "49",
+            "50",
             {
-              "fr": "+ `_shared` ; la 49ᵉ est le routeur `main`, **jamais déployé sur Supabase, et c'est voulu**",
-              "pt": "+ `_shared`; a 49ª é o roteador `main`, **nunca implantado no Supabase, e é intencional**"
+              "fr": "+ `_shared` ; la 50ᵉ est le routeur `main`, **jamais déployé sur Supabase, et c'est voulu** — il ne sert que la pile auto-hébergée",
+              "pt": "+ `_shared`; a 50ª é o roteador `main`, **nunca implantado no Supabase, e isso é intencional** — serve apenas à pilha auto-hospedada"
             }
           ],
           [
@@ -500,10 +493,10 @@
               "fr": "Déclarations `verify_jwt`",
               "pt": "Declarações `verify_jwt`"
             },
-            "31",
+            "38",
             {
-              "fr": "**toutes à `false`** ; 18 fonctions déployées ne sont pas déclarées du tout (item **B6**)",
-              "pt": "**todas em `false`**; 18 funções implantadas não estão declaradas (item **B6**)"
+              "fr": "**toutes à `false`** : les fonctions protégées le sont par le défaut de la plateforme, pas par une déclaration. Réconcilier ce fichier avec les fonctions réellement déployées reste l'item **B6**",
+              "pt": "**todas em `false`**: as funções protegidas o são pelo padrão da plataforma, não por uma declaração. Reconciliar este arquivo com as funções realmente implantadas continua sendo o item **B6**"
             }
           ]
         ]
@@ -517,12 +510,12 @@
           [
             {
               "fr": "Notices",
-              "pt": "Registros"
+              "pt": "Fichas"
             },
-            "2 676",
+            "2 659",
             {
-              "fr": "2 741 exemplaires, 2 495 œuvres, 1 305 autorités",
-              "pt": "2 741 exemplares, 2 495 obras, 1 305 autoridades"
+              "fr": "2 758 exemplaires, 2 495 œuvres, 1 305 autorités. Les notices baissent de 17 et les exemplaires montent de 17 depuis le 29/08 : ce sont les fusions de doublons (item **P4**), pas des pertes",
+              "pt": "2 758 exemplares, 2 495 obras, 1 305 autoridades. As fichas caem 17 e os exemplares sobem 17 desde 29/08: são as fusões de duplicatas (item **P4**), não perdas"
             }
           ],
           [
@@ -530,10 +523,10 @@
               "fr": "Brouillons de catalogage",
               "pt": "Rascunhos de catalogação"
             },
-            "2 237",
+            "2 240",
             {
-              "fr": "5 671 insertions cumulées, 310 en file de revue",
-              "pt": "5 671 inserções acumuladas, 310 na fila de revisão"
+              "fr": "deux états seulement : `draft` et `published`",
+              "pt": "apenas dois estados: `draft` e `published`"
             }
           ],
           [
@@ -541,10 +534,10 @@
               "fr": "Indexation matière",
               "pt": "Indexação de assunto"
             },
-            "1 127 / 2 676",
+            "1 122 / 2 659",
             {
-              "fr": "42 % des notices ; 1 284 affectations sur 89 sujets locaux",
-              "pt": "42 % dos registros; 1 284 atribuições sobre 89 assuntos locais"
+              "fr": "42 % des notices ; 1 279 affectations sur 89 sujets locaux",
+              "pt": "42 % das fichas; 1 279 atribuições sobre 89 assuntos locais"
             }
           ],
           [
@@ -565,8 +558,8 @@
             },
             "4",
             {
-              "fr": "titres, 7 fascicules rattachés — P1→P9 livrés les 27-28/08",
-              "pt": "títulos, 7 fascículos vinculados — P1→P9 entregues em 27-28/08"
+              "fr": "titres, 7 fascicules rattachés. Leur **arbitrage de doublons** est ouvert à tout rôle `librarian` alors que celui des livres est réservé à la coordination : écart mesuré le 01/09, décidé, en attente de préavis",
+              "pt": "títulos, 7 fascículos vinculados. O **arbítrio de duplicatas** deles está aberto a qualquer `librarian` enquanto o dos livros é reservado à coordenação: desvio medido em 01/09, decidido, aguardando aviso prévio"
             }
           ]
         ]
@@ -582,10 +575,10 @@
               "fr": "Bibliothèques",
               "pt": "Bibliotecas"
             },
-            "5",
+            "4",
             {
-              "fr": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `cira-marseille` 0 · `blmf-teste` 0",
-              "pt": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `cira-marseille` 0 · `blmf-teste` 0"
+              "fr": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` n'est plus en base** — elle y figurait le 29/08 avec 0 fonds. La suppression n'a laissé **aucun orphelin** (contrôlé sur les 8 tables qui portent un `library_id` sans clé étrangère), mais elle n'est tracée nulle part : à confirmer",
+              "pt": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` não está mais no banco** — constava em 29/08 com 0 acervo. A remoção não deixou **nenhum órfão** (verificado nas 8 tabelas que portam `library_id` sem chave estrangeira), mas não está registrada em lugar nenhum: a confirmar"
             }
           ],
           [
@@ -595,14 +588,14 @@
             },
             "16",
             {
-              "fr": "28 appartenances actives",
-              "pt": "28 vínculos ativos"
+              "fr": "**18** appartenances actives — elles étaient 28 le 29/08",
+              "pt": "**18** vínculos ativos — eram 28 em 29/08"
             }
           ],
           [
             {
               "fr": "Administrateur·rices réseau",
-              "pt": "Administradores·as de rede"
+              "pt": "Administrador(a/e)s da rede"
             },
             "1",
             {
@@ -615,10 +608,10 @@
               "fr": "Circulation vivante",
               "pt": "Circulação viva"
             },
-            "5 / 19 / 22 / 2",
+            "6 / 19 / 22 / 2",
             {
-              "fr": "emprunts / réservations / consultations / PEB — dernières écritures : 01/08 pour les emprunts, 18/06 pour le reste",
-              "pt": "empréstimos / reservas / consultas / EEB — últimas escritas: 01/08 para empréstimos, 18/06 para o resto"
+              "fr": "emprunts / réservations / consultations / PEB — dernière écriture d'emprunt le 31/08",
+              "pt": "empréstimos / reservas / consultas / EEB — última escrita de empréstimo em 31/08"
             }
           ]
         ]
@@ -634,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 265",
+            "2 413",
             {
-              "fr": "655 depuis le v33 ; 345 sur le seul mois d'août",
-              "pt": "655 desde o v33; 345 só no mês de agosto"
+              "fr": "148 depuis le relevé du 29/08 — l'essentiel est la campagne de vérification du backlog et l'audit **B14**",
+              "pt": "148 desde o levantamento de 29/08 — a maior parte é a campanha de verificação do backlog e a auditoria **B14**"
             }
           ],
           [
@@ -645,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "280",
+            "290",
             {
-              "fr": "38 routes, 79 pages, 89 composants",
-              "pt": "38 rotas, 79 páginas, 89 componentes"
+              "fr": "79 pages, 89 composants",
+              "pt": "79 páginas, 89 componentes"
             }
           ],
           [
@@ -656,7 +649,7 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 177",
+            "6 179",
             {
               "fr": "× 10 locales, parité stricte vérifiée en CI",
               "pt": "× 10 locales, paridade estrita verificada na CI"
@@ -667,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "171 + 43",
+            "349 + 58",
             {
-              "fr": "171 cas JavaScript, 43 suites SQL — **6 suites ne tournent pas en CI** (item **I7**)",
-              "pt": "171 casos JavaScript, 43 suítes SQL — **6 suítes não rodam na CI** (item **I7**)"
+              "fr": "**349 cas JavaScript** dans 25 fichiers — chiffre donné par l exécution, non par un grep des déclarations : les tests engendrés en boucle en produisent plusieurs chacun. 58 suites SQL, dont **57 tournent en CI** ; la 58ᵉ est celle qui attend le préavis. L item **I7** (« 6 suites ne tournent pas ») est soldé",
+              "pt": "**349 casos JavaScript** em 25 arquivos — número dado pela execução, não por um grep das declarações: os testes gerados em laço produzem vários cada um. 58 suítes SQL, das quais **57 rodam na CI**; a 58ª é a que aguarda o aviso prévio. O item **I7** (« 6 suítes não rodam ») está liquidado"
             }
           ],
           [
@@ -678,18 +671,18 @@
               "fr": "Marqueurs de dette",
               "pt": "Marcadores de dívida"
             },
-            "17",
+            "6",
             {
-              "fr": "dont 4 dans `src/` et **aucun** n'est une vraie tâche ouverte : la dette n'est pas dans le code",
-              "pt": "dos quais 4 em `src/` e **nenhum** é uma tarefa aberta real: a dívida não está no código"
+              "fr": "dont 4 dans `src/` — ils étaient 17 le 29/08. Aucun n'est une tâche ouverte : la dette n'est pas dans les commentaires, elle est dans ce backlog",
+              "pt": "sendo 4 em `src/` — eram 17 em 29/08. Nenhum é uma tarefa aberta: a dívida não está nos comentários, está neste backlog"
             }
           ]
         ]
       }
     ],
     "ecarts_intro": {
-      "fr": "Voici pourquoi le v33 ne pouvait plus servir. Ces écarts ne sont pas des négligences : ils sont la trace normale d'un projet qui a livré 655 commits pendant que ses documents de pilotage restaient figés. Ce qui compte n'est pas de les déplorer, c'est de savoir qu'ils vont **dans les deux sens** — et donc qu'un document non revérifié peut aussi bien faire perdre du temps à refaire l'existant qu'à croire acquis ce qui ne l'est pas.",
-      "pt": "Eis por que o v33 não podia mais servir. Estes desvios não são negligências: são o rastro normal de um projeto que entregou 655 commits enquanto seus documentos de pilotagem ficaram parados. O que importa não é lamentá-los, é saber que vão **nos dois sentidos** — e portanto que um documento não reverificado tanto pode fazer perder tempo refazendo o existente quanto acreditar adquirido o que não é."
+      "fr": "Voici pourquoi le v33 ne pouvait plus servir. **Cette table est un relevé du 29 août 2026 et le reste** : c'est le compte rendu d'une comparaison faite ce jour-là, pas un état courant. Plusieurs de ces écarts ont été soldés depuis (`ingest` sous RLS, périodiques livrés, crons réactivés, vues remises en invoker), et les items concernés le disent dans leur propre fiche. On ne réécrit pas ce tableau à chaque relevé : le réécrire effacerait ce qu'il démontre.\n\nCes écarts ne sont pas des négligences : ils sont la trace normale d'un projet qui a livré 655 commits pendant que ses documents de pilotage restaient figés. Ce qui compte n'est pas de les déplorer, c'est de savoir qu'ils vont **dans les deux sens** — et donc qu'un document non revérifié peut aussi bien faire perdre du temps à refaire l'existant qu'à croire acquis ce qui ne l'est pas.",
+      "pt": "Eis por que o v33 já não podia servir. **Esta tabela é um levantamento de 29 de agosto de 2026 e assim permanece**: é o relato de uma comparação feita naquele dia, não um estado corrente. Vários desses desvios foram liquidados desde então (`ingest` sob RLS, periódicos entregues, crons reativados, views devolvidas a invoker), e os itens envolvidos o dizem na própria ficha. Não se reescreve esta tabela a cada levantamento: reescrevê-la apagaria aquilo que ela demonstra.\n\nEsses desvios não são negligências: são o rastro normal de um projeto que entregou 655 commits enquanto seus documentos de pilotagem permaneciam congelados. O que importa não é lamentá-los, é saber que eles vão **nos dois sentidos** — e portanto que um documento não reverificado tanto pode fazer perder tempo refazendo o existente quanto levar a crer adquirido o que não é."
     },
     "ecarts": [
       {

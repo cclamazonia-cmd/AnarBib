@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-31** · 80 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 80 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 29 août 2026](#létat-réel-au-29-août-2026)
+- [L'état réel au 1er septembre 2026](#létat-réel-au-1er-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -34,9 +34,11 @@
 
 ## Pourquoi une réécriture
 
-Ce document remplace le backlog v33 du 17 juin 2026. Entre les deux, **216 des 221 migrations appliquées en production** ont été écrites, ainsi que 655 commits. Le v33 portait un bandeau d'avertissement de fraîcheur ajouté le 28 août ; il ne suffisait plus.
+Ce document remplace le backlog v33 du 17 juin 2026. Le v33 portait un bandeau d'avertissement de fraîcheur ajouté le 28 août ; il ne suffisait plus.
 
-Le v34 n'est pas une mise à jour du v33 : c'est une **réécriture sur état vérifié**. Chaque affirmation d'état a été relue le 29 août 2026 contre deux sources primaires — la base de données de production interrogée en lecture seule, et le dépôt Codeberg au commit `1d00ed2c`. Aucun item n'a été reporté sur la foi d'un document.
+Le v34 n'est pas une mise à jour du v33 : c'est une **réécriture sur état vérifié**. À sa rédaction, le 29 août 2026, chaque affirmation d'état a été relue contre deux sources primaires — la base de production interrogée en lecture seule, et le dépôt Codeberg au commit `1d00ed2c`. Aucun item n'a été reporté sur la foi d'un document. Entre le v33 et ce jour-là, 216 des 221 migrations alors appliquées avaient été écrites, ainsi que 655 commits.
+
+**Ce paragraphe raconte une genèse, pas un état.** Les chiffres qui décrivent le présent vivent dans « L'état réel », relevé à part et daté ; celui-ci a été refait le 1er septembre 2026, et la moitié des valeurs du 29 août avaient bougé en trois jours. Confondre les deux est exactement l'erreur qui a rendu le v33 inutilisable.
 
 Ce travail a produit un résultat qui commande la lecture de tout le reste : **la documentation se trompe dans les deux sens**. Elle déclare ouverts des chantiers livrés depuis des semaines, et elle déclare livrées des choses que personne n'a jamais exercées. La section « Écarts relevés » les nomme un par un.
 
@@ -56,68 +58,69 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 29 août 2026
+## L'état réel au 1er septembre 2026
 
-Relevé du **29 août 2026**. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `1d00ed2c`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés.
+Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-08-31.** **57 items sur 80** portent une vérification datée qui leur est propre (A1, A3, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **57 items sur 80** portent une vérification datée qui leur est propre (A1, A3, B4, B5, B7, B9, B10, B11, B13, B14, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H4, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
 | | | |
 |---|---:|---|
-| Tables `public` | **187** | toutes avec RLS activé, 279 policies sur 174 tables |
-| Tables `ingest` | **10** | 8 étaient sans RLS le 29/08 au matin — **les 10 le sont depuis le soir** (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
-| Vues `api` | **68** | **65 SECURITY INVOKER**, 3 DEFINER — les trois assumées et commentées `API-VUES-DEFINER` (item **B3**, soldé le 29/08) |
-| Fonctions applicatives | **847** | dont **664 SECURITY DEFINER** ; aucune sans `search_path` épinglé |
-| Migrations appliquées | **221** | 224 fichiers au dépôt ; 3 horodatées au 30/08 (item **I9**) |
-| Jobs `pg_cron` | **36** | **tous actifs** ; 0 échec depuis le 17/08 ; 1 jamais exécuté (`oai-harvest-weekly`) |
-| Avis de sécurité | **515** | 0 ERROR · 464 + 36 WARN sur les fonctions DEFINER exposées · 15 INFO RLS sans policy |
-| Avis de performance | **256** | 170 index inutilisés · 38 clés étrangères non indexées · 24 policies permissives · 9 `auth_rls_initplan` |
-| Schémas de rebut | **2** | `backup_2026_05_07` (6 tables vides) et `conv_backup` (7 tables de revue humaine) |
+| Tables `public` | **187** | toutes avec RLS activé, 279 policies sur **173** tables |
+| Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
+| Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
+| Fonctions applicatives | **854** | `public` 628 · `api` 184 · `ingest` 34 · `private` 8. Dont **666 SECURITY DEFINER** ; **aucune** sans `search_path` épinglé |
+| Migrations appliquées | **254** | 254 fichiers au dépôt : **tout est déployé**. Une 255ᵉ est écrite et éprouvée mais volontairement non poussée — elle retire un pouvoir à quatre personnes et attend leur préavis (voir `DECISION_arbitrage_periodiques_2026-09-01`) |
+| Jobs `pg_cron` | **36** | **tous actifs** ; couverts en CI depuis le 31/08 par `crons_planifies_tests` (le stub `cron` manquait, donc aucun des 36 n'était gardé) |
+| Avis de sécurité | **510** | 0 ERROR · 458 + 28 WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Les `anon` passent de 36 à **28** (lot **B2**) et les `authenticated` de 464 à **458** (**B14**, paquets 1 et 4) |
+| Avis de performance | **243** | 166 index inutilisés · 38 clés étrangères non indexées · 25 policies permissives · 14 tables sans clé primaire · **0 `auth_rls_initplan`** — ils étaient 9 le 29/08, le rejeu du wrap (item **B5**) les a tous fermés |
+| Schémas de rebut | **2** | `backup_2026_05_07` et `conv_backup` — inchangés depuis le 29/08 |
 
 ### Fonctions Edge
 
 | | | |
 |---|---:|---|
-| Déployées et actives | **48** | toutes redéployées en bloc le 28/08 à 02h24 |
-| Dossiers au dépôt | **49** | + `_shared` ; la 49ᵉ est le routeur `main`, **jamais déployé sur Supabase, et c'est voulu** |
-| Déclarations `verify_jwt` | **31** | **toutes à `false`** ; 18 fonctions déployées ne sont pas déclarées du tout (item **B6**) |
+| Dossiers au dépôt | **50** | + `_shared` ; la 50ᵉ est le routeur `main`, **jamais déployé sur Supabase, et c'est voulu** — il ne sert que la pile auto-hébergée |
+| Déclarations `verify_jwt` | **38** | **toutes à `false`** : les fonctions protégées le sont par le défaut de la plateforme, pas par une déclaration. Réconcilier ce fichier avec les fonctions réellement déployées reste l'item **B6** |
 
 ### Catalogue
 
 | | | |
 |---|---:|---|
-| Notices | **2 676** | 2 741 exemplaires, 2 495 œuvres, 1 305 autorités |
-| Brouillons de catalogage | **2 237** | 5 671 insertions cumulées, 310 en file de revue |
-| Indexation matière | **1 127 / 2 676** | 42 % des notices ; 1 284 affectations sur 89 sujets locaux |
+| Notices | **2 659** | 2 758 exemplaires, 2 495 œuvres, 1 305 autorités. Les notices baissent de 17 et les exemplaires montent de 17 depuis le 29/08 : ce sont les fusions de doublons (item **P4**), pas des pertes |
+| Brouillons de catalogage | **2 240** | deux états seulement : `draft` et `published` |
+| Indexation matière | **1 122 / 2 659** | 42 % des notices ; 1 279 affectations sur 89 sujets locaux |
 | Thésaurus FICEDL | **462** | termes, **10 locales complètes** ; 98 alignements vers les sujets locaux |
-| Périodiques | **4** | titres, 7 fascicules rattachés — P1→P9 livrés les 27-28/08 |
+| Périodiques | **4** | titres, 7 fascicules rattachés. Leur **arbitrage de doublons** est ouvert à tout rôle `librarian` alors que celui des livres est réservé à la coordination : écart mesuré le 01/09, décidé, en attente de préavis |
 
 ### Réseau
 
 | | | |
 |---|---:|---|
-| Bibliothèques | **5** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `cira-marseille` 0 · `blmf-teste` 0 |
-| Comptes | **16** | 28 appartenances actives |
+| Bibliothèques | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` n'est plus en base** — elle y figurait le 29/08 avec 0 fonds. La suppression n'a laissé **aucun orphelin** (contrôlé sur les 8 tables qui portent un `library_id` sans clé étrangère), mais elle n'est tracée nulle part : à confirmer |
+| Comptes | **16** | **18** appartenances actives — elles étaient 28 le 29/08 |
 | Administrateur·rices réseau | **1** | **c'est l'item A1, et il commande tout le reste** |
-| Circulation vivante | **5 / 19 / 22 / 2** | emprunts / réservations / consultations / PEB — dernières écritures : 01/08 pour les emprunts, 18/06 pour le reste |
+| Circulation vivante | **6 / 19 / 22 / 2** | emprunts / réservations / consultations / PEB — dernière écriture d'emprunt le 31/08 |
 
 ### Dépôt
 
 | | | |
 |---|---:|---|
-| Commits | **2 265** | 655 depuis le v33 ; 345 sur le seul mois d'août |
-| Fichiers `src/` | **280** | 38 routes, 79 pages, 89 composants |
-| Clés i18n | **6 177** | × 10 locales, parité stricte vérifiée en CI |
-| Tests | **171 + 43** | 171 cas JavaScript, 43 suites SQL — **6 suites ne tournent pas en CI** (item **I7**) |
-| Marqueurs de dette | **17** | dont 4 dans `src/` et **aucun** n'est une vraie tâche ouverte : la dette n'est pas dans le code |
+| Commits | **2 413** | 148 depuis le relevé du 29/08 — l'essentiel est la campagne de vérification du backlog et l'audit **B14** |
+| Fichiers `src/` | **290** | 79 pages, 89 composants |
+| Clés i18n | **6 179** | × 10 locales, parité stricte vérifiée en CI |
+| Tests | **349 + 58** | **349 cas JavaScript** dans 25 fichiers — chiffre donné par l exécution, non par un grep des déclarations : les tests engendrés en boucle en produisent plusieurs chacun. 58 suites SQL, dont **57 tournent en CI** ; la 58ᵉ est celle qui attend le préavis. L item **I7** (« 6 suites ne tournent pas ») est soldé |
+| Marqueurs de dette | **6** | dont 4 dans `src/` — ils étaient 17 le 29/08. Aucun n'est une tâche ouverte : la dette n'est pas dans les commentaires, elle est dans ce backlog |
 
 ---
 
 ## Écarts relevés entre le réel et l'écrit
 
-Voici pourquoi le v33 ne pouvait plus servir. Ces écarts ne sont pas des négligences : ils sont la trace normale d'un projet qui a livré 655 commits pendant que ses documents de pilotage restaient figés. Ce qui compte n'est pas de les déplorer, c'est de savoir qu'ils vont **dans les deux sens** — et donc qu'un document non revérifié peut aussi bien faire perdre du temps à refaire l'existant qu'à croire acquis ce qui ne l'est pas.
+Voici pourquoi le v33 ne pouvait plus servir. **Cette table est un relevé du 29 août 2026 et le reste** : c'est le compte rendu d'une comparaison faite ce jour-là, pas un état courant. Plusieurs de ces écarts ont été soldés depuis (`ingest` sous RLS, périodiques livrés, crons réactivés, vues remises en invoker), et les items concernés le disent dans leur propre fiche. On ne réécrit pas ce tableau à chaque relevé : le réécrire effacerait ce qu'il démontre.
+
+Ces écarts ne sont pas des négligences : ils sont la trace normale d'un projet qui a livré 655 commits pendant que ses documents de pilotage restaient figés. Ce qui compte n'est pas de les déplorer, c'est de savoir qu'ils vont **dans les deux sens** — et donc qu'un document non revérifié peut aussi bien faire perdre du temps à refaire l'existant qu'à croire acquis ce qui ne l'est pas.
 
 ### Déclaré ouvert, en réalité livré
 
@@ -2445,4 +2448,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-31. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 80 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 80 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `de66d94d` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
