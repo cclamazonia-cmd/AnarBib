@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.9 — 2026-09-01 (le circuit collégial ne dépend plus du seul courriel)
+**Version** : 1.10 — 2026-09-01 (le modèle des status dit enfin le CHECK réel)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -18,6 +18,7 @@
 - **v1.7 (2026-09-01, même jour)** : **v2 du saut collégial — ergonomie** (`GOUV-14`, arbitrage Xavier : les trois reports de la v1, sans le verrou Q5). (a) **UI de réglage** dans l'onglet Équipe (`GovernanceSettings`) : réglages visibles de tout le staff (P5), bascule du saut réservée coordenador+/admin réseau, `team_admission_mode` en lecture seule ; la Q2 de GOUV-11 (« en base tant que la demande ne se répète pas ») est relevée. `LeitoresPanel` relit le réglage **en base** à chaque chargement — le cache de session du contexte serait en retard après une bascule. (b) **Les mails du circuit disent le saut** : variantes `team.invitation_coord_proposed_direct.intro` / `team.invitation_coord_ready_direct.intro` ; la détection se fait **côté EF** (membership librarian actif de la cible interrogé au moment de l'envoi), sans élargir les payloads SQL. (c) **Atterrissage du self-demote** : la modale offre le choix librarian/lecteur·rice, `reader` présélectionné quand l'audit de la personne porte `from_role='reader'` (elle n'a jamais exercé librarian). Sections amendées : §5.4, §6.12, §8.2. Aucune migration.
 - **v1.8 (2026-09-01, même jour)** : **`status='inactive'` cesse de porter deux sens.** Le §4.5 de cette spec listait lui-même « lectures multiples possibles » — sortie volontaire, carence expirée, compte abandonné — sans voir que c'était le symptôme : un statut qui admet plusieurs lectures n'est pas un statut, c'est une ambiguïté qu'il faut redéduire à chaque fois. Constaté à l'écran : « Sans connexion depuis plus de 270 jours » affiché sur un rôle quitté dix minutes plus tôt. Nouveau statut **`vacated`** (§4.5bis), posé par `fn_team_self_demote` ; `inactive` garde le seul sens du cron T9. Le sélecteur de bibliothèque, par ailleurs, quitte le seul `/conta` pour `/biblioteca` et `/painel` — avec remontage du panneau à la bascule, sans lequel un emprunt en cours aurait pu changer de bibliothèque en chemin. Sections amendées : §4.5, §4.5bis (nouveau), §5.4. Décisions : `GOUV-15`, `GOUV-16` (registre v0.11). Implémentation : migration `20260901220000`, front `TeamPanel`/`roles.js`/`BibliotecaPage`/`PanelPage`.
 - **v1.9 (2026-09-01, même jour)** : **le circuit collégial se dit dans l'application.** Les événements `team.*` ne partaient que dans `team_notification_outbox` → `notify-event` → e-mail : aucune des huit fonctions écrivant dans `user_notifications` n'était un événement de gouvernance. Pour savoir qu'une proposition attendait son endossement, il fallait recevoir le mail ou aller regarder l'écran d'équipe par hasard. Or depuis `GOUV-11` et `GOUV-13`, **toute** nomination au staff passe par ce circuit — et `fn_team_expire_invitations` la referme au bout de 30 jours : une proposition pouvait naître, être ignorée et mourir sans qu'aucun être humain n'ait su qu'elle existait. Déclencheur sur `library_team_invitations` doublant les deux étapes d'une notification in-app (§8.6). Le rattrapage a immédiatement fait apparaître une proposition **réelle**, entièrement endossée, en attente d'acceptation depuis deux jours sur BTL. Décision : `GOUV-17` (registre v0.12). Implémentation : migration `20260901234500`, front `NotificationBell`. Reste ouvert : le rappel avant péremption.
+- **v1.10 (2026-09-01, même jour)** : **fin de la passe `vacated` — le chapitre 4 dit le CHECK réel.** La v1.8 avait créé §4.5bis et corrigé §4.5/§5.4, mais laissé le reste de la spec raconter l'ancien monde. Le chapeau du §4 montrait un CHECK à six valeurs contenant `'pending'` — une valeur absente de la contrainte réelle, qui en compte **dix** (le socle du 10/05 portait déjà `pending_validation` ; `refused` est arrivé en juin, `vacated` le 01/09). §4.2 renommé `pending_validation` ; périmètre du chapitre explicité (les statuts du cycle de vie lecteur·rice — `pending_validation`, `refused`, `left_with_pending_circulation`, `terminated` — sont hors gouvernance d'équipe). Le schéma §4.6 est redessiné : `vacated` apparaît, la carence aboutit sur `removed` (l'ancien schéma disait `inactive`, même erreur d'origine que §4.5 — corrigée aussi en §4.3, §4.4, §6.10, §15.3), la flèche `active` → `inactive` est attribuée au seul cron T9. §5.5 (T4) disait encore que l'auto-rétro pose `inactive` : c'est `vacated`, comme §5.4 — corrigé aussi dans les scénarios §15.2 et §15.5, le badge UI §9.6 (« Rôle quitté », `info`), et les listes de statuts d'historique (§5.3, §10.3, glossaire). Note v1.1 du §4 (« `removed` réservé à des usages futurs ») marquée caduque. Aucune décision nouvelle : tout est déjà tracé à `GOUV-15` (registre v0.11) ; aucune migration — la spec rejoint la base, pas l'inverse.
 
 ---
 
@@ -196,21 +197,42 @@ CHECK (role = ANY (ARRAY['reader', 'librarian', 'coordenador']))
 
 ## 4. Modèle des status
 
-Le CHECK constraint actuel sur `user_library_memberships.status` (élargi par le paquet 23 du 11/05/2026 pour cohérence avec `network_administrators`) :
+Le CHECK constraint réel sur `user_library_memberships.status`, tel que posé par la migration
+`20260901220000` (état au 01/09/2026) :
 
 ```sql
-CHECK (status = ANY (ARRAY['active', 'inactive', 'pending', 'pending_removal', 'suspended', 'removed']))
+CHECK (status = ANY (ARRAY[
+  'active', 'inactive', 'vacated', 'pending_removal', 'removed', 'suspended',
+  'left_with_pending_circulation', 'terminated', 'pending_validation', 'refused'
+]))
 ```
 
-**Note v1.1** : la valeur `'removed'` ajoutée par le paquet 23 pour aligner sur `network_administrators` n'est pas utilisée par les RPC de cette spec (qui s'arrêtent à `'inactive'`). Elle est réservée à des usages futurs (purge RGPD, par exemple).
+**Note v1.10 — périmètre de ce chapitre.** Le CHECK compte **dix** valeurs ; ce chapitre n'en
+décrit que **six** — `active`, `suspended`, `pending_removal`, `inactive`, `vacated`, plus
+`removed` traité au fil des transitions. Les quatre autres appartiennent au **cycle de vie des
+memberships lecteur·rice** (chantier de juin 2026), hors périmètre gouvernance d'équipe :
+`pending_validation` et `refused` relèvent de la validation présentielle des inscriptions,
+`left_with_pending_circulation` et `terminated` des départs de lecteur·rices avec ou sans
+circulation en cours (migrations `20260622182246` et suivantes). Jusqu'à la v1.9, ce chapeau
+montrait un CHECK à six valeurs contenant `'pending'` — une valeur qui **n'existe pas** dans la
+contrainte réelle (le socle du 10/05/2026 portait déjà `pending_validation`, pas `pending`).
+
+**Note v1.1** *(caduque depuis, conservée pour l'historique)* : elle annonçait `'removed'`
+« réservée à des usages futurs ». C'est faux depuis la v1.2 : `removed` est posé par la fin de
+carence d'un retrait (J+7, cf. §5.6 et §12.1) et par la fermeture du rôle inférieur lors d'une
+promotion (doctrine rôle exclusif).
 
 ### 4.1. `active`
 
 État normal d'une membership. La personne a son rôle et l'exerce.
 
-### 4.2. `pending`
+### 4.2. `pending_validation` *(corrigé v1.10 — s'appelait « pending » ici, à tort)*
 
-**Réservé à la spec validation physique** (hors périmètre de cette spec). Membership en attente de validation par un·e librarian+ de la biblio d'inscription. Cette spec **ne touche pas** à ce statut.
+**Réservé à la spec validation présentielle** (hors périmètre de cette spec). Membership en attente de validation par un·e librarian+ de la biblio d'inscription. Cette spec **ne touche pas** à ce statut.
+
+*(v1.10)* Dès le socle du 10/05/2026, la contrainte réelle porte `pending_validation` — pas
+`pending`, que cette spec a pourtant recopié de version en version. Son refus explicite pose
+`refused` (migration `20260622213649`), également hors périmètre ici.
 
 ### 4.3. `suspended`
 
@@ -218,7 +240,7 @@ CHECK (status = ANY (ARRAY['active', 'inactive', 'pending', 'pending_removal', '
 
 **Usage** : harcèlement signalé en attente d'investigation, compte compromis, conflit en cours de médiation, etc.
 
-**Durée** : indéfinie. La levée se fait manuellement par un·e coordenador·a (retour à `active`) ou par destitution effective (passage à `inactive`).
+**Durée** : indéfinie. La levée se fait manuellement par un·e coordenador·a (retour à `active`) ou par destitution effective — via le circuit de retrait : `pending_removal`, puis `removed` à J+7 *(v1.10 — disait « passage à `inactive` », qui n'est posé que par le cron T9)*.
 
 **Effet** : aucun accès aux fonctions du rôle. La personne reste affichée dans l'équipe avec un badge « suspendue ».
 
@@ -237,7 +259,7 @@ CHECK (status = ANY (ARRAY['active', 'inactive', 'pending', 'pending_removal', '
 **Évolution** :
 - **Annulation** : un·e autre coordenador·a (ou la même) peut annuler la demande dans les 7 jours via `fn_team_cancel_remove_member`. Retour à `active`.
 - **Auto-rétro de la personne concernée** : la personne peut elle-même se rétrograder via `fn_team_self_demote` pour court-circuiter le délai (sortie volontaire).
-- **Effet automatique** : à J+7, un cron passe le statut à `inactive` (cf. §12).
+- **Effet automatique** : à J+7, un cron passe le statut à `removed` et réactive le rôle du cran inférieur (rétrogradation d'un cran, cf. §5.6 et §12.1) *(v1.10 — disait « `inactive` », même erreur d'origine que celle corrigée en §4.5 par la v1.8 ; §12.1 disait déjà `removed`)*.
 
 ### 4.5. `inactive`
 
@@ -281,27 +303,34 @@ de la correction était d'une seule ligne de données au 01/09/2026 — il n'aur
 **Réversibilité** : comme `inactive`, aucune réversibilité directe ; on repasse par le circuit
 de cooptation, qui est de toute façon devenu collégial pour tous les rôles (`GOUV-13`).
 
-### 4.6. Schéma de transitions des status
+### 4.6. Schéma de transitions des status *(redessiné v1.10)*
 
 ```
-                    ┌──────────────┐
-                    │   active     │ ◄──────────────────────────┐
-                    └──────┬───────┘                            │
-                           │                                    │
-            ┌──────────────┼──────────────┐                     │
-            ▼              ▼              ▼                     │
-    ┌──────────────┐ ┌─────────────────┐ ┌──────────────┐       │
-    │  suspended   │ │ pending_removal │ │   inactive   │       │
-    └──────┬───────┘ └────────┬────────┘ └──────────────┘       │
-           │                  │                                  │
-           │ levée            │ annulation                       │
-           └──────────────────┴──────────────────────────────────┘
-                              │
-                              ▼ (J+7 sans annulation)
                        ┌──────────────┐
-                       │   inactive   │
-                       └──────────────┘
+                       │   active     │ ◄──────────┐
+                       └──────┬───────┘            │
+                              │                    │
+        ┌──────────────┬──────┴────────┬───────────│──────┐
+        ▼              ▼               ▼           │      ▼
+ ┌─────────────┐ ┌─────────────┐ ┌────────────┐    │ ┌────────────┐
+ │  suspended  │ │ pending_    │ │  vacated   │    │ │  inactive  │
+ │             │ │ removal     │ │ (P3, auto) │    │ │ (T9, cron) │
+ └──────┬──────┘ └──────┬──────┘ └────────────┘    │ └────────────┘
+        │               │                          │
+        │ levée         │ annulation               │
+        └───────────────┴──────────────────────────┘
+                        │
+                        ▼ (J+7 sans annulation)
+                 ┌──────────────┐
+                 │   removed    │
+                 └──────────────┘
 ```
+
+*(v1.10)* L'ancien schéma faisait aboutir la carence sur `inactive` (au lieu de `removed`),
+montrait une flèche directe `active` → `inactive` sans dire qu'elle appartient au seul cron T9,
+et ignorait `vacated`. Des statuts fermés (`vacated`, `removed`, `inactive`) on ne revient pas
+directement à `active` : la réintégration repasse par le circuit de cooptation, qui réactive la
+ligne fermée ou en crée une nouvelle (cf. §4.5, §4.5bis).
 
 
 ---
@@ -478,7 +507,7 @@ est conservée — elle reste utile pour porter l'historique (une même personne
 Mais la **doctrine « rôle exclusif »** impose qu'au plus **une seule ligne soit en
 `status='active'`** par couple `(user_id, library_id)`. Une promotion ferme systématiquement le
 rôle de rang inférieur ; une rétrogradation (T3, T5, cron) réactive le rôle du cran en dessous.
-L'historique est ainsi intégralement préservé par les lignes non-actives (`removed`, `inactive`)
+L'historique est ainsi intégralement préservé par les lignes non-actives (`removed`, `inactive`, `vacated`)
 et par l'audit log, sans jamais cumuler deux lignes `active`. La v1.1 recommandait le
 multi-membership actif (« filtrer à l'affichage le rôle de plus haut niveau ») : cette
 recommandation est **abandonnée** — masquer en permanence une complexité à l'affichage est le
@@ -511,7 +540,7 @@ saut collégial : elle n'a jamais exercé librarian).
 **Qui** : la personne elle-même.
 
 **Effet** :
-- La membership `librarian` passe à `inactive`
+- La membership `librarian` passe à **`vacated`** *(v1.10 — disait encore `inactive` ; même correction que §5.4 en v1.8, cf. §4.5bis)*
 - La membership `reader` (qui doit exister) reste `active`. Si elle n'existe pas, elle est créée.
 - Mail à toute la coordination + à la personne
 - Audit log
@@ -689,7 +718,7 @@ Cette séparation reflète la séparation politique : le staff local d'une bibli
 
 ### 6.10. Impact sur les emprunts en cours d'un·e librarian destitué·e
 
-**Scénario** : un·e librarian a des emprunts en cours d'un·e lecteur·rice, et est destitué·e (passage à `inactive`).
+**Scénario** : un·e librarian a des emprunts en cours d'un·e lecteur·rice, et est destitué·e (passage à `removed` après carence *(v1.10 — disait `inactive`)*).
 
 **Comportement** :
 - Les emprunts en cours **persistent** (ils sont liés au lecteur·rice, pas au librarian qui les a saisis)
@@ -1011,6 +1040,7 @@ Les badges de statut affichés sur chaque ligne :
 | `suspended` | « suspendu·e » | orange |
 | `pending_removal` | « préavis jusqu'au <date> » | rouge |
 | `inactive` | (n'apparaît pas dans la liste par défaut) | n/a |
+| `vacated` *(v1.10)* | « Rôle quitté » (libellé fr réel, clé `team.status.vacated`) — filtre et compteur dans `TeamPanel`, hors liste par défaut | badge `info` (rien ne va mal, cf. §4.5bis) |
 
 Badge complémentaire :
 
@@ -1070,6 +1100,12 @@ ALTER TABLE public.user_library_memberships
   -- 'administrador' retiré : remplacé par la table network_administrators
 ```
 
+*(v1.10)* Ce bloc est un **relevé historique** des paquets de mai 2026 — il ne décrit plus l'état
+courant. Le CHECK sur `status` réel compte dix valeurs, dont `vacated` depuis la migration
+`20260901220000` (cf. §4, chapeau). Le commentaire de colonne `pending_removal_until` ci-dessus
+(« passage automatique en inactive ») porte la même erreur d'origine que §4.4 : la fin de carence
+pose `removed`.
+
 ### 10.2. Nouvelle table `library_membership_audit`
 
 ```sql
@@ -1123,7 +1159,7 @@ COMMENT ON TABLE public.library_membership_audit IS
 
 ### 10.3. Pas de modification de la contrainte UNIQUE *(actualisé v1.2)*
 
-La contrainte `(user_id, library_id, role)` est conservée telle quelle. Elle permet de garder, pour une même personne dans une biblio, plusieurs lignes de rôles différents — ce qui sert à **porter l'historique** : les rôles passés restent en base avec `status='removed'` (ou `inactive`), tandis qu'un seul rôle est `active`.
+La contrainte `(user_id, library_id, role)` est conservée telle quelle. Elle permet de garder, pour une même personne dans une biblio, plusieurs lignes de rôles différents — ce qui sert à **porter l'historique** : les rôles passés restent en base avec `status='removed'`, `'vacated'` ou `'inactive'` *(v1.10)*, tandis qu'un seul rôle est `active`.
 
 **La contrainte n'autorise pas le multi-membership *actif*.** L'unicité de la ligne `active` n'est pas garantie par une contrainte SQL mais par la **doctrine « rôle exclusif »** (v1.2), appliquée par les RPC : toute promotion ferme le rôle inférieur, toute rétrogradation réactive le cran en dessous. L'invariant « au plus une ligne `active` par `(user_id, library_id)` » est donc maintenu *par la logique applicative*, pas par le schéma.
 
@@ -1418,7 +1454,7 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 > 1. Lucy va dans `/biblioteca`, onglet `team`
 > 2. Sur sa propre ligne (statut coordenador), elle clique « Je passe la main » → « Repasser librarian »
 > 3. Modale de confirmation simple, Lucy confirme
-> 4. Sa membership coordenador passe à `inactive`, sa membership `librarian` (qui existait peut-être déjà ; sinon créée) reste/devient active
+> 4. Sa membership coordenador passe à `vacated` *(v1.10)*, sa membership `librarian` (qui existait peut-être déjà ; sinon créée) reste/devient active
 > 5. Toute la coordination reçoit un mail : « Lucy a passé la main, n'est plus coordenador·a »
 > 6. Lucy reçoit un mail de confirmation
 > 7. Audit log : « 05/05 18:42 - Lucy a auto-rétrogradé coordenador→librarian »
@@ -1435,7 +1471,7 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 > 6. Toute la coordination reçoit un mail
 > 7. Audit log : « 05/05 - Piotr a demandé le retrait de Karl (raison: décision AG du 04/05) »
 > 8. **Sept jours passent**. Aucune annulation.
-> 9. Le 12/05 le cron passe automatiquement Karl à `inactive`. Mails de confirmation. Audit log « removal_completed ».
+> 9. Le 12/05 le cron passe automatiquement Karl à `removed` et réactive sa ligne `reader` *(v1.10 — disait `inactive` ; cf. §5.6)*. Mails de confirmation. Audit log « removal_completed ».
 
 ### 15.4. Compte compromis : suspension immédiate
 
@@ -1456,7 +1492,7 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 >
 > 1. Errico va dans `/biblioteca`, onglet `team`, clique « Je passe la main »
 > 2. Modale de confirmation simple (sans phrase rituelle « last admin lockdown » qui figurait en v1.0, supprimée au paquet F.3) : « Vous perdrez les permissions de coordenador·a immédiatement. »
-> 3. Errico confirme. Sa membership coordenador passe à `inactive` sans blocage technique.
+> 3. Errico confirme. Sa membership coordenador passe à `vacated` *(v1.10)* sans blocage technique.
 > 4. Le SIGB détecte que la BLMF n'a plus de coordenador·a actif·ve → mail aux **administrateurs réseau actifs** (table `network_administrators` `status='active'`)
 > 5. La BLMF continue à fonctionner en mode dégradé (les librarians peuvent gérer les emprunts, etc., mais pas la config)
 > 6. Hors-logiciel, l'équipe d'admin réseau prend contact avec le collectif BLMF pour aider à désigner un·e nouveau·elle coord
@@ -1492,7 +1528,7 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 
 - **AG** : Assemblée Générale (réunion collective de prise de décision)
 - **Cooptation** : nomination par les membres existants
-- **Multi-membership** : présence de plusieurs lignes `user_library_memberships` pour une même personne dans une même biblio. Depuis la doctrine « rôle exclusif » (v1.2), au plus **une** de ces lignes est en `status='active'` ; les autres (`removed`, `inactive`) portent l'historique des rôles passés.
+- **Multi-membership** : présence de plusieurs lignes `user_library_memberships` pour une même personne dans une même biblio. Depuis la doctrine « rôle exclusif » (v1.2), au plus **une** de ces lignes est en `status='active'` ; les autres (`removed`, `vacated`, `inactive`) portent l'historique des rôles passés.
 - **Carence** : délai entre une décision et son effet (ici 7 jours pour les exclusions)
 - **RebAL** : Réseau de Bibliothèques Alternatives Libertaires
 - **(v1.1) Administrateur·rice réseau** : personne inscrite dans `network_administrators` avec `status='active'`. Autorité politique transverse, cooptée à l'unanimité (cf. spec admin réseau v0.3.1).
