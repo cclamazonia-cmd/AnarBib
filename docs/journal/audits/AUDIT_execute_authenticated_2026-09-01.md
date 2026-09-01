@@ -205,10 +205,64 @@ Trois choses méritent d'être notées, parce qu'elles se répéteront :
 
 Correctif : `20260901075511`.
 
+# Paquet 3 — les listes (21 fonctions, 01/09)
+
+Critère que le paquet 2 s'était donné : **les fonctions qui rendent une liste à
+partir d'un paramètre de portée** — la forme qui produit une *énumération*
+plutôt qu'un oracle.
+
+## Aucune énumération — mais six refus muets
+
+Sur les 21 lues, **aucune fuite** : les portées sont respectées.
+`get_reader_roster(p_library_id)` — noms, prénoms, e-mails des lectrices — garde
+par `user_can_manage_library` sur *la même* bibliothèque que le paramètre ; les
+`fn_my_*` filtrent sur `auth.uid()` ; `fn_cartography_submission_list` et les
+quatre `conv_*` lèvent proprement.
+
+Un point de portée mérite d'être écrit plutôt que corrigé : `conv_revue_list`
+garde par `fn_caller_is_staff()` **sans argument** — staff de n'importe quelle
+bibliothèque. Ce n'est pas un oubli : `catalog_review_queue` **n'a pas de
+colonne `library_id`** (vérifié), la file de révision est structurellement un
+commun du réseau, comme la corbeille du catalogage. La garde est cohérente avec
+la table qu'elle protège.
+
+**Ce que le paquet a vraiment trouvé est ailleurs** : six fonctions écrivaient
+leur garde avec un `RETURN;` nu — cinq rapports de qualité du catalogue et
+`fn_authority_list`. « Vous n'avez pas le droit » et « il n'y a rien » y étaient
+le même octet. Sur un rapport de qualité, c'est pire qu'ailleurs : **une liste
+vide y signifie « le catalogue est sain »** — un refus déguisé en bilan
+rassurant. `DOC-SILENCE-1` au mot près.
+
+L'incohérence interne le démontre : dans le **même schéma**, les quatre
+fonctions de liste du chantier conventions lèvent en `42501`. Deux écoles
+cohabitaient ; celle qui se tait était la mauvaise.
+
+**Portée réelle, inégale — et c'est la mesure qui l'a dit :**
+
+| | Atteignable par l'interface ? | |
+|---|---|---|
+| `fn_authority_list` | **oui** — `/atelier-autoridades` est sous `<ProtectedRoute>` **sans garde de rôle** | toute personne inscrite lit « rien à délibérer » au lieu d'« accès réservé » |
+| les cinq `report_*` | non — `ReportsPanel` est derrière la garde stricte de `RedePage` (admins réseau) | silence atteignable en appel direct seulement |
+
+Le cas qui aurait coûté : une contributrice dont le statut passe à `inactive`
+ouvre l'Atelier, voit une file vide, et n'apprend jamais qu'elle a perdu son
+mandat. C'est le motif de `F4` — trois bibliothèques se croyaient couvertes.
+
+**Corrigé** : migration `20260901082124`. Aucun changement de **droit** — elles
+refusaient déjà les mêmes personnes ; on change ce qu'elles **disent** en
+refusant. La migration reprend le patron du wrap RLS (lire `pg_get_functiondef`,
+substituer, ré-exécuter) en y ajoutant ce qui manquait là-bas : **la substitution
+est vérifiée**, et la migration échoue si le motif a disparu plutôt que de se
+croire appliquée. Essayée à blanc en production avant écriture — une garde ciblée
+par fonction, tous les `RETURN QUERY` intacts. Vérifiée après déploiement : zéro
+refus muet, six refus explicites.
+
+Gardé par `tests/sql/b14_api_refus_muet_listes_tests.sql`, qui vérifie la
+**forme par introspection** (donc attrapera la septième fonction le jour où elle
+arrivera avec un `RETURN;` nu), plus l'effet sur le seul cas atteignable et la
+preuve que le staff passe toujours.
+
 ## Compte d'avancement du lot `api`
 
-**39 des 138** fonctions ont un verdict écrit (24 au paquet 1, 15 ici) ;
-**deux fuites réelles** trouvées et corrigées, toutes deux dormantes — et un défaut introduit par le second correctif, attrapé par sa propre suite avant d'avoir servi. Restent 99
-à lire, par paquets de dix. Prochain critère de tri suggéré : les fonctions qui
-rendent une **liste** (plutôt qu'un objet) à partir d'un paramètre de portée —
-c'est la forme qui produit une énumération plutôt qu'un oracle.
+**60 des 138** fonctions ont un verdict écrit (24 au paquet 1, 15 au paquet 2, 21 au paquet 3) ;
+**deux fuites réelles** trouvées et corrigées, toutes deux dormantes — et un défaut introduit par le second correctif, attrapé par sa propre suite avant d'avoir servi. Restent 78 à lire, par paquets. Prochain critère de tri suggéré : les fonctions d'**écriture** prenant un identifiant d'objet (et non de personne) — `p_book_id`, `p_draft_id`, `p_reserva_id` : la forme où l'on agit sur la chose d'autrui plutôt que de la lire.
