@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 77 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 76 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 5
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 4
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-09-01.** **55 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, H7, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **54 items sur 76** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1582,7 +1582,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H5** | Éprouver la moisson OAI-PMH dans les deux sens | `P2` | Ouvert |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
-| **H7** | Décider du sort du texte de conventions d'interopérabilité | `P1` | Bloqué |
 
 #### H1 — Réparer l'aspiration des 158 descripteurs de dates du thésaurus
 
@@ -1671,28 +1670,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 **Dépendances.** Octobre-novembre, si Bastien s'y met. Lié à **D4**.
 
 *Renvois : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6` · `VEILLE_leftovers_maydayrooms_2026-08-19`*
-
-#### H7 — Décider du sort du texte de conventions d'interopérabilité
-
-`P1` Prioritaire · État : **Bloqué** · Charge : une soirée · Ce que ça demande : délibération collective
-
-**État.** `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` est un **brouillon qui n'engage personne et n'a jamais été discuté avec aucune organisation**. Il propose quatre conventions et une demande unique à la FICEDL.
-
-*Vérifié :  **01/09/2026 — la décision est prise, et l'objet a disparu.** La coordination a tranché « porter à Bologne ». Mais le texte lui-même — `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` — est **introuvable** : ni au dépôt, ni sur le disque de travail, ni dans le dossier Bologna. C'est le **deuxième document fantôme du même soir** (avec `spec-periodiques-v0.1`, item D1) : le v34 le cite avec un contenu précis, et rien ne l'atteste nulle part. Deux issues, à la main de la coordination : **retrouver le texte** (une autre machine, un échange de courriel, une session passée) — ou **le réécrire à deux**, et la matière ne manque pas : la convention n°1 est connue (« les flux OPDS existent de part et d'autre mais ne pointent nulle part ») et l'OPDS livré aujourd'hui en est déjà la démonstration, le SKOS de H3 est servi à des URLs stables, et l'argumentaire de réciprocité du thésaurus (17/06) porte la demande FICEDL. Réécrire quatre conventions n'est pas un geste de machine seule : c'est une position portée devant d'autres organisations.*
-
-**Ce que c'est.** Retirer les notes de travail, porter le texte à Bologne, et le laisser être repris collectivement — ou rangé.
-
-**Pourquoi ça compte.** Deux choses sont écrites et méritent d'être tenues. D'une part, **un texte qui invite d'autres outils à s'appuyer sur le thésaurus demande une position de la fédération, pas un feu vert individuel** — c'est une question d'assemblée. D'autre part, **si le texte devient utile, il devra cesser d'être celui de qui l'a écrit**. Pas de liste de signataires : appliquer une convention se constate en regardant un catalogue, pas en consultant un registre.
-
-**Ce qui compte comme fini.**
-
-- Les notes de travail sont retirées.
-- Le texte a été présenté à Bologne et son sort est décidé.
-- S'attendre à ce que la **convention 4 — accepter d'être pointé en retour** — soit la plus discutée : c'est celle qui coûte le plus aux catalogues établis et rapporte le plus aux nouveaux venus. **Ne pas la retirer pour cette raison.**
-
-**Dépendances.** Bologne, 12-13/09.
-
-*Renvois : `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26`*
 
 ---
 
@@ -2340,6 +2317,7 @@ CI verte : lint et suite unitaire. |
 | F8 | Le domaine d'envoi, relevé : en règle pour envoyer, ses rapports partent chez Brevo | **Clos le 01/09/2026, sur deux relevés DNS encadrant les gestes — neuf jours avant l'échéance du 10/09.** Le relevé du matin (jamais fait auparavant) a confirmé l'item mot pour mot : **en règle pour envoyer** — SPF porté par le sous-domaine Resend (`send.notifications` : `v=spf1 include:amazonses.com` + MX feedback SES), DKIM présent (sélecteur `resend`) — mais DMARC en `p=none` avec `rua` chez **Brevo**, le prestataire quitté, sur le sous-domaine ET la racine : les rapports d'authentification partaient chez quelqu'un d'autre, et un canal de rapports qui pointe chez un prestataire quitté est un dispositif de surveillance qui se tait (`DOC-SILENCE-1`). Plus deux TXT `brevo-code` résiduels, jetons de vérification qui disaient publiquement « ce domaine a été chez Brevo ». **Les gestes, faits par la coordination chez OVH le jour même, vérifiés au relevé du soir via un résolveur externe** : les deux `_dmarc` pointent vers `admins@anarbib.org` (déjà destinataire des alertes santé), les deux `brevo-code` ont disparu, et rien d'autre n'a bougé — le SPF OVH de la racine (les boîtes `admins@` en dépendent) et toute la zone Resend sont intacts. **La politique DMARC est décidée, pas différée** : `p=none` maintenu le temps de lire les premiers rapports — qui arrivent désormais chez nous, quotidiennement, en petits XML zippés — et le durcissement (`quarantine`) se tranchera sur leur contenu, dans quelques semaines. Le critère est écrit ; il n'y a plus de décision en suspens, seulement un rendez-vous. |
 | C1 | Faire entrer les 35 sujets SOLIDAIRES dans les migrations | **Clos le 01/09/2026, par décision écrite plutôt que par migration** — c'était l'une des deux issues que l'item prévoyait, et la doctrine FICEDL du 26/08 la commandait : *le vocabulaire fédéral embarque, les sujets locaux et leurs alignements n'embarquent pas*. État mesuré le jour de la décision : **35 sujets** `solidaires-*` en base, tous `proposto`, **47 alignements** FICEDL (sur 98). Le brouillon le disait lui-même — « les libellés sont ceux du collectif, non retraduits » : un vocabulaire *situé*, que traduire ou normaliser pour l'embarquer trahirait. Une installation neuve naît avec le thésaurus ; chaque bibliothèque apporte ses mots, et les alignements font le pont. Le brouillon SQL est rangé en archive (`docs/drafts/archive/`), la décision est datée (`DECISION_sujets_solidaires_2026-09-01.md`) avec sa clause de révision : si d'autres bibliothèques adoptent un jour ces rubriques telles quelles, c'est le critère « fédéral » qui commande, pas le préfixe — et la migration se réécrira depuis la base, pas depuis le brouillon. |
 | D1 | Réviser la spec des périodiques contre ce qui a été livré | **Clos le 01/09/2026 — et le premier constat est que la spec à réviser n'existe pas.** `spec-periodiques-v0.1`, citée par cet item avec ses numéros de section (§11, §14), est **introuvable** — ni au dépôt, ni dans les archives de travail : elle avait vécu dans Downloads, collée en session le 27/08 (« On met ça en œuvre »), puis le fichier a été supprimé — **retrouvée le soir même, intégrale (391 lignes), dans le transcript de cette session**, et archivée : `docs/specs/archive-spec-periodiques-v0.1-retrouvee.md`. Les §11 et §14 cités existent bien, les six gardes sont au §9. *La précision d'une citation n'est pas une preuve d'existence* (`DOC-RECENS-1`). Plutôt que de réviser un fantôme, l'état livré est écrit depuis le code : `docs/specs/spec-periodiques-v1.0-etat-livre.md` — une spec *a posteriori* qui l'assume, où le code fait foi et le document le suit. **Les six gardes annoncées sont vérifiées une à une** : l'anti-cycle borné à 20 sauts relu à la ligne (`WHILE v_hops < 20`, trigger `serials_filiation_no_cycle`), la réciprocité par trigger (`serials_filiation_symmetry`), l'interdiction du `serial_id` hors fascicule (`books_serial_id_requires_periodico`), la clé `issue_key` **générée** qu'aucun chemin d'import ne référence, l'état déclaré/calculé en colonnes séparées, l'index de tri. Et surtout : **les six sont exercées en continu** par `periodiques_tests.sql` (35/35 en CI, verte encore ce soir) — la preuve n'est pas le document, c'est la suite, à chaque commit. Le document nouveau porte aussi le changement du jour (arbitrage aligné sur les livres) et les trois gestes manuels restants, qui ne sont pas des défauts. |
+| H7 | Décider du sort du texte de conventions d'interopérabilité | **Clos le 01/09/2026, au terme d'une soirée de traque : décidé, perdu, retrouvé, préparé.** La coordination a tranché « porter à Bologne » — et le texte s'est révélé introuvable : jamais dans git, jamais en pièce jointe de session (inventaire intégral, Windows et WSL), jamais écrit par un outil. L'enquête a établi qu'il n'était jamais passé par les machines : écrit dans une **conversation claude.ai du 26/08**, comme le v34 lui-même (l'export PDF du 29/08 à 20:08 dans le dossier E: en est la signature). **Retrouvé le soir même par la coordination dans cette conversation**, exporté, et versé au dépôt en deux exemplaires aux rôles clairs : l'original intact, notes de travail comprises (`docs/journal/cadrages/CONVENTIONS_interop_catalogues_libertaires_brouillon-original_2026-08-26.md`) ; et la **version à porter** (`docs/CONVENTIONS_interoperabilite_catalogues_libertaires.md`), dont les deux seuls retraits sont ceux que le texte s'ordonnait lui-même — la section « Notes de travail *(à retirer avant diffusion)* » et la note crochetée sur l'audit à joindre. Le chapeau « ce texte n'engage personne » reste : c'est sa politique, pas une note. **Et il arrive à Bologne avec ses preuves** : la convention n°1 (OPDS) est tenue par AnarBib depuis le matin même, la n°2 (SKOS) depuis H3 — le texte ne propose plus, il montre. Même leçon que la spec des périodiques, deux fois le même soir : *ce qui sert de référence à un item doit être versé quelque part de durable, le jour où il sert.* |
 
 ---
 
@@ -2371,4 +2349,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 77 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 76 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `780cac8a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

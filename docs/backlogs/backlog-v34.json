@@ -1625,6 +1625,17 @@
           "fr": "**Clos le 01/09/2026 — et le premier constat est que la spec à réviser n'existe pas.** `spec-periodiques-v0.1`, citée par cet item avec ses numéros de section (§11, §14), est **introuvable** — ni au dépôt, ni dans les archives de travail : elle avait vécu dans Downloads, collée en session le 27/08 (« On met ça en œuvre »), puis le fichier a été supprimé — **retrouvée le soir même, intégrale (391 lignes), dans le transcript de cette session**, et archivée : `docs/specs/archive-spec-periodiques-v0.1-retrouvee.md`. Les §11 et §14 cités existent bien, les six gardes sont au §9. *La précision d'une citation n'est pas une preuve d'existence* (`DOC-RECENS-1`). Plutôt que de réviser un fantôme, l'état livré est écrit depuis le code : `docs/specs/spec-periodiques-v1.0-etat-livre.md` — une spec *a posteriori* qui l'assume, où le code fait foi et le document le suit. **Les six gardes annoncées sont vérifiées une à une** : l'anti-cycle borné à 20 sauts relu à la ligne (`WHILE v_hops < 20`, trigger `serials_filiation_no_cycle`), la réciprocité par trigger (`serials_filiation_symmetry`), l'interdiction du `serial_id` hors fascicule (`books_serial_id_requires_periodico`), la clé `issue_key` **générée** qu'aucun chemin d'import ne référence, l'état déclaré/calculé en colonnes séparées, l'index de tri. Et surtout : **les six sont exercées en continu** par `periodiques_tests.sql` (35/35 en CI, verte encore ce soir) — la preuve n'est pas le document, c'est la suite, à chaque commit. Le document nouveau porte aussi le changement du jour (arbitrage aligné sur les livres) et les trois gestes manuels restants, qui ne sont pas des défauts.",
           "pt": "**Encerrado em 01/09/2026 — e o primeiro constato é que a spec a revisar não existe.** `spec-periodiques-v0.1`, citada por este item com seus números de seção (§11, §14), está **em parte alguma** — nem no repositório, nem nos arquivos de trabalho: havia vivido em Downloads, colada em sessão em 27/08 (« On met ça en œuvre »), e o arquivo foi depois apagado — **reencontrada na mesma noite, íntegra (391 linhas), no transcript daquela sessão**, e arquivada: `docs/specs/archive-spec-periodiques-v0.1-retrouvee.md`. Os §11 e §14 citados existem, as seis guardas estão no §9. *A precisão de uma citação não é prova de existência* (`DOC-RECENS-1`). Em vez de revisar um fantasma, o estado entregue foi escrito a partir do código: `docs/specs/spec-periodiques-v1.0-etat-livre.md` — uma spec *a posteriori* que o assume, onde o código faz fé e o documento o segue. **As seis guardas anunciadas foram verificadas uma a uma**: o anticiclo limitado a 20 saltos relido na linha (`WHILE v_hops < 20`), a reciprocidade por trigger, a proibição do `serial_id` fora de fascículo, a chave `issue_key` **gerada** que nenhum caminho de importação referencia, o estado declarado/calculado em colunas separadas, o índice de ordenação. E sobretudo: **as seis são exercidas continuamente** por `periodiques_tests.sql` (35/35 na CI, verde ainda esta noite) — a prova não é o documento, é a suíte, a cada commit. O documento novo porta também a mudança do dia (arbítrio alinhado aos livros) e os três gestos manuais restantes, que não são defeitos."
         }
+      ],
+      [
+        "H7",
+        {
+          "fr": "Décider du sort du texte de conventions d'interopérabilité",
+          "pt": "Decidir o destino do texto de convenções de interoperabilidade"
+        },
+        {
+          "fr": "**Clos le 01/09/2026, au terme d'une soirée de traque : décidé, perdu, retrouvé, préparé.** La coordination a tranché « porter à Bologne » — et le texte s'est révélé introuvable : jamais dans git, jamais en pièce jointe de session (inventaire intégral, Windows et WSL), jamais écrit par un outil. L'enquête a établi qu'il n'était jamais passé par les machines : écrit dans une **conversation claude.ai du 26/08**, comme le v34 lui-même (l'export PDF du 29/08 à 20:08 dans le dossier E: en est la signature). **Retrouvé le soir même par la coordination dans cette conversation**, exporté, et versé au dépôt en deux exemplaires aux rôles clairs : l'original intact, notes de travail comprises (`docs/journal/cadrages/CONVENTIONS_interop_catalogues_libertaires_brouillon-original_2026-08-26.md`) ; et la **version à porter** (`docs/CONVENTIONS_interoperabilite_catalogues_libertaires.md`), dont les deux seuls retraits sont ceux que le texte s'ordonnait lui-même — la section « Notes de travail *(à retirer avant diffusion)* » et la note crochetée sur l'audit à joindre. Le chapeau « ce texte n'engage personne » reste : c'est sa politique, pas une note. **Et il arrive à Bologne avec ses preuves** : la convention n°1 (OPDS) est tenue par AnarBib depuis le matin même, la n°2 (SKOS) depuis H3 — le texte ne propose plus, il montre. Même leçon que la spec des périodiques, deux fois le même soir : *ce qui sert de référence à un item doit être versé quelque part de durable, le jour où il sert.*",
+          "pt": "**Encerrado em 01/09/2026, ao fim de uma noite de caça: decidido, perdido, reencontrado, preparado.** A coordenação decidiu « levar a Bolonha » — e o texto se revelou perdido: nunca no git, nunca como anexo de sessão (inventário integral, Windows e WSL), nunca escrito por ferramenta. A investigação estabeleceu que ele nunca passou pelas máquinas: escrito numa **conversa claude.ai de 26/08**, como o próprio v34 (o export PDF de 29/08 às 20:08 na pasta E: é a assinatura). **Reencontrado na mesma noite pela coordenação nessa conversa**, exportado, e versado ao repositório em dois exemplares com papéis claros: o original intacto, notas de trabalho incluídas (`docs/journal/cadrages/CONVENTIONS_interop_catalogues_libertaires_brouillon-original_2026-08-26.md`); e a **versão a levar** (`docs/CONVENTIONS_interoperabilite_catalogues_libertaires.md`), cujos dois únicos cortes são os que o próprio texto se ordenava — a seção « Notas de trabalho *(a retirar antes da difusão)* » e a nota entre colchetes sobre a auditoria a anexar. O chapéu « este texto não compromete ninguém » permanece: é sua política, não uma nota. **E ele chega a Bolonha com suas provas**: a convenção nº 1 (OPDS) é cumprida pelo AnarBib desde a manhã do mesmo dia, a nº 2 (SKOS) desde o H3 — o texto já não propõe, mostra. Mesma lição da spec dos periódicos, duas vezes na mesma noite: *o que serve de referência a um item deve ser versado em lugar durável, no dia em que serve.*"
+        }
       ]
     ]
   },
@@ -4011,55 +4022,6 @@
         "ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6",
         "VEILLE_leftovers_maydayrooms_2026-08-19"
       ]
-    },
-    {
-      "id": "H7",
-      "d": "H",
-      "p": "P1",
-      "s": "bloque",
-      "e": "S",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Décider du sort du texte de conventions d'interopérabilité",
-        "pt": "Decidir o destino do texto de convenções de interoperabilidade"
-      },
-      "v": {
-        "fr": "`CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` est un **brouillon qui n'engage personne et n'a jamais été discuté avec aucune organisation**. Il propose quatre conventions et une demande unique à la FICEDL.",
-        "pt": "`CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` é um **rascunho que não compromete ninguém e nunca foi discutido com nenhuma organização**. Propõe quatro convenções e um pedido único à FICEDL."
-      },
-      "w": {
-        "fr": "Retirer les notes de travail, porter le texte à Bologne, et le laisser être repris collectivement — ou rangé.",
-        "pt": "Retirar as notas de trabalho, levar o texto a Bolonha, e deixá-lo ser retomado coletivamente — ou arquivado."
-      },
-      "y": {
-        "fr": "Deux choses sont écrites et méritent d'être tenues. D'une part, **un texte qui invite d'autres outils à s'appuyer sur le thésaurus demande une position de la fédération, pas un feu vert individuel** — c'est une question d'assemblée. D'autre part, **si le texte devient utile, il devra cesser d'être celui de qui l'a écrit**. Pas de liste de signataires : appliquer une convention se constate en regardant un catalogue, pas en consultant un registre.",
-        "pt": "Duas coisas estão escritas e merecem ser mantidas. Por um lado, **um texto que convida outras ferramentas a se apoiarem no tesauro exige uma posição da federação, não um sinal verde individual** — é uma questão de assembleia. Por outro, **se o texto se tornar útil, deverá deixar de ser o de quem o escreveu**. Sem lista de signatários: aplicar uma convenção se constata olhando um catálogo, não consultando um registro."
-      },
-      "f": {
-        "fr": [
-          "Les notes de travail sont retirées.",
-          "Le texte a été présenté à Bologne et son sort est décidé.",
-          "S'attendre à ce que la **convention 4 — accepter d'être pointé en retour** — soit la plus discutée : c'est celle qui coûte le plus aux catalogues établis et rapporte le plus aux nouveaux venus. **Ne pas la retirer pour cette raison.**"
-        ],
-        "pt": [
-          "As notas de trabalho estão retiradas.",
-          "O texto foi apresentado em Bolonha e seu destino está decidido.",
-          "Esperar que a **convenção 4 — aceitar ser apontado de volta** — seja a mais discutida: é a que mais custa aos catálogos estabelecidos e mais rende aos recém-chegados. **Não retirá-la por essa razão.**"
-        ]
-      },
-      "dep": {
-        "fr": "Bologne, 12-13/09.",
-        "pt": "Bolonha, 12-13/09."
-      },
-      "r": [
-        "CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26"
-      ],
-      "verif": {
-        "fr": " **01/09/2026 — la décision est prise, et l'objet a disparu.** La coordination a tranché « porter à Bologne ». Mais le texte lui-même — `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` — est **introuvable** : ni au dépôt, ni sur le disque de travail, ni dans le dossier Bologna. C'est le **deuxième document fantôme du même soir** (avec `spec-periodiques-v0.1`, item D1) : le v34 le cite avec un contenu précis, et rien ne l'atteste nulle part. Deux issues, à la main de la coordination : **retrouver le texte** (une autre machine, un échange de courriel, une session passée) — ou **le réécrire à deux**, et la matière ne manque pas : la convention n°1 est connue (« les flux OPDS existent de part et d'autre mais ne pointent nulle part ») et l'OPDS livré aujourd'hui en est déjà la démonstration, le SKOS de H3 est servi à des URLs stables, et l'argumentaire de réciprocité du thésaurus (17/06) porte la demande FICEDL. Réécrire quatre conventions n'est pas un geste de machine seule : c'est une position portée devant d'autres organisations.",
-        "pt": " **01/09/2026 — a decisão foi tomada, e o objeto desapareceu.** A coordenação decidiu « levar a Bolonha ». Mas o próprio texto — `CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26` — está **em parte alguma**: nem no repositório, nem no disco de trabalho, nem na pasta Bologna. É o **segundo documento fantasma da mesma noite** (com `spec-periodiques-v0.1`, item D1): o v34 o cita com conteúdo preciso, e nada o atesta em lugar nenhum. Duas saídas, na mão da coordenação: **reencontrar o texto** (outra máquina, uma troca de e-mail, uma sessão passada) — ou **reescrevê-lo a dois**, e matéria não falta: a convenção nº 1 é conhecida (« os fluxos OPDS existem de ambos os lados mas não apontam para lugar nenhum ») e o OPDS entregue hoje já é sua demonstração, o SKOS do H3 está servido em URLs estáveis, e o argumentário de reciprocidade do tesauro (17/06) porta o pedido à FICEDL. Reescrever quatro convenções não é gesto de máquina sozinha: é uma posição levada diante de outras organizações."
-      }
     },
     {
       "id": "I1",
