@@ -60,25 +60,66 @@ BEGIN
   END;
 
   -- ---------------------------------------------------------------------
-  -- T2 — les trois corrigées portent bien un message unique
+  -- T2 — la fonction QUE L'ÉCRAN APPELLE reste exposée
   -- ---------------------------------------------------------------------
-  -- T1 passerait aussi si quelqu'un supprimait les fonctions. On vérifie
-  -- qu'elles existent toujours et qu'elles restent appelables : le refus doit
-  -- vivre dans le corps, jamais dans le droit (`DOC-RPC-3`).
-  v_t := 'T2 les trois fonctions existent et restent exposees';
+  -- T1 passerait aussi si quelqu'un supprimait les fonctions. On vérifie donc
+  -- qu'un chemin reste ouvert : le refus doit vivre dans le corps, jamais dans
+  -- le droit (`DOC-RPC-3`).
+  --
+  -- ATTENDU CORRIGÉ LE 01/09/2026, QUELQUES HEURES APRÈS SON ÉCRITURE, ET LA
+  -- CORRECTION EST LA LEÇON. Ce test exigeait les TROIS fonctions exposées, en
+  -- supposant qu'elles servaient toutes un écran. Le paquet 7 a posé la question
+  -- que je n'avais pas posée — QUI LES APPELLE ? — et la réponse est : personne,
+  -- pour deux d'entre elles. `fn_painel_get_profile_by_id` et
+  -- `fn_painel_find_profile_by_email` sont remplacées par
+  -- `…_by_lookup`, la seule que le panneau appelle ; elles ont donc été fermées.
+  -- Le test gardait une propriété vraie d'UNE fonction et l'exigeait de trois.
+  --
+  -- `DOC-RPC-3` ne dit pas « ne jamais révoquer » : il dit que le refus ne doit
+  -- pas remplacer un écran vivant par un écran mort. Là où aucun écran n'appelle,
+  -- il n'y a pas d'écran à casser.
+  v_t := 'T2 la fonction appelee par le panneau reste exposee';
   BEGIN
     SELECT count(*) INTO v_n
       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
      WHERE n.nspname = 'public'
-       AND p.proname IN ('fn_painel_find_profile_by_lookup','fn_painel_get_profile_by_id',
-                         'fn_attach_received_asset_record')
+       AND p.proname IN ('fn_painel_find_profile_by_lookup','fn_attach_received_asset_record')
        AND has_function_privilege('authenticated', p.oid, 'EXECUTE');
 
-    IF v_n = 3 THEN v_passed := v_passed + 1;
+    IF v_n = 2 THEN v_passed := v_passed + 1;
     ELSE
       v_failed := v_failed + 1;
-      v_failures := v_failures || (v_t || ' : ' || v_n || '/3 exposees'
-        || ' | fermer l''EXECUTE casse l''ecran au lieu de refuser proprement');
+      v_failures := v_failures || (v_t || ' : ' || v_n || '/2 exposees'
+        || ' | fermer l''EXECUTE de celles-la casse un ecran vivant au lieu de'
+        || ' refuser proprement — ce n''est pas le cas des deux remplacees,'
+        || ' fermees le 01/09 parce que RIEN ne les appelle');
+    END IF;
+  EXCEPTION WHEN OTHERS THEN
+    v_failed := v_failed + 1;
+    v_failures := v_failures || (v_t || ' : ' || SQLERRM);
+  END;
+
+  -- ---------------------------------------------------------------------
+  -- T2b — et les deux remplacées restent fermées
+  -- ---------------------------------------------------------------------
+  -- L'autre moitié : elles ont été fermées pour une raison mesurée (aucun
+  -- appelant, ni en base ni au dépôt). Si un écran venait à les appeler de
+  -- nouveau, c'est ce test qui doit forcer à trancher — rouvrir le droit, ou
+  -- appeler la remplaçante.
+  v_t := 'T2b les deux fonctions remplacees restent fermees';
+  BEGIN
+    SELECT count(*) INTO v_n
+      FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+     WHERE n.nspname = 'public'
+       AND p.proname IN ('fn_painel_get_profile_by_id','fn_painel_find_profile_by_email')
+       AND has_function_privilege('authenticated', p.oid, 'EXECUTE');
+
+    IF v_n = 0 THEN v_passed := v_passed + 1;
+    ELSE
+      v_failed := v_failed + 1;
+      v_failures := v_failures || (v_t || ' : ' || v_n || ' rouverte(s)'
+        || ' | une CREATE OR REPLACE reapplique les droits par defaut du schema :'
+        || ' remettre le REVOKE dans la migration qui recree la fonction');
     END IF;
   EXCEPTION WHEN OTHERS THEN
     v_failed := v_failed + 1;
