@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.5 — 2026-09-01 (saut collégial `reader` → `coordenador`, opt-in par biblio)
+**Version** : 1.6 — 2026-09-01 (l'accueil aussi est collégial : T1 directe condamnée)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -14,6 +14,7 @@
 - **v1.4 (2026-08-26)** : **T2 (`librarian` → `coordenador`) cesse d'être unilatérale.** La promotion reposait sur la seule autorisation `user_can_manage_library()` : un·e coordenador·a pouvait en faire un·e autre, seul·e et sans le consentement de l'intéressé·e — ce qui contredisait P2 (cooptation pour **les deux** rôles staff) et P3 (une charge s'accepte, elle ne s'impose pas). Elle emprunte désormais le circuit d'invitation déjà en place : proposition → ratification par une autre personne du staff → acceptation par la personne concernée. `fn_team_promote_to_coordenador` est conservée mais lève `collegiality_required` : un échec bruyant vaut mieux qu'un succès qui ne promeut plus rien. Sections amendées : §5.1, §5.3, §6.1, §6.5, §7.3, §8.2, §8.3, §11.2, §12.3, §15. §14 **entièrement refait** — l'état des lots datait du 15/05/2026 et annonçait « à faire » des objets déjà livrés au 10/05. Implémentation : migrations `20260826120000` et `20260826130000`, front `feat(team)` du 26/08. Registre : `GOUV-1` à `GOUV-6`.
 - **v1.4.1 (2026-08-26, même jour)** : correction d'une **erreur de la v1.4 elle-même**. La v1.4 annonçait, en §5.3, §6.1 et §6.5, qu'un·e administrateur·rice réseau pouvait *proposer* un passage à la coordination. C'était l'intention de la migration, pas son code : `fn_team_propose_invitation` s'ouvre sur `user_can_manage_library_notifications`, qui exige un membership **local** et ne connaît pas les admins réseau. La bascule de T2 sur ce circuit avait donc **supprimé** un droit dont disposait l'ancienne `fn_team_promote_to_coordenador` — et rendu impossible le rattrapage d'une biblio sans coordenador (§6.1). Rétabli par la migration `20260826160000`, pour le seul `p_role = 'coordenador'` : l'accueil garde la garde qu'il a toujours eue. Complété le même jour par `20260826180000` : `fn_team_list_invitations` était restée fermée aux admins réseau, qui obtenaient donc le message de succès de leur proposition puis **une liste vide** — proposer sans pouvoir relire est une action à l'aveugle. Registre : `GOUV-7`, `GOUV-10`.
 - **v1.5 (2026-09-01)** : **le saut collégial `reader` → `coordenador` devient possible, en opt-in par biblio** (`libraries.allow_direct_coordenador`, défaut désactivé). La précondition « on ne saute pas de reader à coordenador » était un **héritage d'implémentation** de l'ancienne `fn_team_promote_to_coordenador`, pas un principe — aucun de P1–P8 n'exige une échelle progressive, et deux asymétries la déjugeaient : T1 directe reste unilatérale, et `fn_team_self_demote` autorise la redescente directe jusqu'à `reader`. Pour un collectif horizontal (cas BTL), l'échelle imposait un grade de passage sans réalité dans le groupe (contraire à P1) et faisait exécuter en deux circuits une seule décision d'AG (P8). Le circuit collégial s'applique **intégralement** au saut : proposition → ratification selon quorum → acceptation ; cible = reader `status='active'` **strict** ; à l'acceptation, la ligne active inférieure se ferme quelle qu'elle soit, et l'audit porte `metadata.from_role`. Sections amendées : §3.1, §5.1, §5.3, §6.12 (nouveau), §10.1, §15.6 (nouveau). Décision : cadrage `CADRAGE_promotion_directe_reader_coordenador_2026-09-01` ; registre `GOUV-11`/`GOUV-12` (v0.8). Implémentation : migration `20260901162610`, tests `tests/sql/saut_collegial_tests.sql`, front `LeitoresPanel` + `LibraryContext`.
+- **v1.6 (2026-09-01, même jour)** : **T1 (`reader` → `librarian`) cesse d'être unilatérale.** Dernier chemin du modèle où UNE personne donnait un rôle staff à une autre sans endossement ni consentement — devenu indéfendable après GOUV-1 (T2 collégiale) et GOUV-11 (même le saut est collégial). `fn_team_promote_to_librarian` est condamnée (`collegiality_required`, même doctrine que GOUV-4) ; l'accueil passe par le circuit d'invitation, construit pour lui à l'origine. Examen GOUV-7 (les autorisations d'arrivée comparées à celles de départ) : l'admin réseau perd le pouvoir de fabriquer un·e librarian directement — perte **assumée**, son rattrapage d'une biblio sans staff actif passe désormais par le saut collégial (§6.4 réécrit ; l'ancienne voie (a) était de toute façon inopérante depuis la v1.4 faute de librarian *actif* à proposer). Sections amendées : §5.1, §5.2, §6.4, §6.8, §6.11, §7.3, §11.2, §15.1. Décision : `GOUV-13` (registre v0.9, arbitrage Xavier du 01/09 au soir). Implémentation : migration `20260901175233`, tests `tests/sql/t1_accueil_collegial_tests.sql`, front `LeitoresPanel`/`TeamActionModal`/`roles.js`/`teamMutations`.
 
 ---
 
@@ -282,7 +283,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 | # | Transition | Qui peut le faire | Mécanisme |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Coordenador local **OU** admin réseau actif | Cooptation (P2) |
+| T1 | `reader` → `librarian` | **Trois personnes distinctes** *(v1.6)* : qui propose (membre du staff **local** — voie médiane), qui endosse (selon quorum), qui accepte (l'intéressé·e). L'admin réseau ne propose pas l'accueil (son rattrapage : §6.4) | Cooptation collégiale (P2), via le circuit d'invitation |
 | T2 | `librarian` → `coordenador` | **Trois personnes distinctes** *(v1.4)* : qui propose (coordenador local **OU** admin réseau actif), qui ratifie (autre membre du staff), qui accepte (l'intéressé·e) | Cooptation collégiale (P2), via le circuit d'invitation |
 | T2b *(v1.5)* | `reader` → `coordenador` (**saut collégial**, seulement si la biblio a activé `allow_direct_coordenador`) | Identique à T2 — mêmes trois personnes, même circuit, même quorum | Cooptation collégiale (P2) ; opt-in par biblio (P7), défaut désactivé |
 | T3 | `coordenador` → `librarian` | Soi-même + autres coordenadores locaux | Auto-rétro ou retrait collégial |
@@ -297,24 +298,44 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 **Note v1.1 — Transition T10 supprimée** : la transition `coordenador → administrador` qui figurait conceptuellement dans la v1.0 (sans être numérotée) est désormais explicitement hors périmètre. La cooptation au réseau d'administrateurs passe par `fn_network_admin_propose_cooptation` + vote à l'unanimité (cf. spec admin réseau v0.3.1 §4). Ce n'est pas une transition de rôle local, c'est une inscription **politique distincte** dans le périmètre réseau.
 
-### 5.2. Détail de T1 — `reader` → `librarian` (cooptation)
+### 5.2. Détail de T1 — `reader` → `librarian` (accueil collégial) *(refondu v1.6)*
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve, **avec autorisation `user_can_engage_library` sur la biblio cible**.
+> **Ce qui change en v1.6.** Jusqu'au 01/09/2026, T1 restait un geste **unilatéral** : un·e
+> coordenador·a (ou un·e admin réseau) promouvait sur-le-champ, sans endossement ni consentement.
+> Après GOUV-1 (T2 collégiale) et GOUV-11 (même le saut vers la coordination est collégial),
+> c'était devenu le chemin le *moins* collégial du modèle — pour l'entrée dans l'équipe, là où le
+> circuit d'invitation a précisément été construit (juin 2026). Même remède que pour T2 : le
+> circuit est le seul chemin, et la fonction directe est condamnée (GOUV-13).
 
-**Précondition** :
-- La personne cible existe en tant qu'utilisateur·rice AnarBib (a un compte)
-- La personne cible n'a pas déjà une membership `active` ou `pending_removal` ou `suspended` dans cette biblio avec un rôle staff (`librarian`/`coordenador`)
-- La personne cible a typiquement une membership `reader` `active` dans cette biblio (cas nominal : on promeut un·e lecteur·rice). Cette ligne `reader` sera fermée par la promotion (cf. Effet).
+**Qui** : trois personnes distinctes, comme pour T2 (§5.3) :
 
-**Effet** *(actualisé v1.2 — doctrine rôle exclusif)* :
-- Création d'une nouvelle ligne `user_library_memberships` avec `role='librarian'`, `status='active'` (ou réactivation si une ligne `librarian` existait en `removed`/`inactive`)
-- **Fermeture du membership `reader`** de la même biblio : la ligne `reader` passe à `status='removed'`. Les rôles sont exclusifs au sein d'une biblio — le rôle `librarian` englobe les capacités du `reader` (cf. §3.2). Une entrée d'audit `removal_completed` sur le rôle `reader` trace la fermeture.
-- Mail à la personne concernée + à tous les coordenadores actifs de la biblio
-- Audit log (entrée `promoted_to_librarian`)
+1. **Qui propose** : un·e membre du staff **local** actif (`librarian` ou `coordenador` — la voie
+   médiane permet à un·e librarian de proposer). L'admin réseau ne propose **pas** un accueil :
+   on ne fait pas entrer quelqu'un dans une équipe dont on n'est pas membre (garde d'origine du
+   circuit, conservée). Son rattrapage d'une biblio sans staff passe par §6.4.
+2. **Qui endosse** : selon le quorum de `team_admission_mode` (cf. §5.3), dont au moins un
+   endossement de la coordination (voie médiane).
+3. **Qui accepte** : la personne concernée, et elle seule.
 
-**Note v1.1 (cross-library)** : si l'acteur·rice est admin réseau **sans** membership staff local sur la biblio cible, l'action est tracée dans `network_admin_cross_library_actions_log` (cf. spec admin réseau v0.3.1 §6.3.1 — action critique : promotion staff). Mail immédiat au staff local de la biblio.
+**Préconditions** :
+- La personne cible existe en tant qu'utilisateur·rice AnarBib (a un compte, donc un `public_id`)
+- Elle n'a pas déjà une membership staff (`librarian`/`coordenador`) `active` dans cette biblio
+- Aucune invitation vivante ne la concerne déjà sur cette biblio
+- Cas nominal : elle a une membership `reader` `active` (on accueille un·e lecteur·rice de la
+  maison) — mais l'accueil accepte aussi une personne sans adhésion locale
 
-**RPC** : `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid)`
+**Effet de l'acceptation** *(doctrine rôle exclusif, inchangée)* :
+- Création (ou réactivation) d'une ligne `librarian` `active`
+- **Fermeture du membership `reader`** s'il existe (`status='removed'`, audit `removal_completed`)
+- Audit log : entrée `promoted_to_librarian`, `metadata.via = 'team_invitation_accepted'`
+- Mails du circuit : proposition, quorum atteint, acceptation (personne + coordination)
+
+**RPCs** : `fn_team_propose_invitation(p_library_id, p_invited_public_id, 'librarian')` →
+`fn_team_ratify_invitation` → `fn_team_accept_invitation` / `fn_team_decline_invitation`.
+
+⚠️ **`fn_team_promote_to_librarian` ne promeut plus** *(v1.6)*. Conservée — signature, droits,
+appelants — mais lève `collegiality_required` (`ERRCODE 0A000`) en désignant le chemin collégial,
+exactement comme sa jumelle `fn_team_promote_to_coordenador` (GOUV-4). Migration `20260901175233`.
 
 ### 5.3. Détail de T2 — `librarian` → `coordenador` (cooptation collégiale) *(refondu v1.4)*
 
@@ -585,7 +606,7 @@ La RPC `fn_team_promote_to_administrador` qui existait en v1.0 a été **dépré
 - La biblio reste « active » techniquement (sa visibility, ses livres, sont accessibles selon RLS)
 - Mais aucune action de gestion locale ne peut plus être faite par le staff local
 - Mail urgent aux administrateurs du réseau AnarBib
-- Les administrateurs réseau peuvent intervenir directement via leur droit transverse pour : (a) *(v1.4, garde rétablie en v1.4.1 par `20260826160000`)* **proposer** une membership `coordenador` via `fn_team_propose_invitation` (rôle `coordenador`) après validation politique du collectif local — la proposition doit ensuite être ratifiée puis acceptée (§5.3), ou (b) accompagner la fermeture de la biblio (procédure hors-spec)
+- Les administrateurs réseau peuvent intervenir via leur droit transverse pour : (a) *(réécrit v1.6)* **proposer** une membership `coordenador` via `fn_team_propose_invitation` (rôle `coordenador`) après validation politique du collectif local. La précondition §5.3 exige un·e librarian **actif·ve** ou — saut collégial — un·e reader actif·ve là où `allow_direct_coordenador` est activé : dans une biblio dont tout le staff est inactif, **le chemin praticable est donc le saut** (activation du réglage sur décision du collectif local, puis proposition visant un·e reader actif·ve ; quorum en bootstrap = 1, l'endossement de la proposition suffit, reste l'acceptation). L'ancienne rédaction (v1.4.1) suggérait la voie coordenador sans ce détail : elle était **inopérante** faute de librarian actif à proposer — et la voie de secours historique, la T1 directe par l'admin réseau, est condamnée depuis GOUV-13. Ou (b) accompagner la fermeture de la biblio (procédure hors-spec)
 
 **Différence avec v1.0** : la v1.0 mentionnait « modification SQL directe » par un admin AnarBib. Depuis le paquet D admin réseau, cette action passe par la RPC normale, simplement appelée par un·e admin réseau (autorisée par les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library`). Plus de bypass SQL, tracé dans `network_admin_cross_library_actions_log`.
 
@@ -620,7 +641,7 @@ La RPC `fn_team_promote_to_administrador` qui existait en v1.0 a été **dépré
 
 ### 6.8. Tentative de promouvoir une personne déjà au même niveau
 
-**Comportement** : retour idempotent (succès silencieux). La RPC vérifie l'état avant action ; si la personne est déjà `librarian` actif, la RPC `fn_team_promote_to_librarian` ne fait rien et retourne `{ok: true, no_change: true}`.
+**Comportement** *(actualisé v1.6)* : le circuit refuse explicitement — `fn_team_propose_invitation` lève `conflict: already an active team member` (accueil) ou `already an active coordenador` (promotion). L'ancien retour idempotent `{ok: true, no_change: true}` appartenait à la promotion directe, condamnée depuis GOUV-13.
 
 ### 6.9. *(Refonte v1.1)* Tentative d'agir sur un·e administrateur·rice réseau via les RPC `fn_team_*`
 
@@ -646,7 +667,7 @@ Cette séparation reflète la séparation politique : le staff local d'une bibli
 Les RPC de cette spec vérifient en début d'exécution le `governance_mode` de la biblio cible (champ ajouté par le paquet A spec profils, à venir) :
 
 - `governance_mode = 'informal'` : toutes les RPC `fn_team_*` retournent une erreur explicite : « cette biblio fonctionne en mode informel, il n'y a pas de rôles staff distincts à gérer ». L'UI n'expose simplement pas l'onglet Équipe.
-- `governance_mode = 'staff_roles'` : RPC `fn_team_promote_to_librarian`, `fn_team_self_demote` actives. RPC `fn_team_request_remove_member`, `fn_team_suspend_member`, `fn_team_cancel_remove_member`, `fn_team_unsuspend_member` retournent une erreur : « les mécanismes de carence/suspension ne sont pas activés dans ce mode ; passez en `full_governance` ou agissez hors logiciel ».
+- `governance_mode = 'staff_roles'` : circuit d'invitation (accueil) et `fn_team_self_demote` actifs *(v1.6 : la promotion directe n'existe plus dans aucun mode)*. RPC `fn_team_request_remove_member`, `fn_team_suspend_member`, `fn_team_cancel_remove_member`, `fn_team_unsuspend_member` retournent une erreur : « les mécanismes de carence/suspension ne sont pas activés dans ce mode ; passez en `full_governance` ou agissez hors logiciel ».
 - `governance_mode = 'full_governance'` : doctrine intégrale, toutes les RPC actives.
 
 **Implémentation** : à prévoir au paquet F de la spec profils. En attendant, toutes les biblios fonctionnent implicitement en `full_governance`.
@@ -706,7 +727,7 @@ Chaque action génère **une entrée** dans `library_membership_audit` :
 
 | Code | Description | RPC source |
 |---|---|---|
-| `promoted_to_librarian` | T1 | `fn_team_promote_to_librarian` |
+| `promoted_to_librarian` | T1 | `fn_team_accept_invitation` (accueil accepté — v1.6 ; historiquement `fn_team_promote_to_librarian`) |
 | `promoted_to_coordenador` | T2 | `fn_team_accept_invitation` *(v1.4 ; auparavant `fn_team_promote_to_coordenador`)* |
 | `self_demoted` | T3 (auto-rétro coord) ou T4 (auto-rétro librarian) | `fn_team_self_demote` |
 | `removal_requested` | T5 (déclenchement carence) | `fn_team_request_remove_member` |
@@ -1060,7 +1081,7 @@ Toutes les RPCs respectent les règles suivantes :
 
 | RPC | Signature | Autorisation requise | Statut |
 |---|---|---|---|
-| `fn_team_promote_to_librarian` | `(p_user_id uuid, p_library_id uuid)` | `user_can_engage_library` | ✅ Existante |
+| `fn_team_promote_to_librarian` | `(p_user_id uuid, p_library_id uuid)` | — | ⚠️ **Condamnée v1.6** (GOUV-13) : lève `collegiality_required`, comme `fn_team_promote_to_coordenador` |
 | `fn_team_promote_to_coordenador` | `(p_user_id uuid, p_library_id uuid)` | — | ⛔ **Neutralisée v1.4 (26/08/2026)** — lève `collegiality_required`, cf. §5.3 |
 | `fn_team_propose_invitation` | `(p_library_id uuid, p_invited_public_id text, p_role text DEFAULT 'librarian')` | staff **local** actif (`user_can_manage_library_notifications`), **ou** admin réseau si `p_role='coordenador'` (v1.4.1) ; **plus** `user_can_manage_library` si `p_role='coordenador'` | ✅ Élargie au rôle `coordenador` en v1.4, garde corrigée en v1.4.1 |
 | `fn_team_ratify_invitation` | `(p_invitation_id uuid)` | staff actif de la biblio | ✅ Existante |
@@ -1309,16 +1330,16 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 
 ## 15. Cas d'usage de référence
 
-### 15.1. Voltairine cooptée librarian
+### 15.1. Voltairine cooptée librarian *(actualisé v1.6)*
 
 > Emma est coordenador·a de la BLMF. Elle veut accueillir Voltairine dans l'équipe (Voltairine est déjà reader inscrite à la BLMF).
 >
-> 1. Emma va dans `/biblioteca`, onglet `team`
-> 2. Elle cherche Voltairine dans la liste des readers de la biblio (recherche par nom/email)
-> 3. Elle clique sur « Inviter dans l'équipe », sélectionne « librarian », confirme la modale
-> 4. Voltairine reçoit un mail : « Tu as été nommée librarian de la BLMF par Emma »
-> 5. La coordination de la BLMF reçoit aussi un mail informationnel
-> 6. L'audit log enregistre : « 05/05 14:30 - Emma a promu Voltairine librarian »
+> 1. Emma va dans `/biblioteca` — onglet lecteur·rices (ligne de Voltairine) ou onglet `team` (invitation par `public_id`)
+> 2. Elle clique « Proposer dans l'équipe » et confirme : une **proposition** est déposée, rien n'est promu
+> 3. Le quorum de `team_admission_mode` s'applique (cosignature : un second endossement, la proposition d'Emma comptant pour un)
+> 4. Voltairine reçoit l'invitation et **accepte** (ou décline — ou laisse expirer, 30 j)
+> 5. À l'acceptation : ligne `librarian` active, ligne `reader` fermée, mails à la personne et à la coordination
+> 6. L'audit log enregistre la proposition puis « promoted_to_librarian, via team_invitation_accepted »
 
 ### 15.2. Lucy passe la main
 
