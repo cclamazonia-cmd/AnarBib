@@ -82,6 +82,55 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // Migration 20260826120000 : la promotion à coordenador emprunte le circuit
   // des invitations. Textes distincts de l'accueil — la personne est déjà dans
   // l'équipe, ce qu'on lui propose c'est une charge, pas une entrée.
+  // ── Relance et expiration du circuit collégial (GOUV-17b) ─────────────────
+  "team.invitation_reminder.sub": {
+    "pt-BR": "Uma proposta de equipe expira em nove dias — {libraryName}",
+    fr: "Une proposition d'équipe expire dans neuf jours — {libraryName}",
+    es: "Una propuesta de equipo caduca en nueve días — {libraryName}",
+    en: "A team proposal expires in nine days — {libraryName}",
+    it: "Una proposta di squadra scade fra nove giorni — {libraryName}",
+    de: "Ein Teamvorschlag läuft in neun Tagen ab — {libraryName}",
+    ca: "Una proposta d'equip caduca d'aquí a nou dies — {libraryName}",
+    eo: "Teama propono senvalidiĝos post naŭ tagoj — {libraryName}",
+    nl: "Een teamvoorstel vervalt over negen dagen — {libraryName}",
+    el: "Μια πρόταση ομάδας λήγει σε εννέα ημέρες — {libraryName}"
+  },
+  "team.invitation_reminder.intro": {
+    "pt-BR": "A proposta que diz respeito a {targetName} em {libraryName} ainda não se concluiu. Ela se fechará sozinha em nove dias. Nada obriga a aceitá-la — mas se o coletivo quiser decidir, é agora.",
+    fr: "La proposition concernant {targetName} dans {libraryName} n'a pas encore abouti. Elle se refermera d'elle-même dans neuf jours. Rien n'oblige à l'accepter — mais si le collectif veut trancher, c'est maintenant.",
+    es: "La propuesta relativa a {targetName} en {libraryName} aún no se ha concluido. Se cerrará sola en nueve días. Nada obliga a aceptarla — pero si el colectivo quiere decidir, es ahora.",
+    en: "The proposal concerning {targetName} at {libraryName} has not yet gone through. It will close on its own in nine days. Nothing requires accepting it — but if the collective wants to decide, now is the time.",
+    it: "La proposta riguardante {targetName} presso {libraryName} non si è ancora conclusa. Si chiuderà da sé fra nove giorni. Nulla obbliga ad accettarla — ma se il collettivo vuole decidere, è adesso.",
+    de: "Der Vorschlag zu {targetName} in {libraryName} ist noch nicht durch. Er schließt sich in neun Tagen von selbst. Nichts zwingt zur Annahme — aber wenn das Kollektiv entscheiden will, dann jetzt.",
+    ca: "La proposta relativa a {targetName} a {libraryName} encara no ha reeixit. Es tancarà tota sola d'aquí a nou dies. Res no obliga a acceptar-la — però si el col·lectiu vol decidir, és ara.",
+    eo: "La propono pri {targetName} ĉe {libraryName} ankoraŭ ne sukcesis. Ĝi fermiĝos memstare post naŭ tagoj. Nenio devigas akcepti ĝin — sed se la kolektivo volas decidi, estas nun.",
+    nl: "Het voorstel over {targetName} bij {libraryName} is nog niet rond. Het sluit zichzelf over negen dagen. Niets verplicht om het te aanvaarden — maar als het collectief wil beslissen, is het nu.",
+    el: "Η πρόταση που αφορά το άτομο {targetName} στη {libraryName} δεν έχει ακόμη ολοκληρωθεί. Θα κλείσει από μόνη της σε εννέα ημέρες. Τίποτα δεν υποχρεώνει την αποδοχή της — αλλά αν το συλλογικό θέλει να αποφασίσει, είναι τώρα."
+  },
+  "team.invitation_expired.sub": {
+    "pt-BR": "Uma proposta de equipe expirou — {libraryName}",
+    fr: "Une proposition d'équipe a expiré — {libraryName}",
+    es: "Una propuesta de equipo ha caducado — {libraryName}",
+    en: "A team proposal has expired — {libraryName}",
+    it: "Una proposta di squadra è scaduta — {libraryName}",
+    de: "Ein Teamvorschlag ist abgelaufen — {libraryName}",
+    ca: "Una proposta d'equip ha caducat — {libraryName}",
+    eo: "Teama propono senvalidiĝis — {libraryName}",
+    nl: "Een teamvoorstel is vervallen — {libraryName}",
+    el: "Μια πρόταση ομάδας έληξε — {libraryName}"
+  },
+  "team.invitation_expired.intro": {
+    "pt-BR": "A proposta que dizia respeito a {targetName} em {libraryName} se fechou sem se concluir, por falta de resposta em trinta dias. Isso não é uma recusa: ninguém decidiu. Ela pode ser reapresentada quando o coletivo quiser.",
+    fr: "La proposition concernant {targetName} dans {libraryName} s'est refermée sans aboutir, faute de réponse en trente jours. Ce n'est pas un refus : personne n'a tranché. Elle peut être reproposée quand le collectif le voudra.",
+    es: "La propuesta relativa a {targetName} en {libraryName} se cerró sin concluirse, por falta de respuesta en treinta días. No es una negativa: nadie decidió. Puede volver a proponerse cuando el colectivo quiera.",
+    en: "The proposal concerning {targetName} at {libraryName} closed without going through, for want of an answer within thirty days. This is not a refusal: nobody decided. It can be proposed again whenever the collective wishes.",
+    it: "La proposta riguardante {targetName} presso {libraryName} si è chiusa senza concludersi, per mancanza di risposta in trenta giorni. Non è un rifiuto: nessuno ha deciso. Può essere riproposta quando il collettivo vorrà.",
+    de: "Der Vorschlag zu {targetName} in {libraryName} hat sich geschlossen, ohne durchzugehen — mangels Antwort binnen dreißig Tagen. Das ist keine Ablehnung: niemand hat entschieden. Er kann jederzeit erneut eingebracht werden.",
+    ca: "La proposta relativa a {targetName} a {libraryName} s'ha tancat sense reeixir, per manca de resposta en trenta dies. No és un rebuig: ningú no ha decidit. Es pot tornar a proposar quan el col·lectiu vulgui.",
+    eo: "La propono pri {targetName} ĉe {libraryName} fermiĝis sen sukcesi, pro manko de respondo dum tridek tagoj. Tio ne estas rifuzo: neniu decidis. Ĝi repropopeblas kiam la kolektivo volos.",
+    nl: "Het voorstel over {targetName} bij {libraryName} is gesloten zonder rond te komen, bij gebrek aan antwoord binnen dertig dagen. Dit is geen weigering: niemand heeft beslist. Het kan opnieuw worden voorgesteld wanneer het collectief dat wil.",
+    el: "Η πρόταση που αφορούσε το άτομο {targetName} στη {libraryName} έκλεισε χωρίς να ολοκληρωθεί, ελλείψει απάντησης μέσα σε τριάντα ημέρες. Δεν πρόκειται για άρνηση: κανείς δεν αποφάσισε. Μπορεί να υποβληθεί ξανά όποτε το θελήσει το συλλογικό."
+  },
   "team.invitation_coord_proposed.sub": {
     "pt-BR": "Uma passagem à coordenação a endossar — {libraryName}",
     fr: "Un passage à la coordination à endosser — {libraryName}",

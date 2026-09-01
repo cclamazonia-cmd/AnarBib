@@ -155,6 +155,10 @@ export async function handleTeamEvent(recordId) {
       result = await handleInvitationProposed(payload, library, targetUserId, actor, ctx, bt);
     } else if (event === "team.invitation_ready") {
       result = await handleInvitationReady(payload, library, targetUserId, ctx, bt);
+    } else if (event === "team.invitation_reminder") {
+      result = await handleInvitationReminder(payload, library, targetUserId, actor, ctx, bt);
+    } else if (event === "team.invitation_expired") {
+      result = await handleInvitationExpired(payload, library, targetUserId, actor, ctx, bt);
     } else if (event.startsWith("team.library_profile.")) {
       return await handleLibraryProfileEvent(row.id);
     } else {
@@ -1082,4 +1086,77 @@ async function handleInvitationReady(payload, library, targetUserId, ctx, bt) {
   const { html, text } = renderEmail({ locale, preheader: tit, title: tit, greeting: greeting(locale, target.first_name || undefined), introHtml, details: [], footerHtml: footerPadrao(ctx, locale), context: ctx });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   return { user_result: userResult };
+}
+
+// ── Relance et expiration du circuit collégial (GOUV-17b, 01/09/2026) ──
+//
+// Pourquoi ces deux-là existent : une proposition pouvait expirer sans que
+// personne ne l'apprenne. La fermeture à 30 jours était correcte, son silence
+// ne l'était pas — un silence tenant lieu de refus, alors que TOUTE nomination
+// au staff passe désormais par ce circuit.
+//
+// Destinataires : qui doit AGIR, plus qui a PROPOSÉ. Prévenir la personne qui a
+// proposé n'est pas lui infliger un rappel de plus : c'est lui rendre le seul
+// pouvoir qui vaille ici, celui d'aller parler aux gens (DOC-COLLECTIVE-1).
+
+async function invitationRecipients(payload, targetUserId, avecStaff) {
+  const libraryId = String(payload.library_id || "").trim();
+  const ids = new Set();
+  if (avecStaff) {
+    const { data: staff } = await supabaseAdmin.from("user_library_memberships")
+      .select("user_id").eq("library_id", libraryId).eq("status", "active")
+      .in("role", [
+        "librarian",
+        "coordenador"
+      ]);
+    for (const m of staff || []) if (m.user_id !== targetUserId) ids.add(m.user_id);
+  } else if (targetUserId) {
+    ids.add(targetUserId);
+  }
+  // Qui a proposé, dans les deux cas — sauf si c'est la personne visée.
+  const proposeur = String(payload.actor_user_id || "").trim();
+  if (proposeur && proposeur !== targetUserId) ids.add(proposeur);
+  if (ids.size === 0) return [];
+  const { data: profiles } = await supabaseAdmin.from("profiles")
+    .select("id,email,first_name,last_name,preferred_language").in("id", Array.from(ids));
+  return profiles || [];
+}
+
+async function envoiCollectif(recipients, subKey, introKey, vars, ctx, bt) {
+  const results = [];
+  for (const recipient of recipients){
+    const locale = recipient.preferred_language || null;
+    const userTarget = userTargetFromProfile(recipient);
+    const sub = `${tMail(locale, subKey, vars)} — ${bt}`;
+    const tit = tMail(locale, subKey, vars);
+    const introHtml = `<p>${tMail(locale, introKey, vars)}</p>`;
+    const { html, text } = renderEmail({ locale, preheader: tit, title: tit, greeting: greeting(locale, recipient.first_name || undefined), introHtml, details: [], footerHtml: footerPadrao(ctx, locale), context: ctx });
+    results.push(await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx));
+  }
+  return { user_results: results, recipients_count: recipients.length };
+}
+
+// Relance à J+21. Tant que le quorum n'est pas atteint, c'est le staff qui peut
+// agir ; une fois atteint, la personne concernée est la seule à pouvoir le faire.
+async function handleInvitationReminder(payload, library, targetUserId, actor, ctx, bt) {
+  const enAttenteDEndossement = String(payload.stage || "") === "pending_ratification";
+  const recipients = await invitationRecipients(payload, targetUserId, enAttenteDEndossement);
+  if (recipients.length === 0) return { recipients_count: 0, reason: "no_recipients" };
+  const invited = await loadProfile(targetUserId);
+  return await envoiCollectif(recipients,
+    "team.invitation_reminder.sub", "team.invitation_reminder.intro",
+    { libraryName: library?.name || library?.short_name || "", targetName: displayName(invited) },
+    ctx, bt);
+}
+
+// Expiration. Ni le staff au complet ni les endosseur·euses : seulement les deux
+// personnes que la proposition engageait.
+async function handleInvitationExpired(payload, library, targetUserId, actor, ctx, bt) {
+  const recipients = await invitationRecipients(payload, targetUserId, false);
+  if (recipients.length === 0) return { recipients_count: 0, reason: "no_recipients" };
+  const invited = await loadProfile(targetUserId);
+  return await envoiCollectif(recipients,
+    "team.invitation_expired.sub", "team.invitation_expired.intro",
+    { libraryName: library?.name || library?.short_name || "", targetName: displayName(invited) },
+    ctx, bt);
 }

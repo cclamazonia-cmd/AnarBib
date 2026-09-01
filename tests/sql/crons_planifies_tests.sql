@@ -91,6 +91,7 @@ BEGIN
     ('anarbib-tasks-detect-stale-recurrence-daily', '50 3 * * *',   true),
     ('anarbib-team-inactive-cleanup',               '0 4 * * *',    true),
     ('anarbib-team-invitations-expire',             '20 3 * * *',   true),
+    ('anarbib-team-invitations-remind',             '35 9 * * *',   true),
     ('anarbib-team-pending-removal-complete',       '0 * * * *',    true),
     ('anarbib_execute_profile_proposals',           '*/15 * * * *', true),
     ('anarbib_expire_profile_proposals',            '0 3 * * *',    true),
