@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.6 — 2026-09-01 (l'accueil aussi est collégial : T1 directe condamnée)
+**Version** : 1.7 — 2026-09-01 (v2 du saut collégial : UI de réglage, mails du saut, atterrissage du self-demote)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -15,6 +15,7 @@
 - **v1.4.1 (2026-08-26, même jour)** : correction d'une **erreur de la v1.4 elle-même**. La v1.4 annonçait, en §5.3, §6.1 et §6.5, qu'un·e administrateur·rice réseau pouvait *proposer* un passage à la coordination. C'était l'intention de la migration, pas son code : `fn_team_propose_invitation` s'ouvre sur `user_can_manage_library_notifications`, qui exige un membership **local** et ne connaît pas les admins réseau. La bascule de T2 sur ce circuit avait donc **supprimé** un droit dont disposait l'ancienne `fn_team_promote_to_coordenador` — et rendu impossible le rattrapage d'une biblio sans coordenador (§6.1). Rétabli par la migration `20260826160000`, pour le seul `p_role = 'coordenador'` : l'accueil garde la garde qu'il a toujours eue. Complété le même jour par `20260826180000` : `fn_team_list_invitations` était restée fermée aux admins réseau, qui obtenaient donc le message de succès de leur proposition puis **une liste vide** — proposer sans pouvoir relire est une action à l'aveugle. Registre : `GOUV-7`, `GOUV-10`.
 - **v1.5 (2026-09-01)** : **le saut collégial `reader` → `coordenador` devient possible, en opt-in par biblio** (`libraries.allow_direct_coordenador`, défaut désactivé). La précondition « on ne saute pas de reader à coordenador » était un **héritage d'implémentation** de l'ancienne `fn_team_promote_to_coordenador`, pas un principe — aucun de P1–P8 n'exige une échelle progressive, et deux asymétries la déjugeaient : T1 directe reste unilatérale, et `fn_team_self_demote` autorise la redescente directe jusqu'à `reader`. Pour un collectif horizontal (cas BTL), l'échelle imposait un grade de passage sans réalité dans le groupe (contraire à P1) et faisait exécuter en deux circuits une seule décision d'AG (P8). Le circuit collégial s'applique **intégralement** au saut : proposition → ratification selon quorum → acceptation ; cible = reader `status='active'` **strict** ; à l'acceptation, la ligne active inférieure se ferme quelle qu'elle soit, et l'audit porte `metadata.from_role`. Sections amendées : §3.1, §5.1, §5.3, §6.12 (nouveau), §10.1, §15.6 (nouveau). Décision : cadrage `CADRAGE_promotion_directe_reader_coordenador_2026-09-01` ; registre `GOUV-11`/`GOUV-12` (v0.8). Implémentation : migration `20260901162610`, tests `tests/sql/saut_collegial_tests.sql`, front `LeitoresPanel` + `LibraryContext`.
 - **v1.6 (2026-09-01, même jour)** : **T1 (`reader` → `librarian`) cesse d'être unilatérale.** Dernier chemin du modèle où UNE personne donnait un rôle staff à une autre sans endossement ni consentement — devenu indéfendable après GOUV-1 (T2 collégiale) et GOUV-11 (même le saut est collégial). `fn_team_promote_to_librarian` est condamnée (`collegiality_required`, même doctrine que GOUV-4) ; l'accueil passe par le circuit d'invitation, construit pour lui à l'origine. Examen GOUV-7 (les autorisations d'arrivée comparées à celles de départ) : l'admin réseau perd le pouvoir de fabriquer un·e librarian directement — perte **assumée**, son rattrapage d'une biblio sans staff actif passe désormais par le saut collégial (§6.4 réécrit ; l'ancienne voie (a) était de toute façon inopérante depuis la v1.4 faute de librarian *actif* à proposer). Sections amendées : §5.1, §5.2, §6.4, §6.8, §6.11, §7.3, §11.2, §15.1. Décision : `GOUV-13` (registre v0.9, arbitrage Xavier du 01/09 au soir). Implémentation : migration `20260901175233`, tests `tests/sql/t1_accueil_collegial_tests.sql`, front `LeitoresPanel`/`TeamActionModal`/`roles.js`/`teamMutations`.
+- **v1.7 (2026-09-01, même jour)** : **v2 du saut collégial — ergonomie** (`GOUV-14`, arbitrage Xavier : les trois reports de la v1, sans le verrou Q5). (a) **UI de réglage** dans l'onglet Équipe (`GovernanceSettings`) : réglages visibles de tout le staff (P5), bascule du saut réservée coordenador+/admin réseau, `team_admission_mode` en lecture seule ; la Q2 de GOUV-11 (« en base tant que la demande ne se répète pas ») est relevée. `LeitoresPanel` relit le réglage **en base** à chaque chargement — le cache de session du contexte serait en retard après une bascule. (b) **Les mails du circuit disent le saut** : variantes `team.invitation_coord_proposed_direct.intro` / `team.invitation_coord_ready_direct.intro` ; la détection se fait **côté EF** (membership librarian actif de la cible interrogé au moment de l'envoi), sans élargir les payloads SQL. (c) **Atterrissage du self-demote** : la modale offre le choix librarian/lecteur·rice, `reader` présélectionné quand l'audit de la personne porte `from_role='reader'` (elle n'a jamais exercé librarian). Sections amendées : §5.4, §6.12, §8.2. Aucune migration.
 
 ---
 
@@ -463,6 +464,11 @@ signe que cette complexité ne devait pas exister.
 
 **RPC pour auto-rétro** : `fn_team_self_demote(p_library_id uuid, p_target_role text DEFAULT 'librarian')`
 
+*(v1.7 — GOUV-14)* La RPC accepte aussi `p_target_role = 'reader'` depuis l'origine ; l'UI offre
+désormais le **choix de l'atterrissage** (librarian ou lecteur·rice), et présélectionne `reader`
+quand l'audit de la personne porte `metadata.from_role = 'reader'` (arrivée à la coordination par
+saut collégial : elle n'a jamais exercé librarian).
+
 **Effet self-demote** :
 - La membership `coordenador` actuelle passe à `inactive` (avec `restricted_reason='self_demoted'` ou métadonnée équivalente)
 - Si la personne avait déjà une membership `librarian` active, elle est conservée
@@ -685,13 +691,17 @@ Les RPC de cette spec vérifient en début d'exécution le `governance_mode` de 
   réévaluer si l'une le fait.
 - **Redescente d'une personne venue directement de `reader`** : `fn_team_self_demote` accepte
   `reader` comme cible — la personne n'est pas obligée de « redescendre » sur un rôle
-  (`librarian`) qu'elle n'a jamais exercé.
+  (`librarian`) qu'elle n'a jamais exercé. *(v1.7)* La modale de self-demote offre le choix de
+  l'atterrissage, et présélectionne `reader` quand l'audit de la personne porte
+  `from_role='reader'`.
 - **Admin réseau** : son droit de *proposer* une coordination (§5.3, garde `20260826160000`)
   s'applique mécaniquement au saut **si et seulement si** la biblio a activé le réglage. C'est un
   choix documenté, pas un effet de bord.
-- **Activation du réglage** : en base, sur décision du collectif (précédent :
-  `team_admission_mode`, qui n'a pas non plus d'UI). Une UI de réglage ne sera envisagée que si
-  la demande se répète (GOUV-11, Q2).
+- **Activation du réglage** *(réécrit v1.7 — GOUV-14)* : dans l'onglet Équipe, bloc « Réglages de
+  gouvernance » — visible de tout le staff (P5), bascule réservée à la coordination (et à l'admin
+  réseau). La confirmation reprend le « prix du saut » (§5.3) : c'est un choix politique du
+  collectif, la bascule n'est que son exécution (P8). `team_admission_mode` y est montré en
+  lecture seule : changer le quorum d'admission reste un geste en base, sur décision du collectif.
 
 ---
 
@@ -798,6 +808,13 @@ Les events suivent le préfixe `team.*` (cohérent avec `loan.*`, `res.*`, `wf.*
 | `team.removal_completed` | T5 (J+7) | personne + coordenadores |
 | `team.invitation_proposed` *(T2 depuis v1.4)* | T1/T2 — proposition déposée | coordenadores de la biblio, à endosser |
 | `team.invitation_ready` *(T2 depuis v1.4)* | T1/T2 — quorum atteint | la personne concernée, à accepter |
+
+*(v1.7)* Pour une proposition de coordination visant une personne **sans membership `librarian`
+actif** (saut collégial, GOUV-11), les deux events ci-dessus utilisent des intros dédiées —
+`team.invitation_coord_proposed_direct.intro` et `team.invitation_coord_ready_direct.intro` — qui
+disent le saut : l'endosseur·euse endosse en connaissance de cause, la personne visée sait qu'elle
+entrerait directement à la coordination. La détection est faite par l'EF au moment de l'envoi
+(requête sur le membership de la cible), les payloads SQL sont inchangés.
 | `team.suspended` | T6 | personne + coordenadores |
 | `team.unsuspended` | T7 | personne + coordenadores |
 | `team.inactive_warning_30d` | T9 (J-30) | personne uniquement |
