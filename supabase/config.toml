@@ -35,7 +35,7 @@ project_id = "anarbib"
 #
 # Inventaire illustratif au 2026-05-07 :
 #
-#   verify_jwt: false  (déclarées ci-dessous — 31 au 30/08/2026)
+#   verify_jwt: false  (déclarées ci-dessous — 36 au 01/09/2026)
 #     - notify-event, notify-internal-task, notify-library-request,
 #       notify-weekly-report, notify-network-weekly-report,
 #       notify-mid-loan-reading, notify-document-permission-request,
@@ -46,7 +46,7 @@ project_id = "anarbib"
 #        = endpoint OAI-PMH moissonnable par des harvesters externes sans JWT,
 #        gate applicatif via fn_oai_harvestable_* — paquet OAI-O2, 12/06/2026)
 #
-#   verify_jwt: true   (AUCUNE déclaration nécessaire — 17 au 30/08/2026)
+#   verify_jwt: true   (AUCUNE déclaration nécessaire — 15 au 01/09/2026)
 #     - register (création de compte, JWT Supabase obligatoire)
 #     - probe-partner-catalog
 #     - catalog_metadata_lookup
@@ -200,4 +200,24 @@ verify_jwt = false
 # une liseuse ne porte pas de JWT. La fonction ne sert QUE les ressources
 # access_scope='publico' actives — meme predicat que documents_numeriques_tests.
 [functions.opds]
+verify_jwt = false
+
+# Les trois portes ouvertes AVANT toute session : se connecter, créer un compte,
+# récupérer son mot de passe. Elles étaient en verify_jwt=true, ce qui ne
+# protégeait rien : la clé qui satisfaisait ce contrôle est la clé anon,
+# publique par nature et embarquée dans le bundle du front. Le contrôle réel
+# est dans chaque fonction — auth_rate_limits pour login et
+# request-password-reset, défi Altcha pour register (comme altcha-challenge
+# ci-dessus).
+#
+# Le passage à false est un PRÉALABLE à la bascule du front vers la clé
+# publiable : celle-ci n'est pas un JWT, la vérification de plateforme la
+# rejetterait en 401 et personne ne pourrait plus se connecter (01/09/2026).
+[functions.login]
+verify_jwt = false
+
+[functions.register]
+verify_jwt = false
+
+[functions.request-password-reset]
 verify_jwt = false

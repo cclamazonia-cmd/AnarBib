@@ -83,7 +83,15 @@ jobs:
       - name: Build Vite
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # Renommage du 01/09/2026 : le code lit VITE_SUPABASE_PUBLISHABLE_KEY.
+          # Le secret Forgejo garde son nom historique VITE_SUPABASE_ANON_KEY —
+          # même contenu, on évite ainsi qu'un renommage de secret et un merge
+          # doivent se produire au même instant. ATTENTION : prebuild (snapshot
+          # catalogue + thésaurus SKOS) fait exit 0 si la variable manque — un
+          # nom désaccordé ne casse pas le build, il publie un instantané
+          # périmé EN SILENCE. À terme : renommer le secret dans les réglages
+          # Forgejo puis aligner cette ligne.
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           # Visio d'entraide : instance Jitsi militante Autistici/Inventati (accord A/I
           # du 16/06 — « usage direct », pas d'embedding : on ouvre en onglet dédié).
           # Valeur publique (pas un secret). Repli meet.jit.si si non défini.

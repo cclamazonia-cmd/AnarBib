@@ -653,7 +653,7 @@ export default function ImportacoesPage() {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ library_id: libraryId, format: exportFormat }),
@@ -723,7 +723,7 @@ export default function ImportacoesPage() {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ library_id: libraryId, format: fondsFormat }),
@@ -794,7 +794,7 @@ export default function ImportacoesPage() {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ source_library_id: libraryId, target_library_id: fondsTarget }),
@@ -926,7 +926,7 @@ export default function ImportacoesPage() {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ received_asset_id: asset.received_asset_id, book_id: book.book_id, mode }),
@@ -974,7 +974,7 @@ export default function ImportacoesPage() {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ asset_id: asset.asset_id }),

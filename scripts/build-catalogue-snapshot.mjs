@@ -50,7 +50,7 @@ function chargerEnvLocal() {
 chargerEnvLocal();
 
 const URL_BASE = (process.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
-const CLE_ANON = process.env.VITE_SUPABASE_ANON_KEY || '';
+const CLE_ANON = process.env.VITE_SUPABASE_PUBLISHABLE_KEY || '';
 
 // Champs retenus : de quoi chercher et afficher une notice lisible. On écarte
 // volontairement le superflu pour garder le fichier léger (il est téléchargé
@@ -70,7 +70,7 @@ function abandon(raison) {
 }
 
 if (!URL_BASE || !CLE_ANON) {
-  abandon('VITE_SUPABASE_URL ou VITE_SUPABASE_ANON_KEY absent de l\'environnement');
+  abandon('VITE_SUPABASE_URL ou VITE_SUPABASE_PUBLISHABLE_KEY absent de l\'environnement');
 }
 
 const entetes = {

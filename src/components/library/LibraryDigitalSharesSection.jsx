@@ -194,7 +194,7 @@ export default function LibraryDigitalSharesSection({ libraryId, canEdit = true 
       const token = sess?.session?.access_token;
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/read-ill-shared-asset`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token || import.meta.env.VITE_SUPABASE_ANON_KEY}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
         body: JSON.stringify({ share_id: s.id }),
       });
       const payload = await res.json();

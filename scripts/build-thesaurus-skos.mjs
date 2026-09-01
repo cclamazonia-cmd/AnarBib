@@ -57,7 +57,7 @@ function chargerEnvLocal() {
 chargerEnvLocal();
 
 const URL_BASE = process.env.VITE_SUPABASE_URL;
-const CLE_ANON = process.env.VITE_SUPABASE_ANON_KEY;
+const CLE_ANON = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 async function principal() {
   if (!URL_BASE || !CLE_ANON) {

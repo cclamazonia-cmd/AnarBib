@@ -228,7 +228,7 @@ C'est le seul test qui prouve quelque chose. À la racine du dépôt, créez
 
 ```
 VITE_SUPABASE_URL=http://localhost
-VITE_SUPABASE_ANON_KEY=<ANON_KEY>
+VITE_SUPABASE_PUBLISHABLE_KEY=<ANON_KEY>
 ```
 
 Puis :

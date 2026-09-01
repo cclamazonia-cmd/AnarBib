@@ -249,7 +249,7 @@ export default function ReaderPage() {
         // superflu dès lors qu'on passe Authorization: Bearer <token>).
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData?.session?.access_token;
-        const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+        const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '';
         const headers = { 'Content-Type': 'application/json' };
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;

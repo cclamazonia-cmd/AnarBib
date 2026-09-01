@@ -297,7 +297,7 @@ The codebase mirrors the structure above. Key directories:
 ```
 # .env.local
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJ...
+VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...
 ```
 
 Les clés (`anon`, `service_role`) vivent dans `.env`/`.env.local`, **jamais** dans le code. La project ref n'est pas committée (voir `supabase/config.toml` pour le `verify_jwt` par fonction).
@@ -311,7 +311,7 @@ Les clés (`anon`, `service_role`) vivent dans `.env`/`.env.local`, **jamais** d
 ```
 # .env.local
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJ...
+VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...
 ```
 
 Keys (`anon`, `service_role`) live in `.env`/`.env.local`, **never** in code. The project ref is not committed (see `supabase/config.toml` for per-function `verify_jwt`).

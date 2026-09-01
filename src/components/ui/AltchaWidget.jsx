@@ -47,7 +47,7 @@ export default function AltchaWidget({ onSolved, resetKey = 0 }) {
     try {
       const base = import.meta.env.VITE_SUPABASE_URL;
       const r = await fetch(`${base}/functions/v1/${FONCTION_DEFI}`, {
-        headers: { apikey: import.meta.env.VITE_SUPABASE_ANON_KEY },
+        headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
       });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       defi = await r.json();
