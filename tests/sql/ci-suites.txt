@@ -21,6 +21,11 @@ tests/sql/b14_oracle_existence_forme_tests.sql
 # donnerait un écran mort), deux fonctions sans appelant en session fermées dans
 # le droit. Un correctif qui « uniformiserait » les quatre casse un des deux.
 tests/sql/b14_gardes_ecriture_tests.sql
+# B14 paquet 5 : « es-tu staff ? » et « où ? » doivent désigner la MÊME
+# bibliothèque. 37 fonctions lisent ces deux colonnes de `api.my_access`
+# ensemble, dont 24 qui écrivent. Le correctif tient à un mot dans un ORDER BY :
+# T3 garde la forme, T1 garde l'effet, et il faut les deux.
+tests/sql/my_access_biblio_effective_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
