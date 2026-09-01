@@ -14,6 +14,14 @@ function resolveRoute(n) {
       return '/conta';
     case 'library_event':
       return '/conta?tab=eventos';
+    // Circuit collégial (GOUV-17) : deux liens et non un seul, parce que le
+    // geste attendu diffère. Qui doit ENDOSSER va à l'écran d'équipe ; la
+    // personne concernée, qui doit ACCEPTER, va à ses bibliothèques. Les
+    // envoyer au même endroit obligerait l'une des deux à chercher.
+    case 'team_invitation_ratify':
+      return '/biblioteca';
+    case 'team_invitation_accept':
+      return '/conta?tab=biblios';
     default:
       return null;
   }
