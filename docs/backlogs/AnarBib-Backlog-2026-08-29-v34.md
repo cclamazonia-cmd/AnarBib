@@ -99,7 +99,7 @@ Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent dat
 
 | | | |
 |---|---:|---|
-| Bibliothèques | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` n'est plus en base** — elle y figurait le 29/08 avec 0 fonds. La suppression n'a laissé **aucun orphelin** (contrôlé sur les 8 tables qui portent un `library_id` sans clé étrangère), mais elle n'est tracée nulle part : à confirmer |
+| Bibliothèques | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` a été retirée du réseau** — suppression volontaire confirmée par la coordination le 01/09, tracée dans `NOTE_retrait_cira_marseille_2026-09-01`. Cascade propre (0 fonds, 0 orphelin) ; thème conservé en storage, source d'import close |
 | Comptes | **16** | **18** appartenances actives — elles étaient 28 le 29/08 |
 | Administrateur·rices réseau | **1** | **c'est l'item A1, et il commande tout le reste** |
 | Circulation vivante | **6 / 19 / 22 / 2** | emprunts / réservations / consultations / PEB — dernière écriture d'emprunt le 31/08 |

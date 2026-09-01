@@ -577,8 +577,8 @@
             },
             "4",
             {
-              "fr": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` n'est plus en base** — elle y figurait le 29/08 avec 0 fonds. La suppression n'a laissé **aucun orphelin** (contrôlé sur les 8 tables qui portent un `library_id` sans clé étrangère), mais elle n'est tracée nulle part : à confirmer",
-              "pt": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` não está mais no banco** — constava em 29/08 com 0 acervo. A remoção não deixou **nenhum órfão** (verificado nas 8 tabelas que portam `library_id` sem chave estrangeira), mas não está registrada em lugar nenhum: a confirmar"
+              "fr": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` a été retirée du réseau** — suppression volontaire confirmée par la coordination le 01/09, tracée dans `NOTE_retrait_cira_marseille_2026-09-01`. Cascade propre (0 fonds, 0 orphelin) ; thème conservé en storage, source d'import close",
+              "pt": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` foi retirada da rede** — remoção voluntária confirmada pela coordenação em 01/09, registrada em `NOTE_retrait_cira_marseille_2026-09-01`. Cascata limpa (0 acervo, 0 órfão); tema conservado no storage, fonte de importação encerrada"
             }
           ],
           [

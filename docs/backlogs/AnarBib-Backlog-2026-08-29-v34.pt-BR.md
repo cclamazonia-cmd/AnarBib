@@ -99,7 +99,7 @@ Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior 
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` não está mais no banco** — constava em 29/08 com 0 acervo. A remoção não deixou **nenhum órfão** (verificado nas 8 tabelas que portam `library_id` sem chave estrangeira), mas não está registrada em lugar nenhum: a confirmar |
+| Bibliotecas | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` foi retirada da rede** — remoção voluntária confirmada pela coordenação em 01/09, registrada em `NOTE_retrait_cira_marseille_2026-09-01`. Cascata limpa (0 acervo, 0 órfão); tema conservado no storage, fonte de importação encerrada |
 | Contas | **16** | **18** vínculos ativos — eram 28 em 29/08 |
 | Administrador(a/e)s da rede | **1** | **é o item A1, e ele comanda todo o resto** |
 | Circulação viva | **6 / 19 / 22 / 2** | empréstimos / reservas / consultas / EEB — última escrita de empréstimo em 31/08 |
