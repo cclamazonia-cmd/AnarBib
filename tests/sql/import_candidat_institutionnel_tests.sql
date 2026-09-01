@@ -206,7 +206,13 @@ BEGIN
       PERFORM public.fn_import_ingest_candidate(v_cand, v_other_src);
       v_failed := v_failed+1; v_failures := v_failures||(v_t||' : aucun refus');
     EXCEPTION WHEN OTHERS THEN
-      IF position('nao pertence' in SQLERRM) > 0 THEN v_passed := v_passed+1;
+      -- Le libellé du refus a changé le 01/09/2026 (B14) : il disait « nao
+      -- pertence a esta biblioteca », il dit désormais « introuvable », le même
+      -- message que pour une source qui n'existe pas. C'est délibéré — deux
+      -- messages distincts sur un identifiant séquentiel laissaient compter les
+      -- sources du réseau. Ce test vérifie toujours la MÊME chose : que la
+      -- source d'une autre bibliothèque est refusée. Seul le mot attendu suit.
+      IF position('introuvable' in SQLERRM) > 0 THEN v_passed := v_passed+1;
       ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : mauvaise erreur '||SQLERRM); END IF;
     END;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' (fixture) : '||SQLERRM); END;
