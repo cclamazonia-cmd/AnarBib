@@ -48,6 +48,7 @@ import { useTeamMutations } from '@/lib/teamMutations';
 import TeamActionsMenu from './TeamActionsMenu';
 import TeamActionModal from './TeamActionModal';
 import TeamInviteModal from './TeamInviteModal';
+import GovernanceSettings from './GovernanceSettings';
 import { formatPublicId } from '@/lib/publicId';
 
 // Note : la liste des rôles staff filtrés (librarian/coord/admin) est
@@ -288,6 +289,12 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
         <div className={`ab-team-toast ab-team-toast--${toast.kind}`}>
           {toast.text}
         </div>
+      )}
+
+      {/* ── Réglages de gouvernance (v2 saut collégial, GOUV-14) ──
+          Visible à tout le staff (P5) ; bascule réservée coordenador+. */}
+      {scope === 'library' && libraryId && (
+        <GovernanceSettings libraryId={libraryId} />
       )}
 
       {/* ── Bouton « accueillir dans l'équipe » (lot 3) ──── */}

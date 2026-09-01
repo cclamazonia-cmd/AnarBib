@@ -34,7 +34,11 @@ export default function LeitoresPanel({ libraryId }) {
   const { formatMessage: t, locale } = useIntl();
   const { role, libraryName, allow_direct_coordenador } = useLibrary();
   const canPromote = role === 'coordenador' || role === 'administrador';
-  const canProposeCoord = canPromote && allow_direct_coordenador === true;
+  // v2 (GOUV-14) : le réglage est relu en base à chaque chargement — le
+  // contexte de session peut être en retard après une bascule dans l'onglet
+  // Équipe (GovernanceSettings). Valeur de départ : celle du contexte.
+  const [allowDirect, setAllowDirect] = useState(allow_direct_coordenador === true);
+  const canProposeCoord = canPromote && allowDirect;
 
   const [readers, setReaders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,6 +60,12 @@ export default function LeitoresPanel({ libraryId }) {
         .order('created_at', { ascending: false });
       if (error) throw error;
       setReaders(data || []);
+      const { data: libRow } = await supabase
+        .from('libraries')
+        .select('allow_direct_coordenador')
+        .eq('id', libraryId)
+        .maybeSingle();
+      if (libRow) setAllowDirect(libRow.allow_direct_coordenador === true);
     } catch (err) {
       console.warn('LeitoresPanel load:', err);
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });

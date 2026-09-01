@@ -32,6 +32,7 @@ import { useIntl } from 'react-intl';
 import Modal from '@/components/ui/Modal';
 import { useTeamMutations } from '@/lib/teamMutations';
 import { localizeError } from '@/lib/localizeError';
+import { supabase } from '@/lib/supabase';
 
 export default function TeamActionModal({
   isOpen,
@@ -46,14 +47,40 @@ export default function TeamActionModal({
   const mutations = useTeamMutations();
   const [reason, setReason] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  // v2 saut collégial (GOUV-14) : rôle d'atterrissage du self-demote.
+  const [demoteTarget, setDemoteTarget] = useState('librarian');
 
   // Reset interne à chaque ouverture
   useEffect(() => {
     if (isOpen) {
       setReason('');
       setErrorMsg('');
+      setDemoteTarget('librarian');
     }
   }, [isOpen]);
+
+  // v2 (GOUV-14) : une personne arrivée à la coordination par saut direct
+  // (audit from_role='reader') n'a jamais exercé librarian — on lui propose
+  // reader par défaut. L'audit est lisible par le staff actif (P5).
+  useEffect(() => {
+    if (!isOpen || action?.action !== 'self_demote' || !membership?.library_id) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('library_membership_audit')
+        .select('metadata')
+        .eq('library_id', membership.library_id)
+        .eq('target_user_id', membership.user_id)
+        .eq('action', 'promoted_to_coordenador')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!cancelled && data?.metadata?.from_role === 'reader') {
+        setDemoteTarget('reader');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isOpen, action?.action, membership?.library_id, membership?.user_id]);
 
   if (!isOpen || !action || !membership) return null;
 
@@ -94,7 +121,7 @@ export default function TeamActionModal({
         break;
       }
       case 'self_demote':
-        result = await mutations.selfDemote(membership.library_id, 'librarian');
+        result = await mutations.selfDemote(membership.library_id, demoteTarget);
         break;
       case 'suspend':
         result = await mutations.suspendMember(
@@ -159,6 +186,25 @@ export default function TeamActionModal({
         {action.action === 'self_demote' && (
           <div className="ab-team-modal-warning">
             {t({ id: 'team.modal.warningSelfDemote' })}
+          </div>
+        )}
+
+        {/* ── Rôle d'atterrissage du self-demote (v2, GOUV-14) ── */}
+        {action.action === 'self_demote' && (
+          <div className="ab-team-modal-field">
+            <label htmlFor="ab-team-modal-demote-target" className="ab-team-modal-label">
+              {t({ id: 'team.modal.selfDemote.targetLabel' })}
+            </label>
+            <select
+              id="ab-team-modal-demote-target"
+              className="ab-team-modal-textarea"
+              value={demoteTarget}
+              onChange={(e) => setDemoteTarget(e.target.value)}
+              style={{ minHeight: 'auto' }}
+            >
+              <option value="librarian">{t({ id: 'team.modal.selfDemote.toLibrarian' })}</option>
+              <option value="reader">{t({ id: 'team.modal.selfDemote.toReader' })}</option>
+            </select>
           </div>
         )}
 

@@ -1014,11 +1014,31 @@ async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) 
 // Le payload porte role_proposed : 'librarian' (accueil) ou 'coordenador'
 // (passage à la coordination). Les textes diffèrent — accueillir quelqu'un et
 // lui confier la coordination ne sont pas le même acte.
+// v2 saut collégial (GOUV-14) : une proposition de coordination qui vise une
+// personne SANS membership librarian actif est un saut (GOUV-11, opt-in par
+// biblio) — l'endosseur·euse doit le savoir, et la personne visée aussi. On le
+// détecte ici plutôt que d'élargir le payload SQL : le mail part au moment de
+// la proposition/ratification, quand le membership n'a pas encore bougé.
+async function invitationIsDirectJump(libraryId, targetUserId) {
+  const { data } = await supabaseAdmin
+    .from("user_library_memberships")
+    .select("id")
+    .eq("library_id", libraryId)
+    .eq("user_id", targetUserId)
+    .eq("role", "librarian")
+    .eq("status", "active")
+    .maybeSingle();
+  return !data;
+}
+
 async function handleInvitationProposed(payload, library, targetUserId, actor, ctx, bt) {
   const libraryId = String(payload.library_id || "").trim();
   const isCoord = String(payload.role_proposed || "librarian") === "coordenador";
+  const isDirect = isCoord && await invitationIsDirectJump(libraryId, targetUserId);
   const subKey = isCoord ? "team.invitation_coord_proposed.sub" : "team.invitation_proposed.sub";
-  const introKey = isCoord ? "team.invitation_coord_proposed.intro" : "team.invitation_proposed.intro";
+  const introKey = isDirect
+    ? "team.invitation_coord_proposed_direct.intro"
+    : (isCoord ? "team.invitation_coord_proposed.intro" : "team.invitation_proposed.intro");
   const invited = await loadProfile(targetUserId);
   const libraryName = library?.name || library?.short_name || "";
   const targetName = displayName(invited);
@@ -1051,8 +1071,11 @@ async function handleInvitationReady(payload, library, targetUserId, ctx, bt) {
   const userTarget = userTargetFromProfile(target);
   const libraryName = library?.name || library?.short_name || "";
   const isCoord = String(payload.role_proposed || "librarian") === "coordenador";
+  const isDirect = isCoord && await invitationIsDirectJump(String(payload.library_id || "").trim(), targetUserId);
   const subKey = isCoord ? "team.invitation_coord_ready.sub" : "team.invitation_ready.sub";
-  const introKey = isCoord ? "team.invitation_coord_ready.intro" : "team.invitation_ready.intro";
+  const introKey = isDirect
+    ? "team.invitation_coord_ready_direct.intro"
+    : (isCoord ? "team.invitation_coord_ready.intro" : "team.invitation_ready.intro");
   const sub = `${tMail(locale, subKey, { libraryName })} — ${bt}`;
   const tit = tMail(locale, subKey, { libraryName });
   const introHtml = `<p>${tMail(locale, introKey, { libraryName })}</p>`;
