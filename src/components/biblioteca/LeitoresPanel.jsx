@@ -19,11 +19,19 @@ import { assertRpcOk } from '../../lib/rpcStatus.js';
  *   - La promotion lecteur → bibliothécaire est une action de prise de
  *     responsabilité ; elle mérite son propre espace, distinct du panneau
  *     équipe où les rétrogradations et exclusions seront gérées.
+ *
+ * Saut collégial (GOUV-11, 01/09/2026) : si la biblio a activé
+ * allow_direct_coordenador, un·e coordenador peut aussi PROPOSER un·e
+ * lecteur·rice à la coordination — via fn_team_propose_invitation
+ * (p_role='coordenador') : le circuit collégial complet s'applique
+ * (endossement selon quorum, puis acceptation par la personne concernée).
+ * Rien n'est promu ici : on dépose une proposition.
  */
 export default function LeitoresPanel({ libraryId }) {
   const { formatMessage: t, locale } = useIntl();
-  const { role, libraryName } = useLibrary();
+  const { role, libraryName, allow_direct_coordenador } = useLibrary();
   const canPromote = role === 'coordenador' || role === 'administrador';
+  const canProposeCoord = canPromote && allow_direct_coordenador === true;
 
   const [readers, setReaders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -38,7 +46,7 @@ export default function LeitoresPanel({ libraryId }) {
     try {
       const { data, error } = await supabase
         .from('user_library_memberships')
-        .select('user_id, role, status, is_primary, created_at, profiles:user_id(email, first_name, last_name, preferred_language)')
+        .select('user_id, role, status, is_primary, created_at, profiles:user_id(public_id, email, first_name, last_name, preferred_language)')
         .eq('library_id', libraryId)
         .eq('role', 'reader')
         .eq('status', 'active')
@@ -70,6 +78,31 @@ export default function LeitoresPanel({ libraryId }) {
       assertRpcOk(rpcData);
       setMsg({ text: t({ id: 'biblioteca.leitores.promoteSuccess' }, { name }), kind: 'ok' });
       await load();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setBusyUserId(null);
+    }
+  }
+
+  // GOUV-11 — dépôt d'une proposition de coordination (saut collégial).
+  // La RPC porte toutes les gardes (réglage biblio, reader actif strict,
+  // quorum) ; ici on ne fait que déposer et informer.
+  async function proposeCoordination(reader) {
+    const name = `${reader.profiles?.first_name||''} ${reader.profiles?.last_name||''}`.trim() || reader.profiles?.email || '—';
+    const confirmMsg = t({ id: 'biblioteca.leitores.proposeCoordConfirm' }, { name });
+    if (!window.confirm(confirmMsg)) return;
+    setBusyUserId(reader.user_id);
+    setMsg({ text: '', kind: '' });
+    try {
+      const { data: rpcData, error } = await supabase.rpc('fn_team_propose_invitation', {
+        p_library_id: libraryId,
+        p_invited_public_id: reader.profiles?.public_id,
+        p_role: 'coordenador',
+      });
+      if (error) throw error;
+      assertRpcOk(rpcData);
+      setMsg({ text: t({ id: 'biblioteca.leitores.proposeCoordSuccess' }, { name }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
@@ -210,18 +243,30 @@ export default function LeitoresPanel({ libraryId }) {
                 <div style={{ textAlign:'center', fontSize:'.82rem', color:'var(--brand-muted)' }}>
                   {r.created_at ? new Date(r.created_at).toLocaleDateString(locale) : '—'}
                 </div>
-                <div style={{ textAlign:'center' }}>
+                <div style={{ textAlign:'center', display:'flex', gap:6, justifyContent:'center', flexWrap:'wrap' }}>
                   {canPromote ? (
-                    <button
-                      className="cat-btn primary"
-                      style={{ fontSize:'.78rem', padding:'4px 10px' }}
-                      onClick={() => promoteToLibrarian(r)}
-                      disabled={isBusy}
-                    >
-                      {isBusy
-                        ? t({ id: 'common.loading' })
-                        : t({ id: 'biblioteca.leitores.promote' })}
-                    </button>
+                    <>
+                      <button
+                        className="cat-btn primary"
+                        style={{ fontSize:'.78rem', padding:'4px 10px' }}
+                        onClick={() => promoteToLibrarian(r)}
+                        disabled={isBusy}
+                      >
+                        {isBusy
+                          ? t({ id: 'common.loading' })
+                          : t({ id: 'biblioteca.leitores.promote' })}
+                      </button>
+                      {canProposeCoord && (
+                        <button
+                          className="cat-btn secondary"
+                          style={{ fontSize:'.78rem', padding:'4px 10px' }}
+                          onClick={() => proposeCoordination(r)}
+                          disabled={isBusy}
+                        >
+                          {t({ id: 'biblioteca.leitores.proposeCoord' })}
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <span style={{ fontSize:'.75rem', color:'var(--brand-muted)' }}>—</span>
                   )}

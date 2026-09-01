@@ -279,3 +279,8 @@ tests/sql/rappels_echeance_tests.sql
 # n'était couvert. Elle énonce ce que produit le DÉPÔT rejoué, pas l'état de la
 # production — son bilan le redit à chaque passage.
 tests/sql/crons_planifies_tests.sql
+
+# Saut collégial reader -> coordenador (GOUV-11/GOUV-12, 01/09/2026) :
+# réglage OFF par défaut, reader actif strict, circuit complet, revérification
+# à l'acceptation, non-régression de l'échelle. Réf. 20260901162610.
+tests/sql/saut_collegial_tests.sql

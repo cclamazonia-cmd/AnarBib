@@ -24,6 +24,8 @@ const DEFAULT_CONTEXT = {
   membership_enabled: false,
   // Carte-lecteur (chantier mobile, 28/05/2026) : capacite activable par biblio.
   reader_cards_enabled: false,
+  // Saut collegial reader -> coordenador (GOUV-11, 01/09/2026) : opt-in par biblio.
+  allow_direct_coordenador: false,
 };
 
 // Hierarchie effective des roles AnarBib v0.3.
@@ -171,7 +173,7 @@ export function LibraryProvider({ children }) {
       const [membershipsResult, networkAdminResult] = await Promise.all([
         supabase
           .from('user_library_memberships')
-          .select('library_id, role, is_primary, libraries(id, slug, name, short_name, catalog_mode, circulation_mode, network_mode, governance_mode, membership_enabled, reader_cards_enabled, theme_slug)')
+          .select('library_id, role, is_primary, libraries(id, slug, name, short_name, catalog_mode, circulation_mode, network_mode, governance_mode, membership_enabled, reader_cards_enabled, allow_direct_coordenador, theme_slug)')
           .eq('user_id', user.id)
           .eq('status', 'active'),
         supabase
@@ -225,6 +227,7 @@ export function LibraryProvider({ children }) {
             governance_mode: lib.governance_mode || DEFAULT_CONTEXT.governance_mode,
             membership_enabled: lib.membership_enabled === true,
             reader_cards_enabled: lib.reader_cards_enabled === true,
+            allow_direct_coordenador: lib.allow_direct_coordenador === true,
           };
           setCtx(next);
           writeToSession(next);
@@ -249,6 +252,7 @@ export function LibraryProvider({ children }) {
           governance_mode: lib.governance_mode || DEFAULT_CONTEXT.governance_mode,
           membership_enabled: lib.membership_enabled === true,
           reader_cards_enabled: lib.reader_cards_enabled === true,
+          allow_direct_coordenador: lib.allow_direct_coordenador === true,
         };
         setCtx(next);
         writeToSession(next);
@@ -276,6 +280,7 @@ export function LibraryProvider({ children }) {
       governance_mode: lib?.governance_mode || DEFAULT_CONTEXT.governance_mode,
       membership_enabled: lib?.membership_enabled === true,
       reader_cards_enabled: lib?.reader_cards_enabled === true,
+      allow_direct_coordenador: lib?.allow_direct_coordenador === true,
     };
     setCtx(next);
     writeToSession(next);
