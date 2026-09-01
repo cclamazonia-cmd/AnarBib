@@ -45,6 +45,11 @@ tests/sql/oracle_existence_ordre_tests.sql
 # Un GRANT distrait sur fn_internal_get_vault_secret donnerait TOUS les secrets
 # du vault a tout compte du reseau : c est le T2, et il verifie aussi PUBLIC.
 tests/sql/salle_des_machines_tests.sql
+# Arbitrage des periodiques aligne sur celui des livres (decision du 01/09,
+# preavis envoye aux quatre personnes AVANT le deploiement). T3 tient l autre
+# moitie de la decision — cataloguer et signaler restent ouverts — et T4 garde
+# que les deux familles refusent dans les memes termes.
+tests/sql/arbitrage_periodiques_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
