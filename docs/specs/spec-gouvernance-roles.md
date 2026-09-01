@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.7 — 2026-09-01 (v2 du saut collégial : UI de réglage, mails du saut, atterrissage du self-demote)
+**Version** : 1.8 — 2026-09-01 (le rôle quitté cesse de se confondre avec le compte délaissé)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -16,6 +16,7 @@
 - **v1.5 (2026-09-01)** : **le saut collégial `reader` → `coordenador` devient possible, en opt-in par biblio** (`libraries.allow_direct_coordenador`, défaut désactivé). La précondition « on ne saute pas de reader à coordenador » était un **héritage d'implémentation** de l'ancienne `fn_team_promote_to_coordenador`, pas un principe — aucun de P1–P8 n'exige une échelle progressive, et deux asymétries la déjugeaient : T1 directe reste unilatérale, et `fn_team_self_demote` autorise la redescente directe jusqu'à `reader`. Pour un collectif horizontal (cas BTL), l'échelle imposait un grade de passage sans réalité dans le groupe (contraire à P1) et faisait exécuter en deux circuits une seule décision d'AG (P8). Le circuit collégial s'applique **intégralement** au saut : proposition → ratification selon quorum → acceptation ; cible = reader `status='active'` **strict** ; à l'acceptation, la ligne active inférieure se ferme quelle qu'elle soit, et l'audit porte `metadata.from_role`. Sections amendées : §3.1, §5.1, §5.3, §6.12 (nouveau), §10.1, §15.6 (nouveau). Décision : cadrage `CADRAGE_promotion_directe_reader_coordenador_2026-09-01` ; registre `GOUV-11`/`GOUV-12` (v0.8). Implémentation : migration `20260901162610`, tests `tests/sql/saut_collegial_tests.sql`, front `LeitoresPanel` + `LibraryContext`.
 - **v1.6 (2026-09-01, même jour)** : **T1 (`reader` → `librarian`) cesse d'être unilatérale.** Dernier chemin du modèle où UNE personne donnait un rôle staff à une autre sans endossement ni consentement — devenu indéfendable après GOUV-1 (T2 collégiale) et GOUV-11 (même le saut est collégial). `fn_team_promote_to_librarian` est condamnée (`collegiality_required`, même doctrine que GOUV-4) ; l'accueil passe par le circuit d'invitation, construit pour lui à l'origine. Examen GOUV-7 (les autorisations d'arrivée comparées à celles de départ) : l'admin réseau perd le pouvoir de fabriquer un·e librarian directement — perte **assumée**, son rattrapage d'une biblio sans staff actif passe désormais par le saut collégial (§6.4 réécrit ; l'ancienne voie (a) était de toute façon inopérante depuis la v1.4 faute de librarian *actif* à proposer). Sections amendées : §5.1, §5.2, §6.4, §6.8, §6.11, §7.3, §11.2, §15.1. Décision : `GOUV-13` (registre v0.9, arbitrage Xavier du 01/09 au soir). Implémentation : migration `20260901175233`, tests `tests/sql/t1_accueil_collegial_tests.sql`, front `LeitoresPanel`/`TeamActionModal`/`roles.js`/`teamMutations`.
 - **v1.7 (2026-09-01, même jour)** : **v2 du saut collégial — ergonomie** (`GOUV-14`, arbitrage Xavier : les trois reports de la v1, sans le verrou Q5). (a) **UI de réglage** dans l'onglet Équipe (`GovernanceSettings`) : réglages visibles de tout le staff (P5), bascule du saut réservée coordenador+/admin réseau, `team_admission_mode` en lecture seule ; la Q2 de GOUV-11 (« en base tant que la demande ne se répète pas ») est relevée. `LeitoresPanel` relit le réglage **en base** à chaque chargement — le cache de session du contexte serait en retard après une bascule. (b) **Les mails du circuit disent le saut** : variantes `team.invitation_coord_proposed_direct.intro` / `team.invitation_coord_ready_direct.intro` ; la détection se fait **côté EF** (membership librarian actif de la cible interrogé au moment de l'envoi), sans élargir les payloads SQL. (c) **Atterrissage du self-demote** : la modale offre le choix librarian/lecteur·rice, `reader` présélectionné quand l'audit de la personne porte `from_role='reader'` (elle n'a jamais exercé librarian). Sections amendées : §5.4, §6.12, §8.2. Aucune migration.
+- **v1.8 (2026-09-01, même jour)** : **`status='inactive'` cesse de porter deux sens.** Le §4.5 de cette spec listait lui-même « lectures multiples possibles » — sortie volontaire, carence expirée, compte abandonné — sans voir que c'était le symptôme : un statut qui admet plusieurs lectures n'est pas un statut, c'est une ambiguïté qu'il faut redéduire à chaque fois. Constaté à l'écran : « Sans connexion depuis plus de 270 jours » affiché sur un rôle quitté dix minutes plus tôt. Nouveau statut **`vacated`** (§4.5bis), posé par `fn_team_self_demote` ; `inactive` garde le seul sens du cron T9. Le sélecteur de bibliothèque, par ailleurs, quitte le seul `/conta` pour `/biblioteca` et `/painel` — avec remontage du panneau à la bascule, sans lequel un emprunt en cours aurait pu changer de bibliothèque en chemin. Sections amendées : §4.5, §4.5bis (nouveau), §5.4. Décisions : `GOUV-15`, `GOUV-16` (registre v0.11). Implémentation : migration `20260901220000`, front `TeamPanel`/`roles.js`/`BibliotecaPage`/`PanelPage`.
 
 ---
 
@@ -241,10 +242,14 @@ CHECK (status = ANY (ARRAY['active', 'inactive', 'pending', 'pending_removal', '
 
 Membership fermée. La personne **n'est plus dans l'équipe**.
 
-**Lectures multiples possibles** :
-- Sortie volontaire (`fn_team_self_demote`)
-- Carence expirée (`pending_removal` → `inactive`)
-- Compte abandonné (cron J-9 mois)
+**Un seul sens depuis la v1.8** : **compte abandonné**, mis en pause par le cron T9 après
+9 mois sans connexion. La personne n'a rien décidé — elle a disparu.
+
+> ⚠️ *(v1.8)* Ce paragraphe listait auparavant « lectures multiples possibles » : sortie
+> volontaire, carence expirée, compte abandonné. C'était le défaut, pas une richesse. Les deux
+> autres lectures ont leur statut propre : la sortie volontaire est désormais `vacated`
+> (§4.5bis), et la carence expirée pose `removed` — jamais `inactive`, contrairement à ce
+> qu'annonçait cette liste (cf. §12.1, le cron clôt bien en `removed`).
 
 **Effet** :
 - Aucun accès aux fonctions du rôle
@@ -252,6 +257,28 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - Visible dans l'audit log et dans une vue « historique de l'équipe »
 
 **Réversibilité** : aucune réversibilité directe. Pour ré-intégrer une personne, on **crée une nouvelle ligne** de membership (workflow standard via cooptation). L'historique est ainsi préservé et lisible.
+
+### 4.5bis. `vacated` *(nouveau v1.8)*
+
+Rôle **quitté volontairement**. La personne a passé la main — c'est un droit (P3), pas un
+incident, et surtout pas un abandon.
+
+**Qui le pose** : `fn_team_self_demote` seule, à ses trois endroits — le rôle supérieur libéré,
+le `librarian` intermédiaire quand la redescente va jusqu'à `reader`, et le `status_after` de
+l'entrée d'audit.
+
+**Effet** : identique à `inactive` du point de vue des droits — aucun accès aux fonctions du
+rôle. Ce qui change est ce que la donnée **dit**, donc ce que l'écran et tout autre lecteur
+peuvent en faire sans se tromper. Badge `info` et non `warn` : rien ne va mal.
+
+**Pourquoi un statut et pas une déduction.** Un premier correctif, le même jour, inférait le sens
+à l'affichage (« la personne a-t-elle un autre rôle actif dans cette biblio ? »). L'inférence est
+juste, mais elle ne vaut que dans l'écran qui la porte : tout export, tout rapport, toute
+fonction future comptant les « inactifs » se serait trompé sans que rien ne le signale. Le coût
+de la correction était d'une seule ligne de données au 01/09/2026 — il n'aurait fait que croître.
+
+**Réversibilité** : comme `inactive`, aucune réversibilité directe ; on repasse par le circuit
+de cooptation, qui est de toute façon devenu collégial pour tous les rôles (`GOUV-13`).
 
 ### 4.6. Schéma de transitions des status
 
@@ -470,7 +497,7 @@ quand l'audit de la personne porte `metadata.from_role = 'reader'` (arrivée à 
 saut collégial : elle n'a jamais exercé librarian).
 
 **Effet self-demote** :
-- La membership `coordenador` actuelle passe à `inactive` (avec `restricted_reason='self_demoted'` ou métadonnée équivalente)
+- La membership `coordenador` actuelle passe à **`vacated`** *(v1.8 — auparavant `inactive`, qui la rendait indiscernable d'un compte abandonné ; cf. §4.5bis)*
 - Si la personne avait déjà une membership `librarian` active, elle est conservée
 - Sinon, une nouvelle membership `librarian` est créée
 - Mail à toute la coordination + à la personne (confirmation)
