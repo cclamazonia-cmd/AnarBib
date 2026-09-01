@@ -2,7 +2,7 @@
 title: "Guia de governança d'AnarBib"
 subtitle: "Per a l'ús de les coordinador-a-es de biblio i de les administrador-a-es de la xarxa"
 author: "Projet AnarBib"
-date: "Versió 1.1 — 5 de juny de 2026"
+date: "Versió 1.2 — 1 de setembre de 2026"
 lang: ca
 ---
 
@@ -215,19 +215,25 @@ El SIGB AnarBib utilitza quatre rols, declarats a la base de dades mitjançant l
 
 **`administrador`** — Rol històric, en vies de desaparició. Existia per significar «dret d'administració trans-biblios» però vinculat a un `library_id`. Ara substituït pels **administrador-a-es de xarxa** emmagatzemat-a-es a la taula `network_administrators` (cf. capítol 2). L'especificació admin-xarxa preveu la migració progressiva i la retirada final d'aquest rol de la taula `user_library_memberships`.
 
-## 3.2. Els cinc estatuts d'una membership
+## 3.2. Els estatuts d'una membership
 
-Cada fila de la taula `user_library_memberships` té un **estatut** que expressa l'estat de la delegació en un moment donat. Cinc estatuts són possibles:
+Cada fila de la taula `user_library_memberships` té un **estatut** que expressa l'estat de la delegació en un moment donat. Els estatuts que concerneixen la governança:
 
 **`active`** — Estat normal. La persona té el seu rol i l'exerceix.
 
-**`pending`** — Reservat a l'especificació de validació física. La membership és creada però en espera d'una trobada física amb un-a librarian+ de la biblio d'inscripció. Sense accés a les funcions del rol mentre duri aquest estatut.
+**`pending_validation`** — Reservat a l'especificació de validació física. La membership és creada però en espera d'una trobada física amb un-a librarian+ de la biblio d'inscripció. Sense accés a les funcions del rol mentre duri aquest estatut.
 
 **`suspended`** — **Mesura cautelar** presa per un-a coordenador-a. Cap accés. Ús: assetjament reportat a l'espera d'investigació, compte compromès, conflicte en curs de mediació. **Durada indefinida**; l'aixecament és manual, per un-a coord (retorn a `active`) o per destitució efectiva.
 
-**`pending_removal`** — **Període de carència de set dies** abans de l'exclusió efectiva. Cap accés durant aquest període. Evolució possible: cancel·lació per un-a altre-a coord (retorn a `active`), auto-retrogressió per la pròpia persona (curtcircuit), o pas automàtic a `inactive` a J+7.
+**`pending_removal`** — **Període de carència de set dies** abans de l'exclusió efectiva. Cap accés durant aquest període. Evolució possible: cancel·lació per un-a altre-a coord (retorn a `active`), auto-retrogressió per la pròpia persona (curtcircuit), o pas automàtic a `removed` a J+7.
 
-**`inactive`** — Membership tancada. La persona ja no és a l'equip. Cap accés. Diversos orígens possibles: sortida voluntària, fi de carència, compte abandonat (automàtic als 9 mesos).
+**`vacated`** — **Rol deixat voluntàriament.** El posa l'auto-retrogradació (« faig el relleu », dret P3). La persona ha decidit — aquest estatut diu precisament això, i res més. *(Distinció introduïda l'01/09/2026: abans d'aquesta data, la sortida voluntària posava `inactive`, confonent-la amb un compte abandonat.)*
+
+**`removed`** — Membership tancada per una decisió o un mecanisme del SIGB: fi de la carència d'una retirada (J+7), o tancament de la línia de rang inferior en una promoció (rol exclusiu, cf. §5.6).
+
+**`inactive`** — **Compte abandonat.** El posa únicament el cron de sortida automàtica, després de 9 mesos sense connexió (T9). La persona no ha decidit res: ha desaparegut.
+
+*(La taula porta també alguns estatuts propis dels recorreguts d'inscripció i circulació — `refused`, `left_with_pending_circulation`, `terminated` — que no pertanyen a la governança d'equip i no es tracten en aquesta guia.)*
 
 ## 3.3. L'esquema de transicions
 
@@ -238,28 +244,28 @@ El SIGB no autoritza qualsevol transició entre estatuts. Aquí, simplificat, l'
                        │   active     │ ◄──────────┐
                        └──────┬───────┘            │
                               │                    │
-              ┌───────────────┼───────────────┐    │
-              ▼               ▼               ▼    │
-       ┌─────────────┐  ┌─────────────┐  ┌─────────┴────┐
-       │  suspended  │  │ pending_    │  │  inactive    │
-       │             │  │ removal     │  │              │
-       └──────┬──────┘  └──────┬──────┘  └──────────────┘
-              │                │
-              │ aixecament     │ cancel·lació
-              └────────────────┴────────────┐
-                               │            │
-                               ▼ (J+7)      ▼
-                        ┌──────────────┐
-                        │   inactive   │
-                        └──────────────┘
+        ┌──────────────┬──────┴────────┬───────────│──────┐
+        ▼              ▼               ▼           │      ▼
+ ┌─────────────┐ ┌─────────────┐ ┌────────────┐    │ ┌────────────┐
+ │  suspended  │ │ pending_    │ │  vacated   │    │ │  inactive  │
+ │             │ │ removal     │ │ (P3, auto) │    │ │ (T9, cron) │
+ └──────┬──────┘ └──────┬──────┘ └────────────┘    │ └────────────┘
+        │               │                          │
+        │ aixecament    │ cancel·lació             │
+        └───────────────┴──────────────────────────┘
+                        │
+                        ▼ (J+7)
+                 ┌──────────────┐
+                 │   removed    │
+                 └──────────────┘
 ```
 
 Algunes regles clau:
 
-- **No** es pot passar directament de `active` a `inactive` per a un-a librarian per decisió unilateral d'un-a altre-a coord. Cal passar per `pending_removal` i esperar la carència (o que la persona es retrogradi ella mateixa).
-- Es pot **sempre** passar del propi estatut `active` a `inactive` (auto-retro, dret P3).
+- **No** es pot excloure un-a librarian d'un sol gest per decisió unilateral d'un-a altre-a coord. Cal passar per `pending_removal` i esperar la carència (o que la persona es retrogradi ella mateixa).
+- Es pot **sempre** deixar voluntàriament el propi rol `active` (auto-retro, dret P3): la línia passa a `vacated`, immediatament.
 - `suspended` **no** té durada màxima. No és una carència abans de l'exclusió, és una mesura cautelar — dura el temps de la deliberació.
-- De `inactive`, **no es torna** a `active`. Per reintegrar una persona, es crea una nova fila de membership. L'historial es preserva.
+- D'un estatut tancat (`vacated`, `removed`, `inactive`), **no es torna** directament a `active`. Per reintegrar una persona, es passa pel circuit normal — que reactiva la línia tancada o en crea una de nova. L'historial es preserva.
 
 ## 3.4. Les nou transicions, qui pot fer què
 
@@ -440,7 +446,7 @@ Dos modes possibles, triats per cada biblio a la seva configuració:
 ### Procediment de validació física (mode `manual_validation`)
 
 1. La persona s'inscriu en línia i tria la vostra biblio com a biblio de referència.
-2. El seu compte és creat amb `status='pending'`. Rep un correu explicant que ha de venir a presentar-se físicament a la biblio.
+2. El seu compte és creat amb `status='pending_validation'`. Rep un correu explicant que ha de venir a presentar-se físicament a la biblio.
 3. Quan ve, un-a `librarian+` la troba, verifica el que cal verificar (la doctrina del que «verificar» significa és local), i clica **«Validar»** a la seva fila a la pestanya **Equip** → secció **Comptes en espera**.
 4. Un camp «Nota» opcional permet inscriure un context («trobada del 12/05 durant la permanència, presentada per Emma»).
 5. El compte passa a `status='active'`. La persona rep un correu de benvinguda.
@@ -477,7 +483,7 @@ Diverses coses poden no convenir-vos en aquest capítol:
 
 - **Els modes de validació física** (§5.5). Penseu que en caldria un tercer («validació diferida», «validació a distància», altre). A portar a `spec-validation-physique.md`.
 
-- **El multi-membership** (§5.6). Penseu que és innecessàriament complex i que caldria un sol rol per persona per biblio. És una decisió de model de dades, més estructurant del que sembla. A portar amb les dev.
+- **El rol exclusiu** (§5.6). Penseu que una persona hauria de poder acumular diversos rols actius a la mateixa biblio (ser alhora `librarian` i `coordenador`, per exemple). És una decisió de model de dades, més estructurant del que sembla — i ja es va decidir en l'altre sentit el maig de 2026. A portar amb les dev.
 
 Vegeu el capítol 4 per al procediment general d'esmena, i l'annex C per al model de nota.
 
@@ -523,8 +529,8 @@ La idea de fons és que mai no se surt ningú d'un equip «per sorpresa» o «en
 
 ### Efecte immediat
 
-- La vostra membership actual (`librarian` o `coordenador`) passa a `inactive`.
-- Si no teníeu ja la membership de destinació (`reader` o `librarian`), es crea a `active`.
+- La vostra membership actual (`librarian` o `coordenador`) passa a `vacated` — l'estatut del rol **deixat voluntàriament**, distint de l'`inactive` del compte abandonat.
+- La vostra línia de rang inferior (`reader` o `librarian`, segons l'aterratge triat) es reactiva si existia — o es crea a `active` altrament.
 - Correu a tota la coordinació + a vosaltres mateixos (confirmació).
 - Registre d'auditoria : `action='self_demoted'`.
 
@@ -535,7 +541,7 @@ El SIGB **us deixa marxar**, però us avisa :
 > ⚠️ ATENCIÓ : ets l'únic-a-e coordenador-a-e actiu-iva-e de [biblio]. La biblio es quedarà sense coordinació. Els-les-e administrador-a-e·s AnarBib seran notificat-des-es. Continuar ?
 
 Si confirmeu :
-- La vostra membership coord passa a `inactive`.
+- La vostra membership coord passa a `vacated`.
 - La biblio entra en **mode degradat** : els-les-e `librarian` poden continuar gestionant els préstecs, validar les inscripcions, etc., però cap modificació de la identitat pública o de la configuració és possible fins a la cooptació d'un-a-e nou-va-e coord.
 - Correu a tots-totes-tothom els-les-e admins de xarxa : «La biblio X ja no té coordenador-a-e. Aquí teniu els-les-e librarians actiu-ves-es : ...»
 
@@ -581,7 +587,7 @@ Quan el col·lectiu decideix que una persona ha de sortir de l'equip, i que aque
 ### Efecte a J+7 (cron automàtic)
 
 Si la sol·licitud no ha estat ni anul·lada ni curtcircuitada :
-- La membership passa a `inactive`.
+- La membership passa a `removed`. La línia de rang inferior (tancada a la promoció, cf. rol exclusiu §5.6) es reactiva — o es crea una línia `reader` : la persona deixa l'equip, no la biblio.
 - Correu final a la persona i a la coordinació : «Retirada efectiva.»
 - Registre d'auditoria : `action='removal_completed'`.
 
@@ -668,7 +674,7 @@ La distinció és crucial :
 | | Suspensió (T6) | Retirada (T5) |
 |---|---|---|
 | Efecte | Immediat | Diferit (J+7) |
-| Durada | Indefinida | 7 dies i després `inactive` |
+| Durada | Indefinida | 7 dies i després `removed` |
 | Reversible per | Aixecament explícit | Cancel·lació durant la carence |
 | Ús típic | Mesura cautelar | Decisió d'exclusió |
 | Política subjacent | «Ens deixem temps per entendre» | «Hem decidit que aquesta persona surt» |
@@ -683,7 +689,7 @@ RPC suspendre : `fn_team_suspend_member(p_user_id, p_library_id, p_role, p_reaso
 
 Un cas una mica particular : què fer quan la coordinació vol **retrogradar un-a-e coordenador-a-e** que no es retrograda espontàniament ?
 
-L'especificació de governança tracta aquest cas com una **sol·licitud de retirada amb carence** dirigida a la membership `coordenador`. Concretament, s'utilitza el mateix procediment que al §6.3 («Sol·licitar la retirada»), però seleccionant el rol `coordenador`. La persona passa a `pending_removal` a la seva membership `coordenador` ; a J+7, aquesta membership passa a `inactive`. Si tenia una membership `librarian` paral·lela, aquesta continua activa (i la persona «cau de nou» a librarian). En cas contrari, torna a ser simple `reader`.
+L'especificació de governança tracta aquest cas com una **sol·licitud de retirada amb carence** dirigida a la membership `coordenador`. Concretament, s'utilitza el mateix procediment que al §6.3 («Sol·licitar la retirada»), però seleccionant el rol `coordenador`. La persona passa a `pending_removal` a la seva membership `coordenador` ; a J+7, aquesta membership passa a `removed`. La seva anterior línia `librarian` — tancada a la seva promoció (rol exclusiu, §5.6) — es reactiva llavors : la persona «cau de nou» a librarian. Si mai no n'ha tinguda cap (arribada per salt col·legiat), torna a ser simple `reader`.
 
 És voluntàriament el mateix mecanisme que per als-les-e `librarian`, amb les mateixes salvaguardes. **Cap altre-a-e coord no té un poder especial** sobre les seves col·legues : el procediment passa per la carence i la col·legialitat.
 
@@ -716,7 +722,7 @@ Políticament, és coherent amb el que fem quan l'únic-a-e coord es retrograda 
 
 ## 6.8. Alguns casos límit a conèixer
 
-**Una persona en `pending_removal` que demana marxar de seguida.** Pot fer-ho. Li n'hi ha prou d'utilitzar ella mateixa «Passo la iniciativa» (auto-retro T4). Efecte : pas immediat a `inactive`, curtcircuit de la carence. Políticament, és coherent : el dret P3 (auto-retrogradació) és incondicional.
+**Una persona en `pending_removal` que demana marxar de seguida.** Pot fer-ho. Li n'hi ha prou d'utilitzar ella mateixa «Passo la iniciativa» (auto-retro T4). Efecte : pas immediat a `vacated`, curtcircuit de la carence. Políticament, és coherent : el dret P3 (auto-retrogradació) és incondicional.
 
 **Una persona en `suspended` que es vol excloure definitivament.** Veure §6.5 «Important : suspensió vs. retirada». Cal aixecar la suspensió primer, i llavors demanar la retirada.
 
@@ -860,9 +866,9 @@ Fora d'especificació, però és el que es practica:
 
 **1. Presa de contacte** per un·a administrador-a-e de xarxa amb el col·lectiu local, per tots els canals disponibles (el o els comptes de lector-a-e que resten inscrits·es, les dades de contacte externes de la biblio si existeixen, la xarxa de coneixences local).
 
-**2. Verificació política**: el col·lectiu encara existeix? Vol continuar existint? Si hi ha membres però que simplement han deixat les funcions tècniques, es pot recooptar nou staff per cooptació fora de workflow.
+**2. Verificació política**: el col·lectiu encara existeix? Vol continuar existint? Si hi ha membres però que simplement han deixat les funcions tècniques, es pot reconstituir una coordinació — pel circuit col·legiat, com pertot arreu.
 
-**3. Cooptació fora de workflow** per l'administrador-a-e de xarxa, via SQL directe o via la UI (un·a administrador-a-e de xarxa té dret d'actuar com a `coordinador`+ en qualsevol biblio, cf. capítol 2). La cooptació fora de workflow ha de quedar registrada al registre d'auditoria amb una raó explícita: « Represa de coordinació després de vacant, arran de contacte del col·lectiu del DD/MM, per administrador-a-e de xarxa X ». I — punt clau de doctrina — **informació prèvia a la coordinació local obligatòria**, excepte si la biblio ja no té cap membre de l'staff viu·va, en aquest cas la informació passa pels `reader` actiu·ves restants (cf. §7.6).
+**3. Represa pel circuit col·legiat** *(des de l'01/09/2026 ja no existeix la « cooptació fora de workflow »: les promocions directes estan condemnades, també per a l'admin de xarxa)*. L'administrador-a-e de xarxa té dret a **dipositar una proposta de coordinació** en qualsevol biblio (cf. capítol 2). Si queda un-a `librarian` actiu-va, la proposta pot dirigir-s'hi. Si només queden `reader` actius-ves, el camí practicable és el **salt col·legiat**: el col·lectiu local decideix activar l'ajust (`allow_direct_coordenador`), l'admin de xarxa diposita la proposta dirigida a un-a reader actiu-va, s'aplica el quòrum de bootstrap (1 aval quan l'equip és massa petit), i la persona **accepta**. Res no es fa sense el col·lectiu: la proposta executa la seva decisió, no la reemplaça. L'acció queda traçada (audit log + `cross_library_actions_log`), i — punt clau de doctrina — **informació prèvia a la coordinació local obligatòria**, excepte si la biblio ja no té cap membre de l'staff viu·va, en aquest cas la informació passa pels `reader` actiu·ves restants (cf. §7.6).
 
 **4. Si el col·lectiu ja no existeix**: obertura d'una discussió sobre el **tancament net** de la biblio. Quines dades conservar, quines suprimir, com comunicar als·les lector-a-e, etc. És un workflow a formalitzar per separat.
 
@@ -1161,7 +1167,9 @@ Cada acció de governança desencadena **un o diversos emails** automàtics. No 
 
 | Esdeveniment | Persona concernida | Coordinadors-es-e locals actius-ves-e | Admins de xarxa |
 |---|---|---|---|
-| Cooptació (T1, T2) | ✅ | ✅ | — |
+| Proposta dipositada (acollida o coordinació) | — | ✅ a avalar | — |
+| Proposta llesta (quòrum assolit) | ✅ a acceptar | — | — |
+| Cooptació culminada (acceptació — T1, T2, T2b) | ✅ benvinguda | ✅ | — |
 | Auto-retrogradació (T3, T4) | ✅ confirmació | ✅ | — |
 | Sol·licitud de retrait (T5) | ✅ | ✅ | — |
 | Cancel·lació de sol·licitud (T8) | ✅ | ✅ | — |
@@ -1175,6 +1183,11 @@ Cada acció de governança desencadena **un o diversos emails** automàtics. No 
 | Cooptació admin de xarxa (rebuig) | ✅ amb raonament | — | ✅ |
 | Retrait col·lectiu admin de xarxa | ✅ | — | ✅ |
 | Intervenció cross-biblioteques | — | ✅ (coordinadors-es-e de la biblioteca) | ✅ (la persona autora) |
+
+Dues precisions sobre els correus del circuit d'invitació:
+
+- **Acollir algú i confiar-li la coordinació no són el mateix acte**: els correus d'una proposta de coordinació tenen textos propis, distints dels de l'acollida.
+- **Un salt col·legiat es diu**: quan una proposta de coordinació es dirigeix a una persona que encara no és membre de l'equip (salt `reader` → `coordenador`, §5.3), els correus de proposta i d'acceptació usen introduccions dedicades que ho diuen explícitament — l'aval com l'acceptació es fan amb coneixement de causa.
 
 ### El to dels emails
 
@@ -1249,21 +1262,21 @@ Per acabar, sis escenaris complets. Cadascun il·lustra una combinació de mecan
 
 1. Emma es connecta el 5 de maig a les 14h30. Va a `/biblioteca`, pestanya **Equip**.
 2. Cerca Voltairine a la llista de `reader` de la biblio (té un compte AnarBib des del febrer).
-3. Fa clic a **« Convidar a l'equip »** → tria **librarian**.
-4. Camp « Raó »: « decisió AG del 04/05 » (doctrina 1, espera estricta).
-5. Confirma.
+3. Fa clic a **« Convidar a l'equip »** → tria **librarian**. Camp « Raó »: « decisió AG del 04/05 » (doctrina 1, espera estricta). Confirma: la **proposta** queda dipositada.
+4. Lucy (una altra coordinadora) rep el correu d'aval i **ratifica** la proposta — una segona mirada, no una formalitat.
+5. Voltairine rep un correu: una invitació a entrar a l'equip l'espera al seu compte. Ella **accepta**.
 
-**Efecte immediat.**
+**Efecte a l'acceptació.**
 
-- Voltairine rep un correu: « Salut Voltairine, has estat nomenada librarian de la BLMF per Emma G. arran de: "decisió AG del 04/05". Els teus nous drets estan actius. Benvinguda a l'equip. »
-- Les altres coordinadore-a-es actives de la BLMF (Lucy i Piotr) reben un correu informatiu.
-- Audit log: `2026-05-05 14:30 — Emma G. ha promocionat Voltairine d.C. a librarian (raó: decisió AG del 04/05)`.
+- La línia `librarian` de Voltairine esdevé activa; la seva línia `reader` es tanca (rol exclusiu, §5.6).
+- Voltairine rep un correu de benvinguda; les coordinadores actives de la BLMF (Emma, Lucy, Piotr) reben un correu informatiu.
+- Audit log: `promoted_to_librarian`, amb la proposta, l'aval i l'acceptació traçables.
 
 **Comentari.**
 
-El cas més senzill. El SIGB executa correctament la decisió del col·lectiu. Emma no ha decidit res políticament — ha fet clic per executar allò que s'havia decidit fora del programari.
+El cas més senzill. El SIGB executa correctament la decisió del col·lectiu, en tres temps: Emma proposa, Lucy avala, Voltairine accepta. Ningú no ha decidit res tot sol — i Voltairine només entra a l'equip perquè ho ha **dit**, al programari com a l'AG *(refosa de l'01/09/2026: abans d'aquesta data, la promoció era directa i immediata)*.
 
-**El que el SIGB no ha fet:** verificar que l'AG ha tingut lloc realment, que la decisió s'ha pres realment, que Voltairine hi està realment d'acord. Aquestes coses són **fora del programari**. Si Emma hagués mentit sobre l'AG, el SIGB no s'hauria adonat de res. La cultura política de la BLMF és el que impedeix aquesta mentida (i el log la fa traçable a posteriori).
+**El que el SIGB no ha fet:** verificar que l'AG ha tingut lloc realment, ni que la decisió s'ha pres realment. Aquestes coses continuen sent **fora del programari**. Si Emma hagués mentit sobre l'AG, hauria calgut que Lucy avalés la mentida i que Voltairine l'acceptés — el circuit fa costós el frau, no fa inútil la cultura política.
 
 ## 10.2. Lucy fa el relleu
 
@@ -1279,8 +1292,8 @@ El cas més senzill. El SIGB executa correctament la decisió del col·lectiu. E
 
 **Efecte immediat.**
 
-- La seva membership `coordenador` passa a `inactive`.
-- La seva membership `librarian` (que existia en paral·lel) resta `active`.
+- La seva membership `coordenador` passa a `vacated` (rol deixat voluntàriament).
+- La seva línia `librarian` — tancada a la seva promoció a la coordinació (rol exclusiu, §5.6) — es reactiva.
 - Lucy rep un correu de confirmació: « Ara ets librarian de la BLMF. Conserves els teus permisos operacionals. »
 - Tota la coordinació (Emma, Piotr) rep un correu: « Lucy P. ha fet el relleu, ja no és coordinadora-a-e. Continua com a librarian de l'equip. »
 - Audit log: `2026-05-05 18:42 — Lucy P. s'ha auto-retrogradat de coordenador → librarian (raó: inici de la tesi, alleujament temporal)`.
@@ -1317,7 +1330,7 @@ El cas més senzill. El SIGB executa correctament la decisió del col·lectiu. E
 - 6 de maig a les 9h: Lucy llegeix el correu. Està d'acord amb la decisió i no intervé.
 - 7 de maig: Emma té un intercanvi amb Karl (que li escriu per explicar-se). Emma conclou que la decisió es manté. No intervé.
 - 8-11 de maig: res.
-- **12 de maig a les 00h00**: el cron `cron_team_pending_removal_complete` s'executa. Karl passa a `inactive`.
+- **12 de maig a les 00h00**: el cron `cron_team_pending_removal_complete` s'executa. Karl passa a `removed`; la seva línia `reader` es reactiva (deixa l'equip, no la biblio).
 - Correu final a Karl + a la coordinació.
 - Audit log: `2026-05-12 — pas automàtic a inactiu (raó: pending_removal expirat, cron) — actor: NULL`.
 
@@ -1378,7 +1391,7 @@ Cas típic on la suspensió s'utilitza com a **mesura conservatòria**, no com a
 
 **Efecte immediat.**
 
-- La membership coordenador d'Errico passa a `inactive`.
+- La membership coordenador d'Errico passa a `vacated`.
 - Correu a Errico (confirmació).
 - Correu a tota la coordinació de la BLMF — però ja no n'hi ha, de manera que en la pràctica les `librarian` actives-a-es restants reben una notificació.
 - **Correu urgent a les admins de xarxa**: « La BLMF ja no té coordinador-a-e actiu-va-e. Aquí hi ha les librarians actives-a-es restants: Voltairine d.C., Friedrich E., ... »
@@ -1388,7 +1401,7 @@ Cas típic on la suspensió s'utilitza com a **mesura conservatòria**, no com a
 
 - 6 de maig: Xavier (admin de xarxa) es posa en contacte amb Voltairine i Friedrich, les `librarian` actives-a-es restants. Confirmen que el col·lectiu BLMF continua existint i que volen continuar.
 - 7-15 de maig: discussió interna del col·lectiu BLMF, que decideix en AG cooptar Voltairine al rol de coordinadora-a-e.
-- 16 de maig: Xavier (o un-a-e altr-e coord BLMF que ja no existeix en aquest cas, de manera que és Xavier en el seu dret transvers) coopta Voltairine com a coordinadora-a-e. **Informació prèvia obligatòria**: Xavier ha escrit a Friedrich i Voltairine 2 dies abans per anunciar l'acció. Un cop feta, l'acció queda traçada a `cross_library_actions_log` amb nivell de criticitat « elevat » (modificació de la coordinació d'una biblio per un-a-e admin de xarxa).
+- 16 de maig: Xavier, en el seu dret transvers (ja no queda cap coord BLMF per fer-ho), **diposita la proposta de coordinació** dirigida a Voltairine — librarian activa, la precondició T2 es compleix. Friedrich **avala**, Voltairine **accepta**: fins i tot en una represa d'admin de xarxa, el circuit col·legiat s'aplica íntegrament — Xavier no pot « fabricar » una coordinadora tot sol. **Informació prèvia obligatòria**: Xavier ha escrit a Friedrich i Voltairine 2 dies abans per anunciar el dipòsit. L'acció queda traçada a `cross_library_actions_log` amb nivell de criticitat « elevat » (modificació de la coordinació d'una biblio per un-a-e admin de xarxa).
 
 **Comentari.**
 
@@ -1462,13 +1475,13 @@ L'alternativa — cooptar Mohammed per majoria contra l'opinió de Patricia — 
 
 **Cross-biblios** — Qualifica una acció efectuada per un-a-e admin de xarxa sobre una biblio de la qual no és membre del personal local. Traçada a `cross_library_actions_log`.
 
-**Cron** — Tasca automàtica executada periòdicament pel SIGB. Sense actor-a-e humà-na-e. Exemples: `cron_team_pending_removal_complete` (pas de `pending_removal` a `inactive` a J+7), `cron_team_inactive_cleanup` (sortida automàtica als 9 mesos).
+**Cron** — Tasca automàtica executada periòdicament pel SIGB. Sense actor-a-e humà-na-e. Exemples: `cron_team_pending_removal_complete` (pas de `pending_removal` a `removed` a J+7), `cron_team_inactive_cleanup` (sortida automàtica als 9 mesos).
 
 **Delegació** — Acte pel qual un col·lectiu confia temporalment una funció a un-a-e dels seus membres, conservant la possibilitat de recuperar-la. Concepte central, distingit de « jerarquia ».
 
-**Membership** — Línia de la taula `user_library_memberships` que expressa la vinculació d'una persona a una biblio en un rol determinat. Una persona pot tenir diverses memberships en una mateixa biblio (multi-membership).
+**Membership** — Línia de la taula `user_library_memberships` que expressa la vinculació d'una persona a una biblio en un rol determinat. Una persona pot tenir diverses línies en una biblio (la seva història), però **només una d'activa** alhora (rol exclusiu, cf. §5.6).
 
-**Multi-membership** — Possibilitat de tenir diverses línies de membership per a una mateixa persona en una mateixa biblio, amb rols diferents.
+**Multi-membership** — Model històric en què una mateixa persona podia tenir diverses línies de membership *actives* en una mateixa biblio, amb rols diferents. Abandonat el maig de 2026 a favor del rol exclusiu (§5.6).
 
 **Xarxa** — El col·lectiu de les biblios que es reconeixen mútuament i comparteixen la plataforma AnarBib. No és una organització central, és una federació.
 
@@ -1494,16 +1507,22 @@ Aquest annex dóna, per a cada RPC esmentada en el guia, la seva traducció pol�
 
 | RPC SQL | Transició | Traducció política |
 |---|---|---|
-| `fn_team_promote_to_librarian` | T1 | Cooptació `reader` → `librarian` |
-| `fn_team_promote_to_coordenador` | T2 | Cooptació `librarian` → `coordenador` |
+| `fn_team_propose_invitation` | T1, T2, T2b | Dipositar una proposta (acollida o coordinació) |
+| `fn_team_ratify_invitation` | T1, T2, T2b | Avalar una proposta (quòrum) |
+| `fn_team_accept_invitation` | T1, T2, T2b | Acceptar la càrrega — és aquest gest el que promou |
+| `fn_team_decline_invitation` | T1, T2, T2b | Refusar la càrrega (no costa res) |
+| `fn_team_revoke_invitation` | T1, T2, T2b | Revocar una proposta dipositada per error |
+| `fn_team_expire_invitations` | T1, T2, T2b | Cron: caducitat de les propostes (30 dies) |
 | `fn_team_self_demote` | T3, T4 | Auto-retrogradació (« faig el relleu ») |
 | `fn_team_request_remove_member` | T5 | Sol·licitud de retirada amb caducitat 7d |
 | `fn_team_cancel_remove_member` | T8 | Cancel·lació d'una sol·licitud de retirada |
 | `fn_team_suspend_member` | T6 | Suspensió immediata (mesura conservatòria) |
 | `fn_team_unsuspend_member` | T7 | Aixecament de la suspensió |
 | `fn_validate_physical_account` | — | Validació física d'un-a-e `reader` |
-| `cron_team_pending_removal_complete` | T5 (continuació) | Cron: pas a `inactive` a J+7 |
+| `cron_team_pending_removal_complete` | T5 (continuació) | Cron: pas a `removed` a J+7 |
 | `cron_team_inactive_cleanup` | T9 | Cron: sortida automàtica als 9 mesos |
+
+*Les antigues promocions directes `fn_team_promote_to_librarian` i `fn_team_promote_to_coordenador` estan **condemnades** (26/08 i 01/09/2026): refusen amb `collegiality_required`, indicant el camí en tres temps. Només figuren aquí perquè el seu nom, creuat en un document vell, no faci creure en un camí actiu.*
 
 ## Funcions d'admin de xarxa
 

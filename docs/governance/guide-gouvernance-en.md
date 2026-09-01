@@ -2,7 +2,7 @@
 title: "AnarBib Governance Guide"
 subtitle: "For library coordinators and network administrators"
 author: "Projet AnarBib"
-date: "Version 1.1 — 5 June 2026"
+date: "Version 1.2 — 1 September 2026"
 lang: en
 ---
 
@@ -215,19 +215,25 @@ The AnarBib ILS uses four roles, declared in the database by the constraint `CHE
 
 **`administrador`** — Historical role, being phased out. It existed to denote "cross-library administration rights" but was tied to a `library_id`. Now replaced by **network administrators** stored in the `network_administrators` table (see chapter 2). The network-admin spec provides for a gradual migration and the eventual removal of this role from the `user_library_memberships` table.
 
-## 3.2. The five statuses of a membership
+## 3.2. The statuses of a membership
 
-Each row in the `user_library_memberships` table has a **status** expressing the state of the delegation at a given point in time. Five statuses are possible:
+Each row in the `user_library_memberships` table has a **status** expressing the state of the delegation at a given point in time. The statuses that concern governance:
 
 **`active`** — Normal state. The person has their role and exercises it.
 
-**`pending`** — Reserved for the physical validation spec. The membership is created but awaiting a physical meeting with a `librarian`+ from the registration library. No access to role functions while in this status.
+**`pending_validation`** — Reserved for the physical validation spec. The membership is created but awaiting a physical meeting with a `librarian`+ from the registration library. No access to role functions while in this status.
 
 **`suspended`** — **Precautionary measure** taken by a coordinator. No access. Use cases: reported harassment pending investigation, compromised account, conflict under mediation. **Indefinite duration**; lifting is manual, by a coordinator (back to `active`) or by effective removal.
 
-**`pending_removal`** — **Seven-day grace period** before effective exclusion. No access during this period. Possible outcomes: cancellation by another coordinator (back to `active`), self-downgrade by the person themselves (short-circuit), or automatic transition to `inactive` at D+7.
+**`pending_removal`** — **Seven-day grace period** before effective exclusion. No access during this period. Possible outcomes: cancellation by another coordinator (back to `active`), self-downgrade by the person themselves (short-circuit), or automatic transition to `removed` at D+7.
 
-**`inactive`** — Closed membership. The person is no longer on the team. No access. Several possible origins: voluntary exit, end of grace period, abandoned account (automatic after 9 months).
+**`vacated`** — **Role left voluntarily.** Set by self-demotion ("I'm stepping down", right P3). The person decided — this status says precisely that, and nothing else. *(Distinction introduced on 01/09/2026: before that date, voluntary exit set `inactive`, conflating it with an abandoned account.)*
+
+**`removed`** — Membership closed by a decision or mechanism of the ILS: end of a withdrawal grace period (D+7), or closure of the lower-rank line upon promotion (exclusive role, cf. §5.6).
+
+**`inactive`** — **Abandoned account.** Set only by the automatic-exit cron, after 9 months without login (T9). The person decided nothing: they disappeared.
+
+*(The table also carries a few statuses specific to registration and circulation flows — `refused`, `left_with_pending_circulation`, `terminated` — which do not belong to team governance and are not covered in this guide.)*
 
 ## 3.3. The transition diagram
 
@@ -238,28 +244,28 @@ The ILS does not allow arbitrary transitions between statuses. Here, simplified,
                        │   active     │ ◄──────────┐
                        └──────┬───────┘            │
                               │                    │
-              ┌───────────────┼───────────────┐    │
-              ▼               ▼               ▼    │
-       ┌─────────────┐  ┌─────────────┐  ┌─────────┴────┐
-       │  suspended  │  │ pending_    │  │  inactive    │
-       │             │  │ removal     │  │              │
-       └──────┬──────┘  └──────┬──────┘  └──────────────┘
-              │                │
-              │ lifted         │ cancelled
-              └────────────────┴────────────┐
-                               │            │
-                               ▼ (D+7)      ▼
-                        ┌──────────────┐
-                        │   inactive   │
-                        └──────────────┘
+        ┌──────────────┬──────┴────────┬───────────│──────┐
+        ▼              ▼               ▼           │      ▼
+ ┌─────────────┐ ┌─────────────┐ ┌────────────┐    │ ┌────────────┐
+ │  suspended  │ │ pending_    │ │  vacated   │    │ │  inactive  │
+ │             │ │ removal     │ │ (P3, self) │    │ │ (T9, cron) │
+ └──────┬──────┘ └──────┬──────┘ └────────────┘    │ └────────────┘
+        │               │                          │
+        │ lifted        │ cancelled                │
+        └───────────────┴──────────────────────────┘
+                        │
+                        ▼ (D+7)
+                 ┌──────────────┐
+                 │   removed    │
+                 └──────────────┘
 ```
 
 A few key rules:
 
-- It is **not** possible to go directly from `active` to `inactive` for a `librarian` by unilateral decision of another coordinator. The process must go through `pending_removal` and wait out the grace period (or for the person to self-downgrade).
-- It is **always** possible to transition from one's own `active` status to `inactive` (self-downgrade, right P3).
+- It is **not** possible to exclude a `librarian` in a single gesture by unilateral decision of another coordinator. The process must go through `pending_removal` and wait out the grace period (or for the person to self-downgrade).
+- It is **always** possible to leave one's own `active` role voluntarily (self-downgrade, right P3): the line moves to `vacated`, immediately.
 - `suspended` has **no** maximum duration. It is not a grace period before exclusion — it is a precautionary measure that lasts as long as deliberation takes.
-- From `inactive`, one **cannot** return to `active`. To reintegrate someone, a new membership row is created. History is preserved.
+- From a closed status (`vacated`, `removed`, `inactive`), one **cannot** return directly to `active`. To reintegrate someone, the normal circuit applies — which reactivates the closed line or creates a new one. History is preserved.
 
 ## 3.4. The nine transitions — who can do what
 
@@ -440,7 +446,7 @@ Two modes are possible, chosen by each library in its configuration:
 ### Physical validation procedure (mode `manual_validation`)
 
 1. The person registers online and chooses your library as their home library.
-2. Their account is created with `status='pending'`. They receive an email explaining that they must come in person to the library.
+2. Their account is created with `status='pending_validation'`. They receive an email explaining that they must come in person to the library.
 3. When they come, a `librarian+` meets them, checks whatever needs to be checked (the doctrine of what "checking" means is local), and clicks **"Validate"** on their row in the **Team** tab → **Pending accounts** section.
 4. An optional "Note" field allows a context to be recorded ("meeting of 12/05 during the open session, introduced by Emma").
 5. The account moves to `status='active'`. The person receives a welcome email.
@@ -477,7 +483,7 @@ Several things in this chapter may not suit you:
 
 - **The physical validation modes** (§5.5). You think a third mode is needed ("deferred validation", "remote validation", other). Bring it to `spec-validation-physique.md`.
 
-- **Multi-membership** (§5.6). You think it is unnecessarily complex and that a single role per person per library would be better. This is a data model decision, more structural than it appears. Bring it to the developers.
+- **The exclusive role** (§5.6). You think a person should be able to hold several active roles in the same library (being both `librarian` and `coordenador`, for instance). This is a data model decision, more structural than it appears — and it was already settled the other way in May 2026. Bring it to the developers.
 
 See chapter 4 for the general amendment procedure, and Appendix C for the note template.
 
@@ -523,8 +529,8 @@ This is the **most fundamental right** in AnarBib's governance system. Any perso
 
 ### Immediate effect
 
-- Your current membership (`librarian` or `coordenador`) changes to `inactive`.
-- If you did not already have the target membership (`reader` or `librarian`), it is created at `active`.
+- Your current membership (`librarian` or `coordenador`) changes to `vacated` — the status of a role **left voluntarily**, distinct from the `inactive` of an abandoned account.
+- Your lower-rank line (`reader` or `librarian`, depending on the chosen landing) is reactivated if it existed — or created at `active` otherwise.
 - Email to the entire coordination team + to yourself (confirmation).
 - Audit log: `action='self_demoted'`.
 
@@ -535,7 +541,7 @@ The SIGB **lets you leave**, but it warns you:
 > ⚠️ WARNING: you are the sole active `coordenador` of [library]. The library will be left without coordination. AnarBib network administrators will be notified. Continue?
 
 If you confirm:
-- Your coord membership changes to `inactive`.
+- Your coord membership changes to `vacated`.
 - The library enters **degraded mode**: `librarian` members can continue to manage loans, validate registrations, etc., but no modification of the public identity or configuration is possible until a new coordinator is co-opted.
 - Email to all network administrators: "Library X no longer has a `coordenador`. Current active librarians are: ..."
 
@@ -581,7 +587,7 @@ When the collective decides that a person must leave the team, and that person d
 ### Effect at D+7 (automatic cron)
 
 If the request has been neither cancelled nor short-circuited:
-- The membership changes to `inactive`.
+- The membership changes to `removed`. The lower-rank line (closed at promotion time, cf. exclusive role §5.6) is reactivated — or a `reader` line is created: the person leaves the team, not the library.
 - Final email to the person and the coordination: "Withdrawal effective."
 - Audit log: `action='removal_completed'`.
 
@@ -668,7 +674,7 @@ The distinction is crucial:
 | | Suspension (T6) | Withdrawal (T5) |
 |---|---|---|
 | Effect | Immediate | Deferred (D+7) |
-| Duration | Indefinite | 7 days then `inactive` |
+| Duration | Indefinite | 7 days then `removed` |
 | Reversible by | Explicit lifting | Cancellation during the waiting period |
 | Typical use | Precautionary measure | Exclusion decision |
 | Underlying politics | "We give ourselves time to understand" | "We have decided this person leaves" |
@@ -683,7 +689,7 @@ RPC to suspend: `fn_team_suspend_member(p_user_id, p_library_id, p_role, p_reaso
 
 A somewhat particular case: what to do when the coordination wants to **demote a coordinator** who does not demote themselves spontaneously?
 
-The governance spec treats this case as a **withdrawal request with a waiting period** targeting the `coordenador` membership. Concretely, you use the same procedure as in §6.3 ("Request withdrawal"), but by selecting the `coordenador` role. The person moves to `pending_removal` on their `coordenador` membership; at D+7, that membership changes to `inactive`. If they had a parallel `librarian` membership, that remains active (and the person "falls back" to `librarian`). Otherwise, they simply return to `reader`.
+The governance spec treats this case as a **withdrawal request with a waiting period** targeting the `coordenador` membership. Concretely, you use the same procedure as in §6.3 ("Request withdrawal"), but by selecting the `coordenador` role. The person moves to `pending_removal` on their `coordenador` membership; at D+7, that membership changes to `removed`. Their previous `librarian` line — closed when they were promoted (exclusive role, §5.6) — is then reactivated: the person "falls back" to `librarian`. If they never had one (arrival by collegial jump), they simply return to `reader`.
 
 This is deliberately the same mechanism as for `librarian` members, with the same safeguards. **No other coordinator has special power** over their colleagues: the procedure goes through the waiting period and collegiality.
 
@@ -716,7 +722,7 @@ Politically, this is consistent with what happens when the sole coordinator expl
 
 ## 6.8. Some edge cases to know
 
-**A person in `pending_removal` who wants to leave immediately.** They can. They simply use "I'm stepping down" (self-demotion T4) themselves. Effect: immediate change to `inactive`, short-circuiting the waiting period. Politically, this is consistent: right P3 (self-demotion) is unconditional.
+**A person in `pending_removal` who wants to leave immediately.** They can. They simply use "I'm stepping down" (self-demotion T4) themselves. Effect: immediate change to `vacated`, short-circuiting the waiting period. Politically, this is consistent: right P3 (self-demotion) is unconditional.
 
 **A person in `suspended` whom one wants to exclude permanently.** See §6.5 "Important: suspension vs. withdrawal". The suspension must be lifted first, then the withdrawal requested.
 
@@ -860,9 +866,9 @@ Off-spec, but here is what is practised:
 
 **1. Contact** by a network administrator with the local collective, through all available channels (the reader account(s) that remain registered, the library's external contact details if they exist, the local network of acquaintances).
 
-**2. Political verification**: does the collective still exist? Does it want to continue existing? If there are members but they have simply let go of the technical functions, new staff can be co-opted through an off-workflow co-optation.
+**2. Political verification**: does the collective still exist? Does it want to continue existing? If there are members but they have simply let go of the technical functions, a coordination can be rebuilt — through the collegial circuit, like everywhere else.
 
-**3. Off-workflow co-optation** by the network administrator, via direct SQL or via the UI (a network administrator has the right to act as coordinator+ on any library, cf. chapter 2). The off-workflow co-optation must be traced in the audit log with an explicit reason: "Resumption of coordination after vacancy, following contact with the collective on DD/MM, by network administrator X." And — a key point of doctrine — **prior notification to the local coordination is mandatory**, except when the library has no living staff members at all, in which case notification goes through the remaining active `reader`s (cf. §7.6).
+**3. Recovery through the collegial circuit** *(since 01/09/2026 there is no more "off-workflow co-optation": direct promotions are condemned, including for the network admin)*. The network administrator has the right to **file a coordination proposal** on any library (cf. chapter 2). If an active `librarian` remains, the proposal can target them. If only active `reader`s remain, the practicable path is the **collegial jump**: the local collective decides to enable the setting (`allow_direct_coordenador`), the network admin files the proposal targeting an active reader, the bootstrap quorum applies (1 endorsement when the team is too small), and the person **accepts**. Nothing happens without the collective: the proposal executes its decision, it does not replace it. The action is traced (audit log + `cross_library_actions_log`), and — a key point of doctrine — **prior notification to the local coordination is mandatory**, except when the library has no living staff members at all, in which case notification goes through the remaining active `reader`s (cf. §7.6).
 
 **4. If the collective no longer exists**: open a discussion about the **orderly closure** of the library. What data to keep, what to delete, how to communicate to readers, etc. This is a workflow to be formalised separately.
 
@@ -1161,7 +1167,9 @@ Each governance action triggers **one or more** automatic emails. This is not sp
 
 | Event | Person concerned | Active local coordinators | Network admins |
 |---|---|---|---|
-| Co-optation (T1, T2) | ✅ | ✅ | — |
+| Proposal filed (welcome or coordination) | — | ✅ to endorse | — |
+| Proposal ready (quorum reached) | ✅ to accept | — | — |
+| Co-optation completed (acceptance — T1, T2, T2b) | ✅ welcome | ✅ | — |
 | Self-downgrade (T3, T4) | ✅ confirmation | ✅ | — |
 | Removal request (T5) | ✅ | ✅ | — |
 | Cancellation of request (T8) | ✅ | ✅ | — |
@@ -1175,6 +1183,11 @@ Each governance action triggers **one or more** automatic emails. This is not sp
 | Network admin co-optation (rejection) | ✅ with rationale | — | ✅ |
 | Collective removal of network admin | ✅ | — | ✅ |
 | Cross-library intervention | — | ✅ (coords of the library) | ✅ (the author) |
+
+Two clarifications on the invitation circuit's emails:
+
+- **Welcoming someone and entrusting them with coordination are not the same act**: the emails of a coordination proposal have their own wording, distinct from the welcome's.
+- **A collegial jump says its name**: when a coordination proposal targets a person who is not yet a team member (`reader` → `coordenador` jump, §5.3), the proposal and acceptance emails use dedicated intros that state it explicitly — endorsement and acceptance both happen in full knowledge.
 
 ### The tone of the emails
 
@@ -1249,21 +1262,21 @@ To close, six complete scenarios. Each illustrates a combination of mechanisms a
 
 1. Emma logs in on 5 May at 14:30. Goes to `/biblioteca`, tab **Team**.
 2. Searches for Voltairine in the list of `reader` members of the library (they have had an AnarBib account since February).
-3. Clicks **"Invite to team"** → selects **librarian**.
-4. "Reason" field: "GA decision of 04/05" (doctrine 1, strict requirement).
-5. Confirms.
+3. Clicks **"Invite to team"** → selects **librarian**. "Reason" field: "GA decision of 04/05" (doctrine 1, strict requirement). Confirms: the **proposal** is filed.
+4. Lucy (another coordinator) receives the endorsement email and **ratifies** the proposal — a second look, not a formality.
+5. Voltairine receives an email: an invitation to join the team awaits in their account. They **accept**.
 
-**Immediate effect.**
+**Effect upon acceptance.**
 
-- Voltairine receives an email: "Hi Voltairine, you have been appointed librarian at BLMF by Emma G. following: "GA decision of 04/05". Your new permissions are active. Welcome to the team."
-- The other active coordinators at BLMF (Lucy and Piotr) receive an informational email.
-- Audit log: `2026-05-05 14:30 — Emma G. promoted Voltairine d.C. to librarian (reason: GA decision of 04/05)`.
+- Voltairine's `librarian` line becomes active; their `reader` line closes (exclusive role, §5.6).
+- Voltairine receives a welcome email; the active coordinators at BLMF (Emma, Lucy, Piotr) receive an informational email.
+- Audit log: `promoted_to_librarian`, with the proposal, the endorsement and the acceptance all traceable.
 
 **Commentary.**
 
-The simplest case. The ILS cleanly executes the collective's decision. Emma made no political decision — they clicked to execute what was decided outside the software.
+The simplest case. The ILS cleanly executes the collective's decision, in three steps: Emma proposes, Lucy endorses, Voltairine accepts. Nobody decided anything alone — and Voltairine only joins the team because they **said so**, in the software as at the GA *(overhaul of 01/09/2026: before that date, promotion was direct and immediate)*.
 
-**What the ILS did not do:** verify that the GA actually took place, that the decision was actually made, that Voltairine actually agreed. These things are **outside the software**. If Emma had lied about the GA, the ILS would have noticed nothing. The political culture of BLMF is what prevents that lie (and the log makes it traceable after the fact).
+**What the ILS did not do:** verify that the GA actually took place, nor that the decision was actually made. These things remain **outside the software**. If Emma had lied about the GA, Lucy would have had to endorse the lie and Voltairine to accept it — the circuit makes fraud costly, it does not make political culture unnecessary.
 
 ## 10.2. Lucy steps down
 
@@ -1279,8 +1292,8 @@ The simplest case. The ILS cleanly executes the collective's decision. Emma made
 
 **Immediate effect.**
 
-- Their `coordenador` membership switches to `inactive`.
-- Their `librarian` membership (which existed in parallel) remains `active`.
+- Their `coordenador` membership switches to `vacated` (role left voluntarily).
+- Their `librarian` line — closed when they were promoted to coordination (exclusive role, §5.6) — is reactivated.
 - Lucy receives a confirmation email: "You are now librarian at BLMF. You keep your operational permissions."
 - The entire coordination team (Emma, Piotr) receives an email: "Lucy P. has stepped down, is no longer a coordinator. They remain librarian on the team."
 - Audit log: `2026-05-05 18:42 — Lucy P. self-demoted coordenador → librarian (reason: starting thesis, temporary lightening of duties)`.
@@ -1317,9 +1330,9 @@ This is the exemplary use of right P3. Lucy did not need to ask anyone's permiss
 - 6 May at 9:00: Lucy reads the email. They agree with the decision and do not intervene.
 - 7 May: Emma has an exchange with Karl (who writes to explain themselves). Emma concludes the decision stands. Does not intervene.
 - 8–11 May: nothing.
-- **12 May at 00:00**: the cron `cron_team_pending_removal_complete` runs. Karl switches to `inactive`.
+- **12 May at 00:00**: the cron `cron_team_pending_removal_complete` runs. Karl switches to `removed`; their `reader` line is reactivated (they leave the team, not the library).
 - Final email to Karl and to the coordination.
-- Audit log: `2026-05-12 — automatic switch to inactive (reason: pending_removal expired, cron) — actor: NULL`.
+- Audit log: `2026-05-12 — automatic switch to removed (reason: pending_removal expired, cron) — actor: NULL`.
 
 **Commentary.**
 
@@ -1378,7 +1391,7 @@ A typical case where suspension is used as a **precautionary measure**, not as a
 
 **Immediate effect.**
 
-- Errico's `coordenador` membership switches to `inactive`.
+- Errico's `coordenador` membership switches to `vacated`.
 - Email to Errico (confirmation).
 - Email to all BLMF coordination members — but there are none left, so in practice the remaining active `librarian` members receive a notification.
 - **Urgent email to network administrators**: "BLMF no longer has an active coordinator. The remaining active librarians are: Voltairine d.C., Friedrich E., …"
@@ -1388,7 +1401,7 @@ A typical case where suspension is used as a **precautionary measure**, not as a
 
 - 6 May: Xavier (network administrator) contacts Voltairine and Friedrich, the remaining active `librarian` members. They confirm that the BLMF collective still exists and that they want to continue.
 - 7–15 May: internal discussion within the BLMF collective, which decides at a GA to co-opt Voltairine as coordinator.
-- 16 May: Xavier (or another BLMF coordinator, of whom there are none left, so Xavier exercising their transversal right) co-opts Voltairine as coordinator. **Mandatory prior notice**: Xavier wrote to Friedrich and Voltairine 2 days earlier to announce the action. Once done, the action is recorded in `cross_library_actions_log` with a criticality level of "high" (modification of a library's coordination by a network administrator).
+- 16 May: Xavier, exercising their transversal right (there is no BLMF coordinator left to do it), **files the coordination proposal** targeting Voltairine — an active librarian, so the T2 precondition is met. Friedrich **endorses**, Voltairine **accepts**: even on a network-admin recovery, the collegial circuit applies in full — Xavier cannot "manufacture" a coordinator alone. **Mandatory prior notice**: Xavier wrote to Friedrich and Voltairine 2 days earlier to announce the filing. The action is recorded in `cross_library_actions_log` with a criticality level of "high" (modification of a library's coordination by a network administrator).
 
 **Commentary.**
 
@@ -1462,13 +1475,13 @@ The alternative — co-opting Mohammed by majority vote against Patricia's objec
 
 **Cross-library** — Describes an action performed by a network administrator on a library of which they are not a local staff member. Recorded in `cross_library_actions_log`.
 
-**Cron** — Automated task executed periodically by the ILS. With no human actor. Examples: `cron_team_pending_removal_complete` (transition from `pending_removal` to `inactive` at D+7), `cron_team_inactive_cleanup` (automatic exit at 9 months).
+**Cron** — Automated task executed periodically by the ILS. With no human actor. Examples: `cron_team_pending_removal_complete` (transition from `pending_removal` to `removed` at D+7), `cron_team_inactive_cleanup` (automatic exit at 9 months).
 
 **Delegation** — Act by which a collective temporarily entrusts a function to one of its members, retaining the ability to reclaim it. Central concept, distinguished from "hierarchy".
 
-**Membership** — Row of the `user_library_memberships` table that expresses a person's attachment to a library in a given role. A person can have multiple memberships in a library (multi-membership).
+**Membership** — Row of the `user_library_memberships` table that expresses a person's attachment to a library in a given role. A person can have several rows in a library (their history), but **only one active** at a time (exclusive role, cf. §5.6).
 
-**Multi-membership** — Ability to have multiple membership rows for the same person in the same library, with different roles.
+**Multi-membership** — Historical model in which the same person could hold several *active* membership rows in the same library, with different roles. Abandoned in May 2026 in favour of the exclusive role (§5.6).
 
 **Network** — The collective of libraries that mutually recognise each other and share the AnarBib platform. Not a central organisation; a federation.
 
@@ -1494,16 +1507,22 @@ This annex gives, for each RPC mentioned in the guide, its political translation
 
 | SQL RPC | Transition | Political translation |
 |---|---|---|
-| `fn_team_promote_to_librarian` | T1 | Co-optation `reader` → `librarian` |
-| `fn_team_promote_to_coordenador` | T2 | Co-optation `librarian` → `coordenador` |
+| `fn_team_propose_invitation` | T1, T2, T2b | File a proposal (welcome or coordination) |
+| `fn_team_ratify_invitation` | T1, T2, T2b | Endorse a proposal (quorum) |
+| `fn_team_accept_invitation` | T1, T2, T2b | Accept the charge — this is the gesture that promotes |
+| `fn_team_decline_invitation` | T1, T2, T2b | Decline the charge (costs nothing) |
+| `fn_team_revoke_invitation` | T1, T2, T2b | Revoke a proposal filed by mistake |
+| `fn_team_expire_invitations` | T1, T2, T2b | Cron: proposal expiry (30 days) |
 | `fn_team_self_demote` | T3, T4 | Self-demotion ("stepping down") |
 | `fn_team_request_remove_member` | T5 | Removal request with 7-day lapse period |
 | `fn_team_cancel_remove_member` | T8 | Cancellation of a removal request |
 | `fn_team_suspend_member` | T6 | Immediate suspension (precautionary measure) |
 | `fn_team_unsuspend_member` | T7 | Lifting of suspension |
 | `fn_validate_physical_account` | — | Physical validation of a `reader` account |
-| `cron_team_pending_removal_complete` | T5 (follow-up) | Cron: transition to `inactive` at D+7 |
+| `cron_team_pending_removal_complete` | T5 (follow-up) | Cron: transition to `removed` at D+7 |
 | `cron_team_inactive_cleanup` | T9 | Cron: automatic exit at 9 months |
+
+*The old direct promotions `fn_team_promote_to_librarian` and `fn_team_promote_to_coordenador` are **condemned** (26/08 and 01/09/2026): they refuse with `collegiality_required`, pointing to the three-step path. They are only mentioned here so that their name, met in an old document, is not mistaken for an active path.*
 
 ## Network administrator functions
 

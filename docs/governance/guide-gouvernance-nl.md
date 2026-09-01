@@ -2,7 +2,7 @@
 title: "Governance-gids van AnarBib"
 subtitle: "Voor coordinatoren van bibliotheken en beheerders van het netwerk"
 author: "Projet AnarBib"
-date: "Versie 1.1 — 5 juni 2026"
+date: "Versie 1.2 — 1 september 2026"
 lang: nl
 ---
 
@@ -215,19 +215,25 @@ Het SIGB AnarBib gebruikt vier rollen, gedeclareerd in de database door de beper
 
 **`administrador`** — Historische rol, in de uitfasering. Bestond om "beheerrechten over meerdere bibliotheken" aan te geven maar gekoppeld aan een `library_id`. Vervangen door de **netwerkbeheerders** opgeslagen in de tabel `network_administrators` (zie hoofdstuk 2). De spec admin-netwerk voorziet in geleidelijke migratie en definitieve verwijdering van deze rol uit de tabel `user_library_memberships`.
 
-## 3.2. De vijf statussen van een lidmaatschap
+## 3.2. De statussen van een lidmaatschap
 
-Elke rij in de tabel `user_library_memberships` heeft een **status** die de staat van de delegatie op een bepaald moment uitdrukt. Vijf statussen zijn mogelijk:
+Elke rij in de tabel `user_library_memberships` heeft een **status** die de staat van de delegatie op een bepaald moment uitdrukt. De statussen die de governance aangaan:
 
 **`active`** — Normale toestand. De persoon heeft zijn/haar/diens rol en oefent die uit.
 
-**`pending`** — Voorbehouden aan de spec fysieke validatie. Het lidmaatschap is aangemaakt maar wacht op een fysieke ontmoeting met een `librarian+` van de inschrijfbibliotheek. Geen toegang tot de functies van de rol zolang deze status actief is.
+**`pending_validation`** — Voorbehouden aan de spec fysieke validatie. Het lidmaatschap is aangemaakt maar wacht op een fysieke ontmoeting met een `librarian+` van de inschrijfbibliotheek. Geen toegang tot de functies van de rol zolang deze status actief is.
 
 **`suspended`** — **Conservatoire maatregel** genomen door een `coordenador`. Geen toegang. Gebruik: gemeld intimidatiegedrag in afwachting van onderzoek, gecompromitteerd account, conflict in mediatieprocedure. **Onbepaalde duur**; opheffing is handmatig, door een coördinator (terug naar `active`) of door feitelijke afzetting.
 
-**`pending_removal`** — **Wachttijd van zeven dagen** vóór feitelijke uitsluiting. Geen toegang gedurende deze periode. Mogelijke verdere ontwikkeling: annulering door een andere coördinator (terug naar `active`), zelf-degradatie door de persoon zelf (kortsluiting), of automatische overgang naar `inactive` op dag +7.
+**`pending_removal`** — **Wachttijd van zeven dagen** vóór feitelijke uitsluiting. Geen toegang gedurende deze periode. Mogelijke verdere ontwikkeling: annulering door een andere coördinator (terug naar `active`), zelf-degradatie door de persoon zelf (kortsluiting), of automatische overgang naar `removed` op dag +7.
 
-**`inactive`** — Gesloten lidmaatschap. De persoon is niet meer in het team. Geen toegang. Meerdere mogelijke oorzaken: vrijwillig vertrek, einde wachttijd, verlaten account (automatisch na 9 maanden).
+**`vacated`** — **Vrijwillig neergelegde rol.** Gezet door de zelfdegradatie ("Ik geef het stokje door", recht P3). De persoon heeft beslist — deze status zegt precies dat, en niets anders. *(Onderscheid ingevoerd op 01/09/2026: vóór die datum zette het vrijwillige vertrek `inactive`, wat het verwarde met een verlaten account.)*
+
+**`removed`** — Lidmaatschap gesloten door een beslissing of een mechanisme van het SIGB: einde van de wachttijd van een terugtrekking (dag +7), of sluiting van de rij van de lagere rang bij een bevordering (exclusieve rol, cf. §5.6).
+
+**`inactive`** — **Verlaten account.** Enkel gezet door de cron van het automatische vertrek, na 9 maanden zonder inloggen (T9). De persoon heeft niets beslist: die is verdwenen.
+
+*(De tabel draagt ook enkele statussen eigen aan de inschrijvings- en uitleentrajecten — `refused`, `left_with_pending_circulation`, `terminated` — die niet tot de teamgovernance behoren en in deze gids niet worden behandeld.)*
 
 ## 3.3. Het transitieschema
 
@@ -238,28 +244,28 @@ Het SIGB staat niet elke overgang tussen statussen toe. Hier, vereenvoudigd, het
                        │   active     │ ◄──────────┐
                        └──────┬───────┘            │
                               │                    │
-              ┌───────────────┼───────────────┐    │
-              ▼               ▼               ▼    │
-       ┌─────────────┐  ┌─────────────┐  ┌─────────┴────┐
-       │  suspended  │  │ pending_    │  │  inactive    │
-       │             │  │ removal     │  │              │
-       └──────┬──────┘  └──────┬──────┘  └──────────────┘
-              │                │
-              │ opheffing      │ annulering
-              └────────────────┴────────────┐
-                               │            │
-                               ▼ (dag+7)    ▼
-                        ┌──────────────┐
-                        │   inactive   │
-                        └──────────────┘
+        ┌──────────────┬──────┴────────┬───────────│──────┐
+        ▼              ▼               ▼           │      ▼
+ ┌─────────────┐ ┌─────────────┐ ┌────────────┐    │ ┌────────────┐
+ │  suspended  │ │ pending_    │ │  vacated   │    │ │  inactive  │
+ │             │ │ removal     │ │ (P3, zelf) │    │ │ (T9, cron) │
+ └──────┬──────┘ └──────┬──────┘ └────────────┘    │ └────────────┘
+        │               │                          │
+        │ opheffing     │ annulering               │
+        └───────────────┴──────────────────────────┘
+                        │
+                        ▼ (dag+7)
+                 ┌──────────────┐
+                 │   removed    │
+                 └──────────────┘
 ```
 
 Enkele kernregels:
 
-- Men kan **niet** rechtstreeks van `active` naar `inactive` gaan voor een `librarian` door een eenzijdige beslissing van een andere coördinator. Er moet via `pending_removal` worden gegaan en de wachttijd worden afgewacht (of de persoon degradeert zichzelf).
-- Men kan **altijd** van de eigen `active` status naar `inactive` gaan (zelfdegradatie, recht P3).
+- Men kan een `librarian` **niet** met één gebaar uitsluiten door een eenzijdige beslissing van een andere coördinator. Er moet via `pending_removal` worden gegaan en de wachttijd worden afgewacht (of de persoon degradeert zichzelf).
+- Men kan de eigen `active` rol **altijd** vrijwillig neerleggen (zelfdegradatie, recht P3): de rij gaat naar `vacated`, onmiddellijk.
 - `suspended` heeft **geen** maximale duur. Het is geen wachttijd vóór uitsluiting, het is een conservatoire maatregel — die duurt zolang de beraadslaging loopt.
-- Van `inactive` keert men **niet terug** naar `active`. Om iemand te herintegreren, maakt men een nieuwe lidmaatschapsrij aan. De geschiedenis blijft bewaard.
+- Van een gesloten status (`vacated`, `removed`, `inactive`) keert men **niet** rechtstreeks terug naar `active`. Om iemand te herintegreren, loopt het normale traject — dat de gesloten rij heractiveert of een nieuwe aanmaakt. De geschiedenis blijft bewaard.
 
 ## 3.4. De negen overgangen: wie mag wat
 
@@ -440,7 +446,7 @@ Twee mogelijke modi, gekozen door elke bibliotheek in haar configuratie:
 ### Procedure voor fysieke validatie (modus `manual_validation`)
 
 1. De persoon schrijft zich online in en kiest uw bibliotheek als thuisbibliotheek.
-2. Diens account wordt aangemaakt met `status='pending'`. Die persoon ontvangt een e-mail met uitleg dat die zich fysiek bij de bibliotheek moet melden.
+2. Diens account wordt aangemaakt met `status='pending_validation'`. Die persoon ontvangt een e-mail met uitleg dat die zich fysiek bij de bibliotheek moet melden.
 3. Wanneer die persoon komt, ontmoet een `librarian+` die persoon, verifieert wat te verifiëren valt (de doctrine van wat "verifiëren" betekent is lokaal), en klikt **"Valideren"** op diens rij in het tabblad **Team** → sectie **Accounts in afwachting**.
 4. Een optioneel veld "Notitie" maakt het mogelijk een context te vermelden ("ontmoeting van 12/05 tijdens de permanentie, voorgesteld door Emma").
 5. Het account gaat naar `status='active'`. De persoon ontvangt een welkomst-e-mail.
@@ -477,7 +483,7 @@ Verschillende dingen in dit hoofdstuk zijn mogelijk niet naar uw wens:
 
 - **De modi voor fysieke validatie** (§5.5). U vindt dat er een derde nodig is ("uitgestelde validatie", "validatie op afstand", anders). Te bespreken via `spec-validation-physique.md`.
 
-- **Het meervoudig lidmaatschap** (§5.6). U vindt het onnodig complex en dat er één rol per persoon per bibliotheek zou moeten zijn. Dit is een gegevensmodellingsbeslissing, meer structurerend dan het lijkt. Te bespreken met de ontwikkelaars.
+- **De exclusieve rol** (§5.6). U vindt dat een persoon meerdere actieve rollen in dezelfde bibliotheek moet kunnen cumuleren (tegelijk `librarian` en `coordenador` zijn, bijvoorbeeld). Dit is een gegevensmodellingsbeslissing, meer structurerend dan het lijkt — en ze werd in mei 2026 al in de andere richting beslecht. Te bespreken met de ontwikkelaars.
 
 Zie hoofdstuk 4 voor de algemene wijzigingsprocedure, en bijlage C voor het notamodel.
 
@@ -523,8 +529,8 @@ Dit is het **meest fundamentele recht** in het governancesysteem van AnarBib. Ie
 
 ### Onmiddellijk effect
 
-- Je huidige membership (`librarian` of `coordenador`) gaat naar `inactive`.
-- Als je de doelmembership (`reader` of `librarian`) nog niet had, wordt die aangemaakt op `active`.
+- Je huidige membership (`librarian` of `coordenador`) gaat naar `vacated` — de status van de **vrijwillig neergelegde** rol, verschillend van de `inactive` van het verlaten account.
+- Je rij van de lagere rang (`reader` of `librarian`, afhankelijk van de gekozen landing) wordt geheractiveerd als die bestond — of anders aangemaakt op `active`.
 - E-mail aan de volledige coördinatie + aan jezelf (bevestiging).
 - Auditlog : `action='self_demoted'`.
 
@@ -535,7 +541,7 @@ Het SIGB **laat je vertrekken**, maar waarschuwt je :
 > ⚠️ LET OP : je bent de enige actieve `coordenador` van [biblio]. De biblio komt zonder coördinatie te staan. De AnarBib-beheerders worden ingelicht. Doorgaan?
 
 Als je bevestigt :
-- Je coord-membership gaat naar `inactive`.
+- Je coord-membership gaat naar `vacated`.
 - De biblio gaat in **degraded mode** : `librarian`s kunnen blijven lenen beheren, inschrijvingen valideren, enz., maar geen wijziging van de publieke identiteit of de configuratie is mogelijk totdat een nieuwe coord wordt gecoöpteerd.
 - E-mail aan alle netwerkbeheerders : « Biblio X heeft geen `coordenador` meer. Dit zijn de actieve `librarian`s : ... »
 
@@ -581,7 +587,7 @@ Wanneer het collectief beslist dat iemand het team moet verlaten, en die persoon
 ### Effect op J+7 (automatische cron)
 
 Als het verzoek niet werd geannuleerd of kortgesloten :
-- De membership gaat naar `inactive`.
+- De membership gaat naar `removed`. De rij van de lagere rang (gesloten bij de bevordering, cf. exclusieve rol §5.6) wordt geheractiveerd — of er wordt een `reader`-rij aangemaakt: de persoon verlaat het team, niet de bibliotheek.
 - Definitieve e-mail aan de persoon en de coördinatie : « Terugtrekking effectief. »
 - Auditlog : `action='removal_completed'`.
 
@@ -668,7 +674,7 @@ Het onderscheid is cruciaal :
 | | Schorsing (T6) | Terugtrekking (T5) |
 |---|---|---|
 | Effect | Onmiddellijk | Uitgesteld (J+7) |
-| Duur | Onbepaald | 7 dagen dan `inactive` |
+| Duur | Onbepaald | 7 dagen dan `removed` |
 | Omkeerbaar door | Expliciete opheffing | Annulering tijdens wachttermijn |
 | Typisch gebruik | Bewarende maatregel | Uitsluitingsbeslissing |
 | Onderliggende politiek | « We geven ons de tijd om te begrijpen » | « We hebben beslist dat deze persoon vertrekt » |
@@ -683,7 +689,7 @@ RPC schorsen : `fn_team_suspend_member(p_user_id, p_library_id, p_role, p_reason
 
 Een enigszins bijzonder geval : wat te doen wanneer de coördinatie een `coordenador` wil **terugzetten** die zichzelf niet spontaan terugzet?
 
-De governancespec behandelt dit geval als een **terugtrekkingsverzoek met wachttermijn** gericht op de `coordenador`-membership. Concreet gebruik je dezelfde procedure als in §6.3 (« Terugtrekking aanvragen »), maar je selecteert de rol `coordenador`. De persoon gaat naar `pending_removal` op zijn/haar/diens `coordenador`-membership ; op J+7 gaat die membership naar `inactive`. Als die persoon een parallelle `librarian`-membership had, blijft die actief (en « valt » de persoon terug als `librarian`). Anders wordt die opnieuw gewone `reader`.
+De governancespec behandelt dit geval als een **terugtrekkingsverzoek met wachttermijn** gericht op de `coordenador`-membership. Concreet gebruik je dezelfde procedure als in §6.3 (« Terugtrekking aanvragen »), maar je selecteert de rol `coordenador`. De persoon gaat naar `pending_removal` op zijn/haar/diens `coordenador`-membership ; op J+7 gaat die membership naar `removed`. De vroegere `librarian`-rij — gesloten bij de bevordering (exclusieve rol, §5.6) — wordt dan geheractiveerd : de persoon « valt terug » als `librarian`. Als die er nooit een had (aankomst via collegiale sprong), wordt die opnieuw gewone `reader`.
 
 Dit is bewust hetzelfde mechanisme als voor `librarian`s, met dezelfde beschermingen. **Geen enkele andere coordinator heeft een bijzondere macht** over zijn/haar/diens collega's : de procedure verloopt via de wachttermijn en de collegialiteit.
 
@@ -716,7 +722,7 @@ Politiek gezien is dit coherent met wat er gedaan wordt wanneer de enige coordin
 
 ## 6.8. Enkele randgevallen om te kennen
 
-**Een persoon in `pending_removal` die onmiddellijk wil vertrekken.** Dat kan. Het volstaat zelf « Ik draag over » te gebruiken (zelf-terugtrekking T4). Effect : onmiddellijk overgaan naar `inactive`, de wachttermijn wordt kortgesloten. Politiek gezien is dit coherent : het recht P3 (zelf-terugtrekking) is onvoorwaardelijk.
+**Een persoon in `pending_removal` die onmiddellijk wil vertrekken.** Dat kan. Het volstaat zelf « Ik draag over » te gebruiken (zelf-terugtrekking T4). Effect : onmiddellijk overgaan naar `vacated`, de wachttermijn wordt kortgesloten. Politiek gezien is dit coherent : het recht P3 (zelf-terugtrekking) is onvoorwaardelijk.
 
 **Een persoon in `suspended` die men definitief wil uitsluiten.** Zie §6.5 « Belangrijk : schorsing vs. terugtrekking ». Men moet de schorsing eerst opheffen, dan de terugtrekking aanvragen.
 
@@ -860,9 +866,9 @@ Buiten de spec, maar dit is de praktijk:
 
 **1. Contact opnemen** door een netwerkbeheerder met het lokale collectief, via alle beschikbare kanalen (het of de lezeraccounts die nog ingeschreven zijn, de externe contactgegevens van de bibliotheek indien beschikbaar, het lokale kennisnetwerk).
 
-**2. Politieke verificatie**: bestaat het collectief nog? Wil het blijven bestaan? Als er leden zijn die gewoon de technische functies hebben laten varen, kan nieuw personeel buiten de workflow gecoöpteerd worden.
+**2. Politieke verificatie**: bestaat het collectief nog? Wil het blijven bestaan? Als er leden zijn die gewoon de technische functies hebben laten varen, kan een coördinatie opnieuw worden opgebouwd — via het collegiale traject, zoals overal.
 
-**3. Coöptatie buiten de workflow** door de netwerkbeheerder, via directe SQL of via de UI (een netwerkbeheerder heeft het recht om op te treden als coordinator+ van welke bibliotheek dan ook, cf. hoofdstuk 2). De coöptatie buiten de workflow moet worden getraceerd in het auditlogboek met een expliciete reden: « Hervatting coordinatie na vacature, na contact met het collectief op DD/MM, door netwerkbeheerder X ». En — een sleutelpunt van de doctrine — **voorafgaande informatie aan de lokale coordinatie is verplicht**, tenzij de bibliotheek helemaal geen levend staflid meer heeft, in welk geval de informatie via de resterende actieve `reader`s loopt (cf. §7.6).
+**3. Hervatting via het collegiale traject** *(sinds 01/09/2026 bestaat er geen « coöptatie buiten de workflow » meer: de directe bevorderingen zijn buiten werking gesteld, ook voor de netwerkbeheerder)*. De netwerkbeheerder heeft het recht om op elke bibliotheek **een coördinatievoorstel in te dienen** (cf. hoofdstuk 2). Als er een actieve `librarian` overblijft, kan het voorstel die betreffen. Als er alleen actieve `reader`s overblijven, is het begaanbare pad de **collegiale sprong**: het lokale collectief besluit de instelling te activeren (`allow_direct_coordenador`), de netwerkbeheerder dient het voorstel in gericht op een actieve reader, het bootstrap-quorum geldt (1 steunbetuiging wanneer het team te klein is), en de persoon **aanvaardt**. Niets gebeurt zonder het collectief: het voorstel voert diens beslissing uit, het vervangt die niet. De actie wordt vastgelegd (auditlog + `cross_library_actions_log`), en — een sleutelpunt van de doctrine — **voorafgaande informatie aan de lokale coordinatie is verplicht**, tenzij de bibliotheek helemaal geen levend staflid meer heeft, in welk geval de informatie via de resterende actieve `reader`s loopt (cf. §7.6).
 
 **4. Als het collectief niet meer bestaat**: opening van een discussie over de **correcte sluiting** van de bibliotheek. Welke gegevens bewaren, welke verwijderen, hoe te communiceren met de lezers, enz. Dit is een workflow die apart geformaliseerd moet worden.
 
@@ -1161,7 +1167,9 @@ Elke bestuurshandeling triggert **een of meerdere** automatische e-mails. Dit is
 
 | Gebeurtenis | Betrokken persoon | Actieve lokale coördinatoren | Netwerkbeheerders |
 |---|---|---|---|
-| Coöptatie (T1, T2) | ✅ | ✅ | — |
+| Voorstel ingediend (verwelkoming of coördinatie) | — | ✅ te steunen | — |
+| Voorstel gereed (quorum bereikt) | ✅ te aanvaarden | — | — |
+| Coöptatie voltooid (aanvaarding — T1, T2, T2b) | ✅ welkom | ✅ | — |
 | Zelf-degradatie (T3, T4) | ✅ bevestiging | ✅ | — |
 | Ontslagverzoek (T5) | ✅ | ✅ | — |
 | Annulering verzoek (T8) | ✅ | ✅ | — |
@@ -1175,6 +1183,11 @@ Elke bestuurshandeling triggert **een of meerdere** automatische e-mails. Dit is
 | Coöptatie netwerkbeheerder (afwijzing) | ✅ met rationale | — | ✅ |
 | Collectief ontslag netwerkbeheerder | ✅ | — | ✅ |
 | Cross-bibliotheekinterventie | — | ✅ (coördinatoren van de bibliotheek) | ✅ (de uitvoerder) |
+
+Twee verduidelijkingen over de e-mails van het uitnodigingstraject:
+
+- **Iemand verwelkomen en iemand de coördinatie toevertrouwen zijn niet dezelfde daad**: de e-mails van een coördinatievoorstel hebben eigen teksten, verschillend van die van de verwelkoming.
+- **Een collegiale sprong zegt zijn naam**: wanneer een coördinatievoorstel een persoon betreft die nog geen teamlid is (sprong `reader` → `coordenador`, §5.3), gebruiken de voorstel- en aanvaardingsmails eigen intro's die dat expliciet zeggen — steun en aanvaarding gebeuren met kennis van zaken.
 
 ### De toon van de e-mails
 
@@ -1249,21 +1262,21 @@ Tot slot zes volledige scenario's. Elk illustreert een combinatie van mechanisme
 
 1. Emma logt in op 5 mei om 14:30 uur. Gaat naar `/biblioteca`, tabblad **Equipe**.
 2. Zoekt Voltairine op in de lijst van `reader` van de bib (ze heeft een AnarBib-account sinds februari).
-3. Klikt op **"Uitnodigen in het team"** → kiest **librarian**.
-4. Veld "Reden": "beslissing AV van 04/05" (doctrine 1, strikte vereiste).
-5. Bevestigt.
+3. Klikt op **"Uitnodigen in het team"** → kiest **librarian**. Veld "Reden": "beslissing AV van 04/05" (doctrine 1, strikte vereiste). Bevestigt: het **voorstel** is ingediend.
+4. Lucy (andere coordinator) ontvangt de steunmail en **ratificeert** het voorstel — een tweede blik, geen formaliteit.
+5. Voltairine ontvangt een e-mail: een uitnodiging om bij het team te komen wacht in haar account. Ze **aanvaardt**.
 
-**Onmiddellijk effect.**
+**Effect bij de aanvaarding.**
 
-- Voltairine ontvangt een e-mail: "Hoi Voltairine, je bent benoemd als librarian van de BLMF door Emma G. naar aanleiding van: "beslissing AV van 04/05". Je nieuwe rechten zijn actief. Welkom in het team."
-- De andere actieve coordinatoren van de BLMF (Lucy en Piotr) ontvangen een informerende e-mail.
-- Auditlog: `2026-05-05 14:30 — Emma G. heeft Voltairine d.C. bevorderd tot librarian (reden: beslissing AV van 04/05)`.
+- Voltairines `librarian`-rij wordt actief; haar `reader`-rij sluit zich (exclusieve rol, §5.6).
+- Voltairine ontvangt een welkomstmail; de actieve coordinatoren van de BLMF (Emma, Lucy, Piotr) ontvangen een informerende e-mail.
+- Auditlog: `promoted_to_librarian`, met het voorstel, de steun en de aanvaarding traceerbaar.
 
 **Commentaar.**
 
-Het eenvoudigste geval. Het SIGB voert de beslissing van het collectief correct uit. Emma heeft politiek niets beslist — ze heeft geklikt om uit te voeren wat buiten de software is beslist.
+Het eenvoudigste geval. Het SIGB voert de beslissing van het collectief correct uit, in drie stappen: Emma stelt voor, Lucy steunt, Voltairine aanvaardt. Niemand heeft alleen beslist — en Voltairine komt alleen in het team omdat ze het **gezegd** heeft, in de software zoals in de AV *(herziening van 01/09/2026: vóór die datum was de bevordering direct en onmiddellijk)*.
 
-**Wat het SIGB niet heeft gedaan:** controleren of de AV echt heeft plaatsgevonden, of de beslissing werkelijk is genomen, of Voltairine het er werkelijk mee eens is. Die dingen vallen **buiten de software**. Als Emma over de AV had gelogen, had het SIGB niets gezien. De politieke cultuur van de BLMF is wat zo'n leugen voorkomt (en het log maakt het achteraf traceerbaar).
+**Wat het SIGB niet heeft gedaan:** controleren of de AV echt heeft plaatsgevonden, noch of de beslissing werkelijk is genomen. Die dingen blijven **buiten de software**. Als Emma over de AV had gelogen, had Lucy de leugen moeten steunen en Voltairine ze moeten aanvaarden — het traject maakt fraude duur, het maakt de politieke cultuur niet overbodig.
 
 ## 10.2. Lucy geeft het stokje door
 
@@ -1279,8 +1292,8 @@ Het eenvoudigste geval. Het SIGB voert de beslissing van het collectief correct 
 
 **Onmiddellijk effect.**
 
-- Haar membership `coordenador` gaat naar `inactive`.
-- Haar membership `librarian` (die parallel bestond) blijft `active`.
+- Haar membership `coordenador` gaat naar `vacated` (vrijwillig neergelegde rol).
+- Haar `librarian`-rij — gesloten bij haar bevordering tot de coördinatie (exclusieve rol, §5.6) — wordt geheractiveerd.
 - Lucy ontvangt een bevestigingsmail: "Je bent nu librarian van de BLMF. Je behoudt je operationele bevoegdheden."
 - De hele coordinatie (Emma, Piotr) ontvangt een e-mail: "Lucy P. heeft het stokje doorgegeven en is geen coordinator meer. Ze blijft librarian van het team."
 - Auditlog: `2026-05-05 18:42 — Lucy P. heeft zichzelf gedegradeerd van coordenador → librarian (reden: start doctoraatsonderzoek, tijdelijke verlichting)`.
@@ -1317,7 +1330,7 @@ Dit is het voorbeeldige gebruik van recht P3. Lucy hoefde niemand om toestemming
 - 6 mei om 9 uur: Lucy leest de e-mail. Ze is het eens met de beslissing en grijpt niet in.
 - 7 mei: Emma heeft een gesprek met Karl (die haar schrijft om zich te verklaren). Emma concludeert dat de beslissing stand houdt. Grijpt niet in.
 - 8-11 mei: niets.
-- **12 mei om 00:00**: de cron `cron_team_pending_removal_complete` wordt uitgevoerd. Karl gaat naar `inactive`.
+- **12 mei om 00:00**: de cron `cron_team_pending_removal_complete` wordt uitgevoerd. Karl gaat naar `removed`; zijn `reader`-rij wordt geheractiveerd (hij verlaat het team, niet de bibliotheek).
 - Afsluitmails aan Karl en aan de coordinatie.
 - Auditlog: `2026-05-12 — automatische overgang naar inactief (reden: pending_removal verlopen, cron) — actor: NULL`.
 
@@ -1378,7 +1391,7 @@ Typisch geval waarbij de schorsing wordt gebruikt als **conservatoire maatregel*
 
 **Onmiddellijk effect.**
 
-- Membership coordenador van Errico gaat naar `inactive`.
+- Membership coordenador van Errico gaat naar `vacated`.
 - E-mail aan Errico (bevestiging).
 - E-mail aan de hele coordinatie van de BLMF — maar die bestaat niet meer, dus in de praktijk zijn het de resterende actieve `librarian` die een melding ontvangen.
 - **Dringende e-mail aan de netwerkbeheerders**: "De BLMF heeft geen actieve coordinator meer. Hier zijn de resterende actieve librarians: Voltairine d.C., Friedrich E., ..."
@@ -1388,7 +1401,7 @@ Typisch geval waarbij de schorsing wordt gebruikt als **conservatoire maatregel*
 
 - 6 mei: Xavier (netwerkbeheerder) neemt contact op met Voltairine en Friedrich, de resterende actieve `librarian`. Ze bevestigen dat het collectief van de BLMF nog bestaat en dat ze willen doorgaan.
 - 7-15 mei: intern overleg van het collectief van de BLMF, dat in een AV besluit Voltairine te coöpteren als coordinator.
-- 16 mei: Xavier (of een andere coordinator van de BLMF die in dit geval niet meer bestaat, dus Xavier vanuit zijn transversaal recht) coöpteert Voltairine als coordinator. **Verplichte voorafgaande informatie**: Xavier heeft 2 dagen eerder aan Friedrich en Voltairine geschreven om de actie aan te kondigen. Eenmaal uitgevoerd wordt de actie vastgelegd in `cross_library_actions_log` met het kriticiteitsniveau "hoog" (wijziging van de coordinatie van een bib door een netwerkbeheerder).
+- 16 mei: Xavier, vanuit zijn transversaal recht (er is geen coordinator van de BLMF meer om het te doen), **dient het coördinatievoorstel in** gericht op Voltairine — actieve librarian, aan de T2-voorwaarde is voldaan. Friedrich **steunt**, Voltairine **aanvaardt**: ook bij een hervatting door een netwerkbeheerder geldt het collegiale traject volledig — Xavier kan niet in zijn eentje een coordinator "maken". **Verplichte voorafgaande informatie**: Xavier heeft 2 dagen eerder aan Friedrich en Voltairine geschreven om de indiening aan te kondigen. De actie wordt vastgelegd in `cross_library_actions_log` met het kriticiteitsniveau "hoog" (wijziging van de coordinatie van een bib door een netwerkbeheerder).
 
 **Commentaar.**
 
@@ -1462,13 +1475,13 @@ Het alternatief — Mohammed coöpteren met een meerderheid tegen de mening van 
 
 **Cross-bibs** — Kwalificeert een handeling uitgevoerd door een netwerkbeheerder op een bib waarvan die geen lokaal personeelslid is. Vastgelegd in `cross_library_actions_log`.
 
-**Cron** — Automatische taak die periodiek door het SIGB wordt uitgevoerd. Zonder menselijke actor. Voorbeelden: `cron_team_pending_removal_complete` (overgang van `pending_removal` naar `inactive` op dag +7), `cron_team_inactive_cleanup` (automatisch vertrek na 9 maanden).
+**Cron** — Automatische taak die periodiek door het SIGB wordt uitgevoerd. Zonder menselijke actor. Voorbeelden: `cron_team_pending_removal_complete` (overgang van `pending_removal` naar `removed` op dag +7), `cron_team_inactive_cleanup` (automatisch vertrek na 9 maanden).
 
 **Delegatie** — Daad waarmee een collectief tijdelijk een functie aan een van zijn leden toevertrouwt, met de mogelijkheid om deze terug te nemen. Centraal concept, onderscheiden van "hiërarchie".
 
-**Membership** — Rij in de tabel `user_library_memberships` die de verbondenheid van een persoon met een bib in een bepaalde rol uitdrukt. Een persoon kan meerdere memberships in een bib hebben (multi-membership).
+**Membership** — Rij in de tabel `user_library_memberships` die de verbondenheid van een persoon met een bib in een bepaalde rol uitdrukt. Een persoon kan meerdere rijen in een bib hebben (haar geschiedenis), maar **slechts één actieve** tegelijk (exclusieve rol, cf. §5.6).
 
-**Multi-membership** — Mogelijkheid om meerdere membership-rijen te hebben voor dezelfde persoon in dezelfde bib, met verschillende rollen.
+**Multi-membership** — Historisch model waarin dezelfde persoon meerdere *actieve* membership-rijen in dezelfde bib kon hebben, met verschillende rollen. In mei 2026 opgegeven ten gunste van de exclusieve rol (§5.6).
 
 **Netwerk** — Het collectief van bibs die elkaar wederzijds erkennen en het AnarBib-platform delen. Geen centrale organisatie, een federatie.
 
@@ -1494,16 +1507,22 @@ Deze bijlage geeft, voor elke in de gids vermelde RPC, de politieke vertaling en
 
 | RPC SQL | Overgang | Politieke vertaling |
 |---|---|---|
-| `fn_team_promote_to_librarian` | T1 | Coöptatie `reader` → `librarian` |
-| `fn_team_promote_to_coordenador` | T2 | Coöptatie `librarian` → `coordenador` |
+| `fn_team_propose_invitation` | T1, T2, T2b | Een voorstel indienen (verwelkoming of coördinatie) |
+| `fn_team_ratify_invitation` | T1, T2, T2b | Een voorstel steunen (quorum) |
+| `fn_team_accept_invitation` | T1, T2, T2b | De last aanvaarden — dit gebaar bevordert |
+| `fn_team_decline_invitation` | T1, T2, T2b | De last weigeren (kost niets) |
+| `fn_team_revoke_invitation` | T1, T2, T2b | Een per vergissing ingediend voorstel intrekken |
+| `fn_team_expire_invitations` | T1, T2, T2b | Cron: verval van de voorstellen (30 dagen) |
 | `fn_team_self_demote` | T3, T4 | Zelfdegradatie ("ik geef het stokje door") |
 | `fn_team_request_remove_member` | T5 | Terugtrekkingsverzoek met verval van 7 dagen |
 | `fn_team_cancel_remove_member` | T8 | Annulering van een terugtrekkingsverzoek |
 | `fn_team_suspend_member` | T6 | Onmiddellijke schorsing (conservatoire maatregel) |
 | `fn_team_unsuspend_member` | T7 | Opheffing van schorsing |
 | `fn_validate_physical_account` | — | Fysieke validatie van een `reader` |
-| `cron_team_pending_removal_complete` | T5 (vervolg) | Cron: overgang naar `inactive` op dag +7 |
+| `cron_team_pending_removal_complete` | T5 (vervolg) | Cron: overgang naar `removed` op dag +7 |
 | `cron_team_inactive_cleanup` | T9 | Cron: automatisch vertrek na 9 maanden |
+
+*De oude directe bevorderingen `fn_team_promote_to_librarian` en `fn_team_promote_to_coordenador` zijn **buiten werking gesteld** (26/08 en 01/09/2026): ze weigeren met `collegiality_required` en wijzen naar het driestappenpad. Ze staan hier alleen opdat hun naam, aangetroffen in een oud document, niet voor een actief pad wordt gehouden.*
 
 ## Functies voor netwerkbeheerder
 

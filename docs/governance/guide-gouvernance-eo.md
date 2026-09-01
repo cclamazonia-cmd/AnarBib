@@ -2,7 +2,7 @@
 title: "Gvidilo pri Regado de AnarBib"
 subtitle: "Por la koordinant-in-oj de bibliotekoj kaj la administrant-in-oj de la reto"
 author: "Projet AnarBib"
-date: "Versio 1.1 — 5-a de junio 2026"
+date: "Versio 1.2 — 1-a de septembro 2026"
 lang: eo
 ---
 
@@ -215,19 +215,25 @@ La SIGB AnarBib uzas kvar rolojn, deklaritajn en la datumbazo per la limo `CHECK
 
 **`administrador`** — Historia rolo, en forigo-procezo. Ekzistis por signifi «trans-biblioteka administra rajto» sed ligita al `library_id`. Nun anstataŭigita de la **ret-administrant-in-oj** stokitaj en la tabelo `network_administrators` (cf. ĉapitro 2). La spec admin-reseau planas la laŭgradan migradon kaj la fian forigon de ĉi tiu rolo el la tabelo `user_library_memberships`.
 
-## 3.2. La kvin statoj de membreco
+## 3.2. La statoj de membreco
 
-Ĉiu linio de la tabelo `user_library_memberships` havas **staton** esprimante la staton de la delegacio en donita momento. Kvin statoj estas eblaj:
+Ĉiu linio de la tabelo `user_library_memberships` havas **staton** esprimante la staton de la delegacio en donita momento. La statoj kiuj koncernas la regadon:
 
 **`active`** — Normala stato. La persono havas sian rolon kaj ekzercas ĝin.
 
-**`pending`** — Rezervita por la fizika validada spec. La membreco estas kreita sed atendas fizikan renkontiĝon kun librarian+ de la aliĝo-biblioteko. Neniu aliro al rolaj funkcioj dum ĉi tiu stato.
+**`pending_validation`** — Rezervita por la fizika validada spec. La membreco estas kreita sed atendas fizikan renkontiĝon kun librarian+ de la aliĝo-biblioteko. Neniu aliro al rolaj funkcioj dum ĉi tiu stato.
 
 **`suspended`** — **Konservativa rimedo** prenita de koordinad-in-o. Neniu aliro. Uzo: raporta ĝenado atendanta esploron, kompromitita konto, konflikto en mediaciprocezo. **Nedifinia daŭro**; la levado estas manlibra, de koordinad-in-o (reveno al `active`) aŭ per efika ekoficiigo.
 
-**`pending_removal`** — **Sep-taga karenco** antaŭ efika ekskludo. Neniu aliro dum ĉi tiu periodo. Ebla evoluo: nuligado de alia koordinad-in-o (reveno al `active`), aŭtomata retrograde de la persono mem (kurtvojo), aŭ aŭtomata transiro al `inactive` je J+7.
+**`pending_removal`** — **Sep-taga karenco** antaŭ efika ekskludo. Neniu aliro dum ĉi tiu periodo. Ebla evoluo: nuligado de alia koordinad-in-o (reveno al `active`), aŭtomata retrograde de la persono mem (kurtvojo), aŭ aŭtomata transiro al `removed` je J+7.
 
-**`inactive`** — Fermita membreco. La persono ne estas plu en la teamo. Neniu aliro. Pluraj eblaj originoj: libervola eliro, fino de karenco, forlasita konto (aŭtomata post 9 monatoj).
+**`vacated`** — **Rolo libervole forlasita.** Metita de la mem-malaltigo (« mi transdonas la manon », rajto P3). La persono decidis — ĉi tiu stato diras ĝuste tion, kaj nenion alian. *(Distingo enkondukita la 01/09/2026: antaŭ tiu dato, la libervola eliro metis `inactive`, konfuzante ĝin kun forlasita konto.)*
+
+**`removed`** — Membreco fermita de decido aŭ mekanismo de la SIGB: fino de la karenco de forigo (J+7), aŭ fermo de la malsupra-ranga linio dum promocio (ekskluziva rolo, kp. §5.6).
+
+**`inactive`** — **Forlasita konto.** Metita nur de la aŭtomata elir-cron, post 9 monatoj sen ensaluto (T9). La persono nenion decidis: ri malaperis.
+
+*(La tabelo portas ankaŭ kelkajn statojn proprajn al la enskribiĝaj kaj cirkuladaj procezoj — `refused`, `left_with_pending_circulation`, `terminated` — kiuj ne apartenas al la team-regado kaj ne estas traktataj en ĉi tiu gvidilo.)*
 
 ## 3.3. La transirskepo
 
@@ -238,28 +244,28 @@ La SIGB ne permesas ajnan transiron inter statoj. Jen, simpligite, la permesita 
                        │   active     │ ◄──────────┐
                        └──────┬───────┘            │
                               │                    │
-              ┌───────────────┼───────────────┐    │
-              ▼               ▼               ▼    │
-       ┌─────────────┐  ┌─────────────┐  ┌─────────┴────┐
-       │  suspended  │  │ pending_    │  │  inactive    │
-       │             │  │ removal     │  │              │
-       └──────┬──────┘  └──────┬──────┘  └──────────────┘
-              │                │
-              │ levado          │ nuligado
-              └────────────────┴────────────┐
-                               │            │
-                               ▼ (J+7)      ▼
-                        ┌──────────────┐
-                        │   inactive   │
-                        └──────────────┘
+        ┌──────────────┬──────┴────────┬───────────│──────┐
+        ▼              ▼               ▼           │      ▼
+ ┌─────────────┐ ┌─────────────┐ ┌────────────┐    │ ┌────────────┐
+ │  suspended  │ │ pending_    │ │  vacated   │    │ │  inactive  │
+ │             │ │ removal     │ │ (P3, mem)  │    │ │ (T9, cron) │
+ └──────┬──────┘ └──────┬──────┘ └────────────┘    │ └────────────┘
+        │               │                          │
+        │ levado        │ nuligado                 │
+        └───────────────┴──────────────────────────┘
+                        │
+                        ▼ (J+7)
+                 ┌──────────────┐
+                 │   removed    │
+                 └──────────────┘
 ```
 
 Kelkaj ŝlosilaj reguloj:
 
-- Oni **ne** povas rekte transiri de `active` al `inactive` por librarian per unuflanka decido de alia koordinad-in-o. Oni devas trairi `pending_removal` kaj atendi la karencperiodpon (aŭ ke la persono mem retrogradu sin).
-- Oni ĉiam povas transiri de sia propra stato `active` al `inactive` (aŭtoretrogrado, rajto P3).
+- Oni **ne** povas ekskludi librarian-on per unu sola gesto, per unuflanka decido de alia koordinad-in-o. Oni devas trairi `pending_removal` kaj atendi la karencperiodpon (aŭ ke la persono mem retrogradu sin).
+- Oni ĉiam povas libervole forlasi sian propran `active` rolon (aŭtoretrogrado, rajto P3): la linio iras al `vacated`, tuj.
 - `suspended` havas **neniun** maksimuman daŭron. Ĝi ne estas karenco antaŭ ekskludo, ĝi estas konservativa rimedo — ĝi daŭras dum la deliberado.
-- De `inactive`, oni **ne reiras** al `active`. Por reintegri personon, oni kreas novan membreclinion. La historio estas konservita.
+- De fermita stato (`vacated`, `removed`, `inactive`), oni **ne reiras** rekte al `active`. Por reintegri personon, oni pasas tra la normala cirkvito — kiu reaktivigas la fermitan linion aŭ kreas novan. La historio estas konservita.
 
 ## 3.4. La naŭ transiroj, kiu povas fari kion
 
@@ -440,7 +446,7 @@ Du eblaj reĝimoj, elektitaj de ĉiu biblioteko en sia agordado:
 ### Proceduro de fizika validado (reĝimo `manual_validation`)
 
 1. La persono aliĝas rete kaj elektas vian bibliotekon kiel sian ĉefan bibliotekon.
-2. Ria konto estas kreita kun `status='pending'`. Ri ricevas retmesaĝon klarigante, ke ri devas veni fizike prezentiĝi al la biblioteko.
+2. Ria konto estas kreita kun `status='pending_validation'`. Ri ricevas retmesaĝon klarigante, ke ri devas veni fizike prezentiĝi al la biblioteko.
 3. Kiam ri venas, librarian+ renkontas rin, kontrolas kion oni devas kontroli (la doktriino pri tio, kion «kontroli» signifas, estas loka), kaj alklakas **«Validigi»** sur ria linio en la langeto **Equipe** → sekcio **Atendantaj kontoj**.
 4. Laŭvola «Noto»-kampo permesas enskribigi kuntekston («renkontiĝo de 12/05 dum la permanenta servo, prezentita de Emma»).
 5. La konto transiras al `status='active'`. La persono ricevas bonvenon-retmesaĝon.
@@ -477,7 +483,7 @@ Pluraj aferoj povas ne konveni al vi en ĉi tiu ĉapitro:
 
 - **La fizikaj validadreĝimoj** (§5.5). Vi pensas, ke oni bezonas trionon («prokrastita validado», «fora validado», alia). Porti tion al `spec-validation-physique.md`.
 
-- **La plurobla membreco** (§5.6). Vi pensas, ke ĝi estas nenecese kompleksa kaj ke devus ekzisti unu sola rolo por persono por biblioteko. Tio estas datumodela decido, pli struktura ol ĝi ŝajnas. Porti tion kun la programist-in-oj.
+- **La ekskluziva rolo** (§5.6). Vi pensas, ke persono devus povi kumuli plurajn aktivajn rolojn en la sama biblioteko (esti samtempe `librarian` kaj `coordenador`, ekzemple). Tio estas datumodela decido, pli struktura ol ĝi ŝajnas — kaj ĝi jam estis decidita en la alia direkto en majo 2026. Porti tion kun la programist-in-oj.
 
 Vidu ĉapitron 4 por la ĝenerala amendada proceduro, kaj anekson C por la notan modelon.
 
@@ -523,8 +529,8 @@ Tio estas la **plej fundamenta rajto** en la registara sistemo de AnarBib. Ĉiu 
 
 ### Tuja efiko
 
-- Via aktuala membreco (`librarian` aŭ `coordenador`) iras al `inactive`.
-- Se vi ne havis jam la celitan membreecon (`reader` aŭ `librarian`), ĝi estas kreata kiel `active`.
+- Via aktuala membreco (`librarian` aŭ `coordenador`) iras al `vacated` — la stato de la rolo **libervole forlasita**, malsama ol la `inactive` de la forlasita konto.
+- Via malsupra-ranga linio (`reader` aŭ `librarian`, laŭ la elektita alteriĝo) estas reaktivigata se ĝi ekzistis — aŭ kreata kiel `active` alie.
 - Retpoŝto al la tuta koordinado + al vi mem (konfirmo).
 - Revizioregistro : `action='self_demoted'`.
 
@@ -535,7 +541,7 @@ La SIGB **permesas al vi foriri**, sed ĝi avertas vin :
 > ⚠️ ATENTU : vi estas la sola aktiv-in-a `coordenador` de [biblio]. La biblio restos sen koordinado. La administrant-in-oj de AnarBib estos sciigit-in-oj. Daŭrigi ?
 
 Se vi konfirmas :
-- Via `coord`-membreco iras al `inactive`.
+- Via `coord`-membreco iras al `vacated`.
 - La biblio eniras **degraditan reĝimon** : la `librarian`-oj povas daŭre administri pruntojn, validigi membriĝojn, ktp., sed nenia modifado de la publika identeco aŭ de la agordo estas ebla ĝis la kooptado de nova `coord`.
 - Retpoŝto al ĉiuj ret-administrant-in-oj : « La biblio X ne havas plu `coordenador`. Jen la aktivaj `librarian`-oj : ... »
 
@@ -581,7 +587,7 @@ Kiam la kolektivo decidas, ke iu person-in-o devas forlasi la teamon, kaj tiu pe
 ### Efiko je J+7 (aŭtomata cron)
 
 Se la peto ne estis nek nuligita nek trarondita :
-- La membreco iras al `inactive`.
+- La membreco iras al `removed`. La malsupra-ranga linio (fermita ĉe la promocio, kp. ekskluziva rolo §5.6) estas reaktivigata — aŭ `reader`-linio estas kreata : la persono forlasas la teamon, ne la bibliotekon.
 - Fina retpoŝto al la person-in-o kaj al la koordinado : « Elirejo efektiviĝis. »
 - Revizioregistro : `action='removal_completed'`.
 
@@ -668,7 +674,7 @@ La distingo estas decida :
 | | Suspendo (T6) | Elirejo (T5) |
 |---|---|---|
 | Efiko | Tuja | Prokrastita (J+7) |
-| Daŭro | Senlima | 7 tagoj poste `inactive` |
+| Daŭro | Senlima | 7 tagoj poste `removed` |
 | Reversebla de | Eksplicita levado | Nuligado dum la kvarento |
 | Tipa uzo | Konservativa mezuro | Ekskluda decido |
 | Subesta politiko | « Ni donas al ni la tempon kompreni » | « Ni decidis, ke ĉi tiu person-in-o eliras » |
@@ -683,7 +689,7 @@ RPC suspendi : `fn_team_suspend_member(p_user_id, p_library_id, p_role, p_reason
 
 Iom aparta kazo : kion fari kiam la koordinado volas **malaltrangi `coordenador`-in-on** kiu ne malaltrangiĝas spontanee ?
 
-La registara spec traktas ĉi tiun kazon kiel **elirpeton kun kvarento** celanta la `coordenador`-membreecon. Konkrete, oni uzas la saman proceduron kiel en §6.3 (« Peti la elirejon »), sed elektante la rolon `coordenador`. La person-in-o eniras `pending_removal` sur sia `coordenador`-membreco ; je J+7, ĉi tiu membreco iras al `inactive`. Se ri havis paralelan `librarian`-membreecon, ĝi restas aktiva (kaj la person-in-o « refalas » `librarian`). Alie, ri refaras simplan `reader`.
+La registara spec traktas ĉi tiun kazon kiel **elirpeton kun kvarento** celanta la `coordenador`-membreecon. Konkrete, oni uzas la saman proceduron kiel en §6.3 (« Peti la elirejon »), sed elektante la rolon `coordenador`. La person-in-o eniras `pending_removal` sur sia `coordenador`-membreco ; je J+7, ĉi tiu membreco iras al `removed`. Ria antaŭa `librarian`-linio — fermita ĉe ria promocio (ekskluziva rolo, §5.6) — estas tiam reaktivigata : la person-in-o « refalas » `librarian`. Se ri neniam havis tian (alveno per kolegia salto), ri refaras simplan `reader`.
 
 Tio estas volonte la sama mekanismo kiel por la `librarian`-oj, kun la samaj gardstoraroj. **Neniu alia `coord` havas specialan potencon** super siaj kolegoj : la proceduro trairas la kvarentan periodon kaj la kolegiecon.
 
@@ -716,7 +722,7 @@ Politike, tio konformas al tio, kion oni faras kiam la sola `coord` malaltrangi�
 
 ## 6.8. Kelkaj limlokaj kazoj sciindaj
 
-**Person-in-o en `pending_removal` kiu petas foriri tuj.** Ri povas. Ri nur bezonas uzi si-mem « Mi transdonegas la manon » (mem-malaltranigo T4). Efiko : tuja transiro al `inactive`, trarondo de la kvarento. Politike, tio estas kohera : la rajto P3 (mem-malaltranigo) estas senkondica.
+**Person-in-o en `pending_removal` kiu petas foriri tuj.** Ri povas. Ri nur bezonas uzi si-mem « Mi transdonegas la manon » (mem-malaltranigo T4). Efiko : tuja transiro al `vacated`, trarondo de la kvarento. Politike, tio estas kohera : la rajto P3 (mem-malaltranigo) estas senkondica.
 
 **Person-in-o en `suspended` kiun oni volas definititve ekskludi.** Vidu §6.5 « Grave : suspendo kontraŭ elirejo ». Oni devas levi la suspendon unue, poste peti la elirejon.
 
@@ -860,9 +866,9 @@ Ekster-spec, sed jen kio estas praktikata:
 
 **1. Kontaktado** de ret-administrant-in-o kun la loka kolektivo, per ĉiuj disponeblaj kanaloj (la restantaj enskribita-in-aj legant-in-oj, la eksteraj koordinatoj de la biblioteko se ili ekzistas, la loka konatarreto).
 
-**2. Politika kontrolo**: ĉu la kolektivo ankoraŭ ekzistas? Ĉu ĝi volas daŭrigi sian ekziston? Se estas membroj sed ili simple lasis fali la teknikajn funkciojn, oni povas rekoopti novajn staff-in-ojn per ekster-laborflua kooptado.
+**2. Politika kontrolo**: ĉu la kolektivo ankoraŭ ekzistas? Ĉu ĝi volas daŭrigi sian ekziston? Se estas membroj sed ili simple lasis fali la teknikajn funkciojn, oni povas rekonstrui koordinadon — per la kolegia cirkvito, kiel ĉie.
 
-**3. Ekster-laborflua kooptado** de ret-administrant-in-o, per rekta SQL aŭ per la UI (ret-administrant-in-o rajtas agi kiel koordinant-in-o+ sur iu ajn biblioteko, cf. ĉapitro 2). La ekster-laborflua kooptado devas esti spurita en la revizio-protokolo kun eksplicita kialo: "Repreno de koordinado post vakanco, post kontakto kun la kolektivo de TT/MM, de ret-administrant-in-o X". Kaj — ŝlosila doktrina punkto — **antaŭa informado al la loka koordinado estas deviga**, krom se la biblioteko ne plu havas iun ajn vivant-in-an staff-membron, en kiu kazo la informado iras al la restantaj aktivaj `reader`-in-oj (cf. §7.6).
+**3. Repreno per la kolegia cirkvito** *(ekde la 01/09/2026 ne plu ekzistas « ekster-laborflua kooptado »: la rektaj promocioj estas kondamnitaj, ankaŭ por la ret-administrant-in-o)*. La ret-administrant-in-o rajtas **deponi koordinadan proponon** en iu ajn biblioteko (cf. ĉapitro 2). Se restas aktiva `librarian`, la propono povas celi rin. Se restas nur aktivaj `reader`-oj, la irebla vojo estas la **kolegia salto**: la loka kolektivo decidas aktivigi la agordon (`allow_direct_coordenador`), la ret-administrant-in-o deponas la proponon celantan aktivan reader-on, la bootstrap-kvorumo aplikiĝas (1 aprobo kiam la teamo estas tro malgranda), kaj la persono **akceptas**. Nenio fariĝas sen la kolektivo: la propono plenumas ĝian decidon, ĝi ne anstataŭas ĝin. La ago estas spurita (revizio-protokolo + `cross_library_actions_log`), kaj — ŝlosila doktrina punkto — **antaŭa informado al la loka koordinado estas deviga**, krom se la biblioteko ne plu havas iun ajn vivant-in-an staff-membron, en kiu kazo la informado iras al la restantaj aktivaj `reader`-in-oj (cf. §7.6).
 
 **4. Se la kolektivo ne plu ekzistas**: malfermo de diskuto pri la **deca fermiĝo** de la biblioteko. Kiajn datumojn konservi, kiujn forigi, kiel komuniki al la legant-in-oj, ktp. Tio estas laborfluo, kiu devas esti formalizita aparte.
 
@@ -1161,7 +1167,9 @@ Tio estas la plej grava travideblec-ilo. Ĝi estas konsultebla el `/biblioteca` 
 
 | Evento | Koncernata persono | Aktivaj lokaj koordinant-in-oj | Ret-administrant-in-oj |
 |---|---|---|---|
-| Kooptado (T1, T2) | ✅ | ✅ | — |
+| Propono deponita (akcepto aŭ koordinado) | — | ✅ por aprobi | — |
+| Propono preta (kvorumo atingita) | ✅ por akcepti | — | — |
+| Kooptado plenumita (akcepto — T1, T2, T2b) | ✅ bonveno | ✅ | — |
 | Mem-retrogradiĝo (T3, T4) | ✅ konfirmo | ✅ | — |
 | Forigpeto (T5) | ✅ | ✅ | — |
 | Nuligo de peto (T8) | ✅ | ✅ | — |
@@ -1175,6 +1183,11 @@ Tio estas la plej grava travideblec-ilo. Ĝi estas konsultebla el `/biblioteca` 
 | Ret-administrant-in-a kooptado (malakcepto) | ✅ kun pravigo | — | ✅ |
 | Kolektiva forigo de ret-administrant-in-o | ✅ | — | ✅ |
 | Trans-biblioteka interveno | — | ✅ (koordinant-in-oj de la biblioteko) | ✅ (la aŭtor-in-o) |
+
+Du precizigoj pri la retmesaĝoj de la invita cirkvito:
+
+- **Akcepti iun kaj konfidi al ri la koordinadon ne estas la sama ago**: la retmesaĝoj de koordinada propono havas siajn proprajn tekstojn, malsamajn ol tiuj de la akcepto en la teamon.
+- **Kolegia salto diras sian nomon**: kiam koordinada propono celas personon kiu ankoraŭ ne estas team-membro (salto `reader` → `coordenador`, §5.3), la propon- kaj akcept-retmesaĝoj uzas dediĉitajn enkondukojn kiuj diras tion eksplicite — la aprobo kiel la akcepto okazas kun plena scio.
 
 ### La tono de la retmesaĝoj
 
@@ -1249,21 +1262,21 @@ Por fini, ses kompletaj scenaroj. Ĉiu ilustras kombinaĵon de mekanismoj kaj eb
 
 1. Emma konektiĝas la 5an de majo je la 14h30. Iras al `/biblioteca`, langeto **Equipe**.
 2. Serĉas Voltairine en la listo de `reader` de la biblio (ri havas konton AnarBib ekde februaro).
-3. Klakas **« Inviter dans l'équipe »** → elektas **librarian**.
-4. Kampo « Raison » : « décision AG du 04/05 » (doktrino 1, strikta atendo).
-5. Konfirmas.
+3. Klakas **« Inviter dans l'équipe »** → elektas **librarian**. Kampo « Raison » : « décision AG du 04/05 » (doktrino 1, strikta atendo). Konfirmas : la **propono** estas deponita.
+4. Lucy (alia koordinant-in-o) ricevas la aprob-retmesaĝon kaj **ratifikas** la proponon — dua rigardo, ne formalaĵo.
+5. Voltairine ricevas retpoŝton : invito aliĝi al la teamo atendas rin en ria konto. Ri **akceptas**.
 
-**Tuja efekto.**
+**Efiko ĉe la akcepto.**
 
-- Voltairine ricevas retpoŝton : « Saluton Voltairine, vi estis nomita librarian de la BLMF de Emma G. laŭ : "décision AG du 04/05". Viaj novaj rajtoj estas aktivaj. Bonvenon en la teamon. »
-- La aliaj aktivaj koordinant-in-oj de la BLMF (Lucy kaj Piotr) ricevas informan retpoŝton.
-- Revizia protokolo : `2026-05-05 14:30 — Emma G. a promu Voltairine d.C. librarian (raison: décision AG du 04/05)`.
+- La `librarian`-linio de Voltairine iĝas aktiva ; ria `reader`-linio fermiĝas (ekskluziva rolo, §5.6).
+- Voltairine ricevas bonvenigan retpoŝton ; la aktivaj koordinant-in-oj de la BLMF (Emma, Lucy, Piotr) ricevas informan retpoŝton.
+- Revizia protokolo : `promoted_to_librarian`, kun la propono, la aprobo kaj la akcepto spureblaj.
 
 **Komento.**
 
-Plej simpla kazo. La SIGB plenumas prave la decidon de la kolektivo. Emma nenion decidis politike — ri klakis por plenumi tion, kio estis decidita ekster la programaro.
+Plej simpla kazo. La SIGB plenumas prave la decidon de la kolektivo, en tri tempoj : Emma proponas, Lucy aprobas, Voltairine akceptas. Neniu decidis ion sole — kaj Voltairine eniras la teamon nur ĉar ri tion **diris**, en la programaro kiel en la AG *(refaro de la 01/09/2026 : antaŭ tiu dato, la promocio estis rekta kaj tuja)*.
 
-**Kion la SIGB ne faris :** kontroli ke la AG vere okazis, ke la decido vere estis prenita, ke Voltairine vere konsentas. Tiuj aferoj estas **ekster la programaro**. Se Emma estus mensoginta pri la AG, la SIGB nenion vidus. La politika kulturo de la BLMF estas tio, kio malhelpas tiun menson (kaj la protokolo igas ĝin a posteriori spurebla).
+**Kion la SIGB ne faris :** kontroli ke la AG vere okazis, nek ke la decido vere estis prenita. Tiuj aferoj restas **ekster la programaro**. Se Emma estus mensoginta pri la AG, Lucy devus aprobi la mensogon kaj Voltairine ĝin akcepti — la cirkvito multekostigas la fraŭdon, ĝi ne senutiligas la politikan kulturon.
 
 ## 10.2. Lucy transdonas la rolon
 
@@ -1279,8 +1292,8 @@ Plej simpla kazo. La SIGB plenumas prave la decidon de la kolektivo. Emma nenion
 
 **Tuja efekto.**
 
-- Ria membership `coordenador` ŝanĝiĝas al `inactive`.
-- Ria membership `librarian` (kiu ekzistis paralele) restas `active`.
+- Ria membership `coordenador` ŝanĝiĝas al `vacated` (rolo libervole forlasita).
+- Ria `librarian`-linio — fermita ĉe ria promocio al la koordinado (ekskluziva rolo, §5.6) — estas reaktivigata.
 - Lucy ricevas konfirman retpoŝton : « Vi estas nun librarian de la BLMF. Vi konservas viajn operaciajn permesojn. »
 - La tuta koordinado (Emma, Piotr) ricevas retpoŝton : « Lucy P. transdonis la rolon, ne plu estas koordinant-in-o. Ri restas librarian de la teamo. »
 - Revizia protokolo : `2026-05-05 18:42 — Lucy P. a auto-rétrogradé coordenador → librarian (raison: démarrage thèse, allègement temporaire)`.
@@ -1317,7 +1330,7 @@ Plej simpla kazo. La SIGB plenumas prave la decidon de la kolektivo. Emma nenion
 - La 6an de majo je la 9h : Lucy legas la retpoŝton. Ri konsentas kun la decido kaj ne intervenas.
 - La 7an de majo : Emma interŝanĝas kun Karl (kiu skribas al ri por klarigi sin). Emma konkludas ke la decido estas valida. Ne intervenas.
 - La 8-11an de majo : nenio.
-- **La 12an de majo je la 00h00** : la cron `cron_team_pending_removal_complete` plenumas. Karl ŝanĝiĝas al `inactive`.
+- **La 12an de majo je la 00h00** : la cron `cron_team_pending_removal_complete` plenumas. Karl ŝanĝiĝas al `removed` ; ria `reader`-linio estas reaktivigata (ri forlasas la teamon, ne la bibliotekon).
 - Fina retpoŝto al Karl + al la koordinado.
 - Revizia protokolo : `2026-05-12 — passage automatique en inactif (raison: pending_removal expiré, cron) — actor: NULL`.
 
@@ -1378,7 +1391,7 @@ Tipa kazo kie la suspenso estas uzata kiel **konservativa mezuro**, ne kiel eksk
 
 **Tuja efekto.**
 
-- La koordinant-o-membership de Errico ŝanĝiĝas al `inactive`.
+- La koordinant-o-membership de Errico ŝanĝiĝas al `vacated`.
 - Retpoŝto al Errico (konfirmo).
 - Retpoŝto al la tuta koordinado de la BLMF — sed ĝi ne plu ekzistas, do en praktiko la aktivaj `librarian`-oj restantaj ricevas sciigon.
 - **Urĝa retpoŝto al la ret-administrant-in-oj** : « La BLMF ne havas plu aktivan koordinant-in-on. Jen la aktivaj librarian-oj restantaj : Voltairine d.C., Friedrich E., ... »
@@ -1388,7 +1401,7 @@ Tipa kazo kie la suspenso estas uzata kiel **konservativa mezuro**, ne kiel eksk
 
 - La 6an de majo : Xavier (ret-administrant-o) kontaktas Voltairine kaj Friedrich, la aktivajn `librarian`-ojn restantajn. Ili konfirmas ke la kolektivo BLMF daŭre ekzistas, kaj ke ili volas daŭrigi.
 - La 7-15an de majo : interna diskuto de la kolektivo BLMF, kiu en AG decidas koopti Voltairine al la rolo de koordinant-in-o.
-- La 16an de majo : Xavier (aŭ alia koordinant-in-o BLMF kiu ne ekzistas plu en ĉi tiu okazo, do Xavier per sia transversa rajto) kooptas Voltairine kiel koordinant-in-o. **Deviga antaŭa informado** : Xavier skribis al Friedrich kaj Voltairine 2 tagojn antaŭe por anonci la agon. Post kiam ĝi estas farita, la ago estas spurita en `cross_library_actions_log` kun kritikeco-nivelo « alta » (koordinadoŝanĝo de biblio de ret-administrant-o).
+- La 16an de majo : Xavier, per sia transversa rajto (ne plu restas koordinant-in-o BLMF por tion fari), **deponas la koordinadan proponon** celantan Voltairine — aktiva librarian, la antaŭkondiĉo T2 estas plenumita. Friedrich **aprobas**, Voltairine **akceptas** : eĉ ĉe repreno fare de ret-administrant-in-o, la kolegia cirkvito plene aplikiĝas — Xavier ne povas « fabriki » koordinant-in-on sole. **Deviga antaŭa informado** : Xavier skribis al Friedrich kaj Voltairine 2 tagojn antaŭe por anonci la deponon. La ago estas spurita en `cross_library_actions_log` kun kritikeco-nivelo « alta » (koordinadoŝanĝo de biblio de ret-administrant-o).
 
 **Komento.**
 
@@ -1462,7 +1475,7 @@ La alternativo — koopti Mohammed per plimulto kontraŭ la opinio de Patricia �
 
 **Transversa** — Kvalifikas agon efektivigitan de ret-administrant-in-o en biblio de kiu ri ne estas loka stab-membro. Spurita en `cross_library_actions_log`.
 
-**Cron** — Aŭtomata tasko plenumita periode de la SIGB. Sen homa agant-in-o. Ekzemploj : `cron_team_pending_removal_complete` (transiro de `pending_removal` al `inactive` ĉe J+7), `cron_team_inactive_cleanup` (aŭtomata eliro ĉe 9 monatoj).
+**Cron** — Aŭtomata tasko plenumita periode de la SIGB. Sen homa agant-in-o. Ekzemploj : `cron_team_pending_removal_complete` (transiro de `pending_removal` al `removed` ĉe J+7), `cron_team_inactive_cleanup` (aŭtomata eliro ĉe 9 monatoj).
 
 **Delegado** — Ago per kiu kolektivo provizore konfidas funkcion al iu el siaj membroj, konservante la eblecon repreni ĝin. Centra koncepto, distingita de « hierarkio ».
 
@@ -1494,16 +1507,22 @@ La alternativo — koopti Mohammed per plimulto kontraŭ la opinio de Patricia �
 
 | RPC SQL | Transiro | Politika traduko |
 |---|---|---|
-| `fn_team_promote_to_librarian` | T1 | Kooptado `reader` → `librarian` |
-| `fn_team_promote_to_coordenador` | T2 | Kooptado `librarian` → `coordenador` |
+| `fn_team_propose_invitation` | T1, T2, T2b | Deponi proponon (akcepto aŭ koordinado) |
+| `fn_team_ratify_invitation` | T1, T2, T2b | Aprobi proponon (kvorumo) |
+| `fn_team_accept_invitation` | T1, T2, T2b | Akcepti la ŝarĝon — ĉi tiu gesto promocias |
+| `fn_team_decline_invitation` | T1, T2, T2b | Rifuzi la ŝarĝon (kostas nenion) |
+| `fn_team_revoke_invitation` | T1, T2, T2b | Revoki proponon deponitan erare |
+| `fn_team_expire_invitations` | T1, T2, T2b | Cron : eksvalidiĝo de la proponoj (30 tagoj) |
 | `fn_team_self_demote` | T3, T4 | Mem-malaltigo (« mi transdonas la rolon ») |
 | `fn_team_request_remove_member` | T5 | Forigo-peto kun 7-taga karencio |
 | `fn_team_cancel_remove_member` | T8 | Nuligo de forigo-peto |
 | `fn_team_suspend_member` | T6 | Tuja suspenso (konservativa mezuro) |
 | `fn_team_unsuspend_member` | T7 | Suspenslevigo |
 | `fn_validate_physical_account` | — | Fizika validado de `reader` |
-| `cron_team_pending_removal_complete` | T5 (daŭrigo) | Cron : transiro al `inactive` ĉe J+7 |
+| `cron_team_pending_removal_complete` | T5 (daŭrigo) | Cron : transiro al `removed` ĉe J+7 |
 | `cron_team_inactive_cleanup` | T9 | Cron : aŭtomata eliro ĉe 9 monatoj |
+
+*La malnovaj rektaj promocioj `fn_team_promote_to_librarian` kaj `fn_team_promote_to_coordenador` estas **kondamnitaj** (26/08 kaj 01/09/2026) : ili rifuzas kun `collegiality_required`, montrante la tri-tempan vojon. Ili aperas ĉi tie nur por ke ilia nomo, renkontita en malnova dokumento, ne kredigu aktivan vojon.*
 
 ## Funkcioj de ret-administrant-o
 

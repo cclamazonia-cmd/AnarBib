@@ -2,7 +2,7 @@
 title: "Guide de gouvernance d'AnarBib"
 subtitle: "À l'usage des coordinateur·rices de biblio et des administrateur·rices du réseau"
 author: "Projet AnarBib"
-date: "Version 1.1 — 5 juin 2026"
+date: "Version 1.2 — 1ᵉʳ septembre 2026"
 lang: fr
 ---
 
@@ -215,19 +215,25 @@ Le SIGB AnarBib utilise quatre rôles, déclarés dans la base de données par l
 
 **`administrador`** — Rôle historique, en voie de disparition. Existait pour signifier « droit d'administration cross-biblios » mais rattaché à une `library_id`. Désormais remplacé par les **administrateur·rices réseau** stocké·es dans la table `network_administrators` (cf. chapitre 2). La spec admin-reseau prévoit la migration progressive et le retrait final de ce rôle de la table `user_library_memberships`.
 
-## 3.2. Les cinq statuts d'une membership
+## 3.2. Les statuts d'une membership
 
-Chaque ligne de la table `user_library_memberships` a un **statut** qui exprime l'état de la délégation à un instant donné. Cinq statuts sont possibles :
+Chaque ligne de la table `user_library_memberships` a un **statut** qui exprime l'état de la délégation à un instant donné. Les statuts qui concernent la gouvernance :
 
 **`active`** — État normal. La personne a son rôle et l'exerce.
 
-**`pending`** — Réservé à la spec validation physique. La membership est créée mais en attente d'une rencontre physique avec un·e librarian+ de la biblio d'inscription. Pas d'accès aux fonctions du rôle tant que ce statut.
+**`pending_validation`** — Réservé à la spec validation physique. La membership est créée mais en attente d'une rencontre physique avec un·e librarian+ de la biblio d'inscription. Pas d'accès aux fonctions du rôle tant que ce statut.
 
 **`suspended`** — **Mesure conservatoire** prise par un·e coordenador·a. Aucun accès. Usage : harcèlement signalé en attente d'investigation, compte compromis, conflit en cours de médiation. **Durée indéfinie** ; la levée est manuelle, par un·e coord (retour à `active`) ou par destitution effective.
 
-**`pending_removal`** — **Période de carence de sept jours** avant exclusion effective. Aucun accès pendant cette période. Évolution possible : annulation par un·e autre coord (retour `active`), auto-rétrogradation par la personne elle-même (court-circuit), ou passage automatique à `inactive` à J+7.
+**`pending_removal`** — **Période de carence de sept jours** avant exclusion effective. Aucun accès pendant cette période. Évolution possible : annulation par un·e autre coord (retour `active`), auto-rétrogradation par la personne elle-même (court-circuit), ou passage automatique à `removed` à J+7.
 
-**`inactive`** — Membership fermée. La personne n'est plus dans l'équipe. Aucun accès. Plusieurs origines possibles : sortie volontaire, fin de carence, compte abandonné (auto à 9 mois).
+**`vacated`** — **Rôle quitté volontairement.** Posé par l'auto-rétrogradation (« je passe la main », droit P3). La personne a décidé — ce statut dit précisément cela, et rien d'autre. *(Distinction introduite le 01/09/2026 : avant cette date, la sortie volontaire posait `inactive`, ce qui la confondait avec un compte délaissé.)*
+
+**`removed`** — Membership fermée par une décision ou un mécanisme du SIGB : fin de carence d'un retrait (J+7), ou fermeture de la ligne de rang inférieur lors d'une promotion (rôle exclusif, cf. §5.6).
+
+**`inactive`** — **Compte délaissé.** Posé uniquement par le cron de sortie automatique, après 9 mois sans connexion (T9). La personne n'a rien décidé : elle a disparu.
+
+*(La table porte aussi quelques statuts propres aux parcours d'inscription et de circulation — `refused`, `left_with_pending_circulation`, `terminated` — qui ne relèvent pas de la gouvernance d'équipe et ne sont pas traités dans ce guide.)*
 
 ## 3.3. Le schéma de transitions
 
@@ -238,28 +244,28 @@ Le SIGB n'autorise pas n'importe quelle transition entre statuts. Voici, simplif
                        │   active     │ ◄──────────┐
                        └──────┬───────┘            │
                               │                    │
-              ┌───────────────┼───────────────┐    │
-              ▼               ▼               ▼    │
-       ┌─────────────┐  ┌─────────────┐  ┌─────────┴────┐
-       │  suspended  │  │ pending_    │  │  inactive    │
-       │             │  │ removal     │  │              │
-       └──────┬──────┘  └──────┬──────┘  └──────────────┘
-              │                │
-              │ levée          │ annulation
-              └────────────────┴────────────┐
-                               │            │
-                               ▼ (J+7)      ▼
-                        ┌──────────────┐
-                        │   inactive   │
-                        └──────────────┘
+        ┌──────────────┬──────┴────────┬───────────│──────┐
+        ▼              ▼               ▼           │      ▼
+ ┌─────────────┐ ┌─────────────┐ ┌────────────┐    │ ┌────────────┐
+ │  suspended  │ │ pending_    │ │  vacated   │    │ │  inactive  │
+ │             │ │ removal     │ │ (P3, auto) │    │ │ (T9, cron) │
+ └──────┬──────┘ └──────┬──────┘ └────────────┘    │ └────────────┘
+        │               │                          │
+        │ levée         │ annulation               │
+        └───────────────┴──────────────────────────┘
+                        │
+                        ▼ (J+7)
+                 ┌──────────────┐
+                 │   removed    │
+                 └──────────────┘
 ```
 
 Quelques règles clés :
 
-- On ne peut **pas** passer directement de `active` à `inactive` pour un·e librarian par décision unilatérale d'un·e autre coord. Il faut passer par `pending_removal` et attendre la carence (ou que la personne se rétrograde elle-même).
-- On peut **toujours** passer de son propre statut `active` à `inactive` (auto-rétro, droit P3).
+- On ne peut **pas** exclure un·e librarian d'un seul geste par décision unilatérale d'un·e autre coord. Il faut passer par `pending_removal` et attendre la carence (ou que la personne se rétrograde elle-même).
+- On peut **toujours** quitter volontairement son propre rôle `active` (auto-rétro, droit P3) : la ligne passe à `vacated`, immédiatement.
 - `suspended` n'a **pas** de durée maximale. Ce n'est pas une carence avant exclusion, c'est une mesure conservatoire — elle dure le temps de la délibération.
-- De `inactive`, on **ne revient pas** à `active`. Pour réintégrer une personne, on crée une nouvelle ligne de membership. L'historique est préservé.
+- D'un statut fermé (`vacated`, `removed`, `inactive`), on **ne revient pas** directement à `active`. Pour réintégrer une personne, on repasse par le circuit normal — qui réactive la ligne fermée ou en crée une nouvelle. L'historique est préservé.
 
 ## 3.4. Les neuf transitions, qui peut faire quoi
 
@@ -440,7 +446,7 @@ Deux modes possibles, choisis par chaque biblio dans sa configuration :
 ### Procédure de validation physique (mode `manual_validation`)
 
 1. La personne s'inscrit en ligne et choisit votre biblio comme biblio d'attache.
-2. Son compte est créé avec `status='pending'`. Elle reçoit un mail expliquant qu'elle doit venir se présenter physiquement à la biblio.
+2. Son compte est créé avec `status='pending_validation'`. Elle reçoit un mail expliquant qu'elle doit venir se présenter physiquement à la biblio.
 3. Quand elle vient, un·e `librarian+` la rencontre, vérifie ce qu'il y a à vérifier (la doctrine de ce que « vérifier » signifie est locale), et clique **« Valider »** sur sa ligne dans l'onglet **Equipe** → section **Comptes en attente**.
 4. Un champ « Note » optionnel permet d'inscrire un contexte (« rencontre du 12/05 lors de la permanence, présentée par Emma »).
 5. Le compte passe à `status='active'`. La personne reçoit un mail de bienvenue.
@@ -477,7 +483,7 @@ Plusieurs choses peuvent ne pas vous convenir dans ce chapitre :
 
 - **Les modes de validation physique** (§5.5). Vous pensez qu'il en faudrait un troisième (« validation différée », « validation à distance », autre). À porter sur `spec-validation-physique.md`.
 
-- **Le multi-membership** (§5.6). Vous pensez que c'est inutilement complexe et qu'il faudrait un seul rôle par personne par biblio. C'est une décision de modèle de données, plus structurante qu'il n'y paraît. À porter avec les dev.
+- **Le rôle exclusif** (§5.6). Vous pensez qu'une personne devrait pouvoir cumuler plusieurs rôles actifs dans la même biblio (être à la fois `librarian` et `coordenador`, par exemple). C'est une décision de modèle de données, plus structurante qu'il n'y paraît — et elle a déjà été tranchée dans l'autre sens en mai 2026. À porter avec les dev.
 
 Voir chapitre 4 pour la procédure générale d'amendement, et annexe C pour le modèle de note.
 
@@ -523,8 +529,8 @@ C'est le **droit le plus fondamental** dans le système de gouvernance d'AnarBib
 
 ### Effet immédiat
 
-- Votre membership actuelle (`librarian` ou `coordenador`) passe à `inactive`.
-- Si vous n'aviez pas déjà la membership cible (`reader` ou `librarian`), elle est créée à `active`.
+- Votre membership actuelle (`librarian` ou `coordenador`) passe à `vacated` — le statut du rôle **quitté volontairement**, distinct de l'`inactive` du compte délaissé.
+- Votre ligne de rang inférieur (`reader` ou `librarian`, selon l'atterrissage choisi) est réactivée si elle existait — ou créée à `active` sinon.
 - Mail à toute la coordination + à vous-même (confirmation).
 - Audit log : `action='self_demoted'`.
 
@@ -535,7 +541,7 @@ Le SIGB **vous laisse partir**, mais il vous prévient :
 > ⚠️ ATTENTION : tu es l'unique coordenador·a actif·ve de [biblio]. La biblio se retrouvera sans coordination. Les administrateur·rices AnarBib seront notifié·es. Continuer ?
 
 Si vous confirmez :
-- Votre membership coord passe à `inactive`.
+- Votre membership coord passe à `vacated`.
 - La biblio passe en **mode dégradé** : les `librarian` peuvent continuer à gérer les emprunts, valider les inscriptions, etc., mais aucune modification de l'identité publique ou de la configuration n'est possible jusqu'à la cooptation d'un·e nouveau·elle coord.
 - Mail à tous les admins réseau : « La biblio X n'a plus de coordenador·a. Voici les librarians actifs : ... »
 
@@ -581,7 +587,7 @@ Quand le collectif décide qu'une personne doit quitter l'équipe, et que cette 
 ### Effet à J+7 (cron automatique)
 
 Si la demande n'a été ni annulée ni court-circuitée :
-- La membership passe à `inactive`.
+- La membership passe à `removed`. La ligne de rang inférieur (fermée lors de la promotion, cf. rôle exclusif §5.6) est réactivée — ou une ligne `reader` est créée : la personne quitte l'équipe, pas la biblio.
 - Mail final à la personne et à la coordination : « Retrait effectif. »
 - Audit log : `action='removal_completed'`.
 
@@ -668,7 +674,7 @@ La distinction est cruciale :
 | | Suspension (T6) | Retrait (T5) |
 |---|---|---|
 | Effet | Immédiat | Différé (J+7) |
-| Durée | Indéfinie | 7 jours puis `inactive` |
+| Durée | Indéfinie | 7 jours puis `removed` |
 | Réversible par | Levée explicite | Annulation pendant la carence |
 | Usage typique | Mesure conservatoire | Décision d'exclusion |
 | Politique sous-jacente | « On se laisse le temps de comprendre » | « On a décidé que cette personne sort » |
@@ -683,7 +689,7 @@ RPC suspendre : `fn_team_suspend_member(p_user_id, p_library_id, p_role, p_reaso
 
 Un cas un peu particulier : que faire quand la coordination veut **rétrograder un·e coordenador·a** qui ne se rétrograde pas spontanément ?
 
-La spec gouvernance traite ce cas comme une **demande de retrait avec carence** ciblant la membership `coordenador`. Concrètement, vous utilisez la même procédure qu'au §6.3 (« Demander le retrait »), mais en sélectionnant le rôle `coordenador`. La personne passe en `pending_removal` sur sa membership `coordenador` ; à J+7, cette membership passe à `inactive`. Si elle avait une membership `librarian` parallèle, celle-ci reste active (et la personne « retombe » librarian). Sinon, elle redevient simple `reader`.
+La spec gouvernance traite ce cas comme une **demande de retrait avec carence** ciblant la membership `coordenador`. Concrètement, vous utilisez la même procédure qu'au §6.3 (« Demander le retrait »), mais en sélectionnant le rôle `coordenador`. La personne passe en `pending_removal` sur sa membership `coordenador` ; à J+7, cette membership passe à `removed`. Sa précédente ligne `librarian` — fermée lors de sa promotion (rôle exclusif, §5.6) — est alors réactivée : la personne « retombe » librarian. Si elle n'en a jamais eu (arrivée par saut collégial), elle redevient simple `reader`.
 
 C'est volontairement le même mécanisme que pour les `librarian`, avec les mêmes garde-fous. **Aucune autre coord n'a un pouvoir spécial** sur ses collègues : la procédure passe par la carence et la collégialité.
 
@@ -716,7 +722,7 @@ Politiquement, c'est cohérent avec ce qu'on fait quand l'unique coord se rétro
 
 ## 6.8. Quelques cas-limites à connaître
 
-**Une personne en `pending_removal` qui demande à partir tout de suite.** Elle peut. Il lui suffit d'utiliser elle-même « Je passe la main » (auto-rétro T4). Effet : passage immédiat à `inactive`, court-circuit de la carence. Politiquement, c'est cohérent : le droit P3 (auto-rétrogradation) est inconditionnel.
+**Une personne en `pending_removal` qui demande à partir tout de suite.** Elle peut. Il lui suffit d'utiliser elle-même « Je passe la main » (auto-rétro T4). Effet : passage immédiat à `vacated`, court-circuit de la carence. Politiquement, c'est cohérent : le droit P3 (auto-rétrogradation) est inconditionnel.
 
 **Une personne en `suspended` qu'on veut exclure définitivement.** Voir §6.5 « Important : suspension vs retrait ». Il faut lever la suspension d'abord, puis demander le retrait.
 
@@ -860,9 +866,9 @@ Hors-spec, mais voici ce qui se pratique :
 
 **1. Prise de contact** par un·e admin réseau avec le collectif local, par tous les canaux disponibles (le ou les comptes lecteur·rice qui restent inscrit·es, les coordonnées externes de la biblio si elles existent, le réseau de connaissances local).
 
-**2. Vérification politique** : est-ce que le collectif existe encore ? Veut-il continuer à exister ? S'il y a des membres mais qu'iels ont juste laissé tomber les fonctions techniques, on peut recoopter de nouveaux staff par cooptation hors-workflow.
+**2. Vérification politique** : est-ce que le collectif existe encore ? Veut-il continuer à exister ? S'il y a des membres mais qu'iels ont juste laissé tomber les fonctions techniques, on peut reconstituer une coordination — par le circuit collégial, comme partout ailleurs.
 
-**3. Cooptation hors-workflow** par l'admin réseau, via SQL direct ou via l'UI (un·e admin réseau a le droit d'agir comme coord+ sur n'importe quelle biblio, cf. chapitre 2). La cooptation hors-workflow doit être tracée dans l'audit log avec une raison explicite : « Reprise de coordination après vacance, suite à contact du collectif du JJ/MM, par admin réseau X ». Et — point clé de doctrine — **information préalable à la coordination locale obligatoire**, sauf si la biblio n'a plus aucun·e membre staff vivant·e auquel cas l'information passe par les `reader` actif·ves restant·es (cf. §7.6).
+**3. Rattrapage par le circuit collégial** *(depuis le 01/09/2026, il n'existe plus de « cooptation hors-workflow » : les promotions directes sont condamnées, y compris pour l'admin réseau)*. L'admin réseau a le droit de **déposer une proposition de coordination** sur n'importe quelle biblio (cf. chapitre 2). S'il reste un·e `librarian` actif·ve, la proposition peut le·la viser. S'il ne reste que des `reader` actif·ves, le chemin praticable est le **saut collégial** : le collectif local décide d'activer le réglage (`allow_direct_coordenador`), l'admin réseau dépose la proposition visant un·e reader actif·ve, le quorum de bootstrap s'applique (1 endossement quand l'équipe est trop petite), et la personne **accepte**. Rien ne se fait sans le collectif : la proposition exécute sa décision, elle ne la remplace pas. L'action est tracée (audit log + `cross_library_actions_log`), et — point clé de doctrine — **information préalable à la coordination locale obligatoire**, sauf si la biblio n'a plus aucun·e membre staff vivant·e auquel cas l'information passe par les `reader` actif·ves restant·es (cf. §7.6).
 
 **4. Si le collectif n'existe plus** : ouverture d'une discussion sur la **fermeture propre** de la biblio. Quelles données conserver, lesquelles supprimer, comment communiquer aux lecteur·rices, etc. C'est un workflow à formaliser séparément.
 
@@ -1161,7 +1167,9 @@ Chaque action de gouvernance déclenche **un ou plusieurs emails** automatiques.
 
 | Événement | Personne concernée | Coords locaux actif·ves | Admins réseau |
 |---|---|---|---|
-| Cooptation (T1, T2) | ✅ | ✅ | — |
+| Proposition déposée (accueil ou coordination) | — | ✅ à endosser | — |
+| Proposition prête (quorum atteint) | ✅ à accepter | — | — |
+| Cooptation aboutie (acceptation — T1, T2, T2b) | ✅ bienvenue | ✅ | — |
 | Auto-rétrogradation (T3, T4) | ✅ confirmation | ✅ | — |
 | Demande de retrait (T5) | ✅ | ✅ | — |
 | Annulation de demande (T8) | ✅ | ✅ | — |
@@ -1175,6 +1183,11 @@ Chaque action de gouvernance déclenche **un ou plusieurs emails** automatiques.
 | Cooptation admin réseau (rejet) | ✅ avec rationale | — | ✅ |
 | Retrait collectif admin réseau | ✅ | — | ✅ |
 | Intervention cross-biblios | — | ✅ (coords de la biblio) | ✅ (l'auteur·rice) |
+
+Deux précisions sur les mails du circuit d'invitation :
+
+- **Accueillir et confier la coordination ne sont pas le même acte** : les mails d'une proposition de coordination ont leurs propres textes, distincts de ceux de l'accueil.
+- **Un saut collégial se dit** : quand une proposition de coordination vise une personne qui n'est pas encore membre de l'équipe (saut `reader` → `coordenador`, §5.3), les mails de proposition et d'acceptation utilisent des intros dédiées qui le disent explicitement — l'endossement comme l'acceptation se font en connaissance de cause.
 
 ### Le ton des emails
 
@@ -1249,21 +1262,21 @@ Pour finir, six scénarios complets. Chacun illustre une combinaison de mécanis
 
 1. Emma se connecte le 5 mai à 14h30. Va dans `/biblioteca`, onglet **Equipe**.
 2. Cherche Voltairine dans la liste des `reader` de la biblio (elle a un compte AnarBib depuis février).
-3. Clique **« Inviter dans l'équipe »** → choisit **librarian**.
-4. Champ « Raison » : « décision AG du 04/05 » (doctrine 1, attente stricte).
-5. Confirme.
+3. Clique **« Inviter dans l'équipe »** → choisit **librarian**. Champ « Raison » : « décision AG du 04/05 » (doctrine 1, attente stricte). Confirme : la **proposition** est déposée.
+4. Lucy (autre coord) reçoit le mail d'endossement et **ratifie** la proposition — un deuxième regard, pas une formalité.
+5. Voltairine reçoit un mail : une invitation à rejoindre l'équipe l'attend dans son compte. Elle **accepte**.
 
-**Effet immédiat.**
+**Effet à l'acceptation.**
 
-- Voltairine reçoit un mail : « Salut Voltairine, tu as été nommée librarian de la BLMF par Emma G. suite à : "décision AG du 04/05". Tes nouveaux droits sont actifs. Bienvenue dans l'équipe. »
-- Les autres coords actives de la BLMF (Lucy et Piotr) reçoivent un mail informationnel.
-- Audit log : `2026-05-05 14:30 — Emma G. a promu Voltairine d.C. librarian (raison: décision AG du 04/05)`.
+- La ligne `librarian` de Voltairine devient active ; sa ligne `reader` se ferme (rôle exclusif, §5.6).
+- Voltairine reçoit un mail de bienvenue ; les coords actives de la BLMF (Emma, Lucy, Piotr) reçoivent un mail informationnel.
+- Audit log : `promoted_to_librarian`, avec la proposition, l'endossement et l'acceptation traçables.
 
 **Commentaire.**
 
-Cas le plus simple. Le SIGB exécute proprement la décision du collectif. Emma n'a rien décidé politiquement — elle a cliqué pour exécuter ce qui a été décidé hors logiciel.
+Cas le plus simple. Le SIGB exécute proprement la décision du collectif, en trois temps : Emma propose, Lucy endosse, Voltairine accepte. Personne n'a rien décidé seul·e — et Voltairine n'entre dans l'équipe que parce qu'elle l'a **dit**, dans le logiciel comme en AG *(refonte du 01/09/2026 : avant cette date, la promotion était directe et immédiate)*.
 
-**Ce que le SIGB n'a pas fait :** vérifier que l'AG a vraiment eu lieu, que la décision a vraiment été prise, que Voltairine est vraiment d'accord. Ces choses sont **hors logiciel**. Si Emma avait menti sur l'AG, le SIGB n'aurait rien vu. La culture politique de la BLMF est ce qui empêche ce mensonge (et le log le rend a posteriori traçable).
+**Ce que le SIGB n'a pas fait :** vérifier que l'AG a vraiment eu lieu, ni que la décision a vraiment été prise. Ces choses restent **hors logiciel**. Si Emma avait menti sur l'AG, il aurait fallu que Lucy endosse le mensonge et que Voltairine l'accepte — le circuit rend la fraude coûteuse, il ne rend pas la culture politique inutile.
 
 ## 10.2. Lucy passe la main
 
@@ -1279,8 +1292,8 @@ Cas le plus simple. Le SIGB exécute proprement la décision du collectif. Emma 
 
 **Effet immédiat.**
 
-- Sa membership `coordenador` passe à `inactive`.
-- Sa membership `librarian` (qui existait en parallèle) reste `active`.
+- Sa membership `coordenador` passe à `vacated` (rôle quitté volontairement).
+- Sa ligne `librarian` — fermée lors de sa promotion à la coordination (rôle exclusif, §5.6) — est réactivée.
 - Lucy reçoit un mail de confirmation : « Tu es désormais librarian de la BLMF. Tu gardes tes permissions opérationnelles. »
 - Toute la coordination (Emma, Piotr) reçoit un mail : « Lucy P. a passé la main, n'est plus coordenadora. Elle reste librarian de l'équipe. »
 - Audit log : `2026-05-05 18:42 — Lucy P. a auto-rétrogradé coordenador → librarian (raison: démarrage thèse, allègement temporaire)`.
@@ -1317,7 +1330,7 @@ C'est l'usage exemplaire du droit P3. Lucy n'a eu à demander d'autorisation à 
 - 6 mai à 9h : Lucy lit le mail. Elle est d'accord avec la décision et n'intervient pas.
 - 7 mai : Emma a un échange avec Karl (qui lui écrit pour s'expliquer). Emma conclut que la décision tient. N'intervient pas.
 - 8-11 mai : rien.
-- **12 mai à 00h00** : le cron `cron_team_pending_removal_complete` s'exécute. Karl passe à `inactive`.
+- **12 mai à 00h00** : le cron `cron_team_pending_removal_complete` s'exécute. Karl passe à `removed` ; sa ligne `reader` est réactivée (il quitte l'équipe, pas la biblio).
 - Mail final à Karl + à la coordination.
 - Audit log : `2026-05-12 — passage automatique en inactif (raison: pending_removal expiré, cron) — actor: NULL`.
 
@@ -1378,7 +1391,7 @@ Cas typique où la suspension est utilisée comme **mesure conservatoire**, pas 
 
 **Effet immédiat.**
 
-- Membership coordenador d'Errico passe à `inactive`.
+- Membership coordenador d'Errico passe à `vacated`.
 - Mail à Errico (confirmation).
 - Mail à toute la coordination de la BLMF — mais il n'y en a plus, donc en pratique c'est les `librarian` actif·ves restant·es qui reçoivent une notification.
 - **Mail urgent aux admins réseau** : « La BLMF n'a plus de coordenador·a actif·ve. Voici les librarians actif·ves restant·es : Voltairine d.C., Friedrich E., ... »
@@ -1388,7 +1401,7 @@ Cas typique où la suspension est utilisée comme **mesure conservatoire**, pas 
 
 - 6 mai : Xavier (admin réseau) prend contact avec Voltairine et Friedrich, les `librarian` actif·ves restant·es. Iels confirment que le collectif BLMF existe encore, et qu'iels veulent continuer.
 - 7-15 mai : discussion interne du collectif BLMF, qui décide en AG de coopter Voltairine au rôle de coordenadora.
-- 16 mai : Xavier (ou un·e autre coord BLMF qui n'existe plus en l'occurrence, donc Xavier dans son droit transverse) coopte Voltairine en coordenadora. **Information préalable obligatoire** : Xavier a écrit à Friedrich et Voltairine 2 jours avant pour annoncer l'action. Une fois faite, l'action est tracée dans `cross_library_actions_log` avec niveau de criticité « élevé » (modification de coordination d'une biblio par admin réseau).
+- 16 mai : Xavier, dans son droit transverse (il n'y a plus de coord BLMF pour le faire), **dépose la proposition de coordination** visant Voltairine — librarian active, la précondition T2 est remplie. Friedrich **endosse**, Voltairine **accepte** : même sur un rattrapage d'admin réseau, le circuit collégial s'applique intégralement — Xavier ne peut pas « fabriquer » une coordenadora seul. **Information préalable obligatoire** : Xavier a écrit à Friedrich et Voltairine 2 jours avant pour annoncer le dépôt. L'action est tracée dans `cross_library_actions_log` avec niveau de criticité « élevé » (modification de coordination d'une biblio par admin réseau).
 
 **Commentaire.**
 
@@ -1462,11 +1475,11 @@ L'alternative — coopter Mohammed à la majorité contre l'avis de Patricia —
 
 **Cross-biblios** — Qualifie une action effectuée par un·e admin réseau sur une biblio dont iel n'est pas membre staff local. Tracée dans `cross_library_actions_log`.
 
-**Cron** — Tâche automatique exécutée périodiquement par le SIGB. Sans actor humain·e. Exemples : `cron_team_pending_removal_complete` (passage de `pending_removal` à `inactive` à J+7), `cron_team_inactive_cleanup` (sortie auto à 9 mois).
+**Cron** — Tâche automatique exécutée périodiquement par le SIGB. Sans actor humain·e. Exemples : `cron_team_pending_removal_complete` (passage de `pending_removal` à `removed` à J+7), `cron_team_inactive_cleanup` (sortie auto à 9 mois).
 
 **Délégation** — Acte par lequel un collectif confie temporairement une fonction à un·e de ses membres, en gardant la possibilité de la reprendre. Concept central, distingué de « hiérarchie ».
 
-**Membership** — Ligne de la table `user_library_memberships` qui exprime le rattachement d'une personne à une biblio dans un rôle donné. Une personne peut avoir plusieurs memberships dans une biblio (multi-membership).
+**Membership** — Ligne de la table `user_library_memberships` qui exprime le rattachement d'une personne à une biblio dans un rôle donné. Une personne peut avoir plusieurs lignes dans une biblio (son histoire), mais **une seule active** à la fois (rôle exclusif, cf. §5.6).
 
 **Multi-membership** — Possibilité d'avoir plusieurs lignes de membership pour une même personne dans une même biblio, avec des rôles différents.
 
@@ -1494,16 +1507,22 @@ Cette annexe donne, pour chaque RPC mentionnée dans le guide, sa traduction pol
 
 | RPC SQL | Transition | Traduction politique |
 |---|---|---|
-| `fn_team_promote_to_librarian` | T1 | Cooptation `reader` → `librarian` |
-| `fn_team_promote_to_coordenador` | T2 | Cooptation `librarian` → `coordenador` |
+| `fn_team_propose_invitation` | T1, T2, T2b | Déposer une proposition (accueil ou coordination) |
+| `fn_team_ratify_invitation` | T1, T2, T2b | Endosser une proposition (quorum) |
+| `fn_team_accept_invitation` | T1, T2, T2b | Accepter la charge — c'est ce geste qui promeut |
+| `fn_team_decline_invitation` | T1, T2, T2b | Refuser la charge (ne coûte rien) |
+| `fn_team_revoke_invitation` | T1, T2, T2b | Révoquer une proposition déposée par erreur |
+| `fn_team_expire_invitations` | T1, T2, T2b | Cron : péremption des propositions (30 j) |
 | `fn_team_self_demote` | T3, T4 | Auto-rétrogradation (« je passe la main ») |
 | `fn_team_request_remove_member` | T5 | Demande de retrait avec carence 7j |
 | `fn_team_cancel_remove_member` | T8 | Annulation d'une demande de retrait |
 | `fn_team_suspend_member` | T6 | Suspension immédiate (mesure conservatoire) |
 | `fn_team_unsuspend_member` | T7 | Levée de suspension |
 | `fn_validate_physical_account` | — | Validation physique d'un·e `reader` |
-| `cron_team_pending_removal_complete` | T5 (suite) | Cron : passage à `inactive` à J+7 |
+| `cron_team_pending_removal_complete` | T5 (suite) | Cron : passage à `removed` à J+7 |
 | `cron_team_inactive_cleanup` | T9 | Cron : sortie auto à 9 mois |
+
+*Les anciennes promotions directes `fn_team_promote_to_librarian` et `fn_team_promote_to_coordenador` sont **condamnées** (26/08 et 01/09/2026) : elles refusent avec `collegiality_required` en indiquant le chemin à trois temps. Elles ne figurent plus ici que pour que leur nom, croisé dans un vieux document, ne fasse pas croire à un chemin actif.*
 
 ## Fonctions d'admin réseau
 
