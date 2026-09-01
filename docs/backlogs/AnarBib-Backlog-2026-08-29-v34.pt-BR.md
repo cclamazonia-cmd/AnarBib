@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 77 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 82 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,14 +16,14 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 9
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 5
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **54 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **59 itens de 82** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C1, C2, C3, C4, C5, C7, C8, C9, C10, D1, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, F8, G1, G2, G3, G4, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -374,6 +374,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Em curso |
+| **B18** | Desativar as chaves de API legadas — o sinal verde é um número, não uma data | `P1` | Aberto |
+| **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
 
@@ -542,6 +544,50 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **Dependências.** Esclarecido por **B12**. Ressoa com **A1**. Partilha o vocabulário com o resumo semanal, o que **alivia F6**.
 
 *Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6` · `item F8`*
+
+#### B18 — Desativar as chaves de API legadas — o sinal verde é um número, não uma data
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas, SQL / PostgreSQL
+
+**Estado.** A virada de 01/09 está feita e verificada com provas: as 27 funções Edge leem a chave secreta via `_shared/core/secret-key.ts` (os logs do gateway não mostram mais nenhuma requisição de função com chave legada), os scripts de administração rodam com sua chave dedicada `poste_accattone_scripts_2026_08`, e o front reconstruído na noite de 01/09 embarca a chave publicável — zero ocorrência da antiga chave anon no bundle. O que resta de tráfego legado vem dos navegadores que guardam o bundle antigo em cache: 2.026 requisições de navegador com prefixo `apikey` vazio nas 24 h do levantamento.
+
+*Verificado : 01/09 — logs do gateway em 24 h, campo `request.sb.apikey.apikey.prefix`: vazio = chave legada. 2.026 requisições de navegador com prefixo vazio; zero requisição de função Edge em legado; 4.007 em `sb_secret_efQ1g`.*
+
+**O que é.** Esperar que o tráfego de navegador com prefixo vazio caia a praticamente zero — uma verificação diária agendada faz a medição, não se decide no olhômetro. Depois, na ordem: desativar as chaves `anon` e `service_role` legadas no dashboard (Settings → API Keys, aba Legacy — gesto reversível); retirar o fallback para `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` e a variável legada de `.env.example`; apagar o vestígio do vault `anarbib_staging_anon_key`, que não tem mais nenhum chamador.
+
+**Por que importa.** Enquanto as chaves legadas ficarem ativas, o fallback de `secret-key.ts` é um caminho vivo para uma chave que se acredita morta, e uma chave ativa que nada de legítimo usa mais é exatamente a superfície que uma auditoria vai apontar. A desativação é reversível: o único custo de ir cedo demais é uma leitora com bundle de vários dias que terá de recarregar a página.
+
+**O que conta como terminado.**
+
+- O tráfego de navegador com prefixo `apikey` vazio ficou próximo de zero por vários dias consecutivos de medição.
+- As chaves legadas estão desativadas no dashboard e nenhum 401 anormal aparece nos logs nem nos retornos das leitoras e leitores.
+- O fallback de `secret-key.ts` foi retirado; a função lança erro se `SUPABASE_SECRET_KEYS` faltar.
+- O vestígio do vault `anarbib_staging_anon_key` foi apagado.
+
+**Dependências.** A renovação natural dos caches de navegador; a verificação agendada do tráfego legado (criada em 01/09).
+
+*Remissões : `supabase/functions/_shared/core/secret-key.ts` · `vault anarbib_staging_anon_key` · `item B19` · `item I14`*
+
+#### B19 — Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo
+
+`P2` Corrente · Estado : **Congelado** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** As chaves de assinatura JWT estão migradas: a chave corrente é uma ECC P-256, a antiga HS256 está guardada em « Previously used keys » e só faz verificação. O dashboard mostra ao lado dela um botão Revoke e um texto que convida gentilmente a clicar « uma vez expirados os tokens ». Só que essa chave ainda valida a chave anon legada que os navegadores com bundle em cache enviam — 2.026 requisições por dia no levantamento de 01/09.
+
+*Verificado : 01/09 — página Settings → JWT Keys lida: ECC P-256 corrente, HS256 em « previously used », última rotação há 5 meses.*
+
+**O que é.** Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem.
+
+**Por que importa.** É o único gesto realmente irreversível de todo o canteiro das chaves, e está a um clique de uma tela que se visita por outras razões. Revogada cedo demais, a HS256 invalida de uma vez tudo o que ela ainda validava: a desconexão seria geral e imediata.
+
+**O que conta como terminado.**
+
+- B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais.
+- A revogação foi feita e um login, um cadastro e uma recuperação de senha foram verificados logo depois.
+
+**Dependências.** Item B18 terminado.
+
+*Remissões : `item B18`*
 
 ---
 
@@ -1757,6 +1803,9 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | **I11** | Sair do `node:20`, em fim de manutenção | `P2` | Aberto |
 | **I12** | Automatizar a atualização do espelho frio | `P2` | Aberto |
 | **I13** | Terminar a migração para o novo motor de páginas | `P3` | Aberto |
+| **I14** | A CI não faz redeploy de nada quando só a configuração das funções muda | `P1` | Aberto |
+| **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | Aberto |
+| **I16** | supabase-js: uma versão fixada, vinte e nove flutuantes — decidir um regime | `P3` | Decisão coletiva |
 
 #### I1 — Alinhar a imagem GoTrue com o estado real das migrações de autenticação
 
@@ -1976,6 +2025,67 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** P1, não P0 — a versão histórica não tem data de encerramento anunciada.
 
 *Remissões : `PLAN_migration_git_pages_2026-08-19` · `RUNBOOK_exploitation_v0.3`*
+
+#### I14 — A CI não faz redeploy de nada quando só a configuração das funções muda
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Constatado em 01/09: o commit `c152e7fa` passava `login`, `register` e `request-password-reset` para `verify_jwt = false` e só tocava `supabase/config.toml` — a CI ficou verde e não implantou nada. O `deployer-backend.sh` decide o redeploy com `git diff -- supabase/functions/` (perto da linha 296): uma mudança só de configuração é invisível para ele. Foi preciso implantar as três funções à mão para o ajuste ter efeito.
+
+*Verificado : 01/09 — reproduzido em produção: três funções ainda respondendo o 401 da plataforma depois do run verde de `c152e7fa`, respostas aplicativas corretas depois do deploy manual das três.*
+
+**O que é.** Ampliar a detecção para `supabase/config.toml` — no mais simples, reimplantar tudo quando ele muda; no mais fino, reimplantar só as funções cuja seção `[functions.*]` mudou. E documentar o caso na narrativa do bloco « Edge Functions » do script, que já conta o incidente `--depuis event.before` de 27/08: é a mesma família de ponto cego. Uma ficha de tarefa foi criada em 01/09.
+
+**Por que importa.** Um `verify_jwt` que não vai para produção é uma porta que se acredita ter aberto ou fechado quando ela não se moveu — e a CI verde afirma o contrário. Mesmo silêncio do `--depuis` de 27/08: nada fica vermelho, o trabalho simplesmente não é feito.
+
+**O que conta como terminado.**
+
+- Um commit que só toca `config.toml` dispara um redeploy, verificado com um teste real.
+- O comentário do script conta esse terceiro incidente ao lado dos dois primeiros.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `scripts/ci/deployer-backend.sh` · `item B18`*
+
+#### I15 — O secret do Forgejo da chave publicável ainda carrega seu nome antigo
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Desde 01/09, o código lê `VITE_SUPABASE_PUBLISHABLE_KEY` e seu valor é mesmo a chave publicável — mas na CI essa variável é alimentada pelo secret do Forgejo com o nome histórico `VITE_SUPABASE_ANON_KEY`. Desacoplamento proposital: evitava exigir a renomeação do secret e o merge no mesmo instante. A armadilha está documentada no `ci.yml`: o `prebuild` faz `exit 0` se a variável faltar, um nome desalinhado não quebra o build, publica um instantâneo de catálogo vencido em silêncio.
+
+*Verificado : 01/09 — `ci.yml` relido depois da virada: mapeamento `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` no lugar, comentado.*
+
+**O que é.** Criar o secret `VITE_SUPABASE_PUBLISHABLE_KEY` nas configurações do Forgejo (mesmo valor), alinhar a linha do `ci.yml`, verificar um build completo — o frescor do `catalogue-snapshot.json` serve de prova — e então apagar o secret antigo.
+
+**Por que importa.** O canteiro das chaves pagou duas vezes o preço de um nome que mente — uma variável de plataforma cujo conteúdo mudou sem avisar, e um controle `verify_jwt` satisfeito por uma chave pública. Melhor não deixar um terceiro no lugar, mesmo benigno.
+
+**O que conta como terminado.**
+
+- A linha do `ci.yml` lê um secret com o mesmo nome da variável, o secret antigo não existe mais, e um build posterior produziu um snapshot com a data do dia.
+
+**Dependências.** Acesso às configurações do repositório Forgejo (Settings → Actions → Secrets).
+
+*Remissões : `.forgejo/workflows/ci.yml` · `item B18`*
+
+#### I16 — supabase-js: uma versão fixada, vinte e nove flutuantes — decidir um regime
+
+`P3` Adiado · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : Deno / TypeScript
+
+**Estado.** O `_shared/core/env.ts` fixa `supabase-js@2.112.4` (antes de 01/09: `2.49.1`, sessenta versões para trás durante meses); as vinte e nove outras funções importam `@2` flutuante, resolvido no deploy. O dia 01/09 mostrou o que esse regime misto produz: as flutuantes tinham absorvido em silêncio o suporte às chaves `sb_` enquanto a fixada o ignorava — o diagnóstico de compatibilidade errou exatamente aí.
+
+*Verificado : 01/09 — levantamento dos imports: `grep supabase-js@ supabase/functions -r` → 1 fixado (`env.ts`), 29 em `@2`, 1 em `@2` via npm:.*
+
+**O que é.** Decidir: fixar tudo (deploys reproduzíveis, mas é preciso um ritual de subida de versão, senão repete-se o caso das sessenta versões de atraso) ou deixar tudo flutuar (sempre em dia, mas uma ruptura maior da biblioteca chega em produção sem avisar). Um ou outro — não a mistura atual.
+
+**Por que importa.** A mistura dá o pior dos dois regimes: acredita-se a versão controlada onde ela flutua, e em dia onde está congelada. Os dois erros de 01/09 — um por excesso de confiança na fixação, outro por ignorância da flutuação — saem do mesmo desacordo.
+
+**O que conta como terminado.**
+
+- Uma regra escrita existe (no `CONTRIBUTING.md` ou no cabeçalho do `env.ts`), e as cinquenta e uma funções a seguem todas.
+
+**Dependências.** Nenhuma — é uma arbitragem, não um canteiro.
+
+*Remissões : `supabase/functions/_shared/core/env.ts` · `CONTRIBUTING.md`*
 
 ---
 
@@ -2341,4 +2451,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 77 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 82 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `780cac8a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
