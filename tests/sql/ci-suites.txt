@@ -33,6 +33,12 @@ tests/sql/my_access_biblio_effective_tests.sql
 # d'autres fonctions le meme predicat ELARGIT un acces, et le rendre levant y
 # casserait la navigation.
 tests/sql/refus_reseau_se_dit_tests.sql
+# B14 paquet 6 : meme invariant que b14_oracle_existence_forme, mais par la
+# STRUCTURE et non par le motif. Le motif avait ferme 14 fonctions et n'en
+# voyait pas 9 autres, qui disent la meme chose avec d'autres mots. Son T1 pose
+# la bonne question — reste-t-il DEUX refus distinguables ? — celle qui aurait
+# attrape le troisieme message oublie dans fn_attach_received_asset_record.
+tests/sql/oracle_existence_ordre_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
