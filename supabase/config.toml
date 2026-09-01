@@ -195,3 +195,9 @@ verify_jwt = false
 # pouvoir. Cf. DECISION_anti_robots_2026-08-20 (AR-3).
 [functions.altcha-challenge]
 verify_jwt = false
+
+# Flux OPDS 1.2 du catalogue numerique public (item H4). Anonyme par nature :
+# une liseuse ne porte pas de JWT. La fonction ne sert QUE les ressources
+# access_scope='publico' actives — meme predicat que documents_numeriques_tests.
+[functions.opds]
+verify_jwt = false
