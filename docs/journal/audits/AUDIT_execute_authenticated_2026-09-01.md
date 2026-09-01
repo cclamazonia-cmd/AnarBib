@@ -546,3 +546,70 @@ troisième, qui est la vraie : *une cause certaine se vérifie quand même* — 
 l'était, et il en restait une autre derrière.
 
 **88 des 326 de `public` lues** (69 + 19). Restent 238.
+
+
+# Paquet 3 de `public` — les listes à paramètre de portée (57 lues, 01/09)
+
+Critère qui avait payé côté `api` : une liste rendue à partir d'un paramètre de
+portée. Cinquante-sept fonctions.
+
+## Aucune fuite
+
+Les portées sont respectées partout : les `fn_list_*(p_library_id)` et
+`fn_search_library_books` gardent sur *la* bibliothèque passée ; les
+`list_*`/`suggest_*` de dédoublonnage lèvent sur le rôle de catalogage ; les
+deux fonctions de dépôt de garantie — appelées par un `p_emprestimo_id`
+séquentiel, donc la forme à risque — filtrent bien par
+`(e.user_id = auth.uid() OR user_can_engage_library(d.library_id))` : on ne lit
+le montant et le moyen de paiement que de son propre dépôt, ou en tant que staff.
+
+**Cinq faux positifs de mon détecteur**, et la distinction mérite d'être
+écrite. `search_authors_by_name`, `suggest_author_duplicates`,
+`suggest_author_book_matches`, `suggest_subject_duplicates` et
+`suggest_duplicates_for_fields` portent bien un `RETURN;` nu — mais après un
+contrôle d'**entrée** (« requête vide », « aucune forme normalisée à
+comparer »), pas après un contrôle de **droit** : leur garde d'appelant, elle,
+lève. *Un `RETURN;` qui suit un paramètre vide est légitime ; un `RETURN;` qui
+suit un refus ne l'est pas.* Le motif seul ne suffit pas à trancher, il faut lire
+ce qui précède.
+
+## Une question de doctrine, posée plutôt que tranchée
+
+Quatre fonctions mettent leur garde **dans le `WHERE`** plutôt que dans un `IF` :
+
+| Fonction | Garde |
+|---|---|
+| `fn_list_library_request_invitations` | `where fn_caller_is_network_admin()` |
+| `fn_list_orphan_library_mentions` | idem |
+| `fn_network_library_metrics` | `where fn_current_user_can_view_network_metrics()` |
+| `fn_network_list_library_requests` | `where fn_current_user_can_review_library_requests()` |
+
+Un appel non autorisé y rend donc **zéro ligne au lieu d'une erreur** — la forme
+que le paquet 3 du lot `api` a corrigée sur six fonctions au nom de
+`DOC-SILENCE-1`.
+
+**Mais ici, c'est délibéré et écrit.** `fn_list_orphan_library_mentions` porte le
+commentaire : « *Garde DANS le where : un appel non autorisé rend zéro ligne
+plutôt qu'une erreur, comme fn_list_library_request_invitations.* » Ce n'est pas
+un oubli, c'est un choix, cohérent entre les quatre.
+
+Je ne l'ai donc **pas corrigé** : contrairement aux six du lot `api` — qui ne
+disaient nulle part pourquoi elles se taisaient — celles-ci relèvent d'un
+arbitrage que le projet a déjà rendu une fois. Les deux positions se défendent :
+
+* *pour le silence* — la garde dans le `WHERE` compose avec les vues et les
+  policies, et un écran réservé aux admins réseau n'atteint jamais ce chemin
+  (comme `ReportsPanel`, ces quatre-là sont servies derrière la garde stricte de
+  `RedePage`) ;
+* *contre* — `fn_network_library_metrics` vide se lit « le réseau n'a aucune
+  bibliothèque » et `fn_network_list_library_requests` vide se lit « aucune
+  candidature n'attend ». Ce sont des phrases fausses, et c'est exactement le
+  reproche fait aux rapports de qualité au paquet précédent.
+
+**À trancher collectivement** : soit ces quatre rejoignent la règle du paquet 3
+(un refus se dit), soit `DOC-SILENCE-1` gagne une exception écrite pour les
+gardes en `WHERE`. Ce qu'il ne faut pas, c'est que les deux formes continuent de
+cohabiter sans que le choix soit noté quelque part.
+
+**145 des 326 de `public` lues** (69 + 19 + 57, sans recouvrement : les trois
+critères s'excluent). Restent 181.
