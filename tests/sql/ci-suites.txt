@@ -14,6 +14,7 @@
 tests/sql/paquet_cotisation_tests.sql
 tests/sql/b14_api_cotisation_autrui_tests.sql
 tests/sql/b14_api_gel_global_borne_tests.sql
+tests/sql/b14_api_refus_muet_listes_tests.sql
 tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
