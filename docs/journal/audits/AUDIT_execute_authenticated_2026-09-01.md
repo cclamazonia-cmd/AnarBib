@@ -1218,3 +1218,55 @@ base, appelé avec `auth.uid()` par ses appelants.
 Un paquet sans correctif n'est pas un paquet sans résultat : c'est ce qui permet
 de dire que la classe est passée. Le lot `api` avait connu la même chose à son
 paquet 5, et c'est le signe que la surface commence à converger.
+
+---
+
+# `public`, paquet 9 — la salle des machines
+
+Dernière classe systémique : ce qu'un compte `authenticated` peut déclencher qui
+appartient à l'**exploitation** — HTTP sortant (`pg_net`), secrets (`vault`),
+mécanique cron, files de notification. C'est la classe de la toute première
+fuite du projet : `fn_gazette_translate_call`, qui déclenchait l'API LLM
+facturée depuis `/rest/v1/rpc/`.
+
+## Le scan direct ne suffisait pas — le critère était le graphe
+
+Le motif `vault\.|net\.http|cron\.` sur les corps exposés rend deux fonctions et
+zéro vault. Mais `fn_send_weekly_report_now` lit ses secrets via un **wrapper**
+(`fn_internal_get_vault_secret`) que ce motif ne voit pas dans l'appelante —
+même leçon que le paquet 6 : *chercher un vocabulaire ne trouve que ce qui parle
+sa langue*. Le critère refait est **transitif** : qui touche la machine, et qui
+appelle qui la touche.
+
+## Verdict : l'architecture est en couches, et les couches sont étanches
+
+| Couche | Contenu | Exposée à `authenticated` ? |
+|---|---|---|
+| moteur | ~30 fonctions : `fn_dispatch_*`, `fn_enqueue_*`, `fn_cron_*`, `fn_internal_get_vault_secret`, `fn_gazette_*_call`, `fn_pseudonymize_token`, triggers d'outbox | **aucune** |
+| métier | 44 fonctions qui *aboutissent* au moteur (partenariats, dépôts, adhésions, PEB, OAI, imports) | oui — et chacune porte la garde métier déjà auditée aux paquets 5 et 8 |
+| exceptions | `fn_import_harvest_oai` et `fn_send_weekly_report_now`, seules à faire de l'HTTP **en direct** | oui — gardées sur la bibliothèque concernée, URL et secret venus du vault, jamais de l'appelant |
+
+Les fonctions métier atteignent le moteur en tant que `SECURITY DEFINER` : le
+droit d'EXECUTE du wrapper n'est jamais celui de l'appelant. C'est exactement la
+bonne construction — le lectorat déclenche des *conséquences* (une notification
+part quand un partenariat est accepté), jamais la *mécanique* (choisir quoi
+envoyer, à qui, avec quel secret).
+
+`fn_gazette_translate_call` est vérifiée **fermée**. La boucle du 17/08 est
+bouclée des deux côtés.
+
+## Aucune faille — mais rien ne le gardait
+
+Un `GRANT` distrait sur `fn_internal_get_vault_secret` aurait donné **tous les
+secrets du vault** — `service_role`, clés API, secrets webhook — à tout compte
+du réseau, sans qu'aucun voyant ne rougisse. L'étanchéité tenait à la discipline,
+pas à un test.
+
+D'où `salle_des_machines_tests.sql`, **structurelle et non nominative** : le
+critère « touche `vault.` dans son corps » se remesure à chaque passage et
+attrape les fonctions qui n'existent pas encore. Seules les deux exceptions HTTP
+sont nommées — c'est le sens d'une exception — et le T3 vérifie qu'elles gardent
+leur garde : *une exception sans garde n'est plus une exception, c'est un trou.*
+Le T2 vérifie aussi `PUBLIC`, parce que le défaut natif de Postgres accorde
+EXECUTE à PUBLIC sur toute fonction neuve, et qu'une recréation sans REVOKE y
+retomberait. Éprouvée en production : **4/4**.

@@ -8,7 +8,14 @@ La bibliothèque `cira-marseille` a été supprimée de `public.libraries` entre
 30 août au soir et le 1ᵉʳ septembre au matin, par un geste direct en production —
 aucune migration, aucun commit ne la porte. Le relevé du backlog l'a constaté le
 01/09 ; la coordination a **confirmé le jour même que la suppression était
-volontaire** (participation au réseau non poursuivie à ce stade).
+volontaire, et de sa main**.
+
+**Le motif** : le CIRA Marseille a fait retour qu'il ne se lancerait pas dans un
+nouvel outil. Ce n'est ni un désaccord ni une rupture — c'est le refus ordinaire,
+et parfaitement légitime, d'un centre d'archives qui a déjà ses instruments. La
+porte reste ouverte : c'est précisément pourquoi les fichiers de thème sont
+conservés (voir plus bas), et pourquoi cette note évite tout vocabulaire de
+« départ ».
 
 Cette note existe parce que le geste, lui, n'avait laissé aucune trace : les
 journaux d'audit du réseau couvrent les adhésions et les actions d'équipe, pas

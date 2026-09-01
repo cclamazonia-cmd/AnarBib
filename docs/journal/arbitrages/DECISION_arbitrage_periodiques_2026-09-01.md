@@ -159,8 +159,13 @@ sur les trois libellés remplacés.
 
 ## Suivi
 
-- Migration : `supabase/migrations/20260901110559_arbitrer_une_revue_comme_on_arbitre_un_livre.sql`
-  — **écrite, éprouvée, non poussée** en attente du préavis.
+- **Préavis envoyé le 01/09/2026** par la coordination, aux quatre personnes, en
+  pt-BR. La migration a été poussée dans la foulée — réhorodatée
+  `20260901145725` au moment du push, trois migrations ayant été déployées entre
+  son écriture et son départ.
+- Migration : `supabase/migrations/20260901145725_arbitrer_une_revue_comme_on_arbitre_un_livre.sql`
+  — écrite et éprouvée le matin, **retenue en local jusqu'à l'envoi du préavis**,
+  déployée l'après-midi. La règle a été tenue dans l'ordre qu'elle exigeait.
 - Suite de garde : `tests/sql/arbitrage_periodiques_tests.sql`. Son `T3` tient
   l'autre moitié de la décision (le catalogage reste ouvert), et son `T4` garde
   que les deux familles refusent dans les mêmes termes — deux refus qui disent
