@@ -611,5 +611,86 @@ arbitrage que le projet a déjà rendu une fois. Les deux positions se défenden
 gardes en `WHERE`. Ce qu'il ne faut pas, c'est que les deux formes continuent de
 cohabiter sans que le choix soit noté quelque part.
 
-**145 des 326 de `public` lues** (69 + 19 + 57, sans recouvrement : les trois
-critères s'excluent). Restent 181.
+**138 des 326 de `public` lues** (69 + 19 + 50). Restent 188.
+
+> **Correction du compte, faite le jour même.** J'avais d'abord écrit « 145 des
+> 326, restent 181 », en additionnant les trois paquets comme si leurs critères
+> s'excluaient. Ils ne s'excluent pas : sept fonctions relevaient de deux
+> critères à la fois et ont donc été comptées deux fois. Le chiffre qui ne se
+> discute pas est celui du **reste mesuré** — 188 fonctions n'avaient pas encore
+> été passées — et c'est de lui qu'on déduit les lues, jamais l'inverse. Une
+> somme de paquets est une estimation ; un reste compté est une mesure.
+
+---
+
+# `public`, paquet 4 — ce qu'un numéro suivant raconte du fonds
+
+Les 188 restantes ont été retriées, cette fois avec le **vocabulaire réel des
+gardes** : au lieu de deviner une liste de noms de prédicats, on extrait par
+introspection les appels figurant en position `IF NOT <appel>` dans les corps
+existants — **21 prédicats**, dont six que mes listes écrites à la main avaient
+manqués aux paquets précédents (`fn_is_dedup_arbiter`,
+`my_access.can_access_painel`, `resolve_managed_library_id`,
+`user_can_manage_library_notifications`,
+`can_manage_library_document_governance`,
+`fn_current_user_can_access_network_dashboard`). Les quatre faux positifs des
+paquets précédents venaient tous de là : **un recensement qui part d'une liste
+inventée mesure la liste, pas le code** (`DOC-RECENS-1`).
+
+Reste après ce tri : **39 fonctions sans garde connue**. Lues une à une, elles
+donnent deux non-défauts et quatre cas à traiter.
+
+## Deux qui gardent, à leur manière
+
+`fn_network_dashboard_summary` appelle
+`fn_current_user_can_access_network_dashboard()` et lève `42501` — garde en
+bonne et due forme, simplement invisible à un tri par noms.
+
+`fn_network_get_library_request` garde **dans le `WHERE`** : cinquième membre de
+la famille du paquet 3, et cinquième argument pour la question de doctrine
+laissée ouverte ci-dessus.
+
+## Deux fuites, et un piège évité de justesse
+
+| Fonction | Ce qu'elle donnait à n'importe quel compte |
+|---|---|
+| `fn_next_tombo(uuid)` | le **prochain numéro d'inventaire** d'une bibliothèque : son préfixe donne la convention de cotation, et le numéro lui-même donne **le nombre d'exemplaires déjà catalogués**. Appelée en boucle sur les bibliothèques du réseau, elle rend la volumétrie comparée des fonds — que rien ne publie par ailleurs, et que certaines ont de bonnes raisons de ne pas donner |
+| `link_book_contributors_to_authors(bigint)` | aucune garde, **et elle écrit** : réattribuer les contributeur·rices de n'importe quelle notice de n'importe quelle bibliothèque |
+
+Le réflexe acquis sur le lot `api` — révoquer — aurait cassé deux écrans. Le
+contrôle des appelants, fait **avant** d'écrire quoi que ce soit, montre que ces
+deux-là sont appelées directement par le catalogage
+(`ExemplarDraftForm.jsx`, `BookDraftForm.jsx`). C'est exactement le piège de
+`api.confirm_pickup_v1` au paquet 1 : un `REVOKE` y remplace un refus lisible
+par un écran mort. `DOC-RPC-3` tranche — **le refus vit dans le corps, pas dans
+le droit** — et c'est une garde qu'elles ont reçue.
+
+Deux autres n'ont, elles, aucun appelant qui parle en session :
+`fn_recompute_serial_holdings` (quatre appelantes, toutes des RPC `api.*` déjà
+gardées) et `fn_backup_heartbeat_status` (consommée par `health-probe`, en
+`service_role`). Pour celles-là le droit **est** le bon endroit : révoquées.
+
+**La leçon de ce paquet n'est pas « garder » ni « révoquer », c'est que le choix
+entre les deux se lit chez les appelants, jamais dans la fonction seule.**
+
+## Ce que l'épreuve a apporté
+
+Migration `20260901101901`, éprouvée en production en transaction annulée dans
+les **deux** sens — un seul des deux ne prouvait rien :
+
+| Sous le JWT de… | `fn_next_tombo` | `link_book_contributors_to_authors` |
+|---|---|---|
+| un lecteur sans rôle | refusée (42501) | refusée (42501) |
+| un membre du staff | `CCLA.2026.92` | passée |
+
+Puis le fichier entier, plus sa suite, toujours en transaction annulée :
+`B14_GARDES_ECRITURE OK : 4/4`. Production vérifiée intacte après coup — une
+migration appliquée à la main casserait la CI pour tout le monde.
+
+La suite `b14_gardes_ecriture_tests.sql` tient **deux invariants de sens
+opposé** : deux fonctions gardées mais laissées exécutables, deux fonctions
+fermées. C'est délibéré, et c'est ce qui rend la suite utile : un correctif qui
+« uniformiserait » les quatre casserait forcément l'un des deux.
+
+**177 des 322 exposées lues.** Restent **145** — à ne pas confondre avec le 145
+erroné de l'encadré ci-dessus, qui comptait des lues.
