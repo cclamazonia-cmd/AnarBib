@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Demander un complément (la demande passe en « en attente d'informations »)",
   "rede.exch.markDone": "Marquer l'échange comme réalisé",
   "federacao.carte.edit.delete": "Supprimer la fiche",
-  "federacao.carte.edit.deleteConfirm": "Supprimer définitivement cette fiche de la cartographie ? Le collectif disparaîtra de la carte, sans trace."
+  "federacao.carte.edit.deleteConfirm": "Supprimer définitivement cette fiche de la cartographie ? Le collectif disparaîtra de la carte, sans trace.",
+  "importacoes.fontes.relation.mapeada": "repérée",
+  "importacoes.fontes.relation.contatada": "contactée",
+  "importacoes.fontes.relation.em_discussao": "en discussion",
+  "importacoes.fontes.relation.acordo_parcial": "accord partiel",
+  "importacoes.fontes.relation.acordo_tecnico": "accord technique",
+  "importacoes.fontes.relation.importacao_autorizada": "import autorisé",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "mutualisation autorisée"
 }

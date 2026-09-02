@@ -1399,12 +1399,16 @@ export default function ImportacoesPage() {
                         <Pill variant={r.run_status === 'drafts_created' ? 'ok' : r.run_status === 'failed' ? 'danger' : r.run_status === 'ready_for_review' ? 'warn' : 'info'}>
                           {STATUS[r.run_status] || r.run_status}
                         </Pill>
+                        {/* E12 lot A : une icône seule n'est pas un libellé — le titre
+                            (survol) devient aussi le nom accessible du bouton. */}
                         <button className="cat-btn ghost" title={t({ id: r.archived_at ? 'importacoes.unarchiveRun' : 'importacoes.archiveRun' })}
+                          aria-label={t({ id: r.archived_at ? 'importacoes.unarchiveRun' : 'importacoes.archiveRun' })}
                           style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
                           onClick={e => { e.stopPropagation(); handleArchiveRun(r.id, !r.archived_at); }}>
                           {r.archived_at ? '↩' : '🗄'}
                         </button>
                         <button className="cat-btn ghost" title={t({ id: 'importacoes.deleteRun' })}
+                          aria-label={t({ id: 'importacoes.deleteRun' })}
                           style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
                           onClick={e => { e.stopPropagation(); handleDeleteRun(r.id); }}>
                           🗑
@@ -1438,7 +1442,11 @@ export default function ImportacoesPage() {
                     <div key={s.id} className="imp-pcard">
                       <div className="imp-pcard__top">
                         <h4>{s.partner_name}</h4>
-                        <span className="imp-rel-badge">{s.relation_status || '—'}</span>
+                        {/* E12 lot A : le statut de relation est un code du vocabulaire
+                            partner_catalog_sources_relation_status_check ; il se traduit,
+                            il ne s'affiche pas brut (repli sur le code si une valeur
+                            neuve arrive avant sa clé). */}
+                        <span className="imp-rel-badge">{s.relation_status ? t({ id: `importacoes.fontes.relation.${s.relation_status}`, defaultMessage: s.relation_status }) : '—'}</span>
                       </div>
                       <div className="imp-flags">
                         <span className={`imp-flagchip ${s.import_enabled ? 'imp-flagchip--on' : 'imp-flagchip--off'}`}>

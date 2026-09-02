@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Request more information (the application moves to “awaiting information”)",
   "rede.exch.markDone": "Mark the conversation as held",
   "federacao.carte.edit.delete": "Delete the entry",
-  "federacao.carte.edit.deleteConfirm": "Permanently delete this entry from the map? The collective will disappear from it, without a trace."
+  "federacao.carte.edit.deleteConfirm": "Permanently delete this entry from the map? The collective will disappear from it, without a trace.",
+  "importacoes.fontes.relation.mapeada": "identified",
+  "importacoes.fontes.relation.contatada": "contacted",
+  "importacoes.fontes.relation.em_discussao": "in discussion",
+  "importacoes.fontes.relation.acordo_parcial": "partial agreement",
+  "importacoes.fontes.relation.acordo_tecnico": "technical agreement",
+  "importacoes.fontes.relation.importacao_autorizada": "import authorised",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "sharing authorised"
 }

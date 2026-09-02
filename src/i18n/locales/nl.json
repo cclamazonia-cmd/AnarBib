@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Om aanvullende informatie vragen (de aanvraag gaat naar “wacht op informatie”)",
   "rede.exch.markDone": "Het gesprek als gehouden markeren",
   "federacao.carte.edit.delete": "Vermelding verwijderen",
-  "federacao.carte.edit.deleteConfirm": "Deze vermelding definitief uit de kaart verwijderen? Het collectief verdwijnt spoorloos van de kaart."
+  "federacao.carte.edit.deleteConfirm": "Deze vermelding definitief uit de kaart verwijderen? Het collectief verdwijnt spoorloos van de kaart.",
+  "importacoes.fontes.relation.mapeada": "in kaart gebracht",
+  "importacoes.fontes.relation.contatada": "gecontacteerd",
+  "importacoes.fontes.relation.em_discussao": "in gesprek",
+  "importacoes.fontes.relation.acordo_parcial": "gedeeltelijke afspraak",
+  "importacoes.fontes.relation.acordo_tecnico": "technische afspraak",
+  "importacoes.fontes.relation.importacao_autorizada": "import toegestaan",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "delen toegestaan"
 }

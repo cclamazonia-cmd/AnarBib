@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Peti pliajn informojn (la peto pasos al « atendas informojn »)",
   "rede.exch.markDone": "Marki la interparolon kiel okazintan",
   "federacao.carte.edit.delete": "Forigi la slipon",
-  "federacao.carte.edit.deleteConfirm": "Ĉu definitive forigi ĉi tiun slipon el la kartografio? La kolektivo malaperos de la mapo, senspure."
+  "federacao.carte.edit.deleteConfirm": "Ĉu definitive forigi ĉi tiun slipon el la kartografio? La kolektivo malaperos de la mapo, senspure.",
+  "importacoes.fontes.relation.mapeada": "identigita",
+  "importacoes.fontes.relation.contatada": "kontaktita",
+  "importacoes.fontes.relation.em_discussao": "en diskuto",
+  "importacoes.fontes.relation.acordo_parcial": "parta interkonsento",
+  "importacoes.fontes.relation.acordo_tecnico": "teknika interkonsento",
+  "importacoes.fontes.relation.importacao_autorizada": "importo rajtigita",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "kunhavigo rajtigita"
 }

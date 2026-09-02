@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Ζήτησε συμπληρωματικές πληροφορίες (το αίτημα περνά σε «αναμονή πληροφοριών»)",
   "rede.exch.markDone": "Σήμανε τη συνομιλία ως πραγματοποιημένη",
   "federacao.carte.edit.delete": "Διαγραφή της καταχώρισης",
-  "federacao.carte.edit.deleteConfirm": "Οριστική διαγραφή αυτής της καταχώρισης από τη χαρτογράφηση; Η κολεκτίβα θα εξαφανιστεί από τον χάρτη, χωρίς ίχνος."
+  "federacao.carte.edit.deleteConfirm": "Οριστική διαγραφή αυτής της καταχώρισης από τη χαρτογράφηση; Η κολεκτίβα θα εξαφανιστεί από τον χάρτη, χωρίς ίχνος.",
+  "importacoes.fontes.relation.mapeada": "εντοπισμένη",
+  "importacoes.fontes.relation.contatada": "σε επαφή",
+  "importacoes.fontes.relation.em_discussao": "σε συζήτηση",
+  "importacoes.fontes.relation.acordo_parcial": "μερική συμφωνία",
+  "importacoes.fontes.relation.acordo_tecnico": "τεχνική συμφωνία",
+  "importacoes.fontes.relation.importacao_autorizada": "εισαγωγή εγκεκριμένη",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "κοινή χρήση εγκεκριμένη"
 }

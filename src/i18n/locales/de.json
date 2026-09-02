@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Ergänzende Informationen anfordern (der Antrag wechselt zu „wartet auf Informationen“)",
   "rede.exch.markDone": "Gespräch als durchgeführt markieren",
   "federacao.carte.edit.delete": "Eintrag löschen",
-  "federacao.carte.edit.deleteConfirm": "Diesen Eintrag endgültig aus der Kartografie löschen? Das Kollektiv verschwindet spurlos von der Karte."
+  "federacao.carte.edit.deleteConfirm": "Diesen Eintrag endgültig aus der Kartografie löschen? Das Kollektiv verschwindet spurlos von der Karte.",
+  "importacoes.fontes.relation.mapeada": "erfasst",
+  "importacoes.fontes.relation.contatada": "kontaktiert",
+  "importacoes.fontes.relation.em_discussao": "im Gespräch",
+  "importacoes.fontes.relation.acordo_parcial": "Teilvereinbarung",
+  "importacoes.fontes.relation.acordo_tecnico": "technische Vereinbarung",
+  "importacoes.fontes.relation.importacao_autorizada": "Import genehmigt",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "Teilen genehmigt"
 }

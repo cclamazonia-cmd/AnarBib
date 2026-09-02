@@ -882,7 +882,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E11** | Les deux différés assumés de l'OPAC : tags contributifs et flux RSS | `P3` | Décision collective |
-| **E12** | La page Importations parle la langue de la machine — et l'export n'a pas d'adresse | `P2` | Ouvert |
+| **E12** | La page Importations parle la langue de la machine — et l'export n'a pas d'adresse | `P2` | En cours |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1122,7 +1122,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 #### E12 — La page Importations parle la langue de la machine — et l'export n'a pas d'adresse
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript, langue maternelle
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript, langue maternelle
 
 **État.** **Constat de Xavier le 02/09, sur sa propre capture d'écran, après avoir exercé le circuit OAI dans les deux sens** : « pas très ergonomique ce bazar, surtout pour des camarades qui sont pas informaticiens ». Trois défauts distincts se cachent derrière le mot.
 

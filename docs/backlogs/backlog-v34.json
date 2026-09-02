@@ -3380,7 +3380,7 @@
       "id": "E12",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "front",
@@ -3404,8 +3404,8 @@
       },
       "f": [
         {
-          "fr": "Lot A — plus un code brut à l'écran : `mapeada`, `importacao_autorizada` et consorts traduits dans les dix locales ; les deux icônes du lot portent un libellé.",
-          "pt": "Lote A — nenhum código bruto na tela; os dois ícones do lote com rótulo."
+          "fr": "~~Lot A — plus un code brut à l'écran~~ — livré le 02/09 : les sept statuts de relation (`mapeada` → `mutualizacao_autorizada`, vocabulaire de `partner_catalog_sources_relation_status_check`) traduits dans les dix locales avec repli sur le code si une valeur neuve précède sa clé ; les deux icônes du lot portent leur nom accessible (`aria-label` = le titre au survol). Avant la formation du 13.",
+          "pt": "~~Lote A — nenhum código bruto na tela~~ — entregue em 02/09: os sete status de relação traduzidos nas dez locales, com fallback no código; os dois ícones do lote com nome acessível."
         },
         {
           "fr": "Lot B — les six libellés de l'en-tête et des sections parlent le geste, pas le pipeline.",

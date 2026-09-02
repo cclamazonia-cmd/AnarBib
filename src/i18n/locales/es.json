@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Pedir información complementaria (la solicitud pasa a « en espera de información »)",
   "rede.exch.markDone": "Marcar la conversación como realizada",
   "federacao.carte.edit.delete": "Eliminar la ficha",
-  "federacao.carte.edit.deleteConfirm": "¿Eliminar definitivamente esta ficha de la cartografía? El colectivo desaparecerá del mapa, sin rastro."
+  "federacao.carte.edit.deleteConfirm": "¿Eliminar definitivamente esta ficha de la cartografía? El colectivo desaparecerá del mapa, sin rastro.",
+  "importacoes.fontes.relation.mapeada": "localizada",
+  "importacoes.fontes.relation.contatada": "contactada",
+  "importacoes.fontes.relation.em_discussao": "en conversación",
+  "importacoes.fontes.relation.acordo_parcial": "acuerdo parcial",
+  "importacoes.fontes.relation.acordo_tecnico": "acuerdo técnico",
+  "importacoes.fontes.relation.importacao_autorizada": "importación autorizada",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "mutualización autorizada"
 }

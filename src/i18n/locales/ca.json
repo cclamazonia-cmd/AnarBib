@@ -6220,5 +6220,12 @@
   "rede.exch.moreInfo": "Demanar informació complementària (la sol·licitud passa a « en espera d'informació »)",
   "rede.exch.markDone": "Marcar la conversa com a realitzada",
   "federacao.carte.edit.delete": "Suprimir la fitxa",
-  "federacao.carte.edit.deleteConfirm": "Suprimir definitivament aquesta fitxa de la cartografia? El col·lectiu desapareixerà del mapa, sense rastre."
+  "federacao.carte.edit.deleteConfirm": "Suprimir definitivament aquesta fitxa de la cartografia? El col·lectiu desapareixerà del mapa, sense rastre.",
+  "importacoes.fontes.relation.mapeada": "localitzada",
+  "importacoes.fontes.relation.contatada": "contactada",
+  "importacoes.fontes.relation.em_discussao": "en conversa",
+  "importacoes.fontes.relation.acordo_parcial": "acord parcial",
+  "importacoes.fontes.relation.acordo_tecnico": "acord tècnic",
+  "importacoes.fontes.relation.importacao_autorizada": "importació autoritzada",
+  "importacoes.fontes.relation.mutualizacao_autorizada": "mutualització autoritzada"
 }

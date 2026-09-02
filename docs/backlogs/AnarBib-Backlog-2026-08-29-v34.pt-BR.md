@@ -882,7 +882,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E11** | Os dois adiamentos assumidos do OPAC: tags contributivas e feed RSS | `P3` | Decisão coletiva |
-| **E12** | A página Importações fala a língua da máquina — e a exportação não tem endereço | `P2` | Aberto |
+| **E12** | A página Importações fala a língua da máquina — e a exportação não tem endereço | `P2` | Em curso |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -1122,7 +1122,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 #### E12 — A página Importações fala a língua da máquina — e a exportação não tem endereço
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, língua materna
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript, língua materna
 
 **Estado.** **Constato de Xavier em 02/09, sobre a própria captura de tela**: «nada ergonômico, sobretudo para camaradas que não são informáticos». Três defeitos distintos. **(1) O vocabulário é o do pipeline, não do gesto**: «Tratamentos», «Linhas em staging», «Promovidas» descrevem staging → revisão → promoção; quem cataloga quer *fazer entrar registros*. **(2) Códigos brutos vazam na tela**: `mapeada`, `importacao_autorizada` — valores de enumeração sem tradução, nenhuma chave i18n nas dez locales (verificado em 02/09). É o defeito mais nítido e mais barato. **(3) Importação e exportação estão misturadas, e a exportação está noutro lugar**: a página «Importações» hospeda «Coleta OAI» (uma importação); «ser fonte» vive na página Rede; a exportação de um lote se esconde atrás de dois ícones sem rótulo. Quem quer «dar nossos registros a outro catálogo» não tem lugar com esse nome.
 
