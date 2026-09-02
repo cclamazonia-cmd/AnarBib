@@ -676,6 +676,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const isDossier = materialType === 'dossie';
   const isTese = materialType === 'tese';
   const isArtigo = materialType === 'artigo';
+  // #périodiques P7 — le sélecteur de titre de revue se montre pour un
+  // fascicule, et pour un article seulement si la notice porte déjà un
+  // rattachement (la garde G3 admet `artigo`, mais le registre ne lui donne
+  // pas les champs de fascicule : on ne propose pas de rattacher, on montre
+  // ce qui l'est). Même couple de types que le payload d'enregistrement.
+  const showSerialPicker = materialType === 'periodico' || (isArtigo && !!f('serial_id'));
   const isRelatorio = materialType === 'relatorio';
   const isZine = materialType === 'zine';
   // Track A Lot 3 — ternary tiers: simple→1, advanced→2, complete→3.
@@ -2233,20 +2239,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   // ── Registry-driven context (Lot 2: toutes les entrées passent par le registre) ──
-  // #périodiques P7 — le sélecteur de titre de revue s'insère en tête de la
-  // section « Periódico ». Il écrit dans le formulaire (serial_id est une
-  // colonne du brouillon), pas en base : un appel direct créerait un second
-  // chemin d'écriture, désaccordé de l'enregistrement automatique.
-  const sectionExtras = {
-    periodico: (
-      <SerialAuthorityPicker
-        value={f('serial_id')}
-        onChange={(v) => set('serial_id', v)}
-        publishedBookId={f('published_book_id')}
-      />
-    ),
-  };
-  const ctx = { f, set, t, networkLibraries, sectionExtras };
+  // (Le sélecteur de titre de revue n'est plus déclaré ici via `sectionExtras` :
+  // voir le montage en ligne, en tête de la zone Periódico, et le commentaire
+  // qui l'accompagne.)
+  const ctx = { f, set, t, networkLibraries };
   const rrf = (id) => renderRegistryField(id, ctx, catalogTier, materialType);
 
   // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────
@@ -3107,6 +3103,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {rrf('cdd')}
 
           {/* ── Périodique fields (registry-driven, in-grid) ── */}
+          {/* #périodiques P7 — sélecteur de titre de revue, EN TÊTE de la zone :
+              on choisit la revue avant de décrire le numéro. Il est monté ICI,
+              et non via `sectionExtras` + renderMaterialSection comme livré le
+              27/08/2026 : le groupe `periodico` du registre n'est pas une section
+              « matériel » (absent de MATERIAL_SECTION_IDS), ses champs sont rendus
+              un par un dans la grille principale, et l'entrée `sectionExtras.periodico`
+              n'a donc JAMAIS été rendue — constaté en prod le 02/09/2026, aux trois
+              paliers. Ajouter `periodico` à MATERIAL_SECTION_IDS aurait été la
+              fausse correction : les six champs seraient apparus deux fois.
+              Il écrit dans le formulaire (serial_id est une colonne du brouillon),
+              jamais en base : la publication recopie (P7a). */}
+          {showSerialPicker && (
+            <SerialAuthorityPicker
+              value={f('serial_id')}
+              onChange={(v) => set('serial_id', v)}
+              publishedBookId={f('published_book_id')}
+            />
+          )}
           {rrf('titulo_periodico')}
           {rrf('volume')}
           {rrf('numero')}

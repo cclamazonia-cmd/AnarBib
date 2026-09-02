@@ -67,6 +67,22 @@ Ce document n'est pas la preuve — la suite l'est, à chaque commit.
   Cataloguer et **signaler** restent ouverts au staff. Voir
   `DECISION_arbitrage_periodiques_2026-09-01.md` et la suite
   `arbitrage_periodiques_tests.sql`.
+- **02/09/2026** — le « sélecteur au catalogage » du point 7 ci-dessus
+  **n'avait jamais été affiché** en production. `SerialAuthorityPicker` était
+  bien dans le bundle, mais déclaré sous `sectionExtras.periodico`, un point
+  d'extension que le formulaire ne lit que pour les sections « matériel » —
+  et le groupe `periodico` n'en est pas une : ses champs (titre transcrit,
+  volume, numéro…) sont rendus un par un dans la grille principale. Aucun
+  fascicule n'a donc pu être rattaché à une revue depuis la fiche de
+  catalogage entre le 27/08 et le 02/09 ; seuls le panneau de gouvernance
+  (« rattacher un numéro ») et les reprises SQL l'ont fait.
+  Corrigé : le sélecteur est monté en ligne, en tête de la zone Periódico,
+  pour un fascicule (et pour un article déjà rattaché). Un test de dépôt
+  (`src/tests/serial-picker-monte.test.js`) empêche qu'une clé de
+  `sectionExtras` désigne à nouveau un groupe jamais rendu. Rien n'a changé
+  en base : `book_drafts.serial_id` et sa recopie à la publication (P7a)
+  étaient en place, ils n'avaient simplement jamais reçu de valeur par ce
+  chemin.
 
 ## Ce qui reste des gestes manuels
 

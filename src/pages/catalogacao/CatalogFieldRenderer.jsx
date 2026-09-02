@@ -161,11 +161,17 @@ export function renderRegistryField(id, ctx, tier, material) {
 // `group.fields` est déjà filtré par palier/matériel (visibleGroups).
 //
 // #périodiques P7 (27/08/2026) — `ctx.sectionExtras[group.id]` permet à une
-// section d'accueillir un composant qui n'est pas un champ du registre (ici le
-// sélecteur de titre de revue, qui est un typeahead sur une autorité). Rendu
-// EN TÊTE de la grille, et c'est voulu : on choisit la revue avant de décrire
-// le numéro. L'inverse ferait saisir un fascicule orphelin avant de savoir de
-// quoi il est le fascicule.
+// section d'accueillir un composant qui n'est pas un champ du registre,
+// rendu EN TÊTE de la grille.
+//
+// ⚠ Ce point d'extension ne vaut que pour les groupes que BookDraftForm passe
+// RÉELLEMENT à cette fonction (MATERIAL_SECTION_IDS + `aquisicao`). Le
+// sélecteur de titre de revue y avait été déclaré sous la clé `periodico`, un
+// groupe que le formulaire rend champ par champ dans sa grille principale :
+// l'entrée n'a jamais été lue, le sélecteur n'a jamais été monté (constaté en
+// prod le 02/09/2026). Il est désormais monté en ligne dans BookDraftForm ;
+// src/tests/serial-picker-monte.test.js garde la règle « une clé de
+// sectionExtras = un groupe effectivement rendu par renderMaterialSection ».
 export function renderMaterialSection(group, ctx) {
   const { t } = ctx;
   const extra = ctx.sectionExtras ? ctx.sectionExtras[group.id] : null;
