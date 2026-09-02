@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 4
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 3
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée B20/B21/J7/J8 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `cb37a2a8`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-01.** **51 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **50 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1487,7 +1487,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 |---|---|---|---|
 | **H1** | Réparer l'aspiration des 158 descripteurs de dates du thésaurus | `P1` | Ouvert |
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
-| **H5** | Éprouver la moisson OAI-PMH dans les deux sens | `P2` | Ouvert |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
 
 #### H1 — Réparer l'aspiration des 158 descripteurs de dates du thésaurus
@@ -1533,28 +1532,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 **Dépendances.** Bloque **H3**. À poser à Bologne ou avant.
 
 *Renvois : `NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
-
-#### H5 — Éprouver la moisson OAI-PMH dans les deux sens
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, administration système
-
-**État.** Le chemin est exécutable depuis le 28/08 : fonction `harvest-oai-pmh` déployée, cron `anarbib-oai-harvest-weekly` posé. **Le cron n'a jamais tourné** — première occurrence prévue mardi à 04h20. Et le point d'accès `oai-pmh-provider` **n'a jamais été moissonné depuis l'extérieur**.
-
-*Vérifié : 02/09 — sens entrant : le cron a tourné une fois (01/09, 04h20 UTC, `succeeded`, 0,16 s), mais `fn_cron_import_harvest_oai()` n'a lancé **aucun** run — les 3 lignes de `ingest.partner_catalog_sources` (Maloca/Goldman, CIRA Marseille, Solidaires) sont en `source_kind` `manual_upload`/`partner_deposit`, aucune en `oai_pmh`, et `ingest.oai_harvest_state` est vide. La moisson entrante n'a donc jamais été exercée : pas un échec technique, une absence de partenaire configuré. Sens sortant : `oai-pmh-provider` moissonné depuis l'extérieur avec 6 verbes (`Identify`, `ListMetadataFormats`, `ListSets`, `ListIdentifiers`, `ListRecords`, `badVerb`/`badArgument`) — XML bien formé à chaque appel, 0,29 à 1,42 s de réponse, erreurs conformes au protocole. `ListIdentifiers`/`ListRecords`/`ListSets` renvoient `noRecordsMatch`/`noSetHierarchy` : `oai_opening_requests` n'a aucune ligne au statut `open` (les 4 existantes, du 13/06, sont `closed`/`refused`) — comportement voulu (fail-closed), rien n'a fuité, mais impossible de comparer une notice moissonnée à une notice réelle faute de bibliothèque ouverte. **Aucun des deux sens n'est donc prouvé de bout en bout avec des données réelles** — H5 reste ouvert. Limitation de débit (dep **I2**) toujours non tranchée.*
-
-**Ce que c'est.** Attendre le premier passage du cron et lire ce qu'il ramène. En parallèle, moissonner notre propre point d'accès depuis une machine tierce, avec un client OAI standard, et vérifier que les enregistrements sont conformes.
-
-**Pourquoi ça compte.** Un point d'accès jamais moissonné est un point d'accès dont on ignore s'il fonctionne. C'est le même schéma que le circuit d'invitation : construit, déclaré, jamais emprunté. Et la limitation de débit n'est pas en place — le greffon `caddy-ratelimit` n'est pas embarqué dans l'image `caddy:2`, ce qui laisse le point d'accès public non limité.
-
-**Ce qui compte comme fini.**
-
-- Le cron a tourné au moins une fois et son résultat est lu.
-- Un moissonnage externe a réussi, avec le compte rendu écrit.
-- La limitation de débit a un verdict : rétablie le jour où le moissonnage gênera, ou assumée.
-
-**Dépendances.** La limitation de débit est liée à **I2**.
-
-*Renvois : `Relevé du 29/08/2026` · `REPRISE_bascule_autohebergee_2026-08-26` · `spec-oai-provider-gouvernance.md`*
 
 #### H6 — Aligner les vocabulaires militants qui ne se connaissent pas
 
@@ -2249,6 +2226,7 @@ CI verte : lint et suite unitaire. |
 | F7 | 2026-09-02 | **Treize secrets vides, treize verdicts — et il n'en reste que deux, qui le sont exprès et le disent.** Le relevé rejoué le 02/09 donnait les mêmes treize empreintes de chaîne vide qu'au 30/08. Tri en trois classes, chaque lecteur relu : **11 supprimés** (`supabase secrets unset`) — dix doublons de tête de chaîne de repli dont la variante `ANARBIB_*` renseignée gagnait déjà, plus `REGIMENTO_URL` sur décision : aucun règlement réseau n'est publié, la branche morte qui l'attendait est **retirée du code** (trois endroits — dont une chaîne mal nommée dans `notify-document-permission-request` qui cherchait l'URL du *manuel* en essayant d'abord celle du *règlement* : inoffensive vide, fausse le jour où on l'aurait remplie ; le jour où un regimento existera, le rétablir sera un geste conscient). **2 conservés et documentés** : `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, dont le vide EST le réglage (la redirection des avis internes est inactive, vérifié le 30/08 sur l'inscription BTL) — commentaire posé dans `register/index.ts`, là où on les lit, pour que personne ne les « répare ». Un `secrets list` dit désormais la vérité : deux empreintes vides, toutes deux voulues. |
 | B18 | 2026-09-02 | **Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout. |
 | G2 | 2026-09-02 | **L'écart P2/P8 est tranché — le texte s'aligne sur le code, et la forme de la décision est aussi importante que son fond.** Option 1 des trois écrites : la pratique vivante (le circuit collégial que la BTL exerce depuis le 01/09) devient la règle. Spec v1.11 : P2 dit que **l'exécution elle-même est collégiale** ; P8 clarifie la frontière sans rien céder — les quorums du code ne sont pas des votes mais des **garanties d'exécution** (une ratification atteste qu'une décision collective existe hors logiciel, elle ne la remplace pas) : « modéliser la délibération, jamais ; exiger plusieurs mains pour exécuter, toujours ». Aucune ligne de code. **Décision prise seule, en le disant** — mode dégradé assumé (aucun collectif ne s'est encore saisi de l'outil), daté à `DECISION_G2_alignement_textes_promotion_2026-09-02.md`, `GOUV-18` au REGISTRE (v0.15), **fenêtre d'objection à la formation du 13/09** : le jour où le collectif existe, il trouve une décision contestable, pas un état de fait muet. Au passage, le fil-piège de `GOUV-17b` est réparé (livré ce matin, la ligne du registre avait un jour de retard). |
+| H5 | 2026-09-02 | **La moisson OAI-PMH est éprouvée dans les deux sens, avec de vraies données des deux côtés — et deux circuits civiques exercés pour la première fois le même soir.** **Sens entrant** : première source réelle enregistrée (Persée, fascicules de sociologie, volume borné à 2 lots/cycle — répétition en transaction annulée puis geste réel, garde admin réseau sous l'identité de Xavier) ; le déclencheur du cron lancé à la main a ramené **40 fascicules réels** (les *Actes de la recherche en sciences sociales* de 1975 en tête de file) : run `ready_for_review`, verrou reposé sur `paused`, **jeton de reprise conservé** — le cron de mardi 04h20 continuera là où l'épreuve s'est arrêtée. **Sens sortant** : l'entrepôt répondait conformément mais vide — « aucune bibliothèque ouverte » — car le circuit « être source » n'avait jamais servi ; **la BLMF s'est ouverte par le circuit réel** (demande → décision, notification comprise — décision de Xavier, mode dégradé assumé comme G2), et un client tiers a moissonné **200 notices en deux lots**, reprise par `resumptionToken` honorée, `GetRecord` exact, `Identify`/`ListMetadataFormats`/`ListSets` conformes. **Deux constats en chemin, pour Bologne** : *(1)* les deux partenaires PMB connus (CIRA Lausanne, CSL Milano) n'exposent pas `oai2.php` — le diagnostic des conventions (« les flux ne pointent nulle part ») est en-deçà de la réalité : côté PMB ils n'existent pas, et c'est un sujet pour H6/K6 ; *(2)* `blmf-teste` échoue l'éligibilité sur ses trois verrous de profil — sa recette de bibliothèque masquée tient, y compris face à l'OAI. **Reste ouvert, hors périmètre** : la révision humaine des 40 lignes Persée (file d'import), et un moissonneur vraiment tiers — une autre machine, un autre collectif — que Bologne peut fournir. |
 
 ---
 
@@ -2280,4 +2258,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

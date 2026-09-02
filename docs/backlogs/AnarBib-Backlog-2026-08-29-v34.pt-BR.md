@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 4
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 4
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 3
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **2 de setembro de 2026** — atualização dirigida após o dia B20/B21/J7/J8: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `cb37a2a8`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
-**Frescor dos constatos em 2026-09-01.** **51 itens de 73** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **50 itens de 72** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1471,7 +1471,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 |---|---|---|---|
 | **H1** | Reparar a coleta dos 158 descritores de datas do tesauro | `P1` | Aberto |
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
-| **H5** | Testar a coleta OAI-PMH nos dois sentidos | `P2` | Aberto |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
 
 #### H1 — Reparar a coleta dos 158 descritores de datas do tesauro
@@ -1517,28 +1516,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** Bloqueia **H3**. A colocar em Bolonha ou antes.
 
 *Remissões : `NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
-
-#### H5 — Testar a coleta OAI-PMH nos dois sentidos
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, administração de sistemas
-
-**Estado.** O caminho está executável desde 28/08: função `harvest-oai-pmh` implantada, cron `anarbib-oai-harvest-weekly` posto. **O cron nunca rodou** — primeira ocorrência prevista para terça-feira às 04h20. E o ponto de acesso `oai-pmh-provider` **nunca foi coletado de fora**.
-
-*Verificado : 02/09 — sentido de entrada: o cron rodou uma vez (01/09, 04h20 UTC, `succeeded`, 0,16 s), mas `fn_cron_import_harvest_oai()` não disparou **nenhum** run — as 3 linhas de `ingest.partner_catalog_sources` (Maloca/Goldman, CIRA Marseille, Solidaires) estão em `source_kind` `manual_upload`/`partner_deposit`, nenhuma em `oai_pmh`, e `ingest.oai_harvest_state` está vazia. A coleta de entrada nunca foi exercida: não é uma falha técnica, é ausência de parceiro(a) configurado(a). Sentido de saída: `oai-pmh-provider` coletado de fora com 6 verbos (`Identify`, `ListMetadataFormats`, `ListSets`, `ListIdentifiers`, `ListRecords`, `badVerb`/`badArgument`) — XML bem formado em cada chamada, 0,29 a 1,42 s de resposta, erros conformes ao protocolo. `ListIdentifiers`/`ListRecords`/`ListSets` retornam `noRecordsMatch`/`noSetHierarchy`: `oai_opening_requests` não tem nenhuma linha com status `open` (as 4 existentes, de 13/06, estão `closed`/`refused`) — comportamento desejado (fail-closed), nada vazou, mas foi impossível comparar um registro coletado com um registro real por falta de biblioteca aberta. **Nenhum dos dois sentidos está, portanto, provado de ponta a ponta com dados reais** — H5 permanece aberto. Limitação de taxa (dep **I2**) ainda sem veredito.*
-
-**O que é.** Esperar a primeira passagem do cron e ler o que ela traz. Em paralelo, coletar nosso próprio ponto de acesso a partir de uma máquina de terceiro, com um cliente OAI padrão, e verificar que os registros estão conformes.
-
-**Por que importa.** Um ponto de acesso nunca coletado é um ponto de acesso do qual se ignora se funciona. É o mesmo esquema do circuito de convite: construído, declarado, jamais percorrido. E a limitação de taxa não está em vigor — o plugin `caddy-ratelimit` não está embutido na imagem `caddy:2`, o que deixa o ponto de acesso público sem limite.
-
-**O que conta como terminado.**
-
-- O cron rodou pelo menos uma vez e seu resultado está lido.
-- Uma coleta externa foi bem-sucedida, com o relatório escrito.
-- A limitação de taxa tem um veredicto: restabelecida no dia em que a coleta incomodar, ou assumida.
-
-**Dependências.** A limitação de taxa está ligada a **I2**.
-
-*Remissões : `Relevé du 29/08/2026` · `REPRISE_bascule_autohebergee_2026-08-26` · `spec-oai-provider-gouvernance.md`*
 
 #### H6 — Alinhar os vocabulários militantes que não se conhecem
 
@@ -2223,6 +2200,7 @@ CI verde. |
 | F7 | 2026-09-02 | **Treze segredos vazios, treze vereditos — e só restam dois, de propósito e documentados.** **11 suprimidos** — dez duplicatas de cadeias de fallback cuja variante `ANARBIB_*` preenchida já ganhava, mais `REGIMENTO_URL` por decisão: nenhum regimento de rede está publicado, o ramo morto foi **retirado do código** (três lugares, incluindo uma cadeia mal nomeada que buscava a URL do manual tentando primeiro a do regimento). **2 conservados e documentados**: `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, cujo vazio É a configuração — comentário posto em `register/index.ts`, onde são lidos, para que ninguém os «conserte». |
 | B18 | 2026-09-02 | **As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta. |
 | G2 | 2026-09-02 | **A divergência P2/P8 está decidida — o texto se alinha ao código, e a forma da decisão importa tanto quanto o fundo.** Opção 1: a prática viva (o circuito colegial que a BTL exerce desde 01/09) vira a regra. Spec v1.11: P2 diz que **a própria execução é colegial**; P8 esclarece a fronteira — os quóruns do código não são votos, são **garantias de execução**: «modelar a deliberação, nunca; exigir várias mãos para executar, sempre». Nenhuma linha de código. **Decisão tomada sozinho, dizendo-o** — modo degradado assumido, datada, `GOUV-18` no REGISTRO, **janela de objeção na formação de 13/09**: o dia em que o coletivo existir, encontrará uma decisão contestável, não um fato consumado mudo. |
+| H5 | 2026-09-02 | **A coleta OAI-PMH está provada nos dois sentidos, com dados reais dos dois lados — e dois circuitos cívicos exercidos pela primeira vez na mesma noite.** **Entrada**: primeira fonte real registrada (Persée, fascículos de sociologia, 2 lotes/ciclo); o disparo manual trouxe **40 fascículos reais**: run `ready_for_review`, trava em `paused`, **token de retomada conservado** — o cron de terça continuará onde a prova parou. **Saída**: o repositório respondia conforme mas vazio; **a BLMF abriu-se pelo circuito real** (pedido → decisão, notificação incluída) e um cliente terceiro colheu **200 registros em dois lotes**, retomada honrada, `GetRecord` exato. **Dois constatos para Bolonha**: os dois parceiros PMB não expõem `oai2.php` — do lado deles os fluxos nem existem (assunto para H6/K6); e `blmf-teste` falha a elegibilidade nas suas três travas — a receita de biblioteca mascarada resiste até ao OAI. **Fica aberto**: a revisão humana das 40 linhas, e um colhedor verdadeiramente terceiro — Bolonha pode fornecê-lo. |
 
 ---
 
@@ -2254,4 +2232,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
