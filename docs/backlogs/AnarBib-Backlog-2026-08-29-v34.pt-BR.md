@@ -376,7 +376,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Em curso |
 | **B18** | Desativar as chaves de API legadas — o sinal verde é um número, não uma data | `P1` | Aberto |
 | **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
-| **B20** | Superfície morta medida: 17 funções `api` sem nenhum chamador — 3 delas abertas a `anon` — e 48 funções `public` adiadas com prazo | `P1` | Aberto |
+| **B20** | Superfície morta medida: 17 funções `api` sem nenhum chamador — 3 delas abertas a `anon` — e 48 funções `public` adiadas com prazo | `P1` | Em curso |
 | **B21** | A guarda das chaves estrangeiras sem índice: instrumentar o contador, não mais saldá-lo | `P2` | Aberto |
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
@@ -595,7 +595,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 #### B20 — Superfície morta medida: 17 funções `api` sem nenhum chamador — 3 delas abertas a `anon` — e 48 funções `public` adiadas com prazo
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
 
 **Estado.** **Fonte: Grande Livro branco v17 de 01/09 (cap. 6), contraverificado à unidade em 02/09** — cada constato foi remedido, não copiado (`DOC-CONSTAT-1`). O GLB enumerou a junção frontal inteira: 317 RPC chamadas, zero chamada morta; restam **17 funções `api` sem chamador em lugar nenhum** (grep 0 × 17 refeito em 02/09; consulta em base: 0 chamadores SQL, 0 policies, 0 crons; exposição `authenticated` confirmada). Quatro lotes: circulação (8), mensageria de candidatura (4), edição de cartografia (3), controle de qualidade das convenções (2).
 

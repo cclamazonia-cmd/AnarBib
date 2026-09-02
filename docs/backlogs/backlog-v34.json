@@ -4847,7 +4847,7 @@
       "id": "B20",
       "d": "B",
       "p": "P1",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "sql",
@@ -4871,8 +4871,8 @@
       },
       "f": [
         {
-          "fr": "`REVOKE anon` sur `clear_loan_return_schedule`, `mark_loan_return_missed`, `schedule_loan_return` — le geste d'une migration, aucune décision à attendre.",
-          "pt": "`REVOKE anon` nas três — gesto de uma migração, nenhuma decisão a esperar."
+          "fr": "~~`REVOKE anon` sur les trois~~ — migration `20260902092104` + suite `SURFACE_MORTE_ANON` (droits gardés des deux côtés : anon fermé, authenticated intact), livrées le 02/09.",
+          "pt": "~~`REVOKE anon` nas três~~ — migração `20260902092104` + suíte, entregues em 02/09."
         },
         {
           "fr": "Lot messagerie de candidature : brancher ou révoquer les 4 `fn_request_*` (le reste de la famille est câblé — l'écran manque-t-il, ou le besoin ?).",

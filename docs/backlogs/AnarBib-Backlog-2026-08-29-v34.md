@@ -376,7 +376,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | En cours |
 | **B18** | Désactiver les clés API legacy — le feu vert est un chiffre, pas une date | `P1` | Ouvert |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
-| **B20** | Surface morte mesurée : 17 fonctions `api` sans aucun appelant — dont 3 ouvertes à `anon` — et 48 fonctions `public` différées à échéance | `P1` | Ouvert |
+| **B20** | Surface morte mesurée : 17 fonctions `api` sans aucun appelant — dont 3 ouvertes à `anon` — et 48 fonctions `public` différées à échéance | `P1` | En cours |
 | **B21** | Le garde des clés étrangères sans index : instrumenter le compteur, ne plus le solder | `P2` | Ouvert |
 
 #### B4 — Examiner les quatre tables à RLS sans policy qui ne sont pas du transit
@@ -603,7 +603,7 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 
 #### B20 — Surface morte mesurée : 17 fonctions `api` sans aucun appelant — dont 3 ouvertes à `anon` — et 48 fonctions `public` différées à échéance
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
 
 **État.** **Source : Grand Livre blanc v17 du 01/09 (ch. 6), contre-vérifié à l'unité le 02/09** — chaque constat repris ici a été remesuré, pas recopié (`DOC-CONSTAT-1`). Le GLB a dénombré la jonction frontale entière : 317 noms de RPC appelés, zéro appel mort ; 167 des 184 fonctions du schéma `api` ont un appelant prouvé. Restent **17 fonctions sans appelant nulle part** — ni dans `src/`, ni dans `supabase/functions/`, ni dans `scripts/` (grep : 0 occurrence × 17, refait le 02/09), ni dans le corps d'une autre fonction SQL, ni dans une policy, ni dans un cron (requête du 02/09 : 0 partout, exposition `authenticated` confirmée sur les 17).
 
