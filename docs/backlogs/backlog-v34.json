@@ -3420,8 +3420,8 @@
           "pt": "Cada lote provado por quem não escreveu o código — de preferência uma coordenação BLMF em 13/09."
         },
         {
-          "fr": "~~La porte vers le circuit « être source »~~ — livrée le 02/09 au soir : le bloc « Être source » dit qui demande (la coordination) et qui décide (l'administration du réseau), et porte un bouton vers `/rede`, où `RedePage` ouvre l'onglet « Être source » pour une coordination. Reste ouvert, à décider : faut-il que le lien « Réseau » de la barre s'affiche aussi aux coordinations (elles n'y verraient que cet onglet) ?",
-          "pt": "~~A porta para o circuito «ser fonte»~~ — entregue em 02/09 à noite: o bloco diz quem pede e quem decide, e traz um botão para `/rede`. Fica em aberto: mostrar o link «Rede» também às coordenações?"
+          "fr": "~~La porte vers le circuit « être source »~~ — livrée le 02/09 au soir : le bloc « Être source » dit qui demande (la coordination) et qui décide (l'administration du réseau), et porte un bouton vers `/rede`, où `RedePage` ouvre l'onglet « Être source » pour une coordination. **Tranché par Xavier le 02/09 : non** — le lien « Réseau » reste réservé aux admins réseau (l'afficher aux coordinations porterait à confusion) ; la porte, c'est le bouton du bloc « Être source ».",
+          "pt": "~~A porta para o circuito «ser fonte»~~ — entregue em 02/09 à noite: o bloco diz quem pede e quem decide, e traz um botão para `/rede`. **Decidido por Xavier em 02/09: não** — o link «Rede» fica reservado aos admins de rede (mostrá-lo às coordenações confundiria); a porta é o botão do bloco «Ser fonte»."
         }
       ],
       "dep": {
