@@ -60,7 +60,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ## L'état réel au 2 septembre 2026
 
-Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée B20/B21/J7/J8 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `cb37a2a8`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
+Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
 **Fraîcheur des constats au 2026-09-01.** **48 items sur 70** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
@@ -72,9 +72,9 @@ Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée 
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
 | Fonctions applicatives | **856** | `public` 630 · `api` 184 · `ingest` 34 · `private` 8. Dont **668 SECURITY DEFINER**, **aucune** sans `search_path` épinglé. La surface `authenticated` n'est plus un chantier : **B14 clos le 01/09, B20 le 02/09** — 2 fonctions branchées, 65 fermées en un jour, chaque exposition restante a sa raison écrite aux audits |
-| Migrations appliquées | **268** | 268 fichiers au dépôt = **268 appliquées, alignement exact** (le 269 de la veille était un compte du soir, un train de pushes en cours). Vérifié le 02/09 des deux côtés |
+| Migrations appliquées | **271** | 271 fichiers au dépôt = **271 appliquées, alignement exact** — trois de plus depuis l'après-midi (vestige vault B18, rattrapage des vues, dette assembleias). Vérifié le 02/09 au soir des deux côtés |
 | Jobs `pg_cron` | **37** | **tous actifs** (+1 depuis le 01/09 : le rappel avant péremption des invitations d'équipe, GOUV-17b) ; couverts en CI par `crons_planifies_tests` |
-| Avis de sécurité | **447** | 0 ERROR · **395** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** — exactement la liste nommée T10 (`DOC-GRANT-1`). Le 395 (`authenticated`) descend de 453 par la journée B20 : 2 branchées, 65 fermées, 1 rejugée (`fn_book_due_dates` → registre B2). Chiffres au proxy SQL du 02/09 ; le tableau de bord advisor peut afficher un instantané en retard (cache) |
+| Avis de sécurité | **450** | 0 ERROR · **398** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** (liste T10, `DOC-GRANT-1`). Le 398 (`authenticated`) : 453 → 395 par la journée B20, puis **+3 rouvertes le soir** parce que des vues `security_invoker` les appelaient (rattrapage `20260902175631` — point 0 de la checklist pré-REVOKE). Proxy SQL du 02/09 au soir ; le tableau de bord advisor peut afficher un instantané en retard |
 | Avis de performance | **243** | 166 index inutilisés · **38 clés étrangères non indexées, désormais toutes ASSUMÉES et gardées** (`fk_sans_index_garde_tests`, B21 clos le 02/09 : la dette n'entre plus sans un acte) · 25 policies permissives · 14 tables sans clé primaire · 0 `auth_rls_initplan` |
 | Schémas de rebut | **2** | `backup_2026_05_07` et `conv_backup` — inchangés depuis le 29/08 |
 
@@ -108,10 +108,10 @@ Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée 
 
 | | | |
 |---|---:|---|
-| Commits | **2 494** | sur `main`, au 02/09 au soir — 21 commits dans la seule journée B20/GLB |
+| Commits | **2 515** | sur `main`, au 02/09 au soir — 42 commits dans la journée, de deux sessions |
 | Fichiers `src/` | **290** | 79 pages, 89 composants |
-| Clés i18n | **6 222** | par locale, **parité stricte sur les 10**, gardée en CI ; +43 depuis le 01/09 (messagerie de candidature, retrait de fiche carto) |
-| Tests | **354 + 70** | 354 tests JS (vitest, gate bloquant de la CI) + **70 suites SQL** dans `ci-suites.txt` — 7 nées de la seule journée du 02/09, dont deux gardes de compteur (solde des différées, FK sans index) |
+| Clés i18n | **6 234** | par locale, **parité stricte sur les 10**, gardée en CI ; +55 depuis le 01/09 (messagerie de candidature, retrait de fiche carto, page Importations : statuts traduits, libellés du geste, volet de coordination, porte OAI) |
+| Tests | **354 + 72** | 354 tests JS (vitest, gate bloquant) + **72 suites SQL** dans `ci-suites.txt` — 9 nées du seul 02/09, dont trois gardes de compteur ou de frontière (FK sans index, solde des différées, nom des facilitateur·rices scopé) |
 | Marqueurs de dette | **6** | dont 4 dans `src/` — ils étaient 17 le 29/08. Aucun n'est une tâche ouverte : la dette n'est pas dans les commentaires, elle est dans ce backlog |
 
 ---
@@ -2202,4 +2202,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

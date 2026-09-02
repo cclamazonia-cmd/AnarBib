@@ -14,7 +14,7 @@
     "maj": "2026-09-01",
     "releve": {
       "date": "2026-09-02",
-      "commit": "cb37a2a8"
+      "commit": "360d25b3"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée B20/B21/J7/J8 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `cb37a2a8`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**",
-      "pt": "Levantamento de **2 de setembro de 2026** — atualização dirigida após o dia B20/B21/J7/J8: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `cb37a2a8`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**"
+      "fr": "Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**",
+      "pt": "Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da noite, após o dia B20/B21/J7/J8 e depois B18, F7, G2, H5, B17, G5, I14 e os três lotes de E12: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `360d25b3`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**"
     },
     "photo": [
       {
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "268",
+            "271",
             {
-              "fr": "268 fichiers au dépôt = **268 appliquées, alignement exact** (le 269 de la veille était un compte du soir, un train de pushes en cours). Vérifié le 02/09 des deux côtés",
-              "pt": "268 arquivos no repositório = **268 aplicadas, alinhamento exato**. Verificado em 02/09 dos dois lados"
+              "fr": "271 fichiers au dépôt = **271 appliquées, alignement exact** — trois de plus depuis l'après-midi (vestige vault B18, rattrapage des vues, dette assembleias). Vérifié le 02/09 au soir des deux côtés",
+              "pt": "271 arquivos = **271 aplicadas, alinhamento exato** — três a mais desde a tarde. Verificado em 02/09 à noite"
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "447",
+            "450",
             {
-              "fr": "0 ERROR · **395** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** — exactement la liste nommée T10 (`DOC-GRANT-1`). Le 395 (`authenticated`) descend de 453 par la journée B20 : 2 branchées, 65 fermées, 1 rejugée (`fn_book_due_dates` → registre B2). Chiffres au proxy SQL du 02/09 ; le tableau de bord advisor peut afficher un instantané en retard (cache)",
-              "pt": "0 ERROR · **395** + **28** WARN sobre funções DEFINER expostas · 24 INFO. O 28 (`anon`) é o **valor esperado** — exatamente a lista nomeada T10 (`DOC-GRANT-1`). O 395 desce de 453 pelo dia B20: 2 ligadas, 65 fechadas, 1 rejulgada (`fn_book_due_dates` → registro B2). Números pelo proxy SQL de 02/09"
+              "fr": "0 ERROR · **398** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** (liste T10, `DOC-GRANT-1`). Le 398 (`authenticated`) : 453 → 395 par la journée B20, puis **+3 rouvertes le soir** parce que des vues `security_invoker` les appelaient (rattrapage `20260902175631` — point 0 de la checklist pré-REVOKE). Proxy SQL du 02/09 au soir ; le tableau de bord advisor peut afficher un instantané en retard",
+              "pt": "0 ERROR · **398** + **28** WARN · 24 INFO. O 28 é o **valor esperado** (T10). O 398: 453 → 395 pelo dia B20, depois **+3 reabertas à noite** porque views `security_invoker` as chamavam (ponto 0 da checklist pré-REVOKE). Proxy SQL de 02/09 à noite"
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 494",
+            "2 515",
             {
-              "fr": "sur `main`, au 02/09 au soir — 21 commits dans la seule journée B20/GLB",
-              "pt": "em `main`, na noite de 02/09 — 21 commits só no dia B20/GLB"
+              "fr": "sur `main`, au 02/09 au soir — 42 commits dans la journée, de deux sessions",
+              "pt": "em `main`, na noite de 02/09 — 42 commits no dia, de duas sessões"
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 222",
+            "6 234",
             {
-              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; +43 depuis le 01/09 (messagerie de candidature, retrait de fiche carto)",
-              "pt": "por locale, **paridade estrita nas 10**, guardada na CI; +43 desde 01/09"
+              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; +55 depuis le 01/09 (messagerie de candidature, retrait de fiche carto, page Importations : statuts traduits, libellés du geste, volet de coordination, porte OAI)",
+              "pt": "por locale, **paridade estrita nas 10**; +55 desde 01/09"
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "354 + 70",
+            "354 + 72",
             {
-              "fr": "354 tests JS (vitest, gate bloquant de la CI) + **70 suites SQL** dans `ci-suites.txt` — 7 nées de la seule journée du 02/09, dont deux gardes de compteur (solde des différées, FK sans index)",
-              "pt": "354 testes JS (vitest, gate bloqueante) + **70 suítes SQL** — 7 nascidas só em 02/09, entre elas duas guardas de contador"
+              "fr": "354 tests JS (vitest, gate bloquant) + **72 suites SQL** dans `ci-suites.txt` — 9 nées du seul 02/09, dont trois gardes de compteur ou de frontière (FK sans index, solde des différées, nom des facilitateur·rices scopé)",
+              "pt": "354 testes JS + **72 suítes SQL** — 9 nascidas só em 02/09"
             }
           ],
           [
