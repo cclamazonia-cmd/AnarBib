@@ -6,6 +6,12 @@
 -- `fn_book_due_dates` est LA sortie du solde : ouverte à anon par verdict
 -- écrit (T10 de grants_herites, audit B2 du 30/08) — cette suite garde la
 -- frontière entre les deux régimes.
+--
+-- Rattrapage 20260902175631 : `fn_circle_member_count` est SORTIE du solde —
+-- appelée par les vues api.my_library_circles_v1 et circles_directory_v1
+-- (security_invoker, lues par FederacaoPage et EntraideTab), ce que la
+-- mesure « 0 appelant » n'avait pas vu (pg_rewrite). 46 fermées ; elle
+-- rejoint T3 avec les chemins vivants.
 
 DO $$
 DECLARE
@@ -16,15 +22,15 @@ DECLARE
   v_liste text;
   v_n int;
 BEGIN
-  -- T1 : les 47 fermées à la porte du navigateur
-  v_test_name := 'T1 les 47 fermées';
+  -- T1 : les 46 fermées à la porte du navigateur (fn_circle_member_count : voir T3)
+  v_test_name := 'T1 les 46 fermées';
   SELECT count(*) INTO v_n
   FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
   WHERE n.nspname = 'public'
     AND p.proname IN (
       'assign_book_to_work','fn_activate_approved_library_request',
       'fn_book_restricted_digital_state','fn_can_engage_library_for_storage',
-      'fn_circle_member_count','fn_import_process_deposit',
+      'fn_import_process_deposit',
       'fn_import_register_oai_source','fn_import_set_rows_review',
       'fn_is_cross_library_action','fn_library_has_staff_roles',
       'fn_library_publishes_catalog','fn_library_uses_governance',
@@ -50,8 +56,8 @@ BEGIN
       'fn_v2_remove_emprestimo_interbibliotecas_itens',
       'fn_v2_return_emprestimo_interbibliotecas_linhas',
       'fn_v2_start_devolucao_emprestimo_interbibliotecas');
-  IF v_n <> 47 THEN
-    v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || v_n || '/47 présentes — liste et base divergent');
+  IF v_n <> 46 THEN
+    v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || v_n || '/46 présentes — liste et base divergent');
   ELSE
     SELECT string_agg(p.proname, ', ') INTO v_liste
     FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
@@ -59,7 +65,7 @@ BEGIN
       AND p.proname IN (
         'assign_book_to_work','fn_activate_approved_library_request',
         'fn_book_restricted_digital_state','fn_can_engage_library_for_storage',
-        'fn_circle_member_count','fn_import_process_deposit',
+        'fn_import_process_deposit',
         'fn_import_register_oai_source','fn_import_set_rows_review',
         'fn_is_cross_library_action','fn_library_has_staff_roles',
         'fn_library_publishes_catalog','fn_library_uses_governance',
@@ -97,11 +103,14 @@ BEGIN
      AND has_function_privilege('authenticated', 'public.fn_book_due_dates(bigint)', 'EXECUTE') THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : fermée — le verdict B2 (T10) serait contredit'); END IF;
 
-  -- T3 : les chemins vivants des mêmes familles restent ouverts
+  -- T3 : les chemins vivants des mêmes familles restent ouverts — dont
+  --      fn_circle_member_count, appelée par les vues des cercles
+  --      (rattrapage 20260902175631).
   v_test_name := 'T3 chemins vivants ouverts';
   SELECT string_agg(a.nsp||'.'||a.nom, ', ') INTO v_liste
   FROM (VALUES ('api','fn_approve_library_request'),('public','fn_import_list_oai_sources'),
-               ('public','fn_import_harvest_oai'),('public','merge_book_with_fields')) a(nsp, nom)
+               ('public','fn_import_harvest_oai'),('public','merge_book_with_fields'),
+               ('public','fn_circle_member_count')) a(nsp, nom)
   WHERE NOT EXISTS (
     SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
     WHERE n.nspname = a.nsp AND p.proname = a.nom

@@ -5,6 +5,12 @@
 -- fermeture rend orphelines sont closes à anon et authenticated ; les jumelles
 -- câblées (négociation de créneau, calcul d'échéance, flux brouillon) gardent
 -- leur EXECUTE ; toutes les fonctions existent encore (restauration = GRANT).
+--
+-- Rattrapage 20260902175631 : `api.get_remaining_renewals` est SORTIE de la
+-- fermeture — elle est appelée par les quatre vues *_loans_renewal_status*
+-- (security_invoker, lues par AccountPage et PanelPage), ce que la mesure
+-- « 0 appelant » n'avait pas vu (pg_rewrite). Elle rejoint T3 : dix fermées,
+-- une rouverte, onze existent.
 
 DO $$
 DECLARE
@@ -14,13 +20,13 @@ DECLARE
   v_test_name text;
   v_liste text;
 BEGIN
-  -- T1 : les onze fermées à la porte du navigateur
-  v_test_name := 'T1 les onze fermées';
+  -- T1 : les dix fermées à la porte du navigateur (get_remaining_renewals : voir T3)
+  v_test_name := 'T1 les dix fermées';
   SELECT string_agg(n.nspname||'.'||p.proname, ', ') INTO v_liste
   FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
   WHERE ((n.nspname = 'api' AND p.proname IN (
            'attach_exemplar','clear_loan_return_schedule','get_due_date_for_loan',
-           'get_library_circulation_policy_rules_ui','get_remaining_renewals',
+           'get_library_circulation_policy_rules_ui',
            'mark_loan_return_missed','refuse_pickup_slot','schedule_loan_return'))
      OR (n.nspname = 'public' AND p.proname IN (
            'fn_v2_schedule_emprestimo_return','fn_v2_clear_emprestimo_return_schedule',
@@ -46,12 +52,15 @@ BEGIN
   IF v_liste IS NULL THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : absentes — ' || v_liste); END IF;
 
-  -- T3 : les jumelles câblées gardent leur EXECUTE (couples schéma+nom explicites)
+  -- T3 : les jumelles câblées gardent leur EXECUTE (couples schéma+nom explicites),
+  --      et get_remaining_renewals avec elles : les vues *_loans_renewal_status*
+  --      l'appellent sous le rôle du lecteur (rattrapage 20260902175631).
   v_test_name := 'T3 jumelles câblées ouvertes';
   SELECT string_agg(a.nsp||'.'||a.nom, ', ') INTO v_liste
   FROM (VALUES ('api','confirm_pickup_slot'),('api','fn_confirm_pickup_slot_as_reader'),
                ('api','fn_propose_pickup_slot_as_reader'),('api','get_due_date_after_renewal'),
                ('api','resolve_circulation_rule'),('api','get_library_circulation_policy_sets_ui'),
+               ('api','get_remaining_renewals'),
                ('public','publish_book_draft')) a(nsp, nom)
   WHERE NOT EXISTS (
     SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace

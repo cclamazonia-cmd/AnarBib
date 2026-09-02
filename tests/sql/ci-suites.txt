@@ -330,3 +330,13 @@ tests/sql/solde_des_differees_tests.sql
 # consciemment) ; T3 prouve la morsure sur une FK neuve creee dans la
 # transaction du test. Ref. item B21.
 tests/sql/fk_sans_index_garde_tests.sql
+
+# Une vue appelle aussi (B20, rattrapage du 02/09/2026) : trois fonctions
+# fermees par les campagnes du 01-02/09 etaient appelees par des vues api en
+# security_invoker lues par le front (403 en prod sur les cercles, la
+# facilitation d'AG et les renouvellements). T1 ouvertes a authenticated,
+# T2 fermees a anon, T3 la dependance vue -> fonction reste visible dans
+# pg_depend (pg_rewrite) pour la prochaine campagne. Ref. migration
+# 20260902175631 ; les suites circulation_couche_supplantee et
+# solde_des_differees ont ete alignees (dix / 46 fermees).
+tests/sql/une_vue_appelle_aussi_tests.sql
