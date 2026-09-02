@@ -27,10 +27,24 @@
 --   vides, donc en `postgres`, qui conserve son EXECUTE — inchangés.
 -- * `authenticated` : conservé. Le sort des quatre lots (brancher, révoquer,
 --   documenter) reste l'arbitrage de B20, pas celui de cette migration.
+--
+-- ============================================================================
+-- POURQUOI « FROM PUBLIC, anon » ET PAS « FROM anon » (leçon du premier essai)
+-- ============================================================================
+-- L'ACL réelle de ces trois fonctions est {=X/postgres, postgres=X,
+-- authenticated=X} : l'exécution d'`anon` vient de l'entrée `=X` — un GRANT à
+-- **PUBLIC** — et `anon` n'a jamais eu d'entrée propre. Un `REVOKE FROM anon`
+-- seul est donc un no-op silencieux : `has_function_privilege('anon', …)`
+-- reste vrai par héritage. Le premier essai de cette migration l'a payé en
+-- CI : sa propre garde a levé « révocation sans effet » et `sql-tests` a
+-- rougi — avant que la clôture ne mente. C'est le pendant côté `api` du
+-- défaut de baseline documenté sur `public` (B2) : le rempart se retire à la
+-- racine (`PUBLIC`), pas au rôle qui en hérite. `authenticated` garde son
+-- grant explicite, qui survit au retrait de `PUBLIC`.
 
-REVOKE EXECUTE ON FUNCTION api.clear_loan_return_schedule(bigint, integer[]) FROM anon;
-REVOKE EXECUTE ON FUNCTION api.mark_loan_return_missed(bigint, integer[]) FROM anon;
-REVOKE EXECUTE ON FUNCTION api.schedule_loan_return(bigint, integer[], timestamptz) FROM anon;
+REVOKE EXECUTE ON FUNCTION api.clear_loan_return_schedule(bigint, integer[]) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION api.mark_loan_return_missed(bigint, integer[]) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION api.schedule_loan_return(bigint, integer[], timestamptz) FROM PUBLIC, anon;
 
 DO $$
 DECLARE
