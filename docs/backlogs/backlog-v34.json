@@ -3440,6 +3440,64 @@
       }
     },
     {
+      "id": "E13",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "front"
+      ],
+      "t": {
+        "fr": "Dans Mon compte, « Ma demande » promet une porte qui n'existe pas — et ne s'efface jamais",
+        "pt": "Em Minha conta, «Meu pedido» promete uma porta que não existe — e nunca se apaga"
+      },
+      "v": {
+        "fr": "**Constat de Xavier le 02/09 au soir, sur sa propre capture de `/conta`** : un bloc « Ma demande · Biblioteca Voltairine de Cleyre · Approuvée », la phrase « Rendez-vous dans l'atelier de constitution pour configurer votre bibliothèque », puis « Échanges avec la coordination — Aucun échange pour le moment ». Ses trois questions : *comment j'atteins l'atelier, il n'y a pas de bouton ? c'est quoi ces éléments ? ils vont rester là tout le temps ?* La demande elle-même est une fixture posée sur son compte par la session des captures du Manuel v5 (IMAGEM 32), qui la retirera — mais les deux défauts qu'elle révèle sont réels.\n\n**(1) Une phrase sans porte.** `MinhaSolicitacaoPanel` affiche, pour une demande approuvée, l'invitation à se rendre à l'atelier — sans lien. Le vrai circuit s'en passe parce que l'approbation bascule le profil en `coordenador_em_constituicao`, et que `LoginPage` comme `ProtectedRoute` emmènent alors d'office vers `/atelier`. Dès que cet état n'est pas posé (fixture, compte repris à la main, profil réparé), la phrase désigne une adresse qu'il faut deviner : `/atelier`. Même famille que la porte OAI livrée le soir même dans E12 : l'adresse existe, personne ne la trouve.\n\n**(2) Un bloc qui ne s'éteint jamais.** Le panneau montre la demande **la plus récente** soumise par la personne, quel que soit son état, sans condition de fin : une demande approuvée dont l'atelier est achevé et la bibliothèque née, ou une demande refusée il y a un an, restent affichées à vie en tête de Mon compte, avec un canal d'échange devenu muet (il n'est interactif qu'en attente / analyse / attente d'information). Rien ne dit non plus ce que **sont** ces éléments — le mot « demande » n'est expliqué nulle part sur la page.",
+        "pt": "**Constato de Xavier em 02/09 à noite, na sua própria captura de `/conta`**: um bloco «Meu pedido · Biblioteca Voltairine de Cleyre · Aprovado», a frase «vá à oficina de constituição para configurar a sua biblioteca», e «Trocas com a coordenação — nenhuma troca por enquanto». As suas três perguntas: *como chego à oficina, não há botão? o que são estes elementos? vão ficar aí para sempre?* O pedido em si é uma fixture posta na conta dele pela sessão das capturas do Manual v5 (IMAGEM 32), que o retirará — mas os dois defeitos que revela são reais.\n\n**(1) Uma frase sem porta.** `MinhaSolicitacaoPanel` mostra, para um pedido aprovado, o convite a ir à oficina — sem link. O circuito real dispensa-o porque a aprovação põe o perfil em `coordenador_em_constituicao`, e `LoginPage` e `ProtectedRoute` levam então de ofício a `/atelier`. Quando esse estado não está posto (fixture, conta retomada à mão, perfil reparado), a frase aponta para um endereço que é preciso adivinhar. Mesma família que a porta OAI entregue na mesma noite em E12.\n\n**(2) Um bloco que nunca se apaga.** O painel mostra o pedido **mais recente** da pessoa, seja qual for o estado, sem condição de fim: um pedido aprovado cuja biblioteca já nasceu, ou um recusado há um ano, ficam para sempre no topo de Minha conta, com um canal de trocas mudo. E nada diz o que **são** estes elementos."
+      },
+      "w": {
+        "fr": "**(1)** Sous la phrase d'approbation, un bouton « Aller à l'atelier » vers `/atelier` — la porte dans la page du geste, doctrine du 02/09. **(2)** Une condition de fin : masquer le panneau quand la demande approuvée a sa bibliothèque née (`library_constitution_progress.completed_at` posé, ou `approved_library_ref` renseigné), et replier une demande refusée ou approuvée-achevée derrière une ligne « Historique de mes demandes » plutôt que l'afficher en tête. **(3)** Une phrase d'explication en tête du bloc — « la demande d'adhésion de votre bibliothèque au réseau, et vos échanges avec l'administration réseau pendant son examen » — dix locales. Éprouver avec un compte réellement en constitution (le circuit complet : demande → approbation → redirection → atelier), pas seulement avec la fixture.",
+        "pt": "**(1)** Sob a frase de aprovação, um botão «Ir à oficina» para `/atelier` — a porta na página do gesto. **(2)** Uma condição de fim: esconder o painel quando o pedido aprovado tem a biblioteca nascida, e recolher um pedido recusado ou concluído atrás de uma linha «Histórico dos meus pedidos». **(3)** Uma frase de explicação no topo do bloco, dez locales. Provar com uma conta realmente em constituição, não só com a fixture."
+      },
+      "y": {
+        "fr": "Mon compte est la première page que voit une coordination qui vient d'être acceptée : c'est là que le réseau lui dit « bienvenue, voici ton chantier ». Une porte absente et un bloc qui ne s'éteint jamais y disent le contraire. Le coût est celui d'une soirée.",
+        "pt": "Minha conta é a primeira página que vê uma coordenação recém-aceite: é ali que a rede lhe diz «bem-vinda, eis a tua obra». Uma porta ausente e um bloco que nunca se apaga dizem o contrário. O custo é o de uma noite."
+      },
+      "f": [
+        {
+          "fr": "Le bouton « Aller à l'atelier » sous la phrase d'approbation, dix locales.",
+          "pt": "O botão «Ir à oficina» sob a frase de aprovação, dez locales."
+        },
+        {
+          "fr": "La condition de fin du panneau (bibliothèque née / demande refusée-ancienne → repli en historique).",
+          "pt": "A condição de fim do painel (biblioteca nascida / pedido recusado antigo → recolhido em histórico)."
+        },
+        {
+          "fr": "La phrase d'explication en tête du bloc.",
+          "pt": "A frase de explicação no topo do bloco."
+        },
+        {
+          "fr": "Éprouvé sur le circuit complet avec un compte en constitution, puis retrait de la fixture Voltairine par la session des captures.",
+          "pt": "Provado no circuito completo com uma conta em constituição; depois retirada da fixture Voltairine pela sessão das capturas."
+        }
+      ],
+      "dep": {
+        "fr": "Même doctrine de la porte que **E12** (f[4]). Le circuit qu'il habille est celui de **G1** (adhésion et constitution) ; la fixture qui l'a révélé appartient à **J2** (Manuel v5, IMAGEM 32).",
+        "pt": "Mesma doutrina da porta que **E12**. O circuito é o de **G1**; a fixture que o revelou pertence a **J2** (Manual v5, IMAGEM 32)."
+      },
+      "r": [
+        "src/components/account/MinhaSolicitacaoPanel.jsx",
+        "src/components/layout/ProtectedRoute.jsx",
+        "src/pages/atelier/AtelierConstituicaoPage.jsx",
+        "capture d'écran de Xavier du 02/09 (/conta, contexte BLMF)"
+      ],
+      "verif": {
+        "fr": "02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (aucun `Link` dans le panneau ; `if (!req) return null` est la seule condition d'affichage ; la redirection vers `/atelier` ne dépend que de `profile.solicitante_state`) et en base (demande `a94cc4c7` approuvée le 02/09 à 21:08, `library_constitution_progress` sans `completed_at`, profil sans état de constitution).",
+        "pt": "02/09 — constato de quem usa a ferramenta, verificado no código e na base (pedido aprovado em 02/09, progresso sem `completed_at`, perfil sem estado de constituição)."
+      }
+    },
+    {
       "id": "F1",
       "d": "F",
       "p": "P1",

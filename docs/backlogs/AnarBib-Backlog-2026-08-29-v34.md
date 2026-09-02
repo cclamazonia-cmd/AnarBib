@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-02** · 70 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-02** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 3
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-02.** **48 items sur 70** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-02.** **49 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, E13, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -883,6 +883,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E11** | Les deux différés assumés de l'OPAC : tags contributifs et flux RSS | `P3` | Décision collective |
 | **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
+| **E13** | Dans Mon compte, « Ma demande » promet une porte qui n'existe pas — et ne s'efface jamais | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1153,6 +1154,33 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 **Dépendances.** Né de l'épreuve **H5** (l'export par moissonnage vit à Rede, pas ici). Voisin de **E9** (mobile) et **C6** (assistances de saisie) sans les recouvrir ; même exigence de regard extérieur que **E1**. Le lot A est daté par **K7** (formation du 13/09).
 
 *Renvois : `src/pages/importacoes/ImportacoesPage.jsx` · `src/components/rede/OaiSourcePanel.jsx` · `supabase/functions/export-catalog-lote` · `capture d'écran de Xavier du 02/09 (contexte blmf-teste)`*
+
+#### E13 — Dans Mon compte, « Ma demande » promet une porte qui n'existe pas — et ne s'efface jamais
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
+
+**État.** **Constat de Xavier le 02/09 au soir, sur sa propre capture de `/conta`** : un bloc « Ma demande · Biblioteca Voltairine de Cleyre · Approuvée », la phrase « Rendez-vous dans l'atelier de constitution pour configurer votre bibliothèque », puis « Échanges avec la coordination — Aucun échange pour le moment ». Ses trois questions : *comment j'atteins l'atelier, il n'y a pas de bouton ? c'est quoi ces éléments ? ils vont rester là tout le temps ?* La demande elle-même est une fixture posée sur son compte par la session des captures du Manuel v5 (IMAGEM 32), qui la retirera — mais les deux défauts qu'elle révèle sont réels.
+
+**(1) Une phrase sans porte.** `MinhaSolicitacaoPanel` affiche, pour une demande approuvée, l'invitation à se rendre à l'atelier — sans lien. Le vrai circuit s'en passe parce que l'approbation bascule le profil en `coordenador_em_constituicao`, et que `LoginPage` comme `ProtectedRoute` emmènent alors d'office vers `/atelier`. Dès que cet état n'est pas posé (fixture, compte repris à la main, profil réparé), la phrase désigne une adresse qu'il faut deviner : `/atelier`. Même famille que la porte OAI livrée le soir même dans E12 : l'adresse existe, personne ne la trouve.
+
+**(2) Un bloc qui ne s'éteint jamais.** Le panneau montre la demande **la plus récente** soumise par la personne, quel que soit son état, sans condition de fin : une demande approuvée dont l'atelier est achevé et la bibliothèque née, ou une demande refusée il y a un an, restent affichées à vie en tête de Mon compte, avec un canal d'échange devenu muet (il n'est interactif qu'en attente / analyse / attente d'information). Rien ne dit non plus ce que **sont** ces éléments — le mot « demande » n'est expliqué nulle part sur la page.
+
+*Vérifié : 02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (aucun `Link` dans le panneau ; `if (!req) return null` est la seule condition d'affichage ; la redirection vers `/atelier` ne dépend que de `profile.solicitante_state`) et en base (demande `a94cc4c7` approuvée le 02/09 à 21:08, `library_constitution_progress` sans `completed_at`, profil sans état de constitution).*
+
+**Ce que c'est.** **(1)** Sous la phrase d'approbation, un bouton « Aller à l'atelier » vers `/atelier` — la porte dans la page du geste, doctrine du 02/09. **(2)** Une condition de fin : masquer le panneau quand la demande approuvée a sa bibliothèque née (`library_constitution_progress.completed_at` posé, ou `approved_library_ref` renseigné), et replier une demande refusée ou approuvée-achevée derrière une ligne « Historique de mes demandes » plutôt que l'afficher en tête. **(3)** Une phrase d'explication en tête du bloc — « la demande d'adhésion de votre bibliothèque au réseau, et vos échanges avec l'administration réseau pendant son examen » — dix locales. Éprouver avec un compte réellement en constitution (le circuit complet : demande → approbation → redirection → atelier), pas seulement avec la fixture.
+
+**Pourquoi ça compte.** Mon compte est la première page que voit une coordination qui vient d'être acceptée : c'est là que le réseau lui dit « bienvenue, voici ton chantier ». Une porte absente et un bloc qui ne s'éteint jamais y disent le contraire. Le coût est celui d'une soirée.
+
+**Ce qui compte comme fini.**
+
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
+
+**Dépendances.** Même doctrine de la porte que **E12** (f[4]). Le circuit qu'il habille est celui de **G1** (adhésion et constitution) ; la fixture qui l'a révélé appartient à **J2** (Manuel v5, IMAGEM 32).
+
+*Renvois : `src/components/account/MinhaSolicitacaoPanel.jsx` · `src/components/layout/ProtectedRoute.jsx` · `src/pages/atelier/AtelierConstituicaoPage.jsx` · `capture d'écran de Xavier du 02/09 (/conta, contexte BLMF)`*
 
 ---
 
@@ -2202,4 +2230,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

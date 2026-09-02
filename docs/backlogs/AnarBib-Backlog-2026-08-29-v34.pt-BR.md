@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-02** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-02** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 12
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 13
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 4
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 3
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da noite, após o dia B20/B21/J7/J8 e depois B18, F7, G2, H5, B17, G5, I14 e os três lotes de E12: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `360d25b3`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
-**Frescor dos constatos em 2026-09-02.** **48 itens de 70** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-02.** **49 itens de 71** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, E13, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -883,6 +883,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E11** | Os dois adiamentos assumidos do OPAC: tags contributivas e feed RSS | `P3` | Decisão coletiva |
 | **E12** | A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra | `P2` | Em curso |
+| **E13** | Em Minha conta, «Meu pedido» promete uma porta que não existe — e nunca se apaga | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -1147,6 +1148,33 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **Dependências.** Nascido da prova **H5**. Vizinho de **E9** e **C6** sem os cobrir; mesma exigência de olhar externo que **E1**. O lote A é datado por **K7**.
 
 *Remissões : `src/pages/importacoes/ImportacoesPage.jsx` · `src/components/rede/OaiSourcePanel.jsx` · `supabase/functions/export-catalog-lote` · `capture d'écran de Xavier du 02/09 (contexte blmf-teste)`*
+
+#### E13 — Em Minha conta, «Meu pedido» promete uma porta que não existe — e nunca se apaga
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
+
+**Estado.** **Constato de Xavier em 02/09 à noite, na sua própria captura de `/conta`**: um bloco «Meu pedido · Biblioteca Voltairine de Cleyre · Aprovado», a frase «vá à oficina de constituição para configurar a sua biblioteca», e «Trocas com a coordenação — nenhuma troca por enquanto». As suas três perguntas: *como chego à oficina, não há botão? o que são estes elementos? vão ficar aí para sempre?* O pedido em si é uma fixture posta na conta dele pela sessão das capturas do Manual v5 (IMAGEM 32), que o retirará — mas os dois defeitos que revela são reais.
+
+**(1) Uma frase sem porta.** `MinhaSolicitacaoPanel` mostra, para um pedido aprovado, o convite a ir à oficina — sem link. O circuito real dispensa-o porque a aprovação põe o perfil em `coordenador_em_constituicao`, e `LoginPage` e `ProtectedRoute` levam então de ofício a `/atelier`. Quando esse estado não está posto (fixture, conta retomada à mão, perfil reparado), a frase aponta para um endereço que é preciso adivinhar. Mesma família que a porta OAI entregue na mesma noite em E12.
+
+**(2) Um bloco que nunca se apaga.** O painel mostra o pedido **mais recente** da pessoa, seja qual for o estado, sem condição de fim: um pedido aprovado cuja biblioteca já nasceu, ou um recusado há um ano, ficam para sempre no topo de Minha conta, com um canal de trocas mudo. E nada diz o que **são** estes elementos.
+
+*Verificado : 02/09 — constato de quem usa a ferramenta, verificado no código e na base (pedido aprovado em 02/09, progresso sem `completed_at`, perfil sem estado de constituição).*
+
+**O que é.** **(1)** Sob a frase de aprovação, um botão «Ir à oficina» para `/atelier` — a porta na página do gesto. **(2)** Uma condição de fim: esconder o painel quando o pedido aprovado tem a biblioteca nascida, e recolher um pedido recusado ou concluído atrás de uma linha «Histórico dos meus pedidos». **(3)** Uma frase de explicação no topo do bloco, dez locales. Provar com uma conta realmente em constituição, não só com a fixture.
+
+**Por que importa.** Minha conta é a primeira página que vê uma coordenação recém-aceite: é ali que a rede lhe diz «bem-vinda, eis a tua obra». Uma porta ausente e um bloco que nunca se apaga dizem o contrário. O custo é o de uma noite.
+
+**O que conta como terminado.**
+
+- [object Object]
+- [object Object]
+- [object Object]
+- [object Object]
+
+**Dependências.** Mesma doutrina da porta que **E12**. O circuito é o de **G1**; a fixture que o revelou pertence a **J2** (Manual v5, IMAGEM 32).
+
+*Remissões : `src/components/account/MinhaSolicitacaoPanel.jsx` · `src/components/layout/ProtectedRoute.jsx` · `src/pages/atelier/AtelierConstituicaoPage.jsx` · `capture d'écran de Xavier du 02/09 (/conta, contexte BLMF)`*
 
 ---
 
@@ -2178,4 +2206,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-02. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `360d25b3`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-02. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `360d25b3`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
