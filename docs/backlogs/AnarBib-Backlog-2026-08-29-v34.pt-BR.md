@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 1º de setembro de 2026](#o-estado-real-em-1º-de-setembro-de-2026)
+- [O estado real em 2 de setembro de 2026](#o-estado-real-em-2-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -58,9 +58,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 1º de setembro de 2026
+## O estado real em 2 de setembro de 2026
 
-Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
+Levantamento de **2 de setembro de 2026** — atualização dirigida após o dia B20/B21/J7/J8: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `cb37a2a8`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
 **Frescor dos constatos em 2026-09-01.** **54 itens de 76** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
@@ -71,11 +71,11 @@ Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior 
 | Tabelas `public` | **187** | todas com RLS ativado, 279 policies em **173** tabelas |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **854** | `public` 628 · `api` 184 · `ingest` 34 · `private` 8. Sendo **666 SECURITY DEFINER**, **nenhuma** sem `search_path` fixado. **315** das de `public` seguem expostas a `authenticated`: é a superfície do item **B14** |
-| Migrações aplicadas | **269** | 269 arquivos no repositório ao fim do dia; as aplicadas seguem no ritmo da CI — a defasagem de um trem de pushes noturno não é a armadilha nº 4, nada é aplicado à mão |
-| Jobs `pg_cron` | **36** | **todos ativos**; cobertos na CI desde 31/08 por `crons_planifies_tests` (faltava o stub `cron`, então nenhum dos 36 estava guardado) |
-| Avisos de segurança | **505** | 0 ERROR · **453** + 28 WARN sobre funções DEFINER expostas · 24 INFO « RLS sem policy ». Os `anon` caíram de 36 para 28 (lote **B2**) e os `authenticated` de 464 para **453** ao longo dos onze pacotes do **B14**, encerrado em 01/09 — cada queda é uma função fechada por uma razão escrita, e **as 453 restantes foram todas lidas, sua razão de exposição escrita** (ver `AUDIT_execute_authenticated_2026-09-01`) |
-| Avisos de desempenho | **243** | 166 índices não usados · 38 chaves estrangeiras sem índice · 25 policies permissivas · 14 tabelas sem chave primária · **0 `auth_rls_initplan`** — eram 9 em 29/08, a reaplicação do wrap (item **B5**) fechou todos |
+| Funções aplicativas | **856** | `public` 630 · `api` 184 · `ingest` 34 · `private` 8. Sendo **668 SECURITY DEFINER**, **nenhuma** sem `search_path` fixado. A superfície `authenticated` já não é um canteiro: **B14 encerrado em 01/09, B20 em 02/09** — cada exposição restante tem sua razão escrita nas auditorias |
+| Migrações aplicadas | **268** | 268 arquivos no repositório = **268 aplicadas, alinhamento exato**. Verificado em 02/09 dos dois lados |
+| Jobs `pg_cron` | **37** | **todos ativos** (+1 desde 01/09: o lembrete antes do vencimento dos convites de equipe, GOUV-17b); cobertos na CI por `crons_planifies_tests` |
+| Avisos de segurança | **447** | 0 ERROR · **395** + **28** WARN sobre funções DEFINER expostas · 24 INFO. O 28 (`anon`) é o **valor esperado** — exatamente a lista nomeada T10 (`DOC-GRANT-1`). O 395 desce de 453 pelo dia B20: 2 ligadas, 65 fechadas, 1 rejulgada (`fn_book_due_dates` → registro B2). Números pelo proxy SQL de 02/09 |
+| Avisos de desempenho | **243** | 166 índices não usados · **38 chaves estrangeiras sem índice, agora todas ASSUMIDAS e guardadas** (B21 encerrado em 02/09: a dívida não entra mais sem um ato) · 25 policies permissivas · 14 tabelas sem chave primária · 0 `auth_rls_initplan` |
 | Esquemas de refugo | **2** | `backup_2026_05_07` e `conv_backup` — inalterados desde 29/08 |
 
 ### Funções Edge
@@ -108,10 +108,10 @@ Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior 
 
 | | | |
 |---|---:|---|
-| Commits | **2 473** | 208 desde o levantamento de 29/08 — a campanha de verificação, os onze pacotes do B14, o canteiro das chaves e o circuito colegiado, conduzidos por duas sessões em paralelo no mesmo dia |
+| Commits | **2 494** | em `main`, na noite de 02/09 — 21 commits só no dia B20/GLB |
 | Arquivos `src/` | **290** | 79 páginas, 89 componentes |
-| Chaves i18n | **6 179** | × 10 locales, paridade estrita verificada na CI |
-| Testes | **353 + 64** | **353 casos JavaScript** em 26 arquivos — número dado pela execução — e **64 suítes SQL, todas na CI**. Doze suítes nasceram só em 1º de setembro |
+| Chaves i18n | **6 222** | por locale, **paridade estrita nas 10**, guardada na CI; +43 desde 01/09 |
+| Testes | **354 + 70** | 354 testes JS (vitest, gate bloqueante) + **70 suítes SQL** — 7 nascidas só em 02/09, entre elas duas guardas de contador |
 | Marcadores de dívida | **6** | sendo 4 em `src/` — eram 17 em 29/08. Nenhum é uma tarefa aberta: a dívida não está nos comentários, está neste backlog |
 
 ---
@@ -2340,4 +2340,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 76 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c7222379`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 76 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
