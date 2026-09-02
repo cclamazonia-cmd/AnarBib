@@ -302,3 +302,9 @@ tests/sql/surface_morte_anon_fermee_tests.sql
 # delete reste ouverte — branchee le meme jour dans CartographyEditModal.
 # Ref. 20260902095935.
 tests/sql/cartographie_surface_taillee_tests.sql
+
+# Un instrument de console n'a pas besoin de la porte du navigateur (B20 lot
+# conventions, 02/09/2026) : conv_controle_qualite / conv_controle_resumo
+# fermees a anon+authenticated ; l'instrument reste entier (vues private
+# presentes, postgres garde EXECUTE). Ref. 20260902100917.
+tests/sql/conventions_console_fermee_tests.sql

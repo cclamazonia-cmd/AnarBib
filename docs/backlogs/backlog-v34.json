@@ -4887,8 +4887,8 @@
           "pt": "Lote circulação: decidir o destino do bloco de planejamento de devolução (8 funções)."
         },
         {
-          "fr": "Lot conventions : documenter `conv_controle_qualite` / `conv_controle_resumo` comme surface console, ou les fermer à `authenticated` (le staff passe par les RPC `conv_revue_*`).",
-          "pt": "Lote convenções: documentar como superfície de console, ou fechar a `authenticated`."
+          "fr": "~~Lot conventions~~ — **fermé à la porte, entier à la console (02/09).** `conv_controle_qualite` et `conv_controle_resumo` sont des diagnostics en lecture seule écrits pour piloter la campagne depuis la console — or la console travaille en `postgres` : le grant `authenticated` ne servait qu'à la porte PostgREST, où personne ne frappe. Révoquées (migration `20260902100917`) ; la recette console est intacte (vues `private.v_conv_controle_*` présentes, `postgres` garde EXECUTE — la suite `CONVENTIONS_CONSOLE` garde les deux moitiés du contrat), et le jour où l'atelier des conventions veut son panneau de contrôle qualité, la restauration est un GRANT.",
+          "pt": "~~Lote convenções~~ — **fechado na porta, inteiro no console (02/09).** `conv_controle_qualite` e `conv_controle_resumo` são diagnósticos de leitura escritos para o console — e o console trabalha como `postgres`: o grant `authenticated` só servia à porta PostgREST, onde ninguém bate. Revogadas; a receita de console está intacta (suíte de 4 testes guarda as duas metades do contrato), e a restauração é um GRANT no dia em que a oficina quiser seu painel."
         },
         {
           "fr": "Avant le **01/10** : rejouer la mesure de `20260901140139` sur les 48 différées et acter, fonction par fonction, écran dû ou REVOKE.",
