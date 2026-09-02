@@ -340,3 +340,11 @@ tests/sql/fk_sans_index_garde_tests.sql
 # 20260902175631 ; les suites circulation_couche_supplantee et
 # solde_des_differees ont ete alignees (dix / 46 fermees).
 tests/sql/une_vue_appelle_aussi_tests.sql
+
+# Un nom ne se donne qu'a qui voit l'assemblee (dette B20 soldee, solution 2,
+# 02/09/2026) : fn_assembleia_facilitator_name(assembleia, user) ne rend le
+# nom qu'a une personne qui voit l'assemblee (meme porte que assembleias_select)
+# et seulement pour cette assemblee ; la forme (uuid) — l'annuaire par
+# ricochet — n'existe plus ; la vue appelante recree en security_invoker.
+# Ref. 20260902183505.
+tests/sql/facilitateur_nom_scope_tests.sql
