@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 8
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée B20/B21/J7/J8 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `cb37a2a8`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-01.** **50 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **49 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -373,7 +373,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
-| **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | En cours |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
 
 #### B4 — Examiner les quatre tables à RLS sans policy qui ne sont pas du transit
@@ -506,53 +505,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 **Dépendances.** **Bloqué par A2.** Ne pas commencer avant.
 
 *Renvois : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
-
-#### B17 — L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas
-
-`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, i18n
-
-**État.** **Trouvé le 31/08 en instruisant B12, et le constat était faux par excès.** La spec `spec-administrateur-reseau-v0.4` §6.3 l'écrit : « *Si action critique → INSERT dans outbox d'event `network.cross_library_critical_action` → **mail immédiat aux coordenadores actifs de la biblio*** ». Ce mail-là n'est jamais parti. Le déclencheur SQL fonctionne — quatre lignes en file, la dernière du **30/08/2026** — mais `_shared/domain/network.ts` connaissait onze events `network.*` et pas celui-là : il tombait dans le `else` final, marqué `skipped`.
-
-**Ce qui manquait au constat, trouvé le soir même.** Le dispositif a **deux étages**, et l'autre marche. `notify-cross-library-digest`, écrite le 17/08, envoie chaque lundi à 8 h 30 le récapitulatif hebdomadaire des actions inter-bibliothèques — **aux mêmes destinataires** (les coordenador·es actif·ves de chaque biblio touchée), dans leur langue, avec des libellés humains pour les dix types d'action. Le cron a tourné le 31/08 à 8 h 30 comme les lundis précédents.
-
-Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event** : le récapitulatif ne lit pas l'outbox, il lit la table de journal `network_admin_cross_library_actions_log`. Aucun `grep` sur `cross_library_critical_action` ne pouvait le trouver — d'où `DOC-RECENS-1`.
-
-**Le manque réel n'était donc pas la visibilité, mais le délai** : jusqu'à sept jours entre une action décidée du dehors et le moment où la bibliothèque l'apprend. Pour une promotion, l'attente est tenable ; pour `team_suspend_member` ou `team_request_remove_member`, elle ne l'est pas.
-
-**Et l'en-tête de `notify-cross-library-digest` affirmait depuis le 17/08 que l'étage immédiat fonctionnait.** Un commentaire qui décrit un mécanisme absent est exactement ce qui fait qu'on ne le cherche pas.
-
-**Livré le 31/08.** `_shared/domain/cross_library.ts` (handler, destinataires = coordenador·es actif·ves hors acteur·rice, identité d'expéditeur *réseau* et non *bibliothèque*), branché dans `handleNetworkEvent`. Les libellés des dix actions et six objets **ne sont pas réécrits** : le fichier de chaînes du récapitulatif a quitté `notify-cross-library-digest/` pour `_shared/i18n/cross-library-strings.ts`, lu par les deux étages — trois nouvelles clés × dix locales au lieu de cent vingt, et surtout aucune divergence possible entre ce que les deux étages appellent le même geste. Le qualifiant « proposition, N ratifications requises — rien n'est encore fait » est partagé lui aussi.
-
-**Neuf types d'action, pas sept.** `fn_is_critical_action_type()` en énumère sept ; deux RPC de réattribution d'ouvrage passent `p_is_critical := true` en dur. Les dix libellés couvrent les neuf.
-
-**Éprouvé le 31/08 à 15 h 23 : le courriel est parti et il a été lu.** La ligne `#72` rejouée, `notify-event` a répondu `200` avec `recipients_count: 3` et trois `ok: true` — les trois coordenador·es actif·ves de la Terra Livre. Le message reçu porte l'identité **AnarBib**, pas celle de la bibliothèque (à comparer avec l'invitation à endosser de la veille, qui porte le logo de la Terra Livre : la distinction se voit à l'œil nu, et c'est tout l'objet). Il dit *« Promoção ao papel de coordenação (proposta, 2 ratificação(ões) necessária(s) — nada feito ainda) »* : le qualifiant partagé avec le récapitulatif fait son travail, l'avertissement n'annonce pas un fait accompli. La ligne est passée à `sent`, `sent_at` rempli, `skip_reason` revenu à `NULL`.
-
-**Deux choses vues en éprouvant, qui ne sont pas dans le code.**
-
-*(a)* **Un recouvrement partiel, pour ce seul type d'action.** La destinataire a reçu le même jour le récapitulatif hebdomadaire à 10 h 30 et l'avertissement immédiat à 15 h 23, tous deux sur la même promotion — plus, la veille, l'invitation à endosser, qui nommait déjà Xavier comme proposeur. C'est un artefact du rejeu (en régime normal l'immédiat précède le lundi de plusieurs jours), mais il montre que pour `team_promote_to_coordenador` **trois canaux parlent du même geste**. Les six autres types critiques n'en ont qu'un : `team_suspend_member`, `team_request_remove_member`, `update_library`, les deux réattributions d'ouvrage et les changements de politique n'envoient rien à personne avant le lundi. **C'est là que l'étage immédiat gagne ses sept jours** — et c'est là qu'il faudra l'éprouver ensuite. Question ouverte, une occurrence ne suffit pas à trancher : faut-il taire l'immédiat quand une invitation a déjà été émise pour la même entité ? Relève d'`OPS-8`, pas d'un correctif.
-
-*(b)* **Un constat retiré le soir même.** Cette fiche a un moment affirmé que le courriel avait été trouvé dans la corbeille de la boîte destinataire, et en tirait une question de délivrabilité. C'était un geste délibéré de Xavier, qui range ses courriels d'essai. Rien n'a jamais été mesuré : la capture d'écran montrait un dossier, elle ne disait pas qui l'y avait mis. Écrit et retiré le 31/08, gardé ici comme illustration de `DOC-CONSTAT-1` — un constat fabriqué à partir d'un indice, le jour même où deux doctrines ont été actées contre ça.
-
-*Vérifié : 31/08 — instruit, **corrigé**, livré et **éprouvé en envoi réel le jour même**. Cinq sources : la base (4 lignes en file ; `#72` passée à `sent` à 15 h 23 h 35, `skip_reason` à `NULL`), la réponse HTTP de `notify-event` (`200`, `recipients_count: 3`, trois `ok: true`), **le courriel reçu et relu** (identité réseau, qualifiant de proposition correct), le code (aucune branche pour cet event avant ce jour ; un récapitulatif hebdomadaire qui sert les mêmes destinataires depuis le 17/08), et le déclencheur `trg_team_outbox_dispatch`, `AFTER INSERT` sans rejeu. **Reste à éprouver sur un type d'action sans autre canal.***
-
-**Ce que c'est.** **Il reste une chose, et une seule** : éprouver sur un type d'action qui n'a pas d'autre canal. La promotion collégiale en a trois ; une suspension n'en a aucun avant le lundi. Tant que l'étage immédiat n'a été vu qu'au seul endroit où il fait doublon, on n'a pas éprouvé ce pour quoi il a été écrit.
-
-**Les trois lignes de juin ne sont pas retouchées.** Leur `skip_reason` dit `unknown_network_event`, et c'est exact : ce jour-là, l'event était inconnu du handler. Le réécrire en septembre falsifierait un journal au lieu de le compléter.
-
-**Pourquoi ça compte.** Un pouvoir transverse sans trace visible par celles qui le subissent n'est pas un pouvoir contrôlé. La spec l'avait compris et l'avait écrit ; le code ne l'a jamais fait. À Bologne, c'est exactement le genre d'écart qu'on ne peut pas présenter comme acquis.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Éclairé par **B12** (la raison du saut est écrite). Résonne avec **A1** : un seul administrateur réseau, donc un seul émetteur possible de ces actions. Partage son vocabulaire avec le récapitulatif hebdomadaire, ce qui **allège F6** d'un fichier au lieu de l'alourdir.
-
-*Renvois : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6` · `item F8`*
 
 #### B19 — Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde
 
@@ -2227,6 +2179,7 @@ CI verte : lint et suite unitaire. |
 | B18 | 2026-09-02 | **Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout. |
 | G2 | 2026-09-02 | **L'écart P2/P8 est tranché — le texte s'aligne sur le code, et la forme de la décision est aussi importante que son fond.** Option 1 des trois écrites : la pratique vivante (le circuit collégial que la BTL exerce depuis le 01/09) devient la règle. Spec v1.11 : P2 dit que **l'exécution elle-même est collégiale** ; P8 clarifie la frontière sans rien céder — les quorums du code ne sont pas des votes mais des **garanties d'exécution** (une ratification atteste qu'une décision collective existe hors logiciel, elle ne la remplace pas) : « modéliser la délibération, jamais ; exiger plusieurs mains pour exécuter, toujours ». Aucune ligne de code. **Décision prise seule, en le disant** — mode dégradé assumé (aucun collectif ne s'est encore saisi de l'outil), daté à `DECISION_G2_alignement_textes_promotion_2026-09-02.md`, `GOUV-18` au REGISTRE (v0.15), **fenêtre d'objection à la formation du 13/09** : le jour où le collectif existe, il trouve une décision contestable, pas un état de fait muet. Au passage, le fil-piège de `GOUV-17b` est réparé (livré ce matin, la ligne du registre avait un jour de retard). |
 | H5 | 2026-09-02 | **La moisson OAI-PMH est éprouvée dans les deux sens, avec de vraies données des deux côtés — et deux circuits civiques exercés pour la première fois le même soir.** **Sens entrant** : première source réelle enregistrée (Persée, fascicules de sociologie, volume borné à 2 lots/cycle — répétition en transaction annulée puis geste réel, garde admin réseau sous l'identité de Xavier) ; le déclencheur du cron lancé à la main a ramené **40 fascicules réels** (les *Actes de la recherche en sciences sociales* de 1975 en tête de file) : run `ready_for_review`, verrou reposé sur `paused`, **jeton de reprise conservé** — le cron de mardi 04h20 continuera là où l'épreuve s'est arrêtée. **Sens sortant** : l'entrepôt répondait conformément mais vide — « aucune bibliothèque ouverte » — car le circuit « être source » n'avait jamais servi ; **la BLMF s'est ouverte par le circuit réel** (demande → décision, notification comprise — décision de Xavier, mode dégradé assumé comme G2), et un client tiers a moissonné **200 notices en deux lots**, reprise par `resumptionToken` honorée, `GetRecord` exact, `Identify`/`ListMetadataFormats`/`ListSets` conformes. **Deux constats en chemin, pour Bologne** : *(1)* les deux partenaires PMB connus (CIRA Lausanne, CSL Milano) n'exposent pas `oai2.php` — le diagnostic des conventions (« les flux ne pointent nulle part ») est en-deçà de la réalité : côté PMB ils n'existent pas, et c'est un sujet pour H6/K6 ; *(2)* `blmf-teste` échoue l'éligibilité sur ses trois verrous de profil — sa recette de bibliothèque masquée tient, y compris face à l'OAI. **Reste ouvert, hors périmètre** : la révision humaine des 40 lignes Persée (file d'import), et un moissonneur vraiment tiers — une autre machine, un autre collectif — que Bologne peut fournir. |
+| B17 | 2026-09-02 | **L'avertissement immédiat des actions transverses est éprouvé de bout en bout — y compris, ce soir, sur le type pour lequel il a été écrit.** L'étage immédiat livré et éprouvé en envoi réel le 31/08 (ligne #72 rejouée : 200, 3 destinataires, courriel reçu et relu) ne l'avait été que sur la promotion collégiale — un type à trois canaux, où l'immédiat fait doublon. Restait à le voir sur un type **sans autre canal avant le lundi**. Fait le 02/09, en transaction annulée sur `blmf-teste` avec une actrice synthétique (admin réseau fixture, non staff de la biblio — le critère `fn_is_cross_library_action` exclut à raison l'admin qui est aussi staff local, ce qui disqualifiait l'identité de Xavier pour l'épreuve) : `fn_team_suspend_member` → membership `suspended`, **ligne d'outbox `network.cross_library_critical_action` avec `action_type=team_suspend_member`**, ligne de journal — la chaîne SQL exacte qui tombait dans le `else` du handler avant le 31/08. La jambe EF n'a pas besoin d'être rejouée : le handler est agnostique au type (un seul événement, le type ne choisit que le libellé, et `cross-library-strings` porte « Suspension d'une personne de l'équipe » dans les dix locales — vérifié). Sanité post-rollback : Voltairine `active`, l'actrice fixture disparue, zéro ligne résiduelle. **Vu en chemin** : le canal mail de `blmf-teste` est retombé sur `disabled`/`inactive` après l'épreuve G4 — c'est l'hygiène attendue d'une biblio de formation, et la raison de plus pour l'épreuve en transaction. |
 
 ---
 
@@ -2258,4 +2211,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

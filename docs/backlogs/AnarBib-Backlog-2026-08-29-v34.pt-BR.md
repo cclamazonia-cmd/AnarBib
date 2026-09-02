@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 8
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **2 de setembro de 2026** — atualização dirigida após o dia B20/B21/J7/J8: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `cb37a2a8`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
-**Frescor dos constatos em 2026-09-01.** **50 itens de 72** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **49 itens de 71** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -373,7 +373,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Em curso |
 | **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
@@ -506,45 +505,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **Dependências.** **Bloqueado por A2.** Não começar antes.
 
 *Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
-
-#### B17 — O aviso que devia tornar visíveis as ações de um administrador de rede não existe
-
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : Deno / TypeScript, i18n
-
-**Estado.** **Encontrado em 31/08 ao instruir B12, e o constato estava errado por excesso.** A spec §6.3 prevê um **e-mail imediato** aos coordenadores da biblioteca quando um administrador de rede age nela. Esse e-mail nunca partiu: o gatilho SQL enfileirava desde 8 de junho, mas nenhum handler tratava o evento.
-
-**O que faltava ao constato.** O dispositivo tem **dois andares**, e o outro funciona: `notify-cross-library-digest`, escrita em 17/08, envia toda segunda-feira o resumo semanal **aos mesmos destinatários**. O primeiro levantamento não a viu porque procurava o **nome do evento**: o resumo lê a tabela de registro, não a outbox. Daí `DOC-RECENS-1`.
-
-**A falta real não era a visibilidade, mas o prazo**: até sete dias. Para uma promoção, é tolerável; para `team_suspend_member`, não.
-
-**Entregue em 31/08.** `_shared/domain/cross_library.ts`, ligado a `handleNetworkEvent`. Os rótulos das dez ações não foram reescritos: o ficheiro de cadeias mudou-se para `_shared/i18n/cross-library-strings.ts` e é lido pelos dois andares.
-
-**Provado em 31/08 às 15h23: o e-mail partiu e foi lido.** A linha `#72` reproduzida, `notify-event` respondeu `200` com `recipients_count: 3`. A mensagem traz a identidade **AnarBib**, não a da biblioteca, e diz *«Promoção ao papel de coordenação (proposta, 2 ratificação(ões) necessária(s) — nada feito ainda)»*. A linha passou a `sent`, `skip_reason` de volta a `NULL`.
-
-**Uma coisa vista ao provar.** Para este único tipo de ação, **três canais falam do mesmo gesto** — o convite a endossar na véspera, o resumo semanal às 10h30 e o aviso imediato às 15h23. Os outros seis tipos críticos não têm nenhum antes de segunda-feira: é aí que o andar imediato ganha os seus sete dias, e é aí que falta prová-lo. Questão em aberto.
-
-*(Uma segunda observação — o e-mail encontrado na lixeira — foi retirada na mesma noite: era um gesto deliberado de arrumação, não uma medida. Ver `DOC-CONSTAT-1`.)*
-
-*Verificado : 31/08 — instruído, **corrigido**, entregue e **provado em envio real no mesmo dia**, sobre cinco fontes, incluindo **o e-mail recebido e relido**. **Falta provar sobre um tipo de ação sem outro canal.***
-
-**O que é.** **Resta uma coisa, e uma só**: provar sobre um tipo de ação sem outro canal — uma suspensão não tem nenhum antes de segunda-feira.
-
-**As três linhas de junho não são retocadas**: o seu `skip_reason` é exato.
-
-**Por que importa.** Um poder transversal sem rasto visível para quem o sofre não é um poder controlado. A spec entendeu-o e escreveu-o; o código nunca o fez.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Esclarecido por **B12**. Ressoa com **A1**. Partilha o vocabulário com o resumo semanal, o que **alivia F6**.
-
-*Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6` · `item F8`*
 
 #### B19 — Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo
 
@@ -2201,6 +2161,7 @@ CI verde. |
 | B18 | 2026-09-02 | **As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta. |
 | G2 | 2026-09-02 | **A divergência P2/P8 está decidida — o texto se alinha ao código, e a forma da decisão importa tanto quanto o fundo.** Opção 1: a prática viva (o circuito colegial que a BTL exerce desde 01/09) vira a regra. Spec v1.11: P2 diz que **a própria execução é colegial**; P8 esclarece a fronteira — os quóruns do código não são votos, são **garantias de execução**: «modelar a deliberação, nunca; exigir várias mãos para executar, sempre». Nenhuma linha de código. **Decisão tomada sozinho, dizendo-o** — modo degradado assumido, datada, `GOUV-18` no REGISTRO, **janela de objeção na formação de 13/09**: o dia em que o coletivo existir, encontrará uma decisão contestável, não um fato consumado mudo. |
 | H5 | 2026-09-02 | **A coleta OAI-PMH está provada nos dois sentidos, com dados reais dos dois lados — e dois circuitos cívicos exercidos pela primeira vez na mesma noite.** **Entrada**: primeira fonte real registrada (Persée, fascículos de sociologia, 2 lotes/ciclo); o disparo manual trouxe **40 fascículos reais**: run `ready_for_review`, trava em `paused`, **token de retomada conservado** — o cron de terça continuará onde a prova parou. **Saída**: o repositório respondia conforme mas vazio; **a BLMF abriu-se pelo circuito real** (pedido → decisão, notificação incluída) e um cliente terceiro colheu **200 registros em dois lotes**, retomada honrada, `GetRecord` exato. **Dois constatos para Bolonha**: os dois parceiros PMB não expõem `oai2.php` — do lado deles os fluxos nem existem (assunto para H6/K6); e `blmf-teste` falha a elegibilidade nas suas três travas — a receita de biblioteca mascarada resiste até ao OAI. **Fica aberto**: a revisão humana das 40 linhas, e um colhedor verdadeiramente terceiro — Bolonha pode fornecê-lo. |
+| B17 | 2026-09-02 | **O aviso imediato das ações transversais está provado de ponta a ponta — inclusive, esta noite, sobre o tipo para o qual foi escrito.** O andar imediato provado em envio real em 31/08 só o fora sobre a promoção colegial — um tipo com três canais. Faltava vê-lo sobre um tipo **sem outro canal antes de segunda**. Feito em 02/09, em transação revertida em `blmf-teste` com uma atriz sintética (admin de rede fixture, não staff da biblioteca — o critério exclui com razão o admin que também é staff local): `fn_team_suspend_member` → membership `suspended`, **linha de outbox `network.cross_library_critical_action` com `action_type=team_suspend_member`**, linha de diário. A perna EF não precisa ser repetida: o handler é agnóstico ao tipo (o tipo só escolhe o rótulo, presente nas dez locales). Sanidade pós-rollback: tudo desaparecido, zero resíduo. |
 
 ---
 
@@ -2232,4 +2193,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

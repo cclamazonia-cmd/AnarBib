@@ -1711,6 +1711,14 @@
           "fr": "**La moisson OAI-PMH est éprouvée dans les deux sens, avec de vraies données des deux côtés — et deux circuits civiques exercés pour la première fois le même soir.** **Sens entrant** : première source réelle enregistrée (Persée, fascicules de sociologie, volume borné à 2 lots/cycle — répétition en transaction annulée puis geste réel, garde admin réseau sous l'identité de Xavier) ; le déclencheur du cron lancé à la main a ramené **40 fascicules réels** (les *Actes de la recherche en sciences sociales* de 1975 en tête de file) : run `ready_for_review`, verrou reposé sur `paused`, **jeton de reprise conservé** — le cron de mardi 04h20 continuera là où l'épreuve s'est arrêtée. **Sens sortant** : l'entrepôt répondait conformément mais vide — « aucune bibliothèque ouverte » — car le circuit « être source » n'avait jamais servi ; **la BLMF s'est ouverte par le circuit réel** (demande → décision, notification comprise — décision de Xavier, mode dégradé assumé comme G2), et un client tiers a moissonné **200 notices en deux lots**, reprise par `resumptionToken` honorée, `GetRecord` exact, `Identify`/`ListMetadataFormats`/`ListSets` conformes. **Deux constats en chemin, pour Bologne** : *(1)* les deux partenaires PMB connus (CIRA Lausanne, CSL Milano) n'exposent pas `oai2.php` — le diagnostic des conventions (« les flux ne pointent nulle part ») est en-deçà de la réalité : côté PMB ils n'existent pas, et c'est un sujet pour H6/K6 ; *(2)* `blmf-teste` échoue l'éligibilité sur ses trois verrous de profil — sa recette de bibliothèque masquée tient, y compris face à l'OAI. **Reste ouvert, hors périmètre** : la révision humaine des 40 lignes Persée (file d'import), et un moissonneur vraiment tiers — une autre machine, un autre collectif — que Bologne peut fournir.",
           "pt": "**A coleta OAI-PMH está provada nos dois sentidos, com dados reais dos dois lados — e dois circuitos cívicos exercidos pela primeira vez na mesma noite.** **Entrada**: primeira fonte real registrada (Persée, fascículos de sociologia, 2 lotes/ciclo); o disparo manual trouxe **40 fascículos reais**: run `ready_for_review`, trava em `paused`, **token de retomada conservado** — o cron de terça continuará onde a prova parou. **Saída**: o repositório respondia conforme mas vazio; **a BLMF abriu-se pelo circuito real** (pedido → decisão, notificação incluída) e um cliente terceiro colheu **200 registros em dois lotes**, retomada honrada, `GetRecord` exato. **Dois constatos para Bolonha**: os dois parceiros PMB não expõem `oai2.php` — do lado deles os fluxos nem existem (assunto para H6/K6); e `blmf-teste` falha a elegibilidade nas suas três travas — a receita de biblioteca mascarada resiste até ao OAI. **Fica aberto**: a revisão humana das 40 linhas, e um colhedor verdadeiramente terceiro — Bolonha pode fornecê-lo."
         }
+      ],
+      [
+        "B17",
+        "2026-09-02",
+        {
+          "fr": "**L'avertissement immédiat des actions transverses est éprouvé de bout en bout — y compris, ce soir, sur le type pour lequel il a été écrit.** L'étage immédiat livré et éprouvé en envoi réel le 31/08 (ligne #72 rejouée : 200, 3 destinataires, courriel reçu et relu) ne l'avait été que sur la promotion collégiale — un type à trois canaux, où l'immédiat fait doublon. Restait à le voir sur un type **sans autre canal avant le lundi**. Fait le 02/09, en transaction annulée sur `blmf-teste` avec une actrice synthétique (admin réseau fixture, non staff de la biblio — le critère `fn_is_cross_library_action` exclut à raison l'admin qui est aussi staff local, ce qui disqualifiait l'identité de Xavier pour l'épreuve) : `fn_team_suspend_member` → membership `suspended`, **ligne d'outbox `network.cross_library_critical_action` avec `action_type=team_suspend_member`**, ligne de journal — la chaîne SQL exacte qui tombait dans le `else` du handler avant le 31/08. La jambe EF n'a pas besoin d'être rejouée : le handler est agnostique au type (un seul événement, le type ne choisit que le libellé, et `cross-library-strings` porte « Suspension d'une personne de l'équipe » dans les dix locales — vérifié). Sanité post-rollback : Voltairine `active`, l'actrice fixture disparue, zéro ligne résiduelle. **Vu en chemin** : le canal mail de `blmf-teste` est retombé sur `disabled`/`inactive` après l'épreuve G4 — c'est l'hygiène attendue d'une biblio de formation, et la raison de plus pour l'épreuve en transaction.",
+          "pt": "**O aviso imediato das ações transversais está provado de ponta a ponta — inclusive, esta noite, sobre o tipo para o qual foi escrito.** O andar imediato provado em envio real em 31/08 só o fora sobre a promoção colegial — um tipo com três canais. Faltava vê-lo sobre um tipo **sem outro canal antes de segunda**. Feito em 02/09, em transação revertida em `blmf-teste` com uma atriz sintética (admin de rede fixture, não staff da biblioteca — o critério exclui com razão o admin que também é staff local): `fn_team_suspend_member` → membership `suspended`, **linha de outbox `network.cross_library_critical_action` com `action_type=team_suspend_member`**, linha de diário. A perna EF não precisa ser repetida: o handler é agnóstico ao tipo (o tipo só escolhe o rótulo, presente nas dez locales). Sanidade pós-rollback: tudo desaparecido, zero resíduo."
+        }
       ]
     ]
   },
@@ -4629,79 +4637,6 @@
         "supabase/functions/_shared/core/env.ts",
         "CONTRIBUTING.md"
       ]
-    },
-    {
-      "id": "B17",
-      "d": "B",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "deno",
-        "i18n"
-      ],
-      "t": {
-        "fr": "L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas",
-        "pt": "O aviso que devia tornar visíveis as ações de um administrador de rede não existe"
-      },
-      "v": {
-        "fr": "**Trouvé le 31/08 en instruisant B12, et le constat était faux par excès.** La spec `spec-administrateur-reseau-v0.4` §6.3 l'écrit : « *Si action critique → INSERT dans outbox d'event `network.cross_library_critical_action` → **mail immédiat aux coordenadores actifs de la biblio*** ». Ce mail-là n'est jamais parti. Le déclencheur SQL fonctionne — quatre lignes en file, la dernière du **30/08/2026** — mais `_shared/domain/network.ts` connaissait onze events `network.*` et pas celui-là : il tombait dans le `else` final, marqué `skipped`.\n\n**Ce qui manquait au constat, trouvé le soir même.** Le dispositif a **deux étages**, et l'autre marche. `notify-cross-library-digest`, écrite le 17/08, envoie chaque lundi à 8 h 30 le récapitulatif hebdomadaire des actions inter-bibliothèques — **aux mêmes destinataires** (les coordenador·es actif·ves de chaque biblio touchée), dans leur langue, avec des libellés humains pour les dix types d'action. Le cron a tourné le 31/08 à 8 h 30 comme les lundis précédents.\n\nLe premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event** : le récapitulatif ne lit pas l'outbox, il lit la table de journal `network_admin_cross_library_actions_log`. Aucun `grep` sur `cross_library_critical_action` ne pouvait le trouver — d'où `DOC-RECENS-1`.\n\n**Le manque réel n'était donc pas la visibilité, mais le délai** : jusqu'à sept jours entre une action décidée du dehors et le moment où la bibliothèque l'apprend. Pour une promotion, l'attente est tenable ; pour `team_suspend_member` ou `team_request_remove_member`, elle ne l'est pas.\n\n**Et l'en-tête de `notify-cross-library-digest` affirmait depuis le 17/08 que l'étage immédiat fonctionnait.** Un commentaire qui décrit un mécanisme absent est exactement ce qui fait qu'on ne le cherche pas.\n\n**Livré le 31/08.** `_shared/domain/cross_library.ts` (handler, destinataires = coordenador·es actif·ves hors acteur·rice, identité d'expéditeur *réseau* et non *bibliothèque*), branché dans `handleNetworkEvent`. Les libellés des dix actions et six objets **ne sont pas réécrits** : le fichier de chaînes du récapitulatif a quitté `notify-cross-library-digest/` pour `_shared/i18n/cross-library-strings.ts`, lu par les deux étages — trois nouvelles clés × dix locales au lieu de cent vingt, et surtout aucune divergence possible entre ce que les deux étages appellent le même geste. Le qualifiant « proposition, N ratifications requises — rien n'est encore fait » est partagé lui aussi.\n\n**Neuf types d'action, pas sept.** `fn_is_critical_action_type()` en énumère sept ; deux RPC de réattribution d'ouvrage passent `p_is_critical := true` en dur. Les dix libellés couvrent les neuf.\n\n**Éprouvé le 31/08 à 15 h 23 : le courriel est parti et il a été lu.** La ligne `#72` rejouée, `notify-event` a répondu `200` avec `recipients_count: 3` et trois `ok: true` — les trois coordenador·es actif·ves de la Terra Livre. Le message reçu porte l'identité **AnarBib**, pas celle de la bibliothèque (à comparer avec l'invitation à endosser de la veille, qui porte le logo de la Terra Livre : la distinction se voit à l'œil nu, et c'est tout l'objet). Il dit *« Promoção ao papel de coordenação (proposta, 2 ratificação(ões) necessária(s) — nada feito ainda) »* : le qualifiant partagé avec le récapitulatif fait son travail, l'avertissement n'annonce pas un fait accompli. La ligne est passée à `sent`, `sent_at` rempli, `skip_reason` revenu à `NULL`.\n\n**Deux choses vues en éprouvant, qui ne sont pas dans le code.**\n\n*(a)* **Un recouvrement partiel, pour ce seul type d'action.** La destinataire a reçu le même jour le récapitulatif hebdomadaire à 10 h 30 et l'avertissement immédiat à 15 h 23, tous deux sur la même promotion — plus, la veille, l'invitation à endosser, qui nommait déjà Xavier comme proposeur. C'est un artefact du rejeu (en régime normal l'immédiat précède le lundi de plusieurs jours), mais il montre que pour `team_promote_to_coordenador` **trois canaux parlent du même geste**. Les six autres types critiques n'en ont qu'un : `team_suspend_member`, `team_request_remove_member`, `update_library`, les deux réattributions d'ouvrage et les changements de politique n'envoient rien à personne avant le lundi. **C'est là que l'étage immédiat gagne ses sept jours** — et c'est là qu'il faudra l'éprouver ensuite. Question ouverte, une occurrence ne suffit pas à trancher : faut-il taire l'immédiat quand une invitation a déjà été émise pour la même entité ? Relève d'`OPS-8`, pas d'un correctif.\n\n*(b)* **Un constat retiré le soir même.** Cette fiche a un moment affirmé que le courriel avait été trouvé dans la corbeille de la boîte destinataire, et en tirait une question de délivrabilité. C'était un geste délibéré de Xavier, qui range ses courriels d'essai. Rien n'a jamais été mesuré : la capture d'écran montrait un dossier, elle ne disait pas qui l'y avait mis. Écrit et retiré le 31/08, gardé ici comme illustration de `DOC-CONSTAT-1` — un constat fabriqué à partir d'un indice, le jour même où deux doctrines ont été actées contre ça.",
-        "pt": "**Encontrado em 31/08 ao instruir B12, e o constato estava errado por excesso.** A spec §6.3 prevê um **e-mail imediato** aos coordenadores da biblioteca quando um administrador de rede age nela. Esse e-mail nunca partiu: o gatilho SQL enfileirava desde 8 de junho, mas nenhum handler tratava o evento.\n\n**O que faltava ao constato.** O dispositivo tem **dois andares**, e o outro funciona: `notify-cross-library-digest`, escrita em 17/08, envia toda segunda-feira o resumo semanal **aos mesmos destinatários**. O primeiro levantamento não a viu porque procurava o **nome do evento**: o resumo lê a tabela de registro, não a outbox. Daí `DOC-RECENS-1`.\n\n**A falta real não era a visibilidade, mas o prazo**: até sete dias. Para uma promoção, é tolerável; para `team_suspend_member`, não.\n\n**Entregue em 31/08.** `_shared/domain/cross_library.ts`, ligado a `handleNetworkEvent`. Os rótulos das dez ações não foram reescritos: o ficheiro de cadeias mudou-se para `_shared/i18n/cross-library-strings.ts` e é lido pelos dois andares.\n\n**Provado em 31/08 às 15h23: o e-mail partiu e foi lido.** A linha `#72` reproduzida, `notify-event` respondeu `200` com `recipients_count: 3`. A mensagem traz a identidade **AnarBib**, não a da biblioteca, e diz *«Promoção ao papel de coordenação (proposta, 2 ratificação(ões) necessária(s) — nada feito ainda)»*. A linha passou a `sent`, `skip_reason` de volta a `NULL`.\n\n**Uma coisa vista ao provar.** Para este único tipo de ação, **três canais falam do mesmo gesto** — o convite a endossar na véspera, o resumo semanal às 10h30 e o aviso imediato às 15h23. Os outros seis tipos críticos não têm nenhum antes de segunda-feira: é aí que o andar imediato ganha os seus sete dias, e é aí que falta prová-lo. Questão em aberto.\n\n*(Uma segunda observação — o e-mail encontrado na lixeira — foi retirada na mesma noite: era um gesto deliberado de arrumação, não uma medida. Ver `DOC-CONSTAT-1`.)*"
-      },
-      "w": {
-        "fr": "**Il reste une chose, et une seule** : éprouver sur un type d'action qui n'a pas d'autre canal. La promotion collégiale en a trois ; une suspension n'en a aucun avant le lundi. Tant que l'étage immédiat n'a été vu qu'au seul endroit où il fait doublon, on n'a pas éprouvé ce pour quoi il a été écrit.\n\n**Les trois lignes de juin ne sont pas retouchées.** Leur `skip_reason` dit `unknown_network_event`, et c'est exact : ce jour-là, l'event était inconnu du handler. Le réécrire en septembre falsifierait un journal au lieu de le compléter.",
-        "pt": "**Resta uma coisa, e uma só**: provar sobre um tipo de ação sem outro canal — uma suspensão não tem nenhum antes de segunda-feira.\n\n**As três linhas de junho não são retocadas**: o seu `skip_reason` é exato."
-      },
-      "y": {
-        "fr": "Un pouvoir transverse sans trace visible par celles qui le subissent n'est pas un pouvoir contrôlé. La spec l'avait compris et l'avait écrit ; le code ne l'a jamais fait. À Bologne, c'est exactement le genre d'écart qu'on ne peut pas présenter comme acquis.",
-        "pt": "Um poder transversal sem rasto visível para quem o sofre não é um poder controlado. A spec entendeu-o e escreveu-o; o código nunca o fez."
-      },
-      "f": [
-        {
-          "fr": "~~L'event a un handler~~ — `_shared/domain/cross_library.ts`, branché le 31/08.",
-          "pt": "~~O evento tem um handler~~ — entregue em 31/08."
-        },
-        {
-          "fr": "~~Les dix locales ont leurs chaînes~~ — trois clés de cadre ajoutées ; les libellés d'action et d'objet sont ceux du récapitulatif, désormais partagés.",
-          "pt": "~~As dez locales têm as suas cadeias~~ — partilhadas com o resumo semanal."
-        },
-        {
-          "fr": "~~Un courriel est vu partir~~ — 31/08 à 15 h 23, trois destinataires réels, message reçu et lu.",
-          "pt": "~~Um e-mail é visto partir~~ — 31/08 às 15h23, três destinatárias reais."
-        },
-        {
-          "fr": "~~Le courriel dit « proposition, deux ratifications requises »~~ — vérifié sur le message reçu.",
-          "pt": "~~O e-mail diz «proposta, duas ratificações necessárias»~~ — verificado."
-        },
-        {
-          "fr": "~~L'en-tête de `notify-cross-library-digest` ne décrit plus comme acquis un étage absent~~.",
-          "pt": "~~O cabeçalho de `notify-cross-library-digest` deixa de afirmar o que não existia~~."
-        },
-        {
-          "fr": "Éprouvé sur un type d'action **qui n'a pas d'autre canal** — `team_suspend_member` de préférence. C'est le cas où les sept jours comptent, et le seul non couvert.",
-          "pt": "Provado sobre um tipo de ação **sem outro canal** — de preferência `team_suspend_member`."
-        }
-      ],
-      "dep": {
-        "fr": "Éclairé par **B12** (la raison du saut est écrite). Résonne avec **A1** : un seul administrateur réseau, donc un seul émetteur possible de ces actions. Partage son vocabulaire avec le récapitulatif hebdomadaire, ce qui **allège F6** d'un fichier au lieu de l'alourdir.",
-        "pt": "Esclarecido por **B12**. Ressoa com **A1**. Partilha o vocabulário com o resumo semanal, o que **alivia F6**."
-      },
-      "r": [
-        "docs/specs/spec-administrateur-reseau-v0.4.md §6.3",
-        "supabase/functions/_shared/domain/cross_library.ts",
-        "supabase/functions/_shared/i18n/cross-library-strings.ts",
-        "supabase/functions/notify-cross-library-digest/",
-        "public.team_notification_outbox lignes 56, 58, 61, 72",
-        "public.fn_is_critical_action_type",
-        "REGISTRE DOC-RECENS-1",
-        "item B12",
-        "item F6",
-        "item F8"
-      ],
-      "verif": {
-        "fr": "31/08 — instruit, **corrigé**, livré et **éprouvé en envoi réel le jour même**. Cinq sources : la base (4 lignes en file ; `#72` passée à `sent` à 15 h 23 h 35, `skip_reason` à `NULL`), la réponse HTTP de `notify-event` (`200`, `recipients_count: 3`, trois `ok: true`), **le courriel reçu et relu** (identité réseau, qualifiant de proposition correct), le code (aucune branche pour cet event avant ce jour ; un récapitulatif hebdomadaire qui sert les mêmes destinataires depuis le 17/08), et le déclencheur `trg_team_outbox_dispatch`, `AFTER INSERT` sans rejeu. **Reste à éprouver sur un type d'action sans autre canal.**",
-        "pt": "31/08 — instruído, **corrigido**, entregue e **provado em envio real no mesmo dia**, sobre cinco fontes, incluindo **o e-mail recebido e relido**. **Falta provar sobre um tipo de ação sem outro canal.**"
-      }
     },
     {
       "id": "B19",
