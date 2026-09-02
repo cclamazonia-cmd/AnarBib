@@ -93,22 +93,45 @@ BEGIN
   -- ---------------------------------------------------------------------
   -- T1 passerait aussi si quelqu'un fermait ces fonctions a tout le monde :
   -- l ecran mourrait au lieu de refuser proprement (DOC-RPC-3).
-  v_t := 'T3 les neuf restent appelables par authenticated';
+  -- 02/09/2026 : T3 exigeait les NEUF exposees — il gardait d'un lot ce qui
+  -- n'etait vrai que de sept (quatrieme occurrence du motif note a l'audit du
+  -- 01/09 : « un test qui enumere plusieurs objets doit garder ce qui est vrai
+  -- de chacun »). Les deux fn_v2_*_return* n'ont jamais servi aucun ecran :
+  -- fermees par 20260902103305 (B20 lot circulation), leur forme de refus
+  -- reste gardee par T1/T2 — le corps n'a pas change, seul le droit d'entree.
+  v_t := 'T3 les sept qui servent un ecran restent appelables par authenticated';
   BEGIN
     SELECT count(*) INTO v_n
       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
      WHERE n.nspname = 'public'
        AND p.proname IN ('fn_confirm_digital_asset_rights','fn_publish_digital_asset_from_resource',
                          'fn_attach_received_asset_record','fn_import_set_adapter_overrides',
-                         'fn_import_set_profile','fn_set_circulation_limits','discard_exemplar',
-                         'fn_v2_schedule_emprestimo_return','fn_v2_clear_emprestimo_return_schedule')
+                         'fn_import_set_profile','fn_set_circulation_limits','discard_exemplar')
        AND has_function_privilege('authenticated', p.oid, 'EXECUTE');
 
-    IF v_n = 9 THEN v_passed := v_passed + 1;
+    IF v_n = 7 THEN v_passed := v_passed + 1;
     ELSE
       v_failed := v_failed + 1;
-      v_failures := v_failures || (v_t || ' : ' || v_n || '/9 exposees'
+      v_failures := v_failures || (v_t || ' : ' || v_n || '/7 exposees'
         || ' | fermer l EXECUTE casse l ecran au lieu de refuser');
+    END IF;
+  EXCEPTION WHEN OTHERS THEN
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM);
+  END;
+
+  v_t := 'T3b les deux fermees le restent';
+  BEGIN
+    SELECT count(*) INTO v_n
+      FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+     WHERE n.nspname = 'public'
+       AND p.proname IN ('fn_v2_schedule_emprestimo_return','fn_v2_clear_emprestimo_return_schedule')
+       AND has_function_privilege('authenticated', p.oid, 'EXECUTE');
+
+    IF v_n = 0 THEN v_passed := v_passed + 1;
+    ELSE
+      v_failed := v_failed + 1;
+      v_failures := v_failures || (v_t || ' : ' || v_n || ' rouverte(s)'
+        || ' | l agendamento de retour n a aucun ecran — sa reouverture se decide, ne se constate pas');
     END IF;
   EXCEPTION WHEN OTHERS THEN
     v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM);
