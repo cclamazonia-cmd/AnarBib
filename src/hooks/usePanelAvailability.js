@@ -20,7 +20,6 @@ import { useLibrary } from '@/contexts/LibraryContext';
  * | reservas       | circulation_mode = 'full_sigb'                          |
  * | consultas      | circulation_mode IN ('informal', 'full_sigb')           |
  * | emprestimos    | circulation_mode IN ('informal', 'full_sigb')           |
- * | emprestimos-lt | circulation_mode = 'full_sigb' (lotes = mecanique SIGB) |
  * | leitor         | toujours (recherche lecteur)                            |
  * | historico      | toujours (couche D.4 masque deja si circulation = off)  |
  * | contribuicoes  | membership_enabled ET circulation_mode != 'off'         |
@@ -38,13 +37,15 @@ export function usePanelAvailability() {
     const me = library?.membership_enabled === true;
     const allowsLoanFlow = cm === 'informal' || cm === 'full_sigb';
     const isFullSigb = cm === 'full_sigb';
+    // Les cles doivent correspondre aux `key` de ALL_TABS (PanelPage) : le
+    // filtre est `availability[key] !== false`, donc une cle absente ici rend
+    // l'onglet TOUJOURS visible (vecu refactor E.3 : 'emprestimos' non listee).
     return {
       'trabalho-do-dia': true,
       'acoes': true,
       'reservas': isFullSigb,
       'consultas-locais': allowsLoanFlow,
-      'emprestimos-livro': allowsLoanFlow,
-      'emprestimos-lote': isFullSigb,
+      'emprestimos': allowsLoanFlow,
       'leitor': true,
       'historico': true,
       'contribuicoes': me && cm !== 'off',

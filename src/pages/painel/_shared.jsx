@@ -197,7 +197,7 @@ export function TaskBucket({ title, tasks, setTab, onTaskAction }) {
                 <button className="ab-button ab-button--mini" onClick={() => setTab('reservas')}>{t({ id: 'panel.openReservations' })}</button>
               )}
               {tk.actionType === 'emprestimo' && (
-                <button className="ab-button ab-button--mini" onClick={() => setTab('emprestimos-livro')}>{t({ id: 'panel.openLoans' })}</button>
+                <button className="ab-button ab-button--mini" onClick={() => setTab('emprestimos')}>{t({ id: 'panel.openLoans' })}</button>
               )}
               {tk.actionType === 'consulta' && (
                 <button className="ab-button ab-button--mini" onClick={() => setTab('consultas-locais')}>{t({ id: 'panel.openConsultations' })}</button>
