@@ -308,3 +308,10 @@ tests/sql/cartographie_surface_taillee_tests.sql
 # fermees a anon+authenticated ; l'instrument reste entier (vues private
 # presentes, postgres garde EXECUTE). Ref. 20260902100917.
 tests/sql/conventions_console_fermee_tests.sql
+
+# Une aile jamais ouverte se ferme a cle (B20 lot circulation, 02/09/2026) :
+# les 8 api sans appelant + les 3 fn_v2_*_return* de public (chaine
+# d'agendamento jamais servie, 0 ligne) fermees a anon+authenticated ; les
+# jumelles cablees (negociation de creneau, calcul d'echeance, flux brouillon)
+# gardees ouvertes, couples schema+nom explicites. Ref. 20260902103305.
+tests/sql/circulation_couche_supplantee_tests.sql
