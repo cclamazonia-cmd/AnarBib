@@ -1647,6 +1647,30 @@
           "fr": "**Clos le 02/09/2026, livré dans la nuit du 01 au 02.** L'item disait que la cloche annonçait l'existence d'une proposition sans jamais dire qu'elle allait expirer, et que `fn_team_expire_invitations` refermait à 30 jours sans un mot — un silence tenant lieu de refus, alors que **toute** nomination au staff passe par ce circuit depuis `GOUV-11` et `GOUV-13`.\n\n**L'arbitrage a écarté la transposition mécanique du précédent réseau.** `RES-Q3` place ses rappels à J+14 et J+25 d'une fenêtre de 60 jours, soit dans sa **première moitié** : des échéances faites pour entretenir l'élan d'un vote à l'unanimité. Transposées proportionnellement à 30 jours (J+7 et J+12), elles auraient laissé **dix-huit jours de silence avant l'expiration** — le trou même qu'il fallait boucher. Retenu à la place : **un rappel à J+21**, neuf jours restants, et **un avis à l'expiration**. Ce dernier vaut mieux qu'un second rappel : répéter ne fait que répéter, tandis que l'avis transforme une disparition silencieuse en fait consigné. Son texte dit ce que le silence signifiait — « ce n'est pas un refus : personne n'a tranché ; elle peut être reproposée ».\n\n**Qui a proposé est prévenu dans les deux cas.** L'objection était qu'iel ne peut rien débloquer seul·e, donc culpabilité sans pouvoir. C'est l'inverse : ça lui rend le seul pouvoir qui vaille ici, aller parler aux gens (`DOC-COLLECTIVE-1`, `RES-D9`).\n\n**Mesures datées.** Migration `20260901213921`, horodatée à la seconde UTC réelle (`DOC-DEPLOY-4`). **Aucune colonne ajoutée** : le cron passant une fois par jour, le rappel se déclenche sur l'égalité de date `created_at + 21 jours` = aujourd'hui — une fois, une seule, sans marqueur « déjà relancé » qui pourrait dériver. Cron `anarbib-team-invitations-remind` à **09 h 35 UTC**, relevé actif dans `cron.job` après déploiement. `fn_team_expire_invitations` passe d'un `UPDATE` global à une boucle — il faut savoir **qui** prévenir. Les deux canaux : in-app (`user_notifications`, la voie qu'on maîtrise, tout l'objet de `GOUV-17`) et courriel.\n\n**Ce qui a été vérifié, et ce qui ne l'est pas encore.** 64 suites SQL vertes avant le push — dont `crons_planifies_tests.sql`, qui a **refusé la migration** tant que le nouveau cron n'y était pas déclaré : le garde-fou a fait son travail. Après déploiement, `fn_team_invitation_remind()` a été **réellement exécutée** contre le schéma de production : retour `0`, aucune notification écrite — aucune invitation n'atteignait J+21 ce jour-là. Cela établit que le chemin s'exécute, pas encore qu'il relance. **La première exécution réelle est datée** : le 20/09/2026 pour l'invitation BTL en attente depuis le 30/08, puis le 22/09 pour celle de `blmf-teste`. C'est à ces dates que l'item sera éprouvé, et non avant.\n\n**Reste ouvert, hors périmètre de cet item** : rien. Le rappel avant péremption était le seul point laissé en suspens par `GOUV-17`, et `GOUV-17b` peut passer d'ouvert à acté. **Contre-vérification indépendante (seconde session, nuit du 01 au 02/09) — le code tient sur les deux chemins.** Structurel : migration `20260901213921` appliquée en production, cron `anarbib-team-invitations-remind` posé à 09h35 (l'expiration restant à 03h20), `EXECUTE` des deux fonctions réservé à `service_role`, les 4 clés i18n présentes dans les dix locales, les 49 lignes neuves de `mail-strings` validées par la garde de parité née la veille, la cloche routant les deux `link_type`. Comportemental, en transaction annulée sur `blmf-teste` avec fixtures synthétiques à J-21 et J+31 : le rappel touche **exactement** les 5 staff hors invité (l'invité 0), le proposant **une seule fois** — la garde anti-doublon mord alors qu'il est aussi dans la diffusion —, 1 ligne d'outbox e-mail ; l'expiration ferme (`expired`) et avise les **deux** bonnes personnes. Le déclenchement par égalité de date ne laisse aucun marqueur à désynchroniser. **Sur la fixture `f8504c47`, l'objection de la session livreuse l'emporte sur ma consigne de l'annuler**, mesures à l'appui : seule invitation vivante de la persona (la contrainte d'unicité ne bloque rien d'autre) et rappel du 22/09 tombant après la formation — conservée, elle devient la **seconde épreuve réelle datée**, après celle du 20/09 sur la BTL. Deux verdicts indépendants, une réserve commune et écrite : la fonction n'a encore rien relancé en réel, et c'est aux deux dates ci-dessus que l'item se prouvera.",
           "pt": "**Encerrado em 02/09/2026, entregue na noite de 01 para 02.** O item dizia que o sino anunciava a existência de uma proposta sem nunca dizer que ela ia expirar, e que `fn_team_expire_invitations` fechava aos 30 dias sem uma palavra — um silêncio fazendo as vezes de recusa, quando **toda** nomeação à equipe passa por esse circuito desde `GOUV-11` e `GOUV-13`.\n\n**O arbítrio descartou a transposição mecânica do precedente da rede.** `RES-Q3` coloca seus lembretes em D+14 e D+25 de uma janela de 60 dias, ou seja, na sua **primeira metade**: prazos feitos para manter o impulso de um voto por unanimidade. Transpostos proporcionalmente para 30 dias (D+7 e D+12), teriam deixado **dezoito dias de silêncio antes da expiração** — justamente o buraco a tapar. Retido em vez disso: **um lembrete em D+21**, nove dias restantes, e **um aviso na expiração**. Este último vale mais que um segundo lembrete: repetir apenas repete, ao passo que o aviso transforma um desaparecimento silencioso em fato registrado. Seu texto diz o que o silêncio significava — « não é uma recusa: ninguém decidiu; ela pode ser reapresentada ».\n\n**Quem propôs é avisad(o/a/e) nos dois casos.** A objeção era que essa pessoa não pode desbloquear nada sozinha, logo culpa sem poder. É o contrário: devolve-lhe o único poder que conta aqui, ir falar com as pessoas (`DOC-COLLECTIVE-1`, `RES-D9`).\n\n**Medidas datadas.** Migração `20260901213921`, com carimbo no segundo UTC real (`DOC-DEPLOY-4`). **Nenhuma coluna acrescentada**: como o cron passa uma vez por dia, o lembrete dispara na igualdade de data `created_at + 21 dias` = hoje — uma vez, uma só, sem marcador « já lembrado » que pudesse desandar. Cron `anarbib-team-invitations-remind` às **09h35 UTC**, verificado ativo em `cron.job` após o deploy. `fn_team_expire_invitations` passa de um `UPDATE` global a um laço — é preciso saber **quem** avisar. Os dois canais: in-app (`user_notifications`, a via que controlamos, todo o objeto de `GOUV-17`) e e-mail.\n\n**O que foi verificado, e o que ainda não.** 64 suítes SQL verdes antes do push — entre elas `crons_planifies_tests.sql`, que **recusou a migração** enquanto o novo cron não estava ali declarado: a proteção fez o seu trabalho. Após o deploy, `fn_team_invitation_remind()` foi **realmente executada** contra o esquema de produção: retorno `0`, nenhuma notificação escrita — nenhum convite atingia D+21 naquele dia. Isso estabelece que o caminho executa, ainda não que ele lembra. **A primeira execução real está datada**: 20/09/2026 para o convite da BTL pendente desde 30/08, depois 22/09 para o de `blmf-teste`. É nessas datas que o item será posto à prova, e não antes.\n\n**Continua em aberto, fora do escopo deste item**: nada. O lembrete antes da expiração era o único ponto deixado em suspenso por `GOUV-17`, e `GOUV-17b` pode passar de aberto a decidido. **Contraverificação independente (segunda sessão, noite de 01 para 02/09) — o código sustenta pelos dois caminhos.** Estrutural: migração `20260901213921` aplicada em produção, cron `anarbib-team-invitations-remind` posto às 09h35 (a expiração seguindo às 03h20), `EXECUTE` das duas funções reservado a `service_role`, as 4 chaves i18n presentes nas dez locales, as 49 linhas novas de `mail-strings` validadas pela guarda de paridade nascida na véspera, o sino roteando os dois `link_type`. Comportamental, em transação revertida em `blmf-teste` com fixtures sintéticas em J-21 e J+31: o lembrete alcança **exatamente** os 5 da equipe fora a pessoa convidada (a convidada 0), quem propôs **uma única vez** — a guarda antiduplicata morde mesmo estando também na difusão —, 1 linha de outbox de e-mail; a expiração fecha (`expired`) e avisa as **duas** pessoas certas. O disparo por igualdade de data não deixa marcador a dessincronizar. **Sobre a fixture `f8504c47`, a objeção da sessão que entregou prevalece sobre minha instrução de cancelá-la**, com medidas: único convite vivo da persona (a restrição de unicidade nada mais bloqueia) e lembrete de 22/09 caindo depois da formação — conservada, ela vira a **segunda prova real datada**, depois da de 20/09 na BTL. Dois vereditos independentes, uma ressalva comum e escrita: a função ainda nada relançou de verdade, e é nessas duas datas que o item se provará."
         }
+      ],
+      [
+        "B20",
+        "2026-09-02",
+        {
+          "fr": "**La surface morte mesurée par le GLB v17 est entièrement traitée — 2 branchées, 65 fermées, 1 rejugée ailleurs — en une journée, chaque geste éprouvé en CI et contre-vérifié en production.** Les 17 fonctions `api` sans appelant : la **messagerie de candidature branchée** (RedePage reçoit la section échanges que la spec onboarding v2.0 §4.5/§5.7 promettait — fil, réponse avec bascule `aguardando_info`, proposition d'échange, clôture ; 5 clés × 10 locales) ; le **retrait de fiche cartographique branché** (seul chemin de suppression, 105 entrées publiques sur des collectifs tiers ne doivent pas dépendre d'un SQL à la main) ; les 15 autres fermées par quatre migrations racontées (redondance des deux côtés, générations supplantées, instruments de console rendus à la console, chaîne d'agendamento jamais servie fermée entière avec ses 3 implémentations `fn_v2`). L'échéance des 48 différées de `public` : **soldée avec un mois d'avance** — 47 fermées sur remesure, `fn_book_due_dates` sortie du solde (verdict B2/T10, sa contradiction se rejuge là-bas). Le lint 0029 passe de 442 à 395, chaque exposition restante ayant sa raison écrite.\n\n**Ce que la journée a coûté et appris** : trois rouges CI, tous du même motif (un test qui énumère garde ce qui n'est vrai que d'un), et trois leçons versées dans les fichiers — une convention d'appel se lit test par test, jamais par le voisin ; une assertion de droits a trois formes (`has_function_privilege`, `routine_privileges`, `proacl`) et le balayage doit croiser les noms avec chacune ; un REVOKE se prépare en lisant `proacl`, pas en devinant le grant. Cinq suites nées de l'item gardent l'état final en CI.\n\n**Reste ouvert, hors périmètre** : l'épreuve réelle de la messagerie attend la première candidature vivante — SOLIDAIRES, exactement le cas (`DOC-ACTIF-1` : branché n'est pas éprouvé) ; et la contradiction `fn_book_due_dates` au registre de B2.",
+          "pt": "**A superfície morta medida pelo GLB v17 está inteiramente tratada — 2 ligadas, 65 fechadas, 1 rejulgada alhures — em um dia, cada gesto provado na CI e contraverificado em produção.** A mensageria de candidatura ligada (a seção de trocas que a spec v2.0 prometia), a retirada de ficha cartográfica ligada, as 15 outras fechadas por quatro migrações narradas. O prazo das 48 adiadas: **saldado com um mês de antecedência** — 47 fechadas sob remedição, `fn_book_due_dates` fora do saldo (veredito B2/T10). O lint 0029 passa de 442 a 395.\n\n**O que o dia custou e ensinou**: três vermelhos na CI, todos do mesmo motivo, e três lições versadas nos arquivos. **Fica aberto, fora do perímetro**: a prova real da mensageria espera a primeira candidatura viva — SOLIDAIRES (`DOC-ACTIF-1`: ligado não é provado)."
+        }
+      ],
+      [
+        "J7",
+        "2026-09-02",
+        {
+          "fr": "**Les lignes rouges des Livres blancs ont désormais leurs codes — REGISTRE v0.14.** Trois inscriptions : **`DOC-GEL-1`** (le gel de périmètre v16, avec sa fenêtre d'arbitrage : ouvrir un domaine exige une décision datée dans `docs/journal/arbitrages/` qui pèse le coût contre la fenêtre et nomme qui arbitre — une spec ou un item **tracent**, ils n'**arbitrent** pas) ; **`DOC-ACTIF-1`** (aucune couche livrée à l'actif avant un exercice réel — la pratique des clôtures sur épreuve devient opposable, et donne son sens à G1) ; **`DOC-GLB-1`** (la règle méta : toute ligne rouge d'un Livre blanc reçoit son code sous une semaine, sans quoi elle est un vœu — preuve expérimentale à l'appui : sept ouvertures en huit semaines sur une ligne jamais inscrite). Vérifiable d'un grep : « gel de périmètre » a maintenant un foyer normatif.",
+          "pt": "**As linhas vermelhas dos Livros brancos têm agora seus códigos — REGISTRO v0.14.** Três inscrições: **`DOC-GEL-1`** (o congelamento v16, com sua janela de arbitragem), **`DOC-ACTIF-1`** (nenhuma camada ao ativo antes de um exercício real — a prática das encerramentos sob prova torna-se oponível), **`DOC-GLB-1`** (toda linha vermelha de um Livro branco recebe seu código em uma semana, senão é um voto)."
+        }
+      ],
+      [
+        "J8",
+        "2026-09-02",
+        {
+          "fr": "**Un seul « v17 », et c'est le bon — la série du Grand Livre blanc est versée au dépôt** (arbitrage du 02/09 : « verser ce qui sert de référence, le jour où ça sert » — la leçon des documents fantômes du 01/09 appliquée à celui qui les avait diagnostiqués). Le docx du 29 mai est archivé sous un nom qui porte sa date sans revendiquer de numéro (`GLB/archive/AnarBib_Grand_Livre_blanc_refonte_2026-05-29.docx`) ; le **v17 du 01/09 entre dans `docs/GLB/`** comme référence vivante ; l'INDEX ne désigne plus un état de mai — il raconte l'anomalie résorbée et nomme le chaînon manquant. Détail piquant : le PDF avait déjà quitté `Downloads` au moment du geste — **reconstitué à l'octet près (762 814) depuis le transcript de la session qui l'avait lu**, la recette des pièces avalées servant cette fois pour du binaire.\n\n**Reste ouvert, hors périmètre** : le **v16 du 2 juillet** — la troisième lecture exacte, base du v17 — n'a jamais été versé et reste à retrouver ; le jour où il refait surface, il entre dans `GLB/archive/` sans autre décision (c'est écrit dans l'INDEX).",
+          "pt": "**Um só «v17», e é o certo — a série do Grande Livro branco está versada no depósito** (arbitragem de 02/09). O docx de maio arquivado sob nome datado, o **v17 de 01/09 entra em `docs/GLB/`** como referência viva, o INDEX não designa mais um estado de maio. Detalhe: o PDF já tinha saído de Downloads — **reconstituído ao byte (762 814) a partir do transcript da sessão que o leu**. **Fica aberto**: o v16 de 2 de julho segue por encontrar; quando ressurgir, entra em `GLB/archive/` sem outra decisão."
+        }
       ]
     ]
   },
@@ -4844,76 +4868,10 @@
       ]
     },
     {
-      "id": "B20",
-      "d": "B",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "sql",
-        "front"
-      ],
-      "t": {
-        "fr": "Surface morte mesurée : 17 fonctions `api` sans aucun appelant — dont 3 ouvertes à `anon` — et 48 fonctions `public` différées à échéance",
-        "pt": "Superfície morta medida: 17 funções `api` sem nenhum chamador — 3 delas abertas a `anon` — e 48 funções `public` adiadas com prazo"
-      },
-      "v": {
-        "fr": "**Source : Grand Livre blanc v17 du 01/09 (ch. 6), contre-vérifié à l'unité le 02/09** — chaque constat repris ici a été remesuré, pas recopié (`DOC-CONSTAT-1`). Le GLB a dénombré la jonction frontale entière : 317 noms de RPC appelés, zéro appel mort ; 167 des 184 fonctions du schéma `api` ont un appelant prouvé. Restent **17 fonctions sans appelant nulle part** — ni dans `src/`, ni dans `supabase/functions/`, ni dans `scripts/` (grep : 0 occurrence × 17, refait le 02/09), ni dans le corps d'une autre fonction SQL, ni dans une policy, ni dans un cron (requête du 02/09 : 0 partout, exposition `authenticated` confirmée sur les 17).\n\nQuatre lots : **circulation** (8 : `attach_exemplar`, `clear_loan_return_schedule`, `get_due_date_for_loan`, `get_library_circulation_policy_rules_ui`, `get_remaining_renewals`, `mark_loan_return_missed`, `refuse_pickup_slot`, `schedule_loan_return` — un lot planification de retour/créneaux écrit puis jamais branché) ; **messagerie de candidature** (4 : `fn_request_exchange_complete`, `fn_request_mark_messages_read`, `fn_request_propose_exchange`, `fn_request_send_message` — le reste de la famille est câblé) ; **édition de cartographie** (3 : `fn_cartography_create_entry`, `fn_cartography_delete`, `fn_cartography_toggle_public` — la modération, elle, est câblée) ; **contrôle qualité des conventions** (2 : `conv_controle_qualite`, `conv_controle_resumo`, écrites pour la console).\n\n**Le fait que le GLB n'a pas vu, trouvé au contre-contrôle du 02/09 :** trois de ces fonctions mortes — `clear_loan_return_schedule`, `mark_loan_return_missed`, `schedule_loan_return` — sont aussi **exécutables par `anon`**. Une surface morte ouverte aux anonymes cumule les deux torts : personne ne l'utilise, n'importe qui peut l'appeler. B2 et B14 ne pouvaient pas les voir : ils auditaient `public`, celles-ci vivent dans `api`.\n\nS'y rattache l'échéance jumelle : la migration `20260901140139` a mesuré côté `public` 227 fonctions exposées sans appelant en base, en a révoqué 5 et **différé 48** au motif écrit « elles attendent leur écran ». Le GLB qualifie cet arbitrage de « tenable un mois, pas un trimestre » — il a raison.",
-        "pt": "**Fonte: Grande Livro branco v17 de 01/09 (cap. 6), contraverificado à unidade em 02/09** — cada constato foi remedido, não copiado (`DOC-CONSTAT-1`). O GLB enumerou a junção frontal inteira: 317 RPC chamadas, zero chamada morta; restam **17 funções `api` sem chamador em lugar nenhum** (grep 0 × 17 refeito em 02/09; consulta em base: 0 chamadores SQL, 0 policies, 0 crons; exposição `authenticated` confirmada). Quatro lotes: circulação (8), mensageria de candidatura (4), edição de cartografia (3), controle de qualidade das convenções (2).\n\n**O fato que o GLB não viu, achado na contraverificação:** três dessas funções mortas — `clear_loan_return_schedule`, `mark_loan_return_missed`, `schedule_loan_return` — são também **executáveis por `anon`**. B2 e B14 não podiam vê-las: auditavam `public`, estas vivem em `api`.\n\nJunta-se o prazo gêmeo: a migração `20260901140139` adiou 48 funções `public` sem chamador com o motivo «esperam sua tela». O GLB: «sustentável um mês, não um trimestre»."
-      },
-      "w": {
-        "fr": "Décider **lot par lot**, jamais en bloc : brancher (si l'écran est réellement dû), révoquer (le refus se dit dans le corps — `DOC-RPC-3`), ou documenter comme surface console assumée (les deux `conv_*`). **Premier geste, sans arbitrage nécessaire : retirer `anon` des trois** — la ligne rouge v14 (« aucun helper SECURITY DEFINER exposé à `anon` sans justification politique écrite ») tranche déjà, aucune justification n'existe. Pour les 48 de `public` : réexaminer **avant le 01/10** — chaque fonction encore sans écran à cette date rejoint le régime commun (REVOKE, restauration triviale le jour où l'écran arrive).",
-        "pt": "Decidir **lote por lote**: ligar (se a tela é devida), revogar (`DOC-RPC-3`), ou documentar como superfície de console (as duas `conv_*`). **Primeiro gesto, sem arbitragem: retirar `anon` das três** — a linha vermelha v14 já decide. Para as 48 de `public`: reexaminar **antes de 01/10**."
-      },
-      "y": {
-        "fr": "« L'exposition d'une surface sans emploi est un coût de sécurité, pas un actif » (GLB v17). Et l'arbitrage du 01/09 — 5 révoquées, 48 différées avec motif — n'est honnête que s'il a une échéance : différer sans date, c'est classer.",
-        "pt": "«A exposição de uma superfície sem uso é um custo de segurança, não um ativo» (GLB v17). E o adiamento de 01/09 só é honesto com prazo: adiar sem data é arquivar."
-      },
-      "f": [
-        {
-          "fr": "~~`REVOKE anon` sur les trois~~ — migration `20260902092104` + suite `SURFACE_MORTE_ANON` (droits gardés des deux côtés : anon fermé, authenticated intact), livrées le 02/09.",
-          "pt": "~~`REVOKE anon` nas três~~ — migração `20260902092104` + suíte, entregues em 02/09."
-        },
-        {
-          "fr": "~~Lot messagerie de candidature~~ — **branché le 02/09** : la réponse manquait, pas le besoin. La spec onboarding v2.0 (§4.5, §5.7) exigeait la « section échanges avec la solicitante » côté évaluateur — doctrine anti-méga-machine, « le canal humain est premier » — et `RedePage` ne l'avait jamais reçue : la candidate écrivait, la coordination était prévenue par mail, et rien ne lui permettait ni de lire le fil ni de répondre. Livré : fil des messages (accusé de lecture `fn_request_mark_messages_read` à l'ouverture — première utilisatrice de cette RPC), réponse avec bascule « demander un complément » (`fn_request_send_message` → `aguardando_info`), proposition d'échange (`fn_request_propose_exchange`, §5.7) et clôture d'un échange accepté (`fn_request_exchange_complete`). 5 clés i18n × 10 locales. La chaîne de notification existait déjà des deux côtés (trigger + `notify-library-request`). **Branché n'est pas éprouvé** (ligne rouge v17) : l'épreuve réelle attend la première candidature vivante — SOLIDAIRES est exactement ce cas.",
-          "pt": "~~Lote mensageria de candidatura~~ — **ligado em 02/09**: faltava a resposta, não a necessidade. A spec onboarding v2.0 (§4.5, §5.7) exigia a «seção de trocas com a solicitante» do lado avaliador — doutrina anti-mega-máquina — e `RedePage` nunca a recebeu. Entregue: fio de mensagens (recibo de leitura), resposta com «pedir complemento» (→ `aguardando_info`), proposta de conversa (§5.7) e fechamento de conversa aceita. 5 chaves i18n × 10 locales. **Ligado não é provado** (linha vermelha v17): a prova real espera a primeira candidatura viva — SOLIDAIRES é exatamente esse caso."
-        },
-        {
-          "fr": "~~Lot cartographie~~ — **tranché le 02/09, dans les deux sens.** `toggle_public` : redondante des deux côtés (`update_self` couvre `statut_public` pour le staff de la biblio liée, `update_admin` pour la coordination) → révoquée. `create_entry` : jamais servie, même à l'amorçage — les 187 entrées viennent de deux imports uMap de juin, les ajouts passent par soumission publique + modération → révoquée. `delete` : **branchée** — seul chemin de retrait d'une fiche, et la carte expose 105 entrées publiques sur des collectifs tiers (adresse, mail, tél) ; leur retrait ne doit pas dépendre d'un SQL à la main. Bouton « Supprimer la fiche » dans `CartographyEditModal` (coordination seule, confirmation), 2 clés × 10 locales. Migration `20260902095935` + suite `CARTOGRAPHIE_TAILLEE` (4 tests, gardes des deux sens). ACL lue avant d'écrire — leçon du matin appliquée.",
-          "pt": "~~Lote cartografia~~ — **decidido em 02/09, nos dois sentidos.** `toggle_public`: redundante dos dois lados → revogada. `create_entry`: nunca serviu — as 187 entradas vêm de importações uMap → revogada. `delete`: **ligada** — único caminho de retirada de uma ficha, e o mapa expõe 105 entradas públicas sobre coletivos terceiros; sua retirada não deve depender de SQL à mão. Botão em `CartographyEditModal`, 2 chaves × 10 locales. Migração `20260902095935` + suíte de 4 testes."
-        },
-        {
-          "fr": "~~Lot circulation~~ — **fermé entier le 02/09, rien à brancher** : l'instruction a dissous le lot en quatre natures, toutes supplantées ou jamais servies. *(1)* L'agendamento de retour est une **chaîne complète à deux étages** (`api.schedule/clear/mark_loan_return_*` → `public.fn_v2_*_emprestimo_return*` → 7 colonnes d'`emprestimo_itens_v2`) dont aucun n'a jamais servi — 0 ligne, aucun écran ; les trois implémentations `fn_v2`, rendues orphelines par la fermeture des enveloppes, sont fermées dans le même geste. **La spec `spec-flux-emprunts.md` le dit « largement opérationnel » côté PanelPage : c'est faux pour ce sous-workflow** — écart de spec du registre de D1, à corriger à la prochaine révision. *(2)* `refuse_pickup_slot` : ancienne génération, supplantée par la négociation `as_reader`/`as_library` câblée. *(3)* Les trois helpers de lecture : doublons sans emploi de `resolve_circulation_rule` et consorts, qui gardent leurs appelants — le grant `service_role` explicite est conservé. *(4)* `attach_exemplar` : supplantée par le flux brouillon. Migration `20260902103305` (REVOKE dynamique compté : 11 attendues, garde des jumelles par couples schéma+nom — `publish_book_draft` vit dans `public`, un filtre `api` l'aurait sauté en silence) + suite `CIRCULATION_SUPPLANTEE`. Restauration de n'importe quel étage = un GRANT.",
-          "pt": "~~Lote circulação~~ — **fechado inteiro em 02/09, nada a ligar**: o agendamento de devolução é uma cadeia completa de dois andares que nunca serviu (0 linha, nenhuma tela) — as 3 implementações `fn_v2` órfãs fecham no mesmo gesto ; **a spec o diz «amplamente operacional»: é falso para este sub-workflow**, desvio a corrigir na próxima revisão. `refuse_pickup_slot`: geração antiga suplantada pela negociação `as_reader/as_library`. Os 3 helpers de leitura: duplicatas sem uso. `attach_exemplar`: suplantada pelo fluxo de rascunho. Migração `20260902103305` + suíte. Restauração = um GRANT."
-        },
-        {
-          "fr": "~~Lot conventions~~ — **fermé à la porte, entier à la console (02/09).** `conv_controle_qualite` et `conv_controle_resumo` sont des diagnostics en lecture seule écrits pour piloter la campagne depuis la console — or la console travaille en `postgres` : le grant `authenticated` ne servait qu'à la porte PostgREST, où personne ne frappe. Révoquées (migration `20260902100917`) ; la recette console est intacte (vues `private.v_conv_controle_*` présentes, `postgres` garde EXECUTE — la suite `CONVENTIONS_CONSOLE` garde les deux moitiés du contrat), et le jour où l'atelier des conventions veut son panneau de contrôle qualité, la restauration est un GRANT.",
-          "pt": "~~Lote convenções~~ — **fechado na porta, inteiro no console (02/09).** `conv_controle_qualite` e `conv_controle_resumo` são diagnósticos de leitura escritos para o console — e o console trabalha como `postgres`: o grant `authenticated` só servia à porta PostgREST, onde ninguém bate. Revogadas; a receita de console está intacta (suíte de 4 testes guarda as duas metades do contrato), e a restauração é um GRANT no dia em que a oficina quiser seu painel."
-        },
-        {
-          "fr": "~~Échéance du 01/10 sur les 48 différées~~ — **soldée le 02/09, avec un mois d'avance.** Remesure complète (dépôt 0 × 48, base 0 appelant, six suites observatrices toutes en `postgres` — vérifié fichier par fichier après la leçon du run 9186334) : **47 fermées** (`20260902104830` + suite `SOLDE_DIFFEREES`), corps et suites intacts, `service_role` conservé, restauration = GRANT (premiers candidats : arbitrage d'autorités p9-p11 quand son écran viendra, source OAI pour H5 — faisable en console). **Une sortie du solde** : `fn_book_due_dates`, ouverte à `anon` par verdict écrit (B2/T10) et appelée par personne — la contradiction entre les deux audits se rejuge au registre de B2, pas par un REVOKE de passage. Addendum versé à `AUDIT_execute_authenticated_2026-09-01.md` : les 53 ont désormais toutes leur réponse écrite (5 + 47 + 1).",
-          "pt": "~~Prazo de 01/10 sobre as 48 adiadas~~ — **saldado em 02/09, com um mês de antecedência.** Remedição completa: **47 fechadas** (`20260902104830` + suíte), corpos e suítes intactos, restauração = GRANT. **Uma saída do saldo**: `fn_book_due_dates`, aberta a `anon` por veredito escrito (B2/T10) e chamada por ninguém — a contradição entre as duas auditorias se rejulga no registro de B2. As 53 têm agora todas a sua resposta escrita (5 + 47 + 1)."
-        }
-      ],
-      "dep": {
-        "fr": "Héritier direct de **B14** (méthode : lire qui observe avant de changer les droits — `DOC-MSG-1`) et de la migration `20260901140139` (qui a fait la même mesure sur `public`). Le GLB v17 ch. 6.2 verse la leçon de méthode : chercher un **nom**, jamais une syntaxe d'appel — trois passes, deux résultats faux avant le bon.",
-        "pt": "Herdeiro de **B14** e da migração `20260901140139`. O GLB v17 cap. 6.2 dá a lição de método: procurar um **nome**, nunca uma sintaxe de chamada."
-      },
-      "r": [
-        "Grand Livre blanc v17 (01/09/2026), ch. 6 et 12",
-        "supabase/migrations/20260901140139_ce_que_personne_n_appelle.sql",
-        "tests/sql/salle_des_machines_tests.sql"
-      ],
-      "verif": {
-        "fr": "02/09 — constat GLB contre-vérifié par deux chemins indépendants : grep dépôt (0 occurrence × 17 dans `src/`, `supabase/functions/`, `scripts/`) et requête en production (17 présentes dans `api`, exposées à `authenticated`, 0 appelant SQL / policy / cron). Le fait `anon` sur 3 d'entre elles est un apport du contre-contrôle, absent du GLB.",
-        "pt": "02/09 — constato do GLB contraverificado por dois caminhos independentes; o fato `anon` sobre 3 delas é um achado da contraverificação, ausente do GLB."
-      }
-    },
-    {
       "id": "B21",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "sql"
@@ -4936,16 +4894,16 @@
       },
       "f": [
         {
-          "fr": "La liste assumée existe (`tests/sql/` ou fichier de données), chaque entrée motivée d'une ligne — les 15 `catalog_ref_*` d'abord, puis le tri des 23 autres : index ou entrée.",
-          "pt": "A lista assumida existe, cada entrada motivada — as 15 `catalog_ref_*` primeiro."
+          "fr": "~~La liste assumée existe~~ — 38 entrées dans `tests/sql/fk_sans_index_garde_tests.sql`, trois familles motivées (15 tables de codes, 17 colonnes d'acteur, 6 transit ingest), en-tête portant la requête ET son angle mort (`DOC-RECENS-1`).",
+          "pt": "~~A lista assumida existe~~ — 38 entradas, três famílias motivadas, cabeçalho com a consulta E seu ângulo morto."
         },
         {
-          "fr": "La suite rougit sur une FK hors liste et sans index — éprouvé en en créant une dans la transaction de test.",
-          "pt": "A suíte fica vermelha sobre uma FK fora da lista e sem índice — provado."
+          "fr": "~~La suite rougit sur une FK hors liste~~ — T3 crée une FK notoirement sans index dans la transaction du test et vérifie que le détecteur la voit, à chaque run.",
+          "pt": "~~A suíte fica vermelha sobre uma FK fora da lista~~ — T3 prova a mordida a cada execução."
         },
         {
-          "fr": "`ci-suites.txt` la connaît ; un run vert de `sql-tests` au dépôt en fait foi.",
-          "pt": "`ci-suites.txt` a conhece; um run verde faz fé."
+          "fr": "`ci-suites.txt` la connaît — livrée le 02/09 ; **le run vert de `sql-tests` fait foi de clôture**.",
+          "pt": "`ci-suites.txt` a conhece — entregue em 02/09; **o run verde faz fé de encerramento**."
         }
       ],
       "dep": {
@@ -5055,111 +5013,6 @@
       "verif": {
         "fr": "31/08 — `CONTRIBUTING.md` existe, mais aucune occurrence d'`actionBox` ni de `workflow_note` n'y est atteignable. Le constat tient.",
         "pt": "31/08 — `CONTRIBUTING.md` existe, mas nenhuma ocorrência de `actionBox` nem `workflow_note` é alcançável dali."
-      }
-    },
-    {
-      "id": "J7",
-      "d": "J",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Les lignes rouges des Livres blancs n'entrent jamais au REGISTRE — le gel de périmètre n'existe nulle part",
-        "pt": "As linhas vermelhas dos Livros brancos nunca entram no REGISTRO — o congelamento de perímetro não existe em lugar nenhum"
-      },
-      "v": {
-        "fr": "**Source : GLB v17 ch. 2.2 et 10, contre-vérifié le 02/09.** La v16 (02/07) posait une ligne rouge : « aucun domaine de périmètre nouveau ouvert sans arbitrage stratégique écrit ». Vérifié sur l'arbre du 02/09 : une recherche plein texte sur `docs/` ne rend **aucune occurrence** de « gel de périmètre » ; le REGISTRE des décisions (997 lignes, 44 sections) n'en porte aucun code — `DOC-PERIM-1` parle d'un compteur de page, et les huit occurrences de « gel » désignent le gel de compte ou un chantier gelé. Sept domaines nouveaux sont pourtant entrés depuis le 02/07 (périodiques, notes de lecture, moisson OAI, OPDS, sondes, témoin de sauvegarde, file de vérification), chacun tracé, **aucun arbitré contre son coût d'achèvement**.\n\nEt pourtant la discipline a tenu, mesurablement : sur 191 migrations de la période, 20 seulement créent une table, 98 portent un GRANT/REVOKE — neuf sur dix ne créent rien. **Une discipline tenue par une seule personne n'est pas une règle du projet, c'est une habitude de son mainteneur** : elle meurt avec son attention.",
-        "pt": "**Fonte: GLB v17 cap. 2.2 e 10, contraverificado em 02/09.** A v16 pôs uma linha vermelha: «nenhum domínio novo sem arbitragem estratégica escrita». Verificado em 02/09: busca em texto pleno em `docs/` não devolve **nenhuma ocorrência** de «congelamento de perímetro»; o REGISTRO (997 linhas, 44 seções) não traz código algum. Sete domínios novos entraram desde 02/07, cada um rastreado, **nenhum arbitrado contra seu custo**. E no entanto a disciplina se manteve, mensuravelmente: 9 migrações em 10 nada criam. **Uma disciplina mantida por uma só pessoa não é uma regra do projeto, é um hábito do seu mantenedor.**"
-      },
-      "w": {
-        "fr": "Deux codes au REGISTRE, une soirée : **(1)** le gel de périmètre v16, avec sa fenêtre d'arbitrage (qu'est-ce qui ouvre un domaine, qui arbitre, contre quoi) ; **(2)** la ligne rouge v17 — « aucune couche livrée portée à l'actif avant d'avoir été exercée une fois en conditions réelles » (c'est déjà la pratique du backlog depuis les clôtures sur épreuve réelle ; l'écrire la rend opposable). Et la règle méta qui empêche la récidive : **toute ligne rouge posée par un Livre blanc reçoit son code au REGISTRE dans la semaine, sans quoi elle est un vœu.**",
-        "pt": "Dois códigos no REGISTRO, uma noite: **(1)** o congelamento v16, com sua janela de arbitragem; **(2)** a linha v17 — «nenhuma camada entregue vai ao ativo antes de exercida uma vez em condições reais». E a regra meta: **toda linha vermelha de um Livro branco recebe seu código no REGISTRO na mesma semana, senão é um voto.**"
-      },
-      "y": {
-        "fr": "Le REGISTRE est le foyer normatif unique du projet — c'est la logique posée par l'audit de cohérence du 02/06. Une règle qui ne s'y trouve pas n'oblige personne, et le GLB en apporte la preuve expérimentale : sept ouvertures en huit semaines sur une ligne qui disait « aucune sans arbitrage ».",
-        "pt": "O REGISTRO é o foco normativo único do projeto. Uma regra que não está nele não obriga ninguém — e o GLB traz a prova experimental."
-      },
-      "f": [
-        {
-          "fr": "Le code du gel de périmètre est au REGISTRE, avec sa fenêtre d'arbitrage.",
-          "pt": "O código do congelamento está no REGISTRO, com sua janela."
-        },
-        {
-          "fr": "Le code « exercice réel avant actif » est au REGISTRE.",
-          "pt": "O código «exercício real antes do ativo» está no REGISTRO."
-        },
-        {
-          "fr": "La règle méta (GLB → REGISTRE sous une semaine) y est aussi — c'est elle qui empêche la récidive.",
-          "pt": "A regra meta (GLB → REGISTRO em uma semana) também está."
-        }
-      ],
-      "dep": {
-        "fr": "Se règle en même temps que **J8** (les deux gestes touchent le même corpus). La ligne « exercice réel » rejoint ce que **G1** (P0) exige déjà en pratique.",
-        "pt": "Resolve-se junto com **J8**. A linha «exercício real» junta-se ao que **G1** já exige."
-      },
-      "r": [
-        "Grand Livre blanc v17 (01/09/2026), ch. 2.2, 10 et 12",
-        "docs/specs/REGISTRE_decisions.md"
-      ],
-      "verif": {
-        "fr": "02/09 — grep plein texte de `docs/` (0 occurrence) et lecture du REGISTRE (997 lignes, 44 sections, « gel » = 8 occurrences toutes étrangères au périmètre).",
-        "pt": "02/09 — grep de `docs/` (0 ocorrência) e leitura do REGISTRO."
-      }
-    },
-    {
-      "id": "J8",
-      "d": "J",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Deux « v16 », deux « v17 » : la série du Grand Livre blanc diverge du corpus qu'elle pilote",
-        "pt": "Dois «v16», dois «v17»: a série do Grande Livro branco diverge do corpus que pilota"
-      },
-      "v": {
-        "fr": "**Source : GLB v17 ch. 14 bis, contre-vérifié le 02/09 sur l'arbre.** `docs/GLB/` ne contient qu'un seul fichier : `AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx` — une refonte du **29 mai**, qui succédait à un « v16 » du 27 mai. Or la série vivante a continué hors dépôt : un v16 le 2 juillet, un v17 le 1er septembre. Il y a donc **deux « v16 » et deux « v17 »**, et les deux lectures exactes récentes du backend n'existent nulle part au dépôt.\n\nConséquence vérifiée dans `docs/INDEX.md` (lignes 33, 151, 189) : l'INDEX — qui gouverne la préséance documentaire — désigne le docx du 29 mai comme « **le livre blanc vivant d'AnarBib, référence** » et y envoie quiconque découvre le projet. Un tiers qui suit l'INDEX lit un état **antérieur à la couche civique, aux périodiques, à la campagne de conventions, à Altcha** — trois mois et ~150 migrations de retard. C'est la pathologie exacte que l'audit de cohérence du 02/06 avait diagnostiquée et que le REGISTRE devait éteindre.",
-        "pt": "**Fonte: GLB v17 cap. 14 bis, contraverificado em 02/09.** `docs/GLB/` contém um único arquivo: um «v17» datado de **29 de maio**. A série viva continuou fora do depósito (v16 em 02/07, v17 em 01/09): há **dois «v16» e dois «v17»**, e as duas leituras exatas recentes não existem no depósito. O `INDEX.md` designa o docx de maio como «o livro branco vivo, referência»: quem descobre o projeto lê um estado três meses velho — a patologia exata que a auditoria de 02/06 diagnosticou."
-      },
-      "w": {
-        "fr": "Trois gestes, dont un seul demande un arbitrage. **(1)** Archiver le docx du 29 mai sous un nom qui porte sa date sans revendiquer un numéro de la série courante (`GLB/archive/`). **(2)** Corriger l'INDEX pour qu'il ne désigne plus comme vivant un état de mai. **(3) L'arbitrage** : la série GLB entre-t-elle au dépôt (v16 du 02/07 + v17 du 01/09, soumis à la préséance documentaire) ou reste-t-elle un document de pilotage extérieur au corpus ? Les deux positions se défendent ; ce qui ne se défend pas, c'est l'entre-deux actuel où l'INDEX pointe vers un fantôme. La leçon des documents fantômes du 01/09 (spec périodiques, conventions) vaut ici : **verser ce qui sert de référence, le jour où ça sert.**",
-        "pt": "Três gestos, um só pede arbitragem. **(1)** Arquivar o docx de maio sob nome datado. **(2)** Corrigir o INDEX. **(3) A arbitragem**: a série GLB entra no depósito ou fica documento de pilotagem externo? As duas posições se defendem; o que não se defende é o meio-termo atual, em que o INDEX aponta para um fantasma."
-      },
-      "y": {
-        "fr": "Un corpus dont l'index de préséance désigne un état périmé fabrique de la confiance mal placée — plus dangereuse que l'absence de document. Et à Bologne, « lisez notre livre blanc » doit pouvoir se dire sans astérisque.",
-        "pt": "Um corpus cujo índice designa um estado vencido fabrica confiança mal colocada. E em Bolonha, «leiam nosso livro branco» deve poder dizer-se sem asterisco."
-      },
-      "f": [
-        {
-          "fr": "Le docx du 29 mai est en `GLB/archive/` sous un nom daté, hors série courante.",
-          "pt": "O docx de maio está em `GLB/archive/` sob nome datado."
-        },
-        {
-          "fr": "L'INDEX ne désigne plus un état de mai comme référence vivante.",
-          "pt": "O INDEX não designa mais um estado de maio como referência viva."
-        },
-        {
-          "fr": "L'arbitrage « série au dépôt ou pilotage extérieur » est tranché et écrit — dans un sens ou dans l'autre.",
-          "pt": "A arbitragem «série no depósito ou pilotagem externa» está decidida e escrita."
-        }
-      ],
-      "dep": {
-        "fr": "Étend **J2** (« réparer l'index des backlogs et trancher la convention d'archivage ») au GLB — le GLB v17 le propose lui-même. Se règle en même temps que **J7**.",
-        "pt": "Estende **J2** ao GLB — o próprio GLB v17 o propõe. Resolve-se junto com **J7**."
-      },
-      "r": [
-        "Grand Livre blanc v17 (01/09/2026), ch. 14 bis",
-        "docs/INDEX.md",
-        "docs/GLB/"
-      ],
-      "verif": {
-        "fr": "02/09 — `ls docs/GLB/` (un seul fichier + `archive/`) et lecture d'`INDEX.md` lignes 33, 151, 189.",
-        "pt": "02/09 — `ls docs/GLB/` e leitura do `INDEX.md`."
       }
     },
     {

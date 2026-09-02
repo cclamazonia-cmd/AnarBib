@@ -322,3 +322,11 @@ tests/sql/circulation_couche_supplantee_tests.sql
 # solde (verdict B2/T10, ouverte a anon par decision ecrite) ; les chemins
 # vivants des memes familles restent ouverts. Ref. 20260902104830.
 tests/sql/solde_des_differees_tests.sql
+
+# Le garde des cles etrangeres sans index (B21, 02/09/2026) : un chantier de
+# dette structurelle se solde par un garde, pas par une campagne (doctrine
+# v17). 38 entrees assumees en trois familles motivees ; garde dans les deux
+# sens (T1 la dette n'entre plus sans acte, T2 la liste ne retrecit que
+# consciemment) ; T3 prouve la morsure sur une FK neuve creee dans la
+# transaction du test. Ref. item B21.
+tests/sql/fk_sans_index_garde_tests.sql

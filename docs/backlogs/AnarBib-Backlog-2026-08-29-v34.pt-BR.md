@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 80 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 77 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 10
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -24,7 +24,7 @@
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 4
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 4
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **1º de setembro de 2026**, refeito por inteiro — o anterior era de 29 de agosto e metade dos seus números havia mudado em três dias. Banco de produção `uflwmikiyjfnikiphtcp` consultado em somente-leitura; repositório `codeberg.org/anarbib/anarbib` no commit `de66d94d`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é a razão pela qual estão datados. **A data deste título é gerada a partir desta fonte**: estava fixada no script até 01/09, e por isso o título anunciava « 29 de agosto » acima de uma tabela que já não era.
 
-**Frescor dos constatos em 2026-09-01.** **58 itens de 80** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, B20, B21, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, J7, J8, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **55 itens de 77** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, B21, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -376,8 +376,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Em curso |
 | **B18** | Desativar as chaves de API legadas — o sinal verde é um número, não uma data | `P1` | Aberto |
 | **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
-| **B20** | Superfície morta medida: 17 funções `api` sem nenhum chamador — 3 delas abertas a `anon` — e 48 funções `public` adiadas com prazo | `P1` | Em curso |
-| **B21** | A guarda das chaves estrangeiras sem índice: instrumentar o contador, não mais saldá-lo | `P2` | Aberto |
+| **B21** | A guarda das chaves estrangeiras sem índice: instrumentar o contador, não mais saldá-lo | `P2` | Em curso |
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
 
@@ -595,38 +594,9 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 *Remissões : `item B18`*
 
-#### B20 — Superfície morta medida: 17 funções `api` sem nenhum chamador — 3 delas abertas a `anon` — e 48 funções `public` adiadas com prazo
-
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
-
-**Estado.** **Fonte: Grande Livro branco v17 de 01/09 (cap. 6), contraverificado à unidade em 02/09** — cada constato foi remedido, não copiado (`DOC-CONSTAT-1`). O GLB enumerou a junção frontal inteira: 317 RPC chamadas, zero chamada morta; restam **17 funções `api` sem chamador em lugar nenhum** (grep 0 × 17 refeito em 02/09; consulta em base: 0 chamadores SQL, 0 policies, 0 crons; exposição `authenticated` confirmada). Quatro lotes: circulação (8), mensageria de candidatura (4), edição de cartografia (3), controle de qualidade das convenções (2).
-
-**O fato que o GLB não viu, achado na contraverificação:** três dessas funções mortas — `clear_loan_return_schedule`, `mark_loan_return_missed`, `schedule_loan_return` — são também **executáveis por `anon`**. B2 e B14 não podiam vê-las: auditavam `public`, estas vivem em `api`.
-
-Junta-se o prazo gêmeo: a migração `20260901140139` adiou 48 funções `public` sem chamador com o motivo «esperam sua tela». O GLB: «sustentável um mês, não um trimestre».
-
-*Verificado : 02/09 — constato do GLB contraverificado por dois caminhos independentes; o fato `anon` sobre 3 delas é um achado da contraverificação, ausente do GLB.*
-
-**O que é.** Decidir **lote por lote**: ligar (se a tela é devida), revogar (`DOC-RPC-3`), ou documentar como superfície de console (as duas `conv_*`). **Primeiro gesto, sem arbitragem: retirar `anon` das três** — a linha vermelha v14 já decide. Para as 48 de `public`: reexaminar **antes de 01/10**.
-
-**Por que importa.** «A exposição de uma superfície sem uso é um custo de segurança, não um ativo» (GLB v17). E o adiamento de 01/09 só é honesto com prazo: adiar sem data é arquivar.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Herdeiro de **B14** e da migração `20260901140139`. O GLB v17 cap. 6.2 dá a lição de método: procurar um **nome**, nunca uma sintaxe de chamada.
-
-*Remissões : `Grand Livre blanc v17 (01/09/2026), ch. 6 et 12` · `supabase/migrations/20260901140139_ce_que_personne_n_appelle.sql` · `tests/sql/salle_des_machines_tests.sql`*
-
 #### B21 — A guarda das chaves estrangeiras sem índice: instrumentar o contador, não mais saldá-lo
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
 **Estado.** **Fonte: GLB v17 cap. 8.1, contraverificado em 02/09.** Em 02/07 a migração baixou as FK sem índice de 151 para 15; a v16 escreveu «saldado». Em 01/09: **32 em `public`, 6 em `ingest`, 38 no total** — remedidos à unidade em 02/09, em acordo exato com o advisor. As 17 novas vêm todas das tabelas criadas desde então: cada coluna de ator traz sua FK para as contas, não indexada. **Nenhuma falta foi cometida; o contador sobe pelo funcionamento normal do projeto.**
 
@@ -2016,8 +1986,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 |---|---|---|---|
 | **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
 | **J6** | Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria | `P2` | Aberto |
-| **J7** | As linhas vermelhas dos Livros brancos nunca entram no REGISTRO — o congelamento de perímetro não existe em lugar nenhum | `P1` | Aberto |
-| **J8** | Dois «v16», dois «v17»: a série do Grande Livro branco diverge do corpus que pilota | `P1` | Aberto |
 
 #### J2 — Reparar o índice dos backlogs e decidir a convenção de arquivamento
 
@@ -2060,50 +2028,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** Serve **A2** e **A4**.
 
 *Remissões : `CLAUDE.md, doctrines internalisées` · `PLAN_DE_MARCHE §8`*
-
-#### J7 — As linhas vermelhas dos Livros brancos nunca entram no REGISTRO — o congelamento de perímetro não existe em lugar nenhum
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
-
-**Estado.** **Fonte: GLB v17 cap. 2.2 e 10, contraverificado em 02/09.** A v16 pôs uma linha vermelha: «nenhum domínio novo sem arbitragem estratégica escrita». Verificado em 02/09: busca em texto pleno em `docs/` não devolve **nenhuma ocorrência** de «congelamento de perímetro»; o REGISTRO (997 linhas, 44 seções) não traz código algum. Sete domínios novos entraram desde 02/07, cada um rastreado, **nenhum arbitrado contra seu custo**. E no entanto a disciplina se manteve, mensuravelmente: 9 migrações em 10 nada criam. **Uma disciplina mantida por uma só pessoa não é uma regra do projeto, é um hábito do seu mantenedor.**
-
-*Verificado : 02/09 — grep de `docs/` (0 ocorrência) e leitura do REGISTRO.*
-
-**O que é.** Dois códigos no REGISTRO, uma noite: **(1)** o congelamento v16, com sua janela de arbitragem; **(2)** a linha v17 — «nenhuma camada entregue vai ao ativo antes de exercida uma vez em condições reais». E a regra meta: **toda linha vermelha de um Livro branco recebe seu código no REGISTRO na mesma semana, senão é um voto.**
-
-**Por que importa.** O REGISTRO é o foco normativo único do projeto. Uma regra que não está nele não obriga ninguém — e o GLB traz a prova experimental.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Resolve-se junto com **J8**. A linha «exercício real» junta-se ao que **G1** já exige.
-
-*Remissões : `Grand Livre blanc v17 (01/09/2026), ch. 2.2, 10 et 12` · `docs/specs/REGISTRE_decisions.md`*
-
-#### J8 — Dois «v16», dois «v17»: a série do Grande Livro branco diverge do corpus que pilota
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** **Fonte: GLB v17 cap. 14 bis, contraverificado em 02/09.** `docs/GLB/` contém um único arquivo: um «v17» datado de **29 de maio**. A série viva continuou fora do depósito (v16 em 02/07, v17 em 01/09): há **dois «v16» e dois «v17»**, e as duas leituras exatas recentes não existem no depósito. O `INDEX.md` designa o docx de maio como «o livro branco vivo, referência»: quem descobre o projeto lê um estado três meses velho — a patologia exata que a auditoria de 02/06 diagnosticou.
-
-*Verificado : 02/09 — `ls docs/GLB/` e leitura do `INDEX.md`.*
-
-**O que é.** Três gestos, um só pede arbitragem. **(1)** Arquivar o docx de maio sob nome datado. **(2)** Corrigir o INDEX. **(3) A arbitragem**: a série GLB entra no depósito ou fica documento de pilotagem externo? As duas posições se defendem; o que não se defende é o meio-termo atual, em que o INDEX aponta para um fantasma.
-
-**Por que importa.** Um corpus cujo índice designa um estado vencido fabrica confiança mal colocada. E em Bolonha, «leiam nosso livro branco» deve poder dizer-se sem asterisco.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Estende **J2** ao GLB — o próprio GLB v17 o propõe. Resolve-se junto com **J7**.
-
-*Remissões : `Grand Livre blanc v17 (01/09/2026), ch. 14 bis` · `docs/INDEX.md` · `docs/GLB/`*
 
 ---
 
@@ -2402,6 +2326,11 @@ CI verde. |
 **O que foi verificado, e o que ainda não.** 64 suítes SQL verdes antes do push — entre elas `crons_planifies_tests.sql`, que **recusou a migração** enquanto o novo cron não estava ali declarado: a proteção fez o seu trabalho. Após o deploy, `fn_team_invitation_remind()` foi **realmente executada** contra o esquema de produção: retorno `0`, nenhuma notificação escrita — nenhum convite atingia D+21 naquele dia. Isso estabelece que o caminho executa, ainda não que ele lembra. **A primeira execução real está datada**: 20/09/2026 para o convite da BTL pendente desde 30/08, depois 22/09 para o de `blmf-teste`. É nessas datas que o item será posto à prova, e não antes.
 
 **Continua em aberto, fora do escopo deste item**: nada. O lembrete antes da expiração era o único ponto deixado em suspenso por `GOUV-17`, e `GOUV-17b` pode passar de aberto a decidido. **Contraverificação independente (segunda sessão, noite de 01 para 02/09) — o código sustenta pelos dois caminhos.** Estrutural: migração `20260901213921` aplicada em produção, cron `anarbib-team-invitations-remind` posto às 09h35 (a expiração seguindo às 03h20), `EXECUTE` das duas funções reservado a `service_role`, as 4 chaves i18n presentes nas dez locales, as 49 linhas novas de `mail-strings` validadas pela guarda de paridade nascida na véspera, o sino roteando os dois `link_type`. Comportamental, em transação revertida em `blmf-teste` com fixtures sintéticas em J-21 e J+31: o lembrete alcança **exatamente** os 5 da equipe fora a pessoa convidada (a convidada 0), quem propôs **uma única vez** — a guarda antiduplicata morde mesmo estando também na difusão —, 1 linha de outbox de e-mail; a expiração fecha (`expired`) e avisa as **duas** pessoas certas. O disparo por igualdade de data não deixa marcador a dessincronizar. **Sobre a fixture `f8504c47`, a objeção da sessão que entregou prevalece sobre minha instrução de cancelá-la**, com medidas: único convite vivo da persona (a restrição de unicidade nada mais bloqueia) e lembrete de 22/09 caindo depois da formação — conservada, ela vira a **segunda prova real datada**, depois da de 20/09 na BTL. Dois vereditos independentes, uma ressalva comum e escrita: a função ainda nada relançou de verdade, e é nessas duas datas que o item se provará. |
+| B20 | 2026-09-02 | **A superfície morta medida pelo GLB v17 está inteiramente tratada — 2 ligadas, 65 fechadas, 1 rejulgada alhures — em um dia, cada gesto provado na CI e contraverificado em produção.** A mensageria de candidatura ligada (a seção de trocas que a spec v2.0 prometia), a retirada de ficha cartográfica ligada, as 15 outras fechadas por quatro migrações narradas. O prazo das 48 adiadas: **saldado com um mês de antecedência** — 47 fechadas sob remedição, `fn_book_due_dates` fora do saldo (veredito B2/T10). O lint 0029 passa de 442 a 395.
+
+**O que o dia custou e ensinou**: três vermelhos na CI, todos do mesmo motivo, e três lições versadas nos arquivos. **Fica aberto, fora do perímetro**: a prova real da mensageria espera a primeira candidatura viva — SOLIDAIRES (`DOC-ACTIF-1`: ligado não é provado). |
+| J7 | 2026-09-02 | **As linhas vermelhas dos Livros brancos têm agora seus códigos — REGISTRO v0.14.** Três inscrições: **`DOC-GEL-1`** (o congelamento v16, com sua janela de arbitragem), **`DOC-ACTIF-1`** (nenhuma camada ao ativo antes de um exercício real — a prática das encerramentos sob prova torna-se oponível), **`DOC-GLB-1`** (toda linha vermelha de um Livro branco recebe seu código em uma semana, senão é um voto). |
+| J8 | 2026-09-02 | **Um só «v17», e é o certo — a série do Grande Livro branco está versada no depósito** (arbitragem de 02/09). O docx de maio arquivado sob nome datado, o **v17 de 01/09 entra em `docs/GLB/`** como referência viva, o INDEX não designa mais um estado de maio. Detalhe: o PDF já tinha saído de Downloads — **reconstituído ao byte (762 814) a partir do transcript da sessão que o leu**. **Fica aberto**: o v16 de 2 de julho segue por encontrar; quando ressurgir, entra em `GLB/archive/` sem outra decisão. |
 
 ---
 
@@ -2433,4 +2362,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 80 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c7222379`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 77 itens em 11 domínios. O estado numérico foi levantado em 2026-09-01 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c7222379`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

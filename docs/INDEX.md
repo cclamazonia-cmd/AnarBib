@@ -30,7 +30,7 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 |---|---|---|
 | [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.7 du 30/08/2026 — 🟢 référence normative |
 | [`governance/guide-gouvernance-fr.md`](./governance/) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau (foyer FR ; 9 traductions dans `governance/`). | v1.0 du 11/05/2026 — 🟢 référence |
-| [`GLB/AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. | v17 du 29/05/2026 — 🟢 référence (livre blanc vivant) |
+| [`GLB/Grand_Livre_blanc_AnarBib_v17_2026-09-01.pdf`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. Série versée au dépôt le 02/09/2026 (arbitrage J8) : chaque version entre ici le jour où elle sert de référence. | v17 du 01/09/2026 — 🟢 référence (livre blanc vivant) |
 | [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.0 (avril 2026) — 🟢 stable |
 | [`multiformat-viewers.md`](./multiformat-viewers.md) | Doc technique du viewer multi-format (PDF en prod, audio/vidéo/image disponibles côté code). | 08/05/2026 — 🟢 stable |
 
@@ -148,7 +148,9 @@ Versions successives. Seule la dernière est vivante, les autres sont historique
 
 Le livre blanc vivant d'AnarBib — état politique et technique, trajectoire, doctrine.
 
-**Version courante** : `AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx`. Les versions antérieures (v15, v16…) sont dans `GLB/archive/`.
+**Version courante** : `Grand_Livre_blanc_AnarBib_v17_2026-09-01.pdf` (quatrième lecture exacte du backend — 30/04, 19/05, 02/07, 01/09). Les versions antérieures sont dans `GLB/archive/`, dont la refonte du 29/05 (`AnarBib_Grand_Livre_blanc_refonte_2026-05-29.docx`) qui a longtemps porté à tort le numéro « v17 » et le statut de référence vivante — c'est l'anomalie de numérotation que le v17 du 01/09 documente en son chapitre 14 bis, résorbée le 02/09 (item J8).
+
+> **Chaînon manquant** : le v16 du 2 juillet 2026 — la troisième lecture exacte, base du v17 — n'a jamais été versé et reste à retrouver. Le jour où il refait surface, il entre dans `GLB/archive/` sans autre décision.
 
 ### `cartographie/` — Carte du réseau
 
