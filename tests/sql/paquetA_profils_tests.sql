@@ -419,8 +419,15 @@ BEGIN
     RAISE EXCEPTION 'TEST 15.2 FAILED : predicat(s) de droit rouverts a anon -> % (regression du durcissement du 02/07/2026)', v_txt;
   END IF;
 
+  -- 02/09/2026 : 15.3 exigeait les SIX predicats ouverts a authenticated —
+  -- il gardait d'un lot ce qui n'etait vrai que de trois. Trois predicats
+  -- (has_staff_roles, publishes_catalog, uses_governance) n'ont aucun
+  -- appelant nulle part et ont rejoint le regime commun (20260902104830,
+  -- solde des differees B20) : fermes a la porte, corps intacts, GRANT le
+  -- jour ou un ecran les demande. 15.3 garde les trois qui servent ;
+  -- 15.4 garde les trois fermees fermees.
   SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
-    FROM unnest(c_modes || c_predic) AS nom
+    FROM unnest(c_modes || ARRAY['fn_library_has_circulation','fn_library_has_full_sigb','fn_library_is_federated']) AS nom
    WHERE NOT EXISTS (SELECT 1 FROM information_schema.routine_privileges
                       WHERE routine_schema = 'public' AND routine_name = nom
                         AND grantee = 'authenticated' AND privilege_type = 'EXECUTE');
@@ -428,7 +435,16 @@ BEGIN
     RAISE EXCEPTION 'TEST 15.3 FAILED : helper(s) fermes a authenticated -> %', v_txt;
   END IF;
 
-  RAISE NOTICE 'TEST 15 OK : 4 lecteurs de mode ouverts a anon, 6 predicats reserves a authenticated';
+  SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
+    FROM unnest(ARRAY['fn_library_has_staff_roles','fn_library_publishes_catalog','fn_library_uses_governance']) AS nom
+   WHERE EXISTS (SELECT 1 FROM information_schema.routine_privileges
+                  WHERE routine_schema = 'public' AND routine_name = nom
+                    AND grantee = 'authenticated' AND privilege_type = 'EXECUTE');
+  IF v_txt IS NOT NULL THEN
+    RAISE EXCEPTION 'TEST 15.4 FAILED : predicat(s) sans appelant rouverts a authenticated -> % (leur reouverture se decide avec un ecran, elle ne se constate pas)', v_txt;
+  END IF;
+
+  RAISE NOTICE 'TEST 15 OK : 4 lecteurs de mode ouverts a anon, 3 predicats servis ouverts, 3 sans appelant fermes';
 END $$;
 
 -- ============================================================
