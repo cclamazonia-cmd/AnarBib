@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -21,9 +21,9 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 12
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 4
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 3
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 12
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **2 de setembro de 2026** — atualização dirigida após o dia B20/B21/J7/J8: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `cb37a2a8`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
-**Frescor dos constatos em 2026-09-01.** **50 itens de 72** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G5, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **48 itens de 70** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1280,7 +1280,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | | | | |
 |---|---|---|---|
 | **G1** | Percorrer os circuitos construídos e jamais usados | `P0` | Aberto |
-| **G5** | O que `is_test_mode` realmente comanda na Biblioteca Terra Livre | `P2` | Aberto |
 | **G6** | Dar uma tela ao empréstimo entre bibliotecas | `P2` | Aberto |
 | **G7** | Decidir a admissão da Biblioteca SOLIDAIRES | `P1` | Bloqueado |
 | **G8** | Completar a cartografia com os arquivos identificados alhures | `P2` | Aberto |
@@ -1314,29 +1313,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** O bloco «assembleia» depende de **A1**. Os outros não.
 
 *Remissões : `Relevé du 29/08/2026` · `REGISTRE §32 AG, §28 ATE, §26 ONBO` · `emprunt #69 (BLMF, item 84, échéance 21/09)` · `item F4` · `public.book_reading_notes`*
-
-#### G5 — O que `is_test_mode` realmente comanda na Biblioteca Terra Livre
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
-
-**Estado.** **Verificado em 30/08, e o item reduz-se a metade.** O constato assentava em `library_commons.email_delivery_mode = 'test_only'`. Ora **nenhum caminho de envio lê essa coluna**: é o seletor inerte retirado no mesmo dia. O verdadeiro comutador é `library_mail_channels`, e diz outra coisa — a BTL tem `delivery_mode = 'platform_shared'` e `active = true`. **O correio da BTL parte normalmente, e sempre partiu.**
-
-Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa biblioteca de 2 187 exemplares publicada na rede. O que a lê, e o que ela muda?
-
-*Verificado : 30/08 — `library_mail_channels` consultada: a BTL está em `platform_shared` / `active = true`. O que `is_test_mode` comanda não foi procurado.*
-
-**O que é.** Procurar o que lê `libraries.is_test_mode` — no banco e no front. Três saídas, e é preciso decidir entre elas: ou a coluna comanda algo real, e é preciso perguntar à BTL o que quer; ou não comanda nada, e é um segundo seletor inerte a retirar (`DOC-SILENCE-1`); ou serve apenas a um filtro de exibição, e o seu nome mente sobre o alcance.
-
-**Por que importa.** Em modo de teste, os e-mails não saem. Uma biblioteca com 2 187 exemplares publicados cujas leitoras não recebem nenhuma notificação é ou uma escolha, ou uma pane silenciosa há meses. A BTL entrou na rede com um estatuto «experimental» assumido — mas um estatuto político e um ajuste técnico não são a mesma coisa.
-
-**O que conta como terminado.**
-
-- A BTL respondeu, e a configuração corresponde à sua resposta.
-- O estatuto está escrito onde alguém vai procurá-lo.
-
-**Dependências.** Nenhuma. Uma conversa.
-
-*Remissões : `PLAN_formation_coordination_BLMF §8`*
 
 #### G6 — Dar uma tela ao empréstimo entre bibliotecas
 
@@ -1541,7 +1517,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | **I11** | Sair do `node:20`, em fim de manutenção | `P2` | Aberto |
 | **I12** | Automatizar a atualização do espelho frio | `P2` | Aberto |
 | **I13** | Terminar a migração para o novo motor de páginas | `P3` | Aberto |
-| **I14** | A CI não faz redeploy de nada quando só a configuração das funções muda | `P1` | Aberto |
 | **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | Aberto |
 | **I16** | supabase-js: uma versão fixada, vinte e nove flutuantes — decidir um regime | `P3` | Decisão coletiva |
 
@@ -1763,27 +1738,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** P1, não P0 — a versão histórica não tem data de encerramento anunciada.
 
 *Remissões : `PLAN_migration_git_pages_2026-08-19` · `RUNBOOK_exploitation_v0.3`*
-
-#### I14 — A CI não faz redeploy de nada quando só a configuração das funções muda
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** Constatado em 01/09: o commit `c152e7fa` passava `login`, `register` e `request-password-reset` para `verify_jwt = false` e só tocava `supabase/config.toml` — a CI ficou verde e não implantou nada. O `deployer-backend.sh` decide o redeploy com `git diff -- supabase/functions/` (perto da linha 296): uma mudança só de configuração é invisível para ele. Foi preciso implantar as três funções à mão para o ajuste ter efeito.
-
-*Verificado : 01/09 — reproduzido em produção: três funções ainda respondendo o 401 da plataforma depois do run verde de `c152e7fa`, respostas aplicativas corretas depois do deploy manual das três.*
-
-**O que é.** Ampliar a detecção para `supabase/config.toml` — no mais simples, reimplantar tudo quando ele muda; no mais fino, reimplantar só as funções cuja seção `[functions.*]` mudou. E documentar o caso na narrativa do bloco « Edge Functions » do script, que já conta o incidente `--depuis event.before` de 27/08: é a mesma família de ponto cego. Uma ficha de tarefa foi criada em 01/09.
-
-**Por que importa.** Um `verify_jwt` que não vai para produção é uma porta que se acredita ter aberto ou fechado quando ela não se moveu — e a CI verde afirma o contrário. Mesmo silêncio do `--depuis` de 27/08: nada fica vermelho, o trabalho simplesmente não é feito.
-
-**O que conta como terminado.**
-
-- Um commit que só toca `config.toml` dispara um redeploy, verificado com um teste real.
-- O comentário do script conta esse terceiro incidente ao lado dos dois primeiros.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `scripts/ci/deployer-backend.sh` · `item B18`*
 
 #### I15 — O secret do Forgejo da chave publicável ainda carrega seu nome antigo
 
@@ -2186,6 +2140,8 @@ CI verde. |
 | G2 | 2026-09-02 | **A divergência P2/P8 está decidida — o texto se alinha ao código, e a forma da decisão importa tanto quanto o fundo.** Opção 1: a prática viva (o circuito colegial que a BTL exerce desde 01/09) vira a regra. Spec v1.11: P2 diz que **a própria execução é colegial**; P8 esclarece a fronteira — os quóruns do código não são votos, são **garantias de execução**: «modelar a deliberação, nunca; exigir várias mãos para executar, sempre». Nenhuma linha de código. **Decisão tomada sozinho, dizendo-o** — modo degradado assumido, datada, `GOUV-18` no REGISTRO, **janela de objeção na formação de 13/09**: o dia em que o coletivo existir, encontrará uma decisão contestável, não um fato consumado mudo. |
 | H5 | 2026-09-02 | **A coleta OAI-PMH está provada nos dois sentidos, com dados reais dos dois lados — e dois circuitos cívicos exercidos pela primeira vez na mesma noite.** **Entrada**: primeira fonte real registrada (Persée, fascículos de sociologia, 2 lotes/ciclo); o disparo manual trouxe **40 fascículos reais**: run `ready_for_review`, trava em `paused`, **token de retomada conservado** — o cron de terça continuará onde a prova parou. **Saída**: o repositório respondia conforme mas vazio; **a BLMF abriu-se pelo circuito real** (pedido → decisão, notificação incluída) e um cliente terceiro colheu **200 registros em dois lotes**, retomada honrada, `GetRecord` exato. **Dois constatos para Bolonha**: os dois parceiros PMB não expõem `oai2.php` — do lado deles os fluxos nem existem (assunto para H6/K6); e `blmf-teste` falha a elegibilidade nas suas três travas — a receita de biblioteca mascarada resiste até ao OAI. **Nada sobrevive à prova, por decisão de Xavier na mesma noite**: os 40 registros Persée não pertenciam a nenhuma biblioteca real (run ligado à caixa de areia, por isso invisível num contexto de biblioteca comum); run, linhas e fonte purgados pelo caminho próprio — **nenhuma fonte OAI fica armada, o cron de terça nada colherá**. A abertura da BLMF é fechada pela mão de Xavier. A prova, essa, está adquirida. **Fica aberto**: um colhedor verdadeiramente terceiro — Bolonha pode fornecê-lo. |
 | B17 | 2026-09-02 | **O aviso imediato das ações transversais está provado de ponta a ponta — inclusive, esta noite, sobre o tipo para o qual foi escrito.** O andar imediato provado em envio real em 31/08 só o fora sobre a promoção colegial — um tipo com três canais. Faltava vê-lo sobre um tipo **sem outro canal antes de segunda**. Feito em 02/09, em transação revertida em `blmf-teste` com uma atriz sintética (admin de rede fixture, não staff da biblioteca — o critério exclui com razão o admin que também é staff local): `fn_team_suspend_member` → membership `suspended`, **linha de outbox `network.cross_library_critical_action` com `action_type=team_suspend_member`**, linha de diário. A perna EF não precisa ser repetida: o handler é agnóstico ao tipo (o tipo só escolhe o rótulo, presente nas dez locales). Sanidade pós-rollback: tudo desaparecido, zero resíduo. |
+| G5 | 2026-09-02 | **A bandeira comanda algo real, está posta certo, e a Terra Livre não está em modo de teste.** A ficha olhava `libraries.is_test_mode`: essa coluna **já não existe** — a migração de 30/08 já decidira a outra metade. A bandeira vive em `library_commons.is_test_mode`: **`blmf-teste = true`, as três bibliotecas reais = `false`** (02/09). O que comanda: o **banner «contexto de teste»** nos avisos internos de inscrição — nenhum front a lê, nenhuma policy. O nome não mente sobre o alcance; nada a perguntar à BTL. **Limite escrita**: põe-se na criação e não tem interruptor depois. |
+| I14 (config.toml et la CI) | 2026-09-02 | **O ângulo morto já estava fechado — desde 01/09, pelo commit `5e129c54` — e o item não o acompanhou.** `deployer-backend.sh` vigia agora `supabase/config.toml` ao lado de `supabase/functions/`, reimplanta **tudo** quando a configuração muda, e narra o incidente de 01/09 no seu próprio texto. **Provado no banco em 02/09**, localmente, num ramo descartável: um commit tocando só `config.toml` aparece na lista de gatilhos. **Limite escrita (`DOC-ACTIF-1`)**: nenhum push só-config aconteceu desde a correção; a prova real será o próximo. |
 
 ---
 
@@ -2217,4 +2173,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

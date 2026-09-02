@@ -1719,6 +1719,22 @@
           "fr": "**L'avertissement immédiat des actions transverses est éprouvé de bout en bout — y compris, ce soir, sur le type pour lequel il a été écrit.** L'étage immédiat livré et éprouvé en envoi réel le 31/08 (ligne #72 rejouée : 200, 3 destinataires, courriel reçu et relu) ne l'avait été que sur la promotion collégiale — un type à trois canaux, où l'immédiat fait doublon. Restait à le voir sur un type **sans autre canal avant le lundi**. Fait le 02/09, en transaction annulée sur `blmf-teste` avec une actrice synthétique (admin réseau fixture, non staff de la biblio — le critère `fn_is_cross_library_action` exclut à raison l'admin qui est aussi staff local, ce qui disqualifiait l'identité de Xavier pour l'épreuve) : `fn_team_suspend_member` → membership `suspended`, **ligne d'outbox `network.cross_library_critical_action` avec `action_type=team_suspend_member`**, ligne de journal — la chaîne SQL exacte qui tombait dans le `else` du handler avant le 31/08. La jambe EF n'a pas besoin d'être rejouée : le handler est agnostique au type (un seul événement, le type ne choisit que le libellé, et `cross-library-strings` porte « Suspension d'une personne de l'équipe » dans les dix locales — vérifié). Sanité post-rollback : Voltairine `active`, l'actrice fixture disparue, zéro ligne résiduelle. **Vu en chemin** : le canal mail de `blmf-teste` est retombé sur `disabled`/`inactive` après l'épreuve G4 — c'est l'hygiène attendue d'une biblio de formation, et la raison de plus pour l'épreuve en transaction.",
           "pt": "**O aviso imediato das ações transversais está provado de ponta a ponta — inclusive, esta noite, sobre o tipo para o qual foi escrito.** O andar imediato provado em envio real em 31/08 só o fora sobre a promoção colegial — um tipo com três canais. Faltava vê-lo sobre um tipo **sem outro canal antes de segunda**. Feito em 02/09, em transação revertida em `blmf-teste` com uma atriz sintética (admin de rede fixture, não staff da biblioteca — o critério exclui com razão o admin que também é staff local): `fn_team_suspend_member` → membership `suspended`, **linha de outbox `network.cross_library_critical_action` com `action_type=team_suspend_member`**, linha de diário. A perna EF não precisa ser repetida: o handler é agnóstico ao tipo (o tipo só escolhe o rótulo, presente nas dez locales). Sanidade pós-rollback: tudo desaparecido, zero resíduo."
         }
+      ],
+      [
+        "G5",
+        "2026-09-02",
+        {
+          "fr": "**Le drapeau commande quelque chose de réel, il est posé juste, et la Terra Livre n'est pas en mode test.** La fiche regardait `libraries.is_test_mode` : cette colonne **n'existe plus** — la migration du 30/08 (`06f933d7`, « on retire la copie figée et le réglage qui ne réglait rien ») a déjà tranché l'autre moitié de G5 en retirant `email_delivery_mode` et en nommant la vraie colonne. Le drapeau vit dans `library_commons.is_test_mode` (défaut `false`), exposé par la vue `api.library_email_identity`, posé au provisionnement par `fn_provision_preactive_library` et par `register`. **Valeurs le 02/09 : `blmf-teste = true`, les trois bibliothèques réelles = `false`.** Ce qu'il commande, et rien d'autre : le **bandeau « contexte de test »** dans les avis internes d'inscription (`register`, `buildInternalMail` — `isTestContext = is_test_mode OU redirection interne posée`), le même mécanisme que les deux secrets vides-exprès de F7. Aucun front ne le lit, aucune policy, aucun filtre d'affichage : son nom ne ment pas sur sa portée. Des trois issues écrites dans la fiche, c'est la première — et il n'y a rien à demander à la BTL, qui n'a jamais été en mode test ailleurs que dans une colonne morte. **Limite écrite** : le drapeau se pose à la création et n'a pas d'interrupteur ensuite — le jour où une bibliothèque de formation doit devenir réelle (ou l'inverse), c'est un UPDATE de coordination, pas un bouton.",
+          "pt": "**A bandeira comanda algo real, está posta certo, e a Terra Livre não está em modo de teste.** A ficha olhava `libraries.is_test_mode`: essa coluna **já não existe** — a migração de 30/08 já decidira a outra metade. A bandeira vive em `library_commons.is_test_mode`: **`blmf-teste = true`, as três bibliotecas reais = `false`** (02/09). O que comanda: o **banner «contexto de teste»** nos avisos internos de inscrição — nenhum front a lê, nenhuma policy. O nome não mente sobre o alcance; nada a perguntar à BTL. **Limite escrita**: põe-se na criação e não tem interruptor depois."
+        }
+      ],
+      [
+        "I14 (config.toml et la CI)",
+        "2026-09-02",
+        {
+          "fr": "**L'angle mort était déjà fermé — depuis le 01/09, par le commit `5e129c54` — et l'item ne l'avait pas suivi.** `deployer-backend.sh` surveille désormais `supabase/config.toml` à côté de `supabase/functions/` (`git diff --name-only <marqueur> <tête> -- supabase/functions/ supabase/config.toml`, ligne 308), redéploie **tout** quand le fichier de configuration bouge, et raconte l'incident du 01/09 dans son propre récit (lignes 244-250 : le commit `c152e7fa` ne changeait que `config.toml`, la CI est restée verte et n'a rien déployé) — la même famille d'angle mort que `--depuis event.before` du 27/08, et la même parade : le journal DIT ce que le diff couvre. **Éprouvé au banc le 02/09**, en local, sur une branche jetable : un commit ne touchant que `config.toml` fait apparaître le fichier dans la liste des déclencheurs — l'étape ne se sauterait plus. **Limite écrite (`DOC-ACTIF-1`)** : aucun push ne changeant que `config.toml` n'a eu lieu depuis le correctif ; l'épreuve en conditions réelles sera le prochain — et c'est le journal du job `backend` qui en fera foi.",
+          "pt": "**O ângulo morto já estava fechado — desde 01/09, pelo commit `5e129c54` — e o item não o acompanhou.** `deployer-backend.sh` vigia agora `supabase/config.toml` ao lado de `supabase/functions/`, reimplanta **tudo** quando a configuração muda, e narra o incidente de 01/09 no seu próprio texto. **Provado no banco em 02/09**, localmente, num ramo descartável: um commit tocando só `config.toml` aparece na lista de gatilhos. **Limite escrita (`DOC-ACTIF-1`)**: nenhum push só-config aconteceu desde a correção; a prova real será o próximo."
+        }
       ]
     ]
   },
@@ -3639,53 +3655,6 @@
       }
     },
     {
-      "id": "G5",
-      "d": "G",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Ce que commande vraiment `is_test_mode` sur la Biblioteca Terra Livre",
-        "pt": "O que `is_test_mode` realmente comanda na Biblioteca Terra Livre"
-      },
-      "v": {
-        "fr": "**Vérifié le 30/08, et l'item se réduit de moitié.** Le constat reposait sur `library_commons.email_delivery_mode = 'test_only'`. Or **aucun chemin d'envoi ne lit cette colonne** : c'est le sélecteur inerte retiré le jour même côté interface. Le vrai commutateur est `library_mail_channels`, et il dit autre chose — la BTL y porte `delivery_mode = 'platform_shared'` et `active = true`. **Le courrier de la BTL part normalement, et depuis toujours.** Il n'y a donc rien à clarifier de ce côté : la bibliothèque n'était pas en mode d'essai, elle le paraissait.\n\nCe qui reste tient en une question : la colonne `libraries.is_test_mode`, toujours à `true` sur une bibliothèque de 2 187 exemplaires publiée au réseau. Qu'est-ce qui la lit, et qu'est-ce qu'elle change ?",
-        "pt": "**Verificado em 30/08, e o item reduz-se a metade.** O constato assentava em `library_commons.email_delivery_mode = 'test_only'`. Ora **nenhum caminho de envio lê essa coluna**: é o seletor inerte retirado no mesmo dia. O verdadeiro comutador é `library_mail_channels`, e diz outra coisa — a BTL tem `delivery_mode = 'platform_shared'` e `active = true`. **O correio da BTL parte normalmente, e sempre partiu.**\n\nResta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa biblioteca de 2 187 exemplares publicada na rede. O que a lê, e o que ela muda?"
-      },
-      "w": {
-        "fr": "Chercher ce qui lit `libraries.is_test_mode` — en base et dans le front. Trois issues, et il faut trancher entre elles plutôt que de laisser le champ tel quel : ou bien la colonne commande quelque chose de réel, et il faut demander à la BTL ce qu'elle veut ; ou bien elle ne commande rien, et c'est un second sélecteur inerte à retirer (`DOC-SILENCE-1`) ; ou bien elle ne sert qu'à un filtre d'affichage, et son nom ment sur sa portée.",
-        "pt": "Procurar o que lê `libraries.is_test_mode` — no banco e no front. Três saídas, e é preciso decidir entre elas: ou a coluna comanda algo real, e é preciso perguntar à BTL o que quer; ou não comanda nada, e é um segundo seletor inerte a retirar (`DOC-SILENCE-1`); ou serve apenas a um filtro de exibição, e o seu nome mente sobre o alcance."
-      },
-      "y": {
-        "fr": "En mode d'essai, les courriels ne partent pas. Une bibliothèque avec 2 187 exemplaires publiés dont les lectrices ne reçoivent aucune notification, c'est soit un choix, soit une panne silencieuse depuis des mois. La BTL a rejoint le réseau avec un statut « expérimental » assumé — mais un statut politique et un réglage technique ne sont pas la même chose.",
-        "pt": "Em modo de teste, os e-mails não saem. Uma biblioteca com 2 187 exemplares publicados cujas leitoras não recebem nenhuma notificação é ou uma escolha, ou uma pane silenciosa há meses. A BTL entrou na rede com um estatuto «experimental» assumido — mas um estatuto político e um ajuste técnico não são a mesma coisa."
-      },
-      "f": {
-        "fr": [
-          "La BTL a répondu, et la configuration correspond à sa réponse.",
-          "Le statut est écrit là où quelqu'un le cherchera."
-        ],
-        "pt": [
-          "A BTL respondeu, e a configuração corresponde à sua resposta.",
-          "O estatuto está escrito onde alguém vai procurá-lo."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Une conversation.",
-        "pt": "Nenhuma. Uma conversa."
-      },
-      "r": [
-        "PLAN_formation_coordination_BLMF §8"
-      ],
-      "verif": {
-        "fr": "30/08 — `library_mail_channels` interrogée : la BTL est à `platform_shared` / `active = true`. Ce que commande `is_test_mode` n'a pas été cherché.",
-        "pt": "30/08 — `library_mail_channels` consultada: a BTL está em `platform_shared` / `active = true`. O que `is_test_mode` comanda não foi procurado."
-      }
-    },
-    {
       "id": "G6",
       "d": "G",
       "p": "P2",
@@ -4556,54 +4525,6 @@
         "fr": "31/08 — une partie du nettoyage est déjà faite : la branche `pages` n'existe plus sur la forge, `public/.domains` a disparu, et `public/CNAME` est bien préservé. Restent à confirmer le service lui-même et les secrets devenus inutiles.",
         "pt": "31/08 — parte da limpeza já está feita: o branch `pages` não existe mais, `public/.domains` sumiu, `public/CNAME` preservado."
       }
-    },
-    {
-      "id": "I14",
-      "d": "I",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "La CI ne redéploie rien quand seule la configuration des fonctions change",
-        "pt": "A CI não faz redeploy de nada quando só a configuração das funções muda"
-      },
-      "v": {
-        "fr": "Constaté le 01/09 : le commit `c152e7fa` passait `login`, `register` et `request-password-reset` en `verify_jwt = false` et ne touchait que `supabase/config.toml` — la CI est restée verte et n'a rien déployé. `deployer-backend.sh` décide du redéploiement sur `git diff -- supabase/functions/` (vers la ligne 296) : un changement de configuration seul est invisible pour lui. Il a fallu déployer les trois fonctions à la main pour que le réglage prenne effet.",
-        "pt": "Constatado em 01/09: o commit `c152e7fa` passava `login`, `register` e `request-password-reset` para `verify_jwt = false` e só tocava `supabase/config.toml` — a CI ficou verde e não implantou nada. O `deployer-backend.sh` decide o redeploy com `git diff -- supabase/functions/` (perto da linha 296): uma mudança só de configuração é invisível para ele. Foi preciso implantar as três funções à mão para o ajuste ter efeito."
-      },
-      "w": {
-        "fr": "Élargir la détection à `supabase/config.toml` — au plus simple, tout redéployer quand il change ; au plus fin, ne redéployer que les fonctions dont la section `[functions.*]` a bougé. Et documenter le cas dans le récit du bloc « Edge Functions » du script, qui raconte déjà l'incident `--depuis event.before` du 27/08 : c'est la même famille d'angle mort. Une pastille de tâche a été posée le 01/09.",
-        "pt": "Ampliar a detecção para `supabase/config.toml` — no mais simples, reimplantar tudo quando ele muda; no mais fino, reimplantar só as funções cuja seção `[functions.*]` mudou. E documentar o caso na narrativa do bloco « Edge Functions » do script, que já conta o incidente `--depuis event.before` de 27/08: é a mesma família de ponto cego. Uma ficha de tarefa foi criada em 01/09."
-      },
-      "f": {
-        "fr": [
-          "Un commit ne touchant que `config.toml` déclenche un redéploiement, vérifié par un essai réel.",
-          "Le commentaire du script raconte ce troisième incident à côté des deux premiers."
-        ],
-        "pt": [
-          "Um commit que só toca `config.toml` dispara um redeploy, verificado com um teste real.",
-          "O comentário do script conta esse terceiro incidente ao lado dos dois primeiros."
-        ]
-      },
-      "y": {
-        "fr": "Un `verify_jwt` qui ne part pas en production, c'est une porte qu'on croit avoir ouverte ou fermée alors qu'elle n'a pas bougé — et la CI verte affirme le contraire. Même silence que le `--depuis` du 27/08 : rien ne rougit, le travail n'est simplement pas fait.",
-        "pt": "Um `verify_jwt` que não vai para produção é uma porta que se acredita ter aberto ou fechado quando ela não se moveu — e a CI verde afirma o contrário. Mesmo silêncio do `--depuis` de 27/08: nada fica vermelho, o trabalho simplesmente não é feito."
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "verif": {
-        "fr": "01/09 — reproduit en production : trois fonctions répondant encore le 401 plateforme après le run vert de `c152e7fa`, réponses applicatives correctes après déploiement manuel des trois.",
-        "pt": "01/09 — reproduzido em produção: três funções ainda respondendo o 401 da plataforma depois do run verde de `c152e7fa`, respostas aplicativas corretas depois do deploy manual das três."
-      },
-      "r": [
-        "scripts/ci/deployer-backend.sh",
-        "item B18"
-      ]
     },
     {
       "id": "I15",
