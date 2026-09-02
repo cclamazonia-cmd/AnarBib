@@ -3361,6 +3361,65 @@
       ]
     },
     {
+      "id": "E12",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "front",
+        "langue"
+      ],
+      "t": {
+        "fr": "La page Importations parle la langue de la machine — et l'export n'a pas d'adresse",
+        "pt": "A página Importações fala a língua da máquina — e a exportação não tem endereço"
+      },
+      "v": {
+        "fr": "**Constat de Xavier le 02/09, sur sa propre capture d'écran, après avoir exercé le circuit OAI dans les deux sens** : « pas très ergonomique ce bazar, surtout pour des camarades qui sont pas informaticiens ». Trois défauts distincts se cachent derrière le mot.\n\n**(1) Le vocabulaire est celui du pipeline, pas du geste.** « Traitements », « Lignes en staging », « Promu·e·s », « Brouillons créés », « File de révision », « Journal d'importation » décrivent exactement staging → révision → promotion — pour qui l'a construit. Une bibliothécaire veut *faire entrer des notices* : « Notices reçues », « À vérifier », « Entrées au catalogue ».\n\n**(2) Des codes bruts fuient à l'écran.** Sous « Bibliothèques compagnes », les pastilles affichent `mapeada` et `importacao_autorizada` : des valeurs d'énumération non traduites — `relation_status || '—'` dans `ImportacoesPage.jsx`, et **aucune clé i18n** pour ces valeurs dans les dix locales (vérifié le 02/09). C'est le défaut le plus net et le moins cher.\n\n**(3) L'import et l'export sont mélangés, et l'export est ailleurs.** La page s'appelle « Importations » mais héberge « Moisson OAI » (un import) ; « être source » — l'export par moissonnage, exercé puis refermé le 02/09 (H5) — vit dans l'onglet réseau de `RedePage` ; l'export d'un lot se cache derrière deux icônes sans libellé à droite du lot. Quelqu'un qui veut « donner nos notices à un autre catalogue » n'a aucun endroit qui s'appelle comme ça. Et le parcours impose un concept de « source partenaire » même pour un simple fichier sous la main : quatre étapes là où l'attente est « je choisis mon fichier, je vérifie, c'est entré ».",
+        "pt": "**Constato de Xavier em 02/09, sobre a própria captura de tela**: «nada ergonômico, sobretudo para camaradas que não são informáticos». Três defeitos distintos. **(1) O vocabulário é o do pipeline, não do gesto**: «Tratamentos», «Linhas em staging», «Promovidas» descrevem staging → revisão → promoção; quem cataloga quer *fazer entrar registros*. **(2) Códigos brutos vazam na tela**: `mapeada`, `importacao_autorizada` — valores de enumeração sem tradução, nenhuma chave i18n nas dez locales (verificado em 02/09). É o defeito mais nítido e mais barato. **(3) Importação e exportação estão misturadas, e a exportação está noutro lugar**: a página «Importações» hospeda «Coleta OAI» (uma importação); «ser fonte» vive na página Rede; a exportação de um lote se esconde atrás de dois ícones sem rótulo. Quem quer «dar nossos registros a outro catálogo» não tem lugar com esse nome."
+      },
+      "w": {
+        "fr": "Trois lots, du moins cher au plus structurant. **Lot A — avant la formation du 13/09** : traduire les statuts bruts (`relation_status`, états de lot, états de ligne) dans les dix locales, et donner un libellé aux deux icônes du lot — une soirée, et la page peut être montrée sans rougir. **Lot B** : renommer vers le geste (les six libellés de l'en-tête et des sections), sans toucher au pipeline. **Lot C** : donner une adresse à l'export — une entrée « Donner nos notices » qui réunit être source (OAI), le flux OPDS et l'export d'un lot, et un parcours guidé « j'ai un fichier » en deux écrans où la source partenaire devient facultative. Éprouver chaque lot avec une personne qui n'a pas écrit le code (E1 a la même exigence).",
+        "pt": "Três lotes. **Lote A — antes da formação de 13/09**: traduzir os status brutos nas dez locales e rotular os dois ícones — uma noite. **Lote B**: renomear para o gesto, sem tocar no pipeline. **Lote C**: dar um endereço à exportação — uma entrada «Dar nossos registros» (ser fonte, OPDS, exportação de lote) e um percurso guiado «tenho um arquivo» em duas telas. Provar cada lote com quem não escreveu o código."
+      },
+      "y": {
+        "fr": "C'est la doctrine anti-méga-machine appliquée à l'écran le plus technique du logiciel : un outil qui cache les camarades derrière son vocabulaire fait le contraire de ce qu'il promet (`DOC-COLLECTIVE-1`). Et la formation du 13/09 montrera cette page aux coordinations BLMF — le lot A est daté par ce calendrier.",
+        "pt": "É a doutrina anti-megamáquina aplicada à tela mais técnica do software: uma ferramenta que esconde os camaradas atrás do seu vocabulário faz o contrário do que promete. E a formação de 13/09 mostrará esta página — o lote A é datado por esse calendário."
+      },
+      "f": [
+        {
+          "fr": "Lot A — plus un code brut à l'écran : `mapeada`, `importacao_autorizada` et consorts traduits dans les dix locales ; les deux icônes du lot portent un libellé.",
+          "pt": "Lote A — nenhum código bruto na tela; os dois ícones do lote com rótulo."
+        },
+        {
+          "fr": "Lot B — les six libellés de l'en-tête et des sections parlent le geste, pas le pipeline.",
+          "pt": "Lote B — os seis rótulos falam o gesto, não o pipeline."
+        },
+        {
+          "fr": "Lot C — « Donner nos notices » existe et réunit être source, OPDS et export de lot ; le parcours « j'ai un fichier » tient en deux écrans.",
+          "pt": "Lote C — «Dar nossos registros» existe; o percurso «tenho um arquivo» cabe em duas telas."
+        },
+        {
+          "fr": "Chaque lot éprouvé par une personne qui n'a pas écrit le code — de préférence une coordination BLMF le 13/09.",
+          "pt": "Cada lote provado por quem não escreveu o código — de preferência uma coordenação BLMF em 13/09."
+        }
+      ],
+      "dep": {
+        "fr": "Né de l'épreuve **H5** (l'export par moissonnage vit à Rede, pas ici). Voisin de **E9** (mobile) et **C6** (assistances de saisie) sans les recouvrir ; même exigence de regard extérieur que **E1**. Le lot A est daté par **K7** (formation du 13/09).",
+        "pt": "Nascido da prova **H5**. Vizinho de **E9** e **C6** sem os cobrir; mesma exigência de olhar externo que **E1**. O lote A é datado por **K7**."
+      },
+      "r": [
+        "src/pages/importacoes/ImportacoesPage.jsx",
+        "src/components/rede/OaiSourcePanel.jsx",
+        "supabase/functions/export-catalog-lote",
+        "capture d'écran de Xavier du 02/09 (contexte blmf-teste)"
+      ],
+      "verif": {
+        "fr": "02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (`relation_status || '—'` rendu brut ; aucune clé i18n pour ces valeurs, grep sur `fr.json`).",
+        "pt": "02/09 — constato de quem usa a ferramenta, verificado no código (valor bruto renderizado; nenhuma chave i18n)."
+      }
+    },
+    {
       "id": "F1",
       "d": "F",
       "p": "P1",
