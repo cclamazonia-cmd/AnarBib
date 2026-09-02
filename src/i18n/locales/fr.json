@@ -6213,5 +6213,10 @@
   "catalogacao.batch.draftsPublished": "{count} publié(s)",
   "catalogacao.batchPublishedArchiveInstead": "Ce lot porte {count} fiche(s) déjà publiée(s) au catalogue : il garde la mémoire de cette séance de catalogage. Un lot publié s’archive — utilise « Archiver ».",
   "error.batch.has_drafts_in_progress": "Ce lot retient encore du travail en cours. Traite-le ou mets-le au rebut avant de supprimer le lot.",
-  "error.batch.published_archive_instead": "Ce lot porte des fiches publiées : il s’archive, il ne se supprime pas."
+  "error.batch.published_archive_instead": "Ce lot porte des fiches publiées : il s’archive, il ne se supprime pas.",
+  "rede.exch.title": "Échanges avec la personne solicitante",
+  "rede.exch.fromSolicitante": "Personne solicitante",
+  "rede.exch.messagePlaceholder": "Votre message à la personne solicitante…",
+  "rede.exch.moreInfo": "Demander un complément (la demande passe en « en attente d'informations »)",
+  "rede.exch.markDone": "Marquer l'échange comme réalisé"
 }

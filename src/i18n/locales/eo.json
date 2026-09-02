@@ -6213,5 +6213,10 @@
   "catalogacao.batch.draftsPublished": "{count} publikigita(j)",
   "catalogacao.batchPublishedArchiveInstead": "Ĉi tiu loto portas {count} jam publikigita(j)n slipo(j)n en la katalogo: ĝi konservas la memoron de tiu kataloga kunsido. Publikigita loto arkiviĝas — uzu «Arkivi».",
   "error.batch.has_drafts_in_progress": "Ĉi tiu loto ankoraŭ retenas laboron survoje. Traktu ĝin aŭ forĵetu ĝin antaŭ ol forigi la loton.",
-  "error.batch.published_archive_instead": "Ĉi tiu loto portas publikigitajn slipojn: ĝi arkiviĝas, ĝi ne foriĝas."
+  "error.batch.published_archive_instead": "Ĉi tiu loto portas publikigitajn slipojn: ĝi arkiviĝas, ĝi ne foriĝas.",
+  "rede.exch.title": "Interŝanĝoj kun la petanta persono",
+  "rede.exch.fromSolicitante": "Petanta persono",
+  "rede.exch.messagePlaceholder": "Via mesaĝo al la petanta persono…",
+  "rede.exch.moreInfo": "Peti pliajn informojn (la peto pasos al « atendas informojn »)",
+  "rede.exch.markDone": "Marki la interparolon kiel okazintan"
 }

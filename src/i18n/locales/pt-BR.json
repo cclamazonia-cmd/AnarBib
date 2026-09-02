@@ -6213,5 +6213,10 @@
   "catalogacao.batch.draftsPublished": "{count} publicado(s)",
   "catalogacao.batchPublishedArchiveInstead": "Este lote tem {count} ficha(s) já publicada(s) no catálogo: ele guarda a memória dessa sessão de catalogação. Um lote publicado arquiva-se — usa «Arquivar».",
   "error.batch.has_drafts_in_progress": "Este lote ainda retém trabalho em curso. Trata-o ou manda-o para a lixeira antes de excluir o lote.",
-  "error.batch.published_archive_instead": "Este lote tem fichas publicadas: ele arquiva-se, não se exclui."
+  "error.batch.published_archive_instead": "Este lote tem fichas publicadas: ele arquiva-se, não se exclui.",
+  "rede.exch.title": "Trocas com a pessoa solicitante",
+  "rede.exch.fromSolicitante": "Pessoa solicitante",
+  "rede.exch.messagePlaceholder": "A tua mensagem à pessoa solicitante…",
+  "rede.exch.moreInfo": "Pedir informações complementares (a solicitação passa a « aguardando informações »)",
+  "rede.exch.markDone": "Marcar a conversa como realizada"
 }

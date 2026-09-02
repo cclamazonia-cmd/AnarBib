@@ -6213,5 +6213,10 @@
   "catalogacao.batch.draftsPublished": "{count} publicada/es",
   "catalogacao.batchPublishedArchiveInstead": "Aquest lot té {count} fitxa/es ja publicada/es al catàleg: conserva la memòria d’aquella sessió de catalogació. Un lot publicat s’arxiva — fes servir «Arxiva».",
   "error.batch.has_drafts_in_progress": "Aquest lot encara reté feina en curs. Tracta-la o descarta-la abans d’eliminar el lot.",
-  "error.batch.published_archive_instead": "Aquest lot té fitxes publicades: s’arxiva, no s’elimina."
+  "error.batch.published_archive_instead": "Aquest lot té fitxes publicades: s’arxiva, no s’elimina.",
+  "rede.exch.title": "Intercanvis amb la persona sol·licitant",
+  "rede.exch.fromSolicitante": "Persona sol·licitant",
+  "rede.exch.messagePlaceholder": "El teu missatge a la persona sol·licitant…",
+  "rede.exch.moreInfo": "Demanar informació complementària (la sol·licitud passa a « en espera d'informació »)",
+  "rede.exch.markDone": "Marcar la conversa com a realitzada"
 }

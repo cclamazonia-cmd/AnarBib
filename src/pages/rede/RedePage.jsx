@@ -101,6 +101,14 @@ export default function RedePage() {
   const [voteRationale, setVoteRationale] = useState('');
   const [commentText, setCommentText] = useState('');
   const [evalBusy, setEvalBusy] = useState(false);
+  // B20 lot messagerie — canal avec la solicitante (spec onboarding v2.0 §4.5/§5.7 :
+  // « le canal humain est premier »). Symétrique de MinhaSolicitacaoPanel.
+  const [evalMsgs, setEvalMsgs] = useState([]);
+  const [evalInvites, setEvalInvites] = useState([]);
+  const [evalMsgText, setEvalMsgText] = useState('');
+  const [evalMoreInfo, setEvalMoreInfo] = useState(false);
+  const [evalExSubject, setEvalExSubject] = useState('');
+  const [evalExWhen, setEvalExWhen] = useState('');
   // E.4.a : allMembers, newAdminEmail et l'agregation distincte staff/reader
   // au niveau reseau ont ete supprimes. AdminsPanel charge maintenant ses
   // propres donnees via api.network_administrators_public_v1. Les stats
@@ -260,15 +268,65 @@ export default function RedePage() {
   // ── #111 — évaluation collaborative ─────────────────────
   // Charge votes + commentaires de la demande sélectionnée (RLS : admin réseau).
   async function loadRequestDetail(reqId) {
-    setEvalVotes([]); setEvalComments([]);
+    setEvalVotes([]); setEvalComments([]); setEvalMsgs([]); setEvalInvites([]);
     if (!reqId) return;
     try {
-      const [{ data: votes }, { data: comments }] = await Promise.all([
+      const [{ data: votes }, { data: comments }, { data: msgs }, { data: invites }] = await Promise.all([
         supabase.from('library_request_votes').select('*').eq('request_id', reqId).order('voted_at', { ascending: true }),
         supabase.from('library_request_comments').select('*').eq('request_id', reqId).order('created_at', { ascending: true }),
+        supabase.from('library_request_messages').select('*').eq('request_id', reqId).order('created_at', { ascending: true }),
+        supabase.from('library_request_invitations').select('*').eq('request_id', reqId).order('created_at', { ascending: true }),
       ]);
       setEvalVotes(votes || []); setEvalComments(comments || []);
+      setEvalMsgs(msgs || []); setEvalInvites(invites || []);
+      // Accusé de lecture des messages entrants (solicitante -> coordination).
+      // Fire-and-forget : un échec d'accusé ne doit pas gêner la consultation.
+      if ((msgs || []).some(m => m.direction === 'solicitante_to_admin' && !m.read_at)) {
+        apiRpc('fn_request_mark_messages_read', { p_request_id: reqId }).catch(() => {});
+      }
     } catch (err) { console.warn('loadRequestDetail:', err); }
+  }
+
+  // B20 lot messagerie — les trois gestes côté coordination.
+  async function sendRequestMessage(reqId) {
+    if (!(evalMsgText || '').trim()) return;
+    setEvalBusy(true);
+    try {
+      const { error } = await apiRpc('fn_request_send_message', {
+        p_request_id: reqId, p_content: evalMsgText, p_request_more_info: evalMoreInfo,
+      });
+      if (error) throw new Error(error.message || 'send failed');
+      setEvalMsgText(''); setEvalMoreInfo(false);
+      await loadRequestDetail(reqId);
+      // « demander un complément » bascule la demande en aguardando_info :
+      // recharger la liste pour que la pastille de statut suive.
+      await loadAll();
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+    finally { setEvalBusy(false); }
+  }
+
+  async function proposeExchange(reqId) {
+    if (!(evalExSubject || '').trim()) return;
+    setEvalBusy(true);
+    try {
+      const { error } = await apiRpc('fn_request_propose_exchange', {
+        p_request_id: reqId, p_subject: evalExSubject, p_proposed_at_text: evalExWhen || null,
+      });
+      if (error) throw new Error(error.message || 'propose failed');
+      setEvalExSubject(''); setEvalExWhen('');
+      await loadRequestDetail(reqId);
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+    finally { setEvalBusy(false); }
+  }
+
+  async function completeExchange(reqId, invitationId) {
+    setEvalBusy(true);
+    try {
+      const { error } = await apiRpc('fn_request_exchange_complete', { p_invitation_id: invitationId });
+      if (error) throw new Error(error.message || 'complete failed');
+      await loadRequestDetail(reqId);
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+    finally { setEvalBusy(false); }
   }
 
   async function proposeDecision(reqId, decision) {
@@ -461,7 +519,7 @@ export default function RedePage() {
             <div style={lw}>
               {filteredReqs.length===0 && <div style={{ padding:16, fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({id:'common.empty'})}</div>}
               {filteredReqs.map((r,i) => (
-                <div key={r.id} style={{...lr(i), cursor:'pointer', background: selectedReq?.id===r.id?'rgba(29,78,216,.12)':lr(i).background}} onClick={()=>{setSelectedReq(r);setReviewNote(r.review_notes||'');setDiscloseId(false);setRefusalReason('');setVoteRationale('');setCommentText('');loadRequestDetail(r.id);}}>
+                <div key={r.id} style={{...lr(i), cursor:'pointer', background: selectedReq?.id===r.id?'rgba(29,78,216,.12)':lr(i).background}} onClick={()=>{setSelectedReq(r);setReviewNote(r.review_notes||'');setDiscloseId(false);setRefusalReason('');setVoteRationale('');setCommentText('');setEvalMsgText('');setEvalMoreInfo(false);setEvalExSubject('');setEvalExWhen('');loadRequestDetail(r.id);}}>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.library_name || t({ id: 'common.noName' })}</div>
                     <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{r.city||'—'}{r.state_region&&`, ${r.state_region}`} · {new Date(r.created_at).toLocaleDateString(locale)}</div>
@@ -546,6 +604,56 @@ export default function RedePage() {
                       <button className="cat-btn secondary" disabled={evalBusy} onClick={()=>addComment(selectedReq.id)}>{t({ id: 'rede.eval.addComment' })}</button>
                     </div>
                   )}
+
+                  {/* B20 lot messagerie — échanges avec la solicitante (spec §4.5/§5.7).
+                      Le fil est visible quel que soit le statut (il fait partie du
+                      dossier) ; la zone d'écriture n'apparaît que tant que la demande
+                      est vivante. Symétrique de MinhaSolicitacaoPanel côté candidate. */}
+                  <div style={{ marginTop:14, paddingTop:12, borderTop:'1px solid rgba(255,255,255,.08)' }}>
+                    <h5 style={{ margin:'0 0 6px' }}>{t({ id: 'rede.exch.title' })}</h5>
+                    {evalMsgs.length === 0 && evalInvites.length === 0 && (
+                      <p style={{ fontSize:'.82rem', color:'var(--brand-muted)', margin:'0 0 8px' }}>{t({ id: 'conta.demande.noExchange' })}</p>
+                    )}
+                    {evalMsgs.map(m => {
+                      const fromUs = m.direction === 'admin_to_solicitante';
+                      return (
+                        <div key={m.id} style={{ margin:'6px 0', textAlign: fromUs ? 'right' : 'left' }}>
+                          <div style={{ display:'inline-block', maxWidth:'85%', padding:'6px 10px', borderRadius:8, background: fromUs ? 'rgba(29,78,216,.18)' : 'rgba(255,255,255,.06)' }}>
+                            <div style={{ fontSize:'.72rem', color:'var(--brand-muted)', marginBottom:2 }}>
+                              {t({ id: fromUs ? 'conta.demande.fromCoordination' : 'rede.exch.fromSolicitante' })} · {new Date(m.created_at).toLocaleDateString(locale)}
+                            </div>
+                            <div style={{ fontSize:'.86rem' }}>{m.content}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {evalInvites.map(iv => (
+                      <div key={iv.id} style={{ margin:'6px 0', padding:8, borderRadius:8, background:'rgba(255,255,255,.04)', border:'1px solid rgba(255,255,255,.08)' }}>
+                        <div style={{ fontSize:'.85rem' }}>
+                          🗓 {iv.subject}{iv.proposed_at_text ? ` — ${iv.proposed_at_text}` : ''}
+                          <span style={{ fontSize:'.72rem', color:'var(--brand-muted)', marginLeft:6 }}>({t({ id: 'conta.demande.invite.' + iv.status, defaultMessage: iv.status })})</span>
+                        </div>
+                        {iv.status === 'accepted' && (
+                          <button className="cat-btn secondary" style={{ marginTop:6, fontSize:'.78rem' }} disabled={evalBusy} onClick={()=>completeExchange(selectedReq.id, iv.id)}>{t({ id: 'rede.exch.markDone' })}</button>
+                        )}
+                      </div>
+                    ))}
+                    {['pendente','em_analise','aguardando_info','proposta_aprovacao','proposta_recusa'].includes(selectedReq.request_status) && (
+                      <>
+                        <textarea value={evalMsgText} onChange={e=>setEvalMsgText(e.target.value)} rows={2} placeholder={t({ id: 'rede.exch.messagePlaceholder' })} style={{...fs, resize:'vertical', margin:'8px 0 6px'}} />
+                        <label style={{ fontSize:'.8rem', display:'flex', gap:6, alignItems:'center', marginBottom:6 }}>
+                          <input type="checkbox" checked={evalMoreInfo} onChange={e=>setEvalMoreInfo(e.target.checked)} /> {t({ id: 'rede.exch.moreInfo' })}
+                        </label>
+                        <button className="cat-btn secondary" disabled={evalBusy || !evalMsgText.trim()} onClick={()=>sendRequestMessage(selectedReq.id)}>{t({ id: 'conta.demande.send' })}</button>
+
+                        <div style={{ display:'flex', gap:6, marginTop:12, flexWrap:'wrap', alignItems:'center' }}>
+                          <input value={evalExSubject} onChange={e=>setEvalExSubject(e.target.value)} placeholder={t({ id: 'conta.demande.exchangeSubject' })} style={{...fs, flex:'1 1 160px', width:'auto'}} />
+                          <input value={evalExWhen} onChange={e=>setEvalExWhen(e.target.value)} placeholder={t({ id: 'conta.demande.exchangeWhen' })} style={{...fs, flex:'1 1 160px', width:'auto'}} />
+                          <button className="cat-btn secondary" disabled={evalBusy || !evalExSubject.trim()} onClick={()=>proposeExchange(selectedReq.id)}>{t({ id: 'conta.demande.requestExchange' })}</button>
+                        </div>
+                      </>
+                    )}
+                  </div>
 
                   {/* ONBO-Q13 — transfert du mandat de coordination (demande approuvée, en constitution) */}
                   {selectedReq.request_status === 'aprovada' && (

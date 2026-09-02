@@ -6213,5 +6213,10 @@
   "catalogacao.batch.draftsPublished": "{count} gepubliceerd",
   "catalogacao.batchPublishedArchiveInstead": "Dit lot bevat {count} reeds in de catalogus gepubliceerde fiche(s): het bewaart de herinnering aan die catalogiseersessie. Een gepubliceerd lot wordt gearchiveerd — gebruik “Archiveren”.",
   "error.batch.has_drafts_in_progress": "Dit lot bevat nog werk in bewerking. Behandel het of gooi het weg voordat je het lot verwijdert.",
-  "error.batch.published_archive_instead": "Dit lot bevat gepubliceerde fiches: het wordt gearchiveerd, niet verwijderd."
+  "error.batch.published_archive_instead": "Dit lot bevat gepubliceerde fiches: het wordt gearchiveerd, niet verwijderd.",
+  "rede.exch.title": "Uitwisseling met de aanvragende persoon",
+  "rede.exch.fromSolicitante": "Aanvragende persoon",
+  "rede.exch.messagePlaceholder": "Je bericht aan de aanvragende persoon…",
+  "rede.exch.moreInfo": "Om aanvullende informatie vragen (de aanvraag gaat naar “wacht op informatie”)",
+  "rede.exch.markDone": "Het gesprek als gehouden markeren"
 }

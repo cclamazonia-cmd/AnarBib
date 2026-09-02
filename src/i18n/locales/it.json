@@ -6213,5 +6213,10 @@
   "catalogacao.batch.draftsPublished": "{count} pubblicata/e",
   "catalogacao.batchPublishedArchiveInstead": "Questo lotto ha {count} scheda/e già pubblicata/e nel catalogo: conserva la memoria di quella sessione di catalogazione. Un lotto pubblicato si archivia — usa «Archivia».",
   "error.batch.has_drafts_in_progress": "Questo lotto trattiene ancora lavoro in corso. Trattalo o scartalo prima di eliminare il lotto.",
-  "error.batch.published_archive_instead": "Questo lotto ha schede pubblicate: si archivia, non si elimina."
+  "error.batch.published_archive_instead": "Questo lotto ha schede pubblicate: si archivia, non si elimina.",
+  "rede.exch.title": "Scambi con la persona richiedente",
+  "rede.exch.fromSolicitante": "Persona richiedente",
+  "rede.exch.messagePlaceholder": "Il tuo messaggio alla persona richiedente…",
+  "rede.exch.moreInfo": "Chiedere un'integrazione (la richiesta passa a « in attesa di informazioni »)",
+  "rede.exch.markDone": "Segnare lo scambio come avvenuto"
 }

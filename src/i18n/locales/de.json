@@ -6213,5 +6213,10 @@
   "catalogacao.batch.draftsPublished": "{count} veröffentlicht",
   "catalogacao.batchPublishedArchiveInstead": "Dieses Los enthält {count} bereits im Katalog veröffentlichte Datensätze: es bewahrt die Erinnerung an diese Katalogisierungssitzung. Ein veröffentlichtes Los wird archiviert — nutze „Archivieren“.",
   "error.batch.has_drafts_in_progress": "Dieses Los enthält noch laufende Arbeit. Bearbeite oder verwirf sie, bevor du das Los löschst.",
-  "error.batch.published_archive_instead": "Dieses Los enthält veröffentlichte Datensätze: es wird archiviert, nicht gelöscht."
+  "error.batch.published_archive_instead": "Dieses Los enthält veröffentlichte Datensätze: es wird archiviert, nicht gelöscht.",
+  "rede.exch.title": "Austausch mit der antragstellenden Person",
+  "rede.exch.fromSolicitante": "Antragstellende Person",
+  "rede.exch.messagePlaceholder": "Deine Nachricht an die antragstellende Person…",
+  "rede.exch.moreInfo": "Ergänzende Informationen anfordern (der Antrag wechselt zu „wartet auf Informationen“)",
+  "rede.exch.markDone": "Gespräch als durchgeführt markieren"
 }
