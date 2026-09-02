@@ -882,7 +882,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E11** | Les deux différés assumés de l'OPAC : tags contributifs et flux RSS | `P3` | Décision collective |
-| **E12** | La page Importations parle la langue de la machine — et l'export n'a pas d'adresse | `P2` | En cours |
+| **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1120,7 +1120,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 *Renvois : `REGISTRE §18 OPAC-RSS1` · `AnarBib-Backlog-2026-06-17-v33 §2.4`*
 
-#### E12 — La page Importations parle la langue de la machine — et l'export n'a pas d'adresse
+#### E12 — La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve
 
 `P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript, langue maternelle
 
@@ -1132,9 +1132,11 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 **(3) L'import et l'export sont mélangés, et l'export est ailleurs.** La page s'appelle « Importations » mais héberge « Moisson OAI » (un import) ; « être source » — l'export par moissonnage, exercé puis refermé le 02/09 (H5) — vit dans l'onglet réseau de `RedePage` ; l'export d'un lot se cache derrière deux icônes sans libellé à droite du lot. Quelqu'un qui veut « donner nos notices à un autre catalogue » n'a aucun endroit qui s'appelle comme ça. Et le parcours impose un concept de « source partenaire » même pour un simple fichier sous la main : quatre étapes là où l'attente est « je choisis mon fichier, je vérifie, c'est entré ».
 
+**Correction du soir même, sur une seconde capture de Xavier (« voilà pourquoi je trouve que l'import fait un peu usine à gaz »).** L'export **a** une adresse : un commutateur « Sens : Importation / Exportation » en tête de page — si petit que le mainteneur lui-même ne l'avait pas en tête. Le volet 3 se reformule donc : l'adresse existe, elle est illisible, et ce qu'elle ouvre est le vrai « bazar » — **six blocs de trois natures différentes empilés dans le même onglet** : *(a)* geste de bibliothécaire — « Exportation par lot » (CSV / MARCXML / JSON), le seul que la plupart cherchent ; *(b)* gestes de coordination sur le fonds numérique — « Export de fonds » (ZIP), « envoi direct à une bibliothèque partenaire », « Attacher les fichiers reçus » ; *(c)* gestes juridiques — « Préparer l'éligibilité à l'export », « Vérifications de domaine public ». Plus un bloc « Partage ILL » qui annonce **« fonctionnalité en développement » à l'écran** (un chantier ne s'affiche pas aux usagères), et un vocabulaire qui fuit : *éligibilité*, *assets*, *bucket* (« le retire du bucket », lisible par une coordination). Le commutateur « Sens » est d'ailleurs la bonne idée : c'est sa **visibilité** et le **tri de ce qu'il ouvre** qui manquent.
+
 *Vérifié : 02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (`relation_status || '—'` rendu brut ; aucune clé i18n pour ces valeurs, grep sur `fr.json`).*
 
-**Ce que c'est.** Trois lots, du moins cher au plus structurant. **Lot A — avant la formation du 13/09** : traduire les statuts bruts (`relation_status`, états de lot, états de ligne) dans les dix locales, et donner un libellé aux deux icônes du lot — une soirée, et la page peut être montrée sans rougir. **Lot B** : renommer vers le geste (les six libellés de l'en-tête et des sections), sans toucher au pipeline. **Lot C** : donner une adresse à l'export — une entrée « Donner nos notices » qui réunit être source (OAI), le flux OPDS et l'export d'un lot, et un parcours guidé « j'ai un fichier » en deux écrans où la source partenaire devient facultative. Éprouver chaque lot avec une personne qui n'a pas écrit le code (E1 a la même exigence).
+**Ce que c'est.** Trois lots, du moins cher au plus structurant. **Lot A — avant la formation du 13/09** : traduire les statuts bruts (`relation_status`, états de lot, états de ligne) dans les dix locales, et donner un libellé aux deux icônes du lot — une soirée, et la page peut être montrée sans rougir. **Lot B** : renommer vers le geste (les six libellés de l'en-tête et des sections), sans toucher au pipeline. **Lot C** : rendre le commutateur « Sens » visible (deux vrais onglets, pas un interrupteur), et **trier l'onglet Exportation par nature** — d'abord le geste de bibliothécaire (« Exporter notre catalogue », CSV/MARCXML/JSON, seul bloc visible par défaut), puis un volet « Mutualiser un fonds numérique » (ZIP, envoi direct, fichiers reçus, éligibilité, domaine public) réservé à la coordination et replié ; retirer de l'écran ce qui est « en développement » (ILL) tant qu'il l'est ; bannir *assets* et *bucket* des textes ; et réunir là aussi « être source » (OAI) et le flux OPDS, qui sont des exports. Côté import, le parcours guidé « j'ai un fichier » en deux écrans, source partenaire facultative. Éprouver chaque lot avec une personne qui n'a pas écrit le code (E1 a la même exigence).
 
 **Pourquoi ça compte.** C'est la doctrine anti-méga-machine appliquée à l'écran le plus technique du logiciel : un outil qui cache les camarades derrière son vocabulaire fait le contraire de ce qu'il promet (`DOC-COLLECTIVE-1`). Et la formation du 13/09 montrera cette page aux coordinations BLMF — le lot A est daté par ce calendrier.
 

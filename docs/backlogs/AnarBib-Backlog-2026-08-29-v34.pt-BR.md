@@ -882,7 +882,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E11** | Os dois adiamentos assumidos do OPAC: tags contributivas e feed RSS | `P3` | Decisão coletiva |
-| **E12** | A página Importações fala a língua da máquina — e a exportação não tem endereço | `P2` | Em curso |
+| **E12** | A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra | `P2` | Em curso |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -1120,15 +1120,17 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 *Remissões : `REGISTRE §18 OPAC-RSS1` · `AnarBib-Backlog-2026-06-17-v33 §2.4`*
 
-#### E12 — A página Importações fala a língua da máquina — e a exportação não tem endereço
+#### E12 — A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra
 
 `P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript, língua materna
 
 **Estado.** **Constato de Xavier em 02/09, sobre a própria captura de tela**: «nada ergonômico, sobretudo para camaradas que não são informáticos». Três defeitos distintos. **(1) O vocabulário é o do pipeline, não do gesto**: «Tratamentos», «Linhas em staging», «Promovidas» descrevem staging → revisão → promoção; quem cataloga quer *fazer entrar registros*. **(2) Códigos brutos vazam na tela**: `mapeada`, `importacao_autorizada` — valores de enumeração sem tradução, nenhuma chave i18n nas dez locales (verificado em 02/09). É o defeito mais nítido e mais barato. **(3) Importação e exportação estão misturadas, e a exportação está noutro lugar**: a página «Importações» hospeda «Coleta OAI» (uma importação); «ser fonte» vive na página Rede; a exportação de um lote se esconde atrás de dois ícones sem rótulo. Quem quer «dar nossos registros a outro catálogo» não tem lugar com esse nome.
 
+**Correção na mesma noite, sobre uma segunda captura de Xavier.** A exportação **tem** endereço: um comutador «Sentido: Importação / Exportação» no topo — tão pequeno que nem o mantenedor o tinha em mente. O volet 3 reformula-se: o endereço existe, é ilegível, e o que abre é a verdadeira «usina de gás» — **seis blocos de três naturezas** no mesmo separador: gesto de bibliotecário (exportação por lote), gestos de coordenação sobre o acervo digital (ZIP, envio direto, anexar recebidos), gestos jurídicos (elegibilidade, domínio público). Mais um bloco ILL que anuncia «em desenvolvimento» na tela, e um vocabulário que vaza (*assets*, *bucket*).
+
 *Verificado : 02/09 — constato de quem usa a ferramenta, verificado no código (valor bruto renderizado; nenhuma chave i18n).*
 
-**O que é.** Três lotes. **Lote A — antes da formação de 13/09**: traduzir os status brutos nas dez locales e rotular os dois ícones — uma noite. **Lote B**: renomear para o gesto, sem tocar no pipeline. **Lote C**: dar um endereço à exportação — uma entrada «Dar nossos registros» (ser fonte, OPDS, exportação de lote) e um percurso guiado «tenho um arquivo» em duas telas. Provar cada lote com quem não escreveu o código.
+**O que é.** Três lotes. **Lote A — antes da formação de 13/09**: traduzir os status brutos nas dez locales e rotular os dois ícones — uma noite. **Lote B**: renomear para o gesto, sem tocar no pipeline. **Lote C**: tornar visível o comutador «Sentido» (dois separadores de verdade) e **ordenar a Exportação por natureza** — primeiro o gesto de bibliotecário (exportar o catálogo, único bloco visível por padrão), depois um painel «Mutualizar um acervo digital» reservado à coordenação e recolhido; retirar da tela o que está «em desenvolvimento»; banir *assets* e *bucket*; reunir ali «ser fonte» (OAI) e OPDS. Na importação, o percurso «tenho um arquivo» em duas telas. Provar cada lote com quem não escreveu o código.
 
 **Por que importa.** É a doutrina anti-megamáquina aplicada à tela mais técnica do software: uma ferramenta que esconde os camaradas atrás do seu vocabulário faz o contrário do que promete. E a formação de 13/09 mostrará esta página — o lote A é datado por esse calendário.
 
