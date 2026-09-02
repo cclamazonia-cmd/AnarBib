@@ -37,7 +37,7 @@ const cjs = (url) => transformSync(readFileSync(url, 'utf8'), {
 }).code;
 
 const SECRET = 's3cr3t-de-test';
-const ENV = { SUPABASE_URL: 'http://stub', SUPABASE_SERVICE_ROLE_KEY: 'stub', ANARBIB_PARTNER_IMPORT_SECRET: SECRET };
+const ENV = { SUPABASE_URL: 'http://stub', SUPABASE_SECRET_KEYS: '{"default":"stub"}', ANARBIB_PARTNER_IMPORT_SECRET: SECRET };
 
 // ── Réponses OAI-PMH canoniques ───────────────────────────────────────────
 const enveloppe = (inner) =>
@@ -147,8 +147,8 @@ function monterEF(etat, reponses) {
     if (spec.includes('supabase-js')) return { createClient: () => client('public') };
     if (spec.endsWith('marc.ts')) return evaluer(cjs(MARC), {});
     if (spec.endsWith('oai.ts')) return evaluer(cjs(OAI), {});
-    // Le vrai module, pas un stub : son repli sur SUPABASE_SERVICE_ROLE_KEY
-    // (seule cle presente dans l'ENV du banc) doit rester exerce.
+    // Le vrai module, pas un stub. Depuis B18 (02/09/2026) le repli legacy
+    // n'existe plus : le banc exerce SUPABASE_SECRET_KEYS, le seul chemin.
     if (spec.endsWith('secret-key.ts')) return evaluer(cjs(CLE), {});
     if (spec.includes('edge-runtime.d.ts')) return {};
     throw new Error(`import inattendu : ${spec}`);

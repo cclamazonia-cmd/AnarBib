@@ -26,8 +26,10 @@ const CODE = transformSync(readFileSync(SRC, 'utf8'), {
   loader: 'ts', format: 'cjs', target: 'es2022',
 }).code;
 
-// Le vrai module de lecture de cle, pas un stub : son repli sur
-// SUPABASE_SERVICE_ROLE_KEY (seule cle de l'ENV ci-dessous) reste exerce.
+// Le vrai module de lecture de cle, pas un stub. Depuis B18 (02/09/2026,
+// cles legacy desactivees) le repli SUPABASE_SERVICE_ROLE_KEY n'existe
+// plus : l'ENV du banc porte SUPABASE_SECRET_KEYS, le seul chemin vivant
+// — et c'est lui qui doit rester exerce a chaque execution.
 const CLE_SRC = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
 const CLE_CODE = transformSync(readFileSync(CLE_SRC, 'utf8'), {
   loader: 'ts', format: 'cjs', target: 'es2022',
@@ -35,7 +37,7 @@ const CLE_CODE = transformSync(readFileSync(CLE_SRC, 'utf8'), {
 
 const SECRET = 's3cr3t-de-test';
 const ENV = {
-  SUPABASE_URL: 'http://stub', SUPABASE_SERVICE_ROLE_KEY: 'stub',
+  SUPABASE_URL: 'http://stub', SUPABASE_SECRET_KEYS: '{"default":"stub"}',
   GAZETTE_CRON_SECRET: SECRET, ANTHROPIC_API_KEY: 'stub',
 };
 
