@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.10 — 2026-09-01 (le modèle des status dit enfin le CHECK réel)
+**Version** : 1.11 — 2026-09-02 (P2/P8 alignés sur le code : l'exécution est collégiale, la délibération reste hors logiciel — GOUV-18)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -19,6 +19,7 @@
 - **v1.8 (2026-09-01, même jour)** : **`status='inactive'` cesse de porter deux sens.** Le §4.5 de cette spec listait lui-même « lectures multiples possibles » — sortie volontaire, carence expirée, compte abandonné — sans voir que c'était le symptôme : un statut qui admet plusieurs lectures n'est pas un statut, c'est une ambiguïté qu'il faut redéduire à chaque fois. Constaté à l'écran : « Sans connexion depuis plus de 270 jours » affiché sur un rôle quitté dix minutes plus tôt. Nouveau statut **`vacated`** (§4.5bis), posé par `fn_team_self_demote` ; `inactive` garde le seul sens du cron T9. Le sélecteur de bibliothèque, par ailleurs, quitte le seul `/conta` pour `/biblioteca` et `/painel` — avec remontage du panneau à la bascule, sans lequel un emprunt en cours aurait pu changer de bibliothèque en chemin. Sections amendées : §4.5, §4.5bis (nouveau), §5.4. Décisions : `GOUV-15`, `GOUV-16` (registre v0.11). Implémentation : migration `20260901220000`, front `TeamPanel`/`roles.js`/`BibliotecaPage`/`PanelPage`.
 - **v1.9 (2026-09-01, même jour)** : **le circuit collégial se dit dans l'application.** Les événements `team.*` ne partaient que dans `team_notification_outbox` → `notify-event` → e-mail : aucune des huit fonctions écrivant dans `user_notifications` n'était un événement de gouvernance. Pour savoir qu'une proposition attendait son endossement, il fallait recevoir le mail ou aller regarder l'écran d'équipe par hasard. Or depuis `GOUV-11` et `GOUV-13`, **toute** nomination au staff passe par ce circuit — et `fn_team_expire_invitations` la referme au bout de 30 jours : une proposition pouvait naître, être ignorée et mourir sans qu'aucun être humain n'ait su qu'elle existait. Déclencheur sur `library_team_invitations` doublant les deux étapes d'une notification in-app (§8.6). Le rattrapage a immédiatement fait apparaître une proposition **réelle**, entièrement endossée, en attente d'acceptation depuis deux jours sur BTL. Décision : `GOUV-17` (registre v0.12). Implémentation : migration `20260901234500`, front `NotificationBell`. Reste ouvert : le rappel avant péremption.
 - **v1.10 (2026-09-01, même jour)** : **fin de la passe `vacated` — le chapitre 4 dit le CHECK réel.** La v1.8 avait créé §4.5bis et corrigé §4.5/§5.4, mais laissé le reste de la spec raconter l'ancien monde. Le chapeau du §4 montrait un CHECK à six valeurs contenant `'pending'` — une valeur absente de la contrainte réelle, qui en compte **dix** (le socle du 10/05 portait déjà `pending_validation` ; `refused` est arrivé en juin, `vacated` le 01/09). §4.2 renommé `pending_validation` ; périmètre du chapitre explicité (les statuts du cycle de vie lecteur·rice — `pending_validation`, `refused`, `left_with_pending_circulation`, `terminated` — sont hors gouvernance d'équipe). Le schéma §4.6 est redessiné : `vacated` apparaît, la carence aboutit sur `removed` (l'ancien schéma disait `inactive`, même erreur d'origine que §4.5 — corrigée aussi en §4.3, §4.4, §6.10, §15.3), la flèche `active` → `inactive` est attribuée au seul cron T9. §5.5 (T4) disait encore que l'auto-rétro pose `inactive` : c'est `vacated`, comme §5.4 — corrigé aussi dans les scénarios §15.2 et §15.5, le badge UI §9.6 (« Rôle quitté », `info`), et les listes de statuts d'historique (§5.3, §10.3, glossaire). Note v1.1 du §4 (« `removed` réservé à des usages futurs ») marquée caduque. Aucune décision nouvelle : tout est déjà tracé à `GOUV-15` (registre v0.11) ; aucune migration — la spec rejoint la base, pas l'inverse.
+- **v1.11 (2026-09-02)** : **P2/P8 alignés sur le code** (`GOUV-18`, décision G2 en mode dégradé assumé — fenêtre d'objection à la formation du 13/09). Le code du 26/08 avait installé ratifications et quorums d'exécution alors que P8 écrivait « aucun mécanisme de vote, quorum » : l'écart est tranché dans le sens de la pratique vivante. P8 clarifie la frontière (modéliser la délibération, jamais ; exiger plusieurs mains pour exécuter, toujours) ; P2 dit que l'exécution elle-même est collégiale. Aucune ligne de code. Décision : `DECISION_G2_alignement_textes_promotion_2026-09-02.md`.
 
 ---
 
@@ -92,7 +93,7 @@ Aucun rôle n'est un titre. Tous les rôles sont **temporaires par nature** et *
 
 ### P2 — Cooptation pour les rôles staff
 
-L'entrée dans une équipe (devenir librarian, devenir coordenador) se fait par **cooptation des coordenadores existant·es**. Ce choix politique repose sur l'idée que c'est au collectif politique (qui se réunit en AG ou équivalent **hors logiciel**) de décider qui est admis, et qu'un·e coordenador·a n'est que la main qui exécute la décision dans le SIGB.
+L'entrée dans une équipe (devenir librarian, devenir coordenador) se fait par **cooptation des coordenadores existant·es**. Ce choix politique repose sur l'idée que c'est au collectif politique (qui se réunit en AG ou équivalent **hors logiciel**) de décider qui est admis. *(v1.11, GOUV-18)* **L'exécution elle-même est collégiale** : depuis le 26/08/2026, le SIGB refuse d'appliquer un changement de rôle sur la parole d'une seule main — qui propose, qui ratifie et qui accepte sont trois personnes distinctes (§8). La main qui exécute est donc toujours *des* mains, sans que cela retire quoi que ce soit à l'AG : voir P8.
 
 ### P3 — Rétrogradation volontaire toujours possible
 
@@ -118,7 +119,9 @@ Les changements de rôle dans la biblio A n'affectent **rien** dans la biblio B,
 
 ### P8 — Le SIGB ne modélise pas l'AG
 
-Le SIGB exécute les décisions, il ne les prend pas. La spec ne contient aucun mécanisme de vote, quorum, etc. Ces choses se passent en collectif, hors logiciel.
+Le SIGB exécute les décisions, il ne les prend pas. Les délibérations — qui admettre, qui promouvoir, pourquoi — se passent en collectif, hors logiciel, et la spec ne contient aucun mécanisme pour les remplacer.
+
+*(v1.11, GOUV-18 — clarification, sur l'écart relevé à G2)* Ce principe interdisait de lire ce que le code fait depuis le 26/08 : le circuit proposition → ratification → acceptation, ses quorums d'endossement et le consentement de la personne concernée **ne sont pas un vote** — ce sont des garanties d'exécution. Une ratification atteste qu'une décision collective existe quelque part hors logiciel ; un quorum d'endossement empêche qu'une seule main fabrique un fait accompli ; une acceptation rappelle qu'une charge ne s'impose pas (P3). Le SIGB ne prend toujours aucune décision : il refuse d'en exécuter une qui n'aurait pas laissé de trace collective. La frontière est là : **modéliser la délibération, jamais ; exiger plusieurs mains pour exécuter, toujours.**
 
 ---
 

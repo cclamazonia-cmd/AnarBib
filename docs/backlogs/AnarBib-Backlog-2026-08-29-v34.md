@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 74 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -21,7 +21,7 @@
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 4
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée B20/B21/J7/J8 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `cb37a2a8`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-01.** **52 items sur 74** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **51 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1312,7 +1312,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | | | | |
 |---|---|---|---|
 | **G1** | Emprunter les circuits construits et jamais utilisés | `P0` | Ouvert |
-| **G2** | Trancher politiquement l'écart entre P2 et P8 sur la promotion à coordenador·a | `P1` | Décision collective |
 | **G5** | Ce que commande vraiment `is_test_mode` sur la Biblioteca Terra Livre | `P2` | Ouvert |
 | **G6** | Donner un écran au prêt entre bibliothèques | `P2` | Ouvert |
 | **G7** | Décider de l'admission de la Bibliothèque SOLIDAIRES | `P1` | Bloqué |
@@ -1347,28 +1346,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Le bloc « assemblée » dépend de **A1**. Les autres non.
 
 *Renvois : `Relevé du 29/08/2026` · `REGISTRE §32 AG, §28 ATE, §26 ONBO` · `emprunt #69 (BLMF, item 84, échéance 21/09)` · `item F4` · `public.book_reading_notes`*
-
-#### G2 — Trancher politiquement l'écart entre P2 et P8 sur la promotion à coordenador·a
-
-`P1` Prioritaire · État : **Décision collective** · Charge : une soirée · Ce que ça demande : délibération collective
-
-**État.** La migration `20260826120000` **est en production** et tranche dans le sens de P2 : collégialité obligatoire, ratification préalable, repli à une signature quand il n'y a qu'une seule personne coordinatrice, consentement explicite de la personne promue, exclusion de cette personne du décompte du quorum. **Mais la décision politique n'a jamais été prise.**
-
-*Vérifié : 31/08 — la migration `20260826120000` figure bien au registre de production. Rien de neuf mesurable sur la décision politique elle-même.*
-
-**Ce que c'est.** Porter la question au collectif. Trois options sont écrites : ne rien changer au code et corriger le texte de P2 ; étendre le chemin A comme le code l'a fait ; ou garder la promotion directe mais la rendre visible avec un délai d'objection.
-
-**Pourquoi ça compte.** Il y a aujourd'hui **du code en production qui anticipe une décision collective non prise**. Le rollback est écrit et testé, ce qui rend l'anticipation réversible — mais l'autre lecture, *le SIGB ne modélise pas l'assemblée générale*, reste entièrement défendable. **Ce n'est pas un arbitrage technique.**
-
-**Ce qui compte comme fini.**
-
-- Le collectif a tranché, et la décision est inscrite au REGISTRE.
-- Le code est aligné sur la décision, ou le texte de P2 est amendé.
-- Rappel : le fichier de rollback porte un tiret bas initial qui empêche la CLI de l'appliquer — **ne pas le renommer**.
-
-**Dépendances.** Question ouverte depuis le 26/08. Bloque **G3** si la réponse est « revenir en arrière ».
-
-*Renvois : `ECART_cosignature_promotion_coordenador_2026-08-26 §5` · `REGISTRE §41 GOUV-1`*
 
 #### G5 — Ce que commande vraiment `is_test_mode` sur la Biblioteca Terra Livre
 
@@ -2271,6 +2248,7 @@ CI verte : lint et suite unitaire. |
 | B21 | 2026-09-02 | **Le compteur des clés étrangères sans index a son garde, et il a mordu dès son premier tour de CI** (run vert du 02/09 sur `dfc96a8b`). `tests/sql/fk_sans_index_garde_tests.sql` : 38 entrées assumées en trois familles motivées d'une ligne (15 vers les tables de codes `catalog_ref_*` — les résiduelles voulues du solde du 02/07, intactes —, 17 colonnes d'acteur de la qualité catalographique, 6 transit d'import `ingest`), l'en-tête portant la requête qui produit le relevé ET son angle mort (`DOC-RECENS-1` : index d'expression et partiels non vus, même méthode que l'advisor, accord à l'unité au 02/09). Gardé dans les deux sens : T1 — toute FK neuve sans index rougit la CI au moment où la migration s'écrit, son issue est un index ou une entrée motivée par un commit ; T2 — une entrée indexée ou disparue rougit aussi, la liste ne rétrécit que consciemment. Et T3 prouve la morsure à chaque run en créant une FK notoirement nue dans la transaction du test (fixture en tables temporaires — le hook pre-commit exige à raison RLS+GRANT de toute table qui naît dans `public`, même éphémère). La doctrine v17 est servie : le chantier n'est pas « soldé », il est **instrumenté** — la campagne d'indexation reste où elle est (B10, différée avec sa raison), et le compteur ne remontera plus en silence. |
 | F7 | 2026-09-02 | **Treize secrets vides, treize verdicts — et il n'en reste que deux, qui le sont exprès et le disent.** Le relevé rejoué le 02/09 donnait les mêmes treize empreintes de chaîne vide qu'au 30/08. Tri en trois classes, chaque lecteur relu : **11 supprimés** (`supabase secrets unset`) — dix doublons de tête de chaîne de repli dont la variante `ANARBIB_*` renseignée gagnait déjà, plus `REGIMENTO_URL` sur décision : aucun règlement réseau n'est publié, la branche morte qui l'attendait est **retirée du code** (trois endroits — dont une chaîne mal nommée dans `notify-document-permission-request` qui cherchait l'URL du *manuel* en essayant d'abord celle du *règlement* : inoffensive vide, fausse le jour où on l'aurait remplie ; le jour où un regimento existera, le rétablir sera un geste conscient). **2 conservés et documentés** : `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, dont le vide EST le réglage (la redirection des avis internes est inactive, vérifié le 30/08 sur l'inscription BTL) — commentaire posé dans `register/index.ts`, là où on les lit, pour que personne ne les « répare ». Un `secrets list` dit désormais la vérité : deux empreintes vides, toutes deux voulues. |
 | B18 | 2026-09-02 | **Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout. |
+| G2 | 2026-09-02 | **L'écart P2/P8 est tranché — le texte s'aligne sur le code, et la forme de la décision est aussi importante que son fond.** Option 1 des trois écrites : la pratique vivante (le circuit collégial que la BTL exerce depuis le 01/09) devient la règle. Spec v1.11 : P2 dit que **l'exécution elle-même est collégiale** ; P8 clarifie la frontière sans rien céder — les quorums du code ne sont pas des votes mais des **garanties d'exécution** (une ratification atteste qu'une décision collective existe hors logiciel, elle ne la remplace pas) : « modéliser la délibération, jamais ; exiger plusieurs mains pour exécuter, toujours ». Aucune ligne de code. **Décision prise seule, en le disant** — mode dégradé assumé (aucun collectif ne s'est encore saisi de l'outil), daté à `DECISION_G2_alignement_textes_promotion_2026-09-02.md`, `GOUV-18` au REGISTRE (v0.15), **fenêtre d'objection à la formation du 13/09** : le jour où le collectif existe, il trouve une décision contestable, pas un état de fait muet. Au passage, le fil-piège de `GOUV-17b` est réparé (livré ce matin, la ligne du registre avait un jour de retard). |
 
 ---
 
@@ -2302,4 +2280,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 74 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

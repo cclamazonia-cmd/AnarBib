@@ -1695,6 +1695,14 @@
           "fr": "**Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout.",
           "pt": "**As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta."
         }
+      ],
+      [
+        "G2",
+        "2026-09-02",
+        {
+          "fr": "**L'écart P2/P8 est tranché — le texte s'aligne sur le code, et la forme de la décision est aussi importante que son fond.** Option 1 des trois écrites : la pratique vivante (le circuit collégial que la BTL exerce depuis le 01/09) devient la règle. Spec v1.11 : P2 dit que **l'exécution elle-même est collégiale** ; P8 clarifie la frontière sans rien céder — les quorums du code ne sont pas des votes mais des **garanties d'exécution** (une ratification atteste qu'une décision collective existe hors logiciel, elle ne la remplace pas) : « modéliser la délibération, jamais ; exiger plusieurs mains pour exécuter, toujours ». Aucune ligne de code. **Décision prise seule, en le disant** — mode dégradé assumé (aucun collectif ne s'est encore saisi de l'outil), daté à `DECISION_G2_alignement_textes_promotion_2026-09-02.md`, `GOUV-18` au REGISTRE (v0.15), **fenêtre d'objection à la formation du 13/09** : le jour où le collectif existe, il trouve une décision contestable, pas un état de fait muet. Au passage, le fil-piège de `GOUV-17b` est réparé (livré ce matin, la ligne du registre avait un jour de retard).",
+          "pt": "**A divergência P2/P8 está decidida — o texto se alinha ao código, e a forma da decisão importa tanto quanto o fundo.** Opção 1: a prática viva (o circuito colegial que a BTL exerce desde 01/09) vira a regra. Spec v1.11: P2 diz que **a própria execução é colegial**; P8 esclarece a fronteira — os quóruns do código não são votos, são **garantias de execução**: «modelar a deliberação, nunca; exigir várias mãos para executar, sempre». Nenhuma linha de código. **Decisão tomada sozinho, dizendo-o** — modo degradado assumido, datada, `GOUV-18` no REGISTRO, **janela de objeção na formação de 13/09**: o dia em que o coletivo existir, encontrará uma decisão contestável, não um fato consumado mudo."
+        }
       ]
     ]
   },
@@ -3553,56 +3561,6 @@
       "verif": {
         "fr": "31/08 — remesuré en production : **62 tables de `public` sur 189** à zéro insertion (`pg_stat_user_tables.n_tup_ins`, croisé avec un décompte de lignes sur les tables citées). Le compte est stable, la liste ne l'est pas — `loan_cycle_notifications` y est entrée le jour de sa naissance. Emprunt **#69** ouvert à la BLMF ; l'invitation à écrire une note de lecture est attendue le **10/09**, et c'est la première sortie possible de cette liste.",
         "pt": "31/08 — remedido em produção: **62 tabelas de `public` em 189** a zero inserções. A conta é estável, a lista não. Empréstimo **#69** aberto na BLMF; o convite a escrever uma nota de leitura é esperado em **10/09**."
-      }
-    },
-    {
-      "id": "G2",
-      "d": "G",
-      "p": "P1",
-      "s": "decision",
-      "e": "S",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Trancher politiquement l'écart entre P2 et P8 sur la promotion à coordenador·a",
-        "pt": "Decidir politicamente o desvio entre P2 e P8 sobre a promoção a coordenador·a"
-      },
-      "v": {
-        "fr": "La migration `20260826120000` **est en production** et tranche dans le sens de P2 : collégialité obligatoire, ratification préalable, repli à une signature quand il n'y a qu'une seule personne coordinatrice, consentement explicite de la personne promue, exclusion de cette personne du décompte du quorum. **Mais la décision politique n'a jamais été prise.**",
-        "pt": "A migração `20260826120000` **está em produção** e decide no sentido de P2: colegialidade obrigatória, ratificação prévia, recuo a uma assinatura quando há uma só pessoa coordenadora, consentimento explícito da pessoa promovida, exclusão dessa pessoa da contagem do quórum. **Mas a decisão política nunca foi tomada.**"
-      },
-      "w": {
-        "fr": "Porter la question au collectif. Trois options sont écrites : ne rien changer au code et corriger le texte de P2 ; étendre le chemin A comme le code l'a fait ; ou garder la promotion directe mais la rendre visible avec un délai d'objection.",
-        "pt": "Levar a questão ao coletivo. Três opções estão escritas: não mudar nada no código e corrigir o texto de P2; estender o caminho A como o código fez; ou manter a promoção direta mas torná-la visível com um prazo de objeção."
-      },
-      "y": {
-        "fr": "Il y a aujourd'hui **du code en production qui anticipe une décision collective non prise**. Le rollback est écrit et testé, ce qui rend l'anticipation réversible — mais l'autre lecture, *le SIGB ne modélise pas l'assemblée générale*, reste entièrement défendable. **Ce n'est pas un arbitrage technique.**",
-        "pt": "Há hoje **código em produção que antecipa uma decisão coletiva não tomada**. O rollback está escrito e testado, o que torna a antecipação reversível — mas a outra leitura, *o SIGB não modela a assembleia geral*, continua inteiramente defensável. **Não é uma arbitragem técnica.**"
-      },
-      "f": {
-        "fr": [
-          "Le collectif a tranché, et la décision est inscrite au REGISTRE.",
-          "Le code est aligné sur la décision, ou le texte de P2 est amendé.",
-          "Rappel : le fichier de rollback porte un tiret bas initial qui empêche la CLI de l'appliquer — **ne pas le renommer**."
-        ],
-        "pt": [
-          "O coletivo decidiu, e a decisão está inscrita no REGISTRO.",
-          "O código está alinhado com a decisão, ou o texto de P2 é emendado.",
-          "Lembrete: o arquivo de rollback traz um sublinhado inicial que impede a CLI de aplicá-lo — **não renomeá-lo**."
-        ]
-      },
-      "dep": {
-        "fr": "Question ouverte depuis le 26/08. Bloque **G3** si la réponse est « revenir en arrière ».",
-        "pt": "Questão aberta desde 26/08. Bloqueia **G3** se a resposta for «voltar atrás»."
-      },
-      "r": [
-        "ECART_cosignature_promotion_coordenador_2026-08-26 §5",
-        "REGISTRE §41 GOUV-1"
-      ],
-      "verif": {
-        "fr": "31/08 — la migration `20260826120000` figure bien au registre de production. Rien de neuf mesurable sur la décision politique elle-même.",
-        "pt": "31/08 — a migração `20260826120000` está no registro de produção. Nada de novo mensurável sobre a decisão política."
       }
     },
     {
