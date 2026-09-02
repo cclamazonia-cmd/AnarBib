@@ -3408,8 +3408,8 @@
           "pt": "~~Lote A — nenhum código bruto na tela~~ — entregue em 02/09: os sete status de relação traduzidos nas dez locales, com fallback no código; os dois ícones do lote com nome acessível."
         },
         {
-          "fr": "Lot B — les six libellés de l'en-tête et des sections parlent le geste, pas le pipeline.",
-          "pt": "Lote B — os seis rótulos falam o gesto, não o pipeline."
+          "fr": "~~Lot B — les libellés parlent le geste~~ — livré le 02/09 : « Traitements » → « Lots reçus », « Lignes en staging » → « Notices reçues », « Promu·e·s » → « Entrées au catalogue », « Brouillons créés » → « À l'atelier » (là où sont les notices, dans le vocabulaire déjà connu), « File de révision » → « Notices à vérifier », « Journal d'importation » → « Historique » ; dix locales, aucune clé ajoutée, le pipeline inchangé.",
+          "pt": "~~Lote B — os rótulos falam o gesto~~ — entregue em 02/09: «Tratamentos» → «Lotes recebidos», «Linhas em staging» → «Registros recebidos», «Promovidos» → «Entradas no catálogo», «Rascunhos criados» → «Na oficina», «Fila de revisão» → «Registros a verificar», «Diário» → «Histórico»; dez locales, nenhuma chave nova."
         },
         {
           "fr": "Lot C — le commutateur « Sens » est visible comme deux onglets ; l'onglet Exportation montre d'abord « Exporter notre catalogue », le reste replié sous « Mutualiser un fonds numérique » (coordination) ; plus de « en développement » ni de *bucket* à l'écran ; être source et OPDS y ont leur place ; le parcours « j'ai un fichier » tient en deux écrans.",
