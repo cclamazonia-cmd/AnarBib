@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 75 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 74 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 9
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 8
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée B20/B21/J7/J8 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `cb37a2a8`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-01.** **53 items sur 75** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **52 items sur 74** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -374,7 +374,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | En cours |
-| **B18** | Désactiver les clés API legacy — le feu vert est un chiffre, pas une date | `P1` | Ouvert |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
 
 #### B4 — Examiner les quatre tables à RLS sans policy qui ne sont pas du transit
@@ -554,31 +553,6 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 **Dépendances.** Éclairé par **B12** (la raison du saut est écrite). Résonne avec **A1** : un seul administrateur réseau, donc un seul émetteur possible de ces actions. Partage son vocabulaire avec le récapitulatif hebdomadaire, ce qui **allège F6** d'un fichier au lieu de l'alourdir.
 
 *Renvois : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6` · `item F8`*
-
-#### B18 — Désactiver les clés API legacy — le feu vert est un chiffre, pas une date
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système, SQL / PostgreSQL
-
-**État.** La bascule du 01/09 est faite et vérifiée sur pièce : les 27 fonctions Edge lisent la clé secrète via `_shared/core/secret-key.ts` (les logs de passerelle ne montrent plus une seule requête de fonction en clé legacy), les scripts d'administration tournent sur leur clé dédiée `poste_accattone_scripts_2026_08`, et le front reconstruit du 01/09 au soir embarque la clé publiable — zéro occurrence de l'ancienne clé anon dans le bundle. Ce qui reste de trafic legacy vient des navigateurs qui gardent l'ancien bundle en cache : 2 026 requêtes navigateur à préfixe `apikey` vide sur les 24 h du relevé.
-
-*Vérifié : 01/09 — logs de passerelle sur 24 h, champ `request.sb.apikey.apikey.prefix` : vide = clé legacy. 2 026 requêtes navigateur à préfixe vide ; zéro requête de fonction Edge en legacy ; 4 007 en `sb_secret_efQ1g`.
-
-02/09 — **la mesure de référence était biaisée, le repère du 01/09 est à jeter.** Le critère « `request.sb.apikey.apikey.prefix` vide = legacy » comptait aussi les requêtes sans AUCUNE clé : ClickHouse renvoie `''` pour une clé absente de la map. Sur 24 h : 946 requêtes « navigateur » selon l'ancienne formule, dont **419 réellement legacy** et **527 sans aucune clé** — un plancher permanent qui rendait le feu vert inatteignable par construction. Marqueur exact retenu à la place : `request.sb.jwt.apikey.payload.role`, renseigné pour les seules clés legacy, qui sont des JWT (`supabase_admin` exclu : c'est l'infrastructure Supabase, pas nous). **Depuis la bascule du 01/09 18 h : 175 requêtes legacy, deux sources seulement.** Googlebot, 142, sur 4 IP, entre 01 h 20 et 09 h 28 le 02/09 — il rejoue sa copie cachée de l'ancien bundle. Et un navigateur humain, 33, toutes entre 18 h 07 min 14 s et 18 h 07 min 17 s : un dernier chargement de page ouverte avant bascule, plus rien depuis. Trois hypothèses inquiétantes écartées sur pièces : le bundle réellement servi (`index-DYUwpoUE.js`, daté du 01/09 21 h 50) ne contient que `sb_publishable_KJByt` et zéro JWT, donc le runner CI ne réinjecte pas l'ancienne clé ; les 76 requêtes `node` s'arrêtent toutes à 16 h 19 le 01/09, avant la bascule (`build-catalogue-snapshot.mjs` et `build-thesaurus-skos.mjs`, passés depuis à `VITE_SUPABASE_PUBLISHABLE_KEY`) ; les Edge Functions sont à zéro legacy sur 3 134 requêtes, toutes en `sb_secret_efQ1g`. **L'item reste ouvert** : le seul consommateur legacy vivant est Googlebot, et désactiver maintenant casserait son crawl à dix jours de Bologne. La tâche de surveillance quotidienne a été corrigée le même jour — nouvelle requête sur le JWT, quatre origines distinguées (`edge-function`, `script`, `robot-google`, `navigateur`) au lieu d'une seule ligne lue, et interdiction de se rabattre sur `get_logs`, dont la requête figée n'expose pas les champs `request.sb.jwt.*`.*
-
-**Ce que c'est.** Attendre que le trafic navigateur à préfixe vide tombe à peu près à zéro — une vérification quotidienne planifiée le mesure, on ne décide pas au doigt mouillé. Puis, dans l'ordre : désactiver les clés `anon` et `service_role` legacy au dashboard (Settings → API Keys, onglet Legacy — geste réversible) ; retirer le repli sur `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` et la variable legacy de `.env.example` ; supprimer le vestige vault `anarbib_staging_anon_key`, qui n'a plus aucun appelant.
-
-**Pourquoi ça compte.** Tant que les clés legacy restent actives, le repli de `secret-key.ts` est un chemin vivant vers une clé qu'on croit morte, et une clé active que plus rien de légitime n'utilise est exactement la surface qu'un audit reprochera. La désactivation est réversible : le seul coût d'y aller trop tôt est un lecteur au bundle vieux de plusieurs jours qui devra recharger la page.
-
-**Ce qui compte comme fini.**
-
-- Le trafic legacy — mesuré par `request.sb.jwt.apikey.payload.role`, et non par un préfixe vide — est resté à zéro sur plusieurs jours consécutifs pour les trois origines qui nous concernent : navigateur, script et robot d'indexation.
-- Les clés legacy sont désactivées au dashboard et aucun 401 anormal n'apparaît dans les logs ni dans les retours des lecteurs.
-- Le repli de `secret-key.ts` est retiré ; la fonction lève si `SUPABASE_SECRET_KEYS` manque.
-- Le vestige vault `anarbib_staging_anon_key` est supprimé.
-
-**Dépendances.** Le renouvellement naturel des caches navigateur ; la vérification planifiée du trafic legacy (posée le 01/09).
-
-*Renvois : `supabase/functions/_shared/core/secret-key.ts` · `vault anarbib_staging_anon_key` · `item B19` · `item I14`*
 
 #### B19 — Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde
 
@@ -2296,6 +2270,7 @@ CI verte : lint et suite unitaire. |
 **Reste ouvert, hors périmètre** : le **v16 du 2 juillet** — la troisième lecture exacte, base du v17 — n'a jamais été versé et reste à retrouver ; le jour où il refait surface, il entre dans `GLB/archive/` sans autre décision (c'est écrit dans l'INDEX). |
 | B21 | 2026-09-02 | **Le compteur des clés étrangères sans index a son garde, et il a mordu dès son premier tour de CI** (run vert du 02/09 sur `dfc96a8b`). `tests/sql/fk_sans_index_garde_tests.sql` : 38 entrées assumées en trois familles motivées d'une ligne (15 vers les tables de codes `catalog_ref_*` — les résiduelles voulues du solde du 02/07, intactes —, 17 colonnes d'acteur de la qualité catalographique, 6 transit d'import `ingest`), l'en-tête portant la requête qui produit le relevé ET son angle mort (`DOC-RECENS-1` : index d'expression et partiels non vus, même méthode que l'advisor, accord à l'unité au 02/09). Gardé dans les deux sens : T1 — toute FK neuve sans index rougit la CI au moment où la migration s'écrit, son issue est un index ou une entrée motivée par un commit ; T2 — une entrée indexée ou disparue rougit aussi, la liste ne rétrécit que consciemment. Et T3 prouve la morsure à chaque run en créant une FK notoirement nue dans la transaction du test (fixture en tables temporaires — le hook pre-commit exige à raison RLS+GRANT de toute table qui naît dans `public`, même éphémère). La doctrine v17 est servie : le chantier n'est pas « soldé », il est **instrumenté** — la campagne d'indexation reste où elle est (B10, différée avec sa raison), et le compteur ne remontera plus en silence. |
 | F7 | 2026-09-02 | **Treize secrets vides, treize verdicts — et il n'en reste que deux, qui le sont exprès et le disent.** Le relevé rejoué le 02/09 donnait les mêmes treize empreintes de chaîne vide qu'au 30/08. Tri en trois classes, chaque lecteur relu : **11 supprimés** (`supabase secrets unset`) — dix doublons de tête de chaîne de repli dont la variante `ANARBIB_*` renseignée gagnait déjà, plus `REGIMENTO_URL` sur décision : aucun règlement réseau n'est publié, la branche morte qui l'attendait est **retirée du code** (trois endroits — dont une chaîne mal nommée dans `notify-document-permission-request` qui cherchait l'URL du *manuel* en essayant d'abord celle du *règlement* : inoffensive vide, fausse le jour où on l'aurait remplie ; le jour où un regimento existera, le rétablir sera un geste conscient). **2 conservés et documentés** : `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, dont le vide EST le réglage (la redirection des avis internes est inactive, vérifié le 30/08 sur l'inscription BTL) — commentaire posé dans `register/index.ts`, là où on les lit, pour que personne ne les « répare ». Un `secrets list` dit désormais la vérité : deux empreintes vides, toutes deux voulues. |
+| B18 | 2026-09-02 | **Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout. |
 
 ---
 
@@ -2327,4 +2302,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 75 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 74 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

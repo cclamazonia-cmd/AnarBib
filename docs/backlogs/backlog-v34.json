@@ -1687,6 +1687,14 @@
           "fr": "**Treize secrets vides, treize verdicts — et il n'en reste que deux, qui le sont exprès et le disent.** Le relevé rejoué le 02/09 donnait les mêmes treize empreintes de chaîne vide qu'au 30/08. Tri en trois classes, chaque lecteur relu : **11 supprimés** (`supabase secrets unset`) — dix doublons de tête de chaîne de repli dont la variante `ANARBIB_*` renseignée gagnait déjà, plus `REGIMENTO_URL` sur décision : aucun règlement réseau n'est publié, la branche morte qui l'attendait est **retirée du code** (trois endroits — dont une chaîne mal nommée dans `notify-document-permission-request` qui cherchait l'URL du *manuel* en essayant d'abord celle du *règlement* : inoffensive vide, fausse le jour où on l'aurait remplie ; le jour où un regimento existera, le rétablir sera un geste conscient). **2 conservés et documentés** : `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, dont le vide EST le réglage (la redirection des avis internes est inactive, vérifié le 30/08 sur l'inscription BTL) — commentaire posé dans `register/index.ts`, là où on les lit, pour que personne ne les « répare ». Un `secrets list` dit désormais la vérité : deux empreintes vides, toutes deux voulues.",
           "pt": "**Treze segredos vazios, treze vereditos — e só restam dois, de propósito e documentados.** **11 suprimidos** — dez duplicatas de cadeias de fallback cuja variante `ANARBIB_*` preenchida já ganhava, mais `REGIMENTO_URL` por decisão: nenhum regimento de rede está publicado, o ramo morto foi **retirado do código** (três lugares, incluindo uma cadeia mal nomeada que buscava a URL do manual tentando primeiro a do regimento). **2 conservados e documentados**: `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, cujo vazio É a configuração — comentário posto em `register/index.ts`, onde são lidos, para que ninguém os «conserte»."
         }
+      ],
+      [
+        "B18",
+        "2026-09-02",
+        {
+          "fr": "**Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout.",
+          "pt": "**As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta."
+        }
       ]
     ]
   },
@@ -4780,61 +4788,6 @@
         "fr": "31/08 — instruit, **corrigé**, livré et **éprouvé en envoi réel le jour même**. Cinq sources : la base (4 lignes en file ; `#72` passée à `sent` à 15 h 23 h 35, `skip_reason` à `NULL`), la réponse HTTP de `notify-event` (`200`, `recipients_count: 3`, trois `ok: true`), **le courriel reçu et relu** (identité réseau, qualifiant de proposition correct), le code (aucune branche pour cet event avant ce jour ; un récapitulatif hebdomadaire qui sert les mêmes destinataires depuis le 17/08), et le déclencheur `trg_team_outbox_dispatch`, `AFTER INSERT` sans rejeu. **Reste à éprouver sur un type d'action sans autre canal.**",
         "pt": "31/08 — instruído, **corrigido**, entregue e **provado em envio real no mesmo dia**, sobre cinco fontes, incluindo **o e-mail recebido e relido**. **Falta provar sobre um tipo de ação sem outro canal.**"
       }
-    },
-    {
-      "id": "B18",
-      "d": "B",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin",
-        "sql"
-      ],
-      "t": {
-        "fr": "Désactiver les clés API legacy — le feu vert est un chiffre, pas une date",
-        "pt": "Desativar as chaves de API legadas — o sinal verde é um número, não uma data"
-      },
-      "v": {
-        "fr": "La bascule du 01/09 est faite et vérifiée sur pièce : les 27 fonctions Edge lisent la clé secrète via `_shared/core/secret-key.ts` (les logs de passerelle ne montrent plus une seule requête de fonction en clé legacy), les scripts d'administration tournent sur leur clé dédiée `poste_accattone_scripts_2026_08`, et le front reconstruit du 01/09 au soir embarque la clé publiable — zéro occurrence de l'ancienne clé anon dans le bundle. Ce qui reste de trafic legacy vient des navigateurs qui gardent l'ancien bundle en cache : 2 026 requêtes navigateur à préfixe `apikey` vide sur les 24 h du relevé.",
-        "pt": "A virada de 01/09 está feita e verificada com provas: as 27 funções Edge leem a chave secreta via `_shared/core/secret-key.ts` (os logs do gateway não mostram mais nenhuma requisição de função com chave legada), os scripts de administração rodam com sua chave dedicada `poste_accattone_scripts_2026_08`, e o front reconstruído na noite de 01/09 embarca a chave publicável — zero ocorrência da antiga chave anon no bundle. O que resta de tráfego legado vem dos navegadores que guardam o bundle antigo em cache: 2.026 requisições de navegador com prefixo `apikey` vazio nas 24 h do levantamento."
-      },
-      "w": {
-        "fr": "Attendre que le trafic navigateur à préfixe vide tombe à peu près à zéro — une vérification quotidienne planifiée le mesure, on ne décide pas au doigt mouillé. Puis, dans l'ordre : désactiver les clés `anon` et `service_role` legacy au dashboard (Settings → API Keys, onglet Legacy — geste réversible) ; retirer le repli sur `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` et la variable legacy de `.env.example` ; supprimer le vestige vault `anarbib_staging_anon_key`, qui n'a plus aucun appelant.",
-        "pt": "Esperar que o tráfego de navegador com prefixo vazio caia a praticamente zero — uma verificação diária agendada faz a medição, não se decide no olhômetro. Depois, na ordem: desativar as chaves `anon` e `service_role` legadas no dashboard (Settings → API Keys, aba Legacy — gesto reversível); retirar o fallback para `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` e a variável legada de `.env.example`; apagar o vestígio do vault `anarbib_staging_anon_key`, que não tem mais nenhum chamador."
-      },
-      "f": {
-        "fr": [
-          "Le trafic legacy — mesuré par `request.sb.jwt.apikey.payload.role`, et non par un préfixe vide — est resté à zéro sur plusieurs jours consécutifs pour les trois origines qui nous concernent : navigateur, script et robot d'indexation.",
-          "Les clés legacy sont désactivées au dashboard et aucun 401 anormal n'apparaît dans les logs ni dans les retours des lecteurs.",
-          "Le repli de `secret-key.ts` est retiré ; la fonction lève si `SUPABASE_SECRET_KEYS` manque.",
-          "Le vestige vault `anarbib_staging_anon_key` est supprimé."
-        ],
-        "pt": [
-          "O tráfego legado — medido por `request.sb.jwt.apikey.payload.role`, e não por um prefixo vazio — ficou em zero por vários dias consecutivos nas três origens que nos dizem respeito: navegador, script e robô de indexação.",
-          "As chaves legadas estão desativadas no dashboard e nenhum 401 anormal aparece nos logs nem nos retornos das leitoras e leitores.",
-          "O fallback de `secret-key.ts` foi retirado; a função lança erro se `SUPABASE_SECRET_KEYS` faltar.",
-          "O vestígio do vault `anarbib_staging_anon_key` foi apagado."
-        ]
-      },
-      "y": {
-        "fr": "Tant que les clés legacy restent actives, le repli de `secret-key.ts` est un chemin vivant vers une clé qu'on croit morte, et une clé active que plus rien de légitime n'utilise est exactement la surface qu'un audit reprochera. La désactivation est réversible : le seul coût d'y aller trop tôt est un lecteur au bundle vieux de plusieurs jours qui devra recharger la page.",
-        "pt": "Enquanto as chaves legadas ficarem ativas, o fallback de `secret-key.ts` é um caminho vivo para uma chave que se acredita morta, e uma chave ativa que nada de legítimo usa mais é exatamente a superfície que uma auditoria vai apontar. A desativação é reversível: o único custo de ir cedo demais é uma leitora com bundle de vários dias que terá de recarregar a página."
-      },
-      "dep": {
-        "fr": "Le renouvellement naturel des caches navigateur ; la vérification planifiée du trafic legacy (posée le 01/09).",
-        "pt": "A renovação natural dos caches de navegador; a verificação agendada do tráfego legado (criada em 01/09)."
-      },
-      "verif": {
-        "fr": "01/09 — logs de passerelle sur 24 h, champ `request.sb.apikey.apikey.prefix` : vide = clé legacy. 2 026 requêtes navigateur à préfixe vide ; zéro requête de fonction Edge en legacy ; 4 007 en `sb_secret_efQ1g`.\n\n02/09 — **la mesure de référence était biaisée, le repère du 01/09 est à jeter.** Le critère « `request.sb.apikey.apikey.prefix` vide = legacy » comptait aussi les requêtes sans AUCUNE clé : ClickHouse renvoie `''` pour une clé absente de la map. Sur 24 h : 946 requêtes « navigateur » selon l'ancienne formule, dont **419 réellement legacy** et **527 sans aucune clé** — un plancher permanent qui rendait le feu vert inatteignable par construction. Marqueur exact retenu à la place : `request.sb.jwt.apikey.payload.role`, renseigné pour les seules clés legacy, qui sont des JWT (`supabase_admin` exclu : c'est l'infrastructure Supabase, pas nous). **Depuis la bascule du 01/09 18 h : 175 requêtes legacy, deux sources seulement.** Googlebot, 142, sur 4 IP, entre 01 h 20 et 09 h 28 le 02/09 — il rejoue sa copie cachée de l'ancien bundle. Et un navigateur humain, 33, toutes entre 18 h 07 min 14 s et 18 h 07 min 17 s : un dernier chargement de page ouverte avant bascule, plus rien depuis. Trois hypothèses inquiétantes écartées sur pièces : le bundle réellement servi (`index-DYUwpoUE.js`, daté du 01/09 21 h 50) ne contient que `sb_publishable_KJByt` et zéro JWT, donc le runner CI ne réinjecte pas l'ancienne clé ; les 76 requêtes `node` s'arrêtent toutes à 16 h 19 le 01/09, avant la bascule (`build-catalogue-snapshot.mjs` et `build-thesaurus-skos.mjs`, passés depuis à `VITE_SUPABASE_PUBLISHABLE_KEY`) ; les Edge Functions sont à zéro legacy sur 3 134 requêtes, toutes en `sb_secret_efQ1g`. **L'item reste ouvert** : le seul consommateur legacy vivant est Googlebot, et désactiver maintenant casserait son crawl à dix jours de Bologne. La tâche de surveillance quotidienne a été corrigée le même jour — nouvelle requête sur le JWT, quatre origines distinguées (`edge-function`, `script`, `robot-google`, `navigateur`) au lieu d'une seule ligne lue, et interdiction de se rabattre sur `get_logs`, dont la requête figée n'expose pas les champs `request.sb.jwt.*`.",
-        "pt": "01/09 — logs do gateway em 24 h, campo `request.sb.apikey.apikey.prefix`: vazio = chave legada. 2.026 requisições de navegador com prefixo vazio; zero requisição de função Edge em legado; 4.007 em `sb_secret_efQ1g`.\n\n02/09 — **a medida de referência estava enviesada, o marco de 01/09 deve ser descartado.** O critério « `request.sb.apikey.apikey.prefix` vazio = legado » contava também as requisições SEM NENHUMA chave: o ClickHouse devolve `''` para uma chave ausente do map. Em 24 h: 946 requisições « navegador » pela fórmula antiga, das quais **419 realmente legadas** e **527 sem chave alguma** — um piso permanente que tornava o sinal verde inatingível por construção. Marcador exato adotado no lugar: `request.sb.jwt.apikey.payload.role`, preenchido apenas para as chaves legadas, que são JWT (`supabase_admin` excluído: é a infraestrutura da Supabase, não nós). **Desde a virada de 01/09 18 h: 175 requisições legadas, apenas duas fontes.** O Googlebot, 142, em 4 IPs, entre 01h20 e 09h28 de 02/09 — ele reexecuta sua cópia em cache do bundle antigo. E um navegador humano, 33, todas entre 18h07min14s e 18h07min17s: um último carregamento de página aberta antes da virada, e nada mais desde então. Três hipóteses preocupantes afastadas com provas: o bundle realmente servido (`index-DYUwpoUE.js`, de 01/09 às 21h50) contém apenas `sb_publishable_KJByt` e zero JWT, ou seja, o runner de CI não reinjeta a chave antiga; as 76 requisições `node` param todas às 16h19 de 01/09, antes da virada (`build-catalogue-snapshot.mjs` e `build-thesaurus-skos.mjs`, desde então migrados para `VITE_SUPABASE_PUBLISHABLE_KEY`); as funções Edge estão em zero legado sobre 3 134 requisições, todas em `sb_secret_efQ1g`. **O item continua aberto**: o único consumidor legado vivo é o Googlebot, e desativar agora quebraria seu rastreamento a dez dias de Bolonha. A tarefa de vigilância diária foi corrigida no mesmo dia — nova consulta sobre o JWT, quatro origens distinguidas (`edge-function`, `script`, `robot-google`, `navegador`) em vez de uma única linha lida, e proibição de recorrer a `get_logs`, cuja consulta fixa não expõe os campos `request.sb.jwt.*`."
-      },
-      "r": [
-        "supabase/functions/_shared/core/secret-key.ts",
-        "vault anarbib_staging_anon_key",
-        "item B19",
-        "item I14"
-      ]
     },
     {
       "id": "B19",

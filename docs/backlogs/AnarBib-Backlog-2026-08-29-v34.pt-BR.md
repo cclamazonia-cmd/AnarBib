@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-01** · 75 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-01** · 74 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 9
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 8
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **2 de setembro de 2026** — atualização dirigida após o dia B20/B21/J7/J8: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `cb37a2a8`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
-**Frescor dos constatos em 2026-09-01.** **53 itens de 75** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-01.** **52 itens de 74** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B17, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -374,7 +374,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B17** | O aviso que devia tornar visíveis as ações de um administrador de rede não existe | `P1` | Em curso |
-| **B18** | Desativar as chaves de API legadas — o sinal verde é um número, não uma data | `P1` | Aberto |
 | **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
@@ -546,31 +545,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **Dependências.** Esclarecido por **B12**. Ressoa com **A1**. Partilha o vocabulário com o resumo semanal, o que **alivia F6**.
 
 *Remissões : `docs/specs/spec-administrateur-reseau-v0.4.md §6.3` · `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/_shared/i18n/cross-library-strings.ts` · `supabase/functions/notify-cross-library-digest/` · `public.team_notification_outbox lignes 56, 58, 61, 72` · `public.fn_is_critical_action_type` · `REGISTRE DOC-RECENS-1` · `item B12` · `item F6` · `item F8`*
-
-#### B18 — Desativar as chaves de API legadas — o sinal verde é um número, não uma data
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas, SQL / PostgreSQL
-
-**Estado.** A virada de 01/09 está feita e verificada com provas: as 27 funções Edge leem a chave secreta via `_shared/core/secret-key.ts` (os logs do gateway não mostram mais nenhuma requisição de função com chave legada), os scripts de administração rodam com sua chave dedicada `poste_accattone_scripts_2026_08`, e o front reconstruído na noite de 01/09 embarca a chave publicável — zero ocorrência da antiga chave anon no bundle. O que resta de tráfego legado vem dos navegadores que guardam o bundle antigo em cache: 2.026 requisições de navegador com prefixo `apikey` vazio nas 24 h do levantamento.
-
-*Verificado : 01/09 — logs do gateway em 24 h, campo `request.sb.apikey.apikey.prefix`: vazio = chave legada. 2.026 requisições de navegador com prefixo vazio; zero requisição de função Edge em legado; 4.007 em `sb_secret_efQ1g`.
-
-02/09 — **a medida de referência estava enviesada, o marco de 01/09 deve ser descartado.** O critério « `request.sb.apikey.apikey.prefix` vazio = legado » contava também as requisições SEM NENHUMA chave: o ClickHouse devolve `''` para uma chave ausente do map. Em 24 h: 946 requisições « navegador » pela fórmula antiga, das quais **419 realmente legadas** e **527 sem chave alguma** — um piso permanente que tornava o sinal verde inatingível por construção. Marcador exato adotado no lugar: `request.sb.jwt.apikey.payload.role`, preenchido apenas para as chaves legadas, que são JWT (`supabase_admin` excluído: é a infraestrutura da Supabase, não nós). **Desde a virada de 01/09 18 h: 175 requisições legadas, apenas duas fontes.** O Googlebot, 142, em 4 IPs, entre 01h20 e 09h28 de 02/09 — ele reexecuta sua cópia em cache do bundle antigo. E um navegador humano, 33, todas entre 18h07min14s e 18h07min17s: um último carregamento de página aberta antes da virada, e nada mais desde então. Três hipóteses preocupantes afastadas com provas: o bundle realmente servido (`index-DYUwpoUE.js`, de 01/09 às 21h50) contém apenas `sb_publishable_KJByt` e zero JWT, ou seja, o runner de CI não reinjeta a chave antiga; as 76 requisições `node` param todas às 16h19 de 01/09, antes da virada (`build-catalogue-snapshot.mjs` e `build-thesaurus-skos.mjs`, desde então migrados para `VITE_SUPABASE_PUBLISHABLE_KEY`); as funções Edge estão em zero legado sobre 3 134 requisições, todas em `sb_secret_efQ1g`. **O item continua aberto**: o único consumidor legado vivo é o Googlebot, e desativar agora quebraria seu rastreamento a dez dias de Bolonha. A tarefa de vigilância diária foi corrigida no mesmo dia — nova consulta sobre o JWT, quatro origens distinguidas (`edge-function`, `script`, `robot-google`, `navegador`) em vez de uma única linha lida, e proibição de recorrer a `get_logs`, cuja consulta fixa não expõe os campos `request.sb.jwt.*`.*
-
-**O que é.** Esperar que o tráfego de navegador com prefixo vazio caia a praticamente zero — uma verificação diária agendada faz a medição, não se decide no olhômetro. Depois, na ordem: desativar as chaves `anon` e `service_role` legadas no dashboard (Settings → API Keys, aba Legacy — gesto reversível); retirar o fallback para `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` e a variável legada de `.env.example`; apagar o vestígio do vault `anarbib_staging_anon_key`, que não tem mais nenhum chamador.
-
-**Por que importa.** Enquanto as chaves legadas ficarem ativas, o fallback de `secret-key.ts` é um caminho vivo para uma chave que se acredita morta, e uma chave ativa que nada de legítimo usa mais é exatamente a superfície que uma auditoria vai apontar. A desativação é reversível: o único custo de ir cedo demais é uma leitora com bundle de vários dias que terá de recarregar a página.
-
-**O que conta como terminado.**
-
-- O tráfego legado — medido por `request.sb.jwt.apikey.payload.role`, e não por um prefixo vazio — ficou em zero por vários dias consecutivos nas três origens que nos dizem respeito: navegador, script e robô de indexação.
-- As chaves legadas estão desativadas no dashboard e nenhum 401 anormal aparece nos logs nem nos retornos das leitoras e leitores.
-- O fallback de `secret-key.ts` foi retirado; a função lança erro se `SUPABASE_SECRET_KEYS` faltar.
-- O vestígio do vault `anarbib_staging_anon_key` foi apagado.
-
-**Dependências.** A renovação natural dos caches de navegador; a verificação agendada do tráfego legado (criada em 01/09).
-
-*Remissões : `supabase/functions/_shared/core/secret-key.ts` · `vault anarbib_staging_anon_key` · `item B19` · `item I14`*
 
 #### B19 — Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo
 
@@ -2270,6 +2244,7 @@ CI verde. |
 | J8 | 2026-09-02 | **Um só «v17», e é o certo — a série do Grande Livro branco está versada no depósito** (arbitragem de 02/09). O docx de maio arquivado sob nome datado, o **v17 de 01/09 entra em `docs/GLB/`** como referência viva, o INDEX não designa mais um estado de maio. Detalhe: o PDF já tinha saído de Downloads — **reconstituído ao byte (762 814) a partir do transcript da sessão que o leu**. **Fica aberto**: o v16 de 2 de julho segue por encontrar; quando ressurgir, entra em `GLB/archive/` sem outra decisão. |
 | B21 | 2026-09-02 | **O contador das chaves estrangeiras sem índice tem sua guarda, e ela mordeu já na primeira volta de CI** (run verde de 02/09). 38 entradas assumidas em três famílias motivadas, cabeçalho com a consulta E seu ângulo morto (`DOC-RECENS-1`). Guardada nos dois sentidos: toda FK nova sem índice avermelha a CI no momento em que a migração se escreve; uma entrada indexada ou desaparecida avermelha também — a lista só encolhe conscientemente. T3 prova a mordida a cada execução. A doutrina v17 está servida: o canteiro não foi «saldado», foi **instrumentado** — e o contador não subirá mais em silêncio. |
 | F7 | 2026-09-02 | **Treze segredos vazios, treze vereditos — e só restam dois, de propósito e documentados.** **11 suprimidos** — dez duplicatas de cadeias de fallback cuja variante `ANARBIB_*` preenchida já ganhava, mais `REGIMENTO_URL` por decisão: nenhum regimento de rede está publicado, o ramo morto foi **retirado do código** (três lugares, incluindo uma cadeia mal nomeada que buscava a URL do manual tentando primeiro a do regimento). **2 conservados e documentados**: `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, cujo vazio É a configuração — comentário posto em `register/index.ts`, onde são lidos, para que ninguém os «conserte». |
+| B18 | 2026-09-02 | **As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta. |
 
 ---
 
@@ -2301,4 +2276,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 75 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 74 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `cb37a2a8`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
