@@ -1750,6 +1750,15 @@ export default function ImportacoesPage() {
               </div>
               <div className="imp-sheet__body">
                 <p className="imp-note">{t({ id: 'importacoes.export.serFonte.desc' })}</p>
+                <p className="imp-note">{t({ id: 'importacoes.export.serFonte.who' })}</p>
+                {/* La porte vers le circuit : la barre de navigation n'offre
+                    « Réseau » qu'aux admins réseau (canSeeRede), alors que
+                    RedePage accueille une coordination directement sur l'onglet
+                    « Être source » (OAI-O3). Sans ce lien, une coordination
+                    devait taper /rede à la main — constat de Xavier, 02/09. */}
+                <Link to="/rede" className="cat-btn secondary" style={{ display: 'inline-block', marginTop: 6 }}>
+                  {t({ id: 'importacoes.export.serFonte.go' })}
+                </Link>
                 <p className="imp-note">{t({ id: 'importacoes.export.serFonte.opds' })}</p>
               </div>
             </div>

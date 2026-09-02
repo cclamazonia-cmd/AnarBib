@@ -6230,5 +6230,7 @@
   "importacoes.fontes.relation.mutualizacao_autorizada": "mutualización autorizada",
   "importacoes.export.coord.title": "Mutualizar un fondo digital",
   "importacoes.export.coord.hint": "Gestos reservados a la coordinación: preparar la elegibilidad, entregar un lote de material gris a una biblioteca asociada, adjuntar lo recibido, verificar el dominio público.",
-  "importacoes.export.serFonte.opds": "Los documentos digitales públicos del catálogo ya salen por un flujo OPDS 1.2 (/opds), legible por cualquier aplicación de lectura — sin gesto que hacer."
+  "importacoes.export.serFonte.opds": "Los documentos digitales públicos del catálogo ya salen por un flujo OPDS 1.2 (/opds), legible por cualquier aplicación de lectura — sin gesto que hacer.",
+  "importacoes.export.serFonte.go": "Pedir la apertura, o ver el estado de la solicitud",
+  "importacoes.export.serFonte.who": "Quién pide: la coordinación de la biblioteca. Quién decide: la administración de la red."
 }

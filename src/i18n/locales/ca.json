@@ -6230,5 +6230,7 @@
   "importacoes.fontes.relation.mutualizacao_autorizada": "mutualització autoritzada",
   "importacoes.export.coord.title": "Mutualitzar un fons digital",
   "importacoes.export.coord.hint": "Gestos reservats a la coordinació: preparar l’elegibilitat, lliurar un lot de material gris a una biblioteca associada, adjuntar el que s’ha rebut, verificar el domini públic.",
-  "importacoes.export.serFonte.opds": "Els documents digitals públics del catàleg ja surten per un flux OPDS 1.2 (/opds), llegible per qualsevol aplicació de lectura — cap gest a fer."
+  "importacoes.export.serFonte.opds": "Els documents digitals públics del catàleg ja surten per un flux OPDS 1.2 (/opds), llegible per qualsevol aplicació de lectura — cap gest a fer.",
+  "importacoes.export.serFonte.go": "Demanar l’obertura, o veure l’estat de la sol·licitud",
+  "importacoes.export.serFonte.who": "Qui demana: la coordinació de la biblioteca. Qui decideix: l’administració de la xarxa."
 }

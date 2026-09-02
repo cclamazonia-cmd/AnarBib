@@ -6230,5 +6230,7 @@
   "importacoes.fontes.relation.mutualizacao_autorizada": "Teilen genehmigt",
   "importacoes.export.coord.title": "Einen digitalen Bestand teilen",
   "importacoes.export.coord.hint": "Der Koordination vorbehalten: Eignung vorbereiten, einen Bestand grauer Literatur an eine Partnerbibliothek übergeben, Empfangenes zuordnen, Gemeinfreiheit prüfen.",
-  "importacoes.export.serFonte.opds": "Die öffentlichen digitalen Dokumente des Katalogs gehen bereits über einen OPDS-1.2-Feed (/opds) hinaus, lesbar von jeder Lese-App — nichts zu tun."
+  "importacoes.export.serFonte.opds": "Die öffentlichen digitalen Dokumente des Katalogs gehen bereits über einen OPDS-1.2-Feed (/opds) hinaus, lesbar von jeder Lese-App — nichts zu tun.",
+  "importacoes.export.serFonte.go": "Öffnung beantragen oder den Stand des Antrags sehen",
+  "importacoes.export.serFonte.who": "Wer beantragt: die Koordination der Bibliothek. Wer entscheidet: die Netzwerkverwaltung."
 }

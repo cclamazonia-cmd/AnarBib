@@ -1128,6 +1128,8 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Correção na mesma noite, sobre uma segunda captura de Xavier.** A exportação **tem** endereço: um comutador «Sentido: Importação / Exportação» no topo — tão pequeno que nem o mantenedor o tinha em mente. O volet 3 reformula-se: o endereço existe, é ilegível, e o que abre é a verdadeira «usina de gás» — **seis blocos de três naturezas** no mesmo separador: gesto de bibliotecário (exportação por lote), gestos de coordenação sobre o acervo digital (ZIP, envio direto, anexar recebidos), gestos jurídicos (elegibilidade, domínio público). Mais um bloco ILL que anuncia «em desenvolvimento» na tela, e um vocabulário que vaza (*assets*, *bucket*).
 
+**Terceiro constato, sobre a página entregue (Xavier, 02/09 à noite)**: uma coordenação não-admin não podia pedir a abertura pela interface — o circuito existe, mas o link «Rede» só aparece aos admins de rede. Tinha de digitar `/rede` à mão.
+
 *Verificado : 02/09 — constato de quem usa a ferramenta, verificado no código (valor bruto renderizado; nenhuma chave i18n).*
 
 **O que é.** Três lotes. **Lote A — antes da formação de 13/09**: traduzir os status brutos nas dez locales e rotular os dois ícones — uma noite. **Lote B**: renomear para o gesto, sem tocar no pipeline. **Lote C**: tornar visível o comutador «Sentido» (dois separadores de verdade) e **ordenar a Exportação por natureza** — primeiro o gesto de bibliotecário (exportar o catálogo, único bloco visível por padrão), depois um painel «Mutualizar um acervo digital» reservado à coordenação e recolhido; retirar da tela o que está «em desenvolvimento»; banir *assets* e *bucket*; reunir ali «ser fonte» (OAI) e OPDS. Na importação, o percurso «tenho um arquivo» em duas telas. Provar cada lote com quem não escreveu o código.
@@ -1136,6 +1138,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **O que conta como terminado.**
 
+- [object Object]
 - [object Object]
 - [object Object]
 - [object Object]
