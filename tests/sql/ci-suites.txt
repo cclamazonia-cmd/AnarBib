@@ -292,8 +292,8 @@ tests/sql/t1_accueil_collegial_tests.sql
 
 # Morte et anonyme : aucune des deux (B20 premier geste, 02/09/2026) : les
 # trois wrappers de planification de retour sans aucun appelant ne sont plus
-# exécutables par anon ; authenticated inchangé tant que B20 n'a pas arbitré
-# les lots. Réf. 20260902092104.
+# exécutables par anon ; depuis l'arbitrage du lot circulation (20260902103305)
+# ils sont fermés à authenticated aussi. Réf. 20260902092104.
 tests/sql/surface_morte_anon_fermee_tests.sql
 
 # La carte se taille, elle ne s'efface qu'a la main (B20 lot cartographie,
