@@ -532,7 +532,13 @@ BEGIN
         -- `loan_not_found`, et PAS `not_your_loan` : voir la note sur les
         -- deux refus, en tete de fichier. C'est RLS qui ferme, avant que le
         -- controle d'appartenance ne soit atteint.
-        IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
+        -- Depuis 20260902103305 (B20 lot circulation), schedule/clear (7.03,
+        -- 7.05) refusent UN ETAGE PLUS TOT : EXECUTE authenticated revoque
+        -- (aucun ecran n'a jamais appele ces wrappers) -> `permission denied`
+        -- a la porte, uniforme pour tout appelant, pas de fuite d'existence.
+        -- Pour 6.03 (renew, grant conserve) la branche est inerte.
+        -- `loan_not_found` reste accepte pour le jour d'un re-GRANT.
+        IF SQLERRM LIKE '%loan_not_found%' OR SQLERRM LIKE '%permission denied for function%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -620,7 +626,13 @@ BEGIN
         -- `loan_not_found`, et PAS `not_your_loan` : voir la note sur les
         -- deux refus, en tete de fichier. C'est RLS qui ferme, avant que le
         -- controle d'appartenance ne soit atteint.
-        IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
+        -- Depuis 20260902103305 (B20 lot circulation), schedule/clear (7.03,
+        -- 7.05) refusent UN ETAGE PLUS TOT : EXECUTE authenticated revoque
+        -- (aucun ecran n'a jamais appele ces wrappers) -> `permission denied`
+        -- a la porte, uniforme pour tout appelant, pas de fuite d'existence.
+        -- Pour 6.03 (renew, grant conserve) la branche est inerte.
+        -- `loan_not_found` reste accepte pour le jour d'un re-GRANT.
+        IF SQLERRM LIKE '%loan_not_found%' OR SQLERRM LIKE '%permission denied for function%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -652,7 +664,13 @@ BEGIN
         -- `loan_not_found`, et PAS `not_your_loan` : voir la note sur les
         -- deux refus, en tete de fichier. C'est RLS qui ferme, avant que le
         -- controle d'appartenance ne soit atteint.
-        IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
+        -- Depuis 20260902103305 (B20 lot circulation), schedule/clear (7.03,
+        -- 7.05) refusent UN ETAGE PLUS TOT : EXECUTE authenticated revoque
+        -- (aucun ecran n'a jamais appele ces wrappers) -> `permission denied`
+        -- a la porte, uniforme pour tout appelant, pas de fuite d'existence.
+        -- Pour 6.03 (renew, grant conserve) la branche est inerte.
+        -- `loan_not_found` reste accepte pour le jour d'un re-GRANT.
+        IF SQLERRM LIKE '%loan_not_found%' OR SQLERRM LIKE '%permission denied for function%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -714,7 +732,10 @@ BEGIN
     PERFORM api.mark_loan_return_missed(99999999, ARRAY[1]::integer[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
-    IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
+    -- Depuis 20260902103305 : refus a la porte (EXECUTE revoque, B20 lot
+    -- circulation) — `permission denied` avant meme le corps. `loan_not_found`
+    -- reste accepte pour le jour d'un re-GRANT.
+    IF SQLERRM LIKE '%loan_not_found%' OR SQLERRM LIKE '%permission denied for function%' THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
   END;
 
