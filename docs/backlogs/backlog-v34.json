@@ -1671,6 +1671,14 @@
           "fr": "**Un seul « v17 », et c'est le bon — la série du Grand Livre blanc est versée au dépôt** (arbitrage du 02/09 : « verser ce qui sert de référence, le jour où ça sert » — la leçon des documents fantômes du 01/09 appliquée à celui qui les avait diagnostiqués). Le docx du 29 mai est archivé sous un nom qui porte sa date sans revendiquer de numéro (`GLB/archive/AnarBib_Grand_Livre_blanc_refonte_2026-05-29.docx`) ; le **v17 du 01/09 entre dans `docs/GLB/`** comme référence vivante ; l'INDEX ne désigne plus un état de mai — il raconte l'anomalie résorbée et nomme le chaînon manquant. Détail piquant : le PDF avait déjà quitté `Downloads` au moment du geste — **reconstitué à l'octet près (762 814) depuis le transcript de la session qui l'avait lu**, la recette des pièces avalées servant cette fois pour du binaire.\n\n**Reste ouvert, hors périmètre** : le **v16 du 2 juillet** — la troisième lecture exacte, base du v17 — n'a jamais été versé et reste à retrouver ; le jour où il refait surface, il entre dans `GLB/archive/` sans autre décision (c'est écrit dans l'INDEX).",
           "pt": "**Um só «v17», e é o certo — a série do Grande Livro branco está versada no depósito** (arbitragem de 02/09). O docx de maio arquivado sob nome datado, o **v17 de 01/09 entra em `docs/GLB/`** como referência viva, o INDEX não designa mais um estado de maio. Detalhe: o PDF já tinha saído de Downloads — **reconstituído ao byte (762 814) a partir do transcript da sessão que o leu**. **Fica aberto**: o v16 de 2 de julho segue por encontrar; quando ressurgir, entra em `GLB/archive/` sem outra decisão."
         }
+      ],
+      [
+        "B21",
+        "2026-09-02",
+        {
+          "fr": "**Le compteur des clés étrangères sans index a son garde, et il a mordu dès son premier tour de CI** (run vert du 02/09 sur `dfc96a8b`). `tests/sql/fk_sans_index_garde_tests.sql` : 38 entrées assumées en trois familles motivées d'une ligne (15 vers les tables de codes `catalog_ref_*` — les résiduelles voulues du solde du 02/07, intactes —, 17 colonnes d'acteur de la qualité catalographique, 6 transit d'import `ingest`), l'en-tête portant la requête qui produit le relevé ET son angle mort (`DOC-RECENS-1` : index d'expression et partiels non vus, même méthode que l'advisor, accord à l'unité au 02/09). Gardé dans les deux sens : T1 — toute FK neuve sans index rougit la CI au moment où la migration s'écrit, son issue est un index ou une entrée motivée par un commit ; T2 — une entrée indexée ou disparue rougit aussi, la liste ne rétrécit que consciemment. Et T3 prouve la morsure à chaque run en créant une FK notoirement nue dans la transaction du test (fixture en tables temporaires — le hook pre-commit exige à raison RLS+GRANT de toute table qui naît dans `public`, même éphémère). La doctrine v17 est servie : le chantier n'est pas « soldé », il est **instrumenté** — la campagne d'indexation reste où elle est (B10, différée avec sa raison), et le compteur ne remontera plus en silence.",
+          "pt": "**O contador das chaves estrangeiras sem índice tem sua guarda, e ela mordeu já na primeira volta de CI** (run verde de 02/09). 38 entradas assumidas em três famílias motivadas, cabeçalho com a consulta E seu ângulo morto (`DOC-RECENS-1`). Guardada nos dois sentidos: toda FK nova sem índice avermelha a CI no momento em que a migração se escreve; uma entrada indexada ou desaparecida avermelha também — a lista só encolhe conscientemente. T3 prova a mordida a cada execução. A doutrina v17 está servida: o canteiro não foi «saldado», foi **instrumentado** — e o contador não subirá mais em silêncio."
+        }
       ]
     ]
   },
@@ -4866,59 +4874,6 @@
       "r": [
         "item B18"
       ]
-    },
-    {
-      "id": "B21",
-      "d": "B",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Le garde des clés étrangères sans index : instrumenter le compteur, ne plus le solder",
-        "pt": "A guarda das chaves estrangeiras sem índice: instrumentar o contador, não mais saldá-lo"
-      },
-      "v": {
-        "fr": "**Source : GLB v17 ch. 8.1, contre-vérifié le 02/09.** Le 02/07, la migration `20260702160920_fk_support_indexes_8_2` déployait 136 index et ramenait les clés étrangères sans index de support de 151 à 15 ; la v16 écrivait « soldé ». Au 01/09 : **32 dans `public`, 6 dans `ingest`, 38 au total** — remesurés à l'unité le 02/09 par requête indépendante sur `pg_constraint`/`pg_index`, en accord exact avec l'advisor. Les 15 résiduelles voulues (tables de codes `catalog_ref_*`) sont intactes ; les 17 nouvelles viennent **toutes** des tables créées depuis — signalements de doublons, file de vérification, notes de lecture, réclamations d'invitation. Le mécanisme est structurel : chaque table de qualité catalographique porte ses colonnes d'acteur (qui a signalé, décidé, appliqué), et chaque colonne d'acteur porte sa clé étrangère vers les comptes, non indexée. **Aucune faute n'a été commise ; le compteur remonte par le fonctionnement normal du projet.**",
-        "pt": "**Fonte: GLB v17 cap. 8.1, contraverificado em 02/09.** Em 02/07 a migração baixou as FK sem índice de 151 para 15; a v16 escreveu «saldado». Em 01/09: **32 em `public`, 6 em `ingest`, 38 no total** — remedidos à unidade em 02/09, em acordo exato com o advisor. As 17 novas vêm todas das tabelas criadas desde então: cada coluna de ator traz sua FK para as contas, não indexada. **Nenhuma falta foi cometida; o contador sobe pelo funcionamento normal do projeto.**"
-      },
-      "w": {
-        "fr": "Écrire **le garde, pas la migration** : une suite `tests/sql/` qui compare les clés étrangères sans index à une **liste assumée** versionnée (même registre que le banc d'engendrement du backlog et les six règles bloquantes du pre-commit). Toute FK nouvelle a deux issues : son index, ou son entrée motivée dans la liste. Sinon, rouge en CI — au moment où la migration est écrite, pas huit semaines après. La campagne d'indexation elle-même reste où elle est (**B10**, différée à raison : rien ne se voit à la volumétrie actuelle) ; le garde, lui, n'attend pas la volumétrie, il vaut pour toujours et coûte une soirée.",
-        "pt": "Escrever **a guarda, não a migração**: uma suíte `tests/sql/` que compara as FK sem índice a uma **lista assumida** versionada (mesmo registro do teste de engendramento do backlog). Toda FK nova: seu índice, ou sua entrada motivada na lista — senão, vermelho na CI. A campanha de indexação fica onde está (**B10**, adiada com razão); a guarda não espera a volumetria."
-      },
-      "y": {
-        "fr": "Doctrine v17, établie expérimentalement par cette réouverture : « un chantier de dette structurelle n'est clos que quand un garde automatique empêche sa réouverture. Une migration remet un compteur à zéro ; elle ne tient pas la ligne. » La correction vaut par anticipation pour tout ce qui se compte — index sans usage, fonctions sans appelant, chaînes non traduites.",
-        "pt": "Doutrina v17: «um canteiro de dívida estrutural só fecha quando uma guarda automática impede sua reabertura. Uma migração zera um contador; não segura a linha.»"
-      },
-      "f": [
-        {
-          "fr": "~~La liste assumée existe~~ — 38 entrées dans `tests/sql/fk_sans_index_garde_tests.sql`, trois familles motivées (15 tables de codes, 17 colonnes d'acteur, 6 transit ingest), en-tête portant la requête ET son angle mort (`DOC-RECENS-1`).",
-          "pt": "~~A lista assumida existe~~ — 38 entradas, três famílias motivadas, cabeçalho com a consulta E seu ângulo morto."
-        },
-        {
-          "fr": "~~La suite rougit sur une FK hors liste~~ — T3 crée une FK notoirement sans index dans la transaction du test et vérifie que le détecteur la voit, à chaque run.",
-          "pt": "~~A suíte fica vermelha sobre uma FK fora da lista~~ — T3 prova a mordida a cada execução."
-        },
-        {
-          "fr": "`ci-suites.txt` la connaît — livrée le 02/09 ; **le run vert de `sql-tests` fait foi de clôture**.",
-          "pt": "`ci-suites.txt` a conhece — entregue em 02/09; **o run verde faz fé de encerramento**."
-        }
-      ],
-      "dep": {
-        "fr": "Extrait de **B10**, qui garde la campagne (P3, différée avec sa raison). Même famille que le garde d'engendrement du backlog (**J1**, clos) : un compteur qu'on a mesuré deux fois mérite un garde, pas une troisième mesure.",
-        "pt": "Extraído de **B10**, que guarda a campanha. Mesma família da guarda de engendramento do backlog (**J1**)."
-      },
-      "r": [
-        "Grand Livre blanc v17 (01/09/2026), ch. 8.1 et doctrine, précision 3",
-        "supabase/migrations/20260702160920_fk_support_indexes_8_2.sql",
-        "scripts/ci/run-sql-suites.sh"
-      ],
-      "verif": {
-        "fr": "02/09 — 32 + 6 = 38 remesurés à l'unité en production, requête indépendante de l'advisor et en accord avec lui.",
-        "pt": "02/09 — 32 + 6 = 38 remedidos à unidade em produção."
-      }
     },
     {
       "id": "J2",

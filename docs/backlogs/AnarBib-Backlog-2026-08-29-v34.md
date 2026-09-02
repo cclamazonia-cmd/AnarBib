@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 77 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 76 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 10
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 9
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **1ᵉʳ septembre 2026**, refait entièrement — le précédent datait du 29 août et la moitié de ses chiffres avaient bougé en trois jours. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `de66d94d`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source** : elle était codée en dur dans le script jusqu'au 01/09, et le titre a donc annoncé « 29 août » au-dessus d'un tableau qui ne l'était plus.
 
-**Fraîcheur des constats au 2026-09-01.** **55 items sur 77** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, B21, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **54 items sur 76** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -376,7 +376,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B17** | L'avertissement qui devait rendre visibles les actions d'un administrateur réseau n'existe pas | `P1` | En cours |
 | **B18** | Désactiver les clés API legacy — le feu vert est un chiffre, pas une date | `P1` | Ouvert |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
-| **B21** | Le garde des clés étrangères sans index : instrumenter le compteur, ne plus le solder | `P2` | En cours |
 
 #### B4 — Examiner les quatre tables à RLS sans policy qui ne sont pas du transit
 
@@ -601,28 +600,6 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 **Dépendances.** Item B18 terminé.
 
 *Renvois : `item B18`*
-
-#### B21 — Le garde des clés étrangères sans index : instrumenter le compteur, ne plus le solder
-
-`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** **Source : GLB v17 ch. 8.1, contre-vérifié le 02/09.** Le 02/07, la migration `20260702160920_fk_support_indexes_8_2` déployait 136 index et ramenait les clés étrangères sans index de support de 151 à 15 ; la v16 écrivait « soldé ». Au 01/09 : **32 dans `public`, 6 dans `ingest`, 38 au total** — remesurés à l'unité le 02/09 par requête indépendante sur `pg_constraint`/`pg_index`, en accord exact avec l'advisor. Les 15 résiduelles voulues (tables de codes `catalog_ref_*`) sont intactes ; les 17 nouvelles viennent **toutes** des tables créées depuis — signalements de doublons, file de vérification, notes de lecture, réclamations d'invitation. Le mécanisme est structurel : chaque table de qualité catalographique porte ses colonnes d'acteur (qui a signalé, décidé, appliqué), et chaque colonne d'acteur porte sa clé étrangère vers les comptes, non indexée. **Aucune faute n'a été commise ; le compteur remonte par le fonctionnement normal du projet.**
-
-*Vérifié : 02/09 — 32 + 6 = 38 remesurés à l'unité en production, requête indépendante de l'advisor et en accord avec lui.*
-
-**Ce que c'est.** Écrire **le garde, pas la migration** : une suite `tests/sql/` qui compare les clés étrangères sans index à une **liste assumée** versionnée (même registre que le banc d'engendrement du backlog et les six règles bloquantes du pre-commit). Toute FK nouvelle a deux issues : son index, ou son entrée motivée dans la liste. Sinon, rouge en CI — au moment où la migration est écrite, pas huit semaines après. La campagne d'indexation elle-même reste où elle est (**B10**, différée à raison : rien ne se voit à la volumétrie actuelle) ; le garde, lui, n'attend pas la volumétrie, il vaut pour toujours et coûte une soirée.
-
-**Pourquoi ça compte.** Doctrine v17, établie expérimentalement par cette réouverture : « un chantier de dette structurelle n'est clos que quand un garde automatique empêche sa réouverture. Une migration remet un compteur à zéro ; elle ne tient pas la ligne. » La correction vaut par anticipation pour tout ce qui se compte — index sans usage, fonctions sans appelant, chaînes non traduites.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Extrait de **B10**, qui garde la campagne (P3, différée avec sa raison). Même famille que le garde d'engendrement du backlog (**J1**, clos) : un compteur qu'on a mesuré deux fois mérite un garde, pas une troisième mesure.
-
-*Renvois : `Grand Livre blanc v17 (01/09/2026), ch. 8.1 et doctrine, précision 3` · `supabase/migrations/20260702160920_fk_support_indexes_8_2.sql` · `scripts/ci/run-sql-suites.sh`*
 
 ---
 
@@ -2365,6 +2342,7 @@ CI verte : lint et suite unitaire. |
 | J8 | 2026-09-02 | **Un seul « v17 », et c'est le bon — la série du Grand Livre blanc est versée au dépôt** (arbitrage du 02/09 : « verser ce qui sert de référence, le jour où ça sert » — la leçon des documents fantômes du 01/09 appliquée à celui qui les avait diagnostiqués). Le docx du 29 mai est archivé sous un nom qui porte sa date sans revendiquer de numéro (`GLB/archive/AnarBib_Grand_Livre_blanc_refonte_2026-05-29.docx`) ; le **v17 du 01/09 entre dans `docs/GLB/`** comme référence vivante ; l'INDEX ne désigne plus un état de mai — il raconte l'anomalie résorbée et nomme le chaînon manquant. Détail piquant : le PDF avait déjà quitté `Downloads` au moment du geste — **reconstitué à l'octet près (762 814) depuis le transcript de la session qui l'avait lu**, la recette des pièces avalées servant cette fois pour du binaire.
 
 **Reste ouvert, hors périmètre** : le **v16 du 2 juillet** — la troisième lecture exacte, base du v17 — n'a jamais été versé et reste à retrouver ; le jour où il refait surface, il entre dans `GLB/archive/` sans autre décision (c'est écrit dans l'INDEX). |
+| B21 | 2026-09-02 | **Le compteur des clés étrangères sans index a son garde, et il a mordu dès son premier tour de CI** (run vert du 02/09 sur `dfc96a8b`). `tests/sql/fk_sans_index_garde_tests.sql` : 38 entrées assumées en trois familles motivées d'une ligne (15 vers les tables de codes `catalog_ref_*` — les résiduelles voulues du solde du 02/07, intactes —, 17 colonnes d'acteur de la qualité catalographique, 6 transit d'import `ingest`), l'en-tête portant la requête qui produit le relevé ET son angle mort (`DOC-RECENS-1` : index d'expression et partiels non vus, même méthode que l'advisor, accord à l'unité au 02/09). Gardé dans les deux sens : T1 — toute FK neuve sans index rougit la CI au moment où la migration s'écrit, son issue est un index ou une entrée motivée par un commit ; T2 — une entrée indexée ou disparue rougit aussi, la liste ne rétrécit que consciemment. Et T3 prouve la morsure à chaque run en créant une FK notoirement nue dans la transaction du test (fixture en tables temporaires — le hook pre-commit exige à raison RLS+GRANT de toute table qui naît dans `public`, même éphémère). La doctrine v17 est servie : le chantier n'est pas « soldé », il est **instrumenté** — la campagne d'indexation reste où elle est (B10, différée avec sa raison), et le compteur ne remontera plus en silence. |
 
 ---
 
@@ -2396,4 +2374,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 77 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `c7222379` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 76 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-01 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `c7222379` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
