@@ -4891,8 +4891,8 @@
           "pt": "~~Lote convenções~~ — **fechado na porta, inteiro no console (02/09).** `conv_controle_qualite` e `conv_controle_resumo` são diagnósticos de leitura escritos para o console — e o console trabalha como `postgres`: o grant `authenticated` só servia à porta PostgREST, onde ninguém bate. Revogadas; a receita de console está intacta (suíte de 4 testes guarda as duas metades do contrato), e a restauração é um GRANT no dia em que a oficina quiser seu painel."
         },
         {
-          "fr": "Avant le **01/10** : rejouer la mesure de `20260901140139` sur les 48 différées et acter, fonction par fonction, écran dû ou REVOKE.",
-          "pt": "Antes de **01/10**: repetir a medida sobre as 48 adiadas e decidir, função por função."
+          "fr": "~~Échéance du 01/10 sur les 48 différées~~ — **soldée le 02/09, avec un mois d'avance.** Remesure complète (dépôt 0 × 48, base 0 appelant, six suites observatrices toutes en `postgres` — vérifié fichier par fichier après la leçon du run 9186334) : **47 fermées** (`20260902104830` + suite `SOLDE_DIFFEREES`), corps et suites intacts, `service_role` conservé, restauration = GRANT (premiers candidats : arbitrage d'autorités p9-p11 quand son écran viendra, source OAI pour H5 — faisable en console). **Une sortie du solde** : `fn_book_due_dates`, ouverte à `anon` par verdict écrit (B2/T10) et appelée par personne — la contradiction entre les deux audits se rejuge au registre de B2, pas par un REVOKE de passage. Addendum versé à `AUDIT_execute_authenticated_2026-09-01.md` : les 53 ont désormais toutes leur réponse écrite (5 + 47 + 1).",
+          "pt": "~~Prazo de 01/10 sobre as 48 adiadas~~ — **saldado em 02/09, com um mês de antecedência.** Remedição completa: **47 fechadas** (`20260902104830` + suíte), corpos e suítes intactos, restauração = GRANT. **Uma saída do saldo**: `fn_book_due_dates`, aberta a `anon` por veredito escrito (B2/T10) e chamada por ninguém — a contradição entre as duas auditorias se rejulga no registro de B2. As 53 têm agora todas a sua resposta escrita (5 + 47 + 1)."
         }
       ],
       "dep": {

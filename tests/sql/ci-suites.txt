@@ -315,3 +315,10 @@ tests/sql/conventions_console_fermee_tests.sql
 # jumelles cablees (negociation de creneau, calcul d'echeance, flux brouillon)
 # gardees ouvertes, couples schema+nom explicites. Ref. 20260902103305.
 tests/sql/circulation_couche_supplantee_tests.sql
+
+# Differer sans date, c'est classer — le solde du 2 septembre (B20, echeance
+# des 48) : les 47 differees du 01/09 rejoignent le regime commun (fermees a
+# anon+authenticated, corps et suites intacts) ; fn_book_due_dates sort du
+# solde (verdict B2/T10, ouverte a anon par decision ecrite) ; les chemins
+# vivants des memes familles restent ouverts. Ref. 20260902104830.
+tests/sql/solde_des_differees_tests.sql

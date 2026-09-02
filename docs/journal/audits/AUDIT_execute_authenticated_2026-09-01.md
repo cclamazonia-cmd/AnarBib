@@ -1422,3 +1422,32 @@ L'advisor 0029 passe de 464 à 453 — et ce chiffre n'est plus un avertissement
 **chacune des 453 restantes a été lue, et sa raison d'être exposée est écrite.**
 L'advisor signale une architecture qu'il ne peut pas connaître ; ce document la
 connaît.
+
+---
+
+# Addendum du 02/09/2026 — le solde des 48 différées
+
+L'échéance posée au lendemain de ce relevé (« tenable un mois, pas un
+trimestre », GLB v17) a été soldée le 02/09, sur remesure complète et non sur
+mémoire : 0 occurrence des 48 noms au dépôt (`src/`, `supabase/functions/`,
+`scripts/`, balayage nominatif PEB compris), 0 appelant en base (fonctions,
+policies, crons), et six suites qui en exercent 13 — **toutes en `postgres`**,
+vérifié fichier par fichier après que le run 9186334 a montré ce que coûte une
+convention d'appel déduite du test voisin.
+
+**47 fermées** (migration `20260902104830`, REVOKE compté, gardes des deux
+sens, suite `SOLDE_DIFFEREES`). Corps, gardes et suites intacts ; le grant
+`service_role` explicite conservé ; restauration = un GRANT le jour où un
+écran est réellement dû — l'arbitrage d'autorités (p9-p11) et
+l'enregistrement de source OAI (geste H5, faisable en console `postgres`)
+sont les premiers candidats.
+
+**Une sortie du solde** : `fn_book_due_dates` est dans la liste nommée T10 de
+`grants_herites_tests` — ouverte à `anon` par verdict écrit
+(`AUDIT_execute_anon_2026-08-30.md`). Ouverte par décision, appelée par
+personne : la contradiction entre les deux audits est réelle et se rejuge au
+registre de B2 — un REVOKE de passage l'aurait tranchée en silence, contre un
+test et contre une décision.
+
+Avec ce solde, les trois questions posées plus haut aux 53 ont toutes leur
+réponse écrite : 5 fermées le 01/09, 47 le 02/09, 1 rejugée ailleurs.
