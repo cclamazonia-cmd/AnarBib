@@ -112,6 +112,12 @@ function readEnvEmail(name, fallback = "") {
 function readEnvString(name, fallback = "") {
   return String(Deno.env.get(name) || fallback).trim();
 }
+// F7 (02/09/2026) — VIDE EXPRES : BLMF_/BTL_INTERNAL_REDIRECT_EMAIL existent
+// avec une valeur VIDE, et c'est le reglage — vide, la redirection des avis
+// internes est inactive et le courriel part a l'adresse reelle de la biblio
+// (verifie le 30/08 sur l'inscription BTL). Les "reparer" en les remplissant
+// detournerait les avis. Seule l'empreinte SHA-256 de la chaine vide
+// (e3b0c442...) les distingue d'un secret renseigne au tableau de bord.
 function resolveLibraryInternalRedirectEmail(librarySlug) {
   const envKey = `${normalizeSlug(librarySlug).toUpperCase()}_INTERNAL_REDIRECT_EMAIL`;
   return readEnvEmail(envKey);

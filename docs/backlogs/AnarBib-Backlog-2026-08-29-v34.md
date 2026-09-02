@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-01** · 76 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-01** · 75 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 4
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé après la journée B20/B21/J7/J8 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `cb37a2a8`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-01.** **54 items sur 76** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, F7, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-01.** **53 items sur 75** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B17, B18, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, F1, F3, F4, F6, G1, G2, G5, G6, G8, H1, H5, I1, I3, I4, I6, I8, I10, I11, I12, I13, I14, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1205,7 +1205,6 @@ Le premier relevé ne l'avait pas vue parce qu'il cherchait le **nom de l'event*
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
 | **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
-| **F7** | Treize secrets de fonction sont déclarés et vides, sans qu'on sache lesquels le sont exprès | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1329,53 +1328,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 **Dépendances.** Aucune. Le relevé est fait — il est dans cet item. Ce qui reste est une décision de portée, pas une enquête.
 
 *Renvois : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026` · `src/tests/notify-internal-task-signature.test.js`*
-
-#### F7 — Treize secrets de fonction sont déclarés et vides, sans qu'on sache lesquels le sont exprès
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Relevé le 30/08 en vérifiant tout autre chose — que le secret des avis de tâche était bien le même des deux côtés.
-
-`supabase secrets list` ne montre pas les valeurs mais leur **empreinte SHA-256**. Or `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` est l'empreinte de la **chaîne vide** — et treize secrets la portent :
-
-```
-ADMIN_EMAIL_NOTIFY_EVENT   ADMIN_NAME            BRAND_NAME
-FOOTER_TEXT                REPLY_TO_EMAIL        REGIMENTO_URL
-LIBRARY_ADMIN_EMAIL        LIBRARY_ADMIN_NAME    LIBRARY_BRAND_NAME
-LIBRARY_FOOTER_TEXT        LIBRARY_LOGO_URL
-BLMF_INTERNAL_REDIRECT_EMAIL   BTL_INTERNAL_REDIRECT_EMAIL
-```
-
-Dans le tableau de bord, un secret vide et un secret renseigné se ressemblent : les deux existent, les deux affichent une valeur masquée. **Seule l'empreinte les distingue.**
-
-**Deux sont vides exprès, et c'est vérifiable :** les deux `*_INTERNAL_REDIRECT_EMAIL`. C'est ainsi que la redirection des avis internes reste inactive — le 30/08, la notification d'inscription de la BTL est bien partie à l'adresse réelle de la bibliothèque, précisément parce que ce secret est vide.
-
-**Onze sont dans une chaîne de repli**, donc sans conséquence visible : `_shared/core/env.ts` lit `ADMIN_NAME || LIBRARY_ADMIN_NAME || ANARBIB_ADMIN_NAME || …`, et les variantes `ANARBIB_*` / `NETWORK_*` sont, elles, renseignées.
-
-**Sauf une.** `REGIMENTO_URL` est vide, et ses deux replis — `ANARBIB_REGIMENTO_URL`, `NETWORK_REGIMENTO_URL` — **n'existent pas du tout** dans la liste. La constante vaut donc la chaîne vide, et `footerPadrao` omet purement et simplement la ligne « Regimento : ouvrir » de tous les courriels qui l'utilisent. Le lien vers le règlement de la bibliothèque n'a jamais été affiché.
-
-*Vérifié : 31/08 — `supabase secrets list` rejoué : les treize mêmes secrets portent l'empreinte de la chaîne vide, ni plus ni moins. `REGIMENTO_URL` toujours vide, ses deux replis toujours absents : la ligne « Regimento » manque toujours des courriels.*
-
-**Ce que c'est.** **D'abord le seul qui a une conséquence** : décider si le lien vers le règlement doit figurer au pied des courriels. Si oui, renseigner `REGIMENTO_URL` — une seule variable, et la ligne apparaît. Si non, retirer le code qui l'attend dans `footerPadrao`, plutôt que de laisser une branche morte.
-
-**Puis le ménage** : pour chacun des douze autres, trancher entre *vide exprès* et *jamais rempli*. Les deux redirections sont clairement dans le premier cas — elles méritent un commentaire quelque part, parce qu'un secret vide qui EST le réglage est exactement le genre de chose qu'on « répare » par erreur. Les dix autres sont des doublons de chaînes de repli : s'ils ne servent à rien, les supprimer vaut mieux que les garder vides.
-
-**Et retenir la technique**, parce qu'elle ne coûte rien : `supabase secrets list` publie un SHA-256, `sha256()` est natif côté base. Comparer un secret de fonction et un secret du vault, ou repérer les vides, se fait donc sans qu'aucune valeur ne soit lue par personne.
-
-**Pourquoi ça compte.** Parce qu'un secret vide ne se signale pas. Il n'y a ni erreur au démarrage, ni ligne de journal : la constante vaut `""`, le repli joue ou pas, et le courriel part avec un champ en moins que personne ne remarque — c'est le cas de `REGIMENTO_URL` depuis toujours.
-
-Et parce que l'inverse est plus dangereux encore : les deux redirections sont vides **exprès**, et c'est ce vide qui fait le réglage. Quelqu'un qui « complète les secrets manquants » sans savoir lesquels sont délibérés rebrancherait la redirection des avis d'inscription sans s'en apercevoir.
-
-**Ce qui compte comme fini.**
-
-- Le sort du lien « Regimento » est tranché : la variable est renseignée, ou le code qui l'attend est retiré.
-- Chacun des douze autres secrets vides est classé — voulu, ou à remplir, ou à supprimer.
-- Les deux redirections portent une note écrite disant que leur vide EST le réglage.
-- La méthode de comparaison par empreinte est notée quelque part de retrouvable.
-
-**Dépendances.** Aucune. Le relevé est fait et tient dans l'item ; ce qui reste demande surtout de savoir ce qu'on voulait.
-
-*Renvois : `supabase secrets list --project-ref … (colonne DIGEST = SHA-256)` · `empreinte de la chaîne vide : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` · `supabase/functions/_shared/core/env.ts (chaînes de repli)` · `footerPadrao — ligne « Regimento », jamais affichée`*
 
 ---
 
@@ -2343,6 +2295,7 @@ CI verte : lint et suite unitaire. |
 
 **Reste ouvert, hors périmètre** : le **v16 du 2 juillet** — la troisième lecture exacte, base du v17 — n'a jamais été versé et reste à retrouver ; le jour où il refait surface, il entre dans `GLB/archive/` sans autre décision (c'est écrit dans l'INDEX). |
 | B21 | 2026-09-02 | **Le compteur des clés étrangères sans index a son garde, et il a mordu dès son premier tour de CI** (run vert du 02/09 sur `dfc96a8b`). `tests/sql/fk_sans_index_garde_tests.sql` : 38 entrées assumées en trois familles motivées d'une ligne (15 vers les tables de codes `catalog_ref_*` — les résiduelles voulues du solde du 02/07, intactes —, 17 colonnes d'acteur de la qualité catalographique, 6 transit d'import `ingest`), l'en-tête portant la requête qui produit le relevé ET son angle mort (`DOC-RECENS-1` : index d'expression et partiels non vus, même méthode que l'advisor, accord à l'unité au 02/09). Gardé dans les deux sens : T1 — toute FK neuve sans index rougit la CI au moment où la migration s'écrit, son issue est un index ou une entrée motivée par un commit ; T2 — une entrée indexée ou disparue rougit aussi, la liste ne rétrécit que consciemment. Et T3 prouve la morsure à chaque run en créant une FK notoirement nue dans la transaction du test (fixture en tables temporaires — le hook pre-commit exige à raison RLS+GRANT de toute table qui naît dans `public`, même éphémère). La doctrine v17 est servie : le chantier n'est pas « soldé », il est **instrumenté** — la campagne d'indexation reste où elle est (B10, différée avec sa raison), et le compteur ne remontera plus en silence. |
+| F7 | 2026-09-02 | **Treize secrets vides, treize verdicts — et il n'en reste que deux, qui le sont exprès et le disent.** Le relevé rejoué le 02/09 donnait les mêmes treize empreintes de chaîne vide qu'au 30/08. Tri en trois classes, chaque lecteur relu : **11 supprimés** (`supabase secrets unset`) — dix doublons de tête de chaîne de repli dont la variante `ANARBIB_*` renseignée gagnait déjà, plus `REGIMENTO_URL` sur décision : aucun règlement réseau n'est publié, la branche morte qui l'attendait est **retirée du code** (trois endroits — dont une chaîne mal nommée dans `notify-document-permission-request` qui cherchait l'URL du *manuel* en essayant d'abord celle du *règlement* : inoffensive vide, fausse le jour où on l'aurait remplie ; le jour où un regimento existera, le rétablir sera un geste conscient). **2 conservés et documentés** : `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, dont le vide EST le réglage (la redirection des avis internes est inactive, vérifié le 30/08 sur l'inscription BTL) — commentaire posé dans `register/index.ts`, là où on les lit, pour que personne ne les « répare ». Un `secrets list` dit désormais la vérité : deux empreintes vides, toutes deux voulues. |
 
 ---
 
@@ -2374,4 +2327,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 76 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 75 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `cb37a2a8` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

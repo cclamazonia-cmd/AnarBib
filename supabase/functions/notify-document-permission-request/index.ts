@@ -45,8 +45,10 @@ const FOOTER_TEXT = firstEnv([
   "FOOTER_TEXT",
   "ANARBIB_FOOTER_TEXT"
 ], "Em caso de dúvida, responda a este e-mail.");
+// F7 (02/09/2026) : la chaine essayait REGIMENTO_URL d'abord — un reglement
+// n'est pas un manuel ; le secret (vide) est retire, la chaine dit ce qu'elle
+// cherche.
 const MANUAL_URL = firstEnv([
-  "REGIMENTO_URL",
   "ANARBIB_MANUAL_URL"
 ], "");
 const LIBRARIAN_PHONE = firstEnv([

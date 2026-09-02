@@ -12,7 +12,6 @@ const BRAND_NAME = (Deno.env.get("BRAND_NAME") || "").trim() || "AnarBib";
 const SENDER_EMAIL = (Deno.env.get("SENDER_EMAIL") || "").trim() || "anarbib@anarbib.org";
 const FOOTER_TEXT = (Deno.env.get("FOOTER_TEXT") || "").trim() || "Em caso de dúvida, responda a este e-mail.";
 const LOGO_URL = (Deno.env.get("LOGO_URL") || "").trim();
-const REGIMENTO_URL = (Deno.env.get("REGIMENTO_URL") || "").trim();
 const LIBRARIAN_PHONE = (Deno.env.get("LIBRARIAN_PHONE") || "").trim();
 const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: {
@@ -178,9 +177,6 @@ function adminTarget() {
 }
 function footerHtml(locale) {
   const parts = [];
-  if (REGIMENTO_URL) {
-    parts.push(`Regimento da rede: <a href="${esc(REGIMENTO_URL)}" style="color:#fff;text-decoration:underline;">abrir</a>`);
-  }
   if (LIBRARIAN_PHONE) {
     parts.push(`Contato rápido: <b>${esc(LIBRARIAN_PHONE)}</b>`);
   }
@@ -189,7 +185,6 @@ function footerHtml(locale) {
 }
 function footerText(locale) {
   const parts = [];
-  if (REGIMENTO_URL) parts.push(`Regimento da rede: ${REGIMENTO_URL}`);
   if (LIBRARIAN_PHONE) parts.push(`Contato rápido: ${LIBRARIAN_PHONE}`);
   parts.push(tr(locale || FALLBACK_LOCALE, "footer"));
   return parts.join("\n");
