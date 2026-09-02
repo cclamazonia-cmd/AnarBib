@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-01",
+    "maj": "2026-09-02",
     "releve": {
       "date": "2026-09-02",
       "commit": "360d25b3"
@@ -1234,8 +1234,8 @@
           "pt": "«Nove pacotes a entregar»"
         },
         {
-          "fr": "**Les neuf livrés les 27-28/08.** Reste la révision de la spec, item **D1**.",
-          "pt": "**Os nove entregues em 27-28/08.** Resta a revisão da spec, item **D1**."
+          "fr": "**Les neuf livrés les 27-28/08.** Reste la révision de la spec, item **D1**. **Nuance du 02/09 : P7 était livré, pas exercé.** Le sélecteur de titre de revue (`SerialAuthorityPicker`) était dans le bundle depuis le 27/08 et **jamais monté** dans la fiche de catalogage — déclaré dans un point d'extension (`sectionExtras`) que la fiche ne lit pas pour la zone Periódico, dont les champs sont rendus un par un. Six jours sans qu'un fascicule puisse être rattaché depuis la fiche, lint, tests et build verts. Constaté en prod le 02/09, corrigé le jour même (`9d9b7744`), vérifié à l'écran avec une session de coordination, gardé par `src/tests/serial-picker-monte.test.js` ; consigné dans `spec-periodiques-v1.0-etat-livre`. Même famille que « déclaré livré, jamais exercé ».",
+          "pt": "**Os nove entregues em 27-28/08.** Resta a revisão da spec, item **D1**. **Nuance de 02/09: P7 estava entregue, não exercido.** O seletor de título de revista (`SerialAuthorityPicker`) estava no bundle desde 27/08 e **nunca foi montado** na ficha de catalogação — declarado num ponto de extensão (`sectionExtras`) que a ficha não lê para a zona Periódico, cujos campos são renderizados um a um. Seis dias sem que um fascículo pudesse ser vinculado a partir da ficha, com lint, testes e build verdes. Constatado em produção em 02/09, corrigido no mesmo dia (`9d9b7744`), verificado na tela com uma sessão de coordenação, guardado por `src/tests/serial-picker-monte.test.js`; registrado em `spec-periodiques-v1.0-etat-livre`. Mesma família de «declarado entregue, jamais exercido»."
         }
       ],
       [
