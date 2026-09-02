@@ -496,3 +496,23 @@
    la ligne hors de l'écran en 360 px (cf. doctrine mobile du dépôt). */
 .imp-newsource .ab-input { flex: 1 1 12rem; min-width: 0; }
 .imp-newsource__ok { flex-shrink: 0; padding: 6px 14px; font-size: .8rem; }
+
+/* E12 lot C — le volet « Mutualiser un fonds numérique » : les gestes de
+   coordination sur le fonds numérique sont repliés par défaut sous un seul
+   résumé cliquable. Le marqueur natif du <details> sert d'affordance. */
+.imp-coord > .imp-coord__summary {
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  list-style: revert;
+}
+.imp-coord > .imp-coord__summary::-webkit-details-marker { display: revert; }
+.imp-coord__hint {
+  font-size: .82rem;
+  color: var(--brand-muted, #ccc);
+  flex-basis: 100%;
+}
+.imp-coord[open] > .imp-coord__summary { margin-bottom: 10px; }
+.imp-coord > .imp-sheet { margin-top: 10px; }

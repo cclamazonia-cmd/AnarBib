@@ -1038,21 +1038,26 @@ export default function ImportacoesPage() {
           </div>
         )}
 
-        {/* ── Sentido toggle ────────────────────────────── */}
-        <div className="imp-sentido">
-          <span className="imp-sentido__label">{t({ id: 'importacoes.sentido.label' })}</span>
-          <div className="imp-seg" role="group">
-            <button className={sentido === 'import' ? 'on' : ''} onClick={() => setSentido('import')}>
-              {t({ id: 'importacoes.sentido.import' })}
-            </button>
-            <button className={sentido === 'export' ? 'on' : ''} onClick={() => setSentido('export')}>
-              {t({ id: 'importacoes.sentido.export' })}
-            </button>
-          </div>
-          <span className="imp-sentido__hint">
-            {t({ id: 'importacoes.sentido.hint' })}
-          </span>
-        </div>
+        {/* ── Sens : deux vrais onglets (E12 lot C) ──────────────
+            L'ancien commutateur « Sens » était si discret que l'export n'avait,
+            aux yeux de qui cherche, pas d'adresse. La barre de pastilles partagée
+            `.ab-tabbar` (src/styles/tabbar.css) est celle de toutes les pages à
+            onglets : on la reconnaît, et elle se voit. */}
+        <nav className="ab-tabbar" role="tablist" aria-label={t({ id: 'importacoes.sentido.label' })} style={{ marginBottom: 10 }}>
+          <button className={`ab-tabbar__tab${sentido === 'import' ? ' active' : ''}`}
+            role="tab" aria-selected={sentido === 'import'} onClick={() => setSentido('import')}>
+            <span className="ab-tabbar__icon" aria-hidden="true">📥</span>
+            {t({ id: 'importacoes.sentido.import' })}
+          </button>
+          <button className={`ab-tabbar__tab${sentido === 'export' ? ' active' : ''}`}
+            role="tab" aria-selected={sentido === 'export'} onClick={() => setSentido('export')}>
+            <span className="ab-tabbar__icon" aria-hidden="true">📤</span>
+            {t({ id: 'importacoes.sentido.export' })}
+          </button>
+        </nav>
+        <p className="imp-sentido__hint" style={{ margin: '0 0 16px' }}>
+          {t({ id: 'importacoes.sentido.hint' })}
+        </p>
 
         {/* ════════════════════════════════════════════════ */}
         {/*  FACE IMPORT                                    */}
@@ -1701,14 +1706,10 @@ export default function ImportacoesPage() {
               </div>
             </div>
 
-            <div className="imp-sheet">
-              <div className="imp-sheet__head">
-                <span className="imp-sheet__title">{t({ id: 'importacoes.export.partilha.title' })}<Pill>ILL-1..9</Pill></span>
-              </div>
-              <div className="imp-sheet__body">
-                <p className="imp-note">{t({ id: 'importacoes.export.partilha.desc' })}</p>
-              </div>
-            </div>
+            {/* E12 lot C : le bloc « Partage ILL » (circuit en développement) ne
+                s'affiche plus — un chantier ne se montre pas aux usagères. Les
+                clés importacoes.export.partilha.* restent pour le jour où il
+                sera livré. */}
 
             <div className="imp-sheet">
               <div className="imp-sheet__head">
@@ -1739,6 +1740,30 @@ export default function ImportacoesPage() {
                 </div>
               </div>
             </div>
+
+            {/* E12 lot C : « être source » est un export — il monte à côté de
+                l'export par lot, avec le flux OPDS, et ne dit plus « en
+                développement » : le circuit a été éprouvé le 02/09 (H5). */}
+            <div className="imp-sheet">
+              <div className="imp-sheet__head">
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.serFonte.title' })}<Pill variant="ok">OAI-PMH · OPDS</Pill></span>
+              </div>
+              <div className="imp-sheet__body">
+                <p className="imp-note">{t({ id: 'importacoes.export.serFonte.desc' })}</p>
+                <p className="imp-note">{t({ id: 'importacoes.export.serFonte.opds' })}</p>
+              </div>
+            </div>
+
+            {/* E12 lot C : les gestes de coordination sur le fonds numérique
+                (éligibilité, export de fonds, fichiers reçus, domaine public)
+                sont de même nature et s'ouvrent ensemble, repliés par défaut —
+                la bibliothécaire qui veut « exporter le catalogue » les voit
+                sans les subir. */}
+            <details className="imp-sheet imp-coord">
+              <summary className="imp-sheet__head imp-coord__summary">
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.coord.title' })}</span>
+                <span className="imp-coord__hint">{t({ id: 'importacoes.export.coord.hint' })}</span>
+              </summary>
 
             <div className="imp-sheet">
               <div className="imp-sheet__head">
@@ -1984,14 +2009,7 @@ export default function ImportacoesPage() {
               </div>
             </div>
 
-            <div className="imp-sheet">
-              <div className="imp-sheet__head">
-                <span className="imp-sheet__title">{t({ id: 'importacoes.export.serFonte.title' })}</span>
-              </div>
-              <div className="imp-sheet__body">
-                <p className="imp-note">{t({ id: 'importacoes.export.serFonte.desc' })}</p>
-              </div>
-            </div>
+            </details>
           </>
         )}
 
