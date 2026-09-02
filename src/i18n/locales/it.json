@@ -6218,5 +6218,7 @@
   "rede.exch.fromSolicitante": "Persona richiedente",
   "rede.exch.messagePlaceholder": "Il tuo messaggio alla persona richiedente…",
   "rede.exch.moreInfo": "Chiedere un'integrazione (la richiesta passa a « in attesa di informazioni »)",
-  "rede.exch.markDone": "Segnare lo scambio come avvenuto"
+  "rede.exch.markDone": "Segnare lo scambio come avvenuto",
+  "federacao.carte.edit.delete": "Eliminare la scheda",
+  "federacao.carte.edit.deleteConfirm": "Eliminare definitivamente questa scheda dalla cartografia? Il collettivo sparirà dalla mappa, senza traccia."
 }

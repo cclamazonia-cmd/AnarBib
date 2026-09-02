@@ -6218,5 +6218,7 @@
   "rede.exch.fromSolicitante": "Persona sol·licitant",
   "rede.exch.messagePlaceholder": "El teu missatge a la persona sol·licitant…",
   "rede.exch.moreInfo": "Demanar informació complementària (la sol·licitud passa a « en espera d'informació »)",
-  "rede.exch.markDone": "Marcar la conversa com a realitzada"
+  "rede.exch.markDone": "Marcar la conversa com a realitzada",
+  "federacao.carte.edit.delete": "Suprimir la fitxa",
+  "federacao.carte.edit.deleteConfirm": "Suprimir definitivament aquesta fitxa de la cartografia? El col·lectiu desapareixerà del mapa, sense rastre."
 }

@@ -6218,5 +6218,7 @@
   "rede.exch.fromSolicitante": "Petanta persono",
   "rede.exch.messagePlaceholder": "Via mesaĝo al la petanta persono…",
   "rede.exch.moreInfo": "Peti pliajn informojn (la peto pasos al « atendas informojn »)",
-  "rede.exch.markDone": "Marki la interparolon kiel okazintan"
+  "rede.exch.markDone": "Marki la interparolon kiel okazintan",
+  "federacao.carte.edit.delete": "Forigi la slipon",
+  "federacao.carte.edit.deleteConfirm": "Ĉu definitive forigi ĉi tiun slipon el la kartografio? La kolektivo malaperos de la mapo, senspure."
 }

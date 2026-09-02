@@ -6218,5 +6218,7 @@
   "rede.exch.fromSolicitante": "Personne solicitante",
   "rede.exch.messagePlaceholder": "Votre message à la personne solicitante…",
   "rede.exch.moreInfo": "Demander un complément (la demande passe en « en attente d'informations »)",
-  "rede.exch.markDone": "Marquer l'échange comme réalisé"
+  "rede.exch.markDone": "Marquer l'échange comme réalisé",
+  "federacao.carte.edit.delete": "Supprimer la fiche",
+  "federacao.carte.edit.deleteConfirm": "Supprimer définitivement cette fiche de la cartographie ? Le collectif disparaîtra de la carte, sans trace."
 }

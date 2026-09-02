@@ -6218,5 +6218,7 @@
   "rede.exch.fromSolicitante": "Aanvragende persoon",
   "rede.exch.messagePlaceholder": "Je bericht aan de aanvragende persoon…",
   "rede.exch.moreInfo": "Om aanvullende informatie vragen (de aanvraag gaat naar “wacht op informatie”)",
-  "rede.exch.markDone": "Het gesprek als gehouden markeren"
+  "rede.exch.markDone": "Het gesprek als gehouden markeren",
+  "federacao.carte.edit.delete": "Vermelding verwijderen",
+  "federacao.carte.edit.deleteConfirm": "Deze vermelding definitief uit de kaart verwijderen? Het collectief verdwijnt spoorloos van de kaart."
 }

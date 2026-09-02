@@ -295,3 +295,10 @@ tests/sql/t1_accueil_collegial_tests.sql
 # exécutables par anon ; authenticated inchangé tant que B20 n'a pas arbitré
 # les lots. Réf. 20260902092104.
 tests/sql/surface_morte_anon_fermee_tests.sql
+
+# La carte se taille, elle ne s'efface qu'a la main (B20 lot cartographie,
+# 02/09/2026) : create_entry (jamais servie, les 187 entrees viennent d'uMap)
+# et toggle_public (redondante d'update_self et update_admin) fermees ;
+# delete reste ouverte — branchee le meme jour dans CartographyEditModal.
+# Ref. 20260902095935.
+tests/sql/cartographie_surface_taillee_tests.sql

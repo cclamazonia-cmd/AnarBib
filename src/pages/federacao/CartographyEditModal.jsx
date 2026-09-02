@@ -110,6 +110,18 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
     onSaved();
   }
 
+  // B20 lot cartographie — suppression d'une fiche (coordination seule). La carte
+  // recense des collectifs tiers avec adresse et contacts : le retrait demandé par
+  // l'un d'eux doit être un geste d'interface, pas du SQL à la main.
+  async function deleteEntry() {
+    if (!confirm(t({ id: 'federacao.carte.edit.deleteConfirm' }))) return;
+    setSaving(true); setErr('');
+    const { error } = await apiRpc('fn_cartography_delete', { p_entry_id: entryId });
+    setSaving(false);
+    if (error) { setErr(t({ id: 'federacao.carte.edit.error' })); return; }
+    onSaved();
+  }
+
   // Géocodage adresse→GPS via le proxy serveur (EF geocode → Nominatim self-hosted).
   // Repli silencieux sur le pin manuel si indisponible (MAP-F / spec §7).
   async function geocodeFromAddress() {
@@ -235,7 +247,14 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
 
             {err && <p style={{ color: '#fca5a5', fontSize: '.85rem', marginTop: 12 }}>{err}</p>}
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
+            <div style={{ display: 'flex', justifyContent: row.can_admin ? 'space-between' : 'flex-end', gap: 10, marginTop: 20, flexWrap: 'wrap' }}>
+              {row.can_admin && (
+                <button type="button" onClick={deleteEntry} disabled={saving}
+                  style={{ ...input, width: 'auto', cursor: 'pointer', background: 'transparent', borderColor: 'rgba(220,38,38,.4)', color: '#f87171' }}>
+                  {t({ id: 'federacao.carte.edit.delete' })}
+                </button>
+              )}
+              <div style={{ display: 'flex', gap: 10 }}>
               <button type="button" onClick={onClose} disabled={saving}
                 style={{ ...input, width: 'auto', cursor: 'pointer', background: 'transparent' }}>
                 {t({ id: 'federacao.carte.edit.cancel' })}
@@ -244,6 +263,7 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
                 style={{ ...input, width: 'auto', cursor: 'pointer', background: 'rgb(var(--brand-accent-rgb))', borderColor: 'transparent', fontWeight: 700 }}>
                 {t({ id: 'federacao.carte.edit.save' })}
               </button>
+              </div>
             </div>
           </>
         )}
