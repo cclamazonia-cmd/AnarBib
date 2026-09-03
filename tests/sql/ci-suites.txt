@@ -394,3 +394,4 @@ tests/sql/conv_evidence_non_agents_tests.sql
 # 3/4 les contributeurs dont le nom est exactement celui d'une fiche sont lies (fn_conv_autorite_homonyme). Ref. 20260903182354.
 tests/sql/conv_evidence_liens_exacts_tests.sql
 # 4/4 trancher UNE ligne evidente de la file comme l'ecran l'aurait fait, garde CONV-O6, liste fermee. Ref. 20260903182355.
+tests/sql/conv_evidence_file_tests.sql
