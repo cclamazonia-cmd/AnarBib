@@ -6235,5 +6235,6 @@
   "importacoes.export.serFonte.who": "Quem pede : a coordenação da biblioteca. Quem decide : a administração da rede.",
   "conta.demande.intro": "A candidatura da sua biblioteca à rede, e as suas trocas com a administração da rede durante a análise.",
   "conta.demande.goAtelier": "Ir à oficina de constituição",
-  "conta.demande.historyTitle": "Histórico dos meus pedidos"
+  "conta.demande.historyTitle": "Histórico dos meus pedidos",
+  "ficedl.facet.dates": "Datas"
 }

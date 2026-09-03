@@ -6235,5 +6235,6 @@
   "importacoes.export.serFonte.who": "Wer beantragt: die Koordination der Bibliothek. Wer entscheidet: die Netzwerkverwaltung.",
   "conta.demande.intro": "Der Beitrittsantrag Ihrer Bibliothek zum Netzwerk und Ihr Austausch mit der Netzwerkverwaltung während der Prüfung.",
   "conta.demande.goAtelier": "Zur Gründungswerkstatt",
-  "conta.demande.historyTitle": "Verlauf meiner Anträge"
+  "conta.demande.historyTitle": "Verlauf meiner Anträge",
+  "ficedl.facet.dates": "Daten"
 }

@@ -6235,5 +6235,6 @@
   "importacoes.export.serFonte.who": "Wie vraagt: de coördinatie van de bibliotheek. Wie beslist: het netwerkbeheer.",
   "conta.demande.intro": "De aanvraag van uw bibliotheek om tot het netwerk toe te treden, en uw uitwisselingen met het netwerkbeheer tijdens de beoordeling.",
   "conta.demande.goAtelier": "Naar de oprichtingswerkplaats",
-  "conta.demande.historyTitle": "Geschiedenis van mijn aanvragen"
+  "conta.demande.historyTitle": "Geschiedenis van mijn aanvragen",
+  "ficedl.facet.dates": "Data"
 }

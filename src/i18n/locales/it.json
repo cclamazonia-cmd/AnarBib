@@ -6235,5 +6235,6 @@
   "importacoes.export.serFonte.who": "Chi chiede: il coordinamento della biblioteca. Chi decide: l’amministrazione della rete.",
   "conta.demande.intro": "La domanda di adesione della vostra biblioteca alla rete, e i vostri scambi con l’amministrazione della rete durante l’esame.",
   "conta.demande.goAtelier": "Vai al laboratorio di costituzione",
-  "conta.demande.historyTitle": "Cronologia delle mie richieste"
+  "conta.demande.historyTitle": "Cronologia delle mie richieste",
+  "ficedl.facet.dates": "Date"
 }

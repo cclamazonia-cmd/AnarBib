@@ -6235,5 +6235,6 @@
   "importacoes.export.serFonte.who": "Who asks: the library’s coordination. Who decides: the network administration.",
   "conta.demande.intro": "Your library’s application to join the network, and your exchanges with the network administration while it is reviewed.",
   "conta.demande.goAtelier": "Go to the constitution workshop",
-  "conta.demande.historyTitle": "History of my requests"
+  "conta.demande.historyTitle": "History of my requests",
+  "ficedl.facet.dates": "Dates"
 }

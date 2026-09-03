@@ -17,7 +17,8 @@ import { supabase } from '@/lib/supabase';
 import { pickLabel } from '@/lib/i18nLabel';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
-const FACETS = ['sujets', 'geo'];
+// « dates » depuis le 03/09 (H1) : les 159 années du thésaurus sont en base, avec libellé et liens.
+const FACETS = ['sujets', 'geo', 'dates'];
 
 // Normalisation pour recherche insensible aux accents et à la casse.
 function norm(s) {

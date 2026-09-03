@@ -6235,5 +6235,6 @@
   "importacoes.export.serFonte.who": "Kiu petas: la kunordigado de la biblioteko. Kiu decidas: la administrado de la reto.",
   "conta.demande.intro": "La aliĝpeto de via biblioteko al la reto, kaj viaj interŝanĝoj kun la reta administrado dum ĝia ekzameno.",
   "conta.demande.goAtelier": "Iri al la fonda laborejo",
-  "conta.demande.historyTitle": "Historio de miaj petoj"
+  "conta.demande.historyTitle": "Historio de miaj petoj",
+  "ficedl.facet.dates": "Datoj"
 }

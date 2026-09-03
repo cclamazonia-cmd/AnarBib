@@ -6235,5 +6235,6 @@
   "importacoes.export.serFonte.who": "Qui demana: la coordinació de la biblioteca. Qui decideix: l’administració de la xarxa.",
   "conta.demande.intro": "La sol·licitud d’adhesió de la vostra biblioteca a la xarxa, i els vostres intercanvis amb l’administració de la xarxa durant l’examen.",
   "conta.demande.goAtelier": "Anar al taller de constitució",
-  "conta.demande.historyTitle": "Historial de les meves sol·licituds"
+  "conta.demande.historyTitle": "Historial de les meves sol·licituds",
+  "ficedl.facet.dates": "Dates"
 }
