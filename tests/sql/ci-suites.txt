@@ -360,3 +360,10 @@ tests/sql/conv_c5_autor_sans_autorite_tests.sql
 # gardee : casse naturelle du point d'acces, egalite sans casse, ni collectivite.
 # Ref. 20260903164241.
 tests/sql/conv_a1prime_preferred_name_tests.sql
+
+# Audit des autorites du 03/09 (N1, N2) : la recherche d'homonyme des lots compare
+# sans casse ni accents, sur les deux formes et la forme derivee ; la proposition
+# C5 refuse les anonymes inverses (« identificado, Nao ») ; les doublons exacts
+# sont SIGNALES (authority_duplicate_reports), jamais fusionnes par script.
+# Ref. 20260903165149.
+tests/sql/conv_homonymie_tests.sql
