@@ -968,10 +968,18 @@ export default function CatalogPage() {
       {/* ── Rebond OPAC → fiche publique (#PUB6) : quand le catalogue est scopé
             sur une bibliothèque via /catalogo/:slug, lien vers sa fiche. ── */}
       {routeLibrarySlug && (
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '10px 16px 0' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '10px 16px 0', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           <Link to={`/bibliotecas/${routeLibrarySlug}`} style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.88rem' }}>
             {t({ id: 'catalog.aboutLibrary' })}
           </Link>
+          {/* E11 (03/09) : le flux des nouveautés de cette bibliothèque — sans requête,
+              sans compte. La fonction ne répond que pour une bibliothèque publique. */}
+          {import.meta.env.VITE_SUPABASE_URL && (
+            <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-novidades/${routeLibrarySlug}`}
+               type="application/rss+xml" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.88rem' }}>
+              {t({ id: 'bibliotecas.rssFeed' })}
+            </a>
+          )}
         </div>
       )}
 

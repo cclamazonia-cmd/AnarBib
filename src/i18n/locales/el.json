@@ -2127,7 +2127,7 @@
   "catalogacao.field.approxDate": "Κατά προσέγγιση ημερομηνία",
   "catalogacao.field.audioFormat": "Μορφή",
   "catalogacao.field.audioLang": "Ομιλούμενη γλώσσα",
-  "catalogacao.field.author": "Κύριος/α συγγραφέας",
+  "catalogacao.field.author": "Συγγραφέας όπως τυπώθηκε (μεταγραφή)",
   "catalogacao.field.batch": "Παρτίδα",
   "catalogacao.field.bibRef": "Τοπική αναφορά",
   "catalogacao.field.campaign": "Εκστρατεία",

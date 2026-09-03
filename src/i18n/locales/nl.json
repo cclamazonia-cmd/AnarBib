@@ -2127,7 +2127,7 @@
   "catalogacao.field.approxDate": "Geschatte datum",
   "catalogacao.field.audioFormat": "Formaat",
   "catalogacao.field.audioLang": "Gesproken taal",
-  "catalogacao.field.author": "Hoofdauteur",
+  "catalogacao.field.author": "Auteur zoals gedrukt (transcriptie)",
   "catalogacao.field.batch": "Partij",
   "catalogacao.field.bibRef": "Lokale referentie",
   "catalogacao.field.campaign": "Campagne",

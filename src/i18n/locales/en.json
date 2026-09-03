@@ -2127,7 +2127,7 @@
   "catalogacao.field.approxDate": "Approximate date",
   "catalogacao.field.audioFormat": "Format",
   "catalogacao.field.audioLang": "Spoken language",
-  "catalogacao.field.author": "Main author",
+  "catalogacao.field.author": "Author as printed (transcription)",
   "catalogacao.field.batch": "Batch",
   "catalogacao.field.bibRef": "Referência local",
   "catalogacao.field.campaign": "Campanha",
