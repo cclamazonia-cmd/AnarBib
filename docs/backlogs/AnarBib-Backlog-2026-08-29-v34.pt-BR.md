@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 2 de setembro de 2026](#o-estado-real-em-2-de-setembro-de-2026)
+- [O estado real em 3 de setembro de 2026](#o-estado-real-em-3-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -58,9 +58,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 2 de setembro de 2026
+## O estado real em 3 de setembro de 2026
 
-Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da noite, após o dia B20/B21/J7/J8 e depois B18, F7, G2, H5, B17, G5, I14 e os três lotes de E12: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `360d25b3`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
+Registo de **3 de setembro de 2026**, ao fim do dia — produção consultada em leitura e repositório recontado, depois da manhã (E13, I4, I6, H1), da carta de Xavier (C5, C9, D2, E11, I16) executada até ao fim, do lote `autor_sans_autorite` decidido na mesma noite e do registo em v0.17. Todas as linhas foram remedidas: é um registo completo.
 
 **Frescor dos constatos em 2026-09-02.** **47 itens de 64** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, J2, J6, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
@@ -71,28 +71,28 @@ Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da n
 | Tabelas `public` | **187** | todas com RLS ativado, 279 policies em **173** tabelas |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **856** | `public` 630 · `api` 184 · `ingest` 34 · `private` 8. Sendo **668 SECURITY DEFINER**, **nenhuma** sem `search_path` fixado. A superfície `authenticated` já não é um canteiro: **B14 encerrado em 01/09, B20 em 02/09** — cada exposição restante tem sua razão escrita nas auditorias |
-| Migrações aplicadas | **271** | 271 arquivos = **271 aplicadas, alinhamento exato** — três a mais desde a tarde. Verificado em 02/09 à noite |
+| Funções aplicativas | **858** | `public` 632 · `api` 184 · `ingest` 34 · `private` 8. **669 SECURITY DEFINER** (+2 em 03/09, ambas guardadas staff). |
+| Migrações aplicadas | **273** | 273 numeradas = **273 aplicadas, alinhamento exato** (281 ficheiros com o modelo e sete rollbacks). Duas a mais em 03/09. |
 | Jobs `pg_cron` | **37** | **todos ativos** (+1 desde 01/09: o lembrete antes do vencimento dos convites de equipe, GOUV-17b); cobertos na CI por `crons_planifies_tests` |
-| Avisos de segurança | **450** | 0 ERROR · **398** + **28** WARN · 24 INFO. O 28 é o **valor esperado** (T10). O 398: 453 → 395 pelo dia B20, depois **+3 reabertas à noite** porque views `security_invoker` as chamavam (ponto 0 da checklist pré-REVOKE). Proxy SQL de 02/09 à noite |
-| Avisos de desempenho | **243** | 166 índices não usados · **38 chaves estrangeiras sem índice, agora todas ASSUMIDAS e guardadas** (B21 encerrado em 02/09: a dívida não entra mais sem um ato) · 25 policies permissivas · 14 tabelas sem chave primária · 0 `auth_rls_initplan` |
+| Avisos de segurança | **451** | 0 ERROR · **399** + **28** WARN · 24 INFO. 28 = valor esperado ; 399 = 398 + 1 em 03/09 (semeadura do lote, guardada staff, justificada). |
+| Avisos de desempenho | **896** | **403 «índices não usados»** : artefacto do reinício de 02/09 (contadores a zero), não uma degradação. 38 FK sem índice, todas assumidas e guardadas. |
 | Esquemas de refugo | **2** | `backup_2026_05_07` e `conv_backup` — inalterados desde 29/08 |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **51** | + `_shared`; entre elas o roteador `main`, **nunca implantado no Supabase, e isso é intencional** — serve apenas à pilha auto-hospedada |
-| Declarações `verify_jwt` | **36** | **todas em `false`** — contagem das linhas `^verify_jwt = `, não das ocorrências da palavra (os comentários também a mencionam, e foi assim que o número derivou duas vezes). As funções protegidas o são pelo padrão da plataforma; reconciliar este arquivo com as funções implantadas continua sendo o item **B6** |
+| Pastas no repositório | **52** | + `_shared` ; **+1 em 03/09 : `rss-novidades`**. O roteador `main` nunca é implantado, de propósito. |
+| Declarações `verify_jwt` | **37** | **todas a `false`** ; +1 em 03/09 (`rss-novidades`). |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 659** | 2 758 exemplares, 2 495 obras, 1 305 autoridades. As fichas caem 17 e os exemplares sobem 17 desde 29/08: são as fusões de duplicatas (item **P4**), não perdas |
-| Rascunhos de catalogação | **2 240** | apenas dois estados: `draft` e `published` |
+| Fichas | **2 659** | 2 758 exemplares, 2 495 obras, **1 532 autoridades** (+227 criadas em 03/09 pelo lote `autor_sans_autorite`, nunca relidas). |
+| Rascunhos de catalogação | **2 240** | três estados : `draft`, `published`, `cancelled`. |
 | Indexação de assunto | **1 122 / 2 659** | 42 % das fichas; 1 279 atribuições sobre 89 assuntos locais |
-| Tesauro FICEDL | **462** | termos, **10 locales completas**; 98 alinhamentos para os assuntos locais |
+| Tesauro FICEDL | **621** | termos — 462 em 02/09 : **+159 datas** em 03/09 (H1), separador «Datas» online. 98 alinhamentos intactos. |
 | Periódicos | **4** | títulos, 7 fascículos vinculados. O **arbítrio de duplicatas** deles está aberto a qualquer `librarian` enquanto o dos livros é reservado à coordenação: desvio medido em 01/09, decidido, aguardando aviso prévio |
 
 ### Rede
@@ -100,19 +100,19 @@ Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da n
 | | | |
 |---|---:|---|
 | Bibliotecas | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` foi retirada da rede** — remoção voluntária confirmada pela coordenação em 01/09, registrada em `NOTE_retrait_cira_marseille_2026-09-01`. Cascata limpa (0 acervo, 0 órfão); tema conservado no storage, fonte de importação encerrada |
-| Contas | **16** | **18** vínculos ativos — eram 28 em 29/08 |
+| Contas | **19** | **23** adesões ativas — +3 leitoras fictícias em `blmf-teste` para a formação. Nenhuma conta real. |
 | Administrador(a/e)s da rede | **1** | **é o item A1, e ele comanda todo o resto** |
-| Circulação viva | **6 / 19 / 22 / 2** | empréstimos / reservas / consultas / EEB — última escrita de empréstimo em 31/08 |
+| Circulação viva | **6 / 19 / 22 / 0** | empréstimos / reservas / consultas / PEB — os dois PEB de teste saíram em 02/09. |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **2 515** | em `main`, na noite de 02/09 — 42 commits no dia, de duas sessões |
-| Arquivos `src/` | **290** | 79 páginas, 89 componentes |
-| Chaves i18n | **6 234** | por locale, **paridade estrita nas 10**; +55 desde 01/09 |
-| Testes | **354 + 72** | 354 testes JS + **72 suítes SQL** — 9 nascidas só em 02/09 |
-| Marcadores de dívida | **6** | sendo 4 em `src/` — eram 17 em 29/08. Nenhum é uma tarefa aberta: a dívida não está nos comentários, está neste backlog |
+| Commits | **2 541** | em `main`, 03/09 à noite — **26 commits no dia**. |
+| Arquivos `src/` | **295** | 79 páginas, 90 componentes. |
+| Chaves i18n | **6 249** | por locale, **paridade estrita nas 10** ; **+15 desde 02/09**. |
+| Testes | **370 + 73** | 370 testes JS (+16) + **73 suites SQL** (+1 : lote C5, 8 testes). |
+| Marcadores de dívida | **66** | dos quais 6 em `src/`. Nenhum é uma tarefa aberta. |
 
 ---
 
@@ -2053,4 +2053,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-02. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 64 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `360d25b3`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-02. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 64 itens em 11 domínios. O estado numérico foi levantado em 2026-09-03 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `aeb77002`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

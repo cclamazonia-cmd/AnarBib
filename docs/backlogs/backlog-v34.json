@@ -13,8 +13,8 @@
     },
     "maj": "2026-09-02",
     "releve": {
-      "date": "2026-09-02",
-      "commit": "360d25b3"
+      "date": "2026-09-03",
+      "commit": "aeb77002"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**",
-      "pt": "Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da noite, após o dia B20/B21/J7/J8 e depois B18, F7, G2, H5, B17, G5, I14 e os três lotes de E12: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `360d25b3`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**"
+      "fr": "Relevé du **3 septembre 2026**, en fin de journée — production interrogée en lecture seule et dépôt recompté, après la matinée (E13, I4, I6, H1), la lettre de Xavier (C5 = B, C9 = A, D2 = A, E11 = A, I16 = A) exécutée de bout en bout, le lot `autor_sans_autorite` tranché le soir même, et le registre porté à v0.17 (`RES-Q13`, `RES-D12`). Toutes les lignes ont été remesurées, y compris les volumétries métier : c'est un relevé complet, pas un rafraîchissement ciblé.",
+      "pt": "Registo de **3 de setembro de 2026**, ao fim do dia — produção consultada em leitura e repositório recontado, depois da manhã (E13, I4, I6, H1), da carta de Xavier (C5, C9, D2, E11, I16) executada até ao fim, do lote `autor_sans_autorite` decidido na mesma noite e do registo em v0.17. Todas as linhas foram remedidas: é um registo completo."
     },
     "photo": [
       {
@@ -408,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "856",
+            "858",
             {
-              "fr": "`public` 630 · `api` 184 · `ingest` 34 · `private` 8. Dont **668 SECURITY DEFINER**, **aucune** sans `search_path` épinglé. La surface `authenticated` n'est plus un chantier : **B14 clos le 01/09, B20 le 02/09** — 2 fonctions branchées, 65 fermées en un jour, chaque exposition restante a sa raison écrite aux audits",
-              "pt": "`public` 630 · `api` 184 · `ingest` 34 · `private` 8. Sendo **668 SECURITY DEFINER**, **nenhuma** sem `search_path` fixado. A superfície `authenticated` já não é um canteiro: **B14 encerrado em 01/09, B20 em 02/09** — cada exposição restante tem sua razão escrita nas auditorias"
+              "fr": "`public` 632 · `api` 184 · `ingest` 34 · `private` 8. Dont **669 SECURITY DEFINER** (+2 le 03/09 : la proposition et le semis du lot `autor_sans_autorite`, toutes deux gardées staff), aucune exposée à `anon` hors la liste attendue.",
+              "pt": "`public` 632 · `api` 184 · `ingest` 34 · `private` 8. **669 SECURITY DEFINER** (+2 em 03/09, ambas guardadas staff)."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "271",
+            "273",
             {
-              "fr": "271 fichiers au dépôt = **271 appliquées, alignement exact** — trois de plus depuis l'après-midi (vestige vault B18, rattrapage des vues, dette assembleias). Vérifié le 02/09 au soir des deux côtés",
-              "pt": "271 arquivos = **271 aplicadas, alinhamento exato** — três a mais desde a tarde. Verificado em 02/09 à noite"
+              "fr": "273 migrations numérotées au dépôt = **273 appliquées, alignement exact** (281 fichiers dans le dossier avec le gabarit et sept scripts de rollback, hors motif). Deux de plus le 03/09 : le lot `autor_sans_autorite` et le grant du flux RSS. Vérifié le 03/09 au soir des deux côtés.",
+              "pt": "273 numeradas = **273 aplicadas, alinhamento exato** (281 ficheiros com o modelo e sete rollbacks). Duas a mais em 03/09."
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "450",
+            "451",
             {
-              "fr": "0 ERROR · **398** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** (liste T10, `DOC-GRANT-1`). Le 398 (`authenticated`) : 453 → 395 par la journée B20, puis **+3 rouvertes le soir** parce que des vues `security_invoker` les appelaient (rattrapage `20260902175631` — point 0 de la checklist pré-REVOKE). Proxy SQL du 02/09 au soir ; le tableau de bord advisor peut afficher un instantané en retard",
-              "pt": "0 ERROR · **398** + **28** WARN · 24 INFO. O 28 é o **valor esperado** (T10). O 398: 453 → 395 pelo dia B20, depois **+3 reabertas à noite** porque views `security_invoker` as chamavam (ponto 0 da checklist pré-REVOKE). Proxy SQL de 02/09 à noite"
+              "fr": "0 ERROR · **399** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** (liste T10, `DOC-GRANT-1`). Le 399 (`authenticated`) : 398 le 02/09 au soir, **+1 le 03/09** — `fn_conv_lot_autor_sans_autorite_seed`, DEFINER par nécessité (semis de la file) et gardée `fn_caller_is_staff` en première ligne ; justifiée, à porter à l'audit 0029.",
+              "pt": "0 ERROR · **399** + **28** WARN · 24 INFO. 28 = valor esperado ; 399 = 398 + 1 em 03/09 (semeadura do lote, guardada staff, justificada)."
             }
           ],
           [
@@ -452,10 +452,10 @@
               "fr": "Avis de performance",
               "pt": "Avisos de desempenho"
             },
-            "243",
+            "896",
             {
-              "fr": "166 index inutilisés · **38 clés étrangères non indexées, désormais toutes ASSUMÉES et gardées** (`fk_sans_index_garde_tests`, B21 clos le 02/09 : la dette n'entre plus sans un acte) · 25 policies permissives · 14 tables sans clé primaire · 0 `auth_rls_initplan`",
-              "pt": "166 índices não usados · **38 chaves estrangeiras sem índice, agora todas ASSUMIDAS e guardadas** (B21 encerrado em 02/09: a dívida não entra mais sem um ato) · 25 policies permissivas · 14 tabelas sem chave primária · 0 `auth_rls_initplan`"
+              "fr": "**403 « index inutilisés »**, contre 166 le 02/09 : ce n'est pas une dégradation, c'est le **redémarrage du projet du 02/09** (PostgREST « Unhealthy » → Restart) qui a remis les compteurs `idx_scan` à zéro — tout index non touché depuis compte comme inutilisé. À relire dans un mois, pas maintenant. **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`, 02/09). 25 tables à policies permissives multiples, inchangé.",
+              "pt": "**403 «índices não usados»** : artefacto do reinício de 02/09 (contadores a zero), não uma degradação. 38 FK sem índice, todas assumidas e guardadas."
             }
           ],
           [
@@ -482,10 +482,10 @@
               "fr": "Dossiers au dépôt",
               "pt": "Pastas no repositório"
             },
-            "51",
+            "52",
             {
-              "fr": "+ `_shared` ; dont le routeur `main`, **jamais déployé sur Supabase, et c'est voulu** — il ne sert que la pile auto-hébergée",
-              "pt": "+ `_shared`; entre elas o roteador `main`, **nunca implantado no Supabase, e isso é intencional** — serve apenas à pilha auto-hospedada"
+              "fr": "+ `_shared` ; **+1 le 03/09 : `rss-novidades`**, le flux des nouveautés par bibliothèque (E11). Dont le routeur `main`, jamais déployé sur Supabase, et c'est voulu.",
+              "pt": "+ `_shared` ; **+1 em 03/09 : `rss-novidades`**. O roteador `main` nunca é implantado, de propósito."
             }
           ],
           [
@@ -493,10 +493,10 @@
               "fr": "Déclarations `verify_jwt`",
               "pt": "Declarações `verify_jwt`"
             },
-            "36",
+            "37",
             {
-              "fr": "**toutes à `false`** — compte des lignes `^verify_jwt = `, pas des occurrences du mot (les commentaires en parlent aussi, et c'est ainsi que le chiffre a dérivé deux fois). Les fonctions protégées le sont par le défaut de la plateforme ; réconcilier ce fichier avec les fonctions déployées reste l'item **B6**",
-              "pt": "**todas em `false`** — contagem das linhas `^verify_jwt = `, não das ocorrências da palavra (os comentários também a mencionam, e foi assim que o número derivou duas vezes). As funções protegidas o são pelo padrão da plataforma; reconciliar este arquivo com as funções implantadas continua sendo o item **B6**"
+              "fr": "**toutes à `false`** — compte des lignes `^verify_jwt = ` ; +1 le 03/09 (`rss-novidades`, flux anonyme par nature, deux gardes dans la fonction).",
+              "pt": "**todas a `false`** ; +1 em 03/09 (`rss-novidades`)."
             }
           ]
         ]
@@ -514,8 +514,8 @@
             },
             "2 659",
             {
-              "fr": "2 758 exemplaires, 2 495 œuvres, 1 305 autorités. Les notices baissent de 17 et les exemplaires montent de 17 depuis le 29/08 : ce sont les fusions de doublons (item **P4**), pas des pertes",
-              "pt": "2 758 exemplares, 2 495 obras, 1 305 autoridades. As fichas caem 17 e os exemplares sobem 17 desde 29/08: são as fusões de duplicatas (item **P4**), não perdas"
+              "fr": "2 758 exemplaires, 2 495 œuvres, **1 532 autorités** — 1 305 à midi : **+227 créées le 03/09 au soir par le lot `autor_sans_autorite`** (Xavier a tranché les 464 : 446 liens posés, 18 écartés). Ces 227 sont non typées et jamais relues : premier objet de l'audit cadré à C3. Notices et exemplaires inchangés depuis le 01/09.",
+              "pt": "2 758 exemplares, 2 495 obras, **1 532 autoridades** (+227 criadas em 03/09 pelo lote `autor_sans_autorite`, nunca relidas)."
             }
           ],
           [
@@ -525,8 +525,8 @@
             },
             "2 240",
             {
-              "fr": "deux états seulement : `draft` et `published`",
-              "pt": "apenas dois estados: `draft` e `published`"
+              "fr": "trois états : `draft`, `published`, et `cancelled` — le troisième est apparu depuis le 02/09 (corbeille du catalogage).",
+              "pt": "três estados : `draft`, `published`, `cancelled`."
             }
           ],
           [
@@ -545,10 +545,10 @@
               "fr": "Thésaurus FICEDL",
               "pt": "Tesauro FICEDL"
             },
-            "462",
+            "621",
             {
-              "fr": "termes, **10 locales complètes** ; 98 alignements vers les sujets locaux",
-              "pt": "termos, **10 locales completas**; 98 alinhamentos para os assuntos locais"
+              "fr": "termes, **10 locales complètes** — 462 le 02/09 : **+159 dates (1868-2027)** entrées le 03/09 (H1), 147 avec leurs liens Placard / Cartoliste ; onglet « Dates » en ligne. 98 alignements vers les sujets locaux, intacts.",
+              "pt": "termos — 462 em 02/09 : **+159 datas** em 03/09 (H1), separador «Datas» online. 98 alinhamentos intactos."
             }
           ],
           [
@@ -586,10 +586,10 @@
               "fr": "Comptes",
               "pt": "Contas"
             },
-            "16",
+            "19",
             {
-              "fr": "**18** appartenances actives — elles étaient 28 le 29/08",
-              "pt": "**18** vínculos ativos — eram 28 em 29/08"
+              "fr": "**23** appartenances actives — 18 le 02/09 : **+3 lecteur·rices fictif·ves sur `blmf-teste`** pour la formation (Emma Teste, Errico Teste, Voltairine de Teste repassée lectrice), plus les comptes créés pour la séance. Aucun compte réel ajouté.",
+              "pt": "**23** adesões ativas — +3 leitoras fictícias em `blmf-teste` para a formação. Nenhuma conta real."
             }
           ],
           [
@@ -608,10 +608,10 @@
               "fr": "Circulation vivante",
               "pt": "Circulação viva"
             },
-            "6 / 19 / 22 / 2",
+            "6 / 19 / 22 / 0",
             {
-              "fr": "emprunts / réservations / consultations / PEB — dernière écriture d'emprunt le 31/08",
-              "pt": "empréstimos / reservas / consultas / EEB — última escrita de empréstimo em 31/08"
+              "fr": "emprunts / réservations / consultations / PEB — les deux PEB de test ont été retirés avec les fixtures des captures le 02/09 ; dernière écriture d'emprunt le 31/08, toujours.",
+              "pt": "empréstimos / reservas / consultas / PEB — os dois PEB de teste saíram em 02/09."
             }
           ]
         ]
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 515",
+            "2 541",
             {
-              "fr": "sur `main`, au 02/09 au soir — 42 commits dans la journée, de deux sessions",
-              "pt": "em `main`, na noite de 02/09 — 42 commits no dia, de duas sessões"
+              "fr": "sur `main`, au 03/09 au soir — **26 commits dans la journée**, d'une seule session (l'autre a poussé le journal P7 et la migration des captures).",
+              "pt": "em `main`, 03/09 à noite — **26 commits no dia**."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "290",
+            "295",
             {
-              "fr": "79 pages, 89 composants",
-              "pt": "79 páginas, 89 componentes"
+              "fr": "79 pages, 90 composants ; +5 fichiers depuis le 02/09 (bancs d'essai et tests).",
+              "pt": "79 páginas, 90 componentes."
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 234",
+            "6 249",
             {
-              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; +55 depuis le 01/09 (messagerie de candidature, retrait de fiche carto, page Importations : statuts traduits, libellés du geste, volet de coordination, porte OAI)",
-              "pt": "por locale, **paridade estrita nas 10**; +55 desde 01/09"
+              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; **+15 depuis le 02/09** : « Ma demande » (3), onglet « Dates » (1), atelier et périodicité (9), lot des auteurs (2), flux RSS (1) ; le champ auteur du formulaire renommé « tel qu'imprimé ».",
+              "pt": "por locale, **paridade estrita nas 10** ; **+15 desde 02/09**."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "354 + 72",
+            "370 + 73",
             {
-              "fr": "354 tests JS (vitest, gate bloquant) + **72 suites SQL** dans `ci-suites.txt` — 9 nées du seul 02/09, dont trois gardes de compteur ou de frontière (FK sans index, solde des différées, nom des facilitateur·rices scopé)",
-              "pt": "354 testes JS + **72 suítes SQL** — 9 nascidas só em 02/09"
+              "fr": "370 tests JS (vitest, gate bloquant ; +16 : engendrement, RSS, épinglage supabase-js) + **73 suites SQL** dans `ci-suites.txt` (+1 : `conv_c5_autor_sans_autorite`, 8 tests, verte en local avec O7 et O8 avant le push).",
+              "pt": "370 testes JS (+16) + **73 suites SQL** (+1 : lote C5, 8 testes)."
             }
           ],
           [
@@ -671,10 +671,10 @@
               "fr": "Marqueurs de dette",
               "pt": "Marcadores de dívida"
             },
-            "6",
+            "66",
             {
-              "fr": "dont 4 dans `src/` — ils étaient 17 le 29/08. Aucun n'est une tâche ouverte : la dette n'est pas dans les commentaires, elle est dans ce backlog",
-              "pt": "sendo 4 em `src/` — eram 17 em 29/08. Nenhum é uma tarefa aberta: a dívida não está nos comentários, está neste backlog"
+              "fr": "dont 6 dans `src/` (motifs `TODO`/`FIXME`, même compte que le 29/08). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
+              "pt": "dos quais 6 em `src/`. Nenhum é uma tarefa aberta."
             }
           ]
         ]

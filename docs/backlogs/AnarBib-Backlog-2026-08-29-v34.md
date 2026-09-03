@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 2 septembre 2026](#létat-réel-au-2-septembre-2026)
+- [L'état réel au 3 septembre 2026](#létat-réel-au-3-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -58,9 +58,9 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 2 septembre 2026
+## L'état réel au 3 septembre 2026
 
-Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
+Relevé du **3 septembre 2026**, en fin de journée — production interrogée en lecture seule et dépôt recompté, après la matinée (E13, I4, I6, H1), la lettre de Xavier (C5 = B, C9 = A, D2 = A, E11 = A, I16 = A) exécutée de bout en bout, le lot `autor_sans_autorite` tranché le soir même, et le registre porté à v0.17 (`RES-Q13`, `RES-D12`). Toutes les lignes ont été remesurées, y compris les volumétries métier : c'est un relevé complet, pas un rafraîchissement ciblé.
 
 **Fraîcheur des constats au 2026-09-02.** **47 items sur 64** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, J2, J6, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
@@ -71,28 +71,28 @@ Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, 
 | Tables `public` | **187** | toutes avec RLS activé, 279 policies sur **173** tables |
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
-| Fonctions applicatives | **856** | `public` 630 · `api` 184 · `ingest` 34 · `private` 8. Dont **668 SECURITY DEFINER**, **aucune** sans `search_path` épinglé. La surface `authenticated` n'est plus un chantier : **B14 clos le 01/09, B20 le 02/09** — 2 fonctions branchées, 65 fermées en un jour, chaque exposition restante a sa raison écrite aux audits |
-| Migrations appliquées | **271** | 271 fichiers au dépôt = **271 appliquées, alignement exact** — trois de plus depuis l'après-midi (vestige vault B18, rattrapage des vues, dette assembleias). Vérifié le 02/09 au soir des deux côtés |
+| Fonctions applicatives | **858** | `public` 632 · `api` 184 · `ingest` 34 · `private` 8. Dont **669 SECURITY DEFINER** (+2 le 03/09 : la proposition et le semis du lot `autor_sans_autorite`, toutes deux gardées staff), aucune exposée à `anon` hors la liste attendue. |
+| Migrations appliquées | **273** | 273 migrations numérotées au dépôt = **273 appliquées, alignement exact** (281 fichiers dans le dossier avec le gabarit et sept scripts de rollback, hors motif). Deux de plus le 03/09 : le lot `autor_sans_autorite` et le grant du flux RSS. Vérifié le 03/09 au soir des deux côtés. |
 | Jobs `pg_cron` | **37** | **tous actifs** (+1 depuis le 01/09 : le rappel avant péremption des invitations d'équipe, GOUV-17b) ; couverts en CI par `crons_planifies_tests` |
-| Avis de sécurité | **450** | 0 ERROR · **398** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** (liste T10, `DOC-GRANT-1`). Le 398 (`authenticated`) : 453 → 395 par la journée B20, puis **+3 rouvertes le soir** parce que des vues `security_invoker` les appelaient (rattrapage `20260902175631` — point 0 de la checklist pré-REVOKE). Proxy SQL du 02/09 au soir ; le tableau de bord advisor peut afficher un instantané en retard |
-| Avis de performance | **243** | 166 index inutilisés · **38 clés étrangères non indexées, désormais toutes ASSUMÉES et gardées** (`fk_sans_index_garde_tests`, B21 clos le 02/09 : la dette n'entre plus sans un acte) · 25 policies permissives · 14 tables sans clé primaire · 0 `auth_rls_initplan` |
+| Avis de sécurité | **451** | 0 ERROR · **399** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** (liste T10, `DOC-GRANT-1`). Le 399 (`authenticated`) : 398 le 02/09 au soir, **+1 le 03/09** — `fn_conv_lot_autor_sans_autorite_seed`, DEFINER par nécessité (semis de la file) et gardée `fn_caller_is_staff` en première ligne ; justifiée, à porter à l'audit 0029. |
+| Avis de performance | **896** | **403 « index inutilisés »**, contre 166 le 02/09 : ce n'est pas une dégradation, c'est le **redémarrage du projet du 02/09** (PostgREST « Unhealthy » → Restart) qui a remis les compteurs `idx_scan` à zéro — tout index non touché depuis compte comme inutilisé. À relire dans un mois, pas maintenant. **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`, 02/09). 25 tables à policies permissives multiples, inchangé. |
 | Schémas de rebut | **2** | `backup_2026_05_07` et `conv_backup` — inchangés depuis le 29/08 |
 
 ### Fonctions Edge
 
 | | | |
 |---|---:|---|
-| Dossiers au dépôt | **51** | + `_shared` ; dont le routeur `main`, **jamais déployé sur Supabase, et c'est voulu** — il ne sert que la pile auto-hébergée |
-| Déclarations `verify_jwt` | **36** | **toutes à `false`** — compte des lignes `^verify_jwt = `, pas des occurrences du mot (les commentaires en parlent aussi, et c'est ainsi que le chiffre a dérivé deux fois). Les fonctions protégées le sont par le défaut de la plateforme ; réconcilier ce fichier avec les fonctions déployées reste l'item **B6** |
+| Dossiers au dépôt | **52** | + `_shared` ; **+1 le 03/09 : `rss-novidades`**, le flux des nouveautés par bibliothèque (E11). Dont le routeur `main`, jamais déployé sur Supabase, et c'est voulu. |
+| Déclarations `verify_jwt` | **37** | **toutes à `false`** — compte des lignes `^verify_jwt = ` ; +1 le 03/09 (`rss-novidades`, flux anonyme par nature, deux gardes dans la fonction). |
 
 ### Catalogue
 
 | | | |
 |---|---:|---|
-| Notices | **2 659** | 2 758 exemplaires, 2 495 œuvres, 1 305 autorités. Les notices baissent de 17 et les exemplaires montent de 17 depuis le 29/08 : ce sont les fusions de doublons (item **P4**), pas des pertes |
-| Brouillons de catalogage | **2 240** | deux états seulement : `draft` et `published` |
+| Notices | **2 659** | 2 758 exemplaires, 2 495 œuvres, **1 532 autorités** — 1 305 à midi : **+227 créées le 03/09 au soir par le lot `autor_sans_autorite`** (Xavier a tranché les 464 : 446 liens posés, 18 écartés). Ces 227 sont non typées et jamais relues : premier objet de l'audit cadré à C3. Notices et exemplaires inchangés depuis le 01/09. |
+| Brouillons de catalogage | **2 240** | trois états : `draft`, `published`, et `cancelled` — le troisième est apparu depuis le 02/09 (corbeille du catalogage). |
 | Indexation matière | **1 122 / 2 659** | 42 % des notices ; 1 279 affectations sur 89 sujets locaux |
-| Thésaurus FICEDL | **462** | termes, **10 locales complètes** ; 98 alignements vers les sujets locaux |
+| Thésaurus FICEDL | **621** | termes, **10 locales complètes** — 462 le 02/09 : **+159 dates (1868-2027)** entrées le 03/09 (H1), 147 avec leurs liens Placard / Cartoliste ; onglet « Dates » en ligne. 98 alignements vers les sujets locaux, intacts. |
 | Périodiques | **4** | titres, 7 fascicules rattachés. Leur **arbitrage de doublons** est ouvert à tout rôle `librarian` alors que celui des livres est réservé à la coordination : écart mesuré le 01/09, décidé, en attente de préavis |
 
 ### Réseau
@@ -100,19 +100,19 @@ Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, 
 | | | |
 |---|---:|---|
 | Bibliothèques | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` a été retirée du réseau** — suppression volontaire confirmée par la coordination le 01/09, tracée dans `NOTE_retrait_cira_marseille_2026-09-01`. Cascade propre (0 fonds, 0 orphelin) ; thème conservé en storage, source d'import close |
-| Comptes | **16** | **18** appartenances actives — elles étaient 28 le 29/08 |
+| Comptes | **19** | **23** appartenances actives — 18 le 02/09 : **+3 lecteur·rices fictif·ves sur `blmf-teste`** pour la formation (Emma Teste, Errico Teste, Voltairine de Teste repassée lectrice), plus les comptes créés pour la séance. Aucun compte réel ajouté. |
 | Administrateur·rices réseau | **1** | **c'est l'item A1, et il commande tout le reste** |
-| Circulation vivante | **6 / 19 / 22 / 2** | emprunts / réservations / consultations / PEB — dernière écriture d'emprunt le 31/08 |
+| Circulation vivante | **6 / 19 / 22 / 0** | emprunts / réservations / consultations / PEB — les deux PEB de test ont été retirés avec les fixtures des captures le 02/09 ; dernière écriture d'emprunt le 31/08, toujours. |
 
 ### Dépôt
 
 | | | |
 |---|---:|---|
-| Commits | **2 515** | sur `main`, au 02/09 au soir — 42 commits dans la journée, de deux sessions |
-| Fichiers `src/` | **290** | 79 pages, 89 composants |
-| Clés i18n | **6 234** | par locale, **parité stricte sur les 10**, gardée en CI ; +55 depuis le 01/09 (messagerie de candidature, retrait de fiche carto, page Importations : statuts traduits, libellés du geste, volet de coordination, porte OAI) |
-| Tests | **354 + 72** | 354 tests JS (vitest, gate bloquant) + **72 suites SQL** dans `ci-suites.txt` — 9 nées du seul 02/09, dont trois gardes de compteur ou de frontière (FK sans index, solde des différées, nom des facilitateur·rices scopé) |
-| Marqueurs de dette | **6** | dont 4 dans `src/` — ils étaient 17 le 29/08. Aucun n'est une tâche ouverte : la dette n'est pas dans les commentaires, elle est dans ce backlog |
+| Commits | **2 541** | sur `main`, au 03/09 au soir — **26 commits dans la journée**, d'une seule session (l'autre a poussé le journal P7 et la migration des captures). |
+| Fichiers `src/` | **295** | 79 pages, 90 composants ; +5 fichiers depuis le 02/09 (bancs d'essai et tests). |
+| Clés i18n | **6 249** | par locale, **parité stricte sur les 10**, gardée en CI ; **+15 depuis le 02/09** : « Ma demande » (3), onglet « Dates » (1), atelier et périodicité (9), lot des auteurs (2), flux RSS (1) ; le champ auteur du formulaire renommé « tel qu'imprimé ». |
+| Tests | **370 + 73** | 370 tests JS (vitest, gate bloquant ; +16 : engendrement, RSS, épinglage supabase-js) + **73 suites SQL** dans `ci-suites.txt` (+1 : `conv_c5_autor_sans_autorite`, 8 tests, verte en local avec O7 et O8 avant le push). |
+| Marqueurs de dette | **66** | dont 6 dans `src/` (motifs `TODO`/`FIXME`, même compte que le 29/08). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
 
@@ -2077,4 +2077,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 64 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 64 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
