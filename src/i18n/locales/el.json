@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Αιτιολογία (τουλ. 20 χαρακτήρες)",
   "atelier.obj.refused": "Η ένσταση καταχωρίστηκε — η πρόταση απορρίφθηκε (2+ βιβλιοθήκες που τη χρησιμοποιούν).",
   "atelier.obj.submit": "Καταχώριση ένστασης",
-  "atelier.page.subtitle": "Η ουρά των προτάσεων συνεισφοράς στο κοινό σώμα καθιερωμένων εγγραφών (πρόσωπα, συλλογικότητες, θέματα). Οι αποφάσεις λαμβάνονται με συναίνεση: χωρίς αιτιολογημένη ένσταση μέχρι την προθεσμία, η πρόταση εφαρμόζεται από μέλος της ομάδας.",
+  "atelier.page.subtitle": "Η ουρά ελέγχου του καταλόγου: προτάσεις για τις καθιερωμένες μορφές (πρόσωπα, συλλογικότητες, θέματα) και παρτίδες αναθεώρησης των εγγραφών (τίτλοι, ονόματα). Οι αποφάσεις λαμβάνονται με συναίνεση: χωρίς αιτιολογημένη ένσταση πριν από την προθεσμία, η πρόταση εφαρμόζεται από μέλος της ομάδας.",
   "atelier.page.title": "Εργαστήρι καθιερωμένων εγγραφών",
   "atelier.pageTitle": "Εργαστήριο συγκρότησης",
   "atelier.panel.markDone": "Σήμανση ως συζητημένο συλλογικά ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "Η αίτηση ένταξης της βιβλιοθήκης σας στο δίκτυο, και οι ανταλλαγές σας με τη διαχείριση του δικτύου κατά την εξέτασή της.",
   "conta.demande.goAtelier": "Μετάβαση στο εργαστήριο σύστασης",
   "conta.demande.historyTitle": "Ιστορικό των αιτημάτων μου",
-  "ficedl.facet.dates": "Χρονολογίες"
+  "ficedl.facet.dates": "Χρονολογίες",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Εβδομαδιαία",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Δεκαπενθήμερη",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Μηνιαία",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Διμηνιαία",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Τριμηνιαία",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Εξαμηνιαία",
+  "catalogacao.serialDetail.frequencyOption.annual": "Ετήσια",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Ακανόνιστη"
 }

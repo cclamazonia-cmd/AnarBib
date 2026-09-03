@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Motivazione (min. 20 caratteri)",
   "atelier.obj.refused": "Obiezione registrata — la proposta è stata respinta (2+ biblioteche utilizzatrici).",
   "atelier.obj.submit": "Registra l'obiezione",
-  "atelier.page.subtitle": "La coda delle proposte di contributo al corpus condiviso di autorità (persone, collettività, soggetti). Le decisioni si prendono per consenso: senza obiezione motivata entro la scadenza, la proposta viene applicata da un membro dell'équipe.",
+  "atelier.page.subtitle": "La coda di verifica del catalogo: proposte sulle autorità (persone, collettività, soggetti) e lotti di revisione delle schede (titoli, nomi). Le decisioni si prendono per consenso: senza obiezione motivata entro la scadenza, la proposta viene applicata da un membro dell’équipe.",
   "atelier.page.title": "Laboratorio delle autorità",
   "atelier.pageTitle": "Laboratorio di costituzione",
   "atelier.panel.markDone": "Segnare come discusso in collettivo ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "La domanda di adesione della vostra biblioteca alla rete, e i vostri scambi con l’amministrazione della rete durante l’esame.",
   "conta.demande.goAtelier": "Vai al laboratorio di costituzione",
   "conta.demande.historyTitle": "Cronologia delle mie richieste",
-  "ficedl.facet.dates": "Date"
+  "ficedl.facet.dates": "Date",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Settimanale",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Quindicinale",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Mensile",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Bimestrale",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Trimestrale",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Semestrale",
+  "catalogacao.serialDetail.frequencyOption.annual": "Annuale",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Irregolare"
 }

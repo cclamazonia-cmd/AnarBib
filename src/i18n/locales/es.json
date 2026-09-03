@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Motivación (mín. 20 caracteres)",
   "atelier.obj.refused": "Objeción registrada — la propuesta fue rechazada (2+ bibliotecas usuarias).",
   "atelier.obj.submit": "Registrar objeción",
-  "atelier.page.subtitle": "La cola de propuestas de contribución al corpus compartido de autoridades (personas, colectividades, materias). Las decisiones se toman por consentimiento: sin objeción motivada antes del plazo, la propuesta la aplica un miembro del equipo.",
+  "atelier.page.subtitle": "La cola de verificación del catálogo: propuestas sobre las autoridades (personas, colectividades, materias) y lotes de revisión de los registros (títulos, nombres). Las decisiones se toman por consentimiento: sin objeción motivada antes del plazo, la propuesta la aplica un miembro del equipo.",
   "atelier.page.title": "Taller de autoridades",
   "atelier.pageTitle": "Taller de constitución",
   "atelier.panel.markDone": "Marcar como debatido en colectivo ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "La solicitud de adhesión de su biblioteca a la red, y sus intercambios con la administración de la red durante su examen.",
   "conta.demande.goAtelier": "Ir al taller de constitución",
   "conta.demande.historyTitle": "Historial de mis solicitudes",
-  "ficedl.facet.dates": "Fechas"
+  "ficedl.facet.dates": "Fechas",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Semanal",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Quincenal",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Mensual",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Bimestral",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Trimestral",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Semestral",
+  "catalogacao.serialDetail.frequencyOption.annual": "Anual",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Irregular"
 }

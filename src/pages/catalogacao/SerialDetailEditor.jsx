@@ -277,7 +277,16 @@ export default function SerialDetailEditor({ serial, myLibraries, onChanged }) {
         </div>
         <div>
           <label style={lbl}>{t({ id: 'catalogacao.serialDetail.frequency' })}</label>
-          <input className="ab-input" value={form.periodicidade} onChange={e => set('periodicidade', e.target.value)} placeholder="Trimestral" />
+          {/* D2/1 (verdict 03/09) : vocabulaire LIBRE, avec une liste de suggestions non
+              contraignante — la liste ne se ferme que le jour où un fonds réel (Anarchief)
+              en fait apparaître le besoin. */}
+          <input className="ab-input" list="serial-periodicidade-suggestions" value={form.periodicidade}
+            onChange={e => set('periodicidade', e.target.value)} placeholder={t({ id: 'catalogacao.serialDetail.frequencyOption.quarterly' })} />
+          <datalist id="serial-periodicidade-suggestions">
+            {['weekly', 'biweekly', 'monthly', 'bimonthly', 'quarterly', 'biannual', 'annual', 'irregular'].map(k => (
+              <option key={k} value={t({ id: `catalogacao.serialDetail.frequencyOption.${k}` })} />
+            ))}
+          </datalist>
         </div>
         <div>
           <label style={lbl}>{t({ id: 'catalogacao.serialDetail.language' })}</label>

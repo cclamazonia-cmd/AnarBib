@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Motivering (min. 20 tekens)",
   "atelier.obj.refused": "Bezwaar geregistreerd — het voorstel is afgewezen (2+ gebruikende bibliotheken).",
   "atelier.obj.submit": "Bezwaar registreren",
-  "atelier.page.subtitle": "De wachtrij van bijdragevoorstellen voor het gedeelde corpus van autoriteiten (personen, collectiviteiten, onderwerpen). Beslissingen vallen bij consent: zonder gemotiveerd bezwaar vóór de deadline wordt het voorstel toegepast door een teamlid.",
+  "atelier.page.subtitle": "De controlewachtrij van de catalogus: voorstellen over de autoriteiten (personen, collectieven, onderwerpen) en revisiepartijen van records (titels, namen). Beslissingen vallen bij consent: zonder gemotiveerd bezwaar voor de deadline past een teamlid het voorstel toe.",
   "atelier.page.title": "Werkplaats autoriteiten",
   "atelier.pageTitle": "Oprichtingsatelier",
   "atelier.panel.markDone": "Markeren als collectief besproken ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "De aanvraag van uw bibliotheek om tot het netwerk toe te treden, en uw uitwisselingen met het netwerkbeheer tijdens de beoordeling.",
   "conta.demande.goAtelier": "Naar de oprichtingswerkplaats",
   "conta.demande.historyTitle": "Geschiedenis van mijn aanvragen",
-  "ficedl.facet.dates": "Data"
+  "ficedl.facet.dates": "Data",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Wekelijks",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Tweewekelijks",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Maandelijks",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Tweemaandelijks",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Driemaandelijks",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Halfjaarlijks",
+  "catalogacao.serialDetail.frequencyOption.annual": "Jaarlijks",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Onregelmatig"
 }

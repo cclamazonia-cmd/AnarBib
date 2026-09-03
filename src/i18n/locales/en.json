@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Reason (min. 20 characters)",
   "atelier.obj.refused": "Objection registered — the proposal was refused (2+ using libraries).",
   "atelier.obj.submit": "Register objection",
-  "atelier.page.subtitle": "The queue of contribution proposals to the shared authorities corpus (people, collectivities, subjects). Decisions are made by consent: with no motivated objection by the deadline, the proposal is applied by a team member.",
+  "atelier.page.subtitle": "The catalogue review queue: proposals about authorities (people, collectivities, subjects) and review batches of records (titles, names). Decisions are taken by consent: without a reasoned objection before the deadline, the proposal is applied by a team member.",
   "atelier.page.title": "Authorities workshop",
   "atelier.pageTitle": "Constitution workshop",
   "atelier.panel.markDone": "Mark as discussed collectively ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "Your library’s application to join the network, and your exchanges with the network administration while it is reviewed.",
   "conta.demande.goAtelier": "Go to the constitution workshop",
   "conta.demande.historyTitle": "History of my requests",
-  "ficedl.facet.dates": "Dates"
+  "ficedl.facet.dates": "Dates",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Weekly",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Fortnightly",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Monthly",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Bimonthly",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Quarterly",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Twice a year",
+  "catalogacao.serialDetail.frequencyOption.annual": "Annual",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Irregular"
 }

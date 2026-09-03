@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Motivació (mín. 20 caràcters)",
   "atelier.obj.refused": "Objecció registrada — la proposta ha estat refusada (2+ biblioteques usuàries).",
   "atelier.obj.submit": "Registrar l'objecció",
-  "atelier.page.subtitle": "La cua de propostes de contribució al corpus compartit d'autoritats (persones, col·lectivitats, matèries). Les decisions es prenen per consentiment: sense objecció motivada abans del termini, la proposta és aplicada per un membre de l'equip.",
+  "atelier.page.subtitle": "La cua de verificació del catàleg: propostes sobre les autoritats (persones, col·lectivitats, matèries) i lots de revisió dels registres (títols, noms). Les decisions es prenen per consentiment: sense objecció motivada abans del termini, la proposta l’aplica un membre de l’equip.",
   "atelier.page.title": "Taller d'autoritats",
   "atelier.pageTitle": "Taller de constitució",
   "atelier.panel.markDone": "Marcar com a debatut en col·lectiu ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "La sol·licitud d’adhesió de la vostra biblioteca a la xarxa, i els vostres intercanvis amb l’administració de la xarxa durant l’examen.",
   "conta.demande.goAtelier": "Anar al taller de constitució",
   "conta.demande.historyTitle": "Historial de les meves sol·licituds",
-  "ficedl.facet.dates": "Dates"
+  "ficedl.facet.dates": "Dates",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Setmanal",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Quinzenal",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Mensual",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Bimestral",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Trimestral",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Semestral",
+  "catalogacao.serialDetail.frequencyOption.annual": "Anual",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Irregular"
 }

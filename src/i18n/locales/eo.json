@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Motivo (min. 20 signoj)",
   "atelier.obj.refused": "Obĵeto registrita — la propono estas rifuzita (2+ uzantaj bibliotekoj).",
   "atelier.obj.submit": "Registri la obĵeton",
-  "atelier.page.subtitle": "La vico de kontribuproponoj al la komuna korpuso de aŭtoritatoj (personoj, kolektivoj, temoj). La decidoj estas prenataj per konsento: sen motivita obĵeto antaŭ la limdato, la propono estas aplikata de membro de la teamo.",
+  "atelier.page.subtitle": "La kontrolvico de la katalogo: proponoj pri la aŭtoritatoj (personoj, kolektivoj, temoj) kaj reviziaj lotoj de la slipoj (titoloj, nomoj). La decidoj estas prenataj per konsento: sen motivita obĵeto antaŭ la limdato, la propono estas aplikata de teamano.",
   "atelier.page.title": "Laborejo de aŭtoritatoj",
   "atelier.pageTitle": "Laborejo de konsistigo",
   "atelier.panel.markDone": "Marki kiel kolektive diskutita ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "La aliĝpeto de via biblioteko al la reto, kaj viaj interŝanĝoj kun la reta administrado dum ĝia ekzameno.",
   "conta.demande.goAtelier": "Iri al la fonda laborejo",
   "conta.demande.historyTitle": "Historio de miaj petoj",
-  "ficedl.facet.dates": "Datoj"
+  "ficedl.facet.dates": "Datoj",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Semajna",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Dusemajna",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Monata",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Dumonata",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Trimonata",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Duonjara",
+  "catalogacao.serialDetail.frequencyOption.annual": "Jara",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Neregula"
 }

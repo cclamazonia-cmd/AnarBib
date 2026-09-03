@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Motivation (min. 20 caractères)",
   "atelier.obj.refused": "Objection enregistrée — la proposition est refusée (2+ bibliothèques utilisatrices).",
   "atelier.obj.submit": "Enregistrer l'objection",
-  "atelier.page.subtitle": "La file des propositions de contribution au corpus partagé d'autorités (personnes, collectivités, matières). Les décisions se prennent par consentement : sans objection motivée avant l'échéance, la proposition est appliquée par un membre de l'équipe.",
+  "atelier.page.subtitle": "La file de vérification du catalogue : propositions sur les autorités (personnes, collectivités, matières) et lots de révision des notices (titres, noms). Les décisions se prennent par consentement : sans objection motivée avant l’échéance, la proposition est appliquée par un membre de l’équipe.",
   "atelier.page.title": "Atelier des autorités",
   "atelier.pageTitle": "Atelier de constitution",
   "atelier.panel.markDone": "Marquer comme discuté en collectif ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "La demande d’adhésion de votre bibliothèque au réseau, et vos échanges avec l’administration du réseau pendant son examen.",
   "conta.demande.goAtelier": "Aller à l’atelier de constitution",
   "conta.demande.historyTitle": "Historique de mes demandes",
-  "ficedl.facet.dates": "Dates"
+  "ficedl.facet.dates": "Dates",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Hebdomadaire",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Bimensuel",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Mensuel",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Bimestriel",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Trimestriel",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Semestriel",
+  "catalogacao.serialDetail.frequencyOption.annual": "Annuel",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Irrégulier"
 }

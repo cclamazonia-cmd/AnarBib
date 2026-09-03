@@ -521,7 +521,7 @@
   "atelier.obj.reason": "Begründung (mind. 20 Zeichen)",
   "atelier.obj.refused": "Einwand eingetragen — der Vorschlag wurde abgelehnt (2+ nutzende Bibliotheken).",
   "atelier.obj.submit": "Einwand eintragen",
-  "atelier.page.subtitle": "Die Warteschlange der Beitragsvorschläge zum gemeinsamen Normdaten-Korpus (Personen, Kollektive, Schlagwörter). Entscheidungen fallen im Konsent: Ohne begründeten Einwand bis zur Frist wird der Vorschlag von einem Teammitglied angewendet.",
+  "atelier.page.subtitle": "Die Prüfwarteschlange des Katalogs: Vorschläge zu Normdaten (Personen, Kollektive, Schlagwörter) und Prüflose für Datensätze (Titel, Namen). Entscheidungen fallen im Konsent: Ohne begründeten Einwand vor Fristablauf wird der Vorschlag von einem Teammitglied umgesetzt.",
   "atelier.page.title": "Normdaten-Werkstatt",
   "atelier.pageTitle": "Werkstatt zur Gründung",
   "atelier.panel.markDone": "Als kollektiv besprochen markieren ✓",
@@ -6236,5 +6236,13 @@
   "conta.demande.intro": "Der Beitrittsantrag Ihrer Bibliothek zum Netzwerk und Ihr Austausch mit der Netzwerkverwaltung während der Prüfung.",
   "conta.demande.goAtelier": "Zur Gründungswerkstatt",
   "conta.demande.historyTitle": "Verlauf meiner Anträge",
-  "ficedl.facet.dates": "Daten"
+  "ficedl.facet.dates": "Daten",
+  "catalogacao.serialDetail.frequencyOption.weekly": "Wöchentlich",
+  "catalogacao.serialDetail.frequencyOption.biweekly": "Vierzehntägig",
+  "catalogacao.serialDetail.frequencyOption.monthly": "Monatlich",
+  "catalogacao.serialDetail.frequencyOption.bimonthly": "Zweimonatlich",
+  "catalogacao.serialDetail.frequencyOption.quarterly": "Vierteljährlich",
+  "catalogacao.serialDetail.frequencyOption.biannual": "Halbjährlich",
+  "catalogacao.serialDetail.frequencyOption.annual": "Jährlich",
+  "catalogacao.serialDetail.frequencyOption.irregular": "Unregelmäßig"
 }
