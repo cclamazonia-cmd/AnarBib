@@ -144,7 +144,7 @@ function monterEF(etat, reponses) {
     return new Response(r, { status: 200 });
   };
   const requireStub = (spec) => {
-    if (spec.includes('supabase-js')) return { createClient: () => client('public') };
+    if (spec.includes('supabase-js') || spec.endsWith('deps.ts')) return { createClient: () => client('public') };
     if (spec.endsWith('marc.ts')) return evaluer(cjs(MARC), {});
     if (spec.endsWith('oai.ts')) return evaluer(cjs(OAI), {});
     // Le vrai module, pas un stub. Depuis B18 (02/09/2026) le repli legacy

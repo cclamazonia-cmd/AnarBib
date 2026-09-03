@@ -10,7 +10,7 @@
 // coordenador. verify_jwt par défaut (true) : JWT usager requis et relayé à la RPC (gate).
 
 import { secretKey } from '../_shared/core/secret-key.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 
 const DEPOSIT_BUCKET = 'partner-catalog-deposits';
 

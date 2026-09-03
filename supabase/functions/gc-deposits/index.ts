@@ -11,7 +11,7 @@
 // non attachés (en attente d'attache). verify_jwt=false (cf. config.toml) : auth x-import-secret.
 
 import { secretKey } from '../_shared/core/secret-key.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 
 const DEPOSIT_BUCKET = 'partner-catalog-deposits';
 const IMPORT_SECRET_HEADER = 'x-import-secret';

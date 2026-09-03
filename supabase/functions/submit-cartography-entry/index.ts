@@ -12,7 +12,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), ALTCHA_HMAC_SECRET.
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
 
 // Locales de la donnée carto (clé i18n par collectif) : `pt` (pas `pt-BR`).

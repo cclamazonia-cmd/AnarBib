@@ -11,7 +11,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), NOMINATIM_URL (à définir).
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 
 const CORS = {
   "Access-Control-Allow-Origin": "https://app.anarbib.org",

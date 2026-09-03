@@ -15,7 +15,7 @@
 // qui envoie la clé anon (un JWT valide) → la garde verify_jwt=true est satisfaite.
 // ============================================================================
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = secretKey() ?? "";

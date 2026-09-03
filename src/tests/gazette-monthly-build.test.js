@@ -111,7 +111,7 @@ function monterEF(etat) {
       );
       return m.exports;
     }
-    if (!spec.includes('supabase-js')) throw new Error(`import inattendu : ${spec}`);
+    if (!spec.includes('supabase-js') && !spec.endsWith('deps.ts')) throw new Error(`import inattendu : ${spec}`);
     return { createClient: () => ({ from: requete }) };
   };
 

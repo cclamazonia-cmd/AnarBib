@@ -3,7 +3,7 @@
 // Depuis le pied de chaque envoi : valide le token stable (RPC api.fn_lettre_unsubscribe),
 // retire le consentement, rend une page localisée. Aucun login. service_role (bypass RLS).
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 import { tMail } from "../_shared/i18n/mail-strings.ts";
 
 const sb = createClient(

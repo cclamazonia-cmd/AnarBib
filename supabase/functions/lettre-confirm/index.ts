@@ -4,7 +4,7 @@
 // api.fn_lettre_confirm), rend une page localisée. Aucun login. service_role pour
 // lire la locale (bypass RLS). Idempotent (token usage unique côté RPC).
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 import { tMail } from "../_shared/i18n/mail-strings.ts";
 
 const sb = createClient(

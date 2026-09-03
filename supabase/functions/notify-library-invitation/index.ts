@@ -29,7 +29,7 @@
 // dans le mail (A4).
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 import { SUPABASE_URL, APP_BASE_URL } from "../_shared/core/env.ts";
 import { tMail, formatDateLocale } from "../_shared/i18n/mail-strings.ts";
 import { renderEmail, footerPadrao } from "../_shared/mail/layout.ts";

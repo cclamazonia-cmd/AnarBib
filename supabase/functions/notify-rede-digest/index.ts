@@ -16,7 +16,7 @@
 // authentifié par WEBHOOK_SECRET_NOTIFY_REDE_DIGEST (verify_jwt=false). Envoi Resend.
 // ============================================================================
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 import { tMail, greeting } from "../_shared/i18n/mail-strings.ts";
 
 const APP_URL = "https://app.anarbib.org";

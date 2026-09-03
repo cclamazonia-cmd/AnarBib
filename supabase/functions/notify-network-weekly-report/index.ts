@@ -1,7 +1,7 @@
 // supabase/functions/notify-network-weekly-report/index.ts
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 const PAGE_SIZE = 1000;
 function mustEnv(name) {
   const value = Deno.env.get(name);

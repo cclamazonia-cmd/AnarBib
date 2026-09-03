@@ -1,5 +1,5 @@
 import { secretKey } from "./secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.4";
+import { createClient } from "../deps.ts";
 export const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 // Nom conserve : 10 fonctions importent ce symbole. Ce n'est plus la cle
 // legacy mais la cle secrete nommee « default » (cf. secret-key.ts).

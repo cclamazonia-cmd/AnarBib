@@ -14,7 +14,7 @@
 // Auth    : JWT requis (verify_jwt par défaut) ; le RPC re-valide le rôle.
 
 import { secretKey } from '../_shared/core/secret-key.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 import JSZip from 'npm:jszip@3';
 import { serializeCatalog, SUPPORTED_FORMATS } from '../export-catalog-lote/serialize.ts';
 

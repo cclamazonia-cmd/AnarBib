@@ -1,6 +1,6 @@
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");

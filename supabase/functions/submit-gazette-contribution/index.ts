@@ -10,7 +10,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (présents par défaut dans l'env EF).
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
 const RUBRICS = ["une","reseau","luttes","international","cultures","agenda","autre"];

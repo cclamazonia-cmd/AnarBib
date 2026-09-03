@@ -14,7 +14,7 @@
 // Réf. : http://www.openarchives.org/OAI/openarchivesprotocol.html
 
 import { secretKey } from '../_shared/core/secret-key.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 import { OAI_FORMATS, xmlEscape } from '../_shared/oai/metadata.ts';
 
 const PAGE_SIZE = 100;

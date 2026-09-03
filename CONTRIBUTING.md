@@ -42,6 +42,10 @@ En cas de contradiction apparente entre deux documents, le REGISTRE tranche. Une
 
 `deploy/.env` et `deploy/functions.env` contiennent des secrets et sont ignorés par git. La `SERVICE_ROLE_KEY` n'a sa place ni dans le dépôt, ni dans le front, ni dans un message. Si vous pensez en avoir commis une, dites-le tout de suite : une clé qu'on révoque coûte cinq minutes, une clé qu'on ignore coûte le reste.
 
+### 4. Une dépendance des Edge Functions s'épingle en un seul endroit
+
+`supabase-js` est importé par toutes les fonctions **depuis `supabase/functions/_shared/deps.ts`**, et nulle part ailleurs — jamais `esm.sh/...@2` ni `npm:...@2` dans une fonction. Ce module épingle **une version exacte** ; la monter est un geste daté (changer le nombre, redéployer tout, noter la date). Le banc `src/tests/supabase-js-epingle.test.js` refuse tout import direct. Décision `I16` du 03/09/2026 : un régime mixte — une épinglée, trente flottantes — donne le pire des deux, on l'a payé le 01/09.
+
 ---
 
 ## Mettre en route
@@ -114,6 +118,8 @@ If you don't know where to start, `docs/CHANTIERS_OUVERTS.md` lists entry points
 Then, depending on what you touch: the inclusive-language charter for i18n (`docs/notes-audit/anarbib-charte-langage-inclusif-v2.md`), the active doctrines in `docs/journal/` for SQL and migrations, the cataloguing guides in `docs/guides/`, and `deploy/README.md` for the self-hosted stack.
 
 **Never commit secrets.** `deploy/.env` and `deploy/functions.env` are gitignored. The `SERVICE_ROLE_KEY` belongs neither in the repository, nor in the front end, nor in a message. If you think you committed one, say so immediately.
+
+**One place pins Edge Function dependencies.** Every function imports `supabase-js` from `supabase/functions/_shared/deps.ts` — never `esm.sh/...@2` or `npm:...@2` directly. That module pins an exact version; bumping it is a dated act (change the number, redeploy everything, note the date). `src/tests/supabase-js-epingle.test.js` rejects any direct import (decision `I16`, 2026-09-03).
 
 ## Getting started
 

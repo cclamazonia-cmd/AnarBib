@@ -11,7 +11,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (défaut), ANTHROPIC_API_KEY, GAZETTE_CRON_SECRET.
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
 const ANTHROPIC_MODEL = "claude-opus-4-8";

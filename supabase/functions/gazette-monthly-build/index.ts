@@ -30,7 +30,7 @@
 // Appel protégé par un en-tête partagé X-Cron-Secret == secret GAZETTE_CRON_SECRET.
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
 const TRANSLATE_TARGETS = LOCALES.filter((l) => l !== "fr"); // fr = original curé

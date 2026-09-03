@@ -34,7 +34,7 @@
 // =========================================================================
 import { secretKey } from '../_shared/core/secret-key.ts';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 import { parseMarcXml, buildParsedEntriesFromMarc, MARC_PARSER_VERSION } from '../process-partner-catalog-import/marc.ts';
 import {
   OAI_PARSER_VERSION, parseOaiEnvelope, parseMetadataFormats, chooseMetadataPrefix,

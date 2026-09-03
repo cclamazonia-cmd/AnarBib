@@ -12,7 +12,7 @@
 // verify_jwt par défaut (true) : JWT usager requis et relayé à la RPC gatée.
 
 import { secretKey } from '../_shared/core/secret-key.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',

@@ -15,7 +15,7 @@
 // verify_jwt=false (cf. config.toml) — l'auth interne custom remplace le JWT.
 
 import { secretKey } from '../_shared/core/secret-key.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 import JSZip from 'npm:jszip@3';
 
 const IMPORT_SECRET_HEADER = 'x-import-secret';

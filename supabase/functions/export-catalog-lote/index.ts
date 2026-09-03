@@ -11,7 +11,7 @@
 // Requête : POST { library_id: uuid, format: 'csv'|'marcxml'|'json' }
 // Auth    : JWT requis (verify_jwt par défaut). Le RPC re-valide le rôle.
 
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 import { serializeCatalog, SUPPORTED_FORMATS } from './serialize.ts';
 
 // CORS : l'export est appele en fetch cross-origin depuis app.anarbib.org (POST

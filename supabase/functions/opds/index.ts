@@ -22,7 +22,7 @@
 //   GET /functions/v1/opds/all    → acquisition (tous les documents)
 // Dix-huit documents au 01/09/2026 : pas de pagination — le jour où il en
 // faudra une, `?limit`/`?offset` sont déjà lus et bornés.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";

@@ -1,7 +1,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { verifierSolution } from '../_shared/altcha.ts';
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from '../_shared/deps.ts';
 import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/context/library-mail-routing.ts";

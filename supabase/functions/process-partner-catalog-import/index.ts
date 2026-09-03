@@ -1,6 +1,6 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from '../_shared/deps.ts';
 import { parseMarcFile, MARC_PARSER_VERSION } from './marc.ts';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
