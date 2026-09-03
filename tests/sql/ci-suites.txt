@@ -367,3 +367,10 @@ tests/sql/conv_a1prime_preferred_name_tests.sql
 # sont SIGNALES (authority_duplicate_reports), jamais fusionnes par script.
 # Ref. 20260903165149.
 tests/sql/conv_homonymie_tests.sql
+
+# Audit des autorites du 03/09 (A6) : le motif des collectivites lit les radicaux
+# (Federacao, Comite, Organizacao) et ferme les sigles (SNI ne prend pas Snider) ;
+# le lot autorite_collectivite recoit les inversees ratees le 21/08 et les non
+# inversees non typees (valider pose le type sans renommer, CONV-O7).
+# Ref. 20260903165704.
+tests/sql/conv_collectivites_radicaux_tests.sql
