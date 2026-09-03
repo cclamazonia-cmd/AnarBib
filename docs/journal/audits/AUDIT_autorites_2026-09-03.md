@@ -411,7 +411,7 @@ appliquées = les 61 versées dans la file, 22 patronymes) : ce sont des instant
 | 3 | **N1** — `fn_conv_autor_proposition` aveugle aux anonymes inversés ; recherche d'homonyme à la lettre | mécanique | **migration** (fonction + recherche `unaccent` + forme dérivée) + suite | ✅ |
 | 4 | **N1** — 48 capitales nées de C5 | jugement | **second semis du lot `autorite_casse`** (proposition `initcap` du patronyme, comme le 20/08) | ✅ |
 | 5 | **N1/A2/A3** — ~45 formes directes, 35 mononymes, 7 mentions de rôle, 5 filiations/particules, 8 fiches doubles listées | jugement | **nouveau lot `autorite_forme`** (CHECK, semis, branche d'application, carte, i18n ×10) + suite | ✅ |
-| 6 | **N2** — 13 paires exactes | fusion (`merge_author`) | **signalement** des 13 dans `authority_duplicate_reports` (aucune écriture sur les fiches) | ✅ dans la migration du point 3 |
+| 6 | **N2** — 13 paires exactes | fusion (`merge_author`) | **signalement** dans `authority_duplicate_reports` des **8** paires hors fixtures de formation (les 5 paires « formacao-e* » sont exclues à dessein, voir N5) — aucune écriture sur les fiches | ✅ dans la migration du point 3 (8 signalements ouverts en production le 03/09 au soir) |
 | 7 | **N3** — 12 fiches doubles | gouvernance (`CONV-O8`) | REGISTRE : le seuil est franchi, décision à prendre | ✅ REGISTRE |
 | 8 | **N4** — 7 non-agents | à la main (`unlink` + `discard_author`) | liste ci-dessus | ❌ hors session |
 | 9 | **N5** — fixtures de formation | décision | exclues des semis ; à retirer après le 08/09 | ✅ exclusion |
