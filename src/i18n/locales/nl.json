@@ -6249,5 +6249,7 @@
   "atelier.revue.lot.autor.hint": "C5 · de transcriptie blijft; “toepassen” maakt de autoriteit aan en koppelt de eerste naam",
   "bibliotecas.rssFeed": "Nieuw binnen (RSS)",
   "atelier.revue.lot.forme": "Vorm van het ingangspunt",
-  "atelier.revue.lot.forme.hint": "CONV-2 · de directe vorm wordt omgekeerd, een enkelvoudige naam bevestigd, een rolvermelding verlaat de naam"
+  "atelier.revue.lot.forme.hint": "CONV-2 · de directe vorm wordt omgekeerd, een enkelvoudige naam bevestigd, een rolvermelding verlaat de naam",
+  "book.author.various": "diverse auteurs",
+  "book.author.anonymous": "anoniem"
 }

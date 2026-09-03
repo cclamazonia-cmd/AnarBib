@@ -6249,5 +6249,7 @@
   "atelier.revue.lot.autor.hint": "C5 · la transcripción se queda; «aplicar» crea la autoridad y enlaza el primer nombre",
   "bibliotecas.rssFeed": "Novedades (RSS)",
   "atelier.revue.lot.forme": "Forma del punto de acceso",
-  "atelier.revue.lot.forme.hint": "CONV-2 · la forma directa se invierte, el mononimo se confirma, la mención de función sale del nombre"
+  "atelier.revue.lot.forme.hint": "CONV-2 · la forma directa se invierte, el mononimo se confirma, la mención de función sale del nombre",
+  "book.author.various": "varios autores",
+  "book.author.anonymous": "anónimo"
 }

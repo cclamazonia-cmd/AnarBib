@@ -6249,5 +6249,7 @@
   "atelier.revue.lot.autor.hint": "C5 · la transcripció es queda; «aplica» crea l’autoritat i enllaça el primer nom",
   "bibliotecas.rssFeed": "Novetats (RSS)",
   "atelier.revue.lot.forme": "Forma del punt d'accés",
-  "atelier.revue.lot.forme.hint": "CONV-2 · la forma directa s'inverteix, el mononim es confirma, la menció de funció surt del nom"
+  "atelier.revue.lot.forme.hint": "CONV-2 · la forma directa s'inverteix, el mononim es confirma, la menció de funció surt del nom",
+  "book.author.various": "diversos autors",
+  "book.author.anonymous": "anònim"
 }

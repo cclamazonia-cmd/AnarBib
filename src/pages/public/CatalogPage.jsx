@@ -6,6 +6,7 @@ import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
 import { catalogueDeSecours } from '@/lib/catalogueFallback';
+import { authorLabel } from '@/lib/authorLabel';
 import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
 import { coverThumbUrl, coverUrl } from '@/lib/coverThumbs';
 import { useAuth } from '@/contexts/AuthContext';
@@ -203,7 +204,7 @@ function exportCSV(books) {
 function exportPDF(books, t) {
   const now = new Date().toLocaleDateString('pt-BR');
   const rows = books.map(b =>
-    `<tr><td>${b.bib_ref||'—'}</td><td>${b.author_display||b.autor||'—'}</td><td>${b.titulo||'—'}${b.subtitulo?` — ${b.subtitulo}`:''}</td><td>${b.ano||'—'}</td><td>${b.publisher_display||b.editora||'—'}</td><td>${parseLibraryNames(b)||'—'}</td></tr>`
+    `<tr><td>${b.bib_ref||'—'}</td><td>${authorLabel(b, t)||'—'}</td><td>${b.titulo||'—'}${b.subtitulo?` — ${b.subtitulo}`:''}</td><td>${b.ano||'—'}</td><td>${b.publisher_display||b.editora||'—'}</td><td>${parseLibraryNames(b)||'—'}</td></tr>`
   ).join('');
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>AnarBib — ${t({id:'catalog.title'})} — ${now}</title>
 <style>
@@ -1653,6 +1654,8 @@ export default function CatalogPage() {
 // ── Composant liens auteurs ────────────────────────────────
 
 function AuthorLinks({ book }) {
+  // CONV-8 : « AA. VV. » / « Anônimo » sans autorité → étiquette localisée entre crochets.
+  const { formatMessage: t } = useIntl();
   // author_chips est un JSON array [{ author_id, label }]
   let chips = book.author_chips;
   if (typeof chips === 'string') {
@@ -1678,10 +1681,10 @@ function AuthorLinks({ book }) {
   if (book.author_id) {
     return (
       <Link to={`/autor/${book.author_id}`} className="ab-author-link">
-        {book.author_display || book.autor || '—'}
+        {authorLabel(book, t) || '—'}
       </Link>
     );
   }
 
-  return <>{book.author_display || book.autor || '—'}</>;
+  return <>{authorLabel(book, t) || '—'}</>;
 }

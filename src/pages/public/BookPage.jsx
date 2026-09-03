@@ -11,6 +11,7 @@ import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './BookPage.css';
 import { citeAuthorString, citeAuthorList, buildCitations, buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
 import { languageLabel } from '@/lib/languages';
+import { authorLabel } from '@/lib/authorLabel';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 
@@ -744,6 +745,9 @@ function MetaPill({ label, value, always = false }) {
 }
 
 function BookAuthorLinks({ book, contributors }) {
+  // CONV-8 : sans autorité liée, « AA. VV. » / « Anônimo » s'affichent comme une
+  // étiquette localisée entre crochets ; la transcription reste la donnée.
+  const { formatMessage: t } = useIntl();
   // Priorite : liste COMPLETE des contributeurs (lies en <Link>, non lies en
   // texte). Evite le masquage des contributeurs sans autorite
   // (#FICHE-AUTEURS-INCOMPLETE). Fallback : authors_json (autorites liees).
@@ -785,10 +789,10 @@ function BookAuthorLinks({ book, contributors }) {
   if (book.author_id) {
     return (
       <Link to={`/autor/${book.author_id}`} className="ab-livro-author-link">
-        {book.author_display || book.autor || '—'}
+        {authorLabel(book, t) || '—'}
       </Link>
     );
   }
 
-  return <>{book.author_display || book.autor || '—'}</>;
+  return <>{authorLabel(book, t) || '—'}</>;
 }

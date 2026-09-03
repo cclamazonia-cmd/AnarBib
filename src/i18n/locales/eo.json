@@ -6249,5 +6249,7 @@
   "atelier.revue.lot.autor.hint": "C5 · la transskribo restas; «apliki» kreas la aŭtoritaton kaj ligas la unuan nomon",
   "bibliotecas.rssFeed": "Novaĵoj (RSS)",
   "atelier.revue.lot.forme": "Formo de la alirpunkto",
-  "atelier.revue.lot.forme.hint": "CONV-2 · la rekta formo inversiĝas, la unuvorta nomo konfirmiĝas, la rol-mencio forlasas la nomon"
+  "atelier.revue.lot.forme.hint": "CONV-2 · la rekta formo inversiĝas, la unuvorta nomo konfirmiĝas, la rol-mencio forlasas la nomon",
+  "book.author.various": "diversaj aŭtoroj",
+  "book.author.anonymous": "anonima"
 }

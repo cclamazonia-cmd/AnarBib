@@ -6249,5 +6249,7 @@
   "atelier.revue.lot.autor.hint": "C5 · the transcription stays; “apply” creates the authority and links the first name",
   "bibliotecas.rssFeed": "New arrivals (RSS)",
   "atelier.revue.lot.forme": "Access point form",
-  "atelier.revue.lot.forme.hint": "CONV-2 · a direct form is inverted, a mononym is confirmed, a role mention leaves the name"
+  "atelier.revue.lot.forme.hint": "CONV-2 · a direct form is inverted, a mononym is confirmed, a role mention leaves the name",
+  "book.author.various": "various authors",
+  "book.author.anonymous": "anonymous"
 }
