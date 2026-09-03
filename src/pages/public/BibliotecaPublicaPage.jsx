@@ -145,6 +145,15 @@ export default function BibliotecaPublicaPage() {
                     {t({ id: 'bibliotecas.website' })}
                   </a>
                 )}
+                {/* E11 (03/09) : le flux des nouveautés — sans requête, sans compte, rien à pister.
+                    La fonction ne rend que les bibliothèques publiques : ici on est sur la page
+                    publique, donc le lien est toujours valide. */}
+                {import.meta.env.VITE_SUPABASE_URL && (
+                  <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-novidades/${lib.slug}`}
+                     type="application/rss+xml" style={linkStyle}>
+                    {t({ id: 'bibliotecas.rssFeed' })}
+                  </a>
+                )}
               </div>
             </div>
 

@@ -202,6 +202,11 @@ verify_jwt = false
 [functions.opds]
 verify_jwt = false
 
+# E11 (03/09/2026) : le flux RSS des nouveautés d'une bibliothèque — anonyme par
+# nature, deux gardes dans la fonction (bibliothèque publique, vue publique).
+[functions.rss-novidades]
+verify_jwt = false
+
 # Les trois portes ouvertes AVANT toute session : se connecter, créer un compte,
 # récupérer son mot de passe. Elles étaient en verify_jwt=true, ce qui ne
 # protégeait rien : la clé qui satisfaisait ce contrôle est la clé anon,
