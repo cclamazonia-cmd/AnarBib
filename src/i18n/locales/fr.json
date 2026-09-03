@@ -6232,5 +6232,8 @@
   "importacoes.export.coord.hint": "Gestes réservés à la coordination : préparer l’éligibilité, remettre un lot de matériel gris à une bibliothèque partenaire, attacher ce qui a été reçu, vérifier le domaine public.",
   "importacoes.export.serFonte.opds": "Les documents numériques publics du catalogue sortent déjà par un flux OPDS 1.2 (/opds), lisible par n’importe quelle application de lecture — aucun geste à faire.",
   "importacoes.export.serFonte.go": "Demander l’ouverture, ou voir l’état de la demande",
-  "importacoes.export.serFonte.who": "Qui demande : la coordination de la bibliothèque. Qui décide : l’administration du réseau."
+  "importacoes.export.serFonte.who": "Qui demande : la coordination de la bibliothèque. Qui décide : l’administration du réseau.",
+  "conta.demande.intro": "La demande d’adhésion de votre bibliothèque au réseau, et vos échanges avec l’administration du réseau pendant son examen.",
+  "conta.demande.goAtelier": "Aller à l’atelier de constitution",
+  "conta.demande.historyTitle": "Historique de mes demandes"
 }

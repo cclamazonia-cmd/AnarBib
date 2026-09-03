@@ -6232,5 +6232,8 @@
   "importacoes.export.coord.hint": "Gestoj rezervitaj al la kunordigado: prepari la taŭgecon, transdoni loton da griza materialo al partnera biblioteko, alligi la ricevitaĵojn, kontroli la publikan havaĵon.",
   "importacoes.export.serFonte.opds": "La publikaj ciferecaj dokumentoj de la katalogo jam eliras per OPDS-1.2-fluo (/opds), legebla de iu ajn legaplikaĵo — nenio farenda.",
   "importacoes.export.serFonte.go": "Peti la malfermon, aŭ vidi la staton de la peto",
-  "importacoes.export.serFonte.who": "Kiu petas: la kunordigado de la biblioteko. Kiu decidas: la administrado de la reto."
+  "importacoes.export.serFonte.who": "Kiu petas: la kunordigado de la biblioteko. Kiu decidas: la administrado de la reto.",
+  "conta.demande.intro": "La aliĝpeto de via biblioteko al la reto, kaj viaj interŝanĝoj kun la reta administrado dum ĝia ekzameno.",
+  "conta.demande.goAtelier": "Iri al la fonda laborejo",
+  "conta.demande.historyTitle": "Historio de miaj petoj"
 }

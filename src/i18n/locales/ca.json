@@ -6232,5 +6232,8 @@
   "importacoes.export.coord.hint": "Gestos reservats a la coordinació: preparar l’elegibilitat, lliurar un lot de material gris a una biblioteca associada, adjuntar el que s’ha rebut, verificar el domini públic.",
   "importacoes.export.serFonte.opds": "Els documents digitals públics del catàleg ja surten per un flux OPDS 1.2 (/opds), llegible per qualsevol aplicació de lectura — cap gest a fer.",
   "importacoes.export.serFonte.go": "Demanar l’obertura, o veure l’estat de la sol·licitud",
-  "importacoes.export.serFonte.who": "Qui demana: la coordinació de la biblioteca. Qui decideix: l’administració de la xarxa."
+  "importacoes.export.serFonte.who": "Qui demana: la coordinació de la biblioteca. Qui decideix: l’administració de la xarxa.",
+  "conta.demande.intro": "La sol·licitud d’adhesió de la vostra biblioteca a la xarxa, i els vostres intercanvis amb l’administració de la xarxa durant l’examen.",
+  "conta.demande.goAtelier": "Anar al taller de constitució",
+  "conta.demande.historyTitle": "Historial de les meves sol·licituds"
 }

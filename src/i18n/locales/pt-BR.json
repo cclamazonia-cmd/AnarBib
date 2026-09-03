@@ -6232,5 +6232,8 @@
   "importacoes.export.coord.hint": "Gestos reservados à coordenação : preparar a elegibilidade, remeter um lote de material cinzento a uma biblioteca parceira, anexar o que foi recebido, verificar o domínio público.",
   "importacoes.export.serFonte.opds": "Os documentos digitais públicos do catálogo já saem por um fluxo OPDS 1.2 (/opds), legível por qualquer aplicação de leitura — sem gesto a fazer.",
   "importacoes.export.serFonte.go": "Pedir a abertura, ou ver o estado do pedido",
-  "importacoes.export.serFonte.who": "Quem pede : a coordenação da biblioteca. Quem decide : a administração da rede."
+  "importacoes.export.serFonte.who": "Quem pede : a coordenação da biblioteca. Quem decide : a administração da rede.",
+  "conta.demande.intro": "A candidatura da sua biblioteca à rede, e as suas trocas com a administração da rede durante a análise.",
+  "conta.demande.goAtelier": "Ir à oficina de constituição",
+  "conta.demande.historyTitle": "Histórico dos meus pedidos"
 }

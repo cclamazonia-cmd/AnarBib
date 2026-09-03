@@ -6232,5 +6232,8 @@
   "importacoes.export.coord.hint": "Voorbehouden aan de coördinatie: geschiktheid voorbereiden, een partij grijze literatuur aan een partnerbibliotheek overdragen, het ontvangene koppelen, publiek domein verifiëren.",
   "importacoes.export.serFonte.opds": "De openbare digitale documenten van de catalogus verlaten die al via een OPDS 1.2-feed (/opds), leesbaar door elke lees-app — niets te doen.",
   "importacoes.export.serFonte.go": "Openstelling aanvragen, of de status van de aanvraag bekijken",
-  "importacoes.export.serFonte.who": "Wie vraagt: de coördinatie van de bibliotheek. Wie beslist: het netwerkbeheer."
+  "importacoes.export.serFonte.who": "Wie vraagt: de coördinatie van de bibliotheek. Wie beslist: het netwerkbeheer.",
+  "conta.demande.intro": "De aanvraag van uw bibliotheek om tot het netwerk toe te treden, en uw uitwisselingen met het netwerkbeheer tijdens de beoordeling.",
+  "conta.demande.goAtelier": "Naar de oprichtingswerkplaats",
+  "conta.demande.historyTitle": "Geschiedenis van mijn aanvragen"
 }

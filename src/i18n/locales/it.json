@@ -6232,5 +6232,8 @@
   "importacoes.export.coord.hint": "Gesti riservati al coordinamento: preparare l’idoneità, consegnare un lotto di materiale grigio a una biblioteca partner, allegare quanto ricevuto, verificare il pubblico dominio.",
   "importacoes.export.serFonte.opds": "I documenti digitali pubblici del catalogo escono già tramite un flusso OPDS 1.2 (/opds), leggibile da qualsiasi applicazione di lettura — nessun gesto da fare.",
   "importacoes.export.serFonte.go": "Chiedere l’apertura, o vedere lo stato della richiesta",
-  "importacoes.export.serFonte.who": "Chi chiede: il coordinamento della biblioteca. Chi decide: l’amministrazione della rete."
+  "importacoes.export.serFonte.who": "Chi chiede: il coordinamento della biblioteca. Chi decide: l’amministrazione della rete.",
+  "conta.demande.intro": "La domanda di adesione della vostra biblioteca alla rete, e i vostri scambi con l’amministrazione della rete durante l’esame.",
+  "conta.demande.goAtelier": "Vai al laboratorio di costituzione",
+  "conta.demande.historyTitle": "Cronologia delle mie richieste"
 }

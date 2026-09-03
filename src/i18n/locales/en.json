@@ -6232,5 +6232,8 @@
   "importacoes.export.coord.hint": "Coordination-only gestures: prepare eligibility, hand a batch of grey material to a partner library, attach what was received, verify public domain.",
   "importacoes.export.serFonte.opds": "The catalogue’s public digital documents already leave through an OPDS 1.2 feed (/opds), readable by any reading app — nothing to do.",
   "importacoes.export.serFonte.go": "Request opening, or see the request’s status",
-  "importacoes.export.serFonte.who": "Who asks: the library’s coordination. Who decides: the network administration."
+  "importacoes.export.serFonte.who": "Who asks: the library’s coordination. Who decides: the network administration.",
+  "conta.demande.intro": "Your library’s application to join the network, and your exchanges with the network administration while it is reviewed.",
+  "conta.demande.goAtelier": "Go to the constitution workshop",
+  "conta.demande.historyTitle": "History of my requests"
 }

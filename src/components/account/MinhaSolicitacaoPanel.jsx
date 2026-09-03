@@ -2,9 +2,19 @@
 // Affiche l'état de SA demande d'adhésion (lecture RLS « select_own »), le motif de
 // refus le cas échéant, et le canal d'échange avec la coordination (messages +
 // invitations) câblé sur les RPC du Lot 2a. Auto-masqué si aucune demande.
+//
+// E13 (03/09) — trois corrections vues par la personne qui exerce l'outil :
+//  · une phrase dit ce qu'est ce bloc (le mot « demande » n'était expliqué nulle part) ;
+//  · une demande approuvée porte une porte vers /atelier — le circuit réel y emmène
+//    d'office (LoginPage, ProtectedRoute) quand le profil est en constitution, mais
+//    dès que cet état manque, la phrase désignait une adresse à deviner ;
+//  · une condition de fin : la demande approuvée dont la bibliothèque est née
+//    (progress.completed_at), ou refusée depuis plus de trente jours, se replie
+//    derrière « Historique de mes demandes » au lieu de coiffer Mon compte à vie.
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import { supabase, apiRpc } from '@/lib/supabase';
+import { supabase, apiRpc, apiQuery } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { localizeError } from '@/lib/localizeError';
 
@@ -15,11 +25,14 @@ const HINT = {
   aprovada: 'conta.demande.approvedHint', recusada: 'conta.demande.refusedHint',
 };
 const INTERACTIVE = ['pendente', 'em_analise', 'aguardando_info', 'proposta_aprovacao', 'proposta_recusa'];
+// Au-delà de ce délai, une demande refusée n'a plus à coiffer Mon compte.
+const REFUS_REPLI_JOURS = 30;
 
 export default function MinhaSolicitacaoPanel() {
   const { user } = useAuth();
   const { formatMessage: t, locale } = useIntl();
   const [req, setReq] = useState(null);
+  const [prog, setProg] = useState(null); // my_constitution_progress_v1 (demande approuvée)
   const [msgs, setMsgs] = useState([]);
   const [invites, setInvites] = useState([]);
   const [msgText, setMsgText] = useState('');
@@ -40,6 +53,13 @@ export default function MinhaSolicitacaoPanel() {
         supabase.from('library_request_invitations').select('*').eq('request_id', r.id).order('created_at', { ascending: true }),
       ]);
       setMsgs(m || []); setInvites(i || []);
+      if (r.request_status === 'aprovada') {
+        // La vue ne rend que la constitution dont on est coordination : une ligne ou rien.
+        const { data: pr } = await apiQuery('my_constitution_progress_v1', { filters: { request_id: 'eq.' + r.id } });
+        setProg((pr && pr[0]) || null);
+      } else {
+        setProg(null);
+      }
     } catch (e) { console.warn('MinhaSolicitacaoPanel load:', e); }
   }, [user?.id]);
 
@@ -60,18 +80,27 @@ export default function MinhaSolicitacaoPanel() {
   const st = req.request_status;
   const canInteract = INTERACTIVE.includes(st);
   const hintKey = HINT[st];
+  // Condition de fin (E13) : bibliothèque née, ou refus ancien → repli en historique.
+  const ageJours = (Date.now() - new Date(req.updated_at || req.created_at).getTime()) / 86400000;
+  const terminee = (st === 'aprovada' && !!prog?.completed_at) || (st === 'recusada' && ageJours > REFUS_REPLI_JOURS);
   const box = { marginTop: 12, padding: '14px 16px', borderRadius: 10, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.15)' };
   const inp = { width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.88rem' };
 
-  return (
-    <div style={box}>
+  const corps = (
+    <>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-        <h3 style={{ margin: 0, fontSize: '1rem' }}>{t({ id: 'conta.demande.title' })}</h3>
+        {!terminee && <h3 style={{ margin: 0, fontSize: '1rem' }}>{t({ id: 'conta.demande.title' })}</h3>}
         <span style={{ fontSize: '.75rem', padding: '2px 8px', borderRadius: 999, background: 'rgba(255,255,255,.08)' }}>
           {req.library_name} · {t({ id: `request.status.${st}`, defaultMessage: st })}
         </span>
       </div>
+      <p style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0 0' }}>{t({ id: 'conta.demande.intro' })}</p>
       {hintKey && <p style={{ fontSize: '.86rem', color: 'var(--brand-muted)', margin: '8px 0 0' }}>{t({ id: hintKey })}</p>}
+      {st === 'aprovada' && !terminee && (
+        <div style={{ marginTop: 10 }}>
+          <Link to="/atelier" className="cat-btn primary">{t({ id: 'conta.demande.goAtelier' })}</Link>
+        </div>
+      )}
 
       {/* Motif de refus */}
       {st === 'recusada' && (
@@ -135,6 +164,16 @@ export default function MinhaSolicitacaoPanel() {
           </>
         )}
       </div>
-    </div>
+    </>
   );
+
+  if (terminee) {
+    return (
+      <details style={{ ...box, padding: '10px 16px' }}>
+        <summary style={{ cursor: 'pointer', fontSize: '.92rem', fontWeight: 600 }}>{t({ id: 'conta.demande.historyTitle' })}</summary>
+        <div style={{ marginTop: 10 }}>{corps}</div>
+      </details>
+    );
+  }
+  return <div style={box}>{corps}</div>;
 }
