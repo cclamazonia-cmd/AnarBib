@@ -38,8 +38,12 @@ export function classifyAuthorString(s) {
  */
 export function authorLabel(book, t) {
   if (!book) return '';
-  if (book.author_display) return book.author_display;
   const raw = String(book.autor || '').trim();
+  // Les vues du catalogue posent COALESCE(author_display, autor) : un
+  // `author_display` égal à la transcription n'est PAS une autorité, c'est le
+  // repli. Il ne prime que s'il dit autre chose que la transcription.
+  const disp = String(book.author_display || '').trim();
+  if (disp && disp !== raw) return disp;
   if (!raw) return '';
   const kind = classifyAuthorString(raw);
   if (!kind) return raw;

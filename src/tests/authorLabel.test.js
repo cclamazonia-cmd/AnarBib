@@ -30,6 +30,10 @@ describe('authorLabel', () => {
   it("l'autorité l'emporte sur la transcription", () => {
     expect(authorLabel({ author_display: 'KROPOTKIN, Piotr', autor: 'AA. VV.' }, t)).toBe('KROPOTKIN, Piotr');
   });
+  it('un author_display égal à la transcription est le repli des vues, pas une autorité', () => {
+    expect(authorLabel({ author_display: 'Sem Autoria', autor: 'Sem Autoria' }, t)).toBe('[anonyme]');
+    expect(authorLabel({ author_display: 'AA. VV', autor: 'AA. VV' }, t)).toBe('[auteurs divers]');
+  });
   it('remplace le premier segment par l’étiquette entre crochets et garde le reste', () => {
     expect(authorLabel({ autor: 'AA. VV. ; XERRI, Elio ; BURATTI, Simone' }, t)).toBe('[auteurs divers] ; XERRI, Elio ; BURATTI, Simone');
     expect(authorLabel({ autor: 'Anônimo' }, t)).toBe('[anonyme]');
