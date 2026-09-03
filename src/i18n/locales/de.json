@@ -6247,5 +6247,7 @@
   "catalogacao.serialDetail.frequencyOption.irregular": "Unregelmäßig",
   "atelier.revue.lot.autor": "Verfasser ohne Normdatensatz",
   "atelier.revue.lot.autor.hint": "C5 · die Transkription bleibt; „anwenden“ legt den Normdatensatz an und verknüpft den ersten Namen",
-  "bibliotecas.rssFeed": "Neuzugänge (RSS)"
+  "bibliotecas.rssFeed": "Neuzugänge (RSS)",
+  "atelier.revue.lot.forme": "Form des Ansetzungspunkts",
+  "atelier.revue.lot.forme.hint": "CONV-2 · die direkte Form wird invertiert, ein Einzelname bestätigt, eine Funktionsangabe verlässt den Namen"
 }

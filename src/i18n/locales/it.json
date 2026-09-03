@@ -6247,5 +6247,7 @@
   "catalogacao.serialDetail.frequencyOption.irregular": "Irregolare",
   "atelier.revue.lot.autor": "Autori senza autorità",
   "atelier.revue.lot.autor.hint": "C5 · la trascrizione resta; «applica» crea l’autorità e collega il primo nome",
-  "bibliotecas.rssFeed": "Novità (RSS)"
+  "bibliotecas.rssFeed": "Novità (RSS)",
+  "atelier.revue.lot.forme": "Forma del punto di accesso",
+  "atelier.revue.lot.forme.hint": "CONV-2 · la forma diretta si inverte, il mononimo si conferma, la menzione di ruolo esce dal nome"
 }

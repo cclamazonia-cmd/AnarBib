@@ -6247,5 +6247,7 @@
   "catalogacao.serialDetail.frequencyOption.irregular": "Ακανόνιστη",
   "atelier.revue.lot.autor": "Συγγραφείς χωρίς καθιερωμένη μορφή",
   "atelier.revue.lot.autor.hint": "C5 · η μεταγραφή μένει· η «εφαρμογή» δημιουργεί την καθιερωμένη μορφή και συνδέει το πρώτο όνομα",
-  "bibliotecas.rssFeed": "Νέες εισαγωγές (RSS)"
+  "bibliotecas.rssFeed": "Νέες εισαγωγές (RSS)",
+  "atelier.revue.lot.forme": "Μορφή του σημείου πρόσβασης",
+  "atelier.revue.lot.forme.hint": "CONV-2 · η ευθεία μορφή αντιστρέφεται, το μονώνυμο επιβεβαιώνεται, η μνεία ρόλου βγαίνει από το όνομα"
 }

@@ -37,6 +37,11 @@ const CLE_DE_LOT = {
   // Ici « appliquer » ne réécrit pas un texte, il POSE UN LIEN (et crée
   // l'autorité au besoin) — voir 20260903150117.
   autor_sans_autorite:   'autor',
+  // Audit des autorites du 03/09 : la FORME du point d'acces se relit a la
+  // main — forme directe, mononyme, mention dans le nom, filiation ou
+  // particule en tete. La proposition est un point de depart ; « valider »
+  // un mononyme = le confirmer tel quel.
+  autorite_forme:        'forme',
 };
 
 // Les trois vues forment une PARTITION : chaque ligne est dans exactement une

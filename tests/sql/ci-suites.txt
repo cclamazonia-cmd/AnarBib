@@ -379,3 +379,9 @@ tests/sql/conv_collectivites_radicaux_tests.sql
 # points d'acces en capitales nes du lot C5 (« NOM, Prenoms » et mononymes),
 # hors collectivites, fixtures de formation et doublons signales. Ref. 20260903165706.
 tests/sql/conv_casse_second_semis_tests.sql
+
+# Audit des autorites du 03/09 (N1, A2, A3) : le lot autorite_forme — forme directe,
+# mononyme, mention dans le nom, dates dans le nom, filiation ou particule en tete ;
+# la proposition est un point de depart, rien pour plusieurs personnes (CONV-O8).
+# Ref. 20260903170329.
+tests/sql/conv_forme_tests.sql
