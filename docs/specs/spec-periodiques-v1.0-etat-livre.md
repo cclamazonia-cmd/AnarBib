@@ -90,3 +90,15 @@ Trois gestes restent à la main du catalogage (aucun n'est un défaut) :
 promouvoir un titre existant en autorité de revue, déclarer l'état de
 collection d'un fonds, et rattacher les fascicules anciens au fil des reprises.
 Le panneau de gouvernance les porte tous les trois.
+
+## Les cinq arbitrages du 03/09/2026 *(ex-§13 « TODO à arbitrer » de la v0.1)*
+
+Tranchés par Xavier le 03/09 (D2 = A, les cinq), sur la page `journal/arbitrages/DECISIONS_bloc3_cinq_questions_2026-09-03.md`. État mesuré ce jour-là : 4 titres dans `serials`, `periodicidade` jamais renseignée, pas de `library_id`, page `/periodico/<slug>` livrée ; Anarchief non importé, SOLIDAIRES (12 titres, 91 fascicules) passé.
+
+| # | Question | Verdict |
+|---|---|---|
+| 1 | `periodicidade` libre ou fermée ? | **Libre, avec une liste de suggestions non contraignante** (mensuel, bimestriel, trimestriel, irrégulier…). La liste se ferme le jour où Anarchief en fait apparaître le besoin, pas avant. *Reste à faire : la liste de suggestions (D2, S).* |
+| 2 | Filiation n-n ou deux liens ? | **Deux liens simples** (prédécesseur / successeur) jusqu'au premier cas réel de fusion ou de scission de titres — Anarchief le fournira. |
+| 3 | `serials.library_id` ? | **Non, confirmé par le code.** Un titre est une autorité du réseau ; ce qui varie par bibliothèque vit dans `serial_holdings`. Au premier conflit de description : une note par bibliothèque, pas un `library_id`. |
+| 4 | Promotion automatique d'un titre proposé ? | **Non : un geste, pas un seuil.** Confirmé. |
+| 5 | Page dédiée ou facette ? | **Page dédiée**, confirmé par le code livré. |
