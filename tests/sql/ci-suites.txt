@@ -399,3 +399,7 @@ tests/sql/conv_evidence_file_tests.sql
 # CONV-8 (03/09 soir) : « AA. VV. », « Anonimo », « Coletivo » ne sont pas des contributeurs —
 # entree au titre, transcription conservee, seize lignes retirees a liste fermee. Ref. 20260903184828.
 tests/sql/conv_8_auteurs_divers_tests.sql
+
+# CONV-8, suite (03/09 soir) : « Leueroth, Pelo Coletivo Edgar » requalifie en collectivite
+# « Coletivo Edgard Leuenroth », role organizacao, transcription reparee. Ref. 20260903191250.
+tests/sql/conv_8_collectif_nomme_tests.sql
