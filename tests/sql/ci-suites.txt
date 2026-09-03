@@ -390,3 +390,5 @@ tests/sql/conv_forme_tests.sql
 # 1/4 fusion d'un doublon EXACT (cles normalisees qui se recoupent), corps de merge_author recopie. Ref. 20260903182352.
 tests/sql/conv_evidence_fusions_tests.sql
 # 2/4 retrait d'un non-agent (« ?? », « identificado, Nao », un titre) : le nom reste sur le contributeur. Ref. 20260903182353.
+tests/sql/conv_evidence_non_agents_tests.sql
+# 3/4 les contributeurs dont le nom est exactement celui d'une fiche sont lies (fn_conv_autorite_homonyme). Ref. 20260903182354.
