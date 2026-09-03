@@ -1,4 +1,4 @@
-# Compléments au conducteur de la séance 1 — formation BLMF
+# Compléments au conducteur de la séance 1 — formation BLMF, le 08/09/2026
 
 > **Réécrit le 03/09 en fin de journée**, après réception des documents de la
 > formation (déposés dans `formation-BLMF/`). La première version de cette page
@@ -22,7 +22,7 @@
 > soirée. Le « 13/09 » venait du backlog lui-même (E12 lot A « avant la
 > formation du 13/09 », `GOUV-18` « fenêtre d'objection à la formation du
 > 13/09 »), écrit les 01 et 02/09 par hypothèse. Il n'y avait rien à trancher :
-> il y a une date à **poser**, celle de la soirée 1, et les fiches suivront.
+> il y a une date à **poser**, celle de la soirée 1 — **posée par Xavier le 03/09 : le 08/09/2026**, 17 h 00 – 19 h 15 ; les fiches la portent.
 
 ---
 
@@ -38,7 +38,7 @@
 | `is_test_mode` | `true` : les courriels partent avec le bandeau « contexte de test ». |
 | Le circuit collégial sur le bac à sable | `allow_direct_coordenador = true` ; deux propositions de coordination du 01/09 (une acceptée, une en attente de ratification) — matière vivante pour le module 5. |
 
-Ce qui reste à la main de Xavier avant la soirée 1 : poser les mots de passe d'Emma et d'Errico, vérifier l'entrée de Rafael, décider du sort de Voltairine (la remettre lectrice, ou la laisser aux captures), et **dater la soirée 1**.
+Ce qui reste à la main de Xavier avant la soirée 1 : poser les mots de passe d'Emma et d'Errico, vérifier l'entrée de Rafael, et décider du sort de Voltairine (la remettre lectrice, ou la laisser aux captures). La soirée 1 est datée : **le 08/09**.
 
 ---
 
