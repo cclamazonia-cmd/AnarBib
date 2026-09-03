@@ -374,3 +374,8 @@ tests/sql/conv_homonymie_tests.sql
 # inversees non typees (valider pose le type sans renommer, CONV-O7).
 # Ref. 20260903165704.
 tests/sql/conv_collectivites_radicaux_tests.sql
+
+# Audit des autorites du 03/09 (N1) : second semis du lot autorite_casse — les
+# points d'acces en capitales nes du lot C5 (« NOM, Prenoms » et mononymes),
+# hors collectivites, fixtures de formation et doublons signales. Ref. 20260903165706.
+tests/sql/conv_casse_second_semis_tests.sql
