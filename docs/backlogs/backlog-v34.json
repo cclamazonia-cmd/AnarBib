@@ -1759,6 +1759,14 @@
           "fr": "**Les 159 dates sont en base, avec libellé et liens — et l'épreuve a trouvé un second retour précoce.** Le correctif que la fiche disait « jamais éprouvé contre le site » était commité depuis le 27/08 (`04b86dd7`, `36d33bfc`) avec son test ; ce qui manquait, c'était l'aspiration. Faite le 03/09 (623 fiches, concurrence 2, un 503 du site absorbé par une reprise à 90 s) : les 161 dates sortent avec leur `title_fr`… **mais sans leurs liens** — Placard et Cartoliste pointent bien vers chaque année, et la section des liens venait *après* les deux retours précoces, exactement comme le H1 la veille. `collectCatalogLinks` est désormais appelée en tête de `parseDescriptor` (`2f314f15`) ; ré-aspiration : 159 dates avec libellé, 147 avec liens (275 liens), 2 fiches nues sur 623. **Synchro en base le 03/09** à la sémantique du script (upsert sur `mot_id`, jamais de purge) mais par la base directement, la CLI masquant les clés secrètes et la clé legacy étant désactivée depuis la veille : 159 dates nouvelles, 32 fiches mises à jour (l'astérisque final des libellés portugais, détaché par le scraper depuis le 28/08 et jamais synchronisé depuis le 30/06), 430 inchangées ; `harvested_at` 03/09 sur les 621 ; `subject_ficedl_links` intact (98). Contrôle : « 1936 » → Placard `mot6725` + Cartoliste `parution&date=1936`. Deux pièges tenus : `--json` explicite, pas de `--prune`. La page publique du thésaurus n'offrait que Sujets et Lieux : **onglet « Dates » ajouté** (`d42f54a5`, +1 clé, 6238). Reste hors fiche : le domaine `bianco.ficedl.info` n'est pas dans `CATALOG_HOSTS` (les dates y renvoient aussi) — à décider avec le thésaurus, pas ici.",
           "pt": "**As 159 datas estão na base, com rótulo e links — e a prova encontrou um segundo retorno precoce.** O corretivo estava commitado desde 27/08 com o seu teste; faltava a aspiração. Feita em 03/09: as datas saíam com `title_fr` **mas sem links** — a secção dos links vinha *depois* dos retornos precoces. `collectCatalogLinks` passa a ser chamada no início de `parseDescriptor` (`2f314f15`); nova aspiração: 159 datas com rótulo, 147 com links (275). **Sincronização em 03/09** com a semântica do script (upsert por `mot_id`, sem purga), pela base diretamente: 159 novas, 32 atualizadas, 430 inalteradas; `subject_ficedl_links` intacto. A página pública do tesauro só tinha Assuntos e Lugares: **separador «Datas» adicionado** (`d42f54a5`). Fica fora da ficha: `bianco.ficedl.info` não está em `CATALOG_HOSTS`."
         }
+      ],
+      [
+        "I16",
+        "2026-09-03",
+        {
+          "fr": "**Tranché A et livré le matin même.** `supabase/functions/_shared/deps.ts` épingle `@supabase/supabase-js@2.114.0` (dernière 2.x au registre npm le 03/09) et ré-exporte `createClient` ; les **trente** fonctions et `env.ts` importent de là — plus un seul `esm.sh/…@2` ni `npm:…@2` dans une fonction. La règle est écrite dans `CONTRIBUTING.md` (§3.4, fr et en) et **gardée par un banc** : `src/tests/supabase-js-epingle.test.js` refuse tout import direct et exige une version exacte dans `deps.ts`. Les deux bancs d'EF (`gazette`, `harvest`) reconnaissent `deps.ts` comme le client. La montée de version est désormais un geste daté : changer un nombre, redéployer tout (le déployeur redéploie l'ensemble dès que `supabase/functions/` bouge — c'est écrit dans `deployer-backend.sh`, lignes 211-258), noter la date ; le recompte mensuel de CLAUDE.md relit ce nombre. Le mélange du 01/09 — une épinglée en retard, trente flottantes en avance — ne peut plus se reproduire.",
+          "pt": "**Decidido A e entregue na mesma manhã.** `_shared/deps.ts` fixa `supabase-js@2.114.0` e re-exporta `createClient`; as trinta funções e `env.ts` importam dali. Regra em `CONTRIBUTING.md` e guardada por um banco (`supabase-js-epingle.test.js`). Subir a versão é um gesto datado."
+        }
       ]
     ]
   },
@@ -2359,40 +2367,46 @@
       "id": "C5",
       "d": "C",
       "p": "P2",
-      "s": "decision",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "biblio",
         "sql"
       ],
       "t": {
-        "fr": "Trancher le sort du champ libre `books.autor`",
-        "pt": "Decidir o destino do campo livre `books.autor`"
+        "fr": "`books.autor` est une forme transcrite : le rendu unique, le formulaire, et le lot des 226",
+        "pt": "`books.autor` é uma forma transcrita: a renderização única, o formulário e o lote dos 226"
       },
       "v": {
         "fr": "`CONV-O3` est ouvert : déprécier `books.autor` maintenant, ou à l'Atelier ? Le champ coexiste avec la table `authors` et porte les mêmes défauts **en pire** — on y trouve `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. L'audit du 20/08 l'a explicitement laissé hors périmètre : sa dette n'est pas chiffrée.",
         "pt": "`CONV-O3` está aberto: depreciar `books.autor` agora, ou na Oficina? O campo coexiste com a tabela `authors` e carrega os mesmos defeitos **piores** — encontram-se lá `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. A auditoria de 20/08 o deixou explicitamente fora do perímetro: sua dívida não está quantificada."
       },
       "w": {
-        "fr": "D'abord chiffrer : combien de notices ont un `autor` sans contributeur lié, et à quoi ressemble le contenu. Puis trancher : dépréciation immédiate avec migration des valeurs récupérables, ou conservation comme forme transcrite au sens de `P3` des périodiques.",
-        "pt": "Primeiro quantificar: quantos registros têm um `autor` sem contribuidor vinculado, e como é o conteúdo. Depois decidir: depreciação imediata com migração dos valores recuperáveis, ou conservação como forma transcrita no sentido do `P3` dos periódicos."
+        "fr": "**Tranché le 03/09 (C5 = B, `CONV-O3` acté)** : le champ est la transcription de la page de titre, l'autorité liée est la vérité. Trois gestes : **(1)** un rendu unique « autorité sinon transcription » partout où un auteur s'affiche (OPAC, listes, exports) ; **(2)** `BookDraftForm` ne pré-remplit plus l'autorité depuis `autor` — il pré-remplit la transcription, et le libellé du champ dit « auteur tel qu'imprimé » ; **(3)** un lot de la file `autor_sans_autorite` pour les 226 livres sans lien `authors` (élargir la CHECK de `catalog_review_queue.lot` — cf. le piège des vocabulaires CHECK), traité à la main sans échéance.",
+        "pt": "**Decidido em 03/09 (C5 = B)**: o campo é a transcrição da página de rosto, a autoridade ligada é a verdade. Três gestos: renderização única «autoridade senão transcrição»; o formulário deixa de pré-preencher a autoridade a partir de `autor`; um lote da fila `autor_sans_autorite` para os 226 livros, tratado à mão."
       },
       "y": {
         "fr": "Deux vérités concurrentes sur l'auteur d'un livre, c'est le contraire de `DOC-CONV-1` (« une seule vérité en base, plusieurs rendus »). Tant que le champ vit, chaque écran doit choisir lequel afficher, et les deux divergent.",
         "pt": "Duas verdades concorrentes sobre o autor de um livro é o contrário de `DOC-CONV-1` («uma só verdade no banco, várias renderizações»). Enquanto o campo viver, cada tela precisa escolher qual exibir, e os dois divergem."
       },
-      "f": {
-        "fr": [
-          "~~La dette est chiffrée~~ — 31/08 : 2 653 `autor` non vides, 1 629 distincts, 231 livres sans aucun lien `authors`.",
-          "Une décision est inscrite au REGISTRE, dans un sens ou dans l'autre.",
-          "Si dépréciation : le champ n'est plus écrit par aucun formulaire."
-        ],
-        "pt": [
-          "~~A dívida está quantificada~~ — 31/08: 2 653 `autor` não vazios, 1 629 distintos, 231 livros sem vínculo com `authors`.",
-          "Uma decisão está inscrita no REGISTRO, num sentido ou no outro.",
-          "Se depreciação: o campo não é mais escrito por nenhum formulário."
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Une décision est inscrite au REGISTRE~~ — 03/09 : `CONV-O3` acté, B.",
+          "pt": "~~Decisão no REGISTRO~~ — 03/09: `CONV-O3` decidido, B."
+        },
+        {
+          "fr": "Le rendu unique « autorité sinon transcription ».",
+          "pt": "A renderização única «autoridade senão transcrição»."
+        },
+        {
+          "fr": "Le formulaire pré-remplit la transcription, plus l'autorité ; libellé « auteur tel qu'imprimé », dix locales.",
+          "pt": "O formulário pré-preenche a transcrição, não a autoridade; rótulo «autor tal como impresso», dez locales."
+        },
+        {
+          "fr": "Le lot `autor_sans_autorite` existe dans la file (CHECK élargie), avec ses 226 lignes.",
+          "pt": "O lote `autor_sans_autorite` existe na fila, com as suas 226 linhas."
+        }
+      ],
       "dep": {
         "fr": "Renvoie à `INV-4`.",
         "pt": "Remete a `INV-4`."
@@ -2402,8 +2416,8 @@
         "AUDIT_conventions_catalographiques_2026-08-20"
       ],
       "verif": {
-        "fr": "31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes. **03/09** — instruit dans la page des cinq décisions (`docs/journal/arbitrages/DECISIONS_bloc3_cinq_questions_2026-09-03.md`) : 226 livres sans lien `authors` (BTL 138, MLEG 52, BLMF 36), 121 chaînes multi-personnes, 8 `autor` encore écrits par le formulaire depuis le 01/08 ; options A déprécier / B forme transcrite / C différer — **recommandé B**. Verdict attendu.",
-        "pt": "31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria. **03/09** — instruído na página das cinco decisões: 226 livros sem ligação a `authors`, 121 cadeias multi-pessoas; opções A/B/C — **recomendado B**. Veredito pendente."
+        "fr": "31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes. **03/09** — instruit dans la page des cinq décisions (`docs/journal/arbitrages/DECISIONS_bloc3_cinq_questions_2026-09-03.md`) : 226 livres sans lien `authors` (BTL 138, MLEG 52, BLMF 36), 121 chaînes multi-personnes, 8 `autor` encore écrits par le formulaire depuis le 01/08 ; options A déprécier / B forme transcrite / C différer — **recommandé B**. Verdict attendu. **03/09 — tranché : B.** La fiche passe de « décision » à « ouvert », effort S, trois gestes.",
+        "pt": "31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria. **03/09** — instruído na página das cinco decisões: 226 livros sem ligação a `authors`, 121 cadeias multi-pessoas; opções A/B/C — **recomendado B**. Veredito pendente. **03/09 — decidido: B.** A ficha passa a «aberto»."
       }
     },
     {
@@ -2555,37 +2569,45 @@
       "id": "C9",
       "d": "C",
       "p": "P2",
-      "s": "decision",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "biblio"
       ],
       "t": {
-        "fr": "Fermer les huit questions ouvertes des conventions catalographiques",
-        "pt": "Fechar as oito questões abertas das convenções catalográficas"
+        "fr": "Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main",
+        "pt": "As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão"
       },
       "v": {
         "fr": "`CONV-6` reste « à confirmer » et `CONV-O1` à `CONV-O8` sont ouverts. Deux d'entre eux portent du travail chiffré : `CONV-O7` (le type d'autorité existe mais reste illisible par le SQL — **16 verdicts de collectivités restent à poser**) et `CONV-O8` (la scission d'autorité n'existe pas — **3 découpages restent**).",
         "pt": "`CONV-6` continua «a confirmar» e `CONV-O1` a `CONV-O8` estão abertos. Dois deles carregam trabalho quantificado: `CONV-O7` (o tipo de autoridade existe mas continua ilegível pelo SQL — **16 vereditos de coletividades faltam**) e `CONV-O8` (a cisão de autoridade não existe — **3 separações faltam**)."
       },
       "w": {
-        "fr": "Trancher les huit en une session, en s'aidant du fonds réel : `name_lang` distinct de `country` ou non, conventions des collectivités, sort de `books.autor` (voir **C5**), critère de bascule EDTF, périmètre de l'écran de vérification, et les deux lots manuels.",
-        "pt": "Decidir as oito numa sessão, apoiando-se no acervo real: `name_lang` distinto de `country` ou não, convenções das coletividades, destino de `books.autor` (ver **C5**), critério de mudança para EDTF, perímetro da tela de verificação, e os dois lotes manuais."
+        "fr": "**Tranché le 03/09 (C9 = A, les huit — `CONV-6`, `CONV-O1..O8` actés au REGISTRE v0.16).** Ce qui reste est du code petit et du travail à la main : **O5** renommer l'intitulé de `/atelier-autoridades` en « file de vérification du catalogue » (une clé, dix locales) ; **O6** rafraîchir `avant` à l'affichage de la file ; **O2** poser les deux verdicts de collectivités « à revoir » ; **O8** traiter à la main les trois fiches doubles (créer, repointer, fusion inverse). `O7` : vérifier que le SQL lit `authority_type` là où il affiche.",
+        "pt": "**Decidido em 03/09 (C9 = A, as oito).** Resta código pequeno e trabalho à mão: O5 renomear o título da fila; O6 atualizar `avant` na exibição; O2 os dois vereditos de coletividades; O8 as três fichas duplas à mão."
       },
       "y": {
         "fr": "La colonne `name_lang` a été créée nullable et sans contrainte validée : **la créer n'engage rien, l'utiliser oui**. Tant que la question reste ouverte, chaque nouvelle règle d'entrée doit se demander sur quoi elle s'appuie.",
         "pt": "A coluna `name_lang` foi criada anulável e sem restrição validada: **criá-la não compromete nada, usá-la sim**. Enquanto a questão ficar aberta, cada nova regra de entrada precisa se perguntar em que se apoia."
       },
-      "f": {
-        "fr": [
-          "Les huit ont un verdict au REGISTRE.",
-          "Les 16 collectivités et les 3 découpages sont traités à la main — ils sont explicitement **non automatisables**."
-        ],
-        "pt": [
-          "As oito têm um veredicto no REGISTRO.",
-          "As 16 coletividades e as 3 separações são tratadas à mão — são explicitamente **não automatizáveis**."
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Les huit ont un verdict au REGISTRE~~ — 03/09, v0.16.",
+          "pt": "~~As oito têm veredito no REGISTRO~~ — 03/09."
+        },
+        {
+          "fr": "O5 : l'intitulé de la file dit ce qu'elle est (une clé, dix locales).",
+          "pt": "O5: o título da fila diz o que ela é."
+        },
+        {
+          "fr": "O6 : `avant` est rafraîchi à l'affichage ; la garde stricte reste.",
+          "pt": "O6: `avant` atualizado na exibição; a guarda estrita fica."
+        },
+        {
+          "fr": "Les 2 collectivités « à revoir » et les 3 découpages sont traités à la main — non automatisables.",
+          "pt": "As 2 coletividades e os 3 desdobramentos tratados à mão."
+        }
+      ],
       "dep": {
         "fr": "Éclaire **C6**.",
         "pt": "Esclarece **C6**."
@@ -2594,8 +2616,8 @@
         "REGISTRE §37 CONV-6, CONV-O1..O8"
       ],
       "verif": {
-        "fr": "31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes. **03/09** — un verdict proposé par question dans la page des cinq décisions (O1 oui ; O2 convention provisoire ; O3 = C5 ; O4 pas de bascule sans déclencheur ; O5 le périmètre est la file ; O6 garde stricte + rafraîchissement ; O7 `authority_type` est la vérité ; O8 pas de scission avant la quatrième) ; file : collectivités 14 appliqués, 2 à revoir ; 1 241 autorités non typées. **Recommandé A**. Verdict attendu.",
-        "pt": "31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si. **03/09** — um veredito proposto por pergunta na página das cinco decisões. **Recomendado A**. Veredito pendente."
+        "fr": "31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes. **03/09** — un verdict proposé par question dans la page des cinq décisions (O1 oui ; O2 convention provisoire ; O3 = C5 ; O4 pas de bascule sans déclencheur ; O5 le périmètre est la file ; O6 garde stricte + rafraîchissement ; O7 `authority_type` est la vérité ; O8 pas de scission avant la quatrième) ; file : collectivités 14 appliqués, 2 à revoir ; 1 241 autorités non typées. **Recommandé A**. Verdict attendu. **03/09 — tranché : A, les huit.** Passe de « décision » à « ouvert », effort S.",
+        "pt": "31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si. **03/09** — um veredito proposto por pergunta na página das cinco decisões. **Recomendado A**. Veredito pendente. **03/09 — decidido: A, as oito.** Passa a «aberto»."
       }
     },
     {
@@ -2649,38 +2671,42 @@
     {
       "id": "D2",
       "d": "D",
-      "p": "P2",
-      "s": "decision",
+      "p": "P3",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "biblio"
       ],
       "t": {
-        "fr": "Trancher les cinq questions restées ouvertes sur les périodiques",
-        "pt": "Decidir as cinco questões que ficaram abertas sobre os periódicos"
+        "fr": "Les cinq questions des périodiques sont tranchées : reste la liste de suggestions de `periodicidade`",
+        "pt": "As cinco perguntas dos periódicos estão decididas: falta a lista de sugestões de `periodicidade`"
       },
       "v": {
         "fr": "Cinq arbitrages étaient laissés en attente dans la spec, avec un penchant écrit pour chacun : vocabulaire de `periodicidade` libre ou fermé ; filiation n-n ou deux liens simples ; `serials` doit-elle porter un `library_id` ; promotion automatique d'un titre proposé ; page publique dédiée ou facette.",
         "pt": "Cinco arbitragens ficaram pendentes na spec, com uma inclinação escrita para cada uma: vocabulário de `periodicidade` livre ou fechado; filiação n-n ou dois vínculos simples; `serials` deve levar um `library_id`; promoção automática de um título proposto; página pública dedicada ou faceta."
       },
       "w": {
-        "fr": "Les trancher sur des cas réels plutôt que dans l'abstrait — le fonds Anarchief (une centaine de titres depuis 1860) et le fonds SOLIDAIRES (12 titres, 91 fascicules) sont la matière à éprouver.",
-        "pt": "Decidi-las sobre casos reais em vez de no abstrato — o acervo Anarchief (cerca de cem títulos desde 1860) e o acervo SOLIDAIRES (12 títulos, 91 fascículos) são a matéria para testar."
+        "fr": "**Tranché le 03/09 (D2 = A, les cinq — spec périodiques v1.0, section « Les cinq arbitrages du 03/09 »).** Trois étaient déjà tranchés par le code, deux attendent un cas réel d'Anarchief. Le seul geste restant : une liste de suggestions non contraignante pour `periodicidade` (`datalist` : mensuel, bimestriel, trimestriel, irrégulier…, dix locales) — le champ reste libre.",
+        "pt": "**Decidido em 03/09 (D2 = A, as cinco).** Único gesto restante: uma lista de sugestões não vinculativa para `periodicidade`, dez locales; o campo continua livre."
       },
       "y": {
         "fr": "Deux des cinq sont déjà tranchés de fait par le code livré (page dédiée `/periodico/<slug>`, pas de `library_id`). Les laisser « ouverts » au REGISTRE alors que le code a choisi crée exactement le genre d'écart que ce backlog corrige.",
         "pt": "Duas das cinco já estão decididas de fato pelo código entregue (página dedicada `/periodico/<slug>`, sem `library_id`). Deixá-las «abertas» no REGISTRO enquanto o código escolheu cria exatamente o tipo de desvio que este backlog corrige."
       },
-      "f": {
-        "fr": [
-          "Les cinq ont un verdict inscrit, en accord avec le code livré ou en le corrigeant.",
-          "La promotion d'un titre reste **un geste et non un seuil** — c'était le penchant, et il vaut d'être confirmé."
-        ],
-        "pt": [
-          "As cinco têm um veredicto inscrito, de acordo com o código entregue ou corrigindo-o.",
-          "A promoção de um título continua **um gesto e não um limiar** — era a inclinação, e vale confirmá-la."
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Les cinq ont un verdict inscrit~~ — 03/09, spec v1.0.",
+          "pt": "~~As cinco têm veredito~~ — 03/09."
+        },
+        {
+          "fr": "~~La promotion reste un geste, pas un seuil~~ — confirmé le 03/09.",
+          "pt": "~~A promoção fica um gesto~~ — confirmado em 03/09."
+        },
+        {
+          "fr": "La liste de suggestions de `periodicidade`, dix locales, non contraignante.",
+          "pt": "A lista de sugestões de `periodicidade`, dez locales."
+        }
+      ],
       "dep": {
         "fr": "Après **D1**.",
         "pt": "Depois de **D1**."
@@ -2689,8 +2715,8 @@
         "spec-periodiques-v0.1 §13"
       ],
       "verif": {
-        "fr": " **03/09** — les cinq tranchées dans la page des cinq décisions, en accord avec le code livré (libre + suggestions ; deux liens ; pas de `library_id` ; geste, pas seuil ; page dédiée) ; 4 titres en base, `periodicidade` jamais renseignée. **Recommandé A**. Verdict attendu.",
-        "pt": " **03/09** — as cinco decididas na página das cinco decisões, em acordo com o código. **Recomendado A**. Veredito pendente."
+        "fr": " **03/09** — les cinq tranchées dans la page des cinq décisions, en accord avec le code livré (libre + suggestions ; deux liens ; pas de `library_id` ; geste, pas seuil ; page dédiée) ; 4 titres en base, `periodicidade` jamais renseignée. **Recommandé A**. Verdict attendu. **03/09 — tranché : A, les cinq.** Passe de « décision » à « ouvert », P3, effort S (4 titres en base, `periodicidade` jamais renseignée).",
+        "pt": " **03/09** — as cinco decididas na página das cinco decisões, em acordo com o código. **Recomendado A**. Veredito pendente. **03/09 — decidido: A, as cinco.** Passa a «aberto», P3."
       }
     },
     {
@@ -3363,38 +3389,38 @@
       "id": "E11",
       "d": "E",
       "p": "P3",
-      "s": "decision",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "collectif",
         "front"
       ],
       "t": {
-        "fr": "Les deux différés assumés de l'OPAC : tags contributifs et flux RSS",
-        "pt": "Os dois adiamentos assumidos do OPAC: tags contributivas e feed RSS"
+        "fr": "Un flux des nouveautés par bibliothèque, sans requête et sans compte (ex-RSS de recherche)",
+        "pt": "Um feed de novidades por biblioteca, sem consulta e sem conta (ex-RSS de busca)"
       },
       "v": {
         "fr": "`#OPAC5` (folksonomie, tags posés par les lectrices) est bloqué sur une décision de communauté et de vie privée. `#OPAC11` (flux RSS de recherche) est différé pour raison anti-pistage. Les deux sont ouverts depuis mai et n'ont jamais été instruits.",
         "pt": "`#OPAC5` (folksonomia, tags postas pelas leitoras) está bloqueado numa decisão de comunidade e de privacidade. `#OPAC11` (feed RSS de busca) está adiado por razão antirrastreamento. Os dois estão abertos desde maio e nunca foram instruídos."
       },
       "w": {
-        "fr": "Les instruire une bonne fois : qu'est-ce qu'un tag public révèle de qui l'a posé, et qu'est-ce qu'un flux RSS révèle de qui le suit ? Puis trancher, ou fermer.",
-        "pt": "Instruí-los de uma vez: o que uma tag pública revela sobre quem a pôs, e o que um feed RSS revela sobre quem o segue? Depois decidir, ou fechar."
+        "fr": "**Tranché le 03/09 (E11 = A).** `#OPAC5` (tags contributifs) est **fermé** — `OPAC-TAG1` au REGISTRE : un tag signé révèle la lecture, un tag anonyme ne se modère pas, le besoin est couvert par l'autorité matière. `#OPAC11` est **requalifié** — `OPAC-RSS1` : pas de flux de recherche (l'URL porterait la requête), mais un **flux des nouveautés par bibliothèque** : `/rss/<slug>` ou route OPDS existante, les N derniers livres publiés, sans paramètre, sans compte, sans journal.",
+        "pt": "**Decidido em 03/09 (E11 = A).** `#OPAC5` fechado (`OPAC-TAG1`); `#OPAC11` requalificado (`OPAC-RSS1`): um feed de novidades por biblioteca, sem parâmetro, sem conta, sem registo."
       },
       "y": {
         "fr": "Un item différé sans instruction reste à l'ordre du jour de chaque relecture et coûte de l'attention à chaque fois. Fermer un item est une décision aussi valable que le livrer.",
         "pt": "Um item adiado sem instrução continua na pauta de cada releitura e custa atenção a cada vez. Fechar um item é uma decisão tão válida quanto entregá-lo."
       },
-      "f": {
-        "fr": [
-          "Les deux ont un verdict au REGISTRE : livré, ou fermé avec la raison.",
-          "`OPAC-RSS1` est mis à jour en conséquence."
-        ],
-        "pt": [
-          "Os dois têm um veredicto no REGISTRO: entregue, ou fechado com o motivo.",
-          "`OPAC-RSS1` é atualizado em consequência."
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Les deux ont un verdict au REGISTRE~~ — 03/09 : `OPAC-TAG1` fermé, `OPAC-RSS1` requalifié.",
+          "pt": "~~Os dois têm veredito~~ — 03/09."
+        },
+        {
+          "fr": "Le flux des nouveautés existe pour chaque bibliothèque visible, sans requête ni compte, et le pied de l'OPAC y mène.",
+          "pt": "O feed de novidades existe para cada biblioteca visível, sem consulta nem conta."
+        }
+      ],
       "dep": {
         "fr": "Aucune.",
         "pt": "Nenhuma."
@@ -3404,8 +3430,8 @@
         "AnarBib-Backlog-2026-06-17-v33 §2.4"
       ],
       "verif": {
-        "fr": " **03/09** — instruits dans la page des cinq décisions : un tag signé révèle la lecture, un tag anonyme ne se modère pas ; l'URL d'un flux de recherche porte la requête en clair. **Recommandé : fermer #OPAC5, requalifier #OPAC11 en flux des nouveautés par bibliothèque**. Verdict attendu.",
-        "pt": " **03/09** — instruídos na página das cinco decisões. **Recomendado: fechar #OPAC5, requalificar #OPAC11**. Veredito pendente."
+        "fr": " **03/09** — instruits dans la page des cinq décisions : un tag signé révèle la lecture, un tag anonyme ne se modère pas ; l'URL d'un flux de recherche porte la requête en clair. **Recommandé : fermer #OPAC5, requalifier #OPAC11 en flux des nouveautés par bibliothèque**. Verdict attendu. **03/09 — tranché : A.** Tags fermés, flux requalifié ; passe de « décision » à « ouvert », effort S.",
+        "pt": " **03/09** — instruídos na página das cinco decisões. **Recomendado: fechar #OPAC5, requalificar #OPAC11**. Veredito pendente. **03/09 — decidido: A.** Tags fechados, feed requalificado; passa a «aberto»."
       }
     },
     {
@@ -4505,52 +4531,6 @@
       "r": [
         ".forgejo/workflows/ci.yml",
         "item B18"
-      ]
-    },
-    {
-      "id": "I16",
-      "d": "I",
-      "p": "P3",
-      "s": "decision",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "supabase-js : une version épinglée, vingt-neuf flottantes — trancher un régime",
-        "pt": "supabase-js: uma versão fixada, vinte e nove flutuantes — decidir um regime"
-      },
-      "v": {
-        "fr": "`_shared/core/env.ts` épingle `supabase-js@2.112.4` (avant le 01/09 : `2.49.1`, restée soixante versions en arrière pendant des mois) ; les vingt-neuf autres fonctions importent `@2` flottant, résolu au déploiement. Le 01/09 a montré ce que produit ce régime mixte : les flottantes avaient absorbé silencieusement le support des clés `sb_` pendant que l'épinglée l'ignorait — le diagnostic de compatibilité s'est trompé précisément là-dessus.",
-        "pt": "O `_shared/core/env.ts` fixa `supabase-js@2.112.4` (antes de 01/09: `2.49.1`, sessenta versões para trás durante meses); as vinte e nove outras funções importam `@2` flutuante, resolvido no deploy. O dia 01/09 mostrou o que esse regime misto produz: as flutuantes tinham absorvido em silêncio o suporte às chaves `sb_` enquanto a fixada o ignorava — o diagnóstico de compatibilidade errou exatamente aí."
-      },
-      "w": {
-        "fr": "Trancher : tout épingler (déploiements reproductibles, mais il faut un rituel de montée de version, sinon on refait le coup des soixante versions de retard) ou tout flotter (toujours à jour, mais une rupture majeure de la bibliothèque arrive en production sans prévenir). L'un ou l'autre — pas le mélange actuel.",
-        "pt": "Decidir: fixar tudo (deploys reproduzíveis, mas é preciso um ritual de subida de versão, senão repete-se o caso das sessenta versões de atraso) ou deixar tudo flutuar (sempre em dia, mas uma ruptura maior da biblioteca chega em produção sem avisar). Um ou outro — não a mistura atual."
-      },
-      "f": {
-        "fr": [
-          "Une règle écrite existe (dans `CONTRIBUTING.md` ou en tête d'`env.ts`), et les cinquante et une fonctions la suivent toutes."
-        ],
-        "pt": [
-          "Uma regra escrita existe (no `CONTRIBUTING.md` ou no cabeçalho do `env.ts`), e as cinquenta e uma funções a seguem todas."
-        ]
-      },
-      "y": {
-        "fr": "Le mélange donne le pire des deux régimes : on croit la version maîtrisée là où elle flotte, et à jour là où elle est figée. Les deux erreurs du 01/09 — l'une par excès de confiance dans l'épinglage, l'autre par ignorance du flottement — sortent du même désaccord.",
-        "pt": "A mistura dá o pior dos dois regimes: acredita-se a versão controlada onde ela flutua, e em dia onde está congelada. Os dois erros de 01/09 — um por excesso de confiança na fixação, outro por ignorância da flutuação — saem do mesmo desacordo."
-      },
-      "dep": {
-        "fr": "Aucune — c'est un arbitrage, pas un chantier.",
-        "pt": "Nenhuma — é uma arbitragem, não um canteiro."
-      },
-      "verif": {
-        "fr": "01/09 — relevé des imports : `grep supabase-js@ supabase/functions -r` → 1 épinglé (`env.ts`), 29 en `@2`, 1 en `@2` via npm:. **03/09** — relevé : 1 épinglé (`2.112.4`), 16 `esm.sh …@2`, 14 `npm:…@2` ; options A tout épingler en un seul module `_shared/deps.ts` avec rituel daté / B tout flotter — **recommandé A**, dans la page des cinq décisions. Verdict attendu.",
-        "pt": "01/09 — levantamento dos imports: `grep supabase-js@ supabase/functions -r` → 1 fixado (`env.ts`), 29 em `@2`, 1 em `@2` via npm:. **03/09** — 1 fixado, 30 flutuantes; opções A fixar tudo num só módulo / B flutuar — **recomendado A**. Veredito pendente."
-      },
-      "r": [
-        "supabase/functions/_shared/core/env.ts",
-        "CONTRIBUTING.md"
       ]
     },
     {
