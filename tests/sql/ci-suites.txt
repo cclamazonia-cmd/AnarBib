@@ -395,3 +395,7 @@ tests/sql/conv_evidence_non_agents_tests.sql
 tests/sql/conv_evidence_liens_exacts_tests.sql
 # 4/4 trancher UNE ligne evidente de la file comme l'ecran l'aurait fait, garde CONV-O6, liste fermee. Ref. 20260903182355.
 tests/sql/conv_evidence_file_tests.sql
+
+# CONV-8 (03/09 soir) : « AA. VV. », « Anonimo », « Coletivo » ne sont pas des contributeurs —
+# entree au titre, transcription conservee, seize lignes retirees a liste fermee. Ref. 20260903184828.
+tests/sql/conv_8_auteurs_divers_tests.sql
