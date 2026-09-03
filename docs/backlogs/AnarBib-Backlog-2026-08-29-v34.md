@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-02** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-02** · 64 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,9 +17,9 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 2
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-02.** **50 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D2, D3, D6, E1, E2, E5, E6, E7, E8, E9, E11, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, J2, J6, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-02.** **47 items sur 64** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, J2, J6, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -538,7 +538,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **C2** | Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse | `P1` | Bloqué |
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Ouvert |
-| **C5** | `books.autor` est une forme transcrite : le rendu unique, le formulaire, et le lot des 226 | `P2` | Ouvert |
 | **C6** | Livrer les trois assistances de saisie prévues par la spec des conventions | `P2` | Ouvert |
 | **C7** | Indexer par matière les 1 549 notices qui n'ont aucun sujet | `P2` | Ouvert |
 | **C8** | Enrichir les autorités : dates, identifiants externes, formes variantes | `P3` | Ouvert |
@@ -612,29 +611,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 *Renvois : `AUDIT_conventions_catalographiques_2026-08-20 A5` · `REGISTRE §37 CONV-7`*
 
-#### C5 — `books.autor` est une forme transcrite : le rendu unique, le formulaire, et le lot des 226
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
-
-**État.** `CONV-O3` est ouvert : déprécier `books.autor` maintenant, ou à l'Atelier ? Le champ coexiste avec la table `authors` et porte les mêmes défauts **en pire** — on y trouve `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. L'audit du 20/08 l'a explicitement laissé hors périmètre : sa dette n'est pas chiffrée.
-
-*Vérifié : 31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes. **03/09** — instruit dans la page des cinq décisions (`docs/journal/arbitrages/DECISIONS_bloc3_cinq_questions_2026-09-03.md`) : 226 livres sans lien `authors` (BTL 138, MLEG 52, BLMF 36), 121 chaînes multi-personnes, 8 `autor` encore écrits par le formulaire depuis le 01/08 ; options A déprécier / B forme transcrite / C différer — **recommandé B**. Verdict attendu. **03/09 — tranché : B.** La fiche passe de « décision » à « ouvert », effort S, trois gestes.*
-
-**Ce que c'est.** **Tranché le 03/09 (C5 = B, `CONV-O3` acté)** : le champ est la transcription de la page de titre, l'autorité liée est la vérité. Trois gestes : **(1)** un rendu unique « autorité sinon transcription » partout où un auteur s'affiche (OPAC, listes, exports) ; **(2)** `BookDraftForm` ne pré-remplit plus l'autorité depuis `autor` — il pré-remplit la transcription, et le libellé du champ dit « auteur tel qu'imprimé » ; **(3)** un lot de la file `autor_sans_autorite` pour les 226 livres sans lien `authors` (élargir la CHECK de `catalog_review_queue.lot` — cf. le piège des vocabulaires CHECK), traité à la main sans échéance.
-
-**Pourquoi ça compte.** Deux vérités concurrentes sur l'auteur d'un livre, c'est le contraire de `DOC-CONV-1` (« une seule vérité en base, plusieurs rendus »). Tant que le champ vit, chaque écran doit choisir lequel afficher, et les deux divergent.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Renvoie à `INV-4`.
-
-*Renvois : `REGISTRE §37 CONV-O3` · `AUDIT_conventions_catalographiques_2026-08-20`*
-
 #### C6 — Livrer les trois assistances de saisie prévues par la spec des conventions
 
 `P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript, bibliothéconomie
@@ -706,7 +682,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 **État.** `CONV-6` reste « à confirmer » et `CONV-O1` à `CONV-O8` sont ouverts. Deux d'entre eux portent du travail chiffré : `CONV-O7` (le type d'autorité existe mais reste illisible par le SQL — **16 verdicts de collectivités restent à poser**) et `CONV-O8` (la scission d'autorité n'existe pas — **3 découpages restent**).
 
-*Vérifié : 31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes. **03/09** — un verdict proposé par question dans la page des cinq décisions (O1 oui ; O2 convention provisoire ; O3 = C5 ; O4 pas de bascule sans déclencheur ; O5 le périmètre est la file ; O6 garde stricte + rafraîchissement ; O7 `authority_type` est la vérité ; O8 pas de scission avant la quatrième) ; file : collectivités 14 appliqués, 2 à revoir ; 1 241 autorités non typées. **Recommandé A**. Verdict attendu. **03/09 — tranché : A, les huit.** Passe de « décision » à « ouvert », effort S.*
+*Vérifié : 31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes. **03/09** — un verdict proposé par question dans la page des cinq décisions (O1 oui ; O2 convention provisoire ; O3 = C5 ; O4 pas de bascule sans déclencheur ; O5 le périmètre est la file ; O6 garde stricte + rafraîchissement ; O7 `authority_type` est la vérité ; O8 pas de scission avant la quatrième) ; file : collectivités 14 appliqués, 2 à revoir ; 1 241 autorités non typées. **Recommandé A**. Verdict attendu. **03/09 — tranché : A, les huit.** Passe de « décision » à « ouvert », effort S. **03/09, après-midi** — O5 livré, O6 constaté déjà fait ; il ne reste que f[3], le travail de main (2 collectivités à revoir, 3 découpages), à l'Atelier autorités.*
 
 **Ce que c'est.** **Tranché le 03/09 (C9 = A, les huit — `CONV-6`, `CONV-O1..O8` actés au REGISTRE v0.16).** Ce qui reste est du code petit et du travail à la main : **O5** renommer l'intitulé de `/atelier-autoridades` en « file de vérification du catalogue » (une clé, dix locales) ; **O6** rafraîchir `avant` à l'affichage de la file ; **O2** poser les deux verdicts de collectivités « à revoir » ; **O8** traiter à la main les trois fiches doubles (créer, repointer, fusion inverse). `O7` : vérifier que le SQL lit `authority_type` là où il affiche.
 
@@ -752,33 +728,10 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 | | | | |
 |---|---|---|---|
-| **D2** | Les cinq questions des périodiques sont tranchées : reste la liste de suggestions de `periodicidade` | `P3` | Ouvert |
 | **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P2` | Bloqué |
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D6** | Reprendre ou remplacer le lecteur EPUB | `P3` | Ouvert |
-
-#### D2 — Les cinq questions des périodiques sont tranchées : reste la liste de suggestions de `periodicidade`
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie
-
-**État.** Cinq arbitrages étaient laissés en attente dans la spec, avec un penchant écrit pour chacun : vocabulaire de `periodicidade` libre ou fermé ; filiation n-n ou deux liens simples ; `serials` doit-elle porter un `library_id` ; promotion automatique d'un titre proposé ; page publique dédiée ou facette.
-
-*Vérifié :  **03/09** — les cinq tranchées dans la page des cinq décisions, en accord avec le code livré (libre + suggestions ; deux liens ; pas de `library_id` ; geste, pas seuil ; page dédiée) ; 4 titres en base, `periodicidade` jamais renseignée. **Recommandé A**. Verdict attendu. **03/09 — tranché : A, les cinq.** Passe de « décision » à « ouvert », P3, effort S (4 titres en base, `periodicidade` jamais renseignée).*
-
-**Ce que c'est.** **Tranché le 03/09 (D2 = A, les cinq — spec périodiques v1.0, section « Les cinq arbitrages du 03/09 »).** Trois étaient déjà tranchés par le code, deux attendent un cas réel d'Anarchief. Le seul geste restant : une liste de suggestions non contraignante pour `periodicidade` (`datalist` : mensuel, bimestriel, trimestriel, irrégulier…, dix locales) — le champ reste libre.
-
-**Pourquoi ça compte.** Deux des cinq sont déjà tranchés de fait par le code livré (page dédiée `/periodico/<slug>`, pas de `library_id`). Les laisser « ouverts » au REGISTRE alors que le code a choisi crée exactement le genre d'écart que ce backlog corrige.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Après **D1**.
-
-*Renvois : `spec-periodiques-v0.1 §13`*
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
 
@@ -885,7 +838,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **E8** | Charger les deux polices sans bloquer l'affichage | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
-| **E11** | Un flux des nouveautés par bibliothèque, sans requête et sans compte (ex-RSS de recherche) | `P3` | Ouvert |
 | **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
@@ -1102,27 +1054,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 **Dépendances.** Hérité de `#MOBILE P3`, `#MOBILE P5`, `#MOB-QR-A4`.
 
 *Renvois : `AnarBib-Backlog-2026-06-17-v33 §2.1`*
-
-#### E11 — Un flux des nouveautés par bibliothèque, sans requête et sans compte (ex-RSS de recherche)
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective, React / JavaScript
-
-**État.** `#OPAC5` (folksonomie, tags posés par les lectrices) est bloqué sur une décision de communauté et de vie privée. `#OPAC11` (flux RSS de recherche) est différé pour raison anti-pistage. Les deux sont ouverts depuis mai et n'ont jamais été instruits.
-
-*Vérifié :  **03/09** — instruits dans la page des cinq décisions : un tag signé révèle la lecture, un tag anonyme ne se modère pas ; l'URL d'un flux de recherche porte la requête en clair. **Recommandé : fermer #OPAC5, requalifier #OPAC11 en flux des nouveautés par bibliothèque**. Verdict attendu. **03/09 — tranché : A.** Tags fermés, flux requalifié ; passe de « décision » à « ouvert », effort S.*
-
-**Ce que c'est.** **Tranché le 03/09 (E11 = A).** `#OPAC5` (tags contributifs) est **fermé** — `OPAC-TAG1` au REGISTRE : un tag signé révèle la lecture, un tag anonyme ne se modère pas, le besoin est couvert par l'autorité matière. `#OPAC11` est **requalifié** — `OPAC-RSS1` : pas de flux de recherche (l'URL porterait la requête), mais un **flux des nouveautés par bibliothèque** : `/rss/<slug>` ou route OPDS existante, les N derniers livres publiés, sans paramètre, sans compte, sans journal.
-
-**Pourquoi ça compte.** Un item différé sans instruction reste à l'ordre du jour de chaque relecture et coûte de l'attention à chaque fois. Fermer un item est une décision aussi valable que le livrer.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-
-**Dépendances.** Aucune.
-
-*Renvois : `REGISTRE §18 OPAC-RSS1` · `AnarBib-Backlog-2026-06-17-v33 §2.4`*
 
 #### E12 — La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve
 
@@ -2112,6 +2043,9 @@ CI verte : lint et suite unitaire. |
 | I4 | 2026-09-03 | **Le témoin de provenance était fini depuis le 20/08 — sous d'autres noms que ceux de la fiche.** La fiche cherchait une migration `20260827180000_temoin_sauvegarde_provenance` et un correctif `health_probe_provenance.patch` : ni l'un ni l'autre n'existent nulle part (dépôt, Windows, WSL, transcripts — cherchés le 03/09). Mais ce qu'ils devaient produire est **en production** : *(base)* `fn_backup_heartbeat_status` expose `host`, `temoin_amorcage` (= « aucun témoin réel, ligne d'amorçage ») et `instantane_atteste` — posés par `20260820012343_backup_heartbeat_status_expose_host_et_amorcage`, affinés jusqu'à `20260901101901` ; le 03/09 les trois flux répondent `host = ACCATTONE`, `temoin_amorcage = false`, `instantane_atteste = true` (instantanés `973e398e`, `fb17d44c`, `e1428cff`). *(fonction)* la `health-probe` **déployée** (source relu via l'API le 03/09, pas seulement le dépôt) rend cette provenance dans chaque incident et chaque courriel (`provenanceTexte` / `provenanceHtml`, commit `ba0d2433` « le champ qui devait éclairer l'angle mort n'était lu par personne »). Forme `DOC-RECENS-1` : la fiche décrivait comme à faire un chantier fait sous un autre nom. Deux fantômes à ne plus chercher : la migration `…180000` et les deux `.patch`. |
 | H1 | 2026-09-03 | **Les 159 dates sont en base, avec libellé et liens — et l'épreuve a trouvé un second retour précoce.** Le correctif que la fiche disait « jamais éprouvé contre le site » était commité depuis le 27/08 (`04b86dd7`, `36d33bfc`) avec son test ; ce qui manquait, c'était l'aspiration. Faite le 03/09 (623 fiches, concurrence 2, un 503 du site absorbé par une reprise à 90 s) : les 161 dates sortent avec leur `title_fr`… **mais sans leurs liens** — Placard et Cartoliste pointent bien vers chaque année, et la section des liens venait *après* les deux retours précoces, exactement comme le H1 la veille. `collectCatalogLinks` est désormais appelée en tête de `parseDescriptor` (`2f314f15`) ; ré-aspiration : 159 dates avec libellé, 147 avec liens (275 liens), 2 fiches nues sur 623. **Synchro en base le 03/09** à la sémantique du script (upsert sur `mot_id`, jamais de purge) mais par la base directement, la CLI masquant les clés secrètes et la clé legacy étant désactivée depuis la veille : 159 dates nouvelles, 32 fiches mises à jour (l'astérisque final des libellés portugais, détaché par le scraper depuis le 28/08 et jamais synchronisé depuis le 30/06), 430 inchangées ; `harvested_at` 03/09 sur les 621 ; `subject_ficedl_links` intact (98). Contrôle : « 1936 » → Placard `mot6725` + Cartoliste `parution&date=1936`. Deux pièges tenus : `--json` explicite, pas de `--prune`. La page publique du thésaurus n'offrait que Sujets et Lieux : **onglet « Dates » ajouté** (`d42f54a5`, +1 clé, 6238). Reste hors fiche : le domaine `bianco.ficedl.info` n'est pas dans `CATALOG_HOSTS` (les dates y renvoient aussi) — à décider avec le thésaurus, pas ici. |
 | I16 | 2026-09-03 | **Tranché A et livré le matin même.** `supabase/functions/_shared/deps.ts` épingle `@supabase/supabase-js@2.114.0` (dernière 2.x au registre npm le 03/09) et ré-exporte `createClient` ; les **trente** fonctions et `env.ts` importent de là — plus un seul `esm.sh/…@2` ni `npm:…@2` dans une fonction. La règle est écrite dans `CONTRIBUTING.md` (§3.4, fr et en) et **gardée par un banc** : `src/tests/supabase-js-epingle.test.js` refuse tout import direct et exige une version exacte dans `deps.ts`. Les deux bancs d'EF (`gazette`, `harvest`) reconnaissent `deps.ts` comme le client. La montée de version est désormais un geste daté : changer un nombre, redéployer tout (le déployeur redéploie l'ensemble dès que `supabase/functions/` bouge — c'est écrit dans `deployer-backend.sh`, lignes 211-258), noter la date ; le recompte mensuel de CLAUDE.md relit ce nombre. Le mélange du 01/09 — une épinglée en retard, trente flottantes en avance — ne peut plus se reproduire. |
+| C5 | 2026-09-03 | **B, livré l'après-midi même — et la dette était deux fois plus grande que la fiche ne le disait.** *(1) Le rendu unique* « autorité sinon transcription » était **déjà** la règle de l'OPAC (`author_display || autor` dans `BookPage` et `CatalogPage`, `author_display` venant de `v_book_authors_canonical`) — rien à écrire, forme `DOC-RECENS-1`. *(2) Le formulaire* ne pré-remplit que la transcription (recherche ISBN, œuvre parente) et n'a jamais pré-rempli d'autorité depuis `autor` ; le libellé du champ dit désormais « auteur tel qu'imprimé », dix locales. *(3) Le lot* `autor_sans_autorite` existe (`7618ccfc`, migration `20260903150117`) : CHECK élargie, semis rejouable, `conv_revue_list` rend la transcription comme « actuel », `conv_revue_appliquer` **pose un lien** au lieu de réécrire un texte — autorité retrouvée par l'une des deux formes sans casse ou créée, lien sur le contributeur homonyme ou ligne neuve, anti-écrasement CONV-O6 ; « Anônimo », « Coletivo », « AA. VV. » ne reçoivent aucune proposition. **464 livres semés en production, pas 226** : la fiche comptait les livres sans ligne `book_authors`, table *dérivée* par trigger ; la vérité des contributeurs vit dans `book_contributors`, et 464 livres n'y ont aucun `author_id` (247 sans contributeur du tout, 217 avec des noms non liés). Suite SQL de 8 tests, verte en local avec O7 et O8 ; carte « Auteurs sans autorité » dans l'atelier. Le travail des 464 est un travail de main, à l'Atelier autorités, sans échéance — la file le porte. |
+| D2 | 2026-09-03 | **A, les cinq — et le seul geste de code est livré.** Verdicts inscrits (spec périodiques v1.0 §13, `5f63e75f`) en accord avec le code : `periodicidade` libre, deux liens de filiation, pas de `library_id`, promotion = un geste, page dédiée. La liste de suggestions non contraignante de `periodicidade` (huit valeurs, `datalist`, dix locales) est dans `SerialDetailEditor` depuis `5f43a247` ; elle ne se fermera que le jour où un fonds réel (Anarchief) en fera apparaître le besoin. 4 titres en base, `periodicidade` jamais renseignée : la liste arrive avant le premier usage. |
+| E11 | 2026-09-03 | **A — les tags fermés, le flux requalifié et livré le jour même.** `OPAC-TAG1` fermé au REGISTRE (un tag signé dit qui a lu quoi ; un tag anonyme ne se modère pas ; le besoin est couvert par l'autorité matière et le thésaurus). `OPAC-RSS1` requalifié puis **livré** (`e7a8acab`) : Edge Function `rss-novidades` — `GET /functions/v1/rss-novidades/<slug>`, **deux gardes et rien d'autre** (la bibliothèque est publique via `api.libraries_public_v1` ; les notices viennent de `v_books_public_catalog_v2`, la vue que l'OPAC anonyme lit déjà), RSS 2.0, autorité sinon transcription, lien vers la notice, cache d'une heure ; banc d'essai de 5 tests (même recette que gazette, `@vitest-environment node`) ; lien « Nouveautés (RSS) » sur la page publique et en tête du catalogue de chaque bibliothèque, dix locales. Sans requête, sans compte : rien à pister. **Ce que le banc ne voit pas, la production l'a montré** : à la première requête, 500 « permission denied for view libraries_public_v1 » — la vue `security_invoker` n'était accordée qu'à `anon` et `authenticated`, pas au rôle de service de la fonction ; un grant `SELECT` (`3677442a`, `20260903150755`) a suffi, le prédicat de publicité reste dans la vue. Vérifié ensuite en production : `/rss-novidades/blmf` répond un flux valide. |
 
 ---
 
@@ -2143,4 +2077,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 64 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

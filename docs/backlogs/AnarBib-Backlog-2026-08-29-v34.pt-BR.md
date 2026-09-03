@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-02** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-02** · 64 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,9 +17,9 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 12
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 4
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 2
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da noite, após o dia B20/B21/J7/J8 e depois B18, F7, G2, H5, B17, G5, I14 e os três lotes de E12: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `360d25b3`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
-**Frescor dos constatos em 2026-09-02.** **50 itens de 67** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D2, D3, D6, E1, E2, E5, E6, E7, E8, E9, E11, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, J2, J6, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-02.** **47 itens de 64** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, J2, J6, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -538,7 +538,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **C2** | Importar o acervo SOLIDAIRES pela ferramenta de importação, e registrar o que quebra | `P1` | Bloqueado |
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C4** | Preencher os países ausentes em 722 fichas de autoridade | `P2` | Aberto |
-| **C5** | `books.autor` é uma forma transcrita: a renderização única, o formulário e o lote dos 226 | `P2` | Aberto |
 | **C6** | Entregar as três assistências de digitação previstas pela spec das convenções | `P2` | Aberto |
 | **C7** | Indexar por assunto os 1 549 registros que não têm nenhum assunto | `P2` | Aberto |
 | **C8** | Enriquecer as autoridades: datas, identificadores externos, formas variantes | `P3` | Aberto |
@@ -612,29 +611,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 *Remissões : `AUDIT_conventions_catalographiques_2026-08-20 A5` · `REGISTRE §37 CONV-7`*
 
-#### C5 — `books.autor` é uma forma transcrita: a renderização única, o formulário e o lote dos 226
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia, SQL / PostgreSQL
-
-**Estado.** `CONV-O3` está aberto: depreciar `books.autor` agora, ou na Oficina? O campo coexiste com a tabela `authors` e carrega os mesmos defeitos **piores** — encontram-se lá `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. A auditoria de 20/08 o deixou explicitamente fora do perímetro: sua dívida não está quantificada.
-
-*Verificado : 31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria. **03/09** — instruído na página das cinco decisões: 226 livros sem ligação a `authors`, 121 cadeias multi-pessoas; opções A/B/C — **recomendado B**. Veredito pendente. **03/09 — decidido: B.** A ficha passa a «aberto».*
-
-**O que é.** **Decidido em 03/09 (C5 = B)**: o campo é a transcrição da página de rosto, a autoridade ligada é a verdade. Três gestos: renderização única «autoridade senão transcrição»; o formulário deixa de pré-preencher a autoridade a partir de `autor`; um lote da fila `autor_sans_autorite` para os 226 livros, tratado à mão.
-
-**Por que importa.** Duas verdades concorrentes sobre o autor de um livro é o contrário de `DOC-CONV-1` («uma só verdade no banco, várias renderizações»). Enquanto o campo viver, cada tela precisa escolher qual exibir, e os dois divergem.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Remete a `INV-4`.
-
-*Remissões : `REGISTRE §37 CONV-O3` · `AUDIT_conventions_catalographiques_2026-08-20`*
-
 #### C6 — Entregar as três assistências de digitação previstas pela spec das convenções
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, biblioteconomia
@@ -706,7 +682,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `CONV-6` continua «a confirmar» e `CONV-O1` a `CONV-O8` estão abertos. Dois deles carregam trabalho quantificado: `CONV-O7` (o tipo de autoridade existe mas continua ilegível pelo SQL — **16 vereditos de coletividades faltam**) e `CONV-O8` (a cisão de autoridade não existe — **3 separações faltam**).
 
-*Verificado : 31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si. **03/09** — um veredito proposto por pergunta na página das cinco decisões. **Recomendado A**. Veredito pendente. **03/09 — decidido: A, as oito.** Passa a «aberto».*
+*Verificado : 31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si. **03/09** — um veredito proposto por pergunta na página das cinco decisões. **Recomendado A**. Veredito pendente. **03/09 — decidido: A, as oito.** Passa a «aberto». **03/09, tarde** — O5 entregue, O6 já feito ; fica só f[3], trabalho manual.*
 
 **O que é.** **Decidido em 03/09 (C9 = A, as oito).** Resta código pequeno e trabalho à mão: O5 renomear o título da fila; O6 atualizar `avant` na exibição; O2 os dois vereditos de coletividades; O8 as três fichas duplas à mão.
 
@@ -752,33 +728,10 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 | | | | |
 |---|---|---|---|
-| **D2** | As cinco perguntas dos periódicos estão decididas: falta a lista de sugestões de `periodicidade` | `P3` | Aberto |
 | **D3** | Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES | `P2` | Bloqueado |
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D6** | Retomar ou substituir o leitor EPUB | `P3` | Aberto |
-
-#### D2 — As cinco perguntas dos periódicos estão decididas: falta a lista de sugestões de `periodicidade`
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia
-
-**Estado.** Cinco arbitragens ficaram pendentes na spec, com uma inclinação escrita para cada uma: vocabulário de `periodicidade` livre ou fechado; filiação n-n ou dois vínculos simples; `serials` deve levar um `library_id`; promoção automática de um título proposto; página pública dedicada ou faceta.
-
-*Verificado :  **03/09** — as cinco decididas na página das cinco decisões, em acordo com o código. **Recomendado A**. Veredito pendente. **03/09 — decidido: A, as cinco.** Passa a «aberto», P3.*
-
-**O que é.** **Decidido em 03/09 (D2 = A, as cinco).** Único gesto restante: uma lista de sugestões não vinculativa para `periodicidade`, dez locales; o campo continua livre.
-
-**Por que importa.** Duas das cinco já estão decididas de fato pelo código entregue (página dedicada `/periodico/<slug>`, sem `library_id`). Deixá-las «abertas» no REGISTRO enquanto o código escolheu cria exatamente o tipo de desvio que este backlog corrige.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Depois de **D1**.
-
-*Remissões : `spec-periodiques-v0.1 §13`*
 
 #### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
 
@@ -885,7 +838,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **E8** | Carregar as duas fontes sem bloquear a exibição | `P2` | Aberto |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
-| **E11** | Um feed de novidades por biblioteca, sem consulta e sem conta (ex-RSS de busca) | `P3` | Aberto |
 | **E12** | A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra | `P2` | Em curso |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
@@ -1102,27 +1054,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **Dependências.** Herdado de `#MOBILE P3`, `#MOBILE P5`, `#MOB-QR-A4`.
 
 *Remissões : `AnarBib-Backlog-2026-06-17-v33 §2.1`*
-
-#### E11 — Um feed de novidades por biblioteca, sem consulta e sem conta (ex-RSS de busca)
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva, React / JavaScript
-
-**Estado.** `#OPAC5` (folksonomia, tags postas pelas leitoras) está bloqueado numa decisão de comunidade e de privacidade. `#OPAC11` (feed RSS de busca) está adiado por razão antirrastreamento. Os dois estão abertos desde maio e nunca foram instruídos.
-
-*Verificado :  **03/09** — instruídos na página das cinco decisões. **Recomendado: fechar #OPAC5, requalificar #OPAC11**. Veredito pendente. **03/09 — decidido: A.** Tags fechados, feed requalificado; passa a «aberto».*
-
-**O que é.** **Decidido em 03/09 (E11 = A).** `#OPAC5` fechado (`OPAC-TAG1`); `#OPAC11` requalificado (`OPAC-RSS1`): um feed de novidades por biblioteca, sem parâmetro, sem conta, sem registo.
-
-**Por que importa.** Um item adiado sem instrução continua na pauta de cada releitura e custa atenção a cada vez. Fechar um item é uma decisão tão válida quanto entregá-lo.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-
-**Dependências.** Nenhuma.
-
-*Remissões : `REGISTRE §18 OPAC-RSS1` · `AnarBib-Backlog-2026-06-17-v33 §2.4`*
 
 #### E12 — A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra
 
@@ -2088,6 +2019,9 @@ CI verde. |
 | I4 | 2026-09-03 | **A testemunha de proveniência estava pronta desde 20/08 — com outros nomes.** A migração `20260827180000` e o patch `health_probe_provenance.patch` não existem em lado nenhum (procurados em 03/09). Mas o que deviam produzir está **em produção**: `fn_backup_heartbeat_status` expõe `host`, `temoin_amorcage` e `instantane_atteste` (desde `20260820012343`); a `health-probe` **implantada** (fonte relida pela API em 03/09) mostra essa proveniência em cada incidente e e-mail. Forma `DOC-RECENS-1`. Dois fantasmas a não procurar mais. |
 | H1 | 2026-09-03 | **As 159 datas estão na base, com rótulo e links — e a prova encontrou um segundo retorno precoce.** O corretivo estava commitado desde 27/08 com o seu teste; faltava a aspiração. Feita em 03/09: as datas saíam com `title_fr` **mas sem links** — a secção dos links vinha *depois* dos retornos precoces. `collectCatalogLinks` passa a ser chamada no início de `parseDescriptor` (`2f314f15`); nova aspiração: 159 datas com rótulo, 147 com links (275). **Sincronização em 03/09** com a semântica do script (upsert por `mot_id`, sem purga), pela base diretamente: 159 novas, 32 atualizadas, 430 inalteradas; `subject_ficedl_links` intacto. A página pública do tesauro só tinha Assuntos e Lugares: **separador «Datas» adicionado** (`d42f54a5`). Fica fora da ficha: `bianco.ficedl.info` não está em `CATALOG_HOSTS`. |
 | I16 | 2026-09-03 | **Decidido A e entregue na mesma manhã.** `_shared/deps.ts` fixa `supabase-js@2.114.0` e re-exporta `createClient`; as trinta funções e `env.ts` importam dali. Regra em `CONTRIBUTING.md` e guardada por um banco (`supabase-js-epingle.test.js`). Subir a versão é um gesto datado. |
+| C5 | 2026-09-03 | **B, entregue na mesma tarde — e a dívida era o dobro do que a ficha dizia.** O render «autoridade senão transcrição» já era a regra do OPAC ; o formulário só preenche a transcrição, rótulo «autor tal como impresso» em dez locales ; o lote `autor_sans_autorite` existe (`7618ccfc`) : aplicar **põe uma ligação** em vez de reescrever um texto, com anti-sobreposição CONV-O6. **464 livros semeados em produção, não 226** : a ficha lia `book_authors`, tabela derivada ; a verdade vive em `book_contributors`. Suite SQL de 8 testes. O trabalho dos 464 é manual, na Oficina, sem prazo. |
+| D2 | 2026-09-03 | **A, as cinco — e o único gesto de código está entregue.** Vereditos inscritos em acordo com o código ; lista de sugestões de `periodicidade` (oito valores, dez locales) em `SerialDetailEditor` desde `5f43a247`. |
+| E11 | 2026-09-03 | **A — tags fechadas, feed requalificado e entregue no mesmo dia.** `OPAC-TAG1` fechado ; `OPAC-RSS1` requalificado e **entregue** (`e7a8acab`) : Edge Function `rss-novidades`, duas guardas e nada mais (biblioteca pública, vista pública), RSS 2.0, banco de 5 testes, link «Novidades (RSS)» na página pública de cada biblioteca. Sem consulta, sem conta : nada a rastrear. |
 
 ---
 
@@ -2119,4 +2053,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-02. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `360d25b3`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-02. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 64 itens em 11 domínios. O estado numérico foi levantado em 2026-09-02 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `360d25b3`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
