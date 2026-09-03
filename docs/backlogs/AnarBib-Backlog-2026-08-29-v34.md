@@ -112,7 +112,7 @@ Relevé du **3 septembre 2026**, en fin de journée — production interrogée e
 | Fichiers `src/` | **295** | 79 pages, 90 composants ; +5 fichiers depuis le 02/09 (bancs d'essai et tests). |
 | Clés i18n | **6 249** | par locale, **parité stricte sur les 10**, gardée en CI ; **+15 depuis le 02/09** : « Ma demande » (3), onglet « Dates » (1), atelier et périodicité (9), lot des auteurs (2), flux RSS (1) ; le champ auteur du formulaire renommé « tel qu'imprimé ». |
 | Tests | **370 + 73** | 370 tests JS (vitest, gate bloquant ; +16 : engendrement, RSS, épinglage supabase-js) + **73 suites SQL** dans `ci-suites.txt` (+1 : `conv_c5_autor_sans_autorite`, 8 tests, verte en local avec O7 et O8 avant le push). |
-| Marqueurs de dette | **66** | dont 6 dans `src/` (motifs `TODO`/`FIXME`, même compte que le 29/08). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
+| Marqueurs de dette | **17** | dont 4 dans `src/` (motifs `TODO`/`FIXME`, même compte que le 29/08). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
 

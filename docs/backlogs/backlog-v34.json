@@ -671,10 +671,10 @@
               "fr": "Marqueurs de dette",
               "pt": "Marcadores de dívida"
             },
-            "66",
+            "17",
             {
-              "fr": "dont 6 dans `src/` (motifs `TODO`/`FIXME`, même compte que le 29/08). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
-              "pt": "dos quais 6 em `src/`. Nenhum é uma tarefa aberta."
+              "fr": "dont 4 dans `src/` (motifs `TODO`/`FIXME`, même compte que le 29/08). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
+              "pt": "dos quais 4 em `src/`. Nenhum é uma tarefa aberta."
             }
           ]
         ]

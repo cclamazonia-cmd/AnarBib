@@ -112,7 +112,7 @@ Registo de **3 de setembro de 2026**, ao fim do dia — produção consultada em
 | Arquivos `src/` | **295** | 79 páginas, 90 componentes. |
 | Chaves i18n | **6 249** | por locale, **paridade estrita nas 10** ; **+15 desde 02/09**. |
 | Testes | **370 + 73** | 370 testes JS (+16) + **73 suites SQL** (+1 : lote C5, 8 testes). |
-| Marcadores de dívida | **66** | dos quais 6 em `src/`. Nenhum é uma tarefa aberta. |
+| Marcadores de dívida | **17** | dos quais 4 em `src/`. Nenhum é uma tarefa aberta. |
 
 ---
 
