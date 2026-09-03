@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-02** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-02** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,11 +19,11 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 3
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 12
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-02.** **49 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, E13, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I4, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-02.** **47 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, H1, I1, I3, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -883,7 +883,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E11** | Les deux différés assumés de l'OPAC : tags contributifs et flux RSS | `P3` | Décision collective |
 | **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
-| **E13** | Dans Mon compte, « Ma demande » promet une porte qui n'existe pas — et ne s'efface jamais | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1154,33 +1153,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 **Dépendances.** Né de l'épreuve **H5** (l'export par moissonnage vit à Rede, pas ici). Voisin de **E9** (mobile) et **C6** (assistances de saisie) sans les recouvrir ; même exigence de regard extérieur que **E1**. Le lot A est daté par **K7** (formation du 13/09).
 
 *Renvois : `src/pages/importacoes/ImportacoesPage.jsx` · `src/components/rede/OaiSourcePanel.jsx` · `supabase/functions/export-catalog-lote` · `capture d'écran de Xavier du 02/09 (contexte blmf-teste)`*
-
-#### E13 — Dans Mon compte, « Ma demande » promet une porte qui n'existe pas — et ne s'efface jamais
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
-
-**État.** **Constat de Xavier le 02/09 au soir, sur sa propre capture de `/conta`** : un bloc « Ma demande · Biblioteca Voltairine de Cleyre · Approuvée », la phrase « Rendez-vous dans l'atelier de constitution pour configurer votre bibliothèque », puis « Échanges avec la coordination — Aucun échange pour le moment ». Ses trois questions : *comment j'atteins l'atelier, il n'y a pas de bouton ? c'est quoi ces éléments ? ils vont rester là tout le temps ?* La demande elle-même est une fixture posée sur son compte par la session des captures du Manuel v5 (IMAGEM 32), qui la retirera — mais les deux défauts qu'elle révèle sont réels.
-
-**(1) Une phrase sans porte.** `MinhaSolicitacaoPanel` affiche, pour une demande approuvée, l'invitation à se rendre à l'atelier — sans lien. Le vrai circuit s'en passe parce que l'approbation bascule le profil en `coordenador_em_constituicao`, et que `LoginPage` comme `ProtectedRoute` emmènent alors d'office vers `/atelier`. Dès que cet état n'est pas posé (fixture, compte repris à la main, profil réparé), la phrase désigne une adresse qu'il faut deviner : `/atelier`. Même famille que la porte OAI livrée le soir même dans E12 : l'adresse existe, personne ne la trouve.
-
-**(2) Un bloc qui ne s'éteint jamais.** Le panneau montre la demande **la plus récente** soumise par la personne, quel que soit son état, sans condition de fin : une demande approuvée dont l'atelier est achevé et la bibliothèque née, ou une demande refusée il y a un an, restent affichées à vie en tête de Mon compte, avec un canal d'échange devenu muet (il n'est interactif qu'en attente / analyse / attente d'information). Rien ne dit non plus ce que **sont** ces éléments — le mot « demande » n'est expliqué nulle part sur la page.
-
-*Vérifié : 02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (aucun `Link` dans le panneau ; `if (!req) return null` est la seule condition d'affichage ; la redirection vers `/atelier` ne dépend que de `profile.solicitante_state`) et en base (demande `a94cc4c7` approuvée le 02/09 à 21:08, `library_constitution_progress` sans `completed_at`, profil sans état de constitution).*
-
-**Ce que c'est.** **(1)** Sous la phrase d'approbation, un bouton « Aller à l'atelier » vers `/atelier` — la porte dans la page du geste, doctrine du 02/09. **(2)** Une condition de fin : masquer le panneau quand la demande approuvée a sa bibliothèque née (`library_constitution_progress.completed_at` posé, ou `approved_library_ref` renseigné), et replier une demande refusée ou approuvée-achevée derrière une ligne « Historique de mes demandes » plutôt que l'afficher en tête. **(3)** Une phrase d'explication en tête du bloc — « la demande d'adhésion de votre bibliothèque au réseau, et vos échanges avec l'administration réseau pendant son examen » — dix locales. Éprouver avec un compte réellement en constitution (le circuit complet : demande → approbation → redirection → atelier), pas seulement avec la fixture.
-
-**Pourquoi ça compte.** Mon compte est la première page que voit une coordination qui vient d'être acceptée : c'est là que le réseau lui dit « bienvenue, voici ton chantier ». Une porte absente et un bloc qui ne s'éteint jamais y disent le contraire. Le coût est celui d'une soirée.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Même doctrine de la porte que **E12** (f[4]). Le circuit qu'il habille est celui de **G1** (adhésion et constitution) ; la fixture qui l'a révélé appartient à **J2** (Manuel v5, IMAGEM 32).
-
-*Renvois : `src/components/account/MinhaSolicitacaoPanel.jsx` · `src/components/layout/ProtectedRoute.jsx` · `src/pages/atelier/AtelierConstituicaoPage.jsx` · `capture d'écran de Xavier du 02/09 (/conta, contexte BLMF)`*
 
 ---
 
@@ -1557,7 +1529,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I1** | Aligner l'image GoTrue sur l'état réel des migrations d'authentification | `P1` | Gelé |
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Gelé |
 | **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Gelé |
-| **I4** | Finir le témoin de provenance des sauvegardes | `P1` | Ouvert |
 | **I6** | Purger les relevés de la sonde de santé | `P2` | À vérifier |
 | **I8** | Mettre `deploy/README.md` en accord avec ce qui a été exécuté | `P2` | Ouvert |
 | **I10** | Nettoyer les traces de Turnstile et les fichiers de rebut | `P2` | Ouvert |
@@ -1633,35 +1604,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
 
-#### I4 — Finir le témoin de provenance des sauvegardes
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** La migration `20260827180000_temoin_sauvegarde_provenance.sql` est **éprouvée sur un PostgreSQL 16 jetable, avec sept contrôles passés, mais jamais jouée contre la production**. Le correctif `health_probe_provenance.patch` **ne s'applique pas** : `patch failed … index.ts:286`. Il a été produit contre le miroir GitHub. Échéance du 28/08, donc échue.
-
-*Vérifié : 31/08 — la version `20260827180000` n'est ni dans `supabase/migrations/` ni au registre de production (0 ligne). Le fichier n'a pas été retrouvé dans le dépôt. Le mot « provenance » apparaît en revanche dix fois dans le `health-probe/index.ts` du dépôt : la part fonction existe au moins en partie ; la part base, nulle part. Échéance du 28/08 échue.*
-
-**Ce que c'est.** Départager le conflit par `git hash-object` sur le fichier cible, comparé au blob de base `0d00dc0e016fdfb86ef314e4e707abd4a84d1d2c`. **Empreinte identique → `git apply --3way` passe. Empreinte différente → refaire le correctif à la main sur la version réelle : ne pas forcer, ne pas écraser.** Puis déployer `health-probe`.
-
-**Pourquoi ça compte.** Ce que le correctif doit obtenir, quelle que soit la voie : dans le courriel, chaque flux affiche son hôte (ou « aucune ») et une mention explicite quand il s'agit d'un amorçage ; dans la raison de sauvegarde, `(dernière source : …)` ou `(aucun signal reçu)`. Sans cela, un courriel vert ne dit pas d'où vient le vert — et c'est exactement le défaut qui a laissé les sauvegardes échouer 36 heures en silence.
-
-**Ce qui compte comme fini.**
-
-- La migration est posée dans `supabase/migrations/` et appliquée.
-- `health-probe` est déployée avec le comportement de provenance.
-- **`temoin_sauvegarde_provenance.patch` est périmé : à ignorer, ne pas l'appliquer.**
-
-**Dépendances.** Ne pas confondre avec le `snapshot_id` nul sur cinq lignes : le remède tient en trois lignes mais **`anarbib-bg2.sh` vit sur le poste de travail, hors dépôt** — c'est à signaler, pas à tenter depuis le dépôt.
-
-*Renvois : `NOTE_temoin_sauvegarde_2026-08-27` · `REPRISE_claude_code_2026-08-27 chantier 1`*
-
 #### I6 — Purger les relevés de la sonde de santé
 
 `P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
 
 **État.** **Constat corrigé le 31/08 au soir : la purge existe — elle vit dans la sonde elle-même, pas dans un cron.** `health-probe/index.ts` supprime à chaque tour les relevés de plus de `RETENTION_JOURS = 30` jours (vérifié dans le source déployé, pas seulement au dépôt). Elle n'a encore jamais rien supprimé — `n_tup_del = 0` pour 16 268 insertions — pour une raison simple : la table est née le 17/08, plus jeune que sa rétention. Le relevé initial cherchait un *cron* de purge ; le dispositif était dans le corps de la fonction. La forme `DOC-RECENS-1`, une fois de plus — et écrire le cron demandé aurait fait une purge en double.
 
-*Vérifié : 31/08 — source déployé de `health-probe` relu (`RETENTION_JOURS = 30`, purge en fin de tour) ; `pg_stat_user_tables` : 16 268 insertions, **0 suppression**, plus ancien relevé du 17/08 — la naissance de la table, pas un effet de purge. Premier effet attendu vers le **16/09** : c'est là que le constat se prouve.*
+*Vérifié : 31/08 — source déployé de `health-probe` relu (`RETENTION_JOURS = 30`, purge en fin de tour) ; `pg_stat_user_tables` : 16 268 insertions, **0 suppression**, plus ancien relevé du 17/08 — la naissance de la table, pas un effet de purge. Premier effet attendu vers le **16/09** : c'est là que le constat se prouve. **03/09** — relevé : 19 396 relevés, le plus ancien toujours du 17/08 14:36 UTC, aucune suppression (`n_tup_del = 0` — les compteurs ont été remis à zéro par le redémarrage du 02/09, `n_tup_ins = 724` depuis) ; source déployé relu, `RETENTION_JOURS = 30` inchangé. Rien à faire avant le 16/09 : c'est la date où le constat se prouve.*
 
 **Ce que c'est.** Un cron de purge sur le modèle de `anarbib-catalog-audit-snapshot-purge`, avec une rétention à décider — trente jours suffisent probablement, les incidents étant conservés à part dans `service_health_incidents`.
 
@@ -2199,6 +2148,8 @@ CI verte : lint et suite unitaire. |
 | B17 | 2026-09-02 | **L'avertissement immédiat des actions transverses est éprouvé de bout en bout — y compris, ce soir, sur le type pour lequel il a été écrit.** L'étage immédiat livré et éprouvé en envoi réel le 31/08 (ligne #72 rejouée : 200, 3 destinataires, courriel reçu et relu) ne l'avait été que sur la promotion collégiale — un type à trois canaux, où l'immédiat fait doublon. Restait à le voir sur un type **sans autre canal avant le lundi**. Fait le 02/09, en transaction annulée sur `blmf-teste` avec une actrice synthétique (admin réseau fixture, non staff de la biblio — le critère `fn_is_cross_library_action` exclut à raison l'admin qui est aussi staff local, ce qui disqualifiait l'identité de Xavier pour l'épreuve) : `fn_team_suspend_member` → membership `suspended`, **ligne d'outbox `network.cross_library_critical_action` avec `action_type=team_suspend_member`**, ligne de journal — la chaîne SQL exacte qui tombait dans le `else` du handler avant le 31/08. La jambe EF n'a pas besoin d'être rejouée : le handler est agnostique au type (un seul événement, le type ne choisit que le libellé, et `cross-library-strings` porte « Suspension d'une personne de l'équipe » dans les dix locales — vérifié). Sanité post-rollback : Voltairine `active`, l'actrice fixture disparue, zéro ligne résiduelle. **Vu en chemin** : le canal mail de `blmf-teste` est retombé sur `disabled`/`inactive` après l'épreuve G4 — c'est l'hygiène attendue d'une biblio de formation, et la raison de plus pour l'épreuve en transaction. |
 | G5 | 2026-09-02 | **Le drapeau commande quelque chose de réel, il est posé juste, et la Terra Livre n'est pas en mode test.** La fiche regardait `libraries.is_test_mode` : cette colonne **n'existe plus** — la migration du 30/08 (`06f933d7`, « on retire la copie figée et le réglage qui ne réglait rien ») a déjà tranché l'autre moitié de G5 en retirant `email_delivery_mode` et en nommant la vraie colonne. Le drapeau vit dans `library_commons.is_test_mode` (défaut `false`), exposé par la vue `api.library_email_identity`, posé au provisionnement par `fn_provision_preactive_library` et par `register`. **Valeurs le 02/09 : `blmf-teste = true`, les trois bibliothèques réelles = `false`.** Ce qu'il commande, et rien d'autre : le **bandeau « contexte de test »** dans les avis internes d'inscription (`register`, `buildInternalMail` — `isTestContext = is_test_mode OU redirection interne posée`), le même mécanisme que les deux secrets vides-exprès de F7. Aucun front ne le lit, aucune policy, aucun filtre d'affichage : son nom ne ment pas sur sa portée. Des trois issues écrites dans la fiche, c'est la première — et il n'y a rien à demander à la BTL, qui n'a jamais été en mode test ailleurs que dans une colonne morte. **Limite écrite** : le drapeau se pose à la création et n'a pas d'interrupteur ensuite — le jour où une bibliothèque de formation doit devenir réelle (ou l'inverse), c'est un UPDATE de coordination, pas un bouton. |
 | I14 (config.toml et la CI) | 2026-09-02 | **L'angle mort était déjà fermé — depuis le 01/09, par le commit `5e129c54` — et l'item ne l'avait pas suivi.** `deployer-backend.sh` surveille désormais `supabase/config.toml` à côté de `supabase/functions/` (`git diff --name-only <marqueur> <tête> -- supabase/functions/ supabase/config.toml`, ligne 308), redéploie **tout** quand le fichier de configuration bouge, et raconte l'incident du 01/09 dans son propre récit (lignes 244-250 : le commit `c152e7fa` ne changeait que `config.toml`, la CI est restée verte et n'a rien déployé) — la même famille d'angle mort que `--depuis event.before` du 27/08, et la même parade : le journal DIT ce que le diff couvre. **Éprouvé au banc le 02/09**, en local, sur une branche jetable : un commit ne touchant que `config.toml` fait apparaître le fichier dans la liste des déclencheurs — l'étape ne se sauterait plus. **Limite écrite (`DOC-ACTIF-1`)** : aucun push ne changeant que `config.toml` n'a eu lieu depuis le correctif ; l'épreuve en conditions réelles sera le prochain — et c'est le journal du job `backend` qui en fera foi. |
+| E13 | 2026-09-03 | **Livré le matin même, commit `18ac8676`.** Le panneau « Ma demande » de Mon compte (`MinhaSolicitacaoPanel`) fait trois choses qu'il ne faisait pas la veille : **(1)** une phrase en tête dit ce qu'il est — « la demande d'adhésion de votre bibliothèque au réseau, et vos échanges avec l'administration du réseau pendant son examen » ; **(2)** une demande approuvée porte un bouton « Aller à l'atelier de constitution » vers `/atelier` — le circuit réel y emmène d'office quand le profil est en constitution (`LoginPage`, `ProtectedRoute`), mais dès que cet état manque la phrase désignait une adresse à deviner ; **(3)** une condition de fin : demande approuvée dont la bibliothèque est née (`completed_at` de `my_constitution_progress_v1`, lu par la requête filtrée sur la demande) ou refusée depuis plus de trente jours → le bloc se replie derrière « Historique de mes demandes » au lieu de coiffer Mon compte à vie. Dix locales, +3 clés (6 237). Banc 362/362. **Le regard extérieur du circuit complet reste dû** — même exigence qu'E12 f[3], à confier le 13/09 ; la fixture Voltairine qui avait révélé le défaut a été retirée par la session des captures dans la nuit (0 demande depuis le 02/09, vérifié en base le 03/09). |
+| I4 | 2026-09-03 | **Le témoin de provenance était fini depuis le 20/08 — sous d'autres noms que ceux de la fiche.** La fiche cherchait une migration `20260827180000_temoin_sauvegarde_provenance` et un correctif `health_probe_provenance.patch` : ni l'un ni l'autre n'existent nulle part (dépôt, Windows, WSL, transcripts — cherchés le 03/09). Mais ce qu'ils devaient produire est **en production** : *(base)* `fn_backup_heartbeat_status` expose `host`, `temoin_amorcage` (= « aucun témoin réel, ligne d'amorçage ») et `instantane_atteste` — posés par `20260820012343_backup_heartbeat_status_expose_host_et_amorcage`, affinés jusqu'à `20260901101901` ; le 03/09 les trois flux répondent `host = ACCATTONE`, `temoin_amorcage = false`, `instantane_atteste = true` (instantanés `973e398e`, `fb17d44c`, `e1428cff`). *(fonction)* la `health-probe` **déployée** (source relu via l'API le 03/09, pas seulement le dépôt) rend cette provenance dans chaque incident et chaque courriel (`provenanceTexte` / `provenanceHtml`, commit `ba0d2433` « le champ qui devait éclairer l'angle mort n'était lu par personne »). Forme `DOC-RECENS-1` : la fiche décrivait comme à faire un chantier fait sous un autre nom. Deux fantômes à ne plus chercher : la migration `…180000` et les deux `.patch`. |
 
 ---
 
@@ -2230,4 +2181,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-02 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `360d25b3` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
