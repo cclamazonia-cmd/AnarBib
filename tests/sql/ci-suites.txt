@@ -385,3 +385,8 @@ tests/sql/conv_casse_second_semis_tests.sql
 # la proposition est un point de depart, rien pour plusieurs personnes (CONV-O8).
 # Ref. 20260903170329.
 tests/sql/conv_forme_tests.sql
+
+# Evidences de l'audit du 03/09 (decision Xavier du soir : « corrige ce qui est evident »).
+# 1/4 fusion d'un doublon EXACT (cles normalisees qui se recoupent), corps de merge_author recopie. Ref. 20260903182352.
+tests/sql/conv_evidence_fusions_tests.sql
+# 2/4 retrait d'un non-agent (« ?? », « identificado, Nao », un titre) : le nom reste sur le contributeur. Ref. 20260903182353.
