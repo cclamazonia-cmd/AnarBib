@@ -1751,6 +1751,14 @@
           "fr": "**Le témoin de provenance était fini depuis le 20/08 — sous d'autres noms que ceux de la fiche.** La fiche cherchait une migration `20260827180000_temoin_sauvegarde_provenance` et un correctif `health_probe_provenance.patch` : ni l'un ni l'autre n'existent nulle part (dépôt, Windows, WSL, transcripts — cherchés le 03/09). Mais ce qu'ils devaient produire est **en production** : *(base)* `fn_backup_heartbeat_status` expose `host`, `temoin_amorcage` (= « aucun témoin réel, ligne d'amorçage ») et `instantane_atteste` — posés par `20260820012343_backup_heartbeat_status_expose_host_et_amorcage`, affinés jusqu'à `20260901101901` ; le 03/09 les trois flux répondent `host = ACCATTONE`, `temoin_amorcage = false`, `instantane_atteste = true` (instantanés `973e398e`, `fb17d44c`, `e1428cff`). *(fonction)* la `health-probe` **déployée** (source relu via l'API le 03/09, pas seulement le dépôt) rend cette provenance dans chaque incident et chaque courriel (`provenanceTexte` / `provenanceHtml`, commit `ba0d2433` « le champ qui devait éclairer l'angle mort n'était lu par personne »). Forme `DOC-RECENS-1` : la fiche décrivait comme à faire un chantier fait sous un autre nom. Deux fantômes à ne plus chercher : la migration `…180000` et les deux `.patch`.",
           "pt": "**A testemunha de proveniência estava pronta desde 20/08 — com outros nomes.** A migração `20260827180000` e o patch `health_probe_provenance.patch` não existem em lado nenhum (procurados em 03/09). Mas o que deviam produzir está **em produção**: `fn_backup_heartbeat_status` expõe `host`, `temoin_amorcage` e `instantane_atteste` (desde `20260820012343`); a `health-probe` **implantada** (fonte relida pela API em 03/09) mostra essa proveniência em cada incidente e e-mail. Forma `DOC-RECENS-1`. Dois fantasmas a não procurar mais."
         }
+      ],
+      [
+        "H1",
+        "2026-09-03",
+        {
+          "fr": "**Les 159 dates sont en base, avec libellé et liens — et l'épreuve a trouvé un second retour précoce.** Le correctif que la fiche disait « jamais éprouvé contre le site » était commité depuis le 27/08 (`04b86dd7`, `36d33bfc`) avec son test ; ce qui manquait, c'était l'aspiration. Faite le 03/09 (623 fiches, concurrence 2, un 503 du site absorbé par une reprise à 90 s) : les 161 dates sortent avec leur `title_fr`… **mais sans leurs liens** — Placard et Cartoliste pointent bien vers chaque année, et la section des liens venait *après* les deux retours précoces, exactement comme le H1 la veille. `collectCatalogLinks` est désormais appelée en tête de `parseDescriptor` (`2f314f15`) ; ré-aspiration : 159 dates avec libellé, 147 avec liens (275 liens), 2 fiches nues sur 623. **Synchro en base le 03/09** à la sémantique du script (upsert sur `mot_id`, jamais de purge) mais par la base directement, la CLI masquant les clés secrètes et la clé legacy étant désactivée depuis la veille : 159 dates nouvelles, 32 fiches mises à jour (l'astérisque final des libellés portugais, détaché par le scraper depuis le 28/08 et jamais synchronisé depuis le 30/06), 430 inchangées ; `harvested_at` 03/09 sur les 621 ; `subject_ficedl_links` intact (98). Contrôle : « 1936 » → Placard `mot6725` + Cartoliste `parution&date=1936`. Deux pièges tenus : `--json` explicite, pas de `--prune`. Reste hors fiche : le domaine `bianco.ficedl.info` n'est pas dans `CATALOG_HOSTS` (les dates y renvoient aussi) — à décider avec le thésaurus, pas ici.",
+          "pt": "**As 159 datas estão na base, com rótulo e links — e a prova encontrou um segundo retorno precoce.** O corretivo estava commitado desde 27/08 com o seu teste; faltava a aspiração. Feita em 03/09: as datas saíam com `title_fr` **mas sem links** — a secção dos links vinha *depois* dos retornos precoces. `collectCatalogLinks` passa a ser chamada no início de `parseDescriptor` (`2f314f15`); nova aspiração: 159 datas com rótulo, 147 com links (275). **Sincronização em 03/09** com a semântica do script (upsert por `mot_id`, sem purga), pela base diretamente: 159 novas, 32 atualizadas, 430 inalteradas; `subject_ficedl_links` intacto. Fica fora da ficha: `bianco.ficedl.info` não está em `CATALOG_HOSTS`."
+        }
       ]
     ]
   },
@@ -3908,57 +3916,6 @@
         "REGISTRE §26 ONBO-Q13",
         "spec-onboarding-biblioteca-v2.0"
       ]
-    },
-    {
-      "id": "H1",
-      "d": "H",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "deno",
-        "biblio"
-      ],
-      "t": {
-        "fr": "Réparer l'aspiration des 158 descripteurs de dates du thésaurus",
-        "pt": "Reparar a coleta dos 158 descritores de datas do tesauro"
-      },
-      "v": {
-        "fr": "`parseDescriptor` sort par retour précoce avant d'atteindre le titre de page quand une fiche n'a pas de bloc de traduction. Résultat : **158 descripteurs de la facette « dates », soit un quart du thésaurus, sont enregistrés comme identifiants nus, sans libellé, donc non alignables.** Leurs liens vers les catalogues se perdent de la même façon. Le correctif `ficedl_scrape_titre_dates.patch` existe, passe `node --check`, et **n'a jamais été éprouvé contre le site**.",
-        "pt": "`parseDescriptor` sai por retorno antecipado antes de alcançar o título de página quando uma ficha não tem bloco de tradução. Resultado: **158 descritores da faceta «datas», ou seja um quarto do tesauro, são registrados como identificadores nus, sem rótulo, portanto não alinháveis.** Seus vínculos com os catálogos se perdem da mesma forma. A correção `ficedl_scrape_titre_dates.patch` existe, passa `node --check`, e **nunca foi testada contra o site**."
-      },
-      "w": {
-        "fr": "Appliquer le correctif, qui relève le titre de page avant les retours précoces et le range dans un champ `title_fr` **distinct de `labels`** — une date a un libellé canonique mais pas de traduction.",
-        "pt": "Aplicar a correção, que capta o título de página antes dos retornos antecipados e o guarda num campo `title_fr` **distinto de `labels`** — uma data tem um rótulo canônico mas não uma tradução."
-      },
-      "y": {
-        "fr": "Un quart du thésaurus est aujourd'hui inutilisable. Et il faut le réparer **au moment d'une aspiration déjà prévue**, pas en lançant 620 requêtes spécialement : l'hébergeur du thésaurus a signalé une charge robots excessive.",
-        "pt": "Um quarto do tesauro está hoje inutilizável. E é preciso repará-lo **no momento de uma coleta já prevista**, não lançando 620 requisições especialmente: o provedor do tesauro sinalizou uma carga de robôs excessiva."
-      },
-      "f": {
-        "fr": [
-          "Les 158 descripteurs de dates portent un libellé.",
-          "La vérification s'est faite lors d'une aspiration prévue.",
-          "Deux pièges du script de synchronisation à ne pas redécouvrir : **toujours passer `--json` explicitement** (un fichier sans date trie avant les fichiers datés) et **ne jamais utiliser `--prune`** (il supprimerait des descripteurs référencés par `subject_ficedl_links`)."
-        ],
-        "pt": [
-          "Os 158 descritores de datas trazem um rótulo.",
-          "A verificação se fez durante uma coleta prevista.",
-          "Duas armadilhas do script de sincronização a não redescobrir: **sempre passar `--json` explicitamente** (um arquivo sem data ordena antes dos arquivos datados) e **nunca usar `--prune`** (suprimiria descritores referenciados por `subject_ficedl_links`)."
-        ]
-      },
-      "dep": {
-        "fr": "Prévu semaine du 14/09. Abandonnable sans regret si le temps manque avant Bologne.",
-        "pt": "Previsto para a semana de 14/09. Abandonável sem arrependimento se faltar tempo antes de Bolonha."
-      },
-      "r": [
-        "REPRISE_claude_code_2026-08-27 chantier 3",
-        "NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
-      ],
-      "verif": {
-        "fr": "31/08 — précision au constat : les 158 descripteurs de la facette « dates » sont sans libellé dans le **JSON d'aspiration** (`tmp-ficedl/ficedl_thesaurus.json` : 620 termes, 158/158 nus) ; la table `ficedl_thesaurus_terms`, elle, n'en porte **aucun** — 462 lignes, facettes sujets et géo seulement. En base ils ne sont pas « nus » : ils manquent. Le correctif n'a toujours pas été éprouvé contre le site.",
-        "pt": "31/08 — precisão: os 158 descritores de datas estão sem rótulo no **JSON de aspiração** (620 termos); a tabela não traz **nenhum** deles — 462 linhas, só facetas assuntos e geo. No banco eles não estão « nus »: faltam. O corretivo segue sem prova contra o site."
-      }
     },
     {
       "id": "H2",
