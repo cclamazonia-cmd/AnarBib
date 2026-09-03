@@ -257,6 +257,13 @@ function parseDescriptor(id, raw) {
   const h1 = getH1(raw);
   if (h1) rec.title_fr = h1;
 
+  // Les liens de catalogue aussi se relèvent AVANT les retours précoces (03/09) :
+  // une fiche « dates » n'a pas de bloc de traduction mais renvoie bel et bien vers
+  // Placard et Bianco (« 1880 » → placard.ficedl.info/mot6669, bianco.ficedl.info/
+  // mot9851). Les relever après le bloc, c'était les perdre pour 160 fiches, exactement
+  // comme le libellé la veille — l'épreuve contre le site du 03/09 l'a montré.
+  collectCatalogLinks(raw, rec);
+
   const region = findRegion(text);
   if (!region) {
     rec.flags.push("no_translation_block");
@@ -332,7 +339,12 @@ function parseDescriptor(id, raw) {
   rec.hierarchy = levels;
   rec.depth = levels.length;
 
-  // liens catalogues (cross-catalogues du réseau), scopés par hôte connu
+  return rec;
+}
+
+// liens catalogues (cross-catalogues du réseau), scopés par hôte connu — relevés
+// pour TOUTE fiche, traduite ou non (voir parseDescriptor).
+function collectCatalogLinks(raw, rec) {
   const anchorRe = /<a\b([^>]*\bclass="spip_out"[^>]*)>([\s\S]*?)<\/a>/gi;
   const seen = new Set();
   let a;
@@ -347,8 +359,6 @@ function parseDescriptor(id, raw) {
     seen.add(url);
     rec.catalog_links.push({ name: title || label, href: url });
   }
-
-  return rec;
 }
 
 // --- audit des coquilles ----------------------------------------------------
