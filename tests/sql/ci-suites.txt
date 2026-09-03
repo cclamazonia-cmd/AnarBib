@@ -353,3 +353,10 @@ tests/sql/facilitateur_nom_scope_tests.sql
 # (book_contributors.author_id), cree l'autorite au besoin, ne reecrit jamais
 # books.autor. Ref. 20260903150117.
 tests/sql/conv_c5_autor_sans_autorite_tests.sql
+
+# Audit des autorites du 03/09 (A1') : 17 formes d'affichage restees en capitales
+# apres correction du point d'acces le 21/08 (« Simone DE BEAUVOIR » sous
+# « Beauvoir, Simone de »). La regle CONV-2 vit dans fn_conv_preferred_name_derive,
+# gardee : casse naturelle du point d'acces, egalite sans casse, ni collectivite.
+# Ref. 20260903164241.
+tests/sql/conv_a1prime_preferred_name_tests.sql
