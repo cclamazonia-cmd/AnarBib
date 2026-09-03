@@ -447,7 +447,7 @@ export default function AtelierAutoridadesPage() {
             21/08). Une page dont le texte annonce « le corpus partage
             d'autorites » ne peut pas heberger la correction des notices. */}
         <ConvRevuePanel
-          lots={['autorite_patronyme', 'autorite_casse', 'autorite_collectivite']}
+          lots={['autorite_patronyme', 'autorite_casse', 'autorite_collectivite', 'autor_sans_autorite']}
           titleKey="atelier.revue.title"
           introKey="atelier.revue.intro" />
 

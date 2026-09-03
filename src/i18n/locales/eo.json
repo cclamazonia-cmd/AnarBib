@@ -6244,5 +6244,8 @@
   "catalogacao.serialDetail.frequencyOption.quarterly": "Trimonata",
   "catalogacao.serialDetail.frequencyOption.biannual": "Duonjara",
   "catalogacao.serialDetail.frequencyOption.annual": "Jara",
-  "catalogacao.serialDetail.frequencyOption.irregular": "Neregula"
+  "catalogacao.serialDetail.frequencyOption.irregular": "Neregula",
+  "atelier.revue.lot.autor": "Aŭtoroj sen aŭtoritato",
+  "atelier.revue.lot.autor.hint": "C5 · la transskribo restas; «apliki» kreas la aŭtoritaton kaj ligas la unuan nomon",
+  "bibliotecas.rssFeed": "Novaĵoj (RSS)"
 }

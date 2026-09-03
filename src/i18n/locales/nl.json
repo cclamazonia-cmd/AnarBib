@@ -6244,5 +6244,8 @@
   "catalogacao.serialDetail.frequencyOption.quarterly": "Driemaandelijks",
   "catalogacao.serialDetail.frequencyOption.biannual": "Halfjaarlijks",
   "catalogacao.serialDetail.frequencyOption.annual": "Jaarlijks",
-  "catalogacao.serialDetail.frequencyOption.irregular": "Onregelmatig"
+  "catalogacao.serialDetail.frequencyOption.irregular": "Onregelmatig",
+  "atelier.revue.lot.autor": "Auteurs zonder autoriteit",
+  "atelier.revue.lot.autor.hint": "C5 · de transcriptie blijft; “toepassen” maakt de autoriteit aan en koppelt de eerste naam",
+  "bibliotecas.rssFeed": "Nieuw binnen (RSS)"
 }

@@ -348,3 +348,8 @@ tests/sql/une_vue_appelle_aussi_tests.sql
 # ricochet — n'existe plus ; la vue appelante recree en security_invoker.
 # Ref. 20260902183505.
 tests/sql/facilitateur_nom_scope_tests.sql
+
+# C5 = B (03/09/2026) : le lot autor_sans_autorite — appliquer POSE UN LIEN
+# (book_contributors.author_id), cree l'autorite au besoin, ne reecrit jamais
+# books.autor. Ref. 20260903150117.
+tests/sql/conv_c5_autor_sans_autorite_tests.sql

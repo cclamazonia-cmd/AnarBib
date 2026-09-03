@@ -33,6 +33,10 @@ const CLE_DE_LOT = {
   autorite_casse:        'casse',
   autorite_collectivite: 'collectivite',
   titre_casse:           'titres',
+  // C5 = B (03/09) : les livres dont aucun contributeur ne porte d'autorité.
+  // Ici « appliquer » ne réécrit pas un texte, il POSE UN LIEN (et crée
+  // l'autorité au besoin) — voir 20260903150117.
+  autor_sans_autorite:   'autor',
 };
 
 // Les trois vues forment une PARTITION : chaque ligne est dans exactement une

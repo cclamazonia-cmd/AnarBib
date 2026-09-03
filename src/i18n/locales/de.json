@@ -6244,5 +6244,8 @@
   "catalogacao.serialDetail.frequencyOption.quarterly": "Vierteljährlich",
   "catalogacao.serialDetail.frequencyOption.biannual": "Halbjährlich",
   "catalogacao.serialDetail.frequencyOption.annual": "Jährlich",
-  "catalogacao.serialDetail.frequencyOption.irregular": "Unregelmäßig"
+  "catalogacao.serialDetail.frequencyOption.irregular": "Unregelmäßig",
+  "atelier.revue.lot.autor": "Verfasser ohne Normdatensatz",
+  "atelier.revue.lot.autor.hint": "C5 · die Transkription bleibt; „anwenden“ legt den Normdatensatz an und verknüpft den ersten Namen",
+  "bibliotecas.rssFeed": "Neuzugänge (RSS)"
 }

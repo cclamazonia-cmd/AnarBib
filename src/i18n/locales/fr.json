@@ -6244,5 +6244,8 @@
   "catalogacao.serialDetail.frequencyOption.quarterly": "Trimestriel",
   "catalogacao.serialDetail.frequencyOption.biannual": "Semestriel",
   "catalogacao.serialDetail.frequencyOption.annual": "Annuel",
-  "catalogacao.serialDetail.frequencyOption.irregular": "Irrégulier"
+  "catalogacao.serialDetail.frequencyOption.irregular": "Irrégulier",
+  "atelier.revue.lot.autor": "Auteurs sans autorité",
+  "atelier.revue.lot.autor.hint": "C5 · la transcription reste ; « appliquer » crée l’autorité et lie le premier nom",
+  "bibliotecas.rssFeed": "Nouveautés (RSS)"
 }
