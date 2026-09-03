@@ -2402,8 +2402,8 @@
         "AUDIT_conventions_catalographiques_2026-08-20"
       ],
       "verif": {
-        "fr": "31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes.",
-        "pt": "31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria."
+        "fr": "31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes. **03/09** — instruit dans la page des cinq décisions (`docs/journal/arbitrages/DECISIONS_bloc3_cinq_questions_2026-09-03.md`) : 226 livres sans lien `authors` (BTL 138, MLEG 52, BLMF 36), 121 chaînes multi-personnes, 8 `autor` encore écrits par le formulaire depuis le 01/08 ; options A déprécier / B forme transcrite / C différer — **recommandé B**. Verdict attendu.",
+        "pt": "31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria. **03/09** — instruído na página das cinco decisões: 226 livros sem ligação a `authors`, 121 cadeias multi-pessoas; opções A/B/C — **recomendado B**. Veredito pendente."
       }
     },
     {
@@ -2594,8 +2594,8 @@
         "REGISTRE §37 CONV-6, CONV-O1..O8"
       ],
       "verif": {
-        "fr": "31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes.",
-        "pt": "31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si."
+        "fr": "31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes. **03/09** — un verdict proposé par question dans la page des cinq décisions (O1 oui ; O2 convention provisoire ; O3 = C5 ; O4 pas de bascule sans déclencheur ; O5 le périmètre est la file ; O6 garde stricte + rafraîchissement ; O7 `authority_type` est la vérité ; O8 pas de scission avant la quatrième) ; file : collectivités 14 appliqués, 2 à revoir ; 1 241 autorités non typées. **Recommandé A**. Verdict attendu.",
+        "pt": "31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si. **03/09** — um veredito proposto por pergunta na página das cinco decisões. **Recomendado A**. Veredito pendente."
       }
     },
     {
@@ -2687,7 +2687,11 @@
       },
       "r": [
         "spec-periodiques-v0.1 §13"
-      ]
+      ],
+      "verif": {
+        "fr": " **03/09** — les cinq tranchées dans la page des cinq décisions, en accord avec le code livré (libre + suggestions ; deux liens ; pas de `library_id` ; geste, pas seuil ; page dédiée) ; 4 titres en base, `periodicidade` jamais renseignée. **Recommandé A**. Verdict attendu.",
+        "pt": " **03/09** — as cinco decididas na página das cinco decisões, em acordo com o código. **Recomendado A**. Veredito pendente."
+      }
     },
     {
       "id": "D3",
@@ -3398,7 +3402,11 @@
       "r": [
         "REGISTRE §18 OPAC-RSS1",
         "AnarBib-Backlog-2026-06-17-v33 §2.4"
-      ]
+      ],
+      "verif": {
+        "fr": " **03/09** — instruits dans la page des cinq décisions : un tag signé révèle la lecture, un tag anonyme ne se modère pas ; l'URL d'un flux de recherche porte la requête en clair. **Recommandé : fermer #OPAC5, requalifier #OPAC11 en flux des nouveautés par bibliothèque**. Verdict attendu.",
+        "pt": " **03/09** — instruídos na página das cinco decisões. **Recomendado: fechar #OPAC5, requalificar #OPAC11**. Veredito pendente."
+      }
     },
     {
       "id": "E12",
@@ -4537,8 +4545,8 @@
         "pt": "Nenhuma — é uma arbitragem, não um canteiro."
       },
       "verif": {
-        "fr": "01/09 — relevé des imports : `grep supabase-js@ supabase/functions -r` → 1 épinglé (`env.ts`), 29 en `@2`, 1 en `@2` via npm:.",
-        "pt": "01/09 — levantamento dos imports: `grep supabase-js@ supabase/functions -r` → 1 fixado (`env.ts`), 29 em `@2`, 1 em `@2` via npm:."
+        "fr": "01/09 — relevé des imports : `grep supabase-js@ supabase/functions -r` → 1 épinglé (`env.ts`), 29 en `@2`, 1 en `@2` via npm:. **03/09** — relevé : 1 épinglé (`2.112.4`), 16 `esm.sh …@2`, 14 `npm:…@2` ; options A tout épingler en un seul module `_shared/deps.ts` avec rituel daté / B tout flotter — **recommandé A**, dans la page des cinq décisions. Verdict attendu.",
+        "pt": "01/09 — levantamento dos imports: `grep supabase-js@ supabase/functions -r` → 1 fixado (`env.ts`), 29 em `@2`, 1 em `@2` via npm:. **03/09** — 1 fixado, 30 flutuantes; opções A fixar tudo num só módulo / B flutuar — **recomendado A**. Veredito pendente."
       },
       "r": [
         "supabase/functions/_shared/core/env.ts",

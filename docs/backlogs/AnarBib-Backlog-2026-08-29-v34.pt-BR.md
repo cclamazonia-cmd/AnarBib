@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **2 de setembro de 2026** — atualização dirigida ao fim da noite, após o dia B20/B21/J7/J8 e depois B18, F7, G2, H5, B17, G5, I14 e os três lotes de E12: só as linhas que a campanha moveu foram remedidas (direitos, migrações, crons, repositório); as volumetrias de acervo seguem as de 1º de setembro. Banco de produção consultado em leitura; repositório no commit `360d25b3`. Estes números não são estimativas: são a resposta de uma consulta ou de um `ls`. Vão vencer rápido — é normal, e é por isso que são datados. **A data deste título é gerada a partir desta fonte.**
 
-**Frescor dos constatos em 2026-09-02.** **46 itens de 68** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-02.** **48 itens de 68** trazem uma verificação datada própria (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D2, D3, D6, E2, E5, E6, E7, E8, E9, E11, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Os **20** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -618,7 +618,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `CONV-O3` está aberto: depreciar `books.autor` agora, ou na Oficina? O campo coexiste com a tabela `authors` e carrega os mesmos defeitos **piores** — encontram-se lá `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. A auditoria de 20/08 o deixou explicitamente fora do perímetro: sua dívida não está quantificada.
 
-*Verificado : 31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria.*
+*Verificado : 31/08 — dívida quantificada: 2 653 livros de 2 659 com `autor` não vazio, 1 629 valores distintos, e **231 livros sem nenhum vínculo com `authors`** — para eles o campo livre é a única informação de autoria. **03/09** — instruído na página das cinco decisões: 226 livros sem ligação a `authors`, 121 cadeias multi-pessoas; opções A/B/C — **recomendado B**. Veredito pendente.*
 
 **O que é.** Primeiro quantificar: quantos registros têm um `autor` sem contribuidor vinculado, e como é o conteúdo. Depois decidir: depreciação imediata com migração dos valores recuperáveis, ou conservação como forma transcrita no sentido do `P3` dos periódicos.
 
@@ -705,7 +705,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `CONV-6` continua «a confirmar» e `CONV-O1` a `CONV-O8` estão abertos. Dois deles carregam trabalho quantificado: `CONV-O7` (o tipo de autoridade existe mas continua ilegível pelo SQL — **16 vereditos de coletividades faltam**) e `CONV-O8` (a cisão de autoridade não existe — **3 separações faltam**).
 
-*Verificado : 31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si.*
+*Verificado : 31/08 — dos 16 vereditos de coletividades, **14 estão postos** (2 a rever); `authority_type`: 19 `collective`, 45 `person`, 1 241 sem tipo. A cisão de autoridade continua inexistente no banco. Nada medido sobre as oito questões em si. **03/09** — um veredito proposto por pergunta na página das cinco decisões. **Recomendado A**. Veredito pendente.*
 
 **O que é.** Decidir as oito numa sessão, apoiando-se no acervo real: `name_lang` distinto de `country` ou não, convenções das coletividades, destino de `books.autor` (ver **C5**), critério de mudança para EDTF, perímetro da tela de verificação, e os dois lotes manuais.
 
@@ -761,7 +761,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** Cinco arbitragens ficaram pendentes na spec, com uma inclinação escrita para cada uma: vocabulário de `periodicidade` livre ou fechado; filiação n-n ou dois vínculos simples; `serials` deve levar um `library_id`; promoção automática de um título proposto; página pública dedicada ou faceta.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado :  **03/09** — as cinco decididas na página das cinco decisões, em acordo com o código. **Recomendado A**. Veredito pendente.*
 
 **O que é.** Decidi-las sobre casos reais em vez de no abstrato — o acervo Anarchief (cerca de cem títulos desde 1860) e o acervo SOLIDAIRES (12 títulos, 91 fascículos) são a matéria para testar.
 
@@ -1105,7 +1105,7 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 
 **Estado.** `#OPAC5` (folksonomia, tags postas pelas leitoras) está bloqueado numa decisão de comunidade e de privacidade. `#OPAC11` (feed RSS de busca) está adiado por razão antirrastreamento. Os dois estão abertos desde maio e nunca foram instruídos.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado :  **03/09** — instruídos na página das cinco decisões. **Recomendado: fechar #OPAC5, requalificar #OPAC11**. Veredito pendente.*
 
 **O que é.** Instruí-los de uma vez: o que uma tag pública revela sobre quem a pôs, e o que um feed RSS revela sobre quem o segue? Depois decidir, ou fechar.
 
@@ -1724,7 +1724,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** O `_shared/core/env.ts` fixa `supabase-js@2.112.4` (antes de 01/09: `2.49.1`, sessenta versões para trás durante meses); as vinte e nove outras funções importam `@2` flutuante, resolvido no deploy. O dia 01/09 mostrou o que esse regime misto produz: as flutuantes tinham absorvido em silêncio o suporte às chaves `sb_` enquanto a fixada o ignorava — o diagnóstico de compatibilidade errou exatamente aí.
 
-*Verificado : 01/09 — levantamento dos imports: `grep supabase-js@ supabase/functions -r` → 1 fixado (`env.ts`), 29 em `@2`, 1 em `@2` via npm:.*
+*Verificado : 01/09 — levantamento dos imports: `grep supabase-js@ supabase/functions -r` → 1 fixado (`env.ts`), 29 em `@2`, 1 em `@2` via npm:. **03/09** — 1 fixado, 30 flutuantes; opções A fixar tudo num só módulo / B flutuar — **recomendado A**. Veredito pendente.*
 
 **O que é.** Decidir: fixar tudo (deploys reproduzíveis, mas é preciso um ritual de subida de versão, senão repete-se o caso das sessenta versões de atraso) ou deixar tudo flutuar (sempre em dia, mas uma ruptura maior da biblioteca chega em produção sem avisar). Um ou outro — não a mistura atual.
 

@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **2 septembre 2026** — rafraîchissement ciblé en fin de soirée, après la journée B20/B21/J7/J8 puis B18, F7, G2, H5, B17, G5, I14 et les trois lots d'E12 : seules les lignes que la campagne a fait bouger ont été remesurées (droits, migrations, crons, dépôt), les volumétries métier restent celles du 1ᵉʳ septembre. Base de production `uflwmikiyjfnikiphtcp` interrogée en lecture seule ; dépôt `codeberg.org/anarbib/anarbib` au commit `360d25b3`. Ces chiffres ne sont pas des estimations : ils sont la réponse d'une requête ou d'un `ls`. Ils périmeront vite — c'est normal, et c'est la raison pour laquelle ils sont datés. **La date de ce titre est engendrée depuis cette source.**
 
-**Fraîcheur des constats au 2026-09-02.** **46 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D3, D6, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-02.** **48 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C5, C7, C8, C9, C10, D2, D3, D6, E2, E5, E6, E7, E8, E9, E11, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, I16, J2, J6, K2). Les **20** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -618,7 +618,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 **État.** `CONV-O3` est ouvert : déprécier `books.autor` maintenant, ou à l'Atelier ? Le champ coexiste avec la table `authors` et porte les mêmes défauts **en pire** — on y trouve `identificado, Não`, `REICH, Hilhem`, `Rosamund Bartlett (Org.)`. L'audit du 20/08 l'a explicitement laissé hors périmètre : sa dette n'est pas chiffrée.
 
-*Vérifié : 31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes.*
+*Vérifié : 31/08 — dette chiffrée en lecture seule : 2 653 livres sur 2 659 portent un `autor` non vide, 1 629 valeurs distinctes, et **231 livres n'ont aucun lien vers `authors`** — pour eux, le champ libre est aujourd'hui la seule information d'auteur. Le déprécier sans reprise les rendrait anonymes. **03/09** — instruit dans la page des cinq décisions (`docs/journal/arbitrages/DECISIONS_bloc3_cinq_questions_2026-09-03.md`) : 226 livres sans lien `authors` (BTL 138, MLEG 52, BLMF 36), 121 chaînes multi-personnes, 8 `autor` encore écrits par le formulaire depuis le 01/08 ; options A déprécier / B forme transcrite / C différer — **recommandé B**. Verdict attendu.*
 
 **Ce que c'est.** D'abord chiffrer : combien de notices ont un `autor` sans contributeur lié, et à quoi ressemble le contenu. Puis trancher : dépréciation immédiate avec migration des valeurs récupérables, ou conservation comme forme transcrite au sens de `P3` des périodiques.
 
@@ -705,7 +705,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 **État.** `CONV-6` reste « à confirmer » et `CONV-O1` à `CONV-O8` sont ouverts. Deux d'entre eux portent du travail chiffré : `CONV-O7` (le type d'autorité existe mais reste illisible par le SQL — **16 verdicts de collectivités restent à poser**) et `CONV-O8` (la scission d'autorité n'existe pas — **3 découpages restent**).
 
-*Vérifié : 31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes.*
+*Vérifié : 31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes. **03/09** — un verdict proposé par question dans la page des cinq décisions (O1 oui ; O2 convention provisoire ; O3 = C5 ; O4 pas de bascule sans déclencheur ; O5 le périmètre est la file ; O6 garde stricte + rafraîchissement ; O7 `authority_type` est la vérité ; O8 pas de scission avant la quatrième) ; file : collectivités 14 appliqués, 2 à revoir ; 1 241 autorités non typées. **Recommandé A**. Verdict attendu.*
 
 **Ce que c'est.** Trancher les huit en une session, en s'aidant du fonds réel : `name_lang` distinct de `country` ou non, conventions des collectivités, sort de `books.autor` (voir **C5**), critère de bascule EDTF, périmètre de l'écran de vérification, et les deux lots manuels.
 
@@ -761,7 +761,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 **État.** Cinq arbitrages étaient laissés en attente dans la spec, avec un penchant écrit pour chacun : vocabulaire de `periodicidade` libre ou fermé ; filiation n-n ou deux liens simples ; `serials` doit-elle porter un `library_id` ; promotion automatique d'un titre proposé ; page publique dédiée ou facette.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié :  **03/09** — les cinq tranchées dans la page des cinq décisions, en accord avec le code livré (libre + suggestions ; deux liens ; pas de `library_id` ; geste, pas seuil ; page dédiée) ; 4 titres en base, `periodicidade` jamais renseignée. **Recommandé A**. Verdict attendu.*
 
 **Ce que c'est.** Les trancher sur des cas réels plutôt que dans l'abstrait — le fonds Anarchief (une centaine de titres depuis 1860) et le fonds SOLIDAIRES (12 titres, 91 fascicules) sont la matière à éprouver.
 
@@ -1105,7 +1105,7 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 
 **État.** `#OPAC5` (folksonomie, tags posés par les lectrices) est bloqué sur une décision de communauté et de vie privée. `#OPAC11` (flux RSS de recherche) est différé pour raison anti-pistage. Les deux sont ouverts depuis mai et n'ont jamais été instruits.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié :  **03/09** — instruits dans la page des cinq décisions : un tag signé révèle la lecture, un tag anonyme ne se modère pas ; l'URL d'un flux de recherche porte la requête en clair. **Recommandé : fermer #OPAC5, requalifier #OPAC11 en flux des nouveautés par bibliothèque**. Verdict attendu.*
 
 **Ce que c'est.** Les instruire une bonne fois : qu'est-ce qu'un tag public révèle de qui l'a posé, et qu'est-ce qu'un flux RSS révèle de qui le suit ? Puis trancher, ou fermer.
 
@@ -1738,7 +1738,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** `_shared/core/env.ts` épingle `supabase-js@2.112.4` (avant le 01/09 : `2.49.1`, restée soixante versions en arrière pendant des mois) ; les vingt-neuf autres fonctions importent `@2` flottant, résolu au déploiement. Le 01/09 a montré ce que produit ce régime mixte : les flottantes avaient absorbé silencieusement le support des clés `sb_` pendant que l'épinglée l'ignorait — le diagnostic de compatibilité s'est trompé précisément là-dessus.
 
-*Vérifié : 01/09 — relevé des imports : `grep supabase-js@ supabase/functions -r` → 1 épinglé (`env.ts`), 29 en `@2`, 1 en `@2` via npm:.*
+*Vérifié : 01/09 — relevé des imports : `grep supabase-js@ supabase/functions -r` → 1 épinglé (`env.ts`), 29 en `@2`, 1 en `@2` via npm:. **03/09** — relevé : 1 épinglé (`2.112.4`), 16 `esm.sh …@2`, 14 `npm:…@2` ; options A tout épingler en un seul module `_shared/deps.ts` avec rituel daté / B tout flotter — **recommandé A**, dans la page des cinq décisions. Verdict attendu.*
 
 **Ce que c'est.** Trancher : tout épingler (déploiements reproductibles, mais il faut un rituel de montée de version, sinon on refait le coup des soixante versions de retard) ou tout flotter (toujours à jour, mais une rupture majeure de la bibliothèque arrive en production sans prévenir). L'un ou l'autre — pas le mélange actuel.
 
