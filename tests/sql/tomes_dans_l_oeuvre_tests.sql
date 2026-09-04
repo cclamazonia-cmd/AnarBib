@@ -15,7 +15,7 @@ DO $$
 DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
   v_staff uuid := '11111111-1111-1111-1111-111111111111';
-  v_author bigint; v_w1 bigint; v_w2 bigint; v_w3 bigint; v_b1 bigint; v_b2 bigint; v_b3 bigint; v_b4 bigint;
+  v_author bigint; v_w1 bigint; v_w2 bigint; v_w3 bigint; v_b1 bigint; v_b2 bigint; v_b3 bigint; v_b4 bigint; v_b5 bigint;
   v_n int; v_key text; v_id bigint; v_txt text;
 BEGIN
   -- ── Fixtures : BTL a mis deux tomes dans une oeuvre, MLEG un tome par oeuvre ; un homonyme sans tome
@@ -70,30 +70,47 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T4 « meme oeuvre en plusieurs volumes » : numeros poses, une seule oeuvre, les vides supprimees';
+  v_t := 'T4 « meme oeuvre en plusieurs volumes » sur trois des quatre : numeros poses, une seule oeuvre, les vides supprimees, et le groupe ne revient pas';
   BEGIN
+    SELECT s.group_key INTO v_key FROM public.suggest_volume_groups(1000) s WHERE s.book_id = v_b3;
     v_id := public.group_books_as_volumes(jsonb_build_array(
       jsonb_build_object('book_id', v_b1, 'volume', 'I'), jsonb_build_object('book_id', v_b2, 'volume', 'II'),
-      jsonb_build_object('book_id', v_b3, 'volume', 'III'), jsonb_build_object('book_id', v_b4, 'volume', 'IV')));
+      jsonb_build_object('book_id', v_b3, 'volume', 'III')));
     IF v_id = v_w1
-       AND (SELECT count(DISTINCT work_id) FROM public.books WHERE id IN (v_b1, v_b2, v_b3, v_b4)) = 1
+       AND (SELECT count(DISTINCT work_id) FROM public.books WHERE id IN (v_b1, v_b2, v_b3)) = 1
        AND (SELECT volume FROM public.books WHERE id = v_b3) = 'III'
-       AND NOT EXISTS (SELECT 1 FROM public.works WHERE id IN (v_w2, v_w3))
-       AND NOT EXISTS (SELECT 1 FROM public.suggest_volume_groups(1000) s WHERE s.book_id = v_b3 AND s.works > 1)
+       AND NOT EXISTS (SELECT 1 FROM public.works WHERE id = v_w2)
+       AND EXISTS (SELECT 1 FROM public.works WHERE id = v_w3)
+       -- Regle du 04/09 soir : une notice numerotee est reglee ; il ne reste que b4
+       -- a decider, seul -> le groupe disparait (vecu : « El Hombre y la Tierra »).
+       AND NOT EXISTS (SELECT 1 FROM public.suggest_volume_groups(1000) s WHERE s.group_key = v_key)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : oeuvre='||coalesce(v_id::text,'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T5 « pas des tomes » retire le groupe du balayage';
+  v_t := 'T5 deux notices restant a decider reforment le groupe ; « pas des tomes » le retire';
   BEGIN
-    -- Le groupe reste propose (une seule oeuvre desormais, mais des marqueurs) : on l'ecarte.
-    SELECT s.group_key INTO v_key FROM public.suggest_volume_groups(1000) s WHERE s.book_id = v_b3;
+    INSERT INTO public.books (titulo, autor, idioma, ano, work_id) VALUES ('Zzaccion directa anarquista - Tomo V', 'ZZMECHOSO, Juan Carlos', 'es', '2008', v_w3) RETURNING id INTO v_b5;
+    INSERT INTO public.book_authors (book_id, author_id, role, ord) VALUES (v_b5, v_author, 'autor', 1) ON CONFLICT DO NOTHING;
+    SELECT count(*) INTO v_n FROM public.suggest_volume_groups(1000) s WHERE s.group_key = v_key;
     PERFORM public.dismiss_volume_group(v_key, 'test');
-    IF v_key IS NOT NULL AND NOT EXISTS (SELECT 1 FROM public.suggest_volume_groups(1000) s WHERE s.group_key = v_key)
+    IF v_n = 2
+       AND NOT EXISTS (SELECT 1 FROM public.suggest_volume_groups(1000) s WHERE s.group_key = v_key)
        AND EXISTS (SELECT 1 FROM public.volume_group_dismissals WHERE group_key = v_key)
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : cle='||coalesce(v_key,'NULL')); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : n='||v_n||' cle='||coalesce(v_key,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T5b deux tomes differents ne sont jamais un doublon, ni une oeuvre scindee';
+  BEGIN
+    IF NOT EXISTS (SELECT 1 FROM public.suggest_catalog_duplicates(5000) d
+                    WHERE (d.book_id_a, d.book_id_b) IN ((v_b3, v_b4), (v_b4, v_b3), (v_b1, v_b2), (v_b2, v_b1)))
+       AND NOT EXISTS (SELECT 1 FROM public.suggest_split_works(5000) s
+                        WHERE (s.work_id_a, s.work_id_b) IN ((v_w1, v_w3), (v_w3, v_w1)))
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   PERFORM set_config('request.jwt.claims', NULL, true);
@@ -114,7 +131,7 @@ BEGIN
 
   -- ── Nettoyage ─────────────────────────────────────────────────────
   DELETE FROM public.volume_group_dismissals WHERE group_key = v_key;
-  DELETE FROM public.books WHERE id IN (v_b1, v_b2, v_b3, v_b4);
+  DELETE FROM public.books WHERE id IN (v_b1, v_b2, v_b3, v_b4, v_b5);
   DELETE FROM public.works WHERE primary_author_id = v_author;
   DELETE FROM public.authors WHERE id = v_author;
 
