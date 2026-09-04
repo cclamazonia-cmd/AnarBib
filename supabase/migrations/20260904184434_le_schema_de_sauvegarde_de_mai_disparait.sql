@@ -13,11 +13,19 @@
 --
 -- Garde : la purge refuse de s'exécuter si l'une des tables porte encore une ligne.
 -- Sur une base où le schéma n'existe pas (rejeu en CI), la migration ne fait rien.
+--
+-- RELEVÉ DÉMENTI (04/09/2026 au soir, run backend 9254851) : cinq des six
+-- tables portent 10 lignes chacune — réservations et prêts d'essai du 29/03
+-- au 02/04/2026, absents de `public` aujourd'hui. On ne détruit pas ce qu'on
+-- n'a pas relu : si une table porte encore une ligne, la purge est DIFFÉRÉE
+-- (notice), le schéma reste, la migration passe. Sinon, purge.
+
 
 do $$
 declare
   r record;
   n bigint;
+  occupees text := '';
 begin
   if to_regnamespace('backup_2026_05_07') is null then
     raise notice 'backup_2026_05_07 : schéma absent, rien à purger';
@@ -31,19 +39,15 @@ begin
      where ns.nspname = 'backup_2026_05_07' and c.relkind = 'r'
   loop
     execute format('select count(*) from backup_2026_05_07.%I', r.relname) into n;
-    if n > 0 then
-      raise exception 'backup_2026_05_07.% porte % ligne(s) : purge refusée, à examiner à la main', r.relname, n;
-    end if;
+    if n > 0 then occupees := occupees || format(' %s=%s', r.relname, n); end if;
   end loop;
-end
-$$;
 
-drop schema if exists backup_2026_05_07 cascade;
-
-do $$
-begin
-  if to_regnamespace('backup_2026_05_07') is not null then
-    raise exception 'backup_2026_05_07 existe encore';
+  if occupees <> '' then
+    raise notice 'backup_2026_05_07 : purge différée, tables non vides :%', occupees;
+    return;
   end if;
+
+  execute 'drop schema backup_2026_05_07 cascade';
+  raise notice 'backup_2026_05_07 : schéma supprimé';
 end
 $$;
