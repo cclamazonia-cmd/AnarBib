@@ -6251,5 +6251,9 @@
   "atelier.revue.lot.forme": "Vorm van het ingangspunt",
   "atelier.revue.lot.forme.hint": "CONV-2 · de directe vorm wordt omgekeerd, een enkelvoudige naam bevestigd, een rolvermelding verlaat de naam",
   "book.author.various": "diverse auteurs",
-  "book.author.anonymous": "anoniem"
+  "book.author.anonymous": "anoniem",
+  "importacoes.deposit.ownCatalog": "Mijn eigen catalogus",
+  "importacoes.deposit.adminOnlyNote": "Het deponeren van de catalogus van een bevriende bibliotheek is voorbehouden aan het netwerkbeheer.",
+  "importacoes.fila.depositAdminOnly": "Deze partij komt uit een bevriend depot: het omzetten naar concepten is voorbehouden aan het netwerkbeheer.",
+  "error.import.deposit_admin_only": "Het deponeren van een bevriende catalogus (bron registreren, bestand uploaden, partij omzetten) is voorbehouden aan het netwerkbeheer."
 }

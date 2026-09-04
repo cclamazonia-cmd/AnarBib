@@ -6251,5 +6251,9 @@
   "atelier.revue.lot.forme": "Formo de la alirpunkto",
   "atelier.revue.lot.forme.hint": "CONV-2 · la rekta formo inversiĝas, la unuvorta nomo konfirmiĝas, la rol-mencio forlasas la nomon",
   "book.author.various": "diversaj aŭtoroj",
-  "book.author.anonymous": "anonima"
+  "book.author.anonymous": "anonima",
+  "importacoes.deposit.ownCatalog": "Mia propra katalogo",
+  "importacoes.deposit.adminOnlyNote": "La deponado de la katalogo de kompana biblioteko estas rezervita al la administrado de la reto.",
+  "importacoes.fila.depositAdminOnly": "Ĉi tiu aro venas el kompana depono: ĝia promocio al malnetoj estas rezervita al la administrado de la reto.",
+  "error.import.deposit_admin_only": "La deponado de kompana katalogo (registri la fonton, alŝuti la dosieron, promocii la aron) estas rezervita al la administrado de la reto."
 }

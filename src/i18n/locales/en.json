@@ -6251,5 +6251,9 @@
   "atelier.revue.lot.forme": "Access point form",
   "atelier.revue.lot.forme.hint": "CONV-2 · a direct form is inverted, a mononym is confirmed, a role mention leaves the name",
   "book.author.various": "various authors",
-  "book.author.anonymous": "anonymous"
+  "book.author.anonymous": "anonymous",
+  "importacoes.deposit.ownCatalog": "My own catalogue",
+  "importacoes.deposit.adminOnlyNote": "Depositing a companion library’s catalogue is reserved to the network administration.",
+  "importacoes.fila.depositAdminOnly": "This batch comes from a companion deposit: promoting it to drafts is reserved to the network administration.",
+  "error.import.deposit_admin_only": "Depositing a companion catalogue (registering the source, uploading the file, promoting the batch) is reserved to the network administration."
 }

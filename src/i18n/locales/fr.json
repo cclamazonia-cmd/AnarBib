@@ -6251,5 +6251,9 @@
   "atelier.revue.lot.forme": "Forme du point d'accès",
   "atelier.revue.lot.forme.hint": "CONV-2 · la forme directe s'inverse, le mononyme se confirme, la mention de rôle sort du nom",
   "book.author.various": "auteurs divers",
-  "book.author.anonymous": "anonyme"
+  "book.author.anonymous": "anonyme",
+  "importacoes.deposit.ownCatalog": "Mon propre catalogue",
+  "importacoes.deposit.adminOnlyNote": "Le dépôt du catalogue d’une bibliothèque compagne est réservé à l’administration du réseau.",
+  "importacoes.fila.depositAdminOnly": "Ce lot vient d’un dépôt compagnon : sa promotion en brouillons est réservée à l’administration du réseau.",
+  "error.import.deposit_admin_only": "Le dépôt d’un catalogue compagnon (enregistrer la source, déposer le fichier, promouvoir le lot) est réservé à l’administration du réseau."
 }

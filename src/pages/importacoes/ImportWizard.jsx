@@ -55,6 +55,10 @@ export default function ImportWizard() {
   useDocumentTitle(t({ id: 'importacoes.wizard.title' }));
 
   const canImport = role === 'coordenador' || role === 'administrador' || isNetworkAdmin;
+  // 04/09/2026 : le depot d'un catalogue compagnon (partner_deposit) est un
+  // geste d'administration du reseau ; la coordination garde son propre
+  // catalogue (own_catalog). Miroir de la garde fn_import_create.
+  const canDeposit = isNetworkAdmin;
 
   const [step, setStep] = useState(1);
   const [circuit, setCircuit] = useState(null);
@@ -80,6 +84,19 @@ export default function ImportWizard() {
       if (!error && data) setSources(data);
     } catch { /* guard */ }
   }, []);
+
+  // Retrouve ou cree la source own_catalog de la biblio active, puis la selectionne.
+  async function handleOwnSource() {
+    setBusy(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_import_own_source');
+      if (error) throw error;
+      await loadSources();
+      if (data?.source_id) setSourceId(String(data.source_id));
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setBusy(false); }
+  }
 
   const loadRows = useCallback(async (rid) => {
     if (!rid) return;
@@ -272,6 +289,7 @@ export default function ImportWizard() {
 
   function renderSource() {
     const isFile = circuit === 'arquivo' || circuit === 'migracao';
+    const fileSources = sources.filter((s) => canDeposit || s.source_kind !== 'partner_deposit');
     return (
       <div className="imp-sheet">
         <div className="imp-sheet__head">
@@ -286,11 +304,17 @@ export default function ImportWizard() {
                 <span className="imp-note">{t({ id: 'importacoes.wizard.source.sourceLabel' })}</span>
                 <select className="ab-select" value={sourceId} onChange={(e) => setSourceId(e.target.value)} disabled={busy}>
                   <option value="">—</option>
-                  {sources.map((s) => (
+                  {fileSources.map((s) => (
                     <option key={s.id} value={s.id}>{s.partner_name || `#${s.id}`}</option>
                   ))}
                 </select>
-                {sources.length === 0 && <span className="imp-note">{t({ id: 'importacoes.wizard.source.noSources' })}</span>}
+                {fileSources.length === 0 && <span className="imp-note">{t({ id: 'importacoes.wizard.source.noSources' })}</span>}
+                {!fileSources.some((s) => s.source_kind === 'own_catalog') && (
+                  <button type="button" className="imp-linkbtn" onClick={handleOwnSource} disabled={busy}>
+                    + {t({ id: 'importacoes.deposit.ownCatalog' })}
+                  </button>
+                )}
+                {!canDeposit && <span className="imp-note">{t({ id: 'importacoes.deposit.adminOnlyNote' })}</span>}
               </label>
               <label style={{ display: 'grid', gap: 6 }}>
                 <span className="imp-note">{t({ id: 'importacoes.wizard.source.fileLabel' })}</span>

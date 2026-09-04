@@ -6251,5 +6251,9 @@
   "atelier.revue.lot.forme": "Form des Ansetzungspunkts",
   "atelier.revue.lot.forme.hint": "CONV-2 · die direkte Form wird invertiert, ein Einzelname bestätigt, eine Funktionsangabe verlässt den Namen",
   "book.author.various": "verschiedene Verfasser",
-  "book.author.anonymous": "anonym"
+  "book.author.anonymous": "anonym",
+  "importacoes.deposit.ownCatalog": "Mein eigener Katalog",
+  "importacoes.deposit.adminOnlyNote": "Die Hinterlegung des Katalogs einer befreundeten Bibliothek ist der Netzwerkverwaltung vorbehalten.",
+  "importacoes.fila.depositAdminOnly": "Dieses Los stammt aus einer befreundeten Hinterlegung: seine Überführung in Entwürfe ist der Netzwerkverwaltung vorbehalten.",
+  "error.import.deposit_admin_only": "Die Hinterlegung eines befreundeten Katalogs (Quelle registrieren, Datei hochladen, Los überführen) ist der Netzwerkverwaltung vorbehalten."
 }

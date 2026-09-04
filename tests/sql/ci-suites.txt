@@ -403,3 +403,10 @@ tests/sql/conv_8_auteurs_divers_tests.sql
 # CONV-8, suite (03/09 soir) : « Leueroth, Pelo Coletivo Edgar » requalifie en collectivite
 # « Coletivo Edgard Leuenroth », role organizacao, transcription reparee. Ref. 20260903191250.
 tests/sql/conv_8_collectif_nomme_tests.sql
+
+# Le depot d'un catalogue compagnon est un geste d'administration, le catalogue propre
+# reste a la coordination (decision du 04/09/2026). T2 et T5 sont des tests de
+# NON-ACTION (le refus ne cree ni run ni brouillon) ; T3/T4 tiennent l'autre bord
+# (la coordination importe toujours SON catalogue) ; T6 garde que l'admin passe.
+# Ref. 20260904121500.
+tests/sql/import_depot_partenaire_admin_tests.sql

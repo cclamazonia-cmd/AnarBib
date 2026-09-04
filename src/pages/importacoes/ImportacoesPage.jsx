@@ -44,7 +44,8 @@ function formatDate(iso) {
 // les « Fontes companheiras » leur collerait un badge de relation invente.
 //   institutional_lookup : source creee par fn_import_ingest_candidate
 //   oai_pmh              : entrepot moissonne, encart « oai » dedie
-const NON_COMPANHEIRA_KINDS = ['institutional_lookup', 'oai_pmh'];
+//   own_catalog          : le catalogue PROPRE de la biblio (fn_import_own_source)
+const NON_COMPANHEIRA_KINDS = ['institutional_lookup', 'oai_pmh', 'own_catalog'];
 
 export default function ImportacoesPage() {
   useAuth();
@@ -287,6 +288,17 @@ export default function ImportacoesPage() {
   // backend fn_import_* coordenador-only + la nav canSeeImportacoes=isCoord).
   // Les librarians sont volontairement exclus ici.
   const canImport = role === 'coordenador' || role === 'administrador' || isNetworkAdmin;
+  // 04/09/2026 : deposer le catalogue d'une bibliotheque COMPAGNE (source
+  // partner_deposit) engage le reseau — la biblio ne detient pas ces livres,
+  // et la publication leur donnera quand meme une biblio de destination. Ce
+  // geste passe a l'administration du reseau ; la coordination garde son
+  // propre catalogue (own_catalog). Miroir des gardes fn_import_create /
+  // fn_import_promote / fn_import_register_deposit_source (HINT
+  // error.import.deposit_admin_only).
+  const canDeposit = isNetworkAdmin;
+  const fileSources = sources.filter(s => canDeposit || s.source_kind !== 'partner_deposit');
+  const selectedRunSource = selectedRun ? sources.find(s => s.id === selectedRun.source_id) : null;
+  const depositLocked = !canDeposit && selectedRunSource?.source_kind === 'partner_deposit';
 
   if (!roleLoaded) return (
     <PageShell><Topbar />
@@ -398,6 +410,22 @@ export default function ImportacoesPage() {
       });
       setNewSourceName('');
       setNewSourceOpen(false);
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setRegisteringSource(false); }
+  }
+
+  // ── Mon propre catalogue (own_catalog) ──────────────────────────────────
+  // La voie qui reste a la coordination : fn_import_own_source retrouve ou
+  // cree la source own_catalog de la biblio active (une seule, idempotente).
+  async function handleOwnSource() {
+    setRegisteringSource(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_import_own_source');
+      if (error) throw error;
+      assertRpcOk(data);
+      await loadSources();
+      if (data?.source_id) setSourceId(String(data.source_id));
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setRegisteringSource(false); }
@@ -1222,12 +1250,22 @@ export default function ImportacoesPage() {
                       <label className="ab-field__label">{t({ id: 'importacoes.file.source' })}</label>
                       <select className="ab-select" value={sourceId} onChange={e => setSourceId(e.target.value)}>
                         <option value="">{t({ id: 'importacoes.reception.selectSourcePlaceholder' })}</option>
-                        {sources.map(s => <option key={s.id} value={String(s.id)}>{s.partner_name}</option>)}
+                        {fileSources.map(s => <option key={s.id} value={String(s.id)}>{s.partner_name}</option>)}
                       </select>
-                      {!newSourceOpen && (
+                      {!fileSources.some(s => s.source_kind === 'own_catalog') && (
+                        <button type="button" className="imp-linkbtn" onClick={handleOwnSource} disabled={registeringSource}>
+                          + {t({ id: 'importacoes.deposit.ownCatalog' })}
+                        </button>
+                      )}
+                      {canDeposit && !newSourceOpen && (
                         <button type="button" className="imp-linkbtn" onClick={() => setNewSourceOpen(true)}>
                           + {t({ id: 'importacoes.deposit.newPartner' })}
                         </button>
+                      )}
+                      {!canDeposit && (
+                        <span className="imp-note" style={{ display: 'block', marginTop: 4 }}>
+                          {t({ id: 'importacoes.deposit.adminOnlyNote' })}
+                        </span>
                       )}
                       {newSourceOpen && (
                         <div className="imp-newsource">
@@ -1545,9 +1583,13 @@ export default function ImportacoesPage() {
                   {selectedRows.size > 0 && (
                     <div className="imp-batchbar" style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '4px 0 12px', padding: '8px 12px', background: 'var(--brand-surface-2, rgba(0,0,0,.04))', borderRadius: 8, flexWrap: 'wrap' }}>
                       <span className="imp-note">{t({ id: 'importacoes.fila.selectedCount' }, { n: selectedRows.size })}</span>
-                      <button className="cat-btn" disabled={promotingSel || selectedNewCount === 0} onClick={handlePromoteSelected}>
+                      <button className="cat-btn" disabled={promotingSel || selectedNewCount === 0 || depositLocked} onClick={handlePromoteSelected}
+                        title={depositLocked ? t({ id: 'importacoes.fila.depositAdminOnly' }) : undefined}>
                         {promotingSel ? t({ id: 'importacoes.generatingDrafts' }) : t({ id: 'importacoes.fila.createSelected' }, { n: selectedNewCount })}
                       </button>
+                      {depositLocked && (
+                        <span className="imp-note">{t({ id: 'importacoes.fila.depositAdminOnly' })}</span>
+                      )}
                       <button className="cat-btn" disabled={promotingSel || selectedDupCount === 0} onClick={handleReconcileSelected} title={t({ id: 'importacoes.fila.reconcileTitle' })}>
                         {t({ id: 'importacoes.fila.reconcile' }, { n: selectedDupCount })}
                       </button>

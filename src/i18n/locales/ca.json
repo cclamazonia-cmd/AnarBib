@@ -6251,5 +6251,9 @@
   "atelier.revue.lot.forme": "Forma del punt d'accés",
   "atelier.revue.lot.forme.hint": "CONV-2 · la forma directa s'inverteix, el mononim es confirma, la menció de funció surt del nom",
   "book.author.various": "diversos autors",
-  "book.author.anonymous": "anònim"
+  "book.author.anonymous": "anònim",
+  "importacoes.deposit.ownCatalog": "El meu propi catàleg",
+  "importacoes.deposit.adminOnlyNote": "El dipòsit del catàleg d’una biblioteca companya està reservat a l’administració de la xarxa.",
+  "importacoes.fila.depositAdminOnly": "Aquest lot prové d’un dipòsit company: la seva promoció a esborranys està reservada a l’administració de la xarxa.",
+  "error.import.deposit_admin_only": "El dipòsit d’un catàleg company (registrar la font, pujar el fitxer, promoure el lot) està reservat a l’administració de la xarxa."
 }

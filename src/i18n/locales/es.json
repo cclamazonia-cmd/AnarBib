@@ -6251,5 +6251,9 @@
   "atelier.revue.lot.forme": "Forma del punto de acceso",
   "atelier.revue.lot.forme.hint": "CONV-2 · la forma directa se invierte, el mononimo se confirma, la mención de función sale del nombre",
   "book.author.various": "varios autores",
-  "book.author.anonymous": "anónimo"
+  "book.author.anonymous": "anónimo",
+  "importacoes.deposit.ownCatalog": "Mi propio catálogo",
+  "importacoes.deposit.adminOnlyNote": "El depósito del catálogo de una biblioteca compañera está reservado a la administración de la red.",
+  "importacoes.fila.depositAdminOnly": "Este lote procede de un depósito compañero: su promoción a borradores está reservada a la administración de la red.",
+  "error.import.deposit_admin_only": "El depósito de un catálogo compañero (registrar la fuente, subir el archivo, promover el lote) está reservado a la administración de la red."
 }
