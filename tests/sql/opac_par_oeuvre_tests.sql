@@ -115,6 +115,23 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
+  -- Le banc tourne en superuser : sans ce test, « permission denied for view
+  -- catalog_list_session_v1 » n'apparait qu'en prod (vecu le 04/09, dix minutes
+  -- apres le deploiement du lot 2). Ref. 20260904150000.
+  v_t := 'T8 un visiteur non connecte (role anon) lit les deux RPC';
+  BEGIN
+    EXECUTE 'SET LOCAL ROLE anon';
+    v_res  := api.catalog_works_v1('{"q": "zzopacwork"}'::jsonb, 'titulo.asc', 0, 50, 'pt-BR');
+    v_res2 := api.book_copies_by_library_v1(v_b2);
+    EXECUTE 'RESET ROLE';
+    IF (v_res->>'total')::int = 2 AND jsonb_array_length(v_res2->'libraries') = 1 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : total='||coalesce(v_res->>'total','NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    BEGIN EXECUTE 'RESET ROLE'; EXCEPTION WHEN OTHERS THEN NULL; END;
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM);
+  END;
+
+  -- ─────────────────────────────────────────────────────────────────
   v_t := 'T7 les deux RPC restent publiques';
   BEGIN
     IF has_function_privilege('anon', 'api.catalog_works_v1(jsonb,text,integer,integer,text)', 'EXECUTE')

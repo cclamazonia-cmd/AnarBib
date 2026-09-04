@@ -46,6 +46,8 @@ const PUBLIC_COLS = [
   'global_available_count','global_exemplares_total','available_count',
   'exemplares_total','loanable','bibliotecas_count',
   'has_online_reading','holding_library_names_json','cover_object_path',
+  // work_id manquait ici depuis le lot C : le repli client ne regroupait jamais rien.
+  'work_id',
 ].join(',');
 
 const SESSION_COLS = [
@@ -60,6 +62,7 @@ const SESSION_COLS = [
   'session_library_id','session_library_slug','session_library_name',
   'session_exemplares_total','session_has_holding','session_status_hint',
   'session_available_count','session_loanable','cover_object_path',
+  'work_id',
 ].join(',');
 
 // Sort options, availability options, and status labels are built inside the component using t()
