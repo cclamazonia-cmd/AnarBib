@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-02",
+    "maj": "2026-09-04",
     "releve": {
       "date": "2026-09-03",
       "commit": "aeb77002"
@@ -1791,6 +1791,54 @@
           "fr": "**A — les tags fermés, le flux requalifié et livré le jour même.** `OPAC-TAG1` fermé au REGISTRE (un tag signé dit qui a lu quoi ; un tag anonyme ne se modère pas ; le besoin est couvert par l'autorité matière et le thésaurus). `OPAC-RSS1` requalifié puis **livré** (`e7a8acab`) : Edge Function `rss-novidades` — `GET /functions/v1/rss-novidades/<slug>`, **deux gardes et rien d'autre** (la bibliothèque est publique via `api.libraries_public_v1` ; les notices viennent de `v_books_public_catalog_v2`, la vue que l'OPAC anonyme lit déjà), RSS 2.0, autorité sinon transcription, lien vers la notice, cache d'une heure ; banc d'essai de 5 tests (même recette que gazette, `@vitest-environment node`) ; lien « Nouveautés (RSS) » sur la page publique et en tête du catalogue de chaque bibliothèque, dix locales. Sans requête, sans compte : rien à pister. **Ce que le banc ne voit pas, la production l'a montré** : à la première requête, 500 « permission denied for view libraries_public_v1 » — la vue `security_invoker` n'était accordée qu'à `anon` et `authenticated`, pas au rôle de service de la fonction ; un grant `SELECT` (`3677442a`, `20260903150755`) a suffi, le prédicat de publicité reste dans la vue. Vérifié ensuite en production : `/rss-novidades/blmf` répond un flux valide.",
           "pt": "**A — tags fechadas, feed requalificado e entregue no mesmo dia.** `OPAC-TAG1` fechado ; `OPAC-RSS1` requalificado e **entregue** (`e7a8acab`) : Edge Function `rss-novidades`, duas guardas e nada mais (biblioteca pública, vista pública), RSS 2.0, banco de 5 testes, link «Novidades (RSS)» na página pública de cada biblioteca. Sem consulta, sem conta : nada a rastrear."
         }
+      ],
+      [
+        "B4",
+        "2026-09-04",
+        {
+          "fr": "**Verdict écrit le 04/09 (`04b5c298`, migration `20260904184501`) : les quatre sont fermées exprès.** `author_name_aliases` (1 644 lignes) est lue par six fonctions `SECURITY DEFINER` (`merge_author`, `preview_merge_author`, `suggest_author_duplicates`, `suggest_authority_duplicates`, `fn_conv_fusionner_doublon_exact`, `api.search_catalog_v1`) et deux vues (`v_author_alias_candidates_unique`, `v_author_alias_worklist`) — rien ne la lit directement, et rien ne devrait. `library_themes` (7 lignes) et `library_theme_configs` (vide) passent par `get/set_library_theme_config*` et `fn_ensure_library_theme` ; `interlibrary_loan_events` (vide) n'est écrite que par `fn_v2_log_emprestimo_interbibliotecas_event` — le PEB n'a pas d'écran (G6). Chaque table porte le verdict en `COMMENT ON TABLE`, avec les noms. **Le second critère était déjà rempli** : `deploy/bootstrap.sh` liste nommément les 15 tables fermées attendues (`SANS_POLICY_ATTENDUES`) et échoue si l'une manque ou s'il y en a une de trop — `DOC-RECENS-1`.",
+          "pt": "**Veredicto escrito em 04/09 (`04b5c298`, migração `20260904184501`) : as quatro estão fechadas de propósito.** `author_name_aliases` é lida por seis funções DEFINER e duas vistas ; `library_themes` / `library_theme_configs` passam por `get/set_library_theme_config*` ; `interlibrary_loan_events` só é escrita por `fn_v2_log_emprestimo_interbibliotecas_event`. Cada tabela leva o veredicto em `COMMENT ON TABLE`. O segundo critério já estava cumprido : `bootstrap.sh` lista as 15 tabelas fechadas esperadas."
+        }
+      ],
+      [
+        "I11",
+        "2026-09-04",
+        {
+          "fr": "**`node:22` depuis le 04/09 (`04b5c298`)** — sept occurrences dans `ci.yml` et `sql-tests.yml`. La CLI Supabase `v2.98.1` est un binaire téléchargé par `curl`, pas un paquet npm : rien à réinstaller. Preuve en deux runs : le run 1191 (premier sur `node:22`) a passé `app` (lint, tests, build, 2 min 41) et `sql-tests`, et `backend` est allé jusqu'au `db push` — qui a échoué sur le garde de **B9**, pas sur l'image ; le run suivant (`ea813837`) a passé `backend` de bout en bout, migrations appliquées en production.",
+          "pt": "**`node:22` desde 04/09 (`04b5c298`)** — sete ocorrências nos dois workflows. A CLI Supabase é um binário descarregado por `curl`, nada a reinstalar. Prova : o run 1191 passou `app` e `sql-tests`, `backend` chegou ao `db push` (falhou na guarda de B9, não na imagem) ; o run seguinte (`ea813837`) passou `backend` até ao fim."
+        }
+      ],
+      [
+        "I8",
+        "2026-09-04",
+        {
+          "fr": "**Réécrit le 04/09 (`04b5c298`).** L'en-tête de `deploy/README.md` dit désormais ce qui a tourné le 26/08 — trois passes de `bootstrap.sh` (volumes vierges : 183/183 migrations en 12 s, 184 tables, 0 sans RLS, 77 migrations GoTrue ; dump factice ; **dump réel de la production**, objet Storage servi octet pour octet), **huit défauts** trouvés et corrigés (collision du nom de projet Docker, `--wait`, faux vert de l'étape 8, buckets qu'aucune migration ne crée, Storage démarré après la restauration, image Storage `v1.60.4` → `v1.70.7`, disposition des fichiers Storage ≠ sauvegarde), la doctrine d'ordre qui en sort, **huit étapes plus une « 7 bis »** — et ce qui n'a pas tourné (la bascule, le routeur `main` en conditions réelles, un vrai domaine). Les quatre points « à confirmer » ont leur verdict : `notify-cross-library-digest` **clos** (elle est au dépôt), le rejeu des migrations **fait** (étape 5 à deux branches), `CADDY_TAG=2` **justifié** dans `.env.example` (seule entorse au « jamais de `latest` », à épingler le jour de la répétition finale) ; GoTrue/courriel et `PGRST_DB_SCHEMAS` restent marqués à vérifier, honnêtement.",
+          "pt": "**Reescrito em 04/09 (`04b5c298`).** O cabeçalho diz o que correu em 26/08 — três passagens de `bootstrap.sh`, oito defeitos corrigidos, oito etapas mais uma «7 bis» — e o que não correu. `notify-cross-library-digest` fechado (está no repositório), rejogo das migrações feito, `CADDY_TAG=2` justificado ; GoTrue/correio e `PGRST_DB_SCHEMAS` continuam a verificar."
+        }
+      ],
+      [
+        "E8",
+        "2026-09-04",
+        {
+          "fr": "**Clos le 04/09 sur mesure consignée — le travail datait du 06/05 (`dba21cd3`).** Avant : deux TTF bloquants, `titre.ttf` 1 Mo + `accent.ttf` 484 Ko, soit **≈ 1,5 Mo** avant tout texte. Après : **19 fichiers woff2 auto-hébergés, 1 296 308 octets en tout** (Bitter + Fira Sans, graphies latine, grecque, cyrillique), chargés à la demande par face et par graphie, **tous en `font-display: swap`** (10 déclarations dans `src/styles/fonts.css`) ; **seuls deux fichiers sont préchargés** au premier rendu (`index.html:47-48`) : `FiraSans-Regular.woff2` 44 904 octets + `Bitter-Regular.woff2` 36 516 octets = **81 420 octets**. Sur une connexion de comptoir, le texte s'affiche avec la police de substitution puis bascule ; rien ne bloque. Le sous-ensemblage (troisième idée du constat) n'a pas lieu d'être : le découpage par graphie fait déjà ce travail. Mesuré dans le dépôt le 04/09.",
+          "pt": "**Fechado em 04/09 com a medida registada — o trabalho era de 06/05.** Antes : dois TTF bloqueantes, ≈ 1,5 MB. Depois : 19 woff2 auto-alojados, 1 296 308 bytes no total, por face e por escrita, todos em `font-display: swap` ; só dois pré-carregados no primeiro render : 81 420 bytes. Nada bloqueia."
+        }
+      ],
+      [
+        "J6",
+        "2026-09-04",
+        {
+          "fr": "**Le constat était faux depuis le 17/05 — `DOC-RECENS-1`.** Les cinq doctrines sont **au dépôt depuis la refonte bilingue du README** (`fbe8969b`, 17/05/2026), section « Doctrines internalisées / Internalized doctrines », en français et en anglais, avec quatre autres (traçabilité R8, proposeur silencieux, qui notifier, compte auth en SQL direct). Ce qui manquait tenait en une ligne : **aucun chemin depuis `CONTRIBUTING.md`**. Ajouté le 04/09 (`04b5c298`) dans la table « selon ce que vous touchez » : une RPC qui écrit plusieurs tables, un courriel sortant, l'auth côté front, un script sous Windows → le README. Les incidents d'origine sont dans le code lui-même là où ils existent (`AuthContext.jsx` : la boucle de re-fetch qui saturait le pool ; baseline `paquet 141.2.E`, fix B3 du 16/05).",
+          "pt": "**O constato era falso desde 17/05 — `DOC-RECENS-1`.** As cinco doutrinas estão no README (FR/EN) desde `fbe8969b`. Faltava um caminho a partir de `CONTRIBUTING.md` : acrescentado em 04/09 (`04b5c298`) na tabela «conforme o que toca»."
+        }
+      ],
+      [
+        "I10",
+        "2026-09-04",
+        {
+          "fr": "**Clos le 04/09 (`04b5c298`).** `tmp-ficedl/` supprimé du disque (740 Ko, ignoré par git depuis le 28/08). Le secret de fonction `TURNSTILE_SECRET_KEY` — dernière trace hors historique — **retiré** (`supabase secrets unset`, après vérification que les sept mentions restantes dans le code sont des commentaires « remplace Turnstile »). `docs/drafts/` a sa règle, écrite dans `docs/drafts/README.md` : **un sas, pas une réserve** — ce qui y entre en sort dans le mois, promu, tranché par décision ou supprimé ; `archive/` garde la trace. Et le sas est vidé dans le même geste : le brouillon de recherche par accents, **périmé depuis le 03/07** (remplacé par `api.catalog_search_ids_v1`, son en-tête le disait), rejoint `archive/` sous sa date d'entrée. `.env.example` garde une mention historique en commentaire, à dessein.",
+          "pt": "**Fechado em 04/09 (`04b5c298`).** `tmp-ficedl/` apagado ; segredo `TURNSTILE_SECRET_KEY` retirado ; `docs/drafts/` tem regra (`README.md` : um sas, não uma reserva — o que entra sai no mês) e foi esvaziado : o rascunho de pesquisa, obsoleto desde 03/07, passou para `archive/`."
+        }
       ]
     ]
   },
@@ -1946,54 +1994,6 @@
       }
     },
     {
-      "id": "B4",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Examiner les quatre tables à RLS sans policy qui ne sont pas du transit",
-        "pt": "Examinar as quatro tabelas com RLS sem policy que não são de trânsito"
-      },
-      "v": {
-        "fr": "15 tables ont RLS activé et zéro policy. Onze sont des tables de transit ou vides. Quatre ne le sont pas : `author_name_aliases` (**1 647 lignes**), `library_themes` (3 lignes), `library_theme_configs`, `interlibrary_loan_events`.",
-        "pt": "15 tabelas têm RLS ativado e zero policy. Onze são tabelas de trânsito ou vazias. Quatro não são: `author_name_aliases` (**1 647 linhas**), `library_themes` (3 linhas), `library_theme_configs`, `interlibrary_loan_events`."
-      },
-      "w": {
-        "fr": "Pour chacune, trancher : soit l'accès passe par une RPC et l'absence de policy est correcte — l'écrire en commentaire SQL —, soit une lecture légitime est aujourd'hui impossible et il manque une policy ou une fonction.",
-        "pt": "Para cada uma, decidir: ou o acesso passa por uma RPC e a ausência de policy está correta — escrevê-lo em comentário SQL —, ou uma leitura legítima é hoje impossível e falta uma policy ou uma função."
-      },
-      "y": {
-        "fr": "Une table avec RLS et sans policy est fermée à tout le monde sauf aux fonctions `DEFINER`. C'est parfois exactement ce qu'on veut, et parfois une fonctionnalité qui ne marche pas sans que personne l'ait remarqué — `author_name_aliases` porte 1 647 lignes que rien ne lit peut-être.",
-        "pt": "Uma tabela com RLS e sem policy está fechada para todos exceto para as funções `DEFINER`. Às vezes é exatamente o que se quer, e às vezes é uma funcionalidade que não funciona sem que ninguém tenha percebido — `author_name_aliases` carrega 1 647 linhas que talvez nada leia."
-      },
-      "f": {
-        "fr": [
-          "Les quatre tables ont un verdict écrit.",
-          "Le contrôle de restauration du runbook liste nommément les tables sans policy attendues."
-        ],
-        "pt": [
-          "As quatro tabelas têm um veredicto escrito.",
-          "O controle de restauração do runbook lista nominalmente as tabelas sem policy esperadas."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "PLAN_DE_MARCHE §8",
-        "MATRICE_rls_deny_all_2026-06-23"
-      ],
-      "verif": {
-        "fr": "31/08 — 14 tables à RLS sans policy (15 au 29/08). Les quatre nommées y sont toujours : `author_name_aliases` (1 647 lignes vivantes), `library_themes` (3), `library_theme_configs` (0), `interlibrary_loan_events` (0).",
-        "pt": "31/08 — 14 tabelas com RLS sem policy (15 em 29/08). As quatro nomeadas continuam lá, `author_name_aliases` com 1 647 linhas vivas."
-      }
-    },
-    {
       "id": "B7",
       "d": "B",
       "p": "P2",
@@ -2054,27 +2054,27 @@
         "pt": "Purgar o esquema `backup_2026_05_07`"
       },
       "v": {
-        "fr": "Six tables, **toutes à zéro ligne et zéro insertion depuis leur création**, sans clé primaire, sans RLS : `emprestimos_v2`, `emprestimo_itens_v2`, `reservas_v2`, `reserva_linhas_v2`, `reserva_item_workflow_v2`, `loan_midpoint_message_log`. La décision `BG2-9` prescrit cette purge depuis juin.",
-        "pt": "Seis tabelas, **todas com zero linha e zero inserção desde a criação**, sem chave primária, sem RLS: `emprestimos_v2`, `emprestimo_itens_v2`, `reservas_v2`, `reserva_linhas_v2`, `reserva_item_workflow_v2`, `loan_midpoint_message_log`. A decisão `BG2-9` prescreve essa purga desde junho."
+        "fr": "**Constat corrigé le 04/09 au soir — il était faux depuis le 30/08, dans le sens qui compte.** Six tables, sans clé primaire, sans RLS, qu'aucune fonction (`pg_proc.prosrc`) ni vue (`pg_views`) ne cite. Mais **pas « zéro ligne »** : le « 0 insertion depuis la création » du relevé du 30/08 (et de la revérification du 04/09 au matin) venait de `pg_stat_user_tables`, dont les compteurs ont été **remis à zéro par le redémarrage du 02/09** — et sur ces tables jamais analysées, `n_live_tup` disait 0 aussi. Le comptage direct dit **50 lignes** : 10 réservations, 10 lignes, 10 workflows, 10 emprunts, 10 lignes d'emprunt, journal de mi-parcours vide. C'est exactement ce que `BILAN_05_au_07_MAI_2026` décrit : le **snapshot pris le 07/05/2026 avant le `TRUNCATE` de l'historique de circulation de la période d'essai** (créé du 29/03 au 30/04/2026), gardé « une à deux semaines » pour restauration. Aucune de ces lignes n'existe dans `public` (la production a redémarré à 1), aucune n'est postérieure au 08/05. **La décision `BG2-9` prescrit la purge en connaissance de cause** (« copie figée »).",
+        "pt": "**Constato corrigido em 04/09 à noite.** Seis tabelas sem PK nem RLS, nenhuma função nem vista as cita — mas **não «zero linhas»** : o «0 inserções» vinha de `pg_stat_user_tables`, cujos contadores foram repostos a zero pelo reinício de 02/09. Contagem direta : **50 linhas**, o snapshot de 07/05/2026 tirado antes do `TRUNCATE` do histórico de circulação do período de ensaio (29/03–30/04). Nenhuma existe em `public`. `BG2-9` prescreve a purga sabendo disso."
       },
       "w": {
-        "fr": "`DROP SCHEMA backup_2026_05_07 CASCADE` par migration, après avoir confirmé une dernière fois que les six tables sont vides.",
-        "pt": "`DROP SCHEMA backup_2026_05_07 CASCADE` por migração, após confirmar uma última vez que as seis tabelas estão vazias."
+        "fr": "Une migration qui **atteste ce snapshot-là** avant de purger — six tables, 5 × 10 + 0 lignes, tout antérieur au 08/05/2026, aucun identifiant présent dans `public` — et refuse tout autre contenu. Le garde a été écrit et essayé en production dans un `DO` sans purge le 04/09 : il passe. Reste à le porter dans une **nouvelle** migration (la version `20260904184434` est appliquée sous sa forme « différée » et ne se rejoue pas).",
+        "pt": "Uma migração que **atesta este snapshot** antes de purgar (6 tabelas, 5 × 10 + 0 linhas, tudo anterior a 08/05/2026, nenhum id em `public`). A guarda foi ensaiada em produção sem purga em 04/09 : passa. Falta levá-la a uma **nova** migração."
       },
       "y": {
         "fr": "Six tables de sauvegarde vides polluent chaque relevé d'advisors — elles portent à elles seules six des quatorze avis « pas de clé primaire ». Et un schéma nommé `backup_` qui ne contient rien est un piège pour qui reprendra le projet.",
         "pt": "Seis tabelas de backup vazias poluem cada levantamento de advisors — carregam sozinhas seis dos catorze avisos «sem chave primária». E um esquema chamado `backup_` que não contém nada é uma armadilha para quem retomar o projeto."
       },
-      "f": {
-        "fr": [
-          "Le schéma n'existe plus.",
-          "`deploy/bg2-known-tables.txt` a été mis à jour dans le même mouvement."
-        ],
-        "pt": [
-          "O esquema não existe mais.",
-          "`deploy/bg2-known-tables.txt` foi atualizado no mesmo movimento."
-        ]
-      },
+      "f": [
+        {
+          "fr": "Le schéma n'existe plus.",
+          "pt": "O esquema já não existe."
+        },
+        {
+          "fr": "~~`deploy/bg2-known-tables.txt` a été mis à jour dans le même mouvement~~ — **rien à changer** : il ne classe que `public`, et les `emprestimos_v2`, `reservas_v2`… qu'il liste sont les tables vivantes, homonymes des copies (vérifié le 04/09).",
+          "pt": "~~`bg2-known-tables.txt` atualizado~~ — **nada a mudar** : só classifica `public`."
+        }
+      ],
       "dep": {
         "fr": "Ne pas confondre avec `conv_backup`, qui porte des données de revue humaine et **ne se purge pas** (voir **C4**).",
         "pt": "Não confundir com `conv_backup`, que carrega dados de revisão humana e **não se purga** (ver **C4**)."
@@ -2083,8 +2083,8 @@
         "REGISTRE §BG2 BG2-9"
       ],
       "verif": {
-        "fr": "30/08 — le schéma pèse 6 tables et 0,1 Mo. Ce qui le lit encore n'a pas été cherché.",
-        "pt": "30/08 — o esquema pesa 6 tabelas e 0,1 Mo. O que ainda o lê não foi procurado."
+        "fr": "30/08 — le schéma pèse 6 tables et 0,1 Mo. Ce qui le lit encore n'a pas été cherché. **04/09, matin** — « zéro ligne, zéro insertion » relu dans `pg_stat_user_tables` ; rien ne le lit (`prosrc`, `pg_views`) : ça, c'était vrai. **04/09, 20 h 55** — première migration (`04b5c298`) : le garde « refuse si une ligne » a **refusé** — `reservas_v2 porte 10 ligne(s)` — et a fait tomber le job `backend` (run 1191) : aucun `db push` ne passait plus. Deux sessions ont réagi : la voisine a rendu la purge **différée** (`ea813837` : notice, le schéma reste, la migration passe — c'est la version appliquée) ; celle-ci a compté (50 lignes, mars–avril 2026, aucune dans `public`), relu le bilan de mai, écrit le garde attestant et l'a essayé en production sans purge. **La purge attend une nouvelle migration**, ou la décision de garder le snapshot.",
+        "pt": "**04/09, 20h55** — a guarda «recusa se houver linha» recusou (`reservas_v2` : 10 linhas) e derrubou o job `backend`. A sessão vizinha tornou a purga **adiada** (`ea813837`, versão aplicada) ; esta contou (50 linhas, março–abril 2026, nenhuma em `public`) e ensaiou a guarda que atesta o snapshot. **A purga espera uma nova migração.**"
       }
     },
     {
@@ -3166,54 +3166,6 @@
       }
     },
     {
-      "id": "E8",
-      "d": "E",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "front"
-      ],
-      "t": {
-        "fr": "Charger les deux polices sans bloquer l'affichage",
-        "pt": "Carregar as duas fontes sem bloquear a exibição"
-      },
-      "v": {
-        "fr": "**Constat corrigé le 31/08 : il décrivait un état mort depuis mai.** `titre.ttf` (1 Mo) et `accent.ttf` (484 Ko) ont disparu le **06/05/2026** (commit `dba21cd3`, auto-hébergement Bitter + Fira Sans) — il n'en reste qu'un commentaire dans `src/lib/theme.js:198`. Depuis : 19 fichiers woff2 auto-hébergés dans `public/fonts/` (1,3 Mo en tout), `font-display: swap` sur toutes les faces de `src/styles/fonts.css`, préchargement des deux fichiers du premier rendu dans `index.html`. Il ne reste de l'item que la mesure avant/après jamais consignée — candidat à la clôture.",
-        "pt": "**Constato corrigido em 31/08: descrevia um estado morto desde maio.** `titre.ttf` e `accent.ttf` desapareceram em **06/05/2026** — resta só um comentário em `theme.js:198`. Desde então: 19 arquivos woff2 auto-hospedados (1,3 MB), `font-display: swap` em todas as faces, pré-carregamento dos dois arquivos críticos. Resta só a medição antes/depois nunca consignada — candidato a encerramento."
-      },
-      "w": {
-        "fr": "Ajouter `font-display: swap`, précharger la police de titre seule, sous-ensembler les fichiers aux caractères réellement utilisés — dix langues dont le grec, donc le sous-ensemble n'est pas trivial.",
-        "pt": "Adicionar `font-display: swap`, pré-carregar apenas a fonte de título, subconjuntar os arquivos aos caracteres realmente usados — dez línguas incluindo o grego, então o subconjunto não é trivial."
-      },
-      "y": {
-        "fr": "1,5 Mo de polices sur une connexion de comptoir, c'est plusieurs secondes d'écran blanc. Le public d'AnarBib inclut des bibliothèques qui n'ont pas la fibre.",
-        "pt": "1,5 MB de fontes numa conexão de balcão são vários segundos de tela branca. O público do AnarBib inclui bibliotecas que não têm fibra."
-      },
-      "f": {
-        "fr": [
-          "~~Le texte s'affiche avant les polices, avec une substitution acceptable~~ — `font-display: swap` sur toutes les faces depuis le 06/05 (`src/styles/fonts.css`).",
-          "Le poids total des polices chargées à la première visite est mesuré avant et après."
-        ],
-        "pt": [
-          "~~O texto aparece antes das fontes, com uma substituição aceitável~~ — `font-display: swap` em todas as faces desde 06/05.",
-          "O peso total das fontes carregadas na primeira visita é medido antes e depois."
-        ]
-      },
-      "dep": {
-        "fr": "Ne pas toucher à l'identité visuelle : `IDENT-1` à `IDENT-4` sont actés.",
-        "pt": "Não tocar na identidade visual: `IDENT-1` a `IDENT-4` estão registrados."
-      },
-      "r": [
-        "Mémoire de projet, dette technique",
-        "REGISTRE §39 IDENT"
-      ],
-      "verif": {
-        "fr": "31/08 — mesuré dans le dépôt : fichiers de `public/fonts/`, `src/styles/fonts.css`, `index.html:47-48`, historique git.",
-        "pt": "31/08 — medido no repositório: arquivos, CSS, `index.html`, histórico git."
-      }
-    },
-    {
       "id": "E9",
       "d": "E",
       "p": "P2",
@@ -4111,155 +4063,6 @@
       }
     },
     {
-      "id": "I8",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Mettre `deploy/README.md` en accord avec ce qui a été exécuté",
-        "pt": "Pôr `deploy/README.md` de acordo com o que foi executado"
-      },
-      "v": {
-        "fr": "Le document affirme en gras : « Rien de tout ceci n'a encore tourné ». Trois commits du 26/08 décrivent des exécutions réelles avec huit défauts relevés. Par ailleurs `bootstrap.sh` a **huit étapes** plus une « 7 bis » et une vérification, là où le README en annonce sept ; et le README déclare `notify-cross-library-digest` « absente du dépôt » alors qu'elle y est.",
-        "pt": "O documento afirma em negrito: «Nada disso ainda rodou». Três commits de 26/08 descrevem execuções reais com oito defeitos levantados. Além disso `bootstrap.sh` tem **oito etapas** mais uma «7 bis» e uma verificação, onde o README anuncia sete; e o README declara `notify-cross-library-digest` «ausente do repositório» quando ela está lá."
-      },
-      "w": {
-        "fr": "Réécrire la section d'état à partir des journaux d'exécution du 26/08, corriger le compte d'étapes, et retirer l'affirmation sur `notify-cross-library-digest`.",
-        "pt": "Reescrever a seção de estado a partir dos diários de execução de 26/08, corrigir a contagem de etapas, e retirar a afirmação sobre `notify-cross-library-digest`."
-      },
-      "y": {
-        "fr": "`deploy/README.md` est le document que lira quelqu'un qui prend **A2** — la reconstruction par un tiers. Une phrase qui dit « rien n'a tourné » va lui faire croire qu'il essuie les plâtres alors que huit défauts ont déjà été trouvés et corrigés pour lui.",
-        "pt": "`deploy/README.md` é o documento que lerá quem assumir **A2** — a reconstrução por um terceiro. Uma frase que diz «nada rodou» vai fazê-lo crer que está abrindo caminho quando oito defeitos já foram encontrados e corrigidos para ele."
-      },
-      "f": {
-        "fr": [
-          "La section d'état décrit ce qui a tourné et ce qui n'a pas tourné.",
-          "Les quatre points « à confirmer avant bascule » ont un verdict : GoTrue et le courriel, `PGRST_DB_SCHEMAS` mis à `public,api,storage` par déduction, le cas `notify-cross-library-digest` (clos), et le rejeu des migrations.",
-          "`CADDY_TAG=2` est un tag majeur flottant dans un fichier qui proclame « aucun `latest`, jamais » : à épingler ou à justifier."
-        ],
-        "pt": [
-          "A seção de estado descreve o que rodou e o que não rodou.",
-          "Os quatro pontos «a confirmar antes da migração» têm um veredicto: GoTrue e o e-mail, `PGRST_DB_SCHEMAS` posto em `public,api,storage` por dedução, o caso `notify-cross-library-digest` (encerrado), e a reexecução das migrações.",
-          "`CADDY_TAG=2` é um tag maior flutuante num arquivo que proclama «nenhum `latest`, jamais»: a fixar ou a justificar."
-        ]
-      },
-      "dep": {
-        "fr": "Prérequis moral de **A2**.",
-        "pt": "Pré-requisito moral de **A2**."
-      },
-      "r": [
-        "deploy/README.md",
-        "Commits 57321385, 35c03dd5, 90266600"
-      ],
-      "verif": {
-        "fr": "31/08 — `deploy/README.md` affirme toujours « Rien de tout ceci n'a encore tourné » et déclare toujours `notify-cross-library-digest` absente du dépôt. Le constat tient mot pour mot.",
-        "pt": "31/08 — `deploy/README.md` ainda afirma que nada rodou e ainda declara `notify-cross-library-digest` ausente do repositório."
-      }
-    },
-    {
-      "id": "I10",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Nettoyer les traces de Turnstile et les fichiers de rebut",
-        "pt": "Limpar os rastros do Turnstile e os arquivos de refugo"
-      },
-      "v": {
-        "fr": "Turnstile a été entièrement retiré du code le 20/08 — sa réapparition serait une régression. Mais des **clés de test subsistent** dans `.env.example` (deux entrées), `.env.local`, `deploy/functions.env`, une référence dans `package.json`, et un secret au Vault. Par ailleurs `tmp-ficedl/` (754 Ko, doublon exact d'un fichier versionné) traîne à la racine, et `docs/drafts/` est versionné sans règle.",
-        "pt": "O Turnstile foi inteiramente retirado do código em 20/08 — sua reaparição seria uma regressão. Mas **chaves de teste subsistem** em `.env.example` (duas entradas), `.env.local`, `deploy/functions.env`, uma referência em `package.json`, e um segredo no Vault. Além disso `tmp-ficedl/` (754 KB, duplicata exata de um arquivo versionado) fica na raiz, e `docs/drafts/` está versionado sem regra."
-      },
-      "w": {
-        "fr": "Retirer les cinq traces, supprimer `tmp-ficedl/` (ignoré par git depuis le 28/08, donc sans risque), et décider du statut de `docs/drafts/` : soit c'est un sas et il s'ignore, soit c'est du contenu et il se documente.",
-        "pt": "Retirar os cinco rastros, suprimir `tmp-ficedl/` (ignorado pelo git desde 28/08, portanto sem risco), e decidir o estatuto de `docs/drafts/`: ou é uma antecâmara e se ignora, ou é conteúdo e se documenta."
-      },
-      "y": {
-        "fr": "Une clé de test dans un fichier d'exemple est ce que copiera la prochaine personne qui installe le projet. Et `docs/drafts/` est exactement l'endroit où le SQL des sujets SOLIDAIRES s'est perdu (voir **C1**) : un dossier sans règle est un dossier où les choses restent.",
-        "pt": "Uma chave de teste num arquivo de exemplo é o que copiará a próxima pessoa que instalar o projeto. E `docs/drafts/` é exatamente o lugar onde o SQL dos assuntos SOLIDAIRES se perdeu (ver **C1**): uma pasta sem regra é uma pasta onde as coisas ficam."
-      },
-      "f": {
-        "fr": [
-          "Aucune trace de Turnstile hors historique git.",
-          "`tmp-ficedl/` a disparu du disque.",
-          "`docs/drafts/` a une règle écrite : ce qui y entre en sort, ou n'y entre pas."
-        ],
-        "pt": [
-          "Nenhum rastro do Turnstile fora do histórico git.",
-          "`tmp-ficedl/` desapareceu do disco.",
-          "`docs/drafts/` tem uma regra escrita: o que entra sai, ou não entra."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "RUNBOOK_exploitation_v0.3 §9.8",
-        "PLAN_DE_MARCHE §7.4",
-        "Relevé du 29/08/2026"
-      ],
-      "verif": {
-        "fr": "31/08 — le ménage a avancé sans que l'item le sache : plus aucune trace Turnstile dans `package.json`, `.env.local`, `deploy/functions.env` ni au Vault ; `.env.example` n'en garde qu'une mention historique en commentaire. Restent : le secret de fonction `TURNSTILE_SECRET_KEY` (posé le 05/05), `tmp-ficedl/` (740 Ko) à la racine, et `docs/drafts/` sans règle (2 fichiers).",
-        "pt": "31/08 — a limpeza avançou: nenhum traço Turnstile em `package.json`, `.env.local`, `functions.env` nem no Vault. Restam: o segredo de função `TURNSTILE_SECRET_KEY`, `tmp-ficedl/` (740 KB) e `docs/drafts/` sem regra."
-      }
-    },
-    {
-      "id": "I11",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Sortir de `node:20`, en fin de maintenance",
-        "pt": "Sair do `node:20`, em fim de manutenção"
-      },
-      "v": {
-        "fr": "Les trois jobs d'intégration continue tournent dans un conteneur `node:20`, dont la fenêtre de maintenance à long terme s'est achevée en avril 2026. C'est le point de fin de vie le plus net de la chaîne.",
-        "pt": "Os três jobs de integração contínua rodam num contêiner `node:20`, cuja janela de manutenção de longo prazo terminou em abril de 2026. É o ponto de fim de vida mais claro da cadeia."
-      },
-      "w": {
-        "fr": "Passer à la version en maintenance longue suivante, vérifier que le build, les tests et le lint passent, et que la CLI Supabase épinglée `v2.98.1` s'y installe.",
-        "pt": "Passar para a versão em manutenção longa seguinte, verificar que o build, os testes e o lint passam, e que a CLI Supabase fixada `v2.98.1` se instala nela."
-      },
-      "y": {
-        "fr": "Une image sans mises à jour de sécurité fait tourner tout le déploiement. Le changement est mécanique et se vérifie en une exécution.",
-        "pt": "Uma imagem sem atualizações de segurança faz rodar toda a implantação. A mudança é mecânica e se verifica numa execução."
-      },
-      "f": {
-        "fr": [
-          "Les trois jobs tournent sur une version maintenue.",
-          "Le lint reste à zéro erreur (environ cent avertissements est l'état normal)."
-        ],
-        "pt": [
-          "Os três jobs rodam numa versão mantida.",
-          "O lint continua com zero erro (cerca de cem avisos é o estado normal)."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        ".forgejo/workflows/ci.yml",
-        "package.json"
-      ],
-      "verif": {
-        "fr": "31/08 — 7 occurrences de `node:20` dans les deux workflows. Rien n'a bougé.",
-        "pt": "31/08 — 7 ocorrências de `node:20` nos dois workflows. Nada mudou."
-      }
-    },
-    {
       "id": "I12",
       "d": "I",
       "p": "P2",
@@ -4496,54 +4299,6 @@
       "verif": {
         "fr": "31/08 — `INDEX.md` relu, archives comptées : 9 avec le préfixe `-archive-`, 27 sans.",
         "pt": "31/08 — `INDEX.md` relido, arquivos contados: 9 com prefixo `-archive-`, 27 sem."
-      }
-    },
-    {
-      "id": "J6",
-      "d": "J",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Écrire les cinq doctrines internalisées là où un tiers les trouverait",
-        "pt": "Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria"
-      },
-      "v": {
-        "fr": "Cinq règles de conception sont appliquées partout et écrites nulle part d'accessible : l'ordre des mises à jour dans une RPC (le récit avant l'état), la distinction entre `workflow_note` et `schedule_reply_note`, l'interdiction d'`async` dans `onAuthStateChange`, les pièges d'encodage sous PowerShell, et le contrat `actionBox` de la fonction de rendu des courriels.",
-        "pt": "Cinco regras de concepção são aplicadas em toda parte e escritas em nenhum lugar acessível: a ordem das atualizações numa RPC (o relato antes do estado), a distinção entre `workflow_note` e `schedule_reply_note`, a proibição de `async` em `onAuthStateChange`, as armadilhas de codificação sob PowerShell, e o contrato `actionBox` da função de renderização dos e-mails."
-      },
-      "w": {
-        "fr": "Les écrire dans le dépôt, pas dans un fichier local. Une page suffit ; chacune tient en trois lignes et un exemple.",
-        "pt": "Escrevê-las no repositório, não num arquivo local. Uma página basta; cada uma cabe em três linhas e um exemplo."
-      },
-      "y": {
-        "fr": "Ces cinq règles vivent aujourd'hui dans `CLAUDE.md`, qui est **explicitement hors dépôt**. Quelqu'un qui clone le projet ne les verra jamais et les enfreindra, une par une, en écrivant du code parfaitement raisonnable.",
-        "pt": "Estas cinco regras vivem hoje em `CLAUDE.md`, que está **explicitamente fora do repositório**. Quem clonar o projeto nunca as verá e as infringirá, uma a uma, escrevendo código perfeitamente razoável."
-      },
-      "f": {
-        "fr": [
-          "Les cinq sont dans le dépôt, atteignables depuis `CONTRIBUTING.md`.",
-          "Chacune porte l'incident qui l'a produite, quand il existe."
-        ],
-        "pt": [
-          "As cinco estão no repositório, alcançáveis a partir de `CONTRIBUTING.md`.",
-          "Cada uma traz o incidente que a produziu, quando existe."
-        ]
-      },
-      "dep": {
-        "fr": "Sert **A2** et **A4**.",
-        "pt": "Serve **A2** e **A4**."
-      },
-      "r": [
-        "CLAUDE.md, doctrines internalisées",
-        "PLAN_DE_MARCHE §8"
-      ],
-      "verif": {
-        "fr": "31/08 — `CONTRIBUTING.md` existe, mais aucune occurrence d'`actionBox` ni de `workflow_note` n'y est atteignable. Le constat tient.",
-        "pt": "31/08 — `CONTRIBUTING.md` existe, mas nenhuma ocorrência de `actionBox` nem `workflow_note` é alcançável dali."
       }
     },
     {

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-02** · 64 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-04** · 58 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,15 +16,15 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 2
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 10
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 7
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **3 septembre 2026**, en fin de journée — production interrogée en lecture seule et dépôt recompté, après la matinée (E13, I4, I6, H1), la lettre de Xavier (C5 = B, C9 = A, D2 = A, E11 = A, I16 = A) exécutée de bout en bout, le lot `autor_sans_autorite` tranché le soir même, et le registre porté à v0.17 (`RES-Q13`, `RES-D12`). Toutes les lignes ont été remesurées, y compris les volumétries métier : c'est un relevé complet, pas un rafraîchissement ciblé.
 
-**Fraîcheur des constats au 2026-09-02.** **47 items sur 64** portent une vérification datée qui leur est propre (A1, A3, B4, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E8, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I8, I10, I11, I12, I13, I15, J2, J6, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-04.** **41 items sur 58** portent une vérification datée qui leur est propre (A1, A3, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -367,34 +367,12 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **B4** | Examiner les quatre tables à RLS sans policy qui ne sont pas du transit | `P2` | Ouvert |
 | **B7** | Départager les homonymes de fonctions entre `ingest` et `public` | `P2` | Ouvert |
 | **B9** | Purger le schéma `backup_2026_05_07` | `P2` | Ouvert |
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
-
-#### B4 — Examiner les quatre tables à RLS sans policy qui ne sont pas du transit
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** 15 tables ont RLS activé et zéro policy. Onze sont des tables de transit ou vides. Quatre ne le sont pas : `author_name_aliases` (**1 647 lignes**), `library_themes` (3 lignes), `library_theme_configs`, `interlibrary_loan_events`.
-
-*Vérifié : 31/08 — 14 tables à RLS sans policy (15 au 29/08). Les quatre nommées y sont toujours : `author_name_aliases` (1 647 lignes vivantes), `library_themes` (3), `library_theme_configs` (0), `interlibrary_loan_events` (0).*
-
-**Ce que c'est.** Pour chacune, trancher : soit l'accès passe par une RPC et l'absence de policy est correcte — l'écrire en commentaire SQL —, soit une lecture légitime est aujourd'hui impossible et il manque une policy ou une fonction.
-
-**Pourquoi ça compte.** Une table avec RLS et sans policy est fermée à tout le monde sauf aux fonctions `DEFINER`. C'est parfois exactement ce qu'on veut, et parfois une fonctionnalité qui ne marche pas sans que personne l'ait remarqué — `author_name_aliases` porte 1 647 lignes que rien ne lit peut-être.
-
-**Ce qui compte comme fini.**
-
-- Les quatre tables ont un verdict écrit.
-- Le contrôle de restauration du runbook liste nommément les tables sans policy attendues.
-
-**Dépendances.** Aucune.
-
-*Renvois : `PLAN_DE_MARCHE §8` · `MATRICE_rls_deny_all_2026-06-23`*
 
 #### B7 — Départager les homonymes de fonctions entre `ingest` et `public`
 
@@ -421,18 +399,18 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
 
-**État.** Six tables, **toutes à zéro ligne et zéro insertion depuis leur création**, sans clé primaire, sans RLS : `emprestimos_v2`, `emprestimo_itens_v2`, `reservas_v2`, `reserva_linhas_v2`, `reserva_item_workflow_v2`, `loan_midpoint_message_log`. La décision `BG2-9` prescrit cette purge depuis juin.
+**État.** **Constat corrigé le 04/09 au soir — il était faux depuis le 30/08, dans le sens qui compte.** Six tables, sans clé primaire, sans RLS, qu'aucune fonction (`pg_proc.prosrc`) ni vue (`pg_views`) ne cite. Mais **pas « zéro ligne »** : le « 0 insertion depuis la création » du relevé du 30/08 (et de la revérification du 04/09 au matin) venait de `pg_stat_user_tables`, dont les compteurs ont été **remis à zéro par le redémarrage du 02/09** — et sur ces tables jamais analysées, `n_live_tup` disait 0 aussi. Le comptage direct dit **50 lignes** : 10 réservations, 10 lignes, 10 workflows, 10 emprunts, 10 lignes d'emprunt, journal de mi-parcours vide. C'est exactement ce que `BILAN_05_au_07_MAI_2026` décrit : le **snapshot pris le 07/05/2026 avant le `TRUNCATE` de l'historique de circulation de la période d'essai** (créé du 29/03 au 30/04/2026), gardé « une à deux semaines » pour restauration. Aucune de ces lignes n'existe dans `public` (la production a redémarré à 1), aucune n'est postérieure au 08/05. **La décision `BG2-9` prescrit la purge en connaissance de cause** (« copie figée »).
 
-*Vérifié : 30/08 — le schéma pèse 6 tables et 0,1 Mo. Ce qui le lit encore n'a pas été cherché.*
+*Vérifié : 30/08 — le schéma pèse 6 tables et 0,1 Mo. Ce qui le lit encore n'a pas été cherché. **04/09, matin** — « zéro ligne, zéro insertion » relu dans `pg_stat_user_tables` ; rien ne le lit (`prosrc`, `pg_views`) : ça, c'était vrai. **04/09, 20 h 55** — première migration (`04b5c298`) : le garde « refuse si une ligne » a **refusé** — `reservas_v2 porte 10 ligne(s)` — et a fait tomber le job `backend` (run 1191) : aucun `db push` ne passait plus. Deux sessions ont réagi : la voisine a rendu la purge **différée** (`ea813837` : notice, le schéma reste, la migration passe — c'est la version appliquée) ; celle-ci a compté (50 lignes, mars–avril 2026, aucune dans `public`), relu le bilan de mai, écrit le garde attestant et l'a essayé en production sans purge. **La purge attend une nouvelle migration**, ou la décision de garder le snapshot.*
 
-**Ce que c'est.** `DROP SCHEMA backup_2026_05_07 CASCADE` par migration, après avoir confirmé une dernière fois que les six tables sont vides.
+**Ce que c'est.** Une migration qui **atteste ce snapshot-là** avant de purger — six tables, 5 × 10 + 0 lignes, tout antérieur au 08/05/2026, aucun identifiant présent dans `public` — et refuse tout autre contenu. Le garde a été écrit et essayé en production dans un `DO` sans purge le 04/09 : il passe. Reste à le porter dans une **nouvelle** migration (la version `20260904184434` est appliquée sous sa forme « différée » et ne se rejoue pas).
 
 **Pourquoi ça compte.** Six tables de sauvegarde vides polluent chaque relevé d'advisors — elles portent à elles seules six des quatorze avis « pas de clé primaire ». Et un schéma nommé `backup_` qui ne contient rien est un piège pour qui reprendra le projet.
 
 **Ce qui compte comme fini.**
 
-- Le schéma n'existe plus.
-- `deploy/bg2-known-tables.txt` a été mis à jour dans le même mouvement.
+- [object Object]
+- [object Object]
 
 **Dépendances.** Ne pas confondre avec `conv_backup`, qui porte des données de revue humaine et **ne se purge pas** (voir **C4**).
 
@@ -835,7 +813,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **E5** | Relayer les tuiles OpenStreetMap par le serveur | `P2` | Ouvert |
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
 | **E7** | Corriger le titre de page qui ne suit pas la navigation | `P2` | Ouvert |
-| **E8** | Charger les deux polices sans bloquer l'affichage | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
@@ -990,27 +967,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 **Dépendances.** Complément naturel de **E1**.
 
 *Renvois : `Mémoire de projet, dette technique`*
-
-#### E8 — Charger les deux polices sans bloquer l'affichage
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
-
-**État.** **Constat corrigé le 31/08 : il décrivait un état mort depuis mai.** `titre.ttf` (1 Mo) et `accent.ttf` (484 Ko) ont disparu le **06/05/2026** (commit `dba21cd3`, auto-hébergement Bitter + Fira Sans) — il n'en reste qu'un commentaire dans `src/lib/theme.js:198`. Depuis : 19 fichiers woff2 auto-hébergés dans `public/fonts/` (1,3 Mo en tout), `font-display: swap` sur toutes les faces de `src/styles/fonts.css`, préchargement des deux fichiers du premier rendu dans `index.html`. Il ne reste de l'item que la mesure avant/après jamais consignée — candidat à la clôture.
-
-*Vérifié : 31/08 — mesuré dans le dépôt : fichiers de `public/fonts/`, `src/styles/fonts.css`, `index.html:47-48`, historique git.*
-
-**Ce que c'est.** Ajouter `font-display: swap`, précharger la police de titre seule, sous-ensembler les fichiers aux caractères réellement utilisés — dix langues dont le grec, donc le sous-ensemble n'est pas trivial.
-
-**Pourquoi ça compte.** 1,5 Mo de polices sur une connexion de comptoir, c'est plusieurs secondes d'écran blanc. Le public d'AnarBib inclut des bibliothèques qui n'ont pas la fibre.
-
-**Ce qui compte comme fini.**
-
-- ~~Le texte s'affiche avant les polices, avec une substitution acceptable~~ — `font-display: swap` sur toutes les faces depuis le 06/05 (`src/styles/fonts.css`).
-- Le poids total des polices chargées à la première visite est mesuré avant et après.
-
-**Dépendances.** Ne pas toucher à l'identité visuelle : `IDENT-1` à `IDENT-4` sont actés.
-
-*Renvois : `Mémoire de projet, dette technique` · `REGISTRE §39 IDENT`*
 
 #### E9 — Finir la mise en page mobile : trois lots identifiés
 
@@ -1442,9 +1398,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Gelé |
 | **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Gelé |
 | **I6** | Purger les relevés de la sonde de santé | `P2` | À vérifier |
-| **I8** | Mettre `deploy/README.md` en accord avec ce qui a été exécuté | `P2` | Ouvert |
-| **I10** | Nettoyer les traces de Turnstile et les fichiers de rebut | `P2` | Ouvert |
-| **I11** | Sortir de `node:20`, en fin de maintenance | `P2` | Ouvert |
 | **I12** | Automatiser le rafraîchissement du miroir froid | `P2` | Ouvert |
 | **I13** | Finir la bascule vers le nouveau moteur de pages | `P3` | Ouvert |
 | **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | Ouvert |
@@ -1537,71 +1490,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `Relevé du 29/08/2026` · `REGISTRE §38 OPS`*
 
-#### I8 — Mettre `deploy/README.md` en accord avec ce qui a été exécuté
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Le document affirme en gras : « Rien de tout ceci n'a encore tourné ». Trois commits du 26/08 décrivent des exécutions réelles avec huit défauts relevés. Par ailleurs `bootstrap.sh` a **huit étapes** plus une « 7 bis » et une vérification, là où le README en annonce sept ; et le README déclare `notify-cross-library-digest` « absente du dépôt » alors qu'elle y est.
-
-*Vérifié : 31/08 — `deploy/README.md` affirme toujours « Rien de tout ceci n'a encore tourné » et déclare toujours `notify-cross-library-digest` absente du dépôt. Le constat tient mot pour mot.*
-
-**Ce que c'est.** Réécrire la section d'état à partir des journaux d'exécution du 26/08, corriger le compte d'étapes, et retirer l'affirmation sur `notify-cross-library-digest`.
-
-**Pourquoi ça compte.** `deploy/README.md` est le document que lira quelqu'un qui prend **A2** — la reconstruction par un tiers. Une phrase qui dit « rien n'a tourné » va lui faire croire qu'il essuie les plâtres alors que huit défauts ont déjà été trouvés et corrigés pour lui.
-
-**Ce qui compte comme fini.**
-
-- La section d'état décrit ce qui a tourné et ce qui n'a pas tourné.
-- Les quatre points « à confirmer avant bascule » ont un verdict : GoTrue et le courriel, `PGRST_DB_SCHEMAS` mis à `public,api,storage` par déduction, le cas `notify-cross-library-digest` (clos), et le rejeu des migrations.
-- `CADDY_TAG=2` est un tag majeur flottant dans un fichier qui proclame « aucun `latest`, jamais » : à épingler ou à justifier.
-
-**Dépendances.** Prérequis moral de **A2**.
-
-*Renvois : `deploy/README.md` · `Commits 57321385, 35c03dd5, 90266600`*
-
-#### I10 — Nettoyer les traces de Turnstile et les fichiers de rebut
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Turnstile a été entièrement retiré du code le 20/08 — sa réapparition serait une régression. Mais des **clés de test subsistent** dans `.env.example` (deux entrées), `.env.local`, `deploy/functions.env`, une référence dans `package.json`, et un secret au Vault. Par ailleurs `tmp-ficedl/` (754 Ko, doublon exact d'un fichier versionné) traîne à la racine, et `docs/drafts/` est versionné sans règle.
-
-*Vérifié : 31/08 — le ménage a avancé sans que l'item le sache : plus aucune trace Turnstile dans `package.json`, `.env.local`, `deploy/functions.env` ni au Vault ; `.env.example` n'en garde qu'une mention historique en commentaire. Restent : le secret de fonction `TURNSTILE_SECRET_KEY` (posé le 05/05), `tmp-ficedl/` (740 Ko) à la racine, et `docs/drafts/` sans règle (2 fichiers).*
-
-**Ce que c'est.** Retirer les cinq traces, supprimer `tmp-ficedl/` (ignoré par git depuis le 28/08, donc sans risque), et décider du statut de `docs/drafts/` : soit c'est un sas et il s'ignore, soit c'est du contenu et il se documente.
-
-**Pourquoi ça compte.** Une clé de test dans un fichier d'exemple est ce que copiera la prochaine personne qui installe le projet. Et `docs/drafts/` est exactement l'endroit où le SQL des sujets SOLIDAIRES s'est perdu (voir **C1**) : un dossier sans règle est un dossier où les choses restent.
-
-**Ce qui compte comme fini.**
-
-- Aucune trace de Turnstile hors historique git.
-- `tmp-ficedl/` a disparu du disque.
-- `docs/drafts/` a une règle écrite : ce qui y entre en sort, ou n'y entre pas.
-
-**Dépendances.** Aucune.
-
-*Renvois : `RUNBOOK_exploitation_v0.3 §9.8` · `PLAN_DE_MARCHE §7.4` · `Relevé du 29/08/2026`*
-
-#### I11 — Sortir de `node:20`, en fin de maintenance
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Les trois jobs d'intégration continue tournent dans un conteneur `node:20`, dont la fenêtre de maintenance à long terme s'est achevée en avril 2026. C'est le point de fin de vie le plus net de la chaîne.
-
-*Vérifié : 31/08 — 7 occurrences de `node:20` dans les deux workflows. Rien n'a bougé.*
-
-**Ce que c'est.** Passer à la version en maintenance longue suivante, vérifier que le build, les tests et le lint passent, et que la CLI Supabase épinglée `v2.98.1` s'y installe.
-
-**Pourquoi ça compte.** Une image sans mises à jour de sécurité fait tourner tout le déploiement. Le changement est mécanique et se vérifie en une exécution.
-
-**Ce qui compte comme fini.**
-
-- Les trois jobs tournent sur une version maintenue.
-- Le lint reste à zéro erreur (environ cent avertissements est l'état normal).
-
-**Dépendances.** Aucune.
-
-*Renvois : `.forgejo/workflows/ci.yml` · `package.json`*
-
 #### I12 — Automatiser le rafraîchissement du miroir froid
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
@@ -1675,7 +1563,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J2** | Réparer l'index des backlogs et trancher la convention d'archivage | `P2` | Ouvert |
-| **J6** | Écrire les cinq doctrines internalisées là où un tiers les trouverait | `P2` | Ouvert |
 
 #### J2 — Réparer l'index des backlogs et trancher la convention d'archivage
 
@@ -1697,27 +1584,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Se fait en posant ce backlog.
 
 *Renvois : `docs/backlogs/INDEX.md`*
-
-#### J6 — Écrire les cinq doctrines internalisées là où un tiers les trouverait
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** Cinq règles de conception sont appliquées partout et écrites nulle part d'accessible : l'ordre des mises à jour dans une RPC (le récit avant l'état), la distinction entre `workflow_note` et `schedule_reply_note`, l'interdiction d'`async` dans `onAuthStateChange`, les pièges d'encodage sous PowerShell, et le contrat `actionBox` de la fonction de rendu des courriels.
-
-*Vérifié : 31/08 — `CONTRIBUTING.md` existe, mais aucune occurrence d'`actionBox` ni de `workflow_note` n'y est atteignable. Le constat tient.*
-
-**Ce que c'est.** Les écrire dans le dépôt, pas dans un fichier local. Une page suffit ; chacune tient en trois lignes et un exemple.
-
-**Pourquoi ça compte.** Ces cinq règles vivent aujourd'hui dans `CLAUDE.md`, qui est **explicitement hors dépôt**. Quelqu'un qui clone le projet ne les verra jamais et les enfreindra, une par une, en écrivant du code parfaitement raisonnable.
-
-**Ce qui compte comme fini.**
-
-- Les cinq sont dans le dépôt, atteignables depuis `CONTRIBUTING.md`.
-- Chacune porte l'incident qui l'a produite, quand il existe.
-
-**Dépendances.** Sert **A2** et **A4**.
-
-*Renvois : `CLAUDE.md, doctrines internalisées` · `PLAN_DE_MARCHE §8`*
 
 ---
 
@@ -2046,6 +1912,12 @@ CI verte : lint et suite unitaire. |
 | C5 | 2026-09-03 | **B, livré l'après-midi même — et la dette était deux fois plus grande que la fiche ne le disait.** *(1) Le rendu unique* « autorité sinon transcription » était **déjà** la règle de l'OPAC (`author_display || autor` dans `BookPage` et `CatalogPage`, `author_display` venant de `v_book_authors_canonical`) — rien à écrire, forme `DOC-RECENS-1`. *(2) Le formulaire* ne pré-remplit que la transcription (recherche ISBN, œuvre parente) et n'a jamais pré-rempli d'autorité depuis `autor` ; le libellé du champ dit désormais « auteur tel qu'imprimé », dix locales. *(3) Le lot* `autor_sans_autorite` existe (`7618ccfc`, migration `20260903150117`) : CHECK élargie, semis rejouable, `conv_revue_list` rend la transcription comme « actuel », `conv_revue_appliquer` **pose un lien** au lieu de réécrire un texte — autorité retrouvée par l'une des deux formes sans casse ou créée, lien sur le contributeur homonyme ou ligne neuve, anti-écrasement CONV-O6 ; « Anônimo », « Coletivo », « AA. VV. » ne reçoivent aucune proposition. **464 livres semés en production, pas 226** : la fiche comptait les livres sans ligne `book_authors`, table *dérivée* par trigger ; la vérité des contributeurs vit dans `book_contributors`, et 464 livres n'y ont aucun `author_id` (247 sans contributeur du tout, 217 avec des noms non liés). Suite SQL de 8 tests, verte en local avec O7 et O8 ; carte « Auteurs sans autorité » dans l'atelier. Le travail des 464 est un travail de main, à l'Atelier autorités, sans échéance — la file le porte. **Le soir même, Xavier a tranché les 464** dans l'Atelier (16 h 05 – 16 h 10) : 446 validés et appliqués — 446 liens posés, **227 autorités créées** par l'application (`source_kind = 'conv_revue'`) —, 18 écartés (anonymes, collectifs). Il reste 18 livres sans autorité, tous écartés à dessein. Les 227 autorités neuves et les secondes personnes des 125 chaînes multi-noms sont le premier objet de l'audit en profondeur cadré dans `docs/journal/cadrages/REPRISE_audit_autorites_en_profondeur_2026-09-03.md`. **03/09, nuit — l'audit est fait** : les 227 sont classées (98 formes inversées correctes, 60 formes directes, 35 mononymes, 48 en capitales, ~20 collectivités non typées, 7 mentions de rôle, 8 fiches doubles, `??`, `identificado, Não`) ; **9 sont des doublons** de fiches corrigées le 21/08 — la recherche d'homonyme du lot comparait à la lettre. Corrigé (recherche `fn_conv_autorite_homonyme`, sans casse ni accents, forme dérivée ; proposition qui lit « identificado, Não ») ; les 227 sont versées aux lots `autorite_casse`, `autorite_collectivite` et au nouveau `autorite_forme` ; 8 doublons exacts sont signalés à l'Atelier (les 5 paires de fixtures de formation exclues). Les 333 secondes personnes restent : lot par contributeur à écrire, après l'homonymie. |
 | D2 | 2026-09-03 | **A, les cinq — et le seul geste de code est livré.** Verdicts inscrits (spec périodiques v1.0 §13, `5f63e75f`) en accord avec le code : `periodicidade` libre, deux liens de filiation, pas de `library_id`, promotion = un geste, page dédiée. La liste de suggestions non contraignante de `periodicidade` (huit valeurs, `datalist`, dix locales) est dans `SerialDetailEditor` depuis `5f43a247` ; elle ne se fermera que le jour où un fonds réel (Anarchief) en fera apparaître le besoin. 4 titres en base, `periodicidade` jamais renseignée : la liste arrive avant le premier usage. |
 | E11 | 2026-09-03 | **A — les tags fermés, le flux requalifié et livré le jour même.** `OPAC-TAG1` fermé au REGISTRE (un tag signé dit qui a lu quoi ; un tag anonyme ne se modère pas ; le besoin est couvert par l'autorité matière et le thésaurus). `OPAC-RSS1` requalifié puis **livré** (`e7a8acab`) : Edge Function `rss-novidades` — `GET /functions/v1/rss-novidades/<slug>`, **deux gardes et rien d'autre** (la bibliothèque est publique via `api.libraries_public_v1` ; les notices viennent de `v_books_public_catalog_v2`, la vue que l'OPAC anonyme lit déjà), RSS 2.0, autorité sinon transcription, lien vers la notice, cache d'une heure ; banc d'essai de 5 tests (même recette que gazette, `@vitest-environment node`) ; lien « Nouveautés (RSS) » sur la page publique et en tête du catalogue de chaque bibliothèque, dix locales. Sans requête, sans compte : rien à pister. **Ce que le banc ne voit pas, la production l'a montré** : à la première requête, 500 « permission denied for view libraries_public_v1 » — la vue `security_invoker` n'était accordée qu'à `anon` et `authenticated`, pas au rôle de service de la fonction ; un grant `SELECT` (`3677442a`, `20260903150755`) a suffi, le prédicat de publicité reste dans la vue. Vérifié ensuite en production : `/rss-novidades/blmf` répond un flux valide. |
+| B4 | 2026-09-04 | **Verdict écrit le 04/09 (`04b5c298`, migration `20260904184501`) : les quatre sont fermées exprès.** `author_name_aliases` (1 644 lignes) est lue par six fonctions `SECURITY DEFINER` (`merge_author`, `preview_merge_author`, `suggest_author_duplicates`, `suggest_authority_duplicates`, `fn_conv_fusionner_doublon_exact`, `api.search_catalog_v1`) et deux vues (`v_author_alias_candidates_unique`, `v_author_alias_worklist`) — rien ne la lit directement, et rien ne devrait. `library_themes` (7 lignes) et `library_theme_configs` (vide) passent par `get/set_library_theme_config*` et `fn_ensure_library_theme` ; `interlibrary_loan_events` (vide) n'est écrite que par `fn_v2_log_emprestimo_interbibliotecas_event` — le PEB n'a pas d'écran (G6). Chaque table porte le verdict en `COMMENT ON TABLE`, avec les noms. **Le second critère était déjà rempli** : `deploy/bootstrap.sh` liste nommément les 15 tables fermées attendues (`SANS_POLICY_ATTENDUES`) et échoue si l'une manque ou s'il y en a une de trop — `DOC-RECENS-1`. |
+| I11 | 2026-09-04 | **`node:22` depuis le 04/09 (`04b5c298`)** — sept occurrences dans `ci.yml` et `sql-tests.yml`. La CLI Supabase `v2.98.1` est un binaire téléchargé par `curl`, pas un paquet npm : rien à réinstaller. Preuve en deux runs : le run 1191 (premier sur `node:22`) a passé `app` (lint, tests, build, 2 min 41) et `sql-tests`, et `backend` est allé jusqu'au `db push` — qui a échoué sur le garde de **B9**, pas sur l'image ; le run suivant (`ea813837`) a passé `backend` de bout en bout, migrations appliquées en production. |
+| I8 | 2026-09-04 | **Réécrit le 04/09 (`04b5c298`).** L'en-tête de `deploy/README.md` dit désormais ce qui a tourné le 26/08 — trois passes de `bootstrap.sh` (volumes vierges : 183/183 migrations en 12 s, 184 tables, 0 sans RLS, 77 migrations GoTrue ; dump factice ; **dump réel de la production**, objet Storage servi octet pour octet), **huit défauts** trouvés et corrigés (collision du nom de projet Docker, `--wait`, faux vert de l'étape 8, buckets qu'aucune migration ne crée, Storage démarré après la restauration, image Storage `v1.60.4` → `v1.70.7`, disposition des fichiers Storage ≠ sauvegarde), la doctrine d'ordre qui en sort, **huit étapes plus une « 7 bis »** — et ce qui n'a pas tourné (la bascule, le routeur `main` en conditions réelles, un vrai domaine). Les quatre points « à confirmer » ont leur verdict : `notify-cross-library-digest` **clos** (elle est au dépôt), le rejeu des migrations **fait** (étape 5 à deux branches), `CADDY_TAG=2` **justifié** dans `.env.example` (seule entorse au « jamais de `latest` », à épingler le jour de la répétition finale) ; GoTrue/courriel et `PGRST_DB_SCHEMAS` restent marqués à vérifier, honnêtement. |
+| E8 | 2026-09-04 | **Clos le 04/09 sur mesure consignée — le travail datait du 06/05 (`dba21cd3`).** Avant : deux TTF bloquants, `titre.ttf` 1 Mo + `accent.ttf` 484 Ko, soit **≈ 1,5 Mo** avant tout texte. Après : **19 fichiers woff2 auto-hébergés, 1 296 308 octets en tout** (Bitter + Fira Sans, graphies latine, grecque, cyrillique), chargés à la demande par face et par graphie, **tous en `font-display: swap`** (10 déclarations dans `src/styles/fonts.css`) ; **seuls deux fichiers sont préchargés** au premier rendu (`index.html:47-48`) : `FiraSans-Regular.woff2` 44 904 octets + `Bitter-Regular.woff2` 36 516 octets = **81 420 octets**. Sur une connexion de comptoir, le texte s'affiche avec la police de substitution puis bascule ; rien ne bloque. Le sous-ensemblage (troisième idée du constat) n'a pas lieu d'être : le découpage par graphie fait déjà ce travail. Mesuré dans le dépôt le 04/09. |
+| J6 | 2026-09-04 | **Le constat était faux depuis le 17/05 — `DOC-RECENS-1`.** Les cinq doctrines sont **au dépôt depuis la refonte bilingue du README** (`fbe8969b`, 17/05/2026), section « Doctrines internalisées / Internalized doctrines », en français et en anglais, avec quatre autres (traçabilité R8, proposeur silencieux, qui notifier, compte auth en SQL direct). Ce qui manquait tenait en une ligne : **aucun chemin depuis `CONTRIBUTING.md`**. Ajouté le 04/09 (`04b5c298`) dans la table « selon ce que vous touchez » : une RPC qui écrit plusieurs tables, un courriel sortant, l'auth côté front, un script sous Windows → le README. Les incidents d'origine sont dans le code lui-même là où ils existent (`AuthContext.jsx` : la boucle de re-fetch qui saturait le pool ; baseline `paquet 141.2.E`, fix B3 du 16/05). |
+| I10 | 2026-09-04 | **Clos le 04/09 (`04b5c298`).** `tmp-ficedl/` supprimé du disque (740 Ko, ignoré par git depuis le 28/08). Le secret de fonction `TURNSTILE_SECRET_KEY` — dernière trace hors historique — **retiré** (`supabase secrets unset`, après vérification que les sept mentions restantes dans le code sont des commentaires « remplace Turnstile »). `docs/drafts/` a sa règle, écrite dans `docs/drafts/README.md` : **un sas, pas une réserve** — ce qui y entre en sort dans le mois, promu, tranché par décision ou supprimé ; `archive/` garde la trace. Et le sas est vidé dans le même geste : le brouillon de recherche par accents, **périmé depuis le 03/07** (remplacé par `api.catalog_search_ids_v1`, son en-tête le disait), rejoint `archive/` sous sa date d'entrée. `.env.example` garde une mention historique en commentaire, à dessein. |
 
 ---
 
@@ -2077,4 +1949,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-02. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 64 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-04. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 58 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
