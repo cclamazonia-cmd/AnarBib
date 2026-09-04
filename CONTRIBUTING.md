@@ -35,6 +35,7 @@ En cas de contradiction apparente entre deux documents, le REGISTRE tranche. Une
 |---|---|
 | l'i18n, les libellés, l'interface | `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md` |
 | le SQL, la base, les migrations | les doctrines actives dans `docs/journal/` |
+| une RPC qui écrit plusieurs tables, un courriel sortant, l'auth côté front, un script sous Windows | [`README.md` § Doctrines internalisées](README.md#doctrines-internalisées--internalized-doctrines) — ordre des `UPDATE` (le récit avant l'état), `workflow_note` / `schedule_reply_note`, contrat `actionBox` de `renderEmail`, jamais d'`async` dans `onAuthStateChange`, UTF-8 sous PowerShell |
 | le catalogage, les notices | `docs/guides/guide-conventions-catalografia-*.md` |
 | le déploiement, la pile auto-hébergée | `deploy/README.md` puis `deploy/REPETITION.md` |
 

@@ -48,7 +48,7 @@ jobs:
   sql-tests:
     runs-on: anarbib-local
     container:
-      image: node:20
+      image: node:22
     services:
       db:
         image: public.ecr.aws/supabase/postgres:17.6.1.084  # = image db du stack local
@@ -114,7 +114,7 @@ jobs:
     if: failure()
     runs-on: anarbib-local
     container:
-      image: node:20
+      image: node:22
     steps:
       - name: Ouvrir ou rouvrir le ticket de rouge
         env:
@@ -194,7 +194,7 @@ jobs:
     if: ${{ !cancelled() && needs['sql-tests'].result == 'success' }}
     runs-on: anarbib-local
     container:
-      image: node:20
+      image: node:22
     continue-on-error: true
     steps:
       - name: Refermer le ticket de rouge s'il y en a un

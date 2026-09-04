@@ -58,7 +58,7 @@ jobs:
   app:
     runs-on: anarbib-local
     container:
-      image: node:20
+      image: node:22
     steps:
       - name: Outils système (git, curl, tar)
         run: |
@@ -163,7 +163,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: anarbib-local
     container:
-      image: node:20
+      image: node:22
     steps:
       - name: Outils système (git, curl, tar)
         run: |
@@ -285,7 +285,7 @@ jobs:
     if: failure()
     runs-on: anarbib-local
     container:
-      image: node:20
+      image: node:22
     steps:
       - name: Ouvrir ou rouvrir le ticket de rouge
         env:
@@ -365,7 +365,7 @@ jobs:
     if: ${{ !cancelled() && needs.app.result == 'success' && (needs.backend.result == 'success' || needs.backend.result == 'skipped') }}
     runs-on: anarbib-local
     container:
-      image: node:20
+      image: node:22
     continue-on-error: true
     steps:
       - name: Refermer le ticket de rouge s'il y en a un

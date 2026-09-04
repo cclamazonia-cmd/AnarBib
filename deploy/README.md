@@ -5,8 +5,37 @@ Trois fichiers : `compose.yml`, `Caddyfile`, `.env` (depuis `.env.example`).
 déclare treize) et Caddy substitué à Kong. Justification service par service :
 [`AUDIT_pile_minimale_2026-08-26`](../docs/journal/audits/AUDIT_pile_minimale_2026-08-26.md).
 
-**Ce document décrit un état à atteindre, pas un état atteint.** Rien de tout
-ceci n'a encore tourné : c'est la matière de la répétition sur machine jetable.
+**État au 04/09/2026 — ce qui a tourné, et ce qui n'a pas tourné.** La pile
+a été montée trois fois le 26/08/2026 par `bootstrap.sh`, en trois passes
+(commits `57321385`, `35c03dd5`, `90266600`) :
+
+- sur volumes vierges, depuis le dépôt seul : 183/183 migrations en 12 s,
+  184 tables publiques, 0 sans RLS, 77 migrations GoTrue (la production
+  exactement), trois `200` à travers Caddy, code de sortie 0 ;
+- sur un jeu de données factice restauré par `--depuis-une-sauvegarde`,
+  aller-retour exact ;
+- sur **un dump réel de la production**, fichiers des buckets remis en place et
+  un objet Storage servi octet pour octet.
+
+**Huit défauts ont été trouvés et corrigés en chemin** — aucun ne se voyait à
+la lecture : collision du nom de projet Docker avec la pile de dev (`down -v`
+démontait l'autre), `--wait` qui n'attend que les services dotés d'une sonde,
+faux vert de l'étape 8 (plafonds « posés » sans vérification de l'effet), les
+buckets que **aucune** migration ne crée (ils arrivent avec le dump), Storage
+démarré *après* la restauration alors qu'il produit du schéma (`storage.buckets`),
+image Storage en retard sur la production (`v1.60.4` → `v1.70.7`, colonne
+`versioning_status`), et la disposition des fichiers Storage sur disque qui
+n'est pas celle de la sauvegarde (`<bucket>/<nom>` d'un côté,
+`<s3>/<tenant>/<bucket>/<nom>/<version>` de l'autre — un `rsync` direct était
+faux). D'où la doctrine d'ordre, désormais dans `bootstrap.sh` : base seule →
+rôles → GoTrue **et** Storage → schéma + données → vues → et seulement ensuite
+les services qui *lisent* le schéma. Le script compte **huit étapes plus une
+« 7 bis »** (attente d'un fait, jamais d'un délai) et une vérification finale.
+
+**Ce qui n'a pas tourné** : la bascule elle-même chez Herbes Folles, le routeur
+`main` en conditions réelles (item I3, gelé jusqu'au 14/09), et un front
+reconstruit pointé sur un vrai domaine (étapes 7 et 8 de la liste de
+répétition, plus bas). C'est là que se joue le chiffre à rapporter.
 
 ---
 
@@ -98,14 +127,22 @@ friction classique.
 - **`PGRST_DB_SCHEMAS`.** Mis à `public,api,storage` par déduction. Comparer avec
   le réglage réel du projet Supabase (Settings → API → Exposed schemas).
 
-- **`notify-cross-library-digest`.** Appelée depuis une migration, absente du
-  dépôt. `supabase functions list` tranchera. Si elle n'existe qu'en production,
-  elle disparaît à la première reconstruction.
+- **`notify-cross-library-digest`.** ~~Appelée depuis une migration, absente du
+  dépôt.~~ **Clos (04/09/2026)** : la fonction est au dépôt,
+  `supabase/functions/notify-cross-library-digest/`, et se déploie avec les
+  autres. Rien n'existe qu'en production.
 
-- **Le rejeu des migrations.** Le montage `docker-entrypoint-initdb.d` ne
-  s'exécute qu'au tout premier démarrage, sur un volume vide. Pour une
-  reconstruction, c'est ce qu'on veut ; pour une mise à jour, il faut passer par
-  la CLI. `bootstrap.sh` devra distinguer les deux cas.
+- **Le rejeu des migrations.** ~~`bootstrap.sh` devra distinguer les deux cas.~~
+  **Fait** : l'étape 5 a deux branches — rejeu depuis le dépôt sur volume vide,
+  ou `--depuis-une-sauvegarde` — éprouvées toutes deux le 26/08. Le montage
+  `docker-entrypoint-initdb.d` ne s'exécute qu'au tout premier démarrage ; pour
+  une mise à jour ultérieure, c'est la CLI.
+
+- **`CADDY_TAG=2`.** Seule entorse à « aucun `latest`, jamais » : un tag majeur
+  flottant. Justification écrite dans `.env.example` — Caddy est le seul service
+  sans schéma ni données, une mineure ne change rien à la reconstruction. À
+  épingler au tag exact le jour de la répétition finale, avec la valeur que
+  `docker image inspect` aura donnée.
 
 ---
 
