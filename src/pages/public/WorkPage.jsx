@@ -10,11 +10,13 @@ import { languageLabel } from '@/lib/languages';
 
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
 
-// Page Œuvre (P4 v2 Lot A) : titre uniforme, auteur·rice, éditions publiques.
+// Page Œuvre (P4 v2 Lot A) : titre dans la locale de la lectrice (lot 3 du
+// 04/09/2026 : work_titles, sinon titre d'une édition dans cette langue, sinon
+// titre uniforme), auteur·rice, éditions publiques.
 // Données via api.work_public_detail (public-safe : passe par catalog_list_anon_v1).
 export default function WorkPage() {
   const { id } = useParams();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   const [work, setWork] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,15 +25,17 @@ export default function WorkPage() {
     setLoading(true);
     (async () => {
       try {
-        const { data } = await supabase.schema('api').rpc('work_public_detail', { p_work_id: Number(id) });
+        const { data } = await supabase.schema('api').rpc('work_public_detail', { p_work_id: Number(id), p_lang: locale });
         if (alive) setWork(data || null);
       } catch { if (alive) setWork(null); }
       finally { if (alive) setLoading(false); }
     })();
     return () => { alive = false; };
-  }, [id]);
+  }, [id, locale]);
 
-  useDocumentTitle(work?.uniform_title || t({ id: 'work.page.title' }));
+  const displayTitle = work?.display_title || work?.uniform_title;
+  const localTitle = work?.titles?.[locale];
+  useDocumentTitle(displayTitle || t({ id: 'work.page.title' }));
 
   if (loading) {
     return <PageShell><Topbar /><div style={{ textAlign: 'center', padding: 60 }}><Spinner size={32} /></div></PageShell>;
@@ -65,7 +69,7 @@ export default function WorkPage() {
   return (
     <PageShell>
       <Topbar />
-      <Hero title={work.uniform_title} subtitle={subtitle}>
+      <Hero title={displayTitle} subtitle={subtitle}>
         {work.primary_author_id && work.author_name && (
           <Link to={`/autor/${work.primary_author_id}`} className="ab-button ab-button--secondary ab-button--sm">
             {work.author_name}
@@ -74,6 +78,13 @@ export default function WorkPage() {
       </Hero>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '16px 12px' }}>
+        {(displayTitle !== work.uniform_title || localTitle?.source === 'auto') && (
+          <p style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 12px' }}>
+            {displayTitle !== work.uniform_title && <span>{t({ id: 'work.page.uniformTitle' }, { title: work.uniform_title })}</span>}
+            {displayTitle !== work.uniform_title && localTitle?.source === 'auto' && ' · '}
+            {localTitle?.source === 'auto' && <em>{t({ id: 'work.page.autoTitle' })}</em>}
+          </p>
+        )}
         <h2 style={{ fontSize: '1rem', margin: '0 0 12px' }}>{t({ id: 'work.page.editionsHeading' })}</h2>
         {expressions.map(exp => (
           <div key={exp.lang} style={{ marginBottom: 18 }}>

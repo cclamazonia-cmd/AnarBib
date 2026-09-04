@@ -70,6 +70,8 @@ BEGIN
     ('anarbib-gazette-monthly-start',               '0 6 15 * *',   true),
     ('anarbib-gazette-reconcile-tick',              '*/5 * * * *',  true),
     ('anarbib-gazette-translate-submissions',       '*/10 * * * *', true),
+    -- OPAC par oeuvre, lot 3 (04/09/2026) : pre-traduction des titres d'oeuvre, ref. 20260904130100
+    ('anarbib-work-titles-autofill',                '*/10 * * * *', true),
     ('anarbib-health-probe',                        '*/5 * * * *',  true),
     ('anarbib-membership-expiry-daily',             '40 6 * * *',   true),
     ('anarbib-notify-cross-library-digest-weekly',  '30 8 * * 1',   true),

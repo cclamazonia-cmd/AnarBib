@@ -125,6 +125,10 @@ verify_jwt = false
 [functions.translate-gazette-submission]
 verify_jwt = false
 
+# Pré-traduction des titres d'œuvre (lot 3 OPAC par œuvre) : appelée par pg_cron, protégée par X-Cron-Secret.
+[functions.work-titles-autofill]
+verify_jwt = false
+
 # Lettre de la fédération : confirmation double opt-in + désabonnement 1-clic (publics, token-gated).
 [functions.lettre-confirm]
 verify_jwt = false
