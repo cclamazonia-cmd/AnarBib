@@ -57,13 +57,48 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
 
   const key = (r) => `${r.book_id_a}:${r.book_id_b}`;
 
+  // OPAC par œuvre (04/09/2026, lot 1b) : le balayage des œuvres probablement
+  // scindées (même auteur·rice, titre proche) — suggest_split_works, la même
+  // heuristique qui a sorti les 30 groupes arbitrés à la main le 04/09.
+  const [splits, setSplits] = useState([]);
+  const [splitEx, setSplitEx] = useState(null); // { key, motif }
+
   const charger = useCallback(async () => {
     setLoading(true); setErr('');
-    const { data, error } = await supabase.rpc('suggest_catalog_duplicates', { p_max: 500 });
-    if (error) setErr(localizeError(error, t));
-    else setRows(data || []);
+    const [dup, sp] = await Promise.all([
+      supabase.rpc('suggest_catalog_duplicates', { p_max: 500 }),
+      supabase.rpc('suggest_split_works', { p_max: 300 }),
+    ]);
+    if (dup.error) setErr(localizeError(dup.error, t));
+    else setRows(dup.data || []);
+    if (sp.error) setErr((e) => e || localizeError(sp.error, t));
+    else setSplits(sp.data || []);
     setLoading(false); setCharge(true);
   }, [t]);
+
+  const splitKey = (s) => `${s.work_id_a}:${s.work_id_b}`;
+  const retirerSplit = (s, absorbee) => {
+    // La paire décidée disparaît ; si une œuvre a été absorbée, toutes les
+    // paires qui la citaient aussi (elle n'existe plus).
+    setSplits((prev) => prev.filter((x) => splitKey(x) !== splitKey(s)
+      && (absorbee == null || (x.work_id_a !== absorbee && x.work_id_b !== absorbee))));
+    setSplitEx(null);
+    onChanged?.();
+  };
+  async function fusionnerOeuvres(s, source, cible) {
+    setBusy(true); setErr('');
+    const { error } = await supabase.rpc('merge_works', { p_source_work_id: source, p_target_work_id: cible });
+    setBusy(false);
+    if (error) { setErr(localizeError(error, t)); return; }
+    retirerSplit(s, source);
+  }
+  async function garderSeparees(s, motif) {
+    setBusy(true); setErr('');
+    const { error } = await supabase.rpc('mark_works_not_same', { p_a: s.work_id_a, p_b: s.work_id_b, p_reason: motif?.trim() || null });
+    setBusy(false);
+    if (error) { setErr(localizeError(error, t)); return; }
+    retirerSplit(s, null);
+  }
 
   useEffect(() => {
     if (isActive && !charge && !loading) charger();
@@ -241,8 +276,9 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
         <>
           <div className="ab-tabbar ab-tabbar--sub">
             {[['decider', 'catalogacao.dedupAssist.bucketDecide', aDecider.length],
-              ['rapprocher', 'catalogacao.dedupAssist.bucketGroup', aRapprocher.length]].map(([id, cle, n]) => (
-              <button key={id} type="button" onClick={() => { setBucket(id); setEx(null); }}
+              ['rapprocher', 'catalogacao.dedupAssist.bucketGroup', aRapprocher.length],
+              ['scindees', 'catalogacao.dedupAssist.bucketSplit', splits.length]].map(([id, cle, n]) => (
+              <button key={id} type="button" onClick={() => { setBucket(id); setEx(null); setSplitEx(null); }}
                 className={`ab-tabbar__tab${bucket === id ? ' active' : ''}`}>
                 {t({ id: cle })}
                 {n > 0 && <span className="ab-tabbar__badge">{n}</span>}
@@ -251,13 +287,82 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
           </div>
 
           <p style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', marginTop: 0, marginBottom: 12 }}>
-            {t({ id: bucket === 'decider' ? 'catalogacao.dedupAssist.helpDecide' : 'catalogacao.dedupAssist.helpGroup' })}
+            {t({ id: bucket === 'decider' ? 'catalogacao.dedupAssist.helpDecide'
+              : bucket === 'scindees' ? 'catalogacao.dedupAssist.helpSplit' : 'catalogacao.dedupAssist.helpGroup' })}
           </p>
 
-          {listeAffichee.length === 0 && <p>{t({ id: 'catalogacao.dedup.none' })}</p>}
+          {/* ── Œuvres scindées : deux œuvres, un même texte ? ──────────── */}
+          {bucket === 'scindees' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {splits.length === 0 && <p>{t({ id: 'catalogacao.splitWorks.none' })}</p>}
+              {splits.map((s) => {
+                const ouvert = splitEx && splitEx.key === splitKey(s);
+                const cotes = [
+                  { id: s.work_id_a, title: s.title_a, editions: s.editions_a, libs: s.libraries_a, years: s.years_a },
+                  { id: s.work_id_b, title: s.title_b, editions: s.editions_b, libs: s.libraries_b, years: s.years_b },
+                ];
+                return (
+                  <div key={splitKey(s)} style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 10, padding: 12, opacity: busy && ouvert ? 0.6 : 1 }}>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)' }}>{s.author_name || '—'}</span>
+                      <span style={{ fontSize: '.7rem', color: 'var(--brand-muted, #777)' }}>{Math.round((Number(s.score) || 0) * 100)}%</span>
+                      {!ouvert && (
+                        <button type="button" className="ab-button ab-button--mini ab-button--secondary"
+                          style={{ marginLeft: 'auto' }} disabled={busy}
+                          onClick={() => setSplitEx({ key: splitKey(s), motif: '' })}>
+                          {t({ id: 'catalogacao.dedupAssist.examine' })}
+                        </button>
+                      )}
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginBottom: ouvert ? 10 : 0 }}>
+                      {cotes.map((c) => (
+                        <div key={c.id} style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: 10, fontSize: '.86rem' }}>
+                          <div style={{ fontWeight: 600 }}>{c.title}</div>
+                          <div style={{ color: 'var(--brand-muted, #888)', fontSize: '.8rem', marginTop: 4 }}>
+                            {[t({ id: 'catalogacao.splitWorks.editions' }, { count: c.editions || 0 }), c.years, c.libs].filter(Boolean).join(' · ')}
+                          </div>
+                          <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                            <a className="ab-button ab-button--mini" href={`/obra/${c.id}`}>{t({ id: 'catalogacao.dedup.scanOpen' })}</a>
+                            {ouvert && (
+                              <button type="button" className="ab-button ab-button--sm" disabled={busy}
+                                onClick={() => fusionnerOeuvres(s, c.id === s.work_id_a ? s.work_id_b : s.work_id_a, c.id)}>
+                                {t({ id: 'catalogacao.splitWorks.mergeInto' }, { title: c.title })}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {ouvert && (
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                        <input type="text" value={splitEx.motif || ''} disabled={busy}
+                          onChange={(e) => setSplitEx((p) => ({ ...p, motif: e.target.value }))}
+                          placeholder={t({ id: 'catalogacao.splitWorks.reasonPlaceholder' })}
+                          style={{
+                            flex: '1 1 200px', minWidth: 0, padding: '7px 10px', borderRadius: 8,
+                            border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)',
+                            color: '#f4f4f4', fontSize: '.85rem',
+                          }} />
+                        <button type="button" className="ab-button ab-button--sm ab-button--secondary" disabled={busy}
+                          onClick={() => garderSeparees(s, splitEx.motif)}>
+                          {t({ id: 'catalogacao.splitWorks.keepSeparate' })}
+                        </button>
+                        <button type="button" className="ab-button ab-button--mini ab-button--secondary"
+                          disabled={busy} onClick={() => setSplitEx(null)}>
+                          {t({ id: 'common.cancel' })}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {bucket !== 'scindees' && listeAffichee.length === 0 && <p>{t({ id: 'catalogacao.dedup.none' })}</p>}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {listeAffichee.map((r) => {
+            {bucket !== 'scindees' && listeAffichee.map((r) => {
               const ouvert = ex && key(ex.r) === key(r);
               const a = cote(r, 'a'); const b = cote(r, 'b');
               return (

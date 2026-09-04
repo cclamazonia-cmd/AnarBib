@@ -410,3 +410,10 @@ tests/sql/conv_8_collectif_nomme_tests.sql
 # (la coordination importe toujours SON catalogue) ; T6 garde que l'admin passe.
 # Ref. 20260904121500.
 tests/sql/import_depot_partenaire_admin_tests.sql
+
+# OPAC par oeuvre (04/09/2026, decisions Xavier) : lot 1b rattachement/fusion des oeuvres
+# (20260904130000), lot 3 titres par langue (20260904130100), lot 2 OPAC groupe cote serveur
+# (20260904130200). Le lot 2 rafraichit la vue materialisee du catalogue apres ses fixtures.
+tests/sql/oeuvres_rattachement_tests.sql
+tests/sql/work_titles_tests.sql
+tests/sql/opac_par_oeuvre_tests.sql

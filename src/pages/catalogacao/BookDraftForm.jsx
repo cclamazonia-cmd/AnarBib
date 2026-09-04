@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
 import SerialAuthorityPicker from './SerialAuthorityPicker';
 import AudioSegmentsBlock from './AudioSegmentsBlock';
+import WorkToolsBlock from './WorkToolsBlock';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
@@ -2976,6 +2977,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   {editionSuggLoading ? t({ id: 'catalogacao.dedup.finding' }) : t({ id: 'catalogacao.work.suggest' })}
                 </button>
               </div>
+              {/* OPAC par œuvre (04/09/2026) : rattacher à une autre œuvre (lot 1b),
+                  titres par langue (lot 3). */}
+              <WorkToolsBlock
+                bookId={Number(f('published_book_id'))}
+                workId={work?.id || null}
+                onChanged={() => setWorkNonce(n => n + 1)}
+                onMsg={(text, kind) => setMsg({ text, kind })}
+              />
               {editionSugg !== null && editionSugg.length === 0 && (
                 <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)', marginTop: 6 }}>{t({ id: 'catalogacao.work.noSuggestions' })}</div>
               )}
