@@ -6312,5 +6312,6 @@
   "catalogacao.volumes.reasonPlaceholder": "Γιατί δεν είναι τόμοι (προαιρετικό)",
   "catalogacao.volumes.works": "{count, plural, one {# έργο σήμερα} other {# έργα σήμερα}}",
   "catalogacao.work.volume": "Τόμος",
-  "catalogacao.work.volumeHint": "Αριθμός του τόμου μέσα στο έργο (I, 2, 1/2). Κενό για έκδοση σε έναν τόμο."
+  "catalogacao.work.volumeHint": "Αριθμός του τόμου μέσα στο έργο (I, 2, 1/2). Κενό για έκδοση σε έναν τόμο.",
+  "catalogacao.volumes.include": "Ένωση αυτής της εγγραφής"
 }

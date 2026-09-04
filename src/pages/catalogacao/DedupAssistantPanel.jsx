@@ -92,18 +92,31 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
     setLoading(false); setCharge(true);
   }, [t]);
 
+  // Chaque ligne porte une case « réunir » : un tome dont on ne sait rien (pas
+  // de numéro deviné) reste à l'écart par défaut et attend une décision.
   const ouvrirVolumes = (g) => setVolEx({
     key: g.key, motif: '',
     volumes: Object.fromEntries(g.members.map((m) => [m.book_id, m.volume || m.volume_guess || ''])),
+    include: Object.fromEntries(g.members.map((m) => [m.book_id, !!(m.volume || m.volume_guess)])),
   });
-  const retirerVolumes = (g) => { setVolGroups((prev) => prev.filter((x) => x.key !== g.key)); setVolEx(null); onChanged?.(); };
+  const retirerVolumes = (g, gardes) => {
+    // Les notices laissées de côté restent proposées, seules les réunies partent.
+    setVolGroups((prev) => prev.flatMap((x) => {
+      if (x.key !== g.key) return [x];
+      const reste = gardes && gardes.length >= 2 ? { ...x, members: x.members.filter((m) => gardes.includes(m.book_id)) } : null;
+      return reste ? [reste] : [];
+    }));
+    setVolEx(null); onChanged?.();
+  };
   async function reunirTomes(g) {
+    const choisis = g.members.filter((m) => volEx?.include?.[m.book_id]);
+    if (choisis.length < 2) return;
     setBusy(true); setErr('');
-    const items = g.members.map((m) => ({ book_id: m.book_id, volume: (volEx?.volumes?.[m.book_id] || '').trim() }));
+    const items = choisis.map((m) => ({ book_id: m.book_id, volume: (volEx?.volumes?.[m.book_id] || '').trim() }));
     const { error } = await supabase.rpc('group_books_as_volumes', { p_items: items });
     setBusy(false);
     if (error) { setErr(localizeError(error, t)); return; }
-    retirerVolumes(g);
+    retirerVolumes(g, g.members.filter((m) => !volEx?.include?.[m.book_id]).map((m) => m.book_id));
   }
   async function ecarterTomes(g) {
     setBusy(true); setErr('');
@@ -354,8 +367,13 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                       {g.members.map((m) => (
                         <div key={m.book_id} style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', fontSize: '.84rem', padding: '4px 6px', borderRadius: 6, background: 'rgba(255,255,255,.04)' }}>
+                          {ouvert && (
+                            <input type="checkbox" checked={!!volEx.include?.[m.book_id]} disabled={busy}
+                              aria-label={t({ id: 'catalogacao.volumes.include' })} title={t({ id: 'catalogacao.volumes.include' })}
+                              onChange={(e) => setVolEx((p) => ({ ...p, include: { ...p.include, [m.book_id]: e.target.checked } }))} />
+                          )}
                           {ouvert ? (
-                            <input type="text" value={volEx.volumes[m.book_id] || ''} disabled={busy}
+                            <input type="text" value={volEx.volumes[m.book_id] || ''} disabled={busy || !volEx.include?.[m.book_id]}
                               onChange={(e) => setVolEx((p) => ({ ...p, volumes: { ...p.volumes, [m.book_id]: e.target.value } }))}
                               placeholder={t({ id: 'catalogacao.volumes.volumeInput' })}
                               style={{ width: 64, padding: '4px 6px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.84rem' }} />
@@ -372,8 +390,11 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
                     </div>
                     {ouvert && (
                       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginTop: 10 }}>
-                        <button type="button" className="ab-button ab-button--sm" disabled={busy} onClick={() => reunirTomes(g)}>
+                        <button type="button" className="ab-button ab-button--sm"
+                          disabled={busy || Object.values(volEx.include || {}).filter(Boolean).length < 2}
+                          onClick={() => reunirTomes(g)}>
                           {t({ id: 'catalogacao.volumes.groupAsVolumes' })}
+                          {' '}({Object.values(volEx.include || {}).filter(Boolean).length}/{g.members.length})
                         </button>
                         <input type="text" value={volEx.motif || ''} disabled={busy}
                           onChange={(e) => setVolEx((p) => ({ ...p, motif: e.target.value }))}

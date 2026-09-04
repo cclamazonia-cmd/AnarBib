@@ -6312,5 +6312,6 @@
   "catalogacao.volumes.reasonPlaceholder": "Kial ili ne estas volumoj (laŭvole)",
   "catalogacao.volumes.works": "{count, plural, one {# verko hodiaŭ} other {# verkoj hodiaŭ}}",
   "catalogacao.work.volume": "Volumo",
-  "catalogacao.work.volumeHint": "Numero de la volumo en la verko (I, 2, 1/2). Malplena por unuvoluma eldono."
+  "catalogacao.work.volumeHint": "Numero de la volumo en la verko (I, 2, 1/2). Malplena por unuvoluma eldono.",
+  "catalogacao.volumes.include": "Kunigi ĉi tiun registron"
 }

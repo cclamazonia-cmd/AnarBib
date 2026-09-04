@@ -6312,5 +6312,6 @@
   "catalogacao.volumes.reasonPlaceholder": "Waarom het geen delen zijn (optioneel)",
   "catalogacao.volumes.works": "{count, plural, one {# werk vandaag} other {# werken vandaag}}",
   "catalogacao.work.volume": "Deel",
-  "catalogacao.work.volumeHint": "Nummer van het deel binnen het werk (I, 2, 1/2). Leeg voor een editie in één deel."
+  "catalogacao.work.volumeHint": "Nummer van het deel binnen het werk (I, 2, 1/2). Leeg voor een editie in één deel.",
+  "catalogacao.volumes.include": "Deze beschrijving samenvoegen"
 }

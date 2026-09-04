@@ -6312,5 +6312,6 @@
   "catalogacao.volumes.reasonPlaceholder": "Pourquoi ce ne sont pas des tomes (facultatif)",
   "catalogacao.volumes.works": "{count, plural, one {# œuvre aujourd'hui} other {# œuvres aujourd'hui}}",
   "catalogacao.work.volume": "Tome / volume",
-  "catalogacao.work.volumeHint": "Numéro du tome dans l'œuvre (I, 2, 1/2). Vide pour une édition en un seul volume."
+  "catalogacao.work.volumeHint": "Numéro du tome dans l'œuvre (I, 2, 1/2). Vide pour une édition en un seul volume.",
+  "catalogacao.volumes.include": "Réunir cette notice"
 }

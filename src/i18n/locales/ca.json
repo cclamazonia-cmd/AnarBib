@@ -6312,5 +6312,6 @@
   "catalogacao.volumes.reasonPlaceholder": "Per què no són toms (opcional)",
   "catalogacao.volumes.works": "{count, plural, one {# obra avui} other {# obres avui}}",
   "catalogacao.work.volume": "Tom / volum",
-  "catalogacao.work.volumeHint": "Número del tom dins l'obra (I, 2, 1/2). Buit per a una edició en un sol volum."
+  "catalogacao.work.volumeHint": "Número del tom dins l'obra (I, 2, 1/2). Buit per a una edició en un sol volum.",
+  "catalogacao.volumes.include": "Reunir aquest registre"
 }

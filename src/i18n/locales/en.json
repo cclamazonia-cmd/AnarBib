@@ -6312,5 +6312,6 @@
   "catalogacao.volumes.reasonPlaceholder": "Why they are not volumes (optional)",
   "catalogacao.volumes.works": "{count, plural, one {# work today} other {# works today}}",
   "catalogacao.work.volume": "Volume",
-  "catalogacao.work.volumeHint": "Number of the volume within the work (I, 2, 1/2). Empty for a single-volume edition."
+  "catalogacao.work.volumeHint": "Number of the volume within the work (I, 2, 1/2). Empty for a single-volume edition.",
+  "catalogacao.volumes.include": "Join this record"
 }

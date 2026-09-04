@@ -6312,5 +6312,6 @@
   "catalogacao.volumes.reasonPlaceholder": "Warum es keine Bände sind (optional)",
   "catalogacao.volumes.works": "{count, plural, one {# Werk heute} other {# Werke heute}}",
   "catalogacao.work.volume": "Band",
-  "catalogacao.work.volumeHint": "Nummer des Bandes im Werk (I, 2, 1/2). Leer für eine einbändige Ausgabe."
+  "catalogacao.work.volumeHint": "Nummer des Bandes im Werk (I, 2, 1/2). Leer für eine einbändige Ausgabe.",
+  "catalogacao.volumes.include": "Diese Aufnahme zusammenführen"
 }
