@@ -803,3 +803,6 @@
   .ab-row--copies[data-depth="2"] .ab-copies { margin-left: 10px; }
   .ab-row--copies[data-depth="3"] .ab-copies { margin-left: 22px; }
 }
+
+/* Tome d'une œuvre en plusieurs volumes (lot 4, 04/09/2026). */
+.ab-volume-badge { display: inline-block; margin-right: 6px; padding: 0 6px; border-radius: 999px; font-size: .68rem; font-weight: 700; background: rgba(255,255,255,.12); vertical-align: middle; }

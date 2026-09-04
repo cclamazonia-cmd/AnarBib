@@ -2952,6 +2952,26 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             />
           </div>
 
+          {/* ── Tome / volume (décision 6 du 04/09/2026 : les tomes vivent dans
+              l'œuvre). Même colonne `volume` que les périodiques, qui ont déjà
+              leur champ ; pour une monographie il dit « quel tome de l'œuvre ».
+              Visible dès qu'une œuvre est en jeu (rattachée ou publiée). */}
+          {!SERIAL_TYPES.has(f('tipo_material')) && (f('work_id') || f('published_book_id')) && (
+            <div className="ab-span3" style={{ gridColumn: 'span 3', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <label htmlFor="ab-work-volume" style={{ fontWeight: 600, fontSize: '.88rem' }} title={t({ id: 'catalogacao.work.volumeHint' })}>
+                {t({ id: 'catalogacao.work.volume' })}
+              </label>
+              <input id="ab-work-volume" type="text" value={f('volume')} list="ab-work-volume-list"
+                onChange={(e) => set('volume', e.target.value)} placeholder="I, 2, 1/2"
+                title={t({ id: 'catalogacao.work.volumeHint' })}
+                style={{ width: 90, padding: '5px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.25)', color: 'inherit', fontSize: '.82rem' }} />
+              <datalist id="ab-work-volume-list">
+                {['1', '2', '3', '4', 'I', 'II', 'III', 'IV'].map((v) => <option key={v} value={v} />)}
+              </datalist>
+              <span style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.work.volumeHint' })}</span>
+            </div>
+          )}
+
           {/* ── Œuvre (P4) — palier avancé/complet ───────── */}
           {catalogTier >= 2 && f('published_book_id') && (
             <div className="ab-span3" style={{ gridColumn: 'span 3', marginBottom: 6 }}>

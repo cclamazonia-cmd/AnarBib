@@ -63,18 +63,55 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
   const [splits, setSplits] = useState([]);
   const [splitEx, setSplitEx] = useState(null); // { key, motif }
 
+  // Lot 4 (04/09/2026, décision 6) : les tomes vivent dans l'œuvre. Le balayage
+  // suggest_volume_groups rend une ligne par notice ; on regroupe par group_key.
+  const [volGroups, setVolGroups] = useState([]); // [{ key, author_name, base_title, works, members: [rows] }]
+  const [volEx, setVolEx] = useState(null);       // { key, volumes: { [book_id]: 'III' }, motif }
+
   const charger = useCallback(async () => {
     setLoading(true); setErr('');
-    const [dup, sp] = await Promise.all([
+    const [dup, sp, vg] = await Promise.all([
       supabase.rpc('suggest_catalog_duplicates', { p_max: 500 }),
       supabase.rpc('suggest_split_works', { p_max: 300 }),
+      supabase.rpc('suggest_volume_groups', { p_max: 200 }),
     ]);
     if (dup.error) setErr(localizeError(dup.error, t));
     else setRows(dup.data || []);
     if (sp.error) setErr((e) => e || localizeError(sp.error, t));
     else setSplits(sp.data || []);
+    if (vg.error) setErr((e) => e || localizeError(vg.error, t));
+    else {
+      const byKey = new Map();
+      for (const r of vg.data || []) {
+        let g = byKey.get(r.group_key);
+        if (!g) { g = { key: r.group_key, author_name: r.author_name, base_title: r.base_title, works: r.works, members: [] }; byKey.set(r.group_key, g); }
+        g.members.push(r);
+      }
+      setVolGroups([...byKey.values()]);
+    }
     setLoading(false); setCharge(true);
   }, [t]);
+
+  const ouvrirVolumes = (g) => setVolEx({
+    key: g.key, motif: '',
+    volumes: Object.fromEntries(g.members.map((m) => [m.book_id, m.volume || m.volume_guess || ''])),
+  });
+  const retirerVolumes = (g) => { setVolGroups((prev) => prev.filter((x) => x.key !== g.key)); setVolEx(null); onChanged?.(); };
+  async function reunirTomes(g) {
+    setBusy(true); setErr('');
+    const items = g.members.map((m) => ({ book_id: m.book_id, volume: (volEx?.volumes?.[m.book_id] || '').trim() }));
+    const { error } = await supabase.rpc('group_books_as_volumes', { p_items: items });
+    setBusy(false);
+    if (error) { setErr(localizeError(error, t)); return; }
+    retirerVolumes(g);
+  }
+  async function ecarterTomes(g) {
+    setBusy(true); setErr('');
+    const { error } = await supabase.rpc('dismiss_volume_group', { p_group_key: g.key, p_reason: volEx?.motif?.trim() || null });
+    setBusy(false);
+    if (error) { setErr(localizeError(error, t)); return; }
+    retirerVolumes(g);
+  }
 
   const splitKey = (s) => `${s.work_id_a}:${s.work_id_b}`;
   const retirerSplit = (s, absorbee) => {
@@ -277,8 +314,9 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
           <div className="ab-tabbar ab-tabbar--sub">
             {[['decider', 'catalogacao.dedupAssist.bucketDecide', aDecider.length],
               ['rapprocher', 'catalogacao.dedupAssist.bucketGroup', aRapprocher.length],
-              ['scindees', 'catalogacao.dedupAssist.bucketSplit', splits.length]].map(([id, cle, n]) => (
-              <button key={id} type="button" onClick={() => { setBucket(id); setEx(null); setSplitEx(null); }}
+              ['scindees', 'catalogacao.dedupAssist.bucketSplit', splits.length],
+              ['volumes', 'catalogacao.dedupAssist.bucketVolumes', volGroups.length]].map(([id, cle, n]) => (
+              <button key={id} type="button" onClick={() => { setBucket(id); setEx(null); setSplitEx(null); setVolEx(null); }}
                 className={`ab-tabbar__tab${bucket === id ? ' active' : ''}`}>
                 {t({ id: cle })}
                 {n > 0 && <span className="ab-tabbar__badge">{n}</span>}
@@ -288,8 +326,76 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
 
           <p style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', marginTop: 0, marginBottom: 12 }}>
             {t({ id: bucket === 'decider' ? 'catalogacao.dedupAssist.helpDecide'
-              : bucket === 'scindees' ? 'catalogacao.dedupAssist.helpSplit' : 'catalogacao.dedupAssist.helpGroup' })}
+              : bucket === 'scindees' ? 'catalogacao.dedupAssist.helpSplit'
+              : bucket === 'volumes' ? 'catalogacao.dedupAssist.helpVolumes' : 'catalogacao.dedupAssist.helpGroup' })}
           </p>
+
+          {/* ── Volumes : les tomes d'une même œuvre ────────────────────── */}
+          {bucket === 'volumes' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {volGroups.length === 0 && <p>{t({ id: 'catalogacao.volumes.none' })}</p>}
+              {volGroups.map((g) => {
+                const ouvert = volEx && volEx.key === g.key;
+                return (
+                  <div key={g.key} style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 10, padding: 12, opacity: busy && ouvert ? 0.6 : 1 }}>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8, flexWrap: 'wrap' }}>
+                      <span style={{ fontWeight: 600, fontSize: '.9rem' }}>{g.base_title}</span>
+                      <span style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)' }}>{g.author_name || '—'}</span>
+                      <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)' }}>
+                        {t({ id: 'catalogacao.volumes.works' }, { count: g.works || 0 })}
+                      </span>
+                      {!ouvert && (
+                        <button type="button" className="ab-button ab-button--mini ab-button--secondary"
+                          style={{ marginLeft: 'auto' }} disabled={busy} onClick={() => ouvrirVolumes(g)}>
+                          {t({ id: 'catalogacao.dedupAssist.examine' })}
+                        </button>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {g.members.map((m) => (
+                        <div key={m.book_id} style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', fontSize: '.84rem', padding: '4px 6px', borderRadius: 6, background: 'rgba(255,255,255,.04)' }}>
+                          {ouvert ? (
+                            <input type="text" value={volEx.volumes[m.book_id] || ''} disabled={busy}
+                              onChange={(e) => setVolEx((p) => ({ ...p, volumes: { ...p.volumes, [m.book_id]: e.target.value } }))}
+                              placeholder={t({ id: 'catalogacao.volumes.volumeInput' })}
+                              style={{ width: 64, padding: '4px 6px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.84rem' }} />
+                          ) : (
+                            <span style={{ minWidth: 40, fontWeight: 600 }}>{m.volume || m.volume_guess || '?'}</span>
+                          )}
+                          <span style={{ flex: 1, minWidth: 0 }}>{m.titulo}{m.subtitulo ? ` — ${m.subtitulo}` : ''}</span>
+                          <span style={{ color: 'var(--brand-muted, #999)', fontSize: '.76rem' }}>
+                            {[m.ano, m.editora, m.libraries, m.bib_ref].filter(Boolean).join(' · ')}
+                          </span>
+                          <a className="ab-button ab-button--mini" href={`/livro/${m.book_id}`}>{t({ id: 'catalogacao.dedup.scanOpen' })}</a>
+                        </div>
+                      ))}
+                    </div>
+                    {ouvert && (
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginTop: 10 }}>
+                        <button type="button" className="ab-button ab-button--sm" disabled={busy} onClick={() => reunirTomes(g)}>
+                          {t({ id: 'catalogacao.volumes.groupAsVolumes' })}
+                        </button>
+                        <input type="text" value={volEx.motif || ''} disabled={busy}
+                          onChange={(e) => setVolEx((p) => ({ ...p, motif: e.target.value }))}
+                          placeholder={t({ id: 'catalogacao.volumes.reasonPlaceholder' })}
+                          style={{
+                            flex: '1 1 200px', minWidth: 0, padding: '7px 10px', borderRadius: 8,
+                            border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)',
+                            color: '#f4f4f4', fontSize: '.85rem',
+                          }} />
+                        <button type="button" className="ab-button ab-button--sm ab-button--secondary" disabled={busy} onClick={() => ecarterTomes(g)}>
+                          {t({ id: 'catalogacao.volumes.notVolumes' })}
+                        </button>
+                        <button type="button" className="ab-button ab-button--mini ab-button--secondary" disabled={busy} onClick={() => setVolEx(null)}>
+                          {t({ id: 'common.cancel' })}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {/* ── Œuvres scindées : deux œuvres, un même texte ? ──────────── */}
           {bucket === 'scindees' && (
@@ -359,10 +465,10 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
             </div>
           )}
 
-          {bucket !== 'scindees' && listeAffichee.length === 0 && <p>{t({ id: 'catalogacao.dedup.none' })}</p>}
+          {bucket !== 'scindees' && bucket !== 'volumes' && listeAffichee.length === 0 && <p>{t({ id: 'catalogacao.dedup.none' })}</p>}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {bucket !== 'scindees' && listeAffichee.map((r) => {
+            {bucket !== 'scindees' && bucket !== 'volumes' && listeAffichee.map((r) => {
               const ouvert = ex && key(ex.r) === key(r);
               const a = cote(r, 'a'); const b = cote(r, 'b');
               return (

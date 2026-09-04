@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Uniforme titel",
   "catalogacao.work.uniformTitleHint": "In de taal van het werk zelf, niet die van een vertaling (besluit van 04-09-2026). Alleen zichtbaar voor talen zonder titel.",
   "catalogacao.work.uniformTitleSaved": "Uniforme titel opgeslagen.",
-  "error.catalog.work.emptyTitle": "De uniforme titel mag niet leeg zijn."
+  "error.catalog.work.emptyTitle": "De uniforme titel mag niet leeg zijn.",
+  "catalog.works.volumesCount": "{count, plural, one {# deel} other {# delen}}",
+  "catalog.works.volumeLabel": "Deel {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Delen",
+  "catalogacao.dedupAssist.helpVolumes": "Beschrijvingen van dezelfde auteur met dezelfde titel op een deelnummer na. Een deel is geen werk: „Hetzelfde werk in meerdere delen” zet het nummer van elk deel en voegt ze samen in één werk, niets wordt vernietigd. Anders afwijzen.",
+  "catalogacao.volumes.groupAsVolumes": "Hetzelfde werk in meerdere delen",
+  "catalogacao.volumes.notVolumes": "Dit zijn geen delen",
+  "catalogacao.volumes.none": "Geen reeks delen gevonden.",
+  "catalogacao.volumes.volumeInput": "Deel",
+  "catalogacao.volumes.reasonPlaceholder": "Waarom het geen delen zijn (optioneel)",
+  "catalogacao.volumes.works": "{count, plural, one {# werk vandaag} other {# werken vandaag}}",
+  "catalogacao.work.volume": "Deel",
+  "catalogacao.work.volumeHint": "Nummer van het deel binnen het werk (I, 2, 1/2). Leeg voor een editie in één deel."
 }

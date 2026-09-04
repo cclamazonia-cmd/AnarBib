@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Uniform title",
   "catalogacao.work.uniformTitleHint": "In the language of the work itself, not that of a translation (decision of 2026-09-04). Shown only to languages without a title.",
   "catalogacao.work.uniformTitleSaved": "Uniform title saved.",
-  "error.catalog.work.emptyTitle": "The uniform title cannot be empty."
+  "error.catalog.work.emptyTitle": "The uniform title cannot be empty.",
+  "catalog.works.volumesCount": "{count, plural, one {# volume} other {# volumes}}",
+  "catalog.works.volumeLabel": "Vol. {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Volumes",
+  "catalogacao.dedupAssist.helpVolumes": "Records by the same author with the same title except for a volume number. A volume is not a work: “Same work in several volumes” sets each volume's number and joins them into one work, nothing is destroyed. Otherwise dismiss them.",
+  "catalogacao.volumes.groupAsVolumes": "Same work in several volumes",
+  "catalogacao.volumes.notVolumes": "These are not volumes",
+  "catalogacao.volumes.none": "No series of volumes detected.",
+  "catalogacao.volumes.volumeInput": "Vol.",
+  "catalogacao.volumes.reasonPlaceholder": "Why they are not volumes (optional)",
+  "catalogacao.volumes.works": "{count, plural, one {# work today} other {# works today}}",
+  "catalogacao.work.volume": "Volume",
+  "catalogacao.work.volumeHint": "Number of the volume within the work (I, 2, 1/2). Empty for a single-volume edition."
 }

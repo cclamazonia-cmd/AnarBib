@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Einheitstitel",
   "catalogacao.work.uniformTitleHint": "In der Sprache des Werks selbst, nicht der einer Übersetzung (Entscheidung vom 04.09.2026). Er erscheint nur in Sprachen ohne Titel.",
   "catalogacao.work.uniformTitleSaved": "Einheitstitel gespeichert.",
-  "error.catalog.work.emptyTitle": "Der Einheitstitel darf nicht leer sein."
+  "error.catalog.work.emptyTitle": "Der Einheitstitel darf nicht leer sein.",
+  "catalog.works.volumesCount": "{count, plural, one {# Band} other {# Bände}}",
+  "catalog.works.volumeLabel": "Band {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Bände",
+  "catalogacao.dedupAssist.helpVolumes": "Titelaufnahmen derselben Autorin oder desselben Autors mit gleichem Titel bis auf eine Bandnummer. Ein Band ist kein Werk: „Dasselbe Werk in mehreren Bänden“ setzt jede Bandnummer und führt sie in einem Werk zusammen, nichts wird gelöscht. Sonst verwerfen.",
+  "catalogacao.volumes.groupAsVolumes": "Dasselbe Werk in mehreren Bänden",
+  "catalogacao.volumes.notVolumes": "Das sind keine Bände",
+  "catalogacao.volumes.none": "Keine Bandreihe gefunden.",
+  "catalogacao.volumes.volumeInput": "Band",
+  "catalogacao.volumes.reasonPlaceholder": "Warum es keine Bände sind (optional)",
+  "catalogacao.volumes.works": "{count, plural, one {# Werk heute} other {# Werke heute}}",
+  "catalogacao.work.volume": "Band",
+  "catalogacao.work.volumeHint": "Nummer des Bandes im Werk (I, 2, 1/2). Leer für eine einbändige Ausgabe."
 }

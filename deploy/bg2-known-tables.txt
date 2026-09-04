@@ -182,6 +182,7 @@ user_library_memberships
 user_notification_preferences
 user_notifications
 user_wishlist
+volume_group_dismissals
 work_expressions
 work_titles
 work_not_same

@@ -423,3 +423,6 @@ tests/sql/opac_par_oeuvre_tests.sql
 # volume. T1 a T3 sont des tests de NON-ACTION (ni run, ni verrou, ni brouillon) ;
 # T4 garde que l'admin reseau passe. Ref. 20260904133000.
 tests/sql/import_moisson_oai_admin_tests.sql
+
+# Lot 4 (04/09/2026, decision 6) : les tomes vivent dans l'oeuvre. Ref. 20260904170000.
+tests/sql/tomes_dans_l_oeuvre_tests.sql

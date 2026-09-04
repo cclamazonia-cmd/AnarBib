@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Título uniforme",
   "catalogacao.work.uniformTitleHint": "No idioma da própria obra, não no de uma tradução (decisão de 04/09/2026). Só aparece nos idiomas sem título.",
   "catalogacao.work.uniformTitleSaved": "Título uniforme salvo.",
-  "error.catalog.work.emptyTitle": "O título uniforme não pode ficar vazio."
+  "error.catalog.work.emptyTitle": "O título uniforme não pode ficar vazio.",
+  "catalog.works.volumesCount": "{count, plural, one {# volume} other {# volumes}}",
+  "catalog.works.volumeLabel": "Tomo {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Volumes",
+  "catalogacao.dedupAssist.helpVolumes": "Registros do mesmo autor ou da mesma autora, com o mesmo título a menos de um número de tomo. Um tomo não é uma obra: « Mesma obra em vários volumes » define o número de cada tomo e os reúne numa só obra, nada é destruído. Senão, descartá-los.",
+  "catalogacao.volumes.groupAsVolumes": "Mesma obra em vários volumes",
+  "catalogacao.volumes.notVolumes": "Não são tomos",
+  "catalogacao.volumes.none": "Nenhuma série de tomos detectada.",
+  "catalogacao.volumes.volumeInput": "Tomo",
+  "catalogacao.volumes.reasonPlaceholder": "Por que não são tomos (opcional)",
+  "catalogacao.volumes.works": "{count, plural, one {# obra hoje} other {# obras hoje}}",
+  "catalogacao.work.volume": "Tomo / volume",
+  "catalogacao.work.volumeHint": "Número do tomo na obra (I, 2, 1/2). Vazio para uma edição em um só volume."
 }

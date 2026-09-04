@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Unueca titolo",
   "catalogacao.work.uniformTitleHint": "En la lingvo de la verko mem, ne en tiu de traduko (decido de 2026-09-04). Ĝi aperas nur en lingvoj sen titolo.",
   "catalogacao.work.uniformTitleSaved": "Unueca titolo konservita.",
-  "error.catalog.work.emptyTitle": "La unueca titolo ne povas esti malplena."
+  "error.catalog.work.emptyTitle": "La unueca titolo ne povas esti malplena.",
+  "catalog.works.volumesCount": "{count, plural, one {# volumo} other {# volumoj}}",
+  "catalog.works.volumeLabel": "Volumo {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Volumoj",
+  "catalogacao.dedupAssist.helpVolumes": "Registroj de la sama aŭtoro, kun la sama titolo krom volumnumero. Volumo ne estas verko: « Sama verko en pluraj volumoj » fiksas la numeron de ĉiu volumo kaj kunigas ilin en unu verkon, nenio detruiĝas. Alie forĵeti ilin.",
+  "catalogacao.volumes.groupAsVolumes": "Sama verko en pluraj volumoj",
+  "catalogacao.volumes.notVolumes": "Ili ne estas volumoj",
+  "catalogacao.volumes.none": "Neniu serio de volumoj trovita.",
+  "catalogacao.volumes.volumeInput": "Vol.",
+  "catalogacao.volumes.reasonPlaceholder": "Kial ili ne estas volumoj (laŭvole)",
+  "catalogacao.volumes.works": "{count, plural, one {# verko hodiaŭ} other {# verkoj hodiaŭ}}",
+  "catalogacao.work.volume": "Volumo",
+  "catalogacao.work.volumeHint": "Numero de la volumo en la verko (I, 2, 1/2). Malplena por unuvoluma eldono."
 }

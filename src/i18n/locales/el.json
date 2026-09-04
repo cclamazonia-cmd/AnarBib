@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Ομοιόμορφος τίτλος",
   "catalogacao.work.uniformTitleHint": "Στη γλώσσα του ίδιου του έργου, όχι σε αυτή μιας μετάφρασης (απόφαση της 04/09/2026). Εμφανίζεται μόνο στις γλώσσες χωρίς τίτλο.",
   "catalogacao.work.uniformTitleSaved": "Ο ομοιόμορφος τίτλος αποθηκεύτηκε.",
-  "error.catalog.work.emptyTitle": "Ο ομοιόμορφος τίτλος δεν μπορεί να είναι κενός."
+  "error.catalog.work.emptyTitle": "Ο ομοιόμορφος τίτλος δεν μπορεί να είναι κενός.",
+  "catalog.works.volumesCount": "{count, plural, one {# τόμος} other {# τόμοι}}",
+  "catalog.works.volumeLabel": "Τόμος {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Τόμοι",
+  "catalogacao.dedupAssist.helpVolumes": "Εγγραφές του ίδιου συγγραφέα με τον ίδιο τίτλο εκτός από έναν αριθμό τόμου. Ένας τόμος δεν είναι έργο: το « Ίδιο έργο σε πολλούς τόμους » ορίζει τον αριθμό κάθε τόμου και τους ενώνει σε ένα έργο, τίποτα δεν καταστρέφεται. Αλλιώς απορρίψτε τους.",
+  "catalogacao.volumes.groupAsVolumes": "Ίδιο έργο σε πολλούς τόμους",
+  "catalogacao.volumes.notVolumes": "Δεν είναι τόμοι",
+  "catalogacao.volumes.none": "Δεν εντοπίστηκε σειρά τόμων.",
+  "catalogacao.volumes.volumeInput": "Τόμος",
+  "catalogacao.volumes.reasonPlaceholder": "Γιατί δεν είναι τόμοι (προαιρετικό)",
+  "catalogacao.volumes.works": "{count, plural, one {# έργο σήμερα} other {# έργα σήμερα}}",
+  "catalogacao.work.volume": "Τόμος",
+  "catalogacao.work.volumeHint": "Αριθμός του τόμου μέσα στο έργο (I, 2, 1/2). Κενό για έκδοση σε έναν τόμο."
 }

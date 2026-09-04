@@ -1058,7 +1058,11 @@ export default function CatalogPage() {
               aria-label={t({ id: isOpen ? 'catalog.works.collapse' : 'catalog.works.expand' })}
               title={t({ id: isOpen ? 'catalog.works.collapse' : 'catalog.works.expand' })}
               onClick={() => toggleWork(w.key)}>{isOpen ? '−' : '+'}</button>
-            <span>{t({ id: 'catalog.works.editionsCount' }, { count: w.edition_count || eds.length })}</span>
+            <span>
+              {Number(w.volume_count) >= 2 && Number(w.volume_count) === eds.length
+                ? t({ id: 'catalog.works.volumesCount' }, { count: w.volume_count })
+                : t({ id: 'catalog.works.editionsCount' }, { count: w.edition_count || eds.length })}
+            </span>
           </span>
         </td>
         <td data-label={t({ id: 'catalog.table.author' })}><AuthorLinks book={rep} /></td>
@@ -1672,6 +1676,7 @@ export default function CatalogPage() {
                           </Link>
                           <span className="ab-cat-title__text">
                             <Link to={`/livro/${book.book_id}`}>
+                              {book.volume && <span className="ab-volume-badge">{t({ id: 'catalog.works.volumeLabel' }, { n: book.volume })}</span>}
                               {book.titulo}
                               {book.subtitulo && <span className="ab-subtitulo"> — {book.subtitulo}</span>}
                             </Link>

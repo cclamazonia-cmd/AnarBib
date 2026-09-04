@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Títol uniforme",
   "catalogacao.work.uniformTitleHint": "En la llengua de l'obra mateixa, no en la d'una traducció (decisió del 04/09/2026). Només es mostra a les llengües sense títol.",
   "catalogacao.work.uniformTitleSaved": "Títol uniforme desat.",
-  "error.catalog.work.emptyTitle": "El títol uniforme no pot quedar buit."
+  "error.catalog.work.emptyTitle": "El títol uniforme no pot quedar buit.",
+  "catalog.works.volumesCount": "{count, plural, one {# volum} other {# volums}}",
+  "catalog.works.volumeLabel": "Tom {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Volums",
+  "catalogacao.dedupAssist.helpVolumes": "Registres de la mateixa persona autora, amb el mateix títol llevat d'un número de tom. Un tom no és una obra: « Mateixa obra en diversos volums » fixa el número de cada tom i els reuneix en una sola obra, res no es destrueix. Si no, descartar-los.",
+  "catalogacao.volumes.groupAsVolumes": "Mateixa obra en diversos volums",
+  "catalogacao.volumes.notVolumes": "No són toms",
+  "catalogacao.volumes.none": "Cap sèrie de toms detectada.",
+  "catalogacao.volumes.volumeInput": "Tom",
+  "catalogacao.volumes.reasonPlaceholder": "Per què no són toms (opcional)",
+  "catalogacao.volumes.works": "{count, plural, one {# obra avui} other {# obres avui}}",
+  "catalogacao.work.volume": "Tom / volum",
+  "catalogacao.work.volumeHint": "Número del tom dins l'obra (I, 2, 1/2). Buit per a una edició en un sol volum."
 }

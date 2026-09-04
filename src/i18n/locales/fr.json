@@ -6300,5 +6300,17 @@
   "catalogacao.work.uniformTitle": "Titre uniforme",
   "catalogacao.work.uniformTitleHint": "Dans la langue de l'œuvre elle-même, pas celle d'une traduction (décision du 04/09/2026). Il ne s'affiche qu'aux langues sans titre.",
   "catalogacao.work.uniformTitleSaved": "Titre uniforme enregistré.",
-  "error.catalog.work.emptyTitle": "Le titre uniforme ne peut pas être vide."
+  "error.catalog.work.emptyTitle": "Le titre uniforme ne peut pas être vide.",
+  "catalog.works.volumesCount": "{count, plural, one {# volume} other {# volumes}}",
+  "catalog.works.volumeLabel": "Tome {n}",
+  "catalogacao.dedupAssist.bucketVolumes": "Volumes",
+  "catalogacao.dedupAssist.helpVolumes": "Des notices du même auteur ou de la même autrice, au même titre à un numéro de tome près. Un tome n'est pas une œuvre : « Même œuvre en plusieurs volumes » pose le numéro de chaque tome et les réunit dans une seule œuvre, rien n'est détruit. Sinon, les écarter.",
+  "catalogacao.volumes.groupAsVolumes": "Même œuvre en plusieurs volumes",
+  "catalogacao.volumes.notVolumes": "Ce ne sont pas des tomes",
+  "catalogacao.volumes.none": "Aucune série de tomes détectée.",
+  "catalogacao.volumes.volumeInput": "Tome",
+  "catalogacao.volumes.reasonPlaceholder": "Pourquoi ce ne sont pas des tomes (facultatif)",
+  "catalogacao.volumes.works": "{count, plural, one {# œuvre aujourd'hui} other {# œuvres aujourd'hui}}",
+  "catalogacao.work.volume": "Tome / volume",
+  "catalogacao.work.volumeHint": "Numéro du tome dans l'œuvre (I, 2, 1/2). Vide pour une édition en un seul volume."
 }
