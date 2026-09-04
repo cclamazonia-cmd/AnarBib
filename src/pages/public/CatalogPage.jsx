@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
+import { buildWorksFilters, worksSortParam, groupBooksIntoWorks, yearsLabel, WORKS_PAGE_SIZE } from '@/lib/catalogWorks';
 import { catalogueDeSecours } from '@/lib/catalogueFallback';
 import { authorLabel } from '@/lib/authorLabel';
 import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
@@ -17,7 +18,7 @@ import UnifiedSearchCombobox from '@/components/UnifiedSearchCombobox';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './CatalogPage.css';
-import { languageOptions } from '@/lib/languages';
+import { languageOptions, languageLabel } from '@/lib/languages';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 
 const PAGE_SIZE = 100;
@@ -306,8 +307,16 @@ export default function CatalogPage() {
   const [libMenuOpen, setLibMenuOpen] = useState(false);
   const libMenuRef = useRef(null);
   const [sortValue, setSortValue] = useState(filterState.sortValue || '__relevance__');
-  // P4 v2 Lot C — repli des éditions par œuvre (côté client, sur les résultats chargés ; OFF par défaut)
-  const [collapseEditions, setCollapseEditions] = useState(false);
+  // OPAC par œuvre (04/09/2026, décision 1) : regroupement ACTIF par défaut, côté
+  // serveur (api.catalog_works_v1) ; « Liste plate » = l'ancien affichage par
+  // édition. Persisté avec les filtres. Le repli client du lot C reste le mode
+  // dégradé (instantané statique, ou RPC absent).
+  const [collapseEditions, setCollapseEditions] = useState(filterState.groupByWork !== false);
+  const [works, setWorks] = useState([]);           // page d'œuvres (forme du RPC)
+  const [worksServer, setWorksServer] = useState(false); // true = `works` vient du RPC
+  const [expandedWorks, setExpandedWorks] = useState(() => new Set());   // clés d'œuvre dépliées
+  const [expandedCopies, setExpandedCopies] = useState(() => new Set()); // book_id aux exemplaires dépliés
+  const [copiesByBook, setCopiesByBook] = useState({});                  // book_id -> { loading, libraries }
   const [compact, setCompact] = useState(filterState.compact || false);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [exploreOpen, setExploreOpen] = useState(true); // bloc « Explorer » escamotable
@@ -342,8 +351,8 @@ export default function CatalogPage() {
 
   // Sauvegarder les filtres dans sessionStorage à chaque modification
   useEffect(() => {
-    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter });
-  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter]);
+    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, groupByWork: collapseEditions });
+  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, collapseEditions]);
 
   // ── Initialisation depuis l'URL (montage uniquement) ───────
   // Doctrine validée : l'URL est la source de vérité. Un lien profond
@@ -483,6 +492,36 @@ export default function CatalogPage() {
     // le mode dégradé n'est simplement jamais réactivé plus bas.
     if (!append) setDegradedSince(null);
     try {
+      // OPAC par œuvre (décision 1 du 04/09/2026) : une ligne par œuvre, groupée
+      // CÔTÉ SERVEUR (tri et pagination au niveau œuvre, une œuvre à cheval sur
+      // deux pages n'apparaît plus deux fois). Les éditions arrivent imbriquées,
+      // sous la forme exacte des vues : `books` reste la liste plate des éditions
+      // chargées (export, compteurs, favoris). Si le RPC échoue, on retombe sur
+      // la liste plate ci-dessous, repliée côté client : jamais pire que le lot C.
+      if (collapseEditions) {
+        try {
+          const p_filters = buildWorksFilters({ search: dSearch, authorFilter: dAuthor, authorIdFilter, alphaFilter, publisherFilter: dPublisher, yearFilter: dYear, libraryShortNames, availabilityFilter, isAuth, isbnFilter: dIsbn, languageFilter: dLanguage, cddFilter: dCdd, subjectsFilter: dSubjects, materialFilter, collectionFilter: dCollection, placeFilter: dPlace, subjectFilter });
+          const { data, error } = await supabase.schema('api').rpc('catalog_works_v1', {
+            p_filters, p_sort: worksSortParam(sortValue), p_offset: offset, p_limit: WORKS_PAGE_SIZE, p_lang: locale,
+          });
+          if (error) throw error;
+          const page = Array.isArray(data?.works) ? data.works : [];
+          const flat = page.flatMap(w => (Array.isArray(w.editions) ? w.editions : []));
+          if (append) { setWorks(prev => [...prev, ...page]); setBooks(prev => [...prev, ...flat]); }
+          else { setWorks(page); setBooks(flat); setExpandedWorks(new Set()); setExpandedCopies(new Set()); }
+          setWorksServer(true);
+          setTotalFetched(offset + page.length);
+          setHasMore(page.length === WORKS_PAGE_SIZE);
+          setTotalCount(Number(data?.total ?? 0));
+          return;
+        } catch (werr) {
+          console.warn('catalog_works_v1 indisponible, repli sur la liste plate repliée côté client :', werr);
+          setWorksServer(false);
+        }
+      } else {
+        setWorksServer(false);
+      }
+
       // (1b) Recherche INSENSIBLE AUX ACCENTS + classée par pertinence via le RPC
       // api.catalog_search_ids_v1 (branche anon/session selon la visibilité de
       // l'appelant·e). En cas d'erreur ou de RPC absent, on RETOMBE sur la
@@ -586,30 +625,39 @@ export default function CatalogPage() {
     // lien profond /catalogo/:slug, libraryFilter est posé au montage AVANT le chargement
     // async des options ; libraryShortNames se résout après → sans cette dep, le fetch
     // ne se rejoue pas et le filtre biblio reste inappliqué (course + closure périmée).
-  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, libraryShortNames, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
+  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, libraryShortNames, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace, collapseEditions, locale]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
 
-  // Repli des éditions (Lot C) : regroupe les notices chargées par work_id (une
-  // ligne représentante + nb d'éditions chargées). Les notices sans œuvre restent
-  // individuelles. La page Œuvre (/obra/:id) reste la référence du jeu complet.
-  const displayBooks = useMemo(() => {
-    if (!collapseEditions) return books;
-    const byWork = new Map();
-    const out = [];
-    for (const b of books) {
-      if (b.work_id) {
-        const rep = byWork.get(b.work_id);
-        if (rep) { rep._editionCount += 1; continue; }
-        const fresh = { ...b, _editionCount: 1 };
-        byWork.set(b.work_id, fresh);
-        out.push(fresh);
-      } else {
-        out.push(b);
-      }
-    }
-    return out;
-  }, [collapseEditions, books]);
+  // Les œuvres à afficher : celles du RPC quand il a répondu ; sinon (mode
+  // dégradé, RPC absent) le repli du lot C, côté client, à la même forme.
+  const worksToShow = useMemo(() => {
+    if (!collapseEditions) return [];
+    if (worksServer && !degradedSince) return works;
+    return groupBooksIntoWorks(books);
+  }, [collapseEditions, worksServer, degradedSince, works, books]);
+
+  const toggleWork = useCallback((key) => {
+    setExpandedWorks(prev => { const n = new Set(prev); if (n.has(key)) n.delete(key); else n.add(key); return n; });
+  }, []);
+  // Second « + » : les exemplaires d'une édition, bibliothèque par bibliothèque,
+  // chargés au dépliage (api.book_copies_by_library_v1) et gardés en cache.
+  const toggleCopies = useCallback((bookId) => {
+    setExpandedCopies(prev => { const n = new Set(prev); if (n.has(bookId)) n.delete(bookId); else n.add(bookId); return n; });
+    setCopiesByBook(prev => {
+      if (prev[bookId]) return prev;
+      (async () => {
+        try {
+          const { data, error } = await supabase.schema('api').rpc('book_copies_by_library_v1', { p_book_id: bookId });
+          if (error) throw error;
+          setCopiesByBook(p => ({ ...p, [bookId]: { loading: false, libraries: Array.isArray(data?.libraries) ? data.libraries : [] } }));
+        } catch {
+          setCopiesByBook(p => ({ ...p, [bookId]: { loading: false, libraries: [] } }));
+        }
+      })();
+      return { ...prev, [bookId]: { loading: true, libraries: [] } };
+    });
+  }, []);
 
   // #OPAC7 — compteurs de facettes via api.catalog_facets_v1 (un appel JSONB).
   // Recalcule à chaque évolution des filtres (sémantique « expand » côté RPC).
@@ -942,6 +990,140 @@ export default function CatalogPage() {
     else el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   }
 
+  // ── OPAC par œuvre : les lignes de la grille ─────────────
+  // Une ligne d'œuvre (auteur·rice + titre dans la locale, toujours visibles),
+  // ses éditions quand elle est dépliée (mêmes cellules que la liste plate),
+  // et sous chaque édition dépliée ses exemplaires par bibliothèque. Une œuvre
+  // à une seule édition s'affiche directement comme une édition : l'écran ne
+  // change que là où il y a plusieurs éditions.
+  const tableRows = [];
+  if (collapseEditions) {
+    for (const w of worksToShow) {
+      const eds = Array.isArray(w.editions) ? w.editions : [];
+      if (eds.length <= 1) {
+        const b = eds[0];
+        if (!b) continue;
+        tableRows.push({ type: 'edition', book: b });
+        if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b });
+        continue;
+      }
+      tableRows.push({ type: 'work', w });
+      if (expandedWorks.has(w.key)) {
+        for (const b of eds) {
+          tableRows.push({ type: 'edition', book: b, indent: true });
+          if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b });
+        }
+      }
+    }
+  } else {
+    for (const b of books) {
+      tableRows.push({ type: 'edition', book: b });
+      if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b });
+    }
+  }
+  const STATUS_RANK = { ok: 0, warn: 1, muted: 2, bad: 3 };
+
+  function copiesExpander(book) {
+    const open = expandedCopies.has(book.book_id);
+    return (
+      <button type="button" className="ab-expander" aria-expanded={open}
+        title={t({ id: open ? 'catalog.works.hideCopies' : 'catalog.works.showCopies' })}
+        aria-label={t({ id: open ? 'catalog.works.hideCopies' : 'catalog.works.showCopies' })}
+        onClick={() => toggleCopies(book.book_id)}>{open ? '−' : '+'}</button>
+    );
+  }
+
+  function renderWorkRow(w, idx) {
+    const eds = Array.isArray(w.editions) ? w.editions : [];
+    const rep = eds.find(e => e.book_id === w.rep_book_id) || eds[0] || {};
+    const isOpen = expandedWorks.has(w.key);
+    const href = w.work_id ? `/obra/${w.work_id}` : `/livro/${rep.book_id}`;
+    const icon = TIPO_ICONS[rep.tipo_material] || '';
+    const libNames = orderLibraryNames((w.library_names || []).map(String), libPriority)
+      .map(nm => (cityByLib[nm] ? `${nm} (${cityByLib[nm]})` : nm));
+    const publishers = [...new Set(eds.map(e => e.publisher_display || e.editora).filter(Boolean))];
+    const langs = [...new Set(eds.map(e => e.idioma).filter(Boolean))].map(c => languageLabel(c, t) || c);
+    const best = eds.map(e => getStatusInfo(e, isAuth, t))
+      .sort((a, b) => (STATUS_RANK[a.cls] ?? 9) - (STATUS_RANK[b.cls] ?? 9))[0] || { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
+    return (
+      <tr key={`w-${w.key}-${idx}`} className="ab-row--work">
+        <td data-label={t({ id: 'catalog.table.ref' })}>
+          <span className="ab-cat-ref-stack">
+            <button type="button" className="ab-expander" aria-expanded={isOpen}
+              aria-label={t({ id: isOpen ? 'catalog.works.collapse' : 'catalog.works.expand' })}
+              title={t({ id: isOpen ? 'catalog.works.collapse' : 'catalog.works.expand' })}
+              onClick={() => toggleWork(w.key)}>{isOpen ? '−' : '+'}</button>
+            <span>{t({ id: 'catalog.works.editionsCount' }, { count: w.edition_count || eds.length })}</span>
+          </span>
+        </td>
+        <td data-label={t({ id: 'catalog.table.author' })}><AuthorLinks book={rep} /></td>
+        <td data-label={t({ id: 'catalog.table.bookTitle' })}>
+          <div className="ab-cat-title">
+            <Link to={href} className="ab-cat-thumb" tabIndex={-1} aria-hidden="true">
+              {rep.cover_object_path
+                ? <img src={coverThumbUrl(rep.cover_object_path)} alt="" loading="lazy" decoding="async" width="30" height="42" onError={(e) => handleThumbError(e, rep.cover_object_path)} />
+                : <span className="ab-cat-thumb__ph">{icon || '📖'}</span>}
+            </Link>
+            <span className="ab-cat-title__text">
+              <Link to={href} className="ab-work-title">{w.display_title || rep.titulo}</Link>
+              {langs.length > 0 && <div className="ab-work-meta">{langs.join(' · ')}</div>}
+            </span>
+          </div>
+        </td>
+        <td data-label={t({ id: 'catalog.table.year' })}>{yearsLabel(w.year_min, w.year_max)}</td>
+        <td data-label={t({ id: 'catalog.table.publisher' })}>
+          {publishers.length === 1 ? publishers[0] : publishers.length > 1 ? t({ id: 'catalog.works.publishers' }, { count: publishers.length }) : '—'}
+        </td>
+        <td data-label={t({ id: 'catalog.table.libraries' })}><LibraryCell names={libNames} t={t} /></td>
+        <td data-label={t({ id: 'catalog.table.availability' })}><span className={`ab-status-dot ab-status-dot--${best.cls}`}>{best.label}</span></td>
+        {isAuth && <td className="ab-table__actions-cell" />}
+      </tr>
+    );
+  }
+
+  // Disponibilité d'une bibliothèque pour cette édition. Doctrine A1/A2/A3 :
+  // l'anon ne voit que « à vérifier » ; la lectrice voit sa bibliothèque par
+  // l'indice de session, les autres par leurs compteurs.
+  function copyStatus(l) {
+    if (!isAuth) return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
+    if (l.is_session_library && l.session_status_hint) {
+      return getStatusInfo({ session_status_hint: l.session_status_hint, session_available_count: l.session_available_count, loanable: l.loanable }, isAuth, t);
+    }
+    if (l.loanable === false) return { label: t({ id: 'catalog.avail.consult' }), cls: 'warn' };
+    if (Number(l.available_count) > 0) return { label: t({ id: 'catalog.avail.availableCount' }, { count: Number(l.available_count) }), cls: 'ok' };
+    if (l.available_count == null) return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
+    return { label: t({ id: 'catalog.works.unavailableNow' }), cls: 'bad' };
+  }
+
+  function renderCopiesRow(book, idx) {
+    const st = copiesByBook[book.book_id] || { loading: true, libraries: [] };
+    const libs = st.libraries || [];
+    return (
+      <tr key={`c-${book.book_id}-${idx}`} className="ab-row--copies">
+        <td colSpan={isAuth ? 8 : 7}>
+          <div className="ab-copies" role="region" aria-label={t({ id: 'catalog.works.showCopies' })}>
+            {st.loading ? (
+              <span className="ab-copies__muted">{t({ id: 'catalog.works.copiesLoading' })}</span>
+            ) : libs.length === 0 ? (
+              <span className="ab-copies__muted">{t({ id: 'catalog.works.copiesNone' })}</span>
+            ) : libs.map(l => {
+              const s = copyStatus(l);
+              return (
+                <div className="ab-copies__row" key={l.library_slug || l.library_name}>
+                  <span className="ab-copies__lib">{l.short_name || l.library_name}{l.city ? ` (${l.city})` : ''}</span>
+                  {l.is_session_library && <span className="ab-copies__mine">{t({ id: 'catalog.works.yourLibrary' })}</span>}
+                  <span>{t({ id: 'catalog.works.copiesCount' }, { count: Number(l.exemplares_total) || 0 })}</span>
+                  <span className={`ab-status-dot ab-status-dot--${s.cls}`}>{s.label}</span>
+                  {l.local_bib_ref && <span className="ab-copies__muted">{l.local_bib_ref}</span>}
+                </div>
+              );
+            })}
+          </div>
+        </td>
+      </tr>
+    );
+  }
+
   // ── Rendu ────────────────────────────────────────────────
 
   return (
@@ -1203,6 +1385,10 @@ export default function CatalogPage() {
             <button className="ab-mini-action" onClick={() => setCompact(!compact)} aria-pressed={compact}>
               {compact ? t({ id: 'catalog.actions.compactOn' }) : t({ id: 'catalog.actions.compactOff' })}
             </button>
+            <button className="ab-mini-action" onClick={() => setCollapseEditions(v => !v)} aria-pressed={collapseEditions}
+              title={t({ id: 'catalog.works.groupedHint' })}>
+              {collapseEditions ? t({ id: 'catalog.works.flatList' }) : t({ id: 'catalog.collapseEditions' })}
+            </button>
           </div>
         </div>
       </section>
@@ -1231,6 +1417,7 @@ export default function CatalogPage() {
             className={`ab-facet-chip ${collapseEditions ? 'is-active' : ''}`}
             aria-pressed={collapseEditions}
             onClick={() => setCollapseEditions(v => !v)}
+            title={t({ id: 'catalog.works.groupedHint' })}
           >
             {t({ id: 'catalog.collapseEditions' })}
           </button>
@@ -1370,8 +1557,15 @@ export default function CatalogPage() {
 
       {/* ══ STATS PILLS ═══════════════════════════════════════ */}
       <div className="ab-stats">
-        <Pill>Total: {totalCount ?? '…'}</Pill>
-        <Pill>{t({ id: 'catalog.stats.displayed' }, { count: loading && books.length === 0 ? '…' : books.length })}{loading && books.length === 0 ? ` / ${totalCount ?? '…'}` : hasMore ? ` / ${totalCount ?? '…'}` : totalCount ? ` / ${totalCount}` : ''}</Pill>
+        <Pill>{collapseEditions ? t({ id: 'catalog.works.total' }, { count: totalCount ?? '…' }) : `Total: ${totalCount ?? '…'}`}</Pill>
+        {(() => {
+          // En mode œuvre, « affichés » compte les œuvres (l'unité de la pagination).
+          const shown = collapseEditions ? worksToShow.length : books.length;
+          const pending = loading && shown === 0;
+          return (
+            <Pill>{t({ id: 'catalog.stats.displayed' }, { count: pending ? '…' : shown })}{pending ? ` / ${totalCount ?? '…'}` : hasMore ? ` / ${totalCount ?? '…'}` : totalCount ? ` / ${totalCount}` : ''}</Pill>
+          );
+        })()}
         <Pill variant={isAuth && serverAvailableCount > 0 ? 'ok' : 'default'}>
           {t({ id: 'catalog.stats.localAvailable' }, { count: isAuth ? (serverAvailableCount ?? '…') : '—' })}
         </Pill>
@@ -1442,14 +1636,22 @@ export default function CatalogPage() {
                 </tr>
               </thead>
               <tbody>
-                {displayBooks.map((book, idx) => {
+                {tableRows.map((row, idx) => {
+                  if (row.type === 'work') return renderWorkRow(row.w, idx);
+                  if (row.type === 'copies') return renderCopiesRow(row.book, idx);
+                  const book = row.book;
                   const status = getStatusInfo(book, isAuth, t);
                   const icon = TIPO_ICONS[book.tipo_material] || '';
                   const libNames = orderLibraryNames(libraryNameList(book), libPriority)
                     .map(nm => (cityByLib[nm] ? `${nm} (${cityByLib[nm]})` : nm));
                   return (
-                    <tr key={`${book.book_id}-${book.library_slug}-${idx}`}>
-                      <td data-label={t({ id: 'catalog.table.ref' })}><Link to={`/livro/${book.book_id}`}>{book.bib_ref || '—'}</Link></td>
+                    <tr key={`${book.book_id}-${book.library_slug}-${idx}`} className={row.indent ? 'ab-row--edition' : undefined}>
+                      <td data-label={t({ id: 'catalog.table.ref' })}>
+                        <span className="ab-cat-ref-stack">
+                          {copiesExpander(book)}
+                          <Link to={`/livro/${book.book_id}`}>{book.bib_ref || '—'}</Link>
+                        </span>
+                      </td>
                       <td data-label={t({ id: 'catalog.table.author' })}><AuthorLinks book={book} /></td>
                       <td data-label={t({ id: 'catalog.table.bookTitle' })}>
                         <div className="ab-cat-title">
@@ -1464,11 +1666,6 @@ export default function CatalogPage() {
                               {book.subtitulo && <span className="ab-subtitulo"> — {book.subtitulo}</span>}
                             </Link>
                             {book.has_online_reading && <span className="ab-online-badge">{t({ id: 'catalog.actions.readOnline' })}</span>}
-                            {book._editionCount > 1 && (
-                              <Link to={`/obra/${book.work_id}`} className="ab-online-badge">
-                                {t({ id: 'work.page.editions' }, { count: book._editionCount })} · {t({ id: 'book.work.view' })}
-                              </Link>
-                            )}
                           </span>
                         </div>
                       </td>
