@@ -6254,8 +6254,8 @@
   "book.author.anonymous": "anônimo",
   "importacoes.deposit.ownCatalog": "Meu próprio catálogo",
   "importacoes.deposit.adminOnlyNote": "O depósito do catálogo de uma biblioteca companheira é reservado à administração da rede.",
-  "importacoes.fila.depositAdminOnly": "Este lote vem de um depósito companheiro: sua promoção a rascunhos é reservada à administração da rede.",
-  "error.import.deposit_admin_only": "O depósito de um catálogo companheiro (registrar a fonte, enviar o arquivo, promover o lote) é reservado à administração da rede.",
+  "importacoes.fila.depositAdminOnly": "Este lote vem de um depósito companheiro ou de uma colheita OAI: sua promoção a rascunhos é reservada à administração da rede.",
+  "error.import.deposit_admin_only": "O depósito de um catálogo companheiro e a colheita de um repositório OAI (registrar a fonte, enviar ou colher, promover o lote) são reservados à administração da rede.",
   "catalog.works.editionsCount": "{count, plural, one {# edição} other {# edições}}",
   "catalog.works.expand": "Ver as edições",
   "catalog.works.collapse": "Recolher as edições",
@@ -6295,5 +6295,6 @@
   "work.page.uniformTitle": "Título uniforme: {title}",
   "work.page.autoTitle": "Título traduzido automaticamente, a revisar.",
   "error.catalog.work.sameWork": "Uma obra não se funde consigo mesma.",
-  "error.catalog.work.badLocale": "Idioma desconhecido."
+  "error.catalog.work.badLocale": "Idioma desconhecido.",
+  "importacoes.oai.adminOnlyNote": "A colheita de um repositório OAI-PMH é reservada à administração da rede."
 }

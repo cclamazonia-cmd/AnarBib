@@ -298,7 +298,10 @@ export default function ImportacoesPage() {
   const canDeposit = isNetworkAdmin;
   const fileSources = sources.filter(s => canDeposit || s.source_kind !== 'partner_deposit');
   const selectedRunSource = selectedRun ? sources.find(s => s.id === selectedRun.source_id) : null;
-  const depositLocked = !canDeposit && selectedRunSource?.source_kind === 'partner_deposit';
+  // 04/09/2026 apres-midi : un entrepot OAI moissonne est un fonds tiers de
+  // meme nature — meme garde (20260904133000), meme HINT.
+  const THIRD_PARTY_KINDS = ['partner_deposit', 'oai_pmh'];
+  const depositLocked = !canDeposit && THIRD_PARTY_KINDS.includes(selectedRunSource?.source_kind);
 
   if (!roleLoaded) return (
     <PageShell><Topbar />
@@ -1401,12 +1404,18 @@ export default function ImportacoesPage() {
                               geste que la base rejettera : on eteint le bouton, la pastille
                               ci-dessus dit pourquoi. La RPC reste l'autorite — ce grisage est
                               une politesse, pas une garde. */}
-                          <button className="cat-btn primary" style={{ fontSize: '.82rem', padding: '5px 14px', minHeight: 0 }}
-                            onClick={() => handleHarvestOai(s.id)}
-                            title={!s.import_enabled ? t({ id: 'error.oai.sourceDisabled' }) : undefined}
-                            disabled={s.harvest_status === 'in_progress' || !s.import_enabled}>
-                            {s.harvest_status === 'in_progress' ? t({ id: 'importacoes.oai.harvesting' }) : t({ id: 'importacoes.oai.harvestNow' })}
-                          </button>
+                          {/* 04/09/2026 : moissonner est un geste de reseau (fn_import_harvest_oai
+                              admin seulement). La coordination voit l'etat, pas le bouton. */}
+                          {canDeposit ? (
+                            <button className="cat-btn primary" style={{ fontSize: '.82rem', padding: '5px 14px', minHeight: 0 }}
+                              onClick={() => handleHarvestOai(s.id)}
+                              title={!s.import_enabled ? t({ id: 'error.oai.sourceDisabled' }) : undefined}
+                              disabled={s.harvest_status === 'in_progress' || !s.import_enabled}>
+                              {s.harvest_status === 'in_progress' ? t({ id: 'importacoes.oai.harvesting' }) : t({ id: 'importacoes.oai.harvestNow' })}
+                            </button>
+                          ) : (
+                            <span className="imp-note">{t({ id: 'importacoes.oai.adminOnlyNote' })}</span>
+                          )}
                         </div>
                       ))}
                     </div>

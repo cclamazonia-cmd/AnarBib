@@ -6254,8 +6254,8 @@
   "book.author.anonymous": "anonyme",
   "importacoes.deposit.ownCatalog": "Mon propre catalogue",
   "importacoes.deposit.adminOnlyNote": "Le dépôt du catalogue d’une bibliothèque compagne est réservé à l’administration du réseau.",
-  "importacoes.fila.depositAdminOnly": "Ce lot vient d’un dépôt compagnon : sa promotion en brouillons est réservée à l’administration du réseau.",
-  "error.import.deposit_admin_only": "Le dépôt d’un catalogue compagnon (enregistrer la source, déposer le fichier, promouvoir le lot) est réservé à l’administration du réseau.",
+  "importacoes.fila.depositAdminOnly": "Ce lot vient d’un dépôt compagnon ou d’une moisson OAI : sa promotion en brouillons est réservée à l’administration du réseau.",
+  "error.import.deposit_admin_only": "Le dépôt d’un catalogue compagnon et le moissonnage d’un entrepôt OAI (enregistrer la source, déposer ou moissonner, promouvoir le lot) sont réservés à l’administration du réseau.",
   "catalog.works.editionsCount": "{count, plural, one {# édition} other {# éditions}}",
   "catalog.works.expand": "Voir les éditions",
   "catalog.works.collapse": "Replier les éditions",
@@ -6295,5 +6295,6 @@
   "work.page.uniformTitle": "Titre uniforme : {title}",
   "work.page.autoTitle": "Titre traduit automatiquement, à relire.",
   "error.catalog.work.sameWork": "Une œuvre ne se fusionne pas avec elle-même.",
-  "error.catalog.work.badLocale": "Langue inconnue."
+  "error.catalog.work.badLocale": "Langue inconnue.",
+  "importacoes.oai.adminOnlyNote": "Le moissonnage d’un entrepôt OAI-PMH est réservé à l’administration du réseau."
 }

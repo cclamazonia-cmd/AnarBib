@@ -417,3 +417,9 @@ tests/sql/import_depot_partenaire_admin_tests.sql
 tests/sql/oeuvres_rattachement_tests.sql
 tests/sql/work_titles_tests.sql
 tests/sql/opac_par_oeuvre_tests.sql
+
+# Moissonner un entrepot OAI-PMH est un geste de reseau, comme deposer un catalogue
+# compagnon (decision du 04/09/2026, apres-midi) : la provenance decide, pas le
+# volume. T1 a T3 sont des tests de NON-ACTION (ni run, ni verrou, ni brouillon) ;
+# T4 garde que l'admin reseau passe. Ref. 20260904133000.
+tests/sql/import_moisson_oai_admin_tests.sql

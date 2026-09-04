@@ -6254,8 +6254,8 @@
   "book.author.anonymous": "anonymous",
   "importacoes.deposit.ownCatalog": "My own catalogue",
   "importacoes.deposit.adminOnlyNote": "Depositing a companion library’s catalogue is reserved to the network administration.",
-  "importacoes.fila.depositAdminOnly": "This batch comes from a companion deposit: promoting it to drafts is reserved to the network administration.",
-  "error.import.deposit_admin_only": "Depositing a companion catalogue (registering the source, uploading the file, promoting the batch) is reserved to the network administration.",
+  "importacoes.fila.depositAdminOnly": "This batch comes from a companion deposit or an OAI harvest: promoting it to drafts is reserved to the network administration.",
+  "error.import.deposit_admin_only": "Depositing a companion catalogue and harvesting an OAI repository (registering the source, uploading or harvesting, promoting the batch) are reserved to the network administration.",
   "catalog.works.editionsCount": "{count, plural, one {# edition} other {# editions}}",
   "catalog.works.expand": "Show editions",
   "catalog.works.collapse": "Hide editions",
@@ -6295,5 +6295,6 @@
   "work.page.uniformTitle": "Uniform title: {title}",
   "work.page.autoTitle": "Machine-translated title, to be reviewed.",
   "error.catalog.work.sameWork": "A work cannot be merged into itself.",
-  "error.catalog.work.badLocale": "Unknown language."
+  "error.catalog.work.badLocale": "Unknown language.",
+  "importacoes.oai.adminOnlyNote": "Harvesting an OAI-PMH repository is reserved to the network administration."
 }

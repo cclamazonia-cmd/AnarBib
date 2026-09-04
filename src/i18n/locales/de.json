@@ -6254,8 +6254,8 @@
   "book.author.anonymous": "anonym",
   "importacoes.deposit.ownCatalog": "Mein eigener Katalog",
   "importacoes.deposit.adminOnlyNote": "Die Hinterlegung des Katalogs einer befreundeten Bibliothek ist der Netzwerkverwaltung vorbehalten.",
-  "importacoes.fila.depositAdminOnly": "Dieses Los stammt aus einer befreundeten Hinterlegung: seine Überführung in Entwürfe ist der Netzwerkverwaltung vorbehalten.",
-  "error.import.deposit_admin_only": "Die Hinterlegung eines befreundeten Katalogs (Quelle registrieren, Datei hochladen, Los überführen) ist der Netzwerkverwaltung vorbehalten.",
+  "importacoes.fila.depositAdminOnly": "Dieses Los stammt aus einer befreundeten Hinterlegung oder einer OAI-Ernte: seine Überführung in Entwürfe ist der Netzwerkverwaltung vorbehalten.",
+  "error.import.deposit_admin_only": "Die Hinterlegung eines befreundeten Katalogs und das Ernten eines OAI-Repositoriums (Quelle registrieren, hochladen oder ernten, Los überführen) sind der Netzwerkverwaltung vorbehalten.",
   "catalog.works.editionsCount": "{count, plural, one {# Ausgabe} other {# Ausgaben}}",
   "catalog.works.expand": "Ausgaben anzeigen",
   "catalog.works.collapse": "Ausgaben einklappen",
@@ -6295,5 +6295,6 @@
   "work.page.uniformTitle": "Einheitstitel: {title}",
   "work.page.autoTitle": "Maschinell übersetzter Titel, zu prüfen.",
   "error.catalog.work.sameWork": "Ein Werk lässt sich nicht mit sich selbst zusammenführen.",
-  "error.catalog.work.badLocale": "Unbekannte Sprache."
+  "error.catalog.work.badLocale": "Unbekannte Sprache.",
+  "importacoes.oai.adminOnlyNote": "Das Ernten eines OAI-PMH-Repositoriums ist der Netzwerkverwaltung vorbehalten."
 }

@@ -6254,8 +6254,8 @@
   "book.author.anonymous": "anònim",
   "importacoes.deposit.ownCatalog": "El meu propi catàleg",
   "importacoes.deposit.adminOnlyNote": "El dipòsit del catàleg d’una biblioteca companya està reservat a l’administració de la xarxa.",
-  "importacoes.fila.depositAdminOnly": "Aquest lot prové d’un dipòsit company: la seva promoció a esborranys està reservada a l’administració de la xarxa.",
-  "error.import.deposit_admin_only": "El dipòsit d’un catàleg company (registrar la font, pujar el fitxer, promoure el lot) està reservat a l’administració de la xarxa.",
+  "importacoes.fila.depositAdminOnly": "Aquest lot prové d’un dipòsit company o d’una recol·lecció OAI: la seva promoció a esborranys està reservada a l’administració de la xarxa.",
+  "error.import.deposit_admin_only": "El dipòsit d’un catàleg company i la recol·lecció d’un repositori OAI (registrar la font, pujar o recol·lectar, promoure el lot) estan reservats a l’administració de la xarxa.",
   "catalog.works.editionsCount": "{count, plural, one {# edició} other {# edicions}}",
   "catalog.works.expand": "Veure les edicions",
   "catalog.works.collapse": "Plegar les edicions",
@@ -6295,5 +6295,6 @@
   "work.page.uniformTitle": "Títol uniforme: {title}",
   "work.page.autoTitle": "Títol traduït automàticament, per revisar.",
   "error.catalog.work.sameWork": "Una obra no es fusiona amb ella mateixa.",
-  "error.catalog.work.badLocale": "Llengua desconeguda."
+  "error.catalog.work.badLocale": "Llengua desconeguda.",
+  "importacoes.oai.adminOnlyNote": "La recol·lecció d’un repositori OAI-PMH està reservada a l’administració de la xarxa."
 }

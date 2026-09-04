@@ -6254,8 +6254,8 @@
   "book.author.anonymous": "anónimo",
   "importacoes.deposit.ownCatalog": "Mi propio catálogo",
   "importacoes.deposit.adminOnlyNote": "El depósito del catálogo de una biblioteca compañera está reservado a la administración de la red.",
-  "importacoes.fila.depositAdminOnly": "Este lote procede de un depósito compañero: su promoción a borradores está reservada a la administración de la red.",
-  "error.import.deposit_admin_only": "El depósito de un catálogo compañero (registrar la fuente, subir el archivo, promover el lote) está reservado a la administración de la red.",
+  "importacoes.fila.depositAdminOnly": "Este lote procede de un depósito compañero o de una cosecha OAI: su promoción a borradores está reservada a la administración de la red.",
+  "error.import.deposit_admin_only": "El depósito de un catálogo compañero y la cosecha de un repositorio OAI (registrar la fuente, subir o cosechar, promover el lote) están reservados a la administración de la red.",
   "catalog.works.editionsCount": "{count, plural, one {# edición} other {# ediciones}}",
   "catalog.works.expand": "Ver las ediciones",
   "catalog.works.collapse": "Plegar las ediciones",
@@ -6295,5 +6295,6 @@
   "work.page.uniformTitle": "Título uniforme: {title}",
   "work.page.autoTitle": "Título traducido automáticamente, por revisar.",
   "error.catalog.work.sameWork": "Una obra no se fusiona consigo misma.",
-  "error.catalog.work.badLocale": "Idioma desconocido."
+  "error.catalog.work.badLocale": "Idioma desconocido.",
+  "importacoes.oai.adminOnlyNote": "La cosecha de un repositorio OAI-PMH está reservada a la administración de la red."
 }

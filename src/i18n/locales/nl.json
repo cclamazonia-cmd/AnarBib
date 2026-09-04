@@ -6254,8 +6254,8 @@
   "book.author.anonymous": "anoniem",
   "importacoes.deposit.ownCatalog": "Mijn eigen catalogus",
   "importacoes.deposit.adminOnlyNote": "Het deponeren van de catalogus van een bevriende bibliotheek is voorbehouden aan het netwerkbeheer.",
-  "importacoes.fila.depositAdminOnly": "Deze partij komt uit een bevriend depot: het omzetten naar concepten is voorbehouden aan het netwerkbeheer.",
-  "error.import.deposit_admin_only": "Het deponeren van een bevriende catalogus (bron registreren, bestand uploaden, partij omzetten) is voorbehouden aan het netwerkbeheer.",
+  "importacoes.fila.depositAdminOnly": "Deze partij komt uit een bevriend depot of een OAI-oogst: het omzetten naar concepten is voorbehouden aan het netwerkbeheer.",
+  "error.import.deposit_admin_only": "Het deponeren van een bevriende catalogus en het oogsten van een OAI-repository (bron registreren, uploaden of oogsten, partij omzetten) zijn voorbehouden aan het netwerkbeheer.",
   "catalog.works.editionsCount": "{count, plural, one {# editie} other {# edities}}",
   "catalog.works.expand": "Edities tonen",
   "catalog.works.collapse": "Edities inklappen",
@@ -6295,5 +6295,6 @@
   "work.page.uniformTitle": "Uniforme titel: {title}",
   "work.page.autoTitle": "Automatisch vertaalde titel, na te kijken.",
   "error.catalog.work.sameWork": "Een werk kan niet met zichzelf worden samengevoegd.",
-  "error.catalog.work.badLocale": "Onbekende taal."
+  "error.catalog.work.badLocale": "Onbekende taal.",
+  "importacoes.oai.adminOnlyNote": "Het oogsten van een OAI-PMH-repository is voorbehouden aan het netwerkbeheer."
 }
