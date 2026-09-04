@@ -183,5 +183,7 @@ user_notification_preferences
 user_notifications
 user_wishlist
 work_expressions
+work_titles
+work_not_same
 works
 loan_cycle_notifications
