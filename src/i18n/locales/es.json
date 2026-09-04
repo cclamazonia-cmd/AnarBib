@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Título traducido automáticamente, por revisar.",
   "error.catalog.work.sameWork": "Una obra no se fusiona consigo misma.",
   "error.catalog.work.badLocale": "Idioma desconocido.",
-  "importacoes.oai.adminOnlyNote": "La cosecha de un repositorio OAI-PMH está reservada a la administración de la red."
+  "importacoes.oai.adminOnlyNote": "La cosecha de un repositorio OAI-PMH está reservada a la administración de la red.",
+  "catalogacao.work.uniformTitle": "Título uniforme",
+  "catalogacao.work.uniformTitleHint": "En la lengua de la propia obra, no en la de una traducción (decisión del 04/09/2026). Solo se muestra en las lenguas sin título.",
+  "catalogacao.work.uniformTitleSaved": "Título uniforme guardado.",
+  "error.catalog.work.emptyTitle": "El título uniforme no puede quedar vacío."
 }

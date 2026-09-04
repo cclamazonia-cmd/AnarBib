@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Αυτόματα μεταφρασμένος τίτλος, προς έλεγχο.",
   "error.catalog.work.sameWork": "Ένα έργο δεν συγχωνεύεται με τον εαυτό του.",
   "error.catalog.work.badLocale": "Άγνωστη γλώσσα.",
-  "importacoes.oai.adminOnlyNote": "Η συγκομιδή ενός αποθετηρίου OAI-PMH επιφυλάσσεται στη διαχείριση του δικτύου."
+  "importacoes.oai.adminOnlyNote": "Η συγκομιδή ενός αποθετηρίου OAI-PMH επιφυλάσσεται στη διαχείριση του δικτύου.",
+  "catalogacao.work.uniformTitle": "Ομοιόμορφος τίτλος",
+  "catalogacao.work.uniformTitleHint": "Στη γλώσσα του ίδιου του έργου, όχι σε αυτή μιας μετάφρασης (απόφαση της 04/09/2026). Εμφανίζεται μόνο στις γλώσσες χωρίς τίτλο.",
+  "catalogacao.work.uniformTitleSaved": "Ο ομοιόμορφος τίτλος αποθηκεύτηκε.",
+  "error.catalog.work.emptyTitle": "Ο ομοιόμορφος τίτλος δεν μπορεί να είναι κενός."
 }

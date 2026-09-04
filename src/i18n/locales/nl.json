@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Automatisch vertaalde titel, na te kijken.",
   "error.catalog.work.sameWork": "Een werk kan niet met zichzelf worden samengevoegd.",
   "error.catalog.work.badLocale": "Onbekende taal.",
-  "importacoes.oai.adminOnlyNote": "Het oogsten van een OAI-PMH-repository is voorbehouden aan het netwerkbeheer."
+  "importacoes.oai.adminOnlyNote": "Het oogsten van een OAI-PMH-repository is voorbehouden aan het netwerkbeheer.",
+  "catalogacao.work.uniformTitle": "Uniforme titel",
+  "catalogacao.work.uniformTitleHint": "In de taal van het werk zelf, niet die van een vertaling (besluit van 04-09-2026). Alleen zichtbaar voor talen zonder titel.",
+  "catalogacao.work.uniformTitleSaved": "Uniforme titel opgeslagen.",
+  "error.catalog.work.emptyTitle": "De uniforme titel mag niet leeg zijn."
 }

@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Aŭtomate tradukita titolo, relegenda.",
   "error.catalog.work.sameWork": "Verko ne kunfandiĝas kun si mem.",
   "error.catalog.work.badLocale": "Nekonata lingvo.",
-  "importacoes.oai.adminOnlyNote": "La rikoltado de OAI-PMH-deponejo estas rezervita al la administrado de la reto."
+  "importacoes.oai.adminOnlyNote": "La rikoltado de OAI-PMH-deponejo estas rezervita al la administrado de la reto.",
+  "catalogacao.work.uniformTitle": "Unueca titolo",
+  "catalogacao.work.uniformTitleHint": "En la lingvo de la verko mem, ne en tiu de traduko (decido de 2026-09-04). Ĝi aperas nur en lingvoj sen titolo.",
+  "catalogacao.work.uniformTitleSaved": "Unueca titolo konservita.",
+  "error.catalog.work.emptyTitle": "La unueca titolo ne povas esti malplena."
 }

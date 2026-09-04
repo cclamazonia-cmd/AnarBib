@@ -16,7 +16,7 @@ DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
   v_staff uuid := '11111111-1111-1111-1111-111111111111';
   v_author bigint; v_w1 bigint; v_w2 bigint; v_w3 bigint; v_b1 bigint; v_b2 bigint; v_b3 bigint;
-  v_n int; v_id bigint; v_txt text;
+  v_n int; v_id bigint; v_txt text; v_txt2 text;
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM public.user_library_memberships WHERE user_id = v_staff AND status = 'active') THEN
     RAISE EXCEPTION 'OEUVRES-RATTACHEMENT : le coordenador du seed est absent, la suite ne peut pas simuler le staff';
@@ -134,6 +134,31 @@ BEGIN
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- Decision 5 du 04/09 : le titre uniforme s'ecrit dans la langue de l'oeuvre ;
+  -- l'app recoit un champ, donc une RPC (ref. 20260904163000).
+  v_t := 'T9 set_work_uniform_title renomme et recalcule sort_title ; refuse le vide et le non-staff';
+  BEGIN
+    v_txt := '';
+    BEGIN PERFORM public.set_work_uniform_title(v_id, 'Zz sans staff'); v_txt := '(aucun refus)';
+    EXCEPTION WHEN OTHERS THEN v_txt := SQLERRM; END;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_staff, 'role', 'authenticated')::text, true);
+    PERFORM public.set_work_uniform_title(v_id, '  Zz Civil Disobedience ');
+    v_txt2 := '';
+    BEGIN PERFORM public.set_work_uniform_title(v_id, '   '); v_txt2 := '(aucun refus)';
+    EXCEPTION WHEN OTHERS THEN v_txt2 := SQLERRM; END;
+    PERFORM set_config('request.jwt.claims', NULL, true);
+    IF v_txt ~ 'bibliotec'
+       AND (SELECT uniform_title FROM public.works WHERE id = v_id) = 'Zz Civil Disobedience'
+       AND (SELECT sort_title FROM public.works WHERE id = v_id) = public.fn_normalize_name('Zz Civil Disobedience')
+       AND v_txt2 ~ 'vazio'
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt||' / '||v_txt2); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    PERFORM set_config('request.jwt.claims', NULL, true);
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM);
+  END;
 
   -- ── Nettoyage ─────────────────────────────────────────────────────
   DELETE FROM public.books WHERE id IN (v_b1, v_b2, v_b3);

@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Maschinell übersetzter Titel, zu prüfen.",
   "error.catalog.work.sameWork": "Ein Werk lässt sich nicht mit sich selbst zusammenführen.",
   "error.catalog.work.badLocale": "Unbekannte Sprache.",
-  "importacoes.oai.adminOnlyNote": "Das Ernten eines OAI-PMH-Repositoriums ist der Netzwerkverwaltung vorbehalten."
+  "importacoes.oai.adminOnlyNote": "Das Ernten eines OAI-PMH-Repositoriums ist der Netzwerkverwaltung vorbehalten.",
+  "catalogacao.work.uniformTitle": "Einheitstitel",
+  "catalogacao.work.uniformTitleHint": "In der Sprache des Werks selbst, nicht der einer Übersetzung (Entscheidung vom 04.09.2026). Er erscheint nur in Sprachen ohne Titel.",
+  "catalogacao.work.uniformTitleSaved": "Einheitstitel gespeichert.",
+  "error.catalog.work.emptyTitle": "Der Einheitstitel darf nicht leer sein."
 }

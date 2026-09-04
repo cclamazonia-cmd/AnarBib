@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Machine-translated title, to be reviewed.",
   "error.catalog.work.sameWork": "A work cannot be merged into itself.",
   "error.catalog.work.badLocale": "Unknown language.",
-  "importacoes.oai.adminOnlyNote": "Harvesting an OAI-PMH repository is reserved to the network administration."
+  "importacoes.oai.adminOnlyNote": "Harvesting an OAI-PMH repository is reserved to the network administration.",
+  "catalogacao.work.uniformTitle": "Uniform title",
+  "catalogacao.work.uniformTitleHint": "In the language of the work itself, not that of a translation (decision of 2026-09-04). Shown only to languages without a title.",
+  "catalogacao.work.uniformTitleSaved": "Uniform title saved.",
+  "error.catalog.work.emptyTitle": "The uniform title cannot be empty."
 }

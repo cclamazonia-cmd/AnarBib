@@ -62,22 +62,45 @@ export default function WorkToolsBlock({ bookId, workId, onChanged, onMsg }) {
     } finally { setLinking(null); }
   }
 
-  // ── 2. Titres par langue ─────────────────────────────────────
+  // ── 2. Titres par langue, et le titre uniforme ───────────────
+  // Décision 5 du 04/09/2026 : le titre uniforme s'écrit dans la langue de
+  // l'œuvre elle-même (set_work_uniform_title) ; il ne s'affiche qu'aux locales
+  // sans titre.
   const [titlesOpen, setTitlesOpen] = useState(false);
   const [titles, setTitles] = useState({});   // lang -> { title, source, needs_review }
   const [drafts, setDrafts] = useState({});   // lang -> saisie en cours
   const [saving, setSaving] = useState(null);
+  const [uniform, setUniform] = useState('');       // titre uniforme en base
+  const [uniformDraft, setUniformDraft] = useState('');
 
   const loadTitles = useCallback(async () => {
-    if (!workId) { setTitles({}); setDrafts({}); return; }
-    const { data } = await supabase.from('work_titles').select('lang, title, source, needs_review').eq('work_id', workId);
+    if (!workId) { setTitles({}); setDrafts({}); setUniform(''); setUniformDraft(''); return; }
+    const [{ data }, { data: w }] = await Promise.all([
+      supabase.from('work_titles').select('lang, title, source, needs_review').eq('work_id', workId),
+      supabase.from('works').select('uniform_title').eq('id', workId).maybeSingle(),
+    ]);
     const m = {};
     for (const r of data || []) m[r.lang] = r;
     setTitles(m);
     setDrafts(Object.fromEntries(LOCALES.map(l => [l, m[l]?.title || ''])));
+    setUniform(w?.uniform_title || ''); setUniformDraft(w?.uniform_title || '');
   }, [workId]);
 
   useEffect(() => { if (titlesOpen) loadTitles(); }, [titlesOpen, loadTitles]);
+
+  async function saveUniform() {
+    if (!workId) return;
+    setSaving('__uniform__');
+    try {
+      const { error } = await supabase.rpc('set_work_uniform_title', { p_work_id: Number(workId), p_title: uniformDraft });
+      if (error) throw error;
+      onMsg?.(t({ id: 'catalogacao.work.uniformTitleSaved' }), 'ok');
+      await loadTitles();
+      onChanged?.();
+    } catch (err) {
+      onMsg?.(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), 'error');
+    } finally { setSaving(null); }
+  }
 
   async function saveTitle(lang) {
     if (!workId) return;
@@ -143,6 +166,18 @@ export default function WorkToolsBlock({ bookId, workId, onChanged, onMsg }) {
 
       {titlesOpen && workId && (
         <div style={{ border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, padding: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', padding: '3px 0', marginBottom: 6, borderBottom: '1px solid rgba(255,255,255,.08)' }}>
+            <span style={{ width: 120, fontSize: '.78rem', fontWeight: 600, flex: '0 0 auto' }} title={t({ id: 'catalogacao.work.uniformTitleHint' })}>
+              {t({ id: 'catalogacao.work.uniformTitle' })}
+            </span>
+            <input type="text" value={uniformDraft} style={inputStyle} title={t({ id: 'catalogacao.work.uniformTitleHint' })}
+              onChange={e => setUniformDraft(e.target.value)} />
+            {uniformDraft.trim() !== uniform && uniformDraft.trim() && (
+              <button type="button" className="ab-button ab-button--sm" disabled={saving != null} onClick={saveUniform}>
+                {saving === '__uniform__' ? '…' : t({ id: 'catalogacao.work.titleSave' })}
+              </button>
+            )}
+          </div>
           <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)', marginBottom: 6 }}>{t({ id: 'catalogacao.work.titlesHint' })}</div>
           {LOCALES.map(lang => {
             const cur = titles[lang];

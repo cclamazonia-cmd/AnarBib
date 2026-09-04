@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Titre traduit automatiquement, à relire.",
   "error.catalog.work.sameWork": "Une œuvre ne se fusionne pas avec elle-même.",
   "error.catalog.work.badLocale": "Langue inconnue.",
-  "importacoes.oai.adminOnlyNote": "Le moissonnage d’un entrepôt OAI-PMH est réservé à l’administration du réseau."
+  "importacoes.oai.adminOnlyNote": "Le moissonnage d’un entrepôt OAI-PMH est réservé à l’administration du réseau.",
+  "catalogacao.work.uniformTitle": "Titre uniforme",
+  "catalogacao.work.uniformTitleHint": "Dans la langue de l'œuvre elle-même, pas celle d'une traduction (décision du 04/09/2026). Il ne s'affiche qu'aux langues sans titre.",
+  "catalogacao.work.uniformTitleSaved": "Titre uniforme enregistré.",
+  "error.catalog.work.emptyTitle": "Le titre uniforme ne peut pas être vide."
 }

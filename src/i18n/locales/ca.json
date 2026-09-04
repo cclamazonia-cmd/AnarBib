@@ -6296,5 +6296,9 @@
   "work.page.autoTitle": "Títol traduït automàticament, per revisar.",
   "error.catalog.work.sameWork": "Una obra no es fusiona amb ella mateixa.",
   "error.catalog.work.badLocale": "Llengua desconeguda.",
-  "importacoes.oai.adminOnlyNote": "La recol·lecció d’un repositori OAI-PMH està reservada a l’administració de la xarxa."
+  "importacoes.oai.adminOnlyNote": "La recol·lecció d’un repositori OAI-PMH està reservada a l’administració de la xarxa.",
+  "catalogacao.work.uniformTitle": "Títol uniforme",
+  "catalogacao.work.uniformTitleHint": "En la llengua de l'obra mateixa, no en la d'una traducció (decisió del 04/09/2026). Només es mostra a les llengües sense títol.",
+  "catalogacao.work.uniformTitleSaved": "Títol uniforme desat.",
+  "error.catalog.work.emptyTitle": "El títol uniforme no pot quedar buit."
 }
