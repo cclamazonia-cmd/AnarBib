@@ -1003,25 +1003,27 @@ export default function CatalogPage() {
   if (collapseEditions) {
     for (const w of worksToShow) {
       const eds = Array.isArray(w.editions) ? w.editions : [];
+      // `depth` : 1 = œuvre (ou édition seule), 2 = édition d'une œuvre dépliée,
+      // puis les exemplaires un cran plus loin. Le CSS indente par data-depth.
       if (eds.length <= 1) {
         const b = eds[0];
         if (!b) continue;
-        tableRows.push({ type: 'edition', book: b });
-        if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b });
+        tableRows.push({ type: 'edition', book: b, depth: 1 });
+        if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b, depth: 2 });
         continue;
       }
       tableRows.push({ type: 'work', w });
       if (expandedWorks.has(w.key)) {
         for (const b of eds) {
-          tableRows.push({ type: 'edition', book: b, indent: true });
-          if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b });
+          tableRows.push({ type: 'edition', book: b, indent: true, depth: 2 });
+          if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b, depth: 3 });
         }
       }
     }
   } else {
     for (const b of books) {
-      tableRows.push({ type: 'edition', book: b });
-      if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b });
+      tableRows.push({ type: 'edition', book: b, depth: 1 });
+      if (expandedCopies.has(b.book_id)) tableRows.push({ type: 'copies', book: b, depth: 2 });
     }
   }
   const STATUS_RANK = { ok: 0, warn: 1, muted: 2, bad: 3 };
@@ -1049,7 +1051,7 @@ export default function CatalogPage() {
     const best = eds.map(e => getStatusInfo(e, isAuth, t))
       .sort((a, b) => (STATUS_RANK[a.cls] ?? 9) - (STATUS_RANK[b.cls] ?? 9))[0] || { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
     return (
-      <tr key={`w-${w.key}-${idx}`} className="ab-row--work">
+      <tr key={`w-${w.key}-${idx}`} className="ab-row--work" data-depth={1}>
         <td data-label={t({ id: 'catalog.table.ref' })}>
           <span className="ab-cat-ref-stack">
             <button type="button" className="ab-expander" aria-expanded={isOpen}
@@ -1086,11 +1088,16 @@ export default function CatalogPage() {
 
   // Disponibilité d'une bibliothèque pour cette édition. Doctrine A1/A2/A3 :
   // l'anon ne voit que « à vérifier » ; la lectrice voit sa bibliothèque par
-  // l'indice de session, les autres par leurs compteurs.
-  function copyStatus(l) {
+  // l'indice de session. Pour les AUTRES bibliothèques, le « pour vous » de
+  // l'édition prime (Xavier, 04/09) : un exemplaire libre à MLEG n'est pas
+  // disponible pour une lectrice de BTL, la ligne ne doit pas dire le contraire.
+  function copyStatus(l, book) {
     if (!isAuth) return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
     if (l.is_session_library && l.session_status_hint) {
       return getStatusInfo({ session_status_hint: l.session_status_hint, session_available_count: l.session_available_count, loanable: l.loanable }, isAuth, t);
+    }
+    if (!l.is_session_library && (book?.session_status_hint || '').toLowerCase() === 'indisponivel_para_voce') {
+      return { label: t({ id: 'catalog.avail.unavailUser' }), cls: 'bad' };
     }
     if (l.loanable === false) return { label: t({ id: 'catalog.avail.consult' }), cls: 'warn' };
     if (Number(l.available_count) > 0) return { label: t({ id: 'catalog.avail.availableCount' }, { count: Number(l.available_count) }), cls: 'ok' };
@@ -1098,11 +1105,11 @@ export default function CatalogPage() {
     return { label: t({ id: 'catalog.works.unavailableNow' }), cls: 'bad' };
   }
 
-  function renderCopiesRow(book, idx) {
+  function renderCopiesRow(book, idx, depth = 2) {
     const st = copiesByBook[book.book_id] || { loading: true, libraries: [] };
     const libs = st.libraries || [];
     return (
-      <tr key={`c-${book.book_id}-${idx}`} className="ab-row--copies">
+      <tr key={`c-${book.book_id}-${idx}`} className="ab-row--copies" data-depth={depth}>
         <td colSpan={isAuth ? 8 : 7}>
           <div className="ab-copies" role="region" aria-label={t({ id: 'catalog.works.showCopies' })}>
             {st.loading ? (
@@ -1110,7 +1117,7 @@ export default function CatalogPage() {
             ) : libs.length === 0 ? (
               <span className="ab-copies__muted">{t({ id: 'catalog.works.copiesNone' })}</span>
             ) : libs.map(l => {
-              const s = copyStatus(l);
+              const s = copyStatus(l, book);
               return (
                 <div className="ab-copies__row" key={l.library_slug || l.library_name}>
                   <span className="ab-copies__lib">{l.short_name || l.library_name}{l.city ? ` (${l.city})` : ''}</span>
@@ -1641,14 +1648,14 @@ export default function CatalogPage() {
               <tbody>
                 {tableRows.map((row, idx) => {
                   if (row.type === 'work') return renderWorkRow(row.w, idx);
-                  if (row.type === 'copies') return renderCopiesRow(row.book, idx);
+                  if (row.type === 'copies') return renderCopiesRow(row.book, idx, row.depth);
                   const book = row.book;
                   const status = getStatusInfo(book, isAuth, t);
                   const icon = TIPO_ICONS[book.tipo_material] || '';
                   const libNames = orderLibraryNames(libraryNameList(book), libPriority)
                     .map(nm => (cityByLib[nm] ? `${nm} (${cityByLib[nm]})` : nm));
                   return (
-                    <tr key={`${book.book_id}-${book.library_slug}-${idx}`} className={row.indent ? 'ab-row--edition' : undefined}>
+                    <tr key={`${book.book_id}-${book.library_slug}-${idx}`} className={row.indent ? 'ab-row--edition' : undefined} data-depth={row.depth || 1}>
                       <td data-label={t({ id: 'catalog.table.ref' })}>
                         <span className="ab-cat-ref-stack">
                           {copiesExpander(book)}

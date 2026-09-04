@@ -786,3 +786,20 @@
   .ab-row--edition .ab-cat-title { padding-left: 8px; }
   .ab-table--cards tbody tr.ab-row--edition { margin-left: 10px; }
 }
+
+/* Indentation croissante œuvre → édition → exemplaire (Xavier, 04/09/2026) :
+   chaque niveau déplié entre d'un cran, avec un fil à gauche. */
+.ab-table tbody tr[data-depth="2"] > td:first-child { padding-left: 34px; }
+.ab-table tbody tr[data-depth="2"] .ab-cat-ref-stack { position: relative; }
+.ab-table tbody tr[data-depth="2"] .ab-cat-ref-stack::before {
+  content: ''; position: absolute; left: -16px; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,.14);
+}
+.ab-copies { border-left: 2px solid rgba(255,255,255,.14); padding-left: 10px; }
+.ab-row--copies[data-depth="2"] .ab-copies { margin-left: 30px; }
+.ab-row--copies[data-depth="3"] .ab-copies { margin-left: 64px; }
+@media (max-width: 720px) {
+  .ab-table tbody tr[data-depth="2"] > td:first-child { padding-left: 14px; }
+  .ab-table tbody tr[data-depth="2"] .ab-cat-ref-stack::before { display: none; }
+  .ab-row--copies[data-depth="2"] .ab-copies { margin-left: 10px; }
+  .ab-row--copies[data-depth="3"] .ab-copies { margin-left: 22px; }
+}
