@@ -38,4 +38,5 @@ Déjà en place : un bouton « Regrouper les éditions » (lot C) caché sous «
 
 - Les doublons de **notices** (même édition cataloguée deux fois : 1458/2333, 1451/1446, 1359/1353) relèvent de l'assistant de doublons, pas des œuvres.
 - L'autorité « Anoar Aiex » sur l'œuvre 178 (texte de Vaneigem/Ratgeb) ; le tome de la notice BTL 375.
-- Le titre uniforme de l'œuvre 97 reste en espagnol (« Desobediencia Civil ») alors que deux éditions sur trois sont en portugais : `work_titles` le résout à l'affichage.
+- Les titres uniformes des autres œuvres en langue de traduction : la règle 5 est posée et le champ existe, seule l'œuvre 97 a été renommée. Une passe sur les œuvres à plusieurs éditions reste à faire, à la main.
+- Les 100 notices à marqueur de tome attendent l'arbitrage dans l'onglet « Volumes » ; le numéro de tome ne se pose jamais par script.
