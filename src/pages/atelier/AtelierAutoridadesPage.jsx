@@ -8,6 +8,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
 import ConvRevuePanel from '@/components/atelier/ConvRevuePanel';
+import WorksWorkshopPanel from '@/components/atelier/WorksWorkshopPanel';
 
 // Atelier autorités — paquet 2, lot A : la file de propositions (vue 1re page).
 // Lecture via api.fn_authority_list ; actions via fn_authority_propose / apply /
@@ -28,7 +29,8 @@ const STATUS = {
 // sont restées en portugais dans une interface en français, en production,
 // sans que rien ne le signale. On ne garde ici que la LISTE des valeurs ;
 // le libellé se demande à `t()` au moment de l'affichage.
-const KINDS = ['creation', 'edition', 'fusion', 'traduction', 'scission'];
+// … et, depuis le 05/09/2026, les trois types propres aux œuvres.
+const KINDS = ['creation', 'edition', 'fusion', 'traduction', 'scission', 'titre', 'rattachement', 'tomes'];
 
 // Une part de scission, vide. Deux au minimum : scinder en une seule part
 // n'est pas une scission, et la base le refuse aussi (CONV-O8).
@@ -55,6 +57,15 @@ export default function AtelierAutoridadesPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const [myLibs, setMyLibs] = useState([]);
+
+  // Deux files dans le même atelier (05/09/2026) : autorités, œuvres. L'onglet
+  // se lit dans l'adresse (#tab=obras), comme partout ailleurs dans l'app.
+  const [tab, setTab] = useState(() => (window.location.hash.replace('#tab=', '') === 'obras' ? 'obras' : 'autoridades'));
+  function switchTab(k) {
+    setTab(k);
+    try { window.history.replaceState(null, '', `#tab=${k}`); } catch { /* sans importance */ }
+  }
+  const visibleRows = rows.filter(r => (tab === 'obras') === (r.target_kind === 'work'));
   const [objectingId, setObjectingId] = useState(null);
   const [objForm, setObjForm] = useState({ libraryId: '', reason: '' });
 
@@ -217,8 +228,19 @@ export default function AtelierAutoridadesPage() {
         boxShadow: 'var(--brand-shadow)',
       }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
-          {t({ id: 'atelier.page.title', defaultMessage: 'Oficina de autoridades' })}
+          {t({ id: 'atelier.page.titleAll' })}
         </h1>
+
+        <nav className="ab-tabbar" role="tablist" style={{ marginBottom: 16 }}>
+          {[['autoridades', '✒️'], ['obras', '📚']].map(([k, icon]) => (
+            <button key={k} className={`ab-tabbar__tab${tab === k ? ' active' : ''}`} role="tab" aria-selected={tab === k} onClick={() => switchTab(k)}>
+              <span className="ab-tabbar__icon" aria-hidden="true">{icon}</span>
+              {t({ id: `atelier.tab.${k}` })}
+            </button>
+          ))}
+        </nav>
+
+        {tab === 'autoridades' && (<>
         <p style={{ color: 'var(--brand-muted)', marginBottom: 16, fontSize: '.9rem', lineHeight: 1.6 }}>
           {t({ id: 'atelier.page.subtitle', defaultMessage: 'A fila de propostas de contribuição ao corpus compartilhado de autoridades (pessoas, coletividades, matérias). As decisões se dão por consentimento: sem objeção motivada até o prazo, a proposta é aplicada por um membro da equipe.' })}
         </p>
@@ -372,13 +394,16 @@ export default function AtelierAutoridadesPage() {
             </Button>
           </form>
         )}
+        </>)}
+
+        {tab === 'obras' && <WorksWorkshopPanel isStaff={myLibs.length > 0} onProposed={load} />}
 
         {loading ? (
           <p style={{ color: 'var(--brand-muted)', fontSize: '.88rem' }}>{t({ id: 'common.loading', defaultMessage: 'Carregando…' })}</p>
-        ) : rows.length === 0 ? (
+        ) : visibleRows.length === 0 ? (
           <p style={{ color: 'var(--brand-muted)', fontSize: '.88rem' }}>{t({ id: 'atelier.empty', defaultMessage: 'Nenhuma proposta no momento.' })}</p>
         ) : (
-          rows.map(r => {
+          visibleRows.map(r => {
             const st = STATUS[r.status] || { color: '#a3a3a3', label: r.status };
             const mine = user && r.proposed_by === user.id;
             return (
@@ -446,10 +471,12 @@ export default function AtelierAutoridadesPage() {
             oeuvres et vit desormais dans Catalogacao (CONV-O5, tranche le
             21/08). Une page dont le texte annonce « le corpus partage
             d'autorites » ne peut pas heberger la correction des notices. */}
+        {tab === 'autoridades' && (
         <ConvRevuePanel
           lots={['autorite_patronyme', 'autorite_forme', 'autorite_casse', 'autorite_collectivite', 'autor_sans_autorite']}
           titleKey="atelier.revue.title"
           introKey="atelier.revue.intro" />
+        )}
 
         <div style={{ marginTop: 20 }}>
           <Button variant="secondary" onClick={() => navigate(-1)}>{t({ id: 'common.back', defaultMessage: 'Voltar' })}</Button>

@@ -441,3 +441,9 @@ tests/sql/homonymes_ingest_public_tests.sql
 # variantes gardee contre les fixtures (T3, non-action) ; rapport d'incoherences aligne
 # sur le trigger (T4) ; rapport de revision sans table temporaire (T5). Ref. 20260905160000.
 tests/sql/rapport_reseau_evidences_tests.sql
+
+# L'atelier s'ouvre aux oeuvres (05/09/2026) : les cinq types (titre, fusion, rattachement,
+# scission, tomes) EMPRUNTES de bout en bout, effet verifie sur books / works /
+# work_titles. T2 tient la decision : sans bibliotheque on propose, on n'objecte pas ;
+# rattache·e, on objecte. T7 = non-actions. Ref. 20260905220000.
+tests/sql/atelier_oeuvres_tests.sql

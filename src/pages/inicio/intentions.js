@@ -47,6 +47,7 @@ export const INTENTIONS = [
   { id: 'lots',          group: 'librarian', icon: '📦', to: '/catalogacao#tab=batchesPanel' },
   { id: 'duplicates',    group: 'librarian', icon: '🔀', to: '/catalogacao#tab=dedupPanel' },
   { id: 'periodicals',   group: 'librarian', icon: '🗞️', to: '/catalogacao#tab=periodicosPanel' },
+  { id: 'workshop',      group: 'librarian', icon: '🛠️', to: '/atelier-autoridades#tab=obras' },
 
   // ── Coordonner ma bibliothèque ─────────────────────────────────────
   { id: 'loanRules',     group: 'coord',     icon: '⚖️', to: '/biblioteca#tab=regulation' },

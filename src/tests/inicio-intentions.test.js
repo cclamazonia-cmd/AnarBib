@@ -36,6 +36,7 @@ describe('registre des intentions', () => {
       else if ((m = it.to.match(/^\/rede#tab=(\w+)$/))) expect(rede, it.id).toContain(m[1]);
       else if ((m = it.to.match(/^\/federacao\/(\w+)$/))) expect(federacao, it.id).toContain(m[1]);
       else if ((m = it.to.match(/^\/importacoes#tab=(\w+)$/))) expect(importacoes, it.id).toContain(m[1]);
+      else if ((m = it.to.match(/^\/atelier-autoridades#tab=(\w+)$/))) expect(['autoridades', 'obras'], it.id).toContain(m[1]);
       else expect(['/', '/painel', '/bibliotecas', '/cartografia'], it.id).toContain(it.to);
     }
   });

@@ -105,12 +105,22 @@ async function loadAuthority(targetKind: string, id: number | null) {
     const { data } = await supabaseAdmin.from("authors").select("id,preferred_name").eq("id", id).maybeSingle();
     return data;
   }
+  // Œuvres et périodiques (05/09/2026) : un titre uniforme, pas un label_i18n.
+  // Sans ces branches, une proposition sur une œuvre partait en courriel sans nom.
+  if (targetKind === "work") {
+    const { data } = await supabaseAdmin.from("works").select("id,uniform_title").eq("id", id).maybeSingle();
+    return data ? { id: data.id, preferred_name: data.uniform_title } : null;
+  }
+  if (targetKind === "serial") {
+    const { data } = await supabaseAdmin.from("serials").select("id,uniform_title,slug").eq("id", id).maybeSingle();
+    return data ? { id: data.id, preferred_name: data.uniform_title || data.slug } : null;
+  }
   const { data } = await supabaseAdmin.from("subjects").select("id,label_i18n").eq("id", id).maybeSingle();
   return data;
 }
 function authorityNameFor(targetKind: string, authority: any, locale: string | null): string {
   if (!authority) return "";
-  if (targetKind === "author") return String(authority.preferred_name || "").trim();
+  if (targetKind === "author" || targetKind === "work" || targetKind === "serial") return String(authority.preferred_name || "").trim();
   const li = authority.label_i18n;
   if (li && typeof li === "object") {
     const pick = (k: string) => (typeof li[k] === "string" ? li[k] : "");
