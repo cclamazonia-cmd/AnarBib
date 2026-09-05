@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-04** · 58 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-05** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,10 +16,10 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 4
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 2
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **3 de setembro de 2026**, ao fim do dia — produção consultada em leitura e repositório recontado, depois da manhã (E13, I4, I6, H1), da carta de Xavier (C5, C9, D2, E11, I16) executada até ao fim, do lote `autor_sans_autorite` decidido na mesma noite e do registo em v0.17. Todas as linhas foram remedidas: é um registo completo.
 
-**Frescor dos constatos em 2026-09-04.** **41 itens de 58** trazem uma verificação datada própria (A1, A3, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-05.** **37 itens de 54** trazem uma verificação datada própria (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -367,54 +367,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B7** | Desambiguar os homônimos de funções entre `ingest` e `public` | `P2` | Aberto |
-| **B9** | Purgar o esquema `backup_2026_05_07` | `P2` | Aberto |
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
-| **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
-
-#### B7 — Desambiguar os homônimos de funções entre `ingest` e `public`
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Quatro nomes de função existem nos dois esquemas com assinaturas e semânticas diferentes: `fn_bulk_create_book_drafts_from_run`, `fn_bulk_set_partner_catalog_editorial_decision`, `fn_set_partner_catalog_editorial_decision`, e `set_updated_at()`. Nenhuma duplicata de assinatura num mesmo esquema — o problema é o nome compartilhado.
-
-*Verificado : 30/08 — quatro homónimos levantados: `set_updated_at` (trivial) e três que tocam nas decisões editoriais sobre catálogo parceiro. Os corpos não foram comparados.*
-
-**O que é.** Verificar qual das duas é chamada pelo front e pelas RPC, renomear a que não é, ou suprimir a versão morta. `set_updated_at()` é um trigger banal e pode ficar.
-
-**Por que importa.** Um `search_path` que muda de ordem basta para chamar a outra função, com parâmetros que não correspondem. É uma pane difícil de diagnosticar, e o projeto já pagou uma vez por um `search_path` mal fixado.
-
-**O que conta como terminado.**
-
-- As três funções de negócio homônimas estão desambiguadas.
-- Nenhuma depende da ordem do `search_path` para ser resolvida corretamente.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `Relevé du 29/08/2026`*
-
-#### B9 — Purgar o esquema `backup_2026_05_07`
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** **Constato corrigido em 04/09 à noite.** Seis tabelas sem PK nem RLS, nenhuma função nem vista as cita — mas **não «zero linhas»** : o «0 inserções» vinha de `pg_stat_user_tables`, cujos contadores foram repostos a zero pelo reinício de 02/09. Contagem direta : **50 linhas**, o snapshot de 07/05/2026 tirado antes do `TRUNCATE` do histórico de circulação do período de ensaio (29/03–30/04). Nenhuma existe em `public`. `BG2-9` prescreve a purga sabendo disso.
-
-*Verificado : **04/09, 20h55** — a guarda «recusa se houver linha» recusou (`reservas_v2` : 10 linhas) e derrubou o job `backend`. A sessão vizinha tornou a purga **adiada** (`ea813837`, versão aplicada) ; esta contou (50 linhas, março–abril 2026, nenhuma em `public`) e ensaiou a guarda que atesta o snapshot. **A purga espera uma nova migração.***
-
-**O que é.** Uma migração que **atesta este snapshot** antes de purgar (6 tabelas, 5 × 10 + 0 linhas, tudo anterior a 08/05/2026, nenhum id em `public`). A guarda foi ensaiada em produção sem purga em 04/09 : passa. Falta levá-la a uma **nova** migração.
-
-**Por que importa.** Seis tabelas de backup vazias poluem cada levantamento de advisors — carregam sozinhas seis dos catorze avisos «sem chave primária». E um esquema chamado `backup_` que não contém nada é uma armadilha para quem retomar o projeto.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-
-**Dependências.** Não confundir com `conv_backup`, que carrega dados de revisão humana e **não se purga** (ver **C4**).
-
-*Remissões : `REGISTRE §BG2 BG2-9`*
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -439,29 +394,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** A retomar se uma biblioteca de grande acervo entrar na rede.
 
 *Remissões : `ETAT-lancement-consolide-2026-07-03 §2 item 7` · `Advisors performance du 29/08/2026`*
-
-#### B11 — Compreender `user_wishlist`: uma linha viva para 9 092 inserções
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** **Medido em 30/08: 1 linha viva, 9 092 inserções, 9 082 supressões.** A razão não é uma fuga de escrita mas um **ciclo**: quase tudo o que entra volta a sair. Nove mil idas e voltas para uma única linha sobrevivente não se parece com um uso de leitoras — a rede não tem esse volume.
-
-A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a seguir»**.
-
-*Verificado : 30/08 — `pg_stat_user_tables`: 1 linha viva, 9 092 inserções, 9 082 supressões. O que escreve e depois apaga continua desconhecido.*
-
-**O que é.** Encontrar o que escreve e apaga: um teste reexecutado, um carregamento de página que insere e depois cancela, um componente React que chama a RPC a cada renderização. Olhar `OPAC-W1`, cuja nota diz «resta `WITH CHECK`».
-
-**Por que importa.** Nove mil escritas para uma linha não é um uso: é um laço. Custa pouco hoje e custará exatamente o mesmo por usuária no dia em que houver cem.
-
-**O que conta como terminado.**
-
-- A causa está identificada e escrita.
-- Se for um laço do front, está corrigido; se for um teste, a linha é retirada da constatação.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `REGISTRE §18 OPAC-W1` · `Relevé du 29/08/2026`*
 
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
@@ -812,7 +744,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 | **E4** | Resolver os pares irregulares do italiano | `P2` | Aberto |
 | **E5** | Retransmitir os ladrilhos OpenStreetMap pelo servidor | `P2` | Aberto |
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Aberto |
-| **E7** | Corrigir o título de página que não segue a navegação | `P2` | Aberto |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E12** | A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra | `P2` | Em curso |
@@ -946,27 +877,6 @@ A pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a s
 **Dependências.** Retoma `#PERF-accountpage-split`, herdado do v32.
 
 *Remissões : `AnarBib-Backlog-2026-06-17-v33 §2.5` · `Relevé du 29/08/2026`*
-
-#### E7 — Corrigir o título de página que não segue a navegação
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
-
-**Estado.** **Constato corrigido em 31/08: estava errado desde maio.** O hook `src/lib/useDocumentTitle.js` atualiza `document.title` na navegação desde **05/05/2026**, e 32 páginas de 79 o usam. O que resta é a cobertura das 47 páginas sem hook e o teste prometido, que não existe.
-
-*Verificado : 31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título. Na mesma noite: o teste prometido está escrito e verde (6 casos).*
-
-**O que é.** Definir o título a cada mudança de rota, a partir das chaves i18n existentes.
-
-**Por que importa.** O título de página é o que os leitores de tela leem na chegada, o que se inscreve no histórico do navegador, e o que aparece numa aba fixada. Um título congelado torna os três inutilizáveis.
-
-**O que conta como terminado.**
-
-- O título segue a rota, nas dez línguas.
-- ~~Um teste o verifica, no modelo de `documentLanguage.test.js`~~ — `src/tests/documentTitle.test.js`, seis casos, entregue em 31/08.
-
-**Dependências.** Complemento natural de **E1**.
-
-*Remissões : `Mémoire de projet, dette technique`*
 
 #### E9 — Terminar o layout móvel: três lotes identificados
 
@@ -1480,18 +1390,18 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado.** O espelho frio `anarbib-mirror.git` existe na estação de trabalho e sua atualização é manual. As unidades systemd `anarbib-mirror-refresh.service` e `.timer` estão versionadas em `deploy/ops/` mas sua entrada em serviço não está confirmada.
+**Estado.** **Constato corrigido em 05/09 : o temporizador funciona.** O journal do utilizador prova-o (18h02 diariamente ; 32 commits em 04/09). Falta que a falha alerte e que a frescura apareça no testemunho de backup.
 
-*Verificado : 31/08 — as unidades estão versionadas em `deploy/ops/systemd/`. O espelho frio traz um HEAD de 30/08 às 16h — no máximo um dia de atraso — mas nada daqui distingue um timer ativo de um refresh manual.*
+*Verificado : 31/08 — as unidades estão versionadas em `deploy/ops/systemd/`. O espelho frio traz um HEAD de 30/08 às 16h — no máximo um dia de atraso — mas nada daqui distingue um timer ativo de um refresh manual. **05/09** — timer ativo, última passagem 04/09 18:02 ; a falha ainda não tem destinatário.*
 
-**O que é.** Verificar se o temporizador roda, e senão colocá-lo em serviço. Registrar o frescor do espelho em algum lugar legível.
+**O que é.** Falta : fazer subir a falha do serviço (`OnFailure=` ou uma linha em `backup_heartbeats`) e escrever a data do último refresh onde o testemunho a lê.
 
 **Por que importa.** Uma reconstrução exige **três** coisas e não duas: o repositório, um backup, **e os segredos do Vault**. O espelho frio é a terceira cópia do repositório, depois do Codeberg e do espelho GitHub. Só serve se estiver atualizado — e o espelho GitHub já acumulou 6 878 objetos de atraso uma vez.
 
 **O que conta como terminado.**
 
-- A atualização é automática e sua falha alerta.
-- O frescor do espelho aparece na testemunha de backup.
+- [object Object]
+- [object Object]
 
 **Dependências.** Ligado a **I4**.
 
@@ -1894,6 +1804,10 @@ CI verde. |
 | E8 | 2026-09-04 | **Fechado em 04/09 com a medida registada — o trabalho era de 06/05.** Antes : dois TTF bloqueantes, ≈ 1,5 MB. Depois : 19 woff2 auto-alojados, 1 296 308 bytes no total, por face e por escrita, todos em `font-display: swap` ; só dois pré-carregados no primeiro render : 81 420 bytes. Nada bloqueia. |
 | J6 | 2026-09-04 | **O constato era falso desde 17/05 — `DOC-RECENS-1`.** As cinco doutrinas estão no README (FR/EN) desde `fbe8969b`. Faltava um caminho a partir de `CONTRIBUTING.md` : acrescentado em 04/09 (`04b5c298`) na tabela «conforme o que toca». |
 | I10 | 2026-09-04 | **Fechado em 04/09 (`04b5c298`).** `tmp-ficedl/` apagado ; segredo `TURNSTILE_SECRET_KEY` retirado ; `docs/drafts/` tem regra (`README.md` : um sas, não uma reserva — o que entra sai no mês) e foi esvaziado : o rascunho de pesquisa, obsoleto desde 03/07, passou para `archive/`. |
+| B9 | 2026-09-05 | **Purgado em 04/09 à noite, por decisão de Xavier após releitura** (`6295f256`, migração `20260904223000`) : o esquema tinha as vinte operações de ensaio da circulação v2, não «zero linhas» — o constato lia `pg_stat_user_tables`, reposto a zero em 02/09. Verificado em 05/09 : o esquema já não existe. |
+| B11 | 2026-09-05 | **Encontrado em 05/09 : é o arnês de teste de carga, não um laço do front.** `scripts/loadtest/anarbib-loadtest.mjs` (17/08) escreve de propósito em `user_wishlist`, uma das duas tabelas sem gatilho de e-mail. Desde 02/09 : zero escritas. A linha sai do constato. |
+| E7 | 2026-09-05 | **Fechado em 05/09 (`7434c1b6`).** 31 rotas em `App.jsx`, todas com `useDocumentTitle` salvo duas : a página 404 e a página de ensaio OCR. Postas em 05/09 com duas chaves nas dez locales (6 395 chaves, paridade estrita). |
+| B7 | 2026-09-05 | **Desambiguadas em 05/09 (`7434c1b6`, migração `20260905132602`).** Todos os apelos vivos são qualificados e visam `ingest.*` ; as três de `public` não eram chamadas por nada e eram DEFINER executáveis por `authenticated` (lint 0029 : 399 → 396). Suprimidas com guarda ; seis testes. |
 
 ---
 
@@ -1925,4 +1839,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-04. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 58 itens em 11 domínios. O estado numérico foi levantado em 2026-09-03 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `aeb77002`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-09-03 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `aeb77002`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

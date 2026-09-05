@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-04** · 58 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-05** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,10 +16,10 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 2
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **3 septembre 2026**, en fin de journée — production interrogée en lecture seule et dépôt recompté, après la matinée (E13, I4, I6, H1), la lettre de Xavier (C5 = B, C9 = A, D2 = A, E11 = A, I16 = A) exécutée de bout en bout, le lot `autor_sans_autorite` tranché le soir même, et le registre porté à v0.17 (`RES-Q13`, `RES-D12`). Toutes les lignes ont été remesurées, y compris les volumétries métier : c'est un relevé complet, pas un rafraîchissement ciblé.
 
-**Fraîcheur des constats au 2026-09-04.** **41 items sur 58** portent une vérification datée qui leur est propre (A1, A3, B7, B9, B10, B11, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E7, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-05.** **37 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -367,54 +367,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **B7** | Départager les homonymes de fonctions entre `ingest` et `public` | `P2` | Ouvert |
-| **B9** | Purger le schéma `backup_2026_05_07` | `P2` | Ouvert |
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
-| **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
-
-#### B7 — Départager les homonymes de fonctions entre `ingest` et `public`
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Quatre noms de fonction existent dans les deux schémas avec des signatures et des sémantiques différentes : `fn_bulk_create_book_drafts_from_run`, `fn_bulk_set_partner_catalog_editorial_decision`, `fn_set_partner_catalog_editorial_decision`, et `set_updated_at()`. Aucun doublon de signature dans un même schéma — le problème est le nom partagé.
-
-*Vérifié : 30/08 — quatre homonymes relevés : `set_updated_at` (trivial) et trois qui touchent aux décisions éditoriales sur catalogue partenaire. Les corps n'ont pas été comparés.*
-
-**Ce que c'est.** Vérifier laquelle des deux est appelée par le front et par les RPC, renommer celle qui ne l'est pas, ou supprimer la version morte. `set_updated_at()` est un trigger banal et peut rester.
-
-**Pourquoi ça compte.** Un `search_path` qui change d'ordre suffit à faire appeler l'autre fonction, avec des paramètres qui ne correspondent pas. C'est une panne difficile à diagnostiquer, et le projet a déjà payé une fois pour un `search_path` mal épinglé.
-
-**Ce qui compte comme fini.**
-
-- Les trois fonctions métier homonymes sont départagées.
-- Aucune ne dépend de l'ordre du `search_path` pour être résolue correctement.
-
-**Dépendances.** Aucune.
-
-*Renvois : `Relevé du 29/08/2026`*
-
-#### B9 — Purger le schéma `backup_2026_05_07`
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** **Constat corrigé le 04/09 au soir — il était faux depuis le 30/08, dans le sens qui compte.** Six tables, sans clé primaire, sans RLS, qu'aucune fonction (`pg_proc.prosrc`) ni vue (`pg_views`) ne cite. Mais **pas « zéro ligne »** : le « 0 insertion depuis la création » du relevé du 30/08 (et de la revérification du 04/09 au matin) venait de `pg_stat_user_tables`, dont les compteurs ont été **remis à zéro par le redémarrage du 02/09** — et sur ces tables jamais analysées, `n_live_tup` disait 0 aussi. Le comptage direct dit **50 lignes** : 10 réservations, 10 lignes, 10 workflows, 10 emprunts, 10 lignes d'emprunt, journal de mi-parcours vide. C'est exactement ce que `BILAN_05_au_07_MAI_2026` décrit : le **snapshot pris le 07/05/2026 avant le `TRUNCATE` de l'historique de circulation de la période d'essai** (créé du 29/03 au 30/04/2026), gardé « une à deux semaines » pour restauration. Aucune de ces lignes n'existe dans `public` (la production a redémarré à 1), aucune n'est postérieure au 08/05. **La décision `BG2-9` prescrit la purge en connaissance de cause** (« copie figée »).
-
-*Vérifié : 30/08 — le schéma pèse 6 tables et 0,1 Mo. Ce qui le lit encore n'a pas été cherché. **04/09, matin** — « zéro ligne, zéro insertion » relu dans `pg_stat_user_tables` ; rien ne le lit (`prosrc`, `pg_views`) : ça, c'était vrai. **04/09, 20 h 55** — première migration (`04b5c298`) : le garde « refuse si une ligne » a **refusé** — `reservas_v2 porte 10 ligne(s)` — et a fait tomber le job `backend` (run 1191) : aucun `db push` ne passait plus. Deux sessions ont réagi : la voisine a rendu la purge **différée** (`ea813837` : notice, le schéma reste, la migration passe — c'est la version appliquée) ; celle-ci a compté (50 lignes, mars–avril 2026, aucune dans `public`), relu le bilan de mai, écrit le garde attestant et l'a essayé en production sans purge. **La purge attend une nouvelle migration**, ou la décision de garder le snapshot.*
-
-**Ce que c'est.** Une migration qui **atteste ce snapshot-là** avant de purger — six tables, 5 × 10 + 0 lignes, tout antérieur au 08/05/2026, aucun identifiant présent dans `public` — et refuse tout autre contenu. Le garde a été écrit et essayé en production dans un `DO` sans purge le 04/09 : il passe. Reste à le porter dans une **nouvelle** migration (la version `20260904184434` est appliquée sous sa forme « différée » et ne se rejoue pas).
-
-**Pourquoi ça compte.** Six tables de sauvegarde vides polluent chaque relevé d'advisors — elles portent à elles seules six des quatorze avis « pas de clé primaire ». Et un schéma nommé `backup_` qui ne contient rien est un piège pour qui reprendra le projet.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-
-**Dépendances.** Ne pas confondre avec `conv_backup`, qui porte des données de revue humaine et **ne se purge pas** (voir **C4**).
-
-*Renvois : `REGISTRE §BG2 BG2-9`*
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -439,29 +394,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** À reprendre si une bibliothèque à gros fonds rejoint le réseau.
 
 *Renvois : `ETAT-lancement-consolide-2026-07-03 §2 item 7` · `Advisors performance du 29/08/2026`*
-
-#### B11 — Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** **Mesuré le 30/08 : 1 ligne vivante, 9 092 insertions, 9 082 suppressions.** Le rapport n'est donc pas une fuite d'écriture mais un **cycle** : presque tout ce qui entre ressort. Une liste d'envies dont on retire ce qu'on ajoute, à raison de neuf mille allers-retours pour une seule ligne survivante, ne ressemble pas à un usage de lectrices — le réseau n'a pas ce volume.
-
-La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui écrit puis efface aussitôt »** : un test rejoué en boucle, un composant qui insère à chaque rendu et nettoie derrière lui, ou un chargement de page qui bascule l'état deux fois.
-
-*Vérifié : 30/08 — `pg_stat_user_tables` : 1 ligne vivante, 9 092 insertions, 9 082 suppressions. Ce qui écrit puis efface reste inconnu.*
-
-**Ce que c'est.** Trouver ce qui écrit et efface : un test rejoué, un chargement de page qui insère puis annule, un composant React qui appelle la RPC à chaque rendu. Regarder `OPAC-W1`, dont la note dit « reste `WITH CHECK` ».
-
-**Pourquoi ça compte.** Neuf mille écritures pour une ligne, ce n'est pas un usage : c'est une boucle. Elle coûte peu aujourd'hui et coûtera exactement autant par utilisatrice le jour où il y en aura cent.
-
-**Ce qui compte comme fini.**
-
-- La cause est identifiée et écrite.
-- Si c'est une boucle du front, elle est corrigée ; si c'est un test, la ligne est retirée du constat.
-
-**Dépendances.** Aucune.
-
-*Renvois : `REGISTRE §18 OPAC-W1` · `Relevé du 29/08/2026`*
 
 #### B13 — Décider du sort des 221 migrations : squash ou pas
 
@@ -812,7 +744,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 | **E4** | Régler les paires irrégulières de l'italien | `P2` | Ouvert |
 | **E5** | Relayer les tuiles OpenStreetMap par le serveur | `P2` | Ouvert |
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
-| **E7** | Corriger le titre de page qui ne suit pas la navigation | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
@@ -946,27 +877,6 @@ La question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui 
 **Dépendances.** Reprend `#PERF-accountpage-split`, hérité du v32.
 
 *Renvois : `AnarBib-Backlog-2026-06-17-v33 §2.5` · `Relevé du 29/08/2026`*
-
-#### E7 — Corriger le titre de page qui ne suit pas la navigation
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
-
-**État.** **Constat corrigé le 31/08 : il était faux depuis mai.** Le hook `src/lib/useDocumentTitle.js` met à jour `document.title` à la navigation depuis le **05/05/2026** (commit `c4865278`), et 32 pages sur 79 l'utilisent. Ce qui reste n'est pas « le titre ne suit pas » : c'est la couverture des 47 pages sans hook — dont il faut d'abord dire combien sont des routes réelles — et le test promis, qui n'existe pas.
-
-*Vérifié : 31/08 — mesuré dans le dépôt : hook présent depuis le 05/05, 32 usages sous `src/pages/`, aucun test de titre dans `src/tests/`. Le soir même : le test promis est écrit et vert (6 cas — format, repli, navigation, titre dynamique, non-retour au démontage).*
-
-**Ce que c'est.** Poser le titre à chaque changement de route, à partir des clés i18n existantes.
-
-**Pourquoi ça compte.** Le titre de page est ce que lisent les lecteurs d'écran à l'arrivée, ce qui s'inscrit dans l'historique du navigateur, et ce qui apparaît dans un onglet épinglé. Un titre figé rend les trois inutilisables.
-
-**Ce qui compte comme fini.**
-
-- Le titre suit la route, dans les dix langues.
-- ~~Un test le vérifie, sur le modèle de `documentLanguage.test.js`~~ — `src/tests/documentTitle.test.js`, six cas dont la navigation et le non-retour au démontage, livré le 31/08 (commit `e442f97c`).
-
-**Dépendances.** Complément naturel de **E1**.
-
-*Renvois : `Mémoire de projet, dette technique`*
 
 #### E9 — Finir la mise en page mobile : trois lots identifiés
 
@@ -1494,18 +1404,18 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
 
-**État.** Le miroir froid `anarbib-mirror.git` existe sur le poste de travail et son rafraîchissement est manuel. Les unités systemd `anarbib-mirror-refresh.service` et `.timer` sont versionnées dans `deploy/ops/` mais leur mise en service n'est pas confirmée.
+**État.** **Constat corrigé le 05/09 : le minuteur tourne.** Le journal systemd de l'utilisateur le prouve : `anarbib-mirror-refresh.timer` se déclenche chaque jour à 18 h 02, et le 04/09 le service a pris 32 commits (`a1656516 → 63630c2f`, « Miroir froid à jour, 243 Mo »). `systemctl` ment sur ce poste, mais `journalctl --user -u anarbib-mirror-refresh.service` ne ment pas. Le script (`deploy/ops/anarbib-mirror-refresh.sh`) refuse un remote inconnu et **s'arrête sur une réécriture d'historique** — mais son échec ne va nulle part d'autre que le journal, et la fraîcheur du miroir n'apparaît pas dans le témoin de sauvegarde (`fn_backup_heartbeat_status`).
 
-*Vérifié : 31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée.*
+*Vérifié : 31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée. **05/09** — `journalctl --user` : timer actif, dernier passage 04/09 18:02:19, prochain 05/09 18:03 ; le miroir portait `3b1f71c1` le soir même (rafraîchi à la main en plus). Le `die` du script n'a pas de destinataire.*
 
-**Ce que c'est.** Vérifier que le minuteur tourne, et sinon le mettre en service. Consigner la fraîcheur du miroir quelque part de lisible.
+**Ce que c'est.** Ce qui reste : faire remonter l'échec du service (un `OnFailure=` vers l'unité d'alerte des sauvegardes, ou une ligne dans `backup_heartbeats`) et écrire la date du dernier rafraîchissement là où le témoin la lira. Le `die` du script est le bon signal, il n'a pas encore de destinataire.
 
 **Pourquoi ça compte.** Une reconstruction demande **trois** choses et non deux : le dépôt, une sauvegarde, **et les secrets du Vault**. Le miroir froid est la troisième copie du dépôt, après Codeberg et le miroir GitHub. Il ne sert que s'il est à jour — et le miroir GitHub a déjà accumulé 6 878 objets de retard une fois.
 
 **Ce qui compte comme fini.**
 
-- Le rafraîchissement est automatique et son échec alerte.
-- La fraîcheur du miroir apparaît dans le témoin de sauvegarde.
+- [object Object]
+- [object Object]
 
 **Dépendances.** Lié à **I4**.
 
@@ -1918,6 +1828,10 @@ CI verte : lint et suite unitaire. |
 | E8 | 2026-09-04 | **Clos le 04/09 sur mesure consignée — le travail datait du 06/05 (`dba21cd3`).** Avant : deux TTF bloquants, `titre.ttf` 1 Mo + `accent.ttf` 484 Ko, soit **≈ 1,5 Mo** avant tout texte. Après : **19 fichiers woff2 auto-hébergés, 1 296 308 octets en tout** (Bitter + Fira Sans, graphies latine, grecque, cyrillique), chargés à la demande par face et par graphie, **tous en `font-display: swap`** (10 déclarations dans `src/styles/fonts.css`) ; **seuls deux fichiers sont préchargés** au premier rendu (`index.html:47-48`) : `FiraSans-Regular.woff2` 44 904 octets + `Bitter-Regular.woff2` 36 516 octets = **81 420 octets**. Sur une connexion de comptoir, le texte s'affiche avec la police de substitution puis bascule ; rien ne bloque. Le sous-ensemblage (troisième idée du constat) n'a pas lieu d'être : le découpage par graphie fait déjà ce travail. Mesuré dans le dépôt le 04/09. |
 | J6 | 2026-09-04 | **Le constat était faux depuis le 17/05 — `DOC-RECENS-1`.** Les cinq doctrines sont **au dépôt depuis la refonte bilingue du README** (`fbe8969b`, 17/05/2026), section « Doctrines internalisées / Internalized doctrines », en français et en anglais, avec quatre autres (traçabilité R8, proposeur silencieux, qui notifier, compte auth en SQL direct). Ce qui manquait tenait en une ligne : **aucun chemin depuis `CONTRIBUTING.md`**. Ajouté le 04/09 (`04b5c298`) dans la table « selon ce que vous touchez » : une RPC qui écrit plusieurs tables, un courriel sortant, l'auth côté front, un script sous Windows → le README. Les incidents d'origine sont dans le code lui-même là où ils existent (`AuthContext.jsx` : la boucle de re-fetch qui saturait le pool ; baseline `paquet 141.2.E`, fix B3 du 16/05). |
 | I10 | 2026-09-04 | **Clos le 04/09 (`04b5c298`).** `tmp-ficedl/` supprimé du disque (740 Ko, ignoré par git depuis le 28/08). Le secret de fonction `TURNSTILE_SECRET_KEY` — dernière trace hors historique — **retiré** (`supabase secrets unset`, après vérification que les sept mentions restantes dans le code sont des commentaires « remplace Turnstile »). `docs/drafts/` a sa règle, écrite dans `docs/drafts/README.md` : **un sas, pas une réserve** — ce qui y entre en sort dans le mois, promu, tranché par décision ou supprimé ; `archive/` garde la trace. Et le sas est vidé dans le même geste : le brouillon de recherche par accents, **périmé depuis le 03/07** (remplacé par `api.catalog_search_ids_v1`, son en-tête le disait), rejoint `archive/` sous sa date d'entrée. `.env.example` garde une mention historique en commentaire, à dessein. |
+| B9 | 2026-09-05 | **Purgé le 04/09 au soir, par décision de Xavier après relecture** (`6295f256`, migration `20260904223000`, session voisine) : le schéma portait les vingt opérations d'essai de la circulation v2 (mars–avril 2026, deux comptes), pas « zéro ligne » — le constat du 30/08 lisait `pg_stat_user_tables`, remis à zéro par le redémarrage du 02/09. Ma première migration (`04b5c298`) avait refusé la purge et fait tomber le job `backend` ; la version différée (`ea813837`) a passé, puis la purge relue a suivi le soir même. Vérifié le 05/09 : `to_regnamespace('backup_2026_05_07')` est nul. `deploy/bg2-known-tables.txt` n'avait rien à changer (il ne classe que `public`). Six avis « pas de clé primaire » en moins. |
+| B11 | 2026-09-05 | **Trouvé le 05/09 : c'est le harnais de test de charge, pas une boucle du front.** `scripts/loadtest/anarbib-loadtest.mjs` (versé au dépôt le 17/08, campagne des plafonds de capacité) écrit exprès dans `user_wishlist` — étape `w_wishlist`, `POST /rest/v1/user_wishlist?on_conflict=user_id,book_id` puis retrait — parce que c'est l'une des deux tables sans déclencheur de courriel (le README du harnais le dit : « ne jamais mettre dans le volume une opération qui déclenche un e-mail »). Neuf mille allers-retours pour une ligne survivante, c'est la signature d'une campagne de charge, et le compte de la base ne connaît aucune autre écriture : les six fonctions qui touchent la table sont des fusions, des suppressions et l'export RGPD. **Contre-épreuve** : depuis la remise à zéro des compteurs le 02/09, zéro insertion, zéro suppression, une ligne vivante. La ligne est retirée du constat, comme la fiche le prévoyait. |
+| E7 | 2026-09-05 | **Clos le 05/09 (`7434c1b6`) — le constat avait déjà été corrigé le 31/08, il restait à compter.** Compté sur `App.jsx` : 31 routes ; toutes les pages routées portent `useDocumentTitle`, y compris celles servies par `ContaRouter` (compte, compte contributeur·rice, écrans d'attente et de refus) et l'atelier de constitution. Deux manquaient : la **page 404** (définie dans `App.jsx`) et la page d'essai OCR (`/dev/ocr`, jetable). Posées le 05/09 avec deux clés (`pageTitle.notFound`, `pageTitle.ocrDev`) dans les dix locales — 6 395 clés, parité stricte. Le test `documentTitle.test.js` (31/08) couvre le hook ; les 35 fichiers de `src/pages/` sans hook sont des onglets et composants, pas des routes. |
+| B7 | 2026-09-05 | **Départagés le 05/09 (`7434c1b6`, migration `20260905132602`, suite `homonymes_ingest_public_tests.sql`).** Mesuré en production : tous les appels vivants sont **qualifiés par schéma** et visent `ingest.*` (`fn_import_promote`, `fn_import_set_editorial`, `fn_import_reconcile_duplicates`) — le risque du `search_path` décrit par la fiche n'avait pas de chemin réel. Les trois de `public` n'étaient appelées par **rien** : ni fonction (hors elles-mêmes, en chaîne fermée), ni vue, ni trigger, ni Edge Function, ni fichier du front — et elles étaient `SECURITY DEFINER`, exécutables par `authenticated` : trois entrées de plus au lint 0029 (399 → 396). Supprimées, avec un garde qui refuse si un corps ou une vue cite encore `public.<nom>` ; les versions `ingest` portent leur commentaire. `set_updated_at` reste, comme prévu. Six tests : plus d'homonyme, un seul exemplaire par nom, `ingest.*` DEFINER à `search_path` figé, fermées à `anon` et `authenticated`, appelants qualifiés, aucune citation résiduelle. |
 
 ---
 
@@ -1949,4 +1863,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-04. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 58 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

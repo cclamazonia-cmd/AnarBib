@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-04",
+    "maj": "2026-09-05",
     "releve": {
       "date": "2026-09-03",
       "commit": "aeb77002"
@@ -1839,6 +1839,38 @@
           "fr": "**Clos le 04/09 (`04b5c298`).** `tmp-ficedl/` supprimé du disque (740 Ko, ignoré par git depuis le 28/08). Le secret de fonction `TURNSTILE_SECRET_KEY` — dernière trace hors historique — **retiré** (`supabase secrets unset`, après vérification que les sept mentions restantes dans le code sont des commentaires « remplace Turnstile »). `docs/drafts/` a sa règle, écrite dans `docs/drafts/README.md` : **un sas, pas une réserve** — ce qui y entre en sort dans le mois, promu, tranché par décision ou supprimé ; `archive/` garde la trace. Et le sas est vidé dans le même geste : le brouillon de recherche par accents, **périmé depuis le 03/07** (remplacé par `api.catalog_search_ids_v1`, son en-tête le disait), rejoint `archive/` sous sa date d'entrée. `.env.example` garde une mention historique en commentaire, à dessein.",
           "pt": "**Fechado em 04/09 (`04b5c298`).** `tmp-ficedl/` apagado ; segredo `TURNSTILE_SECRET_KEY` retirado ; `docs/drafts/` tem regra (`README.md` : um sas, não uma reserva — o que entra sai no mês) e foi esvaziado : o rascunho de pesquisa, obsoleto desde 03/07, passou para `archive/`."
         }
+      ],
+      [
+        "B9",
+        "2026-09-05",
+        {
+          "fr": "**Purgé le 04/09 au soir, par décision de Xavier après relecture** (`6295f256`, migration `20260904223000`, session voisine) : le schéma portait les vingt opérations d'essai de la circulation v2 (mars–avril 2026, deux comptes), pas « zéro ligne » — le constat du 30/08 lisait `pg_stat_user_tables`, remis à zéro par le redémarrage du 02/09. Ma première migration (`04b5c298`) avait refusé la purge et fait tomber le job `backend` ; la version différée (`ea813837`) a passé, puis la purge relue a suivi le soir même. Vérifié le 05/09 : `to_regnamespace('backup_2026_05_07')` est nul. `deploy/bg2-known-tables.txt` n'avait rien à changer (il ne classe que `public`). Six avis « pas de clé primaire » en moins.",
+          "pt": "**Purgado em 04/09 à noite, por decisão de Xavier após releitura** (`6295f256`, migração `20260904223000`) : o esquema tinha as vinte operações de ensaio da circulação v2, não «zero linhas» — o constato lia `pg_stat_user_tables`, reposto a zero em 02/09. Verificado em 05/09 : o esquema já não existe."
+        }
+      ],
+      [
+        "B11",
+        "2026-09-05",
+        {
+          "fr": "**Trouvé le 05/09 : c'est le harnais de test de charge, pas une boucle du front.** `scripts/loadtest/anarbib-loadtest.mjs` (versé au dépôt le 17/08, campagne des plafonds de capacité) écrit exprès dans `user_wishlist` — étape `w_wishlist`, `POST /rest/v1/user_wishlist?on_conflict=user_id,book_id` puis retrait — parce que c'est l'une des deux tables sans déclencheur de courriel (le README du harnais le dit : « ne jamais mettre dans le volume une opération qui déclenche un e-mail »). Neuf mille allers-retours pour une ligne survivante, c'est la signature d'une campagne de charge, et le compte de la base ne connaît aucune autre écriture : les six fonctions qui touchent la table sont des fusions, des suppressions et l'export RGPD. **Contre-épreuve** : depuis la remise à zéro des compteurs le 02/09, zéro insertion, zéro suppression, une ligne vivante. La ligne est retirée du constat, comme la fiche le prévoyait.",
+          "pt": "**Encontrado em 05/09 : é o arnês de teste de carga, não um laço do front.** `scripts/loadtest/anarbib-loadtest.mjs` (17/08) escreve de propósito em `user_wishlist`, uma das duas tabelas sem gatilho de e-mail. Desde 02/09 : zero escritas. A linha sai do constato."
+        }
+      ],
+      [
+        "E7",
+        "2026-09-05",
+        {
+          "fr": "**Clos le 05/09 (`7434c1b6`) — le constat avait déjà été corrigé le 31/08, il restait à compter.** Compté sur `App.jsx` : 31 routes ; toutes les pages routées portent `useDocumentTitle`, y compris celles servies par `ContaRouter` (compte, compte contributeur·rice, écrans d'attente et de refus) et l'atelier de constitution. Deux manquaient : la **page 404** (définie dans `App.jsx`) et la page d'essai OCR (`/dev/ocr`, jetable). Posées le 05/09 avec deux clés (`pageTitle.notFound`, `pageTitle.ocrDev`) dans les dix locales — 6 395 clés, parité stricte. Le test `documentTitle.test.js` (31/08) couvre le hook ; les 35 fichiers de `src/pages/` sans hook sont des onglets et composants, pas des routes.",
+          "pt": "**Fechado em 05/09 (`7434c1b6`).** 31 rotas em `App.jsx`, todas com `useDocumentTitle` salvo duas : a página 404 e a página de ensaio OCR. Postas em 05/09 com duas chaves nas dez locales (6 395 chaves, paridade estrita)."
+        }
+      ],
+      [
+        "B7",
+        "2026-09-05",
+        {
+          "fr": "**Départagés le 05/09 (`7434c1b6`, migration `20260905132602`, suite `homonymes_ingest_public_tests.sql`).** Mesuré en production : tous les appels vivants sont **qualifiés par schéma** et visent `ingest.*` (`fn_import_promote`, `fn_import_set_editorial`, `fn_import_reconcile_duplicates`) — le risque du `search_path` décrit par la fiche n'avait pas de chemin réel. Les trois de `public` n'étaient appelées par **rien** : ni fonction (hors elles-mêmes, en chaîne fermée), ni vue, ni trigger, ni Edge Function, ni fichier du front — et elles étaient `SECURITY DEFINER`, exécutables par `authenticated` : trois entrées de plus au lint 0029 (399 → 396). Supprimées, avec un garde qui refuse si un corps ou une vue cite encore `public.<nom>` ; les versions `ingest` portent leur commentaire. `set_updated_at` reste, comme prévu. Six tests : plus d'homonyme, un seul exemplaire par nom, `ingest.*` DEFINER à `search_path` figé, fermées à `anon` et `authenticated`, appelants qualifiés, aucune citation résiduelle.",
+          "pt": "**Desambiguadas em 05/09 (`7434c1b6`, migração `20260905132602`).** Todos os apelos vivos são qualificados e visam `ingest.*` ; as três de `public` não eram chamadas por nada e eram DEFINER executáveis por `authenticated` (lint 0029 : 399 → 396). Suprimidas com guarda ; seis testes."
+        }
       ]
     ]
   },
@@ -1994,100 +2026,6 @@
       }
     },
     {
-      "id": "B7",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Départager les homonymes de fonctions entre `ingest` et `public`",
-        "pt": "Desambiguar os homônimos de funções entre `ingest` e `public`"
-      },
-      "v": {
-        "fr": "Quatre noms de fonction existent dans les deux schémas avec des signatures et des sémantiques différentes : `fn_bulk_create_book_drafts_from_run`, `fn_bulk_set_partner_catalog_editorial_decision`, `fn_set_partner_catalog_editorial_decision`, et `set_updated_at()`. Aucun doublon de signature dans un même schéma — le problème est le nom partagé.",
-        "pt": "Quatro nomes de função existem nos dois esquemas com assinaturas e semânticas diferentes: `fn_bulk_create_book_drafts_from_run`, `fn_bulk_set_partner_catalog_editorial_decision`, `fn_set_partner_catalog_editorial_decision`, e `set_updated_at()`. Nenhuma duplicata de assinatura num mesmo esquema — o problema é o nome compartilhado."
-      },
-      "w": {
-        "fr": "Vérifier laquelle des deux est appelée par le front et par les RPC, renommer celle qui ne l'est pas, ou supprimer la version morte. `set_updated_at()` est un trigger banal et peut rester.",
-        "pt": "Verificar qual das duas é chamada pelo front e pelas RPC, renomear a que não é, ou suprimir a versão morta. `set_updated_at()` é um trigger banal e pode ficar."
-      },
-      "y": {
-        "fr": "Un `search_path` qui change d'ordre suffit à faire appeler l'autre fonction, avec des paramètres qui ne correspondent pas. C'est une panne difficile à diagnostiquer, et le projet a déjà payé une fois pour un `search_path` mal épinglé.",
-        "pt": "Um `search_path` que muda de ordem basta para chamar a outra função, com parâmetros que não correspondem. É uma pane difícil de diagnosticar, e o projeto já pagou uma vez por um `search_path` mal fixado."
-      },
-      "f": {
-        "fr": [
-          "Les trois fonctions métier homonymes sont départagées.",
-          "Aucune ne dépend de l'ordre du `search_path` pour être résolue correctement."
-        ],
-        "pt": [
-          "As três funções de negócio homônimas estão desambiguadas.",
-          "Nenhuma depende da ordem do `search_path` para ser resolvida corretamente."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "Relevé du 29/08/2026"
-      ],
-      "verif": {
-        "fr": "30/08 — quatre homonymes relevés : `set_updated_at` (trivial) et trois qui touchent aux décisions éditoriales sur catalogue partenaire. Les corps n'ont pas été comparés.",
-        "pt": "30/08 — quatro homónimos levantados: `set_updated_at` (trivial) e três que tocam nas decisões editoriais sobre catálogo parceiro. Os corpos não foram comparados."
-      }
-    },
-    {
-      "id": "B9",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Purger le schéma `backup_2026_05_07`",
-        "pt": "Purgar o esquema `backup_2026_05_07`"
-      },
-      "v": {
-        "fr": "**Constat corrigé le 04/09 au soir — il était faux depuis le 30/08, dans le sens qui compte.** Six tables, sans clé primaire, sans RLS, qu'aucune fonction (`pg_proc.prosrc`) ni vue (`pg_views`) ne cite. Mais **pas « zéro ligne »** : le « 0 insertion depuis la création » du relevé du 30/08 (et de la revérification du 04/09 au matin) venait de `pg_stat_user_tables`, dont les compteurs ont été **remis à zéro par le redémarrage du 02/09** — et sur ces tables jamais analysées, `n_live_tup` disait 0 aussi. Le comptage direct dit **50 lignes** : 10 réservations, 10 lignes, 10 workflows, 10 emprunts, 10 lignes d'emprunt, journal de mi-parcours vide. C'est exactement ce que `BILAN_05_au_07_MAI_2026` décrit : le **snapshot pris le 07/05/2026 avant le `TRUNCATE` de l'historique de circulation de la période d'essai** (créé du 29/03 au 30/04/2026), gardé « une à deux semaines » pour restauration. Aucune de ces lignes n'existe dans `public` (la production a redémarré à 1), aucune n'est postérieure au 08/05. **La décision `BG2-9` prescrit la purge en connaissance de cause** (« copie figée »).",
-        "pt": "**Constato corrigido em 04/09 à noite.** Seis tabelas sem PK nem RLS, nenhuma função nem vista as cita — mas **não «zero linhas»** : o «0 inserções» vinha de `pg_stat_user_tables`, cujos contadores foram repostos a zero pelo reinício de 02/09. Contagem direta : **50 linhas**, o snapshot de 07/05/2026 tirado antes do `TRUNCATE` do histórico de circulação do período de ensaio (29/03–30/04). Nenhuma existe em `public`. `BG2-9` prescreve a purga sabendo disso."
-      },
-      "w": {
-        "fr": "Une migration qui **atteste ce snapshot-là** avant de purger — six tables, 5 × 10 + 0 lignes, tout antérieur au 08/05/2026, aucun identifiant présent dans `public` — et refuse tout autre contenu. Le garde a été écrit et essayé en production dans un `DO` sans purge le 04/09 : il passe. Reste à le porter dans une **nouvelle** migration (la version `20260904184434` est appliquée sous sa forme « différée » et ne se rejoue pas).",
-        "pt": "Uma migração que **atesta este snapshot** antes de purgar (6 tabelas, 5 × 10 + 0 linhas, tudo anterior a 08/05/2026, nenhum id em `public`). A guarda foi ensaiada em produção sem purga em 04/09 : passa. Falta levá-la a uma **nova** migração."
-      },
-      "y": {
-        "fr": "Six tables de sauvegarde vides polluent chaque relevé d'advisors — elles portent à elles seules six des quatorze avis « pas de clé primaire ». Et un schéma nommé `backup_` qui ne contient rien est un piège pour qui reprendra le projet.",
-        "pt": "Seis tabelas de backup vazias poluem cada levantamento de advisors — carregam sozinhas seis dos catorze avisos «sem chave primária». E um esquema chamado `backup_` que não contém nada é uma armadilha para quem retomar o projeto."
-      },
-      "f": [
-        {
-          "fr": "Le schéma n'existe plus.",
-          "pt": "O esquema já não existe."
-        },
-        {
-          "fr": "~~`deploy/bg2-known-tables.txt` a été mis à jour dans le même mouvement~~ — **rien à changer** : il ne classe que `public`, et les `emprestimos_v2`, `reservas_v2`… qu'il liste sont les tables vivantes, homonymes des copies (vérifié le 04/09).",
-          "pt": "~~`bg2-known-tables.txt` atualizado~~ — **nada a mudar** : só classifica `public`."
-        }
-      ],
-      "dep": {
-        "fr": "Ne pas confondre avec `conv_backup`, qui porte des données de revue humaine et **ne se purge pas** (voir **C4**).",
-        "pt": "Não confundir com `conv_backup`, que carrega dados de revisão humana e **não se purga** (ver **C4**)."
-      },
-      "r": [
-        "REGISTRE §BG2 BG2-9"
-      ],
-      "verif": {
-        "fr": "30/08 — le schéma pèse 6 tables et 0,1 Mo. Ce qui le lit encore n'a pas été cherché. **04/09, matin** — « zéro ligne, zéro insertion » relu dans `pg_stat_user_tables` ; rien ne le lit (`prosrc`, `pg_views`) : ça, c'était vrai. **04/09, 20 h 55** — première migration (`04b5c298`) : le garde « refuse si une ligne » a **refusé** — `reservas_v2 porte 10 ligne(s)` — et a fait tomber le job `backend` (run 1191) : aucun `db push` ne passait plus. Deux sessions ont réagi : la voisine a rendu la purge **différée** (`ea813837` : notice, le schéma reste, la migration passe — c'est la version appliquée) ; celle-ci a compté (50 lignes, mars–avril 2026, aucune dans `public`), relu le bilan de mai, écrit le garde attestant et l'a essayé en production sans purge. **La purge attend une nouvelle migration**, ou la décision de garder le snapshot.",
-        "pt": "**04/09, 20h55** — a guarda «recusa se houver linha» recusou (`reservas_v2` : 10 linhas) e derrubou o job `backend`. A sessão vizinha tornou a purga **adiada** (`ea813837`, versão aplicada) ; esta contou (50 linhas, março–abril 2026, nenhuma em `public`) e ensaiou a guarda que atesta o snapshot. **A purga espera uma nova migração.**"
-      }
-    },
-    {
       "id": "B10",
       "d": "B",
       "p": "P3",
@@ -2135,54 +2073,6 @@
       "verif": {
         "fr": "31/08 — 254 avis : 167 index inutilisés, 38 clés étrangères non indexées, **25** tables en policies permissives en double (`book_reading_notes` s'y est ajoutée avec les notes de lecture), 14 tables sans clé primaire, 1 avis de connexions.",
         "pt": "31/08 — 254 avisos: 167 índices sem uso, 38 chaves estrangeiras sem índice, **25** tabelas com policies permissivas em dobro (`book_reading_notes` entrou na lista), 14 sem chave primária."
-      }
-    },
-    {
-      "id": "B11",
-      "d": "B",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions",
-        "pt": "Compreender `user_wishlist`: uma linha viva para 9 092 inserções"
-      },
-      "v": {
-        "fr": "**Mesuré le 30/08 : 1 ligne vivante, 9 092 insertions, 9 082 suppressions.** Le rapport n'est donc pas une fuite d'écriture mais un **cycle** : presque tout ce qui entre ressort. Une liste d'envies dont on retire ce qu'on ajoute, à raison de neuf mille allers-retours pour une seule ligne survivante, ne ressemble pas à un usage de lectrices — le réseau n'a pas ce volume.\n\nLa question n'est donc plus « qu'est-ce qui écrit », mais **« qu'est-ce qui écrit puis efface aussitôt »** : un test rejoué en boucle, un composant qui insère à chaque rendu et nettoie derrière lui, ou un chargement de page qui bascule l'état deux fois.",
-        "pt": "**Medido em 30/08: 1 linha viva, 9 092 inserções, 9 082 supressões.** A razão não é uma fuga de escrita mas um **ciclo**: quase tudo o que entra volta a sair. Nove mil idas e voltas para uma única linha sobrevivente não se parece com um uso de leitoras — a rede não tem esse volume.\n\nA pergunta já não é «o que escreve», mas **«o que escreve e apaga logo a seguir»**."
-      },
-      "w": {
-        "fr": "Trouver ce qui écrit et efface : un test rejoué, un chargement de page qui insère puis annule, un composant React qui appelle la RPC à chaque rendu. Regarder `OPAC-W1`, dont la note dit « reste `WITH CHECK` ».",
-        "pt": "Encontrar o que escreve e apaga: um teste reexecutado, um carregamento de página que insere e depois cancela, um componente React que chama a RPC a cada renderização. Olhar `OPAC-W1`, cuja nota diz «resta `WITH CHECK`»."
-      },
-      "y": {
-        "fr": "Neuf mille écritures pour une ligne, ce n'est pas un usage : c'est une boucle. Elle coûte peu aujourd'hui et coûtera exactement autant par utilisatrice le jour où il y en aura cent.",
-        "pt": "Nove mil escritas para uma linha não é um uso: é um laço. Custa pouco hoje e custará exatamente o mesmo por usuária no dia em que houver cem."
-      },
-      "f": {
-        "fr": [
-          "La cause est identifiée et écrite.",
-          "Si c'est une boucle du front, elle est corrigée ; si c'est un test, la ligne est retirée du constat."
-        ],
-        "pt": [
-          "A causa está identificada e escrita.",
-          "Se for um laço do front, está corrigido; se for um teste, a linha é retirada da constatação."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "REGISTRE §18 OPAC-W1",
-        "Relevé du 29/08/2026"
-      ],
-      "verif": {
-        "fr": "30/08 — `pg_stat_user_tables` : 1 ligne vivante, 9 092 insertions, 9 082 suppressions. Ce qui écrit puis efface reste inconnu.",
-        "pt": "30/08 — `pg_stat_user_tables`: 1 linha viva, 9 092 inserções, 9 082 supressões. O que escreve e depois apaga continua desconhecido."
       }
     },
     {
@@ -3119,53 +3009,6 @@
       }
     },
     {
-      "id": "E7",
-      "d": "E",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "front"
-      ],
-      "t": {
-        "fr": "Corriger le titre de page qui ne suit pas la navigation",
-        "pt": "Corrigir o título de página que não segue a navegação"
-      },
-      "v": {
-        "fr": "**Constat corrigé le 31/08 : il était faux depuis mai.** Le hook `src/lib/useDocumentTitle.js` met à jour `document.title` à la navigation depuis le **05/05/2026** (commit `c4865278`), et 32 pages sur 79 l'utilisent. Ce qui reste n'est pas « le titre ne suit pas » : c'est la couverture des 47 pages sans hook — dont il faut d'abord dire combien sont des routes réelles — et le test promis, qui n'existe pas.",
-        "pt": "**Constato corrigido em 31/08: estava errado desde maio.** O hook `src/lib/useDocumentTitle.js` atualiza `document.title` na navegação desde **05/05/2026**, e 32 páginas de 79 o usam. O que resta é a cobertura das 47 páginas sem hook e o teste prometido, que não existe."
-      },
-      "w": {
-        "fr": "Poser le titre à chaque changement de route, à partir des clés i18n existantes.",
-        "pt": "Definir o título a cada mudança de rota, a partir das chaves i18n existentes."
-      },
-      "y": {
-        "fr": "Le titre de page est ce que lisent les lecteurs d'écran à l'arrivée, ce qui s'inscrit dans l'historique du navigateur, et ce qui apparaît dans un onglet épinglé. Un titre figé rend les trois inutilisables.",
-        "pt": "O título de página é o que os leitores de tela leem na chegada, o que se inscreve no histórico do navegador, e o que aparece numa aba fixada. Um título congelado torna os três inutilizáveis."
-      },
-      "f": {
-        "fr": [
-          "Le titre suit la route, dans les dix langues.",
-          "~~Un test le vérifie, sur le modèle de `documentLanguage.test.js`~~ — `src/tests/documentTitle.test.js`, six cas dont la navigation et le non-retour au démontage, livré le 31/08 (commit `e442f97c`)."
-        ],
-        "pt": [
-          "O título segue a rota, nas dez línguas.",
-          "~~Um teste o verifica, no modelo de `documentLanguage.test.js`~~ — `src/tests/documentTitle.test.js`, seis casos, entregue em 31/08."
-        ]
-      },
-      "dep": {
-        "fr": "Complément naturel de **E1**.",
-        "pt": "Complemento natural de **E1**."
-      },
-      "r": [
-        "Mémoire de projet, dette technique"
-      ],
-      "verif": {
-        "fr": "31/08 — mesuré dans le dépôt : hook présent depuis le 05/05, 32 usages sous `src/pages/`, aucun test de titre dans `src/tests/`. Le soir même : le test promis est écrit et vert (6 cas — format, repli, navigation, titre dynamique, non-retour au démontage).",
-        "pt": "31/08 — medido no repositório: hook presente desde 05/05, 32 usos, nenhum teste de título. Na mesma noite: o teste prometido está escrito e verde (6 casos)."
-      }
-    },
-    {
       "id": "E9",
       "d": "E",
       "p": "P2",
@@ -4076,27 +3919,27 @@
         "pt": "Automatizar a atualização do espelho frio"
       },
       "v": {
-        "fr": "Le miroir froid `anarbib-mirror.git` existe sur le poste de travail et son rafraîchissement est manuel. Les unités systemd `anarbib-mirror-refresh.service` et `.timer` sont versionnées dans `deploy/ops/` mais leur mise en service n'est pas confirmée.",
-        "pt": "O espelho frio `anarbib-mirror.git` existe na estação de trabalho e sua atualização é manual. As unidades systemd `anarbib-mirror-refresh.service` e `.timer` estão versionadas em `deploy/ops/` mas sua entrada em serviço não está confirmada."
+        "fr": "**Constat corrigé le 05/09 : le minuteur tourne.** Le journal systemd de l'utilisateur le prouve : `anarbib-mirror-refresh.timer` se déclenche chaque jour à 18 h 02, et le 04/09 le service a pris 32 commits (`a1656516 → 63630c2f`, « Miroir froid à jour, 243 Mo »). `systemctl` ment sur ce poste, mais `journalctl --user -u anarbib-mirror-refresh.service` ne ment pas. Le script (`deploy/ops/anarbib-mirror-refresh.sh`) refuse un remote inconnu et **s'arrête sur une réécriture d'historique** — mais son échec ne va nulle part d'autre que le journal, et la fraîcheur du miroir n'apparaît pas dans le témoin de sauvegarde (`fn_backup_heartbeat_status`).",
+        "pt": "**Constato corrigido em 05/09 : o temporizador funciona.** O journal do utilizador prova-o (18h02 diariamente ; 32 commits em 04/09). Falta que a falha alerte e que a frescura apareça no testemunho de backup."
       },
       "w": {
-        "fr": "Vérifier que le minuteur tourne, et sinon le mettre en service. Consigner la fraîcheur du miroir quelque part de lisible.",
-        "pt": "Verificar se o temporizador roda, e senão colocá-lo em serviço. Registrar o frescor do espelho em algum lugar legível."
+        "fr": "Ce qui reste : faire remonter l'échec du service (un `OnFailure=` vers l'unité d'alerte des sauvegardes, ou une ligne dans `backup_heartbeats`) et écrire la date du dernier rafraîchissement là où le témoin la lira. Le `die` du script est le bon signal, il n'a pas encore de destinataire.",
+        "pt": "Falta : fazer subir a falha do serviço (`OnFailure=` ou uma linha em `backup_heartbeats`) e escrever a data do último refresh onde o testemunho a lê."
       },
       "y": {
         "fr": "Une reconstruction demande **trois** choses et non deux : le dépôt, une sauvegarde, **et les secrets du Vault**. Le miroir froid est la troisième copie du dépôt, après Codeberg et le miroir GitHub. Il ne sert que s'il est à jour — et le miroir GitHub a déjà accumulé 6 878 objets de retard une fois.",
         "pt": "Uma reconstrução exige **três** coisas e não duas: o repositório, um backup, **e os segredos do Vault**. O espelho frio é a terceira cópia do repositório, depois do Codeberg e do espelho GitHub. Só serve se estiver atualizado — e o espelho GitHub já acumulou 6 878 objetos de atraso uma vez."
       },
-      "f": {
-        "fr": [
-          "Le rafraîchissement est automatique et son échec alerte.",
-          "La fraîcheur du miroir apparaît dans le témoin de sauvegarde."
-        ],
-        "pt": [
-          "A atualização é automática e sua falha alerta.",
-          "O frescor do espelho aparece na testemunha de backup."
-        ]
-      },
+      "f": [
+        {
+          "fr": "~~Le rafraîchissement est automatique~~ — prouvé le 05/09 par le journal ; **et son échec alerte** — pas encore.",
+          "pt": "~~O refresh é automático~~ — provado em 05/09 ; **e a falha alerta** — ainda não."
+        },
+        {
+          "fr": "La fraîcheur du miroir apparaît dans le témoin de sauvegarde.",
+          "pt": "A frescura do espelho aparece no testemunho de backup."
+        }
+      ],
       "dep": {
         "fr": "Lié à **I4**.",
         "pt": "Ligado a **I4**."
@@ -4105,8 +3948,8 @@
         "RUNBOOK_exploitation_v0.3 §4 §9.1"
       ],
       "verif": {
-        "fr": "31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée.",
-        "pt": "31/08 — as unidades estão versionadas em `deploy/ops/systemd/`. O espelho frio traz um HEAD de 30/08 às 16h — no máximo um dia de atraso — mas nada daqui distingue um timer ativo de um refresh manual."
+        "fr": "31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée. **05/09** — `journalctl --user` : timer actif, dernier passage 04/09 18:02:19, prochain 05/09 18:03 ; le miroir portait `3b1f71c1` le soir même (rafraîchi à la main en plus). Le `die` du script n'a pas de destinataire.",
+        "pt": "31/08 — as unidades estão versionadas em `deploy/ops/systemd/`. O espelho frio traz um HEAD de 30/08 às 16h — no máximo um dia de atraso — mas nada daqui distingue um timer ativo de um refresh manual. **05/09** — timer ativo, última passagem 04/09 18:02 ; a falha ainda não tem destinatário."
       }
     },
     {
