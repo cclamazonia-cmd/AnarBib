@@ -54,9 +54,12 @@ export default function ImportacoesPage() {
   useDocumentTitle(t({ id: 'importacoes.title' }));
 
   // ── Core UI state ──────────────────────────────────────
-  const [sentido, setSentido] = useState('import');
+  // #tab=export ouvre le sens export ; #tab=arquivo|busca|oai ouvre l'import sur
+  // cette origine (liens profonds, meme convention que Catalogage — 05/09/2026).
+  const initialHash = (typeof window !== 'undefined' ? window.location.hash : '').replace('#tab=', '');
+  const [sentido, setSentido] = useState(initialHash === 'export' ? 'export' : 'import');
   // Origine d'ajout (fusion des 3 ex-circuits) : fichier / busca / oai.
-  const [addMode, setAddMode] = useState('arquivo');
+  const [addMode, setAddMode] = useState(['arquivo', 'busca', 'oai'].includes(initialHash) ? initialHash : 'arquivo');
   const [msg, setMsg] = useState({ text: '', kind: '' });
   // ── Export de lote (Lot 5, IMP-13) ─────────────────────
   const [exportFormat, setExportFormat] = useState('csv');

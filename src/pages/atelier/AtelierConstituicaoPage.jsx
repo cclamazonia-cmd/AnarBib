@@ -5,6 +5,7 @@ import { apiQuery, apiRpc, supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import LibraryProfileWizard from '@/components/LibraryProfileWizard';
 import HumanChannelInlineCallout from '@/components/atelier/HumanChannelInlineCallout';
 import AtelierVoletEditor, { WIRED_VOLETS } from '@/components/atelier/AtelierVoletEditor';
@@ -234,7 +235,9 @@ export default function AtelierConstituicaoPage() {
 
   return (
     <PageShell><Topbar />
-      <Hero title={t({ id: 'atelier.title' })} subtitle={prog.library_name || t({ id: 'atelier.subtitle' })} />
+      <Hero title={t({ id: 'atelier.title' })} subtitle={prog.library_name || t({ id: 'atelier.subtitle' })}>
+        <HeroDocumentationActions />
+      </Hero>
 
       <div className="ab-atl-wrap">
         {/* Bandeau échéance (ONBO-Q5) */}

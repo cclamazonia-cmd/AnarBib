@@ -7,11 +7,21 @@
 //
 // Cf. docs/journal/chantiers/CHANTIER_harmonisation_heros_2026-05-19.md §2.3 et §3.3
 // Cf. Guide de gouvernance d'AnarBib v1.0 §2.3
+//
+// 05/09/2026 : la table « page → documents » (§2.5) vit désormais dans
+// src/lib/docLinks.js, qui sait aussi À QUELLE PAGE de quel recueil ouvrir,
+// dans la langue de la personne, et quels vade-mecums des Communs proposer.
+// Les booléens showReaderManual / showCompleteManual / showGovernanceGuide
+// restent exposés (ReaderTutorialsCard les lit).
 
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import {
+  docsForLocation, readerManualUrl, completeManualUrl, governanceGuideUrl, communsDocUrl,
+} from '@/lib/docLinks';
 
 // --- Mapping role -> variante CSS du badge (doctrine §2.2) ----------------
 const ROLE_VARIANT = {
@@ -30,66 +40,25 @@ const ROLE_LABEL_KEY = {
 };
 
 // --- Documents à afficher dans le hero selon la page + le rôle effectif ---
-// Cf. doctrine §2.5 (table de mapping)
-function computeDocuments(pathname, effectiveRole) {
+function computeDocuments(location, effectiveRole, locale) {
   const isStaff =
     effectiveRole === 'librarian' ||
     effectiveRole === 'coordenador' ||
     effectiveRole === 'network_admin';
-
-  const path = pathname || '/';
-
-  // Page lectrice·eur par scope : manuel lecteur seul (le scope prime sur le rôle)
-  if (
-    path.startsWith('/catalogo') ||
-    path.startsWith('/cat\u00e1logo') ||
-    path === '/' ||
-    path.startsWith('/conta')
-  ) {
-    return {
-      showReaderManual: true,
-      showCompleteManual: false,
-      showGovernanceGuide: false,
-    };
-  }
-
-  // Page réseau : guide de gouvernance seul
-  if (path.startsWith('/rede')) {
-    return {
-      showReaderManual: false,
-      showCompleteManual: false,
-      showGovernanceGuide: true,
-    };
-  }
-
-  // Pages staff politiques : manuel complet + guide de gouvernance
-  if (path.startsWith('/painel') || path.startsWith('/biblioteca')) {
-    return {
-      showReaderManual: false,
-      showCompleteManual: isStaff,
-      showGovernanceGuide: isStaff,
-    };
-  }
-
-  // Pages staff techniques : manuel complet seul
-  if (
-    path.startsWith('/catalogacao') ||
-    path.startsWith('/catalog\u00e7\u00e3o') ||
-    path.startsWith('/importacoes') ||
-    path.startsWith('/importa\u00e7\u00f5es')
-  ) {
-    return {
-      showReaderManual: false,
-      showCompleteManual: isStaff,
-      showGovernanceGuide: false,
-    };
-  }
-
-  // Par défaut : rien
+  const docs = docsForLocation({
+    pathname: location.pathname || '/',
+    search: location.search || '',
+    hash: location.hash || '',
+    isStaff,
+  });
   return {
-    showReaderManual: false,
-    showCompleteManual: false,
-    showGovernanceGuide: false,
+    showReaderManual: docs.reader !== null,
+    showCompleteManual: docs.complete !== null,
+    showGovernanceGuide: docs.governance,
+    readerManualUrl: docs.reader !== null ? readerManualUrl(locale, docs.reader) : null,
+    completeManualUrl: docs.complete !== null ? completeManualUrl(locale, docs.complete) : null,
+    governanceGuideUrl: docs.governance ? governanceGuideUrl(locale) : null,
+    communs: docs.communs.map((id) => ({ id, to: communsDocUrl(id) })),
   };
 }
 
@@ -98,6 +67,7 @@ export function useEffectiveScope() {
   const { user, profile } = useAuth();
   const libCtx = useLibrary();
   const location = useLocation();
+  const { locale } = useIntl();
 
   return useMemo(() => {
     const isAuthenticated = !!user;
@@ -143,9 +113,10 @@ export function useEffectiveScope() {
     const fullName = profile
       ? [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim() || null
       : null;
+
     const publicId = profile?.public_id || null;
 
-    const documents = computeDocuments(pathname, effectiveRole);
+    const documents = computeDocuments(location, effectiveRole, locale);
 
     return {
       isAuthenticated,
@@ -158,7 +129,7 @@ export function useEffectiveScope() {
       showLibraryAcronym: !isNetworkPage,
       documents,
     };
-  }, [user, profile, libCtx, location.pathname]);
+  }, [user, profile, libCtx, location.pathname, location.search, location.hash, locale]);
 }
 
 export default useEffectiveScope;

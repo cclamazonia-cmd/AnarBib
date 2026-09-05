@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import LibraryContextBanner from '@/components/LibraryContextBanner';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
+import { useParams } from 'react-router-dom';
 import { Button, Pill, Spinner, Skeleton } from '@/components/ui';
 import { parseAddressText } from '@/lib/addressFormat';
 import Modal from '@/components/ui/Modal';
@@ -221,6 +222,15 @@ function PanelPageInner() {
   }, [isCoordOrAdmin, isLibrarian]);
 
   const [tab, setTab] = useState('trabalho-do-dia');
+  // /painel/:tab existait dans le routeur sans etre lu : l'onglet demande
+  // s'ouvre desormais (liens profonds — documentation, cloche, « Je veux… »).
+  const { tab: routeTab } = useParams();
+  useEffect(() => {
+    if (routeTab && ['trabalho-do-dia', 'acoes', 'reservas', 'consultas-locais', 'emprestimos',
+      'leitor', 'historico', 'contribuicoes', 'validacoes', 'recolement'].includes(routeTab)) {
+      setTab(routeTab);
+    }
+  }, [routeTab]);
   const [pendingValidCount, setPendingValidCount] = useState(0); // VALID-C4 : compteur « comptes en attente »
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState([]);

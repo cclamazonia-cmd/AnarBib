@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams, useNavigate } from 'react-router-dom';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -212,6 +213,7 @@ export default function FederacaoPage() {
     <PageShell><Topbar />
       <Hero title={t({ id: 'federacao.title' })} subtitle={t({ id: 'federacao.subtitle' })}>
         <UserHeroBadge />
+        <HeroDocumentationActions />
       </Hero>
 
       <div className="catalogacao-wrap" style={{ maxWidth: 980, margin: '0 auto' }}>

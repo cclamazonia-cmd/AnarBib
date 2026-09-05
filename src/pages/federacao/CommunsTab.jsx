@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import Markdown from 'react-markdown';
 import { COMMUNS_DOCS, COMMUNS_CATS, resolveDocMd } from './communsRegistry';
@@ -15,7 +16,13 @@ import { COMMUNS_DOCS, COMMUNS_CATS, resolveDocMd } from './communsRegistry';
 
 export default function CommunsTab() {
   const { formatMessage: t, locale } = useIntl();
-  const [openId, setOpenId] = useState(null);
+  // ?doc=<id> ouvre directement un document : c'est la porte que les heros
+  // des pages de catalogage empruntent vers les vade-mecums (05/09/2026).
+  const [searchParams] = useSearchParams();
+  const wanted = searchParams.get('doc');
+  const [openId, setOpenId] = useState(() => (
+    wanted && COMMUNS_DOCS.some((d) => d.id === wanted) ? wanted : null
+  ));
   const doc = openId ? COMMUNS_DOCS.find((d) => d.id === openId) : null;
 
   if (doc) {

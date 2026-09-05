@@ -7,6 +7,7 @@ import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './BookPage.css';
 import { citeAuthorString, citeAuthorList, buildCitations, buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
@@ -373,6 +374,7 @@ export default function BookPage() {
 
       {/* Hero */}
       <Hero title={book.titulo || t({ id: 'book.noTitle' })} subtitle={book.subtitulo || ''}>
+        <HeroDocumentationActions />
         <div className="ab-livro-author">
           <BookAuthorLinks book={book} contributors={contributors} />
         </div>

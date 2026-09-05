@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { Spinner, EmptyState } from '@/components/ui';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 import { languageLabel } from '@/lib/languages';
@@ -70,6 +71,7 @@ export default function WorkPage() {
     <PageShell>
       <Topbar />
       <Hero title={displayTitle} subtitle={subtitle}>
+        <HeroDocumentationActions />
         {work.primary_author_id && work.author_name && (
           <Link to={`/autor/${work.primary_author_id}`} className="ab-button ab-button--secondary ab-button--sm">
             {work.author_name}

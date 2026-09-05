@@ -1,67 +1,68 @@
 // src/components/HeroDocumentationActions.jsx
 //
-// Rend la rangee de boutons documentation en tete du hero, selon le scope
-// de la page et le role effectif. Cf. CHANTIER §2.5 et §3.2
+// Rangée de boutons « documentation » du hero : le bon recueil, ouvert à la
+// bonne page, dans la langue de la personne — plus les vade-mecums des
+// Communs quand la page s'y prête (catalogage, autorités).
+//
+// Ce que l'on montre est décidé par src/lib/docLinks.js (page → documents)
+// via useEffectiveScope ; ici on ne fait que rendre. Les PDF sont ceux du
+// bucket library-ui-assets/manuals/network/published/ (01-03/09/2026).
 
+import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import useEffectiveScope from '@/hooks/useEffectiveScope';
 
-// URLs des documents - voir CHANTIER §2.6.
-// Le PDF guide-gouvernance v1.0 (11 mai 2026) doit avoir ete uploade dans
-// le bucket library-ui-assets/manuals/network/published/ avant le deploiement.
-const MANUAL_URLS = {
-  reader:
-    'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual%20Leitor-a-e.pdf',
-  complete:
-    'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual_do_AnarBib.pdf',
-  governance:
-    'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Guia_de_governanca_AnarBib.pdf',
-};
-
-// Icone livre (SVG inline pour eviter dependance externe)
 function BookIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
-         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-         aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
       <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
     </svg>
   );
 }
 
-// Icone balance/justice (SVG inline)
 function ScaleIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
-         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-         aria-hidden="true">
-      <path d="M12 3v18" />
-      <path d="M5 21h14" />
-      <path d="M19 6l-2 6h4z" />
-      <path d="M5 6l-2 6h4z" />
-      <path d="M5 6h14" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3v18" /><path d="M5 7h14" />
+      <path d="M3 13l2-6 2 6a2 2 0 0 1-4 0z" /><path d="M17 13l2-6 2 6a2 2 0 0 1-4 0z" />
     </svg>
   );
 }
 
+function LeafIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 16-9-1 12-5 16-9 16z" /><path d="M4 20l7-7" />
+    </svg>
+  );
+}
+
+// Titres des vade-mecums : les clés existantes du registre des Communs.
+const COMMUNS_TITLE_KEY = {
+  'guide-conventions': 'federacao.communs.doc.guideConventions.title',
+  'guide-indexar': 'federacao.communs.doc.indexarAssunto.title',
+  'guide-scan': 'federacao.communs.doc.guideScan.title',
+  'guide-numerisation': 'federacao.communs.doc.guideNumerisation.title',
+  cotation: 'federacao.communs.doc.cotation.title',
+  'thesaurus-ficedl': 'federacao.communs.doc.thesaurusFicedl.title',
+};
+
 /**
- * Rangee de boutons documentation. Rendu intelligent selon scope + role.
- *
  * @param {object} props
  * @param {React.ReactNode} [props.extraActions]
- *   Boutons additionnels specifiques a la page (ex. Exportar PDF/CSV sur /catalogo,
- *   Atualizar dados sur /rede). Rendus AVANT les boutons documentation.
+ *   Boutons additionnels spécifiques à la page (ex. Exportar PDF/CSV sur /catalogo,
+ *   pastilles de compteurs sur /painel), rendus AVANT les liens de documentation.
  */
 export default function HeroDocumentationActions({ extraActions = null }) {
   const intl = useIntl();
-  const scope = useEffectiveScope();
-  const { documents } = scope;
+  const { documents } = useEffectiveScope();
 
   const hasDoc =
     documents.showReaderManual ||
     documents.showCompleteManual ||
-    documents.showGovernanceGuide;
+    documents.showGovernanceGuide ||
+    (documents.communs && documents.communs.length > 0);
   if (!hasDoc && !extraActions) return null;
 
   return (
@@ -69,40 +70,37 @@ export default function HeroDocumentationActions({ extraActions = null }) {
       {extraActions}
 
       {documents.showReaderManual && (
-        <a
-          href={MANUAL_URLS.reader}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ab-hero-doc-btn ab-hero-doc-btn--primary"
-        >
+        <a href={documents.readerManualUrl} target="_blank" rel="noopener noreferrer"
+          className="ab-hero-doc-btn ab-hero-doc-btn--primary">
           <span className="ab-hero-doc-btn__icon"><BookIcon /></span>
           <span>{intl.formatMessage({ id: 'nav.manual.reader' })}</span>
         </a>
       )}
 
       {documents.showCompleteManual && (
-        <a
-          href={MANUAL_URLS.complete}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ab-hero-doc-btn ab-hero-doc-btn--primary"
-        >
+        <a href={documents.completeManualUrl} target="_blank" rel="noopener noreferrer"
+          className="ab-hero-doc-btn ab-hero-doc-btn--primary">
           <span className="ab-hero-doc-btn__icon"><BookIcon /></span>
           <span>{intl.formatMessage({ id: 'nav.manual.complete' })}</span>
         </a>
       )}
 
       {documents.showGovernanceGuide && (
-        <a
-          href={MANUAL_URLS.governance}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ab-hero-doc-btn ab-hero-doc-btn--gov"
-        >
+        <a href={documents.governanceGuideUrl} target="_blank" rel="noopener noreferrer"
+          className="ab-hero-doc-btn ab-hero-doc-btn--gov">
           <span className="ab-hero-doc-btn__icon"><ScaleIcon /></span>
           <span>{intl.formatMessage({ id: 'nav.governance.guide' })}</span>
         </a>
       )}
+
+      {(documents.communs || []).map((c) => (
+        COMMUNS_TITLE_KEY[c.id] ? (
+          <Link key={c.id} to={c.to} className="ab-hero-doc-btn ab-hero-doc-btn--gov">
+            <span className="ab-hero-doc-btn__icon"><LeafIcon /></span>
+            <span>{intl.formatMessage({ id: COMMUNS_TITLE_KEY[c.id] })}</span>
+          </Link>
+        ) : null
+      ))}
     </div>
   );
 }

@@ -131,6 +131,13 @@ export default function BibliotecaPage() {
   });
 
   const [tab, setTab] = useState(isCoord ? 'identity' : 'team');
+  // #tab=<id> ouvre l'onglet demande (liens profonds : documentation, cloche,
+  // page « Je veux… ») — meme convention que Catalogage et Reseau (05/09/2026).
+  useEffect(() => {
+    const wanted = window.location.hash.replace('#tab=', '');
+    if (wanted && visibleTabs.some(tb => tb.id === wanted)) setTab(wanted);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleTabs.length]);
   const [wsInspectorOpen, setWsInspectorOpen] = useState(false);
   const [refreshState, setRefreshState] = useState('idle');
   const [msg, setMsg] = useState({ text: '', kind: '' });

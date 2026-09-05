@@ -8,6 +8,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { detectLocale } from '@/i18n';
 import { getCountryName } from '@/lib/countries';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './AuthorPage.css';
 import { buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
@@ -249,6 +250,7 @@ export default function AuthorPage() {
 
       {/* Hero */}
       <Hero title={displayName} subtitle={intro}>
+        <HeroDocumentationActions />
         <div className="ab-autor-chips">
           {/* B1 : naissance/décès, pays et nombre de livres figurent déjà dans le sous-titre
               du Hero — on ne les répète pas en chips. Ces emplacements accueilleront en B2
