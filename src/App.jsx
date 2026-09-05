@@ -20,6 +20,7 @@ const AuthorPage = lazy(() => import('@/pages/public/AuthorPage'));
 const WorkPage = lazy(() => import('@/pages/public/WorkPage'));
 const ReaderPage = lazy(() => import('@/pages/public/ReaderPage'));
 const ContaRouter = lazy(() => import('@/pages/account/ContaRouter'));
+const InicioPage = lazy(() => import('@/pages/inicio/InicioPage')); /* « Je veux… » (05/09/2026) */
 const PanelPage = lazy(() => import('@/pages/painel/PanelPage'));
 const CatalogacaoPage = lazy(() => import('@/pages/catalogacao/CatalogacaoPage'));
 const CriarContaPage = lazy(() => import('@/pages/public/CriarContaPage'));
@@ -162,6 +163,8 @@ export default function App() {
 
                   {/* ── Pages authentifiées ────────── */}
                   <Route path="/conta" element={<ProtectedRoute><ContaRouter /></ProtectedRoute>} />
+                  {/* « Je veux… » : une intention → la page et l'onglet du geste (05/09/2026) */}
+                  <Route path="/inicio" element={<ProtectedRoute><InicioPage /></ProtectedRoute>} />
                   {/* Oficina de constituição (coordenador_em_constituicao) — auto-gardée */}
                   <Route path="/atelier" element={<ProtectedRoute><AtelierConstituicaoPage /></ProtectedRoute>} />
                   {/* Oficina de autoridades (atelier autorités) — file de propositions */}

@@ -151,6 +151,13 @@ export function Topbar() {
           {t({ id: 'nav.thesaurus' })}
         </Link>
 
+        {/* « Je veux… » : dire ce qu'on veut faire, et y être mené (05/09/2026) */}
+        {user && (
+          <Link to="/inicio" className={isActive('/inicio') ? 'active' : ''}>
+            {t({ id: 'nav.inicio' })}
+          </Link>
+        )}
+
         {user && canSeeAccount(role) && (
           <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
             {t({ id: 'nav.account' })}
