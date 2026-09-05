@@ -6391,5 +6391,8 @@
   "error.review.bad_verdict": "Unknown verdict.",
   "error.review.not_found": "Review not found.",
   "error.review.already_decided": "This review is already decided.",
-  "error.review.notes_required": "Changes need a reason: add a note."
+  "error.review.notes_required": "Changes need a reason: add a note.",
+  "rede.reviews.queued": "Queued, not yet requested",
+  "rede.reviews.queuedHint": "Open imported batches whose coordination has not yet requested a review. The report can be read now; the verdict waits for the request.",
+  "rede.reviews.showReport": "Show report"
 }

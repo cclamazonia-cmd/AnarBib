@@ -6391,5 +6391,8 @@
   "error.review.bad_verdict": "Veredicte desconegut.",
   "error.review.not_found": "Revisió no trobada.",
   "error.review.already_decided": "Aquesta revisió ja està decidida.",
-  "error.review.notes_required": "Els retocs es motiven: afegiu una nota."
+  "error.review.notes_required": "Els retocs es motiven: afegiu una nota.",
+  "rede.reviews.queued": "En cua, sense sol·licitud",
+  "rede.reviews.queuedHint": "Lots importats oberts dels quals la coordinació encara no ha sol·licitat la revisió. L’informe ja es pot llegir; el veredicte esperarà la sol·licitud.",
+  "rede.reviews.showReport": "Veure l’informe"
 }

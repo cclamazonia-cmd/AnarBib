@@ -6391,5 +6391,8 @@
   "error.review.bad_verdict": "Veredicto desconocido.",
   "error.review.not_found": "Revisión no encontrada.",
   "error.review.already_decided": "Esta revisión ya está decidida.",
-  "error.review.notes_required": "Los retoques se motivan: añada una nota."
+  "error.review.notes_required": "Los retoques se motivan: añada una nota.",
+  "rede.reviews.queued": "En cola, sin solicitud",
+  "rede.reviews.queuedHint": "Lotes importados abiertos cuya coordinación aún no ha solicitado la revisión. El informe ya se puede leer; el veredicto esperará a la solicitud.",
+  "rede.reviews.showReport": "Ver el informe"
 }

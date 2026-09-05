@@ -6391,5 +6391,8 @@
   "error.review.bad_verdict": "Onbekend oordeel.",
   "error.review.not_found": "Beoordeling niet gevonden.",
   "error.review.already_decided": "Deze beoordeling is al beslist.",
-  "error.review.notes_required": "Aanpassingen worden gemotiveerd: voeg een opmerking toe."
+  "error.review.notes_required": "Aanpassingen worden gemotiveerd: voeg een opmerking toe.",
+  "rede.reviews.queued": "In de wachtrij, nog niet aangevraagd",
+  "rede.reviews.queuedHint": "Open geïmporteerde partijen waarvoor de coördinatie nog geen beoordeling heeft aangevraagd. Het rapport is nu al leesbaar; het oordeel wacht op de aanvraag.",
+  "rede.reviews.showReport": "Rapport tonen"
 }

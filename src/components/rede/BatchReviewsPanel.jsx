@@ -33,7 +33,10 @@ export default function BatchReviewsPanel() {
     try {
       const { data, error } = await supabase.rpc('fn_batch_reviews_list');
       if (error) throw error;
-      setRows((data || []).filter(r => r.review_id));
+      // Tous les lots importes, tour de revision ou pas : ce qui attend, ce
+      // qui est tranche, et ce qui est encore EN FILE sans demande (05/09/2026,
+      // vu par Xavier : « je ne les vois pas, les lots a corriger »).
+      setRows((data || []).filter(r => r.imported));
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setLoading(false); }
@@ -70,8 +73,11 @@ export default function BatchReviewsPanel() {
     } finally { setBusy(null); }
   }
 
-  const pending = rows.filter(r => r.status === 'requested');
-  const decided = rows.filter(r => r.status !== 'requested');
+  const pending = rows.filter(r => r.review_id && r.status === 'requested');
+  const decided = rows.filter(r => r.review_id && r.status !== 'requested');
+  // En file : lot importe encore ouvert, sans aucun tour. Le rapport se lit,
+  // le verdict attend la demande de la coordination — la regle ne change pas.
+  const queued = rows.filter(r => !r.review_id && r.batch_status === 'open');
   const fmt = (d) => (d ? formatDate(d, { dateStyle: 'medium', timeStyle: 'short' }) : '—');
 
   return (
@@ -118,6 +124,34 @@ export default function BatchReviewsPanel() {
           </div>
         </div>
       ))}
+
+      {queued.length > 0 && (
+        <div style={{ marginTop: 16 }}>
+          <h4 style={{ margin: '0 0 4px', fontSize: '.9rem' }}>{t({ id: 'rede.reviews.queued' })} ({queued.length})</h4>
+          <p style={{ ...muted, margin: '0 0 8px' }}>{t({ id: 'rede.reviews.queuedHint' })}</p>
+          {queued.map(r => (
+            <div key={r.batch_id} style={card}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'baseline' }}>
+                <strong>{r.batch_name}</strong>
+                <span style={muted}>{t({ id: 'rede.reviews.drafts' }, { n: r.drafts_active ?? 0 })}</span>
+              </div>
+              {live[r.batch_id]
+                ? (
+                  <details open style={{ marginTop: 8 }}>
+                    <summary style={{ cursor: 'pointer', fontSize: '.86rem' }}>{t({ id: 'review.report.title' })}</summary>
+                    <div style={{ marginTop: 8 }}><BatchReviewReport report={live[r.batch_id]} /></div>
+                  </details>
+                )
+                : (
+                  <button type="button" className="ab-button ab-button--ghost" style={{ marginTop: 8, fontSize: '.75rem', padding: '4px 10px' }}
+                    onClick={() => refreshReport(r.batch_id)}>
+                    {t({ id: 'rede.reviews.showReport' })}
+                  </button>
+                )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {decided.length > 0 && (
         <details style={{ marginTop: 16 }}>

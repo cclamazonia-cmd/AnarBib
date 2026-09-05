@@ -6391,5 +6391,8 @@
   "error.review.bad_verdict": "Verdict inconnu.",
   "error.review.not_found": "Révision introuvable.",
   "error.review.already_decided": "Cette révision est déjà tranchée.",
-  "error.review.notes_required": "Des retouches se motivent : ajoutez une note."
+  "error.review.notes_required": "Des retouches se motivent : ajoutez une note.",
+  "rede.reviews.queued": "En file, sans demande",
+  "rede.reviews.queuedHint": "Lots importés ouverts dont la coordination n’a pas encore demandé la révision. Le rapport se lit dès maintenant ; le verdict attendra la demande.",
+  "rede.reviews.showReport": "Voir le rapport"
 }

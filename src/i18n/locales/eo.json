@@ -6391,5 +6391,8 @@
   "error.review.bad_verdict": "Nekonata verdikto.",
   "error.review.not_found": "Revizio ne trovita.",
   "error.review.already_decided": "Ĉi tiu revizio jam estas decidita.",
-  "error.review.notes_required": "Korektoj motiviĝas: aldonu noton."
+  "error.review.notes_required": "Korektoj motiviĝas: aldonu noton.",
+  "rede.reviews.queued": "En vico, sen peto",
+  "rede.reviews.queuedHint": "Malfermitaj importitaj aroj, kies kunordigo ankoraŭ ne petis revizion. La raporto legeblas jam nun; la verdikto atendos la peton.",
+  "rede.reviews.showReport": "Vidi la raporton"
 }

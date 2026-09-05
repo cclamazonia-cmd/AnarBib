@@ -6391,5 +6391,8 @@
   "error.review.bad_verdict": "Veredito desconhecido.",
   "error.review.not_found": "Revisão não encontrada.",
   "error.review.already_decided": "Esta revisão já foi decidida.",
-  "error.review.notes_required": "Retoques justificam-se: acrescente uma nota."
+  "error.review.notes_required": "Retoques justificam-se: acrescente uma nota.",
+  "rede.reviews.queued": "Em fila, sem pedido",
+  "rede.reviews.queuedHint": "Lotes importados abertos cuja coordenação ainda não pediu a revisão. O relatório já se lê; o veredito espera o pedido.",
+  "rede.reviews.showReport": "Ver o relatório"
 }
