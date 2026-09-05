@@ -70,6 +70,16 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T3b le groupe porte le titre lisible du premier tome, pas la cle triee';
+  BEGIN
+    SELECT s.base_title INTO v_txt FROM public.suggest_volume_groups(1000) s WHERE s.book_id = v_b3;
+    IF v_txt = 'Zzaccion directa anarquista'
+       AND public.fn_title_lisible_sans_volume('A Revolução Desconhecida — Vol. 1') = 'A Revolução Desconhecida'
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(v_txt,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
   v_t := 'T4 « meme oeuvre en plusieurs volumes » sur trois des quatre : numeros poses, une seule oeuvre, les vides supprimees, et le groupe ne revient pas';
   BEGIN
     SELECT s.group_key INTO v_key FROM public.suggest_volume_groups(1000) s WHERE s.book_id = v_b3;
