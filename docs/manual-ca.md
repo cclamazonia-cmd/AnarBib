@@ -1,7 +1,7 @@
 # AnarBib — Manual d'utilització
 ## Xarxa de biblioteques llibertàries
 
-*Versió 1.0 — Abril 2026*
+*Versió 1.1 — Setembre 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Aneu a l'URL de la vostra instància AnarBib i feu clic a **Entrar** (o el botó
 
 ### Canviar la llengua
 El selector de llengua es troba a dalt a la dreta de cada pàgina (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). L'elecció es desa localment.
+
+### Cercar al catàleg
+El **Catàleg** mostra una línia per obra, en la llengua de la teva interfície quan el títol ha estat traduït: autor-a-e, títol, nombre d'edicions i biblioteques que la tenen.
+1. Fes clic a **Veure les edicions** (el « + » de la línia): cada edició apareix a sota, amb la coberta, l'editorial i l'any. Els toms d'una obra en diversos volums van numerats i ordenats.
+2. Fes clic a **Exemplars per biblioteca**: la disponibilitat es mostra biblioteca per biblioteca. Si has iniciat sessió, « la teva biblioteca » queda assenyalada; el que és disponible en un altre lloc però no per a tu es diu tal qual.
+3. El botó **Llista plana** torna a una línia per edició; la tria es memoritza.
 
 ---
 
@@ -87,6 +93,20 @@ La pestanya **Gestionar lector-a-e** permet:
 4. Utilitzar **Cercar metadades** per pre-omplir via ISBN
 5. **Desar l'esborrany**
 
+### Obra, edicions i toms
+Una obra reuneix totes les edicions d'un mateix text. A la fitxa d'un document, el bloc **Obra** permet:
+- **Vincular a una altra obra**: cercar l'obra pel títol i després **Vincular**. L'obra deixada desapareix si queda buida.
+- **Títols per llengua**: un títol per llengua de la interfície. Els títols marcats « traducció automàtica — corregeix-me » els ha proposat la màquina: rellegeix-los i fes clic a **Desar** per confirmar-los.
+- **Títol uniforme**: el títol de referència de l'obra, escrit en la llengua d'origen de la mateixa obra, no en la d'una traducció.
+- **Tom / volum**: el número del tom quan l'obra té diversos volums. Els toms es queden en una sola obra.
+
+### Assistent de deduplicació: obres escindides i volums
+A l'**Assistent de deduplicació** (Catalogació), dues pestanyes completen els duplicats de registres:
+- **Obres escindides**: dues obres que semblen ser el mateix text. **Fusionar a « … »** les reuneix; **Mantenir separades** memoritza la decisió i el parell no torna.
+- **Volums**: registres que semblen ser els toms d'una mateixa obra. Marca **Reunir aquest registre** per a cada tom triat, escriu-ne el número i valida; un grup resolt no torna més.
+
+Cap fusió ni cap número de tom els posa la màquina: cada gest és teu.
+
 ### Tipus de documents i camps especialitzats
 Cada tipus de document mostra camps adaptats:
 - **Periòdic** : volum, número, fascicle, periodicitat, ISSN
@@ -143,6 +163,8 @@ La interfície és disponible en 10 llengües:
 - Esperanto
 
 Les biografies d'autors poden ser traduïdes independentment en cada llengua.
+
+Els títols de les obres es pretradueixen automàticament a les deu llengües; porten la menció « corregeix-me » fins que una persona els rellegeix.
 
 ---
 

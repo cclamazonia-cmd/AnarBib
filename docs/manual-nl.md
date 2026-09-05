@@ -1,7 +1,7 @@
 # AnarBib — Gebruikershandleiding
 ## Netwerk van libertaire bibliotheken
 
-*Versie 1.0 — april 2026*
+*Versie 1.1 — September 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Ga naar de URL van uw AnarBib-instantie en klik op **Entrar** (of de inlogknop i
 
 ### De taal wijzigen
 De taalkiezer bevindt zich rechtsboven op elke pagina (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). De keuze wordt lokaal opgeslagen.
+
+### Zoeken in de catalogus
+De **Catalogus** toont één regel per werk, in de taal van jouw interface zodra de titel vertaald is: auteur, titel, aantal edities en de bibliotheken die het bezitten.
+1. Klik op **Edities tonen** (de „+” van de regel): elke editie verschijnt eronder, met omslag, uitgever en jaar. De delen van een meerdelig werk zijn genummerd en gesorteerd.
+2. Klik op **Exemplaren per bibliotheek**: de beschikbaarheid verschijnt bibliotheek per bibliotheek. Ben je ingelogd, dan is „jouw bibliotheek” gemarkeerd; wat elders beschikbaar is maar niet voor jou, wordt precies zo gezegd.
+3. De knop **Platte lijst** keert terug naar één regel per editie; de keuze wordt onthouden.
 
 ---
 
@@ -87,6 +93,20 @@ Het tabblad **Lezer beheren** laat toe om :
 4. Gebruik **Metagegevens opzoeken** om vooraf in te vullen via ISBN
 5. **Sla het ontwerp op**
 
+### Werk, edities en delen
+Een werk verenigt alle edities van eenzelfde tekst. In de beschrijving van een document laat het blok **Werk** toe om:
+- **Aan een ander werk koppelen**: het werk op titel zoeken, dan **Koppelen**. Het verlaten werk verdwijnt als het leeg blijft.
+- **Titels per taal**: één titel per interfacetaal. Titels met de vermelding „automatische vertaling — verbeter me” zijn door de machine voorgesteld: lees ze na en klik op **Opslaan** om ze te bevestigen.
+- **Uniforme titel**: de referentietitel van het werk, geschreven in de oorspronkelijke taal van het werk zelf, niet in die van een vertaling.
+- **Deel**: het deelnummer wanneer het werk uit meerdere delen bestaat. De delen blijven in één enkel werk.
+
+### Ontdubbelingsassistent: gesplitste werken en delen
+In de **Ontdubbelingsassistent** (Catalogiseren) vullen twee tabbladen de dubbele beschrijvingen aan:
+- **Gesplitste werken**: twee werken die dezelfde tekst lijken te zijn. **Samenvoegen in „…”** brengt ze samen; **Apart houden** onthoudt de beslissing en het paar komt niet terug.
+- **Delen**: beschrijvingen die de delen van eenzelfde werk lijken te zijn. Vink **Deze beschrijving samenvoegen** aan voor elk gekozen deel, vul het nummer in en bevestig; een afgehandelde groep komt niet meer terug.
+
+Geen enkele samenvoeging en geen enkel deelnummer wordt door de machine gezet: elke handeling is de jouwe.
+
 ### Documenttypen en gespecialiseerde velden
 Elk documenttype toont aangepaste velden :
 - **Periodiek** : deel, nummer, aflevering, periodiciteit, ISSN
@@ -143,6 +163,8 @@ De interface is beschikbaar in 10 talen :
 - Esperanto
 
 Auteursbiografieën kunnen per taal afzonderlijk worden vertaald.
+
+De titels van de werken worden automatisch voorvertaald in de tien talen; ze dragen de vermelding „verbeter me” tot een persoon ze heeft nagelezen.
 
 ---
 

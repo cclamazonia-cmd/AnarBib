@@ -1,7 +1,7 @@
 # AnarBib — Manual de uso
 ## Red de bibliotecas libertarias
 
-*Versión 1.0 — Abril 2026*
+*Versión 1.1 — Septiembre 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Ve a la URL de tu instancia de AnarBib y haz clic en **Entrar** (o en el botón 
 
 ### Cambiar el idioma
 Le selectore de idioma se encuentra en la parte superior derecha de cada página (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). La elección se guarda localmente.
+
+### Buscar en el catálogo
+El **Catálogo** muestra una línea por obra, en el idioma de tu interfaz cuando el título ha sido traducido: autore, título, número de ediciones y bibliotecas que la tienen.
+1. Haz clic en **Ver las ediciones** (el « + » de la línea): cada edición aparece debajo, con su portada, su editorial y su año. Los tomos de una obra en varios volúmenes van numerados y ordenados.
+2. Haz clic en **Ejemplares por biblioteca**: la disponibilidad se muestra biblioteca por biblioteca. Si has iniciado sesión, « tu biblioteca » queda señalada; lo que está disponible en otro sitio pero no para ti se dice tal cual.
+3. El botón **Lista plana** vuelve a una línea por edición; la elección se memoriza.
 
 ---
 
@@ -87,6 +93,20 @@ La pestaña **Gestionar lectore** permite:
 4. Usar **Buscar metadatos** para pre-rellenar vía ISBN
 5. **Guardar el borrador**
 
+### Obra, ediciones y tomos
+Una obra reúne todas las ediciones de un mismo texto. En la ficha de un documento, el bloque **Obra** permite:
+- **Vincular a otra obra**: buscar la obra por su título y luego **Vincular**. La obra abandonada desaparece si queda vacía.
+- **Títulos por idioma**: un título por idioma de la interfaz. Los títulos marcados « traducción automática — corrígeme » los propuso la máquina: reléelos y haz clic en **Guardar** para confirmarlos.
+- **Título uniforme**: el título de referencia de la obra, escrito en el idioma de origen de la propia obra, no en el de una traducción.
+- **Tomo / volumen**: el número del tomo cuando la obra tiene varios volúmenes. Los tomos se quedan en una sola obra.
+
+### Asistente de deduplicación: obras escindidas y volúmenes
+En el **Asistente de deduplicación** (Catalogación), dos pestañas completan los duplicados de registros:
+- **Obras escindidas**: dos obras que parecen ser el mismo texto. **Fusionar en « … »** las reúne; **Mantener separadas** memoriza la decisión y el par no vuelve.
+- **Volúmenes**: registros que parecen ser los tomos de una misma obra. Marca **Reunir este registro** para cada tomo elegido, escribe su número y valida; un grupo resuelto no vuelve más.
+
+Ninguna fusión ni ningún número de tomo los pone la máquina: cada gesto es tuyo.
+
 ### Tipos de documentos y campos especializados
 Cada tipo de documento muestra campos adaptados:
 - **Periódico**: volumen, número, fascículo, periodicidad, ISSN
@@ -143,6 +163,8 @@ La interfaz está disponible en 10 idiomas:
 - Esperanto
 
 Las biografías de autores pueden traducirse de forma independiente en cada idioma.
+
+Los títulos de las obras se pretraducen automáticamente a los diez idiomas; llevan la mención « corrígeme » hasta que una persona los relea.
 
 ---
 

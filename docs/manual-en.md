@@ -1,7 +1,7 @@
 # AnarBib — User Manual
 ## Network of Libertarian Libraries
 
-*Version 1.0 — April 2026*
+*Version 1.1 — September 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Go to your AnarBib instance URL and click **Entrar** (or the login button in you
 
 ### Changing the language
 The language selector is at the top right of every page (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). Your choice is saved locally.
+
+### Searching the catalog
+The **Catalog** shows one line per work, in the language of your interface when the title has been translated: author, title, number of editions and the libraries that hold it.
+1. Click **Show editions** (the “+” on the line): each edition appears below, with its cover, publisher and year. The volumes of a multi-volume work are numbered and sorted.
+2. Click **Copies by library**: availability is shown library by library. If you are signed in, “your library” is flagged; what is available elsewhere but not for you is said as such.
+3. The **Flat list** button goes back to one line per edition; the choice is remembered.
 
 ---
 
@@ -87,6 +93,20 @@ The **Manage reader** tab allows you to:
 4. Use **Search metadata** to pre-fill via ISBN
 5. **Save the draft**
 
+### Work, editions and volumes
+A work gathers all the editions of one text. In a document's record, the **Work** block lets you:
+- **Attach to another work**: search the work by title, then **Attach**. The work you leave disappears if it is left empty.
+- **Titles by language**: one title per interface language. Titles marked “machine translation — correct me” were proposed by the machine: read them over and click **Save** to confirm them.
+- **Uniform title**: the reference title of the work, written in the original language of the work itself, not in the language of a translation.
+- **Volume**: the volume number when the work spans several volumes. Volumes stay within a single work.
+
+### Deduplication assistant: split works and volumes
+In the **Deduplication assistant** (Cataloguing), two tabs complement record duplicates:
+- **Split works**: two works that look like the same text. **Merge into “…”** brings them together; **Keep apart** records the decision and the pair does not come back.
+- **Volumes**: records that look like the volumes of one work. Tick **Join this record** for each volume you keep, enter its number and confirm; a settled group does not come back.
+
+No merge and no volume number is ever set by the machine: every action is yours.
+
 ### Document types and specialised fields
 Each document type displays adapted fields:
 - **Periodical**: volume, issue, fascicle, periodicity, ISSN
@@ -143,6 +163,8 @@ The interface is available in 10 languages:
 - Esperanto
 
 Author biographies can be translated independently into each language.
+
+Work titles are pre-translated automatically into the ten languages; they carry the mention “correct me” until a person has read them over.
 
 ---
 

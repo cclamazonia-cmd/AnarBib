@@ -40,3 +40,22 @@ Déjà en place : un bouton « Regrouper les éditions » (lot C) caché sous «
 - L'autorité « Anoar Aiex » sur l'œuvre 178 (texte de Vaneigem/Ratgeb) ; le tome de la notice BTL 375.
 - Les titres uniformes des autres œuvres en langue de traduction : la règle 5 est posée et le champ existe, seule l'œuvre 97 a été renommée. Une passe sur les œuvres à plusieurs éditions reste à faire, à la main.
 - Les 100 notices à marqueur de tome attendent l'arbitrage dans l'onglet « Volumes » ; le numéro de tome ne se pose jamais par script.
+
+## Suite, 05/09/2026
+
+- **Le libellé d'un groupe de tomes est un titre lisible** (migration `20260905154500`, commit `06b928ed`). L'onglet « Volumes » affichait la clé de regroupement en guise de titre — « a desconhecida revolucao », « capital o » : `fn_title_sans_volume` passe par `fn_normalize_name`, qui trie les mots pour rapprocher des noms d'autorité. Bonne clé, mauvais libellé. `fn_title_lisible_sans_volume` porte désormais l'unique expression de retrait du marqueur de tome, la clé s'en déduit, et le groupe prend le titre de son premier tome. Contrat de la RPC inchangé, groupes écartés inchangés, test T3b.
+- **Le registre porte enfin les décisions** : `OPAC-OEU1` à `OPAC-OEU6` (§18), `DEDUP-10` (§40, un balayage sans mémoire), `THES-4` (§30, une note d'import ne crée jamais d'entrée au thésaurus). Le commit `eb076903` du 04/09 disait les avoir inscrites ; seule cette page les portait.
+- **Le manuel** (dix langues, v1.1) décrit la lecture par œuvre, le bloc Œuvre de la fiche et les deux onglets de l'assistant. Le backlog v34 reçoit la clôture « OPAC par œuvre » et l'item **C11** pour ce qui reste à arbitrer.
+
+### État de la file au 05/09 (compté en production, session coordination)
+
+| File | Reste |
+|---|---|
+| Onglet « Volumes » | 9 groupes, 30 notices |
+| Onglet « Œuvres scindées » | 90 paires proposées |
+| Onglet « À décider » (doublons de notices) | 1458/2333, 1451/1446, 1359/1353 |
+| Titres automatiques « corrige-moi » | 1 452 sur 162 œuvres (pré-traduction terminée, aucune erreur ; 2 œuvres neuves en attente du prochain passage) |
+| Notes MLEG « Assuntos importados » sans matière | 176 (huit catégories) |
+| Titres uniformes vérifiés dans la langue de l'œuvre | 1 sur 161 œuvres à plusieurs éditions |
+
+Rien de cela ne se règle par script : c'est l'item C11 du backlog.

@@ -1,7 +1,7 @@
 # AnarBib — Manuale d'uso
 ## Rete di biblioteche libertarie
 
-*Versione 1.0 — Aprile 2026*
+*Versione 1.1 — Settembre 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Vai all'URL della tua istanza AnarBib e clicca su **Entrar** (o il pulsante di a
 
 ### Cambiare la lingua
 Il selettore di lingua si trova in alto a destra di ogni pagina (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). La scelta viene salvata localmente.
+
+### Cercare nel catalogo
+Il **Catalogo** mostra una riga per opera, nella lingua della tua interfaccia quando il titolo è stato tradotto: autore/trice, titolo, il numero di edizioni e le biblioteche che la possiedono.
+1. Clicca su **Vedi le edizioni** (il « + » della riga): ogni edizione compare sotto, con copertina, editore e anno. I tomi di un'opera in più volumi sono numerati e ordinati.
+2. Clicca su **Esemplari per biblioteca**: la disponibilità compare biblioteca per biblioteca. Se hai effettuato l'accesso, « la tua biblioteca » è segnalata; ciò che è disponibile altrove ma non per te viene detto così com'è.
+3. Il pulsante **Lista piatta** torna a una riga per edizione; la scelta viene memorizzata.
 
 ---
 
@@ -87,6 +93,20 @@ La scheda **Gestire lettore/trice** permette di :
 4. Usare **Ricerca metadati** per precompilare tramite ISBN
 5. **Salvare la bozza**
 
+### Opera, edizioni e tomi
+Un'opera riunisce tutte le edizioni di uno stesso testo. Nella scheda di un documento, il blocco **Opera** permette di:
+- **Collegare a un'altra opera**: cercare l'opera per titolo, poi **Collegare**. L'opera lasciata scompare se resta vuota.
+- **Titoli per lingua**: un titolo per lingua dell'interfaccia. I titoli segnati « traduzione automatica — correggimi » sono stati proposti dalla macchina: rileggili e clicca **Salva** per confermarli.
+- **Titolo uniforme**: il titolo di riferimento dell'opera, scritto nella lingua d'origine dell'opera stessa, non in quella di una traduzione.
+- **Tomo / volume**: il numero del tomo quando l'opera è in più volumi. I tomi restano in un'unica opera.
+
+### Assistente di deduplicazione: opere scisse e volumi
+Nell'**Assistente di deduplicazione** (Catalogazione), due schede completano i doppioni di schede:
+- **Opere scisse**: due opere che sembrano essere lo stesso testo. **Unire in « … »** le riunisce; **Tenere separate** memorizza la decisione e la coppia non torna.
+- **Volumi**: schede che sembrano essere i tomi di una stessa opera. Spunta **Riunire questa scheda** per ogni tomo scelto, inserisci il numero e conferma; un gruppo risolto non torna più.
+
+Nessuna fusione e nessun numero di tomo vengono posti dalla macchina: ogni gesto è tuo.
+
 ### Tipi di documento e campi specializzati
 Ogni tipo di documento mostra campi adattati :
 - **Periodico** : volume, numero, fascicolo, periodicità, ISSN
@@ -143,6 +163,8 @@ L'interfaccia è disponibile in 10 lingue :
 - Esperanto
 
 Le biografie degli autori/trici possono essere tradotte indipendentemente in ogni lingua.
+
+I titoli delle opere sono pretradotti automaticamente nelle dieci lingue; portano la dicitura « correggimi » finché una persona non li rilegge.
 
 ---
 

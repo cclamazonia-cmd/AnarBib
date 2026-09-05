@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-05** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-05** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,7 +17,7 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **3 septembre 2026**, en fin de journée — production interrogée en lecture seule et dépôt recompté, après la matinée (E13, I4, I6, H1), la lettre de Xavier (C5 = B, C9 = A, D2 = A, E11 = A, I16 = A) exécutée de bout en bout, le lot `autor_sans_autorite` tranché le soir même, et le registre porté à v0.17 (`RES-Q13`, `RES-D12`). Toutes les lignes ont été remesurées, y compris les volumétries métier : c'est un relevé complet, pas un rafraîchissement ciblé.
 
-**Fraîcheur des constats au 2026-09-05.** **37 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-05.** **38 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -453,6 +453,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C8** | Enrichir les autorités : dates, identifiants externes, formes variantes | `P3` | Ouvert |
 | **C9** | Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main | `P2` | Ouvert |
 | **C10** | Renommer l'une des deux colonnes `rights_status` | `P2` | Ouvert |
+| **C11** | Arbitrer ce que l'OPAC par œuvre a mis en file : tomes, œuvres scindées, titres pré-traduits, notes MLEG | `P2` | Ouvert |
 
 #### C2 — Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse
 
@@ -629,6 +630,29 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `PLAN_DE_MARCHE §8` · `DECISION_profil_numerisation_2026-08-20`*
+
+#### C11 — Arbitrer ce que l'OPAC par œuvre a mis en file : tomes, œuvres scindées, titres pré-traduits, notes MLEG
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
+
+**État.** L'OPAC se lit par œuvre depuis le 04/09 (`OPAC-OEU1..6`). Le code est livré ; ce qui reste est **de la bibliothéconomie, dans l'application**. Compté en production le 05/09 : **9 groupes de tomes** (30 notices) dans l'onglet « Volumes », **90 paires** proposées dans « Œuvres scindées », **3 doublons de notices** dans « À décider » (1458/2333, 1451/1446, 1359/1353), **1 452 titres automatiques** « corrige-moi » sur 162 œuvres (pré-traduction terminée, zéro erreur), **176 notes MLEG** « Assuntos importados » sans matière au thésaurus (huit catégories, dont Anarquismo no Brasil 50 et Anarquismo Internacional 42), et **161 œuvres à plusieurs éditions** dont une seule (Thoreau 97) a son titre uniforme vérifié dans la langue de l'œuvre.
+
+*Vérifié : 05/09 — compté en production (session coordination) : 9 groupes / 30 notices ; 90 paires ; 3 doublons ; 1 452 titres auto à relire sur 162 œuvres ; 176 notes MLEG ; 161 œuvres multi-éditions, 0 sans titre uniforme (colonne obligatoire), 1 vérifiée.*
+
+**Ce que c'est.** Dans l'assistant de dédoublonnage : trancher les groupes de tomes ligne à ligne (numéro posé à la main), les paires d'œuvres scindées (« Fusionner » ou « Garder séparées »), les trois doublons. Dans la fiche : relire les « Titres par langue » d'une œuvre quand on l'ouvre, poser le « Titre uniforme » dans la langue de l'œuvre. Pour les 176 notes MLEG, une décision **par catégorie** : laisser en note, ou choisir une matière proche **existante** — jamais créer d'entrée (`THES-4`), jamais convertir vers plus générique.
+
+**Pourquoi ça compte.** Un OPAC par œuvre vaut ce que valent ses œuvres : chaque bibliothèque entrante ajoute ses éditions, et huit « Desobediência civil » sur six œuvres, c'est ce que voyait la lectrice le 04/09 au matin. La machine propose et mémorise, elle ne décide jamais (`OPAC-OEU3`, `OPAC-OEU5`, `DEDUP-7`) : deux tomes ne sont pas un doublon, deux éditions ne sont pas deux œuvres, et seul un regard le sait.
+
+**Ce qui compte comme fini.**
+
+- Les onglets « Volumes » et « Œuvres scindées » sont vides, ou ce qui y reste est mémorisé comme « pas des tomes » / « garder séparées ».
+- Plus aucun titre « corrige-moi » sur une œuvre ouverte au moins une fois au catalogage.
+- Les 176 notes MLEG ont chacune une décision écrite (matière existante posée, ou note conservée par choix), et `subjects` n'a pas gagné une entrée.
+- Les œuvres à plusieurs éditions ont un titre uniforme dans leur langue d'origine.
+
+**Dépendances.** Aucune migration : tout se fait dans l'application, par la coordination catalogage. Les compteurs se relisent en base (`suggest_volume_groups`, `suggest_split_works`, `work_titles.needs_review`, `books.notas ~ 'Assuntos importados'`).
+
+*Renvois : `DECISION_opac_par_oeuvre_2026-09-04` · `REGISTRE §18 OPAC-OEU1..6` · `REGISTRE §30 THES-4` · `REGISTRE §40 DEDUP-10`*
 
 ---
 
@@ -1832,6 +1856,7 @@ CI verte : lint et suite unitaire. |
 | B11 | 2026-09-05 | **Trouvé le 05/09 : c'est le harnais de test de charge, pas une boucle du front.** `scripts/loadtest/anarbib-loadtest.mjs` (versé au dépôt le 17/08, campagne des plafonds de capacité) écrit exprès dans `user_wishlist` — étape `w_wishlist`, `POST /rest/v1/user_wishlist?on_conflict=user_id,book_id` puis retrait — parce que c'est l'une des deux tables sans déclencheur de courriel (le README du harnais le dit : « ne jamais mettre dans le volume une opération qui déclenche un e-mail »). Neuf mille allers-retours pour une ligne survivante, c'est la signature d'une campagne de charge, et le compte de la base ne connaît aucune autre écriture : les six fonctions qui touchent la table sont des fusions, des suppressions et l'export RGPD. **Contre-épreuve** : depuis la remise à zéro des compteurs le 02/09, zéro insertion, zéro suppression, une ligne vivante. La ligne est retirée du constat, comme la fiche le prévoyait. |
 | E7 | 2026-09-05 | **Clos le 05/09 (`7434c1b6`) — le constat avait déjà été corrigé le 31/08, il restait à compter.** Compté sur `App.jsx` : 31 routes ; toutes les pages routées portent `useDocumentTitle`, y compris celles servies par `ContaRouter` (compte, compte contributeur·rice, écrans d'attente et de refus) et l'atelier de constitution. Deux manquaient : la **page 404** (définie dans `App.jsx`) et la page d'essai OCR (`/dev/ocr`, jetable). Posées le 05/09 avec deux clés (`pageTitle.notFound`, `pageTitle.ocrDev`) dans les dix locales — 6 395 clés, parité stricte. Le test `documentTitle.test.js` (31/08) couvre le hook ; les 35 fichiers de `src/pages/` sans hook sont des onglets et composants, pas des routes. |
 | B7 | 2026-09-05 | **Départagés le 05/09 (`7434c1b6`, migration `20260905132602`, suite `homonymes_ingest_public_tests.sql`).** Mesuré en production : tous les appels vivants sont **qualifiés par schéma** et visent `ingest.*` (`fn_import_promote`, `fn_import_set_editorial`, `fn_import_reconcile_duplicates`) — le risque du `search_path` décrit par la fiche n'avait pas de chemin réel. Les trois de `public` n'étaient appelées par **rien** : ni fonction (hors elles-mêmes, en chaîne fermée), ni vue, ni trigger, ni Edge Function, ni fichier du front — et elles étaient `SECURITY DEFINER`, exécutables par `authenticated` : trois entrées de plus au lint 0029 (399 → 396). Supprimées, avec un garde qui refuse si un corps ou une vue cite encore `public.<nom>` ; les versions `ingest` portent leur commentaire. `set_updated_at` reste, comme prévu. Six tests : plus d'homonyme, un seul exemplaire par nom, `ingest.*` DEFINER à `search_path` figé, fermées à `anon` et `authenticated`, appelants qualifiés, aucune citation résiduelle. |
+| OPAC par œuvre | 2026-09-05 | **Livré les 04-05/09** (`cac464fd` → `06b928ed`, douze migrations `20260904095317` → `20260905154500`, quatre suites SQL, Edge Function `work-titles-autofill`) : une ligne par œuvre à l'OPAC, éditions puis exemplaires par bibliothèque dépliables, titre dans la langue de la lectrice (`work_titles`, pré-traduction « corrige-moi »), rattachement et fusion d'œuvres au catalogage, onglets « Œuvres scindées » et « Volumes » de l'assistant, champ « Tome / volume », titre uniforme dans la langue de l'œuvre. Trente groupes scindés arbitrés à la main et appliqués ; 2 125 notes d'import effacées ; 68 « Assuntos importados » convertis vers des matières existantes. Doctrine au REGISTRE : `OPAC-OEU1..6`, `DEDUP-10`, `THES-4`. Ce qui reste à arbitrer est l'item **C11**. |
 
 ---
 
@@ -1863,4 +1888,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

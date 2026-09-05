@@ -60,3 +60,19 @@ Et un quatrième, déjà prévu par le plan : le **transfert de rôle par le cir
 - Le compte rendu de l'étape E12 entre dans la fiche E12, seul lot qui lui reste.
 - Le §7 du plan (« points d'honnêteté ») liste quatre réserves des diapositives que le code a dépassées (PEB, carte lecteur·rice, rappels, onglet équipe) : **à corriger dans les diapositives avant la soirée 4**. Le backlog ne les porte pas encore ; à décider si on les y met.
 - L'objectif chiffré (aucun exemplaire nouveau sans mode d'acquisition ; 5 sur 2 758 aujourd'hui) est celui de K7 : c'est sur lui que la fiche se fermera.
+
+---
+
+## 4. Ce qui a changé à l'écran depuis le conducteur (04-05/09) — *ajouté le 05/09*
+
+Les diapositives et les captures ont été faites sur un OPAC **plat** : une ligne par édition. Depuis le 04/09, l'OPAC se lit **par œuvre** (`OPAC-OEU1` au registre, `docs/manual.md` §1 « Chercher dans le catalogue ») et le formulaire de catalogage a gagné des champs. Ce que les deux coordinations verront, et que les supports ne montrent pas :
+
+| Écran | Ce que montre le support | Ce qu'elles verront |
+|---|---|---|
+| Catalogue (module 1, découverte) | Une ligne par notice, « Regrouper les éditions » caché sous « Explorer ». | Une ligne par **œuvre**, avec « Voir les éditions » puis « Exemplaires par bibliothèque » ; le bouton **Liste plate** rend l'écran des diapositives. Le titre s'affiche en portugais s'il a été traduit — et les traductions automatiques se relisent au catalogage. |
+| Fiche document (exercice 1, le zine en mode Simples) | La section Œuvre avec « Créer l'œuvre » / « Suggérer des éditions ». | En plus : **Rattacher à une autre œuvre**, **Titres par langue** (avec la mention « traduction automatique — corrige-moi »), **Titre uniforme**, **Tome / volume**. Pour un zine en mode Simples, rien de tout cela n'est nécessaire : le dire, pour qu'elles ne s'y arrêtent pas. |
+| Assistant de dédoublonnage (soirée 3 ou 7) | Deux onglets : « À décider », « À regrouper ». | Quatre : **Œuvres scindées** et **Volumes** en plus. C'est là que vit le travail de bibliothéconomie qui reste (item **C11** du backlog : 9 groupes de tomes, 90 paires d'œuvres) — un bon exercice réel pour la soirée « Manter e decidir », mieux qu'un exercice inventé. |
+
+Deux règles à dire en une phrase chacune, parce que l'écran les tient déjà : **la machine propose, ne décide jamais** (aucune fusion d'œuvres, aucun numéro de tome sans un geste humain) ; et **« pour vous » prime** — une bibliothèque qui a un exemplaire disponible mais pas pour la personne connectée le dit ainsi.
+
+**Les supports ne sont pas à jour** : ni les diapositives ni les captures du manuel n'ont été refaites. Refaire les captures demande une session connectée dans le navigateur de capture (chaîne du Manuel v5, en dehors du dépôt) ; à caler avec Xavier avant la soirée 1 si l'on veut des images justes, sinon le tableau ci-dessus sert de correctif oral. Le §7 du plan (« points d'honnêteté ») a une cinquième réserve à retirer : l'OPAC ne montre plus « sept fois le même titre ».

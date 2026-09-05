@@ -31,7 +31,7 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 | [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.7 du 30/08/2026 — 🟢 référence normative |
 | [`governance/guide-gouvernance-fr.md`](./governance/) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau (foyer FR ; 9 traductions dans `governance/`). | v1.0 du 11/05/2026 — 🟢 référence |
 | [`GLB/Grand_Livre_blanc_AnarBib_v17_2026-09-01.pdf`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. Série versée au dépôt le 02/09/2026 (arbitrage J8) : chaque version entre ici le jour où elle sert de référence. | v17 du 01/09/2026 — 🟢 référence (livre blanc vivant) |
-| [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.0 (avril 2026) — 🟢 stable |
+| [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.1 (septembre 2026 : OPAC par œuvre, bloc Œuvre, onglets « Œuvres scindées » / « Volumes ») — 🟢 stable |
 | [`multiformat-viewers.md`](./multiformat-viewers.md) | Doc technique du viewer multi-format (PDF en prod, audio/vidéo/image disponibles côté code). | 08/05/2026 — 🟢 stable |
 
 > Le `livre-blanc-v0.1.md` (point d'étape de mai) est supersédé par le GLB v17 et part en archive. Le GLB est le livre blanc vivant ; v0.1 reste consultable pour mémoire dans `archive/` (à déplacer).

@@ -1,7 +1,7 @@
 # AnarBib — Benutzer*innenhandbuch
 ## Netzwerk libertärer Bibliotheken
 
-*Version 1.0 — April 2026*
+*Version 1.1 — September 2026*
 
 ---
 
@@ -15,6 +15,12 @@ E-Mail-Adresse und dein Passwort ein.
 ### Sprache ändern
 Die Sprachauswahl befindet sich oben rechts auf jeder Seite (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto).
 Die Auswahl wird lokal gespeichert.
+
+### Im Katalog suchen
+Der **Katalog** zeigt eine Zeile je Werk, in der Sprache deiner Oberfläche, sobald der Titel übersetzt wurde: Autor*in, Titel, Zahl der Ausgaben und die Bibliotheken, die es besitzen.
+1. Klicke auf **Ausgaben anzeigen** (das „+“ der Zeile): jede Ausgabe erscheint darunter, mit Cover, Verlag und Jahr. Die Bände eines mehrbändigen Werks sind nummeriert und sortiert.
+2. Klicke auf **Exemplare je Bibliothek**: die Verfügbarkeit erscheint Bibliothek für Bibliothek. Bist du angemeldet, ist „deine Bibliothek“ markiert; was anderswo verfügbar ist, aber nicht für dich, wird genau so gesagt.
+3. Die Schaltfläche **Flache Liste** kehrt zu einer Zeile je Ausgabe zurück; die Wahl wird gemerkt.
 
 ---
 
@@ -96,6 +102,20 @@ Der Reiter **Leser*in verwalten** ermöglicht es:
 4. Benutze **Metadaten suchen**, um über ISBN vorzubefüllen
 5. **Entwurf speichern**
 
+### Werk, Ausgaben und Bände
+Ein Werk vereint alle Ausgaben desselben Textes. In der Karteikarte eines Dokuments erlaubt der Block **Werk**:
+- **Einem anderen Werk zuordnen**: das Werk über den Titel suchen, dann **Zuordnen**. Das verlassene Werk verschwindet, wenn es leer bleibt.
+- **Titel je Sprache**: ein Titel je Oberflächensprache. Titel mit dem Vermerk „maschinelle Übersetzung — bitte korrigieren“ hat die Maschine vorgeschlagen: lies sie nach und klicke **Speichern**, um sie zu bestätigen.
+- **Einheitstitel**: der Referenztitel des Werks, in der Originalsprache des Werks selbst geschrieben, nicht in der einer Übersetzung.
+- **Band**: die Bandnummer, wenn das Werk mehrere Bände umfasst. Die Bände bleiben in einem einzigen Werk.
+
+### Dubletten-Assistent: gespaltene Werke und Bände
+Im **Dubletten-Assistent** (Katalogisierung) ergänzen zwei Reiter die Dubletten von Aufnahmen:
+- **Gespaltene Werke**: zwei Werke, die derselbe Text zu sein scheinen. **Zusammenführen in „…“** vereint sie; **Getrennt lassen** merkt sich die Entscheidung, das Paar kommt nicht wieder.
+- **Bände**: Aufnahmen, die die Bände eines Werks zu sein scheinen. Hake **Diese Aufnahme zusammenführen** für jeden gewählten Band an, trage seine Nummer ein und bestätige; eine erledigte Gruppe kommt nicht wieder.
+
+Keine Zusammenführung und keine Bandnummer wird von der Maschine gesetzt: jede Handlung ist deine.
+
 ### Dokumenttypen und Spezialfelder
 Jeder Dokumenttyp zeigt angepasste Felder:
 - **Zeitschrift** : Band, Nummer, Heft, Erscheinungsweise, ISSN
@@ -152,6 +172,8 @@ Die Benutzeroberfläche ist in 10 Sprachen verfügbar:
 - Esperanto
 
 Autor*innenbiografien können in jeder Sprache unabhängig übersetzt werden.
+
+Die Werktitel werden automatisch in die zehn Sprachen vorübersetzt; sie tragen den Vermerk „bitte korrigieren“, bis eine Person sie nachgelesen hat.
 
 ---
 

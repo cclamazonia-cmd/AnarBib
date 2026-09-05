@@ -1871,6 +1871,17 @@
           "fr": "**Départagés le 05/09 (`7434c1b6`, migration `20260905132602`, suite `homonymes_ingest_public_tests.sql`).** Mesuré en production : tous les appels vivants sont **qualifiés par schéma** et visent `ingest.*` (`fn_import_promote`, `fn_import_set_editorial`, `fn_import_reconcile_duplicates`) — le risque du `search_path` décrit par la fiche n'avait pas de chemin réel. Les trois de `public` n'étaient appelées par **rien** : ni fonction (hors elles-mêmes, en chaîne fermée), ni vue, ni trigger, ni Edge Function, ni fichier du front — et elles étaient `SECURITY DEFINER`, exécutables par `authenticated` : trois entrées de plus au lint 0029 (399 → 396). Supprimées, avec un garde qui refuse si un corps ou une vue cite encore `public.<nom>` ; les versions `ingest` portent leur commentaire. `set_updated_at` reste, comme prévu. Six tests : plus d'homonyme, un seul exemplaire par nom, `ingest.*` DEFINER à `search_path` figé, fermées à `anon` et `authenticated`, appelants qualifiés, aucune citation résiduelle.",
           "pt": "**Desambiguadas em 05/09 (`7434c1b6`, migração `20260905132602`).** Todos os apelos vivos são qualificados e visam `ingest.*` ; as três de `public` não eram chamadas por nada e eram DEFINER executáveis por `authenticated` (lint 0029 : 399 → 396). Suprimidas com guarda ; seis testes."
         }
+      ],
+      [
+        {
+          "fr": "OPAC par œuvre",
+          "pt": "OPAC por obra"
+        },
+        "2026-09-05",
+        {
+          "fr": "**Livré les 04-05/09** (`cac464fd` → `06b928ed`, douze migrations `20260904095317` → `20260905154500`, quatre suites SQL, Edge Function `work-titles-autofill`) : une ligne par œuvre à l'OPAC, éditions puis exemplaires par bibliothèque dépliables, titre dans la langue de la lectrice (`work_titles`, pré-traduction « corrige-moi »), rattachement et fusion d'œuvres au catalogage, onglets « Œuvres scindées » et « Volumes » de l'assistant, champ « Tome / volume », titre uniforme dans la langue de l'œuvre. Trente groupes scindés arbitrés à la main et appliqués ; 2 125 notes d'import effacées ; 68 « Assuntos importados » convertis vers des matières existantes. Doctrine au REGISTRE : `OPAC-OEU1..6`, `DEDUP-10`, `THES-4`. Ce qui reste à arbitrer est l'item **C11**.",
+          "pt": "**Entregue em 04-05/09** (`cac464fd` → `06b928ed`, doze migrações, quatro suítes SQL, Edge Function `work-titles-autofill`): uma linha por obra no OPAC, edições e exemplares por biblioteca desdobráveis, título na língua da leitora (`work_titles`, pré-tradução «corrija-me»), vínculo e fusão de obras na catalogação, abas «Obras cindidas» e «Volumes» do assistente, campo «Tomo / volume», título uniforme na língua da obra. Doutrina no REGISTRO: `OPAC-OEU1..6`, `DEDUP-10`, `THES-4`. O que resta arbitrar é o item **C11**."
+        }
       ]
     ]
   },
@@ -2523,6 +2534,60 @@
       "verif": {
         "fr": "31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.",
         "pt": "31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo."
+      }
+    },
+    {
+      "id": "C11",
+      "d": "C",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "biblio"
+      ],
+      "t": {
+        "fr": "Arbitrer ce que l'OPAC par œuvre a mis en file : tomes, œuvres scindées, titres pré-traduits, notes MLEG",
+        "pt": "Arbitrar o que o OPAC por obra pôs em fila: tomos, obras cindidas, títulos pré-traduzidos, notas MLEG"
+      },
+      "v": {
+        "fr": "L'OPAC se lit par œuvre depuis le 04/09 (`OPAC-OEU1..6`). Le code est livré ; ce qui reste est **de la bibliothéconomie, dans l'application**. Compté en production le 05/09 : **9 groupes de tomes** (30 notices) dans l'onglet « Volumes », **90 paires** proposées dans « Œuvres scindées », **3 doublons de notices** dans « À décider » (1458/2333, 1451/1446, 1359/1353), **1 452 titres automatiques** « corrige-moi » sur 162 œuvres (pré-traduction terminée, zéro erreur), **176 notes MLEG** « Assuntos importados » sans matière au thésaurus (huit catégories, dont Anarquismo no Brasil 50 et Anarquismo Internacional 42), et **161 œuvres à plusieurs éditions** dont une seule (Thoreau 97) a son titre uniforme vérifié dans la langue de l'œuvre.",
+        "pt": "O OPAC lê-se por obra desde 04/09 (`OPAC-OEU1..6`). O código está entregue; o que resta é **biblioteconomia, no aplicativo**. Contado em produção em 05/09: **9 grupos de tomos** (30 registros) na aba «Volumes», **90 pares** propostos em «Obras cindidas», **3 duplicatas de registros** em «A decidir», **1 452 títulos automáticos** «corrija-me» em 162 obras (pré-tradução terminada, zero erro), **176 notas MLEG** «Assuntos importados» sem assunto no tesauro (oito categorias), e **161 obras com várias edições** das quais uma só tem o título uniforme verificado na língua da obra."
+      },
+      "w": {
+        "fr": "Dans l'assistant de dédoublonnage : trancher les groupes de tomes ligne à ligne (numéro posé à la main), les paires d'œuvres scindées (« Fusionner » ou « Garder séparées »), les trois doublons. Dans la fiche : relire les « Titres par langue » d'une œuvre quand on l'ouvre, poser le « Titre uniforme » dans la langue de l'œuvre. Pour les 176 notes MLEG, une décision **par catégorie** : laisser en note, ou choisir une matière proche **existante** — jamais créer d'entrée (`THES-4`), jamais convertir vers plus générique.",
+        "pt": "No assistente de deduplicação: decidir os grupos de tomos linha a linha (número posto à mão), os pares de obras cindidas («Fundir» ou «Manter separadas»), as três duplicatas. Na ficha: reler os «Títulos por idioma» de uma obra ao abri-la, pôr o «Título uniforme» na língua da obra. Para as 176 notas MLEG, uma decisão **por categoria**: deixar em nota, ou escolher um assunto próximo **existente** — nunca criar entrada (`THES-4`), nunca converter para mais genérico."
+      },
+      "y": {
+        "fr": "Un OPAC par œuvre vaut ce que valent ses œuvres : chaque bibliothèque entrante ajoute ses éditions, et huit « Desobediência civil » sur six œuvres, c'est ce que voyait la lectrice le 04/09 au matin. La machine propose et mémorise, elle ne décide jamais (`OPAC-OEU3`, `OPAC-OEU5`, `DEDUP-7`) : deux tomes ne sont pas un doublon, deux éditions ne sont pas deux œuvres, et seul un regard le sait.",
+        "pt": "Um OPAC por obra vale o que valem suas obras: cada biblioteca que entra acrescenta suas edições. A máquina propõe e memoriza, nunca decide (`OPAC-OEU3`, `OPAC-OEU5`, `DEDUP-7`): dois tomos não são uma duplicata, duas edições não são duas obras, e só um olhar o sabe."
+      },
+      "f": {
+        "fr": [
+          "Les onglets « Volumes » et « Œuvres scindées » sont vides, ou ce qui y reste est mémorisé comme « pas des tomes » / « garder séparées ».",
+          "Plus aucun titre « corrige-moi » sur une œuvre ouverte au moins une fois au catalogage.",
+          "Les 176 notes MLEG ont chacune une décision écrite (matière existante posée, ou note conservée par choix), et `subjects` n'a pas gagné une entrée.",
+          "Les œuvres à plusieurs éditions ont un titre uniforme dans leur langue d'origine."
+        ],
+        "pt": [
+          "As abas «Volumes» e «Obras cindidas» estão vazias, ou o que fica está memorizado como «não são tomos» / «manter separadas».",
+          "Nenhum título «corrija-me» numa obra aberta ao menos uma vez na catalogação.",
+          "As 176 notas MLEG têm cada uma uma decisão escrita, e `subjects` não ganhou nenhuma entrada.",
+          "As obras com várias edições têm título uniforme na sua língua de origem."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune migration : tout se fait dans l'application, par la coordination catalogage. Les compteurs se relisent en base (`suggest_volume_groups`, `suggest_split_works`, `work_titles.needs_review`, `books.notas ~ 'Assuntos importados'`).",
+        "pt": "Nenhuma migração: tudo se faz no aplicativo, pela coordenação de catalogação."
+      },
+      "r": [
+        "DECISION_opac_par_oeuvre_2026-09-04",
+        "REGISTRE §18 OPAC-OEU1..6",
+        "REGISTRE §30 THES-4",
+        "REGISTRE §40 DEDUP-10"
+      ],
+      "verif": {
+        "fr": "05/09 — compté en production (session coordination) : 9 groupes / 30 notices ; 90 paires ; 3 doublons ; 1 452 titres auto à relire sur 162 œuvres ; 176 notes MLEG ; 161 œuvres multi-éditions, 0 sans titre uniforme (colonne obligatoire), 1 vérifiée.",
+        "pt": "05/09 — contado em produção: 9 grupos / 30 registros; 90 pares; 3 duplicatas; 1 452 títulos automáticos em 162 obras; 176 notas MLEG; 161 obras multi-edições, 1 verificada."
       }
     },
     {

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-05** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-05** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 4
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **3 de setembro de 2026**, ao fim do dia — produção consultada em leitura e repositório recontado, depois da manhã (E13, I4, I6, H1), da carta de Xavier (C5, C9, D2, E11, I16) executada até ao fim, do lote `autor_sans_autorite` decidido na mesma noite e do registo em v0.17. Todas as linhas foram remedidas: é um registo completo.
 
-**Frescor dos constatos em 2026-09-05.** **37 itens de 54** trazem uma verificação datada própria (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-05.** **38 itens de 55** trazem uma verificação datada própria (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -453,6 +453,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C8** | Enriquecer as autoridades: datas, identificadores externos, formas variantes | `P3` | Aberto |
 | **C9** | As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão | `P2` | Aberto |
 | **C10** | Renomear uma das duas colunas `rights_status` | `P2` | Aberto |
+| **C11** | Arbitrar o que o OPAC por obra pôs em fila: tomos, obras cindidas, títulos pré-traduzidos, notas MLEG | `P2` | Aberto |
 
 #### C2 — Importar o acervo SOLIDAIRES pela ferramenta de importação, e registrar o que quebra
 
@@ -629,6 +630,29 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `PLAN_DE_MARCHE §8` · `DECISION_profil_numerisation_2026-08-20`*
+
+#### C11 — Arbitrar o que o OPAC por obra pôs em fila: tomos, obras cindidas, títulos pré-traduzidos, notas MLEG
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
+
+**Estado.** O OPAC lê-se por obra desde 04/09 (`OPAC-OEU1..6`). O código está entregue; o que resta é **biblioteconomia, no aplicativo**. Contado em produção em 05/09: **9 grupos de tomos** (30 registros) na aba «Volumes», **90 pares** propostos em «Obras cindidas», **3 duplicatas de registros** em «A decidir», **1 452 títulos automáticos** «corrija-me» em 162 obras (pré-tradução terminada, zero erro), **176 notas MLEG** «Assuntos importados» sem assunto no tesauro (oito categorias), e **161 obras com várias edições** das quais uma só tem o título uniforme verificado na língua da obra.
+
+*Verificado : 05/09 — contado em produção: 9 grupos / 30 registros; 90 pares; 3 duplicatas; 1 452 títulos automáticos em 162 obras; 176 notas MLEG; 161 obras multi-edições, 1 verificada.*
+
+**O que é.** No assistente de deduplicação: decidir os grupos de tomos linha a linha (número posto à mão), os pares de obras cindidas («Fundir» ou «Manter separadas»), as três duplicatas. Na ficha: reler os «Títulos por idioma» de uma obra ao abri-la, pôr o «Título uniforme» na língua da obra. Para as 176 notas MLEG, uma decisão **por categoria**: deixar em nota, ou escolher um assunto próximo **existente** — nunca criar entrada (`THES-4`), nunca converter para mais genérico.
+
+**Por que importa.** Um OPAC por obra vale o que valem suas obras: cada biblioteca que entra acrescenta suas edições. A máquina propõe e memoriza, nunca decide (`OPAC-OEU3`, `OPAC-OEU5`, `DEDUP-7`): dois tomos não são uma duplicata, duas edições não são duas obras, e só um olhar o sabe.
+
+**O que conta como terminado.**
+
+- As abas «Volumes» e «Obras cindidas» estão vazias, ou o que fica está memorizado como «não são tomos» / «manter separadas».
+- Nenhum título «corrija-me» numa obra aberta ao menos uma vez na catalogação.
+- As 176 notas MLEG têm cada uma uma decisão escrita, e `subjects` não ganhou nenhuma entrada.
+- As obras com várias edições têm título uniforme na sua língua de origem.
+
+**Dependências.** Nenhuma migração: tudo se faz no aplicativo, pela coordenação de catalogação.
+
+*Remissões : `DECISION_opac_par_oeuvre_2026-09-04` · `REGISTRE §18 OPAC-OEU1..6` · `REGISTRE §30 THES-4` · `REGISTRE §40 DEDUP-10`*
 
 ---
 
@@ -1808,6 +1832,7 @@ CI verde. |
 | B11 | 2026-09-05 | **Encontrado em 05/09 : é o arnês de teste de carga, não um laço do front.** `scripts/loadtest/anarbib-loadtest.mjs` (17/08) escreve de propósito em `user_wishlist`, uma das duas tabelas sem gatilho de e-mail. Desde 02/09 : zero escritas. A linha sai do constato. |
 | E7 | 2026-09-05 | **Fechado em 05/09 (`7434c1b6`).** 31 rotas em `App.jsx`, todas com `useDocumentTitle` salvo duas : a página 404 e a página de ensaio OCR. Postas em 05/09 com duas chaves nas dez locales (6 395 chaves, paridade estrita). |
 | B7 | 2026-09-05 | **Desambiguadas em 05/09 (`7434c1b6`, migração `20260905132602`).** Todos os apelos vivos são qualificados e visam `ingest.*` ; as três de `public` não eram chamadas por nada e eram DEFINER executáveis por `authenticated` (lint 0029 : 399 → 396). Suprimidas com guarda ; seis testes. |
+| OPAC por obra | 2026-09-05 | **Entregue em 04-05/09** (`cac464fd` → `06b928ed`, doze migrações, quatro suítes SQL, Edge Function `work-titles-autofill`): uma linha por obra no OPAC, edições e exemplares por biblioteca desdobráveis, título na língua da leitora (`work_titles`, pré-tradução «corrija-me»), vínculo e fusão de obras na catalogação, abas «Obras cindidas» e «Volumes» do assistente, campo «Tomo / volume», título uniforme na língua da obra. Doutrina no REGISTRO: `OPAC-OEU1..6`, `DEDUP-10`, `THES-4`. O que resta arbitrar é o item **C11**. |
 
 ---
 
@@ -1839,4 +1864,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-09-03 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `aeb77002`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-09-03 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `aeb77002`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -1,7 +1,7 @@
 # AnarBib — Manual de utilização
 ## Rede de bibliotecas libertárias
 
-*Versão 1.0 — Abril 2026*
+*Versão 1.1 — Setembro 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Acesse a URL da sua instância AnarBib e clique em **Entrar** (ou o botão de ac
 
 ### Mudar o idioma
 O seletor de idioma se encontra no canto superior direito de cada página (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). A escolha é salva localmente.
+
+### Buscar no catálogo
+O **Catálogo** mostra uma linha por obra, no idioma da sua interface quando o título foi traduzido: autor(a/e), título, número de edições e bibliotecas que a possuem.
+1. Clique em **Ver as edições** (o « + » da linha): cada edição aparece abaixo, com capa, editora e ano. Os tomos de uma obra em vários volumes são numerados e ordenados.
+2. Clique em **Exemplares por biblioteca**: a disponibilidade aparece biblioteca por biblioteca. Se você entrou na sua conta, « sua biblioteca » é sinalizada; o que está disponível em outro lugar mas não para você é dito assim mesmo.
+3. O botão **Lista plana** volta a uma linha por edição; a escolha fica memorizada.
 
 ---
 
@@ -87,6 +93,20 @@ A aba **Gerenciar leitor(a/e)** permite:
 4. Usar **Buscar metadados** para pré-preencher via ISBN
 5. **Salvar o rascunho**
 
+### Obra, edições e tomos
+Uma obra reúne todas as edições de um mesmo texto. Na ficha de um documento, o bloco **Obra** permite:
+- **Vincular a outra obra**: buscar a obra pelo título, depois **Vincular**. A obra deixada desaparece se ficar vazia.
+- **Títulos por idioma**: um título por idioma da interface. Os títulos marcados « tradução automática — corrija-me » foram propostos pela máquina: releia-os e clique em **Salvar** para confirmá-los.
+- **Título uniforme**: o título de referência da obra, escrito no idioma de origem da própria obra, não no de uma tradução.
+- **Tomo / volume**: o número do tomo quando a obra tem vários volumes. Os tomos ficam numa única obra.
+
+### Assistente de deduplicação: obras cindidas e volumes
+No **Assistente de deduplicação** (Catalogação), duas abas completam as duplicatas de registros:
+- **Obras cindidas**: duas obras que parecem ser o mesmo texto. **Fundir em « … »** as reúne; **Manter separadas** memoriza a decisão e o par não volta.
+- **Volumes**: registros que parecem ser os tomos de uma mesma obra. Marque **Reunir este registro** para cada tomo escolhido, digite o número e valide; um grupo resolvido não volta mais.
+
+Nenhuma fusão e nenhum número de tomo são postos pela máquina: cada gesto é seu.
+
 ### Tipos de documentos e campos especializados
 Cada tipo de documento exibe campos adaptados:
 - **Periódico**: volume, número, fascículo, periodicidade, ISSN
@@ -143,6 +163,8 @@ A interface está disponível em 10 idiomas:
 - Esperanto
 
 As biografias de autores(as/es) podem ser traduzidas independentemente em cada idioma.
+
+Os títulos das obras são pré-traduzidos automaticamente nos dez idiomas; eles trazem a menção « corrija-me » até serem relidos por uma pessoa.
 
 ---
 

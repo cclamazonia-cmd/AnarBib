@@ -1,7 +1,7 @@
 # AnarBib — Uzadmanlibro
 ## Reto de libertaraj bibliotekoj
 
-*Versio 1.0 — Aprilo 2026*
+*Versio 1.1 — Septembro 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Iru al la URL de via AnarBib-instanco kaj alklaku **Entrar** (aŭ la ensalutan b
 
 ### Ŝanĝu la lingvon
 La lingvoselektilo troviĝas en la supra dekstra angulo de ĉiu paĝo (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). La elekto estas konservita loke.
+
+### Serĉi en la katalogo
+La **Katalogo** montras unu linion por verko, en la lingvo de via interfaco kiam la titolo estis tradukita: aŭtoro, titolo, nombro de eldonoj kaj la bibliotekoj, kiuj ĝin posedas.
+1. Alklaku **Montri la eldonojn** (la « + » de la linio): ĉiu eldono aperas sube, kun kovrilo, eldonejo kaj jaro. La volumoj de plurvoluma verko estas numeritaj kaj ordigitaj.
+2. Alklaku **Ekzempleroj laŭ biblioteko**: la havebleco aperas biblioteko post biblioteko. Se vi ensalutis, « via biblioteko » estas markita; kio haveblas aliloke sed ne por vi, estas dirita tia, kia ĝi estas.
+3. La butono **Plata listo** revenas al unu linio por eldono; la elekto estas memorata.
 
 ---
 
@@ -87,6 +93,20 @@ La langeto **Administri legant-in-on** permesas :
 4. Uzu **Serĉi metadatumojn** por antaŭpleniĝo per ISBN
 5. **Konservi la malneton**
 
+### Verko, eldonoj kaj volumoj
+Verko kunigas ĉiujn eldonojn de sama teksto. En la slipo de dokumento, la bloko **Verko** ebligas:
+- **Ligi al alia verko**: serĉi la verkon laŭ titolo, poste **Ligi**. La forlasita verko malaperas, se ĝi restas malplena.
+- **Titoloj laŭ lingvo**: unu titolo por ĉiu interfaca lingvo. La titoloj markitaj « aŭtomata traduko — korektu min » estis proponitaj de la maŝino: relegu ilin kaj alklaku **Konservi** por konfirmi ilin.
+- **Unueca titolo**: la referenca titolo de la verko, skribita en la origina lingvo de la verko mem, ne en tiu de traduko.
+- **Volumo**: la numero de la volumo, kiam la verko havas plurajn volumojn. La volumoj restas en unu sola verko.
+
+### Asistanto pri seninduobligo: disigitaj verkoj kaj volumoj
+En la **Asistanto pri seninduobligo** (Katalogado), du langetoj kompletigas la duoblajn slipojn:
+- **Disigitaj verkoj**: du verkoj, kiuj ŝajnas esti la sama teksto. **Kunfandi en « … »** kunigas ilin; **Teni aparte** memoras la decidon kaj la paro ne revenas.
+- **Volumoj**: slipoj, kiuj ŝajnas esti la volumoj de sama verko. Marku **Kunigi ĉi tiun registron** por ĉiu elektita volumo, enigu ĝian numeron kaj konfirmu; solvita grupo ne plu revenas.
+
+Neniu kunfando kaj neniu voluma numero estas metataj de la maŝino: ĉiu gesto estas via.
+
 ### Dokumenttipoj kaj specialigitaj kampoj
 Ĉiu dokumenttipo montras adaptitajn kampojn :
 - **Periodaĵo** : volumo, numero, fasciklo, periodiceco, ISSN
@@ -143,6 +163,8 @@ La interfaco estas disponebla en 10 lingvoj :
 - Esperanto
 
 La verkint-in-o-biografioj povas esti tradukitaj sendepende en ĉiu lingvo.
+
+La titoloj de la verkoj estas aŭtomate antaŭtradukitaj en la dek lingvojn; ili portas la mencion « korektu min » ĝis homo relegis ilin.
 
 ---
 

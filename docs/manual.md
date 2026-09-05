@@ -1,7 +1,7 @@
 # AnarBib — Manuel d'utilisation
 ## Réseau de bibliothèques libertaires
 
-*Version 1.0 — Avril 2026*
+*Version 1.1 — Septembre 2026*
 
 ---
 
@@ -12,6 +12,12 @@ Rendez-vous sur l'URL de votre instance AnarBib et cliquez sur **Entrar** (ou le
 
 ### Changer la langue
 Le sélecteur de langue se trouve en haut à droite de chaque page (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). Le choix est sauvegardé localement.
+
+### Chercher dans le catalogue
+Le **Catalogue** présente une ligne par œuvre, dans la langue de votre interface quand le titre a été traduit : l'auteur·rice, le titre, le nombre d'éditions et les bibliothèques qui la détiennent.
+1. Cliquez sur **Voir les éditions** (le « + » de la ligne) : chaque édition apparaît en dessous, avec sa vignette, son éditeur et son année. Les tomes d'une œuvre en plusieurs volumes sont numérotés et triés.
+2. Cliquez sur **Exemplaires par bibliothèque** : la disponibilité s'affiche bibliothèque par bibliothèque. Si vous êtes connecté·e, « votre bibliothèque » est signalée ; ce qui est disponible ailleurs mais pas pour vous est dit tel quel.
+3. Le bouton **Liste plate** revient à une ligne par édition ; le choix est mémorisé.
 
 ---
 
@@ -87,6 +93,20 @@ L'onglet **Gérer lecteur·rice** permet de :
 4. Utiliser **Rechercher métadonnées** pour pré-remplir via ISBN
 5. **Enregistrer le brouillon**
 
+### Œuvre, éditions et tomes
+Une œuvre réunit toutes les éditions d'un même texte. Dans la fiche d'un document, le bloc **Œuvre** permet de :
+- **Rattacher à une autre œuvre** : chercher l'œuvre par son titre, puis **Rattacher**. L'œuvre quittée disparaît si elle reste vide.
+- **Titres par langue** : un titre par langue d'interface. Les titres marqués « traduction automatique — corrige-moi » ont été proposés par la machine : relisez-les et cliquez **Enregistrer** pour les confirmer.
+- **Titre uniforme** : le titre de référence de l'œuvre, écrit dans la langue d'origine de l'œuvre elle-même, pas dans celle d'une traduction.
+- **Tome / volume** : le numéro du tome quand l'œuvre est en plusieurs volumes. Les tomes restent dans une seule œuvre.
+
+### Assistant de dédoublonnage : œuvres scindées et volumes
+Dans l'**Assistant de dédoublonnage** (Catalogage), deux onglets complètent les doublons de notices :
+- **Œuvres scindées** : deux œuvres qui semblent être le même texte. **Fusionner dans « … »** les réunit ; **Garder séparées** mémorise la décision et la paire ne revient pas.
+- **Volumes** : des notices qui semblent être les tomes d'une même œuvre. Cochez **Réunir cette notice** pour chaque tome retenu, saisissez son numéro, puis validez ; un groupe réglé ne revient plus.
+
+Aucune fusion et aucun numéro de tome ne sont posés par la machine : chaque geste est le vôtre.
+
 ### Types de documents et champs spécialisés
 Chaque type de document affiche des champs adaptés :
 - **Périodique** : volume, numéro, fascicule, périodicité, ISSN
@@ -143,6 +163,8 @@ L'interface est disponible en 10 langues :
 - Esperanto
 
 Les biographies d'auteurs peuvent être traduites indépendamment dans chaque langue.
+
+Les titres des œuvres sont pré-traduits automatiquement dans les dix langues ; ils portent la mention « corrige-moi » jusqu'à relecture par une personne.
 
 ---
 
