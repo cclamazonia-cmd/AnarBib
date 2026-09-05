@@ -6563,5 +6563,10 @@
   "atelier.form.error.workParts": "Al menos dos partes, cada una con un título y al menos una edición.",
   "atelier.form.error.workTomes": "Indica al menos otro tomo (otra obra).",
   "inicio.i.workshop": "Contribuir en el taller (autoridades, obras)",
-  "inicio.kw.workshop": "taller propuesta fusión título obra autoridad corrígeme"
+  "inicio.kw.workshop": "taller propuesta fusión título obra autoridad corrígeme",
+  "atelier.kindLabel.work.titre": "Título",
+  "atelier.kindLabel.work.fusion": "Fusión",
+  "atelier.kindLabel.work.rattachement": "Vinculación",
+  "atelier.kindLabel.work.scission": "Escisión",
+  "atelier.kindLabel.work.tomes": "Tomos"
 }

@@ -156,11 +156,24 @@ export default function WorksWorkshopPanel({ isStaff, onProposed }) {
           </h2>
           <div style={{ marginBottom: 10 }}>
             <label style={ls}>{t({ id: 'atelier.form.kind' })}</label>
-            <select value={form.kind} onChange={e => setForm(f => ({ ...f, kind: e.target.value }))} style={fs}>
-              {KINDS.map(k => <option key={k} value={k}>{t({ id: `atelier.kindProp.work.${k}` })}</option>)}
-            </select>
-            <p style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)', margin: '6px 0 0', maxWidth: 640 }}>
-              {t({ id: `atelier.form.work.hint.${form.kind}` })}
+            {/* Cinq boutons, pas un menu deroulant : ferme, un <select> ne montre
+                que le type courant — Xavier y a vu « une seule categorie » (05/09). */}
+            <div role="radiogroup" aria-label={t({ id: 'atelier.form.kind' })} style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {KINDS.map(k => {
+                const on = form.kind === k;
+                return (
+                  <button key={k} type="button" role="radio" aria-checked={on}
+                    onClick={() => setForm(f => ({ ...f, kind: k }))}
+                    style={{ ...fs, width: 'auto', cursor: 'pointer', padding: '7px 12px', fontWeight: on ? 700 : 500,
+                      borderColor: on ? 'var(--brand-color-primary, #e0304a)' : 'rgba(255,255,255,.12)',
+                      background: on ? 'rgba(var(--brand-action-rgb, 200,16,46), .18)' : 'rgba(0,0,0,.3)' }}>
+                    {t({ id: `atelier.kindLabel.work.${k}` })}
+                  </button>
+                );
+              })}
+            </div>
+            <p style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)', margin: '8px 0 0', maxWidth: 640 }}>
+              <strong>{t({ id: `atelier.kindProp.work.${form.kind}` })}</strong> — {t({ id: `atelier.form.work.hint.${form.kind}` })}
             </p>
           </div>
 

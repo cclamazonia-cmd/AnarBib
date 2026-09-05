@@ -6563,5 +6563,10 @@
   "atelier.form.error.workParts": "Τουλάχιστον δύο μέρη, καθένα με τίτλο και τουλάχιστον μία έκδοση.",
   "atelier.form.error.workTomes": "Δώσε τουλάχιστον έναν άλλο τόμο (άλλο έργο).",
   "inicio.i.workshop": "Συνεισφορά στο εργαστήρι (καθιερωμένοι όροι, έργα)",
-  "inicio.kw.workshop": "εργαστήρι πρόταση συγχώνευση τίτλος έργο καθιερωμένος όρος"
+  "inicio.kw.workshop": "εργαστήρι πρόταση συγχώνευση τίτλος έργο καθιερωμένος όρος",
+  "atelier.kindLabel.work.titre": "Τίτλος",
+  "atelier.kindLabel.work.fusion": "Συγχώνευση",
+  "atelier.kindLabel.work.rattachement": "Σύνδεση",
+  "atelier.kindLabel.work.scission": "Διαχωρισμός",
+  "atelier.kindLabel.work.tomes": "Τόμοι"
 }

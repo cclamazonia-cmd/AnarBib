@@ -6563,5 +6563,10 @@
   "atelier.form.error.workParts": "Almenaŭ du partoj, ĉiu kun titolo kaj almenaŭ unu eldono.",
   "atelier.form.error.workTomes": "Indiku almenaŭ unu alian volumon (alian verkon).",
   "inicio.i.workshop": "Kontribui en la laborejo (aŭtoritatoj, verkoj)",
-  "inicio.kw.workshop": "laborejo propono kunfando titolo verko aŭtoritato"
+  "inicio.kw.workshop": "laborejo propono kunfando titolo verko aŭtoritato",
+  "atelier.kindLabel.work.titre": "Titolo",
+  "atelier.kindLabel.work.fusion": "Kunfando",
+  "atelier.kindLabel.work.rattachement": "Alligo",
+  "atelier.kindLabel.work.scission": "Disigo",
+  "atelier.kindLabel.work.tomes": "Volumoj"
 }

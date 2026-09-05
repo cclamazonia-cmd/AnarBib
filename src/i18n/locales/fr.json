@@ -6563,5 +6563,10 @@
   "atelier.form.error.workParts": "Au moins deux parts, chacune avec un titre et au moins une édition.",
   "atelier.form.error.workTomes": "Indique au moins un autre tome (une autre œuvre).",
   "inicio.i.workshop": "Contribuer à l’atelier (autorités, œuvres)",
-  "inicio.kw.workshop": "atelier proposition fusion titre œuvre autorité corrige-moi"
+  "inicio.kw.workshop": "atelier proposition fusion titre œuvre autorité corrige-moi",
+  "atelier.kindLabel.work.titre": "Titre",
+  "atelier.kindLabel.work.fusion": "Fusion",
+  "atelier.kindLabel.work.rattachement": "Rattachement",
+  "atelier.kindLabel.work.scission": "Scission",
+  "atelier.kindLabel.work.tomes": "Tomes"
 }

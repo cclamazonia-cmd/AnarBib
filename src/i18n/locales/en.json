@@ -6563,5 +6563,10 @@
   "atelier.form.error.workParts": "At least two parts, each with a title and at least one edition.",
   "atelier.form.error.workTomes": "Give at least one other volume (another work).",
   "inicio.i.workshop": "Contribute in the workshop (authorities, works)",
-  "inicio.kw.workshop": "workshop proposal merge title work authority fix me"
+  "inicio.kw.workshop": "workshop proposal merge title work authority fix me",
+  "atelier.kindLabel.work.titre": "Title",
+  "atelier.kindLabel.work.fusion": "Merge",
+  "atelier.kindLabel.work.rattachement": "Attachment",
+  "atelier.kindLabel.work.scission": "Split",
+  "atelier.kindLabel.work.tomes": "Volumes"
 }

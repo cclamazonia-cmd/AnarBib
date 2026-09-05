@@ -6563,5 +6563,10 @@
   "atelier.form.error.workParts": "Almenys dues parts, cadascuna amb un títol i almenys una edició.",
   "atelier.form.error.workTomes": "Indica almenys un altre tom (una altra obra).",
   "inicio.i.workshop": "Contribuir al taller (autoritats, obres)",
-  "inicio.kw.workshop": "taller proposta fusió títol obra autoritat corregeix-me"
+  "inicio.kw.workshop": "taller proposta fusió títol obra autoritat corregeix-me",
+  "atelier.kindLabel.work.titre": "Títol",
+  "atelier.kindLabel.work.fusion": "Fusió",
+  "atelier.kindLabel.work.rattachement": "Vinculació",
+  "atelier.kindLabel.work.scission": "Escissió",
+  "atelier.kindLabel.work.tomes": "Toms"
 }

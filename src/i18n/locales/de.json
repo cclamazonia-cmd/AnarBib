@@ -6563,5 +6563,10 @@
   "atelier.form.error.workParts": "Mindestens zwei Teile, je mit Titel und mindestens einer Ausgabe.",
   "atelier.form.error.workTomes": "Gib mindestens einen weiteren Band (ein anderes Werk) an.",
   "inicio.i.workshop": "In der Werkstatt mitwirken (Normdaten, Werke)",
-  "inicio.kw.workshop": "Werkstatt Vorschlag Zusammenführung Titel Werk Normdaten"
+  "inicio.kw.workshop": "Werkstatt Vorschlag Zusammenführung Titel Werk Normdaten",
+  "atelier.kindLabel.work.titre": "Titel",
+  "atelier.kindLabel.work.fusion": "Zusammenführung",
+  "atelier.kindLabel.work.rattachement": "Zuordnung",
+  "atelier.kindLabel.work.scission": "Aufteilung",
+  "atelier.kindLabel.work.tomes": "Bände"
 }
