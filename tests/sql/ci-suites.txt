@@ -434,3 +434,10 @@ tests/sql/tomes_dans_l_oeuvre_tests.sql
 tests/sql/revision_lots_importes_tests.sql
 # B7 (05/09/2026) — les trois homonymes de public ont disparu ; les versions ingest restent, DEFINER, fermees a authenticated. Ref. 20260905132602.
 tests/sql/homonymes_ingest_public_tests.sql
+
+# Ce que le rapport general du 05/09 montrait encore : CONV-8 retirait les contributeurs
+# « AA. VV. » et gardait la transcription, le rapport lisait la transcription. UN predicat
+# (fn_conv_est_non_agent) pour la vue, les semis et le rapport de revision ; fusion de
+# variantes gardee contre les fixtures (T3, non-action) ; rapport d'incoherences aligne
+# sur le trigger (T4) ; rapport de revision sans table temporaire (T5). Ref. 20260905160000.
+tests/sql/rapport_reseau_evidences_tests.sql

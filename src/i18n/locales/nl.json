@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "Aanpassingen worden gemotiveerd: voeg een opmerking toe.",
   "rede.reviews.queued": "In de wachtrij, nog niet aangevraagd",
   "rede.reviews.queuedHint": "Open geïmporteerde partijen waarvoor de coördinatie nog geen beoordeling heeft aangevraagd. Het rapport is nu al leesbaar; het oordeel wacht op de aanvraag.",
-  "rede.reviews.showReport": "Rapport tonen"
+  "rede.reviews.showReport": "Rapport tonen",
+  "review.report.titleEntries": "{n} titelingangen (diverse auteurs, anoniem…): geen afwijking, de transcriptie blijft.",
+  "review.report.rule.contrib_non_agent": "Bijdrager die geen agent is (diverse auteurs, anoniem…): verwijderen, de ingang is op titel"
 }

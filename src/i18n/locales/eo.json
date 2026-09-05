@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "Korektoj motiviĝas: aldonu noton.",
   "rede.reviews.queued": "En vico, sen peto",
   "rede.reviews.queuedHint": "Malfermitaj importitaj aroj, kies kunordigo ankoraŭ ne petis revizion. La raporto legeblas jam nun; la verdikto atendos la peton.",
-  "rede.reviews.showReport": "Vidi la raporton"
+  "rede.reviews.showReport": "Vidi la raporton",
+  "review.report.titleEntries": "{n} titolaj enskriboj (diversaj aŭtoroj, anonima…): ne devio, la transskribo restas.",
+  "review.report.rule.contrib_non_agent": "Kontribuanto kiu ne estas aganto (diversaj aŭtoroj, anonima…): forigenda, la enskribo estas laŭ titolo"
 }

@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "Changes need a reason: add a note.",
   "rede.reviews.queued": "Queued, not yet requested",
   "rede.reviews.queuedHint": "Open imported batches whose coordination has not yet requested a review. The report can be read now; the verdict waits for the request.",
-  "rede.reviews.showReport": "Show report"
+  "rede.reviews.showReport": "Show report",
+  "review.report.titleEntries": "{n} title entries (various authors, anonymous…): not a deviation, the transcription stays.",
+  "review.report.rule.contrib_non_agent": "Contributor that is not an agent (various authors, anonymous…): to remove, entry is under the title"
 }

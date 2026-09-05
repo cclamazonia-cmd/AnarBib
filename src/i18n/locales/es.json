@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "Los retoques se motivan: añada una nota.",
   "rede.reviews.queued": "En cola, sin solicitud",
   "rede.reviews.queuedHint": "Lotes importados abiertos cuya coordinación aún no ha solicitado la revisión. El informe ya se puede leer; el veredicto esperará a la solicitud.",
-  "rede.reviews.showReport": "Ver el informe"
+  "rede.reviews.showReport": "Ver el informe",
+  "review.report.titleEntries": "{n} entradas por el título (varios autores, anónimo…): no es una desviación, la transcripción se conserva.",
+  "review.report.rule.contrib_non_agent": "Contribuidor que no es un agente (varios autores, anónimo…): retirar, la entrada es por el título"
 }

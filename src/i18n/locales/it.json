@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "I ritocchi si motivano: aggiungete una nota.",
   "rede.reviews.queued": "In coda, senza richiesta",
   "rede.reviews.queuedHint": "Lotti importati aperti per cui la coordinazione non ha ancora richiesto la revisione. Il rapporto si legge già; il verdetto attenderà la richiesta.",
-  "rede.reviews.showReport": "Vedi il rapporto"
+  "rede.reviews.showReport": "Vedi il rapporto",
+  "review.report.titleEntries": "{n} entrate al titolo (autori vari, anonimo…): non è uno scostamento, la trascrizione resta.",
+  "review.report.rule.contrib_non_agent": "Contributore che non è un agente (autori vari, anonimo…): da togliere, l’entrata è al titolo"
 }

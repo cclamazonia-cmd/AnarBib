@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "Retoques justificam-se: acrescente uma nota.",
   "rede.reviews.queued": "Em fila, sem pedido",
   "rede.reviews.queuedHint": "Lotes importados abertos cuja coordenação ainda não pediu a revisão. O relatório já se lê; o veredito espera o pedido.",
-  "rede.reviews.showReport": "Ver o relatório"
+  "rede.reviews.showReport": "Ver o relatório",
+  "review.report.titleEntries": "{n} entradas pelo título (vários autores, anônimo…): não é um desvio, a transcrição fica.",
+  "review.report.rule.contrib_non_agent": "Contribuidor que não é um agente (vários autores, anônimo…): retirar, a entrada é pelo título"
 }

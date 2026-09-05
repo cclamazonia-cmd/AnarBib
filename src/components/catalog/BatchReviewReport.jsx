@@ -37,6 +37,9 @@ export default function BatchReviewReport({ report }) {
       <div>
         <div>{t({ id: 'review.report.summary' }, { active: b.drafts_active ?? 0, published: b.drafts_published ?? 0, cancelled: b.drafts_cancelled ?? 0 })}</div>
         <div style={{ fontWeight: 600 }}>{t({ id: 'review.report.totals' }, { issues: tot.convention_issues ?? 0, dups: tot.duplicates ?? 0, unlinked: tot.unlinked_authorities ?? 0 })}</div>
+        {(b.title_entries ?? 0) > 0 && (
+          <div style={muted}>{t({ id: 'review.report.titleEntries' }, { n: b.title_entries })}</div>
+        )}
         {report.generated_at && (
           <div style={{ ...muted, fontSize: '.76rem' }}>{t({ id: 'review.report.generatedAt' }, { date: formatDate(report.generated_at, { dateStyle: 'medium', timeStyle: 'short' }) })}</div>
         )}

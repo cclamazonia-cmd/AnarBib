@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "Nacharbeit will begründet sein: bitte eine Anmerkung.",
   "rede.reviews.queued": "In der Warteschlange, noch nicht angefragt",
   "rede.reviews.queuedHint": "Offene importierte Lose, deren Koordination noch keine Prüfung angefragt hat. Der Bericht ist schon lesbar; die Entscheidung wartet auf die Anfrage.",
-  "rede.reviews.showReport": "Bericht anzeigen"
+  "rede.reviews.showReport": "Bericht anzeigen",
+  "review.report.titleEntries": "{n} Titeleinträge (verschiedene Verfasser, anonym …): keine Abweichung, die Vorlageform bleibt.",
+  "review.report.rule.contrib_non_agent": "Beitragender, der kein Agent ist (verschiedene Verfasser, anonym …): entfernen, Eintrag unter dem Titel"
 }

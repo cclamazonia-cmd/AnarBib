@@ -6396,5 +6396,7 @@
   "error.review.notes_required": "Els retocs es motiven: afegiu una nota.",
   "rede.reviews.queued": "En cua, sense sol·licitud",
   "rede.reviews.queuedHint": "Lots importats oberts dels quals la coordinació encara no ha sol·licitat la revisió. L’informe ja es pot llegir; el veredicte esperarà la sol·licitud.",
-  "rede.reviews.showReport": "Veure l’informe"
+  "rede.reviews.showReport": "Veure l’informe",
+  "review.report.titleEntries": "{n} entrades pel títol (autors diversos, anònim…): no és una desviació, la transcripció es conserva.",
+  "review.report.rule.contrib_non_agent": "Contribuïdor que no és un agent (autors diversos, anònim…): a retirar, l’entrada es fa pel títol"
 }
