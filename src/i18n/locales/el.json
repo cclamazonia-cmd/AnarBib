@@ -5321,6 +5321,8 @@
   "account.mylib.hours": "Ώρες / βάρδιες",
   "pageTitle.bibliotecas": "Βιβλιοθήκες",
   "pageTitle.bibliotecaPublica": "Βιβλιοθήκη",
+  "pageTitle.notFound": "Η σελίδα δεν βρέθηκε",
+  "pageTitle.ocrDev": "OCR (δοκιμή)",
   "bibliotecas.title": "Βιβλιοθήκες του δικτύου",
   "bibliotecas.subtitle": "Οι αναρχικές βιβλιοθήκες που απαρτίζουν το δίκτυο AnarBib.",
   "bibliotecas.empty": "Καμία δημόσια βιβλιοθήκη ακόμη.",

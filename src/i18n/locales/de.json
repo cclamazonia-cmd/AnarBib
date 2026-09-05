@@ -5321,6 +5321,8 @@
   "account.mylib.hours": "Zeiten / Dienste",
   "pageTitle.bibliotecas": "Bibliotheken",
   "pageTitle.bibliotecaPublica": "Bibliothek",
+  "pageTitle.notFound": "Seite nicht gefunden",
+  "pageTitle.ocrDev": "OCR (Test)",
   "bibliotecas.title": "Bibliotheken im Netzwerk",
   "bibliotecas.subtitle": "Die anarchistischen Bibliotheken des AnarBib-Netzwerks.",
   "bibliotecas.empty": "Noch keine öffentliche Bibliothek.",

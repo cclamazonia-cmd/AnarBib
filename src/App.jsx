@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { IntlProvider, useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LibraryProvider } from '@/contexts/LibraryContext';
 import { ToastProvider } from '@/contexts/ToastContext';
@@ -62,6 +63,7 @@ function LoadingFallback() {
 // consomme pas) : permet d'i18n le message d'erreur via useIntl.
 function NotFound() {
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.notFound' }));
   return (
     <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>
       <h1>404</h1>

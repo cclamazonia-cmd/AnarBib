@@ -5327,6 +5327,8 @@
   "account.mylib.hours": "Horaires / permanences",
   "pageTitle.bibliotecas": "Bibliothèques",
   "pageTitle.bibliotecaPublica": "Bibliothèque",
+  "pageTitle.notFound": "Page introuvable",
+  "pageTitle.ocrDev": "OCR (essai)",
   "bibliotecas.title": "Bibliothèques du réseau",
   "bibliotecas.subtitle": "Les bibliothèques anarchistes qui composent le réseau AnarBib.",
   "bibliotecas.empty": "Aucune bibliothèque publique pour le moment.",

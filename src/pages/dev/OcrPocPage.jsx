@@ -6,8 +6,12 @@
  * Cadrage : docs/journal/cadrages/CADRAGE_ocr_import_navigateur_2026-06-17.md
  */
 
+import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import OcrImportPanel from '@/components/ocr/OcrImportPanel';
 
 export default function OcrPocPage() {
+  const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.ocrDev' }));
   return <OcrImportPanel />;
 }

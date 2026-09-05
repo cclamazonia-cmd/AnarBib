@@ -5321,6 +5321,8 @@
   "account.mylib.hours": "Horaris / torns",
   "pageTitle.bibliotecas": "Biblioteques",
   "pageTitle.bibliotecaPublica": "Biblioteca",
+  "pageTitle.notFound": "Pàgina no trobada",
+  "pageTitle.ocrDev": "OCR (prova)",
   "bibliotecas.title": "Biblioteques de la xarxa",
   "bibliotecas.subtitle": "Les biblioteques anarquistes que formen la xarxa AnarBib.",
   "bibliotecas.empty": "Cap biblioteca pública de moment.",

@@ -432,3 +432,5 @@ tests/sql/tomes_dans_l_oeuvre_tests.sql
 # rien) ; T4 tient l'autre bord (un lot a la main n'est pas concerne) ; T5/T8 verifient que
 # la cloche sonne chez la bonne personne ; T9 ferme le circuit. Ref. 20260905093000.
 tests/sql/revision_lots_importes_tests.sql
+# B7 (05/09/2026) — les trois homonymes de public ont disparu ; les versions ingest restent, DEFINER, fermees a authenticated. Ref. 20260905132602.
+tests/sql/homonymes_ingest_public_tests.sql

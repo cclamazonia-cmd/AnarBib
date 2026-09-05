@@ -5321,6 +5321,8 @@
   "account.mylib.hours": "Horoj / deĵoroj",
   "pageTitle.bibliotecas": "Bibliotekoj",
   "pageTitle.bibliotecaPublica": "Biblioteko",
+  "pageTitle.notFound": "Paĝo ne trovita",
+  "pageTitle.ocrDev": "OCR (provo)",
   "bibliotecas.title": "Bibliotekoj de la reto",
   "bibliotecas.subtitle": "La anarkiismaj bibliotekoj kiuj formas la reton AnarBib.",
   "bibliotecas.empty": "Ankoraŭ neniu publika biblioteko.",

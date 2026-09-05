@@ -5321,6 +5321,8 @@
   "account.mylib.hours": "Uren / diensten",
   "pageTitle.bibliotecas": "Bibliotheken",
   "pageTitle.bibliotecaPublica": "Bibliotheek",
+  "pageTitle.notFound": "Pagina niet gevonden",
+  "pageTitle.ocrDev": "OCR (test)",
   "bibliotecas.title": "Bibliotheken in het netwerk",
   "bibliotecas.subtitle": "De anarchistische bibliotheken die het AnarBib-netwerk vormen.",
   "bibliotecas.empty": "Nog geen openbare bibliotheek.",
