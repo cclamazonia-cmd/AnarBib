@@ -35,6 +35,7 @@ cartography_entries
 cartography_submission_notification_outbox
 cartography_submissions
 catalog_audit_log
+catalog_batch_reviews
 catalog_batches
 catalog_duplicate_reports
 catalog_partner_capabilities

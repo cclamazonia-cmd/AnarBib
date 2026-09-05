@@ -22,6 +22,13 @@ function resolveRoute(n) {
       return '/biblioteca';
     case 'team_invitation_accept':
       return '/conta?tab=biblios';
+    // Revision des lots importes (05/09/2026) : l'admin qui doit TRANCHER va
+    // a l'onglet Revisions de la page Reseau ; la coordination qui recoit le
+    // verdict retourne a ses lots.
+    case 'batch_review_verdict':
+      return '/rede#tab=reviews';
+    case 'batch_review_result':
+      return '/catalogacao#tab=batchesPanel';
     default:
       return null;
   }

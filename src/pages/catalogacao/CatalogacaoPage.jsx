@@ -17,6 +17,7 @@ import CatalogPanel from './CatalogPanel';
 import SubjectGovernancePanel from './SubjectGovernancePanel';
 import SerialGovernancePanel from './SerialGovernancePanel';
 import DedupAssistantPanel from './DedupAssistantPanel';
+import BatchReviewReport from '@/components/catalog/BatchReviewReport';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -563,6 +564,78 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
   const [newNotes, setNewNotes] = useState('');
   const [msg, setMsg] = useState(null);
 
+  // ── Revision des lots importes (05/09/2026) ──────────────────────────
+  // Un lot ne d'un import ne se publie qu'apres une revision approuvee par
+  // l'administration du reseau (garde dans publish_book_draft, HINT
+  // error.publish.review_required). Le rapport est lisible ICI, avant la
+  // demande : la coordination corrige d'abord ce qu'elle peut. Le grisage du
+  // bouton Publier est une politesse ; la RPC reste l'autorite.
+  const [reviews, setReviews] = useState({});           // batch_id -> dernier tour
+  const [reportModal, setReportModal] = useState(null); // { batch, report, loading }
+  const loadReviews = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_reviews_list');
+      if (error) throw error;
+      const map = {};
+      (data || []).forEach(r => { map[r.batch_id] = r; });
+      setReviews(map);
+    } catch { /* la colonne reste muette, la garde en base tient */ }
+  }, []);
+  useEffect(() => { loadReviews(); }, [loadReviews, batches]);
+
+  function reviewLocked(b) {
+    const r = reviews[b.id];
+    return !!r && r.imported && r.status !== 'approved';
+  }
+
+  async function openReport(b) {
+    setReportModal({ batch: b, report: null, loading: true });
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_review_report', { p_batch_id: Number(b.id) });
+      if (error) throw error;
+      setReportModal({ batch: b, report: data, loading: false });
+    } catch (err) {
+      setReportModal(null);
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
+  async function requestReview(b) {
+    const message = window.prompt(t({ id: 'catalogacao.batch.review.requestPrompt' }), '');
+    if (message === null) return;
+    try {
+      const { error } = await supabase.rpc('fn_batch_review_request', {
+        p_batch_id: Number(b.id), p_message: message.trim() || null,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.batch.review.requested.ok' }, { name: b.name }), kind: 'ok' });
+      await loadReviews();
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
+  function renderReview(b) {
+    const r = reviews[b.id];
+    if (!r || !r.imported) return <span style={{ color: 'var(--brand-muted, #666)' }}>{t({ id: 'catalogacao.batch.review.notImported' })}</span>;
+    const color = r.status === 'approved' ? '#4ade80'
+      : r.status === 'changes_requested' ? '#fbbf24'
+        : r.status === 'requested' ? '#60a5fa' : 'var(--brand-muted, #aaa)';
+    const label = !r.status ? t({ id: 'catalogacao.batch.review.none' })
+      : r.status === 'requested' ? t({ id: 'catalogacao.batch.review.requested' }, { date: formatDate(r.requested_at) })
+        : t({ id: `catalogacao.batch.review.${r.status}` });
+    return (
+      <span style={{ display: 'inline-flex', flexDirection: 'column', gap: 2 }}>
+        <span style={{ color }}>{label}</span>
+        {r.status === 'changes_requested' && r.admin_notes && (
+          <span style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }} title={r.admin_notes}>
+            {t({ id: 'catalogacao.batch.review.adminNotes' })} : {r.admin_notes}
+          </span>
+        )}
+      </span>
+    );
+  }
+
   async function createBatch() {
     if (!newName.trim()) { setMsg({text: t({id:'catalogacao.batchNameRequired'}), kind:'error'}); return; }
     setCreating(true);
@@ -757,6 +830,21 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
         {msg && <div style={{ marginTop: 8, fontSize: '.82rem', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>{msg.text}</div>}
       </div>
 
+      {/* Rapport de revision d'un lot (lisible avant la demande) */}
+      {reportModal && (
+        <div role="dialog" aria-modal="true" onClick={() => setReportModal(null)}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div onClick={e => e.stopPropagation()}
+            style={{ maxWidth: 760, width: '100%', maxHeight: '85vh', overflow: 'auto', padding: 18, borderRadius: 12, background: 'var(--brand-panel-bg, #161616)', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.12))' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 10, marginBottom: 10 }}>
+              <h4 style={{ margin: 0, fontSize: '.95rem' }}>{t({ id: 'review.report.title' })} — {reportModal.batch.name}</h4>
+              <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }} onClick={() => setReportModal(null)}>{t({ id: 'common.close' })}</button>
+            </div>
+            {reportModal.loading ? <p style={{ color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'common.loading' })}</p> : <BatchReviewReport report={reportModal.report} />}
+          </div>
+        </div>
+      )}
+
       {/* Lotes ouverts */}
       {openBatches.length > 0 && (
         <div style={{ marginBottom: 16 }}>
@@ -768,6 +856,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thNotes'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thDrafts'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.review.th'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
@@ -778,8 +867,21 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                   <td style={{ padding: '8px', color: 'var(--brand-muted, #aaa)' }}>{b.notes || '—'}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
+                  <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderReview(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
+                    {reviews[b.id]?.imported && (
+                      <>
+                        <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                          onClick={() => openReport(b)}>{t({id:'catalogacao.batch.review.report'})}</button>
+                        {isCoord && (!reviews[b.id].status || reviews[b.id].status === 'changes_requested') && (
+                          <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                            onClick={() => requestReview(b)}>{t({id:'catalogacao.batch.review.request'})}</button>
+                        )}
+                      </>
+                    )}
                     <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                      disabled={reviewLocked(b)}
+                      title={reviewLocked(b) ? t({id:'catalogacao.batch.review.publishLocked'}) : undefined}
                       onClick={() => publishBatch(b.id)}>{t({id:'catalogacao.publishBatch'})}</button>
                     <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
                       onClick={() => closeBatch(b.id)}>{t({id:'catalogacao.closeBatch'})}</button>

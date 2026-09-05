@@ -426,3 +426,9 @@ tests/sql/import_moisson_oai_admin_tests.sql
 
 # Lot 4 (04/09/2026, decision 6) : les tomes vivent dans l'oeuvre. Ref. 20260904170000.
 tests/sql/tomes_dans_l_oeuvre_tests.sql
+
+# Un lot ne d'un import ne se publie qu'apres une revision approuvee par l'administration,
+# sur rapport (decision du 05/09/2026). T3 est un test de NON-ACTION (le refus ne publie
+# rien) ; T4 tient l'autre bord (un lot a la main n'est pas concerne) ; T5/T8 verifient que
+# la cloche sonne chez la bonne personne ; T9 ferme le circuit. Ref. 20260905093000.
+tests/sql/revision_lots_importes_tests.sql

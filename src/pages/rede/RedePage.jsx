@@ -15,6 +15,7 @@ import OaiSourcePanel from '@/components/rede/OaiSourcePanel'; /* OAI-O3 */
 import GazetteStaffPanel from '@/components/rede/GazetteStaffPanel';
 import LettreStaffPanel from '@/components/rede/LettreStaffPanel';
 import InvitationsPanel from '@/components/rede/InvitationsPanel';
+import BatchReviewsPanel from '@/components/rede/BatchReviewsPanel'; /* revision des lots importes (05/09/2026) */
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { normalizePublicId } from '@/lib/publicId';
@@ -57,6 +58,7 @@ export default function RedePage() {
     { id: 'overview', icon: '🌐', label: t({ id: 'rede.tab.overview' }) },
     { id: 'requests', icon: '📥', label: t({ id: 'rede.requests.label' }) },
     { id: 'invitations', icon: '💌', label: t({ id: 'rede.tab.invitations' }) },
+    { id: 'reviews', icon: '🔎', label: t({ id: 'rede.tab.reviews' }) },
     { id: 'libraries', icon: '🏛️', label: t({ id: 'rede.tab.libraries' }) },
     { id: 'members', icon: '👥', label: t({ id: 'rede.tab.members' }) },
     { id: 'admins', icon: '🔑', label: t({ id: 'rede.tab.admins' }) },
@@ -78,6 +80,14 @@ export default function RedePage() {
   const [tab, setTab] = useState('overview');
   // OAI-O3 : un coordenador non-admin n'a que l'onglet OAI -> l'ouvrir d'emblée.
   useEffect(() => { if (roleLoaded && !isAdmin && isCoord) setTab('oaisource'); }, [roleLoaded, isAdmin, isCoord]);
+  // La cloche envoie l'admin sur un onglet precis (/rede#tab=reviews) : on lit
+  // le hash une fois le role connu, et seulement pour un admin — un onglet que
+  // la barre ne montre pas ne s'ouvre pas.
+  useEffect(() => {
+    if (!roleLoaded || !isAdmin) return;
+    const hash = window.location.hash.replace('#tab=', '');
+    if (hash && TABS.some(x => x.id === hash)) setTab(hash);
+  }, [roleLoaded, isAdmin, TABS]);
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [loading, setLoading] = useState(false);
 
@@ -752,6 +762,11 @@ export default function RedePage() {
             doit jamais vivre dans le navigateur. */}
         {tab === 'invitations' && (
           <InvitationsPanel />
+        )}
+
+        {/* ═══ REVISION DES LOTS IMPORTES (05/09/2026) ═══ */}
+        {tab === 'reviews' && (
+          <BatchReviewsPanel />
         )}
 
         {tab === 'oaisource' && (
