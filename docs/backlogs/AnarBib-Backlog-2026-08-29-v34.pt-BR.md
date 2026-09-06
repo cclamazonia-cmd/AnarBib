@@ -1710,11 +1710,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna, nenhuma competência técnica
 
-**Estado.** PR #2 em `AnarBib/pages`: guia passo a passo em 10 línguas geradas por script, link na navegação, README em 4 línguas. Documenta `./install.sh`, que não está em `main`. Quatro afirmações a corrigir: « cooperar com a rede » (só o catálogo, G12); « 2 GB bastam » e « Raspberry Pi » (não medido); credenciais padrão (G11); « modo simulação silencioso » recomendado (F7). Sem aviso « traduzido automaticamente, corrija-me ».
+**Estado.** PR #2 em `AnarBib/pages`: guia passo a passo em 10 línguas geradas por script, link na navegação, README em 4 línguas. Documenta `./install.sh`, que não está em `main`. Quatro afirmações a corrigir: « cooperar com a rede » (só o catálogo, G12); « 2 GB bastam » e « Raspberry Pi » (não medido); credenciais padrão (G11); « modo simulação silencioso » recomendado (F7). Sem aviso « traduzido automaticamente, corrija-me ». **Decidido em 06/09 às 21h (Xavier)**: o link « Auto-hospedagem » vai no **rodapé** e na página Contribuir, **não na barra de navegação principal**; Bastien o pôs nos dois em todas as subpáginas das dez línguas — retirar da navegação antes da fusão. As quatro frases e o aviso « corrija-me » estão resolvidos.
 
 *Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
-**O que é.** Resposta colocada em 06/09. Mesclar **depois** da PR « auto-hospedagem », com as quatro frases ajustadas e o aviso no gerador. O README multilíngue pode sair sozinho.
+**O que é.** Resposta colocada em 06/09; as quatro frases e o aviso estão resolvidos. Falta: retirar o link da barra de navegação (manter rodapé + Contribuir), depois mesclar **depois** da PR « auto-hospedagem ». O README multilíngue saiu sozinho na PR #3.
 
 **Por que importa.** A vitrine é a única coisa que lê quem ainda não conhece o projeto. Uma promessa falsa custa mais que um bug.
 
