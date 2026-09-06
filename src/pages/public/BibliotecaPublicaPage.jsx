@@ -14,7 +14,7 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
-import { apiQuery, SUPABASE_URL } from '@/lib/supabase';
+import { apiQuery } from '@/lib/supabase';
 import { resolveLibraryLogo } from '@/lib/theme';
 import { getCountryName } from '@/lib/countries';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -148,8 +148,8 @@ export default function BibliotecaPublicaPage() {
                 {/* E11 (03/09) : le flux des nouveautés — sans requête, sans compte, rien à pister.
                     La fonction ne rend que les bibliothèques publiques : ici on est sur la page
                     publique, donc le lien est toujours valide. */}
-                {SUPABASE_URL && (
-                  <a href={`${SUPABASE_URL}/functions/v1/rss-novidades/${lib.slug}`}
+                {import.meta.env.VITE_SUPABASE_URL && (
+                  <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-novidades/${lib.slug}`}
                      type="application/rss+xml" style={linkStyle}>
                     {t({ id: 'bibliotecas.rssFeed' })}
                   </a>

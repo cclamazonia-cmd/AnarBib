@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase, SUPABASE_URL } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useIntl } from 'react-intl';
@@ -682,7 +682,7 @@ export default function ImportacoesPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/export-catalog-lote`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-catalog-lote`,
         {
           method: 'POST',
           headers: {
@@ -752,7 +752,7 @@ export default function ImportacoesPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/export-fonds-bundle`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-fonds-bundle`,
         {
           method: 'POST',
           headers: {
@@ -823,7 +823,7 @@ export default function ImportacoesPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/deposit-fonds-direct`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/deposit-fonds-direct`,
         {
           method: 'POST',
           headers: {
@@ -955,7 +955,7 @@ export default function ImportacoesPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/attach-received-asset`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/attach-received-asset`,
         {
           method: 'POST',
           headers: {
@@ -1003,7 +1003,7 @@ export default function ImportacoesPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/revoke-digital-asset`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/revoke-digital-asset`,
         {
           method: 'POST',
           headers: {

@@ -180,7 +180,6 @@ export default function CartographyMap({ viewName }) {
         const map = L.map(containerRef.current, { worldCopyJump: true }).setView([25, 5], 2);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; OpenStreetMap', maxZoom: 18,
-          referrerPolicy: 'strict-origin-when-cross-origin',
         }).addTo(map);
         const cluster = L.markerClusterGroup({ maxClusterRadius: 45, chunkedLoading: true });
         map.addLayer(cluster);

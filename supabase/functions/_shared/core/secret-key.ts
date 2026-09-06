@@ -23,7 +23,7 @@ export function secretKey(): string | undefined {
       // JSON illisible : mustSecretKey() levera, bruyamment.
     }
   }
-  return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  return undefined;
 }
 
 // Pendant « levant » de secretKey(), au contrat identique au mustEnv() que

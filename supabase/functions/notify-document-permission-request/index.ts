@@ -293,10 +293,10 @@ function formatMailAddress(email, name) {
   const n = String(name || "").trim();
   return n ? `${n} <${email}>` : email;
 }
-
-import { sendViaSmtp } from "../_shared/mail/smtp.ts";
-
 // --- Implementation Resend (cf. spec §4.4) ---------------------------------
+// Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
+// reply_to "Nom <email>", corps html/text. Contrat identique a sendViaBrevo :
+// renvoie la string brute, throw sur erreur HTTP.
 async function sendViaResend(opts) {
   const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
   if (!resendKey) {
@@ -324,47 +324,10 @@ async function sendViaResend(opts) {
   if (!res.ok) throw new Error(`Resend error HTTP ${res.status}: ${body}`);
   return body;
 }
-
-async function sendViaConfiguredSmtp(opts) {
-  const host = (Deno.env.get("SMTP_HOST") || "").trim();
-  const port = parseInt(Deno.env.get("SMTP_PORT") || "587", 10);
-  const user = (Deno.env.get("SMTP_USER") || "").trim();
-  const pass = (Deno.env.get("SMTP_PASS") || "").trim();
-  const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
-
-  return await sendViaSmtp({
-    host,
-    port,
-    user,
-    pass,
-    secure,
-    from: formatMailAddress(SENDER_EMAIL, SENDER_NAME),
-    to: [opts.toEmail],
-    replyTo: isValidEmail(REPLY_TO_EMAIL) ? formatMailAddress(REPLY_TO_EMAIL, REPLY_TO_NAME) : undefined,
-    subject: opts.subject,
-    html: opts.html,
-    text: opts.text
-  });
-}
-
 // --- Wrapper neutre --------------------------------------------------------
 async function sendEmail(opts) {
-  const smtpHost = (Deno.env.get("SMTP_HOST") || "").trim();
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  const mailTransport = (Deno.env.get("MAIL_TRANSPORT") || "").trim().toLowerCase();
-
-  if (mailTransport === "smtp" || (smtpHost && mailTransport !== "resend")) {
-    console.log(`[document-permission-request] envoi via SMTP (${smtpHost})`);
-    return await sendViaConfiguredSmtp(opts);
-  }
-
-  if (resendKey) {
-    console.log(`[document-permission-request] envoi via resend`);
-    return await sendViaResend(opts);
-  }
-
-  console.log(`[document-permission-request] pas de serveur mail configuré (mock local) : mail non envoyé à ${opts.toEmail} (« ${opts.subject} »)`);
-  return JSON.stringify({ ok: true, mocked: true, to: opts.toEmail, subject: opts.subject });
+  console.log(`[document-permission-request] envoi via resend`);
+  return await sendViaResend(opts);
 }
 async function safeSendEmail(target, subject, html, text, label) {
   const email = String(target?.email || "").trim().toLowerCase();
