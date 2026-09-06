@@ -22,6 +22,7 @@ const ENV_FILE = path.join(DEPLOY_DIR, '.env');
 const mode = process.argv[2] || 'local';
 const rawDomain = process.argv[3] || '';
 const rawLibName = (process.argv[4] || '').trim();
+const rawAdminEmail = (process.argv[5] || '').trim();
 
 const libName = rawLibName || (mode === 'prod' ? 'Bibliothèque Principale' : 'Bibliothèque Autonome');
 const libSlug = libName
@@ -64,14 +65,14 @@ async function main() {
 
   // Règle GOUV-19 : mot de passe fort aléatoire dans TOUS les modes (local comme prod)
   const adminPassword = crypto.randomBytes(12).toString('base64url');
-  let adminEmail = 'admin@anarbib.local';
+  let adminEmail = rawAdminEmail || 'admin@anarbib.local';
 
-  if (mode === 'prod') {
+  if (mode === 'prod' && !rawAdminEmail) {
     const cleanDomain = rawDomain
       .replace(/^https?:\/\//, '')
       .replace(/\/.*$/, '')
       .trim();
-    adminEmail = cleanDomain ? `admin@${cleanDomain}` : 'admin@anarbib.org';
+    adminEmail = cleanDomain ? `admin@${cleanDomain}` : 'admin@anarbib.local';
   }
 
   let userId = null;

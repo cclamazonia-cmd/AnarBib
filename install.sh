@@ -235,6 +235,28 @@ t() {
     en:admin_lib)      echo "  • Library      : $2" ;;
     pt:admin_lib)      echo "  • Biblioteca   : $2" ;;
 
+    # ── admin email (GOUV-19) ────────────────────────────────────────────────
+    fr:admin_email_title)  echo "👤 Compte d'administration initial :" ;;
+    en:admin_email_title)  echo "👤 Initial administration account:" ;;
+    pt:admin_email_title)  echo "👤 Conta de administração inicial:" ;;
+
+    fr:admin_email_prompt) printf "  Courriel de l'administrateur [défaut: %s] : " "$2" ;;
+    en:admin_email_prompt) printf "  Administrator email [default: %s]: " "$2" ;;
+    pt:admin_email_prompt) printf "  E-mail do administrador [padrão: %s]: " "$2" ;;
+
+    # ── rebuild confirmation ─────────────────────────────────────────────────
+    fr:rebuild_warn)       echo "⚠️  Attention : cette opération va supprimer définitivement la base locale et ses données." ;;
+    en:rebuild_warn)       echo "⚠️  Warning: this operation will permanently delete the local database and its data." ;;
+    pt:rebuild_warn)       echo "⚠️  Atenção: esta operação apagará definitivamente o banco de dados local e seus dados." ;;
+
+    fr:confirm_prompt)     printf "  Continuer ? [o/N] : " ;;
+    en:confirm_prompt)     printf "  Continue? [y/N]: " ;;
+    pt:confirm_prompt)     printf "  Continuar? [s/N]: " ;;
+
+    fr:abort)              echo "Opération annulée." ;;
+    en:abort)              echo "Operation aborted." ;;
+    pt:abort)              echo "Operação cancelada." ;;
+
     # ── step 3 ───────────────────────────────────────────────────────────────
     fr:step3)          echo "3/4 · Configuration et compilation du frontend" ;;
     en:step3)          echo "3/4 · Frontend configuration and build" ;;
@@ -385,12 +407,16 @@ cd "$RACINE"
 MODE="local"
 DOMAINE_PROD=""
 REBUILD=0
+ASSUME_YES=0
 START=1
 START_FRONT=1
 ACTION="install"
 
 while [ $# -gt 0 ]; do
   case "$1" in
+    -y|--yes)
+      ASSUME_YES=1
+      ;;
     --lang)
       shift
       case "${1:-}" in
@@ -579,12 +605,13 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
   esac
 fi
 
-# Initialisation de la première bibliothèque (GOUV-19)
+# Initialisation de la première bibliothèque et du compte administrateur (GOUV-19)
 DEFAULT_LIB="Bibliothèque Autonome"
 [ "$LANG_CODE" = "en" ] && DEFAULT_LIB="Autonomous Library"
 [ "$LANG_CODE" = "pt" ] && DEFAULT_LIB="Biblioteca Autônoma"
 
 LIB_NAME="$DEFAULT_LIB"
+ADMIN_EMAIL=""
 if [ -t 0 ]; then
   echo ""
   t lib_title
@@ -592,6 +619,19 @@ if [ -t 0 ]; then
   read -r USER_LIB_NAME
   [ -n "$USER_LIB_NAME" ] && LIB_NAME="$USER_LIB_NAME"
   succes "$(t ok_lib "$LIB_NAME")"
+
+  echo ""
+  t admin_email_title
+  DEFAULT_ADMIN_EMAIL="admin@anarbib.local"
+  if [ "$MODE" = "prod" ] && [ -n "$DOMAINE_PROD" ]; then
+    CLEAN_DOM="${DOMAINE_PROD#https://}"
+    CLEAN_DOM="${CLEAN_DOM#http://}"
+    CLEAN_DOM="${CLEAN_DOM%%/*}"
+    DEFAULT_ADMIN_EMAIL="admin@${CLEAN_DOM}"
+  fi
+  t admin_email_prompt "$DEFAULT_ADMIN_EMAIL"
+  read -r USER_ADMIN_EMAIL
+  [ -n "$USER_ADMIN_EMAIL" ] && ADMIN_EMAIL="$USER_ADMIN_EMAIL"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -600,14 +640,27 @@ fi
 dire "$(t step3)"
 
 ANON_KEY="$(grep '^ANON_KEY=' deploy/.env | cut -d= -f2-)"
-API_URL="$(grep '^API_EXTERNAL_URL=' deploy/.env | cut -d= -f2-)"
 
-cat > .env.local <<EOF
+# Configuration de .env.local (sans écraser les clés personnalisées existantes)
+if [ ! -f .env.local ]; then
+  cat > .env.local <<EOF
 # $(t gen_keys)
-VITE_SUPABASE_URL=${API_URL}
+VITE_SUPABASE_URL=auto
 VITE_SUPABASE_PUBLISHABLE_KEY=${ANON_KEY}
 EOF
-succes "$(t ok_envlocal "$API_URL")"
+else
+  if grep -q '^VITE_SUPABASE_URL=' .env.local; then
+    sed -i 's|^VITE_SUPABASE_URL=.*|VITE_SUPABASE_URL=auto|' .env.local
+  else
+    echo "VITE_SUPABASE_URL=auto" >> .env.local
+  fi
+  if grep -q '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env.local; then
+    sed -i "s|^VITE_SUPABASE_PUBLISHABLE_KEY=.*|VITE_SUPABASE_PUBLISHABLE_KEY=${ANON_KEY}|" .env.local
+  else
+    echo "VITE_SUPABASE_PUBLISHABLE_KEY=${ANON_KEY}" >> .env.local
+  fi
+fi
+succes "$(t ok_envlocal "auto")"
 
 if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
   echo "$(t npm_install)"
@@ -633,13 +686,33 @@ if [ "$START" = "1" ]; then
   cd deploy
 
   if [ "$REBUILD" = "1" ]; then
+    if [ "$ASSUME_YES" = "0" ] && [ -t 0 ]; then
+      echo ""
+      t rebuild_warn
+      t confirm_prompt
+      read -r REPONSE_REBUILD
+      case "$REPONSE_REBUILD" in
+        [yYoOsS]*) ;;
+        *) echo "$(t abort)"; exit 0 ;;
+      esac
+    fi
     echo "$(t rebuild_clean)"
     docker compose down -v
     ./bootstrap.sh --depuis-le-depot --sel-jetable
   else
     mkdir -p ../dist
     docker compose up -d db >/dev/null 2>&1
-    sleep 2
+
+    # Attente active de pg_isready (évite qu'une base lente soit prise pour vide)
+    attente_db=0
+    while [ "$attente_db" -lt 30 ]; do
+      if docker compose exec -T db pg_isready -h localhost -U supabase_admin -d postgres >/dev/null 2>&1; then
+        break
+      fi
+      sleep 1
+      attente_db=$((attente_db + 1))
+    done
+
     NB_TABLES="$(docker compose exec -T db psql -U supabase_admin -d postgres -tAc \
       "SELECT count(*) FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';" \
       2>/dev/null || echo "0")"
@@ -658,7 +731,7 @@ if [ "$START" = "1" ]; then
   dire "$(t health_title)"
   ./deploy/deploy.sh --controle
 
-  node deploy/scripts/seed-admin.mjs "$MODE" "$DOMAINE_PROD" "$LIB_NAME"
+  node deploy/scripts/seed-admin.mjs "$MODE" "$DOMAINE_PROD" "$LIB_NAME" "$ADMIN_EMAIL"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
