@@ -581,8 +581,8 @@ fi
 
 # Initialisation de la première bibliothèque (GOUV-19)
 DEFAULT_LIB="Bibliothèque Autonome"
-[ "$LANGUE" = "en" ] && DEFAULT_LIB="Autonomous Library"
-[ "$LANGUE" = "pt" ] && DEFAULT_LIB="Biblioteca Autônoma"
+[ "$LANG_CODE" = "en" ] && DEFAULT_LIB="Autonomous Library"
+[ "$LANG_CODE" = "pt" ] && DEFAULT_LIB="Biblioteca Autônoma"
 
 LIB_NAME="$DEFAULT_LIB"
 if [ -t 0 ]; then
