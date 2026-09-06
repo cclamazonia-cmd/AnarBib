@@ -71,11 +71,11 @@ Registo de **6 de setembro de 2026** de manhã — produção consultada em leit
 | Tabelas `public` | **191** | todas com RLS ativado, **332 policies** — +4 tabelas desde 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), todas classificadas no filete BG2. |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **906** | `public` 676 · `api` 188 · `ingest` 34 · `private` 8. **694 SECURITY DEFINER**. Uma função sem `search_path` fixo : `private.conv_motifs_collectivite` (INVOKER, só `postgres`). |
+| Funções aplicativas | **906** | `public` 676 · `api` 188 · `ingest` 34 · `private` 8. **694 SECURITY DEFINER**. Nenhuma função sem `search_path` fixo desde 06/09 (`20260906111308`), guardado por suite. |
 | Migrações aplicadas | **307** | 307 numeradas = **307 aplicadas, alinhamento exato** (315 ficheiros). **+34 desde 03/09**. |
 | Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
-| Avisos de segurança | **464** | 0 ERROR · **411** + **28** WARN · 1 WARN `search_path` · 24 INFO. 28 = valor esperado ; 411 = 399 − 3 (B7) + 15 (RPC de 05/09, ainda não levadas à auditoria 0029). |
-| Avisos de desempenho | **442** | **369 índices não usados** (contadores desde 02/09). 38 FK sem índice, assumidas. 25 tabelas com policies múltiplas. **8 sem PK** (eram 14). **1 `auth_rls_initplan`** em `catalog_batch_reviews_read_staff` (tabela de 05/09) — o motivo que B5 tinha resolvido. |
+| Avisos de segurança | **463** | 0 ERROR · **411** + **28** WARN · 24 INFO. O WARN `search_path` desapareceu. **411 inteiramente justificado desde 06/09** : 395 herdados + 16 RPC de 04–05/09 lidas uma a uma (complemento da auditoria) ; duas limitações funcionais, nenhuma falha. |
+| Avisos de desempenho | **440** | **368 índices não usados**. 38 FK assumidas. 25 tabelas com policies múltiplas. **8 sem PK**. O `auth_rls_initplan` da manhã foi resolvido (`20260906111308`) e a suite de higiene guarda agora o motivo de B5. |
 | Esquemas de refugo | **1** | só `conv_backup` — não se purga. `backup_2026_05_07` saiu em 04/09 (B9). |
 
 ### Funções Edge

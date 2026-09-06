@@ -410,8 +410,8 @@
             },
             "906",
             {
-              "fr": "`public` 676 · `api` 188 · `ingest` 34 · `private` 8. Dont **694 SECURITY DEFINER** (526 / 144 / 17 / 7) : +48 fonctions et +25 DEFINER depuis le 03/09 (OPAC par œuvre, atelier des œuvres, révision des lots), −3 (les homonymes de `public`, B7). **Une fonction sans `search_path` figé** : `private.conv_motifs_collectivite` (INVOKER, réservée à `postgres`, née le 05/09 — le hook ne garde que les DEFINER ; une ligne `ALTER FUNCTION … SET search_path` la règle).",
-              "pt": "`public` 676 · `api` 188 · `ingest` 34 · `private` 8. **694 SECURITY DEFINER**. Uma função sem `search_path` fixo : `private.conv_motifs_collectivite` (INVOKER, só `postgres`)."
+              "fr": "`public` 676 · `api` 188 · `ingest` 34 · `private` 8. Dont **694 SECURITY DEFINER** (526 / 144 / 17 / 7) : +48 fonctions et +25 DEFINER depuis le 03/09 (OPAC par œuvre, atelier des œuvres, révision des lots), −3 (les homonymes de `public`, B7). **Aucune fonction sans `search_path` figé** — `private.conv_motifs_collectivite` (INVOKER, née le 05/09 hors du garde du hook) l'a reçu le 06/09 (`560b94e4`, `20260906111308`) ; la suite `hygiene_search_path_et_initplan` le garde désormais sur toute la base.",
+              "pt": "`public` 676 · `api` 188 · `ingest` 34 · `private` 8. **694 SECURITY DEFINER**. Nenhuma função sem `search_path` fixo desde 06/09 (`20260906111308`), guardado por suite."
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "464",
+            "463",
             {
-              "fr": "0 ERROR · **411** + **28** WARN sur les fonctions DEFINER exposées · **1 WARN `function_search_path_mutable`** (`private.conv_motifs_collectivite`, voir la ligne des fonctions) · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`, verdicts B4 posés). Le 28 (`anon`) est la **valeur attendue** (T10, `DOC-GRANT-1`). Le 411 (`authenticated`) : 399 le 03/09, −3 le 05/09 (B7), **+15 le 05/09 soir** — les RPC de l'OPAC par œuvre, de l'atelier des œuvres et de la révision des lots, DEFINER par nécessité et gardées, mais **pas encore portées à l'audit 0029** (`AUDIT_execute_authenticated_2026-09-01`) : quinze lignes de verdict à écrire, doctrine `DOC-GRANT-1`.",
-              "pt": "0 ERROR · **411** + **28** WARN · 1 WARN `search_path` · 24 INFO. 28 = valor esperado ; 411 = 399 − 3 (B7) + 15 (RPC de 05/09, ainda não levadas à auditoria 0029)."
+              "fr": "0 ERROR · **411** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`, verdicts B4 posés). Le WARN `function_search_path_mutable` du matin est **parti** (`20260906111308`). Le 28 (`anon`) est la **valeur attendue** (T10, `DOC-GRANT-1`). **Le 411 (`authenticated`) est entièrement justifié depuis le 06/09** : 395 hérités des paquets du 01/09 et **16 RPC nées les 04–05/09, lues corps par corps** — « Complément du 06/09 » de `AUDIT_execute_authenticated_2026-09-01` : aucune faille, deux limites fonctionnelles (liste et rapport des lots transversaux au réseau ; `fn_batch_review_request` ne rapproche pas le lot de la bibliothèque de l'appelant·e).",
+              "pt": "0 ERROR · **411** + **28** WARN · 24 INFO. O WARN `search_path` desapareceu. **411 inteiramente justificado desde 06/09** : 395 herdados + 16 RPC de 04–05/09 lidas uma a uma (complemento da auditoria) ; duas limitações funcionais, nenhuma falha."
             }
           ],
           [
@@ -452,10 +452,10 @@
               "fr": "Avis de performance",
               "pt": "Avisos de desempenho"
             },
-            "442",
+            "440",
             {
-              "fr": "**369 « index inutilisés »** (403 le 03/09 — les compteurs repartent du redémarrage du 02/09, le nombre baisse à mesure que les index servent ; à relire dans un mois). **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`). 25 tables à policies permissives multiples. **8 tables sans clé primaire** (14 le 03/09 : les six du schéma de mai sont parties avec lui). **1 `auth_rls_initplan`** sur `catalog_batch_reviews_read_staff` — table née le 05/09 : `auth.uid()` réévalué par ligne, le motif que **B5** avait résorbé partout ; une ligne `(select auth.uid())` le règle.",
-              "pt": "**369 índices não usados** (contadores desde 02/09). 38 FK sem índice, assumidas. 25 tabelas com policies múltiplas. **8 sem PK** (eram 14). **1 `auth_rls_initplan`** em `catalog_batch_reviews_read_staff` (tabela de 05/09) — o motivo que B5 tinha resolvido."
+              "fr": "**368 « index inutilisés »** (403 le 03/09 — les compteurs repartent du redémarrage du 02/09 ; à relire dans un mois). **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`). 25 tables à policies permissives multiples. **8 tables sans clé primaire** (14 le 03/09 : les six du schéma de mai sont parties avec lui). L'`auth_rls_initplan` du matin sur `catalog_batch_reviews_read_staff` est **résorbé** (`(select auth.uid())`, `20260906111308`) et la suite d'hygiène refuse désormais toute policy qui réévaluerait `auth.uid()` par ligne — le motif de **B5** est gardé, plus seulement corrigé.",
+              "pt": "**368 índices não usados**. 38 FK assumidas. 25 tabelas com policies múltiplas. **8 sem PK**. O `auth_rls_initplan` da manhã foi resolvido (`20260906111308`) e a suite de higiene guarda agora o motivo de B5."
             }
           ],
           [
