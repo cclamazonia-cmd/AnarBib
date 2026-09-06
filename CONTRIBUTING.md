@@ -56,23 +56,15 @@ Sous **Linux**, ou sous **WSL2** si vous êtes sur Windows.
 ```bash
 git clone https://codeberg.org/anarbib/anarbib.git
 cd anarbib
-
-# Lancer la pile complète (Backend + Frontend) en une seule commande :
-./install.sh
-
-# L'application est disponible sur http://localhost:5173
-# (Pour arrêter : ./install.sh --stop)
-
-# Tests et validation du code :
+npm ci          # et non « npm install » : le lock fait foi
+npm run dev     # front de développement
 npm test        # suite Vitest
 npm run lint
 ```
 
-`./install.sh` s'occupe de tout (secrets, conteneurs, migrations, compilation et service web via Caddy sur les ports 80 et 5173).
-Pour développer activement sur le frontend avec rechargement à chaud (HMR), vous pouvez exécuter `npm run dev`.
+`npm ci` et pas `npm install <paquet>@latest` : le `package-lock.json` fixe les versions, et les faire dériver silencieusement casse des choses ailleurs.
 
-Pour la gestion détaillée de la pile auto-hébergée (déploiement, mise à jour, tunnel), voir `deploy/README.md`. **Elle se rebâtit depuis le dépôt seul**, sans aucun secret venu d'ailleurs.
-
+Pour reconstruire la pile complète — Postgres, PostgREST, authentification, stockage, exécution des fonctions, proxy — voir `deploy/README.md`. **Elle se rebâtit depuis le dépôt seul**, sans aucun secret venu d'ailleurs.
 
 ---
 
@@ -82,6 +74,14 @@ Pour la gestion détaillée de la pile auto-hébergée (déploiement, mise à jo
 2. **Commits clairs**, préfixés `feat:` `fix:` `docs:` `chore:`, avec un trailer `Session: <nom>`.
 3. **Demande d'intégration vers `main`**, avec le périmètre décrit.
 4. Pour un chantier d'ampleur, **ouvrir un ticket avant de coder**. Deux personnes qui écrivent le même correctif, c'est une soirée perdue pour l'une des deux.
+
+**Ce qu'une demande d'intégration peut contenir** *(règle écrite le 06/09/2026, après la première contribution extérieure — REGISTRE `DOC-CONTRIB-1`)* :
+
+- **Une PR = un sujet.** Un installateur, un correctif de migration, une page du manuel : trois PR, pas une. Une PR qu'on ne peut pas relire d'un trait ne sera pas fusionnée d'un trait.
+- **Le code qui part en production va dans une PR à part.** Tout ce qui est sous `src/` ou `supabase/functions/` est déployé sur la production par l'intégration continue à la fusion. Il se relit comme du code de production, avec ses tests — séparément de l'outillage (`deploy/`, `scripts/`, docs).
+- **Pendant une relecture, on ajoute des commits, on ne réécrit pas l'historique.** Un `push --force` sur une branche en cours de lecture fait perdre au relecteur ce qu'il avait lu. Les corrections viennent en commits ajoutés ; on nettoie, si on y tient, une fois la PR approuvée.
+
+**Ce que le mainteneur promet en retour** : un premier retour sous une semaine, et le motif d'un refus toujours écrit. Une PR qui attend plus longtemps, c'est à lui qu'il faut le reprocher, pas à vous.
 
 **Livrables** : des correctifs complets, éprouvés sur un clone propre, ou des fichiers entiers. Jamais d'instructions « remplacez la ligne 42 par ceci ».
 
@@ -132,31 +132,19 @@ Then, depending on what you touch: the inclusive-language charter for i18n (`doc
 
 ## Getting started
 
-On **Linux**, or **WSL2** on Windows:
-```bash
-git clone https://codeberg.org/anarbib/anarbib.git
-cd anarbib
-
-# Start the full stack (Backend + Frontend) in a single command:
-./install.sh
-
-# The app is available at http://localhost:5173
-# (To stop: ./install.sh --stop)
-
-# Tests and code validation:
-npm test        # vitest suite
-npm run lint
-```
-
-`./install.sh` manages everything (secrets, containers, migrations, build and web serving via Caddy on ports 80 and 5173).
-For active frontend development with Hot Module Replacement (HMR), you can run `npm run dev`.
-
-To manage, update, or tunnel the full self-hosted stack, see `deploy/README.md` — it rebuilds from the repository alone, with no secret from anywhere else.
-
+On **Linux**, or **WSL2** on Windows: `git clone`, then `npm ci` (not `npm install`, the lockfile is authoritative), `npm run dev`, `npm test`, `npm run lint`. To rebuild the full stack, see `deploy/README.md` — it rebuilds from the repository alone, with no secret from anywhere else.
 
 ## Working rhythm
 
 Fork on Codeberg, one branch per work item, clear commits prefixed `feat:` `fix:` `docs:` `chore:` with a `Session: <name>` trailer, and a pull request to `main` describing the scope. For anything substantial, open an issue before coding.
+
+**What a pull request may contain** *(rule written on 2026-09-06, after the first outside contribution — REGISTRE `DOC-CONTRIB-1`)*:
+
+- **One PR, one subject.** An installer, a migration fix, a manual page: three PRs, not one. A PR that cannot be read in one sitting will not be merged in one sitting.
+- **Code that ships to production goes in its own PR.** Everything under `src/` or `supabase/functions/` is deployed to production by CI on merge. It is reviewed as production code, with its tests — separately from tooling (`deploy/`, `scripts/`, docs).
+- **While a PR is under review, add commits; do not rewrite history.** A `push --force` on a branch being read throws away what the reviewer had read. Fixes come as added commits; squash, if you care to, once the PR is approved.
+
+**What the maintainer promises in return**: a first reply within a week, and the reason for any refusal always in writing. A PR that waits longer than that is on him, not on you.
 
 Deliverables are complete patches tested on a clean clone, or whole files — never "replace line 42 with this". No migration reaches production without explicit validation.
 
