@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-05** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-06** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 3 de setembro de 2026](#o-estado-real-em-3-de-setembro-de-2026)
+- [O estado real em 6 de setembro de 2026](#o-estado-real-em-6-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -58,41 +58,41 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 3 de setembro de 2026
+## O estado real em 6 de setembro de 2026
 
-Registo de **3 de setembro de 2026**, ao fim do dia — produção consultada em leitura e repositório recontado, depois da manhã (E13, I4, I6, H1), da carta de Xavier (C5, C9, D2, E11, I16) executada até ao fim, do lote `autor_sans_autorite` decidido na mesma noite e do registo em v0.17. Todas as linhas foram remedidas: é um registo completo.
+Registo de **6 de setembro de 2026** de manhã — produção consultada em leitura e repositório recontado no commit `757e336d`, depois de três dias em que três sessões empurraram (OPAC por obra, revisão dos lotes importados, página «Quero…», oficina aberta às obras, purga do esquema de maio, homónimos de `public`). Todas as linhas remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-05.** **38 itens de 55** trazem uma verificação datada própria (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-06.** **38 itens de 55** trazem uma verificação datada própria (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
 | | | |
 |---|---:|---|
-| Tabelas `public` | **187** | todas com RLS ativado, 279 policies em **173** tabelas |
+| Tabelas `public` | **191** | todas com RLS ativado, **332 policies** — +4 tabelas desde 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), todas classificadas no filete BG2. |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **858** | `public` 632 · `api` 184 · `ingest` 34 · `private` 8. **669 SECURITY DEFINER** (+2 em 03/09, ambas guardadas staff). |
-| Migrações aplicadas | **273** | 273 numeradas = **273 aplicadas, alinhamento exato** (281 ficheiros com o modelo e sete rollbacks). Duas a mais em 03/09. |
-| Jobs `pg_cron` | **37** | **todos ativos** (+1 desde 01/09: o lembrete antes do vencimento dos convites de equipe, GOUV-17b); cobertos na CI por `crons_planifies_tests` |
-| Avisos de segurança | **451** | 0 ERROR · **399** + **28** WARN · 24 INFO. 28 = valor esperado ; 399 = 398 + 1 em 03/09 (semeadura do lote, guardada staff, justificada). |
-| Avisos de desempenho | **896** | **403 «índices não usados»** : artefacto do reinício de 02/09 (contadores a zero), não uma degradação. 38 FK sem índice, todas assumidas e guardadas. |
-| Esquemas de refugo | **2** | `backup_2026_05_07` e `conv_backup` — inalterados desde 29/08 |
+| Funções aplicativas | **906** | `public` 676 · `api` 188 · `ingest` 34 · `private` 8. **694 SECURITY DEFINER**. Uma função sem `search_path` fixo : `private.conv_motifs_collectivite` (INVOKER, só `postgres`). |
+| Migrações aplicadas | **307** | 307 numeradas = **307 aplicadas, alinhamento exato** (315 ficheiros). **+34 desde 03/09**. |
+| Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
+| Avisos de segurança | **464** | 0 ERROR · **411** + **28** WARN · 1 WARN `search_path` · 24 INFO. 28 = valor esperado ; 411 = 399 − 3 (B7) + 15 (RPC de 05/09, ainda não levadas à auditoria 0029). |
+| Avisos de desempenho | **442** | **369 índices não usados** (contadores desde 02/09). 38 FK sem índice, assumidas. 25 tabelas com policies múltiplas. **8 sem PK** (eram 14). **1 `auth_rls_initplan`** em `catalog_batch_reviews_read_staff` (tabela de 05/09) — o motivo que B5 tinha resolvido. |
+| Esquemas de refugo | **1** | só `conv_backup` — não se purga. `backup_2026_05_07` saiu em 04/09 (B9). |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **52** | + `_shared` ; **+1 em 03/09 : `rss-novidades`**. O roteador `main` nunca é implantado, de propósito. |
-| Declarações `verify_jwt` | **37** | **todas a `false`** ; +1 em 03/09 (`rss-novidades`). |
+| Pastas no repositório | **53** | + `_shared` ; **+1 desde 03/09 : `work-titles-autofill`**. O roteador `main` nunca é implantado, de propósito. |
+| Declarações `verify_jwt` | **38** | **todas a `false`** ; +1 desde 03/09. |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 659** | 2 758 exemplares, 2 495 obras, **1 532 autoridades** (+227 criadas em 03/09 pelo lote `autor_sans_autorite`, nunca relidas). |
-| Rascunhos de catalogação | **2 240** | três estados : `draft`, `published`, `cancelled`. |
-| Indexação de assunto | **1 122 / 2 659** | 42 % das fichas; 1 279 atribuições sobre 89 assuntos locais |
-| Tesauro FICEDL | **621** | termos — 462 em 02/09 : **+159 datas** em 03/09 (H1), separador «Datas» online. 98 alinhamentos intactos. |
+| Fichas | **2 656** | 2 758 exemplares, **2 449 obras** (35 vazias suprimidas + fusões), **1 505 autoridades** (17 fusões C5), **3 497 títulos de obra** (pré-traduzidos, 1 452 a rever — C11). 0 proposta sobre obra ainda (G1). |
+| Rascunhos de catalogação | **2 250** | dois estados : `draft` 1 820, `published` 430. Nenhuma revisão de lote ainda (`catalog_batch_reviews` vazia). |
+| Indexação de assunto | **1 184 / 2 656** | registos com pelo menos um assunto — **1 472 sem nenhum** (eram 1 537). Objeto de **C7**. |
+| Tesauro FICEDL | **621** | termos — 159 datas desde 03/09 (H1). 98 alinhamentos intactos. |
 | Periódicos | **4** | títulos, 7 fascículos vinculados. O **arbítrio de duplicatas** deles está aberto a qualquer `librarian` enquanto o dos livros é reservado à coordenação: desvio medido em 01/09, decidido, aguardando aviso prévio |
 
 ### Rede
@@ -100,19 +100,19 @@ Registo de **3 de setembro de 2026**, ao fim do dia — produção consultada em
 | | | |
 |---|---:|---|
 | Bibliotecas | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` foi retirada da rede** — remoção voluntária confirmada pela coordenação em 01/09, registrada em `NOTE_retrait_cira_marseille_2026-09-01`. Cascata limpa (0 acervo, 0 órfão); tema conservado no storage, fonte de importação encerrada |
-| Contas | **19** | **23** adesões ativas — +3 leitoras fictícias em `blmf-teste` para a formação. Nenhuma conta real. |
+| Contas | **19** | **23** adesões ativas — inalterado. **0 contribuidor de rede**. |
 | Administrador(a/e)s da rede | **1** | **é o item A1, e ele comanda todo o resto** |
-| Circulação viva | **6 / 19 / 22 / 0** | empréstimos / reservas / consultas / PEB — os dois PEB de teste saíram em 02/09. |
+| Circulação viva | **6 / 19 / 22 / 0** | empréstimos / reservas / consultas / PEB abertos — inalterado. Dois PEB de maio, devolvidos, ficam como histórico. |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **2 541** | em `main`, 03/09 à noite — **26 commits no dia**. |
-| Arquivos `src/` | **295** | 79 páginas, 90 componentes. |
-| Chaves i18n | **6 249** | por locale, **paridade estrita nas 10** ; **+15 desde 02/09**. |
-| Testes | **370 + 73** | 370 testes JS (+16) + **73 suites SQL** (+1 : lote C5, 8 testes). |
-| Marcadores de dívida | **17** | dos quais 4 em `src/`. Nenhum é uma tarefa aberta. |
+| Commits | **2 594** | em `main` — **53 commits desde 03/09**, de três sessões. |
+| Arquivos `src/` | **310** | 81 páginas, 93 componentes. |
+| Chaves i18n | **6 570** | por locale, **paridade estrita nas 10** ; **+321 desde 03/09**. |
+| Testes | **407 + 94** | 407 testes JS (+37) + **94 suites SQL** (+21). |
+| Marcadores de dívida | **21** | dos quais 4 em `src/` (eram 17 no total). Nenhum é uma tarefa aberta. |
 
 ---
 
@@ -363,7 +363,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 ### B — Banco de dados, segurança, RLS
 
-*187 tabelas, 666 funções SECURITY DEFINER, 279 policies. A maior superfície do projeto.*
+*191 tabelas, 694 funções SECURITY DEFINER, 332 policies (06/09). A maior superfície do projeto.*
 
 | | | | |
 |---|---|---|---|
@@ -758,7 +758,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 ### E — Front, OPAC, i18n, acessibilidade
 
-*10 locales em paridade estrita, 6 179 chaves cada, verificadas na integração contínua.*
+*10 locales em paridade estrita, 6 570 chaves cada (06/09), verificadas na integração contínua.*
 
 | | | | |
 |---|---|---|---|
@@ -778,7 +778,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Funcionalidades de acessibilidade estão implementadas: painel de ajustes em todas as páginas desde 26/08, `html lang` que segue a língua exibida (WCAG 3.1.1) com seu teste, campos de 16 px no mínimo, alvos táteis de 44 px, `viewport-fit=cover`. **Nenhuma auditoria de acessibilidade independente foi jamais conduzida.**
 
-*Verificado : **03/09** — a formação (noite 1 em 08/09/2026) tem uma **testemunha leve** (etapa 8: teclado só). Não é a auditoria pedida; E1 fica aberto, o discurso fica «implementado, não auditado». **03/09, fim do dia** — a testemunha leve cabe em qualquer noite da formação.*
+*Verificado : **03/09** — a formação (noite 1 em 08/09/2026) tem uma **testemunha leve** (etapa 8: teclado só). Não é a auditoria pedida; E1 fica aberto, o discurso fica «implementado, não auditado». **03/09, fim do dia** — a testemunha leve cabe em qualquer noite da formação. **06/09** — a navegação mudou em 05/09 : página «Quero…» (`/inicio`, 51 intenções) e ligações profundas para os PDF. A auditoria terá de percorrer esses caminhos.*
 
 **O que é.** Fazer percorrer os percursos principais — buscar, abrir um registro, reservar, cadastrar-se — por uma pessoa que use um leitor de tela ou navegação só por teclado, e escrever o que trava.
 
@@ -955,7 +955,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Terceiro constato, sobre a página entregue (Xavier, 02/09 à noite)**: uma coordenação não-admin não podia pedir a abertura pela interface — o circuito existe, mas o link «Rede» só aparece aos admins de rede. Tinha de digitar `/rede` à mão.
 
-*Verificado : 02/09 — constato de quem usa a ferramenta, verificado no código (valor bruto renderizado; nenhuma chave i18n).*
+*Verificado : 02/09 — constato de quem usa a ferramenta, verificado no código (valor bruto renderizado; nenhuma chave i18n). **06/09** — desde 05/09, um lote importado só se publica após revisão da administração, sobre relatório. Terceiro aspeto a acrescentar à página : a coordenação tem de perceber porque o seu lote espera.*
 
 **O que é.** Três lotes. **Lote A — antes da noite 1 da formação, em 08/09**: traduzir os status brutos nas dez locales e rotular os dois ícones — uma noite. **Lote B**: renomear para o gesto, sem tocar no pipeline. **Lote C**: tornar visível o comutador «Sentido» (dois separadores de verdade) e **ordenar a Exportação por natureza** — primeiro o gesto de bibliotecário (exportar o catálogo, único bloco visível por padrão), depois um painel «Mutualizar um acervo digital» reservado à coordenação e recolhido; retirar da tela o que está «em desenvolvimento»; banir *assets* e *bucket*; reunir ali «ser fonte» (OAI) e OPDS. Na importação, o percurso «tenho um arquivo» em duas telas. Provar cada lote com quem não escreveu o código.
 
@@ -1128,7 +1128,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: assembleias da rede (3), propostas e objeções de autoridade (3), referenciais `catalog_ref_*` (8), governança dos perfis (4, **e os dois crons continuam a rodar sobre elas a cada quinze minutos**), deliberação dos pedidos de adesão (5). Todos a zero inserções.
 
-*Verificado : 31/08 — remedido em produção: **62 tabelas de `public` em 189** a zero inserções. A conta é estável, a lista não. Empréstimo **#69** aberto na BLMF; o convite a escrever uma nota de leitura é esperado em **10/09**.*
+*Verificado : 31/08 — remedido em produção: **62 tabelas de `public` em 189** a zero inserções. A conta é estável, a lista não. Empréstimo **#69** aberto na BLMF; o convite a escrever uma nota de leitura é esperado em **10/09**. **06/09** — dois circuitos a mais construídos sem uso : a oficina aberta às obras (0 proposta) e a revisão dos lotes importados (0 revisão) ; `network_contributors` continua a 0.*
 
 **O que é.** Escolher um bloco e percorrê-lo de verdade, do primeiro ao último gesto: realizar uma assembleia da rede, depositar uma nota de leitura, propor uma autoridade e deixar alguém objetar, fazer deliberar um pedido de adesão. Registrar o que falta, o que surpreende, o que trava.
 
@@ -1864,4 +1864,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-09-03 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `aeb77002`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-06. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-09-06 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `757e336d`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

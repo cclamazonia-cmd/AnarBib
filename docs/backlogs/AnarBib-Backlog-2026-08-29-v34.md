@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-05** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-06** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 3 septembre 2026](#létat-réel-au-3-septembre-2026)
+- [L'état réel au 6 septembre 2026](#létat-réel-au-6-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -58,41 +58,41 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 3 septembre 2026
+## L'état réel au 6 septembre 2026
 
-Relevé du **3 septembre 2026**, en fin de journée — production interrogée en lecture seule et dépôt recompté, après la matinée (E13, I4, I6, H1), la lettre de Xavier (C5 = B, C9 = A, D2 = A, E11 = A, I16 = A) exécutée de bout en bout, le lot `autor_sans_autorite` tranché le soir même, et le registre porté à v0.17 (`RES-Q13`, `RES-D12`). Toutes les lignes ont été remesurées, y compris les volumétries métier : c'est un relevé complet, pas un rafraîchissement ciblé.
+Relevé du **6 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `757e336d`, après trois journées où trois sessions ont poussé (l'OPAC par œuvre en douze migrations, la révision des lots importés, la page « Je veux… », l'atelier ouvert aux œuvres, la purge du schéma de mai, les homonymes de `public`). Toutes les lignes ont été remesurées, advisors compris : c'est un relevé complet. Deux régressions d'hygiène y apparaissent, notées à leur ligne.
 
-**Fraîcheur des constats au 2026-09-05.** **38 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-06.** **38 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
 | | | |
 |---|---:|---|
-| Tables `public` | **187** | toutes avec RLS activé, 279 policies sur **173** tables |
+| Tables `public` | **191** | toutes avec RLS activé, **332 policies** — +4 tables depuis le 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), toutes classées au filet BG2 (191 sur 191 au rejeu local du 05/09). |
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
-| Fonctions applicatives | **858** | `public` 632 · `api` 184 · `ingest` 34 · `private` 8. Dont **669 SECURITY DEFINER** (+2 le 03/09 : la proposition et le semis du lot `autor_sans_autorite`, toutes deux gardées staff), aucune exposée à `anon` hors la liste attendue. |
-| Migrations appliquées | **273** | 273 migrations numérotées au dépôt = **273 appliquées, alignement exact** (281 fichiers dans le dossier avec le gabarit et sept scripts de rollback, hors motif). Deux de plus le 03/09 : le lot `autor_sans_autorite` et le grant du flux RSS. Vérifié le 03/09 au soir des deux côtés. |
-| Jobs `pg_cron` | **37** | **tous actifs** (+1 depuis le 01/09 : le rappel avant péremption des invitations d'équipe, GOUV-17b) ; couverts en CI par `crons_planifies_tests` |
-| Avis de sécurité | **451** | 0 ERROR · **399** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy ». Le 28 (`anon`) est la **valeur attendue** (liste T10, `DOC-GRANT-1`). Le 399 (`authenticated`) : 398 le 02/09 au soir, **+1 le 03/09** — `fn_conv_lot_autor_sans_autorite_seed`, DEFINER par nécessité (semis de la file) et gardée `fn_caller_is_staff` en première ligne ; justifiée, à porter à l'audit 0029. |
-| Avis de performance | **896** | **403 « index inutilisés »**, contre 166 le 02/09 : ce n'est pas une dégradation, c'est le **redémarrage du projet du 02/09** (PostgREST « Unhealthy » → Restart) qui a remis les compteurs `idx_scan` à zéro — tout index non touché depuis compte comme inutilisé. À relire dans un mois, pas maintenant. **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`, 02/09). 25 tables à policies permissives multiples, inchangé. |
-| Schémas de rebut | **2** | `backup_2026_05_07` et `conv_backup` — inchangés depuis le 29/08 |
+| Fonctions applicatives | **906** | `public` 676 · `api` 188 · `ingest` 34 · `private` 8. Dont **694 SECURITY DEFINER** (526 / 144 / 17 / 7) : +48 fonctions et +25 DEFINER depuis le 03/09 (OPAC par œuvre, atelier des œuvres, révision des lots), −3 (les homonymes de `public`, B7). **Une fonction sans `search_path` figé** : `private.conv_motifs_collectivite` (INVOKER, réservée à `postgres`, née le 05/09 — le hook ne garde que les DEFINER ; une ligne `ALTER FUNCTION … SET search_path` la règle). |
+| Migrations appliquées | **307** | 307 migrations numérotées au dépôt = **307 appliquées, alignement exact** (315 fichiers avec le gabarit et sept rollbacks). **+34 depuis le 03/09** — douze pour l'OPAC par œuvre, la révision des lots, la purge du schéma de mai, B4, B7, et les migrations d'évidences. Vérifié le 06/09 des deux côtés. |
+| Jobs `pg_cron` | **38** | actifs — +1 depuis le 03/09 (le tick de pré-traduction des titres d'œuvre, `work-titles-autofill`). |
+| Avis de sécurité | **464** | 0 ERROR · **411** + **28** WARN sur les fonctions DEFINER exposées · **1 WARN `function_search_path_mutable`** (`private.conv_motifs_collectivite`, voir la ligne des fonctions) · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`, verdicts B4 posés). Le 28 (`anon`) est la **valeur attendue** (T10, `DOC-GRANT-1`). Le 411 (`authenticated`) : 399 le 03/09, −3 le 05/09 (B7), **+15 le 05/09 soir** — les RPC de l'OPAC par œuvre, de l'atelier des œuvres et de la révision des lots, DEFINER par nécessité et gardées, mais **pas encore portées à l'audit 0029** (`AUDIT_execute_authenticated_2026-09-01`) : quinze lignes de verdict à écrire, doctrine `DOC-GRANT-1`. |
+| Avis de performance | **442** | **369 « index inutilisés »** (403 le 03/09 — les compteurs repartent du redémarrage du 02/09, le nombre baisse à mesure que les index servent ; à relire dans un mois). **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`). 25 tables à policies permissives multiples. **8 tables sans clé primaire** (14 le 03/09 : les six du schéma de mai sont parties avec lui). **1 `auth_rls_initplan`** sur `catalog_batch_reviews_read_staff` — table née le 05/09 : `auth.uid()` réévalué par ligne, le motif que **B5** avait résorbé partout ; une ligne `(select auth.uid())` le règle. |
+| Schémas de rebut | **1** | `conv_backup` seul — il porte les trois tables de revue humaine de C3 et **ne se purge pas**. `backup_2026_05_07` est parti le 04/09 au soir (B9, décision de Xavier après relecture des 50 lignes). |
 
 ### Fonctions Edge
 
 | | | |
 |---|---:|---|
-| Dossiers au dépôt | **52** | + `_shared` ; **+1 le 03/09 : `rss-novidades`**, le flux des nouveautés par bibliothèque (E11). Dont le routeur `main`, jamais déployé sur Supabase, et c'est voulu. |
-| Déclarations `verify_jwt` | **37** | **toutes à `false`** — compte des lignes `^verify_jwt = ` ; +1 le 03/09 (`rss-novidades`, flux anonyme par nature, deux gardes dans la fonction). |
+| Dossiers au dépôt | **53** | + `_shared` ; **+1 depuis le 03/09 : `work-titles-autofill`** (pré-traduction des titres d'œuvre, « corrige-moi »). Dont le routeur `main`, jamais déployé sur Supabase, et c'est voulu. |
+| Déclarations `verify_jwt` | **38** | **toutes à `false`** — compte des lignes `^verify_jwt = ` ; +1 depuis le 03/09 (`work-titles-autofill`, appelée par cron avec son secret). |
 
 ### Catalogue
 
 | | | |
 |---|---:|---|
-| Notices | **2 659** | 2 758 exemplaires, 2 495 œuvres, **1 532 autorités** — 1 305 à midi : **+227 créées le 03/09 au soir par le lot `autor_sans_autorite`** (Xavier a tranché les 464 : 446 liens posés, 18 écartés). Ces 227 sont non typées et jamais relues : premier objet de l'audit cadré à C3. Notices et exemplaires inchangés depuis le 01/09. |
-| Brouillons de catalogage | **2 240** | trois états : `draft`, `published`, et `cancelled` — le troisième est apparu depuis le 02/09 (corbeille du catalogage). |
-| Indexation matière | **1 122 / 2 659** | 42 % des notices ; 1 279 affectations sur 89 sujets locaux |
-| Thésaurus FICEDL | **621** | termes, **10 locales complètes** — 462 le 02/09 : **+159 dates (1868-2027)** entrées le 03/09 (H1), 147 avec leurs liens Placard / Cartoliste ; onglet « Dates » en ligne. 98 alignements vers les sujets locaux, intacts. |
+| Notices | **2 656** | 2 758 exemplaires, **2 449 œuvres** (2 495 le 03/09 : 35 œuvres vides supprimées et des fusions — lot 1 de l'OPAC par œuvre), **1 505 autorités** (1 532 le 03/09 : 17 fusions du lot C5 et les doublons exacts du 03/09), **3 497 titres d'œuvre** dans `work_titles` (pré-traduits, « corrige-moi », 1 452 à relire — C11). Trois notices de moins : les fusions d'éditions. 0 proposition sur une œuvre encore : l'atelier des œuvres est ouvert depuis le 05/09 au soir, jamais emprunté (G1). |
+| Brouillons de catalogage | **2 250** | deux états ce matin : `draft` 1 820, `published` 430 — l'état `cancelled` vu le 03/09 n'a plus d'occurrence (corbeille vidée). **Aucune révision de lot encore** (`catalog_batch_reviews` vide) : la garde « un lot importé se publie après révision » est en place depuis le 05/09, jamais exercée. |
+| Indexation matière | **1 184 / 2 656** | notices avec au moins un sujet — **1 472 sans aucun** (1 537 le 03/09 : les « Assuntos importados » de MLEG devenus matières quand le thésaurus les avait, 04/09 soir). Reste l'objet de **C7**. |
+| Thésaurus FICEDL | **621** | termes, **10 locales complètes**, 159 dates (1868-2027) depuis le 03/09 (H1), onglet « Dates » en ligne. 98 alignements vers les sujets locaux, intacts. |
 | Périodiques | **4** | titres, 7 fascicules rattachés. Leur **arbitrage de doublons** est ouvert à tout rôle `librarian` alors que celui des livres est réservé à la coordination : écart mesuré le 01/09, décidé, en attente de préavis |
 
 ### Réseau
@@ -100,19 +100,19 @@ Relevé du **3 septembre 2026**, en fin de journée — production interrogée e
 | | | |
 |---|---:|---|
 | Bibliothèques | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` a été retirée du réseau** — suppression volontaire confirmée par la coordination le 01/09, tracée dans `NOTE_retrait_cira_marseille_2026-09-01`. Cascade propre (0 fonds, 0 orphelin) ; thème conservé en storage, source d'import close |
-| Comptes | **19** | **23** appartenances actives — 18 le 02/09 : **+3 lecteur·rices fictif·ves sur `blmf-teste`** pour la formation (Emma Teste, Errico Teste, Voltairine de Teste repassée lectrice), plus les comptes créés pour la séance. Aucun compte réel ajouté. |
+| Comptes | **19** | **23** appartenances actives — inchangé depuis le 03/09 (Emma, Errico et Voltairine de Teste sur `blmf-teste` pour la formation du 08/09). **0 contributeur·rice réseau** : le circuit « contributeur » de l'atelier n'a jamais été emprunté (G1). |
 | Administrateur·rices réseau | **1** | **c'est l'item A1, et il commande tout le reste** |
-| Circulation vivante | **6 / 19 / 22 / 0** | emprunts / réservations / consultations / PEB — les deux PEB de test ont été retirés avec les fixtures des captures le 02/09 ; dernière écriture d'emprunt le 31/08, toujours. |
+| Circulation vivante | **6 / 19 / 22 / 0** | emprunts / réservations / consultations / PEB ouverts — inchangé depuis le 03/09. Deux PEB de mai 2026 (n° 24 et 25, rendus, `devolvido`) restent en base comme historique ; le 03/09 ne comptait que les ouverts, cette ligne aussi. Dernière écriture d'emprunt le 31/08. |
 
 ### Dépôt
 
 | | | |
 |---|---:|---|
-| Commits | **2 541** | sur `main`, au 03/09 au soir — **26 commits dans la journée**, d'une seule session (l'autre a poussé le journal P7 et la migration des captures). |
-| Fichiers `src/` | **295** | 79 pages, 90 composants ; +5 fichiers depuis le 02/09 (bancs d'essai et tests). |
-| Clés i18n | **6 249** | par locale, **parité stricte sur les 10**, gardée en CI ; **+15 depuis le 02/09** : « Ma demande » (3), onglet « Dates » (1), atelier et périodicité (9), lot des auteurs (2), flux RSS (1) ; le champ auteur du formulaire renommé « tel qu'imprimé ». |
-| Tests | **370 + 73** | 370 tests JS (vitest, gate bloquant ; +16 : engendrement, RSS, épinglage supabase-js) + **73 suites SQL** dans `ci-suites.txt` (+1 : `conv_c5_autor_sans_autorite`, 8 tests, verte en local avec O7 et O8 avant le push). |
-| Marqueurs de dette | **17** | dont 4 dans `src/` (motifs `TODO`/`FIXME`, même compte que le 29/08). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
+| Commits | **2 594** | sur `main`, au 06/09 au matin — **53 commits depuis le 03/09 au soir**, de trois sessions. |
+| Fichiers `src/` | **310** | 81 pages, 93 composants (79 et 90 le 03/09 : la page « Je veux… », l'assistant des œuvres, les onglets de l'atelier). |
+| Clés i18n | **6 570** | par locale, **parité stricte sur les 10**, gardée en CI ; **+321 depuis le 03/09** : « Je veux… » (51 intentions × 2), atelier des œuvres, OPAC par œuvre, docs par page, révision des lots, titres de page (E7). |
+| Tests | **407 + 94** | 407 tests JS (vitest, gate bloquant ; +37 depuis le 03/09) + **94 suites SQL** dans `ci-suites.txt` (+21 : quatre de l'OPAC par œuvre, la révision des lots, les homonymes B7, les évidences…). Rejeu local des 307 migrations en ~2 min le 05/09. |
+| Marqueurs de dette | **21** | dont 4 dans `src/` (motifs `TODO`/`FIXME`, casse exacte ; 17 le 03/09 — les quatre de plus sont hors `src/`, dans le code du 05/09). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
 
@@ -363,7 +363,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 ### B — Base de données, sécurité, RLS
 
-*187 tables, 666 fonctions SECURITY DEFINER, 279 policies. La surface la plus large du projet.*
+*191 tables, 694 fonctions SECURITY DEFINER, 332 policies (relevé du 06/09). La surface la plus large du projet.*
 
 | | | | |
 |---|---|---|---|
@@ -758,7 +758,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 ### E — Front, OPAC, i18n, accessibilité
 
-*10 locales à parité stricte, 6 179 clés chacune, vérifiées en intégration continue.*
+*10 locales à parité stricte, 6 570 clés chacune (06/09), vérifiées en intégration continue.*
 
 | | | | |
 |---|---|---|---|
@@ -778,7 +778,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Des fonctionnalités d'accessibilité sont implémentées : panneau de réglages sur toutes les pages depuis le 26/08, `html lang` qui suit la langue affichée (WCAG 3.1.1) avec son test, champs à 16 px minimum, cibles tactiles à 44 px, `viewport-fit=cover`. **Aucun audit d'accessibilité indépendant n'a jamais été mené.**
 
-*Vérifié : **03/09** — la formation (soirée 1 le 08/09/2026) comporte un **témoin léger** (étape 8 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` : chercher, ouvrir, réserver au clavier seul, souris retournée). Ce n'est pas l'audit demandé par cette fiche : pas de lecteur d'écran, pas de personne concernée ; E1 reste ouvert et le discours reste « implémenté, pas audité ». La liste de blocages clavier qui en sortira entre ici. **03/09, fin de journée** — le témoin clavier léger se cale dans n'importe quelle soirée de la formation (sept soirées, plan du 01/09), pas « le 13/09 ».*
+*Vérifié : **03/09** — la formation (soirée 1 le 08/09/2026) comporte un **témoin léger** (étape 8 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` : chercher, ouvrir, réserver au clavier seul, souris retournée). Ce n'est pas l'audit demandé par cette fiche : pas de lecteur d'écran, pas de personne concernée ; E1 reste ouvert et le discours reste « implémenté, pas audité ». La liste de blocages clavier qui en sortira entre ici. **03/09, fin de journée** — le témoin clavier léger se cale dans n'importe quelle soirée de la formation (sept soirées, plan du 01/09), pas « le 13/09 ». **06/09** — la navigation a changé le 05/09 : la page **« Je veux… »** (`/inicio`, 51 intentions par rôle, raccourcis en `localStorage`) et les **liens profonds vers les recueils PDF** (`#page=N` par langue). L'audit demandé devra parcourir ces deux chemins ; le témoin clavier de la formation peut commencer par « Je veux… ».*
 
 **Ce que c'est.** Faire parcourir les parcours principaux — chercher, ouvrir une notice, réserver, s'inscrire — par une personne qui utilise un lecteur d'écran ou une navigation au clavier seul, et écrire ce qui bloque.
 
@@ -961,7 +961,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **Troisième constat, sur la page livrée (Xavier, 02/09 soir)** : « Comment un coordinateur qui n'est pas admin fait-il pour demander à ce que sa bibliothèque puisse être moissonnée ? » Réponse : il ne pouvait pas depuis l'interface. Le circuit existe (`fn_oai_request_open_library` accepte une coordination active, `RedePage` l'accueille directement sur l'onglet « Être source », le bouton de demande y est) — mais le lien « Réseau » de la barre n'apparaît qu'aux admins réseau (`canSeeRede(isNetworkAdmin)`). Une coordination devait taper `/rede` à la main. Même maladie que le commutateur « Sens » : une adresse que personne ne trouve.
 
-*Vérifié : 02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (`relation_status || '—'` rendu brut ; aucune clé i18n pour ces valeurs, grep sur `fr.json`).*
+*Vérifié : 02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (`relation_status || '—'` rendu brut ; aucune clé i18n pour ces valeurs, grep sur `fr.json`). **06/09** — depuis le 05/09, **un lot né d'un import ne se publie qu'après une révision de l'administration, sur rapport** (`catalog_batch_reviews`, garde dans `publish_book_draft`, cloche ; onglet Révisions de Rede). C'est un troisième volet à ajouter à la page : la coordination doit comprendre pourquoi son lot attend, et où. Aucune révision n'a encore eu lieu.*
 
 **Ce que c'est.** Trois lots, du moins cher au plus structurant. **Lot A — avant la soirée 1 de la formation, le 08/09** : traduire les statuts bruts (`relation_status`, états de lot, états de ligne) dans les dix locales, et donner un libellé aux deux icônes du lot — une soirée, et la page peut être montrée sans rougir. **Lot B** : renommer vers le geste (les six libellés de l'en-tête et des sections), sans toucher au pipeline. **Lot C** : rendre le commutateur « Sens » visible (deux vrais onglets, pas un interrupteur), et **trier l'onglet Exportation par nature** — d'abord le geste de bibliothécaire (« Exporter notre catalogue », CSV/MARCXML/JSON, seul bloc visible par défaut), puis un volet « Mutualiser un fonds numérique » (ZIP, envoi direct, fichiers reçus, éligibilité, domaine public) réservé à la coordination et replié ; retirer de l'écran ce qui est « en développement » (ILL) tant qu'il l'est ; bannir *assets* et *bucket* des textes ; et réunir là aussi « être source » (OAI) et le flux OPDS, qui sont des exports. Côté import, le parcours guidé « j'ai un fichier » en deux écrans, source partenaire facultative. Éprouver chaque lot avec une personne qui n'a pas écrit le code (E1 a la même exigence).
 
@@ -1142,7 +1142,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 Les six autres blocs sont inchangés au 31/08, vérifiés table par table : assemblées du réseau (3), propositions et objections d'autorité (3), référentiels `catalog_ref_*` (8), gouvernance des profils de bibliothèque (4, **et les deux crons tournent toujours dessus toutes les quinze minutes**), délibération des demandes d'adhésion (5). Tous à zéro insertion.
 
-*Vérifié : 31/08 — remesuré en production : **62 tables de `public` sur 189** à zéro insertion (`pg_stat_user_tables.n_tup_ins`, croisé avec un décompte de lignes sur les tables citées). Le compte est stable, la liste ne l'est pas — `loan_cycle_notifications` y est entrée le jour de sa naissance. Emprunt **#69** ouvert à la BLMF ; l'invitation à écrire une note de lecture est attendue le **10/09**, et c'est la première sortie possible de cette liste.*
+*Vérifié : 31/08 — remesuré en production : **62 tables de `public` sur 189** à zéro insertion (`pg_stat_user_tables.n_tup_ins`, croisé avec un décompte de lignes sur les tables citées). Le compte est stable, la liste ne l'est pas — `loan_cycle_notifications` y est entrée le jour de sa naissance. Emprunt **#69** ouvert à la BLMF ; l'invitation à écrire une note de lecture est attendue le **10/09**, et c'est la première sortie possible de cette liste. **06/09** — deux circuits de plus sont construits sans être empruntés : **l'atelier ouvert aux œuvres** (05/09 soir, cinq types de proposition, file « corrige-moi » de 1 452 titres) compte **0 proposition** ; la **révision des lots importés** (05/09) compte **0 révision** (`catalog_batch_reviews` vide) ; et `network_contributors` est toujours à **0** — l'atelier des autorités lui-même n'avait jamais reçu une proposition avant le 05/09. La liste des circuits jamais empruntés s'allonge plus vite qu'elle ne se vide.*
 
 **Ce que c'est.** Choisir un bloc et l'emprunter pour de vrai, du premier geste au dernier : tenir une assemblée du réseau, déposer une note de lecture, proposer une autorité et laisser quelqu'un objecter, faire délibérer une demande d'adhésion. Consigner ce qui manque, ce qui surprend, ce qui bloque.
 
@@ -1888,4 +1888,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-03 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `aeb77002` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-06. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-06 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `757e336d` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
