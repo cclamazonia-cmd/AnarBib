@@ -303,7 +303,6 @@ REVOKE EXECUTE ON FUNCTION public.fn_work_titles_autofill_call() FROM PUBLIC, an
 SELECT cron.unschedule(jobid) FROM cron.job WHERE jobname = 'anarbib-work-titles-autofill';
 SELECT cron.schedule('anarbib-work-titles-autofill', '*/10 * * * *', $$select public.fn_work_titles_autofill_call()$$);
 
-
 -- ---------------------------------------------------------------------
 -- 7. merge_works emporte les titres manuels de la source
 -- ---------------------------------------------------------------------

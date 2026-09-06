@@ -94,19 +94,21 @@ echo "Rôles de service configurés. rest / auth / storage peuvent démarrer."
 # pg_cron est préchargé par l'image supabase/postgres (shared_preload_libraries).
 # On crée l'extension dès l'initialisation pour que les migrations puissent
 # planifier les crons réels (BG2-crons) au lieu de sauter la planification.
-echo ""
-echo "Initialisation de pg_cron..."
-if ! psql -U "$SU" -d postgres -v ON_ERROR_STOP=1 \
-     -c "
+if psql -U "$SU" -d postgres -tAc "select 1 from pg_roles where rolname = 'postgres'" 2>/dev/null | grep -q 1; then
+  echo ""
+  echo "Initialisation de pg_cron..."
+  if ! psql -U "$SU" -d postgres -v ON_ERROR_STOP=1 \
+       -c "
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 GRANT USAGE ON SCHEMA cron TO postgres, service_role;
 GRANT ALL ON ALL TABLES IN SCHEMA cron TO postgres;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA cron TO postgres;
 GRANT ALL ON ALL ROUTINES IN SCHEMA cron TO postgres;
 "; then
-  echo "✗ ÉCHEC de l'initialisation de pg_cron." >&2
-  exit 1
+    echo "✗ ÉCHEC de l'initialisation de pg_cron." >&2
+    exit 1
+  fi
+  echo "✓ Extension pg_cron active (schéma cron prêt)."
 fi
-echo "✓ Extension pg_cron active (schéma cron prêt)."
 
 
