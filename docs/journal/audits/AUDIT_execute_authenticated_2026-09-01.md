@@ -1451,3 +1451,68 @@ test et contre une décision.
 
 Avec ce solde, les trois questions posées plus haut aux 53 ont toutes leur
 réponse écrite : 5 fermées le 01/09, 47 le 02/09, 1 rejugée ailleurs.
+
+---
+
+# Complément du 06/09/2026 — les seize RPC nées les 04–05/09
+
+**6 septembre 2026** · base `uflwmikiyjfnikiphtcp` en lecture seule · photo du backlog du 06/09.
+
+Le lint 0029 est passé de **399** (03/09) à **411** (06/09) : −3 avec la
+suppression des homonymes de `public` (B7, `20260905132602`), **+16 fonctions
+`SECURITY DEFINER` exécutables par `authenticated`** nées entre le 04/09 midi et
+le 05/09 soir — trois chantiers d'une autre session : l'OPAC par œuvre (lots
+1b à 4), la révision des lots importés, l'atelier ouvert aux œuvres, plus la
+source « catalogue propre » de l'import. Les seize sont relevées par `oid`
+décroissant (toute fonction créée après `fn_assembleia_facilitator_name`, 02/09)
+et lues corps par corps, au **même critère** que les paquets du 01/09 : *que
+peut demander une inconnue qui vient de s'inscrire ?*
+
+## Verdict : aucune faille, deux limites fonctionnelles, une forme à noter
+
+| Fonction | Garde lue dans le corps | Ce qu'une inconnue inscrite obtient | Verdict |
+|---|---|---|---|
+| `api.fn_work_title_validate(p_work_id, p_lang, p_title)` | `fn_caller_is_staff()` en tête, sinon `forbidden` | rien (exception) | **justifiée** |
+| `api.fn_work_titles_review_list(p_lang, p_limit)` | prédicat dans le `WHERE` : contributeur·rice réseau **ou** staff **ou** admin | une liste vide (refus muet, forme déjà notée au paquet 3) ; aucune donnée nominative — des titres d'œuvre et un nom d'autorité | **justifiée** |
+| `public.fn_batch_reviews_list()` | admin réseau **ou** appartenance active `librarian`/`coordenador` (toute bibliothèque) | rien pour une inconnue ; pour un·e staff : les lots **de tout le réseau**, avec les prénoms et noms des staff qui ont demandé ou revu | **justifiée** — transparence entre staff, aucune lectrice exposée ; *limite fonctionnelle 1* ci-dessous |
+| `public.fn_batch_review_verdict(p_review_id, p_verdict, p_notes)` | admin réseau seulement, puis `for update` et états contrôlés | rien | **justifiée** |
+| `public.fn_batch_review_request(p_batch_id, p_message)` | admin **ou** `coordenador` actif (toute bibliothèque) ; lot ouvert, né d'un import, pas déjà demandé | rien pour une inconnue | **justifiée** — *limite fonctionnelle 2* : la coordination d'une bibliothèque peut demander la révision d'un lot **d'une autre** (le lot n'est pas rapproché de la bibliothèque de l'appelant·e) ; aucune donnée ne sort, l'effet est un tour de révision de plus chez l'admin |
+| `public.fn_batch_review_report(p_batch_id)` | admin **ou** staff actif (toute bibliothèque) | rien pour une inconnue ; pour un·e staff : le rapport de conventions d'un lot de n'importe quelle bibliothèque (titres, doublons, auteurs non liés — des données de catalogue, pas de personnes) | **justifiée** — même transparence de catalogue que `fn_batch_reviews_list` |
+| `public.dismiss_volume_group(p_group_key, p_reason)` | staff actif (toute bibliothèque), `42501` sinon | rien | **justifiée** |
+| `public.group_books_as_volumes(p_items)` | idem | rien | **justifiée** |
+| `public.suggest_volume_groups(p_max)` | idem | rien | **justifiée** |
+| `public.set_work_uniform_title(p_work_id, p_title)` | idem, titre non vide, œuvre existante | rien | **justifiée** |
+| `public.set_work_title(p_work_id, p_lang, p_title)` | idem, locale contrôlée | rien | **justifiée** |
+| `public.search_works_for_link(p_q, p_limit)` | idem | rien (et la recherche ne rend que titres d'œuvre, nom d'autorité, compte d'éditions, années) | **justifiée** |
+| `public.mark_works_not_same(p_a, p_b, p_reason)` | idem, deux œuvres distinctes | rien | **justifiée** |
+| `public.suggest_split_works(p_max)` | idem | rien | **justifiée** |
+| `public.merge_works(p_source, p_target)` | idem, deux œuvres existantes et distinctes | rien | **justifiée** |
+| `public.fn_import_own_source()` | `my_access` (accès painel + bibliothèque) **et** `coordenador` ou admin ; n'écrit que pour la bibliothèque de l'appelant·e | rien | **justifiée** |
+
+**La forme à noter.** Les neuf RPC de l'OPAC par œuvre portent la même garde
+que `discard_book` et ses sœurs — *staff actif de n'importe quelle
+bibliothèque* — et le même `HINT` (`error.catalog.discard.forbidden`). C'est
+cohérent avec la doctrine du catalogue commun (une œuvre n'appartient à aucune
+bibliothèque ; regrouper, fusionner, titrer sont des gestes de réseau) et avec
+ce que le paquet 4 du 01/09 avait constaté sur les 45 écritures. Rien à fermer.
+
+**Les deux limites fonctionnelles** ne sont pas des failles (aucune donnée de
+personne, aucun geste sur un objet qu'un tiers ne verrait pas déjà), mais
+elles méritent une ligne au backlog si la révision des lots se déploie à
+plusieurs bibliothèques : (1) la liste et le rapport des lots sont
+**transversaux au réseau** par construction ; (2) `fn_batch_review_request`
+devrait vérifier que le lot appartient à la bibliothèque de la coordination
+qui le demande — une condition de plus, `catalog_batches.library_id =
+v_actor.library_id`, le jour où deux bibliothèques importent en même temps.
+
+**Non concernées.** `api.fn_authority_object`, `api.report_incoherences_auteurs`,
+`public.fn_authority_using_libraries`, `public.fn_library_uses_authority`,
+nées aussi le 05/09, n'apparaissent pas au lint 0029 (pas exposées à
+`authenticated`, ou pas DEFINER) : hors du périmètre de ce complément.
+
+**Compte au 06/09.** 0029 = **411**, tous justifiés : **395** hérités des paquets
+du 01/09 et **16** de ce complément (les seize sont bien dans la liste du lint,
+vérifié nom par nom). L’arithmétique 399 (03/09) − 3 (B7) donnerait 396 : une
+fonction héritée a perdu son `EXECUTE` entre le 03/09 et le 06/09 sans que ce
+complément l’identifie — écart d’une unité, dans le bon sens, à relire au
+prochain relevé. Le lint 0028 reste à **28**, la liste T10.

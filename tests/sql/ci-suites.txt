@@ -447,3 +447,5 @@ tests/sql/rapport_reseau_evidences_tests.sql
 # work_titles. T2 tient la decision : sans bibliotheque on propose, on n'objecte pas ;
 # rattache·e, on objecte. T7 = non-actions. Ref. 20260905220000.
 tests/sql/atelier_oeuvres_tests.sql
+# Hygiene (06/09/2026) — aucune fonction applicative sans search_path, aucune policy qui reevalue auth.uid() par ligne ; la policy des revisions garde son predicat. Ref. 20260906111308.
+tests/sql/hygiene_search_path_et_initplan_tests.sql
