@@ -136,6 +136,15 @@ export function Topbar() {
           {t({ id: 'nav.catalog' })}
         </Link>
 
+        {/* « Je veux… » : dire ce qu'on veut faire, et y être mené (05/09/2026).
+            Juste après le catalogue — la porte publique reste en tête, le geste
+            vient tout de suite pour qui est connecté (Xavier, 06/09). */}
+        {user && (
+          <Link to="/inicio" className={isActive('/inicio') ? 'active' : ''}>
+            {t({ id: 'nav.inicio' })}
+          </Link>
+        )}
+
         {/* Annuaire public des bibliothèques (chantier PUBLIB) — visible de tout le monde, anon compris */}
         <Link to="/bibliotecas" className={isActive('/bibliotecas') ? 'active' : ''}>
           {t({ id: 'nav.bibliotecas' })}
@@ -150,13 +159,6 @@ export function Topbar() {
         <Link to="/thesaurus-ficedl" className={isActive('/thesaurus-ficedl') ? 'active' : ''}>
           {t({ id: 'nav.thesaurus' })}
         </Link>
-
-        {/* « Je veux… » : dire ce qu'on veut faire, et y être mené (05/09/2026) */}
-        {user && (
-          <Link to="/inicio" className={isActive('/inicio') ? 'active' : ''}>
-            {t({ id: 'nav.inicio' })}
-          </Link>
-        )}
 
         {user && canSeeAccount(role) && (
           <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
