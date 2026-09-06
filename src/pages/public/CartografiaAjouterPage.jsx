@@ -63,7 +63,7 @@ export default function CartografiaAjouterPage() {
         if (cancel || !pickerRef.current || mapRef.current) return;
         const L = window.L;
         const map = L.map(pickerRef.current, { worldCopyJump: true, attributionControl: false }).setView([20, 5], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, referrerPolicy: 'strict-origin-when-cross-origin' }).addTo(map);
         let marker = null;
         map.on('click', (e) => {
           if (!marker) marker = L.marker(e.latlng, { draggable: true }).addTo(map);

@@ -1,12 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 import { anarbibStorage } from './staffStorage';
 
-// Configuration Supabase : les deux variables sont REQUISES au build.
-// Pas de fallback hardcodé : si une variable manque, c'est un bug de
-// configuration de l'environnement de build qui doit être détecté
-// explicitement plutôt que masqué par une valeur en dur.
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// Résolution dynamique de l'URL Supabase / Passerelle API :
+// Permet à l'application de fonctionner sans reconfiguration quel que soit le moyen d'accès :
+// - adresse IP locale (ex: http://192.168.1.50:5173 ou http://192.168.1.50)
+// - nom de machine ou domaine local (ex: http://mon-serveur.lan:5173)
+// - domaine public (ex: https://biblio.example.org)
+// - localhost (http://localhost:5173 ou http://localhost)
+export function resolveSupabaseUrl(explicitUrl = import.meta.env.VITE_SUPABASE_URL) {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    if (!explicitUrl || explicitUrl === 'auto' || explicitUrl.includes('localhost') || explicitUrl.includes('127.0.0.1')) {
+      return window.location.origin;
+    }
+  }
+  return explicitUrl || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+}
+
+export const SUPABASE_URL = resolveSupabaseUrl();
+export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 if (!SUPABASE_URL) {
   throw new Error(

@@ -300,8 +300,18 @@ END;
 $$;
 REVOKE EXECUTE ON FUNCTION public.fn_work_titles_autofill_call() FROM PUBLIC, anon, authenticated;
 
-SELECT cron.unschedule(jobid) FROM cron.job WHERE jobname = 'anarbib-work-titles-autofill';
-SELECT cron.schedule('anarbib-work-titles-autofill', '*/10 * * * *', $$select public.fn_work_titles_autofill_call()$$);
+DO $$
+BEGIN
+  IF to_regnamespace('cron') IS NULL THEN
+    RAISE NOTICE 'pg_cron absent : planification sautee (banc d''essai).';
+    RETURN;
+  END IF;
+
+  IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'anarbib-work-titles-autofill') THEN
+    PERFORM cron.unschedule(jobid) FROM cron.job WHERE jobname = 'anarbib-work-titles-autofill';
+  END IF;
+  PERFORM cron.schedule('anarbib-work-titles-autofill', '*/10 * * * *', 'select public.fn_work_titles_autofill_call()');
+END $$;
 
 -- ---------------------------------------------------------------------
 -- 7. merge_works emporte les titres manuels de la source

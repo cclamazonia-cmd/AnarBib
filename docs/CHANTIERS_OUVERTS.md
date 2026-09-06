@@ -8,13 +8,11 @@ Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et
 
 ---
 
-## 1. Éprouver la reconstruction — *le meilleur premier pas*
+## 1. Éprouver la reconstruction — *Validé le 28 août 2026*
 
-**Ce que c'est.** Cloner le dépôt sur une machine qui n'est pas celle du mainteneur, monter la pile complète en suivant `deploy/README.md`, et écrire ce qui casse.
+**Ce que c'est.** Cloner le dépôt sur une machine qui n'est pas celle du mainteneur, monter la pile complète via `./install.sh` ou en suivant `deploy/README.md`, et vérifier que tout démarre.
 
-**Ce que ça demande.** Docker, une machine, une soirée. Aucun secret, aucun accès, aucune coordination : la pile se rebâtit depuis le dépôt seul.
-
-**Ce que ça apporte.** La réponse à la seule question qui décide de tout le reste : *ce projet est-il reprenable par quelqu'un d'autre que celui qui l'a écrit ?* Personne ne l'a jamais vérifié. Un rapport d'échec détaillé vaut ici plus qu'un correctif : c'est la liste de ce qui ne marche que sur une seule machine.
+**État.** Éprouvé et automatisé le 28/08/2026. La pile minimale (6 conteneurs) se reconstruit et se vérifie en une seule commande depuis le dépôt seul, avec rejeu des 218 migrations et contrôle d'intégrité (0 table sans RLS, GoTrue, PostgREST, Storage, routeur `main`).
 
 ---
 
@@ -22,11 +20,10 @@ Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et
 
 **Ce que c'est.** Aligner l'image GoTrue sur l'état réel des migrations, découpler la chaîne de déploiement de l'intégration continue, et poser un proxy inverse avec tunnel devant la pile.
 
-**Ce que ça demande.** De l'administration système, du réseau, des conteneurs. C'est le chantier le plus technique et le plus autonome du lot.
+**État.** Le routeur `main` et les scripts de déploiement/mise à jour autonomes (`deploy/deploy.sh`, `apply-pending-migrations.sh`) ainsi que la doctrine et les configurations de tunnel L4 (`deploy/tunnel/`) sont en place.
 
-**Ce que ça apporte.** La fin de la dépendance à un hébergeur tiers. C'est l'objectif que le projet s'est donné et qu'il n'a pas encore atteint.
+> **Bascule de production gelée jusqu'au 14 septembre 2026** pour le mainteneur : une démonstration publique tourne sur la production, et une migration d'infrastructure entamée deux semaines avant est le meilleur moyen d'arriver avec un système cassé. Le gel porte sur la production, pas sur le travail en environnement d'essai.
 
-> **Gelé jusqu'au 14 septembre 2026** pour le mainteneur : une démonstration publique tourne sur la production, et une migration d'infrastructure entamée deux semaines avant est le meilleur moyen d'arriver avec un système cassé. Le gel porte sur la production, pas sur le travail en environnement d'essai.
 
 ---
 

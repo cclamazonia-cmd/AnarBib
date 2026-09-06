@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import PdfViewer from '@/components/viewers/PdfViewer';
 import ImageViewer from '@/components/viewers/ImageViewer';
@@ -192,7 +192,7 @@ export default function LibraryDigitalSharesSection({ libraryId, canEdit = true 
     try {
       const { data: sess } = await supabase.auth.getSession();
       const token = sess?.session?.access_token;
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/read-ill-shared-asset`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/read-ill-shared-asset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
         body: JSON.stringify({ share_id: s.id }),

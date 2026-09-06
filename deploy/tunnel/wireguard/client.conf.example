@@ -1,0 +1,10 @@
+# /etc/wireguard/wg0.conf (sur la machine hôte AnarBib)
+[Interface]
+Address = 10.10.0.2/24
+PrivateKey = VOS_CLES_CLIENT_PRIVEES
+
+[Peer]
+PublicKey = CLE_PUBLIQUE_DU_SERVEUR_VPS
+Endpoint = IP_PUBLIQUE_DU_VPS:51820
+AllowedIPs = 10.10.0.0/24
+PersistentKeepalive = 25

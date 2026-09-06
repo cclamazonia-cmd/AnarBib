@@ -119,6 +119,10 @@ COMMENT ON FUNCTION public.fn_import_delete_run(bigint) IS
   'du lot ne bloque pas. Garde ajoutee le 29/08/2026 : jusque-la le lot et ses '
   'brouillons restaient sans provenance (lot 55, CIRA Marseille).';
 
+revoke execute on function public.fn_import_delete_run(bigint) from public, anon;
+grant execute on function public.fn_import_delete_run(bigint) to authenticated;
+
+
 -- -----------------------------------------------------------------------------
 -- Verification structurelle
 -- -----------------------------------------------------------------------------

@@ -140,7 +140,7 @@ BEGIN
 END;
 $function$;
 
-revoke execute on function public.fn_import_own_source() from public;
+revoke execute on function public.fn_import_own_source() from public, anon;
 grant  execute on function public.fn_import_own_source() to authenticated, service_role;
 
 comment on function public.fn_import_own_source() is
@@ -208,7 +208,7 @@ BEGIN
 END;
 $function$;
 
-revoke execute on function public.fn_import_register_deposit_source(text, text) from public;
+revoke execute on function public.fn_import_register_deposit_source(text, text) from public, anon;
 grant  execute on function public.fn_import_register_deposit_source(text, text) to authenticated, service_role;
 
 comment on function public.fn_import_register_deposit_source(text, text) is
@@ -294,7 +294,7 @@ BEGIN
 END;
 $function$;
 
-revoke execute on function public.fn_import_create(bigint, text, text, text, text, bigint, text, text) from public;
+revoke execute on function public.fn_import_create(bigint, text, text, text, text, bigint, text, text) from public, anon;
 grant  execute on function public.fn_import_create(bigint, text, text, text, text, bigint, text, text) to authenticated, service_role;
 
 -- ── 4b. Faire entrer le lot dans la file : meme garde ─────────────────────
@@ -356,7 +356,7 @@ BEGIN
 END;
 $function$;
 
-revoke execute on function public.fn_import_promote(bigint, text[], text[], text, text) from public;
+revoke execute on function public.fn_import_promote(bigint, text[], text[], text, text) from public, anon;
 grant  execute on function public.fn_import_promote(bigint, text[], text[], text, text) to authenticated, service_role;
 
 -- ── 5. Verification structurelle (aucune dependance aux donnees) ──────────

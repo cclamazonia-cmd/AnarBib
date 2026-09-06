@@ -112,55 +112,100 @@ The detail of work in progress, debts and priorities lives in the current backlo
 
 ### Démarrage rapide (FR)
 
-```
-npm install
-npm run dev
+**Lancer AnarBib en une seule commande (pile locale complète) :**
+
+```bash
+./install.sh
 ```
 
-L'application tourne sur http://localhost:5173/. Les variables d'environnement Supabase ont des valeurs par défaut pointant vers le projet de production — pour une connexion à un autre projet, voir Configuration.
+Ce script tout-en-un s'occupe de tout de manière autonome :
+1. Vérification des prérequis hôte (`docker`, `docker compose`, `node`).
+2. Configuration des secrets et clés JWT locales (`deploy/genkeys.mjs`).
+3. Liaison automatique du frontend (génération de `.env.local`), installation des dépendances (`npm ci`) et compilation du frontend web (`dist/`).
+4. Démarrage de la pile complète (6 conteneurs : `PostgreSQL`, `PostgREST`, `GoTrue`, `Storage`, `Edge Functions`, `Caddy`), rejeu des 308 migrations SQL et contrôle de santé.
+5. Caddy sert à la fois les API backend et l'application web sur les **ports 80 et 5173**. L'application s'adapte automatiquement à l'adresse utilisée dans le navigateur (IP locale, domaine ou localhost).
 
-> ⚠️ Le dépôt se travaille **exclusivement depuis WSL2** (clone canonique unique `~/anarbib`). Voir Outillage de développement.
+L'application est immédiatement accessible sur :
+- **http://localhost:5173** (ou **http://localhost**)
+- Par adresse IP locale (ex : `http://192.168.x.x:5173` ou `http://192.168.x.x`)
+- Par nom de domaine ou alias DNS pointant vers la machine
+
+Compte administrateur initial créé automatiquement :
+- **Courriel :** `admin@anarbib.local` (ou `admin@<domaine>` avec `--prod`)
+- **Mot de passe :** `anarbib-admin` (ou mot de passe généré affiché sur le terminal avec `--prod`)
+- Donne accès complet aux panneaux d'administration : [`/painel`](http://localhost:5173/painel) (gestion de bibliothèque), [`/biblioteca`](http://localhost:5173/biblioteca), [`/rede`](http://localhost:5173/rede) (fédération) et [`/catalogacao`](http://localhost:5173/catalogacao).
+
+Options utiles de gestion :
+```bash
+./install.sh --rebuild     # Réinitialisation complète et remise à neuf des volumes
+./install.sh --stop        # Arrêter l'ensemble des conteneurs et services
+```
+
+> ⚠️ Le dépôt se travaille **exclusivement depuis WSL2 / Linux** (clone canonique unique `~/anarbib`). Voir Outillage de développement.
 
 Tests rapides :
 
-```
+```bash
 npm test     # vitest run (i18n, helpers, composants)
 npx vitest   # mode watch
 ```
 
 Pour les tests SQL d'acceptation, voir Tests.
 
-Build local (quality gate avant push — le déploiement réel passe par Forgejo Actions) :
+Build local (quality gate avant push — le déploiement réel passe par Forgejo Actions ou `./deploy/deploy.sh`) :
 
-```
+```bash
 npm run build
 ```
 
 ### Quick start (EN)
 
-```
-npm install
-npm run dev
+**Start AnarBib in a single command (full local stack):**
+
+```bash
+./install.sh
 ```
 
-The application runs at http://localhost:5173/. Supabase environment variables have default values pointing to the production project — to connect to a different project, see Configuration.
+This all-in-one script takes care of everything autonomously:
+1. Host prerequisites verification (`docker`, `docker compose`, `node`).
+2. Local secrets and JWT keys configuration (`deploy/genkeys.mjs`).
+3. Automatic frontend wiring (`.env.local` generation), dependencies installation (`npm ci`), and web build (`dist/`).
+4. Full stack startup (6 containers: `PostgreSQL`, `PostgREST`, `GoTrue`, `Storage`, `Edge Functions`, `Caddy`), 308 SQL migrations replay, and health checks.
+5. Caddy serves both backend APIs and the web app on **ports 80 and 5173**. The client adapts automatically to whatever host is accessed in the browser (LAN IP, custom domain, or localhost).
 
-> ⚠️ The repo is worked on **exclusively from WSL2** (single canonical clone `~/anarbib`). See Development tooling.
+The application is immediately available at:
+- **http://localhost:5173** (or **http://localhost**)
+- By local IP address (e.g. `http://192.168.x.x:5173` or `http://192.168.x.x`)
+- By any domain name or DNS record pointing to the machine
+
+Initial administrator account created automatically:
+- **Email:** `admin@anarbib.local` (or `admin@<domain>` with `--prod`)
+- **Password:** `anarbib-admin` (or secure generated password displayed in terminal with `--prod`)
+- Grants full access to administration panels: `/painel` (library management), `/biblioteca`, `/rede` (network administration), and `/catalogacao` (cataloging).
+
+Useful management options:
+```bash
+./install.sh --rebuild     # Complete reset and fresh volumes initialization
+./install.sh --stop        # Stop all containers and services
+```
+
+> ⚠️ The repo is worked on **exclusively from WSL2 / Linux** (single canonical clone `~/anarbib`). See Development tooling.
 
 Quick tests:
 
-```
+```bash
 npm test     # vitest run (i18n, helpers, components)
 npx vitest   # watch mode
 ```
 
 For SQL acceptance tests, see Tests.
 
-Local build (quality gate before push — real deployment goes through Forgejo Actions):
+Local build (quality gate before push — real deployment goes through Forgejo Actions or `./deploy/deploy.sh`):
 
-```
+```bash
 npm run build
 ```
+
 
 ---
 

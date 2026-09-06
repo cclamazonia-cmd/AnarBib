@@ -24,6 +24,8 @@
 
 REVOKE EXECUTE ON FUNCTION api.conv_controle_qualite(text, integer) FROM PUBLIC, anon, authenticated;
 REVOKE EXECUTE ON FUNCTION api.conv_controle_resumo() FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION api.conv_controle_qualite(text, integer) TO postgres;
+GRANT EXECUTE ON FUNCTION api.conv_controle_resumo() TO postgres;
 
 DO $$
 DECLARE

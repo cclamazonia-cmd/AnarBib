@@ -40,7 +40,11 @@ const THUMB_SUFFIX = '.thumb.jpg';
 // .forgejo/workflows/ci.yml), et `./supabase` leve a l'import si la variable
 // manque. Un import statique ici rendrait ce module intestable.
 function storagePublicBase() {
-  return `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public`;
+  const env = import.meta.env.VITE_SUPABASE_URL;
+  const base = (typeof window !== 'undefined' && window.location?.origin && (!env || env.includes('localhost') || env.includes('127.0.0.1')))
+    ? window.location.origin
+    : (env || '');
+  return `${base}/storage/v1/object/public`;
 }
 
 async function client() {

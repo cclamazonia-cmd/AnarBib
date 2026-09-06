@@ -27,7 +27,7 @@
 #                    tuer pour dépassement de durée — et l'usager voit un
 #                    « identifiants incorrects » trompeur.
 #                    Constaté le 18/08/2026.
-{$API_DOMAIN}, http://caddy {
+{$API_DOMAIN}, :80, :5173, http://caddy {
 
 	encode zstd gzip
 
@@ -36,7 +36,7 @@
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		X-Content-Type-Options    "nosniff"
 		X-Frame-Options           "DENY"
-		Referrer-Policy           "no-referrer"
+		Referrer-Policy           "strict-origin-when-cross-origin"
 		-Server
 	}
 
@@ -79,9 +79,11 @@
 	# En attendant, le moissonnage n'est pas limité — à surveiller, pas à
 	# corriger par anticipation.
 
-	# --- Le reste : rien. Pas de page d'accueil, pas de listing. -------------
+	# --- Frontend SPA (servi depuis le build dist/) -------------------------
 	handle {
-		respond "AnarBib API" 404
+		root * /srv
+		try_files {path} /index.html
+		file_server
 	}
 
 	log {

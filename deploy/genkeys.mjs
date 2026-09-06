@@ -28,6 +28,7 @@ if (!fs.existsSync(ENV)) {
 }
 
 let txt = fs.readFileSync(ENV, 'utf8');
+const txtInitial = txt;
 const rempli = [];
 const deja = [];
 
@@ -95,15 +96,26 @@ poser('SERVICE_ROLE_KEY', jwt('service_role', secret));
 // --- 4. mode local (répétition sur votre machine) --------------------------
 
 if (LOCAL) {
-  poser('API_DOMAIN', 'localhost', { force: true });
+  poser('API_DOMAIN', 'http://localhost', { force: true });
   poser('API_EXTERNAL_URL', 'http://localhost', { force: true });
   poser('SITE_URL', 'http://localhost:5173', { force: true });
   poser('URI_ALLOW_LIST', 'http://localhost:5173,http://localhost:5173/*', { force: true });
 }
 
+
 // --- écriture ---------------------------------------------------------------
 
-fs.writeFileSync(ENV, txt);
+if (txt !== txtInitial) {
+  if (txtInitial.trim().length > 0) {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const bakFile = `${ENV}.bak.${timestamp}`;
+    try {
+      fs.writeFileSync(bakFile, txtInitial);
+      console.log(`· Sauvegarde préalable de .env : ${bakFile}`);
+    } catch { /* ignore */ }
+  }
+  fs.writeFileSync(ENV, txt);
+}
 
 console.log('');
 if (rempli.length) {
@@ -121,8 +133,6 @@ if (deja.length) {
 console.log('');
 console.log('Aucun secret n\'a été affiché. Ils sont dans .env, qui est ignoré par git.');
 if (LOCAL) {
-  console.log('Mode local : domaines basculés sur localhost.');
-  console.log('⚠️  Pensez aussi à remplacer, dans le Caddyfile, la première ligne');
-  console.log('    «  {$API_DOMAIN} {  »  par  «  http://localhost {  ».');
+  console.log('Mode local : domaines basculés sur localhost (Caddyfile configuré automatiquement).');
 }
 console.log('');
