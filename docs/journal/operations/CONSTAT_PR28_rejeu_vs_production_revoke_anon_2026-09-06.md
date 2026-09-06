@@ -129,3 +129,67 @@ La fiche de reprise décrivait une exécution locale d'`install.sh` (étapes 1 �
 ## 8. État de la pile de répétition sur le poste (constaté en passant)
 
 `docker compose ls` : un seul projet, `anarbib-selfhost`, dossier `/mnt/c/Users/accat/Codeberg/anarbib/deploy` (clone Windows sur `main`, `effb6e99`). Conteneurs créés le 27/08 ; `db`, `caddy`, `functions` sortis en 127 le 03/09 20:01 UTC (arrêt du démon, pas une panne de Postgres : le journal montre un `fast shutdown` propre) ; `rest` relancé au démarrage de Docker Desktop ce matin (09:47 UTC), `auth` et `storage` en redémarrage permanent faute de base. Rien à faire avant le retour ; à remonter d'un `docker compose up -d` le jour où la répétition reprend.
+
+---
+
+## 9. MàJ 06/09, fin d'après-midi — la PR est « complétée », et elle a changé de nature
+
+Bastien a repoussé à 17 h 14 (5 commits, tête `b5782ec1`, base `c9fae54c` = `main` du jour) avec le message « J'ai complété ma PR ». Ses captures d'écran (`anar@fedora`, Docker 29.7.2, Compose 5.4.0) sont **celles que la fiche de reprise décrivait comme une exécution locale** : l'`install.sh` n'a jamais tourné sur ce poste, il a tourné chez lui. Le §5 et le §7 ci-dessus restent exacts, la cause est simplement identifiée. Deux PR sont aussi ouvertes sur le dépôt du site vitrine (`AnarBib/pages` : #1 fermée, remplacée par #2).
+
+### 9.1 Ce que la PR contient maintenant (46 fichiers, 3 011 lignes de diff, contre 18 et 1 253 le matin)
+
+| Bloc | Fichiers | Nature |
+|---|---|---|
+| Installateur | `install.sh` (668 l., trilingue), `deploy/scripts/seed-admin.mjs`, `deploy/genkeys.mjs`, `deploy/bootstrap.sh`, `deploy/scripts/run-migrations.sh`, `apply-pending-migrations.sh`, `deploy/deploy.sh` | outillage auto-hébergé |
+| Pile | `deploy/compose.yml`, `deploy/Caddyfile`, `deploy/functions.env.example`, `deploy/tunnel/*` | outillage auto-hébergé |
+| Migrations | 3 du 29/08 (inchangées depuis le matin) + 6 autres (`20260830090000`, `20260830130000`, `20260902100917`, `20260904121500`, `20260904130100`, `20260906111308`) | chemin de rejeu |
+| **Code de production** | `src/lib/supabase.js` (`resolveSupabaseUrl`), `src/lib/coverThumbs.js`, `AltchaWidget.jsx`, 6 pages, `_shared/core/secret-key.ts`, `_shared/transport/email.ts`, `_shared/mail/smtp.ts` (235 l., client SMTP maison), `notify-library-request`, `notify-document-permission-request` | **déployé en prod par la CI à la fusion** |
+| Docs | `README.md`, `CONTRIBUTING.md`, `deploy/README.md` (+99/−151), `deploy/REPETITION.md`, `docs/CHANTIERS_OUVERTS.md` | éditorial |
+
+**Le point qui commande tout le reste** : ce n'est plus une PR d'auto-hébergement. Trois Edge Functions, le transport mail commun et le résolveur d'URL du frontend changent pour tout le monde. Fusionner, c'est déployer ces changements sur la production par `ci.yml`. Demander une **scission** : (1) l'auto-hébergement pur — `install.sh`, `deploy/`, migrations, seed, docs de la pile ; (2) le code applicatif — à relire comme du code de production, avec ses tests, hors gel.
+
+### 9.2 Trois changements contraires à des décisions écrites
+
+1. **`_shared/core/secret-key.ts`** : `return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")` réintroduit le repli sur la clé legacy. Le commentaire du fichier dit noir sur blanc pourquoi il a été retiré (B18, 02/09 : clé désactivée, « un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire », `DOC-SILENCE-1`). Et le changement est **inutile** : la même PR ajoute `SUPABASE_SECRET_KEYS: '{"default":"${SERVICE_ROLE_KEY}"}'` dans `compose.yml`, ce qui est la bonne réponse pour la pile auto-hébergée. Garder la ligne de `compose.yml`, retirer celle du code.
+2. **Transport mail « mock silencieux »** (`email.ts`, et les deux copies locales dans `notify-library-request` et `notify-document-permission-request`) : sans `SMTP_HOST` ni `RESEND_API_KEY`, `sendEmail` rend `{ok:true, mocked:true}` et journalise. C'est le cas *(a)* de `DOC-SILENCE-1` (« un dispositif qui n'agit pas doit le dire ») — et même la forme exacte de son occurrence (1) : des mails qu'on croit partis. En prod la clé Resend existe, donc rien ne change **aujourd'hui** ; le jour où le secret manque, la prod répondra 200 en n'envoyant rien. Forme acceptable : le mock **seulement** sur `MAIL_TRANSPORT=mock` explicite ; absence de configuration = lever, comme avant. Le nouvel aiguillage (`SMTP_HOST` posé ⇒ SMTP l'emporte sauf `MAIL_TRANSPORT=resend`) est correct pour la prod, qui n'a pas de `SMTP_HOST`. Le client SMTP maison (`smtp.ts`, STARTTLS/465, AUTH LOGIN/PLAIN, `Deno.connectTls` sans option de contournement de certificat — bien) entre dans le bundle de prod sans y servir.
+3. **`docs/CHANTIERS_OUVERTS.md`** : l'entrée 1 passe à « *Validé le 28 août 2026* » avec « rejeu des 218 migrations et contrôle d'intégrité » — le chiffre qu'il a lui-même retiré (« d'autres migrations en échec »), à une date antérieure à sa PR, et le corps de la PR dit désormais 308. C'est `DOC-CONSTAT-1` mot pour mot, et c'est le document d'orientation du mainteneur : « validé » s'y écrit par celui qui l'a éprouvé sur une machine qui n'est pas la sienne, avec sa mesure datée. Il a aussi retiré les paragraphes « Ce que ça demande / Ce que ça apporte ». À laisser à Xavier.
+
+### 9.3 Sécurité : le compte administrateur initial
+
+`seed-admin.mjs` (appelé par `install.sh` après le contrôle de santé) crée, si `network_administrators` est vide : un utilisateur GoTrue via `/auth/v1/admin/users` (clé service), son profil, une bibliothèque `demo` si la table est vide (`visibility_level` reste `private` par défaut : elle n'apparaîtra pas à l'inscription publique — vérifié contre le schéma prod), deux appartenances `coordenador` + `librarian` (`UNIQUE (user_id, library_id, role)` en prod : le `ON CONFLICT` est juste) et une ligne `network_administrators` (PK `user_id` : juste aussi). Les colonnes nommées existent toutes en prod.
+
+- **Mode local** : `admin@anarbib.local` / **`anarbib-admin`**, en dur — et la PR #2 du site vitrine **publie ces identifiants** dans dix langues, pendant que la PR #28 vante l'accès « depuis le Wi-Fi, le téléphone d'un·e camarade, l'IP du réseau local ». Toute pile lancée par défaut et joignable sur un réseau a un administrateur réseau au mot de passe connu de tous. Le mode `prod` tire un mot de passe aléatoire (12 octets, base64url) : faire pareil en local, l'afficher une fois (c'est déjà ce que fait la fin d'`install.sh`, qui lit puis efface `.initial_admin_creds`).
+- **Doctrine** : l'écriture directe d'un `coordenador` + admin réseau contourne tout le circuit collégial (§41 `GOUV`). Pour amorcer une base **vide**, c'est exactement le « bootstrap reste ce qu'il est » de `GOUV-12` — acceptable, à condition que le script refuse de tourner sur une base qui a déjà un administrateur (c'est le cas : `count(*) … status='active'` puis `return`) et que la doc le présente comme l'amorçage, pas comme une façon de créer des comptes.
+
+### 9.4 Le chemin de rejeu, revu sur les neuf migrations
+
+- Les trois `REVOKE` du 29/08 : inchangés, justes (§4).
+- `20260904121500` : `from public` → `from public, anon` sur quatre `fn_import_*` — juste, même famille.
+- `20260830090000`, `20260830130000` : les blocs de vérification excluent désormais `supabase_admin` des grantees tolérés ; `20260902100917` ajoute `GRANT … TO postgres` sur `api.conv_controle_*`. Inoffensif en prod (`postgres` y est propriétaire, le grant est un no-op) ; **révélateur** : chez lui les objets appartiennent à `supabase_admin`, parce que les migrations tournent sous ce rôle (§3). La divergence est confirmée par le diff lui-même.
+- `20260904130100` : le `cron.schedule` passe dans un `DO` gardé par `to_regnamespace('cron') IS NULL → NOTICE + RETURN`. Le message dit « banc d'essai », mais le banc CI a un stub `cron` depuis le 31/08 : la garde ne sert que chez lui, donc **sa pile n'a pas `pg_cron`** — et toutes les planifications des migrations antérieures (15 fichiers appellent `cron.schedule`) y sont déjà passées en silence par leurs anciens `EXCEPTION`. Sur une pile auto-hébergée, cela veut dire : pas de rappels d'échéance, pas de moisson OAI, pas de digests, sans qu'aucun message ne le dise (`DOC-SILENCE-1`, encore). La bonne réponse est de **créer l'extension dans la pile** (`compose.yml` note déjà que le code l'utilise 36 fois), pas de sauter.
+- `20260906111308` : la regex du contrôle passe de `SELECT auth\.uid\(\)` à `~* 'SELECT (auth\.)?uid\(\)'`. Pourquoi `pg_get_expr` rendrait-il `uid()` sans schéma chez lui ? (`auth` dans le `search_path` de sa session ?) À lui de dire ; l'assouplissement est sans danger mais cache la cause.
+- Le corps de la PR annonce « Correction des identifiants UUID déterministes » : rien de tel dans le diff des migrations. À demander.
+- **Bien** : `SANS_POLICY_ATTENDUES` de `bootstrap.sh` complété des 9 tables manquantes (les 8 `ingest.*` de `20260830140000` et `loan_cycle_notifications`) — c'est précisément l'écart 15 → 24 que la comparaison des advisors avait relevé le matin. `run-migrations.sh` et `apply-pending-migrations.sh` inscrivent désormais chaque migration dans `supabase_migrations.schema_migrations` avec le schéma de table de la CLI (`version`, `statements`, `name`) : un `supabase db push` ultérieur les verrait appliquées.
+
+### 9.5 Détails de la pile et de la doc
+
+- `genkeys.mjs` : sauvegarde horodatée `.env.bak.<date>` avant toute écriture, message « éditez le Caddyfile » retiré, `REPETITION.md` aligné — les deux remarques du §5 sont **réglées**, avant même d'avoir été posées.
+- `.gitignore` : `deploy/.env.*` et `deploy/functions.env.*` couvrent aussi `.env.example` / `functions.env.example` (suivis, donc pas exclus, mais un `git add` d'un nouveau modèle sera refusé) : viser `deploy/.env.bak.*`.
+- `compose.yml` : Caddy publie aussi `5173` pour servir la SPA construite (`../dist` monté en `/srv`) — en conflit avec `npm run dev`, que `CONTRIBUTING.md` propose encore pour le HMR. `Caddyfile` : `{$API_DOMAIN}, :80, :5173, http://caddy` (tout `Host` accepté), `Referrer-Policy` global passé de `no-referrer` à `strict-origin-when-cross-origin` pour les tuiles OSM (le Leaflet des trois cartes le pose aussi) — à peser pour l'API, qui n'en avait pas besoin.
+- `src/lib/supabase.js` : en prod `VITE_SUPABASE_URL` ne contient ni `localhost` ni `127.0.0.1`, donc `resolveSupabaseUrl` rend l'URL explicite — comportement inchangé. Mais le commentaire supprimé (« pas de fallback hardcodé : une variable manquante doit être détectée, pas masquée ») était une décision ; le nouveau code rend `http://localhost` quand tout manque, et le `throw` qui suit devient inatteignable. `coverThumbs.js` recopie la logique au lieu de l'importer (justifié par son propre en-tête : l'import rendrait le module intestable).
+- `deploy/README.md` : réécrit à −151 lignes ; disparaissent « Ce qu'on a supprimé, et pourquoi », « Ordre de la répétition » et « `bg2-known-tables.txt` — le classement des tables pour la sauvegarde », section que le filet de la CI et la sauvegarde #BG2 citent. À rétablir ou à déplacer, pas à perdre.
+- `deploy/tunnel/README.md` : doctrine L4 (WireGuard recommandé, Rathole en option), gabarits. Non relu en détail — chantier gelé.
+
+### 9.6 Site vitrine — `AnarBib/pages` PR #2 (PR #1 fermée, même contenu)
+
+Guide d'auto-hébergement en 10 langues (générées par `tools/build-selfhosting-pages.py`, 1 444 lignes), lien « Auto-hébergement » dans la barre de navigation et le pied de page de `fr/`, `en/`, `es/`, `pt/`, renvoi dans le formulaire d'adhésion, `README.md` du dépôt en 4 langues.
+
+- **Dépend de la PR #28** : il documente `./install.sh`, qui n'est pas dans `main`. Pas avant elle, et pas avant le 14/09 non plus.
+- **Promesses à corriger avant publication** : « Fédération possible : même installée chez vous, votre bibliothèque peut coopérer avec les autres camarades du réseau » — **faux aujourd'hui** : la fédération vit dans une seule base, il n'existe aucun protocole entre instances ; « 2 Go suffisent largement », « Raspberry Pi 4/5 » — non mesuré (six conteneurs, dont Postgres, l'edge-runtime et un `npm run build` sur la machine) ; les identifiants par défaut publiés (§9.3) ; le « mode simulation local silencieux » présenté comme un choix recommandé (§9.2) ; « il applique automatiquement les 308 règles de base de données ». Le reste (ton, découpage, boutons « copier », `sudo usermod -aG docker`) est bon et utile.
+- Traductions produites par script : doctrine des Communs — livrer les 10 d'emblée **avec** l'avertissement « corrige-moi » ; le guide n'en porte pas.
+
+### 9.7 Ce qui reste vrai, et ce qui reste à faire
+
+- Production : toujours rien à appliquer ; aucune écriture faite ; aucun commentaire posté sur aucune des trois PR.
+- Le message proposé au §6 est à réécrire pour tenir compte de la PR complétée : version v2 dans le scratchpad de la session, remise à Xavier.
+- Ordre proposé pour la suite : (1) poser à Bastien la demande de scission et les trois points du §9.2 — ce sont ceux qui ne se discutent pas ; (2) le compte admin (§9.3) ; (3) le reste au retour de Bologne, PR par PR.
