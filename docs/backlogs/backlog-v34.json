@@ -4604,8 +4604,8 @@
       "id": "A4",
       "d": "A",
       "p": "P1",
-      "s": "decision",
-      "e": "?",
+      "s": "en-cours",
+      "e": "S",
       "sk": [
         "collectif",
         "aucune"
@@ -4615,8 +4615,8 @@
         "pt": "Acolher uma contribuição externa sem a perder nem se afogar nela"
       },
       "v": {
-        "fr": "Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène.",
-        "pt": "Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide."
+        "fr": "Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène. **Tranché le 06/09 au soir (Xavier) : A** — les trois règles et la contrepartie du mainteneur sont écrites dans `CONTRIBUTING.md` (fr et en, les deux langues du fichier) le soir même (`DOC-CONTRIB-1` ✅). Reste : la PR #28 scindée selon ces règles.",
+        "pt": "Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide. **Decidido em 06/09 à noite (Xavier): A** — as três regras e a contrapartida do mantenedor estão em `CONTRIBUTING.md` (fr e en, as duas línguas do arquivo) (`DOC-CONTRIB-1` ✅). Falta: a PR #28 dividida segundo essas regras."
       },
       "w": {
         "fr": "Écrire dans `CONTRIBUTING.md` trois règles courtes : une PR = un sujet ; le code déployé en production (frontend, Edge Functions) va dans une PR distincte de l'outillage ; pendant une relecture, on ajoute des commits, on ne force-pousse pas. Et dire ce que le mainteneur promet en retour : un premier retour sous une semaine.",
@@ -4959,18 +4959,18 @@
       "id": "G11",
       "d": "G",
       "p": "P0",
-      "s": "decision",
-      "e": "?",
+      "s": "ouvert",
+      "e": "S",
       "sk": [
-        "collectif"
+        "sysadmin"
       ],
       "t": {
         "fr": "Le premier administrateur d'une instance : écrire la règle d'amorçage",
         "pt": "O primeiro administrador de uma instância: escrever a regra de arranque"
       },
       "v": {
-        "fr": "Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK).",
-        "pt": "O circuito dos administradores de rede é colegial e supõe que já exista um; numa base vazia ninguém pode propor ninguém. A primeira linha foi escrita à mão em maio de 2026 e a exceção não está inscrita. `seed-admin.mjs` (PR #28) refaz o gesto por script; em modo local, credenciais fixas `admin@anarbib.local` / `anarbib-admin`, publicadas pelo guia da vitrine."
+        "fr": "Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK). **Tranché le 06/09 au soir (Xavier) : A + B + C + D′** — amorçage unique hors circuit, mot de passe aléatoire dans tous les modes, premier compte = coordination de la première biblio et admin réseau, l'installateur demande le nom de la bibliothèque. Reste à l'appliquer dans `seed-admin.mjs` et `install.sh` (PR #28) et à le dire dans `deploy/README.md`.",
+        "pt": "O circuito dos administradores de rede é colegial e supõe que já exista um; numa base vazia ninguém pode propor ninguém. A primeira linha foi escrita à mão em maio de 2026 e a exceção não está inscrita. `seed-admin.mjs` (PR #28) refaz o gesto por script; em modo local, credenciais fixas `admin@anarbib.local` / `anarbib-admin`, publicadas pelo guia da vitrine. **Decidido em 06/09 à noite (Xavier): A + B + C + D′.** Falta aplicar em `seed-admin.mjs` e `install.sh` (PR #28) e dizer em `deploy/README.md`."
       },
       "w": {
         "fr": "Trancher et inscrire au REGISTRE (`GOUV-19`) : *(a)* l'amorçage d'une base vide écrit un premier compte hors circuit, une fois, et le script refuse sinon ; *(b)* mot de passe aléatoire dans tous les modes, affiché une fois ; *(c)* le premier compte est-il coordinateur de la première biblio, admin réseau, ou les deux ? *(d)* la biblio `demo` : la créer, ou demander son nom à l'installation ?",
@@ -4991,8 +4991,8 @@
         ]
       },
       "dep": {
-        "fr": "Décision du mainteneur — `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q1). Bloque la fusion de la PR « auto-hébergement » (**I16**).",
-        "pt": "Decisão do mantenedor — Q1 da página de arbitragem. Bloqueia a fusão da PR « auto-hospedagem » (I16)."
+        "fr": "PR #28 scindée (**I16**) : le morceau est à proposer à Bastien.",
+        "pt": "PR #28 dividida (I16): a peça é a propor a Bastien."
       },
       "r": [
         "REGISTRE §41 GOUV-19",
@@ -5008,18 +5008,19 @@
       "id": "G12",
       "d": "G",
       "p": "P2",
-      "s": "decision",
-      "e": "?",
+      "s": "ouvert",
+      "e": "S",
       "sk": [
-        "collectif"
+        "langue",
+        "aucune"
       ],
       "t": {
         "fr": "Une instance = un réseau ; entre instances, seul le catalogue traverse",
         "pt": "Uma instância = uma rede; entre instâncias, só o catálogo atravessa"
       },
       "v": {
-        "fr": "Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction.",
-        "pt": "Cada instalação auto-hospedada é uma rede por si só. O que atravessa hoje: o catálogo, por OAI-PMH (`oai-pmh-provider`, `harvest-oai-pmh`). O que não atravessa: contas, vínculos, empréstimos entre bibliotecas, governança, gazeta."
+        "fr": "Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction. **Tranché le 06/09 au soir (Xavier) : A** — la doctrine est inscrite telle quelle (`FED-O11` ✅) ; aucun annuaire d'instances ouvert. Reste : faire dire la phrase au guide vitrine (**J3**) et à `deploy/README.md`.",
+        "pt": "Cada instalação auto-hospedada é uma rede por si só. O que atravessa hoje: o catálogo, por OAI-PMH (`oai-pmh-provider`, `harvest-oai-pmh`). O que não atravessa: contas, vínculos, empréstimos entre bibliotecas, governança, gazeta. **Decidido em 06/09 à noite (Xavier): A** — doutrina inscrita (`FED-O11` ✅); nenhum anuário aberto. Falta: fazer o guia da vitrine (J3) e `deploy/README.md` dizerem a frase."
       },
       "w": {
         "fr": "Inscrire la doctrine au REGISTRE (`FED-O11`) et la faire dire au site vitrine dans les mêmes termes. Un **annuaire des instances** (pour que la moisson ne dépende pas d'une adresse tapée à la main) serait le premier pas utile — c'est un domaine nouveau, donc un arbitrage écrit selon `DOC-GEL-1`, pas un item de code. Prêts, comptes et gouvernance entre instances = une fédération de protocole, hors de portée sans redessiner le modèle ; ne pas l'annoncer.",
@@ -5040,8 +5041,8 @@
         ]
       },
       "dep": {
-        "fr": "Décision du mainteneur — Q2 de la page d'arbitrage. Conditionne **J3**.",
-        "pt": "Decisão do mantenedor — Q2 da página de arbitragem. Condiciona J3."
+        "fr": "Aucune ; **J3** en dépend.",
+        "pt": "Nenhuma; J3 depende disto."
       },
       "r": [
         "REGISTRE §24 FED-O11",

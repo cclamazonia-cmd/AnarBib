@@ -75,6 +75,14 @@ Pour reconstruire la pile complète — Postgres, PostgREST, authentification, s
 3. **Demande d'intégration vers `main`**, avec le périmètre décrit.
 4. Pour un chantier d'ampleur, **ouvrir un ticket avant de coder**. Deux personnes qui écrivent le même correctif, c'est une soirée perdue pour l'une des deux.
 
+**Ce qu'une demande d'intégration peut contenir** *(règle écrite le 06/09/2026, après la première contribution extérieure — REGISTRE `DOC-CONTRIB-1`)* :
+
+- **Une PR = un sujet.** Un installateur, un correctif de migration, une page du manuel : trois PR, pas une. Une PR qu'on ne peut pas relire d'un trait ne sera pas fusionnée d'un trait.
+- **Le code qui part en production va dans une PR à part.** Tout ce qui est sous `src/` ou `supabase/functions/` est déployé sur la production par l'intégration continue à la fusion. Il se relit comme du code de production, avec ses tests — séparément de l'outillage (`deploy/`, `scripts/`, docs).
+- **Pendant une relecture, on ajoute des commits, on ne réécrit pas l'historique.** Un `push --force` sur une branche en cours de lecture fait perdre au relecteur ce qu'il avait lu. Les corrections viennent en commits ajoutés ; on nettoie, si on y tient, une fois la PR approuvée.
+
+**Ce que le mainteneur promet en retour** : un premier retour sous une semaine, et le motif d'un refus toujours écrit. Une PR qui attend plus longtemps, c'est à lui qu'il faut le reprocher, pas à vous.
+
 **Livrables** : des correctifs complets, éprouvés sur un clone propre, ou des fichiers entiers. Jamais d'instructions « remplacez la ligne 42 par ceci ».
 
 **Production** : aucune migration n'est appliquée sans validation explicite. Le travail se fait en local ou sur une base d'essai.
@@ -129,6 +137,14 @@ On **Linux**, or **WSL2** on Windows: `git clone`, then `npm ci` (not `npm insta
 ## Working rhythm
 
 Fork on Codeberg, one branch per work item, clear commits prefixed `feat:` `fix:` `docs:` `chore:` with a `Session: <name>` trailer, and a pull request to `main` describing the scope. For anything substantial, open an issue before coding.
+
+**What a pull request may contain** *(rule written on 2026-09-06, after the first outside contribution — REGISTRE `DOC-CONTRIB-1`)*:
+
+- **One PR, one subject.** An installer, a migration fix, a manual page: three PRs, not one. A PR that cannot be read in one sitting will not be merged in one sitting.
+- **Code that ships to production goes in its own PR.** Everything under `src/` or `supabase/functions/` is deployed to production by CI on merge. It is reviewed as production code, with its tests — separately from tooling (`deploy/`, `scripts/`, docs).
+- **While a PR is under review, add commits; do not rewrite history.** A `push --force` on a branch being read throws away what the reviewer had read. Fixes come as added commits; squash, if you care to, once the PR is approved.
+
+**What the maintainer promises in return**: a first reply within a week, and the reason for any refusal always in writing. A PR that waits longer than that is on him, not on you.
 
 Deliverables are complete patches tested on a clean clone, or whole files — never "replace line 42 with this". No migration reaches production without explicit validation.
 

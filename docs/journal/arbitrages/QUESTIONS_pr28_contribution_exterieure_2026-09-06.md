@@ -1,4 +1,4 @@
-# Quatre questions nées de la première contribution extérieure — 06/09/2026
+# Quatre questions nées de la première contribution extérieure — 06/09/2026 *(tranchées le soir même)*
 
 > Page préparée pour Xavier le soir du 06/09, après relecture complète de la
 > PR #28 (`codeberg.org/anarbib/anarbib/pulls/28`, Bastien, `ASR2026`) et de la
@@ -26,7 +26,9 @@
 - **C′ — Le premier compte n'est que coordination** ; l'admin réseau s'active par un geste séparé, documenté.
 - **D — La biblio `demo` se crée** avec ce nom ; **D′ — l'installateur demande le nom** de la bibliothèque (une question de plus dans `install.sh`, qui en pose déjà pour le mail).
 
-**Recommandation : A + B + C + D′.** A et B ne se discutent pas. C parce que l'instance auto-hébergée typique est une bibliothèque seule, et que C′ ajoute une marche là où le guide promet « une seule commande ». D′ parce qu'une bibliothèque nommée `demo` finit par s'appeler `demo` pour toujours.
+**Recommandation : A + B + C + D′.**
+
+**Verdict (Xavier, 06/09 au soir) : A + B + C + D′.** → REGISTRE `GOUV-19` ✅, backlog `G11` passe à *ouvert* (à appliquer dans `seed-admin.mjs` et `install.sh`, PR #28). A et B ne se discutent pas. C parce que l'instance auto-hébergée typique est une bibliothèque seule, et que C′ ajoute une marche là où le guide promet « une seule commande ». D′ parce qu'une bibliothèque nommée `demo` finit par s'appeler `demo` pour toujours.
 
 ---
 
@@ -40,7 +42,9 @@
 - **B — A, plus ouvrir l'annuaire des instances comme domaine** : une liste des instances qui se reconnaissent, pour que la moisson ne dépende pas d'une adresse tapée à la main. C'est un domaine nouveau au sens de `DOC-GEL-1` : il faudrait une décision datée qui pèse son coût contre la fenêtre restante. Pas avant le retour.
 - **C — Annoncer une fédération de protocole** (prêts, comptes, gouvernance entre instances). Écartée : elle n'existe pas, et rien ne l'annonce.
 
-**Recommandation : A maintenant, B à instruire au retour, si le collectif le demande.** L'auto-hébergement va multiplier les instances ; si le projet ne dit pas ce qui les relie, chaque guide le dira à sa façon.
+**Recommandation : A maintenant, B à instruire au retour, si le collectif le demande.**
+
+**Verdict (Xavier, 06/09 au soir) : A.** → REGISTRE `FED-O11` ✅, backlog `G12` passe à *ouvert* (faire dire la phrase au site vitrine et à `deploy/README.md`) ; l'annuaire n'est pas ouvert. L'auto-hébergement va multiplier les instances ; si le projet ne dit pas ce qui les relie, chaque guide le dira à sa façon.
 
 ---
 
@@ -60,8 +64,10 @@
 - **B — Les mêmes règles, appliquées au cas par cas** sans les écrire. C'est ce qui s'est passé le 06/09 : ça a demandé un commentaire de deux pages.
 - **C — Un gabarit de PR** (`.forgejo/PULL_REQUEST_TEMPLATE.md`) qui pose les questions à l'ouverture : quel sujet, quels fichiers de production, quel test. Complète A ; ne le remplace pas.
 
-**Recommandation : A, et C quand quelqu'un a une soirée.** Une règle écrite protège la contribution autant que le projet : elle évite qu'un travail sincère finisse refusé en bloc parce qu'il était impossible à lire.
+**Recommandation : A, et C quand quelqu'un a une soirée.**
+
+**Verdict (Xavier, 06/09 au soir) : A.** → REGISTRE `DOC-CONTRIB-1` ✅ ; les trois règles écrites dans `CONTRIBUTING.md` le soir même ; backlog `A4` passe à *en cours* (reste : la PR #28 scindée). Une règle écrite protège la contribution autant que le projet : elle évite qu'un travail sincère finisse refusé en bloc parce qu'il était impossible à lire.
 
 ---
 
-*Une fois répondu : les trois entrées 🟡 du REGISTRE passent à ✅ avec la lettre choisie, les items du backlog changent d'état, et cette page reste comme trace.*
+*Répondu le 06/09 au soir : `Q1 A-B-C-D′ · Q2 A · Q3 (déjà) attendre · Q4 A`. Les trois entrées du REGISTRE sont passées à ✅, les items du backlog ont changé d'état, cette page reste comme trace.*

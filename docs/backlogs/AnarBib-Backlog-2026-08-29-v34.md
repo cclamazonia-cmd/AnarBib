@@ -292,7 +292,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **A1** | Obtenir au moins deux autres administrateur·rices réseau | `P0` | Décision collective |
 | **A2** | Éprouver la reconstruction complète par quelqu'un d'autre que le mainteneur | `P0` | Ouvert |
 | **A3** | Sortir le runner d'intégration continue de la machine du mainteneur | `P0` | Ouvert |
-| **A4** | Accueillir une contribution extérieure sans la perdre ni s'y noyer | `P1` | Décision collective |
+| **A4** | Accueillir une contribution extérieure sans la perdre ni s'y noyer | `P1` | En cours |
 
 #### A1 — Obtenir au moins deux autres administrateur·rices réseau
 
@@ -362,9 +362,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### A4 — Accueillir une contribution extérieure sans la perdre ni s'y noyer
 
-`P1` Prioritaire · État : **Décision collective** · Charge : non chiffré · Ce que ça demande : délibération collective, aucune compétence technique
+`P1` Prioritaire · État : **En cours** · Charge : une soirée · Ce que ça demande : délibération collective, aucune compétence technique
 
-**État.** Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène.
+**État.** Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène. **Tranché le 06/09 au soir (Xavier) : A** — les trois règles et la contrepartie du mainteneur sont écrites dans `CONTRIBUTING.md` (fr et en, les deux langues du fichier) le soir même (`DOC-CONTRIB-1` ✅). Reste : la PR #28 scindée selon ces règles.
 
 *Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
@@ -1195,8 +1195,8 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G9** | Implémenter la cartographie du réseau selon la spec v1.0 | `P3` | Gelé |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
-| **G11** | Le premier administrateur d'une instance : écrire la règle d'amorçage | `P0` | Décision collective |
-| **G12** | Une instance = un réseau ; entre instances, seul le catalogue traverse | `P2` | Décision collective |
+| **G11** | Le premier administrateur d'une instance : écrire la règle d'amorçage | `P0` | Ouvert |
+| **G12** | Une instance = un réseau ; entre instances, seul le catalogue traverse | `P2` | Ouvert |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1335,9 +1335,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### G11 — Le premier administrateur d'une instance : écrire la règle d'amorçage
 
-`P0` Structurel · État : **Décision collective** · Charge : non chiffré · Ce que ça demande : délibération collective
+`P0` Structurel · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
 
-**État.** Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK).
+**État.** Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK). **Tranché le 06/09 au soir (Xavier) : A + B + C + D′** — amorçage unique hors circuit, mot de passe aléatoire dans tous les modes, premier compte = coordination de la première biblio et admin réseau, l'installateur demande le nom de la bibliothèque. Reste à l'appliquer dans `seed-admin.mjs` et `install.sh` (PR #28) et à le dire dans `deploy/README.md`.
 
 *Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
@@ -1350,15 +1350,15 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - `GOUV-19` est acté au REGISTRE avec les quatre réponses.
 - `seed-admin.mjs` les applique et `deploy/README.md` le présente comme l'amorçage, pas comme une création de compte.
 
-**Dépendances.** Décision du mainteneur — `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q1). Bloque la fusion de la PR « auto-hébergement » (**I16**).
+**Dépendances.** PR #28 scindée (**I16**) : le morceau est à proposer à Bastien.
 
 *Renvois : `REGISTRE §41 GOUV-19` · `deploy/scripts/seed-admin.mjs (PR #28)` · `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06`*
 
 #### G12 — Une instance = un réseau ; entre instances, seul le catalogue traverse
 
-`P2` Courant · État : **Décision collective** · Charge : non chiffré · Ce que ça demande : délibération collective
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle, aucune compétence technique
 
-**État.** Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction.
+**État.** Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction. **Tranché le 06/09 au soir (Xavier) : A** — la doctrine est inscrite telle quelle (`FED-O11` ✅) ; aucun annuaire d'instances ouvert. Reste : faire dire la phrase au guide vitrine (**J3**) et à `deploy/README.md`.
 
 *Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
@@ -1371,7 +1371,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - `FED-O11` acté ; le guide vitrine et `deploy/README.md` emploient la même phrase.
 - La question de l'annuaire a une décision datée dans `journal/arbitrages/`, dans un sens ou dans l'autre.
 
-**Dépendances.** Décision du mainteneur — Q2 de la page d'arbitrage. Conditionne **J3**.
+**Dépendances.** Aucune ; **J3** en dépend.
 
 *Renvois : `REGISTRE §24 FED-O11` · `supabase/functions/oai-pmh-provider` · `supabase/functions/harvest-oai-pmh` · `REGISTRE §0 DOC-GEL-1`*
 

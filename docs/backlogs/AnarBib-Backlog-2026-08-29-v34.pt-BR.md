@@ -292,7 +292,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **A1** | Obter pelo menos duas outras pessoas administradoras de rede | `P0` | Decisão coletiva |
 | **A2** | Testar a reconstrução completa por outra pessoa que não o mantenedor | `P0` | Aberto |
 | **A3** | Tirar o runner de integração contínua da máquina do mantenedor | `P0` | Aberto |
-| **A4** | Acolher uma contribuição externa sem a perder nem se afogar nela | `P1` | Decisão coletiva |
+| **A4** | Acolher uma contribuição externa sem a perder nem se afogar nela | `P1` | Em curso |
 
 #### A1 — Obter pelo menos duas outras pessoas administradoras de rede
 
@@ -362,9 +362,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### A4 — Acolher uma contribuição externa sem a perder nem se afogar nela
 
-`P1` Prioritário · Estado : **Decisão coletiva** · Carga : não estimado · O que exige : deliberação coletiva, nenhuma competência técnica
+`P1` Prioritário · Estado : **Em curso** · Carga : uma noite · O que exige : deliberação coletiva, nenhuma competência técnica
 
-**Estado.** Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide.
+**Estado.** Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide. **Decidido em 06/09 à noite (Xavier): A** — as três regras e a contrapartida do mantenedor estão em `CONTRIBUTING.md` (fr e en, as duas línguas do arquivo) (`DOC-CONTRIB-1` ✅). Falta: a PR #28 dividida segundo essas regras.
 
 *Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
@@ -1181,8 +1181,8 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G8** | Completar a cartografia com os arquivos identificados alhures | `P2` | Aberto |
 | **G9** | Implementar a cartografia da rede segundo a spec v1.0 | `P3` | Congelado |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
-| **G11** | O primeiro administrador de uma instância: escrever a regra de arranque | `P0` | Decisão coletiva |
-| **G12** | Uma instância = uma rede; entre instâncias, só o catálogo atravessa | `P2` | Decisão coletiva |
+| **G11** | O primeiro administrador de uma instância: escrever a regra de arranque | `P0` | Aberto |
+| **G12** | Uma instância = uma rede; entre instâncias, só o catálogo atravessa | `P2` | Aberto |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1321,9 +1321,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### G11 — O primeiro administrador de uma instância: escrever a regra de arranque
 
-`P0` Estrutural · Estado : **Decisão coletiva** · Carga : não estimado · O que exige : deliberação coletiva
+`P0` Estrutural · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
-**Estado.** O circuito dos administradores de rede é colegial e supõe que já exista um; numa base vazia ninguém pode propor ninguém. A primeira linha foi escrita à mão em maio de 2026 e a exceção não está inscrita. `seed-admin.mjs` (PR #28) refaz o gesto por script; em modo local, credenciais fixas `admin@anarbib.local` / `anarbib-admin`, publicadas pelo guia da vitrine.
+**Estado.** O circuito dos administradores de rede é colegial e supõe que já exista um; numa base vazia ninguém pode propor ninguém. A primeira linha foi escrita à mão em maio de 2026 e a exceção não está inscrita. `seed-admin.mjs` (PR #28) refaz o gesto por script; em modo local, credenciais fixas `admin@anarbib.local` / `anarbib-admin`, publicadas pelo guia da vitrine. **Decidido em 06/09 à noite (Xavier): A + B + C + D′.** Falta aplicar em `seed-admin.mjs` e `install.sh` (PR #28) e dizer em `deploy/README.md`.
 
 *Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
@@ -1336,15 +1336,15 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - `GOUV-19` está registrado com as quatro respostas.
 - `seed-admin.mjs` as aplica e `deploy/README.md` o apresenta como arranque.
 
-**Dependências.** Decisão do mantenedor — Q1 da página de arbitragem. Bloqueia a fusão da PR « auto-hospedagem » (I16).
+**Dependências.** PR #28 dividida (I16): a peça é a propor a Bastien.
 
 *Remissões : `REGISTRE §41 GOUV-19` · `deploy/scripts/seed-admin.mjs (PR #28)` · `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06`*
 
 #### G12 — Uma instância = uma rede; entre instâncias, só o catálogo atravessa
 
-`P2` Corrente · Estado : **Decisão coletiva** · Carga : não estimado · O que exige : deliberação coletiva
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna, nenhuma competência técnica
 
-**Estado.** Cada instalação auto-hospedada é uma rede por si só. O que atravessa hoje: o catálogo, por OAI-PMH (`oai-pmh-provider`, `harvest-oai-pmh`). O que não atravessa: contas, vínculos, empréstimos entre bibliotecas, governança, gazeta.
+**Estado.** Cada instalação auto-hospedada é uma rede por si só. O que atravessa hoje: o catálogo, por OAI-PMH (`oai-pmh-provider`, `harvest-oai-pmh`). O que não atravessa: contas, vínculos, empréstimos entre bibliotecas, governança, gazeta. **Decidido em 06/09 à noite (Xavier): A** — doutrina inscrita (`FED-O11` ✅); nenhum anuário aberto. Falta: fazer o guia da vitrine (J3) e `deploy/README.md` dizerem a frase.
 
 *Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
@@ -1357,7 +1357,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - `FED-O11` registrado; guia da vitrine e `deploy/README.md` usam a mesma frase.
 - A questão do anuário tem decisão datada em `journal/arbitrages/`.
 
-**Dependências.** Decisão do mantenedor — Q2 da página de arbitragem. Condiciona J3.
+**Dependências.** Nenhuma; J3 depende disto.
 
 *Remissões : `REGISTRE §24 FED-O11` · `supabase/functions/oai-pmh-provider` · `supabase/functions/harvest-oai-pmh` · `REGISTRE §0 DOC-GEL-1`*
 
