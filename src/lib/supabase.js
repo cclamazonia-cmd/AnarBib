@@ -1,12 +1,22 @@
 import { createClient } from '@supabase/supabase-js';
 import { anarbibStorage } from './staffStorage';
 
-// Configuration Supabase : les deux variables sont REQUISES au build.
-// Pas de fallback hardcodé : si une variable manque, c'est un bug de
-// configuration de l'environnement de build qui doit être détecté
-// explicitement plutôt que masqué par une valeur en dur.
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// Résolution dynamique de l'URL Supabase / Passerelle API :
+// Si VITE_SUPABASE_URL='auto' (mode auto-hébergé avec Caddy servant le front et l'API sur la même origine),
+// l'URL est résolue dynamiquement sur window.location.origin.
+// Si une URL explicite est fournie (ex: http://127.0.0.1:54321 pour supabase start, ou https://*.supabase.co en cloud),
+// elle est STRICTEMENT respectée pour ne pas casser le flux de dev Supabase CLI standard.
+export function resolveSupabaseUrl(explicitUrl = import.meta.env.VITE_SUPABASE_URL) {
+  if (explicitUrl === 'auto') {
+    return typeof window !== 'undefined' && window.location?.origin
+      ? window.location.origin
+      : 'http://localhost';
+  }
+  return explicitUrl || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+}
+
+export const SUPABASE_URL = resolveSupabaseUrl();
+export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 if (!SUPABASE_URL) {
   throw new Error(
