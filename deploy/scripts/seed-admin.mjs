@@ -85,7 +85,7 @@ async function main() {
     const data = await res.json();
     if (data.id) {
       userId = data.id;
-    } else if (data.msg && data.msg.includes('already registered')) {
+    } else if (data.error_code === 'email_exists' || (data.msg || data.message || '').includes('already')) {
       const idOut = execSync(
         `docker compose -f "${path.join(DEPLOY_DIR, 'compose.yml')}" exec -T db psql -U supabase_admin -d postgres -tAc "SELECT id FROM auth.users WHERE email='${adminEmail}';"`,
         { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
@@ -139,9 +139,11 @@ END $$;
 `;
 
   try {
+    // Le SQL contient des délimiteurs $$ (PL/pgSQL) qui seraient interprétés
+    // par le shell si passés via -c "...". On pipe via stdin pour éviter ça.
     execSync(
-      `docker compose -f "${path.join(DEPLOY_DIR, 'compose.yml')}" exec -T db psql -U supabase_admin -d postgres -c "${sql.replace(/"/g, '\\"')}"`,
-      { stdio: ['pipe', 'pipe', 'ignore'] }
+      `docker compose -f "${path.join(DEPLOY_DIR, 'compose.yml')}" exec -T db psql -U supabase_admin -d postgres`,
+      { input: sql, encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
     );
   } catch (err) {
     console.error(`✗ Erreur attribution rôles SQL: ${err.message}`);
