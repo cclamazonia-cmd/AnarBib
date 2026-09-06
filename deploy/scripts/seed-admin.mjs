@@ -21,6 +21,15 @@ const ENV_FILE = path.join(DEPLOY_DIR, '.env');
 
 const mode = process.argv[2] || 'local';
 const rawDomain = process.argv[3] || '';
+const rawLibName = (process.argv[4] || '').trim();
+
+const libName = rawLibName || (mode === 'prod' ? 'Bibliothèque Principale' : 'Bibliothèque Autonome');
+const libSlug = libName
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/(^-|-$)/g, '') || 'bibliotheque';
 
 if (!fs.existsSync(ENV_FILE)) {
   console.error(`✗ Fichier ${ENV_FILE} introuvable.`);
@@ -53,8 +62,9 @@ async function main() {
     return;
   }
 
+  // Règle GOUV-19 : mot de passe fort aléatoire dans TOUS les modes (local comme prod)
+  const adminPassword = crypto.randomBytes(12).toString('base64url');
   let adminEmail = 'admin@anarbib.local';
-  let adminPassword = 'anarbib-admin';
 
   if (mode === 'prod') {
     const cleanDomain = rawDomain
@@ -62,7 +72,6 @@ async function main() {
       .replace(/\/.*$/, '')
       .trim();
     adminEmail = cleanDomain ? `admin@${cleanDomain}` : 'admin@anarbib.org';
-    adminPassword = crypto.randomBytes(12).toString('base64url');
   }
 
   let userId = null;
@@ -116,7 +125,7 @@ BEGIN
 
   IF NOT EXISTS (SELECT 1 FROM public.libraries LIMIT 1) THEN
     INSERT INTO public.libraries (slug, name, is_active, is_default, accepts_public_signup, default_locale)
-    VALUES ('demo', 'Bibliothèque AnarBib Démo', true, true, true, 'fr')
+    VALUES ('${libSlug}', '${libName.replace(/'/g, "''")}', true, true, true, 'fr')
     RETURNING id INTO v_lib_id;
   ELSE
     SELECT id INTO v_lib_id FROM public.libraries ORDER BY created_at ASC LIMIT 1;
@@ -153,7 +162,7 @@ END $$;
   const credsFile = path.join(DEPLOY_DIR, '.initial_admin_creds');
   fs.writeFileSync(
     credsFile,
-    `ADMIN_EMAIL=${adminEmail}\nADMIN_PASSWORD=${adminPassword}\n`
+    `ADMIN_EMAIL=${adminEmail}\nADMIN_PASSWORD=${adminPassword}\nLIB_NAME=${libName}\n`
   );
 }
 

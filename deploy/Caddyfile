@@ -27,7 +27,7 @@
 #                    tuer pour dépassement de durée — et l'usager voit un
 #                    « identifiants incorrects » trompeur.
 #                    Constaté le 18/08/2026.
-{$API_DOMAIN}, :80, :5173, http://caddy {
+{$API_DOMAIN}, :80, http://caddy {
 
 	encode zstd gzip
 

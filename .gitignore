@@ -100,9 +100,11 @@ public/thesaurus.jsonld
 # Seuls les fichiers REMPLIS sont ignores ; les modeles .example sont versionnes,
 # faute de quoi le dossier deploy/ n'est pas utilisable depuis un clone frais.
 deploy/.env
-deploy/.env.*
+deploy/.env.local
+deploy/.env.bak.*
 deploy/functions.env
-deploy/functions.env.*
+deploy/functions.env.local
+deploy/functions.env.bak.*
 deploy/.initial_admin_creds
 # NOTE 2026-08-18 : genkeys.mjs etait ignore par erreur. Il ne contient AUCUN
 # secret — il en genere, et les ecrit dans .env sans jamais les afficher. Sans

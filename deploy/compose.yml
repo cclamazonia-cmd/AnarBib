@@ -241,7 +241,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "5173:5173"
     environment:
       API_DOMAIN: ${API_DOMAIN}
     volumes:

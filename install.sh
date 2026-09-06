@@ -218,6 +218,23 @@ t() {
     en:ok_mock)        echo "Local mode activated (emails logged, no external sending)" ;;
     pt:ok_mock)        echo "Modo local ativado (e-mails registrados sem envio externo)" ;;
 
+    # ── library name (GOUV-19) ────────────────────────────────────────────────
+    fr:lib_title)      echo "📚 Initialisation de votre première bibliothèque (GOUV-19) :" ;;
+    en:lib_title)      echo "📚 Initializing your first library (GOUV-19):" ;;
+    pt:lib_title)      echo "📚 Inicialização da sua primeira biblioteca (GOUV-19):" ;;
+
+    fr:lib_prompt)     printf "  Nom de votre bibliothèque [défaut: %s] : " "$2" ;;
+    en:lib_prompt)     printf "  Library name [default: %s]: " "$2" ;;
+    pt:lib_prompt)     printf "  Nome da sua biblioteca [padrão: %s]: " "$2" ;;
+
+    fr:ok_lib)         echo "Bibliothèque configurée : $2" ;;
+    en:ok_lib)         echo "Library configured: $2" ;;
+    pt:ok_lib)         echo "Biblioteca configurada: $2" ;;
+
+    fr:admin_lib)      echo "  • Bibliothèque : $2" ;;
+    en:admin_lib)      echo "  • Library      : $2" ;;
+    pt:admin_lib)      echo "  • Biblioteca   : $2" ;;
+
     # ── step 3 ───────────────────────────────────────────────────────────────
     fr:step3)          echo "3/4 · Configuration et compilation du frontend" ;;
     en:step3)          echo "3/4 · Frontend configuration and build" ;;
@@ -281,21 +298,21 @@ t() {
     en:open_browser)   echo "  👉 Open your browser at:" ;;
     pt:open_browser)   echo "  👉 Abra seu navegador em:" ;;
 
-    fr:url_local)      echo "     • Local       : http://localhost:5173  (ou http://localhost)" ;;
-    en:url_local)      echo "     • Local       : http://localhost:5173  (or http://localhost)" ;;
-    pt:url_local)      echo "     • Local       : http://localhost:5173  (ou http://localhost)" ;;
+    fr:url_local)      echo "     • Local       : http://localhost" ;;
+    en:url_local)      echo "     • Local       : http://localhost" ;;
+    pt:url_local)      echo "     • Local       : http://localhost" ;;
 
-    fr:url_network)    echo "     • Réseau (IP) : http://$2:5173" ;;
-    en:url_network)    echo "     • Network (IP): http://$2:5173" ;;
-    pt:url_network)    echo "     • Rede (IP)   : http://$2:5173" ;;
+    fr:url_network)    echo "     • Réseau (IP) : http://$2" ;;
+    en:url_network)    echo "     • Network (IP): http://$2" ;;
+    pt:url_network)    echo "     • Rede (IP)   : http://$2" ;;
 
     fr:url_domain)     echo "     • Domaine     : tout nom de domaine ou alias DNS pointant vers cette machine" ;;
     en:url_domain)     echo "     • Domain      : any domain name or DNS alias pointing to this machine" ;;
     pt:url_domain)     echo "     • Domínio     : qualquer nome de domínio ou alias DNS apontando para esta máquina" ;;
 
-    fr:admin_title)    echo "👤 Compte d'administration initial créé :" ;;
-    en:admin_title)    echo "👤 Initial admin account created:" ;;
-    pt:admin_title)    echo "👤 Conta de administrador inicial criada:" ;;
+    fr:admin_title)    echo "👤 Compte d'administration initial créé (amorçage) :" ;;
+    en:admin_title)    echo "👤 Initial admin account created (bootstrap):" ;;
+    pt:admin_title)    echo "👤 Conta de administrador inicial criada (bootstrap):" ;;
 
     fr:admin_email)    echo "  • Courriel     : $2" ;;
     en:admin_email)    echo "  • Email        : $2" ;;
@@ -305,17 +322,17 @@ t() {
     en:admin_pass)     echo "  • Password     : $2" ;;
     pt:admin_pass)     echo "  • Senha        : $2" ;;
 
-    fr:admin_warn)     echo "  ⚠️  Pensez à modifier ce mot de passe dès votre première connexion !" ;;
-    en:admin_warn)     echo "  ⚠️  Please change this password after your first login!" ;;
-    pt:admin_warn)     echo "  ⚠️  Altere esta senha após o primeiro acesso!" ;;
+    fr:admin_warn)     echo "  ⚠️  Notez bien ce mot de passe aléatoire : il ne sera plus réaffiché !" ;;
+    en:admin_warn)     echo "  ⚠️  Save this random password: it will not be displayed again!" ;;
+    pt:admin_warn)     echo "  ⚠️  Guarde esta senha aleatória: ela não será exibida novamente!" ;;
 
     fr:access_title)   echo "Points d'accès de votre installation :" ;;
     en:access_title)   echo "Access points for your installation:" ;;
     pt:access_title)   echo "Pontos de acesso da sua instalação:" ;;
 
-    fr:access_web)     echo "  • Application Web (Interface) : port 5173 ou port 80 (IP, domaine ou localhost)" ;;
-    en:access_web)     echo "  • Web Application (Interface)  : port 5173 or port 80 (IP, domain or localhost)" ;;
-    pt:access_web)     echo "  • Aplicação Web (Interface)    : porta 5173 ou porta 80 (IP, domínio ou localhost)" ;;
+    fr:access_web)     echo "  • Application Web (Interface) : port 80 (ou port 5173 en mode npm run dev)" ;;
+    en:access_web)     echo "  • Web Application (Interface)  : port 80 (or port 5173 in npm run dev mode)" ;;
+    pt:access_web)     echo "  • Aplicação Web (Interface)    : porta 80 (ou porta 5173 no modo npm run dev)" ;;
 
     fr:access_api)     echo "  • Passerelle API (Caddy)       : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
     en:access_api)     echo "  • API Gateway (Caddy)          : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
@@ -562,6 +579,21 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
   esac
 fi
 
+# Initialisation de la première bibliothèque (GOUV-19)
+DEFAULT_LIB="Bibliothèque Autonome"
+[ "$LANGUE" = "en" ] && DEFAULT_LIB="Autonomous Library"
+[ "$LANGUE" = "pt" ] && DEFAULT_LIB="Biblioteca Autônoma"
+
+LIB_NAME="$DEFAULT_LIB"
+if [ -t 0 ]; then
+  echo ""
+  t lib_title
+  t lib_prompt "$DEFAULT_LIB"
+  read -r USER_LIB_NAME
+  [ -n "$USER_LIB_NAME" ] && LIB_NAME="$USER_LIB_NAME"
+  succes "$(t ok_lib "$LIB_NAME")"
+fi
+
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. Frontend build
 # ─────────────────────────────────────────────────────────────────────────────
@@ -626,7 +658,7 @@ if [ "$START" = "1" ]; then
   dire "$(t health_title)"
   ./deploy/deploy.sh --controle
 
-  node deploy/scripts/seed-admin.mjs "$MODE" "$DOMAINE_PROD"
+  node deploy/scripts/seed-admin.mjs "$MODE" "$DOMAINE_PROD" "$LIB_NAME"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -646,11 +678,13 @@ echo ""
 if [ -f deploy/.initial_admin_creds ]; then
   ADMIN_EMAIL="$(grep '^ADMIN_EMAIL=' deploy/.initial_admin_creds | cut -d= -f2-)"
   ADMIN_PASSWORD="$(grep '^ADMIN_PASSWORD=' deploy/.initial_admin_creds | cut -d= -f2-)"
+  CREDS_LIB_NAME="$(grep '^LIB_NAME=' deploy/.initial_admin_creds | cut -d= -f2-)"
   rm -f deploy/.initial_admin_creds
   t admin_title
+  [ -n "$CREDS_LIB_NAME" ] && t admin_lib "$CREDS_LIB_NAME"
   t admin_email "$ADMIN_EMAIL"
   t admin_pass  "$ADMIN_PASSWORD"
-  [ "$MODE" = "prod" ] && t admin_warn
+  t admin_warn
   echo ""
 fi
 
