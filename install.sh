@@ -168,6 +168,64 @@ if [ "$MODE" = "prod" ] && [ -n "$DOMAINE_PROD" ]; then
   succes "Domaine de production configuré : https://${DOMAINE_PROD}"
 fi
 
+# Configuration du service de messagerie (interactive si terminal interactif et non configuré)
+CURRENT_TRANSPORT="$(grep '^MAIL_TRANSPORT=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
+CURRENT_SMTP="$(grep '^SMTP_HOST=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
+CURRENT_RESEND="$(grep '^RESEND_API_KEY=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
+
+if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
+  echo ""
+  echo "📧 Configuration du service d'e-mail pour les notifications :"
+  echo "   [1] Aucun / Test en local (les e-mails sont simulés, aucun compte requis) [Défaut]"
+  echo "   [2] Serveur SMTP standard (votre propre boîte mail : OVH, Gandi, Infomaniak, etc.)"
+  echo "   [3] Clé API Resend (service tiers clé en main)"
+  read -r -p "Votre choix [1/2/3] (défaut: 1) : " MAIL_CHOICE
+  MAIL_CHOICE="${MAIL_CHOICE:-1}"
+
+  case "$MAIL_CHOICE" in
+    2)
+      echo ""
+      echo "→ Configuration SMTP :"
+      read -r -p "  Hôte SMTP (ex: mail.mon-domaine.org) : " CFG_SMTP_HOST
+      read -r -p "  Port SMTP (ex: 587 ou 465) [défaut: 587] : " CFG_SMTP_PORT
+      CFG_SMTP_PORT="${CFG_SMTP_PORT:-587}"
+      read -r -p "  Utilisateur SMTP (votre adresse mail) : " CFG_SMTP_USER
+      read -r -s -p "  Mot de passe SMTP : " CFG_SMTP_PASS
+      echo ""
+      read -r -p "  Adresse d'expédition (From) [défaut: ${CFG_SMTP_USER}] : " CFG_SENDER_EMAIL
+      CFG_SENDER_EMAIL="${CFG_SENDER_EMAIL:-$CFG_SMTP_USER}"
+
+      CFG_SECURE="false"
+      if [ "$CFG_SMTP_PORT" = "465" ]; then
+        CFG_SECURE="true"
+      fi
+
+      sed -i "s|^MAIL_TRANSPORT=.*|MAIL_TRANSPORT=smtp|" deploy/functions.env
+      sed -i "s|^SMTP_HOST=.*|SMTP_HOST=${CFG_SMTP_HOST}|" deploy/functions.env
+      sed -i "s|^SMTP_PORT=.*|SMTP_PORT=${CFG_SMTP_PORT}|" deploy/functions.env
+      sed -i "s|^SMTP_USER=.*|SMTP_USER=${CFG_SMTP_USER}|" deploy/functions.env
+      sed -i "s|^SMTP_PASS=.*|SMTP_PASS=${CFG_SMTP_PASS}|" deploy/functions.env
+      sed -i "s|^SMTP_SECURE=.*|SMTP_SECURE=${CFG_SECURE}|" deploy/functions.env
+      sed -i "s|^SENDER_EMAIL=.*|SENDER_EMAIL=${CFG_SENDER_EMAIL}|" deploy/functions.env
+      succes "Service SMTP configuré (${CFG_SMTP_HOST}:${CFG_SMTP_PORT})"
+      ;;
+    3)
+      echo ""
+      echo "→ Configuration API Resend :"
+      read -r -p "  Clé API Resend (ex: re_123456...) : " CFG_RESEND_KEY
+      read -r -p "  Adresse d'expédition vérifiée sur Resend : " CFG_RESEND_SENDER
+      sed -i "s|^MAIL_TRANSPORT=.*|MAIL_TRANSPORT=resend|" deploy/functions.env
+      sed -i "s|^RESEND_API_KEY=.*|RESEND_API_KEY=${CFG_RESEND_KEY}|" deploy/functions.env
+      sed -i "s|^SENDER_EMAIL=.*|SENDER_EMAIL=${CFG_RESEND_SENDER}|" deploy/functions.env
+      succes "Service Resend configuré (${CFG_RESEND_SENDER})"
+      ;;
+    *)
+      sed -i "s|^MAIL_TRANSPORT=.*|MAIL_TRANSPORT=mock|" deploy/functions.env
+      succes "Mode local activé (e-mails journalisés sans envoi externe)"
+      ;;
+  esac
+fi
+
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. Configuration et compilation du frontend
 # ─────────────────────────────────────────────────────────────────────────────

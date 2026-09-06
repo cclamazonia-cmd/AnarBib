@@ -273,6 +273,9 @@ function formatMailAddress(email, name) {
   const n = String(name || "").trim();
   return n ? `${n} <${email}>` : email;
 }
+
+import { sendViaSmtp } from "../_shared/mail/smtp.ts";
+
 // --- Implementation Resend (cf. spec §4.4) ---------------------------------
 // htmlInlined : meme HTML deja inline que pour Brevo (§4.5).
 async function sendViaResend(target, subject, htmlInlined, text) {
@@ -302,11 +305,33 @@ async function sendViaResend(target, subject, htmlInlined, text) {
   if (!res.ok) throw new Error(`Resend error HTTP ${res.status}: ${body}`);
   return body;
 }
+
+async function sendViaConfiguredSmtp(target, subject, htmlInlined, text) {
+  const host = (Deno.env.get("SMTP_HOST") || "").trim();
+  const port = parseInt(Deno.env.get("SMTP_PORT") || "587", 10);
+  const user = (Deno.env.get("SMTP_USER") || "").trim();
+  const pass = (Deno.env.get("SMTP_PASS") || "").trim();
+  const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
+
+  return await sendViaSmtp({
+    host,
+    port,
+    user,
+    pass,
+    secure,
+    from: formatMailAddress(SENDER_EMAIL, BRAND_NAME),
+    to: [target.email],
+    replyTo: isValidEmail(ADMIN_EMAIL) ? formatMailAddress(ADMIN_EMAIL.trim().toLowerCase(), ADMIN_NAME) : undefined,
+    subject,
+    html: htmlInlined,
+    text
+  });
+}
+
 // --- Wrapper neutre --------------------------------------------------------
-// Inline les logos une fois (spec §4.5), puis envoie via Resend.
+// Inline les logos une fois (spec §4.5), puis envoie via le transport configuré.
 async function sendEmail(target, subject, html, text) {
   // Inlining des logos Supabase Storage en data URI base64 — inconditionnel.
-  // Defensif : en cas d'echec, HTML d'origine.
   let htmlInlined = html;
   if (html && typeof html === "string") {
     try {
@@ -315,8 +340,23 @@ async function sendEmail(target, subject, html, text) {
       console.warn(`notify-library-request: inlineLogosInHtml failed (mail sent anyway):`, e);
     }
   }
-  console.log(`[library-request] envoi via resend`);
-  return await sendViaResend(target, subject, htmlInlined, text);
+
+  const smtpHost = (Deno.env.get("SMTP_HOST") || "").trim();
+  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
+  const mailTransport = (Deno.env.get("MAIL_TRANSPORT") || "").trim().toLowerCase();
+
+  if (mailTransport === "smtp" || (smtpHost && mailTransport !== "resend")) {
+    console.log(`[library-request] envoi via SMTP (${smtpHost})`);
+    return await sendViaConfiguredSmtp(target, subject, htmlInlined, text);
+  }
+
+  if (resendKey) {
+    console.log(`[library-request] envoi via resend`);
+    return await sendViaResend(target, subject, htmlInlined, text);
+  }
+
+  console.log(`[library-request] pas de serveur mail configuré (mock local) : mail non envoyé à ${target.email} (« ${subject} »)`);
+  return JSON.stringify({ ok: true, mocked: true, to: target.email, subject });
 }
 async function safeSendEmail(label, target, subject, html, text) {
   if (!target || !isValidEmail(target.email)) {

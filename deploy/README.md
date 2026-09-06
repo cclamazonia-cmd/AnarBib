@@ -66,12 +66,19 @@ Lors d'une nouvelle installation avec une base vierge, `./install.sh` provisionn
 
 Ce compte dispose des rôles de gestionnaire de réseau (`network_administrators`), de coordinateur et de bibliothécaire sur la bibliothèque de démonstration, donnant un accès immédiat aux panneaux de gestion (`/painel`, `/biblioteca`, `/rede`, `/catalogacao`).
 
+### Transport des e-mails (SMTP universel ou API Resend)
+
+L'application supporte deux modes d'envoi d'e-mails pour les notifications, les prêts et les invitations :
+1. **Serveur SMTP standard (recommandé en auto-hébergement)** : connectez n'importe quelle boîte mail (OVH, Gandi, Infomaniak, Postfix local, serveur dédié de votre association). Configuration demandée interactivement par `./install.sh` ou via les variables `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SENDER_EMAIL` dans `deploy/functions.env`.
+2. **API Resend** : renseignez simplement `RESEND_API_KEY` et `SENDER_EMAIL` dans `deploy/functions.env`.
+3. **Mode test local** : si aucun serveur n'est configuré, les e-mails sont journalisés dans la console sans bloquer l'application ni générer d'erreur.
+
 
 ### Gestion des clés et secrets
 
 | Environnement | Où mettre les clés ? | Comment ça marche ? |
 |---|---|---|
-| **Auto-hébergement (Production ou Local)** | `deploy/.env` et `deploy/functions.env` | `deploy/.env` (clés d'infrastructure Postgres, JWT, Anon) est généré automatiquement par `deploy/genkeys.mjs`. `deploy/functions.env` contient les clés des services tiers (Resend pour les e-mails, Altcha pour l'anti-robot). Aucun compte Supabase Cloud requis. |
+| **Auto-hébergement (Production ou Local)** | `deploy/.env` et `deploy/functions.env` | `deploy/.env` (clés d'infrastructure Postgres, JWT, Anon) est généré automatiquement par `deploy/genkeys.mjs`. `deploy/functions.env` contient les réglages des services tiers (SMTP standard ou Resend pour les e-mails, Altcha pour l'anti-robot). Aucun compte Supabase Cloud requis. |
 | **Supabase Cloud (Hébergement distant)** | `.env.local` (local) ou Secrets CI/CD (Codeberg/GitHub) | Renseigner `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY`. Le code bascule automatiquement sur le Cloud sans aucune modification. |
 
 Les deux modes coexistent sans interférence : le frontend détecte automatiquement s'il parle à une URL cloud distante ou à la passerelle Caddy locale/réseau.

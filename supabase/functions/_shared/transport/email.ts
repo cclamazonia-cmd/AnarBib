@@ -3,27 +3,17 @@ import { renderEmail, footerPadrao } from "../mail/layout.ts";
 import { inlineLogosInHtml } from "../mail/inline-images.ts";
 import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
+import { sendViaSmtp } from "../mail/smtp.ts";
+
 // ============================================================================
-// Transport mail — envoi via Resend
+// Transport mail — Hybride universel : SMTP ou API Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend) : R.2 avait introduit un dispatch
-// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
-// sendEmail() appelle desormais directement sendViaResend(). Le secret
-// MAIL_PROVIDER a ete retire de Supabase en R.7 (08/06/2026) ; n'est
-// plus lu par le code. safeSendEmail() est inchange, donc aucun handler de
-// _shared/domain/* n'est touche.
-// Spec : docs/specs/spec-migration-mail-resend.md.
+// Supporte :
+//   1. SMTP standard (mail.domaine.org, OVH, Gandi, Postfix, etc.)
+//   2. API Resend (https://api.resend.com/emails)
+//   3. Mock local (journalisation sans erreur si aucun service configuré)
 // ============================================================================
 
-// --- Implementation Resend ----------------------------------------------
-// Nouvelle. Format Resend (cf. spec §4.4) :
-//   - auth : header "Authorization: Bearer <RESEND_API_KEY>"
-//   - expediteur : champ "from" au format "Nom <email>"
-//   - destinataire : champ "to" = tableau de strings
-//   - reponse : champ "reply_to" au format "Nom <email>"
-//   - corps : champs "html" et "text"
-// DECISION 1 (format de retour) : on retourne res.text() — la string brute,
-// exactement comme sendViaBrevo. safeSendEmail n'a donc rien a adapter.
 function formatAddress(email: string, name?: string): string {
   const n = name?.trim();
   return n ? `${n} <${email}>` : email;
@@ -58,12 +48,50 @@ async function sendViaResend(opts) {
   return body;
 }
 
+async function sendViaConfiguredSmtp(opts) {
+  const r = resolveMailRouting(opts.context);
+  const host = (Deno.env.get("SMTP_HOST") || "").trim();
+  const port = parseInt(Deno.env.get("SMTP_PORT") || "587", 10);
+  const user = (Deno.env.get("SMTP_USER") || "").trim();
+  const pass = (Deno.env.get("SMTP_PASS") || "").trim();
+  const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
+
+  return await sendViaSmtp({
+    host,
+    port,
+    user,
+    pass,
+    secure,
+    from: formatAddress(r.senderEmail, r.senderName),
+    to: [opts.toEmail],
+    replyTo: r.replyToEmail ? formatAddress(r.replyToEmail, r.replyToName) : undefined,
+    subject: opts.subject,
+    html: opts.html,
+    text: opts.text
+  });
+}
+
 // --- Wrapper neutre ------------------------------------------------------
 // Point d'entree unique. C'est la seule fonction d'envoi que le reste du
 // module (safeSendEmail) doit connaitre.
 export async function sendEmail(opts) {
-  console.log(`[transport] envoi via resend (label=${opts.label ?? "?"})`);
-  return await sendViaResend(opts);
+  const smtpHost = (Deno.env.get("SMTP_HOST") || "").trim();
+  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
+  const mailTransport = (Deno.env.get("MAIL_TRANSPORT") || "").trim().toLowerCase();
+
+  if (mailTransport === "smtp" || (smtpHost && mailTransport !== "resend")) {
+    console.log(`[transport] envoi via SMTP (${smtpHost}) (label=${opts.label ?? "?"})`);
+    return await sendViaConfiguredSmtp(opts);
+  }
+
+  if (resendKey) {
+    console.log(`[transport] envoi via Resend (label=${opts.label ?? "?"})`);
+    return await sendViaResend(opts);
+  }
+
+  // Repli local sans service de messagerie configuré
+  console.log(`[transport] pas de serveur mail configuré (mock local) : mail non envoyé à ${opts.toEmail} (« ${opts.subject} »)`);
+  return JSON.stringify({ ok: true, mocked: true, to: opts.toEmail, subject: opts.subject });
 }
 
 export function skippedEmailResult(label, reason, email) {
