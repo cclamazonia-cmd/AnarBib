@@ -16,6 +16,8 @@ Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et
 
 **Ce que ça apporte.** La réponse à la seule question qui décide de tout le reste : *ce projet est-il reprenable par quelqu'un d'autre que celui qui l'a écrit ?* Personne ne l'a jamais vérifié. Un rapport d'échec détaillé vaut ici plus qu'un correctif : c'est la liste de ce qui ne marche que sur une seule machine.
 
+> **État au 06/09/2026.** Quelqu'un l'a fait : Bastien (`ASR2026`) a rebâti la pile depuis le dépôt seul sur sa machine et a ouvert la PR #28 avec ce qui cassait — le rejeu depuis zéro ouvre à `anon` des fonctions que la production n'ouvre pas (REGISTRE `DOC-GRANT-2`). La PR est en relecture, rien n'est fusionné avant le 14 septembre ; ce qui reste à faire de notre côté est au backlog (`I16` à `I19`). Cette entrée sera réécrite par le mainteneur quand la PR sera fusionnée — pas avant.
+
 ---
 
 ## 2. Achever la bascule vers l'auto-hébergement

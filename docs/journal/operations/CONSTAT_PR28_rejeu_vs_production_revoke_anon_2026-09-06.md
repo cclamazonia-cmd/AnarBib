@@ -185,7 +185,7 @@ Bastien a repoussé à 17 h 14 (5 commits, tête `b5782ec1`, base `c9fae54c` = `
 Guide d'auto-hébergement en 10 langues (générées par `tools/build-selfhosting-pages.py`, 1 444 lignes), lien « Auto-hébergement » dans la barre de navigation et le pied de page de `fr/`, `en/`, `es/`, `pt/`, renvoi dans le formulaire d'adhésion, `README.md` du dépôt en 4 langues.
 
 - **Dépend de la PR #28** : il documente `./install.sh`, qui n'est pas dans `main`. Pas avant elle, et pas avant le 14/09 non plus.
-- **Promesses à corriger avant publication** : « Fédération possible : même installée chez vous, votre bibliothèque peut coopérer avec les autres camarades du réseau » — **trop large** : vrai pour le catalogue (AnarBib sert et moissonne OAI-PMH — `oai-pmh-provider`, `harvest-oai-pmh` — donc deux instances peuvent s'échanger leurs notices, en lecture, vers la file de révision, sur décision admin), faux pour les comptes, les prêts entre bibliothèques et la gouvernance, qui vivent dans une seule base *(correction du 07/09 : la première rédaction disait « aucun protocole entre instances », c'était trop fort)* ; « 2 Go suffisent largement », « Raspberry Pi 4/5 » — non mesuré (six conteneurs, dont Postgres, l'edge-runtime et un `npm run build` sur la machine) ; les identifiants par défaut publiés (§9.3) ; le « mode simulation local silencieux » présenté comme un choix recommandé (§9.2) ; « il applique automatiquement les 308 règles de base de données ». Le reste (ton, découpage, boutons « copier », `sudo usermod -aG docker`) est bon et utile.
+- **Promesses à corriger avant publication** : « Fédération possible : même installée chez vous, votre bibliothèque peut coopérer avec les autres camarades du réseau » — **trop large** : vrai pour le catalogue (AnarBib sert et moissonne OAI-PMH — `oai-pmh-provider`, `harvest-oai-pmh` — donc deux instances peuvent s'échanger leurs notices, en lecture, vers la file de révision, sur décision admin), faux pour les comptes, les prêts entre bibliothèques et la gouvernance, qui vivent dans une seule base *(correction du 06/09 au soir : la première rédaction disait « aucun protocole entre instances », c'était trop fort)* ; « 2 Go suffisent largement », « Raspberry Pi 4/5 » — non mesuré (six conteneurs, dont Postgres, l'edge-runtime et un `npm run build` sur la machine) ; les identifiants par défaut publiés (§9.3) ; le « mode simulation local silencieux » présenté comme un choix recommandé (§9.2) ; « il applique automatiquement les 308 règles de base de données ». Le reste (ton, découpage, boutons « copier », `sudo usermod -aG docker`) est bon et utile.
 - Traductions produites par script : doctrine des Communs — livrer les 10 d'emblée **avec** l'avertissement « corrige-moi » ; le guide n'en porte pas.
 
 ### 9.7 Ce qui reste vrai, et ce qui reste à faire
@@ -193,3 +193,21 @@ Guide d'auto-hébergement en 10 langues (générées par `tools/build-selfhostin
 - Production : toujours rien à appliquer ; aucune écriture faite ; aucun commentaire posté sur aucune des trois PR.
 - Le message proposé au §6 est à réécrire pour tenir compte de la PR complétée : version v2 dans le scratchpad de la session, remise à Xavier.
 - Ordre proposé pour la suite : (1) poser à Bastien la demande de scission et les trois points du §9.2 — ce sont ceux qui ne se discutent pas ; (2) le compte admin (§9.3) ; (3) le reste au retour de Bologne, PR par PR.
+
+### 9.8 Où chaque point est consigné (06/09, soir)
+
+| Point | Document |
+|---|---|
+| Suivi de la PR #28 (scission, quatre bloquants, détails) | backlog `I16` |
+| `anon` retiré du défaut avant le socle ; rôle `supabase_admin` vs `postgres` | backlog `I17` |
+| Un rejeu CI sur image Supabase réelle | backlog `I18` |
+| `pg_cron` absent rendu silencieux | backlog `I19` |
+| Repli sur la clé legacy : une garde | backlog `B20` |
+| Mail « mock » silencieux ; une seule implémentation | backlog `F7` |
+| Premier administrateur d'une instance | REGISTRE `GOUV-19` 🟡, backlog `G11`, arbitrage Q1 |
+| Une instance = un réseau, seul le catalogue traverse ; annuaire | REGISTRE `FED-O11` 🟡, backlog `G12`, arbitrage Q2 |
+| Site vitrine PR #2 | backlog `J3`, arbitrage Q3 (tranché : attendre) |
+| `CHANTIERS_OUVERTS` §1 | backlog `J4` ; état daté posé sous l'entrée |
+| Règles de contribution | REGISTRE `DOC-CONTRIB-1` 🟡, backlog `A4`, arbitrage Q4 |
+
+Page d'arbitrage : `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md`.

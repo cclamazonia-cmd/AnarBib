@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-06** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-06** · 66 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -15,16 +15,16 @@
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
-    - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
+    - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 4
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 2
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 7
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **6 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `757e336d`, après trois journées où trois sessions ont poussé (l'OPAC par œuvre en douze migrations, la révision des lots importés, la page « Je veux… », l'atelier ouvert aux œuvres, la purge du schéma de mai, les homonymes de `public`). Toutes les lignes ont été remesurées, advisors compris : c'est un relevé complet. Deux régressions d'hygiène y apparaissent, notées à leur ligne.
 
-**Fraîcheur des constats au 2026-09-06.** **38 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B19, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, G1, G6, G8, I1, I3, I6, I12, I13, I15, J2, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-06.** **49 items sur 66** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, J2, J3, J4, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -292,6 +292,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **A1** | Obtenir au moins deux autres administrateur·rices réseau | `P0` | Décision collective |
 | **A2** | Éprouver la reconstruction complète par quelqu'un d'autre que le mainteneur | `P0` | Ouvert |
 | **A3** | Sortir le runner d'intégration continue de la machine du mainteneur | `P0` | Ouvert |
+| **A4** | Accueillir une contribution extérieure sans la perdre ni s'y noyer | `P1` | Décision collective |
 
 #### A1 — Obtenir au moins deux autres administrateur·rices réseau
 
@@ -359,6 +360,27 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `CLAUDE.md, piège connu n°1` · `REPRISE_bascule_autohebergee_2026-08-26`*
 
+#### A4 — Accueillir une contribution extérieure sans la perdre ni s'y noyer
+
+`P1` Prioritaire · État : **Décision collective** · Charge : non chiffré · Ce que ça demande : délibération collective, aucune compétence technique
+
+**État.** Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Écrire dans `CONTRIBUTING.md` trois règles courtes : une PR = un sujet ; le code déployé en production (frontend, Edge Functions) va dans une PR distincte de l'outillage ; pendant une relecture, on ajoute des commits, on ne force-pousse pas. Et dire ce que le mainteneur promet en retour : un premier retour sous une semaine.
+
+**Pourquoi ça compte.** Un projet à un mainteneur ne survit à ses contributeurs que s'il dit à l'avance ce qu'il peut relire. Une règle écrite protège la contribution autant que le projet : elle évite qu'un travail sincère finisse refusé en bloc parce qu'il était impossible à lire.
+
+**Ce qui compte comme fini.**
+
+- `CONTRIBUTING.md` porte les trois règles, en français, portugais et anglais.
+- La PR #28 a été scindée selon ces règles, ou fusionnée en connaissance de cause.
+
+**Dépendances.** Décision du mainteneur ; question posée dans `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q4). REGISTRE `DOC-CONTRIB-1` (ouvert).
+
+*Renvois : `CONTRIBUTING.md` · `REGISTRE §0 DOC-CONTRIB-1` · `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06` · `codeberg.org/anarbib/anarbib/pulls/28`*
+
 ---
 
 ### B — Base de données, sécurité, RLS
@@ -370,6 +392,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
+| **B20** | Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire | `P1` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -436,6 +459,27 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Item B18 terminé.
 
 *Renvois : `item B18`*
+
+#### B20 — Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** `_shared/core/secret-key.ts` a retiré le 02/09 (B18) le repli sur `SUPABASE_SERVICE_ROLE_KEY`, avec un commentaire qui dit pourquoi. La PR #28 le réintroduit (`return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")`) — de bonne foi, pour sa pile, où la même PR pose déjà `SUPABASE_SECRET_KEYS` dans `compose.yml`. Un commentaire n'a pas suffi ; la clé legacy est désactivée en prod, un repli vers elle masquerait une panne au lieu de la dire (`DOC-SILENCE-1`).
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Une garde dans `scripts/ci/` (grep sur `supabase/functions/**` : aucun `SUPABASE_SERVICE_ROLE_KEY` hors de `env.ts`/commentaires, liste fermée) et une ligne dans `CONTRIBUTING.md`. Demander le retrait dans la PR #28.
+
+**Pourquoi ça compte.** Une décision de sécurité qui ne tient qu'à un commentaire est annulée par la première personne qui ne l'a pas lu. Les gardes à liste fermée sont la forme que ce dépôt sait tenir (`DOC-GRANT-1`, `T10`).
+
+**Ce qui compte comme fini.**
+
+- La garde existe et rougit sur la branche de la PR #28 telle qu'elle est le 06/09.
+- `secret-key.ts` est revenu à sa forme du 02/09 dans la PR.
+
+**Dépendances.** Aucune.
+
+*Renvois : `supabase/functions/_shared/core/secret-key.ts` · `item B18` · `REGISTRE §0 DOC-SILENCE-1` · `codeberg.org/anarbib/anarbib/pulls/28`*
 
 ---
 
@@ -991,6 +1035,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
 | **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
+| **F7** | Un transport mail sans service configuré lève ; il ne simule pas en silence | `P1` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1115,6 +1160,27 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 *Renvois : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026` · `src/tests/notify-internal-task-signature.test.js`*
 
+#### F7 — Un transport mail sans service configuré lève ; il ne simule pas en silence
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** La PR #28 ajoute un transport hybride SMTP / Resend / « mock » dans `_shared/transport/email.ts` et dans les deux copies locales de `notify-library-request` et `notify-document-permission-request` : sans `SMTP_HOST` ni `RESEND_API_KEY`, `sendEmail` rend `{ok:true, mocked:true}` et journalise. C'est le cas *(a)* de `DOC-SILENCE-1`, et la forme exacte de son occurrence (1). En prod la clé Resend existe, rien ne change aujourd'hui ; le jour où le secret manque, la prod répondra 200 en n'envoyant rien. L'aiguillage SMTP/Resend, lui, est correct (`SMTP_HOST` posé ⇒ SMTP sauf `MAIL_TRANSPORT=resend`), et le client SMTP maison (`smtp.ts`) est propre.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Règle à demander dans la PR et à écrire dans `spec-migration-mail-resend` : le mock **uniquement** sur `MAIL_TRANSPORT=mock` explicite (c'est ce qu'`install.sh` écrit déjà pour l'option 1) ; sans configuration, lever comme avant. Et une seule implémentation : les deux `notify-*` doivent appeler `_shared/transport/email.ts` au lieu d'en porter une copie — la PR a étendu les trois.
+
+**Pourquoi ça compte.** Une coordination a cru pendant des mois avoir coupé ses notifications ; le contraire — croire qu'elles partent — coûte les rappels d'échéance et les circuits collégiaux, qui s'arrêtent sans bruit (`GOUV-17`).
+
+**Ce qui compte comme fini.**
+
+- Sans `MAIL_TRANSPORT=mock`, une fonction sans service mail configuré lève et son appel rend une erreur lisible.
+- Une seule fonction d'envoi dans `_shared/`, appelée par toutes les EF qui écrivent.
+
+**Dépendances.** Relecture de la PR « code applicatif » (**I16**).
+
+*Renvois : `supabase/functions/_shared/transport/email.ts` · `REGISTRE §0 DOC-SILENCE-1` · `docs/specs/spec-migration-mail-resend.md` · `codeberg.org/anarbib/anarbib/pulls/28`*
+
 ---
 
 ### G — Réseau, gouvernance, fédération
@@ -1129,6 +1195,8 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G9** | Implémenter la cartographie du réseau selon la spec v1.0 | `P3` | Gelé |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
+| **G11** | Le premier administrateur d'une instance : écrire la règle d'amorçage | `P0` | Décision collective |
+| **G12** | Une instance = un réseau ; entre instances, seul le catalogue traverse | `P2` | Décision collective |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1265,6 +1333,48 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `REGISTRE §26 ONBO-Q13` · `spec-onboarding-biblioteca-v2.0`*
 
+#### G11 — Le premier administrateur d'une instance : écrire la règle d'amorçage
+
+`P0` Structurel · État : **Décision collective** · Charge : non chiffré · Ce que ça demande : délibération collective
+
+**État.** Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK).
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Trancher et inscrire au REGISTRE (`GOUV-19`) : *(a)* l'amorçage d'une base vide écrit un premier compte hors circuit, une fois, et le script refuse sinon ; *(b)* mot de passe aléatoire dans tous les modes, affiché une fois ; *(c)* le premier compte est-il coordinateur de la première biblio, admin réseau, ou les deux ? *(d)* la biblio `demo` : la créer, ou demander son nom à l'installation ?
+
+**Pourquoi ça compte.** Sans règle écrite, l'amorçage devient une porte : un script qui « crée un admin » se relance, se copie, se documente comme une commodité. Avec une règle, c'est un geste unique, nommé, refusé dès qu'il existe quelqu'un.
+
+**Ce qui compte comme fini.**
+
+- `GOUV-19` est acté au REGISTRE avec les quatre réponses.
+- `seed-admin.mjs` les applique et `deploy/README.md` le présente comme l'amorçage, pas comme une création de compte.
+
+**Dépendances.** Décision du mainteneur — `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q1). Bloque la fusion de la PR « auto-hébergement » (**I16**).
+
+*Renvois : `REGISTRE §41 GOUV-19` · `deploy/scripts/seed-admin.mjs (PR #28)` · `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06`*
+
+#### G12 — Une instance = un réseau ; entre instances, seul le catalogue traverse
+
+`P2` Courant · État : **Décision collective** · Charge : non chiffré · Ce que ça demande : délibération collective
+
+**État.** Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Inscrire la doctrine au REGISTRE (`FED-O11`) et la faire dire au site vitrine dans les mêmes termes. Un **annuaire des instances** (pour que la moisson ne dépende pas d'une adresse tapée à la main) serait le premier pas utile — c'est un domaine nouveau, donc un arbitrage écrit selon `DOC-GEL-1`, pas un item de code. Prêts, comptes et gouvernance entre instances = une fédération de protocole, hors de portée sans redessiner le modèle ; ne pas l'annoncer.
+
+**Pourquoi ça compte.** L'auto-hébergement va multiplier les instances. Si le projet ne dit pas ce qui les relie, chaque guide le dira à sa façon, et la première déception sera une bibliothèque qui croyait rejoindre le réseau en installant le logiciel.
+
+**Ce qui compte comme fini.**
+
+- `FED-O11` acté ; le guide vitrine et `deploy/README.md` emploient la même phrase.
+- La question de l'annuaire a une décision datée dans `journal/arbitrages/`, dans un sens ou dans l'autre.
+
+**Dépendances.** Décision du mainteneur — Q2 de la page d'arbitrage. Conditionne **J3**.
+
+*Renvois : `REGISTRE §24 FED-O11` · `supabase/functions/oai-pmh-provider` · `supabase/functions/harvest-oai-pmh` · `REGISTRE §0 DOC-GEL-1`*
+
 ---
 
 ### H — Interopérabilité, thésaurus, moisson
@@ -1335,6 +1445,10 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I12** | Automatiser le rafraîchissement du miroir froid | `P2` | Ouvert |
 | **I13** | Finir la bascule vers le nouveau moteur de pages | `P3` | Ouvert |
 | **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | Ouvert |
+| **I16** | Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09 | `P1` | En cours |
+| **I17** | Le rejeu depuis zéro doit être fidèle au dump : `anon` retiré du défaut avant le socle | `P1` | Ouvert |
+| **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | Ouvert |
+| **I19** | `pg_cron` doit exister sur la pile auto-hébergée, et son absence doit se voir | `P1` | Ouvert |
 
 #### I1 — Aligner l'image GoTrue sur l'état réel des migrations d'authentification
 
@@ -1488,6 +1602,91 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `.forgejo/workflows/ci.yml` · `item B18`*
 
+#### I16 — Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09
+
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : administration système, SQL / PostgreSQL, Deno / TypeScript
+
+**État.** La PR #28 (installateur `install.sh`, `deploy/`, seed admin, transport mail, résolveur d'URL, neuf migrations retouchées) est relue ; réponse du mainteneur posée le 06/09 au soir. Bloquant avant fusion, indépendamment du gel : **(1)** scinder — le code de production (`src/lib/supabase.js`, `coverThumbs.js`, `AltchaWidget`, six pages, `secret-key.ts`, `email.ts`, `smtp.ts`, deux `notify-*`) dans une PR à part ; **(2)** retirer le repli sur `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` (la ligne `SUPABASE_SECRET_KEYS` de `compose.yml` suffit) ; **(3)** le mode « mock » du mail réservé à `MAIL_TRANSPORT=mock` explicite ; **(4)** `docs/CHANTIERS_OUVERTS.md` rendu au mainteneur. Puis : mot de passe admin aléatoire en local, `pg_cron` créé plutôt que sauté, explication de la regex `uid()` (`20260906111308`), « UUID déterministes » introuvables dans le diff. Détails : `.gitignore` `deploy/.env.*` couvre `.env.example` ; Caddy sur `5173` contre `npm run dev` ; `Referrer-Policy` changé pour toute l'API ; `deploy/README.md` perd la section `bg2-known-tables.txt`.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Attendre la réponse de Bastien ; relire la PR scindée « auto-hébergement » au retour de Bologne ; la fusionner quand les points (1)-(4) sont réglés ; ouvrir la relecture de la PR « code applicatif » comme du code de production, avec tests. Ne rien fusionner avant le 14/09.
+
+**Pourquoi ça compte.** C'est la première reconstruction depuis le dépôt seul faite par quelqu'un d'autre que le mainteneur — la réponse à la question qui décide de tout le reste (`CHANTIERS_OUVERTS` §1). La perdre en la laissant traîner, ou la fusionner sans la lire, coûterait la même chose.
+
+**Ce qui compte comme fini.**
+
+- La PR « auto-hébergement » est fusionnée, ses quatre points bloquants réglés, `install.sh` exécuté une fois sur une machine qui n'est pas celle de son auteur.
+- La PR « code applicatif » est ouverte à part, avec un test pour chaque changement de comportement.
+- Le REGISTRE porte la règle d'amorçage du premier administrateur (`GOUV-19`).
+
+**Dépendances.** Réponse de Bastien ; retour du 14/09. Lié à **A4**, **I17**, **I19**, **B20**, **F7**, **G11**, **J3**, **J4**.
+
+*Renvois : `codeberg.org/anarbib/anarbib/pulls/28` · `journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9` · `REGISTRE §0 DOC-GRANT-2`*
+
+#### I17 — Le rejeu depuis zéro doit être fidèle au dump : `anon` retiré du défaut avant le socle
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, administration système
+
+**État.** Mesuré le 06/09 (`DOC-GRANT-2`) : le socle `20260510000000_baseline_live` porte 163 `GRANT … TO anon` sur des fonctions et zéro `REVOKE … FROM anon` ; sur une image Supabase, `pg_default_acl` ouvre à `anon` toute fonction du socle à sa naissance, alors qu'en prod 595 des 676 fonctions de `public` sont fermées. Les migrations du 29/08 lèvent au rejeu pour cette raison. Sur le chemin auto-hébergé, les migrations tournent en `supabase_admin` (`run-migrations.sh`, PR #28 idem), pas en `postgres` comme en prod : c'est la ligne `supabase_admin` de `pg_default_acl` qui s'applique, et `20260831105114` ne touche que la ligne `postgres`.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Dans `deploy/init-db/`, avant le socle : `ALTER DEFAULT PRIVILEGES FOR ROLE <rôle qui applique> IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon` — pour `supabase_admin` ET `postgres`, sans jamais vider l'entrée (piège de `DOC-GRANT-1`). Décider si les migrations auto-hébergées doivent tourner en `postgres` comme en prod, et l'écrire dans `deploy/README.md`. Vérifier ensuite sur une image réelle que les trois migrations du 29/08 passent sans les `REVOKE` nominatifs.
+
+**Pourquoi ça compte.** Les `REVOKE` nominatifs de la PR #28 réparent deux fonctions ; le même symptôme attend derrière chaque migration qui vérifiera un jour l'ACL d'une fonction du socle. Réparer le défaut à la source rend le rejeu fidèle une fois pour toutes : les 163 `GRANT` explicites du dump rouvrent exactement ce que la prod ouvrait.
+
+**Ce qui compte comme fini.**
+
+- Un rejeu complet sur `supabase/postgres` passe les migrations du 29/08 sans `REVOKE` nominatif ajouté.
+- `select count(*) … has_function_privilege('anon', …)` rend le même nombre sur le rejeu et en prod, à la liste `T10` près.
+
+**Dépendances.** Coordination avec la PR #28 (**I16**) : le morceau a été proposé à Bastien, il est à lui s'il le prend.
+
+*Renvois : `REGISTRE §0 DOC-GRANT-2` · `deploy/init-db/01-roles.sh` · `deploy/scripts/run-migrations.sh` · `supabase/migrations/20260831105114_une_fonction_ne_nait_plus_ouverte_a_anon.sql`*
+
+#### I18 — Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système
+
+**État.** `scripts/ci/run-sql-suites.sh` crée `anarbib_test` depuis `template0` : `pg_default_acl` y est vide, les fonctions naissent fermées, la vérification des migrations du 29/08 passe — et une image réelle la fait lever. Le vert de `sql-tests` n'atteste donc pas qu'une image Supabase rejoue le dépôt (`DOC-GRANT-2`, même limite structurelle que `DOC-MIGR-1` par l'autre bout). Le choix de `template0` est motivé (pas d'event triggers hérités) et reste bon pour les suites.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Un second job, ou une étape hebdomadaire : rejouer les migrations dans la base `postgres` de l'image `supabase/postgres` du stack (celle que `sql-tests.yml` lance déjà en `services:`), avec ses privilèges par défaut et son `pg_cron`, sans suites — juste « ça passe ou ça casse ». Rouge = un contributeur extérieur cassera au même endroit.
+
+**Pourquoi ça compte.** Toute assertion « N migrations rejouent de zéro » se mesure sur une image Supabase, jamais sur le banc CI. Sans ce job, c'est la prochaine personne extérieure qui fera la mesure, à ses frais.
+
+**Ce qui compte comme fini.**
+
+- Un job de la forge rejoue les migrations sur `supabase/postgres` et son résultat est lisible dans Actions.
+- Il a été rouge une fois pour une vraie raison, et la raison a été corrigée.
+
+**Dépendances.** Après **I17** (sinon le job sera rouge pour la raison déjà connue).
+
+*Renvois : `scripts/ci/run-sql-suites.sh` · `REGISTRE §0 DOC-GRANT-2` · `REGISTRE §0 DOC-MIGR-1`*
+
+#### I19 — `pg_cron` doit exister sur la pile auto-hébergée, et son absence doit se voir
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système, SQL / PostgreSQL
+
+**État.** La PR #28 enveloppe `cron.schedule` de `20260904130100` dans une garde `to_regnamespace('cron') IS NULL → NOTICE + RETURN`, étiquetée « banc d'essai ». Le banc CI a un stub `cron` depuis le 31/08 : la garde ne sert que sur la pile de Bastien, donc **elle n'a pas `pg_cron`** — et les 15 migrations antérieures qui planifient y sont déjà passées en silence par leurs anciens `EXCEPTION`. Sur une installation réelle : pas de rappels d'échéance, pas de moisson OAI, pas de digests, pas de témoin de sauvegarde, sans un mot (`DOC-SILENCE-1`). `compose.yml` note pourtant que le code appelle `cron.` 36 fois.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Créer l'extension dans `deploy/init-db/` (l'image la charge déjà : le journal de la pile du 27/08 montre « pg_cron scheduler started ») ; faire lever, pas sauter, quand elle manque ; ajouter une ligne au contrôle de santé de `deploy.sh --controle` : nombre de jobs `cron.job` attendus.
+
+**Pourquoi ça compte.** Une bibliothèque auto-hébergée sans `pg_cron` est une bibliothèque sans rappels ni sauvegardes surveillées, qui croit en avoir. C'est la forme la plus coûteuse du silence.
+
+**Ce qui compte comme fini.**
+
+- `select count(*) from cron.job` sur une pile fraîche rend le nombre de jobs du dépôt.
+- Une migration qui planifie sans `pg_cron` est rouge, pas silencieuse.
+
+**Dépendances.** À proposer à Bastien dans la PR scindée (**I16**) ou à faire au retour.
+
+*Renvois : `supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql` · `deploy/compose.yml` · `deploy/init-db/` · `REGISTRE §0 DOC-SILENCE-1`*
+
 ---
 
 ### J — Documentation et corpus
@@ -1497,6 +1696,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J2** | Réparer l'index des backlogs et trancher la convention d'archivage | `P2` | Ouvert |
+| **J3** | Le guide d'auto-hébergement du site vitrine (pages PR #2) : quatre phrases, un avertissement, et attendre la PR #28 | `P2` | Ouvert |
+| **J4** | `CHANTIERS_OUVERTS` §1 : écrire l'état réel après la première reconstruction extérieure | `P2` | Ouvert |
 
 #### J2 — Réparer l'index des backlogs et trancher la convention d'archivage
 
@@ -1518,6 +1719,46 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Se fait en posant ce backlog.
 
 *Renvois : `docs/backlogs/INDEX.md`*
+
+#### J3 — Le guide d'auto-hébergement du site vitrine (pages PR #2) : quatre phrases, un avertissement, et attendre la PR #28
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle, aucune compétence technique
+
+**État.** PR #2 sur `AnarBib/pages` (la #1, même contenu, est fermée) : guide pas à pas en 10 langues engendrées par `tools/build-selfhosting-pages.py`, lien dans la navigation de `fr/`, `en/`, `es/`, `pt/`, renvoi dans le formulaire d'adhésion, README du dépôt en 4 langues. Ton juste, découpage juste, boutons « copier ». Il documente `./install.sh`, qui n'est pas dans `main`. Quatre affirmations à corriger : « coopérer avec les autres camarades du réseau » (vrai pour le catalogue par OAI-PMH, faux pour comptes, prêts, gouvernance — **G12**) ; « 2 Go suffisent largement » et « Raspberry Pi 4/5 » (non mesuré : six conteneurs dont Postgres et l'edge-runtime, plus `npm run build`) ; les identifiants par défaut (**G11**) ; le « mode simulation silencieux » présenté comme recommandé (**F7**). Pas d'avertissement « traduit automatiquement, corrigez-moi » sur les pages engendrées.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Réponse posée le 06/09 (fichier `pages-pr2-reponse`). Fusionner **après** la PR « auto-hébergement », une fois les quatre phrases ajustées et l'avertissement ajouté au générateur. Le README multilingue du dépôt vitrine peut partir seul si Bastien le sort dans une PR à part.
+
+**Pourquoi ça compte.** Le site vitrine est la seule chose que lit quelqu'un qui ne connaît pas encore le projet. Une promesse fausse y coûte plus qu'un bug : elle se lit dix fois avant qu'on la corrige.
+
+**Ce qui compte comme fini.**
+
+- Les quatre phrases sont corrigées dans les 10 langues, l'avertissement est là, la PR #28 « auto-hébergement » est fusionnée, puis celle-ci.
+
+**Dépendances.** **I16**, **G11**, **G12**, **F7**.
+
+*Renvois : `codeberg.org/AnarBib/pages/pulls/2` · `journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9.6` · `anarbib-vitrine-site-repo`*
+
+#### J4 — `CHANTIERS_OUVERTS` §1 : écrire l'état réel après la première reconstruction extérieure
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** L'entrée 1 (« Éprouver la reconstruction — le meilleur premier pas ») disait « personne ne l'a jamais vérifié ». Depuis le 06/09, quelqu'un l'a fait : Bastien a rebâti la pile depuis le dépôt seul et a trouvé les défauts du chemin de rejeu (`DOC-GRANT-2`). Sa PR réécrit l'entrée en « Validé le 28 août 2026, rejeu des 218 migrations » — date antérieure à la PR, chiffre retiré par lui-même, paragraphes « ce que ça demande / ce que ça apporte » supprimés ; c'est `DOC-CONSTAT-1`, et c'est le document d'orientation du mainteneur. Un état daté a été ajouté sous l'entrée le 06/09, sans toucher au texte.
+
+*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+
+**Ce que c'est.** Au retour : le mainteneur réécrit l'entrée 1 lui-même — ce qui a été éprouvé, par qui, ce qui a cassé, ce qui reste (I17, I18, I19) — et décide si « le meilleur premier pas » reste l'entrée 1 ou passe à l'entrée 2.
+
+**Pourquoi ça compte.** Ce document est la porte d'entrée des contributeurs. Y écrire « validé » avant que ce soit vrai renvoie la prochaine personne vers un chantier qu'elle croira clos.
+
+**Ce qui compte comme fini.**
+
+- L'entrée 1 porte une mesure datée, signée, et la PR #28 ne la réécrit plus.
+
+**Dépendances.** Fusion de la PR « auto-hébergement » (**I16**).
+
+*Renvois : `docs/CHANTIERS_OUVERTS.md` · `REGISTRE §0 DOC-CONSTAT-1` · `REGISTRE §0 DOC-ACTIF-1`*
 
 ---
 
@@ -1888,4 +2129,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-06. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-06 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `757e336d` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-06. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 66 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-06 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `757e336d` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

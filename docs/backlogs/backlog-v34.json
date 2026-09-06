@@ -4599,6 +4599,555 @@
         "fr": "30/08 — relevé fait fichier par fichier, après ouverture de l'item : 9 fichiers dupliqués et tous divergents, ~694 lignes, et **une seule divergence à effet observable** — la signature de pied de page non traduite, **refermée le soir même et gardée par 6 tests**. L'origine des copies n'a pas de réponse dans le dépôt : elles sont dans le premier commit. Ce qui reste est une décision de portée, pas une mesure.",
         "pt": "30/08 — levantamento feito ficheiro a ficheiro, depois da abertura do item: 9 ficheiros duplicados e todos divergentes, ~694 linhas, e **uma única divergência com efeito observável** — a assinatura de rodapé não traduzida, **fechada na mesma noite e guardada por 6 testes**. A origem das cópias não tem resposta no repositório: estão no primeiro commit. O que resta é uma decisão de alcance, não uma medição."
       }
+    },
+    {
+      "id": "A4",
+      "d": "A",
+      "p": "P1",
+      "s": "decision",
+      "e": "?",
+      "sk": [
+        "collectif",
+        "aucune"
+      ],
+      "t": {
+        "fr": "Accueillir une contribution extérieure sans la perdre ni s'y noyer",
+        "pt": "Acolher uma contribuição externa sem a perder nem se afogar nela"
+      },
+      "v": {
+        "fr": "Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène.",
+        "pt": "Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide."
+      },
+      "w": {
+        "fr": "Écrire dans `CONTRIBUTING.md` trois règles courtes : une PR = un sujet ; le code déployé en production (frontend, Edge Functions) va dans une PR distincte de l'outillage ; pendant une relecture, on ajoute des commits, on ne force-pousse pas. Et dire ce que le mainteneur promet en retour : un premier retour sous une semaine.",
+        "pt": "Escrever em `CONTRIBUTING.md` três regras curtas: uma PR = um assunto; código de produção em PR separada da ferramentaria; durante uma releitura, commits adicionados, nunca force-push. E dizer o que o mantenedor promete: um primeiro retorno em uma semana."
+      },
+      "y": {
+        "fr": "Un projet à un mainteneur ne survit à ses contributeurs que s'il dit à l'avance ce qu'il peut relire. Une règle écrite protège la contribution autant que le projet : elle évite qu'un travail sincère finisse refusé en bloc parce qu'il était impossible à lire.",
+        "pt": "Um projeto com um mantenedor só sobrevive aos seus contribuidores se disser de antemão o que consegue reler."
+      },
+      "f": {
+        "fr": [
+          "`CONTRIBUTING.md` porte les trois règles, en français, portugais et anglais.",
+          "La PR #28 a été scindée selon ces règles, ou fusionnée en connaissance de cause."
+        ],
+        "pt": [
+          "`CONTRIBUTING.md` traz as três regras em francês, português e inglês.",
+          "A PR #28 foi dividida segundo essas regras, ou mesclada com conhecimento de causa."
+        ]
+      },
+      "dep": {
+        "fr": "Décision du mainteneur ; question posée dans `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q4). REGISTRE `DOC-CONTRIB-1` (ouvert).",
+        "pt": "Decisão do mantenedor; pergunta em `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q4). REGISTRO `DOC-CONTRIB-1` (aberto)."
+      },
+      "r": [
+        "CONTRIBUTING.md",
+        "REGISTRE §0 DOC-CONTRIB-1",
+        "journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06",
+        "codeberg.org/anarbib/anarbib/pulls/28"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "I16",
+      "d": "I",
+      "p": "P1",
+      "s": "en-cours",
+      "e": "M",
+      "sk": [
+        "sysadmin",
+        "sql",
+        "deno"
+      ],
+      "t": {
+        "fr": "Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09",
+        "pt": "Acompanhar a PR #28 até a fusão: divisão, quatro pontos bloqueantes, congelamento até 14/09"
+      },
+      "v": {
+        "fr": "La PR #28 (installateur `install.sh`, `deploy/`, seed admin, transport mail, résolveur d'URL, neuf migrations retouchées) est relue ; réponse du mainteneur posée le 06/09 au soir. Bloquant avant fusion, indépendamment du gel : **(1)** scinder — le code de production (`src/lib/supabase.js`, `coverThumbs.js`, `AltchaWidget`, six pages, `secret-key.ts`, `email.ts`, `smtp.ts`, deux `notify-*`) dans une PR à part ; **(2)** retirer le repli sur `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` (la ligne `SUPABASE_SECRET_KEYS` de `compose.yml` suffit) ; **(3)** le mode « mock » du mail réservé à `MAIL_TRANSPORT=mock` explicite ; **(4)** `docs/CHANTIERS_OUVERTS.md` rendu au mainteneur. Puis : mot de passe admin aléatoire en local, `pg_cron` créé plutôt que sauté, explication de la regex `uid()` (`20260906111308`), « UUID déterministes » introuvables dans le diff. Détails : `.gitignore` `deploy/.env.*` couvre `.env.example` ; Caddy sur `5173` contre `npm run dev` ; `Referrer-Policy` changé pour toute l'API ; `deploy/README.md` perd la section `bg2-known-tables.txt`.",
+        "pt": "A PR #28 foi relida; resposta do mantenedor colocada em 06/09 à noite. Bloqueante antes da fusão: (1) dividir — código de produção em PR separada; (2) retirar o fallback `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts`; (3) modo « mock » do mail só com `MAIL_TRANSPORT=mock` explícito; (4) `docs/CHANTIERS_OUVERTS.md` devolvido ao mantenedor. Depois: senha admin aleatória em local, `pg_cron` criado em vez de pulado, regex `uid()`, « UUID determinísticos » ausentes do diff, e os detalhes (`.gitignore`, porta 5173, `Referrer-Policy`, seção `bg2-known-tables.txt`)."
+      },
+      "w": {
+        "fr": "Attendre la réponse de Bastien ; relire la PR scindée « auto-hébergement » au retour de Bologne ; la fusionner quand les points (1)-(4) sont réglés ; ouvrir la relecture de la PR « code applicatif » comme du code de production, avec tests. Ne rien fusionner avant le 14/09.",
+        "pt": "Esperar a resposta de Bastien; reler a PR dividida « auto-hospedagem » na volta de Bolonha; mesclá-la quando (1)-(4) estiverem resolvidos; abrir a releitura da PR « código aplicativo » como código de produção, com testes. Nada mesclado antes de 14/09."
+      },
+      "y": {
+        "fr": "C'est la première reconstruction depuis le dépôt seul faite par quelqu'un d'autre que le mainteneur — la réponse à la question qui décide de tout le reste (`CHANTIERS_OUVERTS` §1). La perdre en la laissant traîner, ou la fusionner sans la lire, coûterait la même chose.",
+        "pt": "É a primeira reconstrução a partir do repositório feita por alguém que não o mantenedor. Perdê-la ou mesclá-la sem ler custaria o mesmo."
+      },
+      "f": {
+        "fr": [
+          "La PR « auto-hébergement » est fusionnée, ses quatre points bloquants réglés, `install.sh` exécuté une fois sur une machine qui n'est pas celle de son auteur.",
+          "La PR « code applicatif » est ouverte à part, avec un test pour chaque changement de comportement.",
+          "Le REGISTRE porte la règle d'amorçage du premier administrateur (`GOUV-19`)."
+        ],
+        "pt": [
+          "A PR « auto-hospedagem » está mesclada, os quatro pontos resolvidos, `install.sh` executado uma vez numa máquina que não é a do autor.",
+          "A PR « código aplicativo » está aberta à parte, com um teste por mudança de comportamento.",
+          "O REGISTRO traz a regra de arranque do primeiro administrador (`GOUV-19`)."
+        ]
+      },
+      "dep": {
+        "fr": "Réponse de Bastien ; retour du 14/09. Lié à **A4**, **I17**, **I19**, **B20**, **F7**, **G11**, **J3**, **J4**.",
+        "pt": "Resposta de Bastien; volta em 14/09. Ligado a A4, I17, I19, B20, F7, G11, J3, J4."
+      },
+      "r": [
+        "codeberg.org/anarbib/anarbib/pulls/28",
+        "journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9",
+        "REGISTRE §0 DOC-GRANT-2"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "I17",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql",
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Le rejeu depuis zéro doit être fidèle au dump : `anon` retiré du défaut avant le socle",
+        "pt": "O replay do zero deve ser fiel ao dump: `anon` retirado do padrão antes da base"
+      },
+      "v": {
+        "fr": "Mesuré le 06/09 (`DOC-GRANT-2`) : le socle `20260510000000_baseline_live` porte 163 `GRANT … TO anon` sur des fonctions et zéro `REVOKE … FROM anon` ; sur une image Supabase, `pg_default_acl` ouvre à `anon` toute fonction du socle à sa naissance, alors qu'en prod 595 des 676 fonctions de `public` sont fermées. Les migrations du 29/08 lèvent au rejeu pour cette raison. Sur le chemin auto-hébergé, les migrations tournent en `supabase_admin` (`run-migrations.sh`, PR #28 idem), pas en `postgres` comme en prod : c'est la ligne `supabase_admin` de `pg_default_acl` qui s'applique, et `20260831105114` ne touche que la ligne `postgres`.",
+        "pt": "Medido em 06/09 (`DOC-GRANT-2`): a base é um `pg_dump` com 163 `GRANT … TO anon` e zero `REVOKE … FROM anon`; numa imagem Supabase, `pg_default_acl` abre a `anon` toda função da base ao nascer. No caminho auto-hospedado, as migrações correm como `supabase_admin`, não `postgres`: é a linha `supabase_admin` de `pg_default_acl` que se aplica."
+      },
+      "w": {
+        "fr": "Dans `deploy/init-db/`, avant le socle : `ALTER DEFAULT PRIVILEGES FOR ROLE <rôle qui applique> IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon` — pour `supabase_admin` ET `postgres`, sans jamais vider l'entrée (piège de `DOC-GRANT-1`). Décider si les migrations auto-hébergées doivent tourner en `postgres` comme en prod, et l'écrire dans `deploy/README.md`. Vérifier ensuite sur une image réelle que les trois migrations du 29/08 passent sans les `REVOKE` nominatifs.",
+        "pt": "Em `deploy/init-db/`, antes da base: `ALTER DEFAULT PRIVILEGES FOR ROLE <papel> IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon` — para `supabase_admin` E `postgres`, sem esvaziar a entrada. Decidir se as migrações auto-hospedadas devem correr como `postgres`, e escrever em `deploy/README.md`."
+      },
+      "y": {
+        "fr": "Les `REVOKE` nominatifs de la PR #28 réparent deux fonctions ; le même symptôme attend derrière chaque migration qui vérifiera un jour l'ACL d'une fonction du socle. Réparer le défaut à la source rend le rejeu fidèle une fois pour toutes : les 163 `GRANT` explicites du dump rouvrent exactement ce que la prod ouvrait.",
+        "pt": "Os `REVOKE` nominativos da PR #28 reparam duas funções; o mesmo sintoma espera atrás de cada migração que verifique a ACL de uma função da base. Reparar na fonte torna o replay fiel de uma vez."
+      },
+      "f": {
+        "fr": [
+          "Un rejeu complet sur `supabase/postgres` passe les migrations du 29/08 sans `REVOKE` nominatif ajouté.",
+          "`select count(*) … has_function_privilege('anon', …)` rend le même nombre sur le rejeu et en prod, à la liste `T10` près."
+        ],
+        "pt": [
+          "Um replay completo em `supabase/postgres` passa as migrações de 29/08 sem `REVOKE` nominativo.",
+          "A contagem de funções executáveis por `anon` é a mesma no replay e em produção, salvo a lista `T10`."
+        ]
+      },
+      "dep": {
+        "fr": "Coordination avec la PR #28 (**I16**) : le morceau a été proposé à Bastien, il est à lui s'il le prend.",
+        "pt": "Coordenação com a PR #28 (I16): a peça foi proposta a Bastien."
+      },
+      "r": [
+        "REGISTRE §0 DOC-GRANT-2",
+        "deploy/init-db/01-roles.sh",
+        "deploy/scripts/run-migrations.sh",
+        "supabase/migrations/20260831105114_une_fonction_ne_nait_plus_ouverte_a_anon.sql"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "I18",
+      "d": "I",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse",
+        "pt": "O banco de CI não faz replay numa imagem Supabase — é preciso um que faça"
+      },
+      "v": {
+        "fr": "`scripts/ci/run-sql-suites.sh` crée `anarbib_test` depuis `template0` : `pg_default_acl` y est vide, les fonctions naissent fermées, la vérification des migrations du 29/08 passe — et une image réelle la fait lever. Le vert de `sql-tests` n'atteste donc pas qu'une image Supabase rejoue le dépôt (`DOC-GRANT-2`, même limite structurelle que `DOC-MIGR-1` par l'autre bout). Le choix de `template0` est motivé (pas d'event triggers hérités) et reste bon pour les suites.",
+        "pt": "`scripts/ci/run-sql-suites.sh` cria `anarbib_test` a partir de `template0`: `pg_default_acl` está vazia, as funções nascem fechadas e a verificação passa — uma imagem real a faz falhar. O verde do `sql-tests` não atesta que uma imagem Supabase reproduz o repositório."
+      },
+      "w": {
+        "fr": "Un second job, ou une étape hebdomadaire : rejouer les migrations dans la base `postgres` de l'image `supabase/postgres` du stack (celle que `sql-tests.yml` lance déjà en `services:`), avec ses privilèges par défaut et son `pg_cron`, sans suites — juste « ça passe ou ça casse ». Rouge = un contributeur extérieur cassera au même endroit.",
+        "pt": "Um segundo job, ou etapa semanal: reproduzir as migrações no banco `postgres` da imagem `supabase/postgres` já lançada em `services:`, com seus privilégios padrão e `pg_cron`, sem suítes — só « passa ou quebra »."
+      },
+      "y": {
+        "fr": "Toute assertion « N migrations rejouent de zéro » se mesure sur une image Supabase, jamais sur le banc CI. Sans ce job, c'est la prochaine personne extérieure qui fera la mesure, à ses frais.",
+        "pt": "Toda afirmação « N migrações reproduzem do zero » mede-se numa imagem Supabase, nunca no banco de CI."
+      },
+      "f": {
+        "fr": [
+          "Un job de la forge rejoue les migrations sur `supabase/postgres` et son résultat est lisible dans Actions.",
+          "Il a été rouge une fois pour une vraie raison, et la raison a été corrigée."
+        ],
+        "pt": [
+          "Um job da forja reproduz as migrações em `supabase/postgres` com resultado legível em Actions.",
+          "Foi vermelho uma vez por uma razão real, corrigida."
+        ]
+      },
+      "dep": {
+        "fr": "Après **I17** (sinon le job sera rouge pour la raison déjà connue).",
+        "pt": "Depois de I17."
+      },
+      "r": [
+        "scripts/ci/run-sql-suites.sh",
+        "REGISTRE §0 DOC-GRANT-2",
+        "REGISTRE §0 DOC-MIGR-1"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "I19",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin",
+        "sql"
+      ],
+      "t": {
+        "fr": "`pg_cron` doit exister sur la pile auto-hébergée, et son absence doit se voir",
+        "pt": "`pg_cron` deve existir na pilha auto-hospedada, e sua ausência deve ser visível"
+      },
+      "v": {
+        "fr": "La PR #28 enveloppe `cron.schedule` de `20260904130100` dans une garde `to_regnamespace('cron') IS NULL → NOTICE + RETURN`, étiquetée « banc d'essai ». Le banc CI a un stub `cron` depuis le 31/08 : la garde ne sert que sur la pile de Bastien, donc **elle n'a pas `pg_cron`** — et les 15 migrations antérieures qui planifient y sont déjà passées en silence par leurs anciens `EXCEPTION`. Sur une installation réelle : pas de rappels d'échéance, pas de moisson OAI, pas de digests, pas de témoin de sauvegarde, sans un mot (`DOC-SILENCE-1`). `compose.yml` note pourtant que le code appelle `cron.` 36 fois.",
+        "pt": "A PR #28 envolve `cron.schedule` numa guarda que pula se o esquema `cron` não existir. O banco de CI tem um stub desde 31/08: a guarda só serve na pilha de Bastien, logo ela **não tem `pg_cron`** — e as 15 migrações anteriores que agendam já passaram em silêncio. Numa instalação real: sem lembretes, sem colheita OAI, sem digests, sem uma palavra."
+      },
+      "w": {
+        "fr": "Créer l'extension dans `deploy/init-db/` (l'image la charge déjà : le journal de la pile du 27/08 montre « pg_cron scheduler started ») ; faire lever, pas sauter, quand elle manque ; ajouter une ligne au contrôle de santé de `deploy.sh --controle` : nombre de jobs `cron.job` attendus.",
+        "pt": "Criar a extensão em `deploy/init-db/`; falhar, não pular, quando faltar; acrescentar ao `deploy.sh --controle` o número de jobs `cron.job` esperados."
+      },
+      "y": {
+        "fr": "Une bibliothèque auto-hébergée sans `pg_cron` est une bibliothèque sans rappels ni sauvegardes surveillées, qui croit en avoir. C'est la forme la plus coûteuse du silence.",
+        "pt": "Uma biblioteca auto-hospedada sem `pg_cron` é uma biblioteca sem lembretes nem backups vigiados, que acredita tê-los."
+      },
+      "f": {
+        "fr": [
+          "`select count(*) from cron.job` sur une pile fraîche rend le nombre de jobs du dépôt.",
+          "Une migration qui planifie sans `pg_cron` est rouge, pas silencieuse."
+        ],
+        "pt": [
+          "`select count(*) from cron.job` numa pilha nova devolve o número de jobs do repositório.",
+          "Uma migração que agenda sem `pg_cron` é vermelha, não silenciosa."
+        ]
+      },
+      "dep": {
+        "fr": "À proposer à Bastien dans la PR scindée (**I16**) ou à faire au retour.",
+        "pt": "A propor a Bastien na PR dividida (I16) ou a fazer na volta."
+      },
+      "r": [
+        "supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql",
+        "deploy/compose.yml",
+        "deploy/init-db/",
+        "REGISTRE §0 DOC-SILENCE-1"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "B20",
+      "d": "B",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire",
+        "pt": "O fallback para a chave legada não pode voltar: uma guarda, não um comentário"
+      },
+      "v": {
+        "fr": "`_shared/core/secret-key.ts` a retiré le 02/09 (B18) le repli sur `SUPABASE_SERVICE_ROLE_KEY`, avec un commentaire qui dit pourquoi. La PR #28 le réintroduit (`return Deno.env.get(\"SUPABASE_SERVICE_ROLE_KEY\")`) — de bonne foi, pour sa pile, où la même PR pose déjà `SUPABASE_SECRET_KEYS` dans `compose.yml`. Un commentaire n'a pas suffi ; la clé legacy est désactivée en prod, un repli vers elle masquerait une panne au lieu de la dire (`DOC-SILENCE-1`).",
+        "pt": "`secret-key.ts` retirou em 02/09 o fallback para `SUPABASE_SERVICE_ROLE_KEY`, com um comentário explicando. A PR #28 o reintroduz de boa-fé. Um comentário não bastou; a chave legada está desativada em produção."
+      },
+      "w": {
+        "fr": "Une garde dans `scripts/ci/` (grep sur `supabase/functions/**` : aucun `SUPABASE_SERVICE_ROLE_KEY` hors de `env.ts`/commentaires, liste fermée) et une ligne dans `CONTRIBUTING.md`. Demander le retrait dans la PR #28.",
+        "pt": "Uma guarda em `scripts/ci/` (grep em `supabase/functions/**`: nenhum `SUPABASE_SERVICE_ROLE_KEY` fora da lista fechada) e uma linha em `CONTRIBUTING.md`. Pedir a retirada na PR #28."
+      },
+      "y": {
+        "fr": "Une décision de sécurité qui ne tient qu'à un commentaire est annulée par la première personne qui ne l'a pas lu. Les gardes à liste fermée sont la forme que ce dépôt sait tenir (`DOC-GRANT-1`, `T10`).",
+        "pt": "Uma decisão de segurança que só está num comentário é anulada pela primeira pessoa que não o leu."
+      },
+      "f": {
+        "fr": [
+          "La garde existe et rougit sur la branche de la PR #28 telle qu'elle est le 06/09.",
+          "`secret-key.ts` est revenu à sa forme du 02/09 dans la PR."
+        ],
+        "pt": [
+          "A guarda existe e fica vermelha na branch da PR #28 tal como está em 06/09.",
+          "`secret-key.ts` voltou à forma de 02/09 na PR."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "supabase/functions/_shared/core/secret-key.ts",
+        "item B18",
+        "REGISTRE §0 DOC-SILENCE-1",
+        "codeberg.org/anarbib/anarbib/pulls/28"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "F7",
+      "d": "F",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Un transport mail sans service configuré lève ; il ne simule pas en silence",
+        "pt": "Um transporte de e-mail sem serviço configurado falha; não simula em silêncio"
+      },
+      "v": {
+        "fr": "La PR #28 ajoute un transport hybride SMTP / Resend / « mock » dans `_shared/transport/email.ts` et dans les deux copies locales de `notify-library-request` et `notify-document-permission-request` : sans `SMTP_HOST` ni `RESEND_API_KEY`, `sendEmail` rend `{ok:true, mocked:true}` et journalise. C'est le cas *(a)* de `DOC-SILENCE-1`, et la forme exacte de son occurrence (1). En prod la clé Resend existe, rien ne change aujourd'hui ; le jour où le secret manque, la prod répondra 200 en n'envoyant rien. L'aiguillage SMTP/Resend, lui, est correct (`SMTP_HOST` posé ⇒ SMTP sauf `MAIL_TRANSPORT=resend`), et le client SMTP maison (`smtp.ts`) est propre.",
+        "pt": "A PR #28 adiciona um transporte híbrido SMTP / Resend / « mock »: sem `SMTP_HOST` nem `RESEND_API_KEY`, `sendEmail` devolve `{ok:true, mocked:true}`. É o caso (a) de `DOC-SILENCE-1`. Em produção nada muda hoje; no dia em que o segredo faltar, a produção responderá 200 sem enviar nada."
+      },
+      "w": {
+        "fr": "Règle à demander dans la PR et à écrire dans `spec-migration-mail-resend` : le mock **uniquement** sur `MAIL_TRANSPORT=mock` explicite (c'est ce qu'`install.sh` écrit déjà pour l'option 1) ; sans configuration, lever comme avant. Et une seule implémentation : les deux `notify-*` doivent appeler `_shared/transport/email.ts` au lieu d'en porter une copie — la PR a étendu les trois.",
+        "pt": "Regra a pedir na PR e escrever na spec: mock **só** com `MAIL_TRANSPORT=mock` explícito; sem configuração, falhar como antes. E uma única implementação: os dois `notify-*` devem chamar `_shared/transport/email.ts` em vez de copiar."
+      },
+      "y": {
+        "fr": "Une coordination a cru pendant des mois avoir coupé ses notifications ; le contraire — croire qu'elles partent — coûte les rappels d'échéance et les circuits collégiaux, qui s'arrêtent sans bruit (`GOUV-17`).",
+        "pt": "Uma coordenação acreditou por meses ter cortado suas notificações; o contrário — acreditar que partem — custa lembretes e circuitos colegiais que param sem ruído."
+      },
+      "f": {
+        "fr": [
+          "Sans `MAIL_TRANSPORT=mock`, une fonction sans service mail configuré lève et son appel rend une erreur lisible.",
+          "Une seule fonction d'envoi dans `_shared/`, appelée par toutes les EF qui écrivent."
+        ],
+        "pt": [
+          "Sem `MAIL_TRANSPORT=mock`, uma função sem serviço configurado falha com erro legível.",
+          "Uma única função de envio em `_shared/`, chamada por todas as EF."
+        ]
+      },
+      "dep": {
+        "fr": "Relecture de la PR « code applicatif » (**I16**).",
+        "pt": "Releitura da PR « código aplicativo » (I16)."
+      },
+      "r": [
+        "supabase/functions/_shared/transport/email.ts",
+        "REGISTRE §0 DOC-SILENCE-1",
+        "docs/specs/spec-migration-mail-resend.md",
+        "codeberg.org/anarbib/anarbib/pulls/28"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "G11",
+      "d": "G",
+      "p": "P0",
+      "s": "decision",
+      "e": "?",
+      "sk": [
+        "collectif"
+      ],
+      "t": {
+        "fr": "Le premier administrateur d'une instance : écrire la règle d'amorçage",
+        "pt": "O primeiro administrador de uma instância: escrever a regra de arranque"
+      },
+      "v": {
+        "fr": "Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK).",
+        "pt": "O circuito dos administradores de rede é colegial e supõe que já exista um; numa base vazia ninguém pode propor ninguém. A primeira linha foi escrita à mão em maio de 2026 e a exceção não está inscrita. `seed-admin.mjs` (PR #28) refaz o gesto por script; em modo local, credenciais fixas `admin@anarbib.local` / `anarbib-admin`, publicadas pelo guia da vitrine."
+      },
+      "w": {
+        "fr": "Trancher et inscrire au REGISTRE (`GOUV-19`) : *(a)* l'amorçage d'une base vide écrit un premier compte hors circuit, une fois, et le script refuse sinon ; *(b)* mot de passe aléatoire dans tous les modes, affiché une fois ; *(c)* le premier compte est-il coordinateur de la première biblio, admin réseau, ou les deux ? *(d)* la biblio `demo` : la créer, ou demander son nom à l'installation ?",
+        "pt": "Decidir e inscrever no REGISTRO (`GOUV-19`): (a) o arranque de uma base vazia escreve uma primeira conta fora do circuito, uma vez; (b) senha aleatória em todos os modos; (c) a primeira conta é coordenadora, admin de rede, ou ambos? (d) a biblioteca `demo`: criar, ou perguntar o nome na instalação?"
+      },
+      "y": {
+        "fr": "Sans règle écrite, l'amorçage devient une porte : un script qui « crée un admin » se relance, se copie, se documente comme une commodité. Avec une règle, c'est un geste unique, nommé, refusé dès qu'il existe quelqu'un.",
+        "pt": "Sem regra escrita, o arranque vira uma porta. Com regra, é um gesto único, nomeado, recusado assim que exista alguém."
+      },
+      "f": {
+        "fr": [
+          "`GOUV-19` est acté au REGISTRE avec les quatre réponses.",
+          "`seed-admin.mjs` les applique et `deploy/README.md` le présente comme l'amorçage, pas comme une création de compte."
+        ],
+        "pt": [
+          "`GOUV-19` está registrado com as quatro respostas.",
+          "`seed-admin.mjs` as aplica e `deploy/README.md` o apresenta como arranque."
+        ]
+      },
+      "dep": {
+        "fr": "Décision du mainteneur — `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q1). Bloque la fusion de la PR « auto-hébergement » (**I16**).",
+        "pt": "Decisão do mantenedor — Q1 da página de arbitragem. Bloqueia a fusão da PR « auto-hospedagem » (I16)."
+      },
+      "r": [
+        "REGISTRE §41 GOUV-19",
+        "deploy/scripts/seed-admin.mjs (PR #28)",
+        "journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "G12",
+      "d": "G",
+      "p": "P2",
+      "s": "decision",
+      "e": "?",
+      "sk": [
+        "collectif"
+      ],
+      "t": {
+        "fr": "Une instance = un réseau ; entre instances, seul le catalogue traverse",
+        "pt": "Uma instância = uma rede; entre instâncias, só o catálogo atravessa"
+      },
+      "v": {
+        "fr": "Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction.",
+        "pt": "Cada instalação auto-hospedada é uma rede por si só. O que atravessa hoje: o catálogo, por OAI-PMH (`oai-pmh-provider`, `harvest-oai-pmh`). O que não atravessa: contas, vínculos, empréstimos entre bibliotecas, governança, gazeta."
+      },
+      "w": {
+        "fr": "Inscrire la doctrine au REGISTRE (`FED-O11`) et la faire dire au site vitrine dans les mêmes termes. Un **annuaire des instances** (pour que la moisson ne dépende pas d'une adresse tapée à la main) serait le premier pas utile — c'est un domaine nouveau, donc un arbitrage écrit selon `DOC-GEL-1`, pas un item de code. Prêts, comptes et gouvernance entre instances = une fédération de protocole, hors de portée sans redessiner le modèle ; ne pas l'annoncer.",
+        "pt": "Inscrever a doutrina no REGISTRO (`FED-O11`) e fazê-la dizer na vitrine nos mesmos termos. Um **anuário de instâncias** seria o primeiro passo útil — domínio novo, logo arbitragem escrita (`DOC-GEL-1`). Empréstimos, contas e governança entre instâncias: fora de alcance sem redesenhar o modelo; não anunciar."
+      },
+      "y": {
+        "fr": "L'auto-hébergement va multiplier les instances. Si le projet ne dit pas ce qui les relie, chaque guide le dira à sa façon, et la première déception sera une bibliothèque qui croyait rejoindre le réseau en installant le logiciel.",
+        "pt": "A auto-hospedagem vai multiplicar instâncias. Se o projeto não disser o que as liga, cada guia dirá à sua maneira."
+      },
+      "f": {
+        "fr": [
+          "`FED-O11` acté ; le guide vitrine et `deploy/README.md` emploient la même phrase.",
+          "La question de l'annuaire a une décision datée dans `journal/arbitrages/`, dans un sens ou dans l'autre."
+        ],
+        "pt": [
+          "`FED-O11` registrado; guia da vitrine e `deploy/README.md` usam a mesma frase.",
+          "A questão do anuário tem decisão datada em `journal/arbitrages/`."
+        ]
+      },
+      "dep": {
+        "fr": "Décision du mainteneur — Q2 de la page d'arbitrage. Conditionne **J3**.",
+        "pt": "Decisão do mantenedor — Q2 da página de arbitragem. Condiciona J3."
+      },
+      "r": [
+        "REGISTRE §24 FED-O11",
+        "supabase/functions/oai-pmh-provider",
+        "supabase/functions/harvest-oai-pmh",
+        "REGISTRE §0 DOC-GEL-1"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "J3",
+      "d": "J",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "langue",
+        "aucune"
+      ],
+      "t": {
+        "fr": "Le guide d'auto-hébergement du site vitrine (pages PR #2) : quatre phrases, un avertissement, et attendre la PR #28",
+        "pt": "O guia de auto-hospedagem da vitrine (pages PR #2): quatro frases, um aviso, e esperar a PR #28"
+      },
+      "v": {
+        "fr": "PR #2 sur `AnarBib/pages` (la #1, même contenu, est fermée) : guide pas à pas en 10 langues engendrées par `tools/build-selfhosting-pages.py`, lien dans la navigation de `fr/`, `en/`, `es/`, `pt/`, renvoi dans le formulaire d'adhésion, README du dépôt en 4 langues. Ton juste, découpage juste, boutons « copier ». Il documente `./install.sh`, qui n'est pas dans `main`. Quatre affirmations à corriger : « coopérer avec les autres camarades du réseau » (vrai pour le catalogue par OAI-PMH, faux pour comptes, prêts, gouvernance — **G12**) ; « 2 Go suffisent largement » et « Raspberry Pi 4/5 » (non mesuré : six conteneurs dont Postgres et l'edge-runtime, plus `npm run build`) ; les identifiants par défaut (**G11**) ; le « mode simulation silencieux » présenté comme recommandé (**F7**). Pas d'avertissement « traduit automatiquement, corrigez-moi » sur les pages engendrées.",
+        "pt": "PR #2 em `AnarBib/pages`: guia passo a passo em 10 línguas geradas por script, link na navegação, README em 4 línguas. Documenta `./install.sh`, que não está em `main`. Quatro afirmações a corrigir: « cooperar com a rede » (só o catálogo, G12); « 2 GB bastam » e « Raspberry Pi » (não medido); credenciais padrão (G11); « modo simulação silencioso » recomendado (F7). Sem aviso « traduzido automaticamente, corrija-me »."
+      },
+      "w": {
+        "fr": "Réponse posée le 06/09 (fichier `pages-pr2-reponse`). Fusionner **après** la PR « auto-hébergement », une fois les quatre phrases ajustées et l'avertissement ajouté au générateur. Le README multilingue du dépôt vitrine peut partir seul si Bastien le sort dans une PR à part.",
+        "pt": "Resposta colocada em 06/09. Mesclar **depois** da PR « auto-hospedagem », com as quatro frases ajustadas e o aviso no gerador. O README multilíngue pode sair sozinho."
+      },
+      "y": {
+        "fr": "Le site vitrine est la seule chose que lit quelqu'un qui ne connaît pas encore le projet. Une promesse fausse y coûte plus qu'un bug : elle se lit dix fois avant qu'on la corrige.",
+        "pt": "A vitrine é a única coisa que lê quem ainda não conhece o projeto. Uma promessa falsa custa mais que um bug."
+      },
+      "f": {
+        "fr": [
+          "Les quatre phrases sont corrigées dans les 10 langues, l'avertissement est là, la PR #28 « auto-hébergement » est fusionnée, puis celle-ci."
+        ],
+        "pt": [
+          "As quatro frases estão corrigidas nas 10 línguas, o aviso está lá, a PR #28 mesclada, depois esta."
+        ]
+      },
+      "dep": {
+        "fr": "**I16**, **G11**, **G12**, **F7**.",
+        "pt": "I16, G11, G12, F7."
+      },
+      "r": [
+        "codeberg.org/AnarBib/pages/pulls/2",
+        "journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9.6",
+        "anarbib-vitrine-site-repo"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
+    },
+    {
+      "id": "J4",
+      "d": "J",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "`CHANTIERS_OUVERTS` §1 : écrire l'état réel après la première reconstruction extérieure",
+        "pt": "`CHANTIERS_OUVERTS` §1: escrever o estado real depois da primeira reconstrução externa"
+      },
+      "v": {
+        "fr": "L'entrée 1 (« Éprouver la reconstruction — le meilleur premier pas ») disait « personne ne l'a jamais vérifié ». Depuis le 06/09, quelqu'un l'a fait : Bastien a rebâti la pile depuis le dépôt seul et a trouvé les défauts du chemin de rejeu (`DOC-GRANT-2`). Sa PR réécrit l'entrée en « Validé le 28 août 2026, rejeu des 218 migrations » — date antérieure à la PR, chiffre retiré par lui-même, paragraphes « ce que ça demande / ce que ça apporte » supprimés ; c'est `DOC-CONSTAT-1`, et c'est le document d'orientation du mainteneur. Un état daté a été ajouté sous l'entrée le 06/09, sans toucher au texte.",
+        "pt": "A entrada 1 dizia « ninguém nunca verificou ». Desde 06/09, alguém verificou. A PR reescreve a entrada como « Validado em 28 de agosto, replay de 218 migrações » — data anterior à PR, número retirado por ele mesmo. Um estado datado foi acrescentado em 06/09 sem tocar no texto."
+      },
+      "w": {
+        "fr": "Au retour : le mainteneur réécrit l'entrée 1 lui-même — ce qui a été éprouvé, par qui, ce qui a cassé, ce qui reste (I17, I18, I19) — et décide si « le meilleur premier pas » reste l'entrée 1 ou passe à l'entrée 2.",
+        "pt": "Na volta: o mantenedor reescreve a entrada 1 — o que foi provado, por quem, o que quebrou, o que falta — e decide se « o melhor primeiro passo » continua sendo a entrada 1."
+      },
+      "y": {
+        "fr": "Ce document est la porte d'entrée des contributeurs. Y écrire « validé » avant que ce soit vrai renvoie la prochaine personne vers un chantier qu'elle croira clos.",
+        "pt": "Este documento é a porta de entrada dos contribuidores. Escrever « validado » antes de ser verdade manda a próxima pessoa para um canteiro que ela julgará fechado."
+      },
+      "f": {
+        "fr": [
+          "L'entrée 1 porte une mesure datée, signée, et la PR #28 ne la réécrit plus."
+        ],
+        "pt": [
+          "A entrada 1 traz uma medida datada, assinada, e a PR #28 não a reescreve mais."
+        ]
+      },
+      "dep": {
+        "fr": "Fusion de la PR « auto-hébergement » (**I16**).",
+        "pt": "Fusão da PR « auto-hospedagem » (I16)."
+      },
+      "r": [
+        "docs/CHANTIERS_OUVERTS.md",
+        "REGISTRE §0 DOC-CONSTAT-1",
+        "REGISTRE §0 DOC-ACTIF-1"
+      ],
+      "verif": {
+        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+      }
     }
   ]
 }
