@@ -72,4 +72,19 @@
 
 ---
 
+---
+
+## Complément — six décisions de relecture, tranchées le 06/09 à 21 h 30 (Xavier)
+
+Numérotées D3 à D9 dans le prompt de reprise du 14/09 (D1, D2 et D5 avaient été réglées dans la soirée : lien vitrine en pied de page, courriel admin demandé, PR pages #3 réduite au README). Toutes tranchées dans le sens de la recommandation.
+
+| # | Décision | Verdict | Où ça s'applique |
+|---|---|---|---|
+| D3 | Nom de la bibliothèque sur entrée vide | **Refuser et redemander** — pas de nom par défaut | `install.sh` (PR #28), backlog `G11` |
+| D4 | Mode « simulation » des e-mails | **Option 3, jamais par défaut** — Entrée ne choisit rien, il faut taper un chiffre (`DOC-SILENCE-1`) | `install.sh` (PR #28), guide vitrine (PR pages #2), backlog `J3`, `F7` |
+| D6 | Historique de la #29 | **Rebaser sur la #28 fusionnée, en un ou deux commits**, en abandonnant sa version de `src/lib/supabase.js` | PR #29, backlog `I16` |
+| D7 | Qui fait `I17` (défaut `anon` retiré avant le socle) | **Nous écrivons la spec, on la lui propose** après la fusion de la #28 | backlog `I17` |
+| D8 | Fenêtre de fusion de la #29 (déploie en prod) | **Entre deux soirées de formation**, jamais la veille d'une séance, tests verts, une heure devant soi | backlog `I16` |
+| D9 | `src/lib/supabase.js` dans la #28 | **Accepté, seul et sous sa forme minimale** (seul `auto` bascule sur l'origine ; le `throw` reste quand la variable est absente) — exception dite explicitement à la fusion, pas un précédent | PR #28, backlog `I16` ; `DOC-CONTRIB-1` inchangé |
+
 *Répondu le 06/09 au soir : `Q1 A-B-C-D′ · Q2 A · Q3 (déjà) attendre · Q4 A`. Les trois entrées du REGISTRE sont passées à ✅, les items du backlog ont changé d'état, cette page reste comme trace.*
