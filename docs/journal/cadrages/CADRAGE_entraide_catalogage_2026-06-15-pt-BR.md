@@ -10,6 +10,8 @@ agarra? ».** Este enquadramento é, de certa forma, o primeiro teste concreto d
 
 ---
 
+> **Nota de 08/09/2026.** O §8 abaixo, escrito em junho, previa uma instância Jitsi militante «em seu defeito `meet.jit.si`». Os dois pontos mudaram: o hospedeiro escolhido em junho, Autistici/Inventati, foi designado «terrorista» pelos Estados Unidos em 26/08/2026 e fechou; a videoconferência aponta desde 08/09 para o **Framatalk** (Framasoft), e o recurso codificado para `meet.jit.si` (empresa americana) foi **retirado** — a ausência de configuração leva ao Framatalk, nunca a um hospedeiro americano. Um Jitsi hospedado por nós ou por um aliado está posto no canteiro de auto-hospedagem (backlog I2). Registro: FED-O9.
+
 ## 1. A necessidade
 
 A catalogação é o ponto de dor das bibliotecas iniciantes (cf. os canteiros de

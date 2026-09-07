@@ -12,6 +12,8 @@ erste konkrete Bewährungsprobe der Charta.
 
 ---
 
+> **Hinweis vom 08/09/2026.** §8 unten, im Juni geschrieben, sah eine militante Jitsi-Instanz vor, „andernfalls `meet.jit.si`“. Beides hat sich geändert: der im Juni gewählte Host, Autistici/Inventati, wurde am 26/08/2026 von den USA als „terroristisch“ eingestuft und hat geschlossen; seit dem 08/09 zeigt die Videokonferenz auf **Framatalk** (Framasoft), und der codierte Rückfall auf `meet.jit.si` (US-Unternehmen) wurde **entfernt** — ohne Einstellung geht es zu Framatalk, nie zu einem US-Anbieter. Ein von uns oder einem verbündeten Kollektiv gehostetes Jitsi ist in der Selbsthosting-Baustelle vermerkt (Backlog I2). Register: FED-O9.
+
 ## 1. Der Bedarf
 
 Die Katalogisierung ist der Schmerzpunkt der Einsteiger-Bibliotheken (vgl. die Baustellen

@@ -10,6 +10,8 @@ Questo quadro è, in un certo senso, la prima messa alla prova concreta della ca
 
 ---
 
+> **Nota dell'08/09/2026.** Il §8 qui sotto, scritto a giugno, prevedeva un'istanza Jitsi militante «in mancanza `meet.jit.si`». Entrambi i punti sono cambiati: l'host scelto a giugno, Autistici/Inventati, è stato designato «terrorista» dagli Stati Uniti il 26/08/2026 e ha chiuso; la videoconferenza punta dall'08/09 a **Framatalk** (Framasoft), e il ripiego codificato verso `meet.jit.si` (società statunitense) è stato **rimosso** — l'assenza di configurazione porta a Framatalk, mai a un hosting statunitense. Un Jitsi ospitato da noi o da un alleato è posto nel cantiere dell'auto-hosting (backlog I2). Registro: FED-O9.
+
 ## 1. Il bisogno
 
 La catalogazione è il punto dolente delle biblioteche alle prime armi (cfr. i cantieri

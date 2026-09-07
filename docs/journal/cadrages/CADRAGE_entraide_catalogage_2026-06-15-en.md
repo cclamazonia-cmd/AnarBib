@@ -10,6 +10,8 @@ This scoping document is, in a sense, the first concrete test of the charter.
 
 ---
 
+> **Note of 08/09/2026.** §8 below, written in June, planned an activist Jitsi instance, "failing that `meet.jit.si`". Both points have moved: the host chosen in June, Autistici/Inventati, was designated "terrorist" by the United States on 26/08/2026 and shut down; since 08/09 the video call points to **Framatalk** (Framasoft), and the coded fallback to `meet.jit.si` (a US company) has been **removed** — no setting means Framatalk, never a US host. A Jitsi hosted by us or by an ally is raised in the self-hosting work (backlog I2). Register: FED-O9.
+
 ## 1. The need
 
 Cataloguing is the pain point for new libraries (cf. the authority, subject indexing,

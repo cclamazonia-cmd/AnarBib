@@ -10,6 +10,8 @@ agafa?».** Aquest cadratge és, en certa mesura, la primera prova concreta de l
 
 ---
 
+> **Nota del 08/09/2026.** El §8 de sota, escrit al juny, preveia una instància Jitsi militant «a falta `meet.jit.si`». Tots dos punts han canviat: l'amfitrió triat al juny, Autistici/Inventati, va ser designat «terrorista» pels Estats Units el 26/08/2026 i ha tancat; la videotrucada apunta des del 08/09 a **Framatalk** (Framasoft), i el recurs codificat cap a `meet.jit.si` (empresa nord-americana) s'ha **retirat** — l'absència de configuració porta a Framatalk, mai a un allotjador nord-americà. Un Jitsi allotjat per nosaltres o per un aliat es planteja a l'obra d'autoallotjament (backlog I2). Registre: FED-O9.
+
 ## 1. La necessitat
 
 El catalogatge és el punt de dolor de les biblioteques debutants (cf. els chantiers

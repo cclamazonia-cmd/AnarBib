@@ -8,6 +8,8 @@ la *arkitekturon* kaj la *principajn decidojn*. **Ĝi ankoraŭ ne estas spec por
 
 ---
 
+> **Noto de la 08/09/2026.** La §8 sube, verkita en junio, antaŭvidis aktivulan Jitsi-instancon, « manke `meet.jit.si` ». Ambaŭ punktoj ŝanĝiĝis: la gastiganto elektita en junio, Autistici/Inventati, estis deklarita « terorisma » de Usono la 26/08/2026 kaj fermiĝis; ekde la 08/09 la videokonferenco montras al **Framatalk** (Framasoft), kaj la kodita rezervo al `meet.jit.si` (usona firmao) estis **forigita** — sen agordo oni iras al Framatalk, neniam al usona gastiganto. Jitsi gastigata de ni aŭ de aliancano estas metita en la memgastigan laborejon (backlog I2). Registro: FED-O9.
+
 ## 1. La bezono
 
 Katalogado estas la dolorpunkto de komencant-in-aj bibliotekoj (cf. la laborchantieroj de aŭtoritato, subjekto-indeksado, malkovra gvid-sorĉisto). Sola biblioteko antaŭ la aŭtoritatoj, subjektoj, klasifiko estas timigata. La langeto « Kunhelpado » respondas al ĉi tiu preciza bezono — sed la anarkiisma katalogado ne estas neŭtrala : la ĉefaj subjektaj titoloj patologiziĝas, forviŝiĝas, mis-nomiĝas. **La kunhelpado transdonas *politikan metion* kiun nek normoj nek IA enkodigas.**

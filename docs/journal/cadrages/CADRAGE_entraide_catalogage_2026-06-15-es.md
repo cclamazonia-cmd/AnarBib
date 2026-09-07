@@ -10,6 +10,8 @@ agarra?».** Este encuadre es, en cierto modo, la primera puesta a prueba concre
 
 ---
 
+> **Nota del 08/09/2026.** El §8 de abajo, escrito en junio, preveía una instancia Jitsi militante «en su defecto `meet.jit.si`». Ambos puntos han cambiado: el anfitrión elegido en junio, Autistici/Inventati, fue designado «terrorista» por Estados Unidos el 26/08/2026 y cerró; la videollamada apunta desde el 08/09 a **Framatalk** (Framasoft), y el recurso codificado hacia `meet.jit.si` (empresa estadounidense) se **retiró** — la ausencia de configuración lleva a Framatalk, nunca a un alojador estadounidense. Un Jitsi alojado por nosotras o por un aliado está planteado en la obra de autoalojamiento (backlog I2). Registro: FED-O9.
+
 ## 1. La necesidad
 
 El catalogado es el punto de dolor de las bibliotecas principiantes (cf. los talleres

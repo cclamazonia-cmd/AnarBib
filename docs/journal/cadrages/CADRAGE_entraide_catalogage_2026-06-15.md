@@ -11,6 +11,8 @@ concrète de la charte.
 
 ---
 
+> **Note du 08/09/2026.** Le §8 ci-dessous, écrit en juin, prévoyait une instance Jitsi militante « à défaut `meet.jit.si` ». Les deux points ont bougé : l'hôte choisi en juin, Autistici/Inventati, a été désigné « terroriste » par les États-Unis le 26/08/2026 et a fermé ; la visio pointe depuis le 08/09 vers **Framatalk** (Framasoft), et le repli codé vers `meet.jit.si` (société américaine) a été **retiré** — l'absence de réglage renvoie vers Framatalk, jamais vers un hébergeur américain. Un Jitsi hébergé par nous ou par un allié est posé au chantier d'auto-hébergement (backlog I2). Registre : FED-O9.
+
 ## 1. Le besoin
 
 Le catalogage est le point de douleur des biblios débutantes (cf. les chantiers

@@ -10,6 +10,8 @@ grijpen ? ».** Deze kaderstelling is in zekere zin de eerste concrete toetsing 
 
 ---
 
+> **Noot van 08/09/2026.** §8 hieronder, in juni geschreven, voorzag een militante Jitsi-instantie, „bij gebrek `meet.jit.si`”. Beide punten zijn veranderd: de in juni gekozen host, Autistici/Inventati, werd op 26/08/2026 door de Verenigde Staten als „terroristisch” aangemerkt en sloot; sinds 08/09 wijst het videogesprek naar **Framatalk** (Framasoft), en de gecodeerde terugval naar `meet.jit.si` (Amerikaans bedrijf) is **verwijderd** — zonder instelling gaat het naar Framatalk, nooit naar een Amerikaanse host. Een door ons of door een bondgenoot gehoste Jitsi staat in de zelfhosting-werf (backlog I2). Register: FED-O9.
+
 ## 1. De behoefte
 
 Catalogiseren is het pijnpunt van beginnende bibliotheken (cf. de werven autoriteiten,
