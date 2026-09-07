@@ -51,7 +51,15 @@ export default function WorkPage() {
     ? work.expressions
     : [{ lang: '', editions }];
   const multiLang = expressions.length > 1;
-  const subtitle = [work.author_name, t({ id: 'work.page.editions' }, { count: editions.length })].filter(Boolean).join(' · ');
+  // E18 (07/09/2026) : six tomes d'une même édition sont UNE édition en six volumes,
+  // pas six éditions. La RPC compte les deux ; on les dit tous les deux.
+  const editionCount = Number(work.edition_count) > 0 ? Number(work.edition_count) : editions.length;
+  const volumeCount = Number(work.volume_count) || 0;
+  const subtitle = [
+    work.author_name,
+    t({ id: 'catalog.works.editionsCount' }, { count: editionCount }),
+    volumeCount >= 2 ? t({ id: 'catalog.works.volumesCount' }, { count: volumeCount }) : null,
+  ].filter(Boolean).join(' · ');
 
   const renderEdition = (e) => (
     <Link key={e.book_id} to={`/livro/${e.book_id}`}

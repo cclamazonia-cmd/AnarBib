@@ -15,6 +15,9 @@
 --   T3 même ordre et même `volume` dans le groupe par langue (expressions)
 --   T4 une édition sans tome garde `volume` NULL et passe devant par l'année
 --   T5 anon peut toujours exécuter la RPC (grant conservé par le REPLACE)
+--   T6 edition_count = 2 : l'édition sans tome + UNE édition pour les trois
+--      tomes de 1905 (retour Xavier : « six tomes d'une seule édition »)
+--   T7 volume_count = 3 (tomes distincts)
 --
 --   Bilan OK : 'OEUVRE-TOMES OK : N/N tests passés'
 -- =====================================================================
@@ -84,6 +87,18 @@ BEGIN
   IF has_function_privilege('anon', 'api.work_public_detail(bigint,text)', 'EXECUTE') THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || v_t; END IF;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T6 edition_count = 2 (une sans tome + une édition en trois tomes)';
+  IF (v_res->>'edition_count')::int = 2 THEN
+    v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_res->>'edition_count', '∅')); END IF;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T7 volume_count = 3';
+  IF (v_res->>'volume_count')::int = 3 THEN
+    v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_res->>'volume_count', '∅')); END IF;
 
   -- ─── Bilan (le RAISE annule les fixtures) ─────────────────────────
   IF v_failed = 0 THEN
