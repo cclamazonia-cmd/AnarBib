@@ -455,3 +455,6 @@ tests/sql/oai_getrecord_tests.sql
 # I20 (07/09) : l adresse des Edge Functions vient du reglage anarbib.functions_base_url
 # (repli cloud). T3 est structurel et non nominatif : aucun corps ne porte le litteral.
 tests/sql/adresse_des_fonctions_tests.sql
+# E18 (07/09) : la page Oeuvre dit le tome. T2 insere III, I, II et exige I, II, III :
+# l ordre des identifiants ne suffit pas, seul le rang du tome le fait.
+tests/sql/oeuvre_tomes_page_tests.sql

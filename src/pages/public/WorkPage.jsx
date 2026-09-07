@@ -60,7 +60,11 @@ export default function WorkPage() {
         ? <img src={`${COVER_BASE}${e.cover_object_path}`} alt="" loading="lazy" style={{ width: 48, height: 68, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }} />
         : <div style={{ width: 48, height: 68, borderRadius: 4, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,.06)', fontSize: '1.2rem' }}>{(e.titulo || '?')[0]}</div>}
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: '.86rem', fontWeight: 600 }}>{e.titulo}</div>
+        <div style={{ fontSize: '.86rem', fontWeight: 600 }}>
+          {/* E18 (07/09/2026) : le tome, sinon six tomes d'une même édition sont six cartes identiques. */}
+          {e.volume && <span style={{ display: 'inline-block', marginRight: 6, padding: '0 6px', borderRadius: 999, fontSize: '.68rem', fontWeight: 700, background: 'rgba(255,255,255,.12)', verticalAlign: 'middle' }}>{t({ id: 'catalog.works.volumeLabel' }, { n: e.volume })}</span>}
+          {e.titulo}
+        </div>
         <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }}>{[e.ano, e.editora].filter(Boolean).join(' · ')}</div>
         {!multiLang && e.idioma && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{languageLabel(e.idioma, t)}</div>}
       </div>
