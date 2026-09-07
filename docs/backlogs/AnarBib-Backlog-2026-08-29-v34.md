@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-06** · 66 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-07** · 70 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,11 +19,11 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 2
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 3
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 12
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **6 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `757e336d`, après trois journées où trois sessions ont poussé (l'OPAC par œuvre en douze migrations, la révision des lots importés, la page « Je veux… », l'atelier ouvert aux œuvres, la purge du schéma de mai, les homonymes de `public`). Toutes les lignes ont été remesurées, advisors compris : c'est un relevé complet. Deux régressions d'hygiène y apparaissent, notées à leur ligne.
 
-**Fraîcheur des constats au 2026-09-06.** **49 items sur 66** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, J2, J3, J4, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-07.** **53 items sur 70** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, H8, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, I20, J2, J3, J4, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -815,6 +815,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
+| **E14** | Une page pour signaler un bug depuis l'application | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1023,6 +1024,30 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `src/pages/importacoes/ImportacoesPage.jsx` · `src/components/rede/OaiSourcePanel.jsx` · `supabase/functions/export-catalog-lote` · `capture d'écran de Xavier du 02/09 (contexte blmf-teste)`*
 
+#### E14 — Une page pour signaler un bug depuis l'application
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, langue maternelle
+
+**État.** **Demande de Xavier le 07/09/2026.** Vérifié le même jour : **aucun mécanisme de signalement n'existe dans l'app**, à aucun niveau. Pas de table (`bug_reports`, `feedback`, `signalements` — rien ; la seule table d'incidents, `service_health_incidents`, est la supervision automatique), aucune des 52 Edge Functions, aucune route dans `App.jsx` (pas de `/bug`, `/feedback`, `/contato`, `/aide`), aucune clé i18n (`*.bug.*`, `*.feedback.*`), aucun lien vers les issues Codeberg dans `src/` (les seules URL Codeberg de l'app sont dans la politique de confidentialité et le DPA). Le seul courriel de contact général, `mailto:contato@anarbib.org`, est enterré dans `PrivacyPolicyPage.jsx` ; les deux `mailto:anarbib@proton.me` sont réservés à l'onboarding. Le canal documenté vit hors de l'app et côté développeur : `CONTRIBUTING.md` et le README disent « ouvrir une issue sur Codeberg » — inaccessible à une bibliothécaire qui n'a pas de compte là-bas.
+
+**Trois patrons maison existent déjà**, et il n'y a rien à inventer : *(1)* `authority_duplicate_reports` + `report_authority_pair` (staff → coordination, index unique partiel anti-flood sur `status='open'`, `HINT` = clés i18n, `DO $$` de vérification — et son en-tête explique pourquoi une table générique à `entity_type` a été refusée) ; *(2)* `book_reading_note_reports` (modération, `UNIQUE (note_id, reporter)`) ; *(3)* **`cartography_submissions`** — le seul ouvert à `anon` : table verrouillée, Edge Function publique `submit-cartography-entry` avec défi altcha, outbox → `notify-event` vers `fede@anarbib.org`, trio `list/approve/reject`, écran de modération. C'est le modèle 3 qui couvre le besoin, avec l'anti-flood du modèle 1.
+
+*Vérifié : 07/09 — grep sur `src/`, `supabase/functions/` (52 EF), `App.jsx` (routes), `fr.json` ; dépôt `eb790c33`. Aucun mécanisme, aucun item au backlog avant celui-ci.*
+
+**Ce que c'est.** Une page publique « Signaler un problème » (route à nommer, `/signalar` ou `/problema`), accessible **sans compte** et depuis **toutes** les pages : un lien dans le `Footer` (`src/components/layout/index.jsx`, aujourd'hui trois éléments : mention, confidentialité, langue) et une intention « Je veux signaler un problème » dans `intentions.js` (groupe lecteur — une ligne). Formulaire minimal : ce qui s'est passé, ce qui était attendu, comment refaire ; **le contexte se remplit seul** (page d'origine, locale, rôle et bibliothèque de session si connecté, navigateur) ; courriel de réponse facultatif ; jamais de mot de passe ni de capture obligatoire. Côté serveur, calquer `cartography_submissions` : table `bug_reports` verrouillée (`REVOKE ALL FROM anon, authenticated`), Edge Function `submit-bug-report` avec altcha pour les anonymes, outbox → `notify-event` vers `admins@anarbib.org` (le destinataire de supervision, F-domaine), statut `open/closed`, index unique partiel anti-flood, RPC `list/close` réservées aux admins réseau, et un onglet dans Rede (ou la page de modération existante) pour la file. **Deux décisions à prendre en écrivant** : *(a)* pont vers Codeberg (un admin recopie à la main vers une issue — le plus simple et le plus honnête) ou pas de pont ; *(b)* accusé de réception par courriel au signaleur quand il a laissé une adresse. Dix locales d'emblée (parité stricte, `i18n.test.js`), et un test qui garde la route et le `Footer`.
+
+**Pourquoi ça compte.** La formation BLMF commence le 08/09 (sept soirées) : des coordinations vont buter sur des défauts, et la seule voie de retour aujourd'hui est l'oreille de Xavier. Un outil dont on ne peut pas dire qu'il est cassé sans passer par le mainteneur contredit `DOC-COLLECTIVE-1` ; et la promesse d'**A4** (« un premier retour sous une semaine ») n'a pas de porte d'entrée pour qui ne code pas.
+
+**Ce qui compte comme fini.**
+
+- [object Object]
+- [object Object]
+- [object Object]
+
+**Dépendances.** Aucune bloquante. Voisin de **A4** (accueillir une contribution) et **E12** (le premier retour ergonomique de Xavier n'avait, lui non plus, pas de canal). Réutilise `notify-event` et altcha tels quels.
+
+*Renvois : `src/components/layout/index.jsx (Footer)` · `src/pages/inicio/intentions.js` · `supabase/migrations/20260618182516_cartography_submissions.sql` · `supabase/functions/submit-cartography-entry` · `supabase/migrations/20260821130001_signaler_un_doublon_d_autorite.sql` · `CONTRIBUTING.md`*
+
 ---
 
 ### F — Courriel et notifications
@@ -1197,6 +1222,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
 | **G11** | Le premier administrateur d'une instance : écrire la règle d'amorçage | `P0` | Ouvert |
 | **G12** | Une instance = un réseau ; entre instances, seul le catalogue traverse | `P2` | Ouvert |
+| **G13** | Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA… | `P2` | Ouvert |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1375,6 +1401,34 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `REGISTRE §24 FED-O11` · `supabase/functions/oai-pmh-provider` · `supabase/functions/harvest-oai-pmh` · `REGISTRE §0 DOC-GEL-1`*
 
+#### G13 — Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA…
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript, langue maternelle, bibliothéconomie
+
+**État.** **Demande de Xavier le 07/09/2026** : pouvoir restreindre l'affichage aux catalogues des bibliothèques qui appartiennent à un réseau constitué **avant** AnarBib — FICEDL, RebAL, NORLA (le corpus écrit NORLA, pas NORMA).
+
+**Le modèle ne connaît pas ces réseaux.** `libraries` n'a ni colonne ni table d'affiliation externe — `network_mode` (`isolated|observer|federated`), `visibility_level='network'`, `catalog_mode='network_published'` et `network_administrators` parlent tous du rapport au réseau **AnarBib**, faux amis. Deux seuls porteurs, en texte libre : **`cartography_entries.reseau`** (spec-cartographie, sans vocabulaire contrôlé) et `library_commons.affiliation_label` (éditorial : « CCLA »). Sur les 187 fiches de carte : `FICEDL` 34, `RebAL ; FICEDL` 11, `RebAL` 6, `FAI Reggiana` 2, `ABABA`, `RebAL, FAI`, `FAO, AFI`, `UK Social Centre Network, Radical Routes` — 130 vides ; séparateurs `;` et `,` mélangés ; fédérations de centres de documentation et organisations politiques dans le même champ. **NORLA n'apparaît nulle part dans les données** (seulement aux items G8, H6, D4). Le champ n'est affiché qu'en infobulle de la carte (`CartographyMap.jsx`), jamais filtrable, et absent du formulaire d'édition. Aucune vue publique ne l'expose : `api.libraries_public_v1` (celle de l'OPAC) sert `id, slug, name, short_name, city, state` ; `api.public_libraries` sert `affiliation_label` mais pas `reseau`.
+
+**Côté OPAC**, le filtre par bibliothèque passe par les **noms courts** (`p_filters.libraries` → `api.catalog_works_v1`, `holding_library_names_json`), mémorisé dans `localStorage` (`anarbib:catalog:filters`) — pas de `library_ids`, pas de notion de réseau.
+
+**Mesuré en production le 07/09** : trois bibliothèques seulement ont une fiche de carte rattachée (`library_id`) — BLMF (FICEDL, 248 exemplaires), BTL (FICEDL, 2 184), MLEG (aucun réseau, 269). Un commutateur « FICEDL seulement » montrerait donc aujourd'hui BLMF + BTL, et « RebAL » ou « NORLA » rien : l'item vaut pour ce que le réseau devient (Bologne, admissions), pas pour ce qu'il est.
+
+*Vérifié : 07/09 — production interrogée en lecture seule (jointure `cartography_entries` × `libraries` : trois lignes, réseaux et exemplaires ci-dessus) ; valeurs de `reseau` comptées sur `carte-reseau.umap` ; dépôt `eb790c33`.*
+
+**Ce que c'est.** Trois pas, dans cet ordre. **(1) Normaliser** : un vocabulaire contrôlé des réseaux (table `networks` : slug, libellé, site — `ficedl`, `rebal`, `norla`, `fai`…, en excluant ou en typant les organisations politiques) et une colonne `reseaux text[]` — ou une table de jointure — sur `cartography_entries`, remplie depuis `reseau` (couper sur `;` et `,`, normaliser la casse), le champ ajouté à `CartographyEditModal` avec ses clés i18n ; l'appartenance reste déclarée par la fiche de carte, qui a déjà sa modération — **aucun circuit nouveau**. **(2) Exposer** : une colonne `networks` dans `api.libraries_public_v1` par jointure sur `cartography_entries.library_id` — en réécrivant la vue **avec** `security_invoker` (un `CREATE OR REPLACE VIEW` sans `WITH` la ferait retomber en DEFINER). **(3) Filtrer** : dans `CatalogPage.jsx`, à côté du sélecteur de bibliothèques, un sélecteur de réseaux qui réduit `libraryOptions` et alimente `libraryShortNames` — **sans toucher au RPC** ni aux vues matérialisées `catalog_list_*` ; mémorisé dans `anarbib:catalog:filters`, visible en puce, remis à zéro par « effacer les filtres ». **Décision à prendre en écrivant** : un interrupteur unique « réseaux constitués seulement » ou un filtre par réseau (FICEDL / RebAL / NORLA) — le second coûte le même prix et répond à « où sont nos catalogues ? » posé par un réseau à la fois ; l'interrupteur peut être le raccourci « tous les réseaux ». Une biblio hors de toute fiche de carte n'apparaît dans aucun réseau : le dire à l'écran plutôt que la faire disparaître en silence.
+
+**Pourquoi ça compte.** Bologne (13/09) réunit des gens dont les réseaux existaient avant AnarBib ; la première chose qu'ils chercheront à l'écran, c'est le leur. Les conventions d'interopérabilité posent qu'il n'y a « rien à rejoindre » : montrer les réseaux tels qu'ils existent, plutôt que les fondre dans un annuaire AnarBib, est la traduction de cette phrase dans l'interface.
+
+**Ce qui compte comme fini.**
+
+- [object Object]
+- [object Object]
+- [object Object]
+
+**Dépendances.** **G8** (compléter la carte : les neuf archives NORLA) enrichit le résultat sans le conditionner. **G9** (cartographie v1.0) est gelé : ne pas l'attendre, le pas (1) lui servira. Voisin de **H6** (vocabulaires NORLA ↔ FICEDL). Le pas (2) touche une vue : relire `CREATE OR REPLACE VIEW` et ses options avant.
+
+*Renvois : `supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)` · `docs/specs/spec-cartographie-reseau.md` · `src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)` · `supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)` · `api.libraries_public_v1 (baseline)` · `src/pages/federacao/CartographyMap.jsx` · `docs/cartographie/carte-reseau.umap`*
+
 ---
 
 ### H — Interopérabilité, thésaurus, moisson
@@ -1385,6 +1439,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 |---|---|---|---|
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
+| **H8** | `GetRecord` sert la première notice de la bibliothèque, pas celle qu'on lui demande | `P1` | Ouvert |
 
 #### H2 — Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus
 
@@ -1430,6 +1485,27 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6` · `VEILLE_leftovers_maydayrooms_2026-08-19`*
 
+#### H8 — `GetRecord` sert la première notice de la bibliothèque, pas celle qu'on lui demande
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** **Trouvé le 07/09 en relisant l'entrepôt OAI pour répondre à « comment se partage un catalogue entre instances ».** `fn_oai_harvestable_records(p_library_slug, p_from, p_until, p_limit, p_offset, p_book_id)` applique `p_book_id` au **comptage** (`AND (p_book_id IS NULL OR b.id = p_book_id)`) mais **pas à la requête qui produit les notices**, qui ne filtre que sur la fenêtre de dates puis `ORDER BY b.id LIMIT v_limit OFFSET v_offset`. L'Edge Function `oai-pmh-provider` appelle `fetchRecords(slug, '', '', 1, 0, bookId)` : `LIMIT 1 OFFSET 0`, donc **la notice de plus petit `books.id` de la bibliothèque, quel que soit l'identifiant demandé** — et un identifiant inexistant reçoit une notice au lieu de `idDoesNotExist` (`total` vaut 0, mais l'EF ne regarde que `records[0]`). Vérifié dans la migration `20260622120319` et dans `pg_proc` en production (deux occurrences de `p_book_id` dans le corps : la signature et le comptage). La clôture **H5** du 02/09 dit « `GetRecord` exact » — compatible avec un essai sur la première notice ; `DOC-CONSTAT-1`. Sans effet aujourd'hui : aucune bibliothèque n'est ouverte (l'ouverture BLMF du 02/09 a été refermée 21 minutes plus tard) et aucun moissonneur tiers n'existe.
+
+*Vérifié : 07/09 — corps de la fonction lu dans la migration et dans `pg_proc` en production (`regexp_matches(prosrc, 'p_book_id')` = 2) ; `oai_opening_requests` : dernière ouverture BLMF `closed` à 18:02 le 02/09 ; zéro source `oai_pmh` enregistrée.*
+
+**Ce que c'est.** Une migration qui **repart de la définition réelle en production** (pas du texte de la migration de juin) et ajoute `AND (p_book_id IS NULL OR b.id = p_book_id)` à la requête des notices ; grants et `SECURITY DEFINER` inchangés (appelée en `service_role` seulement). Une suite `tests/sql/oai_getrecord_tests.sql` au manifeste `ci-suites.txt` : sur une bibliothèque ouverte à deux notices, demander la seconde renvoie la seconde et elle seule ; un identifiant inconnu renvoie zéro notice. Puis nuancer la ligne H5 aux clôtures (fait le 07/09 en même temps que cet item) et, à la prochaine ouverture réelle, rejouer `GetRecord` sur un identifiant qui n'est pas le premier.
+
+**Pourquoi ça compte.** Un moissonneur emploie `GetRecord` pour rafraîchir **une** notice : servir la mauvaise sans erreur corrompt en silence le catalogue d'en face — exactement ce que « seul le catalogue traverse » (`FED-O11`) promet de ne pas faire. Et c'est un chemin déclaré éprouvé qui ne l'était pas sur ce verbe (`anarbib-rpc-jamais-empruntee`).
+
+**Ce qui compte comme fini.**
+
+- [object Object]
+- [object Object]
+
+**Dépendances.** Aucune. Le correctif est une soirée ; ne pas attendre un moissonneur tiers pour le faire.
+
+*Renvois : `supabase/migrations/20260622120319_audio_p5_oai_expose_mbid.sql (comptage l. 55, notices l. 121-126)` · `supabase/functions/oai-pmh-provider/index.ts (GetRecord, fetchRecords(…, 1, 0, bookId))` · `tests/sql/ci-suites.txt` · `clôture H5 (02/09)`*
+
 ---
 
 ### I — Auto-hébergement, exploitation, sauvegardes, CI
@@ -1449,6 +1525,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I17** | Le rejeu depuis zéro doit être fidèle au dump : `anon` retiré du défaut avant le socle | `P1` | Ouvert |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | Ouvert |
 | **I19** | `pg_cron` doit exister sur la pile auto-hébergée, et son absence doit se voir | `P1` | Ouvert |
+| **I20** | Quinze URL de fonctions codées en dur sur le projet cloud : une instance auto-hébergée irait frapper la production | `P2` | Ouvert |
 
 #### I1 — Aligner l'image GoTrue sur l'état réel des migrations d'authentification
 
@@ -1686,6 +1763,27 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** À proposer à Bastien dans la PR scindée (**I16**) ou à faire au retour.
 
 *Renvois : `supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql` · `deploy/compose.yml` · `deploy/init-db/` · `REGISTRE §0 DOC-SILENCE-1`*
+
+#### I20 — Quinze URL de fonctions codées en dur sur le projet cloud : une instance auto-hébergée irait frapper la production
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, administration système
+
+**État.** **Trouvé le 07/09 en suivant la chaîne de moisson pour une instance locale.** `ingest.fn_dispatch_oai_harvest` (migration `20260828190000`, l. 89) pose `v_url := 'https://uflwmikiyjfnikiphtcp.supabase.co/functions/v1/harvest-oai-pmh'`. Ce n'est pas isolé : **quinze occurrences dans huit migrations**, vers neuf fonctions — `notify-event` (4), `notify-library-request` (2), `gazette-monthly-build` (2), `work-titles-autofill`, `translate-gazette-submission`, `notify-rede-digest`, `health-probe`, `harvest-oai-pmh`. Aucun helper `fn_functions_base_url` n'existe ; `deploy/.env.example` et `bootstrap.sh` ne portent pas de variable pour cette adresse. Sur une pile auto-hébergée (`api.anarbib.org`, Caddy devant `functions`), chaque `net.http_post` de ces dispatchers partirait donc **vers le cloud du mainteneur**, avec le secret local en en-tête : rien ne tourne sur place (pas de courriel, pas de gazette, pas de sonde, pas de moisson), et le secret est offert à un autre opérateur. `deploy/README.md` dit que la pile a été montée trois fois ; ces chemins-là n'y ont jamais été exercés — ils ne se voient pas au rejeu des migrations. (Vault n'est pas le problème : l'image `supabase/postgres` le fournit, `bootstrap.sh` l'amorce.)
+
+*Vérifié : 07/09 — grep sur le dépôt `eb790c33` (8 fichiers, 15 occurrences, 9 fonctions cibles) ; `deploy/compose.yml`, `bootstrap.sh` et `.env.example` relus.*
+
+**Ce que c'est.** Une seule source de vérité pour l'adresse des fonctions : une ligne de réglage en base (table de configuration privée existante, ou `vault` où le secret voisin vit déjà) lue par un helper `private.fn_functions_base_url()` ; une migration qui remplace les quinze littéraux par l'appel au helper, avec en repli la valeur cloud actuelle pour que la production ne bouge pas ; `bootstrap.sh` pose la valeur locale (`https://api.anarbib.org` ou celle de `.env`) et `deploy.sh --controle` la vérifie ; une garde CI (ou le hook `pre-commit`) qui refuse tout nouveau `supabase.co/functions/v1` littéral dans une migration. À faire en environnement d'essai — le domaine I est gelé sur la production jusqu'au 14/09.
+
+**Pourquoi ça compte.** `FED-O11` promet qu'une instance est un réseau à part entière ; avec ces quinze lignes, une instance « à part » reste branchée sur la production du mainteneur sans que personne ne l'ait décidé. C'est aussi le genre de défaut que Bastien (**I16**) rencontrera le premier jour où il branchera un courriel.
+
+**Ce qui compte comme fini.**
+
+- [object Object]
+- [object Object]
+
+**Dépendances.** Prolonge **I2** (bascule) et **I19** (`pg_cron`) : même famille — ce qui marche au cloud parce que le cloud est là. À proposer dans la PR scindée de Bastien (**I16**) ou au retour.
+
+*Renvois : `supabase/migrations/20260828190000_lot3b_moisson_oai_pmh.sql (l. 89)` · `grep "uflwmikiyjfnikiphtcp.supabase.co/functions" supabase/migrations/ (8 fichiers, 15 occurrences)` · `deploy/bootstrap.sh` · `deploy/.env.example` · `REGISTRE §24 FED-O11`*
 
 ---
 
@@ -2076,7 +2174,7 @@ CI verte : lint et suite unitaire. |
 | F7 | 2026-09-02 | **Treize secrets vides, treize verdicts — et il n'en reste que deux, qui le sont exprès et le disent.** Le relevé rejoué le 02/09 donnait les mêmes treize empreintes de chaîne vide qu'au 30/08. Tri en trois classes, chaque lecteur relu : **11 supprimés** (`supabase secrets unset`) — dix doublons de tête de chaîne de repli dont la variante `ANARBIB_*` renseignée gagnait déjà, plus `REGIMENTO_URL` sur décision : aucun règlement réseau n'est publié, la branche morte qui l'attendait est **retirée du code** (trois endroits — dont une chaîne mal nommée dans `notify-document-permission-request` qui cherchait l'URL du *manuel* en essayant d'abord celle du *règlement* : inoffensive vide, fausse le jour où on l'aurait remplie ; le jour où un regimento existera, le rétablir sera un geste conscient). **2 conservés et documentés** : `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, dont le vide EST le réglage (la redirection des avis internes est inactive, vérifié le 30/08 sur l'inscription BTL) — commentaire posé dans `register/index.ts`, là où on les lit, pour que personne ne les « répare ». Un `secrets list` dit désormais la vérité : deux empreintes vides, toutes deux voulues. |
 | B18 | 2026-09-02 | **Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout. |
 | G2 | 2026-09-02 | **L'écart P2/P8 est tranché — le texte s'aligne sur le code, et la forme de la décision est aussi importante que son fond.** Option 1 des trois écrites : la pratique vivante (le circuit collégial que la BTL exerce depuis le 01/09) devient la règle. Spec v1.11 : P2 dit que **l'exécution elle-même est collégiale** ; P8 clarifie la frontière sans rien céder — les quorums du code ne sont pas des votes mais des **garanties d'exécution** (une ratification atteste qu'une décision collective existe hors logiciel, elle ne la remplace pas) : « modéliser la délibération, jamais ; exiger plusieurs mains pour exécuter, toujours ». Aucune ligne de code. **Décision prise seule, en le disant** — mode dégradé assumé (aucun collectif ne s'est encore saisi de l'outil), daté à `DECISION_G2_alignement_textes_promotion_2026-09-02.md`, `GOUV-18` au REGISTRE (v0.15), **fenêtre d'objection à la soirée 1 de la formation, le 08/09/2026** : le jour où le collectif existe, il trouve une décision contestable, pas un état de fait muet. Au passage, le fil-piège de `GOUV-17b` est réparé (livré ce matin, la ligne du registre avait un jour de retard). |
-| H5 | 2026-09-02 | **La moisson OAI-PMH est éprouvée dans les deux sens, avec de vraies données des deux côtés — et deux circuits civiques exercés pour la première fois le même soir.** **Sens entrant** : première source réelle enregistrée (Persée, fascicules de sociologie, volume borné à 2 lots/cycle — répétition en transaction annulée puis geste réel, garde admin réseau sous l'identité de Xavier) ; le déclencheur du cron lancé à la main a ramené **40 fascicules réels** (les *Actes de la recherche en sciences sociales* de 1975 en tête de file) : run `ready_for_review`, verrou reposé sur `paused`, **jeton de reprise conservé** — le cron de mardi 04h20 continuera là où l'épreuve s'est arrêtée. **Sens sortant** : l'entrepôt répondait conformément mais vide — « aucune bibliothèque ouverte » — car le circuit « être source » n'avait jamais servi ; **la BLMF s'est ouverte par le circuit réel** (demande → décision, notification comprise — décision de Xavier, mode dégradé assumé comme G2), et un client tiers a moissonné **200 notices en deux lots**, reprise par `resumptionToken` honorée, `GetRecord` exact, `Identify`/`ListMetadataFormats`/`ListSets` conformes. **Deux constats en chemin, pour Bologne** : *(1)* les deux partenaires PMB connus (CIRA Lausanne, CSL Milano) n'exposent pas `oai2.php` — le diagnostic des conventions (« les flux ne pointent nulle part ») est en-deçà de la réalité : côté PMB ils n'existent pas, et c'est un sujet pour H6/K6 ; *(2)* `blmf-teste` échoue l'éligibilité sur ses trois verrous de profil — sa recette de bibliothèque masquée tient, y compris face à l'OAI. **Rien ne survit à l'épreuve, sur décision de Xavier le soir même** : les 40 notices Persée n'appartenaient à aucune bibliothèque réelle (run rattaché au bac à sable, donc invisible depuis un contexte de biblio ordinaire — c'est ce qui les rendait introuvables à l'écran) ; run, lignes et source sont purgés par le chemin propre (`fn_import_delete_run`, puis retrait de la source et de son état) — **zéro source OAI reste armée, le cron de mardi ne moissonnera rien**. L'ouverture de la BLMF est refermée de la main de Xavier. L'épreuve, elle, est acquise : ce qui a été prouvé n'a pas besoin des données qui l'ont prouvé. **Reste ouvert, hors périmètre** : un moissonneur vraiment tiers — une autre machine, un autre collectif — que Bologne peut fournir. |
+| H5 | 2026-09-02 | **La moisson OAI-PMH est éprouvée dans les deux sens, avec de vraies données des deux côtés — et deux circuits civiques exercés pour la première fois le même soir.** **Sens entrant** : première source réelle enregistrée (Persée, fascicules de sociologie, volume borné à 2 lots/cycle — répétition en transaction annulée puis geste réel, garde admin réseau sous l'identité de Xavier) ; le déclencheur du cron lancé à la main a ramené **40 fascicules réels** (les *Actes de la recherche en sciences sociales* de 1975 en tête de file) : run `ready_for_review`, verrou reposé sur `paused`, **jeton de reprise conservé** — le cron de mardi 04h20 continuera là où l'épreuve s'est arrêtée. **Sens sortant** : l'entrepôt répondait conformément mais vide — « aucune bibliothèque ouverte » — car le circuit « être source » n'avait jamais servi ; **la BLMF s'est ouverte par le circuit réel** (demande → décision, notification comprise — décision de Xavier, mode dégradé assumé comme G2), et un client tiers a moissonné **200 notices en deux lots**, reprise par `resumptionToken` honorée, `GetRecord` exact *(nuancé le 07/09 : l'essai portait sur la première notice — la fonction ignore l'identifiant demandé, voir **H8**)*, `Identify`/`ListMetadataFormats`/`ListSets` conformes. **Deux constats en chemin, pour Bologne** : *(1)* les deux partenaires PMB connus (CIRA Lausanne, CSL Milano) n'exposent pas `oai2.php` — le diagnostic des conventions (« les flux ne pointent nulle part ») est en-deçà de la réalité : côté PMB ils n'existent pas, et c'est un sujet pour H6/K6 ; *(2)* `blmf-teste` échoue l'éligibilité sur ses trois verrous de profil — sa recette de bibliothèque masquée tient, y compris face à l'OAI. **Rien ne survit à l'épreuve, sur décision de Xavier le soir même** : les 40 notices Persée n'appartenaient à aucune bibliothèque réelle (run rattaché au bac à sable, donc invisible depuis un contexte de biblio ordinaire — c'est ce qui les rendait introuvables à l'écran) ; run, lignes et source sont purgés par le chemin propre (`fn_import_delete_run`, puis retrait de la source et de son état) — **zéro source OAI reste armée, le cron de mardi ne moissonnera rien**. L'ouverture de la BLMF est refermée de la main de Xavier. L'épreuve, elle, est acquise : ce qui a été prouvé n'a pas besoin des données qui l'ont prouvé. **Reste ouvert, hors périmètre** : un moissonneur vraiment tiers — une autre machine, un autre collectif — que Bologne peut fournir. |
 | B17 | 2026-09-02 | **L'avertissement immédiat des actions transverses est éprouvé de bout en bout — y compris, ce soir, sur le type pour lequel il a été écrit.** L'étage immédiat livré et éprouvé en envoi réel le 31/08 (ligne #72 rejouée : 200, 3 destinataires, courriel reçu et relu) ne l'avait été que sur la promotion collégiale — un type à trois canaux, où l'immédiat fait doublon. Restait à le voir sur un type **sans autre canal avant le lundi**. Fait le 02/09, en transaction annulée sur `blmf-teste` avec une actrice synthétique (admin réseau fixture, non staff de la biblio — le critère `fn_is_cross_library_action` exclut à raison l'admin qui est aussi staff local, ce qui disqualifiait l'identité de Xavier pour l'épreuve) : `fn_team_suspend_member` → membership `suspended`, **ligne d'outbox `network.cross_library_critical_action` avec `action_type=team_suspend_member`**, ligne de journal — la chaîne SQL exacte qui tombait dans le `else` du handler avant le 31/08. La jambe EF n'a pas besoin d'être rejouée : le handler est agnostique au type (un seul événement, le type ne choisit que le libellé, et `cross-library-strings` porte « Suspension d'une personne de l'équipe » dans les dix locales — vérifié). Sanité post-rollback : Voltairine `active`, l'actrice fixture disparue, zéro ligne résiduelle. **Vu en chemin** : le canal mail de `blmf-teste` est retombé sur `disabled`/`inactive` après l'épreuve G4 — c'est l'hygiène attendue d'une biblio de formation, et la raison de plus pour l'épreuve en transaction. |
 | G5 | 2026-09-02 | **Le drapeau commande quelque chose de réel, il est posé juste, et la Terra Livre n'est pas en mode test.** La fiche regardait `libraries.is_test_mode` : cette colonne **n'existe plus** — la migration du 30/08 (`06f933d7`, « on retire la copie figée et le réglage qui ne réglait rien ») a déjà tranché l'autre moitié de G5 en retirant `email_delivery_mode` et en nommant la vraie colonne. Le drapeau vit dans `library_commons.is_test_mode` (défaut `false`), exposé par la vue `api.library_email_identity`, posé au provisionnement par `fn_provision_preactive_library` et par `register`. **Valeurs le 02/09 : `blmf-teste = true`, les trois bibliothèques réelles = `false`.** Ce qu'il commande, et rien d'autre : le **bandeau « contexte de test »** dans les avis internes d'inscription (`register`, `buildInternalMail` — `isTestContext = is_test_mode OU redirection interne posée`), le même mécanisme que les deux secrets vides-exprès de F7. Aucun front ne le lit, aucune policy, aucun filtre d'affichage : son nom ne ment pas sur sa portée. Des trois issues écrites dans la fiche, c'est la première — et il n'y a rien à demander à la BTL, qui n'a jamais été en mode test ailleurs que dans une colonne morte. **Limite écrite** : le drapeau se pose à la création et n'a pas d'interrupteur ensuite — le jour où une bibliothèque de formation doit devenir réelle (ou l'inverse), c'est un UPDATE de coordination, pas un bouton. |
 | I14 (config.toml et la CI) | 2026-09-02 | **L'angle mort était déjà fermé — depuis le 01/09, par le commit `5e129c54` — et l'item ne l'avait pas suivi.** `deployer-backend.sh` surveille désormais `supabase/config.toml` à côté de `supabase/functions/` (`git diff --name-only <marqueur> <tête> -- supabase/functions/ supabase/config.toml`, ligne 308), redéploie **tout** quand le fichier de configuration bouge, et raconte l'incident du 01/09 dans son propre récit (lignes 244-250 : le commit `c152e7fa` ne changeait que `config.toml`, la CI est restée verte et n'a rien déployé) — la même famille d'angle mort que `--depuis event.before` du 27/08, et la même parade : le journal DIT ce que le diff couvre. **Éprouvé au banc le 02/09**, en local, sur une branche jetable : un commit ne touchant que `config.toml` fait apparaître le fichier dans la liste des déclencheurs — l'étape ne se sauterait plus. **Limite écrite (`DOC-ACTIF-1`)** : aucun push ne changeant que `config.toml` n'a eu lieu depuis le correctif ; l'épreuve en conditions réelles sera le prochain — et c'est le journal du job `backend` qui en fera foi. |
@@ -2129,4 +2227,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-06. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 66 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-06 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `757e336d` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-06 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `757e336d` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
