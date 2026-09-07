@@ -90,6 +90,22 @@ Second piège, connu et repayé : un `npm ci` lancé dans une ligne
 `wsl.exe … bash -c "…"` a rendu `rc=0` sans rien installer (mangling des
 variables par Git Bash). Toujours un script fichier, ou une ligne sans variable.
 
+Troisième piège, payé en production à 01 h 30 : la CLI `supabase storage cp`
+envoie d'un seul tenant et Cloudflare a refusé les 18 Go (**413**) ; le
+téléversement s'est fait par TUS (`televerser-tus.mjs`, morceaux de 6 Mio,
+54 min à 5,4 Mo/s montants — c'est le débit montant du poste qui borne, pas
+Supabase), lancé par Xavier lui-même avec la clé secrète, que le garde-fou de
+session m'interdit de manipuler.
+
+Quatrième, le plus vicieux : une fois le front déployé, les requêtes Range
+partaient bien (206), le décodage des tuiles marchait, et **les canvas
+restaient transparents sans une erreur console**. La dist 4.0.1 vendorisée
+lit l'option **`theme`** ; le README en ligne, plus récent, dit `flavor`.
+Sans thème reconnu : zéro règle de peinture. Corrigé (`463c8af1` → correctif
+suivant), et gardé par un test qui lit le nom d'option dans la dist elle-même.
+Leçon : vérifier une carte **par les pixels** (`getImageData`), pas par
+l'absence d'erreur ni par le compte de requêtes.
+
 ## 4. Rafraîchir
 
 `bash scripts/maptiles/extraire-planet.sh` mesure ; `--extraire --televerser`

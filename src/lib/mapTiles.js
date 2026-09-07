@@ -63,9 +63,12 @@ function loadScript(src) {
  */
 export async function addBasemap(map, { locale, attribution } = {}) {
   await loadScript('/vendor/leaflet/protomaps-leaflet.js');
+  // ⚠️ La dist 4.0.1 vendorisée lit `theme` (le README en ligne, plus récent, dit
+  // `flavor`). Sans thème reconnu : zéro règle de peinture, tuiles transparentes —
+  // vécu en production le 08/09/2026 à 01 h 30, sans la moindre erreur console.
   const layer = window.protomapsL.leafletLayer({
     url: MAPTILES_URL,
-    flavor: 'light',
+    theme: 'light',
     lang: basemapLang(locale),
     maxDataZoom: MAPTILES_MAX_DATA_ZOOM,
     maxZoom: MAPTILES_MAX_ZOOM,

@@ -46,6 +46,16 @@ describe('cartes sans domaine tiers (E5)', () => {
     expect(fautifs).toEqual([]);
   });
 
+  it("l'option de thème passée au greffon est celle que la dist vendorisée lit", () => {
+    // Vécu le 08/09/2026 : `flavor` (README en ligne) au lieu de `theme` (dist 4.0.1)
+    // = zéro règle de peinture, tuiles transparentes, aucune erreur console.
+    const dist = readFileSync(join(process.cwd(), 'public/vendor/leaflet/protomaps-leaflet.js'), 'utf8');
+    const lib = readFileSync(join(SRC, 'lib', 'mapTiles.js'), 'utf8');
+    const optionLue = /\.theme\b/.test(dist) ? 'theme' : (/\.flavor\b/.test(dist) ? 'flavor' : null);
+    expect(optionLue).not.toBeNull();
+    expect(lib).toMatch(new RegExp(`^\\s*${optionLue}: '`, 'm'));
+  });
+
   it('langue des étiquettes : présentes dans le fond, sinon noms locaux', () => {
     expect(basemapLang('fr')).toBe('fr');
     expect(basemapLang('pt-BR')).toBe('pt');
