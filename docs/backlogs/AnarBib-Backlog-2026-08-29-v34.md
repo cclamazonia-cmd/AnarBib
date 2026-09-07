@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-07** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-08** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 7 septembre 2026](#létat-réel-au-7-septembre-2026)
+- [L'état réel au 8 septembre 2026](#létat-réel-au-8-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -58,11 +58,11 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 7 septembre 2026
+## L'état réel au 8 septembre 2026
 
-Relevé du **7 septembre 2026** en fin de soirée — production interrogée en lecture seule et dépôt recompté au commit `fb1b0139`. Il prolonge le relevé complet du 06/09 et celui du soir : la session voisine a poussé jusqu'à 23 h (E18 sur la page Œuvre en deux migrations, E17 le bloc « Explorer » replié, le tutoiement sans exception en fr et es, le grec provisoire, le test d'écriture i18n, le registre à 0.26 avec `DOC-LEX-1`). Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.
+Relevé du **8 septembre 2026** à 1 h 30 — production interrogée en lecture seule et dépôt recompté au commit `e3a15243`. Il prolonge les relevés du 06 et du 07/09. Dans la nuit, la session voisine a livré **E5** : la dernière exception anti-pistage tombe, le fond de carte est un fichier PMTiles auto-hébergé dans le bucket public `map-tiles` (18 Go, planet Protomaps du 07/09, zoom 12), plus aucun appel du navigateur vers `tile.openstreetmap.org`, gardé par un test. Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.
 
-**Fraîcheur des constats au 2026-09-07.** **67 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-08.** **67 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -72,7 +72,7 @@ Relevé du **7 septembre 2026** en fin de soirée — production interrogée en 
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
 | Fonctions applicatives | **907** | `public` · `api` · `ingest` · `private` — +1 le 07/09 (les trois migrations du jour : H8, I20, et `api.thesaurus_export_v1` réécrite pour dire vers quelle liste pointe un alignement). Dont 694 SECURITY DEFINER au 06/09, toutes justifiées (audit 0029, complément du 06/09). **Aucune fonction sans `search_path` figé** : gardé par la suite `hygiene_search_path_et_initplan` depuis le 06/09. |
-| Migrations appliquées | **313** | 313 migrations numérotées au dépôt = **313 appliquées, alignement exact** (vérifié le 07/09 à 23 h). **+5 le 07/09** : H8 GetRecord, I20 `functions_base_url`, l'alignement FICEDL qui dit vers quelle liste il pointe, puis deux pour E18 — `20260907220000` (la page Œuvre dit le tome et range les tomes dans l'ordre) et `20260907233000` (elle compte les éditions, pas les tomes). |
+| Migrations appliquées | **314** | 314 migrations numérotées au dépôt = **314 appliquées, alignement exact** (vérifié le 08/09 à 1 h 30). La 314ᵉ, `20260907234500`, crée le bucket public `map-tiles` (E5) — **17 buckets** désormais, celui-ci **exclu du flux restic `storage`** à dessein : 18 Go reconstructibles en trente minutes depuis Protomaps (`scripts/maptiles/README.md`), il triplerait le dépôt. Cinq migrations le 07/09 avant elle (H8, I20, alignement FICEDL, E18 ×2). |
 | Jobs `pg_cron` | **38** | actifs — +1 depuis le 03/09 (le tick de pré-traduction des titres d'œuvre, `work-titles-autofill`). |
 | Avis de sécurité | **463** | 0 ERROR · **411** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`, verdicts B4 posés). Le WARN `function_search_path_mutable` du matin est **parti** (`20260906111308`). Le 28 (`anon`) est la **valeur attendue** (T10, `DOC-GRANT-1`). **Le 411 (`authenticated`) est entièrement justifié depuis le 06/09** : 395 hérités des paquets du 01/09 et **16 RPC nées les 04–05/09, lues corps par corps** — « Complément du 06/09 » de `AUDIT_execute_authenticated_2026-09-01` : aucune faille, deux limites fonctionnelles (liste et rapport des lots transversaux au réseau ; `fn_batch_review_request` ne rapproche pas le lot de la bibliothèque de l'appelant·e). |
 | Avis de performance | **440** | **368 « index inutilisés »** (403 le 03/09 — les compteurs repartent du redémarrage du 02/09 ; à relire dans un mois). **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`). 25 tables à policies permissives multiples. **8 tables sans clé primaire** (14 le 03/09 : les six du schéma de mai sont parties avec lui). L'`auth_rls_initplan` du matin sur `catalog_batch_reviews_read_staff` est **résorbé** (`(select auth.uid())`, `20260906111308`) et la suite d'hygiène refuse désormais toute policy qui réévaluerait `auth.uid()` par ligne — le motif de **B5** est gardé, plus seulement corrigé. |
@@ -108,10 +108,10 @@ Relevé du **7 septembre 2026** en fin de soirée — production interrogée en 
 
 | | | |
 |---|---:|---|
-| Commits | **2 631** | sur `main`, au 07/09 à 23 h — 37 commits dans la journée, de deux sessions ; les dix derniers (21 h – 23 h) sont le registre 0.25 et 0.26, l'audit i18n des diacritiques et de l'anglais résiduel, E17 et E18. |
-| Fichiers `src/` | **312** | 81 pages, 93 composants ; +2 le 07/09 : les tests `migrations-sans-url-cloud` (I20) et `i18n-ecriture` (`DOC-PS-1`). |
+| Commits | **2 634** | sur `main`, au 08/09 à 1 h 30 — 40 commits depuis le relevé du 06/09, de deux sessions ; les deux derniers (00 h 10 et 01 h 21) sont E5 et son correctif de greffon (`theme`, pas `flavor`). |
+| Fichiers `src/` | **314** | 81 pages, 93 composants ; +2 cette nuit : `src/lib/mapTiles.js` (adresse du PMTiles, zooms, langue des étiquettes) et le test `carte-sans-domaine-tiers`. Les trois composants de carte lisent `mapTiles.js` au lieu de `tile.openstreetmap.org`. |
 | Clés i18n | **6 571** | par locale, **parité stricte sur les 10**, gardée en CI ; +1 ce soir (la phrase liminaire `privacy.register`) ; onze clés grecques provisoires et cinq locales où « Organization or collective » dormait en anglais, corrigées (audit des diacritiques et de l'anglais résiduel du 07/09). |
-| Tests | **452 + 98** | 452 tests JS (vitest, gate bloquant ; +41 ce soir : `i18n-ecriture`, qui rend `DOC-PS-1` exécutable — tutoiement, NFC) + **98 suites SQL** dans `ci-suites.txt` (+1 ce soir, E18). CI verte sur chaque push du jour. |
+| Tests | **457 + 98** | 457 tests JS (vitest, gate bloquant ; +5 cette nuit : `carte-sans-domaine-tiers`, qui refuse toute citation de `tile.openstreetmap.org` dans `src/` et vérifie l'empreinte du greffon vendorisé) + **98 suites SQL** dans `ci-suites.txt` (le stub `storage` de la CI précharge désormais `map-tiles`). CI verte sur chaque push. |
 | Marqueurs de dette | **21** | dont 4 dans `src/` (motifs `TODO`/`FIXME`, casse exacte ; 17 le 03/09 — les quatre de plus sont hors `src/`, dans le code du 05/09). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
@@ -2589,4 +2589,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fb1b0139` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-08. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-08 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `e3a15243` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

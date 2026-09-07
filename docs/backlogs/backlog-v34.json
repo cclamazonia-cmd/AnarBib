@@ -11,10 +11,10 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-07",
+    "maj": "2026-09-08",
     "releve": {
-      "date": "2026-09-07",
-      "commit": "fb1b0139"
+      "date": "2026-09-08",
+      "commit": "e3a15243"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **7 septembre 2026** en fin de soirée — production interrogée en lecture seule et dépôt recompté au commit `fb1b0139`. Il prolonge le relevé complet du 06/09 et celui du soir : la session voisine a poussé jusqu'à 23 h (E18 sur la page Œuvre en deux migrations, E17 le bloc « Explorer » replié, le tutoiement sans exception en fr et es, le grec provisoire, le test d'écriture i18n, le registre à 0.26 avec `DOC-LEX-1`). Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.",
-      "pt": "Registo de **7 de setembro de 2026** ao fim da noite — produção em leitura e repositório recontado no commit `fb1b0139`. A sessão vizinha empurrou até às 23 h (E18 na página Obra, E17, tratamento por tu em fr/es, teste de escrita i18n, registo 0.26). As volumetrias não mudaram."
+      "fr": "Relevé du **8 septembre 2026** à 1 h 30 — production interrogée en lecture seule et dépôt recompté au commit `e3a15243`. Il prolonge les relevés du 06 et du 07/09. Dans la nuit, la session voisine a livré **E5** : la dernière exception anti-pistage tombe, le fond de carte est un fichier PMTiles auto-hébergé dans le bucket public `map-tiles` (18 Go, planet Protomaps du 07/09, zoom 12), plus aucun appel du navigateur vers `tile.openstreetmap.org`, gardé par un test. Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.",
+      "pt": "Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e repositório recontado no commit `e3a15243`. De noite, a sessão vizinha entregou **E5** : a última exceção anti-rastreio cai, o fundo de mapa é um ficheiro PMTiles auto-alojado no bucket `map-tiles` (18 GB), nenhuma chamada a `tile.openstreetmap.org`, guardado por teste."
     },
     "photo": [
       {
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "313",
+            "314",
             {
-              "fr": "313 migrations numérotées au dépôt = **313 appliquées, alignement exact** (vérifié le 07/09 à 23 h). **+5 le 07/09** : H8 GetRecord, I20 `functions_base_url`, l'alignement FICEDL qui dit vers quelle liste il pointe, puis deux pour E18 — `20260907220000` (la page Œuvre dit le tome et range les tomes dans l'ordre) et `20260907233000` (elle compte les éditions, pas les tomes).",
-              "pt": "313 numeradas = **313 aplicadas**. **+5 em 07/09** (H8, I20, alinhamento FICEDL, duas para E18)."
+              "fr": "314 migrations numérotées au dépôt = **314 appliquées, alignement exact** (vérifié le 08/09 à 1 h 30). La 314ᵉ, `20260907234500`, crée le bucket public `map-tiles` (E5) — **17 buckets** désormais, celui-ci **exclu du flux restic `storage`** à dessein : 18 Go reconstructibles en trente minutes depuis Protomaps (`scripts/maptiles/README.md`), il triplerait le dépôt. Cinq migrations le 07/09 avant elle (H8, I20, alignement FICEDL, E18 ×2).",
+              "pt": "314 numeradas = **314 aplicadas**. A 314.ª cria o bucket público `map-tiles` (E5) — 17 buckets, este excluído do restic de propósito (18 GB reconstruíveis em 30 min)."
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 631",
+            "2 634",
             {
-              "fr": "sur `main`, au 07/09 à 23 h — 37 commits dans la journée, de deux sessions ; les dix derniers (21 h – 23 h) sont le registre 0.25 et 0.26, l'audit i18n des diacritiques et de l'anglais résiduel, E17 et E18.",
-              "pt": "em `main`, 07/09 às 23 h — 37 commits no dia, de duas sessões."
+              "fr": "sur `main`, au 08/09 à 1 h 30 — 40 commits depuis le relevé du 06/09, de deux sessions ; les deux derniers (00 h 10 et 01 h 21) sont E5 et son correctif de greffon (`theme`, pas `flavor`).",
+              "pt": "em `main`, 08/09 à 1h30 — 40 commits desde 06/09, de duas sessões ; os dois últimos são E5."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "312",
+            "314",
             {
-              "fr": "81 pages, 93 composants ; +2 le 07/09 : les tests `migrations-sans-url-cloud` (I20) et `i18n-ecriture` (`DOC-PS-1`).",
-              "pt": "81 páginas, 93 componentes ; +2 em 07/09 (dois testes)."
+              "fr": "81 pages, 93 composants ; +2 cette nuit : `src/lib/mapTiles.js` (adresse du PMTiles, zooms, langue des étiquettes) et le test `carte-sans-domaine-tiers`. Les trois composants de carte lisent `mapTiles.js` au lieu de `tile.openstreetmap.org`.",
+              "pt": "81 páginas, 93 componentes ; +2 esta noite : `src/lib/mapTiles.js` e o teste `carte-sans-domaine-tiers`."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "452 + 98",
+            "457 + 98",
             {
-              "fr": "452 tests JS (vitest, gate bloquant ; +41 ce soir : `i18n-ecriture`, qui rend `DOC-PS-1` exécutable — tutoiement, NFC) + **98 suites SQL** dans `ci-suites.txt` (+1 ce soir, E18). CI verte sur chaque push du jour.",
-              "pt": "452 testes JS (+ `i18n-ecriture`) + **98 suites SQL** (+1, E18)."
+              "fr": "457 tests JS (vitest, gate bloquant ; +5 cette nuit : `carte-sans-domaine-tiers`, qui refuse toute citation de `tile.openstreetmap.org` dans `src/` et vérifie l'empreinte du greffon vendorisé) + **98 suites SQL** dans `ci-suites.txt` (le stub `storage` de la CI précharge désormais `map-tiles`). CI verte sur chaque push.",
+              "pt": "457 testes JS (+ `carte-sans-domaine-tiers`) + **98 suites SQL**."
             }
           ],
           [

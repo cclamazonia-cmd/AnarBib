@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-07** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-08** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 7 de setembro de 2026](#o-estado-real-em-7-de-setembro-de-2026)
+- [O estado real em 8 de setembro de 2026](#o-estado-real-em-8-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -58,11 +58,11 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 7 de setembro de 2026
+## O estado real em 8 de setembro de 2026
 
-Registo de **7 de setembro de 2026** ao fim da noite — produção em leitura e repositório recontado no commit `fb1b0139`. A sessão vizinha empurrou até às 23 h (E18 na página Obra, E17, tratamento por tu em fr/es, teste de escrita i18n, registo 0.26). As volumetrias não mudaram.
+Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e repositório recontado no commit `e3a15243`. De noite, a sessão vizinha entregou **E5** : a última exceção anti-rastreio cai, o fundo de mapa é um ficheiro PMTiles auto-alojado no bucket `map-tiles` (18 GB), nenhuma chamada a `tile.openstreetmap.org`, guardado por teste.
 
-**Frescor dos constatos em 2026-09-07.** **67 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-08.** **67 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -72,7 +72,7 @@ Registo de **7 de setembro de 2026** ao fim da noite — produção em leitura e
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
 | Funções aplicativas | **907** | 907 — +1 em 07/09 (H8, I20, `api.thesaurus_export_v1` reescrita). 694 DEFINER justificadas. Nenhuma sem `search_path`, guardado por suite. |
-| Migrações aplicadas | **313** | 313 numeradas = **313 aplicadas**. **+5 em 07/09** (H8, I20, alinhamento FICEDL, duas para E18). |
+| Migrações aplicadas | **314** | 314 numeradas = **314 aplicadas**. A 314.ª cria o bucket público `map-tiles` (E5) — 17 buckets, este excluído do restic de propósito (18 GB reconstruíveis em 30 min). |
 | Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
 | Avisos de segurança | **463** | 0 ERROR · **411** + **28** WARN · 24 INFO. O WARN `search_path` desapareceu. **411 inteiramente justificado desde 06/09** : 395 herdados + 16 RPC de 04–05/09 lidas uma a uma (complemento da auditoria) ; duas limitações funcionais, nenhuma falha. |
 | Avisos de desempenho | **440** | **368 índices não usados**. 38 FK assumidas. 25 tabelas com policies múltiplas. **8 sem PK**. O `auth_rls_initplan` da manhã foi resolvido (`20260906111308`) e a suite de higiene guarda agora o motivo de B5. |
@@ -108,10 +108,10 @@ Registo de **7 de setembro de 2026** ao fim da noite — produção em leitura e
 
 | | | |
 |---|---:|---|
-| Commits | **2 631** | em `main`, 07/09 às 23 h — 37 commits no dia, de duas sessões. |
-| Arquivos `src/` | **312** | 81 páginas, 93 componentes ; +2 em 07/09 (dois testes). |
+| Commits | **2 634** | em `main`, 08/09 à 1h30 — 40 commits desde 06/09, de duas sessões ; os dois últimos são E5. |
+| Arquivos `src/` | **314** | 81 páginas, 93 componentes ; +2 esta noite : `src/lib/mapTiles.js` e o teste `carte-sans-domaine-tiers`. |
 | Chaves i18n | **6 571** | por locale, **paridade estrita nas 10** ; +1 esta noite ; onze chaves gregas provisórias e cinco locales corrigidas. |
-| Testes | **452 + 98** | 452 testes JS (+ `i18n-ecriture`) + **98 suites SQL** (+1, E18). |
+| Testes | **457 + 98** | 457 testes JS (+ `carte-sans-domaine-tiers`) + **98 suites SQL**. |
 | Marcadores de dívida | **21** | dos quais 4 em `src/` (eram 17 no total). Nenhum é uma tarefa aberta. |
 
 ---
@@ -2565,4 +2565,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fb1b0139`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado numérico foi levantado em 2026-09-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `e3a15243`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
