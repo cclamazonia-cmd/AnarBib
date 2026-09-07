@@ -4251,6 +4251,7 @@
   "privacy.declared.body2": "This information is not shared with any third party. It is readable only by the team that administers the AnarBib network. You can view, modify or delete this information at any time from your account (My data section).",
   "privacy.declared.title": "Optional declared information",
   "privacy.intro": "This policy explains what personal data AnarBib collects, why it is collected, with whom it is shared, and what rights you have over it. The text applies to all libraries using the AnarBib system.",
+  "privacy.register": "This text addresses you plainly, like the rest of AnarBib. That is not a sign of casualness: the commitments it contains bind the collective exactly as a formally worded text would.",
   "privacy.lib.fallback": "This section has not yet been translated to your language. The text below is in Portuguese.",
   "privacy.lib.title": "Specifics of {name}",
   "privacy.retention.body": "We apply the data minimization principle (GDPR article 5(1)(e), LGPD article 6): no data is kept beyond the time strictly necessary. The default retention durations of the AnarBib network are as follows:",

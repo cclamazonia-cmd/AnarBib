@@ -109,6 +109,10 @@ export default function PrivacyPolicyPage() {
 
         <section style={sectionStyle}>
           <p style={pStyle}>{t({ id: 'privacy.intro' })}</p>
+          {/* DOC-ADDR-1 (amendé le 07/09/2026) : la politique tutoie comme le
+              reste de l'app ; cette phrase dit pourquoi ce n'est pas une
+              légèreté. Clé partagée avec la vitrine (build-privacy-pages.cjs). */}
+          <p style={{ ...pStyle, fontStyle: 'italic', opacity: .85 }}>{t({ id: 'privacy.register' })}</p>
         </section>
 
         <section style={sectionStyle}>
