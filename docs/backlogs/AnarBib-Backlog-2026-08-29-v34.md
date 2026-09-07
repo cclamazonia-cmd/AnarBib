@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-07** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-07** · 87 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **7 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `003ad4ca`. Il prolonge le relevé complet du 06/09. La journée a été dense côté dépôt : trois migrations (H8 GetRecord, I20 l'adresse des fonctions, l'alignement FICEDL qui dit vers quelle liste il pointe), deux suites SQL, la PR #28 et la relecture de la FICEDL versées au backlog — **dix-huit items neufs** (B22, B23, E14–E16, F9, F10, G13, G14, H9–H13, I21, I22, J9, K9, K10), trois clôtures (H8, I20, I17). Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.
 
-**Fraîcheur des constats au 2026-09-07.** **67 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, E15, E16, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-07.** **68 items sur 87** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -866,6 +866,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E14** | Une page pour signaler un bug depuis l'application | `P2` | Ouvert |
 | **E15** | Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf | `P2` | Ouvert |
 | **E16** | La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique | `P2` | À vérifier |
+| **E17** | Le bloc « Explorer » du catalogue s'ouvre replié, pour que la première notice soit visible sans défiler | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1137,6 +1138,28 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `claude/MANUEL_v5_refonte_2026-09-01 (points à trancher)`*
+
+#### E17 — Le bloc « Explorer » du catalogue s'ouvre replié, pour que la première notice soit visible sans défiler
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript, langue maternelle
+
+**État.** **Demande de Xavier le 07/09/2026, pour la lisibilité du catalogue.** Dans `CatalogPage.jsx`, le bloc « Explorer » (modes de parcours, alphabet, arbre des sujets, facettes) est escamotable depuis le 21/08 — en-tête `ab-collapse-header`, chevron, `aria-expanded` — mais il naît **ouvert** : `const [exploreOpen, setExploreOpen] = useState(true)`. À chaque visite, la page ouvre donc sur un mur de commandes au-dessus des résultats ; sur mobile, la première notice est sous la ligne de flottaison. Le choix de replier n'est **pas mémorisé** : `saveFilters` enregistre dix-sept préférences dans `anarbib:catalog:filters` (recherche, filtres, tri, `compact`, regroupement par œuvre), pas `exploreOpen` — on replie, on recharge, c'est rouvert. Deux faits qui rendent le repli sans perte : les filtres actifs s'affichent en **puces au-dessus des résultats**, indépendamment du panneau (`hasActiveFilters`, l. 1366), et l'arbre des sujets ne se charge qu'à l'ouverture du panneau (l. 704-715) — replié par défaut, c'est aussi une requête de moins à l'arrivée.
+
+*Vérifié : 07/09 — lu dans le code au commit `4c235923` : `useState(true)`, `saveFilters` sans `exploreOpen`, puces indépendantes du panneau, arbre chargé à l'ouverture.*
+
+**Ce que c'est.** Trois gestes, une soirée. **(1)** `useState(false)` par défaut, et `exploreOpen` ajouté à `saveFilters` / `loadSavedFilters` — le choix de la personne survit au rechargement, comme `compact`. **(2)** L'en-tête replié dit ce qu'il cache, sinon la découverte se perd : « Explorer : sujets, facettes, alphabet », et le nombre de facettes actives en badge quand il y en a (dix locales, clé `catalog.section.explore` à enrichir). **(3)** Un test de source (`src/tests/catalog-explore-replie.test.js`, patron `serial-picker-monte.test.js`) qui garde `useState(false)` et la présence d'`exploreOpen` dans la sauvegarde. Puis vérifier à l'écran, mobile compris : la première notice visible sans défiler, les puces de filtres toujours là panneau replié. Ne pas rouvrir automatiquement quand un filtre est actif : les puces suffisent, et c'est le retour au mur de commandes par la petite porte.
+
+**Pourquoi ça compte.** Le catalogue est la porte d'entrée de toute personne qui n'a pas de compte — celle que la vitrine et la formation montrent en premier. Ce qu'on y cherche, c'est une notice, pas un tableau de bord ; la surface d'exploration doit être à portée de main, pas devant les yeux. Voisin direct de **E9** (mobile) et de la doctrine « la première chose utile visible sans geste ».
+
+**Ce qui compte comme fini.**
+
+- [object Object]
+- [object Object]
+- [object Object]
+
+**Dépendances.** Aucune. **G13** (réseaux constitués) ajoutera un sélecteur à côté du filtre de bibliothèques, qui est hors du bloc « Explorer » : pas d'interférence.
+
+*Renvois : `src/pages/public/CatalogPage.jsx (exploreOpen l. 325, saveFilters l. 352-355, arbre des sujets l. 704-715, bloc l. 1410-1416)` · `src/pages/public/CatalogPage.css (.ab-explore-toggle, .ab-explore-panel, .ab-collapse-header)` · `src/i18n/locales/*.json (catalog.section.explore)` · `src/tests/serial-picker-monte.test.js (patron de test de source)`*
 
 ---
 
@@ -2586,4 +2609,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `003ad4ca` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 87 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `003ad4ca` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

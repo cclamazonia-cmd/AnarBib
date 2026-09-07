@@ -6141,6 +6141,61 @@
         "claude/GLB_v17_releve_et_constats_2026-09-01",
         "REGISTRE §0 DOC-GEL-1"
       ]
+    },
+    {
+      "id": "E17",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "front",
+        "langue"
+      ],
+      "t": {
+        "fr": "Le bloc « Explorer » du catalogue s'ouvre replié, pour que la première notice soit visible sans défiler",
+        "pt": "O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar"
+      },
+      "v": {
+        "fr": "**Demande de Xavier le 07/09/2026, pour la lisibilité du catalogue.** Dans `CatalogPage.jsx`, le bloc « Explorer » (modes de parcours, alphabet, arbre des sujets, facettes) est escamotable depuis le 21/08 — en-tête `ab-collapse-header`, chevron, `aria-expanded` — mais il naît **ouvert** : `const [exploreOpen, setExploreOpen] = useState(true)`. À chaque visite, la page ouvre donc sur un mur de commandes au-dessus des résultats ; sur mobile, la première notice est sous la ligne de flottaison. Le choix de replier n'est **pas mémorisé** : `saveFilters` enregistre dix-sept préférences dans `anarbib:catalog:filters` (recherche, filtres, tri, `compact`, regroupement par œuvre), pas `exploreOpen` — on replie, on recharge, c'est rouvert. Deux faits qui rendent le repli sans perte : les filtres actifs s'affichent en **puces au-dessus des résultats**, indépendamment du panneau (`hasActiveFilters`, l. 1366), et l'arbre des sujets ne se charge qu'à l'ouverture du panneau (l. 704-715) — replié par défaut, c'est aussi une requête de moins à l'arrivée.",
+        "pt": "**Pedido de Xavier em 07/09/2026, pela legibilidade do catálogo.** Em `CatalogPage.jsx`, o bloco «Explorar» (modos, alfabeto, árvore de assuntos, facetas) é recolhível desde 21/08, mas nasce **aberto**: `useState(true)`. A cada visita, a página abre num muro de comandos acima dos resultados; no celular, o primeiro registro fica abaixo da dobra. A escolha de recolher **não é lembrada**: `saveFilters` guarda dezessete preferências em `anarbib:catalog:filters`, não `exploreOpen`. Dois fatos tornam o recolhimento sem perda: os filtros ativos aparecem em **chips acima dos resultados**, independentemente do painel, e a árvore de assuntos só carrega à abertura do painel — recolhido por padrão, é também uma requisição a menos."
+      },
+      "w": {
+        "fr": "Trois gestes, une soirée. **(1)** `useState(false)` par défaut, et `exploreOpen` ajouté à `saveFilters` / `loadSavedFilters` — le choix de la personne survit au rechargement, comme `compact`. **(2)** L'en-tête replié dit ce qu'il cache, sinon la découverte se perd : « Explorer : sujets, facettes, alphabet », et le nombre de facettes actives en badge quand il y en a (dix locales, clé `catalog.section.explore` à enrichir). **(3)** Un test de source (`src/tests/catalog-explore-replie.test.js`, patron `serial-picker-monte.test.js`) qui garde `useState(false)` et la présence d'`exploreOpen` dans la sauvegarde. Puis vérifier à l'écran, mobile compris : la première notice visible sans défiler, les puces de filtres toujours là panneau replié. Ne pas rouvrir automatiquement quand un filtre est actif : les puces suffisent, et c'est le retour au mur de commandes par la petite porte.",
+        "pt": "Três gestos, uma noite. **(1)** `useState(false)` por padrão, e `exploreOpen` acrescentado a `saveFilters` / `loadSavedFilters` — a escolha sobrevive ao recarregamento, como `compact`. **(2)** O cabeçalho recolhido diz o que esconde: «Explorar: assuntos, facetas, alfabeto», com o número de facetas ativas em badge (dez locales). **(3)** Um teste de fonte que guarda `useState(false)` e a presença de `exploreOpen` na gravação. Depois verificar na tela, celular incluído. Não reabrir automaticamente quando um filtro está ativo: os chips bastam."
+      },
+      "y": {
+        "fr": "Le catalogue est la porte d'entrée de toute personne qui n'a pas de compte — celle que la vitrine et la formation montrent en premier. Ce qu'on y cherche, c'est une notice, pas un tableau de bord ; la surface d'exploration doit être à portée de main, pas devant les yeux. Voisin direct de **E9** (mobile) et de la doctrine « la première chose utile visible sans geste ».",
+        "pt": "O catálogo é a porta de entrada de quem não tem conta — a que a vitrine e a formação mostram primeiro. O que se procura ali é um registro, não um painel; a superfície de exploração deve estar ao alcance da mão, não diante dos olhos. Vizinho direto de **E9** (celular)."
+      },
+      "f": [
+        {
+          "fr": "À l'arrivée sur `/catalogo`, le bloc est replié et la première notice est visible sans défiler, sur mobile aussi.",
+          "pt": "Ao chegar em `/catalogo`, o bloco está recolhido e o primeiro registro é visível sem rolar, também no celular."
+        },
+        {
+          "fr": "Le choix d'ouvrir survit au rechargement ; les puces de filtres actifs restent visibles panneau replié.",
+          "pt": "A escolha de abrir sobrevive ao recarregamento; os chips de filtros ativos continuam visíveis com o painel recolhido."
+        },
+        {
+          "fr": "Test de source vert ; dix locales à parité.",
+          "pt": "Teste de fonte verde; dez locales em paridade."
+        }
+      ],
+      "dep": {
+        "fr": "Aucune. **G13** (réseaux constitués) ajoutera un sélecteur à côté du filtre de bibliothèques, qui est hors du bloc « Explorer » : pas d'interférence.",
+        "pt": "Nenhuma. **G13** acrescentará um seletor ao lado do filtro de bibliotecas, fora do bloco «Explorar»: sem interferência."
+      },
+      "r": [
+        "src/pages/public/CatalogPage.jsx (exploreOpen l. 325, saveFilters l. 352-355, arbre des sujets l. 704-715, bloc l. 1410-1416)",
+        "src/pages/public/CatalogPage.css (.ab-explore-toggle, .ab-explore-panel, .ab-collapse-header)",
+        "src/i18n/locales/*.json (catalog.section.explore)",
+        "src/tests/serial-picker-monte.test.js (patron de test de source)"
+      ],
+      "verif": {
+        "fr": "07/09 — lu dans le code au commit `4c235923` : `useState(true)`, `saveFilters` sans `exploreOpen`, puces indépendantes du panneau, arbre chargé à l'ouverture.",
+        "pt": "07/09 — lido no código no commit `4c235923`: `useState(true)`, `saveFilters` sem `exploreOpen`, chips independentes do painel, árvore carregada à abertura."
+      }
     }
   ]
 }
