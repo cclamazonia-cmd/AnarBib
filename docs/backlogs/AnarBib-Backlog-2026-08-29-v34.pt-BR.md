@@ -1591,7 +1591,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A exportação completa dos 620 descritores nos dois formatos está a **uma noite de trabalho** — assim que as sete questões tiverem resposta. Estão escritas e ninguém ainda as colocou.
 
-*Verificado : 07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»).*
+*Verificado : 07/09, noite — **mais duas respostas da fonte.** (1) `X (généralités)` **é** a cabeça da hierarquia: os 45 pais «não encontrados» são 45 `broader` reais; 138 descritores de 148 estão vinculados, 10 não — e a pergunta restante virou: `guerres` e `art : courants` são **grupos de palavras-chave SPIP**? (2) Identificadores: a forma canônica SPIP é `?motNN` seja qual for o tipo de URL exibido; as «URL propres» são endereços, não identidades. A questão 1 cai — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, proposta `/id/motNN` retirada. Restam: a questão dos grupos, o formato (um arquivo com dois esquemas ou dois), os vínculos aos catálogos, o grego, a licença, a regeneração.
+
+07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»).*
 
 **O que é.** As sete: a forma dos identificadores; **a hierarquia, que é a verdadeira questão**; o estatuto da faceta «datas»; o destino dos 2 842 vínculos para seis catálogos; o grego romanizado; a licença; e a maneira como o arquivo se regenera.
 
@@ -1722,7 +1724,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Verificado : 07/09 — ausentes do repositório e do projeto; sua existência em disco não foi verificada.*
 
-**O que é.** Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada.
+**O que é.** Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada — e, desde a nota da fonte sobre as URL: URI canônica `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, a forma `/id/motNN` retirada.
 
 **Por que importa.** É a peça que você põe na mesa em Bolonha. Uma peça que só existe num pendrive não é contribuição, é demonstração.
 
@@ -2164,7 +2166,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **K6** | Preparar o encontro com leftove.rs e May Day Rooms | `P2` | Em curso |
 | **K7** | Conduzir a formação das duas coordenações BLMF até a autonomia | `P1` | Em curso |
 | **K8** | Terminar o texto de orientação sobre as ferramentas de bibliotecas militantes | `P2` | Aberto |
-| **K9** | Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é 10 — quatro textos a corrigir antes do dia 12 | `P1` | Aberto |
+| **K9** | Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é «138 vinculados, 10 sem cabeça» — quatro textos a corrigir antes do dia 12 | `P1` | Aberto |
 | **K10** | Três artigos prometidos ao *Monde libertaire*, um por mês — e um programa proposto à *Trous Noirs* | `P2` | A verificar |
 
 #### K1 — Fazer adotar a ata de criação do Fundo AnarBib
@@ -2325,15 +2327,17 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26`*
 
-#### K9 — Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é 10 — quatro textos a corrigir antes do dia 12
+#### K9 — Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é «138 vinculados, 10 sem cabeça» — quatro textos a corrigir antes do dia 12
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
 **Estado.** **Medido na coleta de 03/09, em 07/09.** 620 → **623** descritores entre 30/06 e 03/09 (três datas surgiram: `1927`, `2026`, `2027`, nenhuma desapareceu). E dos 148 descritores hierarquizados, 55 pais não eram encontrados em 28/08 — **45 se resolvem pela variante `X (généralités)`**; restam **10** agrupamentos reais sem conceito (`guerres` ×9, `art : courants` ×1). Os dois números estão na apresentação do dia 12, na intervenção do 13, no texto de orientação e nas convenções de interoperabilidade.
 
-*Verificado : 07/09 — números medidos; textos ainda não corrigidos.*
+*Verificado : 07/09, noite — a fonte confirma que `X (généralités)` é a cabeça: o «45 / 10» vira «138 vinculados / 10 sem cabeça».
 
-**O que é.** Dizer «mais de seiscentos» ou «623 em 3 de setembro»; substituir «55 de 148 não existem» por «45 são convenção de nomeação, 10 são agrupamentos» — e reformular a pergunta à federação: não mais «a sua árvore existe?», e sim «*X* e *X (généralités)* são o mesmo termo?».
+07/09 — números medidos; textos ainda não corrigidos.*
+
+**O que é.** Dizer «mais de seiscentos» ou «623 em 3 de setembro»; substituir «55 de 148 não existem» por «138 de 148 estão vinculados à sua cabeça `X (généralités)`, confirmado pela fonte; 10 não estão» — e fazer a única pergunta que resta: «`guerres` e `art : courants` são grupos de palavras-chave no SPIP?».
 
 **Por que importa.** O vocabulário mudou sem que ninguém soubesse: é o argumento da intervenção, medido na sua própria cópia. Mas dizer um número errado diante de quem mantém o site é perder o argumento.
 

@@ -3755,8 +3755,8 @@
         "NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
       ],
       "verif": {
-        "fr": "07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).",
-        "pt": "07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»)."
+        "fr": "07/09, soir — **deux réponses de plus de la source.** (1) `X (généralités)` **est** la tête de hiérarchie : les 45 parents « introuvables » sont 45 `broader` réels ; 138 descripteurs sur 148 sont rattachés, 10 ne le sont pas — et la question restante est devenue : `guerres` et `art : courants` sont-ils des **groupes de mots-clés SPIP** ? (2) Identifiants : la forme canonique SPIP est `?motNN` quel que soit le type d'URL affiché ; les « URL propres » sont des adresses, pas des identités. La question 1 tombe — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, proposition `/id/motNN` retirée. Restent : la question des groupes, le format (un fichier à deux schémas ou deux), les liens vers les catalogues, le grec, la licence, la régénération.\n\n07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).",
+        "pt": "07/09, noite — **mais duas respostas da fonte.** (1) `X (généralités)` **é** a cabeça da hierarquia: os 45 pais «não encontrados» são 45 `broader` reais; 138 descritores de 148 estão vinculados, 10 não — e a pergunta restante virou: `guerres` e `art : courants` são **grupos de palavras-chave SPIP**? (2) Identificadores: a forma canônica SPIP é `?motNN` seja qual for o tipo de URL exibido; as «URL propres» são endereços, não identidades. A questão 1 cai — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, proposta `/id/motNN` retirada. Restam: a questão dos grupos, o formato (um arquivo com dois esquemas ou dois), os vínculos aos catálogos, o grego, a licença, a regeneração.\n\n07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»)."
       }
     },
     {
@@ -5518,8 +5518,8 @@
         "pt": "O dossiê de Bolonha de 03/09 diz: `ficedl_thesaurus_ESQUISSE.csv` e `.jsonld` «não estão no projeto», a levar em pendrive. **Verificado em 07/09**: `docs/journal/ficedl/` contém as quatro coletas e as auditorias, **nenhum arquivo `ESQUISSE`**; o projeto Claude tampouco. O raspador e o sync, esses, estão no repositório (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — essa metade já é doável."
       },
       "w": {
-        "fr": "Retrouver les deux fichiers (Downloads ?) ou les régénérer depuis l'aspiration du 03/09, et les commiter avec la note du 28/08 à côté. Depuis le 07/09 l'esquisse est à réviser : deux `skos:ConceptScheme`, les têtes `guerres`/`art : courants` en `skos:Collection`, jamais d'URI de schéma inventé.",
-        "pt": "Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada."
+        "fr": "Retrouver les deux fichiers (Downloads ?) ou les régénérer depuis l'aspiration du 03/09, et les commiter avec la note du 28/08 à côté. Depuis le 07/09 l'esquisse est à réviser : deux `skos:ConceptScheme`, les têtes `guerres`/`art : courants` en `skos:Collection`, jamais d'URI de schéma inventé — et, depuis la note de la source sur les URL : URI canonique `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, la forme `/id/motNN` retirée.",
+        "pt": "Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada — e, desde a nota da fonte sobre as URL: URI canônica `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, a forma `/id/motNN` retirada."
       },
       "y": {
         "fr": "C'est la pièce que tu poses sur la table à Bologne. Une pièce qui n'existe que sur une clé n'est pas une contribution, c'est une démonstration.",
@@ -5556,16 +5556,16 @@
         "aucune"
       ],
       "t": {
-        "fr": "Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est 10 — quatre textes à corriger avant le 12",
-        "pt": "Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é 10 — quatro textos a corrigir antes do dia 12"
+        "fr": "Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est « 138 rattachés, 10 sans tête » — quatre textes à corriger avant le 12",
+        "pt": "Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é «138 vinculados, 10 sem cabeça» — quatro textos a corrigir antes do dia 12"
       },
       "v": {
         "fr": "**Mesuré sur l'aspiration du 03/09, le 07/09.** 620 → **623** descripteurs entre le 30/06 et le 03/09 (trois dates apparues : `1927`, `2026`, `2027`, zéro disparition). Et sur les 148 descripteurs hiérarchisés, 55 parents étaient introuvables au 28/08 — **45 se résolvent par la variante `X (généralités)`** ; il reste **10** vrais regroupements sans concept (`guerres` ×9, `art : courants` ×1). Les deux chiffres sont dans la présentation du 12, l'intervention du 13, le texte d'orientation et les conventions d'interopérabilité.",
         "pt": "**Medido na coleta de 03/09, em 07/09.** 620 → **623** descritores entre 30/06 e 03/09 (três datas surgiram: `1927`, `2026`, `2027`, nenhuma desapareceu). E dos 148 descritores hierarquizados, 55 pais não eram encontrados em 28/08 — **45 se resolvem pela variante `X (généralités)`**; restam **10** agrupamentos reais sem conceito (`guerres` ×9, `art : courants` ×1). Os dois números estão na apresentação do dia 12, na intervenção do 13, no texto de orientação e nas convenções de interoperabilidade."
       },
       "w": {
-        "fr": "Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 45 relèvent d'une convention de nommage, 10 sont des regroupements » — et reformuler la question à la fédération : non plus « votre arbre existe-t-il ? » mais « *X* et *X (généralités)* sont-ils le même terme ? ».",
-        "pt": "Dizer «mais de seiscentos» ou «623 em 3 de setembro»; substituir «55 de 148 não existem» por «45 são convenção de nomeação, 10 são agrupamentos» — e reformular a pergunta à federação: não mais «a sua árvore existe?», e sim «*X* e *X (généralités)* são o mesmo termo?»."
+        "fr": "Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 138 sur 148 sont rattachés à leur tête `X (généralités)`, confirmé par la source ; 10 ne le sont pas » — et poser la seule question qui reste : « `guerres` et `art : courants` sont-ils des groupes de mots-clés dans SPIP ? ».",
+        "pt": "Dizer «mais de seiscentos» ou «623 em 3 de setembro»; substituir «55 de 148 não existem» por «138 de 148 estão vinculados à sua cabeça `X (généralités)`, confirmado pela fonte; 10 não estão» — e fazer a única pergunta que resta: «`guerres` e `art : courants` são grupos de palavras-chave no SPIP?»."
       },
       "y": {
         "fr": "Le vocabulaire a bougé sans que personne l'apprenne : c'est l'argument de l'intervention, mesuré sur ta propre copie. Mais prononcer un chiffre faux devant les gens qui tiennent le site, c'est perdre l'argument.",
@@ -5593,8 +5593,8 @@
         "claude/CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26"
       ],
       "verif": {
-        "fr": "07/09 — chiffres mesurés ; textes non encore corrigés.",
-        "pt": "07/09 — números medidos; textos ainda não corrigidos."
+        "fr": "07/09, soir — la source confirme que `X (généralités)` est la tête : le « 45 / 10 » devient « 138 rattachés / 10 sans tête ».\n\n07/09 — chiffres mesurés ; textes non encore corrigés.",
+        "pt": "07/09, noite — a fonte confirma que `X (généralités)` é a cabeça: o «45 / 10» vira «138 vinculados / 10 sem cabeça».\n\n07/09 — números medidos; textos ainda não corrigidos."
       }
     },
     {

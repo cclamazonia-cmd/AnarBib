@@ -1605,7 +1605,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** L'export complet des 620 descripteurs dans les deux formats est **à une soirée de travail** — dès que les sept questions ont une réponse. Elles sont écrites et personne ne les a encore posées.
 
-*Vérifié : 07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).*
+*Vérifié : 07/09, soir — **deux réponses de plus de la source.** (1) `X (généralités)` **est** la tête de hiérarchie : les 45 parents « introuvables » sont 45 `broader` réels ; 138 descripteurs sur 148 sont rattachés, 10 ne le sont pas — et la question restante est devenue : `guerres` et `art : courants` sont-ils des **groupes de mots-clés SPIP** ? (2) Identifiants : la forme canonique SPIP est `?motNN` quel que soit le type d'URL affiché ; les « URL propres » sont des adresses, pas des identités. La question 1 tombe — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, proposition `/id/motNN` retirée. Restent : la question des groupes, le format (un fichier à deux schémas ou deux), les liens vers les catalogues, le grec, la licence, la régénération.
+
+07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).*
 
 **Ce que c'est.** Les sept : la forme des identifiants ; **la hiérarchie, qui est la vraie question** ; le statut de la facette « dates » ; le sort des 2 842 liens vers six catalogues ; le grec romanisé ; la licence ; et la manière dont le fichier se régénère.
 
@@ -1736,7 +1738,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Vérifié : 07/09 — absents du dépôt et du projet ; leur existence sur disque n'a pas été vérifiée.*
 
-**Ce que c'est.** Retrouver les deux fichiers (Downloads ?) ou les régénérer depuis l'aspiration du 03/09, et les commiter avec la note du 28/08 à côté. Depuis le 07/09 l'esquisse est à réviser : deux `skos:ConceptScheme`, les têtes `guerres`/`art : courants` en `skos:Collection`, jamais d'URI de schéma inventé.
+**Ce que c'est.** Retrouver les deux fichiers (Downloads ?) ou les régénérer depuis l'aspiration du 03/09, et les commiter avec la note du 28/08 à côté. Depuis le 07/09 l'esquisse est à réviser : deux `skos:ConceptScheme`, les têtes `guerres`/`art : courants` en `skos:Collection`, jamais d'URI de schéma inventé — et, depuis la note de la source sur les URL : URI canonique `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, la forme `/id/motNN` retirée.
 
 **Pourquoi ça compte.** C'est la pièce que tu poses sur la table à Bologne. Une pièce qui n'existe que sur une clé n'est pas une contribution, c'est une démonstration.
 
@@ -2178,7 +2180,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **K6** | Préparer la rencontre avec leftove.rs et May Day Rooms | `P2` | En cours |
 | **K7** | Mener la formation des deux coordinations BLMF jusqu'à l'autonomie | `P1` | En cours |
 | **K8** | Finir le texte d'orientation sur les outils de bibliothèques militantes | `P2` | Ouvert |
-| **K9** | Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est 10 — quatre textes à corriger avant le 12 | `P1` | Ouvert |
+| **K9** | Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est « 138 rattachés, 10 sans tête » — quatre textes à corriger avant le 12 | `P1` | Ouvert |
 | **K10** | Trois articles promis au *Monde libertaire*, un par mois — et une émission proposée à *Trous Noirs* | `P2` | À vérifier |
 
 #### K1 — Faire adopter l'acte de création du Fonds AnarBib
@@ -2339,15 +2341,17 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26`*
 
-#### K9 — Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est 10 — quatre textes à corriger avant le 12
+#### K9 — Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est « 138 rattachés, 10 sans tête » — quatre textes à corriger avant le 12
 
 `P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
 
 **État.** **Mesuré sur l'aspiration du 03/09, le 07/09.** 620 → **623** descripteurs entre le 30/06 et le 03/09 (trois dates apparues : `1927`, `2026`, `2027`, zéro disparition). Et sur les 148 descripteurs hiérarchisés, 55 parents étaient introuvables au 28/08 — **45 se résolvent par la variante `X (généralités)`** ; il reste **10** vrais regroupements sans concept (`guerres` ×9, `art : courants` ×1). Les deux chiffres sont dans la présentation du 12, l'intervention du 13, le texte d'orientation et les conventions d'interopérabilité.
 
-*Vérifié : 07/09 — chiffres mesurés ; textes non encore corrigés.*
+*Vérifié : 07/09, soir — la source confirme que `X (généralités)` est la tête : le « 45 / 10 » devient « 138 rattachés / 10 sans tête ».
 
-**Ce que c'est.** Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 45 relèvent d'une convention de nommage, 10 sont des regroupements » — et reformuler la question à la fédération : non plus « votre arbre existe-t-il ? » mais « *X* et *X (généralités)* sont-ils le même terme ? ».
+07/09 — chiffres mesurés ; textes non encore corrigés.*
+
+**Ce que c'est.** Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 138 sur 148 sont rattachés à leur tête `X (généralités)`, confirmé par la source ; 10 ne le sont pas » — et poser la seule question qui reste : « `guerres` et `art : courants` sont-ils des groupes de mots-clés dans SPIP ? ».
 
 **Pourquoi ça compte.** Le vocabulaire a bougé sans que personne l'apprenne : c'est l'argument de l'intervention, mesuré sur ta propre copie. Mais prononcer un chiffre faux devant les gens qui tiennent le site, c'est perdre l'argument.
 
