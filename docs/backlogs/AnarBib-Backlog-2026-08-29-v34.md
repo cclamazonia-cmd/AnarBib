@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 6 septembre 2026](#létat-réel-au-6-septembre-2026)
+- [L'état réel au 7 septembre 2026](#létat-réel-au-7-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -58,9 +58,9 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 6 septembre 2026
+## L'état réel au 7 septembre 2026
 
-Relevé du **6 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `757e336d`, après trois journées où trois sessions ont poussé (l'OPAC par œuvre en douze migrations, la révision des lots importés, la page « Je veux… », l'atelier ouvert aux œuvres, la purge du schéma de mai, les homonymes de `public`). Toutes les lignes ont été remesurées, advisors compris : c'est un relevé complet. Deux régressions d'hygiène y apparaissent, notées à leur ligne.
+Relevé du **7 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `ecdcd06c`. Il prolonge le relevé complet du 06/09 : les volumétries métier n'ont pas bougé depuis (aucune migration ni code depuis la correction d'hygiène du 06/09 midi), le dépôt a reçu la PR #28 au backlog et au registre, six décisions de relecture, et quatre items neufs ce matin (E14, G13, H8, I20). Toutes les lignes ont été relues, celles qui changent portent la date.
 
 **Fraîcheur des constats au 2026-09-07.** **53 items sur 70** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, H8, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, I20, J2, J3, J4, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
@@ -72,7 +72,7 @@ Relevé du **6 septembre 2026** au matin — production interrogée en lecture s
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
 | Fonctions applicatives | **906** | `public` 676 · `api` 188 · `ingest` 34 · `private` 8. Dont **694 SECURITY DEFINER** (526 / 144 / 17 / 7) : +48 fonctions et +25 DEFINER depuis le 03/09 (OPAC par œuvre, atelier des œuvres, révision des lots), −3 (les homonymes de `public`, B7). **Aucune fonction sans `search_path` figé** — `private.conv_motifs_collectivite` (INVOKER, née le 05/09 hors du garde du hook) l'a reçu le 06/09 (`560b94e4`, `20260906111308`) ; la suite `hygiene_search_path_et_initplan` le garde désormais sur toute la base. |
-| Migrations appliquées | **307** | 307 migrations numérotées au dépôt = **307 appliquées, alignement exact** (315 fichiers avec le gabarit et sept rollbacks). **+34 depuis le 03/09** — douze pour l'OPAC par œuvre, la révision des lots, la purge du schéma de mai, B4, B7, et les migrations d'évidences. Vérifié le 06/09 des deux côtés. |
+| Migrations appliquées | **308** | 308 migrations numérotées au dépôt = **308 appliquées, alignement exact** (316 fichiers avec le gabarit et sept rollbacks). La 308ᵉ est la correction d'hygiène du 06/09 (`20260906111308`) ; **rien depuis** — les commits du 06/09 soir et du 07/09 sont documentaires. Vérifié le 07/09 des deux côtés. |
 | Jobs `pg_cron` | **38** | actifs — +1 depuis le 03/09 (le tick de pré-traduction des titres d'œuvre, `work-titles-autofill`). |
 | Avis de sécurité | **463** | 0 ERROR · **411** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`, verdicts B4 posés). Le WARN `function_search_path_mutable` du matin est **parti** (`20260906111308`). Le 28 (`anon`) est la **valeur attendue** (T10, `DOC-GRANT-1`). **Le 411 (`authenticated`) est entièrement justifié depuis le 06/09** : 395 hérités des paquets du 01/09 et **16 RPC nées les 04–05/09, lues corps par corps** — « Complément du 06/09 » de `AUDIT_execute_authenticated_2026-09-01` : aucune faille, deux limites fonctionnelles (liste et rapport des lots transversaux au réseau ; `fn_batch_review_request` ne rapproche pas le lot de la bibliothèque de l'appelant·e). |
 | Avis de performance | **440** | **368 « index inutilisés »** (403 le 03/09 — les compteurs repartent du redémarrage du 02/09 ; à relire dans un mois). **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`). 25 tables à policies permissives multiples. **8 tables sans clé primaire** (14 le 03/09 : les six du schéma de mai sont parties avec lui). L'`auth_rls_initplan` du matin sur `catalog_batch_reviews_read_staff` est **résorbé** (`(select auth.uid())`, `20260906111308`) et la suite d'hygiène refuse désormais toute policy qui réévaluerait `auth.uid()` par ligne — le motif de **B5** est gardé, plus seulement corrigé. |
@@ -108,10 +108,10 @@ Relevé du **6 septembre 2026** au matin — production interrogée en lecture s
 
 | | | |
 |---|---:|---|
-| Commits | **2 594** | sur `main`, au 06/09 au matin — **53 commits depuis le 03/09 au soir**, de trois sessions. |
+| Commits | **2 609** | sur `main`, au 07/09 au matin — 15 commits depuis le relevé du 06/09, tous documentaires (PR #28 au backlog et au registre, décisions de relecture D3–D9, E14/G13/H8/I20). |
 | Fichiers `src/` | **310** | 81 pages, 93 composants (79 et 90 le 03/09 : la page « Je veux… », l'assistant des œuvres, les onglets de l'atelier). |
 | Clés i18n | **6 570** | par locale, **parité stricte sur les 10**, gardée en CI ; **+321 depuis le 03/09** : « Je veux… » (51 intentions × 2), atelier des œuvres, OPAC par œuvre, docs par page, révision des lots, titres de page (E7). |
-| Tests | **407 + 94** | 407 tests JS (vitest, gate bloquant ; +37 depuis le 03/09) + **94 suites SQL** dans `ci-suites.txt` (+21 : quatre de l'OPAC par œuvre, la révision des lots, les homonymes B7, les évidences…). Rejeu local des 307 migrations en ~2 min le 05/09. |
+| Tests | **407 + 95** | 407 tests JS (vitest, gate bloquant) + **95 suites SQL** dans `ci-suites.txt` (+1 le 06/09 : `hygiene_search_path_et_initplan`, qui garde sur toute la base l'absence de fonction sans `search_path` et de policy qui réévalue `auth.uid()`). Rejeu local des 308 migrations le 06/09. |
 | Marqueurs de dette | **21** | dont 4 dans `src/` (motifs `TODO`/`FIXME`, casse exacte ; 17 le 03/09 — les quatre de plus sont hors `src/`, dans le code du 05/09). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
@@ -2227,4 +2227,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-06 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `757e336d` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `ecdcd06c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

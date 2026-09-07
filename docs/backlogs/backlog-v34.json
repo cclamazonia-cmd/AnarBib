@@ -13,8 +13,8 @@
     },
     "maj": "2026-09-07",
     "releve": {
-      "date": "2026-09-06",
-      "commit": "757e336d"
+      "date": "2026-09-07",
+      "commit": "ecdcd06c"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **6 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `757e336d`, après trois journées où trois sessions ont poussé (l'OPAC par œuvre en douze migrations, la révision des lots importés, la page « Je veux… », l'atelier ouvert aux œuvres, la purge du schéma de mai, les homonymes de `public`). Toutes les lignes ont été remesurées, advisors compris : c'est un relevé complet. Deux régressions d'hygiène y apparaissent, notées à leur ligne.",
-      "pt": "Registo de **6 de setembro de 2026** de manhã — produção consultada em leitura e repositório recontado no commit `757e336d`, depois de três dias em que três sessões empurraram (OPAC por obra, revisão dos lotes importados, página «Quero…», oficina aberta às obras, purga do esquema de maio, homónimos de `public`). Todas as linhas remedidas, advisors incluídos."
+      "fr": "Relevé du **7 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `ecdcd06c`. Il prolonge le relevé complet du 06/09 : les volumétries métier n'ont pas bougé depuis (aucune migration ni code depuis la correction d'hygiène du 06/09 midi), le dépôt a reçu la PR #28 au backlog et au registre, six décisions de relecture, et quatre items neufs ce matin (E14, G13, H8, I20). Toutes les lignes ont été relues, celles qui changent portent la date.",
+      "pt": "Registo de **7 de setembro de 2026** de manhã — produção em leitura e repositório recontado no commit `ecdcd06c`. Prolonga o registo completo de 06/09 : as volumetrias não mudaram (nenhuma migração nem código desde a correção de higiene de 06/09), o repositório recebeu a PR #28, seis decisões de releitura e quatro itens novos (E14, G13, H8, I20)."
     },
     "photo": [
       {
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "307",
+            "308",
             {
-              "fr": "307 migrations numérotées au dépôt = **307 appliquées, alignement exact** (315 fichiers avec le gabarit et sept rollbacks). **+34 depuis le 03/09** — douze pour l'OPAC par œuvre, la révision des lots, la purge du schéma de mai, B4, B7, et les migrations d'évidences. Vérifié le 06/09 des deux côtés.",
-              "pt": "307 numeradas = **307 aplicadas, alinhamento exato** (315 ficheiros). **+34 desde 03/09**."
+              "fr": "308 migrations numérotées au dépôt = **308 appliquées, alignement exact** (316 fichiers avec le gabarit et sept rollbacks). La 308ᵉ est la correction d'hygiène du 06/09 (`20260906111308`) ; **rien depuis** — les commits du 06/09 soir et du 07/09 sont documentaires. Vérifié le 07/09 des deux côtés.",
+              "pt": "308 numeradas = **308 aplicadas, alinhamento exato** (316 ficheiros). A 308.ª é a correção de higiene de 06/09 ; nada desde então."
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 594",
+            "2 609",
             {
-              "fr": "sur `main`, au 06/09 au matin — **53 commits depuis le 03/09 au soir**, de trois sessions.",
-              "pt": "em `main` — **53 commits desde 03/09**, de três sessões."
+              "fr": "sur `main`, au 07/09 au matin — 15 commits depuis le relevé du 06/09, tous documentaires (PR #28 au backlog et au registre, décisions de relecture D3–D9, E14/G13/H8/I20).",
+              "pt": "em `main`, 07/09 de manhã — 15 commits desde 06/09, todos documentais."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "407 + 94",
+            "407 + 95",
             {
-              "fr": "407 tests JS (vitest, gate bloquant ; +37 depuis le 03/09) + **94 suites SQL** dans `ci-suites.txt` (+21 : quatre de l'OPAC par œuvre, la révision des lots, les homonymes B7, les évidences…). Rejeu local des 307 migrations en ~2 min le 05/09.",
-              "pt": "407 testes JS (+37) + **94 suites SQL** (+21)."
+              "fr": "407 tests JS (vitest, gate bloquant) + **95 suites SQL** dans `ci-suites.txt` (+1 le 06/09 : `hygiene_search_path_et_initplan`, qui garde sur toute la base l'absence de fonction sans `search_path` et de policy qui réévalue `auth.uid()`). Rejeu local des 308 migrations le 06/09.",
+              "pt": "407 testes JS + **95 suites SQL** (+1 em 06/09 : `hygiene_search_path_et_initplan`)."
             }
           ],
           [
