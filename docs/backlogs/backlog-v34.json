@@ -14,7 +14,7 @@
     "maj": "2026-09-07",
     "releve": {
       "date": "2026-09-07",
-      "commit": "003ad4ca"
+      "commit": "fb1b0139"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **7 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `003ad4ca`. Il prolonge le relevé complet du 06/09. La journée a été dense côté dépôt : trois migrations (H8 GetRecord, I20 l'adresse des fonctions, l'alignement FICEDL qui dit vers quelle liste il pointe), deux suites SQL, la PR #28 et la relecture de la FICEDL versées au backlog — **dix-huit items neufs** (B22, B23, E14–E16, F9, F10, G13, G14, H9–H13, I21, I22, J9, K9, K10), trois clôtures (H8, I20, I17). Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.",
-      "pt": "Registo de **7 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `003ad4ca`. Três migrações (H8, I20, alinhamento FICEDL), duas suites SQL, **dezoito itens novos**, três encerramentos (H8, I20, I17). As volumetrias não mudaram."
+      "fr": "Relevé du **7 septembre 2026** en fin de soirée — production interrogée en lecture seule et dépôt recompté au commit `fb1b0139`. Il prolonge le relevé complet du 06/09 et celui du soir : la session voisine a poussé jusqu'à 23 h (E18 sur la page Œuvre en deux migrations, E17 le bloc « Explorer » replié, le tutoiement sans exception en fr et es, le grec provisoire, le test d'écriture i18n, le registre à 0.26 avec `DOC-LEX-1`). Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.",
+      "pt": "Registo de **7 de setembro de 2026** ao fim da noite — produção em leitura e repositório recontado no commit `fb1b0139`. A sessão vizinha empurrou até às 23 h (E18 na página Obra, E17, tratamento por tu em fr/es, teste de escrita i18n, registo 0.26). As volumetrias não mudaram."
     },
     "photo": [
       {
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "311",
+            "313",
             {
-              "fr": "311 migrations numérotées au dépôt = **311 appliquées, alignement exact** (vérifié le 07/09 au soir). **+3 le 07/09** : `20260907120000` (H8 — GetRecord sert la notice demandée), `20260907123000` (I20 — `anarbib.functions_base_url`, l'adresse des fonctions n'est plus codée en dur ; posée par l'étape « 5 bis » de `bootstrap.sh` sur une instance auto-hébergée), `20260907172508` (l'alignement FICEDL dit vers quelle liste il pointe — H10/H12).",
-              "pt": "311 numeradas = **311 aplicadas, alinhamento exato**. **+3 em 07/09** : H8 GetRecord, I20 `functions_base_url`, alinhamento FICEDL."
+              "fr": "313 migrations numérotées au dépôt = **313 appliquées, alignement exact** (vérifié le 07/09 à 23 h). **+5 le 07/09** : H8 GetRecord, I20 `functions_base_url`, l'alignement FICEDL qui dit vers quelle liste il pointe, puis deux pour E18 — `20260907220000` (la page Œuvre dit le tome et range les tomes dans l'ordre) et `20260907233000` (elle compte les éditions, pas les tomes).",
+              "pt": "313 numeradas = **313 aplicadas**. **+5 em 07/09** (H8, I20, alinhamento FICEDL, duas para E18)."
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 621",
+            "2 631",
             {
-              "fr": "sur `main`, au 07/09 au soir — 27 commits dans la journée, de deux sessions : le code de H8 et I20, la relecture de la FICEDL (H9–H13), le cadrage du rejeu fidèle (I17, I21, I22), dix-huit items et trois clôtures au backlog.",
-              "pt": "em `main`, 07/09 à noite — 27 commits no dia, de duas sessões."
+              "fr": "sur `main`, au 07/09 à 23 h — 37 commits dans la journée, de deux sessions ; les dix derniers (21 h – 23 h) sont le registre 0.25 et 0.26, l'audit i18n des diacritiques et de l'anglais résiduel, E17 et E18.",
+              "pt": "em `main`, 07/09 às 23 h — 37 commits no dia, de duas sessões."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "311",
+            "312",
             {
-              "fr": "81 pages, 93 composants ; +1 fichier le 07/09 : le test `migrations-sans-url-cloud.test.js` (I20 — aucune migration ne doit porter l'adresse du projet cloud).",
-              "pt": "81 páginas, 93 componentes ; +1 em 07/09 : o teste `migrations-sans-url-cloud` (I20)."
+              "fr": "81 pages, 93 composants ; +2 le 07/09 : les tests `migrations-sans-url-cloud` (I20) et `i18n-ecriture` (`DOC-PS-1`).",
+              "pt": "81 páginas, 93 componentes ; +2 em 07/09 (dois testes)."
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 570",
+            "6 571",
             {
-              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; **+321 depuis le 03/09** : « Je veux… » (51 intentions × 2), atelier des œuvres, OPAC par œuvre, docs par page, révision des lots, titres de page (E7).",
-              "pt": "por locale, **paridade estrita nas 10** ; **+321 desde 03/09**."
+              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; +1 ce soir (la phrase liminaire `privacy.register`) ; onze clés grecques provisoires et cinq locales où « Organization or collective » dormait en anglais, corrigées (audit des diacritiques et de l'anglais résiduel du 07/09).",
+              "pt": "por locale, **paridade estrita nas 10** ; +1 esta noite ; onze chaves gregas provisórias e cinco locales corrigidas."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "411 + 97",
+            "452 + 98",
             {
-              "fr": "411 tests JS (vitest, gate bloquant) + **97 suites SQL** dans `ci-suites.txt` (+2 le 07/09 avec H8 et I20, après `hygiene_search_path_et_initplan` le 06/09). Rejeu local des migrations le 06/09 ; CI verte sur les trois pushes du jour.",
-              "pt": "411 testes JS + **97 suites SQL** (+2 em 07/09). CI verde nos três pushes do dia."
+              "fr": "452 tests JS (vitest, gate bloquant ; +41 ce soir : `i18n-ecriture`, qui rend `DOC-PS-1` exécutable — tutoiement, NFC) + **98 suites SQL** dans `ci-suites.txt` (+1 ce soir, E18). CI verte sur chaque push du jour.",
+              "pt": "452 testes JS (+ `i18n-ecriture`) + **98 suites SQL** (+1, E18)."
             }
           ],
           [
