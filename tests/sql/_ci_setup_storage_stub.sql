@@ -62,5 +62,7 @@ VALUES
   ('library-ui-assets',          'library-ui-assets',          true),
   ('network-map',                'network-map',                false),
   ('partner-catalog-deposits',   'partner-catalog-deposits',   false),
-  ('pdf-restrito',               'pdf-restrito',               false)
+  ('pdf-restrito',               'pdf-restrito',               false),
+  -- 17e bucket (07/09/2026) : fond de carte PMTiles, cf. 20260907234500.
+  ('map-tiles',                  'map-tiles',                  true)
 ON CONFLICT (id) DO NOTHING;

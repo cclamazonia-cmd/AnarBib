@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-07** · 87 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-07** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **7 septembre 2026** en fin de soirée — production interrogée en lecture seule et dépôt recompté au commit `fb1b0139`. Il prolonge le relevé complet du 06/09 et celui du soir : la session voisine a poussé jusqu'à 23 h (E18 sur la page Œuvre en deux migrations, E17 le bloc « Explorer » replié, le tutoiement sans exception en fr et es, le grec provisoire, le test d'écriture i18n, le registre à 0.26 avec `DOC-LEX-1`). Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.
 
-**Fraîcheur des constats au 2026-09-07.** **68 items sur 87** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-07.** **67 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -858,7 +858,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E2** | Trancher les conventions néerlandaise et grecque | `P1` | Ouvert |
 | **E3** | Uniformiser le registre d'adresse entre les dix locales | `P2` | Décision collective |
 | **E4** | Régler les paires irrégulières de l'italien | `P2` | Ouvert |
-| **E5** | Relayer les tuiles OpenStreetMap par le serveur | `P2` | Ouvert |
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
@@ -954,27 +953,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Avant le 08/09 si possible, sinon octobre.
 
 *Renvois : `CLAUDE.md, piège connu n°9` · `CALENDRIER_bologne_2026-08-27`*
-
-#### E5 — Relayer les tuiles OpenStreetMap par le serveur
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
-
-**État.** C'est la **seule exception anti-pistage restante** : les tuiles de `tile.openstreetmap.org` sont chargées par le navigateur de la visiteuse, qui livre donc son adresse IP à un tiers. L'intention de relayer est **déjà annoncée publiquement** dans la clé `privacy.s6.maptiles` des dix locales.
-
-*Vérifié : 31/08 — trois fichiers chargent encore `tile.openstreetmap.org` côté client : `CartographyEditModal.jsx:70`, `CartographyMap.jsx:181`, `CartografiaAjouterPage.jsx:66`.*
-
-**Ce que c'est.** Reprendre le modèle déjà en place pour Nominatim : un relais côté serveur, avec cache, et l'adresse du relais dans la configuration du front.
-
-**Pourquoi ça compte.** La règle de conformité du projet est écrite et générale : **toute dépendance qui reçoit une adresse IP de visiteuse doit être déclarée, y compris quand elle n'est pas un sous-traitant au sens du RGPD.** Le raisonnement inverse est précisément ce qui avait laissé Turnstile invisible pendant des mois. Ici la dépendance est déclarée — il reste à la supprimer, comme annoncé.
-
-**Ce qui compte comme fini.**
-
-- Aucune requête ne part du navigateur vers un domaine tiers sur les pages de carte.
-- La clé `privacy.s6.maptiles` est mise à jour dans les dix locales pour décrire le nouvel état.
-
-**Dépendances.** Plus simple après **I2** (pile auto-hébergée), mais faisable avant.
-
-*Renvois : `VERIF_confidentialite_tiers_2026-08-20` · `PLAN_DE_MARCHE §8` · `scripts/nominatim/`*
 
 #### E6 — Découper les cinq écrans qui pèsent plus de cent kilooctets
 
@@ -2579,6 +2557,7 @@ CI verte : lint et suite unitaire. |
 | I20 | 2026-09-07 | **Clos le 07/09, le jour même du constat** (migration `20260907123000_l_adresse_des_fonctions_n_est_plus_codee_en_dur`, suite `adresse_des_fonctions_tests.sql`, garde `src/tests/migrations-sans-url-cloud.test.js`, `bootstrap.sh` étape 5 bis + contrôle (g), note dans `.env.example`). Une source de vérité : le réglage de base `anarbib.functions_base_url` (`ALTER DATABASE … SET`, lu à l'ouverture de chaque session par PostgREST, pg_cron et psql), servi par `private.fn_functions_base_url()` — INVOKER, fermé à anon/authenticated — qui se replie sur le projet cloud quand le réglage manque : **la production ne change pas de comportement**. Les douze fonctions (relevé `pg_proc`, toutes à `postgres`) sont réécrites **par motif sur leur définition réelle** au moment de l'application, depuis une liste nominative et fermée (une absente fait échouer la migration) — c'est ce qui permet de repartir de la définition réelle sur douze corps sans les recopier, et le nom de chaque fonction reste trouvable au grep. Le job cron `anarbib-health-probe`, qui portait l'URL dans sa commande même, est replanifié par `cron.schedule` (idempotent par nom). Le vitest n'accepte le littéral `supabase.co/functions/v1/` que dans les huit migrations historiques et celle-ci. `bootstrap.sh` pose le réglage depuis `API_EXTERNAL_URL` **dans les deux modes** (un dump de production ne l'emporte pas) et le vérifie en fin de course dans une session neuve. Non exercé sur une pile réelle : le domaine I est gelé sur la production jusqu'au 14/09 ; c'est le premier contrôle à regarder à la prochaine répétition (I2). |
 | I17 | 2026-09-07 | **Clos le 07/09 sur le constat de l'expérience du §7** (`journal/operations/NOTE_experience-I17-rejeu-fidele_2026-09-07`), pas sur le code. Sur `main` à `c28baac0`, sans la PR #28, image `supabase/postgres:17.6.1.136`, volume vierge : avec A.1 (`anon` retiré du défaut *fonctions* des **deux** rôles dans `01-roles.sh`, entrées vérifiées non vides) et A.2 (migrations sous `postgres`), **310/310 migrations vertes**, dont celles du 29/08, 30/08, 02/09 et 04/09 sans aucun `REVOKE` ni tolérance ajoutés ; 676 fonctions possédées par `postgres` ; **133 fonctions exécutables par `anon`, empreinte MD5 identique à la production** interrogée en lecture seule à la même minute ; `pg_default_acl` sans `anon=` pour les deux rôles, l'entrée `postgres` rétablie par le socle puis refermée par `20260831105114` ; T8-T11 verts. L'option B n'a pas eu à être considérée. Appris en chemin : l'entrypoint traite `initdb.d/*` dans l'ordre du glob, `99-roles.sh` passe **avant** `migrate.sh` (le commentaire de `compose.yml` est faux, `bootstrap.sh` rejoue le script à l'étape 2) ; `cron.job` absent à la 288e, `CREATE EXTENSION pg_cron` sous `postgres` réussit (→ `I19`). Reste **T7** rouge : cinq vues du socle lisibles par `anon` au rejeu, `anon=m` en prod, `REVOKE SELECT` écrit nulle part — versé à `B22`. Le code A.1/A.2 reste à proposer à Bastien après la fusion de la #28 (D7). |
 | E18 | 2026-09-07 | **Constaté et clos le 07/09 par Xavier, sur `/obra/133` (« L'Homme et la Terre », Reclus)** : six « éditions » strictement identiques à l'écran — « 1905 · Librairie Universelle · Français » six fois, dans l'ordre VI, V, IV, I, III, II. Les données étaient justes (les six notices portent `volume` = I à VI et le sous-titre « Tome N ») : `api.work_public_detail` ne servait pas `volume` et triait par année puis titre, six clés égales. La liste du catalogue, elle, servait déjà le tome par édition avec son badge « Tome N » (`catalog.works.volumeLabel`, dix locales) — la page Œuvre était la seule surface à l'ignorer. Migration `20260907220000_la_page_oeuvre_dit_le_tome` (RPC reprise de sa définition en production : `volume` dans chaque édition, tri année → `fn_volume_rank` → titre, grants conservés), badge « Tome N » dans `WorkPage.jsx` avec la clé existante, suite `oeuvre_tomes_page_tests.sql` au manifeste (trois tomes insérés III, I, II qui doivent sortir I, II, III ; une édition sans tome garde `volume` NULL). Vérifié à l'écran sur `/obra/133` après déploiement. **Second geste le soir même, sur remarque de Xavier** (« c'est pas six éditions, c'est six tomes d'une seule édition ») : l'en-tête disait encore « 6 édition(s) ». Migration `20260907233000` : la RPC sert `edition_count` (une notice sans tome = 1 ; les tomes d'une même année/éditeur/langue = 1) et `volume_count` (tomes distincts, même règle que la liste), l'en-tête compose « 1 édition · 6 volumes » avec les clés plurielles existantes ; T6-T7 ajoutés à la suite. |
+| E5 | 2026-09-07 | **Livré et en production le soir même — la dernière exception anti-pistage tombe, et pas par la voie que la fiche proposait.** La fiche voulait un *relais* de `tile.openstreetmap.org` avec cache ; la politique des tuiles d'OSM déconseille les proxys et interdit tout préchargement, et un relais aurait gardé la dépendance. Fait à la place : **un seul fichier PMTiles** (planet Protomaps du 07/09, dérivé d'OpenStreetMap, ODbL) extrait à **z12 = 18 Go** (`pmtiles extract --maxzoom=12`, mesures à vide : z10 3,7 Go, z11 7,9, z13 36, z14 68, z15 138), déposé dans le bucket public **`map-tiles`** (créé en base + migration `20260907234500` inerte ensuite, plafond global Storage monté de 500 Mo à 20 Gio par l'API de gestion, les cinq buckets sans plafond propre figés à leurs 500 Mo de fait) et lu par le navigateur **par requêtes Range** (Storage répond 206 + CORS `*`, vérifié). Rendu dans le Leaflet vendorisé par **`protomaps-leaflet` 4.0.1** (vendorisé, BSD-3, canvas + polices web, pas de serveur de glyphes) via `src/lib/mapTiles.js` ; les trois cartes (`CartographyMap`, `CartographyEditModal`, `CartografiaAjouterPage`) n'ont plus une ligne `L.tileLayer`. Garde CI `src/tests/carte-sans-domaine-tiers.test.js` (aucun `tile.openstreetmap.org` dans `src/`, toute `L.map(` passe par `addBasemap`). `privacy.s6.maptiles` et `federacao.carte.attribution` réécrits dans les dix locales. Recette et rythme de rafraîchissement : `scripts/maptiles/README.md` + `extraire-planet.sh` (mesure par défaut, n'agit que sur demande). **Deux limites écrites** : (1) le fichier est sur le Storage Supabase — la fuite d'IP vers un tiers est close, pas le périmètre Cloud Act, qui tombe avec **I2** (copier le fichier là où Caddy le sert, poser `VITE_MAPTILES_URL`, et compter ces 18 Go dans le disque demandé aux Herbes Folles — **I21**) ; (2) `map-tiles` est volontairement hors du flux storage de **BG2** (reconstructible en 30 min). Étiquettes : `ca` et `eo` absents du fond → noms locaux, sans repli vers une autre langue. Accessoirement : l'échec de juin 2026 dont tout le monde se souvenait comme « les fonds de carte » était **Nominatim** (géocodage, MAP-F), qui reste non configuré. Incident de méthode : la mesure à vide de z15 (177 M d'entrées) lancée en même temps que l'extraction a figé WSL à son plafond de 15 Go — `wsl --shutdown` avec l'accord de Xavier, aucune autre session active, rien perdu ; mesurer seul, ou pas z15. |
 
 ---
 
@@ -2610,4 +2589,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 87 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fb1b0139` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fb1b0139` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

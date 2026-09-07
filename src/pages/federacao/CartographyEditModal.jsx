@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { apiRpc, supabase } from '@/lib/supabase';
+import { addBasemap } from '@/lib/mapTiles';
 
 // Modale d'édition d'une fiche cartographique (Phase 3, MAP-D). Ouverte depuis la
 // carte interne (clic « Éditer » sur un marqueur éditable). Pré-remplie via
@@ -67,7 +68,8 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
     const lat0 = Number(row.lat) || 0;
     const lon0 = Number(row.lon) || 0;
     const map = L.map(pickerDivRef.current, { worldCopyJump: true, attributionControl: false }).setView([lat0, lon0], 6);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+    // Fond de carte auto-hébergé (PMTiles, E5) : plus aucun appel vers un tiers.
+    addBasemap(map, { locale }).catch((e) => console.error('[CartographyEditModal] fond de carte', e));
     const marker = L.marker([lat0, lon0], { draggable: true }).addTo(map);
     const apply = (ll) => setForm((f) => ({ ...f, lat: Number(ll.lat.toFixed(5)), lon: Number(ll.lng.toFixed(5)) }));
     marker.on('dragend', () => apply(marker.getLatLng()));

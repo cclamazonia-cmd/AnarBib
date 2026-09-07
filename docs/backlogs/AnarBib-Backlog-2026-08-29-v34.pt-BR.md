@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-07** · 87 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-07** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 13
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 12
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **7 de setembro de 2026** ao fim da noite — produção em leitura e repositório recontado no commit `fb1b0139`. A sessão vizinha empurrou até às 23 h (E18 na página Obra, E17, tratamento por tu em fr/es, teste de escrita i18n, registo 0.26). As volumetrias não mudaram.
 
-**Frescor dos constatos em 2026-09-07.** **68 itens de 87** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-07.** **67 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -858,7 +858,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E2** | Decidir as convenções neerlandesa e grega | `P1` | Aberto |
 | **E3** | Uniformizar o registro de tratamento entre as dez locales | `P2` | Decisão coletiva |
 | **E4** | Resolver os pares irregulares do italiano | `P2` | Aberto |
-| **E5** | Retransmitir os ladrilhos OpenStreetMap pelo servidor | `P2` | Aberto |
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Aberto |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
@@ -954,27 +953,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Antes de 08/09 se possível, senão outubro.
 
 *Remissões : `CLAUDE.md, piège connu n°9` · `CALENDRIER_bologne_2026-08-27`*
-
-#### E5 — Retransmitir os ladrilhos OpenStreetMap pelo servidor
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
-
-**Estado.** É a **única exceção antirrastreamento restante**: os ladrilhos de `tile.openstreetmap.org` são carregados pelo navegador da visitante, que entrega portanto seu endereço IP a um terceiro. A intenção de retransmitir já está **anunciada publicamente** na chave `privacy.s6.maptiles` das dez locales.
-
-*Verificado : 31/08 — três arquivos ainda carregam `tile.openstreetmap.org` do lado do navegador.*
-
-**O que é.** Retomar o modelo já em vigor para o Nominatim: um relé do lado servidor, com cache, e o endereço do relé na configuração do front.
-
-**Por que importa.** A regra de conformidade do projeto está escrita e é geral: **toda dependência que recebe um endereço IP de visitante deve ser declarada, mesmo quando não é um operador no sentido do RGPD.** O raciocínio inverso é precisamente o que deixara o Turnstile invisível durante meses. Aqui a dependência está declarada — falta suprimi-la, como anunciado.
-
-**O que conta como terminado.**
-
-- Nenhuma requisição sai do navegador para um domínio de terceiro nas páginas de mapa.
-- A chave `privacy.s6.maptiles` é atualizada nas dez locales para descrever o novo estado.
-
-**Dependências.** Mais simples depois de **I2** (pilha auto-hospedada), mas viável antes.
-
-*Remissões : `VERIF_confidentialite_tiers_2026-08-20` · `PLAN_DE_MARCHE §8` · `scripts/nominatim/`*
 
 #### E6 — Dividir as cinco telas que pesam mais de cem quilobytes
 
@@ -2555,6 +2533,7 @@ CI verde. |
 | I20 | 2026-09-07 | **Encerrado em 07/09, no mesmo dia do constato** (migração `20260907123000`, suíte `adresse_des_fonctions_tests.sql`, guarda `migrations-sans-url-cloud.test.js`, `bootstrap.sh` etapa 5 bis + controle (g)). Uma fonte de verdade: o ajuste de banco `anarbib.functions_base_url` (`ALTER DATABASE … SET`, lido na abertura de cada sessão), servido por `private.fn_functions_base_url()` — INVOKER, fechado a anon/authenticated — com fallback no projeto cloud quando o ajuste falta: **a produção não muda de comportamento**. As doze funções são reescritas **por padrão sobre a sua definição real** no momento da aplicação, a partir de uma lista nominativa e fechada. O job cron `anarbib-health-probe` é replanejado por `cron.schedule`. O vitest só aceita o literal nas oito migrações históricas e nesta. `bootstrap.sh` põe o ajuste a partir de `API_EXTERNAL_URL` **nos dois modos** e verifica-o no fim. Não exercido numa pilha real: o domínio I está congelado na produção até 14/09; é o primeiro controle a olhar na próxima repetição (I2). |
 | I17 | 2026-09-07 | **Encerrado em 07/09 sobre o constato da experiência do §7** (`journal/operations/NOTE_experience-I17-rejeu-fidele_2026-09-07`), não sobre o código. Em `main` (`c28baac0`), sem a PR #28, imagem `supabase/postgres:17.6.1.136`, volume virgem: com A.1 (`anon` retirado do padrão de *funções* dos **dois** papéis em `01-roles.sh`, entradas verificadas não vazias) e A.2 (migrações sob `postgres`), **310/310 migrações verdes**, incluindo as de 29/08, 30/08, 02/09 e 04/09 sem nenhum `REVOKE` nem tolerância adicionados; 676 funções de `postgres`; **133 funções executáveis por `anon`, hash MD5 idêntico à produção** consultada em leitura no mesmo minuto; `pg_default_acl` sem `anon=` nos dois papéis; T8-T11 verdes. A opção B não precisou ser considerada. Aprendido: o entrypoint processa `initdb.d/*` na ordem do glob, `99-roles.sh` passa **antes** de `migrate.sh`; `cron.job` ausente na 288ª, `CREATE EXTENSION pg_cron` sob `postgres` funciona (→ `I19`). Resta **T7** vermelho: cinco vistas da base legíveis por `anon` no replay, `anon=m` em produção — levado a `B22`. O código A.1/A.2 fica para propor a Bastien após a fusão da #28 (D7). |
 | E18 | 2026-09-07 | **Constatado e encerrado em 07/09 por Xavier, em `/obra/133`** : seis «edições» idênticas na tela, na ordem VI, V, IV, I, III, II. Os dados estavam certos (`volume` = I a VI): `api.work_public_detail` não servia `volume` e ordenava por ano e título. A lista do catálogo já servia o tomo com o seu badge «Tomo N» — a página Obra era a única superfície a ignorá-lo. Migração `20260907220000` (RPC retomada da definição em produção: `volume` em cada edição, ordem ano → `fn_volume_rank` → título, grants conservados), badge em `WorkPage.jsx` com a chave existente, suíte `oeuvre_tomes_page_tests.sql` (três tomos inseridos III, I, II que devem sair I, II, III). Verificado na tela em `/obra/133` após o deploy. **Segundo gesto na mesma noite, por observação de Xavier** («não são seis edições, são seis tomos de uma só edição»): o cabeçalho ainda dizia «6 edição(ões)». Migração `20260907233000`: a RPC serve `edition_count` e `volume_count` (mesma regra que a lista), o cabeçalho compõe «1 edição · 6 volumes»; T6-T7 na suíte. |
+| E5 | 2026-09-07 | **Entregue e em produção na mesma noite — a última exceção antirrastreamento cai, e não pela via que a ficha propunha.** A ficha queria um *relé* de `tile.openstreetmap.org` com cache; a política de ladrilhos do OSM desaconselha proxies e proíbe qualquer pré-carregamento, e um relé manteria a dependência. Feito em vez disso: **um único arquivo PMTiles** (planet Protomaps de 07/09, derivado do OpenStreetMap, ODbL) extraído em **z12 = 18 GB** (medidas a seco: z10 3,7 GB, z11 7,9, z13 36, z14 68, z15 138), depositado no bucket público **`map-tiles`** (criado na base + migração `20260907234500` inerte depois, teto global do Storage subido de 500 MB para 20 GiB pela API de gestão) e lido pelo navegador **por requisições Range** (Storage responde 206 + CORS `*`, verificado). Renderizado no Leaflet vendorizado por **`protomaps-leaflet` 4.0.1** via `src/lib/mapTiles.js`; os três mapas não têm mais nenhuma linha `L.tileLayer`. Guarda CI `src/tests/carte-sans-domaine-tiers.test.js`. `privacy.s6.maptiles` e `federacao.carte.attribution` reescritos nas dez locales. Receita: `scripts/maptiles/README.md`. **Dois limites escritos**: (1) o arquivo está no Storage Supabase — o vazamento de IP para terceiro está fechado, não o perímetro Cloud Act, que cai com **I2** (contar estes 18 GB no disco pedido às Herbes Folles — **I21**); (2) `map-tiles` fica fora do fluxo storage do **BG2**. `ca` e `eo` ausentes do fundo → nomes locais. O fracasso de junho de 2026 lembrado como «os fundos de mapa» era o **Nominatim** (geocodificação), que segue não configurado. Incidente de método: a medida a seco de z15 travou o WSL no teto de 15 GB — `wsl --shutdown` com acordo de Xavier, nada perdido. |
 
 ---
 
@@ -2586,4 +2565,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 87 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fb1b0139`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fb1b0139`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

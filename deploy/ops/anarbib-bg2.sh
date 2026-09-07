@@ -53,6 +53,9 @@ export RESTIC_PASSWORD_FILE="${RESTIC_PASSWORD_FILE:-$HOME/.config/restic-anarbi
 # Auth : tables a inclure dans le flux court (les 3 tables d'identite durable)
 AUTH_TABLES=(auth.users auth.identities auth.mfa_factors)
 
+# map-tiles (fond de carte PMTiles, 18 Go, 07/09/2026) est EXCLU volontairement :
+# reconstructible en 30 min depuis Protomaps (scripts/maptiles/README.md), il
+# triplerait le depot restic. Ne pas l ajouter ici.
 # Buckets Storage (ordre indifferent ; les vides donnent 0 fichier)
 BUCKETS=(pdf-restrito library-ui-assets anarbib-pdf-public authors covers
   library-regimentos-private library-regimentos-public catalogos_parceiros_raw

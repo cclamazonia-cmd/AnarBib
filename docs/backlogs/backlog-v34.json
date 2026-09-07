@@ -1914,6 +1914,14 @@
           "fr": "**Constaté et clos le 07/09 par Xavier, sur `/obra/133` (« L'Homme et la Terre », Reclus)** : six « éditions » strictement identiques à l'écran — « 1905 · Librairie Universelle · Français » six fois, dans l'ordre VI, V, IV, I, III, II. Les données étaient justes (les six notices portent `volume` = I à VI et le sous-titre « Tome N ») : `api.work_public_detail` ne servait pas `volume` et triait par année puis titre, six clés égales. La liste du catalogue, elle, servait déjà le tome par édition avec son badge « Tome N » (`catalog.works.volumeLabel`, dix locales) — la page Œuvre était la seule surface à l'ignorer. Migration `20260907220000_la_page_oeuvre_dit_le_tome` (RPC reprise de sa définition en production : `volume` dans chaque édition, tri année → `fn_volume_rank` → titre, grants conservés), badge « Tome N » dans `WorkPage.jsx` avec la clé existante, suite `oeuvre_tomes_page_tests.sql` au manifeste (trois tomes insérés III, I, II qui doivent sortir I, II, III ; une édition sans tome garde `volume` NULL). Vérifié à l'écran sur `/obra/133` après déploiement. **Second geste le soir même, sur remarque de Xavier** (« c'est pas six éditions, c'est six tomes d'une seule édition ») : l'en-tête disait encore « 6 édition(s) ». Migration `20260907233000` : la RPC sert `edition_count` (une notice sans tome = 1 ; les tomes d'une même année/éditeur/langue = 1) et `volume_count` (tomes distincts, même règle que la liste), l'en-tête compose « 1 édition · 6 volumes » avec les clés plurielles existantes ; T6-T7 ajoutés à la suite.",
           "pt": "**Constatado e encerrado em 07/09 por Xavier, em `/obra/133`** : seis «edições» idênticas na tela, na ordem VI, V, IV, I, III, II. Os dados estavam certos (`volume` = I a VI): `api.work_public_detail` não servia `volume` e ordenava por ano e título. A lista do catálogo já servia o tomo com o seu badge «Tomo N» — a página Obra era a única superfície a ignorá-lo. Migração `20260907220000` (RPC retomada da definição em produção: `volume` em cada edição, ordem ano → `fn_volume_rank` → título, grants conservados), badge em `WorkPage.jsx` com a chave existente, suíte `oeuvre_tomes_page_tests.sql` (três tomos inseridos III, I, II que devem sair I, II, III). Verificado na tela em `/obra/133` após o deploy. **Segundo gesto na mesma noite, por observação de Xavier** («não são seis edições, são seis tomos de uma só edição»): o cabeçalho ainda dizia «6 edição(ões)». Migração `20260907233000`: a RPC serve `edition_count` e `volume_count` (mesma regra que a lista), o cabeçalho compõe «1 edição · 6 volumes»; T6-T7 na suíte."
         }
+      ],
+      [
+        "E5",
+        "2026-09-07",
+        {
+          "fr": "**Livré et en production le soir même — la dernière exception anti-pistage tombe, et pas par la voie que la fiche proposait.** La fiche voulait un *relais* de `tile.openstreetmap.org` avec cache ; la politique des tuiles d'OSM déconseille les proxys et interdit tout préchargement, et un relais aurait gardé la dépendance. Fait à la place : **un seul fichier PMTiles** (planet Protomaps du 07/09, dérivé d'OpenStreetMap, ODbL) extrait à **z12 = 18 Go** (`pmtiles extract --maxzoom=12`, mesures à vide : z10 3,7 Go, z11 7,9, z13 36, z14 68, z15 138), déposé dans le bucket public **`map-tiles`** (créé en base + migration `20260907234500` inerte ensuite, plafond global Storage monté de 500 Mo à 20 Gio par l'API de gestion, les cinq buckets sans plafond propre figés à leurs 500 Mo de fait) et lu par le navigateur **par requêtes Range** (Storage répond 206 + CORS `*`, vérifié). Rendu dans le Leaflet vendorisé par **`protomaps-leaflet` 4.0.1** (vendorisé, BSD-3, canvas + polices web, pas de serveur de glyphes) via `src/lib/mapTiles.js` ; les trois cartes (`CartographyMap`, `CartographyEditModal`, `CartografiaAjouterPage`) n'ont plus une ligne `L.tileLayer`. Garde CI `src/tests/carte-sans-domaine-tiers.test.js` (aucun `tile.openstreetmap.org` dans `src/`, toute `L.map(` passe par `addBasemap`). `privacy.s6.maptiles` et `federacao.carte.attribution` réécrits dans les dix locales. Recette et rythme de rafraîchissement : `scripts/maptiles/README.md` + `extraire-planet.sh` (mesure par défaut, n'agit que sur demande). **Deux limites écrites** : (1) le fichier est sur le Storage Supabase — la fuite d'IP vers un tiers est close, pas le périmètre Cloud Act, qui tombe avec **I2** (copier le fichier là où Caddy le sert, poser `VITE_MAPTILES_URL`, et compter ces 18 Go dans le disque demandé aux Herbes Folles — **I21**) ; (2) `map-tiles` est volontairement hors du flux storage de **BG2** (reconstructible en 30 min). Étiquettes : `ca` et `eo` absents du fond → noms locaux, sans repli vers une autre langue. Accessoirement : l'échec de juin 2026 dont tout le monde se souvenait comme « les fonds de carte » était **Nominatim** (géocodage, MAP-F), qui reste non configuré. Incident de méthode : la mesure à vide de z15 (177 M d'entrées) lancée en même temps que l'extraction a figé WSL à son plafond de 15 Go — `wsl --shutdown` avec l'accord de Xavier, aucune autre session active, rien perdu ; mesurer seul, ou pas z15.",
+          "pt": "**Entregue e em produção na mesma noite — a última exceção antirrastreamento cai, e não pela via que a ficha propunha.** A ficha queria um *relé* de `tile.openstreetmap.org` com cache; a política de ladrilhos do OSM desaconselha proxies e proíbe qualquer pré-carregamento, e um relé manteria a dependência. Feito em vez disso: **um único arquivo PMTiles** (planet Protomaps de 07/09, derivado do OpenStreetMap, ODbL) extraído em **z12 = 18 GB** (medidas a seco: z10 3,7 GB, z11 7,9, z13 36, z14 68, z15 138), depositado no bucket público **`map-tiles`** (criado na base + migração `20260907234500` inerte depois, teto global do Storage subido de 500 MB para 20 GiB pela API de gestão) e lido pelo navegador **por requisições Range** (Storage responde 206 + CORS `*`, verificado). Renderizado no Leaflet vendorizado por **`protomaps-leaflet` 4.0.1** via `src/lib/mapTiles.js`; os três mapas não têm mais nenhuma linha `L.tileLayer`. Guarda CI `src/tests/carte-sans-domaine-tiers.test.js`. `privacy.s6.maptiles` e `federacao.carte.attribution` reescritos nas dez locales. Receita: `scripts/maptiles/README.md`. **Dois limites escritos**: (1) o arquivo está no Storage Supabase — o vazamento de IP para terceiro está fechado, não o perímetro Cloud Act, que cai com **I2** (contar estes 18 GB no disco pedido às Herbes Folles — **I21**); (2) `map-tiles` fica fora do fluxo storage do **BG2**. `ca` e `eo` ausentes do fundo → nomes locais. O fracasso de junho de 2026 lembrado como «os fundos de mapa» era o **Nominatim** (geocodificação), que segue não configurado. Incidente de método: a medida a seco de z15 travou o WSL no teto de 15 GB — `wsl --shutdown` com acordo de Xavier, nada perdido."
+        }
       ]
     ]
   },
@@ -3005,55 +3013,6 @@
         "CLAUDE.md, piège connu n°9",
         "CALENDRIER_bologne_2026-08-27"
       ]
-    },
-    {
-      "id": "E5",
-      "d": "E",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "front"
-      ],
-      "t": {
-        "fr": "Relayer les tuiles OpenStreetMap par le serveur",
-        "pt": "Retransmitir os ladrilhos OpenStreetMap pelo servidor"
-      },
-      "v": {
-        "fr": "C'est la **seule exception anti-pistage restante** : les tuiles de `tile.openstreetmap.org` sont chargées par le navigateur de la visiteuse, qui livre donc son adresse IP à un tiers. L'intention de relayer est **déjà annoncée publiquement** dans la clé `privacy.s6.maptiles` des dix locales.",
-        "pt": "É a **única exceção antirrastreamento restante**: os ladrilhos de `tile.openstreetmap.org` são carregados pelo navegador da visitante, que entrega portanto seu endereço IP a um terceiro. A intenção de retransmitir já está **anunciada publicamente** na chave `privacy.s6.maptiles` das dez locales."
-      },
-      "w": {
-        "fr": "Reprendre le modèle déjà en place pour Nominatim : un relais côté serveur, avec cache, et l'adresse du relais dans la configuration du front.",
-        "pt": "Retomar o modelo já em vigor para o Nominatim: um relé do lado servidor, com cache, e o endereço do relé na configuração do front."
-      },
-      "y": {
-        "fr": "La règle de conformité du projet est écrite et générale : **toute dépendance qui reçoit une adresse IP de visiteuse doit être déclarée, y compris quand elle n'est pas un sous-traitant au sens du RGPD.** Le raisonnement inverse est précisément ce qui avait laissé Turnstile invisible pendant des mois. Ici la dépendance est déclarée — il reste à la supprimer, comme annoncé.",
-        "pt": "A regra de conformidade do projeto está escrita e é geral: **toda dependência que recebe um endereço IP de visitante deve ser declarada, mesmo quando não é um operador no sentido do RGPD.** O raciocínio inverso é precisamente o que deixara o Turnstile invisível durante meses. Aqui a dependência está declarada — falta suprimi-la, como anunciado."
-      },
-      "f": {
-        "fr": [
-          "Aucune requête ne part du navigateur vers un domaine tiers sur les pages de carte.",
-          "La clé `privacy.s6.maptiles` est mise à jour dans les dix locales pour décrire le nouvel état."
-        ],
-        "pt": [
-          "Nenhuma requisição sai do navegador para um domínio de terceiro nas páginas de mapa.",
-          "A chave `privacy.s6.maptiles` é atualizada nas dez locales para descrever o novo estado."
-        ]
-      },
-      "dep": {
-        "fr": "Plus simple après **I2** (pile auto-hébergée), mais faisable avant.",
-        "pt": "Mais simples depois de **I2** (pilha auto-hospedada), mas viável antes."
-      },
-      "r": [
-        "VERIF_confidentialite_tiers_2026-08-20",
-        "PLAN_DE_MARCHE §8",
-        "scripts/nominatim/"
-      ],
-      "verif": {
-        "fr": "31/08 — trois fichiers chargent encore `tile.openstreetmap.org` côté client : `CartographyEditModal.jsx:70`, `CartographyMap.jsx:181`, `CartografiaAjouterPage.jsx:66`.",
-        "pt": "31/08 — três arquivos ainda carregam `tile.openstreetmap.org` do lado do navegador."
-      }
     },
     {
       "id": "E6",

@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { apiQuery } from '@/lib/supabase';
+import { addBasemap } from '@/lib/mapTiles';
 import CartographyEditModal from './CartographyEditModal';
 import './NetworkMap.css';
 
 // Composant carte partagé de l'annuaire géographique du réseau. Leaflet +
-// markercluster VENDORISÉS (public/vendor/leaflet/, chargés à la volée). Source =
+// markercluster VENDORISÉS (public/vendor/leaflet/, chargés à la volée). Fond de
+// carte auto-hébergé (PMTiles) via src/lib/mapTiles.js — plus de tuiles OSM. Source =
 // table public.cartography_entries via une vue api SECDEF (N1 uniquement : jamais
 // email/tél/adresse — MAP-E). Utilisé par :
 //   - NetworkMapTab (interne, authentifié·e) → api.cartography_network_v1 (+ can_edit)
@@ -178,9 +180,8 @@ export default function CartographyMap({ viewName }) {
         const L = await loadLeaflet();
         if (cancelled || !containerRef.current) return;
         const map = L.map(containerRef.current, { worldCopyJump: true }).setView([25, 5], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap', maxZoom: 18,
-        }).addTo(map);
+        // Fond de carte auto-hébergé (PMTiles, E5) : plus aucun appel vers un tiers.
+        await addBasemap(map, { locale });
         const cluster = L.markerClusterGroup({ maxClusterRadius: 45, chunkedLoading: true });
         map.addLayer(cluster);
         const memberLayer = L.layerGroup().addTo(map);
