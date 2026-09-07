@@ -19,8 +19,14 @@
 #      suivants ne sont jamais traités. Ici chaque rôle est traité
 #      indépendamment, et le bilan est affiché à la fin.
 #
-# Monté dans /docker-entrypoint-initdb.d/ : s'exécute seul au premier démarrage
-# d'un volume vierge. Sur un volume déjà initialisé, le lancer à la main :
+# Monté dans /docker-entrypoint-initdb.d/ (sous le nom 99-roles.sh) : l'entrypoint
+# l'exécute au premier démarrage d'un volume vierge, mais AVANT les scripts de
+# l'image (ordre du glob, « 99-… » < « migrate.sh », mesuré le 07/09/2026) — les
+# rôles sont alors « absents », rien n'est posé, et c'est le rejeu par
+# bootstrap.sh (étape 2) qui fait le travail. Comme le fichier est SOURCÉ par
+# l'entrypoint, un `exit` non nul à ce passage tuerait l'initialisation de la
+# base : ne quitter en erreur que sur un échec réel (rôle présent et refusé).
+# Sur un volume déjà initialisé, le lancer à la main :
 #
 #   docker compose exec db sh /docker-entrypoint-initdb.d/01-roles.sh
 #

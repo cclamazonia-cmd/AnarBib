@@ -82,7 +82,19 @@ services:
       # d'initialisation propres à l'image Supabase, qui vivent exactement là :
       # la base démarre alors sans AUCUN rôle — pas même `postgres` — tout en
       # se déclarant « healthy ». Constaté le 18/08/2026.
-      # Le préfixe 99 garantit l'exécution APRÈS les scripts de l'image.
+      #
+      # ⚠️ LE PRÉFIXE 99 NE GARANTIT RIEN — mesuré le 07/09/2026 (expérience
+      # I17). L'entrypoint traite /docker-entrypoint-initdb.d/* dans l'ordre
+      # du glob, où « 99-roles.sh » passe AVANT « migrate.sh » (les chiffres
+      # trient avant les lettres) : à ce passage, les rôles de l'image
+      # n'existent pas encore, le script les trouve « absents » et ne pose
+      # rien. Ce qui pose réellement les mots de passe, c'est le rejeu du même
+      # script à l'étape 2 de bootstrap.sh, une fois la base saine. Le montage
+      # reste utile (le script est dans le conteneur, à l'endroit documenté).
+      # Et comme le fichier est monté sans bit d'exécution, l'entrypoint le
+      # SOURCE : un `exit 1` dedans tue l'initialisation entière — la base
+      # repart au redémarrage suivant « sans initialisation », sans un rôle.
+      # Un script d'init ne doit donc jamais quitter en erreur à ce passage.
       - ./init-db/01-roles.sh:/docker-entrypoint-initdb.d/99-roles.sh:ro
       # Scripts d'exploitation lancés à la main (rejeu des migrations, etc.).
       # Volontairement HORS de initdb.d : on veut les déclencher et en voir la

@@ -221,3 +221,31 @@ non classée rend le run rouge, sur le commit fautif. Avant ce garde-fou
 (19/08/2026), la règle n'était qu'une discipline — `altcha_consumed_challenges`
 est arrivée non classée et toutes les sauvegardes ont échoué en silence, sans
 autre filet que l'alarme de silence, 36 h plus tard.
+
+## L'ordre des scripts d'initialisation — ce que le préfixe 99 ne garantit pas
+
+Mesuré le 07/09/2026 (expérience d'`I17`,
+`journal/operations/NOTE_experience-I17-rejeu-fidele_2026-09-07`). L'entrypoint
+de l'image traite `/docker-entrypoint-initdb.d/*` **dans l'ordre du glob**, où
+`99-roles.sh` passe **avant** `migrate.sh` : les chiffres trient avant les
+lettres. Au premier démarrage d'un volume vierge, notre script tourne donc
+avant que l'image ait créé le moindre rôle de service : il les trouve
+« absents », ne pose rien, et rend la main. Ce qui pose réellement les mots de
+passe, c'est son rejeu à l'**étape 2** de `bootstrap.sh`, une fois la base
+saine — c'est pour cela que l'étape existe et qu'elle n'est pas facultative.
+
+Deux conséquences pour qui écrit un script d'initialisation :
+
+- **Ne jamais quitter en erreur à ce premier passage.** Le fichier est monté
+  sans bit d'exécution, donc *sourcé* par l'entrypoint : un `exit 1` tue
+  l'initialisation entière, le conteneur redémarre en « sautant
+  l'initialisation », et la base tourne **sans aucun rôle** tout en se
+  déclarant malade au healthcheck. Un script qui a besoin des rôles de l'image
+  doit constater leur absence et différer, pas échouer.
+- **Ce qui doit précéder le socle se pose à l'étape 2**, pas dans `initdb.d` :
+  le retrait d'`anon` du privilège par défaut (`DOC-GRANT-3`), comme la création
+  de `pg_cron` (`I19`), passent par le même rejeu.
+
+Si l'on tient à ce que le script passe *après* `migrate.sh` dès le premier
+démarrage, le nom du montage doit trier après lui (`zz-roles.sh`, éprouvé le
+07/09) ; la correction du commentaire seule ne change pas l'ordre.

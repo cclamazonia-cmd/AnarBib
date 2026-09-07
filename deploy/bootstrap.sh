@@ -118,8 +118,11 @@ echo "✓ Base prête (le healthcheck vérifie que le rôle authenticator existe
 # -----------------------------------------------------------------------------
 # 2. Mots de passe des rôles de service
 # -----------------------------------------------------------------------------
-# Sur un volume vierge, le script s'exécute seul via /docker-entrypoint-initdb.d.
-# Sur un volume déjà initialisé, il faut le rejouer — il est idempotent.
+# Sur un volume vierge, le script est bien exécuté par /docker-entrypoint-initdb.d,
+# mais AVANT les scripts de l'image (ordre du glob : « 99-… » < « migrate.sh »,
+# mesuré le 07/09/2026) : les rôles n'existent pas encore, il ne pose rien.
+# C'est donc CE rejeu-ci qui pose réellement les mots de passe, sur volume
+# vierge comme sur volume déjà initialisé — il est idempotent.
 etape "2/8 · Mots de passe des rôles de service"
 docker compose exec -T db sh /docker-entrypoint-initdb.d/99-roles.sh
 
