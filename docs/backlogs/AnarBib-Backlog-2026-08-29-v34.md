@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-07** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-07** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 5
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **7 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `ecdcd06c`. Il prolonge le relevé complet du 06/09 : les volumétries métier n'ont pas bougé depuis (aucune migration ni code depuis la correction d'hygiène du 06/09 midi), le dépôt a reçu la PR #28 au backlog et au registre, six décisions de relecture, et quatre items neufs ce matin (E14, G13, H8, I20). Toutes les lignes ont été relues, celles qui changent portent la date.
 
-**Fraîcheur des constats au 2026-09-07.** **51 items sur 68** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, J2, J3, J4, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-07.** **52 items sur 69** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, J2, J3, J4, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -393,6 +393,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
 | **B20** | Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire | `P1` | Ouvert |
+| **B22** | Quarante-sept fonctions ouvertes à anon sans qu'aucune ligne du dépôt ne le dise | `P2` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -480,6 +481,28 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `supabase/functions/_shared/core/secret-key.ts` · `item B18` · `REGISTRE §0 DOC-SILENCE-1` · `codeberg.org/anarbib/anarbib/pulls/28`*
+
+#### B22 — Quarante-sept fonctions ouvertes à anon sans qu'aucune ligne du dépôt ne le dise
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Mesuré le 07/09 en préparant la spec d'`I17` (§4 de `CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07`). **Classe A** : 98 fonctions portent `anon=X` dans leur ACL ; pour **12** d'entre elles, aucun `GRANT … TO anon` n'existe dans le dépôt — elles ne sont ouvertes que par le privilège par défaut du moment de leur création (quatre DEFINER pourtant listées dans `T10`, dont `fn_book_restricted_pdf_state` et sa sœur appelées par le front ; six triggers et helpers des périodiques et des tomes ; `fn_current_user_is_member_of_holding_library`, `fn_reading_notes_enabled_for`). **Classe B** : 35 fonctions sont exécutables par `anon` via `PUBLIC` — `=X` explicite sur **dix RPC de circulation de `api`** (`advance_consulta`, `create_loan_at_counter`, `return_loan_total`…), 17 helpers et triggers d'`ingest`, 5 de `public` ; ACL nulle sur `api.extend_loan_item_as_library`, `api.renew_my_loan_item`, `private.fn_book_work_id`. Toutes INVOKER : la RLS tient, le lint 0028 ne les voit pas — mais une RPC de prêt appelable par un visiteur anonyme est une surface laissée par oubli, pas par décision (`DOC-GRANT-1`).
+
+*Vérifié : 07/09 — mesures faites pour la spec d'I17 : image `supabase/postgres:17.6.1.136` sondée à vide (conteneur jetable), production interrogée en lecture seule, dépôt au commit `fb64c996`.*
+
+**Ce que c'est.** Une migration nominative, après le 14 : pour chacune des 47, un `GRANT EXECUTE … TO anon` écrit si l'ouverture sert (à confirmer sous session anonyme pour les deux `fn_book_restricted_pdf_state*`), sinon `REVOKE EXECUTE … FROM PUBLIC, anon` + `GRANT … TO authenticated` (les RPC de circulation) ou rien de plus que le retrait (triggers, helpers). **Avant chaque REVOKE, chercher les vues et les policies** qui appellent la fonction sous le rôle du lecteur (`pg_rewrite`, `pg_policy`) — REGISTRE « avant un REVOKE, chercher les VUES ». Compléter `T10` si une DEFINER change de camp.
+
+**Pourquoi ça compte.** `DOC-GRANT-1` dit qu'une ouverture à `anon` est un acte écrit. Quarante-sept fonctions contredisent la règle en silence ; le jour où un rejeu ferme le défaut, `T10` rougit pour quatre d'entre elles sans qu'aucune ligne n'explique pourquoi elles devaient être ouvertes.
+
+**Ce qui compte comme fini.**
+
+- Chacune des 47 a une ligne écrite qui dit son ouverture ou sa fermeture.
+- `grants_herites_tests.sql` porte une assertion « aucune fonction exécutable par anon sans GRANT écrit » — une liste fermée, comme `T10`.
+- Le lint 0028 rend toujours 28, ou le nouveau nombre attendu, écrit.
+
+**Dépendances.** Après le 14/09 (gel). Indépendant d'`I17`, mais la spec d'`I17` en est la source.
+
+*Renvois : `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07 §4` · `REGISTRE §0 DOC-GRANT-1` · `tests/sql/grants_herites_tests.sql T10` · `item I17`*
 
 ---
 
@@ -1500,7 +1523,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I13** | Finir la bascule vers le nouveau moteur de pages | `P3` | Ouvert |
 | **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | Ouvert |
 | **I16** | Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09 | `P1` | En cours |
-| **I17** | Le rejeu depuis zéro doit être fidèle au dump : `anon` retiré du défaut avant le socle | `P1` | Ouvert |
+| **I17** | Le rejeu depuis zéro doit être fidèle au dump : `anon` retiré du défaut avant le socle | `P1` | En cours |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | Ouvert |
 | **I19** | `pg_cron` doit exister sur la pile auto-hébergée, et son absence doit se voir | `P1` | Ouvert |
 
@@ -1680,13 +1703,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### I17 — Le rejeu depuis zéro doit être fidèle au dump : `anon` retiré du défaut avant le socle
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, administration système
+`P1` Prioritaire · État : **En cours** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, administration système
 
-**État.** Mesuré le 06/09 (`DOC-GRANT-2`) : le socle `20260510000000_baseline_live` porte 163 `GRANT … TO anon` sur des fonctions et zéro `REVOKE … FROM anon` ; sur une image Supabase, `pg_default_acl` ouvre à `anon` toute fonction du socle à sa naissance, alors qu'en prod 595 des 676 fonctions de `public` sont fermées. Les migrations du 29/08 lèvent au rejeu pour cette raison. Sur le chemin auto-hébergé, les migrations tournent en `supabase_admin` (`run-migrations.sh`, PR #28 idem), pas en `postgres` comme en prod : c'est la ligne `supabase_admin` de `pg_default_acl` qui s'applique, et `20260831105114` ne touche que la ligne `postgres`. **D7 tranchée (21 h 30)** : nous écrivons la spec (quoi, où, comment vérifier — sans jamais vider l'entrée `pg_default_acl`, piège de `DOC-GRANT-1`), et on la propose à Bastien après la fusion de la #28.
+**État.** Mesuré le 06/09 (`DOC-GRANT-2`) : le socle `20260510000000_baseline_live` porte 163 `GRANT … TO anon` sur des fonctions et zéro `REVOKE … FROM anon` ; sur une image Supabase, `pg_default_acl` ouvre à `anon` toute fonction du socle à sa naissance, alors qu'en prod 595 des 676 fonctions de `public` sont fermées. Les migrations du 29/08 lèvent au rejeu pour cette raison. Sur le chemin auto-hébergé, les migrations tournent en `supabase_admin` (`run-migrations.sh`, PR #28 idem), pas en `postgres` comme en prod : c'est la ligne `supabase_admin` de `pg_default_acl` qui s'applique, et `20260831105114` ne touche que la ligne `postgres`. **D7 tranchée (21 h 30)** : nous écrivons la spec (quoi, où, comment vérifier — sans jamais vider l'entrée `pg_default_acl`, piège de `DOC-GRANT-1`), et on la propose à Bastien après la fusion de la #28. **07/09 — la spec est écrite** : `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07.md`. Mesuré : l'image vierge pose `anon=X` dans le défaut des **deux** rôles (`postgres` et `supabase_admin`) ; `postgres` n'y est pas superutilisateur mais crée `pg_cron` et ne peut pas toucher le défaut de `supabase_admin` ; **le banc CI applique déjà les 308 migrations sous `postgres`** sur la même image — le motif du 17/08 pour `supabase_admin` ne tient pas pour les migrations ; le socle rétablit lui-même le défaut de `postgres` à sa fin (l. 61217). Recommandation : **option A** — retirer `anon` du défaut des deux rôles dans `01-roles.sh` avant le socle, et faire appliquer les migrations sous `postgres` comme la prod et la CI. Expérience qui tranche au §7 de la spec.
 
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Vérifié : 07/09 — mesures faites pour la spec d'I17 : image `supabase/postgres:17.6.1.136` sondée à vide (conteneur jetable), production interrogée en lecture seule, dépôt au commit `fb64c996`.*
 
-**Ce que c'est.** Écrire la spec après le 14 (une page : rôle qui applique, `ALTER DEFAULT PRIVILEGES` pour `supabase_admin` ET `postgres`, sans vider l'entrée, vérification sur image réelle), la proposer à Bastien après la fusion de la #28 ; s'il ne la prend pas, la faire.
+**Ce que c'est.** Après la fusion de la #28 : proposer à Bastien les points A.1 et A.2 de la spec avec la page ; faire ou faire faire l'expérience du §7 (une soirée, aucun risque) ; la comparaison avec la production (§7.2) est à nous. Fermer sur le constat daté, pas sur le code.
 
 **Pourquoi ça compte.** Les `REVOKE` nominatifs de la PR #28 réparent deux fonctions ; le même symptôme attend derrière chaque migration qui vérifiera un jour l'ACL d'une fonction du socle. Réparer le défaut à la source rend le rejeu fidèle une fois pour toutes : les 163 `GRANT` explicites du dump rouvrent exactement ce que la prod ouvrait.
 
@@ -1697,13 +1720,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **Dépendances.** Coordination avec la PR #28 (**I16**) : le morceau a été proposé à Bastien, il est à lui s'il le prend.
 
-*Renvois : `REGISTRE §0 DOC-GRANT-2` · `deploy/init-db/01-roles.sh` · `deploy/scripts/run-migrations.sh` · `supabase/migrations/20260831105114_une_fonction_ne_nait_plus_ouverte_a_anon.sql`*
+*Renvois : `REGISTRE §0 DOC-GRANT-2` · `deploy/init-db/01-roles.sh` · `deploy/scripts/run-migrations.sh` · `supabase/migrations/20260831105114_une_fonction_ne_nait_plus_ouverte_a_anon.sql` · `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07` · `item B22`*
 
 #### I18 — Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse
 
 `P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système
 
-**État.** `scripts/ci/run-sql-suites.sh` crée `anarbib_test` depuis `template0` : `pg_default_acl` y est vide, les fonctions naissent fermées, la vérification des migrations du 29/08 passe — et une image réelle la fait lever. Le vert de `sql-tests` n'atteste donc pas qu'une image Supabase rejoue le dépôt (`DOC-GRANT-2`, même limite structurelle que `DOC-MIGR-1` par l'autre bout). Le choix de `template0` est motivé (pas d'event triggers hérités) et reste bon pour les suites.
+**État.** `scripts/ci/run-sql-suites.sh` crée `anarbib_test` depuis `template0` : `pg_default_acl` y est vide, les fonctions naissent fermées, la vérification des migrations du 29/08 passe — et une image réelle la fait lever. Le vert de `sql-tests` n'atteste donc pas qu'une image Supabase rejoue le dépôt (`DOC-GRANT-2`, même limite structurelle que `DOC-MIGR-1` par l'autre bout). Le choix de `template0` est motivé (pas d'event triggers hérités) et reste bon pour les suites. **07/09** : la spec d'`I17` (§8) rend cet item bon marché — le service `sql-tests` lance déjà l'image ; il suffit d'un second job qui rejoue les migrations dans la base `postgres` du service (défauts et extensions de l'init posés) au lieu d'une base `template0`.
 
 *Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
 
@@ -2185,4 +2208,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `ecdcd06c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `ecdcd06c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
