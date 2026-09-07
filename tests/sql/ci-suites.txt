@@ -449,3 +449,9 @@ tests/sql/rapport_reseau_evidences_tests.sql
 tests/sql/atelier_oeuvres_tests.sql
 # Hygiene (06/09/2026) — aucune fonction applicative sans search_path, aucune policy qui reevalue auth.uid() par ligne ; la policy des revisions garde son predicat. Ref. 20260906111308.
 tests/sql/hygiene_search_path_et_initplan_tests.sql
+# H8 (07/09) : GetRecord sert la notice demandee. T3 demande la SECONDE notice
+# d une bibliotheque ouverte — la seule forme du test qui voit le defaut.
+tests/sql/oai_getrecord_tests.sql
+# I20 (07/09) : l adresse des Edge Functions vient du reglage anarbib.functions_base_url
+# (repli cloud). T3 est structurel et non nominatif : aucun corps ne porte le litteral.
+tests/sql/adresse_des_fonctions_tests.sql

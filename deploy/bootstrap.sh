@@ -253,6 +253,30 @@ else
 fi
 
 # -----------------------------------------------------------------------------
+# 5 bis. L'adresse des Edge Functions de CETTE instance (I20, 07/09/2026)
+# -----------------------------------------------------------------------------
+# Douze dispatchers PL/pgSQL et un job cron construisent l'URL des fonctions
+# (courriels, gazette, sonde, moisson OAI) depuis private.fn_functions_base_url(),
+# qui lit le réglage de base `anarbib.functions_base_url`. Sans ce réglage, le
+# helper se replie sur le projet cloud du mainteneur : une pile auto-hébergée
+# enverrait alors ses dépêches À LA PRODUCTION D'ANARBIB, avec son propre
+# secret en en-tête. Le réglage se pose dans les DEUX modes : un dump de
+# production ne le contient pas (pg_dump n'emporte pas les ALTER DATABASE … SET).
+# Il est lu à l'ouverture de chaque session : PostgREST, pg_cron et les
+# services démarrés à l'étape 7 le voient d'emblée.
+etape "5 bis · Adresse des fonctions (anarbib.functions_base_url)"
+URL_FONCTIONS=$(grep -E '^API_EXTERNAL_URL=' .env | cut -d= -f2- | tr -d '\r' | tr -d '"' | sed 's#/*$##')
+if [ -z "$URL_FONCTIONS" ]; then
+  echo "✗ API_EXTERNAL_URL absent de deploy/.env : impossible de poser l'adresse des fonctions." >&2
+  exit 1
+fi
+case "$URL_FONCTIONS" in
+  *"'"*) echo "✗ API_EXTERNAL_URL contient une apostrophe — refusé." >&2; exit 1 ;;
+esac
+sql "alter database postgres set anarbib.functions_base_url = '$URL_FONCTIONS'" >/dev/null
+echo "✓ anarbib.functions_base_url = $URL_FONCTIONS (les fonctions sont appelées sur $URL_FONCTIONS/functions/v1/…)."
+
+# -----------------------------------------------------------------------------
 # 6. Les vues matérialisées
 # -----------------------------------------------------------------------------
 etape "6/8 · Rafraîchissement des vues matérialisées"
@@ -535,6 +559,21 @@ else
   elif [ "${BIB_SQL:-0}" = "0" ]; then
     echo "· Base sans bibliothèque : le contrôle « catalogue non vide » n'a pas d'objet."
   fi
+fi
+
+# g) L'adresse des fonctions est celle de CETTE instance, pas celle du cloud (I20).
+#
+# Le helper se replie sur le projet cloud quand le réglage manque : ce contrôle
+# lit ce que les dispatchers liront réellement, dans une session neuve.
+URL_LUE=$(sql "select private.fn_functions_base_url()" 2>/dev/null || echo "?")
+URL_ATTENDUE=$(grep -E '^API_EXTERNAL_URL=' .env | cut -d= -f2- | tr -d '\r' | tr -d '"' | sed 's#/*$##')
+if [ "$URL_LUE" = "$URL_ATTENDUE" ] && [ -n "$URL_ATTENDUE" ]; then
+  echo "✓ Les fonctions sont appelées sur $URL_LUE/functions/v1/… (cette instance)."
+else
+  echo "✗ private.fn_functions_base_url() rend « $URL_LUE » et non « $URL_ATTENDUE » :"
+  echo "  les dépêches (courriels, gazette, sonde, moisson) partiraient ailleurs."
+  echo "  Rejouer l'étape 5 bis :  alter database postgres set anarbib.functions_base_url = '…'"
+  ECHEC=1
 fi
 
 echo

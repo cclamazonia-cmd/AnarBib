@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-07** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-07** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,8 +22,8 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 3
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 12
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 2
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 11
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **7 de setembro de 2026** de manhã — produção em leitura e repositório recontado no commit `ecdcd06c`. Prolonga o registo completo de 06/09 : as volumetrias não mudaram (nenhuma migração nem código desde a correção de higiene de 06/09), o repositório recebeu a PR #28, seis decisões de releitura e quatro itens novos (E14, G13, H8, I20).
 
-**Frescor dos constatos em 2026-09-07.** **53 itens de 70** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, H8, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, I20, J2, J3, J4, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-07.** **51 itens de 68** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, I1, I3, I6, I12, I13, I15, I16, I17, I18, I19, J2, J3, J4, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1425,7 +1425,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
-| **H8** | `GetRecord` serve o primeiro registro da biblioteca, não o que lhe pedem | `P1` | Aberto |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1471,27 +1470,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6` · `VEILLE_leftovers_maydayrooms_2026-08-19`*
 
-#### H8 — `GetRecord` serve o primeiro registro da biblioteca, não o que lhe pedem
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** **Encontrado em 07/09 ao reler o repositório OAI.** `fn_oai_harvestable_records(…, p_book_id)` aplica `p_book_id` à **contagem** mas **não à consulta que produz os registros**, que só filtra pela janela de datas e depois `ORDER BY b.id LIMIT … OFFSET …`. A Edge Function `oai-pmh-provider` chama `fetchRecords(slug, '', '', 1, 0, bookId)`: `LIMIT 1 OFFSET 0`, logo **o registro de menor `books.id` da biblioteca, qualquer que seja o identificador pedido** — e um identificador inexistente recebe um registro em vez de `idDoesNotExist`. Verificado na migração `20260622120319` e em `pg_proc` na produção. O encerramento **H5** de 02/09 diz «`GetRecord` exato» — compatível com um ensaio no primeiro registro; `DOC-CONSTAT-1`. Sem efeito hoje: nenhuma biblioteca está aberta e nenhum colhedor terceiro existe.
-
-*Verificado : 07/09 — corpo da função lido na migração e em `pg_proc` na produção (duas ocorrências de `p_book_id`); `oai_opening_requests`: última abertura BLMF `closed` às 18:02 de 02/09; zero fontes `oai_pmh` registradas.*
-
-**O que é.** Uma migração que **parte da definição real em produção** e acrescenta `AND (p_book_id IS NULL OR b.id = p_book_id)` à consulta dos registros; grants inalterados. Uma suíte `tests/sql/oai_getrecord_tests.sql` no manifesto `ci-suites.txt`: numa biblioteca aberta com dois registros, pedir o segundo devolve o segundo e só ele; um identificador desconhecido devolve zero. Depois, na próxima abertura real, repetir `GetRecord` num identificador que não seja o primeiro.
-
-**Por que importa.** Um colhedor usa `GetRecord` para atualizar **um** registro: servir o errado sem erro corrompe em silêncio o catálogo do outro lado — exatamente o que «só o catálogo atravessa» (`FED-O11`) promete não fazer. E é um caminho declarado provado que não o era neste verbo.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-
-**Dependências.** Nenhuma. A correção é uma noite; não esperar um colhedor terceiro para a fazer.
-
-*Remissões : `supabase/migrations/20260622120319_audio_p5_oai_expose_mbid.sql (comptage l. 55, notices l. 121-126)` · `supabase/functions/oai-pmh-provider/index.ts (GetRecord, fetchRecords(…, 1, 0, bookId))` · `tests/sql/ci-suites.txt` · `clôture H5 (02/09)`*
-
 ---
 
 ### I — Auto-hospedagem, operação, backups, CI
@@ -1511,7 +1489,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I17** | O replay do zero deve ser fiel ao dump: `anon` retirado do padrão antes da base | `P1` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Aberto |
 | **I19** | `pg_cron` deve existir na pilha auto-hospedada, e sua ausência deve ser visível | `P1` | Aberto |
-| **I20** | Quinze URLs de funções fixadas no projeto cloud: uma instância auto-hospedada iria bater na produção | `P2` | Aberto |
 
 #### I1 — Alinhar a imagem GoTrue com o estado real das migrações de autenticação
 
@@ -1749,27 +1726,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** A propor a Bastien na PR dividida (I16) ou a fazer na volta.
 
 *Remissões : `supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql` · `deploy/compose.yml` · `deploy/init-db/` · `REGISTRE §0 DOC-SILENCE-1`*
-
-#### I20 — Quinze URLs de funções fixadas no projeto cloud: uma instância auto-hospedada iria bater na produção
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, administração de sistemas
-
-**Estado.** **Encontrado em 07/09 ao seguir a cadeia de coleta para uma instância local.** `ingest.fn_dispatch_oai_harvest` fixa `v_url := 'https://uflwmikiyjfnikiphtcp.supabase.co/functions/v1/harvest-oai-pmh'`. Não é isolado: **quinze ocorrências em oito migrações**, para nove funções (`notify-event` 4, `notify-library-request` 2, `gazette-monthly-build` 2, `work-titles-autofill`, `translate-gazette-submission`, `notify-rede-digest`, `health-probe`, `harvest-oai-pmh`). Nenhum helper existe; `deploy/.env.example` não traz variável para esse endereço. Numa pilha auto-hospedada, cada `net.http_post` desses despachantes partiria **para o cloud do mantenedor**, com o segredo local no cabeçalho: nada roda no local, e o segredo é oferecido a outro operador. A pilha foi montada três vezes; esses caminhos nunca foram exercidos — não se veem no replay das migrações.
-
-*Verificado : 07/09 — grep no repositório `eb790c33` (8 arquivos, 15 ocorrências, 9 funções alvo); `deploy/compose.yml`, `bootstrap.sh` e `.env.example` relidos.*
-
-**O que é.** Uma única fonte de verdade para o endereço das funções: uma linha de configuração no banco (tabela privada existente, ou `vault`) lida por um helper `private.fn_functions_base_url()`; uma migração que substitui os quinze literais pela chamada ao helper, com fallback no valor cloud atual para que a produção não mude; `bootstrap.sh` põe o valor local e `deploy.sh --controle` o verifica; uma guarda de CI que recusa qualquer novo literal `supabase.co/functions/v1` numa migração. A fazer em ambiente de teste — o domínio I está congelado na produção até 14/09.
-
-**Por que importa.** `FED-O11` promete que uma instância é uma rede por inteiro; com estas quinze linhas, uma instância «à parte» continua ligada à produção do mantenedor sem que ninguém o tenha decidido. É também o tipo de defeito que Bastien (**I16**) encontrará no primeiro dia em que ligar um e-mail.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-
-**Dependências.** Prolonga **I2** e **I19**: mesma família — o que funciona no cloud porque o cloud está lá. A propor na PR de Bastien (**I16**) ou na volta.
-
-*Remissões : `supabase/migrations/20260828190000_lot3b_moisson_oai_pmh.sql (l. 89)` · `grep "uflwmikiyjfnikiphtcp.supabase.co/functions" supabase/migrations/ (8 fichiers, 15 occurrences)` · `deploy/bootstrap.sh` · `deploy/.env.example` · `REGISTRE §24 FED-O11`*
 
 ---
 
@@ -2172,6 +2128,8 @@ CI verde. |
 | E7 | 2026-09-05 | **Fechado em 05/09 (`7434c1b6`).** 31 rotas em `App.jsx`, todas com `useDocumentTitle` salvo duas : a página 404 e a página de ensaio OCR. Postas em 05/09 com duas chaves nas dez locales (6 395 chaves, paridade estrita). |
 | B7 | 2026-09-05 | **Desambiguadas em 05/09 (`7434c1b6`, migração `20260905132602`).** Todos os apelos vivos são qualificados e visam `ingest.*` ; as três de `public` não eram chamadas por nada e eram DEFINER executáveis por `authenticated` (lint 0029 : 399 → 396). Suprimidas com guarda ; seis testes. |
 | OPAC por obra | 2026-09-05 | **Entregue em 04-05/09** (`cac464fd` → `06b928ed`, doze migrações, quatro suítes SQL, Edge Function `work-titles-autofill`): uma linha por obra no OPAC, edições e exemplares por biblioteca desdobráveis, título na língua da leitora (`work_titles`, pré-tradução «corrija-me»), vínculo e fusão de obras na catalogação, abas «Obras cindidas» e «Volumes» do assistente, campo «Tomo / volume», título uniforme na língua da obra. Doutrina no REGISTRO: `OPAC-OEU1..6`, `DEDUP-10`, `THES-4`. O que resta arbitrar é o item **C11**. |
+| H8 | 2026-09-07 | **Encerrado em 07/09, no mesmo dia do constato** (migração `20260907120000`, suíte `oai_getrecord_tests.sql` no manifesto). `fn_oai_harvestable_records` aplicava `p_book_id` à contagem e não aos registros: `GetRecord` servia o primeiro registro da biblioteca fosse qual fosse o identificador pedido. A função é reescrita **a partir da definição lida na produção**, com o mesmo predicado nas duas consultas; grants e lista T10 inalterados. A suíte pede o **segundo** registro de uma biblioteca aberta com dois registros (T3) e um identificador desconhecido (T4) — a única forma de teste que vê o defeito. Sem efeito na produção: nenhuma biblioteca aberta, nenhuma fonte registrada. Falta, na próxima abertura real: repetir `GetRecord` num identificador que não seja o primeiro. |
+| I20 | 2026-09-07 | **Encerrado em 07/09, no mesmo dia do constato** (migração `20260907123000`, suíte `adresse_des_fonctions_tests.sql`, guarda `migrations-sans-url-cloud.test.js`, `bootstrap.sh` etapa 5 bis + controle (g)). Uma fonte de verdade: o ajuste de banco `anarbib.functions_base_url` (`ALTER DATABASE … SET`, lido na abertura de cada sessão), servido por `private.fn_functions_base_url()` — INVOKER, fechado a anon/authenticated — com fallback no projeto cloud quando o ajuste falta: **a produção não muda de comportamento**. As doze funções são reescritas **por padrão sobre a sua definição real** no momento da aplicação, a partir de uma lista nominativa e fechada. O job cron `anarbib-health-probe` é replanejado por `cron.schedule`. O vitest só aceita o literal nas oito migrações históricas e nesta. `bootstrap.sh` põe o ajuste a partir de `API_EXTERNAL_URL` **nos dois modos** e verifica-o no fim. Não exercido numa pilha real: o domínio I está congelado na produção até 14/09; é o primeiro controle a olhar na próxima repetição (I2). |
 
 ---
 
@@ -2203,4 +2161,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `ecdcd06c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `ecdcd06c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

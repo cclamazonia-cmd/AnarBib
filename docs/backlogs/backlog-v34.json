@@ -1882,6 +1882,22 @@
           "fr": "**Livré les 04-05/09** (`cac464fd` → `06b928ed`, douze migrations `20260904095317` → `20260905154500`, quatre suites SQL, Edge Function `work-titles-autofill`) : une ligne par œuvre à l'OPAC, éditions puis exemplaires par bibliothèque dépliables, titre dans la langue de la lectrice (`work_titles`, pré-traduction « corrige-moi »), rattachement et fusion d'œuvres au catalogage, onglets « Œuvres scindées » et « Volumes » de l'assistant, champ « Tome / volume », titre uniforme dans la langue de l'œuvre. Trente groupes scindés arbitrés à la main et appliqués ; 2 125 notes d'import effacées ; 68 « Assuntos importados » convertis vers des matières existantes. Doctrine au REGISTRE : `OPAC-OEU1..6`, `DEDUP-10`, `THES-4`. Ce qui reste à arbitrer est l'item **C11**.",
           "pt": "**Entregue em 04-05/09** (`cac464fd` → `06b928ed`, doze migrações, quatro suítes SQL, Edge Function `work-titles-autofill`): uma linha por obra no OPAC, edições e exemplares por biblioteca desdobráveis, título na língua da leitora (`work_titles`, pré-tradução «corrija-me»), vínculo e fusão de obras na catalogação, abas «Obras cindidas» e «Volumes» do assistente, campo «Tomo / volume», título uniforme na língua da obra. Doutrina no REGISTRO: `OPAC-OEU1..6`, `DEDUP-10`, `THES-4`. O que resta arbitrar é o item **C11**."
         }
+      ],
+      [
+        "H8",
+        "2026-09-07",
+        {
+          "fr": "**Clos le 07/09, le jour même du constat** (migration `20260907120000_getrecord_sert_la_notice_demandee`, suite `oai_getrecord_tests.sql` au manifeste). `fn_oai_harvestable_records` appliquait `p_book_id` au comptage et pas aux notices : `GetRecord` servait la première notice de la bibliothèque quel que soit l'identifiant demandé, et une notice pour un identifiant inexistant. La fonction est réécrite **depuis sa définition lue en production** (identique à la migration de juin, vérifié), avec le même prédicat dans les deux requêtes ; grants et liste T10 inchangés. La suite demande la **seconde** notice d'une bibliothèque ouverte à deux notices (T3) et un identifiant inconnu (T4) — la seule forme de test qui voit le défaut, puisque l'essai du 02/09 (H5) portait sur la première notice. Sans effet en production : aucune bibliothèque n'est ouverte au moissonnage, aucune source enregistrée. Reste à faire à la prochaine ouverture réelle : rejouer `GetRecord` sur un identifiant qui n'est pas le premier.",
+          "pt": "**Encerrado em 07/09, no mesmo dia do constato** (migração `20260907120000`, suíte `oai_getrecord_tests.sql` no manifesto). `fn_oai_harvestable_records` aplicava `p_book_id` à contagem e não aos registros: `GetRecord` servia o primeiro registro da biblioteca fosse qual fosse o identificador pedido. A função é reescrita **a partir da definição lida na produção**, com o mesmo predicado nas duas consultas; grants e lista T10 inalterados. A suíte pede o **segundo** registro de uma biblioteca aberta com dois registros (T3) e um identificador desconhecido (T4) — a única forma de teste que vê o defeito. Sem efeito na produção: nenhuma biblioteca aberta, nenhuma fonte registrada. Falta, na próxima abertura real: repetir `GetRecord` num identificador que não seja o primeiro."
+        }
+      ],
+      [
+        "I20",
+        "2026-09-07",
+        {
+          "fr": "**Clos le 07/09, le jour même du constat** (migration `20260907123000_l_adresse_des_fonctions_n_est_plus_codee_en_dur`, suite `adresse_des_fonctions_tests.sql`, garde `src/tests/migrations-sans-url-cloud.test.js`, `bootstrap.sh` étape 5 bis + contrôle (g), note dans `.env.example`). Une source de vérité : le réglage de base `anarbib.functions_base_url` (`ALTER DATABASE … SET`, lu à l'ouverture de chaque session par PostgREST, pg_cron et psql), servi par `private.fn_functions_base_url()` — INVOKER, fermé à anon/authenticated — qui se replie sur le projet cloud quand le réglage manque : **la production ne change pas de comportement**. Les douze fonctions (relevé `pg_proc`, toutes à `postgres`) sont réécrites **par motif sur leur définition réelle** au moment de l'application, depuis une liste nominative et fermée (une absente fait échouer la migration) — c'est ce qui permet de repartir de la définition réelle sur douze corps sans les recopier, et le nom de chaque fonction reste trouvable au grep. Le job cron `anarbib-health-probe`, qui portait l'URL dans sa commande même, est replanifié par `cron.schedule` (idempotent par nom). Le vitest n'accepte le littéral `supabase.co/functions/v1/` que dans les huit migrations historiques et celle-ci. `bootstrap.sh` pose le réglage depuis `API_EXTERNAL_URL` **dans les deux modes** (un dump de production ne l'emporte pas) et le vérifie en fin de course dans une session neuve. Non exercé sur une pile réelle : le domaine I est gelé sur la production jusqu'au 14/09 ; c'est le premier contrôle à regarder à la prochaine répétition (I2).",
+          "pt": "**Encerrado em 07/09, no mesmo dia do constato** (migração `20260907123000`, suíte `adresse_des_fonctions_tests.sql`, guarda `migrations-sans-url-cloud.test.js`, `bootstrap.sh` etapa 5 bis + controle (g)). Uma fonte de verdade: o ajuste de banco `anarbib.functions_base_url` (`ALTER DATABASE … SET`, lido na abertura de cada sessão), servido por `private.fn_functions_base_url()` — INVOKER, fechado a anon/authenticated — com fallback no projeto cloud quando o ajuste falta: **a produção não muda de comportamento**. As doze funções são reescritas **por padrão sobre a sua definição real** no momento da aplicação, a partir de uma lista nominativa e fechada. O job cron `anarbib-health-probe` é replanejado por `cron.schedule`. O vitest só aceita o literal nas oito migrações históricas e nesta. `bootstrap.sh` põe o ajuste a partir de `API_EXTERNAL_URL` **nos dois modos** e verifica-o no fim. Não exercido numa pilha real: o domínio I está congelado na produção até 14/09; é o primeiro controle a olhar na próxima repetição (I2)."
+        }
       ]
     ]
   },
@@ -5267,108 +5283,6 @@
       "verif": {
         "fr": "07/09 — production interrogée en lecture seule (jointure `cartography_entries` × `libraries` : trois lignes, réseaux et exemplaires ci-dessus) ; valeurs de `reseau` comptées sur `carte-reseau.umap` ; dépôt `eb790c33`.",
         "pt": "07/09 — produção consultada em leitura (junção `cartography_entries` × `libraries`: três linhas); valores de `reseau` contados em `carte-reseau.umap`; repositório `eb790c33`."
-      }
-    },
-    {
-      "id": "H8",
-      "d": "H",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "`GetRecord` sert la première notice de la bibliothèque, pas celle qu'on lui demande",
-        "pt": "`GetRecord` serve o primeiro registro da biblioteca, não o que lhe pedem"
-      },
-      "v": {
-        "fr": "**Trouvé le 07/09 en relisant l'entrepôt OAI pour répondre à « comment se partage un catalogue entre instances ».** `fn_oai_harvestable_records(p_library_slug, p_from, p_until, p_limit, p_offset, p_book_id)` applique `p_book_id` au **comptage** (`AND (p_book_id IS NULL OR b.id = p_book_id)`) mais **pas à la requête qui produit les notices**, qui ne filtre que sur la fenêtre de dates puis `ORDER BY b.id LIMIT v_limit OFFSET v_offset`. L'Edge Function `oai-pmh-provider` appelle `fetchRecords(slug, '', '', 1, 0, bookId)` : `LIMIT 1 OFFSET 0`, donc **la notice de plus petit `books.id` de la bibliothèque, quel que soit l'identifiant demandé** — et un identifiant inexistant reçoit une notice au lieu de `idDoesNotExist` (`total` vaut 0, mais l'EF ne regarde que `records[0]`). Vérifié dans la migration `20260622120319` et dans `pg_proc` en production (deux occurrences de `p_book_id` dans le corps : la signature et le comptage). La clôture **H5** du 02/09 dit « `GetRecord` exact » — compatible avec un essai sur la première notice ; `DOC-CONSTAT-1`. Sans effet aujourd'hui : aucune bibliothèque n'est ouverte (l'ouverture BLMF du 02/09 a été refermée 21 minutes plus tard) et aucun moissonneur tiers n'existe.",
-        "pt": "**Encontrado em 07/09 ao reler o repositório OAI.** `fn_oai_harvestable_records(…, p_book_id)` aplica `p_book_id` à **contagem** mas **não à consulta que produz os registros**, que só filtra pela janela de datas e depois `ORDER BY b.id LIMIT … OFFSET …`. A Edge Function `oai-pmh-provider` chama `fetchRecords(slug, '', '', 1, 0, bookId)`: `LIMIT 1 OFFSET 0`, logo **o registro de menor `books.id` da biblioteca, qualquer que seja o identificador pedido** — e um identificador inexistente recebe um registro em vez de `idDoesNotExist`. Verificado na migração `20260622120319` e em `pg_proc` na produção. O encerramento **H5** de 02/09 diz «`GetRecord` exato» — compatível com um ensaio no primeiro registro; `DOC-CONSTAT-1`. Sem efeito hoje: nenhuma biblioteca está aberta e nenhum colhedor terceiro existe."
-      },
-      "w": {
-        "fr": "Une migration qui **repart de la définition réelle en production** (pas du texte de la migration de juin) et ajoute `AND (p_book_id IS NULL OR b.id = p_book_id)` à la requête des notices ; grants et `SECURITY DEFINER` inchangés (appelée en `service_role` seulement). Une suite `tests/sql/oai_getrecord_tests.sql` au manifeste `ci-suites.txt` : sur une bibliothèque ouverte à deux notices, demander la seconde renvoie la seconde et elle seule ; un identifiant inconnu renvoie zéro notice. Puis nuancer la ligne H5 aux clôtures (fait le 07/09 en même temps que cet item) et, à la prochaine ouverture réelle, rejouer `GetRecord` sur un identifiant qui n'est pas le premier.",
-        "pt": "Uma migração que **parte da definição real em produção** e acrescenta `AND (p_book_id IS NULL OR b.id = p_book_id)` à consulta dos registros; grants inalterados. Uma suíte `tests/sql/oai_getrecord_tests.sql` no manifesto `ci-suites.txt`: numa biblioteca aberta com dois registros, pedir o segundo devolve o segundo e só ele; um identificador desconhecido devolve zero. Depois, na próxima abertura real, repetir `GetRecord` num identificador que não seja o primeiro."
-      },
-      "y": {
-        "fr": "Un moissonneur emploie `GetRecord` pour rafraîchir **une** notice : servir la mauvaise sans erreur corrompt en silence le catalogue d'en face — exactement ce que « seul le catalogue traverse » (`FED-O11`) promet de ne pas faire. Et c'est un chemin déclaré éprouvé qui ne l'était pas sur ce verbe (`anarbib-rpc-jamais-empruntee`).",
-        "pt": "Um colhedor usa `GetRecord` para atualizar **um** registro: servir o errado sem erro corrompe em silêncio o catálogo do outro lado — exatamente o que «só o catálogo atravessa» (`FED-O11`) promete não fazer. E é um caminho declarado provado que não o era neste verbo."
-      },
-      "f": [
-        {
-          "fr": "`GetRecord` avec un identifiant existant renvoie cette notice et elle seule ; un identifiant inconnu renvoie `idDoesNotExist`.",
-          "pt": "`GetRecord` com um identificador existente devolve esse registro e só ele; um desconhecido devolve `idDoesNotExist`."
-        },
-        {
-          "fr": "Suite SQL au manifeste, verte en CI ; ligne H5 nuancée.",
-          "pt": "Suíte SQL no manifesto, verde na CI; linha H5 matizada."
-        }
-      ],
-      "dep": {
-        "fr": "Aucune. Le correctif est une soirée ; ne pas attendre un moissonneur tiers pour le faire.",
-        "pt": "Nenhuma. A correção é uma noite; não esperar um colhedor terceiro para a fazer."
-      },
-      "r": [
-        "supabase/migrations/20260622120319_audio_p5_oai_expose_mbid.sql (comptage l. 55, notices l. 121-126)",
-        "supabase/functions/oai-pmh-provider/index.ts (GetRecord, fetchRecords(…, 1, 0, bookId))",
-        "tests/sql/ci-suites.txt",
-        "clôture H5 (02/09)"
-      ],
-      "verif": {
-        "fr": "07/09 — corps de la fonction lu dans la migration et dans `pg_proc` en production (`regexp_matches(prosrc, 'p_book_id')` = 2) ; `oai_opening_requests` : dernière ouverture BLMF `closed` à 18:02 le 02/09 ; zéro source `oai_pmh` enregistrée.",
-        "pt": "07/09 — corpo da função lido na migração e em `pg_proc` na produção (duas ocorrências de `p_book_id`); `oai_opening_requests`: última abertura BLMF `closed` às 18:02 de 02/09; zero fontes `oai_pmh` registradas."
-      }
-    },
-    {
-      "id": "I20",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql",
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Quinze URL de fonctions codées en dur sur le projet cloud : une instance auto-hébergée irait frapper la production",
-        "pt": "Quinze URLs de funções fixadas no projeto cloud: uma instância auto-hospedada iria bater na produção"
-      },
-      "v": {
-        "fr": "**Trouvé le 07/09 en suivant la chaîne de moisson pour une instance locale.** `ingest.fn_dispatch_oai_harvest` (migration `20260828190000`, l. 89) pose `v_url := 'https://uflwmikiyjfnikiphtcp.supabase.co/functions/v1/harvest-oai-pmh'`. Ce n'est pas isolé : **quinze occurrences dans huit migrations**, vers neuf fonctions — `notify-event` (4), `notify-library-request` (2), `gazette-monthly-build` (2), `work-titles-autofill`, `translate-gazette-submission`, `notify-rede-digest`, `health-probe`, `harvest-oai-pmh`. Aucun helper `fn_functions_base_url` n'existe ; `deploy/.env.example` et `bootstrap.sh` ne portent pas de variable pour cette adresse. Sur une pile auto-hébergée (`api.anarbib.org`, Caddy devant `functions`), chaque `net.http_post` de ces dispatchers partirait donc **vers le cloud du mainteneur**, avec le secret local en en-tête : rien ne tourne sur place (pas de courriel, pas de gazette, pas de sonde, pas de moisson), et le secret est offert à un autre opérateur. `deploy/README.md` dit que la pile a été montée trois fois ; ces chemins-là n'y ont jamais été exercés — ils ne se voient pas au rejeu des migrations. (Vault n'est pas le problème : l'image `supabase/postgres` le fournit, `bootstrap.sh` l'amorce.)",
-        "pt": "**Encontrado em 07/09 ao seguir a cadeia de coleta para uma instância local.** `ingest.fn_dispatch_oai_harvest` fixa `v_url := 'https://uflwmikiyjfnikiphtcp.supabase.co/functions/v1/harvest-oai-pmh'`. Não é isolado: **quinze ocorrências em oito migrações**, para nove funções (`notify-event` 4, `notify-library-request` 2, `gazette-monthly-build` 2, `work-titles-autofill`, `translate-gazette-submission`, `notify-rede-digest`, `health-probe`, `harvest-oai-pmh`). Nenhum helper existe; `deploy/.env.example` não traz variável para esse endereço. Numa pilha auto-hospedada, cada `net.http_post` desses despachantes partiria **para o cloud do mantenedor**, com o segredo local no cabeçalho: nada roda no local, e o segredo é oferecido a outro operador. A pilha foi montada três vezes; esses caminhos nunca foram exercidos — não se veem no replay das migrações."
-      },
-      "w": {
-        "fr": "Une seule source de vérité pour l'adresse des fonctions : une ligne de réglage en base (table de configuration privée existante, ou `vault` où le secret voisin vit déjà) lue par un helper `private.fn_functions_base_url()` ; une migration qui remplace les quinze littéraux par l'appel au helper, avec en repli la valeur cloud actuelle pour que la production ne bouge pas ; `bootstrap.sh` pose la valeur locale (`https://api.anarbib.org` ou celle de `.env`) et `deploy.sh --controle` la vérifie ; une garde CI (ou le hook `pre-commit`) qui refuse tout nouveau `supabase.co/functions/v1` littéral dans une migration. À faire en environnement d'essai — le domaine I est gelé sur la production jusqu'au 14/09.",
-        "pt": "Uma única fonte de verdade para o endereço das funções: uma linha de configuração no banco (tabela privada existente, ou `vault`) lida por um helper `private.fn_functions_base_url()`; uma migração que substitui os quinze literais pela chamada ao helper, com fallback no valor cloud atual para que a produção não mude; `bootstrap.sh` põe o valor local e `deploy.sh --controle` o verifica; uma guarda de CI que recusa qualquer novo literal `supabase.co/functions/v1` numa migração. A fazer em ambiente de teste — o domínio I está congelado na produção até 14/09."
-      },
-      "y": {
-        "fr": "`FED-O11` promet qu'une instance est un réseau à part entière ; avec ces quinze lignes, une instance « à part » reste branchée sur la production du mainteneur sans que personne ne l'ait décidé. C'est aussi le genre de défaut que Bastien (**I16**) rencontrera le premier jour où il branchera un courriel.",
-        "pt": "`FED-O11` promete que uma instância é uma rede por inteiro; com estas quinze linhas, uma instância «à parte» continua ligada à produção do mantenedor sem que ninguém o tenha decidido. É também o tipo de defeito que Bastien (**I16**) encontrará no primeiro dia em que ligar um e-mail."
-      },
-      "f": [
-        {
-          "fr": "Zéro littéral `supabase.co/functions/v1` dans les migrations ; la garde CI le tient.",
-          "pt": "Zero literais `supabase.co/functions/v1` nas migrações; a guarda de CI o mantém."
-        },
-        {
-          "fr": "Sur la pile d'essai, un `notify-event` et une moisson partent vers l'adresse locale (vu dans `partner_catalog_import_dispatch_log` et le journal de Caddy).",
-          "pt": "Na pilha de teste, um `notify-event` e uma coleta partem para o endereço local (visto no log de despacho e no diário do Caddy)."
-        }
-      ],
-      "dep": {
-        "fr": "Prolonge **I2** (bascule) et **I19** (`pg_cron`) : même famille — ce qui marche au cloud parce que le cloud est là. À proposer dans la PR scindée de Bastien (**I16**) ou au retour.",
-        "pt": "Prolonga **I2** e **I19**: mesma família — o que funciona no cloud porque o cloud está lá. A propor na PR de Bastien (**I16**) ou na volta."
-      },
-      "r": [
-        "supabase/migrations/20260828190000_lot3b_moisson_oai_pmh.sql (l. 89)",
-        "grep \"uflwmikiyjfnikiphtcp.supabase.co/functions\" supabase/migrations/ (8 fichiers, 15 occurrences)",
-        "deploy/bootstrap.sh",
-        "deploy/.env.example",
-        "REGISTRE §24 FED-O11"
-      ],
-      "verif": {
-        "fr": "07/09 — grep sur le dépôt `eb790c33` (8 fichiers, 15 occurrences, 9 fonctions cibles) ; `deploy/compose.yml`, `bootstrap.sh` et `.env.example` relus.",
-        "pt": "07/09 — grep no repositório `eb790c33` (8 arquivos, 15 ocorrências, 9 funções alvo); `deploy/compose.yml`, `bootstrap.sh` e `.env.example` relidos."
       }
     }
   ]

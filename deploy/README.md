@@ -29,8 +29,11 @@ n'est pas celle de la sauvegarde (`<bucket>/<nom>` d'un côté,
 `<s3>/<tenant>/<bucket>/<nom>/<version>` de l'autre — un `rsync` direct était
 faux). D'où la doctrine d'ordre, désormais dans `bootstrap.sh` : base seule →
 rôles → GoTrue **et** Storage → schéma + données → vues → et seulement ensuite
-les services qui *lisent* le schéma. Le script compte **huit étapes plus une
-« 7 bis »** (attente d'un fait, jamais d'un délai) et une vérification finale.
+les services qui *lisent* le schéma. Le script compte **huit étapes plus deux
+« bis »** — la « 5 bis » pose l'adresse des Edge Functions de cette instance
+(`anarbib.functions_base_url`, I20 du 07/09/2026 : sans elle, les dépêches
+partiraient vers le projet cloud du mainteneur), la « 7 bis » attend un fait,
+jamais un délai — et une vérification finale.
 
 **Ce qui n'a pas tourné** : la bascule elle-même chez Herbes Folles, le routeur
 `main` en conditions réelles (item I3, gelé jusqu'au 14/09), et un front
