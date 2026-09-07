@@ -490,7 +490,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Verificado : 07/09 — medições feitas para a spec de I17: imagem sondada a vazio, produção consultada em leitura, repositório em `fb64c996`.*
 
-**O que é.** Uma migração nominativa, depois do 14: para cada uma das 47, `GRANT` escrito se a abertura serve, senão `REVOKE … FROM PUBLIC, anon`. **Antes de cada REVOKE, procurar as vistas e as policies** que chamam a função sob o papel do leitor.
+**O que é.** Uma migração nominativa, depois do 14: para cada uma das 47, `GRANT` escrito se a abertura serve, senão `REVOKE … FROM PUBLIC, anon`. **Antes de cada REVOKE, procurar as vistas e as policies** que chamam a função sob o papel do leitor. **Recomendação de 07/09 para as cinco vistas de T7**: primeiro uma **migração nominativa** que escreva o `REVOKE SELECT` nas cinco vistas (segura, documenta o estado real da produção: `anon=m, authenticated=m`), depois de procurar quem as chama (`pg_rewrite` para as vistas, `pg_policy` para as policies — uma leitura pública que passasse por elas cairia em silêncio). A **extensão de A.1 às tabelas** fica como **questão**, a instruir com Bastien quando A.1 lhe for proposto: toca a trajetória do replay e merece a sua própria experiência.
 
 **Por que importa.** `DOC-GRANT-1` diz que uma abertura a `anon` é um ato escrito. Quarenta e sete funções contradizem a regra em silêncio.
 
