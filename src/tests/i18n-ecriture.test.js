@@ -16,7 +16,8 @@
 //   — six valeurs laissées en anglais dans `el.json` ;
 //   — cinq valeurs de `el.json` écrites en GREC TRANSLITTÉRÉ en caractères
 //     latins — « Sfalma kata ti dimiourgia tou logariasmo » — qu'aucune
-//     lectrice grecque ne lit comme du grec.
+//     lectrice grecque ne lit comme du grec. Ces onze-là portent depuis le
+//     07/09 au soir une traduction provisoire, listée dans `GREC_PROVISOIRE`.
 //
 // Les commits d'origine s'étalent de mai à août 2026. Ce n'est pas un accident,
 // c'est un mode de défaillance récurrent : une règle écrite là où elle n'oblige
@@ -86,26 +87,35 @@ const TOUT = Object.fromEntries(LOCALES.map((l) => [l, charge(l)]));
 const EN = TOUT.en;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// DETTE — le grec en attente d'une camarade hellénophone.
+// GREC PROVISOIRE — onze clés traduites le 07/09/2026 par Claude, PAS par une
+// personne hellénophone.
 //
-// Ces onze clés sont FAUTIVES et connues comme telles depuis l'audit du
-// 07/09/2026. Elles ne sont pas corrigées ici parce qu'une retranslittération
-// faite par quelqu'un qui ne lit pas le grec produirait une faute de plus.
+// Elles étaient fautives (six en anglais, cinq en grec translittéré en lettres
+// latines) et l'ont été en production du 07/06 au 07/09. Le choix a été de
+// mettre une traduction provisoire plutôt que de laisser du charabia à l'écran
+// en attendant la relecture — Xavier, 07/09 : « on la laisse moisir comme ça ? »
+// Registre au singulier comme les voisines (`DOC-ADDR-1`) ; vocabulaire pris
+// dans `el.json` même (« καθιερωμένη εγγραφή », « Οργάνωση ή συλλογικότητα »,
+// « Αποθήκευση ούτως ή άλλως; »).
 //
-// CETTE LISTE NE PEUT QUE RÉTRÉCIR. Le test `la dette grecque ne contient
-// aucune entrée devenue sans objet` échoue si l'une d'elles a été corrigée
-// sans être retirée d'ici — sans quoi la dette deviendrait un cimetière et le
-// garde-fou une décoration.
+// CE QUE LA LISTE GARANTIT : que ces clés sont EN GREC (les chemins 1, 2 et 3
+// les contrôlent comme n'importe quelle autre — plus aucune exemption). Elle
+// ne garantit PAS que le grec est bon : ça, seule une relecture humaine le
+// dit, et c'est en la faisant qu'on retire la clé d'ici.
+//
+// ANGLE MORT ASSUMÉ : rien de mécanique ne force cette liste à rétrécir — une
+// relecture est un acte humain, pas un état du code. Si elle est encore là
+// dans six mois, c'est que personne n'a relu, et c'est l'information utile.
 // ─────────────────────────────────────────────────────────────────────────────
-const DETTE_GREC = [
-  // (1) anglais laissé tel quel — commit 7300502e, 07/06/2026
+const GREC_PROVISOIRE = [
+  // ex-anglais — commit 7300502e, 07/06/2026
   'catalogacao.isbnDup.badge',
   'catalogacao.presave.isbnExists',
   'catalogacao.presave.titleAuthorExists',
   'catalogacao.authlink.autoLinked',
   'account.profile.org',
   'panel.reader.org',
-  // (2) grec translittéré en caractères latins — commit a1ce13ae, 07/06/2026
+  // ex-translittéré — commit a1ce13ae, 07/06/2026
   'auth.create.errorCreateFailed',
   'auth.create.errorGeneric',
   'auth.create.errorLibraryNotReady',
@@ -282,7 +292,6 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
         const rx = new RegExp(`\\b(${motifs.join('|')})\\b`, 'i');
         const fautes = [];
         for (const [k, v] of Object.entries(TOUT[l])) {
-          if (DETTE_GREC.includes(k) && l === 'el') continue;
           if (ASCII_VOULU.includes(k)) continue;
           const m = prose(v).match(rx);
           if (m) fautes.push(`${k} → « ${m[1]} » dans « ${v.slice(0, 70)} »`);
@@ -300,7 +309,7 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
     it('aucune valeur de prose sans une seule lettre grecque, hors liste nommée', () => {
       const fautes = [];
       for (const [k, v] of Object.entries(TOUT.el)) {
-        if (EL_SANS_GREC_LEGITIME.includes(k) || DETTE_GREC.includes(k)) continue;
+        if (EL_SANS_GREC_LEGITIME.includes(k)) continue;
         const p = prose(v);
         const motsLatins = p.match(/[A-Za-z]{3,}/g) || [];
         if (motsLatins.length >= 2 && !GREC.test(p)) {
@@ -319,11 +328,23 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
   // ── 3. Anglais laissé tel quel ────────────────────────────────────────────
   describe('chemin (1) — pas d\'anglais laissé tel quel', () => {
     const cles = Object.keys(EN);
-    // Une valeur identique dans ≥ 7 locales est un terme technique partagé,
-    // pas une traduction oubliée.
+    // Une valeur identique dans ≥ 7 locales est un terme technique partagé
+    // (ISBN, MARC JSON, une URL d'exemple)… À CONDITION qu'elle en ait l'air.
+    //
+    // Payé le 07/09/2026 au soir : « Organization or collective » était en
+    // anglais dans SIX locales (de, it, ca, eo, nl — et el jusqu'à sa
+    // correction). Sept locales identiques, donc « terme partagé », donc
+    // exemptée : le seuil validait la faute d'autant mieux qu'elle était
+    // répandue. C'est le grec corrigé qui l'a démasquée, en faisant tomber le
+    // compte à six. D'où la seconde condition : pas un seul mot en minuscules
+    // hors placeholders — un sigle n'en a pas, une phrase oubliée en a.
+    const ressembleAUnJeton = (v) =>
+      !(v.replace(/\{[^{}]*\}/g, ' ').match(/\b[a-z][a-z]{2,}\b/) || []).length;
     const partout = new Set(
       cles.filter(
-        (k) => LOCALES.filter((l) => TOUT[l][k] === EN[k]).length >= 7,
+        (k) =>
+          LOCALES.filter((l) => TOUT[l][k] === EN[k]).length >= 7 &&
+          ressembleAUnJeton(EN[k]),
       ),
     );
 
@@ -334,7 +355,6 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
         for (const k of cles) {
           if (partout.has(k)) continue;
           if (IDENTIQUE_A_EN_LEGITIME.includes(k)) continue;
-          if (l === 'el' && DETTE_GREC.includes(k)) continue;
           if (TOUT[l][k] !== EN[k]) continue;
           if (TOUT[l][k] === TOUT['pt-BR'][k]) continue; // identique à la source aussi
           const mots = (prose(EN[k]).match(/[A-Za-z]{2,}/g) || []).length;
@@ -370,27 +390,20 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
     }
   });
 
-  // ── 5. La dette ne peut que rétrécir ──────────────────────────────────────
-  // Sans ce test, DETTE_GREC deviendrait un cimetière : des clés corrigées y
-  // resteraient inscrites, et la liste cesserait de dire quoi que ce soit.
-  describe('dette grecque', () => {
-    it('toutes les clés de DETTE_GREC existent', () => {
-      const fantomes = DETTE_GREC.filter((k) => !(k in TOUT.el));
+  // ── 5. Le grec provisoire ─────────────────────────────────────────────────
+  describe('grec provisoire', () => {
+    it('toutes les clés de GREC_PROVISOIRE existent', () => {
+      const fantomes = GREC_PROVISOIRE.filter((k) => !(k in TOUT.el));
       expect(fantomes, `clés inexistantes dans el.json : ${fantomes.join(', ')}`).toEqual([]);
     });
 
-    it('aucune entrée de dette n\'est devenue sans objet', () => {
-      const reglees = DETTE_GREC.filter((k) => {
-        const v = TOUT.el[k];
-        const p = prose(v);
-        const enAnglais = v === EN[k];
-        const sansGrec = (p.match(/[A-Za-z]{3,}/g) || []).length >= 2 && !GREC.test(p);
-        return !enAnglais && !sansGrec; // ni anglais, ni latin : c'est corrigé
-      });
+    // Si quelqu'un remet de l'anglais ou du latin sur l'une de ces clés, les
+    // chemins 1 et 2 le verront ; ce test-ci dit en plus D'OÙ vient la clé.
+    it('chaque clé provisoire est bien en grec', () => {
+      const regressees = GREC_PROVISOIRE.filter((k) => !GREC.test(prose(TOUT.el[k] || '')));
       expect(
-        reglees,
-        `${reglees.length} clé(s) corrigée(s) mais toujours inscrite(s) en dette — ` +
-          `retire-les de DETTE_GREC : ${reglees.join(', ')}`,
+        regressees,
+        `${regressees.length} clé(s) provisoire(s) plus en grec : ${regressees.join(', ')}`,
       ).toEqual([]);
     });
   });
