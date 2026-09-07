@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-07** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-07** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,16 +16,16 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 4
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 5
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 2
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
-    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 7
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 12
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
+    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 9
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
 - [Manutenção deste documento](#manutenção-deste-documento)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **7 de setembro de 2026** de manhã — produção em leitura e repositório recontado no commit `ecdcd06c`. Prolonga o registo completo de 06/09 : as volumetrias não mudaram (nenhuma migração nem código desde a correção de higiene de 06/09), o repositório recebeu a PR #28, seis decisões de releitura e quatro itens novos (E14, G13, H8, I20).
 
-**Frescor dos constatos em 2026-09-07.** **51 itens de 68** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, I1, I3, I6, I12, I13, I15, I16, I18, I19, J2, J3, J4, K2, K5, K7). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-07.** **67 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, E15, E16, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -394,6 +394,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
 | **B20** | O fallback para a chave legada não pode voltar: uma guarda, não um comentário | `P1` | Aberto |
 | **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Aberto |
+| **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -488,7 +489,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Medido em 07/09 preparando a spec de `I17`. **Classe A**: 98 funções com `anon=X` na ACL; para **12** delas nenhum `GRANT … TO anon` existe no repositório. **Classe B**: 35 funções executáveis por `anon` via `PUBLIC` — dez RPC de circulação de `api`, 17 de `ingest`, 5 de `public`, 3 com ACL nula. Todas INVOKER: a RLS segura, mas uma RPC de empréstimo chamável por anônimo é uma superfície deixada por esquecimento. **07/09, experiência de `I17`**: mesmo mecanismo do lado das **relações**. Cinco vistas da base sem `security_invoker` nascem legíveis por `anon`/`authenticated` no replay (padrão da imagem para tabelas: `anon=arwdm`) enquanto a produção só lhes deixa `anon=m`: o `REVOKE SELECT` não está escrito em lugar nenhum. T7 vermelho no replay, verde na CI. Duas vias: estender A.1 às tabelas antes da base, ou uma migração nominativa — vistas e policies a procurar antes.
 
-*Verificado : 07/09 — medições feitas para a spec de I17: imagem sondada a vazio, produção consultada em leitura, repositório em `fb64c996`.*
+*Verificado : 07/09 — medida complementar, não a mesma dos 47: **28** funções SECURITY DEFINER de `api`+`public` são executáveis por `anon`. A «migração de REVOKE antes do dia 8» da retomada de 06/09 não foi executada; a constatação escrita é este item.
+
+07/09 — medições feitas para a spec de I17: imagem sondada a vazio, produção consultada em leitura, repositório em `fb64c996`.*
 
 **O que é.** Uma migração nominativa, depois do 14: para cada uma das 47, `GRANT` escrito se a abertura serve, senão `REVOKE … FROM PUBLIC, anon`. **Antes de cada REVOKE, procurar as vistas e as policies** que chamam a função sob o papel do leitor. **Recomendação de 07/09 para as cinco vistas de T7**: primeiro uma **migração nominativa** que escreva o `REVOKE SELECT` nas cinco vistas (segura, documenta o estado real da produção: `anon=m, authenticated=m`), depois de procurar quem as chama (`pg_rewrite` para as vistas, `pg_policy` para as policies — uma leitura pública que passasse por elas cairia em silêncio). A **extensão de A.1 às tabelas** fica como **questão**, a instruir com Bastien quando A.1 lhe for proposto: toca a trajetória do replay e merece a sua própria experiência.
 
@@ -503,6 +506,26 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de 14/09. Independente de `I17`, mas a spec de `I17` é a fonte.
 
 *Remissões : `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07 §4` · `REGISTRE §0 DOC-GRANT-1` · `tests/sql/grants_herites_tests.sql T10` · `item I17`*
+
+#### B23 — `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** O GLB v17 (01/09) contava 67 views `api` de 68 em `security_invoker`. **Verificado em 07/09**: `pg_class.reloptions` de `api.library_email_identity` está vazio — ela lê, portanto, sob o proprietário. Talvez intencional (serve a identidade de remetente às funções de e-mail), mas nenhum comentário o diz.
+
+*Verificado : 07/09 — `reloptions` vazio, logo DEFINER.*
+
+**O que é.** Ou `ALTER VIEW … SET (security_invoker = on)` e uma suíte que verifica que o e-mail ainda sai, ou um `COMMENT ON VIEW` que explique a exceção. Uma noite nos dois casos.
+
+**Por que importa.** Uma exceção não escrita um dia se repete como erro — por alguém que «corrige» o que era intencional.
+
+**O que conta como terminado.**
+
+- A view está em invoker, ou carrega o comentário que diz por que não está.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `claude/GLB_v17_releve_et_constats_2026-09-01`*
 
 ---
 
@@ -528,7 +551,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** 1 685 registros em `SOLIDAIRES_import_test.csv`. **Constato corrigido em 31/08: o arquivo foi sim confrontado com o importador.** `book_drafts` traz 1 673 rascunhos da fonte `SOLIDAIRES_import_v2.csv`, criados num único lote na noite anterior à escrita do constato « nunca confrontados ». Todos `draft`, **nenhum publicado**: o catálogo público não foi tocado. A decisão de Xavier (29/08) permanece: nenhuma promoção antes da admissão (G7). O que resta não é mais « importar », mas consignar o que quebrou e promover depois da admissão.
 
-*Verificado : 31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo.*
+*Verificado : 07/09 — inalterado: 1 673 rascunhos `SOLIDAIRES_import_v2.csv`, candidatura `pendente` desde 27/08.
+
+31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo.*
 
 **O que é.** Adaptar os cabeçalhos ao formato realmente esperado (cerca de uma hora), passar o arquivo **pela ferramenta de importação do repositório e não por `INSERT` à mão**, revisar umas vinte fichas ao acaso, e depois fazer uma demonstração em videoconferência com tela compartilhada.
 
@@ -839,6 +864,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E12** | A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra | `P2` | Em curso |
 | **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | Aberto |
+| **E15** | As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales | `P2` | Aberto |
+| **E16** | A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática | `P2` | A verificar |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -1065,6 +1092,46 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `src/components/layout/index.jsx (Footer)` · `src/pages/inicio/intentions.js` · `supabase/migrations/20260618182516_cartography_submissions.sql` · `supabase/functions/submit-cartography-entry` · `supabase/migrations/20260821130001_signaler_un_doublon_d_autorite.sql` · `CONTRIBUTING.md`*
 
+#### E15 — As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna
+
+**Estado.** **Verificado em `src/i18n/locales/` em 07/09.** Em pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` e `account.deleteAccount.confirmText` = `EXCLUIR`: dois gestos, duas palavras. Em fr, en, es, it, de, nl, el e eo, **as duas chaves carregam a mesma palavra** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Só o catalão distingue (`ELIMINA` / `SUPRIMIR`). Levantado primeiro pelo manual da leitora v2 de 03/09.
+
+*Verificado : 07/09 — oito pares idênticos constatados nos arquivos de locale.*
+
+**O que é.** Escolher duas palavras distintas por locale, com as pessoas falantes quando houver (**E2** para nl e el), e pôr o manual de acordo.
+
+**Por que importa.** Uma palavra de confirmação serve para não confundir duas destruições. Quando é a mesma, não serve para nada — e é exatamente `DOC-DESTR-2`: dizer o que se destrói.
+
+**O que conta como terminado.**
+
+- Nove locales, duas palavras diferentes cada; o teste i18n passa.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03` · `REGISTRE §0 DOC-DESTR-2`*
+
+#### E16 — A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática
+
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript
+
+**Estado.** Levantado pela refonte do manual v5 (01/09): «duas mensagens contraditórias sobre a ativação da purga automática — o manual pede para verificar a instância». **Não verificado em 07/09**: é um defeito de tela, a constatar na aplicação, não nos arquivos.
+
+*Verificado : 07/09 — não verificado, constatação de tela apenas.*
+
+**O que é.** Abrir a subaba em `blmf-teste`, ler as duas mensagens, decidir qual diz a verdade olhando o ajuste no banco, corrigir a outra.
+
+**Por que importa.** Uma tela de privacidade que se contradiz faz duvidar de todo o resto da página — e é a página que uma coordenação lê primeiro.
+
+**O que conta como terminado.**
+
+- Uma só mensagem, conforme o estado real do ajuste.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `claude/MANUEL_v5_refonte_2026-09-01 (points à trancher)`*
+
 ---
 
 ### F — E-mail e notificações
@@ -1078,6 +1145,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F7** | Um transporte de e-mail sem serviço configurado falha; não simula em silêncio | `P1` | Aberto |
+| **F9** | SPF, DKIM e DMARC de `notifications.anarbib.org` nunca foram levantados — trinta e seis crons enviam e-mail a partir desse domínio | `P1` | A verificar |
+| **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1215,6 +1284,47 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 *Remissões : `supabase/functions/_shared/transport/email.ts` · `REGISTRE §0 DOC-SILENCE-1` · `docs/specs/spec-migration-mail-resend.md` · `codeberg.org/anarbib/anarbib/pulls/28`*
 
+#### F9 — SPF, DKIM e DMARC de `notifications.anarbib.org` nunca foram levantados — trinta e seis crons enviam e-mail a partir desse domínio
+
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Levantado em 31/08 na retomada: «nunca levantados; três `Resolve-DnsName` bastam; a fazer antes de 10/09». **Em 07/09, impossível verificar**: nem o contêiner nem a VM de trabalho alcançam um resolvedor DNS. Nenhum rastro além desse levantamento diz que foi feito.
+
+*Verificado : 07/09 — não verificável daqui; nenhum rastro de que tenha sido feito.*
+
+**O que é.** No PowerShell: `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, e o seletor DKIM mostrado pelo painel Resend. Colar as três respostas aqui, datadas. Se faltar DMARC, pôr `p=none` com endereço de relatório antes de endurecer.
+
+**Por que importa.** Em 10/09, o convite de **F4** sai por esse domínio, dois dias antes de Bolonha. Um e-mail que cai em spam não aparece nos logs — aparece no silêncio da leitora.
+
+**O que conta como terminado.**
+
+- Os três registros levantados e colados neste item, com a data.
+
+**Dependências.** Antes de **F4** (10/09). Entra em **F1** (auditoria) mas não a espera.
+
+*Remissões : `claude/REPRISE_2026-09-01_douze_jours_avant_bologne`*
+
+#### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, deliberação coletiva
+
+**Estado.** **Verificado no repositório em 07/09**: `supabase/functions/_shared/transport/email.ts` conhece dois transportes, `sendViaResend` e `sendViaBrevo` — o segundo sobrevive à retirada do Brevo (R.6/R.7, anunciado fechado). Nenhum transporte SMTP genérico, logo nenhum meio de ligar um relay militante (ARN, Nodo50, bida.im) no dia em que um disser sim. A nota de 05-06/09 põe essa saída depois de Bolonha, atrás do pedido de um relay SMTP no dia 12.
+
+*Verificado : 07/09 — dois transportes em `email.ts`, nenhum SMTP.*
+
+**O que é.** Pedir antes de escolher (os relays militantes primeiro, Scaleway como recuo); escrever `sendViaSmtp` (ou o transporte escolhido) e restabelecer um roteamento por variável; remover `sendViaBrevo`; só levantar erro onde deve (**F7** está fechado nisso).
+
+**Por que importa.** O Resend é o último serviço estadunidense depois do Supabase. Sair de um sem o outro deixa metade da dependência, e a metade mais falante: o e-mail das leitoras.
+
+**O que conta como terminado.**
+
+- Um e-mail real sai pelo novo transporte, da produção, para uma caixa terceira.
+- `sendViaBrevo` não existe mais no repositório.
+
+**Dependências.** Depois de **K5** (relay pedido em Bolonha). Não antes de **I2**: mudar de transporte e de hospedeiro na mesma semana são duas incógnitas.
+
+*Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
+
 ---
 
 ### G — Rede, governança, federação
@@ -1232,6 +1342,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G11** | O primeiro administrador de uma instância: escrever a regra de arranque | `P0` | Aberto |
 | **G12** | Uma instância = uma rede; entre instâncias, só o catálogo atravessa | `P2` | Aberto |
 | **G13** | Um comutador «redes constituídas» no OPAC: ver só os catálogos FICEDL, RebAL, NORLA… | `P2` | Aberto |
+| **G14** | Um convite de equipe espera desde 30/08 e expirará em 29/09 — a pessoa talvez não saiba | `P2` | Aberto |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1352,7 +1463,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Três pontos estão marcados 🔴 «a resolver o mais rápido possível» desde junho e não se moveram: `#111` (avaliação colaborativa de uma pessoa administradora de rede, dormente), `ONBO-Q13` (transferência técnica do mandato de coordenação), e o acabamento do módulo 10 da oficina de onboarding.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 07/09 — no repositório: `fn_activate_approved_library_request` não é chamada por **nenhum** componente de `src/` — «Concluir a constituição» não vale, portanto, ativação, como o manual v5 tinha levantado em 01/09. É a quarta questão de onboarding, ou a primeira.*
 
 **O que é.** Os três se tratam juntos porque carregam a mesma questão: o que acontece quando alguém chega, e quando alguém sai?
 
@@ -1438,6 +1549,26 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)` · `docs/specs/spec-cartographie-reseau.md` · `src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)` · `supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)` · `api.libraries_public_v1 (baseline)` · `src/pages/federacao/CartographyMap.jsx` · `docs/cartographie/carte-reseau.umap`*
 
+#### G14 — Um convite de equipe espera desde 30/08 e expirará em 29/09 — a pessoa talvez não saiba
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
+
+**Estado.** **Verificado no banco em 07/09**: em `library_team_invitations`, um convite criado em 30/08 continua `ready`, expira em 29/09 (dois outros de 01/09 estão `accepted` e `pending_ratification`). O plano de formação de 01/09 já o sinalizava: «é preciso avisá-la». O cron de expiração vai fechá-lo em silêncio.
+
+*Verificado : 07/09 — `ready` desde 30/08, expira em 29/09.*
+
+**O que é.** Uma mensagem à pessoa convidada, pelo canal humano (`DOC-COLLECTIVE-1`). Depois olhar por que o convite por e-mail não bastou — é **G1** em miniatura.
+
+**Por que importa.** Um circuito que expira sem que ninguém perceba é um circuito que não existe.
+
+**O que conta como terminado.**
+
+- O convite está `accepted` ou `declined` antes de 29/09, não expirado.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `claude/PLAN_formation_coordination_BLMF_2026-08-26 (annexe)` · `REGISTRE §0 DOC-COLLECTIVE-1`*
+
 ---
 
 ### H — Interoperabilidade, tesauro, coleta
@@ -1448,6 +1579,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
+| **H9** | Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco | `P1` | Congelado |
+| **H10** | Reler à mão os 98 alinhamentos FICEDL — 54 `close` dos quais uma parte são `broad` — e alinhar enfim as quatro rubricas históricas de Solidaires | `P2` | Aberto |
+| **H11** | O repositório diz 462 descritores FICEDL, a produção carrega 621 — regenerar a migração de dados antes que um replay do zero quebre | `P2` | Aberto |
+| **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
+| **H13** | O esboço SKOS dos 26 descritores não está nem no repositório nem no projeto — versá-lo em `docs/journal/ficedl/` para que seja doável e versionado | `P2` | A verificar |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1455,7 +1591,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A exportação completa dos 620 descritores nos dois formatos está a **uma noite de trabalho** — assim que as sete questões tiverem resposta. Estão escritas e ninguém ainda as colocou.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»).*
 
 **O que é.** As sete: a forma dos identificadores; **a hierarquia, que é a verdadeira questão**; o estatuto da faceta «datas»; o destino dos 2 842 vínculos para seis catálogos; o grego romanizado; a licença; e a maneira como o arquivo se regenera.
 
@@ -1493,6 +1629,111 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6` · `VEILLE_leftovers_maydayrooms_2026-08-19`*
 
+#### H9 — Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco
+
+`P1` Prioritário · Estado : **Congelado** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
+
+**Estado.** **Verificado no banco e no repositório em 07/09.** O domínio de `subject_ficedl_links.match_type` agora carrega `exact`, `close`, `broad`, `narrow`, `related` (migração `20260907172508`), mas a porta ficou fechada de propósito: `api.fn_subject_add_ficedl_match` só aceita `exact`/`close`, porque **duas renderizações são binárias** — `src/pages/public/SubjectPage.jsx` (l. 163) mostra «exata» para tudo que não é `close`, e `src/lib/skosExport.js` serializa como `skos:exactMatch` tudo que não é `close`, no Turtle e no JSON-LD publicados. Um `broad` criado hoje seria publicado como correspondência exata.
+
+*Verificado : 07/09 — domínio estendido no banco, porta fechada, duas renderizações binárias constatadas no repositório.*
+
+**O que é.** Estender a guarda da RPC aos três valores; substituir os dois ternários por uma tabela de cinco entradas (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`); acrescentar três chaves `subject.matchBroad/Narrow/Related` nas dez locales (o teste i18n bloqueia se faltar). Entregar os três juntos, nunca um sem os outros.
+
+**Por que importa.** Enquanto o domínio existir no banco sem consumidor capaz de dizê-lo, cada alinhamento «mais amplo» continua espremido em `close` — uma sobreafirmação publicada. E abri-lo sem as renderizações seria pior: um `broad` sairia como `exactMatch` num arquivo que outros catálogos podem coletar.
+
+**O que conta como terminado.**
+
+- Um alinhamento `broad` posto pela tela aparece «mais amplo» na página de assunto e sai como `skos:broadMatch` no Turtle e no JSON-LD.
+- `npm test` passa com as trinta chaves.
+- A migração `20260907172508` tem seu bloco de verificação 4.2 (porta fechada) retirado ou invertido no mesmo dia.
+
+**Dependências.** Congelado até 14/09 (código de produção). Precede **H10**.
+
+*Remissões : `REGISTRE §0 DOC-THES-1` · `REGISTRE §30 THES-FIC4, THES-FIC5` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `migration 20260907172508`*
+
+#### H10 — Reler à mão os 98 alinhamentos FICEDL — 54 `close` dos quais uma parte são `broad` — e alinhar enfim as quatro rubricas históricas de Solidaires
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
+
+**Estado.** **Verificado no banco em 07/09.** 98 vínculos em `subject_ficedl_links`: 44 `exact`, 54 `close`. Até 07/09 o domínio só tinha esses dois valores, logo tudo que é realmente «mais amplo» ou «vizinho» foi espremido em `close`. Por vocabulário visado: 72 para a lista comum, 26 para a geo-histo, **0 para a faceta `dates`** — as quatro rubricas históricas de Solidaires (guerras, períodos) continuam, portanto, sem alinhamento, embora as 159 datas estejam no banco desde 03/09 (H1 fechado).
+
+*Verificado : 07/09 — 98 vínculos, 54 `close`, 0 para `dates`.*
+
+**O que é.** Ficha por ficha, nunca por passagem automática (`CONV-EXEC-3`): para cada `close`, decidir se fica `close` ou vira `broad`/`narrow`/`related`; pôr os alinhamentos faltantes para a faceta `dates` nas rubricas históricas; passar também os 44 alinhamentos do lote Solidaires de 28/08.
+
+**Por que importa.** Um `skos:closeMatch` diz «quase o mesmo conceito». Quando o assunto local é mais estreito, é falso — e está publicado no export que outros catálogos podem ler.
+
+**O que conta como terminado.**
+
+- Cada vínculo carrega uma relação escolhida, não herdada de um domínio de dois valores.
+- Existe pelo menos um alinhamento para um descritor `dates`.
+
+**Dependências.** Depois de **H9**: sem os cinco valores abertos na tela, a releitura não tem ferramenta para dizer o que vê.
+
+*Remissões : `REGISTRE §30 THES-FIC4, THES-FIC-O1` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `CALENDRIER_bologne_2026-08-27 (rubriques historiques)`*
+
+#### H11 — O repositório diz 462 descritores FICEDL, a produção carrega 621 — regenerar a migração de dados antes que um replay do zero quebre
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** **Verificado em 07/09, repositório e produção.** `20260826191000_donnees_ficedl_thesaurus.sql` insere 462 linhas (227 assuntos, 234 geo, 1 dupla, **0 data**) — congelada na coleta de 30/06. A produção carrega a coleta de 03/09: **621** (159 datas a mais) porque `ficedl_thesaurus_sync.mjs` foi reexecutado. O replay a partir de um banco vazio ainda passa: os 47 `mot_id` referenciados pela migração de alinhamento estão todos nos 462. Vai quebrar no dia em que um alinhamento visar um termo posterior a 30/06 — é exatamente o que **H10** vai fazer. Duas datas da coleta (161) faltam no banco (159): sem rótulo, descartadas por `isSyncable`.
+
+*Verificado : 07/09 — 462 no repositório, 621 na produção, replay ainda verde.*
+
+**O que é.** Regenerar a migração de dados a partir de `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` (ou substituí-la por um seed reexecutado pelo sync na CI), e olhar as duas fichas sem rótulo. Nunca rodar o sync com `--prune`.
+
+**Por que importa.** Uma reconstrução do zero (**A2**, a virada **I2**) que não reexecuta os dados de produção não é uma reconstrução — é outro banco.
+
+**O que conta como terminado.**
+
+- `count(*)` de `ficedl_thesaurus_terms` idêntico na CI e na produção.
+- O replay de `sql-tests.yml` passa com um alinhamento para um descritor `dates`.
+
+**Dependências.** Antes de **H10**. Condiciona **A2** e **I2**.
+
+*Remissões : `REGISTRE §30 THES-FIC-O4` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `REPRISE_claude_code_2026-08-27 (piège --prune)`*
+
+#### H12 — As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica, deliberação coletiva
+
+**Estado.** Resposta da fonte, 07/09: dois referenciais existem fora do tesauro — os municípios das biografias do *Bettini* (com cartografia) e os lugares de edição do *Bianco* — «não integrados ao tesauro, provavelmente pesado demais para gerir». O AnarBib não tem nenhuma autoridade de lugares: `local_publicacao` é campo livre (auditoria de 20/08: `BELEM`), e a spec de periódicos descartou o alinhamento FICEDL porque o tesauro indexa assuntos — verdade para os assuntos, falso para os lugares.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Depois de Bolonha, e fora do pedido do dia 12 (que se sustenta porque pede *uma* coisa): pedir as duas listas como arquivos separados, como estão. Depois alinhar a um referencial geográfico existente (Wikidata, GeoNames) com a lista do Bianco como sobrecamada militante — não construir mais uma lista de municípios.
+
+**Por que importa.** Pedir a integração é pedir a carga que a fonte diz não poder carregar. Uma lista não precisa estar no tesauro para ser útil; precisa ser copiável.
+
+**O que conta como terminado.**
+
+- As duas listas recebidas em forma legível por máquina, versadas em `docs/journal/ficedl/`.
+- Uma decisão escrita sobre a autoridade de lugares do AnarBib.
+
+**Dependências.** Depois de **K5**. Toca `spec-periodiques` e **C3** (autoridades).
+
+*Remissões : `REGISTRE §30 THES-FIC-O2` · `claude/REPONSE_hortical_deux_thesaurus_2026-09-07` · `claude/spec-periodiques-v0.1 §5`*
+
+#### H13 — O esboço SKOS dos 26 descritores não está nem no repositório nem no projeto — versá-lo em `docs/journal/ficedl/` para que seja doável e versionado
+
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : nenhuma competência técnica
+
+**Estado.** O dossiê de Bolonha de 03/09 diz: `ficedl_thesaurus_ESQUISSE.csv` e `.jsonld` «não estão no projeto», a levar em pendrive. **Verificado em 07/09**: `docs/journal/ficedl/` contém as quatro coletas e as auditorias, **nenhum arquivo `ESQUISSE`**; o projeto Claude tampouco. O raspador e o sync, esses, estão no repositório (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — essa metade já é doável.
+
+*Verificado : 07/09 — ausentes do repositório e do projeto; sua existência em disco não foi verificada.*
+
+**O que é.** Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada.
+
+**Por que importa.** É a peça que você põe na mesa em Bolonha. Uma peça que só existe num pendrive não é contribuição, é demonstração.
+
+**O que conta como terminado.**
+
+- Os dois arquivos no repositório, regeneráveis por um comando documentado.
+
+**Dependências.** Ligado a **H2** e **K6**.
+
+*Remissões : `claude/DOSSIER_rencontre_leftovers_bologne_2026-09-12 §B.1` · `claude/NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
+
 ---
 
 ### I — Auto-hospedagem, operação, backups, CI
@@ -1511,6 +1752,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I16** | Acompanhar a PR #28 até a fusão: divisão, quatro pontos bloqueantes, congelamento até 14/09 | `P1` | Em curso |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Aberto |
 | **I19** | `pg_cron` deve existir na pilha auto-hospedada, e sua ausência deve ser visível | `P1` | Aberto |
+| **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
+| **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
+| **I23** | Registrar um ccTLD europeu e fazê-lo alias de `anarbib.org` — o `.org` continua sob registro estadunidense | `P2` | Aberto |
 
 #### I1 — Alinhar a imagem GoTrue com o estado real das migrações de autenticação
 
@@ -1728,6 +1972,67 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql` · `deploy/compose.yml` · `deploy/init-db/` · `REGISTRE §0 DOC-SILENCE-1`*
 
+#### I21 — O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil
+
+`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas, deliberação coletiva
+
+**Estado.** A decisão de 07/09 (oferta confirmada: VM IPv4, Debian, backups já lá) e a nota de 05-06/09 deixam uma lista que nada mantém junta. **Verificado em 07/09 em `deploy/`**: nenhum rastro de `unattended-upgrades`, firewall nem autenticação só por chave. O resto é humano ou local: a conexão autenticada na pilha local nunca retestada desde a retirada do Turnstile; `deploy/.env` sobrescrito por `install.sh` (domínios em `localhost`) sem cópia conhecida; o teste a partir de uma rede móvel brasileira (NAT64) nunca feito; o prazo de intervenção de Les Herbes Folles nunca pedido; o meio de lhes pagar «pedido desde julho, sem resposta»; um segundo detentor dos acessos; e a regra posta em 07/09: **não se vira antes que o backup tenha ido para um terceiro** — hoje os três fluxos restic estão no próprio hospedeiro de destino.
+
+*Verificado : 07/09 — `deploy/` sem endurecimento; as outras sete condições não verificáveis a partir do banco.*
+
+**O que é.** Manter a lista aqui, marcar cada condição com sua prova (arquivo, e-mail, teste datado). O endurecimento entra em `deploy/`; o depósito de backup terceiro pede-se em Bolonha (**I12** diz o que o espelho frio cobre, e não é isso).
+
+**Por que importa.** Cada condição é pequena. Juntas, são a diferença entre uma virada e uma mudança de endereço da fragilidade.
+
+**O que conta como terminado.**
+
+- As oito condições marcadas com prova, neste item.
+- `deploy/` carrega o endurecimento, reexecutado por `bootstrap.sh`.
+
+**Dependências.** Bloqueia **I2**. O depósito terceiro e o segundo detentor pertencem à mesma conversa que **A1** (Bolonha).
+
+*Remissões : `claude/DECISION_herbesfolles_offre_confirmee_2026-09-07` · `claude/NOTE_sortie_services_etats_uniens_2026-09-05` · `claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)`*
+
+#### I22 — Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
+
+**Estado.** Em 07/09, a migração `20260907172508` foi aplicada em produção por `apply_migration` (MCP) — o que `DOC-DEPLOY-1` proíbe com todas as letras. Desvio constatado depois, rastreado no REGISTRE §30, recuperado sem dupla aplicação (arquivo renomeado com o timestamp registrado em `supabase_migrations.schema_migrations`). O registro deixa a questão aberta e lembra que, enquanto estiver, **a regra escrita vale**.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Duas saídas, uma linha no registro cada: tolerar em caráter excepcional e rastreado, no modelo de `DOC-DEPLOY-3` — ou reafirmar a proibição e pôr o controle que a torna verificável: uma versão presente em `supabase_migrations.schema_migrations` cujo arquivo não está no repositório é a assinatura exata do desvio (uma consulta, executável na CI).
+
+**Por que importa.** Uma regra infringida sem consequência vira regra decorativa. A consequência pode ser uma exceção escrita; não pode ser o silêncio.
+
+**O que conta como terminado.**
+
+- A linha `DOC-DEPLOY-1` do registro não carrega mais o ⚠️ de 07/09.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `REGISTRE §0 DOC-DEPLOY-1` · `REGISTRE §30 (écart tracé)` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07 §4`*
+
+#### I23 — Registrar um ccTLD europeu e fazê-lo alias de `anarbib.org` — o `.org` continua sob registro estadunidense
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** A nota de 05-06/09 põe isso no início do caminho: «esta semana — registrar um ccTLD europeu e fazê-lo alias», compatível com o congelamento porque não toca a produção. Motivo: o registro do `.org` (Public Interest Registry) é estadunidense, como os dois serviços dos quais o projeto está saindo. **Não verificado** — sem resolução DNS possível daqui; nada no repositório o menciona.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Escolher o domínio, registrá-lo na OVH, pôr um redirecionamento para `anarbib.org` (e não o inverso, por enquanto), e escrevê-lo na política de privacidade se ela o mencionar.
+
+**Por que importa.** Um alias custa um euro por mês e dá um endereço que sobrevive a uma decisão estrangeira sobre o `.org`.
+
+**O que conta como terminado.**
+
+- O domínio resolve e redireciona.
+
+**Dependências.** Nenhuma. Independente do congelamento.
+
+*Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 1)`*
+
 ---
 
 ### J — Documentação e corpus
@@ -1739,6 +2044,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
 | **J3** | O guia de auto-hospedagem da vitrine (pages PR #2): quatro frases, um aviso, e esperar a PR #28 | `P2` | Aberto |
 | **J4** | `CHANTIERS_OUVERTS` §1: escrever o estado real depois da primeira reconstrução externa | `P2` | Aberto |
+| **J9** | Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px | `P2` | A verificar |
+| **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
 
 #### J2 — Reparar o índice dos backlogs e decidir a convenção de arquivamento
 
@@ -1801,6 +2108,47 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `docs/CHANTIERS_OUVERTS.md` · `REGISTRE §0 DOC-CONSTAT-1` · `REGISTRE §0 DOC-ACTIF-1`*
 
+#### J9 — Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px
+
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : nenhuma competência técnica
+
+**Estado.** O portfólio de 02/09 deixa cinco coisas abertas: 320 posições preenchidas das quais **180 por recuo pt-BR** (sem captura na própria língua para nove locales); **IMG-31** reproduz um pedido de adesão real ainda em análise (Solidaires); **IMG-08** deixa legíveis o endereço e o e-mail da BLMF, «provavelmente deliberado, a confirmar»; o texto fica ≈ 4,5 pt no papel, daí recaptura em 900-1000 px e recorte do fundo; **IMG-20** espera o deploy da correção do seletor de periódico. O manual da leitora v2 de 03/09 reutilizou as mesmas capturas sem essa correção. **Verificado em 07/09 no repositório**: os dez `docs/manual*.md` estão na v1.1 de setembro — essa parte está feita; o branch e o worktree `manualv5` não existem mais — feito também. As capturas em si estão na máquina de Xavier, fora de alcance.
+
+*Verificado : 07/09 — manuais .md na v1.1 e branch removido (feito); capturas não verificáveis daqui.*
+
+**O que é.** Decidir IMG-31 (pedido fictício ou desfoque) e IMG-08; depois uma passagem de recaptura em 900-1000 px, locale por locale, começando pelas que têm leitoras.
+
+**Por que importa.** Um manual que não se consegue ler no papel, e cuja imagem mostra o dossiê de uma biblioteca que espera resposta, não se imprime para Bolonha.
+
+**O que conta como terminado.**
+
+- IMG-31 e IMG-08 decididas, com a razão escrita.
+- As capturas relidas legíveis na impressão.
+
+**Dependências.** IMG-31 toca **G7** (não expor uma candidatura em curso).
+
+*Remissões : `claude/MANUEL_v5_portfolio_captures_2026-09-02` · `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03`*
+
+#### J10 — Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão
+
+`P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : nenhuma competência técnica
+
+**Estado.** O levantamento do GLB v17 (01/09) o diz sem ação datada: periódicos, notas de leitura, coleta OAI de entrada, OPDS, sondas, testemunha de backup, fila das convenções — «nenhum foi arbitrado contra seu custo de conclusão». Desde então, H5 (OAI) e I4 (testemunha) estão fechados; os outros cinco estão entregues em parte e não arbitrados.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Cinco linhas: o que está entregue, o que falta para estar pronto, o que custa, e se se termina ou se congela com a razão escrita (`P3`).
+
+**Por que importa.** O congelamento de perímetro (`DOC-GEL-1`) só vale se o que entrou durante o congelamento for julgado — senão não houve congelamento.
+
+**O que conta como terminado.**
+
+- Cinco veredictos no registro ou no backlog, datados.
+
+**Dependências.** Depois de Bolonha. Sem dependência técnica.
+
+*Remissões : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
+
 ---
 
 ### K — Caixa, comunicação, formação
@@ -1816,6 +2164,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **K6** | Preparar o encontro com leftove.rs e May Day Rooms | `P2` | Em curso |
 | **K7** | Conduzir a formação das duas coordenações BLMF até a autonomia | `P1` | Em curso |
 | **K8** | Terminar o texto de orientação sobre as ferramentas de bibliotecas militantes | `P2` | Aberto |
+| **K9** | Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é 10 — quatro textos a corrigir antes do dia 12 | `P1` | Aberto |
+| **K10** | Três artigos prometidos ao *Monde libertaire*, um por mês — e um programa proposto à *Trous Noirs* | `P2` | A verificar |
 
 #### K1 — Fazer adotar a ata de criação do Fundo AnarBib
 
@@ -1890,7 +2240,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Oficina AnarBib em 12/09 pela manhã, assembleia aberta em 13. Um conjunto de 29 slides italiano-inglês está pronto, assim como um folheto manifesto bilíngue. Três objetivos anunciados: a gênese e a concepção, o panorama das funcionalidades, e **um chamado à participação**.
 
-*Verificado : **03/09** — **colisão de datas assinalada**: formação BLMF em 13/09 e Bolonha em 11-13/09. A decidir por Xavier. **03/09, fim do dia — falso alarme retirado.** O plano não data a primeira noite ; não havia colisão com Bolonha.*
+*Verificado : 07/09 — dois números dos textos estão vencidos (620 → 623; 55 pais → 10), saíram em **K9**. A cláusula Stripe do encarte de apoio está no ar nas dez locales (verificado em `anarbib.org/fr/contribuer/`).
+
+**03/09** — **colisão de datas assinalada**: formação BLMF em 13/09 e Bolonha em 11-13/09. A decidir por Xavier. **03/09, fim do dia — falso alarme retirado.** O plano não data a primeira noite ; não havia colisão com Bolonha.*
 
 **O que é.** Pedir o horário de intervenção à assembleia do dia 13, cronometrar a versão italiana em voz alta, imprimir o material em papel — nem todo mundo abre um PDF numa sala —, e ensaiar a demonstração **off-line**, caso a rede falte.
 
@@ -1933,7 +2285,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** O material está entregue: 89 slides em português do Brasil, seis módulos, três encontros, seis exercícios práticos, notas de animação em cada slide. Nenhuma das duas pessoas é bibliotecária ou informática.
 
-*Verificado : **03/09 — preparação da sessão 1, verificada na base.** Contas das duas coordenações em `blmf-teste` (Rafael G. sem login desde 24/06); as cinco fichas do exercício 2 desde 26/08; **mas nenhum leitor fictício** e **nenhuma regra de circulação** — regras e horários da BLMF copiados em 03/09. Fica com Xavier: convidar dois leitores fictícios, verificar Rafael, decidir a colisão de datas com Bolonha, encontrar o plano e o gabarito (ausentes do repositório). Percurso: `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fim do dia — os documentos estão no repositório e o dispositivo mudou.** Plano de 01/09, condutor, roteiro, 89 slides : em `formation-BLMF/`. Sete noites de 2h15, seis módulos, cápsula de 40 min. **O «13/09» não está em nenhum documento** : a primeira noite não tem data ; a «colisão com Bolonha» era um falso alarme. Duas leitoras fictícias criadas em `blmf-teste` (Emma Teste, Errico Teste). A página `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` foi reescrita como complementos ao condutor. **Noite 1 datada por Xavier : 08/09/2026.** Voltairine de Teste voltou a **leitora** ; Emma e Errico Teste entraram em 03/09.*
+*Verificado : 07/09 — no banco: a leitora fictícia «Voltairine de Teste» **nunca** abriu sessão (`auth.users.last_sign_in_at` nulo); nenhum exemplar criado desde 01/09, logo o compromisso «nenhum exemplar sem modo de aquisição» ainda não foi provado. O convite BTL em espera saiu em **G14**.
+
+**03/09 — preparação da sessão 1, verificada na base.** Contas das duas coordenações em `blmf-teste` (Rafael G. sem login desde 24/06); as cinco fichas do exercício 2 desde 26/08; **mas nenhum leitor fictício** e **nenhuma regra de circulação** — regras e horários da BLMF copiados em 03/09. Fica com Xavier: convidar dois leitores fictícios, verificar Rafael, decidir a colisão de datas com Bolonha, encontrar o plano e o gabarito (ausentes do repositório). Percurso: `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fim do dia — os documentos estão no repositório e o dispositivo mudou.** Plano de 01/09, condutor, roteiro, 89 slides : em `formation-BLMF/`. Sete noites de 2h15, seis módulos, cápsula de 40 min. **O «13/09» não está em nenhum documento** : a primeira noite não tem data ; a «colisão com Bolonha» era um falso alarme. Duas leitoras fictícias criadas em `blmf-teste` (Emma Teste, Errico Teste). A página `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` foi reescrita como complementos ao condutor. **Noite 1 datada por Xavier : 08/09/2026.** Voltairine de Teste voltou a **leitora** ; Emma e Errico Teste entraram em 03/09.*
 
 **O que é.** Antes do primeiro encontro: criar em `blmf-teste` as duas contas de coordenação, uma ou duas contas de leitura fictícias, e as cinco fichas defeituosas do exercício 2. Depois o acompanhamento de oito semanas: cinco fichas por semana **todas com sua proveniência**, um dia de balcão por semana, uma consulta conduzida de ponta a ponta com negociação real, e o voto do perfil da biblioteca levado à assembleia.
 
@@ -1970,6 +2324,47 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Ligado a **K5** e **H7**.
 
 *Remissões : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26`*
+
+#### K9 — Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é 10 — quatro textos a corrigir antes do dia 12
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
+
+**Estado.** **Medido na coleta de 03/09, em 07/09.** 620 → **623** descritores entre 30/06 e 03/09 (três datas surgiram: `1927`, `2026`, `2027`, nenhuma desapareceu). E dos 148 descritores hierarquizados, 55 pais não eram encontrados em 28/08 — **45 se resolvem pela variante `X (généralités)`**; restam **10** agrupamentos reais sem conceito (`guerres` ×9, `art : courants` ×1). Os dois números estão na apresentação do dia 12, na intervenção do 13, no texto de orientação e nas convenções de interoperabilidade.
+
+*Verificado : 07/09 — números medidos; textos ainda não corrigidos.*
+
+**O que é.** Dizer «mais de seiscentos» ou «623 em 3 de setembro»; substituir «55 de 148 não existem» por «45 são convenção de nomeação, 10 são agrupamentos» — e reformular a pergunta à federação: não mais «a sua árvore existe?», e sim «*X* e *X (généralités)* são o mesmo termo?».
+
+**Por que importa.** O vocabulário mudou sem que ninguém soubesse: é o argumento da intervenção, medido na sua própria cópia. Mas dizer um número errado diante de quem mantém o site é perder o argumento.
+
+**O que conta como terminado.**
+
+- Os quatro textos carregam os números de 03/09 e a pergunta reformulada.
+- O foglio italiano impresso é a versão corrigida.
+
+**Dependências.** Antes de **K5** (12/09). Sem dependência técnica.
+
+*Remissões : `claude/REPONSE_hortical_deux_thesaurus_2026-09-07 §5-6` · `claude/PRESENTATION_samedi_bologne_2026-09-12` · `claude/INTERVENTION_assemblee_ouverte_bologne_2026-09-13` · `claude/ORIENTATION_outils_bibliotheques_militantes_2026-08-26` · `claude/CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26`*
+
+#### K10 — Três artigos prometidos ao *Monde libertaire*, um por mês — e um programa proposto à *Trous Noirs*
+
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : língua materna
+
+**Estado.** Sessão de 30/08: o e-mail a Monique e Serge (Radio Libertaire, *Trous Noirs*) escreve «Le Monde libertaire en publie trois articles dans les mois qui viennent, un par mois». **Não verificado**: nem a entrega do primeiro artigo, nem o envio do e-mail, nem a resposta. Nenhum item do backlog carregava esse compromisso.
+
+*Verificado : 07/09 — compromisso encontrado numa sessão, nenhum rastro de acompanhamento em outro lugar.*
+
+**O que é.** Dizer aqui onde estão os três artigos (entregue, revisto, publicado) e se o e-mail saiu; depois manter o ritmo — um artigo por mês é uma dívida que se vê.
+
+**Por que importa.** Uma promessa feita a um jornal militante compromete o projeto tanto quanto um deploy: lê-se nos números em que o artigo falta.
+
+**O que conta como terminado.**
+
+- Três datas de publicação, ou uma renegociação escrita do ritmo.
+
+**Dependências.** Vizinho de **K5**; sem dependência técnica.
+
+*Remissões : `session Cowork « Monde libertaire article publication », 30/08/2026`*
 
 ---
 
@@ -2163,4 +2558,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `ecdcd06c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `bf2a4532`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -14,7 +14,7 @@
     "maj": "2026-09-07",
     "releve": {
       "date": "2026-09-07",
-      "commit": "ecdcd06c"
+      "commit": "bf2a4532"
     }
   },
   "domains": [
@@ -2210,8 +2210,8 @@
         "CALENDRIER_bologne_2026-08-27"
       ],
       "verif": {
-        "fr": "31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue.",
-        "pt": "31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo."
+        "fr": "07/09 — inchangé : 1 673 brouillons `SOLIDAIRES_import_v2.csv`, candidature `pendente` depuis le 27/08.\n\n31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue.",
+        "pt": "07/09 — inalterado: 1 673 rascunhos `SOLIDAIRES_import_v2.csv`, candidatura `pendente` desde 27/08.\n\n31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo."
       }
     },
     {
@@ -3704,7 +3704,11 @@
       "r": [
         "REGISTRE §26 ONBO-Q13",
         "spec-onboarding-biblioteca-v2.0"
-      ]
+      ],
+      "verif": {
+        "fr": "07/09 — dans le dépôt : `fn_activate_approved_library_request` n'est appelée par **aucun** composant de `src/` — « Concluir a constituição » ne vaut donc pas activation, comme le manuel v5 l'avait relevé le 01/09. C'est la quatrième question d'onboarding, ou la première.",
+        "pt": "07/09 — no repositório: `fn_activate_approved_library_request` não é chamada por **nenhum** componente de `src/` — «Concluir a constituição» não vale, portanto, ativação, como o manual v5 tinha levantado em 01/09. É a quarta questão de onboarding, ou a primeira."
+      }
     },
     {
       "id": "H2",
@@ -3749,7 +3753,11 @@
       },
       "r": [
         "NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
-      ]
+      ],
+      "verif": {
+        "fr": "07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).",
+        "pt": "07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»)."
+      }
     },
     {
       "id": "H6",
@@ -4423,8 +4431,8 @@
         "PLAN_intervention_FICEDL_Bologne_2026-09-12"
       ],
       "verif": {
-        "fr": "**03/09** — **collision de dates signalée** : le backlog place la formation BLMF le 13/09 (K7, E12, GOUV-18 « fenêtre d'objection à la formation du 13/09 ») et Bologne les 11-13/09 (atelier le 12, assemblée le 13). À trancher par Xavier : séance à distance depuis Bologne avec relais à Belém, ou autre date. La liste K5 (créneau, chronométrage, papier, démonstration hors ligne) est reprise en §5 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — fausse alerte retirée.** Le plan de formation du 01/09 ne date pas la première soirée : il n'y avait pas de collision avec Bologne, seulement un « 13/09 » posé par hypothèse dans le backlog. K5 garde sa propre liste.",
-        "pt": "**03/09** — **colisão de datas assinalada**: formação BLMF em 13/09 e Bolonha em 11-13/09. A decidir por Xavier. **03/09, fim do dia — falso alarme retirado.** O plano não data a primeira noite ; não havia colisão com Bolonha."
+        "fr": "07/09 — deux chiffres des textes sont périmés (620 → 623 ; 55 parents → 10), sortis en **K9**. La clause Stripe de l'encart de soutien est en ligne dans les dix locales (vérifié sur `anarbib.org/fr/contribuer/`).\n\n**03/09** — **collision de dates signalée** : le backlog place la formation BLMF le 13/09 (K7, E12, GOUV-18 « fenêtre d'objection à la formation du 13/09 ») et Bologne les 11-13/09 (atelier le 12, assemblée le 13). À trancher par Xavier : séance à distance depuis Bologne avec relais à Belém, ou autre date. La liste K5 (créneau, chronométrage, papier, démonstration hors ligne) est reprise en §5 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — fausse alerte retirée.** Le plan de formation du 01/09 ne date pas la première soirée : il n'y avait pas de collision avec Bologne, seulement un « 13/09 » posé par hypothèse dans le backlog. K5 garde sa propre liste.",
+        "pt": "07/09 — dois números dos textos estão vencidos (620 → 623; 55 pais → 10), saíram em **K9**. A cláusula Stripe do encarte de apoio está no ar nas dez locales (verificado em `anarbib.org/fr/contribuer/`).\n\n**03/09** — **colisão de datas assinalada**: formação BLMF em 13/09 e Bolonha em 11-13/09. A decidir por Xavier. **03/09, fim do dia — falso alarme retirado.** O plano não data a primeira noite ; não havia colisão com Bolonha."
       }
     },
     {
@@ -4520,8 +4528,8 @@
         "docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md"
       ],
       "verif": {
-        "fr": "**03/09 — préparation de la séance 1, vérifiée en base.** Les deux coordinations ont leur compte sur `blmf-teste` (Mariana S. active le 30/08 ; **Rafael G. sans connexion depuis le 24/06** — à vérifier au début de séance) ; les cinq fiches fautives de l'exercice 2 y sont depuis le 26/08 (`TESTE-9001-1`…`9005-1`) ; **mais aucun lecteur fictif** (le seul retiré le 02/09) et **aucune règle de circulation ni horaire** — impossible d'y jouer une réservation. Posé le 03/09 : le jeu de règles de la BLMF (six règles) et ses horaires copiés sur `blmf-teste`. Reste à la main de Xavier : inviter deux lecteur·rices fictif·ves (le bac à sable n'accepte pas l'inscription publique), vérifier l'entrée de Rafael, **trancher la collision de dates avec Bologne (11-13/09)**, et retrouver le plan et le gabarit — **absents du dépôt, du poste et des transcripts** (les références `PLAN_formation…` et `GABARITO…` de cette fiche sont des fantômes tant qu'ils ne sont pas déposés). Le parcours de la séance, étape par étape, page par page, compte par compte : `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — les documents sont au dépôt et le dispositif n'est plus celui de la fiche.** Xavier a fourni le plan (révisé le 01/09), le conducteur de la séance 1, le roteiro de la capsule, les 89 diapositives et « O salto colegial » : déposés dans `docs/journal/chantiers/formation-BLMF/`. Le plan dit **sept soirées de 2 h 15, six modules, six exercices, une capsule de 40 minutes** — plus trois rencontres ; l'exercice 0 devient un travail personnel ; l'engagement chiffré est inchangé (5 exemplaires sur 2 758 avec mode d'acquisition). **Le « 13/09 » n'apparaît dans aucun document** : la première soirée n'est pas datée, et « collision avec Bologne » était une fausse alerte née d'une hypothèse du backlog. Bac à sable : deux lecteur·rices fictif·ves créé·es sur `blmf-teste` (Emma Teste, Errico Teste, adresses de Xavier ; mot de passe à poser par « Esqueci minha senha ») ; Voltairine de Teste existe mais ses adhésions ont été remaniées le 02/09 (lectrice retirée) ; règles et horaires copiés de la BLMF. La page `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` est réécrite en **compléments au conducteur**. Reste : dater la soirée 1, poser les mots de passe, Rafael G., et corriger dans les diapositives les quatre réserves dépassées listées au §7 du plan avant la soirée 4. **Soirée 1 datée par Xavier : le 08/09/2026** (17 h 00 – 19 h 15). Voltairine de Teste repassée **lectrice** (bibliothécaire retirée) ; Emma et Errico Teste se sont connecté·es le 03/09 à 16 h 15 et 16 h 18 : le bac à sable a ses trois lecteur·rices.",
-        "pt": "**03/09 — preparação da sessão 1, verificada na base.** Contas das duas coordenações em `blmf-teste` (Rafael G. sem login desde 24/06); as cinco fichas do exercício 2 desde 26/08; **mas nenhum leitor fictício** e **nenhuma regra de circulação** — regras e horários da BLMF copiados em 03/09. Fica com Xavier: convidar dois leitores fictícios, verificar Rafael, decidir a colisão de datas com Bolonha, encontrar o plano e o gabarito (ausentes do repositório). Percurso: `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fim do dia — os documentos estão no repositório e o dispositivo mudou.** Plano de 01/09, condutor, roteiro, 89 slides : em `formation-BLMF/`. Sete noites de 2h15, seis módulos, cápsula de 40 min. **O «13/09» não está em nenhum documento** : a primeira noite não tem data ; a «colisão com Bolonha» era um falso alarme. Duas leitoras fictícias criadas em `blmf-teste` (Emma Teste, Errico Teste). A página `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` foi reescrita como complementos ao condutor. **Noite 1 datada por Xavier : 08/09/2026.** Voltairine de Teste voltou a **leitora** ; Emma e Errico Teste entraram em 03/09."
+        "fr": "07/09 — en base : la lectrice fictive « Voltairine de Teste » n'a **jamais** ouvert de session (`auth.users.last_sign_in_at` nul) ; aucun exemplaire créé depuis le 01/09, donc l'engagement « aucun exemplaire sans mode d'acquisition » n'est pas encore éprouvé. L'invitation BTL en attente est sortie en **G14**.\n\n**03/09 — préparation de la séance 1, vérifiée en base.** Les deux coordinations ont leur compte sur `blmf-teste` (Mariana S. active le 30/08 ; **Rafael G. sans connexion depuis le 24/06** — à vérifier au début de séance) ; les cinq fiches fautives de l'exercice 2 y sont depuis le 26/08 (`TESTE-9001-1`…`9005-1`) ; **mais aucun lecteur fictif** (le seul retiré le 02/09) et **aucune règle de circulation ni horaire** — impossible d'y jouer une réservation. Posé le 03/09 : le jeu de règles de la BLMF (six règles) et ses horaires copiés sur `blmf-teste`. Reste à la main de Xavier : inviter deux lecteur·rices fictif·ves (le bac à sable n'accepte pas l'inscription publique), vérifier l'entrée de Rafael, **trancher la collision de dates avec Bologne (11-13/09)**, et retrouver le plan et le gabarit — **absents du dépôt, du poste et des transcripts** (les références `PLAN_formation…` et `GABARITO…` de cette fiche sont des fantômes tant qu'ils ne sont pas déposés). Le parcours de la séance, étape par étape, page par page, compte par compte : `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — les documents sont au dépôt et le dispositif n'est plus celui de la fiche.** Xavier a fourni le plan (révisé le 01/09), le conducteur de la séance 1, le roteiro de la capsule, les 89 diapositives et « O salto colegial » : déposés dans `docs/journal/chantiers/formation-BLMF/`. Le plan dit **sept soirées de 2 h 15, six modules, six exercices, une capsule de 40 minutes** — plus trois rencontres ; l'exercice 0 devient un travail personnel ; l'engagement chiffré est inchangé (5 exemplaires sur 2 758 avec mode d'acquisition). **Le « 13/09 » n'apparaît dans aucun document** : la première soirée n'est pas datée, et « collision avec Bologne » était une fausse alerte née d'une hypothèse du backlog. Bac à sable : deux lecteur·rices fictif·ves créé·es sur `blmf-teste` (Emma Teste, Errico Teste, adresses de Xavier ; mot de passe à poser par « Esqueci minha senha ») ; Voltairine de Teste existe mais ses adhésions ont été remaniées le 02/09 (lectrice retirée) ; règles et horaires copiés de la BLMF. La page `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` est réécrite en **compléments au conducteur**. Reste : dater la soirée 1, poser les mots de passe, Rafael G., et corriger dans les diapositives les quatre réserves dépassées listées au §7 du plan avant la soirée 4. **Soirée 1 datée par Xavier : le 08/09/2026** (17 h 00 – 19 h 15). Voltairine de Teste repassée **lectrice** (bibliothécaire retirée) ; Emma et Errico Teste se sont connecté·es le 03/09 à 16 h 15 et 16 h 18 : le bac à sable a ses trois lecteur·rices.",
+        "pt": "07/09 — no banco: a leitora fictícia «Voltairine de Teste» **nunca** abriu sessão (`auth.users.last_sign_in_at` nulo); nenhum exemplar criado desde 01/09, logo o compromisso «nenhum exemplar sem modo de aquisição» ainda não foi provado. O convite BTL em espera saiu em **G14**.\n\n**03/09 — preparação da sessão 1, verificada na base.** Contas das duas coordenações em `blmf-teste` (Rafael G. sem login desde 24/06); as cinco fichas do exercício 2 desde 26/08; **mas nenhum leitor fictício** e **nenhuma regra de circulação** — regras e horários da BLMF copiados em 03/09. Fica com Xavier: convidar dois leitores fictícios, verificar Rafael, decidir a colisão de datas com Bolonha, encontrar o plano e o gabarito (ausentes do repositório). Percurso: `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fim do dia — os documentos estão no repositório e o dispositivo mudou.** Plano de 01/09, condutor, roteiro, 89 slides : em `formation-BLMF/`. Sete noites de 2h15, seis módulos, cápsula de 40 min. **O «13/09» não está em nenhum documento** : a primeira noite não tem data ; a «colisão com Bolonha» era um falso alarme. Duas leitoras fictícias criadas em `blmf-teste` (Emma Teste, Errico Teste). A página `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` foi reescrita como complementos ao condutor. **Noite 1 datada por Xavier : 08/09/2026.** Voltairine de Teste voltou a **leitora** ; Emma e Errico Teste entraram em 03/09."
       }
     },
     {
@@ -5290,9 +5298,849 @@
         "item I17"
       ],
       "verif": {
-        "fr": "07/09 — mesures faites pour la spec d'I17 : image `supabase/postgres:17.6.1.136` sondée à vide (conteneur jetable), production interrogée en lecture seule, dépôt au commit `fb64c996`.",
-        "pt": "07/09 — medições feitas para a spec de I17: imagem sondada a vazio, produção consultada em leitura, repositório em `fb64c996`."
+        "fr": "07/09 — mesure complémentaire, pas la même que les 47 : **28** fonctions SECURITY DEFINER de `api`+`public` sont exécutables par `anon`. La « migration de REVOKE avant le 8 » de la reprise du 06/09 n'a pas été jouée ; le constat écrit, c'est cet item.\n\n07/09 — mesures faites pour la spec d'I17 : image `supabase/postgres:17.6.1.136` sondée à vide (conteneur jetable), production interrogée en lecture seule, dépôt au commit `fb64c996`.",
+        "pt": "07/09 — medida complementar, não a mesma dos 47: **28** funções SECURITY DEFINER de `api`+`public` são executáveis por `anon`. A «migração de REVOKE antes do dia 8» da retomada de 06/09 não foi executada; a constatação escrita é este item.\n\n07/09 — medições feitas para a spec de I17: imagem sondada a vazio, produção consultada em leitura, repositório em `fb64c996`."
       }
+    },
+    {
+      "id": "H9",
+      "d": "H",
+      "p": "P1",
+      "s": "gele",
+      "e": "M",
+      "sk": [
+        "sql",
+        "front",
+        "langue"
+      ],
+      "t": {
+        "fr": "Ouvrir les cinq relations SKOS aux consommateurs — RPC, page-sujet, sérialiseur, trente clés i18n, d'un bloc",
+        "pt": "Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco"
+      },
+      "v": {
+        "fr": "**Vérifié en base et dans le dépôt le 07/09.** Le domaine de `subject_ficedl_links.match_type` porte désormais `exact`, `close`, `broad`, `narrow`, `related` (migration `20260907172508`), mais la porte est restée fermée exprès : `api.fn_subject_add_ficedl_match` n'accepte que `exact`/`close`, parce que **deux rendus sont binaires** — `src/pages/public/SubjectPage.jsx` (l. 163) affiche « exacte » pour tout ce qui n'est pas `close`, et `src/lib/skosExport.js` sérialise en `skos:exactMatch` tout ce qui n'est pas `close`, dans le Turtle et le JSON-LD publiés. Un `broad` créé aujourd'hui serait publié comme correspondance exacte.",
+        "pt": "**Verificado no banco e no repositório em 07/09.** O domínio de `subject_ficedl_links.match_type` agora carrega `exact`, `close`, `broad`, `narrow`, `related` (migração `20260907172508`), mas a porta ficou fechada de propósito: `api.fn_subject_add_ficedl_match` só aceita `exact`/`close`, porque **duas renderizações são binárias** — `src/pages/public/SubjectPage.jsx` (l. 163) mostra «exata» para tudo que não é `close`, e `src/lib/skosExport.js` serializa como `skos:exactMatch` tudo que não é `close`, no Turtle e no JSON-LD publicados. Um `broad` criado hoje seria publicado como correspondência exata."
+      },
+      "w": {
+        "fr": "Étendre la garde de la RPC aux trois valeurs ; remplacer les deux ternaires par une table à cinq entrées (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`) ; ajouter trois clés `subject.matchBroad/Narrow/Related` dans les dix locales (le test i18n bloque sinon). Livrer les trois ensemble, jamais l'un sans les autres.",
+        "pt": "Estender a guarda da RPC aos três valores; substituir os dois ternários por uma tabela de cinco entradas (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`); acrescentar três chaves `subject.matchBroad/Narrow/Related` nas dez locales (o teste i18n bloqueia se faltar). Entregar os três juntos, nunca um sem os outros."
+      },
+      "y": {
+        "fr": "Tant que le domaine existe en base sans consommateur capable de le dire, chaque alignement « plus large » reste tassé en `close` — une sur-affirmation publiée. Et l'ouvrir sans les rendus ferait pire : un `broad` sortirait en `exactMatch` dans un fichier que d'autres catalogues peuvent moissonner.",
+        "pt": "Enquanto o domínio existir no banco sem consumidor capaz de dizê-lo, cada alinhamento «mais amplo» continua espremido em `close` — uma sobreafirmação publicada. E abri-lo sem as renderizações seria pior: um `broad` sairia como `exactMatch` num arquivo que outros catálogos podem coletar."
+      },
+      "f": {
+        "fr": [
+          "Un alignement `broad` posé depuis l'écran s'affiche « plus large » sur la page-sujet et sort en `skos:broadMatch` dans le Turtle et le JSON-LD.",
+          "`npm test` passe avec les trente clés.",
+          "La migration `20260907172508` voit son bloc de vérification 4.2 (porte fermée) retiré ou inversé le même jour."
+        ],
+        "pt": [
+          "Um alinhamento `broad` posto pela tela aparece «mais amplo» na página de assunto e sai como `skos:broadMatch` no Turtle e no JSON-LD.",
+          "`npm test` passa com as trinta chaves.",
+          "A migração `20260907172508` tem seu bloco de verificação 4.2 (porta fechada) retirado ou invertido no mesmo dia."
+        ]
+      },
+      "dep": {
+        "fr": "Gelé jusqu'au 14/09 (code de production). Précède **H10**.",
+        "pt": "Congelado até 14/09 (código de produção). Precede **H10**."
+      },
+      "r": [
+        "REGISTRE §0 DOC-THES-1",
+        "REGISTRE §30 THES-FIC4, THES-FIC5",
+        "claude/VERIF_subject_ficedl_links_schema_2026-09-07",
+        "migration 20260907172508"
+      ],
+      "verif": {
+        "fr": "07/09 — domaine étendu en base, porte fermée, deux rendus binaires constatés dans le dépôt.",
+        "pt": "07/09 — domínio estendido no banco, porta fechada, duas renderizações binárias constatadas no repositório."
+      }
+    },
+    {
+      "id": "H10",
+      "d": "H",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "biblio"
+      ],
+      "t": {
+        "fr": "Relire à la main les 98 alignements FICEDL — 54 `close` dont une part sont des `broad` — et aligner enfin les quatre rubriques historiques de Solidaires",
+        "pt": "Reler à mão os 98 alinhamentos FICEDL — 54 `close` dos quais uma parte são `broad` — e alinhar enfim as quatro rubricas históricas de Solidaires"
+      },
+      "v": {
+        "fr": "**Vérifié en base le 07/09.** 98 liens dans `subject_ficedl_links` : 44 `exact`, 54 `close`. Jusqu'au 07/09 le domaine n'avait que ces deux valeurs, donc tout ce qui est réellement « plus large » ou « voisin » a été tassé en `close`. Par vocabulaire visé : 72 vers la liste commune, 26 vers la géo-histo, **0 vers la facette `dates`** — les quatre rubriques historiques de Solidaires (guerres, périodes) ne sont donc toujours pas alignées, alors que les 159 dates sont en base depuis le 03/09 (H1 clos).",
+        "pt": "**Verificado no banco em 07/09.** 98 vínculos em `subject_ficedl_links`: 44 `exact`, 54 `close`. Até 07/09 o domínio só tinha esses dois valores, logo tudo que é realmente «mais amplo» ou «vizinho» foi espremido em `close`. Por vocabulário visado: 72 para a lista comum, 26 para a geo-histo, **0 para a faceta `dates`** — as quatro rubricas históricas de Solidaires (guerras, períodos) continuam, portanto, sem alinhamento, embora as 159 datas estejam no banco desde 03/09 (H1 fechado)."
+      },
+      "w": {
+        "fr": "Fiche par fiche, jamais par passe automatique (`CONV-EXEC-3`) : pour chaque `close`, décider s'il reste `close` ou devient `broad`/`narrow`/`related` ; poser les alignements manquants vers la facette `dates` pour les rubriques historiques ; passer aussi les 44 alignements du lot Solidaires du 28/08.",
+        "pt": "Ficha por ficha, nunca por passagem automática (`CONV-EXEC-3`): para cada `close`, decidir se fica `close` ou vira `broad`/`narrow`/`related`; pôr os alinhamentos faltantes para a faceta `dates` nas rubricas históricas; passar também os 44 alinhamentos do lote Solidaires de 28/08."
+      },
+      "y": {
+        "fr": "Un `skos:closeMatch` dit « presque le même concept ». Quand le sujet local est plus étroit, c'est faux — et c'est publié dans l'export que d'autres catalogues peuvent lire.",
+        "pt": "Um `skos:closeMatch` diz «quase o mesmo conceito». Quando o assunto local é mais estreito, é falso — e está publicado no export que outros catálogos podem ler."
+      },
+      "f": {
+        "fr": [
+          "Chaque lien porte une relation choisie, pas héritée d'un domaine à deux valeurs.",
+          "Au moins un alignement vers un descripteur `dates` existe."
+        ],
+        "pt": [
+          "Cada vínculo carrega uma relação escolhida, não herdada de um domínio de dois valores.",
+          "Existe pelo menos um alinhamento para um descritor `dates`."
+        ]
+      },
+      "dep": {
+        "fr": "Après **H9** : sans les cinq valeurs ouvertes à l'écran, la relecture n'a pas d'outil pour dire ce qu'elle voit.",
+        "pt": "Depois de **H9**: sem os cinco valores abertos na tela, a releitura não tem ferramenta para dizer o que vê."
+      },
+      "r": [
+        "REGISTRE §30 THES-FIC4, THES-FIC-O1",
+        "claude/VERIF_subject_ficedl_links_schema_2026-09-07",
+        "CALENDRIER_bologne_2026-08-27 (rubriques historiques)"
+      ],
+      "verif": {
+        "fr": "07/09 — 98 liens, 54 `close`, 0 vers `dates`.",
+        "pt": "07/09 — 98 vínculos, 54 `close`, 0 para `dates`."
+      }
+    },
+    {
+      "id": "H11",
+      "d": "H",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Le dépôt dit 462 descripteurs FICEDL, la production en porte 621 — régénérer la migration de données avant qu'un rejeu depuis zéro ne casse",
+        "pt": "O repositório diz 462 descritores FICEDL, a produção carrega 621 — regenerar a migração de dados antes que um replay do zero quebre"
+      },
+      "v": {
+        "fr": "**Vérifié le 07/09, dépôt et production.** `20260826191000_donnees_ficedl_thesaurus.sql` insère 462 lignes (227 sujets, 234 geo, 1 double, **0 date**) — figée sur l'aspiration du 30/06. La production porte l'aspiration du 03/09 : **621** (159 dates en plus) parce que `ficedl_thesaurus_sync.mjs` a été rejoué. Le rejeu depuis une base vide passe encore : les 47 `mot_id` référencés par la migration d'alignement sont tous dans les 462. Il cassera le jour où un alignement visera un terme postérieur au 30/06 — c'est exactement ce que **H10** va faire. Deux dates de l'aspiration (161) manquent en base (159) : sans libellé, écartées par `isSyncable`.",
+        "pt": "**Verificado em 07/09, repositório e produção.** `20260826191000_donnees_ficedl_thesaurus.sql` insere 462 linhas (227 assuntos, 234 geo, 1 dupla, **0 data**) — congelada na coleta de 30/06. A produção carrega a coleta de 03/09: **621** (159 datas a mais) porque `ficedl_thesaurus_sync.mjs` foi reexecutado. O replay a partir de um banco vazio ainda passa: os 47 `mot_id` referenciados pela migração de alinhamento estão todos nos 462. Vai quebrar no dia em que um alinhamento visar um termo posterior a 30/06 — é exatamente o que **H10** vai fazer. Duas datas da coleta (161) faltam no banco (159): sem rótulo, descartadas por `isSyncable`."
+      },
+      "w": {
+        "fr": "Régénérer la migration de données depuis `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` (ou la remplacer par un seed rejoué par le sync en CI), et regarder les deux fiches sans libellé. Ne jamais lancer le sync avec `--prune`.",
+        "pt": "Regenerar a migração de dados a partir de `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` (ou substituí-la por um seed reexecutado pelo sync na CI), e olhar as duas fichas sem rótulo. Nunca rodar o sync com `--prune`."
+      },
+      "y": {
+        "fr": "Une reconstruction depuis zéro (**A2**, la bascule **I2**) qui ne rejoue pas les données de production n'est pas une reconstruction — c'est une autre base.",
+        "pt": "Uma reconstrução do zero (**A2**, a virada **I2**) que não reexecuta os dados de produção não é uma reconstrução — é outro banco."
+      },
+      "f": {
+        "fr": [
+          "`count(*)` de `ficedl_thesaurus_terms` identique en CI et en production.",
+          "Le rejeu de `sql-tests.yml` passe avec un alignement vers un descripteur `dates`."
+        ],
+        "pt": [
+          "`count(*)` de `ficedl_thesaurus_terms` idêntico na CI e na produção.",
+          "O replay de `sql-tests.yml` passa com um alinhamento para um descritor `dates`."
+        ]
+      },
+      "dep": {
+        "fr": "Avant **H10**. Conditionne **A2** et **I2**.",
+        "pt": "Antes de **H10**. Condiciona **A2** e **I2**."
+      },
+      "r": [
+        "REGISTRE §30 THES-FIC-O4",
+        "claude/VERIF_subject_ficedl_links_schema_2026-09-07",
+        "REPRISE_claude_code_2026-08-27 (piège --prune)"
+      ],
+      "verif": {
+        "fr": "07/09 — 462 au dépôt, 621 en production, rejeu encore vert.",
+        "pt": "07/09 — 462 no repositório, 621 na produção, replay ainda verde."
+      }
+    },
+    {
+      "id": "H12",
+      "d": "H",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune",
+        "collectif"
+      ],
+      "t": {
+        "fr": "Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration",
+        "pt": "As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração"
+      },
+      "v": {
+        "fr": "Réponse de la source, 07/09 : deux référentiels existent hors thésaurus — les communes des biographies du *Bettini* (avec cartographie) et les lieux d'édition du *Bianco* — « pas intégrées au thésaurus, probablement trop lourd à gérer ». AnarBib n'a aucune autorité de lieux : `local_publicacao` est un champ libre (audit du 20/08 : `BELEM`), et la spec périodiques a écarté l'alignement FICEDL au motif que le thésaurus indexe des matières — vrai pour les matières, faux pour les lieux.",
+        "pt": "Resposta da fonte, 07/09: dois referenciais existem fora do tesauro — os municípios das biografias do *Bettini* (com cartografia) e os lugares de edição do *Bianco* — «não integrados ao tesauro, provavelmente pesado demais para gerir». O AnarBib não tem nenhuma autoridade de lugares: `local_publicacao` é campo livre (auditoria de 20/08: `BELEM`), e a spec de periódicos descartou o alinhamento FICEDL porque o tesauro indexa assuntos — verdade para os assuntos, falso para os lugares."
+      },
+      "w": {
+        "fr": "Après Bologne, et hors de la demande du 12 (qui tient parce qu'elle demande *une* chose) : demander les deux listes comme fichiers séparés, telles qu'elles sont. Puis aligner sur un référentiel géographique existant (Wikidata, GeoNames) avec la liste du Bianco en surcouche militante — pas construire une n-ième liste de communes.",
+        "pt": "Depois de Bolonha, e fora do pedido do dia 12 (que se sustenta porque pede *uma* coisa): pedir as duas listas como arquivos separados, como estão. Depois alinhar a um referencial geográfico existente (Wikidata, GeoNames) com a lista do Bianco como sobrecamada militante — não construir mais uma lista de municípios."
+      },
+      "y": {
+        "fr": "Demander l'intégration, c'est demander la charge que la source dit ne pas pouvoir porter. Une liste n'a pas besoin d'être dans le thésaurus pour être utile ; elle a besoin d'être copiable.",
+        "pt": "Pedir a integração é pedir a carga que a fonte diz não poder carregar. Uma lista não precisa estar no tesauro para ser útil; precisa ser copiável."
+      },
+      "f": {
+        "fr": [
+          "Les deux listes reçues sous une forme machine-lisible, versées à `docs/journal/ficedl/`.",
+          "Une décision écrite sur l'autorité de lieux d'AnarBib."
+        ],
+        "pt": [
+          "As duas listas recebidas em forma legível por máquina, versadas em `docs/journal/ficedl/`.",
+          "Uma decisão escrita sobre a autoridade de lugares do AnarBib."
+        ]
+      },
+      "dep": {
+        "fr": "Après **K5**. Touche `spec-periodiques` et **C3** (autorités).",
+        "pt": "Depois de **K5**. Toca `spec-periodiques` e **C3** (autoridades)."
+      },
+      "r": [
+        "REGISTRE §30 THES-FIC-O2",
+        "claude/REPONSE_hortical_deux_thesaurus_2026-09-07",
+        "claude/spec-periodiques-v0.1 §5"
+      ]
+    },
+    {
+      "id": "H13",
+      "d": "H",
+      "p": "P2",
+      "s": "a-verifier",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "L'esquisse SKOS des 26 descripteurs n'est ni au dépôt ni au projet — la verser à `docs/journal/ficedl/` pour qu'elle soit donnable et versionnée",
+        "pt": "O esboço SKOS dos 26 descritores não está nem no repositório nem no projeto — versá-lo em `docs/journal/ficedl/` para que seja doável e versionado"
+      },
+      "v": {
+        "fr": "Le dossier Bologne du 03/09 le dit : `ficedl_thesaurus_ESQUISSE.csv` et `.jsonld` « ne sont pas dans le projet », à emporter sur clé USB. **Vérifié le 07/09** : `docs/journal/ficedl/` contient les quatre aspirations et les audits, **aucun fichier `ESQUISSE`** ; le projet Claude non plus. Le racleur et le sync, eux, sont au dépôt (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — cette moitié-là est déjà donnable.",
+        "pt": "O dossiê de Bolonha de 03/09 diz: `ficedl_thesaurus_ESQUISSE.csv` e `.jsonld` «não estão no projeto», a levar em pendrive. **Verificado em 07/09**: `docs/journal/ficedl/` contém as quatro coletas e as auditorias, **nenhum arquivo `ESQUISSE`**; o projeto Claude tampouco. O raspador e o sync, esses, estão no repositório (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — essa metade já é doável."
+      },
+      "w": {
+        "fr": "Retrouver les deux fichiers (Downloads ?) ou les régénérer depuis l'aspiration du 03/09, et les commiter avec la note du 28/08 à côté. Depuis le 07/09 l'esquisse est à réviser : deux `skos:ConceptScheme`, les têtes `guerres`/`art : courants` en `skos:Collection`, jamais d'URI de schéma inventé.",
+        "pt": "Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada."
+      },
+      "y": {
+        "fr": "C'est la pièce que tu poses sur la table à Bologne. Une pièce qui n'existe que sur une clé n'est pas une contribution, c'est une démonstration.",
+        "pt": "É a peça que você põe na mesa em Bolonha. Uma peça que só existe num pendrive não é contribuição, é demonstração."
+      },
+      "f": {
+        "fr": [
+          "Les deux fichiers au dépôt, régénérables par une commande documentée."
+        ],
+        "pt": [
+          "Os dois arquivos no repositório, regeneráveis por um comando documentado."
+        ]
+      },
+      "dep": {
+        "fr": "Lié à **H2** et **K6**.",
+        "pt": "Ligado a **H2** e **K6**."
+      },
+      "r": [
+        "claude/DOSSIER_rencontre_leftovers_bologne_2026-09-12 §B.1",
+        "claude/NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
+      ],
+      "verif": {
+        "fr": "07/09 — absents du dépôt et du projet ; leur existence sur disque n'a pas été vérifiée.",
+        "pt": "07/09 — ausentes do repositório e do projeto; sua existência em disco não foi verificada."
+      }
+    },
+    {
+      "id": "K9",
+      "d": "K",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est 10 — quatre textes à corriger avant le 12",
+        "pt": "Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é 10 — quatro textos a corrigir antes do dia 12"
+      },
+      "v": {
+        "fr": "**Mesuré sur l'aspiration du 03/09, le 07/09.** 620 → **623** descripteurs entre le 30/06 et le 03/09 (trois dates apparues : `1927`, `2026`, `2027`, zéro disparition). Et sur les 148 descripteurs hiérarchisés, 55 parents étaient introuvables au 28/08 — **45 se résolvent par la variante `X (généralités)`** ; il reste **10** vrais regroupements sans concept (`guerres` ×9, `art : courants` ×1). Les deux chiffres sont dans la présentation du 12, l'intervention du 13, le texte d'orientation et les conventions d'interopérabilité.",
+        "pt": "**Medido na coleta de 03/09, em 07/09.** 620 → **623** descritores entre 30/06 e 03/09 (três datas surgiram: `1927`, `2026`, `2027`, nenhuma desapareceu). E dos 148 descritores hierarquizados, 55 pais não eram encontrados em 28/08 — **45 se resolvem pela variante `X (généralités)`**; restam **10** agrupamentos reais sem conceito (`guerres` ×9, `art : courants` ×1). Os dois números estão na apresentação do dia 12, na intervenção do 13, no texto de orientação e nas convenções de interoperabilidade."
+      },
+      "w": {
+        "fr": "Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 45 relèvent d'une convention de nommage, 10 sont des regroupements » — et reformuler la question à la fédération : non plus « votre arbre existe-t-il ? » mais « *X* et *X (généralités)* sont-ils le même terme ? ».",
+        "pt": "Dizer «mais de seiscentos» ou «623 em 3 de setembro»; substituir «55 de 148 não existem» por «45 são convenção de nomeação, 10 são agrupamentos» — e reformular a pergunta à federação: não mais «a sua árvore existe?», e sim «*X* e *X (généralités)* são o mesmo termo?»."
+      },
+      "y": {
+        "fr": "Le vocabulaire a bougé sans que personne l'apprenne : c'est l'argument de l'intervention, mesuré sur ta propre copie. Mais prononcer un chiffre faux devant les gens qui tiennent le site, c'est perdre l'argument.",
+        "pt": "O vocabulário mudou sem que ninguém soubesse: é o argumento da intervenção, medido na sua própria cópia. Mas dizer um número errado diante de quem mantém o site é perder o argumento."
+      },
+      "f": {
+        "fr": [
+          "Les quatre textes portent les chiffres du 03/09 et la question reformulée.",
+          "Le foglio italien imprimé est la version corrigée."
+        ],
+        "pt": [
+          "Os quatro textos carregam os números de 03/09 e a pergunta reformulada.",
+          "O foglio italiano impresso é a versão corrigida."
+        ]
+      },
+      "dep": {
+        "fr": "Avant **K5** (12/09). Sans dépendance technique.",
+        "pt": "Antes de **K5** (12/09). Sem dependência técnica."
+      },
+      "r": [
+        "claude/REPONSE_hortical_deux_thesaurus_2026-09-07 §5-6",
+        "claude/PRESENTATION_samedi_bologne_2026-09-12",
+        "claude/INTERVENTION_assemblee_ouverte_bologne_2026-09-13",
+        "claude/ORIENTATION_outils_bibliotheques_militantes_2026-08-26",
+        "claude/CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26"
+      ],
+      "verif": {
+        "fr": "07/09 — chiffres mesurés ; textes non encore corrigés.",
+        "pt": "07/09 — números medidos; textos ainda não corrigidos."
+      }
+    },
+    {
+      "id": "K10",
+      "d": "K",
+      "p": "P2",
+      "s": "a-verifier",
+      "e": "M",
+      "sk": [
+        "langue"
+      ],
+      "t": {
+        "fr": "Trois articles promis au *Monde libertaire*, un par mois — et une émission proposée à *Trous Noirs*",
+        "pt": "Três artigos prometidos ao *Monde libertaire*, um por mês — e um programa proposto à *Trous Noirs*"
+      },
+      "v": {
+        "fr": "Session du 30/08 : le courriel à Monique et Serge (Radio Libertaire, *Trous Noirs*) écrit « Le Monde libertaire en publie trois articles dans les mois qui viennent, un par mois ». **Non vérifié** : ni la remise du premier article, ni l'envoi du courriel, ni la réponse. Aucun item du backlog ne portait cet engagement.",
+        "pt": "Sessão de 30/08: o e-mail a Monique e Serge (Radio Libertaire, *Trous Noirs*) escreve «Le Monde libertaire en publie trois articles dans les mois qui viennent, un par mois». **Não verificado**: nem a entrega do primeiro artigo, nem o envio do e-mail, nem a resposta. Nenhum item do backlog carregava esse compromisso."
+      },
+      "w": {
+        "fr": "Dire ici où en sont les trois articles (rendu, relu, publié) et si le courriel est parti ; puis tenir le rythme — un article par mois est une dette qui se voit.",
+        "pt": "Dizer aqui onde estão os três artigos (entregue, revisto, publicado) e se o e-mail saiu; depois manter o ritmo — um artigo por mês é uma dívida que se vê."
+      },
+      "y": {
+        "fr": "Une promesse faite à un journal militant engage le projet autant qu'un déploiement : elle se lit dans les numéros où l'article manque.",
+        "pt": "Uma promessa feita a um jornal militante compromete o projeto tanto quanto um deploy: lê-se nos números em que o artigo falta."
+      },
+      "f": {
+        "fr": [
+          "Trois dates de parution, ou une renégociation écrite du rythme."
+        ],
+        "pt": [
+          "Três datas de publicação, ou uma renegociação escrita do ritmo."
+        ]
+      },
+      "dep": {
+        "fr": "Voisin de **K5** ; sans dépendance technique.",
+        "pt": "Vizinho de **K5**; sem dependência técnica."
+      },
+      "r": [
+        "session Cowork « Monde libertaire article publication », 30/08/2026"
+      ],
+      "verif": {
+        "fr": "07/09 — engagement relevé dans une session, aucune trace de suivi ailleurs.",
+        "pt": "07/09 — compromisso encontrado numa sessão, nenhum rastro de acompanhamento em outro lugar."
+      }
+    },
+    {
+      "id": "I21",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sysadmin",
+        "collectif"
+      ],
+      "t": {
+        "fr": "Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile",
+        "pt": "O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil"
+      },
+      "v": {
+        "fr": "La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.",
+        "pt": "A decisão de 07/09 (oferta confirmada: VM IPv4, Debian, backups já lá) e a nota de 05-06/09 deixam uma lista que nada mantém junta. **Verificado em 07/09 em `deploy/`**: nenhum rastro de `unattended-upgrades`, firewall nem autenticação só por chave. O resto é humano ou local: a conexão autenticada na pilha local nunca retestada desde a retirada do Turnstile; `deploy/.env` sobrescrito por `install.sh` (domínios em `localhost`) sem cópia conhecida; o teste a partir de uma rede móvel brasileira (NAT64) nunca feito; o prazo de intervenção de Les Herbes Folles nunca pedido; o meio de lhes pagar «pedido desde julho, sem resposta»; um segundo detentor dos acessos; e a regra posta em 07/09: **não se vira antes que o backup tenha ido para um terceiro** — hoje os três fluxos restic estão no próprio hospedeiro de destino."
+      },
+      "w": {
+        "fr": "Tenir la liste ici, cocher chaque condition avec sa preuve (fichier, courriel, essai daté). Le durcissement entre dans `deploy/` ; le dépôt de sauvegarde tiers se demande à Bologne (**I12** dit ce que le miroir froid couvre, et ce n'est pas ça).",
+        "pt": "Manter a lista aqui, marcar cada condição com sua prova (arquivo, e-mail, teste datado). O endurecimento entra em `deploy/`; o depósito de backup terceiro pede-se em Bolonha (**I12** diz o que o espelho frio cobre, e não é isso)."
+      },
+      "y": {
+        "fr": "Chacune de ces conditions est petite. Ensemble, c'est la différence entre une bascule et un déménagement de la fragilité.",
+        "pt": "Cada condição é pequena. Juntas, são a diferença entre uma virada e uma mudança de endereço da fragilidade."
+      },
+      "f": {
+        "fr": [
+          "Les huit conditions cochées avec preuve, dans cet item.",
+          "`deploy/` porte le durcissement, rejoué par `bootstrap.sh`."
+        ],
+        "pt": [
+          "As oito condições marcadas com prova, neste item.",
+          "`deploy/` carrega o endurecimento, reexecutado por `bootstrap.sh`."
+        ]
+      },
+      "dep": {
+        "fr": "Bloque **I2**. Le dépôt tiers et le second détenteur relèvent de la même conversation que **A1** (Bologne).",
+        "pt": "Bloqueia **I2**. O depósito terceiro e o segundo detentor pertencem à mesma conversa que **A1** (Bolonha)."
+      },
+      "r": [
+        "claude/DECISION_herbesfolles_offre_confirmee_2026-09-07",
+        "claude/NOTE_sortie_services_etats_uniens_2026-09-05",
+        "claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)"
+      ],
+      "verif": {
+        "fr": "07/09 — `deploy/` sans durcissement ; les sept autres conditions non vérifiables depuis la base.",
+        "pt": "07/09 — `deploy/` sem endurecimento; as outras sete condições não verificáveis a partir do banco."
+      }
+    },
+    {
+      "id": "I22",
+      "d": "I",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler",
+        "pt": "Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar"
+      },
+      "v": {
+        "fr": "Le 07/09, la migration `20260907172508` a été appliquée en production par `apply_migration` (MCP) — ce que `DOC-DEPLOY-1` interdit en toutes lettres. Écart constaté après coup, tracé au REGISTRE §30, rattrapé sans double application (fichier renommé sur l'horodatage enregistré dans `supabase_migrations.schema_migrations`). Le registre laisse la question ouverte et rappelle que, tant qu'elle l'est, **la règle écrite vaut**.",
+        "pt": "Em 07/09, a migração `20260907172508` foi aplicada em produção por `apply_migration` (MCP) — o que `DOC-DEPLOY-1` proíbe com todas as letras. Desvio constatado depois, rastreado no REGISTRE §30, recuperado sem dupla aplicação (arquivo renomeado com o timestamp registrado em `supabase_migrations.schema_migrations`). O registro deixa a questão aberta e lembra que, enquanto estiver, **a regra escrita vale**."
+      },
+      "w": {
+        "fr": "Deux issues, une ligne au registre chacune : tolérer à titre exceptionnel et tracé, sur le modèle de `DOC-DEPLOY-3` — ou réaffirmer l'interdiction et poser le contrôle qui la rend vérifiable : une version présente dans `supabase_migrations.schema_migrations` dont le fichier n'est pas au dépôt est la signature exacte de l'écart (une requête, jouable en CI).",
+        "pt": "Duas saídas, uma linha no registro cada: tolerar em caráter excepcional e rastreado, no modelo de `DOC-DEPLOY-3` — ou reafirmar a proibição e pôr o controle que a torna verificável: uma versão presente em `supabase_migrations.schema_migrations` cujo arquivo não está no repositório é a assinatura exata do desvio (uma consulta, executável na CI)."
+      },
+      "y": {
+        "fr": "Une règle enfreinte sans suite devient une règle décorative. La suite peut être une exception écrite ; ce ne peut pas être le silence.",
+        "pt": "Uma regra infringida sem consequência vira regra decorativa. A consequência pode ser uma exceção escrita; não pode ser o silêncio."
+      },
+      "f": {
+        "fr": [
+          "La ligne `DOC-DEPLOY-1` du registre ne porte plus le ⚠️ du 07/09."
+        ],
+        "pt": [
+          "A linha `DOC-DEPLOY-1` do registro não carrega mais o ⚠️ de 07/09."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "REGISTRE §0 DOC-DEPLOY-1",
+        "REGISTRE §30 (écart tracé)",
+        "claude/VERIF_subject_ficedl_links_schema_2026-09-07 §4"
+      ]
+    },
+    {
+      "id": "I23",
+      "d": "I",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien",
+        "pt": "Registrar um ccTLD europeu e fazê-lo alias de `anarbib.org` — o `.org` continua sob registro estadunidense"
+      },
+      "v": {
+        "fr": "La note du 05-06/09 le met en tête de chemin : « cette semaine — déposer un ccTLD européen et en faire un alias », compatible avec le gel parce que ça ne touche pas la production. Motif : le registre du `.org` (Public Interest Registry) est états-unien, comme les deux services dont le projet sort. **Non vérifié** — pas de résolution DNS possible depuis ici ; rien dans le dépôt ne le mentionne.",
+        "pt": "A nota de 05-06/09 põe isso no início do caminho: «esta semana — registrar um ccTLD europeu e fazê-lo alias», compatível com o congelamento porque não toca a produção. Motivo: o registro do `.org` (Public Interest Registry) é estadunidense, como os dois serviços dos quais o projeto está saindo. **Não verificado** — sem resolução DNS possível daqui; nada no repositório o menciona."
+      },
+      "w": {
+        "fr": "Choisir le domaine, le déposer chez OVH, poser une redirection vers `anarbib.org` (et non l'inverse, pour l'instant), et l'écrire dans la politique de confidentialité s'il y figure.",
+        "pt": "Escolher o domínio, registrá-lo na OVH, pôr um redirecionamento para `anarbib.org` (e não o inverso, por enquanto), e escrevê-lo na política de privacidade se ela o mencionar."
+      },
+      "y": {
+        "fr": "Un alias coûte un euro par mois et donne une adresse qui survit à une décision étrangère sur le `.org`.",
+        "pt": "Um alias custa um euro por mês e dá um endereço que sobrevive a uma decisão estrangeira sobre o `.org`."
+      },
+      "f": {
+        "fr": [
+          "Le domaine résout et redirige."
+        ],
+        "pt": [
+          "O domínio resolve e redireciona."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. Indépendant du gel.",
+        "pt": "Nenhuma. Independente do congelamento."
+      },
+      "r": [
+        "claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 1)"
+      ]
+    },
+    {
+      "id": "F9",
+      "d": "F",
+      "p": "P1",
+      "s": "a-verifier",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "SPF, DKIM et DMARC de `notifications.anarbib.org` n'ont jamais été relevés — trente-six crons envoient du courrier depuis ce domaine",
+        "pt": "SPF, DKIM e DMARC de `notifications.anarbib.org` nunca foram levantados — trinta e seis crons enviam e-mail a partir desse domínio"
+      },
+      "v": {
+        "fr": "Relevé le 31/08 dans la reprise : « jamais relevés ; trois `Resolve-DnsName` suffisent ; à faire avant le 10/09 ». **Le 07/09, impossible à vérifier** : ni le conteneur ni la VM de travail n'atteignent un résolveur DNS. Aucune trace ailleurs que ce relevé ne dit que c'est fait.",
+        "pt": "Levantado em 31/08 na retomada: «nunca levantados; três `Resolve-DnsName` bastam; a fazer antes de 10/09». **Em 07/09, impossível verificar**: nem o contêiner nem a VM de trabalho alcançam um resolvedor DNS. Nenhum rastro além desse levantamento diz que foi feito."
+      },
+      "w": {
+        "fr": "Depuis PowerShell : `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, et le sélecteur DKIM affiché par le tableau de bord Resend. Coller les trois réponses ici, datées. Si DMARC manque, poser `p=none` avec une adresse de rapport avant de durcir.",
+        "pt": "No PowerShell: `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, e o seletor DKIM mostrado pelo painel Resend. Colar as três respostas aqui, datadas. Se faltar DMARC, pôr `p=none` com endereço de relatório antes de endurecer."
+      },
+      "y": {
+        "fr": "Le 10/09, l'invitation de **F4** part sur ce domaine, deux jours avant Bologne. Un courrier qui tombe en indésirable ne se voit pas dans les logs — il se voit dans le silence de la lectrice.",
+        "pt": "Em 10/09, o convite de **F4** sai por esse domínio, dois dias antes de Bolonha. Um e-mail que cai em spam não aparece nos logs — aparece no silêncio da leitora."
+      },
+      "f": {
+        "fr": [
+          "Les trois enregistrements relevés et collés dans cet item, avec la date."
+        ],
+        "pt": [
+          "Os três registros levantados e colados neste item, com a data."
+        ]
+      },
+      "dep": {
+        "fr": "Avant **F4** (10/09). Entre dans **F1** (audit) mais ne l'attend pas.",
+        "pt": "Antes de **F4** (10/09). Entra em **F1** (auditoria) mas não a espera."
+      },
+      "r": [
+        "claude/REPRISE_2026-09-01_douze_jours_avant_bologne"
+      ],
+      "verif": {
+        "fr": "07/09 — non vérifiable depuis ici ; aucune trace que ce soit fait.",
+        "pt": "07/09 — não verificável daqui; nenhum rastro de que tenha sido feito."
+      }
+    },
+    {
+      "id": "F10",
+      "d": "F",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "deno",
+        "collectif"
+      ],
+      "t": {
+        "fr": "Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`",
+        "pt": "Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`"
+      },
+      "v": {
+        "fr": "**Vérifié dans le dépôt le 07/09** : `supabase/functions/_shared/transport/email.ts` connaît deux transports, `sendViaResend` et `sendViaBrevo` — le second survit au retrait de Brevo (R.6/R.7, annoncé clos). Aucun transport SMTP générique, donc aucun moyen de brancher un relais militant (ARN, Nodo50, bida.im) le jour où l'un dit oui. La note du 05-06/09 place cette sortie après Bologne, derrière la demande d'un relais SMTP le 12.",
+        "pt": "**Verificado no repositório em 07/09**: `supabase/functions/_shared/transport/email.ts` conhece dois transportes, `sendViaResend` e `sendViaBrevo` — o segundo sobrevive à retirada do Brevo (R.6/R.7, anunciado fechado). Nenhum transporte SMTP genérico, logo nenhum meio de ligar um relay militante (ARN, Nodo50, bida.im) no dia em que um disser sim. A nota de 05-06/09 põe essa saída depois de Bolonha, atrás do pedido de um relay SMTP no dia 12."
+      },
+      "w": {
+        "fr": "Demander avant de choisir (les relais militants d'abord, Scaleway en repli) ; écrire `sendViaSmtp` (ou le transport retenu) et rétablir un aiguillage par variable ; supprimer `sendViaBrevo` ; ne faire lever que ce qui doit lever (**F7** est clos là-dessus).",
+        "pt": "Pedir antes de escolher (os relays militantes primeiro, Scaleway como recuo); escrever `sendViaSmtp` (ou o transporte escolhido) e restabelecer um roteamento por variável; remover `sendViaBrevo`; só levantar erro onde deve (**F7** está fechado nisso)."
+      },
+      "y": {
+        "fr": "Resend est le dernier service états-unien après Supabase. Sortir de l'un sans l'autre laisse la moitié de la dépendance, et la moitié la plus bavarde : le courriel des lectrices.",
+        "pt": "O Resend é o último serviço estadunidense depois do Supabase. Sair de um sem o outro deixa metade da dependência, e a metade mais falante: o e-mail das leitoras."
+      },
+      "f": {
+        "fr": [
+          "Un courriel réel part par le nouveau transport, depuis la production, vers une boîte tierce.",
+          "`sendViaBrevo` n'existe plus dans le dépôt."
+        ],
+        "pt": [
+          "Um e-mail real sai pelo novo transporte, da produção, para uma caixa terceira.",
+          "`sendViaBrevo` não existe mais no repositório."
+        ]
+      },
+      "dep": {
+        "fr": "Après **K5** (relais demandé à Bologne). Pas avant **I2** : changer de transport et d'hébergeur la même semaine, c'est deux inconnues.",
+        "pt": "Depois de **K5** (relay pedido em Bolonha). Não antes de **I2**: mudar de transporte e de hospedeiro na mesma semana são duas incógnitas."
+      },
+      "r": [
+        "claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)",
+        "spec-migration-mail-resend"
+      ],
+      "verif": {
+        "fr": "07/09 — deux transports dans `email.ts`, aucun SMTP.",
+        "pt": "07/09 — dois transportes em `email.ts`, nenhum SMTP."
+      }
+    },
+    {
+      "id": "E15",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "langue"
+      ],
+      "t": {
+        "fr": "Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf",
+        "pt": "As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales"
+      },
+      "v": {
+        "fr": "**Vérifié dans `src/i18n/locales/` le 07/09.** En pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` et `account.deleteAccount.confirmText` = `EXCLUIR` : deux gestes, deux mots. Dans fr, en, es, it, de, nl, el et eo, **les deux clés portent le même mot** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Seul le catalan distingue (`ELIMINA` / `SUPRIMIR`). Relevé d'abord par le manuel lecteur v2 du 03/09.",
+        "pt": "**Verificado em `src/i18n/locales/` em 07/09.** Em pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` e `account.deleteAccount.confirmText` = `EXCLUIR`: dois gestos, duas palavras. Em fr, en, es, it, de, nl, el e eo, **as duas chaves carregam a mesma palavra** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Só o catalão distingue (`ELIMINA` / `SUPRIMIR`). Levantado primeiro pelo manual da leitora v2 de 03/09."
+      },
+      "w": {
+        "fr": "Choisir deux mots distincts par locale, avec les locuteur·rices quand il y en a (**E2** pour nl et el), et mettre le manuel en accord.",
+        "pt": "Escolher duas palavras distintas por locale, com as pessoas falantes quando houver (**E2** para nl e el), e pôr o manual de acordo."
+      },
+      "y": {
+        "fr": "Un mot de confirmation sert à ce qu'on ne confonde pas deux destructions. Quand c'est le même, il ne sert à rien — et c'est précisément `DOC-DESTR-2` : dire ce qu'on détruit.",
+        "pt": "Uma palavra de confirmação serve para não confundir duas destruições. Quando é a mesma, não serve para nada — e é exatamente `DOC-DESTR-2`: dizer o que se destrói."
+      },
+      "f": {
+        "fr": [
+          "Neuf locales, deux mots différents chacune ; le test i18n passe."
+        ],
+        "pt": [
+          "Nove locales, duas palavras diferentes cada; o teste i18n passa."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "claude/MANUEL_LECTEUR_v2_refonte_2026-09-03",
+        "REGISTRE §0 DOC-DESTR-2"
+      ],
+      "verif": {
+        "fr": "07/09 — huit paires identiques constatées dans les fichiers de locale.",
+        "pt": "07/09 — oito pares idênticos constatados nos arquivos de locale."
+      }
+    },
+    {
+      "id": "E16",
+      "d": "E",
+      "p": "P2",
+      "s": "a-verifier",
+      "e": "S",
+      "sk": [
+        "front"
+      ],
+      "t": {
+        "fr": "La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique",
+        "pt": "A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática"
+      },
+      "v": {
+        "fr": "Relevé par la refonte du manuel v5 (01/09) : « deux messages contradictoires sur l'activation de la purge automatique — le manuel demande de vérifier l'instance ». **Non vérifié le 07/09** : c'est un défaut d'écran, à constater dans l'application, pas dans les fichiers.",
+        "pt": "Levantado pela refonte do manual v5 (01/09): «duas mensagens contraditórias sobre a ativação da purga automática — o manual pede para verificar a instância». **Não verificado em 07/09**: é um defeito de tela, a constatar na aplicação, não nos arquivos."
+      },
+      "w": {
+        "fr": "Ouvrir la sous-page sur `blmf-teste`, lire les deux messages, décider lequel dit vrai en regardant le réglage en base, corriger l'autre.",
+        "pt": "Abrir a subaba em `blmf-teste`, ler as duas mensagens, decidir qual diz a verdade olhando o ajuste no banco, corrigir a outra."
+      },
+      "y": {
+        "fr": "Un écran de confidentialité qui se contredit fait douter de tout le reste de la page — et c'est la page qu'une coordination lit en premier.",
+        "pt": "Uma tela de privacidade que se contradiz faz duvidar de todo o resto da página — e é a página que uma coordenação lê primeiro."
+      },
+      "f": {
+        "fr": [
+          "Un seul message, conforme à l'état réel du réglage."
+        ],
+        "pt": [
+          "Uma só mensagem, conforme o estado real do ajuste."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "claude/MANUEL_v5_refonte_2026-09-01 (points à trancher)"
+      ],
+      "verif": {
+        "fr": "07/09 — non vérifié, constat d'écran seulement.",
+        "pt": "07/09 — não verificado, constatação de tela apenas."
+      }
+    },
+    {
+      "id": "G14",
+      "d": "G",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Une invitation d'équipe attend depuis le 30/08 et expirera le 29/09 — la personne ne le sait peut-être pas",
+        "pt": "Um convite de equipe espera desde 30/08 e expirará em 29/09 — a pessoa talvez não saiba"
+      },
+      "v": {
+        "fr": "**Vérifié en base le 07/09** : dans `library_team_invitations`, une invitation créée le 30/08 est toujours `ready`, expiration le 29/09 (deux autres du 01/09 sont `accepted` et `pending_ratification`). Le plan de formation du 01/09 la signalait déjà : « il faut la prévenir ». Le cron d'expiration la fermera en silence.",
+        "pt": "**Verificado no banco em 07/09**: em `library_team_invitations`, um convite criado em 30/08 continua `ready`, expira em 29/09 (dois outros de 01/09 estão `accepted` e `pending_ratification`). O plano de formação de 01/09 já o sinalizava: «é preciso avisá-la». O cron de expiração vai fechá-lo em silêncio."
+      },
+      "w": {
+        "fr": "Un message à la personne invitée, par le canal humain (`DOC-COLLECTIVE-1`). Puis regarder pourquoi l'invitation par courriel n'a pas suffi — c'est **G1** en miniature.",
+        "pt": "Uma mensagem à pessoa convidada, pelo canal humano (`DOC-COLLECTIVE-1`). Depois olhar por que o convite por e-mail não bastou — é **G1** em miniatura."
+      },
+      "y": {
+        "fr": "Un circuit qui expire sans que personne ne s'en aperçoive est un circuit qui n'existe pas.",
+        "pt": "Um circuito que expira sem que ninguém perceba é um circuito que não existe."
+      },
+      "f": {
+        "fr": [
+          "L'invitation est `accepted` ou `declined` avant le 29/09, pas expirée."
+        ],
+        "pt": [
+          "O convite está `accepted` ou `declined` antes de 29/09, não expirado."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "claude/PLAN_formation_coordination_BLMF_2026-08-26 (annexe)",
+        "REGISTRE §0 DOC-COLLECTIVE-1"
+      ],
+      "verif": {
+        "fr": "07/09 — `ready` depuis le 30/08, expiration 29/09.",
+        "pt": "07/09 — `ready` desde 30/08, expira em 29/09."
+      }
+    },
+    {
+      "id": "B23",
+      "d": "B",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "`api.library_email_identity` est la seule vue `api` encore en SECURITY DEFINER — le dire, ou la basculer",
+        "pt": "`api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la"
+      },
+      "v": {
+        "fr": "Le GLB v17 (01/09) comptait 67 vues `api` sur 68 en `security_invoker`. **Vérifié le 07/09** : `pg_class.reloptions` de `api.library_email_identity` est vide — elle lit donc sous le propriétaire. Peut-être voulu (elle sert l'identité d'expéditeur aux fonctions de courriel), mais aucun commentaire ne le dit.",
+        "pt": "O GLB v17 (01/09) contava 67 views `api` de 68 em `security_invoker`. **Verificado em 07/09**: `pg_class.reloptions` de `api.library_email_identity` está vazio — ela lê, portanto, sob o proprietário. Talvez intencional (serve a identidade de remetente às funções de e-mail), mas nenhum comentário o diz."
+      },
+      "w": {
+        "fr": "Soit `ALTER VIEW … SET (security_invoker = on)` et une suite qui vérifie que le courriel part encore, soit un `COMMENT ON VIEW` qui explique l'exception. Une soirée dans les deux cas.",
+        "pt": "Ou `ALTER VIEW … SET (security_invoker = on)` e uma suíte que verifica que o e-mail ainda sai, ou um `COMMENT ON VIEW` que explique a exceção. Uma noite nos dois casos."
+      },
+      "y": {
+        "fr": "Une exception non écrite se rejoue un jour comme une erreur — par quelqu'un qui « corrige » ce qui était voulu.",
+        "pt": "Uma exceção não escrita um dia se repete como erro — por alguém que «corrige» o que era intencional."
+      },
+      "f": {
+        "fr": [
+          "La vue est en invoker, ou porte le commentaire qui dit pourquoi elle ne l'est pas."
+        ],
+        "pt": [
+          "A view está em invoker, ou carrega o comentário que diz por que não está."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "claude/GLB_v17_releve_et_constats_2026-09-01"
+      ],
+      "verif": {
+        "fr": "07/09 — `reloptions` vide, donc DEFINER.",
+        "pt": "07/09 — `reloptions` vazio, logo DEFINER."
+      }
+    },
+    {
+      "id": "J9",
+      "d": "J",
+      "p": "P2",
+      "s": "a-verifier",
+      "e": "M",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Manuel v5 : le reliquat des captures — 180 emplacements en repli pt-BR, IMG-31 à refaire, IMG-08 à confirmer, tout à recapturer en 900-1000 px",
+        "pt": "Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px"
+      },
+      "v": {
+        "fr": "Le portfolio du 02/09 laisse cinq choses ouvertes : 320 emplacements remplis dont **180 par repli pt-BR** (pas de capture en langue propre pour neuf locales) ; **IMG-31** reproduit une demande d'adhésion réelle encore en analyse (Solidaires) ; **IMG-08** laisse lisibles l'adresse et le courriel de la BLMF, « probablement délibéré, à confirmer » ; le texte fait ≈ 4,5 pt sur papier, d'où recapture à 900-1000 px et rognage du fond ; **IMG-20** attend le déploiement du correctif du sélecteur de périodique. Le manuel lecteur v2 du 03/09 a réutilisé les mêmes captures sans ce correctif. **Vérifié le 07/09 dans le dépôt** : les dix `docs/manual*.md` sont en v1.1 de septembre — cette partie-là est faite ; la branche et le worktree `manualv5` n'existent plus — fait aussi. Les captures elles-mêmes sont sur la machine de Xavier, hors de portée.",
+        "pt": "O portfólio de 02/09 deixa cinco coisas abertas: 320 posições preenchidas das quais **180 por recuo pt-BR** (sem captura na própria língua para nove locales); **IMG-31** reproduz um pedido de adesão real ainda em análise (Solidaires); **IMG-08** deixa legíveis o endereço e o e-mail da BLMF, «provavelmente deliberado, a confirmar»; o texto fica ≈ 4,5 pt no papel, daí recaptura em 900-1000 px e recorte do fundo; **IMG-20** espera o deploy da correção do seletor de periódico. O manual da leitora v2 de 03/09 reutilizou as mesmas capturas sem essa correção. **Verificado em 07/09 no repositório**: os dez `docs/manual*.md` estão na v1.1 de setembro — essa parte está feita; o branch e o worktree `manualv5` não existem mais — feito também. As capturas em si estão na máquina de Xavier, fora de alcance."
+      },
+      "w": {
+        "fr": "Trancher IMG-31 (demande fictive ou floutage) et IMG-08 ; puis une passe de recapture à 900-1000 px, locale par locale, en commençant par celles qui ont des lectrices.",
+        "pt": "Decidir IMG-31 (pedido fictício ou desfoque) e IMG-08; depois uma passagem de recaptura em 900-1000 px, locale por locale, começando pelas que têm leitoras."
+      },
+      "y": {
+        "fr": "Un manuel qu'on ne peut pas lire sur papier, et dont une image montre le dossier d'une bibliothèque qui attend une réponse, ne s'imprime pas pour Bologne.",
+        "pt": "Um manual que não se consegue ler no papel, e cuja imagem mostra o dossiê de uma biblioteca que espera resposta, não se imprime para Bolonha."
+      },
+      "f": {
+        "fr": [
+          "IMG-31 et IMG-08 tranchées, avec la raison écrite.",
+          "Les captures relues lisibles à l'impression."
+        ],
+        "pt": [
+          "IMG-31 e IMG-08 decididas, com a razão escrita.",
+          "As capturas relidas legíveis na impressão."
+        ]
+      },
+      "dep": {
+        "fr": "IMG-31 touche **G7** (ne pas exposer une candidature en cours).",
+        "pt": "IMG-31 toca **G7** (não expor uma candidatura em curso)."
+      },
+      "r": [
+        "claude/MANUEL_v5_portfolio_captures_2026-09-02",
+        "claude/MANUEL_LECTEUR_v2_refonte_2026-09-03"
+      ],
+      "verif": {
+        "fr": "07/09 — manuels .md en v1.1 et branche supprimée (fait) ; captures non vérifiables depuis ici.",
+        "pt": "07/09 — manuais .md na v1.1 e branch removido (feito); capturas não verificáveis daqui."
+      }
+    },
+    {
+      "id": "J10",
+      "d": "J",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement",
+        "pt": "Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão"
+      },
+      "v": {
+        "fr": "Le relevé du GLB v17 (01/09) le dit sans action datée : périodiques, notes de lecture, moisson OAI entrante, OPDS, sondes, témoin de sauvegarde, file des conventions — « aucun n'a été arbitré contre son coût d'achèvement ». Depuis, H5 (OAI) et I4 (témoin) sont clos ; les cinq autres sont livrés en partie et non arbitrés.",
+        "pt": "O levantamento do GLB v17 (01/09) o diz sem ação datada: periódicos, notas de leitura, coleta OAI de entrada, OPDS, sondas, testemunha de backup, fila das convenções — «nenhum foi arbitrado contra seu custo de conclusão». Desde então, H5 (OAI) e I4 (testemunha) estão fechados; os outros cinco estão entregues em parte e não arbitrados."
+      },
+      "w": {
+        "fr": "Cinq lignes : ce qui est livré, ce qui manque pour que ce soit fini, ce que ça coûte, et si on le finit ou si on le gèle avec la raison écrite (`P3`).",
+        "pt": "Cinco linhas: o que está entregue, o que falta para estar pronto, o que custa, e se se termina ou se congela com a razão escrita (`P3`)."
+      },
+      "y": {
+        "fr": "Le gel de périmètre (`DOC-GEL-1`) ne vaut que si ce qui est entré pendant le gel est jugé — sinon il n'y a pas eu de gel.",
+        "pt": "O congelamento de perímetro (`DOC-GEL-1`) só vale se o que entrou durante o congelamento for julgado — senão não houve congelamento."
+      },
+      "f": {
+        "fr": [
+          "Cinq verdicts au registre ou au backlog, datés."
+        ],
+        "pt": [
+          "Cinco veredictos no registro ou no backlog, datados."
+        ]
+      },
+      "dep": {
+        "fr": "Après Bologne. Sans dépendance technique.",
+        "pt": "Depois de Bolonha. Sem dependência técnica."
+      },
+      "r": [
+        "claude/GLB_v17_releve_et_constats_2026-09-01",
+        "REGISTRE §0 DOC-GEL-1"
+      ]
     }
   ]
 }

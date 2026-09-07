@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-07** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-07** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,16 +16,16 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 5
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 2
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 10
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
-    - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 7
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 5
+    - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 9
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
 - [Maintenance de ce document](#maintenance-de-ce-document)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **7 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `ecdcd06c`. Il prolonge le relevé complet du 06/09 : les volumétries métier n'ont pas bougé depuis (aucune migration ni code depuis la correction d'hygiène du 06/09 midi), le dépôt a reçu la PR #28 au backlog et au registre, six décisions de relecture, et quatre items neufs ce matin (E14, G13, H8, I20). Toutes les lignes ont été relues, celles qui changent portent la date.
 
-**Fraîcheur des constats au 2026-09-07.** **51 items sur 68** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, F1, F3, F4, F6, F7, G1, G6, G8, G11, G12, G13, I1, I3, I6, I12, I13, I15, I16, I18, I19, J2, J3, J4, K2, K5, K7). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-07.** **67 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, E15, E16, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -394,6 +394,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B19** | Révoquer l'ancienne clé de signature HS256 — le bouton qui déconnecterait tout le monde | `P2` | Gelé |
 | **B20** | Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire | `P1` | Ouvert |
 | **B22** | Quarante-sept fonctions ouvertes à anon sans qu'aucune ligne du dépôt ne le dise | `P2` | Ouvert |
+| **B23** | `api.library_email_identity` est la seule vue `api` encore en SECURITY DEFINER — le dire, ou la basculer | `P3` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -488,7 +489,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Mesuré le 07/09 en préparant la spec d'`I17` (§4 de `CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07`). **Classe A** : 98 fonctions portent `anon=X` dans leur ACL ; pour **12** d'entre elles, aucun `GRANT … TO anon` n'existe dans le dépôt — elles ne sont ouvertes que par le privilège par défaut du moment de leur création (quatre DEFINER pourtant listées dans `T10`, dont `fn_book_restricted_pdf_state` et sa sœur appelées par le front ; six triggers et helpers des périodiques et des tomes ; `fn_current_user_is_member_of_holding_library`, `fn_reading_notes_enabled_for`). **Classe B** : 35 fonctions sont exécutables par `anon` via `PUBLIC` — `=X` explicite sur **dix RPC de circulation de `api`** (`advance_consulta`, `create_loan_at_counter`, `return_loan_total`…), 17 helpers et triggers d'`ingest`, 5 de `public` ; ACL nulle sur `api.extend_loan_item_as_library`, `api.renew_my_loan_item`, `private.fn_book_work_id`. Toutes INVOKER : la RLS tient, le lint 0028 ne les voit pas — mais une RPC de prêt appelable par un visiteur anonyme est une surface laissée par oubli, pas par décision (`DOC-GRANT-1`). **07/09, expérience d'`I17`** : même mécanisme côté **relations**. Cinq vues du socle sans `security_invoker` (`v_author_alias_candidates_unique`, `v_author_alias_worklist`, `v_author_seed_candidates`, `v_terra_livre_books_ready`, `v_terra_livre_books_ready_stats`) naissent lisibles par `anon`/`authenticated` au rejeu (défaut de l'image sur les tables : `anon=arwdm`) alors que la prod ne leur laisse que `anon=m` : le `REVOKE SELECT` qui les a fermées n'est écrit nulle part (`20260830110000` ne retire qu'`insert, update, delete`). T7 de `grants_herites` est rouge au rejeu, vert en CI (template0). Deux voies : étendre A.1 aux tables avant le socle, ou une migration nominative — vues et policies à chercher avant.
 
-*Vérifié : 07/09 — mesures faites pour la spec d'I17 : image `supabase/postgres:17.6.1.136` sondée à vide (conteneur jetable), production interrogée en lecture seule, dépôt au commit `fb64c996`.*
+*Vérifié : 07/09 — mesure complémentaire, pas la même que les 47 : **28** fonctions SECURITY DEFINER de `api`+`public` sont exécutables par `anon`. La « migration de REVOKE avant le 8 » de la reprise du 06/09 n'a pas été jouée ; le constat écrit, c'est cet item.
+
+07/09 — mesures faites pour la spec d'I17 : image `supabase/postgres:17.6.1.136` sondée à vide (conteneur jetable), production interrogée en lecture seule, dépôt au commit `fb64c996`.*
 
 **Ce que c'est.** Une migration nominative, après le 14 : pour chacune des 47, un `GRANT EXECUTE … TO anon` écrit si l'ouverture sert (à confirmer sous session anonyme pour les deux `fn_book_restricted_pdf_state*`), sinon `REVOKE EXECUTE … FROM PUBLIC, anon` + `GRANT … TO authenticated` (les RPC de circulation) ou rien de plus que le retrait (triggers, helpers). **Avant chaque REVOKE, chercher les vues et les policies** qui appellent la fonction sous le rôle du lecteur (`pg_rewrite`, `pg_policy`) — REGISTRE « avant un REVOKE, chercher les VUES ». Compléter `T10` si une DEFINER change de camp. **Recommandation du 07/09 pour les cinq vues de T7** : d'abord une **migration nominative** qui écrit le `REVOKE SELECT` sur les cinq vues (sûre, elle documente l'état réel de la prod : `anon=m, authenticated=m`), après avoir cherché qui les appelle (`pg_rewrite` pour les vues, `pg_policy` pour les policies — une lecture publique qui passerait par elles tomberait en silence, l'app avale le 403 en liste vide). L'**extension d'A.1 aux tables** (retirer `anon` du défaut des relations avant le socle, laisser les `GRANT` du dump rouvrir) reste une **question**, à instruire avec Bastien quand A.1 lui sera proposé : elle touche la trajectoire du rejeu et mérite sa propre expérience (vérifier que le socle rétablit bien le défaut des tables pour `postgres`, l. 61226-61229).
 
@@ -503,6 +506,26 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Après le 14/09 (gel). Indépendant d'`I17`, mais la spec d'`I17` en est la source.
 
 *Renvois : `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07 §4` · `REGISTRE §0 DOC-GRANT-1` · `tests/sql/grants_herites_tests.sql T10` · `item I17`*
+
+#### B23 — `api.library_email_identity` est la seule vue `api` encore en SECURITY DEFINER — le dire, ou la basculer
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Le GLB v17 (01/09) comptait 67 vues `api` sur 68 en `security_invoker`. **Vérifié le 07/09** : `pg_class.reloptions` de `api.library_email_identity` est vide — elle lit donc sous le propriétaire. Peut-être voulu (elle sert l'identité d'expéditeur aux fonctions de courriel), mais aucun commentaire ne le dit.
+
+*Vérifié : 07/09 — `reloptions` vide, donc DEFINER.*
+
+**Ce que c'est.** Soit `ALTER VIEW … SET (security_invoker = on)` et une suite qui vérifie que le courriel part encore, soit un `COMMENT ON VIEW` qui explique l'exception. Une soirée dans les deux cas.
+
+**Pourquoi ça compte.** Une exception non écrite se rejoue un jour comme une erreur — par quelqu'un qui « corrige » ce qui était voulu.
+
+**Ce qui compte comme fini.**
+
+- La vue est en invoker, ou porte le commentaire qui dit pourquoi elle ne l'est pas.
+
+**Dépendances.** Aucune.
+
+*Renvois : `claude/GLB_v17_releve_et_constats_2026-09-01`*
 
 ---
 
@@ -528,7 +551,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** 1 685 notices dans `SOLIDAIRES_import_test.csv`. **Constat corrigé le 31/08 : le fichier a bel et bien été confronté à l'importeur.** `book_drafts` porte 1 673 brouillons de source `SOLIDAIRES_import_v2.csv`, créés en un seul lot le 29/08 à 1 h 48 — la nuit précédant l'écriture du constat « jamais confrontés ». Tous sont à l'état `draft`, **aucun n'est publié** : le catalogue public n'est pas touché. La décision de Xavier (29/08) reste entière pour la suite : pas de promotion tant que la candidature de SOLIDAIRES n'est pas acceptée à plusieurs (G7). Ce qui reste de l'item n'est donc plus « importer », mais consigner ce que l'import a cassé, puis promouvoir après l'admission.
 
-*Vérifié : 31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue.*
+*Vérifié : 07/09 — inchangé : 1 673 brouillons `SOLIDAIRES_import_v2.csv`, candidature `pendente` depuis le 27/08.
+
+31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue.*
 
 **Ce que c'est.** Adapter les en-têtes au format réellement attendu (environ une heure), faire passer le fichier **par l'outil d'import du dépôt et non par des `INSERT` à la main**, relire une vingtaine de fiches au hasard, puis faire une démonstration en visio écran partagé.
 
@@ -839,6 +864,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
 | **E14** | Une page pour signaler un bug depuis l'application | `P2` | Ouvert |
+| **E15** | Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf | `P2` | Ouvert |
+| **E16** | La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique | `P2` | À vérifier |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1071,6 +1098,46 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `src/components/layout/index.jsx (Footer)` · `src/pages/inicio/intentions.js` · `supabase/migrations/20260618182516_cartography_submissions.sql` · `supabase/functions/submit-cartography-entry` · `supabase/migrations/20260821130001_signaler_un_doublon_d_autorite.sql` · `CONTRIBUTING.md`*
 
+#### E15 — Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle
+
+**État.** **Vérifié dans `src/i18n/locales/` le 07/09.** En pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` et `account.deleteAccount.confirmText` = `EXCLUIR` : deux gestes, deux mots. Dans fr, en, es, it, de, nl, el et eo, **les deux clés portent le même mot** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Seul le catalan distingue (`ELIMINA` / `SUPRIMIR`). Relevé d'abord par le manuel lecteur v2 du 03/09.
+
+*Vérifié : 07/09 — huit paires identiques constatées dans les fichiers de locale.*
+
+**Ce que c'est.** Choisir deux mots distincts par locale, avec les locuteur·rices quand il y en a (**E2** pour nl et el), et mettre le manuel en accord.
+
+**Pourquoi ça compte.** Un mot de confirmation sert à ce qu'on ne confonde pas deux destructions. Quand c'est le même, il ne sert à rien — et c'est précisément `DOC-DESTR-2` : dire ce qu'on détruit.
+
+**Ce qui compte comme fini.**
+
+- Neuf locales, deux mots différents chacune ; le test i18n passe.
+
+**Dépendances.** Aucune.
+
+*Renvois : `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03` · `REGISTRE §0 DOC-DESTR-2`*
+
+#### E16 — La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique
+
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : React / JavaScript
+
+**État.** Relevé par la refonte du manuel v5 (01/09) : « deux messages contradictoires sur l'activation de la purge automatique — le manuel demande de vérifier l'instance ». **Non vérifié le 07/09** : c'est un défaut d'écran, à constater dans l'application, pas dans les fichiers.
+
+*Vérifié : 07/09 — non vérifié, constat d'écran seulement.*
+
+**Ce que c'est.** Ouvrir la sous-page sur `blmf-teste`, lire les deux messages, décider lequel dit vrai en regardant le réglage en base, corriger l'autre.
+
+**Pourquoi ça compte.** Un écran de confidentialité qui se contredit fait douter de tout le reste de la page — et c'est la page qu'une coordination lit en premier.
+
+**Ce qui compte comme fini.**
+
+- Un seul message, conforme à l'état réel du réglage.
+
+**Dépendances.** Aucune.
+
+*Renvois : `claude/MANUEL_v5_refonte_2026-09-01 (points à trancher)`*
+
 ---
 
 ### F — Courriel et notifications
@@ -1084,6 +1151,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 | **F7** | Un transport mail sans service configuré lève ; il ne simule pas en silence | `P1` | Ouvert |
+| **F9** | SPF, DKIM et DMARC de `notifications.anarbib.org` n'ont jamais été relevés — trente-six crons envoient du courrier depuis ce domaine | `P1` | À vérifier |
+| **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1229,6 +1298,47 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 *Renvois : `supabase/functions/_shared/transport/email.ts` · `REGISTRE §0 DOC-SILENCE-1` · `docs/specs/spec-migration-mail-resend.md` · `codeberg.org/anarbib/anarbib/pulls/28`*
 
+#### F9 — SPF, DKIM et DMARC de `notifications.anarbib.org` n'ont jamais été relevés — trente-six crons envoient du courrier depuis ce domaine
+
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** Relevé le 31/08 dans la reprise : « jamais relevés ; trois `Resolve-DnsName` suffisent ; à faire avant le 10/09 ». **Le 07/09, impossible à vérifier** : ni le conteneur ni la VM de travail n'atteignent un résolveur DNS. Aucune trace ailleurs que ce relevé ne dit que c'est fait.
+
+*Vérifié : 07/09 — non vérifiable depuis ici ; aucune trace que ce soit fait.*
+
+**Ce que c'est.** Depuis PowerShell : `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, et le sélecteur DKIM affiché par le tableau de bord Resend. Coller les trois réponses ici, datées. Si DMARC manque, poser `p=none` avec une adresse de rapport avant de durcir.
+
+**Pourquoi ça compte.** Le 10/09, l'invitation de **F4** part sur ce domaine, deux jours avant Bologne. Un courrier qui tombe en indésirable ne se voit pas dans les logs — il se voit dans le silence de la lectrice.
+
+**Ce qui compte comme fini.**
+
+- Les trois enregistrements relevés et collés dans cet item, avec la date.
+
+**Dépendances.** Avant **F4** (10/09). Entre dans **F1** (audit) mais ne l'attend pas.
+
+*Renvois : `claude/REPRISE_2026-09-01_douze_jours_avant_bologne`*
+
+#### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, délibération collective
+
+**État.** **Vérifié dans le dépôt le 07/09** : `supabase/functions/_shared/transport/email.ts` connaît deux transports, `sendViaResend` et `sendViaBrevo` — le second survit au retrait de Brevo (R.6/R.7, annoncé clos). Aucun transport SMTP générique, donc aucun moyen de brancher un relais militant (ARN, Nodo50, bida.im) le jour où l'un dit oui. La note du 05-06/09 place cette sortie après Bologne, derrière la demande d'un relais SMTP le 12.
+
+*Vérifié : 07/09 — deux transports dans `email.ts`, aucun SMTP.*
+
+**Ce que c'est.** Demander avant de choisir (les relais militants d'abord, Scaleway en repli) ; écrire `sendViaSmtp` (ou le transport retenu) et rétablir un aiguillage par variable ; supprimer `sendViaBrevo` ; ne faire lever que ce qui doit lever (**F7** est clos là-dessus).
+
+**Pourquoi ça compte.** Resend est le dernier service états-unien après Supabase. Sortir de l'un sans l'autre laisse la moitié de la dépendance, et la moitié la plus bavarde : le courriel des lectrices.
+
+**Ce qui compte comme fini.**
+
+- Un courriel réel part par le nouveau transport, depuis la production, vers une boîte tierce.
+- `sendViaBrevo` n'existe plus dans le dépôt.
+
+**Dépendances.** Après **K5** (relais demandé à Bologne). Pas avant **I2** : changer de transport et d'hébergeur la même semaine, c'est deux inconnues.
+
+*Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
+
 ---
 
 ### G — Réseau, gouvernance, fédération
@@ -1246,6 +1356,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G11** | Le premier administrateur d'une instance : écrire la règle d'amorçage | `P0` | Ouvert |
 | **G12** | Une instance = un réseau ; entre instances, seul le catalogue traverse | `P2` | Ouvert |
 | **G13** | Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA… | `P2` | Ouvert |
+| **G14** | Une invitation d'équipe attend depuis le 30/08 et expirera le 29/09 — la personne ne le sait peut-être pas | `P2` | Ouvert |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1366,7 +1477,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Trois points sont marqués 🔴 « à résoudre au plus vite » depuis juin et n'ont pas bougé : `#111` (évaluation collaborative d'un·e administrateur·rice réseau, dormante), `ONBO-Q13` (transfert technique du mandat de coordination), et la finition du volet 10 de l'atelier d'onboarding.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 07/09 — dans le dépôt : `fn_activate_approved_library_request` n'est appelée par **aucun** composant de `src/` — « Concluir a constituição » ne vaut donc pas activation, comme le manuel v5 l'avait relevé le 01/09. C'est la quatrième question d'onboarding, ou la première.*
 
 **Ce que c'est.** Les trois se traitent ensemble parce qu'ils portent la même question : que se passe-t-il quand quelqu'un arrive, et quand quelqu'un part ?
 
@@ -1452,6 +1563,26 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)` · `docs/specs/spec-cartographie-reseau.md` · `src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)` · `supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)` · `api.libraries_public_v1 (baseline)` · `src/pages/federacao/CartographyMap.jsx` · `docs/cartographie/carte-reseau.umap`*
 
+#### G14 — Une invitation d'équipe attend depuis le 30/08 et expirera le 29/09 — la personne ne le sait peut-être pas
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** **Vérifié en base le 07/09** : dans `library_team_invitations`, une invitation créée le 30/08 est toujours `ready`, expiration le 29/09 (deux autres du 01/09 sont `accepted` et `pending_ratification`). Le plan de formation du 01/09 la signalait déjà : « il faut la prévenir ». Le cron d'expiration la fermera en silence.
+
+*Vérifié : 07/09 — `ready` depuis le 30/08, expiration 29/09.*
+
+**Ce que c'est.** Un message à la personne invitée, par le canal humain (`DOC-COLLECTIVE-1`). Puis regarder pourquoi l'invitation par courriel n'a pas suffi — c'est **G1** en miniature.
+
+**Pourquoi ça compte.** Un circuit qui expire sans que personne ne s'en aperçoive est un circuit qui n'existe pas.
+
+**Ce qui compte comme fini.**
+
+- L'invitation est `accepted` ou `declined` avant le 29/09, pas expirée.
+
+**Dépendances.** Aucune.
+
+*Renvois : `claude/PLAN_formation_coordination_BLMF_2026-08-26 (annexe)` · `REGISTRE §0 DOC-COLLECTIVE-1`*
+
 ---
 
 ### H — Interopérabilité, thésaurus, moisson
@@ -1462,6 +1593,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 |---|---|---|---|
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
+| **H9** | Ouvrir les cinq relations SKOS aux consommateurs — RPC, page-sujet, sérialiseur, trente clés i18n, d'un bloc | `P1` | Gelé |
+| **H10** | Relire à la main les 98 alignements FICEDL — 54 `close` dont une part sont des `broad` — et aligner enfin les quatre rubriques historiques de Solidaires | `P2` | Ouvert |
+| **H11** | Le dépôt dit 462 descripteurs FICEDL, la production en porte 621 — régénérer la migration de données avant qu'un rejeu depuis zéro ne casse | `P2` | Ouvert |
+| **H12** | Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration | `P3` | Ouvert |
+| **H13** | L'esquisse SKOS des 26 descripteurs n'est ni au dépôt ni au projet — la verser à `docs/journal/ficedl/` pour qu'elle soit donnable et versionnée | `P2` | À vérifier |
 
 #### H2 — Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus
 
@@ -1469,7 +1605,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** L'export complet des 620 descripteurs dans les deux formats est **à une soirée de travail** — dès que les sept questions ont une réponse. Elles sont écrites et personne ne les a encore posées.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).*
 
 **Ce que c'est.** Les sept : la forme des identifiants ; **la hiérarchie, qui est la vraie question** ; le statut de la facette « dates » ; le sort des 2 842 liens vers six catalogues ; le grec romanisé ; la licence ; et la manière dont le fichier se régénère.
 
@@ -1507,6 +1643,111 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6` · `VEILLE_leftovers_maydayrooms_2026-08-19`*
 
+#### H9 — Ouvrir les cinq relations SKOS aux consommateurs — RPC, page-sujet, sérialiseur, trente clés i18n, d'un bloc
+
+`P1` Prioritaire · État : **Gelé** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript, langue maternelle
+
+**État.** **Vérifié en base et dans le dépôt le 07/09.** Le domaine de `subject_ficedl_links.match_type` porte désormais `exact`, `close`, `broad`, `narrow`, `related` (migration `20260907172508`), mais la porte est restée fermée exprès : `api.fn_subject_add_ficedl_match` n'accepte que `exact`/`close`, parce que **deux rendus sont binaires** — `src/pages/public/SubjectPage.jsx` (l. 163) affiche « exacte » pour tout ce qui n'est pas `close`, et `src/lib/skosExport.js` sérialise en `skos:exactMatch` tout ce qui n'est pas `close`, dans le Turtle et le JSON-LD publiés. Un `broad` créé aujourd'hui serait publié comme correspondance exacte.
+
+*Vérifié : 07/09 — domaine étendu en base, porte fermée, deux rendus binaires constatés dans le dépôt.*
+
+**Ce que c'est.** Étendre la garde de la RPC aux trois valeurs ; remplacer les deux ternaires par une table à cinq entrées (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`) ; ajouter trois clés `subject.matchBroad/Narrow/Related` dans les dix locales (le test i18n bloque sinon). Livrer les trois ensemble, jamais l'un sans les autres.
+
+**Pourquoi ça compte.** Tant que le domaine existe en base sans consommateur capable de le dire, chaque alignement « plus large » reste tassé en `close` — une sur-affirmation publiée. Et l'ouvrir sans les rendus ferait pire : un `broad` sortirait en `exactMatch` dans un fichier que d'autres catalogues peuvent moissonner.
+
+**Ce qui compte comme fini.**
+
+- Un alignement `broad` posé depuis l'écran s'affiche « plus large » sur la page-sujet et sort en `skos:broadMatch` dans le Turtle et le JSON-LD.
+- `npm test` passe avec les trente clés.
+- La migration `20260907172508` voit son bloc de vérification 4.2 (porte fermée) retiré ou inversé le même jour.
+
+**Dépendances.** Gelé jusqu'au 14/09 (code de production). Précède **H10**.
+
+*Renvois : `REGISTRE §0 DOC-THES-1` · `REGISTRE §30 THES-FIC4, THES-FIC5` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `migration 20260907172508`*
+
+#### H10 — Relire à la main les 98 alignements FICEDL — 54 `close` dont une part sont des `broad` — et aligner enfin les quatre rubriques historiques de Solidaires
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
+
+**État.** **Vérifié en base le 07/09.** 98 liens dans `subject_ficedl_links` : 44 `exact`, 54 `close`. Jusqu'au 07/09 le domaine n'avait que ces deux valeurs, donc tout ce qui est réellement « plus large » ou « voisin » a été tassé en `close`. Par vocabulaire visé : 72 vers la liste commune, 26 vers la géo-histo, **0 vers la facette `dates`** — les quatre rubriques historiques de Solidaires (guerres, périodes) ne sont donc toujours pas alignées, alors que les 159 dates sont en base depuis le 03/09 (H1 clos).
+
+*Vérifié : 07/09 — 98 liens, 54 `close`, 0 vers `dates`.*
+
+**Ce que c'est.** Fiche par fiche, jamais par passe automatique (`CONV-EXEC-3`) : pour chaque `close`, décider s'il reste `close` ou devient `broad`/`narrow`/`related` ; poser les alignements manquants vers la facette `dates` pour les rubriques historiques ; passer aussi les 44 alignements du lot Solidaires du 28/08.
+
+**Pourquoi ça compte.** Un `skos:closeMatch` dit « presque le même concept ». Quand le sujet local est plus étroit, c'est faux — et c'est publié dans l'export que d'autres catalogues peuvent lire.
+
+**Ce qui compte comme fini.**
+
+- Chaque lien porte une relation choisie, pas héritée d'un domaine à deux valeurs.
+- Au moins un alignement vers un descripteur `dates` existe.
+
+**Dépendances.** Après **H9** : sans les cinq valeurs ouvertes à l'écran, la relecture n'a pas d'outil pour dire ce qu'elle voit.
+
+*Renvois : `REGISTRE §30 THES-FIC4, THES-FIC-O1` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `CALENDRIER_bologne_2026-08-27 (rubriques historiques)`*
+
+#### H11 — Le dépôt dit 462 descripteurs FICEDL, la production en porte 621 — régénérer la migration de données avant qu'un rejeu depuis zéro ne casse
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** **Vérifié le 07/09, dépôt et production.** `20260826191000_donnees_ficedl_thesaurus.sql` insère 462 lignes (227 sujets, 234 geo, 1 double, **0 date**) — figée sur l'aspiration du 30/06. La production porte l'aspiration du 03/09 : **621** (159 dates en plus) parce que `ficedl_thesaurus_sync.mjs` a été rejoué. Le rejeu depuis une base vide passe encore : les 47 `mot_id` référencés par la migration d'alignement sont tous dans les 462. Il cassera le jour où un alignement visera un terme postérieur au 30/06 — c'est exactement ce que **H10** va faire. Deux dates de l'aspiration (161) manquent en base (159) : sans libellé, écartées par `isSyncable`.
+
+*Vérifié : 07/09 — 462 au dépôt, 621 en production, rejeu encore vert.*
+
+**Ce que c'est.** Régénérer la migration de données depuis `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` (ou la remplacer par un seed rejoué par le sync en CI), et regarder les deux fiches sans libellé. Ne jamais lancer le sync avec `--prune`.
+
+**Pourquoi ça compte.** Une reconstruction depuis zéro (**A2**, la bascule **I2**) qui ne rejoue pas les données de production n'est pas une reconstruction — c'est une autre base.
+
+**Ce qui compte comme fini.**
+
+- `count(*)` de `ficedl_thesaurus_terms` identique en CI et en production.
+- Le rejeu de `sql-tests.yml` passe avec un alignement vers un descripteur `dates`.
+
+**Dépendances.** Avant **H10**. Conditionne **A2** et **I2**.
+
+*Renvois : `REGISTRE §30 THES-FIC-O4` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `REPRISE_claude_code_2026-08-27 (piège --prune)`*
+
+#### H12 — Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique, délibération collective
+
+**État.** Réponse de la source, 07/09 : deux référentiels existent hors thésaurus — les communes des biographies du *Bettini* (avec cartographie) et les lieux d'édition du *Bianco* — « pas intégrées au thésaurus, probablement trop lourd à gérer ». AnarBib n'a aucune autorité de lieux : `local_publicacao` est un champ libre (audit du 20/08 : `BELEM`), et la spec périodiques a écarté l'alignement FICEDL au motif que le thésaurus indexe des matières — vrai pour les matières, faux pour les lieux.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Après Bologne, et hors de la demande du 12 (qui tient parce qu'elle demande *une* chose) : demander les deux listes comme fichiers séparés, telles qu'elles sont. Puis aligner sur un référentiel géographique existant (Wikidata, GeoNames) avec la liste du Bianco en surcouche militante — pas construire une n-ième liste de communes.
+
+**Pourquoi ça compte.** Demander l'intégration, c'est demander la charge que la source dit ne pas pouvoir porter. Une liste n'a pas besoin d'être dans le thésaurus pour être utile ; elle a besoin d'être copiable.
+
+**Ce qui compte comme fini.**
+
+- Les deux listes reçues sous une forme machine-lisible, versées à `docs/journal/ficedl/`.
+- Une décision écrite sur l'autorité de lieux d'AnarBib.
+
+**Dépendances.** Après **K5**. Touche `spec-periodiques` et **C3** (autorités).
+
+*Renvois : `REGISTRE §30 THES-FIC-O2` · `claude/REPONSE_hortical_deux_thesaurus_2026-09-07` · `claude/spec-periodiques-v0.1 §5`*
+
+#### H13 — L'esquisse SKOS des 26 descripteurs n'est ni au dépôt ni au projet — la verser à `docs/journal/ficedl/` pour qu'elle soit donnable et versionnée
+
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** Le dossier Bologne du 03/09 le dit : `ficedl_thesaurus_ESQUISSE.csv` et `.jsonld` « ne sont pas dans le projet », à emporter sur clé USB. **Vérifié le 07/09** : `docs/journal/ficedl/` contient les quatre aspirations et les audits, **aucun fichier `ESQUISSE`** ; le projet Claude non plus. Le racleur et le sync, eux, sont au dépôt (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — cette moitié-là est déjà donnable.
+
+*Vérifié : 07/09 — absents du dépôt et du projet ; leur existence sur disque n'a pas été vérifiée.*
+
+**Ce que c'est.** Retrouver les deux fichiers (Downloads ?) ou les régénérer depuis l'aspiration du 03/09, et les commiter avec la note du 28/08 à côté. Depuis le 07/09 l'esquisse est à réviser : deux `skos:ConceptScheme`, les têtes `guerres`/`art : courants` en `skos:Collection`, jamais d'URI de schéma inventé.
+
+**Pourquoi ça compte.** C'est la pièce que tu poses sur la table à Bologne. Une pièce qui n'existe que sur une clé n'est pas une contribution, c'est une démonstration.
+
+**Ce qui compte comme fini.**
+
+- Les deux fichiers au dépôt, régénérables par une commande documentée.
+
+**Dépendances.** Lié à **H2** et **K6**.
+
+*Renvois : `claude/DOSSIER_rencontre_leftovers_bologne_2026-09-12 §B.1` · `claude/NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
+
 ---
 
 ### I — Auto-hébergement, exploitation, sauvegardes, CI
@@ -1525,6 +1766,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I16** | Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09 | `P1` | En cours |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | Ouvert |
 | **I19** | `pg_cron` doit exister sur la pile auto-hébergée, et son absence doit se voir | `P1` | Ouvert |
+| **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
+| **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
+| **I23** | Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien | `P2` | Ouvert |
 
 #### I1 — Aligner l'image GoTrue sur l'état réel des migrations d'authentification
 
@@ -1742,6 +1986,67 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql` · `deploy/compose.yml` · `deploy/init-db/` · `REGISTRE §0 DOC-SILENCE-1`*
 
+#### I21 — Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système, délibération collective
+
+**État.** La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.
+
+*Vérifié : 07/09 — `deploy/` sans durcissement ; les sept autres conditions non vérifiables depuis la base.*
+
+**Ce que c'est.** Tenir la liste ici, cocher chaque condition avec sa preuve (fichier, courriel, essai daté). Le durcissement entre dans `deploy/` ; le dépôt de sauvegarde tiers se demande à Bologne (**I12** dit ce que le miroir froid couvre, et ce n'est pas ça).
+
+**Pourquoi ça compte.** Chacune de ces conditions est petite. Ensemble, c'est la différence entre une bascule et un déménagement de la fragilité.
+
+**Ce qui compte comme fini.**
+
+- Les huit conditions cochées avec preuve, dans cet item.
+- `deploy/` porte le durcissement, rejoué par `bootstrap.sh`.
+
+**Dépendances.** Bloque **I2**. Le dépôt tiers et le second détenteur relèvent de la même conversation que **A1** (Bologne).
+
+*Renvois : `claude/DECISION_herbesfolles_offre_confirmee_2026-09-07` · `claude/NOTE_sortie_services_etats_uniens_2026-09-05` · `claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)`*
+
+#### I22 — Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** Le 07/09, la migration `20260907172508` a été appliquée en production par `apply_migration` (MCP) — ce que `DOC-DEPLOY-1` interdit en toutes lettres. Écart constaté après coup, tracé au REGISTRE §30, rattrapé sans double application (fichier renommé sur l'horodatage enregistré dans `supabase_migrations.schema_migrations`). Le registre laisse la question ouverte et rappelle que, tant qu'elle l'est, **la règle écrite vaut**.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Deux issues, une ligne au registre chacune : tolérer à titre exceptionnel et tracé, sur le modèle de `DOC-DEPLOY-3` — ou réaffirmer l'interdiction et poser le contrôle qui la rend vérifiable : une version présente dans `supabase_migrations.schema_migrations` dont le fichier n'est pas au dépôt est la signature exacte de l'écart (une requête, jouable en CI).
+
+**Pourquoi ça compte.** Une règle enfreinte sans suite devient une règle décorative. La suite peut être une exception écrite ; ce ne peut pas être le silence.
+
+**Ce qui compte comme fini.**
+
+- La ligne `DOC-DEPLOY-1` du registre ne porte plus le ⚠️ du 07/09.
+
+**Dépendances.** Aucune.
+
+*Renvois : `REGISTRE §0 DOC-DEPLOY-1` · `REGISTRE §30 (écart tracé)` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07 §4`*
+
+#### I23 — Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** La note du 05-06/09 le met en tête de chemin : « cette semaine — déposer un ccTLD européen et en faire un alias », compatible avec le gel parce que ça ne touche pas la production. Motif : le registre du `.org` (Public Interest Registry) est états-unien, comme les deux services dont le projet sort. **Non vérifié** — pas de résolution DNS possible depuis ici ; rien dans le dépôt ne le mentionne.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Choisir le domaine, le déposer chez OVH, poser une redirection vers `anarbib.org` (et non l'inverse, pour l'instant), et l'écrire dans la politique de confidentialité s'il y figure.
+
+**Pourquoi ça compte.** Un alias coûte un euro par mois et donne une adresse qui survit à une décision étrangère sur le `.org`.
+
+**Ce qui compte comme fini.**
+
+- Le domaine résout et redirige.
+
+**Dépendances.** Aucune. Indépendant du gel.
+
+*Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 1)`*
+
 ---
 
 ### J — Documentation et corpus
@@ -1753,6 +2058,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **J2** | Réparer l'index des backlogs et trancher la convention d'archivage | `P2` | Ouvert |
 | **J3** | Le guide d'auto-hébergement du site vitrine (pages PR #2) : quatre phrases, un avertissement, et attendre la PR #28 | `P2` | Ouvert |
 | **J4** | `CHANTIERS_OUVERTS` §1 : écrire l'état réel après la première reconstruction extérieure | `P2` | Ouvert |
+| **J9** | Manuel v5 : le reliquat des captures — 180 emplacements en repli pt-BR, IMG-31 à refaire, IMG-08 à confirmer, tout à recapturer en 900-1000 px | `P2` | À vérifier |
+| **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
 
 #### J2 — Réparer l'index des backlogs et trancher la convention d'archivage
 
@@ -1815,6 +2122,47 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `docs/CHANTIERS_OUVERTS.md` · `REGISTRE §0 DOC-CONSTAT-1` · `REGISTRE §0 DOC-ACTIF-1`*
 
+#### J9 — Manuel v5 : le reliquat des captures — 180 emplacements en repli pt-BR, IMG-31 à refaire, IMG-08 à confirmer, tout à recapturer en 900-1000 px
+
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : aucune compétence technique
+
+**État.** Le portfolio du 02/09 laisse cinq choses ouvertes : 320 emplacements remplis dont **180 par repli pt-BR** (pas de capture en langue propre pour neuf locales) ; **IMG-31** reproduit une demande d'adhésion réelle encore en analyse (Solidaires) ; **IMG-08** laisse lisibles l'adresse et le courriel de la BLMF, « probablement délibéré, à confirmer » ; le texte fait ≈ 4,5 pt sur papier, d'où recapture à 900-1000 px et rognage du fond ; **IMG-20** attend le déploiement du correctif du sélecteur de périodique. Le manuel lecteur v2 du 03/09 a réutilisé les mêmes captures sans ce correctif. **Vérifié le 07/09 dans le dépôt** : les dix `docs/manual*.md` sont en v1.1 de septembre — cette partie-là est faite ; la branche et le worktree `manualv5` n'existent plus — fait aussi. Les captures elles-mêmes sont sur la machine de Xavier, hors de portée.
+
+*Vérifié : 07/09 — manuels .md en v1.1 et branche supprimée (fait) ; captures non vérifiables depuis ici.*
+
+**Ce que c'est.** Trancher IMG-31 (demande fictive ou floutage) et IMG-08 ; puis une passe de recapture à 900-1000 px, locale par locale, en commençant par celles qui ont des lectrices.
+
+**Pourquoi ça compte.** Un manuel qu'on ne peut pas lire sur papier, et dont une image montre le dossier d'une bibliothèque qui attend une réponse, ne s'imprime pas pour Bologne.
+
+**Ce qui compte comme fini.**
+
+- IMG-31 et IMG-08 tranchées, avec la raison écrite.
+- Les captures relues lisibles à l'impression.
+
+**Dépendances.** IMG-31 touche **G7** (ne pas exposer une candidature en cours).
+
+*Renvois : `claude/MANUEL_v5_portfolio_captures_2026-09-02` · `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03`*
+
+#### J10 — Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement
+
+`P3` Différé · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : aucune compétence technique
+
+**État.** Le relevé du GLB v17 (01/09) le dit sans action datée : périodiques, notes de lecture, moisson OAI entrante, OPDS, sondes, témoin de sauvegarde, file des conventions — « aucun n'a été arbitré contre son coût d'achèvement ». Depuis, H5 (OAI) et I4 (témoin) sont clos ; les cinq autres sont livrés en partie et non arbitrés.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Cinq lignes : ce qui est livré, ce qui manque pour que ce soit fini, ce que ça coûte, et si on le finit ou si on le gèle avec la raison écrite (`P3`).
+
+**Pourquoi ça compte.** Le gel de périmètre (`DOC-GEL-1`) ne vaut que si ce qui est entré pendant le gel est jugé — sinon il n'y a pas eu de gel.
+
+**Ce qui compte comme fini.**
+
+- Cinq verdicts au registre ou au backlog, datés.
+
+**Dépendances.** Après Bologne. Sans dépendance technique.
+
+*Renvois : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
+
 ---
 
 ### K — Caisse, communication, formation
@@ -1830,6 +2178,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **K6** | Préparer la rencontre avec leftove.rs et May Day Rooms | `P2` | En cours |
 | **K7** | Mener la formation des deux coordinations BLMF jusqu'à l'autonomie | `P1` | En cours |
 | **K8** | Finir le texte d'orientation sur les outils de bibliothèques militantes | `P2` | Ouvert |
+| **K9** | Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est 10 — quatre textes à corriger avant le 12 | `P1` | Ouvert |
+| **K10** | Trois articles promis au *Monde libertaire*, un par mois — et une émission proposée à *Trous Noirs* | `P2` | À vérifier |
 
 #### K1 — Faire adopter l'acte de création du Fonds AnarBib
 
@@ -1904,7 +2254,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Atelier AnarBib le 12/09 au matin, assemblée ouverte le 13. Un jeu de 29 diapositives italien-anglais est prêt, ainsi qu'une brochure manifeste bilingue. Trois objectifs annoncés : la genèse et la conception, le panorama des fonctionnalités, et **un appel à participation**.
 
-*Vérifié : **03/09** — **collision de dates signalée** : le backlog place la formation BLMF le 13/09 (K7, E12, GOUV-18 « fenêtre d'objection à la formation du 13/09 ») et Bologne les 11-13/09 (atelier le 12, assemblée le 13). À trancher par Xavier : séance à distance depuis Bologne avec relais à Belém, ou autre date. La liste K5 (créneau, chronométrage, papier, démonstration hors ligne) est reprise en §5 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — fausse alerte retirée.** Le plan de formation du 01/09 ne date pas la première soirée : il n'y avait pas de collision avec Bologne, seulement un « 13/09 » posé par hypothèse dans le backlog. K5 garde sa propre liste.*
+*Vérifié : 07/09 — deux chiffres des textes sont périmés (620 → 623 ; 55 parents → 10), sortis en **K9**. La clause Stripe de l'encart de soutien est en ligne dans les dix locales (vérifié sur `anarbib.org/fr/contribuer/`).
+
+**03/09** — **collision de dates signalée** : le backlog place la formation BLMF le 13/09 (K7, E12, GOUV-18 « fenêtre d'objection à la formation du 13/09 ») et Bologne les 11-13/09 (atelier le 12, assemblée le 13). À trancher par Xavier : séance à distance depuis Bologne avec relais à Belém, ou autre date. La liste K5 (créneau, chronométrage, papier, démonstration hors ligne) est reprise en §5 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — fausse alerte retirée.** Le plan de formation du 01/09 ne date pas la première soirée : il n'y avait pas de collision avec Bologne, seulement un « 13/09 » posé par hypothèse dans le backlog. K5 garde sa propre liste.*
 
 **Ce que c'est.** Demander le créneau d'intervention à l'assemblée du 13, chronométrer la version italienne à voix haute, imprimer le dossier sur papier — tout le monde n'ouvre pas un PDF dans une salle —, et répéter la démonstration **hors ligne**, au cas où le réseau manque.
 
@@ -1947,7 +2299,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Le matériel est livré : 89 diapositives en portugais du Brésil, six modules, trois rencontres, six exercices pratiques, notes d'animation dans chaque diapositive. Ni l'une ni l'autre des deux personnes n'est bibliothécaire ou informaticienne.
 
-*Vérifié : **03/09 — préparation de la séance 1, vérifiée en base.** Les deux coordinations ont leur compte sur `blmf-teste` (Mariana S. active le 30/08 ; **Rafael G. sans connexion depuis le 24/06** — à vérifier au début de séance) ; les cinq fiches fautives de l'exercice 2 y sont depuis le 26/08 (`TESTE-9001-1`…`9005-1`) ; **mais aucun lecteur fictif** (le seul retiré le 02/09) et **aucune règle de circulation ni horaire** — impossible d'y jouer une réservation. Posé le 03/09 : le jeu de règles de la BLMF (six règles) et ses horaires copiés sur `blmf-teste`. Reste à la main de Xavier : inviter deux lecteur·rices fictif·ves (le bac à sable n'accepte pas l'inscription publique), vérifier l'entrée de Rafael, **trancher la collision de dates avec Bologne (11-13/09)**, et retrouver le plan et le gabarit — **absents du dépôt, du poste et des transcripts** (les références `PLAN_formation…` et `GABARITO…` de cette fiche sont des fantômes tant qu'ils ne sont pas déposés). Le parcours de la séance, étape par étape, page par page, compte par compte : `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — les documents sont au dépôt et le dispositif n'est plus celui de la fiche.** Xavier a fourni le plan (révisé le 01/09), le conducteur de la séance 1, le roteiro de la capsule, les 89 diapositives et « O salto colegial » : déposés dans `docs/journal/chantiers/formation-BLMF/`. Le plan dit **sept soirées de 2 h 15, six modules, six exercices, une capsule de 40 minutes** — plus trois rencontres ; l'exercice 0 devient un travail personnel ; l'engagement chiffré est inchangé (5 exemplaires sur 2 758 avec mode d'acquisition). **Le « 13/09 » n'apparaît dans aucun document** : la première soirée n'est pas datée, et « collision avec Bologne » était une fausse alerte née d'une hypothèse du backlog. Bac à sable : deux lecteur·rices fictif·ves créé·es sur `blmf-teste` (Emma Teste, Errico Teste, adresses de Xavier ; mot de passe à poser par « Esqueci minha senha ») ; Voltairine de Teste existe mais ses adhésions ont été remaniées le 02/09 (lectrice retirée) ; règles et horaires copiés de la BLMF. La page `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` est réécrite en **compléments au conducteur**. Reste : dater la soirée 1, poser les mots de passe, Rafael G., et corriger dans les diapositives les quatre réserves dépassées listées au §7 du plan avant la soirée 4. **Soirée 1 datée par Xavier : le 08/09/2026** (17 h 00 – 19 h 15). Voltairine de Teste repassée **lectrice** (bibliothécaire retirée) ; Emma et Errico Teste se sont connecté·es le 03/09 à 16 h 15 et 16 h 18 : le bac à sable a ses trois lecteur·rices.*
+*Vérifié : 07/09 — en base : la lectrice fictive « Voltairine de Teste » n'a **jamais** ouvert de session (`auth.users.last_sign_in_at` nul) ; aucun exemplaire créé depuis le 01/09, donc l'engagement « aucun exemplaire sans mode d'acquisition » n'est pas encore éprouvé. L'invitation BTL en attente est sortie en **G14**.
+
+**03/09 — préparation de la séance 1, vérifiée en base.** Les deux coordinations ont leur compte sur `blmf-teste` (Mariana S. active le 30/08 ; **Rafael G. sans connexion depuis le 24/06** — à vérifier au début de séance) ; les cinq fiches fautives de l'exercice 2 y sont depuis le 26/08 (`TESTE-9001-1`…`9005-1`) ; **mais aucun lecteur fictif** (le seul retiré le 02/09) et **aucune règle de circulation ni horaire** — impossible d'y jouer une réservation. Posé le 03/09 : le jeu de règles de la BLMF (six règles) et ses horaires copiés sur `blmf-teste`. Reste à la main de Xavier : inviter deux lecteur·rices fictif·ves (le bac à sable n'accepte pas l'inscription publique), vérifier l'entrée de Rafael, **trancher la collision de dates avec Bologne (11-13/09)**, et retrouver le plan et le gabarit — **absents du dépôt, du poste et des transcripts** (les références `PLAN_formation…` et `GABARITO…` de cette fiche sont des fantômes tant qu'ils ne sont pas déposés). Le parcours de la séance, étape par étape, page par page, compte par compte : `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — les documents sont au dépôt et le dispositif n'est plus celui de la fiche.** Xavier a fourni le plan (révisé le 01/09), le conducteur de la séance 1, le roteiro de la capsule, les 89 diapositives et « O salto colegial » : déposés dans `docs/journal/chantiers/formation-BLMF/`. Le plan dit **sept soirées de 2 h 15, six modules, six exercices, une capsule de 40 minutes** — plus trois rencontres ; l'exercice 0 devient un travail personnel ; l'engagement chiffré est inchangé (5 exemplaires sur 2 758 avec mode d'acquisition). **Le « 13/09 » n'apparaît dans aucun document** : la première soirée n'est pas datée, et « collision avec Bologne » était une fausse alerte née d'une hypothèse du backlog. Bac à sable : deux lecteur·rices fictif·ves créé·es sur `blmf-teste` (Emma Teste, Errico Teste, adresses de Xavier ; mot de passe à poser par « Esqueci minha senha ») ; Voltairine de Teste existe mais ses adhésions ont été remaniées le 02/09 (lectrice retirée) ; règles et horaires copiés de la BLMF. La page `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` est réécrite en **compléments au conducteur**. Reste : dater la soirée 1, poser les mots de passe, Rafael G., et corriger dans les diapositives les quatre réserves dépassées listées au §7 du plan avant la soirée 4. **Soirée 1 datée par Xavier : le 08/09/2026** (17 h 00 – 19 h 15). Voltairine de Teste repassée **lectrice** (bibliothécaire retirée) ; Emma et Errico Teste se sont connecté·es le 03/09 à 16 h 15 et 16 h 18 : le bac à sable a ses trois lecteur·rices.*
 
 **Ce que c'est.** Avant la première séance : créer sur `blmf-teste` les deux comptes de coordination, un ou deux comptes de lecture fictifs, et les cinq fiches fautives de l'exercice 2. Puis le suivi de huit semaines : cinq fiches par semaine **toutes avec leur provenance**, un jour de comptoir par semaine, une consultation menée de bout en bout avec négociation réelle, et le vote du profil de la bibliothèque porté en assemblée.
 
@@ -1984,6 +2338,47 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Lié à **K5** et **H7**.
 
 *Renvois : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26`*
+
+#### K9 — Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est 10 — quatre textes à corriger avant le 12
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** **Mesuré sur l'aspiration du 03/09, le 07/09.** 620 → **623** descripteurs entre le 30/06 et le 03/09 (trois dates apparues : `1927`, `2026`, `2027`, zéro disparition). Et sur les 148 descripteurs hiérarchisés, 55 parents étaient introuvables au 28/08 — **45 se résolvent par la variante `X (généralités)`** ; il reste **10** vrais regroupements sans concept (`guerres` ×9, `art : courants` ×1). Les deux chiffres sont dans la présentation du 12, l'intervention du 13, le texte d'orientation et les conventions d'interopérabilité.
+
+*Vérifié : 07/09 — chiffres mesurés ; textes non encore corrigés.*
+
+**Ce que c'est.** Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 45 relèvent d'une convention de nommage, 10 sont des regroupements » — et reformuler la question à la fédération : non plus « votre arbre existe-t-il ? » mais « *X* et *X (généralités)* sont-ils le même terme ? ».
+
+**Pourquoi ça compte.** Le vocabulaire a bougé sans que personne l'apprenne : c'est l'argument de l'intervention, mesuré sur ta propre copie. Mais prononcer un chiffre faux devant les gens qui tiennent le site, c'est perdre l'argument.
+
+**Ce qui compte comme fini.**
+
+- Les quatre textes portent les chiffres du 03/09 et la question reformulée.
+- Le foglio italien imprimé est la version corrigée.
+
+**Dépendances.** Avant **K5** (12/09). Sans dépendance technique.
+
+*Renvois : `claude/REPONSE_hortical_deux_thesaurus_2026-09-07 §5-6` · `claude/PRESENTATION_samedi_bologne_2026-09-12` · `claude/INTERVENTION_assemblee_ouverte_bologne_2026-09-13` · `claude/ORIENTATION_outils_bibliotheques_militantes_2026-08-26` · `claude/CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26`*
+
+#### K10 — Trois articles promis au *Monde libertaire*, un par mois — et une émission proposée à *Trous Noirs*
+
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : langue maternelle
+
+**État.** Session du 30/08 : le courriel à Monique et Serge (Radio Libertaire, *Trous Noirs*) écrit « Le Monde libertaire en publie trois articles dans les mois qui viennent, un par mois ». **Non vérifié** : ni la remise du premier article, ni l'envoi du courriel, ni la réponse. Aucun item du backlog ne portait cet engagement.
+
+*Vérifié : 07/09 — engagement relevé dans une session, aucune trace de suivi ailleurs.*
+
+**Ce que c'est.** Dire ici où en sont les trois articles (rendu, relu, publié) et si le courriel est parti ; puis tenir le rythme — un article par mois est une dette qui se voit.
+
+**Pourquoi ça compte.** Une promesse faite à un journal militant engage le projet autant qu'un déploiement : elle se lit dans les numéros où l'article manque.
+
+**Ce qui compte comme fini.**
+
+- Trois dates de parution, ou une renégociation écrite du rythme.
+
+**Dépendances.** Voisin de **K5** ; sans dépendance technique.
+
+*Renvois : `session Cowork « Monde libertaire article publication », 30/08/2026`*
 
 ---
 
@@ -2187,4 +2582,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `ecdcd06c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `bf2a4532` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
