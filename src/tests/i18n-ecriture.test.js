@@ -261,7 +261,7 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
       // trompe, `===` échoue contre la même chaîne venue du code, et un
       // `\b` d'expression régulière coupe au milieu du mot.
       it(`${l}.json — toutes les valeurs en forme NFC (composée)`, () => {
-        const decomposees = Object.entries(JSON.parse(texte))
+        const decomposees = Object.entries(TOUT[l])
           .filter(([, v]) => typeof v === 'string' && v.normalize('NFC') !== v)
           .map(([k]) => k);
         expect(
