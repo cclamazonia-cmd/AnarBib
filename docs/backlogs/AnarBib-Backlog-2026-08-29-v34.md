@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **8 septembre 2026** à 1 h 30 — production interrogée en lecture seule et dépôt recompté au commit `e3a15243`. Il prolonge les relevés du 06 et du 07/09. Dans la nuit, la session voisine a livré **E5** : la dernière exception anti-pistage tombe, le fond de carte est un fichier PMTiles auto-hébergé dans le bucket public `map-tiles` (18 Go, planet Protomaps du 07/09, zoom 12), plus aucun appel du navigateur vers `tile.openstreetmap.org`, gardé par un test. Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.
 
-**Fraîcheur des constats au 2026-09-08.** **67 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-08.** **68 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1801,9 +1801,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La pile est réduite de douze à **six conteneurs** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), les versions sont épinglées, `bootstrap.sh` a été exécuté pour de vrai le 26/08 avec huit défauts relevés et corrigés, et la répétition du 18/08 a rejoué 124 migrations et restauré un dump de production en 17 secondes. Reconstruction complète mesurée : **25 minutes**.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 08/09 — l'hôte de la visio est Framatalk depuis ce jour (commits `88bba888`, `b75d4b2a`, REGISTRE FED-O9/AG-7) ; aucune réponse d'hébergeur sur un Jitsi n'a encore été demandée. Le fond de carte est un fichier de 18 Go dans le Storage (`map-tiles`), à faire suivre.*
 
-**Ce que c'est.** Ce qui reste : découpler la chaîne de déploiement de l'intégration continue (**de l'extraction, pas de la création** — `scripts/ci/deployer-backend.sh` existe déjà), poser un proxy inverse avec tunnel devant la pile, passer des tags aux empreintes `sha256`, et refaire la répétition à froid un mois plus tard pour vérifier que rien n'a divergé.
+**Ce que c'est.** Ce qui reste : découpler la chaîne de déploiement de l'intégration continue (**de l'extraction, pas de la création** — `scripts/ci/deployer-backend.sh` existe déjà), poser un proxy inverse avec tunnel devant la pile, passer des tags aux empreintes `sha256`, et refaire la répétition à froid un mois plus tard pour vérifier que rien n'a divergé. **Ajouté le 08/09/2026, à poser à l'hébergeur pressenti (Les Herbes Folles), ou à un ou plusieurs autres** : **un Jitsi à nous.** La visio d'entraide et d'assemblées vivait chez Autistici/Inventati ; A/I a été désigné « SDGT » par les États-Unis le 26/08 et a fermé ; le 08/09 on a basculé sur Framatalk (Framasoft, Hetzner en Allemagne) — un tiers de confiance, mais un tiers, et sur une infrastructure qu'une mesure du même genre peut atteindre. Un Jitsi hébergé par nous (ou par un collectif d'hébergement allié, ou réparti entre plusieurs) est la seule sortie complète. Ce n'est pas la même charge que le reste de la pile : le videobridge consomme de la bande passante montante à proportion des participantes, et une assemblée de vingt personnes n'est pas une aide à deux. **Questions à poser** : la VM peut-elle tenir un Jitsi (RAM, bande passante, ports UDP 10000) ; préfèrent-ils une seconde machine ; un autre hébergeur allié (Chapril, Systemli, une instance amie) accepterait-il de porter la visio pour le réseau, quitte à ce qu'elle ne vive pas au même endroit que la base ? Le même jour, **le fichier de fond de carte** (`map-tiles/planet-z12.pmtiles`, 18 Go, à réextraire en z15 depuis la VM : 138 Go) est entré dans ce qui déménage — à compter dans le disque demandé (I21).
 
 **Pourquoi ça compte.** C'est l'objectif que le projet s'est donné et qu'il n'a pas encore atteint : la fin de la dépendance à un hébergeur tiers. **C'est le chantier le plus technique et le plus autonome du lot** — quelqu'un peut le prendre sans coordination.
 
@@ -1813,10 +1813,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - Une reconstruction complète a été refaite un mois après la première.
 - Garde-fou à préserver impérativement : la boucle de déploiement parcourt `supabase/functions/*/` **en excluant `_shared` et `main`** — sans quoi le routeur partirait sur le Supabase hébergé.
 - Piège déjà rencontré : les rôles de service n'ont pas de mot de passe dans l'image `supabase/postgres` (SQLSTATE 28P01 en boucle), `postgres` n'est pas superutilisateur (c'est `supabase_admin`), `authenticator` est réservé, et un `set -e` dans la boucle tue le script au premier rôle en échec.
+- La question d'un Jitsi (chez l'hébergeur, chez un allié, ou réparti) a été posée, et la réponse est consignée ici — même si c'est « non ».
 
 **Dépendances.** **Gelé sur la production jusqu'au 14/09.** Dépend de **I1**. À faire avant de louer quoi que ce soit : reprendre la connexion authentifiée en local, bloquée par une résolution IPv6 sans route — **ce blocage a probablement disparu de lui-même**, le vérifier coûte cinq minutes et peut épargner une machine montée pour rien.
 
-*Renvois : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26`*
+*Renvois : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
 
 #### I3 — Tester le routeur `main` de la pile auto-hébergée
 

@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e repositório recontado no commit `e3a15243`. De noite, a sessão vizinha entregou **E5** : a última exceção anti-rastreio cai, o fundo de mapa é um ficheiro PMTiles auto-alojado no bucket `map-tiles` (18 GB), nenhuma chamada a `tile.openstreetmap.org`, guardado por teste.
 
-**Frescor dos constatos em 2026-09-08.** **67 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-08.** **68 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1787,9 +1787,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A pilha está reduzida de doze a **seis contêineres** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), as versões estão fixadas, `bootstrap.sh` foi executado de verdade em 26/08 com oito defeitos levantados e corrigidos, e o ensaio de 18/08 reexecutou 124 migrações e restaurou um dump de produção em 17 segundos. Reconstrução completa medida: **25 minutos**.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 08/09 — o hospedeiro da videoconferência é o Framatalk desde este dia; nenhuma resposta de hospedeiro sobre um Jitsi foi ainda pedida. O fundo de mapa é um arquivo de 18 GB no Storage (`map-tiles`), a fazer seguir.*
 
-**O que é.** O que resta: desacoplar a cadeia de implantação da integração contínua (**extração, não criação** — `scripts/ci/deployer-backend.sh` já existe), colocar um proxy reverso com túnel na frente da pilha, passar de tags para impressões `sha256`, e refazer o ensaio a frio um mês depois para verificar que nada divergiu.
+**O que é.** O que resta: desacoplar a cadeia de implantação da integração contínua (**extração, não criação** — `scripts/ci/deployer-backend.sh` já existe), colocar um proxy reverso com túnel na frente da pilha, passar de tags para impressões `sha256`, e refazer o ensaio a frio um mês depois para verificar que nada divergiu. **Acrescentado em 08/09/2026, a colocar ao hospedeiro previsto (Les Herbes Folles), ou a um ou vários outros**: **um Jitsi nosso.** A videoconferência de apoio mútuo e de assembleias vivia na Autistici/Inventati; a A/I foi designada «SDGT» pelos Estados Unidos em 26/08 e fechou; em 08/09 mudámos para o Framatalk (Framasoft, Hetzner na Alemanha) — um terceiro de confiança, mas um terceiro, numa infraestrutura que uma medida do mesmo tipo pode atingir. Um Jitsi hospedado por nós (ou por um coletivo de hospedagem aliado, ou repartido entre vários) é a única saída completa. Não é a mesma carga que o resto da pilha: o videobridge consome largura de banda de subida na proporção das participantes. **Perguntas a fazer**: a VM aguenta um Jitsi (RAM, banda, porta UDP 10000); preferem uma segunda máquina; outro hospedeiro aliado (Chapril, Systemli, uma instância amiga) aceitaria carregar a videoconferência da rede, mesmo que não viva no mesmo lugar que a base? No mesmo dia, **o arquivo de fundo de mapa** (`map-tiles/planet-z12.pmtiles`, 18 GB, a reextrair em z15 a partir da VM: 138 GB) entrou no que se muda — a contar no disco pedido (I21).
 
 **Por que importa.** É o objetivo que o projeto se deu e que ainda não atingiu: o fim da dependência de um provedor terceiro. **É o canteiro mais técnico e mais autônomo do lote** — alguém pode assumi-lo sem coordenação.
 
@@ -1799,10 +1799,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Uma reconstrução completa foi refeita um mês após a primeira.
 - Guarda a preservar imperativamente: o laço de implantação percorre `supabase/functions/*/` **excluindo `_shared` e `main`** — sem o que o roteador iria para o Supabase hospedado.
 - Armadilha já encontrada: os papéis de serviço não têm senha na imagem `supabase/postgres` (SQLSTATE 28P01 em laço), `postgres` não é superusuário (é `supabase_admin`), `authenticator` é reservado, e um `set -e` no laço mata o script no primeiro papel em falha.
+- A pergunta de um Jitsi (no hospedeiro, num aliado, ou repartido) foi feita, e a resposta está registada aqui — mesmo que seja «não».
 
 **Dependências.** **Congelado na produção até 14/09.** Depende de **I1**. A fazer antes de alugar o que quer que seja: retomar a conexão autenticada em local, bloqueada por uma resolução IPv6 sem rota — **esse bloqueio provavelmente desapareceu sozinho**, verificá-lo custa cinco minutos e pode poupar uma máquina montada à toa.
 
-*Remissões : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26`*
+*Remissões : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
 
 #### I3 — Testar o roteador `main` da pilha auto-hospedada
 

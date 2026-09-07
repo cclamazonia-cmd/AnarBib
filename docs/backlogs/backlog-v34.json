@@ -3840,8 +3840,8 @@
         "pt": "A pilha está reduzida de doze a **seis contêineres** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), as versões estão fixadas, `bootstrap.sh` foi executado de verdade em 26/08 com oito defeitos levantados e corrigidos, e o ensaio de 18/08 reexecutou 124 migrações e restaurou um dump de produção em 17 segundos. Reconstrução completa medida: **25 minutos**."
       },
       "w": {
-        "fr": "Ce qui reste : découpler la chaîne de déploiement de l'intégration continue (**de l'extraction, pas de la création** — `scripts/ci/deployer-backend.sh` existe déjà), poser un proxy inverse avec tunnel devant la pile, passer des tags aux empreintes `sha256`, et refaire la répétition à froid un mois plus tard pour vérifier que rien n'a divergé.",
-        "pt": "O que resta: desacoplar a cadeia de implantação da integração contínua (**extração, não criação** — `scripts/ci/deployer-backend.sh` já existe), colocar um proxy reverso com túnel na frente da pilha, passar de tags para impressões `sha256`, e refazer o ensaio a frio um mês depois para verificar que nada divergiu."
+        "fr": "Ce qui reste : découpler la chaîne de déploiement de l'intégration continue (**de l'extraction, pas de la création** — `scripts/ci/deployer-backend.sh` existe déjà), poser un proxy inverse avec tunnel devant la pile, passer des tags aux empreintes `sha256`, et refaire la répétition à froid un mois plus tard pour vérifier que rien n'a divergé. **Ajouté le 08/09/2026, à poser à l'hébergeur pressenti (Les Herbes Folles), ou à un ou plusieurs autres** : **un Jitsi à nous.** La visio d'entraide et d'assemblées vivait chez Autistici/Inventati ; A/I a été désigné « SDGT » par les États-Unis le 26/08 et a fermé ; le 08/09 on a basculé sur Framatalk (Framasoft, Hetzner en Allemagne) — un tiers de confiance, mais un tiers, et sur une infrastructure qu'une mesure du même genre peut atteindre. Un Jitsi hébergé par nous (ou par un collectif d'hébergement allié, ou réparti entre plusieurs) est la seule sortie complète. Ce n'est pas la même charge que le reste de la pile : le videobridge consomme de la bande passante montante à proportion des participantes, et une assemblée de vingt personnes n'est pas une aide à deux. **Questions à poser** : la VM peut-elle tenir un Jitsi (RAM, bande passante, ports UDP 10000) ; préfèrent-ils une seconde machine ; un autre hébergeur allié (Chapril, Systemli, une instance amie) accepterait-il de porter la visio pour le réseau, quitte à ce qu'elle ne vive pas au même endroit que la base ? Le même jour, **le fichier de fond de carte** (`map-tiles/planet-z12.pmtiles`, 18 Go, à réextraire en z15 depuis la VM : 138 Go) est entré dans ce qui déménage — à compter dans le disque demandé (I21).",
+        "pt": "O que resta: desacoplar a cadeia de implantação da integração contínua (**extração, não criação** — `scripts/ci/deployer-backend.sh` já existe), colocar um proxy reverso com túnel na frente da pilha, passar de tags para impressões `sha256`, e refazer o ensaio a frio um mês depois para verificar que nada divergiu. **Acrescentado em 08/09/2026, a colocar ao hospedeiro previsto (Les Herbes Folles), ou a um ou vários outros**: **um Jitsi nosso.** A videoconferência de apoio mútuo e de assembleias vivia na Autistici/Inventati; a A/I foi designada «SDGT» pelos Estados Unidos em 26/08 e fechou; em 08/09 mudámos para o Framatalk (Framasoft, Hetzner na Alemanha) — um terceiro de confiança, mas um terceiro, numa infraestrutura que uma medida do mesmo tipo pode atingir. Um Jitsi hospedado por nós (ou por um coletivo de hospedagem aliado, ou repartido entre vários) é a única saída completa. Não é a mesma carga que o resto da pilha: o videobridge consome largura de banda de subida na proporção das participantes. **Perguntas a fazer**: a VM aguenta um Jitsi (RAM, banda, porta UDP 10000); preferem uma segunda máquina; outro hospedeiro aliado (Chapril, Systemli, uma instância amiga) aceitaria carregar a videoconferência da rede, mesmo que não viva no mesmo lugar que a base? No mesmo dia, **o arquivo de fundo de mapa** (`map-tiles/planet-z12.pmtiles`, 18 GB, a reextrair em z15 a partir da VM: 138 GB) entrou no que se muda — a contar no disco pedido (I21)."
       },
       "y": {
         "fr": "C'est l'objectif que le projet s'est donné et qu'il n'a pas encore atteint : la fin de la dépendance à un hébergeur tiers. **C'est le chantier le plus technique et le plus autonome du lot** — quelqu'un peut le prendre sans coordination.",
@@ -3852,13 +3852,15 @@
           "La pile tourne derrière un proxy inverse, avec les versions en empreintes.",
           "Une reconstruction complète a été refaite un mois après la première.",
           "Garde-fou à préserver impérativement : la boucle de déploiement parcourt `supabase/functions/*/` **en excluant `_shared` et `main`** — sans quoi le routeur partirait sur le Supabase hébergé.",
-          "Piège déjà rencontré : les rôles de service n'ont pas de mot de passe dans l'image `supabase/postgres` (SQLSTATE 28P01 en boucle), `postgres` n'est pas superutilisateur (c'est `supabase_admin`), `authenticator` est réservé, et un `set -e` dans la boucle tue le script au premier rôle en échec."
+          "Piège déjà rencontré : les rôles de service n'ont pas de mot de passe dans l'image `supabase/postgres` (SQLSTATE 28P01 en boucle), `postgres` n'est pas superutilisateur (c'est `supabase_admin`), `authenticator` est réservé, et un `set -e` dans la boucle tue le script au premier rôle en échec.",
+          "La question d'un Jitsi (chez l'hébergeur, chez un allié, ou réparti) a été posée, et la réponse est consignée ici — même si c'est « non »."
         ],
         "pt": [
           "A pilha roda atrás de um proxy reverso, com as versões em impressões.",
           "Uma reconstrução completa foi refeita um mês após a primeira.",
           "Guarda a preservar imperativamente: o laço de implantação percorre `supabase/functions/*/` **excluindo `_shared` e `main`** — sem o que o roteador iria para o Supabase hospedado.",
-          "Armadilha já encontrada: os papéis de serviço não têm senha na imagem `supabase/postgres` (SQLSTATE 28P01 em laço), `postgres` não é superusuário (é `supabase_admin`), `authenticator` é reservado, e um `set -e` no laço mata o script no primeiro papel em falha."
+          "Armadilha já encontrada: os papéis de serviço não têm senha na imagem `supabase/postgres` (SQLSTATE 28P01 em laço), `postgres` não é superusuário (é `supabase_admin`), `authenticator` é reservado, e um `set -e` no laço mata o script no primeiro papel em falha.",
+          "A pergunta de um Jitsi (no hospedeiro, num aliado, ou repartido) foi feita, e a resposta está registada aqui — mesmo que seja «não»."
         ]
       },
       "dep": {
@@ -3868,8 +3870,14 @@
       "r": [
         "docs/CHANTIERS_OUVERTS.md §2",
         "deploy/README.md",
-        "REPRISE_bascule_autohebergee_2026-08-26"
-      ]
+        "REPRISE_bascule_autohebergee_2026-08-26",
+        "SETUP_fonds_de_carte_pmtiles_2026-09-07",
+        "REGISTRE FED-O9 (08/09)"
+      ],
+      "verif": {
+        "fr": "08/09 — l'hôte de la visio est Framatalk depuis ce jour (commits `88bba888`, `b75d4b2a`, REGISTRE FED-O9/AG-7) ; aucune réponse d'hébergeur sur un Jitsi n'a encore été demandée. Le fond de carte est un fichier de 18 Go dans le Storage (`map-tiles`), à faire suivre.",
+        "pt": "08/09 — o hospedeiro da videoconferência é o Framatalk desde este dia; nenhuma resposta de hospedeiro sobre um Jitsi foi ainda pedida. O fundo de mapa é um arquivo de 18 GB no Storage (`map-tiles`), a fazer seguir."
+      }
     },
     {
       "id": "I3",
