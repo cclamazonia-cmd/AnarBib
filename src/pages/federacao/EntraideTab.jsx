@@ -15,10 +15,16 @@ import { useLibrary } from '@/contexts/LibraryContext';
 // savoir-faire (texte), JAMAIS de données de catalogue (le degré 3 consenti viendra).
 // Visio : link-out Jitsi à domaine configurable (cadrage §8), salle déterministe
 // par appel pour que demandeur·euse et aidant·e se retrouvent.
+// Hôte (FED-O9) : Framatalk (Framasoft) depuis le 08/09/2026 — Autistici/Inventati,
+// hôte initial, a été désigné « SDGT » par les États-Unis le 26/08/2026 et a fermé
+// ses services ; vc.autistici.org ne répond plus. Le REPLI codé n'est plus
+// meet.jit.si (8x8, société américaine : Cloud Act, et exposition au même type de
+// sanction) mais Framatalk aussi : l'absence de variable ne renvoie jamais vers
+// un hébergeur américain.
 // ═══════════════════════════════════════════════════════════════════════════
 
 
-const JITSI_DOMAIN = (import.meta.env.VITE_JITSI_DOMAIN || 'meet.jit.si')
+const JITSI_DOMAIN = (import.meta.env.VITE_JITSI_DOMAIN || 'framatalk.org')
   .replace(/^https?:\/\//, '').replace(/\/+$/, '');
 
 export default function EntraideTab() {

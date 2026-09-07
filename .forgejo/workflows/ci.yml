@@ -92,10 +92,13 @@ jobs:
           # périmé EN SILENCE. À terme : renommer le secret dans les réglages
           # Forgejo puis aligner cette ligne.
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          # Visio d'entraide : instance Jitsi militante Autistici/Inventati (accord A/I
-          # du 16/06 — « usage direct », pas d'embedding : on ouvre en onglet dédié).
-          # Valeur publique (pas un secret). Repli meet.jit.si si non défini.
-          VITE_JITSI_DOMAIN: vc.autistici.org
+          # Visio d'entraide : instance Jitsi de Framasoft (association française,
+          # serveurs Hetzner en Allemagne), ouverte en onglet dédié, pas d'embedding.
+          # Jusqu'au 08/09/2026 : vc.autistici.org (accord A/I du 16/06) — A/I a été
+          # désigné « SDGT » par les États-Unis le 26/08/2026 et a fermé ; le domaine
+          # ne répond plus. Valeur publique (pas un secret). Repli codé : framatalk.org
+          # aussi (plus jamais meet.jit.si, société américaine). REGISTRE FED-O9 / AG-7.
+          VITE_JITSI_DOMAIN: framatalk.org
         run: |
           npm run build
           test -d dist || (echo "✗ dist/ introuvable" && exit 1)
