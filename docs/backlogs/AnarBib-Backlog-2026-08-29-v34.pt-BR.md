@@ -60,7 +60,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 7 de setembro de 2026
 
-Registo de **7 de setembro de 2026** de manhã — produção em leitura e repositório recontado no commit `ecdcd06c`. Prolonga o registo completo de 06/09 : as volumetrias não mudaram (nenhuma migração nem código desde a correção de higiene de 06/09), o repositório recebeu a PR #28, seis decisões de releitura e quatro itens novos (E14, G13, H8, I20).
+Registo de **7 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `003ad4ca`. Três migrações (H8, I20, alinhamento FICEDL), duas suites SQL, **dezoito itens novos**, três encerramentos (H8, I20, I17). As volumetrias não mudaram.
 
 **Frescor dos constatos em 2026-09-07.** **67 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E5, E6, E9, E12, E14, E15, E16, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
@@ -71,8 +71,8 @@ Registo de **7 de setembro de 2026** de manhã — produção em leitura e repos
 | Tabelas `public` | **191** | todas com RLS ativado, **332 policies** — +4 tabelas desde 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), todas classificadas no filete BG2. |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **906** | `public` 676 · `api` 188 · `ingest` 34 · `private` 8. **694 SECURITY DEFINER**. Nenhuma função sem `search_path` fixo desde 06/09 (`20260906111308`), guardado por suite. |
-| Migrações aplicadas | **308** | 308 numeradas = **308 aplicadas, alinhamento exato** (316 ficheiros). A 308.ª é a correção de higiene de 06/09 ; nada desde então. |
+| Funções aplicativas | **907** | 907 — +1 em 07/09 (H8, I20, `api.thesaurus_export_v1` reescrita). 694 DEFINER justificadas. Nenhuma sem `search_path`, guardado por suite. |
+| Migrações aplicadas | **311** | 311 numeradas = **311 aplicadas, alinhamento exato**. **+3 em 07/09** : H8 GetRecord, I20 `functions_base_url`, alinhamento FICEDL. |
 | Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
 | Avisos de segurança | **463** | 0 ERROR · **411** + **28** WARN · 24 INFO. O WARN `search_path` desapareceu. **411 inteiramente justificado desde 06/09** : 395 herdados + 16 RPC de 04–05/09 lidas uma a uma (complemento da auditoria) ; duas limitações funcionais, nenhuma falha. |
 | Avisos de desempenho | **440** | **368 índices não usados**. 38 FK assumidas. 25 tabelas com policies múltiplas. **8 sem PK**. O `auth_rls_initplan` da manhã foi resolvido (`20260906111308`) e a suite de higiene guarda agora o motivo de B5. |
@@ -108,10 +108,10 @@ Registo de **7 de setembro de 2026** de manhã — produção em leitura e repos
 
 | | | |
 |---|---:|---|
-| Commits | **2 609** | em `main`, 07/09 de manhã — 15 commits desde 06/09, todos documentais. |
-| Arquivos `src/` | **310** | 81 páginas, 93 componentes. |
+| Commits | **2 621** | em `main`, 07/09 à noite — 27 commits no dia, de duas sessões. |
+| Arquivos `src/` | **311** | 81 páginas, 93 componentes ; +1 em 07/09 : o teste `migrations-sans-url-cloud` (I20). |
 | Chaves i18n | **6 570** | por locale, **paridade estrita nas 10** ; **+321 desde 03/09**. |
-| Testes | **407 + 95** | 407 testes JS + **95 suites SQL** (+1 em 06/09 : `hygiene_search_path_et_initplan`). |
+| Testes | **411 + 97** | 411 testes JS + **97 suites SQL** (+2 em 07/09). CI verde nos três pushes do dia. |
 | Marcadores de dívida | **21** | dos quais 4 em `src/` (eram 17 no total). Nenhum é uma tarefa aberta. |
 
 ---
@@ -2558,4 +2558,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `bf2a4532`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado numérico foi levantado em 2026-09-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `003ad4ca`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

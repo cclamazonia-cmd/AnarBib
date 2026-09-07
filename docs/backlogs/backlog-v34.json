@@ -14,7 +14,7 @@
     "maj": "2026-09-07",
     "releve": {
       "date": "2026-09-07",
-      "commit": "bf2a4532"
+      "commit": "003ad4ca"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **7 septembre 2026** au matin — production interrogée en lecture seule et dépôt recompté au commit `ecdcd06c`. Il prolonge le relevé complet du 06/09 : les volumétries métier n'ont pas bougé depuis (aucune migration ni code depuis la correction d'hygiène du 06/09 midi), le dépôt a reçu la PR #28 au backlog et au registre, six décisions de relecture, et quatre items neufs ce matin (E14, G13, H8, I20). Toutes les lignes ont été relues, celles qui changent portent la date.",
-      "pt": "Registo de **7 de setembro de 2026** de manhã — produção em leitura e repositório recontado no commit `ecdcd06c`. Prolonga o registo completo de 06/09 : as volumetrias não mudaram (nenhuma migração nem código desde a correção de higiene de 06/09), o repositório recebeu a PR #28, seis decisões de releitura e quatro itens novos (E14, G13, H8, I20)."
+      "fr": "Relevé du **7 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `003ad4ca`. Il prolonge le relevé complet du 06/09. La journée a été dense côté dépôt : trois migrations (H8 GetRecord, I20 l'adresse des fonctions, l'alignement FICEDL qui dit vers quelle liste il pointe), deux suites SQL, la PR #28 et la relecture de la FICEDL versées au backlog — **dix-huit items neufs** (B22, B23, E14–E16, F9, F10, G13, G14, H9–H13, I21, I22, J9, K9, K10), trois clôtures (H8, I20, I17). Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.",
+      "pt": "Registo de **7 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `003ad4ca`. Três migrações (H8, I20, alinhamento FICEDL), duas suites SQL, **dezoito itens novos**, três encerramentos (H8, I20, I17). As volumetrias não mudaram."
     },
     "photo": [
       {
@@ -408,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "906",
+            "907",
             {
-              "fr": "`public` 676 · `api` 188 · `ingest` 34 · `private` 8. Dont **694 SECURITY DEFINER** (526 / 144 / 17 / 7) : +48 fonctions et +25 DEFINER depuis le 03/09 (OPAC par œuvre, atelier des œuvres, révision des lots), −3 (les homonymes de `public`, B7). **Aucune fonction sans `search_path` figé** — `private.conv_motifs_collectivite` (INVOKER, née le 05/09 hors du garde du hook) l'a reçu le 06/09 (`560b94e4`, `20260906111308`) ; la suite `hygiene_search_path_et_initplan` le garde désormais sur toute la base.",
-              "pt": "`public` 676 · `api` 188 · `ingest` 34 · `private` 8. **694 SECURITY DEFINER**. Nenhuma função sem `search_path` fixo desde 06/09 (`20260906111308`), guardado por suite."
+              "fr": "`public` · `api` · `ingest` · `private` — +1 le 07/09 (les trois migrations du jour : H8, I20, et `api.thesaurus_export_v1` réécrite pour dire vers quelle liste pointe un alignement). Dont 694 SECURITY DEFINER au 06/09, toutes justifiées (audit 0029, complément du 06/09). **Aucune fonction sans `search_path` figé** : gardé par la suite `hygiene_search_path_et_initplan` depuis le 06/09.",
+              "pt": "907 — +1 em 07/09 (H8, I20, `api.thesaurus_export_v1` reescrita). 694 DEFINER justificadas. Nenhuma sem `search_path`, guardado por suite."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "308",
+            "311",
             {
-              "fr": "308 migrations numérotées au dépôt = **308 appliquées, alignement exact** (316 fichiers avec le gabarit et sept rollbacks). La 308ᵉ est la correction d'hygiène du 06/09 (`20260906111308`) ; **rien depuis** — les commits du 06/09 soir et du 07/09 sont documentaires. Vérifié le 07/09 des deux côtés.",
-              "pt": "308 numeradas = **308 aplicadas, alinhamento exato** (316 ficheiros). A 308.ª é a correção de higiene de 06/09 ; nada desde então."
+              "fr": "311 migrations numérotées au dépôt = **311 appliquées, alignement exact** (vérifié le 07/09 au soir). **+3 le 07/09** : `20260907120000` (H8 — GetRecord sert la notice demandée), `20260907123000` (I20 — `anarbib.functions_base_url`, l'adresse des fonctions n'est plus codée en dur ; posée par l'étape « 5 bis » de `bootstrap.sh` sur une instance auto-hébergée), `20260907172508` (l'alignement FICEDL dit vers quelle liste il pointe — H10/H12).",
+              "pt": "311 numeradas = **311 aplicadas, alinhamento exato**. **+3 em 07/09** : H8 GetRecord, I20 `functions_base_url`, alinhamento FICEDL."
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 609",
+            "2 621",
             {
-              "fr": "sur `main`, au 07/09 au matin — 15 commits depuis le relevé du 06/09, tous documentaires (PR #28 au backlog et au registre, décisions de relecture D3–D9, E14/G13/H8/I20).",
-              "pt": "em `main`, 07/09 de manhã — 15 commits desde 06/09, todos documentais."
+              "fr": "sur `main`, au 07/09 au soir — 27 commits dans la journée, de deux sessions : le code de H8 et I20, la relecture de la FICEDL (H9–H13), le cadrage du rejeu fidèle (I17, I21, I22), dix-huit items et trois clôtures au backlog.",
+              "pt": "em `main`, 07/09 à noite — 27 commits no dia, de duas sessões."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "310",
+            "311",
             {
-              "fr": "81 pages, 93 composants (79 et 90 le 03/09 : la page « Je veux… », l'assistant des œuvres, les onglets de l'atelier).",
-              "pt": "81 páginas, 93 componentes."
+              "fr": "81 pages, 93 composants ; +1 fichier le 07/09 : le test `migrations-sans-url-cloud.test.js` (I20 — aucune migration ne doit porter l'adresse du projet cloud).",
+              "pt": "81 páginas, 93 componentes ; +1 em 07/09 : o teste `migrations-sans-url-cloud` (I20)."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "407 + 95",
+            "411 + 97",
             {
-              "fr": "407 tests JS (vitest, gate bloquant) + **95 suites SQL** dans `ci-suites.txt` (+1 le 06/09 : `hygiene_search_path_et_initplan`, qui garde sur toute la base l'absence de fonction sans `search_path` et de policy qui réévalue `auth.uid()`). Rejeu local des 308 migrations le 06/09.",
-              "pt": "407 testes JS + **95 suites SQL** (+1 em 06/09 : `hygiene_search_path_et_initplan`)."
+              "fr": "411 tests JS (vitest, gate bloquant) + **97 suites SQL** dans `ci-suites.txt` (+2 le 07/09 avec H8 et I20, après `hygiene_search_path_et_initplan` le 06/09). Rejeu local des migrations le 06/09 ; CI verte sur les trois pushes du jour.",
+              "pt": "411 testes JS + **97 suites SQL** (+2 em 07/09). CI verde nos três pushes do dia."
             }
           ],
           [
