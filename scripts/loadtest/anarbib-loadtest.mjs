@@ -5,11 +5,30 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 import { writeFileSync } from 'node:fs';
 
-const BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co';
-const ANON =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmbHdtaWtpeWpmbmlraXBodGNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MzIyNDUsImV4cCI6MjA4OTQwODI0NX0.kCs7nPg08ofjb9CWwRH9xVN6BjanrAC5pj418line1o';
+const BASE = process.env.LOADTEST_URL || 'https://uflwmikiyjfnikiphtcp.supabase.co';
 
-const PWD = 'LoadTest!2026-Bologna';
+// Ni la clé ni le mot de passe ne vivent plus dans ce fichier : le dépôt est
+// public, et un fork en emporte une copie. La clé anon legacy qui figurait ici
+// en dur (un JWT `eyJ…`) a été désactivée le 02/09/2026 avec le reste des clés
+// legacy (B18) — elle était donc déjà morte, mais un secret mort dans un dépôt
+// public reste une fausse piste offerte au prochain lecteur, et c'est ce que la
+// migration `une_cle_morte_ne_laisse_pas_de_vestige` a chassé du coffre le même
+// jour. Ce fichier était le dernier endroit du dépôt à en garder une.
+//
+// Poser les deux variables avant de lancer :
+//   LOADTEST_KEY=sb_publishable_… LOADTEST_PWD='…' node anarbib-loadtest.mjs …
+// LOADTEST_URL permet en plus de viser une pile auto-hébergée plutôt que la prod.
+const ANON = process.env.LOADTEST_KEY;
+const PWD = process.env.LOADTEST_PWD;
+
+if (!ANON || !PWD) {
+  console.error(
+    "Manque LOADTEST_KEY (clé publiable sb_publishable_…) et/ou LOADTEST_PWD " +
+      "(mot de passe des comptes loadtest-NN@loadtest.invalid).\n" +
+      "Exemple : LOADTEST_KEY=sb_publishable_xxx LOADTEST_PWD='...' node anarbib-loadtest.mjs --vu=40",
+  );
+  process.exit(1);
+}
 const RUN_TAG = `LOADTEST-${Date.now()}`;
 
 const args = Object.fromEntries(
