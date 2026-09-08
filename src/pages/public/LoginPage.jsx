@@ -10,6 +10,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button, Spinner } from '@/components/ui';
 import { normalizePublicId } from '@/lib/publicId';
+import { clearAuthHash } from '@/lib/clearAuthHash';
 import { readSessionEndNotice } from '@/lib/sessionEndNotice';
 
 
@@ -130,9 +131,29 @@ export default function LoginPage() {
   // rendait la lecture ci-dessus inopérante en pratique (l'usager atterrissait sur le
   // formulaire de login au lieu du « nouveau mot de passe »). On bascule sur la vue
   // recovery dès que le flag passe à true.
+  //
+  // Et on RETIRE le jeton de l'URL au même moment. Sans ça, `#access_token=…` survit
+  // dans la barre d'adresse : le useEffect de montage ci-dessus le relit à chaque
+  // retour sur /login (rechargement, navigation arrière, reconnexion après le reset)
+  // et rebascule en mode « nouveau mot de passe » avec un jeton déjà consommé —
+  // l'usager ne peut plus se connecter du tout. C'est aussi un JWT qui n'a rien à
+  // faire dans l'historique du navigateur.
   useEffect(() => {
-    if (recovery) setView('recovery');
+    if (!recovery) return;
+    setView('recovery');
+    clearAuthHash();
   }, [recovery]);
+
+  // Filet de sécurité. Le nettoyage ci-dessus dépend de l'événement
+  // PASSWORD_RECOVERY ; s'il n'est pas émis (session déjà ouverte, lien périmé qui
+  // renvoie `#error=…`), le fragment resterait dans l'URL et le useEffect de montage
+  // le relirait au prochain passage. Dès que AuthContext a fini de s'initialiser —
+  // donc que detectSessionInUrl a eu le temps de consommer ce qu'il devait —, on
+  // retire ce qui traîne encore. Pas de minuterie : authLoading est le signal exact.
+  useEffect(() => {
+    if (authLoading) return;
+    clearAuthHash();
+  }, [authLoading]);
 
   // Bascule auto vers la destination (paquet 25.6).
   //
@@ -347,6 +368,10 @@ export default function LoginPage() {
       // connexion suivante.
       setTimeout(async () => {
         await supabase.auth.signOut();
+        // Ceinture et bretelles : si le hash a survécu jusqu'ici (PASSWORD_RECOVERY
+        // jamais émis, par exemple), on le retire maintenant que le mot de passe est
+        // changé. Sinon un simple rechargement renverrait au formulaire de reset.
+        clearAuthHash();
         setView('login');
       }, 2000);
     } catch {

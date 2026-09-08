@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { syncLocaleFromProfile } from '@/i18n';
 import { clearStaffSession } from '@/lib/staffStorage';
 import { clearSessionAlive, clearSessionEndNotice } from '@/lib/sessionEndNotice';
+import { clearAuthHash } from '@/lib/clearAuthHash';
 
 const AuthContext = createContext({
   session: null,
@@ -214,6 +215,10 @@ export function AuthProvider({ children }) {
         if (event === 'PASSWORD_RECOVERY') {
           try { localStorage.setItem('anarbib:pw-recovery', '1'); } catch { /* ignore */ }
           setRecovery(true);
+          // Le jeton vient d'être consommé : on le sort de l'URL. Tant qu'il y reste,
+          // LoginPage le relit à chaque montage et repropose la redéfinition du mot de
+          // passe avec un jeton mort — l'usager est bouclé sur le formulaire de reset.
+          clearAuthHash();
         }
         setSession(s);
         if (s?.user?.id) {
