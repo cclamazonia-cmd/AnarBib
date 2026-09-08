@@ -1692,8 +1692,8 @@
         "B18",
         "2026-09-02",
         {
-          "fr": "**Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout.",
-          "pt": "**As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta."
+          "fr": "**Les clés API legacy sont désactivées — et le feu vert fut un chiffre, comme la fiche l'exigeait.** La jauge refaite le matin même (sur le marqueur JWT, après que le critère « préfixe vide » se soit révélé compter les requêtes SANS clé comme legacy) donnait : zéro `service_role` depuis la bascule du 01/09, et côté `anon` **un seul user-agent navigateur** — un onglet Chrome/Windows connecté, jamais rechargé depuis la bascule — plus Googlebot rejouant son cache d'ancien bundle. L'onglet rechargé, le toggle basculé au dashboard (geste réversible), et la contre-preuve lue dans les logs : **zéro JWT legacy et zéro 401 sur 857 requêtes vivantes** — l'application entière sur la clé publiable et `sb_secret`. Le code a suivi dans l'heure : le repli `SUPABASE_SERVICE_ROLE_KEY` retiré de `secret-key.ts` (une clé morte ne mérite pas de chemin de code, et un repli vers elle masquerait une panne de `SUPABASE_SECRET_KEYS` au lieu de la dire — DOC-SILENCE-1), `.env.example` nettoyé, et le vestige vault `anarbib_staging_anon_key` supprimé (migration `20260902163600`, zéro appelant vérifié). La bascule `service_role` → `sb_secret` entamée le 01/09 est close de bout en bout. **Nuance du 08/09 : la clôture était juste pour l'application, et l'application n'était pas tout.** Le site vitrine `anarbib.org` — second dépôt, `codeberg.org/anarbib/pages` — portait la clé anon legacy dans les dix `index.html` de sa galerie *Explorer*, qui lit `api.public_libraries` : dès le toggle, chaque visiteur de la galerie a reçu un 401 et une page vide, **six jours durant**. La jauge quotidienne l'a vu (4 à 7 requêtes legacy par jour du 04 au 07/09) et l'a lu comme un résidu d'onglets, parce que le chiffre était petit et que personne n'avait demandé le `referer`. Trouvé et réparé dans la nuit du 07 au 08/09 par la session du fond de carte (vitrine `df9ba40`). Ce qui en sort est l'item **B24** et la carte `OPS-9` du registre : une rotation de clé commence par l'inventaire des dépôts qui la portent, et après une désactivation le seuil d'alerte est un, pas cinquante.",
+          "pt": "**As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta. **Nuance de 08/09: o encerramento estava certo para o aplicativo, e o aplicativo não era tudo.** O site vitrine `anarbib.org` — segundo repositório, `codeberg.org/anarbib/pages` — carregava a chave anon legacy nos dez `index.html` da sua galeria *Explorar*, que lê `api.public_libraries`: desde o toggle, cada visitante da galeria recebeu um 401 e uma página vazia, **durante seis dias**. O medidor diário viu (4 a 7 requisições legacy por dia de 04 a 07/09) e leu como resíduo de abas, porque o número era pequeno e ninguém tinha pedido o `referer`. Encontrado e consertado na noite de 07 para 08/09 pela sessão do mapa base (vitrine `df9ba40`). O que sai disso é o item **B24** e o cartão `OPS-9` do registro: uma rotação de chave começa pelo inventário dos repositórios que a carregam, e depois de uma desativação o limiar de alerta é um, não cinquenta."
         }
       ],
       [
@@ -4140,16 +4140,16 @@
         "pt": "As chaves de assinatura JWT estão migradas: a chave corrente é uma ECC P-256, a antiga HS256 está guardada em « Previously used keys » e só faz verificação. O dashboard mostra ao lado dela um botão Revoke e um texto que convida gentilmente a clicar « uma vez expirados os tokens ». Só que essa chave ainda valida a chave anon legada que os navegadores com bundle em cache enviam — 2.026 requisições por dia no levantamento de 01/09."
       },
       "w": {
-        "fr": "Rien avant que B18 soit terminé et digéré. Ensuite seulement : vérifier qu'aucun jeton ni URL signée de longue durée ne dépend encore de la HS256, puis révoquer. Item gelé exprès pour que personne ne « range » ce bouton en passant.",
-        "pt": "Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem."
+        "fr": "Rien avant que B18 soit terminé et digéré. Ensuite seulement : vérifier qu'aucun jeton ni URL signée de longue durée ne dépend encore de la HS256, puis révoquer. Item gelé exprès pour que personne ne « range » ce bouton en passant. **Amendé le 08/09 (B24, `OPS-9`)** : « digéré » se mesure dans les DEUX dépôts, pas dans l'application seule — `grep -r eyJhbGciOi` à zéro dans `anarbib` ET dans `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` montrant la clé courante, et une semaine de logs où chaque requête legacy résiduelle a été qualifiée par son `referer`. La galerie de la vitrine est restée cassée six jours après B18 sans que personne ne le voie : la HS256 révoquée, une page oubliée ne rend plus 401, elle rend une déconnexion générale.",
+        "pt": "Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem. **Emendado em 08/09 (B24, `OPS-9`)**: «digerido» se mede nos DOIS repositórios, não só no aplicativo — `grep -r eyJhbGciOi` a zero em `anarbib` E em `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` mostrando a chave corrente, e uma semana de logs em que cada requisição legacy residual foi qualificada pelo seu `referer`. A galeria da vitrine ficou quebrada seis dias depois de B18 sem que ninguém visse: com a HS256 revogada, uma página esquecida não devolve mais 401, devolve uma desconexão geral."
       },
       "f": {
         "fr": [
-          "B18 est clos depuis assez longtemps pour que plus aucun jeton signé HS256 ne circule.",
+          "B18 est clos depuis assez longtemps pour que plus aucun jeton signé HS256 ne circule — et B24 est soldé : les deux dépôts sans clé legacy, la vitrine déployée vérifiée.",
           "La révocation est faite et une connexion, une inscription et une récupération de mot de passe ont été vérifiées juste après."
         ],
         "pt": [
-          "B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais.",
+          "B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais — e B24 está saldado: os dois repositórios sem chave legacy, a vitrine publicada verificada.",
           "A revogação foi feita e um login, um cadastro e uma recuperação de senha foram verificados logo depois."
         ]
       },
@@ -4158,8 +4158,8 @@
         "pt": "É o único gesto realmente irreversível de todo o canteiro das chaves, e está a um clique de uma tela que se visita por outras razões. Revogada cedo demais, a HS256 invalida de uma vez tudo o que ela ainda validava: a desconexão seria geral e imediata."
       },
       "dep": {
-        "fr": "Item B18 terminé.",
-        "pt": "Item B18 terminado."
+        "fr": "Item B18 terminé, et B24 soldé (l'inventaire des deux dépôts).",
+        "pt": "Item B18 terminado, e B24 saldado (o inventário dos dois repositórios)."
       },
       "verif": {
         "fr": "01/09 — page Settings → JWT Keys lue : ECC P-256 courante, HS256 en « previously used », dernière rotation il y a 5 mois.",
@@ -6025,6 +6025,57 @@
       "verif": {
         "fr": "07/09 — `reloptions` vide, donc DEFINER.",
         "pt": "07/09 — `reloptions` vazio, logo DEFINER."
+      }
+    },
+    {
+      "id": "B24",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer",
+        "pt": "Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo"
+      },
+      "v": {
+        "fr": "B18 (02/09) a désactivé les clés legacy sur un feu vert chiffré qui ne regardait que l'application. Or le site vitrine `anarbib.org` est un **second dépôt** (`codeberg.org/anarbib/pages`) dont la galerie *Explorer* lit `api.public_libraries` en production avec une clé embarquée en `data-supabase-key` dans **dix `index.html`** (un par locale) : dès le toggle, la galerie a rendu 401 — **page vide pendant six jours**, réparée dans la nuit du 07 au 08/09 par la session du fond de carte (vitrine `df9ba40`), pas par la surveillance qui était censée le voir. Cette surveillance (tâche quotidienne `anarbib-trafic-cles-legacy`) comptait 4 à 7 requêtes legacy par jour du 04 au 07/09 et les lisait comme des onglets fossiles ; le `referer`, demandé le 08/09 pour la première fois, a désigné la vitrine en une ligne. Le harnais de charge de l'application portait lui aussi la clé legacy en clair (`scripts/loadtest/anarbib-loadtest.mjs`), retirée le 07/09 (`e2f5d75a`). **Vérifié le 08/09** : `grep -r eyJhbGciOi` rend zéro dans les deux dépôts, `/fr/explorar/` déployée sert `sb_publishable_…`, zéro requête legacy depuis le correctif. Ce qui manque n'est plus la réparation, c'est ce qui empêche la répétition : la vitrine n'a **aucune garde**, et sa clé vit en dix copies qu'un `sed` a dû toucher une par une.",
+        "pt": "B18 (02/09) desativou as chaves legacy com um sinal verde numérico que só olhava o aplicativo. Só que o site vitrine `anarbib.org` é um **segundo repositório** (`codeberg.org/anarbib/pages`) cuja galeria *Explorar* lê `api.public_libraries` em produção com uma chave embutida em `data-supabase-key` em **dez `index.html`** (um por locale): desde o toggle, a galeria devolveu 401 — **página vazia durante seis dias**, consertada na noite de 07 para 08/09 pela sessão do mapa base (vitrine `df9ba40`), não pela vigilância que deveria ter visto. Essa vigilância (tarefa diária `anarbib-trafic-cles-legacy`) contava 4 a 7 requisições legacy por dia de 04 a 07/09 e as lia como abas fósseis; o `referer`, pedido em 08/09 pela primeira vez, apontou a vitrine numa linha. O harnês de carga do aplicativo também carregava a chave legacy em claro (`scripts/loadtest/anarbib-loadtest.mjs`), retirada em 07/09 (`e2f5d75a`). **Verificado em 08/09**: `grep -r eyJhbGciOi` devolve zero nos dois repositórios, `/fr/explorar/` publicada serve `sb_publishable_…`, zero requisição legacy desde a correção. O que falta já não é o conserto, é o que impede a repetição: a vitrine não tem **nenhuma guarda**, e sua chave vive em dez cópias que um `sed` teve de tocar uma a uma."
+      },
+      "w": {
+        "fr": "Deux gestes dans le dépôt `pages`, une soirée. (1) **Une seule copie de la clé** : la sortir des dix `index.html` vers un `js/config.js` (ou un seul `data-*` sur la balise racine lue par `explorar.js`), pour qu'une rotation soit un commit d'une ligne. (2) **Une garde qui refuse une clé legacy** : test ou hook `pre-commit` qui rougit sur `eyJhbGciOi` n'importe où dans le dépôt, et qui vérifie que la clé embarquée commence par `sb_publishable_`. Et dans l'application : la liste des dépôts à inventorier à chaque rotation écrite dans `B19` (fait le 08/09) et dans `CONTRIBUTING.md`.",
+        "pt": "Dois gestos no repositório `pages`, uma noite. (1) **Uma única cópia da chave**: tirá-la dos dez `index.html` para um `js/config.js` (ou um único `data-*` na tag raiz lido por `explorar.js`), para que uma rotação seja um commit de uma linha. (2) **Uma guarda que recusa uma chave legacy**: teste ou hook `pre-commit` que fica vermelho com `eyJhbGciOi` em qualquer lugar do repositório, e que verifica que a chave embutida começa com `sb_publishable_`. E no aplicativo: a lista dos repositórios a inventariar a cada rotação escrita em `B19` (feito em 08/09) e em `CONTRIBUTING.md`."
+      },
+      "y": {
+        "fr": "B19 est le prochain geste sur les clés et il est irréversible : une page oubliée ne rendra plus 401 ce jour-là, elle rendra une déconnexion générale. Et six jours de galerie vide, c'est six jours où la vitrine disait au public « ce réseau n'a aucune bibliothèque » — indistinguable d'une panne, comme le dit `DOC-SILENCE-1`.",
+        "pt": "B19 é o próximo gesto sobre as chaves e é irreversível: uma página esquecida não devolverá mais 401 nesse dia, devolverá uma desconexão geral. E seis dias de galeria vazia são seis dias em que a vitrine dizia ao público «esta rede não tem nenhuma biblioteca» — indistinguível de uma pane, como diz `DOC-SILENCE-1`."
+      },
+      "f": {
+        "fr": [
+          "La clé de la vitrine vit en un seul endroit, et une garde rougit sur toute clé legacy ou sur une clé qui ne commence pas par `sb_publishable_`.",
+          "`B19` et `CONTRIBUTING.md` nomment les dépôts à inventorier avant et après toute rotation."
+        ],
+        "pt": [
+          "A chave da vitrine vive num único lugar, e uma guarda fica vermelha com qualquer chave legacy ou com uma chave que não comece por `sb_publishable_`.",
+          "`B19` e `CONTRIBUTING.md` nomeiam os repositórios a inventariar antes e depois de qualquer rotação."
+        ]
+      },
+      "dep": {
+        "fr": "Bloque **B19** (la révocation HS256 exige cet inventaire). Dépôt `pages` : à ne toucher qu'après le gel (retour de Bologne, 14/09).",
+        "pt": "Bloqueia **B19** (a revogação HS256 exige esse inventário). Repositório `pages`: só tocar depois do congelamento (volta de Bolonha, 14/09)."
+      },
+      "r": [
+        "REGISTRE §38 OPS-9",
+        "item B18 (clôture nuancée)",
+        "item B19",
+        "vitrine df9ba40",
+        "app e2f5d75a"
+      ],
+      "verif": {
+        "fr": "08/09 — logs edge 24 h : les 4 requêtes legacy (toutes 401) sont la vérification pré-correctif de la session vitrine, referer `anarbib.org` et `localhost:8765`, même réseau ; `curl anarbib.org/fr/explorar/` → `sb_publishable_…` ; `grep eyJhbGciOi` = 0 dans `anarbib` et `pages`.",
+        "pt": "08/09 — logs edge 24 h: as 4 requisições legacy (todas 401) são a verificação pré-correção da sessão da vitrine, referer `anarbib.org` e `localhost:8765`, mesma rede; `curl anarbib.org/fr/explorar/` → `sb_publishable_…`; `grep eyJhbGciOi` = 0 em `anarbib` e `pages`."
       }
     },
     {

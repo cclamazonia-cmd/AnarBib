@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-08** · 88 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-08** · 89 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 4
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 14
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e repositório recontado no commit `e3a15243`. De noite, a sessão vizinha entregou **E5** : a última exceção anti-rastreio cai, o fundo de mapa é um ficheiro PMTiles auto-alojado no bucket `map-tiles` (18 GB), nenhuma chamada a `tile.openstreetmap.org`, guardado por teste.
 
-**Frescor dos constatos em 2026-09-08.** **70 itens de 88** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-08.** **71 itens de 89** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -395,6 +395,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B20** | O fallback para a chave legada não pode voltar: uma guarda, não um comentário | `P1` | Aberto |
 | **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Aberto |
 | **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
+| **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -449,16 +450,16 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Verificado : 01/09 — página Settings → JWT Keys lida: ECC P-256 corrente, HS256 em « previously used », última rotação há 5 meses.*
 
-**O que é.** Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem.
+**O que é.** Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem. **Emendado em 08/09 (B24, `OPS-9`)**: «digerido» se mede nos DOIS repositórios, não só no aplicativo — `grep -r eyJhbGciOi` a zero em `anarbib` E em `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` mostrando a chave corrente, e uma semana de logs em que cada requisição legacy residual foi qualificada pelo seu `referer`. A galeria da vitrine ficou quebrada seis dias depois de B18 sem que ninguém visse: com a HS256 revogada, uma página esquecida não devolve mais 401, devolve uma desconexão geral.
 
 **Por que importa.** É o único gesto realmente irreversível de todo o canteiro das chaves, e está a um clique de uma tela que se visita por outras razões. Revogada cedo demais, a HS256 invalida de uma vez tudo o que ela ainda validava: a desconexão seria geral e imediata.
 
 **O que conta como terminado.**
 
-- B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais.
+- B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais — e B24 está saldado: os dois repositórios sem chave legacy, a vitrine publicada verificada.
 - A revogação foi feita e um login, um cadastro e uma recuperação de senha foram verificados logo depois.
 
-**Dependências.** Item B18 terminado.
+**Dependências.** Item B18 terminado, e B24 saldado (o inventário dos dois repositórios).
 
 *Remissões : `item B18`*
 
@@ -526,6 +527,27 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `claude/GLB_v17_releve_et_constats_2026-09-01`*
+
+#### B24 — Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** B18 (02/09) desativou as chaves legacy com um sinal verde numérico que só olhava o aplicativo. Só que o site vitrine `anarbib.org` é um **segundo repositório** (`codeberg.org/anarbib/pages`) cuja galeria *Explorar* lê `api.public_libraries` em produção com uma chave embutida em `data-supabase-key` em **dez `index.html`** (um por locale): desde o toggle, a galeria devolveu 401 — **página vazia durante seis dias**, consertada na noite de 07 para 08/09 pela sessão do mapa base (vitrine `df9ba40`), não pela vigilância que deveria ter visto. Essa vigilância (tarefa diária `anarbib-trafic-cles-legacy`) contava 4 a 7 requisições legacy por dia de 04 a 07/09 e as lia como abas fósseis; o `referer`, pedido em 08/09 pela primeira vez, apontou a vitrine numa linha. O harnês de carga do aplicativo também carregava a chave legacy em claro (`scripts/loadtest/anarbib-loadtest.mjs`), retirada em 07/09 (`e2f5d75a`). **Verificado em 08/09**: `grep -r eyJhbGciOi` devolve zero nos dois repositórios, `/fr/explorar/` publicada serve `sb_publishable_…`, zero requisição legacy desde a correção. O que falta já não é o conserto, é o que impede a repetição: a vitrine não tem **nenhuma guarda**, e sua chave vive em dez cópias que um `sed` teve de tocar uma a uma.
+
+*Verificado : 08/09 — logs edge 24 h: as 4 requisições legacy (todas 401) são a verificação pré-correção da sessão da vitrine, referer `anarbib.org` e `localhost:8765`, mesma rede; `curl anarbib.org/fr/explorar/` → `sb_publishable_…`; `grep eyJhbGciOi` = 0 em `anarbib` e `pages`.*
+
+**O que é.** Dois gestos no repositório `pages`, uma noite. (1) **Uma única cópia da chave**: tirá-la dos dez `index.html` para um `js/config.js` (ou um único `data-*` na tag raiz lido por `explorar.js`), para que uma rotação seja um commit de uma linha. (2) **Uma guarda que recusa uma chave legacy**: teste ou hook `pre-commit` que fica vermelho com `eyJhbGciOi` em qualquer lugar do repositório, e que verifica que a chave embutida começa com `sb_publishable_`. E no aplicativo: a lista dos repositórios a inventariar a cada rotação escrita em `B19` (feito em 08/09) e em `CONTRIBUTING.md`.
+
+**Por que importa.** B19 é o próximo gesto sobre as chaves e é irreversível: uma página esquecida não devolverá mais 401 nesse dia, devolverá uma desconexão geral. E seis dias de galeria vazia são seis dias em que a vitrine dizia ao público «esta rede não tem nenhuma biblioteca» — indistinguível de uma pane, como diz `DOC-SILENCE-1`.
+
+**O que conta como terminado.**
+
+- A chave da vitrine vive num único lugar, e uma guarda fica vermelha com qualquer chave legacy ou com uma chave que não comece por `sb_publishable_`.
+- `B19` e `CONTRIBUTING.md` nomeiam os repositórios a inventariar antes e depois de qualquer rotação.
+
+**Dependências.** Bloqueia **B19** (a revogação HS256 exige esse inventário). Repositório `pages`: só tocar depois do congelamento (volta de Bolonha, 14/09).
+
+*Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
 
 ---
 
@@ -2556,7 +2578,7 @@ CI verde. |
 | J8 | 2026-09-02 | **Um só «v17», e é o certo — a série do Grande Livro branco está versada no depósito** (arbitragem de 02/09). O docx de maio arquivado sob nome datado, o **v17 de 01/09 entra em `docs/GLB/`** como referência viva, o INDEX não designa mais um estado de maio. Detalhe: o PDF já tinha saído de Downloads — **reconstituído ao byte (762 814) a partir do transcript da sessão que o leu**. **Fica aberto**: o v16 de 2 de julho segue por encontrar; quando ressurgir, entra em `GLB/archive/` sem outra decisão. |
 | B21 | 2026-09-02 | **O contador das chaves estrangeiras sem índice tem sua guarda, e ela mordeu já na primeira volta de CI** (run verde de 02/09). 38 entradas assumidas em três famílias motivadas, cabeçalho com a consulta E seu ângulo morto (`DOC-RECENS-1`). Guardada nos dois sentidos: toda FK nova sem índice avermelha a CI no momento em que a migração se escreve; uma entrada indexada ou desaparecida avermelha também — a lista só encolhe conscientemente. T3 prova a mordida a cada execução. A doutrina v17 está servida: o canteiro não foi «saldado», foi **instrumentado** — e o contador não subirá mais em silêncio. |
 | F7 | 2026-09-02 | **Treze segredos vazios, treze vereditos — e só restam dois, de propósito e documentados.** **11 suprimidos** — dez duplicatas de cadeias de fallback cuja variante `ANARBIB_*` preenchida já ganhava, mais `REGIMENTO_URL` por decisão: nenhum regimento de rede está publicado, o ramo morto foi **retirado do código** (três lugares, incluindo uma cadeia mal nomeada que buscava a URL do manual tentando primeiro a do regimento). **2 conservados e documentados**: `BLMF_/BTL_INTERNAL_REDIRECT_EMAIL`, cujo vazio É a configuração — comentário posto em `register/index.ts`, onde são lidos, para que ninguém os «conserte». |
-| B18 | 2026-09-02 | **As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta. |
+| B18 | 2026-09-02 | **As chaves API legacy estão desativadas — e o sinal verde foi um número, como a ficha exigia.** O medidor refeito de manhã dava: zero `service_role` desde a virada de 01/09, e do lado `anon` **um único user-agent de navegador** (uma aba nunca recarregada) mais o Googlebot repetindo seu cache. Aba recarregada, toggle virado no dashboard (gesto reversível), contraprova nos logs: **zero JWT legacy e zero 401 em 857 requisições vivas**. O código seguiu na mesma hora: fallback retirado de `secret-key.ts` (uma chave morta não merece caminho de código — DOC-SILENCE-1), `.env.example` limpo, vestígio do vault suprimido. A virada `service_role` → `sb_secret` está encerrada de ponta a ponta. **Nuance de 08/09: o encerramento estava certo para o aplicativo, e o aplicativo não era tudo.** O site vitrine `anarbib.org` — segundo repositório, `codeberg.org/anarbib/pages` — carregava a chave anon legacy nos dez `index.html` da sua galeria *Explorar*, que lê `api.public_libraries`: desde o toggle, cada visitante da galeria recebeu um 401 e uma página vazia, **durante seis dias**. O medidor diário viu (4 a 7 requisições legacy por dia de 04 a 07/09) e leu como resíduo de abas, porque o número era pequeno e ninguém tinha pedido o `referer`. Encontrado e consertado na noite de 07 para 08/09 pela sessão do mapa base (vitrine `df9ba40`). O que sai disso é o item **B24** e o cartão `OPS-9` do registro: uma rotação de chave começa pelo inventário dos repositórios que a carregam, e depois de uma desativação o limiar de alerta é um, não cinquenta. |
 | G2 | 2026-09-02 | **A divergência P2/P8 está decidida — o texto se alinha ao código, e a forma da decisão importa tanto quanto o fundo.** Opção 1: a prática viva (o circuito colegial que a BTL exerce desde 01/09) vira a regra. Spec v1.11: P2 diz que **a própria execução é colegial**; P8 esclarece a fronteira — os quóruns do código não são votos, são **garantias de execução**: «modelar a deliberação, nunca; exigir várias mãos para executar, sempre». Nenhuma linha de código. **Decisão tomada sozinho, dizendo-o** — modo degradado assumido, datada, `GOUV-18` no REGISTRO, **janela de objeção na noite 1 da formação, em 08/09/2026**: o dia em que o coletivo existir, encontrará uma decisão contestável, não um fato consumado mudo. |
 | H5 | 2026-09-02 | **A coleta OAI-PMH está provada nos dois sentidos, com dados reais dos dois lados — e dois circuitos cívicos exercidos pela primeira vez na mesma noite.** **Entrada**: primeira fonte real registrada (Persée, fascículos de sociologia, 2 lotes/ciclo); o disparo manual trouxe **40 fascículos reais**: run `ready_for_review`, trava em `paused`, **token de retomada conservado** — o cron de terça continuará onde a prova parou. **Saída**: o repositório respondia conforme mas vazio; **a BLMF abriu-se pelo circuito real** (pedido → decisão, notificação incluída) e um cliente terceiro colheu **200 registros em dois lotes**, retomada honrada, `GetRecord` exato *(matizado em 07/09: o ensaio era no primeiro registro — a função ignora o identificador pedido, ver **H8**)*. **Dois constatos para Bolonha**: os dois parceiros PMB não expõem `oai2.php` — do lado deles os fluxos nem existem (assunto para H6/K6); e `blmf-teste` falha a elegibilidade nas suas três travas — a receita de biblioteca mascarada resiste até ao OAI. **Nada sobrevive à prova, por decisão de Xavier na mesma noite**: os 40 registros Persée não pertenciam a nenhuma biblioteca real (run ligado à caixa de areia, por isso invisível num contexto de biblioteca comum); run, linhas e fonte purgados pelo caminho próprio — **nenhuma fonte OAI fica armada, o cron de terça nada colherá**. A abertura da BLMF é fechada pela mão de Xavier. A prova, essa, está adquirida. **Fica aberto**: um colhedor verdadeiramente terceiro — Bolonha pode fornecê-lo. |
 | B17 | 2026-09-02 | **O aviso imediato das ações transversais está provado de ponta a ponta — inclusive, esta noite, sobre o tipo para o qual foi escrito.** O andar imediato provado em envio real em 31/08 só o fora sobre a promoção colegial — um tipo com três canais. Faltava vê-lo sobre um tipo **sem outro canal antes de segunda**. Feito em 02/09, em transação revertida em `blmf-teste` com uma atriz sintética (admin de rede fixture, não staff da biblioteca — o critério exclui com razão o admin que também é staff local): `fn_team_suspend_member` → membership `suspended`, **linha de outbox `network.cross_library_critical_action` com `action_type=team_suspend_member`**, linha de diário. A perna EF não precisa ser repetida: o handler é agnóstico ao tipo (o tipo só escolhe o rótulo, presente nas dez locales). Sanidade pós-rollback: tudo desaparecido, zero resíduo. |
@@ -2616,4 +2638,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 88 itens em 11 domínios. O estado numérico foi levantado em 2026-09-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `e3a15243`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado numérico foi levantado em 2026-09-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `e3a15243`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
