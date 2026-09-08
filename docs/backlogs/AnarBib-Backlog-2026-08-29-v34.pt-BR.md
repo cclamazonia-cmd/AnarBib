@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-08** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-08** · 88 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 12
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 14
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e repositório recontado no commit `e3a15243`. De noite, a sessão vizinha entregou **E5** : a última exceção anti-rastreio cai, o fundo de mapa é um ficheiro PMTiles auto-alojado no bucket `map-tiles` (18 GB), nenhuma chamada a `tile.openstreetmap.org`, guardado por teste.
 
-**Frescor dos constatos em 2026-09-08.** **68 itens de 86** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-08.** **70 itens de 88** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -866,6 +866,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E15** | As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales | `P2` | Aberto |
 | **E16** | A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática | `P2` | A verificar |
 | **E17** | O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar | `P2` | Aberto |
+| **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Aberto |
+| **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -1132,6 +1134,54 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma. **G13** acrescentará um seletor ao lado do filtro de bibliotecas, fora do bloco «Explorar»: sem interferência.
 
 *Remissões : `src/pages/public/CatalogPage.jsx (exploreOpen l. 325, saveFilters l. 352-355, arbre des sujets l. 704-715, bloc l. 1410-1416)` · `src/pages/public/CatalogPage.css (.ab-explore-toggle, .ab-explore-panel, .ab-collapse-header)` · `src/i18n/locales/*.json (catalog.section.explore)` · `src/tests/serial-picker-monte.test.js (patron de test de source)`*
+
+#### E19 — Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
+
+**Estado.** **Pedido de Xavier em 08/09/2026, decidido após debate.** O separador «Dados pessoais» de `/conta` é o mais longo da página ; os três blocos de decisão (exportar, notificações, carta da federação) estão no fundo, e a supressão da conta a seguir. As preferências de conservação vivem em «Histórico» e aí ficam.
+
+*Verificado : 08/09 — ordem dos blocos relida em `AccountPage.jsx` ; rótulos já nas dez locales.*
+
+**O que é.** Uma fila de **três cartões lado a lado** (exportar, notificações, carta) **logo depois do formulário do perfil** ; grelha em `minmax(0, 1fr)`, uma coluna abaixo de 640 px. «Suprimir a minha conta» fica sozinho no fundo, a toda a largura, a vermelho. Nenhuma RPC, nenhuma chave nova ; refazer a captura no Manual v5.
+
+**Por que importa.** O que a página pede para decidir deve ver-se antes do que dá a ler. E a supressão da conta, isolada, mantém o gesto raro à parte dos ordinários.
+
+**O que conta como terminado.**
+
+- Os três cartões visíveis sem rolar num portátil, sob o formulário do perfil.
+- A 360 px, uma coluna, sem transbordo.
+- A supressão da conta é o último bloco, sozinha, a vermelho.
+- Captura do Manual v5 refeita.
+
+**Dependências.** Nenhuma. Depois de 14/09 (congelamento). Vizinho de **E9**.
+
+*Remissões : `AccountPage.jsx (onglet perfil)` · `anarbib-mobile-grid-blowout-doctrine` · `Manuel v5 §Mon compte`*
+
+#### E20 — A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, língua materna
+
+**Estado.** **Pedido de Xavier em 08/09/2026, decidido após debate.** A barra alinha numa só linha até doze ligações ; cada página alinha os seus separadores (nove a quinze). Tudo está achatado. A proposta inicial (menus por papel, ao passar do rato) foi substituída no debate.
+
+*Verificado : 08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09).*
+
+**O que é.** **Agrupar por natureza, não por papel** : **Público** (catálogo, bibliotecas, cartografia, tesauro), **Eu** (minha conta, «Quero…»), **Trabalho** (painel, catalogação, importações, biblioteca, federação, rede — cada entrada sob o mesmo `canSee*`, o grupo só aparece se tiver entradas). **Menus ao clique ou Enter, nunca ao passar do rato** (E9, E1), com `aria-haspopup`/`aria-expanded`, Esc, foco devolvido. **Os separadores não mudam neste lote.** Entregar com o registo `intentions.js` relido, as dez locales, o Manual v5 e a formação BLMF.
+
+**Por que importa.** Uma barra de doze ligações sem hierarquia lê-se percorrendo, não olhando. Agrupar por natureza resiste ao número de papéis de uma pessoa ; ao clique funciona onde a app corre.
+
+**O que conta como terminado.**
+
+- A barra só expõe as ligações diretas e três botões de grupo ; cada grupo abre ao clique e ao teclado, fecha em Esc, e só mostra o que o papel abre.
+- Uma desconhecida não vê Eu nem Trabalho ; uma leitora vê Eu ; uma bibliotecária vê Trabalho com Painel e Catalogação ; uma coordenação também Importações, Biblioteca, Federação ; a admin de rede vê Rede.
+- Nenhum caminho muda : intenções e ligações profundas continuam válidas.
+- Dez locales, paridade estrita.
+- A 360 px a barra cabe.
+- Manual v5 e guião da formação atualizados — ou lote datado depois da última noite de formação.
+
+**Dependências.** Depois de **E9** de preferência ; mesma exigência de olhar externo que **E1**. **Não entregar durante a formação BLMF** (sete noites a partir de 08/09). Congelamento até 14/09.
+
+*Remissões : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
 
 ---
 
@@ -2566,4 +2616,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado numérico foi levantado em 2026-09-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `e3a15243`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 88 itens em 11 domínios. O estado numérico foi levantado em 2026-09-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `e3a15243`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

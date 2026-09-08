@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-08** · 86 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-08** · 88 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 14
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **8 septembre 2026** à 1 h 30 — production interrogée en lecture seule et dépôt recompté au commit `e3a15243`. Il prolonge les relevés du 06 et du 07/09. Dans la nuit, la session voisine a livré **E5** : la dernière exception anti-pistage tombe, le fond de carte est un fichier PMTiles auto-hébergé dans le bucket public `map-tiles` (18 Go, planet Protomaps du 07/09, zoom 12), plus aucun appel du navigateur vers `tile.openstreetmap.org`, gardé par un test. Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.
 
-**Fraîcheur des constats au 2026-09-08.** **68 items sur 86** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-08.** **70 items sur 88** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -866,6 +866,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E15** | Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf | `P2` | Ouvert |
 | **E16** | La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique | `P2` | À vérifier |
 | **E17** | Le bloc « Explorer » du catalogue s'ouvre replié, pour que la première notice soit visible sans défiler | `P2` | Ouvert |
+| **E19** | Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas | `P2` | Ouvert |
+| **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -1138,6 +1140,54 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune. **G13** (réseaux constitués) ajoutera un sélecteur à côté du filtre de bibliothèques, qui est hors du bloc « Explorer » : pas d'interférence.
 
 *Renvois : `src/pages/public/CatalogPage.jsx (exploreOpen l. 325, saveFilters l. 352-355, arbre des sujets l. 704-715, bloc l. 1410-1416)` · `src/pages/public/CatalogPage.css (.ab-explore-toggle, .ab-explore-panel, .ab-collapse-header)` · `src/i18n/locales/*.json (catalog.section.explore)` · `src/tests/serial-picker-monte.test.js (patron de test de source)`*
+
+#### E19 — Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
+
+**État.** **Demande de Xavier le 08/09/2026, tranchée après débat.** L'onglet « Données personnelles » de `/conta` (`AccountPage.jsx`, `activeTab === 'perfil'`, lignes 1352–1830) est le plus long de la page : le formulaire du profil, l'adresse, la carte de contact de la bibliothèque, ce qui a été déclaré, la configuration de l'adhésion (avec un repli), le compte de dépôt — puis, **tout en bas**, les trois blocs qui demandent une décision : « Exporter mes données » (`account.export.title`, `DataExportButton`), « Mes notifications » (`account.notifPrefs.title`) et « Lettre de la fédération » (`account.lettre.title`), et enfin « Supprimer mon compte » en rouge (`account.deleteAccount.*`). Il faut défiler longtemps pour trouver ce qu'on vient faire. Les préférences de conservation ne sont pas dans cet onglet : elles vivent dans « Historique », à côté des traces qu'elles gouvernent, et **y restent**.
+
+*Vérifié : 08/09 — ordre des blocs relu dans `AccountPage.jsx` : profil (1352), adresse, contact, déclaré, adhésion, dépôt, RGPD/export (1645), notifications, lettre, suppression (1795). Les libellés existent dans les dix locales ; rien à traduire.*
+
+**Ce que c'est.** Une rangée de **trois cartes côte à côte** — export, notifications, lettre — placée **juste après le formulaire du profil**, avant l'adresse et les blocs d'adhésion (de la lecture plus que de la décision). La grille en `repeat(3, minmax(0, 1fr))`, qui passe à une colonne sous 640 px — jamais `1fr` nu (doctrine mobile, `src/styles/mobile.css`). Le bloc **« Supprimer mon compte » reste seul, tout en bas, sur toute la largeur**, en rouge : son caractère définitif se lit à sa place autant qu'à sa couleur. Aucune RPC, aucune clé nouvelle : un déplacement de JSX et une grille. Refaire ensuite la capture de cette page dans le Manuel v5 (`anarbib-manual-v5-portfolio-captures`).
+
+**Pourquoi ça compte.** Ce que la page demande de décider doit se voir avant ce qu'elle donne à lire. Et la suppression du compte, isolée, garde le geste rare à part des gestes ordinaires — c'est une règle d'interface qu'on retrouve partout où un bouton est irréversible.
+
+**Ce qui compte comme fini.**
+
+- Les trois cartes sont visibles sans défiler sur un écran de portable, sous le formulaire du profil.
+- Sur 360 px, une colonne, aucun débordement horizontal (test : `iframe` 360 px, doctrine mobile).
+- La suppression du compte est le dernier bloc de l'onglet, seule sur sa ligne, en rouge.
+- La capture du Manuel v5 est refaite.
+
+**Dépendances.** Aucune. À faire **après le 14/09** (gel du code jusqu'au retour de Bologne). Voisin de **E9** (mobile).
+
+*Renvois : `AccountPage.jsx (onglet perfil)` · `anarbib-mobile-grid-blowout-doctrine` · `Manuel v5 §Mon compte`*
+
+#### E20 — La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript, langue maternelle
+
+**État.** **Demande de Xavier le 08/09/2026, tranchée après débat.** `src/components/layout/index.jsx` aligne sur **une seule ligne** jusqu'à **douze liens** pour une coordination qui est aussi admin réseau : Catalogue, Je veux…, Bibliothèques, Cartographie, Thésaurus, Mon compte, Panneau (`canSeePainel`), Catalogage, Importations (`canSeeImportacoes`), Bibliothèque, Fédération, Réseau (`canSeeRede`). Et chaque page aligne ses onglets sur une ligne aussi : neuf à Mon compte, douze à Bibliothèque, quinze à Réseau. Tout est aplati : rien ne dit d'un coup d'œil ce qui est public, ce qui est à soi, ce qui est du travail de bibliothèque ou de réseau. Xavier proposait d'abord des menus **par rôle** (« Bibliothécaire », « Coordinateur ») ouverts **au survol** ; le débat a retenu autre chose sur les deux points, voir « ce qu'il faut faire ».
+
+*Vérifié : 08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien.*
+
+**Ce que c'est.** **Regrouper par nature, pas par rôle** — une coordination est aussi bibliothécaire et lectrice, un menu par rôle lui en montrerait deux pour elle seule et une bibliothécaire verrait un menu « Coordinateur » vide. Trois groupes : **Public** (Catalogue, Bibliothèques, Cartographie, Thésaurus), **Moi** (Mon compte, Je veux…), **Travail** (Panneau, Catalogage, Importations, Bibliothèque, Fédération, Réseau — chaque entrée soumise au même `canSee*` qu'aujourd'hui, le groupe n'apparaissant que s'il a une entrée ; le rôle qui ouvre chaque entrée peut être un sous-titre dans le menu). Le catalogue reste un lien direct, c'est la porte d'entrée publique. **Les menus s'ouvrent au clic ou à la touche Entrée, jamais au survol** : le survol n'existe ni au doigt (E9) ni au clavier (E1) ; `aria-haspopup`, `aria-expanded`, fermeture à Échap et au clic dehors, focus rendu au bouton. **Les onglets ne bougent pas dans ce lot** : un troisième niveau ferait pire, et les 51 intentions de « Je veux… » pointent déjà page + onglet exacts ; un regroupement des onglets, s'il s'impose, sera un lot à part. À livrer avec : le registre `intentions.js` relu (les chemins ne changent pas, les libellés de groupe entrent dans ses mots-clés), les dix locales (trois libellés de groupe, les sous-titres de rôle), le Manuel v5 et la formation BLMF (89 diapositives montrent la barre actuelle).
+
+**Pourquoi ça compte.** Une barre de douze liens sans hiérarchie se lit en la parcourant, pas en la regardant — et c'est exactement ce qu'on demande à une coordination le premier soir de sa formation. Grouper par nature tient quel que soit le nombre de rôles d'une personne ; grouper par rôle se casse dès qu'elle en a deux. Et un menu au clic marche partout où l'app tourne, un menu au survol seulement à la souris.
+
+**Ce qui compte comme fini.**
+
+- La barre n'expose plus que les liens directs (Catalogue) et trois boutons de groupe ; chaque groupe s'ouvre au clic et au clavier, se ferme à Échap, et ne montre que ce que le rôle ouvre.
+- Une inconnue non connectée ne voit ni Moi ni Travail ; une lectrice voit Moi ; une bibliothécaire voit Travail avec Panneau et Catalogage ; une coordination y voit aussi Importations, Bibliothèque, Fédération ; l'admin réseau y voit Réseau.
+- Aucun chemin ne change : les 51 intentions de « Je veux… » et les liens profonds du Manuel v5 restent valides (test à liste fermée d'`intentions.js` vert).
+- Dix locales pour les libellés de groupe et de rôle, parité stricte.
+- Sur 360 px, la barre tient sans débordement et les menus se ferment au toucher hors du menu.
+- Le Manuel v5 et le conducteur de la formation montrent la nouvelle barre — **ou** le lot est daté après la dernière soirée de formation.
+
+**Dépendances.** Après **E9** (mobile) de préférence, ou avec lui ; même exigence de regard extérieur que **E1**. **Ne pas livrer pendant la formation BLMF** (sept soirées à partir du 08/09) : la barre est sur les diapositives — à dater après la dernière soirée, ou à montrer aux coordinations comme changement annoncé. Gel du code jusqu'au 14/09.
+
+*Renvois : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
 
 ---
 
@@ -2590,4 +2640,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-08. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 86 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-08 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `e3a15243` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-08. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 88 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-08 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `e3a15243` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

@@ -6171,6 +6171,119 @@
         "fr": "07/09 — lu dans le code au commit `4c235923` : `useState(true)`, `saveFilters` sans `exploreOpen`, puces indépendantes du panneau, arbre chargé à l'ouverture.",
         "pt": "07/09 — lido no código no commit `4c235923`: `useState(true)`, `saveFilters` sem `exploreOpen`, chips independentes do painel, árvore carregada à abertura."
       }
+    },
+    {
+      "id": "E19",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "front"
+      ],
+      "t": {
+        "fr": "Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas",
+        "pt": "Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo"
+      },
+      "v": {
+        "fr": "**Demande de Xavier le 08/09/2026, tranchée après débat.** L'onglet « Données personnelles » de `/conta` (`AccountPage.jsx`, `activeTab === 'perfil'`, lignes 1352–1830) est le plus long de la page : le formulaire du profil, l'adresse, la carte de contact de la bibliothèque, ce qui a été déclaré, la configuration de l'adhésion (avec un repli), le compte de dépôt — puis, **tout en bas**, les trois blocs qui demandent une décision : « Exporter mes données » (`account.export.title`, `DataExportButton`), « Mes notifications » (`account.notifPrefs.title`) et « Lettre de la fédération » (`account.lettre.title`), et enfin « Supprimer mon compte » en rouge (`account.deleteAccount.*`). Il faut défiler longtemps pour trouver ce qu'on vient faire. Les préférences de conservation ne sont pas dans cet onglet : elles vivent dans « Historique », à côté des traces qu'elles gouvernent, et **y restent**.",
+        "pt": "**Pedido de Xavier em 08/09/2026, decidido após debate.** O separador «Dados pessoais» de `/conta` é o mais longo da página ; os três blocos de decisão (exportar, notificações, carta da federação) estão no fundo, e a supressão da conta a seguir. As preferências de conservação vivem em «Histórico» e aí ficam."
+      },
+      "w": {
+        "fr": "Une rangée de **trois cartes côte à côte** — export, notifications, lettre — placée **juste après le formulaire du profil**, avant l'adresse et les blocs d'adhésion (de la lecture plus que de la décision). La grille en `repeat(3, minmax(0, 1fr))`, qui passe à une colonne sous 640 px — jamais `1fr` nu (doctrine mobile, `src/styles/mobile.css`). Le bloc **« Supprimer mon compte » reste seul, tout en bas, sur toute la largeur**, en rouge : son caractère définitif se lit à sa place autant qu'à sa couleur. Aucune RPC, aucune clé nouvelle : un déplacement de JSX et une grille. Refaire ensuite la capture de cette page dans le Manuel v5 (`anarbib-manual-v5-portfolio-captures`).",
+        "pt": "Uma fila de **três cartões lado a lado** (exportar, notificações, carta) **logo depois do formulário do perfil** ; grelha em `minmax(0, 1fr)`, uma coluna abaixo de 640 px. «Suprimir a minha conta» fica sozinho no fundo, a toda a largura, a vermelho. Nenhuma RPC, nenhuma chave nova ; refazer a captura no Manual v5."
+      },
+      "y": {
+        "fr": "Ce que la page demande de décider doit se voir avant ce qu'elle donne à lire. Et la suppression du compte, isolée, garde le geste rare à part des gestes ordinaires — c'est une règle d'interface qu'on retrouve partout où un bouton est irréversible.",
+        "pt": "O que a página pede para decidir deve ver-se antes do que dá a ler. E a supressão da conta, isolada, mantém o gesto raro à parte dos ordinários."
+      },
+      "f": {
+        "fr": [
+          "Les trois cartes sont visibles sans défiler sur un écran de portable, sous le formulaire du profil.",
+          "Sur 360 px, une colonne, aucun débordement horizontal (test : `iframe` 360 px, doctrine mobile).",
+          "La suppression du compte est le dernier bloc de l'onglet, seule sur sa ligne, en rouge.",
+          "La capture du Manuel v5 est refaite."
+        ],
+        "pt": [
+          "Os três cartões visíveis sem rolar num portátil, sob o formulário do perfil.",
+          "A 360 px, uma coluna, sem transbordo.",
+          "A supressão da conta é o último bloco, sozinha, a vermelho.",
+          "Captura do Manual v5 refeita."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. À faire **après le 14/09** (gel du code jusqu'au retour de Bologne). Voisin de **E9** (mobile).",
+        "pt": "Nenhuma. Depois de 14/09 (congelamento). Vizinho de **E9**."
+      },
+      "r": [
+        "AccountPage.jsx (onglet perfil)",
+        "anarbib-mobile-grid-blowout-doctrine",
+        "Manuel v5 §Mon compte"
+      ],
+      "verif": {
+        "fr": "08/09 — ordre des blocs relu dans `AccountPage.jsx` : profil (1352), adresse, contact, déclaré, adhésion, dépôt, RGPD/export (1645), notifications, lettre, suppression (1795). Les libellés existent dans les dix locales ; rien à traduire.",
+        "pt": "08/09 — ordem dos blocos relida em `AccountPage.jsx` ; rótulos já nas dez locales."
+      }
+    },
+    {
+      "id": "E20",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "front",
+        "langue"
+      ],
+      "t": {
+        "fr": "La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol",
+        "pt": "A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato"
+      },
+      "v": {
+        "fr": "**Demande de Xavier le 08/09/2026, tranchée après débat.** `src/components/layout/index.jsx` aligne sur **une seule ligne** jusqu'à **douze liens** pour une coordination qui est aussi admin réseau : Catalogue, Je veux…, Bibliothèques, Cartographie, Thésaurus, Mon compte, Panneau (`canSeePainel`), Catalogage, Importations (`canSeeImportacoes`), Bibliothèque, Fédération, Réseau (`canSeeRede`). Et chaque page aligne ses onglets sur une ligne aussi : neuf à Mon compte, douze à Bibliothèque, quinze à Réseau. Tout est aplati : rien ne dit d'un coup d'œil ce qui est public, ce qui est à soi, ce qui est du travail de bibliothèque ou de réseau. Xavier proposait d'abord des menus **par rôle** (« Bibliothécaire », « Coordinateur ») ouverts **au survol** ; le débat a retenu autre chose sur les deux points, voir « ce qu'il faut faire ».",
+        "pt": "**Pedido de Xavier em 08/09/2026, decidido após debate.** A barra alinha numa só linha até doze ligações ; cada página alinha os seus separadores (nove a quinze). Tudo está achatado. A proposta inicial (menus por papel, ao passar do rato) foi substituída no debate."
+      },
+      "w": {
+        "fr": "**Regrouper par nature, pas par rôle** — une coordination est aussi bibliothécaire et lectrice, un menu par rôle lui en montrerait deux pour elle seule et une bibliothécaire verrait un menu « Coordinateur » vide. Trois groupes : **Public** (Catalogue, Bibliothèques, Cartographie, Thésaurus), **Moi** (Mon compte, Je veux…), **Travail** (Panneau, Catalogage, Importations, Bibliothèque, Fédération, Réseau — chaque entrée soumise au même `canSee*` qu'aujourd'hui, le groupe n'apparaissant que s'il a une entrée ; le rôle qui ouvre chaque entrée peut être un sous-titre dans le menu). Le catalogue reste un lien direct, c'est la porte d'entrée publique. **Les menus s'ouvrent au clic ou à la touche Entrée, jamais au survol** : le survol n'existe ni au doigt (E9) ni au clavier (E1) ; `aria-haspopup`, `aria-expanded`, fermeture à Échap et au clic dehors, focus rendu au bouton. **Les onglets ne bougent pas dans ce lot** : un troisième niveau ferait pire, et les 51 intentions de « Je veux… » pointent déjà page + onglet exacts ; un regroupement des onglets, s'il s'impose, sera un lot à part. À livrer avec : le registre `intentions.js` relu (les chemins ne changent pas, les libellés de groupe entrent dans ses mots-clés), les dix locales (trois libellés de groupe, les sous-titres de rôle), le Manuel v5 et la formation BLMF (89 diapositives montrent la barre actuelle).",
+        "pt": "**Agrupar por natureza, não por papel** : **Público** (catálogo, bibliotecas, cartografia, tesauro), **Eu** (minha conta, «Quero…»), **Trabalho** (painel, catalogação, importações, biblioteca, federação, rede — cada entrada sob o mesmo `canSee*`, o grupo só aparece se tiver entradas). **Menus ao clique ou Enter, nunca ao passar do rato** (E9, E1), com `aria-haspopup`/`aria-expanded`, Esc, foco devolvido. **Os separadores não mudam neste lote.** Entregar com o registo `intentions.js` relido, as dez locales, o Manual v5 e a formação BLMF."
+      },
+      "y": {
+        "fr": "Une barre de douze liens sans hiérarchie se lit en la parcourant, pas en la regardant — et c'est exactement ce qu'on demande à une coordination le premier soir de sa formation. Grouper par nature tient quel que soit le nombre de rôles d'une personne ; grouper par rôle se casse dès qu'elle en a deux. Et un menu au clic marche partout où l'app tourne, un menu au survol seulement à la souris.",
+        "pt": "Uma barra de doze ligações sem hierarquia lê-se percorrendo, não olhando. Agrupar por natureza resiste ao número de papéis de uma pessoa ; ao clique funciona onde a app corre."
+      },
+      "f": {
+        "fr": [
+          "La barre n'expose plus que les liens directs (Catalogue) et trois boutons de groupe ; chaque groupe s'ouvre au clic et au clavier, se ferme à Échap, et ne montre que ce que le rôle ouvre.",
+          "Une inconnue non connectée ne voit ni Moi ni Travail ; une lectrice voit Moi ; une bibliothécaire voit Travail avec Panneau et Catalogage ; une coordination y voit aussi Importations, Bibliothèque, Fédération ; l'admin réseau y voit Réseau.",
+          "Aucun chemin ne change : les 51 intentions de « Je veux… » et les liens profonds du Manuel v5 restent valides (test à liste fermée d'`intentions.js` vert).",
+          "Dix locales pour les libellés de groupe et de rôle, parité stricte.",
+          "Sur 360 px, la barre tient sans débordement et les menus se ferment au toucher hors du menu.",
+          "Le Manuel v5 et le conducteur de la formation montrent la nouvelle barre — **ou** le lot est daté après la dernière soirée de formation."
+        ],
+        "pt": [
+          "A barra só expõe as ligações diretas e três botões de grupo ; cada grupo abre ao clique e ao teclado, fecha em Esc, e só mostra o que o papel abre.",
+          "Uma desconhecida não vê Eu nem Trabalho ; uma leitora vê Eu ; uma bibliotecária vê Trabalho com Painel e Catalogação ; uma coordenação também Importações, Biblioteca, Federação ; a admin de rede vê Rede.",
+          "Nenhum caminho muda : intenções e ligações profundas continuam válidas.",
+          "Dez locales, paridade estrita.",
+          "A 360 px a barra cabe.",
+          "Manual v5 e guião da formação atualizados — ou lote datado depois da última noite de formação."
+        ]
+      },
+      "dep": {
+        "fr": "Après **E9** (mobile) de préférence, ou avec lui ; même exigence de regard extérieur que **E1**. **Ne pas livrer pendant la formation BLMF** (sept soirées à partir du 08/09) : la barre est sur les diapositives — à dater après la dernière soirée, ou à montrer aux coordinations comme changement annoncé. Gel du code jusqu'au 14/09.",
+        "pt": "Depois de **E9** de preferência ; mesma exigência de olhar externo que **E1**. **Não entregar durante a formação BLMF** (sete noites a partir de 08/09). Congelamento até 14/09."
+      },
+      "r": [
+        "src/components/layout/index.jsx",
+        "src/lib/roles.js (canSee*)",
+        "src/pages/inicio (intentions.js)",
+        "anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)",
+        "K7 (formation BLMF)"
+      ],
+      "verif": {
+        "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien.",
+        "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09)."
+      }
     }
   ]
 }
