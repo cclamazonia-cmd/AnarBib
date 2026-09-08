@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -11,6 +11,7 @@ import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button, Spinner } from '@/components/ui';
 import { normalizePublicId } from '@/lib/publicId';
 import { clearAuthHash } from '@/lib/clearAuthHash';
+import { hashHintsRecovery, decideHashRecovery } from '@/lib/recoveryView';
 import { readSessionEndNotice } from '@/lib/sessionEndNotice';
 
 
@@ -121,9 +122,16 @@ export default function LoginPage() {
   // false -> showTransition devient false -> le formulaire revient avec l'erreur.
   const showTransition = transitioningToApp;
 
+  // Indice RAPIDE : le fragment d'URL laissé par le lien de récupération. Il ouvre
+  // la bonne vue sans attendre l'aller-retour d'auth-js, mais il ne PROUVE rien —
+  // un jeton déjà consommé y traîne aussi (voir l'effet « jeton mort » plus bas).
+  // On retient qu'on a ouvert la vue sur cet indice, pour pouvoir la refermer.
+  const hashHintedRef = useRef(false);
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash.includes('type=recovery') || hash.includes('access_token')) setView('recovery');
+    if (hashHintsRecovery(window.location.hash)) {
+      hashHintedRef.current = true;
+      setView('recovery');
+    }
   }, []);
 
   // Détection FIABLE du flow recovery : l'événement PASSWORD_RECOVERY (capté par
@@ -143,6 +151,36 @@ export default function LoginPage() {
     setView('recovery');
     clearAuthHash();
   }, [recovery]);
+
+  // Jeton MORT dans l'URL (08/09/2026 ; journal auth : GET /user → 403
+  // session_not_found 12 s puis 6 s après chaque logout du parcours de test).
+  // Le lien de récupération reste dans l'historique du navigateur avec son
+  // #access_token. À tout rechargement de cette entrée, auth-js tente GET /user
+  // avec un jeton dont la session a été fermée → 403 → il ne pose ni session ni
+  // PASSWORD_RECOVERY, et il NE RETIRE PAS le fragment (il ne le fait qu'en cas
+  // de succès). L'indice ci-dessus, lui, a déjà ouvert le formulaire « nouveau
+  // mot de passe » : l'usager le voit sans session, et updateUser échouerait.
+  // C'était le « je reste bloqué sur la redéfinition » constaté après un reset
+  // pourtant réussi (mot de passe changé, logout, login OK côté serveur).
+  //
+  // Dès que l'auth a fini de charger, si ni session ni flag recovery ne sont là,
+  // on abandonne la vue et on explique (lien périmé, redemander un lien). Pas de
+  // course avec le cas valide : auth-js pose la session AVANT que authLoading
+  // retombe (même getSession().then), donc `user` est déjà là ; et
+  // PASSWORD_RECOVERY, qui suit un tick plus tard, éteint l'indice.
+  useEffect(() => {
+    if (recovery) hashHintedRef.current = false;
+    const verdict = decideHashRecovery({
+      authLoading,
+      hashHinted: hashHintedRef.current,
+      recovery,
+      user: !!user,
+    });
+    if (verdict !== 'abandon') return;
+    hashHintedRef.current = false;
+    setView('login');
+    setLoginMsg({ text: t({ id: 'auth.resetExpired' }), kind: 'error' });
+  }, [authLoading, recovery, user, t]);
 
   // Filet de sécurité. Le nettoyage ci-dessus dépend de l'événement
   // PASSWORD_RECOVERY ; s'il n'est pas émis (session déjà ouverte, lien périmé qui
