@@ -42,10 +42,47 @@ on:
     # à coup sûr, quelle que soit la sémantique retenue), puis la doc à part.
     # Et après tout push censé appliquer une migration, VÉRIFIER en base
     # (supabase_migrations.schema_migrations) plutôt que de conclure du vert d'un job.
+    #
+    # ⚠️ DEUXIÈME LEÇON (08/09/2026) : « docs/** » et « **/*.md » ignoraient aussi
+    # les documents que le FRONT EMBARQUE — les `.md` importés en `?raw` par
+    # src/pages/federacao/communsRegistry.js (manuel, cotation, chartes, guides,
+    # gouvernance, cadrage Entraide, note AG). Une note ajoutée au cadrage Entraide
+    # (1f2d9aba) n'a déclenché aucun build : l'onglet Communs en ligne montrait
+    # toujours l'ancien texte, sans rouge nulle part. Un document embarqué est une
+    # ENTRÉE DU BUILD, pas de la documentation. Le filtre ne liste donc plus que
+    # ce qui n'entre jamais dans le bundle ; les dossiers importés (docs/*.md à la
+    # racine de docs, docs/governance, docs/guides, docs/notes-audit,
+    # docs/journal/cadrages, docs/journal/arbitrages) N'Y SONT PAS, à dessein.
+    # Garde : src/tests/ci-docs-embarques.test.js compare cette liste aux imports.
+    # La règle « ne jamais mélanger doc et code dans un push » tient toujours.
     paths-ignore:
-      - 'docs/**'
-      - '**/*.md'
-      - 'notes-audit/**'
+      - '*.md'
+      - 'deploy/**/*.md'
+      - 'scripts/**/*.md'
+      - 'supabase/**/*.md'
+      - 'tests/**/*.md'
+      - 'docs/INDEX.md'
+      - 'docs/CHANTIERS_OUVERTS.md'
+      - 'docs/CONVENTIONS_interoperabilite_catalogues_libertaires.md'
+      - 'docs/multiformat-viewers.md'
+      - 'docs/GLB/**'
+      - 'docs/archive/**'
+      - 'docs/backlogs/**'
+      - 'docs/cartographie/**'
+      - 'docs/db/**'
+      - 'docs/drafts/**'
+      - 'docs/legal/**'
+      - 'docs/schema/**'
+      - 'docs/specs/**'
+      - 'docs/journal/*.md'
+      - 'docs/journal/archive/**'
+      - 'docs/journal/audits/**'
+      - 'docs/journal/bugs/**'
+      - 'docs/journal/chantiers/**'
+      - 'docs/journal/ficedl/**'
+      - 'docs/journal/operations/**'
+      - 'docs/journal/references/**'
+      - 'docs/journal/sessions/**'
   workflow_dispatch: {}
 
 # Sérialise les pipelines main (la « règle d'or » anti-push-concurrent, native).
