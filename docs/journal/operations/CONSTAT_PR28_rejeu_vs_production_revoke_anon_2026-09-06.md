@@ -211,3 +211,23 @@ Guide d'auto-hébergement en 10 langues (générées par `tools/build-selfhostin
 | Règles de contribution | REGISTRE `DOC-CONTRIB-1` 🟡, backlog `A4`, arbitrage Q4 |
 
 Page d'arbitrage : `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md`.
+
+### 9.9 MàJ 07-15/09 — les six blocages nommés, `search_path`, la réparation mesurée, et la fusion
+
+**La liste de Bastien (06/09, 18 h 54), reçue après ce constat.** Six migrations avaient levé sur son rejeu séquentiel depuis zéro : *(1)* `20260829060000`, `20260829100000`, `20260829160000` — fonctions de `public` ouvertes à `anon` (`fn_import_delete_run`, `publish_book_draft`), le point du §3 ; *(2)* `20260830090000` et `20260830130000` — « une vue du chantier garde des droits de trop » parce que `supabase_admin`, rôle qui appliquait chez lui, n'était pas dans l'exclusion ; *(3)* `20260902100917` — révocation totale sur `api.conv_controle_*`, coupant `postgres` ; *(4)* `20260904121500` — `fn_import_*` créées ouvertes à `anon` avant vérification ; *(5)* `20260904130100` — `schema "cron" does not exist` ; *(6)* `20260906111308` — l'assertion sur `catalog_batch_reviews_read_staff` voyait `SELECT uid()` sans `auth.`. Les quatre premiers sont le même défaut, celui de ce constat ; le cinquième est `I19` ; le sixième est un `search_path` : `pg_get_expr` omet le préfixe d'un schéma présent dans le `search_path` de la session qui rejoue, et le rôle de rejeu de Bastien avait `auth` dans le sien, ce que la production n'a pas. La regex assouplie qu'il a posée passe dans les deux cas ; elle masque une différence d'environnement plus qu'elle ne la corrige, et c'est tolérable.
+
+**La réparation, mesurée (07/09, `DOC-GRANT-3`).** Spec `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07` ; note `journal/operations/NOTE_experience-I17-rejeu-fidele_2026-09-07`. Sur l'image `supabase/postgres:17.6.1.136` vierge et le dépôt seul : *(A.1)* retirer `anon` du privilège par défaut des fonctions de `public` pour **les deux rôles**, `postgres` et `supabase_admin`, avant le socle, sans jamais vider une entrée ; *(A.2)* appliquer les migrations sous `postgres`, comme la production et la CI. Résultat : 310/310 migrations vertes sans un `REVOKE` ajouté, les cinq premiers blocages disparus, et **les 133 fonctions exécutables par `anon` identiques à celles de la production, empreinte MD5 comprise**. `I17` a été clos sur ce constat.
+
+**Le 15/09, sur la PR elle-même.** `install.sh` de la tête `73eb3462`, exécuté sur une machine vierge sans interaction : il va au bout (107 s, 308 migrations, six conteneurs, amorçage conforme), mais la base installée expose **371 fonctions à `anon`, dont 233 `SECURITY DEFINER`** — ce constat, mesuré sur une installation réelle. A.1 et A.2 ont donc été demandés dans la PR avant sa fusion ; Bastien les a repris tels quels, avec le reste de la relecture, en trente minutes (tête `0c63cb05`). Re-mesuré trois fois sur pile vierge : rc 0 en 50-64 s, **133 fonctions `anon`, empreinte identique à la production**, `pg_cron` et ses 38 jobs, contrôle de santé à 0. **Fusionnée le 15/09 à 22 h 01 (commit de fusion `f179f1ff`, 17 commits conservés), CI verte.** Le guide vitrine attend encore (D4) ; la #29 attend son rebase.
+
+**Deux faits d'exécution appris en chemin, consignés dans `deploy/` (`db861fd8`) :** l'entrypoint de l'image traite `/docker-entrypoint-initdb.d/*` dans l'ordre du glob, où `99-roles.sh` passe **avant** `migrate.sh` — le rejeu par `bootstrap.sh` à l'étape 2 fait le vrai travail, et un script d'init sourcé ne doit jamais quitter en erreur au premier passage ; et `pg_cron` n'existe pas dans la base `postgres` de l'image, `CREATE EXTENSION` sous `postgres` suffit.
+
+**Ce qui reste, hors de ce constat :** cinq vues du socle sans `security_invoker` naissent lisibles par `anon` au rejeu alors que la production ne leur laisse que `anon=m` — même mécanisme côté relations, aucun `REVOKE SELECT` écrit ; versé à `B22` avec sa recommandation (migration nominative d'abord).
+
+| Point (07-15/09) | Document |
+|---|---|
+| Réparation du rejeu, expérience, corollaire | REGISTRE `DOC-GRANT-3` ; `CADRAGE_rejeu_fidele_…_2026-09-07` ; `NOTE_experience-I17-…_2026-09-07` ; backlog `I17` (clôtures) |
+| Suivi de la PR #28 jusqu'à la fusion, mesures du 15/09 | backlog `I16` |
+| `pg_cron` créé, différé dit, arrêt franc ; reste la ligne du contrôle de santé | backlog `I19` |
+| Ouvertures à `anon` sans ligne écrite, dont les cinq vues | backlog `B22` |
+| Ordre des scripts d'initialisation | `deploy/compose.yml`, `deploy/README.md` (section finale), `01-roles.sh` |
