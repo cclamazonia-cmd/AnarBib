@@ -133,7 +133,7 @@ In the **Indexing** tab, beneath the copy form:
 ## 5. Administration
 
 ### Library management
-The **Library** page lets you configure:
+The **Library management** page lets you configure:
 - Identity (name, city, contact)
 - Communications (emails, sending modes, notification types)
 - Rules (PDF upload, circulation rules)

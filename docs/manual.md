@@ -133,7 +133,7 @@ Dans l'onglet **Indexation**, sous le formulaire d'exemplaire :
 ## 5. Administration
 
 ### Gestion de la bibliothèque
-La page **Bibliothèque** permet de configurer :
+La page **Gestion de la bibliothèque** permet de configurer :
 - Identité (nom, ville, contact)
 - Communications (e-mails, modes d'envoi, types de notification)
 - Règlement (upload PDF, règles de circulation)

@@ -133,7 +133,7 @@ In het tabblad **Indexering**, onder het exemplaarformulier :
 ## 5. Beheer
 
 ### Bibliotheekbeheer
-De pagina **Bibliotheek** laat toe om in te stellen :
+De pagina **Bibliotheekbeheer** laat toe om in te stellen :
 - Identiteit (naam, stad, contact)
 - Communicatie (e-mails, verzendmodi, notificatietypes)
 - Reglement (PDF-upload, circulatieregels)

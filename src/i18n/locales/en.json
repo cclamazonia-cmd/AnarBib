@@ -6679,5 +6679,6 @@
   "rede.gazeta.correct.editedAt": "revised by the team on {date}",
   "rede.gazeta.correct.showOriginal": "show the contributor’s version",
   "rede.gazeta.correct.hideOriginal": "hide the contributor’s version",
-  "rede.gazeta.correct.original": "Contributor’s version"
+  "rede.gazeta.correct.original": "Contributor’s version",
+  "nav.biblioteca": "Library management"
 }

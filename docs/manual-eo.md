@@ -133,7 +133,7 @@ En la langeto **Indeksado**, sub la ekzemplera formularo :
 ## 5. Administrado
 
 ### Administri la bibliotekon
-La paĝo **Biblioteko** permesas agordi :
+La paĝo **Administrado de la biblioteko** permesas agordi :
 - Identecon (nomo, urbo, kontakto)
 - Komunikadon (retpoŝtoj, sendmanieroj, sciig-tipoj)
 - Regularon (PDF-alŝuto, cirkuladreguloj)

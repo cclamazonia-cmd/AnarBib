@@ -6679,5 +6679,6 @@
   "rede.gazeta.correct.editedAt": "korektita de la teamo la {date}",
   "rede.gazeta.correct.showOriginal": "vidi la version de la persono",
   "rede.gazeta.correct.hideOriginal": "kaŝi la version de la persono",
-  "rede.gazeta.correct.original": "Versio de la persono"
+  "rede.gazeta.correct.original": "Versio de la persono",
+  "nav.biblioteca": "Administrado de la biblioteko"
 }

@@ -142,7 +142,7 @@ Im Reiter **Indexierung**, unter dem Exemplarenformular:
 ## 5. Administration
 
 ### Bibliotheksverwaltung
-Die Seite **Bibliothek** ermöglicht die Konfiguration von:
+Die Seite **Bibliotheksverwaltung** ermöglicht die Konfiguration von:
 - Identität (Name, Stadt, Kontakt)
 - Kommunikation (E-Mails, Versandarten, Benachrichtigungstypen)
 - Regelwerk (PDF hochladen, Ausleihregeln)

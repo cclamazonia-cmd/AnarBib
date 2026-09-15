@@ -6679,5 +6679,6 @@
   "rede.gazeta.correct.editedAt": "aangepast door het team op {date}",
   "rede.gazeta.correct.showOriginal": "versie van de persoon tonen",
   "rede.gazeta.correct.hideOriginal": "versie van de persoon verbergen",
-  "rede.gazeta.correct.original": "Versie van de persoon"
+  "rede.gazeta.correct.original": "Versie van de persoon",
+  "nav.biblioteca": "Bibliotheekbeheer"
 }

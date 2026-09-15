@@ -133,7 +133,7 @@ Na aba **Indexação**, abaixo do formulário de exemplar:
 ## 5. Administração
 
 ### Gestão da biblioteca
-A página **Biblioteca** permite configurar:
+A página **Gestão da biblioteca** permite configurar:
 - Identidade (nome, cidade, contato)
 - Comunicações (e-mails, modos de envio, tipos de notificação)
 - Regulamento (upload PDF, regras de circulação)

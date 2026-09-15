@@ -6679,5 +6679,6 @@
   "rede.gazeta.correct.editedAt": "διορθώθηκε από την ομάδα στις {date}",
   "rede.gazeta.correct.showOriginal": "εμφάνιση της εκδοχής του ατόμου",
   "rede.gazeta.correct.hideOriginal": "απόκρυψη της εκδοχής του ατόμου",
-  "rede.gazeta.correct.original": "Εκδοχή του ατόμου"
+  "rede.gazeta.correct.original": "Εκδοχή του ατόμου",
+  "nav.biblioteca": "Διαχείριση βιβλιοθήκης"
 }

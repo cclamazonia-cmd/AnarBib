@@ -6679,5 +6679,6 @@
   "rede.gazeta.correct.editedAt": "corregida per l’equip el {date}",
   "rede.gazeta.correct.showOriginal": "veure la versió de la persona",
   "rede.gazeta.correct.hideOriginal": "amagar la versió de la persona",
-  "rede.gazeta.correct.original": "Versió de la persona"
+  "rede.gazeta.correct.original": "Versió de la persona",
+  "nav.biblioteca": "Gestió de la biblioteca"
 }

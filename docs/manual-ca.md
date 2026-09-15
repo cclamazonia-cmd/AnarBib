@@ -133,7 +133,7 @@ A la pestanya **Indexació**, sota el formulari d'exemplar:
 ## 5. Administració
 
 ### Gestió de la biblioteca
-La pàgina **Biblioteca** permet configurar:
+La pàgina **Gestió de la biblioteca** permet configurar:
 - Identitat (nom, ciutat, contacte)
 - Comunicacions (e-mails, modes d'enviament, tipus de notificació)
 - Reglament (càrrega de PDF, regles de circulació)

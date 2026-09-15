@@ -192,9 +192,13 @@ export function Topbar() {
           </>
         )}
 
+        {/* Le lien porte le titre réel de la page (« Gestion de la bibliothèque »),
+            pas « Bibliothèque » : à côté de « Bibliothèques » (l'annuaire public),
+            un singulier seul ne disait pas ce qu'on y trouve (Xavier, 15/09/2026).
+            `nav.library` reste en usage comme en-tête de colonne dans RedePage. */}
         {canSeeBiblioteca(role) && (
           <Link to="/biblioteca" className={isActive('/biblioteca') ? 'active' : ''}>
-            {t({ id: 'nav.library' })}
+            {t({ id: 'nav.biblioteca' })}
           </Link>
         )}
 

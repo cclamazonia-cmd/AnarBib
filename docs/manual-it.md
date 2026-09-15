@@ -133,7 +133,7 @@ Nella scheda **Indicizzazione**, sotto il modulo dell'esemplare :
 ## 5. Amministrazione
 
 ### Gestione della biblioteca
-La pagina **Biblioteca** permette di configurare :
+La pagina **Gestione della biblioteca** permette di configurare :
 - Identità (nome, città, contatto)
 - Comunicazioni (e-mail, modalità di invio, tipi di notifica)
 - Regolamento (caricamento PDF, regole di circolazione)
