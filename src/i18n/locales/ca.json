@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Lot no trobat.",
   "error.rubrics.batch.staff_only": "Classificar un lot està reservat a l’equip de la biblioteca propietària.",
   "error.rubrics.batch.not_open": "Només un lot obert es classifica.",
-  "error.rubrics.batch.bad_map": "Taula rúbrica → classe no vàlida."
+  "error.rubrics.batch.bad_map": "Taula rúbrica → classe no vàlida.",
+  "rede.gazeta.sources.probe": "Provar les fonts ara",
+  "rede.gazeta.sources.probeHint": "Mesura des del servidor de la gaseta, sense tocar els números; resultat en menys d’un minut.",
+  "rede.gazeta.sources.probeStarted": "Prova llançada: els estats s’actualitzen en menys d’un minut."
 }

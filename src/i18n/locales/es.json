@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Lote no encontrado.",
   "error.rubrics.batch.staff_only": "Clasificar un lote está reservado al equipo de la biblioteca propietaria.",
   "error.rubrics.batch.not_open": "Solo un lote abierto se clasifica.",
-  "error.rubrics.batch.bad_map": "Tabla rúbrica → clase inválida."
+  "error.rubrics.batch.bad_map": "Tabla rúbrica → clase inválida.",
+  "rede.gazeta.sources.probe": "Probar las fuentes ahora",
+  "rede.gazeta.sources.probeHint": "Mide desde el servidor de la gaceta, sin tocar los números; resultado en menos de un minuto.",
+  "rede.gazeta.sources.probeStarted": "Prueba lanzada: los estados se actualizan en menos de un minuto."
 }

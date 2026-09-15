@@ -249,6 +249,24 @@ export default function GazetteStaffPanel() {
     }
   }
 
+  // GAZ-8 : tester les flux depuis l'Edge, sans attendre le 15 du mois. La
+  // mesure est asynchrone (RPC → pg_net → EF, étape probe_sources, qui n'écrit
+  // que last_*) : on recharge le registre à 15 s puis à 60 s.
+  async function probeSources() {
+    setBusy('probe');
+    try {
+      const { error } = await apiRpc('fn_gazette_probe_sources', {});
+      if (error) throw error;
+      setMsg({ text: t({ id: 'rede.gazeta.sources.probeStarted' }), kind: 'ok' });
+      setTimeout(load, 15000);
+      setTimeout(load, 60000);
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function removeSource(row) {
     if (!window.confirm(t({ id: 'rede.gazeta.sources.removeConfirm' }, { name: row.name }))) return;
     setBusy('src:' + row.id);
@@ -526,6 +544,12 @@ export default function GazetteStaffPanel() {
           <p style={{ fontSize: '.84rem', color: 'var(--brand-muted)', marginTop: 0, marginBottom: 12 }}>
             {t({ id: 'rede.gazeta.sources.hint' })}
           </p>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
+            <button className="cat-btn secondary" disabled={busy === 'probe'} onClick={probeSources}>
+              {t({ id: 'rede.gazeta.sources.probe' })}
+            </button>
+            <span style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>{t({ id: 'rede.gazeta.sources.probeHint' })}</span>
+          </div>
 
           <div style={{ ...box, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
             <div style={{ flex: '2 1 200px' }}>

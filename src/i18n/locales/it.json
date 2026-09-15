@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Lotto non trovato.",
   "error.rubrics.batch.staff_only": "Classificare un lotto è riservato allo staff della biblioteca proprietaria.",
   "error.rubrics.batch.not_open": "Solo un lotto aperto si classifica.",
-  "error.rubrics.batch.bad_map": "Tabella rubrica → classe non valida."
+  "error.rubrics.batch.bad_map": "Tabella rubrica → classe non valida.",
+  "rede.gazeta.sources.probe": "Testare le fonti adesso",
+  "rede.gazeta.sources.probeHint": "Misura dal server della gazzetta, senza toccare i numeri; risultato entro un minuto.",
+  "rede.gazeta.sources.probeStarted": "Test avviato: gli stati si aggiornano entro un minuto."
 }

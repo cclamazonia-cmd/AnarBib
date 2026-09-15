@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Lot introuvable.",
   "error.rubrics.batch.staff_only": "Classer un lot est réservé à l’équipe de la bibliothèque propriétaire.",
   "error.rubrics.batch.not_open": "Seul un lot ouvert se classe.",
-  "error.rubrics.batch.bad_map": "Table rubrique → classe invalide."
+  "error.rubrics.batch.bad_map": "Table rubrique → classe invalide.",
+  "rede.gazeta.sources.probe": "Tester les sources maintenant",
+  "rede.gazeta.sources.probeHint": "Mesure depuis le serveur de la gazette, sans toucher aux numéros ; résultat sous une minute.",
+  "rede.gazeta.sources.probeStarted": "Test lancé : les statuts se rafraîchissent d’ici une minute."
 }

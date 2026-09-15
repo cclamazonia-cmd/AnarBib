@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Η παρτίδα δεν βρέθηκε.",
   "error.rubrics.batch.staff_only": "Η ταξινόμηση παρτίδας επιφυλάσσεται στην ομάδα της βιβλιοθήκης-ιδιοκτήτριας.",
   "error.rubrics.batch.not_open": "Μόνο μια ανοιχτή παρτίδα ταξινομείται.",
-  "error.rubrics.batch.bad_map": "Μη έγκυρος πίνακας θεματική → τάξη."
+  "error.rubrics.batch.bad_map": "Μη έγκυρος πίνακας θεματική → τάξη.",
+  "rede.gazeta.sources.probe": "Δοκιμή των πηγών τώρα",
+  "rede.gazeta.sources.probeHint": "Μέτρηση από τον διακομιστή της εφημερίδας, χωρίς να αγγίξει τεύχη· αποτέλεσμα μέσα σε ένα λεπτό.",
+  "rede.gazeta.sources.probeStarted": "Η δοκιμή ξεκίνησε: οι καταστάσεις ανανεώνονται μέσα σε ένα λεπτό."
 }

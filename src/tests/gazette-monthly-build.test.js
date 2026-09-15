@@ -84,6 +84,7 @@ function monterEF(etat) {
     const cols = chaine.find((c) => c.op === 'select')?.args?.[0] ?? '';
     if (table === 'gazette_issues') {
       if (cols.includes('status')) return { data: etat.numero, error: null };
+      if (cols === 'build_mode') return { data: etat.numero, error: null };
       if (cols === 'id') return { data: { id: 'iss-1' }, error: null };
       if (cols.includes('cover_date')) return { data: { id: 'iss-1', cover_date: '2026-08-15' }, error: null };
       return { data: null, error: null };
@@ -91,18 +92,31 @@ function monterEF(etat) {
     if (table === 'gazette_build_jobs') {
       if (cols.includes('issue_number')) return { data: etat.job, error: null };
       if (cols.includes('consumed_ids')) return { data: { consumed_ids: [] }, error: null };
-      if (cols.includes('sources')) return { data: { sources: {} }, error: null };
+      if (cols.includes('sources')) return { data: { sources: etat.job?.sources ?? {} }, error: null };
       return { data: null, error: null };
     }
     if (table === 'gazette_issue_locales') return { data: etat.locales, error: null };
     if (table === 'gazette_submissions') return { data: etat.breves, error: null };
-    if (table === 'gazette_sources') return { data: [], error: null };
+    if (table === 'gazette_sources') {
+      // Le registre des flux ; le rattrapage de stepCurate ne demande que les
+      // sources en erreur (.eq('last_status','error')).
+      const st = chaine.find((c) => c.op === 'eq' && c.args[0] === 'last_status')?.args?.[1];
+      const rows = (etat.sources ?? []).filter((s) => !st || s.last_status === st);
+      return { data: rows, error: null };
+    }
     return { data: null, error: null };
   };
 
   let handler = null;
   const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
-  const fetchStub = async () => new Response('<rss></rss>', { status: 200 });
+  // Les flux : `etat.flux(url)` rend la réponse d'un site (ou lève) ; chaque
+  // appel est noté, avec ses en-têtes — c'est là qu'on lit le User-Agent.
+  const appelsFetch = [];
+  const fetchStub = async (url, opts) => {
+    appelsFetch.push({ url: String(url), opts });
+    if (etat.flux) return etat.flux(String(url));
+    return new Response('<rss></rss>', { status: 200 });
+  };
   const requireStub = (spec) => {
     if (spec.endsWith('secret-key.ts')) {
       const m = { exports: {} };
@@ -123,15 +137,24 @@ function monterEF(etat) {
 
   return async function appeler(corps, { secret = SECRET } = {}) {
     ecrits.length = 0;
+    appelsFetch.length = 0;
     const res = await handler(new Request('http://ef.local/', {
       method: 'POST',
       headers: { 'x-cron-secret': secret, 'content-type': 'application/json' },
       body: JSON.stringify(corps),
     }));
     const corpsRendu = await res.json().catch(() => ({}));
-    return { statut: res.status, corps: corpsRendu, ecrits: [...ecrits] };
+    return { statut: res.status, corps: corpsRendu, ecrits: [...ecrits], appelsFetch: [...appelsFetch] };
   };
 }
+
+// Un flux RSS d'un article, tel qu'un site le sert.
+const RSS_UN_ITEM = '<rss version="2.0"><channel><item><title>Grève reconduite</title>'
+  + '<link>https://exemple.test/greve</link><pubDate>Mon, 14 Sep 2026 10:00:00 GMT</pubDate>'
+  + '<description>Un mot.</description></item></channel></rss>';
+const source = (name, feed_url, over = {}) => ({
+  id: 's-' + name, name, feed_url, active: true, rubric: 'luttes', locale: 'fr', last_status: 'ok', ...over,
+});
 
 const etatNeuf = () => ({ numero: null, job: null, locales: [], breves: [] });
 const contenusEcrits = (ecrits) => ecrits
@@ -145,6 +168,80 @@ describe("l'EF reste fermée sans l'en-tête X-Cron-Secret", () => {
     const r = await appeler({ step: 'start' }, { secret: 'pas-le-bon' });
     expect(r.statut).toBe(403);
     expect(r.ecrits).toEqual([]);
+  });
+});
+
+describe("probe_sources : tester les flux à la main, sans toucher aux numéros (GAZ-8)", () => {
+  const etatDeuxSources = () => ({
+    ...etatNeuf(),
+    numero: { status: 'draft', build_mode: 'revue' },
+    sources: [source('Qui répond', 'https://repond.test/feed'), source('Qui tombe', 'https://tombe.test/feed')],
+    flux: (url) => (url.includes('tombe.test')
+      ? new Response('<html>Forbidden</html>', { status: 404 })
+      : new Response(RSS_UN_ITEM, { status: 200 })),
+  });
+
+  it("mesure chaque source et n'écrit QUE dans gazette_sources", async () => {
+    const r = await monterEF(etatDeuxSources())({ step: 'probe_sources' });
+    expect(r.statut).toBe(200);
+    expect(r.corps.probed).toBe(2);
+    const bilan = Object.fromEntries(r.corps.bilan.map((b) => [b.name, b]));
+    expect(bilan['Qui répond']).toMatchObject({ status: 'ok', items: 1, error: null });
+    expect(bilan['Qui tombe'].status).toBe('error');
+    expect(bilan['Qui tombe'].error).toMatch(/HTTP 404/);
+    // ni numéro, ni job : la santé des sources, et rien d'autre
+    expect(r.ecrits.every((e) => e.table === 'gazette_sources')).toBe(true);
+    expect(r.ecrits).toHaveLength(2);
+  });
+
+  it("dit qui on est, avec une adresse où nous joindre", async () => {
+    const r = await monterEF(etatDeuxSources())({ step: 'probe_sources' });
+    expect(r.appelsFetch.length).toBeGreaterThan(0);
+    for (const a of r.appelsFetch) {
+      expect(a.opts.headers['User-Agent']).toMatch(/^AnarBib-Gazette\/1\.0 \(\+https:\/\/app\.anarbib\.org\//);
+    }
+  });
+
+  it("reste fermée sans le secret, comme les autres étapes", async () => {
+    const r = await monterEF(etatDeuxSources())({ step: 'probe_sources' }, { secret: 'non' });
+    expect(r.statut).toBe(403);
+    expect(r.ecrits).toEqual([]);
+  });
+});
+
+describe("stepCurate donne une seconde chance aux sources tombées au start", () => {
+  const etatAvecPanne = () => ({
+    ...etatNeuf(),
+    numero: { status: 'draft', build_mode: 'revue' },
+    job: { issue_number: 4, status: 'curating', sources: { 'Info Libertaire': [], 'Qui répond': [] } },
+    sources: [
+      source('Info Libertaire', 'https://www.infolibertaire.net/feed/', { last_status: 'error' }),
+      source('Qui répond', 'https://repond.test/feed'),
+    ],
+    flux: () => new Response(RSS_UN_ITEM, { status: 200 }),
+  });
+
+  it("ne refait que les sources en erreur, et fond ce qui revient dans le vivier du job", async () => {
+    const r = await monterEF(etatAvecPanne())({ step: 'curate', issue_number: 4 });
+    expect(r.statut).toBe(200);
+    expect(r.corps.rattrapees).toBe(1);
+    expect(r.appelsFetch.map((a) => a.url)).toEqual(['https://www.infolibertaire.net/feed/']);
+    const majJob = r.ecrits.find((e) => e.table === 'gazette_build_jobs' && e.op === 'update' && e.donnees.sources);
+    expect(majJob).toBeTruthy();
+    expect(majJob.donnees.sources['Info Libertaire']).toHaveLength(1);
+    expect(majJob.donnees.sources['Qui répond']).toEqual([]);
+    const majSource = r.ecrits.find((e) => e.table === 'gazette_sources' && e.op === 'update');
+    expect(majSource.donnees.last_status).toBe('ok');
+  });
+
+  it("sans source en erreur, rien n'est refait ni réécrit", async () => {
+    const etat = etatAvecPanne();
+    etat.sources[0].last_status = 'ok';
+    const r = await monterEF(etat)({ step: 'curate', issue_number: 4 });
+    expect(r.statut).toBe(200);
+    expect(r.corps.rattrapees).toBe(0);
+    expect(r.appelsFetch).toEqual([]);
+    expect(r.ecrits.some((e) => e.table === 'gazette_build_jobs' && e.donnees.sources)).toBe(false);
   });
 });
 

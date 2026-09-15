@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Partij niet gevonden.",
   "error.rubrics.batch.staff_only": "Een partij classificeren is voorbehouden aan het team van de eigenaar-bibliotheek.",
   "error.rubrics.batch.not_open": "Alleen een open partij kan worden geclassificeerd.",
-  "error.rubrics.batch.bad_map": "Ongeldige tabel rubriek → klasse."
+  "error.rubrics.batch.bad_map": "Ongeldige tabel rubriek → klasse.",
+  "rede.gazeta.sources.probe": "Bronnen nu testen",
+  "rede.gazeta.sources.probeHint": "Gemeten vanaf de server van de Gazette, zonder een nummer aan te raken; resultaat binnen een minuut.",
+  "rede.gazeta.sources.probeStarted": "Test gestart: de statussen worden binnen een minuut vernieuwd."
 }

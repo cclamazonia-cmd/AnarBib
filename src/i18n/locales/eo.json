@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Loto ne trovita.",
   "error.rubrics.batch.staff_only": "Klasifiki loton estas rezervita al la teamo de la posedanta biblioteko.",
   "error.rubrics.batch.not_open": "Nur malfermita loto klasifikeblas.",
-  "error.rubrics.batch.bad_map": "Nevalida tabelo rubriko → klaso."
+  "error.rubrics.batch.bad_map": "Nevalida tabelo rubriko → klaso.",
+  "rede.gazeta.sources.probe": "Testi la fontojn nun",
+  "rede.gazeta.sources.probeHint": "Mezuras el la servilo de la gazeto, ne tuŝante la numerojn; rezulto ene de minuto.",
+  "rede.gazeta.sources.probeStarted": "Testo lanĉita: la statoj ĝisdatiĝos ene de minuto."
 }

@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Los nicht gefunden.",
   "error.rubrics.batch.staff_only": "Ein Los zu klassifizieren ist dem Team der besitzenden Bibliothek vorbehalten.",
   "error.rubrics.batch.not_open": "Nur ein offenes Los lässt sich klassifizieren.",
-  "error.rubrics.batch.bad_map": "Ungültige Tabelle Rubrik → Klasse."
+  "error.rubrics.batch.bad_map": "Ungültige Tabelle Rubrik → Klasse.",
+  "rede.gazeta.sources.probe": "Quellen jetzt prüfen",
+  "rede.gazeta.sources.probeHint": "Gemessen vom Gazette-Server aus, ohne eine Ausgabe anzurühren; Ergebnis innerhalb einer Minute.",
+  "rede.gazeta.sources.probeStarted": "Prüfung gestartet: die Zustände aktualisieren sich innerhalb einer Minute."
 }

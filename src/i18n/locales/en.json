@@ -6668,5 +6668,8 @@
   "error.rubrics.batch.not_found": "Batch not found.",
   "error.rubrics.batch.staff_only": "Classifying a batch is reserved to the staff of the owning library.",
   "error.rubrics.batch.not_open": "Only an open batch can be classified.",
-  "error.rubrics.batch.bad_map": "Invalid heading → class table."
+  "error.rubrics.batch.bad_map": "Invalid heading → class table.",
+  "rede.gazeta.sources.probe": "Test the sources now",
+  "rede.gazeta.sources.probeHint": "Measured from the gazette server, without touching any issue; results within a minute.",
+  "rede.gazeta.sources.probeStarted": "Test started: statuses refresh within a minute."
 }

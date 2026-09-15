@@ -6,6 +6,7 @@
 // "reconcile-gazette-dispatch" (*/5 min) rappelle l'EF jusqu'à status='ready'.
 //
 // Étapes : start → curate (FR) → translate (1 locale/appel) → assemble_reseau → finalize.
+// Hors pipeline : probe_sources (test des flux à la main, ne touche ni numéro ni job).
 //
 // TROIS MODES DE FABRICATION, portés par gazette_issues.build_mode et déclarés
 // tels quels dans le colophon public de chaque numéro :
@@ -81,13 +82,17 @@ async function recupererFlux(feedUrl: string, essais = 2): Promise<string> {
   let dernier: Error | null = null;
   for (let n = 1; n <= essais; n++) {
     try {
-      // On dit qui on est, on dit ce qu'on attend, et on n'attend pas
-      // indéfiniment : sans délai maximal, un flux qui pend bloque l'étape.
+      // On dit qui on est — avec une adresse où nous joindre, comme le veut
+      // l'usage entre robots polis et comme le demandent certains pare-feux —,
+      // on dit ce qu'on attend, et on n'attend pas indéfiniment : sans délai
+      // maximal, un flux qui pend bloque l'étape. 40 s : la collecte est
+      // parallèle, un flux lent ne coûte rien aux autres, et l'origine
+      // d'Info Libertaire a dépassé 20 s deux mois de suite (08 et 09/2026).
       const res = await fetch(feedUrl, {
         redirect: "follow",
-        signal: AbortSignal.timeout(20000),
+        signal: AbortSignal.timeout(40000),
         headers: {
-          "User-Agent": "AnarBib-Gazette/1.0",
+          "User-Agent": "AnarBib-Gazette/1.0 (+https://app.anarbib.org/federacao/gazeta)",
           "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
         },
       });
@@ -453,6 +458,83 @@ async function composerDeterministe(sources: Record<string, unknown>, avecFlux: 
 }
 
 // ---------- étapes ----------
+type Source = { id: string | null; name: string; feed: string };
+type BilanSource = { name: string; status: string; items: number; error: string | null };
+
+// Collecte d'un lot de sources et mise à jour de leur santé (last_*). Servie
+// par stepStart (toutes les actives), par le rattrapage de stepCurate (celles
+// en erreur) et par l'étape probe_sources (test à la main depuis le panneau).
+// EN PARALLÈLE, et pas l'un après l'autre. Un flux qui pend coûtait jusqu'ici
+// son délai à tous les suivants ; avec le réessai, douze sources en panne
+// auraient pu dépasser le temps d'exécution alloué à la fonction et faire
+// échouer l'étape entière. En parallèle, la collecte dure le temps du flux le
+// plus lent, pas la somme des douze. Les sites sont distincts : on ne charge
+// aucun serveur en particulier.
+async function collecterSources(liste: Source[]) {
+  const sources: Record<string, unknown> = {};
+  const bilan: BilanSource[] = [];
+  const resultats = await Promise.all(liste.map(async (s) => {
+    try {
+      const items = await fetchFeedItems(s.feed);
+      const newest = items.map((i) => i.date).filter(Boolean)
+        .map((d) => new Date(d as string).getTime()).sort((a, b) => b - a)[0];
+      return {
+        s, items,
+        maj: {
+          last_fetched_at: new Date().toISOString(),
+          last_item_at: newest ? new Date(newest).toISOString() : null,
+          last_status: items.length ? "ok" : "empty", last_error: null as string | null,
+        },
+      };
+    } catch (e) {
+      return {
+        s, items: [] as unknown[],
+        maj: {
+          last_fetched_at: new Date().toISOString(),
+          last_status: "error", last_error: String(e).slice(0, 500) as string | null,
+        },
+      };
+    }
+  }));
+  for (const r of resultats) {
+    sources[r.s.name] = r.items;
+    bilan.push({ name: r.s.name, status: r.maj.last_status, items: r.items.length, error: r.maj.last_error });
+    if (r.s.id) await sb.from("gazette_sources").update(r.maj).eq("id", r.s.id);
+  }
+  return { sources, bilan };
+}
+
+// Tester les sources À LA MAIN, sans toucher aux numéros ni aux jobs : la même
+// collecte que stepStart, dont on ne garde que la santé (last_*) et un bilan.
+// C'est la vantage qui compte — celle de l'Edge, pas celle d'un poste : un flux
+// peut répondre au poste et à la base, et pas d'ici (Info Libertaire, 08 et
+// 09/2026). Appelée par api.fn_gazette_probe_sources (network_staff) via
+// fn_gazette_build_call('probe_sources').
+async function stepProbeSources() {
+  const { bilan } = await collecterSources(await loadSources());
+  return { probed: bilan.length, bilan };
+}
+
+// Un flux tombé au start a une seconde chance ici, cinq minutes plus tard (le
+// tick) : on refait la collecte des seules sources en erreur et on fond ce qui
+// revient dans le vivier du job. Deux mois de suite (08 et 09/2026) Info
+// Libertaire a manqué au numéro sur une panne passagère à 06:00 UTC — le
+// réessai de recupererFlux, quatre secondes plus tard, ne suffisait pas.
+async function rattraperSourcesEnErreur(number: number, sources: Record<string, unknown>) {
+  const { data } = await sb.from("gazette_sources")
+    .select("id,name,feed_url").eq("active", true).eq("last_status", "error");
+  const enErreur: Source[] = (data ?? []).map((s) => ({ id: s.id as string, name: s.name as string, feed: s.feed_url as string }));
+  if (enErreur.length === 0) return { sources, rattrapees: 0 };
+  const { sources: reprises, bilan } = await collecterSources(enErreur);
+  const fusion = { ...sources };
+  let rattrapees = 0;
+  for (const b of bilan) {
+    if (b.status === "ok") { fusion[b.name] = reprises[b.name]; rattrapees++; }
+  }
+  if (rattrapees > 0) await sb.from("gazette_build_jobs").update({ sources: fusion }).eq("issue_number", number);
+  return { sources: fusion, rattrapees };
+}
+
 async function stepStart() {
   const { number, slug, cover_date } = issueForToday();
 
@@ -496,40 +578,7 @@ async function stepStart() {
     { number, slug, masthead_title: "Rizoma — la gazette du réseau AnarBib", cover_date, status: "draft", build_mode },
     { onConflict: "number" },
   );
-  // EN PARALLÈLE, et pas l'un après l'autre. Un flux qui pend coûtait jusqu'ici
-  // son délai à tous les suivants ; avec le réessai, douze sources en panne
-  // auraient pu dépasser le temps d'exécution alloué à la fonction et faire
-  // échouer l'étape entière. En parallèle, la collecte dure le temps du flux le
-  // plus lent, pas la somme des douze. Les sites sont distincts : on ne charge
-  // aucun serveur en particulier.
-  const sources: Record<string, unknown> = {};
-  const resultats = await Promise.all((await loadSources()).map(async (s) => {
-    try {
-      const items = await fetchFeedItems(s.feed);
-      const newest = items.map((i) => i.date).filter(Boolean)
-        .map((d) => new Date(d as string).getTime()).sort((a, b) => b - a)[0];
-      return {
-        s, items,
-        maj: {
-          last_fetched_at: new Date().toISOString(),
-          last_item_at: newest ? new Date(newest).toISOString() : null,
-          last_status: items.length ? "ok" : "empty", last_error: null,
-        },
-      };
-    } catch (e) {
-      return {
-        s, items: [] as unknown[],
-        maj: {
-          last_fetched_at: new Date().toISOString(),
-          last_status: "error", last_error: String(e).slice(0, 500),
-        },
-      };
-    }
-  }));
-  for (const r of resultats) {
-    sources[r.s.name] = r.items;
-    if (r.s.id) await sb.from("gazette_sources").update(r.maj).eq("id", r.s.id);
-  }
+  const { sources } = await collecterSources(await loadSources());
   await sb.from("gazette_build_jobs").upsert(
     { issue_number: number, status: "curating", sources, step_error: null },
     { onConflict: "issue_number" },
@@ -540,19 +589,20 @@ async function stepStart() {
 async function stepCurate(number: number) {
   const { data: job } = await sb.from("gazette_build_jobs").select("sources").eq("issue_number", number).single();
   const mode = await buildMode(number);
+  const { sources: vivier, rattrapees } = await rattraperSourcesEnErreur(
+    number, (job?.sources ?? {}) as Record<string, unknown>,
+  );
 
   // Modes déterministes : on n'ouvre même pas la connexion au modèle.
   // translation_status='original' — ce français-là n'est pas une traduction, et
   // il n'a pas été écrit par une machine.
   if (mode === "revue" || mode === "manual") {
-    const { pages, consumed } = await composerDeterministe(
-      (job?.sources ?? {}) as Record<string, unknown>, mode === "revue",
-    );
+    const { pages, consumed } = await composerDeterministe(vivier, mode === "revue");
     await upsertLocale(number, "fr", pages, "original", null);
     await sb.from("gazette_build_jobs")
       .update({ status: "translating", cursor_locale: TRANSLATE_TARGETS[0], consumed_ids: consumed })
       .eq("issue_number", number);
-    return { status: "translating", next: TRANSLATE_TARGETS[0], mode, pages: pages.length };
+    return { status: "translating", next: TRANSLATE_TARGETS[0], mode, pages: pages.length, rattrapees };
   }
 
   const system =
@@ -560,7 +610,7 @@ async function stepCurate(number: number) {
     `registre militant mais sobre, des digests fidèles (sans inventer) à partir d'extraits de flux. ` +
     `Tu produis UNIQUEMENT un JSON valide (le tableau "content"). ${SCHEMA_DOC}`;
   const user = `Voici les articles récents (sélectionne les ~12-14 plus pertinents, répartis dans les rubriques) :\n` +
-    JSON.stringify(filtrerFraicheur((job?.sources ?? {}) as Record<string, unknown>)).slice(0, 24000) +
+    JSON.stringify(filtrerFraicheur(vivier)).slice(0, 24000) +
     `\n\nRends le tableau "content" (5 pages : Une, Luttes, International, Cultures, Agenda). Pas de page Réseau.`;
   const pages = parseJsonBlock(await claude(system, user));
   // Même en mode assisté, l'éditorial reste humain : le gabarit interdit au
@@ -575,7 +625,7 @@ async function stepCurate(number: number) {
   await sb.from("gazette_build_jobs")
     .update({ status: "translating", cursor_locale: TRANSLATE_TARGETS[0], consumed_ids: consumed })
     .eq("issue_number", number);
-  return { status: "translating", next: TRANSLATE_TARGETS[0], mode };
+  return { status: "translating", next: TRANSLATE_TARGETS[0], mode, rattrapees };
 }
 
 async function stepTranslate(number: number) {
@@ -789,6 +839,7 @@ Deno.serve(async (req) => {
 
     let out;
     if (s === "start") out = await stepStart();
+    else if (s === "probe_sources") out = await stepProbeSources();
     else if (s === "curate") out = await stepCurate(n);
     else if (s === "translate") out = await stepTranslate(n);
     else if (s === "assemble_reseau") out = await stepAssembleReseau(n);

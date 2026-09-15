@@ -467,3 +467,6 @@ tests/sql/gazette_reprise_tests.sql
 # 15/09 (E21) : la serie de tombos et la cote se reglent depuis l'ecran (unique dans le reseau, figee
 # apres usage) ; un lot recoit ses cotes dans son ordre et ses classes de rangement par table de rubriques.
 tests/sql/numerotation_et_rangement_tests.sql
+# GAZ-8 (15/09) : les sources se testent a la main depuis l Edge. La porte est ouverte a
+# authenticated, la garde de role (network_staff) vit dans le corps et refuse en 42501.
+tests/sql/gazette_sources_probe_tests.sql
