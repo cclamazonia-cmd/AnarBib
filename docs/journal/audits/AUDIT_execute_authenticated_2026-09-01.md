@@ -1516,3 +1516,71 @@ vérifié nom par nom). L’arithmétique 399 (03/09) − 3 (B7) donnerait 396 :
 fonction héritée a perdu son `EXECUTE` entre le 03/09 et le 06/09 sans que ce
 complément l’identifie — écart d’une unité, dans le bon sens, à relire au
 prochain relevé. Le lint 0028 reste à **28**, la liste T10.
+
+
+---
+
+# Complément du 15/09/2026 — les huit RPC nées le 15/09
+
+**15 septembre 2026, 23 h 30** · base `uflwmikiyjfnikiphtcp` en lecture seule · photo du backlog du 15/09 au soir (`fe0cedf1`).
+
+Le lint 0029 est passé de **411** (06/09) à **419** (15/09) : **+8 fonctions
+`SECURITY DEFINER` exécutables par `authenticated`**, toutes nées le 15/09 et
+toutes dans `public` — deux chantiers d'une autre session : **un lot importé a
+une bibliothèque de destination** (`20260915184154`, 19 h) et **E21, la
+numérotation et le rangement d'une bibliothèque depuis l'écran et par lot**
+(`20260915201252`, 22 h 15). Rien entre le 06/09 et le 15/09 : le gel de
+Bologne a tenu. Les huit sont relevées par `oid` décroissant (toute fonction
+créée après `api.fn_work_title_validate`, la dernière du complément du 06/09),
+lues corps par corps dans `pg_proc.prosrc` **en production** — pas dans les
+fichiers de migration — au **même critère** que les paquets du 01/09 : *que
+peut demander une inconnue qui vient de s'inscrire ?*
+
+## Verdict : aucune faille, la limite 2 du 06/09 se referme, une forme à corriger d'une ligne
+
+| Fonction | Garde lue dans le corps | Ce qu'une inconnue inscrite obtient | Verdict |
+|---|---|---|---|
+| `public.fn_batch_reassign_library(p_batch_id, p_library_id)` | `fn_caller_is_network_admin()` **en tête**, puis `FOR UPDATE`, lot `open`, bibliothèque existante, **refus si une révision est approuvée** (`fn_batch_review_status = 'approved'`) | rien (exception `admin_only`) | **justifiée** — écrit `owner_library_id` sur les brouillons vivants, remet `initial_copies_library_id` à nul (l'override lu en dernier par `publish_book_draft`), aligne la source compagne (`ingest.partner_catalog_sources.destination_library_id`) et trace le geste, nommé, dans les notes du lot |
+| `public.fn_batch_owner_libraries()` | prédicat dans le `WHERE` : admin **ou** appartenance active `librarian`/`coordenador` (toute bibliothèque) | une liste vide (refus muet, forme déjà notée) ; pour un·e staff : par lot, la bibliothèque propriétaire et le nombre de brouillons — **aucune donnée de personne** | **justifiée** — même transparence de réseau que `fn_batch_reviews_list` (limite fonctionnelle 1 du 06/09, assumée) |
+| `public.fn_library_numbering_get(p_library_id)` | `user_has_library_staff_role(auth.uid(), p_library_id)` **ou** admin — **le staff de CETTE bibliothèque** | rien (exception `staff_only`) | **justifiée** — lecture seule ; les deux `EXCEPTION WHEN OTHERS` autour de `fn_next_tombo` et `next_bib_ref` rendent `NULL` pour dire « pas de série », c'est leur rôle |
+| `public.fn_library_numbering_set(p_library_id, …)` | **coordination active de CETTE bibliothèque** ou admin ; `FOR UPDATE` ; préfixe obligatoire, ≤ 24 caractères, séparateur ≤ 3, **jokers `%` et `_` interdits** (`fn_next_tombo` cherche par `LIKE préfixe || '%'`), remplissage borné (0–8, 1–10) ; **unicité dans le réseau** — ni préfixe égal, ni préfixe contenu ou contenant, ni préfixe déjà porté par des exemplaires d'une autre bibliothèque (séries héritées) ; **figé** dès qu'un exemplaire l'a utilisé (préfixe, année, séparateur ; le remplissage reste modifiable) | rien | **justifiée** — le refus `prefix_taken` dit qu'un préfixe existe ailleurs, pas où : rien de plus que ce que les tombos du catalogue public montrent déjà |
+| `public.fn_batch_caller_can_edit(p_batch_id)` | prédicat pur : admin **ou** staff actif de **la bibliothèque propriétaire des brouillons du lot** **ou** (lot sans propriétaire **et** `fn_is_catalog_coordinator()`) | `false`, que le lot existe ou non | **justifiée** — et c'est **la garde qui referme la limite fonctionnelle 2 du 06/09** : depuis que les lots ont une propriétaire, le geste est rapproché de la bibliothèque de l'appelant·e, pas seulement de son rôle. Le repli « lot orphelin → coordination du catalogue » couvre les lots nés avant le 15/09 |
+| `public.fn_batch_assign_bib_refs(p_batch_id, p_apply)` | lot existant, **puis** `fn_batch_caller_can_edit`, lot `open`, brouillons sans cote d'**une seule** bibliothèque, convention `bib_ref_auto` posée ; **verrou consultatif par préfixe** (`pg_advisory_xact_lock`) ; le maximum est cherché partout où une cote vit (notices publiées, holdings de la bibliothèque, brouillons non annulés) | `not_found` ou `staff_only` — voir la forme ci-dessous | **justifiée** — `p_apply = false` est une prévisualisation sans écriture ; l'écriture ne touche que `bib_ref` des brouillons du lot et les notes du lot, nommées |
+| `public.fn_batch_rubrics(p_batch_id)` | lot existant, **puis** `fn_batch_caller_can_edit` | idem | **justifiée** — lecture seule : rubriques du lot, comptes, brouillons sans classe |
+| `public.fn_batch_apply_rubric_classes(p_batch_id, p_map, p_overwrite)` | lot existant, **puis** `fn_batch_caller_can_edit`, lot `open`, `p_map` objet JSON | idem | **justifiée** — n'écrit que `book_drafts.cdd` des brouillons vivants du lot, ne remplace une classe existante que sur `p_overwrite`, trace le geste, nommé, dans les notes du lot |
+
+**La forme à corriger, d'une ligne.** Les trois RPC de lot de E21
+(`fn_batch_assign_bib_refs`, `fn_batch_rubrics`,
+`fn_batch_apply_rubric_classes`) vérifient **l'existence du lot avant les
+droits** : une inconnue reçoit `not_found` pour un identifiant vide et
+`staff_only` pour un identifiant pris, et peut donc énumérer les identifiants
+de lots existants — des entiers séquentiels, sans aucune donnée derrière.
+Ce n'est pas une faille (l'existence d'un lot ne dit rien, et les lots sont
+déjà listés à tout·e staff), mais `fn_batch_reassign_library` fait l'inverse,
+droits d'abord, et c'est l'ordre du paquet 4 du 01/09. Inverser les deux
+`IF` dans chacune des trois — à faire dans la prochaine migration qui les
+touche, pas pour elle-même.
+
+**Ce que E21 apporte à l'audit.** `fn_library_numbering_get`/`_set` sont les
+premières RPC de configuration de bibliothèque écrites depuis le paquet 2 :
+elles portent la garde **par bibliothèque** (`user_has_library_staff_role`,
+appartenance `coordenador` à `p_library_id`), pas la garde « staff de
+n'importe quelle bibliothèque » du catalogue commun — la bonne, puisqu'une
+série d'inventaire appartient à une bibliothèque. Et les contrôles de
+`fn_library_numbering_set` (jokers interdits, unicité y compris contre les
+séries héritées, figement après usage) ferment d'avance les collisions de
+tombos que la mémoire `anarbib-tombo-global-unique-collision` documentait.
+
+**Non concernées.** `public.fn_book_draft_rubric(p_draft_id)` (DEFINER, `SQL`,
+l'extraction de la rubrique d'un brouillon — appelée par les deux RPC de
+rubriques, **pas exposée** à `authenticated`) et
+`public.fn_gazette_submission_decision_enqueue` (GAZ-7, interne à la file de
+courriels, pas exposée) sont nées aussi le 15/09 et n'apparaissent pas au
+lint 0029 : hors du périmètre de ce complément. Toutes deux sont dans les
+704 DEFINER de la photo.
+
+**Compte au 15/09.** 0029 = **419**, tous justifiés : **411** du 06/09 et **8**
+de ce complément (les huit sont dans la liste du lint, vérifié nom par nom sur
+le relevé de 22 h 45, format groupé — une entrée par lint, tableau
+`findings`). Le lint 0028 reste à **28**, la liste T10. Aucune des huit n'est
+exécutable par `anon` (vérifié par `has_function_privilege`).
