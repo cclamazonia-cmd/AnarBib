@@ -175,7 +175,7 @@ begin
 
   if exists (select 1 from information_schema.role_table_grants
               where table_schema = 'public' and table_name = 'v_catalog_batch_draft_counts'
-                and grantee not in ('postgres', 'service_role')
+                and grantee not in ('postgres', 'service_role', 'supabase_admin')
                 and (grantee in ('anon', 'PUBLIC') or privilege_type in ('INSERT','UPDATE','DELETE'))) then
     raise exception 'la vue a repris des droits de trop';
   end if;

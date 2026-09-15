@@ -25,7 +25,10 @@ MIG_DIR="${MIG_DIR:-/migrations}"
 DEPART="${1:-1}"          # numéro de la première migration à appliquer
 SU=""
 
-for candidat in supabase_admin postgres; do
+# Les migrations s'appliquent sous `postgres`, comme en production et en CI
+# (DOC-GRANT-3, A.2) : c'est ce rôle que le socle et 20260831105114 règlent.
+# supabase_admin reste un repli, et il se dit.
+for candidat in postgres supabase_admin; do
   if psql -U "$candidat" -d postgres -tAc "select 1" >/dev/null 2>&1; then
     SU="$candidat"; break
   fi
@@ -34,6 +37,10 @@ done
 if [ -z "$SU" ]; then
   echo "✗ Impossible de se connecter à Postgres."
   exit 1
+fi
+
+if [ "$SU" != "postgres" ]; then
+  echo "· postgres refusé — repli sur $SU : les objets seront possédés par $SU, pas comme en production."
 fi
 
 # Le modèle de migration (_TEMPLATE.sql) et tout fichier préfixé par « _ »
@@ -87,6 +94,15 @@ echo "────────────────────────�
 n=0
 debut=$(date +%s)
 
+psql -q -U "$SU" -d postgres -c "
+CREATE SCHEMA IF NOT EXISTS supabase_migrations;
+CREATE TABLE IF NOT EXISTS supabase_migrations.schema_migrations (
+  version text PRIMARY KEY,
+  statements text[],
+  name text
+);
+" >/dev/null
+
 for f in $LISTE; do
   n=$((n + 1))
   [ "$n" -lt "$DEPART" ] && continue
@@ -94,6 +110,13 @@ for f in $LISTE; do
   printf "%3d/%s  %-70s " "$n" "$total" "$nom"
 
   if psql -q -U "$SU" -d postgres -v ON_ERROR_STOP=1 -f "$f" >/dev/null 2>/tmp/mig_err; then
+    version=$(echo "$nom" | cut -d_ -f1)
+    nom_sans_version=$(echo "$nom" | cut -d_ -f2- | sed 's/\.sql$//')
+    psql -q -U "$SU" -d postgres -c "
+      INSERT INTO supabase_migrations.schema_migrations (version, name)
+      VALUES ('$version', '$nom_sans_version')
+      ON CONFLICT (version) DO NOTHING;
+    " >/dev/null
     echo "OK"
   else
     echo "ÉCHEC"
@@ -110,6 +133,7 @@ for f in $LISTE; do
     exit 1
   fi
 done
+
 
 fin=$(date +%s)
 echo "─────────────────────────────────────────────"

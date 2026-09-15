@@ -1,0 +1,12 @@
+# Configuration Rathole Client (sur le backend AnarBib)
+[client]
+remote_addr = "IP_PUBLIQUE_VPS:2333"
+default_token = "GENERER_UN_JETON_ALEATOIRE_SECRET"
+
+[client.services.http]
+type = "tcp"
+local_addr = "caddy:80"
+
+[client.services.https]
+type = "tcp"
+local_addr = "caddy:443"

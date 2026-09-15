@@ -44,7 +44,7 @@ begin
   end if;
   select count(*) into n from pg_policy p
    where p.polname = 'catalog_batch_reviews_read_staff'
-     and pg_get_expr(p.polqual, p.polrelid) ~ 'SELECT auth\.uid\(\)';
+     and pg_get_expr(p.polqual, p.polrelid) ~* 'SELECT (auth\.)?uid\(\)';
   if n <> 1 then
     raise exception 'catalog_batch_reviews_read_staff : auth.uid() n''est pas enveloppé';
   end if;

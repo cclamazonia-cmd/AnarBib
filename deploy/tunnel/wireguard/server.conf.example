@@ -1,0 +1,23 @@
+# /etc/wireguard/wg0.conf (sur le VPS Frontal)
+[Interface]
+Address = 10.10.0.1/24
+ListenPort = 51820
+PrivateKey = VOS_CLES_SERVEUR_PRIVEES
+
+# Redirection directe des ports 80 et 443 vers le backend AnarBib
+# (Adapter 'eth0' si l'interface publique a un autre nom, ex: enp1s0)
+PostUp = iptables -A FORWARD -i eth0 -o wg0 -p tcp --dport 80 -d 10.10.0.2 -j ACCEPT
+PostUp = iptables -A FORWARD -i eth0 -o wg0 -p tcp --dport 443 -d 10.10.0.2 -j ACCEPT
+PostUp = iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 10.10.0.2:80
+PostUp = iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to-destination 10.10.0.2:443
+PostUp = iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
+
+PostDown = iptables -D FORWARD -i eth0 -o wg0 -p tcp --dport 80 -d 10.10.0.2 -j ACCEPT
+PostDown = iptables -D FORWARD -i eth0 -o wg0 -p tcp --dport 443 -d 10.10.0.2 -j ACCEPT
+PostDown = iptables -t nat -D PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 10.10.0.2:80
+PostDown = iptables -t nat -D PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to-destination 10.10.0.2:443
+PostDown = iptables -t nat -D POSTROUTING -o wg0 -j MASQUERADE
+
+[Peer]
+PublicKey = CLE_PUBLIQUE_DU_BACKEND
+AllowedIPs = 10.10.0.2/32

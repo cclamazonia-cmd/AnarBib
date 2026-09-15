@@ -1,0 +1,13 @@
+# Extension Docker Compose pour lancer le client de tunnel Rathole
+# Usage:
+#   docker compose -f compose.yml -f tunnel/rathole/docker-compose.tunnel.yml up -d
+services:
+  tunnel-client:
+    image: rapiz1/rathole:v0.5.0
+    restart: unless-stopped
+    volumes:
+      - ./tunnel/rathole/client.toml:/app/client.toml:ro
+    command: ["--client", "/app/client.toml"]
+    depends_on:
+      caddy:
+        condition: service_healthy

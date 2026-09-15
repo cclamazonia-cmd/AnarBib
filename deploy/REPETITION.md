@@ -123,15 +123,13 @@ Collez les deux lignes obtenues dans `.env`.
 Pour la répétition sur votre machine, mettez dans `.env` :
 
 ```
-API_DOMAIN=localhost
+API_DOMAIN=http://localhost
 API_EXTERNAL_URL=http://localhost
 SITE_URL=http://localhost:5173
 URI_ALLOW_LIST=http://localhost:5173,http://localhost:5173/*
 ```
 
-Et dans le `Caddyfile`, remplacez la première ligne `{$API_DOMAIN} {` par
-`http://localhost {` — sinon Caddy tentera d'obtenir un certificat Let's Encrypt
-pour `localhost` et échouera.
+*(Le script `node genkeys.mjs --local` ou `./install.sh` renseigne automatiquement ces valeurs. Le préfixe `http://` dans `API_DOMAIN` désactive automatiquement le HTTPS de Caddy — aucune édition manuelle du `Caddyfile` n'est nécessaire).*
 
 ### Les secrets des fonctions
 

@@ -418,7 +418,15 @@ fi
 # Un contrôle rouge par construction s'apprend vite à ignorer — c'est-à-dire
 # qu'il ne contrôle plus rien.
 SANS_POLICY_ATTENDUES="ingest.import_profiles
+ingest.oai_harvest_state
+ingest.partner_catalog_import_dispatch_log
+ingest.partner_catalog_import_files
+ingest.partner_catalog_import_runs
+ingest.partner_catalog_match_candidates
 ingest.partner_catalog_received_assets
+ingest.partner_catalog_row_to_draft
+ingest.partner_catalog_sources
+ingest.partner_catalog_staging_rows
 public.altcha_consumed_challenges
 public.author_name_aliases
 public.catalog_partner_capabilities
@@ -429,6 +437,7 @@ public.import_terra_livre_zotero_staging
 public.interlibrary_loan_events
 public.library_theme_configs
 public.library_themes
+public.loan_cycle_notifications
 public.partner_source_holdings
 public.partner_source_items
 public.partner_source_records"

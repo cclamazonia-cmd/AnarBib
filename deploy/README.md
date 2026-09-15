@@ -1,8 +1,7 @@
-# AnarBib — pile auto-hébergée : mode d'emploi
+# AnarBib — Pile auto-hébergée : mode d'emploi
 
-Trois fichiers : `compose.yml`, `Caddyfile`, `.env` (depuis `.env.example`).
-**Six conteneurs** : cinq briques reprises du compose officiel Supabase (qui en
-déclare treize) et Caddy substitué à Kong. Justification service par service :
+Trois fichiers de configuration : `compose.yml`, `Caddyfile`, `.env` (depuis `.env.example`).
+**Six conteneurs** : cinq briques reprises du compose officiel Supabase et Caddy substitué à Kong. Justification service par service :
 [`AUDIT_pile_minimale_2026-08-26`](../docs/journal/audits/AUDIT_pile_minimale_2026-08-26.md).
 
 **État au 04/09/2026 — ce qui a tourné, et ce qui n'a pas tourné.** La pile
@@ -35,91 +34,112 @@ les services qui *lisent* le schéma. Le script compte **huit étapes plus deux
 partiraient vers le projet cloud du mainteneur), la « 7 bis » attend un fait,
 jamais un délai — et une vérification finale.
 
-**Ce qui n'a pas tourné** : la bascule elle-même chez Herbes Folles, le routeur
-`main` en conditions réelles (item I3, gelé jusqu'au 14/09), et un front
-reconstruit pointé sur un vrai domaine (étapes 7 et 8 de la liste de
-répétition, plus bas). C'est là que se joue le chiffre à rapporter.
-
 ---
 
-## Ce qui reste à faire avant que ça démarre
+## 1. Démarrage rapide (Installation en une commande)
 
-### 1. Le routeur `main` — écrit, à relire et à tester
-
-Fourni : `main/index.ts`, **à copier dans `supabase/functions/main/`** du dépôt.
-
-Sur la plateforme Supabase, chaque Edge Function est déployée séparément et
-`config.toml` impose son `verify_jwt`. Hors plateforme, rien de tout ça
-n'existe : `edge-runtime` passe toutes les requêtes à un service unique.
-
-Deux partis pris méritent votre relecture, parce qu'ils portent la sécurité des
-44 fonctions :
-
-- **Le routeur lit `config.toml` lui-même**, au démarrage. Il n'y a donc aucune
-  liste recopiée à maintenir en parallèle : la politique reste à un seul
-  endroit, et elle ne peut pas diverger. C'est pourquoi `compose.yml` monte
-  `config.toml` dans le conteneur.
-
-- **Refus par défaut.** `config.toml` déclare 28 fonctions en
-  `verify_jwt = false` et **aucune** en `true` — les 16 autres reposent sur le
-  défaut de la plateforme. Le routeur lit donc uniquement les dispenses et exige
-  un JWT pour tout le reste. Une fonction nouvelle, oubliée ou mal orthographiée
-  se retrouve protégée, jamais ouverte.
-
-Corollaire à garder en tête : **une fonction retirée de `config.toml` devient
-protégée**, ce qui peut casser un webhook. C'est le bon sens de l'erreur, mais
-il faut le savoir avant de toucher au fichier.
-
-Si `config.toml` est illisible, le routeur **refuse de démarrer** plutôt que de
-choisir un comportement par défaut. Panne franche au déploiement plutôt
-qu'ouverture silencieuse en production.
-
-**Ce qu'il reste à faire dessus** : le tester. Trois cas au minimum — une
-fonction protégée sans en-tête `Authorization` (attendu : 401), la même avec un
-JWT valide (200), et une fonction dispensée comme `health-probe` sans JWT (200).
-Plus un nom inexistant (404).
-
-### 2. Épingler les versions
-
-Les tags de `.env` sont vides à dessein. Les récupérer depuis le compose
-officiel de Supabase (dépôt `supabase/supabase`, dossier `docker`), qui est la
-seule référence à jour, puis les recopier tels quels.
-
-Une fois la pile validée, remplacer chaque tag par son digest :
+À la racine du dépôt :
 
 ```bash
-docker compose config --images | while read -r img; do
-  docker image inspect "$img" --format '{{index .RepoDigests 0}}'
-done
+./install.sh                           # Installation complète en local (Backend + Frontend)
+./install.sh --rebuild                 # Réinitialisation complète et remise à neuf des volumes
+./install.sh --stop                    # Arrête l'application web et les conteneurs
+./install.sh --prod api.domaine.org    # Installation en mode production
 ```
 
-Un tag peut être redéplacé sur une autre image ; un digest, jamais. C'est la
-différence entre « à peu près la même pile » et « la même pile ».
+Le script centralisé `./install.sh` effectue de manière 100 % autonome et sans intervention manuelle :
+1. **Prérequis** : Vérification de `docker`, `docker compose`, `node`.
+2. **Secrets & Clés** : Génération cryptographique des clés JWT et secrets locaux via `deploy/genkeys.mjs` (`deploy/.env` et `deploy/functions.env`).
+3. **Liaison & Build Frontend** : Création automatique de `.env.local`, installation des dépendances (`npm ci`) et compilation statique (`npm run build` dans `dist/`).
+4. **Déploiement Docker (6 conteneurs)** : Démarrage des conteneurs avec amorçage initial ou rejeu des migrations incrémentales. Caddy sert à la fois les API backend et l'application web sur les ports 80 et 5173.
+5. **Résolution universelle (IP / Domaine / Localhost)** : L'application s'adapte dynamiquement à l'hôte accédé dans le navigateur (`window.location.origin`). Elle est immédiatement fonctionnelle sur une adresse IP locale (ex: `http://192.168.x.x:5173`), un domaine personnalisé ou `localhost`.
 
-### 3. Générer les clés
+Options disponibles :
+- `./install.sh` : installation et démarrage complet (Backend + Frontend).
+- `./install.sh --lang fr|en|pt` : force la langue d'affichage (détection automatique depuis `$LANG` par défaut).
+- `./install.sh --rebuild` : réinitialise les volumes de la base avant réinstallation.
+- `./install.sh --stop` : arrête l'ensemble des conteneurs et services.
+- `./install.sh --sans-start` : prépare les secrets et l'environnement sans démarrer de conteneur.
+- `./install.sh --prod DOMAINE` : configure pour un domaine public (ex: `api.anarbib.org`).
 
-`ANON_KEY` et `SERVICE_ROLE_KEY` sont des JWT signés avec `JWT_SECRET`, portant
-respectivement `role: anon` et `role: service_role`. Supabase fournit un
-générateur dans sa documentation self-hosting ; sinon n'importe quel outil JWT
-fait l'affaire, la charge utile étant :
+### Compte administrateur initial
 
-```json
-{ "role": "anon", "iss": "supabase", "iat": <maintenant>, "exp": <dans 10 ans> }
-```
+Lors d'une nouvelle installation avec une base vierge, `./install.sh` provisionne automatiquement un compte administrateur réseau :
+- **Email admin** : demandé interactivement lors de l'installation (par défaut `admin@DOMAINE` en production, `admin@anarbib.local` en local).
+- **Mot de passe** : généré aléatoirement (16 caractères), affiché une seule fois à l'écran à la fin de l'installation, puis supprimé.
 
-`SERVICE_ROLE_KEY` ne doit jamais atteindre le front ni le dépôt.
+Ce compte dispose des rôles de gestionnaire de réseau (`network_administrators`), de coordinateur et de bibliothécaire sur la bibliothèque de démonstration, donnant un accès immédiat aux panneaux de gestion (`/painel`, `/biblioteca`, `/rede`, `/catalogacao`).
 
-### 4. Les rôles Postgres
+### Transport des e-mails (SMTP universel ou API Resend)
 
-`compose.yml` se connecte avec `authenticator`, `supabase_auth_admin` et
-`supabase_storage_admin`. L'image `supabase/postgres` les crée, mais leurs mots
-de passe doivent être posés — la migration baseline du dépôt en présuppose
-peut-être certains. **À vérifier au premier démarrage**, c'est un point de
-friction classique.
+L'application supporte deux modes d'envoi d'e-mails pour les notifications, les prêts et les invitations :
+1. **Serveur SMTP standard (recommandé en auto-hébergement)** : connectez n'importe quelle boîte mail (OVH, Gandi, Infomaniak, Postfix local, serveur dédié de votre association). Configuration demandée interactivement par `./install.sh` ou via les variables `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SENDER_EMAIL` dans `deploy/functions.env`.
+2. **API Resend** : renseignez simplement `RESEND_API_KEY` et `SENDER_EMAIL` dans `deploy/functions.env`.
+3. **Mode test local** : si aucun serveur n'est configuré, les e-mails sont journalisés dans la console sans bloquer l'application ni générer d'erreur.
+
+
+### Gestion des clés et secrets
+
+| Environnement | Où mettre les clés ? | Comment ça marche ? |
+|---|---|---|
+| **Auto-hébergement (Production ou Local)** | `deploy/.env` et `deploy/functions.env` | `deploy/.env` (clés d'infrastructure Postgres, JWT, Anon) est généré automatiquement par `deploy/genkeys.mjs`. `deploy/functions.env` contient les réglages des services tiers (SMTP standard ou Resend pour les e-mails, Altcha pour l'anti-robot). Aucun compte Supabase Cloud requis. |
+| **Supabase Cloud (Hébergement distant)** | `.env.local` (local) ou Secrets CI/CD (Codeberg/GitHub) | Renseigner `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY`. Le code bascule automatiquement sur le Cloud sans aucune modification. |
+
+Les deux modes coexistent sans interférence : le frontend détecte automatiquement s'il parle à une URL cloud distante ou à la passerelle Caddy locale/réseau.
 
 ---
 
-## Points à confirmer avant bascule
+## 2. Architecture de la pile (6 conteneurs)
+
+| Conteneur | Image | Rôle |
+|---|---|---|
+| `db` | `supabase/postgres:17.6.1.136` | Base PostgreSQL 17 + Vault + pg_net + extensions |
+| `rest` | `postgrest/postgrest:v14.12` | API REST & RPC `api.*` |
+| `auth` | `supabase/gotrue:v2.192.0` | Serveur d'authentification GoTrue (77 migrations) |
+| `storage` | `supabase/storage-api:v1.70.7` | Stockage d'objets et gestion des buckets |
+| `functions` | `supabase/edge-runtime:v1.74.0` | Routeur `main` et exécution des 48 Edge Functions |
+| `caddy` | `caddy:2` | Passerelle API, sécurité HTTP et terminaison TLS automatique |
+
+---
+
+## 3. Sécurité & Routeur `main`
+
+Le routeur Deno (`supabase/functions/main/index.ts`) est le point d'entrée unique de `edge-runtime` :
+
+- **Lecture dynamique de `config.toml`** : Aucune liste en double. Les fonctions déclarées avec `verify_jwt = false` sont dispensées de jeton ; toutes les autres exigent un JWT valide (`Authorization: Bearer <TOKEN>`).
+- **Refus par défaut** : Toute fonction non explicitement dispensée ou nouvellement créée est automatiquement protégée.
+- **Vérification cryptographique** : Les signatures JWT sont validées localement avec le `JWT_SECRET`.
+
+---
+
+## 4. Déploiement et mise à jour autonome (hors CI)
+
+Pour mettre à jour une instance en production ou en essai sans dépendre de la forge ni de l'API Supabase Cloud :
+
+```bash
+./deploy/deploy.sh             # git pull + migrations incrémentales + reload fonctions + santé
+./deploy/deploy.sh --sans-pull # applique sur l'état local du code
+./deploy/deploy.sh --controle  # vérifie la santé de chaque brique
+```
+
+### Application des migrations incrémentales
+
+Le script `deploy/scripts/apply-pending-migrations.sh` :
+- Vérifie `supabase_migrations.schema_migrations`.
+- N'applique que les nouvelles migrations dans l'ordre lexicographique.
+- Notifie PostgREST (`NOTIFY pgrst, 'reload schema'`) pour actualiser le cache de schéma sans coupure de service.
+
+---
+
+## 5. Exposition et Tunnel (Reverse Proxy)
+
+Si la machine hôte n'a pas d'IP publique directe ou est située derrière un NAT / pare-feu :
+- Voir le guide complet et les configurations dans [`deploy/tunnel/README.md`](tunnel/README.md).
+- **Doctrine L4 (Passthrough TCP)** : Le VPS frontal public ne détient aucun certificat TLS ni secret. Il redirige les flux TCP bruts (ports 80/443) via **WireGuard** ou **Rathole** vers Caddy, qui assure seul la terminaison TLS.
+
+---
+
+## 6. Points à confirmer avant bascule
 
 - **GoTrue et le courriel.** La configuration pose `MAILER_AUTOCONFIRM=true`, en
   partant du principe que les liens sont produits par `admin.generateLink` dans
@@ -130,34 +150,16 @@ friction classique.
 - **`PGRST_DB_SCHEMAS`.** Mis à `public,api,storage` par déduction. Comparer avec
   le réglage réel du projet Supabase (Settings → API → Exposed schemas).
 
-- **`notify-cross-library-digest`.** ~~Appelée depuis une migration, absente du
-  dépôt.~~ **Clos (04/09/2026)** : la fonction est au dépôt,
+- **`notify-cross-library-digest`.** **Clos (04/09/2026)** : la fonction est au dépôt,
   `supabase/functions/notify-cross-library-digest/`, et se déploie avec les
   autres. Rien n'existe qu'en production.
 
-- **Le rejeu des migrations.** ~~`bootstrap.sh` devra distinguer les deux cas.~~
-  **Fait** : l'étape 5 a deux branches — rejeu depuis le dépôt sur volume vide,
-  ou `--depuis-une-sauvegarde` — éprouvées toutes deux le 26/08. Le montage
-  `docker-entrypoint-initdb.d` ne s'exécute qu'au tout premier démarrage ; pour
-  une mise à jour ultérieure, c'est la CLI.
+- **Le rejeu des migrations.** **Fait** : l'étape 5 a deux branches — rejeu depuis le dépôt sur volume vide,
+  ou `--depuis-une-sauvegarde` — éprouvées toutes deux le 26/08. Pour les mises à jour ultérieures, `apply-pending-migrations.sh` et `deploy.sh` prennent le relais.
 
 - **`CADDY_TAG=2`.** Seule entorse à « aucun `latest`, jamais » : un tag majeur
   flottant. Justification écrite dans `.env.example` — Caddy est le seul service
-  sans schéma ni données, une mineure ne change rien à la reconstruction. À
-  épingler au tag exact le jour de la répétition finale, avec la valeur que
-  `docker image inspect` aura donnée.
-
----
-
-## Ce que ça donne côté frontend
-
-**Aucune modification de code.** Le `Caddyfile` reproduit les chemins de l'API
-Supabase (`/rest/v1`, `/auth/v1`, `/storage/v1`, `/functions/v1`), donc seule la
-variable de build `VITE_SUPABASE_URL` change, de `https://<ref>.supabase.co`
-vers `https://api.anarbib.org`.
-
-C'est ce qui rend la bascule réversible : si quelque chose se passe mal, on
-remet l'ancienne valeur et on redéploie le front.
+  sans schéma ni données, une mineure ne change rien à la reconstruction.
 
 ---
 
@@ -192,7 +194,11 @@ démarre, mais celui d'une connexion réussie depuis un front reconstruit.
 
 ---
 
-## `bg2-known-tables.txt` — le classement des tables pour la sauvegarde
+## 7. Sauvegarde et Restauration (#BG2)
+
+La stratégie de sauvegarde militante #BG2 (trois flux restic `court`, `long`, `storage`) et la procédure de restauration sont documentées dans [`deploy/ops/README.md`](ops/README.md).
+
+### `bg2-known-tables.txt` — le classement des tables pour la sauvegarde
 
 Liste plate et triée de **toutes** les tables de `public`. C'est le « filet » de
 la chaîne de sauvegarde #BG2 : `anarbib-bg2.sh` compare les tables réellement

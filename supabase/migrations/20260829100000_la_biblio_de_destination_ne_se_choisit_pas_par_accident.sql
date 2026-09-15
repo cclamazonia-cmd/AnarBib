@@ -384,6 +384,10 @@ comment on function public.publish_book_draft(bigint) is
   'publie — departagee de facon deterministe. Garde-fou elargi le 29/08/2026 : '
   'il ne portait que sur initial_copies_library_id.';
 
+revoke execute on function public.publish_book_draft(bigint) from public, anon;
+grant execute on function public.publish_book_draft(bigint) to authenticated;
+
+
 -- -----------------------------------------------------------------------------
 -- Verification structurelle
 -- -----------------------------------------------------------------------------

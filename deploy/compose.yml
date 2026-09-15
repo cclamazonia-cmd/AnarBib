@@ -222,6 +222,7 @@ services:
       SUPABASE_URL: http://caddy
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      SUPABASE_SECRET_KEYS: '{"default":"${SERVICE_ROLE_KEY}"}'
       SUPABASE_DB_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/postgres
       SUPABASE_JWT_SECRET: ${JWT_SECRET}
       ALLOWED_ORIGIN: ${SITE_URL}
@@ -256,6 +257,7 @@ services:
       API_DOMAIN: ${API_DOMAIN}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../dist:/srv:ro
       - caddy-data:/data
       - caddy-config:/config
 

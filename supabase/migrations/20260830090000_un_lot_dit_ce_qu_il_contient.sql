@@ -127,7 +127,7 @@ begin
                 and table_name in ('v_catalog_batch_draft_counts', 'v_book_draft_destination')
                 and (grantee in ('anon', 'PUBLIC')
                      or privilege_type in ('INSERT', 'UPDATE', 'DELETE'))
-                and grantee <> 'postgres' and grantee <> 'service_role') then
+                and grantee not in ('postgres', 'service_role', 'supabase_admin')) then
     raise exception 'une vue du chantier garde des droits de trop (anon, ou ecriture)';
   end if;
   if not exists (select 1 from information_schema.role_table_grants

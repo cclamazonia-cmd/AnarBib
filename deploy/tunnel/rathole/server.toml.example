@@ -1,0 +1,12 @@
+# Configuration Rathole Serveur (sur le VPS frontal)
+[server]
+bind_addr = "0.0.0.0:2333"
+default_token = "GENERER_UN_JETON_ALEATOIRE_SECRET"
+
+[server.services.http]
+bind_addr = "0.0.0.0:80"
+type = "tcp"
+
+[server.services.https]
+bind_addr = "0.0.0.0:443"
+type = "tcp"

@@ -390,6 +390,10 @@ end;
 $function$
 ;
 
+revoke execute on function public.publish_book_draft(bigint) from public, anon;
+grant execute on function public.publish_book_draft(bigint) to authenticated;
+
+
 -- -----------------------------------------------------------------------------
 -- Verification
 -- -----------------------------------------------------------------------------
