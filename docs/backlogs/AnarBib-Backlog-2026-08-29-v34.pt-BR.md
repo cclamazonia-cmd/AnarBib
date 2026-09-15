@@ -391,7 +391,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B19** | Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo | `P2` | Congelado |
+| **B19** | Revogar a antiga chave de assinatura HS256 — condições reunidas em 15/09, gesto reversível, a fazer no dashboard | `P2` | Aberto |
 | **B20** | O fallback para a chave legada não pode voltar: uma guarda, não um comentário | `P1` | Aberto |
 | **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Aberto |
 | **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
@@ -442,24 +442,24 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
 
-#### B19 — Revogar a antiga chave de assinatura HS256 — o botão que desconectaria todo mundo
+#### B19 — Revogar a antiga chave de assinatura HS256 — condições reunidas em 15/09, gesto reversível, a fazer no dashboard
 
-`P2` Corrente · Estado : **Congelado** · Carga : uma noite · O que exige : administração de sistemas
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
 
 **Estado.** As chaves de assinatura JWT estão migradas: a chave corrente é uma ECC P-256, a antiga HS256 está guardada em « Previously used keys » e só faz verificação. O dashboard mostra ao lado dela um botão Revoke e um texto que convida gentilmente a clicar « uma vez expirados os tokens ». Só que essa chave ainda valida a chave anon legada que os navegadores com bundle em cache enviam — 2.026 requisições por dia no levantamento de 01/09.
 
-*Verificado : 01/09 — página Settings → JWT Keys lida: ECC P-256 corrente, HS256 em « previously used », última rotação há 5 meses.*
+*Verificado : 15/09 — logs edge 24 h: 0 requisição com chave legacy, e os 246 JWT de usuários apresentados todos em ES256 com `kid` (nenhum token HS256 em circulação); `cron.job`, corpo das funções e `vault.secrets` sem JWT legacy nem cabeçalho Authorization; único verificador HS256 do código = o roteador `supabase/functions/main` da pilha auto-hospedada (seu próprio `JWT_SECRET`, ausente das 50 funções publicadas); URLs assinadas do Storage a 600-900 s; `eyJhbGciOi` ausente do código de `anarbib` (depois da fusão da PR #28, `f179f1ff`, `secret-key.ts` continua sem fallback) e de `pages`; `anarbib.org/fr/explorar/` serve `sb_publishable_…`. 01/09 — página Settings → JWT Keys lida: ECC P-256 corrente, HS256 em « previously used ».*
 
-**O que é.** Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem. **Emendado em 08/09 (B24, `OPS-9`)**: «digerido» se mede nos DOIS repositórios, não só no aplicativo — `grep -r eyJhbGciOi` a zero em `anarbib` E em `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` mostrando a chave corrente, e uma semana de logs em que cada requisição legacy residual foi qualificada pelo seu `referer`. A galeria da vitrine ficou quebrada seis dias depois de B18 sem que ninguém visse: com a HS256 revogada, uma página esquecida não devolve mais 401, devolve uma desconexão geral.
+**O que é.** Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem. **Emendado em 08/09 (B24, `OPS-9`)**: «digerido» se mede nos DOIS repositórios, não só no aplicativo — `grep -r eyJhbGciOi` a zero em `anarbib` E em `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` mostrando a chave corrente, e uma semana de logs em que cada requisição legacy residual foi qualificada pelo seu `referer`. A galeria da vitrine ficou quebrada seis dias depois de B18 sem que ninguém visse: com a HS256 revogada, uma página esquecida não devolve mais 401, devolve uma desconexão geral. **Emendado em 15/09 — descongelado.** As condições estão medidas (ver a verificação) e o gesto se desfaz: segundo a doc Supabase « JWT Signing Keys », uma chave revogada volta a *standby* e se reativa por uma rotação; só a *exclusão* é definitiva, e ela é proibida para o segredo legacy. O gesto, por Xavier: Settings → JWT Keys → HS256 em « Previously used » → Revoke; depois, na hora seguinte, um login, um cadastro, uma recuperação de senha e a abertura de um documento digital (URL assinada do Storage). Em caso de quebra: voltar a HS256 para standby e rodar as chaves (intervalo de cerca de 5 min entre duas mudanças de estado). O levantamento do dia seguinte da tarefa `anarbib-trafic-cles-legacy` serve de prova, e então a tarefa pode ser apagada.
 
-**Por que importa.** É o único gesto realmente irreversível de todo o canteiro das chaves, e está a um clique de uma tela que se visita por outras razões. Revogada cedo demais, a HS256 invalida de uma vez tudo o que ela ainda validava: a desconexão seria geral e imediata.
+**Por que importa.** Revogada cedo demais, a HS256 invalida de uma vez tudo o que ela ainda validava: a desconexão seria geral e imediata — até que se a volte para standby. O gesto deve então ser feito num momento em que se possa verificar e voltar atrás, não de passagem pela tela por outro motivo. **Corrigido em 15/09**: este parágrafo dizia « o único gesto realmente irreversível de todo o canteiro das chaves »; é a exclusão que o é, não a revogação (doc Supabase « JWT Signing Keys », tabela das ações).
 
 **O que conta como terminado.**
 
-- B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais — e B24 está saldado: os dois repositórios sem chave legacy, a vitrine publicada verificada.
+- B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais — e o inventário dos dois repositórios está feito: nenhuma chave legacy em `anarbib` nem em `pages`, a vitrine publicada verificada (adquirido em 15/09).
 - A revogação foi feita e um login, um cadastro e uma recuperação de senha foram verificados logo depois.
 
-**Dependências.** Item B18 terminado, e B24 saldado (o inventário dos dois repositórios).
+**Dependências.** Item B18 terminado (02/09). **B24 não bloqueia mais (levantado em 15/09)**: o inventário dos dois repositórios que ele exigia está feito; suas guardas (chave única e recusa das chaves legacy em `pages`) protegem a rotação seguinte, não esta.
 
 *Remissões : `item B18`*
 
@@ -538,14 +538,14 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **O que é.** Dois gestos no repositório `pages`, uma noite. (1) **Uma única cópia da chave**: tirá-la dos dez `index.html` para um `js/config.js` (ou um único `data-*` na tag raiz lido por `explorar.js`), para que uma rotação seja um commit de uma linha. (2) **Uma guarda que recusa uma chave legacy**: teste ou hook `pre-commit` que fica vermelho com `eyJhbGciOi` em qualquer lugar do repositório, e que verifica que a chave embutida começa com `sb_publishable_`. E no aplicativo: a lista dos repositórios a inventariar a cada rotação escrita em `B19` (feito em 08/09) e em `CONTRIBUTING.md`.
 
-**Por que importa.** B19 é o próximo gesto sobre as chaves e é irreversível: uma página esquecida não devolverá mais 401 nesse dia, devolverá uma desconexão geral. E seis dias de galeria vazia são seis dias em que a vitrine dizia ao público «esta rede não tem nenhuma biblioteca» — indistinguível de uma pane, como diz `DOC-SILENCE-1`.
+**Por que importa.** B19 é o próximo gesto sobre as chaves: nesse dia uma página esquecida não devolverá mais 401, devolverá uma desconexão geral — reversível (a chave revogada volta para standby), mas geral. *(Corrigido em 15/09: esta frase dizia o gesto irreversível.)* E seis dias de galeria vazia são seis dias em que a vitrine dizia ao público «esta rede não tem nenhuma biblioteca» — indistinguível de uma pane, como diz `DOC-SILENCE-1`.
 
 **O que conta como terminado.**
 
 - A chave da vitrine vive num único lugar, e uma guarda fica vermelha com qualquer chave legacy ou com uma chave que não comece por `sb_publishable_`.
 - `B19` e `CONTRIBUTING.md` nomeiam os repositórios a inventariar antes e depois de qualquer rotação.
 
-**Dependências.** Bloqueia **B19** (a revogação HS256 exige esse inventário). Repositório `pages`: só tocar depois do congelamento (volta de Bolonha, 14/09).
+**Dependências.** Não bloqueia mais **B19** (levantado em 15/09: o inventário está feito e verificado, e a revogação é reversível); os dois gestos protegem a rotação seguinte. Repositório `pages`: o congelamento acabou em 14/09.
 
 *Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
 
