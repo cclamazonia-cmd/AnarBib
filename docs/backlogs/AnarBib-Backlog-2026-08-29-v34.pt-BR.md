@@ -1210,11 +1210,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
 
-**Estado.** **Constatado em 15/09/2026** ao atribuir o lote Solidaires à sua biblioteca : `fn_batch_reassign_library` devolveu o aviso `library_without_tombo_pattern`. `libraries.tombo_pattern` (JSON `{prefix, year, sep, pad}`, lido por `fn_next_tombo` a cada exemplar publicado) e `bib_ref_prefix` / `bib_ref_pad` / `bib_ref_auto` (a cota) **não têm ecrã nenhum** : nem a página Biblioteca, nem a página Rede, nenhuma RPC os escreve. BLMF, BTL e MLEG foram configuradas **em SQL à mão** ; `blmf-teste` e Solidaires não têm nada. Uma biblioteca criada na app **não consegue publicar nenhum exemplar** enquanto um admin não escrever uma linha de SQL — e nada lho diz antes da primeira recusa. **E antes do tombo**, `publish_book_draft` recusa qualquer rascunho sem cota (`bib_ref`) : os 1 673 de Solidaires não têm nenhuma, e **nenhuma ferramenta numera um lote em massa**.
+**Estado.** **Constatado em 15/09/2026** ao atribuir o lote Solidaires à sua biblioteca : `fn_batch_reassign_library` devolveu o aviso `library_without_tombo_pattern`. `libraries.tombo_pattern` (JSON `{prefix, year, sep, pad}`, lido por `fn_next_tombo` a cada exemplar publicado) e `bib_ref_prefix` / `bib_ref_pad` / `bib_ref_auto` (a cota) **não têm ecrã nenhum** : nem a página Biblioteca, nem a página Rede, nenhuma RPC os escreve. BLMF, BTL e MLEG foram configuradas **em SQL à mão** ; `blmf-teste` e Solidaires não têm nada. Uma biblioteca criada na app **não consegue publicar nenhum exemplar** enquanto um admin não escrever uma linha de SQL — e nada lho diz antes da primeira recusa. **E antes do tombo**, `publish_book_draft` recusa qualquer rascunho sem cota (`bib_ref`) : os 1 673 de Solidaires não têm nenhuma, e **nenhuma ferramenta numera um lote em massa**. **E a arrumação :** o número de tombo nunca serviu para encontrar um livro na estante ; é a **cota de arrumação**, calculada na etiqueta de lombada — classe no campo `cdd` (texto livre, Dewey não imposto) e trigrama de autor·a. Sem classe, só o trigrama : arrumação alfabética, não temática. Medido em 15/09 : BTL 956 fichas classificadas em 2 184, BLMF 189 em 248, **MLEG 17 em 269**. Solidaires chega com **35 rubricas** próprias, guardadas como assuntos, e nenhuma classe.
 
 *Constato de 29/08, não reverificado desde então.*
 
-**O que é.** Um bloco « Numeração » em Biblioteca › Configuração, para a coordenação : prefixo, ano sim/não, separador, preenchimento a N dígitos, com **o exemplo renderizado ao vivo** e o último número atribuído ; o mesmo bloco para a cota. Uma RPC que escreve estas colunas com duas guardas : o prefixo é **único na rede** (`exemplares.tombo` é único em toda a base) e não muda depois de usado. E na Rede, ao criar uma biblioteca, o passo « numeração » **antes** da ativação.
+**O que é.** Um bloco « Numeração » em Biblioteca › Configuração, para a coordenação : prefixo, ano sim/não, separador, preenchimento a N dígitos, com **o exemplo renderizado ao vivo** e o último número atribuído ; o mesmo bloco para a cota. Uma RPC que escreve estas colunas com duas guardas : o prefixo é **único na rede** (`exemplares.tombo` é único em toda a base) e não muda depois de usado. E na Rede, ao criar uma biblioteca, o passo « numeração » **antes** da ativação. **Via 2, a arrumação temática de um lote importado** (pedida por Xavier em 15/09) : um gesto de lote « Passar as rubricas para a classe » que, para cada rascunho sem `cdd`, pega a rubrica da fonte (assuntos importados ou classificação local preservada) e a escreve no campo classe, segundo uma tabela rubrica → código de arrumação que a coordenação relê e valida antes de aplicar (35 linhas para Solidaires, não 1 673). A etiqueta de lombada segue sozinha. Mesmo padrão que a numeração das cotas : um lote, uma convenção, uma pré-visualização, uma aplicação.
 
 **Por que importa.** Uma biblioteca admitida que não pode publicar nada é uma biblioteca que a administração tem de desenrascar em SQL a cada admissão — exatamente a dependência de uma só pessoa que **A1**-**A3** querem desfazer.
 
@@ -1224,10 +1224,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 - Um prefixo já usado por outra biblioteca é recusado pelo servidor.
 - Solidaires publica o seu primeiro exemplar com um tombo da sua série, configurada no ecrã.
 - Um lote de rascunhos sem cota recebe as suas cotas num só gesto, pela ordem do lote.
+- Um lote importado recebe as suas classes de arrumação num só gesto, a partir de uma tabela rubrica → código relida pela coordenação ; as etiquetas de Solidaires levam a sua rubrica.
 
 **Dependências.** Nasce de **IMP-20** (registo §17). Ligado a **G7** e **C2**.
 
-*Remissões : `REGISTRE §17 IMP-20` · `anarbib-tombo-global-unique-collision` · `src/pages/biblioteca/BibliotecaPage.jsx` · `fn_next_tombo`*
+*Remissões : `REGISTRE §17 IMP-20` · `anarbib-tombo-global-unique-collision` · `src/pages/biblioteca/BibliotecaPage.jsx` · `fn_next_tombo` · `docs/cotation-et-cdd.md` · `src/pages/catalogacao/BookDraftForm.jsx (buildShelfLabel)`*
 
 ---
 
