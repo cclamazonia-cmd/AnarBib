@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Ongeldige tabel rubriek → klasse.",
   "rede.gazeta.sources.probe": "Bronnen nu testen",
   "rede.gazeta.sources.probeHint": "Gemeten vanaf de server van de Gazette, zonder een nummer aan te raken; resultaat binnen een minuut.",
-  "rede.gazeta.sources.probeStarted": "Test gestart: de statussen worden binnen een minuut vernieuwd."
+  "rede.gazeta.sources.probeStarted": "Test gestart: de statussen worden binnen een minuut vernieuwd.",
+  "rede.gazeta.correct": "Aanpassen",
+  "rede.gazeta.correct.hint": "Pas zelf aan wat publicatie van het bericht in de weg staat. De persoon hoort dat het met correcties is aangenomen, met de tekst zoals die verschijnt; de vertaling begint opnieuw.",
+  "rede.gazeta.correct.saveAccept": "Opslaan en aannemen",
+  "rede.gazeta.correct.save": "Correctie opslaan",
+  "rede.gazeta.correct.editedAt": "aangepast door het team op {date}",
+  "rede.gazeta.correct.showOriginal": "versie van de persoon tonen",
+  "rede.gazeta.correct.hideOriginal": "versie van de persoon verbergen",
+  "rede.gazeta.correct.original": "Versie van de persoon"
 }

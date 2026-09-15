@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Μη έγκυρος πίνακας θεματική → τάξη.",
   "rede.gazeta.sources.probe": "Δοκιμή των πηγών τώρα",
   "rede.gazeta.sources.probeHint": "Μέτρηση από τον διακομιστή της εφημερίδας, χωρίς να αγγίξει τεύχη· αποτέλεσμα μέσα σε ένα λεπτό.",
-  "rede.gazeta.sources.probeStarted": "Η δοκιμή ξεκίνησε: οι καταστάσεις ανανεώνονται μέσα σε ένα λεπτό."
+  "rede.gazeta.sources.probeStarted": "Η δοκιμή ξεκίνησε: οι καταστάσεις ανανεώνονται μέσα σε ένα λεπτό.",
+  "rede.gazeta.correct": "Διόρθωση",
+  "rede.gazeta.correct.hint": "Διόρθωσε μόνη σου ό,τι εμποδίζει τη δημοσίευση. Το άτομο θα ενημερωθεί ότι το σημείωμα κρατήθηκε με διορθώσεις, μαζί με το κείμενο που θα δημοσιευτεί· η μετάφραση ξεκινά από την αρχή.",
+  "rede.gazeta.correct.saveAccept": "Αποθήκευση και αποδοχή",
+  "rede.gazeta.correct.save": "Αποθήκευση διόρθωσης",
+  "rede.gazeta.correct.editedAt": "διορθώθηκε από την ομάδα στις {date}",
+  "rede.gazeta.correct.showOriginal": "εμφάνιση της εκδοχής του ατόμου",
+  "rede.gazeta.correct.hideOriginal": "απόκρυψη της εκδοχής του ατόμου",
+  "rede.gazeta.correct.original": "Εκδοχή του ατόμου"
 }

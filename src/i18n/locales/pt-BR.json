@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Tabela rubrica → classe inválida.",
   "rede.gazeta.sources.probe": "Testar as fontes agora",
   "rede.gazeta.sources.probeHint": "Mede a partir do servidor da gazeta, sem tocar nos números; resultado em menos de um minuto.",
-  "rede.gazeta.sources.probeStarted": "Teste lançado: os estados se atualizam dentro de um minuto."
+  "rede.gazeta.sources.probeStarted": "Teste lançado: os estados se atualizam dentro de um minuto.",
+  "rede.gazeta.correct": "Corrigir",
+  "rede.gazeta.correct.hint": "Corrige tu mesma o que impede a nota de sair. A pessoa será avisada de que foi retida com correções, com o texto que sairá; a tradução recomeça.",
+  "rede.gazeta.correct.saveAccept": "Guardar e aceitar",
+  "rede.gazeta.correct.save": "Guardar a correção",
+  "rede.gazeta.correct.editedAt": "corrigida pela equipe em {date}",
+  "rede.gazeta.correct.showOriginal": "ver a versão da pessoa",
+  "rede.gazeta.correct.hideOriginal": "ocultar a versão da pessoa",
+  "rede.gazeta.correct.original": "Versão da pessoa"
 }

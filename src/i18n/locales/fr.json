@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Table rubrique → classe invalide.",
   "rede.gazeta.sources.probe": "Tester les sources maintenant",
   "rede.gazeta.sources.probeHint": "Mesure depuis le serveur de la gazette, sans toucher aux numéros ; résultat sous une minute.",
-  "rede.gazeta.sources.probeStarted": "Test lancé : les statuts se rafraîchissent d’ici une minute."
+  "rede.gazeta.sources.probeStarted": "Test lancé : les statuts se rafraîchissent d’ici une minute.",
+  "rede.gazeta.correct": "Corriger",
+  "rede.gazeta.correct.hint": "Corrige toi-même ce qui empêche la brève de paraître. La personne sera prévenue qu’elle est retenue avec corrections, texte à l’appui ; la traduction repart.",
+  "rede.gazeta.correct.saveAccept": "Enregistrer et accepter",
+  "rede.gazeta.correct.save": "Enregistrer la correction",
+  "rede.gazeta.correct.editedAt": "corrigée par l’équipe le {date}",
+  "rede.gazeta.correct.showOriginal": "voir la version de la personne",
+  "rede.gazeta.correct.hideOriginal": "masquer la version de la personne",
+  "rede.gazeta.correct.original": "Version de la personne"
 }

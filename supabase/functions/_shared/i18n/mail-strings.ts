@@ -531,6 +531,18 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Het netwerkteam heeft je voorstel ‘{title}’ gelezen en aangenomen. Het komt op de pagina ‘Leven van het netwerk’ van het volgende nummer, vertaald in de tien talen van het netwerk. Bedankt voor het schrijven — van zulke berichten is die pagina gemaakt.",
     el: "Η ομάδα του δικτύου διάβασε την πρότασή σου «{title}» και την κράτησε. Θα μπει στη σελίδα «Ζωή του δικτύου» του επόμενου τεύχους, μεταφρασμένη στις δέκα γλώσσες του δικτύου. Ευχαριστούμε που έγραψες: από τέτοια σημειώματα φτιάχνεται η σελίδα."
   },
+  "gazette.contribution.accepted.corrected": {
+    "pt-BR": "A equipe fez algumas correções antes de a reter. Eis o texto tal como sairá:",
+    fr: "L'équipe a apporté quelques corrections avant de la retenir. Voici le texte tel qu'il paraîtra :",
+    es: "El equipo hizo algunas correcciones antes de retenerla. Este es el texto tal como saldrá:",
+    en: "The team made a few corrections before keeping it. Here is the text as it will appear:",
+    it: "L'équipe ha apportato alcune correzioni prima di accoglierla. Ecco il testo così come uscirà:",
+    de: "Das Team hat vor der Annahme einige Korrekturen vorgenommen. Hier der Text, wie er erscheinen wird:",
+    ca: "L'equip hi ha fet algunes correccions abans de retenir-la. Aquest és el text tal com sortirà:",
+    eo: "La teamo faris kelkajn korektojn antaŭ ol akcepti ĝin. Jen la teksto tia, kia ĝi aperos:",
+    nl: "Het team heeft enkele correcties aangebracht voor het werd aangenomen. Dit is de tekst zoals die verschijnt:",
+    el: "Η ομάδα έκανε μερικές διορθώσεις πριν το κρατήσει. Να το κείμενο όπως θα δημοσιευτεί:"
+  },
 
   // === Lettre de la fédération (double opt-in : confirmation + pages de retour) ===
   "lettre.optin.confirm.sub": {

@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Tabla rúbrica → clase inválida.",
   "rede.gazeta.sources.probe": "Probar las fuentes ahora",
   "rede.gazeta.sources.probeHint": "Mide desde el servidor de la gaceta, sin tocar los números; resultado en menos de un minuto.",
-  "rede.gazeta.sources.probeStarted": "Prueba lanzada: los estados se actualizan en menos de un minuto."
+  "rede.gazeta.sources.probeStarted": "Prueba lanzada: los estados se actualizan en menos de un minuto.",
+  "rede.gazeta.correct": "Corregir",
+  "rede.gazeta.correct.hint": "Corrige tú misme lo que impide que la nota salga. La persona será avisada de que fue retenida con correcciones, con el texto que saldrá; la traducción vuelve a empezar.",
+  "rede.gazeta.correct.saveAccept": "Guardar y aceptar",
+  "rede.gazeta.correct.save": "Guardar la corrección",
+  "rede.gazeta.correct.editedAt": "corregida por el equipo el {date}",
+  "rede.gazeta.correct.showOriginal": "ver la versión de la persona",
+  "rede.gazeta.correct.hideOriginal": "ocultar la versión de la persona",
+  "rede.gazeta.correct.original": "Versión de la persona"
 }

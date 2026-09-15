@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Invalid heading → class table.",
   "rede.gazeta.sources.probe": "Test the sources now",
   "rede.gazeta.sources.probeHint": "Measured from the gazette server, without touching any issue; results within a minute.",
-  "rede.gazeta.sources.probeStarted": "Test started: statuses refresh within a minute."
+  "rede.gazeta.sources.probeStarted": "Test started: statuses refresh within a minute.",
+  "rede.gazeta.correct": "Revise",
+  "rede.gazeta.correct.hint": "Fix yourself what keeps the bulletin from being published. The contributor will be told it was accepted with corrections, with the text as it will appear; translation starts over.",
+  "rede.gazeta.correct.saveAccept": "Save and accept",
+  "rede.gazeta.correct.save": "Save the correction",
+  "rede.gazeta.correct.editedAt": "revised by the team on {date}",
+  "rede.gazeta.correct.showOriginal": "show the contributor’s version",
+  "rede.gazeta.correct.hideOriginal": "hide the contributor’s version",
+  "rede.gazeta.correct.original": "Contributor’s version"
 }

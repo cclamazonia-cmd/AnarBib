@@ -82,13 +82,16 @@ export default function GazetteStaffPanel() {
   const [draft, setDraft] = useState(NEW_SOURCE); // formulaire d'ajout de source
   // GAZ-7 : rejeter ouvre un champ motif ; { id, note } tant qu'il n'est pas confirmé.
   const [rejecting, setRejecting] = useState(null);
+  // GAZ-9 : corriger soi-même une brève ; { id, title, body, link } pendant l'édition.
+  const [editing, setEditing] = useState(null);
+  const [showOriginal, setShowOriginal] = useState({}); // id -> bool
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       const [s, i, src, lg] = await Promise.all([
         supabase.from('gazette_submissions')
-          .select('id,rubric,locale,title,body,title_i18n,body_i18n,i18n_status,link,event_date,contributor_name,contributor_collective,contributor_email,status,created_at,review_note,parent_submission_id,resubmitted_at,resubmit_token_expires_at')
+          .select('id,rubric,locale,title,body,title_i18n,body_i18n,i18n_status,link,event_date,contributor_name,contributor_collective,contributor_email,status,created_at,review_note,parent_submission_id,resubmitted_at,resubmit_token_expires_at,staff_edited_at,original_title,original_body,original_link')
           .order('created_at', { ascending: false }),
         supabase.from('gazette_issues')
           .select('id,number,slug,masthead_title,cover_date,status,published_at,published_broadcast_at,build_mode')
@@ -128,6 +131,32 @@ export default function GazetteStaffPanel() {
       const { error } = await supabase.from('gazette_submissions').update(patch).eq('id', id);
       if (error) throw error;
       setRejecting(null);
+      setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
+      await load();
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  // GAZ-9 : entre accepter tel quel et rejeter — corriger soi-même et retenir.
+  // La base fait le reste (trigger) : elle garde la version de la personne,
+  // trace qui a corrigé, remet la traduction en attente, et l'acceptation dit à
+  // la personne que sa brève est retenue avec corrections, texte à l'appui.
+  async function saveCorrection(accept) {
+    if (!editing) return;
+    const title = editing.title.trim();
+    const body = editing.body.trim();
+    const link = editing.link.trim();
+    if (title.length < 2 || body.length < 2) return;
+    setBusy('sub:' + editing.id);
+    try {
+      const patch = { title, body, link: link || null };
+      if (accept) Object.assign(patch, { status: 'accepted', reviewed_by: user?.id || null, reviewed_at: new Date().toISOString() });
+      const { error } = await supabase.from('gazette_submissions').update(patch).eq('id', editing.id);
+      if (error) throw error;
+      setEditing(null);
       setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
       await load();
     } catch (e) {
@@ -381,6 +410,23 @@ export default function GazetteStaffPanel() {
                   </div>
                   <div style={{ fontWeight: 700, fontSize: '.98rem' }}>{(s.title_i18n && s.title_i18n[locale]) || s.title}</div>
                   <div style={{ fontSize: '.86rem', color: 'var(--brand-muted)', margin: '4px 0', whiteSpace: 'pre-wrap' }}>{(s.body_i18n && s.body_i18n[locale]) || s.body}</div>
+                  {/* GAZ-9 : une correction du staff se voit, et la version de la personne reste lisible */}
+                  {s.staff_edited_at && (
+                    <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', margin: '2px 0 4px' }}>
+                      {t({ id: 'rede.gazeta.correct.editedAt' }, { date: fmtDate(s.staff_edited_at) })}
+                      {' · '}
+                      <button type="button" className="cat-btn ghost" style={{ padding: '0 4px', fontSize: '.78rem' }}
+                        onClick={() => setShowOriginal((m) => ({ ...m, [s.id]: !m[s.id] }))}>
+                        {showOriginal[s.id] ? t({ id: 'rede.gazeta.correct.hideOriginal' }) : t({ id: 'rede.gazeta.correct.showOriginal' })}
+                      </button>
+                      {showOriginal[s.id] && (
+                        <div style={{ marginTop: 4, padding: '6px 10px', borderLeft: '3px solid rgba(255,255,255,.2)', whiteSpace: 'pre-wrap', color: '#f4f4f4' }}>
+                          <span className="cat-pill" style={{ fontSize: '.62rem', marginRight: 6 }}>{t({ id: 'rede.gazeta.correct.original' })}</span>
+                          <b>{s.original_title}</b>{'\n'}{s.original_body}{s.original_link ? `\n${s.original_link}` : ''}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>
                     {[s.contributor_name, s.contributor_collective].filter(Boolean).join(' · ') || '—'}
                     {s.event_date ? ` · ${fmtDate(s.event_date)}` : ''} · {fmtDate(s.created_at)}
@@ -417,13 +463,56 @@ export default function GazetteStaffPanel() {
                       {t({ id: 'rede.gazeta.accept' })}
                     </button>
                   )}
+                  {s.status !== 'published' && editing?.id !== s.id && (
+                    <button className="cat-btn secondary" disabled={busy === 'sub:' + s.id}
+                      onClick={() => { setRejecting(null); setEditing({ id: s.id, title: s.title, body: s.body, link: s.link || '' }); }}>
+                      {t({ id: 'rede.gazeta.correct' })}
+                    </button>
+                  )}
                   {s.status !== 'rejected' && rejecting?.id !== s.id && (
-                    <button className="cat-btn ghost" style={{ color: '#f87171' }} disabled={busy === 'sub:' + s.id} onClick={() => setRejecting({ id: s.id, note: '' })}>
+                    <button className="cat-btn ghost" style={{ color: '#f87171' }} disabled={busy === 'sub:' + s.id} onClick={() => { setEditing(null); setRejecting({ id: s.id, note: '' }); }}>
                       {t({ id: 'rede.gazeta.reject' })}
                     </button>
                   )}
                 </div>
               </div>
+              {/* GAZ-9 : l'éditeur de correction — enregistrer et accepter d'un seul geste */}
+              {editing?.id === s.id && (
+                <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+                  <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginBottom: 6 }}>{t({ id: 'rede.gazeta.correct.hint' })}</div>
+                  <label htmlFor={`gz-edit-title-${s.id}`} style={{ display: 'block', fontSize: '.76rem', color: 'var(--brand-muted)', marginBottom: 3 }}>
+                    {t({ id: 'federacao.gazeta.contribute.field.title' })}
+                  </label>
+                  <input id={`gz-edit-title-${s.id}`} value={editing.title} maxLength={200}
+                    onChange={(e) => setEditing({ ...editing, title: e.target.value })}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: 8, borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem', marginBottom: 6 }} />
+                  <label htmlFor={`gz-edit-body-${s.id}`} style={{ display: 'block', fontSize: '.76rem', color: 'var(--brand-muted)', marginBottom: 3 }}>
+                    {t({ id: 'federacao.gazeta.contribute.field.body' })}
+                  </label>
+                  <textarea id={`gz-edit-body-${s.id}`} rows={6} value={editing.body} maxLength={6000}
+                    onChange={(e) => setEditing({ ...editing, body: e.target.value })}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: 8, borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem', marginBottom: 6 }} />
+                  <label htmlFor={`gz-edit-link-${s.id}`} style={{ display: 'block', fontSize: '.76rem', color: 'var(--brand-muted)', marginBottom: 3 }}>
+                    {t({ id: 'federacao.gazeta.contribute.field.link' })}
+                  </label>
+                  <input id={`gz-edit-link-${s.id}`} type="url" value={editing.link} maxLength={500}
+                    onChange={(e) => setEditing({ ...editing, link: e.target.value })}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: 8, borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem' }} />
+                  <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end', marginTop: 8 }}>
+                    <button className="cat-btn ghost" disabled={busy === 'sub:' + s.id} onClick={() => setEditing(null)}>{t({ id: 'common.cancel' })}</button>
+                    {s.status === 'accepted'
+                      ? (
+                        <button className="cat-btn primary" disabled={busy === 'sub:' + s.id || editing.title.trim().length < 2 || editing.body.trim().length < 2} onClick={() => saveCorrection(false)}>
+                          {t({ id: 'rede.gazeta.correct.save' })}
+                        </button>
+                      ) : (
+                        <button className="cat-btn primary" disabled={busy === 'sub:' + s.id || editing.title.trim().length < 2 || editing.body.trim().length < 2} onClick={() => saveCorrection(true)}>
+                          {t({ id: 'rede.gazeta.correct.saveAccept' })}
+                        </button>
+                      )}
+                  </div>
+                </div>
+              )}
               {/* GAZ-7 : le rejet se motive ici, et l'écran dit si la personne sera prévenue */}
               {rejecting?.id === s.id && (
                 <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.08)' }}>

@@ -470,3 +470,6 @@ tests/sql/numerotation_et_rangement_tests.sql
 # GAZ-8 (15/09) : les sources se testent a la main depuis l Edge. La porte est ouverte a
 # authenticated, la garde de role (network_staff) vit dans le corps et refuse en 42501.
 tests/sql/gazette_sources_probe_tests.sql
+# GAZ-9 (15/09) : le staff corrige une breve avant de la retenir. T1 garde la version de la personne
+# et remet la traduction en attente ; T5 corrige et accepte d un seul geste (ordre des triggers indifferent).
+tests/sql/gazette_correction_staff_tests.sql

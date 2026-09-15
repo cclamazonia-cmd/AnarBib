@@ -194,9 +194,15 @@ async function handleContributionAccepted(payload, ctx) {
   const locale = String(payload.locale || "").trim() || ctx?.default_locale || "pt-BR";
   const title = String(payload.title || "");
   const sub = tMail(locale, "gazette.contribution.accepted.sub", { title });
-  const introHtml =
-    `<p>${esc(tMail(locale, "gazette.contribution.accepted.intro", { title }))}</p>`
-    + `<p><a href="${APP_URL}/federacao/gazeta">${APP_URL}/federacao/gazeta</a></p>`;
+  let introHtml = `<p>${esc(tMail(locale, "gazette.contribution.accepted.intro", { title }))}</p>`;
+  // GAZ-9 : retenue AVEC corrections du staff — la personne voit le texte qui
+  // paraîtra, pas seulement la nouvelle.
+  if (payload.corrected) {
+    introHtml += `<p>${esc(tMail(locale, "gazette.contribution.accepted.corrected"))}</p>`
+      + `<blockquote style="margin:.6rem 0;padding-left:.8rem;border-left:3px solid #cf1f27;color:#444;white-space:pre-wrap">`
+      + `<b>${esc(title)}</b>\n${esc(String(payload.body || ""))}</blockquote>`;
+  }
+  introHtml += `<p><a href="${APP_URL}/federacao/gazeta">${APP_URL}/federacao/gazeta</a></p>`;
   const { html, text } = renderEmail({
     locale,
     preheader: sub,

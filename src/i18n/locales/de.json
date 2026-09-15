@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Ungültige Tabelle Rubrik → Klasse.",
   "rede.gazeta.sources.probe": "Quellen jetzt prüfen",
   "rede.gazeta.sources.probeHint": "Gemessen vom Gazette-Server aus, ohne eine Ausgabe anzurühren; Ergebnis innerhalb einer Minute.",
-  "rede.gazeta.sources.probeStarted": "Prüfung gestartet: die Zustände aktualisieren sich innerhalb einer Minute."
+  "rede.gazeta.sources.probeStarted": "Prüfung gestartet: die Zustände aktualisieren sich innerhalb einer Minute.",
+  "rede.gazeta.correct": "Überarbeiten",
+  "rede.gazeta.correct.hint": "Überarbeite selbst, was der Veröffentlichung im Weg steht. Die Person erfährt, dass ihre Kurzmeldung mit Korrekturen angenommen wurde, samt Text; die Übersetzung beginnt neu.",
+  "rede.gazeta.correct.saveAccept": "Speichern und annehmen",
+  "rede.gazeta.correct.save": "Korrektur speichern",
+  "rede.gazeta.correct.editedAt": "vom Team überarbeitet am {date}",
+  "rede.gazeta.correct.showOriginal": "Fassung der Person anzeigen",
+  "rede.gazeta.correct.hideOriginal": "Fassung der Person ausblenden",
+  "rede.gazeta.correct.original": "Fassung der Person"
 }

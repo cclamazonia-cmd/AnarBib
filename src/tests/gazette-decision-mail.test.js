@@ -165,6 +165,20 @@ describe('gazette.contribution.accepted — la bonne nouvelle aussi', () => {
     expect(r.envois[0].html).toContain('https://app.anarbib.org/federacao/gazeta');
     expect(r.rendus[0].actionBox).toBeUndefined();
     expect(r.statutOutbox).toMatchObject({ status: 'sent' });
+    expect(r.envois[0].html).not.toContain('correcciones');
+  });
+
+  it('retenue AVEC corrections du staff (GAZ-9) : le courriel le dit et montre le texte qui paraîtra', async () => {
+    const traiter = monter([{
+      id: 4, status: 'queued', event: 'gazette.contribution.accepted',
+      payload: { to: 'louise@test.local', to_name: 'Louise', locale: 'fr', submission_id: 'sub-1', rubric: 'reseau',
+        title: 'Titre corrigé', body: 'Corps corrigé.\nDeuxième ligne.', corrected: true },
+    }]);
+    const r = await traiter(4);
+    expect(r.envois).toHaveLength(1);
+    expect(r.envois[0].html).toContain("L'équipe a apporté quelques corrections");
+    expect(r.envois[0].html).toContain('<b>Titre corrigé</b>');
+    expect(r.envois[0].html).toContain('Corps corrigé.\nDeuxième ligne.');
   });
 });
 
@@ -202,6 +216,7 @@ describe('mail-strings — les nouvelles clés existent dans les 10 locales', ()
       'gazette.contribution.rejected.resubmit.title', 'gazette.contribution.rejected.resubmit.cta',
       'gazette.contribution.rejected.resubmit.expires',
       'gazette.contribution.accepted.sub', 'gazette.contribution.accepted.intro',
+      'gazette.contribution.accepted.corrected',
     ];
     for (const k of cles) expect(strings._isComplete(k), k).toBe(true);
   });

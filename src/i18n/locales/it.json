@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Tabella rubrica → classe non valida.",
   "rede.gazeta.sources.probe": "Testare le fonti adesso",
   "rede.gazeta.sources.probeHint": "Misura dal server della gazzetta, senza toccare i numeri; risultato entro un minuto.",
-  "rede.gazeta.sources.probeStarted": "Test avviato: gli stati si aggiornano entro un minuto."
+  "rede.gazeta.sources.probeStarted": "Test avviato: gli stati si aggiornano entro un minuto.",
+  "rede.gazeta.correct": "Correggere",
+  "rede.gazeta.correct.hint": "Correggi tu stess* ciò che impedisce alla breve di uscire. La persona sarà avvisata che è stata accolta con correzioni, testo alla mano; la traduzione riparte.",
+  "rede.gazeta.correct.saveAccept": "Salvare e accogliere",
+  "rede.gazeta.correct.save": "Salvare la correzione",
+  "rede.gazeta.correct.editedAt": "corretta dall’équipe il {date}",
+  "rede.gazeta.correct.showOriginal": "vedere la versione della persona",
+  "rede.gazeta.correct.hideOriginal": "nascondere la versione della persona",
+  "rede.gazeta.correct.original": "Versione della persona"
 }

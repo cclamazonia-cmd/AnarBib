@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Taula rúbrica → classe no vàlida.",
   "rede.gazeta.sources.probe": "Provar les fonts ara",
   "rede.gazeta.sources.probeHint": "Mesura des del servidor de la gaseta, sense tocar els números; resultat en menys d’un minut.",
-  "rede.gazeta.sources.probeStarted": "Prova llançada: els estats s’actualitzen en menys d’un minut."
+  "rede.gazeta.sources.probeStarted": "Prova llançada: els estats s’actualitzen en menys d’un minut.",
+  "rede.gazeta.correct": "Corregir",
+  "rede.gazeta.correct.hint": "Corregeix tu mateixa el que impedeix que la breu surti. La persona serà avisada que s’ha retingut amb correccions, amb el text que sortirà; la traducció torna a començar.",
+  "rede.gazeta.correct.saveAccept": "Desar i acceptar",
+  "rede.gazeta.correct.save": "Desar la correcció",
+  "rede.gazeta.correct.editedAt": "corregida per l’equip el {date}",
+  "rede.gazeta.correct.showOriginal": "veure la versió de la persona",
+  "rede.gazeta.correct.hideOriginal": "amagar la versió de la persona",
+  "rede.gazeta.correct.original": "Versió de la persona"
 }

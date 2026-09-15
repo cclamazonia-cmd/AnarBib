@@ -6671,5 +6671,13 @@
   "error.rubrics.batch.bad_map": "Nevalida tabelo rubriko → klaso.",
   "rede.gazeta.sources.probe": "Testi la fontojn nun",
   "rede.gazeta.sources.probeHint": "Mezuras el la servilo de la gazeto, ne tuŝante la numerojn; rezulto ene de minuto.",
-  "rede.gazeta.sources.probeStarted": "Testo lanĉita: la statoj ĝisdatiĝos ene de minuto."
+  "rede.gazeta.sources.probeStarted": "Testo lanĉita: la statoj ĝisdatiĝos ene de minuto.",
+  "rede.gazeta.correct": "Korekti",
+  "rede.gazeta.correct.hint": "Korektu mem tion, kio malhelpas la aperon de la novaĵeto. La persono estos avertita, ke ĝi estas akceptita kun korektoj, kun la teksto aperonta; la traduko rekomenciĝas.",
+  "rede.gazeta.correct.saveAccept": "Konservi kaj akcepti",
+  "rede.gazeta.correct.save": "Konservi la korekton",
+  "rede.gazeta.correct.editedAt": "korektita de la teamo la {date}",
+  "rede.gazeta.correct.showOriginal": "vidi la version de la persono",
+  "rede.gazeta.correct.hideOriginal": "kaŝi la version de la persono",
+  "rede.gazeta.correct.original": "Versio de la persono"
 }
