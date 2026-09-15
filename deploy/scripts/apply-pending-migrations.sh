@@ -41,13 +41,17 @@ if [ "$SU" != "postgres" ]; then
 fi
 
 # Initialisation de la table de suivi si nécessaire
+# Le GRANT garantit que les deux rôles peuvent utiliser le schéma même si
+# c'est l'autre qui l'a créé lors d'un run précédent.
 psql -q -U "$SU" -d postgres -c "
 CREATE SCHEMA IF NOT EXISTS supabase_migrations;
+GRANT ALL ON SCHEMA supabase_migrations TO postgres, supabase_admin;
 CREATE TABLE IF NOT EXISTS supabase_migrations.schema_migrations (
   version text PRIMARY KEY,
   statements text[],
   name text
 );
+GRANT ALL ON ALL TABLES IN SCHEMA supabase_migrations TO postgres, supabase_admin;
 " >/dev/null
 
 LISTE=$(ls "$MIG_DIR"/*.sql 2>/dev/null | grep -v '/_' | sort)
