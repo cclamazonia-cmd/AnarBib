@@ -62,7 +62,11 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **15 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `60e0580a`, premier relevé après Bologne (13/09) et la fin du gel (14/09). Depuis le relevé du 08/09 : quatre commits seulement au dépôt — les deux correctifs du jeton de récupération (08/09), `OPS-9` au registre, et ce soir **un lot importé a une bibliothèque de destination** (migration `20260915184154`, deux RPC nouvelles) ; en production, **une cinquième bibliothèque** est née le 14/09 (Solidaires, Paris — inactive, privée, une coordination rattachée) et les 1 673 brouillons du lot Solidaires ont désormais une propriétaire. Toutes les lignes ont été remesurées, advisors compris. Une alerte d'exploitation en sort, **I24**.
 
+<<<<<<< Updated upstream
 **Fraîcheur des constats au 2026-09-15.** **72 items sur 89** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+=======
+**Fraîcheur des constats au 2026-09-15.** **74 items sur 91** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, E21, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+>>>>>>> Stashed changes
 
 ### Base
 
@@ -71,11 +75,11 @@ Relevé du **15 septembre 2026** au soir — production interrogée en lecture s
 | Tables `public` | **191** | toutes avec RLS activé, **332 policies** — +4 tables depuis le 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), toutes classées au filet BG2 (191 sur 191 au rejeu local du 05/09). |
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
-| Fonctions applicatives | **909** | `public` 678 · `api` 188 · `ingest` 34 · `private` 9. Dont **696 SECURITY DEFINER** — +2 le 15/09, `fn_batch_reassign_library` (admin réseau) et `fn_batch_owner_libraries` (staff), exposées à `authenticated` et **pas encore portées à l'audit 0029** (deux verdicts à écrire, `DOC-GRANT-1`). Aucune fonction sans `search_path` figé (suite `hygiene_search_path_et_initplan`). |
-| Migrations appliquées | **315** | 315 migrations numérotées au dépôt = **315 appliquées, alignement exact** (vérifié le 15/09 à 21 h). **+1 depuis le 08/09** : `20260915184154`, un lot importé a une bibliothèque de destination (`ingest.partner_catalog_sources.destination_library_id`, `owner_library_id` tamponné à la promotion, réattribution par l'admin réseau). Rien pendant le gel du 08 au 14/09. |
+| Fonctions applicatives | **917** | `public` 686 · `api` 188 · `ingest` 34 · `private` 9. Dont **704 SECURITY DEFINER** — +8 le 15/09 au soir : les sept de E21 (numérotation d'une bibliothèque, cotes et classes de rangement d'un lot) et `fn_gazette_submission_decision_enqueue` (GAZ-7, interne). Les 909 / 696 du relevé de 21 h sont ceux d'avant les deux livraisons de la soirée. |
+| Migrations appliquées | **317** | 317 migrations numérotées au dépôt = **317 appliquées, alignement exact** (vérifié le 15/09 à 22 h 45, après les deux livraisons de la soirée : `20260915193525` GAZ-7 et `20260915201252` E21). 325 fichiers avec le gabarit et les 7 rollbacks. |
 | Jobs `pg_cron` | **38** | actifs — +1 depuis le 03/09 (le tick de pré-traduction des titres d'œuvre, `work-titles-autofill`). |
-| Avis de sécurité | **465** | 0 ERROR · **413** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`). Le 28 (`anon`) est la **valeur attendue** (T10). Le 413 (`authenticated`) = 411 justifiés au 06/09 **+ 2 du 15/09** (`fn_batch_reassign_library`, `fn_batch_owner_libraries`) à porter au complément d'audit. **Le format de l'advisor a changé** : une entrée par lint avec un tableau `findings`, plus une entrée par objet — un compteur qui compte les entrées lit désormais « 3 » ; compter `findings`. |
-| Avis de performance | **423** | **351 « index inutilisés »** (368 le 06/09 — les compteurs repartent du 02/09 et baissent à mesure que les index servent). **38 clés étrangères non indexées, toutes assumées et gardées**. 25 tables à policies permissives multiples. **8 tables sans clé primaire**. 1 avis de connexions. Aucun `auth_rls_initplan` (gardé par la suite d'hygiène depuis le 06/09). |
+| Avis de sécurité | **471** | 0 ERROR · **419** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). 419 = 413 + les six RPC de E21 ouvertes à `authenticated` (`fn_library_numbering_get`/`_set`, `fn_batch_caller_can_edit`, `fn_batch_assign_bib_refs`, `fn_batch_rubrics`, `fn_batch_apply_rubric_classes`) — **huit verdicts à écrire** au complément de `AUDIT_execute_authenticated_2026-09-01` (les deux du lot à bibliothèque de destination et ces six). Format groupé : compter `findings`, pas les entrées. |
+| Avis de performance | **422** | **350 « index inutilisés »** (351 à 21 h, 368 le 06/09 — les compteurs repartent du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. Rien de neuf depuis la soirée. |
 | Schémas de rebut | **1** | `conv_backup` seul — il porte les trois tables de revue humaine de C3 et **ne se purge pas**. `backup_2026_05_07` est parti le 04/09 au soir (B9, décision de Xavier après relecture des 50 lignes). |
 
 ### Fonctions Edge
@@ -108,11 +112,11 @@ Relevé du **15 septembre 2026** au soir — production interrogée en lecture s
 
 | | | |
 |---|---:|---|
-| Commits | **2 645** | sur `main`, au 15/09 au soir — **11 commits depuis le 08/09**, dont quatre après le relevé du 08/09 : les deux correctifs du jeton de récupération mort dans l'URL (08/09), `OPS-9` au registre, et la bibliothèque de destination des lots (15/09). Le gel du 08 au 14/09 a tenu. |
-| Fichiers `src/` | **318** | 81 pages, 93 composants ; +4 depuis le 08/09 : `lib/clearAuthHash.js`, `lib/recoveryView.js`, le test `recovery-dead-token` (jeton mort dans l'URL) et l'écran des lots (colonne « Bibliothèque », réattribution). |
-| Clés i18n | **6 592** | par locale, **parité stricte sur les 10**, gardée en CI ; +21 le 15/09 (bibliothèque de destination, réattribution, avertissements). |
-| Tests | **469 + 99** | 469 tests JS (vitest, gate bloquant ; +12 depuis le 08/09 : `recovery-dead-token` et le reste) + **99 suites SQL** dans `ci-suites.txt` (+1 : `lot_importe_bibliotheque_de_destination`). CI verte sur le push du 15/09. |
-| Marqueurs de dette | **21** | dont 4 dans `src/` (motifs `TODO`/`FIXME`, casse exacte ; 17 le 03/09 — les quatre de plus sont hors `src/`, dans le code du 05/09). Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
+| Commits | **2 675** | sur `main`, au 15/09 à 22 h 45 — **30 commits entre 21 h et 22 h 15**, tous de la session voisine : la **PR #28 fusionnée** (`f179f1ff`, installateur de Bastien, 17 commits repris), **GAZ-7** (trois commits : base, Edge Functions, front), **E21** livré (`f7bf927c`), B19 dégelé, I16 et I19 annotés. Le gel du 08 au 14/09 avait tenu (11 commits en une semaine). |
+| Fichiers `src/` | **321** | 81 pages, 94 composants ; +3 depuis le relevé de 21 h : `components/library/LibraryNumberingSection.jsx` (E21, le bloc « Numérotation » de Biblioteca › Configuração) et les deux bancs de GAZ-7 (`gazette-decision-mail`, `submit-gazette-contribution`). |
+| Clés i18n | **6 670** | par locale, **parité stricte sur les 10**, gardée en CI ; +78 dans la soirée du 15/09 (GAZ-7 : motif du rejet et reprise ; E21 : bloc de numérotation, cotes et rubriques d'un lot), +21 à 21 h (bibliothèque de destination). |
+| Tests | **486 + 101** | 486 tests JS (vitest, gate bloquant ; +17 dans la soirée : les deux bancs de GAZ-7 et le reste) + **101 suites SQL** dans `ci-suites.txt` (+2 : `gazette_reprise_tests`, `numerotation_et_rangement_tests`). Vitest relancé en entier à 22 h 30 : 486/486 en 45 s. CI verte : la migration 317 est en production. |
+| Marqueurs de dette | **18** | dont 4 dans `src/` — **recompté à méthode fixe** (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au commit `60e0580a` comme à `f7bf927c`, la soirée n'en a ajouté aucun ; le « 21 » du relevé précédent venait d'un balayage plus large. Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
 
@@ -1211,6 +1215,33 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
 
+<<<<<<< Updated upstream
+=======
+#### E21 — La série de numéros d'inventaire (tombo) et le préfixe de cote d'une bibliothèque ne se règlent nulle part dans l'application
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript, SQL / PostgreSQL
+
+**État.** **Constaté le 15/09/2026** en attribuant le lot Solidaires à sa bibliothèque : `fn_batch_reassign_library` a rendu l'avertissement `library_without_tombo_pattern`. `libraries.tombo_pattern` — un JSON `{prefix, year, sep, pad}` lu par `fn_next_tombo` à chaque exemplaire publié — et `bib_ref_prefix` / `bib_ref_pad` / `bib_ref_auto` (la cote, générée par le formulaire de notice) n'ont **aucun écran** : la page Biblioteca ne les montre pas, la page Réseau non plus, et aucune RPC ne les écrit. BLMF (`CCLA.` + année), BTL (`BTL-TL-EX-`, six chiffres) et MLEG (`MLEG-` + année, quatre chiffres) ont été réglées **en SQL à la main** ; `blmf-teste` et Solidaires n'ont rien. Une bibliothèque créée dans l'app ne peut donc **publier aucun exemplaire** — `fn_next_tombo` lève `tombo_pattern_not_configured` — tant qu'un admin n'a pas écrit une ligne SQL, et rien ne le lui dit avant le premier refus. **Et avant même le tombo**, `publish_book_draft` refuse tout brouillon sans cote (`error.publish.bib_ref_required`) : les 1 673 brouillons Solidaires n'en ont aucune, le formulaire ne génère la cote qu'une notice à la fois, et **aucun outil ne numérote un lot en masse**. **Et le rangement, question de Xavier du 15/09 :** le numéro d'inventaire n'a jamais servi à retrouver un livre sur un rayon ; c'est la **cote de rangement** qui le fait, et AnarBib la calcule sur l'étiquette de dos — classe renseignée dans le champ `cdd` (texte libre, Dewey non imposé), puis trigramme d'auteur·rice ou mot du titre. Sans classe, l'étiquette ne porte que le trigramme : un classement alphabétique, pas thématique. Mesuré le 15/09 : BTL 956 notices classées sur 2 184, BLMF 189 sur 248, **MLEG 17 sur 269** ; le champ d'emplacement de l'exemplaire (`shelf_location`) est quasi vide (14 exemplaires, remplis avec le nom de la bibliothèque). Solidaires arrive avec **35 rubriques** propres, conservées comme sujets sur chacun des 1 673 brouillons, et aucune classe.
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Un bloc « Numérotation » dans Biblioteca › Configuração, pour la coordination : préfixe, année oui/non, séparateur, remplissage à N chiffres, avec **l'exemple rendu en direct** (`SOL-2026-00001`) et le dernier numéro attribué ; le même bloc pour la cote (`bib_ref_prefix`, `bib_ref_pad`, `bib_ref_auto`). Une RPC qui écrit ces colonnes avec deux gardes serveur : le préfixe est **unique dans le réseau** — `exemplares.tombo` est unique sur toute la base, deux bibliothèques au même préfixe se voleraient leurs numéros (mémoire `anarbib-tombo-global-unique-collision`) — et il ne change plus une fois qu'un exemplaire l'a utilisé. Et dans Réseau, à la création d'une bibliothèque, l'étape « numérotation » **avant** l'activation : c'est là que l'oubli naît. Enfin, un geste de lot « Attribuer les cotes manquantes » (coordination de la bibliothèque propriétaire) qui numérote en masse, dans l'ordre du lot, les brouillons sans `bib_ref` selon la convention de leur bibliothèque — sinon Solidaires devra ouvrir 1 673 notices une à une. En attendant, la recette SQL est dans le registre (`IMP-20`). **Voie 2, le rangement thématique d'un lot importé** (demandée par Xavier le 15/09) : un geste de lot « Reporter les rubriques dans la classe » qui, pour chaque brouillon sans `cdd`, prend la rubrique de la source (sujets importés `book_draft_subjects`, ou `assunto_local_sugerido` / la classification locale préservée) et l'écrit dans le champ classe, selon une table de correspondance rubrique → code de rangement que la coordination relit et valide avant d'appliquer (35 lignes pour Solidaires, pas 1 673). L'étiquette de dos suit d'elle-même : « rubrique / trigramme ». Même patron que la numérotation des cotes : un lot, une convention, un aperçu, une application. À terme, l'étiquette lit le système de classification déclaré par la bibliothèque (`cataloging_classification_system`) au lieu du seul champ CDD.
+
+**Pourquoi ça compte.** Une bibliothèque admise qui ne peut rien publier est une bibliothèque que l'administration doit dépanner en SQL à chaque admission — exactement la dépendance à une seule personne que **A1**-**A3** veulent défaire. Et le premier refus arrive au pire moment : à la publication d'un lot de 1 673 notices, après la révision.
+
+**Ce qui compte comme fini.**
+
+- Une coordination règle sa série de tombos et sa cote depuis Biblioteca, sans SQL, et voit l'exemple rendu avant d'enregistrer.
+- Un préfixe déjà pris par une autre bibliothèque est refusé par le serveur, pas seulement par l'écran.
+- Solidaires publie son premier exemplaire avec un tombo de sa série, réglée depuis l'écran.
+- Un lot de brouillons sans cote reçoit ses cotes en un geste, dans l'ordre du lot, et le rapport de révision ne signale plus de cote manquante.
+- Un lot importé reçoit ses classes de rangement en un geste, depuis une table rubrique → code relue par la coordination ; les étiquettes de dos de Solidaires portent leur rubrique, pas seulement le trigramme d'auteur·rice.
+
+**Dépendances.** Né de **IMP-20** (registre §17) : le lot Solidaires est attribué mais ne se publie pas tant que la série n'existe pas. Lié à **G7** (admission) et **C2** (le lot lui-même).
+
+*Renvois : `REGISTRE §17 IMP-20` · `anarbib-tombo-global-unique-collision` · `src/pages/biblioteca/BibliotecaPage.jsx` · `fn_next_tombo` · `docs/cotation-et-cdd.md` · `src/pages/catalogacao/BookDraftForm.jsx (buildShelfLabel)`*
+
+>>>>>>> Stashed changes
 ---
 
 ### F — Courriel et notifications
@@ -2666,4 +2697,8 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
+<<<<<<< Updated upstream
 Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 89 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `60e0580a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+=======
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 91 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `f7bf927c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+>>>>>>> Stashed changes
