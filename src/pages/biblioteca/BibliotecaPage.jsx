@@ -23,6 +23,7 @@ import ExchangeFollowupPanel from '@/components/library/ExchangeFollowupPanel';
 import LibraryContactProfileSection from '@/components/library/LibraryContactProfileSection';
 import LibraryPublicContactSection from '@/components/library/LibraryPublicContactSection';
 import LocaleSelector from '@/components/library/LocaleSelector';
+import LibraryNumberingSection from '@/components/library/LibraryNumberingSection'; /* E21 : serie de tombos et cote (15/09/2026) */
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
 import EventosPanel from '@/components/biblioteca/EventosPanel';
@@ -1520,6 +1521,8 @@ export default function BibliotecaPage() {
               <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.identity.publicMessage' })}</label><textarea value={serviceState.public_message||''} onChange={e=>setSS('public_message',e.target.value)} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({id:'biblioteca.identity.publicMessagePlaceholder'})} /></div>
             </div>
           </div>}
+          {/* E21 (15/09/2026) : la serie de numeros d'inventaire et la cote se reglent ici, plus en SQL */}
+          <LibraryNumberingSection libraryId={libraryId} canEdit={isCoord} />
           {/* OPENING-HOURS — horaires/permanences hebdomadaires (migration 20260617004224) */}
           <div style={bx}>
             <h4 style={{ margin:'0 0 4px' }}>{t({ id: 'biblioteca.openingHours.title' })}</h4>

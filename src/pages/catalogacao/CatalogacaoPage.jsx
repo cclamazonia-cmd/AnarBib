@@ -632,6 +632,79 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     );
   }
 
+  // ── Cotes manquantes et classes de rangement d'un lot (E21, 15/09/2026) ──
+  // publish_book_draft refuse tout brouillon sans cote, et le formulaire ne
+  // la genere qu'une notice a la fois : un lot importe en recoit ici en un
+  // geste, dans l'ordre du lot, a la suite de la serie de sa bibliotheque
+  // (fn_batch_assign_bib_refs : apercu, puis application). Et le numero
+  // d'inventaire ne range rien : c'est la classe (champ cdd) qui fait la cote
+  // de rangement de l'etiquette — la rubrique laissee par l'import se reporte
+  // dans la classe par une table rubrique -> code relue par la coordination
+  // (fn_batch_rubrics / fn_batch_apply_rubric_classes).
+  const [bibRefs, setBibRefs] = useState(null);     // { batch, preview, loading, applying }
+  const [rubrics, setRubrics] = useState(null);     // { batch, rows, map, overwrite, loading, applying }
+
+  async function openBibRefs(b) {
+    setBibRefs({ batch: b, preview: null, loading: true, applying: false });
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_assign_bib_refs', { p_batch_id: Number(b.id), p_apply: false });
+      if (error) throw error;
+      setBibRefs({ batch: b, preview: data, loading: false, applying: false });
+    } catch (err) {
+      setBibRefs(null);
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
+  async function applyBibRefs() {
+    if (!bibRefs?.batch) return;
+    setBibRefs(prev => ({ ...prev, applying: true }));
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_assign_bib_refs', { p_batch_id: Number(bibRefs.batch.id), p_apply: true });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.batch.bibrefs.ok' }, { count: Number(data?.updated ?? 0), first: data?.first || '', last: data?.last || '' }), kind: 'ok' });
+      setBibRefs(null);
+      onRefresh();
+    } catch (err) {
+      setBibRefs(prev => (prev ? { ...prev, applying: false } : prev));
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
+  async function openRubrics(b) {
+    setRubrics({ batch: b, rows: [], map: {}, overwrite: false, loading: true, applying: false });
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_rubrics', { p_batch_id: Number(b.id) });
+      if (error) throw error;
+      setRubrics({ batch: b, rows: data || [], map: {}, overwrite: false, loading: false, applying: false });
+    } catch (err) {
+      setRubrics(null);
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
+  async function applyRubrics() {
+    if (!rubrics?.batch) return;
+    const map = {};
+    Object.entries(rubrics.map).forEach(([k, v]) => { if (String(v || '').trim()) map[k] = String(v).trim(); });
+    if (Object.keys(map).length === 0) return;
+    setRubrics(prev => ({ ...prev, applying: true }));
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_apply_rubric_classes', {
+        p_batch_id: Number(rubrics.batch.id), p_map: map, p_overwrite: rubrics.overwrite === true,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.batch.rubrics.ok' }, {
+        updated: Number(data?.updated ?? 0), kept: Number(data?.skipped_has_class ?? 0), unmapped: Number(data?.skipped_unmapped ?? 0),
+      }), kind: 'ok' });
+      setRubrics(null);
+      onRefresh();
+    } catch (err) {
+      setRubrics(prev => (prev ? { ...prev, applying: false } : prev));
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
   async function submitReassign() {
     if (!reassign?.libraryId) return;
     setReassigning(true);
@@ -922,6 +995,97 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
         </div>
       )}
 
+      {/* Cotes manquantes d'un lot : apercu puis application (E21) */}
+      {bibRefs && (
+        <div role="dialog" aria-modal="true" onClick={() => !bibRefs.applying && setBibRefs(null)}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div onClick={e => e.stopPropagation()}
+            style={{ maxWidth: 520, width: '100%', padding: 18, borderRadius: 12, background: 'var(--brand-panel-bg, #161616)', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.12))' }}>
+            <h4 style={{ margin: '0 0 8px', fontSize: '.95rem' }}>{t({ id: 'catalogacao.batch.bibrefs.title' })}</h4>
+            {bibRefs.loading ? (
+              <p style={{ color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'common.loading' })}</p>
+            ) : Number(bibRefs.preview?.candidates ?? 0) === 0 ? (
+              <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.batch.bibrefs.none' })}</p>
+            ) : (
+              <p style={{ margin: '0 0 12px', fontSize: '.85rem' }}>
+                {t({ id: 'catalogacao.batch.bibrefs.preview' }, {
+                  count: Number(bibRefs.preview.candidates), name: bibRefs.batch.name,
+                  library: bibRefs.preview.library_name || '', first: bibRefs.preview.first, last: bibRefs.preview.last,
+                })}
+              </p>
+            )}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 14 }}>
+              <button className="ab-button ab-button--ghost" style={{ fontSize: '.8rem', padding: '6px 12px' }}
+                disabled={bibRefs.applying} onClick={() => setBibRefs(null)}>{t({ id: 'common.cancel' })}</button>
+              {Number(bibRefs.preview?.candidates ?? 0) > 0 && (
+                <button className="ab-button ab-button--secondary" style={{ fontSize: '.8rem', padding: '6px 12px' }}
+                  disabled={bibRefs.applying || bibRefs.loading} onClick={applyBibRefs}>
+                  {bibRefs.applying ? t({ id: 'common.saving' }) : t({ id: 'catalogacao.batch.bibrefs.apply' })}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Classes de rangement depuis les rubriques du lot (E21, voie 2) */}
+      {rubrics && (
+        <div role="dialog" aria-modal="true" onClick={() => !rubrics.applying && setRubrics(null)}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div onClick={e => e.stopPropagation()}
+            style={{ maxWidth: 760, width: '100%', maxHeight: '85vh', overflow: 'auto', padding: 18, borderRadius: 12, background: 'var(--brand-panel-bg, #161616)', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.12))' }}>
+            <h4 style={{ margin: '0 0 8px', fontSize: '.95rem' }}>{t({ id: 'catalogacao.batch.rubrics.title' })}</h4>
+            <p style={{ margin: '0 0 12px', fontSize: '.82rem', color: 'var(--brand-muted, #aaa)' }}>
+              {t({ id: 'catalogacao.batch.rubrics.intro' }, { name: rubrics.batch.name })}
+            </p>
+            {rubrics.loading ? (
+              <p style={{ color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'common.loading' })}</p>
+            ) : rubrics.rows.length === 0 ? (
+              <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.batch.rubrics.empty' })}</p>
+            ) : (
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.82rem' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,.1)' }}>
+                    <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.batch.rubrics.thRubric' })}</th>
+                    <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.batch.rubrics.thDrafts' })}</th>
+                    <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.batch.rubrics.thCode' })}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rubrics.rows.map((r, i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+                      <td style={{ padding: '6px 8px' }}>{r.rubric ?? <span style={{ color: 'var(--brand-muted, #888)' }}>{t({ id: 'catalogacao.batch.rubrics.noRubric' })}</span>}</td>
+                      <td style={{ padding: '6px 8px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                        {r.drafts} <span style={{ color: 'var(--brand-muted, #888)' }}>({r.without_class} {t({ id: 'catalogacao.batch.rubrics.thWithout' })})</span>
+                      </td>
+                      <td style={{ padding: '6px 8px' }}>
+                        {r.rubric != null && (
+                          <input type="text" value={rubrics.map[r.rubric] || ''} maxLength={40}
+                            onChange={e => setRubrics(prev => ({ ...prev, map: { ...prev.map, [r.rubric]: e.target.value } }))}
+                            style={{ width: '100%', padding: '5px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.82rem' }} />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 12, fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>
+              <input type="checkbox" checked={rubrics.overwrite} onChange={e => setRubrics(prev => ({ ...prev, overwrite: e.target.checked }))} />
+              {t({ id: 'catalogacao.batch.rubrics.overwrite' })}
+            </label>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 14 }}>
+              <button className="ab-button ab-button--ghost" style={{ fontSize: '.8rem', padding: '6px 12px' }}
+                disabled={rubrics.applying} onClick={() => setRubrics(null)}>{t({ id: 'common.cancel' })}</button>
+              <button className="ab-button ab-button--secondary" style={{ fontSize: '.8rem', padding: '6px 12px' }}
+                disabled={rubrics.applying || rubrics.loading || !Object.values(rubrics.map).some(v => String(v || '').trim())} onClick={applyRubrics}>
+                {rubrics.applying ? t({ id: 'common.saving' }) : t({ id: 'catalogacao.batch.rubrics.apply' })}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Reattribuer un lot a une bibliotheque (administration du reseau) */}
       {reassign && (
         <div role="dialog" aria-modal="true" onClick={() => !reassigning && setReassign(null)}
@@ -990,6 +1154,14 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                           <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                             onClick={() => requestReview(b)}>{t({id:'catalogacao.batch.review.request'})}</button>
                         )}
+                      </>
+                    )}
+                    {isCoord && (
+                      <>
+                        <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                          onClick={() => openBibRefs(b)}>{t({id:'catalogacao.batch.bibrefs'})}</button>
+                        <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                          onClick={() => openRubrics(b)}>{t({id:'catalogacao.batch.rubrics'})}</button>
                       </>
                     )}
                     {isNetworkAdmin && (

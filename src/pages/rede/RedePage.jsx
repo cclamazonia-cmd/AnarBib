@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -16,6 +16,7 @@ import GazetteStaffPanel from '@/components/rede/GazetteStaffPanel';
 import LettreStaffPanel from '@/components/rede/LettreStaffPanel';
 import InvitationsPanel from '@/components/rede/InvitationsPanel';
 import BatchReviewsPanel from '@/components/rede/BatchReviewsPanel'; /* revision des lots importes (05/09/2026) */
+import LibraryNumberingSection from '@/components/library/LibraryNumberingSection'; /* E21 : numerotation d'une biblio par l'admin (15/09/2026) */
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { normalizePublicId } from '@/lib/publicId';
@@ -94,6 +95,9 @@ export default function RedePage() {
   // ── Data ────────────────────────────────────────────────
   const [globalStats, setGlobalStats] = useState(null);
   const [libCards, setLibCards] = useState([]);
+  // E21 : une bibliotheque nee ici ne peut rien publier tant que sa serie de
+  // tombos n'existe pas — l'admin la regle depuis cette liste, avant l'activation.
+  const [numberingLibId, setNumberingLibId] = useState(null);
   const [requests, setRequests] = useState([]);
   const [reqFilter, setReqFilter] = useState('');
   const [selectedReq, setSelectedReq] = useState(null);
@@ -691,7 +695,8 @@ export default function RedePage() {
               <div>{t({ id: 'nav.library' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.th.service' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.readers' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.staff' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.exemplars' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOpenShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOverdueShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.reservationsActiveShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'common.actions' })}</div>
             </div>
             {libCards.map((lib,i) => (
-              <div key={lib.id} style={{ display:'grid', gridTemplateColumns: 'minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .8fr)', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
+              <Fragment key={lib.id}>
+              <div style={{ display:'grid', gridTemplateColumns: 'minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .8fr)', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
                 <div>
                   <div style={{ fontSize:'.9rem', fontWeight:600 }}>{lib.name} <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ fontSize:'.6rem' }}>{lib.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span></div>
                   <div style={{ fontSize:'.78rem', color:'var(--brand-muted)' }}>{lib.slug} · {lib.city||'—'} · {lib.contact_email||'—'}</div>
@@ -707,8 +712,19 @@ export default function RedePage() {
                   <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', color: lib.is_active?'#f87171':'#4ade80' }} onClick={()=>toggleLibraryActive(lib.id, lib.is_active)}>
                     {lib.is_active ? t({ id: 'rede.deactivate' }) : t({ id: 'rede.reactivate' })}
                   </button>
+                  <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', marginTop:4 }}
+                    aria-expanded={numberingLibId === lib.id}
+                    onClick={()=>setNumberingLibId(numberingLibId === lib.id ? null : lib.id)}>
+                    {t({ id: 'rede.numbering' })}
+                  </button>
                 </div>
               </div>
+              {numberingLibId === lib.id && (
+                <div style={{ padding:'8px 12px 4px', borderBottom:'1px solid rgba(255,255,255,.04)' }}>
+                  <LibraryNumberingSection libraryId={lib.id} canEdit compact />
+                </div>
+              )}
+              </Fragment>
             ))}
           </div>
         </div>)}

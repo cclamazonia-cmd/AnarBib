@@ -464,3 +464,6 @@ tests/sql/lot_importe_bibliotheque_de_destination_tests.sql
 # GAZ-7 (15/09) : une breve rejetee dit pourquoi et peut revenir. T2 lit le jeton dans le payload
 # de l'outbox et le confronte a l'empreinte stockee ; T3 prouve qu'aucune ligne ne nait sans e-mail.
 tests/sql/gazette_reprise_tests.sql
+# 15/09 (E21) : la serie de tombos et la cote se reglent depuis l'ecran (unique dans le reseau, figee
+# apres usage) ; un lot recoit ses cotes dans son ordre et ses classes de rangement par table de rubriques.
+tests/sql/numerotation_et_rangement_tests.sql
