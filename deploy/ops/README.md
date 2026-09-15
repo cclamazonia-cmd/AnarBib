@@ -317,6 +317,23 @@ tar czf anarbib-worktree-<date>.tar.gz \
     --exclude=./deploy/.env --exclude=./deploy/functions.env -C <dépôt> .
 ```
 
+**Puis vérifier que le tarball emporte bien ce qui n’est pas au dépôt** — le
+15/09/2026, tous les non-suivis du checkout Windows avaient disparu (`CLAUDE.md`,
+`.claude/`, `.env*`), et la copie froide est la seule sauvegarde de `CLAUDE.md` :
+
+```bash
+tar tzf anarbib-worktree-<date>.tar.gz | grep -c '^./CLAUDE.md : ces fichiers
+portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse**,
+`Archives\SECRETS-EN-CLAIR`. Une sauvegarde du dépôt qui les emporterait en
+ferait une seconde, sur un disque qui circule.
+
+## Pour restaurer
+
+[`RUNBOOK_restauration_BG2_2026-07-01`](../../docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md)
+— trois flux, rétention 7/4/6, procédure de réinjection des secrets du Vault.
+   # doit dire 1
+```
+
 Les deux `--exclude` sur `deploy/*.env` ne sont pas un détail : ces fichiers
 portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse**,
 `Archives\SECRETS-EN-CLAIR`. Une sauvegarde du dépôt qui les emporterait en
