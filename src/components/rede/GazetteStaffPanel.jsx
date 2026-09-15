@@ -80,13 +80,15 @@ export default function GazetteStaffPanel() {
   // ni se publier ni prétendre à une relecture.
   const [langues, setLangues] = useState({});
   const [draft, setDraft] = useState(NEW_SOURCE); // formulaire d'ajout de source
+  // GAZ-7 : rejeter ouvre un champ motif ; { id, note } tant qu'il n'est pas confirmé.
+  const [rejecting, setRejecting] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       const [s, i, src, lg] = await Promise.all([
         supabase.from('gazette_submissions')
-          .select('id,rubric,locale,title,body,title_i18n,body_i18n,i18n_status,link,event_date,contributor_name,contributor_collective,status,created_at')
+          .select('id,rubric,locale,title,body,title_i18n,body_i18n,i18n_status,link,event_date,contributor_name,contributor_collective,contributor_email,status,created_at,review_note,parent_submission_id,resubmitted_at,resubmit_token_expires_at')
           .order('created_at', { ascending: false }),
         supabase.from('gazette_issues')
           .select('id,number,slug,masthead_title,cover_date,status,published_at,published_broadcast_at,build_mode')
@@ -115,13 +117,17 @@ export default function GazetteStaffPanel() {
   }, [t]);
   useEffect(() => { load(); }, [load]);
 
-  async function decideSubmission(id, status) {
+  async function decideSubmission(id, status, note) {
     setBusy('sub:' + id);
     try {
-      const { error } = await supabase.from('gazette_submissions')
-        .update({ status, reviewed_by: user?.id || null, reviewed_at: new Date().toISOString() })
-        .eq('id', id);
+      const patch = { status, reviewed_by: user?.id || null, reviewed_at: new Date().toISOString() };
+      // GAZ-7 : un rejet porte un motif — la base le refuse sinon (CHECK). Il part
+      // à la personne par courriel, avec le lien de reprise, si elle a laissé un
+      // e-mail ; c'est le trigger de décision qui s'en charge, pas l'écran.
+      if (status === 'rejected') patch.review_note = String(note || '').trim();
+      const { error } = await supabase.from('gazette_submissions').update(patch).eq('id', id);
       if (error) throw error;
+      setRejecting(null);
       setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
       await load();
     } catch (e) {
@@ -353,6 +359,7 @@ export default function GazetteStaffPanel() {
                     {s.locale && <span className="cat-pill" style={{ fontSize: '.68rem' }}>{s.locale}</span>}
                     <span className={`cat-pill ${subStatusPill(s.status)}`} style={{ fontSize: '.68rem' }}>{t({ id: `rede.gazeta.status.${s.status}` })}</span>
                     {s.i18n_status && <span className={`cat-pill ${s.i18n_status === 'done' ? 'ok' : s.i18n_status === 'error' ? 'danger' : 'warn'}`} style={{ fontSize: '.68rem' }}>{t({ id: `rede.gazeta.i18nStatus.${s.i18n_status}` })}</span>}
+                    {s.parent_submission_id && <span className="cat-pill info" style={{ fontSize: '.68rem' }}>{t({ id: 'rede.gazeta.resubmission.badge' })}</span>}
                   </div>
                   <div style={{ fontWeight: 700, fontSize: '.98rem' }}>{(s.title_i18n && s.title_i18n[locale]) || s.title}</div>
                   <div style={{ fontSize: '.86rem', color: 'var(--brand-muted)', margin: '4px 0', whiteSpace: 'pre-wrap' }}>{(s.body_i18n && s.body_i18n[locale]) || s.body}</div>
@@ -361,6 +368,30 @@ export default function GazetteStaffPanel() {
                     {s.event_date ? ` · ${fmtDate(s.event_date)}` : ''} · {fmtDate(s.created_at)}
                     {s.link && <> · <a href={s.link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-link, #7fb0e0)' }}>{t({ id: 'rede.gazeta.source' })}</a></>}
                   </div>
+                  {/* GAZ-7 : une reprise se relit avec le motif du rejet précédent sous les yeux */}
+                  {s.parent_submission_id && (() => {
+                    const parent = subs.find((p) => p.id === s.parent_submission_id);
+                    return (
+                      <div style={{ fontSize: '.8rem', marginTop: 6, padding: '6px 10px', borderLeft: '3px solid rgba(240,160,64,.6)', background: 'rgba(240,160,64,.08)', whiteSpace: 'pre-wrap' }}>
+                        {parent?.review_note
+                          ? <>{t({ id: 'rede.gazeta.resubmission.hint' })} <i>{parent.review_note}</i></>
+                          : t({ id: 'rede.gazeta.resubmission.hintNoParent' })}
+                      </div>
+                    );
+                  })()}
+                  {s.status === 'rejected' && s.review_note && (
+                    <div style={{ fontSize: '.8rem', marginTop: 6, padding: '6px 10px', borderLeft: '3px solid rgba(248,113,113,.6)', background: 'rgba(248,113,113,.06)' }}>
+                      <span className="cat-pill danger" style={{ fontSize: '.66rem', marginRight: 6 }}>{t({ id: 'rede.gazeta.reviewNote' })}</span>
+                      <span style={{ whiteSpace: 'pre-wrap' }}>{s.review_note}</span>
+                      <div style={{ color: 'var(--brand-muted)', marginTop: 4 }}>
+                        {s.resubmitted_at
+                          ? t({ id: 'rede.gazeta.resubmitted.at' }, { date: fmtDate(s.resubmitted_at) })
+                          : s.resubmit_token_expires_at
+                            ? t({ id: 'rede.gazeta.resubmit.until' }, { date: fmtDate(s.resubmit_token_expires_at) })
+                            : t({ id: 'rede.gazeta.resubmit.noEmail' })}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
                   {s.status !== 'accepted' && (
@@ -368,13 +399,40 @@ export default function GazetteStaffPanel() {
                       {t({ id: 'rede.gazeta.accept' })}
                     </button>
                   )}
-                  {s.status !== 'rejected' && (
-                    <button className="cat-btn ghost" style={{ color: '#f87171' }} disabled={busy === 'sub:' + s.id} onClick={() => decideSubmission(s.id, 'rejected')}>
+                  {s.status !== 'rejected' && rejecting?.id !== s.id && (
+                    <button className="cat-btn ghost" style={{ color: '#f87171' }} disabled={busy === 'sub:' + s.id} onClick={() => setRejecting({ id: s.id, note: '' })}>
                       {t({ id: 'rede.gazeta.reject' })}
                     </button>
                   )}
                 </div>
               </div>
+              {/* GAZ-7 : le rejet se motive ici, et l'écran dit si la personne sera prévenue */}
+              {rejecting?.id === s.id && (
+                <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+                  <label htmlFor={`gz-note-${s.id}`} style={{ display: 'block', fontSize: '.82rem', marginBottom: 4 }}>
+                    {t({ id: 'rede.gazeta.reject.noteLabel' })} *
+                  </label>
+                  <textarea
+                    id={`gz-note-${s.id}`} rows={3} value={rejecting.note} maxLength={2000}
+                    onChange={(e) => setRejecting({ id: s.id, note: e.target.value })}
+                    placeholder={t({ id: 'rede.gazeta.reject.notePlaceholder' })}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: 8, borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem' }}
+                  />
+                  <div style={{ fontSize: '.78rem', color: s.contributor_email ? 'var(--brand-muted)' : '#f0a040', margin: '4px 0 8px' }}>
+                    {s.contributor_email ? t({ id: 'rede.gazeta.reject.withEmail' }) : t({ id: 'rede.gazeta.reject.withoutEmail' })}
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
+                    <button className="cat-btn ghost" disabled={busy === 'sub:' + s.id} onClick={() => setRejecting(null)}>{t({ id: 'common.cancel' })}</button>
+                    <button
+                      className="cat-btn primary" style={{ background: '#b91c1c', borderColor: '#b91c1c' }}
+                      disabled={busy === 'sub:' + s.id || rejecting.note.trim().length < 2}
+                      onClick={() => decideSubmission(s.id, 'rejected', rejecting.note)}
+                    >
+                      {t({ id: 'rede.gazeta.reject.confirm' })}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

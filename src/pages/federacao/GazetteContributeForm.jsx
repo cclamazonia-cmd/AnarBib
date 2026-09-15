@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { callEdgeFunction } from '@/lib/supabase';
 
@@ -10,12 +10,28 @@ import { callEdgeFunction } from '@/lib/supabase';
 // dans gazette_submissions et enfile une notif → fede@anarbib.org. Les brèves
 // n'apparaissent PAS automatiquement : network_staff les trie (accepted/rejected).
 // UI app-native (thème sombre du SIGB), pas le style papier de la gazette.
+//
+// REPRISE (GAZ-7, 15/09/2026). Avec `resubmitToken` (le ?reprise=<jeton> du lien
+// reçu par courriel au rejet), le formulaire se pré-remplit depuis l'EF (action
+// « prefill » : texte d'origine + motif écrit par le staff), affiche le motif, et
+// l'envoi porte le jeton : la nouvelle brève est chaînée à la rejetée, le jeton
+// est consommé. Un jeton mort (inventé, révoqué, consommé, périmé) est dit tel
+// quel — et renvoie vers le formulaire habituel, jamais vers un mur.
 // ═══════════════════════════════════════════════════════════════════════════
 
 const RUBRICS = ['une', 'reseau', 'luttes', 'international', 'cultures', 'agenda', 'autre'];
+const EF = 'submit-gazette-contribution';
 
-export default function GazetteContributeForm({ onClose }) {
+function tokenErrorId(data) {
+  const code = data?.error;
+  if (code === 'token_used') return 'federacao.gazeta.resubmit.error.used';
+  if (code === 'token_expired') return 'federacao.gazeta.resubmit.error.expired';
+  return 'federacao.gazeta.resubmit.error.invalid';
+}
+
+export default function GazetteContributeForm({ onClose, resubmitToken }) {
   const { formatMessage: t, locale } = useIntl();
+  const isResubmit = !!resubmitToken;
   const [rubric, setRubric] = useState('');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -25,8 +41,36 @@ export default function GazetteContributeForm({ onClose }) {
   const [collective, setCollective] = useState('');
   const [email, setEmail] = useState('');
   const [website, setWebsite] = useState(''); // honeypot anti-bot (doit rester vide)
-  const [phase, setPhase] = useState('idle'); // idle | sending | done | error
+  const [reviewNote, setReviewNote] = useState(''); // motif du rejet, en reprise
+  // prefill (reprise en cours de chargement) | idle | sending | done | error | dead (jeton mort)
+  const [phase, setPhase] = useState(isResubmit ? 'prefill' : 'idle');
   const [errId, setErrId] = useState(null);
+
+  useEffect(() => {
+    if (!resubmitToken) return undefined;
+    let cancelled = false;
+    (async () => {
+      const { ok, data } = await callEdgeFunction(EF, { action: 'prefill', resubmit_token: resubmitToken });
+      if (cancelled) return;
+      if (!ok || !data?.original) {
+        setErrId(tokenErrorId(data));
+        setPhase('dead');
+        return;
+      }
+      const o = data.original;
+      setRubric(o.rubric || '');
+      setTitle(o.title || '');
+      setBody(o.body || '');
+      setLink(o.link || '');
+      setEventDate(o.event_date || '');
+      setName(o.contributor_name || '');
+      setCollective(o.contributor_collective || '');
+      setEmail(o.contributor_email || '');
+      setReviewNote(o.review_note || '');
+      setPhase('idle');
+    })();
+    return () => { cancelled = true; };
+  }, [resubmitToken]);
 
   const titleLen = title.trim().length;
   const bodyLen = body.trim().length;
@@ -50,20 +94,46 @@ export default function GazetteContributeForm({ onClose }) {
       contributor_collective: collective.trim() || undefined,
       contributor_email: email.trim() || undefined,
       target_issue_number: undefined,
+      resubmit_token: resubmitToken || undefined,
       website, // honeypot
     };
-    const { ok, status } = await callEdgeFunction('submit-gazette-contribution', payload);
+    const { ok, status, data } = await callEdgeFunction(EF, payload);
     if (ok) { setPhase('done'); return; }
+    if (isResubmit && (status === 404 || status === 410)) {
+      // Le jeton est mort entre l'ouverture et l'envoi : le texte reste à l'écran
+      // derrière le message, rien n'a été inséré côté base.
+      setErrId(tokenErrorId(data));
+      setPhase('dead');
+      return;
+    }
     setPhase('error');
     if (status === 429) setErrId('federacao.gazeta.contribute.error.rateLimited');
     else if (status === 422) setErrId('federacao.gazeta.contribute.error.validation');
     else setErrId('federacao.gazeta.contribute.error.generic');
   }
 
+  if (phase === 'prefill') {
+    return (
+      <div className="ab-gz-form ab-gz-form-done" role="status">
+        <p>{t({ id: 'federacao.gazeta.resubmit.loading' })}</p>
+        <button type="button" className="cat-btn ghost" onClick={onClose}>{t({ id: 'common.cancel' })}</button>
+      </div>
+    );
+  }
+
+  if (phase === 'dead') {
+    return (
+      <div className="ab-gz-form ab-gz-form-done" role="alert">
+        <p>{t({ id: errId })}</p>
+        <button type="button" className="cat-btn ghost" onClick={onClose}>{t({ id: 'common.close' })}</button>
+      </div>
+    );
+  }
+
   if (phase === 'done') {
     return (
       <div className="ab-gz-form ab-gz-form-done" role="status">
-        <p>{t({ id: 'federacao.gazeta.contribute.success' })}</p>
+        <p>{isResubmit ? t({ id: 'federacao.gazeta.resubmit.success' }) : t({ id: 'federacao.gazeta.contribute.success' })}</p>
         <button type="button" className="cat-btn ghost" onClick={onClose}>{t({ id: 'common.close' })}</button>
       </div>
     );
@@ -72,10 +142,17 @@ export default function GazetteContributeForm({ onClose }) {
   return (
     <form className="ab-gz-form" onSubmit={submit} noValidate>
       <div className="ab-gz-form-head">
-        <h3>{t({ id: 'federacao.gazeta.contribute.title' })}</h3>
+        <h3>{isResubmit ? t({ id: 'federacao.gazeta.resubmit.title' }) : t({ id: 'federacao.gazeta.contribute.title' })}</h3>
         <button type="button" className="cat-btn ghost" onClick={onClose}>{t({ id: 'common.cancel' })}</button>
       </div>
-      <p className="ab-gz-form-intro">{t({ id: 'federacao.gazeta.contribute.intro' })}</p>
+      <p className="ab-gz-form-intro">{isResubmit ? t({ id: 'federacao.gazeta.resubmit.intro' }) : t({ id: 'federacao.gazeta.contribute.intro' })}</p>
+
+      {isResubmit && reviewNote && (
+        <div style={{ margin: '0 0 14px', padding: '10px 12px', borderLeft: '3px solid #cf1f27', background: 'rgba(207,31,39,.08)', borderRadius: 6 }}>
+          <div className="ab-gz-flabel" style={{ marginTop: 0 }}>{t({ id: 'federacao.gazeta.resubmit.reason' })}</div>
+          <blockquote style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '.92rem' }}>{reviewNote}</blockquote>
+        </div>
+      )}
 
       <label className="ab-gz-flabel" htmlFor="gz-rubric">{t({ id: 'federacao.gazeta.contribute.rubric' })} *</label>
       <select id="gz-rubric" value={rubric} onChange={(e) => setRubric(e.target.value)} required>
@@ -130,7 +207,9 @@ export default function GazetteContributeForm({ onClose }) {
         <button type="submit" className="cat-btn primary" disabled={!canSubmit}>
           {phase === 'sending'
             ? t({ id: 'federacao.gazeta.contribute.sending' })
-            : t({ id: 'federacao.gazeta.contribute.submit' })}
+            : isResubmit
+              ? t({ id: 'federacao.gazeta.resubmit.submit' })
+              : t({ id: 'federacao.gazeta.contribute.submit' })}
         </button>
       </div>
     </form>

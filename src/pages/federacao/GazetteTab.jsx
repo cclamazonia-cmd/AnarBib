@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { useSearchParams } from 'react-router-dom';
 import { apiQuery } from '@/lib/supabase';
 import GazetteContributeForm from './GazetteContributeForm';
 
@@ -467,6 +468,20 @@ export default function GazetteTab() {
   const frameRef = useRef(null);
   const [frameH, setFrameH] = useState(640);
   const [contributing, setContributing] = useState(false);
+  // GAZ-7 : ?reprise=<jeton> (le lien reçu par courriel au rejet d'une brève)
+  // ouvre le formulaire pré-rempli. Le jeton ne vit que dans l'URL et dans la
+  // requête à l'EF ; refermer le volet le retire de l'adresse.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const reprise = searchParams.get('reprise') || '';
+  useEffect(() => { if (reprise) setContributing(true); }, [reprise]);
+  const closeForm = () => {
+    setContributing(false);
+    if (reprise) {
+      const next = new URLSearchParams(searchParams);
+      next.delete('reprise');
+      setSearchParams(next, { replace: true });
+    }
+  };
 
   const fetchGazette = useCallback(async () => {
     setState((s) => ({ ...s, status: 'loading' }));
@@ -541,6 +556,8 @@ export default function GazetteTab() {
       <div className="ab-fed-placeholder">
         <h3>{t({ id: 'federacao.tab.gazeta' })}</h3>
         <p>{t({ id: 'federacao.gazeta.empty' })}</p>
+        {/* Une reprise ne dépend pas d'un numéro publié : le lien doit marcher aussi ici. */}
+        {contributing && <GazetteContributeForm onClose={closeForm} resubmitToken={reprise || undefined} />}
       </div>
     );
   }
@@ -574,7 +591,7 @@ export default function GazetteTab() {
         <button type="button" className="cat-btn primary" onClick={printPdf}>{ui.pdf}</button>
       </div>
 
-      {contributing && <GazetteContributeForm onClose={() => setContributing(false)} />}
+      {contributing && <GazetteContributeForm onClose={closeForm} resubmitToken={reprise || undefined} />}
 
       {!hasLoc && ui.pending && <div className="ab-gz-pending">{ui.pending}</div>}
 
