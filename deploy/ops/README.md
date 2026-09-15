@@ -323,9 +323,11 @@ tar czf anarbib-worktree-<date>.tar.gz \
 
 ```bash
 tar tzf anarbib-worktree-<date>.tar.gz | grep -c '^./CLAUDE.md : ces fichiers
-portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse**,
-`Archives\SECRETS-EN-CLAIR`. Une sauvegarde du dépôt qui les emporterait en
-ferait une seconde, sur un disque qui circule.
+portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse** :
+**Dashlane** (entrées « AnarBib — … » ; `Archives\SECRETS-EN-CLAIR` ne garde
+que la note de migration et deux fichiers périmés, les valeurs en ont été
+retirées exprès). Une sauvegarde du dépôt qui les emporterait en ferait une
+seconde, sur un disque qui circule.
 
 ## Pour restaurer
 
@@ -335,9 +337,11 @@ ferait une seconde, sur un disque qui circule.
 ```
 
 Les deux `--exclude` sur `deploy/*.env` ne sont pas un détail : ces fichiers
-portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse**,
-`Archives\SECRETS-EN-CLAIR`. Une sauvegarde du dépôt qui les emporterait en
-ferait une seconde, sur un disque qui circule.
+portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse** :
+**Dashlane** (entrées « AnarBib — … » ; `Archives\SECRETS-EN-CLAIR` ne garde
+que la note de migration et deux fichiers périmés, les valeurs en ont été
+retirées exprès). Une sauvegarde du dépôt qui les emporterait en ferait une
+seconde, sur un disque qui circule.
 
 ## Pour restaurer
 
