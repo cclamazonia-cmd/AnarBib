@@ -33,7 +33,7 @@ const TAB_KEY  = 'catalogacaoActiveTab';
 
 export default function CatalogacaoPage() {
   const { user } = useAuth();
-  const { config, effectiveRole } = useLibrary();
+  const { config, effectiveRole, isNetworkAdmin } = useLibrary();
   // L'assistant de dedoublonnage n'a de sens que pour qui peut arbitrer :
   // ses trois temps se terminent par une fusion. Ailleurs il n'offrirait
   // que des impasses.
@@ -502,7 +502,7 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.lotes'})}</h3>
             </div>
-            <BatchesPanel batches={batches} onRefresh={refreshAll} isCoord={isCoord} />
+            <BatchesPanel batches={batches} onRefresh={refreshAll} isCoord={isCoord} isNetworkAdmin={isNetworkAdmin} />
           </div>
 
           {/* 6. Catálogo(s) já publicado(s) */}
@@ -557,7 +557,7 @@ const BATCH_STATUS_LABEL_IDS = {
 // Les trois tables de brouillons rattachables a un lot.
 const BATCH_DRAFT_TABLES = ['book_drafts', 'author_drafts', 'exemplar_drafts'];
 
-function BatchesPanel({ batches, onRefresh, isCoord }) {
+function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   const { formatMessage: t } = useIntl();
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState('');
@@ -582,6 +582,83 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
     } catch { /* la colonne reste muette, la garde en base tient */ }
   }, []);
   useEffect(() => { loadReviews(); }, [loadReviews, batches]);
+
+  // ── A qui appartient le lot (15/09/2026) ─────────────────────────────
+  // La creation des brouillons d'un import ne posait jamais de biblio
+  // proprietaire, et la publication retombait sur la biblio de qui publie.
+  // Le lot Solidaires (1673 brouillons) n'avait aucun geste pour etre
+  // rattache a sa biblio, creee le 14/09. Desormais fn_import_promote
+  // tamponne la biblio a la promotion, l'ecran montre « sans bibliotheque »
+  // AVANT la publication, et l'administration du reseau reattribue un lot
+  // entier ici (fn_batch_reassign_library : brouillons en cours seulement,
+  // fiches publiees intactes, source d'import alignee, trace dans les notes).
+  const [owners, setOwners] = useState({});             // batch_id -> [{ library_id, library_name, drafts }]
+  const [reassign, setReassign] = useState(null);       // { batch, libraryId }
+  const [reassigning, setReassigning] = useState(false);
+  const [libraries, setLibraries] = useState([]);
+  const loadOwners = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_owner_libraries');
+      if (error) throw error;
+      const map = {};
+      (data || []).forEach(r => { (map[r.batch_id] = map[r.batch_id] || []).push(r); });
+      setOwners(map);
+    } catch { /* la colonne reste muette ; la regle de destination est en base */ }
+  }, []);
+  useEffect(() => { loadOwners(); }, [loadOwners, batches]);
+  useEffect(() => {
+    if (!reassign || libraries.length > 0) return undefined;
+    let vivant = true;
+    supabase.from('libraries').select('id, name, is_active').order('name').then(({ data, error }) => {
+      if (vivant && !error && data) setLibraries(data);
+    });
+    return () => { vivant = false; };
+  }, [reassign, libraries.length]);
+
+  function renderOwners(b) {
+    const rows = owners[b.id] || [];
+    if (rows.length === 0) return <span style={{ color: 'var(--brand-muted, #666)' }}>—</span>;
+    const secondaire = { color: 'var(--brand-muted, #888)' };
+    return (
+      <span style={{ display: 'inline-flex', flexDirection: 'column', gap: 2 }}>
+        {rows.map((r, i) => r.library_id
+          ? <span key={i}>{r.library_name} <span style={secondaire}>({r.drafts})</span></span>
+          : (
+            <span key={i} style={{ color: '#fbbf24' }} title={t({ id: 'catalogacao.batch.library.noneHint' })}>
+              {t({ id: 'catalogacao.batch.library.none' })} <span style={secondaire}>({r.drafts})</span>
+            </span>
+          ))}
+      </span>
+    );
+  }
+
+  async function submitReassign() {
+    if (!reassign?.libraryId) return;
+    setReassigning(true);
+    setMsg(null);
+    try {
+      const { data, error } = await supabase.rpc('fn_batch_reassign_library', {
+        p_batch_id: Number(reassign.batch.id), p_library_id: reassign.libraryId,
+      });
+      if (error) throw error;
+      const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
+      const parts = [t({ id: 'catalogacao.batch.reassign.ok' }, {
+        count: Number(data?.drafts_updated ?? 0), library: data?.library_name || '',
+      })];
+      // Des avertissements, pas des refus : reattribuer et preparer la biblio
+      // (serie de tombos, activation) sont deux responsabilites.
+      if (warnings.includes('library_without_tombo_pattern')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.tombo' }));
+      if (warnings.includes('library_inactive')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.inactive' }));
+      setMsg({ text: parts.join(' '), kind: 'ok' });
+      setReassign(null);
+      await loadOwners();
+      onRefresh();
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally {
+      setReassigning(false);
+    }
+  }
 
   function reviewLocked(b) {
     const r = reviews[b.id];
@@ -845,6 +922,40 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
         </div>
       )}
 
+      {/* Reattribuer un lot a une bibliotheque (administration du reseau) */}
+      {reassign && (
+        <div role="dialog" aria-modal="true" onClick={() => !reassigning && setReassign(null)}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div onClick={e => e.stopPropagation()}
+            style={{ maxWidth: 520, width: '100%', padding: 18, borderRadius: 12, background: 'var(--brand-panel-bg, #161616)', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.12))' }}>
+            <h4 style={{ margin: '0 0 8px', fontSize: '.95rem' }}>{t({ id: 'catalogacao.batch.reassign.title' })}</h4>
+            <p style={{ margin: '0 0 12px', fontSize: '.82rem', color: 'var(--brand-muted, #aaa)' }}>
+              {t({ id: 'catalogacao.batch.reassign.intro' }, { name: reassign.batch.name })}
+            </p>
+            <label style={{ display: 'block', fontSize: '.75rem', color: 'var(--brand-muted, #aaa)', marginBottom: 4 }}>
+              {t({ id: 'catalogacao.batch.reassign.pick' })}
+            </label>
+            <select value={reassign.libraryId} onChange={e => setReassign({ ...reassign, libraryId: e.target.value })}
+              style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}>
+              <option value="">{t({ id: 'catalogacao.batch.reassign.pickPlaceholder' })}</option>
+              {libraries.map(l => (
+                <option key={l.id} value={l.id}>
+                  {l.name}{l.is_active ? '' : ' ' + t({ id: 'catalogacao.batch.reassign.libraryInactive' })}
+                </option>
+              ))}
+            </select>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 14 }}>
+              <button className="ab-button ab-button--ghost" style={{ fontSize: '.8rem', padding: '6px 12px' }}
+                disabled={reassigning} onClick={() => setReassign(null)}>{t({ id: 'common.cancel' })}</button>
+              <button className="ab-button ab-button--secondary" style={{ fontSize: '.8rem', padding: '6px 12px' }}
+                disabled={reassigning || !reassign.libraryId} onClick={submitReassign}>
+                {reassigning ? t({ id: 'common.saving' }) : t({ id: 'catalogacao.batch.reassign.submit' })}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Lotes ouverts */}
       {openBatches.length > 0 && (
         <div style={{ marginBottom: 16 }}>
@@ -856,6 +967,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thNotes'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thDrafts'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thLibrary'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.review.th'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
@@ -867,6 +979,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                   <td style={{ padding: '8px', color: 'var(--brand-muted, #aaa)' }}>{b.notes || '—'}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
+                  <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderOwners(b)}</td>
                   <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderReview(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
                     {reviews[b.id]?.imported && (
@@ -878,6 +991,10 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                             onClick={() => requestReview(b)}>{t({id:'catalogacao.batch.review.request'})}</button>
                         )}
                       </>
+                    )}
+                    {isNetworkAdmin && (
+                      <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                        onClick={() => setReassign({ batch: b, libraryId: '' })}>{t({id:'catalogacao.batch.reassign'})}</button>
                     )}
                     <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                       disabled={reviewLocked(b)}

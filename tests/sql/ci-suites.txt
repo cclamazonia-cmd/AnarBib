@@ -458,3 +458,6 @@ tests/sql/adresse_des_fonctions_tests.sql
 # E18 (07/09) : la page Oeuvre dit le tome. T2 insere III, I, II et exige I, II, III :
 # l ordre des identifiants ne suffit pas, seul le rang du tome le fait.
 tests/sql/oeuvre_tomes_page_tests.sql
+# 15/09 : un lot importe a une bibliotheque de destination — tamponnee a la promotion selon la
+# provenance, reattribuable par l'administration (brouillons en cours seulement, revision approuvee = refus).
+tests/sql/lot_importe_bibliotheque_de_destination_tests.sql

@@ -121,6 +121,12 @@ export default function ImportacoesPage() {
   // Solidaires du 27/08/2026). Seule fn_import_register_deposit_source fait ça.
   const [newSourceOpen, setNewSourceOpen] = useState(false);
   const [newSourceName, setNewSourceName] = useState('');
+  // 15/09/2026 : la biblio qui DETIENT les livres du depot, si elle est deja
+  // admise au reseau. Sinon on la laisse vide : les brouillons naitront « sans
+  // bibliotheque » et l'administration reattribuera le lot le jour de
+  // l'admission (Catalogacao > Lots > Reattribuer…).
+  const [newSourceDest, setNewSourceDest] = useState('');
+  const [destLibraries, setDestLibraries] = useState([]);
   const [registeringSource, setRegisteringSource] = useState(false);
   // ── Adaptateur : overrides Estrutura / Vocabulário ('auto' = laisser l'auto-détection) ──
   const [adapterFormat, setAdapterFormat] = useState('auto');
@@ -299,6 +305,14 @@ export default function ImportacoesPage() {
   // fn_import_promote / fn_import_register_deposit_source (HINT
   // error.import.deposit_admin_only).
   const canDeposit = isNetworkAdmin;
+  useEffect(() => {
+    if (!newSourceOpen || !canDeposit) return undefined;
+    let active = true;
+    supabase.from('libraries').select('id, name').order('name').then(({ data, error }) => {
+      if (active && !error && data) setDestLibraries(data);
+    });
+    return () => { active = false; };
+  }, [newSourceOpen, canDeposit]);
   const fileSources = sources.filter(s => canDeposit || s.source_kind !== 'partner_deposit');
   const selectedRunSource = selectedRun ? sources.find(s => s.id === selectedRun.source_id) : null;
   // 04/09/2026 apres-midi : un entrepot OAI moissonne est un fonds tiers de
@@ -405,6 +419,7 @@ export default function ImportacoesPage() {
     try {
       const { data, error } = await supabase.rpc('fn_import_register_deposit_source', {
         p_partner_name: name,
+        p_destination_library_id: newSourceDest || null,
       });
       if (error) throw error;
       assertRpcOk(data);
@@ -415,6 +430,7 @@ export default function ImportacoesPage() {
         kind: 'ok',
       });
       setNewSourceName('');
+      setNewSourceDest('');
       setNewSourceOpen(false);
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
@@ -1279,13 +1295,20 @@ export default function ImportacoesPage() {
                             onChange={e => setNewSourceName(e.target.value)}
                             placeholder={t({ id: 'importacoes.deposit.partnerPlaceholder' })}
                             onKeyDown={e => { if (e.key === 'Enter') handleRegisterDepositSource(); }} />
+                          <select className="ab-input" value={newSourceDest}
+                            onChange={e => setNewSourceDest(e.target.value)}
+                            aria-label={t({ id: 'importacoes.deposit.destinationLibrary' })}
+                            title={t({ id: 'importacoes.deposit.destinationLibrary' })}>
+                            <option value="">{t({ id: 'importacoes.deposit.destinationLibraryNone' })}</option>
+                            {destLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                          </select>
                           <button type="button" className="cat-btn secondary imp-newsource__ok"
                             onClick={handleRegisterDepositSource}
                             disabled={registeringSource || !newSourceName.trim()}>
                             {registeringSource ? t({ id: 'common.saving' }) : t({ id: 'common.add' })}
                           </button>
                           <button type="button" className="imp-linkbtn"
-                            onClick={() => { setNewSourceOpen(false); setNewSourceName(''); }}>
+                            onClick={() => { setNewSourceOpen(false); setNewSourceName(''); setNewSourceDest(''); }}>
                             {t({ id: 'common.cancel' })}
                           </button>
                         </div>
