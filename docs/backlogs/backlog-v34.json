@@ -1946,6 +1946,14 @@
           "fr": "**La série de numéros d'inventaire et la cote d'une bibliothèque se règlent depuis l'écran ; un lot reçoit ses cotes et ses classes de rangement en un geste — livré et en production le soir même** (registre §12 `CAT-E17`, migration `20260915201252`, commit `f7bf927c`). Ouvert et clos le même jour, sur la question de Xavier « comment font-ils pour s'y retrouver avec des numéros d'inventaire dans l'ordre d'apparition ? ». Trois gestes, dans le patron proposé pour les numéros d'inventaire — une convention, un aperçu, une application, une trace : **(1)** bloc « Numérotation » dans Biblioteca › Identité et, pour l'admin, sous chaque bibliothèque de la page Réseau — préfixe, année, séparateur, remplissage, cote, exemple rendu en direct, prochain et dernier numéro ; gardes serveur : préfixe obligatoire sans `%` ni `_`, **unique dans le réseau** (préfixes déclarés et séries héritées des exemplaires, « SOL » et « SOL- » refusés l'un pour l'autre), **figé** dès qu'un exemplaire l'a utilisé ; **(2)** « Cotes manquantes » sur un lot ouvert : aperçu puis application, dans l'ordre du lot, à la suite des cotes existantes (notices, holdings, brouillons vivants), sous verrou par préfixe ; **(3)** « Classer par rubriques » : la rubrique lue là où l'import l'a laissée — pour Solidaires, `assunto_local` de la charge utile brute, puisque le run 29 n'a lié aucun sujet —, table rubrique → code relue par la coordination, `cdd` écrit sur les brouillons sans classe. Suite SQL de 14 tests, 101 suites vertes, 486 tests JS, 57 clés en dix locales. **Reste aux personnes** : choisir le préfixe de Solidaires (Réseau › Numérotation), attribuer les 1 673 cotes, remplir la table des 35 rubriques, activer la bibliothèque, puis la révision du lot (`catalog_batch_reviews`).",
           "pt": "**A série de tombos e a cota de uma biblioteca configuram-se no ecrã ; um lote recebe as suas cotas e as suas classes de arrumação num só gesto — entregue e em produção na mesma noite** (registo §12 `CAT-E17`, migração `20260915201252`). Três gestos, no padrão proposto para os tombos — convenção, pré-visualização, aplicação, rasto : bloco « Numeração » (Biblioteca e Rede ; prefixo único na rede, congelado após uso), « Cotas em falta » num lote (na ordem do lote, a seguir às existentes), « Classificar por rubricas » (rubrica lida onde a importação a deixou — `assunto_local` para Solidaires —, tabela rubrica → código relida pela coordenação). 14 testes SQL, 101 suites verdes. **Fica às pessoas** : o prefixo de Solidaires, as 1 673 cotas, a tabela das 35 rubricas, a ativação, depois a revisão do lote."
         }
+      ],
+      [
+        "G7",
+        "2026-09-15",
+        {
+          "fr": "**Solidaires est admise** — décision de Xavier du 15/09/2026 au soir, en mode « seul·e admin » (spec-onboarding §2.6), à défaut de co-administrateur·rices trouvé·es à Bologne (registre §1 `RES-D12` amendé, v0.34). Ce que la fiche attendait de l'admission est arrivé le même soir par `IMP-20` et `CAT-E17` : bibliothèque active, série d'inventaire `SOL-` + millésime, 1 673 brouillons attribués et cotés, coordination Christian. Le périmètre d'admission (`RES-Q13`) reste à porter en AG : Solidaires y entre comme cas, pas comme règle.",
+          "pt": "**Solidaires está admitida** — decisão de Xavier em 15/09/2026, em modo « só admin », à falta de co-administradores encontrados em Bolonha (registo `RES-D12` alterado, v0.34). Biblioteca ativa, série de tombo `SOL-`, 1 673 rascunhos atribuídos e cotados. O perímetro de admissão (`RES-Q13`) continua para a AG."
+        }
       ]
     ]
   },
@@ -3510,56 +3518,6 @@
       "verif": {
         "fr": "31/08 — `interlibrary_loans_v2` : 2 prêts vivants pour 20 insertions historiques, comme au 29/08.",
         "pt": "31/08 — `interlibrary_loans_v2`: 2 empréstimos vivos para 20 inserções, como em 29/08."
-      }
-    },
-    {
-      "id": "G7",
-      "d": "G",
-      "p": "P1",
-      "s": "bloque",
-      "e": "?",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Décider de l'admission de la Bibliothèque SOLIDAIRES",
-        "pt": "Decidir a admissão da Biblioteca SOLIDAIRES"
-      },
-      "v": {
-        "fr": "Décision fédérale **volontairement différée**, faute de pouvoir être prise à plusieurs. Échéance envisagée : octobre ou novembre, après Bologne.",
-        "pt": "Decisão federal **deliberadamente adiada**, por não poder ser tomada em conjunto. Prazo previsto: outubro ou novembro, depois de Bolonha."
-      },
-      "w": {
-        "fr": "Une fois **A1** abouti, instruire la demande à plusieurs et trancher.",
-        "pt": "Uma vez concluído **A1**, instruir o pedido em conjunto e decidir."
-      },
-      "y": {
-        "fr": "La contrainte est écrite noir sur blanc au collectif et elle est absolue : **ne pas créer de bibliothèque « SOLIDAIRES » en base** tant que la décision n'est pas prise, ni membre, ni partenaire, ni cible. « Créer la fiche reviendrait à inscrire en base une décision qu'on dit ne pas prendre. » **Et depuis le 29/08 la même règle vaut pour le fonds : l'import des 1 685 notices (C2) ne se fera qu'après l'admission.** Cet item ne décide donc pas seulement d'une adhésion : il débloque un chantier de catalogage entier.",
-        "pt": "A restrição está escrita preto no branco ao coletivo e é absoluta: **não criar biblioteca «SOLIDAIRES» no banco** enquanto a decisão não for tomada, nem membro, nem parceira, nem alvo. «Criar a ficha equivaleria a inscrever no banco uma decisão que se diz não tomar.» **E desde 29/08 a mesma regra vale para o acervo: a importação dos 1 685 registros (C2) só se fará depois da admissão.** Este item não decide portanto apenas uma adesão: desbloqueia um canteiro de catalogação inteiro."
-      },
-      "f": {
-        "fr": [
-          "La décision est prise à trois au moins, et tracée dans `network_administrator_audit`.",
-          "Quelle qu'elle soit, elle est communiquée au collectif SOLIDAIRES avec sa raison.",
-          "Une fois l'admission prononcée, **C2** et **D3** se débloquent dans cet ordre."
-        ],
-        "pt": [
-          "A decisão é tomada por pelo menos três, e rastreada em `network_administrator_audit`.",
-          "Seja qual for, é comunicada ao coletivo SOLIDAIRES com seu motivo.",
-          "Uma vez pronunciada a admissão, **C2** e **D3** se desbloqueiam nesta ordem."
-        ]
-      },
-      "dep": {
-        "fr": "**Bloqué par A1.** Même remarque pour la demande d'adhésion belge en cours d'évaluation.",
-        "pt": "**Bloqueado por A1.** Mesma observação para o pedido de adesão belga em avaliação."
-      },
-      "r": [
-        "REPRISE_claude_code_2026-08-27",
-        "CALENDRIER_bologne_2026-08-27"
-      ],
-      "verif": {
-        "fr": " **15/09** — une fiche `libraries` **Bibliothèque Solidaires (Paris, France)** existe depuis le 14/09 (`is_active = false`, `visibility_level = private`, une coordination rattachée, aucune demande dans `library_requests`) : c'est la **bibliothèque de destination** du lot d'import (migration du 15/09), créée par l'administration pour que les 1 673 brouillons aient une propriétaire — **pas une admission**. `RES-D12` tient : réponse de SOLIDAIRES attendue avant fin septembre, décision à plusieurs (A1) ensuite.",
-        "pt": " **15/09** — existe uma ficha Solidaires desde 14/09 (inativa, privada, uma coordenação) : biblioteca de **destino** do lote, criada pela administração — **não uma admissão**. `RES-D12` mantém-se."
       }
     },
     {

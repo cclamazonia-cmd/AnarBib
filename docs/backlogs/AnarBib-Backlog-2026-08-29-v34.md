@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-15** · 89 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-15** · 88 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -21,7 +21,7 @@
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 14
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 5
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **15 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `60e0580a`, premier relevé après Bologne (13/09) et la fin du gel (14/09). Depuis le relevé du 08/09 : quatre commits seulement au dépôt — les deux correctifs du jeton de récupération (08/09), `OPS-9` au registre, et ce soir **un lot importé a une bibliothèque de destination** (migration `20260915184154`, deux RPC nouvelles) ; en production, **une cinquième bibliothèque** est née le 14/09 (Solidaires, Paris — inactive, privée, une coordination rattachée) et les 1 673 brouillons du lot Solidaires ont désormais une propriétaire. Toutes les lignes ont été remesurées, advisors compris. Une alerte d'exploitation en sort, **I24**.
 
-**Fraîcheur des constats au 2026-09-15.** **72 items sur 89** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-15.** **71 items sur 88** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1422,7 +1422,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 |---|---|---|---|
 | **G1** | Emprunter les circuits construits et jamais utilisés | `P0` | Ouvert |
 | **G6** | Donner un écran au prêt entre bibliothèques | `P2` | Ouvert |
-| **G7** | Décider de l'admission de la Bibliothèque SOLIDAIRES | `P1` | Bloqué |
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G9** | Implémenter la cartographie du réseau selon la spec v1.0 | `P3` | Gelé |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
@@ -1479,28 +1478,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** `EA-12 phase 2` (parité PEB, environ 45 fonctions) est gelée par `BIBLIO-9` — à ne pas confondre avec cet item.
 
 *Renvois : `spec-cycle-vie-peb.md` · `PLAN_formation_coordination_BLMF §5` · `REGISTRE §14 PEB`*
-
-#### G7 — Décider de l'admission de la Bibliothèque SOLIDAIRES
-
-`P1` Prioritaire · État : **Bloqué** · Charge : non chiffré · Ce que ça demande : délibération collective
-
-**État.** Décision fédérale **volontairement différée**, faute de pouvoir être prise à plusieurs. Échéance envisagée : octobre ou novembre, après Bologne.
-
-*Vérifié :  **15/09** — une fiche `libraries` **Bibliothèque Solidaires (Paris, France)** existe depuis le 14/09 (`is_active = false`, `visibility_level = private`, une coordination rattachée, aucune demande dans `library_requests`) : c'est la **bibliothèque de destination** du lot d'import (migration du 15/09), créée par l'administration pour que les 1 673 brouillons aient une propriétaire — **pas une admission**. `RES-D12` tient : réponse de SOLIDAIRES attendue avant fin septembre, décision à plusieurs (A1) ensuite.*
-
-**Ce que c'est.** Une fois **A1** abouti, instruire la demande à plusieurs et trancher.
-
-**Pourquoi ça compte.** La contrainte est écrite noir sur blanc au collectif et elle est absolue : **ne pas créer de bibliothèque « SOLIDAIRES » en base** tant que la décision n'est pas prise, ni membre, ni partenaire, ni cible. « Créer la fiche reviendrait à inscrire en base une décision qu'on dit ne pas prendre. » **Et depuis le 29/08 la même règle vaut pour le fonds : l'import des 1 685 notices (C2) ne se fera qu'après l'admission.** Cet item ne décide donc pas seulement d'une adhésion : il débloque un chantier de catalogage entier.
-
-**Ce qui compte comme fini.**
-
-- La décision est prise à trois au moins, et tracée dans `network_administrator_audit`.
-- Quelle qu'elle soit, elle est communiquée au collectif SOLIDAIRES avec sa raison.
-- Une fois l'admission prononcée, **C2** et **D3** se débloquent dans cet ordre.
-
-**Dépendances.** **Bloqué par A1.** Même remarque pour la demande d'adhésion belge en cours d'évaluation.
-
-*Renvois : `REPRISE_claude_code_2026-08-27` · `CALENDRIER_bologne_2026-08-27`*
 
 #### G8 — Compléter la cartographie avec les archives repérées ailleurs
 
@@ -2635,6 +2612,7 @@ CI verte : lint et suite unitaire. |
 | IMP-20 | 2026-09-15 | **Un lot importé appartient à une bibliothèque de destination — livré et en production le soir même** (registre §17 `IMP-20`, migration `20260915184154`, commit `60e0580a`). Ce n'était pas un item : c'est une question de Xavier du 15/09 — « comment attribuer les 1 673 brouillons du lot Solidaires à cette bibliothèque ? » — dont la réponse honnête était « par un UPDATE à la main, que chaque admin aurait à refaire à chaque admission ». La chaîne d'import ne posait jamais `owner_library_id` ; la publication retombait sur la bibliothèque de qui publie. Fait : `destination_library_id` sur la source (la bibliothèque qui *détient* les livres, distincte de la bibliothèque importatrice), tampon de `owner_library_id` à la promotion selon la provenance, `fn_batch_reassign_library` (administration du réseau : brouillons en cours seulement, fiches publiées intactes, source alignée, trace dans les notes, refus si révision approuvée), `fn_batch_owner_libraries` et la colonne « Bibliothèque » dans Catalogação › Lots (« sans bibliothèque » en ambre avant de publier), bibliothèque de destination optionnelle sur une nouvelle source de dépôt dans Importações, 21 clés en dix locales, suite SQL de 12 tests. **Le lot Solidaires est attribué** (essai à blanc annulé, puis réel sous l'identité de Xavier) ; la fonction a rendu ses deux avertissements — bibliothèque sans série de tombos, inactive — d'où **E21**. Reste derrière **G7** (admission) et la révision de lot. |
 | I19 | 2026-09-15 | **Clos le 15/09, sur mesure.** *(1)* L'extension : `deploy/init-db/01-roles.sh` crée `pg_cron` (`CREATE EXTENSION IF NOT EXISTS` + `GRANT` à `postgres` et `service_role`) et **s'arrête** si ça échoue ; au premier passage de l'entrypoint, où le rôle `postgres` n'existe pas encore, il le dit (« différé au prochain passage ») et le rejeu par `bootstrap.sh` (étape 2) fait le travail — livré par la PR #28 de Bastien (`f179f1ff`), garde `to_regnamespace('cron')` sortie de `20260904130100`. *(2)* Le contrôle de santé : `deploy.sh --controle` vérifie que l'extension existe puis **rejoue `tests/sql/crons_planifies_tests.sql` sur le vrai `cron.job` de l'instance** — la même liste nommée que la CI, sans copie (DOC-RECENS-1) ; ✓ « N jobs planifiés — OK : n/n » sinon ⚠ et code de retour 1. Éprouvé sur pile vierge le 15/09 : 38 jobs, suite verte ; un job retiré à la main → ⚠ et rc 1 ; extension supprimée → ⚠ « extension ABSENTE » et rc 1. Reste hors item : la suite dit ce que le dépôt planifie, pas ce que la prod fait — relevé prod à refaire de temps en temps (38 au 15/09, mêmes noms). |
 | E21 | 2026-09-15 | **La série de numéros d'inventaire et la cote d'une bibliothèque se règlent depuis l'écran ; un lot reçoit ses cotes et ses classes de rangement en un geste — livré et en production le soir même** (registre §12 `CAT-E17`, migration `20260915201252`, commit `f7bf927c`). Ouvert et clos le même jour, sur la question de Xavier « comment font-ils pour s'y retrouver avec des numéros d'inventaire dans l'ordre d'apparition ? ». Trois gestes, dans le patron proposé pour les numéros d'inventaire — une convention, un aperçu, une application, une trace : **(1)** bloc « Numérotation » dans Biblioteca › Identité et, pour l'admin, sous chaque bibliothèque de la page Réseau — préfixe, année, séparateur, remplissage, cote, exemple rendu en direct, prochain et dernier numéro ; gardes serveur : préfixe obligatoire sans `%` ni `_`, **unique dans le réseau** (préfixes déclarés et séries héritées des exemplaires, « SOL » et « SOL- » refusés l'un pour l'autre), **figé** dès qu'un exemplaire l'a utilisé ; **(2)** « Cotes manquantes » sur un lot ouvert : aperçu puis application, dans l'ordre du lot, à la suite des cotes existantes (notices, holdings, brouillons vivants), sous verrou par préfixe ; **(3)** « Classer par rubriques » : la rubrique lue là où l'import l'a laissée — pour Solidaires, `assunto_local` de la charge utile brute, puisque le run 29 n'a lié aucun sujet —, table rubrique → code relue par la coordination, `cdd` écrit sur les brouillons sans classe. Suite SQL de 14 tests, 101 suites vertes, 486 tests JS, 57 clés en dix locales. **Reste aux personnes** : choisir le préfixe de Solidaires (Réseau › Numérotation), attribuer les 1 673 cotes, remplir la table des 35 rubriques, activer la bibliothèque, puis la révision du lot (`catalog_batch_reviews`). |
+| G7 | 2026-09-15 | **Solidaires est admise** — décision de Xavier du 15/09/2026 au soir, en mode « seul·e admin » (spec-onboarding §2.6), à défaut de co-administrateur·rices trouvé·es à Bologne (registre §1 `RES-D12` amendé, v0.34). Ce que la fiche attendait de l'admission est arrivé le même soir par `IMP-20` et `CAT-E17` : bibliothèque active, série d'inventaire `SOL-` + millésime, 1 673 brouillons attribués et cotés, coordination Christian. Le périmètre d'admission (`RES-Q13`) reste à porter en AG : Solidaires y entre comme cas, pas comme règle. |
 
 ---
 
@@ -2666,4 +2644,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 89 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fe0cedf1` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 88 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fe0cedf1` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
