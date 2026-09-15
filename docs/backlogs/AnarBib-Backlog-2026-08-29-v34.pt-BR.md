@@ -1186,7 +1186,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Pedido de Xavier em 08/09/2026, decidido após debate.** A barra alinha numa só linha até doze ligações ; cada página alinha os seus separadores (nove a quinze). Tudo está achatado. A proposta inicial (menus por papel, ao passar do rato) foi substituída no debate.
 
-*Verificado : 08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09).*
+*Verificado : 08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote.*
 
 **O que é.** **Agrupar por natureza, não por papel** : **Público** (catálogo, bibliotecas, cartografia, tesauro), **Eu** (minha conta, «Quero…»), **Trabalho** (painel, catalogação, importações, biblioteca, federação, rede — cada entrada sob o mesmo `canSee*`, o grupo só aparece se tiver entradas). **Menus ao clique ou Enter, nunca ao passar do rato** (E9, E1), com `aria-haspopup`/`aria-expanded`, Esc, foco devolvido. **Os separadores não mudam neste lote.** Entregar com o registo `intentions.js` relido, as dez locales, o Manual v5 e a formação BLMF.
 
