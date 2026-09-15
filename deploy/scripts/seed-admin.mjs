@@ -23,6 +23,16 @@ const mode = process.argv[2] || 'local';
 const rawDomain = process.argv[3] || '';
 const rawLibName = (process.argv[4] || '').trim();
 const rawAdminEmail = (process.argv[5] || '').trim();
+const rawLocale = (process.argv[6] || '').trim();
+
+let targetLocale = 'fr';
+if (rawLocale === 'pt' || rawLocale === 'pt-BR') {
+  targetLocale = 'pt-BR';
+} else if (rawLocale === 'en') {
+  targetLocale = 'en';
+} else if (rawLocale) {
+  targetLocale = rawLocale;
+}
 
 const libName = rawLibName || (mode === 'prod' ? 'Bibliothèque Principale' : 'Bibliothèque Autonome');
 const libSlug = libName
@@ -121,12 +131,12 @@ DECLARE
   v_lib_id uuid;
 BEGIN
   INSERT INTO public.profiles (id, email, first_name, last_name, is_librarian, preferred_language)
-  VALUES (v_uid, '${adminEmail}', 'Admin', 'AnarBib', true, 'fr')
-  ON CONFLICT (id) DO UPDATE SET is_librarian = true, preferred_language = 'fr';
+  VALUES (v_uid, '${adminEmail}', 'Admin', 'AnarBib', true, '${targetLocale}')
+  ON CONFLICT (id) DO UPDATE SET is_librarian = true, preferred_language = '${targetLocale}';
 
   IF NOT EXISTS (SELECT 1 FROM public.libraries LIMIT 1) THEN
     INSERT INTO public.libraries (slug, name, is_active, is_default, accepts_public_signup, default_locale)
-    VALUES ('${libSlug}', '${libName.replace(/'/g, "''")}', true, true, true, 'fr')
+    VALUES ('${libSlug}', '${libName.replace(/'/g, "''")}', true, true, true, '${targetLocale}')
     RETURNING id INTO v_lib_id;
   ELSE
     SELECT id INTO v_lib_id FROM public.libraries ORDER BY created_at ASC LIMIT 1;

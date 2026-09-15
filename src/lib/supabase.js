@@ -12,7 +12,7 @@ export function resolveSupabaseUrl(explicitUrl = import.meta.env.VITE_SUPABASE_U
       ? window.location.origin
       : 'http://localhost';
   }
-  return explicitUrl || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+  return explicitUrl;
 }
 
 export const SUPABASE_URL = resolveSupabaseUrl();

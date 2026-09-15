@@ -25,7 +25,10 @@ MIG_DIR="${MIG_DIR:-/migrations}"
 DEPART="${1:-1}"          # numéro de la première migration à appliquer
 SU=""
 
-for candidat in supabase_admin postgres; do
+# Les migrations s'appliquent sous `postgres`, comme en production et en CI
+# (DOC-GRANT-3, A.2) : c'est ce rôle que le socle et 20260831105114 règlent.
+# supabase_admin reste un repli, et il se dit.
+for candidat in postgres supabase_admin; do
   if psql -U "$candidat" -d postgres -tAc "select 1" >/dev/null 2>&1; then
     SU="$candidat"; break
   fi
@@ -34,6 +37,10 @@ done
 if [ -z "$SU" ]; then
   echo "✗ Impossible de se connecter à Postgres."
   exit 1
+fi
+
+if [ "$SU" != "postgres" ]; then
+  echo "· postgres refusé — repli sur $SU : les objets seront possédés par $SU, pas comme en production."
 fi
 
 # Le modèle de migration (_TEMPLATE.sql) et tout fichier préfixé par « _ »

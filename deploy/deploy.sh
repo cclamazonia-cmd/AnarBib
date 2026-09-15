@@ -89,6 +89,7 @@ if [ "$FONCTIONS" = "1" ]; then
 fi
 
 # 5. Contrôle de santé
+SANTE_OK=1
 if [ "$CONTROLE" = "1" ]; then
   dire "Contrôle de santé de la pile"
   
@@ -99,19 +100,26 @@ if [ "$CONTROLE" = "1" ]; then
     echo "✓ RLS : OK (0 table publique sans RLS)"
   else
     echo "⚠ RLS : anomalie ($RLS_KO table(s) sans RLS)"
+    SANTE_OK=0
   fi
 
-  # PostgREST
-  REST_STATUS=$(docker compose exec -T caddy curl -s -o /dev/null -w "%{http_code}" "http://rest:3000/" 2>/dev/null || echo "000")
+  # PostgREST (/libraries évite de générer tout le schéma OpenAPI à froid)
+  REST_STATUS=$(docker compose exec -T caddy curl -s -o /dev/null -w "%{http_code}" "http://rest:3000/libraries" 2>/dev/null || echo "000")
   if [ "$REST_STATUS" = "200" ]; then
     echo "✓ PostgREST : OK (HTTP 200)"
   else
     echo "⚠ PostgREST : HTTP $REST_STATUS"
+    SANTE_OK=0
   fi
 
   # GoTrue
   AUTH_STATUS=$(docker compose exec -T caddy curl -s "http://auth:9999/health" 2>/dev/null | grep -o '"version":[^,}]*' || echo "injoignable")
-  echo "✓ GoTrue : OK ($AUTH_STATUS)"
+  if [ "$AUTH_STATUS" != "injoignable" ]; then
+    echo "✓ GoTrue : OK ($AUTH_STATUS)"
+  else
+    echo "⚠ GoTrue : injoignable"
+    SANTE_OK=0
+  fi
 
   # Storage
   STORAGE_STATUS=$(docker compose exec -T caddy curl -s -o /dev/null -w "%{http_code}" "http://storage:5000/status" 2>/dev/null || echo "000")
@@ -119,8 +127,8 @@ if [ "$CONTROLE" = "1" ]; then
     echo "✓ Storage : OK (HTTP 200)"
   else
     echo "⚠ Storage : HTTP $STORAGE_STATUS"
+    SANTE_OK=0
   fi
-
 
   # Functions
   FN_STATUS=$(docker compose exec -T caddy curl -s -o /dev/null -w "%{http_code}" "http://functions:9000/health-probe" 2>/dev/null || echo "000")
@@ -128,15 +136,33 @@ if [ "$CONTROLE" = "1" ]; then
     echo "✓ Edge Runtime : OK (routeur main actif)"
   else
     echo "⚠ Edge Runtime : HTTP $FN_STATUS"
+    SANTE_OK=0
   fi
 
   # Frontend Web
   FRONT_STATUS=$(docker compose exec -T caddy curl -s -o /dev/null -w "%{http_code}" "http://localhost/" 2>/dev/null || echo "000")
   if [ "$FRONT_STATUS" = "200" ]; then
-    echo "✓ Application Web : OK (HTTP 200 sur http://localhost et http://localhost:5173)"
+    echo "✓ Application Web : OK (HTTP 200 sur http://localhost)"
   else
     echo "⚠ Application Web : HTTP $FRONT_STATUS"
+    SANTE_OK=0
   fi
 fi
 
-dire "Déploiement terminé avec succès."
+if [ "$choix_explicite" = "1" ] && [ "$CONTROLE" = "1" ] && [ "$MIGRATIONS" = "0" ] && [ "$FONCTIONS" = "0" ]; then
+  if [ "$SANTE_OK" = "1" ]; then
+    dire "Contrôle de santé terminé avec succès."
+    exit 0
+  else
+    echo "✗ Contrôle de santé : des anomalies ont été détectées." >&2
+    exit 1
+  fi
+fi
+
+if [ "$SANTE_OK" = "1" ]; then
+  dire "Déploiement terminé avec succès."
+  exit 0
+else
+  echo "⚠ Déploiement terminé avec des anomalies de santé." >&2
+  exit 1
+fi
