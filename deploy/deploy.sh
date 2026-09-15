@@ -139,6 +139,44 @@ if [ "$CONTROLE" = "1" ]; then
     SANTE_OK=0
   fi
 
+  # pg_cron — l'extension existe et les jobs attendus sont planifiés, eux seuls (I19).
+  # Source de vérité : la suite tests/sql/crons_planifies_tests.sql, la même que
+  # la CI rejoue sur le banc — ici elle interroge le VRAI cron.job de cette
+  # instance, ce que le banc ne peut pas faire (son schéma cron est un stub).
+  # La liste nommée vit dans la suite, pas ici (DOC-RECENS-1 : une seule liste).
+  CRON_EXT=$(docker compose exec -T db psql -U supabase_admin -d postgres -tAc \
+    "select count(*) from pg_extension where extname = 'pg_cron';" 2>/dev/null || echo "0")
+  if [ "$CRON_EXT" != "1" ]; then
+    echo "⚠ pg_cron : extension ABSENTE — aucun rappel, aucune moisson, aucun digest ne partira"
+    SANTE_OK=0
+  else
+    CRON_JOBS=$(docker compose exec -T db psql -U supabase_admin -d postgres -tAc \
+      "select count(*) from cron.job;" 2>/dev/null || echo "?")
+    CRON_SUITE="$RACINE/tests/sql/crons_planifies_tests.sql"
+    if [ -f "$CRON_SUITE" ]; then
+      CRON_BILAN=$(docker compose exec -T db psql -U supabase_admin -d postgres -v ON_ERROR_STOP=0 \
+        -f /dev/stdin < "$CRON_SUITE" 2>&1 | grep -oE 'CRONS-PLANIFIES (OK|ECHEC) : .*' | head -n 1 | cut -c1-600)
+      case "$CRON_BILAN" in
+        "CRONS-PLANIFIES OK"*)
+          # Le bilan vert porte aussi une note interne de la suite après « ; » : on la coupe.
+          echo "✓ pg_cron : $CRON_JOBS jobs planifiés — $(printf '%s' "${CRON_BILAN#CRONS-PLANIFIES }" | sed 's/ ; .*//')" ;;
+        "CRONS-PLANIFIES ECHEC"*)
+          # Le bilan rouge nomme les jobs manquants, en trop ou décalés après « | » : on le garde entier.
+          echo "⚠ pg_cron : $CRON_JOBS jobs planifiés, mais ${CRON_BILAN#CRONS-PLANIFIES }"
+          echo "  Détail : docker compose exec -T db psql -U supabase_admin -d postgres -f /dev/stdin < tests/sql/crons_planifies_tests.sql"
+          SANTE_OK=0 ;;
+        *)
+          echo "⚠ pg_cron : la suite crons_planifies n'a pas rendu de bilan ($CRON_JOBS jobs planifiés)"
+          SANTE_OK=0 ;;
+      esac
+    elif [ "$CRON_JOBS" != "?" ] && [ "$CRON_JOBS" -gt 0 ]; then
+      echo "✓ pg_cron : $CRON_JOBS jobs planifiés (suite tests/sql/crons_planifies_tests.sql absente : liste non vérifiée)"
+    else
+      echo "⚠ pg_cron : aucun job planifié ($CRON_JOBS)"
+      SANTE_OK=0
+    fi
+  fi
+
   # Frontend Web
   FRONT_STATUS=$(docker compose exec -T caddy curl -s -o /dev/null -w "%{http_code}" "http://localhost/" 2>/dev/null || echo "000")
   if [ "$FRONT_STATUS" = "200" ]; then

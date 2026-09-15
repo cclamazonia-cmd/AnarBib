@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-15** · 91 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-15** · 90 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 14
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 9
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
 
-**Frescor dos constatos em 2026-09-15.** **73 itens de 91** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-15.** **72 itens de 90** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1851,7 +1851,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | Aberto |
 | **I16** | Acompanhar a PR #28 até a fusão: divisão, quatro pontos bloqueantes, congelamento até 14/09 | `P1` | Em curso |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Aberto |
-| **I19** | `pg_cron` deve existir na pilha auto-hospedada, e sua ausência deve ser visível | `P1` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
@@ -2052,27 +2051,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de I17.
 
 *Remissões : `scripts/ci/run-sql-suites.sh` · `REGISTRE §0 DOC-GRANT-2` · `REGISTRE §0 DOC-MIGR-1`*
-
-#### I19 — `pg_cron` deve existir na pilha auto-hospedada, e sua ausência deve ser visível
-
-`P1` Prioritário · Estado : **Em curso** · Carga : uma noite · O que exige : administração de sistemas, SQL / PostgreSQL
-
-**Estado.** A PR #28 envolve `cron.schedule` numa guarda que pula se o esquema `cron` não existir. O banco de CI tem um stub desde 31/08: a guarda só serve na pilha de Bastien, logo ela **não tem `pg_cron`** — e as 15 migrações anteriores que agendam já passaram em silêncio. Numa instalação real: sem lembretes, sem colheita OAI, sem digests, sem uma palavra. **Atualização 15/09 — entregue no essencial pela #28 (`f179f1ff`)**: `01-roles.sh` cria a extensão e **para** se falhar; na primeira passagem do entrypoint, diz que adia em vez de calar. Medido: `pg_cron` presente, **38 jobs em `cron.job`** numa pilha fresca, 308 migrações verdes.
-
-*Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **07/09, experiência de `I17`**: na imagem 17.6.1.136 virgem, a biblioteca é pré-carregada mas a extensão não existe em `postgres` — `cron.job` ausente, `20260904130100` vermelha na 288ª. `CREATE EXTENSION IF NOT EXISTS pg_cron` sob `postgres` funciona, depois 288→310 verdes. Armadilha: `initdb.d/*` na ordem do glob, `99-roles.sh` antes de `migrate.sh`.*
-
-**O que é.** Resta a linha no controlo de saúde de `deploy.sh --controle`: contar `cron.job` e comparar ao esperado (38 em 15/09). Depois encerrar.
-
-**Por que importa.** Uma biblioteca auto-hospedada sem `pg_cron` é uma biblioteca sem lembretes nem backups vigiados, que acredita tê-los.
-
-**O que conta como terminado.**
-
-- `select count(*) from cron.job` numa pilha nova devolve o número de jobs do repositório.
-- Uma migração que agenda sem `pg_cron` é vermelha, não silenciosa.
-
-**Dependências.** A propor a Bastien na PR dividida (I16) ou a fazer na volta.
-
-*Remissões : `supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql` · `deploy/compose.yml` · `deploy/init-db/` · `REGISTRE §0 DOC-SILENCE-1`*
 
 #### I21 — O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil
 
@@ -2656,6 +2634,7 @@ CI verde. |
 | E18 | 2026-09-07 | **Constatado e encerrado em 07/09 por Xavier, em `/obra/133`** : seis «edições» idênticas na tela, na ordem VI, V, IV, I, III, II. Os dados estavam certos (`volume` = I a VI): `api.work_public_detail` não servia `volume` e ordenava por ano e título. A lista do catálogo já servia o tomo com o seu badge «Tomo N» — a página Obra era a única superfície a ignorá-lo. Migração `20260907220000` (RPC retomada da definição em produção: `volume` em cada edição, ordem ano → `fn_volume_rank` → título, grants conservados), badge em `WorkPage.jsx` com a chave existente, suíte `oeuvre_tomes_page_tests.sql` (três tomos inseridos III, I, II que devem sair I, II, III). Verificado na tela em `/obra/133` após o deploy. **Segundo gesto na mesma noite, por observação de Xavier** («não são seis edições, são seis tomos de uma só edição»): o cabeçalho ainda dizia «6 edição(ões)». Migração `20260907233000`: a RPC serve `edition_count` e `volume_count` (mesma regra que a lista), o cabeçalho compõe «1 edição · 6 volumes»; T6-T7 na suíte. |
 | E5 | 2026-09-07 | **Entregue e em produção na mesma noite — a última exceção antirrastreamento cai, e não pela via que a ficha propunha.** A ficha queria um *relé* de `tile.openstreetmap.org` com cache; a política de ladrilhos do OSM desaconselha proxies e proíbe qualquer pré-carregamento, e um relé manteria a dependência. Feito em vez disso: **um único arquivo PMTiles** (planet Protomaps de 07/09, derivado do OpenStreetMap, ODbL) extraído em **z12 = 18 GB** (medidas a seco: z10 3,7 GB, z11 7,9, z13 36, z14 68, z15 138), depositado no bucket público **`map-tiles`** (criado na base + migração `20260907234500` inerte depois, teto global do Storage subido de 500 MB para 20 GiB pela API de gestão) e lido pelo navegador **por requisições Range** (Storage responde 206 + CORS `*`, verificado). Renderizado no Leaflet vendorizado por **`protomaps-leaflet` 4.0.1** via `src/lib/mapTiles.js`; os três mapas não têm mais nenhuma linha `L.tileLayer`. Guarda CI `src/tests/carte-sans-domaine-tiers.test.js`. `privacy.s6.maptiles` e `federacao.carte.attribution` reescritos nas dez locales. Receita: `scripts/maptiles/README.md`. **Dois limites escritos**: (1) o arquivo está no Storage Supabase — o vazamento de IP para terceiro está fechado, não o perímetro Cloud Act, que cai com **I2** (contar estes 18 GB no disco pedido às Herbes Folles — **I21**); (2) `map-tiles` fica fora do fluxo storage do **BG2**. `ca` e `eo` ausentes do fundo → nomes locais. O fracasso de junho de 2026 lembrado como «os fundos de mapa» era o **Nominatim** (geocodificação), que segue não configurado. Incidente de método: a medida a seco de z15 travou o WSL no teto de 15 GB — `wsl --shutdown` com acordo de Xavier, nada perdido. |
 | IMP-20 | 2026-09-15 | **Um lote importado pertence a uma biblioteca de destino — entregue e em produção na mesma noite** (registo §17 `IMP-20`, migração `20260915184154`). Não era um item : era uma pergunta de Xavier de 15/09 — como atribuir os 1 673 rascunhos de Solidaires à sua biblioteca — cuja resposta honesta era « um UPDATE à mão, a refazer a cada admissão ». Feito : `destination_library_id` na fonte, carimbo de `owner_library_id` na promoção, `fn_batch_reassign_library` (administração da rede), coluna « Biblioteca » nos lotes, 21 chaves em dez locales, suite SQL de 12 testes. **O lote Solidaires está atribuído** ; os avisos (sem série de tombos, inativa) dão **E21**. Continua atrás de **G7** e da revisão do lote. |
+| I19 | 2026-09-15 | **Encerrado em 15/09, sobre medição.** *(1)* `01-roles.sh` cria `pg_cron` e **para** se falhar; na primeira passagem do entrypoint diz que adia (PR #28, `f179f1ff`). *(2)* `deploy.sh --controle` verifica a extensão e **reproduz `tests/sql/crons_planifies_tests.sql` no `cron.job` real** — a mesma lista da CI, sem cópia; ✓ ou ⚠ com código de retorno 1. Provado em pilha virgem: 38 jobs, suíte verde; job removido → ⚠ rc 1; extensão removida → ⚠ rc 1. |
 
 ---
 
@@ -2687,4 +2666,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 91 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60e0580a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 90 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60e0580a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

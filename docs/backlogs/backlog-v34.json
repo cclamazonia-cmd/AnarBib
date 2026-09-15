@@ -1930,6 +1930,14 @@
           "fr": "**Un lot importé appartient à une bibliothèque de destination — livré et en production le soir même** (registre §17 `IMP-20`, migration `20260915184154`, commit `60e0580a`). Ce n'était pas un item : c'est une question de Xavier du 15/09 — « comment attribuer les 1 673 brouillons du lot Solidaires à cette bibliothèque ? » — dont la réponse honnête était « par un UPDATE à la main, que chaque admin aurait à refaire à chaque admission ». La chaîne d'import ne posait jamais `owner_library_id` ; la publication retombait sur la bibliothèque de qui publie. Fait : `destination_library_id` sur la source (la bibliothèque qui *détient* les livres, distincte de la bibliothèque importatrice), tampon de `owner_library_id` à la promotion selon la provenance, `fn_batch_reassign_library` (administration du réseau : brouillons en cours seulement, fiches publiées intactes, source alignée, trace dans les notes, refus si révision approuvée), `fn_batch_owner_libraries` et la colonne « Bibliothèque » dans Catalogação › Lots (« sans bibliothèque » en ambre avant de publier), bibliothèque de destination optionnelle sur une nouvelle source de dépôt dans Importações, 21 clés en dix locales, suite SQL de 12 tests. **Le lot Solidaires est attribué** (essai à blanc annulé, puis réel sous l'identité de Xavier) ; la fonction a rendu ses deux avertissements — bibliothèque sans série de tombos, inactive — d'où **E21**. Reste derrière **G7** (admission) et la révision de lot.",
           "pt": "**Um lote importado pertence a uma biblioteca de destino — entregue e em produção na mesma noite** (registo §17 `IMP-20`, migração `20260915184154`). Não era um item : era uma pergunta de Xavier de 15/09 — como atribuir os 1 673 rascunhos de Solidaires à sua biblioteca — cuja resposta honesta era « um UPDATE à mão, a refazer a cada admissão ». Feito : `destination_library_id` na fonte, carimbo de `owner_library_id` na promoção, `fn_batch_reassign_library` (administração da rede), coluna « Biblioteca » nos lotes, 21 chaves em dez locales, suite SQL de 12 testes. **O lote Solidaires está atribuído** ; os avisos (sem série de tombos, inativa) dão **E21**. Continua atrás de **G7** e da revisão do lote."
         }
+      ],
+      [
+        "I19",
+        "2026-09-15",
+        {
+          "fr": "**Clos le 15/09, sur mesure.** *(1)* L'extension : `deploy/init-db/01-roles.sh` crée `pg_cron` (`CREATE EXTENSION IF NOT EXISTS` + `GRANT` à `postgres` et `service_role`) et **s'arrête** si ça échoue ; au premier passage de l'entrypoint, où le rôle `postgres` n'existe pas encore, il le dit (« différé au prochain passage ») et le rejeu par `bootstrap.sh` (étape 2) fait le travail — livré par la PR #28 de Bastien (`f179f1ff`), garde `to_regnamespace('cron')` sortie de `20260904130100`. *(2)* Le contrôle de santé : `deploy.sh --controle` vérifie que l'extension existe puis **rejoue `tests/sql/crons_planifies_tests.sql` sur le vrai `cron.job` de l'instance** — la même liste nommée que la CI, sans copie (DOC-RECENS-1) ; ✓ « N jobs planifiés — OK : n/n » sinon ⚠ et code de retour 1. Éprouvé sur pile vierge le 15/09 : 38 jobs, suite verte ; un job retiré à la main → ⚠ et rc 1 ; extension supprimée → ⚠ « extension ABSENTE » et rc 1. Reste hors item : la suite dit ce que le dépôt planifie, pas ce que la prod fait — relevé prod à refaire de temps en temps (38 au 15/09, mêmes noms).",
+          "pt": "**Encerrado em 15/09, sobre medição.** *(1)* `01-roles.sh` cria `pg_cron` e **para** se falhar; na primeira passagem do entrypoint diz que adia (PR #28, `f179f1ff`). *(2)* `deploy.sh --controle` verifica a extensão e **reproduz `tests/sql/crons_planifies_tests.sql` no `cron.job` real** — a mesma lista da CI, sem cópia; ✓ ou ⚠ com código de retorno 1. Provado em pilha virgem: 38 jobs, suíte verde; job removido → ⚠ rc 1; extensão removida → ⚠ rc 1."
+        }
       ]
     ]
   },
@@ -4770,57 +4778,6 @@
       "verif": {
         "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
         "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
-    },
-    {
-      "id": "I19",
-      "d": "I",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "sysadmin",
-        "sql"
-      ],
-      "t": {
-        "fr": "`pg_cron` doit exister sur la pile auto-hébergée, et son absence doit se voir",
-        "pt": "`pg_cron` deve existir na pilha auto-hospedada, e sua ausência deve ser visível"
-      },
-      "v": {
-        "fr": "La PR #28 enveloppe `cron.schedule` de `20260904130100` dans une garde `to_regnamespace('cron') IS NULL → NOTICE + RETURN`, étiquetée « banc d'essai ». Le banc CI a un stub `cron` depuis le 31/08 : la garde ne sert que sur la pile de Bastien, donc **elle n'a pas `pg_cron`** — et les 15 migrations antérieures qui planifient y sont déjà passées en silence par leurs anciens `EXCEPTION`. Sur une installation réelle : pas de rappels d'échéance, pas de moisson OAI, pas de digests, pas de témoin de sauvegarde, sans un mot (`DOC-SILENCE-1`). `compose.yml` note pourtant que le code appelle `cron.` 36 fois. **MàJ 15/09 — livré pour l'essentiel par la #28 (`f179f1ff`)** : `deploy/init-db/01-roles.sh` crée l'extension (`CREATE EXTENSION IF NOT EXISTS pg_cron` + `GRANT` à `postgres` et `service_role`) et **s'arrête** si ça échoue ; au premier passage de l'entrypoint, où le rôle `postgres` n'existe pas encore, il le dit (« différé au prochain passage ») au lieu de se taire, et le rejeu par `bootstrap.sh` (étape 2) fait le travail. La garde `to_regnamespace('cron')` est sortie de `20260904130100`. Mesuré sur la tête fusionnée : `pg_cron` présent, **38 jobs dans `cron.job`** sur une pile fraîche, 308 migrations vertes sans un saut.",
-        "pt": "A PR #28 envolve `cron.schedule` numa guarda que pula se o esquema `cron` não existir. O banco de CI tem um stub desde 31/08: a guarda só serve na pilha de Bastien, logo ela **não tem `pg_cron`** — e as 15 migrações anteriores que agendam já passaram em silêncio. Numa instalação real: sem lembretes, sem colheita OAI, sem digests, sem uma palavra. **Atualização 15/09 — entregue no essencial pela #28 (`f179f1ff`)**: `01-roles.sh` cria a extensão e **para** se falhar; na primeira passagem do entrypoint, diz que adia em vez de calar. Medido: `pg_cron` presente, **38 jobs em `cron.job`** numa pilha fresca, 308 migrações verdes."
-      },
-      "w": {
-        "fr": "Reste la ligne au contrôle de santé de `deploy.sh --controle` : compter `cron.job` et comparer au nombre de jobs attendus du dépôt (38 au 15/09), rouge si l'extension ou des jobs manquent. Puis clore sur ce constat.",
-        "pt": "Resta a linha no controlo de saúde de `deploy.sh --controle`: contar `cron.job` e comparar ao esperado (38 em 15/09). Depois encerrar."
-      },
-      "y": {
-        "fr": "Une bibliothèque auto-hébergée sans `pg_cron` est une bibliothèque sans rappels ni sauvegardes surveillées, qui croit en avoir. C'est la forme la plus coûteuse du silence.",
-        "pt": "Uma biblioteca auto-hospedada sem `pg_cron` é uma biblioteca sem lembretes nem backups vigiados, que acredita tê-los."
-      },
-      "f": {
-        "fr": [
-          "`select count(*) from cron.job` sur une pile fraîche rend le nombre de jobs du dépôt.",
-          "Une migration qui planifie sans `pg_cron` est rouge, pas silencieuse."
-        ],
-        "pt": [
-          "`select count(*) from cron.job` numa pilha nova devolve o número de jobs do repositório.",
-          "Uma migração que agenda sem `pg_cron` é vermelha, não silenciosa."
-        ]
-      },
-      "dep": {
-        "fr": "À proposer à Bastien dans la PR scindée (**I16**) ou à faire au retour.",
-        "pt": "A propor a Bastien na PR dividida (I16) ou a fazer na volta."
-      },
-      "r": [
-        "supabase/migrations/20260904130100_les_oeuvres_ont_un_titre_par_langue.sql",
-        "deploy/compose.yml",
-        "deploy/init-db/",
-        "REGISTRE §0 DOC-SILENCE-1"
-      ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **07/09, expérience d'`I17`** (`NOTE_experience-I17-rejeu-fidele_2026-09-07`) : sur l'image 17.6.1.136 vierge, la bibliothèque est préchargée (« pg_cron scheduler started ») mais l'extension n'existe pas dans `postgres` — `cron.job` absent, `20260904130100` rouge à la 288e migration. `CREATE EXTENSION IF NOT EXISTS pg_cron` sous `postgres` non superutilisateur réussit, puis 288→310 vertes. Piège : `initdb.d/*` est traité dans l'ordre du glob, `99-roles.sh` avant `migrate.sh` ; un `exit 1` dans le script sourcé tue l'init.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **07/09, experiência de `I17`**: na imagem 17.6.1.136 virgem, a biblioteca é pré-carregada mas a extensão não existe em `postgres` — `cron.job` ausente, `20260904130100` vermelha na 288ª. `CREATE EXTENSION IF NOT EXISTS pg_cron` sob `postgres` funciona, depois 288→310 verdes. Armadilha: `initdb.d/*` na ordem do glob, `99-roles.sh` antes de `migrate.sh`."
       }
     },
     {
