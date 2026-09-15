@@ -2096,7 +2096,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** **Constatado em 15/09/2026 ao voltar de Bolonha.** Domingo 13/09 o posto estava desligado ; em 15/09 às 08h15 o systemd recuperou os três fluxos : `court` e `long` terminaram, **`storage` foi morto às 08h23 por `SIGTERM`** — o encerramento da sessão WSL — e a unidade de alerta `OnFailure` **não pôde ser lançada**. Resultado : fluxo `storage` com nove dias, testemunho `started` sem `ok`, nenhum e-mail. Relançado à mão às 20h50.
 
-*Verificado : 15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50.*
+*Verificado : 15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50. **21h05** — o relançamento manual terminou : dezasseis buckets, instantâneo `daafc96b`, testemunho enviado. O buraco vai de 06/09 a 15/09.*
 
 **O que é.** **(1)** O serviço `storage` não deve morrer com a sessão (`KillMode=`, `TimeoutStopSec=`, ou `loginctl enable-linger`). **(2)** O alerta não deve depender da sessão : o controlo de frescura do meio-dia deve **enviar** quando um fluxo passa o limiar ou tem um `started` sem `ok`.
 

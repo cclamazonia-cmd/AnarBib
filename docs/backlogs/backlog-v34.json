@@ -5762,8 +5762,8 @@
         "RUNBOOK_restauration_BG2_2026-07-01"
       ],
       "verif": {
-        "fr": "15/09 — journal `journalctl --user -u anarbib-backup-storage.service` : `Main process exited, code=killed, status=15/TERM` à 08:23:45, « Failed to enqueue OnFailure » ; `fn_backup_heartbeat_status` : `storage` `interrompu = true`, `muet = true`, 215,5 h. Relance manuelle à 20 h 50, en cours au moment du relevé.",
-        "pt": "15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50."
+        "fr": "15/09 — journal `journalctl --user -u anarbib-backup-storage.service` : `Main process exited, code=killed, status=15/TERM` à 08:23:45, « Failed to enqueue OnFailure » ; `fn_backup_heartbeat_status` : `storage` `interrompu = true`, `muet = true`, 215,5 h. Relance manuelle à 20 h 50, en cours au moment du relevé. **21 h 05** — la relance manuelle a abouti : seize buckets resynchronisés, instantané `daafc96b`, témoin de vie envoyé, rétention 7/4/6 appliquée (l’instantané du 09/08 sorti). Le flux `storage` est de nouveau attesté ; le trou va du 06/09 21 h 19 au 15/09 21 h 05.",
+        "pt": "15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50. **21h05** — o relançamento manual terminou : dezasseis buckets, instantâneo `daafc96b`, testemunho enviado. O buraco vai de 06/09 a 15/09."
       }
     },
     {
