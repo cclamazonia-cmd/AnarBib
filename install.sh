@@ -88,9 +88,9 @@ t() {
     pt:banner)         echo "AnarBib — Instalador centralizado completo" ;;
 
     # ── step 1 ───────────────────────────────────────────────────────────────
-    fr:step1)          echo "1/5 · Vérification des prérequis système" ;;
-    en:step1)          echo "1/5 · Checking system prerequisites" ;;
-    pt:step1)          echo "1/5 · Verificação dos pré-requisitos do sistema" ;;
+    fr:step1)          echo "1/4 · Vérification des prérequis système" ;;
+    en:step1)          echo "1/4 · Checking system prerequisites" ;;
+    pt:step1)          echo "1/4 · Verificação dos pré-requisitos do sistema" ;;
 
     fr:err_docker)     echo "Docker est introuvable. Installez Docker avant de continuer." ;;
     en:err_docker)     echo "Docker not found. Please install Docker before continuing." ;;
@@ -125,9 +125,9 @@ t() {
     pt:ok_node)        echo "Node.js / npm pronto ($2)" ;;
 
     # ── step 2 ───────────────────────────────────────────────────────────────
-    fr:step2)          echo "2/5 · Initialisation des environnements et génération des clés" ;;
-    en:step2)          echo "2/5 · Environment setup and key generation" ;;
-    pt:step2)          echo "2/5 · Configuração do ambiente e geração de chaves" ;;
+    fr:step2)          echo "2/4 · Initialisation des environnements et génération des clés" ;;
+    en:step2)          echo "2/4 · Environment setup and key generation" ;;
+    pt:step2)          echo "2/4 · Configuração do ambiente e geração de chaves" ;;
 
     fr:ok_env)         echo "Fichier deploy/.env créé depuis deploy/.env.example" ;;
     en:ok_env)         echo "File deploy/.env created from deploy/.env.example" ;;
@@ -154,21 +154,21 @@ t() {
     en:mail_title)     echo "📧 Email service configuration for notifications:" ;;
     pt:mail_title)     echo "📧 Configuração do serviço de e-mail para notificações:" ;;
 
-    fr:mail_opt1)      echo "   [1] Aucun / Test en local (les e-mails sont simulés, aucun compte requis) [Défaut]" ;;
-    en:mail_opt1)      echo "   [1] None / Local test (emails are simulated, no account needed) [Default]" ;;
-    pt:mail_opt1)      echo "   [1] Nenhum / Teste local (e-mails simulados, nenhuma conta necessária) [Padrão]" ;;
+    fr:mail_opt1)      echo "   [1] Serveur SMTP standard (votre propre boîte mail : OVH, Gandi, Infomaniak, etc.)" ;;
+    en:mail_opt1)      echo "   [1] Standard SMTP server (your own mailbox: Gmail, Gandi, Infomaniak, etc.)" ;;
+    pt:mail_opt1)      echo "   [1] Servidor SMTP padrão (sua própria caixa de correio: Gmail, Gandi, etc.)" ;;
 
-    fr:mail_opt2)      echo "   [2] Serveur SMTP standard (votre propre boîte mail : OVH, Gandi, Infomaniak, etc.)" ;;
-    en:mail_opt2)      echo "   [2] Standard SMTP server (your own mailbox: Gmail, Gandi, Infomaniak, etc.)" ;;
-    pt:mail_opt2)      echo "   [2] Servidor SMTP padrão (sua própria caixa de correio: Gmail, Gandi, etc.)" ;;
+    fr:mail_opt2)      echo "   [2] Clé API Resend (service tiers clé en main)" ;;
+    en:mail_opt2)      echo "   [2] Resend API key (third-party turnkey service)" ;;
+    pt:mail_opt2)      echo "   [2] Chave API Resend (serviço terceirizado pronto para uso)" ;;
 
-    fr:mail_opt3)      echo "   [3] Clé API Resend (service tiers clé en main)" ;;
-    en:mail_opt3)      echo "   [3] Resend API key (third-party turnkey service)" ;;
-    pt:mail_opt3)      echo "   [3] Chave API Resend (serviço terceirizado pronto para uso)" ;;
+    fr:mail_opt3)      echo "   [3] Simulation locale (e-mails journalisés, aucun compte requis)" ;;
+    en:mail_opt3)      echo "   [3] Local simulation (emails logged, no account needed)" ;;
+    pt:mail_opt3)      echo "   [3] Simulação local (e-mails registrados, nenhuma conta necessária)" ;;
 
-    fr:mail_prompt)    printf "Votre choix [1/2/3] (défaut: 1) : " ;;
-    en:mail_prompt)    printf "Your choice [1/2/3] (default: 1): " ;;
-    pt:mail_prompt)    printf "Sua escolha [1/2/3] (padrão: 1): " ;;
+    fr:mail_prompt)    printf "Votre choix [1/2/3] : " ;;
+    en:mail_prompt)    printf "Your choice [1/2/3]: " ;;
+    pt:mail_prompt)    printf "Sua escolha [1/2/3]: " ;;
 
     fr:smtp_title)     echo "→ Configuration SMTP :" ;;
     en:smtp_title)     echo "→ SMTP configuration:" ;;
@@ -563,10 +563,9 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
   t mail_opt3
   t mail_prompt
   read -r MAIL_CHOICE
-  MAIL_CHOICE="${MAIL_CHOICE:-1}"
 
   case "$MAIL_CHOICE" in
-    2)
+    1)
       echo ""
       t smtp_title
       t smtp_host;   read -r CFG_SMTP_HOST
@@ -588,7 +587,7 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
       sed -i "s|^SENDER_EMAIL=.*|SENDER_EMAIL=${CFG_SENDER_EMAIL}|" deploy/functions.env
       succes "$(t ok_smtp "${CFG_SMTP_HOST}:${CFG_SMTP_PORT}")"
       ;;
-    3)
+    2)
       echo ""
       t resend_title
       t resend_key;    read -r CFG_RESEND_KEY
@@ -598,7 +597,7 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
       sed -i "s|^SENDER_EMAIL=.*|SENDER_EMAIL=${CFG_RESEND_SENDER}|"  deploy/functions.env
       succes "$(t ok_resend "$CFG_RESEND_SENDER")"
       ;;
-    *)
+    3|*)
       sed -i "s|^MAIL_TRANSPORT=.*|MAIL_TRANSPORT=mock|" deploy/functions.env
       succes "$(t ok_mock)"
       ;;
@@ -610,14 +609,15 @@ DEFAULT_LIB="Bibliothèque Autonome"
 [ "$LANG_CODE" = "en" ] && DEFAULT_LIB="Autonomous Library"
 [ "$LANG_CODE" = "pt" ] && DEFAULT_LIB="Biblioteca Autônoma"
 
-LIB_NAME="$DEFAULT_LIB"
+LIB_NAME=""
 ADMIN_EMAIL=""
 if [ -t 0 ]; then
   echo ""
   t lib_title
-  t lib_prompt "$DEFAULT_LIB"
-  read -r USER_LIB_NAME
-  [ -n "$USER_LIB_NAME" ] && LIB_NAME="$USER_LIB_NAME"
+  while [ -z "$LIB_NAME" ]; do
+    t lib_prompt "$DEFAULT_LIB"
+    read -r LIB_NAME
+  done
   succes "$(t ok_lib "$LIB_NAME")"
 
   echo ""
@@ -644,7 +644,7 @@ ANON_KEY="$(grep '^ANON_KEY=' deploy/.env | cut -d= -f2-)"
 # Configuration de .env.local (sans écraser les clés personnalisées existantes)
 if [ ! -f .env.local ]; then
   cat > .env.local <<EOF
-# $(t gen_keys)
+# AnarBib — configuration locale générée par ./install.sh
 VITE_SUPABASE_URL=auto
 VITE_SUPABASE_PUBLISHABLE_KEY=${ANON_KEY}
 EOF
@@ -731,7 +731,7 @@ if [ "$START" = "1" ]; then
   dire "$(t health_title)"
   ./deploy/deploy.sh --controle
 
-  node deploy/scripts/seed-admin.mjs "$MODE" "$DOMAINE_PROD" "$LIB_NAME" "$ADMIN_EMAIL"
+  node deploy/scripts/seed-admin.mjs "$MODE" "$DOMAINE_PROD" "$LIB_NAME" "$ADMIN_EMAIL" "$LANG_CODE"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────

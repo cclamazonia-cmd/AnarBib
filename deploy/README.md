@@ -62,8 +62,8 @@ Options disponibles :
 ### Compte administrateur initial
 
 Lors d'une nouvelle installation avec une base vierge, `./install.sh` provisionne automatiquement un compte administrateur réseau :
-- **Mode local** : `admin@anarbib.local` / mot de passe : `anarbib-admin`
-- **Mode production** : `admin@DOMAINE` avec un mot de passe aléatoire sécurisé de 16 caractères affiché à l'écran.
+- **Email admin** : demandé interactivement lors de l'installation (par défaut `admin@DOMAINE` en production, `admin@anarbib.local` en local).
+- **Mot de passe** : généré aléatoirement (16 caractères), affiché une seule fois à l'écran à la fin de l'installation, puis supprimé.
 
 Ce compte dispose des rôles de gestionnaire de réseau (`network_administrators`), de coordinateur et de bibliothécaire sur la bibliothèque de démonstration, donnant un accès immédiat aux panneaux de gestion (`/painel`, `/biblioteca`, `/rede`, `/catalogacao`).
 
@@ -157,6 +157,37 @@ Si la machine hôte n'a pas d'IP publique directe ou est située derrière un NA
 - **`CADDY_TAG=2`.** Seule entorse à « aucun `latest`, jamais » : un tag majeur
   flottant. Justification écrite dans `.env.example` — Caddy est le seul service
   sans schéma ni données, une mineure ne change rien à la reconstruction.
+
+---
+
+## Ce qu'on a supprimé, et pourquoi
+
+| Service | Raison |
+|---|---|
+| `realtime` | aucun usage dans le front — pas un `.channel(`, pas un `postgres_changes` |
+| `imgproxy` | aucune transformation d'image demandée à Storage — **vrai depuis le 26/08 seulement** : la grille du catalogue en demandait depuis le 17/06, voir l'audit |
+| `studio` | administration par migrations ; jamais en production |
+| `analytics` / `vector` | logs dans journald |
+| `meta` | outil de Studio |
+| `kong` | remplacé par Caddy |
+| `supavisor` | pooler sans objet à cette charge |
+
+---
+
+## Ordre de la répétition
+
+1. VM jetable, Docker installé.
+2. `.env` rempli, tags épinglés.
+3. Écrire et relire le routeur `main`.
+4. `docker compose up -d`, observer les healthchecks.
+5. Restaurer un dump de production dans `db`.
+6. Vérifier dans l'ordre : `/auth/v1/health` → une RPC `api.*` → un fichier
+   Storage → une Edge Function du chemin critique (`login`).
+7. Pointer un build du front sur le nouveau domaine et se connecter pour de vrai.
+8. **Chronométrer le tout**, et noter ce qui a cassé.
+
+Le chiffre à rapporter à hfo est celui de l'étape 8 — pas celui d'un compose qui
+démarre, mais celui d'une connexion réussie depuis un front reconstruit.
 
 ---
 
