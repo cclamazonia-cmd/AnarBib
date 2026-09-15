@@ -62,11 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
 
-<<<<<<< Updated upstream
 **Frescor dos constatos em 2026-09-15.** **72 itens de 89** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
-=======
-**Frescor dos constatos em 2026-09-15.** **74 itens de 91** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, E21, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
->>>>>>> Stashed changes
 
 ### Banco
 
@@ -112,7 +108,7 @@ Registo de **15 de setembro de 2026** à noite — produção em leitura e repos
 
 | | | |
 |---|---:|---|
-| Commits | **2 675** | em `main`, em 15/09 às 22h45 — **30 commits entre 21 h e 22h15**, todos da sessão vizinha: a **PR #28 fundida** (`f179f1ff`, instalador do Bastien, 17 commits retomados), **GAZ-7** (três commits: base, Edge Functions, front), **E21** entregue (`f7bf927c`), B19 descongelado, I16 e I19 anotados. O congelamento de 08 a 14/09 tinha aguentado (11 commits numa semana). |
+| Commits | **2 677** | em `main`, em 15/09 às 22h40 — **32 commits entre 21 h e 22h40**, todos da sessão vizinha: a **PR #28 fundida** (`f179f1ff`, instalador do Bastien, 17 commits retomados), **GAZ-7** (três commits: base, Edge Functions, front), **E21** entregue (`f7bf927c`) e fechado (`fe0cedf1`, `CAT-E17` no registro), **I19** fechado (`cbb51278`: o controle de saúde do `deploy.sh` verifica `pg_cron` e reproduz a lista dos crons esperados no `cron.job` real), B19 descongelado, I16 anotado. O congelamento de 08 a 14/09 tinha aguentado (11 commits numa semana). |
 | Arquivos `src/` | **321** | 81 páginas, 94 componentes; +3 desde o levantamento das 21 h: `components/library/LibraryNumberingSection.jsx` (E21, o bloco « Numeração » de Biblioteca › Configuração) e as duas bancadas de GAZ-7 (`gazette-decision-mail`, `submit-gazette-contribution`). |
 | Chaves i18n | **6 670** | por locale, **paridade estrita nas 10**, guardada na CI; +78 na noite de 15/09 (GAZ-7: motivo da rejeição e retomada; E21: bloco de numeração, cotas e rubricas de um lote), +21 às 21 h (biblioteca de destino). |
 | Testes | **486 + 101** | 486 testes JS (vitest, gate bloqueante; +17 na noite: as duas bancadas de GAZ-7 e o resto) + **101 suítes SQL** em `ci-suites.txt` (+2: `gazette_reprise_tests`, `numerotation_et_rangement_tests`). Vitest relançado por inteiro às 22h30: 486/486 em 45 s. CI verde: a migração 317 está em produção. |
@@ -1209,33 +1205,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
 
-<<<<<<< Updated upstream
-=======
-#### E21 — A série de números de tombo e o prefixo de cota de uma biblioteca não se configuram em lado nenhum da aplicação
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
-
-**Estado.** **Constatado em 15/09/2026** ao atribuir o lote Solidaires à sua biblioteca : `fn_batch_reassign_library` devolveu o aviso `library_without_tombo_pattern`. `libraries.tombo_pattern` (JSON `{prefix, year, sep, pad}`, lido por `fn_next_tombo` a cada exemplar publicado) e `bib_ref_prefix` / `bib_ref_pad` / `bib_ref_auto` (a cota) **não têm ecrã nenhum** : nem a página Biblioteca, nem a página Rede, nenhuma RPC os escreve. BLMF, BTL e MLEG foram configuradas **em SQL à mão** ; `blmf-teste` e Solidaires não têm nada. Uma biblioteca criada na app **não consegue publicar nenhum exemplar** enquanto um admin não escrever uma linha de SQL — e nada lho diz antes da primeira recusa. **E antes do tombo**, `publish_book_draft` recusa qualquer rascunho sem cota (`bib_ref`) : os 1 673 de Solidaires não têm nenhuma, e **nenhuma ferramenta numera um lote em massa**. **E a arrumação :** o número de tombo nunca serviu para encontrar um livro na estante ; é a **cota de arrumação**, calculada na etiqueta de lombada — classe no campo `cdd` (texto livre, Dewey não imposto) e trigrama de autor·a. Sem classe, só o trigrama : arrumação alfabética, não temática. Medido em 15/09 : BTL 956 fichas classificadas em 2 184, BLMF 189 em 248, **MLEG 17 em 269**. Solidaires chega com **35 rubricas** próprias, guardadas como assuntos, e nenhuma classe.
-
-*Verificado : [object Object]*
-
-**O que é.** Um bloco « Numeração » em Biblioteca › Configuração, para a coordenação : prefixo, ano sim/não, separador, preenchimento a N dígitos, com **o exemplo renderizado ao vivo** e o último número atribuído ; o mesmo bloco para a cota. Uma RPC que escreve estas colunas com duas guardas : o prefixo é **único na rede** (`exemplares.tombo` é único em toda a base) e não muda depois de usado. E na Rede, ao criar uma biblioteca, o passo « numeração » **antes** da ativação. **Via 2, a arrumação temática de um lote importado** (pedida por Xavier em 15/09) : um gesto de lote « Passar as rubricas para a classe » que, para cada rascunho sem `cdd`, pega a rubrica da fonte (assuntos importados ou classificação local preservada) e a escreve no campo classe, segundo uma tabela rubrica → código de arrumação que a coordenação relê e valida antes de aplicar (35 linhas para Solidaires, não 1 673). A etiqueta de lombada segue sozinha. Mesmo padrão que a numeração das cotas : um lote, uma convenção, uma pré-visualização, uma aplicação.
-
-**Por que importa.** Uma biblioteca admitida que não pode publicar nada é uma biblioteca que a administração tem de desenrascar em SQL a cada admissão — exatamente a dependência de uma só pessoa que **A1**-**A3** querem desfazer.
-
-**O que conta como terminado.**
-
-- Uma coordenação configura a sua série de tombos e a sua cota a partir de Biblioteca, sem SQL, e vê o exemplo antes de gravar.
-- Um prefixo já usado por outra biblioteca é recusado pelo servidor.
-- Solidaires publica o seu primeiro exemplar com um tombo da sua série, configurada no ecrã.
-- Um lote de rascunhos sem cota recebe as suas cotas num só gesto, pela ordem do lote.
-- Um lote importado recebe as suas classes de arrumação num só gesto, a partir de uma tabela rubrica → código relida pela coordenação ; as etiquetas de Solidaires levam a sua rubrica.
-
-**Dependências.** Nasce de **IMP-20** (registo §17). Ligado a **G7** e **C2**.
-
-*Remissões : `REGISTRE §17 IMP-20` · `anarbib-tombo-global-unique-collision` · `src/pages/biblioteca/BibliotecaPage.jsx` · `fn_next_tombo` · `docs/cotation-et-cdd.md` · `src/pages/catalogacao/BookDraftForm.jsx (buildShelfLabel)`*
-
->>>>>>> Stashed changes
 ---
 
 ### F — E-mail e notificações
@@ -2673,8 +2642,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-<<<<<<< Updated upstream
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60e0580a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
-=======
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 91 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `f7bf927c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
->>>>>>> Stashed changes
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
