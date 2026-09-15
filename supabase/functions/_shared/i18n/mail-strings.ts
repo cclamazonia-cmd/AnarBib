@@ -434,6 +434,104 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Μόλις κυκλοφόρησε το τεύχος {number} της εφημερίδας του δικτύου. Καλή ανάγνωση — και μη διστάσεις να τη διαδώσεις."
   },
 
+  // ── Gazette · GAZ-7 : la décision est dite à la personne qui a écrit ──────
+  "gazette.contribution.received.resubmitted": {
+    "pt-BR": "Retomada de uma nota rejeitada anteriormente: esta é a versão corrigida pela pessoa.",
+    fr: "Reprise d'une brève rejetée précédemment : c'est la version corrigée par la personne.",
+    es: "Retoma de una nota rechazada anteriormente: esta es la versión corregida por la persona.",
+    en: "Resubmission of a previously rejected bulletin: this is the version revised by the contributor.",
+    it: "Ripresa di una breve rifiutata in precedenza: questa è la versione corretta dalla persona.",
+    de: "Wiedervorlage einer zuvor abgelehnten Kurzmeldung: dies ist die von der Person überarbeitete Fassung.",
+    ca: "Represa d'una breu rebutjada anteriorment: aquesta és la versió corregida per la persona.",
+    eo: "Reprezento de antaŭe malakceptita novaĵeto: jen la versio korektita de la persono.",
+    nl: "Opnieuw ingestuurd na een eerdere afwijzing: dit is de door de persoon aangepaste versie.",
+    el: "Επανυποβολή σημειώματος που είχε απορριφθεί: αυτή είναι η διορθωμένη εκδοχή από το άτομο."
+  },
+  "gazette.contribution.rejected.sub": {
+    "pt-BR": "Tua nota « {title} » não foi retida — eis por quê",
+    fr: "Ta brève « {title} » n'a pas été retenue — voici pourquoi",
+    es: "Tu nota « {title} » no fue retenida — te contamos por qué",
+    en: "Your bulletin “{title}” was not retained — here is why",
+    it: "La tua breve « {title} » non è stata accolta — ecco perché",
+    de: "Deine Kurzmeldung „{title}“ wurde nicht aufgenommen — hier der Grund",
+    ca: "La teva breu « {title} » no s'ha retingut — t'expliquem per què",
+    eo: "Via novaĵeto « {title} » ne estis akceptita — jen kial",
+    nl: "Je bericht ‘{title}’ is niet opgenomen — dit is waarom",
+    el: "Το σημείωμά σου «{title}» δεν κρατήθηκε — να γιατί"
+  },
+  "gazette.contribution.rejected.intro": {
+    "pt-BR": "A equipe da rede leu tua proposta para a rubrica « {rubric} » e decidiu não a publicar tal como está. O motivo, escrito por quem a leu:",
+    fr: "L'équipe réseau a lu ta proposition pour la rubrique « {rubric} » et a décidé de ne pas la publier telle quelle. Le motif, écrit par la personne qui l'a lue :",
+    es: "El equipo de la red leyó tu propuesta para la sección « {rubric} » y decidió no publicarla tal como está. El motivo, escrito por quien la leyó:",
+    en: "The network team read your proposal for the “{rubric}” section and decided not to publish it as it stands. The reason, in the words of the person who read it:",
+    it: "L'équipe della rete ha letto la tua proposta per la rubrica « {rubric} » e ha deciso di non pubblicarla così com'è. Il motivo, scritto da chi l'ha letta:",
+    de: "Das Netzwerk-Team hat deinen Vorschlag für die Rubrik „{rubric}“ gelesen und entschieden, ihn so nicht zu veröffentlichen. Der Grund, in den Worten der Person, die ihn gelesen hat:",
+    ca: "L'equip de la xarxa ha llegit la teva proposta per a la secció « {rubric} » i ha decidit no publicar-la tal com està. El motiu, escrit per qui l'ha llegida:",
+    eo: "La reta teamo legis vian proponon por la rubriko « {rubric} » kaj decidis ne publikigi ĝin tia, kia ĝi estas. La kialo, skribita de tiu, kiu legis ĝin:",
+    nl: "Het netwerkteam heeft je voorstel voor de rubriek ‘{rubric}’ gelezen en besloten het zo niet te publiceren. De reden, in de woorden van wie het las:",
+    el: "Η ομάδα του δικτύου διάβασε την πρότασή σου για την ενότητα «{rubric}» και αποφάσισε να μην τη δημοσιεύσει ως έχει. Ο λόγος, όπως τον έγραψε το άτομο που τη διάβασε:"
+  },
+  "gazette.contribution.rejected.resubmit.title": {
+    "pt-BR": "Podes corrigir tua nota e reenviá-la",
+    fr: "Tu peux corriger ta brève et la renvoyer",
+    es: "Puedes corregir tu nota y volver a enviarla",
+    en: "You can revise your bulletin and send it again",
+    it: "Puoi correggere la tua breve e rimandarla",
+    de: "Du kannst deine Kurzmeldung überarbeiten und erneut senden",
+    ca: "Pots corregir la teva breu i tornar-la a enviar",
+    eo: "Vi povas korekti vian novaĵeton kaj resendi ĝin",
+    nl: "Je kunt je bericht aanpassen en opnieuw insturen",
+    el: "Μπορείς να διορθώσεις το σημείωμά σου και να το ξαναστείλεις"
+  },
+  "gazette.contribution.rejected.resubmit.cta": {
+    "pt-BR": "Corrigir e reenviar",
+    fr: "Corriger et renvoyer",
+    es: "Corregir y reenviar",
+    en: "Revise and resend",
+    it: "Correggere e rimandare",
+    de: "Überarbeiten und erneut senden",
+    ca: "Corregir i reenviar",
+    eo: "Korekti kaj resendi",
+    nl: "Aanpassen en opnieuw insturen",
+    el: "Διόρθωση και επαναποστολή"
+  },
+  "gazette.contribution.rejected.resubmit.expires": {
+    "pt-BR": "O link abre o formulário já preenchido com teu texto e o motivo. Serve uma única vez e vale até {date}. Se preferires não retomar, não há nada a fazer.",
+    fr: "Le lien ouvre le formulaire déjà rempli avec ton texte et le motif. Il ne sert qu'une fois et vaut jusqu'au {date}. Si tu préfères en rester là, il n'y a rien à faire.",
+    es: "El enlace abre el formulario ya rellenado con tu texto y el motivo. Sirve una sola vez y vale hasta el {date}. Si prefieres dejarlo así, no hay nada que hacer.",
+    en: "The link opens the form already filled in with your text and the reason. It works once and is valid until {date}. If you would rather leave it there, nothing else is needed.",
+    it: "Il link apre il modulo già compilato con il tuo testo e il motivo. Vale una sola volta, fino al {date}. Se preferisci lasciar perdere, non c'è nulla da fare.",
+    de: "Der Link öffnet das Formular, bereits ausgefüllt mit deinem Text und dem Grund. Er gilt einmalig und bis zum {date}. Wenn du es dabei belassen möchtest, ist nichts weiter zu tun.",
+    ca: "L'enllaç obre el formulari ja omplert amb el teu text i el motiu. Serveix una sola vegada i val fins al {date}. Si prefereixes deixar-ho aquí, no cal fer res.",
+    eo: "La ligilo malfermas la formularon jam plenigitan per via teksto kaj la kialo. Ĝi validas nur unufoje, ĝis {date}. Se vi preferas lasi ĝin tiel, nenio plu necesas.",
+    nl: "De link opent het formulier, al ingevuld met je tekst en de reden. Hij werkt één keer en is geldig tot {date}. Wil je het hierbij laten, dan hoef je niets te doen.",
+    el: "Ο σύνδεσμος ανοίγει τη φόρμα ήδη συμπληρωμένη με το κείμενό σου και τον λόγο. Ισχύει μία μόνο φορά, έως {date}. Αν προτιμάς να το αφήσεις εκεί, δεν χρειάζεται να κάνεις τίποτα."
+  },
+  "gazette.contribution.accepted.sub": {
+    "pt-BR": "Tua nota « {title} » foi aceita para a Gazeta",
+    fr: "Ta brève « {title} » est retenue pour la Gazette",
+    es: "Tu nota « {title} » fue aceptada para la Gaceta",
+    en: "Your bulletin “{title}” has been accepted for the Gazette",
+    it: "La tua breve « {title} » è stata accolta per la Gazzetta",
+    de: "Deine Kurzmeldung „{title}“ wurde für die Gazette angenommen",
+    ca: "La teva breu « {title} » s'ha acceptat per a la Gaseta",
+    eo: "Via novaĵeto « {title} » estis akceptita por la Gazeto",
+    nl: "Je bericht ‘{title}’ is aangenomen voor de Gazette",
+    el: "Το σημείωμά σου «{title}» έγινε δεκτό για την εφημερίδα"
+  },
+  "gazette.contribution.accepted.intro": {
+    "pt-BR": "A equipe da rede leu tua proposta « {title} » e a reteve. Ela entrará na página « Vida da rede » do próximo número, traduzida nas dez línguas da rede. Obrigado por teres escrito: é dessas notas que a página é feita.",
+    fr: "L'équipe réseau a lu ta proposition « {title} » et l'a retenue. Elle entrera dans la page « Vie du réseau » du prochain numéro, traduite dans les dix langues du réseau. Merci d'avoir écrit : c'est de ces brèves que la page est faite.",
+    es: "El equipo de la red leyó tu propuesta « {title} » y la retuvo. Entrará en la página « Vida de la red » del próximo número, traducida a las diez lenguas de la red. Gracias por escribir: de esas notas está hecha la página.",
+    en: "The network team read your proposal “{title}” and kept it. It will appear on the “Network life” page of the next issue, translated into the network's ten languages. Thank you for writing — that page is made of these bulletins.",
+    it: "L'équipe della rete ha letto la tua proposta « {title} » e l'ha accolta. Entrerà nella pagina « Vita della rete » del prossimo numero, tradotta nelle dieci lingue della rete. Grazie per aver scritto: è di queste brevi che la pagina è fatta.",
+    de: "Das Netzwerk-Team hat deinen Vorschlag „{title}“ gelesen und angenommen. Er erscheint auf der Seite „Leben des Netzwerks“ der nächsten Ausgabe, übersetzt in die zehn Sprachen des Netzwerks. Danke fürs Schreiben — aus solchen Meldungen besteht diese Seite.",
+    ca: "L'equip de la xarxa ha llegit la teva proposta « {title} » i l'ha retinguda. Entrarà a la pàgina « Vida de la xarxa » del proper número, traduïda a les deu llengües de la xarxa. Gràcies per escriure: d'aquestes breus està feta la pàgina.",
+    eo: "La reta teamo legis vian proponon « {title} » kaj akceptis ĝin. Ĝi aperos en la paĝo « Vivo de la reto » de la venonta numero, tradukita en la dek lingvojn de la reto. Dankon pro via skribo: el tiaj novaĵetoj la paĝo konsistas.",
+    nl: "Het netwerkteam heeft je voorstel ‘{title}’ gelezen en aangenomen. Het komt op de pagina ‘Leven van het netwerk’ van het volgende nummer, vertaald in de tien talen van het netwerk. Bedankt voor het schrijven — van zulke berichten is die pagina gemaakt.",
+    el: "Η ομάδα του δικτύου διάβασε την πρότασή σου «{title}» και την κράτησε. Θα μπει στη σελίδα «Ζωή του δικτύου» του επόμενου τεύχους, μεταφρασμένη στις δέκα γλώσσες του δικτύου. Ευχαριστούμε που έγραψες: από τέτοια σημειώματα φτιάχνεται η σελίδα."
+  },
+
   // === Lettre de la fédération (double opt-in : confirmation + pages de retour) ===
   "lettre.optin.confirm.sub": {
     "pt-BR": "Confirma tua inscrição no Boletim da rede",

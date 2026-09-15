@@ -11,12 +11,24 @@
 // Events traités (Étape A) :
 //   - gazette.contribution.received   → fede@anarbib.org (boîte éditoriale fixe)
 //   - gazette.draft.ready_for_review  → network_staff (fan-out, chacun·e sa locale)
+//   - gazette.issue.published         → 1 destinataire par ligne (fan-out SQL)
+// GAZ-7 (15/09/2026) — la décision est dite à la personne qui a écrit :
+//   - gazette.contribution.rejected   → contributor_email, dans SA locale : le motif
+//                                       écrit par le staff + le lien de reprise (jeton
+//                                       d'usage unique, 60 jours). Le jeton arrive en
+//                                       clair dans le payload ; la base n'en garde que
+//                                       l'empreinte. L'URL se construit ICI (le front
+//                                       n'est pas l'affaire du SQL).
+//   - gazette.contribution.accepted   → contributor_email : la brève entrera dans la
+//                                       page « Vie du réseau » du prochain numéro.
+//   Sans e-mail, la base n'enfile rien (personne à prévenir) ; si une ligne arrive
+//   quand même sans `to`, elle est sautée en le disant (no_recipients).
 // ============================================================================
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
-import { tMail, greeting } from "../i18n/mail-strings.ts";
+import { tMail, greeting, formatDateLocale } from "../i18n/mail-strings.ts";
 
 const OUTBOX = "gazette_submission_notification_outbox";
 const APP_URL = "https://app.anarbib.org";
@@ -75,6 +87,10 @@ export async function handleGazetteEvent(recordId) {
       result = await handleDraftReady(payload, ctx);
     } else if (event === "gazette.issue.published") {
       result = await handleIssuePublished(payload, ctx);
+    } else if (event === "gazette.contribution.rejected") {
+      result = await handleContributionRejected(payload, ctx);
+    } else if (event === "gazette.contribution.accepted") {
+      result = await handleContributionAccepted(payload, ctx);
     } else {
       console.warn(`[gazette] unknown event: ${event}`);
       await markOutboxSkipped(outbox.id, "unknown_gazette_event");
@@ -106,6 +122,10 @@ async function handleContributionReceived(payload, ctx) {
 
   const sub = tMail(locale, "gazette.contribution.received.sub");
   let introHtml = `<p>${esc(tMail(locale, "gazette.contribution.received.intro", { rubric, title, author }))}</p>`;
+  // GAZ-7 : une reprise se présente comme telle — le staff relit une v2, pas un inconnu.
+  if (payload.parent_submission_id) {
+    introHtml += `<p><b>${esc(tMail(locale, "gazette.contribution.received.resubmitted"))}</b></p>`;
+  }
   if (excerpt) introHtml += `<blockquote style="margin:.6rem 0;padding-left:.8rem;border-left:3px solid #cf1f27;color:#444">${esc(excerpt)}</blockquote>`;
   if (link) introHtml += `<p><a href="${esc(link)}">${esc(link)}</a></p>`;
   introHtml += `<p><a href="${APP_URL}/rede">${APP_URL}/rede</a></p>`;
@@ -121,6 +141,74 @@ async function handleContributionReceived(payload, ctx) {
   });
   const target = { email: to, name: "Gazette AnarBib" };
   const result = await safeSendEmail(target, sub, html, text, "gazette_contribution", ctx);
+  return { recipients_count: 1, result };
+}
+
+// gazette.contribution.rejected → la personne qui a écrit, dans sa locale : le
+// motif tel que le staff l'a écrit, et le lien de reprise (jeton en clair dans
+// le payload, empreinte seule en base ; 60 jours ; usage unique).
+async function handleContributionRejected(payload, ctx) {
+  const to = String(payload.to || "").trim();
+  if (!to) return { recipients_count: 0, reason: "no_email" };
+  const locale = String(payload.locale || "").trim() || ctx?.default_locale || "pt-BR";
+  const title = String(payload.title || "");
+  const rubric = String(payload.rubric || "—");
+  const note = String(payload.review_note || "").trim();
+  const token = String(payload.resubmit_token || "").trim();
+  const expires = formatDateLocale(payload.expires_at, locale);
+
+  const sub = tMail(locale, "gazette.contribution.rejected.sub", { title });
+  let introHtml = `<p>${esc(tMail(locale, "gazette.contribution.rejected.intro", { rubric, title }))}</p>`;
+  if (note) introHtml += `<blockquote style="margin:.6rem 0;padding-left:.8rem;border-left:3px solid #cf1f27;color:#444;white-space:pre-wrap">${esc(note)}</blockquote>`;
+  let actionBox;
+  if (token) {
+    actionBox = {
+      kind: "action",
+      title: tMail(locale, "gazette.contribution.rejected.resubmit.title"),
+      ctaLabel: tMail(locale, "gazette.contribution.rejected.resubmit.cta"),
+      ctaUrl: `${APP_URL}/federacao/gazeta?reprise=${encodeURIComponent(token)}`,
+    };
+    introHtml += `<p>${esc(tMail(locale, "gazette.contribution.rejected.resubmit.expires", { date: expires }))}</p>`;
+  }
+
+  const { html, text } = renderEmail({
+    locale,
+    preheader: sub,
+    title: sub,
+    greeting: greeting(locale, payload.to_name || undefined),
+    actionBox,
+    introHtml,
+    details: [],
+    footerHtml: footerPadrao(ctx, locale),
+    context: ctx,
+  });
+  const target = { email: to, name: payload.to_name || undefined };
+  const result = await safeSendEmail(target, sub, html, text, "gazette_contribution_rejected", ctx);
+  return { recipients_count: 1, result };
+}
+
+// gazette.contribution.accepted → la personne qui a écrit, dans sa locale.
+async function handleContributionAccepted(payload, ctx) {
+  const to = String(payload.to || "").trim();
+  if (!to) return { recipients_count: 0, reason: "no_email" };
+  const locale = String(payload.locale || "").trim() || ctx?.default_locale || "pt-BR";
+  const title = String(payload.title || "");
+  const sub = tMail(locale, "gazette.contribution.accepted.sub", { title });
+  const introHtml =
+    `<p>${esc(tMail(locale, "gazette.contribution.accepted.intro", { title }))}</p>`
+    + `<p><a href="${APP_URL}/federacao/gazeta">${APP_URL}/federacao/gazeta</a></p>`;
+  const { html, text } = renderEmail({
+    locale,
+    preheader: sub,
+    title: sub,
+    greeting: greeting(locale, payload.to_name || undefined),
+    introHtml,
+    details: [],
+    footerHtml: footerPadrao(ctx, locale),
+    context: ctx,
+  });
+  const target = { email: to, name: payload.to_name || undefined };
+  const result = await safeSendEmail(target, sub, html, text, "gazette_contribution_accepted", ctx);
   return { recipients_count: 1, result };
 }
 
