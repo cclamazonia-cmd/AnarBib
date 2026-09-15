@@ -11,10 +11,10 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-08",
+    "maj": "2026-09-15",
     "releve": {
-      "date": "2026-09-08",
-      "commit": "e3a15243"
+      "date": "2026-09-15",
+      "commit": "60e0580a"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "Relevé du **8 septembre 2026** à 1 h 30 — production interrogée en lecture seule et dépôt recompté au commit `e3a15243`. Il prolonge les relevés du 06 et du 07/09. Dans la nuit, la session voisine a livré **E5** : la dernière exception anti-pistage tombe, le fond de carte est un fichier PMTiles auto-hébergé dans le bucket public `map-tiles` (18 Go, planet Protomaps du 07/09, zoom 12), plus aucun appel du navigateur vers `tile.openstreetmap.org`, gardé par un test. Les volumétries métier n'ont pas bougé. Les lignes qui changent portent la date.",
-      "pt": "Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e repositório recontado no commit `e3a15243`. De noite, a sessão vizinha entregou **E5** : a última exceção anti-rastreio cai, o fundo de mapa é um ficheiro PMTiles auto-alojado no bucket `map-tiles` (18 GB), nenhuma chamada a `tile.openstreetmap.org`, guardado por teste."
+      "fr": "Relevé du **15 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `60e0580a`, premier relevé après Bologne (13/09) et la fin du gel (14/09). Depuis le relevé du 08/09 : quatre commits seulement au dépôt — les deux correctifs du jeton de récupération (08/09), `OPS-9` au registre, et ce soir **un lot importé a une bibliothèque de destination** (migration `20260915184154`, deux RPC nouvelles) ; en production, **une cinquième bibliothèque** est née le 14/09 (Solidaires, Paris — inactive, privée, une coordination rattachée) et les 1 673 brouillons du lot Solidaires ont désormais une propriétaire. Toutes les lignes ont été remesurées, advisors compris. Une alerte d'exploitation en sort, **I24**.",
+      "pt": "Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**."
     },
     "photo": [
       {
@@ -408,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "907",
+            "909",
             {
-              "fr": "`public` · `api` · `ingest` · `private` — +1 le 07/09 (les trois migrations du jour : H8, I20, et `api.thesaurus_export_v1` réécrite pour dire vers quelle liste pointe un alignement). Dont 694 SECURITY DEFINER au 06/09, toutes justifiées (audit 0029, complément du 06/09). **Aucune fonction sans `search_path` figé** : gardé par la suite `hygiene_search_path_et_initplan` depuis le 06/09.",
-              "pt": "907 — +1 em 07/09 (H8, I20, `api.thesaurus_export_v1` reescrita). 694 DEFINER justificadas. Nenhuma sem `search_path`, guardado por suite."
+              "fr": "`public` 678 · `api` 188 · `ingest` 34 · `private` 9. Dont **696 SECURITY DEFINER** — +2 le 15/09, `fn_batch_reassign_library` (admin réseau) et `fn_batch_owner_libraries` (staff), exposées à `authenticated` et **pas encore portées à l'audit 0029** (deux verdicts à écrire, `DOC-GRANT-1`). Aucune fonction sans `search_path` figé (suite `hygiene_search_path_et_initplan`).",
+              "pt": "`public` 678 · `api` 188 · `ingest` 34 · `private` 9. **696 DEFINER** — +2 em 15/09, ainda sem veredicto na auditoria 0029."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "314",
+            "315",
             {
-              "fr": "314 migrations numérotées au dépôt = **314 appliquées, alignement exact** (vérifié le 08/09 à 1 h 30). La 314ᵉ, `20260907234500`, crée le bucket public `map-tiles` (E5) — **17 buckets** désormais, celui-ci **exclu du flux restic `storage`** à dessein : 18 Go reconstructibles en trente minutes depuis Protomaps (`scripts/maptiles/README.md`), il triplerait le dépôt. Cinq migrations le 07/09 avant elle (H8, I20, alignement FICEDL, E18 ×2).",
-              "pt": "314 numeradas = **314 aplicadas**. A 314.ª cria o bucket público `map-tiles` (E5) — 17 buckets, este excluído do restic de propósito (18 GB reconstruíveis em 30 min)."
+              "fr": "315 migrations numérotées au dépôt = **315 appliquées, alignement exact** (vérifié le 15/09 à 21 h). **+1 depuis le 08/09** : `20260915184154`, un lot importé a une bibliothèque de destination (`ingest.partner_catalog_sources.destination_library_id`, `owner_library_id` tamponné à la promotion, réattribution par l'admin réseau). Rien pendant le gel du 08 au 14/09.",
+              "pt": "315 numeradas = **315 aplicadas**. **+1 desde 08/09** : `20260915184154`. Nada durante o congelamento."
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "463",
+            "465",
             {
-              "fr": "0 ERROR · **411** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`, verdicts B4 posés). Le WARN `function_search_path_mutable` du matin est **parti** (`20260906111308`). Le 28 (`anon`) est la **valeur attendue** (T10, `DOC-GRANT-1`). **Le 411 (`authenticated`) est entièrement justifié depuis le 06/09** : 395 hérités des paquets du 01/09 et **16 RPC nées les 04–05/09, lues corps par corps** — « Complément du 06/09 » de `AUDIT_execute_authenticated_2026-09-01` : aucune faille, deux limites fonctionnelles (liste et rapport des lots transversaux au réseau ; `fn_batch_review_request` ne rapproche pas le lot de la bibliothèque de l'appelant·e).",
-              "pt": "0 ERROR · **411** + **28** WARN · 24 INFO. O WARN `search_path` desapareceu. **411 inteiramente justificado desde 06/09** : 395 herdados + 16 RPC de 04–05/09 lidas uma a uma (complemento da auditoria) ; duas limitações funcionais, nenhuma falha."
+              "fr": "0 ERROR · **413** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (liste attendue de `bootstrap.sh`). Le 28 (`anon`) est la **valeur attendue** (T10). Le 413 (`authenticated`) = 411 justifiés au 06/09 **+ 2 du 15/09** (`fn_batch_reassign_library`, `fn_batch_owner_libraries`) à porter au complément d'audit. **Le format de l'advisor a changé** : une entrée par lint avec un tableau `findings`, plus une entrée par objet — un compteur qui compte les entrées lit désormais « 3 » ; compter `findings`.",
+              "pt": "0 ERROR · **413** + **28** WARN · 24 INFO. 413 = 411 justificados + 2 de 15/09 a levar à auditoria. **Formato do advisor mudou** : uma entrada por lint com `findings`."
             }
           ],
           [
@@ -452,10 +452,10 @@
               "fr": "Avis de performance",
               "pt": "Avisos de desempenho"
             },
-            "440",
+            "423",
             {
-              "fr": "**368 « index inutilisés »** (403 le 03/09 — les compteurs repartent du redémarrage du 02/09 ; à relire dans un mois). **38 clés étrangères non indexées, toutes assumées et gardées** (`fk_sans_index_garde`). 25 tables à policies permissives multiples. **8 tables sans clé primaire** (14 le 03/09 : les six du schéma de mai sont parties avec lui). L'`auth_rls_initplan` du matin sur `catalog_batch_reviews_read_staff` est **résorbé** (`(select auth.uid())`, `20260906111308`) et la suite d'hygiène refuse désormais toute policy qui réévaluerait `auth.uid()` par ligne — le motif de **B5** est gardé, plus seulement corrigé.",
-              "pt": "**368 índices não usados**. 38 FK assumidas. 25 tabelas com policies múltiplas. **8 sem PK**. O `auth_rls_initplan` da manhã foi resolvido (`20260906111308`) e a suite de higiene guarda agora o motivo de B5."
+              "fr": "**351 « index inutilisés »** (368 le 06/09 — les compteurs repartent du 02/09 et baissent à mesure que les index servent). **38 clés étrangères non indexées, toutes assumées et gardées**. 25 tables à policies permissives multiples. **8 tables sans clé primaire**. 1 avis de connexions. Aucun `auth_rls_initplan` (gardé par la suite d'hygiène depuis le 06/09).",
+              "pt": "**351 índices não usados**. 38 FK assumidas. 25 policies múltiplas. **8 sem PK**. Nenhum `auth_rls_initplan`."
             }
           ],
           [
@@ -525,8 +525,8 @@
             },
             "2 250",
             {
-              "fr": "deux états ce matin : `draft` 1 820, `published` 430 — l'état `cancelled` vu le 03/09 n'a plus d'occurrence (corbeille vidée). **Aucune révision de lot encore** (`catalog_batch_reviews` vide) : la garde « un lot importé se publie après révision » est en place depuis le 05/09, jamais exercée.",
-              "pt": "dois estados : `draft` 1 820, `published` 430. Nenhuma revisão de lote ainda (`catalog_batch_reviews` vazia)."
+              "fr": "`draft` 1 820, `published` 430 — inchangé. **Les 1 673 brouillons du lot Solidaires ont une propriétaire depuis le 15/09** (`owner_library_id` = Solidaires) ; ils ne se publient qu'après l'admission (**C2**) et la révision de lot (`catalog_batch_reviews`, encore vide).",
+              "pt": "`draft` 1 820, `published` 430. **Os 1 673 rascunhos de Solidaires têm dona desde 15/09** ; só se publicam após a admissão (C2) e a revisão do lote."
             }
           ],
           [
@@ -575,10 +575,10 @@
               "fr": "Bibliothèques",
               "pt": "Bibliotecas"
             },
-            "4",
+            "5",
             {
-              "fr": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` a été retirée du réseau** — suppression volontaire confirmée par la coordination le 01/09, tracée dans `NOTE_retrait_cira_marseille_2026-09-01`. Cascade propre (0 fonds, 0 orphelin) ; thème conservé en storage, source d'import close",
-              "pt": "`blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` foi retirada da rede** — remoção voluntária confirmada pela coordenação em 01/09, registrada em `NOTE_retrait_cira_marseille_2026-09-01`. Cascata limpa (0 acervo, 0 órfão); tema conservado no storage, fonte de importação encerrada"
+              "fr": "**+1 le 14/09 : Bibliothèque Solidaires (Paris, France)** — créée `is_active = false`, `visibility_level = private`, `catalog_mode = network_published`, une coordination `active` rattachée le jour même ; aucune ligne dans `library_requests` : créée directement par l'administration, comme bibliothèque de **destination** du lot d'import (source 17), **pas comme admission** — `RES-D12` (réponse avant fin septembre) et `G7` restent ouverts. BLMF, BTL, MLEG, `blmf-teste` inchangées.",
+              "pt": "**+1 em 14/09 : Bibliothèque Solidaires (Paris)** — inativa, privada, uma coordenação ligada ; criada pela administração como biblioteca de **destino** do lote de importação, **não como admissão** (`RES-D12`, `G7` abertos)."
             }
           ],
           [
@@ -588,8 +588,8 @@
             },
             "19",
             {
-              "fr": "**23** appartenances actives — inchangé depuis le 03/09 (Emma, Errico et Voltairine de Teste sur `blmf-teste` pour la formation du 08/09). **0 contributeur·rice réseau** : le circuit « contributeur » de l'atelier n'a jamais été emprunté (G1).",
-              "pt": "**23** adesões ativas — inalterado. **0 contribuidor de rede**."
+              "fr": "**24** appartenances actives (+1 depuis le 08/09 : la coordination de Solidaires). 0 contributeur·rice réseau, 0 proposition à l'atelier des œuvres, 0 révision de lot : les circuits neufs de **G1** restent inemployés.",
+              "pt": "**24** adesões ativas (+1 : coordenação de Solidaires). 0 contribuidor de rede, 0 proposta, 0 revisão de lote (G1)."
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 634",
+            "2 645",
             {
-              "fr": "sur `main`, au 08/09 à 1 h 30 — 40 commits depuis le relevé du 06/09, de deux sessions ; les deux derniers (00 h 10 et 01 h 21) sont E5 et son correctif de greffon (`theme`, pas `flavor`).",
-              "pt": "em `main`, 08/09 à 1h30 — 40 commits desde 06/09, de duas sessões ; os dois últimos são E5."
+              "fr": "sur `main`, au 15/09 au soir — **11 commits depuis le 08/09**, dont quatre après le relevé du 08/09 : les deux correctifs du jeton de récupération mort dans l'URL (08/09), `OPS-9` au registre, et la bibliothèque de destination des lots (15/09). Le gel du 08 au 14/09 a tenu.",
+              "pt": "em `main`, 15/09 à noite — **11 commits desde 08/09**. O congelamento de 08 a 14/09 aguentou."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "314",
+            "318",
             {
-              "fr": "81 pages, 93 composants ; +2 cette nuit : `src/lib/mapTiles.js` (adresse du PMTiles, zooms, langue des étiquettes) et le test `carte-sans-domaine-tiers`. Les trois composants de carte lisent `mapTiles.js` au lieu de `tile.openstreetmap.org`.",
-              "pt": "81 páginas, 93 componentes ; +2 esta noite : `src/lib/mapTiles.js` e o teste `carte-sans-domaine-tiers`."
+              "fr": "81 pages, 93 composants ; +4 depuis le 08/09 : `lib/clearAuthHash.js`, `lib/recoveryView.js`, le test `recovery-dead-token` (jeton mort dans l'URL) et l'écran des lots (colonne « Bibliothèque », réattribution).",
+              "pt": "81 páginas, 93 componentes ; +4 desde 08/09 (jeton de recuperação, ecrã dos lotes)."
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 571",
+            "6 592",
             {
-              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; +1 ce soir (la phrase liminaire `privacy.register`) ; onze clés grecques provisoires et cinq locales où « Organization or collective » dormait en anglais, corrigées (audit des diacritiques et de l'anglais résiduel du 07/09).",
-              "pt": "por locale, **paridade estrita nas 10** ; +1 esta noite ; onze chaves gregas provisórias e cinco locales corrigidas."
+              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; +21 le 15/09 (bibliothèque de destination, réattribution, avertissements).",
+              "pt": "por locale, **paridade estrita nas 10** ; +21 em 15/09."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "457 + 98",
+            "469 + 99",
             {
-              "fr": "457 tests JS (vitest, gate bloquant ; +5 cette nuit : `carte-sans-domaine-tiers`, qui refuse toute citation de `tile.openstreetmap.org` dans `src/` et vérifie l'empreinte du greffon vendorisé) + **98 suites SQL** dans `ci-suites.txt` (le stub `storage` de la CI précharge désormais `map-tiles`). CI verte sur chaque push.",
-              "pt": "457 testes JS (+ `carte-sans-domaine-tiers`) + **98 suites SQL**."
+              "fr": "469 tests JS (vitest, gate bloquant ; +12 depuis le 08/09 : `recovery-dead-token` et le reste) + **99 suites SQL** dans `ci-suites.txt` (+1 : `lot_importe_bibliotheque_de_destination`). CI verte sur le push du 15/09.",
+              "pt": "469 testes JS + **99 suites SQL** (+1 : lote importado, biblioteca de destino)."
             }
           ],
           [
@@ -2226,8 +2226,8 @@
         "CALENDRIER_bologne_2026-08-27"
       ],
       "verif": {
-        "fr": "07/09 — inchangé : 1 673 brouillons `SOLIDAIRES_import_v2.csv`, candidature `pendente` depuis le 27/08.\n\n31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue.",
-        "pt": "07/09 — inalterado: 1 673 rascunhos `SOLIDAIRES_import_v2.csv`, candidatura `pendente` desde 27/08.\n\n31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo."
+        "fr": "07/09 — inchangé : 1 673 brouillons `SOLIDAIRES_import_v2.csv`, candidature `pendente` depuis le 27/08.\n\n31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue. **15/09** — les 1 673 brouillons ont désormais `owner_library_id` = Solidaires (bibliothèque créée le 14/09 comme destination, inactive et privée). Le geste manquant — attribuer un lot à la bibliothèque qui détient les livres — existe depuis ce soir dans l'app (`fn_batch_reassign_library`, admin réseau, colonne « Bibliothèque » dans Catalogação › Lots). La promotion reste suspendue à l'admission (G7) et passe par la révision de lot du 05/09.",
+        "pt": "07/09 — inalterado: 1 673 rascunhos `SOLIDAIRES_import_v2.csv`, candidatura `pendente` desde 27/08.\n\n31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo. **15/09** — os 1 673 rascunhos têm `owner_library_id` = Solidaires. O gesto que faltava (atribuir um lote à biblioteca que detém os livros) existe desde esta noite. A promoção continua à espera da admissão (G7)."
       }
     },
     {
@@ -2676,8 +2676,8 @@
         "REPRISE_claude_code_2026-08-27"
       ],
       "verif": {
-        "fr": "31/08 — les 1 673 brouillons SOLIDAIRES sont en base (voir C2) et **aucun ne porte de `serial_id`** : le rattachement des fascicules n'a pas commencé. Toujours derrière G7.",
-        "pt": "31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou."
+        "fr": "31/08 — les 1 673 brouillons SOLIDAIRES sont en base (voir C2) et **aucun ne porte de `serial_id`** : le rattachement des fascicules n'a pas commencé. Toujours derrière G7. **15/09** — la bibliothèque de destination existe (Solidaires, 14/09) et le lot lui est attribué ; le rattachement des 91 fascicules et des 87 monographies suspectes reste à faire dans le lot, avant la promotion, et reste bloqué par C2/G7.",
+        "pt": "31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou. **15/09** — a biblioteca de destino existe e o lote está-lhe atribuído ; o resto continua bloqueado por C2/G7."
       }
     },
     {
@@ -3532,7 +3532,11 @@
       "r": [
         "REPRISE_claude_code_2026-08-27",
         "CALENDRIER_bologne_2026-08-27"
-      ]
+      ],
+      "verif": {
+        "fr": " **15/09** — une fiche `libraries` **Bibliothèque Solidaires (Paris, France)** existe depuis le 14/09 (`is_active = false`, `visibility_level = private`, une coordination rattachée, aucune demande dans `library_requests`) : c'est la **bibliothèque de destination** du lot d'import (migration du 15/09), créée par l'administration pour que les 1 673 brouillons aient une propriétaire — **pas une admission**. `RES-D12` tient : réponse de SOLIDAIRES attendue avant fin septembre, décision à plusieurs (A1) ensuite.",
+        "pt": " **15/09** — existe uma ficha Solidaires desde 14/09 (inativa, privada, uma coordenação) : biblioteca de **destino** do lote, criada pela administração — **não uma admissão**. `RES-D12` mantém-se."
+      }
     },
     {
       "id": "G8",
@@ -3973,8 +3977,8 @@
         "REGISTRE §38 OPS"
       ],
       "verif": {
-        "fr": "31/08 — source déployé de `health-probe` relu (`RETENTION_JOURS = 30`, purge en fin de tour) ; `pg_stat_user_tables` : 16 268 insertions, **0 suppression**, plus ancien relevé du 17/08 — la naissance de la table, pas un effet de purge. Premier effet attendu vers le **16/09** : c'est là que le constat se prouve. **03/09** — relevé : 19 396 relevés, le plus ancien toujours du 17/08 14:36 UTC, aucune suppression (`n_tup_del = 0` — les compteurs ont été remis à zéro par le redémarrage du 02/09, `n_tup_ins = 724` depuis) ; source déployé relu, `RETENTION_JOURS = 30` inchangé. Rien à faire avant le 16/09 : c'est la date où le constat se prouve.",
-        "pt": "31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**. **03/09** — 19 396 registos, o mais antigo de 17/08, nenhuma supressão; `RETENTION_JOURS = 30`. Nada a fazer antes de 16/09."
+        "fr": "31/08 — source déployé de `health-probe` relu (`RETENTION_JOURS = 30`, purge en fin de tour) ; `pg_stat_user_tables` : 16 268 insertions, **0 suppression**, plus ancien relevé du 17/08 — la naissance de la table, pas un effet de purge. Premier effet attendu vers le **16/09** : c'est là que le constat se prouve. **03/09** — relevé : 19 396 relevés, le plus ancien toujours du 17/08 14:36 UTC, aucune suppression (`n_tup_del = 0` — les compteurs ont été remis à zéro par le redémarrage du 02/09, `n_tup_ins = 724` depuis) ; source déployé relu, `RETENTION_JOURS = 30` inchangé. Rien à faire avant le 16/09 : c'est la date où le constat se prouve. **15/09, 21 h** — 33 628 relevés, le plus ancien toujours du 17/08 14:36 UTC, `n_tup_del = 0` : la purge à 30 jours n'a encore rien supprimé. **Le 16/09 est demain** : si le plus ancien relevé date encore du 17/08 le 17/09 au matin, la purge ne fait pas ce que son source dit.",
+        "pt": "31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**. **03/09** — 19 396 registos, o mais antigo de 17/08, nenhuma supressão; `RETENTION_JOURS = 30`. Nada a fazer antes de 16/09. **15/09** — 33 628 sondas, a mais antiga de 17/08, `n_tup_del = 0`. Amanhã é 16/09 : se em 17/09 a mais antiga ainda for de 17/08, a purga não faz o que o código diz."
       }
     },
     {
@@ -5709,6 +5713,58 @@
         "REGISTRE §30 (écart tracé)",
         "claude/VERIF_subject_ficedl_links_schema_2026-09-07 §4"
       ]
+    },
+    {
+      "id": "I24",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas",
+        "pt": "O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte"
+      },
+      "v": {
+        "fr": "**Constaté le 15/09/2026 au retour de Bologne.** Le dimanche 13/09, le poste était éteint : les minuteurs hebdomadaires `long` (20 h) et `storage` (21 h) n'ont pas tourné. Le 15/09 à 08 h 15, au démarrage, systemd a rattrapé les trois (`Persistent=`) : `court` fini à 08 h 17, `long` à 08 h 20 (instantané `da135422`), **`storage` tué à 08 h 23 par `SIGTERM`** (« Failed with result 'signal' »), après quatre buckets sur seize — c'est l'arrêt de la session utilisateur WSL, qui rebondit sur ce poste (mémoire `anarbib-systemd-etat-non-fiable`), qui a emporté le service. Et la ligne suivante du journal : **« Failed to enqueue OnFailure=anarbib-backup-failure@… »** — l'unité d'alerte n'a pas pu être lancée, la session s'arrêtant. Résultat : un flux `storage` vieux de neuf jours (dernier instantané le 06/09 21 h 19, seuil de fraîcheur 216 h atteint le 15/09 à 21 h 20), un témoin `started` sans `ok` (`fn_backup_heartbeat_status` : « tir commencé et JAMAIS TERMINÉ, tué en route »), et **aucun courriel**. Relancé à la main le 15/09 à 20 h 50 (`systemctl --user start anarbib-backup-storage.service`).",
+        "pt": "**Constatado em 15/09/2026 ao voltar de Bolonha.** Domingo 13/09 o posto estava desligado ; em 15/09 às 08h15 o systemd recuperou os três fluxos : `court` e `long` terminaram, **`storage` foi morto às 08h23 por `SIGTERM`** — o encerramento da sessão WSL — e a unidade de alerta `OnFailure` **não pôde ser lançada**. Resultado : fluxo `storage` com nove dias, testemunho `started` sem `ok`, nenhum e-mail. Relançado à mão às 20h50."
+      },
+      "w": {
+        "fr": "Deux choses. **(1)** Le service `storage` ne doit pas mourir avec la session : `KillMode=` et `TimeoutStopSec=` à régler, ou mieux, le lancer sous `systemd-run --scope` détaché, ou enfin `loginctl enable-linger` pour que la session utilisateur ne s'arrête pas avec le terminal — vérifier lequel tient sur ce WSL, où `systemctl` ment (juger sur `journalctl`). **(2)** L'alerte ne doit pas dépendre de la session qui meurt : le contrôle de fraîcheur du midi (`anarbib-fraicheur.timer`, lecture seule des dépôts restic) doit **envoyer** quand un flux dépasse son seuil ou porte un `started` sans `ok`, pas seulement l'écrire au journal. Le témoin en base (`fn_backup_heartbeat_status`) sait déjà dire « interrompu » : lui donner un destinataire (`HEALTH_ALERT_CC`, mémoire `anarbib-alertes-supervision-destinataires`).",
+        "pt": "**(1)** O serviço `storage` não deve morrer com a sessão (`KillMode=`, `TimeoutStopSec=`, ou `loginctl enable-linger`). **(2)** O alerta não deve depender da sessão : o controlo de frescura do meio-dia deve **enviar** quando um fluxo passa o limiar ou tem um `started` sem `ok`."
+      },
+      "y": {
+        "fr": "Une sauvegarde qui saute en silence quand le poste redémarre est exactement la panne qu'on ne voit qu'en reprise après sinistre — et le poste redémarre souvent. Le flux `storage` est **la seule sauvegarde des 16 buckets** (BG2-8) : neuf jours de trou, ce sont neuf jours de couvertures, de PDF et de règlements perdus si le Storage tombe.",
+        "pt": "Um backup que falha em silêncio quando o posto reinicia é a avaria que só se vê na recuperação. O fluxo `storage` é **o único backup dos 16 buckets**."
+      },
+      "f": {
+        "fr": [
+          "Le service `storage` survit à la fermeture du terminal WSL : éprouvé en fermant la session pendant un tir.",
+          "Un flux en dépassement de seuil ou « interrompu » produit un courriel à `admins@anarbib.org` dans les 24 h, sans qu'aucun humain regarde le journal.",
+          "Le 13/09 ne se reproduit pas : un poste éteint le dimanche donne trois flux verts le lundi matin, ou un courriel."
+        ],
+        "pt": [
+          "O serviço `storage` sobrevive ao fecho do terminal WSL.",
+          "Um fluxo em atraso ou «interrompido» produz um e-mail em 24 h.",
+          "Um posto desligado ao domingo dá três fluxos verdes na segunda, ou um e-mail."
+        ]
+      },
+      "dep": {
+        "fr": "Cousin de **I12** (le `die` du miroir sans destinataire) : même cause, l'alerte n'a pas de chemin qui survive au poste. Lié à **A3** (tout tourne sur la machine du mainteneur).",
+        "pt": "Primo de **I12**. Ligado a **A3**."
+      },
+      "r": [
+        "deploy/ops/systemd/",
+        "anarbib-systemd-etat-non-fiable",
+        "anarbib-backup-stale-lock-selfheal",
+        "RUNBOOK_restauration_BG2_2026-07-01"
+      ],
+      "verif": {
+        "fr": "15/09 — journal `journalctl --user -u anarbib-backup-storage.service` : `Main process exited, code=killed, status=15/TERM` à 08:23:45, « Failed to enqueue OnFailure » ; `fn_backup_heartbeat_status` : `storage` `interrompu = true`, `muet = true`, 215,5 h. Relance manuelle à 20 h 50, en cours au moment du relevé.",
+        "pt": "15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50."
+      }
     },
     {
       "id": "I23",

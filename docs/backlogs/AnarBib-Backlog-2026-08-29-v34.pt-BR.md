@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-08** · 89 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-15** · 90 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 8 de setembro de 2026](#o-estado-real-em-8-de-setembro-de-2026)
+- [O estado real em 15 de setembro de 2026](#o-estado-real-em-15-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 14
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 9
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -58,11 +58,11 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 8 de setembro de 2026
+## O estado real em 15 de setembro de 2026
 
-Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e repositório recontado no commit `e3a15243`. De noite, a sessão vizinha entregou **E5** : a última exceção anti-rastreio cai, o fundo de mapa é um ficheiro PMTiles auto-alojado no bucket `map-tiles` (18 GB), nenhuma chamada a `tile.openstreetmap.org`, guardado por teste.
+Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
 
-**Frescor dos constatos em 2026-09-08.** **71 itens de 89** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-15.** **73 itens de 90** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I19, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -71,11 +71,11 @@ Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e reposit
 | Tabelas `public` | **191** | todas com RLS ativado, **332 policies** — +4 tabelas desde 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), todas classificadas no filete BG2. |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **907** | 907 — +1 em 07/09 (H8, I20, `api.thesaurus_export_v1` reescrita). 694 DEFINER justificadas. Nenhuma sem `search_path`, guardado por suite. |
-| Migrações aplicadas | **314** | 314 numeradas = **314 aplicadas**. A 314.ª cria o bucket público `map-tiles` (E5) — 17 buckets, este excluído do restic de propósito (18 GB reconstruíveis em 30 min). |
+| Funções aplicativas | **909** | `public` 678 · `api` 188 · `ingest` 34 · `private` 9. **696 DEFINER** — +2 em 15/09, ainda sem veredicto na auditoria 0029. |
+| Migrações aplicadas | **315** | 315 numeradas = **315 aplicadas**. **+1 desde 08/09** : `20260915184154`. Nada durante o congelamento. |
 | Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
-| Avisos de segurança | **463** | 0 ERROR · **411** + **28** WARN · 24 INFO. O WARN `search_path` desapareceu. **411 inteiramente justificado desde 06/09** : 395 herdados + 16 RPC de 04–05/09 lidas uma a uma (complemento da auditoria) ; duas limitações funcionais, nenhuma falha. |
-| Avisos de desempenho | **440** | **368 índices não usados**. 38 FK assumidas. 25 tabelas com policies múltiplas. **8 sem PK**. O `auth_rls_initplan` da manhã foi resolvido (`20260906111308`) e a suite de higiene guarda agora o motivo de B5. |
+| Avisos de segurança | **465** | 0 ERROR · **413** + **28** WARN · 24 INFO. 413 = 411 justificados + 2 de 15/09 a levar à auditoria. **Formato do advisor mudou** : uma entrada por lint com `findings`. |
+| Avisos de desempenho | **423** | **351 índices não usados**. 38 FK assumidas. 25 policies múltiplas. **8 sem PK**. Nenhum `auth_rls_initplan`. |
 | Esquemas de refugo | **1** | só `conv_backup` — não se purga. `backup_2026_05_07` saiu em 04/09 (B9). |
 
 ### Funções Edge
@@ -90,7 +90,7 @@ Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e reposit
 | | | |
 |---|---:|---|
 | Fichas | **2 656** | 2 758 exemplares, **2 449 obras** (35 vazias suprimidas + fusões), **1 505 autoridades** (17 fusões C5), **3 497 títulos de obra** (pré-traduzidos, 1 452 a rever — C11). 0 proposta sobre obra ainda (G1). |
-| Rascunhos de catalogação | **2 250** | dois estados : `draft` 1 820, `published` 430. Nenhuma revisão de lote ainda (`catalog_batch_reviews` vazia). |
+| Rascunhos de catalogação | **2 250** | `draft` 1 820, `published` 430. **Os 1 673 rascunhos de Solidaires têm dona desde 15/09** ; só se publicam após a admissão (C2) e a revisão do lote. |
 | Indexação de assunto | **1 184 / 2 656** | registos com pelo menos um assunto — **1 472 sem nenhum** (eram 1 537). Objeto de **C7**. |
 | Tesauro FICEDL | **621** | termos — 159 datas desde 03/09 (H1). 98 alinhamentos intactos. |
 | Periódicos | **4** | títulos, 7 fascículos vinculados. O **arbítrio de duplicatas** deles está aberto a qualquer `librarian` enquanto o dos livros é reservado à coordenação: desvio medido em 01/09, decidido, aguardando aviso prévio |
@@ -99,8 +99,8 @@ Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e reposit
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **4** | `blmf` 248 · `btl` 2 187 · `mleg` 269 · `blmf-teste` 5. **`cira-marseille` foi retirada da rede** — remoção voluntária confirmada pela coordenação em 01/09, registrada em `NOTE_retrait_cira_marseille_2026-09-01`. Cascata limpa (0 acervo, 0 órfão); tema conservado no storage, fonte de importação encerrada |
-| Contas | **19** | **23** adesões ativas — inalterado. **0 contribuidor de rede**. |
+| Bibliotecas | **5** | **+1 em 14/09 : Bibliothèque Solidaires (Paris)** — inativa, privada, uma coordenação ligada ; criada pela administração como biblioteca de **destino** do lote de importação, **não como admissão** (`RES-D12`, `G7` abertos). |
+| Contas | **19** | **24** adesões ativas (+1 : coordenação de Solidaires). 0 contribuidor de rede, 0 proposta, 0 revisão de lote (G1). |
 | Administrador(a/e)s da rede | **1** | **é o item A1, e ele comanda todo o resto** |
 | Circulação viva | **6 / 19 / 22 / 0** | empréstimos / reservas / consultas / PEB abertos — inalterado. Dois PEB de maio, devolvidos, ficam como histórico. |
 
@@ -108,10 +108,10 @@ Registo de **8 de setembro de 2026** à 1h30 — produção em leitura e reposit
 
 | | | |
 |---|---:|---|
-| Commits | **2 634** | em `main`, 08/09 à 1h30 — 40 commits desde 06/09, de duas sessões ; os dois últimos são E5. |
-| Arquivos `src/` | **314** | 81 páginas, 93 componentes ; +2 esta noite : `src/lib/mapTiles.js` e o teste `carte-sans-domaine-tiers`. |
-| Chaves i18n | **6 571** | por locale, **paridade estrita nas 10** ; +1 esta noite ; onze chaves gregas provisórias e cinco locales corrigidas. |
-| Testes | **457 + 98** | 457 testes JS (+ `carte-sans-domaine-tiers`) + **98 suites SQL**. |
+| Commits | **2 645** | em `main`, 15/09 à noite — **11 commits desde 08/09**. O congelamento de 08 a 14/09 aguentou. |
+| Arquivos `src/` | **318** | 81 páginas, 93 componentes ; +4 desde 08/09 (jeton de recuperação, ecrã dos lotes). |
+| Chaves i18n | **6 592** | por locale, **paridade estrita nas 10** ; +21 em 15/09. |
+| Testes | **469 + 99** | 469 testes JS + **99 suites SQL** (+1 : lote importado, biblioteca de destino). |
 | Marcadores de dívida | **21** | dos quais 4 em `src/` (eram 17 no total). Nenhum é uma tarefa aberta. |
 
 ---
@@ -575,7 +575,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Verificado : 07/09 — inalterado: 1 673 rascunhos `SOLIDAIRES_import_v2.csv`, candidatura `pendente` desde 27/08.
 
-31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo.*
+31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo. **15/09** — os 1 673 rascunhos têm `owner_library_id` = Solidaires. O gesto que faltava (atribuir um lote à biblioteca que detém os livros) existe desde esta noite. A promoção continua à espera da admissão (G7).*
 
 **O que é.** Adaptar os cabeçalhos ao formato realmente esperado (cerca de uma hora), passar o arquivo **pela ferramenta de importação do repositório e não por `INSERT` à mão**, revisar umas vinte fichas ao acaso, e depois fazer uma demonstração em videoconferência com tela compartilhada.
 
@@ -787,7 +787,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo.
 
-*Verificado : 31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou.*
+*Verificado : 31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou. **15/09** — a biblioteca de destino existe e o lote está-lhe atribuído ; o resto continua bloqueado por C2/G7.*
 
 **O que é.** Criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente.
 
@@ -1472,7 +1472,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Decisão federal **deliberadamente adiada**, por não poder ser tomada em conjunto. Prazo previsto: outubro ou novembro, depois de Bolonha.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado :  **15/09** — existe uma ficha Solidaires desde 14/09 (inativa, privada, uma coordenação) : biblioteca de **destino** do lote, criada pela administração — **não uma admissão**. `RES-D12` mantém-se.*
 
 **O que é.** Uma vez concluído **A1**, instruir o pedido em conjunto e decidir.
 
@@ -1829,6 +1829,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I19** | `pg_cron` deve existir na pilha auto-hospedada, e sua ausência deve ser visível | `P1` | Aberto |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
+| **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
 | **I23** | Registrar um ccTLD europeu e fazê-lo alias de `anarbib.org` — o `.org` continua sob registro estadunidense | `P2` | Aberto |
 
 #### I1 — Alinhar a imagem GoTrue com o estado real das migrações de autenticação
@@ -1904,7 +1905,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** **Constato corrigido em 31/08 à noite: a purga existe — vive na própria sonda, não num cron.** `health-probe` apaga a cada volta os registros com mais de 30 dias (verificado no código implantado). Nunca apagou nada (`n_tup_del = 0` para 16 268 inserções): a tabela nasceu em 17/08, mais jovem que sua retenção. O levantamento procurava um *cron*; o dispositivo estava no corpo da função — `DOC-RECENS-1` de novo. Escrever o cron pedido teria feito uma purga em dobro.
 
-*Verificado : 31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**. **03/09** — 19 396 registos, o mais antigo de 17/08, nenhuma supressão; `RETENTION_JOURS = 30`. Nada a fazer antes de 16/09.*
+*Verificado : 31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**. **03/09** — 19 396 registos, o mais antigo de 17/08, nenhuma supressão; `RETENTION_JOURS = 30`. Nada a fazer antes de 16/09. **15/09** — 33 628 sondas, a mais antiga de 17/08, `n_tup_del = 0`. Amanhã é 16/09 : se em 17/09 a mais antiga ainda for de 17/08, a purga não faz o que o código diz.*
 
 **O que é.** Um cron de purga no modelo de `anarbib-catalog-audit-snapshot-purge`, com uma retenção a decidir — trinta dias provavelmente bastam, já que os incidentes são conservados à parte em `service_health_incidents`.
 
@@ -2088,6 +2089,28 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Nenhuma.
 
 *Remissões : `REGISTRE §0 DOC-DEPLOY-1` · `REGISTRE §30 (écart tracé)` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07 §4`*
+
+#### I24 — O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** **Constatado em 15/09/2026 ao voltar de Bolonha.** Domingo 13/09 o posto estava desligado ; em 15/09 às 08h15 o systemd recuperou os três fluxos : `court` e `long` terminaram, **`storage` foi morto às 08h23 por `SIGTERM`** — o encerramento da sessão WSL — e a unidade de alerta `OnFailure` **não pôde ser lançada**. Resultado : fluxo `storage` com nove dias, testemunho `started` sem `ok`, nenhum e-mail. Relançado à mão às 20h50.
+
+*Verificado : 15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50.*
+
+**O que é.** **(1)** O serviço `storage` não deve morrer com a sessão (`KillMode=`, `TimeoutStopSec=`, ou `loginctl enable-linger`). **(2)** O alerta não deve depender da sessão : o controlo de frescura do meio-dia deve **enviar** quando um fluxo passa o limiar ou tem um `started` sem `ok`.
+
+**Por que importa.** Um backup que falha em silêncio quando o posto reinicia é a avaria que só se vê na recuperação. O fluxo `storage` é **o único backup dos 16 buckets**.
+
+**O que conta como terminado.**
+
+- O serviço `storage` sobrevive ao fecho do terminal WSL.
+- Um fluxo em atraso ou «interrompido» produz um e-mail em 24 h.
+- Um posto desligado ao domingo dá três fluxos verdes na segunda, ou um e-mail.
+
+**Dependências.** Primo de **I12**. Ligado a **A3**.
+
+*Remissões : `deploy/ops/systemd/` · `anarbib-systemd-etat-non-fiable` · `anarbib-backup-stale-lock-selfheal` · `RUNBOOK_restauration_BG2_2026-07-01`*
 
 #### I23 — Registrar um ccTLD europeu e fazê-lo alias de `anarbib.org` — o `.org` continua sob registro estadunidense
 
@@ -2638,4 +2661,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado numérico foi levantado em 2026-09-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `e3a15243`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 90 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60e0580a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
