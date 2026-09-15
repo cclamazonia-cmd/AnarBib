@@ -40,10 +40,15 @@ if [ "$SU" != "postgres" ]; then
   echo "· postgres refusé — repli sur $SU : les objets seront possédés par $SU, pas comme en production."
 fi
 
-# Initialisation de la table de suivi si nécessaire
-# Le GRANT garantit que les deux rôles peuvent utiliser le schéma même si
-# c'est l'autre qui l'a créé lors d'un run précédent.
-psql -q -U "$SU" -d postgres -c "
+# Initialisation de la table de suivi via supabase_admin (superuser de l'image,
+# propriétaire du schéma supabase_migrations — seul lui peut GRANTer dessus
+# même si postgres a été sélectionné pour les migrations).
+INIT_SU="supabase_admin"
+if ! psql -U "$INIT_SU" -d postgres -tAc "select 1" >/dev/null 2>&1; then
+  INIT_SU="$SU"
+fi
+
+psql -q -U "$INIT_SU" -d postgres -c "
 CREATE SCHEMA IF NOT EXISTS supabase_migrations;
 GRANT ALL ON SCHEMA supabase_migrations TO postgres, supabase_admin;
 CREATE TABLE IF NOT EXISTS supabase_migrations.schema_migrations (
