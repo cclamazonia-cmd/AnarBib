@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-15** · 90 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-15** · 89 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 15
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 14
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
 
-**Frescor dos constatos em 2026-09-15.** **72 itens de 90** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-15.** **72 itens de 89** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G7, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -890,7 +890,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E17** | O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar | `P2` | Aberto |
 | **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
-| **E21** | A série de números de tombo e o prefixo de cota de uma biblioteca não se configuram em lado nenhum da aplicação | `P1` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -1205,30 +1204,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **E9** de preferência ; mesma exigência de olhar externo que **E1**. **Não entregar durante a formação BLMF** (sete noites a partir de 08/09). Congelamento até 14/09.
 
 *Remissões : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
-
-#### E21 — A série de números de tombo e o prefixo de cota de uma biblioteca não se configuram em lado nenhum da aplicação
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
-
-**Estado.** **Constatado em 15/09/2026** ao atribuir o lote Solidaires à sua biblioteca : `fn_batch_reassign_library` devolveu o aviso `library_without_tombo_pattern`. `libraries.tombo_pattern` (JSON `{prefix, year, sep, pad}`, lido por `fn_next_tombo` a cada exemplar publicado) e `bib_ref_prefix` / `bib_ref_pad` / `bib_ref_auto` (a cota) **não têm ecrã nenhum** : nem a página Biblioteca, nem a página Rede, nenhuma RPC os escreve. BLMF, BTL e MLEG foram configuradas **em SQL à mão** ; `blmf-teste` e Solidaires não têm nada. Uma biblioteca criada na app **não consegue publicar nenhum exemplar** enquanto um admin não escrever uma linha de SQL — e nada lho diz antes da primeira recusa. **E antes do tombo**, `publish_book_draft` recusa qualquer rascunho sem cota (`bib_ref`) : os 1 673 de Solidaires não têm nenhuma, e **nenhuma ferramenta numera um lote em massa**. **E a arrumação :** o número de tombo nunca serviu para encontrar um livro na estante ; é a **cota de arrumação**, calculada na etiqueta de lombada — classe no campo `cdd` (texto livre, Dewey não imposto) e trigrama de autor·a. Sem classe, só o trigrama : arrumação alfabética, não temática. Medido em 15/09 : BTL 956 fichas classificadas em 2 184, BLMF 189 em 248, **MLEG 17 em 269**. Solidaires chega com **35 rubricas** próprias, guardadas como assuntos, e nenhuma classe.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Um bloco « Numeração » em Biblioteca › Configuração, para a coordenação : prefixo, ano sim/não, separador, preenchimento a N dígitos, com **o exemplo renderizado ao vivo** e o último número atribuído ; o mesmo bloco para a cota. Uma RPC que escreve estas colunas com duas guardas : o prefixo é **único na rede** (`exemplares.tombo` é único em toda a base) e não muda depois de usado. E na Rede, ao criar uma biblioteca, o passo « numeração » **antes** da ativação. **Via 2, a arrumação temática de um lote importado** (pedida por Xavier em 15/09) : um gesto de lote « Passar as rubricas para a classe » que, para cada rascunho sem `cdd`, pega a rubrica da fonte (assuntos importados ou classificação local preservada) e a escreve no campo classe, segundo uma tabela rubrica → código de arrumação que a coordenação relê e valida antes de aplicar (35 linhas para Solidaires, não 1 673). A etiqueta de lombada segue sozinha. Mesmo padrão que a numeração das cotas : um lote, uma convenção, uma pré-visualização, uma aplicação.
-
-**Por que importa.** Uma biblioteca admitida que não pode publicar nada é uma biblioteca que a administração tem de desenrascar em SQL a cada admissão — exatamente a dependência de uma só pessoa que **A1**-**A3** querem desfazer.
-
-**O que conta como terminado.**
-
-- Uma coordenação configura a sua série de tombos e a sua cota a partir de Biblioteca, sem SQL, e vê o exemplo antes de gravar.
-- Um prefixo já usado por outra biblioteca é recusado pelo servidor.
-- Solidaires publica o seu primeiro exemplar com um tombo da sua série, configurada no ecrã.
-- Um lote de rascunhos sem cota recebe as suas cotas num só gesto, pela ordem do lote.
-- Um lote importado recebe as suas classes de arrumação num só gesto, a partir de uma tabela rubrica → código relida pela coordenação ; as etiquetas de Solidaires levam a sua rubrica.
-
-**Dependências.** Nasce de **IMP-20** (registo §17). Ligado a **G7** e **C2**.
-
-*Remissões : `REGISTRE §17 IMP-20` · `anarbib-tombo-global-unique-collision` · `src/pages/biblioteca/BibliotecaPage.jsx` · `fn_next_tombo` · `docs/cotation-et-cdd.md` · `src/pages/catalogacao/BookDraftForm.jsx (buildShelfLabel)`*
 
 ---
 
@@ -2635,6 +2610,7 @@ CI verde. |
 | E5 | 2026-09-07 | **Entregue e em produção na mesma noite — a última exceção antirrastreamento cai, e não pela via que a ficha propunha.** A ficha queria um *relé* de `tile.openstreetmap.org` com cache; a política de ladrilhos do OSM desaconselha proxies e proíbe qualquer pré-carregamento, e um relé manteria a dependência. Feito em vez disso: **um único arquivo PMTiles** (planet Protomaps de 07/09, derivado do OpenStreetMap, ODbL) extraído em **z12 = 18 GB** (medidas a seco: z10 3,7 GB, z11 7,9, z13 36, z14 68, z15 138), depositado no bucket público **`map-tiles`** (criado na base + migração `20260907234500` inerte depois, teto global do Storage subido de 500 MB para 20 GiB pela API de gestão) e lido pelo navegador **por requisições Range** (Storage responde 206 + CORS `*`, verificado). Renderizado no Leaflet vendorizado por **`protomaps-leaflet` 4.0.1** via `src/lib/mapTiles.js`; os três mapas não têm mais nenhuma linha `L.tileLayer`. Guarda CI `src/tests/carte-sans-domaine-tiers.test.js`. `privacy.s6.maptiles` e `federacao.carte.attribution` reescritos nas dez locales. Receita: `scripts/maptiles/README.md`. **Dois limites escritos**: (1) o arquivo está no Storage Supabase — o vazamento de IP para terceiro está fechado, não o perímetro Cloud Act, que cai com **I2** (contar estes 18 GB no disco pedido às Herbes Folles — **I21**); (2) `map-tiles` fica fora do fluxo storage do **BG2**. `ca` e `eo` ausentes do fundo → nomes locais. O fracasso de junho de 2026 lembrado como «os fundos de mapa» era o **Nominatim** (geocodificação), que segue não configurado. Incidente de método: a medida a seco de z15 travou o WSL no teto de 15 GB — `wsl --shutdown` com acordo de Xavier, nada perdido. |
 | IMP-20 | 2026-09-15 | **Um lote importado pertence a uma biblioteca de destino — entregue e em produção na mesma noite** (registo §17 `IMP-20`, migração `20260915184154`). Não era um item : era uma pergunta de Xavier de 15/09 — como atribuir os 1 673 rascunhos de Solidaires à sua biblioteca — cuja resposta honesta era « um UPDATE à mão, a refazer a cada admissão ». Feito : `destination_library_id` na fonte, carimbo de `owner_library_id` na promoção, `fn_batch_reassign_library` (administração da rede), coluna « Biblioteca » nos lotes, 21 chaves em dez locales, suite SQL de 12 testes. **O lote Solidaires está atribuído** ; os avisos (sem série de tombos, inativa) dão **E21**. Continua atrás de **G7** e da revisão do lote. |
 | I19 | 2026-09-15 | **Encerrado em 15/09, sobre medição.** *(1)* `01-roles.sh` cria `pg_cron` e **para** se falhar; na primeira passagem do entrypoint diz que adia (PR #28, `f179f1ff`). *(2)* `deploy.sh --controle` verifica a extensão e **reproduz `tests/sql/crons_planifies_tests.sql` no `cron.job` real** — a mesma lista da CI, sem cópia; ✓ ou ⚠ com código de retorno 1. Provado em pilha virgem: 38 jobs, suíte verde; job removido → ⚠ rc 1; extensão removida → ⚠ rc 1. |
+| E21 | 2026-09-15 | **A série de tombos e a cota de uma biblioteca configuram-se no ecrã ; um lote recebe as suas cotas e as suas classes de arrumação num só gesto — entregue e em produção na mesma noite** (registo §12 `CAT-E17`, migração `20260915201252`). Três gestos, no padrão proposto para os tombos — convenção, pré-visualização, aplicação, rasto : bloco « Numeração » (Biblioteca e Rede ; prefixo único na rede, congelado após uso), « Cotas em falta » num lote (na ordem do lote, a seguir às existentes), « Classificar por rubricas » (rubrica lida onde a importação a deixou — `assunto_local` para Solidaires —, tabela rubrica → código relida pela coordenação). 14 testes SQL, 101 suites verdes. **Fica às pessoas** : o prefixo de Solidaires, as 1 673 cotas, a tabela das 35 rubricas, a ativação, depois a revisão do lote. |
 
 ---
 
@@ -2666,4 +2642,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 90 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60e0580a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60e0580a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
