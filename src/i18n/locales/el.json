@@ -5953,6 +5953,7 @@
   "panel.apiError.scission_author_only": "Μόνο εγγραφή προσώπου ή συλλογικού οργάνου μπορεί να διαχωριστεί.",
   "panel.apiError.scission_bad_type": "Άγνωστος τύπος καθιερωμένου όρου σε ένα από τα μέρη.",
   "panel.apiError.split_target_changed": "Η εγγραφή άλλαξε μετά την πρόταση: δεν γράφτηκε τίποτα, ώστε να μη σβηστεί η δουλειά κάποιου άλλου. Επαναλάβετε την πρόταση στην τρέχουσα κατάσταση.",
+  "panel.apiError.too_soon": "Πολύ νωρίς: η ίδια ενέργεια μόλις εκτελέστηκε. Δοκιμάστε ξανά σε ένα λεπτό.",
   "atelier.revue.entity.book": "βιβλίο",
   "atelier.revue.entity.author": "καθιερωμένος όρος",
   "atelier.revue.filter.label": "Εμφάνιση",

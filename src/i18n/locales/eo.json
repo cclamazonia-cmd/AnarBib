@@ -5953,6 +5953,7 @@
   "panel.apiError.scission_author_only": "Nur slipo de persono aŭ kolektivo disigeblas.",
   "panel.apiError.scission_bad_type": "Nekonata aŭtoritata tipo ĉe unu el la partoj.",
   "panel.apiError.split_target_changed": "La slipo ŝanĝiĝis post la propono: nenio estis skribita, por ne forviŝi la laboron de alia. Refaru la proponon laŭ la nuna stato.",
+  "panel.apiError.too_soon": "Tro frue: la sama operacio ĵus ruliĝis. Reprovu post unu minuto.",
   "atelier.revue.entity.book": "libro",
   "atelier.revue.entity.author": "aŭtoritato",
   "atelier.revue.filter.label": "Montri",

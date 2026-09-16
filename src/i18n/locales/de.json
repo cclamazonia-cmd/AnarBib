@@ -5953,6 +5953,7 @@
   "panel.apiError.scission_author_only": "Nur ein Personen- oder Körperschaftsdatensatz kann aufgespalten werden.",
   "panel.apiError.scission_bad_type": "Unbekannter Normdatentyp bei einem der Teile.",
   "panel.apiError.split_target_changed": "Der Datensatz hat sich seit dem Vorschlag geändert: Es wurde nichts geschrieben, um die Arbeit anderer nicht zu löschen. Bitte den Vorschlag auf dem aktuellen Stand erneuern.",
+  "panel.apiError.too_soon": "Zu früh: derselbe Vorgang ist gerade gelaufen. Versuchen Sie es in einer Minute erneut.",
   "atelier.revue.entity.book": "Buch",
   "atelier.revue.entity.author": "Normdatensatz",
   "atelier.revue.filter.label": "Anzeigen",

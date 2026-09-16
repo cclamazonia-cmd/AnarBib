@@ -5953,6 +5953,7 @@
   "panel.apiError.scission_author_only": "Només un registre de persona o col·lectivitat es pot escindir.",
   "panel.apiError.scission_bad_type": "Tipus d’autoritat desconegut en una de les parts.",
   "panel.apiError.split_target_changed": "El registre ha canviat des de la proposta: no s’ha escrit res, per no esborrar la feina d’altri. Refeu la proposta sobre l’estat actual.",
+  "panel.apiError.too_soon": "Massa aviat: la mateixa operació s'acaba d'executar. Torneu-ho a provar d'aquí a un minut.",
   "atelier.revue.entity.book": "llibre",
   "atelier.revue.entity.author": "autoritat",
   "atelier.revue.filter.label": "Mostrar",

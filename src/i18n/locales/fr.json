@@ -5953,6 +5953,7 @@
   "panel.apiError.scission_author_only": "Seule une fiche de personne ou de collectivité peut être scindée.",
   "panel.apiError.scission_bad_type": "Type d’autorité inconnu pour une des parts.",
   "panel.apiError.split_target_changed": "La fiche a changé depuis la proposition : rien n’a été écrit, pour ne pas effacer le travail de quelqu’un d’autre. Reprenez la proposition sur l’état actuel.",
+  "panel.apiError.too_soon": "Trop tôt : la même opération vient de tourner. Réessayez dans une minute.",
   "atelier.revue.entity.book": "livre",
   "atelier.revue.entity.author": "autorité",
   "atelier.revue.filter.label": "Afficher",

@@ -5953,6 +5953,7 @@
   "panel.apiError.scission_author_only": "Only a person or corporate-body record can be split.",
   "panel.apiError.scission_bad_type": "Unknown authority type on one of the parts.",
   "panel.apiError.split_target_changed": "The record changed since the proposal: nothing was written, so as not to erase someone else’s work. Redo the proposal on the current state.",
+  "panel.apiError.too_soon": "Too soon: the same operation just ran. Try again in a minute.",
   "atelier.revue.entity.book": "book",
   "atelier.revue.entity.author": "authority",
   "atelier.revue.filter.label": "Show",

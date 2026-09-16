@@ -5953,6 +5953,7 @@
   "panel.apiError.scission_author_only": "Alleen een persoons- of collectiefrecord kan worden gesplitst.",
   "panel.apiError.scission_bad_type": "Onbekend autoriteitstype bij een van de delen.",
   "panel.apiError.split_target_changed": "Het record is sinds het voorstel gewijzigd: er is niets geschreven, om andermans werk niet te wissen. Doe het voorstel opnieuw op de huidige staat.",
+  "panel.apiError.too_soon": "Te vroeg: dezelfde bewerking is net uitgevoerd. Probeer het over een minuut opnieuw.",
   "atelier.revue.entity.book": "boek",
   "atelier.revue.entity.author": "autoriteit",
   "atelier.revue.filter.label": "Tonen",
