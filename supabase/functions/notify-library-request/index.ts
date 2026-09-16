@@ -189,6 +189,11 @@ function footerText(locale) {
   parts.push(tr(locale || FALLBACK_LOCALE, "footer"));
   return parts.join("\n");
 }
+// Version texte (16/09/2026) : introHtml passe par esc() ; retirer les balises
+// laissait les entités (« n&#039;est »). On les rend à la lettre.
+function unescapeForText(s) {
+  return String(s).replace(/&#0?39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+}
 function renderEmail(opts) {
   const detailRows = (opts.details || []).map((row)=>`
     <tr>
@@ -199,6 +204,8 @@ function renderEmail(opts) {
   const detailsHtml = detailRows ? `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:14px 0 0;border-collapse:collapse;">${detailRows}</table>
        <div style="height:1px;background:rgba(255,255,255,0.12);margin:14px 0 0;"></div>` : "";
   const greetingHtml = opts.greeting ? `<p style="margin:0 0 12px;font-size:16px;line-height:1.5;">${esc(opts.greeting)}</p>` : "";
+  // Bouton d'action (16/09/2026) : { label, url }, rendu après l'intro, avant les détails.
+  const actionHtml = opts.action ? `<div style="margin:18px 0 0;"><a href="${esc(opts.action.url)}" style="display:inline-block;padding:11px 18px;border-radius:10px;background:#c00000;color:#ffffff;font-weight:700;text-decoration:none;font-size:15px;">${esc(opts.action.label)}</a></div>` : "";
   const logoHtml = LOGO_URL ? `<img src="${esc(LOGO_URL)}" alt="${esc(BRAND_NAME)}" style="display:block;max-width:84px;max-height:52px;width:auto;height:auto;object-fit:contain;">` : "";
   const html = `<!doctype html>
 <html><head>
@@ -226,6 +233,7 @@ function renderEmail(opts) {
                 <h1 style="margin:0 0 12px;font-size:20px;line-height:1.25;">${esc(opts.title)}</h1>
                 ${greetingHtml}
                 <div style="font-size:16px;line-height:1.55;color:#f2f2f2;">${opts.introHtml}</div>
+                ${actionHtml}
                 ${detailsHtml}
                 <div style="margin:16px 0 0;font-size:13px;line-height:1.5;color:#cfcfcf;">${footerHtml(opts.locale)}</div>
               </div>
@@ -246,8 +254,9 @@ function renderEmail(opts) {
     opts.title,
     "",
     opts.greeting || "",
-    opts.introHtml.replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>\s*<p>/gi, "\n\n").replace(/<[^>]+>/g, "").trim(),
+    unescapeForText(opts.introHtml.replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>\s*<p>/gi, "\n\n").replace(/<[^>]+>/g, "")).trim(),
     "",
+    ...(opts.action ? [`${opts.action.label}: ${opts.action.url}`, ""] : []),
     ...(opts.details || []).map((row)=>`${row.label}: ${row.value}`),
     "",
     footerText(opts.locale)
@@ -395,12 +404,25 @@ function buildApplicantEmail(locale, eventType, row, reviewerName) {
   if (row.review_notes && ["library_request_more_info", "library_request_approved", "library_request_refused"].includes(eventType)) {
     details.push({ label: tr(locale, "lbl.coordinationMessage"), value: normalizeReviewNotesForEmail(row.review_notes, eventType === "library_request_more_info") });
   }
+  // Acceptation (16/09/2026) : le mail ne porte pas le guide d'accueil, il y
+  // mène — et propose d'abord un échange humain (spec onboarding §1.4.2,
+  // DOC-COLLECTIVE-1). Quatre paragraphes puis un bouton vers la page de la
+  // vitrine dans la langue de la personne ; le tableau de détails reste dessous.
+  // Les paragraphes sont séparés par une ligne vide dans le HTML : la version
+  // texte de renderEmail ne fait que retirer les balises.
+  const paragraphs = [tr(locale, evKey + ".intro", { library: row.library_name })];
+  let action = null;
+  if (eventType === "library_request_approved") {
+    paragraphs.push(tr(locale, "approved.notYet"), tr(locale, "approved.path"), tr(locale, "approved.human"));
+    action = { label: tr(locale, "approved.ctaLabel"), url: tr(locale, "approved.guideUrl") };
+  }
   return {
     locale,
     subject: `[${BRAND_NAME}] ${tr(locale, evKey + ".subject")}`,
     title: tr(locale, evKey + ".subject"),
     greeting: greetingFor(locale, row.contact_name),
-    introHtml: `<p style="margin:0;">${esc(tr(locale, evKey + ".intro", { library: row.library_name }))}</p>`,
+    introHtml: paragraphs.map((p, i) => `<p style="margin:${i ? "12px" : "0"} 0 0;">${esc(p)}</p>`).join("\n\n"),
+    action,
     details,
   };
 }
@@ -561,7 +583,10 @@ async function handleNotify(payload) {
     results.push(await safeSendEmail("applicant", target, applicantEmail.subject, applicantRendered.html, applicantRendered.text));
   }
   // Copie à la coordination : fan-out vers chaque admin actif·ve, dans sa langue.
-  if (eventType === "library_request_created") {
+  // Depuis le 16/09/2026 aussi à l'acceptation (décision Xavier) : la
+  // coordination sait qu'une bibliothèque entre en constitution et à qui
+  // proposer un échange (ONBO-Q10), sans attendre le digest.
+  if (eventType === "library_request_created" || eventType === "library_request_approved") {
     await sendToAdmins("admin_copy", (loc) => buildAdminEmail(loc, eventType, row, reviewerName), results);
   }
   const sentCount = results.filter((x)=>x.ok === true).length;
