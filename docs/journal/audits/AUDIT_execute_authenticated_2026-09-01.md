@@ -1621,6 +1621,14 @@ reconsidérer si le staff s'élargit ou si une source se plaint d'être
 sollicitée : un garde-fou d'une ligne (`pg_advisory_xact_lock` ou un
 horodatage « dernière sonde < 1 min → refus ») suffirait.
 
+**Fait le 16/09 à 23 h 45** (`20260916233000_la_sonde_des_sources_attend_une_minute`) :
+si une source porte un `last_fetched_at` de moins d'une minute, la RPC refuse
+en 55000 « too_soon » avant tout appel réseau ; `gazette_sources_probe_tests`
+T5 attend le refus, T4 vide les horodatages avant d'appeler, et le banc nomme
+un `network_staff` le temps du test quand le seed n'en a pas (jusque-là T4
+était « non exercé » en CI). Le front traduit le code court
+(`panel.apiError.too_soon`, dix locales).
+
 **Non concernées.** Nées aussi le 15/09 au soir, après le relevé :
 `public.fn_gazette_submission_staff_edit` (GAZ-9, `20260915211224`, trigger
 DEFINER, `postgres`/`service_role` seuls) et
