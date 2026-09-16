@@ -196,7 +196,7 @@ PSP -At -F ' ' -c "
       || ' (dont SECURITY DEFINER : ' || count(*) filter (where prosecdef) || ')'
     from f
   union all
-  select 'empreinte MD5 de la liste (prod 15/09/2026 : 133 / 56ed10b70dfd69e8436b6a4e818093ef) : '
+  select 'empreinte MD5 de la liste (prod 16/09/2026 apres B22 : 90 / 1852f6b218d8c42ed4b9d11b07bffece ; avant B22 : 133 / 56ed10b70dfd69e8436b6a4e818093ef) : '
       || md5(string_agg(sig, E'\n' order by sig collate \"C\"))
     from f
   union all

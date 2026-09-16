@@ -221,6 +221,11 @@ BEGIN
   --   * une fonction de la liste fermee a `anon` = un acces public casse.
   -- Ajouter une entree ici doit etre un acte, pas un effet de bord. Chaque nom
   -- a un verdict ecrit dans docs/journal/audits/AUDIT_execute_anon_2026-08-30.md.
+  -- 16/09/2026 (B22) : fn_current_user_is_member_of_holding_library et
+  -- fn_reading_notes_enabled_for sortent de la liste -- elles n'etaient ouvertes
+  -- que par un defaut de creation, sans GRANT ecrit, et rien ne les appelle
+  -- sous anon (deux DEFINER, une policy d'INSERT). 28 -> 26 ; le lint 0028 doit
+  -- rendre 26.
   v_t := 'T10 les fonctions SECURITY DEFINER ouvertes a anon sont exactement celles de la liste nommee';
   BEGIN
     WITH nommees(fn) AS (VALUES
@@ -233,7 +238,6 @@ BEGIN
       ('public.fn_caller_is_library_staff'),
       ('public.fn_caller_is_network_admin'),
       ('public.fn_consume_library_request_claim'),
-      ('public.fn_current_user_is_member_of_holding_library'),
       ('public.fn_get_library_request_claim_context'),
       ('public.fn_library_catalog_mode'),
       ('public.fn_library_circulation_mode'),
@@ -243,7 +247,6 @@ BEGIN
       ('public.fn_oai_harvestable_libraries'),
       ('public.fn_oai_harvestable_records'),
       ('public.fn_oai_library_is_harvest_eligible'),
-      ('public.fn_reading_notes_enabled_for'),
       ('public.fn_serial_caller_is_library_staff'),
       ('public.fn_submit_library_request'),
       ('public.fn_submit_library_request_via_claim'),
@@ -312,6 +315,141 @@ BEGIN
       v_failures := v_failures||(v_t||' : le defaut a perdu authenticated ou service_role -> '||v_txt);
     ELSE
       v_passed := v_passed+1;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- T12 -- TOUT ce que anon execute, en une liste ecrite (item B22, 16/09/2026).
+  --
+  -- T10 ne regarde que les SECURITY DEFINER. Or 47 fonctions (12 a `anon=X`
+  -- dans l'ACL par un defaut de creation, 35 par PUBLIC) etaient executables
+  -- par anon sans qu'AUCUNE ligne du depot ne le dise -- dont dix RPC de
+  -- circulation d'api et dix-sept helpers d'ingest. La migration
+  -- 20260916223000 a ecrit les quatre ouvertures qui servent et ferme les
+  -- 43 autres. Cette liste est desormais la verite ecrite de l'exposition a
+  -- anon sur les quatre schemas du depot, INVOKER compris, et elle se verifie
+  -- dans les deux sens comme T10 : une fonction ouverte hors liste est une
+  -- exposition non decidee (le plus souvent un `=X` natif jamais revoque, ou
+  -- un GRANT ... TO PUBLIC), une entree fermee casse un acces public. Pour
+  -- ajouter une ligne : un GRANT ecrit dans la migration qui cree la
+  -- fonction, ET la ligne ici. La reference est la production du 16/09 :
+  -- 133 executables par anon, 90 apres B22.
+  v_t := 'T12 les fonctions executables par anon (public, api, ingest, private) sont exactement celles de la liste nommee';
+  BEGIN
+    WITH nommees(fn) AS (VALUES
+      ('api.audio_tracklist_public'),
+      ('api.author_subjects_v1'),
+      ('api.book_copies_by_library_v1'),
+      ('api.book_other_editions'),
+      ('api.book_serial_v1'),
+      ('api.catalog_facets_v1'),
+      ('api.catalog_search_ids_v1'),
+      ('api.catalog_works_v1'),
+      ('api.search_catalog_v1'),
+      ('api.serial_detail_v1'),
+      ('api.serial_issues_v1'),
+      ('api.similar_authors'),
+      ('api.similar_books'),
+      ('api.subject_detail_v1'),
+      ('api.subject_ficedl_links_v1'),
+      ('api.subject_related_v1'),
+      ('api.subject_tree_v1'),
+      ('api.thesaurus_export_v1'),
+      ('api.work_public_detail'),
+      ('private.fn_book_work_id'),
+      ('private.fn_cartography_public_rows'),
+      ('private.fn_catalog_public_rows'),
+      ('private.fn_publisher_display'),
+      ('public._anarbib_safe_date'),
+      ('public._anarbib_trim_or_null'),
+      ('public.catalog_bridge_block'),
+      ('public.catalog_bridge_date'),
+      ('public.catalog_bridge_text'),
+      ('public.catalog_bridge_timestamptz'),
+      ('public.catalog_partner_can_compare'),
+      ('public.catalog_partner_can_import'),
+      ('public.catalog_partner_can_mutualize'),
+      ('public.catalog_partner_policy_by_slug'),
+      ('public.catalog_partner_relationship_rank'),
+      ('public.catalog_partner_require_compare_authorized'),
+      ('public.catalog_partner_require_import_authorized'),
+      ('public.catalog_partner_status_allows_comparison'),
+      ('public.catalog_partner_status_allows_import'),
+      ('public.circulation_material_scope_from_tipo_material'),
+      ('public.f_normalize_search'),
+      ('public.fn_book_due_dates'),
+      ('public.fn_book_restricted_pdf_state'),
+      ('public.fn_book_restricted_pdf_state_for_current_user'),
+      ('public.fn_caller_is_library_staff'),
+      ('public.fn_caller_is_network_admin'),
+      ('public.fn_check_consulta_transition'),
+      ('public.fn_check_loan_action'),
+      ('public.fn_consume_library_request_claim'),
+      ('public.fn_export_my_data'),
+      ('public.fn_format_holding_refs'),
+      ('public.fn_get_consulta_context'),
+      ('public.fn_get_library_request_claim_context'),
+      ('public.fn_get_loan_context'),
+      ('public.fn_get_retention_policy'),
+      ('public.fn_hash_claim_token'),
+      ('public.fn_is_critical_action_type'),
+      ('public.fn_library_catalog_mode'),
+      ('public.fn_library_circulation_mode'),
+      ('public.fn_library_governance_mode'),
+      ('public.fn_library_network_mode'),
+      ('public.fn_library_visible_to_caller'),
+      ('public.fn_locale_from_idioma'),
+      ('public.fn_normalize_name'),
+      ('public.fn_oai_harvestable_libraries'),
+      ('public.fn_oai_harvestable_records'),
+      ('public.fn_oai_library_is_harvest_eligible'),
+      ('public.fn_serial_caller_is_library_staff'),
+      ('public.fn_set_retention_policy'),
+      ('public.fn_submit_library_request'),
+      ('public.fn_submit_library_request_via_claim'),
+      ('public.fn_task_adopt_suggestion'),
+      ('public.fn_task_create'),
+      ('public.fn_task_delete'),
+      ('public.fn_task_instantiate_template'),
+      ('public.fn_task_invite'),
+      ('public.fn_task_update_status'),
+      ('public.fn_touch_draft_opened'),
+      ('public.fn_volume_marker'),
+      ('public.fn_volume_rank'),
+      ('public.fn_work_display_title'),
+      ('public.generate_public_id'),
+      ('public.get_accessible_digital_asset_by_id_v2'),
+      ('public.get_book_contributors_public'),
+      ('public.get_book_primary_public_digital_asset_v2'),
+      ('public.norm_match_text'),
+      ('public.normalize_author_alias'),
+      ('public.task_invite_emails_from_tags'),
+      ('public.try_parse_jsonb'),
+      ('public.user_can_act_as_staff_on_library'),
+      ('public.user_can_engage_library')
+    ), reelles AS (
+      SELECT DISTINCT n.nspname||'.'||p.proname AS fn
+        FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+       WHERE n.nspname IN ('public','api','ingest','private')
+         AND has_function_privilege('anon', p.oid, 'EXECUTE')
+    )
+    SELECT
+      coalesce(string_agg(x.fn||' ('||x.sens||')', ', ' ORDER BY x.fn), ''),
+      count(*)
+      INTO v_txt, v_n
+      FROM (
+        SELECT fn, 'ouverte hors liste' AS sens FROM reelles
+         WHERE fn NOT IN (SELECT fn FROM nommees)
+        UNION ALL
+        SELECT fn, 'attendue mais fermee' FROM nommees
+         WHERE fn NOT IN (SELECT fn FROM reelles)
+      ) x;
+
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : '||v_n||' ecart(s) -> '||left(v_txt, 600)
+        ||' | ouverte hors liste = exposition non decidee (GRANT ecrit + ligne ici, ou REVOKE) ;'
+        ||' attendue mais fermee = acces public casse');
     END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
