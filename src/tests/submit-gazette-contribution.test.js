@@ -25,8 +25,10 @@ import { transformSync } from 'esbuild';
 const SRC = new URL('../../supabase/functions/submit-gazette-contribution/index.ts', import.meta.url);
 const CLE = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
+const RL = new URL('../../supabase/functions/_shared/core/rate-limit.ts', import.meta.url);
 const CODE = cjs(SRC);
 const CLE_CODE = cjs(CLE);
+const RL_CODE = cjs(RL);
 
 const ENV = { SUPABASE_URL: 'http://stub', SUPABASE_SECRET_KEYS: '{"default":"stub"}' };
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
@@ -76,9 +78,12 @@ function monterEF(breves) {
   let handler = null;
   const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
   const requireStub = (spec) => {
-    if (spec.endsWith('secret-key.ts')) {
+    if (spec.endsWith('secret-key.ts') || spec.endsWith('rate-limit.ts')) {
+      // Le vrai rate-limit.ts (B26) : ses compteurs lisent et écrivent le faux
+      // client ci-dessus, qui répond « pas de ligne, pas d'erreur » — chaque
+      // frappe passe.
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(requireStub, m, m.exports, DenoStub);
+      new Function('require', 'module', 'exports', 'Deno', spec.endsWith('secret-key.ts') ? CLE_CODE : RL_CODE)(requireStub, m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };

@@ -473,3 +473,6 @@ tests/sql/gazette_sources_probe_tests.sql
 # GAZ-9 (15/09) : le staff corrige une breve avant de la retenir. T1 garde la version de la personne
 # et remet la traduction en attente ; T5 corrige et accepte d un seul geste (ordre des triggers indifferent).
 tests/sql/gazette_correction_staff_tests.sql
+# B25/B26 (16/09) : les compteurs d abus comptent — 7 kinds fermes (login, geocode, cartographie, gazette),
+# la cle est une empreinte SHA-256 (jamais IP ni courriel), une cle brute ou un kind inconnu sont refuses.
+tests/sql/compteurs_d_abus_tests.sql

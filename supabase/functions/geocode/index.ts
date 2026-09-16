@@ -11,6 +11,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), NOMINATIM_URL (à définir).
 
 import { secretKey } from "../_shared/core/secret-key.ts";
+import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 
 const CORS = {
@@ -22,10 +23,6 @@ const IP_LIMIT = 40, WINDOW_MIN = 60; // 40 géocodages / heure / IP
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
-}
-async function sha256Hex(s: string) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 Deno.serve(async (req) => {
@@ -45,22 +42,13 @@ Deno.serve(async (req) => {
     { auth: { persistSession: false } },
   );
 
-  // Rate-limit (réutilise public.auth_rate_limits)
+  // Rate-limit par IP (compteur partagé, clé hachée, échoue fermé — B26 : de
+  // juin à septembre ce compteur n'a jamais compté, la table refusait son kind
+  // et personne ne lisait l'erreur).
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const ipHash = await sha256Hex(ip);
-  {
-    const { data } = await sb.from("auth_rate_limits").select("failure_count,blocked_until")
-      .eq("kind", "geocode_ip").eq("key", ipHash).maybeSingle();
-    const now = new Date();
-    if (data?.blocked_until && new Date(data.blocked_until) > now) return json({ error: "rate_limited" }, 429);
-    const count = (data?.failure_count ?? 0) + 1;
-    const blocked_until = count >= IP_LIMIT ? new Date(now.getTime() + WINDOW_MIN * 60000).toISOString() : null;
-    await sb.from("auth_rate_limits").upsert({
-      kind: "geocode_ip", key: ipHash, failure_count: count, last_failure_at: now.toISOString(),
-      first_failure_at: data ? undefined : now.toISOString(), blocked_until,
-    }, { onConflict: "kind,key" });
-    if (count > IP_LIMIT) return json({ error: "rate_limited" }, 429);
-  }
+  const stop = await freiner(sb, "geocode_ip", ipHash, IP_LIMIT, WINDOW_MIN, json);
+  if (stop) return stop;
 
   // Proxy vers Nominatim self-hosted (côté serveur uniquement)
   const url = `${base.replace(/\/+$/, "")}/search?q=${encodeURIComponent(q)}&format=jsonv2&limit=1&addressdetails=0`;

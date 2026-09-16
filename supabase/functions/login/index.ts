@@ -12,6 +12,17 @@
 //   - Email : 5  échecs / 30 min → blocage 1h
 //   - Login réussi → reset des compteurs (suppression des lignes)
 //
+// B25 (16/09/2026) — deux règles apprises à quatre mois de 403 silencieux :
+//   - La clé des compteurs est une EMPREINTE (sha256Hex de l'IP, du courriel
+//     en minuscules), jamais la valeur : la table ne sait pas qui, et la query
+//     string du DELETE — qui passe dans les journaux edge — non plus.
+//   - `signInWithPassword` se fait sur un client À PART. Sur le client qui
+//     porte la clé secrète, supabase-js pose la session de la personne après
+//     la connexion, et tout appel suivant part avec SON jeton : le DELETE de
+//     clearFailures tournait en `authenticated`, sans droit sur la table,
+//     à chaque connexion réussie depuis le 05/05 — et personne ne lisait
+//     `error`. Désormais chaque erreur du magasin est journalisée.
+//
 // Variables d'env requises (à configurer via supabase secrets set) :
 //   - SUPABASE_URL              (auto)
 //   - SUPABASE_SECRET_KEYS (auto, cle « default »)
@@ -19,6 +30,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { secretKey } from "../_shared/core/secret-key.ts";
+import { sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 
 // ─── Configuration ──────────────────────────────────────────
@@ -85,20 +97,24 @@ interface RateLimitRow {
 }
 
 /**
- * Vérifie si une clé (IP ou email) est actuellement bloquée.
- * Retourne true si bloquée (= refus immédiat).
+ * Vérifie si une clé (empreinte d'IP ou de courriel) est actuellement bloquée.
+ * Retourne true si bloquée (= refus immédiat). Un magasin qui ne répond pas
+ * LÈVE : le handler répond 500 plutôt que de laisser passer sans compter.
  */
 async function isRateLimited(
   supabase: ReturnType<typeof createClient>,
   kind: "ip" | "email",
   key: string,
 ): Promise<boolean> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("auth_rate_limits")
     .select("blocked_until")
     .eq("kind", kind)
     .eq("key", key)
     .maybeSingle();
+  if (error) {
+    throw new Error(`login: lecture du compteur ${kind} impossible — ${error.message ?? error.code ?? error}`);
+  }
 
   if (!data?.blocked_until) return false;
   return new Date(data.blocked_until) > new Date();
@@ -118,22 +134,28 @@ async function recordFailure(
   const windowStart = new Date(now.getTime() - config.windowMinutes * 60 * 1000);
 
   // Lecture de la ligne existante (si elle existe)
-  const { data: existing } = await supabase
+  const { data: existing, error: errLecture } = await supabase
     .from("auth_rate_limits")
     .select("*")
     .eq("kind", kind)
     .eq("key", key)
     .maybeSingle<RateLimitRow>();
+  if (errLecture) {
+    console.error(`login: compteur ${kind} illisible —`, errLecture.message ?? errLecture);
+  }
 
   if (!existing) {
     // Nouvelle entrée
-    await supabase.from("auth_rate_limits").insert({
+    const { error: errInsert } = await supabase.from("auth_rate_limits").insert({
       kind,
       key,
       failure_count: 1,
       first_failure_at: now.toISOString(),
       last_failure_at: now.toISOString(),
     });
+    if (errInsert) {
+      console.error(`login: compteur ${kind} non créé —`, errInsert.message ?? errInsert);
+    }
     return;
   }
 
@@ -160,7 +182,7 @@ async function recordFailure(
     ).toISOString();
   }
 
-  await supabase
+  const { error: errUpdate } = await supabase
     .from("auth_rate_limits")
     .update({
       failure_count: newCount,
@@ -170,20 +192,29 @@ async function recordFailure(
     })
     .eq("kind", kind)
     .eq("key", key);
+  if (errUpdate) {
+    console.error(`login: compteur ${kind} non mis à jour —`, errUpdate.message ?? errUpdate);
+  }
 }
 
 /**
- * Reset les compteurs après un login réussi.
+ * Reset les compteurs après un login réussi. Les deux clés sont des empreintes :
+ * la query string de ce DELETE traverse les journaux edge, elle ne doit porter
+ * ni adresse IP ni courriel.
  */
 async function clearFailures(
   supabase: ReturnType<typeof createClient>,
-  ip: string,
-  email: string,
+  ipKey: string,
+  emailKey: string,
 ): Promise<void> {
-  await supabase
+  const { error } = await supabase
     .from("auth_rate_limits")
     .delete()
-    .or(`and(kind.eq.ip,key.eq.${ip}),and(kind.eq.email,key.eq.${email})`);
+    .or(`and(kind.eq.ip,key.eq.${ipKey}),and(kind.eq.email,key.eq.${emailKey})`);
+  if (error) {
+    // 42501 pendant quatre mois sans que personne le voie : plus jamais en silence.
+    console.error("login: remise à zéro des compteurs refusée —", error.message ?? error.code ?? error);
+  }
 }
 
 // ─── Plancher de durée (AR-1, 2026-08-20) ──────────────────
@@ -237,14 +268,30 @@ Deno.serve(async (req: Request) => {
       return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 400);
     }
 
-    // Client Supabase avec service_role (contourne RLS pour auth_rate_limits)
+    // Client Supabase avec la clé secrète (service_role : contourne la RLS de
+    // auth_rate_limits, et seul rôle à y avoir un GRANT). Il ne se connecte
+    // JAMAIS : voir `auth` plus bas.
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       secretKey() ?? "",
+      { auth: { persistSession: false, autoRefreshToken: false } },
+    );
+    // Client à part pour signInWithPassword. supabase-js pose la session
+    // obtenue sur le client qui l'a demandée, et tous ses appels suivants
+    // partent alors avec le jeton de la personne (rôle `authenticated`). Sur
+    // `supabase`, le DELETE de clearFailures tournait en 42501 à chaque
+    // connexion réussie (B25). Ce client-ci ne sert qu'à ça.
+    const auth = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      secretKey() ?? "",
+      { auth: { persistSession: false, autoRefreshToken: false } },
     );
 
+    // Empreintes : la table et les journaux ne voient jamais l'IP ni le courriel.
+    const ipKey = await sha256Hex(ip);
+
     // ─── Rate limit par IP, avant toute autre opération ────────
-    if (await isRateLimited(supabase, "ip", ip)) {
+    if (await isRateLimited(supabase, "ip", ipKey)) {
       return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
     }
 
@@ -290,38 +337,40 @@ Deno.serve(async (req: Request) => {
       if (!found) {
         // Identifiant inconnu : même réponse et même comptage qu'un mot de passe
         // faux, pour ne pas révéler l'existence d'un numéro de lecteur.
+        const inconnuKey = await sha256Hex(email);
         await Promise.all([
-          recordFailure(supabase, "ip", ip, RATE_LIMIT_IP),
-          recordFailure(supabase, "email", email, RATE_LIMIT_EMAIL),
+          recordFailure(supabase, "ip", ipKey, RATE_LIMIT_IP),
+          recordFailure(supabase, "email", inconnuKey, RATE_LIMIT_EMAIL),
         ]);
         await plancher(t0);
         return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 401);
       }
       email = String(found).trim().toLowerCase();
     }
+    const emailKey = await sha256Hex(email);
 
     // ─── Rate limit par e-mail (après résolution) ──────────────
-    if (await isRateLimited(supabase, "email", email)) {
+    if (await isRateLimited(supabase, "email", emailKey)) {
       await plancher(t0);
       return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
     }
 
-    // ─── Tentative de login ────────────────────────────────────
+    // ─── Tentative de login — sur le client à part ─────────────
     const { data: authData, error: authError } =
-      await supabase.auth.signInWithPassword({ email, password });
+      await auth.auth.signInWithPassword({ email, password });
 
     if (authError || !authData?.session) {
       // Échec : enregistre les compteurs (en parallèle, mais on attend le résultat)
       await Promise.all([
-        recordFailure(supabase, "ip", ip, RATE_LIMIT_IP),
-        recordFailure(supabase, "email", email, RATE_LIMIT_EMAIL),
+        recordFailure(supabase, "ip", ipKey, RATE_LIMIT_IP),
+        recordFailure(supabase, "email", emailKey, RATE_LIMIT_EMAIL),
       ]);
       await plancher(t0);
       return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 401);
     }
 
-    // ─── Login réussi : reset des compteurs ────────────────────
-    await clearFailures(supabase, ip, email);
+    // ─── Login réussi : reset des compteurs (client de service, clés hachées) ──
+    await clearFailures(supabase, ipKey, emailKey);
 
     // Renvoi de la session au frontend (qui la stockera via supabase-js)
     return jsonResponse({

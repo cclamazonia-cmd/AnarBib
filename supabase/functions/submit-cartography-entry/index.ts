@@ -12,6 +12,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), ALTCHA_HMAC_SECRET.
 
 import { secretKey } from "../_shared/core/secret-key.ts";
+import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
 
@@ -29,10 +30,6 @@ const IP_LIMIT = 5, WINDOW_MIN = 60; // 5 soumissions / heure / IP
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
-}
-async function sha256Hex(s: string) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 Deno.serve(async (req) => {
@@ -91,21 +88,10 @@ Deno.serve(async (req) => {
     return json({ error: "captcha_failed" }, 403);
   }
 
-  // Rate-limit (réutilise public.auth_rate_limits)
-  async function hit(kind: string, k: string, limit: number): Promise<boolean> {
-    const { data } = await sb.from("auth_rate_limits").select("failure_count,blocked_until")
-      .eq("kind", kind).eq("key", k).maybeSingle();
-    const now = new Date();
-    if (data?.blocked_until && new Date(data.blocked_until) > now) return false;
-    const count = (data?.failure_count ?? 0) + 1;
-    const blocked_until = count >= limit ? new Date(now.getTime() + WINDOW_MIN * 60000).toISOString() : null;
-    await sb.from("auth_rate_limits").upsert({
-      kind, key: k, failure_count: count, last_failure_at: now.toISOString(),
-      first_failure_at: data ? undefined : now.toISOString(), blocked_until,
-    }, { onConflict: "kind,key" });
-    return count <= limit;
-  }
-  if (!(await hit("carto_ip", ipHash, IP_LIMIT))) return json({ error: "rate_limited" }, 429);
+  // Rate-limit par IP (compteur partagé, clé hachée, échoue fermé — B26 : depuis
+  // le 03/09 ce compteur n'avait jamais compté, la table refusait son kind).
+  const stop = await freiner(sb, "carto_ip", ipHash, IP_LIMIT, WINDOW_MIN, json);
+  if (stop) return stop;
 
   const langs = Array.isArray(p.langue_fonds)
     ? p.langue_fonds.map((x) => String(x).trim()).filter(Boolean)

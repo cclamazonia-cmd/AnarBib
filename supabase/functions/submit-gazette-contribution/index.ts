@@ -21,6 +21,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (présents par défaut dans l'env EF).
 
 import { secretKey } from "../_shared/core/secret-key.ts";
+import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
@@ -46,10 +47,6 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status, headers: { ...CORS, "Content-Type": "application/json" },
   });
-}
-async function sha256Hex(s: string) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 // Retrouve la brève rejetée que désigne un jeton, ou dit pourquoi il ne vaut rien.
@@ -83,24 +80,15 @@ Deno.serve(async (req) => {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const ipHash = await sha256Hex(ip);
 
-  // --- Rate-limit (réutilise public.auth_rate_limits) ---
-  async function hit(kind: string, k: string, limit: number): Promise<boolean> {
-    const { data } = await sb.from("auth_rate_limits").select("failure_count,blocked_until")
-      .eq("kind", kind).eq("key", k).maybeSingle();
-    const now = new Date();
-    if (data?.blocked_until && new Date(data.blocked_until) > now) return false;
-    const count = (data?.failure_count ?? 0) + 1;
-    const blocked_until = count >= limit ? new Date(now.getTime() + WINDOW_MIN * 60000).toISOString() : null;
-    await sb.from("auth_rate_limits").upsert({
-      kind, key: k, failure_count: count, last_failure_at: now.toISOString(),
-      first_failure_at: data ? undefined : now.toISOString(), blocked_until,
-    }, { onConflict: "kind,key" });
-    return count <= limit;
-  }
+  // --- Rate-limit : compteurs partagés (_shared/core/rate-limit.ts), clés
+  // hachées, échoue fermé. B26 : le `hit()` local d'ici n'a jamais compté (la
+  // table refusait ses kinds, l'erreur n'était pas lue), et `gazette_email`
+  // écrivait le courriel en clair.
 
   // --- Reprise, temps 1 : pré-remplir le formulaire depuis le jeton ---
   if (p.action === "prefill") {
-    if (!(await hit("gazette_prefill", ipHash, PREFILL_LIMIT))) return json({ error: "rate_limited" }, 429);
+    const stop = await freiner(sb, "gazette_prefill", ipHash, PREFILL_LIMIT, WINDOW_MIN, json);
+    if (stop) return stop;
     const r = await parentFromToken(sb, p.resubmit_token);
     if (!r.parent) return json({ error: r.error }, r.status);
     const o = r.parent;
@@ -137,8 +125,12 @@ Deno.serve(async (req) => {
   }
 
   const email = p.contributor_email ? String(p.contributor_email).trim().toLowerCase() : null;
-  if (!(await hit("gazette_ip", ipHash, IP_LIMIT))) return json({ error: "rate_limited" }, 429);
-  if (email && !(await hit("gazette_email", email, EMAIL_LIMIT))) return json({ error: "rate_limited" }, 429);
+  const stopIp = await freiner(sb, "gazette_ip", ipHash, IP_LIMIT, WINDOW_MIN, json);
+  if (stopIp) return stopIp;
+  if (email) {
+    const stopEmail = await freiner(sb, "gazette_email", await sha256Hex(email), EMAIL_LIMIT, WINDOW_MIN, json);
+    if (stopEmail) return stopEmail;
+  }
 
   // --- Insertion (le trigger enfile la notif → fede@anarbib.org, qui dit si c'est une reprise) ---
   const { data, error } = await sb.from("gazette_submissions").insert({
