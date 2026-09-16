@@ -67,7 +67,17 @@ BEGIN
   v_test_name := 'T4 network_staff actif, aucune sonde recente : passe les gardes';
   SELECT ns.user_id INTO v_staff FROM public.network_staff ns WHERE ns.is_active LIMIT 1;
   IF v_staff IS NULL THEN
-    RAISE NOTICE 'T4 non exercé : aucun network_staff actif dans le seed';
+    -- Le seed n'a pas de network_staff (constaté le 16/09 : T4 « non exercé »
+    -- sur le banc, donc la garde too_soon jamais éprouvée en CI). On en nomme
+    -- un le temps du banc, annulé avec tout le reste par le RAISE final.
+    SELECT u.id INTO v_staff FROM auth.users u ORDER BY u.created_at LIMIT 1;
+    IF v_staff IS NOT NULL THEN
+      INSERT INTO public.network_staff (user_id, is_active, network_role)
+      VALUES (v_staff, true, 'admin');
+    END IF;
+  END IF;
+  IF v_staff IS NULL THEN
+    RAISE NOTICE 'T4 non exercé : aucun compte dans le seed';
   ELSE
     UPDATE public.gazette_sources SET last_fetched_at = NULL;
     PERFORM set_config('request.jwt.claims',
