@@ -1841,7 +1841,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I13** | Finir la bascule vers le nouveau moteur de pages | `P3` | Ouvert |
 | **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | Ouvert |
 | **I16** | Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09 | `P1` | En cours |
-| **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | Ouvert |
+| **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
@@ -2024,13 +2024,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### I18 — Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : administration système
 
-**État.** `scripts/ci/run-sql-suites.sh` crée `anarbib_test` depuis `template0` : `pg_default_acl` y est vide, les fonctions naissent fermées, la vérification des migrations du 29/08 passe — et une image réelle la fait lever. Le vert de `sql-tests` n'atteste donc pas qu'une image Supabase rejoue le dépôt (`DOC-GRANT-2`, même limite structurelle que `DOC-MIGR-1` par l'autre bout). Le choix de `template0` est motivé (pas d'event triggers hérités) et reste bon pour les suites. **07/09** : la spec d'`I17` (§8) rend cet item bon marché — le service `sql-tests` lance déjà l'image ; il suffit d'un second job qui rejoue les migrations dans la base `postgres` du service (défauts et extensions de l'init posés) au lieu d'une base `template0`. **07/09, confirmé par l'expérience d'`I17`** : avec A.1 avant le socle et `CREATE EXTENSION pg_cron`, la base `postgres` de l'image rejoue les 310 migrations sous `postgres` ; le job serait vert aujourd'hui.
+**État.** `scripts/ci/run-sql-suites.sh` crée `anarbib_test` depuis `template0` : `pg_default_acl` y est vide, les fonctions naissent fermées, la vérification des migrations du 29/08 passe — et une image réelle la fait lever. Le vert de `sql-tests` n'atteste donc pas qu'une image Supabase rejoue le dépôt (`DOC-GRANT-2`, même limite structurelle que `DOC-MIGR-1` par l'autre bout). Le choix de `template0` est motivé (pas d'event triggers hérités) et reste bon pour les suites. **07/09** : la spec d'`I17` (§8) rend cet item bon marché — le service `sql-tests` lance déjà l'image ; il suffit d'un second job qui rejoue les migrations dans la base `postgres` du service (défauts et extensions de l'init posés) au lieu d'une base `template0`. **07/09, confirmé par l'expérience d'`I17`** : avec A.1 avant le socle et `CREATE EXTENSION pg_cron`, la base `postgres` de l'image rejoue les 310 migrations sous `postgres` ; le job serait vert aujourd'hui. **16/09 : livré.** Job `rejeu-image` dans `sql-tests.yml` (`scripts/ci/run-image-replay.sh`) : même service Postgres, rejeu dans la base `postgres` de l'image par les deux scripts de la pile (`deploy/init-db/01-roles.sh` : mots de passe, A.1, `pg_cron` ; `deploy/scripts/run-migrations.sh` sous `postgres`), qui parlent à l'image par `PGHOST` au lieu du socket — un `install.sh` sans conteneurs applicatifs. Entre les deux, ce que la pile obtient de ses services avant de migrer (bootstrap.sh 3/8 et 4/8) : le sel au Vault réel par `vault.create_secret`, les stubs `auth` et `storage` de sql-tests, et un stub de pont `tests/sql/_ci_setup_image_services_stub.sql`. **Quatre manques de l'image nue, mesurés en chemin, sans lesquels un rejeu à froid s'arrête** : `auth.jwt()` absent (socle, l. 41402) ; `auth.users` d'origine sans `email_confirmed_at`, `is_sso_user`, `is_anonymous` (`20260623204043`) ; `auth.uid()` d'origine qui ne lit que `request.jwt.claim.sub`, pas `request.jwt.claims` (`20260702081711`, « Nenhum usuário autenticado ») ; `storage.buckets` créée fermée à `postgres`, l'image n'ayant aucun privilège par défaut sur `storage` (`20260820012512`). Le stub dit chacun. Éprouvé quatre fois sur conteneur jetable `public.ecr.aws/supabase/postgres:17.6.1.084` : **320/320 en 54 s sous `postgres`, 133 fonctions exécutables par `anon` (public, api, ingest, private), empreinte MD5 identique à la production du 15/09, 38 crons, 0 table sans RLS**, 64 s bout en bout. `alerte` et `acquittement` comptent les deux jobs. Reste : le premier run de la forge, puis le critère 2 (un rouge pour une vraie raison, corrigé).
 
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Vérifié : 16/09 — job écrit et éprouvé quatre fois sur conteneur jetable `public.ecr.aws/supabase/postgres:17.6.1.084` (worktree `claude/i18`), liste des 133 fonctions `anon` comparée ligne à ligne à celle du 15/09, empreinte identique ; pile locale (GoTrue, Storage réels) consultée pour les droits et `auth.uid()`.*
 
-**Ce que c'est.** Un second job, ou une étape hebdomadaire : rejouer les migrations dans la base `postgres` de l'image `supabase/postgres` du stack (celle que `sql-tests.yml` lance déjà en `services:`), avec ses privilèges par défaut et son `pg_cron`, sans suites — juste « ça passe ou ça casse ». Rouge = un contributeur extérieur cassera au même endroit.
+**Ce que c'est.** Lire le run dans Actions. Quand il rougit, corriger la cause — une migration, ou le pont si l'image ou GoTrue ont bougé — jamais le job. Le jour où un rouge motivé est corrigé, clore (critère 2).
 
 **Pourquoi ça compte.** Toute assertion « N migrations rejouent de zéro » se mesure sur une image Supabase, jamais sur le banc CI. Sans ce job, c'est la prochaine personne extérieure qui fera la mesure, à ses frais.
 
@@ -2041,7 +2041,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **Dépendances.** Après **I17** (sinon le job sera rouge pour la raison déjà connue).
 
-*Renvois : `scripts/ci/run-sql-suites.sh` · `REGISTRE §0 DOC-GRANT-2` · `REGISTRE §0 DOC-MIGR-1`*
+*Renvois : `scripts/ci/run-sql-suites.sh` · `REGISTRE §0 DOC-GRANT-2` · `REGISTRE §0 DOC-MIGR-1` · `scripts/ci/run-image-replay.sh` · `tests/sql/_ci_setup_image_services_stub.sql` · `.forgejo/workflows/sql-tests.yml` · `deploy/init-db/01-roles.sh` · `deploy/scripts/run-migrations.sh`*
 
 #### I21 — Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile
 

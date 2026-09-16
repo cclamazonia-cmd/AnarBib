@@ -251,6 +251,14 @@ Deux conséquences pour qui écrit un script d'initialisation :
 - **Ce qui doit précéder le socle se pose à l'étape 2**, pas dans `initdb.d` :
   le retrait d'`anon` du privilège par défaut (`DOC-GRANT-3`), comme la création
   de `pg_cron` (`I19`), passent par le même rejeu.
+- **La forge rejoue ces deux scripts tels quels.** Le job `rejeu-image` de
+  `sql-tests.yml` (`scripts/ci/run-image-replay.sh`, backlog `I18`, 16/09/2026)
+  lance `01-roles.sh` puis `run-migrations.sh` contre la base `postgres` de
+  l'image `supabase/postgres`, par `PGHOST` au lieu du socket, après avoir posé
+  ce que la pile obtient de ses services avant de migrer (sel au Vault,
+  `auth.jwt()` et colonnes récentes d'`auth.users`, `storage.buckets` — voir
+  `tests/sql/_ci_setup_image_services_stub.sql`). Un changement dans l'un des
+  deux scripts qui casse le rejeu casse la CI au même endroit, avant la pile.
 
 Si l'on tient à ce que le script passe *après* `migrate.sh` dès le premier
 démarrage, le nom du montage doit trier après lui (`zz-roles.sh`, éprouvé le

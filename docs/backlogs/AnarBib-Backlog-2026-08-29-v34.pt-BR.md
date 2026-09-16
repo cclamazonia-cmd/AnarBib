@@ -1827,7 +1827,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I13** | Terminar a migração para o novo motor de páginas | `P3` | Aberto |
 | **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | Aberto |
 | **I16** | Acompanhar a PR #28 até a fusão: divisão, quatro pontos bloqueantes, congelamento até 14/09 | `P1` | Em curso |
-| **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Aberto |
+| **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
@@ -2010,13 +2010,13 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### I18 — O banco de CI não faz replay numa imagem Supabase — é preciso um que faça
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : administração de sistemas
 
-**Estado.** `scripts/ci/run-sql-suites.sh` cria `anarbib_test` a partir de `template0`: `pg_default_acl` está vazia, as funções nascem fechadas e a verificação passa — uma imagem real a faz falhar. O verde do `sql-tests` não atesta que uma imagem Supabase reproduz o repositório. **07/09**: a spec de `I17` (§8) torna este item barato — basta um segundo job que reproduza as migrações no banco `postgres` do serviço em vez de um banco `template0`. **07/09, confirmado pela experiência de `I17`**: com A.1 antes da base e `CREATE EXTENSION pg_cron`, o banco `postgres` da imagem reproduz as 310 migrações sob `postgres`; o job estaria verde hoje.
+**Estado.** `scripts/ci/run-sql-suites.sh` cria `anarbib_test` a partir de `template0`: `pg_default_acl` está vazia, as funções nascem fechadas e a verificação passa — uma imagem real a faz falhar. O verde do `sql-tests` não atesta que uma imagem Supabase reproduz o repositório. **07/09**: a spec de `I17` (§8) torna este item barato — basta um segundo job que reproduza as migrações no banco `postgres` do serviço em vez de um banco `template0`. **07/09, confirmado pela experiência de `I17`**: com A.1 antes da base e `CREATE EXTENSION pg_cron`, o banco `postgres` da imagem reproduz as 310 migrações sob `postgres`; o job estaria verde hoje. **16/09: entregue.** Job `rejeu-image` em `sql-tests.yml` (`scripts/ci/run-image-replay.sh`): mesmo serviço Postgres, replay no banco `postgres` da imagem pelos dois scripts da pilha (`01-roles.sh`: A.1 e `pg_cron`; `run-migrations.sh` sob `postgres`), precedido do que a pilha obtém dos seus serviços antes de migrar (sal no Vault real, stubs `auth`/`storage`, stub de ponte `_ci_setup_image_services_stub.sql`). Quatro faltas da imagem nua medidas no caminho: `auth.jwt()` ausente; `auth.users` de origem sem `email_confirmed_at` / `is_sso_user` / `is_anonymous`; `auth.uid()` de origem que não lê `request.jwt.claims`; `storage.buckets` fechada a `postgres`. Provado quatro vezes em contêiner descartável `17.6.1.084`: **320/320 em 54 s, 133 funções `anon`, MD5 idêntico à produção, 38 crons, 0 tabela sem RLS**. Falta: o primeiro run da forja e o critério 2 (um vermelho por razão real, corrigido).
 
-*Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Verificado : 16/09 — job escrito e provado quatro vezes em contêiner descartável `17.6.1.084` (worktree `claude/i18`), lista das 133 funções `anon` comparada linha a linha com a de 15/09, MD5 idêntico.*
 
-**O que é.** Um segundo job, ou etapa semanal: reproduzir as migrações no banco `postgres` da imagem `supabase/postgres` já lançada em `services:`, com seus privilégios padrão e `pg_cron`, sem suítes — só « passa ou quebra ».
+**O que é.** Ler o run em Actions. Quando ficar vermelho, corrigir a causa — uma migração, ou a ponte — nunca o job. No dia em que um vermelho motivado for corrigido, encerrar (critério 2).
 
 **Por que importa.** Toda afirmação « N migrações reproduzem do zero » mede-se numa imagem Supabase, nunca no banco de CI.
 
@@ -2027,7 +2027,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Dependências.** Depois de I17.
 
-*Remissões : `scripts/ci/run-sql-suites.sh` · `REGISTRE §0 DOC-GRANT-2` · `REGISTRE §0 DOC-MIGR-1`*
+*Remissões : `scripts/ci/run-sql-suites.sh` · `REGISTRE §0 DOC-GRANT-2` · `REGISTRE §0 DOC-MIGR-1` · `scripts/ci/run-image-replay.sh` · `tests/sql/_ci_setup_image_services_stub.sql` · `.forgejo/workflows/sql-tests.yml` · `deploy/init-db/01-roles.sh` · `deploy/scripts/run-migrations.sh`*
 
 #### I21 — O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil
 
