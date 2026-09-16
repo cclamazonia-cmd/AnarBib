@@ -251,6 +251,14 @@ export default function AtelierConstituicaoPage() {
         )}
         {completed && <div className="ab-atl-deadline is-done">{t({ id: 'atelier.completed' })}</div>}
 
+        {/* Guide d'accueil des coordinations (16/09/2026) : chaque volet est une
+            décision du collectif ; le guide, publié sur la vitrine, dit ce que
+            chaque choix change en pratique. Lien dans la langue de la personne. */}
+        <div className="ab-atl-guide">
+          <span>{t({ id: 'atelier.guide.callout' })}</span>
+          <a href={t({ id: 'account.constitution.guideUrl' })} target="_blank" rel="noreferrer">{t({ id: 'account.constitution.banner.cta' })}</a>
+        </div>
+
         <div className="ab-atl-grid">
           {/* Colonne ancre */}
           <aside className="ab-atl-anchor">

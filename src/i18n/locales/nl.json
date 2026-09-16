@@ -6681,5 +6681,10 @@
   "rede.gazeta.correct.showOriginal": "versie van de persoon tonen",
   "rede.gazeta.correct.hideOriginal": "versie van de persoon verbergen",
   "rede.gazeta.correct.original": "Versie van de persoon",
-  "nav.biblioteca": "Bibliotheekbeheer"
+  "nav.biblioteca": "Bibliotheekbeheer",
+  "account.constitution.banner.title": "Jouw kandidatuur is aanvaard — nu de oprichting",
+  "account.constitution.banner.body": "Jouw bibliotheek is pre-actief. Maak het oprichtingsatelier af en breng het reglement naar de assemblee; de welkomstgids begeleidt je stap voor stap.",
+  "account.constitution.banner.cta": "De welkomstgids openen",
+  "account.constitution.guideUrl": "https://anarbib.org/nl/onthaal/",
+  "atelier.guide.callout": "Elke keuze in dit atelier is een beslissing van het collectief, geen veld om in te vullen; de welkomstgids zegt wat elke keuze in de praktijk verandert."
 }

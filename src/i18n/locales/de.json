@@ -6681,5 +6681,10 @@
   "rede.gazeta.correct.showOriginal": "Fassung der Person anzeigen",
   "rede.gazeta.correct.hideOriginal": "Fassung der Person ausblenden",
   "rede.gazeta.correct.original": "Fassung der Person",
-  "nav.biblioteca": "Bibliotheksverwaltung"
+  "nav.biblioteca": "Bibliotheksverwaltung",
+  "account.constitution.banner.title": "Deine Bewerbung ist angenommen — jetzt die Gründung",
+  "account.constitution.banner.body": "Deine Bibliothek ist vor-aktiv. Beende die Gründungswerkstatt und bring die Geschäftsordnung in die Versammlung; der Willkommensleitfaden begleitet dich Schritt für Schritt.",
+  "account.constitution.banner.cta": "Willkommensleitfaden öffnen",
+  "account.constitution.guideUrl": "https://anarbib.org/de/willkommen/",
+  "atelier.guide.callout": "Jede Wahl in dieser Werkstatt ist eine Entscheidung des Kollektivs und kein auszufüllendes Feld; der Willkommensleitfaden sagt dir, was jede davon in der Praxis ändert."
 }

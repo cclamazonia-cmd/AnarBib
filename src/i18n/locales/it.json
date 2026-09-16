@@ -6681,5 +6681,10 @@
   "rede.gazeta.correct.showOriginal": "vedere la versione della persona",
   "rede.gazeta.correct.hideOriginal": "nascondere la versione della persona",
   "rede.gazeta.correct.original": "Versione della persona",
-  "nav.biblioteca": "Gestione della biblioteca"
+  "nav.biblioteca": "Gestione della biblioteca",
+  "account.constitution.banner.title": "La candidatura è accettata — ora la costituzione",
+  "account.constitution.banner.body": "La tua biblioteca è pre-attiva. Completa il laboratorio di costituzione e porta il regolamento in assemblea; la guida di accoglienza ti accompagna passo passo.",
+  "account.constitution.banner.cta": "Apri la guida di accoglienza",
+  "account.constitution.guideUrl": "https://anarbib.org/it/accoglienza/",
+  "atelier.guide.callout": "Ogni scelta di questo laboratorio è una decisione del collettivo, non un campo da riempire. La guida di accoglienza dice che cosa ciascuna cambia nella pratica."
 }

@@ -6681,5 +6681,10 @@
   "rede.gazeta.correct.showOriginal": "vidi la version de la persono",
   "rede.gazeta.correct.hideOriginal": "kaŝi la version de la persono",
   "rede.gazeta.correct.original": "Versio de la persono",
-  "nav.biblioteca": "Administrado de la biblioteko"
+  "nav.biblioteca": "Administrado de la biblioteko",
+  "account.constitution.banner.title": "Via kandidatiĝo estas akceptita — nun la konstituiĝo",
+  "account.constitution.banner.body": "Via biblioteko estas antaŭaktiva. Finu la metiejon de konstituiĝo kaj portu la regularon al la asembleo; la akcepta gvidilo akompanas vin paŝon post paŝo.",
+  "account.constitution.banner.cta": "Malfermi la akceptan gvidilon",
+  "account.constitution.guideUrl": "https://anarbib.org/eo/akcepto/",
+  "atelier.guide.callout": "Ĉiu elekto en ĉi tiu metiejo estas decido de la kolektivo kaj ne kampo plenigenda; la akcepta gvidilo diras kion ĉiu el ili ŝanĝas praktike."
 }

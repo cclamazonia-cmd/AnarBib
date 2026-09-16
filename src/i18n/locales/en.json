@@ -6681,5 +6681,10 @@
   "rede.gazeta.correct.showOriginal": "show the contributor’s version",
   "rede.gazeta.correct.hideOriginal": "hide the contributor’s version",
   "rede.gazeta.correct.original": "Contributor’s version",
-  "nav.biblioteca": "Library management"
+  "nav.biblioteca": "Library management",
+  "account.constitution.banner.title": "Your application is accepted — now the constitution",
+  "account.constitution.banner.body": "Your library is pre-active. Finish the constitution workshop and take the bylaws to the assembly; the welcome guide walks you through it step by step.",
+  "account.constitution.banner.cta": "Open the welcome guide",
+  "account.constitution.guideUrl": "https://anarbib.org/en/welcome/",
+  "atelier.guide.callout": "Every choice in this workshop is a decision of the collective, not a field to fill in. The welcome guide says what each one changes in practice."
 }

@@ -99,6 +99,14 @@ export default function MinhaSolicitacaoPanel() {
       {st === 'aprovada' && !terminee && (
         <div style={{ marginTop: 10 }}>
           <Link to="/atelier" className="cat-btn primary">{t({ id: 'conta.demande.goAtelier' })}</Link>
+          {/* Guide d'accueil des coordinations (16/09/2026). Publié sur la vitrine,
+              pas embarqué : l'app n'en porte que le lien, dans la langue de la
+              personne (account.constitution.guideUrl varie par locale). */}
+          <div className="ab-guide-banner" style={{ marginTop: 12, padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)' }}>
+            <div style={{ fontSize: '.9rem', fontWeight: 600 }}>{t({ id: 'account.constitution.banner.title' })}</div>
+            <p style={{ fontSize: '.84rem', color: 'var(--brand-muted)', margin: '4px 0 8px' }}>{t({ id: 'account.constitution.banner.body' })}</p>
+            <a className="cat-btn" href={t({ id: 'account.constitution.guideUrl' })} target="_blank" rel="noreferrer">{t({ id: 'account.constitution.banner.cta' })}</a>
+          </div>
         </div>
       )}
 

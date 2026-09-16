@@ -6681,5 +6681,10 @@
   "rede.gazeta.correct.showOriginal": "voir la version de la personne",
   "rede.gazeta.correct.hideOriginal": "masquer la version de la personne",
   "rede.gazeta.correct.original": "Version de la personne",
-  "nav.biblioteca": "Gestion de la bibliothèque"
+  "nav.biblioteca": "Gestion de la bibliothèque",
+  "account.constitution.banner.title": "Ta candidature est acceptée — place à la constitution",
+  "account.constitution.banner.body": "Ta bibliothèque est pré-active. Termine l'atelier de constitution et porte le règlement en assemblée ; le guide d'accueil t'accompagne pas à pas.",
+  "account.constitution.banner.cta": "Ouvrir le guide d'accueil",
+  "account.constitution.guideUrl": "https://anarbib.org/fr/accueil/",
+  "atelier.guide.callout": "Chaque choix de cet atelier est une décision du collectif, pas un champ à remplir. Le guide d'accueil dit ce que chacun change en pratique."
 }

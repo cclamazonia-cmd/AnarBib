@@ -6681,5 +6681,10 @@
   "rede.gazeta.correct.showOriginal": "ver la versión de la persona",
   "rede.gazeta.correct.hideOriginal": "ocultar la versión de la persona",
   "rede.gazeta.correct.original": "Versión de la persona",
-  "nav.biblioteca": "Gestión de la biblioteca"
+  "nav.biblioteca": "Gestión de la biblioteca",
+  "account.constitution.banner.title": "Tu candidatura fue aceptada — ahora la constitución",
+  "account.constitution.banner.body": "Tu biblioteca está preactiva. Terminá el taller de constitución y llevá el reglamento a la asamblea; la guía de acogida te acompaña paso a paso.",
+  "account.constitution.banner.cta": "Abrir la guía de acogida",
+  "account.constitution.guideUrl": "https://anarbib.org/es/acogida/",
+  "atelier.guide.callout": "Cada elección de este taller es una decisión del colectivo, no un campo a llenar. La guía de acogida dice lo que cada una cambia en la práctica."
 }

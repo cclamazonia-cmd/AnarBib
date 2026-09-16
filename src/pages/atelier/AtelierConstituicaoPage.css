@@ -17,6 +17,17 @@
 .ab-atl-deadline.is-frozen{ background:rgba(214,69,59,.1); border-color:rgba(214,69,59,.4); color:#e7b7b3; }
 .ab-atl-deadline.is-done{ background:rgba(126,224,168,.08); border-color:rgba(126,224,168,.35); color:var(--color-ok,#7ee0a8); }
 
+/* Guide d'accueil des coordinations (16/09/2026) — même ton que le canal humain « léger ». */
+.ab-atl-guide{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:space-between;
+  padding:11px 15px; border-radius:11px; border:1px solid rgba(126,224,168,.32);
+  background:rgba(126,224,168,.06); font-size:.86rem; line-height:1.5;
+  color:var(--brand-text,#e7dfe6); margin-bottom:18px;
+}
+.ab-atl-guide span{ flex:1 1 32ch; }
+.ab-atl-guide a{ font-weight:700; color:var(--color-ok,#7ee0a8); text-decoration:none; white-space:nowrap; }
+.ab-atl-guide a:hover{ text-decoration:underline; }
+
 /* Layout deux colonnes */
 .ab-atl-grid{ display:grid; grid-template-columns:330px minmax(0, 1fr); gap:26px; align-items:start; }
 @media (max-width:880px){ .ab-atl-grid{ grid-template-columns:minmax(0, 1fr); } }
