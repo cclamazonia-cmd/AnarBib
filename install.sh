@@ -154,21 +154,33 @@ t() {
     en:mail_title)     echo "📧 Email service configuration for notifications:" ;;
     pt:mail_title)     echo "📧 Configuração do serviço de e-mail para notificações:" ;;
 
-    fr:mail_opt1)      echo "   [1] Serveur SMTP standard (votre propre boîte mail : OVH, Gandi, Infomaniak, etc.)" ;;
-    en:mail_opt1)      echo "   [1] Standard SMTP server (your own mailbox: Gmail, Gandi, Infomaniak, etc.)" ;;
-    pt:mail_opt1)      echo "   [1] Servidor SMTP padrão (sua própria caixa de correio: Gmail, Gandi, etc.)" ;;
+    fr:mail_opt1)      echo "   [1] Serveur SMTP standard (votre propre boîte mail) — À VENIR, pas encore pris en charge" ;;
+    en:mail_opt1)      echo "   [1] Standard SMTP server (your own mailbox) — COMING SOON, not supported yet" ;;
+    pt:mail_opt1)      echo "   [1] Servidor SMTP padrão (sua própria caixa de correio) — EM BREVE, ainda não suportado" ;;
 
     fr:mail_opt2)      echo "   [2] Clé API Resend (service tiers clé en main)" ;;
     en:mail_opt2)      echo "   [2] Resend API key (third-party turnkey service)" ;;
     pt:mail_opt2)      echo "   [2] Chave API Resend (serviço terceirizado pronto para uso)" ;;
 
-    fr:mail_opt3)      echo "   [3] Simulation locale (e-mails journalisés, aucun compte requis)" ;;
-    en:mail_opt3)      echo "   [3] Local simulation (emails logged, no account needed)" ;;
-    pt:mail_opt3)      echo "   [3] Simulação local (e-mails registrados, nenhuma conta necessária)" ;;
+    fr:mail_opt3)      echo "   [3] Simulation locale (e-mails journalisés) — À VENIR, pas encore prise en charge" ;;
+    en:mail_opt3)      echo "   [3] Local simulation (emails logged) — COMING SOON, not supported yet" ;;
+    pt:mail_opt3)      echo "   [3] Simulação local (e-mails registrados) — EM BREVE, ainda não suportada" ;;
 
-    fr:mail_prompt)    printf "Votre choix [1/2/3] : " ;;
-    en:mail_prompt)    printf "Your choice [1/2/3]: " ;;
-    pt:mail_prompt)    printf "Sua escolha [1/2/3]: " ;;
+    fr:mail_prompt)    printf "Votre choix [1/2/3] (seul 2 fonctionne aujourd'hui) : " ;;
+    en:mail_prompt)    printf "Your choice [1/2/3] (only 2 works today): " ;;
+    pt:mail_prompt)    printf "Sua escolha [1/2/3] (só a 2 funciona hoje): " ;;
+    fr:mail_not_yet)   echo "Pas de transport configuré : les fonctions serveur ne savent envoyer que par Resend (option 2)."
+                       echo "   SMTP et simulation viendront avec le transport hybride (backlog F7). D'ici là, AUCUN courriel"
+                       echo "   ne partira et chaque envoi échouera avec « RESEND_API_KEY absente » — bruyamment, jamais en silence."
+                       echo "   Relancez ./install.sh avec une clé Resend quand vous en aurez une." ;;
+    en:mail_not_yet)   echo "No transport configured: the server functions can only send through Resend (option 2)."
+                       echo "   SMTP and simulation will come with the hybrid transport (backlog F7). Until then NO email"
+                       echo "   will leave, and each send will fail with 'RESEND_API_KEY absente' — loudly, never silently."
+                       echo "   Run ./install.sh again with a Resend key when you have one." ;;
+    pt:mail_not_yet)   echo "Nenhum transporte configurado: as funções do servidor só sabem enviar pelo Resend (opção 2)."
+                       echo "   SMTP e simulação virão com o transporte híbrido (backlog F7). Até lá NENHUM e-mail"
+                       echo "   sairá, e cada envio falhará com « RESEND_API_KEY absente » — de forma ruidosa, nunca em silêncio."
+                       echo "   Rode ./install.sh de novo com uma chave Resend quando tiver uma." ;;
 
     fr:smtp_title)     echo "→ Configuration SMTP :" ;;
     en:smtp_title)     echo "→ SMTP configuration:" ;;
@@ -552,6 +564,16 @@ if [ "$MODE" = "prod" ] && [ -n "$DOMAINE_PROD" ]; then
 fi
 
 # Mail configuration (interactive, only if not already set)
+#
+# 16/09/2026 — l'installateur ne promet que ce que les fonctions serveur
+# tiennent. Les Edge Functions de main (_shared/transport/email.ts et les deux
+# copies dans notify-*) ne connaissent que Resend : sans RESEND_API_KEY, chaque
+# envoi lève « RESEND_API_KEY absente ». Le transport hybride (SMTP, simulation
+# sur MAIL_TRANSPORT=mock explicite) était la PR #29, fermée par son auteur le
+# 16/09 sans remplacement : backlog F7. Tant qu'il n'est pas dans main, les
+# options [1] et [3] sont annoncées « à venir », ne configurent rien, et le
+# disent ; la touche Entrée ne choisit rien non plus. Le bloc de saisie SMTP
+# reviendra avec F7 — ses libellés (smtp_*) sont gardés pour ça.
 CURRENT_SMTP="$(grep '^SMTP_HOST=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
 CURRENT_RESEND="$(grep '^RESEND_API_KEY=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
 
@@ -565,28 +587,6 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
   read -r MAIL_CHOICE
 
   case "$MAIL_CHOICE" in
-    1)
-      echo ""
-      t smtp_title
-      t smtp_host;   read -r CFG_SMTP_HOST
-      t smtp_port;   read -r CFG_SMTP_PORT
-      CFG_SMTP_PORT="${CFG_SMTP_PORT:-587}"
-      t smtp_user;   read -r CFG_SMTP_USER
-      t smtp_pass;   read -r -s CFG_SMTP_PASS
-      echo ""
-      t smtp_sender "$CFG_SMTP_USER"; read -r CFG_SENDER_EMAIL
-      CFG_SENDER_EMAIL="${CFG_SENDER_EMAIL:-$CFG_SMTP_USER}"
-      CFG_SECURE="false"
-      [ "$CFG_SMTP_PORT" = "465" ] && CFG_SECURE="true"
-      sed -i "s|^MAIL_TRANSPORT=.*|MAIL_TRANSPORT=smtp|"         deploy/functions.env
-      sed -i "s|^SMTP_HOST=.*|SMTP_HOST=${CFG_SMTP_HOST}|"       deploy/functions.env
-      sed -i "s|^SMTP_PORT=.*|SMTP_PORT=${CFG_SMTP_PORT}|"       deploy/functions.env
-      sed -i "s|^SMTP_USER=.*|SMTP_USER=${CFG_SMTP_USER}|"       deploy/functions.env
-      sed -i "s|^SMTP_PASS=.*|SMTP_PASS=${CFG_SMTP_PASS}|"       deploy/functions.env
-      sed -i "s|^SMTP_SECURE=.*|SMTP_SECURE=${CFG_SECURE}|"      deploy/functions.env
-      sed -i "s|^SENDER_EMAIL=.*|SENDER_EMAIL=${CFG_SENDER_EMAIL}|" deploy/functions.env
-      succes "$(t ok_smtp "${CFG_SMTP_HOST}:${CFG_SMTP_PORT}")"
-      ;;
     2)
       echo ""
       t resend_title
@@ -597,9 +597,10 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
       sed -i "s|^SENDER_EMAIL=.*|SENDER_EMAIL=${CFG_RESEND_SENDER}|"  deploy/functions.env
       succes "$(t ok_resend "$CFG_RESEND_SENDER")"
       ;;
-    3|*)
-      sed -i "s|^MAIL_TRANSPORT=.*|MAIL_TRANSPORT=mock|" deploy/functions.env
-      succes "$(t ok_mock)"
+    *)
+      # [1], [3], Entrée ou autre : rien n'est écrit, et on dit pourquoi.
+      echo ""
+      avertir "$(t mail_not_yet)"
       ;;
   esac
 fi

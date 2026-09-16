@@ -87,12 +87,15 @@ Lors d'une nouvelle installation avec une base vierge, `./install.sh` provisionn
 
 Ce compte dispose des rôles de gestionnaire de réseau (`network_administrators`), de coordinateur et de bibliothécaire sur la bibliothèque de démonstration, donnant un accès immédiat aux panneaux de gestion (`/painel`, `/biblioteca`, `/rede`, `/catalogacao`).
 
-### Transport des e-mails (SMTP universel ou API Resend)
+### Transport des e-mails (Resend aujourd'hui ; SMTP et simulation à venir)
 
-L'application supporte deux modes d'envoi d'e-mails pour les notifications, les prêts et les invitations :
-1. **Serveur SMTP standard (recommandé en auto-hébergement)** : connectez n'importe quelle boîte mail (OVH, Gandi, Infomaniak, Postfix local, serveur dédié de votre association). Configuration demandée interactivement par `./install.sh` ou via les variables `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SENDER_EMAIL` dans `deploy/functions.env`.
-2. **API Resend** : renseignez simplement `RESEND_API_KEY` et `SENDER_EMAIL` dans `deploy/functions.env`.
-3. **Mode test local** : si aucun serveur n'est configuré, les e-mails sont journalisés dans la console sans bloquer l'application ni générer d'erreur.
+**Aujourd'hui, un seul transport fonctionne : l'API Resend.** Renseignez `RESEND_API_KEY` et `SENDER_EMAIL` dans `deploy/functions.env` (ou choisissez l'option 2 de `./install.sh`). Sans clé, chaque envoi de courriel échoue avec « RESEND_API_KEY absente » — bruyamment, jamais en silence (`DOC-SILENCE-1`) : l'application tourne, mais aucune notification, invitation ou relance ne part.
+
+À venir, avec le transport hybride (backlog `F7`) :
+1. **Serveur SMTP standard** (votre propre boîte mail : OVH, Gandi, Infomaniak, Postfix local…) — les variables `SMTP_*` de `functions.env` et l'option 1 de l'installateur existent déjà, mais **les fonctions serveur ne les lisent pas encore** ; l'installateur le dit et ne configure rien.
+2. **Simulation locale** (courriels journalisés) — uniquement sur `MAIL_TRANSPORT=mock` explicite, jamais par défaut : un transport absent doit lever, pas se taire.
+
+Ce transport hybride était la PR #29 (16/09/2026), fermée par son auteur sans remplacement ; la reprise est planifiée (`F7`).
 
 
 ### Gestion des clés et secrets
