@@ -1962,6 +1962,46 @@
           "fr": "**La HS256 est révoquée** — geste de Xavier le 15/09 à 22 h 14 (20 h 14 UTC), Settings → JWT Keys → Revoke. **Premier contrôle, 24 h après** (tâche `anarbib-trafic-cles-legacy`, relevé du 16/09) : aucun 401 sur une connexion utilisateur — 1 144 réponses 200, 20 en 204, 12 en 206, tous les jetons de session en ES256 avant comme après ; recoupé sur les logs edge : 0 × 401 sur `/rest/v1/` en 24 h hors les quatre de bingbot du 16/09 à 15 h 19 (robot sans clé, ni ancienne ni nouvelle). Seul reste en HS256 le compte `supabase_admin` de `@supabase-infra/mgmt-api` sur `/admin/v1/network-bans/retrieve`, toujours en 200 — l'infrastructure de Supabase, pas l'application. Les trois anomalies vues au passage ne viennent pas de la révocation et ont chacune leur cause : les `403` sur `DELETE auth_rate_limits` (**B25**, depuis mai), les `400` sur `GET gazette_submissions` du 15/09 à 21 h 09–21 h 11 UTC (le front de GAZ-9 publié par le job `app` quelques minutes **avant** que le job `backend` applique la migration qui ajoute `staff_edited_at`/`original_*` — l'ordre normal de la CI, transitoire), et les `400` sur `POST auth_rate_limits` (**B26**). **Les quatre parcours (connexion, inscription, récupération du mot de passe, document numérique) ont été testés par Xavier le 16/09 : ils fonctionnent.** La tâche `anarbib-trafic-cles-legacy` a été supprimée le même jour.",
           "pt": "**A HS256 está revogada** — gesto de Xavier em 15/09 às 22h14 (20h14 UTC), Settings → JWT Keys → Revoke. **Primeiro controlo, 24 h depois** (tarefa `anarbib-trafic-cles-legacy`, levantamento de 16/09): nenhum 401 numa conexão de usuário — 1 144 respostas 200, 20 em 204, 12 em 206, todos os tokens de sessão em ES256 antes como depois; cruzado com os logs edge: 0 × 401 em `/rest/v1/` em 24 h fora os quatro do bingbot de 16/09 às 15h19 (robô sem chave, nem antiga nem nova). Só resta em HS256 a conta `supabase_admin` de `@supabase-infra/mgmt-api` em `/admin/v1/network-bans/retrieve`, sempre em 200 — a infraestrutura da Supabase, não a aplicação. As três anomalias vistas de passagem não vêm da revogação e têm cada uma a sua causa: os `403` em `DELETE auth_rate_limits` (**B25**, desde maio), os `400` em `GET gazette_submissions` de 15/09 às 21h09–21h11 UTC (o front de GAZ-9 publicado pelo job `app` alguns minutos **antes** de o job `backend` aplicar a migração que acrescenta `staff_edited_at`/`original_*` — a ordem normal da CI, transitório) e os `400` em `POST auth_rate_limits` (**B26**). **Os quatro percursos (conexão, inscrição, recuperação de senha, documento digital) foram testados por Xavier em 16/09: funcionam.** A tarefa `anarbib-trafic-cles-legacy` foi apagada no mesmo dia."
         }
+      ],
+      [
+        "B25",
+        "2026-09-16",
+        {
+          "fr": "**Livré le 16/09 au soir** (`af60bc49`, Edge Function `login` redéployée par la CI à 22 h 27, marqueur `deployed-functions` sur ce commit). Deux clients : celui de la clé secrète ne se connecte jamais (il lit, écrit et supprime les compteurs), un second, créé pour `signInWithPassword` seul, porte la session de la personne — le `DELETE` de `clearFailures` repart en `service_role`. Les clés sont des empreintes `sha256Hex` (IP, courriel en minuscules) : plus d'adresse ni de courriel dans la table, ni dans la query string du `DELETE` que traversent les journaux edge. Chaque erreur du magasin est journalisée ; un compteur illisible ferme (500). Banc `login-compteurs-haches` (6 tests : client à part, empreintes partout, `42501` journalisé, porte fermée). **Vérifié en production** : `auth_rate_limits` purgée (52 lignes brutes → 0), contrainte `auth_rate_limits_key_empreinte` posée. Reste à voir passer la première connexion réelle : un `DELETE` en 204 dans les logs edge, plus aucun `42501` dans `postgres_logs`.",
+          "pt": "**Entregue em 16/09 à noite** (`af60bc49`, Edge Function `login` reimplantada pela CI às 22h27). Dois clientes: o da chave secreta nunca se conecta (lê, escreve e apaga os contadores), um segundo, criado só para `signInWithPassword`, leva a sessão da pessoa — o `DELETE` de `clearFailures` volta a partir em `service_role`. As chaves são impressões `sha256Hex` (IP, e-mail em minúsculas): mais nenhum endereço nem e-mail na tabela, nem na query string do `DELETE` que atravessa os registos edge. Cada erro do armazém é registado; um contador ilegível fecha (500). Bancada `login-compteurs-haches` (6 testes). **Verificado em produção**: `auth_rate_limits` purgada (52 linhas em claro → 0), restrição `auth_rate_limits_key_empreinte` posta. Falta ver passar a primeira conexão real: um `DELETE` em 204 nos registos edge, mais nenhum `42501` em `postgres_logs`."
+        }
+      ],
+      [
+        "B26",
+        "2026-09-16",
+        {
+          "fr": "**Livré le 16/09 au soir** (`af60bc49`, migration `20260916201249` appliquée par la CI : prod 321 = dépôt 321). `_shared/core/rate-limit.ts` remplace le `hit()` copié trois fois : fenêtre fixe qui repart de 1 (l'ancien, une fois la limite atteinte, re-bloquait à chaque frappe — pour toujours), clé obligatoirement une empreinte, **échec fermé** (`frapper` lève, `freiner` répond 500 `rate_limit_unavailable`). `geocode`, `submit-cartography-entry` et `submit-gazette-contribution` l'utilisent ; `gazette_email` est haché. **Vérifié en production** : la `CHECK` de `kind` liste les sept kinds réels (`ip`, `email`, `geocode_ip`, `carto_ip`, `gazette_ip`, `gazette_email`, `gazette_prefill`), une seconde `CHECK` exige une empreinte de 64 hexadécimaux, la table est vide (lignes brutes purgées). Suite `compteurs_d_abus_tests` (4 tests, en CI) et banc `compteurs-d-abus-partages` (7 tests) ; 509 tests JS verts. Première ligne `geocode_ip` ou `gazette_ip` à voir apparaître au premier usage réel.",
+          "pt": "**Entregue em 16/09 à noite** (`af60bc49`, migração `20260916201249` aplicada pela CI: prod 321 = repositório 321). `_shared/core/rate-limit.ts` substitui o `hit()` copiado três vezes: janela fixa que recomeça em 1, chave obrigatoriamente uma impressão, **falha fechada** (`frapper` lança, `freiner` responde 500). `geocode`, `submit-cartography-entry` e `submit-gazette-contribution` usam-no; `gazette_email` passa por hash. **Verificado em produção**: a `CHECK` de `kind` lista os sete kinds reais, uma segunda `CHECK` exige uma impressão de 64 hexadecimais, a tabela está vazia (linhas em claro purgadas). Suíte `compteurs_d_abus_tests` (4 testes, na CI) e bancada `compteurs-d-abus-partages` (7 testes); 509 testes JS verdes."
+        }
+      ],
+      [
+        "F9",
+        "2026-09-16",
+        {
+          "fr": "**Relevé le 16/09/2026 à 22 h 30 (UTC+2), depuis le poste (`nslookup`)** — les trois enregistrements existent. **SPF** : `send.notifications.anarbib.org` TXT `v=spf1 include:amazonses.com ~all` (Resend envoie depuis le sous-domaine `send.`, c'est là que vit le SPF ; `notifications.anarbib.org` lui-même n'a pas de TXT, ce qui est attendu), MX `10 feedback-smtp.eu-west-1.amazonses.com`. **DKIM** : `resend._domainkey.notifications.anarbib.org` TXT `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5Uxzm…` (clé RSA publiée, sélecteur `resend`). **DMARC** : `_dmarc.notifications.anarbib.org` TXT `v=DMARC1; p=none; rua=mailto:admins@anarbib.org` — politique d'observation avec rapports vers les admins, la forme prudente que l'item demandait avant de durcir. Rien à poser ; durcir vers `p=quarantine` est une décision à part, après lecture des rapports `rua`.",
+          "pt": "**Levantado em 16/09/2026 às 22h30 (UTC+2), a partir do posto (`nslookup`)** — os três registos existem. **SPF**: `send.notifications.anarbib.org` TXT `v=spf1 include:amazonses.com ~all` (a Resend envia a partir do subdomínio `send.`, é lá que vive o SPF), MX `10 feedback-smtp.eu-west-1.amazonses.com`. **DKIM**: `resend._domainkey.notifications.anarbib.org` TXT `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5Uxzm…` (chave RSA publicada, seletor `resend`). **DMARC**: `_dmarc.notifications.anarbib.org` TXT `v=DMARC1; p=none; rua=mailto:admins@anarbib.org` — política de observação com relatórios para as admins, a forma prudente que o item pedia antes de endurecer. Nada a pôr; endurecer para `p=quarantine` é uma decisão à parte, depois de ler os relatórios `rua`."
+        }
+      ],
+      [
+        "I6",
+        "2026-09-16",
+        {
+          "fr": "**Prouvé le 16/09/2026, à la date que l'item fixait.** `service_health_probes` : 34 568 lignes, la plus ancienne du **17/08 à 20 h 30 UTC**, la plus récente du 16/09 à 20 h 25 — et **zéro ligne de plus de trente jours**. La borne basse a avancé de trente jours en trente jours : la purge intégrée à `health-probe` supprime pour de vrai (le compteur `n_tup_del` de `pg_stat`, remis à zéro le 02/09, ne pouvait pas le dire ; le comptage direct le dit). `service_health_incidents` n'est pas touchée. Aucun cron à ajouter.",
+          "pt": "**Provado em 16/09/2026, na data que o item fixava.** `service_health_probes`: 34 568 linhas, a mais antiga de **17/08 às 20h30 UTC**, a mais recente de 16/09 às 20h25 — e **zero linhas com mais de trinta dias**. O limite inferior avançou trinta dias em trinta dias: a purga integrada em `health-probe` apaga de verdade (o contador `n_tup_del` do `pg_stat`, reposto a zero em 02/09, não podia dizê-lo; a contagem direta diz). `service_health_incidents` não é tocada. Nenhum cron a acrescentar."
+        }
+      ],
+      [
+        "A2",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026, décision de Xavier.** La reconstruction par quelqu'un d'autre que le mainteneur a eu lieu : **Bastien** (compte `ASR2026`, première contribution extérieure) a monté la pile chez lui depuis le dépôt seul, en a écrit l'installateur (`install.sh`, PR #28, **fusionnée le 15/09** — `f179f1ff`) et consigné ce qui cassait dans ses commits (`pg_cron` absent au démarrage, schéma à initialiser sous `supabase_admin`, `GRANT` sur `supabase_migrations`, `LANG_CODE`, port 5173…), puis le mainteneur a relu et fusionné **depuis cette installation** — ses forks partent d'un AnarBib qui tourne chez lui. Les écarts structurels trouvés en chemin ont leurs notes (`CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`, `NOTE_experience-I17-rejeu-fidele_2026-09-07`, `DOC-GRANT-2/3`). Ce que la fiche voulait en plus — le journal d'exécution comme section de `deploy/README.md` — est posé le 16/09 (§ « Première reconstruction extérieure »). L'entrée 1 de `CHANTIERS_OUVERTS` reste à réécrire par le mainteneur : **J4**.",
+          "pt": "**Encerrado em 16/09/2026, decisão de Xavier.** A reconstrução por alguém que não o mantenedor aconteceu: **Bastien** (conta `ASR2026`, primeira contribuição exterior) montou a pilha em casa a partir do repositório só, escreveu-lhe o instalador (`install.sh`, PR #28, **fundida em 15/09** — `f179f1ff`) e registou o que quebrava nos seus commits (`pg_cron` ausente no arranque, esquema a inicializar sob `supabase_admin`, `GRANT` em `supabase_migrations`, `LANG_CODE`, porta 5173…), depois o mantenedor releu e fundiu **a partir dessa instalação**. Os desvios estruturais encontrados têm as suas notas (`CONSTAT_PR28…`, `NOTE_experience-I17…`, `DOC-GRANT-2/3`). O diário de execução como secção de `deploy/README.md` é posto em 16/09. A entrada 1 de `CHANTIERS_OUVERTS` fica a reescrever pelo mantenedor: **J4**."
+        }
       ]
     ]
   },
@@ -2017,54 +2057,6 @@
         "fr": "31/08 — `network_administrators` : 1 ligne. Rien n'a bougé.",
         "pt": "31/08 — `network_administrators`: 1 linha. Nada mudou."
       }
-    },
-    {
-      "id": "A2",
-      "d": "A",
-      "p": "P0",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "sysadmin",
-        "sql",
-        "front"
-      ],
-      "t": {
-        "fr": "Éprouver la reconstruction complète par quelqu'un d'autre que le mainteneur",
-        "pt": "Testar a reconstrução completa por outra pessoa que não o mantenedor"
-      },
-      "v": {
-        "fr": "Jamais fait. `deploy/README.md`, `deploy/REPETITION.md` et `deploy/bootstrap.sh` existent et ont été exécutés — **sur la seule machine du mainteneur**.",
-        "pt": "Nunca feito. `deploy/README.md`, `deploy/REPETITION.md` e `deploy/bootstrap.sh` existem e foram executados — **apenas na máquina do mantenedor**."
-      },
-      "w": {
-        "fr": "Cloner le dépôt sur une machine tierce, monter la pile complète en suivant `deploy/README.md`, et écrire ce qui casse. Aucun secret, aucun accès, aucune coordination : la pile se rebâtit depuis le dépôt seul. Docker, une machine, une soirée.",
-        "pt": "Clonar o repositório numa máquina de terceiro, subir a pilha completa seguindo `deploy/README.md`, e escrever o que quebra. Nenhum segredo, nenhum acesso, nenhuma coordenação: a pilha se reconstrói a partir do repositório sozinho. Docker, uma máquina, uma noite."
-      },
-      "y": {
-        "fr": "C'est la réponse à la seule question qui décide de tout le reste : *ce projet est-il reprenable par quelqu'un d'autre que celui qui l'a écrit ?* Un rapport d'échec détaillé vaut ici plus qu'un correctif : c'est la liste de ce qui ne marche que sur une seule machine.",
-        "pt": "É a resposta à única pergunta que decide todo o resto: *este projeto é retomável por outra pessoa além de quem o escreveu?* Um relatório de falha detalhado vale aqui mais que uma correção: é a lista do que só funciona numa única máquina."
-      },
-      "f": {
-        "fr": [
-          "La pile démarre sur une machine qui n'a jamais vu le projet, en suivant la documentation seule.",
-          "Chaque écart entre la documentation et la réalité est consigné, avec sa commande et son message d'erreur.",
-          "Le journal d'exécution devient une section de `deploy/README.md`."
-        ],
-        "pt": [
-          "A pilha sobe numa máquina que nunca viu o projeto, seguindo apenas a documentação.",
-          "Cada divergência entre a documentação e a realidade é registrada, com seu comando e sua mensagem de erro.",
-          "O diário de execução vira uma seção de `deploy/README.md`."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. **C'est le meilleur premier pas pour quelqu'un qui arrive.**",
-        "pt": "Nenhuma. **É o melhor primeiro passo para quem chega.**"
-      },
-      "r": [
-        "docs/CHANTIERS_OUVERTS.md §1",
-        "deploy/REPETITION.md"
-      ]
     },
     {
       "id": "A3",
@@ -2611,10 +2603,16 @@
         "PLAN_DE_MARCHE §8",
         "DECISION_profil_numerisation_2026-08-20"
       ],
-      "verif": {
-        "fr": "31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.",
-        "pt": "31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.",
+          "pt": "31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo."
+        },
+        {
+          "fr": "16/09 — ce ne sont plus deux colonnes mais **trois** : `digital_assets.rights_status`, `book_digital_resources.rights_status`, `book_draft_digital_resources.rights_status`. Le renommage porte sur la colonne de workflow, à identifier parmi les trois.",
+          "pt": "16/09 — já não são duas colunas mas **três**: `digital_assets.rights_status`, `book_digital_resources.rights_status`, `book_draft_digital_resources.rights_status`."
+        }
+      ]
     },
     {
       "id": "C11",
@@ -3419,10 +3417,16 @@
         "tests/sql/rappels_echeance_tests.sql",
         "public.book_reading_notes"
       ],
-      "verif": {
-        "fr": "31/08 — relevé en base (36 crons relus, aucun pour le prêt aux lectrices ; 3 bibliothèques avec les deux interrupteurs à `true` ; `book_reading_notes` à zéro ligne) et dans le dépôt (l'ancien mi-parcours écrit en portugais en dur, aucune colonne de blog nulle part). Livré le jour même ; **pas encore éprouvé en envoi réel**.",
-        "pt": "31/08 — levantamento em base e no repositório. Entregue no mesmo dia; **ainda não provado em envio real**."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — relevé en base (36 crons relus, aucun pour le prêt aux lectrices ; 3 bibliothèques avec les deux interrupteurs à `true` ; `book_reading_notes` à zéro ligne) et dans le dépôt (l'ancien mi-parcours écrit en portugais en dur, aucune colonne de blog nulle part). Livré le jour même ; **pas encore éprouvé en envoi réel**.",
+          "pt": "31/08 — levantamento em base e no repositório. Entregue no mesmo dia; **ainda não provado em envio real**."
+        },
+        {
+          "fr": "16/09 — `loan_cycle_notifications` porte **un** envoi en septembre 2026 : le circuit a envoyé une fois pour de vrai. Reste à dire lequel (`moment`) et si c'est l'épreuve J-3 que l'item demandait.",
+          "pt": "16/09 — `loan_cycle_notifications` tem **um** envio em setembro de 2026: o circuito enviou uma vez de verdade. Falta dizer qual (`moment`) e se é a prova J-3 que o item pedia."
+        }
+      ]
     },
     {
       "id": "G1",
@@ -3811,10 +3815,16 @@
       "r": [
         "REPRISE_bascule_autohebergee_2026-08-26 §1"
       ],
-      "verif": {
-        "fr": "31/08 — `auth.schema_migrations` : 77 ; `deploy/.env` et `.env.example` relus : `v2.192.0` des deux côtés.",
-        "pt": "31/08 — `auth.schema_migrations`: 77; `deploy/.env` e `.env.example` relidos: `v2.192.0` dos dois lados."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — `auth.schema_migrations` : 77 ; `deploy/.env` et `.env.example` relus : `v2.192.0` des deux côtés.",
+          "pt": "31/08 — `auth.schema_migrations`: 77; `deploy/.env` e `.env.example` relidos: `v2.192.0` dos dois lados."
+        },
+        {
+          "fr": "16/09 — `deploy/.env.example` : `GOTRUE_TAG=v2.192.0`, règle « image ≥ production » écrite, et les passes du 26/08 ont mesuré 77 migrations GoTrue = la production. Les deux premiers « fini quand » sont tenus ; le troisième (les douze dernières versions de production listées) ne l'est pas. Clôturable si Xavier lève le troisième.",
+          "pt": "16/09 — `deploy/.env.example`: `GOTRUE_TAG=v2.192.0`, regra « imagem ≥ produção » escrita, e as passagens de 26/08 mediram 77 migrações GoTrue = a produção. Os dois primeiros « acabado quando » estão cumpridos; o terceiro não. Fechável se Xavier levantar o terceiro."
+        }
+      ]
     },
     {
       "id": "I2",
@@ -3922,56 +3932,6 @@
       }
     },
     {
-      "id": "I6",
-      "d": "I",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Purger les relevés de la sonde de santé",
-        "pt": "Purgar os registros da sonda de saúde"
-      },
-      "v": {
-        "fr": "**Constat corrigé le 31/08 au soir : la purge existe — elle vit dans la sonde elle-même, pas dans un cron.** `health-probe/index.ts` supprime à chaque tour les relevés de plus de `RETENTION_JOURS = 30` jours (vérifié dans le source déployé, pas seulement au dépôt). Elle n'a encore jamais rien supprimé — `n_tup_del = 0` pour 16 268 insertions — pour une raison simple : la table est née le 17/08, plus jeune que sa rétention. Le relevé initial cherchait un *cron* de purge ; le dispositif était dans le corps de la fonction. La forme `DOC-RECENS-1`, une fois de plus — et écrire le cron demandé aurait fait une purge en double.",
-        "pt": "**Constato corrigido em 31/08 à noite: a purga existe — vive na própria sonda, não num cron.** `health-probe` apaga a cada volta os registros com mais de 30 dias (verificado no código implantado). Nunca apagou nada (`n_tup_del = 0` para 16 268 inserções): a tabela nasceu em 17/08, mais jovem que sua retenção. O levantamento procurava um *cron*; o dispositivo estava no corpo da função — `DOC-RECENS-1` de novo. Escrever o cron pedido teria feito uma purga em dobro."
-      },
-      "w": {
-        "fr": "Un cron de purge sur le modèle de `anarbib-catalog-audit-snapshot-purge`, avec une rétention à décider — trente jours suffisent probablement, les incidents étant conservés à part dans `service_health_incidents`.",
-        "pt": "Um cron de purga no modelo de `anarbib-catalog-audit-snapshot-purge`, com uma retenção a decidir — trinta dias provavelmente bastam, já que os incidentes são conservados à parte em `service_health_incidents`."
-      },
-      "y": {
-        "fr": "C'est la table la plus volumineuse de la base, et elle ne contient que du bruit dont l'utile a déjà été extrait. À ce rythme elle atteindra cent mille lignes avant la fin de l'année, ce qui alourdira chaque sauvegarde pour rien.",
-        "pt": "É a tabela mais volumosa do banco, e só contém ruído do qual o útil já foi extraído. Nesse ritmo alcançará cem mil linhas antes do fim do ano, o que pesará em cada backup à toa."
-      },
-      "f": {
-        "fr": [
-          "~~Un cron de purge existe, avec une rétention écrite~~ — la purge existe depuis l'origine, dans la fonction elle-même, rétention écrite de 30 jours ; le cron demandé aurait fait doublon.",
-          "~~`service_health_incidents` n'est pas touchée par la purge~~ — vérifié : la purge ne vise que `service_health_probes`.",
-          "La purge a supprimé pour de vrai : `n_tup_del > 0`, à relever après le 16/09."
-        ],
-        "pt": [
-          "~~Um cron de purga existe, com uma retenção escrita~~ — a purga existe desde a origem, na própria função, retenção de 30 dias; o cron pedido faria dobro.",
-          "~~`service_health_incidents` não é tocada pela purga~~ — verificado: a purga só visa `service_health_probes`.",
-          "A purga apagou de verdade: `n_tup_del > 0`, a levantar depois de 16/09."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "Relevé du 29/08/2026",
-        "REGISTRE §38 OPS"
-      ],
-      "verif": {
-        "fr": "31/08 — source déployé de `health-probe` relu (`RETENTION_JOURS = 30`, purge en fin de tour) ; `pg_stat_user_tables` : 16 268 insertions, **0 suppression**, plus ancien relevé du 17/08 — la naissance de la table, pas un effet de purge. Premier effet attendu vers le **16/09** : c'est là que le constat se prouve. **03/09** — relevé : 19 396 relevés, le plus ancien toujours du 17/08 14:36 UTC, aucune suppression (`n_tup_del = 0` — les compteurs ont été remis à zéro par le redémarrage du 02/09, `n_tup_ins = 724` depuis) ; source déployé relu, `RETENTION_JOURS = 30` inchangé. Rien à faire avant le 16/09 : c'est la date où le constat se prouve. **15/09, 21 h** — 33 628 relevés, le plus ancien toujours du 17/08 14:36 UTC, `n_tup_del = 0` : la purge à 30 jours n'a encore rien supprimé. **Le 16/09 est demain** : si le plus ancien relevé date encore du 17/08 le 17/09 au matin, la purge ne fait pas ce que son source dit.",
-        "pt": "31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**. **03/09** — 19 396 registos, o mais antigo de 17/08, nenhuma supressão; `RETENTION_JOURS = 30`. Nada a fazer antes de 16/09. **15/09** — 33 628 sondas, a mais antiga de 17/08, `n_tup_del = 0`. Amanhã é 16/09 : se em 17/09 a mais antiga ainda for de 17/08, a purga não faz o que o código diz."
-      }
-    },
-    {
       "id": "I12",
       "d": "I",
       "p": "P2",
@@ -4065,10 +4025,16 @@
         "PLAN_migration_git_pages_2026-08-19",
         "RUNBOOK_exploitation_v0.3"
       ],
-      "verif": {
-        "fr": "31/08 — une partie du nettoyage est déjà faite : la branche `pages` n'existe plus sur la forge, `public/.domains` a disparu, et `public/CNAME` est bien préservé. Restent à confirmer le service lui-même et les secrets devenus inutiles.",
-        "pt": "31/08 — parte da limpeza já está feita: o branch `pages` não existe mais, `public/.domains` sumiu, `public/CNAME` preservado."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — une partie du nettoyage est déjà faite : la branche `pages` n'existe plus sur la forge, `public/.domains` a disparu, et `public/CNAME` est bien préservé. Restent à confirmer le service lui-même et les secrets devenus inutiles.",
+          "pt": "31/08 — parte da limpeza já está feita: o branch `pages` não existe mais, `public/.domains` sumiu, `public/CNAME` preservado."
+        },
+        {
+          "fr": "16/09 — mesuré : une route inconnue (`/une-route-qui-n-existe-pas`) rend **200 `text/html`** ; `public/_redirects` existe, `public/.domains` n'existe plus, `public/CNAME` est gardé, la branche `pages` n'existe plus sur Codeberg. Reste à vérifier par Xavier dans les réglages Forgejo : les secrets devenus inutiles. Sinon, clôturable.",
+          "pt": "16/09 — medido: uma rota desconhecida devolve **200 `text/html`**; `public/_redirects` existe, `public/.domains` já não existe, `public/CNAME` mantido, o ramo `pages` já não existe na Codeberg. Falta verificar por Xavier nos ajustes Forgejo: os segredos tornados inúteis. Senão, fechável."
+        }
+      ]
     },
     {
       "id": "I15",
@@ -4600,10 +4566,16 @@
         "journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06",
         "codeberg.org/anarbib/anarbib/pulls/28"
       ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
+      "verif": [
+        {
+          "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+          "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+        },
+        {
+          "fr": "16/09 — `CONTRIBUTING.md` porte les trois règles en français (l. 80-86) et en anglais (l. 143 sq.), **pas en portugais** ; la PR #28 est fusionnée en connaissance de cause (15/09). Clôturable en écrivant la version portugaise, ou en levant l'exigence des trois langues.",
+          "pt": "16/09 — `CONTRIBUTING.md` tem as três regras em francês e em inglês, **não em português**; a PR #28 está fundida com conhecimento de causa (15/09). Fechável escrevendo a versão portuguesa, ou levantando a exigência das três línguas."
+        }
+      ]
     },
     {
       "id": "I16",
@@ -4757,10 +4729,16 @@
         "REGISTRE §0 DOC-SILENCE-1",
         "codeberg.org/anarbib/anarbib/pulls/28"
       ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
+      "verif": [
+        {
+          "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+          "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+        },
+        {
+          "fr": "16/09 — aucune garde n'existe encore ; `secret-key.ts` est sans repli, mais deux fonctions (`gc-deposits`, `harvest-oai-pmh`) portent encore le nom `SUPABASE_SERVICE_ROLE_KEY` dans leur message d'erreur — la garde à écrire les rougirait, corriger les deux messages avec elle.",
+          "pt": "16/09 — nenhuma guarda existe ainda; `secret-key.ts` está sem recuo, mas duas funções (`gc-deposits`, `harvest-oai-pmh`) ainda levam o nome `SUPABASE_SERVICE_ROLE_KEY` na mensagem de erro — a guarda a escrever avermelhá-las-ia, corrigir as duas mensagens com ela."
+        }
+      ]
     },
     {
       "id": "F7",
@@ -4807,10 +4785,16 @@
         "docs/specs/spec-migration-mail-resend.md",
         "codeberg.org/anarbib/anarbib/pulls/28"
       ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
+      "verif": [
+        {
+          "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
+          "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
+        },
+        {
+          "fr": "16/09 — le transport hybride SMTP/Resend/Mock n'est **pas** dans `main` : `_shared/transport/email.ts` ne connaît que Resend, `MAIL_TRANSPORT` n'apparaît que dans `deploy/functions.env.example`. Il est dans la PR #29 (code applicatif), pas encore fusionnée. **Écart de doc** : `deploy/README.md` § « Transport des e-mails » décrit déjà les trois modes et le « mode test local » silencieux — le README est en avance sur le code, et décrit précisément ce que F7 interdit.",
+          "pt": "16/09 — o transporte híbrido SMTP/Resend/Mock **não** está em `main`: `_shared/transport/email.ts` só conhece a Resend, `MAIL_TRANSPORT` só aparece em `deploy/functions.env.example`. Está na PR #29, ainda não fundida. **Desvio de doc**: `deploy/README.md` § « Transport des e-mails » já descreve os três modos e o « modo teste local » silencioso — o README está à frente do código."
+        }
+      ]
     },
     {
       "id": "G11",
@@ -5757,51 +5741,6 @@
       }
     },
     {
-      "id": "F9",
-      "d": "F",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "SPF, DKIM et DMARC de `notifications.anarbib.org` n'ont jamais été relevés — trente-six crons envoient du courrier depuis ce domaine",
-        "pt": "SPF, DKIM e DMARC de `notifications.anarbib.org` nunca foram levantados — trinta e seis crons enviam e-mail a partir desse domínio"
-      },
-      "v": {
-        "fr": "Relevé le 31/08 dans la reprise : « jamais relevés ; trois `Resolve-DnsName` suffisent ; à faire avant le 10/09 ». **Le 07/09, impossible à vérifier** : ni le conteneur ni la VM de travail n'atteignent un résolveur DNS. Aucune trace ailleurs que ce relevé ne dit que c'est fait.",
-        "pt": "Levantado em 31/08 na retomada: «nunca levantados; três `Resolve-DnsName` bastam; a fazer antes de 10/09». **Em 07/09, impossível verificar**: nem o contêiner nem a VM de trabalho alcançam um resolvedor DNS. Nenhum rastro além desse levantamento diz que foi feito."
-      },
-      "w": {
-        "fr": "Depuis PowerShell : `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, et le sélecteur DKIM affiché par le tableau de bord Resend. Coller les trois réponses ici, datées. Si DMARC manque, poser `p=none` avec une adresse de rapport avant de durcir.",
-        "pt": "No PowerShell: `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, e o seletor DKIM mostrado pelo painel Resend. Colar as três respostas aqui, datadas. Se faltar DMARC, pôr `p=none` com endereço de relatório antes de endurecer."
-      },
-      "y": {
-        "fr": "Le 10/09, l'invitation de **F4** part sur ce domaine, deux jours avant Bologne. Un courrier qui tombe en indésirable ne se voit pas dans les logs — il se voit dans le silence de la lectrice.",
-        "pt": "Em 10/09, o convite de **F4** sai por esse domínio, dois dias antes de Bolonha. Um e-mail que cai em spam não aparece nos logs — aparece no silêncio da leitora."
-      },
-      "f": {
-        "fr": [
-          "Les trois enregistrements relevés et collés dans cet item, avec la date."
-        ],
-        "pt": [
-          "Os três registros levantados e colados neste item, com a data."
-        ]
-      },
-      "dep": {
-        "fr": "Avant **F4** (10/09). Entre dans **F1** (audit) mais ne l'attend pas.",
-        "pt": "Antes de **F4** (10/09). Entra em **F1** (auditoria) mas não a espera."
-      },
-      "r": [
-        "claude/REPRISE_2026-09-01_douze_jours_avant_bologne"
-      ],
-      "verif": {
-        "fr": "07/09 — non vérifiable depuis ici ; aucune trace que ce soit fait.",
-        "pt": "07/09 — não verificável daqui; nenhum rastro de que tenha sido feito."
-      }
-    },
-    {
       "id": "F10",
       "d": "F",
       "p": "P2",
@@ -5982,10 +5921,16 @@
         "claude/PLAN_formation_coordination_BLMF_2026-08-26 (annexe)",
         "REGISTRE §0 DOC-COLLECTIVE-1"
       ],
-      "verif": {
-        "fr": "07/09 — `ready` depuis le 30/08, expiration 29/09.",
-        "pt": "07/09 — `ready` desde 30/08, expira em 29/09."
-      }
+      "verif": [
+        {
+          "fr": "07/09 — `ready` depuis le 30/08, expiration 29/09.",
+          "pt": "07/09 — `ready` desde 30/08, expira em 29/09."
+        },
+        {
+          "fr": "16/09 — toujours `ready` en production : l'invitation du 30/08 n'est ni acceptée ni déclinée, elle expire le 29/09. Deux autres invitations du 01/09 : une acceptée, une en attente de ratification.",
+          "pt": "16/09 — ainda `ready` em produção: o convite de 30/08 não foi aceite nem recusado, expira em 29/09. Dois outros convites de 01/09: um aceite, um à espera de ratificação."
+        }
+      ]
     },
     {
       "id": "B23",
@@ -6340,120 +6285,6 @@
         "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.",
         "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote."
       }
-    },
-    {
-      "id": "B25",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "edge"
-      ],
-      "t": {
-        "fr": "`login` : la remise à zéro des compteurs d'échec part avec le jeton de la personne (403 à chaque connexion réussie depuis mai), et la table garde IP et courriel en clair",
-        "pt": "`login`: a reposição a zero dos contadores de falha parte com o token da pessoa (403 a cada conexão bem-sucedida desde maio), e a tabela guarda IP e e-mail em claro"
-      },
-      "v": {
-        "fr": "**Constaté le 16/09/2026** au premier contrôle après la révocation HS256 : quatre `403` sur `DELETE /rest/v1/auth_rate_limits` en 24 h, tous depuis l'Edge Function `login` (agent `SupabaseEdgeRuntime`, `supabase-js/2.114.0`), toujours **juste après** deux `GET` en 200 sur la même table, et `postgres_logs` dit `42501 permission denied for table auth_rate_limits`. Lecture du corps : `login` crée **un seul** client avec la clé secrète (ligne 241), s'en sert pour `isRateLimited` (service_role, 200), puis appelle `supabase.auth.signInWithPassword` **sur ce même client** (ligne 311) — supabase-js pose alors la session de la personne sur le client, et `clearFailures` (ligne 324, le `DELETE`) part avec **son** jeton ES256, donc en rôle `authenticated`, qui n'a aucun GRANT sur la table (seuls `postgres` et `service_role`, policy `deny_direct_access_secdef_only`). Présent depuis la naissance de la fonction (`ceb8f6ec`, 05/05) : sous la clé legacy `service_role`, le mécanisme était le même. Effet : les compteurs d'échec ne sont **jamais** remis à zéro après un succès, une personne qui s'est trompée quatre fois puis connectée reste à un échec du blocage jusqu'à la fin de la fenêtre ; et une erreur de permission silencieuse à chaque connexion réussie, invisible parce que `clearFailures` n'inspecte pas `error`. **Second constat, le même jour** : `login` est la seule des quatre fonctions qui écrivent dans `auth_rate_limits` à y mettre la clé **brute** — l'adresse IP et l'adresse de courriel — là où `geocode`, `submit-cartography-entry` et `submit-gazette-contribution` hachent l'IP en SHA-256 avant d'écrire. Et comme le `DELETE` filtre par `key = <courriel>`, le courriel part **dans l'URL** de la requête PostgREST, donc dans les journaux edge de Supabase (relus le 16/09 pour ce diagnostic : IP et courriel de la dernière personne connectée, lisibles en clair). La page de confidentialité ne mentionne ni ces journaux ni leur durée.",
-        "pt": "**Constatado em 16/09/2026** no primeiro controlo depois da revogação HS256: quatro `403` em `DELETE /rest/v1/auth_rate_limits` em 24 h, todos da Edge Function `login`, sempre **logo depois** de dois `GET` em 200 na mesma tabela, e `postgres_logs` diz `42501 permission denied for table auth_rate_limits`. Leitura do corpo: `login` cria **um único** cliente com a chave secreta (linha 241), usa-o para `isRateLimited` (service_role, 200), depois chama `supabase.auth.signInWithPassword` **nesse mesmo cliente** (linha 311) — o supabase-js põe então a sessão da pessoa no cliente, e `clearFailures` (linha 324, o `DELETE`) parte com o token ES256 **dela**, logo no papel `authenticated`, que não tem GRANT nenhum na tabela. Presente desde o nascimento da função (`ceb8f6ec`, 05/05). Efeito: os contadores de falha **nunca** são repostos a zero depois de um sucesso, e um erro de permissão silencioso a cada conexão bem-sucedida, invisível porque `clearFailures` não inspeciona `error`. **Segunda constatação, no mesmo dia**: `login` é a única das quatro funções que escrevem em `auth_rate_limits` a pôr lá a chave **em claro** — o endereço IP e o e-mail — onde `geocode`, `submit-cartography-entry` e `submit-gazette-contribution` fazem o hash SHA-256 do IP antes de escrever. E como o `DELETE` filtra por `key = <e-mail>`, o e-mail parte **na URL** do pedido PostgREST, logo nos registos edge da Supabase (relidos em 16/09 para este diagnóstico: IP e e-mail da última pessoa conectada, legíveis em claro)."
-      },
-      "w": {
-        "fr": "**Décidé par Xavier le 16/09 : la clé se hache.** Trois gestes dans `login`, une seule passe. **(1)** Deux clients : celui de la clé secrète pour `auth_rate_limits` (lecture, écriture, `DELETE`), et un client jetable à la clé publiable, `persistSession: false`, pour `signInWithPassword` — la session rendue au front vient de ce second client. **(2)** La clé des compteurs devient une empreinte : `sha256Hex(ip)` et `sha256Hex(lower(email))`, la même fonction que `geocode` (à remonter dans `_shared/` avec le `hit()` de B26) — plus aucune IP ni courriel dans la table, plus aucun courriel dans l'URL du `DELETE`, et le compteur se comporte exactement pareil (même clé, même fenêtre, même seuil). Les 52 lignes brutes actuelles (20 `ip`, 32 `email`) se purgent dans la migration de B26 : elles ne correspondent plus à aucune clé. **(3)** `clearFailures` lit `error` et le journalise : un `42501` ne doit plus passer sans bruit. Banc : le modèle `src/tests/gazette-monthly-build.test.js` (fetch simulé) — le `DELETE` porte la clé secrète et jamais un `Bearer` de session, et sa query string ne contient ni `@` ni une IP. Redéploiement par `git push` (marqueur `deployed-functions`). **À côté** : une ligne au registre des traitements et à `privacy.s6` sur les journaux techniques de la plateforme (IP, navigateur, URL ; durée = rétention des logs du plan Supabase, à lire dans Settings).",
-        "pt": "**Decidido por Xavier em 16/09: a chave passa por hash.** Três gestos em `login`, uma só passagem. **(1)** Dois clientes: o da chave secreta para `auth_rate_limits` (leitura, escrita, `DELETE`), e um cliente descartável com a chave publicável, `persistSession: false`, para `signInWithPassword` — a sessão devolvida ao front vem deste segundo cliente. **(2)** A chave dos contadores passa a ser uma impressão: `sha256Hex(ip)` e `sha256Hex(lower(email))`, a mesma função que `geocode` (a subir para `_shared/` com o `hit()` de B26) — mais nenhum IP nem e-mail na tabela, mais nenhum e-mail na URL do `DELETE`, e o contador comporta-se exatamente igual. As 52 linhas em claro atuais purgam-se na migração de B26. **(3)** `clearFailures` lê `error` e regista-o. Bancada: o modelo `src/tests/gazette-monthly-build.test.js` — o `DELETE` leva a chave secreta e nunca um `Bearer` de sessão, e a sua query string não contém `@` nem um IP. **Ao lado**: uma linha no registo de tratamentos e em `privacy.s6` sobre os registos técnicos da plataforma."
-      },
-      "y": {
-        "fr": "Le rate limit de la connexion est la seule barrière contre la force brute sur `/login` (AR-1, AR-2 : ni anti-robot ni oracle, exprès). Un compteur qui ne redescend jamais punit les personnes maladroites, pas les robots — et une erreur de permission qui tourne en silence depuis quatre mois est exactement ce qu'un audit des DEFINER ne voit pas : le défaut est dans le client, pas dans la base. Et une table de sécurité n'a pas besoin de savoir *qui* : une empreinte suffit à compter, et ne fuit rien dans les journaux.",
-        "pt": "O rate limit da conexão é a única barreira contra a força bruta em `/login`. Um contador que nunca desce castiga as pessoas desajeitadas, não os robôs — e um erro de permissão que roda em silêncio há quatro meses é exatamente o que uma auditoria das DEFINER não vê: o defeito está no cliente, não na base. E uma tabela de segurança não precisa de saber *quem*: uma impressão chega para contar, e não deixa fugir nada nos registos."
-      },
-      "f": {
-        "fr": [
-          "Une connexion réussie produit un `DELETE` en 204 sur `auth_rate_limits` (logs edge), plus aucun `42501` sur cette table dans `postgres_logs`.",
-          "Quatre échecs puis un succès : la ligne de la personne a disparu de la table.",
-          "`select key from auth_rate_limits` ne rend que des empreintes hexadécimales de 64 caractères — aucune IP, aucun `@` ; la query string du `DELETE` dans les logs edge non plus.",
-          "Un banc vitest prouve les trois points : clé secrète sur le `DELETE`, jamais de `Bearer` de session, clé hachée."
-        ],
-        "pt": [
-          "Uma conexão bem-sucedida produz um `DELETE` em 204 em `auth_rate_limits`, e mais nenhum `42501` nessa tabela.",
-          "Quatro falhas e um sucesso: a linha da pessoa desapareceu da tabela.",
-          "`select key from auth_rate_limits` só devolve impressões hexadecimais de 64 caracteres — nenhum IP, nenhum `@`; a query string do `DELETE` nos registos edge também não.",
-          "Uma bancada vitest prova os três pontos: chave secreta no `DELETE`, nunca um `Bearer` de sessão, chave com hash."
-        ]
-      },
-      "dep": {
-        "fr": "Même table que **B26** (la contrainte `kind`) : une seule passe sur `auth_rate_limits` pour les deux. Sœur de la doctrine « un chemin jamais exécuté n'est pas un chemin qui marche » (I4, `rss-novidades`).",
-        "pt": "Mesma tabela que **B26**: uma só passagem em `auth_rate_limits` para os dois."
-      },
-      "r": [
-        "supabase/functions/login/index.ts",
-        "supabase/functions/_shared/core/secret-key.ts",
-        "AUDIT_execute_authenticated_2026-09-01 (paquet 4, AR-1/AR-2)"
-      ],
-      "verif": [
-        {
-          "fr": "16/09 — quatre `403` en 24 h (15/09 19 h 08 UTC, 21 h 01 ; 16/09 14 h 29, 18 h 31), tous `login`, chacun précédé de deux `GET` 200 ; `postgres_logs` : `42501` ×4 sur la table, aucun autre code. Le premier précède la révocation HS256 de plus d'une heure : sans rapport avec elle.",
-          "pt": "16/09 — quatro `403` em 24 h, todos `login`, cada um precedido de dois `GET` 200; `postgres_logs`: `42501` ×4 na tabela. O primeiro precede a revogação HS256 em mais de uma hora: sem relação com ela."
-        },
-        {
-          "fr": "16/09 — Xavier tranche : la clé se hache (même `sha256Hex` que `geocode`), en une passe avec les deux clients et la lecture de `error`. Purge des 52 lignes brutes à faire dans la migration de B26.",
-          "pt": "16/09 — Xavier decide: a chave passa por hash (o mesmo `sha256Hex` que `geocode`), numa só passagem com os dois clientes e a leitura de `error`. Purga das 52 linhas em claro a fazer na migração de B26."
-        }
-      ]
-    },
-    {
-      "id": "B26",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql",
-        "edge"
-      ],
-      "t": {
-        "fr": "`auth_rate_limits` n'accepte que `ip` et `email` : les compteurs du géocodeur, de la cartographie et de la gazette échouent en `400` depuis leur naissance, et ne bloquent jamais",
-        "pt": "`auth_rate_limits` só aceita `ip` e `email`: os contadores do geocodificador, da cartografia e da gazeta falham em `400` desde que nasceram, e nunca bloqueiam"
-      },
-      "v": {
-        "fr": "**Constaté le 16/09/2026** en lisant les logs de la table pour B25 : deux `400` sur `POST /rest/v1/auth_rate_limits?on_conflict=kind,key` le 15/09 (19 h 15 et 20 h 55 UTC), et `postgres_logs` : `23514 new row violates check constraint \"auth_rate_limits_kind_check\"`. La contrainte vient du socle de mai (`20260510000000`, ligne 45465) : `kind IN ('ip','email')`. Or **trois Edge Functions** réutilisent la table avec d'autres `kind` — `geocode` (`geocode_ip`, depuis `45f7dfbc`, 19/06), `submit-cartography-entry` (03/09) et `submit-gazette-contribution` (`gazette_ip`, `gazette_prefill`, GAZ-8/9, 15/09) — par le même motif copié : `select` puis `upsert`, **sans lire `error`**. En production la table ne contient que `ip` (20) et `email` (32) : aucune ligne des trois autres n'a jamais existé. Conséquence : `data` est toujours nul, `count` vaut toujours 1, **aucune de ces trois limites n'a jamais bloqué personne** ; là où l'Altcha est posé (gazette), il reste le seul frein ; le géocodeur (proxy Nominatim, appelé depuis la page publique de cartographie) n'en a aucun.",
-        "pt": "**Constatado em 16/09/2026** ao ler os logs da tabela para B25: dois `400` em `POST /rest/v1/auth_rate_limits?on_conflict=kind,key` em 15/09, e `postgres_logs`: `23514 new row violates check constraint \"auth_rate_limits_kind_check\"`. A restrição vem da base de maio (`20260510000000`): `kind IN ('ip','email')`. Ora **três Edge Functions** reutilizam a tabela com outros `kind` — `geocode` (`geocode_ip`, 19/06), `submit-cartography-entry` (03/09) e `submit-gazette-contribution` (`gazette_ip`, `gazette_prefill`, 15/09) — pelo mesmo padrão copiado: `select` e `upsert`, **sem ler `error`**. Em produção a tabela só contém `ip` (20) e `email` (32). Consequência: `data` é sempre nulo, `count` vale sempre 1, **nenhum destes três limites bloqueou alguma vez alguém**."
-      },
-      "w": {
-        "fr": "Une migration qui remplace la `CHECK` par la liste réelle des `kind` (`ip`, `email`, `geocode_ip`, ceux de la cartographie, `gazette_ip`, `gazette_prefill`) — ou la lève au profit d'un motif `^[a-z_]{2,32}$`, puisque la table est fermée à `anon` et `authenticated` et n'est écrite que par les fonctions ; garde : une suite SQL qui insère chaque `kind` attendu. Puis, dans les trois fonctions, lire `error` de l'`upsert` et **refuser fermé** (`500`) quand le compteur ne s'écrit pas : un frein qui ne sait pas compter ne doit pas laisser passer en silence. Le même `hit()` est copié trois fois : le remonter dans `_shared/` avec le contrôle d'erreur, une fois. La migration purge aussi les 52 lignes brutes (`ip`, `email`) de `login` : après B25 les clés sont des empreintes, ces lignes ne correspondent plus à rien.",
-        "pt": "Uma migração que substitui a `CHECK` pela lista real dos `kind` — ou a levanta a favor de um padrão `^[a-z_]{2,32}$`, já que a tabela está fechada a `anon` e `authenticated`; guarda: uma suíte SQL que insere cada `kind` esperado. Depois, nas três funções, ler `error` do `upsert` e **recusar fechado** (`500`) quando o contador não se escreve. O mesmo `hit()` está copiado três vezes: subi-lo para `_shared/` com o controlo de erro, uma vez. A migração purga também as 52 linhas em claro (`ip`, `email`) de `login`: depois de B25 as chaves são impressões, essas linhas já não correspondem a nada."
-      },
-      "y": {
-        "fr": "Trois freins anti-abus qui affichent « rate limit » dans le code et n'ont jamais compté : c'est la forme de dette la plus trompeuse, celle qu'une relecture valide. Le géocodeur relaie vers le Nominatim auto-hébergé depuis une page publique — sans compteur, c'est une porte ouverte sur une machine du réseau (A3).",
-        "pt": "Três travões anti-abuso que mostram « rate limit » no código e nunca contaram: é a forma de dívida mais enganadora, a que uma releitura valida. O geocodificador retransmite para o Nominatim auto-hospedado a partir de uma página pública — sem contador, é uma porta aberta."
-      },
-      "f": {
-        "fr": [
-          "`auth_rate_limits` porte des lignes `geocode_ip`, `gazette_ip`, `gazette_prefill` et cartographie en production après un usage réel.",
-          "Plus aucun `23514` sur la table dans `postgres_logs` ; la suite SQL insère chaque `kind` attendu.",
-          "Le dépassement du seuil rend `429` — éprouvé une fois sur le géocodeur, une fois sur la gazette."
-        ],
-        "pt": [
-          "`auth_rate_limits` tem linhas `geocode_ip`, `gazette_ip`, `gazette_prefill` e cartografia em produção depois de um uso real.",
-          "Mais nenhum `23514` na tabela; a suíte SQL insere cada `kind` esperado.",
-          "Passar o limiar devolve `429` — provado no geocodificador e na gazeta."
-        ]
-      },
-      "dep": {
-        "fr": "Même passe que **B25**. Le géocodeur touche **A3** (Nominatim sur la machine du mainteneur) et la doctrine anti-pistage (E5). Les `kind` de la gazette sont nés le 15/09 (GAZ-8/9) : à corriger avant que la gazette s'ouvre aux contributions extérieures.",
-        "pt": "Mesma passagem que **B25**. O geocodificador toca **A3** e a doutrina anti-rastreio (E5)."
-      },
-      "r": [
-        "supabase/migrations/20260510000000_baseline_live.sql (l. 45465)",
-        "supabase/functions/geocode/index.ts",
-        "supabase/functions/submit-cartography-entry/index.ts",
-        "supabase/functions/submit-gazette-contribution/index.ts"
-      ],
-      "verif": [
-        {
-          "fr": "16/09 — `postgres_logs` 24 h : `23514` ×2 sur la table (les deux de la gazette, 15/09) ; `select kind, count(*)` en prod : `ip` 20, `email` 32, rien d'autre ; la contrainte lue dans `pg_constraint` : `kind = ANY (ARRAY['ip','email'])`.",
-          "pt": "16/09 — `postgres_logs` 24 h: `23514` ×2 na tabela; `select kind, count(*)` em prod: `ip` 20, `email` 32, nada mais; a restrição lida em `pg_constraint`: `kind = ANY (ARRAY['ip','email'])`."
-        }
-      ]
     }
   ]
 }

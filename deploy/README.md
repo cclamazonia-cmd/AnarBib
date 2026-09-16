@@ -34,6 +34,23 @@ les services qui *lisent* le schéma. Le script compte **huit étapes plus deux
 partiraient vers le projet cloud du mainteneur), la « 7 bis » attend un fait,
 jamais un délai — et une vérification finale.
 
+**Première reconstruction extérieure (06–15/09/2026, A2).** La pile a été
+rebâtie par quelqu'un d'autre que le mainteneur : Bastien (compte `ASR2026`,
+première contribution au projet) l'a montée chez lui depuis le dépôt seul, en
+a écrit l'installateur (`install.sh`, PR #28, fusionnée le 15/09) et a laissé
+dans ses commits ce qui cassait — `pg_cron` absent au démarrage d'un volume
+vierge, schéma à initialiser sous `supabase_admin` (propriétaire), `GRANT` sur
+`supabase_migrations` aux deux rôles, `LANG_CODE` au premier prompt, port 5173
+à libérer. Deux écarts structurels sont sortis de cette relecture et ont leurs
+notes : le rejeu depuis zéro ne reproduit pas les privilèges par défaut de la
+production (`journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`,
+`DOC-GRANT-2`) et la réparation au privilège par défaut avant le socle
+(`journal/operations/NOTE_experience-I17-rejeu-fidele_2026-09-07`, `DOC-GRANT-3`).
+Depuis, ses correctifs partent d'une instance qui tourne chez lui et sont relus
+puis fusionnés ici. Ce que la pile n'a **pas** encore éprouvé hors de chez son
+auteur : `install.sh` lancé sur une machine tierce vierge (I16), le routeur
+`main` (I3), le rejeu sur une image Supabase en CI (I18).
+
 ---
 
 ## 1. Démarrage rapide (Installation en une commande)

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-16** · 90 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-16** · 85 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -15,15 +15,15 @@
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
-    - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 8
+    - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 14
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 14
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 5
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 9
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **15 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `60e0580a`, premier relevé après Bologne (13/09) et la fin du gel (14/09). Depuis le relevé du 08/09 : quatre commits seulement au dépôt — les deux correctifs du jeton de récupération (08/09), `OPS-9` au registre, et ce soir **un lot importé a une bibliothèque de destination** (migration `20260915184154`, deux RPC nouvelles) ; en production, **une cinquième bibliothèque** est née le 14/09 (Solidaires, Paris — inactive, privée, une coordination rattachée) et les 1 673 brouillons du lot Solidaires ont désormais une propriétaire. Toutes les lignes ont été remesurées, advisors compris. Une alerte d'exploitation en sort, **I24**.
 
-**Fraîcheur des constats au 2026-09-16.** **73 items sur 90** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B20, B22, B23, B24, B25, B26, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-16.** **69 items sur 85** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -290,7 +290,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **A1** | Obtenir au moins deux autres administrateur·rices réseau | `P0` | Décision collective |
-| **A2** | Éprouver la reconstruction complète par quelqu'un d'autre que le mainteneur | `P0` | Ouvert |
 | **A3** | Sortir le runner d'intégration continue de la machine du mainteneur | `P0` | Ouvert |
 | **A4** | Accueillir une contribution extérieure sans la perdre ni s'y noyer | `P1` | En cours |
 
@@ -315,28 +314,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Bloque **G7** (décision sur SOLIDAIRES) et conditionne **A2**.
 
 *Renvois : `docs/CHANTIERS_OUVERTS.md §7` · `REGISTRE §1 RES-D11` · `CALENDRIER_bologne_2026-08-27`*
-
-#### A2 — Éprouver la reconstruction complète par quelqu'un d'autre que le mainteneur
-
-`P0` Structurel · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système, SQL / PostgreSQL, React / JavaScript
-
-**État.** Jamais fait. `deploy/README.md`, `deploy/REPETITION.md` et `deploy/bootstrap.sh` existent et ont été exécutés — **sur la seule machine du mainteneur**.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Cloner le dépôt sur une machine tierce, monter la pile complète en suivant `deploy/README.md`, et écrire ce qui casse. Aucun secret, aucun accès, aucune coordination : la pile se rebâtit depuis le dépôt seul. Docker, une machine, une soirée.
-
-**Pourquoi ça compte.** C'est la réponse à la seule question qui décide de tout le reste : *ce projet est-il reprenable par quelqu'un d'autre que celui qui l'a écrit ?* Un rapport d'échec détaillé vaut ici plus qu'un correctif : c'est la liste de ce qui ne marche que sur une seule machine.
-
-**Ce qui compte comme fini.**
-
-- La pile démarre sur une machine qui n'a jamais vu le projet, en suivant la documentation seule.
-- Chaque écart entre la documentation et la réalité est consigné, avec sa commande et son message d'erreur.
-- Le journal d'exécution devient une section de `deploy/README.md`.
-
-**Dépendances.** Aucune. **C'est le meilleur premier pas pour quelqu'un qui arrive.**
-
-*Renvois : `docs/CHANTIERS_OUVERTS.md §1` · `deploy/REPETITION.md`*
 
 #### A3 — Sortir le runner d'intégration continue de la machine du mainteneur
 
@@ -366,7 +343,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène. **Tranché le 06/09 au soir (Xavier) : A** — les trois règles et la contrepartie du mainteneur sont écrites dans `CONTRIBUTING.md` (fr et en, les deux langues du fichier) le soir même (`DOC-CONTRIB-1` ✅). Reste : la PR #28 scindée selon ces règles.
 
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Écrire dans `CONTRIBUTING.md` trois règles courtes : une PR = un sujet ; le code déployé en production (frontend, Edge Functions) va dans une PR distincte de l'outillage ; pendant une relecture, on ajoute des commits, on ne force-pousse pas. Et dire ce que le mainteneur promet en retour : un premier retour sous une semaine.
 
@@ -395,8 +372,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B22** | Quarante-sept fonctions ouvertes à anon sans qu'aucune ligne du dépôt ne le dise | `P2` | En cours |
 | **B23** | `api.library_email_identity` est la seule vue `api` encore en SECURITY DEFINER — le dire, ou la basculer | `P3` | Ouvert |
 | **B24** | Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer | `P2` | Ouvert |
-| **B25** | `login` : la remise à zéro des compteurs d'échec part avec le jeton de la personne (403 à chaque connexion réussie depuis mai), et la table garde IP et courriel en clair | `P2` | Ouvert |
-| **B26** | `auth_rate_limits` n'accepte que `ip` et `email` : les compteurs du géocodeur, de la cartographie et de la gazette échouent en `400` depuis leur naissance, et ne bloquent jamais | `P2` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -449,7 +424,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `_shared/core/secret-key.ts` a retiré le 02/09 (B18) le repli sur `SUPABASE_SERVICE_ROLE_KEY`, avec un commentaire qui dit pourquoi. La PR #28 le réintroduit (`return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")`) — de bonne foi, pour sa pile, où la même PR pose déjà `SUPABASE_SECRET_KEYS` dans `compose.yml`. Un commentaire n'a pas suffi ; la clé legacy est désactivée en prod, un repli vers elle masquerait une panne au lieu de la dire (`DOC-SILENCE-1`).
 
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Une garde dans `scripts/ci/` (grep sur `supabase/functions/**` : aucun `SUPABASE_SERVICE_ROLE_KEY` hors de `env.ts`/commentaires, liste fermée) et une ligne dans `CONTRIBUTING.md`. Demander le retrait dans la PR #28.
 
@@ -526,51 +501,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Ne bloque plus **B19** (levé le 15/09 : l'inventaire est fait et vérifié, et la révocation est réversible) ; les deux gestes protègent la rotation suivante. Dépôt `pages` : le gel est levé depuis le 14/09.
 
 *Renvois : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
-
-#### B25 — `login` : la remise à zéro des compteurs d'échec part avec le jeton de la personne (403 à chaque connexion réussie depuis mai), et la table garde IP et courriel en clair
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : edge
-
-**État.** **Constaté le 16/09/2026** au premier contrôle après la révocation HS256 : quatre `403` sur `DELETE /rest/v1/auth_rate_limits` en 24 h, tous depuis l'Edge Function `login` (agent `SupabaseEdgeRuntime`, `supabase-js/2.114.0`), toujours **juste après** deux `GET` en 200 sur la même table, et `postgres_logs` dit `42501 permission denied for table auth_rate_limits`. Lecture du corps : `login` crée **un seul** client avec la clé secrète (ligne 241), s'en sert pour `isRateLimited` (service_role, 200), puis appelle `supabase.auth.signInWithPassword` **sur ce même client** (ligne 311) — supabase-js pose alors la session de la personne sur le client, et `clearFailures` (ligne 324, le `DELETE`) part avec **son** jeton ES256, donc en rôle `authenticated`, qui n'a aucun GRANT sur la table (seuls `postgres` et `service_role`, policy `deny_direct_access_secdef_only`). Présent depuis la naissance de la fonction (`ceb8f6ec`, 05/05) : sous la clé legacy `service_role`, le mécanisme était le même. Effet : les compteurs d'échec ne sont **jamais** remis à zéro après un succès, une personne qui s'est trompée quatre fois puis connectée reste à un échec du blocage jusqu'à la fin de la fenêtre ; et une erreur de permission silencieuse à chaque connexion réussie, invisible parce que `clearFailures` n'inspecte pas `error`. **Second constat, le même jour** : `login` est la seule des quatre fonctions qui écrivent dans `auth_rate_limits` à y mettre la clé **brute** — l'adresse IP et l'adresse de courriel — là où `geocode`, `submit-cartography-entry` et `submit-gazette-contribution` hachent l'IP en SHA-256 avant d'écrire. Et comme le `DELETE` filtre par `key = <courriel>`, le courriel part **dans l'URL** de la requête PostgREST, donc dans les journaux edge de Supabase (relus le 16/09 pour ce diagnostic : IP et courriel de la dernière personne connectée, lisibles en clair). La page de confidentialité ne mentionne ni ces journaux ni leur durée.
-
-*Vérifié : [object Object],[object Object]*
-
-**Ce que c'est.** **Décidé par Xavier le 16/09 : la clé se hache.** Trois gestes dans `login`, une seule passe. **(1)** Deux clients : celui de la clé secrète pour `auth_rate_limits` (lecture, écriture, `DELETE`), et un client jetable à la clé publiable, `persistSession: false`, pour `signInWithPassword` — la session rendue au front vient de ce second client. **(2)** La clé des compteurs devient une empreinte : `sha256Hex(ip)` et `sha256Hex(lower(email))`, la même fonction que `geocode` (à remonter dans `_shared/` avec le `hit()` de B26) — plus aucune IP ni courriel dans la table, plus aucun courriel dans l'URL du `DELETE`, et le compteur se comporte exactement pareil (même clé, même fenêtre, même seuil). Les 52 lignes brutes actuelles (20 `ip`, 32 `email`) se purgent dans la migration de B26 : elles ne correspondent plus à aucune clé. **(3)** `clearFailures` lit `error` et le journalise : un `42501` ne doit plus passer sans bruit. Banc : le modèle `src/tests/gazette-monthly-build.test.js` (fetch simulé) — le `DELETE` porte la clé secrète et jamais un `Bearer` de session, et sa query string ne contient ni `@` ni une IP. Redéploiement par `git push` (marqueur `deployed-functions`). **À côté** : une ligne au registre des traitements et à `privacy.s6` sur les journaux techniques de la plateforme (IP, navigateur, URL ; durée = rétention des logs du plan Supabase, à lire dans Settings).
-
-**Pourquoi ça compte.** Le rate limit de la connexion est la seule barrière contre la force brute sur `/login` (AR-1, AR-2 : ni anti-robot ni oracle, exprès). Un compteur qui ne redescend jamais punit les personnes maladroites, pas les robots — et une erreur de permission qui tourne en silence depuis quatre mois est exactement ce qu'un audit des DEFINER ne voit pas : le défaut est dans le client, pas dans la base. Et une table de sécurité n'a pas besoin de savoir *qui* : une empreinte suffit à compter, et ne fuit rien dans les journaux.
-
-**Ce qui compte comme fini.**
-
-- Une connexion réussie produit un `DELETE` en 204 sur `auth_rate_limits` (logs edge), plus aucun `42501` sur cette table dans `postgres_logs`.
-- Quatre échecs puis un succès : la ligne de la personne a disparu de la table.
-- `select key from auth_rate_limits` ne rend que des empreintes hexadécimales de 64 caractères — aucune IP, aucun `@` ; la query string du `DELETE` dans les logs edge non plus.
-- Un banc vitest prouve les trois points : clé secrète sur le `DELETE`, jamais de `Bearer` de session, clé hachée.
-
-**Dépendances.** Même table que **B26** (la contrainte `kind`) : une seule passe sur `auth_rate_limits` pour les deux. Sœur de la doctrine « un chemin jamais exécuté n'est pas un chemin qui marche » (I4, `rss-novidades`).
-
-*Renvois : `supabase/functions/login/index.ts` · `supabase/functions/_shared/core/secret-key.ts` · `AUDIT_execute_authenticated_2026-09-01 (paquet 4, AR-1/AR-2)`*
-
-#### B26 — `auth_rate_limits` n'accepte que `ip` et `email` : les compteurs du géocodeur, de la cartographie et de la gazette échouent en `400` depuis leur naissance, et ne bloquent jamais
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, edge
-
-**État.** **Constaté le 16/09/2026** en lisant les logs de la table pour B25 : deux `400` sur `POST /rest/v1/auth_rate_limits?on_conflict=kind,key` le 15/09 (19 h 15 et 20 h 55 UTC), et `postgres_logs` : `23514 new row violates check constraint "auth_rate_limits_kind_check"`. La contrainte vient du socle de mai (`20260510000000`, ligne 45465) : `kind IN ('ip','email')`. Or **trois Edge Functions** réutilisent la table avec d'autres `kind` — `geocode` (`geocode_ip`, depuis `45f7dfbc`, 19/06), `submit-cartography-entry` (03/09) et `submit-gazette-contribution` (`gazette_ip`, `gazette_prefill`, GAZ-8/9, 15/09) — par le même motif copié : `select` puis `upsert`, **sans lire `error`**. En production la table ne contient que `ip` (20) et `email` (32) : aucune ligne des trois autres n'a jamais existé. Conséquence : `data` est toujours nul, `count` vaut toujours 1, **aucune de ces trois limites n'a jamais bloqué personne** ; là où l'Altcha est posé (gazette), il reste le seul frein ; le géocodeur (proxy Nominatim, appelé depuis la page publique de cartographie) n'en a aucun.
-
-*Vérifié : [object Object]*
-
-**Ce que c'est.** Une migration qui remplace la `CHECK` par la liste réelle des `kind` (`ip`, `email`, `geocode_ip`, ceux de la cartographie, `gazette_ip`, `gazette_prefill`) — ou la lève au profit d'un motif `^[a-z_]{2,32}$`, puisque la table est fermée à `anon` et `authenticated` et n'est écrite que par les fonctions ; garde : une suite SQL qui insère chaque `kind` attendu. Puis, dans les trois fonctions, lire `error` de l'`upsert` et **refuser fermé** (`500`) quand le compteur ne s'écrit pas : un frein qui ne sait pas compter ne doit pas laisser passer en silence. Le même `hit()` est copié trois fois : le remonter dans `_shared/` avec le contrôle d'erreur, une fois. La migration purge aussi les 52 lignes brutes (`ip`, `email`) de `login` : après B25 les clés sont des empreintes, ces lignes ne correspondent plus à rien.
-
-**Pourquoi ça compte.** Trois freins anti-abus qui affichent « rate limit » dans le code et n'ont jamais compté : c'est la forme de dette la plus trompeuse, celle qu'une relecture valide. Le géocodeur relaie vers le Nominatim auto-hébergé depuis une page publique — sans compteur, c'est une porte ouverte sur une machine du réseau (A3).
-
-**Ce qui compte comme fini.**
-
-- `auth_rate_limits` porte des lignes `geocode_ip`, `gazette_ip`, `gazette_prefill` et cartographie en production après un usage réel.
-- Plus aucun `23514` sur la table dans `postgres_logs` ; la suite SQL insère chaque `kind` attendu.
-- Le dépassement du seuil rend `429` — éprouvé une fois sur le géocodeur, une fois sur la gazette.
-
-**Dépendances.** Même passe que **B25**. Le géocodeur touche **A3** (Nominatim sur la machine du mainteneur) et la doctrine anti-pistage (E5). Les `kind` de la gazette sont nés le 15/09 (GAZ-8/9) : à corriger avant que la gazette s'ouvre aux contributions extérieures.
-
-*Renvois : `supabase/migrations/20260510000000_baseline_live.sql (l. 45465)` · `supabase/functions/geocode/index.ts` · `supabase/functions/submit-cartography-entry/index.ts` · `supabase/functions/submit-gazette-contribution/index.ts`*
 
 ---
 
@@ -753,7 +683,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `digital_assets.rights_status` est un **état de workflow** (`to_review`, `public_domain_confirmed`) qui commande la visibilité. Le vocabulaire des droits d'auteur porte le même nom depuis la migration `20260820235000_vocabulaire_rights_status`. Deux sens, un nom.
 
-*Vérifié : 31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Renommer la colonne de workflow — `review_state` par exemple — et propager au front et aux RPC. Le vocabulaire des droits garde le nom, puisque c'est lui qui parle de droits.
 
@@ -1247,7 +1177,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F4** | Trois bibliothèques avaient activé des rappels que personne n'envoyait | `P1` | En cours |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 | **F7** | Un transport mail sans service configuré lève ; il ne simule pas en silence | `P1` | Ouvert |
-| **F9** | SPF, DKIM et DMARC de `notifications.anarbib.org` n'ont jamais été relevés — trente-six crons envoient du courrier depuis ce domaine | `P1` | À vérifier |
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
@@ -1312,7 +1241,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **Livré** : EF `notify-loan-cycle` (quatre moments, dix locales, 120 chaînes), table `loan_cycle_notifications` avec unicité (item, moment) — sans elle un cron rejoué enverrait deux fois le même rappel —, interrupteur `reading_notes_invite_enabled` né en même temps que l'envoi qu'il gouverne, cron quotidien à 9h15 UTC, suite `rappels_echeance_tests.sql` (7 tests, dont un qui écrit).
 
-*Vérifié : 31/08 — relevé en base (36 crons relus, aucun pour le prêt aux lectrices ; 3 bibliothèques avec les deux interrupteurs à `true` ; `book_reading_notes` à zéro ligne) et dans le dépôt (l'ancien mi-parcours écrit en portugais en dur, aucune colonne de blog nulle part). Livré le jour même ; **pas encore éprouvé en envoi réel**.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Voir la CI verte, déployer, puis **éprouver pour de bon** : créer un emprunt dont l'échéance tombe à J-3 et vérifier qu'un courriel part, dans la bonne langue, une seule fois. C'est la leçon d'`I5` : ne pas livrer un envoi sans l'avoir vu partir.
 
@@ -1379,7 +1308,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 **État.** La PR #28 ajoute un transport hybride SMTP / Resend / « mock » dans `_shared/transport/email.ts` et dans les deux copies locales de `notify-library-request` et `notify-document-permission-request` : sans `SMTP_HOST` ni `RESEND_API_KEY`, `sendEmail` rend `{ok:true, mocked:true}` et journalise. C'est le cas *(a)* de `DOC-SILENCE-1`, et la forme exacte de son occurrence (1). En prod la clé Resend existe, rien ne change aujourd'hui ; le jour où le secret manque, la prod répondra 200 en n'envoyant rien. L'aiguillage SMTP/Resend, lui, est correct (`SMTP_HOST` posé ⇒ SMTP sauf `MAIL_TRANSPORT=resend`), et le client SMTP maison (`smtp.ts`) est propre. **D4 (21 h 30)** : côté installateur, la simulation devient l'option 3, jamais par défaut.
 
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Règle à demander dans la PR et à écrire dans `spec-migration-mail-resend` : le mock **uniquement** sur `MAIL_TRANSPORT=mock` explicite (c'est ce qu'`install.sh` écrit déjà pour l'option 1) ; sans configuration, lever comme avant. Et une seule implémentation : les deux `notify-*` doivent appeler `_shared/transport/email.ts` au lieu d'en porter une copie — la PR a étendu les trois.
 
@@ -1393,26 +1322,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 **Dépendances.** Relecture de la PR « code applicatif » (**I16**).
 
 *Renvois : `supabase/functions/_shared/transport/email.ts` · `REGISTRE §0 DOC-SILENCE-1` · `docs/specs/spec-migration-mail-resend.md` · `codeberg.org/anarbib/anarbib/pulls/28`*
-
-#### F9 — SPF, DKIM et DMARC de `notifications.anarbib.org` n'ont jamais été relevés — trente-six crons envoient du courrier depuis ce domaine
-
-`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Relevé le 31/08 dans la reprise : « jamais relevés ; trois `Resolve-DnsName` suffisent ; à faire avant le 10/09 ». **Le 07/09, impossible à vérifier** : ni le conteneur ni la VM de travail n'atteignent un résolveur DNS. Aucune trace ailleurs que ce relevé ne dit que c'est fait.
-
-*Vérifié : 07/09 — non vérifiable depuis ici ; aucune trace que ce soit fait.*
-
-**Ce que c'est.** Depuis PowerShell : `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, et le sélecteur DKIM affiché par le tableau de bord Resend. Coller les trois réponses ici, datées. Si DMARC manque, poser `p=none` avec une adresse de rapport avant de durcir.
-
-**Pourquoi ça compte.** Le 10/09, l'invitation de **F4** part sur ce domaine, deux jours avant Bologne. Un courrier qui tombe en indésirable ne se voit pas dans les logs — il se voit dans le silence de la lectrice.
-
-**Ce qui compte comme fini.**
-
-- Les trois enregistrements relevés et collés dans cet item, avec la date.
-
-**Dépendances.** Avant **F4** (10/09). Entre dans **F1** (audit) mais ne l'attend pas.
-
-*Renvois : `claude/REPRISE_2026-09-01_douze_jours_avant_bologne`*
 
 #### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
 
@@ -1642,7 +1551,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** **Vérifié en base le 07/09** : dans `library_team_invitations`, une invitation créée le 30/08 est toujours `ready`, expiration le 29/09 (deux autres du 01/09 sont `accepted` et `pending_ratification`). Le plan de formation du 01/09 la signalait déjà : « il faut la prévenir ». Le cron d'expiration la fermera en silence.
 
-*Vérifié : 07/09 — `ready` depuis le 30/08, expiration 29/09.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Un message à la personne invitée, par le canal humain (`DOC-COLLECTIVE-1`). Puis regarder pourquoi l'invitation par courriel n'a pas suffi — c'est **G1** en miniature.
 
@@ -1834,7 +1743,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I1** | Aligner l'image GoTrue sur l'état réel des migrations d'authentification | `P1` | Gelé |
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Gelé |
 | **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Gelé |
-| **I6** | Purger les relevés de la sonde de santé | `P2` | À vérifier |
 | **I12** | Automatiser le rafraîchissement du miroir froid | `P2` | Ouvert |
 | **I13** | Finir la bascule vers le nouveau moteur de pages | `P3` | Ouvert |
 | **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | Ouvert |
@@ -1852,7 +1760,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La production porte **77 migrations `auth`** (remesuré le 31/08), la dernière datée du 25/06. **Le constat sur l'épinglage est périmé : `deploy/.env` et `deploy/.env.example` portent tous deux `GOTRUE_TAG=v2.192.0` désormais.** Ce que v2.192.0 embarque comme migrations n'a pas été mesuré : l'alignement reste à prouver, et l'item reste gelé avec I2.
 
-*Vérifié : 31/08 — `auth.schema_migrations` : 77 ; `deploy/.env` et `.env.example` relus : `v2.192.0` des deux côtés.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Une méthode qui **se mesure et ne se devine pas** : monter d'un palier, démarrer sur un volume vierge, `select count(*) from auth.schema_migrations;`, recommencer jusqu'à atteindre au moins 77.
 
@@ -1913,28 +1821,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
 
-#### I6 — Purger les relevés de la sonde de santé
-
-`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** **Constat corrigé le 31/08 au soir : la purge existe — elle vit dans la sonde elle-même, pas dans un cron.** `health-probe/index.ts` supprime à chaque tour les relevés de plus de `RETENTION_JOURS = 30` jours (vérifié dans le source déployé, pas seulement au dépôt). Elle n'a encore jamais rien supprimé — `n_tup_del = 0` pour 16 268 insertions — pour une raison simple : la table est née le 17/08, plus jeune que sa rétention. Le relevé initial cherchait un *cron* de purge ; le dispositif était dans le corps de la fonction. La forme `DOC-RECENS-1`, une fois de plus — et écrire le cron demandé aurait fait une purge en double.
-
-*Vérifié : 31/08 — source déployé de `health-probe` relu (`RETENTION_JOURS = 30`, purge en fin de tour) ; `pg_stat_user_tables` : 16 268 insertions, **0 suppression**, plus ancien relevé du 17/08 — la naissance de la table, pas un effet de purge. Premier effet attendu vers le **16/09** : c'est là que le constat se prouve. **03/09** — relevé : 19 396 relevés, le plus ancien toujours du 17/08 14:36 UTC, aucune suppression (`n_tup_del = 0` — les compteurs ont été remis à zéro par le redémarrage du 02/09, `n_tup_ins = 724` depuis) ; source déployé relu, `RETENTION_JOURS = 30` inchangé. Rien à faire avant le 16/09 : c'est la date où le constat se prouve. **15/09, 21 h** — 33 628 relevés, le plus ancien toujours du 17/08 14:36 UTC, `n_tup_del = 0` : la purge à 30 jours n'a encore rien supprimé. **Le 16/09 est demain** : si le plus ancien relevé date encore du 17/08 le 17/09 au matin, la purge ne fait pas ce que son source dit.*
-
-**Ce que c'est.** Un cron de purge sur le modèle de `anarbib-catalog-audit-snapshot-purge`, avec une rétention à décider — trente jours suffisent probablement, les incidents étant conservés à part dans `service_health_incidents`.
-
-**Pourquoi ça compte.** C'est la table la plus volumineuse de la base, et elle ne contient que du bruit dont l'utile a déjà été extrait. À ce rythme elle atteindra cent mille lignes avant la fin de l'année, ce qui alourdira chaque sauvegarde pour rien.
-
-**Ce qui compte comme fini.**
-
-- ~~Un cron de purge existe, avec une rétention écrite~~ — la purge existe depuis l'origine, dans la fonction elle-même, rétention écrite de 30 jours ; le cron demandé aurait fait doublon.
-- ~~`service_health_incidents` n'est pas touchée par la purge~~ — vérifié : la purge ne vise que `service_health_probes`.
-- La purge a supprimé pour de vrai : `n_tup_del > 0`, à relever après le 16/09.
-
-**Dépendances.** Aucune.
-
-*Renvois : `Relevé du 29/08/2026` · `REGISTRE §38 OPS`*
-
 #### I12 — Automatiser le rafraîchissement du miroir froid
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
@@ -1962,7 +1848,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** L'étape 0 est concluante depuis le 20/08 : `test.anarbib.org` est servi par le nouveau moteur en parallèle. La chaîne d'intégration continue utilise déjà l'action `git-pages`. **Codeberg Pages en version historique est en mode maintenance, pas en fin de vie** — la documentation dit qu'il continuera de fonctionner indéfiniment. D'où la priorité basse.
 
-*Vérifié : 31/08 — une partie du nettoyage est déjà faite : la branche `pages` n'existe plus sur la forge, `public/.domains` a disparu, et `public/CNAME` est bien préservé. Restent à confirmer le service lui-même et les secrets devenus inutiles.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Poser l'enregistrement TXT de liste blanche, créer `public/_redirects` avec la règle de réécriture, vérifier qu'une route inconnue renvoie 200 avec le bon contenu, puis nettoyer **seulement après** vérification verte.
 
@@ -2659,6 +2545,11 @@ CI verte : lint et suite unitaire. |
 | E21 | 2026-09-15 | **La série de numéros d'inventaire et la cote d'une bibliothèque se règlent depuis l'écran ; un lot reçoit ses cotes et ses classes de rangement en un geste — livré et en production le soir même** (registre §12 `CAT-E17`, migration `20260915201252`, commit `f7bf927c`). Ouvert et clos le même jour, sur la question de Xavier « comment font-ils pour s'y retrouver avec des numéros d'inventaire dans l'ordre d'apparition ? ». Trois gestes, dans le patron proposé pour les numéros d'inventaire — une convention, un aperçu, une application, une trace : **(1)** bloc « Numérotation » dans Biblioteca › Identité et, pour l'admin, sous chaque bibliothèque de la page Réseau — préfixe, année, séparateur, remplissage, cote, exemple rendu en direct, prochain et dernier numéro ; gardes serveur : préfixe obligatoire sans `%` ni `_`, **unique dans le réseau** (préfixes déclarés et séries héritées des exemplaires, « SOL » et « SOL- » refusés l'un pour l'autre), **figé** dès qu'un exemplaire l'a utilisé ; **(2)** « Cotes manquantes » sur un lot ouvert : aperçu puis application, dans l'ordre du lot, à la suite des cotes existantes (notices, holdings, brouillons vivants), sous verrou par préfixe ; **(3)** « Classer par rubriques » : la rubrique lue là où l'import l'a laissée — pour Solidaires, `assunto_local` de la charge utile brute, puisque le run 29 n'a lié aucun sujet —, table rubrique → code relue par la coordination, `cdd` écrit sur les brouillons sans classe. Suite SQL de 14 tests, 101 suites vertes, 486 tests JS, 57 clés en dix locales. **Reste aux personnes** : choisir le préfixe de Solidaires (Réseau › Numérotation), attribuer les 1 673 cotes, remplir la table des 35 rubriques, activer la bibliothèque, puis la révision du lot (`catalog_batch_reviews`). |
 | G7 | 2026-09-15 | **Solidaires est admise** — décision de Xavier du 15/09/2026 au soir, en mode « seul·e admin » (spec-onboarding §2.6), à défaut de co-administrateur·rices trouvé·es à Bologne (registre §1 `RES-D12` amendé, v0.34). Ce que la fiche attendait de l'admission est arrivé le même soir par `IMP-20` et `CAT-E17` : bibliothèque active, série d'inventaire `SOL-` + millésime, 1 673 brouillons attribués et cotés, coordination Christian. Le périmètre d'admission (`RES-Q13`) reste à porter en AG : Solidaires y entre comme cas, pas comme règle. |
 | B19 | 2026-09-16 | **La HS256 est révoquée** — geste de Xavier le 15/09 à 22 h 14 (20 h 14 UTC), Settings → JWT Keys → Revoke. **Premier contrôle, 24 h après** (tâche `anarbib-trafic-cles-legacy`, relevé du 16/09) : aucun 401 sur une connexion utilisateur — 1 144 réponses 200, 20 en 204, 12 en 206, tous les jetons de session en ES256 avant comme après ; recoupé sur les logs edge : 0 × 401 sur `/rest/v1/` en 24 h hors les quatre de bingbot du 16/09 à 15 h 19 (robot sans clé, ni ancienne ni nouvelle). Seul reste en HS256 le compte `supabase_admin` de `@supabase-infra/mgmt-api` sur `/admin/v1/network-bans/retrieve`, toujours en 200 — l'infrastructure de Supabase, pas l'application. Les trois anomalies vues au passage ne viennent pas de la révocation et ont chacune leur cause : les `403` sur `DELETE auth_rate_limits` (**B25**, depuis mai), les `400` sur `GET gazette_submissions` du 15/09 à 21 h 09–21 h 11 UTC (le front de GAZ-9 publié par le job `app` quelques minutes **avant** que le job `backend` applique la migration qui ajoute `staff_edited_at`/`original_*` — l'ordre normal de la CI, transitoire), et les `400` sur `POST auth_rate_limits` (**B26**). **Les quatre parcours (connexion, inscription, récupération du mot de passe, document numérique) ont été testés par Xavier le 16/09 : ils fonctionnent.** La tâche `anarbib-trafic-cles-legacy` a été supprimée le même jour. |
+| B25 | 2026-09-16 | **Livré le 16/09 au soir** (`af60bc49`, Edge Function `login` redéployée par la CI à 22 h 27, marqueur `deployed-functions` sur ce commit). Deux clients : celui de la clé secrète ne se connecte jamais (il lit, écrit et supprime les compteurs), un second, créé pour `signInWithPassword` seul, porte la session de la personne — le `DELETE` de `clearFailures` repart en `service_role`. Les clés sont des empreintes `sha256Hex` (IP, courriel en minuscules) : plus d'adresse ni de courriel dans la table, ni dans la query string du `DELETE` que traversent les journaux edge. Chaque erreur du magasin est journalisée ; un compteur illisible ferme (500). Banc `login-compteurs-haches` (6 tests : client à part, empreintes partout, `42501` journalisé, porte fermée). **Vérifié en production** : `auth_rate_limits` purgée (52 lignes brutes → 0), contrainte `auth_rate_limits_key_empreinte` posée. Reste à voir passer la première connexion réelle : un `DELETE` en 204 dans les logs edge, plus aucun `42501` dans `postgres_logs`. |
+| B26 | 2026-09-16 | **Livré le 16/09 au soir** (`af60bc49`, migration `20260916201249` appliquée par la CI : prod 321 = dépôt 321). `_shared/core/rate-limit.ts` remplace le `hit()` copié trois fois : fenêtre fixe qui repart de 1 (l'ancien, une fois la limite atteinte, re-bloquait à chaque frappe — pour toujours), clé obligatoirement une empreinte, **échec fermé** (`frapper` lève, `freiner` répond 500 `rate_limit_unavailable`). `geocode`, `submit-cartography-entry` et `submit-gazette-contribution` l'utilisent ; `gazette_email` est haché. **Vérifié en production** : la `CHECK` de `kind` liste les sept kinds réels (`ip`, `email`, `geocode_ip`, `carto_ip`, `gazette_ip`, `gazette_email`, `gazette_prefill`), une seconde `CHECK` exige une empreinte de 64 hexadécimaux, la table est vide (lignes brutes purgées). Suite `compteurs_d_abus_tests` (4 tests, en CI) et banc `compteurs-d-abus-partages` (7 tests) ; 509 tests JS verts. Première ligne `geocode_ip` ou `gazette_ip` à voir apparaître au premier usage réel. |
+| F9 | 2026-09-16 | **Relevé le 16/09/2026 à 22 h 30 (UTC+2), depuis le poste (`nslookup`)** — les trois enregistrements existent. **SPF** : `send.notifications.anarbib.org` TXT `v=spf1 include:amazonses.com ~all` (Resend envoie depuis le sous-domaine `send.`, c'est là que vit le SPF ; `notifications.anarbib.org` lui-même n'a pas de TXT, ce qui est attendu), MX `10 feedback-smtp.eu-west-1.amazonses.com`. **DKIM** : `resend._domainkey.notifications.anarbib.org` TXT `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5Uxzm…` (clé RSA publiée, sélecteur `resend`). **DMARC** : `_dmarc.notifications.anarbib.org` TXT `v=DMARC1; p=none; rua=mailto:admins@anarbib.org` — politique d'observation avec rapports vers les admins, la forme prudente que l'item demandait avant de durcir. Rien à poser ; durcir vers `p=quarantine` est une décision à part, après lecture des rapports `rua`. |
+| I6 | 2026-09-16 | **Prouvé le 16/09/2026, à la date que l'item fixait.** `service_health_probes` : 34 568 lignes, la plus ancienne du **17/08 à 20 h 30 UTC**, la plus récente du 16/09 à 20 h 25 — et **zéro ligne de plus de trente jours**. La borne basse a avancé de trente jours en trente jours : la purge intégrée à `health-probe` supprime pour de vrai (le compteur `n_tup_del` de `pg_stat`, remis à zéro le 02/09, ne pouvait pas le dire ; le comptage direct le dit). `service_health_incidents` n'est pas touchée. Aucun cron à ajouter. |
+| A2 | 2026-09-16 | **Clos le 16/09/2026, décision de Xavier.** La reconstruction par quelqu'un d'autre que le mainteneur a eu lieu : **Bastien** (compte `ASR2026`, première contribution extérieure) a monté la pile chez lui depuis le dépôt seul, en a écrit l'installateur (`install.sh`, PR #28, **fusionnée le 15/09** — `f179f1ff`) et consigné ce qui cassait dans ses commits (`pg_cron` absent au démarrage, schéma à initialiser sous `supabase_admin`, `GRANT` sur `supabase_migrations`, `LANG_CODE`, port 5173…), puis le mainteneur a relu et fusionné **depuis cette installation** — ses forks partent d'un AnarBib qui tourne chez lui. Les écarts structurels trouvés en chemin ont leurs notes (`CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`, `NOTE_experience-I17-rejeu-fidele_2026-09-07`, `DOC-GRANT-2/3`). Ce que la fiche voulait en plus — le journal d'exécution comme section de `deploy/README.md` — est posé le 16/09 (§ « Première reconstruction extérieure »). L'entrée 1 de `CHANTIERS_OUVERTS` reste à réécrire par le mainteneur : **J4**. |
 
 ---
 
@@ -2690,4 +2581,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-16. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 90 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fe0cedf1` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-16. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 85 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fe0cedf1` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-16** · 90 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-16** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -15,15 +15,15 @@
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
-    - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 4
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 8
+    - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 14
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 14
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 9
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
 
-**Frescor dos constatos em 2026-09-16.** **73 itens de 90** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B22, B23, B24, B25, B26, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-16.** **69 itens de 85** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -290,7 +290,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **A1** | Obter pelo menos duas outras pessoas administradoras de rede | `P0` | Decisão coletiva |
-| **A2** | Testar a reconstrução completa por outra pessoa que não o mantenedor | `P0` | Aberto |
 | **A3** | Tirar o runner de integração contínua da máquina do mantenedor | `P0` | Aberto |
 | **A4** | Acolher uma contribuição externa sem a perder nem se afogar nela | `P1` | Em curso |
 
@@ -315,28 +314,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Bloqueia **G7** (decisão sobre SOLIDAIRES) e condiciona **A2**.
 
 *Remissões : `docs/CHANTIERS_OUVERTS.md §7` · `REGISTRE §1 RES-D11` · `CALENDRIER_bologne_2026-08-27`*
-
-#### A2 — Testar a reconstrução completa por outra pessoa que não o mantenedor
-
-`P0` Estrutural · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas, SQL / PostgreSQL, React / JavaScript
-
-**Estado.** Nunca feito. `deploy/README.md`, `deploy/REPETITION.md` e `deploy/bootstrap.sh` existem e foram executados — **apenas na máquina do mantenedor**.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Clonar o repositório numa máquina de terceiro, subir a pilha completa seguindo `deploy/README.md`, e escrever o que quebra. Nenhum segredo, nenhum acesso, nenhuma coordenação: a pilha se reconstrói a partir do repositório sozinho. Docker, uma máquina, uma noite.
-
-**Por que importa.** É a resposta à única pergunta que decide todo o resto: *este projeto é retomável por outra pessoa além de quem o escreveu?* Um relatório de falha detalhado vale aqui mais que uma correção: é a lista do que só funciona numa única máquina.
-
-**O que conta como terminado.**
-
-- A pilha sobe numa máquina que nunca viu o projeto, seguindo apenas a documentação.
-- Cada divergência entre a documentação e a realidade é registrada, com seu comando e sua mensagem de erro.
-- O diário de execução vira uma seção de `deploy/README.md`.
-
-**Dependências.** Nenhuma. **É o melhor primeiro passo para quem chega.**
-
-*Remissões : `docs/CHANTIERS_OUVERTS.md §1` · `deploy/REPETITION.md`*
 
 #### A3 — Tirar o runner de integração contínua da máquina do mantenedor
 
@@ -366,7 +343,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide. **Decidido em 06/09 à noite (Xavier): A** — as três regras e a contrapartida do mantenedor estão em `CONTRIBUTING.md` (fr e en, as duas línguas do arquivo) (`DOC-CONTRIB-1` ✅). Falta: a PR #28 dividida segundo essas regras.
 
-*Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Escrever em `CONTRIBUTING.md` três regras curtas: uma PR = um assunto; código de produção em PR separada da ferramentaria; durante uma releitura, commits adicionados, nunca force-push. E dizer o que o mantenedor promete: um primeiro retorno em uma semana.
 
@@ -395,8 +372,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Em curso |
 | **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
-| **B25** | `login`: a reposição a zero dos contadores de falha parte com o token da pessoa (403 a cada conexão bem-sucedida desde maio), e a tabela guarda IP e e-mail em claro | `P2` | Aberto |
-| **B26** | `auth_rate_limits` só aceita `ip` e `email`: os contadores do geocodificador, da cartografia e da gazeta falham em `400` desde que nasceram, e nunca bloqueiam | `P2` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -449,7 +424,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `secret-key.ts` retirou em 02/09 o fallback para `SUPABASE_SERVICE_ROLE_KEY`, com um comentário explicando. A PR #28 o reintroduz de boa-fé. Um comentário não bastou; a chave legada está desativada em produção.
 
-*Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Uma guarda em `scripts/ci/` (grep em `supabase/functions/**`: nenhum `SUPABASE_SERVICE_ROLE_KEY` fora da lista fechada) e uma linha em `CONTRIBUTING.md`. Pedir a retirada na PR #28.
 
@@ -526,51 +501,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Não bloqueia mais **B19** (levantado em 15/09: o inventário está feito e verificado, e a revogação é reversível); os dois gestos protegem a rotação seguinte. Repositório `pages`: o congelamento acabou em 14/09.
 
 *Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
-
-#### B25 — `login`: a reposição a zero dos contadores de falha parte com o token da pessoa (403 a cada conexão bem-sucedida desde maio), e a tabela guarda IP e e-mail em claro
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : edge
-
-**Estado.** **Constatado em 16/09/2026** no primeiro controlo depois da revogação HS256: quatro `403` em `DELETE /rest/v1/auth_rate_limits` em 24 h, todos da Edge Function `login`, sempre **logo depois** de dois `GET` em 200 na mesma tabela, e `postgres_logs` diz `42501 permission denied for table auth_rate_limits`. Leitura do corpo: `login` cria **um único** cliente com a chave secreta (linha 241), usa-o para `isRateLimited` (service_role, 200), depois chama `supabase.auth.signInWithPassword` **nesse mesmo cliente** (linha 311) — o supabase-js põe então a sessão da pessoa no cliente, e `clearFailures` (linha 324, o `DELETE`) parte com o token ES256 **dela**, logo no papel `authenticated`, que não tem GRANT nenhum na tabela. Presente desde o nascimento da função (`ceb8f6ec`, 05/05). Efeito: os contadores de falha **nunca** são repostos a zero depois de um sucesso, e um erro de permissão silencioso a cada conexão bem-sucedida, invisível porque `clearFailures` não inspeciona `error`. **Segunda constatação, no mesmo dia**: `login` é a única das quatro funções que escrevem em `auth_rate_limits` a pôr lá a chave **em claro** — o endereço IP e o e-mail — onde `geocode`, `submit-cartography-entry` e `submit-gazette-contribution` fazem o hash SHA-256 do IP antes de escrever. E como o `DELETE` filtra por `key = <e-mail>`, o e-mail parte **na URL** do pedido PostgREST, logo nos registos edge da Supabase (relidos em 16/09 para este diagnóstico: IP e e-mail da última pessoa conectada, legíveis em claro).
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** **Decidido por Xavier em 16/09: a chave passa por hash.** Três gestos em `login`, uma só passagem. **(1)** Dois clientes: o da chave secreta para `auth_rate_limits` (leitura, escrita, `DELETE`), e um cliente descartável com a chave publicável, `persistSession: false`, para `signInWithPassword` — a sessão devolvida ao front vem deste segundo cliente. **(2)** A chave dos contadores passa a ser uma impressão: `sha256Hex(ip)` e `sha256Hex(lower(email))`, a mesma função que `geocode` (a subir para `_shared/` com o `hit()` de B26) — mais nenhum IP nem e-mail na tabela, mais nenhum e-mail na URL do `DELETE`, e o contador comporta-se exatamente igual. As 52 linhas em claro atuais purgam-se na migração de B26. **(3)** `clearFailures` lê `error` e regista-o. Bancada: o modelo `src/tests/gazette-monthly-build.test.js` — o `DELETE` leva a chave secreta e nunca um `Bearer` de sessão, e a sua query string não contém `@` nem um IP. **Ao lado**: uma linha no registo de tratamentos e em `privacy.s6` sobre os registos técnicos da plataforma.
-
-**Por que importa.** O rate limit da conexão é a única barreira contra a força bruta em `/login`. Um contador que nunca desce castiga as pessoas desajeitadas, não os robôs — e um erro de permissão que roda em silêncio há quatro meses é exatamente o que uma auditoria das DEFINER não vê: o defeito está no cliente, não na base. E uma tabela de segurança não precisa de saber *quem*: uma impressão chega para contar, e não deixa fugir nada nos registos.
-
-**O que conta como terminado.**
-
-- Uma conexão bem-sucedida produz um `DELETE` em 204 em `auth_rate_limits`, e mais nenhum `42501` nessa tabela.
-- Quatro falhas e um sucesso: a linha da pessoa desapareceu da tabela.
-- `select key from auth_rate_limits` só devolve impressões hexadecimais de 64 caracteres — nenhum IP, nenhum `@`; a query string do `DELETE` nos registos edge também não.
-- Uma bancada vitest prova os três pontos: chave secreta no `DELETE`, nunca um `Bearer` de sessão, chave com hash.
-
-**Dependências.** Mesma tabela que **B26**: uma só passagem em `auth_rate_limits` para os dois.
-
-*Remissões : `supabase/functions/login/index.ts` · `supabase/functions/_shared/core/secret-key.ts` · `AUDIT_execute_authenticated_2026-09-01 (paquet 4, AR-1/AR-2)`*
-
-#### B26 — `auth_rate_limits` só aceita `ip` e `email`: os contadores do geocodificador, da cartografia e da gazeta falham em `400` desde que nasceram, e nunca bloqueiam
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, edge
-
-**Estado.** **Constatado em 16/09/2026** ao ler os logs da tabela para B25: dois `400` em `POST /rest/v1/auth_rate_limits?on_conflict=kind,key` em 15/09, e `postgres_logs`: `23514 new row violates check constraint "auth_rate_limits_kind_check"`. A restrição vem da base de maio (`20260510000000`): `kind IN ('ip','email')`. Ora **três Edge Functions** reutilizam a tabela com outros `kind` — `geocode` (`geocode_ip`, 19/06), `submit-cartography-entry` (03/09) e `submit-gazette-contribution` (`gazette_ip`, `gazette_prefill`, 15/09) — pelo mesmo padrão copiado: `select` e `upsert`, **sem ler `error`**. Em produção a tabela só contém `ip` (20) e `email` (32). Consequência: `data` é sempre nulo, `count` vale sempre 1, **nenhum destes três limites bloqueou alguma vez alguém**.
-
-*Verificado : [object Object]*
-
-**O que é.** Uma migração que substitui a `CHECK` pela lista real dos `kind` — ou a levanta a favor de um padrão `^[a-z_]{2,32}$`, já que a tabela está fechada a `anon` e `authenticated`; guarda: uma suíte SQL que insere cada `kind` esperado. Depois, nas três funções, ler `error` do `upsert` e **recusar fechado** (`500`) quando o contador não se escreve. O mesmo `hit()` está copiado três vezes: subi-lo para `_shared/` com o controlo de erro, uma vez. A migração purga também as 52 linhas em claro (`ip`, `email`) de `login`: depois de B25 as chaves são impressões, essas linhas já não correspondem a nada.
-
-**Por que importa.** Três travões anti-abuso que mostram « rate limit » no código e nunca contaram: é a forma de dívida mais enganadora, a que uma releitura valida. O geocodificador retransmite para o Nominatim auto-hospedado a partir de uma página pública — sem contador, é uma porta aberta.
-
-**O que conta como terminado.**
-
-- `auth_rate_limits` tem linhas `geocode_ip`, `gazette_ip`, `gazette_prefill` e cartografia em produção depois de um uso real.
-- Mais nenhum `23514` na tabela; a suíte SQL insere cada `kind` esperado.
-- Passar o limiar devolve `429` — provado no geocodificador e na gazeta.
-
-**Dependências.** Mesma passagem que **B25**. O geocodificador toca **A3** e a doutrina anti-rastreio (E5).
-
-*Remissões : `supabase/migrations/20260510000000_baseline_live.sql (l. 45465)` · `supabase/functions/geocode/index.ts` · `supabase/functions/submit-cartography-entry/index.ts` · `supabase/functions/submit-gazette-contribution/index.ts`*
 
 ---
 
@@ -753,7 +683,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `digital_assets.rights_status` é um **estado de workflow** (`to_review`, `public_domain_confirmed`) que comanda a visibilidade. O vocabulário de direitos autorais leva o mesmo nome desde a migração `20260820235000_vocabulaire_rights_status`. Dois sentidos, um nome.
 
-*Verificado : 31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Renomear a coluna de workflow — `review_state` por exemplo — e propagar ao front e às RPC. O vocabulário de direitos guarda o nome, já que é ele que fala de direitos.
 
@@ -1241,7 +1171,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F7** | Um transporte de e-mail sem serviço configurado falha; não simula em silêncio | `P1` | Aberto |
-| **F9** | SPF, DKIM e DMARC de `notifications.anarbib.org` nunca foram levantados — trinta e seis crons enviam e-mail a partir desse domínio | `P1` | A verificar |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
@@ -1298,7 +1227,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Instruído e entregue em 31/08.** Os lembretes não existiam — mas **os interruptores que os comandam existiam**, e as três bibliotecas com política tinham-nos a `true` sem o saber. Seis momentos passam a **três** (`DOC-RAPPEL-1`). Um quarto envio substitui `notify-mid-loan-reading`, que perguntava «Como vai a leitura?» **em português fixo**: agora convida a deixar uma **nota de leitura sob pseudónimo** no catálogo. **Entregue**: EF `notify-loan-cycle`, tabela `loan_cycle_notifications` com unicidade (item, momento), suíte `rappels_echeance_tests.sql`.
 
-*Verificado : 31/08 — levantamento em base e no repositório. Entregue no mesmo dia; **ainda não provado em envio real**.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Ver a CI verde, implantar, depois **provar a sério**: criar um empréstimo com vencimento a J-3 e verificar que um e-mail parte, na língua certa, uma só vez.
 
@@ -1365,7 +1294,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 **Estado.** A PR #28 adiciona um transporte híbrido SMTP / Resend / « mock »: sem `SMTP_HOST` nem `RESEND_API_KEY`, `sendEmail` devolve `{ok:true, mocked:true}`. É o caso (a) de `DOC-SILENCE-1`. Em produção nada muda hoje; no dia em que o segredo faltar, a produção responderá 200 sem enviar nada. **D4 (21h30)**: no instalador, a simulação vira opção 3, nunca padrão.
 
-*Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Regra a pedir na PR e escrever na spec: mock **só** com `MAIL_TRANSPORT=mock` explícito; sem configuração, falhar como antes. E uma única implementação: os dois `notify-*` devem chamar `_shared/transport/email.ts` em vez de copiar.
 
@@ -1379,26 +1308,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 **Dependências.** Releitura da PR « código aplicativo » (I16).
 
 *Remissões : `supabase/functions/_shared/transport/email.ts` · `REGISTRE §0 DOC-SILENCE-1` · `docs/specs/spec-migration-mail-resend.md` · `codeberg.org/anarbib/anarbib/pulls/28`*
-
-#### F9 — SPF, DKIM e DMARC de `notifications.anarbib.org` nunca foram levantados — trinta e seis crons enviam e-mail a partir desse domínio
-
-`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** Levantado em 31/08 na retomada: «nunca levantados; três `Resolve-DnsName` bastam; a fazer antes de 10/09». **Em 07/09, impossível verificar**: nem o contêiner nem a VM de trabalho alcançam um resolvedor DNS. Nenhum rastro além desse levantamento diz que foi feito.
-
-*Verificado : 07/09 — não verificável daqui; nenhum rastro de que tenha sido feito.*
-
-**O que é.** No PowerShell: `Resolve-DnsName notifications.anarbib.org -Type TXT`, `Resolve-DnsName _dmarc.notifications.anarbib.org -Type TXT`, e o seletor DKIM mostrado pelo painel Resend. Colar as três respostas aqui, datadas. Se faltar DMARC, pôr `p=none` com endereço de relatório antes de endurecer.
-
-**Por que importa.** Em 10/09, o convite de **F4** sai por esse domínio, dois dias antes de Bolonha. Um e-mail que cai em spam não aparece nos logs — aparece no silêncio da leitora.
-
-**O que conta como terminado.**
-
-- Os três registros levantados e colados neste item, com a data.
-
-**Dependências.** Antes de **F4** (10/09). Entra em **F1** (auditoria) mas não a espera.
-
-*Remissões : `claude/REPRISE_2026-09-01_douze_jours_avant_bologne`*
 
 #### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
 
@@ -1628,7 +1537,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** **Verificado no banco em 07/09**: em `library_team_invitations`, um convite criado em 30/08 continua `ready`, expira em 29/09 (dois outros de 01/09 estão `accepted` e `pending_ratification`). O plano de formação de 01/09 já o sinalizava: «é preciso avisá-la». O cron de expiração vai fechá-lo em silêncio.
 
-*Verificado : 07/09 — `ready` desde 30/08, expira em 29/09.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Uma mensagem à pessoa convidada, pelo canal humano (`DOC-COLLECTIVE-1`). Depois olhar por que o convite por e-mail não bastou — é **G1** em miniatura.
 
@@ -1820,7 +1729,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I1** | Alinhar a imagem GoTrue com o estado real das migrações de autenticação | `P1` | Congelado |
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Congelado |
 | **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Congelado |
-| **I6** | Purgar os registros da sonda de saúde | `P2` | A verificar |
 | **I12** | Automatizar a atualização do espelho frio | `P2` | Aberto |
 | **I13** | Terminar a migração para o novo motor de páginas | `P3` | Aberto |
 | **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | Aberto |
@@ -1838,7 +1746,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A produção traz **77 migrações `auth`** (remedido em 31/08). **O constato sobre a fixação caducou: `deploy/.env` e `.env.example` trazem ambos `GOTRUE_TAG=v2.192.0`.** O que a v2.192.0 embarca não foi medido: o alinhamento continua por provar.
 
-*Verificado : 31/08 — `auth.schema_migrations`: 77; `deploy/.env` e `.env.example` relidos: `v2.192.0` dos dois lados.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Um método que **se mede e não se adivinha**: subir um patamar, iniciar num volume virgem, `select count(*) from auth.schema_migrations;`, recomeçar até atingir pelo menos 77.
 
@@ -1899,28 +1807,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
 
-#### I6 — Purgar os registros da sonda de saúde
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** **Constato corrigido em 31/08 à noite: a purga existe — vive na própria sonda, não num cron.** `health-probe` apaga a cada volta os registros com mais de 30 dias (verificado no código implantado). Nunca apagou nada (`n_tup_del = 0` para 16 268 inserções): a tabela nasceu em 17/08, mais jovem que sua retenção. O levantamento procurava um *cron*; o dispositivo estava no corpo da função — `DOC-RECENS-1` de novo. Escrever o cron pedido teria feito uma purga em dobro.
-
-*Verificado : 31/08 — código implantado relido (retenção 30 dias); `pg_stat_user_tables`: 16 268 inserções, **0 supressão**, mais antigo de 17/08 — nascimento da tabela, não efeito de purga. Primeiro efeito esperado por volta de **16/09**. **03/09** — 19 396 registos, o mais antigo de 17/08, nenhuma supressão; `RETENTION_JOURS = 30`. Nada a fazer antes de 16/09. **15/09** — 33 628 sondas, a mais antiga de 17/08, `n_tup_del = 0`. Amanhã é 16/09 : se em 17/09 a mais antiga ainda for de 17/08, a purga não faz o que o código diz.*
-
-**O que é.** Um cron de purga no modelo de `anarbib-catalog-audit-snapshot-purge`, com uma retenção a decidir — trinta dias provavelmente bastam, já que os incidentes são conservados à parte em `service_health_incidents`.
-
-**Por que importa.** É a tabela mais volumosa do banco, e só contém ruído do qual o útil já foi extraído. Nesse ritmo alcançará cem mil linhas antes do fim do ano, o que pesará em cada backup à toa.
-
-**O que conta como terminado.**
-
-- ~~Um cron de purga existe, com uma retenção escrita~~ — a purga existe desde a origem, na própria função, retenção de 30 dias; o cron pedido faria dobro.
-- ~~`service_health_incidents` não é tocada pela purga~~ — verificado: a purga só visa `service_health_probes`.
-- A purga apagou de verdade: `n_tup_del > 0`, a levantar depois de 16/09.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `Relevé du 29/08/2026` · `REGISTRE §38 OPS`*
-
 #### I12 — Automatizar a atualização do espelho frio
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
@@ -1948,7 +1834,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A etapa 0 é conclusiva desde 20/08: `test.anarbib.org` é servido pelo novo motor em paralelo. A cadeia de integração contínua já usa a ação `git-pages`. **O Codeberg Pages em versão histórica está em modo de manutenção, não em fim de vida** — a documentação diz que continuará funcionando indefinidamente.
 
-*Verificado : 31/08 — parte da limpeza já está feita: o branch `pages` não existe mais, `public/.domains` sumiu, `public/CNAME` preservado.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Colocar o registro TXT de lista branca, criar `public/_redirects` com a regra de reescrita, verificar que uma rota desconhecida retorna 200 com o conteúdo certo, depois limpar **somente após** verificação verde.
 
@@ -2635,6 +2521,11 @@ CI verde. |
 | E21 | 2026-09-15 | **A série de tombos e a cota de uma biblioteca configuram-se no ecrã ; um lote recebe as suas cotas e as suas classes de arrumação num só gesto — entregue e em produção na mesma noite** (registo §12 `CAT-E17`, migração `20260915201252`). Três gestos, no padrão proposto para os tombos — convenção, pré-visualização, aplicação, rasto : bloco « Numeração » (Biblioteca e Rede ; prefixo único na rede, congelado após uso), « Cotas em falta » num lote (na ordem do lote, a seguir às existentes), « Classificar por rubricas » (rubrica lida onde a importação a deixou — `assunto_local` para Solidaires —, tabela rubrica → código relida pela coordenação). 14 testes SQL, 101 suites verdes. **Fica às pessoas** : o prefixo de Solidaires, as 1 673 cotas, a tabela das 35 rubricas, a ativação, depois a revisão do lote. |
 | G7 | 2026-09-15 | **Solidaires está admitida** — decisão de Xavier em 15/09/2026, em modo « só admin », à falta de co-administradores encontrados em Bolonha (registo `RES-D12` alterado, v0.34). Biblioteca ativa, série de tombo `SOL-`, 1 673 rascunhos atribuídos e cotados. O perímetro de admissão (`RES-Q13`) continua para a AG. |
 | B19 | 2026-09-16 | **A HS256 está revogada** — gesto de Xavier em 15/09 às 22h14 (20h14 UTC), Settings → JWT Keys → Revoke. **Primeiro controlo, 24 h depois** (tarefa `anarbib-trafic-cles-legacy`, levantamento de 16/09): nenhum 401 numa conexão de usuário — 1 144 respostas 200, 20 em 204, 12 em 206, todos os tokens de sessão em ES256 antes como depois; cruzado com os logs edge: 0 × 401 em `/rest/v1/` em 24 h fora os quatro do bingbot de 16/09 às 15h19 (robô sem chave, nem antiga nem nova). Só resta em HS256 a conta `supabase_admin` de `@supabase-infra/mgmt-api` em `/admin/v1/network-bans/retrieve`, sempre em 200 — a infraestrutura da Supabase, não a aplicação. As três anomalias vistas de passagem não vêm da revogação e têm cada uma a sua causa: os `403` em `DELETE auth_rate_limits` (**B25**, desde maio), os `400` em `GET gazette_submissions` de 15/09 às 21h09–21h11 UTC (o front de GAZ-9 publicado pelo job `app` alguns minutos **antes** de o job `backend` aplicar a migração que acrescenta `staff_edited_at`/`original_*` — a ordem normal da CI, transitório) e os `400` em `POST auth_rate_limits` (**B26**). **Os quatro percursos (conexão, inscrição, recuperação de senha, documento digital) foram testados por Xavier em 16/09: funcionam.** A tarefa `anarbib-trafic-cles-legacy` foi apagada no mesmo dia. |
+| B25 | 2026-09-16 | **Entregue em 16/09 à noite** (`af60bc49`, Edge Function `login` reimplantada pela CI às 22h27). Dois clientes: o da chave secreta nunca se conecta (lê, escreve e apaga os contadores), um segundo, criado só para `signInWithPassword`, leva a sessão da pessoa — o `DELETE` de `clearFailures` volta a partir em `service_role`. As chaves são impressões `sha256Hex` (IP, e-mail em minúsculas): mais nenhum endereço nem e-mail na tabela, nem na query string do `DELETE` que atravessa os registos edge. Cada erro do armazém é registado; um contador ilegível fecha (500). Bancada `login-compteurs-haches` (6 testes). **Verificado em produção**: `auth_rate_limits` purgada (52 linhas em claro → 0), restrição `auth_rate_limits_key_empreinte` posta. Falta ver passar a primeira conexão real: um `DELETE` em 204 nos registos edge, mais nenhum `42501` em `postgres_logs`. |
+| B26 | 2026-09-16 | **Entregue em 16/09 à noite** (`af60bc49`, migração `20260916201249` aplicada pela CI: prod 321 = repositório 321). `_shared/core/rate-limit.ts` substitui o `hit()` copiado três vezes: janela fixa que recomeça em 1, chave obrigatoriamente uma impressão, **falha fechada** (`frapper` lança, `freiner` responde 500). `geocode`, `submit-cartography-entry` e `submit-gazette-contribution` usam-no; `gazette_email` passa por hash. **Verificado em produção**: a `CHECK` de `kind` lista os sete kinds reais, uma segunda `CHECK` exige uma impressão de 64 hexadecimais, a tabela está vazia (linhas em claro purgadas). Suíte `compteurs_d_abus_tests` (4 testes, na CI) e bancada `compteurs-d-abus-partages` (7 testes); 509 testes JS verdes. |
+| F9 | 2026-09-16 | **Levantado em 16/09/2026 às 22h30 (UTC+2), a partir do posto (`nslookup`)** — os três registos existem. **SPF**: `send.notifications.anarbib.org` TXT `v=spf1 include:amazonses.com ~all` (a Resend envia a partir do subdomínio `send.`, é lá que vive o SPF), MX `10 feedback-smtp.eu-west-1.amazonses.com`. **DKIM**: `resend._domainkey.notifications.anarbib.org` TXT `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5Uxzm…` (chave RSA publicada, seletor `resend`). **DMARC**: `_dmarc.notifications.anarbib.org` TXT `v=DMARC1; p=none; rua=mailto:admins@anarbib.org` — política de observação com relatórios para as admins, a forma prudente que o item pedia antes de endurecer. Nada a pôr; endurecer para `p=quarantine` é uma decisão à parte, depois de ler os relatórios `rua`. |
+| I6 | 2026-09-16 | **Provado em 16/09/2026, na data que o item fixava.** `service_health_probes`: 34 568 linhas, a mais antiga de **17/08 às 20h30 UTC**, a mais recente de 16/09 às 20h25 — e **zero linhas com mais de trinta dias**. O limite inferior avançou trinta dias em trinta dias: a purga integrada em `health-probe` apaga de verdade (o contador `n_tup_del` do `pg_stat`, reposto a zero em 02/09, não podia dizê-lo; a contagem direta diz). `service_health_incidents` não é tocada. Nenhum cron a acrescentar. |
+| A2 | 2026-09-16 | **Encerrado em 16/09/2026, decisão de Xavier.** A reconstrução por alguém que não o mantenedor aconteceu: **Bastien** (conta `ASR2026`, primeira contribuição exterior) montou a pilha em casa a partir do repositório só, escreveu-lhe o instalador (`install.sh`, PR #28, **fundida em 15/09** — `f179f1ff`) e registou o que quebrava nos seus commits (`pg_cron` ausente no arranque, esquema a inicializar sob `supabase_admin`, `GRANT` em `supabase_migrations`, `LANG_CODE`, porta 5173…), depois o mantenedor releu e fundiu **a partir dessa instalação**. Os desvios estruturais encontrados têm as suas notas (`CONSTAT_PR28…`, `NOTE_experience-I17…`, `DOC-GRANT-2/3`). O diário de execução como secção de `deploy/README.md` é posto em 16/09. A entrada 1 de `CHANTIERS_OUVERTS` fica a reescrever pelo mantenedor: **J4**. |
 
 ---
 
@@ -2666,4 +2557,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 90 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
