@@ -593,16 +593,22 @@ async function stepCurate(number: number) {
     number, (job?.sources ?? {}) as Record<string, unknown>,
   );
 
-  // Modes déterministes : on n'ouvre même pas la connexion au modèle.
-  // translation_status='original' — ce français-là n'est pas une traduction, et
-  // il n'a pas été écrit par une machine.
+  // Modes déterministes : la COMPOSITION n'ouvre pas la connexion au modèle.
+  // Mais le pivot qui en sort est MULTILINGUE : chaque extrait garde la langue
+  // de sa source (catalan d'Anarquia.cat, grec d'Athens Indymedia…), et une
+  // brève de membre est dans la langue de qui l'a écrite. Le n°04 (15/09/2026)
+  // est sorti avec une page « française » en catalan. On le marque donc
+  // source_locale='mul' et la traduction commence par le français
+  // (ciblesTraduction) ; les neuf autres langues partent ensuite de ce
+  // français-là, comme en mode assisté.
   if (mode === "revue" || mode === "manual") {
     const { pages, consumed } = await composerDeterministe(vivier, mode === "revue");
-    await upsertLocale(number, "fr", pages, "original", null);
+    await upsertLocale(number, "fr", pages, "original", "mul");
+    const premiere = ciblesTraduction(mode)[0];
     await sb.from("gazette_build_jobs")
-      .update({ status: "translating", cursor_locale: TRANSLATE_TARGETS[0], consumed_ids: consumed })
+      .update({ status: "translating", cursor_locale: premiere, consumed_ids: consumed })
       .eq("issue_number", number);
-    return { status: "translating", next: TRANSLATE_TARGETS[0], mode, pages: pages.length, rattrapees };
+    return { status: "translating", next: premiere, mode, pages: pages.length, rattrapees };
   }
 
   const system =
@@ -628,18 +634,48 @@ async function stepCurate(number: number) {
   return { status: "translating", next: TRANSLATE_TARGETS[0], mode, rattrapees };
 }
 
+// Ordre de traduction. En mode assisté, le pivot français EST du français : on
+// traduit vers les neuf autres langues. En revue de presse et en manuel, le
+// pivot est multilingue (voir stepCurate) : on le rend d'abord en français,
+// puis les neuf autres partent de ce français-là.
+function ciblesTraduction(mode: string): string[] {
+  return (mode === "revue" || mode === "manual") ? ["fr", ...TRANSLATE_TARGETS] : [...TRANSLATE_TARGETS];
+}
+
 async function stepTranslate(number: number) {
   const { data: job } = await sb.from("gazette_build_jobs").select("cursor_locale").eq("issue_number", number).single();
   const target = job!.cursor_locale as string;
+  const cibles = ciblesTraduction(await buildMode(number));
   const { data: fr } = await sb.from("gazette_issue_locales")
     .select("content").eq("issue_id", (await issueId(number))).eq("locale", "fr").single();
-  const system = `Tu traduis fidèlement du français vers la locale "${target}" un JSON de gazette anarchiste. ` +
-    `Conserve EXACTEMENT la structure et les clés. Ne traduis pas les noms propres ni les sources (src). ` +
-    `Conserve les balises <b>…</b>. Rends UNIQUEMENT le JSON traduit.`;
-  const pages = parseJsonBlock(await claude(system, JSON.stringify(fr!.content)));
-  await upsertLocale(number, target, pages, "machine", "fr");
-  const idx = TRANSLATE_TARGETS.indexOf(target);
-  const next = TRANSLATE_TARGETS[idx + 1] ?? null;
+  const source = fr!.content;
+  // Le prompt ne présume plus la langue de la source. Il disait « du français
+  // vers X » : sur le n°04, dont les extraits étaient en catalan, grec,
+  // néerlandais…, le modèle a laissé tel quel ce qui n'était pas du français
+  // — en, nl et ca sont revenus IDENTIQUES au pivot, et l'article grec est
+  // resté en grec dans les dix langues.
+  const system =
+    `Tu traduis un JSON de gazette anarchiste vers la locale "${target}". La source est en principe en ` +
+    `français, mais des extraits repris de la presse peuvent être dans d'autres langues (catalan, espagnol, ` +
+    `italien, grec, néerlandais, anglais, espéranto, allemand, portugais) : rends TOUT texte lisible — h, p, ` +
+    `label, title, intro, byline, items — en "${target}", sans exception, même ce qui semble déjà l'être. ` +
+    `Ne traduis ni les noms propres ni les sources (src). Un tableau "p" vide reste vide : n'invente rien. ` +
+    `Conserve EXACTEMENT la structure, les clés et les balises <b>…</b>. Rends UNIQUEMENT le JSON traduit.`;
+  const pages = parseJsonBlock(await claude(system, JSON.stringify(source)));
+  // Un modèle qui rend sa source telle quelle n'a pas traduit. On le dit et on
+  // sort le job de la file — arrêt propre : le tick n'envoie pas issue_number,
+  // une exception rejouerait le même échec toutes les cinq minutes.
+  if (JSON.stringify(pages) === JSON.stringify(source)) {
+    const raison = `traduction '${target}' identique à la source : le modèle n'a rien traduit. ` +
+      `Vérifier, puis remettre le job en 'translating' (cursor_locale='${target}').`;
+    await sb.from("gazette_build_jobs").update({ status: "failed", step_error: raison }).eq("issue_number", number);
+    return { translated: null, stopped: true, reason: raison };
+  }
+  // Le français rendu depuis un pivot multilingue est une traduction machine
+  // dont la source est « plusieurs langues » ; les autres partent du français.
+  await upsertLocale(number, target, pages, "machine", target === "fr" ? "mul" : "fr");
+  const idx = cibles.indexOf(target);
+  const next = cibles[idx + 1] ?? null;
   await sb.from("gazette_build_jobs").update(
     next ? { cursor_locale: next } : { status: "assembling", cursor_locale: null },
   ).eq("issue_number", number);

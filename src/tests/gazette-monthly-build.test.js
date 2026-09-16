@@ -90,12 +90,17 @@ function monterEF(etat) {
       return { data: null, error: null };
     }
     if (table === 'gazette_build_jobs') {
-      if (cols.includes('issue_number')) return { data: etat.job, error: null };
+      if (cols.includes('issue_number') || cols === 'cursor_locale') return { data: etat.job, error: null };
       if (cols.includes('consumed_ids')) return { data: { consumed_ids: [] }, error: null };
       if (cols.includes('sources')) return { data: { sources: etat.job?.sources ?? {} }, error: null };
       return { data: null, error: null };
     }
-    if (table === 'gazette_issue_locales') return { data: etat.locales, error: null };
+    if (table === 'gazette_issue_locales') {
+      // .eq('locale', X).single() → la ligne de cette langue ; sinon toutes.
+      const loc = chaine.find((c) => c.op === 'eq' && c.args[0] === 'locale')?.args?.[1];
+      if (loc) return { data: (etat.locales ?? []).find((l) => l.locale === loc) ?? null, error: null };
+      return { data: etat.locales, error: null };
+    }
     if (table === 'gazette_submissions') return { data: etat.breves, error: null };
     if (table === 'gazette_sources') {
       // Le registre des flux ; le rattrapage de stepCurate ne demande que les
@@ -114,7 +119,7 @@ function monterEF(etat) {
   const appelsFetch = [];
   const fetchStub = async (url, opts) => {
     appelsFetch.push({ url: String(url), opts });
-    if (etat.flux) return etat.flux(String(url));
+    if (etat.flux) return etat.flux(String(url), opts);
     return new Response('<rss></rss>', { status: 200 });
   };
   const requireStub = (spec) => {
@@ -368,5 +373,98 @@ describe("aucune étape ne réécrit un numéro qui n'est plus un brouillon", ()
     expect(r.statut).toBe(200);
     expect(r.corps.ok).toBe(true);
     expect(r.ecrits.some((e) => e.table === 'gazette_issue_locales')).toBe(true);
+  });
+});
+
+// ── Le pivot d'une revue de presse est multilingue : il se traduit AUSSI en
+//    français, et le modèle n'a plus le droit de rendre sa source telle quelle
+//    (n°04, 15/09/2026 : page française en catalan, en/nl/ca identiques au pivot).
+const pivotCatalan = () => [
+  { sec: 'La Une', blocks: [{ type: 'lead', label: 'À la une', h: 'Cinisme climàtic i nens rostits', p: ['Fa una calorada de por.'], src: 'Anarquia.cat — https://anarquia.cat/x' }] },
+  { sec: 'Luttes & mouvements', blocks: [{ type: 'art', h: '[Ανακοινώσεις] Βαψίματα στο Μαρούσι', p: ['Το προηγούμενο διάστημα…'], src: 'Athens Indymedia — https://athens.indymedia.org/y' }] },
+];
+const rendu = (h1, p1) => [
+  { sec: 'La Une', blocks: [{ type: 'lead', label: 'À la une', h: h1, p: [p1], src: 'Anarquia.cat — https://anarquia.cat/x' }] },
+  { sec: 'Luttes & mouvements', blocks: [{ type: 'art', h: 'Peintures à Maroussi', p: ['Ces derniers temps…'], src: 'Athens Indymedia — https://athens.indymedia.org/y' }] },
+];
+// Le modèle stubé : rend `reponse` et note ce qu'on lui a demandé.
+const modele = (reponse, demandes) => (url, opts) => {
+  if (!url.includes('anthropic')) return new Response('<rss></rss>', { status: 200 });
+  demandes.push(JSON.parse(opts.body));
+  return new Response(JSON.stringify({ content: [{ text: JSON.stringify(reponse) }] }), { status: 200 });
+};
+
+describe('revue de presse : le pivot multilingue est rendu en français avant les neuf autres langues', () => {
+  it('stepCurate marque le pivot source_locale=mul et met le curseur sur fr', async () => {
+    const etat = {
+      ...etatNeuf(),
+      numero: { status: 'draft', build_mode: 'revue' },
+      job: { issue_number: 4, status: 'curating', sources: {} },
+      sources: [],
+    };
+    const r = await monterEF(etat)({ step: 'curate', issue_number: 4 });
+    expect(r.statut).toBe(200);
+    const pivot = r.ecrits.find((e) => e.table === 'gazette_issue_locales' && e.op === 'upsert');
+    expect(pivot.donnees).toMatchObject({ locale: 'fr', translation_status: 'original', source_locale: 'mul' });
+    const job = r.ecrits.find((e) => e.table === 'gazette_build_jobs' && e.op === 'update');
+    expect(job.donnees).toMatchObject({ status: 'translating', cursor_locale: 'fr' });
+    expect(r.corps.next).toBe('fr');
+    expect(r.appelsFetch.some((a) => a.url.includes('anthropic'))).toBe(false); // composer sans modèle, toujours
+  });
+
+  it("stepTranslate vers fr : le prompt n'assume pas la langue de la source, le français devient une traduction machine de « mul », puis pt-BR", async () => {
+    const demandes = [];
+    const etat = {
+      ...etatNeuf(),
+      numero: { status: 'draft', build_mode: 'revue' },
+      job: { issue_number: 4, status: 'translating', cursor_locale: 'fr' },
+      locales: [{ locale: 'fr', content: pivotCatalan() }],
+      flux: modele(rendu('Cynisme climatique et enfants rôtis', 'Il fait une chaleur effrayante.'), demandes),
+    };
+    const r = await monterEF(etat)({ step: 'translate', issue_number: 4 });
+    expect(r.statut).toBe(200);
+    expect(demandes).toHaveLength(1);
+    expect(demandes[0].system).toContain('vers la locale "fr"');
+    expect(demandes[0].system).toContain('sans exception');
+    expect(demandes[0].system).toContain("n'invente rien");
+    const fr = r.ecrits.find((e) => e.table === 'gazette_issue_locales' && e.op === 'upsert');
+    expect(fr.donnees).toMatchObject({ locale: 'fr', translation_status: 'machine', source_locale: 'mul' });
+    expect(fr.donnees.content[0].blocks[0].h).toBe('Cynisme climatique et enfants rôtis');
+    expect(r.corps.next).toBe('pt-BR');
+  });
+
+  it("mode assisté : fr n'est pas une cible, et la dernière langue mène à l'assemblage", async () => {
+    const demandes = [];
+    const etat = {
+      ...etatNeuf(),
+      numero: { status: 'draft', build_mode: 'assisted' },
+      job: { issue_number: 3, status: 'translating', cursor_locale: 'nl' },
+      locales: [{ locale: 'fr', content: corpsType() }],
+      flux: modele(rendu('Klimaatcynisme', 'Het is angstaanjagend heet.'), demandes),
+    };
+    const r = await monterEF(etat)({ step: 'translate', issue_number: 3 });
+    expect(r.statut).toBe(200);
+    expect(r.corps.next).toBeNull();
+    const nl = r.ecrits.find((e) => e.table === 'gazette_issue_locales' && e.op === 'upsert');
+    expect(nl.donnees).toMatchObject({ locale: 'nl', source_locale: 'fr' });
+    expect(r.ecrits.find((e) => e.table === 'gazette_build_jobs').donnees.status).toBe('assembling');
+  });
+
+  it("une sortie identique à la source n'est pas une traduction : arrêt propre, rien d'écrit dans la langue", async () => {
+    const demandes = [];
+    const etat = {
+      ...etatNeuf(),
+      numero: { status: 'draft', build_mode: 'revue' },
+      job: { issue_number: 4, status: 'translating', cursor_locale: 'en' },
+      locales: [{ locale: 'fr', content: pivotCatalan() }],
+      flux: modele(pivotCatalan(), demandes),
+    };
+    const r = await monterEF(etat)({ step: 'translate', issue_number: 4 });
+    expect(r.corps.stopped).toBe(true);
+    expect(r.ecrits.some((e) => e.table === 'gazette_issue_locales')).toBe(false);
+    const job = r.ecrits.find((e) => e.table === 'gazette_build_jobs');
+    expect(job.donnees.status).toBe('failed');
+    expect(job.donnees.step_error).toMatch(/identique à la source/);
+    expect(job.donnees.step_error).toContain("cursor_locale='en'");
   });
 });
