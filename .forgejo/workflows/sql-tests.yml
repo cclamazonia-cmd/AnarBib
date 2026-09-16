@@ -15,6 +15,14 @@
 # `auth`, applique baseline + forward + seed, puis joue les suites du manifeste
 # tests/sql/ci-suites.txt. 100 % isolé : NE TOUCHE JAMAIS la prod.
 #
+# Second job, `rejeu-image` (backlog I18, 16/09/2026) : le même service
+# Postgres, mais on rejoue les migrations DANS la base `postgres` de l'image —
+# privilèges par défaut et extensions de l'init posés — avec les deux scripts
+# de la pile auto-hébergée (`deploy/init-db/01-roles.sh` : A.1 et pg_cron ;
+# `deploy/scripts/run-migrations.sh` : sous `postgres`), sans suite : « ça
+# passe ou ça casse ». Une base template0 ne peut pas voir ce que DOC-GRANT-2
+# décrit ; l'image le voit. Cf. scripts/ci/run-image-replay.sh.
+#
 # Indépendant de ci.yml (groupe de concurrence distinct) : c'est un SIGNAL de
 # régression, pas un gate du déploiement (le `supabase db push` vit dans ci.yml).
 # Runner : `anarbib-local` (auto-hébergé WSL2). [skip ci]/[ci skip] = run sauté.
@@ -30,6 +38,12 @@ on:
       - 'tests/sql/**'
       - 'scripts/ci/run-sql-suites.sh'
       - '.forgejo/workflows/sql-tests.yml'
+      # Le job `rejeu-image` exécute ces trois fichiers : un changement de
+      # l'un d'eux doit rejouer.
+      - 'scripts/ci/run-image-replay.sh'
+      - 'tests/sql/_ci_setup_image_services_stub.sql'
+      - 'deploy/init-db/01-roles.sh'
+      - 'deploy/scripts/run-migrations.sh'
       # Classement des tables pour la sauvegarde #BG2 : le job le compare au
       # schéma reconstruit (filet, cf. run-sql-suites.sh). Le déclencheur
       # `supabase/migrations/**` couvre déjà le cas « une migration crée une
@@ -80,6 +94,52 @@ jobs:
           PGPASSWORD: postgres
         run: bash scripts/ci/run-sql-suites.sh
 
+  # ── Rejeu sur l'image réelle : ce que template0 ne peut pas voir (I18) ──
+  #
+  # `sql-tests` prouve les suites, pas qu'une image Supabase rejoue le dépôt :
+  # sa base naît de template0, sans privilège par défaut, et chaque fonction y
+  # naît fermée. Sur l'image, `anon=X` est dans le défaut des fonctions de
+  # `public` pour postgres ET supabase_admin (DOC-GRANT-2) : la PR #28 l'a
+  # découvert à notre place (371 fonctions ouvertes à anon dont 233 DEFINER,
+  # contre 133 en production, mesuré le 15/09/2026). Ce job rejoue donc les
+  # migrations dans la base `postgres` du même service, avec les DEUX scripts
+  # de la pile auto-hébergée — un `install.sh` sans conteneurs applicatifs.
+  # Pas de suite ; rouge = un contributeur extérieur cassera au même endroit.
+  # Les mesures imprimées en sortie (fonctions anon et empreinte, crons, RLS)
+  # se lisent dans Actions ; elles ne bloquent pas — B22 dira lesquelles doivent.
+  rejeu-image:
+    runs-on: anarbib-local
+    container:
+      image: node:22
+    services:
+      db:
+        image: public.ecr.aws/supabase/postgres:17.6.1.084  # = image db du stack local
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 30
+          --health-start-period 10s
+    steps:
+      - name: Outils système (git, psql)
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq git postgresql-client >/dev/null
+          echo "✓ outils prêts ($(psql --version))"
+
+      - name: Checkout (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Rejeu des migrations sur l'image (scripts de deploy/, A.1, sous postgres)
+        env:
+          PGHOST: db
+          PGPASSWORD: postgres
+        run: bash scripts/ci/run-image-replay.sh
+
   # ── Alerte : un seul ticket par workflow, rouvert et referme ────────────
   #
   # OPS-6 ouvrait un ticket NEUF a chaque episode rouge. Deux defauts, tous
@@ -110,7 +170,8 @@ jobs:
   # en tete des 50 lus. S'il en sortait un jour, on retomberait sur la
   # creation — degradation, pas panne.
   alerte:
-    needs: sql-tests
+    # Les deux jobs de mesure : l'un ou l'autre rouge ouvre le ticket.
+    needs: [sql-tests, rejeu-image]
     if: failure()
     runs-on: anarbib-local
     container:
@@ -190,8 +251,9 @@ jobs:
   # `continue-on-error` : un acquittement casse ne doit jamais faire rougir un
   # run qui est vert. Symetrique de la regle du job `alerte`.
   acquittement:
-    needs: [sql-tests]
-    if: ${{ !cancelled() && needs['sql-tests'].result == 'success' }}
+    # Le retour au vert, c'est les DEUX jobs verts : un seul ne referme rien.
+    needs: [sql-tests, rejeu-image]
+    if: ${{ !cancelled() && needs['sql-tests'].result == 'success' && needs['rejeu-image'].result == 'success' }}
     runs-on: anarbib-local
     container:
       image: node:22
