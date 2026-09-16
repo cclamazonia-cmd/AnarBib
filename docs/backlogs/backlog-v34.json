@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-15",
+    "maj": "2026-09-16",
     "releve": {
       "date": "2026-09-15",
       "commit": "fe0cedf1"
@@ -1953,6 +1953,14 @@
         {
           "fr": "**Solidaires est admise** — décision de Xavier du 15/09/2026 au soir, en mode « seul·e admin » (spec-onboarding §2.6), à défaut de co-administrateur·rices trouvé·es à Bologne (registre §1 `RES-D12` amendé, v0.34). Ce que la fiche attendait de l'admission est arrivé le même soir par `IMP-20` et `CAT-E17` : bibliothèque active, série d'inventaire `SOL-` + millésime, 1 673 brouillons attribués et cotés, coordination Christian. Le périmètre d'admission (`RES-Q13`) reste à porter en AG : Solidaires y entre comme cas, pas comme règle.",
           "pt": "**Solidaires está admitida** — decisão de Xavier em 15/09/2026, em modo « só admin », à falta de co-administradores encontrados em Bolonha (registo `RES-D12` alterado, v0.34). Biblioteca ativa, série de tombo `SOL-`, 1 673 rascunhos atribuídos e cotados. O perímetro de admissão (`RES-Q13`) continua para a AG."
+        }
+      ],
+      [
+        "B19",
+        "2026-09-16",
+        {
+          "fr": "**La HS256 est révoquée** — geste de Xavier le 15/09 à 22 h 14 (20 h 14 UTC), Settings → JWT Keys → Revoke. **Premier contrôle, 24 h après** (tâche `anarbib-trafic-cles-legacy`, relevé du 16/09) : aucun 401 sur une connexion utilisateur — 1 144 réponses 200, 20 en 204, 12 en 206, tous les jetons de session en ES256 avant comme après ; recoupé sur les logs edge : 0 × 401 sur `/rest/v1/` en 24 h hors les quatre de bingbot du 16/09 à 15 h 19 (robot sans clé, ni ancienne ni nouvelle). Seul reste en HS256 le compte `supabase_admin` de `@supabase-infra/mgmt-api` sur `/admin/v1/network-bans/retrieve`, toujours en 200 — l'infrastructure de Supabase, pas l'application. Les trois anomalies vues au passage ne viennent pas de la révocation et ont chacune leur cause : les `403` sur `DELETE auth_rate_limits` (**B25**, depuis mai), les `400` sur `GET gazette_submissions` du 15/09 à 21 h 09–21 h 11 UTC (le front de GAZ-9 publié par le job `app` quelques minutes **avant** que le job `backend` applique la migration qui ajoute `staff_edited_at`/`original_*` — l'ordre normal de la CI, transitoire), et les `400` sur `POST auth_rate_limits` (**B26**). La tâche `anarbib-trafic-cles-legacy` peut être supprimée.",
+          "pt": "**A HS256 está revogada** — gesto de Xavier em 15/09 às 22h14 (20h14 UTC), Settings → JWT Keys → Revoke. **Primeiro controlo, 24 h depois** (tarefa `anarbib-trafic-cles-legacy`, levantamento de 16/09): nenhum 401 numa conexão de usuário — 1 144 respostas 200, 20 em 204, 12 em 206, todos os tokens de sessão em ES256 antes como depois; cruzado com os logs edge: 0 × 401 em `/rest/v1/` em 24 h fora os quatro do bingbot de 16/09 às 15h19 (robô sem chave, nem antiga nem nova). Só resta em HS256 a conta `supabase_admin` de `@supabase-infra/mgmt-api` em `/admin/v1/network-bans/retrieve`, sempre em 200 — a infraestrutura da Supabase, não a aplicação. As três anomalias vistas de passagem não vêm da revogação e têm cada uma a sua causa: os `403` em `DELETE auth_rate_limits` (**B25**, desde maio), os `400` em `GET gazette_submissions` de 15/09 às 21h09–21h11 UTC (o front de GAZ-9 publicado pelo job `app` alguns minutos **antes** de o job `backend` aplicar a migração que acrescenta `staff_edited_at`/`original_*` — a ordem normal da CI, transitório) e os `400` em `POST auth_rate_limits` (**B26**). A tarefa `anarbib-trafic-cles-legacy` pode ser apagada."
         }
       ]
     ]
@@ -4105,53 +4113,6 @@
       },
       "r": [
         ".forgejo/workflows/ci.yml",
-        "item B18"
-      ]
-    },
-    {
-      "id": "B19",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Révoquer l'ancienne clé de signature HS256 — conditions réunies le 15/09, geste réversible, à faire au dashboard",
-        "pt": "Revogar a antiga chave de assinatura HS256 — condições reunidas em 15/09, gesto reversível, a fazer no dashboard"
-      },
-      "v": {
-        "fr": "Les clés de signature JWT sont migrées : la clé courante est une ECC P-256, l'ancienne HS256 est rangée en « Previously used keys » et ne fait plus que vérifier. Le dashboard affiche à côté d'elle un bouton Revoke et un texte qui invite gentiment à cliquer « une fois les jetons expirés ». Or cette clé valide encore la clé anon legacy qu'envoient les navigateurs au bundle en cache — 2 026 requêtes par jour au relevé du 01/09.",
-        "pt": "As chaves de assinatura JWT estão migradas: a chave corrente é uma ECC P-256, a antiga HS256 está guardada em « Previously used keys » e só faz verificação. O dashboard mostra ao lado dela um botão Revoke e um texto que convida gentilmente a clicar « uma vez expirados os tokens ». Só que essa chave ainda valida a chave anon legada que os navegadores com bundle em cache enviam — 2.026 requisições por dia no levantamento de 01/09."
-      },
-      "w": {
-        "fr": "Rien avant que B18 soit terminé et digéré. Ensuite seulement : vérifier qu'aucun jeton ni URL signée de longue durée ne dépend encore de la HS256, puis révoquer. Item gelé exprès pour que personne ne « range » ce bouton en passant. **Amendé le 08/09 (B24, `OPS-9`)** : « digéré » se mesure dans les DEUX dépôts, pas dans l'application seule — `grep -r eyJhbGciOi` à zéro dans `anarbib` ET dans `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` montrant la clé courante, et une semaine de logs où chaque requête legacy résiduelle a été qualifiée par son `referer`. La galerie de la vitrine est restée cassée six jours après B18 sans que personne ne le voie : la HS256 révoquée, une page oubliée ne rend plus 401, elle rend une déconnexion générale. **Amendé le 15/09 — dégelé.** Les conditions sont mesurées (voir la vérification) et le geste se défait : selon la doc Supabase « JWT Signing Keys », une clé révoquée repasse en *standby* puis se réactive par une rotation ; seule la *suppression* est définitive, et elle est interdite pour le secret legacy. Le geste, par Xavier : Settings → JWT Keys → HS256 dans « Previously used » → Revoke ; puis, dans l'heure, une connexion, une inscription, une récupération de mot de passe et l'ouverture d'un document numérique (URL signée de Storage). En cas de casse : remettre la HS256 en standby et faire tourner les clés (délai d'environ 5 min entre deux changements d'état). Le relevé du lendemain de la tâche `anarbib-trafic-cles-legacy` fait preuve, puis la tâche peut être supprimée.",
-        "pt": "Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem. **Emendado em 08/09 (B24, `OPS-9`)**: «digerido» se mede nos DOIS repositórios, não só no aplicativo — `grep -r eyJhbGciOi` a zero em `anarbib` E em `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` mostrando a chave corrente, e uma semana de logs em que cada requisição legacy residual foi qualificada pelo seu `referer`. A galeria da vitrine ficou quebrada seis dias depois de B18 sem que ninguém visse: com a HS256 revogada, uma página esquecida não devolve mais 401, devolve uma desconexão geral. **Emendado em 15/09 — descongelado.** As condições estão medidas (ver a verificação) e o gesto se desfaz: segundo a doc Supabase « JWT Signing Keys », uma chave revogada volta a *standby* e se reativa por uma rotação; só a *exclusão* é definitiva, e ela é proibida para o segredo legacy. O gesto, por Xavier: Settings → JWT Keys → HS256 em « Previously used » → Revoke; depois, na hora seguinte, um login, um cadastro, uma recuperação de senha e a abertura de um documento digital (URL assinada do Storage). Em caso de quebra: voltar a HS256 para standby e rodar as chaves (intervalo de cerca de 5 min entre duas mudanças de estado). O levantamento do dia seguinte da tarefa `anarbib-trafic-cles-legacy` serve de prova, e então a tarefa pode ser apagada."
-      },
-      "f": {
-        "fr": [
-          "B18 est clos depuis assez longtemps pour que plus aucun jeton signé HS256 ne circule — et l'inventaire des deux dépôts est fait : aucune clé legacy dans `anarbib` ni dans `pages`, la vitrine déployée vérifiée (acquis le 15/09).",
-          "La révocation est faite et une connexion, une inscription et une récupération de mot de passe ont été vérifiées juste après."
-        ],
-        "pt": [
-          "B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais — e o inventário dos dois repositórios está feito: nenhuma chave legacy em `anarbib` nem em `pages`, a vitrine publicada verificada (adquirido em 15/09).",
-          "A revogação foi feita e um login, um cadastro e uma recuperação de senha foram verificados logo depois."
-        ]
-      },
-      "y": {
-        "fr": "Révoquée trop tôt, la HS256 invalide d'un coup tout ce qu'elle validait encore : la déconnexion serait générale et immédiate — jusqu'à ce qu'on la remette en standby. Le geste est donc à faire à un moment où l'on peut vérifier et revenir en arrière, pas en passant sur l'écran pour autre chose. **Corrigé le 15/09** : ce paragraphe disait « le seul geste réellement irréversible de tout le chantier des clés » ; c'est la suppression qui l'est, pas la révocation (doc Supabase « JWT Signing Keys », tableau des actions).",
-        "pt": "Revogada cedo demais, a HS256 invalida de uma vez tudo o que ela ainda validava: a desconexão seria geral e imediata — até que se a volte para standby. O gesto deve então ser feito num momento em que se possa verificar e voltar atrás, não de passagem pela tela por outro motivo. **Corrigido em 15/09**: este parágrafo dizia « o único gesto realmente irreversível de todo o canteiro das chaves »; é a exclusão que o é, não a revogação (doc Supabase « JWT Signing Keys », tabela das ações)."
-      },
-      "dep": {
-        "fr": "Item B18 terminé (02/09). **B24 ne bloque plus (levé le 15/09)** : l'inventaire des deux dépôts qu'il exigeait est fait ; ses gardes (clé unique et refus des clés legacy dans `pages`) protègent la rotation suivante, pas celle-ci.",
-        "pt": "Item B18 terminado (02/09). **B24 não bloqueia mais (levantado em 15/09)**: o inventário dos dois repositórios que ele exigia está feito; suas guardas (chave única e recusa das chaves legacy em `pages`) protegem a rotação seguinte, não esta."
-      },
-      "verif": {
-        "fr": "15/09 — logs edge 24 h : 0 requête en clé legacy, et les 246 JWT utilisateurs présentés tous en ES256 avec `kid` (aucun jeton HS256 en circulation) ; `cron.job`, corps des fonctions et `vault.secrets` sans JWT legacy ni en-tête Authorization ; seul vérificateur HS256 du code = le routeur `supabase/functions/main` de la pile auto-hébergée (son propre `JWT_SECRET`, absent des 50 fonctions déployées) ; URL signées de Storage à 600-900 s ; `eyJhbGciOi` absent du code d'`anarbib` (après la fusion de la PR #28, `f179f1ff`, `secret-key.ts` toujours sans repli) et de `pages` ; `anarbib.org/fr/explorar/` sert `sb_publishable_…`. 01/09 — page Settings → JWT Keys lue : ECC P-256 courante, HS256 en « previously used ».",
-        "pt": "15/09 — logs edge 24 h: 0 requisição com chave legacy, e os 246 JWT de usuários apresentados todos em ES256 com `kid` (nenhum token HS256 em circulação); `cron.job`, corpo das funções e `vault.secrets` sem JWT legacy nem cabeçalho Authorization; único verificador HS256 do código = o roteador `supabase/functions/main` da pilha auto-hospedada (seu próprio `JWT_SECRET`, ausente das 50 funções publicadas); URLs assinadas do Storage a 600-900 s; `eyJhbGciOi` ausente do código de `anarbib` (depois da fusão da PR #28, `f179f1ff`, `secret-key.ts` continua sem fallback) e de `pages`; `anarbib.org/fr/explorar/` serve `sb_publishable_…`. 01/09 — página Settings → JWT Keys lida: ECC P-256 corrente, HS256 em « previously used »."
-      },
-      "r": [
         "item B18"
       ]
     },
@@ -6322,6 +6283,114 @@
         "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.",
         "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote."
       }
+    },
+    {
+      "id": "B25",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "edge"
+      ],
+      "t": {
+        "fr": "`login` : la remise à zéro des compteurs d'échec part avec le jeton de la personne, et échoue en 403 à chaque connexion réussie depuis mai",
+        "pt": "`login`: a reposição a zero dos contadores de falha parte com o token da pessoa, e falha em 403 a cada conexão bem-sucedida desde maio"
+      },
+      "v": {
+        "fr": "**Constaté le 16/09/2026** au premier contrôle après la révocation HS256 : quatre `403` sur `DELETE /rest/v1/auth_rate_limits` en 24 h, tous depuis l'Edge Function `login` (agent `SupabaseEdgeRuntime`, `supabase-js/2.114.0`), toujours **juste après** deux `GET` en 200 sur la même table, et `postgres_logs` dit `42501 permission denied for table auth_rate_limits`. Lecture du corps : `login` crée **un seul** client avec la clé secrète (ligne 241), s'en sert pour `isRateLimited` (service_role, 200), puis appelle `supabase.auth.signInWithPassword` **sur ce même client** (ligne 311) — supabase-js pose alors la session de la personne sur le client, et `clearFailures` (ligne 324, le `DELETE`) part avec **son** jeton ES256, donc en rôle `authenticated`, qui n'a aucun GRANT sur la table (seuls `postgres` et `service_role`, policy `deny_direct_access_secdef_only`). Présent depuis la naissance de la fonction (`ceb8f6ec`, 05/05) : sous la clé legacy `service_role`, le mécanisme était le même. Effet : les compteurs d'échec ne sont **jamais** remis à zéro après un succès, une personne qui s'est trompée quatre fois puis connectée reste à un échec du blocage jusqu'à la fin de la fenêtre ; et une erreur de permission silencieuse à chaque connexion réussie, invisible parce que `clearFailures` n'inspecte pas `error`.",
+        "pt": "**Constatado em 16/09/2026** no primeiro controlo depois da revogação HS256: quatro `403` em `DELETE /rest/v1/auth_rate_limits` em 24 h, todos da Edge Function `login`, sempre **logo depois** de dois `GET` em 200 na mesma tabela, e `postgres_logs` diz `42501 permission denied for table auth_rate_limits`. Leitura do corpo: `login` cria **um único** cliente com a chave secreta (linha 241), usa-o para `isRateLimited` (service_role, 200), depois chama `supabase.auth.signInWithPassword` **nesse mesmo cliente** (linha 311) — o supabase-js põe então a sessão da pessoa no cliente, e `clearFailures` (linha 324, o `DELETE`) parte com o token ES256 **dela**, logo no papel `authenticated`, que não tem GRANT nenhum na tabela. Presente desde o nascimento da função (`ceb8f6ec`, 05/05). Efeito: os contadores de falha **nunca** são repostos a zero depois de um sucesso, e um erro de permissão silencioso a cada conexão bem-sucedida, invisível porque `clearFailures` não inspeciona `error`."
+      },
+      "w": {
+        "fr": "Deux clients dans `login` : celui de la clé secrète pour `auth_rate_limits` (lecture, écriture, `DELETE`), et un client jetable à la clé publiable, `persistSession: false`, pour `signInWithPassword` — la session rendue au front vient de ce second client. Puis `clearFailures` lit `error` et le journalise (`console.error`) : un `42501` ne doit plus passer sans bruit. Banc : le modèle `src/tests/gazette-monthly-build.test.js` (fetch simulé) — vérifier que le `DELETE` porte la clé secrète et pas un `Bearer` de session. Redéploiement par `git push` (marqueur `deployed-functions`).",
+        "pt": "Dois clientes em `login`: o da chave secreta para `auth_rate_limits` (leitura, escrita, `DELETE`), e um cliente descartável com a chave publicável, `persistSession: false`, para `signInWithPassword` — a sessão devolvida ao front vem deste segundo cliente. Depois `clearFailures` lê `error` e regista-o: um `42501` não deve mais passar sem ruído. Bancada: o modelo `src/tests/gazette-monthly-build.test.js` — verificar que o `DELETE` leva a chave secreta e não um `Bearer` de sessão."
+      },
+      "y": {
+        "fr": "Le rate limit de la connexion est la seule barrière contre la force brute sur `/login` (AR-1, AR-2 : ni anti-robot ni oracle, exprès). Un compteur qui ne redescend jamais punit les personnes maladroites, pas les robots — et une erreur de permission qui tourne en silence depuis quatre mois est exactement ce qu'un audit des DEFINER ne voit pas : le défaut est dans le client, pas dans la base.",
+        "pt": "O rate limit da conexão é a única barreira contra a força bruta em `/login`. Um contador que nunca desce castiga as pessoas desajeitadas, não os robôs — e um erro de permissão que roda em silêncio há quatro meses é exatamente o que uma auditoria das DEFINER não vê: o defeito está no cliente, não na base."
+      },
+      "f": {
+        "fr": [
+          "Une connexion réussie produit un `DELETE` en 204 sur `auth_rate_limits` (logs edge), plus aucun `42501` sur cette table dans `postgres_logs`.",
+          "Quatre échecs puis un succès : la ligne `email` de la personne a disparu de la table.",
+          "Un banc vitest prouve que le `DELETE` ne porte jamais un `Bearer` de session."
+        ],
+        "pt": [
+          "Uma conexão bem-sucedida produz um `DELETE` em 204 em `auth_rate_limits`, e mais nenhum `42501` nessa tabela.",
+          "Quatro falhas e um sucesso: a linha `email` da pessoa desapareceu da tabela.",
+          "Uma bancada vitest prova que o `DELETE` nunca leva um `Bearer` de sessão."
+        ]
+      },
+      "dep": {
+        "fr": "Même table que **B26** (la contrainte `kind`) : une seule passe sur `auth_rate_limits` pour les deux. Sœur de la doctrine « un chemin jamais exécuté n'est pas un chemin qui marche » (I4, `rss-novidades`).",
+        "pt": "Mesma tabela que **B26**: uma só passagem em `auth_rate_limits` para os dois."
+      },
+      "r": [
+        "supabase/functions/login/index.ts",
+        "supabase/functions/_shared/core/secret-key.ts",
+        "AUDIT_execute_authenticated_2026-09-01 (paquet 4, AR-1/AR-2)"
+      ],
+      "verif": [
+        {
+          "fr": "16/09 — quatre `403` en 24 h (15/09 19 h 08 UTC, 21 h 01 ; 16/09 14 h 29, 18 h 31), tous `login`, chacun précédé de deux `GET` 200 ; `postgres_logs` : `42501` ×4 sur la table, aucun autre code. Le premier précède la révocation HS256 de plus d'une heure : sans rapport avec elle.",
+          "pt": "16/09 — quatro `403` em 24 h, todos `login`, cada um precedido de dois `GET` 200; `postgres_logs`: `42501` ×4 na tabela. O primeiro precede a revogação HS256 em mais de uma hora: sem relação com ela."
+        }
+      ]
+    },
+    {
+      "id": "B26",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql",
+        "edge"
+      ],
+      "t": {
+        "fr": "`auth_rate_limits` n'accepte que `ip` et `email` : les compteurs du géocodeur, de la cartographie et de la gazette échouent en `400` depuis leur naissance, et ne bloquent jamais",
+        "pt": "`auth_rate_limits` só aceita `ip` e `email`: os contadores do geocodificador, da cartografia e da gazeta falham em `400` desde que nasceram, e nunca bloqueiam"
+      },
+      "v": {
+        "fr": "**Constaté le 16/09/2026** en lisant les logs de la table pour B25 : deux `400` sur `POST /rest/v1/auth_rate_limits?on_conflict=kind,key` le 15/09 (19 h 15 et 20 h 55 UTC), et `postgres_logs` : `23514 new row violates check constraint \"auth_rate_limits_kind_check\"`. La contrainte vient du socle de mai (`20260510000000`, ligne 45465) : `kind IN ('ip','email')`. Or **trois Edge Functions** réutilisent la table avec d'autres `kind` — `geocode` (`geocode_ip`, depuis `45f7dfbc`, 19/06), `submit-cartography-entry` (03/09) et `submit-gazette-contribution` (`gazette_ip`, `gazette_prefill`, GAZ-8/9, 15/09) — par le même motif copié : `select` puis `upsert`, **sans lire `error`**. En production la table ne contient que `ip` (20) et `email` (32) : aucune ligne des trois autres n'a jamais existé. Conséquence : `data` est toujours nul, `count` vaut toujours 1, **aucune de ces trois limites n'a jamais bloqué personne** ; là où l'Altcha est posé (gazette), il reste le seul frein ; le géocodeur (proxy Nominatim, appelé depuis la page publique de cartographie) n'en a aucun.",
+        "pt": "**Constatado em 16/09/2026** ao ler os logs da tabela para B25: dois `400` em `POST /rest/v1/auth_rate_limits?on_conflict=kind,key` em 15/09, e `postgres_logs`: `23514 new row violates check constraint \"auth_rate_limits_kind_check\"`. A restrição vem da base de maio (`20260510000000`): `kind IN ('ip','email')`. Ora **três Edge Functions** reutilizam a tabela com outros `kind` — `geocode` (`geocode_ip`, 19/06), `submit-cartography-entry` (03/09) e `submit-gazette-contribution` (`gazette_ip`, `gazette_prefill`, 15/09) — pelo mesmo padrão copiado: `select` e `upsert`, **sem ler `error`**. Em produção a tabela só contém `ip` (20) e `email` (32). Consequência: `data` é sempre nulo, `count` vale sempre 1, **nenhum destes três limites bloqueou alguma vez alguém**."
+      },
+      "w": {
+        "fr": "Une migration qui remplace la `CHECK` par la liste réelle des `kind` (`ip`, `email`, `geocode_ip`, ceux de la cartographie, `gazette_ip`, `gazette_prefill`) — ou la lève au profit d'un motif `^[a-z_]{2,32}$`, puisque la table est fermée à `anon` et `authenticated` et n'est écrite que par les fonctions ; garde : une suite SQL qui insère chaque `kind` attendu. Puis, dans les trois fonctions, lire `error` de l'`upsert` et **refuser fermé** (`500`) quand le compteur ne s'écrit pas : un frein qui ne sait pas compter ne doit pas laisser passer en silence. Le même `hit()` est copié trois fois : le remonter dans `_shared/` avec le contrôle d'erreur, une fois.",
+        "pt": "Uma migração que substitui a `CHECK` pela lista real dos `kind` — ou a levanta a favor de um padrão `^[a-z_]{2,32}$`, já que a tabela está fechada a `anon` e `authenticated`; guarda: uma suíte SQL que insere cada `kind` esperado. Depois, nas três funções, ler `error` do `upsert` e **recusar fechado** (`500`) quando o contador não se escreve. O mesmo `hit()` está copiado três vezes: subi-lo para `_shared/` com o controlo de erro, uma vez."
+      },
+      "y": {
+        "fr": "Trois freins anti-abus qui affichent « rate limit » dans le code et n'ont jamais compté : c'est la forme de dette la plus trompeuse, celle qu'une relecture valide. Le géocodeur relaie vers le Nominatim auto-hébergé depuis une page publique — sans compteur, c'est une porte ouverte sur une machine du réseau (A3).",
+        "pt": "Três travões anti-abuso que mostram « rate limit » no código e nunca contaram: é a forma de dívida mais enganadora, a que uma releitura valida. O geocodificador retransmite para o Nominatim auto-hospedado a partir de uma página pública — sem contador, é uma porta aberta."
+      },
+      "f": {
+        "fr": [
+          "`auth_rate_limits` porte des lignes `geocode_ip`, `gazette_ip`, `gazette_prefill` et cartographie en production après un usage réel.",
+          "Plus aucun `23514` sur la table dans `postgres_logs` ; la suite SQL insère chaque `kind` attendu.",
+          "Le dépassement du seuil rend `429` — éprouvé une fois sur le géocodeur, une fois sur la gazette."
+        ],
+        "pt": [
+          "`auth_rate_limits` tem linhas `geocode_ip`, `gazette_ip`, `gazette_prefill` e cartografia em produção depois de um uso real.",
+          "Mais nenhum `23514` na tabela; a suíte SQL insere cada `kind` esperado.",
+          "Passar o limiar devolve `429` — provado no geocodificador e na gazeta."
+        ]
+      },
+      "dep": {
+        "fr": "Même passe que **B25**. Le géocodeur touche **A3** (Nominatim sur la machine du mainteneur) et la doctrine anti-pistage (E5). Les `kind` de la gazette sont nés le 15/09 (GAZ-8/9) : à corriger avant que la gazette s'ouvre aux contributions extérieures.",
+        "pt": "Mesma passagem que **B25**. O geocodificador toca **A3** e a doutrina anti-rastreio (E5)."
+      },
+      "r": [
+        "supabase/migrations/20260510000000_baseline_live.sql (l. 45465)",
+        "supabase/functions/geocode/index.ts",
+        "supabase/functions/submit-cartography-entry/index.ts",
+        "supabase/functions/submit-gazette-contribution/index.ts"
+      ],
+      "verif": [
+        {
+          "fr": "16/09 — `postgres_logs` 24 h : `23514` ×2 sur la table (les deux de la gazette, 15/09) ; `select kind, count(*)` en prod : `ip` 20, `email` 32, rien d'autre ; la contrainte lue dans `pg_constraint` : `kind = ANY (ARRAY['ip','email'])`.",
+          "pt": "16/09 — `postgres_logs` 24 h: `23514` ×2 na tabela; `select kind, count(*)` em prod: `ip` 20, `email` 32, nada mais; a restrição lida em `pg_constraint`: `kind = ANY (ARRAY['ip','email'])`."
+        }
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-15** · 88 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-16** · 89 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 4
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 8
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 14
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
 
-**Frescor dos constatos em 2026-09-15.** **71 itens de 88** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B19, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-16.** **72 itens de 89** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B22, B23, B24, B25, B26, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -391,11 +391,12 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B19** | Revogar a antiga chave de assinatura HS256 — condições reunidas em 15/09, gesto reversível, a fazer no dashboard | `P2` | Aberto |
 | **B20** | O fallback para a chave legada não pode voltar: uma guarda, não um comentário | `P1` | Aberto |
 | **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Aberto |
 | **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
+| **B25** | `login`: a reposição a zero dos contadores de falha parte com o token da pessoa, e falha em 403 a cada conexão bem-sucedida desde maio | `P2` | Aberto |
+| **B26** | `auth_rate_limits` só aceita `ip` e `email`: os contadores do geocodificador, da cartografia e da gazeta falham em `400` desde que nasceram, e nunca bloqueiam | `P2` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -441,27 +442,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** **Bloqueado por A2.** Não começar antes.
 
 *Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
-
-#### B19 — Revogar a antiga chave de assinatura HS256 — condições reunidas em 15/09, gesto reversível, a fazer no dashboard
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** As chaves de assinatura JWT estão migradas: a chave corrente é uma ECC P-256, a antiga HS256 está guardada em « Previously used keys » e só faz verificação. O dashboard mostra ao lado dela um botão Revoke e um texto que convida gentilmente a clicar « uma vez expirados os tokens ». Só que essa chave ainda valida a chave anon legada que os navegadores com bundle em cache enviam — 2.026 requisições por dia no levantamento de 01/09.
-
-*Verificado : 15/09 — logs edge 24 h: 0 requisição com chave legacy, e os 246 JWT de usuários apresentados todos em ES256 com `kid` (nenhum token HS256 em circulação); `cron.job`, corpo das funções e `vault.secrets` sem JWT legacy nem cabeçalho Authorization; único verificador HS256 do código = o roteador `supabase/functions/main` da pilha auto-hospedada (seu próprio `JWT_SECRET`, ausente das 50 funções publicadas); URLs assinadas do Storage a 600-900 s; `eyJhbGciOi` ausente do código de `anarbib` (depois da fusão da PR #28, `f179f1ff`, `secret-key.ts` continua sem fallback) e de `pages`; `anarbib.org/fr/explorar/` serve `sb_publishable_…`. 01/09 — página Settings → JWT Keys lida: ECC P-256 corrente, HS256 em « previously used ».*
-
-**O que é.** Nada antes de B18 estar terminado e digerido. Só depois: verificar que nenhum token nem URL assinada de longa duração ainda depende da HS256, e então revogar. Item congelado de propósito para que ninguém « arrume » esse botão de passagem. **Emendado em 08/09 (B24, `OPS-9`)**: «digerido» se mede nos DOIS repositórios, não só no aplicativo — `grep -r eyJhbGciOi` a zero em `anarbib` E em `pages` (vitrine), `curl` de `anarbib.org/fr/explorar/` mostrando a chave corrente, e uma semana de logs em que cada requisição legacy residual foi qualificada pelo seu `referer`. A galeria da vitrine ficou quebrada seis dias depois de B18 sem que ninguém visse: com a HS256 revogada, uma página esquecida não devolve mais 401, devolve uma desconexão geral. **Emendado em 15/09 — descongelado.** As condições estão medidas (ver a verificação) e o gesto se desfaz: segundo a doc Supabase « JWT Signing Keys », uma chave revogada volta a *standby* e se reativa por uma rotação; só a *exclusão* é definitiva, e ela é proibida para o segredo legacy. O gesto, por Xavier: Settings → JWT Keys → HS256 em « Previously used » → Revoke; depois, na hora seguinte, um login, um cadastro, uma recuperação de senha e a abertura de um documento digital (URL assinada do Storage). Em caso de quebra: voltar a HS256 para standby e rodar as chaves (intervalo de cerca de 5 min entre duas mudanças de estado). O levantamento do dia seguinte da tarefa `anarbib-trafic-cles-legacy` serve de prova, e então a tarefa pode ser apagada.
-
-**Por que importa.** Revogada cedo demais, a HS256 invalida de uma vez tudo o que ela ainda validava: a desconexão seria geral e imediata — até que se a volte para standby. O gesto deve então ser feito num momento em que se possa verificar e voltar atrás, não de passagem pela tela por outro motivo. **Corrigido em 15/09**: este parágrafo dizia « o único gesto realmente irreversível de todo o canteiro das chaves »; é a exclusão que o é, não a revogação (doc Supabase « JWT Signing Keys », tabela das ações).
-
-**O que conta como terminado.**
-
-- B18 está fechado há tempo suficiente para que nenhum token assinado com HS256 circule mais — e o inventário dos dois repositórios está feito: nenhuma chave legacy em `anarbib` nem em `pages`, a vitrine publicada verificada (adquirido em 15/09).
-- A revogação foi feita e um login, um cadastro e uma recuperação de senha foram verificados logo depois.
-
-**Dependências.** Item B18 terminado (02/09). **B24 não bloqueia mais (levantado em 15/09)**: o inventário dos dois repositórios que ele exigia está feito; suas guardas (chave única e recusa das chaves legacy em `pages`) protegem a rotação seguinte, não esta.
-
-*Remissões : `item B18`*
 
 #### B20 — O fallback para a chave legada não pode voltar: uma guarda, não um comentário
 
@@ -548,6 +528,50 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Não bloqueia mais **B19** (levantado em 15/09: o inventário está feito e verificado, e a revogação é reversível); os dois gestos protegem a rotação seguinte. Repositório `pages`: o congelamento acabou em 14/09.
 
 *Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
+
+#### B25 — `login`: a reposição a zero dos contadores de falha parte com o token da pessoa, e falha em 403 a cada conexão bem-sucedida desde maio
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : edge
+
+**Estado.** **Constatado em 16/09/2026** no primeiro controlo depois da revogação HS256: quatro `403` em `DELETE /rest/v1/auth_rate_limits` em 24 h, todos da Edge Function `login`, sempre **logo depois** de dois `GET` em 200 na mesma tabela, e `postgres_logs` diz `42501 permission denied for table auth_rate_limits`. Leitura do corpo: `login` cria **um único** cliente com a chave secreta (linha 241), usa-o para `isRateLimited` (service_role, 200), depois chama `supabase.auth.signInWithPassword` **nesse mesmo cliente** (linha 311) — o supabase-js põe então a sessão da pessoa no cliente, e `clearFailures` (linha 324, o `DELETE`) parte com o token ES256 **dela**, logo no papel `authenticated`, que não tem GRANT nenhum na tabela. Presente desde o nascimento da função (`ceb8f6ec`, 05/05). Efeito: os contadores de falha **nunca** são repostos a zero depois de um sucesso, e um erro de permissão silencioso a cada conexão bem-sucedida, invisível porque `clearFailures` não inspeciona `error`.
+
+*Verificado : [object Object]*
+
+**O que é.** Dois clientes em `login`: o da chave secreta para `auth_rate_limits` (leitura, escrita, `DELETE`), e um cliente descartável com a chave publicável, `persistSession: false`, para `signInWithPassword` — a sessão devolvida ao front vem deste segundo cliente. Depois `clearFailures` lê `error` e regista-o: um `42501` não deve mais passar sem ruído. Bancada: o modelo `src/tests/gazette-monthly-build.test.js` — verificar que o `DELETE` leva a chave secreta e não um `Bearer` de sessão.
+
+**Por que importa.** O rate limit da conexão é a única barreira contra a força bruta em `/login`. Um contador que nunca desce castiga as pessoas desajeitadas, não os robôs — e um erro de permissão que roda em silêncio há quatro meses é exatamente o que uma auditoria das DEFINER não vê: o defeito está no cliente, não na base.
+
+**O que conta como terminado.**
+
+- Uma conexão bem-sucedida produz um `DELETE` em 204 em `auth_rate_limits`, e mais nenhum `42501` nessa tabela.
+- Quatro falhas e um sucesso: a linha `email` da pessoa desapareceu da tabela.
+- Uma bancada vitest prova que o `DELETE` nunca leva um `Bearer` de sessão.
+
+**Dependências.** Mesma tabela que **B26**: uma só passagem em `auth_rate_limits` para os dois.
+
+*Remissões : `supabase/functions/login/index.ts` · `supabase/functions/_shared/core/secret-key.ts` · `AUDIT_execute_authenticated_2026-09-01 (paquet 4, AR-1/AR-2)`*
+
+#### B26 — `auth_rate_limits` só aceita `ip` e `email`: os contadores do geocodificador, da cartografia e da gazeta falham em `400` desde que nasceram, e nunca bloqueiam
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, edge
+
+**Estado.** **Constatado em 16/09/2026** ao ler os logs da tabela para B25: dois `400` em `POST /rest/v1/auth_rate_limits?on_conflict=kind,key` em 15/09, e `postgres_logs`: `23514 new row violates check constraint "auth_rate_limits_kind_check"`. A restrição vem da base de maio (`20260510000000`): `kind IN ('ip','email')`. Ora **três Edge Functions** reutilizam a tabela com outros `kind` — `geocode` (`geocode_ip`, 19/06), `submit-cartography-entry` (03/09) e `submit-gazette-contribution` (`gazette_ip`, `gazette_prefill`, 15/09) — pelo mesmo padrão copiado: `select` e `upsert`, **sem ler `error`**. Em produção a tabela só contém `ip` (20) e `email` (32). Consequência: `data` é sempre nulo, `count` vale sempre 1, **nenhum destes três limites bloqueou alguma vez alguém**.
+
+*Verificado : [object Object]*
+
+**O que é.** Uma migração que substitui a `CHECK` pela lista real dos `kind` — ou a levanta a favor de um padrão `^[a-z_]{2,32}$`, já que a tabela está fechada a `anon` e `authenticated`; guarda: uma suíte SQL que insere cada `kind` esperado. Depois, nas três funções, ler `error` do `upsert` e **recusar fechado** (`500`) quando o contador não se escreve. O mesmo `hit()` está copiado três vezes: subi-lo para `_shared/` com o controlo de erro, uma vez.
+
+**Por que importa.** Três travões anti-abuso que mostram « rate limit » no código e nunca contaram: é a forma de dívida mais enganadora, a que uma releitura valida. O geocodificador retransmite para o Nominatim auto-hospedado a partir de uma página pública — sem contador, é uma porta aberta.
+
+**O que conta como terminado.**
+
+- `auth_rate_limits` tem linhas `geocode_ip`, `gazette_ip`, `gazette_prefill` e cartografia em produção depois de um uso real.
+- Mais nenhum `23514` na tabela; a suíte SQL insere cada `kind` esperado.
+- Passar o limiar devolve `429` — provado no geocodificador e na gazeta.
+
+**Dependências.** Mesma passagem que **B25**. O geocodificador toca **A3** e a doutrina anti-rastreio (E5).
+
+*Remissões : `supabase/migrations/20260510000000_baseline_live.sql (l. 45465)` · `supabase/functions/geocode/index.ts` · `supabase/functions/submit-cartography-entry/index.ts` · `supabase/functions/submit-gazette-contribution/index.ts`*
 
 ---
 
@@ -2589,6 +2613,7 @@ CI verde. |
 | I19 | 2026-09-15 | **Encerrado em 15/09, sobre medição.** *(1)* `01-roles.sh` cria `pg_cron` e **para** se falhar; na primeira passagem do entrypoint diz que adia (PR #28, `f179f1ff`). *(2)* `deploy.sh --controle` verifica a extensão e **reproduz `tests/sql/crons_planifies_tests.sql` no `cron.job` real** — a mesma lista da CI, sem cópia; ✓ ou ⚠ com código de retorno 1. Provado em pilha virgem: 38 jobs, suíte verde; job removido → ⚠ rc 1; extensão removida → ⚠ rc 1. |
 | E21 | 2026-09-15 | **A série de tombos e a cota de uma biblioteca configuram-se no ecrã ; um lote recebe as suas cotas e as suas classes de arrumação num só gesto — entregue e em produção na mesma noite** (registo §12 `CAT-E17`, migração `20260915201252`). Três gestos, no padrão proposto para os tombos — convenção, pré-visualização, aplicação, rasto : bloco « Numeração » (Biblioteca e Rede ; prefixo único na rede, congelado após uso), « Cotas em falta » num lote (na ordem do lote, a seguir às existentes), « Classificar por rubricas » (rubrica lida onde a importação a deixou — `assunto_local` para Solidaires —, tabela rubrica → código relida pela coordenação). 14 testes SQL, 101 suites verdes. **Fica às pessoas** : o prefixo de Solidaires, as 1 673 cotas, a tabela das 35 rubricas, a ativação, depois a revisão do lote. |
 | G7 | 2026-09-15 | **Solidaires está admitida** — decisão de Xavier em 15/09/2026, em modo « só admin », à falta de co-administradores encontrados em Bolonha (registo `RES-D12` alterado, v0.34). Biblioteca ativa, série de tombo `SOL-`, 1 673 rascunhos atribuídos e cotados. O perímetro de admissão (`RES-Q13`) continua para a AG. |
+| B19 | 2026-09-16 | **A HS256 está revogada** — gesto de Xavier em 15/09 às 22h14 (20h14 UTC), Settings → JWT Keys → Revoke. **Primeiro controlo, 24 h depois** (tarefa `anarbib-trafic-cles-legacy`, levantamento de 16/09): nenhum 401 numa conexão de usuário — 1 144 respostas 200, 20 em 204, 12 em 206, todos os tokens de sessão em ES256 antes como depois; cruzado com os logs edge: 0 × 401 em `/rest/v1/` em 24 h fora os quatro do bingbot de 16/09 às 15h19 (robô sem chave, nem antiga nem nova). Só resta em HS256 a conta `supabase_admin` de `@supabase-infra/mgmt-api` em `/admin/v1/network-bans/retrieve`, sempre em 200 — a infraestrutura da Supabase, não a aplicação. As três anomalias vistas de passagem não vêm da revogação e têm cada uma a sua causa: os `403` em `DELETE auth_rate_limits` (**B25**, desde maio), os `400` em `GET gazette_submissions` de 15/09 às 21h09–21h11 UTC (o front de GAZ-9 publicado pelo job `app` alguns minutos **antes** de o job `backend` aplicar a migração que acrescenta `staff_edited_at`/`original_*` — a ordem normal da CI, transitório) e os `400` em `POST auth_rate_limits` (**B26**). A tarefa `anarbib-trafic-cles-legacy` pode ser apagada. |
 
 ---
 
@@ -2620,4 +2645,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 88 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
