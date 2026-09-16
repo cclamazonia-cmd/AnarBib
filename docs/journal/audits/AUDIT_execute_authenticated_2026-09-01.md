@@ -1584,3 +1584,61 @@ de ce complément (les huit sont dans la liste du lint, vérifié nom par nom su
 le relevé de 22 h 45, format groupé — une entrée par lint, tableau
 `findings`). Le lint 0028 reste à **28**, la liste T10. Aucune des huit n'est
 exécutable par `anon` (vérifié par `has_function_privilege`).
+
+
+---
+
+# Complément du 16/09/2026 — la 420e, et ce que B22 a retiré de l'autre lint
+
+**16 septembre 2026, 23 h 00** · base `uflwmikiyjfnikiphtcp` en lecture seule · relevé `get_advisors` de 22 h 40, format groupé.
+
+Le lint 0029 est passé de **419** (15/09, 22 h 45) à **420** : **+1 fonction
+`SECURITY DEFINER` exécutable par `authenticated`**. Relevée par `oid`
+décroissant (toute fonction créée après `fn_batch_apply_rubric_classes`, la
+dernière des huit du complément du 15/09) : une seule,
+`api.fn_gazette_probe_sources` (`oid` 1159470), née de la migration
+`20260915203617_les_sources_se_testent_a_la_main` (GAZ-8), écrite à 20 h 36 et
+**poussée à 22 h 56, onze minutes après le relevé de 419** — d'où l'écart. Le
+lint la compte à bon droit : DEFINER, `authenticated=X` dans l'ACL, dans `api`.
+Lue dans `pg_proc.prosrc` en production, au même critère : *que peut demander
+une inconnue qui vient de s'inscrire ?*
+
+## Verdict : aucune faille, une forme à noter
+
+| Fonction | Garde lue dans le corps | Ce qu'une inconnue inscrite obtient | Verdict |
+|---|---|---|---|
+| `api.fn_gazette_probe_sources()` | `network_staff` **actif** (`ns.user_id = auth.uid() and ns.is_active`) **en tête**, `errcode 42501` ; `search_path = public, extensions` ; puis `perform public.fn_gazette_build_call('probe_sources')` | rien (exception `forbidden: network_staff only`) | **justifiée** — le corps ne lit ni n'écrit aucune table : il délègue à `fn_gazette_build_call`, DEFINER **non exposée** (`postgres`, `service_role` seuls), qui fait un `net.http_post` asynchrone vers l'Edge Function `gazette-monthly-build` (`private.fn_functions_base_url()`, I20) avec le secret `gazette_cron_secret` lu au Vault en en-tête `X-Cron-Secret`, corps `{step: 'probe_sources'}`. Le secret ne transite jamais par la session appelante ; la RPC ne rend rien (pas même l'identifiant de requête `pg_net`) |
+
+**La forme à noter.** Un·e `network_staff` peut déclencher la sonde des
+sources à volonté : chaque appel est un `http_post` vers notre propre Edge
+Function, qui sonde à son tour les sources externes (Info Libertaire et les
+autres, GAZ-7/8). Aucun compteur ne borne le geste — les compteurs d'abus de
+`auth_rate_limits` (B25/B26, `20260916201249`) ne connaissent pas ce chemin,
+et la sonde est faite pour être lancée à la main. Ce n'est pas une faille :
+le rôle est le plus restreint du réseau (admins), le coût est le nôtre, et
+la sonde est idempotente (elle marque des états, ne publie rien). À
+reconsidérer si le staff s'élargit ou si une source se plaint d'être
+sollicitée : un garde-fou d'une ligne (`pg_advisory_xact_lock` ou un
+horodatage « dernière sonde < 1 min → refus ») suffirait.
+
+**Non concernées.** Nées aussi le 15/09 au soir, après le relevé :
+`public.fn_gazette_submission_staff_edit` (GAZ-9, `20260915211224`, trigger
+DEFINER, `postgres`/`service_role` seuls) et
+`public.fn_gazette_submission_decision_enqueue` (déjà notée le 15/09) —
+pas exposées, hors du lint. La migration `20260916191823` (la gazette
+s'appelle Fractale) et `20260916201249` (compteurs d'abus) ne créent aucune
+DEFINER.
+
+**Ce que B22 a changé de l'autre côté (même soirée).** Le lint 0028 passe de
+**28 à 26** : `fn_current_user_is_member_of_holding_library` et
+`fn_reading_notes_enabled_for` ne sont plus exécutables par `anon`
+(`20260916223000`, elles n'étaient ouvertes que par un défaut de création,
+rien ne les appelle sous `anon`). La liste T10 les a perdues ; **T12** porte
+désormais la liste fermée des 90 fonctions, INVOKER compris, que `anon`
+exécute sur `public`, `api`, `ingest`, `private`. Le 0029 n'a pas bougé de
+ce fait : les deux avaient déjà `authenticated=X`, écrit.
+
+**Compte au 16/09.** 0029 = **420**, tous justifiés : 411 du 06/09, 8 du
+15/09, 1 de ce complément. 0028 = **26**, la liste T10. Prochain relevé : à
+la prochaine migration qui crée une DEFINER exposée — le lint ne prévient
+pas, il compte.
