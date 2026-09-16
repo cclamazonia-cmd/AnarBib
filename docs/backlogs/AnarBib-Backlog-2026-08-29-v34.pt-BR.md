@@ -392,7 +392,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B20** | O fallback para a chave legada não pode voltar: uma guarda, não um comentário | `P1` | Aberto |
-| **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Aberto |
+| **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Em curso |
 | **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
 | **B25** | `login`: a reposição a zero dos contadores de falha parte com o token da pessoa (403 a cada conexão bem-sucedida desde maio), e a tabela guarda IP e e-mail em claro | `P2` | Aberto |
@@ -466,15 +466,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B22 — Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado.** Medido em 07/09 preparando a spec de `I17`. **Classe A**: 98 funções com `anon=X` na ACL; para **12** delas nenhum `GRANT … TO anon` existe no repositório. **Classe B**: 35 funções executáveis por `anon` via `PUBLIC` — dez RPC de circulação de `api`, 17 de `ingest`, 5 de `public`, 3 com ACL nula. Todas INVOKER: a RLS segura, mas uma RPC de empréstimo chamável por anônimo é uma superfície deixada por esquecimento. **07/09, experiência de `I17`**: mesmo mecanismo do lado das **relações**. Cinco vistas da base sem `security_invoker` nascem legíveis por `anon`/`authenticated` no replay (padrão da imagem para tabelas: `anon=arwdm`) enquanto a produção só lhes deixa `anon=m`: o `REVOKE SELECT` não está escrito em lugar nenhum. T7 vermelho no replay, verde na CI. Duas vias: estender A.1 às tabelas antes da base, ou uma migração nominativa — vistas e policies a procurar antes.
+**Estado.** Medido em 07/09 preparando a spec de `I17`. **Classe A**: 98 funções com `anon=X` na ACL; para **12** delas nenhum `GRANT … TO anon` existe no repositório. **Classe B**: 35 funções executáveis por `anon` via `PUBLIC` — dez RPC de circulação de `api`, 17 de `ingest`, 5 de `public`, 3 com ACL nula. Todas INVOKER: a RLS segura, mas uma RPC de empréstimo chamável por anônimo é uma superfície deixada por esquecimento. **07/09, experiência de `I17`**: mesmo mecanismo do lado das **relações**. Cinco vistas da base sem `security_invoker` nascem legíveis por `anon`/`authenticated` no replay (padrão da imagem para tabelas: `anon=arwdm`) enquanto a produção só lhes deixa `anon=m`: o `REVOKE SELECT` não está escrito em lugar nenhum. T7 vermelho no replay, verde na CI. Duas vias: estender A.1 às tabelas antes da base, ou uma migração nominativa — vistas e policies a procurar antes. **16/09: entregue, a medir em prod.** 133 funções executáveis por `anon`, 47 sem GRANT escrito (mesma conta que 07/09). Chamadores procurados antes de qualquer REVOKE: quatro aberturas SERVEM sob anon e agora estão escritas (`private.fn_book_work_id`, os dois `fn_book_restricted_pdf_state*`, `fn_volume_rank`); as 43 outras fecham-se (10 RPC de circulação + 2, 17 de ingest, 5 dos periódicos + `fn_serial_issue_key`, 4 helpers, 3 `fn_assert_*`, e duas DEFINER de T10 que mudam de lado: 28 → 26). Cinco vistas de T7: `REVOKE SELECT` escrito. Migração `20260916223000`, T10 a 26, **T12 = lista fechada das 90 funções executáveis por anon**. Banco CI verde (103 suítes), replay na imagem verde (321/321, 90 anon). Falta: a CI implanta, medir 0028 (esperado 26) e fechar.
 
-*Verificado : 07/09 — medida complementar, não a mesma dos 47: **28** funções SECURITY DEFINER de `api`+`public` são executáveis por `anon`. A «migração de REVOKE antes do dia 8» da retomada de 06/09 não foi executada; a constatação escrita é este item.
+*Verificado : 16/09 — produção lida (133 funções, ACL, chamadores), repositório classificado por script, banco CI e replay na imagem verdes (worktree `claude/b22`).*
 
-07/09 — medições feitas para a spec de I17: imagem sondada a vazio, produção consultada em leitura, repositório em `fb64c996`.*
-
-**O que é.** Uma migração nominativa, depois do 14: para cada uma das 47, `GRANT` escrito se a abertura serve, senão `REVOKE … FROM PUBLIC, anon`. **Antes de cada REVOKE, procurar as vistas e as policies** que chamam a função sob o papel do leitor. **Recomendação de 07/09 para as cinco vistas de T7**: primeiro uma **migração nominativa** que escreva o `REVOKE SELECT` nas cinco vistas (segura, documenta o estado real da produção: `anon=m, authenticated=m`), depois de procurar quem as chama (`pg_rewrite` para as vistas, `pg_policy` para as policies — uma leitura pública que passasse por elas cairia em silêncio). A **extensão de A.1 às tabelas** fica como **questão**, a instruir com Bastien quando A.1 lhe for proposto: toca a trajetória do replay e merece a sua própria experiência.
+**O que é.** Após a implantação: `get_advisors` deve dar 26 em 0028, e a produção 90 funções `anon` com a mesma MD5. Depois encerrar. Toda função futura: GRANT escrito na migração E linha em T12, senão T12 fica vermelho.
 
 **Por que importa.** `DOC-GRANT-1` diz que uma abertura a `anon` é um ato escrito. Quarenta e sete funções contradizem a regra em silêncio.
 
@@ -486,7 +484,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Dependências.** Depois de 14/09. Independente de `I17`, mas a spec de `I17` é a fonte.
 
-*Remissões : `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07 §4` · `REGISTRE §0 DOC-GRANT-1` · `tests/sql/grants_herites_tests.sql T10` · `item I17`*
+*Remissões : `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07 §4` · `REGISTRE §0 DOC-GRANT-1` · `tests/sql/grants_herites_tests.sql T10` · `item I17` · `supabase/migrations/20260916223000_b22_ouvertures_a_anon_ecrites.sql` · `tests/sql/grants_herites_tests.sql`*
 
 #### B23 — `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la
 
