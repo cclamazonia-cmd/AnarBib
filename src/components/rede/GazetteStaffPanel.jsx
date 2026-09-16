@@ -323,7 +323,7 @@ export default function GazetteStaffPanel() {
     try {
       const { error } = await supabase.from('gazette_issues').insert({
         ...prochain,
-        masthead_title: 'Rizoma — la gazette du réseau AnarBib',
+        masthead_title: 'Fractale — la gazette du réseau AnarBib',
         status: 'draft',
         // Même règle de report que la chaîne : on reprend le mode du dernier numéro.
         build_mode: issues[0]?.build_mode || 'assisted',

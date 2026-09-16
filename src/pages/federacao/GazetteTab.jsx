@@ -33,7 +33,8 @@ const LOCALE_NAMES = {
 // `tagline` = sous-titre constant de la gazette (même sens à chaque numéro).
 // Servi ici comme constante i18n plutôt que depuis gazette_issue_locales.tagline,
 // dont la valeur peut être restée en français si l'automatisation a raté la
-// traduction (cf. N°03). Le nom « Rizoma » reste codé en dur (nom propre).
+// traduction (cf. N°03). Le nom « Fractale » reste codé en dur (nom propre ;
+// « Rizoma » du 16/06 au 16/09/2026, GAZ-10).
 const UI = {
   'pt-BR': { lang: 'Idioma', pdf: 'Baixar PDF', page: 'Página', sources: 'Fontes', tagline: 'A gazeta da rede',
     pending: 'Tradução da comunidade em andamento — exibindo o conteúdo em francês.' },
@@ -126,6 +127,11 @@ const GZ_CSS = `
   .wordmark{font-family:var(--cond);font-weight:900;font-size:4.6rem;line-height:.86;
     letter-spacing:-.02em;color:var(--ink);font-stretch:condensed}
   .wordmark b{color:var(--red)}
+  /* Le premier A du mot-marque est cerclé (GAZ-10) : le cercle est dessiné, pas
+     un glyphe Ⓐ — la fonte condensée n'en a pas, et le rendu PDF doit être le même. */
+  .wordmark .ac{position:relative;display:inline-block;padding:0 .07em}
+  .wordmark .ac::after{content:"";position:absolute;left:50%;top:50%;width:1.02em;height:1.02em;
+    border:.075em solid var(--red);border-radius:50%;transform:translate(-50%,-53%);pointer-events:none}
   .wordmark .tag{display:block;font-family:var(--sans);font-weight:600;font-size:.74rem;
     letter-spacing:.42em;text-transform:uppercase;color:var(--ink);margin-top:.5rem;
     border-top:1px solid var(--line);padding-top:.45rem}
@@ -423,10 +429,10 @@ function renderBlock(b, ui) {
 
 // Construit le document HTML autonome (journal 6 pages) injecté dans l'iframe srcdoc.
 // Nom du document journal — sert de <title> à l'iframe ET de nom de fichier proposé
-// à l'impression PDF (cf. printPdf). Nom propre « Rizoma » non traduit, numéro non
-// paddé : « Rizoma - n°3 ».
+// à l'impression PDF (cf. printPdf). Nom propre « Fractale » non traduit, numéro non
+// paddé : « Fractale - n°3 » (sans le Ⓐ du mot-marque : un nom de fichier reste sobre).
 function gazetteDocTitle(number) {
-  return number != null ? `Rizoma - n°${number}` : 'Rizoma';
+  return number != null ? `Fractale - n°${number}` : 'Fractale';
 }
 
 function buildDocHTML(data, ui, locale, number) {
@@ -439,7 +445,7 @@ function buildDocHTML(data, ui, locale, number) {
       inner += `<div class="masthead">
         <div class="topline"><span>${S(m.left)}</span><span class="mid">${S(m.mid)}</span><span>${S(m.right)}</span></div>
         <div class="lockup">${EMBLEM}
-          <div class="wordmark">Rizo<b>ma</b><span class="tag">${S(ui.tagline || data.tagline)}</span></div>
+          <div class="wordmark">Fr<b class="ac">A</b>ctale<span class="tag">${S(ui.tagline || data.tagline)}</span></div>
         </div></div>`;
     }
     inner += `<div class="kicker"><div class="sec"><span class="n">${String(idx + 1).padStart(2, '0')}</span>${S(pg.sec)}</div>

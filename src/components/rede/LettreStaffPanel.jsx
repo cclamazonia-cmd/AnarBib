@@ -3,7 +3,7 @@
 //
 // Cycle d'un numéro de la Lettre de la fédération (newsletter opt-in) :
 //   créer un brouillon AUTO-assemblé (fn_lettre_draft_create : cercles récents +
-//   assemblées à venir + dernière Rizoma) → relire/éditer (intro libre + items
+//   assemblées à venir + dernière Fractale) → relire/éditer (intro libre + items
 //   retenus, fn_lettre_issue_update) → envoyer aux abonné·es (fn_lettre_issue_send,
 //   fan-out idempotent). Lecture lettre_issues (RLS staff). Modèle = GazetteStaffPanel.
 // ═══════════════════════════════════════════════════════════════════════════

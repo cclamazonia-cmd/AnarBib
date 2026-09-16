@@ -684,16 +684,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Komende vergaderingen", el: "Επερχόμενες συνελεύσεις"
   },
   "lettre.issue.gazetteLink": {
-    "pt-BR": "Saiu o n.º {number} da Rizoma — vem ler",
-    fr: "Le n°{number} de Rizoma est paru — à lire",
-    es: "Ya salió el n.º {number} de Rizoma — a leer",
-    en: "Rizoma no. {number} is out — read it",
-    it: "È uscito il n. {number} di Rizoma — da leggere",
-    de: "Rizoma Nr. {number} ist da — zum Lesen",
-    ca: "Ja ha sortit el núm. {number} de Rizoma — a llegir",
-    eo: "Aperis la n-ro {number} de Rizoma — legu ĝin",
-    nl: "Rizoma nr. {number} is uit — lees mee",
-    el: "Κυκλοφόρησε το αρ. {number} της Rizoma — διάβασέ το"
+    "pt-BR": "Saiu o n.º {number} da Fractale — vem ler",
+    fr: "Le n°{number} de Fractale est paru — à lire",
+    es: "Ya salió el n.º {number} de Fractale — a leer",
+    en: "Fractale no. {number} is out — read it",
+    it: "È uscito il n. {number} di Fractale — da leggere",
+    de: "Fractale Nr. {number} ist da — zum Lesen",
+    ca: "Ja ha sortit el núm. {number} de Fractale — a llegir",
+    eo: "Aperis la n-ro {number} de Fractale — legu ĝin",
+    nl: "Fractale nr. {number} is uit — lees mee",
+    el: "Κυκλοφόρησε το αρ. {number} της Fractale — διάβασέ το"
   },
   "lettre.issue.empty": {
     "pt-BR": "Nada de novo desta vez — até breve.", fr: "Rien de neuf cette fois — à très vite.",

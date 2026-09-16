@@ -575,7 +575,7 @@ async function stepStart() {
   }
 
   await sb.from("gazette_issues").upsert(
-    { number, slug, masthead_title: "Rizoma — la gazette du réseau AnarBib", cover_date, status: "draft", build_mode },
+    { number, slug, masthead_title: "Fractale — la gazette du réseau AnarBib", cover_date, status: "draft", build_mode },
     { onConflict: "number" },
   );
   const { sources } = await collecterSources(await loadSources());

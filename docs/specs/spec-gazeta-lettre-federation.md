@@ -4,7 +4,7 @@
 |---|---|
 | **Domaine** | Face fédération — onglet `Gazeta` (renvoyé par `spec-outils-federalistes` §9). Deux objets, deux canaux. |
 | **Version** | v0.1 (16 juin 2026 — cadrage : sépare l'éditorial *pull* déjà en prod du carnet de réseau *push* à construire) |
-| **Statut** | 🟢 **Lot 2 + Lot 3 + 2b-bis en prod (16/06)** : opt-in (`/conta`, onglet & pill « Lettre », case signup), envoi des numéros + UI staff (`/rede`). Gazette « Rizoma » (pull) en prod. |
+| **Statut** | 🟢 **Lot 2 + Lot 3 + 2b-bis en prod (16/06)** : opt-in (`/conta`, onglet & pill « Lettre », case signup), envoi des numéros + UI staff (`/rede`). Gazette « Fractale » (pull) en prod — nommée « Rizoma » du 16/06 au 16/09/2026 (GAZ-10). |
 | **Foyer décisions** | **REGISTRE §29 `GAZ`** (GAZ-1..6) — *on cite l'ID, on ne reformule jamais ici.* Parent : **§24 `FED`** (onglet Gazeta). Anti-marketing : **`REGISTRE_TRAITEMENTS` §2.4 / §4.2 + Charte art. 4**. |
 | **Dépendances entrantes** | `spec-outils-federalistes` v0.2 (§9 renvoie « bulletin de vie » + « gazette éditoriale ») · infra mail `notify-event` + Resend (`spec-migration-mail-resend`) · `profiles.consent_email_at` (transactionnel, RGPD art. 7) |
 | **Dépendances sortantes** | **Fiche de traitement RGPD dédiée** pour la lettre (`REGISTRE_TRAITEMENTS` §2.6 à créer — **lot 3**) · flag de consentement `consent_lettre_at` (migration, lot 2) |
@@ -16,7 +16,7 @@
 
 La face fédération prévoyait un onglet `Gazeta` à **deux registres** (`spec-outils-federalistes` §9) : un **bulletin de vie** du réseau et une **gazette éditoriale**. Cette spec les **dissocie en deux objets de nature et de canal différents** (**GAZ-1**) :
 
-- **La Gazette « Rizoma »** — objet **éditorial**, lu **en *pull*** : on vient le lire dans l'app (`/federacao/gazeta`), on le télécharge en PDF. *Déjà construit.* *(Nom officiel = **Rizoma**, tranché 16/06 ; emblème « Le Noyau » conservé.)*
+- **La Gazette « Fractale »** — objet **éditorial**, lu **en *pull*** : on vient le lire dans l'app (`/federacao/gazeta`), on le télécharge en PDF. *Déjà construit.* *(Nom officiel = **Fractale**, tranché 16/09/2026 par GAZ-10 — « Rizoma » du 16/06 au 16/09, cédé à un journal camarade ; mot-marque « FrⒶctale » ; emblème « Le Noyau » conservé.)*
 - **La Lettre de la fédération** — **carnet de vie du réseau**, **poussé en *push*** dans la boîte mail. C'est le « bulletin de vie » jamais implémenté. *À construire.*
 
 **Doctrine cardinale (la raison d'être de la séparation).** La lettre **n'est pas la gazette envoyée par mail**. Pousser le contenu éditorial complet dans les boîtes, ce serait exactement le modèle « newsletter Carrefour/Lidl » que le réseau refuse. Le différenciateur n'est pas cosmétique, il est **politique et juridique** :
@@ -39,7 +39,7 @@ Méthode du projet : nommer l'existant avant de concevoir.
 
 **Non construit (la Lettre)** : aucun flag de consentement dédié, aucune surface d'opt-in, aucun pipeline de composition/envoi de carnet de réseau, aucune fiche de traitement RGPD. Tout le §4 est à bâtir.
 
-## 3. La Gazette « Rizoma » — registre éditorial, *pull* (existant)
+## 3. La Gazette « Fractale » — registre éditorial, *pull* (existant)
 
 **Cité ici pour mémoire** ; décision = **GAZ-2**. Rien à reconcevoir, sinon respecter la frontière avec la lettre.
 
