@@ -395,7 +395,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Aberto |
 | **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
-| **B25** | `login`: a reposição a zero dos contadores de falha parte com o token da pessoa, e falha em 403 a cada conexão bem-sucedida desde maio | `P2` | Aberto |
+| **B25** | `login`: a reposição a zero dos contadores de falha parte com o token da pessoa (403 a cada conexão bem-sucedida desde maio), e a tabela guarda IP e e-mail em claro | `P2` | Aberto |
 | **B26** | `auth_rate_limits` só aceita `ip` e `email`: os contadores do geocodificador, da cartografia e da gazeta falham em `400` desde que nasceram, e nunca bloqueiam | `P2` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
@@ -529,23 +529,24 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
 
-#### B25 — `login`: a reposição a zero dos contadores de falha parte com o token da pessoa, e falha em 403 a cada conexão bem-sucedida desde maio
+#### B25 — `login`: a reposição a zero dos contadores de falha parte com o token da pessoa (403 a cada conexão bem-sucedida desde maio), e a tabela guarda IP e e-mail em claro
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : edge
 
-**Estado.** **Constatado em 16/09/2026** no primeiro controlo depois da revogação HS256: quatro `403` em `DELETE /rest/v1/auth_rate_limits` em 24 h, todos da Edge Function `login`, sempre **logo depois** de dois `GET` em 200 na mesma tabela, e `postgres_logs` diz `42501 permission denied for table auth_rate_limits`. Leitura do corpo: `login` cria **um único** cliente com a chave secreta (linha 241), usa-o para `isRateLimited` (service_role, 200), depois chama `supabase.auth.signInWithPassword` **nesse mesmo cliente** (linha 311) — o supabase-js põe então a sessão da pessoa no cliente, e `clearFailures` (linha 324, o `DELETE`) parte com o token ES256 **dela**, logo no papel `authenticated`, que não tem GRANT nenhum na tabela. Presente desde o nascimento da função (`ceb8f6ec`, 05/05). Efeito: os contadores de falha **nunca** são repostos a zero depois de um sucesso, e um erro de permissão silencioso a cada conexão bem-sucedida, invisível porque `clearFailures` não inspeciona `error`.
+**Estado.** **Constatado em 16/09/2026** no primeiro controlo depois da revogação HS256: quatro `403` em `DELETE /rest/v1/auth_rate_limits` em 24 h, todos da Edge Function `login`, sempre **logo depois** de dois `GET` em 200 na mesma tabela, e `postgres_logs` diz `42501 permission denied for table auth_rate_limits`. Leitura do corpo: `login` cria **um único** cliente com a chave secreta (linha 241), usa-o para `isRateLimited` (service_role, 200), depois chama `supabase.auth.signInWithPassword` **nesse mesmo cliente** (linha 311) — o supabase-js põe então a sessão da pessoa no cliente, e `clearFailures` (linha 324, o `DELETE`) parte com o token ES256 **dela**, logo no papel `authenticated`, que não tem GRANT nenhum na tabela. Presente desde o nascimento da função (`ceb8f6ec`, 05/05). Efeito: os contadores de falha **nunca** são repostos a zero depois de um sucesso, e um erro de permissão silencioso a cada conexão bem-sucedida, invisível porque `clearFailures` não inspeciona `error`. **Segunda constatação, no mesmo dia**: `login` é a única das quatro funções que escrevem em `auth_rate_limits` a pôr lá a chave **em claro** — o endereço IP e o e-mail — onde `geocode`, `submit-cartography-entry` e `submit-gazette-contribution` fazem o hash SHA-256 do IP antes de escrever. E como o `DELETE` filtra por `key = <e-mail>`, o e-mail parte **na URL** do pedido PostgREST, logo nos registos edge da Supabase (relidos em 16/09 para este diagnóstico: IP e e-mail da última pessoa conectada, legíveis em claro).
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
-**O que é.** Dois clientes em `login`: o da chave secreta para `auth_rate_limits` (leitura, escrita, `DELETE`), e um cliente descartável com a chave publicável, `persistSession: false`, para `signInWithPassword` — a sessão devolvida ao front vem deste segundo cliente. Depois `clearFailures` lê `error` e regista-o: um `42501` não deve mais passar sem ruído. Bancada: o modelo `src/tests/gazette-monthly-build.test.js` — verificar que o `DELETE` leva a chave secreta e não um `Bearer` de sessão.
+**O que é.** **Decidido por Xavier em 16/09: a chave passa por hash.** Três gestos em `login`, uma só passagem. **(1)** Dois clientes: o da chave secreta para `auth_rate_limits` (leitura, escrita, `DELETE`), e um cliente descartável com a chave publicável, `persistSession: false`, para `signInWithPassword` — a sessão devolvida ao front vem deste segundo cliente. **(2)** A chave dos contadores passa a ser uma impressão: `sha256Hex(ip)` e `sha256Hex(lower(email))`, a mesma função que `geocode` (a subir para `_shared/` com o `hit()` de B26) — mais nenhum IP nem e-mail na tabela, mais nenhum e-mail na URL do `DELETE`, e o contador comporta-se exatamente igual. As 52 linhas em claro atuais purgam-se na migração de B26. **(3)** `clearFailures` lê `error` e regista-o. Bancada: o modelo `src/tests/gazette-monthly-build.test.js` — o `DELETE` leva a chave secreta e nunca um `Bearer` de sessão, e a sua query string não contém `@` nem um IP. **Ao lado**: uma linha no registo de tratamentos e em `privacy.s6` sobre os registos técnicos da plataforma.
 
-**Por que importa.** O rate limit da conexão é a única barreira contra a força bruta em `/login`. Um contador que nunca desce castiga as pessoas desajeitadas, não os robôs — e um erro de permissão que roda em silêncio há quatro meses é exatamente o que uma auditoria das DEFINER não vê: o defeito está no cliente, não na base.
+**Por que importa.** O rate limit da conexão é a única barreira contra a força bruta em `/login`. Um contador que nunca desce castiga as pessoas desajeitadas, não os robôs — e um erro de permissão que roda em silêncio há quatro meses é exatamente o que uma auditoria das DEFINER não vê: o defeito está no cliente, não na base. E uma tabela de segurança não precisa de saber *quem*: uma impressão chega para contar, e não deixa fugir nada nos registos.
 
 **O que conta como terminado.**
 
 - Uma conexão bem-sucedida produz um `DELETE` em 204 em `auth_rate_limits`, e mais nenhum `42501` nessa tabela.
-- Quatro falhas e um sucesso: a linha `email` da pessoa desapareceu da tabela.
-- Uma bancada vitest prova que o `DELETE` nunca leva um `Bearer` de sessão.
+- Quatro falhas e um sucesso: a linha da pessoa desapareceu da tabela.
+- `select key from auth_rate_limits` só devolve impressões hexadecimais de 64 caracteres — nenhum IP, nenhum `@`; a query string do `DELETE` nos registos edge também não.
+- Uma bancada vitest prova os três pontos: chave secreta no `DELETE`, nunca um `Bearer` de sessão, chave com hash.
 
 **Dependências.** Mesma tabela que **B26**: uma só passagem em `auth_rate_limits` para os dois.
 
@@ -559,7 +560,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Verificado : [object Object]*
 
-**O que é.** Uma migração que substitui a `CHECK` pela lista real dos `kind` — ou a levanta a favor de um padrão `^[a-z_]{2,32}$`, já que a tabela está fechada a `anon` e `authenticated`; guarda: uma suíte SQL que insere cada `kind` esperado. Depois, nas três funções, ler `error` do `upsert` e **recusar fechado** (`500`) quando o contador não se escreve. O mesmo `hit()` está copiado três vezes: subi-lo para `_shared/` com o controlo de erro, uma vez.
+**O que é.** Uma migração que substitui a `CHECK` pela lista real dos `kind` — ou a levanta a favor de um padrão `^[a-z_]{2,32}$`, já que a tabela está fechada a `anon` e `authenticated`; guarda: uma suíte SQL que insere cada `kind` esperado. Depois, nas três funções, ler `error` do `upsert` e **recusar fechado** (`500`) quando o contador não se escreve. O mesmo `hit()` está copiado três vezes: subi-lo para `_shared/` com o controlo de erro, uma vez. A migração purga também as 52 linhas em claro (`ip`, `email`) de `login`: depois de B25 as chaves são impressões, essas linhas já não correspondem a nada.
 
 **Por que importa.** Três travões anti-abuso que mostram « rate limit » no código e nunca contaram: é a forma de dívida mais enganadora, a que uma releitura valida. O geocodificador retransmite para o Nominatim auto-hospedado a partir de uma página pública — sem contador, é uma porta aberta.
 
