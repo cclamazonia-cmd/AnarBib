@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 15 de setembro de 2026](#o-estado-real-em-15-de-setembro-de-2026)
+- [O estado real em 16 de setembro de 2026](#o-estado-real-em-16-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -58,9 +58,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 15 de setembro de 2026
+## O estado real em 16 de setembro de 2026
 
-Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
+Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do Bastien), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
 **Frescor dos constatos em 2026-09-16.** **69 itens de 85** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
@@ -71,11 +71,11 @@ Registo de **15 de setembro de 2026** à noite — produção em leitura e repos
 | Tabelas `public` | **191** | todas com RLS ativado, **332 policies** — +4 tabelas desde 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), todas classificadas no filete BG2. |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **917** | `public` 686 · `api` 188 · `ingest` 34 · `private` 9. Dos quais **704 SECURITY DEFINER** — +8 em 15/09 à noite: as sete de E21 (numeração de uma biblioteca, cotas e classes de arrumação de um lote) e `fn_gazette_submission_decision_enqueue` (GAZ-7, interna). Os 909 / 696 do levantamento das 21 h são os de antes das duas entregas da noite. |
-| Migrações aplicadas | **317** | 317 migrações numeradas no repositório = **317 aplicadas, alinhamento exato** (verificado em 15/09 às 22h45, depois das duas entregas da noite: `20260915193525` GAZ-7 e `20260915201252` E21). 325 arquivos com o modelo e os 7 rollbacks. |
+| Funções aplicativas | **919** | `public` 687 · `api` 189 · `ingest` 34 · `private` 9. Dos quais **706 SECURITY DEFINER** — +2 desde o levantamento das 23 h de 15/09: `api.fn_gazette_probe_sources` (GAZ-8, exposta a `authenticated` — **um veredicto a escrever**) e `public.fn_gazette_submission_staff_edit` (GAZ-9, interna). Nenhuma função acrescentada por B25/B26. |
+| Migrações aplicadas | **321** | **321 aplicadas** em produção (última `20260916201249`, os contadores de abuso — B25/B26); **322 numeradas no repositório**: a 322.ª, `B22`, estava na fila da CI no instante do levantamento. 330 arquivos com o modelo e os 7 rollbacks. Próximo levantamento: 322 = 322, e o lint 0028 cai abaixo de 28. |
 | Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
-| Avisos de segurança | **471** | 0 ERROR · **419** + **28** WARN sobre as funções DEFINER expostas · 24 INFO « RLS sem policy » (a lista esperada do `bootstrap.sh`, veredictos B4). 419 = 411 + as oito RPC de 15/09 (biblioteca de destino de um lote, E21) — **todas justificadas**, « Complemento de 15/09 » de `AUDIT_execute_authenticated_2026-09-01`: nenhuma falha, o limite funcional 2 de 06/09 se fecha (`fn_batch_caller_can_edit` aproxima o lote da biblioteca), uma forma a corrigir numa linha (três RPC verificam a existência do lote antes dos direitos). Formato agrupado: contar `findings`, não as entradas. |
-| Avisos de desempenho | **422** | **350 « índices não usados »** (351 às 21 h, 368 em 06/09 — os contadores recomeçam em 02/09 e baixam à medida que os índices servem), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 tabelas sem chave primária, 1 aviso sobre as conexões `auth`. Nada de novo desde a noite. |
+| Avisos de segurança | **472** | 0 ERROR · **420** + **28** WARN sobre as funções DEFINER expostas · 24 INFO « RLS sem policy ». 420 = 419 + `api.fn_gazette_probe_sources` (GAZ-8, veredicto a escrever). O 28 de `anon` é a lista T10; **B22, em CI**, retira-lhe 43 REVOKE e 4 GRANT escritos — a remedir assim que aplicada. Formato agrupado: contar `findings`. |
+| Avisos de desempenho | **417** | **345 « índices não usados »** (350 na véspera, 368 em 06/09), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 tabelas sem chave primária, 1 aviso sobre as conexões `auth`. |
 | Esquemas de refugo | **1** | só `conv_backup` — não se purga. `backup_2026_05_07` saiu em 04/09 (B9). |
 
 ### Funções Edge
@@ -90,7 +90,7 @@ Registo de **15 de setembro de 2026** à noite — produção em leitura e repos
 | | | |
 |---|---:|---|
 | Fichas | **2 656** | 2 758 exemplares, **2 449 obras** (35 vazias suprimidas + fusões), **1 505 autoridades** (17 fusões C5), **3 497 títulos de obra** (pré-traduzidos, 1 452 a rever — C11). 0 proposta sobre obra ainda (G1). |
-| Rascunhos de catalogação | **2 250** | `draft` 1 820, `published` 430. **Os 1 673 rascunhos de Solidaires têm dona desde 15/09** ; só se publicam após a admissão (C2) e a revisão do lote. |
+| Rascunhos de catalogação | **2 250** | `draft` 1 820, `published` 430 — inalterado em número, mas **os 1 673 rascunhos do lote Solidaires (63) têm agora uma proprietária, uma biblioteca ativa e uma cota** (`SOL-00001`…`SOL-01673`). Esperam as classes de arrumação (35 rubricas, Christian), a revisão do lote e `publish_catalog_batch(63)`. |
 | Indexação de assunto | **1 184 / 2 656** | registos com pelo menos um assunto — **1 472 sem nenhum** (eram 1 537). Objeto de **C7**. |
 | Tesauro FICEDL | **621** | termos — 159 datas desde 03/09 (H1). 98 alinhamentos intactos. |
 | Periódicos | **4** | títulos, 7 fascículos vinculados. O **arbítrio de duplicatas** deles está aberto a qualquer `librarian` enquanto o dos livros é reservado à coordenação: desvio medido em 01/09, decidido, aguardando aviso prévio |
@@ -99,8 +99,8 @@ Registo de **15 de setembro de 2026** à noite — produção em leitura e repos
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **5** | **+1 em 14/09 : Bibliothèque Solidaires (Paris)** — inativa, privada, uma coordenação ligada ; criada pela administração como biblioteca de **destino** do lote de importação, **não como admissão** (`RES-D12`, `G7` abertos). |
-| Contas | **19** | **24** adesões ativas (+1 : coordenação de Solidaires). 0 contribuidor de rede, 0 proposta, 0 revisão de lote (G1). |
+| Bibliotecas | **5** | **todas ativas desde 15/09**: Solidaires (Paris, França) está **admitida** (decisão de Xavier em modo « só admin », `RES-D12` emendado, G7 fechado) — `is_active = true`, série de tombo `SOL-` + ano configurada na tela (E21), coordenação vinculada. Os seus 1 673 rascunhos têm cota `SOL-00001`…`SOL-01673`; falta as classes por rubricas, a revisão do lote e a publicação (C2, D3). |
+| Contas | **20** | **24** filiações ativas (inalterado); **+1 conta em 16/09** (inscrição às 14h27 UTC, ainda sem filiação). 0 contribuidor(a) de rede, ainda. |
 | Administrador(a/e)s da rede | **1** | **é o item A1, e ele comanda todo o resto** |
 | Circulação viva | **6 / 19 / 22 / 0** | empréstimos / reservas / consultas / PEB abertos — inalterado. Dois PEB de maio, devolvidos, ficam como histórico. |
 
@@ -108,11 +108,11 @@ Registo de **15 de setembro de 2026** à noite — produção em leitura e repos
 
 | | | |
 |---|---:|---|
-| Commits | **2 677** | em `main`, em 15/09 às 22h40 — **32 commits entre 21 h e 22h40**, todos da sessão vizinha: a **PR #28 fundida** (`f179f1ff`, instalador do Bastien, 17 commits retomados), **GAZ-7** (três commits: base, Edge Functions, front), **E21** entregue (`f7bf927c`) e fechado (`fe0cedf1`, `CAT-E17` no registro), **I19** fechado (`cbb51278`: o controle de saúde do `deploy.sh` verifica `pg_cron` e reproduz a lista dos crons esperados no `cron.job` real), B19 descongelado, I16 anotado. O congelamento de 08 a 14/09 tinha aguentado (11 commits numa semana). |
-| Arquivos `src/` | **321** | 81 páginas, 94 componentes; +3 desde o levantamento das 21 h: `components/library/LibraryNumberingSection.jsx` (E21, o bloco « Numeração » de Biblioteca › Configuração) e as duas bancadas de GAZ-7 (`gazette-decision-mail`, `submit-gazette-contribution`). |
-| Chaves i18n | **6 670** | por locale, **paridade estrita nas 10**, guardada na CI; +78 na noite de 15/09 (GAZ-7: motivo da rejeição e retomada; E21: bloco de numeração, cotas e rubricas de um lote), +21 às 21 h (biblioteca de destino). |
-| Testes | **486 + 101** | 486 testes JS (vitest, gate bloqueante; +17 na noite: as duas bancadas de GAZ-7 e o resto) + **101 suítes SQL** em `ci-suites.txt` (+2: `gazette_reprise_tests`, `numerotation_et_rangement_tests`). Vitest relançado por inteiro às 22h30: 486/486 em 45 s. CI verde: a migração 317 está em produção. |
-| Marcadores de dívida | **18** | dos quais 4 em `src/` — **recontado com método fixo** (`git grep -E 'TODO|FIXME'` fora de `docs/`): 18 no commit `60e0580a` como em `f7bf927c`, a noite não acrescentou nenhum; o « 21 » do levantamento anterior vinha de uma varredura mais ampla. Nenhum é uma tarefa aberta: a dívida nomeada vive no backlog, não no código. |
+| Commits | **2 697** | em `main`, em 16/09 às 22h45 — **20 commits desde o levantamento das 23 h de 15/09** (`fe0cedf1`): GAZ-8 a GAZ-11 e « Fractale », a ligação « Gestão da biblioteca », I18, B25/B26 (`af60bc49`), B22 (`21a98d0e`), e os fechos e levantamentos do backlog. |
+| Arquivos `src/` | **323** | 81 páginas, 94 componentes; +2 desde 15/09: as bancadas `compteurs-d-abus-partages` e `login-compteurs-haches` (B25/B26). O módulo partilhado dos contadores vive do lado Edge, não em `src/`. |
+| Chaves i18n | **6 682** | por locale, **paridade estrita nas 10**, guardada na CI; +12 desde 15/09 (Fractale, sonda das fontes, correção pelo staff, ligação « Gestão da biblioteca »). |
+| Testes | **509 + 104** | 509 testes JS (vitest, gate bloqueante; +23 desde 15/09) + **104 suítes SQL** em `ci-suites.txt` (+3). Vitest relançado por inteiro em 16/09 às 22h45. CI verde em `af60bc49`; B22 na fila. |
+| Marcadores de dívida | **18** | dos quais 4 em `src/` — método fixo (`git grep -E 'TODO|FIXME'` fora de `docs/`): 18 em 16/09 como em 15/09. Nenhum é uma tarefa aberta. |
 
 ---
 
@@ -2557,4 +2557,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado numérico foi levantado em 2026-09-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2e89c1de`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
