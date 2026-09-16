@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-16** · 89 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-16** · 90 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 13
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 14
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 9
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Registo de **15 de setembro de 2026** à noite — produção em leitura e repositório recontado no commit `60e0580a`, primeiro registo depois de Bolonha e do fim do congelamento (14/09). Quatro commits desde 08/09 ; em produção, **uma quinta biblioteca** nasceu em 14/09 (Solidaires, inativa, privada) e os 1 673 rascunhos do lote têm agora dona. Todas as linhas remedidas. Um alerta de operação sai daqui, **I24**.
 
-**Frescor dos constatos em 2026-09-16.** **72 itens de 89** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B22, B23, B24, B25, B26, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-16.** **73 itens de 90** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B22, B23, B24, B25, B26, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1832,6 +1832,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
 | **I23** | Registrar um ccTLD europeu e fazê-lo alias de `anarbib.org` — o `.org` continua sob registro estadunidense | `P2` | Aberto |
+| **I25** | A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada | `P3` | Aberto |
 
 #### I1 — Alinhar a imagem GoTrue com o estado real das migrações de autenticação
 
@@ -2111,6 +2112,27 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Nenhuma. Independente do congelamento.
 
 *Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 1)`*
+
+#### I25 — A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Em 16/09 (run 7092391, `d5228c7f`), `sql-tests` ficou vermelho só em `paquet19_loan_wrappers_tests.sql`, cujo balanço diz « OK : 46/46 ». A rede de `run-sql-suites.sh` (`grep -qE` sob `pipefail`) deu FAIL nesse texto. Reproduzido byte a byte fora da CI (WSL e imagem `node:22`): PASS sempre. Nenhuma anomalia no log; suíte inalterada desde 02/09, quatro linhas por construção. Relançado por Xavier: verde às 22h05. Um acaso — e um acaso que dá vermelho custa um relance e um ticket; o inverso seria pior.
+
+*Verificado : 16/09 — log do run 7092391 lido por inteiro, rede reproduzida fora da CI em dois ambientes, ticket #17 fechado no verde do relance.*
+
+**O que é.** Não procurar na suíte. Instrumentar a rede: gravar `$out` em ficheiro, testar com `grep -c` no ficheiro (sem tubo, logo sem `pipefail` nem SIGPIPE), e em FAIL imprimir `PIPESTATUS` e `wc -c`. Se voltar, o log dirá qual elo mentiu.
+
+**Por que importa.** Uma CI que fica vermelha sem causa corrói a confiança: na terceira falsa alerta relança-se sem ler, e a verdadeira passa.
+
+**O que conta como terminado.**
+
+- A rede lê a saída de um ficheiro, sem tubo, e um FAIL imprime `PIPESTATUS` e o tamanho da saída.
+- Ou o vermelho voltou e o log nomeou a causa, ou três meses sem recidiva.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `scripts/ci/run-sql-suites.sh` · `.forgejo/workflows/sql-tests.yml` · `REGISTRE §0 DOC-SILENCE-1` · `REGISTRE §0 OPS-8`*
 
 ---
 
@@ -2646,4 +2668,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 89 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 90 itens em 11 domínios. O estado numérico foi levantado em 2026-09-15 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `fe0cedf1`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

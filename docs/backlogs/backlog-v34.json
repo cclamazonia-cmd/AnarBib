@@ -5705,6 +5705,56 @@
       ]
     },
     {
+      "id": "I25",
+      "d": "I",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée",
+        "pt": "A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada"
+      },
+      "v": {
+        "fr": "Le 16/09 (run 7092391, commit `d5228c7f`), `sql-tests` est rouge sur la seule `paquet19_loan_wrappers_tests.sql`, dont le bilan dit « LOAN-WRAPPERS OK : 46/46 tests passes ». Le filet de `scripts/ci/run-sql-suites.sh` (`echo \"$out\" | grep -qE ' OK : [0-9]+/[0-9]+'`, sous `set -uo pipefail`) a rendu FAIL sur ce texte. Rejoué à l'octet près hors CI (bash 5.3/grep 3.12 dans WSL ; bash 5.2/grep 3.8 dans l'image `node:22` de la CI ; sortie de 314 Ko en variante) : PASS à chaque fois. Le journal du run ne porte aucune anomalie (fork, mémoire, message de bash) ; la suite n'a pas changé depuis le 02/09 et n'imprime que quatre lignes par construction (aucun `RAISE NOTICE`). Relancé par Xavier : vert à 22 h 05. Un aléa, donc, et un aléa qui rougit pour rien coûte une relance et un ticket ; l'inverse (un vert pour rien) serait pire, et rien ne dit qu'il est impossible.",
+        "pt": "Em 16/09 (run 7092391, `d5228c7f`), `sql-tests` ficou vermelho só em `paquet19_loan_wrappers_tests.sql`, cujo balanço diz « OK : 46/46 ». A rede de `run-sql-suites.sh` (`grep -qE` sob `pipefail`) deu FAIL nesse texto. Reproduzido byte a byte fora da CI (WSL e imagem `node:22`): PASS sempre. Nenhuma anomalia no log; suíte inalterada desde 02/09, quatro linhas por construção. Relançado por Xavier: verde às 22h05. Um acaso — e um acaso que dá vermelho custa um relance e um ticket; o inverso seria pior."
+      },
+      "w": {
+        "fr": "Ne pas chercher dans la suite. Instrumenter le filet : écrire `$out` dans un fichier, tester avec `grep -c` sur le fichier (pas de tube, donc pas de `pipefail` ni de SIGPIPE possibles), et sur FAIL imprimer le code de retour de chaque maillon (`PIPESTATUS`) et `wc -c` de la sortie. Si le rouge revient, le journal dira lequel des maillons a menti ; s'il ne revient jamais, l'instrumentation reste sans coût.",
+        "pt": "Não procurar na suíte. Instrumentar a rede: gravar `$out` em ficheiro, testar com `grep -c` no ficheiro (sem tubo, logo sem `pipefail` nem SIGPIPE), e em FAIL imprimir `PIPESTATUS` e `wc -c`. Se voltar, o log dirá qual elo mentiu."
+      },
+      "y": {
+        "fr": "Une CI qui rougit sans cause érode la confiance qu'on lui doit : à la troisième fausse alerte on relance sans lire, et la vraie passe. DOC-SILENCE-1 vaut aussi pour le dispositif qui mesure.",
+        "pt": "Uma CI que fica vermelha sem causa corrói a confiança: na terceira falsa alerta relança-se sem ler, e a verdadeira passa."
+      },
+      "f": {
+        "fr": [
+          "Le filet lit la sortie depuis un fichier, sans tube, et un FAIL imprime `PIPESTATUS` et la taille de la sortie.",
+          "Soit le rouge est revenu et le journal a nommé la cause, soit trois mois sans récidive."
+        ],
+        "pt": [
+          "A rede lê a saída de um ficheiro, sem tubo, e um FAIL imprime `PIPESTATUS` e o tamanho da saída.",
+          "Ou o vermelho voltou e o log nomeou a causa, ou três meses sem recidiva."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "scripts/ci/run-sql-suites.sh",
+        ".forgejo/workflows/sql-tests.yml",
+        "REGISTRE §0 DOC-SILENCE-1",
+        "REGISTRE §0 OPS-8"
+      ],
+      "verif": {
+        "fr": "16/09 — journal du run 7092391 lu en entier (`sql-tests-sql-tests-9589171.log`), filet rejoué hors CI dans deux environnements, ticket #17 refermé au vert de la relance.",
+        "pt": "16/09 — log do run 7092391 lido por inteiro, rede reproduzida fora da CI em dois ambientes, ticket #17 fechado no verde do relance."
+      }
+    },
+    {
       "id": "F9",
       "d": "F",
       "p": "P1",

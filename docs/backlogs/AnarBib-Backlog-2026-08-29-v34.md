@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-16** · 89 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-16** · 90 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 14
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 5
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 9
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **15 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `60e0580a`, premier relevé après Bologne (13/09) et la fin du gel (14/09). Depuis le relevé du 08/09 : quatre commits seulement au dépôt — les deux correctifs du jeton de récupération (08/09), `OPS-9` au registre, et ce soir **un lot importé a une bibliothèque de destination** (migration `20260915184154`, deux RPC nouvelles) ; en production, **une cinquième bibliothèque** est née le 14/09 (Solidaires, Paris — inactive, privée, une coordination rattachée) et les 1 673 brouillons du lot Solidaires ont désormais une propriétaire. Toutes les lignes ont été remesurées, advisors compris. Une alerte d'exploitation en sort, **I24**.
 
-**Fraîcheur des constats au 2026-09-16.** **72 items sur 89** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B20, B22, B23, B24, B25, B26, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-16.** **73 items sur 90** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B20, B22, B23, B24, B25, B26, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F9, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I6, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1846,6 +1846,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
 | **I23** | Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien | `P2` | Ouvert |
+| **I25** | Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée | `P3` | Ouvert |
 
 #### I1 — Aligner l'image GoTrue sur l'état réel des migrations d'authentification
 
@@ -2125,6 +2126,27 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Aucune. Indépendant du gel.
 
 *Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 1)`*
+
+#### I25 — Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** Le 16/09 (run 7092391, commit `d5228c7f`), `sql-tests` est rouge sur la seule `paquet19_loan_wrappers_tests.sql`, dont le bilan dit « LOAN-WRAPPERS OK : 46/46 tests passes ». Le filet de `scripts/ci/run-sql-suites.sh` (`echo "$out" | grep -qE ' OK : [0-9]+/[0-9]+'`, sous `set -uo pipefail`) a rendu FAIL sur ce texte. Rejoué à l'octet près hors CI (bash 5.3/grep 3.12 dans WSL ; bash 5.2/grep 3.8 dans l'image `node:22` de la CI ; sortie de 314 Ko en variante) : PASS à chaque fois. Le journal du run ne porte aucune anomalie (fork, mémoire, message de bash) ; la suite n'a pas changé depuis le 02/09 et n'imprime que quatre lignes par construction (aucun `RAISE NOTICE`). Relancé par Xavier : vert à 22 h 05. Un aléa, donc, et un aléa qui rougit pour rien coûte une relance et un ticket ; l'inverse (un vert pour rien) serait pire, et rien ne dit qu'il est impossible.
+
+*Vérifié : 16/09 — journal du run 7092391 lu en entier (`sql-tests-sql-tests-9589171.log`), filet rejoué hors CI dans deux environnements, ticket #17 refermé au vert de la relance.*
+
+**Ce que c'est.** Ne pas chercher dans la suite. Instrumenter le filet : écrire `$out` dans un fichier, tester avec `grep -c` sur le fichier (pas de tube, donc pas de `pipefail` ni de SIGPIPE possibles), et sur FAIL imprimer le code de retour de chaque maillon (`PIPESTATUS`) et `wc -c` de la sortie. Si le rouge revient, le journal dira lequel des maillons a menti ; s'il ne revient jamais, l'instrumentation reste sans coût.
+
+**Pourquoi ça compte.** Une CI qui rougit sans cause érode la confiance qu'on lui doit : à la troisième fausse alerte on relance sans lire, et la vraie passe. DOC-SILENCE-1 vaut aussi pour le dispositif qui mesure.
+
+**Ce qui compte comme fini.**
+
+- Le filet lit la sortie depuis un fichier, sans tube, et un FAIL imprime `PIPESTATUS` et la taille de la sortie.
+- Soit le rouge est revenu et le journal a nommé la cause, soit trois mois sans récidive.
+
+**Dépendances.** Aucune.
+
+*Renvois : `scripts/ci/run-sql-suites.sh` · `.forgejo/workflows/sql-tests.yml` · `REGISTRE §0 DOC-SILENCE-1` · `REGISTRE §0 OPS-8`*
 
 ---
 
@@ -2670,4 +2692,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-16. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 89 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fe0cedf1` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-16. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 90 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-15 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `fe0cedf1` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
