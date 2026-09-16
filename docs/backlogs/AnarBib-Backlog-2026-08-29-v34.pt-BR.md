@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-16** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-16** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 5
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 14
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do Bastien), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-16.** **69 itens de 85** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B22, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-16.** **68 itens de 84** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -369,7 +369,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B20** | O fallback para a chave legada não pode voltar: uma guarda, não um comentário | `P1` | Aberto |
-| **B22** | Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga | `P2` | Em curso |
 | **B23** | `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
 
@@ -438,28 +437,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `supabase/functions/_shared/core/secret-key.ts` · `item B18` · `REGISTRE §0 DOC-SILENCE-1` · `codeberg.org/anarbib/anarbib/pulls/28`*
-
-#### B22 — Quarenta e sete funções abertas a anon sem que nenhuma linha do repositório o diga
-
-`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Medido em 07/09 preparando a spec de `I17`. **Classe A**: 98 funções com `anon=X` na ACL; para **12** delas nenhum `GRANT … TO anon` existe no repositório. **Classe B**: 35 funções executáveis por `anon` via `PUBLIC` — dez RPC de circulação de `api`, 17 de `ingest`, 5 de `public`, 3 com ACL nula. Todas INVOKER: a RLS segura, mas uma RPC de empréstimo chamável por anônimo é uma superfície deixada por esquecimento. **07/09, experiência de `I17`**: mesmo mecanismo do lado das **relações**. Cinco vistas da base sem `security_invoker` nascem legíveis por `anon`/`authenticated` no replay (padrão da imagem para tabelas: `anon=arwdm`) enquanto a produção só lhes deixa `anon=m`: o `REVOKE SELECT` não está escrito em lugar nenhum. T7 vermelho no replay, verde na CI. Duas vias: estender A.1 às tabelas antes da base, ou uma migração nominativa — vistas e policies a procurar antes. **16/09: entregue, a medir em prod.** 133 funções executáveis por `anon`, 47 sem GRANT escrito (mesma conta que 07/09). Chamadores procurados antes de qualquer REVOKE: quatro aberturas SERVEM sob anon e agora estão escritas (`private.fn_book_work_id`, os dois `fn_book_restricted_pdf_state*`, `fn_volume_rank`); as 43 outras fecham-se (10 RPC de circulação + 2, 17 de ingest, 5 dos periódicos + `fn_serial_issue_key`, 4 helpers, 3 `fn_assert_*`, e duas DEFINER de T10 que mudam de lado: 28 → 26). Cinco vistas de T7: `REVOKE SELECT` escrito. Migração `20260916223000`, T10 a 26, **T12 = lista fechada das 90 funções executáveis por anon**. Banco CI verde (103 suítes), replay na imagem verde (321/321, 90 anon). Falta: a CI implanta, medir 0028 (esperado 26) e fechar.
-
-*Verificado : 16/09 — produção lida (133 funções, ACL, chamadores), repositório classificado por script, banco CI e replay na imagem verdes (worktree `claude/b22`).*
-
-**O que é.** Após a implantação: `get_advisors` deve dar 26 em 0028, e a produção 90 funções `anon` com a mesma MD5. Depois encerrar. Toda função futura: GRANT escrito na migração E linha em T12, senão T12 fica vermelho.
-
-**Por que importa.** `DOC-GRANT-1` diz que uma abertura a `anon` é um ato escrito. Quarenta e sete funções contradizem a regra em silêncio.
-
-**O que conta como terminado.**
-
-- Cada uma das 47 tem uma linha escrita que diz sua abertura ou fechamento.
-- `grants_herites_tests.sql` traz a asserção « nenhuma função executável por anon sem GRANT escrito ».
-- O lint 0028 devolve sempre 28, ou o novo número esperado, escrito.
-
-**Dependências.** Depois de 14/09. Independente de `I17`, mas a spec de `I17` é a fonte.
-
-*Remissões : `journal/cadrages/CADRAGE_rejeu_fidele_privileges_par_defaut_2026-09-07 §4` · `REGISTRE §0 DOC-GRANT-1` · `tests/sql/grants_herites_tests.sql T10` · `item I17` · `supabase/migrations/20260916223000_b22_ouvertures_a_anon_ecrites.sql` · `tests/sql/grants_herites_tests.sql`*
 
 #### B23 — `api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la
 
@@ -2526,6 +2503,7 @@ CI verde. |
 | F9 | 2026-09-16 | **Levantado em 16/09/2026 às 22h30 (UTC+2), a partir do posto (`nslookup`)** — os três registos existem. **SPF**: `send.notifications.anarbib.org` TXT `v=spf1 include:amazonses.com ~all` (a Resend envia a partir do subdomínio `send.`, é lá que vive o SPF), MX `10 feedback-smtp.eu-west-1.amazonses.com`. **DKIM**: `resend._domainkey.notifications.anarbib.org` TXT `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5Uxzm…` (chave RSA publicada, seletor `resend`). **DMARC**: `_dmarc.notifications.anarbib.org` TXT `v=DMARC1; p=none; rua=mailto:admins@anarbib.org` — política de observação com relatórios para as admins, a forma prudente que o item pedia antes de endurecer. Nada a pôr; endurecer para `p=quarantine` é uma decisão à parte, depois de ler os relatórios `rua`. |
 | I6 | 2026-09-16 | **Provado em 16/09/2026, na data que o item fixava.** `service_health_probes`: 34 568 linhas, a mais antiga de **17/08 às 20h30 UTC**, a mais recente de 16/09 às 20h25 — e **zero linhas com mais de trinta dias**. O limite inferior avançou trinta dias em trinta dias: a purga integrada em `health-probe` apaga de verdade (o contador `n_tup_del` do `pg_stat`, reposto a zero em 02/09, não podia dizê-lo; a contagem direta diz). `service_health_incidents` não é tocada. Nenhum cron a acrescentar. |
 | A2 | 2026-09-16 | **Encerrado em 16/09/2026, decisão de Xavier.** A reconstrução por alguém que não o mantenedor aconteceu: **Bastien** (conta `ASR2026`, primeira contribuição exterior) montou a pilha em casa a partir do repositório só, escreveu-lhe o instalador (`install.sh`, PR #28, **fundida em 15/09** — `f179f1ff`) e registou o que quebrava nos seus commits (`pg_cron` ausente no arranque, esquema a inicializar sob `supabase_admin`, `GRANT` em `supabase_migrations`, `LANG_CODE`, porta 5173…), depois o mantenedor releu e fundiu **a partir dessa instalação**. Os desvios estruturais encontrados têm as suas notas (`CONSTAT_PR28…`, `NOTE_experience-I17…`, `DOC-GRANT-2/3`). O diário de execução como secção de `deploy/README.md` é posto em 16/09. A entrada 1 de `CHANTIERS_OUVERTS` fica a reescrever pelo mantenedor: **J4**. |
+| B22 | 2026-09-16 | **Encerrado em 16/09, sobre medição.** 133 funções executáveis por `anon`, 47 sem GRANT escrito. Chamadores procurados antes de qualquer REVOKE. Migração `20260916223000`: 4 aberturas que servem, escritas; 43 fechadas; 5 vistas de T7 com `REVOKE SELECT` escrito. T10 a 26, **T12 = lista fechada das 90 funções executáveis por anon**. Implantado pela CI (`21a98d0e`); **medido em prod: 90 funções, 30 DEFINER, MD5 idêntico ao replay, lint 0028 = 26**. Regra: função que anon deve chamar = GRANT escrito na migração E linha em T12. |
 
 ---
 
@@ -2557,4 +2535,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado numérico foi levantado em 2026-09-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2e89c1de`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado numérico foi levantado em 2026-09-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2e89c1de`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
