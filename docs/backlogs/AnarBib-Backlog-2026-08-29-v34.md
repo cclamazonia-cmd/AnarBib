@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-16** · 84 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-16** · 75 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,15 +17,15 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 3
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 5
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 14
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 13
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 10
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 5
-    - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 9
+    - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
 - [Maintenance de ce document](#maintenance-de-ce-document)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur de Bastien), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-16.** **68 items sur 84** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B20, B23, B24, C2, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E12, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G11, G12, G13, G14, H2, H9, H10, H11, H13, I1, I2, I3, I12, I13, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K5, K7, K9, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-16.** **60 items sur 75** portent une vérification datée qui leur est propre (A1, A3, A4, B10, B13, B20, B23, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G12, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -487,7 +487,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **C2** | Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse | `P1` | Bloqué |
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Ouvert |
 | **C6** | Livrer les trois assistances de saisie prévues par la spec des conventions | `P2` | Ouvert |
@@ -496,32 +495,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C9** | Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main | `P2` | Ouvert |
 | **C10** | Renommer l'une des deux colonnes `rights_status` | `P2` | Ouvert |
 | **C11** | Arbitrer ce que l'OPAC par œuvre a mis en file : tomes, œuvres scindées, titres pré-traduits, notes MLEG | `P2` | Ouvert |
-
-#### C2 — Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse
-
-`P1` Prioritaire · État : **Bloqué** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
-
-**État.** 1 685 notices dans `SOLIDAIRES_import_test.csv`. **Constat corrigé le 31/08 : le fichier a bel et bien été confronté à l'importeur.** `book_drafts` porte 1 673 brouillons de source `SOLIDAIRES_import_v2.csv`, créés en un seul lot le 29/08 à 1 h 48 — la nuit précédant l'écriture du constat « jamais confrontés ». Tous sont à l'état `draft`, **aucun n'est publié** : le catalogue public n'est pas touché. La décision de Xavier (29/08) reste entière pour la suite : pas de promotion tant que la candidature de SOLIDAIRES n'est pas acceptée à plusieurs (G7). Ce qui reste de l'item n'est donc plus « importer », mais consigner ce que l'import a cassé, puis promouvoir après l'admission.
-
-*Vérifié : 07/09 — inchangé : 1 673 brouillons `SOLIDAIRES_import_v2.csv`, candidature `pendente` depuis le 27/08.
-
-31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue. **15/09** — les 1 673 brouillons ont désormais `owner_library_id` = Solidaires (bibliothèque créée le 14/09 comme destination, inactive et privée). Le geste manquant — attribuer un lot à la bibliothèque qui détient les livres — existe depuis ce soir dans l'app (`fn_batch_reassign_library`, admin réseau, colonne « Bibliothèque » dans Catalogação › Lots). La promotion reste suspendue à l'admission (G7) et passe par la révision de lot du 05/09.*
-
-**Ce que c'est.** Adapter les en-têtes au format réellement attendu (environ une heure), faire passer le fichier **par l'outil d'import du dépôt et non par des `INSERT` à la main**, relire une vingtaine de fiches au hasard, puis faire une démonstration en visio écran partagé.
-
-**Pourquoi ça compte.** L'objet reste autant d'éprouver l'importeur que d'obtenir les notices : **le livrable le plus utile du chantier est la liste de ce qui casse, de ce qui est mal deviné et de ce qui se perd** — pas les 1 685 fiches. Mais faire entrer un fonds avant que le réseau ait dit oui reviendrait à trancher par le fait ce qu'on dit vouloir trancher à plusieurs. C'est le même raisonnement qui interdisait de créer la fiche bibliothèque ; il s'étend maintenant au lot lui-même.
-
-**Ce qui compte comme fini.**
-
-- **L'admission a été prononcée à plusieurs (G7) avant que le fichier soit touché.**
-- Le lot est passé par l'outil d'import du dépôt, pas par des `INSERT` à la main.
-- Un compte rendu écrit dit ce qui a cassé, ligne par ligne quand c'est possible.
-- Vingt fiches tirées au hasard ont été relues.
-- **Aucune coquille d'accent de la source n'a été corrigée en silence** : les corrections vivent dans `assunto_local_sugerido`.
-
-**Dépendances.** **Bloqué par G7**, lui-même bloqué par **A1**. Rien ne bouge tant que le réseau n'a qu'un seul administrateur.
-
-*Renvois : `REPRISE_claude_code_2026-08-27 chantier 2` · `CALENDRIER_bologne_2026-08-27`*
 
 #### C3 — Mener la revue humaine des autorités : patronymes, casse, titres
 
@@ -813,7 +786,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
-| **E12** | La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve | `P2` | En cours |
 | **E14** | Une page pour signaler un bug depuis l'application | `P2` | Ouvert |
 | **E15** | Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf | `P2` | Ouvert |
 | **E16** | La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique | `P2` | À vérifier |
@@ -972,40 +944,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Hérité de `#MOBILE P3`, `#MOBILE P5`, `#MOB-QR-A4`.
 
 *Renvois : `AnarBib-Backlog-2026-06-17-v33 §2.1`*
-
-#### E12 — La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve
-
-`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript, langue maternelle
-
-**État.** **Constat de Xavier le 02/09, sur sa propre capture d'écran, après avoir exercé le circuit OAI dans les deux sens** : « pas très ergonomique ce bazar, surtout pour des camarades qui sont pas informaticiens ». Trois défauts distincts se cachent derrière le mot.
-
-**(1) Le vocabulaire est celui du pipeline, pas du geste.** « Traitements », « Lignes en staging », « Promu·e·s », « Brouillons créés », « File de révision », « Journal d'importation » décrivent exactement staging → révision → promotion — pour qui l'a construit. Une bibliothécaire veut *faire entrer des notices* : « Notices reçues », « À vérifier », « Entrées au catalogue ».
-
-**(2) Des codes bruts fuient à l'écran.** Sous « Bibliothèques compagnes », les pastilles affichent `mapeada` et `importacao_autorizada` : des valeurs d'énumération non traduites — `relation_status || '—'` dans `ImportacoesPage.jsx`, et **aucune clé i18n** pour ces valeurs dans les dix locales (vérifié le 02/09). C'est le défaut le plus net et le moins cher.
-
-**(3) L'import et l'export sont mélangés, et l'export est ailleurs.** La page s'appelle « Importations » mais héberge « Moisson OAI » (un import) ; « être source » — l'export par moissonnage, exercé puis refermé le 02/09 (H5) — vit dans l'onglet réseau de `RedePage` ; l'export d'un lot se cache derrière deux icônes sans libellé à droite du lot. Quelqu'un qui veut « donner nos notices à un autre catalogue » n'a aucun endroit qui s'appelle comme ça. Et le parcours impose un concept de « source partenaire » même pour un simple fichier sous la main : quatre étapes là où l'attente est « je choisis mon fichier, je vérifie, c'est entré ».
-
-**Correction du soir même, sur une seconde capture de Xavier (« voilà pourquoi je trouve que l'import fait un peu usine à gaz »).** L'export **a** une adresse : un commutateur « Sens : Importation / Exportation » en tête de page — si petit que le mainteneur lui-même ne l'avait pas en tête. Le volet 3 se reformule donc : l'adresse existe, elle est illisible, et ce qu'elle ouvre est le vrai « bazar » — **six blocs de trois natures différentes empilés dans le même onglet** : *(a)* geste de bibliothécaire — « Exportation par lot » (CSV / MARCXML / JSON), le seul que la plupart cherchent ; *(b)* gestes de coordination sur le fonds numérique — « Export de fonds » (ZIP), « envoi direct à une bibliothèque partenaire », « Attacher les fichiers reçus » ; *(c)* gestes juridiques — « Préparer l'éligibilité à l'export », « Vérifications de domaine public ». Plus un bloc « Partage ILL » qui annonce **« fonctionnalité en développement » à l'écran** (un chantier ne s'affiche pas aux usagères), et un vocabulaire qui fuit : *éligibilité*, *assets*, *bucket* (« le retire du bucket », lisible par une coordination). Le commutateur « Sens » est d'ailleurs la bonne idée : c'est sa **visibilité** et le **tri de ce qu'il ouvre** qui manquent.
-
-**Troisième constat, sur la page livrée (Xavier, 02/09 soir)** : « Comment un coordinateur qui n'est pas admin fait-il pour demander à ce que sa bibliothèque puisse être moissonnée ? » Réponse : il ne pouvait pas depuis l'interface. Le circuit existe (`fn_oai_request_open_library` accepte une coordination active, `RedePage` l'accueille directement sur l'onglet « Être source », le bouton de demande y est) — mais le lien « Réseau » de la barre n'apparaît qu'aux admins réseau (`canSeeRede(isNetworkAdmin)`). Une coordination devait taper `/rede` à la main. Même maladie que le commutateur « Sens » : une adresse que personne ne trouve.
-
-*Vérifié : 02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (`relation_status || '—'` rendu brut ; aucune clé i18n pour ces valeurs, grep sur `fr.json`). **06/09** — depuis le 05/09, **un lot né d'un import ne se publie qu'après une révision de l'administration, sur rapport** (`catalog_batch_reviews`, garde dans `publish_book_draft`, cloche ; onglet Révisions de Rede). C'est un troisième volet à ajouter à la page : la coordination doit comprendre pourquoi son lot attend, et où. Aucune révision n'a encore eu lieu.*
-
-**Ce que c'est.** Trois lots, du moins cher au plus structurant. **Lot A — avant la soirée 1 de la formation, le 08/09** : traduire les statuts bruts (`relation_status`, états de lot, états de ligne) dans les dix locales, et donner un libellé aux deux icônes du lot — une soirée, et la page peut être montrée sans rougir. **Lot B** : renommer vers le geste (les six libellés de l'en-tête et des sections), sans toucher au pipeline. **Lot C** : rendre le commutateur « Sens » visible (deux vrais onglets, pas un interrupteur), et **trier l'onglet Exportation par nature** — d'abord le geste de bibliothécaire (« Exporter notre catalogue », CSV/MARCXML/JSON, seul bloc visible par défaut), puis un volet « Mutualiser un fonds numérique » (ZIP, envoi direct, fichiers reçus, éligibilité, domaine public) réservé à la coordination et replié ; retirer de l'écran ce qui est « en développement » (ILL) tant qu'il l'est ; bannir *assets* et *bucket* des textes ; et réunir là aussi « être source » (OAI) et le flux OPDS, qui sont des exports. Côté import, le parcours guidé « j'ai un fichier » en deux écrans, source partenaire facultative. Éprouver chaque lot avec une personne qui n'a pas écrit le code (E1 a la même exigence).
-
-**Pourquoi ça compte.** C'est la doctrine anti-méga-machine appliquée à l'écran le plus technique du logiciel : un outil qui cache les camarades derrière son vocabulaire fait le contraire de ce qu'il promet (`DOC-COLLECTIVE-1`). Et la formation BLMF (soirée 1 le 08/09/2026, sept soirées) montrera cette page aux coordinations — le lot A est daté par ce calendrier.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Né de l'épreuve **H5** (l'export par moissonnage vit à Rede, pas ici). Voisin de **E9** (mobile) et **C6** (assistances de saisie) sans les recouvrir ; même exigence de regard extérieur que **E1**. Le lot A est daté par **K7** (soirée 1 le 08/09/2026).
-
-*Renvois : `src/pages/importacoes/ImportacoesPage.jsx` · `src/components/rede/OaiSourcePanel.jsx` · `supabase/functions/export-catalog-lote` · `capture d'écran de Xavier du 02/09 (contexte blmf-teste)`*
 
 #### E14 — Une page pour signaler un bug depuis l'application
 
@@ -1334,7 +1272,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G9** | Implémenter la cartographie du réseau selon la spec v1.0 | `P3` | Gelé |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
-| **G11** | Le premier administrateur d'une instance : écrire la règle d'amorçage | `P0` | Ouvert |
 | **G12** | Une instance = un réseau ; entre instances, seul le catalogue traverse | `P2` | Ouvert |
 | **G13** | Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA… | `P2` | Ouvert |
 | **G14** | Une invitation d'équipe attend depuis le 30/08 et expirera le 29/09 — la personne ne le sait peut-être pas | `P2` | Ouvert |
@@ -1452,27 +1389,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `REGISTRE §26 ONBO-Q13` · `spec-onboarding-biblioteca-v2.0`*
 
-#### G11 — Le premier administrateur d'une instance : écrire la règle d'amorçage
-
-`P0` Structurel · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK). **Tranché le 06/09 au soir (Xavier) : A + B + C + D′** — amorçage unique hors circuit, mot de passe aléatoire dans tous les modes, premier compte = coordination de la première biblio et admin réseau, l'installateur demande le nom de la bibliothèque. Reste à l'appliquer dans `seed-admin.mjs` et `install.sh` (PR #28) et à le dire dans `deploy/README.md`. **D3 tranchée (21 h 30)** : sur entrée vide, l'installateur **refuse et redemande** le nom — pas de « Bibliothèque Autonome » par défaut.
-
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
-
-**Ce que c'est.** Trancher et inscrire au REGISTRE (`GOUV-19`) : *(a)* l'amorçage d'une base vide écrit un premier compte hors circuit, une fois, et le script refuse sinon ; *(b)* mot de passe aléatoire dans tous les modes, affiché une fois ; *(c)* le premier compte est-il coordinateur de la première biblio, admin réseau, ou les deux ? *(d)* la biblio `demo` : la créer, ou demander son nom à l'installation ?
-
-**Pourquoi ça compte.** Sans règle écrite, l'amorçage devient une porte : un script qui « crée un admin » se relance, se copie, se documente comme une commodité. Avec une règle, c'est un geste unique, nommé, refusé dès qu'il existe quelqu'un.
-
-**Ce qui compte comme fini.**
-
-- `GOUV-19` est acté au REGISTRE avec les quatre réponses.
-- `seed-admin.mjs` les applique et `deploy/README.md` le présente comme l'amorçage, pas comme une création de compte.
-
-**Dépendances.** PR #28 scindée (**I16**) : le morceau est à proposer à Bastien.
-
-*Renvois : `REGISTRE §41 GOUV-19` · `deploy/scripts/seed-admin.mjs (PR #28)` · `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06`*
-
 #### G12 — Une instance = un réseau ; entre instances, seul le catalogue traverse
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle, aucune compétence technique
@@ -1564,9 +1480,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** L'export complet des 620 descripteurs dans les deux formats est **à une soirée de travail** — dès que les sept questions ont une réponse. Elles sont écrites et personne ne les a encore posées.
 
-*Vérifié : 07/09, soir — **deux réponses de plus de la source.** (1) `X (généralités)` **est** la tête de hiérarchie : les 45 parents « introuvables » sont 45 `broader` réels ; 138 descripteurs sur 148 sont rattachés, 10 ne le sont pas — et la question restante est devenue : `guerres` et `art : courants` sont-ils des **groupes de mots-clés SPIP** ? (2) Identifiants : la forme canonique SPIP est `?motNN` quel que soit le type d'URL affiché ; les « URL propres » sont des adresses, pas des identités. La question 1 tombe — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, proposition `/id/motNN` retirée. Restent : la question des groupes, le format (un fichier à deux schémas ou deux), les liens vers les catalogues, le grec, la licence, la régénération.
-
-07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Les sept : la forme des identifiants ; **la hiérarchie, qui est la vraie question** ; le statut de la facette « dates » ; le sort des 2 842 liens vers six catalogues ; le grec romanisé ; la licence ; et la manière dont le fichier se régénère.
 
@@ -1717,11 +1631,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 | | | | |
 |---|---|---|---|
-| **I1** | Aligner l'image GoTrue sur l'état réel des migrations d'authentification | `P1` | Gelé |
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Gelé |
 | **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Gelé |
-| **I12** | Automatiser le rafraîchissement du miroir froid | `P2` | Ouvert |
-| **I13** | Finir la bascule vers le nouveau moteur de pages | `P3` | Ouvert |
 | **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | Ouvert |
 | **I16** | Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09 | `P1` | En cours |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
@@ -1730,28 +1641,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
 | **I23** | Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien | `P2` | Ouvert |
 | **I25** | Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée | `P3` | Ouvert |
-
-#### I1 — Aligner l'image GoTrue sur l'état réel des migrations d'authentification
-
-`P1` Prioritaire · État : **Gelé** · Charge : quelques jours · Ce que ça demande : administration système
-
-**État.** La production porte **77 migrations `auth`** (remesuré le 31/08), la dernière datée du 25/06. **Le constat sur l'épinglage est périmé : `deploy/.env` et `deploy/.env.example` portent tous deux `GOTRUE_TAG=v2.192.0` désormais.** Ce que v2.192.0 embarque comme migrations n'a pas été mesuré : l'alignement reste à prouver, et l'item reste gelé avec I2.
-
-*Vérifié : [object Object],[object Object]*
-
-**Ce que c'est.** Une méthode qui **se mesure et ne se devine pas** : monter d'un palier, démarrer sur un volume vierge, `select count(*) from auth.schema_migrations;`, recommencer jusqu'à atteindre au moins 77.
-
-**Pourquoi ça compte.** La règle est simple et absolue : **l'image doit être supérieure ou égale à la production, jamais l'inverse.** Une image en retard démarre sur un schéma qu'elle ne connaît pas et peut le corrompre en tentant de le migrer.
-
-**Ce qui compte comme fini.**
-
-- Un tag est retenu, avec le compte mesuré à chaque palier écrit.
-- `deploy/.env.example` est corrigé et la documentation de `deploy/` suit.
-- Les douze dernières versions de production sont listées pour recoupement.
-
-**Dépendances.** **Gelé sur la production jusqu'au 14/09.** Le travail en environnement d'essai est ouvert. Premier maillon de la chaîne de bascule.
-
-*Renvois : `REPRISE_bascule_autohebergee_2026-08-26 §1`*
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1798,50 +1687,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
 
-#### I12 — Automatiser le rafraîchissement du miroir froid
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** **Constat corrigé le 05/09 : le minuteur tourne.** Le journal systemd de l'utilisateur le prouve : `anarbib-mirror-refresh.timer` se déclenche chaque jour à 18 h 02, et le 04/09 le service a pris 32 commits (`a1656516 → 63630c2f`, « Miroir froid à jour, 243 Mo »). `systemctl` ment sur ce poste, mais `journalctl --user -u anarbib-mirror-refresh.service` ne ment pas. Le script (`deploy/ops/anarbib-mirror-refresh.sh`) refuse un remote inconnu et **s'arrête sur une réécriture d'historique** — mais son échec ne va nulle part d'autre que le journal, et la fraîcheur du miroir n'apparaît pas dans le témoin de sauvegarde (`fn_backup_heartbeat_status`).
-
-*Vérifié : 31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée. **05/09** — `journalctl --user` : timer actif, dernier passage 04/09 18:02:19, prochain 05/09 18:03 ; le miroir portait `3b1f71c1` le soir même (rafraîchi à la main en plus). Le `die` du script n'a pas de destinataire.*
-
-**Ce que c'est.** Ce qui reste : faire remonter l'échec du service (un `OnFailure=` vers l'unité d'alerte des sauvegardes, ou une ligne dans `backup_heartbeats`) et écrire la date du dernier rafraîchissement là où le témoin la lira. Le `die` du script est le bon signal, il n'a pas encore de destinataire.
-
-**Pourquoi ça compte.** Une reconstruction demande **trois** choses et non deux : le dépôt, une sauvegarde, **et les secrets du Vault**. Le miroir froid est la troisième copie du dépôt, après Codeberg et le miroir GitHub. Il ne sert que s'il est à jour — et le miroir GitHub a déjà accumulé 6 878 objets de retard une fois.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-
-**Dépendances.** Lié à **I4**.
-
-*Renvois : `RUNBOOK_exploitation_v0.3 §4 §9.1`*
-
-#### I13 — Finir la bascule vers le nouveau moteur de pages
-
-`P3` Différé · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système
-
-**État.** L'étape 0 est concluante depuis le 20/08 : `test.anarbib.org` est servi par le nouveau moteur en parallèle. La chaîne d'intégration continue utilise déjà l'action `git-pages`. **Codeberg Pages en version historique est en mode maintenance, pas en fin de vie** — la documentation dit qu'il continuera de fonctionner indéfiniment. D'où la priorité basse.
-
-*Vérifié : [object Object],[object Object]*
-
-**Ce que c'est.** Poser l'enregistrement TXT de liste blanche, créer `public/_redirects` avec la règle de réécriture, vérifier qu'une route inconnue renvoie 200 avec le bon contenu, puis nettoyer **seulement après** vérification verte.
-
-**Pourquoi ça compte.** Deux points de vigilance sont écrits. **Ne pas toucher aux enregistrements A et AAAA**, qui sont bons. Et **vérifier la casse de l'URL** : le workflow écrit `AnarBib`, la documentation écrit `anarbib` — en cas de doute, poser les deux enregistrements TXT.
-
-**Ce qui compte comme fini.**
-
-- Le site est servi par le nouveau moteur, avec les routes inconnues en 200.
-- Le nettoyage est fait après vérification : `public/.domains`, la branche `pages`, les secrets devenus inutiles.
-- **Laisser `public/CNAME`** — il sert au miroir GitHub.
-- Incertitudes assumées : la réversibilité de la bascule n'est documentée nulle part, aucune limite chiffrée n'est publiée (taille, bande passante, délai), et les fichiers vendorisés pèsent lourd — **point à surveiller au premier déploiement**.
-
-**Dépendances.** P1, pas P0 — la version historique n'a pas de date d'arrêt annoncée.
-
-*Renvois : `PLAN_migration_git_pages_2026-08-19` · `RUNBOOK_exploitation_v0.3`*
-
 #### I15 — Le secret Forgejo de la clé publiable porte encore son ancien nom
 
 `P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
@@ -1868,7 +1713,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La PR #28 (installateur `install.sh`, `deploy/`, seed admin, transport mail, résolveur d'URL, neuf migrations retouchées) est relue ; réponse du mainteneur posée le 06/09 au soir. Bloquant avant fusion, indépendamment du gel : **(1)** scinder — le code de production (`src/lib/supabase.js`, `coverThumbs.js`, `AltchaWidget`, six pages, `secret-key.ts`, `email.ts`, `smtp.ts`, deux `notify-*`) dans une PR à part ; **(2)** retirer le repli sur `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` (la ligne `SUPABASE_SECRET_KEYS` de `compose.yml` suffit) ; **(3)** le mode « mock » du mail réservé à `MAIL_TRANSPORT=mock` explicite ; **(4)** `docs/CHANTIERS_OUVERTS.md` rendu au mainteneur. Puis : mot de passe admin aléatoire en local, `pg_cron` créé plutôt que sauté, explication de la regex `uid()` (`20260906111308`), « UUID déterministes » introuvables dans le diff. Détails : `.gitignore` `deploy/.env.*` couvre `.env.example` ; Caddy sur `5173` contre `npm run dev` ; `Referrer-Policy` changé pour toute l'API ; `deploy/README.md` perd la section `bg2-known-tables.txt`. **MàJ 06/09, 21 h.** Bastien a scindé (#28 auto-hébergement, tête `c0e7d3c2` ; #29 code applicatif, tête `1f3745fa`) et réglé le soir même : `CONTRIBUTING.md` identique à `main`, migration `20260904130100` restaurée, `pg_cron` créé dans `01-roles.sh`, mot de passe aléatoire et nom de biblio demandés, courriel admin demandé, confirmation `--rebuild`, attente `pg_isready`, `.env.local` préservé, redirection http→https Caddy. **Deux points nouveaux pour la relecture d'après le 14** : *(a)* `install.sh` écrit désormais `VITE_SUPABASE_URL=auto`, que seul le `resolveSupabaseUrl` de la #29 comprend — sur `main`, `auto` serait pris pour une URL : **la #28 dépend de la #29**, ou doit écrire l'URL réelle ; *(b)* l'init `pg_cron` est enveloppée dans `if` le rôle `postgres` existe → un saut silencieux est de retour par une autre porte. Les tickets « [CI rouge] » #2/#3 touchés ce soir sont d'août, fermés, seulement cross-référencés ; tous les runs Actions sont verts. **21 h 06 (`73eb3462`)** : il a réglé la dépendance en mettant dans la #28 un `resolveSupabaseUrl` **minimal** — seul `auto` bascule sur `window.location.origin`, une URL explicite est respectée telle quelle (ce qui répare aussi l'heuristique `localhost` de la #29). Conséquences : *(a)* un fichier de production (`src/lib/supabase.js`) revient dans la PR d'auto-hébergement — acceptable **s'il reste le seul** et sous cette forme minimale, à dire explicitement à la fusion ; *(b)* la #29 porte encore sa propre version du même fichier, avec l'heuristique `localhost` : **conflit entre les deux PR**, la #29 devra être rebasée sur la #28 fusionnée et abandonner sa version ; *(c)* le `throw` « `VITE_SUPABASE_URL` requis » qui suit devient inatteignable (repli sur l'origine ou `http://localhost`) — à trancher : garder le `throw` quand la variable est absente, réserver le repli au seul `auto`. **Tranché le 06/09 à 21 h 30 (Xavier)** : D9 — `src/lib/supabase.js` accepté dans la #28, seul et minimal, `throw` conservé hors `auto`, exception dite à la fusion ; D6 — la #29 se rebase sur la #28 fusionnée en un ou deux commits et abandonne sa version du résolveur ; D8 — la #29 se fusionne entre deux soirées de formation, jamais la veille d'une séance, tests verts. **MàJ 15/09, soir — la #28 est fusionnée.** Relecture complète postée à 20 h 45 (`issuecomment-22902616`), après un passage d'`install.sh` de sa tête `73eb3462` sur une machine vierge : rc 0 en 107 s, 308 migrations, six conteneurs, amorçage conforme — mais **371 fonctions exécutables par `anon`, dont 233 `SECURITY DEFINER`** (production : 133 et 28), le mécanisme `DOC-GRANT-2` mesuré sur une installation réelle. Décision (D7 amendée) : A.1/A.2 entrent dans la PR **avant** la fusion, diff joint et testé sur sa branche. Bastien a tout repris en trente minutes (quatre commits, tête `0c63cb05`) : A.1/A.2 tels quels, message de report autour de `pg_cron`, nom de biblio refusé si vide (D3), simulation en option 3 (D4 ; Entrée y tombe encore, `3|*)`), `throw` atteignable hors `auto` (D9), locale via `--lang`, README (ligne périmée retirée, sections « Ordre de la répétition » et « Ce qu'on a supprimé » revenues), `deploy.sh --controle` (sonde `/libraries`, code de retour), port 5173 et `.env.local` nettoyés, `supabase_migrations` initialisé par son propriétaire. Trois passages d'`install.sh` sur pile vierge (5bbe6ba5, 15c95f4e, 0c63cb05) : rc 0 en 50-64 s, **133 fonctions `anon`, empreinte MD5 identique à la production**, contrôle de santé à 0, `merge-tree` propre. **Fusionnée par Xavier à 22 h 01 (commit de fusion `f179f1ff`, 17 commits conservés)** ; CI verte (app, backend, suites SQL). Mot d'après fusion à 22 h 04 (`issuecomment-22905523`). **Pages #3 (README seul) fusionnée à 22 h 08 (`b04f47bc`).** `I17` est ainsi livré dans `main` par la PR elle-même.
 
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **15/09** — quatre têtes re-mesurées par l'API ; `install.sh` exécuté quatre fois sur pile isolée (`COMPOSE_PROJECT_NAME=anarbib-pr28`, worktree détaché sur `refs/pull/28/head`, stdin fermé) ; comptes `anon`/DEFINER et empreinte MD5 comparés à la production en lecture seule ; `merge-tree` contre `main` avant fusion ; CI du commit de fusion suivie jusqu'au vert.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Restent deux PR : **pages #2** (guide vitrine) — à fusionner quand le guide présente la simulation en option 3 (D4) ; **#29** (code applicatif) — Bastien la rebase sur `main` en un ou deux commits sans ses trois fichiers de cartographie (conflit depuis le fond PMTiles du 08/09 ; sa branche est un commit en avance sur la PR, `5e5baf1a`), puis relecture comme du code de production (mock explicite dans les deux `notify-*`, STARTTLS, dot-stuffing, trois copies de l'aiguillage mail, `coverThumbs.js`, tests) et fusion entre deux soirées de formation (D8). Deux détails à lui rappeler à l'occasion : Entrée sur le choix du mail, corps de la PR #28 (« 308 », « 5173 »).
 
@@ -1952,7 +1797,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** **Constaté le 15/09/2026 au retour de Bologne.** Le dimanche 13/09, le poste était éteint : les minuteurs hebdomadaires `long` (20 h) et `storage` (21 h) n'ont pas tourné. Le 15/09 à 08 h 15, au démarrage, systemd a rattrapé les trois (`Persistent=`) : `court` fini à 08 h 17, `long` à 08 h 20 (instantané `da135422`), **`storage` tué à 08 h 23 par `SIGTERM`** (« Failed with result 'signal' »), après quatre buckets sur seize — c'est l'arrêt de la session utilisateur WSL, qui rebondit sur ce poste (mémoire `anarbib-systemd-etat-non-fiable`), qui a emporté le service. Et la ligne suivante du journal : **« Failed to enqueue OnFailure=anarbib-backup-failure@… »** — l'unité d'alerte n'a pas pu être lancée, la session s'arrêtant. Résultat : un flux `storage` vieux de neuf jours (dernier instantané le 06/09 21 h 19, seuil de fraîcheur 216 h atteint le 15/09 à 21 h 20), un témoin `started` sans `ok` (`fn_backup_heartbeat_status` : « tir commencé et JAMAIS TERMINÉ, tué en route »), et **aucun courriel**. Relancé à la main le 15/09 à 20 h 50 (`systemctl --user start anarbib-backup-storage.service`).
 
-*Vérifié : 15/09 — journal `journalctl --user -u anarbib-backup-storage.service` : `Main process exited, code=killed, status=15/TERM` à 08:23:45, « Failed to enqueue OnFailure » ; `fn_backup_heartbeat_status` : `storage` `interrompu = true`, `muet = true`, 215,5 h. Relance manuelle à 20 h 50, en cours au moment du relevé. **21 h 05** — la relance manuelle a abouti : seize buckets resynchronisés, instantané `daafc96b`, témoin de vie envoyé, rétention 7/4/6 appliquée (l’instantané du 09/08 sorti). Le flux `storage` est de nouveau attesté ; le trou va du 06/09 21 h 19 au 15/09 21 h 05.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Deux choses. **(1)** Le service `storage` ne doit pas mourir avec la session : `KillMode=` et `TimeoutStopSec=` à régler, ou mieux, le lancer sous `systemd-run --scope` détaché, ou enfin `loginctl enable-linger` pour que la session utilisateur ne s'arrête pas avec le terminal — vérifier lequel tient sur ce WSL, où `systemctl` ment (juger sur `journalctl`). **(2)** L'alerte ne doit pas dépendre de la session qui meurt : le contrôle de fraîcheur du midi (`anarbib-fraicheur.timer`, lecture seule des dépôts restic) doit **envoyer** quand un flux dépasse son seuil ou porte un `started` sans `ok`, pas seulement l'écrire au journal. Le témoin en base (`fn_backup_heartbeat_status`) sait déjà dire « interrompu » : lui donner un destinataire (`HEALTH_ALERT_CC`, mémoire `anarbib-alertes-supervision-destinataires`).
 
@@ -2136,11 +1981,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **K1** | Faire adopter l'acte de création du Fonds AnarBib | `P0` | Bloqué |
 | **K2** | Ouvrir les canaux d'encaissement dormants | `P1` | Bloqué |
 | **K3** | Tenir le registre public des comptes | `P2` | Ouvert |
-| **K5** | Tenir l'intervention de Bologne et en tirer les suites | `P1` | En cours |
-| **K6** | Préparer la rencontre avec leftove.rs et May Day Rooms | `P2` | En cours |
 | **K7** | Mener la formation des deux coordinations BLMF jusqu'à l'autonomie | `P1` | En cours |
 | **K8** | Finir le texte d'orientation sur les outils de bibliothèques militantes | `P2` | Ouvert |
-| **K9** | Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est « 138 rattachés, 10 sans tête » — quatre textes à corriger avant le 12 | `P1` | Ouvert |
 | **K10** | Trois articles promis au *Monde libertaire*, un par mois — et une émission proposée à *Trous Noirs* | `P2` | À vérifier |
 
 #### K1 — Faire adopter l'acte de création du Fonds AnarBib
@@ -2210,51 +2052,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `PLAN_financement_AnarBib_2026-08-25` · `tools/build-finances-pages.cjs`*
 
-#### K5 — Tenir l'intervention de Bologne et en tirer les suites
-
-`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : délibération collective
-
-**État.** Atelier AnarBib le 12/09 au matin, assemblée ouverte le 13. Un jeu de 29 diapositives italien-anglais est prêt, ainsi qu'une brochure manifeste bilingue. Trois objectifs annoncés : la genèse et la conception, le panorama des fonctionnalités, et **un appel à participation**.
-
-*Vérifié : 07/09 — deux chiffres des textes sont périmés (620 → 623 ; 55 parents → 10), sortis en **K9**. La clause Stripe de l'encart de soutien est en ligne dans les dix locales (vérifié sur `anarbib.org/fr/contribuer/`).
-
-**03/09** — **collision de dates signalée** : le backlog place la formation BLMF le 13/09 (K7, E12, GOUV-18 « fenêtre d'objection à la formation du 13/09 ») et Bologne les 11-13/09 (atelier le 12, assemblée le 13). À trancher par Xavier : séance à distance depuis Bologne avec relais à Belém, ou autre date. La liste K5 (créneau, chronométrage, papier, démonstration hors ligne) est reprise en §5 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — fausse alerte retirée.** Le plan de formation du 01/09 ne date pas la première soirée : il n'y avait pas de collision avec Bologne, seulement un « 13/09 » posé par hypothèse dans le backlog. K5 garde sa propre liste.*
-
-**Ce que c'est.** Demander le créneau d'intervention à l'assemblée du 13, chronométrer la version italienne à voix haute, imprimer le dossier sur papier — tout le monde n'ouvre pas un PDF dans une salle —, et répéter la démonstration **hors ligne**, au cas où le réseau manque.
-
-**Pourquoi ça compte.** L'appel à participation est ce qui décide de **A1** et de **A3**. Le but énoncé est qu'AnarBib cesse d'être un projet solitaire : que le code évolue par des contributions humaines plutôt que par de l'assistance automatique, et que les coûts soient mutualisés. Point de vigilance : la colonne « manquant » de la diapositive 21 est **largement périmée** — beaucoup de ce qu'elle liste a été livré depuis.
-
-**Ce qui compte comme fini.**
-
-- L'intervention a eu lieu et l'appel a été porté à l'assemblée.
-- Les contacts pris sont consignés, avec ce que chacun a proposé.
-- Sur l'accessibilité, dire les deux : des fonctionnalités sont implémentées, aucun audit indépendant n'a été mené (voir **E1**).
-
-**Dépendances.** Gel du code en production à partir du 08/09.
-
-*Renvois : `CALENDRIER_bologne_2026-08-27` · `PLAN_intervention_FICEDL_Bologne_2026-09-12`*
-
-#### K6 — Préparer la rencontre avec leftove.rs et May Day Rooms
-
-`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : délibération collective
-
-**État.** **Le message est parti** — autour du 19/08, soit trois semaines avant la rencontre, ce qui était exactement la fenêtre visée : assez tôt pour qu'ils regardent AnarBib sans que ce soit urgent. **L'atelier AnarBib est le matin, l'atelier leftove.rs l'après-midi du 12/09, même salle, même journée.** Ce qui reste ouvert, ce sont les réponses et la préparation de la journée.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Relancer si besoin, et préparer les trois questions posées pour qu'elles se discutent sur place : le vocabulaire de sujets, le profil de numérisation (ils ont 16 000 documents océrisés), et NORLA et la cartographie. Plus la question sur l'auto-hébergement au collectif technique présent.
-
-**Pourquoi ça compte.** Deux ateliers le même jour dans la même salle, sur des sujets voisins, sans que les deux équipes se soient parlé, serait un gâchis. Et il y a un point à regarder avant, pas après : **leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict.**
-
-**Ce qui compte comme fini.**
-
-- Les trois questions ont une réponse, ou un créneau de discussion est calé pour le 12/09.
-- **Point à regarder avant la rencontre, pas après** : leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict.
-
-**Dépendances.** Le 12/09, dans la journée. Lié à **D4** (matériel éphémère) et **H6** (alignement des vocabulaires).
-
-*Renvois : `VEILLE_leftovers_maydayrooms_2026-08-19` · `CALENDRIER_bologne_2026-08-27`*
-
 #### K7 — Mener la formation des deux coordinations BLMF jusqu'à l'autonomie
 
 `P1` Prioritaire · État : **En cours** · Charge : plusieurs semaines · Ce que ça demande : délibération collective
@@ -2300,29 +2097,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Lié à **K5** et **H7**.
 
 *Renvois : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26`*
-
-#### K9 — Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est « 138 rattachés, 10 sans tête » — quatre textes à corriger avant le 12
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** **Mesuré sur l'aspiration du 03/09, le 07/09.** 620 → **623** descripteurs entre le 30/06 et le 03/09 (trois dates apparues : `1927`, `2026`, `2027`, zéro disparition). Et sur les 148 descripteurs hiérarchisés, 55 parents étaient introuvables au 28/08 — **45 se résolvent par la variante `X (généralités)`** ; il reste **10** vrais regroupements sans concept (`guerres` ×9, `art : courants` ×1). Les deux chiffres sont dans la présentation du 12, l'intervention du 13, le texte d'orientation et les conventions d'interopérabilité.
-
-*Vérifié : 07/09, soir — la source confirme que `X (généralités)` est la tête : le « 45 / 10 » devient « 138 rattachés / 10 sans tête ».
-
-07/09 — chiffres mesurés ; textes non encore corrigés.*
-
-**Ce que c'est.** Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 138 sur 148 sont rattachés à leur tête `X (généralités)`, confirmé par la source ; 10 ne le sont pas » — et poser la seule question qui reste : « `guerres` et `art : courants` sont-ils des groupes de mots-clés dans SPIP ? ».
-
-**Pourquoi ça compte.** Le vocabulaire a bougé sans que personne l'apprenne : c'est l'argument de l'intervention, mesuré sur ta propre copie. Mais prononcer un chiffre faux devant les gens qui tiennent le site, c'est perdre l'argument.
-
-**Ce qui compte comme fini.**
-
-- Les quatre textes portent les chiffres du 03/09 et la question reformulée.
-- Le foglio italien imprimé est la version corrigée.
-
-**Dépendances.** Avant **K5** (12/09). Sans dépendance technique.
-
-*Renvois : `claude/REPONSE_hortical_deux_thesaurus_2026-09-07 §5-6` · `claude/PRESENTATION_samedi_bologne_2026-09-12` · `claude/INTERVENTION_assemblee_ouverte_bologne_2026-09-13` · `claude/ORIENTATION_outils_bibliotheques_militantes_2026-08-26` · `claude/CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26`*
 
 #### K10 — Trois articles promis au *Monde libertaire*, un par mois — et une émission proposée à *Trous Noirs*
 
@@ -2528,6 +2302,15 @@ CI verte : lint et suite unitaire. |
 | I6 | 2026-09-16 | **Prouvé le 16/09/2026, à la date que l'item fixait.** `service_health_probes` : 34 568 lignes, la plus ancienne du **17/08 à 20 h 30 UTC**, la plus récente du 16/09 à 20 h 25 — et **zéro ligne de plus de trente jours**. La borne basse a avancé de trente jours en trente jours : la purge intégrée à `health-probe` supprime pour de vrai (le compteur `n_tup_del` de `pg_stat`, remis à zéro le 02/09, ne pouvait pas le dire ; le comptage direct le dit). `service_health_incidents` n'est pas touchée. Aucun cron à ajouter. |
 | A2 | 2026-09-16 | **Clos le 16/09/2026, décision de Xavier.** La reconstruction par quelqu'un d'autre que le mainteneur a eu lieu : **Bastien** (compte `ASR2026`, première contribution extérieure) a monté la pile chez lui depuis le dépôt seul, en a écrit l'installateur (`install.sh`, PR #28, **fusionnée le 15/09** — `f179f1ff`) et consigné ce qui cassait dans ses commits (`pg_cron` absent au démarrage, schéma à initialiser sous `supabase_admin`, `GRANT` sur `supabase_migrations`, `LANG_CODE`, port 5173…), puis le mainteneur a relu et fusionné **depuis cette installation** — ses forks partent d'un AnarBib qui tourne chez lui. Les écarts structurels trouvés en chemin ont leurs notes (`CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`, `NOTE_experience-I17-rejeu-fidele_2026-09-07`, `DOC-GRANT-2/3`). Ce que la fiche voulait en plus — le journal d'exécution comme section de `deploy/README.md` — est posé le 16/09 (§ « Première reconstruction extérieure »). L'entrée 1 de `CHANTIERS_OUVERTS` reste à réécrire par le mainteneur : **J4**. |
 | B22 | 2026-09-16 | **Clos le 16/09, sur mesure.** Relevé prod du jour : 133 fonctions exécutables par `anon` (public, api, ingest, private), 47 sans `GRANT … TO anon/PUBLIC` écrit — le compte du 07/09. Appelants cherchés avant tout REVOKE (vues et leur `security_invoker`, policies, corps + `prosecdef`, triggers, expressions d'index, défauts générés). Migration `20260916223000_b22_ouvertures_a_anon_ecrites` : **4 ouvertures qui servent, écrites** (`private.fn_book_work_id` lue par les vues invoker du catalogue anonyme ; `fn_book_restricted_pdf_state*` : page publique du livre et EF read-pdf ; `fn_volume_rank` : `api.catalog_works_v1`/`work_public_detail`) ; **43 fermées** (10 RPC de circulation + 2 à ACL nulle, 17 d'ingest avec `authenticated` gardé pour les 3 lues par les vues invoker de l'import et les 2 en expression d'index, 5 triggers/helpers des périodiques + `fn_serial_issue_key`, 4 helpers, 3 `fn_assert_*`, et deux DEFINER de T10 qui changent de camp) ; **5 vues de T7** : `REVOKE SELECT` écrit. `grants_herites_tests.sql` : T10 à 26, **T12 = liste fermée des 90 fonctions exécutables par anon**, dans les deux sens. Déployé par la CI (`21a98d0e`) ; **mesuré en prod à 22 h 40 : 90 fonctions, 30 DEFINER, empreinte `1852f6b2…` identique au rejeu sur image, lint 0028 = 26** (0029 = 420, hors item). Règle désormais : une fonction que anon doit appeler = un GRANT écrit dans sa migration ET une ligne dans T12, sinon T12 rougit. Hors item : `private.fn_book_work_id` reste DEFINER exposée à anon par deux vues invoker (voulu, catalogue public) — hors `public`/`api`, le lint 0028 ne la compte pas. |
+| E12 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — les trois lots étaient livrés depuis le 02/09 (bandeau du jour : « page Importations restructurée, lots A-C : deux onglets, export trié, plus un code brut ») et la page porte ses onglets (`importacoes.tab.history`, `.reception`, `.rss`) ; l'item était resté « en cours » faute de clôture, pas faute de livraison. Constat corrigé le 16/09. |
+| C2 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — le fonds Solidaires **est passé par l'outil d'import du dépôt** (source 17, run 29, lot 63 : 1 673 brouillons), pas par des `INSERT` ; l'admission a été prononcée avant de toucher au lot pour de bon (G7, 15/09 — la fiche voulait « à plusieurs », c'est le mode « seul·e admin » de `RES-D12` qui s'est appliqué, faute de co-admins) ; les corrections d'accents vivent dans `assunto_local_sugerido`. Ce qui a cassé est consigné : `library_without_tombo_pattern` → E21, 91 fascicules et 87 monographies suspectes → **D3**, aucun sujet lié par le run → rubriques (E21). La relecture d'un échantillon se fait dans la révision du lot (`fn_batch_review_report`, rapport admin obligatoire avant `publish_catalog_batch(63)`) : elle n'a pas besoin d'un item à part. |
+| K5 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — l'intervention de Bologne a eu lieu le 13/09 et l'appel a été porté ; les contacts et ce qu'ils ont proposé sont consignés (BTL se réengage, CIRA incertain, leftove.rs — mémoire et notes de session du 13-14/09) ; la suite technique est ouverte à part (H10-H13, K9 sans objet). Sur l'accessibilité, la position tenue est celle de la fiche : des fonctionnalités, pas d'audit indépendant (E1 reste). |
+| K6 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — la rencontre avec leftove.rs s'est tenue autour de Bologne (12-13/09) : les fichiers de travail sont sur le disque `F:` (dossier « Rencontre Leftove.rs »), l'esquisse SKOS a été révisée le 09/09 avec eux (H13 la verse au dépôt), le sujet de la numérisation et de NORLA est ouvert dans H6/G8. Le point licence (CC BY-NC-SA, clause non commerciale) a été vu avant, comme la fiche le demandait. |
+| K9 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — **sans objet** : les quatre textes de Bologne ont servi le 13/09 ; corriger des chiffres dans un dossier d'intervention passé n'a plus de destinataire. Les chiffres vivants (623 descripteurs au 03/09, 138 rattachés sur 148, la question `guerres`/`art : courants`) sont ceux de H10-H13, qui restent ouverts. |
+| I12 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — l'automatisation est faite et prouvée depuis le 05/09 (minuteur systemd utilisateur, 18 h 02 chaque jour, passages lus dans `journalctl --user`, +32 commits le 04/09). Ce qui restait — donner un destinataire au `die` du script et écrire la date du dernier rafraîchissement dans le témoin — est **le même problème que I24** (une alerte qui ne survit pas au poste) : il y est versé, pour être réglé une seule fois avec le flux `storage`. |
+| I13 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — mesuré le 16/09 : le site est servi par git-pages, une route inconnue (`/une-route-qui-n-existe-pas`) rend **200 `text/html`** ; `public/_redirects` existe, `public/.domains` n'existe plus, la branche `pages` n'existe plus sur Codeberg, `public/CNAME` est gardé pour le miroir GitHub. Le nettoyage des secrets Forgejo devenus inutiles est un geste de Xavier dans les réglages de la forge, hors dépôt — il n'a pas besoin d'un item. Les incertitudes assumées (réversibilité, limites non publiées) restent vraies et n'ont pas mordu depuis le 21/08. |
+| I1 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — `deploy/.env.example` porte `GOTRUE_TAG=v2.192.0` avec la règle « image ≥ production » et l'historique de la montée (v2.189.0 → v2.192.0 le 20/08) ; les passes du 26/08 ont mesuré **77 migrations GoTrue = la production exactement** ; la PR #28 a rejoué la pile sur cette image. Le troisième « fini quand » (lister les douze dernières versions de production) est levé : la mesure directe vaut mieux que la liste. |
+| G11 | 2026-09-16 | **Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — la règle d'amorçage est **actée au registre** : `GOUV-19`, « ✅ tranché 06/09 (Xavier, Q1 : A + B + C + D′) » — amorçage unique hors circuit, refusé dès qu'un admin actif existe ; mot de passe aléatoire dans tous les modes, affiché une fois ; premier compte = coordination de la première bibliothèque **et** admin réseau ; bibliothèque `demo` créée si la table est vide. `deploy/scripts/seed-admin.mjs` (PR #28, fusionnée le 15/09) applique les quatre (`crypto.randomBytes` en tout mode, rôles `coordenador` + `librarian` + ligne `network_administrators`, refus si un admin existe), et `deploy/README.md` § « Compte administrateur initial » le présente comme l'amorçage d'une base vierge. Constat corrigé : la fiche disait « à écrire », c'était écrit. |
 
 ---
 
@@ -2559,4 +2342,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-16. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 84 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2e89c1de` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-16. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 75 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2e89c1de` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

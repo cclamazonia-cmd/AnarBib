@@ -2010,6 +2010,78 @@
           "fr": "**Clos le 16/09, sur mesure.** Relevé prod du jour : 133 fonctions exécutables par `anon` (public, api, ingest, private), 47 sans `GRANT … TO anon/PUBLIC` écrit — le compte du 07/09. Appelants cherchés avant tout REVOKE (vues et leur `security_invoker`, policies, corps + `prosecdef`, triggers, expressions d'index, défauts générés). Migration `20260916223000_b22_ouvertures_a_anon_ecrites` : **4 ouvertures qui servent, écrites** (`private.fn_book_work_id` lue par les vues invoker du catalogue anonyme ; `fn_book_restricted_pdf_state*` : page publique du livre et EF read-pdf ; `fn_volume_rank` : `api.catalog_works_v1`/`work_public_detail`) ; **43 fermées** (10 RPC de circulation + 2 à ACL nulle, 17 d'ingest avec `authenticated` gardé pour les 3 lues par les vues invoker de l'import et les 2 en expression d'index, 5 triggers/helpers des périodiques + `fn_serial_issue_key`, 4 helpers, 3 `fn_assert_*`, et deux DEFINER de T10 qui changent de camp) ; **5 vues de T7** : `REVOKE SELECT` écrit. `grants_herites_tests.sql` : T10 à 26, **T12 = liste fermée des 90 fonctions exécutables par anon**, dans les deux sens. Déployé par la CI (`21a98d0e`) ; **mesuré en prod à 22 h 40 : 90 fonctions, 30 DEFINER, empreinte `1852f6b2…` identique au rejeu sur image, lint 0028 = 26** (0029 = 420, hors item). Règle désormais : une fonction que anon doit appeler = un GRANT écrit dans sa migration ET une ligne dans T12, sinon T12 rougit. Hors item : `private.fn_book_work_id` reste DEFINER exposée à anon par deux vues invoker (voulu, catalogue public) — hors `public`/`api`, le lint 0028 ne la compte pas.",
           "pt": "**Encerrado em 16/09, sobre medição.** 133 funções executáveis por `anon`, 47 sem GRANT escrito. Chamadores procurados antes de qualquer REVOKE. Migração `20260916223000`: 4 aberturas que servem, escritas; 43 fechadas; 5 vistas de T7 com `REVOKE SELECT` escrito. T10 a 26, **T12 = lista fechada das 90 funções executáveis por anon**. Implantado pela CI (`21a98d0e`); **medido em prod: 90 funções, 30 DEFINER, MD5 idêntico ao replay, lint 0028 = 26**. Regra: função que anon deve chamar = GRANT escrito na migração E linha em T12."
         }
+      ],
+      [
+        "E12",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — les trois lots étaient livrés depuis le 02/09 (bandeau du jour : « page Importations restructurée, lots A-C : deux onglets, export trié, plus un code brut ») et la page porte ses onglets (`importacoes.tab.history`, `.reception`, `.rss`) ; l'item était resté « en cours » faute de clôture, pas faute de livraison. Constat corrigé le 16/09.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — os três lotes estavam entregues desde 02/09 (página Importações reestruturada, lotes A-C: dois separadores, exportação ordenada, sem código bruto) e a página tem os seus separadores; o item ficara « em curso » por falta de fecho, não de entrega."
+        }
+      ],
+      [
+        "C2",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — le fonds Solidaires **est passé par l'outil d'import du dépôt** (source 17, run 29, lot 63 : 1 673 brouillons), pas par des `INSERT` ; l'admission a été prononcée avant de toucher au lot pour de bon (G7, 15/09 — la fiche voulait « à plusieurs », c'est le mode « seul·e admin » de `RES-D12` qui s'est appliqué, faute de co-admins) ; les corrections d'accents vivent dans `assunto_local_sugerido`. Ce qui a cassé est consigné : `library_without_tombo_pattern` → E21, 91 fascicules et 87 monographies suspectes → **D3**, aucun sujet lié par le run → rubriques (E21). La relecture d'un échantillon se fait dans la révision du lot (`fn_batch_review_report`, rapport admin obligatoire avant `publish_catalog_batch(63)`) : elle n'a pas besoin d'un item à part.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — o fundo Solidaires **passou pela ferramenta de importação do repositório** (fonte 17, run 29, lote 63: 1 673 rascunhos), não por `INSERT`; a admissão foi pronunciada antes de tocar no lote de verdade (G7, 15/09, modo « só admin » de `RES-D12`); as correções de acentos vivem em `assunto_local_sugerido`. O que quebrou está registado: `library_without_tombo_pattern` → E21, 91 fascículos e 87 monografias suspeitas → **D3**, nenhum assunto ligado pelo run → rubricas (E21). A releitura de uma amostra faz-se na revisão do lote (`fn_batch_review_report`, relatório admin obrigatório antes de `publish_catalog_batch(63)`)."
+        }
+      ],
+      [
+        "K5",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — l'intervention de Bologne a eu lieu le 13/09 et l'appel a été porté ; les contacts et ce qu'ils ont proposé sont consignés (BTL se réengage, CIRA incertain, leftove.rs — mémoire et notes de session du 13-14/09) ; la suite technique est ouverte à part (H10-H13, K9 sans objet). Sur l'accessibilité, la position tenue est celle de la fiche : des fonctionnalités, pas d'audit indépendant (E1 reste).",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — a intervenção de Bolonha aconteceu em 13/09 e o apelo foi levado; os contactos e o que propuseram estão registados (BTL reengaja-se, CIRA incerto, leftove.rs); a sequência técnica está aberta à parte (H10-H13). Sobre a acessibilidade, a posição é a da ficha: funcionalidades, sem auditoria independente (E1 fica)."
+        }
+      ],
+      [
+        "K6",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — la rencontre avec leftove.rs s'est tenue autour de Bologne (12-13/09) : les fichiers de travail sont sur le disque `F:` (dossier « Rencontre Leftove.rs »), l'esquisse SKOS a été révisée le 09/09 avec eux (H13 la verse au dépôt), le sujet de la numérisation et de NORLA est ouvert dans H6/G8. Le point licence (CC BY-NC-SA, clause non commerciale) a été vu avant, comme la fiche le demandait.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — o encontro com leftove.rs realizou-se em torno de Bolonha (12-13/09): os ficheiros de trabalho estão no disco `F:`, o esboço SKOS foi revisto em 09/09 com eles (H13 leva-o ao repositório), a digitalização e a NORLA estão abertas em H6/G8. O ponto da licença foi visto antes, como a ficha pedia."
+        }
+      ],
+      [
+        "K9",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — **sans objet** : les quatre textes de Bologne ont servi le 13/09 ; corriger des chiffres dans un dossier d'intervention passé n'a plus de destinataire. Les chiffres vivants (623 descripteurs au 03/09, 138 rattachés sur 148, la question `guerres`/`art : courants`) sont ceux de H10-H13, qui restent ouverts.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — **sem objeto**: os quatro textos de Bolonha serviram em 13/09; corrigir números num dossiê de intervenção passado já não tem destinatário. Os números vivos são os de H10-H13, que ficam abertos."
+        }
+      ],
+      [
+        "I12",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — l'automatisation est faite et prouvée depuis le 05/09 (minuteur systemd utilisateur, 18 h 02 chaque jour, passages lus dans `journalctl --user`, +32 commits le 04/09). Ce qui restait — donner un destinataire au `die` du script et écrire la date du dernier rafraîchissement dans le témoin — est **le même problème que I24** (une alerte qui ne survit pas au poste) : il y est versé, pour être réglé une seule fois avec le flux `storage`.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — a automatização está feita e provada desde 05/09 (timer systemd de utilizador, 18h02 cada dia, passagens lidas em `journalctl --user`). O que restava — dar um destinatário ao `die` do script e escrever a data no testemunho — é **o mesmo problema que I24**: é lá vertido, para ser resolvido uma só vez com o fluxo `storage`."
+        }
+      ],
+      [
+        "I13",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — mesuré le 16/09 : le site est servi par git-pages, une route inconnue (`/une-route-qui-n-existe-pas`) rend **200 `text/html`** ; `public/_redirects` existe, `public/.domains` n'existe plus, la branche `pages` n'existe plus sur Codeberg, `public/CNAME` est gardé pour le miroir GitHub. Le nettoyage des secrets Forgejo devenus inutiles est un geste de Xavier dans les réglages de la forge, hors dépôt — il n'a pas besoin d'un item. Les incertitudes assumées (réversibilité, limites non publiées) restent vraies et n'ont pas mordu depuis le 21/08.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — medido em 16/09: o site é servido por git-pages, uma rota desconhecida devolve **200 `text/html`**; `public/_redirects` existe, `public/.domains` já não existe, o ramo `pages` já não existe na Codeberg, `public/CNAME` mantido para o espelho GitHub. A limpeza dos segredos Forgejo tornados inúteis é um gesto de Xavier nos ajustes da forja, fora do repositório."
+        }
+      ],
+      [
+        "I1",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — `deploy/.env.example` porte `GOTRUE_TAG=v2.192.0` avec la règle « image ≥ production » et l'historique de la montée (v2.189.0 → v2.192.0 le 20/08) ; les passes du 26/08 ont mesuré **77 migrations GoTrue = la production exactement** ; la PR #28 a rejoué la pile sur cette image. Le troisième « fini quand » (lister les douze dernières versions de production) est levé : la mesure directe vaut mieux que la liste.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — `deploy/.env.example` tem `GOTRUE_TAG=v2.192.0` com a regra « imagem ≥ produção » e o histórico; as passagens de 26/08 mediram **77 migrações GoTrue = a produção exatamente**; a PR #28 reproduziu a pilha nessa imagem. O terceiro « acabado quando » é levantado: a medida direta vale mais do que a lista."
+        }
+      ],
+      [
+        "G11",
+        "2026-09-16",
+        {
+          "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — la règle d'amorçage est **actée au registre** : `GOUV-19`, « ✅ tranché 06/09 (Xavier, Q1 : A + B + C + D′) » — amorçage unique hors circuit, refusé dès qu'un admin actif existe ; mot de passe aléatoire dans tous les modes, affiché une fois ; premier compte = coordination de la première bibliothèque **et** admin réseau ; bibliothèque `demo` créée si la table est vide. `deploy/scripts/seed-admin.mjs` (PR #28, fusionnée le 15/09) applique les quatre (`crypto.randomBytes` en tout mode, rôles `coordenador` + `librarian` + ligne `network_administrators`, refus si un admin existe), et `deploy/README.md` § « Compte administrateur initial » le présente comme l'amorçage d'une base vierge. Constat corrigé : la fiche disait « à écrire », c'était écrit.",
+          "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — a regra de arranque está **registada**: `GOUV-19`, « ✅ decidido 06/09 (Xavier, Q1: A + B + C + D′) » — arranque único fora do circuito, recusado assim que exista um admin ativo; palavra-passe aleatória em todos os modos, mostrada uma vez; primeira conta = coordenação da primeira biblioteca **e** admin de rede; biblioteca `demo` criada se a tabela estiver vazia. `deploy/scripts/seed-admin.mjs` (PR #28) aplica as quatro, e `deploy/README.md` apresenta-o como o arranque de uma base virgem."
+        }
       ]
     ]
   },
@@ -2213,61 +2285,6 @@
       "verif": {
         "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul.",
         "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08."
-      }
-    },
-    {
-      "id": "C2",
-      "d": "C",
-      "p": "P1",
-      "s": "bloque",
-      "e": "M",
-      "sk": [
-        "biblio",
-        "sql"
-      ],
-      "t": {
-        "fr": "Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse",
-        "pt": "Importar o acervo SOLIDAIRES pela ferramenta de importação, e registrar o que quebra"
-      },
-      "v": {
-        "fr": "1 685 notices dans `SOLIDAIRES_import_test.csv`. **Constat corrigé le 31/08 : le fichier a bel et bien été confronté à l'importeur.** `book_drafts` porte 1 673 brouillons de source `SOLIDAIRES_import_v2.csv`, créés en un seul lot le 29/08 à 1 h 48 — la nuit précédant l'écriture du constat « jamais confrontés ». Tous sont à l'état `draft`, **aucun n'est publié** : le catalogue public n'est pas touché. La décision de Xavier (29/08) reste entière pour la suite : pas de promotion tant que la candidature de SOLIDAIRES n'est pas acceptée à plusieurs (G7). Ce qui reste de l'item n'est donc plus « importer », mais consigner ce que l'import a cassé, puis promouvoir après l'admission.",
-        "pt": "1 685 registros em `SOLIDAIRES_import_test.csv`. **Constato corrigido em 31/08: o arquivo foi sim confrontado com o importador.** `book_drafts` traz 1 673 rascunhos da fonte `SOLIDAIRES_import_v2.csv`, criados num único lote na noite anterior à escrita do constato « nunca confrontados ». Todos `draft`, **nenhum publicado**: o catálogo público não foi tocado. A decisão de Xavier (29/08) permanece: nenhuma promoção antes da admissão (G7). O que resta não é mais « importar », mas consignar o que quebrou e promover depois da admissão."
-      },
-      "w": {
-        "fr": "Adapter les en-têtes au format réellement attendu (environ une heure), faire passer le fichier **par l'outil d'import du dépôt et non par des `INSERT` à la main**, relire une vingtaine de fiches au hasard, puis faire une démonstration en visio écran partagé.",
-        "pt": "Adaptar os cabeçalhos ao formato realmente esperado (cerca de uma hora), passar o arquivo **pela ferramenta de importação do repositório e não por `INSERT` à mão**, revisar umas vinte fichas ao acaso, e depois fazer uma demonstração em videoconferência com tela compartilhada."
-      },
-      "y": {
-        "fr": "L'objet reste autant d'éprouver l'importeur que d'obtenir les notices : **le livrable le plus utile du chantier est la liste de ce qui casse, de ce qui est mal deviné et de ce qui se perd** — pas les 1 685 fiches. Mais faire entrer un fonds avant que le réseau ait dit oui reviendrait à trancher par le fait ce qu'on dit vouloir trancher à plusieurs. C'est le même raisonnement qui interdisait de créer la fiche bibliothèque ; il s'étend maintenant au lot lui-même.",
-        "pt": "O objetivo continua sendo tanto testar o importador quanto obter os registros: **a entrega mais útil do canteiro é a lista do que quebra, do que é mal adivinhado e do que se perde** — não as 1 685 fichas. Mas fazer entrar um acervo antes de a rede ter dito sim equivaleria a decidir pelo fato o que se diz querer decidir em conjunto. É o mesmo raciocínio que proibia criar a ficha de biblioteca; estende-se agora ao próprio lote."
-      },
-      "f": {
-        "fr": [
-          "**L'admission a été prononcée à plusieurs (G7) avant que le fichier soit touché.**",
-          "Le lot est passé par l'outil d'import du dépôt, pas par des `INSERT` à la main.",
-          "Un compte rendu écrit dit ce qui a cassé, ligne par ligne quand c'est possible.",
-          "Vingt fiches tirées au hasard ont été relues.",
-          "**Aucune coquille d'accent de la source n'a été corrigée en silence** : les corrections vivent dans `assunto_local_sugerido`."
-        ],
-        "pt": [
-          "**A admissão foi pronunciada em conjunto (G7) antes de o arquivo ser tocado.**",
-          "O lote passou pela ferramenta de importação do repositório, não por `INSERT` à mão.",
-          "Um relatório escrito diz o que quebrou, linha por linha quando possível.",
-          "Vinte fichas sorteadas ao acaso foram revisadas.",
-          "**Nenhum erro de acento da fonte foi corrigido em silêncio**: as correções vivem em `assunto_local_sugerido`."
-        ]
-      },
-      "dep": {
-        "fr": "**Bloqué par G7**, lui-même bloqué par **A1**. Rien ne bouge tant que le réseau n'a qu'un seul administrateur.",
-        "pt": "**Bloqueado por G7**, ele mesmo bloqueado por **A1**. Nada se move enquanto a rede tiver um único administrador."
-      },
-      "r": [
-        "REPRISE_claude_code_2026-08-27 chantier 2",
-        "CALENDRIER_bologne_2026-08-27"
-      ],
-      "verif": {
-        "fr": "07/09 — inchangé : 1 673 brouillons `SOLIDAIRES_import_v2.csv`, candidature `pendente` depuis le 27/08.\n\n31/08 — `book_drafts` : 1 673 lignes de source `SOLIDAIRES_import_v2.csv`, toutes créées le 29/08 à 1 h 48 en un seul lot, toutes `draft`, 0 publiée, 0 rattachée à un périodique. Le premier critère de fin (« l'admission avant que le fichier soit touché ») est caduc dans sa lettre : le fichier a été touché — mais rien n'est entré au catalogue. **15/09** — les 1 673 brouillons ont désormais `owner_library_id` = Solidaires (bibliothèque créée le 14/09 comme destination, inactive et privée). Le geste manquant — attribuer un lot à la bibliothèque qui détient les livres — existe depuis ce soir dans l'app (`fn_batch_reassign_library`, admin réseau, colonne « Bibliothèque » dans Catalogação › Lots). La promotion reste suspendue à l'admission (G7) et passe par la révision de lot du 05/09.",
-        "pt": "07/09 — inalterado: 1 673 rascunhos `SOLIDAIRES_import_v2.csv`, candidatura `pendente` desde 27/08.\n\n31/08 — `book_drafts`: 1 673 linhas, todas `draft`, 0 publicadas. O primeiro critério (« admissão antes de tocar o arquivo ») caducou na letra: o arquivo foi tocado — mas nada entrou no catálogo. **15/09** — os 1 673 rascunhos têm `owner_library_id` = Solidaires. O gesto que faltava (atribuir um lote à biblioteca que detém os livros) existe desde esta noite. A promoção continua à espera da admissão (G7)."
       }
     },
     {
@@ -3203,69 +3220,6 @@
       ]
     },
     {
-      "id": "E12",
-      "d": "E",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "front",
-        "langue"
-      ],
-      "t": {
-        "fr": "La page Importations parle la langue de la machine — et l'export a une adresse que personne ne trouve",
-        "pt": "A página Importações fala a língua da máquina — e a exportação tem um endereço que ninguém encontra"
-      },
-      "v": {
-        "fr": "**Constat de Xavier le 02/09, sur sa propre capture d'écran, après avoir exercé le circuit OAI dans les deux sens** : « pas très ergonomique ce bazar, surtout pour des camarades qui sont pas informaticiens ». Trois défauts distincts se cachent derrière le mot.\n\n**(1) Le vocabulaire est celui du pipeline, pas du geste.** « Traitements », « Lignes en staging », « Promu·e·s », « Brouillons créés », « File de révision », « Journal d'importation » décrivent exactement staging → révision → promotion — pour qui l'a construit. Une bibliothécaire veut *faire entrer des notices* : « Notices reçues », « À vérifier », « Entrées au catalogue ».\n\n**(2) Des codes bruts fuient à l'écran.** Sous « Bibliothèques compagnes », les pastilles affichent `mapeada` et `importacao_autorizada` : des valeurs d'énumération non traduites — `relation_status || '—'` dans `ImportacoesPage.jsx`, et **aucune clé i18n** pour ces valeurs dans les dix locales (vérifié le 02/09). C'est le défaut le plus net et le moins cher.\n\n**(3) L'import et l'export sont mélangés, et l'export est ailleurs.** La page s'appelle « Importations » mais héberge « Moisson OAI » (un import) ; « être source » — l'export par moissonnage, exercé puis refermé le 02/09 (H5) — vit dans l'onglet réseau de `RedePage` ; l'export d'un lot se cache derrière deux icônes sans libellé à droite du lot. Quelqu'un qui veut « donner nos notices à un autre catalogue » n'a aucun endroit qui s'appelle comme ça. Et le parcours impose un concept de « source partenaire » même pour un simple fichier sous la main : quatre étapes là où l'attente est « je choisis mon fichier, je vérifie, c'est entré ».\n\n**Correction du soir même, sur une seconde capture de Xavier (« voilà pourquoi je trouve que l'import fait un peu usine à gaz »).** L'export **a** une adresse : un commutateur « Sens : Importation / Exportation » en tête de page — si petit que le mainteneur lui-même ne l'avait pas en tête. Le volet 3 se reformule donc : l'adresse existe, elle est illisible, et ce qu'elle ouvre est le vrai « bazar » — **six blocs de trois natures différentes empilés dans le même onglet** : *(a)* geste de bibliothécaire — « Exportation par lot » (CSV / MARCXML / JSON), le seul que la plupart cherchent ; *(b)* gestes de coordination sur le fonds numérique — « Export de fonds » (ZIP), « envoi direct à une bibliothèque partenaire », « Attacher les fichiers reçus » ; *(c)* gestes juridiques — « Préparer l'éligibilité à l'export », « Vérifications de domaine public ». Plus un bloc « Partage ILL » qui annonce **« fonctionnalité en développement » à l'écran** (un chantier ne s'affiche pas aux usagères), et un vocabulaire qui fuit : *éligibilité*, *assets*, *bucket* (« le retire du bucket », lisible par une coordination). Le commutateur « Sens » est d'ailleurs la bonne idée : c'est sa **visibilité** et le **tri de ce qu'il ouvre** qui manquent.\n\n**Troisième constat, sur la page livrée (Xavier, 02/09 soir)** : « Comment un coordinateur qui n'est pas admin fait-il pour demander à ce que sa bibliothèque puisse être moissonnée ? » Réponse : il ne pouvait pas depuis l'interface. Le circuit existe (`fn_oai_request_open_library` accepte une coordination active, `RedePage` l'accueille directement sur l'onglet « Être source », le bouton de demande y est) — mais le lien « Réseau » de la barre n'apparaît qu'aux admins réseau (`canSeeRede(isNetworkAdmin)`). Une coordination devait taper `/rede` à la main. Même maladie que le commutateur « Sens » : une adresse que personne ne trouve.",
-        "pt": "**Constato de Xavier em 02/09, sobre a própria captura de tela**: «nada ergonômico, sobretudo para camaradas que não são informáticos». Três defeitos distintos. **(1) O vocabulário é o do pipeline, não do gesto**: «Tratamentos», «Linhas em staging», «Promovidas» descrevem staging → revisão → promoção; quem cataloga quer *fazer entrar registros*. **(2) Códigos brutos vazam na tela**: `mapeada`, `importacao_autorizada` — valores de enumeração sem tradução, nenhuma chave i18n nas dez locales (verificado em 02/09). É o defeito mais nítido e mais barato. **(3) Importação e exportação estão misturadas, e a exportação está noutro lugar**: a página «Importações» hospeda «Coleta OAI» (uma importação); «ser fonte» vive na página Rede; a exportação de um lote se esconde atrás de dois ícones sem rótulo. Quem quer «dar nossos registros a outro catálogo» não tem lugar com esse nome.\n\n**Correção na mesma noite, sobre uma segunda captura de Xavier.** A exportação **tem** endereço: um comutador «Sentido: Importação / Exportação» no topo — tão pequeno que nem o mantenedor o tinha em mente. O volet 3 reformula-se: o endereço existe, é ilegível, e o que abre é a verdadeira «usina de gás» — **seis blocos de três naturezas** no mesmo separador: gesto de bibliotecário (exportação por lote), gestos de coordenação sobre o acervo digital (ZIP, envio direto, anexar recebidos), gestos jurídicos (elegibilidade, domínio público). Mais um bloco ILL que anuncia «em desenvolvimento» na tela, e um vocabulário que vaza (*assets*, *bucket*).\n\n**Terceiro constato, sobre a página entregue (Xavier, 02/09 à noite)**: uma coordenação não-admin não podia pedir a abertura pela interface — o circuito existe, mas o link «Rede» só aparece aos admins de rede. Tinha de digitar `/rede` à mão."
-      },
-      "w": {
-        "fr": "Trois lots, du moins cher au plus structurant. **Lot A — avant la soirée 1 de la formation, le 08/09** : traduire les statuts bruts (`relation_status`, états de lot, états de ligne) dans les dix locales, et donner un libellé aux deux icônes du lot — une soirée, et la page peut être montrée sans rougir. **Lot B** : renommer vers le geste (les six libellés de l'en-tête et des sections), sans toucher au pipeline. **Lot C** : rendre le commutateur « Sens » visible (deux vrais onglets, pas un interrupteur), et **trier l'onglet Exportation par nature** — d'abord le geste de bibliothécaire (« Exporter notre catalogue », CSV/MARCXML/JSON, seul bloc visible par défaut), puis un volet « Mutualiser un fonds numérique » (ZIP, envoi direct, fichiers reçus, éligibilité, domaine public) réservé à la coordination et replié ; retirer de l'écran ce qui est « en développement » (ILL) tant qu'il l'est ; bannir *assets* et *bucket* des textes ; et réunir là aussi « être source » (OAI) et le flux OPDS, qui sont des exports. Côté import, le parcours guidé « j'ai un fichier » en deux écrans, source partenaire facultative. Éprouver chaque lot avec une personne qui n'a pas écrit le code (E1 a la même exigence).",
-        "pt": "Três lotes. **Lote A — antes da noite 1 da formação, em 08/09**: traduzir os status brutos nas dez locales e rotular os dois ícones — uma noite. **Lote B**: renomear para o gesto, sem tocar no pipeline. **Lote C**: tornar visível o comutador «Sentido» (dois separadores de verdade) e **ordenar a Exportação por natureza** — primeiro o gesto de bibliotecário (exportar o catálogo, único bloco visível por padrão), depois um painel «Mutualizar um acervo digital» reservado à coordenação e recolhido; retirar da tela o que está «em desenvolvimento»; banir *assets* e *bucket*; reunir ali «ser fonte» (OAI) e OPDS. Na importação, o percurso «tenho um arquivo» em duas telas. Provar cada lote com quem não escreveu o código."
-      },
-      "y": {
-        "fr": "C'est la doctrine anti-méga-machine appliquée à l'écran le plus technique du logiciel : un outil qui cache les camarades derrière son vocabulaire fait le contraire de ce qu'il promet (`DOC-COLLECTIVE-1`). Et la formation BLMF (soirée 1 le 08/09/2026, sept soirées) montrera cette page aux coordinations — le lot A est daté par ce calendrier.",
-        "pt": "É a doutrina anti-megamáquina aplicada à tela mais técnica do software: uma ferramenta que esconde os camaradas atrás do seu vocabulário faz o contrário do que promete. E a formação BLMF (noite 1 em 08/09/2026) mostrará esta página — o lote A é datado por esse calendário."
-      },
-      "f": [
-        {
-          "fr": "~~Lot A — plus un code brut à l'écran~~ — livré le 02/09 : les sept statuts de relation (`mapeada` → `mutualizacao_autorizada`, vocabulaire de `partner_catalog_sources_relation_status_check`) traduits dans les dix locales avec repli sur le code si une valeur neuve précède sa clé ; les deux icônes du lot portent leur nom accessible (`aria-label` = le titre au survol). Avant la formation du 13.",
-          "pt": "~~Lote A — nenhum código bruto na tela~~ — entregue em 02/09: os sete status de relação traduzidos nas dez locales, com fallback no código; os dois ícones do lote com nome acessível."
-        },
-        {
-          "fr": "~~Lot B — les libellés parlent le geste~~ — livré le 02/09 : « Traitements » → « Lots reçus », « Lignes en staging » → « Notices reçues », « Promu·e·s » → « Entrées au catalogue », « Brouillons créés » → « À l'atelier » (là où sont les notices, dans le vocabulaire déjà connu), « File de révision » → « Notices à vérifier », « Journal d'importation » → « Historique » ; dix locales, aucune clé ajoutée, le pipeline inchangé.",
-          "pt": "~~Lote B — os rótulos falam o gesto~~ — entregue em 02/09: «Tratamentos» → «Lotes recebidos», «Linhas em staging» → «Registros recebidos», «Promovidos» → «Entradas no catálogo», «Rascunhos criados» → «Na oficina», «Fila de revisão» → «Registros a verificar», «Diário» → «Histórico»; dez locales, nenhuma chave nova."
-        },
-        {
-          "fr": "~~Lot C — le sens visible, l'export trié par nature~~ — livré le 02/09 : le commutateur « Sens » devient deux vrais onglets (la barre `.ab-tabbar` commune à toutes les pages) ; l'onglet Exportation ouvre sur « Exporter le catalogue » puis « Être source » (OAI-PMH, plus « en développement » — H5 l'a éprouvé — avec sa phrase OPDS), et replie sous un seul volet « Mutualiser un fonds numérique » les quatre gestes de coordination (éligibilité, export de fonds, fichiers reçus, domaine public) ; le bloc « Partage ILL » en développement ne s'affiche plus ; *asset* et *bucket* ont quitté les textes (« fichier », « stockage ») ; dix locales, +3 clés. Reste f[3] : le regard d'une personne qui n'a pas écrit le code.",
-          "pt": "~~Lote C — o sentido visível, a exportação ordenada por natureza~~ — entregue em 02/09: o comutador «Sentido» vira dois separadores de verdade; a Exportação abre em «Exportar o catálogo» e «Ser fonte» (OAI-PMH, já não «em desenvolvimento», com a frase OPDS), e recolhe sob «Mutualizar um acervo digital» os quatro gestos de coordenação; o bloco ILL em desenvolvimento não aparece mais; *asset* e *bucket* saíram dos textos. Falta f[3]: o olhar de quem não escreveu o código."
-        },
-        {
-          "fr": "Chaque lot éprouvé par une personne qui n'a pas écrit le code — **protocole écrit le 03/09** (`docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`, §2) : Mariana S., seule, sans aide, deux consignes sur papier — exporter le catalogue en CSV, expliquer « Ser fonte » et qui décide — chronomètre, silence. **À caler en soirée 3 ou 7 de la formation, pas en soirée 1** (le plan du 01/09 remplace « la formation du 13/09 » : la première soirée n'est pas datée).",
-          "pt": "Cada lote provado por quem não escreveu o código — protocolo escrito em 03/09 (`docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`, §2) : Mariana S., sozinha. **Na noite 3 ou 7 da formação, não na 1** (a primeira noite não tem data)."
-        },
-        {
-          "fr": "~~La porte vers le circuit « être source »~~ — livrée le 02/09 au soir : le bloc « Être source » dit qui demande (la coordination) et qui décide (l'administration du réseau), et porte un bouton vers `/rede`, où `RedePage` ouvre l'onglet « Être source » pour une coordination. **Tranché par Xavier le 02/09 : non** — le lien « Réseau » reste réservé aux admins réseau (l'afficher aux coordinations porterait à confusion) ; la porte, c'est le bouton du bloc « Être source ».",
-          "pt": "~~A porta para o circuito «ser fonte»~~ — entregue em 02/09 à noite: o bloco diz quem pede e quem decide, e traz um botão para `/rede`. **Decidido por Xavier em 02/09: não** — o link «Rede» fica reservado aos admins de rede (mostrá-lo às coordenações confundiria); a porta é o botão do bloco «Ser fonte»."
-        }
-      ],
-      "dep": {
-        "fr": "Né de l'épreuve **H5** (l'export par moissonnage vit à Rede, pas ici). Voisin de **E9** (mobile) et **C6** (assistances de saisie) sans les recouvrir ; même exigence de regard extérieur que **E1**. Le lot A est daté par **K7** (soirée 1 le 08/09/2026).",
-        "pt": "Nascido da prova **H5**. Vizinho de **E9** e **C6** sem os cobrir; mesma exigência de olhar externo que **E1**. O lote A é datado por **K7** (noite 1 em 08/09/2026)."
-      },
-      "r": [
-        "src/pages/importacoes/ImportacoesPage.jsx",
-        "src/components/rede/OaiSourcePanel.jsx",
-        "supabase/functions/export-catalog-lote",
-        "capture d'écran de Xavier du 02/09 (contexte blmf-teste)"
-      ],
-      "verif": {
-        "fr": "02/09 — constat porté par la personne qui exerce l'outil, vérifié dans le code (`relation_status || '—'` rendu brut ; aucune clé i18n pour ces valeurs, grep sur `fr.json`). **06/09** — depuis le 05/09, **un lot né d'un import ne se publie qu'après une révision de l'administration, sur rapport** (`catalog_batch_reviews`, garde dans `publish_book_draft`, cloche ; onglet Révisions de Rede). C'est un troisième volet à ajouter à la page : la coordination doit comprendre pourquoi son lot attend, et où. Aucune révision n'a encore eu lieu.",
-        "pt": "02/09 — constato de quem usa a ferramenta, verificado no código (valor bruto renderizado; nenhuma chave i18n). **06/09** — desde 05/09, um lote importado só se publica após revisão da administração, sobre relatório. Terceiro aspeto a acrescentar à página : a coordenação tem de perceber porque o seu lote espera."
-      }
-    },
-    {
       "id": "F1",
       "d": "F",
       "p": "P1",
@@ -3727,10 +3681,16 @@
       "r": [
         "NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
       ],
-      "verif": {
-        "fr": "07/09, soir — **deux réponses de plus de la source.** (1) `X (généralités)` **est** la tête de hiérarchie : les 45 parents « introuvables » sont 45 `broader` réels ; 138 descripteurs sur 148 sont rattachés, 10 ne le sont pas — et la question restante est devenue : `guerres` et `art : courants` sont-ils des **groupes de mots-clés SPIP** ? (2) Identifiants : la forme canonique SPIP est `?motNN` quel que soit le type d'URL affiché ; les « URL propres » sont des adresses, pas des identités. La question 1 tombe — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, proposition `/id/motNN` retirée. Restent : la question des groupes, le format (un fichier à deux schémas ou deux), les liens vers les catalogues, le grec, la licence, la régénération.\n\n07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).",
-        "pt": "07/09, noite — **mais duas respostas da fonte.** (1) `X (généralités)` **é** a cabeça da hierarquia: os 45 pais «não encontrados» são 45 `broader` reais; 138 descritores de 148 estão vinculados, 10 não — e a pergunta restante virou: `guerres` e `art : courants` são **grupos de palavras-chave SPIP**? (2) Identificadores: a forma canônica SPIP é `?motNN` seja qual for o tipo de URL exibido; as «URL propres» são endereços, não identidades. A questão 1 cai — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, proposta `/id/motNN` retirada. Restam: a questão dos grupos, o formato (um arquivo com dois esquemas ou dois), os vínculos aos catálogos, o grego, a licença, a regeneração.\n\n07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»)."
-      }
+      "verif": [
+        {
+          "fr": "07/09, soir — **deux réponses de plus de la source.** (1) `X (généralités)` **est** la tête de hiérarchie : les 45 parents « introuvables » sont 45 `broader` réels ; 138 descripteurs sur 148 sont rattachés, 10 ne le sont pas — et la question restante est devenue : `guerres` et `art : courants` sont-ils des **groupes de mots-clés SPIP** ? (2) Identifiants : la forme canonique SPIP est `?motNN` quel que soit le type d'URL affiché ; les « URL propres » sont des adresses, pas des identités. La question 1 tombe — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, proposition `/id/motNN` retirée. Restent : la question des groupes, le format (un fichier à deux schémas ou deux), les liens vers les catalogues, le grec, la licence, la régénération.\n\n07/09 — **Réponse partielle reçue de la source** : « guerre » est dans les deux thésaurus qu'elle tient séparés, *liste commune* et *géo-histo* ; les listes de communes (Bettini, Bianco) sont hors thésaurus. Ça répond à la question 3 (dates) et déplace la question 2 : les sept deviennent trois — `X` = `X (généralités)` ? ; `guerres`, `art : courants` = regroupements ou termes ? ; un fichier à deux schémas ou deux fichiers ? Les autres (identifiants, liens, grec, licence, régénération) restent posées. Le même jour, `thesaurus.ficedl.info` est **hors service** (« problème technique (serveur SQL) »).",
+          "pt": "07/09, noite — **mais duas respostas da fonte.** (1) `X (généralités)` **é** a cabeça da hierarquia: os 45 pais «não encontrados» são 45 `broader` reais; 138 descritores de 148 estão vinculados, 10 não — e a pergunta restante virou: `guerres` e `art : courants` são **grupos de palavras-chave SPIP**? (2) Identificadores: a forma canônica SPIP é `?motNN` seja qual for o tipo de URL exibido; as «URL propres» são endereços, não identidades. A questão 1 cai — URI `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, proposta `/id/motNN` retirada. Restam: a questão dos grupos, o formato (um arquivo com dois esquemas ou dois), os vínculos aos catálogos, o grego, a licença, a regeneração.\n\n07/09 — **Resposta parcial recebida da fonte**: «guerre» está nos dois tesauros que ela mantém separados, *lista comum* e *geo-histo*; as listas de municípios (Bettini, Bianco) estão fora do tesauro. Isso responde à questão 3 (datas) e desloca a questão 2: as sete viram três — `X` = `X (généralités)`?; `guerres`, `art : courants` = agrupamentos ou termos?; um arquivo com dois esquemas ou dois arquivos? As outras (identificadores, vínculos, grego, licença, regeneração) continuam postas. No mesmo dia, `thesaurus.ficedl.info` está **fora do ar** («problema técnico (servidor SQL)»)."
+        },
+        {
+          "fr": "16/09 — non clos : la rencontre de Bologne et les échanges avec Ludwig (28 sujets nl validés le 09/09) ont ouvert le canal, mais rien n'atteste que **les sept questions** ont été posées avec l'audit en pièce jointe. À poser par écrit, maintenant que le contact existe.",
+          "pt": "16/09 — não fechado: o encontro de Bolonha e as trocas com Ludwig abriram o canal, mas nada atesta que **as sete perguntas** foram feitas com a auditoria em anexo. A fazer por escrito, agora que o contacto existe."
+        }
+      ]
     },
     {
       "id": "H6",
@@ -3777,61 +3737,6 @@
       "r": [
         "ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6",
         "VEILLE_leftovers_maydayrooms_2026-08-19"
-      ]
-    },
-    {
-      "id": "I1",
-      "d": "I",
-      "p": "P1",
-      "s": "gele",
-      "e": "M",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Aligner l'image GoTrue sur l'état réel des migrations d'authentification",
-        "pt": "Alinhar a imagem GoTrue com o estado real das migrações de autenticação"
-      },
-      "v": {
-        "fr": "La production porte **77 migrations `auth`** (remesuré le 31/08), la dernière datée du 25/06. **Le constat sur l'épinglage est périmé : `deploy/.env` et `deploy/.env.example` portent tous deux `GOTRUE_TAG=v2.192.0` désormais.** Ce que v2.192.0 embarque comme migrations n'a pas été mesuré : l'alignement reste à prouver, et l'item reste gelé avec I2.",
-        "pt": "A produção traz **77 migrações `auth`** (remedido em 31/08). **O constato sobre a fixação caducou: `deploy/.env` e `.env.example` trazem ambos `GOTRUE_TAG=v2.192.0`.** O que a v2.192.0 embarca não foi medido: o alinhamento continua por provar."
-      },
-      "w": {
-        "fr": "Une méthode qui **se mesure et ne se devine pas** : monter d'un palier, démarrer sur un volume vierge, `select count(*) from auth.schema_migrations;`, recommencer jusqu'à atteindre au moins 77.",
-        "pt": "Um método que **se mede e não se adivinha**: subir um patamar, iniciar num volume virgem, `select count(*) from auth.schema_migrations;`, recomeçar até atingir pelo menos 77."
-      },
-      "y": {
-        "fr": "La règle est simple et absolue : **l'image doit être supérieure ou égale à la production, jamais l'inverse.** Une image en retard démarre sur un schéma qu'elle ne connaît pas et peut le corrompre en tentant de le migrer.",
-        "pt": "A regra é simples e absoluta: **a imagem deve ser superior ou igual à produção, nunca o contrário.** Uma imagem atrasada inicia sobre um esquema que não conhece e pode corrompê-lo ao tentar migrá-lo."
-      },
-      "f": {
-        "fr": [
-          "Un tag est retenu, avec le compte mesuré à chaque palier écrit.",
-          "`deploy/.env.example` est corrigé et la documentation de `deploy/` suit.",
-          "Les douze dernières versions de production sont listées pour recoupement."
-        ],
-        "pt": [
-          "Um tag é escolhido, com a contagem medida em cada patamar escrita.",
-          "`deploy/.env.example` está corrigido e a documentação de `deploy/` acompanha.",
-          "As doze últimas versões de produção estão listadas para conferência."
-        ]
-      },
-      "dep": {
-        "fr": "**Gelé sur la production jusqu'au 14/09.** Le travail en environnement d'essai est ouvert. Premier maillon de la chaîne de bascule.",
-        "pt": "**Congelado na produção até 14/09.** O trabalho em ambiente de teste está aberto. Primeiro elo da cadeia de migração."
-      },
-      "r": [
-        "REPRISE_bascule_autohebergee_2026-08-26 §1"
-      ],
-      "verif": [
-        {
-          "fr": "31/08 — `auth.schema_migrations` : 77 ; `deploy/.env` et `.env.example` relus : `v2.192.0` des deux côtés.",
-          "pt": "31/08 — `auth.schema_migrations`: 77; `deploy/.env` e `.env.example` relidos: `v2.192.0` dos dois lados."
-        },
-        {
-          "fr": "16/09 — `deploy/.env.example` : `GOTRUE_TAG=v2.192.0`, règle « image ≥ production » écrite, et les passes du 26/08 ont mesuré 77 migrations GoTrue = la production. Les deux premiers « fini quand » sont tenus ; le troisième (les douze dernières versions de production listées) ne l'est pas. Clôturable si Xavier lève le troisième.",
-          "pt": "16/09 — `deploy/.env.example`: `GOTRUE_TAG=v2.192.0`, regra « imagem ≥ produção » escrita, e as passagens de 26/08 mediram 77 migrações GoTrue = a produção. Os dois primeiros « acabado quando » estão cumpridos; o terceiro não. Fechável se Xavier levantar o terceiro."
-        }
       ]
     },
     {
@@ -3938,111 +3843,6 @@
         "fr": "31/08 — `supabase/functions/main/index.ts` : 6 885 octets, présent ; aucun test ne le mentionne dans `src/tests/` ni `tests/`. Le constat tient.",
         "pt": "31/08 — `main/index.ts`: 6 885 bytes, presente; nenhum teste o menciona."
       }
-    },
-    {
-      "id": "I12",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Automatiser le rafraîchissement du miroir froid",
-        "pt": "Automatizar a atualização do espelho frio"
-      },
-      "v": {
-        "fr": "**Constat corrigé le 05/09 : le minuteur tourne.** Le journal systemd de l'utilisateur le prouve : `anarbib-mirror-refresh.timer` se déclenche chaque jour à 18 h 02, et le 04/09 le service a pris 32 commits (`a1656516 → 63630c2f`, « Miroir froid à jour, 243 Mo »). `systemctl` ment sur ce poste, mais `journalctl --user -u anarbib-mirror-refresh.service` ne ment pas. Le script (`deploy/ops/anarbib-mirror-refresh.sh`) refuse un remote inconnu et **s'arrête sur une réécriture d'historique** — mais son échec ne va nulle part d'autre que le journal, et la fraîcheur du miroir n'apparaît pas dans le témoin de sauvegarde (`fn_backup_heartbeat_status`).",
-        "pt": "**Constato corrigido em 05/09 : o temporizador funciona.** O journal do utilizador prova-o (18h02 diariamente ; 32 commits em 04/09). Falta que a falha alerte e que a frescura apareça no testemunho de backup."
-      },
-      "w": {
-        "fr": "Ce qui reste : faire remonter l'échec du service (un `OnFailure=` vers l'unité d'alerte des sauvegardes, ou une ligne dans `backup_heartbeats`) et écrire la date du dernier rafraîchissement là où le témoin la lira. Le `die` du script est le bon signal, il n'a pas encore de destinataire.",
-        "pt": "Falta : fazer subir a falha do serviço (`OnFailure=` ou uma linha em `backup_heartbeats`) e escrever a data do último refresh onde o testemunho a lê."
-      },
-      "y": {
-        "fr": "Une reconstruction demande **trois** choses et non deux : le dépôt, une sauvegarde, **et les secrets du Vault**. Le miroir froid est la troisième copie du dépôt, après Codeberg et le miroir GitHub. Il ne sert que s'il est à jour — et le miroir GitHub a déjà accumulé 6 878 objets de retard une fois.",
-        "pt": "Uma reconstrução exige **três** coisas e não duas: o repositório, um backup, **e os segredos do Vault**. O espelho frio é a terceira cópia do repositório, depois do Codeberg e do espelho GitHub. Só serve se estiver atualizado — e o espelho GitHub já acumulou 6 878 objetos de atraso uma vez."
-      },
-      "f": [
-        {
-          "fr": "~~Le rafraîchissement est automatique~~ — prouvé le 05/09 par le journal ; **et son échec alerte** — pas encore.",
-          "pt": "~~O refresh é automático~~ — provado em 05/09 ; **e a falha alerta** — ainda não."
-        },
-        {
-          "fr": "La fraîcheur du miroir apparaît dans le témoin de sauvegarde.",
-          "pt": "A frescura do espelho aparece no testemunho de backup."
-        }
-      ],
-      "dep": {
-        "fr": "Lié à **I4**.",
-        "pt": "Ligado a **I4**."
-      },
-      "r": [
-        "RUNBOOK_exploitation_v0.3 §4 §9.1"
-      ],
-      "verif": {
-        "fr": "31/08 — les unités sont bien versionnées, dans `deploy/ops/systemd/` (`anarbib-mirror-refresh.service` + `.timer`, avec toute la famille sauvegardes). Le miroir froid porte un HEAD du 30/08 à 16 h — au plus un jour de retard — mais rien d'ici ne distingue un timer actif d'un rafraîchissement manuel, et `systemctl` ment sur ce poste : mise en service toujours non confirmée. **05/09** — `journalctl --user` : timer actif, dernier passage 04/09 18:02:19, prochain 05/09 18:03 ; le miroir portait `3b1f71c1` le soir même (rafraîchi à la main en plus). Le `die` du script n'a pas de destinataire.",
-        "pt": "31/08 — as unidades estão versionadas em `deploy/ops/systemd/`. O espelho frio traz um HEAD de 30/08 às 16h — no máximo um dia de atraso — mas nada daqui distingue um timer ativo de um refresh manual. **05/09** — timer ativo, última passagem 04/09 18:02 ; a falha ainda não tem destinatário."
-      }
-    },
-    {
-      "id": "I13",
-      "d": "I",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Finir la bascule vers le nouveau moteur de pages",
-        "pt": "Terminar a migração para o novo motor de páginas"
-      },
-      "v": {
-        "fr": "L'étape 0 est concluante depuis le 20/08 : `test.anarbib.org` est servi par le nouveau moteur en parallèle. La chaîne d'intégration continue utilise déjà l'action `git-pages`. **Codeberg Pages en version historique est en mode maintenance, pas en fin de vie** — la documentation dit qu'il continuera de fonctionner indéfiniment. D'où la priorité basse.",
-        "pt": "A etapa 0 é conclusiva desde 20/08: `test.anarbib.org` é servido pelo novo motor em paralelo. A cadeia de integração contínua já usa a ação `git-pages`. **O Codeberg Pages em versão histórica está em modo de manutenção, não em fim de vida** — a documentação diz que continuará funcionando indefinidamente."
-      },
-      "w": {
-        "fr": "Poser l'enregistrement TXT de liste blanche, créer `public/_redirects` avec la règle de réécriture, vérifier qu'une route inconnue renvoie 200 avec le bon contenu, puis nettoyer **seulement après** vérification verte.",
-        "pt": "Colocar o registro TXT de lista branca, criar `public/_redirects` com a regra de reescrita, verificar que uma rota desconhecida retorna 200 com o conteúdo certo, depois limpar **somente após** verificação verde."
-      },
-      "y": {
-        "fr": "Deux points de vigilance sont écrits. **Ne pas toucher aux enregistrements A et AAAA**, qui sont bons. Et **vérifier la casse de l'URL** : le workflow écrit `AnarBib`, la documentation écrit `anarbib` — en cas de doute, poser les deux enregistrements TXT.",
-        "pt": "Dois pontos de vigilância estão escritos. **Não tocar nos registros A e AAAA**, que estão bons. E **verificar a caixa do URL**: o workflow escreve `AnarBib`, a documentação escreve `anarbib` — na dúvida, colocar os dois registros TXT."
-      },
-      "f": {
-        "fr": [
-          "Le site est servi par le nouveau moteur, avec les routes inconnues en 200.",
-          "Le nettoyage est fait après vérification : `public/.domains`, la branche `pages`, les secrets devenus inutiles.",
-          "**Laisser `public/CNAME`** — il sert au miroir GitHub.",
-          "Incertitudes assumées : la réversibilité de la bascule n'est documentée nulle part, aucune limite chiffrée n'est publiée (taille, bande passante, délai), et les fichiers vendorisés pèsent lourd — **point à surveiller au premier déploiement**."
-        ],
-        "pt": [
-          "O site é servido pelo novo motor, com as rotas desconhecidas em 200.",
-          "A limpeza é feita após verificação: `public/.domains`, o branch `pages`, os segredos que se tornaram inúteis.",
-          "**Deixar `public/CNAME`** — serve ao espelho GitHub.",
-          "Incertezas assumidas: a reversibilidade da migração não está documentada em lugar nenhum, nenhum limite numérico está publicado (tamanho, banda, prazo), e os arquivos vendorizados pesam — **ponto a vigiar na primeira implantação**."
-        ]
-      },
-      "dep": {
-        "fr": "P1, pas P0 — la version historique n'a pas de date d'arrêt annoncée.",
-        "pt": "P1, não P0 — a versão histórica não tem data de encerramento anunciada."
-      },
-      "r": [
-        "PLAN_migration_git_pages_2026-08-19",
-        "RUNBOOK_exploitation_v0.3"
-      ],
-      "verif": [
-        {
-          "fr": "31/08 — une partie du nettoyage est déjà faite : la branche `pages` n'existe plus sur la forge, `public/.domains` a disparu, et `public/CNAME` est bien préservé. Restent à confirmer le service lui-même et les secrets devenus inutiles.",
-          "pt": "31/08 — parte da limpeza já está feita: o branch `pages` não existe mais, `public/.domains` sumiu, `public/CNAME` preservado."
-        },
-        {
-          "fr": "16/09 — mesuré : une route inconnue (`/une-route-qui-n-existe-pas`) rend **200 `text/html`** ; `public/_redirects` existe, `public/.domains` n'existe plus, `public/CNAME` est gardé, la branche `pages` n'existe plus sur Codeberg. Reste à vérifier par Xavier dans les réglages Forgejo : les secrets devenus inutiles. Sinon, clôturable.",
-          "pt": "16/09 — medido: uma rota desconhecida devolve **200 `text/html`**; `public/_redirects` existe, `public/.domains` já não existe, `public/CNAME` mantido, o ramo `pages` já não existe na Codeberg. Falta verificar por Xavier nos ajustes Forgejo: os segredos tornados inúteis. Senão, fechável."
-        }
-      ]
     },
     {
       "id": "I15",
@@ -4279,100 +4079,6 @@
       "r": [
         "PLAN_financement_AnarBib_2026-08-25",
         "tools/build-finances-pages.cjs"
-      ]
-    },
-    {
-      "id": "K5",
-      "d": "K",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Tenir l'intervention de Bologne et en tirer les suites",
-        "pt": "Realizar a intervenção de Bolonha e tirar as consequências"
-      },
-      "v": {
-        "fr": "Atelier AnarBib le 12/09 au matin, assemblée ouverte le 13. Un jeu de 29 diapositives italien-anglais est prêt, ainsi qu'une brochure manifeste bilingue. Trois objectifs annoncés : la genèse et la conception, le panorama des fonctionnalités, et **un appel à participation**.",
-        "pt": "Oficina AnarBib em 12/09 pela manhã, assembleia aberta em 13. Um conjunto de 29 slides italiano-inglês está pronto, assim como um folheto manifesto bilíngue. Três objetivos anunciados: a gênese e a concepção, o panorama das funcionalidades, e **um chamado à participação**."
-      },
-      "w": {
-        "fr": "Demander le créneau d'intervention à l'assemblée du 13, chronométrer la version italienne à voix haute, imprimer le dossier sur papier — tout le monde n'ouvre pas un PDF dans une salle —, et répéter la démonstration **hors ligne**, au cas où le réseau manque.",
-        "pt": "Pedir o horário de intervenção à assembleia do dia 13, cronometrar a versão italiana em voz alta, imprimir o material em papel — nem todo mundo abre um PDF numa sala —, e ensaiar a demonstração **off-line**, caso a rede falte."
-      },
-      "y": {
-        "fr": "L'appel à participation est ce qui décide de **A1** et de **A3**. Le but énoncé est qu'AnarBib cesse d'être un projet solitaire : que le code évolue par des contributions humaines plutôt que par de l'assistance automatique, et que les coûts soient mutualisés. Point de vigilance : la colonne « manquant » de la diapositive 21 est **largement périmée** — beaucoup de ce qu'elle liste a été livré depuis.",
-        "pt": "O chamado à participação é o que decide **A1** e **A3**. O objetivo enunciado é que o AnarBib deixe de ser um projeto solitário: que o código evolua por contribuições humanas em vez de assistência automática, e que os custos sejam mutualizados. Ponto de vigilância: a coluna «faltando» do slide 21 está **amplamente vencida** — muito do que ela lista foi entregue desde então."
-      },
-      "f": {
-        "fr": [
-          "L'intervention a eu lieu et l'appel a été porté à l'assemblée.",
-          "Les contacts pris sont consignés, avec ce que chacun a proposé.",
-          "Sur l'accessibilité, dire les deux : des fonctionnalités sont implémentées, aucun audit indépendant n'a été mené (voir **E1**)."
-        ],
-        "pt": [
-          "A intervenção ocorreu e o chamado foi levado à assembleia.",
-          "Os contatos feitos estão registrados, com o que cada um propôs.",
-          "Sobre acessibilidade, dizer os dois: funcionalidades estão implementadas, nenhuma auditoria independente foi conduzida (ver **E1**)."
-        ]
-      },
-      "dep": {
-        "fr": "Gel du code en production à partir du 08/09.",
-        "pt": "Congelamento do código em produção a partir de 08/09."
-      },
-      "r": [
-        "CALENDRIER_bologne_2026-08-27",
-        "PLAN_intervention_FICEDL_Bologne_2026-09-12"
-      ],
-      "verif": {
-        "fr": "07/09 — deux chiffres des textes sont périmés (620 → 623 ; 55 parents → 10), sortis en **K9**. La clause Stripe de l'encart de soutien est en ligne dans les dix locales (vérifié sur `anarbib.org/fr/contribuer/`).\n\n**03/09** — **collision de dates signalée** : le backlog place la formation BLMF le 13/09 (K7, E12, GOUV-18 « fenêtre d'objection à la formation du 13/09 ») et Bologne les 11-13/09 (atelier le 12, assemblée le 13). À trancher par Xavier : séance à distance depuis Bologne avec relais à Belém, ou autre date. La liste K5 (créneau, chronométrage, papier, démonstration hors ligne) est reprise en §5 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md`. **03/09, fin de journée — fausse alerte retirée.** Le plan de formation du 01/09 ne date pas la première soirée : il n'y avait pas de collision avec Bologne, seulement un « 13/09 » posé par hypothèse dans le backlog. K5 garde sa propre liste.",
-        "pt": "07/09 — dois números dos textos estão vencidos (620 → 623; 55 pais → 10), saíram em **K9**. A cláusula Stripe do encarte de apoio está no ar nas dez locales (verificado em `anarbib.org/fr/contribuer/`).\n\n**03/09** — **colisão de datas assinalada**: formação BLMF em 13/09 e Bolonha em 11-13/09. A decidir por Xavier. **03/09, fim do dia — falso alarme retirado.** O plano não data a primeira noite ; não havia colisão com Bolonha."
-      }
-    },
-    {
-      "id": "K6",
-      "d": "K",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Préparer la rencontre avec leftove.rs et May Day Rooms",
-        "pt": "Preparar o encontro com leftove.rs e May Day Rooms"
-      },
-      "v": {
-        "fr": "**Le message est parti** — autour du 19/08, soit trois semaines avant la rencontre, ce qui était exactement la fenêtre visée : assez tôt pour qu'ils regardent AnarBib sans que ce soit urgent. **L'atelier AnarBib est le matin, l'atelier leftove.rs l'après-midi du 12/09, même salle, même journée.** Ce qui reste ouvert, ce sont les réponses et la préparation de la journée.",
-        "pt": "**A mensagem foi enviada** — por volta de 19/08, três semanas antes do encontro, exatamente a janela visada: cedo o bastante para que olhassem o AnarBib sem que fosse urgente. **A oficina AnarBib é de manhã, a oficina leftove.rs à tarde do dia 12/09, mesma sala, mesmo dia.** O que continua aberto são as respostas e a preparação do dia."
-      },
-      "w": {
-        "fr": "Relancer si besoin, et préparer les trois questions posées pour qu'elles se discutent sur place : le vocabulaire de sujets, le profil de numérisation (ils ont 16 000 documents océrisés), et NORLA et la cartographie. Plus la question sur l'auto-hébergement au collectif technique présent.",
-        "pt": "Retomar o contato se necessário, e preparar as três perguntas feitas para que sejam discutidas no local: o vocabulário de assuntos, o perfil de digitalização (eles têm 16 000 documentos ocerizados), e a NORLA e a cartografia. Mais a pergunta sobre auto-hospedagem ao coletivo técnico presente."
-      },
-      "y": {
-        "fr": "Deux ateliers le même jour dans la même salle, sur des sujets voisins, sans que les deux équipes se soient parlé, serait un gâchis. Et il y a un point à regarder avant, pas après : **leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict.**",
-        "pt": "Duas oficinas no mesmo dia na mesma sala, sobre assuntos vizinhos, sem que as duas equipes tenham se falado, seria um desperdício. E há um ponto a olhar antes, não depois: **leftove.rs está sob licença CC BY-NC-SA, e a cláusula não comercial não é uma licença livre em sentido estrito.**"
-      },
-      "f": {
-        "fr": [
-          "Les trois questions ont une réponse, ou un créneau de discussion est calé pour le 12/09.",
-          "**Point à regarder avant la rencontre, pas après** : leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict."
-        ],
-        "pt": [
-          "As três perguntas têm resposta, ou um horário de conversa está marcado para 12/09.",
-          "**Ponto a olhar antes do encontro, não depois**: leftove.rs está sob licença CC BY-NC-SA, e a cláusula não comercial não é uma licença livre em sentido estrito."
-        ]
-      },
-      "dep": {
-        "fr": "Le 12/09, dans la journée. Lié à **D4** (matériel éphémère) et **H6** (alignement des vocabulaires).",
-        "pt": "Em 12/09, no mesmo dia. Ligado a **D4** (material efêmero) e **H6** (alinhamento dos vocabulários)."
-      },
-      "r": [
-        "VEILLE_leftovers_maydayrooms_2026-08-19",
-        "CALENDRIER_bologne_2026-08-27"
       ]
     },
     {
@@ -4633,10 +4339,16 @@
         "journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9",
         "REGISTRE §0 DOC-GRANT-2"
       ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **15/09** — quatre têtes re-mesurées par l'API ; `install.sh` exécuté quatre fois sur pile isolée (`COMPOSE_PROJECT_NAME=anarbib-pr28`, worktree détaché sur `refs/pull/28/head`, stdin fermé) ; comptes `anon`/DEFINER et empreinte MD5 comparés à la production en lecture seule ; `merge-tree` contre `main` avant fusion ; CI du commit de fusion suivie jusqu'au vert.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **15/09** — cabeças re-medidas pela API; `install.sh` executado quatro vezes em pilha isolada; contagens `anon`/DEFINER e MD5 comparados à produção; `merge-tree` antes da fusão; CI verde."
-      }
+      "verif": [
+        {
+          "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **15/09** — quatre têtes re-mesurées par l'API ; `install.sh` exécuté quatre fois sur pile isolée (`COMPOSE_PROJECT_NAME=anarbib-pr28`, worktree détaché sur `refs/pull/28/head`, stdin fermé) ; comptes `anon`/DEFINER et empreinte MD5 comparés à la production en lecture seule ; `merge-tree` contre `main` avant fusion ; CI du commit de fusion suivie jusqu'au vert.",
+          "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **15/09** — cabeças re-medidas pela API; `install.sh` executado quatro vezes em pilha isolada; contagens `anon`/DEFINER e MD5 comparados à produção; `merge-tree` antes da fusão; CI verde."
+        },
+        {
+          "fr": "16/09 — deux des trois « fini quand » sont tenus : la PR #29 (code applicatif) est ouverte à part, `GOUV-19` est acté (G11 clos). Reste le premier : `install.sh` **exécuté une fois sur une machine qui n'est pas celle de son auteur** — non prouvé à ce jour ; c'est le geste qui clôt l'item, avec la relecture de #29.",
+          "pt": "16/09 — dois dos três « acabado quando » estão cumpridos: a PR #29 está aberta à parte, `GOUV-19` está registado (G11 fechado). Falta o primeiro: `install.sh` **executado uma vez numa máquina que não é a do seu autor** — não provado até hoje."
+        }
+      ]
     },
     {
       "id": "I18",
@@ -4803,55 +4515,6 @@
           "pt": "16/09 — o transporte híbrido SMTP/Resend/Mock **não** está em `main`: `_shared/transport/email.ts` só conhece a Resend, `MAIL_TRANSPORT` só aparece em `deploy/functions.env.example`. Está na PR #29, ainda não fundida. **Desvio de doc**: `deploy/README.md` § « Transport des e-mails » já descreve os três modos e o « modo teste local » silencioso — o README está à frente do código."
         }
       ]
-    },
-    {
-      "id": "G11",
-      "d": "G",
-      "p": "P0",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Le premier administrateur d'une instance : écrire la règle d'amorçage",
-        "pt": "O primeiro administrador de uma instância: escrever a regra de arranque"
-      },
-      "v": {
-        "fr": "Le circuit des administrateurs réseau est entièrement collégial (cooptation, retrait) et suppose qu'il en existe déjà un ; sur une base vide, personne ne peut proposer personne. La première ligne de `network_administrators` s'est écrite à la main en mai 2026 et cette exception n'est inscrite nulle part. `seed-admin.mjs` (PR #28) refait ce geste par script : compte GoTrue, profil, bibliothèque `demo` si la table est vide (reste `private`), rôles `coordenador` + `librarian`, ligne admin ; il refuse de tourner s'il existe déjà un admin actif. En mode local, identifiants en dur `admin@anarbib.local` / `anarbib-admin` — publiés par le guide vitrine (pages PR #2). Le script est juste vis-à-vis du schéma prod (colonnes, `UNIQUE (user_id, library_id, role)`, PK). **Tranché le 06/09 au soir (Xavier) : A + B + C + D′** — amorçage unique hors circuit, mot de passe aléatoire dans tous les modes, premier compte = coordination de la première biblio et admin réseau, l'installateur demande le nom de la bibliothèque. Reste à l'appliquer dans `seed-admin.mjs` et `install.sh` (PR #28) et à le dire dans `deploy/README.md`. **D3 tranchée (21 h 30)** : sur entrée vide, l'installateur **refuse et redemande** le nom — pas de « Bibliothèque Autonome » par défaut.",
-        "pt": "O circuito dos administradores de rede é colegial e supõe que já exista um; numa base vazia ninguém pode propor ninguém. A primeira linha foi escrita à mão em maio de 2026 e a exceção não está inscrita. `seed-admin.mjs` (PR #28) refaz o gesto por script; em modo local, credenciais fixas `admin@anarbib.local` / `anarbib-admin`, publicadas pelo guia da vitrine. **Decidido em 06/09 à noite (Xavier): A + B + C + D′.** Falta aplicar em `seed-admin.mjs` e `install.sh` (PR #28) e dizer em `deploy/README.md`. **D3 decidida (21h30)**: com entrada vazia, o instalador **recusa e pergunta de novo** o nome."
-      },
-      "w": {
-        "fr": "Trancher et inscrire au REGISTRE (`GOUV-19`) : *(a)* l'amorçage d'une base vide écrit un premier compte hors circuit, une fois, et le script refuse sinon ; *(b)* mot de passe aléatoire dans tous les modes, affiché une fois ; *(c)* le premier compte est-il coordinateur de la première biblio, admin réseau, ou les deux ? *(d)* la biblio `demo` : la créer, ou demander son nom à l'installation ?",
-        "pt": "Decidir e inscrever no REGISTRO (`GOUV-19`): (a) o arranque de uma base vazia escreve uma primeira conta fora do circuito, uma vez; (b) senha aleatória em todos os modos; (c) a primeira conta é coordenadora, admin de rede, ou ambos? (d) a biblioteca `demo`: criar, ou perguntar o nome na instalação?"
-      },
-      "y": {
-        "fr": "Sans règle écrite, l'amorçage devient une porte : un script qui « crée un admin » se relance, se copie, se documente comme une commodité. Avec une règle, c'est un geste unique, nommé, refusé dès qu'il existe quelqu'un.",
-        "pt": "Sem regra escrita, o arranque vira uma porta. Com regra, é um gesto único, nomeado, recusado assim que exista alguém."
-      },
-      "f": {
-        "fr": [
-          "`GOUV-19` est acté au REGISTRE avec les quatre réponses.",
-          "`seed-admin.mjs` les applique et `deploy/README.md` le présente comme l'amorçage, pas comme une création de compte."
-        ],
-        "pt": [
-          "`GOUV-19` está registrado com as quatro respostas.",
-          "`seed-admin.mjs` as aplica e `deploy/README.md` o apresenta como arranque."
-        ]
-      },
-      "dep": {
-        "fr": "PR #28 scindée (**I16**) : le morceau est à proposer à Bastien.",
-        "pt": "PR #28 dividida (I16): a peça é a propor a Bastien."
-      },
-      "r": [
-        "REGISTRE §41 GOUV-19",
-        "deploy/scripts/seed-admin.mjs (PR #28)",
-        "journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06"
-      ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
     },
     {
       "id": "G12",
@@ -5363,57 +5026,6 @@
       }
     },
     {
-      "id": "K9",
-      "d": "K",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Les chiffres de Bologne sont périmés : « 620 descripteurs » est 623, « 55 parents introuvables » est « 138 rattachés, 10 sans tête » — quatre textes à corriger avant le 12",
-        "pt": "Os números de Bolonha estão vencidos: «620 descritores» é 623, «55 pais não encontrados» é «138 vinculados, 10 sem cabeça» — quatro textos a corrigir antes do dia 12"
-      },
-      "v": {
-        "fr": "**Mesuré sur l'aspiration du 03/09, le 07/09.** 620 → **623** descripteurs entre le 30/06 et le 03/09 (trois dates apparues : `1927`, `2026`, `2027`, zéro disparition). Et sur les 148 descripteurs hiérarchisés, 55 parents étaient introuvables au 28/08 — **45 se résolvent par la variante `X (généralités)`** ; il reste **10** vrais regroupements sans concept (`guerres` ×9, `art : courants` ×1). Les deux chiffres sont dans la présentation du 12, l'intervention du 13, le texte d'orientation et les conventions d'interopérabilité.",
-        "pt": "**Medido na coleta de 03/09, em 07/09.** 620 → **623** descritores entre 30/06 e 03/09 (três datas surgiram: `1927`, `2026`, `2027`, nenhuma desapareceu). E dos 148 descritores hierarquizados, 55 pais não eram encontrados em 28/08 — **45 se resolvem pela variante `X (généralités)`**; restam **10** agrupamentos reais sem conceito (`guerres` ×9, `art : courants` ×1). Os dois números estão na apresentação do dia 12, na intervenção do 13, no texto de orientação e nas convenções de interoperabilidade."
-      },
-      "w": {
-        "fr": "Dire « plus de six cents » ou « 623 au 3 septembre » ; remplacer « 55 sur 148 n'existent pas » par « 138 sur 148 sont rattachés à leur tête `X (généralités)`, confirmé par la source ; 10 ne le sont pas » — et poser la seule question qui reste : « `guerres` et `art : courants` sont-ils des groupes de mots-clés dans SPIP ? ».",
-        "pt": "Dizer «mais de seiscentos» ou «623 em 3 de setembro»; substituir «55 de 148 não existem» por «138 de 148 estão vinculados à sua cabeça `X (généralités)`, confirmado pela fonte; 10 não estão» — e fazer a única pergunta que resta: «`guerres` e `art : courants` são grupos de palavras-chave no SPIP?»."
-      },
-      "y": {
-        "fr": "Le vocabulaire a bougé sans que personne l'apprenne : c'est l'argument de l'intervention, mesuré sur ta propre copie. Mais prononcer un chiffre faux devant les gens qui tiennent le site, c'est perdre l'argument.",
-        "pt": "O vocabulário mudou sem que ninguém soubesse: é o argumento da intervenção, medido na sua própria cópia. Mas dizer um número errado diante de quem mantém o site é perder o argumento."
-      },
-      "f": {
-        "fr": [
-          "Les quatre textes portent les chiffres du 03/09 et la question reformulée.",
-          "Le foglio italien imprimé est la version corrigée."
-        ],
-        "pt": [
-          "Os quatro textos carregam os números de 03/09 e a pergunta reformulada.",
-          "O foglio italiano impresso é a versão corrigida."
-        ]
-      },
-      "dep": {
-        "fr": "Avant **K5** (12/09). Sans dépendance technique.",
-        "pt": "Antes de **K5** (12/09). Sem dependência técnica."
-      },
-      "r": [
-        "claude/REPONSE_hortical_deux_thesaurus_2026-09-07 §5-6",
-        "claude/PRESENTATION_samedi_bologne_2026-09-12",
-        "claude/INTERVENTION_assemblee_ouverte_bologne_2026-09-13",
-        "claude/ORIENTATION_outils_bibliotheques_militantes_2026-08-26",
-        "claude/CONVENTIONS_interoperabilite_catalogues_libertaires_2026-08-26"
-      ],
-      "verif": {
-        "fr": "07/09, soir — la source confirme que `X (généralités)` est la tête : le « 45 / 10 » devient « 138 rattachés / 10 sans tête ».\n\n07/09 — chiffres mesurés ; textes non encore corrigés.",
-        "pt": "07/09, noite — a fonte confirma que `X (généralités)` é a cabeça: o «45 / 10» vira «138 vinculados / 10 sem cabeça».\n\n07/09 — números medidos; textos ainda não corrigidos."
-      }
-    },
-    {
       "id": "K10",
       "d": "K",
       "p": "P2",
@@ -5598,10 +5210,16 @@
         "anarbib-backup-stale-lock-selfheal",
         "RUNBOOK_restauration_BG2_2026-07-01"
       ],
-      "verif": {
-        "fr": "15/09 — journal `journalctl --user -u anarbib-backup-storage.service` : `Main process exited, code=killed, status=15/TERM` à 08:23:45, « Failed to enqueue OnFailure » ; `fn_backup_heartbeat_status` : `storage` `interrompu = true`, `muet = true`, 215,5 h. Relance manuelle à 20 h 50, en cours au moment du relevé. **21 h 05** — la relance manuelle a abouti : seize buckets resynchronisés, instantané `daafc96b`, témoin de vie envoyé, rétention 7/4/6 appliquée (l’instantané du 09/08 sorti). Le flux `storage` est de nouveau attesté ; le trou va du 06/09 21 h 19 au 15/09 21 h 05.",
-        "pt": "15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50. **21h05** — o relançamento manual terminou : dezasseis buckets, instantâneo `daafc96b`, testemunho enviado. O buraco vai de 06/09 a 15/09."
-      }
+      "verif": [
+        {
+          "fr": "15/09 — journal `journalctl --user -u anarbib-backup-storage.service` : `Main process exited, code=killed, status=15/TERM` à 08:23:45, « Failed to enqueue OnFailure » ; `fn_backup_heartbeat_status` : `storage` `interrompu = true`, `muet = true`, 215,5 h. Relance manuelle à 20 h 50, en cours au moment du relevé. **21 h 05** — la relance manuelle a abouti : seize buckets resynchronisés, instantané `daafc96b`, témoin de vie envoyé, rétention 7/4/6 appliquée (l’instantané du 09/08 sorti). Le flux `storage` est de nouveau attesté ; le trou va du 06/09 21 h 19 au 15/09 21 h 05.",
+          "pt": "15/09 — journal : morto por SIGTERM às 08:23:45, `OnFailure` não enfileirado ; `storage` interrompido, 215,5 h. Relançado às 20h50. **21h05** — o relançamento manual terminou : dezasseis buckets, instantâneo `daafc96b`, testemunho enviado. O buraco vai de 06/09 a 15/09."
+        },
+        {
+          "fr": "16/09 — **I12 y est versé** : le `die` du script du miroir froid (`anarbib-mirror-refresh.service`) doit avoir le même destinataire que le contrôle de fraîcheur, et la date du dernier rafraîchissement du miroir s'écrire là où le témoin la lira. Une seule alerte à faire survivre au poste, pour les trois flux restic et le miroir.",
+          "pt": "16/09 — **I12 é aqui vertido**: o `die` do script do espelho frio deve ter o mesmo destinatário que o controlo de frescura, e a data da última atualização do espelho escrever-se onde o testemunho a lerá. Um só alerta a fazer sobreviver ao posto, para os três fluxos restic e o espelho."
+        }
+      ]
     },
     {
       "id": "I23",
