@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-16** · 75 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-17** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -15,7 +15,7 @@
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
-    - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
+    - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 5
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
@@ -23,8 +23,8 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 9
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 4
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do Bastien), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-16.** **60 itens de 75** trazem uma verificação datada própria (A1, A3, A4, B10, B13, B20, B23, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G12, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I16, I18, I21, I24, I25, J2, J3, J4, J9, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-17.** **57 itens de 72** trazem uma verificação datada própria (A1, A3, B10, B13, B20, B23, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G12, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -291,7 +291,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **A1** | Obter pelo menos duas outras pessoas administradoras de rede | `P0` | Decisão coletiva |
 | **A3** | Tirar o runner de integração contínua da máquina do mantenedor | `P0` | Aberto |
-| **A4** | Acolher uma contribuição externa sem a perder nem se afogar nela | `P1` | Em curso |
 
 #### A1 — Obter pelo menos duas outras pessoas administradoras de rede
 
@@ -336,27 +335,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Ligado a **I2** (migração auto-hospedada). Pode ser feito antes, na infraestrutura atual.
 
 *Remissões : `CLAUDE.md, piège connu n°1` · `REPRISE_bascule_autohebergee_2026-08-26`*
-
-#### A4 — Acolher uma contribuição externa sem a perder nem se afogar nela
-
-`P1` Prioritário · Estado : **Em curso** · Carga : uma noite · O que exige : deliberação coletiva, nenhuma competência técnica
-
-**Estado.** Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide. **Decidido em 06/09 à noite (Xavier): A** — as três regras e a contrapartida do mantenedor estão em `CONTRIBUTING.md` (fr e en, as duas línguas do arquivo) (`DOC-CONTRIB-1` ✅). Falta: a PR #28 dividida segundo essas regras.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Escrever em `CONTRIBUTING.md` três regras curtas: uma PR = um assunto; código de produção em PR separada da ferramentaria; durante uma releitura, commits adicionados, nunca force-push. E dizer o que o mantenedor promete: um primeiro retorno em uma semana.
-
-**Por que importa.** Um projeto com um mantenedor só sobrevive aos seus contribuidores se disser de antemão o que consegue reler.
-
-**O que conta como terminado.**
-
-- `CONTRIBUTING.md` traz as três regras em francês, português e inglês.
-- A PR #28 foi dividida segundo essas regras, ou mesclada com conhecimento de causa.
-
-**Dependências.** Decisão do mantenedor; pergunta em `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q4). REGISTRO `DOC-CONTRIB-1` (aberto).
-
-*Remissões : `CONTRIBUTING.md` · `REGISTRE §0 DOC-CONTRIB-1` · `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06` · `codeberg.org/anarbib/anarbib/pulls/28`*
 
 ---
 
@@ -1626,7 +1604,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Congelado |
 | **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Congelado |
 | **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | Aberto |
-| **I16** | Acompanhar a PR #28 até a fusão: divisão, quatro pontos bloqueantes, congelamento até 14/09 | `P1` | Em curso |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
@@ -1699,28 +1676,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `.forgejo/workflows/ci.yml` · `item B18`*
 
-#### I16 — Acompanhar a PR #28 até a fusão: divisão, quatro pontos bloqueantes, congelamento até 14/09
-
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : administração de sistemas, SQL / PostgreSQL, Deno / TypeScript
-
-**Estado.** A PR #28 foi relida; resposta do mantenedor colocada em 06/09 à noite. Bloqueante antes da fusão: (1) dividir — código de produção em PR separada; (2) retirar o fallback `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts`; (3) modo « mock » do mail só com `MAIL_TRANSPORT=mock` explícito; (4) `docs/CHANTIERS_OUVERTS.md` devolvido ao mantenedor. Depois: senha admin aleatória em local, `pg_cron` criado em vez de pulado, regex `uid()`, « UUID determinísticos » ausentes do diff, e os detalhes (`.gitignore`, porta 5173, `Referrer-Policy`, seção `bg2-known-tables.txt`). **Atualização 06/09, 21h.** Bastien dividiu (#28 auto-hospedagem, #29 código aplicativo) e resolveu na mesma noite os pontos pedidos. **Dois pontos novos para a releitura depois do 14**: (a) `install.sh` escreve `VITE_SUPABASE_URL=auto`, que só o `resolveSupabaseUrl` da #29 entende — **a #28 depende da #29**; (b) a inicialização do `pg_cron` está dentro de um `if` sobre o papel `postgres` — um salto silencioso voltou por outra porta. **21h06 (`73eb3462`)**: resolveu a dependência pondo na #28 um `resolveSupabaseUrl` **mínimo** (só `auto` usa a origem da página). Consequências: um arquivo de produção volta à PR de auto-hospedagem (aceitável se for o único); a #29 ainda traz sua própria versão do mesmo arquivo → **conflito**, a rebasear; o `throw` « variável ausente » fica inalcançável. **Decidido em 06/09 às 21h30 (Xavier)**: D9 — `src/lib/supabase.js` aceito na #28, só e mínimo; D6 — a #29 rebaseia sobre a #28 mesclada; D8 — a #29 mescla-se entre duas noites de formação, nunca na véspera. **Atualização 15/09, noite — a #28 está fundida.** Releitura completa publicada às 20h45 após um `install.sh` da cabeça `73eb3462` numa máquina virgem: rc 0 em 107 s, mas **371 funções executáveis por `anon`, 233 delas `SECURITY DEFINER`** (produção: 133 e 28) — o mecanismo `DOC-GRANT-2` medido numa instalação real. Decisão (D7 emendada): A.1/A.2 entram na PR **antes** da fusão. Bastien refez tudo em trinta minutos (quatro commits, cabeça `0c63cb05`). Três passagens de `install.sh` em pilha virgem: rc 0, **133 funções `anon`, MD5 idêntico à produção**. **Fundida por Xavier às 22h01 (`f179f1ff`, 17 commits)**; CI verde. Pages #3 fundida às 22h08 (`b04f47bc`). `I17` fica assim entregue em `main` pela própria PR.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Restam duas PR: **pages #2** (guia) — fundir quando o guia apresentar a simulação como opção 3 (D4); **#29** — Bastien faz rebase em `main` sem os três ficheiros de cartografia, depois releitura como código de produção e fusão entre duas noites de formação (D8).
-
-**Por que importa.** É a primeira reconstrução a partir do repositório feita por alguém que não o mantenedor. Perdê-la ou mesclá-la sem ler custaria o mesmo.
-
-**O que conta como terminado.**
-
-- A PR « auto-hospedagem » está mesclada, os quatro pontos resolvidos, `install.sh` executado uma vez numa máquina que não é a do autor.
-- A PR « código aplicativo » está aberta à parte, com um teste por mudança de comportamento.
-- O REGISTRO traz a regra de arranque do primeiro administrador (`GOUV-19`).
-
-**Dependências.** Resposta de Bastien; volta em 14/09. Ligado a A4, I17, I19, B20, F7, G11, J3, J4.
-
-*Remissões : `codeberg.org/anarbib/anarbib/pulls/28` · `journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9` · `REGISTRE §0 DOC-GRANT-2`*
-
 #### I18 — O banco de CI não faz replay numa imagem Supabase — é preciso um que faça
 
 `P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : administração de sistemas
@@ -1748,7 +1703,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A decisão de 07/09 (oferta confirmada: VM IPv4, Debian, backups já lá) e a nota de 05-06/09 deixam uma lista que nada mantém junta. **Verificado em 07/09 em `deploy/`**: nenhum rastro de `unattended-upgrades`, firewall nem autenticação só por chave. O resto é humano ou local: a conexão autenticada na pilha local nunca retestada desde a retirada do Turnstile; `deploy/.env` sobrescrito por `install.sh` (domínios em `localhost`) sem cópia conhecida; o teste a partir de uma rede móvel brasileira (NAT64) nunca feito; o prazo de intervenção de Les Herbes Folles nunca pedido; o meio de lhes pagar «pedido desde julho, sem resposta»; um segundo detentor dos acessos; e a regra posta em 07/09: **não se vira antes que o backup tenha ido para um terceiro** — hoje os três fluxos restic estão no próprio hospedeiro de destino.
 
-*Verificado : 07/09 — `deploy/` sem endurecimento; as outras sete condições não verificáveis a partir do banco.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Manter a lista aqui, marcar cada condição com sua prova (arquivo, e-mail, teste datado). O endurecimento entra em `deploy/`; o depósito de backup terceiro pede-se em Bolonha (**I12** diz o que o espelho frio cobre, e não é isso).
 
@@ -1855,7 +1810,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | | | | |
 |---|---|---|---|
 | **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
-| **J3** | O guia de auto-hospedagem da vitrine (pages PR #2): quatro frases, um aviso, e esperar a PR #28 | `P2` | Aberto |
 | **J4** | `CHANTIERS_OUVERTS` §1: escrever o estado real depois da primeira reconstrução externa | `P2` | Aberto |
 | **J9** | Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px | `P2` | A verificar |
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
@@ -1880,26 +1834,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Faz-se ao depositar este backlog.
 
 *Remissões : `docs/backlogs/INDEX.md`*
-
-#### J3 — O guia de auto-hospedagem da vitrine (pages PR #2): quatro frases, um aviso, e esperar a PR #28
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna, nenhuma competência técnica
-
-**Estado.** PR #2 em `AnarBib/pages`: guia passo a passo em 10 línguas geradas por script, link na navegação, README em 4 línguas. Documenta `./install.sh`, que não está em `main`. Quatro afirmações a corrigir: « cooperar com a rede » (só o catálogo, G12); « 2 GB bastam » e « Raspberry Pi » (não medido); credenciais padrão (G11); « modo simulação silencioso » recomendado (F7). Sem aviso « traduzido automaticamente, corrija-me ». **Decidido em 06/09 às 21h (Xavier)**: o link « Auto-hospedagem » vai no **rodapé** e na página Contribuir, **não na barra de navegação principal**; Bastien o pôs nos dois em todas as subpáginas das dez línguas — retirar da navegação antes da fusão. As quatro frases e o aviso « corrija-me » estão resolvidos. **21h12 (`832e2196`)**: feito — o link saiu da barra de navegação e vive no rodapé e na página Contribuir. Só falta esperar a #28 e não propor a simulação por padrão. **D4 decidida (21h30)**: modo simulação passa a **opção 3, nunca padrão**, no `install.sh` e no guia.
-
-*Verificado : 06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
-
-**O que é.** Mesclar **depois** da PR « auto-hospedagem » (#28). Falta, do lado de Bastien: não propor a simulação como opção 1 padrão. O README multilíngue saiu sozinho na PR #3.
-
-**Por que importa.** A vitrine é a única coisa que lê quem ainda não conhece o projeto. Uma promessa falsa custa mais que um bug.
-
-**O que conta como terminado.**
-
-- As quatro frases estão corrigidas nas 10 línguas, o aviso está lá, a PR #28 mesclada, depois esta.
-
-**Dependências.** I16, G11, G12, F7.
-
-*Remissões : `codeberg.org/AnarBib/pages/pulls/2` · `journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9.6` · `anarbib-vitrine-site-repo`*
 
 #### J4 — `CHANTIERS_OUVERTS` §1: escrever o estado real depois da primeira reconstrução externa
 
@@ -2293,6 +2227,9 @@ CI verde. |
 | I13 | 2026-09-16 | **Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — medido em 16/09: o site é servido por git-pages, uma rota desconhecida devolve **200 `text/html`**; `public/_redirects` existe, `public/.domains` já não existe, o ramo `pages` já não existe na Codeberg, `public/CNAME` mantido para o espelho GitHub. A limpeza dos segredos Forgejo tornados inúteis é um gesto de Xavier nos ajustes da forja, fora do repositório. |
 | I1 | 2026-09-16 | **Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — `deploy/.env.example` tem `GOTRUE_TAG=v2.192.0` com a regra « imagem ≥ produção » e o histórico; as passagens de 26/08 mediram **77 migrações GoTrue = a produção exatamente**; a PR #28 reproduziu a pilha nessa imagem. O terceiro « acabado quando » é levantado: a medida direta vale mais do que a lista. |
 | G11 | 2026-09-16 | **Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — a regra de arranque está **registada**: `GOUV-19`, « ✅ decidido 06/09 (Xavier, Q1: A + B + C + D′) » — arranque único fora do circuito, recusado assim que exista um admin ativo; palavra-passe aleatória em todos os modos, mostrada uma vez; primeira conta = coordenação da primeira biblioteca **e** admin de rede; biblioteca `demo` criada se a tabela estiver vazia. `deploy/scripts/seed-admin.mjs` (PR #28) aplica as quatro, e `deploy/README.md` apresenta-o como o arranque de uma base virgem. |
+| J3 | 2026-09-17 |  *(segundo item com o identificador J3 — o da PR #28, 06/09; o primeiro está fechado mais acima)* **Encerrado em 17/09/2026 sobre os factos, decisão de Xavier de 16/09; assinalado pela sessão vizinha em 16/09 à noite.** A PR pages #2 (guia de auto-hospedagem do site vitrine, dez línguas) está **fundida em 16/09 às 22h00** (API Codeberg: `merged: true`), depois da PR #28 (15/09) como a ficha exigia; as quatro frases estão corrigidas e o aviso posto; a releitura D4 foi tomada, e `install.sh` já só promete a Resend (`035853eb`). |
+| A4 | 2026-09-17 |  *(segundo item com o identificador A4 — o da PR #28, 06/09; o primeiro está fechado mais acima)* **Encerrado em 17/09/2026 sobre os factos, decisão de Xavier de 16/09; assinalado pela sessão vizinha em 16/09 à noite.** `CONTRIBUTING.md` tem as três regras e a promessa do mantenedor, em francês e em inglês; `DOC-CONTRIB-1` no registo. A PR #28 foi **dividida segundo estas regras** (instalador em #28, código aplicativo em #29, guia vitrine em pages #2) e fundida em 15/09 com conhecimento de causa. A exigência de uma versão portuguesa é levantada: o ficheiro é bilingue FR/EN por construção. |
+| I16 | 2026-09-17 |  *(segundo item com o identificador I16 — o da PR #28, 06/09; o primeiro está fechado mais acima)* **Encerrado em 17/09/2026 sobre os factos, decisão de Xavier de 16/09; assinalado pela sessão vizinha em 16/09 à noite.** O objeto do item — **seguir a PR #28 até à fusão** — está atingido: divisão feita (#28 instalador, #29 código aplicativo aberta à parte, pages #2 guia vitrine), os quatro pontos bloqueantes resolvidos, congelamento de 08 a 14/09 mantido, **fusão em 15/09** (`f179f1ff`), pages #2 em 16/09, `GOUV-19` registado (G11 fechado). O terceiro « acabado quando » (`install.sh` executado numa máquina que não é a do autor) não é uma condição da fusão: é uma prova da pilha, vertida em **I21**. A releitura de #29 continua sob o seu próprio número de PR, com F7 e B20. |
 
 ---
 
@@ -2324,4 +2261,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 75 itens em 11 domínios. O estado numérico foi levantado em 2026-09-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2e89c1de`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-17. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2e89c1de`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

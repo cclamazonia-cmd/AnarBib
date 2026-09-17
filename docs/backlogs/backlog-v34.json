@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-16",
+    "maj": "2026-09-17",
     "releve": {
       "date": "2026-09-16",
       "commit": "2e89c1de"
@@ -2081,6 +2081,30 @@
         {
           "fr": "**Clos le 16/09/2026 sur décision de Xavier (« clos tout ce qui peut l'être à bon droit »)** — la règle d'amorçage est **actée au registre** : `GOUV-19`, « ✅ tranché 06/09 (Xavier, Q1 : A + B + C + D′) » — amorçage unique hors circuit, refusé dès qu'un admin actif existe ; mot de passe aléatoire dans tous les modes, affiché une fois ; premier compte = coordination de la première bibliothèque **et** admin réseau ; bibliothèque `demo` créée si la table est vide. `deploy/scripts/seed-admin.mjs` (PR #28, fusionnée le 15/09) applique les quatre (`crypto.randomBytes` en tout mode, rôles `coordenador` + `librarian` + ligne `network_administrators`, refus si un admin existe), et `deploy/README.md` § « Compte administrateur initial » le présente comme l'amorçage d'une base vierge. Constat corrigé : la fiche disait « à écrire », c'était écrit.",
           "pt": "**Encerrado em 16/09/2026 por decisão de Xavier (« fecha tudo o que pode sê-lo com razão »)** — a regra de arranque está **registada**: `GOUV-19`, « ✅ decidido 06/09 (Xavier, Q1: A + B + C + D′) » — arranque único fora do circuito, recusado assim que exista um admin ativo; palavra-passe aleatória em todos os modos, mostrada uma vez; primeira conta = coordenação da primeira biblioteca **e** admin de rede; biblioteca `demo` criada se a tabela estiver vazia. `deploy/scripts/seed-admin.mjs` (PR #28) aplica as quatro, e `deploy/README.md` apresenta-o como o arranque de uma base virgem."
+        }
+      ],
+      [
+        "J3",
+        "2026-09-17",
+        {
+          "fr": " *(second item portant l'identifiant J3 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** La PR pages #2 (guide d'auto-hébergement du site vitrine, dix langues) est **fusionnée le 16/09 à 22 h 00** (API Codeberg : `merged: true`), après la PR #28 (15/09) comme la fiche l'exigeait ; les quatre phrases sont corrigées et l'avertissement posé ; la relecture D4 (la simulation en option 3, jamais en option 1) est prise, et `install.sh` ne promet plus que Resend (`035853eb`, 16/09 23 h 12 : SMTP et simulation annoncés « à venir », rien de silencieux).",
+          "pt": " *(segundo item com o identificador J3 — o da PR #28, 06/09; o primeiro está fechado mais acima)* **Encerrado em 17/09/2026 sobre os factos, decisão de Xavier de 16/09; assinalado pela sessão vizinha em 16/09 à noite.** A PR pages #2 (guia de auto-hospedagem do site vitrine, dez línguas) está **fundida em 16/09 às 22h00** (API Codeberg: `merged: true`), depois da PR #28 (15/09) como a ficha exigia; as quatro frases estão corrigidas e o aviso posto; a releitura D4 foi tomada, e `install.sh` já só promete a Resend (`035853eb`)."
+        }
+      ],
+      [
+        "A4",
+        "2026-09-17",
+        {
+          "fr": " *(second item portant l'identifiant A4 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** `CONTRIBUTING.md` porte les trois règles (une PR = un sujet ; le code de production dans une PR à part ; des commits, jamais de réécriture pendant la relecture) et la promesse du mainteneur (un premier retour sous une semaine), en français (§ « Le rythme du travail ») et en anglais (§ « Working rhythm ») ; `DOC-CONTRIB-1` au registre. La PR #28 a été **scindée selon ces règles** (installateur dans #28, code applicatif dans #29, guide vitrine dans pages #2) puis fusionnée le 15/09 en connaissance de cause. L'exigence d'une version portugaise est levée : le fichier est bilingue FR/EN par construction, comme le README.",
+          "pt": " *(segundo item com o identificador A4 — o da PR #28, 06/09; o primeiro está fechado mais acima)* **Encerrado em 17/09/2026 sobre os factos, decisão de Xavier de 16/09; assinalado pela sessão vizinha em 16/09 à noite.** `CONTRIBUTING.md` tem as três regras e a promessa do mantenedor, em francês e em inglês; `DOC-CONTRIB-1` no registo. A PR #28 foi **dividida segundo estas regras** (instalador em #28, código aplicativo em #29, guia vitrine em pages #2) e fundida em 15/09 com conhecimento de causa. A exigência de uma versão portuguesa é levantada: o ficheiro é bilingue FR/EN por construção."
+        }
+      ],
+      [
+        "I16",
+        "2026-09-17",
+        {
+          "fr": " *(second item portant l'identifiant I16 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** L'objet de l'item — **suivre la PR #28 jusqu'à sa fusion** — est atteint : scission faite (#28 installateur, #29 code applicatif ouverte à part, pages #2 guide vitrine), les quatre points bloquants réglés, gel du 08 au 14/09 tenu, **fusion le 15/09** (`f179f1ff`), pages #2 le 16/09, `GOUV-19` acté (G11 clos). Le troisième « fini quand » (`install.sh` exécuté une fois sur une machine qui n'est pas celle de son auteur) n'est pas une condition de la fusion : c'est une épreuve de la pile, versée à **I21** (les conditions avant la bascule) — `deploy/README.md` § « Première reconstruction extérieure » la nomme. La relecture de #29 comme du code de production se poursuit sous son propre numéro de PR, avec F7 et B20.",
+          "pt": " *(segundo item com o identificador I16 — o da PR #28, 06/09; o primeiro está fechado mais acima)* **Encerrado em 17/09/2026 sobre os factos, decisão de Xavier de 16/09; assinalado pela sessão vizinha em 16/09 à noite.** O objeto do item — **seguir a PR #28 até à fusão** — está atingido: divisão feita (#28 instalador, #29 código aplicativo aberta à parte, pages #2 guia vitrine), os quatro pontos bloqueantes resolvidos, congelamento de 08 a 14/09 mantido, **fusão em 15/09** (`f179f1ff`), pages #2 em 16/09, `GOUV-19` registado (G11 fechado). O terceiro « acabado quando » (`install.sh` executado numa máquina que não é a do autor) não é uma condição da fusão: é uma prova da pilha, vertida em **I21**. A releitura de #29 continua sob o seu próprio número de PR, com F7 e B20."
         }
       ]
     ]
@@ -4235,122 +4259,6 @@
       }
     },
     {
-      "id": "A4",
-      "d": "A",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "collectif",
-        "aucune"
-      ],
-      "t": {
-        "fr": "Accueillir une contribution extérieure sans la perdre ni s'y noyer",
-        "pt": "Acolher uma contribuição externa sem a perder nem se afogar nela"
-      },
-      "v": {
-        "fr": "Le 06/09, la première contribution extérieure (Bastien, `ASR2026`) a produit en un après-midi trois PR sur deux dépôts, cinq réécritures d'historique et 46 fichiers touchés, dont du code de production. Aucune règle écrite ne dit ce qu'une PR peut contenir, si l'historique peut être réécrit pendant une relecture, ni comment on scinde. Le mainteneur a répondu le soir même, par un commentaire long ; sans règle, la prochaine contribution rejouera la même scène. **Tranché le 06/09 au soir (Xavier) : A** — les trois règles et la contrepartie du mainteneur sont écrites dans `CONTRIBUTING.md` (fr et en, les deux langues du fichier) le soir même (`DOC-CONTRIB-1` ✅). Reste : la PR #28 scindée selon ces règles.",
-        "pt": "Em 06/09, a primeira contribuição externa (Bastien, `ASR2026`) produziu numa tarde três PR em dois repositórios, cinco reescritas de histórico e 46 arquivos tocados, incluindo código de produção. Nenhuma regra escrita diz o que uma PR pode conter, se o histórico pode ser reescrito durante uma releitura, nem como se divide. **Decidido em 06/09 à noite (Xavier): A** — as três regras e a contrapartida do mantenedor estão em `CONTRIBUTING.md` (fr e en, as duas línguas do arquivo) (`DOC-CONTRIB-1` ✅). Falta: a PR #28 dividida segundo essas regras."
-      },
-      "w": {
-        "fr": "Écrire dans `CONTRIBUTING.md` trois règles courtes : une PR = un sujet ; le code déployé en production (frontend, Edge Functions) va dans une PR distincte de l'outillage ; pendant une relecture, on ajoute des commits, on ne force-pousse pas. Et dire ce que le mainteneur promet en retour : un premier retour sous une semaine.",
-        "pt": "Escrever em `CONTRIBUTING.md` três regras curtas: uma PR = um assunto; código de produção em PR separada da ferramentaria; durante uma releitura, commits adicionados, nunca force-push. E dizer o que o mantenedor promete: um primeiro retorno em uma semana."
-      },
-      "y": {
-        "fr": "Un projet à un mainteneur ne survit à ses contributeurs que s'il dit à l'avance ce qu'il peut relire. Une règle écrite protège la contribution autant que le projet : elle évite qu'un travail sincère finisse refusé en bloc parce qu'il était impossible à lire.",
-        "pt": "Um projeto com um mantenedor só sobrevive aos seus contribuidores se disser de antemão o que consegue reler."
-      },
-      "f": {
-        "fr": [
-          "`CONTRIBUTING.md` porte les trois règles, en français, portugais et anglais.",
-          "La PR #28 a été scindée selon ces règles, ou fusionnée en connaissance de cause."
-        ],
-        "pt": [
-          "`CONTRIBUTING.md` traz as três regras em francês, português e inglês.",
-          "A PR #28 foi dividida segundo essas regras, ou mesclada com conhecimento de causa."
-        ]
-      },
-      "dep": {
-        "fr": "Décision du mainteneur ; question posée dans `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q4). REGISTRE `DOC-CONTRIB-1` (ouvert).",
-        "pt": "Decisão do mantenedor; pergunta em `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (Q4). REGISTRO `DOC-CONTRIB-1` (aberto)."
-      },
-      "r": [
-        "CONTRIBUTING.md",
-        "REGISTRE §0 DOC-CONTRIB-1",
-        "journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06",
-        "codeberg.org/anarbib/anarbib/pulls/28"
-      ],
-      "verif": [
-        {
-          "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-          "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-        },
-        {
-          "fr": "16/09 — `CONTRIBUTING.md` porte les trois règles en français (l. 80-86) et en anglais (l. 143 sq.), **pas en portugais** ; la PR #28 est fusionnée en connaissance de cause (15/09). Clôturable en écrivant la version portugaise, ou en levant l'exigence des trois langues.",
-          "pt": "16/09 — `CONTRIBUTING.md` tem as três regras em francês e em inglês, **não em português**; a PR #28 está fundida com conhecimento de causa (15/09). Fechável escrevendo a versão portuguesa, ou levantando a exigência das três línguas."
-        }
-      ]
-    },
-    {
-      "id": "I16",
-      "d": "I",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "sysadmin",
-        "sql",
-        "deno"
-      ],
-      "t": {
-        "fr": "Suivre la PR #28 jusqu'à sa fusion : scission, quatre points bloquants, gel jusqu'au 14/09",
-        "pt": "Acompanhar a PR #28 até a fusão: divisão, quatro pontos bloqueantes, congelamento até 14/09"
-      },
-      "v": {
-        "fr": "La PR #28 (installateur `install.sh`, `deploy/`, seed admin, transport mail, résolveur d'URL, neuf migrations retouchées) est relue ; réponse du mainteneur posée le 06/09 au soir. Bloquant avant fusion, indépendamment du gel : **(1)** scinder — le code de production (`src/lib/supabase.js`, `coverThumbs.js`, `AltchaWidget`, six pages, `secret-key.ts`, `email.ts`, `smtp.ts`, deux `notify-*`) dans une PR à part ; **(2)** retirer le repli sur `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts` (la ligne `SUPABASE_SECRET_KEYS` de `compose.yml` suffit) ; **(3)** le mode « mock » du mail réservé à `MAIL_TRANSPORT=mock` explicite ; **(4)** `docs/CHANTIERS_OUVERTS.md` rendu au mainteneur. Puis : mot de passe admin aléatoire en local, `pg_cron` créé plutôt que sauté, explication de la regex `uid()` (`20260906111308`), « UUID déterministes » introuvables dans le diff. Détails : `.gitignore` `deploy/.env.*` couvre `.env.example` ; Caddy sur `5173` contre `npm run dev` ; `Referrer-Policy` changé pour toute l'API ; `deploy/README.md` perd la section `bg2-known-tables.txt`. **MàJ 06/09, 21 h.** Bastien a scindé (#28 auto-hébergement, tête `c0e7d3c2` ; #29 code applicatif, tête `1f3745fa`) et réglé le soir même : `CONTRIBUTING.md` identique à `main`, migration `20260904130100` restaurée, `pg_cron` créé dans `01-roles.sh`, mot de passe aléatoire et nom de biblio demandés, courriel admin demandé, confirmation `--rebuild`, attente `pg_isready`, `.env.local` préservé, redirection http→https Caddy. **Deux points nouveaux pour la relecture d'après le 14** : *(a)* `install.sh` écrit désormais `VITE_SUPABASE_URL=auto`, que seul le `resolveSupabaseUrl` de la #29 comprend — sur `main`, `auto` serait pris pour une URL : **la #28 dépend de la #29**, ou doit écrire l'URL réelle ; *(b)* l'init `pg_cron` est enveloppée dans `if` le rôle `postgres` existe → un saut silencieux est de retour par une autre porte. Les tickets « [CI rouge] » #2/#3 touchés ce soir sont d'août, fermés, seulement cross-référencés ; tous les runs Actions sont verts. **21 h 06 (`73eb3462`)** : il a réglé la dépendance en mettant dans la #28 un `resolveSupabaseUrl` **minimal** — seul `auto` bascule sur `window.location.origin`, une URL explicite est respectée telle quelle (ce qui répare aussi l'heuristique `localhost` de la #29). Conséquences : *(a)* un fichier de production (`src/lib/supabase.js`) revient dans la PR d'auto-hébergement — acceptable **s'il reste le seul** et sous cette forme minimale, à dire explicitement à la fusion ; *(b)* la #29 porte encore sa propre version du même fichier, avec l'heuristique `localhost` : **conflit entre les deux PR**, la #29 devra être rebasée sur la #28 fusionnée et abandonner sa version ; *(c)* le `throw` « `VITE_SUPABASE_URL` requis » qui suit devient inatteignable (repli sur l'origine ou `http://localhost`) — à trancher : garder le `throw` quand la variable est absente, réserver le repli au seul `auto`. **Tranché le 06/09 à 21 h 30 (Xavier)** : D9 — `src/lib/supabase.js` accepté dans la #28, seul et minimal, `throw` conservé hors `auto`, exception dite à la fusion ; D6 — la #29 se rebase sur la #28 fusionnée en un ou deux commits et abandonne sa version du résolveur ; D8 — la #29 se fusionne entre deux soirées de formation, jamais la veille d'une séance, tests verts. **MàJ 15/09, soir — la #28 est fusionnée.** Relecture complète postée à 20 h 45 (`issuecomment-22902616`), après un passage d'`install.sh` de sa tête `73eb3462` sur une machine vierge : rc 0 en 107 s, 308 migrations, six conteneurs, amorçage conforme — mais **371 fonctions exécutables par `anon`, dont 233 `SECURITY DEFINER`** (production : 133 et 28), le mécanisme `DOC-GRANT-2` mesuré sur une installation réelle. Décision (D7 amendée) : A.1/A.2 entrent dans la PR **avant** la fusion, diff joint et testé sur sa branche. Bastien a tout repris en trente minutes (quatre commits, tête `0c63cb05`) : A.1/A.2 tels quels, message de report autour de `pg_cron`, nom de biblio refusé si vide (D3), simulation en option 3 (D4 ; Entrée y tombe encore, `3|*)`), `throw` atteignable hors `auto` (D9), locale via `--lang`, README (ligne périmée retirée, sections « Ordre de la répétition » et « Ce qu'on a supprimé » revenues), `deploy.sh --controle` (sonde `/libraries`, code de retour), port 5173 et `.env.local` nettoyés, `supabase_migrations` initialisé par son propriétaire. Trois passages d'`install.sh` sur pile vierge (5bbe6ba5, 15c95f4e, 0c63cb05) : rc 0 en 50-64 s, **133 fonctions `anon`, empreinte MD5 identique à la production**, contrôle de santé à 0, `merge-tree` propre. **Fusionnée par Xavier à 22 h 01 (commit de fusion `f179f1ff`, 17 commits conservés)** ; CI verte (app, backend, suites SQL). Mot d'après fusion à 22 h 04 (`issuecomment-22905523`). **Pages #3 (README seul) fusionnée à 22 h 08 (`b04f47bc`).** `I17` est ainsi livré dans `main` par la PR elle-même.",
-        "pt": "A PR #28 foi relida; resposta do mantenedor colocada em 06/09 à noite. Bloqueante antes da fusão: (1) dividir — código de produção em PR separada; (2) retirar o fallback `SUPABASE_SERVICE_ROLE_KEY` de `secret-key.ts`; (3) modo « mock » do mail só com `MAIL_TRANSPORT=mock` explícito; (4) `docs/CHANTIERS_OUVERTS.md` devolvido ao mantenedor. Depois: senha admin aleatória em local, `pg_cron` criado em vez de pulado, regex `uid()`, « UUID determinísticos » ausentes do diff, e os detalhes (`.gitignore`, porta 5173, `Referrer-Policy`, seção `bg2-known-tables.txt`). **Atualização 06/09, 21h.** Bastien dividiu (#28 auto-hospedagem, #29 código aplicativo) e resolveu na mesma noite os pontos pedidos. **Dois pontos novos para a releitura depois do 14**: (a) `install.sh` escreve `VITE_SUPABASE_URL=auto`, que só o `resolveSupabaseUrl` da #29 entende — **a #28 depende da #29**; (b) a inicialização do `pg_cron` está dentro de um `if` sobre o papel `postgres` — um salto silencioso voltou por outra porta. **21h06 (`73eb3462`)**: resolveu a dependência pondo na #28 um `resolveSupabaseUrl` **mínimo** (só `auto` usa a origem da página). Consequências: um arquivo de produção volta à PR de auto-hospedagem (aceitável se for o único); a #29 ainda traz sua própria versão do mesmo arquivo → **conflito**, a rebasear; o `throw` « variável ausente » fica inalcançável. **Decidido em 06/09 às 21h30 (Xavier)**: D9 — `src/lib/supabase.js` aceito na #28, só e mínimo; D6 — a #29 rebaseia sobre a #28 mesclada; D8 — a #29 mescla-se entre duas noites de formação, nunca na véspera. **Atualização 15/09, noite — a #28 está fundida.** Releitura completa publicada às 20h45 após um `install.sh` da cabeça `73eb3462` numa máquina virgem: rc 0 em 107 s, mas **371 funções executáveis por `anon`, 233 delas `SECURITY DEFINER`** (produção: 133 e 28) — o mecanismo `DOC-GRANT-2` medido numa instalação real. Decisão (D7 emendada): A.1/A.2 entram na PR **antes** da fusão. Bastien refez tudo em trinta minutos (quatro commits, cabeça `0c63cb05`). Três passagens de `install.sh` em pilha virgem: rc 0, **133 funções `anon`, MD5 idêntico à produção**. **Fundida por Xavier às 22h01 (`f179f1ff`, 17 commits)**; CI verde. Pages #3 fundida às 22h08 (`b04f47bc`). `I17` fica assim entregue em `main` pela própria PR."
-      },
-      "w": {
-        "fr": "Restent deux PR : **pages #2** (guide vitrine) — à fusionner quand le guide présente la simulation en option 3 (D4) ; **#29** (code applicatif) — Bastien la rebase sur `main` en un ou deux commits sans ses trois fichiers de cartographie (conflit depuis le fond PMTiles du 08/09 ; sa branche est un commit en avance sur la PR, `5e5baf1a`), puis relecture comme du code de production (mock explicite dans les deux `notify-*`, STARTTLS, dot-stuffing, trois copies de l'aiguillage mail, `coverThumbs.js`, tests) et fusion entre deux soirées de formation (D8). Deux détails à lui rappeler à l'occasion : Entrée sur le choix du mail, corps de la PR #28 (« 308 », « 5173 »).",
-        "pt": "Restam duas PR: **pages #2** (guia) — fundir quando o guia apresentar a simulação como opção 3 (D4); **#29** — Bastien faz rebase em `main` sem os três ficheiros de cartografia, depois releitura como código de produção e fusão entre duas noites de formação (D8)."
-      },
-      "y": {
-        "fr": "C'est la première reconstruction depuis le dépôt seul faite par quelqu'un d'autre que le mainteneur — la réponse à la question qui décide de tout le reste (`CHANTIERS_OUVERTS` §1). La perdre en la laissant traîner, ou la fusionner sans la lire, coûterait la même chose.",
-        "pt": "É a primeira reconstrução a partir do repositório feita por alguém que não o mantenedor. Perdê-la ou mesclá-la sem ler custaria o mesmo."
-      },
-      "f": {
-        "fr": [
-          "La PR « auto-hébergement » est fusionnée, ses quatre points bloquants réglés, `install.sh` exécuté une fois sur une machine qui n'est pas celle de son auteur.",
-          "La PR « code applicatif » est ouverte à part, avec un test pour chaque changement de comportement.",
-          "Le REGISTRE porte la règle d'amorçage du premier administrateur (`GOUV-19`)."
-        ],
-        "pt": [
-          "A PR « auto-hospedagem » está mesclada, os quatro pontos resolvidos, `install.sh` executado uma vez numa máquina que não é a do autor.",
-          "A PR « código aplicativo » está aberta à parte, com um teste por mudança de comportamento.",
-          "O REGISTRO traz a regra de arranque do primeiro administrador (`GOUV-19`)."
-        ]
-      },
-      "dep": {
-        "fr": "Réponse de Bastien ; retour du 14/09. Lié à **A4**, **I17**, **I19**, **B20**, **F7**, **G11**, **J3**, **J4**.",
-        "pt": "Resposta de Bastien; volta em 14/09. Ligado a A4, I17, I19, B20, F7, G11, J3, J4."
-      },
-      "r": [
-        "codeberg.org/anarbib/anarbib/pulls/28",
-        "journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9",
-        "REGISTRE §0 DOC-GRANT-2"
-      ],
-      "verif": [
-        {
-          "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **15/09** — quatre têtes re-mesurées par l'API ; `install.sh` exécuté quatre fois sur pile isolée (`COMPOSE_PROJECT_NAME=anarbib-pr28`, worktree détaché sur `refs/pull/28/head`, stdin fermé) ; comptes `anon`/DEFINER et empreinte MD5 comparés à la production en lecture seule ; `merge-tree` contre `main` avant fusion ; CI du commit de fusion suivie jusqu'au vert.",
-          "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`. **15/09** — cabeças re-medidas pela API; `install.sh` executado quatro vezes em pilha isolada; contagens `anon`/DEFINER e MD5 comparados à produção; `merge-tree` antes da fusão; CI verde."
-        },
-        {
-          "fr": "16/09 — deux des trois « fini quand » sont tenus : la PR #29 (code applicatif) est ouverte à part, `GOUV-19` est acté (G11 clos). Reste le premier : `install.sh` **exécuté une fois sur une machine qui n'est pas celle de son auteur** — non prouvé à ce jour ; c'est le geste qui clôt l'item, avec la relecture de #29.",
-          "pt": "16/09 — dois dos três « acabado quando » estão cumpridos: a PR #29 está aberta à parte, `GOUV-19` está registado (G11 fechado). Falta o primeiro: `install.sh` **executado uma vez numa máquina que não é a do seu autor** — não provado até hoje."
-        }
-      ]
-    },
-    {
       "id": "I18",
       "d": "I",
       "p": "P2",
@@ -4561,54 +4469,6 @@
         "supabase/functions/oai-pmh-provider",
         "supabase/functions/harvest-oai-pmh",
         "REGISTRE §0 DOC-GEL-1"
-      ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
-    },
-    {
-      "id": "J3",
-      "d": "J",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "langue",
-        "aucune"
-      ],
-      "t": {
-        "fr": "Le guide d'auto-hébergement du site vitrine (pages PR #2) : quatre phrases, un avertissement, et attendre la PR #28",
-        "pt": "O guia de auto-hospedagem da vitrine (pages PR #2): quatro frases, um aviso, e esperar a PR #28"
-      },
-      "v": {
-        "fr": "PR #2 sur `AnarBib/pages` (la #1, même contenu, est fermée) : guide pas à pas en 10 langues engendrées par `tools/build-selfhosting-pages.py`, lien dans la navigation de `fr/`, `en/`, `es/`, `pt/`, renvoi dans le formulaire d'adhésion, README du dépôt en 4 langues. Ton juste, découpage juste, boutons « copier ». Il documente `./install.sh`, qui n'est pas dans `main`. Quatre affirmations à corriger : « coopérer avec les autres camarades du réseau » (vrai pour le catalogue par OAI-PMH, faux pour comptes, prêts, gouvernance — **G12**) ; « 2 Go suffisent largement » et « Raspberry Pi 4/5 » (non mesuré : six conteneurs dont Postgres et l'edge-runtime, plus `npm run build`) ; les identifiants par défaut (**G11**) ; le « mode simulation silencieux » présenté comme recommandé (**F7**). Pas d'avertissement « traduit automatiquement, corrigez-moi » sur les pages engendrées. **Tranché le 06/09 à 21 h (Xavier)** : le lien « Auto-hébergement » va dans le **pied de page** et sur la page Contribuer, **pas dans la barre de navigation principale** ; Bastien l'a posé dans les deux sur toutes les sous-pages des dix langues (point 4 de sa réponse de 20 h 45) — à retirer de la navigation avant fusion. Les quatre phrases et le bandeau « corrige-moi » sont réglés (tête `aca61fb1`). **21 h 12 (`832e2196`)** : fait — le lien a quitté la barre de navigation des dix langues et vit dans le pied de page et sur la page Contribuer (section dédiée) ; à 21 h 09 (`5c53ba58`) le guide dit aussi que l'installateur demande le nom de la biblio et le courriel admin, sans mot de passe par défaut. **Il ne reste plus que l'attente de la #28** et le mode simulation à ne plus proposer par défaut. **D4 tranchée (21 h 30)** : le mode simulation passe en **option 3, jamais par défaut**, dans `install.sh` comme dans le guide.",
-        "pt": "PR #2 em `AnarBib/pages`: guia passo a passo em 10 línguas geradas por script, link na navegação, README em 4 línguas. Documenta `./install.sh`, que não está em `main`. Quatro afirmações a corrigir: « cooperar com a rede » (só o catálogo, G12); « 2 GB bastam » e « Raspberry Pi » (não medido); credenciais padrão (G11); « modo simulação silencioso » recomendado (F7). Sem aviso « traduzido automaticamente, corrija-me ». **Decidido em 06/09 às 21h (Xavier)**: o link « Auto-hospedagem » vai no **rodapé** e na página Contribuir, **não na barra de navegação principal**; Bastien o pôs nos dois em todas as subpáginas das dez línguas — retirar da navegação antes da fusão. As quatro frases e o aviso « corrija-me » estão resolvidos. **21h12 (`832e2196`)**: feito — o link saiu da barra de navegação e vive no rodapé e na página Contribuir. Só falta esperar a #28 e não propor a simulação por padrão. **D4 decidida (21h30)**: modo simulação passa a **opção 3, nunca padrão**, no `install.sh` e no guia."
-      },
-      "w": {
-        "fr": "Fusionner **après** la PR « auto-hébergement » (#28). Reste, côté Bastien : ne plus faire du mode simulation l'option 1 par défaut. Le README multilingue est parti seul dans la PR #3, fusionnable quand on veut.",
-        "pt": "Mesclar **depois** da PR « auto-hospedagem » (#28). Falta, do lado de Bastien: não propor a simulação como opção 1 padrão. O README multilíngue saiu sozinho na PR #3."
-      },
-      "y": {
-        "fr": "Le site vitrine est la seule chose que lit quelqu'un qui ne connaît pas encore le projet. Une promesse fausse y coûte plus qu'un bug : elle se lit dix fois avant qu'on la corrige.",
-        "pt": "A vitrine é a única coisa que lê quem ainda não conhece o projeto. Uma promessa falsa custa mais que um bug."
-      },
-      "f": {
-        "fr": [
-          "Les quatre phrases sont corrigées dans les 10 langues, l'avertissement est là, la PR #28 « auto-hébergement » est fusionnée, puis celle-ci."
-        ],
-        "pt": [
-          "As quatro frases estão corrigidas nas 10 línguas, o aviso está lá, a PR #28 mesclada, depois esta."
-        ]
-      },
-      "dep": {
-        "fr": "**I16**, **G11**, **G12**, **F7**.",
-        "pt": "I16, G11, G12, F7."
-      },
-      "r": [
-        "codeberg.org/AnarBib/pages/pulls/2",
-        "journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06 §9.6",
-        "anarbib-vitrine-site-repo"
       ],
       "verif": {
         "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
@@ -5115,10 +4975,16 @@
         "claude/NOTE_sortie_services_etats_uniens_2026-09-05",
         "claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)"
       ],
-      "verif": {
-        "fr": "07/09 — `deploy/` sans durcissement ; les sept autres conditions non vérifiables depuis la base.",
-        "pt": "07/09 — `deploy/` sem endurecimento; as outras sete condições não verificáveis a partir do banco."
-      }
+      "verif": [
+        {
+          "fr": "07/09 — `deploy/` sans durcissement ; les sept autres conditions non vérifiables depuis la base.",
+          "pt": "07/09 — `deploy/` sem endurecimento; as outras sete condições não verificáveis a partir do banco."
+        },
+        {
+          "fr": "17/09 — **I16 y verse une condition** : `install.sh` (PR #28) exécuté une fois sur une machine vierge qui n'est pas celle de son auteur, écarts consignés — l'épreuve que la pile n'a pas encore passée hors de chez Bastien (avec le routeur `main`, I3, et le rejeu CI sur l'image Supabase, I18).",
+          "pt": "17/09 — **I16 verte aqui uma condição**: `install.sh` (PR #28) executado uma vez numa máquina virgem que não é a do seu autor, desvios registados — a prova que a pilha ainda não passou fora da casa do Bastien (com o router `main`, I3, e a reprodução CI na imagem Supabase, I18)."
+        }
+      ]
     },
     {
       "id": "I22",

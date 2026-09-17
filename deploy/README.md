@@ -48,7 +48,7 @@ production (`journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_202
 (`journal/operations/NOTE_experience-I17-rejeu-fidele_2026-09-07`, `DOC-GRANT-3`).
 Depuis, ses correctifs partent d'une instance qui tourne chez lui et sont relus
 puis fusionnés ici. Ce que la pile n'a **pas** encore éprouvé hors de chez son
-auteur : `install.sh` lancé sur une machine tierce vierge (I16), le routeur
+auteur : `install.sh` lancé sur une machine tierce vierge (I21), le routeur
 `main` (I3), le rejeu sur une image Supabase en CI (I18).
 
 ---
