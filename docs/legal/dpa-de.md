@@ -71,7 +71,7 @@ bleibt gültig, solange die beitretende Bibliothek die
 AnarBib-Infrastruktur nutzt.
 
 Die beitretende Bibliothek kann diese Vereinbarung jederzeit ohne
-Strafe kündigen, durch E-Mail-Mitteilung an contato@anarbib.org.
+Strafe kündigen, durch E-Mail-Mitteilung an anarbib@proton.me.
 AnarBib kann mit einer Frist von 90 Tagen kündigen und wird nach
 Artikel 10 dieser Vereinbarung hinsichtlich des Verbleibs der
 Daten verfahren.
@@ -365,7 +365,7 @@ dar.
 
 - Vertreten durch: Xavier Van Welden, Hauptentwickler und
   Administrator
-- E-Mail: contato@anarbib.org
+- E-Mail: anarbib@proton.me
 - Ort und Datum: ___________________________________
 - Unterschrift:
 

@@ -64,7 +64,7 @@ remains valid as long as the adhering library uses the AnarBib
 infrastructure.
 
 The adhering library may terminate this agreement at any time
-without penalty, by email notification to contato@anarbib.org.
+without penalty, by email notification to anarbib@proton.me.
 AnarBib may terminate with 90 days' notice and will proceed
 according to Article 10 of this agreement regarding the fate of
 the data.
@@ -333,7 +333,7 @@ data subjects provided by applicable law.
 
 - Represented by: Xavier Van Welden, main developer and
   administrator
-- Email: contato@anarbib.org
+- Email: anarbib@proton.me
 - Place and date: ___________________________________
 - Signature:
 

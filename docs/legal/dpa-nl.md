@@ -66,7 +66,7 @@ blijft geldig zolang de aangesloten bibliotheek de
 AnarBib-infrastructuur gebruikt.
 
 De aangesloten bibliotheek kan deze overeenkomst op elk moment zonder
-boete opzeggen, door kennisgeving per e-mail aan contato@anarbib.org.
+boete opzeggen, door kennisgeving per e-mail aan anarbib@proton.me.
 AnarBib kan opzeggen met een opzegtermijn van 90 dagen en zal handelen
 volgens artikel 10 van deze overeenkomst voor wat betreft de bestemming
 van de gegevens.
@@ -348,7 +348,7 @@ betrokkenen voorzien door het toepasselijke recht.
 
 - Vertegenwoordigd door: Xavier Van Welden, hoofdontwikkelaar en
   beheerder
-- E-mail: contato@anarbib.org
+- E-mail: anarbib@proton.me
 - Plaats en datum: __________________________________
 - Handtekening:
 

@@ -57,4 +57,4 @@ Additional documents (privacy policy templates, DPA models for adherent librarie
 
 ## Contact
 
-For questions regarding these documents or to contribute corrections, translations, or adaptations: **contato@anarbib.org**.
+For questions regarding these documents or to contribute corrections, translations, or adaptations: **anarbib@proton.me**.

@@ -64,7 +64,7 @@ AnarBib.
 
 A biblioteca aderente pode rescindir este acordo a qualquer momento
 sem penalidade, mediante notificação por e-mail ao endereço
-contato@anarbib.org. AnarBib pode rescindir mediante aviso prévio
+anarbib@proton.me. AnarBib pode rescindir mediante aviso prévio
 de 90 dias e procederá conforme o artigo 10 do presente acordo
 quanto ao destino dos dados.
 
@@ -336,7 +336,7 @@ pessoas concernidas previstos pelo direito aplicável.
 
 - Representado por: Xavier Van Welden, desenvolvedor principal e
   administrador
-- E-mail: contato@anarbib.org
+- E-mail: anarbib@proton.me
 - Local e data: ____________________________________
 - Assinatura:
 

@@ -67,7 +67,7 @@ AnarBib.
 
 La biblioteca aderente può recedere da questo accordo in qualsiasi
 momento senza penalità, mediante notifica e-mail a
-contato@anarbib.org. AnarBib può recedere mediante preavviso di 90
+anarbib@proton.me. AnarBib può recedere mediante preavviso di 90
 giorni e procederà secondo l'articolo 10 del presente accordo per
 quanto riguarda il destino dei dati.
 
@@ -352,7 +352,7 @@ applicabile.
 
 - Rappresentato da: Xavier Van Welden, sviluppatore principale e
   amministratore
-- E-mail: contato@anarbib.org
+- E-mail: anarbib@proton.me
 - Luogo e data: ____________________________________
 - Firma:
 

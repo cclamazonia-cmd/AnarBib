@@ -66,7 +66,7 @@ valable tant que la bibliothèque adhérente utilise l'infrastructure
 AnarBib.
 
 La bibliothèque adhérente peut résilier cet accord à tout moment
-sans pénalité, par notification courriel à contato@anarbib.org.
+sans pénalité, par notification courriel à anarbib@proton.me.
 AnarBib peut résilier moyennant un préavis de 90 jours et procédera
 selon l'article 10 du présent accord pour le sort des données.
 
@@ -349,7 +349,7 @@ applicable.
 
 - Représenté par : Xavier Van Welden, développeur principal et
   administrateur
-- Courriel : contato@anarbib.org
+- Courriel : anarbib@proton.me
 - Lieu et date : ____________________________________
 - Signature :
 

@@ -64,7 +64,7 @@ restas valida tiom longe kiom la aliĝinta biblioteko uzas la
 infrastrukturon AnarBib.
 
 La aliĝinta biblioteko povas ĉesigi ĉi tiun interkonsenton
-iam ajn sen puno, per retpoŝta sciigo al contato@anarbib.org.
+iam ajn sen puno, per retpoŝta sciigo al anarbib@proton.me.
 AnarBib povas ĉesigi kun antaŭsciigo de 90 tagoj kaj procedos laŭ
 artikolo 10 de la present interkonsento pri la sorto de la
 datumoj.
@@ -338,7 +338,7 @@ aŭ de la koncernataj personoj antaŭviditaj de la aplikebla juro.
 
 - Reprezentata de: Xavier Van Welden, ĉefa programisto kaj
   administranto
-- Retpoŝto: contato@anarbib.org
+- Retpoŝto: anarbib@proton.me
 - Loko kaj dato: ___________________________________
 - Subskribo:
 

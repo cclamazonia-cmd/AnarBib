@@ -35,7 +35,7 @@ Ce registre se compose de **deux couches** :
 | **Statut juridique** | Personne physique opérant un projet militant non-commercial sans personnalité juridique formelle. AnarBib est porté à titre individuel ; les bibliothèques adhérentes utilisatrices restent responsables de traitement pour leurs propres données. |
 | **Adresse postale (publique)** | Dunkerque, France |
 | **Adresse postale complète** | Communiquée à l'autorité de contrôle (CNIL) sur demande. Conservée dans la version privée du registre, conformément à l'art. 30.4 RGPD qui n'impose pas la publication intégrale. |
-| **Contact pour les questions de données personnelles** | contato@anarbib.org |
+| **Contact pour les questions de données personnelles** | anarbib@proton.me |
 | **Autorité de contrôle compétente** | Commission Nationale de l'Informatique et des Libertés (CNIL), 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France — www.cnil.fr |
 | **Délégué à la protection des données (DPO)** | Non désigné. La désignation n'est pas obligatoire au sens de l'art. 37 RGPD (AnarBib n'est ni autorité publique, ni traitement à grande échelle de données sensibles, ni profilage systématique). |
 | **Date de dernière mise à jour du registre** | 20 août 2026 *(précédente : 5 juin 2026 — mise à jour motivée par le retrait du sous-traitant Cloudflare, §§ 4.1, 5.1 et 6.3)* |
@@ -143,7 +143,7 @@ Toute lecteur·rice peut, à tout moment, exercer les droits suivants :
 | **Effacement (oubli)** | Art. 17 | Bouton « Supprimer mon compte » sur `/conta`, fonction `delete_user_account` (suppression cryptographique des données associées) |
 | **Portabilité** | Art. 20 | Bouton « Télécharger mes données » sur `/conta`, formats JSON et CSV au choix *(en cours d'implémentation — Phase 3 RGPD)* |
 | **Opposition** | Art. 21 | Sans objet pour les traitements basés sur l'exécution du contrat (2.1–2.4). Pour le traitement basé sur l'intérêt légitime (2.5), la lecteur·rice peut quitter le multi-membership à tout moment. |
-| **Limitation** | Art. 18 | Sur demande écrite à `[contato@anarbib.org]`, traitement gelé pendant l'instruction |
+| **Limitation** | Art. 18 | Sur demande écrite à `[anarbib@proton.me]`, traitement gelé pendant l'instruction |
 | **Réclamation** | Art. 77 | Auprès de l'autorité de contrôle nationale (voir section 7) |
 
 ---
@@ -292,7 +292,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 |---|---|
 | Responsable de traitement | Xavier VAN WELDEN (personne physique) |
 | Adresse publique | Dunkerque, France |
-| Contact RGPD | contato@anarbib.org |
+| Contact RGPD | anarbib@proton.me |
 | Hébergement DB | Supabase, région `sa-east-1` (São Paulo, Brésil) — AWS sous-jacent — transitoire |
 | Hébergement frontend | Codeberg Pages (primaire) + GitHub Pages (miroir secondaire) |
 | Mail transactionnel | Resend (Plus Five Five, Inc.), États-Unis — transfert encadré CCT 2021/914 module 2 + EU-U.S. Data Privacy Framework |
