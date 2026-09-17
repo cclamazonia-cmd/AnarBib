@@ -65,7 +65,7 @@ Les frais de fonctionnement — hébergement, courriel, nom de domaine — repr�
 
 ## Écrire
 
-**contato@anarbib.org** — dites ce que vous savez faire et ce dont vous avez le temps, on vous oriente. Il n'y a pas de formulaire, pas de test d'entrée, et pas de niveau requis.
+**anarbib@proton.me** — dites ce que vous savez faire et ce dont vous avez le temps, on vous oriente. Il n'y a pas de formulaire, pas de test d'entrée, et pas de niveau requis.
 
 La page [anarbib.org/fr/contribuer](https://anarbib.org/fr/contribuer/) dit la même chose en plus large et sans les chiffres du jour. Pour les chantiers qui demandent du code, [`docs/CHANTIERS_OUVERTS.md`](docs/CHANTIERS_OUVERTS.md) puis [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
@@ -137,7 +137,7 @@ As despesas de funcionamento — hospedagem, e-mail, nome de domínio — repres
 
 ## Escrever
 
-**contato@anarbib.org** — diga o que você sabe fazer e de quanto tempo dispõe, a gente orienta. Não há formulário, nem teste de entrada, nem nível exigido.
+**anarbib@proton.me** — diga o que você sabe fazer e de quanto tempo dispõe, a gente orienta. Não há formulário, nem teste de entrada, nem nível exigido.
 
 A página [anarbib.org/pt/colaborar](https://anarbib.org/pt/colaborar/) diz o mesmo de forma mais ampla e sem os números do dia.
 
@@ -204,4 +204,4 @@ Running costs — hosting, email, domain name — come to about **€36 a month*
 
 ## Get in touch
 
-**contato@anarbib.org** — tell us what you can do and how much time you have, and we will point you somewhere. There is no form, no entrance test and no required level.
+**anarbib@proton.me** — tell us what you can do and how much time you have, and we will point you somewhere. There is no form, no entrance test and no required level.

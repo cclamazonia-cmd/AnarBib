@@ -286,9 +286,9 @@ Vos droits :
 Cet export implemente l'article 20 du RGPD (droit a la portabilite) et
 l'article 18 de la LGPD bresilienne. Si une donnee est incomplete ou
 incorrecte, vous pouvez la rectifier depuis votre page "Mon compte"
-ou contacter contato@anarbib.org.
+ou contacter anarbib@proton.me.
 
-Pour toute question : contato@anarbib.org
+Pour toute question : anarbib@proton.me
 `;
 }
 

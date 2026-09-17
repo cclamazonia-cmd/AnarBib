@@ -36,7 +36,7 @@ import { renderEmail, footerPadrao } from "../_shared/mail/layout.ts";
 import { safeSendEmail } from "../_shared/transport/email.ts";
 
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
-const CONTACT_EMAIL = (Deno.env.get("ANARBIB_CONTACT_EMAIL") || "contato@anarbib.org").trim();
+const CONTACT_EMAIL = (Deno.env.get("ANARBIB_CONTACT_EMAIL") || "anarbib@proton.me").trim();
 const COORD_NAME = (Deno.env.get("ANARBIB_COORD_NAME") || "Coordination AnarBib").trim();
 
 const corsHeaders = {

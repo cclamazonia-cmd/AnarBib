@@ -251,10 +251,10 @@ export default function PrivacyPolicyPage() {
           <p style={pStyle}>
             {t({ id: 'privacy.s10.body' })}{' '}
             <a
-              href="mailto:contato@anarbib.org"
+              href="mailto:anarbib@proton.me"
               style={{ color: 'var(--brand-accent, #c44)' }}
             >
-              contato@anarbib.org
+              anarbib@proton.me
             </a>
             .
           </p>
