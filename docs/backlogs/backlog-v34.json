@@ -13,8 +13,8 @@
     },
     "maj": "2026-09-20",
     "releve": {
-      "date": "2026-09-16",
-      "commit": "2e89c1de"
+      "date": "2026-09-20",
+      "commit": "6cf45ef4"
     }
   },
   "domains": [
@@ -410,8 +410,8 @@
             },
             "919",
             {
-              "fr": "`public` 687 · `api` 189 · `ingest` 34 · `private` 9. Dont **706 SECURITY DEFINER** — +2 depuis le relevé de 23 h du 15/09 : `api.fn_gazette_probe_sources` (GAZ-8, exposée à `authenticated` — **un verdict à écrire** au complément d'audit) et `public.fn_gazette_submission_staff_edit` (GAZ-9, interne). Aucune fonction ajoutée par B25/B26 (un module partagé côté Edge, pas de RPC).",
-              "pt": "`public` 687 · `api` 189 · `ingest` 34 · `private` 9. Dos quais **706 SECURITY DEFINER** — +2 desde o levantamento das 23 h de 15/09: `api.fn_gazette_probe_sources` (GAZ-8, exposta a `authenticated` — **um veredicto a escrever**) e `public.fn_gazette_submission_staff_edit` (GAZ-9, interna). Nenhuma função acrescentada por B25/B26."
+              "fr": "`public` 687 · `api` 189 · `ingest` 34 · `private` 9. Dont **706 SECURITY DEFINER** — inchangé depuis le 16/09 : ni B22 (des GRANT et des REVOKE), ni les compteurs d abus (un module partagé côté Edge), ni E17/E19 (du front) ne créent de fonction. Le verdict qui manquait au relevé du 16/09, `api.fn_gazette_probe_sources`, **est écrit** : garde `network_staff` actif en tête, le corps délègue à une DEFINER non exposée, justifiée.",
+              "pt": "`public` 687 · `api` 189 · `ingest` 34 · `private` 9. Das quais **706 SECURITY DEFINER** — inalterado desde 16/09: nem B22, nem os contadores de abuso, nem E17/E19 criam funções. O veredito que faltava, `api.fn_gazette_probe_sources`, **está escrito**: guarda `network_staff` ativo à cabeça, justificada."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "321",
+            "324",
             {
-              "fr": "**321 appliquées** en production (dernière `20260916201249`, les compteurs d'abus — B25/B26) ; **322 numérotées au dépôt** : la 322e, `B22` (4 GRANT, 43 REVOKE, 5 vues fermées à `anon`), était en file de CI à l'instant du relevé (22 h 45). 330 fichiers avec le gabarit et les 7 rollbacks. Prochain relevé : 322 = 322, et le lint 0028 retombe sous 28.",
-              "pt": "**321 aplicadas** em produção (última `20260916201249`, os contadores de abuso — B25/B26); **322 numeradas no repositório**: a 322.ª, `B22`, estava na fila da CI no instante do levantamento. 330 arquivos com o modelo e os 7 rollbacks. Próximo levantamento: 322 = 322, e o lint 0028 cai abaixo de 28."
+              "fr": "**324 appliquées en production = 324 numérotées au dépôt** (332 fichiers avec le gabarit et les 7 rollbacks). Les trois depuis le relevé du 16/09 : `20260916223000` **B22** (les ouvertures à `anon` écrites), `20260916233000` (la sonde des sources attend une minute, GAZ-8) et `20260917165542` (la notice d export RGPD sans adresse `.org`). Dernière appliquée : `20260917165542` ; rien n attend en file.",
+              "pt": "**324 aplicadas em produção = 324 numeradas no repositório** (332 ficheiros com o modelo e os 7 rollbacks). As três desde 16/09: `20260916223000` **B22**, `20260916233000` (a sonda das fontes espera um minuto, GAZ-8) e `20260917165542` (o aviso de exportação RGPD sem endereço `.org`). Última aplicada: `20260917165542`; nada em fila."
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "472",
+            "470",
             {
-              "fr": "0 ERROR · **420** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). 420 = 419 + `api.fn_gazette_probe_sources` (GAZ-8, verdict à écrire). Le 28 de `anon` est la liste T10 de `grants_herites_tests.sql` ; **B22, en CI**, en retire 43 REVOKE et 4 GRANT écrits — à remesurer dès qu'elle est appliquée. Format groupé : compter `findings`, pas les entrées.",
-              "pt": "0 ERROR · **420** + **28** WARN sobre as funções DEFINER expostas · 24 INFO « RLS sem policy ». 420 = 419 + `api.fn_gazette_probe_sources` (GAZ-8, veredicto a escrever). O 28 de `anon` é a lista T10; **B22, em CI**, retira-lhe 43 REVOKE e 4 GRANT escritos — a remedir assim que aplicada. Formato agrupado: contar `findings`."
+              "fr": "0 ERROR · **420** WARN sur les DEFINER exposées à `authenticated` (0029) · **26** sur celles exposées à `anon` (0028) · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). **Le 0028 est passé de 28 à 26 : B22 est appliquée** — `fn_current_user_is_member_of_holding_library` et `fn_reading_notes_enabled_for` n étaient ouvertes que par un défaut de création. Les 26 noms rendus par le lint sont **exactement** la liste nommée T10 de `grants_herites_tests.sql` (comparés un à un). Les 420 de 0029 sont tous justifiés, verdict de la sonde des sources compris. Format groupé : compter `findings`, pas les entrées.",
+              "pt": "0 ERROR · **420** WARN nas DEFINER expostas a `authenticated` (0029) · **26** nas expostas a `anon` (0028) · 24 INFO « RLS sem policy ». **O 0028 passou de 28 a 26: B22 está aplicada.** Os 26 nomes do lint são **exatamente** a lista nomeada T10 de `grants_herites_tests.sql` (comparados um a um). Os 420 de 0029 estão todos justificados. Formato agrupado: contar `findings`."
             }
           ],
           [
@@ -452,10 +452,10 @@
               "fr": "Avis de performance",
               "pt": "Avisos de desempenho"
             },
-            "417",
+            "416",
             {
-              "fr": "**345 « index inutilisés »** (350 la veille, 368 le 06/09 — les compteurs repartent du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`.",
-              "pt": "**345 « índices não usados »** (350 na véspera, 368 em 06/09), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 tabelas sem chave primária, 1 aviso sobre as conexões `auth`."
+              "fr": "**344 « index inutilisés »** (345 le 16/09, 368 le 06/09 — les compteurs repartent du redémarrage du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. Rien de neuf : la seule variation est un index de plus qui a servi.",
+              "pt": "**344 « índices não utilizados »** (345 em 16/09, 368 em 06/09 — os contadores partem do reinício de 02/09), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 sem chave primária, 1 aviso sobre as conexões `auth`. Nada de novo."
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 697",
+            "2 729",
             {
-              "fr": "sur `main`, au 16/09 à 22 h 45 — **20 commits depuis le relevé de 23 h du 15/09** (`fe0cedf1`) : GAZ-8 à GAZ-11 et « Fractale », le lien « Gestion de la bibliothèque », I18 (rejeu CI sur `supabase/postgres`), B25/B26 (`af60bc49`), B22 (`21a98d0e`), et les clôtures et relevés du backlog. GitHub est poussé par Xavier une fois par jour.",
-              "pt": "em `main`, em 16/09 às 22h45 — **20 commits desde o levantamento das 23 h de 15/09** (`fe0cedf1`): GAZ-8 a GAZ-11 e « Fractale », a ligação « Gestão da biblioteca », I18, B25/B26 (`af60bc49`), B22 (`21a98d0e`), e os fechos e levantamentos do backlog."
+              "fr": "32 commits depuis le relevé du 16/09 au soir, sur quatre journées. Tête au moment du relevé : `6cf45ef4` (la session voisine a poussé à 20 h 08, pendant la mesure : les deux lignes touchées — fichiers et tests — ont été remesurées sur son commit).",
+              "pt": "32 commits desde o levantamento de 16/09, em quatro dias. Cabeça no momento do levantamento: `6cf45ef4` (a sessão vizinha empurrou às 20h08, durante a medição: as duas linhas afetadas foram remedidas sobre o seu commit)."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "323",
+            "332",
             {
-              "fr": "81 pages, 94 composants ; +2 depuis le 15/09 : les bancs `compteurs-d-abus-partages` et `login-compteurs-haches` (B25/B26). Le module partagé des compteurs vit côté Edge (`supabase/functions/_shared/core/rate-limit.ts`), pas dans `src/`.",
-              "pt": "81 páginas, 94 componentes; +2 desde 15/09: as bancadas `compteurs-d-abus-partages` e `login-compteurs-haches` (B25/B26). O módulo partilhado dos contadores vive do lado Edge, não em `src/`."
+              "fr": "+9 depuis le 16/09 : les bancs d essai de E17, E19, des origines CORS et de l adresse du projet, et les fichiers de la sonde et de l installateur poussés par la session voisine.",
+              "pt": "+9 desde 16/09: os bancos de teste de E17, E19, das origens CORS e do endereço do projeto, e os ficheiros da sonda e do instalador da sessão vizinha."
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 682",
+            "6 690",
             {
-              "fr": "par locale, **parité stricte sur les 10**, gardée en CI ; +12 depuis le 15/09 (Fractale, sonde des sources, correction par le staff, lien « Gestion de la bibliothèque »).",
-              "pt": "por locale, **paridade estrita nas 10**, guardada na CI; +12 desde 15/09 (Fractale, sonda das fontes, correção pelo staff, ligação « Gestão da biblioteca »)."
+              "fr": "parité stricte sur les dix locales (6 690 chacune, recomptées fichier par fichier). +8 depuis le 16/09 : les deux clés du bloc « Explorer » replié (E17) et six de la session voisine. E19 n a demandé aucune clé — le déplacement réemploie les libellés existants.",
+              "pt": "paridade estrita nas dez locales (6 690 cada, recontadas ficheiro a ficheiro). +8 desde 16/09: as duas chaves do bloco « Explorar » recolhido (E17) e seis da sessão vizinha. E19 não pediu nenhuma chave."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "509 + 104",
+            "556 + 104",
             {
-              "fr": "509 tests JS (vitest, gate bloquant ; +23 depuis le 15/09 : les treize de B25/B26, ceux de GAZ-8/9 et d'I18) + **104 suites SQL** dans `ci-suites.txt` (+3 : `compteurs_d_abus_tests`, les suites de la gazette et de B22). Vitest relancé en entier le 16/09 à 22 h 45. CI verte sur `af60bc49` (migration 321 appliquée, fonctions redéployées) ; B22 en file.",
-              "pt": "509 testes JS (vitest, gate bloqueante; +23 desde 15/09) + **104 suítes SQL** em `ci-suites.txt` (+3). Vitest relançado por inteiro em 16/09 às 22h45. CI verde em `af60bc49`; B22 na fila."
+              "fr": "**556 tests JS** (vitest, gate bloquant, 52 fichiers — relancés en entier ce soir à 20 h 14, 43 s, tous verts) + **104 suites SQL** dans `ci-suites.txt`. +47 depuis le 16/09 : E17 (5), E19 (5), les origines CORS (7), la garde de l adresse du projet et les bancs de la session voisine. Aucune suite SQL neuve.",
+              "pt": "**556 testes JS** (vitest, gate bloqueante, 52 ficheiros — relançados por inteiro esta noite às 20h14, 43 s, todos verdes) + **104 suites SQL** em `ci-suites.txt`. +47 desde 16/09: E17 (5), E19 (5), as origens CORS (7), a guarda do endereço do projeto e os bancos da sessão vizinha."
             }
           ],
           [
@@ -673,8 +673,8 @@
             },
             "18",
             {
-              "fr": "dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 16/09 comme au 15/09. Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
-              "pt": "dos quais 4 em `src/` — método fixo (`git grep -E 'TODO|FIXME'` fora de `docs/`): 18 em 16/09 como em 15/09. Nenhum é uma tarefa aberta."
+              "fr": "dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 20/09 comme au 16 et au 15/09. Aucun n est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
+              "pt": "dos quais 4 em `src/` — método fixo (`git grep -E 'TODO|FIXME'` fora de `docs/`): 18 em 20/09 como em 16 e 15/09. Nenhum é uma tarefa aberta."
             }
           ]
         ]

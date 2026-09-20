@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 16 septembre 2026](#létat-réel-au-16-septembre-2026)
+- [L'état réel au 20 septembre 2026](#létat-réel-au-20-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -58,7 +58,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 16 septembre 2026
+## L'état réel au 20 septembre 2026
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur de Bastien), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
@@ -71,11 +71,11 @@ Relevé du **16 septembre 2026** au soir — production interrogée en lecture s
 | Tables `public` | **191** | toutes avec RLS activé, **332 policies** — +4 tables depuis le 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), toutes classées au filet BG2 (191 sur 191 au rejeu local du 05/09). |
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
-| Fonctions applicatives | **919** | `public` 687 · `api` 189 · `ingest` 34 · `private` 9. Dont **706 SECURITY DEFINER** — +2 depuis le relevé de 23 h du 15/09 : `api.fn_gazette_probe_sources` (GAZ-8, exposée à `authenticated` — **un verdict à écrire** au complément d'audit) et `public.fn_gazette_submission_staff_edit` (GAZ-9, interne). Aucune fonction ajoutée par B25/B26 (un module partagé côté Edge, pas de RPC). |
-| Migrations appliquées | **321** | **321 appliquées** en production (dernière `20260916201249`, les compteurs d'abus — B25/B26) ; **322 numérotées au dépôt** : la 322e, `B22` (4 GRANT, 43 REVOKE, 5 vues fermées à `anon`), était en file de CI à l'instant du relevé (22 h 45). 330 fichiers avec le gabarit et les 7 rollbacks. Prochain relevé : 322 = 322, et le lint 0028 retombe sous 28. |
+| Fonctions applicatives | **919** | `public` 687 · `api` 189 · `ingest` 34 · `private` 9. Dont **706 SECURITY DEFINER** — inchangé depuis le 16/09 : ni B22 (des GRANT et des REVOKE), ni les compteurs d abus (un module partagé côté Edge), ni E17/E19 (du front) ne créent de fonction. Le verdict qui manquait au relevé du 16/09, `api.fn_gazette_probe_sources`, **est écrit** : garde `network_staff` actif en tête, le corps délègue à une DEFINER non exposée, justifiée. |
+| Migrations appliquées | **324** | **324 appliquées en production = 324 numérotées au dépôt** (332 fichiers avec le gabarit et les 7 rollbacks). Les trois depuis le relevé du 16/09 : `20260916223000` **B22** (les ouvertures à `anon` écrites), `20260916233000` (la sonde des sources attend une minute, GAZ-8) et `20260917165542` (la notice d export RGPD sans adresse `.org`). Dernière appliquée : `20260917165542` ; rien n attend en file. |
 | Jobs `pg_cron` | **38** | actifs — +1 depuis le 03/09 (le tick de pré-traduction des titres d'œuvre, `work-titles-autofill`). |
-| Avis de sécurité | **472** | 0 ERROR · **420** + **28** WARN sur les fonctions DEFINER exposées · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). 420 = 419 + `api.fn_gazette_probe_sources` (GAZ-8, verdict à écrire). Le 28 de `anon` est la liste T10 de `grants_herites_tests.sql` ; **B22, en CI**, en retire 43 REVOKE et 4 GRANT écrits — à remesurer dès qu'elle est appliquée. Format groupé : compter `findings`, pas les entrées. |
-| Avis de performance | **417** | **345 « index inutilisés »** (350 la veille, 368 le 06/09 — les compteurs repartent du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. |
+| Avis de sécurité | **470** | 0 ERROR · **420** WARN sur les DEFINER exposées à `authenticated` (0029) · **26** sur celles exposées à `anon` (0028) · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). **Le 0028 est passé de 28 à 26 : B22 est appliquée** — `fn_current_user_is_member_of_holding_library` et `fn_reading_notes_enabled_for` n étaient ouvertes que par un défaut de création. Les 26 noms rendus par le lint sont **exactement** la liste nommée T10 de `grants_herites_tests.sql` (comparés un à un). Les 420 de 0029 sont tous justifiés, verdict de la sonde des sources compris. Format groupé : compter `findings`, pas les entrées. |
+| Avis de performance | **416** | **344 « index inutilisés »** (345 le 16/09, 368 le 06/09 — les compteurs repartent du redémarrage du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. Rien de neuf : la seule variation est un index de plus qui a servi. |
 | Schémas de rebut | **1** | `conv_backup` seul — il porte les trois tables de revue humaine de C3 et **ne se purge pas**. `backup_2026_05_07` est parti le 04/09 au soir (B9, décision de Xavier après relecture des 50 lignes). |
 
 ### Fonctions Edge
@@ -108,11 +108,11 @@ Relevé du **16 septembre 2026** au soir — production interrogée en lecture s
 
 | | | |
 |---|---:|---|
-| Commits | **2 697** | sur `main`, au 16/09 à 22 h 45 — **20 commits depuis le relevé de 23 h du 15/09** (`fe0cedf1`) : GAZ-8 à GAZ-11 et « Fractale », le lien « Gestion de la bibliothèque », I18 (rejeu CI sur `supabase/postgres`), B25/B26 (`af60bc49`), B22 (`21a98d0e`), et les clôtures et relevés du backlog. GitHub est poussé par Xavier une fois par jour. |
-| Fichiers `src/` | **323** | 81 pages, 94 composants ; +2 depuis le 15/09 : les bancs `compteurs-d-abus-partages` et `login-compteurs-haches` (B25/B26). Le module partagé des compteurs vit côté Edge (`supabase/functions/_shared/core/rate-limit.ts`), pas dans `src/`. |
-| Clés i18n | **6 682** | par locale, **parité stricte sur les 10**, gardée en CI ; +12 depuis le 15/09 (Fractale, sonde des sources, correction par le staff, lien « Gestion de la bibliothèque »). |
-| Tests | **509 + 104** | 509 tests JS (vitest, gate bloquant ; +23 depuis le 15/09 : les treize de B25/B26, ceux de GAZ-8/9 et d'I18) + **104 suites SQL** dans `ci-suites.txt` (+3 : `compteurs_d_abus_tests`, les suites de la gazette et de B22). Vitest relancé en entier le 16/09 à 22 h 45. CI verte sur `af60bc49` (migration 321 appliquée, fonctions redéployées) ; B22 en file. |
-| Marqueurs de dette | **18** | dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 16/09 comme au 15/09. Aucun n'est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
+| Commits | **2 729** | 32 commits depuis le relevé du 16/09 au soir, sur quatre journées. Tête au moment du relevé : `6cf45ef4` (la session voisine a poussé à 20 h 08, pendant la mesure : les deux lignes touchées — fichiers et tests — ont été remesurées sur son commit). |
+| Fichiers `src/` | **332** | +9 depuis le 16/09 : les bancs d essai de E17, E19, des origines CORS et de l adresse du projet, et les fichiers de la sonde et de l installateur poussés par la session voisine. |
+| Clés i18n | **6 690** | parité stricte sur les dix locales (6 690 chacune, recomptées fichier par fichier). +8 depuis le 16/09 : les deux clés du bloc « Explorer » replié (E17) et six de la session voisine. E19 n a demandé aucune clé — le déplacement réemploie les libellés existants. |
+| Tests | **556 + 104** | **556 tests JS** (vitest, gate bloquant, 52 fichiers — relancés en entier ce soir à 20 h 14, 43 s, tous verts) + **104 suites SQL** dans `ci-suites.txt`. +47 depuis le 16/09 : E17 (5), E19 (5), les origines CORS (7), la garde de l adresse du projet et les bancs de la session voisine. Aucune suite SQL neuve. |
+| Marqueurs de dette | **18** | dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 20/09 comme au 16 et au 15/09. Aucun n est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
 
@@ -2240,4 +2240,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2e89c1de` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
