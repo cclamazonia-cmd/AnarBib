@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-20** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-20** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,12 +16,12 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 4
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur de Bastien), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-20.** **57 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B20, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G12, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-20.** **55 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -346,7 +346,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
-| **B20** | Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire | `P1` | Ouvert |
 | **B24** | Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer | `P2` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
@@ -393,27 +392,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** **Bloqué par A2.** Ne pas commencer avant.
 
 *Renvois : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
-
-#### B20 — Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
-
-**État.** `_shared/core/secret-key.ts` a retiré le 02/09 (B18) le repli sur `SUPABASE_SERVICE_ROLE_KEY`, avec un commentaire qui dit pourquoi. La PR #28 le réintroduit (`return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")`) — de bonne foi, pour sa pile, où la même PR pose déjà `SUPABASE_SECRET_KEYS` dans `compose.yml`. Un commentaire n'a pas suffi ; la clé legacy est désactivée en prod, un repli vers elle masquerait une panne au lieu de la dire (`DOC-SILENCE-1`).
-
-*Vérifié : [object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Une garde dans `scripts/ci/` (grep sur `supabase/functions/**` : aucun `SUPABASE_SERVICE_ROLE_KEY` hors de `env.ts`/commentaires, liste fermée) et une ligne dans `CONTRIBUTING.md`. Demander le retrait dans la PR #28.
-
-**Pourquoi ça compte.** Une décision de sécurité qui ne tient qu'à un commentaire est annulée par la première personne qui ne l'a pas lu. Les gardes à liste fermée sont la forme que ce dépôt sait tenir (`DOC-GRANT-1`, `T10`).
-
-**Ce qui compte comme fini.**
-
-- La garde existe et rougit sur la branche de la PR #28 telle qu'elle est le 06/09.
-- `secret-key.ts` est revenu à sa forme du 02/09 dans la PR.
-
-**Dépendances.** Aucune.
-
-*Renvois : `supabase/functions/_shared/core/secret-key.ts` · `item B18` · `REGISTRE §0 DOC-SILENCE-1` · `codeberg.org/anarbib/anarbib/pulls/28`*
 
 #### B24 — Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer
 
@@ -1229,7 +1207,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G9** | Implémenter la cartographie du réseau selon la spec v1.0 | `P3` | Gelé |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
-| **G12** | Une instance = un réseau ; entre instances, seul le catalogue traverse | `P2` | Ouvert |
 | **G13** | Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA… | `P2` | Ouvert |
 | **G14** | Une invitation d'équipe attend depuis le 30/08 et expirera le 29/09 — la personne ne le sait peut-être pas | `P2` | Ouvert |
 
@@ -1345,27 +1322,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Éclairé par **G3** (le circuit d'invitation est le même).
 
 *Renvois : `REGISTRE §26 ONBO-Q13` · `spec-onboarding-biblioteca-v2.0`*
-
-#### G12 — Une instance = un réseau ; entre instances, seul le catalogue traverse
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle, aucune compétence technique
-
-**État.** Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction. **Tranché le 06/09 au soir (Xavier) : A** — la doctrine est inscrite telle quelle (`FED-O11` ✅) ; aucun annuaire d'instances ouvert. Reste : faire dire la phrase au guide vitrine (**J3**) et à `deploy/README.md`.
-
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
-
-**Ce que c'est.** Inscrire la doctrine au REGISTRE (`FED-O11`) et la faire dire au site vitrine dans les mêmes termes. Un **annuaire des instances** (pour que la moisson ne dépende pas d'une adresse tapée à la main) serait le premier pas utile — c'est un domaine nouveau, donc un arbitrage écrit selon `DOC-GEL-1`, pas un item de code. Prêts, comptes et gouvernance entre instances = une fédération de protocole, hors de portée sans redessiner le modèle ; ne pas l'annoncer.
-
-**Pourquoi ça compte.** L'auto-hébergement va multiplier les instances. Si le projet ne dit pas ce qui les relie, chaque guide le dira à sa façon, et la première déception sera une bibliothèque qui croyait rejoindre le réseau en installant le logiciel.
-
-**Ce qui compte comme fini.**
-
-- `FED-O11` acté ; le guide vitrine et `deploy/README.md` emploient la même phrase.
-- La question de l'annuaire a une décision datée dans `journal/arbitrages/`, dans un sens ou dans l'autre.
-
-**Dépendances.** Aucune ; **J3** en dépend.
-
-*Renvois : `REGISTRE §24 FED-O11` · `supabase/functions/oai-pmh-provider` · `supabase/functions/harvest-oai-pmh` · `REGISTRE §0 DOC-GEL-1`*
 
 #### G13 — Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA…
 
@@ -2228,6 +2184,8 @@ CI verte : lint et suite unitaire. |
 | A4 | 2026-09-17 |  *(second item portant l'identifiant A4 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** `CONTRIBUTING.md` porte les trois règles (une PR = un sujet ; le code de production dans une PR à part ; des commits, jamais de réécriture pendant la relecture) et la promesse du mainteneur (un premier retour sous une semaine), en français (§ « Le rythme du travail ») et en anglais (§ « Working rhythm ») ; `DOC-CONTRIB-1` au registre. La PR #28 a été **scindée selon ces règles** (installateur dans #28, code applicatif dans #29, guide vitrine dans pages #2) puis fusionnée le 15/09 en connaissance de cause. L'exigence d'une version portugaise est levée : le fichier est bilingue FR/EN par construction, comme le README. |
 | I16 | 2026-09-17 |  *(second item portant l'identifiant I16 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** L'objet de l'item — **suivre la PR #28 jusqu'à sa fusion** — est atteint : scission faite (#28 installateur, #29 code applicatif ouverte à part, pages #2 guide vitrine), les quatre points bloquants réglés, gel du 08 au 14/09 tenu, **fusion le 15/09** (`f179f1ff`), pages #2 le 16/09, `GOUV-19` acté (G11 clos). Le troisième « fini quand » (`install.sh` exécuté une fois sur une machine qui n'est pas celle de son auteur) n'est pas une condition de la fusion : c'est une épreuve de la pile, versée à **I21** (les conditions avant la bascule) — `deploy/README.md` § « Première reconstruction extérieure » la nomme. La relecture de #29 comme du code de production se poursuit sous son propre numéro de PR, avec F7 et B20. |
 | B23 | 2026-09-20 | **Clos le 20/09/2026 sur pièce — constat corrigé : il n'y avait rien à faire.** Le « fini quand » disait « la vue est en invoker, **ou** porte le commentaire qui dit pourquoi elle ne l'est pas ». `obj_description('api.library_email_identity')` rend un `COMMENT ON VIEW` complet, signé « Paquet API-VUES-DEFINER du 29/08/2026 » et amendé le 30/08 : identité d'expédition lue par les fonctions de courriel, `service_role` uniquement, « n'est accordée ni à anon ni à authenticated, et ne doit jamais l'être », et « si un GRANT applicatif lui était accordé un jour, il faudrait la passer en security_invoker dans le même mouvement ». Mesuré le 20/09 : propriétaire `postgres`, `reloptions` vides, seul `service_role` a `SELECT`, aucune fonction ni vue ne la cite, un seul lecteur au dépôt (`register`, par le client admin). Le relevé du 07/09 n'avait lu que `reloptions`, pas le commentaire ; la session du 20/09 l'avait d'abord annoncé « petit, en SQL » sur la même lecture partielle. On ne bascule pas en invoker : le commentaire dit pourquoi. |
+| G12 | 2026-09-20 | **Clos le 20/09, sur pièces.** *(1)* La phrase : REGISTRE `FED-O11` (✅ tranché le 06/09, Q2 : A) ; le guide d'auto-hébergement de la vitrine la dit dans ces termes depuis `b9c85e6` (20/09) — la ligne « Partage de catalogue » (clé `s1_adv4` du générateur, dix langues), qui disait « votre catalogue peut être partagé avec le réseau », devient « Une instance, un réseau » : seul le catalogue traverse, par OAI-PMH, sur décision des admins ; comptes, appartenances, prêts entre bibliothèques, gouvernance et gazette ne traversent pas ; `deploy/README.md` porte la même phrase dans une section « Une instance = un réseau ». Contrôlé sur les dix pages régénérées : une mention d'OAI-PMH chacune, l'ancienne formule absente. *(2)* L'annuaire : décision datée dans `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (l. 47, verdict A du 06/09 : « l'annuaire n'est pas ouvert »). Aucun code. |
+| B20 | 2026-09-20 | **Clos le 20/09, sur mesure.** Relevé du jour dans `supabase/functions/**` : deux fonctions lisaient encore `SUPABASE_SERVICE_ROLE_KEY` par `Deno.env.get`, hors du chemin de `_shared/core/secret-key.ts` — `opds` (l. 28) et `rss-novidades` (l. 28), écrites après B18 sur le modèle d'avant. Commit `f83c5f66` : les deux passent par `secretKey()` ; `src/tests/cle-legacy-garde.test.js` interdit toute lecture d'environnement de la variable legacy (liste fermée des fichiers autorisés : vide ; commentaires ignorés ; noms de constantes et messages d'erreur tolérés, ils ne lisent rien) ; le banc `rss-novidades.test.js` évalue le vrai `secret-key.ts` et ne pose que `SUPABASE_SECRET_KEYS` ; une phrase dans `CONTRIBUTING.md` (fr, en). **Critère 1** : la garde est rouge sur `main` avant le correctif (les deux fonctions nommées) et rouge sur le `secret-key.ts` du sommet de la PR #28 au 06/09 (`b5782ec1`, l. 26 : `return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")`), mesuré le 20/09 ; verte après, 536 tests. **Critère 2** : le `secret-key.ts` de `main` ne connaît que `SUPABASE_SECRET_KEYS` (la PR #28 fusionnée ne le touche plus ; la garde le vérifie). Déployé par la CI au second run (`fd5f5a6b` : le premier, sur `f83c5f66`, était rouge sur quatre délais de tests sans rapport, backend sauté ; `testTimeout` porté à 20 s). Relu en production le 20/09 : `opds` en version 27, sa source déployée lit `secretKey()` ; `/opds/all` rend 18 entrées, `rss-novidades/blmf` 30. Hors item : six messages d'erreur disent encore « Missing … SUPABASE_SERVICE_ROLE_KEY » alors que la variable lue est `SUPABASE_SECRET_KEYS` — trompeur, sans effet. |
 
 ---
 
@@ -2259,4 +2217,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2e89c1de` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2e89c1de` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

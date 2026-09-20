@@ -2114,6 +2114,22 @@
           "fr": "**Clos le 20/09/2026 sur pièce — constat corrigé : il n'y avait rien à faire.** Le « fini quand » disait « la vue est en invoker, **ou** porte le commentaire qui dit pourquoi elle ne l'est pas ». `obj_description('api.library_email_identity')` rend un `COMMENT ON VIEW` complet, signé « Paquet API-VUES-DEFINER du 29/08/2026 » et amendé le 30/08 : identité d'expédition lue par les fonctions de courriel, `service_role` uniquement, « n'est accordée ni à anon ni à authenticated, et ne doit jamais l'être », et « si un GRANT applicatif lui était accordé un jour, il faudrait la passer en security_invoker dans le même mouvement ». Mesuré le 20/09 : propriétaire `postgres`, `reloptions` vides, seul `service_role` a `SELECT`, aucune fonction ni vue ne la cite, un seul lecteur au dépôt (`register`, par le client admin). Le relevé du 07/09 n'avait lu que `reloptions`, pas le commentaire ; la session du 20/09 l'avait d'abord annoncé « petit, en SQL » sur la même lecture partielle. On ne bascule pas en invoker : le commentaire dit pourquoi.",
           "pt": "**Encerrado em 20/09/2026 sobre peça — constato corrigido: não havia nada a fazer.** O « acabado quando » dizia « a vista está em invoker, **ou** tem o comentário que diz por que não está ». `obj_description('api.library_email_identity')` devolve um `COMMENT ON VIEW` completo, assinado « Paquet API-VUES-DEFINER du 29/08/2026 » e emendado em 30/08: identidade de expedição lida pelas funções de e-mail, só `service_role`, nunca concedida a anon nem a authenticated, e a passar a security_invoker no mesmo movimento se um GRANT aplicativo lhe fosse dado. Medido em 20/09: proprietário `postgres`, `reloptions` vazias, só `service_role` tem `SELECT`, nenhuma função nem vista a cita, um único leitor no repositório (`register`, pelo cliente admin). O levantamento de 07/09 só lera `reloptions`, não o comentário."
         }
+      ],
+      [
+        "G12",
+        "2026-09-20",
+        {
+          "fr": "**Clos le 20/09, sur pièces.** *(1)* La phrase : REGISTRE `FED-O11` (✅ tranché le 06/09, Q2 : A) ; le guide d'auto-hébergement de la vitrine la dit dans ces termes depuis `b9c85e6` (20/09) — la ligne « Partage de catalogue » (clé `s1_adv4` du générateur, dix langues), qui disait « votre catalogue peut être partagé avec le réseau », devient « Une instance, un réseau » : seul le catalogue traverse, par OAI-PMH, sur décision des admins ; comptes, appartenances, prêts entre bibliothèques, gouvernance et gazette ne traversent pas ; `deploy/README.md` porte la même phrase dans une section « Une instance = un réseau ». Contrôlé sur les dix pages régénérées : une mention d'OAI-PMH chacune, l'ancienne formule absente. *(2)* L'annuaire : décision datée dans `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (l. 47, verdict A du 06/09 : « l'annuaire n'est pas ouvert »). Aucun code.",
+          "pt": "**Encerrado em 20/09, sobre peças.** *(1)* A frase: REGISTRO `FED-O11` (decidido em 06/09); o guia de auto-hospedagem da vitrine diz isso nesses termos desde `b9c85e6` (dez línguas: «Uma instância, uma rede»), e `deploy/README.md` traz a mesma frase. *(2)* O anuário: decisão datada em `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (veredito A de 06/09: não aberto). Nenhum código."
+        }
+      ],
+      [
+        "B20",
+        "2026-09-20",
+        {
+          "fr": "**Clos le 20/09, sur mesure.** Relevé du jour dans `supabase/functions/**` : deux fonctions lisaient encore `SUPABASE_SERVICE_ROLE_KEY` par `Deno.env.get`, hors du chemin de `_shared/core/secret-key.ts` — `opds` (l. 28) et `rss-novidades` (l. 28), écrites après B18 sur le modèle d'avant. Commit `f83c5f66` : les deux passent par `secretKey()` ; `src/tests/cle-legacy-garde.test.js` interdit toute lecture d'environnement de la variable legacy (liste fermée des fichiers autorisés : vide ; commentaires ignorés ; noms de constantes et messages d'erreur tolérés, ils ne lisent rien) ; le banc `rss-novidades.test.js` évalue le vrai `secret-key.ts` et ne pose que `SUPABASE_SECRET_KEYS` ; une phrase dans `CONTRIBUTING.md` (fr, en). **Critère 1** : la garde est rouge sur `main` avant le correctif (les deux fonctions nommées) et rouge sur le `secret-key.ts` du sommet de la PR #28 au 06/09 (`b5782ec1`, l. 26 : `return Deno.env.get(\"SUPABASE_SERVICE_ROLE_KEY\")`), mesuré le 20/09 ; verte après, 536 tests. **Critère 2** : le `secret-key.ts` de `main` ne connaît que `SUPABASE_SECRET_KEYS` (la PR #28 fusionnée ne le touche plus ; la garde le vérifie). Déployé par la CI au second run (`fd5f5a6b` : le premier, sur `f83c5f66`, était rouge sur quatre délais de tests sans rapport, backend sauté ; `testTimeout` porté à 20 s). Relu en production le 20/09 : `opds` en version 27, sa source déployée lit `secretKey()` ; `/opds/all` rend 18 entrées, `rss-novidades/blmf` 30. Hors item : six messages d'erreur disent encore « Missing … SUPABASE_SERVICE_ROLE_KEY » alors que la variable lue est `SUPABASE_SECRET_KEYS` — trompeur, sans effet.",
+          "pt": "**Encerrado em 20/09, sobre medição.** Duas funções ainda liam `SUPABASE_SERVICE_ROLE_KEY` diretamente (`opds`, `rss-novidades`). Commit `f83c5f66`: ambas passam por `secretKey()`; `src/tests/cle-legacy-garde.test.js` proíbe qualquer leitura da variável legacy (lista fechada vazia); o banco do RSS avalia o verdadeiro `secret-key.ts`; uma frase em `CONTRIBUTING.md`. A guarda fica vermelha em `main` antes da correção e no `secret-key.ts` do topo da PR #28 em 06/09 (`b5782ec1`, l. 26); verde depois, 536 testes. Implantado pela CI no segundo run (`fd5f5a6b`); relido em produção em 20/09: `opds` versão 27 lê `secretKey()`, `/opds/all` devolve 18 entradas, `rss-novidades/blmf` 30."
+        }
       ]
     ]
   },
@@ -4327,66 +4343,6 @@
       }
     },
     {
-      "id": "B20",
-      "d": "B",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire",
-        "pt": "O fallback para a chave legada não pode voltar: uma guarda, não um comentário"
-      },
-      "v": {
-        "fr": "`_shared/core/secret-key.ts` a retiré le 02/09 (B18) le repli sur `SUPABASE_SERVICE_ROLE_KEY`, avec un commentaire qui dit pourquoi. La PR #28 le réintroduit (`return Deno.env.get(\"SUPABASE_SERVICE_ROLE_KEY\")`) — de bonne foi, pour sa pile, où la même PR pose déjà `SUPABASE_SECRET_KEYS` dans `compose.yml`. Un commentaire n'a pas suffi ; la clé legacy est désactivée en prod, un repli vers elle masquerait une panne au lieu de la dire (`DOC-SILENCE-1`).",
-        "pt": "`secret-key.ts` retirou em 02/09 o fallback para `SUPABASE_SERVICE_ROLE_KEY`, com um comentário explicando. A PR #28 o reintroduz de boa-fé. Um comentário não bastou; a chave legada está desativada em produção."
-      },
-      "w": {
-        "fr": "Une garde dans `scripts/ci/` (grep sur `supabase/functions/**` : aucun `SUPABASE_SERVICE_ROLE_KEY` hors de `env.ts`/commentaires, liste fermée) et une ligne dans `CONTRIBUTING.md`. Demander le retrait dans la PR #28.",
-        "pt": "Uma guarda em `scripts/ci/` (grep em `supabase/functions/**`: nenhum `SUPABASE_SERVICE_ROLE_KEY` fora da lista fechada) e uma linha em `CONTRIBUTING.md`. Pedir a retirada na PR #28."
-      },
-      "y": {
-        "fr": "Une décision de sécurité qui ne tient qu'à un commentaire est annulée par la première personne qui ne l'a pas lu. Les gardes à liste fermée sont la forme que ce dépôt sait tenir (`DOC-GRANT-1`, `T10`).",
-        "pt": "Uma decisão de segurança que só está num comentário é anulada pela primeira pessoa que não o leu."
-      },
-      "f": {
-        "fr": [
-          "La garde existe et rougit sur la branche de la PR #28 telle qu'elle est le 06/09.",
-          "`secret-key.ts` est revenu à sa forme du 02/09 dans la PR."
-        ],
-        "pt": [
-          "A guarda existe e fica vermelha na branch da PR #28 tal como está em 06/09.",
-          "`secret-key.ts` voltou à forma de 02/09 na PR."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "supabase/functions/_shared/core/secret-key.ts",
-        "item B18",
-        "REGISTRE §0 DOC-SILENCE-1",
-        "codeberg.org/anarbib/anarbib/pulls/28"
-      ],
-      "verif": [
-        {
-          "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-          "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-        },
-        {
-          "fr": "16/09 — aucune garde n'existe encore ; `secret-key.ts` est sans repli, mais deux fonctions (`gc-deposits`, `harvest-oai-pmh`) portent encore le nom `SUPABASE_SERVICE_ROLE_KEY` dans leur message d'erreur — la garde à écrire les rougirait, corriger les deux messages avec elle.",
-          "pt": "16/09 — nenhuma guarda existe ainda; `secret-key.ts` está sem recuo, mas duas funções (`gc-deposits`, `harvest-oai-pmh`) ainda levam o nome `SUPABASE_SERVICE_ROLE_KEY` na mensagem de erro — a guarda a escrever avermelhá-las-ia, corrigir as duas mensagens com ela."
-        },
-        {
-          "fr": "20/09 — **livré par la session voisine à 13 h 25 (`f83c5f66`), relu et rejoué ici le même jour.** À midi, deux fonctions lisaient encore la variable legacy sans passer par `secret-key.ts` (`opds/index.ts:28`, `rss-novidades/index.ts:28`) — sans panne : les deux flux répondaient 200 en production et `deploy/compose.yml` pose les deux variables. `f83c5f66` les fait passer par `secretKey()` et ajoute `src/tests/cle-legacy-garde.test.js` : liste fermée **vide**, la lecture de la variable interdite sous quatre écritures plus `toObject()`, commentaires retirés avant la recherche ; noms de constantes et messages d'erreur laissés exprès (« trompeurs à la lecture mais ne lisent rien ») — cinq messages et dix-huit constantes portent encore le nom legacy, comptés sans troncature. **Les deux « fini quand » rejoués** : *(1)* la regex de la garde, appliquée au `secret-key.ts` du sommet de la PR #28 (`b5782ec1`, 06/09), rend **une ligne rouge, l. 26** (`return Deno.env.get(\"SUPABASE_SERVICE_ROLE_KEY\")`), et zéro à HEAD ; *(2)* `secret-key.ts` à HEAD est **identique** à `69aa870f`, sa forme du 02/09 (diff vide). Garde et banc `rss-novidades` : 9 tests verts en local. **Clôturable** ; la clôture est laissée à la session qui a livré ou à Xavier, pour ne pas croiser deux lignes sur un identifiant déjà réemployé. Pas encore déployé à 13 h 30, soit quelques minutes après la poussée : le marqueur `deployed-functions` est sur `d0fca743`. Rien d’anormal à ce délai, et l’ancien code répond 200 ; à revérifier au prochain relevé. *Deux corrections de cette session :* l'annotation du 16/09 (« deux messages périmés ») venait d'un grep tronqué ; et un premier jet du 20/09 disait le critère (1) « non rejouable » pour avoir cherché le commit `81117888a8` au lieu du sommet `b5782ec1`.",
-          "pt": "20/09 — **entregue pela sessão vizinha às 13h25 (`f83c5f66`), relido e reproduzido aqui no mesmo dia.** Ao meio-dia, duas funções ainda liam a variável legacy sem passar por `secret-key.ts` (`opds`, `rss-novidades`) — sem avaria: os dois fluxos respondiam 200 em produção. `f83c5f66` fá-las passar por `secretKey()` e acrescenta `src/tests/cle-legacy-garde.test.js`: lista fechada **vazia**, a leitura da variável proibida sob quatro escritas mais `toObject()`; nomes de constantes e mensagens de erro deixados de propósito — cinco mensagens e dezoito constantes ainda levam o nome legacy. **Os dois « acabado quando » reproduzidos**: *(1)* a regex da guarda, aplicada ao `secret-key.ts` do topo da PR #28 (`b5782ec1`, 06/09), dá **uma linha vermelha, l. 26**, e zero em HEAD; *(2)* `secret-key.ts` em HEAD é **idêntico** a `69aa870f`, a sua forma de 02/09. 9 testes verdes em local. **Fechável**; o fecho fica para a sessão que entregou ou para Xavier. Ainda não implantado às 13 h 30, poucos minutos depois do push: o marcador `deployed-functions` está em `d0fca743`. Nada de anormal nesse prazo; a reverificar no próximo levantamento."
-        }
-      ]
-    },
-    {
       "id": "F7",
       "d": "F",
       "p": "P1",
@@ -4441,57 +4397,6 @@
           "pt": "16/09 — o transporte híbrido SMTP/Resend/Mock **não** está em `main`: `_shared/transport/email.ts` só conhece a Resend, `MAIL_TRANSPORT` só aparece em `deploy/functions.env.example`. Está na PR #29, ainda não fundida. **Desvio de doc**: `deploy/README.md` § « Transport des e-mails » já descreve os três modos e o « modo teste local » silencioso — o README está à frente do código."
         }
       ]
-    },
-    {
-      "id": "G12",
-      "d": "G",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "langue",
-        "aucune"
-      ],
-      "t": {
-        "fr": "Une instance = un réseau ; entre instances, seul le catalogue traverse",
-        "pt": "Uma instância = uma rede; entre instâncias, só o catálogo atravessa"
-      },
-      "v": {
-        "fr": "Chaque installation auto-hébergée est un réseau à elle seule : sa base, ses bibliothèques, ses admins, ses assemblées. Ce qui traverse d'une instance à l'autre aujourd'hui : le catalogue, par OAI-PMH — chaque instance le sert (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`) vers sa file de révision, sur décision admin. Ce qui ne traverse pas : comptes, appartenances, prêts entre bibliothèques, gouvernance, gazette. Le guide vitrine de Bastien promet « coopérer avec les autres camarades du réseau » sans cette distinction. **Tranché le 06/09 au soir (Xavier) : A** — la doctrine est inscrite telle quelle (`FED-O11` ✅) ; aucun annuaire d'instances ouvert. Reste : faire dire la phrase au guide vitrine (**J3**) et à `deploy/README.md`.",
-        "pt": "Cada instalação auto-hospedada é uma rede por si só. O que atravessa hoje: o catálogo, por OAI-PMH (`oai-pmh-provider`, `harvest-oai-pmh`). O que não atravessa: contas, vínculos, empréstimos entre bibliotecas, governança, gazeta. **Decidido em 06/09 à noite (Xavier): A** — doutrina inscrita (`FED-O11` ✅); nenhum anuário aberto. Falta: fazer o guia da vitrine (J3) e `deploy/README.md` dizerem a frase."
-      },
-      "w": {
-        "fr": "Inscrire la doctrine au REGISTRE (`FED-O11`) et la faire dire au site vitrine dans les mêmes termes. Un **annuaire des instances** (pour que la moisson ne dépende pas d'une adresse tapée à la main) serait le premier pas utile — c'est un domaine nouveau, donc un arbitrage écrit selon `DOC-GEL-1`, pas un item de code. Prêts, comptes et gouvernance entre instances = une fédération de protocole, hors de portée sans redessiner le modèle ; ne pas l'annoncer.",
-        "pt": "Inscrever a doutrina no REGISTRO (`FED-O11`) e fazê-la dizer na vitrine nos mesmos termos. Um **anuário de instâncias** seria o primeiro passo útil — domínio novo, logo arbitragem escrita (`DOC-GEL-1`). Empréstimos, contas e governança entre instâncias: fora de alcance sem redesenhar o modelo; não anunciar."
-      },
-      "y": {
-        "fr": "L'auto-hébergement va multiplier les instances. Si le projet ne dit pas ce qui les relie, chaque guide le dira à sa façon, et la première déception sera une bibliothèque qui croyait rejoindre le réseau en installant le logiciel.",
-        "pt": "A auto-hospedagem vai multiplicar instâncias. Se o projeto não disser o que as liga, cada guia dirá à sua maneira."
-      },
-      "f": {
-        "fr": [
-          "`FED-O11` acté ; le guide vitrine et `deploy/README.md` emploient la même phrase.",
-          "La question de l'annuaire a une décision datée dans `journal/arbitrages/`, dans un sens ou dans l'autre."
-        ],
-        "pt": [
-          "`FED-O11` registrado; guia da vitrine e `deploy/README.md` usam a mesma frase.",
-          "A questão do anuário tem decisão datada em `journal/arbitrages/`."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune ; **J3** en dépend.",
-        "pt": "Nenhuma; J3 depende disto."
-      },
-      "r": [
-        "REGISTRE §24 FED-O11",
-        "supabase/functions/oai-pmh-provider",
-        "supabase/functions/harvest-oai-pmh",
-        "REGISTRE §0 DOC-GEL-1"
-      ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
     },
     {
       "id": "J4",

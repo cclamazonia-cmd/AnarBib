@@ -87,6 +87,10 @@ Lors d'une nouvelle installation avec une base vierge, `./install.sh` provisionn
 
 Ce compte dispose des rôles de gestionnaire de réseau (`network_administrators`), de coordinateur et de bibliothécaire sur la bibliothèque de démonstration, donnant un accès immédiat aux panneaux de gestion (`/painel`, `/biblioteca`, `/rede`, `/catalogacao`).
 
+### Une instance = un réseau (`FED-O11`)
+
+Installée chez vous, votre AnarBib est un réseau à elle seule — sa base, ses bibliothèques, ses admins, ses assemblées. Entre instances, seul le catalogue traverse, par le protocole OAI-PMH : chaque instance sert le sien (`oai-pmh-provider`) et peut moissonner celui d'une autre (`harvest-oai-pmh`), sur décision de ses admins. Les comptes, les appartenances, les prêts entre bibliothèques, la gouvernance et la gazette ne traversent pas. Installer le logiciel ne fait donc pas rejoindre le réseau hébergé sur `app.anarbib.org` : c'est en créer un autre, qui peut échanger des notices avec lui. Aucun annuaire des instances n'existe, et aucune fédération de protocole n'est annoncée (REGISTRE `FED-O11`, tranché le 06/09/2026 ; le guide d'auto-hébergement du site le dit dans les mêmes termes, dix langues).
+
 ### Transport des e-mails (Resend aujourd'hui ; SMTP et simulation à venir)
 
 **Aujourd'hui, un seul transport fonctionne : l'API Resend.** Renseignez `RESEND_API_KEY` et `SENDER_EMAIL` dans `deploy/functions.env` (ou choisissez l'option 2 de `./install.sh`). Sans clé, chaque envoi de courriel échoue avec « RESEND_API_KEY absente » — bruyamment, jamais en silence (`DOC-SILENCE-1`) : l'application tourne, mais aucune notification, invitation ou relance ne part.
