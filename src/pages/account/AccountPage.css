@@ -60,6 +60,28 @@
 .ab-conta-msg { font-size: .88rem; font-weight: 600; color: var(--color-ok); }
 .ab-conta-msg--error { color: var(--color-bad); }
 
+/* E19 — Les trois décisions de l'onglet « Données personnelles » (export,
+   notifications, lettre), côte à côte sous le profil. Pistes en minmax(0, 1fr),
+   jamais `1fr` nu (doctrine mobile, src/styles/mobile.css). */
+.ab-conta-decisions-bloc { margin-top: 28px; }
+.ab-conta-decisions-bloc > h3 { margin-top: 0; }
+.ab-conta-decisions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.ab-conta-decision {
+  min-width: 0; padding: 16px; border-radius: 8px; overflow-wrap: anywhere;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+}
+.ab-conta-decision--notif { background: rgba(96,165,250,.05); border-color: rgba(96,165,250,.15); }
+.ab-conta-decision--lettre { background: rgba(207,31,39,.05); border-color: rgba(207,31,39,.15); }
+.ab-conta-decision h4 { margin: 0 0 8px; font-size: 1rem; font-weight: 700; font-family: var(--brand-font-body); text-transform: none; color: var(--brand-fg, #f4f4f4); }
+.ab-conta-decision label { align-items: flex-start !important; font-size: .9rem; }
+.ab-conta-decision input[type="checkbox"] { flex: 0 0 auto; margin-top: 3px; }
+.ab-conta-decision-note { margin: 12px 0 0; font-size: .78rem; font-style: italic; }
+/* Une colonne sous 900 px, pas 640 : mesuré à 700 px, trois pistes de 207 px
+   tiennent sans déborder mais la carte des notifications y fait 735 px de haut (de). */
+@media (max-width: 900px) {
+  .ab-conta-decisions { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* Reserve form */
 .ab-conta-reserve-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
 .ab-conta-reserve-form .ab-input { max-width: 380px; }
