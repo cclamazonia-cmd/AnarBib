@@ -1727,6 +1727,8 @@
   "catalog.search.suggestions.listLabel": "Sugestões",
   "catalog.search.suggestions.placeholder": "Buscar título ou autor(a/e)…",
   "catalog.section.explore": "Explorar",
+  "catalog.section.exploreCollapsed": "Explorar: assuntos, facetas, alfabeto",
+  "catalog.section.exploreActive": "{count, plural, one {# filtro ativo} other {# filtros ativos}}",
   "catalog.section.filters": "Filtros",
   "catalog.session.connected": "Conectad(o/a/e) — você vê o catálogo da rede; disponibilidade e reservas mostradas para a sua biblioteca",
   "catalog.sort.author": "Autor(a/e)",

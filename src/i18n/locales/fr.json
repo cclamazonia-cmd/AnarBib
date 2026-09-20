@@ -1733,6 +1733,8 @@
   "catalog.search.suggestions.listLabel": "Suggestions",
   "catalog.search.suggestions.placeholder": "Rechercher un titre ou un·e auteur·rice…",
   "catalog.section.explore": "Explorer",
+  "catalog.section.exploreCollapsed": "Explorer : sujets, facettes, alphabet",
+  "catalog.section.exploreActive": "{count, plural, one {# filtre actif} other {# filtres actifs}}",
   "catalog.section.filters": "Filtres",
   "catalog.session.connected": "Connecté·e — tu vois le catalogue du réseau ; disponibilités et réservations affichées pour ta bibliothèque",
   "catalog.sort.author": "Auteur·rice",

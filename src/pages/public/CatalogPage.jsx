@@ -322,7 +322,11 @@ export default function CatalogPage() {
   const [copiesByBook, setCopiesByBook] = useState({});                  // book_id -> { loading, libraries }
   const [compact, setCompact] = useState(filterState.compact || false);
   const [filtersOpen, setFiltersOpen] = useState(true);
-  const [exploreOpen, setExploreOpen] = useState(true); // bloc « Explorer » escamotable
+  // E17 (20/09/2026) : le bloc « Explorer » naît REPLIÉ — la première notice doit être
+  // visible sans défiler, mobile compris — et le choix de la personne survit au
+  // rechargement, comme `compact`. Il ne se rouvre JAMAIS tout seul quand un filtre est
+  // actif : les puces au-dessus des résultats suffisent (garde : catalog-explore-replie.test.js).
+  const [exploreOpen, setExploreOpen] = useState(filterState.exploreOpen ?? false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [isbnFilter, setIsbnFilter] = useState(filterState.isbnFilter || '');
   const [languageFilter, setLanguageFilter] = useState(filterState.languageFilter || '');
@@ -354,8 +358,8 @@ export default function CatalogPage() {
 
   // Sauvegarder les filtres dans sessionStorage à chaque modification
   useEffect(() => {
-    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, groupByWork: collapseEditions });
-  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, collapseEditions]);
+    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, groupByWork: collapseEditions, exploreOpen });
+  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, collapseEditions, exploreOpen]);
 
   // ── Initialisation depuis l'URL (montage uniquement) ───────
   // Doctrine validée : l'URL est la source de vérité. Un lien profond
@@ -916,6 +920,11 @@ export default function CatalogPage() {
 
   // Stats
   const hasActiveFilters = dSearch || dAuthor || alphaFilter || subjectFilter || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter.length > 0 || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
+  // E17 : ce que le bloc « Explorer » replié cache d'actif — les cinq sortes de choix qu'il
+  // propose (lettre, sujet, thème CDD, décennie, auteur·rice). Trois d'entre eux se règlent
+  // aussi depuis la barre de filtres : un·e auteur·rice tapé·e à la main compte donc ici.
+  // C'est voulu — la facette est active, d'où qu'elle vienne — et les puces disent laquelle.
+  const exploreActiveCount = [alphaFilter, subjectFilter, dCdd, dYear, dAuthor].filter(Boolean).length;
   const availabilityOptions = isAuth ? AVAILABILITY_OPTIONS_AUTH : AVAILABILITY_OPTIONS_ANON;
 
   function handleHeaderSort(col) {
@@ -1410,7 +1419,15 @@ export default function CatalogPage() {
       {/* ══ Exploration — modes + facettes (escamotable) ═════ */}
       <div className="ab-explore-toggle">
         <button type="button" className="ab-collapse-header" onClick={() => setExploreOpen(o => !o)} aria-expanded={exploreOpen}>
-          {t({ id: 'catalog.section.explore' })} <span className="ab-collapse-chevron">{exploreOpen ? '▾' : '▸'}</span>
+          {/* Replié, l'en-tête dit ce qu'il cache — sinon la découverte se perd. */}
+          {t({ id: exploreOpen ? 'catalog.section.explore' : 'catalog.section.exploreCollapsed' })}
+          {!exploreOpen && exploreActiveCount > 0 && (
+            <span className="ab-collapse-badge" title={t({ id: 'catalog.section.exploreActive' }, { count: exploreActiveCount })}>
+              <span aria-hidden="true">{exploreActiveCount}</span>
+              <span className="ab-sr-only">{t({ id: 'catalog.section.exploreActive' }, { count: exploreActiveCount })}</span>
+            </span>
+          )}
+          <span className="ab-collapse-chevron" aria-hidden="true">{exploreOpen ? '▾' : '▸'}</span>
         </button>
       </div>
       {exploreOpen && (<div className="ab-explore-panel">

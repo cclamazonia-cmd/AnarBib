@@ -1727,6 +1727,8 @@
   "catalog.search.suggestions.listLabel": "Suggesties",
   "catalog.search.suggestions.placeholder": "Zoek titel of auteur…",
   "catalog.section.explore": "Verkennen",
+  "catalog.section.exploreCollapsed": "Verkennen: onderwerpen, facetten, alfabet",
+  "catalog.section.exploreActive": "{count, plural, one {# actief filter} other {# actieve filters}}",
   "catalog.section.filters": "Filters",
   "catalog.session.connected": "Aangemeld — je ziet de netwerkcatalogus; beschikbaarheid en reserveringen getoond voor je bibliotheek",
   "catalog.sort.author": "Auteur",

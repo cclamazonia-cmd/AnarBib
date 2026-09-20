@@ -1727,6 +1727,8 @@
   "catalog.search.suggestions.listLabel": "Suggeriments",
   "catalog.search.suggestions.placeholder": "Cercar un títol o un-a-e autor-a-e…",
   "catalog.section.explore": "Explora",
+  "catalog.section.exploreCollapsed": "Explora: matèries, facetes, alfabet",
+  "catalog.section.exploreActive": "{count, plural, one {# filtre actiu} other {# filtres actius}}",
   "catalog.section.filters": "Filtres",
   "catalog.session.connected": "Sessió iniciada — veieu el catàleg de la xarxa; disponibilitats i reserves mostrades per a la vostra biblioteca",
   "catalog.sort.author": "Autor-a-e",

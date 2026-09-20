@@ -1727,6 +1727,8 @@
   "catalog.search.suggestions.listLabel": "Vorschläge",
   "catalog.search.suggestions.placeholder": "Titel oder Autor*in suchen…",
   "catalog.section.explore": "Entdecken",
+  "catalog.section.exploreCollapsed": "Entdecken: Themen, Facetten, Alphabet",
+  "catalog.section.exploreActive": "{count, plural, one {# aktiver Filter} other {# aktive Filter}}",
   "catalog.section.filters": "Filter",
   "catalog.session.connected": "Angemeldet — du siehst den Netzwerkkatalog; Verfügbarkeit und Reservierungen für deine Bibliothek",
   "catalog.sort.author": "Autor*in",

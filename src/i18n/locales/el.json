@@ -1727,6 +1727,8 @@
   "catalog.search.suggestions.listLabel": "Προτάσεις",
   "catalog.search.suggestions.placeholder": "Αναζήτηση τίτλου ή συγγραφέα…",
   "catalog.section.explore": "Εξερεύνηση",
+  "catalog.section.exploreCollapsed": "Εξερεύνηση: θέματα, φίλτρα, αλφάβητο",
+  "catalog.section.exploreActive": "{count, plural, one {# ενεργό φίλτρο} other {# ενεργά φίλτρα}}",
   "catalog.section.filters": "Φίλτρα",
   "catalog.session.connected": "Συνδεδεμένος/η — βλέπεις τον κατάλογο του δικτύου· διαθεσιμότητα και κρατήσεις εμφανίζονται για τη βιβλιοθήκη σου",
   "catalog.sort.author": "Συγγραφέας",

@@ -1727,6 +1727,8 @@
   "catalog.search.suggestions.listLabel": "Suggerimenti",
   "catalog.search.suggestions.placeholder": "Cerca titolo o autore/autrice…",
   "catalog.section.explore": "Esplora",
+  "catalog.section.exploreCollapsed": "Esplora: soggetti, faccette, alfabeto",
+  "catalog.section.exploreActive": "{count, plural, one {# filtro attivo} other {# filtri attivi}}",
   "catalog.section.filters": "Filtri",
   "catalog.session.connected": "Conness* — vedi il catalogo della rete; disponibilità e prenotazioni mostrate per la tua biblioteca",
   "catalog.sort.author": "Autore/trice",
