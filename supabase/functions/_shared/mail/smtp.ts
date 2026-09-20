@@ -85,13 +85,6 @@ class SmtpConnection {
     return await this.readResponse();
   }
 
-  async sendRawData(data: string): Promise<void> {
-    if (!this.conn) throw new Error("Connexion fermée");
-    const writer = this.conn.writable.getWriter();
-    await withTimeout(writer.write(this.encoder.encode(data + "\r\n")), this.timeoutMs, `écriture DATA SMTP`);
-    writer.releaseLock();
-  }
-
   async readResponse(): Promise<string> {
     if (!this.reader) throw new Error("Reader non disponible");
     return await withTimeout((async () => {
@@ -161,7 +154,8 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
   const host = opts.host;
   const port = opts.port ?? (opts.secure ? 465 : 587);
   const secure = opts.secure ?? (port === 465);
-  const timeoutMs = opts.timeoutMs ?? 15000;
+  const rawTimeout = Number(opts.timeoutMs);
+  const timeoutMs = Number.isFinite(rawTimeout) && rawTimeout > 0 ? rawTimeout : 15000;
   const allowInsecure = opts.allowInsecure ?? false;
 
   const client = new SmtpConnection(timeoutMs);

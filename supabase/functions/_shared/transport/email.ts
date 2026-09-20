@@ -65,7 +65,8 @@ async function sendViaConfiguredSmtp(opts) {
   const pass = (Deno.env.get("SMTP_PASS") || "").trim();
   const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
   const allowInsecure = (Deno.env.get("SMTP_ALLOW_INSECURE") || "").trim().toLowerCase() === "true";
-  const timeoutMs = parseInt(Deno.env.get("SMTP_TIMEOUT_MS") || "15000", 10);
+  const parsedTimeout = parseInt(Deno.env.get("SMTP_TIMEOUT_MS") || "15000", 10);
+  const timeoutMs = Number.isFinite(parsedTimeout) && parsedTimeout > 0 ? parsedTimeout : 15000;
 
   return await sendViaSmtp({
     host,

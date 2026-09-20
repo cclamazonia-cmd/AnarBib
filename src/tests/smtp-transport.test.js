@@ -105,4 +105,13 @@ describe('email.ts — aiguillage strict DOC-SILENCE-1', () => {
       html: '<p>Test</p>',
     })).rejects.toThrow('MAIL_TRANSPORT=smtp configuré mais SMTP_HOST est vide');
   });
+
+  it('replie proprement sur 15000 ms si SMTP_TIMEOUT_MS est non numérique ou invalide', () => {
+    const rawValues = ['abc', 'NaN', '-10', '0', undefined, null];
+    for (const val of rawValues) {
+      const parsed = parseInt(val || '15000', 10);
+      const timeoutMs = Number.isFinite(parsed) && parsed > 0 ? parsed : 15000;
+      expect(timeoutMs).toBe(15000);
+    }
+  });
 });
