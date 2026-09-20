@@ -195,6 +195,27 @@ jobs:
           token: ${{ forge.token }}
           source: dist/
 
+      # ─────────── ROUTES DE REPLI (20/09/2026) ───────────
+      # git-pages ne sert que ce qu'on lui a publié, SITE PAR SITE : pour qu'un
+      # domaine de repli serve l'application, il lui faut sa propre publication du
+      # même `dist/`. Le nom doit porter le TXT `_git-pages-forge-allowlist.app`
+      # (les deux casses du dépôt), sinon le serveur refuse. Non bloquant, comme
+      # le pas principal : une route de repli en panne ne doit jamais faire
+      # rougir le déploiement du canonique. Runbook et relevé :
+      # docs/journal/operations/RUNBOOK_domaines_repli_2026-09-07.md.
+      # Pour ajouter un domaine : DNS d'abord (A + les deux TXT), vérifié à
+      # l'autorité, PUIS un pas ici — jamais l'inverse.
+      - name: Deploy Pages (git-pages) — repli app.anarbib.is
+        if: github.event_name == 'push'
+        continue-on-error: true
+        timeout-minutes: 10
+        uses: https://codeberg.org/git-pages/action@v2
+        with:
+          site: https://app.anarbib.is/
+          server: codeberg.page
+          token: ${{ forge.token }}
+          source: dist/
+
   # ──────────────────── Job 2 : backend (Supabase) — sur push ────────────────
   # needs: app → ne déploie QUE si lint/test/build ont réussi (gate préservé).
   # Pas de npm install ici (CLI Supabase autonome) → job court, bien sous 5 min.
