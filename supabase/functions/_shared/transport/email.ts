@@ -64,6 +64,8 @@ async function sendViaConfiguredSmtp(opts) {
   const user = (Deno.env.get("SMTP_USER") || "").trim();
   const pass = (Deno.env.get("SMTP_PASS") || "").trim();
   const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
+  const allowInsecure = (Deno.env.get("SMTP_ALLOW_INSECURE") || "").trim().toLowerCase() === "true";
+  const timeoutMs = parseInt(Deno.env.get("SMTP_TIMEOUT_MS") || "15000", 10);
 
   return await sendViaSmtp({
     host,
@@ -71,6 +73,8 @@ async function sendViaConfiguredSmtp(opts) {
     user,
     pass,
     secure,
+    allowInsecure,
+    timeoutMs,
     from: formatAddress(r.senderEmail, r.senderName),
     to: [opts.toEmail],
     replyTo: r.replyToEmail ? formatAddress(r.replyToEmail, r.replyToName) : undefined,
@@ -96,6 +100,9 @@ export async function sendEmail(opts) {
 
   // 2. SMTP explicitement demandé ou configuré via SMTP_HOST (sauf si MAIL_TRANSPORT=resend)
   if (mailTransport === "smtp" || (smtpHost && mailTransport !== "resend")) {
+    if (!smtpHost) {
+      throw new Error("MAIL_TRANSPORT=smtp configuré mais SMTP_HOST est vide ou manquant");
+    }
     console.log(`[transport] envoi via SMTP (${smtpHost}) (label=${opts.label ?? "?"})`);
     return await sendViaConfiguredSmtp(opts);
   }

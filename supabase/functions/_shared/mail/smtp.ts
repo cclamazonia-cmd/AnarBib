@@ -3,10 +3,13 @@
 // =============================================================================
 // Permet d'envoyer des e-mails en auto-hébergement sans dépendre d'une API tierce.
 // Supporte :
-//   - Connexion TCP directe (port 25 / 587) avec STARTTLS
+//   - Connexion TCP directe (port 25 / 587) avec STARTTLS obligatoire
+//     (sauf opt-in explicite SMTP_ALLOW_INSECURE=true pour relais local)
 //   - Connexion TLS directe (port 465)
 //   - Authentification AUTH LOGIN et AUTH PLAIN
-//   - Envoi multipart/alternative (HTML + texte brut) avec UTF-8
+//   - Envoi multipart/alternative (HTML + texte brut) encodé en base64 plié
+//     à 76 colonnes selon RFC 2045 (immunité dot-stuffing et limite 1000 octets)
+//   - Timeout configurable sur chaque opération réseau
 // =============================================================================
 
 export interface SmtpOptions {
@@ -15,6 +18,8 @@ export interface SmtpOptions {
   user?: string;
   pass?: string;
   secure?: boolean; // true pour port 465 (TLS direct)
+  allowInsecure?: boolean; // true pour autoriser l'absence de STARTTLS sur port 25/587
+  timeoutMs?: number; // timeout par commande/connexion (défaut: 15000 ms)
   from: string;
   to: string[];
   replyTo?: string;
@@ -23,20 +28,38 @@ export interface SmtpOptions {
   text?: string;
 }
 
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, operation: string): Promise<T> {
+  let timer: number | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => {
+      reject(new Error(`Timeout SMTP (${timeoutMs}ms) dépassé lors de : ${operation}`));
+    }, timeoutMs);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (timer !== undefined) clearTimeout(timer);
+  });
+}
+
 class SmtpConnection {
   private conn: Deno.Conn | null = null;
   private reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
   private encoder = new TextEncoder();
   private decoder = new TextDecoder();
   private buffer = "";
+  private timeoutMs: number;
+
+  constructor(timeoutMs = 15000) {
+    this.timeoutMs = timeoutMs;
+  }
 
   async connect(host: string, port: number, secure: boolean): Promise<void> {
-    if (secure) {
-      this.conn = await Deno.connectTls({ hostname: host, port });
-    } else {
-      this.conn = await Deno.connect({ hostname: host, port });
-    }
+    const connectPromise = secure
+      ? Deno.connectTls({ hostname: host, port })
+      : Deno.connect({ hostname: host, port });
+
+    this.conn = await withTimeout(connectPromise, this.timeoutMs, `connexion à ${host}:${port}`);
     this.reader = this.conn.readable.getReader();
+
     const banner = await this.readResponse();
     if (!banner.startsWith("220")) {
       throw new Error(`SMTP banner inattendue : ${banner}`);
@@ -48,7 +71,8 @@ class SmtpConnection {
     if (this.reader) {
       this.reader.releaseLock();
     }
-    this.conn = await Deno.startTls(this.conn as Deno.TcpConn, { hostname: host });
+    const tlsPromise = Deno.startTls(this.conn as Deno.TcpConn, { hostname: host });
+    this.conn = await withTimeout(tlsPromise, this.timeoutMs, `handshake TLS avec ${host}`);
     this.reader = this.conn.readable.getReader();
     this.buffer = "";
   }
@@ -56,31 +80,40 @@ class SmtpConnection {
   async sendCommand(cmd: string): Promise<string> {
     if (!this.conn) throw new Error("Connexion fermée");
     const writer = this.conn.writable.getWriter();
-    await writer.write(this.encoder.encode(cmd + "\r\n"));
+    await withTimeout(writer.write(this.encoder.encode(cmd + "\r\n")), this.timeoutMs, `écriture commande SMTP`);
     writer.releaseLock();
     return await this.readResponse();
   }
 
+  async sendRawData(data: string): Promise<void> {
+    if (!this.conn) throw new Error("Connexion fermée");
+    const writer = this.conn.writable.getWriter();
+    await withTimeout(writer.write(this.encoder.encode(data + "\r\n")), this.timeoutMs, `écriture DATA SMTP`);
+    writer.releaseLock();
+  }
+
   async readResponse(): Promise<string> {
     if (!this.reader) throw new Error("Reader non disponible");
-    while (true) {
-      const lineEnd = this.buffer.indexOf("\r\n");
-      if (lineEnd !== -1) {
-        const line = this.buffer.slice(0, lineEnd);
-        this.buffer = this.buffer.slice(lineEnd + 2);
-        // Les réponses multilignes SMTP ont un tiret (ex: "250-SIZE")
-        if (line.length >= 4 && line[3] === "-") {
-          continue; // ligne intermédiaire
+    return await withTimeout((async () => {
+      while (true) {
+        const lineEnd = this.buffer.indexOf("\r\n");
+        if (lineEnd !== -1) {
+          const line = this.buffer.slice(0, lineEnd);
+          this.buffer = this.buffer.slice(lineEnd + 2);
+          // Les réponses multilignes SMTP ont un tiret (ex: "250-SIZE")
+          if (line.length >= 4 && line[3] === "-") {
+            continue; // ligne intermédiaire
+          }
+          return line;
         }
-        return line;
+        const { value, done } = await this.reader!.read();
+        if (done) break;
+        if (value) {
+          this.buffer += this.decoder.decode(value, { stream: true });
+        }
       }
-      const { value, done } = await this.reader.read();
-      if (done) break;
-      if (value) {
-        this.buffer += this.decoder.decode(value, { stream: true });
-      }
-    }
-    return this.buffer;
+      return this.buffer;
+    })(), this.timeoutMs, "lecture réponse SMTP");
   }
 
   async close(): Promise<void> {
@@ -98,20 +131,12 @@ class SmtpConnection {
   }
 }
 
-function extractEmail(address: string): string {
+export function extractEmail(address: string): string {
   const m = address.match(/<([^>]+)>/);
   return m ? m[1].trim() : address.trim();
 }
 
-function encodeAddress(address: string): string {
-  const m = address.match(/^(.*)<([^>]+)>\s*$/);
-  if (!m) return address.trim();
-  const name = m[1].trim().replace(/^"|"$/g, "");
-  const addr = m[2].trim();
-  return name ? `${encodeUtf8Header(name)} <${addr}>` : `<${addr}>`;
-}
-
-function encodeUtf8Header(text: string): string {
+export function encodeUtf8Header(text: string): string {
   if (!/[^\x20-\x7E]/.test(text)) {
     return text;
   }
@@ -119,12 +144,27 @@ function encodeUtf8Header(text: string): string {
   return `=?UTF-8?B?${b64}?=`;
 }
 
+export function encodeAddress(address: string): string {
+  const m = address.match(/^(.*)<([^>]+)>\s*$/);
+  if (!m) return address.trim();
+  const name = m[1].trim().replace(/^"|"$/g, "");
+  const addr = m[2].trim();
+  return name ? `${encodeUtf8Header(name)} <${addr}>` : `<${addr}>`;
+}
+
+export function toBase64Wrapped(str: string): string {
+  const b64 = btoa(unescape(encodeURIComponent(str)));
+  return b64.replace(/(.{76})/g, "$1\r\n");
+}
+
 export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
   const host = opts.host;
   const port = opts.port ?? (opts.secure ? 465 : 587);
   const secure = opts.secure ?? (port === 465);
+  const timeoutMs = opts.timeoutMs ?? 15000;
+  const allowInsecure = opts.allowInsecure ?? false;
 
-  const client = new SmtpConnection();
+  const client = new SmtpConnection(timeoutMs);
   try {
     await client.connect(host, port, secure);
 
@@ -144,6 +184,12 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
         await client.upgradeToTls(host);
         // Ré-émettre EHLO après le handshake TLS
         await client.sendCommand(`EHLO ${Deno.env.get("API_DOMAIN") || "localhost"}`);
+      } else if (!allowInsecure) {
+        throw new Error(
+          `STARTTLS refusé par le serveur SMTP (${startTlsRes.trim()}). ` +
+          `Refus d'envoyer des identifiants en clair sans chiffrement TLS. ` +
+          `(Pour autoriser explicitement un relais local sans TLS, définissez SMTP_ALLOW_INSECURE=true).`
+        );
       }
     }
 
@@ -211,21 +257,24 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
 
     headers.push(`Content-Type: multipart/alternative; boundary="${boundary}"`);
 
-    const textPart = opts.text || opts.html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const textContent = opts.text || opts.html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const textPartB64 = toBase64Wrapped(textContent);
+    const htmlPartB64 = toBase64Wrapped(opts.html);
+
     const bodyLines: string[] = [
       headers.join("\r\n"),
       "",
       `--${boundary}`,
       `Content-Type: text/plain; charset=utf-8`,
-      `Content-Transfer-Encoding: 8bit`,
+      `Content-Transfer-Encoding: base64`,
       "",
-      textPart,
+      textPartB64,
       "",
       `--${boundary}`,
       `Content-Type: text/html; charset=utf-8`,
-      `Content-Transfer-Encoding: 8bit`,
+      `Content-Transfer-Encoding: base64`,
       "",
-      opts.html,
+      htmlPartB64,
       "",
       `--${boundary}--`,
       "." // Point final de fin de données SMTP
