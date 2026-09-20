@@ -748,7 +748,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E15** | Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf | `P2` | Ouvert |
 | **E16** | La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique | `P2` | À vérifier |
 | **E17** | Le bloc « Explorer » du catalogue s'ouvre replié, pour que la première notice soit visible sans défiler | `P2` | En cours |
-| **E19** | Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas | `P2` | Ouvert |
+| **E19** | Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas | `P2` | En cours |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
@@ -991,11 +991,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### E19 — Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
+`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : React / JavaScript
 
 **État.** **Demande de Xavier le 08/09/2026, tranchée après débat.** L'onglet « Données personnelles » de `/conta` (`AccountPage.jsx`, `activeTab === 'perfil'`, lignes 1352–1830) est le plus long de la page : le formulaire du profil, l'adresse, la carte de contact de la bibliothèque, ce qui a été déclaré, la configuration de l'adhésion (avec un repli), le compte de dépôt — puis, **tout en bas**, les trois blocs qui demandent une décision : « Exporter mes données » (`account.export.title`, `DataExportButton`), « Mes notifications » (`account.notifPrefs.title`) et « Lettre de la fédération » (`account.lettre.title`), et enfin « Supprimer mon compte » en rouge (`account.deleteAccount.*`). Il faut défiler longtemps pour trouver ce qu'on vient faire. Les préférences de conservation ne sont pas dans cet onglet : elles vivent dans « Historique », à côté des traces qu'elles gouvernent, et **y restent**.
 
-*Vérifié : 08/09 — ordre des blocs relu dans `AccountPage.jsx` : profil (1352), adresse, contact, déclaré, adhésion, dépôt, RGPD/export (1645), notifications, lettre, suppression (1795). Les libellés existent dans les dix locales ; rien à traduire.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Une rangée de **trois cartes côte à côte** — export, notifications, lettre — placée **juste après le formulaire du profil**, avant l'adresse et les blocs d'adhésion (de la lecture plus que de la décision). La grille en `repeat(3, minmax(0, 1fr))`, qui passe à une colonne sous 640 px — jamais `1fr` nu (doctrine mobile, `src/styles/mobile.css`). Le bloc **« Supprimer mon compte » reste seul, tout en bas, sur toute la largeur**, en rouge : son caractère définitif se lit à sa place autant qu'à sa couleur. Aucune RPC, aucune clé nouvelle : un déplacement de JSX et une grille. Refaire ensuite la capture de cette page dans le Manuel v5 (`anarbib-manual-v5-portfolio-captures`).
 

@@ -748,7 +748,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E15** | As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales | `P2` | Aberto |
 | **E16** | A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática | `P2` | A verificar |
 | **E17** | O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar | `P2` | Em curso |
-| **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Aberto |
+| **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Em curso |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
@@ -991,11 +991,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E19 — Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
+`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : React / JavaScript
 
 **Estado.** **Pedido de Xavier em 08/09/2026, decidido após debate.** O separador «Dados pessoais» de `/conta` é o mais longo da página ; os três blocos de decisão (exportar, notificações, carta da federação) estão no fundo, e a supressão da conta a seguir. As preferências de conservação vivem em «Histórico» e aí ficam.
 
-*Verificado : 08/09 — ordem dos blocos relida em `AccountPage.jsx` ; rótulos já nas dez locales.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Uma fila de **três cartões lado a lado** (exportar, notificações, carta) **logo depois do formulário do perfil** ; grelha em `minmax(0, 1fr)`, uma coluna abaixo de 640 px. «Suprimir a minha conta» fica sozinho no fundo, a toda a largura, a vermelho. Nenhuma RPC, nenhuma chave nova ; refazer a captura no Manual v5.
 

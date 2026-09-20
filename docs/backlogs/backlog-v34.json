@@ -5513,7 +5513,7 @@
       "id": "E19",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "front"
@@ -5557,10 +5557,16 @@
         "anarbib-mobile-grid-blowout-doctrine",
         "Manuel v5 §Mon compte"
       ],
-      "verif": {
-        "fr": "08/09 — ordre des blocs relu dans `AccountPage.jsx` : profil (1352), adresse, contact, déclaré, adhésion, dépôt, RGPD/export (1645), notifications, lettre, suppression (1795). Les libellés existent dans les dix locales ; rien à traduire.",
-        "pt": "08/09 — ordem dos blocos relida em `AccountPage.jsx` ; rótulos já nas dez locales."
-      }
+      "verif": [
+        {
+          "fr": "08/09 — ordre des blocs relu dans `AccountPage.jsx` : profil (1352), adresse, contact, déclaré, adhésion, dépôt, RGPD/export (1645), notifications, lettre, suppression (1795). Les libellés existent dans les dix locales ; rien à traduire.",
+          "pt": "08/09 — ordem dos blocos relida em `AccountPage.jsx` ; rótulos já nas dez locales."
+        },
+        {
+          "fr": "20/09 — **le déplacement est livré (`2d686f93`) ; la page réelle n'a pas été vue à l'écran, et un point de la fiche ne pouvait pas se faire tel quel.** *Livré* : une `<section>` titrée « Mes droits sur mes données » posée juste après le bloc du profil, qui porte une grille `.ab-conta-decisions` en `repeat(3, minmax(0, 1fr))` et trois cartes — export (la mention RGPD art. 20 / LGPD art. 18 de l'ancienne enveloppe y devient une note), notifications, lettre ; l'ancienne enveloppe RGPD, vidée, disparaît ; « Supprimer mon compte » n'a pas bougé, dernier bloc de l'onglet. Aucune clé nouvelle, aucune RPC touchée. Test de source `src/tests/conta-decisions-sous-le-profil.test.js` (5 cas : ordre des blocs, une seule grille à trois cartes sans la suppression, pistes `minmax`, chaque geste garde son appel) ; 546 tests, lint 0 erreur. *Deux écarts à la fiche, à valider par Xavier* : **(1) la rangée vient après l'adresse, pas avant** — l'adresse n'est pas un bloc à part, elle vit dans le même `<form onSubmit={handleSaveProfile}>` que le profil, avec un seul bouton Enregistrer qui écrit les deux ; la placer avant demanderait de couper ce formulaire en deux (deux boutons, un seul gestionnaire) : c'est un choix d'interaction, pas un déplacement de JSX. **(2) une colonne sous 900 px, pas 640** — mesuré à 700 px : trois pistes de 207 px tiennent sans déborder, mais la carte des notifications y fait 735 px de haut en allemand. *Mesuré* — dans un harnais, pas dans la page : `/conta` exige une session que je n'ai pas ; réplique du balisage de la rangée montée dans la page de connexion d'un aperçu (styles globaux et `AccountPage.css` réels, libellés réels fr, de, el) : à 1366 px trois pistes de 424 px, rangée haute de 389 à 418 px ; à 920 px trois pistes de 275 px ; à 700 et 360 px une colonne ; **aucun débordement, ni d'une carte ni de la page, aux quatre largeurs et dans les trois langues**. *Ce qui n'est pas établi* : le premier « fini quand » — les trois cartes visibles sans défiler sur un portable. Le formulaire du profil avec l'adresse précède la rangée, et sa hauteur réelle n'a pas été mesurée : il est probable que la rangée reste sous la ligne de flottaison à 1366×768 tant que l'adresse est devant. À voir par Xavier, connecté ; la capture du Manuel v5 se refait après.",
+          "pt": "20/09 — **o deslocamento está entregue (`2d686f93`); a página real não foi vista na tela, e um ponto da ficha não podia ser feito tal e qual.** *Entregue*: uma `<section>` intitulada « Meus direitos sobre os meus dados » logo após o bloco do perfil, com uma grelha `.ab-conta-decisions` em `repeat(3, minmax(0, 1fr))` e três cartões — exportação (a menção RGPD art. 20 / LGPD art. 18 passa a nota), notificações, carta; o antigo invólucro RGPD, esvaziado, desaparece; « Excluir minha conta » não se moveu, último bloco do separador. Nenhuma chave nova, nenhuma RPC tocada. Teste de fonte `src/tests/conta-decisions-sous-le-profil.test.js` (5 casos); 546 testes, lint 0 erros. *Dois desvios à ficha, a validar por Xavier*: **(1) a fila vem depois da morada, não antes** — a morada vive no mesmo `<form>` que o perfil, com um único botão Guardar; colocá-la antes exigiria cortar esse formulário em dois: é uma escolha de interação. **(2) uma coluna abaixo de 900 px, não 640** — medido a 700 px: três pistas de 207 px cabem sem transbordar, mas o cartão das notificações fica com 735 px de altura em alemão. *Medido* — num arnês, não na página: `/conta` exige uma sessão que não tenho; réplica da marcação montada na página de login de um pré-visualizador (estilos reais, textos reais fr, de, el): a 1366 px três pistas de 424 px; a 920 px três de 275 px; a 700 e 360 px uma coluna; **nenhum transbordo nas quatro larguras e nas três línguas**. *O que não está estabelecido*: o primeiro « terminado quando » — os três cartões visíveis sem deslizar num portátil; a altura real do formulário com a morada não foi medida. A ver por Xavier, com sessão; a captura do Manual v5 refaz-se depois."
+        }
+      ]
     },
     {
       "id": "E20",
