@@ -287,6 +287,42 @@ L'identifiant d'entrée est à toi ; je ne l'invente pas.
 
 ---
 
+## Essai de bascule du 20/09/2026 — partie publique, faite et verte
+
+*Phase 6, moins ses parcours authentifiés. Durée mesurée de la passe : **15 secondes** pour les
+quinze contrôles automatisables (script `bascule_essai.sh`, hors dossier). Ce n'est pas le
+chiffre que la phase 6 demande — celui d'une manœuvre complète — mais c'est celui d'un contrôle
+de santé, et il peut se rejouer à chaque changement de DNS.*
+
+| Contrôle | Canonique | Repli `anarbib.is` |
+|---|---|---|
+| Application servie | 200, 4 165 o | 200, 4 165 o |
+| Même version servie | empreinte `48f8cfcd2fb5` | identique, même bundle `index-CHU28CMf.js` |
+| Vitrine | 200 (IPv6 seulement, voir plus bas) | 307 vers le canonique |
+| Vitrine, dix langues | — | 307 pour les dix |
+| Catalogue public sans compte | 3 bibliothèques publiques, 200 | — (même API) |
+| Recherche unifiée, 4 caractères | 10 résultats, 200 | — |
+| Préflight CORS des 3 formulaires | origine rendue = celle demandée | origine rendue = `app.anarbib.is` |
+| OAI `Identify` | `baseURL` = celle du canonique, `adminEmail` = `fede@anarbib.org` | inchangée, à dessein |
+| OPDS racine / acquisition | 1 / 18 entrées | — |
+| RSS `blmf` | 30 entrées | — |
+| `www.anarbib.org` | 307 vers le canonique (réparé le 20/09) | — |
+
+**Ce que l'essai a trouvé, et qui ne se voyait pas autrement.** Le script tournait dans WSL, qui
+n'a pas d'IPv6 : la vitrine canonique y répondait `000` pour les dix langues, alors qu'elle
+répond 200 depuis Windows. Ce n'était pas un faux positif du script mais un vrai défaut, que
+seule une machine sans IPv6 pouvait voir — **l'enregistrement A de la racine de `anarbib.org`
+avait été remplacé par l'adresse de parking d'OVH (`213.186.33.5`)** dans la journée, si bien
+que le site n'était plus joignable qu'en IPv6. Corollaire à garder : **un contrôle qui ne teste
+qu'une pile d'adresses ne teste pas le site** ; `curl -4` et `curl -6` séparément, ou une sonde
+sur une machine sans IPv6.
+
+**Reste à faire, avec un compte d'essai** (les quatre lignes authentifiées de la liste de la
+phase 6) : connexion, réinitialisation de mot de passe (le courriel mène à `SITE_URL`, donc au
+canonique — c'est voulu), création de compte avec défi Altcha, et une écriture en base depuis le
+domaine de repli. Elles demandent des identifiants : à faire avec Xavier, un jour calme, jamais
+la veille d'une soirée de formation.
+
 ## Annexe A — Toutes les vérifications en un bloc
 
 ```bash
