@@ -41,7 +41,7 @@ En cas de contradiction apparente entre deux documents, le REGISTRE tranche. Une
 
 ### 3. Ce qui ne doit jamais entrer au dépôt
 
-`deploy/.env` et `deploy/functions.env` contiennent des secrets et sont ignorés par git. La `SERVICE_ROLE_KEY` n'a sa place ni dans le dépôt, ni dans le front, ni dans un message. Si vous pensez en avoir commis une, dites-le tout de suite : une clé qu'on révoque coûte cinq minutes, une clé qu'on ignore coûte le reste.
+`deploy/.env` et `deploy/functions.env` contiennent des secrets et sont ignorés par git. La `SERVICE_ROLE_KEY` n'a sa place ni dans le dépôt, ni dans le front, ni dans un message. Si vous pensez en avoir commis une, dites-le tout de suite : une clé qu'on révoque coûte cinq minutes, une clé qu'on ignore coûte le reste. Dans les Edge Functions, la clé secrète se lit par `secretKey()` / `mustSecretKey()` de `_shared/core/secret-key.ts`, jamais par la variable legacy `SUPABASE_SERVICE_ROLE_KEY` : la suite Vitest le garde (`src/tests/cle-legacy-garde.test.js`).
 
 ### 4. Une dépendance des Edge Functions s'épingle en un seul endroit
 
@@ -126,7 +126,7 @@ If you don't know where to start, `docs/CHANTIERS_OUVERTS.md` lists entry points
 
 Then, depending on what you touch: the inclusive-language charter for i18n (`docs/notes-audit/anarbib-charte-langage-inclusif-v2.md`), the active doctrines in `docs/journal/` for SQL and migrations, the cataloguing guides in `docs/guides/`, and `deploy/README.md` for the self-hosted stack.
 
-**Never commit secrets.** `deploy/.env` and `deploy/functions.env` are gitignored. The `SERVICE_ROLE_KEY` belongs neither in the repository, nor in the front end, nor in a message. If you think you committed one, say so immediately.
+**Never commit secrets.** `deploy/.env` and `deploy/functions.env` are gitignored. The `SERVICE_ROLE_KEY` belongs neither in the repository, nor in the front end, nor in a message. If you think you committed one, say so immediately. In Edge Functions, read the secret key through `secretKey()` / `mustSecretKey()` from `_shared/core/secret-key.ts`, never through the legacy `SUPABASE_SERVICE_ROLE_KEY` variable: the Vitest suite guards it (`src/tests/cle-legacy-garde.test.js`).
 
 **One place pins Edge Function dependencies.** Every function imports `supabase-js` from `supabase/functions/_shared/deps.ts` — never `esm.sh/...@2` or `npm:...@2` directly. That module pins an exact version; bumping it is a dated act (change the number, redeploy everything, note the date). `src/tests/supabase-js-epingle.test.js` rejects any direct import (decision `I16`, 2026-09-03).
 

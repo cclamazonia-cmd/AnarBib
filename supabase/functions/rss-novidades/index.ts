@@ -23,9 +23,12 @@
 // (verify_jwt = false, flux anonyme par nature) ; les deux gardes ci-dessus
 // sont donc LA sécurité, écrites une fois, en tête.
 import { createClient } from '../_shared/deps.ts';
+import { secretKey } from '../_shared/core/secret-key.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
-const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+// B20 (20/09/2026) : la clé secrète se lit par secretKey(), un seul chemin pour
+// toutes les fonctions — jamais la variable legacy (garde : cle-legacy-garde.test.js).
+const SERVICE_ROLE_KEY = secretKey() ?? '';
 const APP_URL = 'https://app.anarbib.org';
 const LIMIT_DEFAUT = 30;
 const LIMIT_MAX = 100;

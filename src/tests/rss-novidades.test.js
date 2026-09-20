@@ -12,6 +12,10 @@ import { transformSync } from 'esbuild';
 
 const SRC = new URL('../../supabase/functions/rss-novidades/index.ts', import.meta.url);
 const CODE = transformSync(readFileSync(SRC, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
+// B20 : la fonction lit sa clé par le VRAI _shared/core/secret-key.ts, évalué ici
+// comme dans gazette-monthly-build.test.js — le banc ne pose que SUPABASE_SECRET_KEYS.
+const CLE_SRC = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
+const CLE_CODE = transformSync(readFileSync(CLE_SRC, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 
 const BIBLIOS = { blmf: { slug: 'blmf', name: 'Biblioteca Libertária Maria Lacerda de Moura', short_name: 'BLMF', city: 'Belém' } };
 const LIVRES = [
@@ -46,11 +50,16 @@ function monterEF(opts = {}) {
   const client = { schema: () => client, from: (t) => chaine(t) };
   let handler = null;
   const Deno = {
-    env: { get: (k) => ({ SUPABASE_URL: 'http://stub', SUPABASE_SERVICE_ROLE_KEY: 'stub' })[k] },
+    env: { get: (k) => ({ SUPABASE_URL: 'http://stub', SUPABASE_SECRET_KEYS: '{"default":"stub"}' })[k] },
     serve: (h) => { handler = h; },
   };
   const fauxRequire = (p) => {
     if (p.includes('deps')) return { createClient: () => client };
+    if (p.endsWith('secret-key.ts')) {
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(fauxRequire, m, m.exports, Deno);
+      return m.exports;
+    }
     throw new Error('import inattendu : ' + p);
   };
   const mod = { exports: {} };
