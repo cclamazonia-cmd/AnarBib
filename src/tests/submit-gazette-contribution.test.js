@@ -29,6 +29,7 @@ const RL = new URL('../../supabase/functions/_shared/core/rate-limit.ts', import
 const CODE = cjs(SRC);
 const CLE_CODE = cjs(CLE);
 const RL_CODE = cjs(RL);
+const CORS_CODE = cjs(new URL('../../supabase/functions/_shared/core/cors.ts', import.meta.url));
 
 const ENV = { SUPABASE_URL: 'http://stub', SUPABASE_SECRET_KEYS: '{"default":"stub"}' };
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
@@ -84,6 +85,11 @@ function monterEF(breves) {
       // frappe passe.
       const m = { exports: {} };
       new Function('require', 'module', 'exports', 'Deno', spec.endsWith('secret-key.ts') ? CLE_CODE : RL_CODE)(requireStub, m, m.exports, DenoStub);
+      return m.exports;
+    }
+    if (spec.endsWith('core/cors.ts')) {
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', CORS_CODE)(requireStub, m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };

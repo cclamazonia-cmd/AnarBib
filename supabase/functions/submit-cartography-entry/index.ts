@@ -14,6 +14,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
+import { avecOrigine } from "../_shared/core/cors.ts";
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
 
 // Locales de la donnée carto (clé i18n par collectif) : `pt` (pas `pt-BR`).
@@ -32,7 +33,11 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
 }
 
-Deno.serve(async (req) => {
+// 20/09/2026 : l'origine autorisée suit la requête, dans la liste fermée de
+// _shared/core/cors.ts (canonique + routes de repli, ou APP_ALLOWED_ORIGINS sur
+// une pile auto-hébergée). Le CORS ci-dessus reste le défaut ; avecOrigine le
+// remplace sur la réponse, sans toucher aux json() du gestionnaire.
+async function traiter(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
@@ -117,4 +122,6 @@ Deno.serve(async (req) => {
 
   if (error) return json({ error: "insert_failed", detail: error.message }, 500);
   return json({ ok: true, id: data.id }, 201);
-});
+}
+
+Deno.serve(async (req) => avecOrigine(req, await traiter(req)));

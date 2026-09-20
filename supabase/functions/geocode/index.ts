@@ -13,6 +13,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
+import { avecOrigine } from "../_shared/core/cors.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "https://app.anarbib.org",
@@ -25,7 +26,11 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
 }
 
-Deno.serve(async (req) => {
+// 20/09/2026 : l'origine autorisée suit la requête, dans la liste fermée de
+// _shared/core/cors.ts (canonique + routes de repli, ou APP_ALLOWED_ORIGINS sur
+// une pile auto-hébergée). Le CORS ci-dessus reste le défaut ; avecOrigine le
+// remplace sur la réponse, sans toucher aux json() du gestionnaire.
+async function traiter(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
@@ -67,4 +72,6 @@ Deno.serve(async (req) => {
   } catch (_e) {
     return json({ error: "geocoder_unreachable" }, 504);
   }
-});
+}
+
+Deno.serve(async (req) => avecOrigine(req, await traiter(req)));

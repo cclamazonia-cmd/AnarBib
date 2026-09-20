@@ -23,6 +23,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
+import { avecOrigine } from "../_shared/core/cors.ts";
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
 const RUBRICS = ["une","reseau","luttes","international","cultures","agenda","autre"];
@@ -65,7 +66,11 @@ async function parentFromToken(sb: any, token: unknown) {
   return { parent: data };
 }
 
-Deno.serve(async (req) => {
+// 20/09/2026 : l'origine autorisée suit la requête, dans la liste fermée de
+// _shared/core/cors.ts (canonique + routes de repli, ou APP_ALLOWED_ORIGINS sur
+// une pile auto-hébergée). Le CORS ci-dessus reste le défaut ; avecOrigine le
+// remplace sur la réponse, sans toucher aux json() du gestionnaire.
+async function traiter(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
@@ -155,4 +160,6 @@ Deno.serve(async (req) => {
       .eq("id", parent.id).is("resubmitted_at", null);
   }
   return json({ ok: true, id: data.id, parent_submission_id: parent ? parent.id : null }, 201);
-});
+}
+
+Deno.serve(async (req) => avecOrigine(req, await traiter(req)));
