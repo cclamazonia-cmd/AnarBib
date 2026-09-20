@@ -137,7 +137,7 @@ Compte administrateur initial créé automatiquement :
 
 Options utiles de gestion :
 ```bash
-./install.sh --lang fr|en|pt  # Forcer la langue d'affichage (détection automatique par défaut)
+./install.sh --lang fr|en|pt|es|it|de|ca|eo|nl|el  # Forcer la langue d'affichage (détection automatique par défaut)
 ./install.sh --rebuild         # Réinitialisation complète et remise à neuf des volumes
 ./install.sh --stop            # Arrêter l'ensemble des conteneurs et services
 ```
@@ -186,7 +186,7 @@ Initial administrator account created automatically:
 
 Useful management options:
 ```bash
-./install.sh --lang fr|en|pt  # Force display language (auto-detected from $LANG by default)
+./install.sh --lang fr|en|pt|es|it|de|ca|eo|nl|el  # Force display language (auto-detected from $LANG by default)
 ./install.sh --rebuild         # Complete reset and fresh volumes initialization
 ./install.sh --stop            # Stop all containers and services
 ```

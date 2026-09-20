@@ -73,7 +73,7 @@ Le script centralisé `./install.sh` effectue de manière 100 % autonome et sans
 
 Options disponibles :
 - `./install.sh` : installation et démarrage complet (Backend + Frontend).
-- `./install.sh --lang fr|en|pt` : force la langue d'affichage (détection automatique depuis `$LANG` par défaut).
+- `./install.sh --lang fr|en|pt|es|it|de|ca|eo|nl|el` : force la langue d'affichage (détection automatique depuis `$LANG` par défaut). Une valeur inconnue est refusée avec la liste des codes.
 - `./install.sh --rebuild` : réinitialise les volumes de la base avant réinstallation.
 - `./install.sh --stop` : arrête l'ensemble des conteneurs et services.
 - `./install.sh --sans-start` : prépare les secrets et l'environnement sans démarrer de conteneur.
