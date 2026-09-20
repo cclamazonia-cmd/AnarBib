@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-20** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-20** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 5
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur de Bastien), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-20.** **57 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B20, B23, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G12, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-20.** **57 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B20, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G12, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -347,7 +347,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B20** | Le repli sur la clé legacy ne doit pas pouvoir revenir : une garde, pas un commentaire | `P1` | Ouvert |
-| **B23** | `api.library_email_identity` est la seule vue `api` encore en SECURITY DEFINER — le dire, ou la basculer | `P3` | Ouvert |
 | **B24** | Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer | `P2` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
@@ -401,7 +400,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `_shared/core/secret-key.ts` a retiré le 02/09 (B18) le repli sur `SUPABASE_SERVICE_ROLE_KEY`, avec un commentaire qui dit pourquoi. La PR #28 le réintroduit (`return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")`) — de bonne foi, pour sa pile, où la même PR pose déjà `SUPABASE_SECRET_KEYS` dans `compose.yml`. Un commentaire n'a pas suffi ; la clé legacy est désactivée en prod, un repli vers elle masquerait une panne au lieu de la dire (`DOC-SILENCE-1`).
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Une garde dans `scripts/ci/` (grep sur `supabase/functions/**` : aucun `SUPABASE_SERVICE_ROLE_KEY` hors de `env.ts`/commentaires, liste fermée) et une ligne dans `CONTRIBUTING.md`. Demander le retrait dans la PR #28.
 
@@ -415,26 +414,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `supabase/functions/_shared/core/secret-key.ts` · `item B18` · `REGISTRE §0 DOC-SILENCE-1` · `codeberg.org/anarbib/anarbib/pulls/28`*
-
-#### B23 — `api.library_email_identity` est la seule vue `api` encore en SECURITY DEFINER — le dire, ou la basculer
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Le GLB v17 (01/09) comptait 67 vues `api` sur 68 en `security_invoker`. **Vérifié le 07/09** : `pg_class.reloptions` de `api.library_email_identity` est vide — elle lit donc sous le propriétaire. Peut-être voulu (elle sert l'identité d'expéditeur aux fonctions de courriel), mais aucun commentaire ne le dit.
-
-*Vérifié : 07/09 — `reloptions` vide, donc DEFINER.*
-
-**Ce que c'est.** Soit `ALTER VIEW … SET (security_invoker = on)` et une suite qui vérifie que le courriel part encore, soit un `COMMENT ON VIEW` qui explique l'exception. Une soirée dans les deux cas.
-
-**Pourquoi ça compte.** Une exception non écrite se rejoue un jour comme une erreur — par quelqu'un qui « corrige » ce qui était voulu.
-
-**Ce qui compte comme fini.**
-
-- La vue est en invoker, ou porte le commentaire qui dit pourquoi elle ne l'est pas.
-
-**Dépendances.** Aucune.
-
-*Renvois : `claude/GLB_v17_releve_et_constats_2026-09-01`*
 
 #### B24 — Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer
 
@@ -842,7 +821,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `it.json` n'est pas conforme à la convention de l'astérisque final : les paires irrégulières comme `lettore` / `lettrice` ne se réduisent pas à `lettor*`. Le test de charte vérifie une seule chose sur l'italien — que `camerata` et `camerati` n'y figurent jamais, terme fasciste, échec dur — et rien d'autre.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Décider du traitement des paires irrégulières avec un locuteur natif, puis l'appliquer aux chaînes concernées. C'est un travail de langue, pas de code.
 
@@ -953,7 +932,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Vérifié dans `src/i18n/locales/` le 07/09.** En pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` et `account.deleteAccount.confirmText` = `EXCLUIR` : deux gestes, deux mots. Dans fr, en, es, it, de, nl, el et eo, **les deux clés portent le même mot** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Seul le catalan distingue (`ELIMINA` / `SUPRIMIR`). Relevé d'abord par le manuel lecteur v2 du 03/09.
 
-*Vérifié : 07/09 — huit paires identiques constatées dans les fichiers de locale.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Choisir deux mots distincts par locale, avec les locuteur·rices quand il y en a (**E2** pour nl et el), et mettre le manuel en accord.
 
@@ -1752,7 +1731,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** **Constaté le 15/09/2026 au retour de Bologne.** Le dimanche 13/09, le poste était éteint : les minuteurs hebdomadaires `long` (20 h) et `storage` (21 h) n'ont pas tourné. Le 15/09 à 08 h 15, au démarrage, systemd a rattrapé les trois (`Persistent=`) : `court` fini à 08 h 17, `long` à 08 h 20 (instantané `da135422`), **`storage` tué à 08 h 23 par `SIGTERM`** (« Failed with result 'signal' »), après quatre buckets sur seize — c'est l'arrêt de la session utilisateur WSL, qui rebondit sur ce poste (mémoire `anarbib-systemd-etat-non-fiable`), qui a emporté le service. Et la ligne suivante du journal : **« Failed to enqueue OnFailure=anarbib-backup-failure@… »** — l'unité d'alerte n'a pas pu être lancée, la session s'arrêtant. Résultat : un flux `storage` vieux de neuf jours (dernier instantané le 06/09 21 h 19, seuil de fraîcheur 216 h atteint le 15/09 à 21 h 20), un témoin `started` sans `ok` (`fn_backup_heartbeat_status` : « tir commencé et JAMAIS TERMINÉ, tué en route »), et **aucun courriel**. Relancé à la main le 15/09 à 20 h 50 (`systemctl --user start anarbib-backup-storage.service`).
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Deux choses. **(1)** Le service `storage` ne doit pas mourir avec la session : `KillMode=` et `TimeoutStopSec=` à régler, ou mieux, le lancer sous `systemd-run --scope` détaché, ou enfin `loginctl enable-linger` pour que la session utilisateur ne s'arrête pas avec le terminal — vérifier lequel tient sur ce WSL, où `systemctl` ment (juger sur `journalctl`). **(2)** L'alerte ne doit pas dépendre de la session qui meurt : le contrôle de fraîcheur du midi (`anarbib-fraicheur.timer`, lecture seule des dépôts restic) doit **envoyer** quand un flux dépasse son seuil ou porte un `started` sans `ok`, pas seulement l'écrire au journal. Le témoin en base (`fn_backup_heartbeat_status`) sait déjà dire « interrompu » : lui donner un destinataire (`HEALTH_ALERT_CC`, mémoire `anarbib-alertes-supervision-destinataires`).
 
@@ -2248,6 +2227,7 @@ CI verte : lint et suite unitaire. |
 | J3 | 2026-09-17 |  *(second item portant l'identifiant J3 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** La PR pages #2 (guide d'auto-hébergement du site vitrine, dix langues) est **fusionnée le 16/09 à 22 h 00** (API Codeberg : `merged: true`), après la PR #28 (15/09) comme la fiche l'exigeait ; les quatre phrases sont corrigées et l'avertissement posé ; la relecture D4 (la simulation en option 3, jamais en option 1) est prise, et `install.sh` ne promet plus que Resend (`035853eb`, 16/09 23 h 12 : SMTP et simulation annoncés « à venir », rien de silencieux). |
 | A4 | 2026-09-17 |  *(second item portant l'identifiant A4 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** `CONTRIBUTING.md` porte les trois règles (une PR = un sujet ; le code de production dans une PR à part ; des commits, jamais de réécriture pendant la relecture) et la promesse du mainteneur (un premier retour sous une semaine), en français (§ « Le rythme du travail ») et en anglais (§ « Working rhythm ») ; `DOC-CONTRIB-1` au registre. La PR #28 a été **scindée selon ces règles** (installateur dans #28, code applicatif dans #29, guide vitrine dans pages #2) puis fusionnée le 15/09 en connaissance de cause. L'exigence d'une version portugaise est levée : le fichier est bilingue FR/EN par construction, comme le README. |
 | I16 | 2026-09-17 |  *(second item portant l'identifiant I16 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** L'objet de l'item — **suivre la PR #28 jusqu'à sa fusion** — est atteint : scission faite (#28 installateur, #29 code applicatif ouverte à part, pages #2 guide vitrine), les quatre points bloquants réglés, gel du 08 au 14/09 tenu, **fusion le 15/09** (`f179f1ff`), pages #2 le 16/09, `GOUV-19` acté (G11 clos). Le troisième « fini quand » (`install.sh` exécuté une fois sur une machine qui n'est pas celle de son auteur) n'est pas une condition de la fusion : c'est une épreuve de la pile, versée à **I21** (les conditions avant la bascule) — `deploy/README.md` § « Première reconstruction extérieure » la nomme. La relecture de #29 comme du code de production se poursuit sous son propre numéro de PR, avec F7 et B20. |
+| B23 | 2026-09-20 | **Clos le 20/09/2026 sur pièce — constat corrigé : il n'y avait rien à faire.** Le « fini quand » disait « la vue est en invoker, **ou** porte le commentaire qui dit pourquoi elle ne l'est pas ». `obj_description('api.library_email_identity')` rend un `COMMENT ON VIEW` complet, signé « Paquet API-VUES-DEFINER du 29/08/2026 » et amendé le 30/08 : identité d'expédition lue par les fonctions de courriel, `service_role` uniquement, « n'est accordée ni à anon ni à authenticated, et ne doit jamais l'être », et « si un GRANT applicatif lui était accordé un jour, il faudrait la passer en security_invoker dans le même mouvement ». Mesuré le 20/09 : propriétaire `postgres`, `reloptions` vides, seul `service_role` a `SELECT`, aucune fonction ni vue ne la cite, un seul lecteur au dépôt (`register`, par le client admin). Le relevé du 07/09 n'avait lu que `reloptions`, pas le commentaire ; la session du 20/09 l'avait d'abord annoncé « petit, en SQL » sur la même lecture partielle. On ne bascule pas en invoker : le commentaire dit pourquoi. |
 
 ---
 
@@ -2279,4 +2259,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2e89c1de` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2e89c1de` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

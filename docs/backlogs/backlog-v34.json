@@ -2106,6 +2106,14 @@
           "fr": " *(second item portant l'identifiant I16 — celui de la PR #28, 06/09 ; le premier est clos plus haut)* **Clos le 17/09/2026 sur les faits, décision de Xavier du 16/09 (« clos tout ce qui peut l'être à bon droit ») ; signalé par la session voisine le 16/09 au soir.** L'objet de l'item — **suivre la PR #28 jusqu'à sa fusion** — est atteint : scission faite (#28 installateur, #29 code applicatif ouverte à part, pages #2 guide vitrine), les quatre points bloquants réglés, gel du 08 au 14/09 tenu, **fusion le 15/09** (`f179f1ff`), pages #2 le 16/09, `GOUV-19` acté (G11 clos). Le troisième « fini quand » (`install.sh` exécuté une fois sur une machine qui n'est pas celle de son auteur) n'est pas une condition de la fusion : c'est une épreuve de la pile, versée à **I21** (les conditions avant la bascule) — `deploy/README.md` § « Première reconstruction extérieure » la nomme. La relecture de #29 comme du code de production se poursuit sous son propre numéro de PR, avec F7 et B20.",
           "pt": " *(segundo item com o identificador I16 — o da PR #28, 06/09; o primeiro está fechado mais acima)* **Encerrado em 17/09/2026 sobre os factos, decisão de Xavier de 16/09; assinalado pela sessão vizinha em 16/09 à noite.** O objeto do item — **seguir a PR #28 até à fusão** — está atingido: divisão feita (#28 instalador, #29 código aplicativo aberta à parte, pages #2 guia vitrine), os quatro pontos bloqueantes resolvidos, congelamento de 08 a 14/09 mantido, **fusão em 15/09** (`f179f1ff`), pages #2 em 16/09, `GOUV-19` registado (G11 fechado). O terceiro « acabado quando » (`install.sh` executado numa máquina que não é a do autor) não é uma condição da fusão: é uma prova da pilha, vertida em **I21**. A releitura de #29 continua sob o seu próprio número de PR, com F7 e B20."
         }
+      ],
+      [
+        "B23",
+        "2026-09-20",
+        {
+          "fr": "**Clos le 20/09/2026 sur pièce — constat corrigé : il n'y avait rien à faire.** Le « fini quand » disait « la vue est en invoker, **ou** porte le commentaire qui dit pourquoi elle ne l'est pas ». `obj_description('api.library_email_identity')` rend un `COMMENT ON VIEW` complet, signé « Paquet API-VUES-DEFINER du 29/08/2026 » et amendé le 30/08 : identité d'expédition lue par les fonctions de courriel, `service_role` uniquement, « n'est accordée ni à anon ni à authenticated, et ne doit jamais l'être », et « si un GRANT applicatif lui était accordé un jour, il faudrait la passer en security_invoker dans le même mouvement ». Mesuré le 20/09 : propriétaire `postgres`, `reloptions` vides, seul `service_role` a `SELECT`, aucune fonction ni vue ne la cite, un seul lecteur au dépôt (`register`, par le client admin). Le relevé du 07/09 n'avait lu que `reloptions`, pas le commentaire ; la session du 20/09 l'avait d'abord annoncé « petit, en SQL » sur la même lecture partielle. On ne bascule pas en invoker : le commentaire dit pourquoi.",
+          "pt": "**Encerrado em 20/09/2026 sobre peça — constato corrigido: não havia nada a fazer.** O « acabado quando » dizia « a vista está em invoker, **ou** tem o comentário que diz por que não está ». `obj_description('api.library_email_identity')` devolve um `COMMENT ON VIEW` completo, assinado « Paquet API-VUES-DEFINER du 29/08/2026 » e emendado em 30/08: identidade de expedição lida pelas funções de e-mail, só `service_role`, nunca concedida a anon nem a authenticated, e a passar a security_invoker no mesmo movimento se um GRANT aplicativo lhe fosse dado. Medido em 20/09: proprietário `postgres`, `reloptions` vazias, só `service_role` tem `SELECT`, nenhuma função nem vista a cita, um único leitor no repositório (`register`, pelo cliente admin). O levantamento de 07/09 só lera `reloptions`, não o comentário."
+        }
       ]
     ]
   },
@@ -3099,6 +3107,12 @@
       "r": [
         "CLAUDE.md, piège connu n°9",
         "CALENDRIER_bologne_2026-08-27"
+      ],
+      "verif": [
+        {
+          "fr": "20/09 — mesuré dans `it.json` : 318 clés portent une forme en -tore/-trice, et **quatre conventions coexistent** — barre oblique abrégée (`lettore/trice` ×55, `autore/trice` ×29), astérisque (`amministratori*` ×19, `coordinatori*` ×6), masculin nu (`autore` ×20, `lettore` ×15, `editore` ×15) et paire développée (`autore/autrice` ×3). La fiche parlait de paires qui « ne se réduisent pas à `lettor*` » ; l'état réel est une absence de convention unique. Les « trois chaînes restées en français » n'ont pas été retrouvées : une heuristique (valeur it identique à la valeur fr) rend zéro, ce qui ne prouve rien. La décision reste à prendre avec un·e locuteur·rice, comme la fiche le dit.",
+          "pt": "20/09 — medido em `it.json`: 318 chaves têm uma forma em -tore/-trice, e **quatro convenções coexistem** — barra abreviada (`lettore/trice` ×55), asterisco (`amministratori*` ×19), masculino nu (`autore` ×20, `lettore` ×15) e par desenvolvido (`autore/autrice` ×3). As « três cadeias que ficaram em francês » não foram reencontradas. A decisão continua a tomar-se com uma pessoa falante, como a ficha diz."
+        }
       ]
     },
     {
@@ -4365,6 +4379,10 @@
         {
           "fr": "16/09 — aucune garde n'existe encore ; `secret-key.ts` est sans repli, mais deux fonctions (`gc-deposits`, `harvest-oai-pmh`) portent encore le nom `SUPABASE_SERVICE_ROLE_KEY` dans leur message d'erreur — la garde à écrire les rougirait, corriger les deux messages avec elle.",
           "pt": "16/09 — nenhuma guarda existe ainda; `secret-key.ts` está sem recuo, mas duas funções (`gc-deposits`, `harvest-oai-pmh`) ainda levam o nome `SUPABASE_SERVICE_ROLE_KEY` na mensagem de erro — a guarda a escrever avermelhá-las-ia, corrigir as duas mensagens com ela."
+        },
+        {
+          "fr": "20/09 — **livré par la session voisine à 13 h 25 (`f83c5f66`), relu et rejoué ici le même jour.** À midi, deux fonctions lisaient encore la variable legacy sans passer par `secret-key.ts` (`opds/index.ts:28`, `rss-novidades/index.ts:28`) — sans panne : les deux flux répondaient 200 en production et `deploy/compose.yml` pose les deux variables. `f83c5f66` les fait passer par `secretKey()` et ajoute `src/tests/cle-legacy-garde.test.js` : liste fermée **vide**, la lecture de la variable interdite sous quatre écritures plus `toObject()`, commentaires retirés avant la recherche ; noms de constantes et messages d'erreur laissés exprès (« trompeurs à la lecture mais ne lisent rien ») — cinq messages et dix-huit constantes portent encore le nom legacy, comptés sans troncature. **Les deux « fini quand » rejoués** : *(1)* la regex de la garde, appliquée au `secret-key.ts` du sommet de la PR #28 (`b5782ec1`, 06/09), rend **une ligne rouge, l. 26** (`return Deno.env.get(\"SUPABASE_SERVICE_ROLE_KEY\")`), et zéro à HEAD ; *(2)* `secret-key.ts` à HEAD est **identique** à `69aa870f`, sa forme du 02/09 (diff vide). Garde et banc `rss-novidades` : 9 tests verts en local. **Clôturable** ; la clôture est laissée à la session qui a livré ou à Xavier, pour ne pas croiser deux lignes sur un identifiant déjà réemployé. Pas encore déployé à 13 h 30, soit quelques minutes après la poussée : le marqueur `deployed-functions` est sur `d0fca743`. Rien d’anormal à ce délai, et l’ancien code répond 200 ; à revérifier au prochain relevé. *Deux corrections de cette session :* l'annotation du 16/09 (« deux messages périmés ») venait d'un grep tronqué ; et un premier jet du 20/09 disait le critère (1) « non rejouable » pour avoir cherché le commit `81117888a8` au lieu du sommet `b5782ec1`.",
+          "pt": "20/09 — **entregue pela sessão vizinha às 13h25 (`f83c5f66`), relido e reproduzido aqui no mesmo dia.** Ao meio-dia, duas funções ainda liam a variável legacy sem passar por `secret-key.ts` (`opds`, `rss-novidades`) — sem avaria: os dois fluxos respondiam 200 em produção. `f83c5f66` fá-las passar por `secretKey()` e acrescenta `src/tests/cle-legacy-garde.test.js`: lista fechada **vazia**, a leitura da variável proibida sob quatro escritas mais `toObject()`; nomes de constantes e mensagens de erro deixados de propósito — cinco mensagens e dezoito constantes ainda levam o nome legacy. **Os dois « acabado quando » reproduzidos**: *(1)* a regex da guarda, aplicada ao `secret-key.ts` do topo da PR #28 (`b5782ec1`, 06/09), dá **uma linha vermelha, l. 26**, e zero em HEAD; *(2)* `secret-key.ts` em HEAD é **idêntico** a `69aa870f`, a sua forma de 02/09. 9 testes verdes em local. **Fechável**; o fecho fica para a sessão que entregou ou para Xavier. Ainda não implantado às 13 h 30, poucos minutos depois do push: o marcador `deployed-functions` está em `d0fca743`. Nada de anormal nesse prazo; a reverificar no próximo levantamento."
         }
       ]
     },
@@ -5084,6 +5102,10 @@
         {
           "fr": "16/09 — **I12 y est versé** : le `die` du script du miroir froid (`anarbib-mirror-refresh.service`) doit avoir le même destinataire que le contrôle de fraîcheur, et la date du dernier rafraîchissement du miroir s'écrire là où le témoin la lira. Une seule alerte à faire survivre au poste, pour les trois flux restic et le miroir.",
           "pt": "16/09 — **I12 é aqui vertido**: o `die` do script do espelho frio deve ter o mesmo destinatário que o controlo de frescura, e a data da última atualização do espelho escrever-se onde o testemunho a lerá. Um só alerta a fazer sobreviver ao posto, para os três fluxos restic e o espelho."
+        },
+        {
+          "fr": "20/09 — **relu sur pièces, et deux affirmations de la fiche tombent.** *(a) « Aucun courriel » était faux.* `service_health_incidents` porte l'incident 12 : `backup` / `storage`, ouvert le 15/09 à 09 h 20, **`notified_at` 09 h 20**, raison « tir commencé il y a 1.1 h et JAMAIS TERMINÉ (tué en route) », clos à 21 h 10 après la relance ; et l'incident 10 : `court` muet depuis 36 h, ouvert et notifié le 12/09 à 07 h 55 (poste éteint pendant Bologne). La sonde serveur `health-probe` a donc vu les deux pannes dans l'heure. La rédaction du 15/09 avait déduit « aucun courriel » de la seule ligne locale « Failed to enqueue OnFailure », sans lire cette table. Réserve : `notified_at` atteste que la sonde a marqué l'envoi, pas que le message est arrivé — à confirmer par Xavier. *(b) Les trois remèdes du « comment » ne tiennent pas.* `enable-linger` est actif depuis le **01/07/2026** (`/var/lib/systemd/linger/accattone`) : il l'était le 15/09 et n'a rien empêché. C'est le gestionnaire systemd utilisateur lui-même qui sort (`exit.target` 24 s après `Startup finished` le 15/09 à 08 h 12) : 52 démarrages depuis le 01/09, dont 27 le 17/09 ; aucun `KillMode` ni `scope` ne survit à son gestionnaire. Cause des arrêts : **non établie**. Ce qui tient : le rattrapage `Persistent=`. *(c) Côté poste, rien n'envoie* : `anarbib-notify-failure.sh` (11 lignes) écrit `~/anarbib-ops/.last-failure`, la fraîcheur écrit un drapeau lu par `.bashrc`, et `SuccessExitStatus=1 3` fait de ses alertes des succès pour systemd. C'est décoratif tant qu'on n'ouvre pas un terminal — mais la sonde serveur couvre « muet » et « interrompu ». Reste réel : le seuil de `storage` et `long` est de 216 h, un dimanche manqué n'alerte que neuf jours après le dernier bon tir. Les unités du poste sont des liens vers `~/anarbib/deploy/ops/systemd/` : un commit qui les touche, puis un alignement de WSL, modifie les unités en service.",
+          "pt": "20/09 — **relido sobre peças, e duas afirmações da ficha caem.** *(a) « Nenhum e-mail » era falso.* `service_health_incidents` tem o incidente 12: `backup` / `storage`, aberto em 15/09 às 09h20, **`notified_at` 09h20**, razão « tiro começado há 1.1 h e NUNCA TERMINADO », fechado às 21h10; e o incidente 10: `court` mudo há 36 h, aberto e notificado em 12/09 às 07h55. A sonda do servidor viu as duas avarias dentro da hora. Reserva: `notified_at` atesta que a sonda marcou o envio, não que a mensagem chegou — a confirmar por Xavier. *(b) Os três remédios não se aguentam.* `enable-linger` está ativo desde **01/07/2026**; é o próprio gestor systemd do utilizador que sai (52 arranques desde 01/09, 27 em 17/09). Causa: **não estabelecida**. O que se aguenta: a recuperação `Persistent=`. *(c) Do lado do posto, nada envia*: os dois scripts escrevem ficheiros-bandeira. A sonda do servidor cobre « mudo » e « interrompido ». Resta real: o limiar de `storage` e `long` é de 216 h. As unidades do posto são ligações para `~/anarbib/deploy/ops/systemd/`."
         }
       ]
     },
@@ -5268,10 +5290,16 @@
         "claude/MANUEL_LECTEUR_v2_refonte_2026-09-03",
         "REGISTRE §0 DOC-DESTR-2"
       ],
-      "verif": {
-        "fr": "07/09 — huit paires identiques constatées dans les fichiers de locale.",
-        "pt": "07/09 — oito pares idênticos constatados nos arquivos de locale."
-      }
+      "verif": [
+        {
+          "fr": "07/09 — huit paires identiques constatées dans les fichiers de locale.",
+          "pt": "07/09 — oito pares idênticos constatados nos arquivos de locale."
+        },
+        {
+          "fr": "20/09 — constat du 07/09 confirmé à l'identique : de, el, en, eo, es, fr, it, nl portent le même mot sur les deux clés ; ca (`ELIMINA`/`SUPRIMIR`) et pt-BR (`APAGAR`/`EXCLUIR`) distinguent. À savoir pour choisir les mots : l'historique compare en majuscules après `trim()` (`AccountPage.jsx` l. 2544), la suppression du compte compare la saisie brute (l. 1805).",
+          "pt": "20/09 — constato de 07/09 confirmado tal e qual: de, el, en, eo, es, fr, it, nl têm a mesma palavra nas duas chaves; ca e pt-BR distinguem. A saber: o histórico compara em maiúsculas depois de `trim()` (l. 2544), a eliminação da conta compara a entrada bruta (l. 1805)."
+        }
+      ]
     },
     {
       "id": "E16",
@@ -5369,51 +5397,6 @@
           "pt": "16/09 — ainda `ready` em produção: o convite de 30/08 não foi aceite nem recusado, expira em 29/09. Dois outros convites de 01/09: um aceite, um à espera de ratificação."
         }
       ]
-    },
-    {
-      "id": "B23",
-      "d": "B",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "`api.library_email_identity` est la seule vue `api` encore en SECURITY DEFINER — le dire, ou la basculer",
-        "pt": "`api.library_email_identity` é a única view `api` ainda em SECURITY DEFINER — dizê-lo, ou virá-la"
-      },
-      "v": {
-        "fr": "Le GLB v17 (01/09) comptait 67 vues `api` sur 68 en `security_invoker`. **Vérifié le 07/09** : `pg_class.reloptions` de `api.library_email_identity` est vide — elle lit donc sous le propriétaire. Peut-être voulu (elle sert l'identité d'expéditeur aux fonctions de courriel), mais aucun commentaire ne le dit.",
-        "pt": "O GLB v17 (01/09) contava 67 views `api` de 68 em `security_invoker`. **Verificado em 07/09**: `pg_class.reloptions` de `api.library_email_identity` está vazio — ela lê, portanto, sob o proprietário. Talvez intencional (serve a identidade de remetente às funções de e-mail), mas nenhum comentário o diz."
-      },
-      "w": {
-        "fr": "Soit `ALTER VIEW … SET (security_invoker = on)` et une suite qui vérifie que le courriel part encore, soit un `COMMENT ON VIEW` qui explique l'exception. Une soirée dans les deux cas.",
-        "pt": "Ou `ALTER VIEW … SET (security_invoker = on)` e uma suíte que verifica que o e-mail ainda sai, ou um `COMMENT ON VIEW` que explique a exceção. Uma noite nos dois casos."
-      },
-      "y": {
-        "fr": "Une exception non écrite se rejoue un jour comme une erreur — par quelqu'un qui « corrige » ce qui était voulu.",
-        "pt": "Uma exceção não escrita um dia se repete como erro — por alguém que «corrige» o que era intencional."
-      },
-      "f": {
-        "fr": [
-          "La vue est en invoker, ou porte le commentaire qui dit pourquoi elle ne l'est pas."
-        ],
-        "pt": [
-          "A view está em invoker, ou carrega o comentário que diz por que não está."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "claude/GLB_v17_releve_et_constats_2026-09-01"
-      ],
-      "verif": {
-        "fr": "07/09 — `reloptions` vide, donc DEFINER.",
-        "pt": "07/09 — `reloptions` vazio, logo DEFINER."
-      }
     },
     {
       "id": "B24",
