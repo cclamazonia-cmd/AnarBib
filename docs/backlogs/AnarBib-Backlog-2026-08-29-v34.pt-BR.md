@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-20** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-20** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 4
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 13
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do Bastien), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-20.** **55 itens de 69** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-20.** **56 itens de 70** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -347,6 +347,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
+| **B27** | `api.catalog_works_v1` ultrapassa o prazo de 3 s do papel anónimo: o catálogo por obra falha em silêncio e a página recai na lista plana | `P1` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -413,6 +414,28 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Não bloqueia mais **B19** (levantado em 15/09: o inventário está feito e verificado, e a revogação é reversível); os dois gestos protegem a rotação seguinte. Repositório `pages`: o congelamento acabou em 14/09.
 
 *Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
+
+#### B27 — `api.catalog_works_v1` ultrapassa o prazo de 3 s do papel anónimo: o catálogo por obra falha em silêncio e a página recai na lista plana
+
+`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+
+**Estado.** **Constatado em 20/09/2026** ao verificar E17 na tela. A consola do catálogo tinha erros 500; os registos edge atribuem-nos todos a `POST /rest/v1/rpc/catalog_works_v1` — 13 em 12 minutos — e `postgres_logs` tem, um por um, 13 erros **`57014 canceling statement due to statement timeout`**, em rajadas de **quatro por carregamento de página**. Medido: `anon → statement_timeout=3s`, `authenticated → 8s`. O volume é minúsculo — 2 449 obras, 2 656 registos: mais de três segundos em tão poucas linhas é um plano, não um tamanho. **Nada se vê na tela**: o front recai em `catalog_list_anon_v1` e mostra 91 registos; é o agrupamento por obra que não serve. Treze chamadas anónimas em treze falharam, contra a base real. O primeiro dos dois pré-visualizadores servia `main` sem E17. **O que não está estabelecido**: desde quando; se uma conta ligada passa nos seus 8 s; porquê quatro chamadas por carregamento.
+
+*Verificado : [object Object]*
+
+**O que é.** Medir antes de tocar: `EXPLAIN (ANALYZE, BUFFERS)` da chamada que o front faz, **sob o papel `anon`**, com os argumentos por defeito; dizer para onde vai o tempo. Contar as chamadas reais do front ao carregar (quatro?) e dizer porquê. Depois corrigir a consulta — **não** aumentar o prazo do papel anónimo, que protege o pool de 20 conexões. E tornar a falha visível: um recuo silencioso para a lista plana escondeu a avaria.
+
+**Por que importa.** O OPAC por obra é a obra principal de setembro e é a porta de entrada pública da rede. Se só serve contas ligadas — ou ninguém —, todo o trabalho de agrupamento das edições é invisível para quem foi feito. E uma avaria que o recuo esconde perfeitamente é uma avaria que dura.
+
+**O que conta como terminado.**
+
+- Uma chamada anónima de `catalog_works_v1` com os argumentos do primeiro carregamento responde em menos de 3 s — medido, com o plano registado.
+- Mais nenhum `57014` nesta RPC em `postgres_logs` durante um dia de tráfego real.
+- O front já não recai em silêncio: a falha da RPC é registada, e algo a vigia.
+
+**Dependências.** Encontrado ao verificar **E17**. Toca **C11** e a obra OPAC por obra; primo de **B10**.
+
+*Remissões : `api.catalog_works_v1` · `src/pages/public/CatalogPage.jsx (worksServer, repli)` · `src/lib/catalogueFallback.js` · `anarbib-capacite-plafonds-mesures`*
 
 ---
 
@@ -724,7 +747,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | Aberto |
 | **E15** | As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales | `P2` | Aberto |
 | **E16** | A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática | `P2` | A verificar |
-| **E17** | O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar | `P2` | Aberto |
+| **E17** | O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar | `P2` | Em curso |
 | **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
@@ -946,11 +969,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E17 — O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript, língua materna
+`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : React / JavaScript, língua materna
 
 **Estado.** **Pedido de Xavier em 07/09/2026, pela legibilidade do catálogo.** Em `CatalogPage.jsx`, o bloco «Explorar» (modos, alfabeto, árvore de assuntos, facetas) é recolhível desde 21/08, mas nasce **aberto**: `useState(true)`. A cada visita, a página abre num muro de comandos acima dos resultados; no celular, o primeiro registro fica abaixo da dobra. A escolha de recolher **não é lembrada**: `saveFilters` guarda dezessete preferências em `anarbib:catalog:filters`, não `exploreOpen`. Dois fatos tornam o recolhimento sem perda: os filtros ativos aparecem em **chips acima dos resultados**, independentemente do painel, e a árvore de assuntos só carrega à abertura do painel — recolhido por padrão, é também uma requisição a menos.
 
-*Verificado : 07/09 — lido no código no commit `4c235923`: `useState(true)`, `saveFilters` sem `exploreOpen`, chips independentes do painel, árvore carregada à abertura.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Três gestos, uma noite. **(1)** `useState(false)` por padrão, e `exploreOpen` acrescentado a `saveFilters` / `loadSavedFilters` — a escolha sobrevive ao recarregamento, como `compact`. **(2)** O cabeçalho recolhido diz o que esconde: «Explorar: assuntos, facetas, alfabeto», com o número de facetas ativas em badge (dez locales). **(3)** Um teste de fonte que guarda `useState(false)` e a presença de `exploreOpen` na gravação. Depois verificar na tela, celular incluído. Não reabrir automaticamente quando um filtro está ativo: os chips bastam.
 
@@ -2199,4 +2222,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-20. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2e89c1de`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-20. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2e89c1de`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

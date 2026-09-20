@@ -5452,7 +5452,7 @@
       "id": "E17",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "front",
@@ -5498,10 +5498,16 @@
         "src/i18n/locales/*.json (catalog.section.explore)",
         "src/tests/serial-picker-monte.test.js (patron de test de source)"
       ],
-      "verif": {
-        "fr": "07/09 — lu dans le code au commit `4c235923` : `useState(true)`, `saveFilters` sans `exploreOpen`, puces indépendantes du panneau, arbre chargé à l'ouverture.",
-        "pt": "07/09 — lido no código no commit `4c235923`: `useState(true)`, `saveFilters` sem `exploreOpen`, chips independentes do painel, árvore carregada à abertura."
-      }
+      "verif": [
+        {
+          "fr": "07/09 — lu dans le code au commit `4c235923` : `useState(true)`, `saveFilters` sans `exploreOpen`, puces indépendantes du panneau, arbre chargé à l'ouverture.",
+          "pt": "07/09 — lido no código no commit `4c235923`: `useState(true)`, `saveFilters` sem `exploreOpen`, chips independentes do painel, árvore carregada à abertura."
+        },
+        {
+          "fr": "20/09 — **les trois gestes sont livrés (`3c411f10`) et vérifiés à l'écran ; le but du titre n'est pas atteint.** *Livré* : `useState(filterState.exploreOpen ?? false)`, `exploreOpen` dans la sauvegarde (objet et dépendances) ; en-tête replié « Explorer : sujets, facettes, alphabet » et badge du nombre de facettes actives (lettre, sujet, CDD, décennie, auteur·rice) avec un texte pour lecteurs d'écran, deux clés × dix locales ; aucun `setExploreOpen(true)`, gardé par `src/tests/catalog-explore-replie.test.js` (5 cas). *Vu à l'écran* (aperçu d'un worktree contre la production, en lecture) : première visite repliée ; bascule et stockage dans les deux sens ; le repli ET l'ouverture survivent au rechargement ; badge « 2 » avec une lettre et une décennie, « 1 » après rechargement (le filtre alphabétique n'est pas persisté, c'est voulu) ; puces visibles bloc replié ; **pas de réouverture au rechargement avec un filtre persisté actif** ; aucun débordement horizontal à 375 px (le libellé français tient sur une ligne ; allemand et grec, plus longs, non essayés). *Mesuré* : première notice à **1 685 → 867 px** sur 1366×768 (panneau ouvert : 800 px), **4 018 → 1 710 px** sur 375×812 (panneau ouvert : 2 291 px). **Elle reste sous la ligne de flottaison : de 99 px sur portable, d'environ 900 px sur téléphone.** Ce qui occupe l'écran : le bloc « Filtres », né ouvert lui aussi (`filtersOpen`, `useState(true)`), fait **318 px** sur portable et **978 px** sur mobile — plus qu'un écran. Le replier par défaut tiendrait la promesse du titre, mais c'est une décision d'interface sur l'outil principal du catalogue : **à trancher par Xavier**. Item laissé ouvert pour cette raison. Vu en passant : la page retombe sur la liste à plat parce que `catalog_works_v1` dépasse le délai en anonyme — **B27**.",
+          "pt": "20/09 — **os três gestos estão entregues (`3c411f10`) e verificados na tela; o objetivo do título não é atingido.** *Entregue*: `useState(filterState.exploreOpen ?? false)`, `exploreOpen` na gravação dos filtros; cabeçalho recolhido « Explorar: assuntos, facetas, alfabeto » e distintivo com o número de facetas ativas, com texto para leitores de ecrã, duas chaves × dez locales; nenhum `setExploreOpen(true)`, guardado por `src/tests/catalog-explore-replie.test.js` (5 casos). *Visto na tela*: primeira visita recolhida; alternância e armazenamento nos dois sentidos; sobrevive ao recarregamento; distintivo « 2 » e depois « 1 »; etiquetas visíveis com o bloco recolhido; **sem reabertura ao recarregar com um filtro persistido ativo**; nenhum transbordo horizontal a 375 px. *Medido*: primeiro registo a **1 685 → 867 px** em 1366×768, **4 018 → 1 710 px** em 375×812. **Continua abaixo da dobra: 99 px no portátil, cerca de 900 px no telemóvel.** O que ocupa a tela: o bloco « Filtros », também nascido aberto, tem **318 px** no portátil e **978 px** no telemóvel. Recolhê-lo por defeito cumpriria a promessa do título, mas é uma decisão de interface: **a decidir por Xavier**. Item deixado aberto. Visto de passagem: `catalog_works_v1` ultrapassa o prazo em anónimo — **B27**."
+        }
+      ]
     },
     {
       "id": "E19",
@@ -5615,6 +5621,60 @@
         "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.",
         "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote."
       }
+    },
+    {
+      "id": "B27",
+      "d": "B",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "`api.catalog_works_v1` dépasse le délai de 3 s du rôle anonyme : le catalogue par œuvre échoue en silence et la page retombe sur la liste à plat",
+        "pt": "`api.catalog_works_v1` ultrapassa o prazo de 3 s do papel anónimo: o catálogo por obra falha em silêncio e a página recai na lista plana"
+      },
+      "v": {
+        "fr": "**Constaté le 20/09/2026** en vérifiant E17 à l'écran. La console du catalogue portait des erreurs 500 ; les journaux edge les attribuent toutes à `POST /rest/v1/rpc/catalog_works_v1` — 13 en 12 minutes, depuis deux aperçus locaux branchés sur la production — et `postgres_logs` porte, une pour une, 13 erreurs **`57014 canceling statement due to statement timeout`** (rôle `authenticator`), le plus souvent par salves de **quatre dans la même seconde** (trois salves de quatre à 11 h 52, 11 h 59 et 12 h 01 UTC, puis un appel isolé à 12 h 03). Mesuré : `anon → statement_timeout=3s`, `authenticated → 8s`. La fonction est `api.catalog_works_v1(p_filters jsonb, p_sort text, p_offset integer, p_limit integer, p_lang text)`, INVOKER, STABLE. Le volume est minuscule — 2 449 œuvres, 2 656 notices, 2 651 lignes dans `mv_books_catalog_list_v1` : plus de trois secondes sur si peu de lignes, c'est un plan, pas une taille. **Rien ne se voit à l'écran** : le front retombe sur `catalog_list_anon_v1` et affiche 91 notices ; c'est le regroupement par œuvre (OPAC par œuvre, 04-05/09) qui ne sert pas. Treize appels anonymes sur treize ont échoué, contre la vraie base : **le chemin par œuvre échoue aujourd'hui pour un·e visiteur·se anonyme.** Le premier des deux aperçus servait `main` sans E17 : E17 n'y est pour rien. **Ce qui n'est pas établi** : depuis quand ; si un compte connecté passe dans ses 8 s ; pourquoi quatre appels par chargement. Aucun 500 ne vient de `app.anarbib.org` sur les trois heures relevées — mais aucune connexion n'a eu lieu depuis le 16/09 à 18 h 31 UTC (relu le 20/09 à 14 h) : l'absence d'erreur peut n'être qu'une absence de trafic. Pour qui fera le diagnostic, lu dans `pg_proc.prosrc` le 20/09 : corps en PL/pgSQL de 9 435 caractères, qui appelle `fn_volume_rank` et `fn_work_display_title` et lit `public.books`, `public.book_subjects` et `public.subjects` — des faits, pas une cause.",
+        "pt": "**Constatado em 20/09/2026** ao verificar E17 na tela. A consola do catálogo tinha erros 500; os registos edge atribuem-nos todos a `POST /rest/v1/rpc/catalog_works_v1` — 13 em 12 minutos — e `postgres_logs` tem, um por um, 13 erros **`57014 canceling statement due to statement timeout`**, em rajadas de **quatro por carregamento de página**. Medido: `anon → statement_timeout=3s`, `authenticated → 8s`. O volume é minúsculo — 2 449 obras, 2 656 registos: mais de três segundos em tão poucas linhas é um plano, não um tamanho. **Nada se vê na tela**: o front recai em `catalog_list_anon_v1` e mostra 91 registos; é o agrupamento por obra que não serve. Treze chamadas anónimas em treze falharam, contra a base real. O primeiro dos dois pré-visualizadores servia `main` sem E17. **O que não está estabelecido**: desde quando; se uma conta ligada passa nos seus 8 s; porquê quatro chamadas por carregamento."
+      },
+      "w": {
+        "fr": "Mesurer avant de toucher : `EXPLAIN (ANALYZE, BUFFERS)` de l'appel que fait le front, **sous le rôle `anon`** (`set local role anon`), avec les arguments par défaut du catalogue ; dire où part le temps — planification des vues (mémoire `anarbib-capacite-plafonds-mesures`), fonction appelée par ligne, tri. Compter les appels réels du front au chargement (quatre ?) et dire pourquoi. Puis corriger la requête — **pas** relever le délai du rôle anonyme, qui est la protection du pool de 20 connexions. Et rendre l'échec visible : un repli silencieux sur la liste à plat a caché la panne ; le front devrait au moins le journaliser, et une sonde (`health-probe`) pourrait appeler la RPC en anonyme. Le code est celui du chantier OPAC par œuvre : à coordonner avec la session qui l'a écrit.",
+        "pt": "Medir antes de tocar: `EXPLAIN (ANALYZE, BUFFERS)` da chamada que o front faz, **sob o papel `anon`**, com os argumentos por defeito; dizer para onde vai o tempo. Contar as chamadas reais do front ao carregar (quatro?) e dizer porquê. Depois corrigir a consulta — **não** aumentar o prazo do papel anónimo, que protege o pool de 20 conexões. E tornar a falha visível: um recuo silencioso para a lista plana escondeu a avaria."
+      },
+      "y": {
+        "fr": "L'OPAC par œuvre est le chantier phare de septembre (douze migrations, un manuel en dix langues) et c'est la porte d'entrée publique du réseau. S'il ne sert qu'aux comptes connectés — ou à personne —, tout le travail de regroupement des éditions est invisible à celles et ceux pour qui il a été fait. Et une panne que le repli masque parfaitement est une panne qui dure.",
+        "pt": "O OPAC por obra é a obra principal de setembro e é a porta de entrada pública da rede. Se só serve contas ligadas — ou ninguém —, todo o trabalho de agrupamento das edições é invisível para quem foi feito. E uma avaria que o recuo esconde perfeitamente é uma avaria que dura."
+      },
+      "f": {
+        "fr": [
+          "Un appel anonyme de `catalog_works_v1` avec les arguments du premier chargement répond en moins de 3 s — mesuré, avec le plan consigné.",
+          "Plus aucun `57014` sur cette RPC dans `postgres_logs` pendant une journée de trafic réel.",
+          "Le front ne retombe plus en silence : l'échec de la RPC est journalisé, et quelque chose le surveille."
+        ],
+        "pt": [
+          "Uma chamada anónima de `catalog_works_v1` com os argumentos do primeiro carregamento responde em menos de 3 s — medido, com o plano registado.",
+          "Mais nenhum `57014` nesta RPC em `postgres_logs` durante um dia de tráfego real.",
+          "O front já não recai em silêncio: a falha da RPC é registada, e algo a vigia."
+        ]
+      },
+      "dep": {
+        "fr": "Trouvé en vérifiant **E17**. Touche **C11** et le chantier OPAC par œuvre ; cousin de **B10** (hygiène de performance) et de la mémoire sur les plafonds de capacité (coût de planification des vues).",
+        "pt": "Encontrado ao verificar **E17**. Toca **C11** e a obra OPAC por obra; primo de **B10**."
+      },
+      "r": [
+        "api.catalog_works_v1",
+        "src/pages/public/CatalogPage.jsx (worksServer, repli)",
+        "src/lib/catalogueFallback.js",
+        "anarbib-capacite-plafonds-mesures"
+      ],
+      "verif": [
+        {
+          "fr": "20/09 — `edge_logs` : 13 × 500 sur `catalog_works_v1` entre 11 h 51 et 12 h 03 UTC (referers `localhost:5180` et `:5181`) ; `postgres_logs` : 13 × `57014` aux mêmes secondes ; `pg_roles` : `anon` 3 s, `authenticated` 8 s ; page affichée : 91 notices par le repli.",
+          "pt": "20/09 — `edge_logs`: 13 × 500 em `catalog_works_v1` entre 11h51 e 12h03 UTC; `postgres_logs`: 13 × `57014` nos mesmos segundos; `pg_roles`: `anon` 3 s, `authenticated` 8 s; página mostrada: 91 registos pelo recuo."
+        }
+      ]
     }
   ]
 }
