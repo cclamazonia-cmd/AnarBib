@@ -6,7 +6,11 @@
 import { vi } from 'vitest';
 
 // Mock Supabase
+// SUPABASE_URL : le vrai module l'exporte depuis VITE_SUPABASE_URL ; depuis le
+// 20/09/2026 les pages la lisent au lieu de porter l'adresse du projet en dur,
+// donc le mock doit la donner — sinon les URL construites valent « undefined/… ».
 vi.mock('@/lib/supabase', () => ({
+  SUPABASE_URL: 'https://projet-de-test.supabase.co',
   supabase: {
     from: () => ({ select: () => ({ eq: () => ({ data: [], error: null }) }) }),
     rpc: () => ({ data: null, error: null }),

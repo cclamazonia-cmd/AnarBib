@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -15,7 +15,6 @@ import ImageViewer from '@/components/viewers/ImageViewer';
 import EpubReader from '@/components/viewers/EpubReader';
 import './ReaderPage.css';
 
-const SUPABASE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 const EDGE_URL = `${SUPABASE_URL}/functions/v1/read-digital-asset`;
 const PDFJS_BASE = import.meta.env.BASE_URL + 'vendor/pdfjs/build';
 const PDFJS_ASSETS_BASE = import.meta.env.BASE_URL + 'vendor/pdfjs/web/';

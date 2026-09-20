@@ -14,8 +14,10 @@
 // src/tests/doc-links.test.js garde au moins la forme (dix langues, blocs
 // croissants), pas les valeurs.
 
+import { SUPABASE_URL } from './supabase';
+
 export const DOC_BASE =
-  'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/';
+  `${SUPABASE_URL}/storage/v1/object/public/library-ui-assets/manuals/network/published/`;
 
 export const DOC_FILES = {
   reader: 'Manual%20Leitor-a-e.pdf',

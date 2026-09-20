@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { Spinner, EmptyState } from '@/components/ui';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 import { languageLabel } from '@/lib/languages';
 
-const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
+const COVER_BASE = `${SUPABASE_URL}/storage/v1/object/public/covers/`;
 
 // Page Œuvre (P4 v2 Lot A) : titre dans la locale de la lectrice (lot 3 du
 // 04/09/2026 : work_titles, sinon titre d'une édition dans cette langue, sinon

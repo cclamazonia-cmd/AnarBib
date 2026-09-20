@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { detectLocale } from '@/i18n';
@@ -13,8 +13,8 @@ import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './AuthorPage.css';
 import { buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
 
-const PHOTO_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/authors/';
-const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
+const PHOTO_BASE = `${SUPABASE_URL}/storage/v1/object/public/authors/`;
+const COVER_BASE = `${SUPABASE_URL}/storage/v1/object/public/covers/`;
 
 function localizedSubjectLabel(li, locale) {
   if (!li || typeof li !== 'object') return '';

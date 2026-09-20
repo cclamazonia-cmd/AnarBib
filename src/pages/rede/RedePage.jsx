@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiRpc } from '@/lib/supabase';
+import { supabase, apiRpc, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -21,8 +21,6 @@ import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { normalizePublicId } from '@/lib/publicId';
 import '../catalogacao/CatalogacaoPage.css';
-
-const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 // REQ_STATUS built inside component with t()
 // ROLE_LABELS built inside component with t()
 // SERVICE_LABELS built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
@@ -483,7 +481,7 @@ export default function RedePage() {
 
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(min(320px, 100%), 1fr))', gap:14 }}>
             {libCards.map(lib => {
-              const logoUrl = lib.logo_file_key ? `${PROJECT_URL}/storage/v1/object/public/library-ui-assets/${lib.logo_file_key.includes('/')?lib.logo_file_key:`themes/${lib.logo_file_key}/logo-${lib.logo_file_key}.png`}` : null;
+              const logoUrl = lib.logo_file_key ? `${SUPABASE_URL}/storage/v1/object/public/library-ui-assets/${lib.logo_file_key.includes('/')?lib.logo_file_key:`themes/${lib.logo_file_key}/logo-${lib.logo_file_key}.png`}` : null;
               const hasAlerts = lib.loansOpen > 0 || lib.resActive > 0 || lib.service_mode !== 'funcionamento_normal';
               return (
                 <div key={lib.id} style={{ padding:16, borderRadius:10, background:'rgba(255,255,255,.03)', border:`1px solid ${hasAlerts?'rgba(251,191,36,.2)':'rgba(255,255,255,.08)'}` }}>

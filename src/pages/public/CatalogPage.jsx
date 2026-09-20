@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiQuery } from '@/lib/supabase';
+import { supabase, apiQuery, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
 import { buildWorksFilters, worksSortParam, groupBooksIntoWorks, yearsLabel, WORKS_PAGE_SIZE } from '@/lib/catalogWorks';
@@ -729,7 +729,7 @@ export default function CatalogPage() {
         .eq('library_id', libraryId).eq('is_active', true).eq('publication_status', 'published')
         .order('created_at', { ascending: false }).limit(1).maybeSingle();
       if (data?.storage_path_public) {
-        setRegimentoUrl(`https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/${data.storage_bucket || 'library-regimentos-public'}/${data.storage_path_public}`);
+        setRegimentoUrl(`${SUPABASE_URL}/storage/v1/object/public/${data.storage_bucket || 'library-regimentos-public'}/${data.storage_path_public}`);
       }
     })();
   }, [libraryId, isAuth]);

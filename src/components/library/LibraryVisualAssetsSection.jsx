@@ -24,11 +24,10 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 
 const BUCKET = 'library-ui-assets';
-const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 
 // Slots canoniques. `optional:true` n'affiche pas d'alerte si manquant.
 // `accept` aligne le picker fichier ; `kind` pilote la preview.
@@ -41,7 +40,7 @@ const SLOTS = [
 ];
 
 function publicUrl(slug, fileName, cacheBuster) {
-  const u = `${PROJECT_URL}/storage/v1/object/public/${BUCKET}/themes/${slug}/${fileName}`;
+  const u = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/themes/${slug}/${fileName}`;
   return cacheBuster ? `${u}?v=${cacheBuster}` : u;
 }
 

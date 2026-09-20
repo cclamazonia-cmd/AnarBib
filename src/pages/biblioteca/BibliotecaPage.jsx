@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiRpc } from '@/lib/supabase';
+import { supabase, apiRpc, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -37,8 +37,6 @@ import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
-
-const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 // SERVICE_MODES built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
 // TASK_PRIO   built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
 // ILL_STATUS built inside component with t()
@@ -1396,7 +1394,7 @@ export default function BibliotecaPage() {
   const bx = { padding:14, borderRadius:10, background:'rgba(255,255,255,.03)', border:'1px solid rgba(255,255,255,.08)', marginBottom:16 };
   const lr = (i) => ({ padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 });
   const lw = { border:'1px solid rgba(255,255,255,.06)', borderRadius:8, overflow:'hidden' };
-  const logoUrl = commons?.logo_file_key ? `${PROJECT_URL}/storage/v1/object/public/library-ui-assets/${commons.logo_file_key.includes('/')?commons.logo_file_key:`themes/${commons.logo_file_key}/logo-${commons.logo_file_key}.png`}` : null;
+  const logoUrl = commons?.logo_file_key ? `${SUPABASE_URL}/storage/v1/object/public/library-ui-assets/${commons.logo_file_key.includes('/')?commons.logo_file_key:`themes/${commons.logo_file_key}/logo-${commons.logo_file_key}.png`}` : null;
 
   if (!libraryId) return (
     <PageShell><Topbar />
@@ -1737,7 +1735,7 @@ export default function BibliotecaPage() {
                   </div>
                 </div>
                 <div style={{ display:'flex', gap:8, alignItems:'center', flexShrink:0 }}>
-                  {doc.storage_path_public && <a href={`${PROJECT_URL}/storage/v1/object/public/${doc.storage_bucket||'library-regimentos-public'}/${doc.storage_path_public}`} target="_blank" rel="noopener" className="cat-btn secondary" style={{ fontSize:'.82rem', padding:'5px 12px' }}>{t({ id: 'biblioteca.regulation.openPdf' })}</a>}
+                  {doc.storage_path_public && <a href={`${SUPABASE_URL}/storage/v1/object/public/${doc.storage_bucket||'library-regimentos-public'}/${doc.storage_path_public}`} target="_blank" rel="noopener" className="cat-btn secondary" style={{ fontSize:'.82rem', padding:'5px 12px' }}>{t({ id: 'biblioteca.regulation.openPdf' })}</a>}
                   {isCoord && !doc.is_active && (
                     <button type="button" className="cat-btn secondary" disabled={saving}
                       onClick={() => removeRegimento(doc)}

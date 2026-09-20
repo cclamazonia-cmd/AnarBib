@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
 import SerialAuthorityPicker from './SerialAuthorityPicker';
 import AudioSegmentsBlock from './AudioSegmentsBlock';
@@ -689,9 +689,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const catalogTier = tierFromMode(mode);
 
   // ── Cover preview URL ──────────────────────────────────
-  const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
   const coverDisplayUrl = coverPreviewUrl
-    || (f('cover_object_path') ? `${PROJECT_URL}/storage/v1/object/public/covers/${f('cover_object_path')}` : '');
+    || (f('cover_object_path') ? `${SUPABASE_URL}/storage/v1/object/public/covers/${f('cover_object_path')}` : '');
 
   // ═══════════════════════════════════════════════════════
   // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, DNB, ICCU, LoC, OL, Wikidata + BN Brasil)

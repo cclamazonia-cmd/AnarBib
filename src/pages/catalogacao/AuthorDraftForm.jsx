@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -114,10 +114,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // Recherche d'autorite externe (Wikidata → VIAF/ISNI/variant_forms)
   const [authLookupResults, setAuthLookupResults] = useState(null);
   const [authLookupLoading, setAuthLookupLoading] = useState(false);
-
-  const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
   const photoDisplayUrl = photoPreviewUrl
-    || (form.photo_object_path ? `${PROJECT_URL}/storage/v1/object/public/authors/${form.photo_object_path}` : '');
+    || (form.photo_object_path ? `${SUPABASE_URL}/storage/v1/object/public/authors/${form.photo_object_path}` : '');
 
   const EMPTY_FORM = {
     id: '', published_author_id: '', batch_id: '', action: 'create', status: 'draft',

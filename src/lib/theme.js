@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { PROJECT_REF } from './supabase';
+import { SUPABASE_URL } from './supabase';
 
 const THEME_BUCKET = 'library-ui-assets';
-const SUPABASE_URL = `https://${PROJECT_REF}.supabase.co`;
 
 export function publicAssetUrl(path) {
   return `${SUPABASE_URL}/storage/v1/object/public/${THEME_BUCKET}/${path}`;

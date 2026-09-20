@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { detectLocale } from '@/i18n';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -17,7 +17,6 @@ import { deriveSignupIntent, isSignupSentinel } from '@/lib/signupIntent';
 
 // Logo auto-heberge (19/08/2026), auparavant hotlinke sur un WordPress externe.
 const ANARBIB_LOGO = '/img/logo-anarbib.png';
-const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 
 // Galerie publique des bibliothèques, hébergée sur le site de présentation
 // anarbib.org (et non dans l'app). Le site a un dossier par langue ; on
@@ -115,7 +114,6 @@ export default function CriarContaPage() {
           .select('library_id, storage_bucket, storage_path_public')
           .eq('is_active', true)
           .eq('doc_kind', 'regimento');
-        const SUPABASE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
         const regimentoMap = {};
         (regs || []).forEach(r => {
           if (r.storage_path_public) {
@@ -155,9 +153,9 @@ export default function CriarContaPage() {
     if (lib.logo_url?.startsWith('http')) return lib.logo_url;
     if (lib.logo_file_key && !lib.logo_file_key.startsWith('.')) {
       const key = lib.logo_file_key.includes('/') ? lib.logo_file_key : `themes/${lib.logo_file_key}/logo-${lib.logo_file_key}.png`;
-      return `${PROJECT_URL}/storage/v1/object/public/library-ui-assets/${key}`;
+      return `${SUPABASE_URL}/storage/v1/object/public/library-ui-assets/${key}`;
     }
-    return `${PROJECT_URL}/storage/v1/object/public/library-ui-assets/themes/${lib.slug}/logo-${lib.slug}.png`;
+    return `${SUPABASE_URL}/storage/v1/object/public/library-ui-assets/themes/${lib.slug}/logo-${lib.slug}.png`;
   }
 
   /**

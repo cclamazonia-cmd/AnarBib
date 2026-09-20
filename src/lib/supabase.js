@@ -31,6 +31,12 @@ if (!SUPABASE_ANON_KEY) {
   );
 }
 
+// Référence du projet Supabase Cloud — une IDENTITÉ, jamais une adresse. Ne
+// JAMAIS s'en servir pour fabriquer une URL (`https://${PROJECT_REF}.supabase.co`) :
+// c'est ce que faisait theme.js, et ça rendait le front muet sur une pile
+// auto-hébergée comme sur les routes de repli. L'adresse, c'est SUPABASE_URL
+// ci-dessus, qui vient de VITE_SUPABASE_URL et sait résoudre 'auto'.
+// Garde : src/tests/adresse-supabase-garde.test.js (20/09/2026).
 export const PROJECT_REF = 'uflwmikiyjfnikiphtcp';
 
 // Client principal — schéma public (auth, profiles, tables métier, rpc)

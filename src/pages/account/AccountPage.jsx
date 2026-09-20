@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } fro
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiQuery, apiRpc } from '@/lib/supabase';
+import { supabase, apiQuery, apiRpc, SUPABASE_URL } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useAccountAvailability } from '@/hooks/useAccountAvailability';
@@ -567,7 +567,7 @@ export default function AccountPage() {
         .eq('library_id', libraryId).eq('is_active', true).eq('publication_status', 'published')
         .order('created_at', { ascending: false }).limit(1).maybeSingle();
       if (data?.storage_path_public) {
-        setRegimentoUrl(`https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/${data.storage_bucket || 'library-regimentos-public'}/${data.storage_path_public}`);
+        setRegimentoUrl(`${SUPABASE_URL}/storage/v1/object/public/${data.storage_bucket || 'library-regimentos-public'}/${data.storage_path_public}`);
       }
     })();
   }, [libraryId]);
@@ -2197,8 +2197,7 @@ export default function AccountPage() {
                 ) : (
                 <div className="ab-conta-items">
                   {visResas.map((h, i) => {
-                    const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
-                    const coverUrl = h.cover_object_path ? `${PROJECT_URL}/storage/v1/object/public/covers/${h.cover_object_path}` : null;
+                    const coverUrl = h.cover_object_path ? `${SUPABASE_URL}/storage/v1/object/public/covers/${h.cover_object_path}` : null;
                     const stageKey = h.workflow_stage_effective || h.status || '';
                     const stageLabel = stageKey ? t({ id: `reservation.stage.${stageKey.replace('-','_')}`, defaultMessage: stageKey }) : '\u2014';
                     const isFinal = ['cancelada_leitor','cancelada_biblioteca','expirada','retirada_efetivada','liberada_para_circulacao','convertida_em_emprestimo'].includes(h.workflow_stage_effective || h.status);

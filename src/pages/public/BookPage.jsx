@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -16,8 +16,8 @@ import { authorLabel } from '@/lib/authorLabel';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 
-const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
-const STORAGE_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/';
+const COVER_BASE = `${SUPABASE_URL}/storage/v1/object/public/covers/`;
+const STORAGE_BASE = `${SUPABASE_URL}/storage/v1/object/public/`;
 
 // Material type labels are resolved via i18n inside the component
 
