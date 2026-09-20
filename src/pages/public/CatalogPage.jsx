@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiQuery } from '@/lib/supabase';
+import { supabase, apiQuery, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
 import { buildWorksFilters, worksSortParam, groupBooksIntoWorks, yearsLabel, WORKS_PAGE_SIZE } from '@/lib/catalogWorks';
@@ -1180,8 +1180,8 @@ export default function CatalogPage() {
           </Link>
           {/* E11 (03/09) : le flux des nouveautés de cette bibliothèque — sans requête,
               sans compte. La fonction ne répond que pour une bibliothèque publique. */}
-          {import.meta.env.VITE_SUPABASE_URL && (
-            <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-novidades/${routeLibrarySlug}`}
+          {SUPABASE_URL && (
+            <a href={`${SUPABASE_URL}/functions/v1/rss-novidades/${routeLibrarySlug}`}
                type="application/rss+xml" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.88rem' }}>
               {t({ id: 'bibliotecas.rssFeed' })}
             </a>
