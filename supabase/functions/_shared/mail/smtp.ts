@@ -103,6 +103,14 @@ function extractEmail(address: string): string {
   return m ? m[1].trim() : address.trim();
 }
 
+function encodeAddress(address: string): string {
+  const m = address.match(/^(.*)<([^>]+)>\s*$/);
+  if (!m) return address.trim();
+  const name = m[1].trim().replace(/^"|"$/g, "");
+  const addr = m[2].trim();
+  return name ? `${encodeUtf8Header(name)} <${addr}>` : `<${addr}>`;
+}
+
 function encodeUtf8Header(text: string): string {
   if (!/[^\x20-\x7E]/.test(text)) {
     return text;
@@ -189,8 +197,8 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
     // Construction du message MIME
     const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     const headers: string[] = [
-      `From: ${encodeUtf8Header(opts.from)}`,
-      `To: ${opts.to.map(encodeUtf8Header).join(", ")}`,
+      `From: ${encodeAddress(opts.from)}`,
+      `To: ${opts.to.map(encodeAddress).join(", ")}`,
       `Subject: ${encodeUtf8Header(opts.subject)}`,
       `Date: ${new Date().toUTCString()}`,
       `MIME-Version: 1.0`,
@@ -198,7 +206,7 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
     ];
 
     if (opts.replyTo) {
-      headers.push(`Reply-To: ${encodeUtf8Header(opts.replyTo)}`);
+      headers.push(`Reply-To: ${encodeAddress(opts.replyTo)}`);
     }
 
     headers.push(`Content-Type: multipart/alternative; boundary="${boundary}"`);
