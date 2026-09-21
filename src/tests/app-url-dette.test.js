@@ -40,10 +40,6 @@ const TOLERE = {
   'gazette-monthly-build/index.ts': 1,             // User-Agent du moissonneur : une identité, pas un lien servi
 };
 const DETTE = {
-  '_shared/domain/assembleia.ts': 1,
-  '_shared/domain/cartography.ts': 1,
-  '_shared/domain/entraide.ts': 1,
-  '_shared/domain/gazette.ts': 1,
   '_shared/domain/library_profile.ts': 1,
   '_shared/domain/network.ts': 3,
   '_shared/domain/reservas.ts': 1,

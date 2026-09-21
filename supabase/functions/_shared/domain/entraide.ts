@@ -13,8 +13,9 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { tMail, greeting } from "../i18n/mail-strings.ts";
+import { APP_BASE_URL } from "../core/app-url.ts";
 
-const APP_URL = "https://app.anarbib.org";
+const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
 
 function esc(s) {
   return String(s ?? "")

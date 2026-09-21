@@ -19,8 +19,9 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
+import { appUrl } from "../core/app-url.ts";
 
-const ASSEMBLEIAS_URL = "https://app.anarbib.org/federacao/assembleias";
+const ASSEMBLEIAS_URL = appUrl("/federacao/assembleias"); // foyer unique : ../core/app-url.ts
 const PROFILE_COLS = "id,email,first_name,last_name,preferred_language";
 
 // B12 / DOC-SILENCE-1 : trois statuts, trois formes. `failed` porte son

@@ -14,9 +14,10 @@ import { resolveLibraryNotificationContext } from "../context/library-notificati
 import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
+import { APP_BASE_URL } from "../core/app-url.ts";
 
 const OUTBOX = "cartography_submission_notification_outbox";
-const APP_URL = "https://app.anarbib.org";
+const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
 const EDITORIAL_FALLBACK = "fede@anarbib.org";
 
 function esc(s) {

@@ -125,3 +125,51 @@ describe('domain/assembleia — convocation, ordre du jour, point proposé', () 
     expect(b.etat()).toEqual(['skipped']);
   });
 });
+
+// ── Les liens suivent APP_BASE_URL (21/09/2026) ────────────────────────────────
+// ROUGES sur le code du matin (adresse écrite en dur dans les trois modules), verts
+// depuis qu'ils passent par _shared/core/app-url.ts.
+describe('mails de la fédération — les liens vers l\'application suivent APP_BASE_URL', () => {
+  const ENV = { APP_BASE_URL: 'https://app.anarbib.is/' };
+  const sansCanonique = (envois) => envois.flatMap((e) => liens(e.html)).filter((h) => h.startsWith('https://app.anarbib.org'));
+
+  it('cartographie : le lien de modération', async () => {
+    const ligne = { id: 3, status: 'queued', event: 'cartography.submission_received', payload: { name: 'Ateneu' } };
+    const ef = monterEF({ env: ENV, repondre: (_s, table, a) => (table === 'cartography_submission_notification_outbox' && !a('update') ? { data: ligne, error: null } : { data: null, error: null }) });
+    await ef.charger('_shared/domain/cartography.ts').handleCartographyEvent(3);
+    expect(liens(ef.envois[0].html)).toContain('https://app.anarbib.is/cartografia/moderacao');
+    expect(sansCanonique(ef.envois)).toEqual([]);
+  });
+
+  it('entraide : le lien vers la page d\'entraide', async () => {
+    const ef = monterEF({
+      env: ENV,
+      repondre: (_s, table, a, chaine) => {
+        if (table === 'circles') return { data: { name: 'Cercle' }, error: null };
+        if (table === 'circle_memberships') return { data: [{ library_id: 'lib-a' }, { library_id: 'lib-b' }], error: null };
+        if (table === 'user_library_memberships') return eq(chaine, 'user_id') ? { data: [{ library_id: 'lib-a' }], error: null } : { data: [{ user_id: 'u-2' }], error: null };
+        if (table === 'profiles') return { data: [{ id: 'u-2', email: 'dois@exemplo.test', first_name: 'Dois', preferred_language: 'fr' }], error: null };
+        return { data: null, error: null };
+      },
+    });
+    await ef.charger('_shared/domain/entraide.ts').handleEntraideRequestCircle({ circle_id: 'c-1', subject: 'x', author_user_id: 'u-1' });
+    expect(liens(ef.envois[0].html)).toContain('https://app.anarbib.is/federacao/entreajuda');
+    expect(sansCanonique(ef.envois)).toEqual([]);
+  });
+
+  it('assemblées : le bouton de la convocation', async () => {
+    const ef = monterEF({
+      env: ENV,
+      repondre: (_s, table, a) => {
+        if (table === 'team_notification_outbox') return a('update') ? { data: null, error: null } : { data: { id: 11, status: 'queued', event: 'network.assembleia.agenda_published', payload: { title: 'AG' } }, error: null };
+        if (table === 'libraries') return { data: [{ id: 'lib-a' }], error: null };
+        if (table === 'user_library_memberships') return { data: [{ user_id: 'u-7' }], error: null };
+        if (table === 'profiles') return { data: [{ id: 'u-7', email: 'sete@exemplo.test', first_name: 'Sete', last_name: 'A', preferred_language: 'pt-BR' }], error: null };
+        return { data: null, error: null };
+      },
+    });
+    await ef.charger('_shared/domain/assembleia.ts').handleAssembleiaEvent(11);
+    expect(liens(ef.envois[0].html)).toContain('https://app.anarbib.is/federacao/assembleias');
+    expect(sansCanonique(ef.envois)).toEqual([]);
+  });
+});

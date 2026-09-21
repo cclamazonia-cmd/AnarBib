@@ -24,10 +24,11 @@ const STRINGS = new URL('../../supabase/functions/_shared/i18n/mail-strings.ts',
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 const CODE = cjs(SRC);
 const STRINGS_CODE = cjs(STRINGS);
+const APPURL_CODE = cjs(new URL('../../supabase/functions/_shared/core/app-url.ts', import.meta.url));
 
 const JETON = 'c'.repeat(64);
 
-function monter(outbox) {
+function monter(outbox, env = {}) {
   const envois = [];
   const rendus = [];
   const ecrits = [];
@@ -55,13 +56,14 @@ function monter(outbox) {
     return { data: [], error: null };
   };
 
-  const DenoStub = { env: { get: () => undefined } };
+  const DenoStub = { env: { get: (k) => env[k] } };
   const requireStub = (spec) => {
     if (spec.endsWith('i18n/mail-strings.ts')) return evaluer(STRINGS_CODE);
     if (spec.endsWith('context/library-notification-context.ts')) {
       return { resolveLibraryNotificationContext: async () => ({ default_locale: 'pt-BR' }) };
     }
     if (spec.endsWith('core/env.ts')) return { supabaseAdmin: { from: table } };
+    if (spec.endsWith('core/app-url.ts')) return evaluer(APPURL_CODE);
     if (spec.endsWith('mail/layout.ts')) {
       return {
         renderEmail: (opts) => { rendus.push(opts); return { html: opts.introHtml, text: '' }; },
@@ -219,5 +221,17 @@ describe('mail-strings — les nouvelles clés existent dans les 10 locales', ()
       'gazette.contribution.accepted.corrected',
     ];
     for (const k of cles) expect(strings._isComplete(k), k).toBe(true);
+  });
+});
+
+// ── Le lien de reprise suit APP_BASE_URL (21/09/2026) ──────────────────────────
+// Impossible à écrire sur le code du matin : l'adresse était en dur dans le module.
+// Depuis qu'il passe par _shared/core/app-url.ts, le bouton suit le réglage.
+describe('gazette — le bouton de reprise suit APP_BASE_URL', () => {
+  it('adresse réglée (barre finale tolérée) : le bouton part de là, plus du canonique', async () => {
+    const traiter = monter([rejet()], { APP_BASE_URL: 'https://app.anarbib.is/' });
+    const r = await traiter(1);
+    const box = r.rendus[0].actionBox;
+    expect(box.ctaUrl).toBe(`https://app.anarbib.is/federacao/gazeta?reprise=${JETON}`);
   });
 });
