@@ -24,7 +24,7 @@ function loadSmtpModule() {
   return mod.exports;
 }
 
-const { encodeAddress, encodeUtf8Header, toBase64Wrapped, extractEmail } = loadSmtpModule();
+const { encodeAddress, encodeUtf8Header, toBase64Wrapped, extractEmail, resolveTimeout } = loadSmtpModule();
 
 describe('smtp.ts — conformité RFC 2047 (encodage display-name)', () => {
   it('n’encode que le display-name avec accents et laisse l’adresse en clair', () => {
@@ -106,12 +106,13 @@ describe('email.ts — aiguillage strict DOC-SILENCE-1', () => {
     })).rejects.toThrow('MAIL_TRANSPORT=smtp configuré mais SMTP_HOST est vide');
   });
 
-  it('replie proprement sur 15000 ms si SMTP_TIMEOUT_MS est non numérique ou invalide', () => {
-    const rawValues = ['abc', 'NaN', '-10', '0', undefined, null];
-    for (const val of rawValues) {
-      const parsed = parseInt(val || '15000', 10);
-      const timeoutMs = Number.isFinite(parsed) && parsed > 0 ? parsed : 15000;
-      expect(timeoutMs).toBe(15000);
+  it('replie proprement sur 15000 ms si SMTP_TIMEOUT_MS est non numérique ou invalide via resolveTimeout()', () => {
+    const rawInvalidValues = ['abc', 'NaN', '-10', '0', undefined, null, '', {}];
+    for (const val of rawInvalidValues) {
+      expect(resolveTimeout(val)).toBe(15000);
     }
+    // Et vérifie qu'une valeur valide est bien conservée
+    expect(resolveTimeout('30000')).toBe(30000);
+    expect(resolveTimeout(5000)).toBe(5000);
   });
 });

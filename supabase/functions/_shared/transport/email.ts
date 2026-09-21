@@ -3,7 +3,7 @@ import { renderEmail, footerPadrao } from "../mail/layout.ts";
 import { inlineLogosInHtml } from "../mail/inline-images.ts";
 import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
-import { sendViaSmtp } from "../mail/smtp.ts";
+import { sendViaSmtp, resolveTimeout } from "../mail/smtp.ts";
 
 // ============================================================================
 // Transport mail — Hybride universel : SMTP ou API Resend
@@ -65,8 +65,7 @@ async function sendViaConfiguredSmtp(opts) {
   const pass = (Deno.env.get("SMTP_PASS") || "").trim();
   const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
   const allowInsecure = (Deno.env.get("SMTP_ALLOW_INSECURE") || "").trim().toLowerCase() === "true";
-  const parsedTimeout = parseInt(Deno.env.get("SMTP_TIMEOUT_MS") || "15000", 10);
-  const timeoutMs = Number.isFinite(parsedTimeout) && parsedTimeout > 0 ? parsedTimeout : 15000;
+  const timeoutMs = resolveTimeout(Deno.env.get("SMTP_TIMEOUT_MS"));
 
   return await sendViaSmtp({
     host,

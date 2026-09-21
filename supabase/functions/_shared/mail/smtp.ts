@@ -28,6 +28,11 @@ export interface SmtpOptions {
   text?: string;
 }
 
+export function resolveTimeout(raw: unknown, fallbackMs = 15000): number {
+  const parsed = typeof raw === "number" ? raw : parseInt(String(raw ?? ""), 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallbackMs;
+}
+
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number, operation: string): Promise<T> {
   let timer: number | undefined;
   const timeoutPromise = new Promise<never>((_, reject) => {
@@ -154,8 +159,7 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
   const host = opts.host;
   const port = opts.port ?? (opts.secure ? 465 : 587);
   const secure = opts.secure ?? (port === 465);
-  const rawTimeout = Number(opts.timeoutMs);
-  const timeoutMs = Number.isFinite(rawTimeout) && rawTimeout > 0 ? rawTimeout : 15000;
+  const timeoutMs = resolveTimeout(opts.timeoutMs);
   const allowInsecure = opts.allowInsecure ?? false;
 
   const client = new SmtpConnection(timeoutMs);
