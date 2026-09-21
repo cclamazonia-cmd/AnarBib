@@ -10,13 +10,15 @@
 #   2. Application des migrations SQL en attente (apply-pending-migrations.sh)
 #   3. Rafraîchissement des vues matérialisées (refresh-matviews.sh)
 #   4. Rechargement des Edge Functions (redémarrage du conteneur functions)
-#   5. Contrôle de santé des services
+#   5. Reconstruction du front servi par Caddy, si le code a changé (21/09/2026)
+#   6. Contrôle de santé des services
 #
 # Usage :
 #   deploy/deploy.sh                  # mise à jour complète standard
 #   deploy/deploy.sh --sans-pull      # applique sans faire git pull
 #   deploy/deploy.sh --migrations     # migrations seules
 #   deploy/deploy.sh --fonctions      # fonctions seules
+#   deploy/deploy.sh --front          # front seul (reconstruit même si rien n'a changé)
 #   deploy/deploy.sh --controle       # contrôles de santé seuls
 # =============================================================================
 
@@ -32,16 +34,19 @@ DEPLOY_DIR="$RACINE/deploy"
 PULL=1
 MIGRATIONS=1
 FONCTIONS=1
+FRONT=1
+FRONT_FORCE=0
 CONTROLE=1
 choix_explicite=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --sans-pull)  PULL=0 ;;
-    --migrations) [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; CONTROLE=0; choix_explicite=1; }; MIGRATIONS=1 ;;
-    --fonctions)  [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; CONTROLE=0; choix_explicite=1; }; FONCTIONS=1 ;;
-    --controle)   [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; CONTROLE=0; choix_explicite=1; }; CONTROLE=1 ;;
-    -h|--help)    sed -n '2,20p' "$0"; exit 0 ;;
+    --migrations) [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; MIGRATIONS=1 ;;
+    --fonctions)  [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FONCTIONS=1 ;;
+    --front)      [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FRONT=1; FRONT_FORCE=1 ;;
+    --controle)   [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; CONTROLE=1 ;;
+    -h|--help)    sed -n '2,22p' "$0"; exit 0 ;;
 
     *) echo "✗ Option inconnue : $1" >&2; exit 2 ;;
   esac
@@ -88,11 +93,81 @@ if [ "$FONCTIONS" = "1" ]; then
   echo "✓ Conteneur functions rechargé."
 fi
 
-# 5. Contrôle de santé
+# 5. Front
+#
+# Jusqu'au 21/09/2026 ce script mettait à jour la base et les fonctions, JAMAIS
+# le front : `install.sh` le construit une fois (« dist/ déjà prêt » ensuite),
+# et une instance mise à jour servait donc indéfiniment le front du jour de son
+# installation contre un backend du jour. Un écran qui appelle une RPC
+# renommée, c'est une page blanche que rien ici ne signalait.
+#
+# Caddy monte `../dist` en lecture seule : on ne REMPLACE donc jamais le
+# dossier (le montage suivrait l'ancien inode), on en synchronise le contenu —
+# fichiers neufs d'abord, périmés ensuite, pour qu'aucun index.html servi ne
+# pointe vers un bundle absent. `dist/.version-front` porte le commit construit.
+if [ "$FRONT" = "1" ]; then
+  dire "Front (dist/ servi par Caddy)"
+  cd "$RACINE"
+  TETE="$(git rev-parse HEAD)"
+  CONSTRUIT="$(cat dist/.version-front 2>/dev/null || echo aucun)"
+  if [ "$FRONT_FORCE" = "0" ] && [ "$CONSTRUIT" = "$TETE" ]; then
+    echo "✓ Front déjà construit depuis ce commit (${TETE:0:8})."
+  elif ! command -v npm >/dev/null 2>&1; then
+    echo "⚠ npm introuvable : le front N'A PAS été reconstruit (il date de ${CONSTRUIT:0:8})."
+    echo "  Base et fonctions sont à jour, l'interface ne l'est pas."
+    FRONT_KO=1
+  elif [ ! -f .env.local ]; then
+    echo "⚠ .env.local absent (install.sh le pose) : front non reconstruit."
+    FRONT_KO=1
+  else
+    if [ ! -x node_modules/.bin/vite ] || [ package-lock.json -nt node_modules/.package-lock.json ]; then
+      echo "→ npm ci"
+      npm ci --no-audit --no-fund >/dev/null || { echo "✗ npm ci a échoué." >&2; exit 1; }
+    fi
+    rm -rf dist.neuf
+    # `--` transmet --outDir à `vite build` ; prebuild tourne comme d'habitude.
+    if npm run build -- --outDir dist.neuf --emptyOutDir >/tmp/anarbib-front-build.log 2>&1 \
+       && [ -f dist.neuf/index.html ]; then
+      printf '%s\n' "$TETE" > dist.neuf/.version-front
+      mkdir -p dist
+      if command -v rsync >/dev/null 2>&1; then
+        rsync -a --delete-after dist.neuf/ dist/
+      else
+        cp -a dist.neuf/. dist/
+        echo "  (rsync absent : les anciens bundles restent dans dist/ — sans effet, mais ils s'accumulent)"
+      fi
+      rm -rf dist.neuf
+      echo "✓ Front reconstruit depuis ${TETE:0:8} (avant : ${CONSTRUIT:0:8})."
+    else
+      rm -rf dist.neuf
+      echo "✗ La construction du front a échoué — dist/ n'a PAS été touché, l'ancien front reste servi."
+      echo "  Journal : /tmp/anarbib-front-build.log"
+      tail -5 /tmp/anarbib-front-build.log | sed 's/^/    /'
+      FRONT_KO=1
+    fi
+  fi
+  cd "$DEPLOY_DIR"
+fi
+
+# 6. Contrôle de santé
 SANTE_OK=1
+[ "${FRONT_KO:-0}" = "1" ] && SANTE_OK=0
 if [ "$CONTROLE" = "1" ]; then
   dire "Contrôle de santé de la pile"
   
+  # Front : ce que Caddy sert est-il le commit du dépôt ? (21/09/2026)
+  FRONT_SERVI=$(docker compose exec -T caddy cat /srv/.version-front 2>/dev/null | tr -d '\r\n' || true)
+  TETE_DEPOT=$(git -C "$RACINE" rev-parse HEAD)
+  if [ -z "$FRONT_SERVI" ]; then
+    echo "⚠ Front : version inconnue (dist/.version-front absent) — relancer deploy/deploy.sh --front"
+    SANTE_OK=0
+  elif [ "$FRONT_SERVI" = "$TETE_DEPOT" ]; then
+    echo "✓ Front : construit depuis le commit du dépôt (${TETE_DEPOT:0:8})"
+  else
+    echo "⚠ Front : construit depuis ${FRONT_SERVI:0:8}, dépôt à ${TETE_DEPOT:0:8} — relancer deploy/deploy.sh --front"
+    SANTE_OK=0
+  fi
+
   # Base Postgres
   RLS_KO=$(docker compose exec -T db psql -U supabase_admin -d postgres -tAc \
     "select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity;" 2>/dev/null || echo "err")

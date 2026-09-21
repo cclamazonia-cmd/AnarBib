@@ -178,10 +178,29 @@ Le routeur Deno (`supabase/functions/main/index.ts`) est le point d'entrée uniq
 Pour mettre à jour une instance en production ou en essai sans dépendre de la forge ni de l'API Supabase Cloud :
 
 ```bash
-./deploy/deploy.sh             # git pull + migrations incrémentales + reload fonctions + santé
+./deploy/deploy.sh             # git pull + migrations incrémentales + reload fonctions + front + santé
 ./deploy/deploy.sh --sans-pull # applique sur l'état local du code
+./deploy/deploy.sh --front     # reconstruit le front servi par Caddy, et rien d'autre
 ./deploy/deploy.sh --controle  # vérifie la santé de chaque brique
 ```
+
+**Le front suit, depuis le 21/09/2026.** Jusque-là ce script mettait à jour la
+base et les fonctions, jamais l'interface : `install.sh` construit `dist/` une
+fois, et une instance mise à jour servait donc le front du jour de son
+installation contre un backend du jour. Désormais `deploy.sh` reconstruit le
+front quand le commit a changé (`dist/.version-front` porte le commit
+construit), dans un dossier à part, puis synchronise `dist/` — Caddy monte ce
+dossier, on ne le remplace donc jamais — et le contrôle de santé dit si ce que
+Caddy sert est en retard sur le dépôt. Si la construction échoue, l'ancien
+front reste servi et le script le dit.
+
+**Et côté projet hébergé** (front sur Codeberg Pages) :
+`scripts/ci/publier-front.sh` rejoue hors forge ce que fait le job `app` de la
+CI — construire, puis publier sur les trois sites par `git-pages-cli`, l'image
+que l'action de la forge appelle elle-même. `--simulation` ne publie rien,
+`--essai` fait vérifier l'autorisation par le serveur sans rien publier,
+`--vers-dossier` produit un `dist/` pour n'importe quel serveur de fichiers
+statiques. Pendant du `scripts/ci/deployer-backend.sh` du backend.
 
 ### Application des migrations incrémentales
 

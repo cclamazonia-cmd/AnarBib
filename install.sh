@@ -1277,6 +1277,9 @@ fi
 if [ ! -d "dist" ] || [ "$REBUILD" = "1" ] || [ ! -f "dist/index.html" ]; then
   echo "$(t npm_build)"
   npm run build
+  # Le commit construit : deploy/deploy.sh s'en sert pour savoir si le front
+  # servi par Caddy est en retard sur le dépôt (21/09/2026).
+  git rev-parse HEAD > dist/.version-front 2>/dev/null || true
   succes "$(t ok_build)"
 else
   succes "$(t ok_build_exist)"
