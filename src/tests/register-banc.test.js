@@ -9,19 +9,12 @@
 // « register n'a pas de banc de rendu » — quatre adresses en dur y restaient
 // faute d'oser y toucher à l'aveugle.
 //
-// Ce banc exerce le VRAI supabase/functions/register/index.ts, sur le modèle de
-// gazette-monthly-build.test.js, avec une différence : un petit CHARGEUR résout
-// les imports relatifs et monte les VRAIS modules partagés (mail-strings,
-// library-mail-routing, branding, env, secret-key, site-url, app-url…). Seuls
-// sont remplacés, et c'est dit ici parce que c'est la limite du banc :
-//   - `serve` (deno std)     → on capture le gestionnaire ;
-//   - `_shared/deps.ts`      → faux client supabase, qui note chaque écriture ;
-//   - `_shared/altcha.ts`    → la preuve de travail est réputée juste (l'anti-
-//                              robots a ses propres tests ; ici on teste ce qui
-//                              vient APRÈS). Le second temps, la consommation du
-//                              défi, passe bien par le faux client ;
-//   - `inline-images.ts`     → identité (pas de réseau) ;
-//   - `fetch`                → Resend seul, chaque envoi est gardé.
+// Ce banc exerce le VRAI supabase/functions/register/index.ts par l'aide commune
+// src/tests/helpers/monter-ef.js (chargeur de vrais modules partagés ; ce qu'elle
+// remplace toujours est dit dans son en-tête). Remplacé EN PLUS, ici :
+//   - `_shared/altcha.ts` → la preuve de travail est réputée juste (l'anti-robots
+//     a ses propres tests ; ici on teste ce qui vient APRÈS). Le second temps, la
+//     consommation du défi, passe bien par le faux client.
 // Aucun réseau, aucun fichier temporaire.
 //
 // Ce qu'il épingle : pour chacun des quatre `signup_intent`, QUI reçoit QUOI,
@@ -29,26 +22,8 @@
 // que ces adresses suivent APP_BASE_URL / SITE_BASE_URL quand on les règle.
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { transformSync } from 'esbuild';
-
-const FONCTIONS = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', 'supabase', 'functions');
-const codeDe = (() => {
-  const cache = new Map();
-  return (abs) => {
-    if (!cache.has(abs)) cache.set(abs, transformSync(readFileSync(abs, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code);
-    return cache.get(abs);
-  };
-})();
-
-const ENV_BASE = {
-  SUPABASE_URL: 'http://stub',
-  SUPABASE_SECRET_KEYS: '{"default":"stub"}',
-  RESEND_API_KEY: 'stub',
-};
+import { monterEF, liens, mailA } from './helpers/monter-ef.js';
 
 const BIBLIO = {
   id: 'lib-1', slug: 'blmf', name: 'Biblioteca Louise Michel', default_locale: 'fr',
@@ -60,6 +35,7 @@ const IDENTITE = {
   reply_to_email: 'contact@biblio.test', postal_address: '1 rue de la Commune', is_test_mode: false, is_active: true,
 };
 const CANAL = { delivery_mode: 'normal', channel_active: true, admin_notification_email: 'coordination@biblio.test' };
+const PROFIL = { id: 'user-1', email: 'louise@exemplo.test', public_id: 'AB-0001' };
 
 const CORPS = {
   altcha_payload: 'preuve', email: 'Louise@Exemplo.test', first_name: 'Louise', last_name: 'Michel',
@@ -67,94 +43,41 @@ const CORPS = {
 };
 
 function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL } = {}) {
-  const ENV = { ...ENV_BASE, ...env };
-  const ecrits = [];
-  const rpcs = [];
-  const envois = [];
   const comptes = [];
-
-  const repondre = (schema, table, chaine) => {
-    const a = (op) => chaine.find((c) => c.op === op);
-    const ecrit = ['insert', 'update', 'upsert', 'delete'].find((op) => a(op));
-    if (ecrit) ecrits.push({ table, op: ecrit, donnees: a(ecrit).args[0] });
-    if (schema === 'api' && table === 'library_email_identity') return { data: IDENTITE, error: null };
-    if (table === 'libraries') return { data: biblio, error: null };
-    if (table === 'v_library_notification_context') return { data: canal, error: null };
-    if (table === 'profiles') {
-      if (a('update')) return a('select') ? { data: { id: 'user-1', email: 'louise@exemplo.test', public_id: 'AB-0001' }, error: null } : { data: null, error: null };
-      if (a('limit')) return { data: [], error: null };                                   // l'adresse n'est pas déjà prise
-      return { data: { id: 'user-1', email: 'louise@exemplo.test', public_id: 'AB-0001' }, error: null };
-    }
-    if (table === 'user_library_memberships') return { data: { id: 'membership-1' }, error: null };
-    if (table === 'library_request_claims') return { data: { id: 'claim-1' }, error: null };
-    return { data: null, error: null };
-  };
-  const requete = (schema, table) => {
-    const chaine = [];
-    const proxy = new Proxy(function () {}, {
-      get(_c, prop) {
-        if (prop === 'then') return (res) => res(repondre(schema, table, chaine));
-        return (...args) => { chaine.push({ op: prop, args }); return proxy; };
-      },
-    });
-    return proxy;
-  };
-  const rpc = (schema) => async (nom, args) => {
-    rpcs.push({ schema, nom, args });
-    if (nom === 'fn_consume_altcha_challenge') return { data: true, error: null };
-    return { data: null, error: null };
-  };
-  const client = {
-    from: (t) => requete('public', t),
-    rpc: rpc('public'),
-    schema: (s) => ({ from: (t) => requete(s, t), rpc: rpc(s) }),
+  const ef = monterEF({
+    entree: 'register/index.ts',
+    env,
+    remplacements: { 'altcha.ts': { verifierSolution: async () => ({ ok: true, challenge: 'defi-1', expiresAt: new Date(Date.now() + 60000) }) } },
     auth: { admin: {
       createUser: async (u) => { comptes.push(u); return { data: { user: { id: 'user-1' } }, error: null }; },
       deleteUser: async () => ({ data: null, error: null }),
     } },
-  };
-
-  let handler = null;
-  const DenoStub = { env: { get: (k) => ENV[k] } };
-  const fetchStub = async (url, opts) => {
-    if (String(url).includes('api.resend.com')) { envois.push(JSON.parse(opts.body)); return new Response('{"id":"stub"}', { status: 200 }); }
-    throw new Error(`fetch inattendu : ${url}`);
-  };
-
-  // Chargeur : imports relatifs résolus contre le fichier qui importe, vrais modules.
-  const modules = new Map();
-  const charger = (abs) => {
-    if (modules.has(abs)) return modules.get(abs).exports;
-    const m = { exports: {} };
-    modules.set(abs, m);
-    const requerir = (spec) => {
-      if (spec.includes('deno.land/std')) return { serve: (h) => { handler = h; } };
-      if (!spec.startsWith('.')) throw new Error(`import non relatif inattendu : ${spec} (depuis ${abs})`);
-      const cible = resolve(dirname(abs), spec);
-      if (cible.endsWith('deps.ts')) return { createClient: () => client };
-      if (cible.endsWith('altcha.ts')) return { verifierSolution: async () => ({ ok: true, challenge: 'defi-1', expiresAt: new Date(Date.now() + 60000) }) };
-      if (cible.endsWith('inline-images.ts')) return { inlineLogosInHtml: async (h) => h };
-      return charger(cible);
-    };
-    new Function('require', 'module', 'exports', 'Deno', 'fetch', codeDe(abs))(requerir, m, m.exports, DenoStub, fetchStub);
-    return m.exports;
-  };
-  charger(resolve(FONCTIONS, 'register', 'index.ts'));
-  if (!handler) throw new Error("serve n'a pas été appelé : register n'a pas démarré");
-  const tMail = charger(resolve(FONCTIONS, '_shared', 'i18n', 'mail-strings.ts')).tMail;
+    rpc: (_schema, nom) => (nom === 'fn_consume_altcha_challenge' ? { data: true, error: null } : { data: null, error: null }),
+    repondre: (schema, table, a) => {
+      if (schema === 'api' && table === 'library_email_identity') return { data: IDENTITE, error: null };
+      if (table === 'libraries') return { data: biblio, error: null };
+      if (table === 'v_library_notification_context') return { data: canal, error: null };
+      if (table === 'profiles') {
+        if (a('update')) return a('select') ? { data: PROFIL, error: null } : { data: null, error: null };
+        if (a('limit')) return { data: [], error: null };                   // l'adresse n'est pas déjà prise
+        return { data: PROFIL, error: null };
+      }
+      if (table === 'user_library_memberships') return { data: { id: 'membership-1' }, error: null };
+      if (table === 'library_request_claims') return { data: { id: 'claim-1' }, error: null };
+      return { data: null, error: null };
+    },
+  });
+  const tMail = ef.charger('_shared/i18n/mail-strings.ts').tMail;
 
   async function inscrire(corps) {
-    ecrits.length = 0; rpcs.length = 0; envois.length = 0; comptes.length = 0;
-    const res = await handler(new Request('http://ef.local/', {
+    ef.vider(); comptes.length = 0;
+    const r = await ef.appeler(new Request('http://ef.local/', {
       method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...CORPS, ...corps }),
     }));
-    return { statut: res.status, corps: await res.json(), ecrits: [...ecrits], rpcs: [...rpcs], envois: [...envois], comptes: [...comptes] };
+    return { ...r, ecrits: [...ef.ecrits], rpcs: [...ef.rpcs], envois: [...ef.envois], comptes: [...comptes] };
   }
   return { inscrire, tMail };
 }
-
-const mailA = (envois, adresse) => envois.find((e) => e.to.includes(adresse));
-const liens = (html) => [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1].replace(/&amp;/g, '&'));
 
 describe('register — qui reçoit quoi, et quelles écritures, pour chaque signup_intent', () => {
   it('reader_pending (validation présentielle) : adhésion en attente, avis « à valider », pas de doublon à la biblio', async () => {
