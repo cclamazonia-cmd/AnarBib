@@ -2130,6 +2130,14 @@
           "fr": "**Clos le 20/09, sur mesure.** Relevé du jour dans `supabase/functions/**` : deux fonctions lisaient encore `SUPABASE_SERVICE_ROLE_KEY` par `Deno.env.get`, hors du chemin de `_shared/core/secret-key.ts` — `opds` (l. 28) et `rss-novidades` (l. 28), écrites après B18 sur le modèle d'avant. Commit `f83c5f66` : les deux passent par `secretKey()` ; `src/tests/cle-legacy-garde.test.js` interdit toute lecture d'environnement de la variable legacy (liste fermée des fichiers autorisés : vide ; commentaires ignorés ; noms de constantes et messages d'erreur tolérés, ils ne lisent rien) ; le banc `rss-novidades.test.js` évalue le vrai `secret-key.ts` et ne pose que `SUPABASE_SECRET_KEYS` ; une phrase dans `CONTRIBUTING.md` (fr, en). **Critère 1** : la garde est rouge sur `main` avant le correctif (les deux fonctions nommées) et rouge sur le `secret-key.ts` du sommet de la PR #28 au 06/09 (`b5782ec1`, l. 26 : `return Deno.env.get(\"SUPABASE_SERVICE_ROLE_KEY\")`), mesuré le 20/09 ; verte après, 536 tests. **Critère 2** : le `secret-key.ts` de `main` ne connaît que `SUPABASE_SECRET_KEYS` (la PR #28 fusionnée ne le touche plus ; la garde le vérifie). Déployé par la CI au second run (`fd5f5a6b` : le premier, sur `f83c5f66`, était rouge sur quatre délais de tests sans rapport, backend sauté ; `testTimeout` porté à 20 s). Relu en production le 20/09 : `opds` en version 27, sa source déployée lit `secretKey()` ; `/opds/all` rend 18 entrées, `rss-novidades/blmf` 30. Hors item : cinq messages d'erreur (`probe-partner-catalog`, `harvest-oai-pmh`, `gc-deposits`, `process-partner-catalog-import`, `receive-fonds-bundle`) disent encore « Missing … SUPABASE_SERVICE_ROLE_KEY » alors que la variable lue est `SUPABASE_SECRET_KEYS` — trompeur, sans effet.",
           "pt": "**Encerrado em 20/09, sobre medição.** Duas funções ainda liam `SUPABASE_SERVICE_ROLE_KEY` diretamente (`opds`, `rss-novidades`). Commit `f83c5f66`: ambas passam por `secretKey()`; `src/tests/cle-legacy-garde.test.js` proíbe qualquer leitura da variável legacy (lista fechada vazia); o banco do RSS avalia o verdadeiro `secret-key.ts`; uma frase em `CONTRIBUTING.md`. A guarda fica vermelha em `main` antes da correção e no `secret-key.ts` do topo da PR #28 em 06/09 (`b5782ec1`, l. 26); verde depois, 536 testes. Implantado pela CI no segundo run (`fd5f5a6b`); relido em produção em 20/09: `opds` versão 27 lê `secretKey()`, `/opds/all` devolve 18 entradas, `rss-novidades/blmf` 30."
         }
+      ],
+      [
+        "J4",
+        "2026-09-21",
+        {
+          "fr": "*(second item portant l'identifiant J4 — celui de `CHANTIERS_OUVERTS` §1, 06/09 ; le premier, sur la spec de gouvernance, est clos plus haut)* **Clos le 21/09 : l'entrée 1 est réécrite, sur un texte validé par Xavier le jour même (option A de deux proposées).** Elle reste « le meilleur premier pas » mais son objet change : la reconstruction par un tiers a eu lieu (06–15/09, PR #28 fusionnée le 15/09), il reste à lancer `install.sh` sur une troisième machine, vierge — ce que `deploy/README.md` nomme comme non éprouvé (I21). L'entrée porte ses mesures datées (06–15/09 ; 07/09, empreinte des fonctions ouvertes à l'anonyme identique à la production, clôture I17 ; 16/09, job `rejeu-image`) et sa signature. Elle dit que la forge refait le rejeu à chaque poussée ; elle ne dit pas que ce filet a déjà attrapé quelque chose — I18 reste en cours sur ce critère. Dans le même commit : le prénom du contributeur quitte l'entrée et `deploy/README.md` (« un camarade de l'ASR (compte `ASR2026`) ») ; le README ne range plus le rejeu CI parmi ce qui n'a pas été éprouvé ; l'en-tête est daté du 21/09 et la note de gel de l'entrée 2, échue le 14/09, devient un état daté qui renvoie à I21. **Hors item, laissé en l'état et signalé** : `AIDER.md` (§ `A2`, fr, pt, en) dit encore « personne ne l'a jamais vérifié » ; le REGISTRE porte le prénom dans des entrées historiques.",
+          "pt": "*(segundo item com o identificador J4 — o de `CHANTIERS_OUVERTS` §1)* **Encerrado em 21/09: a entrada 1 foi reescrita, sobre texto validado por Xavier no mesmo dia (opção A).** Continua sendo « o melhor primeiro passo », mas o objeto muda: a reconstrução por um terceiro aconteceu (06–15/09, PR #28 fundida em 15/09); falta rodar `install.sh` numa terceira máquina, limpa (I21). A entrada traz medidas datadas e assinatura. No mesmo commit: o prenome do contribuidor sai da entrada e de `deploy/README.md`; o README não lista mais o replay em CI como não provado; cabeçalho datado de 21/09; a nota de congelamento da entrada 2 vira um estado datado. **Fora do item, sinalizado**: `AIDER.md` (§ `A2`, fr, pt, en) ainda diz « ninguém jamais verificou »."
+        }
       ]
     ]
   },
@@ -4397,53 +4405,6 @@
           "pt": "16/09 — o transporte híbrido SMTP/Resend/Mock **não** está em `main`: `_shared/transport/email.ts` só conhece a Resend, `MAIL_TRANSPORT` só aparece em `deploy/functions.env.example`. Está na PR #29, ainda não fundida. **Desvio de doc**: `deploy/README.md` § « Transport des e-mails » já descreve os três modos e o « modo teste local » silencioso — o README está à frente do código."
         }
       ]
-    },
-    {
-      "id": "J4",
-      "d": "J",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "`CHANTIERS_OUVERTS` §1 : écrire l'état réel après la première reconstruction extérieure",
-        "pt": "`CHANTIERS_OUVERTS` §1: escrever o estado real depois da primeira reconstrução externa"
-      },
-      "v": {
-        "fr": "L'entrée 1 (« Éprouver la reconstruction — le meilleur premier pas ») disait « personne ne l'a jamais vérifié ». Depuis le 06/09, quelqu'un l'a fait : Bastien a rebâti la pile depuis le dépôt seul et a trouvé les défauts du chemin de rejeu (`DOC-GRANT-2`). Sa PR réécrit l'entrée en « Validé le 28 août 2026, rejeu des 218 migrations » — date antérieure à la PR, chiffre retiré par lui-même, paragraphes « ce que ça demande / ce que ça apporte » supprimés ; c'est `DOC-CONSTAT-1`, et c'est le document d'orientation du mainteneur. Un état daté a été ajouté sous l'entrée le 06/09, sans toucher au texte.",
-        "pt": "A entrada 1 dizia « ninguém nunca verificou ». Desde 06/09, alguém verificou. A PR reescreve a entrada como « Validado em 28 de agosto, replay de 218 migrações » — data anterior à PR, número retirado por ele mesmo. Um estado datado foi acrescentado em 06/09 sem tocar no texto."
-      },
-      "w": {
-        "fr": "Au retour : le mainteneur réécrit l'entrée 1 lui-même — ce qui a été éprouvé, par qui, ce qui a cassé, ce qui reste (I17, I18, I19) — et décide si « le meilleur premier pas » reste l'entrée 1 ou passe à l'entrée 2.",
-        "pt": "Na volta: o mantenedor reescreve a entrada 1 — o que foi provado, por quem, o que quebrou, o que falta — e decide se « o melhor primeiro passo » continua sendo a entrada 1."
-      },
-      "y": {
-        "fr": "Ce document est la porte d'entrée des contributeurs. Y écrire « validé » avant que ce soit vrai renvoie la prochaine personne vers un chantier qu'elle croira clos.",
-        "pt": "Este documento é a porta de entrada dos contribuidores. Escrever « validado » antes de ser verdade manda a próxima pessoa para um canteiro que ela julgará fechado."
-      },
-      "f": {
-        "fr": [
-          "L'entrée 1 porte une mesure datée, signée, et la PR #28 ne la réécrit plus."
-        ],
-        "pt": [
-          "A entrada 1 traz uma medida datada, assinada, e a PR #28 não a reescreve mais."
-        ]
-      },
-      "dep": {
-        "fr": "Fusion de la PR « auto-hébergement » (**I16**).",
-        "pt": "Fusão da PR « auto-hospedagem » (I16)."
-      },
-      "r": [
-        "docs/CHANTIERS_OUVERTS.md",
-        "REGISTRE §0 DOC-CONSTAT-1",
-        "REGISTRE §0 DOC-ACTIF-1"
-      ],
-      "verif": {
-        "fr": "06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.",
-        "pt": "06/09 — PR #28 relida por inteiro (46 arquivos, cabeça `b5782ec1`), produção consultada em leitura, constato `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`."
-      }
     },
     {
       "id": "E14",

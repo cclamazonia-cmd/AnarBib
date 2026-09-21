@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 70 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -24,7 +24,7 @@
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 4
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur de Bastien), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **56 items sur 70** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J4, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **55 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1776,7 +1776,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J2** | Réparer l'index des backlogs et trancher la convention d'archivage | `P2` | Ouvert |
-| **J4** | `CHANTIERS_OUVERTS` §1 : écrire l'état réel après la première reconstruction extérieure | `P2` | Ouvert |
 | **J9** | Manuel v5 : le reliquat des captures — 180 emplacements en repli pt-BR, IMG-31 à refaire, IMG-08 à confirmer, tout à recapturer en 900-1000 px | `P2` | À vérifier |
 | **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
 
@@ -1800,26 +1799,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Se fait en posant ce backlog.
 
 *Renvois : `docs/backlogs/INDEX.md`*
-
-#### J4 — `CHANTIERS_OUVERTS` §1 : écrire l'état réel après la première reconstruction extérieure
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** L'entrée 1 (« Éprouver la reconstruction — le meilleur premier pas ») disait « personne ne l'a jamais vérifié ». Depuis le 06/09, quelqu'un l'a fait : Bastien a rebâti la pile depuis le dépôt seul et a trouvé les défauts du chemin de rejeu (`DOC-GRANT-2`). Sa PR réécrit l'entrée en « Validé le 28 août 2026, rejeu des 218 migrations » — date antérieure à la PR, chiffre retiré par lui-même, paragraphes « ce que ça demande / ce que ça apporte » supprimés ; c'est `DOC-CONSTAT-1`, et c'est le document d'orientation du mainteneur. Un état daté a été ajouté sous l'entrée le 06/09, sans toucher au texte.
-
-*Vérifié : 06/09 — PR #28 relue en entier (46 fichiers, tête `b5782ec1`), production interrogée en lecture seule, constat `CONSTAT_PR28_rejeu_vs_production_revoke_anon_2026-09-06`.*
-
-**Ce que c'est.** Au retour : le mainteneur réécrit l'entrée 1 lui-même — ce qui a été éprouvé, par qui, ce qui a cassé, ce qui reste (I17, I18, I19) — et décide si « le meilleur premier pas » reste l'entrée 1 ou passe à l'entrée 2.
-
-**Pourquoi ça compte.** Ce document est la porte d'entrée des contributeurs. Y écrire « validé » avant que ce soit vrai renvoie la prochaine personne vers un chantier qu'elle croira clos.
-
-**Ce qui compte comme fini.**
-
-- L'entrée 1 porte une mesure datée, signée, et la PR #28 ne la réécrit plus.
-
-**Dépendances.** Fusion de la PR « auto-hébergement » (**I16**).
-
-*Renvois : `docs/CHANTIERS_OUVERTS.md` · `REGISTRE §0 DOC-CONSTAT-1` · `REGISTRE §0 DOC-ACTIF-1`*
 
 #### J9 — Manuel v5 : le reliquat des captures — 180 emplacements en repli pt-BR, IMG-31 à refaire, IMG-08 à confirmer, tout à recapturer en 900-1000 px
 
@@ -2209,6 +2188,7 @@ CI verte : lint et suite unitaire. |
 | B23 | 2026-09-20 | **Clos le 20/09/2026 sur pièce — constat corrigé : il n'y avait rien à faire.** Le « fini quand » disait « la vue est en invoker, **ou** porte le commentaire qui dit pourquoi elle ne l'est pas ». `obj_description('api.library_email_identity')` rend un `COMMENT ON VIEW` complet, signé « Paquet API-VUES-DEFINER du 29/08/2026 » et amendé le 30/08 : identité d'expédition lue par les fonctions de courriel, `service_role` uniquement, « n'est accordée ni à anon ni à authenticated, et ne doit jamais l'être », et « si un GRANT applicatif lui était accordé un jour, il faudrait la passer en security_invoker dans le même mouvement ». Mesuré le 20/09 : propriétaire `postgres`, `reloptions` vides, seul `service_role` a `SELECT`, aucune fonction ni vue ne la cite, un seul lecteur au dépôt (`register`, par le client admin). Le relevé du 07/09 n'avait lu que `reloptions`, pas le commentaire ; la session du 20/09 l'avait d'abord annoncé « petit, en SQL » sur la même lecture partielle. On ne bascule pas en invoker : le commentaire dit pourquoi. |
 | G12 | 2026-09-20 | **Clos le 20/09, sur pièces.** *(1)* La phrase : REGISTRE `FED-O11` (✅ tranché le 06/09, Q2 : A) ; le guide d'auto-hébergement de la vitrine la dit dans ces termes depuis `b9c85e6` (20/09) — la ligne « Partage de catalogue » (clé `s1_adv4` du générateur, dix langues), qui disait « votre catalogue peut être partagé avec le réseau », devient « Une instance, un réseau » : seul le catalogue traverse, par OAI-PMH, sur décision des admins ; comptes, appartenances, prêts entre bibliothèques, gouvernance et gazette ne traversent pas ; `deploy/README.md` porte la même phrase dans une section « Une instance = un réseau ». Contrôlé sur les dix pages régénérées : une mention d'OAI-PMH chacune, l'ancienne formule absente. *(2)* L'annuaire : décision datée dans `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (l. 47, verdict A du 06/09 : « l'annuaire n'est pas ouvert »). Aucun code. |
 | B20 | 2026-09-20 | **Clos le 20/09, sur mesure.** Relevé du jour dans `supabase/functions/**` : deux fonctions lisaient encore `SUPABASE_SERVICE_ROLE_KEY` par `Deno.env.get`, hors du chemin de `_shared/core/secret-key.ts` — `opds` (l. 28) et `rss-novidades` (l. 28), écrites après B18 sur le modèle d'avant. Commit `f83c5f66` : les deux passent par `secretKey()` ; `src/tests/cle-legacy-garde.test.js` interdit toute lecture d'environnement de la variable legacy (liste fermée des fichiers autorisés : vide ; commentaires ignorés ; noms de constantes et messages d'erreur tolérés, ils ne lisent rien) ; le banc `rss-novidades.test.js` évalue le vrai `secret-key.ts` et ne pose que `SUPABASE_SECRET_KEYS` ; une phrase dans `CONTRIBUTING.md` (fr, en). **Critère 1** : la garde est rouge sur `main` avant le correctif (les deux fonctions nommées) et rouge sur le `secret-key.ts` du sommet de la PR #28 au 06/09 (`b5782ec1`, l. 26 : `return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")`), mesuré le 20/09 ; verte après, 536 tests. **Critère 2** : le `secret-key.ts` de `main` ne connaît que `SUPABASE_SECRET_KEYS` (la PR #28 fusionnée ne le touche plus ; la garde le vérifie). Déployé par la CI au second run (`fd5f5a6b` : le premier, sur `f83c5f66`, était rouge sur quatre délais de tests sans rapport, backend sauté ; `testTimeout` porté à 20 s). Relu en production le 20/09 : `opds` en version 27, sa source déployée lit `secretKey()` ; `/opds/all` rend 18 entrées, `rss-novidades/blmf` 30. Hors item : cinq messages d'erreur (`probe-partner-catalog`, `harvest-oai-pmh`, `gc-deposits`, `process-partner-catalog-import`, `receive-fonds-bundle`) disent encore « Missing … SUPABASE_SERVICE_ROLE_KEY » alors que la variable lue est `SUPABASE_SECRET_KEYS` — trompeur, sans effet. |
+| J4 | 2026-09-21 | *(second item portant l'identifiant J4 — celui de `CHANTIERS_OUVERTS` §1, 06/09 ; le premier, sur la spec de gouvernance, est clos plus haut)* **Clos le 21/09 : l'entrée 1 est réécrite, sur un texte validé par Xavier le jour même (option A de deux proposées).** Elle reste « le meilleur premier pas » mais son objet change : la reconstruction par un tiers a eu lieu (06–15/09, PR #28 fusionnée le 15/09), il reste à lancer `install.sh` sur une troisième machine, vierge — ce que `deploy/README.md` nomme comme non éprouvé (I21). L'entrée porte ses mesures datées (06–15/09 ; 07/09, empreinte des fonctions ouvertes à l'anonyme identique à la production, clôture I17 ; 16/09, job `rejeu-image`) et sa signature. Elle dit que la forge refait le rejeu à chaque poussée ; elle ne dit pas que ce filet a déjà attrapé quelque chose — I18 reste en cours sur ce critère. Dans le même commit : le prénom du contributeur quitte l'entrée et `deploy/README.md` (« un camarade de l'ASR (compte `ASR2026`) ») ; le README ne range plus le rejeu CI parmi ce qui n'a pas été éprouvé ; l'en-tête est daté du 21/09 et la note de gel de l'entrée 2, échue le 14/09, devient un état daté qui renvoie à I21. **Hors item, laissé en l'état et signalé** : `AIDER.md` (§ `A2`, fr, pt, en) dit encore « personne ne l'a jamais vérifié » ; le REGISTRE porte le prénom dans des entrées historiques. |
 
 ---
 
@@ -2240,4 +2220,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

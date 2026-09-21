@@ -1,6 +1,6 @@
 # Chantiers ouverts — par où commencer
 
-*Document d'orientation, mis à jour le 28 août 2026. **Il n'arbitre rien** : la préséance documentaire reste celle de `docs/INDEX.md` — le REGISTRE fait foi, puis la spec du domaine, puis le backlog. Cette page ne fait que dire où des bras seraient utiles.*
+*Document d'orientation, mis à jour le 21 septembre 2026. **Il n'arbitre rien** : la préséance documentaire reste celle de `docs/INDEX.md` — le REGISTRE fait foi, puis la spec du domaine, puis le backlog. Cette page ne fait que dire où des bras seraient utiles.*
 
 Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et chacun choisisse sans avoir à demander.
 
@@ -8,15 +8,19 @@ Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et
 
 ---
 
-## 1. Éprouver la reconstruction — *le meilleur premier pas*
+## 1. Refaire la reconstruction, chez vous — *le meilleur premier pas*
 
-**Ce que c'est.** Cloner le dépôt sur une machine qui n'est pas celle du mainteneur, monter la pile complète en suivant `deploy/README.md`, et écrire ce qui casse.
+**Ce qui a été éprouvé.** Pendant longtemps cette entrée a dit : « personne n'a jamais vérifié que ce projet est reprenable par quelqu'un d'autre que celui qui l'a écrit ». Entre le 6 et le 15 septembre 2026, quelqu'un l'a vérifié. Un camarade de l'ASR (compte `ASR2026`, première contribution au projet) a rebâti la pile complète sur sa machine, depuis le dépôt seul, et il en a tiré un installateur : `install.sh`, fusionné le 15 septembre (PR #28). La réponse est donc oui — et elle a coûté ce qu'on attendait d'elle : une liste de ce qui ne marchait que sur une seule machine.
 
-**Ce que ça demande.** Docker, une machine, une soirée. Aucun secret, aucun accès, aucune coordination : la pile se rebâtit depuis le dépôt seul.
+**Ce qui a cassé, et ce que c'est devenu.** `pg_cron` absent au démarrage d'un volume vierge ; un schéma à initialiser sous le rôle propriétaire ; des droits manquants sur `supabase_migrations` ; la langue au premier prompt ; un port à libérer. Tout cela est corrigé dans `deploy/`. Et un écart de fond, que personne n'aurait trouvé autrement : rejouer les migrations depuis zéro ouvrait au visiteur anonyme des fonctions que la production n'ouvre pas (REGISTRE `DOC-GRANT-2`). Il est réparé à la racine (`DOC-GRANT-3`) : le 7 septembre, un rejeu complet sur volume vierge a rendu, pour les fonctions ouvertes à l'anonyme, la même empreinte que la production, relevée à la même minute. Depuis le 16 septembre, la forge refait ce rejeu sur une image Supabase à chaque poussée.
 
-**Ce que ça apporte.** La réponse à la seule question qui décide de tout le reste : *ce projet est-il reprenable par quelqu'un d'autre que celui qui l'a écrit ?* Personne ne l'a jamais vérifié. Un rapport d'échec détaillé vaut ici plus qu'un correctif : c'est la liste de ce qui ne marche que sur une seule machine.
+**Ce qui reste, et que vous pouvez faire.** Une reconstruction par son auteur et une par l'auteur de l'installateur, cela fait deux machines. La troisième est la vôtre : lancer `install.sh` sur une machine vierge, en suivant `deploy/README.md` et rien d'autre, et écrire ce qui casse.
 
-> **État au 06/09/2026.** Quelqu'un l'a fait : Bastien (`ASR2026`) a rebâti la pile depuis le dépôt seul sur sa machine et a ouvert la PR #28 avec ce qui cassait — le rejeu depuis zéro ouvre à `anon` des fonctions que la production n'ouvre pas (REGISTRE `DOC-GRANT-2`). La PR est en relecture, rien n'est fusionné avant le 14 septembre ; ce qui reste à faire de notre côté est au backlog (`I16` à `I19`). Cette entrée sera réécrite par le mainteneur quand la PR sera fusionnée — pas avant.
+**Ce que ça demande.** Docker, une machine, une soirée. Aucun secret, aucun accès, aucune coordination. L'installateur parle les dix langues du projet.
+
+**Ce que ça apporte.** La première reconstruction a dit que le projet est reprenable ; la vôtre dira si l'installateur l'est. C'est l'une des huit conditions à réunir avant de quitter l'hébergeur actuel (entrée 2), et par définition elle ne peut pas venir de nous. Un rapport d'échec détaillé vaut toujours plus qu'un correctif.
+
+*— Le mainteneur, le 21 septembre 2026.*
 
 ---
 
@@ -28,7 +32,7 @@ Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et
 
 **Ce que ça apporte.** La fin de la dépendance à un hébergeur tiers. C'est l'objectif que le projet s'est donné et qu'il n'a pas encore atteint.
 
-> **Gelé jusqu'au 14 septembre 2026** pour le mainteneur : une démonstration publique tourne sur la production, et une migration d'infrastructure entamée deux semaines avant est le meilleur moyen d'arriver avec un système cassé. Le gel porte sur la production, pas sur le travail en environnement d'essai.
+> **État au 21/09/2026.** Le gel du mainteneur a pris fin le 14 septembre. Ce qui doit être vrai avant la bascule chez Les Herbes Folles tient en huit conditions, aucune techniquement difficile, listées au backlog (`I21`) ; `install.sh` sur une machine tierce vierge — l'entrée 1 — en fait partie.
 
 ---
 

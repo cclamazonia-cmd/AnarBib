@@ -35,8 +35,8 @@ partiraient vers le projet cloud du mainteneur), la « 7 bis » attend un fait,
 jamais un délai — et une vérification finale.
 
 **Première reconstruction extérieure (06–15/09/2026, A2).** La pile a été
-rebâtie par quelqu'un d'autre que le mainteneur : Bastien (compte `ASR2026`,
-première contribution au projet) l'a montée chez lui depuis le dépôt seul, en
+rebâtie par quelqu'un d'autre que le mainteneur : un camarade de l'ASR (compte
+`ASR2026`, première contribution au projet) l'a montée chez lui depuis le dépôt seul, en
 a écrit l'installateur (`install.sh`, PR #28, fusionnée le 15/09) et a laissé
 dans ses commits ce qui cassait — `pg_cron` absent au démarrage d'un volume
 vierge, schéma à initialiser sous `supabase_admin` (propriétaire), `GRANT` sur
@@ -48,8 +48,9 @@ production (`journal/operations/CONSTAT_PR28_rejeu_vs_production_revoke_anon_202
 (`journal/operations/NOTE_experience-I17-rejeu-fidele_2026-09-07`, `DOC-GRANT-3`).
 Depuis, ses correctifs partent d'une instance qui tourne chez lui et sont relus
 puis fusionnés ici. Ce que la pile n'a **pas** encore éprouvé hors de chez son
-auteur : `install.sh` lancé sur une machine tierce vierge (I21), le routeur
-`main` (I3), le rejeu sur une image Supabase en CI (I18).
+auteur : `install.sh` lancé sur une machine tierce vierge (I21) et le routeur
+`main` (I3). Le rejeu sur une image Supabase, lui, tourne en CI à chaque poussée
+depuis le 16/09 (job `rejeu-image`, I18).
 
 ---
 
