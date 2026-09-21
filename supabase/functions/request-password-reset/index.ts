@@ -16,6 +16,8 @@
 // ============================================================================
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
+import { APP_BASE_URL } from "../_shared/core/app-url.ts";
+import { frapper, sha256Hex } from "../_shared/core/rate-limit.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = secretKey() ?? "";
@@ -23,7 +25,6 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const SENDER_EMAIL = (Deno.env.get("SENDER_EMAIL") || "no-reply@notifications.anarbib.org").trim();
 const SENDER_NAME = (Deno.env.get("SENDER_NAME") || Deno.env.get("BRAND_NAME") || "AnarBib").trim();
 const LOGO_URL = (Deno.env.get("LOGO_URL") || "").trim();
-const APP_BASE_URL = (Deno.env.get("APP_BASE_URL") || "https://app.anarbib.org").trim();
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -91,29 +92,20 @@ function getClientIP(req: Request): string {
   return req.headers.get("x-real-ip") || "unknown";
 }
 
-// Rate-limit réutilisant auth_rate_limits ; clés namespacées `pwreset:` pour ne
-// PAS partager le compteur avec le login (même table, kinds ip/email).
-const RL = { maxRequests: 4, windowMinutes: 15, blockMinutes: 30 };
-type SB = ReturnType<typeof createClient>;
-async function isBlocked(sb: SB, kind: string, key: string): Promise<boolean> {
-  const { data } = await sb.from("auth_rate_limits").select("blocked_until").eq("kind", kind).eq("key", key).maybeSingle();
-  if (!data?.blocked_until) return false;
-  return new Date(data.blocked_until as string) > new Date();
-}
-async function record(sb: SB, kind: string, key: string): Promise<void> {
-  const now = new Date();
-  const windowStart = new Date(now.getTime() - RL.windowMinutes * 60000);
-  const { data: ex } = await sb.from("auth_rate_limits").select("*").eq("kind", kind).eq("key", key).maybeSingle();
-  if (!ex) {
-    await sb.from("auth_rate_limits").insert({ kind, key, failure_count: 1, first_failure_at: now.toISOString(), last_failure_at: now.toISOString() });
-    return;
-  }
-  const first = new Date(ex.first_failure_at as string);
-  const within = first >= windowStart;
-  const count = within ? (ex.failure_count as number) + 1 : 1;
-  const blocked = count >= RL.maxRequests ? new Date(now.getTime() + RL.blockMinutes * 60000).toISOString() : null;
-  await sb.from("auth_rate_limits").update({ failure_count: count, first_failure_at: (within ? first : now).toISOString(), last_failure_at: now.toISOString(), blocked_until: blocked }).eq("kind", kind).eq("key", key);
-}
+// LE FREIN (repris le 21/09/2026). Cette fonction gardait son propre compteur, à
+// clés EN CLAIR (« pwreset:<adresse> »). Depuis la migration 20260916201249 (B25),
+// public.auth_rate_limits n'accepte que des empreintes de 64 caractères
+// hexadécimaux : chaque écriture était refusée, personne ne lisait l'erreur, et les
+// demandes de réinitialisation n'étaient PLUS LIMITÉES DU TOUT. La refonte avait
+// repris quatre fonctions ; celle-ci était la cinquième. Trouvé en écrivant
+// request-password-reset-banc.test.js, qui émule la contrainte.
+//
+// Elle passe par _shared/core/rate-limit.ts, comme les autres : empreinte SHA-256
+// (la table ne sait ni qui ni d'où), préfixe « pwreset: » dans ce qui est haché pour
+// ne PAS partager le compteur du login, kinds existants (ip, email — la contrainte
+// n'est pas à élargir). Quatre demandes par quart d'heure ; la frappe de trop
+// bloque une fenêtre. ÉCHEC FERMÉ : un compteur qui ne répond pas n'envoie rien.
+const RL = { limite: 4, fenetreMin: 15 };
 
 async function sendViaResend(to: string, subject: string, html: string, text: string): Promise<void> {
   const res = await fetch("https://api.resend.com/emails", {
@@ -139,9 +131,25 @@ Deno.serve(async (req: Request) => {
     const ip = getClientIP(req);
     const sb = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false, autoRefreshToken: false } });
 
-    // Rate-limit (clés namespacées) : si bloqué, on s'arrête en silence (200).
-    if (await isBlocked(sb, "email", `pwreset:${email}`) || await isBlocked(sb, "ip", `pwreset:${ip}`)) return OK();
-    await Promise.all([record(sb, "email", `pwreset:${email}`), record(sb, "ip", `pwreset:${ip}`)]);
+    // Le frein : limite atteinte OU compteur indisponible → on s'arrête en silence
+    // (200, anti-énumération). Jamais d'envoi sans avoir pu compter.
+    // allSettled et non all : si la table est en panne, les DEUX frappes rejettent ;
+    // avec Promise.all le second rejet resterait non géré — et sous Deno un rejet
+    // non géré fait tomber la fonction (vu au banc le 21/09/2026, avant tout push).
+    // Les deux empreintes AVANT de lancer la moindre frappe : un `await` glissé entre
+    // la création d'une promesse et son allSettled lui laisse le temps de rejeter
+    // sans témoin (second rejet non géré, vu au banc le même soir).
+    const [cleAdresse, cleIp] = await Promise.all([sha256Hex(`pwreset:${email}`), sha256Hex(`pwreset:${ip}`)]);
+    const frappes = await Promise.allSettled([
+      frapper(sb, "email", cleAdresse, RL.limite, RL.fenetreMin),
+      frapper(sb, "ip", cleIp, RL.limite, RL.fenetreMin),
+    ]);
+    const panne = frappes.find((f) => f.status === "rejected") as PromiseRejectedResult | undefined;
+    if (panne) {
+      console.error("[request-password-reset] compteur indisponible, aucun envoi :", (panne.reason as Error)?.message ?? panne.reason);
+      return OK();
+    }
+    if (frappes.some((f) => f.status === "fulfilled" && f.value === "limite")) return OK();
 
     // Profil → langue. Pas de profil = adresse inconnue : on ne révèle rien (200).
     // limit(1) plutôt que maybeSingle pour ne pas planter sur un email dupliqué.

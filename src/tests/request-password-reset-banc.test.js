@@ -106,3 +106,50 @@ describe('request-password-reset — toujours 200, et un mail seulement à qui e
     expect((await b.demander('louise@exemplo.test')).corps).toEqual({ ok: true });
   });
 });
+
+// ── Le frein compte, ou rien ne part (21/09/2026) ──────────────────────────────
+// ROUGES sur le code du matin. La fonction gardait son propre compteur, à clés en
+// clair (« pwreset:adresse »), que la contrainte auth_rate_limits_key_empreinte
+// refuse depuis le 16/09 : aucune écriture ne passait, personne ne lisait
+// l'erreur, et six demandes de suite envoyaient six courriels. Elle passe
+// désormais par _shared/core/rate-limit.ts (empreintes, échec fermé).
+describe('request-password-reset — l\'adresse de retour suit APP_BASE_URL', () => {
+  // ROUGE sur le code du matin : la fonction lisait bien APP_BASE_URL, mais sans
+  // retirer la barre finale — le retour se faisait sur « …//login ». Le foyer
+  // unique (_shared/core/app-url.ts) normalise.
+  it('barre finale tolérée : le retour se fait sur <adresse>/login', async () => {
+    const { demander, liensDemandes } = monter({ env: { APP_BASE_URL: 'https://app.anarbib.is/' } });
+    await demander('louise@exemplo.test');
+    expect(liensDemandes[0].options.redirectTo).toBe('https://app.anarbib.is/login');
+  });
+});
+
+describe('request-password-reset — le frein', () => {
+  it('quatre demandes par quart d\'heure et par adresse, pas une de plus — et toujours 200', async () => {
+    const { demander, ef } = monter();
+    for (let i = 0; i < 6; i += 1) expect((await demander('louise@exemplo.test')).corps).toEqual({ ok: true });
+    expect(ef.envois).toHaveLength(4);
+  });
+
+  it('la limite vaut aussi par adresse IP, d\'une adresse à l\'autre', async () => {
+    const { demander, ef } = monter();
+    for (let i = 0; i < 6; i += 1) await demander(`personne${i}@exemplo.test`, { ip: '198.51.100.9' });
+    expect(ef.envois).toHaveLength(4);
+  });
+
+  it('la base ne voit que des empreintes : ni courriel ni IP en clair, et aucune écriture refusée', async () => {
+    const { demander, compteurs, refus, ef } = monter();
+    await demander('louise@exemplo.test');
+    expect(refus).toEqual([]);
+    expect([...compteurs.keys()].sort().map((k) => k.split('|')[0])).toEqual(['email', 'ip']);
+    for (const k of compteurs.keys()) expect(k.split('|')[1]).toMatch(/^[0-9a-f]{64}$/);
+    expect(JSON.stringify(ef.ecrits)).not.toMatch(/louise@|203\.0\.113\.7/);
+  });
+
+  it('compteur injoignable : échec FERMÉ — aucun mail, et toujours 200', async () => {
+    const { demander, liensDemandes } = monter({ tablePanne: true });
+    const r = await demander('louise@exemplo.test');
+    expect(r.corps).toEqual({ ok: true });
+    expect(r.nouveaux).toHaveLength(0); expect(liensDemandes).toHaveLength(0);
+  });
+});

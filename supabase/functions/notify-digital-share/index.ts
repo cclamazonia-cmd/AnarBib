@@ -18,10 +18,10 @@ import { supabaseAdmin } from '../_shared/core/env.ts';
 import { tMail } from '../_shared/i18n/mail-strings.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
+import { appUrl } from '../_shared/core/app-url.ts';
 
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_DIGITAL_SHARE') || '').trim();
-const APP_URL = (Deno.env.get('APP_BASE_URL') || 'https://app.anarbib.org').replace(/\/+$/, '');
-const SHARE_URL = `${APP_URL}/painel`;
+const SHARE_URL = appUrl('/painel');
 
 // Contexte « réseau plateforme » : expéditeur = SENDER_EMAIL/SENDER_NAME (env), logo réseau.
 const NETWORK_CTX = {

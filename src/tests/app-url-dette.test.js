@@ -47,11 +47,8 @@ const DETTE = {
   '_shared/domain/library_profile.ts': 1,
   '_shared/domain/network.ts': 3,
   '_shared/domain/reservas.ts': 1,
-  'notify-digital-share/index.ts': 1,              // repli local d'APP_BASE_URL : à remplacer par l'import du foyer
-  'notify-oai-opening/index.ts': 1,                // idem
   'notify-rede-digest/index.ts': 1,
   'opds/index.ts': 1,
-  'request-password-reset/index.ts': 1,            // idem
   'rss-novidades/index.ts': 1,
 };
 

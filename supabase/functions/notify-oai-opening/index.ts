@@ -53,7 +53,9 @@ const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_OAI_OPENING') || '')
 const FEDERAL_EMAIL = (Deno.env.get('OAI_ADMIN_EMAIL') || 'fede@anarbib.org').trim();
 const FEDERAL_NAME = (Deno.env.get('OAI_ADMIN_NAME') || 'Administration AnarBib').trim();
 const FEDERAL_LOCALE = (Deno.env.get('OAI_ADMIN_LOCALE') || 'fr').trim();
-const REDE_URL = `${(APP_BASE_URL || 'https://app.anarbib.org').replace(/\/+$/, '')}/rede`;
+// APP_BASE_URL vient du foyer unique (_shared/core/app-url.ts, ré-exporté par env.ts) :
+// déjà normalisé, jamais vide.
+const REDE_URL = `${APP_BASE_URL}/rede`;
 
 // Contexte mail « fédéral ». IMPORTANT : on NE force PAS sender_visible_email sur
 // l'adresse fédérale — sinon Resend renvoie 403 si le domaine de cette adresse
