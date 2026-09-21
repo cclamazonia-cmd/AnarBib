@@ -327,6 +327,26 @@ laissé. Contrôle : les deux serveurs d'OVH (série `2089907187` → `208998631
 l'ancienne adresse en cache jusqu'à `ipconfig /flushdns` — un `curl` rouge juste après une
 correction DNS se rejoue avec `--resolve` avant de conclure.
 
+**Passe du 21/09 à 13 h 10, les trois domaines câblés.** `anarbib.org.br` a rejoint `.domains`
+(pages `7cd498c`) et `ci.yml` (`9c426d75`) ; les AAAA `2a0a:4580:103f:c0de::2` sont posés sur la
+racine et `app` des deux replis ; `https://app.anarbib.org.br/**` est aux Redirect URLs.
+
+| Hôte | IPv4 | IPv6 |
+|---|---|---|
+| `anarbib.org` | 200 | 200 |
+| `www.anarbib.org` | 307 → canonique | — (pas d'AAAA) |
+| `app.anarbib.org` | 200 | 200 |
+| `anarbib.is` | 307 → canonique | 307 |
+| `app.anarbib.is` | 200 | 200 |
+| `anarbib.org.br` | 307 → canonique | 307 |
+| `app.anarbib.org.br` | 200, même bundle | 200 |
+
+Le certificat de la vitrine `.org.br` a mis une vingtaine de minutes à venir après le commit de
+`.domains` ; d'ici là la poignée de main TLS échoue, ce n'est pas une panne. Et la zone
+`.org.br` était publiée depuis la veille : la sonde interrogeait `a.auto.dns.br`, alors qu'en
+mode avancé Registro.br délègue à `d.sec.dns.br` / `f.sec.dns.br` — **relever les NS délégués
+(`nslookup -type=NS`) avant d'interroger « l'autorité »**.
+
 **Reste à faire, avec un compte d'essai** (les quatre lignes authentifiées de la liste de la
 phase 6) : connexion, réinitialisation de mot de passe (le courriel mène à `SITE_URL`, donc au
 canonique — c'est voulu), création de compte avec défi Altcha, et une écriture en base depuis le
