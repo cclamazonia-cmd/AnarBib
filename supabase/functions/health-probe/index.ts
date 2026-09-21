@@ -659,6 +659,9 @@ Deno.serve(async (req: Request) => {
     sujetOuvert: string;
     titreOuvert: string;
     quoi: string;
+    // La même chose après « de » : « des notifications », pas « de les
+    // notifications » (lu dans le premier courriel réel, 21/09/2026).
+    deQuoi: string;
     // Facultatif : ce qu'il y a à FAIRE, quand l'alerte seule ne le dit pas.
     conseil?: string;
   }[] = [
@@ -668,6 +671,7 @@ Deno.serve(async (req: Request) => {
       sujetOuvert: 'AnarBib — un flux de notifications est cassé',
       titreOuvert: 'Notifications : incohérence détectée',
       quoi: 'les notifications',
+      deQuoi: 'des notifications',
     },
     {
       kind: 'ressources_numeriques',
@@ -675,6 +679,7 @@ Deno.serve(async (req: Request) => {
       sujetOuvert: 'AnarBib — une ressource numérique est devenue illisible',
       titreOuvert: 'Ressources numériques : incohérence détectée',
       quoi: 'les ressources numériques',
+      deQuoi: 'des ressources numériques',
     },
     // 21/09/2026 — l'hébergeur monte GoTrue et Storage de lui-même : les pins de
     // deploy/ étaient repassés SOUS la production (77→82, 65→68) sans que rien
@@ -689,6 +694,7 @@ Deno.serve(async (req: Request) => {
       sujetOuvert: 'AnarBib — la production a monté, les pins de la pile auto-hébergée sont à remesurer',
       titreOuvert: 'Images GoTrue / Storage : le constat ne correspond plus aux pins du dépôt',
       quoi: 'les versions de GoTrue et de Storage',
+      deQuoi: 'des versions de GoTrue et de Storage',
       conseil:
         'Tant que cet écart dure, un dump de la production risque de ne pas se restaurer sous la pile auto-hébergée. À faire : relever les versions servies (/auth/v1/health, /storage/v1/version), passer deploy/banc-paliers.sh avec le pin courant en témoin, puis remplacer ENSEMBLE private.fn_images_pins_attendus() (migration), deploy/.env.example et les seuils de deploy/bootstrap.sh — la garde pins-images-coherence refuse la moitié.',
     },
@@ -753,11 +759,11 @@ Deno.serve(async (req: Request) => {
       const n = await alerter(
         sonde.sujetOuvert,
         sonde.titreOuvert,
-        `<p style="margin:0 0 10px">Le contrôle automatique de ${esc(sonde.quoi)} signale une incohérence. <strong>Ce n'est pas une panne de service :</strong> le site répond normalement. C'est un état interne qui ne fait pas ce qu'il annonce, et qui ne se verrait autrement pas.</p>
+        `<p style="margin:0 0 10px">Le contrôle automatique ${esc(sonde.deQuoi)} signale une incohérence. <strong>Ce n'est pas une panne de service :</strong> le site répond normalement. C'est un état interne qui ne fait pas ce qu'il annonce, et qui ne se verrait autrement pas.</p>
          <p style="margin:0 0 10px">Rubriques concernées : ${esc(raison)}</p>
          ${sonde.conseil ? `<p style="margin:0 0 10px"><strong>Que faire :</strong> ${esc(sonde.conseil)}</p>` : ''}
          <p style="margin:0 0 10px">Bilan complet de la sonde :</p>
-         <pre style="margin:0 0 10px;padding:10px;background:#f4f4f4;border-radius:4px;white-space:pre-wrap;font-size:12px">${esc(
+         <pre style="margin:0 0 10px;padding:10px;background:#f4f4f4;color:#1a1a1a;border:1px solid #d9d9d9;border-radius:4px;white-space:pre-wrap;font-size:12px">${esc(
            JSON.stringify(bilan, null, 2),
          )}</pre>
          <p style="margin:0">Un e-mail de rétablissement suivra dès que la sonde repassera au vert.</p>`,
@@ -776,7 +782,7 @@ Deno.serve(async (req: Request) => {
       const n = await alerter(
         `AnarBib — ${sonde.quoi} : incohérence résolue`,
         'Cohérence rétablie',
-        `<p style="margin:0 0 10px">Le contrôle automatique de ${esc(sonde.quoi)} est repassé au vert. L'incident ouvert le ${esc(depuis)} est clos.</p>
+        `<p style="margin:0 0 10px">Le contrôle automatique ${esc(sonde.deQuoi)} est repassé au vert. L'incident ouvert le ${esc(depuis)} est clos.</p>
          <p style="margin:0">Cause relevée à l'ouverture : ${esc(inc.reason)}</p>`,
       );
       action = `incident ${sonde.kind} clos, ${n} destinataire(s) prévenu(s)`;
