@@ -43,12 +43,12 @@ Des fonctionnalités d'accessibilité sont implémentées. **Aucun audit indépe
 
 **Ce que ça demande** : parcourir les chemins principaux — chercher, ouvrir une notice, réserver, s'inscrire — au lecteur d'écran ou au clavier seul, et écrire ce qui bloque.
 
-## Éprouver la reconstruction sur une autre machine — `A2`
+## Refaire la reconstruction sur une troisième machine — `A2`
 
-Cloner le dépôt sur une machine qui n'est pas celle du mainteneur, monter la pile complète en suivant [`deploy/README.md`](deploy/README.md), et écrire ce qui casse. Aucun secret, aucun accès, aucune coordination : la pile se rebâtit depuis le dépôt seul.
+Cette page a longtemps dit : « personne n'a jamais vérifié que ce projet est reprenable par quelqu'un d'autre que celui qui l'a écrit ». Entre le 6 et le 15 septembre 2026, un camarade l'a vérifié : il a rebâti la pile complète chez lui, depuis le dépôt seul, et en a tiré un installateur, `install.sh`. Cela fait deux machines. La troisième est la vôtre : lancer `install.sh` sur une machine vierge, en suivant [`deploy/README.md`](deploy/README.md) et rien d'autre, et écrire ce qui casse. Aucun secret, aucun accès, aucune coordination.
 
-**Ce que ça demande** : Docker, une machine, une soirée. Aucune connaissance du projet.
-**Ce que ça apporte** : la réponse à la seule question qui décide de tout le reste — *ce projet est-il reprenable par quelqu'un d'autre que celui qui l'a écrit ?* Personne ne l'a jamais vérifié. **Un rapport d'échec détaillé vaut ici plus qu'un correctif** : c'est la liste de ce qui ne marche que sur une seule machine.
+**Ce que ça demande** : Docker, une machine, une soirée. Aucune connaissance du projet ; l'installateur parle les dix langues du projet.
+**Ce que ça apporte** : la première reconstruction a dit que le projet est reprenable ; la vôtre dira si l'installateur l'est. C'est l'une des conditions à réunir avant de quitter l'hébergeur actuel, et par définition elle ne peut pas venir de nous. **Un rapport d'échec détaillé vaut toujours plus qu'un correctif** : c'est la liste de ce qui ne marche que sur deux machines.
 
 ## Ranger la documentation — `J5`
 
@@ -115,12 +115,12 @@ Funcionalidades de acessibilidade estão implementadas. **Nenhuma auditoria inde
 
 **O que exige**: percorrer os caminhos principais — buscar, abrir um registro, reservar, cadastrar-se — com leitor de tela ou só com teclado, e escrever o que trava.
 
-## Testar a reconstrução em outra máquina — `A2`
+## Refazer a reconstrução numa terceira máquina — `A2`
 
-Clonar o repositório numa máquina que não seja a do mantenedor, subir a pilha completa seguindo [`deploy/README.md`](deploy/README.md), e escrever o que quebra. Nenhum segredo, nenhum acesso, nenhuma coordenação: a pilha se reconstrói a partir do repositório sozinho.
+Esta página dizia há muito tempo: « ninguém jamais verificou se este projeto é retomável por outra pessoa além de quem o escreveu ». Entre 6 e 15 de setembro de 2026, um companheiro verificou: reconstruiu a pilha completa na máquina dele, a partir do repositório sozinho, e tirou disso um instalador, `install.sh`. São duas máquinas. A terceira é a sua: rodar `install.sh` numa máquina limpa, seguindo [`deploy/README.md`](deploy/README.md) e nada mais, e escrever o que quebra. Nenhum segredo, nenhum acesso, nenhuma coordenação.
 
-**O que exige**: Docker, uma máquina, uma noite. Nenhum conhecimento do projeto.
-**O que traz**: a resposta à única pergunta que decide todo o resto — *este projeto é retomável por outra pessoa além de quem o escreveu?* Ninguém jamais verificou. **Um relatório de falha detalhado vale aqui mais que uma correção**: é a lista do que só funciona numa única máquina.
+**O que exige**: Docker, uma máquina, uma noite. Nenhum conhecimento do projeto; o instalador fala as dez línguas do projeto.
+**O que traz**: a primeira reconstrução disse que o projeto é retomável; a sua dirá se o instalador também é. É uma das condições a reunir antes de deixar o provedor atual, e por definição ela não pode vir de nós. **Um relatório de falha detalhado vale sempre mais que uma correção**: é a lista do que só funciona em duas máquinas.
 
 ## Arrumar a documentação — `J5`
 
@@ -183,12 +183,12 @@ Of 1,305 authorities, **722 have no country recorded** and nearly half have no d
 
 Accessibility features are implemented. **No independent audit has ever been carried out.** The two are not the same word, and we make a point of saying both.
 
-## Test a rebuild on another machine — `A2`
+## Redo the rebuild on a third machine — `A2`
 
-Clone the repository onto a machine that is not the maintainer's, bring the full stack up following [`deploy/README.md`](deploy/README.md), and write down what breaks. No secrets, no access, no coordination needed: the stack rebuilds from the repository alone.
+For a long time this page said: "nobody has ever checked whether this project can be picked up by someone other than the person who wrote it". Between 6 and 15 September 2026, a comrade checked: he rebuilt the full stack on his own machine, from the repository alone, and turned it into an installer, `install.sh`. That makes two machines. The third is yours: run `install.sh` on a clean machine, following [`deploy/README.md`](deploy/README.md) and nothing else, and write down what breaks. No secrets, no access, no coordination needed.
 
-**What it takes**: Docker, a machine, an evening. No knowledge of the project.
-**What it gives**: the answer to the one question that decides everything else — *can this project be picked up by someone other than the person who wrote it?* Nobody has ever checked. **A detailed failure report is worth more here than a fix**: it is the list of what only works on one machine.
+**What it takes**: Docker, a machine, an evening. No knowledge of the project; the installer speaks the project's ten languages.
+**What it gives**: the first rebuild said the project can be picked up; yours will say whether the installer can. It is one of the conditions to meet before leaving the current host, and by definition it cannot come from us. **A detailed failure report is still worth more than a fix**: it is the list of what only works on two machines.
 
 ## Tidy the documentation — `J5`
 
