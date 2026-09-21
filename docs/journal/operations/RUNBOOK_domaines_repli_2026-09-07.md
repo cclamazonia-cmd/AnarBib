@@ -317,6 +317,16 @@ que le site n'était plus joignable qu'en IPv6. Corollaire à garder : **un cont
 qu'une pile d'adresses ne teste pas le site** ; `curl -4` et `curl -6` séparément, ou une sonde
 sur une machine sans IPv6.
 
+**Réparé le 21/09 à 12 h 25.** La zone OVH portait, à la racine, `A 213.186.33.5` et
+`TXT "1|www.anarbib.org"` : la paire que pose une redirection web OVH (ici de la racine vers
+`www`). Ni le tableau de l'éditeur de zone (filtré sur A : deux lignes, `app` et `www`), ni
+l'onglet Redirection ne la montraient ; **seul « Actions sur ma zone → Modifier en mode textuel »
+la faisait voir**. Corrigée là : l'adresse remplacée par `217.197.84.141`, le TXT retiré, le SPF
+laissé. Contrôle : les deux serveurs d'OVH (série `2089907187` → `2089986319`), 9.9.9.9, 1.1.1.1,
+8.8.8.8, `curl -4` et `-6` à 200, et WSL à 200 sur la racine et les langues. Le poste a gardé
+l'ancienne adresse en cache jusqu'à `ipconfig /flushdns` — un `curl` rouge juste après une
+correction DNS se rejoue avec `--resolve` avant de conclure.
+
 **Reste à faire, avec un compte d'essai** (les quatre lignes authentifiées de la liste de la
 phase 6) : connexion, réinitialisation de mot de passe (le courriel mène à `SITE_URL`, donc au
 canonique — c'est voulu), création de compte avec défi Altcha, et une écriture en base depuis le
