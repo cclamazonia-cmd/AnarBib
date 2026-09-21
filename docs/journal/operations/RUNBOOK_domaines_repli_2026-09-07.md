@@ -392,13 +392,31 @@ vraie fonction, épingle les quatre parcours d'inscription et les refus sur le c
 prouve que les liens suivent `APP_BASE_URL` et `SITE_BASE_URL` (deux cas rouges avant le
 changement, verts après).
 
-**Ce qui reste en dur** est nommé, fichier par fichier, dans
-`src/tests/app-url-dette.test.js` : dix-sept fichiers écrivent encore un lien vers l'application
+**Ce qui restait en dur** était nommé, fichier par fichier, dans
+`src/tests/app-url-dette.test.js` : dix-sept fichiers écrivaient encore un lien vers l'application
 en toutes lettres (mails de la lettre, de la gazette, de l'entraide, du réseau, des assemblées,
-des prêts ; flux OPDS et RSS ; trois replis locaux d'`APP_BASE_URL`), et cinq portent l'adresse
-comme une donnée (origines CORS, User-Agent), ce qui est toléré. La liste ne peut que rétrécir :
-un compte qui monte ou un fichier nouveau fait échouer la suite. **Règle de reprise : on ne
-retouche pas un mail qu'aucun test ne rend — le banc d'abord, comme pour `register`.**
+des prêts ; flux OPDS et RSS ; trois replis locaux d'`APP_BASE_URL`). **La dette est éteinte
+depuis le 21/09/2026 au soir** (dernier commit `2a9681e5`, le bouton du panneau dans les mails
+de réservation) : la liste `DETTE` du test est vide, et n'a plus vocation à recevoir d'entrée.
+Cinq fichiers portent encore l'adresse comme une **donnée** (origines CORS, User-Agent), ce qui
+est toléré. La liste des origines de `_shared/core/cors.ts` ne suit pas `APP_BASE_URL`, et n'en
+a pas besoin pour les trois domaines d'OPS-10, qu'elle porte déjà ; un **quatrième** domaine
+passe par le secret `APP_ALLOWED_ORIGINS` (liste séparée par des virgules, qui REMPLACE la liste
+par défaut — y remettre les trois). Un fichier nouveau qui écrit l'adresse fait échouer la suite. **Règle tenue pendant la reprise, à garder : on ne retouche pas un mail
+qu'aucun test ne rend — le banc d'abord, comme pour `register`.** Bancs nés de cette reprise :
+`register-banc`, `notify-loan-cycle-banc`, `lettre-banc`, `request-password-reset-banc`,
+`notify-digital-share-banc`, `mails-federation-banc`, `equipe-reseau-file-banc`,
+`library-profile-banc`, `flux-et-digest-banc`, `reservas-workflow-banc` (aide commune :
+`src/tests/helpers/monter-ef.js`).
+
+**Trouvé en écrivant ces bancs, et corrigé le même jour.** Sept modules de mail marquaient leur
+ligne de file « sent » — avec un `sent_at` — sans lire le résultat de l'envoi : un transport en
+panne ou un canal coupé laissait un journal qui datait un courriel jamais parti. Ils lisent
+désormais `_shared/domain/outbox-verdict.ts` (un refus → `failed`, avec le compte des partis
+et le nom des refusés ; tout sauté → `skipped` et sa raison). **Rien ne rejoue aujourd'hui une
+ligne `failed`** ; le jour où on l'écrit : rejouer par destinataire refusé, jamais la ligne
+entière. Et `request-password-reset` n'avait plus de limite de débit depuis le 16/09 (clés en
+clair refusées par la contrainte d'empreinte) : rétablie le 21/09 (`1659230e`).
 
 ## Annexe A — Toutes les vérifications en un bloc
 
