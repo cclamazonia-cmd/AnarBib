@@ -34,6 +34,10 @@
 # données — une migration de trop dans le schéma se rejoue (elles sont écrites
 # pour), une migration de trop dans l'historique se perd.
 #
+# ET LES CRONS ? Ils ne sont dans AUCUN des trois fichiers, et n'ont pas à y
+# être : l'étape « 3 ter » appelle private.fn_crons_replanifier(), qui porte la
+# liste et voyage dans le dump du schéma (I26, 21/09/2026).
+#
 # ⚠️ PAS DE DUMP PENDANT QU'UNE MIGRATION ATTEND EN CI : pg_dump tient un verrou
 # de lecture sur toutes les tables, et un ALTER TABLE qui l'attend meurt sur le
 # statement timeout (même jour, même séance).
@@ -147,6 +151,30 @@ else
   HISTORIQUE_ABSENT=1
 fi
 
+# --- 3 ter. Crons -----------------------------------------------------------
+# `supabase db dump` n'emporte pas non plus le schéma `cron` : une instance
+# restaurée portait ZÉRO job — ni rappel, ni moisson, ni gazette, ni sonde de
+# santé — et, l'historique des migrations étant restauré, aucune migration ne
+# les replanifiait. Constaté le 21/09/2026 (I26). La fonction voyage dans le
+# dump avec le schéma ; elle ne touche qu'aux jobs absents ou différents.
+echo "3 ter  Crons…"
+if [ "$(psql -U "$SU" -d postgres -tAc "select to_regprocedure('private.fn_crons_replanifier()') is not null")" = "t" ]; then
+  BILAN_CRONS=$(psql -U "$SU" -d postgres -tAc "select private.fn_crons_replanifier()" 2>/tmp/restore_err) || BILAN_CRONS=""
+  case "$BILAN_CRONS" in
+    *'"ok": true'*)
+      psql -U "$SU" -d postgres -tAc "select '     OK — ' || count(*) || ' jobs planifiés, tous sous le rôle ' || string_agg(distinct username, ',') from cron.job"
+      echo "     bilan : $(printf '%s' "$BILAN_CRONS" | cut -c1-300)" ;;
+    *)
+      echo "     ⚠️  Crons NON replanifiés : ${BILAN_CRONS:-$(tail -n 3 /tmp/restore_err)}"
+      CRONS_ABSENTS=1 ;;
+  esac
+else
+  echo "     ⚠️  private.fn_crons_replanifier() absente de ce dump (antérieur au 21/09/2026)."
+  echo "     Appliquer les migrations en attente (deploy/deploy.sh --migrations), puis :"
+  echo "       docker compose exec -T db psql -U supabase_admin -d postgres -c 'select private.fn_crons_replanifier()'"
+  CRONS_ABSENTS=1
+fi
+
 fin=$(date +%s)
 
 # --- 4. Contrôles -----------------------------------------------------------
@@ -165,6 +193,10 @@ echo "Vérification des clés étrangères réactivées :"
 psql -U "$SU" -d postgres -tAc "select '  session_replication_role = ' || current_setting('session_replication_role')"
 echo ""
 echo "« sans RLS » doit valoir 0, et les compteurs doivent correspondre à la production."
+if [ "${CRONS_ABSENTS:-0}" = "1" ]; then
+  echo ""
+  echo "⚠️  Crons NON replanifiés (voir 3 ter) : cette instance n'enverra aucun rappel et ne se surveillera pas."
+fi
 if [ "${HISTORIQUE_ABSENT:-0}" = "1" ]; then
   echo ""
   echo "⚠️  Historique des migrations NON restauré (voir 3 bis) : à faire avant toute mise à jour."

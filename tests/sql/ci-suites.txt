@@ -484,3 +484,7 @@ tests/sql/catalogue_par_oeuvre_cout_tests.sql
 # éprouve la comparaison PURE, et on vérifie que la sonde, tables absentes,
 # dit « illisible » au lieu de rendre un vert.
 tests/sql/images_pins_tests.sql
+# 21/09 (I26) : supabase db dump n'emporte pas cron.job — une instance restaurée
+# portait zéro job. La suite vide la table (= restauration) et vérifie que
+# private.fn_crons_replanifier() remet les 38, et eux seuls, sans rien retirer.
+tests/sql/crons_replanifier_tests.sql

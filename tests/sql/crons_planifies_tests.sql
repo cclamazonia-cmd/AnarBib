@@ -206,6 +206,51 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
+  -- T7 et T8 (21/09/2026, I26). `private.fn_crons_attendus()` porte désormais la
+  -- même liste AVEC les commandes : c'est elle que `restore.sh` rejoue sur une
+  -- instance restaurée, puisque `supabase db dump` n'emporte pas `cron.job`.
+  -- Deux listes divergent dès la première migration qui n'en touche qu'une. La
+  -- liste ci-dessus reste le point de décision ; ces deux tests refusent que
+  -- l'autre s'en écarte. Qui ajoute, retire ou décale un cron par migration
+  -- remplace aussi `private.fn_crons_attendus()` dans la même migration.
+  v_t := 'T7 la liste de private.fn_crons_attendus() est celle-ci';
+  BEGIN
+    IF to_regprocedure('private.fn_crons_attendus()') IS NULL THEN
+      v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : fonction absente — instance antérieure à I26, ou restaurée d''un dump qui ne la portait pas');
+    ELSE
+      SELECT count(*), string_agg(x.jobname, ', ' ORDER BY x.jobname) INTO v_n, v_liste
+        FROM (
+          (SELECT jobname, schedule, active FROM attendus
+           EXCEPT SELECT jobname, schedule, active FROM private.fn_crons_attendus())
+          UNION ALL
+          (SELECT jobname, schedule, active FROM private.fn_crons_attendus()
+           EXCEPT SELECT jobname, schedule, active FROM attendus)
+        ) x;
+      IF v_n = 0 THEN v_passed := v_passed+1;
+      ELSE v_failed := v_failed+1;
+        v_failures := v_failures||(v_t||' : '||v_n||' écart(s) — '||v_liste);
+      END IF;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  v_t := 'T8 chaque cron tourne avec la commande de private.fn_crons_attendus()';
+  BEGIN
+    IF to_regprocedure('private.fn_crons_attendus()') IS NULL THEN
+      v_failed := v_failed+1; v_failures := v_failures||(v_t||' : fonction absente');
+    ELSE
+      SELECT count(*), string_agg(a.jobname, ', ' ORDER BY a.jobname) INTO v_n, v_liste
+        FROM private.fn_crons_attendus() a
+        JOIN cron.job j ON j.jobname::text = a.jobname
+       WHERE j.command IS DISTINCT FROM a.command;
+      IF v_n = 0 THEN v_passed := v_passed+1;
+      ELSE v_failed := v_failed+1;
+        v_failures := v_failures||(v_t||' : '||v_n||' commande(s) différente(s) — '||v_liste);
+      END IF;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
   -- Le bilan porte la limite, pas seulement le compte : lu seul, « 6/6 » ferait
   -- croire que les crons de production sont testés. Ils ne le sont pas.
   v_socle := CASE

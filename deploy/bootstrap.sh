@@ -613,6 +613,32 @@ else
   ECHEC=1
 fi
 
+# h) Les crons attendus sont planifiés, et eux seuls (I26, 21/09/2026).
+#
+# Jusqu'à ce jour ce script finissait en « ✓ Pile reconstruite et vérifiée » sur
+# une instance restaurée qui ne portait AUCUN job : `supabase db dump` n'emporte
+# pas `cron.job`, et seul `deploy.sh --controle` regardait — qu'on ne lance pas
+# le jour d'une restauration. Même source de vérité que lui et que la CI : la
+# suite tests/sql/crons_planifies_tests.sql, jouée ici contre le VRAI cron.job.
+CRON_SUITE="../tests/sql/crons_planifies_tests.sql"
+if [ -f "$CRON_SUITE" ]; then
+  CRON_BILAN=$(docker compose exec -T db psql -U supabase_admin -d postgres -v ON_ERROR_STOP=0 \
+    -f /dev/stdin < "$CRON_SUITE" 2>&1 | grep -oE 'CRONS-PLANIFIES (OK|ECHEC) : .*' | head -n 1 | cut -c1-600)
+  case "$CRON_BILAN" in
+    "CRONS-PLANIFIES OK"*)
+      echo "✓ Crons : $(sql "select count(*) from cron.job") jobs planifiés — $(printf '%s' "${CRON_BILAN#CRONS-PLANIFIES }" | sed 's/ ; .*//')" ;;
+    "CRONS-PLANIFIES ECHEC"*)
+      echo "✗ Crons : ${CRON_BILAN#CRONS-PLANIFIES }"
+      echo "  Sur une instance restaurée :  select private.fn_crons_replanifier();"
+      ECHEC=1 ;;
+    *)
+      echo "✗ Crons : la suite crons_planifies n'a pas rendu de bilan."
+      ECHEC=1 ;;
+  esac
+else
+  echo "⚠ Crons : suite $CRON_SUITE introuvable — liste non vérifiée."
+fi
+
 echo
 if [ "$ECHEC" = "0" ]; then
   echo "✓ Pile reconstruite et vérifiée."
