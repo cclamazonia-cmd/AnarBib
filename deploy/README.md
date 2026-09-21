@@ -1,5 +1,29 @@
 # AnarBib — Pile auto-hébergée : mode d'emploi
 
+> ## À lire avant de toucher à quoi que ce soit
+>
+> **Une reconstruction demande trois choses, pas deux : le dépôt, une
+> sauvegarde, et les secrets du Vault.** C'est la leçon de méthode la plus
+> chère du chantier.
+>
+> La migration de pseudonymisation refuse de s'appliquer sans le sel
+> `pseudonym_salt`, qui n'est **reconstructible depuis rien**. Et restaurer
+> avec un sel différent **ne produit aucune erreur visible** : cela rend
+> simplement incohérents tous les jetons produits auparavant — corruption
+> silencieuse de données personnelles (RGPD). Les secrets du Vault voyagent
+> dans le flux de sauvegarde `long`, exportés en appels `vault.create_secret`
+> rejouables ; `bootstrap.sh` s'arrête à l'étape 3 tant que le sel manque, et
+> refuse `--sel-jetable` dès qu'il s'agit de restaurer une sauvegarde.
+>
+> S'y ajoutent, hors base, **les fichiers des buckets Storage** : le dump ne
+> porte que les *lignes* de `storage.buckets` et `storage.objects`, jamais les
+> fichiers eux-mêmes. Ils viennent du flux de sauvegarde `storage`, et aucune
+> migration ne crée les buckets — une reconstruction depuis le dépôt seul
+> donne une instance à zéro bucket.
+>
+> Toute personne qui héberge ou administre une instance lit ce paragraphe
+> d'abord. Le reste de cette page suppose qu'il est acquis.
+
 Trois fichiers de configuration : `compose.yml`, `Caddyfile`, `.env` (depuis `.env.example`).
 **Six conteneurs** : cinq briques reprises du compose officiel Supabase et Caddy substitué à Kong. Justification service par service :
 [`AUDIT_pile_minimale_2026-08-26`](../docs/journal/audits/AUDIT_pile_minimale_2026-08-26.md).
@@ -51,6 +75,18 @@ puis fusionnés ici. Ce que la pile n'a **pas** encore éprouvé hors de chez so
 auteur : `install.sh` lancé sur une machine tierce vierge (I21) et le routeur
 `main` (I3). Le rejeu sur une image Supabase, lui, tourne en CI à chaque poussée
 depuis le 16/09 (job `rejeu-image`, I18).
+
+**Pins remesurés le 21/09/2026 — la production monte seule.** L'hébergeur
+actuel met à jour GoTrue et Storage sans prévenir : entre le 26/08 et le 21/09
+la production est passée de 77 à 82 migrations `auth` (GoTrue v2.197.0) et de
+65 à 68 migrations Storage (1.73.1), et les deux pins de cette pile étaient
+repassés **sous** la production sans que rien le signale — le contrôle de
+`bootstrap.sh` comparait à un chiffre écrit en dur. Remesuré au banc, une base
+vierge par palier : `GOTRUE_TAG=v2.197.0` (193 à 196 restent à 77) et
+`STORAGE_TAG=v1.72.0` (v1.71.0 reste à 65) sont les minimums nécessaires ; les
+342 colonnes des schémas `auth` et `storage` de la production s'y retrouvent,
+même empreinte. Détail dans `.env.example`. **Un pin mesuré un jour ne vaut que
+ce jour-là : à refaire avant toute restauration d'un dump réel.**
 
 ---
 
@@ -120,8 +156,8 @@ Les deux modes coexistent sans interférence : le frontend détecte automatiquem
 |---|---|---|
 | `db` | `supabase/postgres:17.6.1.136` | Base PostgreSQL 17 + Vault + pg_net + extensions |
 | `rest` | `postgrest/postgrest:v14.12` | API REST & RPC `api.*` |
-| `auth` | `supabase/gotrue:v2.192.0` | Serveur d'authentification GoTrue (77 migrations) |
-| `storage` | `supabase/storage-api:v1.70.7` | Stockage d'objets et gestion des buckets |
+| `auth` | `supabase/gotrue:v2.197.0` | Serveur d'authentification GoTrue (82 migrations, relevé du 21/09/2026) |
+| `storage` | `supabase/storage-api:v1.72.0` | Stockage d'objets et gestion des buckets (68 migrations, relevé du 21/09/2026) |
 | `functions` | `supabase/edge-runtime:v1.74.0` | Routeur `main` et exécution des 48 Edge Functions |
 | `caddy` | `caddy:2` | Passerelle API, sécurité HTTP et terminaison TLS automatique |
 

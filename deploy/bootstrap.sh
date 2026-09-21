@@ -494,12 +494,34 @@ fi
 # embarqués dans l'image, comparé à un nombre de LIGNES en base. Le bon test
 # n'est pas un décompte, c'est « l'image contient-elle la dernière version que
 # la production déclare ? ».
+#
+# ⚠️ Remesuré le 21/09/2026 : l'hébergeur monte GoTrue et Storage de lui-même,
+# et la production était passée à 82 lignes `auth` (v2.197.0) et 68 migrations
+# Storage (1.73.1) pendant que ce contrôle comparait toujours à « 77 ». Un
+# seuil écrit en dur ne dit que la production DU JOUR OÙ ON L'A ÉCRIT : les
+# deux chiffres ci-dessous portent donc leur date, et le script la répète à
+# l'écran. Avant de restaurer un dump réel, les relever à nouveau :
+#   select count(*), max(version) from auth.schema_migrations;
+#   select count(*) from storage.migrations;
+# Banc du 21/09 : v2.193.0 à v2.196.0 → 77 ; v2.197.0 → 82. Storage v1.71.0 →
+# 65 ; v1.72.0 → 68. Détail et concordance des colonnes : deploy/.env.example.
+PROD_AUTH_MIG=82
+PROD_STORAGE_MIG=68
+PROD_RELEVE_LE="21/09/2026"
 AUTH_MIG=$(sql "select count(*) from auth.schema_migrations" 2>/dev/null || echo "?")
-echo "  Migrations GoTrue de cette instance : $AUTH_MIG  (production au 20/08 : 77)"
-if [ "$AUTH_MIG" != "?" ] && [ "$AUTH_MIG" -lt 77 ] 2>/dev/null; then
+echo "  Migrations GoTrue de cette instance : $AUTH_MIG  (production au $PROD_RELEVE_LE : $PROD_AUTH_MIG)"
+if [ "$AUTH_MIG" != "?" ] && [ "$AUTH_MIG" -lt "$PROD_AUTH_MIG" ] 2>/dev/null; then
   echo "  ⚠ Image GoTrue en retard sur la production. Monter GOTRUE_TAG dans"
   echo "    deploy/.env avant toute bascule : image ≥ production, jamais l'inverse."
 fi
+STORAGE_MIG=$(sql "select count(*) from storage.migrations" 2>/dev/null || echo "?")
+echo "  Migrations Storage de cette instance : $STORAGE_MIG  (production au $PROD_RELEVE_LE : $PROD_STORAGE_MIG)"
+if [ "$STORAGE_MIG" != "?" ] && [ "$STORAGE_MIG" -lt "$PROD_STORAGE_MIG" ] 2>/dev/null; then
+  echo "  ⚠ Image Storage en retard sur la production. Monter STORAGE_TAG dans"
+  echo "    deploy/.env avant toute bascule : image ≥ production, jamais l'inverse."
+fi
+echo "  (Ces deux seuils datent du $PROD_RELEVE_LE. La production monte seule :"
+echo "   les relever à nouveau avant de restaurer un dump réel.)"
 
 # f) La chaîne HTTP répond — et le catalogue n'est pas vide sur une base pleine.
 #
