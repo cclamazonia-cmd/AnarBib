@@ -242,6 +242,14 @@ function loadSavedFilters() {
   } catch { return null; }
 }
 
+// E17 : écran étroit = le seuil du filet mobile (src/styles/mobile.css, 640 px). Lu une fois, à
+// la naissance de la page ou au moment d'un geste — jamais écouté : tourner son téléphone ne doit
+// pas replier un bloc qu'on vient d'ouvrir.
+function ecranEtroit() {
+  return typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    && window.matchMedia('(max-width: 640px)').matches;
+}
+
 function saveFilters(filters) {
   try { localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(filters)); } catch {}
 }
@@ -321,7 +329,11 @@ export default function CatalogPage() {
   const [expandedCopies, setExpandedCopies] = useState(() => new Set()); // book_id aux exemplaires dépliés
   const [copiesByBook, setCopiesByBook] = useState({});                  // book_id -> { loading, libraries }
   const [compact, setCompact] = useState(filterState.compact || false);
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  // E17 (21/09/2026, décision de Xavier) : sur un écran étroit, « Filtres » naît REPLIÉ lui aussi —
+  // ouvert, il fait 978 px à 375 px de large, plus qu'un écran, et tenait la première notice sous la
+  // ligne de flottaison. Sur portable il reste ouvert : l'outil principal du catalogue a la place
+  // d'y vivre. Le choix de la personne l'emporte ensuite, dans les deux sens.
+  const [filtersOpen, setFiltersOpen] = useState(() => filterState.filtersOpen ?? !ecranEtroit());
   // E17 (20/09/2026) : le bloc « Explorer » naît REPLIÉ — la première notice doit être
   // visible sans défiler, mobile compris — et le choix de la personne survit au
   // rechargement, comme `compact`. Il ne se rouvre JAMAIS tout seul quand un filtre est
@@ -358,8 +370,8 @@ export default function CatalogPage() {
 
   // Sauvegarder les filtres dans sessionStorage à chaque modification
   useEffect(() => {
-    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, groupByWork: collapseEditions, exploreOpen });
-  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, collapseEditions, exploreOpen]);
+    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, groupByWork: collapseEditions, exploreOpen, filtersOpen });
+  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, collapseEditions, exploreOpen, filtersOpen]);
 
   // ── Initialisation depuis l'URL (montage uniquement) ───────
   // Doctrine validée : l'URL est la source de vérité. Un lien profond
@@ -925,6 +937,10 @@ export default function CatalogPage() {
   // aussi depuis la barre de filtres : un·e auteur·rice tapé·e à la main compte donc ici.
   // C'est voulu — la facette est active, d'où qu'elle vienne — et les puces disent laquelle.
   const exploreActiveCount = [alphaFilter, subjectFilter, dCdd, dYear, dAuthor].filter(Boolean).length;
+  // Ce que le bloc « Filtres » replié cache : ses propres champs (pas l'alphabet ni le sujet, qui
+  // vivent dans « Explorer »).
+  const filtersActiveCount = [dSearch, dAuthor, dPublisher, dYear, availabilityFilter !== '__all__', libraryFilter.length > 0,
+    dIsbn, dLanguage, dCdd, dSubjects, materialFilter !== '__all__', dCollection, dPlace].filter(Boolean).length;
   const availabilityOptions = isAuth ? AVAILABILITY_OPTIONS_AUTH : AVAILABILITY_OPTIONS_ANON;
 
   function handleHeaderSort(col) {
@@ -1226,15 +1242,25 @@ export default function CatalogPage() {
               setAuthorFilter(author.filterValue || author.label || '');
             }
             setSearch('');
-            setFiltersOpen(true);
+            // Sur portable, on montre le champ Auteur·rice qu'on vient de remplir ; sur un écran
+            // étroit, rouvrir 978 px de filtres au-dessus des résultats serait le mur de commandes
+            // par la petite porte — la puce au-dessus des résultats dit déjà le filtre actif.
+            if (!ecranEtroit()) setFiltersOpen(true);
           }}
         />
       </section>
 
       {/* ══ FILTRES (escamotable) ════════════════════════════ */}
-      <section className="ab-toolbar">
+      <section className={`ab-toolbar${filtersOpen ? '' : ' ab-toolbar--replie'}`}>
         <button type="button" className="ab-collapse-header" onClick={() => setFiltersOpen(o => !o)} aria-expanded={filtersOpen}>
-          {t({ id: 'catalog.section.filters' })} <span className="ab-collapse-chevron">{filtersOpen ? '▾' : '▸'}</span>
+          {t({ id: 'catalog.section.filters' })}
+          {!filtersOpen && filtersActiveCount > 0 && (
+            <span className="ab-collapse-badge" title={t({ id: 'catalog.section.exploreActive' }, { count: filtersActiveCount })}>
+              <span aria-hidden="true">{filtersActiveCount}</span>
+              <span className="ab-sr-only">{t({ id: 'catalog.section.exploreActive' }, { count: filtersActiveCount })}</span>
+            </span>
+          )}
+          {' '}<span className="ab-collapse-chevron" aria-hidden="true">{filtersOpen ? '▾' : '▸'}</span>
         </button>
         {filtersOpen && (<>
         <div className="ab-filters-grid">

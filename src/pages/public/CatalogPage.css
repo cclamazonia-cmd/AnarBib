@@ -700,6 +700,13 @@
 }
 
 /* E17 : nombre de choix actifs que le bloc replié cache. */
+/* E17 (21/09/2026) : sur écran étroit, « Filtres » replié emporte sa rangée d'actions (copier
+   la recherche, l'envoyer, mode compact) — 86 px qui tenaient la première notice sous la ligne de
+   flottaison. Elles reviennent dès qu'on ouvre le bloc. Sur portable, rien ne change. */
+@media (max-width: 640px) {
+  .ab-toolbar--replie .ab-toolbar-meta { display: none; }
+}
+
 .ab-collapse-badge {
   display: inline-block;
   min-width: 1.5em;
