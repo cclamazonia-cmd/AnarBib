@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-21** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-21** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 4
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 13
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do Bastien), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-21.** **55 itens de 69** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-21.** **53 itens de 67** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -746,8 +746,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | Aberto |
 | **E15** | As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales | `P2` | Aberto |
-| **E16** | A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática | `P2` | A verificar |
-| **E17** | O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar | `P2` | Em curso |
 | **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Em curso |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
@@ -946,48 +944,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03` · `REGISTRE §0 DOC-DESTR-2`*
-
-#### E16 — A subaba Privacidade da Biblioteca mostraria duas mensagens contraditórias sobre a purga automática
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript
-
-**Estado.** Levantado pela refonte do manual v5 (01/09): «duas mensagens contraditórias sobre a ativação da purga automática — o manual pede para verificar a instância». **Não verificado em 07/09**: é um defeito de tela, a constatar na aplicação, não nos arquivos.
-
-*Verificado : 07/09 — não verificado, constatação de tela apenas.*
-
-**O que é.** Abrir a subaba em `blmf-teste`, ler as duas mensagens, decidir qual diz a verdade olhando o ajuste no banco, corrigir a outra.
-
-**Por que importa.** Uma tela de privacidade que se contradiz faz duvidar de todo o resto da página — e é a página que uma coordenação lê primeiro.
-
-**O que conta como terminado.**
-
-- Uma só mensagem, conforme o estado real do ajuste.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `claude/MANUEL_v5_refonte_2026-09-01 (points à trancher)`*
-
-#### E17 — O bloco «Explorar» do catálogo abre recolhido, para que o primeiro registro seja visível sem rolar
-
-`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : React / JavaScript, língua materna
-
-**Estado.** **Pedido de Xavier em 07/09/2026, pela legibilidade do catálogo.** Em `CatalogPage.jsx`, o bloco «Explorar» (modos, alfabeto, árvore de assuntos, facetas) é recolhível desde 21/08, mas nasce **aberto**: `useState(true)`. A cada visita, a página abre num muro de comandos acima dos resultados; no celular, o primeiro registro fica abaixo da dobra. A escolha de recolher **não é lembrada**: `saveFilters` guarda dezessete preferências em `anarbib:catalog:filters`, não `exploreOpen`. Dois fatos tornam o recolhimento sem perda: os filtros ativos aparecem em **chips acima dos resultados**, independentemente do painel, e a árvore de assuntos só carrega à abertura do painel — recolhido por padrão, é também uma requisição a menos.
-
-*Verificado : [object Object],[object Object],[object Object]*
-
-**O que é.** Três gestos, uma noite. **(1)** `useState(false)` por padrão, e `exploreOpen` acrescentado a `saveFilters` / `loadSavedFilters` — a escolha sobrevive ao recarregamento, como `compact`. **(2)** O cabeçalho recolhido diz o que esconde: «Explorar: assuntos, facetas, alfabeto», com o número de facetas ativas em badge (dez locales). **(3)** Um teste de fonte que guarda `useState(false)` e a presença de `exploreOpen` na gravação. Depois verificar na tela, celular incluído. Não reabrir automaticamente quando um filtro está ativo: os chips bastam.
-
-**Por que importa.** O catálogo é a porta de entrada de quem não tem conta — a que a vitrine e a formação mostram primeiro. O que se procura ali é um registro, não um painel; a superfície de exploração deve estar ao alcance da mão, não diante dos olhos. Vizinho direto de **E9** (celular).
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Nenhuma. **G13** acrescentará um seletor ao lado do filtro de bibliotecas, fora do bloco «Explorar»: sem interferência.
-
-*Remissões : `src/pages/public/CatalogPage.jsx (exploreOpen l. 325, saveFilters l. 352-355, arbre des sujets l. 704-715, bloc l. 1410-1416)` · `src/pages/public/CatalogPage.css (.ab-explore-toggle, .ab-explore-panel, .ab-collapse-header)` · `src/i18n/locales/*.json (catalog.section.explore)` · `src/tests/serial-picker-monte.test.js (patron de test de source)`*
 
 #### E19 — Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo
 
@@ -2171,6 +2127,8 @@ CI verde. |
 | G12 | 2026-09-20 | **Encerrado em 20/09, sobre peças.** *(1)* A frase: REGISTRO `FED-O11` (decidido em 06/09); o guia de auto-hospedagem da vitrine diz isso nesses termos desde `b9c85e6` (dez línguas: «Uma instância, uma rede»), e `deploy/README.md` traz a mesma frase. *(2)* O anuário: decisão datada em `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (veredito A de 06/09: não aberto). Nenhum código. |
 | B20 | 2026-09-20 | **Encerrado em 20/09, sobre medição.** Duas funções ainda liam `SUPABASE_SERVICE_ROLE_KEY` diretamente (`opds`, `rss-novidades`). Commit `f83c5f66`: ambas passam por `secretKey()`; `src/tests/cle-legacy-garde.test.js` proíbe qualquer leitura da variável legacy (lista fechada vazia); o banco do RSS avalia o verdadeiro `secret-key.ts`; uma frase em `CONTRIBUTING.md`. A guarda fica vermelha em `main` antes da correção e no `secret-key.ts` do topo da PR #28 em 06/09 (`b5782ec1`, l. 26); verde depois, 536 testes. Implantado pela CI no segundo run (`fd5f5a6b`); relido em produção em 20/09: `opds` versão 27 lê `secretKey()`, `/opds/all` devolve 18 entradas, `rss-novidades/blmf` 30. |
 | J4 | 2026-09-21 | *(segundo item com o identificador J4 — o de `CHANTIERS_OUVERTS` §1)* **Encerrado em 21/09: a entrada 1 foi reescrita, sobre texto validado por Xavier no mesmo dia (opção A).** Continua sendo « o melhor primeiro passo », mas o objeto muda: a reconstrução por um terceiro aconteceu (06–15/09, PR #28 fundida em 15/09); falta rodar `install.sh` numa terceira máquina, limpa (I21). A entrada traz medidas datadas e assinatura. No mesmo commit: o prenome do contribuidor sai da entrada e de `deploy/README.md`; o README não lista mais o replay em CI como não provado; cabeçalho datado de 21/09; a nota de congelamento da entrada 2 vira um estado datado. **Fora do item, sinalizado**: `AIDER.md` (§ `A2`, fr, pt, en) ainda diz « ninguém jamais verificou ». |
+| E17 | 2026-09-21 | **Fechado em 21/09 por decisão de Xavier.** Entregue em dois tempos: `3c411f10` (20/09) — o bloco « Explorar » nasce recolhido, lembra-se nos dois sentidos, diz o que esconde, nunca se reabre sozinho; `16d22656` (21/09) — em ecrã estreito, « Filtros » também nasce recolhido, com o seu distintivo de filtros ativos, e leva consigo a sua fila de ações. Medido a 375×812, primeira visita: primeiro título a **778 px, visível sem deslizar** (4 018 px antes de E17). A 1366×768 o bloco « Filtros » nasce aberto e o primeiro título fica a 880 px: **critério afastado por escolha de Xavier em 21/09**. Verificado em produção em 21/09. |
+| E16 | 2026-09-21 | **Fechado em 21/09 sobre provas — a contradição vivia nos ficheiros de língua, não na tela.** *Lido no código*: a subpágina é um único componente (`RetentionPolicySection`), que mostra **um só aviso, sem condição** — « a exclusão automática está ativa » — desde 03/06 (`8d3dd444`). A segunda mensagem, `biblioteca.privacy.phase4aNotice` (« ainda não está ativa »), já não era usada por nenhum ficheiro de código mas continuava nas **dez** locales: foi aí que a revisão do manual a leu. *Lido na base*: a mensagem mostrada diz a verdade — o cron `anarbib-rgpd-purge-weekly` está ativo, `p_dry_run := false`, 16 passagens, a última em 20/09, `succeeded`. *Feito* (`48c413ac`): a chave morta retirada das dez locales (6 690 → 6 689) e um banco de teste de 3 casos. **O que não foi feito**: não abri a tela em `blmf-teste` (sessão necessária); o critério é cumprido pela leitura do componente. O Manual v5 pode retirar o seu aviso. |
 
 ---
 
@@ -2202,4 +2160,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `6cf45ef4`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-09-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `6cf45ef4`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

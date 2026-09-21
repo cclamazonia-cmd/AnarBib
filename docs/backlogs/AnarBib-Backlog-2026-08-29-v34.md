@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 13
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur de Bastien), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **55 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E16, E17, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **53 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -746,8 +746,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E14** | Une page pour signaler un bug depuis l'application | `P2` | Ouvert |
 | **E15** | Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf | `P2` | Ouvert |
-| **E16** | La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique | `P2` | À vérifier |
-| **E17** | Le bloc « Explorer » du catalogue s'ouvre replié, pour que la première notice soit visible sans défiler | `P2` | En cours |
 | **E19** | Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas | `P2` | En cours |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 
@@ -946,48 +944,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03` · `REGISTRE §0 DOC-DESTR-2`*
-
-#### E16 — La sous-page Privacidade de la Biblioteca afficherait deux messages contradictoires sur la purge automatique
-
-`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : React / JavaScript
-
-**État.** Relevé par la refonte du manuel v5 (01/09) : « deux messages contradictoires sur l'activation de la purge automatique — le manuel demande de vérifier l'instance ». **Non vérifié le 07/09** : c'est un défaut d'écran, à constater dans l'application, pas dans les fichiers.
-
-*Vérifié : 07/09 — non vérifié, constat d'écran seulement.*
-
-**Ce que c'est.** Ouvrir la sous-page sur `blmf-teste`, lire les deux messages, décider lequel dit vrai en regardant le réglage en base, corriger l'autre.
-
-**Pourquoi ça compte.** Un écran de confidentialité qui se contredit fait douter de tout le reste de la page — et c'est la page qu'une coordination lit en premier.
-
-**Ce qui compte comme fini.**
-
-- Un seul message, conforme à l'état réel du réglage.
-
-**Dépendances.** Aucune.
-
-*Renvois : `claude/MANUEL_v5_refonte_2026-09-01 (points à trancher)`*
-
-#### E17 — Le bloc « Explorer » du catalogue s'ouvre replié, pour que la première notice soit visible sans défiler
-
-`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : React / JavaScript, langue maternelle
-
-**État.** **Demande de Xavier le 07/09/2026, pour la lisibilité du catalogue.** Dans `CatalogPage.jsx`, le bloc « Explorer » (modes de parcours, alphabet, arbre des sujets, facettes) est escamotable depuis le 21/08 — en-tête `ab-collapse-header`, chevron, `aria-expanded` — mais il naît **ouvert** : `const [exploreOpen, setExploreOpen] = useState(true)`. À chaque visite, la page ouvre donc sur un mur de commandes au-dessus des résultats ; sur mobile, la première notice est sous la ligne de flottaison. Le choix de replier n'est **pas mémorisé** : `saveFilters` enregistre dix-sept préférences dans `anarbib:catalog:filters` (recherche, filtres, tri, `compact`, regroupement par œuvre), pas `exploreOpen` — on replie, on recharge, c'est rouvert. Deux faits qui rendent le repli sans perte : les filtres actifs s'affichent en **puces au-dessus des résultats**, indépendamment du panneau (`hasActiveFilters`, l. 1366), et l'arbre des sujets ne se charge qu'à l'ouverture du panneau (l. 704-715) — replié par défaut, c'est aussi une requête de moins à l'arrivée.
-
-*Vérifié : [object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Trois gestes, une soirée. **(1)** `useState(false)` par défaut, et `exploreOpen` ajouté à `saveFilters` / `loadSavedFilters` — le choix de la personne survit au rechargement, comme `compact`. **(2)** L'en-tête replié dit ce qu'il cache, sinon la découverte se perd : « Explorer : sujets, facettes, alphabet », et le nombre de facettes actives en badge quand il y en a (dix locales, clé `catalog.section.explore` à enrichir). **(3)** Un test de source (`src/tests/catalog-explore-replie.test.js`, patron `serial-picker-monte.test.js`) qui garde `useState(false)` et la présence d'`exploreOpen` dans la sauvegarde. Puis vérifier à l'écran, mobile compris : la première notice visible sans défiler, les puces de filtres toujours là panneau replié. Ne pas rouvrir automatiquement quand un filtre est actif : les puces suffisent, et c'est le retour au mur de commandes par la petite porte.
-
-**Pourquoi ça compte.** Le catalogue est la porte d'entrée de toute personne qui n'a pas de compte — celle que la vitrine et la formation montrent en premier. Ce qu'on y cherche, c'est une notice, pas un tableau de bord ; la surface d'exploration doit être à portée de main, pas devant les yeux. Voisin direct de **E9** (mobile) et de la doctrine « la première chose utile visible sans geste ».
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Aucune. **G13** (réseaux constitués) ajoutera un sélecteur à côté du filtre de bibliothèques, qui est hors du bloc « Explorer » : pas d'interférence.
-
-*Renvois : `src/pages/public/CatalogPage.jsx (exploreOpen l. 325, saveFilters l. 352-355, arbre des sujets l. 704-715, bloc l. 1410-1416)` · `src/pages/public/CatalogPage.css (.ab-explore-toggle, .ab-explore-panel, .ab-collapse-header)` · `src/i18n/locales/*.json (catalog.section.explore)` · `src/tests/serial-picker-monte.test.js (patron de test de source)`*
 
 #### E19 — Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas
 
@@ -2189,6 +2145,8 @@ CI verte : lint et suite unitaire. |
 | G12 | 2026-09-20 | **Clos le 20/09, sur pièces.** *(1)* La phrase : REGISTRE `FED-O11` (✅ tranché le 06/09, Q2 : A) ; le guide d'auto-hébergement de la vitrine la dit dans ces termes depuis `b9c85e6` (20/09) — la ligne « Partage de catalogue » (clé `s1_adv4` du générateur, dix langues), qui disait « votre catalogue peut être partagé avec le réseau », devient « Une instance, un réseau » : seul le catalogue traverse, par OAI-PMH, sur décision des admins ; comptes, appartenances, prêts entre bibliothèques, gouvernance et gazette ne traversent pas ; `deploy/README.md` porte la même phrase dans une section « Une instance = un réseau ». Contrôlé sur les dix pages régénérées : une mention d'OAI-PMH chacune, l'ancienne formule absente. *(2)* L'annuaire : décision datée dans `journal/arbitrages/QUESTIONS_pr28_contribution_exterieure_2026-09-06.md` (l. 47, verdict A du 06/09 : « l'annuaire n'est pas ouvert »). Aucun code. |
 | B20 | 2026-09-20 | **Clos le 20/09, sur mesure.** Relevé du jour dans `supabase/functions/**` : deux fonctions lisaient encore `SUPABASE_SERVICE_ROLE_KEY` par `Deno.env.get`, hors du chemin de `_shared/core/secret-key.ts` — `opds` (l. 28) et `rss-novidades` (l. 28), écrites après B18 sur le modèle d'avant. Commit `f83c5f66` : les deux passent par `secretKey()` ; `src/tests/cle-legacy-garde.test.js` interdit toute lecture d'environnement de la variable legacy (liste fermée des fichiers autorisés : vide ; commentaires ignorés ; noms de constantes et messages d'erreur tolérés, ils ne lisent rien) ; le banc `rss-novidades.test.js` évalue le vrai `secret-key.ts` et ne pose que `SUPABASE_SECRET_KEYS` ; une phrase dans `CONTRIBUTING.md` (fr, en). **Critère 1** : la garde est rouge sur `main` avant le correctif (les deux fonctions nommées) et rouge sur le `secret-key.ts` du sommet de la PR #28 au 06/09 (`b5782ec1`, l. 26 : `return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")`), mesuré le 20/09 ; verte après, 536 tests. **Critère 2** : le `secret-key.ts` de `main` ne connaît que `SUPABASE_SECRET_KEYS` (la PR #28 fusionnée ne le touche plus ; la garde le vérifie). Déployé par la CI au second run (`fd5f5a6b` : le premier, sur `f83c5f66`, était rouge sur quatre délais de tests sans rapport, backend sauté ; `testTimeout` porté à 20 s). Relu en production le 20/09 : `opds` en version 27, sa source déployée lit `secretKey()` ; `/opds/all` rend 18 entrées, `rss-novidades/blmf` 30. Hors item : cinq messages d'erreur (`probe-partner-catalog`, `harvest-oai-pmh`, `gc-deposits`, `process-partner-catalog-import`, `receive-fonds-bundle`) disent encore « Missing … SUPABASE_SERVICE_ROLE_KEY » alors que la variable lue est `SUPABASE_SECRET_KEYS` — trompeur, sans effet. |
 | J4 | 2026-09-21 | *(second item portant l'identifiant J4 — celui de `CHANTIERS_OUVERTS` §1, 06/09 ; le premier, sur la spec de gouvernance, est clos plus haut)* **Clos le 21/09 : l'entrée 1 est réécrite, sur un texte validé par Xavier le jour même (option A de deux proposées).** Elle reste « le meilleur premier pas » mais son objet change : la reconstruction par un tiers a eu lieu (06–15/09, PR #28 fusionnée le 15/09), il reste à lancer `install.sh` sur une troisième machine, vierge — ce que `deploy/README.md` nomme comme non éprouvé (I21). L'entrée porte ses mesures datées (06–15/09 ; 07/09, empreinte des fonctions ouvertes à l'anonyme identique à la production, clôture I17 ; 16/09, job `rejeu-image`) et sa signature. Elle dit que la forge refait le rejeu à chaque poussée ; elle ne dit pas que ce filet a déjà attrapé quelque chose — I18 reste en cours sur ce critère. Dans le même commit : le prénom du contributeur quitte l'entrée et `deploy/README.md` (« un camarade de l'ASR (compte `ASR2026`) ») ; le README ne range plus le rejeu CI parmi ce qui n'a pas été éprouvé ; l'en-tête est daté du 21/09 et la note de gel de l'entrée 2, échue le 14/09, devient un état daté qui renvoie à I21. **Hors item, laissé en l'état et signalé** : `AIDER.md` (§ `A2`, fr, pt, en) dit encore « personne ne l'a jamais vérifié » ; le REGISTRE porte le prénom dans des entrées historiques. |
+| E17 | 2026-09-21 | **Clos le 21/09 sur décision de Xavier (« Clos E17 »).** Livré en deux temps : `3c411f10` (20/09) — le bloc « Explorer » naît replié, s'en souvient dans les deux sens, dit ce qu'il cache, ne se rouvre jamais seul ; `16d22656` (21/09) — sur écran étroit, « Filtres » naît replié lui aussi, avec son badge des filtres actifs, et emporte sa rangée d'actions. Mesuré à l'écran à 375×812, première visite : premier titre à **778 px, visible sans défiler** (4 018 px avant E17). À 1366×768 le bloc « Filtres » naît ouvert et le premier titre reste à 880 px, sous la ligne de flottaison : **critère écarté par choix de Xavier le 21/09** (« replié sur mobile seulement ») — l'outil principal du catalogue reste sous la main sur portable. Bancs `catalog-explore-replie` (5 cas) et `catalog-filtres-replies-mobile` (7 cas). Vérifié en production le 21/09 à 13 h 55 (les deux feuilles et les deux modules servis portent le code). |
+| E16 | 2026-09-21 | **Clos le 21/09 sur pièces — la contradiction vivait dans les fichiers de langue, pas à l'écran.** *Lu dans le code* : la sous-page est un seul composant (`RetentionPolicySection`, monté par l'onglet `privacy` de `BibliotecaPage`), qui rend **un seul bandeau, sans condition** — `biblioteca.privacy.purgeActiveNotice`, « la suppression automatique est active » — depuis le 03/06 (`8d3dd444`, « honest UI »). Le second message, `biblioteca.privacy.phase4aNotice` (« pas encore active, elle le sera en Phase 4b »), n'était plus employé par aucun fichier de code mais restait dans les **dix** locales : c'est là que la refonte du manuel l'a lu. *Lu en base* : le message affiché dit vrai — le cron `anarbib-rgpd-purge-weekly` est actif, `fn_purge_expired_data(p_dry_run := false)`, 16 passages, le dernier le 20/09 à 03 h UTC, `succeeded` ; le préavis `anarbib-rgpd-notify-weekly` tourne une heure avant (20 passages). *Fait* (`48c413ac`) : la clé morte retirée des dix locales (6 690 → 6 689, parité stricte), et le banc `privacidade-un-seul-message-sur-la-purge` (3 cas) qui tient ensemble les trois faits — un seul bandeau, plus de clé `phase4a` ni de renvoi à une « Phase 4b », et une purge planifiée pour de bon (socle + liste fermée des crons, aucune migration qui la déplanifie ou la repasse à blanc). **Ce qui n'a pas été fait** : je n'ai pas ouvert l'écran sur `blmf-teste` (page du personnel, session requise) ; le « fini quand » est tenu par la lecture du composant, qui n'a qu'un chemin de rendu pour ce bandeau. Le Manuel v5 peut retirer sa mise en garde « vérifier l'instance ». |
 
 ---
 
@@ -2220,4 +2178,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
