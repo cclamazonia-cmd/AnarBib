@@ -5286,6 +5286,104 @@
       ]
     },
     {
+      "id": "F12",
+      "d": "F",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "deno",
+        "sql"
+      ],
+      "t": {
+        "fr": "Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours",
+        "pt": "Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre"
+      },
+      "v": {
+        "fr": "**Demandé par Xavier le 21/09/2026**, à la suite du correctif « sent à tort ». Jusqu'à ce soir-là, sept modules de courriel (`lettre`, `gazette`, `team`, `network`, `cartography`, `assembleia`, `library_profile`) marquaient leur ligne de file « sent », avec un `sent_at`, sans lire le résultat de l'envoi : un refus du transport passait pour un envoi. Ils lisent désormais `_shared/domain/outbox-verdict.ts` (commits `bbaaa606`, `bbcbef65`, `81af8a3d`) : un refus donne **`failed`**, et `last_error` compte les partis et nomme les refusés (« 1 parti(s), 1 refuse(s) — adresse : cause »). Le journal dit donc vrai — mais **personne ne relit une ligne `failed`** : *cherché le 21/09* dans `supabase/functions/` et dans les migrations, aucun cron, aucune fonction, aucun bouton ne reprend une ligne `failed` des quatre files concernées (`team_notification_outbox`, `lettre_notification_outbox`, `gazette_submission_notification_outbox`, `cartography_submission_notification_outbox`). C'était déjà vrai avant ; simplement, le refus ne se voyait pas. **Effet de bord à connaître** : `fn_healthcheck_notifications()`, dans sa définition du 17/08 (migration `20260817142747`), compte comme « non traitée » toute ligne de file dont le statut n'est ni `sent` ni `skipped` — une ligne `failed` la fait donc passer à `ok: false`, et l'y laisse tant que la ligne existe. C'est une bonne chose (le refus devient visible), à condition qu'il existe un geste pour en sortir.",
+        "pt": "**Pedido por Xavier em 21/09/2026**, na sequência do correctivo « sent por engano ». Até essa noite, sete módulos de e-mail marcavam a sua linha de fila « sent », com `sent_at`, sem ler o resultado do envio. Leem agora `_shared/domain/outbox-verdict.ts` (commits `bbaaa606`, `bbcbef65`, `81af8a3d`): uma recusa dá **`failed`**, e `last_error` conta os enviados e nomeia os recusados. O registo diz a verdade — mas **ninguém relê uma linha `failed`**: *procurado em 21/09*, nenhum cron, nenhuma função, nenhum botão retoma uma linha `failed` das quatro filas (`team_notification_outbox`, `lettre_notification_outbox`, `gazette_submission_notification_outbox`, `cartography_submission_notification_outbox`). **Efeito a conhecer**: `fn_healthcheck_notifications()` (migração `20260817142747`) conta como « não tratada » qualquer linha cujo estado não seja `sent` nem `skipped` — uma linha `failed` deixa-a em `ok: false` enquanto existir."
+      },
+      "w": {
+        "fr": "Un rejeu automatique, borné, **par destinataire refusé et jamais par ligne** : une ligne vaut pour tous ses destinataires, et ceux qui ont reçu leur courriel ne doivent pas le recevoir deux fois (c'est écrit en tête de `outbox-verdict.ts`). Ce que cela demande : **(1)** garder, de façon lisible par une machine, QUI a été refusé — aujourd'hui `last_error` est une phrase tronquée à 500 caractères, pas une donnée ; **(2)** un nombre d'essais borné avec recul (la colonne `attempts` existe sur `team_notification_outbox` — à vérifier sur les trois autres files) et un état final distinct quand on renonce ; **(3)** un cron qui reprend les lignes `failed` récentes, inscrit dans `fn_crons_attendus()` (I26) ; **(4)** un geste d'acquittement pour les lignes auxquelles on renonce, afin que la sonde des notifications puisse repasser au vert. Banc d'abord, avec `src/tests/helpers/monter-ef.js`.",
+        "pt": "Um reenvio automático, limitado, **por destinatário recusado e nunca por linha**: quem já recebeu o e-mail não deve recebê-lo duas vezes. Exige: **(1)** guardar, de forma legível por máquina, QUEM foi recusado — hoje `last_error` é uma frase cortada a 500 caracteres; **(2)** um número de tentativas limitado, com recuo, e um estado final distinto quando se desiste; **(3)** um cron que retoma as linhas `failed` recentes, inscrito em `fn_crons_attendus()` (I26); **(4)** um gesto de quitação para as linhas abandonadas, para que a sonda volte ao verde. Bancada primeiro."
+      },
+      "y": {
+        "fr": "Dire qu'un courriel n'est pas parti ne le fait pas partir. Une panne d'une heure chez le transporteur, et ce sont des convocations d'assemblée, des décisions de la gazette, des votes de cooptation qui n'arrivent jamais — sans que personne, sauf à lire la base, sache à qui écrire.",
+        "pt": "Dizer que um e-mail não partiu não o faz partir. Uma hora de avaria no transportador, e são convocatórias de assembleia, decisões da gazeta, votos de cooptação que nunca chegam — sem que ninguém, salvo lendo a base, saiba a quem escrever."
+      },
+      "f": {
+        "fr": [
+          "Un envoi refusé est retenté seul, un nombre borné de fois, sans qu'aucun destinataire déjà servi reçoive un doublon — prouvé par un banc.",
+          "Une ligne à laquelle on renonce porte un état final et sa raison ; la sonde des notifications sait la distinguer d'une ligne en attente.",
+          "Le cron du rejeu figure dans `fn_crons_attendus()` et dans la suite des crons."
+        ],
+        "pt": [
+          "Um envio recusado é retentado sozinho, um número limitado de vezes, sem que nenhum destinatário já servido receba um duplicado — provado por uma bancada.",
+          "Uma linha abandonada leva um estado final e a sua razão; a sonda das notificações sabe distingui-la de uma linha em espera.",
+          "O cron do reenvio consta de `fn_crons_attendus()` e da suíte dos crons."
+        ]
+      },
+      "r": [
+        "supabase/functions/_shared/domain/outbox-verdict.ts (en-tête : « rejouer par destinataire »)",
+        "supabase/migrations/20260817142747_healthcheck_notifications.sql (§3, files non traitées)",
+        "src/tests/equipe-reseau-file-banc.test.js, library-profile-banc.test.js, mails-federation-banc.test.js, lettre-banc.test.js",
+        "journal/operations/RUNBOOK_domaines_repli_2026-09-07 (« Trouvé en écrivant ces bancs »)"
+      ],
+      "verif": [
+        {
+          "fr": "21/09 — recherche de `failed` dans `supabase/functions/**/*.ts` : hors des modules de domaine, les neuf fichiers qui le nomment parlent d'autre chose (moissons, imports, couvertures), aucun ne relit une file de courriels ; recherche de `retry|requeue|status = 'failed'` dans les migrations qui nomment une file : aucune reprise. Définition de `fn_healthcheck_notifications()` lue dans sa migration d'origine, pas dans la base : à relire en production avant de s'y fier.",
+          "pt": "21/09 — procura de `failed` em `supabase/functions/**/*.ts` e de `retry|requeue` nas migrações: nenhuma retoma de fila de e-mails. Definição de `fn_healthcheck_notifications()` lida na migração de origem, não na base: a reler em produção."
+        }
+      ]
+    },
+    {
+      "id": "F13",
+      "d": "F",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "`notify-digital-share` : `sent_count` compte aussi les envois refusés",
+        "pt": "`notify-digital-share`: `sent_count` conta também os envios recusados"
+      },
+      "v": {
+        "fr": "**Demandé par Xavier le 21/09/2026.** Trouvé le même jour en écrivant `src/tests/notify-digital-share-banc.test.js`, et **épinglé** là sous le nom « DÉFAUT CONNU » : la fonction incrémente son compteur dès que `sendIll(...)` rend une valeur vraie (`supabase/functions/notify-digital-share/index.ts`, ligne 126 au 21/09), sans lire ce que le transport a répondu — `safeSendEmail` ne lève jamais. Avec un transport en panne, la réponse annonce donc `sent_count: 1` pour zéro courriel parti. Ce n'est qu'un chiffre dans une réponse que rien n'affiche aujourd'hui : aucun courriel n'est perdu à cause de lui et aucune file ne ment. C'est le dernier endroit connu qui garde la forme du défaut « sent à tort » corrigé ailleurs le 21/09.",
+        "pt": "**Pedido por Xavier em 21/09/2026.** Encontrado no mesmo dia ao escrever `src/tests/notify-digital-share-banc.test.js`, e **fixado** aí como « DÉFAUT CONNU »: a função incrementa o contador sem ler o que o transporte respondeu. Com o transporte avariado, a resposta anuncia `sent_count: 1` para zero e-mails enviados. É só um número numa resposta que nada mostra hoje. É o último sítio conhecido com a forma do defeito « sent por engano » corrigido noutros lados em 21/09."
+      },
+      "w": {
+        "fr": "Faire rendre à `sendIll` le résultat de `safeSendEmail`, ne compter que les envois partis, et rendre à côté le compte des refusés (avec l'adresse et la cause) et celui des sautés. Dans le banc, retourner le cas épinglé : rouge d'abord, vert ensuite. Compter les imports, sonder la fonction en production après le déploiement.",
+        "pt": "Fazer `sendIll` devolver o resultado de `safeSendEmail`, contar só os envios feitos, e devolver ao lado a contagem dos recusados (com endereço e causa) e dos saltados. Na bancada, inverter o caso fixado: vermelho primeiro, verde depois."
+      },
+      "y": {
+        "fr": "Un compte rendu qui ment, même petit, finit par servir de preuve. Le jour où quelqu'un branchera un écran ou une alerte sur ce chiffre, il dira que tout est parti.",
+        "pt": "Um relatório que mente, mesmo pequeno, acaba por servir de prova. No dia em que alguém ligar um ecrã ou um alerta a este número, ele dirá que tudo partiu."
+      },
+      "f": {
+        "fr": [
+          "`sent_count` ne compte que les envois acceptés par le transport ; les refus sont rendus à part, nommés.",
+          "Le cas « DÉFAUT CONNU » du banc est retourné et vert ; plus aucun cas de test du dépôt n'est épinglé sous ce nom."
+        ],
+        "pt": [
+          "`sent_count` só conta os envios aceites pelo transporte; as recusas são devolvidas à parte, nomeadas.",
+          "O caso « DÉFAUT CONNU » da bancada está invertido e verde; nenhum caso de teste do repositório fica fixado com esse nome."
+        ]
+      },
+      "r": [
+        "supabase/functions/notify-digital-share/index.ts",
+        "src/tests/notify-digital-share-banc.test.js (cas « DÉFAUT CONNU »)",
+        "supabase/functions/_shared/domain/outbox-verdict.ts"
+      ],
+      "verif": [
+        {
+          "fr": "21/09 — le cas épinglé du banc passe sur le code actuel : transport en 500, zéro envoi, `sent_count` à 1.",
+          "pt": "21/09 — o caso fixado da bancada passa no código atual: transporte em 500, zero envios, `sent_count` a 1."
+        }
+      ]
+    },
+    {
       "id": "E15",
       "d": "E",
       "p": "P2",

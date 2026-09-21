@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 9
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **56 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **58 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, F12, F13, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1028,6 +1028,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F7** | Un transport mail sans service configuré lève ; il ne simule pas en silence | `P1` | Ouvert |
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 | **F11** | Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre | `P2` | Ouvert |
+| **F12** | Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours | `P2` | Ouvert |
+| **F13** | `notify-digital-share` : `sent_count` compte aussi les envois refusés | `P3` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1213,6 +1215,45 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 - Un courriel de chaque famille a été regardé dans un client en thème sombre, captures versées.
 
 *Renvois : `supabase/functions/_shared/mail/layout.ts` · `supabase/functions/health-probe/index.ts (bloc corrigé le 21/09)` · `journal/operations/NOTE_pins-images-remesures_2026-09-21 §6`*
+
+#### F12 — Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
+
+**État.** **Demandé par Xavier le 21/09/2026**, à la suite du correctif « sent à tort ». Jusqu'à ce soir-là, sept modules de courriel (`lettre`, `gazette`, `team`, `network`, `cartography`, `assembleia`, `library_profile`) marquaient leur ligne de file « sent », avec un `sent_at`, sans lire le résultat de l'envoi : un refus du transport passait pour un envoi. Ils lisent désormais `_shared/domain/outbox-verdict.ts` (commits `bbaaa606`, `bbcbef65`, `81af8a3d`) : un refus donne **`failed`**, et `last_error` compte les partis et nomme les refusés (« 1 parti(s), 1 refuse(s) — adresse : cause »). Le journal dit donc vrai — mais **personne ne relit une ligne `failed`** : *cherché le 21/09* dans `supabase/functions/` et dans les migrations, aucun cron, aucune fonction, aucun bouton ne reprend une ligne `failed` des quatre files concernées (`team_notification_outbox`, `lettre_notification_outbox`, `gazette_submission_notification_outbox`, `cartography_submission_notification_outbox`). C'était déjà vrai avant ; simplement, le refus ne se voyait pas. **Effet de bord à connaître** : `fn_healthcheck_notifications()`, dans sa définition du 17/08 (migration `20260817142747`), compte comme « non traitée » toute ligne de file dont le statut n'est ni `sent` ni `skipped` — une ligne `failed` la fait donc passer à `ok: false`, et l'y laisse tant que la ligne existe. C'est une bonne chose (le refus devient visible), à condition qu'il existe un geste pour en sortir.
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Un rejeu automatique, borné, **par destinataire refusé et jamais par ligne** : une ligne vaut pour tous ses destinataires, et ceux qui ont reçu leur courriel ne doivent pas le recevoir deux fois (c'est écrit en tête de `outbox-verdict.ts`). Ce que cela demande : **(1)** garder, de façon lisible par une machine, QUI a été refusé — aujourd'hui `last_error` est une phrase tronquée à 500 caractères, pas une donnée ; **(2)** un nombre d'essais borné avec recul (la colonne `attempts` existe sur `team_notification_outbox` — à vérifier sur les trois autres files) et un état final distinct quand on renonce ; **(3)** un cron qui reprend les lignes `failed` récentes, inscrit dans `fn_crons_attendus()` (I26) ; **(4)** un geste d'acquittement pour les lignes auxquelles on renonce, afin que la sonde des notifications puisse repasser au vert. Banc d'abord, avec `src/tests/helpers/monter-ef.js`.
+
+**Pourquoi ça compte.** Dire qu'un courriel n'est pas parti ne le fait pas partir. Une panne d'une heure chez le transporteur, et ce sont des convocations d'assemblée, des décisions de la gazette, des votes de cooptation qui n'arrivent jamais — sans que personne, sauf à lire la base, sache à qui écrire.
+
+**Ce qui compte comme fini.**
+
+- Un envoi refusé est retenté seul, un nombre borné de fois, sans qu'aucun destinataire déjà servi reçoive un doublon — prouvé par un banc.
+- Une ligne à laquelle on renonce porte un état final et sa raison ; la sonde des notifications sait la distinguer d'une ligne en attente.
+- Le cron du rejeu figure dans `fn_crons_attendus()` et dans la suite des crons.
+
+*Renvois : `supabase/functions/_shared/domain/outbox-verdict.ts (en-tête : « rejouer par destinataire »)` · `supabase/migrations/20260817142747_healthcheck_notifications.sql (§3, files non traitées)` · `src/tests/equipe-reseau-file-banc.test.js, library-profile-banc.test.js, mails-federation-banc.test.js, lettre-banc.test.js` · `journal/operations/RUNBOOK_domaines_repli_2026-09-07 (« Trouvé en écrivant ces bancs »)`*
+
+#### F13 — `notify-digital-share` : `sent_count` compte aussi les envois refusés
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** **Demandé par Xavier le 21/09/2026.** Trouvé le même jour en écrivant `src/tests/notify-digital-share-banc.test.js`, et **épinglé** là sous le nom « DÉFAUT CONNU » : la fonction incrémente son compteur dès que `sendIll(...)` rend une valeur vraie (`supabase/functions/notify-digital-share/index.ts`, ligne 126 au 21/09), sans lire ce que le transport a répondu — `safeSendEmail` ne lève jamais. Avec un transport en panne, la réponse annonce donc `sent_count: 1` pour zéro courriel parti. Ce n'est qu'un chiffre dans une réponse que rien n'affiche aujourd'hui : aucun courriel n'est perdu à cause de lui et aucune file ne ment. C'est le dernier endroit connu qui garde la forme du défaut « sent à tort » corrigé ailleurs le 21/09.
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Faire rendre à `sendIll` le résultat de `safeSendEmail`, ne compter que les envois partis, et rendre à côté le compte des refusés (avec l'adresse et la cause) et celui des sautés. Dans le banc, retourner le cas épinglé : rouge d'abord, vert ensuite. Compter les imports, sonder la fonction en production après le déploiement.
+
+**Pourquoi ça compte.** Un compte rendu qui ment, même petit, finit par servir de preuve. Le jour où quelqu'un branchera un écran ou une alerte sur ce chiffre, il dira que tout est parti.
+
+**Ce qui compte comme fini.**
+
+- `sent_count` ne compte que les envois acceptés par le transport ; les refus sont rendus à part, nommés.
+- Le cas « DÉFAUT CONNU » du banc est retourné et vert ; plus aucun cas de test du dépôt n'est épinglé sous ce nom.
+
+*Renvois : `supabase/functions/notify-digital-share/index.ts` · `src/tests/notify-digital-share-banc.test.js (cas « DÉFAUT CONNU »)` · `supabase/functions/_shared/domain/outbox-verdict.ts`*
 
 ---
 
@@ -2223,4 +2264,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
