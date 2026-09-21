@@ -19,10 +19,18 @@ Garde CI : `src/tests/carte-sans-domaine-tiers.test.js`.
 |---|---|---|
 | 10 | 3,7 Go | quartiers, grands axes |
 | 11 | 7,9 Go | rues principales |
-| **12** | **18 Go** | **rues (choix actuel)** |
-| 13 | 36 Go | toutes les rues, noms |
-| 14 | 68 Go | bâtiments |
-| 15 | 138 Go | planet complet |
+| 12 | 18 Go | rues (choix du 07 au 21/09/2026) |
+| **13** | **36 Go** | **toutes les rues, noms (choix actuel, depuis le 21/09/2026)** |
+| 14 | 68 Go | bâtiments — **ne passe pas par TUS** (voir le plafond ci-dessous) |
+| 15 | 138 Go | planet complet — à extraire depuis la VM (I2), pas depuis le poste |
+
+> ⚠️ **Plafond dur de l'envoi : 62,9 Go.** Le Storage range chaque morceau TUS
+> comme une « part » S3, S3 en accepte 10 000, et la taille du morceau (6 Mio)
+> est imposée : 10 000 × 6 Mio = 62 914 560 000 octets. Le z14 (68,3 Go) est
+> mort à cet octet précis le 21/09/2026, à 92 % d'un envoi de deux jours
+> (`Part number must be an integer between 1 and 10000`). `televerser-tus.mjs`
+> refuse désormais un tel fichier avant d'user la ligne. Au-delà : le protocole
+> S3 du Storage avec de grosses parts (non éprouvé ici), ou la VM de I2.
 
 Au-delà du zoom contenu, Leaflet **agrandit** les tuiles vectorielles (overzoom
 jusqu'au zoom 18) : ce qui existe reste net, rien de plus n'apparaît. Mesurer
@@ -55,18 +63,28 @@ cp` envoie d'un seul tenant et Cloudflare le refuse au-delà de quelques Go
 en mode 600) — jamais dans le dépôt, jamais dans un transcript :
 
 ```bash
-SUPABASE_SECRET_KEY=sb_secret_… node scripts/maptiles/televerser-tus.mjs ~/pmtiles/planet-z12-20260907.pmtiles
+SUPABASE_SECRET_KEY=sb_secret_… node scripts/maptiles/televerser-tus.mjs ~/pmtiles/planet-z13-20260917.pmtiles
 ```
 
-Le nom dans le bucket est **stable** (`planet-z12.pmtiles`) :
+Trois choses apprises en envoyant (19-21/09/2026) : **la machine ne doit pas
+dormir** (une adresse TUS vaut 24 h à compter de sa création, une nuit de veille
+la vide) ; lancé par `setsid nohup … &`, le shell affiche « Done » tout de suite
+et c'est normal, **ne pas relancer** (deux envois sur la même adresse se
+battent) ; le script tient son journal dans `<fichier>.upload.log`.
+
+Le nom dans le bucket est **stable** (`planet-z13.pmtiles`) :
 le remplacer en place suffit, le front ne change pas. Rythme suggéré : **deux à
 quatre fois par an** — un fond de carte vieux de six mois n'a jamais gêné
-personne, et chaque extraction coûte 18 Go de transfert.
+personne, et chaque envoi coûte 36 Go et **trois à cinq heures de ligne
+montante** (2 à 5 Mo/s selon l'heure ; 54 min pour les 18 Go du z12, le 08/09).
 
-Pour changer de profondeur (z13…), changer `MAXZOOM`, le nom d'objet dans
-`src/lib/mapTiles.js` (`MAPTILES_URL`, `MAPTILES_MAX_DATA_ZOOM`) et le plafond
-du bucket (migration `20260907234500`, 20 Gio) ainsi que le plafond global
-Storage (API de gestion, `fileSizeLimit`).
+Pour changer de profondeur, changer `MAXZOOM`, le nom d'objet dans
+`src/lib/mapTiles.js` (`MAPTILES_URL`, `MAPTILES_MAX_DATA_ZOOM`) et dans
+`js/carte-publique.js` de la vitrine, le plafond du bucket (`storage.buckets`,
+80 Gio depuis le 17/09) ainsi que le plafond global Storage (API de gestion,
+`fileSizeLimit`, 80 Gio depuis le 17/09). Historique : z12 du 07 au 21/09/2026
+(migration `20260907234500`, 20 Gio), z14 tenté et perdu sur le plafond d'envoi
+(19-21/09), z13 depuis le 21/09.
 
 ## Ce qui entoure le fichier
 

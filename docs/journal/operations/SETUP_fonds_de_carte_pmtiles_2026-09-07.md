@@ -106,6 +106,39 @@ suivant), et gardé par un test qui lit le nom d'option dans la dist elle-même.
 Leçon : vérifier une carte **par les pixels** (`getImageData`), pas par
 l'absence d'erreur ni par le compte de requêtes.
 
+## 3 bis. Le z14 tenté et perdu, le z13 retenu (17-21/09/2026)
+
+Xavier, au dégel : « pas jojo côté détail » à z12. On a visé z14 (bâtiments,
+**68 Go**, planet du 17/09). Ce que ça a coûté, dans l'ordre :
+
+- **L'extraction** (17/09). `pmtiles extract` distant demande les 64 Go d'un
+  seul flux, que Protomaps coupe au hasard (1,2 Go puis 34 Go) ; en local,
+  l'outil charge le bloc entier en mémoire (tué à 14 Go, et la distro WSL est
+  tombée deux fois). Recette qui a tenu : préfixe du planet téléchargé par
+  morceaux de 512 Mo avec reprise, fichier creux à la géométrie du planet,
+  serveur HTTP Range en boucle locale, VM WSL portée à 24 Go (`.wslconfig`).
+- **Premier envoi** (19/09, 21:20). Arrêté à 65 % : la machine a dormi douze
+  heures, et une adresse TUS ne vaut que 24 h à compter de sa création.
+- **Second envoi** (20/09, 19:57, veille de Windows bloquée). Repris le 21/09 à
+  74 % après un redémarrage de WSL, puis **mort à 92 %, à 62,91 Go, sur un
+  plafond dur** : le Storage range chaque morceau TUS comme une part S3, S3 en
+  accepte 10 000, le morceau est imposé à 6 Mio — 62 914 560 000 octets, l'octet
+  exact de l'arrêt. Aucun nombre d'essais n'y change rien. Ce plafond n'était
+  pas connu de l'assistant, qui ne l'a pas vérifié avant de faire occuper deux
+  nuits de ligne ; le script refuse désormais un tel fichier avant l'envoi.
+
+**Retenu le 21/09 (décision Xavier) : z13**, ≈ 36 Go, toutes les rues avec leurs
+noms, extrait en un quart d'heure du planet déjà sur le disque, sous le plafond
+(≈ 5 700 parts). `planet-z13.pmtiles` dans `src/lib/mapTiles.js`
+(`MAPTILES_MAX_DATA_ZOOM = 13`) et dans `js/carte-publique.js` de la vitrine.
+Le plafond du bucket et le plafond global restent à 80 Gio. Le z12 se supprime
+après la bascule. Bâtiments (z14) et planet complet (z15) attendent la VM de
+I2, où le fichier s'extrait et se sert sur place.
+
+En passant : la commande d'envoi collée dans le chat le 20/09 contenait la clé
+secrète en clair — clé à tourner (si c'est `default`, poser la nouvelle dans
+les secrets des fonctions et redéployer AVANT de révoquer l'ancienne).
+
 ## 4. Rafraîchir
 
 `bash scripts/maptiles/extraire-planet.sh` mesure ; `--extraire --televerser`

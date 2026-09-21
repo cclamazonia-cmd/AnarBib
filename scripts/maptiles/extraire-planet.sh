@@ -15,14 +15,14 @@
 #   BUILD=20260907     jour du build Protomaps (défaut : hier, UTC — le build du
 #                      jour n'est pas toujours publié)
 #   SUPABASE_SECRET_KEY=sb_secret_…   pour --televerser (ou ~/.config/anarbib/secret-key)
-#   MAXZOOM=12         zoom maximal inclus (z12 = 18 Go, z13 = 36, z14 = 68, z15 = 138)
+#   MAXZOOM=13         zoom maximal inclus (z12 = 18 Go, z13 = 36, z14 = 68, z15 = 138)
 #   DEST=~/pmtiles     dossier de travail
 #   PMTILES=pmtiles    binaire (https://github.com/protomaps/go-pmtiles/releases)
 # =============================================================================
 set -euo pipefail
 
 BUILD="${BUILD:-$(date -u -d 'yesterday' +%Y%m%d)}"
-MAXZOOM="${MAXZOOM:-12}"
+MAXZOOM="${MAXZOOM:-13}"
 DEST="${DEST:-$HOME/pmtiles}"
 PMTILES="${PMTILES:-pmtiles}"
 SRC="https://build.protomaps.com/${BUILD}.pmtiles"
