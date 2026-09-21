@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 20 septembre 2026](#létat-réel-au-20-septembre-2026)
+- [L'état réel au 21 septembre 2026](#létat-réel-au-21-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -58,7 +58,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 20 septembre 2026
+## L'état réel au 21 septembre 2026
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
@@ -71,11 +71,11 @@ Relevé du **16 septembre 2026** au soir — production interrogée en lecture s
 | Tables `public` | **191** | toutes avec RLS activé, **332 policies** — +4 tables depuis le 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), toutes classées au filet BG2 (191 sur 191 au rejeu local du 05/09). |
 | Tables `ingest` | **10** | toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde |
-| Fonctions applicatives | **919** | `public` 687 · `api` 189 · `ingest` 34 · `private` 9. Dont **706 SECURITY DEFINER** — inchangé depuis le 16/09 : ni B22 (des GRANT et des REVOKE), ni les compteurs d abus (un module partagé côté Edge), ni E17/E19 (du front) ne créent de fonction. Le verdict qui manquait au relevé du 16/09, `api.fn_gazette_probe_sources`, **est écrit** : garde `network_staff` actif en tête, le corps délègue à une DEFINER non exposée, justifiée. |
-| Migrations appliquées | **324** | **324 appliquées en production = 324 numérotées au dépôt** (332 fichiers avec le gabarit et les 7 rollbacks). Les trois depuis le relevé du 16/09 : `20260916223000` **B22** (les ouvertures à `anon` écrites), `20260916233000` (la sonde des sources attend une minute, GAZ-8) et `20260917165542` (la notice d export RGPD sans adresse `.org`). Dernière appliquée : `20260917165542` ; rien n attend en file. |
+| Fonctions applicatives | **924** | `public` 688 · `api` 189 · `ingest` 34 · `private` 13. Dont **708 SECURITY DEFINER**. +5 depuis le 20/09, toutes du 21/09 et **aucune ouverte** à `anon` ni à `authenticated` (lu dans `has_function_privilege`) : `private.fn_images_pins_attendus`, `private.fn_images_pins_bilan` et `public.fn_healthcheck_images_pins` (DEFINER) pour la sonde des versions ; `private.fn_crons_attendus` et `private.fn_crons_replanifier` (DEFINER) pour I26. Les cinq ont un `search_path` figé. Le lint 0029 ne bouge donc pas. |
+| Migrations appliquées | **328** | **328 appliquées en production = 328 numérotées au dépôt** (336 fichiers avec le gabarit et les 7 rollbacks). Les quatre du 21/09 : `20260921111344` (B27, le catalogue par œuvre répond au visiteur anonyme), `20260921181812` (la production ne monte plus en silence — sonde des versions de GoTrue et Storage), `20260921190301` (Storage a remonté le soir même) et `20260921193147` (une instance restaurée retrouve ses crons, I26). Dernière appliquée : `20260921193147` ; rien n attend en file. |
 | Jobs `pg_cron` | **38** | actifs — +1 depuis le 03/09 (le tick de pré-traduction des titres d'œuvre, `work-titles-autofill`). |
-| Avis de sécurité | **470** | 0 ERROR · **420** WARN sur les DEFINER exposées à `authenticated` (0029) · **26** sur celles exposées à `anon` (0028) · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). **Le 0028 est passé de 28 à 26 : B22 est appliquée** — `fn_current_user_is_member_of_holding_library` et `fn_reading_notes_enabled_for` n étaient ouvertes que par un défaut de création. Les 26 noms rendus par le lint sont **exactement** la liste nommée T10 de `grants_herites_tests.sql` (comparés un à un). Les 420 de 0029 sont tous justifiés, verdict de la sonde des sources compris. Format groupé : compter `findings`, pas les entrées. |
-| Avis de performance | **416** | **344 « index inutilisés »** (345 le 16/09, 368 le 06/09 — les compteurs repartent du redémarrage du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. Rien de neuf : la seule variation est un index de plus qui a servi. |
+| Avis de sécurité | **470** | 0 ERROR · **420** WARN sur les DEFINER exposées à `authenticated` (0029), tous justifiés · **26** sur celles exposées à `anon` (0028), exactement la liste nommée T10 de `grants_herites_tests.sql` · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). **Inchangé depuis le 20/09** : les cinq fonctions du 21/09 naissent fermées. Format groupé : compter `findings`, pas les entrées. |
+| Avis de performance | **415** | **343 « index inutilisés »** (344 le 20/09, 368 le 06/09 — les compteurs repartent du redémarrage du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. |
 | Schémas de rebut | **1** | `conv_backup` seul — il porte les trois tables de revue humaine de C3 et **ne se purge pas**. `backup_2026_05_07` est parti le 04/09 au soir (B9, décision de Xavier après relecture des 50 lignes). |
 
 ### Fonctions Edge
@@ -108,11 +108,11 @@ Relevé du **16 septembre 2026** au soir — production interrogée en lecture s
 
 | | | |
 |---|---:|---|
-| Commits | **2 729** | 32 commits depuis le relevé du 16/09 au soir, sur quatre journées. Tête au moment du relevé : `6cf45ef4` (la session voisine a poussé à 20 h 08, pendant la mesure : les deux lignes touchées — fichiers et tests — ont été remesurées sur son commit). |
-| Fichiers `src/` | **332** | +9 depuis le 16/09 : les bancs d essai de E17, E19, des origines CORS et de l adresse du projet, et les fichiers de la sonde et de l installateur poussés par la session voisine. |
-| Clés i18n | **6 690** | parité stricte sur les dix locales (6 690 chacune, recomptées fichier par fichier). +8 depuis le 16/09 : les deux clés du bloc « Explorer » replié (E17) et six de la session voisine. E19 n a demandé aucune clé — le déplacement réemploie les libellés existants. |
-| Tests | **556 + 104** | **556 tests JS** (vitest, gate bloquant, 52 fichiers — relancés en entier ce soir à 20 h 14, 43 s, tous verts) + **104 suites SQL** dans `ci-suites.txt`. +47 depuis le 16/09 : E17 (5), E19 (5), les origines CORS (7), la garde de l adresse du projet et les bancs de la session voisine. Aucune suite SQL neuve. |
-| Marqueurs de dette | **18** | dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 20/09 comme au 16 et au 15/09. Aucun n est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
+| Commits | **2 785** | **56 commits en une journée**, le 21/09, à plusieurs sessions : B27 et sa sonde, E19 coupé, E17 sur mobile, E16, l inventaire ; et côté voisines les trois domaines câblés (OPS-10), le fond de carte en z13, la sonde des versions d images, les crons d une instance restaurée (I26), un incident réparé sur `register` (503 au démarrage, import dupliqué) et la dette `app-url` éteinte en sept lots, chacun derrière un banc écrit sur le code intact. Tête au moment du relevé : `2a9681e5`. |
+| Fichiers `src/` | **352** | +20 en une journée, presque tous des bancs d essai : ceux de B27, E19, E17 et E16, et la série des bancs de mails et de flux écrits « sur le code intact » avant chaque lot de la dette `app-url`, avec leur aide commune `src/tests/helpers/monter-ef.js` qui monte une vraie Edge Function. |
+| Clés i18n | **6 689** | parité stricte sur les dix locales (6 689 chacune). −1 le 21/09 : la clé morte `biblioteca.privacy.phase4aNotice` (« la purge n est pas encore active »), que plus aucun code n employait depuis le 03/06, retirée des dix fichiers (E16). E19 et E17 n ont demandé aucune clé. |
+| Tests | **697 + 107** | **697 tests JS** (vitest, gate bloquant, 70 fichiers — relancés en entier deux fois ce soir, à 21 h 52 sur `661d62d9` : 693, puis à 21 h 54 sur `2a9681e5` : 697, tous verts) + **107 suites SQL** dans `ci-suites.txt`. **+141 tests en une journée** : les bancs du 21/09 (B27, sonde, E19, E17, E16) et surtout la règle que les sessions voisines se sont donnée — un banc qui exécute la vraie fonction, écrit sur le code intact, AVANT de la toucher. +3 suites SQL : `catalogue_par_oeuvre_cout_tests` (B27) et les deux du soir (versions d images, crons d une instance restaurée). |
+| Marqueurs de dette | **18** | dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 21/09 comme aux 20, 16 et 15/09. Aucun n est une tâche ouverte : la dette nommée vit au backlog, pas dans le code. |
 
 ---
 
@@ -2223,4 +2223,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
