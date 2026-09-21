@@ -382,11 +382,23 @@ le secret `SITE_BASE_URL` (`supabase secrets set`) — les fonctions le lisent a
 redéployer `register` et `notify-library-request` ; côté vitrine, changer `baseUrl` et `SITE`,
 régénérer, pousser. Les liens **internes** de la vitrine sont relatifs : rien à y changer.
 
-**Ce qui reste en dur, et que ce relevé ne couvre pas** : l'adresse de l'**application**
-(`https://app.anarbib.org`) a son foyer côté mails (`APP_BASE_URL`, `_shared/core/env.ts`), mais
-`register` l'écrit encore en toutes lettres à quatre endroits (`DEFAULT_LIBRARY_REQUEST_URL`,
-le repli de `loginOrigin`, `atelierUrl`, `catalogUrl`). À reprendre à part : `register` est la
-fonction la plus sensible du dépôt et n'a pas de banc de rendu.
+**L'adresse de l'application, même jour, deuxième temps.** `https://app.anarbib.org` a désormais
+son foyer sans effet de bord, `supabase/functions/_shared/core/app-url.ts` (`APP_BASE_URL`,
+`appUrl(chemin)` ; `_shared/core/env.ts` le ré-exporte pour les modules qui le lisaient déjà).
+`register` — la fonction la plus sensible du dépôt, qui n'avait aucun test qui l'exécute — y
+passe pour ses quatre adresses (candidature, repli de l'origine de connexion, atelier,
+catalogue), **derrière un banc écrit d'abord** : `src/tests/register-banc.test.js` monte la
+vraie fonction, épingle les quatre parcours d'inscription et les refus sur le code intact, puis
+prouve que les liens suivent `APP_BASE_URL` et `SITE_BASE_URL` (deux cas rouges avant le
+changement, verts après).
+
+**Ce qui reste en dur** est nommé, fichier par fichier, dans
+`src/tests/app-url-dette.test.js` : dix-sept fichiers écrivent encore un lien vers l'application
+en toutes lettres (mails de la lettre, de la gazette, de l'entraide, du réseau, des assemblées,
+des prêts ; flux OPDS et RSS ; trois replis locaux d'`APP_BASE_URL`), et cinq portent l'adresse
+comme une donnée (origines CORS, User-Agent), ce qui est toléré. La liste ne peut que rétrécir :
+un compte qui monte ou un fichier nouveau fait échouer la suite. **Règle de reprise : on ne
+retouche pas un mail qu'aucun test ne rend — le banc d'abord, comme pour `register`.**
 
 ## Annexe A — Toutes les vérifications en un bloc
 
