@@ -1145,7 +1145,6 @@
   "biblioteca.privacy.notesPlaceholder": "Justificacions, decisió col·lectiva, referència a un document intern…",
   "biblioteca.privacy.notifications": "Notificacions llegides",
   "biblioteca.privacy.notificationsHint": "Després de la lectura, les notificacions se suprimeixen al cap d'aquest termini.",
-  "biblioteca.privacy.phase4aNotice": "Configuració visible, però la supressió automàtica encara no està activa. S'activarà en una pròxima actualització (Fase 4b).",
   "biblioteca.privacy.purgeActiveNotice": "L'eliminació automàtica està activa: les dades personals s'esborren segons els terminis definits més amunt.",
   "biblioteca.privacy.readonlyHint": "Esteu en mode de només lectura. Només els-les-les coordinadors-es-es i administradors-es-es poden modificar la política de retenció.",
   "biblioteca.privacy.reservations": "Historial de les reserves",

@@ -1145,7 +1145,6 @@
   "biblioteca.privacy.notesPlaceholder": "Justifications, décision collective, référence à un document interne…",
   "biblioteca.privacy.notifications": "Notifications lues",
   "biblioteca.privacy.notificationsHint": "Après lecture, les notifications sont supprimées au bout de ce délai.",
-  "biblioteca.privacy.phase4aNotice": "Configuration visible, mais la suppression automatique n'est pas encore active. Elle sera activée dans une prochaine mise à jour (Phase 4b).",
   "biblioteca.privacy.purgeActiveNotice": "La suppression automatique est active : les données personnelles sont effacées selon les délais définis ci-dessus.",
   "biblioteca.privacy.readonlyHint": "Tu es en mode lecture seule. Seul·es les coordinateur·rices et administrateur·rices peuvent modifier la politique de rétention.",
   "biblioteca.privacy.reservations": "Historique des réservations",

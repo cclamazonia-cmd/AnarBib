@@ -1145,7 +1145,6 @@
   "biblioteca.privacy.notesPlaceholder": "Justifications, collective decision, reference to an internal document…",
   "biblioteca.privacy.notifications": "Read notifications",
   "biblioteca.privacy.notificationsHint": "After being read, notifications are deleted after this period.",
-  "biblioteca.privacy.phase4aNotice": "Configuration visible, but automatic deletion is not yet active. It will be enabled in a future update (Phase 4b).",
   "biblioteca.privacy.purgeActiveNotice": "Automatic deletion is active: personal data is erased according to the retention periods set above.",
   "biblioteca.privacy.readonlyHint": "You are in read-only mode. Only coordinators and administrators can modify the retention policy.",
   "biblioteca.privacy.reservations": "Reservation history",

@@ -1145,7 +1145,6 @@
   "biblioteca.privacy.notesPlaceholder": "Begründungen, kollektive Entscheidung, Verweis auf ein internes Dokument…",
   "biblioteca.privacy.notifications": "Gelesene Benachrichtigungen",
   "biblioteca.privacy.notificationsHint": "Nach dem Lesen werden Benachrichtigungen nach Ablauf dieses Zeitraums gelöscht.",
-  "biblioteca.privacy.phase4aNotice": "Konfiguration sichtbar, aber die automatische Löschung ist noch nicht aktiv. Sie wird in einem zukünftigen Update aktiviert (Phase 4b).",
   "biblioteca.privacy.purgeActiveNotice": "Die automatische Löschung ist aktiv: Personenbezogene Daten werden gemäß den oben festgelegten Fristen gelöscht.",
   "biblioteca.privacy.readonlyHint": "Sie befinden sich im Lesemodus. Nur Koordination und Administrator*innen können die Aufbewahrungsrichtlinie ändern.",
   "biblioteca.privacy.reservations": "Reservierungsverlauf",

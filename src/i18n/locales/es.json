@@ -1145,7 +1145,6 @@
   "biblioteca.privacy.notesPlaceholder": "Justificaciones, decisión colectiva, referencia a un documento interno…",
   "biblioteca.privacy.notifications": "Notificaciones leídas",
   "biblioteca.privacy.notificationsHint": "Tras la lectura, las notificaciones son eliminadas al cabo de este plazo.",
-  "biblioteca.privacy.phase4aNotice": "Configuración visible, pero la eliminación automática aún no está activa. Será activada en una próxima actualización (Fase 4b).",
   "biblioteca.privacy.purgeActiveNotice": "La eliminación automática está activa: los datos personales se borran según los plazos definidos arriba.",
   "biblioteca.privacy.readonlyHint": "Usted está en modo de solo lectura. Solamente les coordinadores y administradores pueden modificar la política de retención.",
   "biblioteca.privacy.reservations": "Historial de reservas",

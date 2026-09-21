@@ -1145,7 +1145,6 @@
   "biblioteca.privacy.notesPlaceholder": "Rechtvaardigingen, collectief besluit, verwijzing naar een intern document…",
   "biblioteca.privacy.notifications": "Gelezen meldingen",
   "biblioteca.privacy.notificationsHint": "Nadat ze gelezen zijn, worden meldingen na deze periode verwijderd.",
-  "biblioteca.privacy.phase4aNotice": "Configuratie zichtbaar, maar automatische verwijdering is nog niet actief. Ze wordt in een toekomstige update ingeschakeld (Fase 4b).",
   "biblioteca.privacy.purgeActiveNotice": "Automatische verwijdering is actief: persoonsgegevens worden gewist volgens de hierboven ingestelde bewaartermijnen.",
   "biblioteca.privacy.readonlyHint": "Je bent in alleen-lezenmodus. Alleen coördinatoren en beheerders kunnen het bewaarbeleid wijzigen.",
   "biblioteca.privacy.reservations": "Reserveringsgeschiedenis",
