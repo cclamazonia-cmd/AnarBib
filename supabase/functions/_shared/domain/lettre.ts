@@ -13,6 +13,7 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { tMail, greeting } from "../i18n/mail-strings.ts";
 import { appUrl } from "../core/app-url.ts";
+import { verdictEnvois } from "./outbox-verdict.ts";
 import { marked } from "https://esm.sh/marked@12";
 
 const OUTBOX = "lettre_notification_outbox";
@@ -81,9 +82,15 @@ export async function handleLettreEvent(recordId) {
       await markOutboxSkipped(outbox.id, "unknown_lettre_event");
       return { ok: true, ignored: true, reason: "unknown_lettre_event", event };
     }
-    if (result?.recipients_count === 0) await markOutboxSkipped(outbox.id, "no_recipients");
+    // Le statut de la ligne suit ce qui s'est REELLEMENT passe (outbox-verdict.ts) :
+    // un envoi refuse par le transport n'est plus tenu pour fait. On ne leve pas —
+    // l'echec d'envoi est un resultat traite, pas une panne du handler — mais la
+    // reponse le dit (ok:false) et la ligne garde le detail dans last_error.
+    const verdict = verdictEnvois(result);
+    if (verdict.status === "skipped") await markOutboxSkipped(outbox.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict.detail);
     else await markOutboxSent(outbox.id);
-    return { ok: true, event, ...result };
+    return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, ...result };
   } catch (err) {
     await markOutboxFailed(outbox.id, String(err?.message || err));
     throw err;

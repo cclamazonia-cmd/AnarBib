@@ -12,10 +12,11 @@
 // Markdown (`marked`, esm.sh) est remplacé par l'aide : ce n'est pas lui qu'on
 // teste, et c'est dit.
 //
-// DÉFAUT CONNU, épinglé et non corrigé ici (autre item) : quand le transport
-// refuse l'envoi, safeSendEmail rend { ok:false } sans lever, et la ligne de la
-// file passe quand même à « sent ». Un envoi manqué est tenu pour fait — la
-// forme exacte que notify-loan-cycle évite (DOC-SILENCE-1). Voir le dernier cas.
+// DÉFAUT TROUVÉ par ce banc, CORRIGÉ le soir même (21/09/2026) : quand le transport
+// refusait l'envoi, safeSendEmail rendait { ok:false } sans lever, et la ligne de
+// la file passait quand même à « sent » — un numéro non parti tenu pour envoyé
+// (DOC-SILENCE-1). Le statut suit désormais _shared/domain/outbox-verdict.ts :
+// failed avec le détail, skipped avec sa raison, sent seulement si c'est parti.
 
 import { describe, it, expect } from 'vitest';
 import { monterEF, liens } from './helpers/monter-ef.js';
@@ -98,13 +99,25 @@ describe('domain/lettre — un numéro de la Lettre', () => {
     expect(etatFile()).toEqual([{ status: 'skipped', skip_reason: 'unknown_lettre_event' }]);
   });
 
-  it('DÉFAUT CONNU : un envoi refusé par le transport laisse quand même la file à « sent »', async () => {
+  it('un envoi refusé par le transport passe la file à « failed », avec le détail — plus jamais « sent »', async () => {
     const { ef, handleLettreEvent, etatFile } = monterLettre({ outbox: NUMERO, resend: () => new Response('panne', { status: 500 }) });
     const r = await handleLettreEvent(7);
     expect(ef.envois).toHaveLength(0);
-    expect(r.result).toMatchObject({ ok: false });
-    // Ce qu'on VOUDRAIT : 'failed'. Ce qui est : 'sent'. À corriger à part, en retournant ce test.
-    expect(etatFile().map((d) => d.status)).toEqual(['sent']);
+    expect(r).toMatchObject({ ok: false, outbox_status: 'failed' });
+    const etat = etatFile();
+    expect(etat).toHaveLength(1);
+    expect(etat[0].status).toBe('failed');
+    expect(etat[0].last_error).toContain('louise@exemplo.test');
+    expect(etat[0].last_error).toContain('Resend HTTP 500');
+    expect(etat[0].sent_at).toBeUndefined();               // sent_at date un courriel PARTI, rien d'autre
+  });
+
+  it('une adresse invalide : l\'envoi est sauté par le transport, la file le dit (« skipped », transport:invalid_email)', async () => {
+    const { ef, handleLettreEvent, etatFile } = monterLettre({ outbox: { ...NUMERO, payload: { ...NUMERO.payload, to: 'pas-une-adresse' } } });
+    const r = await handleLettreEvent(7);
+    expect(ef.envois).toHaveLength(0);
+    expect(r).toMatchObject({ ok: true, outbox_status: 'skipped' });
+    expect(etatFile()).toEqual([{ status: 'skipped', skip_reason: 'transport:invalid_email' }]);
   });
 });
 
@@ -123,6 +136,31 @@ describe('domain/lettre — confirmation du double opt-in', () => {
     await handleLettreEvent(8);
     expect(ef.envois).toHaveLength(0);
     expect(etatFile()).toEqual([{ status: 'skipped', skip_reason: 'no_recipients' }]);
+  });
+});
+
+describe('outbox-verdict — le statut d\'une ligne de file après une tentative d\'envoi', () => {
+  const { verdictEnvois } = monterEF().charger('_shared/domain/outbox-verdict.ts');
+  const ok = { ok: true, email: 'a@x.test' };
+  const refus = { ok: false, email: 'b@x.test', error: 'Resend HTTP 500: panne' };
+  const saute = { ok: false, skipped: true, reason: 'channel_disabled' };
+
+  it('aucun destinataire : skipped, no_recipients', () => {
+    expect(verdictEnvois({ recipients_count: 0, reason: 'no_email' })).toEqual({ status: 'skipped', detail: 'no_recipients' });
+    expect(verdictEnvois(null)).toEqual({ status: 'skipped', detail: 'no_recipients' });
+  });
+  it('un envoi : parti → sent ; refusé → failed avec le détail ; sauté → skipped avec sa raison', () => {
+    expect(verdictEnvois({ recipients_count: 1, result: ok })).toEqual({ status: 'sent', detail: null });
+    expect(verdictEnvois({ recipients_count: 1, result: refus })).toEqual({ status: 'failed', detail: 'b@x.test : Resend HTTP 500: panne' });
+    expect(verdictEnvois({ recipients_count: 1, result: saute })).toEqual({ status: 'skipped', detail: 'transport:channel_disabled' });
+  });
+  it('plusieurs envois (patron de la gazette) : un seul refus suffit à dire failed ; tout sauté → skipped ; sinon sent', () => {
+    expect(verdictEnvois({ recipients_count: 3, results: [ok, refus, saute] }).status).toBe('failed');
+    expect(verdictEnvois({ recipients_count: 2, results: [saute, saute] })).toEqual({ status: 'skipped', detail: 'transport:channel_disabled' });
+    expect(verdictEnvois({ recipients_count: 2, results: [ok, saute] })).toEqual({ status: 'sent', detail: null });
+  });
+  it('un handler qui ne rend pas ses envois garde le comportement d\'avant (sent)', () => {
+    expect(verdictEnvois({ recipients_count: 2 })).toEqual({ status: 'sent', detail: null });
   });
 });
 
