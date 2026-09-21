@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-20",
+    "maj": "2026-09-21",
     "releve": {
       "date": "2026-09-20",
       "commit": "6cf45ef4"
@@ -5632,7 +5632,7 @@
       "id": "B27",
       "d": "B",
       "p": "P1",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "sql"
@@ -5679,6 +5679,10 @@
         {
           "fr": "20/09 — `edge_logs` : 13 × 500 sur `catalog_works_v1` entre 11 h 51 et 12 h 03 UTC (referers `localhost:5180` et `:5181`) ; `postgres_logs` : 13 × `57014` aux mêmes secondes ; `pg_roles` : `anon` 3 s, `authenticated` 8 s ; page affichée : 91 notices par le repli.",
           "pt": "20/09 — `edge_logs`: 13 × 500 em `catalog_works_v1` entre 11h51 e 12h03 UTC; `postgres_logs`: 13 × `57014` nos mesmos segundos; `pg_roles`: `anon` 3 s, `authenticated` 8 s; página mostrada: 91 registos pelo recuo."
+        },
+        {
+          "fr": "21/09 — **diagnostiqué, réparé et vérifié en production ; deux critères sur trois tenus, le troisième attend une journée de trafic.** *Mesuré avant* (sous `set local role anon`, page par défaut du front) : 1 œuvre = 2 106 ms, 50 œuvres = **3 533 ms** et 579 758 blocs temporaires lus (~4,4 Go), 200 œuvres = **27 311 ms** et 9 126 308 blocs (~70 Go) ; la vue seule rend ses 2 651 lignes en 5 ms. *Deux causes, dans la requête* : (1) un coût **quadratique** — `library_names` relisait tout le CTE `filtered` pour CHAQUE groupe de la page, et `filtered` traînait la ligne entière de la vue en jsonb ; (2) un plancher de **1,3 s** — `fn_work_display_title` appelée une fois par œuvre du catalogue (2 449 appels, 1 311 ms mesurés à part), parce que le tri par défaut porte sur le titre affiché. *Réparé* par la migration `20260921111344` (`1fb565b2`) : `src` sans `row_json`, titre affiché en un passage (même cascade que la fonction — équivalence vérifiée sur 2 449 œuvres × 10 locales, **24 490 comparaisons, 0 différence**), éditions et bibliothèques lues sur les seules lignes de la page. La requête neuve rendait, avant d'être appliquée, un jsonb **égal** à celui de l'ancienne fonction. Corps dérivé du corps réel (dépôt = prod, même md5) par six modifications comptées ; la requête reste dynamique, une seule vue nommée à la fois. *Mesuré après, en production, sous le vrai délai de 3 s* : 50 œuvres = **380 ms**, 200 = **460 ms**, plus aucun fichier temporaire ; par l'API REST avec la clé anonyme : HTTP 200 en 0,6 à 0,9 s, 2 435 œuvres au total. **Premier « fini quand » : tenu** (plan consigné dans l'en-tête de la migration). **Troisième : tenu côté surveillance** — la sonde `catalogue_par_oeuvre` de `health-probe` (`5111ac5f`) appelle la RPC toutes les cinq minutes en anonyme, avec les arguments du premier chargement ; son seuil de lenteur (3 000 ms) est le délai du rôle `anon` ; deux tours mauvais ouvrent un incident `service` et alertent. Le front, lui, journalise déjà le repli (`console.warn`), sans plus. **Deuxième : à relire** — plus aucun `57014` sur cette RPC pendant une journée de trafic réel ; à vérifier dans `postgres_logs` à partir du 22/09. Suites : `catalogue_par_oeuvre_cout_tests` (7 cas) en CI, banc `health-probe-catalogue-par-oeuvre` (3 cas). Appris en route : `trg_books_ensure_work` donne une œuvre à toute notice — la branche « sans œuvre » de la RPC est défensive, aucune notice de production n'y passe. Ce qui coûte encore : la vue elle-même (`fn_library_visible_to_caller` évaluée par détention, ~70 000 accès aux tampons par appel).",
+          "pt": "21/09 — **diagnosticado, reparado e verificado em produção; dois critérios em três cumpridos, o terceiro espera um dia de tráfego.** *Medido antes* (sob `set local role anon`, página por defeito do front): 1 obra = 2 106 ms, 50 obras = **3 533 ms** e 579 758 blocos temporários lidos (~4,4 GB), 200 obras = **27 311 ms** (~70 GB); a view sozinha devolve as suas 2 651 linhas em 5 ms. *Duas causas, na consulta*: (1) um custo **quadrático** — `library_names` relia todo o CTE `filtered` para CADA grupo da página, e `filtered` arrastava a linha inteira da view em jsonb; (2) um piso de **1,3 s** — `fn_work_display_title` chamada uma vez por obra do catálogo (2 449 chamadas). *Reparado* pela migração `20260921111344` (`1fb565b2`): `src` sem `row_json`, título num só passo (mesma cascata — **24 490 comparações, 0 diferenças**), edições e bibliotecas lidas só nas linhas da página; jsonb **igual** ao da função antiga. *Medido depois, em produção, sob o prazo real de 3 s*: 50 obras = **380 ms**, 200 = **460 ms**, nenhum ficheiro temporário; pela API REST com a chave anónima: HTTP 200 em 0,6 a 0,9 s. **Primeiro critério: cumprido. Terceiro: cumprido do lado da vigilância** — a sonda `catalogue_par_oeuvre` de `health-probe` (`5111ac5f`) chama a RPC de cinco em cinco minutos em anónimo. **Segundo: a reler** — nenhum `57014` nesta RPC durante um dia de tráfego real, a verificar em `postgres_logs` a partir de 22/09."
         }
       ]
     }
