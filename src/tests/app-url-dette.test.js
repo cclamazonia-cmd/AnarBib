@@ -40,7 +40,6 @@ const TOLERE = {
   'gazette-monthly-build/index.ts': 1,             // User-Agent du moissonneur : une identité, pas un lien servi
 };
 const DETTE = {
-  '_shared/domain/library_profile.ts': 1,
   '_shared/domain/network.ts': 3,
   '_shared/domain/reservas.ts': 1,
   'notify-rede-digest/index.ts': 1,

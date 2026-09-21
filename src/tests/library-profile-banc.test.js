@@ -8,11 +8,11 @@
 // src/tests/helpers/monter-ef.js. Un sous-événement suffit à éprouver ce qu'on va
 // changer (l'adresse du bouton, le statut de la file) : `proposed`.
 //
-// DÉFAUTS CONNUS, épinglés ici et non corrigés dans ce commit :
-//   1. la ligne passe à « sent » sans lire le résultat des envois (même forme que la
-//      Lettre et que les cinq modules repris le 21/09 par outbox-verdict.ts) ;
-//   2. « sent » aussi quand il n'y a AUCUN destinataire, et pour un sous-événement
-//      inconnu — le module n'a pas de markOutboxSkipped (B12 / DOC-SILENCE-1).
+// DÉFAUTS ÉPINGLÉS PUIS CORRIGÉS (21/09) :
+//   1. la ligne passait à « sent » sans lire le résultat des envois (même forme que la
+//      Lettre et que les cinq modules repris le même jour par outbox-verdict.ts) ;
+//   2. « sent » aussi quand il n'y avait AUCUN destinataire, et pour un sous-événement
+//      inconnu — le module n'avait pas de markOutboxSkipped (B12 / DOC-SILENCE-1).
 
 import { describe, it, expect } from 'vitest';
 import { monterEF, liens, mailA } from './helpers/monter-ef.js';
@@ -71,23 +71,40 @@ describe('domain/library_profile — une proposition de changement de profil', (
     expect(ef.ecrits.map((e) => e.donnees.status)).toEqual(['failed']);
   });
 
-  it('DÉFAUT CONNU : personne à prévenir (la seule staff est celle qui propose), file quand même à « sent »', async () => {
+  // Les trois cas qui suivent étaient épinglés « DÉFAUT CONNU » (file à « sent ») sur
+  // le code intact ; ROUGES puis verts avec outbox-verdict.ts et markOutboxSkipped.
+  it('personne à prévenir (la seule staff est celle qui propose) : « skipped », no_recipients, sans sent_at', async () => {
     const { ef, etat } = monter({ staff: ['u-1'] });
-    await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
+    const r = await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
+    expect(r).toMatchObject({ ok: true, outbox_status: 'skipped' });
     expect(ef.envois).toHaveLength(0);
-    expect(etat().map((d) => d.status)).toEqual(['sent']);      // voulu : 'skipped', no_recipients
+    expect(etat()).toEqual([{ status: 'skipped', skip_reason: 'no_recipients' }]);
   });
 
-  it('DÉFAUT CONNU : sous-événement inconnu, file à « sent »', async () => {
+  it('sous-événement inconnu : « skipped », nommé', async () => {
     const { ef, etat } = monter({ event: 'team.library_profile.autre' });
     expect(await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31)).toMatchObject({ ignored: true, reason: 'unknown_library_profile_sub_event' });
-    expect(etat().map((d) => d.status)).toEqual(['sent']);      // voulu : 'skipped', nommé
+    expect(etat()).toEqual([{ status: 'skipped', skip_reason: 'unknown_library_profile_sub_event' }]);
   });
 
-  it('DÉFAUT CONNU : transport en panne, file à « sent »', async () => {
+  it('transport en panne : « failed », et last_error nomme les deux refusés', async () => {
     const { ef, etat } = monter({ resend: () => new Response('panne', { status: 500 }) });
-    await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
+    const r = await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
+    expect(r).toMatchObject({ ok: false, outbox_status: 'failed' });
     expect(ef.envois).toHaveLength(0);
-    expect(etat().map((d) => d.status)).toEqual(['sent']);      // voulu : 'failed'
+    const [d] = etat();
+    expect(d.status).toBe('failed');
+    expect(d.last_error).toMatch(/^0 parti\(s\), 2 refuse\(s\)/);
+    expect(d.last_error).toContain('dois@exemplo.test');
+    expect(d.sent_at).toBeUndefined();
+  });
+
+  it('le bouton suit APP_BASE_URL (barre finale tolérée) — plus aucun lien vers le canonique', async () => {
+    const { ef } = monter({ env: { APP_BASE_URL: 'https://app.anarbib.is/' } });
+    await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
+    for (const m of ef.envois) {
+      expect(liens(m.html)).toContain('https://app.anarbib.is/painel/biblioteca/lib-1/profil?proposal=p-1');
+      expect(liens(m.html).filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
+    }
   });
 });

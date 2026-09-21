@@ -38,6 +38,8 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
+import { appUrl } from "../core/app-url.ts";
+import { verdictEnvois } from "./outbox-verdict.ts";
 
 // ─── Helpers communs ──────────────────────────────────────────────────────
 
@@ -52,6 +54,16 @@ async function markOutboxFailed(outboxId, errorMsg) {
   await supabaseAdmin.from("team_notification_outbox").update({
     status: "failed",
     last_error: errorMsg
+  }).eq("id", outboxId);
+}
+
+// B12 / DOC-SILENCE-1 (21/09/2026) : ce module n'avait pas de « skipped » — un
+// sous-événement inconnu ou un fan-out vide passaient pour « sent ». La raison va
+// dans `skip_reason`, et `sent_at` n'est PAS posé : rien n'est parti.
+async function markOutboxSkipped(outboxId, reason) {
+  await supabaseAdmin.from("team_notification_outbox").update({
+    status: "skipped",
+    skip_reason: String(reason || "raison_non_precisee")
   }).eq("id", outboxId);
 }
 
@@ -150,9 +162,8 @@ function displayName(p) {
 }
 
 function profilePageUrl(libraryId, proposalId) {
-  const base = "https://app.anarbib.org";
   const q = proposalId ? `?proposal=${proposalId}` : "";
-  return `${base}/painel/biblioteca/${libraryId}/profil${q}`;
+  return appUrl(`/painel/biblioteca/${libraryId}/profil${q}`);
 }
 
 function axisLabel(locale, axis) {
@@ -212,7 +223,7 @@ export async function handleLibraryProfileEvent(recordId) {
       result = await handleExecuted(payload, library, ctx, bt);
     } else {
       console.warn(`[library_profile] unknown sub-event: ${event}`);
-      await markOutboxSent(row.id);
+      await markOutboxSkipped(row.id, "unknown_library_profile_sub_event");
       return {
         ok: true,
         ignored: true,
@@ -220,8 +231,13 @@ export async function handleLibraryProfileEvent(recordId) {
         event
       };
     }
-    await markOutboxSent(row.id);
-    return { ok: true, event, ...result };
+    // DOC-SILENCE-1 (21/09/2026) : le statut de la ligne se lit sur le RÉSULTAT des
+    // envois (outbox-verdict.ts) — « sent » était posé sans condition.
+    const verdict = verdictEnvois(result);
+    if (verdict.status === "skipped") await markOutboxSkipped(row.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(row.id, verdict.detail);
+    else await markOutboxSent(row.id);
+    return { ...result, ok: verdict.status !== "failed", event, outbox_status: verdict.status };
   } catch (err) {
     const errorMsg = String(err?.message || err);
     await markOutboxFailed(row.id, errorMsg);
