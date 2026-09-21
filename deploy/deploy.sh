@@ -254,7 +254,21 @@ if [ "$CONTROLE" = "1" ]; then
 
   # Frontend Web
   FRONT_STATUS=$(docker compose exec -T caddy curl -s -o /dev/null -w "%{http_code}" "http://localhost/" 2>/dev/null || echo "000")
-  if [ "$FRONT_STATUS" = "200" ]; then
+  # Sans préfixe http:// dans API_DOMAIN, Caddy sert en HTTPS et REDIRIGE le
+  # port 80 (308) : ce n'est pas une anomalie, c'est la configuration de
+  # production. On suit la redirection au lieu de rougir (faux ⚠ du 21/09/2026).
+  if [ "$FRONT_STATUS" = "308" ] || [ "$FRONT_STATUS" = "301" ]; then
+    FRONT_HTTPS=$(docker compose exec -T caddy curl -sk -o /dev/null -w "%{http_code}" "https://localhost/" 2>/dev/null || echo "000")
+    if [ "$FRONT_HTTPS" = "200" ]; then
+      echo "✓ Application Web : OK (HTTP $FRONT_STATUS vers HTTPS, puis 200 sur https://localhost)"
+      FRONT_STATUS="suivi"
+    else
+      FRONT_STATUS="$FRONT_STATUS puis $FRONT_HTTPS en HTTPS"
+    fi
+  fi
+  if [ "$FRONT_STATUS" = "suivi" ]; then
+    :
+  elif [ "$FRONT_STATUS" = "200" ]; then
     echo "✓ Application Web : OK (HTTP 200 sur http://localhost)"
   else
     echo "⚠ Application Web : HTTP $FRONT_STATUS"

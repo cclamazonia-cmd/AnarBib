@@ -505,8 +505,11 @@ fi
 #   select count(*) from storage.migrations;
 # Banc du 21/09 : v2.193.0 à v2.196.0 → 77 ; v2.197.0 → 82. Storage v1.71.0 →
 # 65 ; v1.72.0 → 68. Détail et concordance des colonnes : deploy/.env.example.
+# Et le soir même Storage remontait (68 → 73, vu par la sonde images_pins) :
+# v1.76.2 → 72 ; v1.77.0 → 73. Ces seuils sont tenus égaux à l'attendu de la
+# sonde par src/tests/pins-images-coherence.test.js.
 PROD_AUTH_MIG=82
-PROD_STORAGE_MIG=68
+PROD_STORAGE_MIG=73
 PROD_RELEVE_LE="21/09/2026"
 AUTH_MIG=$(sql "select count(*) from auth.schema_migrations" 2>/dev/null || echo "?")
 echo "  Migrations GoTrue de cette instance : $AUTH_MIG  (production au $PROD_RELEVE_LE : $PROD_AUTH_MIG)"

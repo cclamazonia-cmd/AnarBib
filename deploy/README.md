@@ -88,6 +88,17 @@ vierge par palier : `GOTRUE_TAG=v2.197.0` (193 à 196 restent à 77) et
 même empreinte. Détail dans `.env.example`. **Un pin mesuré un jour ne vaut que
 ce jour-là : à refaire avant toute restauration d'un dump réel.**
 
+**Et ce jour-là n'a pas duré trois heures.** Le soir même, à 20 h 43, Storage
+remontait en production (1.73.1 → 1.77.5, 68 → 73 migrations). Cette fois
+quelque chose l'a dit : la sonde `images_pins` de `health-probe`, déployée le
+soir même, a ouvert un incident et écrit aux administrateur·rices à
+20 h 45. Remesuré dans la foulée : `STORAGE_TAG=v1.77.0` (v1.76.2 s'arrête à
+72), 344 colonnes concordantes. La boucle est désormais : la sonde alerte →
+`deploy/banc-paliers.sh` avec le pin courant en témoin → une migration qui
+remplace `private.fn_images_pins_attendus()`, `.env.example` et les seuils de
+`bootstrap.sh` dans le même commit (une garde de CI refuse la moitié) → la
+sonde repasse au vert et le dit.
+
 ---
 
 ## 1. Démarrage rapide (Installation en une commande)
@@ -157,7 +168,7 @@ Les deux modes coexistent sans interférence : le frontend détecte automatiquem
 | `db` | `supabase/postgres:17.6.1.136` | Base PostgreSQL 17 + Vault + pg_net + extensions |
 | `rest` | `postgrest/postgrest:v14.12` | API REST & RPC `api.*` |
 | `auth` | `supabase/gotrue:v2.197.0` | Serveur d'authentification GoTrue (82 migrations, relevé du 21/09/2026) |
-| `storage` | `supabase/storage-api:v1.72.0` | Stockage d'objets et gestion des buckets (68 migrations, relevé du 21/09/2026) |
+| `storage` | `supabase/storage-api:v1.77.0` | Stockage d'objets et gestion des buckets (73 migrations, relevé du 21/09/2026 au soir) |
 | `functions` | `supabase/edge-runtime:v1.74.0` | Routeur `main` et exécution des 48 Edge Functions |
 | `caddy` | `caddy:2` | Passerelle API, sécurité HTTP et terminaison TLS automatique |
 
