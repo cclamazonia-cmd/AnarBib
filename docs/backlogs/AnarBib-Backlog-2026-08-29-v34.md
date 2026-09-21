@@ -1625,7 +1625,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Tenir la liste ici, cocher chaque condition avec sa preuve (fichier, courriel, essai daté). Le durcissement entre dans `deploy/` ; le dépôt de sauvegarde tiers se demande à Bologne (**I12** dit ce que le miroir froid couvre, et ce n'est pas ça).
 

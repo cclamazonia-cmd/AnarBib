@@ -1617,7 +1617,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A decisão de 07/09 (oferta confirmada: VM IPv4, Debian, backups já lá) e a nota de 05-06/09 deixam uma lista que nada mantém junta. **Verificado em 07/09 em `deploy/`**: nenhum rastro de `unattended-upgrades`, firewall nem autenticação só por chave. O resto é humano ou local: a conexão autenticada na pilha local nunca retestada desde a retirada do Turnstile; `deploy/.env` sobrescrito por `install.sh` (domínios em `localhost`) sem cópia conhecida; o teste a partir de uma rede móvel brasileira (NAT64) nunca feito; o prazo de intervenção de Les Herbes Folles nunca pedido; o meio de lhes pagar «pedido desde julho, sem resposta»; um segundo detentor dos acessos; e a regra posta em 07/09: **não se vira antes que o backup tenha ido para um terceiro** — hoje os três fluxos restic estão no próprio hospedeiro de destino.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Manter a lista aqui, marcar cada condição com sua prova (arquivo, e-mail, teste datado). O endurecimento entra em `deploy/`; o depósito de backup terceiro pede-se em Bolonha (**I12** diz o que o espelho frio cobre, e não é isso).
 
