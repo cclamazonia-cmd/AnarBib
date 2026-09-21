@@ -70,6 +70,32 @@ fi
 # Récupération des versions déjà appliquées
 DEJA_APPLIQUEES=$(psql -U "$SU" -d postgres -tAc "SELECT version FROM supabase_migrations.schema_migrations;" 2>/dev/null || echo "")
 
+
+# GARDE-FOU (21/09/2026) — historique vide sur une base PLEINE.
+# `supabase db dump` n'emporte pas `supabase_migrations` : une instance
+# restaurée sans son troisième fichier (cf. restore.sh) arrive ici avec zéro
+# migration inscrite et des centaines de tables. Sans ce contrôle, la boucle
+# ci-dessous rejoue tout depuis le socle. Le socle échoue à sa première
+# création de type — par chance, pas par construction. On refuse donc AVANT,
+# et on dit quoi faire. Même esprit que le garde-fou « la base n'est PAS
+# vierge » de run-migrations.sh.
+if [ -z "$DEJA_APPLIQUEES" ]; then
+  PLEINE=$(psql -U "$SU" -d postgres -tAc "select count(*) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r'" 2>/dev/null || echo 0)
+  if [ "${PLEINE:-0}" -gt 0 ]; then
+    echo "✗ Historique des migrations VIDE sur une base qui porte $PLEINE tables publiques."
+    echo "  Cette instance vient sans doute d'une restauration dont l'historique n'a pas"
+    echo "  suivi (supabase db dump ne l'emporte pas). Rejouer depuis le socle la casserait."
+    echo ""
+    echo "  Reprendre l'historique à la SOURCE de la sauvegarde, puis le charger :"
+    echo "    supabase db dump --linked --data-only --schema supabase_migrations -f deploy/dumps/migrations.sql"
+    echo "    docker compose exec -T db sh /scripts/restore-historique.sh"
+    echo ""
+    echo "  Ne PAS inscrire à la main « toutes les migrations du dépôt » : celles qui"
+    echo "  sont postérieures à la sauvegarde seraient marquées faites sans l'être."
+    exit 1
+  fi
+fi
+
 appliquees=0
 sautees=0
 

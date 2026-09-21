@@ -8,9 +8,35 @@
 # Usage :
 #   docker compose exec db sh /scripts/restore.sh
 #
-# Attend deux fichiers dans /dumps :
-#   schema.sql   ← supabase db dump --linked -f deploy/dumps/schema.sql
-#   data.sql     ← supabase db dump --linked --data-only -f deploy/dumps/data.sql
+# Attend TROIS fichiers dans /dumps :
+#   schema.sql     ← supabase db dump --linked -f deploy/dumps/schema.sql
+#   data.sql       ← supabase db dump --linked --data-only -f deploy/dumps/data.sql
+#   migrations.sql ← supabase db dump --linked --data-only --schema supabase_migrations \
+#                      -f deploy/dumps/migrations.sql
+#
+# -----------------------------------------------------------------------------
+# ⚠️ LE TROISIÈME FICHIER — L'HISTORIQUE DES MIGRATIONS (constaté le 21/09/2026)
+# -----------------------------------------------------------------------------
+# `supabase db dump` n'emporte PAS le schéma `supabase_migrations`, ni dans le
+# dump du schéma ni dans celui des données : il faut le demander par son nom.
+# Sans lui, l'instance restaurée est complète… et ne sait plus quelles
+# migrations elle porte. La première mise à jour (`deploy/deploy.sh`) trouve un
+# historique VIDE et entreprend de rejouer les migrations depuis le socle, sur
+# une base pleine. Trouvé le 21/09 en restaurant un dump réel : l'échec est
+# immédiat (« type "membership_payment_method" already exists »), donc sans
+# dégât — mais l'instance ne pouvait plus JAMAIS être mise à jour.
+#
+# ⚠️ LES TROIS FICHIERS SE PRENNENT ENSEMBLE, SANS DÉPLOIEMENT ENTRE-TEMPS. Le
+# 21/09, l'historique a été dumpé un quart d'heure après les données ; une
+# migration était passée entre les deux. L'historique la déclarait appliquée,
+# le schéma ne la portait pas : marquée « en place », elle n'aurait plus jamais
+# été rejouée. Ordre conseillé : migrations.sql d'ABORD (30 s), puis schéma et
+# données — une migration de trop dans le schéma se rejoue (elles sont écrites
+# pour), une migration de trop dans l'historique se perd.
+#
+# ⚠️ PAS DE DUMP PENDANT QU'UNE MIGRATION ATTEND EN CI : pg_dump tient un verrou
+# de lecture sur toutes les tables, et un ALTER TABLE qui l'attend meurt sur le
+# statement timeout (même jour, même séance).
 #
 # -----------------------------------------------------------------------------
 # ⚠️ LE PIÈGE DES CLÉS ÉTRANGÈRES CIRCULAIRES
@@ -89,6 +115,38 @@ else
   echo "     ⚠️  /scripts/refresh-matviews.sh introuvable — à lancer à la main."
 fi
 
+# --- 3 bis. Historique des migrations ---------------------------------------
+# La table du dump porte les colonnes de la CLI Supabase récente (created_by,
+# idempotency_key, rollback) ; celle que créent nos scripts n'en a que trois.
+# On la crée donc ici dans sa forme LARGE avant de charger, sinon l'INSERT du
+# dump échoue sur des colonnes inconnues.
+echo "3 bis  Historique des migrations…"
+if [ -f "$DUMPS/migrations.sql" ]; then
+  psql -q -U "$SU" -d postgres -v ON_ERROR_STOP=1 >/dev/null 2>/tmp/restore_err <<'SQL'
+CREATE SCHEMA IF NOT EXISTS supabase_migrations;
+CREATE TABLE IF NOT EXISTS supabase_migrations.schema_migrations (
+  version text PRIMARY KEY, statements text[], name text);
+ALTER TABLE supabase_migrations.schema_migrations
+  ADD COLUMN IF NOT EXISTS created_by text,
+  ADD COLUMN IF NOT EXISTS idempotency_key text,
+  ADD COLUMN IF NOT EXISTS rollback text[];
+GRANT ALL ON SCHEMA supabase_migrations TO postgres, supabase_admin;
+GRANT ALL ON ALL TABLES IN SCHEMA supabase_migrations TO postgres, supabase_admin;
+SQL
+  if [ $? -eq 0 ] && psql -q -U "$SU" -d postgres -v ON_ERROR_STOP=1 -f "$DUMPS/migrations.sql" >/dev/null 2>/tmp/restore_err; then
+    psql -U "$SU" -d postgres -tAc "select '     OK — ' || count(*) || ' migrations inscrites, dernière ' || max(version) from supabase_migrations.schema_migrations"
+  else
+    echo "     ÉCHEC"; echo ""; tail -n 15 /tmp/restore_err; exit 1
+  fi
+else
+  echo "     ⚠️  $DUMPS/migrations.sql ABSENT."
+  echo "     L'instance sera complète mais ne saura pas quelles migrations elle porte :"
+  echo "     deploy/deploy.sh REFUSERA de la mettre à jour. Le reprendre à la source :"
+  echo "       supabase db dump --linked --data-only --schema supabase_migrations -f deploy/dumps/migrations.sql"
+  echo "     puis :  docker compose exec -T db psql -U supabase_admin -d postgres -f /dumps/migrations.sql"
+  HISTORIQUE_ABSENT=1
+fi
+
 fin=$(date +%s)
 
 # --- 4. Contrôles -----------------------------------------------------------
@@ -107,3 +165,7 @@ echo "Vérification des clés étrangères réactivées :"
 psql -U "$SU" -d postgres -tAc "select '  session_replication_role = ' || current_setting('session_replication_role')"
 echo ""
 echo "« sans RLS » doit valoir 0, et les compteurs doivent correspondre à la production."
+if [ "${HISTORIQUE_ABSENT:-0}" = "1" ]; then
+  echo ""
+  echo "⚠️  Historique des migrations NON restauré (voir 3 bis) : à faire avant toute mise à jour."
+fi
