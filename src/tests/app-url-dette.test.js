@@ -7,8 +7,12 @@
 // foyer de la vitrine, a compté « https://app.anarbib.org » écrit en dur dans
 // vingt-quatre fichiers. `register` a été repris le jour même, DERRIÈRE un banc
 // (register-banc.test.js), puis les mails des prêts et de la Lettre
-// (notify-loan-cycle-banc, lettre-banc) ; les autres attendent le leur — on ne retouche pas un
+// (notify-loan-cycle-banc, lettre-banc) ; les autres ont attendu le leur — on ne retouche pas un
 // mail qu'aucun test ne rend.
+//
+// DETTE ÉTEINTE le 21/09/2026 au soir : le dernier fichier (domain/reservas.ts) est
+// passé par le foyer, derrière reservas-workflow-banc. La liste DETTE reste, VIDE :
+// elle n'a plus vocation à recevoir d'entrée — un lien nouveau passe par appUrl().
 //
 // Trois listes, chacune avec son motif :
 //   TOLERE : l'adresse y est une DONNÉE et non un lien (liste d'origines CORS,
@@ -39,9 +43,7 @@ const TOLERE = {
   'submit-gazette-contribution/index.ts': 1,       // idem
   'gazette-monthly-build/index.ts': 1,             // User-Agent du moissonneur : une identité, pas un lien servi
 };
-const DETTE = {
-  '_shared/domain/reservas.ts': 1,                 // dernier : le bouton « ouvrir le panneau » du mail staff des réservations
-};
+const DETTE = {};                                  // éteinte le 21/09/2026 — ne pas la rallumer
 
 function releve() {
   const out = {};

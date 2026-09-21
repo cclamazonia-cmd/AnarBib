@@ -46,6 +46,15 @@ describe('domain/reservas — la négociation du retrait', () => {
     expect(liens(mailA(ef.envois, 'lectrice@exemplo.test').html)).not.toContain('https://app.anarbib.org/painel');
   });
 
+  // ROUGE sur le code intact (adresse écrite en dur) ; vert depuis _shared/core/app-url.ts.
+  it('le bouton vers le panneau suit APP_BASE_URL (barre finale tolérée)', async () => {
+    const { ef, lancer } = monter({ env: { APP_BASE_URL: 'https://app.anarbib.is/' } });
+    await lancer('retirada_a_combinar');
+    const l = liens(mailA(ef.envois, 'coordination@biblio.test').html);
+    expect(l).toContain('https://app.anarbib.is/painel');
+    expect(l.filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
+  });
+
   it('créneau verrouillé (rien à faire côté biblio) : mail d\'information, SANS bouton', async () => {
     const { ef, lancer } = monter({ item: ligne({ workflow_stage_effective: 'retirada_agendada' }) });
     await lancer('retirada_agendada');

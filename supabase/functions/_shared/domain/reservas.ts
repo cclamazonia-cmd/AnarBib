@@ -10,6 +10,7 @@ import { normalizeReservaPickupReplyEvent, normalizeReservaStatusChangeEvent, no
 import { getPayloadValue, normalizeLineNos, normalizeWorkflowItems } from "../shared/payload.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { decodeSystemNote } from "../i18n/systemNotes.ts";
+import { appUrl } from "../core/app-url.ts";
 export async function handleReservaCriadaV2(recordId) {
   const { reserva, profile, items } = await getReservaV2Bundle(recordId);
   const ctx = await resolveLibraryNotificationContext(String(reserva.library_id || "").trim() || null);
@@ -486,7 +487,7 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
       kind: 'action',
       title: tMail(libLocale, 'wf.staff.actionBox.title'),
       ctaLabel: tMail(libLocale, 'wf.staff.actionBox.openPanel'),
-      ctaUrl: 'https://app.anarbib.org/painel'
+      ctaUrl: appUrl('/painel')
     } : {
       kind: 'info',
       title: tMail(libLocale, 'wf.staff.infoBox.title')
