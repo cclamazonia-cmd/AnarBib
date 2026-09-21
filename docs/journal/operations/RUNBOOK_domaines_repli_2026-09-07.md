@@ -353,6 +353,41 @@ canonique — c'est voulu), création de compte avec défi Altcha, et une écrit
 domaine de repli. Elles demandent des identifiants : à faire avec Xavier, un jour calme, jamais
 la veille d'une soirée de formation.
 
+## 21/09/2026 — L'adresse du site de présentation a un foyer unique
+
+Constat, en relisant le guide d'accueil des coordinations posé le 16/09 : « https://anarbib.org »
+était écrit en dur à **vingt-trois endroits** du dépôt applicatif — dix locales
+(`account.constitution.guideUrl`), dix chaînes du mail d'acceptation (`approved.guideUrl`), la
+galerie de `/criar-conta`, et deux liens du mail d'inscription (`register`). Tant que `.is` et
+`.org.br` redirigent vers `.org`, rien ne casse ; le jour où le canonique change, il aurait
+fallu les retrouver tous, dans dix langues. La phase 0 (inventaire par `grep`) les aurait
+montrés, mais un soir de bascule n'est pas le moment de rouvrir des dictionnaires.
+
+**Ce qui est vrai désormais.** Les textes ne portent que des **chemins** (`/fr/accueil/`). La
+base a un foyer par côté, réglable sans toucher au code :
+
+| Côté | Foyer | Réglage | Défaut |
+|---|---|---|---|
+| Front | `src/lib/siteUrl.js` | variable de build `VITE_SITE_URL` (pas `ci.yml`, étape build) | `https://anarbib.org` |
+| Mails (Edge Functions) | `supabase/functions/_shared/core/site-url.ts` | secret `SITE_BASE_URL` | `https://anarbib.org` |
+| Vitrine | `tools/guide-meta.json` (`baseUrl`) et `stamp-og.cjs` (`SITE`) | éditer, puis relancer `stamp-og.cjs --write`, `build-guide-pages.cjs` et les feuilles A4 | — |
+
+Garde : `src/tests/site-url-unique.test.js` refuse l'adresse écrite ailleurs que dans les deux
+foyers de l'application ; `notify-library-request-approved.test.js` prouve qu'avec
+`SITE_BASE_URL=https://anarbib.is` le bouton du mail suit, sans toucher aux chaînes.
+
+**Le geste du jour J, pour la vitrine comme base des liens** (en plus de l'inversion des deux
+lignes de `.domains`, phase 1) : poser `VITE_SITE_URL` dans la CI et relancer un build ; poser
+le secret `SITE_BASE_URL` (`supabase secrets set`) — les fonctions le lisent au démarrage, donc
+redéployer `register` et `notify-library-request` ; côté vitrine, changer `baseUrl` et `SITE`,
+régénérer, pousser. Les liens **internes** de la vitrine sont relatifs : rien à y changer.
+
+**Ce qui reste en dur, et que ce relevé ne couvre pas** : l'adresse de l'**application**
+(`https://app.anarbib.org`) a son foyer côté mails (`APP_BASE_URL`, `_shared/core/env.ts`), mais
+`register` l'écrit encore en toutes lettres à quatre endroits (`DEFAULT_LIBRARY_REQUEST_URL`,
+le repli de `loginOrigin`, `atelierUrl`, `catalogUrl`). À reprendre à part : `register` est la
+fonction la plus sensible du dépôt et n'a pas de banc de rendu.
+
 ## Annexe A — Toutes les vérifications en un bloc
 
 ```bash
