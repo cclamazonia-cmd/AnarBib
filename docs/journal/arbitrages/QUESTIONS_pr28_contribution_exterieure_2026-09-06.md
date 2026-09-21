@@ -1,7 +1,7 @@
 # Quatre questions nées de la première contribution extérieure — 06/09/2026 *(tranchées le soir même)*
 
 > Page préparée pour Xavier le soir du 06/09, après relecture complète de la
-> PR #28 (`codeberg.org/anarbib/anarbib/pulls/28`, Bastien, `ASR2026`) et de la
+> PR #28 (`codeberg.org/anarbib/anarbib/pulls/28`, un camarade de l'ASR, compte `ASR2026`) et de la
 > PR #2 du site vitrine (`codeberg.org/AnarBib/pages/pulls/2`). Aucune de ces
 > questions ne demande du code : elles demandent un verdict, et le verdict entre
 > au REGISTRE dans la foulée (`GOUV-19`, `FED-O11`, `DOC-CONTRIB-1`). **On
@@ -50,9 +50,9 @@
 
 ## Q3 — Le site vitrine (backlog `J3`) — *déjà tranché le 06/09*
 
-**Décidé** (Xavier, 06/09, « il vaudrait mieux attendre un peu ») : la PR pages #2 reste ouverte et se fusionne **après** la PR « auto-hébergement », une fois quatre phrases corrigées (fédération, 2 Go / Raspberry Pi, identifiants par défaut, mode simulation) et l'avertissement « traduit automatiquement, corrigez-moi » ajouté au générateur. Le README multilingue du dépôt vitrine peut partir seul. Réponse posée à Bastien dans ces termes. **Rien à répondre ici**, la ligne est là pour que la décision ait une date.
+**Décidé** (Xavier, 06/09, « il vaudrait mieux attendre un peu ») : la PR pages #2 reste ouverte et se fusionne **après** la PR « auto-hébergement », une fois quatre phrases corrigées (fédération, 2 Go / Raspberry Pi, identifiants par défaut, mode simulation) et l'avertissement « traduit automatiquement, corrigez-moi » ajouté au générateur. Le README multilingue du dépôt vitrine peut partir seul. Réponse posée au camarade dans ces termes. **Rien à répondre ici**, la ligne est là pour que la décision ait une date.
 
-**Complément tranché le 06/09, 21 h (Xavier)** : le lien « Auto-hébergement » va **dans le pied de page** (et sur la page Contribuer), **pas dans la barre de navigation principale** — Bastien l'avait posé dans les deux, sur toutes les sous-pages des dix langues (PR pages #2, commentaire du 06/09 20 h 45, point 4). Motif : la navigation principale s'adresse aux lectrices et aux bibliothèques qui cherchent le réseau ; l'auto-hébergement est une voie technique, qui se trouve depuis Contribuer et le pied de page. À répercuter dans la PR #2 avant fusion.
+**Complément tranché le 06/09, 21 h (Xavier)** : le lien « Auto-hébergement » va **dans le pied de page** (et sur la page Contribuer), **pas dans la barre de navigation principale** — le camarade l'avait posé dans les deux, sur toutes les sous-pages des dix langues (PR pages #2, commentaire du 06/09 20 h 45, point 4). Motif : la navigation principale s'adresse aux lectrices et aux bibliothèques qui cherchent le réseau ; l'auto-hébergement est une voie technique, qui se trouve depuis Contribuer et le pied de page. À répercuter dans la PR #2 avant fusion.
 
 ---
 
