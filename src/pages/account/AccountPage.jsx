@@ -191,6 +191,9 @@ export default function AccountPage() {
   const [noteMsg, setNoteMsg] = useState({ text: '', kind: '' });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
+  // E19 : le profil et l'adresse ont chacun leur bouton Enregistrer (même geste, même écriture) ;
+  // le message et le sablier s'affichent sous celui qu'on a cliqué.
+  const [saveBloc, setSaveBloc] = useState('perfil');
   const [msgIsError, setMsgIsError] = useState(false);
   // #REFACTOR 08/06 : états card* déplacés dans ReaderCardSection (composant lazy).
   const [reserveRef, setReserveRef] = useState('');
@@ -576,6 +579,7 @@ export default function AccountPage() {
 
   async function handleSaveProfile(e) {
     e.preventDefault();
+    setSaveBloc(e.currentTarget?.dataset?.bloc === 'adresse' ? 'adresse' : 'perfil');
     setSaving(true);
     setMsg('');
     setMsgIsError(false);
@@ -1356,7 +1360,7 @@ export default function AccountPage() {
               <h2 className="ab-conta-section-title">{t({ id: 'account.profile.title' })}</h2>
               <p className="ab-conta-hint">{t({ id: 'account.profile.hint' })}</p>
 
-              <form onSubmit={handleSaveProfile} className="ab-conta-form">
+              <form onSubmit={handleSaveProfile} data-bloc="perfil" className="ab-conta-form">
                 <div className="ab-conta-grid2">
                   <label>{t({ id: 'account.profile.firstName' })} <input type="text" value={profile.first_name || ''} onChange={e => updateProfile('first_name', e.target.value)} required /></label>
                   <label>{t({ id: 'account.profile.lastName' })} <input type="text" value={profile.last_name || ''} onChange={e => updateProfile('last_name', e.target.value)} required /></label>
@@ -1378,13 +1382,9 @@ export default function AccountPage() {
                 </label>
                 <label>{t({ id: 'account.profile.org' })} <input type="text" value={profile.affiliation_org || ''} maxLength={200} onChange={e => updateProfile('affiliation_org', e.target.value)} /></label>
 
-                <hr className="ab-conta-hr" />
-                <h3 style={{ fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'address.title' })}</h3>
-                <AddressForm addr={addr} onChange={updateAddress} />
-
                 <div className="ab-conta-form-actions">
-                  <Button type="submit" loading={saving}>{t({ id: 'common.save' })}</Button>
-                  {msg && <span className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
+                  <Button type="submit" loading={saving && saveBloc === 'perfil'} disabled={saving}>{t({ id: 'common.save' })}</Button>
+                  {msg && saveBloc === 'perfil' && <span role="status" className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
                 </div>
               </form>
               </div>
@@ -1552,6 +1552,19 @@ export default function AccountPage() {
                   </div>
                 </div>
               </section>
+
+              {/* ── Adresse — second formulaire (E19, 21/09/2026) : sortie du formulaire du profil pour
+                  que les trois décisions ci-dessus se voient sans défiler. Même enregistrement que le
+                  profil (handleSaveProfile écrit les deux) : aucun des deux boutons ne perd de saisie. ── */}
+              <form onSubmit={handleSaveProfile} data-bloc="adresse" className="ab-conta-form ab-conta-adresse">
+                <h3 style={{ fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'address.title' })}</h3>
+                <AddressForm addr={addr} onChange={updateAddress} />
+
+                <div className="ab-conta-form-actions">
+                  <Button type="submit" loading={saving && saveBloc === 'adresse'} disabled={saving}>{t({ id: 'common.save' })}</Button>
+                  {msg && saveBloc === 'adresse' && <span role="status" className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
+                </div>
+              </form>
 
               {/* ── Paquet 7 criar-conta — Encadré privacy : biblio mentionnée ──── */}
               {profile.signup_intent_metadata?.library_name_mentioned && (

@@ -9,6 +9,12 @@
 // Ils remontent juste sous le formulaire du profil, côte à côte ; la suppression
 // du compte reste seule, dernière, en rouge.
 //
+// 21/09, décision de Xavier : l'adresse vivait dans le MÊME formulaire que le
+// profil, et tenait les cartes sous la ligne de flottaison. Le formulaire est
+// coupé : profil + Enregistrer, les trois cartes, puis adresse + Enregistrer.
+// Les deux boutons font le même geste (handleSaveProfile écrit profil ET
+// adresse) : cliquer l'un ne perd jamais ce qu'on a saisi dans l'autre.
+//
 // Rendre AccountPage entier ici (2 700 lignes, une session, une dizaine d'appels
 // Supabase au montage) serait fragile pour ce qu'on veut prouver. Même patron
 // que catalog-explore-replie.test.js : on lit la SOURCE et on garde le contrat.
@@ -19,7 +25,9 @@
 //      la largeur du contenu et fait déborder la page sur mobile — et passe à
 //      une colonne sous 900 px (la fiche disait 640 : mesuré à 700 px, trois pistes
 //      de 207 px tiennent mais la carte des notifications y fait 735 px de haut) ;
-//   4. rien n'a été perdu en route : chaque geste garde son appel.
+//   4. rien n'a été perdu en route : chaque geste garde son appel ;
+//   5. l'adresse vient APRÈS les cartes, dans son propre formulaire, qui
+//      enregistre comme celui du profil ; message et sablier suivent le bouton cliqué.
 // Un test de source n'est pas un test de rendu : le rendu se vérifie à l'écran.
 
 import { describe, it, expect } from 'vitest';
@@ -47,11 +55,13 @@ describe('Mon compte, « Données personnelles » — les décisions sous le pro
   it('ordre des blocs : profil, trois décisions, ce qui se lit, suppression en dernier', () => {
     const jalons = [
       'account.profile.title',
-      'handleSaveProfile',
+      'data-bloc="perfil"',
       'className="ab-conta-decisions"',
       'account.export.title',
       'account.notifPrefs.title',
       'account.lettre.title',
+      'data-bloc="adresse"',
+      '<AddressForm ',
       'account.declared.title',
       'handleChangePassword',
       '<ReaderCardSection />',
@@ -90,6 +100,24 @@ describe('Mon compte, « Données personnelles » — les décisions sous le pro
     expect(mobile[0]).toMatch(/grid-template-columns:\s*minmax\(0,\s*1fr\)/);
     // La carte elle-même accepte de rétrécir sous la largeur de son contenu.
     expect(css).toMatch(/\.ab-conta-decision\s*\{[^}]*min-width:\s*0/);
+  });
+
+  it("l'adresse a son propre formulaire, qui enregistre comme celui du profil", () => {
+    for (const bloc of ['perfil', 'adresse']) {
+      expect(onglet.split(`<form onSubmit={handleSaveProfile} data-bloc="${bloc}"`).length - 1, bloc).toBe(1);
+    }
+    expect(onglet.split('<AddressForm ').length - 1).toBe(1);
+    // le formulaire du profil ne contient plus l'adresse
+    const profil = onglet.slice(onglet.indexOf('data-bloc="perfil"'), onglet.indexOf('</form>', onglet.indexOf('data-bloc="perfil"')));
+    expect(profil).not.toContain('<AddressForm');
+    expect(profil).not.toContain('address.title');
+    // chaque bouton porte son propre message et son propre sablier
+    for (const bloc of ['perfil', 'adresse']) {
+      expect(onglet, bloc).toContain(`loading={saving && saveBloc === '${bloc}'}`);
+      expect(onglet, bloc).toContain(`{msg && saveBloc === '${bloc}' &&`);
+    }
+    // et le geste note quel bouton a été cliqué
+    expect(page).toContain("setSaveBloc(e.currentTarget?.dataset?.bloc === 'adresse' ? 'adresse' : 'perfil')");
   });
 
   it("rien n'est perdu en route : chaque geste garde son appel, une seule fois", () => {

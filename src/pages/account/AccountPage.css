@@ -64,6 +64,9 @@
    notifications, lettre), côte à côte sous le profil. Pistes en minmax(0, 1fr),
    jamais `1fr` nu (doctrine mobile, src/styles/mobile.css). */
 .ab-conta-decisions-bloc { margin-top: 28px; }
+/* L'adresse a son propre formulaire depuis le 21/09 (même enregistrement que le profil),
+   pour que les trois décisions se voient sans défiler. */
+.ab-conta-adresse { margin-top: 28px; }
 .ab-conta-decisions-bloc > h3 { margin-top: 0; }
 .ab-conta-decisions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .ab-conta-decision {
