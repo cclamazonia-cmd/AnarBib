@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,8 +19,8 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **54 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I26, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **56 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -738,6 +738,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **E1** | Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code | `P1` | Ouvert |
+| **E22** | Le build du front signale une accolade fermante en trop dans une feuille de style — personne ne l'a cherchée | `P3` | Ouvert |
 | **E2** | Trancher les conventions néerlandaise et grecque | `P1` | Ouvert |
 | **E3** | Uniformiser le registre d'adresse entre les dix locales | `P2` | Décision collective |
 | **E4** | Régler les paires irrégulières de l'italien | `P2` | Ouvert |
@@ -770,6 +771,25 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** **Entrée sans compétence technique** pour la partie parcours.
 
 *Renvois : `Mémoire de projet, 25/08/2026` · `Commits 69af3cf5, df472bed`*
+
+#### E22 — Le build du front signale une accolade fermante en trop dans une feuille de style — personne ne l'a cherchée
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
+
+**État.** Lu le 21/09 dans la sortie de `npm run build` (commit `ba0f30eb`) : `[esbuild css minify] ▲ [WARNING] Unexpected "}" [css-syntax-error] <stdin>:632:0`. Le build aboutit (392 fichiers) et la CI est verte : un avertissement de minification ne fait rien rougir. `<stdin>` ne nomme pas la feuille — c'est un lot de CSS passé au minifieur, la ligne 632 est celle du lot, pas d'un fichier.
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Trouver la feuille : construire avec `build.cssMinify: false` et chercher l'accolade orpheline, ou passer chaque `.css` de `src/` à un analyseur. Corriger, puis décider si un avertissement du minifieur CSS doit faire échouer le build en CI.
+
+**Pourquoi ça compte.** Une accolade en trop ferme un bloc plus tôt que voulu : selon l'endroit, tout ce qui suit dans la feuille s'applique hors de sa requête média ou de son sélecteur, ou est ignoré. Le projet a déjà payé des débordements mobiles dus à des règles qui ne s'appliquaient pas où l'on croyait.
+
+**Ce qui compte comme fini.**
+
+- La feuille et la ligne sont nommées ici.
+- `npm run build` ne rend plus cet avertissement.
+
+*Renvois : `vite.config.js` · `src/**/*.css`*
 
 #### E2 — Trancher les conventions néerlandaise et grecque
 
@@ -1007,6 +1027,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 | **F7** | Un transport mail sans service configuré lève ; il ne simule pas en silence | `P1` | Ouvert |
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
+| **F11** | Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1172,6 +1193,26 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 **Dépendances.** Après **K5** (relais demandé à Bologne). Pas avant **I2** : changer de transport et d'hébergeur la même semaine, c'est deux inconnues.
 
 *Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
+
+#### F11 — Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
+
+**État.** **Constaté par Xavier le 21/09/2026** sur le premier courriel réel de la sonde `images_pins` : le bilan JSON était **blanc sur blanc**. Cause : le `<pre>` fixait un fond clair (`#f4f4f4`) sans fixer la couleur du texte ; un client en thème sombre passe le texte en blanc et garde le fond. **Ce bloc-là est corrigé** (commit `6320a00d`, couleur et bordure posées) — mais il n'était pas seul. *Mesuré le même soir dans `supabase/functions/`* : sur **48** styles en ligne qui fixent un fond, **27 ne fixent pas la couleur du texte**, dans onze fichiers — `notify-network-weekly-report` (4), `notify-rede-digest`, `notify-library-request`, `notify-weekly-report`, `_shared/domain/reader-message.ts` et **le gabarit commun `_shared/mail/layout.ts`** (3 chacun), `register`, `request-password-reset`, `notify-mid-loan-reading` (2), `notify-library-invitation`, `notify-document-permission-request` (1). Et aucun gabarit ne déclare `color-scheme` ni `prefers-color-scheme` (0 occurrence) : chaque client décide seul de ce qu'il inverse. Parmi ces courriels, ceux de l'inscription et de la réinitialisation du mot de passe — les premiers qu'une personne reçoit.
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Deux gestes. **(1)** La règle, mécanique : tout style en ligne qui fixe `background` fixe aussi `color` — une garde vitest sur `supabase/functions/**` la tient (le décompte ci-dessus est son point de départ, il ne peut que descendre). **(2)** Le choix, à faire une fois dans `layout.ts` : déclarer `<meta name="color-scheme" content="light only">` (on impose le clair, le plus simple et le plus prévisible) ou écrire un vrai thème sombre (`prefers-color-scheme`), que tous les clients ne suivent pas. Puis **regarder** : un courriel de chaque famille ouvert dans un client sombre (Proton, Thunderbird, Gmail mobile), capture à l'appui — une règle de style ne prouve pas un rendu.
+
+**Pourquoi ça compte.** Un courriel qu'on ne peut pas lire est un courriel qui n'est pas parti. Ici c'était une alerte d'exploitation, lue par la seule personne qui pouvait agir ; ailleurs ce sont des rappels d'échéance et des liens d'inscription, reçus par des lectrices qui n'écriront pas pour dire qu'elles n'ont rien vu.
+
+**Ce qui compte comme fini.**
+
+- Plus aucun style en ligne ne fixe un fond sans fixer la couleur du texte, et une garde le tient.
+- Le choix clair imposé / thème sombre est écrit au REGISTRE et posé dans `layout.ts`.
+- Un courriel de chaque famille a été regardé dans un client en thème sombre, captures versées.
+
+*Renvois : `supabase/functions/_shared/mail/layout.ts` · `supabase/functions/health-probe/index.ts (bloc corrigé le 21/09)` · `journal/operations/NOTE_pins-images-remesures_2026-09-21 §6`*
 
 ---
 
@@ -1531,7 +1572,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
 | **I25** | Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée | `P3` | Ouvert |
-| **I26** | Une instance restaurée depuis un dump n'a plus aucun cron — `cron.job` ne voyage pas, et rien ne le dit au moment de la restauration | `P1` | Ouvert |
+| **I27** | Le chemin de secours du front n'a jamais publié pour de vrai — `publier-front.sh` attend son premier tir | `P2` | Ouvert |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1703,27 +1744,27 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `scripts/ci/run-sql-suites.sh` · `.forgejo/workflows/sql-tests.yml` · `REGISTRE §0 DOC-SILENCE-1` · `REGISTRE §0 OPS-8`*
 
-#### I26 — Une instance restaurée depuis un dump n'a plus aucun cron — `cron.job` ne voyage pas, et rien ne le dit au moment de la restauration
+#### I27 — Le chemin de secours du front n'a jamais publié pour de vrai — `publier-front.sh` attend son premier tir
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système, SQL / PostgreSQL
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
 
-**État.** **Constaté le 21/09/2026** sur un dump réel de la production restauré par `bootstrap.sh --depuis-une-sauvegarde` : le contrôle de santé de `deploy/deploy.sh` (I19) rend « pg_cron : 0 jobs planifiés, 38 absents ». `supabase db dump` n'emporte pas le schéma `cron` ; et comme l'historique des migrations est désormais restauré (I2, 21/09), les migrations qui planifient les jobs sont inscrites « faites » et ne se rejouent pas. L'instance est complète, elle répond, on s'y connecte — et ni rappel d'échéance, ni sonde de santé, ni moisson, ni gazette, ni expiration de cotisation ne partira jamais. `bootstrap.sh` finit en « ✓ Pile reconstruite et vérifiée » : sa vérification finale ne regarde pas `cron.job` ; seul `deploy.sh --controle` le voit, et on ne le lance pas le jour d'une restauration.
+**État.** `scripts/ci/publier-front.sh` (21/09, commit `0bd79bd3`) rejoue hors forge le job `app` de la CI : construire, puis publier sur les trois sites par `git-pages-cli`, l'image que l'action de la forge appelle. **Exécutés le 21/09** : le refus sans la clé publiable, la construction (392 fichiers, 23 Mo), `--simulation`, `--vers-dossier`. **Jamais exécutée** : la publication elle-même — il y faut un jeton Codeberg, qui ne se confie pas à une session. La garde `publier-front-coherence` tient la liste des sites égale à celle de `ci.yml` ; elle ne dit rien de l'autorisation.
 
 *Vérifié : [object Object]*
 
-**Ce que c'est.** Deux gestes. **(1)** Que `bootstrap.sh` le DISE : rejouer `tests/sql/crons_planifies_tests.sql` dans sa vérification finale, comme `deploy.sh` le fait déjà — un rouge le jour J vaut mieux qu'un silence d'un mois. **(2)** Que les jobs reviennent : un quatrième fichier, sur le modèle de l'export du Vault (`select format('select cron.schedule(%L,%L,%L);', jobname, schedule, command) from cron.job`), chargé par `restore.sh`. À vérifier d'abord : **les commandes de cron portent-elles des secrets en clair** ? Si oui, le fichier suit la règle des dumps (jamais au dépôt, effacé après usage) et entre dans le flux `long` à côté de `anarbib-vault.sql`. Alternative à peser : une migration idempotente unique qui replanifie les 38 jobs depuis la liste de la suite — une seule liste (`DOC-RECENS-1`), et plus rien à transporter.
+**Ce que c'est.** Un jour calme, par une personne : `GIT_PAGES_TOKEN=… scripts/ci/publier-front.sh --essai` (le `--dry-run` du serveur : l'autorisation est vérifiée, rien n'est publié), sur les trois sites. Si l'essai passe, une publication réelle sur `app.anarbib.is` seul (`--site`), puis le contrôle du nom haché du bundle que le script imprime. Noter ici quel jeton convient (portée, durée) et où il se range (Dashlane), et si la voie `GIT_PAGES_PASSWORD` (défi DNS, sans forge) mérite d'être préparée.
 
-**Pourquoi ça compte.** C'est exactement la panne que le projet sait le mieux reconnaître — un état qui répond « tout va bien » et ne fait pas ce qu'il annonce — placée au pire moment : le lendemain d'une bascule ou d'un sinistre, quand personne ne regarde les crons. Et la sonde de santé étant elle-même un cron, l'instance restaurée est la seule qui ne peut pas s'en apercevoir.
+**Pourquoi ça compte.** Un chemin jamais emprunté n'est pas un chemin qui marche, et celui-ci ne servira qu'un jour de panne — le runner de la CI tourne sur le poste du mainteneur (A3). Le découvrir cassé ce jour-là, c'est le découvrir trop tard.
 
 **Ce qui compte comme fini.**
 
-- `bootstrap.sh --depuis-une-sauvegarde` rougit tant que les crons attendus manquent.
-- Une restauration d'un dump réel rend `CRONS-PLANIFIES OK` sans geste manuel non écrit.
-- La question des secrets dans `cron.job.command` a sa réponse écrite ici.
+- `--essai` accepté par le serveur sur les trois sites, sortie consignée ici.
+- Une publication réelle faite par ce chemin, vérifiée par le nom haché du bundle servi.
+- Le jeton à employer et son rangement sont écrits.
 
-**Dépendances.** Sort de **I2** (passe réelle du 21/09), s'appuie sur **I19** (la suite des crons attendus, déjà rejouée par `deploy.sh`). Entre dans ce que **I21** doit voir vrai avant la bascule.
+**Dépendances.** Sort de **I2** (découpler la CI, 21/09). Cousin de **A3** (tout tourne sur la machine du mainteneur).
 
-*Renvois : `journal/operations/NOTE_pins-images-remesures_2026-09-21 §7` · `deploy/deploy.sh (contrôle pg_cron, I19)` · `tests/sql/crons_planifies_tests.sql` · `deploy/scripts/restore.sh`*
+*Renvois : `scripts/ci/publier-front.sh` · `src/tests/publier-front-coherence.test.js` · `deploy/README.md §4` · `journal/operations/NOTE_pins-images-remesures_2026-09-21 §8`*
 
 ---
 
@@ -2150,6 +2191,7 @@ CI verte : lint et suite unitaire. |
 | E17 | 2026-09-21 | **Clos le 21/09 sur décision de Xavier (« Clos E17 »).** Livré en deux temps : `3c411f10` (20/09) — le bloc « Explorer » naît replié, s'en souvient dans les deux sens, dit ce qu'il cache, ne se rouvre jamais seul ; `16d22656` (21/09) — sur écran étroit, « Filtres » naît replié lui aussi, avec son badge des filtres actifs, et emporte sa rangée d'actions. Mesuré à l'écran à 375×812, première visite : premier titre à **778 px, visible sans défiler** (4 018 px avant E17). À 1366×768 le bloc « Filtres » naît ouvert et le premier titre reste à 880 px, sous la ligne de flottaison : **critère écarté par choix de Xavier le 21/09** (« replié sur mobile seulement ») — l'outil principal du catalogue reste sous la main sur portable. Bancs `catalog-explore-replie` (5 cas) et `catalog-filtres-replies-mobile` (7 cas). Vérifié en production le 21/09 à 13 h 55 (les deux feuilles et les deux modules servis portent le code). |
 | E16 | 2026-09-21 | **Clos le 21/09 sur pièces — la contradiction vivait dans les fichiers de langue, pas à l'écran.** *Lu dans le code* : la sous-page est un seul composant (`RetentionPolicySection`, monté par l'onglet `privacy` de `BibliotecaPage`), qui rend **un seul bandeau, sans condition** — `biblioteca.privacy.purgeActiveNotice`, « la suppression automatique est active » — depuis le 03/06 (`8d3dd444`, « honest UI »). Le second message, `biblioteca.privacy.phase4aNotice` (« pas encore active, elle le sera en Phase 4b »), n'était plus employé par aucun fichier de code mais restait dans les **dix** locales : c'est là que la refonte du manuel l'a lu. *Lu en base* : le message affiché dit vrai — le cron `anarbib-rgpd-purge-weekly` est actif, `fn_purge_expired_data(p_dry_run := false)`, 16 passages, le dernier le 20/09 à 03 h UTC, `succeeded` ; le préavis `anarbib-rgpd-notify-weekly` tourne une heure avant (20 passages). *Fait* (`48c413ac`) : la clé morte retirée des dix locales (6 690 → 6 689, parité stricte), et le banc `privacidade-un-seul-message-sur-la-purge` (3 cas) qui tient ensemble les trois faits — un seul bandeau, plus de clé `phase4a` ni de renvoi à une « Phase 4b », et une purge planifiée pour de bon (socle + liste fermée des crons, aucune migration qui la déplanifie ou la repasse à blanc). **Ce qui n'a pas été fait** : je n'ai pas ouvert l'écran sur `blmf-teste` (page du personnel, session requise) ; le « fini quand » est tenu par la lecture du composant, qui n'a qu'un chemin de rendu pour ce bandeau. Le Manuel v5 peut retirer sa mise en garde « vérifier l'instance ». |
 | I23 | 2026-09-21 | **Clos le 21/09 sur pièces — réglé depuis le 20/09 sans que la fiche le sache.** Trouvé par l'inventaire du 21/09 (sessions et commits depuis le 09/09 confrontés aux items ouverts) : aucune session n'a jamais nommé `I23`, alors que son unique critère — « le domaine résout et redirige » — est tenu. *Mesuré le 21/09 à 20 h 21* : `https://anarbib.is/` répond **307 vers `https://anarbib.org/`** (`.is`, ccTLD islandais, déposé chez ISNIC et non chez OVH comme la fiche le prévoyait) ; `app.anarbib.is` sert l'application en 200 ; `anarbib.org.br` (307) et `app.anarbib.org.br` (200) font de même depuis le 21/09. *Au registre* : **`OPS-10`** (§38, v0.41) — `anarbib.org` reste canonique, `.is` et `.org.br` sont des routes d'accès câblées et éprouvées, **jamais annoncées** : il n'y a donc rien à écrire dans la politique de confidentialité, ce que la fiche réservait au cas où le domaine y figurerait. Deux restes, qui ne sont pas de cet item : `www.anarbib.is` n'a pas répondu en HTTPS à la mesure (cause non relevée), et l'essai de bascule **authentifié** du runbook, que `OPS-10` garde ouvert. |
+| I26 | 2026-09-21 | **Clos le 21/09, le soir même de son ouverture — les trois « fini quand » tenus, chacun avec sa mesure.** Décision de Xavier : la voie de la liste au dépôt plutôt qu'un quatrième fichier de dump. *(1) La question des secrets* : mesuré en production, **0 secret littéral et 0 URL en dur sur les 38 commandes** ; une seule lit un secret (`anarbib-health-probe`), à l'exécution, dans `vault.decrypted_secrets`. La liste peut donc vivre au dépôt. *(2) Ce qui a été livré* (commit `2237d433`, migration `20260921193147`) : une migration seule n'y pouvait rien — restaurée avec son historique, elle est inscrite « faite » et ne se rejoue pas ; d'où une **fonction**, qui voyage dans le dump avec le schéma. `private.fn_crons_attendus()` porte nom, horaire, commande et état des 38 jobs, relevés en production (empreinte md5 `bf25c87f…`, recalculée par la migration elle-même : une retouche d'espace ou de fin de ligne la fait échouer) ; `private.fn_crons_replanifier()`, SECURITY DEFINER pour que les jobs appartiennent à `postgres` comme en production, ne touche qu'aux jobs absents, différents ou inactifs, signale les inattendus et ne retire jamais rien. `restore.sh` l'appelle (étape « 3 ter ») ; `bootstrap.sh` rejoue la suite des crons dans sa vérification finale (contrôle h) et **rougit** s'ils manquent. La suite `crons_planifies_tests.sql` gagne T7 et T8 : sa liste et les commandes réellement planifiées doivent être celles de la fonction — qui ajoute un cron par migration sans le reporter fait rougir la CI. *(3) Éprouvé* : banc SQL complet ; puis **aller-retour réel sur `pg_cron`** — pile bâtie depuis le dépôt, dumpée par la CLI (0 ligne de `cron.job` dans le dump, la fonction y est), démontée, restaurée : « 3 ter OK — 38 jobs planifiés, tous sous le rôle postgres », contrôle (h) vert ; contre-épreuve, table vidée → `deploy.sh --controle` rouge (38 absents), fonction → vert. *En production* : migration appliquée par la CI, `fn_crons_replanifier()` y rend `deja_en_place: 38, planifies: []`, et l'empreinte de `cron.job` est inchangée avant/après (`bf25c87f…`). Appris en passant : sur le dépôt rejoué, 14 commandes différaient de la production par la seule mise en forme (espaces, casse) — la fonction suit la production à l'octet. **Ce que cette clôture ne couvre pas** : l'aller-retour a porté sur une pile sans données ; la restauration d'un dump de la *production* postérieur à cette migration n'a pas été rejouée (elle l'avait été le même soir, avant, et c'est elle qui avait fait ouvrir l'item). |
 
 ---
 
@@ -2181,4 +2223,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

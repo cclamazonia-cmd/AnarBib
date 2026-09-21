@@ -182,6 +182,11 @@ effacés après usage.
    d'abord**.
 2. **Il n'emporte pas `cron.job` non plus** : 38 crons absents après
    restauration, et `bootstrap.sh` finit en vert. Ouvert au backlog : **I26**.
+   *Réglé dans la nuit* (commit `2237d433`, migration `20260921193147`) :
+   `private.fn_crons_replanifier()` porte la liste des 38 jobs, `restore.sh`
+   l'appelle (« 3 ter »), `bootstrap.sh` rougit si des crons manquent (contrôle
+   h). Aller-retour réel éprouvé sur `pg_cron` ; sans effet en production
+   (`planifies: []`, empreinte de `cron.job` inchangée). I26 clos.
 3. **Un `pg_dump` fait tomber une migration en attente.** Le dump tient un
    verrou de lecture sur toutes les tables ; l'`ALTER TABLE` de `20260921181812`
    est mort sur le statement timeout (run 1288, `backend` rouge une demi-heure,
