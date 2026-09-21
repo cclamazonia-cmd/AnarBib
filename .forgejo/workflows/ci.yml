@@ -216,6 +216,19 @@ jobs:
           token: ${{ forge.token }}
           source: dist/
 
+      # DNS publié et vérifié aux deux serveurs d'autorité (d.sec.dns.br,
+      # f.sec.dns.br) le 21/09/2026.
+      - name: Deploy Pages (git-pages) — repli app.anarbib.org.br
+        if: github.event_name == 'push'
+        continue-on-error: true
+        timeout-minutes: 10
+        uses: https://codeberg.org/git-pages/action@v2
+        with:
+          site: https://app.anarbib.org.br/
+          server: codeberg.page
+          token: ${{ forge.token }}
+          source: dist/
+
   # ──────────────────── Job 2 : backend (Supabase) — sur push ────────────────
   # needs: app → ne déploie QUE si lint/test/build ont réussi (gate préservé).
   # Pas de npm install ici (CLI Supabase autonome) → job court, bien sous 5 min.
