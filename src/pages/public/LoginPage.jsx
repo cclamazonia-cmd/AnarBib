@@ -12,7 +12,7 @@ import { Card, Input, Button, Spinner } from '@/components/ui';
 import { normalizePublicId } from '@/lib/publicId';
 import { clearAuthHash } from '@/lib/clearAuthHash';
 import { hashHintsRecovery, decideHashRecovery } from '@/lib/recoveryView';
-import { readSessionEndNotice } from '@/lib/sessionEndNotice';
+import { readSessionEndNotice, acknowledgeWhenSeen } from '@/lib/sessionEndNotice';
 
 
 // Paquet 25.6 — destination apres login / force-change.
@@ -37,7 +37,7 @@ function getSafeNextUrl(searchParams) {
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const reason = searchParams.get('reason');
   // Destination apres login reussi (paquet 25.6).
   // Capturee une seule fois au mount du composant. Si l'usager change d'URL
@@ -60,6 +60,22 @@ export default function LoginPage() {
   // detectera la session et redirigera immediatement sans qu'il ait besoin de
   // re-saisir ses credentials.
   const { user, profile, loading: authLoading, recovery, exitRecovery } = useAuth();
+  // L'avis ne s'annonce qu'une fois. Dès qu'il est réellement affiché — mêmes
+  // conditions que le bandeau plus bas, et onglet visible — on le consomme et on
+  // retire `reason` de l'adresse. Il reste à l'écran pour cette visite (il a été
+  // lu au montage) ; c'est l'actualisation suivante qui ne le trouve plus. Tant
+  // qu'il n'a pas été vu (onglet fermé avant, chargé en arrière-plan), il attend.
+  const noticeShown = !!endNotice && !authLoading && !user;
+  useEffect(() => {
+    if (!noticeShown) return undefined;
+    const cleanup = acknowledgeWhenSeen();
+    if (searchParams.has('reason')) {
+      const next = new URLSearchParams(searchParams);
+      next.delete('reason');
+      setSearchParams(next, { replace: true });
+    }
+    return cleanup;
+  }, [noticeShown, searchParams, setSearchParams]);
   // #LOGIN-FIX H1 (restauré 10/06) : on attend que la biblio ET son thème soient
   // résolus avant de naviguer, pour une transition unique (jamais la page
   // connectée sur l'ancien fond). themeReady résout en ~160ms (manifest depuis le
@@ -517,7 +533,7 @@ export default function LoginPage() {
             seconde l'annonce d'une deconnexion qui n'a pas eu lieu. On attend
             aussi la fin du chargement d'AuthContext : avant, `user` est null
             sans que cela veuille dire quoi que ce soit. */}
-        {endNotice && !authLoading && !user && (
+        {noticeShown && (
           // Fond OPAQUE et couleur de texte explicite, volontairement.
           // L'ancien rgba(..., 0.08) posait le bandeau a 8 % d'opacite par-dessus
           // la photo de fond de la bibliotheque : l'avis existait, il ne se

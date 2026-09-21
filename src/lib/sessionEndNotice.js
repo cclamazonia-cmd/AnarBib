@@ -113,6 +113,41 @@ export function clearSessionEndNotice() {
 }
 
 /**
+ * L'avis a été VU : il a fait son office, il ne reviendra pas au rechargement.
+ *
+ * Le marqueur persiste exprès tant que personne n'a lu l'explication (session
+ * morte navigateur fermé, onglet recréé…). Mais une fois le bandeau réellement
+ * affiché sur /login, le relire à chaque actualisation n'explique plus rien :
+ * on le consomme. La page garde l'avis à l'écran pour la visite en cours (elle
+ * l'a lu une fois, au montage) ; c'est le rechargement suivant qui ne le trouve
+ * plus. Reconnexion ou non, une session éteinte ne s'annonce qu'une fois.
+ */
+export function acknowledgeSessionEndNotice() {
+  remove(KEY_ENDED);
+  remove(KEY_ALIVE);
+}
+
+/**
+ * Consomme l'avis quand il est réellement SOUS LES YEUX : tout de suite si
+ * l'onglet est visible, sinon à son premier retour au premier plan — un onglet
+ * chargé en arrière-plan n'a rien montré à personne. Rend la fonction de
+ * nettoyage de l'écouteur (à rendre telle quelle depuis un useEffect).
+ */
+export function acknowledgeWhenSeen(doc = (typeof document !== 'undefined' ? document : null)) {
+  if (!doc || doc.visibilityState !== 'hidden') {
+    acknowledgeSessionEndNotice();
+    return () => {};
+  }
+  const onVisible = () => {
+    if (doc.visibilityState === 'hidden') return;
+    doc.removeEventListener('visibilitychange', onVisible);
+    acknowledgeSessionEndNotice();
+  };
+  doc.addEventListener('visibilitychange', onVisible);
+  return () => doc.removeEventListener('visibilitychange', onVisible);
+}
+
+/**
  * Ce qu'il y a à dire, ou rien.
  *
  * @returns {'idle'|'closed'|null}

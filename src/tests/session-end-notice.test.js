@@ -22,6 +22,8 @@ import {
   clearSessionAlive,
   clearSessionEndNotice,
   readSessionEndNotice,
+  acknowledgeSessionEndNotice,
+  acknowledgeWhenSeen,
   NOTICE_MAX_AGE_MS,
   DEFAULT_IDLE_MS,
 } from '@/lib/sessionEndNotice';
@@ -106,6 +108,52 @@ describe("dire pourquoi la session s'est terminée", () => {
     // Si la seconde écriture avait eu lieu, la dernière activité daterait de
     // T0+1000 et l'écart au seuil serait décalé d'autant.
     expect(readSessionEndNotice({ now: T0 + DEFAULT_IDLE_MS })).toBe('idle');
+  });
+
+  // ── « Quand on a eu l'info, si on actualise, le bandeau ne doit plus
+  //    apparaître — et uniquement dans ce cas » (21/09/2026).
+  it('une fois VU, il ne revient pas au rechargement', () => {
+    noteSessionEnded('idle', T0);
+    expect(readSessionEndNotice({ now: T0 + MINUTE })).toBe('idle'); // montage de /login : lu, affiché
+    acknowledgeSessionEndNotice();                                    // le bandeau est à l'écran
+    expect(readSessionEndNotice({ now: T0 + 2 * MINUTE })).toBe(null); // F5 : plus rien à dire
+  });
+
+  it('vaut aussi pour la session morte navigateur fermé (battement seul)', () => {
+    markSessionAlive(T0);
+    expect(readSessionEndNotice({ now: T0 + 61 * MINUTE })).toBe('idle');
+    acknowledgeSessionEndNotice();
+    expect(readSessionEndNotice({ now: T0 + 62 * MINUTE })).toBe(null);
+  });
+
+  it("un onglet chargé en arrière-plan n'a rien montré : l'avis attend le premier plan", () => {
+    noteSessionEnded('idle', T0);
+    const ecouteurs = [];
+    const doc = {
+      visibilityState: 'hidden',
+      addEventListener: (type, fn) => ecouteurs.push(fn),
+      removeEventListener: (type, fn) => { const i = ecouteurs.indexOf(fn); if (i >= 0) ecouteurs.splice(i, 1); },
+    };
+    acknowledgeWhenSeen(doc);
+    expect(readSessionEndNotice({ now: T0 + MINUTE })).toBe('idle'); // pas vu, pas consommé
+    doc.visibilityState = 'visible';
+    ecouteurs.slice().forEach((fn) => fn());
+    expect(readSessionEndNotice({ now: T0 + 2 * MINUTE })).toBe(null);
+    expect(ecouteurs).toHaveLength(0); // l'écouteur ne traîne pas
+  });
+
+  it("le nettoyage rendu retire l'écouteur sans consommer l'avis (page quittée avant d'être vue)", () => {
+    noteSessionEnded('idle', T0);
+    const ecouteurs = [];
+    const doc = {
+      visibilityState: 'hidden',
+      addEventListener: (type, fn) => ecouteurs.push(fn),
+      removeEventListener: (type, fn) => { const i = ecouteurs.indexOf(fn); if (i >= 0) ecouteurs.splice(i, 1); },
+    };
+    const nettoyer = acknowledgeWhenSeen(doc);
+    nettoyer();
+    expect(ecouteurs).toHaveLength(0);
+    expect(readSessionEndNotice({ now: T0 + MINUTE })).toBe('idle');
   });
 
   it('survit à un storage illisible plutôt que de casser la page', () => {
