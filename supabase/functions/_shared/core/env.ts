@@ -16,7 +16,9 @@ export const LIBRARIAN_PHONE = Deno.env.get("LIBRARIAN_PHONE") || Deno.env.get("
 export const BRAND_NAME = Deno.env.get("BRAND_NAME") || Deno.env.get("LIBRARY_BRAND_NAME") || Deno.env.get("ANARBIB_BRAND_NAME") || Deno.env.get("NETWORK_BRAND_NAME") || Deno.env.get("BLMF_BRAND_NAME") || "AnarBib";
 export const FOOTER_TEXT = Deno.env.get("FOOTER_TEXT") || Deno.env.get("LIBRARY_FOOTER_TEXT") || Deno.env.get("ANARBIB_FOOTER_TEXT") || Deno.env.get("NETWORK_FOOTER_TEXT") || Deno.env.get("BLMF_FOOTER_TEXT") || "Mensagem automática da biblioteca. Responde apenas se o campo de resposta indicar um contato local.";
 export const LOGO_URL = Deno.env.get("LOGO_URL") || Deno.env.get("LIBRARY_LOGO_URL") || Deno.env.get("ANARBIB_LOGO_URL") || Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("BLMF_LOGO_URL") || "";
-export const APP_BASE_URL = (Deno.env.get("APP_BASE_URL") || Deno.env.get("ANARBIB_APP_URL") || Deno.env.get("NETWORK_APP_URL") || Deno.env.get("ANARBIB_FRONTEND_URL") || "https://app.anarbib.org").replace(/\/+$/, "");
+// Foyer unique : _shared/core/app-url.ts (module sans effet de bord, importable par
+// les fonctions autonomes). Ré-exporté ici pour les neuf modules qui le lisent.
+export { APP_BASE_URL } from "./app-url.ts";
 export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: {
     persistSession: false

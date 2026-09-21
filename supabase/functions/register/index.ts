@@ -6,6 +6,8 @@ import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/context/library-mail-routing.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
+import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
+import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -15,12 +17,13 @@ const DEFAULT_ANARBIB_SENDER_EMAIL = "anarbib@anarbib.org";
 const DEFAULT_ANARBIB_REPLY_TO_EMAIL = DEFAULT_ANARBIB_SENDER_EMAIL;
 const DEFAULT_ANARBIB_ADMIN_EMAIL = DEFAULT_ANARBIB_SENDER_EMAIL;
 // Paquet 25.7 — URL par defaut vers la page de demande de bibliotheque.
-// Pointe vers le frontend AnarBib actuel (app.anarbib.org).
+// Pointe vers le frontend AnarBib : APP_BASE_URL (_shared/core/app-url.ts), plus
+// d'adresse en dur depuis le 21/09/2026 (banc : src/tests/register-banc.test.js).
 // Auparavant pointait vers cclamazonia-cmd.github.io qui est un vestige
 // GitHub Pages obsolete (paquet L.4 du chantier linter). L'env var
 // ANARBIB_LIBRARY_REQUEST_URL reste exposee pour permettre une URL
 // differente en staging futur.
-const DEFAULT_LIBRARY_REQUEST_URL = "https://app.anarbib.org/solicitar-biblioteca";
+const DEFAULT_LIBRARY_REQUEST_URL = appUrl("/solicitar-biblioteca");
 const LIBRARY_REQUEST_CLAIM_TTL_DAYS = 14;
 const MAIL_BRAND = {
   // Paquet 25.10 — URL logo migree du vestige GitHub Pages vers Supabase Storage.
@@ -998,9 +1001,9 @@ serve(async (req)=>{
       // donc l'origine du login = meme origine.
       let loginOrigin;
       try {
-        loginOrigin = new URL(LIBRARY_REQUEST_URL).origin; // "https://app.anarbib.org"
+        loginOrigin = new URL(LIBRARY_REQUEST_URL).origin; // l'origine de l'application
       } catch {
-        loginOrigin = "https://app.anarbib.org";
+        loginOrigin = APP_BASE_URL;
       }
       libraryRequestClaimUrl = `${loginOrigin}/login?next=${encodeURIComponent(nextPathAndQuery)}`;
     } else {
@@ -1165,8 +1168,8 @@ serve(async (req)=>{
       isWithoutLibrary: mailIsWithoutLibrary,
       isOrphan: mailIsOrphan,
       isContributor: mailIsContributor,
-      atelierUrl: mailIsContributor ? "https://app.anarbib.org/atelier-autoridades" : "",
-      catalogUrl: mailIsContributor ? "https://app.anarbib.org/catalogo" : "",
+      atelierUrl: mailIsContributor ? appUrl("/atelier-autoridades") : "",
+      catalogUrl: mailIsContributor ? appUrl("/catalogo") : "",
       libraryRequestUrl: libraryRequestClaimUrl,
       galleryUrl: mailIsOrphan ? siteUrl(`/${localeToSiteLang(userLocale)}/explorar/`) : "",
       aboutUrl: mailIsOrphan ? projectUrl(userLocale) : "",

@@ -280,3 +280,43 @@ describe('register — un refus n\'écrit rien', () => {
     expect(r.rpcs[0]).toMatchObject({ nom: 'fn_consume_altcha_challenge', args: { p_challenge: 'defi-1', p_purpose: 'register' } });
   });
 });
+
+// ── Les adresses suivent les réglages (21/09/2026) ─────────────────────────────
+// Ces cas étaient ROUGES sur le code du matin : quatre adresses de l'application
+// étaient écrites en toutes lettres dans register, sourdes à APP_BASE_URL. C'est
+// leur passage au vert qui prouve le changement — et, avant lui, leur rouge qui
+// prouvait que le banc voit bien ce qui part dans le mail.
+describe('register — les liens des mails suivent APP_BASE_URL et SITE_BASE_URL', () => {
+  it('contributor : atelier et catalogue partent de APP_BASE_URL (barre finale tolérée)', async () => {
+    const { inscrire } = monterRegister({ env: { APP_BASE_URL: 'https://app.anarbib.is/' } });
+    const r = await inscrire({ signup_intent: 'contributor' });
+    const h = liens(mailA(r.envois, 'louise@exemplo.test').html);
+    expect(h).toEqual(expect.arrayContaining(['https://app.anarbib.is/atelier-autoridades', 'https://app.anarbib.is/catalogo']));
+    expect(h.filter((x) => x.startsWith('https://app.anarbib.org'))).toEqual([]);
+  });
+
+  it('collective_candidate : le bouton de candidature part de APP_BASE_URL, le jeton reste juste', async () => {
+    const { inscrire } = monterRegister({ env: { APP_BASE_URL: 'https://biblio.exemple.test' } });
+    const r = await inscrire({ signup_intent: 'collective_candidate' });
+    const cta = liens(mailA(r.envois, 'louise@exemplo.test').html).find((x) => x.includes('/login?next='));
+    const u = new URL(cta);
+    expect(u.origin).toBe('https://biblio.exemple.test');
+    const suite = new URL(u.searchParams.get('next'), u.origin);
+    expect(suite.pathname).toBe('/solicitar-biblioteca');
+    const claim = r.ecrits.find((e) => e.table === 'library_request_claims').donnees;
+    expect(createHash('sha256').update(suite.searchParams.get('claim')).digest('hex')).toBe(claim.claim_token_hash);
+  });
+
+  it('ANARBIB_LIBRARY_REQUEST_URL, quand il est posé, garde la main sur la candidature (comportement antérieur)', async () => {
+    const { inscrire } = monterRegister({ env: { APP_BASE_URL: 'https://app.anarbib.is', ANARBIB_LIBRARY_REQUEST_URL: 'https://recette.exemple.test/solicitar-biblioteca' } });
+    const r = await inscrire({ signup_intent: 'collective_candidate' });
+    const cta = liens(mailA(r.envois, 'louise@exemplo.test').html).find((x) => x.includes('/login?next='));
+    expect(new URL(cta).origin).toBe('https://recette.exemple.test');
+  });
+
+  it('reader_orphan : galerie et page projet partent de SITE_BASE_URL', async () => {
+    const { inscrire } = monterRegister({ env: { SITE_BASE_URL: 'https://anarbib.is' } });
+    const r = await inscrire({ signup_intent: 'reader_orphan', locale: 'fr' });
+    expect(liens(mailA(r.envois, 'louise@exemplo.test').html)).toEqual(expect.arrayContaining(['https://anarbib.is/fr/explorar/', 'https://anarbib.is/fr/projet/']));
+  });
+});
