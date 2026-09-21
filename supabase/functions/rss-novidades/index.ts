@@ -24,12 +24,12 @@
 // sont donc LA sécurité, écrites une fois, en tête.
 import { createClient } from '../_shared/deps.ts';
 import { secretKey } from '../_shared/core/secret-key.ts';
+import { APP_BASE_URL as APP_URL } from '../_shared/core/app-url.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 // B20 (20/09/2026) : la clé secrète se lit par secretKey(), un seul chemin pour
 // toutes les fonctions — jamais la variable legacy (garde : cle-legacy-garde.test.js).
 const SERVICE_ROLE_KEY = secretKey() ?? '';
-const APP_URL = 'https://app.anarbib.org';
 const LIMIT_DEFAUT = 30;
 const LIMIT_MAX = 100;
 

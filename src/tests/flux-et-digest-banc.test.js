@@ -109,6 +109,36 @@ describe('notify-rede-digest — le digest hebdomadaire du réseau', () => {
   });
 });
 
+// ── Les liens suivent APP_BASE_URL (21/09/2026) ────────────────────────────────
+// ROUGES sur le code intact (constante APP_URL écrite en dur dans les trois
+// fonctions), verts depuis qu'elles passent par _shared/core/app-url.ts.
+describe('flux et digest — les liens vers l\'application suivent APP_BASE_URL', () => {
+  const ENV = { APP_BASE_URL: 'https://app.anarbib.is/' };
+
+  it('opds : la notice et l\'<uri> de l\'auteur du flux', async () => {
+    const r = await monterOpds(ENV).ef.appeler(new Request('http://stub/functions/v1/opds/all'));
+    expect(href(r.texte)).toContain('https://app.anarbib.is/livro/BLMF-0012');
+    expect(r.texte).toContain('<uri>https://app.anarbib.is</uri>');
+    expect(r.texte).not.toContain('https://app.anarbib.org');
+  });
+
+  it('rss-novidades : la notice et le catalogue', async () => {
+    const r = await monterRss(ENV).appeler(new Request('http://stub/functions/v1/rss-novidades/blmf'));
+    expect(r.texte).toContain('<link>https://app.anarbib.is/livro/BLMF-0012</link>');
+    expect(r.texte).toContain('<link>https://app.anarbib.is/catalogo/blmf</link>');
+    expect(r.texte).not.toContain('https://app.anarbib.org');
+  });
+
+  it('notify-rede-digest : gazette et cercles, en HTML comme en texte', async () => {
+    const ef = monterDigest(ENV);
+    await ef.appeler(POST(SECRET));
+    const m = mailA(ef.envois, 'une@exemplo.test');
+    expect(liens(m.html)).toEqual(expect.arrayContaining(['https://app.anarbib.is/federacao/gazeta', 'https://app.anarbib.is/federacao/circulos']));
+    expect(m.html).not.toContain('https://app.anarbib.org');
+    expect(m.text).not.toContain('https://app.anarbib.org');
+  });
+});
+
 describe('rss-novidades — les liens', () => {
   it('la notice et le catalogue de la bibliothèque pointent vers l\'application', async () => {
     const r = await monterRss().appeler(new Request('http://stub/functions/v1/rss-novidades/blmf'));

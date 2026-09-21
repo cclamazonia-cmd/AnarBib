@@ -16,6 +16,8 @@ const CODE = transformSync(readFileSync(SRC, 'utf8'), { loader: 'ts', format: 'c
 // comme dans gazette-monthly-build.test.js — le banc ne pose que SUPABASE_SECRET_KEYS.
 const CLE_SRC = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
 const CLE_CODE = transformSync(readFileSync(CLE_SRC, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
+const APPURL_SRC = new URL('../../supabase/functions/_shared/core/app-url.ts', import.meta.url);
+const APPURL_CODE = transformSync(readFileSync(APPURL_SRC, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 
 const BIBLIOS = { blmf: { slug: 'blmf', name: 'Biblioteca Libertária Maria Lacerda de Moura', short_name: 'BLMF', city: 'Belém' } };
 const LIVRES = [
@@ -58,6 +60,12 @@ function monterEF(opts = {}) {
     if (p.endsWith('secret-key.ts')) {
       const m = { exports: {} };
       new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(fauxRequire, m, m.exports, Deno);
+      return m.exports;
+    }
+    // 21/09 : l'adresse de l'application vient du VRAI foyer _shared/core/app-url.ts.
+    if (p.endsWith('app-url.ts')) {
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', APPURL_CODE)(fauxRequire, m, m.exports, Deno);
       return m.exports;
     }
     throw new Error('import inattendu : ' + p);

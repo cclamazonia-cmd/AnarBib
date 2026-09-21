@@ -18,8 +18,8 @@
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
 import { tMail, greeting } from "../_shared/i18n/mail-strings.ts";
+import { APP_BASE_URL as APP_URL } from "../_shared/core/app-url.ts";
 
-const APP_URL = "https://app.anarbib.org";
 
 function mustEnv(name: string): string {
   const v = Deno.env.get(name);

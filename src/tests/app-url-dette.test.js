@@ -40,10 +40,7 @@ const TOLERE = {
   'gazette-monthly-build/index.ts': 1,             // User-Agent du moissonneur : une identité, pas un lien servi
 };
 const DETTE = {
-  '_shared/domain/reservas.ts': 1,
-  'notify-rede-digest/index.ts': 1,
-  'opds/index.ts': 1,
-  'rss-novidades/index.ts': 1,
+  '_shared/domain/reservas.ts': 1,                 // dernier : le bouton « ouvrir le panneau » du mail staff des réservations
 };
 
 function releve() {
