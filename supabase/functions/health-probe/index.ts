@@ -66,6 +66,20 @@ function sondes(bookId: number | null): Sonde[] {
       },
     },
     {
+      // B27 (21/09/2026) : la premiere page du catalogue, telle que le front la demande a un
+      // visiteur NON connecte. Cette RPC a depasse les 3 s du role anon sans que rien ne le
+      // montre : le front retombe sur la liste a plat, en silence. Le seuil de lenteur de la
+      // sonde (SEUIL_LENT_MS) est le statement_timeout du role anon : lente ici = morte la-bas.
+      // Memes arguments que src/pages/public/CatalogPage.jsx (aucun filtre, 'relevance', 50).
+      endpoint: 'catalogue_par_oeuvre',
+      url: `${BASE}/rest/v1/rpc/catalog_works_v1`,
+      init: {
+        method: 'POST',
+        headers: { ...h, 'content-type': 'application/json', 'Accept-Profile': 'api', 'Content-Profile': 'api' },
+        body: JSON.stringify({ p_filters: {}, p_sort: 'relevance', p_offset: 0, p_limit: 50, p_lang: 'pt-BR' }),
+      },
+    },
+    {
       endpoint: 'liste_bibliotheques',
       url: `${BASE}/rest/v1/public_libraries?select=slug&limit=10`,
       init: { headers: { ...h, 'Accept-Profile': 'api' } },
