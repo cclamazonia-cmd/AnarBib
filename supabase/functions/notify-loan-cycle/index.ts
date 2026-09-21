@@ -51,9 +51,9 @@ import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail, userTargetFromProfile } from '../_shared/transport/email.ts';
 import { resolveLibraryNotificationContext } from '../_shared/context/library-notification-context.ts';
 import { tMail, greeting, label, formatDateLocale } from '../_shared/i18n/mail-strings.ts';
+import { appUrl } from '../_shared/core/app-url.ts';
 
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_MID_LOAN') || '').trim();
-const APP_URL = 'https://app.anarbib.org';
 
 // Les quatre moments. `toggle` nomme la colonne de `library_notification_policies`
 // qui les commande : un envoi sans interrupteur serait aussi fautif qu'un
@@ -201,8 +201,8 @@ Deno.serve((req) =>
         dueDate: esc(echeance),
       })}</p>`;
       const ctaUrl = moment === 'note_invite' && item.book_id
-        ? `${APP_URL}/livro/${item.book_id}`
-        : `${APP_URL}/conta`;
+        ? appUrl(`/livro/${item.book_id}`)
+        : appUrl('/conta');
 
       const { html, text } = renderEmail({
         title: sujet,

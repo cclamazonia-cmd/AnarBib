@@ -6,7 +6,8 @@
 // ré-exporté par _shared/core/env.ts). Le relevé du 21/09, fait en posant le
 // foyer de la vitrine, a compté « https://app.anarbib.org » écrit en dur dans
 // vingt-quatre fichiers. `register` a été repris le jour même, DERRIÈRE un banc
-// (register-banc.test.js) ; les autres attendent le leur — on ne retouche pas un
+// (register-banc.test.js), puis les mails des prêts et de la Lettre
+// (notify-loan-cycle-banc, lettre-banc) ; les autres attendent le leur — on ne retouche pas un
 // mail qu'aucun test ne rend.
 //
 // Trois listes, chacune avec son motif :
@@ -43,14 +44,10 @@ const DETTE = {
   '_shared/domain/cartography.ts': 1,
   '_shared/domain/entraide.ts': 1,
   '_shared/domain/gazette.ts': 1,
-  '_shared/domain/lettre.ts': 1,
   '_shared/domain/library_profile.ts': 1,
   '_shared/domain/network.ts': 3,
   '_shared/domain/reservas.ts': 1,
-  'lettre-confirm/index.ts': 1,
-  'lettre-unsubscribe/index.ts': 1,
   'notify-digital-share/index.ts': 1,              // repli local d'APP_BASE_URL : à remplacer par l'import du foyer
-  'notify-loan-cycle/index.ts': 1,
   'notify-oai-opening/index.ts': 1,                // idem
   'notify-rede-digest/index.ts': 1,
   'opds/index.ts': 1,

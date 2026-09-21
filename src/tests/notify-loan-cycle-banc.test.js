@@ -135,3 +135,17 @@ describe('notify-loan-cycle — qui reçoit quel moment, une fois, et la trace s
     expect(r.traces).toHaveLength(0);
   });
 });
+
+// ── Les liens suivent APP_BASE_URL (21/09/2026) ────────────────────────────────
+// ROUGE sur le code du matin (APP_URL écrit en dur dans la fonction), vert depuis
+// que les deux liens passent par _shared/core/app-url.ts.
+describe('notify-loan-cycle — les liens suivent APP_BASE_URL', () => {
+  it('compte et livre partent de l\'adresse réglée ; plus aucun lien vers le canonique', async () => {
+    const { lancer, tMail } = monter({ env: { APP_BASE_URL: 'https://app.anarbib.is/' } });
+    const r = await lancer();
+    const par = (s) => r.envois.find((e) => e.subject === s);
+    expect(liens(par(sujet(tMail, 'loan.note_invite', 'mi')).html)).toContain('https://app.anarbib.is/livro/42');
+    expect(liens(par(sujet(tMail, 'loan.reminder.d0', 'd0')).html)).toContain('https://app.anarbib.is/conta');
+    expect(r.envois.flatMap((e) => liens(e.html)).filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
+  });
+});

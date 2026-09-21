@@ -6,13 +6,13 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
 import { tMail } from "../_shared/i18n/mail-strings.ts";
+import { APP_BASE_URL } from "../_shared/core/app-url.ts";
 
 const sb = createClient(
   Deno.env.get("SUPABASE_URL")!,
   secretKey()!,
   { auth: { persistSession: false } },
 );
-const APP_URL = "https://app.anarbib.org";
 
 function page(locale: string, headingKey: string, status = 200): Response {
   const heading = tMail(locale, headingKey);
@@ -24,7 +24,7 @@ function page(locale: string, headingKey: string, status = 200): Response {
     + `h1{font-size:1.4rem;color:#cf1f27}`
     + `a{display:inline-block;margin-top:1.6rem;background:#cf1f27;color:#fff;padding:.6rem 1.3rem;`
     + `border-radius:6px;text-decoration:none}</style></head>`
-    + `<body><h1>${heading}</h1><a href="${APP_URL}">${cta}</a></body></html>`;
+    + `<body><h1>${heading}</h1><a href="${APP_BASE_URL}">${cta}</a></body></html>`;
   return new Response(html, { status, headers: { "content-type": "text/html; charset=utf-8" } });
 }
 

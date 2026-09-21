@@ -173,3 +173,27 @@ describe('lettre-confirm et lettre-unsubscribe — les deux pages d\'un clic', (
     expect((await ko.ouvrir()).statut).toBe(400);
   });
 });
+
+// ── Les liens suivent APP_BASE_URL (21/09/2026) ────────────────────────────────
+// ROUGES sur le code du matin (APP_URL écrit en dur dans les trois fichiers), verts
+// depuis qu'ils passent par _shared/core/app-url.ts.
+describe('la Lettre — les liens vers l\'application suivent APP_BASE_URL', () => {
+  const ENV = { APP_BASE_URL: 'https://app.anarbib.is/' };
+
+  it('le numéro : gazette et repli de désabonnement', async () => {
+    const a = monterLettre({ env: ENV, outbox: NUMERO });
+    await a.handleLettreEvent(7);
+    expect(liens(a.ef.envois[0].html)).toContain('https://app.anarbib.is/federacao/gazeta');
+    const b = monterLettre({ env: ENV, outbox: { ...NUMERO, payload: { ...NUMERO.payload, unsub_token: '' } } });
+    await b.handleLettreEvent(7);
+    expect(liens(b.ef.envois[0].html)).toContain('https://app.anarbib.is/conta');
+    expect([...liens(a.ef.envois[0].html), ...liens(b.ef.envois[0].html)].filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
+  });
+
+  it('les deux pages d\'un clic : le bouton ramène à l\'adresse réglée', async () => {
+    for (const [entree, statutRpc] of [['lettre-confirm/index.ts', 'confirmed'], ['lettre-unsubscribe/index.ts', 'unsubscribed']]) {
+      const { ouvrir } = monterPage(entree, { env: ENV, statutRpc });
+      expect(liens((await ouvrir()).texte), entree).toEqual(['https://app.anarbib.is']);
+    }
+  });
+});

@@ -12,10 +12,10 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { tMail, greeting } from "../i18n/mail-strings.ts";
+import { appUrl } from "../core/app-url.ts";
 import { marked } from "https://esm.sh/marked@12";
 
 const OUTBOX = "lettre_notification_outbox";
-const APP_URL = "https://app.anarbib.org";
 const FUNCTIONS_BASE = (Deno.env.get("SUPABASE_URL") || "").replace(/\/+$/, "") + "/functions/v1";
 
 function esc(s) {
@@ -164,7 +164,7 @@ async function handleIssueSent(payload, ctx) {
       body += `</ul>`;
     }
     if (gazette) {
-      body += `<p><a href="${APP_URL}/federacao/gazeta">`
+      body += `<p><a href="${appUrl("/federacao/gazeta")}">`
         + `${esc(tMail(locale, "lettre.issue.gazetteLink", { number: String(gazette.number ?? "") }))}</a></p>`;
     }
     if (!intro && !circles.length && !assemblies.length && !gazette) {
@@ -175,7 +175,7 @@ async function handleIssueSent(payload, ctx) {
   // Désabonnement 1-clic (token stable) ; repli sur /conta si token absent.
   const unsubUrl = unsubToken
     ? `${FUNCTIONS_BASE}/lettre-unsubscribe?token=${encodeURIComponent(unsubToken)}`
-    : `${APP_URL}/conta`;
+    : appUrl("/conta");
   body += `<p style="font-size:.78rem;color:#888;margin-top:1.6rem">`
     + `${esc(tMail(locale, "lettre.issue.unsubscribePrefix"))} `
     + `<a href="${esc(unsubUrl)}" style="color:#888">${esc(tMail(locale, "lettre.issue.unsubscribeLink"))}</a>.</p>`;
