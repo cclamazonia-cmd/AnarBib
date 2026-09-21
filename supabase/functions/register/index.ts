@@ -7,7 +7,6 @@ import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/context/library-mail-routing.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
 import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
-import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
