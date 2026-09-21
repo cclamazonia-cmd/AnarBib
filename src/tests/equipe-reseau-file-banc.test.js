@@ -12,7 +12,7 @@
 // Vrais modules, par src/tests/helpers/monter-ef.js.
 
 import { describe, it, expect } from 'vitest';
-import { monterEF, mailA } from './helpers/monter-ef.js';
+import { monterEF, mailA, liens } from './helpers/monter-ef.js';
 
 const eq = (chaine, nom) => chaine.find((c) => c.op === 'eq' && c.args[0] === nom)?.args?.[1];
 const PROFILS = {
@@ -23,8 +23,9 @@ const PROFILS = {
 };
 const CTX = { library_id: 'lib-1', library_name: 'Biblioteca Louise Michel', library_short_name: 'BLMF', default_locale: 'fr', admin_notification_email: 'coordination@biblio.test', delivery_mode: 'platform_shared', channel_active: true };
 
-function monter({ ligne, resend } = {}) {
+function monter({ ligne, resend, env = {} } = {}) {
   const ef = monterEF({
+    env,
     resend,
     repondre: (_s, table, a, chaine) => {
       if (table === 'team_notification_outbox') return a('update') ? { data: null, error: null } : { data: ligne, error: null };
@@ -70,6 +71,34 @@ describe('domain/network — le digest des demandes à évaluer', () => {
     expect(r).toMatchObject({ ok: true, event: 'network.request_eval_digest', recipients_count: 2 });
     expect(ef.envois.map((e) => e.to[0]).sort()).toEqual(['admin1@exemplo.test', 'admin2@exemplo.test']);
     expect(etat().map((d) => d.status)).toEqual(['sent']);
+  });
+});
+
+// ── Les trois adresses que network.ts fabrique (dette app-url, lot 4b) ─────────
+// Le premier cas est écrit sur le code intact (adresses en dur, canoniques) ; le
+// second était ROUGE avant que le module passe par _shared/core/app-url.ts.
+describe('domain/network — les liens vers l\'application', () => {
+  const COOPTATION = { id: 23, status: 'queued', attempts: 0, event: 'network.cooptation_proposed', payload: { proposal_id: 'c-1', proposed_user_id: 'u-2', proposed_by: 'u-1', motivation_preview: 'Tient la permanence.' } };
+  const RETRAIT = { ...COOPTATION, id: 24, event: 'network.collective_removal_proposed', payload: { ...COOPTATION.payload, proposal_id: 'r-1' } };
+  const CHEMINS = [[DIGEST, 22, '/rede'], [COOPTATION, 23, '/painel/admin-rede/cooptation/c-1'], [RETRAIT, 24, '/painel/admin-rede/collective-removal/r-1']];
+
+  async function liensDe(ligne, id, env) {
+    const ef = monter({ ligne, env }).ef;
+    await ef.charger('_shared/domain/network.ts').handleNetworkEvent(id);
+    expect(ef.envois.length).toBeGreaterThan(0);
+    return ef.envois.flatMap((e) => liens(e.html));
+  }
+
+  it('sans réglage : digest, cooptation et retrait collectif pointent vers l\'application canonique', async () => {
+    for (const [ligne, id, chemin] of CHEMINS) expect(await liensDe(ligne, id, {})).toContain(`https://app.anarbib.org${chemin}`);
+  });
+
+  it('APP_BASE_URL réglée (barre finale tolérée) : les trois suivent, plus aucun lien vers le canonique', async () => {
+    for (const [ligne, id, chemin] of CHEMINS) {
+      const l = await liensDe(ligne, id, { APP_BASE_URL: 'https://app.anarbib.is/' });
+      expect(l).toContain(`https://app.anarbib.is${chemin}`);
+      expect(l.filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
+    }
   });
 });
 

@@ -59,6 +59,7 @@ import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.t
 import { handleLibraryProfileEvent } from "./library_profile.ts";
 import { handleCrossLibraryCriticalAction } from "./cross_library.ts";
 import { verdictEnvois } from "./outbox-verdict.ts";
+import { appUrl } from "../core/app-url.ts";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
@@ -176,14 +177,12 @@ function displayName(p) {
 
 // URL frontend vers la page de gestion réseau filtrée sur la proposition cooptation.
 function cooptationProposalUrl(proposalId) {
-  const base = "https://app.anarbib.org";
-  return `${base}/painel/admin-rede/cooptation/${proposalId}`;
+  return appUrl(`/painel/admin-rede/cooptation/${proposalId}`);
 }
 
 // URL frontend vers la page de gestion réseau filtrée sur la proposition retrait collectif.
 function collectiveRemovalProposalUrl(proposalId) {
-  const base = "https://app.anarbib.org";
-  return `${base}/painel/admin-rede/collective-removal/${proposalId}`;
+  return appUrl(`/painel/admin-rede/collective-removal/${proposalId}`);
 }
 
 // ─── Handler principal ────────────────────────────────────────────────────
@@ -809,7 +808,7 @@ async function handleRequestEvalDigest(payload, ctx, bt) {
     throw new Error(`request_eval_digest: invalid kind "${kind}"`);
   }
   const count = String(Number(payload.pending_count || 0));
-  const redeUrl = "https://app.anarbib.org/rede";
+  const redeUrl = appUrl("/rede");
   const results = [];
   for (const r of recipients) {
     const locale = r.preferred_language || null;
