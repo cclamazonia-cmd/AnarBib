@@ -3877,10 +3877,16 @@
         "SETUP_fonds_de_carte_pmtiles_2026-09-07",
         "REGISTRE FED-O9 (08/09)"
       ],
-      "verif": {
-        "fr": "08/09 — l'hôte de la visio est Framatalk depuis ce jour (commits `88bba888`, `b75d4b2a`, REGISTRE FED-O9/AG-7) ; aucune réponse d'hébergeur sur un Jitsi n'a encore été demandée. Le fond de carte est un fichier de 18 Go dans le Storage (`map-tiles`), à faire suivre.",
-        "pt": "08/09 — o hospedeiro da videoconferência é o Framatalk desde este dia; nenhuma resposta de hospedeiro sobre um Jitsi foi ainda pedida. O fundo de mapa é um arquivo de 18 GB no Storage (`map-tiles`), a fazer seguir."
-      }
+      "verif": [
+        {
+          "fr": "08/09 — l'hôte de la visio est Framatalk depuis ce jour (commits `88bba888`, `b75d4b2a`, REGISTRE FED-O9/AG-7) ; aucune réponse d'hébergeur sur un Jitsi n'a encore été demandée. Le fond de carte est un fichier de 18 Go dans le Storage (`map-tiles`), à faire suivre.",
+          "pt": "08/09 — o hospedeiro da videoconferência é o Framatalk desde este dia; nenhuma resposta de hospedeiro sobre um Jitsi foi ainda pedida. O fundo de mapa é um arquivo de 18 GB no Storage (`map-tiles`), a fazer seguir."
+        },
+        {
+          "fr": "21/09 — **relu sur pièces et remesuré ; le « comment » de la fiche est en partie fait, et la journée a trouvé trois choses qu'aucune relecture ne pouvait voir.** *(a) Découpler la CI* : fait pour le backend depuis le 01/09 (`scripts/ci/deployer-backend.sh`, que `ci.yml` appelle) ; **fait ce jour pour le front** — `scripts/ci/publier-front.sh` rejoue hors forge le job `app` (l'action git-pages n'est qu'une image Docker, `git-pages-cli`), garde `publier-front-coherence` ; construction, `--simulation` et `--vers-dossier` exécutés, **publication réelle par ce chemin jamais faite** (`--essai` existe pour le premier tir). Et `deploy/deploy.sh` ne reconstruisait **jamais** le front d'une instance auto-hébergée (`install.sh` le construit une fois) : étape « Front » ajoutée, éprouvée sur une pile restaurée. *(b) Les pins d'images périmaient en silence* : la production était passée à GoTrue v2.197.0 (82 migrations) et Storage 1.73.1 (68) sous des pins à 77 et 65 ; remesurés au banc (`deploy/banc-paliers.sh`), puis **Storage a remonté le soir même** (1.77.5, 73 migrations, 20 h 43) — vu cette fois par la sonde `images_pins` de `health-probe`, livrée dans la journée (migrations `20260921181812` et `20260921190301`, incident ouvert, courriel reçu par Xavier à 20 h 45). Pins retenus : `v2.197.0` et `v1.77.0`, 344 colonnes `auth`+`storage` concordantes avec la production. *(c) Passe `--depuis-une-sauvegarde` sur un dump RÉEL sous ces images* : restauration en 62 s, huit décomptes identiques à la production (5 bibliothèques, 2 656 notices, 2 758 exemplaires, 20 comptes, 17 buckets, 833 objets), 831 fichiers reversés, deux objets servis octet pour octet, connexion par l'Edge Function `login`. Le dump, lui, a coûté 301 s (schéma) + 439 s (données, 37,6 Mo — le double du 26/08). **Trouvé en chemin** : `supabase db dump` n'emporte pas `supabase_migrations` — une instance restaurée ne pouvait plus jamais être mise à jour par `deploy.sh` (il rejouait le socle) ; **réparé** (troisième fichier `migrations.sql`, étape « 3 bis » de `restore.sh`, `restore-historique.sh`, garde-fou dans `apply-pending-migrations.sh`). Il n'emporte pas `cron.job` non plus : **I26**. Et un `pg_dump` lancé pendant qu'une migration attend en CI la fait mourir sur le statement timeout (run 1288, rouge d'une demi-heure, aucune écriture partielle). Pièce : `journal/operations/NOTE_pins-images-remesures_2026-09-21`. Restent au « comment » : le proxy inverse avec tunnel, les empreintes `sha256`, la répétition à froid, la question du Jitsi.",
+          "pt": "21/09 — **relido sobre peças e remedido; o « como » da ficha está em parte feito, e o dia achou três coisas que nenhuma releitura podia ver.** *(a) Desacoplar a CI*: feito para o backend desde 01/09 (`scripts/ci/deployer-backend.sh`); **feito hoje para o front** — `scripts/ci/publier-front.sh` repete fora da forja o job `app` (a ação git-pages é só uma imagem Docker, `git-pages-cli`), guarda `publier-front-coherence`; construção, `--simulation` e `--vers-dossier` executados, **publicação real por este caminho nunca feita** (`--essai` existe para o primeiro tiro). E `deploy/deploy.sh` **nunca** reconstruía o front de uma instância auto-hospedada: etapa « Front » acrescentada, provada numa pilha restaurada. *(b) Os pins de imagens caducavam em silêncio*: a produção tinha passado a GoTrue v2.197.0 (82 migrações) e Storage 1.73.1 (68) sob pins a 77 e 65; remedidos na bancada (`deploy/banc-paliers.sh`), e **o Storage subiu de novo na mesma noite** (1.77.5, 73 migrações, 20h43) — visto desta vez pela sonda `images_pins` do `health-probe`, entregue no mesmo dia (migrações `20260921181812` e `20260921190301`, incidente aberto, e-mail recebido por Xavier às 20h45). Pins retidos: `v2.197.0` e `v1.77.0`, 344 colunas `auth`+`storage` concordantes com a produção. *(c) Passagem `--depuis-une-sauvegarde` num dump REAL sob estas imagens*: restauração em 62 s, oito contagens idênticas à produção, 831 ficheiros repostos, dois objetos servidos byte a byte, login pela Edge Function `login`. O dump custou 301 s (esquema) + 439 s (dados, 37,6 MB — o dobro de 26/08). **Achado pelo caminho**: `supabase db dump` não leva `supabase_migrations` — uma instância restaurada nunca mais podia ser atualizada por `deploy.sh`; **reparado** (terceiro ficheiro `migrations.sql`, etapa « 3 bis » de `restore.sh`, `restore-historique.sh`, guarda em `apply-pending-migrations.sh`). Também não leva `cron.job`: **I26**. E um `pg_dump` lançado enquanto uma migração espera na CI fá-la morrer no statement timeout (run 1288, vermelho de meia hora, nenhuma escrita parcial). Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`. Restam no « como »: o proxy inverso com túnel, as impressões `sha256`, a repetição a frio, a questão do Jitsi."
+        }
+      ]
     },
     {
       "id": "I3",
@@ -5072,6 +5078,61 @@
         "fr": "16/09 — journal du run 7092391 lu en entier (`sql-tests-sql-tests-9589171.log`), filet rejoué hors CI dans deux environnements, ticket #17 refermé au vert de la relance.",
         "pt": "16/09 — log do run 7092391 lido por inteiro, rede reproduzida fora da CI em dois ambientes, ticket #17 fechado no verde do relance."
       }
+    },
+    {
+      "id": "I26",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin",
+        "sql"
+      ],
+      "t": {
+        "fr": "Une instance restaurée depuis un dump n'a plus aucun cron — `cron.job` ne voyage pas, et rien ne le dit au moment de la restauration",
+        "pt": "Uma instância restaurada de um dump fica sem nenhum cron — `cron.job` não viaja, e nada o diz no momento da restauração"
+      },
+      "v": {
+        "fr": "**Constaté le 21/09/2026** sur un dump réel de la production restauré par `bootstrap.sh --depuis-une-sauvegarde` : le contrôle de santé de `deploy/deploy.sh` (I19) rend « pg_cron : 0 jobs planifiés, 38 absents ». `supabase db dump` n'emporte pas le schéma `cron` ; et comme l'historique des migrations est désormais restauré (I2, 21/09), les migrations qui planifient les jobs sont inscrites « faites » et ne se rejouent pas. L'instance est complète, elle répond, on s'y connecte — et ni rappel d'échéance, ni sonde de santé, ni moisson, ni gazette, ni expiration de cotisation ne partira jamais. `bootstrap.sh` finit en « ✓ Pile reconstruite et vérifiée » : sa vérification finale ne regarde pas `cron.job` ; seul `deploy.sh --controle` le voit, et on ne le lance pas le jour d'une restauration.",
+        "pt": "**Constatado em 21/09/2026** num dump real da produção restaurado por `bootstrap.sh --depuis-une-sauvegarde`: o controlo de saúde de `deploy/deploy.sh` (I19) devolve « pg_cron: 0 jobs planeados, 38 ausentes ». `supabase db dump` não leva o esquema `cron`; e como o histórico das migrações é agora restaurado (I2, 21/09), as migrações que planeiam os jobs ficam inscritas como « feitas » e não se repetem. A instância está completa, responde, faz-se login — e nenhum lembrete, sonda de saúde, colheita, gazeta ou expiração de mensalidade partirá alguma vez. `bootstrap.sh` termina em « ✓ Pilha reconstruída e verificada »: a sua verificação final não olha `cron.job`."
+      },
+      "w": {
+        "fr": "Deux gestes. **(1)** Que `bootstrap.sh` le DISE : rejouer `tests/sql/crons_planifies_tests.sql` dans sa vérification finale, comme `deploy.sh` le fait déjà — un rouge le jour J vaut mieux qu'un silence d'un mois. **(2)** Que les jobs reviennent : un quatrième fichier, sur le modèle de l'export du Vault (`select format('select cron.schedule(%L,%L,%L);', jobname, schedule, command) from cron.job`), chargé par `restore.sh`. À vérifier d'abord : **les commandes de cron portent-elles des secrets en clair** ? Si oui, le fichier suit la règle des dumps (jamais au dépôt, effacé après usage) et entre dans le flux `long` à côté de `anarbib-vault.sql`. Alternative à peser : une migration idempotente unique qui replanifie les 38 jobs depuis la liste de la suite — une seule liste (`DOC-RECENS-1`), et plus rien à transporter.",
+        "pt": "Dois gestos. **(1)** Que `bootstrap.sh` o DIGA: repetir `tests/sql/crons_planifies_tests.sql` na sua verificação final, como `deploy.sh` já faz. **(2)** Que os jobs voltem: um quarto ficheiro, no modelo da exportação do Vault (`select format('select cron.schedule(%L,%L,%L);', jobname, schedule, command) from cron.job`), carregado por `restore.sh`. A verificar primeiro: **os comandos de cron levam segredos em claro**? Se sim, o ficheiro segue a regra dos dumps e entra no fluxo `long`. Alternativa a pesar: uma migração idempotente única que replaneia os 38 jobs a partir da lista da suíte."
+      },
+      "y": {
+        "fr": "C'est exactement la panne que le projet sait le mieux reconnaître — un état qui répond « tout va bien » et ne fait pas ce qu'il annonce — placée au pire moment : le lendemain d'une bascule ou d'un sinistre, quand personne ne regarde les crons. Et la sonde de santé étant elle-même un cron, l'instance restaurée est la seule qui ne peut pas s'en apercevoir.",
+        "pt": "É exatamente a avaria que o projeto melhor sabe reconhecer — um estado que responde « tudo bem » e não faz o que anuncia — no pior momento: o dia seguinte a uma virada ou a um sinistro. E sendo a sonda de saúde ela própria um cron, a instância restaurada é a única que não pode dar por isso."
+      },
+      "f": {
+        "fr": [
+          "`bootstrap.sh --depuis-une-sauvegarde` rougit tant que les crons attendus manquent.",
+          "Une restauration d'un dump réel rend `CRONS-PLANIFIES OK` sans geste manuel non écrit.",
+          "La question des secrets dans `cron.job.command` a sa réponse écrite ici."
+        ],
+        "pt": [
+          "`bootstrap.sh --depuis-une-sauvegarde` fica vermelho enquanto faltarem os crons esperados.",
+          "Uma restauração de um dump real devolve `CRONS-PLANIFIES OK` sem gesto manual não escrito.",
+          "A questão dos segredos em `cron.job.command` tem aqui a sua resposta escrita."
+        ]
+      },
+      "dep": {
+        "fr": "Sort de **I2** (passe réelle du 21/09), s'appuie sur **I19** (la suite des crons attendus, déjà rejouée par `deploy.sh`). Entre dans ce que **I21** doit voir vrai avant la bascule.",
+        "pt": "Sai de **I2** (passagem real de 21/09), apoia-se em **I19**. Entra no que **I21** deve ver verdadeiro antes da virada."
+      },
+      "r": [
+        "journal/operations/NOTE_pins-images-remesures_2026-09-21 §7",
+        "deploy/deploy.sh (contrôle pg_cron, I19)",
+        "tests/sql/crons_planifies_tests.sql",
+        "deploy/scripts/restore.sh"
+      ],
+      "verif": [
+        {
+          "fr": "21/09 — mesuré sur la pile restaurée (GoTrue v2.197.0, Storage v1.77.0) : `deploy.sh --controle` → « 0 jobs planifiés, mais ECHEC : 5/6 OK — T2 aucun cron attendu ne manque : 38 absent(s) ». Ni la note du 26/08, ni `restore.sh`, ni `bootstrap.sh`, ni le backlog n'en parlaient (`git grep`).",
+          "pt": "21/09 — medido na pilha restaurada: `deploy.sh --controle` → « 0 jobs planeados, mas FALHA: 5/6 OK — T2: 38 ausente(s) ». Nem a nota de 26/08, nem `restore.sh`, nem `bootstrap.sh`, nem o backlog falavam disso."
+        }
+      ]
     },
     {
       "id": "F10",

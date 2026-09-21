@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-21** · 66 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-21** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 8
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 9
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-21.** **53 itens de 66** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-21.** **54 itens de 67** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I26, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1523,6 +1523,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
 | **I25** | A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada | `P3` | Aberto |
+| **I26** | Uma instância restaurada de um dump fica sem nenhum cron — `cron.job` não viaja, e nada o diz no momento da restauração | `P1` | Aberto |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1530,7 +1531,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A pilha está reduzida de doze a **seis contêineres** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), as versões estão fixadas, `bootstrap.sh` foi executado de verdade em 26/08 com oito defeitos levantados e corrigidos, e o ensaio de 18/08 reexecutou 124 migrações e restaurou um dump de produção em 17 segundos. Reconstrução completa medida: **25 minutos**.
 
-*Verificado : 08/09 — o hospedeiro da videoconferência é o Framatalk desde este dia; nenhuma resposta de hospedeiro sobre um Jitsi foi ainda pedida. O fundo de mapa é um arquivo de 18 GB no Storage (`map-tiles`), a fazer seguir.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** O que resta: desacoplar a cadeia de implantação da integração contínua (**extração, não criação** — `scripts/ci/deployer-backend.sh` já existe), colocar um proxy reverso com túnel na frente da pilha, passar de tags para impressões `sha256`, e refazer o ensaio a frio um mês depois para verificar que nada divergiu. **Acrescentado em 08/09/2026, a colocar ao hospedeiro previsto (Les Herbes Folles), ou a um ou vários outros**: **um Jitsi nosso.** A videoconferência de apoio mútuo e de assembleias vivia na Autistici/Inventati; a A/I foi designada «SDGT» pelos Estados Unidos em 26/08 e fechou; em 08/09 mudámos para o Framatalk (Framasoft, Hetzner na Alemanha) — um terceiro de confiança, mas um terceiro, numa infraestrutura que uma medida do mesmo tipo pode atingir. Um Jitsi hospedado por nós (ou por um coletivo de hospedagem aliado, ou repartido entre vários) é a única saída completa. Não é a mesma carga que o resto da pilha: o videobridge consome largura de banda de subida na proporção das participantes. **Perguntas a fazer**: a VM aguenta um Jitsi (RAM, banda, porta UDP 10000); preferem uma segunda máquina; outro hospedeiro aliado (Chapril, Systemli, uma instância amiga) aceitaria carregar a videoconferência da rede, mesmo que não viva no mesmo lugar que a base? No mesmo dia, **o arquivo de fundo de mapa** (`map-tiles/planet-z12.pmtiles`, 18 GB, a reextrair em z15 a partir da VM: 138 GB) entrou no que se muda — a contar no disco pedido (I21).
 
@@ -1693,6 +1694,28 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Nenhuma.
 
 *Remissões : `scripts/ci/run-sql-suites.sh` · `.forgejo/workflows/sql-tests.yml` · `REGISTRE §0 DOC-SILENCE-1` · `REGISTRE §0 OPS-8`*
+
+#### I26 — Uma instância restaurada de um dump fica sem nenhum cron — `cron.job` não viaja, e nada o diz no momento da restauração
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas, SQL / PostgreSQL
+
+**Estado.** **Constatado em 21/09/2026** num dump real da produção restaurado por `bootstrap.sh --depuis-une-sauvegarde`: o controlo de saúde de `deploy/deploy.sh` (I19) devolve « pg_cron: 0 jobs planeados, 38 ausentes ». `supabase db dump` não leva o esquema `cron`; e como o histórico das migrações é agora restaurado (I2, 21/09), as migrações que planeiam os jobs ficam inscritas como « feitas » e não se repetem. A instância está completa, responde, faz-se login — e nenhum lembrete, sonda de saúde, colheita, gazeta ou expiração de mensalidade partirá alguma vez. `bootstrap.sh` termina em « ✓ Pilha reconstruída e verificada »: a sua verificação final não olha `cron.job`.
+
+*Verificado : [object Object]*
+
+**O que é.** Dois gestos. **(1)** Que `bootstrap.sh` o DIGA: repetir `tests/sql/crons_planifies_tests.sql` na sua verificação final, como `deploy.sh` já faz. **(2)** Que os jobs voltem: um quarto ficheiro, no modelo da exportação do Vault (`select format('select cron.schedule(%L,%L,%L);', jobname, schedule, command) from cron.job`), carregado por `restore.sh`. A verificar primeiro: **os comandos de cron levam segredos em claro**? Se sim, o ficheiro segue a regra dos dumps e entra no fluxo `long`. Alternativa a pesar: uma migração idempotente única que replaneia os 38 jobs a partir da lista da suíte.
+
+**Por que importa.** É exatamente a avaria que o projeto melhor sabe reconhecer — um estado que responde « tudo bem » e não faz o que anuncia — no pior momento: o dia seguinte a uma virada ou a um sinistro. E sendo a sonda de saúde ela própria um cron, a instância restaurada é a única que não pode dar por isso.
+
+**O que conta como terminado.**
+
+- `bootstrap.sh --depuis-une-sauvegarde` fica vermelho enquanto faltarem os crons esperados.
+- Uma restauração de um dump real devolve `CRONS-PLANIFIES OK` sem gesto manual não escrito.
+- A questão dos segredos em `cron.job.command` tem aqui a sua resposta escrita.
+
+**Dependências.** Sai de **I2** (passagem real de 21/09), apoia-se em **I19**. Entra no que **I21** deve ver verdadeiro antes da virada.
+
+*Remissões : `journal/operations/NOTE_pins-images-remesures_2026-09-21 §7` · `deploy/deploy.sh (contrôle pg_cron, I19)` · `tests/sql/crons_planifies_tests.sql` · `deploy/scripts/restore.sh`*
 
 ---
 
@@ -2140,4 +2163,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 66 itens em 11 domínios. O estado numérico foi levantado em 2026-09-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `6cf45ef4`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-09-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `6cf45ef4`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

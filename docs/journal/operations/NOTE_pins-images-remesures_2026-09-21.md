@@ -92,7 +92,9 @@ deux images. La concordance des colonnes la rend probable ; seule la passe
 | Le jeton lit `rest/v1/libraries` | HTTP 200 |
 | « cloudflare » ou « turnstile » dans les journaux des six conteneurs | **0** |
 
-## 5 · Ce qui reste réellement
+## 5 · Ce qui restait à midi
+
+*Les quatre points ci-dessous ont été repris le soir même : voir §6 à §8. Ils sont laissés tels quels, pour que l'on voie ce qui était su à quel moment.*
 
 1. **Le seuil ne doit plus pouvoir périmer en silence.** Ce jour, les deux
    seuils de `bootstrap.sh` portent leur date et le script la répète à l'écran ;
@@ -109,3 +111,98 @@ deux images. La concordance des colonnes la rend probable ; seule la passe
 4. **Le `deploy/.env` du poste** porte encore les anciens tags : il n'est pas
    versionné, il ne suit pas `.env.example`. À réaligner avant le prochain essai
    local.
+
+---
+
+## 6 · Le soir même : la sonde, et Storage qui remonte
+
+Le point 1 du §5 a été fait dans la soirée : `public.fn_healthcheck_images_pins()`
+(migration `20260921181812`), troisième sonde structurelle de `health-probe`,
+genre d'incident `images_pins`. L'attendu vit dans
+`private.fn_images_pins_attendus()` ; la garde
+`src/tests/pins-images-coherence.test.js` tient ensemble cet attendu, les pins
+de `.env.example`, les seuils de `bootstrap.sh` et le tableau du README.
+
+Elle a sonné à son premier soir, et à raison. À **20 h 43 min 42 s**
+(`storage.migrations.executed_at`), l'hébergeur a monté Storage de 1.73.1 à
+**1.77.5** : cinq migrations, 68 → **73**, dernière
+`drop-bucketid-objname-index`. Courriel aux administrateur·rices à 20 h 45,
+reçu et lu par Xavier. Le pin de l'après-midi avait tenu moins de trois heures.
+
+Boucle déroulée telle que le courriel la dicte :
+
+| Storage | migrations | dernière |
+|---|---|---|
+| v1.72.0 *(témoin)* | 68 | objects-null-version-index |
+| v1.74.0, v1.74.5, v1.75.1 | 70 | validate-bucket-lifecycle-constraints |
+| v1.76.2 | 72 | objects-delete-marker-index |
+| **v1.77.0** | **73** | **drop-bucketid-objname-index** |
+| v1.77.5 | 73 | drop-bucketid-objname-index |
+
+Concordance, pile v2.197.0 + v1.77.0 : **344 colonnes**, même empreinte md5 que
+la production. Migration `20260921190301`, `.env.example`, `bootstrap.sh`,
+README : même commit.
+
+Deux défauts du courriel, relevés par son premier lecteur et corrigés : le
+bilan JSON était **blanc sur blanc** en thème sombre (le `<pre>` fixait le fond,
+pas la couleur du texte), et le gabarit écrivait « de les versions ».
+
+## 7 · La passe `--depuis-une-sauvegarde` sur un dump réel (point 3)
+
+| étape | durée | volume |
+|---|---|---|
+| `supabase db dump` (schéma) | 301 s | 3,3 Mo — 78 533 lignes |
+| `supabase db dump` (données) | 439 s | 37,6 Mo — 95 426 lignes *(19 Mo le 26/08)* |
+| `supabase db dump --schema supabase_migrations` | 29 s | 5,4 Mo — 326 versions |
+| secrets du Vault (`restic dump`, flux `long`) | — | 20 appels `create_secret`, dont le sel |
+| restauration complète sous v2.197.0 + v1.77.0 | **62 s** | |
+| fichiers Storage (copie locale du flux `storage`) | — | 831 fichiers pour 833 objets |
+
+Première passe arrêtée sur le sel (code 1, voulu), injection du Vault, seconde
+passe code 0. Huit décomptes **identiques à la production** : 5 bibliothèques,
+2 656 notices, 2 758 exemplaires, 20 profils, 20 comptes, 19 identités,
+17 buckets, 833 objets. Deux objets publics (`covers`, `authors`) servis **octet
+pour octet** comme en production. GoTrue rend les comptes restaurés (API admin,
+décompte seul) ; un compte jetable créé à côté se connecte par l'Edge Function
+`login`. La sonde des pins, sur cette pile : `ok: true`. Dumps, secrets et pile
+effacés après usage.
+
+**Trois constats que seule une passe réelle pouvait faire.**
+
+1. **`supabase db dump` n'emporte pas `supabase_migrations`.** L'instance
+   restaurée ne savait plus quelles migrations elle portait ; `deploy.sh`
+   entreprenait de rejouer le socle sur une base pleine (échec immédiat sur
+   « type "membership_payment_method" already exists » — sans dégât, par chance).
+   Elle ne pouvait donc **plus jamais être mise à jour**. Réparé : troisième
+   fichier `migrations.sql`, étape « 3 bis » de `restore.sh`,
+   `restore-historique.sh`, et garde-fou dans `apply-pending-migrations.sh`
+   (historique vide sur base pleine = refus). Piège associé, vécu : l'historique
+   dumpé un quart d'heure après les données déclarait faite une migration que le
+   schéma ne portait pas — **les trois fichiers se prennent ensemble, l'historique
+   d'abord**.
+2. **Il n'emporte pas `cron.job` non plus** : 38 crons absents après
+   restauration, et `bootstrap.sh` finit en vert. Ouvert au backlog : **I26**.
+3. **Un `pg_dump` fait tomber une migration en attente.** Le dump tient un
+   verrou de lecture sur toutes les tables ; l'`ALTER TABLE` de `20260921181812`
+   est mort sur le statement timeout (run 1288, `backend` rouge une demi-heure,
+   transaction annulée en entier, appliquée au run suivant). Pas de dump pendant
+   qu'une migration attend en CI.
+
+## 8 · Le front hors forge (point 2), et le poste (point 5)
+
+- `scripts/ci/publier-front.sh` : construit (refuse sans la clé publiable —
+  `prebuild` sortirait en 0), publie par `git-pages-cli`, l'image que l'action de
+  la forge appelle. Construction, `--simulation`, `--vers-dossier` exécutés.
+  **La publication réelle par ce chemin n'a pas été faite** : il y faut un jeton
+  Codeberg, et le premier tir (`--essai`, qui fait vérifier l'autorisation sans
+  rien publier) revient à une personne.
+- `deploy/deploy.sh` ne reconstruisait jamais le front d'une instance
+  auto-hébergée. Étape « Front » ajoutée, éprouvée deux fois sur la pile
+  restaurée (reconstruit quand le commit change, ne refait rien sinon) ; le
+  contrôle « Application Web » suit désormais la redirection HTTPS de Caddy.
+- Poste : `~/anarbib/deploy/.env` aligné sur les pins (copie d'avant dans
+  `~/anarbib-ops/`), `~/anarbib` avancé sur `origin/main` ; le brouillon local de
+  `televerser-tus.mjs` (20/09), supplanté par `66c4bca5`, est gardé en `git stash`
+  et en patch dans `~/anarbib-ops/`. Accident de séance, réparé : un `npm ci`
+  lancé dans un worktree dont `node_modules` était un lien a vidé celui de
+  `~/anarbib` ; reconstruit par `npm ci`.
