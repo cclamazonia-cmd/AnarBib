@@ -9,10 +9,12 @@
 // les voient. Même trou que celui refermé pour l'invitation le 27/08 ; même
 // méthode : lire le source .ts comme du texte, une entrée = une ligne.
 //
-// Le troisième contrôle est celui qui compte : l'adresse du guide est écrite à
-// TROIS endroits (guide-meta.json de la vitrine, account.constitution.guideUrl
-// des locales React, approved.guideUrl du mail). Le premier est dans un autre
-// dépôt ; les deux autres doivent au moins dire la même chose.
+// Le troisième contrôle est celui qui compte : le CHEMIN du guide est écrit à
+// trois endroits (guide-meta.json de la vitrine, account.constitution.guidePath
+// des locales React, approved.guidePath du mail). Le premier est dans un autre
+// dépôt ; les deux autres doivent au moins dire la même chose. Depuis le
+// 21/09/2026 ce sont des chemins et non plus des adresses : la base a un foyer
+// unique de chaque côté (cf. site-url-unique.test.js).
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect } from 'vitest';
@@ -25,7 +27,7 @@ const ROOT = join(__dirname, '..', '..');
 const SRC = readFileSync(join(ROOT, 'supabase', 'functions', 'notify-library-request', 'strings.ts'), 'utf8');
 
 const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
-const CLES = ['approved.notYet', 'approved.path', 'approved.human', 'approved.ctaLabel', 'approved.guideUrl'];
+const CLES = ['approved.notYet', 'approved.path', 'approved.human', 'approved.ctaLabel', 'approved.guidePath'];
 
 /** Découpe STRINGS en blocs par locale : `  "pt-BR": {` ou `  fr: {` … `  },`. */
 function blocs() {
@@ -79,15 +81,16 @@ describe("mail d'acceptation — le guide d'accueil dans les dix langues", () =>
     }
   });
 
-  it("approved.guideUrl (mail) et account.constitution.guideUrl (app) désignent la même page", () => {
+  it("approved.guidePath (mail) et account.constitution.guidePath (app) désignent la même page", () => {
     for (const l of LOCALES) {
-      expect(valeur(l, 'approved.guideUrl'), l).toBe(locales[l]['account.constitution.guideUrl']);
-      expect(valeur(l, 'approved.guideUrl'), l).toMatch(/^https:\/\/anarbib\.org\/[a-z]{2}\/[a-z]+\/$/);
+      expect(valeur(l, 'approved.guidePath'), l).toBe(locales[l]['account.constitution.guidePath']);
+      // Un chemin, jamais une adresse : le domaine n'a rien à faire dans un dictionnaire.
+      expect(valeur(l, 'approved.guidePath'), l).toMatch(/^\/[a-z]{2}\/[a-z]+\/$/);
     }
   });
 
   it("l'app et l'oficina ont leurs cinq clés dans les dix locales", () => {
-    const attendues = ['account.constitution.banner.title', 'account.constitution.banner.body', 'account.constitution.banner.cta', 'account.constitution.guideUrl', 'atelier.guide.callout'];
+    const attendues = ['account.constitution.banner.title', 'account.constitution.banner.body', 'account.constitution.banner.cta', 'account.constitution.guidePath', 'atelier.guide.callout'];
     for (const l of LOCALES) {
       const manquantes = attendues.filter(k => !(locales[l][k] || '').trim());
       expect(manquantes, l).toEqual([]);

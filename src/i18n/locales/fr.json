@@ -6686,6 +6686,6 @@
   "account.constitution.banner.title": "Ta candidature est acceptée — place à la constitution",
   "account.constitution.banner.body": "Ta bibliothèque est pré-active. Termine l'atelier de constitution et porte le règlement en assemblée ; le guide d'accueil t'accompagne pas à pas.",
   "account.constitution.banner.cta": "Ouvrir le guide d'accueil",
-  "account.constitution.guideUrl": "https://anarbib.org/fr/accueil/",
+  "account.constitution.guidePath": "/fr/accueil/",
   "atelier.guide.callout": "Chaque choix de cet atelier est une décision du collectif, pas un champ à remplir. Le guide d'accueil dit ce que chacun change en pratique."
 }

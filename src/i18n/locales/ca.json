@@ -6686,6 +6686,6 @@
   "account.constitution.banner.title": "La teva candidatura és acceptada — ara, la constitució",
   "account.constitution.banner.body": "La teva biblioteca és preactiva. Acaba el taller de constitució i porta el reglament a l'assemblea; la guia d'acollida t'acompanya pas a pas.",
   "account.constitution.banner.cta": "Obrir la guia d'acollida",
-  "account.constitution.guideUrl": "https://anarbib.org/ca/acollida/",
+  "account.constitution.guidePath": "/ca/acollida/",
   "atelier.guide.callout": "Cada tria d'aquest taller és una decisió del col·lectiu i no un camp per omplir; la guia d'acollida diu què canvia cadascuna a la pràctica."
 }

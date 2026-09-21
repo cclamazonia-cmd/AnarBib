@@ -6686,6 +6686,6 @@
   "account.constitution.banner.title": "A sua candidatura foi aceita — agora é a constituição",
   "account.constitution.banner.body": "A sua biblioteca está pré-ativa. Complete a oficina de constituição e leve o regimento à assembleia; o guia de acolhimento acompanha você passo a passo.",
   "account.constitution.banner.cta": "Abrir o guia de acolhimento",
-  "account.constitution.guideUrl": "https://anarbib.org/pt/acolhimento/",
+  "account.constitution.guidePath": "/pt/acolhimento/",
   "atelier.guide.callout": "Cada escolha desta oficina é uma decisão do coletivo, não um campo a preencher. O guia de acolhimento diz o que cada uma muda na prática."
 }

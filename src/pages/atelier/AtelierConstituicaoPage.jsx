@@ -11,6 +11,7 @@ import HumanChannelInlineCallout from '@/components/atelier/HumanChannelInlineCa
 import AtelierVoletEditor, { WIRED_VOLETS } from '@/components/atelier/AtelierVoletEditor';
 import { buildRegimentoPdf } from '@/lib/regimentoPdf';
 import './AtelierConstituicaoPage.css';
+import { siteUrl } from '@/lib/siteUrl';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // AtelierConstituicaoPage — « Oficina de constituição » (spec onboarding §6)
@@ -256,7 +257,7 @@ export default function AtelierConstituicaoPage() {
             chaque choix change en pratique. Lien dans la langue de la personne. */}
         <div className="ab-atl-guide">
           <span>{t({ id: 'atelier.guide.callout' })}</span>
-          <a href={t({ id: 'account.constitution.guideUrl' })} target="_blank" rel="noreferrer">{t({ id: 'account.constitution.banner.cta' })}</a>
+          <a href={siteUrl(t({ id: 'account.constitution.guidePath' }))} target="_blank" rel="noreferrer">{t({ id: 'account.constitution.banner.cta' })}</a>
         </div>
 
         <div className="ab-atl-grid">

@@ -18,6 +18,7 @@ import { IntlProvider } from 'react-intl';
 import fr from '@/i18n/locales/fr.json';
 import el from '@/i18n/locales/el.json';
 import MinhaSolicitacaoPanel from '@/components/account/MinhaSolicitacaoPanel';
+import { siteUrl } from '@/lib/siteUrl';
 
 const DEMANDE = {
   id: 'req-1', request_status: 'aprovada', library_name: 'Biblioteca Emma Goldman',
@@ -70,7 +71,9 @@ describe('/conta — bandeau de constitution vers le guide d\'accueil', () => {
       expect(screen.getByText(messages['account.constitution.banner.body'])).toBeTruthy();
       const lien = screen.getByRole('link', { name: messages['account.constitution.banner.cta'] });
       expect(lien.getAttribute('href')).toBe(`https://anarbib.org/${slug}/`);
-      expect(lien.getAttribute('href')).toBe(messages['account.constitution.guideUrl']);
+      // La locale ne porte que le chemin ; la base vient de src/lib/siteUrl.js (21/09/2026).
+      expect(messages['account.constitution.guidePath']).toBe(`/${slug}/`);
+      expect(lien.getAttribute('href')).toBe(siteUrl(messages['account.constitution.guidePath']));
       expect(lien.getAttribute('target')).toBe('_blank');
       // Le bouton existant vers l'atelier est toujours là (Link est rendu nu par le setup).
       expect(screen.getByText(messages['conta.demande.goAtelier'])).toBeTruthy();

@@ -26,6 +26,7 @@ const tsToCjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts'
 const CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/index.ts', import.meta.url));
 const STRINGS_CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/strings.ts', import.meta.url));
 const CLE_CODE = tsToCjs(new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url));
+const SITE_CODE = tsToCjs(new URL('../../supabase/functions/_shared/core/site-url.ts', import.meta.url));
 
 const SECRET = 'webhook-de-test';
 const ENV = {
@@ -44,6 +45,8 @@ const strings = (() => {
   return m.exports;
 })();
 const tr = strings.tr;
+// Les chaînes ne portent qu'un chemin ; la base vient de _shared/core/site-url.ts.
+const guide = (locale, base = 'https://anarbib.org') => base + tr(locale, 'approved.guidePath');
 
 const DEMANDE = {
   id: 'req-1', request_status: 'aprovada', library_name: 'Biblioteca Emma Goldman',
@@ -55,7 +58,7 @@ const DEMANDE = {
   review_notes: null, reviewed_by_user_id: 'user-admin', created_at: '2026-09-16T10:00:00Z',
 };
 
-function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.test', preferred_language: 'de' }] } = {}) {
+function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.test', preferred_language: 'de' }], env = {} } = {}) {
   const envois = [];
   const repondre = (table, chaine) => {
     if (table === 'library_requests') return { data: DEMANDE, error: null };
@@ -81,7 +84,7 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
   };
 
   let handler = null;
-  const DenoStub = { env: { get: (k) => ENV[k] } };
+  const DenoStub = { env: { get: (k) => ({ ...ENV, ...env })[k] } };
   const fetchStub = async (url, opts) => {
     if (String(url).includes('api.resend.com')) {
       envois.push(JSON.parse(opts.body));
@@ -94,6 +97,11 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
     if (spec.endsWith('secret-key.ts')) {
       const m = { exports: {} };
       new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(requireStub, m, m.exports, DenoStub);
+      return m.exports;
+    }
+    if (spec.endsWith('site-url.ts')) {
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', SITE_CODE)(requireStub, m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };
@@ -136,7 +144,7 @@ describe("notify-library-request — le mail d'acceptation mène au guide d'accu
     expect(m, 'pas de mail à la demandeuse').toBeTruthy();
     expect(m.subject).toBe(`[AnarBib] ${tr('fr', 'approved.subject')}`);
 
-    const href = `href="${tr('fr', 'approved.guideUrl')}"`;
+    const href = `href="${guide('fr')}"`;
     const ordre = positions(m.html, [
       esc(tr('fr', 'approved.intro', { library: DEMANDE.library_name })),
       esc(tr('fr', 'approved.notYet')),
@@ -151,7 +159,7 @@ describe("notify-library-request — le mail d'acceptation mène au guide d'accu
     expect(m.html).not.toMatch(/@anarbib\.org/);
 
     // Version texte : les paragraphes sont séparés, le lien est écrit en clair.
-    expect(m.text).toContain(`${tr('fr', 'approved.ctaLabel')}: ${tr('fr', 'approved.guideUrl')}`);
+    expect(m.text).toContain(`${tr('fr', 'approved.ctaLabel')}: ${guide('fr')}`);
     expect(m.text).toContain(`${tr('fr', 'approved.notYet')}\n\n${tr('fr', 'approved.path')}`);
   });
 
@@ -169,9 +177,18 @@ describe("notify-library-request — le mail d'acceptation mène au guide d'accu
     const appeler = monterEF({ langueDemandeuse: 'el' });
     const { envois } = await appeler('library_request_approved');
     const m = envois.find((e) => e.to[0] === 'louise@exemplo.test');
-    expect(m.html).toContain(`href="${tr('el', 'approved.guideUrl')}"`);
+    expect(m.html).toContain(`href="${guide('el')}"`);
     expect(m.html).toContain(esc(tr('el', 'approved.ctaLabel')));
-    expect(tr('el', 'approved.guideUrl')).toBe('https://anarbib.org/el/ypodochi/');
+    expect(guide('el')).toBe('https://anarbib.org/el/ypodochi/');
+  });
+
+  it('si le canonique change, le secret SITE_BASE_URL suffit : le bouton suit, sans toucher aux chaînes', async () => {
+    const appeler = monterEF({ langueDemandeuse: 'fr', env: { SITE_BASE_URL: 'https://anarbib.is/' } });
+    const { envois } = await appeler('library_request_approved');
+    const m = envois.find((e) => e.to[0] === 'louise@exemplo.test');
+    expect(m.html).toContain(`href="${guide('fr', 'https://anarbib.is')}"`);
+    expect(m.html).not.toContain('https://anarbib.org/fr/accueil/');
+    expect(m.text).toContain(guide('fr', 'https://anarbib.is'));
   });
 
   it('un refus ne porte ni bouton ni copie aux admins (comportement antérieur intact)', async () => {

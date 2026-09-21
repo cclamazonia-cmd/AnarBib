@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
+import { siteUrl } from "../_shared/core/site-url.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustSecretKey();
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_LIBRARY_REQUEST");
@@ -414,7 +415,7 @@ function buildApplicantEmail(locale, eventType, row, reviewerName) {
   let action = null;
   if (eventType === "library_request_approved") {
     paragraphs.push(tr(locale, "approved.notYet"), tr(locale, "approved.path"), tr(locale, "approved.human"));
-    action = { label: tr(locale, "approved.ctaLabel"), url: tr(locale, "approved.guideUrl") };
+    action = { label: tr(locale, "approved.ctaLabel"), url: siteUrl(tr(locale, "approved.guidePath")) };
   }
   return {
     locale,

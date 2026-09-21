@@ -5,6 +5,7 @@ import { createClient } from '../_shared/deps.ts';
 import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/context/library-mail-routing.ts";
+import { siteUrl } from "../_shared/core/site-url.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -240,7 +241,7 @@ const SITE_PROJECT_SLUG_BY_LOCALE = {
 function projectUrl(locale) {
   const lang = localeToSiteLang(locale);
   const slug = SITE_PROJECT_SLUG_BY_LOCALE[String(locale || "").trim()] || "projeto";
-  return `https://anarbib.org/${lang}/${slug}/`;
+  return siteUrl(`/${lang}/${slug}/`);
 }
 function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, isContributor = false, atelierUrl, catalogUrl, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR", readerCardsEnabled = false, readerValidationMode = null }) {
   const logoTable = buildLogoTable({
@@ -1167,7 +1168,7 @@ serve(async (req)=>{
       atelierUrl: mailIsContributor ? "https://app.anarbib.org/atelier-autoridades" : "",
       catalogUrl: mailIsContributor ? "https://app.anarbib.org/catalogo" : "",
       libraryRequestUrl: libraryRequestClaimUrl,
-      galleryUrl: mailIsOrphan ? `https://anarbib.org/${localeToSiteLang(userLocale)}/explorar/` : "",
+      galleryUrl: mailIsOrphan ? siteUrl(`/${localeToSiteLang(userLocale)}/explorar/`) : "",
       aboutUrl: mailIsOrphan ? projectUrl(userLocale) : "",
       locale: userLocale,
       // CARD-LOCAL-CANAL : « comment marche ta biblio » conditionné à la config

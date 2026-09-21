@@ -127,6 +127,7 @@ const GREC_PROVISOIRE = [
 // sigles, identifiants techniques, noms de langue dans leur propre langue,
 // exemples d'URL ou d'adresse. Chacune est nommée, aucune n'est un motif.
 const EL_SANS_GREC_LEGITIME = [
+  'account.constitution.guidePath',   // chemin de page de la vitrine (« /el/ypodochi/ »), pas un texte
   'atelier.volet4.classif.cdd',
   'catalogacao.author.sourceKind.viaf',
   'catalogacao.author.sourceKind.wikidata',

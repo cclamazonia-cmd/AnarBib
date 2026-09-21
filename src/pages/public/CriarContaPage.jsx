@@ -14,6 +14,7 @@ import { hasStatesList, getCountryMetadata, getStateName } from '@/components/fo
 import AltchaWidget from '@/components/ui/AltchaWidget';
 import { formatPublicId } from '@/lib/publicId';
 import { deriveSignupIntent, isSignupSentinel } from '@/lib/signupIntent';
+import { siteUrl } from '@/lib/siteUrl';
 
 // Logo auto-heberge (19/08/2026), auparavant hotlinke sur un WordPress externe.
 const ANARBIB_LOGO = '/img/logo-anarbib.png';
@@ -26,7 +27,7 @@ function galleryUrl(locale) {
   const map = { 'pt-BR': 'pt', pt: 'pt', fr: 'fr', es: 'es',
                 it: 'it', en: 'en', de: 'de', ca: 'ca', eo: 'eo' };
   const lang = map[locale] || 'pt';
-  return `https://anarbib.org/${lang}/explorar/`;
+  return siteUrl(`/${lang}/explorar/`);
 }
 
 // Pays par défaut au chargement initial. La détection plus fine

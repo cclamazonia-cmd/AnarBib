@@ -6686,6 +6686,6 @@
   "account.constitution.banner.title": "Η υποψηφιότητά σου έγινε δεκτή — τώρα η σύσταση",
   "account.constitution.banner.body": "Η βιβλιοθήκη σου είναι προ-ενεργή. Ολοκλήρωσε το εργαστήρι σύστασης και πήγαινε τον κανονισμό στη συνέλευση· ο οδηγός υποδοχής σε συνοδεύει βήμα βήμα.",
   "account.constitution.banner.cta": "Άνοιξε τον οδηγό υποδοχής",
-  "account.constitution.guideUrl": "https://anarbib.org/el/ypodochi/",
+  "account.constitution.guidePath": "/el/ypodochi/",
   "atelier.guide.callout": "Κάθε επιλογή σε αυτό το εργαστήρι είναι απόφαση της συλλογικότητας, όχι πεδίο προς συμπλήρωση· ο οδηγός υποδοχής λέει τι αλλάζει η καθεμία στην πράξη."
 }
