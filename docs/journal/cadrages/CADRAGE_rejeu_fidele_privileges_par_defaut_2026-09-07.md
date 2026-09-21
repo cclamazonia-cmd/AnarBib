@@ -1,9 +1,9 @@
 # CADRAGE — Un rejeu depuis zéro fidèle à la production : le privilège par défaut se retire avant le socle
 
-*Trace de cadrage (`docs/journal/cadrages/`), non normative. Ce qui fait foi : REGISTRE `DOC-GRANT-1`, `DOC-GRANT-2` ; backlog `I17` (dont cette page est la « spec », décision D7 du 06/09 : nous l'écrivons, on la propose à Bastien après la fusion de la PR #28).*
+*Trace de cadrage (`docs/journal/cadrages/`), non normative. Ce qui fait foi : REGISTRE `DOC-GRANT-1`, `DOC-GRANT-2` ; backlog `I17` (dont cette page est la « spec », décision D7 du 06/09 : nous l'écrivons, on la propose au camarade après la fusion de la PR #28).*
 
 - **Date :** 7 septembre 2026, matin. Session `reprise-pr28-revoke-anon-2026-09-06`.
-- **Pour qui :** la personne qui fera `I17` — Bastien (`ASR2026`) si elle prend le morceau, nous sinon. Écrite pour être exécutée sans cette session.
+- **Pour qui :** la personne qui fera `I17` — le camarade (`ASR2026`) si elle prend le morceau, nous sinon. Écrite pour être exécutée sans cette session.
 - **Ce qu'elle ne fait pas :** rien en production. La production est saine (constat du 06/09) ; tout ce qui suit concerne le **chemin de rejeu** — la pile auto-hébergée, et le banc CI par ricochet.
 - **Toutes les mesures ci-dessous sont datées du 07/09** : production interrogée en lecture seule (`uflwmikiyjfnikiphtcp`), image `supabase/postgres:17.6.1.136` lancée à vide dans un conteneur jetable puis détruit, dépôt au commit `fb64c996`.
 
@@ -42,7 +42,7 @@ Deux faits qui décident de la suite, vérifiés à blanc (`BEGIN … ROLLBACK`)
 |---|---|---|---|
 | Production (Supabase hébergé, `supabase db push`) | `postgres` | `postgres` | non concerné : le socle *est* le dump de la prod, les fonctions existaient déjà |
 | Banc CI (`scripts/ci/run-sql-suites.sh`, image `public.ecr.aws/supabase/postgres:17.6.1.084`) | `postgres` (`PGUSER` par défaut) | **aucune** : base créée `TEMPLATE template0` | **fermée** — d'où le vert |
-| Pile auto-hébergée (`deploy/scripts/run-migrations.sh`, `apply-pending-migrations.sh` de la PR #28) | **`supabase_admin`** (premier candidat de la boucle) | `supabase_admin` | **ouverte** — d'où le rouge de Bastien |
+| Pile auto-hébergée (`deploy/scripts/run-migrations.sh`, `apply-pending-migrations.sh` de la PR #28) | **`supabase_admin`** (premier candidat de la boucle) | `supabase_admin` | **ouverte** — d'où le rouge du camarade |
 
 Le banc CI prouve une chose que le 17/08 n'avait pas vue : **les 308 migrations s'appliquent entièrement sous `postgres` non superutilisateur, sur cette image** — extensions, rôles et objets compris. Le motif « `postgres` n'est pas superutilisateur » qui a fait choisir `supabase_admin` dans `run-migrations.sh` ne tient pas pour les migrations ; il tient pour `01-roles.sh` (les rôles réservés comme `authenticator` exigent un superutilisateur), et c'est déjà là qu'on l'utilise.
 
@@ -85,7 +85,7 @@ Ce qui rend la règle atteignable sans réécrire le socle : **le socle est fid�
 
 ### Option A (recommandée) — la pile auto-hébergée applique les migrations sous `postgres`, comme la production et la CI
 
-1. **Dans `deploy/init-db/01-roles.sh`** (il s'exécute en `supabase_admin` au premier démarrage d'un volume vierge, *avant* tout rejeu — c'est le bon endroit, celui où Bastien a mis `pg_cron`) : retirer `anon` du défaut **des deux rôles**, pour les fonctions, **sans jamais vider une entrée** (une entrée `pg_default_acl` vide est supprimée par Postgres et le défaut natif `PUBLIC=X` revient — c'est le piège de `DOC-GRANT-1`) :
+1. **Dans `deploy/init-db/01-roles.sh`** (il s'exécute en `supabase_admin` au premier démarrage d'un volume vierge, *avant* tout rejeu — c'est le bon endroit, celui où le camarade a mis `pg_cron`) : retirer `anon` du défaut **des deux rôles**, pour les fonctions, **sans jamais vider une entrée** (une entrée `pg_default_acl` vide est supprimée par Postgres et le défaut natif `PUBLIC=X` revient — c'est le piège de `DOC-GRANT-1`) :
    ```sql
    ALTER DEFAULT PRIVILEGES FOR ROLE postgres       IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;
    ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon;
@@ -131,6 +131,6 @@ Sur une machine avec Docker, dépôt à jour, **sans** la PR #28 (pour mesurer l
 - **`deploy/README.md`** : dire en une phrase que la pile applique les migrations sous `postgres` comme la production, et pourquoi `01-roles.sh` reste en `supabase_admin`.
 - **`DOC-GRANT-1`** ne change pas ; cette page en est l'application au chemin de rejeu. Si l'expérience confirme A, une ligne `DOC-GRANT-2` « corollaire » suffit au REGISTRE.
 
-## 9. Ce qui est proposé à Bastien, et ce qui reste à nous
+## 9. Ce qui est proposé au camarade, et ce qui reste à nous
 
 Après la fusion de la PR #28 (décision D7, 06/09) : lui proposer les points A.1 et A.2 avec cette page, parce que `01-roles.sh` est déjà l'endroit qu'il a choisi pour `pg_cron` et que le rejeu complet est son terrain. L'expérience du §7 peut être faite par lui ou par nous ; la comparaison avec la production (§7.2) demande un accès en lecture à la prod, donc elle est à nous. `B22` est à nous.
