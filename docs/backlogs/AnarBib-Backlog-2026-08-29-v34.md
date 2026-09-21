@@ -973,7 +973,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Demande de Xavier le 07/09/2026, pour la lisibilité du catalogue.** Dans `CatalogPage.jsx`, le bloc « Explorer » (modes de parcours, alphabet, arbre des sujets, facettes) est escamotable depuis le 21/08 — en-tête `ab-collapse-header`, chevron, `aria-expanded` — mais il naît **ouvert** : `const [exploreOpen, setExploreOpen] = useState(true)`. À chaque visite, la page ouvre donc sur un mur de commandes au-dessus des résultats ; sur mobile, la première notice est sous la ligne de flottaison. Le choix de replier n'est **pas mémorisé** : `saveFilters` enregistre dix-sept préférences dans `anarbib:catalog:filters` (recherche, filtres, tri, `compact`, regroupement par œuvre), pas `exploreOpen` — on replie, on recharge, c'est rouvert. Deux faits qui rendent le repli sans perte : les filtres actifs s'affichent en **puces au-dessus des résultats**, indépendamment du panneau (`hasActiveFilters`, l. 1366), et l'arbre des sujets ne se charge qu'à l'ouverture du panneau (l. 704-715) — replié par défaut, c'est aussi une requête de moins à l'arrivée.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Trois gestes, une soirée. **(1)** `useState(false)` par défaut, et `exploreOpen` ajouté à `saveFilters` / `loadSavedFilters` — le choix de la personne survit au rechargement, comme `compact`. **(2)** L'en-tête replié dit ce qu'il cache, sinon la découverte se perd : « Explorer : sujets, facettes, alphabet », et le nombre de facettes actives en badge quand il y en a (dix locales, clé `catalog.section.explore` à enrichir). **(3)** Un test de source (`src/tests/catalog-explore-replie.test.js`, patron `serial-picker-monte.test.js`) qui garde `useState(false)` et la présence d'`exploreOpen` dans la sauvegarde. Puis vérifier à l'écran, mobile compris : la première notice visible sans défiler, les puces de filtres toujours là panneau replié. Ne pas rouvrir automatiquement quand un filtre est actif : les puces suffisent, et c'est le retour au mur de commandes par la petite porte.
 
@@ -995,7 +995,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Demande de Xavier le 08/09/2026, tranchée après débat.** L'onglet « Données personnelles » de `/conta` (`AccountPage.jsx`, `activeTab === 'perfil'`, lignes 1352–1830) est le plus long de la page : le formulaire du profil, l'adresse, la carte de contact de la bibliothèque, ce qui a été déclaré, la configuration de l'adhésion (avec un repli), le compte de dépôt — puis, **tout en bas**, les trois blocs qui demandent une décision : « Exporter mes données » (`account.export.title`, `DataExportButton`), « Mes notifications » (`account.notifPrefs.title`) et « Lettre de la fédération » (`account.lettre.title`), et enfin « Supprimer mon compte » en rouge (`account.deleteAccount.*`). Il faut défiler longtemps pour trouver ce qu'on vient faire. Les préférences de conservation ne sont pas dans cet onglet : elles vivent dans « Historique », à côté des traces qu'elles gouvernent, et **y restent**.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Une rangée de **trois cartes côte à côte** — export, notifications, lettre — placée **juste après le formulaire du profil**, avant l'adresse et les blocs d'adhésion (de la lecture plus que de la décision). La grille en `repeat(3, minmax(0, 1fr))`, qui passe à une colonne sous 640 px — jamais `1fr` nu (doctrine mobile, `src/styles/mobile.css`). Le bloc **« Supprimer mon compte » reste seul, tout en bas, sur toute la largeur**, en rouge : son caractère définitif se lit à sa place autant qu'à sa couleur. Aucune RPC, aucune clé nouvelle : un déplacement de JSX et une grille. Refaire ensuite la capture de cette page dans le Manuel v5 (`anarbib-manual-v5-portfolio-captures`).
 
@@ -1380,7 +1380,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** **Vérifié en base le 07/09** : dans `library_team_invitations`, une invitation créée le 30/08 est toujours `ready`, expiration le 29/09 (deux autres du 01/09 sont `accepted` et `pending_ratification`). Le plan de formation du 01/09 la signalait déjà : « il faut la prévenir ». Le cron d'expiration la fermera en silence.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Un message à la personne invitée, par le canal humain (`DOC-COLLECTIVE-1`). Puis regarder pourquoi l'invitation par courriel n'a pas suffi — c'est **G1** en miniature.
 

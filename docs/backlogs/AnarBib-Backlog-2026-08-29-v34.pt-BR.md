@@ -973,7 +973,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Pedido de Xavier em 07/09/2026, pela legibilidade do catálogo.** Em `CatalogPage.jsx`, o bloco «Explorar» (modos, alfabeto, árvore de assuntos, facetas) é recolhível desde 21/08, mas nasce **aberto**: `useState(true)`. A cada visita, a página abre num muro de comandos acima dos resultados; no celular, o primeiro registro fica abaixo da dobra. A escolha de recolher **não é lembrada**: `saveFilters` guarda dezessete preferências em `anarbib:catalog:filters`, não `exploreOpen`. Dois fatos tornam o recolhimento sem perda: os filtros ativos aparecem em **chips acima dos resultados**, independentemente do painel, e a árvore de assuntos só carrega à abertura do painel — recolhido por padrão, é também uma requisição a menos.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Três gestos, uma noite. **(1)** `useState(false)` por padrão, e `exploreOpen` acrescentado a `saveFilters` / `loadSavedFilters` — a escolha sobrevive ao recarregamento, como `compact`. **(2)** O cabeçalho recolhido diz o que esconde: «Explorar: assuntos, facetas, alfabeto», com o número de facetas ativas em badge (dez locales). **(3)** Um teste de fonte que guarda `useState(false)` e a presença de `exploreOpen` na gravação. Depois verificar na tela, celular incluído. Não reabrir automaticamente quando um filtro está ativo: os chips bastam.
 
@@ -995,7 +995,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Pedido de Xavier em 08/09/2026, decidido após debate.** O separador «Dados pessoais» de `/conta` é o mais longo da página ; os três blocos de decisão (exportar, notificações, carta da federação) estão no fundo, e a supressão da conta a seguir. As preferências de conservação vivem em «Histórico» e aí ficam.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Uma fila de **três cartões lado a lado** (exportar, notificações, carta) **logo depois do formulário do perfil** ; grelha em `minmax(0, 1fr)`, uma coluna abaixo de 640 px. «Suprimir a minha conta» fica sozinho no fundo, a toda a largura, a vermelho. Nenhuma RPC, nenhuma chave nova ; refazer a captura no Manual v5.
 
@@ -1372,7 +1372,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** **Verificado no banco em 07/09**: em `library_team_invitations`, um convite criado em 30/08 continua `ready`, expira em 29/09 (dois outros de 01/09 estão `accepted` e `pending_ratification`). O plano de formação de 01/09 já o sinalizava: «é preciso avisá-la». O cron de expiração vai fechá-lo em silêncio.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Uma mensagem à pessoa convidada, pelo canal humano (`DOC-COLLECTIVE-1`). Depois olhar por que o convite por e-mail não bastou — é **G1** em miniatura.
 
