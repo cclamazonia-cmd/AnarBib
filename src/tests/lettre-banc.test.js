@@ -162,6 +162,20 @@ describe('outbox-verdict — le statut d\'une ligne de file après une tentative
   it('un handler qui ne rend pas ses envois garde le comportement d\'avant (sent)', () => {
     expect(verdictEnvois({ recipients_count: 2 })).toEqual({ status: 'sent', detail: null });
   });
+  // 21/09, soir : les formes que rendent team.ts et network.ts. Rouges tant que le
+  // verdict ne lisait que `result` et `results`.
+  it('patron de l\'équipe : user_result + admin_result, sans recipients_count ; une copie admin nulle ne compte pas', () => {
+    expect(verdictEnvois({ user_result: ok, admin_result: null })).toEqual({ status: 'sent', detail: null });
+    expect(verdictEnvois({ user_result: ok, admin_result: refus })).toEqual({ status: 'failed', detail: '1 parti(s), 1 refuse(s) — b@x.test : Resend HTTP 500: panne' });
+    expect(verdictEnvois({ user_results: [ok, ok], admin_results: [saute] })).toEqual({ status: 'sent', detail: null });
+    expect(verdictEnvois({ user_result: saute, admin_result: saute })).toEqual({ status: 'skipped', detail: 'transport:channel_disabled' });
+  });
+  it('fan-out avec refus : le détail compte les partis et nomme les refusés ; une clé qui ne finit pas par « result(s) » est ignorée', () => {
+    const refus2 = { ok: false, email: 'c@x.test', error: 'Resend HTTP 429: trop' };
+    expect(verdictEnvois({ recipients_count: 4, results: [ok, refus, { user_id: 'u', skipped: true, reason: 'invalid_email' }, refus2] }))
+      .toEqual({ status: 'failed', detail: '1 parti(s), 2 refuse(s) — b@x.test : Resend HTTP 500: panne | c@x.test : Resend HTTP 429: trop' });
+    expect(verdictEnvois({ recipients_count: 1, resultats_annexes: [refus], kind: 'x' })).toEqual({ status: 'sent', detail: null });
+  });
 });
 
 function monterPage(entree, { env = {}, statutRpc = 'confirmed', erreurRpc = null } = {}) {

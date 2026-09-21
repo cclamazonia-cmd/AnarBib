@@ -15,6 +15,7 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
+import { verdictEnvois } from "./outbox-verdict.ts";
 
 const OUTBOX = "cartography_submission_notification_outbox";
 const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
@@ -85,8 +86,14 @@ export async function handleCartographyEvent(recordId) {
     });
     const target = { email: to, name: "Cartographie AnarBib" };
     const result = await safeSendEmail(target, sub, html, text, "cartography_submission", ctx);
-    await markOutboxSent(outbox.id);
-    return { ok: true, event, recipients_count: 1, result };
+    // DOC-SILENCE-1 (21/09/2026) : le statut de la ligne se lit sur le RÉSULTAT des
+    // envois (outbox-verdict.ts), plus sur le seul nombre de destinataires — un
+    // envoi refusé par le transport passait pour « sent ».
+    const verdict = verdictEnvois({ recipients_count: 1, result });
+    if (verdict.status === "skipped") await markOutboxSkipped(outbox.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict.detail);
+    else await markOutboxSent(outbox.id);
+    return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, recipients_count: 1, result };
   } catch (err) {
     await markOutboxFailed(outbox.id, String(err?.message || err));
     throw err;

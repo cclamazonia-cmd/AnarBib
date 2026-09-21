@@ -29,6 +29,7 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
+import { verdictEnvois } from "./outbox-verdict.ts";
 import { tMail, greeting, formatDateLocale } from "../i18n/mail-strings.ts";
 
 const OUTBOX = "gazette_submission_notification_outbox";
@@ -97,9 +98,14 @@ export async function handleGazetteEvent(recordId) {
       await markOutboxSkipped(outbox.id, "unknown_gazette_event");
       return { ok: true, ignored: true, reason: "unknown_gazette_event", event };
     }
-    if (result?.recipients_count === 0) await markOutboxSkipped(outbox.id, "no_recipients");
+    // DOC-SILENCE-1 (21/09/2026) : le statut de la ligne se lit sur le RÉSULTAT des
+    // envois (outbox-verdict.ts), plus sur le seul nombre de destinataires — un
+    // envoi refusé par le transport passait pour « sent ».
+    const verdict = verdictEnvois(result);
+    if (verdict.status === "skipped") await markOutboxSkipped(outbox.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict.detail);
     else await markOutboxSent(outbox.id);
-    return { ok: true, event, ...result };
+    return { ...result, ok: verdict.status !== "failed", event, outbox_status: verdict.status };
   } catch (err) {
     await markOutboxFailed(outbox.id, String(err?.message || err));
     throw err;

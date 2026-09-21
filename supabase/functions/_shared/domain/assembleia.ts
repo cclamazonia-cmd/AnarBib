@@ -20,6 +20,7 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { appUrl } from "../core/app-url.ts";
+import { verdictEnvois } from "./outbox-verdict.ts";
 
 const ASSEMBLEIAS_URL = appUrl("/federacao/assembleias"); // foyer unique : ../core/app-url.ts
 const PROFILE_COLS = "id,email,first_name,last_name,preferred_language";
@@ -150,8 +151,12 @@ export async function handleAssembleiaEvent(recordId) {
       results.push({ user_id: r.id, email: r.email, ...res });
     }
 
-    await markOutbox(row.id, "sent");
-    return { ok: true, event, recipients_count: recipients.length, results };
+    // DOC-SILENCE-1 (21/09/2026) : le statut de la ligne se lit sur le RÉSULTAT des
+    // envois (outbox-verdict.ts), plus sur le seul nombre de destinataires — un
+    // envoi refusé par le transport passait pour « sent ».
+    const verdict = verdictEnvois({ recipients_count: recipients.length, results });
+    await markOutbox(row.id, verdict.status, verdict.detail);
+    return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, recipients_count: recipients.length, results };
   } catch (err) {
     await markOutbox(row.id, "failed", String(err?.message || err));
     throw err;

@@ -26,9 +26,13 @@ const CODE = cjs(SRC);
 const STRINGS_CODE = cjs(STRINGS);
 const APPURL_CODE = cjs(new URL('../../supabase/functions/_shared/core/app-url.ts', import.meta.url));
 
+const VERDICT_CODE = cjs(new URL('../../supabase/functions/_shared/domain/outbox-verdict.ts', import.meta.url));
+
 const JETON = 'c'.repeat(64);
 
-function monter(outbox, env = {}) {
+// `transport(cible)` : ce que rend safeSendEmail pour ce destinataire ; par défaut
+// l'envoi part. Un résultat `ok:false` n'est PAS compté dans `envois`.
+function monter(outbox, env = {}, transport = () => ({ ok: true })) {
   const envois = [];
   const rendus = [];
   const ecrits = [];
@@ -64,6 +68,7 @@ function monter(outbox, env = {}) {
     }
     if (spec.endsWith('core/env.ts')) return { supabaseAdmin: { from: table } };
     if (spec.endsWith('core/app-url.ts')) return evaluer(APPURL_CODE);
+    if (spec.endsWith('outbox-verdict.ts')) return evaluer(VERDICT_CODE);
     if (spec.endsWith('mail/layout.ts')) {
       return {
         renderEmail: (opts) => { rendus.push(opts); return { html: opts.introHtml, text: '' }; },
@@ -72,7 +77,11 @@ function monter(outbox, env = {}) {
     }
     if (spec.endsWith('transport/email.ts')) {
       return {
-        safeSendEmail: async (cible, sujet, html) => { envois.push({ email: cible.email, nom: cible.name, sujet, html }); return { sent: 1 }; },
+        safeSendEmail: async (cible, sujet, html) => {
+          const res = { email: cible.email, ...transport(cible) };
+          if (res.ok !== false) envois.push({ email: cible.email, nom: cible.name, sujet, html });
+          return res;
+        },
         userTargetFromProfile: (p) => (p?.email ? { email: p.email, name: p.first_name } : null),
       };
     }
@@ -233,5 +242,28 @@ describe('gazette — le bouton de reprise suit APP_BASE_URL', () => {
     const r = await traiter(1);
     const box = r.rendus[0].actionBox;
     expect(box.ctaUrl).toBe(`https://app.anarbib.is/federacao/gazeta?reprise=${JETON}`);
+  });
+});
+
+// ── La file dit ce qui s'est passé (21/09/2026) ────────────────────────────────
+// ROUGES sur le code du matin : dès qu'il y avait un destinataire, la ligne passait
+// à « sent » sans lire ce que safeSendEmail avait rendu. Une décision de rejet non
+// partie était tenue pour dite. Le module adopte _shared/domain/outbox-verdict.ts.
+describe('gazette — un envoi refusé ne passe plus pour envoyé', () => {
+  it('rejet, transport en panne : « failed », last_error nomme la personne et la cause, pas de sent_at', async () => {
+    const traiter = monter([rejet()], {}, () => ({ ok: false, error: 'Resend HTTP 500: panne' }));
+    const r = await traiter(1);
+    expect(r.envois).toHaveLength(0);
+    expect(r.resultat).toMatchObject({ ok: false, outbox_status: 'failed' });
+    expect(r.statutOutbox.status).toBe('failed');
+    expect(r.statutOutbox.last_error).toBe('louise@test.local : Resend HTTP 500: panne');
+    expect(r.statutOutbox.sent_at).toBeUndefined();
+  });
+
+  it('rejet, canal délibérément coupé : « skipped », avec la raison du transport', async () => {
+    const traiter = monter([rejet()], {}, () => ({ ok: false, skipped: true, reason: 'channel_disabled' }));
+    const r = await traiter(1);
+    expect(r.resultat).toMatchObject({ ok: true, outbox_status: 'skipped' });
+    expect(r.statutOutbox).toEqual({ status: 'skipped', skip_reason: 'transport:channel_disabled' });
   });
 });

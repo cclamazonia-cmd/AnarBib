@@ -72,3 +72,43 @@ describe('domain/network — le digest des demandes à évaluer', () => {
     expect(etat().map((d) => d.status)).toEqual(['sent']);
   });
 });
+
+// ── La file dit ce qui s'est passé (21/09/2026) ────────────────────────────────
+// ROUGES sur le code du matin : les deux modules marquaient « sent » sans lire le
+// résultat de l'envoi. Ils adoptent _shared/domain/outbox-verdict.ts.
+describe('équipe et réseau — un envoi refusé ne passe plus pour envoyé', () => {
+  const panne = () => new Response('panne', { status: 500 });
+
+  it('promotion, transport en panne : « failed », et last_error nomme les deux destinataires', async () => {
+    const { ef, etat } = monter({ ligne: PROMOTION, resend: panne });
+    const r = await ef.charger('_shared/domain/team.ts').handleTeamEvent(21);
+    expect(r).toMatchObject({ ok: false, outbox_status: 'failed' });
+    const [d] = etat();
+    expect(d.status).toBe('failed');
+    expect(d.last_error).toContain('promue@exemplo.test');
+    expect(d.last_error).toContain('coordination@biblio.test');
+    expect(d.sent_at).toBeUndefined();
+  });
+
+  it('promotion, seule la copie à la biblio est refusée : « failed », et le détail dit qui a reçu (1 parti, 1 refusé)', async () => {
+    const { ef, etat } = monter({ ligne: PROMOTION, resend: (p) => (p.to[0] === 'coordination@biblio.test' ? panne() : new Response('{}', { status: 200 })) });
+    await ef.charger('_shared/domain/team.ts').handleTeamEvent(21);
+    expect(mailA(ef.envois, 'promue@exemplo.test')).toBeTruthy();
+    const [d] = etat();
+    expect(d.status).toBe('failed');
+    expect(d.last_error).toMatch(/^1 parti\(s\), 1 refuse\(s\)/);
+    expect(d.last_error).toContain('coordination@biblio.test');
+    expect(d.last_error).not.toContain('promue@exemplo.test');
+  });
+
+  it('digest du réseau, un admin sur deux refusé : « failed », avec le compte et le nom du refusé', async () => {
+    const { ef, etat } = monter({ ligne: DIGEST, resend: (p) => (p.to[0] === 'admin2@exemplo.test' ? panne() : new Response('{}', { status: 200 })) });
+    const r = await ef.charger('_shared/domain/network.ts').handleNetworkEvent(22);
+    expect(r).toMatchObject({ ok: false, outbox_status: 'failed' });
+    expect(ef.envois.map((e) => e.to[0])).toEqual(['admin1@exemplo.test']);
+    const [d] = etat();
+    expect(d.status).toBe('failed');
+    expect(d.last_error).toMatch(/^1 parti\(s\), 1 refuse\(s\)/);
+    expect(d.last_error).toContain('admin2@exemplo.test');
+  });
+});

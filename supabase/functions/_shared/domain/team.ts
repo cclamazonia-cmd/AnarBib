@@ -27,6 +27,7 @@ import { adminTarget, safeSendEmail, userTargetFromProfile } from "../transport/
 import { formatDateBR, fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { handleLibraryProfileEvent } from "./library_profile.ts";
+import { verdictEnvois } from "./outbox-verdict.ts";
 // ─── Helpers ──────────────────────────────────────────────────────────────
 async function markOutboxSent(outboxId) {
   await supabaseAdmin.from("team_notification_outbox").update({
@@ -174,15 +175,22 @@ export async function handleTeamEvent(recordId) {
     }
     // #153.E LP-C : fan-out vide (handler réussi, recipients_count === 0) →
     // 'skipped' et non 'sent', pour ne pas faire croire qu'un mail est parti.
-    if (result?.recipients_count === 0) {
-      await markOutboxSkipped(row.id, "no_recipients");
+    // DOC-SILENCE-1 (21/09/2026) : le statut de la ligne se lit sur le RÉSULTAT des
+    // envois (outbox-verdict.ts), plus sur le seul nombre de destinataires — un
+    // envoi refusé par le transport passait pour « sent ».
+    const verdict = verdictEnvois(result);
+    if (verdict.status === "skipped") {
+      await markOutboxSkipped(row.id, verdict.detail);
+    } else if (verdict.status === "failed") {
+      await markOutboxFailed(row.id, verdict.detail);
     } else {
       await markOutboxSent(row.id);
     }
     return {
-      ok: true,
+      ...result,
+      ok: verdict.status !== "failed",
       event,
-      ...result
+      outbox_status: verdict.status
     };
   } catch (err) {
     const errorMsg = String(err?.message || err);

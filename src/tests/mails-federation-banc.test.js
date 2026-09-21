@@ -8,9 +8,10 @@
 // par notify-event, qu'aucun test n'exécutait. Écrit avant de toucher à leurs
 // adresses (dette app-url), sur les vrais modules, par src/tests/helpers/monter-ef.js.
 //
-// DÉFAUT CONNU, épinglé et non corrigé ici : cartographie et assemblées marquent la
+// DÉFAUT ÉPINGLÉ PUIS CORRIGÉ le 21/09 : cartographie et assemblées marquaient la
 // ligne de file « sent » sans lire le résultat de l'envoi — même forme que la
-// Lettre (corrigée le 21/09 par _shared/domain/outbox-verdict.ts, à adopter ici).
+// Lettre. Les deux adoptent _shared/domain/outbox-verdict.ts ; les cas « envoi
+// refusé » ci-dessous étaient rouges sur le code du matin.
 
 import { describe, it, expect } from 'vitest';
 import { monterEF, liens, mailA } from './helpers/monter-ef.js';
@@ -43,11 +44,16 @@ describe('domain/cartography — une auto-déclaration à modérer', () => {
     expect(b.ef.envois).toHaveLength(0);
   });
 
-  it('DÉFAUT CONNU : envoi refusé par le transport, file quand même à « sent »', async () => {
+  it('envoi refusé par le transport : la file dit « failed », avec le destinataire et la cause, sans sent_at', async () => {
     const { ef, handle, etat } = monter({ resend: () => new Response('panne', { status: 500 }) });
-    await handle(3);
+    const r = await handle(3);
+    expect(r).toMatchObject({ ok: false, outbox_status: 'failed' });
     expect(ef.envois).toHaveLength(0);
-    expect(etat()).toEqual(['sent']);          // voulu : 'failed' — à reprendre avec outbox-verdict
+    expect(etat()).toEqual(['failed']);
+    const d = ef.ecrits[0].donnees;
+    expect(d.last_error).toContain('fede@anarbib.org');
+    expect(d.last_error).toContain('500');
+    expect(d.sent_at).toBeUndefined();
   });
 });
 
@@ -91,9 +97,10 @@ describe('domain/entraide — une demande dans un cercle', () => {
 
 describe('domain/assembleia — convocation, ordre du jour, point proposé', () => {
   const COORDS = [{ id: 'u-7', email: 'sete@exemplo.test', first_name: 'Sete', last_name: 'A', preferred_language: 'pt-BR' }, { id: 'u-8', email: 'huit@exemplo.test', first_name: 'Huit', last_name: 'B', preferred_language: 'fr' }];
-  function monter({ env = {}, event = 'network.assembleia.convocada', payload = { title: 'Assemblée d\'automne', agenda_deadline_at: '2026-10-01T00:00:00Z' } } = {}) {
+  function monter({ env = {}, resend, event = 'network.assembleia.convocada', payload = { title: 'Assemblée d\'automne', agenda_deadline_at: '2026-10-01T00:00:00Z' } } = {}) {
     const ef = monterEF({
       env,
+      resend,
       repondre: (_s, table, a) => {
         if (table === 'team_notification_outbox') return a('update') ? { data: null, error: null } : { data: { id: 11, status: 'queued', event, payload }, error: null };
         if (table === 'libraries') return { data: [{ id: 'lib-a' }, { id: 'lib-b' }], error: null };
@@ -123,6 +130,18 @@ describe('domain/assembleia — convocation, ordre du jour, point proposé', () 
     const b = monter({ event: 'network.assembleia.autre' });
     expect(await b.handle(11)).toMatchObject({ ignored: true, reason: 'unknown_assembleia_event' });
     expect(b.etat()).toEqual(['skipped']);
+  });
+
+  it('convocation, une coordination sur deux refusée par le transport : « failed », et le détail dit qui relancer', async () => {
+    const { ef, handle } = monter({ resend: (p) => (p.to[0] === 'huit@exemplo.test' ? new Response('panne', { status: 500 }) : new Response('{}', { status: 200 })) });
+    const r = await handle(11);
+    expect(r).toMatchObject({ ok: false, outbox_status: 'failed', recipients_count: 2 });
+    expect(ef.envois.map((e) => e.to[0])).toEqual(['sete@exemplo.test']);
+    const [d] = ef.ecrits.filter((e) => e.table === 'team_notification_outbox').map((e) => e.donnees);
+    expect(d.status).toBe('failed');
+    expect(d.last_error).toMatch(/^1 parti\(s\), 1 refuse\(s\)/);
+    expect(d.last_error).toContain('huit@exemplo.test');
+    expect(d.sent_at).toBeUndefined();
   });
 });
 
