@@ -276,6 +276,18 @@ copie**, et elle est gardée à ce titre.
 | hors ligne | `F:\anarbib-backups\restic-<date>` | disque débranché |
 | locale | `~/restic-miroir/<date>/` | sur le poste |
 
+> **Une seule génération (REGISTRE `BG2-FROID-1`, 21/09/2026).** Chaque copie
+> emporte le dépôt `court`, donc des données personnelles chiffrées promises à
+> 7 jours de conservation. Une fois la nouvelle copie vérifiée, **supprimer les
+> précédentes**, sur le disque comme ici :
+>
+> ```bash
+> ls ~/restic-miroir/                       # garder seulement la date du jour
+> rm -rf ~/restic-miroir/<ancienne-date>
+> ls /mnt/f/anarbib-backups/                # idem côté disque
+> rm -rf /mnt/f/anarbib-backups/restic-<ancienne-date>
+> ```
+
 Elle porte un `LISEZ-MOI.txt` à sa racine qui dit tout cela sur place — parce
 que le premier tirage du 01/07 n'était consigné nulle part, et que c'est
 exactement l'angle mort qu'on ne veut pas recreuser. Le dossier est en `700` :
