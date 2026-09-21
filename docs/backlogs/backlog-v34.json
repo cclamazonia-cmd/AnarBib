@@ -2154,6 +2154,14 @@
           "fr": "**Clos le 21/09 sur pièces — la contradiction vivait dans les fichiers de langue, pas à l'écran.** *Lu dans le code* : la sous-page est un seul composant (`RetentionPolicySection`, monté par l'onglet `privacy` de `BibliotecaPage`), qui rend **un seul bandeau, sans condition** — `biblioteca.privacy.purgeActiveNotice`, « la suppression automatique est active » — depuis le 03/06 (`8d3dd444`, « honest UI »). Le second message, `biblioteca.privacy.phase4aNotice` (« pas encore active, elle le sera en Phase 4b »), n'était plus employé par aucun fichier de code mais restait dans les **dix** locales : c'est là que la refonte du manuel l'a lu. *Lu en base* : le message affiché dit vrai — le cron `anarbib-rgpd-purge-weekly` est actif, `fn_purge_expired_data(p_dry_run := false)`, 16 passages, le dernier le 20/09 à 03 h UTC, `succeeded` ; le préavis `anarbib-rgpd-notify-weekly` tourne une heure avant (20 passages). *Fait* (`48c413ac`) : la clé morte retirée des dix locales (6 690 → 6 689, parité stricte), et le banc `privacidade-un-seul-message-sur-la-purge` (3 cas) qui tient ensemble les trois faits — un seul bandeau, plus de clé `phase4a` ni de renvoi à une « Phase 4b », et une purge planifiée pour de bon (socle + liste fermée des crons, aucune migration qui la déplanifie ou la repasse à blanc). **Ce qui n'a pas été fait** : je n'ai pas ouvert l'écran sur `blmf-teste` (page du personnel, session requise) ; le « fini quand » est tenu par la lecture du composant, qui n'a qu'un chemin de rendu pour ce bandeau. Le Manuel v5 peut retirer sa mise en garde « vérifier l'instance ».",
           "pt": "**Fechado em 21/09 sobre provas — a contradição vivia nos ficheiros de língua, não na tela.** *Lido no código*: a subpágina é um único componente (`RetentionPolicySection`), que mostra **um só aviso, sem condição** — « a exclusão automática está ativa » — desde 03/06 (`8d3dd444`). A segunda mensagem, `biblioteca.privacy.phase4aNotice` (« ainda não está ativa »), já não era usada por nenhum ficheiro de código mas continuava nas **dez** locales: foi aí que a revisão do manual a leu. *Lido na base*: a mensagem mostrada diz a verdade — o cron `anarbib-rgpd-purge-weekly` está ativo, `p_dry_run := false`, 16 passagens, a última em 20/09, `succeeded`. *Feito* (`48c413ac`): a chave morta retirada das dez locales (6 690 → 6 689) e um banco de teste de 3 casos. **O que não foi feito**: não abri a tela em `blmf-teste` (sessão necessária); o critério é cumprido pela leitura do componente. O Manual v5 pode retirar o seu aviso."
         }
+      ],
+      [
+        "I23",
+        "2026-09-21",
+        {
+          "fr": "**Clos le 21/09 sur pièces — réglé depuis le 20/09 sans que la fiche le sache.** Trouvé par l'inventaire du 21/09 (sessions et commits depuis le 09/09 confrontés aux items ouverts) : aucune session n'a jamais nommé `I23`, alors que son unique critère — « le domaine résout et redirige » — est tenu. *Mesuré le 21/09 à 20 h 21* : `https://anarbib.is/` répond **307 vers `https://anarbib.org/`** (`.is`, ccTLD islandais, déposé chez ISNIC et non chez OVH comme la fiche le prévoyait) ; `app.anarbib.is` sert l'application en 200 ; `anarbib.org.br` (307) et `app.anarbib.org.br` (200) font de même depuis le 21/09. *Au registre* : **`OPS-10`** (§38, v0.41) — `anarbib.org` reste canonique, `.is` et `.org.br` sont des routes d'accès câblées et éprouvées, **jamais annoncées** : il n'y a donc rien à écrire dans la politique de confidentialité, ce que la fiche réservait au cas où le domaine y figurerait. Deux restes, qui ne sont pas de cet item : `www.anarbib.is` n'a pas répondu en HTTPS à la mesure (cause non relevée), et l'essai de bascule **authentifié** du runbook, que `OPS-10` garde ouvert.",
+          "pt": "**Fechado em 21/09 sobre provas — resolvido desde 20/09 sem que a ficha o soubesse.** Encontrado pelo inventário de 21/09: nenhuma sessão nomeou `I23`, embora o seu único critério — « o domínio resolve e redireciona » — esteja cumprido. *Medido em 21/09*: `https://anarbib.is/` responde **307 para `https://anarbib.org/`** (`.is`, ccTLD islandês, registado na ISNIC); `app.anarbib.is` serve a aplicação em 200; `anarbib.org.br` e `app.anarbib.org.br` fazem o mesmo desde 21/09. *No registo*: **`OPS-10`** — `anarbib.org` continua canónico, `.is` e `.org.br` são rotas de acesso, **nunca anunciadas**: nada a escrever na política de privacidade. Dois restos, que não são deste item: `www.anarbib.is` não respondeu em HTTPS na medição, e o ensaio de comutação **autenticado**, que `OPS-10` mantém aberto."
+        }
       ]
     ]
   },
@@ -4010,10 +4018,16 @@
       "r": [
         "docs/backlogs/INDEX.md"
       ],
-      "verif": {
-        "fr": "31/08 — `INDEX.md` relu, archives comptées : 9 avec le préfixe `-archive-`, 27 sans.",
-        "pt": "31/08 — `INDEX.md` relido, arquivos contados: 9 com prefixo `-archive-`, 27 sem."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — `INDEX.md` relu, archives comptées : 9 avec le préfixe `-archive-`, 27 sans.",
+          "pt": "31/08 — `INDEX.md` relido, arquivos contados: 9 com prefixo `-archive-`, 27 sem."
+        },
+        {
+          "fr": "21/09 — **premier critère tenu, second en attente d'une phrase de Xavier.** `INDEX.md` relu : le tableau nomme toutes les versions du v8 au v34 sans trou ; les archives vivent dans `docs/backlogs/archive/` (36 fichiers, dont 8 au préfixe `-archive-`). Aucune entrée du REGISTRE ne fixe la convention de nommage : c'est le seul reste.",
+          "pt": "21/09 — **primeiro critério cumprido, segundo à espera de uma frase de Xavier.** `INDEX.md` relido: a tabela nomeia todas as versões de v8 a v34; os arquivos vivem em `docs/backlogs/archive/` (36 ficheiros, 8 com o prefixo `-archive-`). Nenhuma entrada do REGISTO fixa a convenção de nomes."
+        }
+      ]
     },
     {
       "id": "K1",
@@ -4361,10 +4375,16 @@
         "deploy/init-db/01-roles.sh",
         "deploy/scripts/run-migrations.sh"
       ],
-      "verif": {
-        "fr": "16/09 — job écrit et éprouvé quatre fois sur conteneur jetable `public.ecr.aws/supabase/postgres:17.6.1.084` (worktree `claude/i18`), liste des 133 fonctions `anon` comparée ligne à ligne à celle du 15/09, empreinte identique ; pile locale (GoTrue, Storage réels) consultée pour les droits et `auth.uid()`.",
-        "pt": "16/09 — job escrito e provado quatro vezes em contêiner descartável `17.6.1.084` (worktree `claude/i18`), lista das 133 funções `anon` comparada linha a linha com a de 15/09, MD5 idêntico."
-      }
+      "verif": [
+        {
+          "fr": "16/09 — job écrit et éprouvé quatre fois sur conteneur jetable `public.ecr.aws/supabase/postgres:17.6.1.084` (worktree `claude/i18`), liste des 133 fonctions `anon` comparée ligne à ligne à celle du 15/09, empreinte identique ; pile locale (GoTrue, Storage réels) consultée pour les droits et `auth.uid()`.",
+          "pt": "16/09 — job escrito e provado quatro vezes em contêiner descartável `17.6.1.084` (worktree `claude/i18`), lista das 133 funções `anon` comparada linha a linha com a de 15/09, MD5 idêntico."
+        },
+        {
+          "fr": "21/09 — **premier critère tenu sur la forge, second en attente par construction ; la fiche avait cinq jours de retard.** Le job `rejeu-image` (`sql-tests.yml`, commit `d5228c7f`) a tourné **huit fois** sur la forge entre le 16/09 et le 21/09 (relevé par l'API `actions/tasks`), **huit fois vert**, lisible dans Actions — dont le 21/09 sur la migration de B27. Une autre session l'écrit « livré et vert sur la forge » le 21/09. Le second critère — « il a été rouge une fois pour une vraie raison, et la raison a été corrigée » — ne peut pas être provoqué : l'item reste ouvert pour lui, et pour lui seul.",
+          "pt": "21/09 — **primeiro critério cumprido na forja, segundo em espera por construção.** O job `rejeu-image` correu **oito vezes** entre 16/09 e 21/09, **oito vezes verde**. O segundo critério — « ficou vermelho uma vez por uma razão real » — não se pode provocar: o item fica aberto só por ele."
+        }
+      ]
     },
     {
       "id": "F7",
@@ -4996,48 +5016,11 @@
         {
           "fr": "20/09, second passage — **Xavier confirme avoir reçu les deux alertes de sauvegarde** : « AnarBib — les sauvegardes ne donnent plus signe de vie » (12/09, `court` muet, incident 10) et « AnarBib — une sauvegarde a commencé et ne s'est jamais terminée » (15/09, `storage`, incident 12). Le second « fini quand » de la fiche — un courriel aux admins dans les 24 h sans qu'un humain regarde le journal — est donc tenu par `health-probe`, et l'a été les deux fois dans l'heure. **Correction de l'annotation précédente** : elle disait que `notified_at` « atteste que la sonde a marqué l'envoi ». Lu dans `health-probe/index.ts` (l. 423 et 462-468) : `notified_at` est posé dès qu'`alerter()` rend la main ; `alerter()` renvoie le nombre de destinataires visés, pas le nombre d'envois réussis, et ce nombre n'est pas regardé. `notified_at` prouve une **tentative**, pas un envoi ; ici c'est la boîte de Xavier qui fait preuve. À retenir si un jour une alerte manque : ne pas conclure de `notified_at`. **Ce qu'il reste réellement de l'item** : *(1)* le gestionnaire systemd utilisateur sort sans cause établie (52 démarrages depuis le 01/09) et emporte le tir en cours — aucun des trois remèdes de la fiche ne s'y applique, le rattrapage `Persistent=` tient ; *(2)* côté poste, `OnFailure` et la fraîcheur n'écrivent que des fichiers drapeaux ; *(3)* le seuil de `long` et `storage` est de 216 h. Le premier « fini quand » (fermer la session pendant un tir) ne peut être éprouvé que par Xavier. Item laissé ouvert : à requalifier par lui.",
           "pt": "20/09, segunda passagem — **Xavier confirma ter recebido os dois alertas de backup**: « AnarBib — les sauvegardes ne donnent plus signe de vie » (12/09, `court` mudo, incidente 10) e « AnarBib — une sauvegarde a commencé et ne s'est jamais terminée » (15/09, `storage`, incidente 12). O segundo « acabado quando » da ficha — um e-mail às admins em 24 h sem que um humano olhe o diário — está portanto cumprido por `health-probe`, e foi-o das duas vezes dentro da hora. **Correção da anotação anterior**: dizia que `notified_at` « atesta que a sonda marcou o envio ». Lido em `health-probe/index.ts` (l. 423 e 462-468): `notified_at` é posto assim que `alerter()` devolve; `alerter()` devolve o número de destinatários visados, não o de envios bem-sucedidos, e esse número não é verificado. `notified_at` prova uma **tentativa**, não um envio; aqui é a caixa de Xavier que faz prova. **O que resta realmente do item**: *(1)* o gestor systemd do utilizador sai sem causa estabelecida (52 arranques desde 01/09) e leva o tiro em curso — a recuperação `Persistent=` aguenta; *(2)* do lado do posto, `OnFailure` e a frescura só escrevem ficheiros-bandeira; *(3)* o limiar de `long` e `storage` é de 216 h. O primeiro « acabado quando » só pode ser provado por Xavier. Item deixado aberto: a requalificar por ele."
+        },
+        {
+          "fr": "21/09 — les trois flux du dimanche 20/09 sont attestés par les témoins en base (`fn_backup_heartbeat_status`) : `court` parti à 19 h 00 (instantané `47b476f1`), `long` à 20 h 01 (`6e05608e`), et **`storage`, celui qui avait été tué le 15/09, parti à 21 h 01 et terminé à 21 h 21 (`38035670`)** — premier passage hebdomadaire complet depuis l'incident. Rien n'a été changé aux unités : le passage a tenu parce que la session WSL a tenu. Les trois restes de la fiche (gestionnaire systemd qui sort, drapeaux locaux muets, seuil de 216 h) sont inchangés.",
+          "pt": "21/09 — os três fluxos de domingo 20/09 estão atestados na base: `court` às 19h00, `long` às 20h01, e **`storage`, o que tinha sido morto em 15/09, saiu às 21h01 e terminou às 21h21 (`38035670`)**. Nada foi alterado nas unidades; os três restos da ficha mantêm-se."
         }
-      ]
-    },
-    {
-      "id": "I23",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien",
-        "pt": "Registrar um ccTLD europeu e fazê-lo alias de `anarbib.org` — o `.org` continua sob registro estadunidense"
-      },
-      "v": {
-        "fr": "La note du 05-06/09 le met en tête de chemin : « cette semaine — déposer un ccTLD européen et en faire un alias », compatible avec le gel parce que ça ne touche pas la production. Motif : le registre du `.org` (Public Interest Registry) est états-unien, comme les deux services dont le projet sort. **Non vérifié** — pas de résolution DNS possible depuis ici ; rien dans le dépôt ne le mentionne.",
-        "pt": "A nota de 05-06/09 põe isso no início do caminho: «esta semana — registrar um ccTLD europeu e fazê-lo alias», compatível com o congelamento porque não toca a produção. Motivo: o registro do `.org` (Public Interest Registry) é estadunidense, como os dois serviços dos quais o projeto está saindo. **Não verificado** — sem resolução DNS possível daqui; nada no repositório o menciona."
-      },
-      "w": {
-        "fr": "Choisir le domaine, le déposer chez OVH, poser une redirection vers `anarbib.org` (et non l'inverse, pour l'instant), et l'écrire dans la politique de confidentialité s'il y figure.",
-        "pt": "Escolher o domínio, registrá-lo na OVH, pôr um redirecionamento para `anarbib.org` (e não o inverso, por enquanto), e escrevê-lo na política de privacidade se ela o mencionar."
-      },
-      "y": {
-        "fr": "Un alias coûte un euro par mois et donne une adresse qui survit à une décision étrangère sur le `.org`.",
-        "pt": "Um alias custa um euro por mês e dá um endereço que sobrevive a uma decisão estrangeira sobre o `.org`."
-      },
-      "f": {
-        "fr": [
-          "Le domaine résout et redirige."
-        ],
-        "pt": [
-          "O domínio resolve e redireciona."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Indépendant du gel.",
-        "pt": "Nenhuma. Independente do congelamento."
-      },
-      "r": [
-        "claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 1)"
       ]
     },
     {

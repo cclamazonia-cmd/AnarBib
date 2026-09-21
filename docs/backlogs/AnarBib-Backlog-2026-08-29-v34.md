@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 66 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 8
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **53 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **53 items sur 66** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1530,7 +1530,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
-| **I23** | Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien | `P2` | Ouvert |
 | **I25** | Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée | `P3` | Ouvert |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
@@ -1604,7 +1603,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** `scripts/ci/run-sql-suites.sh` crée `anarbib_test` depuis `template0` : `pg_default_acl` y est vide, les fonctions naissent fermées, la vérification des migrations du 29/08 passe — et une image réelle la fait lever. Le vert de `sql-tests` n'atteste donc pas qu'une image Supabase rejoue le dépôt (`DOC-GRANT-2`, même limite structurelle que `DOC-MIGR-1` par l'autre bout). Le choix de `template0` est motivé (pas d'event triggers hérités) et reste bon pour les suites. **07/09** : la spec d'`I17` (§8) rend cet item bon marché — le service `sql-tests` lance déjà l'image ; il suffit d'un second job qui rejoue les migrations dans la base `postgres` du service (défauts et extensions de l'init posés) au lieu d'une base `template0`. **07/09, confirmé par l'expérience d'`I17`** : avec A.1 avant le socle et `CREATE EXTENSION pg_cron`, la base `postgres` de l'image rejoue les 310 migrations sous `postgres` ; le job serait vert aujourd'hui. **16/09 : livré.** Job `rejeu-image` dans `sql-tests.yml` (`scripts/ci/run-image-replay.sh`) : même service Postgres, rejeu dans la base `postgres` de l'image par les deux scripts de la pile (`deploy/init-db/01-roles.sh` : mots de passe, A.1, `pg_cron` ; `deploy/scripts/run-migrations.sh` sous `postgres`), qui parlent à l'image par `PGHOST` au lieu du socket — un `install.sh` sans conteneurs applicatifs. Entre les deux, ce que la pile obtient de ses services avant de migrer (bootstrap.sh 3/8 et 4/8) : le sel au Vault réel par `vault.create_secret`, les stubs `auth` et `storage` de sql-tests, et un stub de pont `tests/sql/_ci_setup_image_services_stub.sql`. **Quatre manques de l'image nue, mesurés en chemin, sans lesquels un rejeu à froid s'arrête** : `auth.jwt()` absent (socle, l. 41402) ; `auth.users` d'origine sans `email_confirmed_at`, `is_sso_user`, `is_anonymous` (`20260623204043`) ; `auth.uid()` d'origine qui ne lit que `request.jwt.claim.sub`, pas `request.jwt.claims` (`20260702081711`, « Nenhum usuário autenticado ») ; `storage.buckets` créée fermée à `postgres`, l'image n'ayant aucun privilège par défaut sur `storage` (`20260820012512`). Le stub dit chacun. Éprouvé quatre fois sur conteneur jetable `public.ecr.aws/supabase/postgres:17.6.1.084` : **320/320 en 54 s sous `postgres`, 133 fonctions exécutables par `anon` (public, api, ingest, private), empreinte MD5 identique à la production du 15/09, 38 crons, 0 table sans RLS**, 64 s bout en bout. `alerte` et `acquittement` comptent les deux jobs. Reste : le premier run de la forge, puis le critère 2 (un rouge pour une vraie raison, corrigé).
 
-*Vérifié : 16/09 — job écrit et éprouvé quatre fois sur conteneur jetable `public.ecr.aws/supabase/postgres:17.6.1.084` (worktree `claude/i18`), liste des 133 fonctions `anon` comparée ligne à ligne à celle du 15/09, empreinte identique ; pile locale (GoTrue, Storage réels) consultée pour les droits et `auth.uid()`.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Lire le run dans Actions. Quand il rougit, corriger la cause — une migration, ou le pont si l'image ou GoTrue ont bougé — jamais le job. Le jour où un rouge motivé est corrigé, clore (critère 2).
 
@@ -1666,7 +1665,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** **Constaté le 15/09/2026 au retour de Bologne.** Le dimanche 13/09, le poste était éteint : les minuteurs hebdomadaires `long` (20 h) et `storage` (21 h) n'ont pas tourné. Le 15/09 à 08 h 15, au démarrage, systemd a rattrapé les trois (`Persistent=`) : `court` fini à 08 h 17, `long` à 08 h 20 (instantané `da135422`), **`storage` tué à 08 h 23 par `SIGTERM`** (« Failed with result 'signal' »), après quatre buckets sur seize — c'est l'arrêt de la session utilisateur WSL, qui rebondit sur ce poste (mémoire `anarbib-systemd-etat-non-fiable`), qui a emporté le service. Et la ligne suivante du journal : **« Failed to enqueue OnFailure=anarbib-backup-failure@… »** — l'unité d'alerte n'a pas pu être lancée, la session s'arrêtant. Résultat : un flux `storage` vieux de neuf jours (dernier instantané le 06/09 21 h 19, seuil de fraîcheur 216 h atteint le 15/09 à 21 h 20), un témoin `started` sans `ok` (`fn_backup_heartbeat_status` : « tir commencé et JAMAIS TERMINÉ, tué en route »), et **aucun courriel**. Relancé à la main le 15/09 à 20 h 50 (`systemctl --user start anarbib-backup-storage.service`).
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Deux choses. **(1)** Le service `storage` ne doit pas mourir avec la session : `KillMode=` et `TimeoutStopSec=` à régler, ou mieux, le lancer sous `systemd-run --scope` détaché, ou enfin `loginctl enable-linger` pour que la session utilisateur ne s'arrête pas avec le terminal — vérifier lequel tient sur ce WSL, où `systemctl` ment (juger sur `journalctl`). **(2)** L'alerte ne doit pas dépendre de la session qui meurt : le contrôle de fraîcheur du midi (`anarbib-fraicheur.timer`, lecture seule des dépôts restic) doit **envoyer** quand un flux dépasse son seuil ou porte un `started` sans `ok`, pas seulement l'écrire au journal. Le témoin en base (`fn_backup_heartbeat_status`) sait déjà dire « interrompu » : lui donner un destinataire (`HEALTH_ALERT_CC`, mémoire `anarbib-alertes-supervision-destinataires`).
 
@@ -1681,26 +1680,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Cousin de **I12** (le `die` du miroir sans destinataire) : même cause, l'alerte n'a pas de chemin qui survive au poste. Lié à **A3** (tout tourne sur la machine du mainteneur).
 
 *Renvois : `deploy/ops/systemd/` · `anarbib-systemd-etat-non-fiable` · `anarbib-backup-stale-lock-selfheal` · `RUNBOOK_restauration_BG2_2026-07-01`*
-
-#### I23 — Déposer un ccTLD européen et en faire l'alias d'`anarbib.org` — le `.org` reste sous registre états-unien
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** La note du 05-06/09 le met en tête de chemin : « cette semaine — déposer un ccTLD européen et en faire un alias », compatible avec le gel parce que ça ne touche pas la production. Motif : le registre du `.org` (Public Interest Registry) est états-unien, comme les deux services dont le projet sort. **Non vérifié** — pas de résolution DNS possible depuis ici ; rien dans le dépôt ne le mentionne.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Choisir le domaine, le déposer chez OVH, poser une redirection vers `anarbib.org` (et non l'inverse, pour l'instant), et l'écrire dans la politique de confidentialité s'il y figure.
-
-**Pourquoi ça compte.** Un alias coûte un euro par mois et donne une adresse qui survit à une décision étrangère sur le `.org`.
-
-**Ce qui compte comme fini.**
-
-- Le domaine résout et redirige.
-
-**Dépendances.** Aucune. Indépendant du gel.
-
-*Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 1)`*
 
 #### I25 — Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée
 
@@ -1741,7 +1720,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** **Corrigé le 31/08 : la ligne du v32 est rétablie depuis le 29/08** (`INDEX.md`, avec la note « elle manquait à ce tableau depuis juin »). Restent : les deux conventions de nommage qui coexistent — 9 archives avec le préfixe `-archive-`, 27 sans — et un en-tête d'INDEX qui dérive déjà : « 90 items » puis « les items restent 84 » dans le même paragraphe, quand le JSON en compte 83.
 
-*Vérifié : 31/08 — `INDEX.md` relu, archives comptées : 9 avec le préfixe `-archive-`, 27 sans.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Ajouter la ligne du v32, celles du v33 et du v34, et trancher la convention d'archivage en une phrase inscrite au REGISTRE.
 
@@ -2147,6 +2126,7 @@ CI verte : lint et suite unitaire. |
 | J4 | 2026-09-21 | *(second item portant l'identifiant J4 — celui de `CHANTIERS_OUVERTS` §1, 06/09 ; le premier, sur la spec de gouvernance, est clos plus haut)* **Clos le 21/09 : l'entrée 1 est réécrite, sur un texte validé par Xavier le jour même (option A de deux proposées).** Elle reste « le meilleur premier pas » mais son objet change : la reconstruction par un tiers a eu lieu (06–15/09, PR #28 fusionnée le 15/09), il reste à lancer `install.sh` sur une troisième machine, vierge — ce que `deploy/README.md` nomme comme non éprouvé (I21). L'entrée porte ses mesures datées (06–15/09 ; 07/09, empreinte des fonctions ouvertes à l'anonyme identique à la production, clôture I17 ; 16/09, job `rejeu-image`) et sa signature. Elle dit que la forge refait le rejeu à chaque poussée ; elle ne dit pas que ce filet a déjà attrapé quelque chose — I18 reste en cours sur ce critère. Dans le même commit : le prénom du contributeur quitte l'entrée et `deploy/README.md` (« un camarade de l'ASR (compte `ASR2026`) ») ; le README ne range plus le rejeu CI parmi ce qui n'a pas été éprouvé ; l'en-tête est daté du 21/09 et la note de gel de l'entrée 2, échue le 14/09, devient un état daté qui renvoie à I21. **Hors item, laissé en l'état et signalé** : `AIDER.md` (§ `A2`, fr, pt, en) dit encore « personne ne l'a jamais vérifié » ; le REGISTRE porte le prénom dans des entrées historiques. |
 | E17 | 2026-09-21 | **Clos le 21/09 sur décision de Xavier (« Clos E17 »).** Livré en deux temps : `3c411f10` (20/09) — le bloc « Explorer » naît replié, s'en souvient dans les deux sens, dit ce qu'il cache, ne se rouvre jamais seul ; `16d22656` (21/09) — sur écran étroit, « Filtres » naît replié lui aussi, avec son badge des filtres actifs, et emporte sa rangée d'actions. Mesuré à l'écran à 375×812, première visite : premier titre à **778 px, visible sans défiler** (4 018 px avant E17). À 1366×768 le bloc « Filtres » naît ouvert et le premier titre reste à 880 px, sous la ligne de flottaison : **critère écarté par choix de Xavier le 21/09** (« replié sur mobile seulement ») — l'outil principal du catalogue reste sous la main sur portable. Bancs `catalog-explore-replie` (5 cas) et `catalog-filtres-replies-mobile` (7 cas). Vérifié en production le 21/09 à 13 h 55 (les deux feuilles et les deux modules servis portent le code). |
 | E16 | 2026-09-21 | **Clos le 21/09 sur pièces — la contradiction vivait dans les fichiers de langue, pas à l'écran.** *Lu dans le code* : la sous-page est un seul composant (`RetentionPolicySection`, monté par l'onglet `privacy` de `BibliotecaPage`), qui rend **un seul bandeau, sans condition** — `biblioteca.privacy.purgeActiveNotice`, « la suppression automatique est active » — depuis le 03/06 (`8d3dd444`, « honest UI »). Le second message, `biblioteca.privacy.phase4aNotice` (« pas encore active, elle le sera en Phase 4b »), n'était plus employé par aucun fichier de code mais restait dans les **dix** locales : c'est là que la refonte du manuel l'a lu. *Lu en base* : le message affiché dit vrai — le cron `anarbib-rgpd-purge-weekly` est actif, `fn_purge_expired_data(p_dry_run := false)`, 16 passages, le dernier le 20/09 à 03 h UTC, `succeeded` ; le préavis `anarbib-rgpd-notify-weekly` tourne une heure avant (20 passages). *Fait* (`48c413ac`) : la clé morte retirée des dix locales (6 690 → 6 689, parité stricte), et le banc `privacidade-un-seul-message-sur-la-purge` (3 cas) qui tient ensemble les trois faits — un seul bandeau, plus de clé `phase4a` ni de renvoi à une « Phase 4b », et une purge planifiée pour de bon (socle + liste fermée des crons, aucune migration qui la déplanifie ou la repasse à blanc). **Ce qui n'a pas été fait** : je n'ai pas ouvert l'écran sur `blmf-teste` (page du personnel, session requise) ; le « fini quand » est tenu par la lecture du composant, qui n'a qu'un chemin de rendu pour ce bandeau. Le Manuel v5 peut retirer sa mise en garde « vérifier l'instance ». |
+| I23 | 2026-09-21 | **Clos le 21/09 sur pièces — réglé depuis le 20/09 sans que la fiche le sache.** Trouvé par l'inventaire du 21/09 (sessions et commits depuis le 09/09 confrontés aux items ouverts) : aucune session n'a jamais nommé `I23`, alors que son unique critère — « le domaine résout et redirige » — est tenu. *Mesuré le 21/09 à 20 h 21* : `https://anarbib.is/` répond **307 vers `https://anarbib.org/`** (`.is`, ccTLD islandais, déposé chez ISNIC et non chez OVH comme la fiche le prévoyait) ; `app.anarbib.is` sert l'application en 200 ; `anarbib.org.br` (307) et `app.anarbib.org.br` (200) font de même depuis le 21/09. *Au registre* : **`OPS-10`** (§38, v0.41) — `anarbib.org` reste canonique, `.is` et `.org.br` sont des routes d'accès câblées et éprouvées, **jamais annoncées** : il n'y a donc rien à écrire dans la politique de confidentialité, ce que la fiche réservait au cas où le domaine y figurerait. Deux restes, qui ne sont pas de cet item : `www.anarbib.is` n'a pas répondu en HTTPS à la mesure (cause non relevée), et l'essai de bascule **authentifié** du runbook, que `OPS-10` garde ouvert. |
 
 ---
 
@@ -2178,4 +2158,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 66 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `6cf45ef4` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
