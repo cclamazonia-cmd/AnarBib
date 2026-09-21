@@ -480,3 +480,7 @@ tests/sql/compteurs_d_abus_tests.sql
 # (sous-requete correlee par groupe de la page + fn_work_display_title par oeuvre du catalogue) ; recrite sans
 # changer son resultat. Garde les motifs couteux, la requete dynamique, et la cascade du titre dans ses 3 branches.
 tests/sql/catalogue_par_oeuvre_cout_tests.sql
+# 21/09 : la sonde des pins d'images. Le banc n'a ni GoTrue ni Storage : on
+# éprouve la comparaison PURE, et on vérifie que la sonde, tables absentes,
+# dit « illisible » au lieu de rendre un vert.
+tests/sql/images_pins_tests.sql
