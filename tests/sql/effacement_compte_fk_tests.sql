@@ -58,11 +58,13 @@ BEGIN
 
   INSERT INTO public.publishers (name, created_by) VALUES ('Éditions de l''effacement (B28)', v_u)
   RETURNING id INTO v_pub_id;
+  -- Contraintes réelles (prod, 22/09) : confirm_real ET confirm_contact vrais,
+  -- project_stage dans la liste fermée, deux adresses avec un « @ ».
   INSERT INTO public.library_requests
     (submitted_by_user_id, submitted_by_email_snapshot, library_name, city, library_email,
-     project_stage, contact_name, contact_email, summary)
+     project_stage, contact_name, contact_email, summary, confirm_real, confirm_contact)
   VALUES (v_u, 'b28.efface@anarbib.local', 'Biblioteca B28', 'Belém', 'b28@exemplo.test',
-          'ideia', 'B28 Test', 'b28@exemplo.test', 'Demande déposée puis compte effacé (B28).')
+          'em_planejamento', 'B28 Test', 'b28@exemplo.test', 'Demande déposée puis compte effacé (B28).', true, true)
   RETURNING id INTO v_req_id;
 
   -- ── T2 : la suppression passe, et les actes changent d'auteur ──
