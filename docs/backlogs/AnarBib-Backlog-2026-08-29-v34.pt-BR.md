@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-22** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-22** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 4
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
@@ -60,11 +60,11 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 22 de setembro de 2026
 
-**Levantamento de 22 de setembro de 2026, à noite** (`608995d0`), só sobre os canteiros da sessão de 21-22/09 — o resto da foto abaixo data de 16/09 e não foi reverificado. **Fechados sobre peças, com a sua medida**: **I26** (uma instância restaurada recupera os seus 38 crons), **E22** (a chaveta órfã de `PanelPage.css` e a guarda), **I27** (o caminho de socorro do front publicou de verdade em `app.anarbib.is`, prova por `/.version-front`). Entregue sem item: a sonda `images_pins` do `health-probe` e as suas duas remedições (GoTrue v2.197.0, Storage v1.77.0), o histórico das migrações restaurado com o dump, `deploy.sh` que reconstrói enfim o front, `publier-front.sh`. **O que falta fechar, e por quem** — *(a) por Xavier, sem código*: **F11** — abrir um e-mail de cada família num cliente real e dizer se se lê; o código está em produção desde 22/09 (`MAIL-Q7`), só falta o olhar. **I24** — requalificar a ficha. *(b) por uma sessão, com medidas*: **I21** — sete condições em oito por marcar com prova; **I2** — proxy inverso com túnel, tags em `sha256`, repetição a frio, a questão do Jitsi. *(c) a vigiar, nada a fazer*: o incidente `images_pins` reabrir-se-á sozinho na próxima subida de GoTrue ou Storage — o e-mail diz então o que fazer. Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`.
+**Levantamento de 22 de setembro de 2026, à noite** (`60b16828`) — produção consultada em leitura apenas e repositório recontado; **todas as linhas foram remedidas**, como na véspera à noite (`2a9681e5`). O que mudou num dia: +2 migrações (330 = 330), +17 commits, +4 bancos, +1 chave, +1 suite SQL, menos 52 « índices não utilizados »; funções, avisos de segurança e marcadores de dívida inalterados; `auth.users` tem 20 contas vivas e 2 tokens pseudónimos de contas apagadas. **Fechado esta noite sobre peças: B27** — zero `57014` em `catalog_works_v1` em 24 h de registos, 337 chamadas todas em 200, sonda no lugar (ver o fecho para a nuance: esse tráfego é o da sonda). **Fechados sobre peças, com a sua medida**: **I26** (uma instância restaurada recupera os seus 38 crons), **E22** (a chaveta órfã de `PanelPage.css` e a guarda), **I27** (o caminho de socorro do front publicou de verdade em `app.anarbib.is`, prova por `/.version-front`). Entregue sem item: a sonda `images_pins` do `health-probe` e as suas duas remedições (GoTrue v2.197.0, Storage v1.77.0), o histórico das migrações restaurado com o dump, `deploy.sh` que reconstrói enfim o front, `publier-front.sh`. **O que falta fechar, e por quem** — *(a) por Xavier, sem código*: **F11** — abrir um e-mail de cada família num cliente real e dizer se se lê; o código está em produção desde 22/09 (`MAIL-Q7`), só falta o olhar. **I24** — requalificar a ficha. *(b) por uma sessão, com medidas*: **I21** — sete condições em oito por marcar com prova; **I2** — proxy inverso com túnel, tags em `sha256`, repetição a frio, a questão do Jitsi. *(c) a vigiar, nada a fazer*: o incidente `images_pins` reabrir-se-á sozinho na próxima subida de GoTrue ou Storage — o e-mail diz então o que fazer. Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`.
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-22.** **57 itens de 70** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-22.** **56 itens de 69** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -73,11 +73,11 @@ Levantamento de **16 de setembro de 2026** à noite — produção consultada em
 | Tabelas `public` | **191** | todas com RLS ativado, **332 policies** — +4 tabelas desde 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), todas classificadas no filete BG2. |
 | Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **924** | `public` 688 · `api` 189 · `ingest` 34 · `private` 13. Das quais **708 SECURITY DEFINER**. +5 desde 20/09, todas de 21/09 e **nenhuma aberta** a `anon` nem a `authenticated`: três para a sonda das versões, duas para I26. As cinco têm `search_path` fixo. O lint 0029 não se move. |
-| Migrações aplicadas | **328** | **328 aplicadas em produção = 328 numeradas no repositório** (336 ficheiros com o modelo e os 7 rollbacks). As quatro de 21/09: `20260921111344` (B27), `20260921181812` (a produção já não sobe em silêncio), `20260921190301` (o Storage voltou a subir na mesma noite) e `20260921193147` (uma instância restaurada reencontra os seus crons, I26). Nada em fila. |
+| Funções aplicativas | **924** | `public` 688 · `api` 189 · `ingest` 34 · `private` 13. Das quais **708 SECURITY DEFINER**. **Inalterado desde a noite de 21/09**: nenhuma função criada nem apagada — as duas migrações de 22/09 substituem corpos existentes. O lint 0029 não se move. |
+| Migrações aplicadas | **330** | **330 aplicadas em produção = 330 numeradas no repositório**. As duas de 22/09: `20260922185953` (prazo de graça de 15 min nas filas de notificações, sonda) e `20260922214500` (B28: o apagamento de uma conta reaponta para o token pseudónimo as 26 colunas de FK que nada tratava). Nada em fila. |
 | Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
-| Avisos de segurança | **470** | 0 ERROR · **420** WARN nas DEFINER expostas a `authenticated` (0029), todas justificadas · **26** nas expostas a `anon` (0028), exatamente a lista nomeada T10 · 24 INFO « RLS sem policy ». **Inalterado desde 20/09**: as cinco funções de 21/09 nascem fechadas. |
-| Avisos de desempenho | **415** | **343 « índices não utilizados »** (344 em 20/09, 368 em 06/09), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 sem chave primária, 1 aviso sobre as conexões `auth`. |
+| Avisos de segurança | **470** | 0 ERROR · **420** WARN nas DEFINER expostas a `authenticated` (0029), todas justificadas · **26** nas expostas a `anon` (0028), exatamente a lista nomeada T10 · 24 INFO « RLS sem policy ». **Inalterado desde 20/09**, relido em 22/09 à noite. |
+| Avisos de desempenho | **363** | **291 « índices não utilizados »** (343 em 21/09, 344 em 20/09, 368 em 06/09 — menos 52 num dia; a causa não foi levantada índice a índice), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 sem chave primária, 1 aviso sobre as conexões `auth`. |
 | Esquemas de refugo | **1** | só `conv_backup` — não se purga. `backup_2026_05_07` saiu em 04/09 (B9). |
 
 ### Funções Edge
@@ -102,7 +102,7 @@ Levantamento de **16 de setembro de 2026** à noite — produção consultada em
 | | | |
 |---|---:|---|
 | Bibliotecas | **5** | **todas ativas desde 15/09**: Solidaires (Paris, França) está **admitida** (decisão de Xavier em modo « só admin », `RES-D12` emendado, G7 fechado) — `is_active = true`, série de tombo `SOL-` + ano configurada na tela (E21), coordenação vinculada. Os seus 1 673 rascunhos têm cota `SOL-00001`…`SOL-01673`; falta as classes por rubricas, a revisão do lote e a publicação (C2, D3). |
-| Contas | **20** | **24** filiações ativas (inalterado); **+1 conta em 16/09** (inscrição às 14h27 UTC, ainda sem filiação). 0 contribuidor(a) de rede, ainda. |
+| Contas | **22** | **24** pertenças ativas (inalterado); **22 linhas** em `auth.users`: **20 contas vivas** (fornecedor `email`, confirmadas, cada uma com perfil e pertença) e **2 tokens pseudónimos** de contas apagadas (fornecedor `pseudonymized`, sem data de criação, sem pertença, nunca ligadas — o rasto que `fn_delete_my_account` deixa). A linha dizia 20: contava as vivas, ou os tokens ainda não existiam — o levantamento de 16/09 não o diz. Quando esses dois apagamentos aconteceram não foi levantado. |
 | Administrador(a/e)s da rede | **1** | **é o item A1, e ele comanda todo o resto** |
 | Circulação viva | **6 / 19 / 22 / 0** | empréstimos / reservas / consultas / PEB abertos — inalterado. Dois PEB de maio, devolvidos, ficam como histórico. |
 
@@ -110,11 +110,11 @@ Levantamento de **16 de setembro de 2026** à noite — produção consultada em
 
 | | | |
 |---|---:|---|
-| Commits | **2 785** | **56 commits num só dia**, 21/09, em várias sessões: B27 e a sua sonda, E19, E17 no telemóvel, E16, o inventário; e do lado das vizinhas os três domínios ligados (OPS-10), o fundo de mapa em z13, a sonda das versões das imagens, os crons de uma instância restaurada (I26), um incidente reparado em `register` e a dívida `app-url` extinta em sete lotes. Cabeça no momento do levantamento: `2a9681e5`. |
-| Arquivos `src/` | **352** | +20 num dia, quase todos bancos de teste: os de B27, E19, E17 e E16, e a série dos bancos de mails e de fluxos escritos « sobre o código intacto » antes de cada lote da dívida `app-url`. |
-| Chaves i18n | **6 689** | paridade estrita nas dez locales (6 689 cada). −1 em 21/09: a chave morta `biblioteca.privacy.phase4aNotice`, que nenhum código usava desde 03/06, retirada dos dez ficheiros (E16). |
-| Testes | **697 + 107** | **697 testes JS** (vitest, 70 ficheiros — relançados por inteiro duas vezes esta noite, todos verdes) + **107 suites SQL** em `ci-suites.txt`. **+141 testes num dia**: os bancos de 21/09 e sobretudo a regra que as sessões vizinhas se deram — um banco que executa a função real, escrito sobre o código intacto, ANTES de lhe tocar. |
-| Marcadores de dívida | **18** | dos quais 4 em `src/` — método fixo: 18 em 21/09 como em 20, 16 e 15/09. Nenhum é uma tarefa aberta. |
+| Commits | **2 802** | +17 desde o levantamento da noite de 21/09, dos quais **14 em 22/09**, todos de sessões vizinhas: **B28** (26 colunas de FK que o apagamento de uma conta não reapontava — migração e suite viva sobre `pg_constraint`), **F14** (nenhum `Reply-To` estranho ao domínio de envio), **F11** (todo fundo de e-mail tem a sua cor de texto), **E22** (a chaveta órfã), a supressão da conta contribuidora a partir da sua página e a palavra-passe recusada que diz porquê, o prazo de graça da sonda das filas, o ensaio de comutação autenticado (OPS-10), **I27** fechado. Cabeça no momento do levantamento: `60b16828`. |
+| Arquivos `src/` | **356** | +4 em 22/09, quatro bancos de teste: `css-accolades-equilibrees` (E22), `mails-fond-et-couleur` (F11), `mot-de-passe-refuse-dit-pourquoi` e `reply-to-meme-domaine` (F14). Nenhum ficheiro de página nem de componente acrescentado. |
+| Chaves i18n | **6 690** | paridade estrita nas dez locales (6 690 cada). +1 em 22/09: `auth.passwordPwned` (« esta palavra-passe consta de fugas de dados conhecidas », `310be843`), e `auth.passwordPolicy` reformulada no mesmo gesto. A chave morta de E16 não voltou. |
+| Testes | **783 + 108** | **783 testes JS** (vitest, 74 ficheiros — relançados por inteiro em 22/09 às 21h52 sobre `60b16828`, todos verdes) + **108 suites SQL** em `ci-suites.txt` (+1: `effacement_compte_fk_tests`, B28, cujo primeiro caso relê `pg_constraint`). +86 testes JS num dia, os quatro bancos de 22/09. |
+| Marcadores de dívida | **18** | dos quais 4 em `src/` — método fixo: 18 em 22/09 como em 21, 20, 16 e 15/09. Nenhum é uma tarefa aberta. |
 
 ---
 
@@ -349,7 +349,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
-| **B27** | `api.catalog_works_v1` ultrapassa o prazo de 3 s do papel anónimo: o catálogo por obra falha em silêncio e a página recai na lista plana | `P1` | Em curso |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -416,28 +415,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Não bloqueia mais **B19** (levantado em 15/09: o inventário está feito e verificado, e a revogação é reversível); os dois gestos protegem a rotação seguinte. Repositório `pages`: o congelamento acabou em 14/09.
 
 *Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
-
-#### B27 — `api.catalog_works_v1` ultrapassa o prazo de 3 s do papel anónimo: o catálogo por obra falha em silêncio e a página recai na lista plana
-
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado.** **Constatado em 20/09/2026** ao verificar E17 na tela. A consola do catálogo tinha erros 500; os registos edge atribuem-nos todos a `POST /rest/v1/rpc/catalog_works_v1` — 13 em 12 minutos — e `postgres_logs` tem, um por um, 13 erros **`57014 canceling statement due to statement timeout`**, em rajadas de **quatro por carregamento de página**. Medido: `anon → statement_timeout=3s`, `authenticated → 8s`. O volume é minúsculo — 2 449 obras, 2 656 registos: mais de três segundos em tão poucas linhas é um plano, não um tamanho. **Nada se vê na tela**: o front recai em `catalog_list_anon_v1` e mostra 91 registos; é o agrupamento por obra que não serve. Treze chamadas anónimas em treze falharam, contra a base real. O primeiro dos dois pré-visualizadores servia `main` sem E17. **O que não está estabelecido**: desde quando; se uma conta ligada passa nos seus 8 s; porquê quatro chamadas por carregamento.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Medir antes de tocar: `EXPLAIN (ANALYZE, BUFFERS)` da chamada que o front faz, **sob o papel `anon`**, com os argumentos por defeito; dizer para onde vai o tempo. Contar as chamadas reais do front ao carregar (quatro?) e dizer porquê. Depois corrigir a consulta — **não** aumentar o prazo do papel anónimo, que protege o pool de 20 conexões. E tornar a falha visível: um recuo silencioso para a lista plana escondeu a avaria.
-
-**Por que importa.** O OPAC por obra é a obra principal de setembro e é a porta de entrada pública da rede. Se só serve contas ligadas — ou ninguém —, todo o trabalho de agrupamento das edições é invisível para quem foi feito. E uma avaria que o recuo esconde perfeitamente é uma avaria que dura.
-
-**O que conta como terminado.**
-
-- Uma chamada anónima de `catalog_works_v1` com os argumentos do primeiro carregamento responde em menos de 3 s — medido, com o plano registado.
-- Mais nenhum `57014` nesta RPC em `postgres_logs` durante um dia de tráfego real.
-- O front já não recai em silêncio: a falha da RPC é registada, e algo a vigia.
-
-**Dependências.** Encontrado ao verificar **E17**. Toca **C11** e a obra OPAC por obra; primo de **B10**.
-
-*Remissões : `api.catalog_works_v1` · `src/pages/public/CatalogPage.jsx (worksServer, repli)` · `src/lib/catalogueFallback.js` · `anarbib-capacite-plafonds-mesures`*
 
 ---
 
@@ -2199,6 +2176,7 @@ CI verde. |
 | E22 | 2026-09-22 | **Fechado em 22/09: a folha está nomeada, a chaveta retirada, e uma guarda fica vermelha antes do build.** Encontrada contando as chavetas de cada folha de `src/`: `src/pages/painel/PanelPage.css`, linha 632 — uma chaveta de fecho que ficou sozinha quando a regra `.ab-painel-tab-divider` foi substituída por um comentário (commit `83e68421`, 15/09). Efeito nos navegadores: nenhum; efeito real: um aviso que se aprende a não ler. Retirada, `npm run build` já não devolve o aviso. `src/tests/css-accolades-equilibrees.test.js` percorre cada folha e fica vermelho nomeando folha e linha — antes do build, na CI. |
 | B28 | 2026-09-22 | **Encerrado em 22/09 à noite, sobre medida.** Levantamento completo de `pg_constraint` em produção: **26 colunas em 20 tabelas** com FK para `profiles` ou `auth.users` em NO ACTION ou RESTRICT que `fn_delete_my_account` não redirecionava — `authority_proposals.proposed_by` à frente. Migração `20260922214500` (`4f68cbfe`), partindo da definição real: bloco « ATOS NOMEADOS » redireciona as 26 colunas para o token pseudônimo. Suíte `effacement_compte_fk_tests.sql`: T1 relê `pg_constraint` (lista viva), T2–T5 apagam uma conta que agiu; jogo de teste corrigido em `1fa81534` (5/5). CI verde; migração aplicada em produção. A conta de teste do ensaio se excluiu pela página às 20h54, antes da migração — não tinha proposto nada. |
 | I27 | 2026-09-22 | **Fechado em 22/09: os três critérios cumpridos, os dois últimos por Xavier, cada um com a sua prova.** *(1)* `--essai`: « dry-run ok » nos três sites — depois de uma recusa instrutiva: um token só com `repository` leitura-escrita lia o repositório (`push: true`), mas o git-pages começa por `GET /api/v1/user`, que exige **`user` leitura**. *(2)* Publicação real só no domínio de recurso: `--sans-build --site https://app.anarbib.is/` → « result: replaced ». **Prova**: `https://app.anarbib.is/.version-front` devolve `68b18cf8` — um ficheiro que só `publier-front.sh` escreve, e que o canónico publicado pela CI não tem; bundle servido `index-B3w3O5ED.js`, o mesmo que em `app.anarbib.org`. Nenhuma mudança para as leitoras. *(3)* Token `publier-front-hors-forge` (`repository` leitura-escrita + `user` leitura), em `~/anarbib-ops/git-pages.token` e no Dashlane. O caminho de socorro do front existe agora de verdade — percorrido num dia calmo. |
+| B27 | 2026-09-22 | **Fechado em 22/09 à noite, sobre peças: os três critérios cumpridos.** *(1)* Cumprido em 21/09 — uma chamada anónima com os argumentos do primeiro carregamento responde em **380 ms** (50 obras) e 460 ms (200), plano registado no cabeçalho da migração `20260921111344`; 3 533 ms e 27 311 ms antes. *(2)* Relido em 22/09 em `postgres_logs`, janela de 24 h: **zero `57014` em `catalog_works_v1`**; `edge_logs` na mesma janela: **337 chamadas, 337 × HTTP 200**. Nuance honesta: as 337 vêm de um só endereço, o da sonda — o « dia de tráfego real » é um dia de sonda de cinco em cinco minutos com os argumentos exatos do primeiro carregamento; nenhum visitante anónimo carregou o catálogo por obra na janela. Os sete `57014` do dia estão noutro lado: cinco leituras de `service_health_incidents` e dois `ALTER TABLE` sobre a mesma tabela, em 21/09 entre as 18h30 e as 18h39 UTC — uma espera de bloqueio numa tabela de sonda, não a RPC do catálogo; causa não levantada. *(3)* Cumprido — a sonda `catalogue_par_oeuvre` do `health-probe` (`5111ac5f`) chama a RPC em anónimo de cinco em cinco minutos, limiar 3 000 ms; o front regista o seu recuo. Suites em CI: `catalogue_par_oeuvre_cout_tests` (7 casos), banco `health-probe-catalogue-par-oeuvre` (3 casos). Fora do item: a view continua a ser o posto mais caro (`fn_library_visible_to_caller` avaliada por detenção, ~70 000 acessos a buffers por chamada). |
 
 ---
 
@@ -2230,4 +2208,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-22. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `608995d0`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-22. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60b16828`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
