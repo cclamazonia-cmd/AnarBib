@@ -2170,6 +2170,14 @@
           "fr": "**Clos le 21/09, le soir même de son ouverture — les trois « fini quand » tenus, chacun avec sa mesure.** Décision de Xavier : la voie de la liste au dépôt plutôt qu'un quatrième fichier de dump. *(1) La question des secrets* : mesuré en production, **0 secret littéral et 0 URL en dur sur les 38 commandes** ; une seule lit un secret (`anarbib-health-probe`), à l'exécution, dans `vault.decrypted_secrets`. La liste peut donc vivre au dépôt. *(2) Ce qui a été livré* (commit `2237d433`, migration `20260921193147`) : une migration seule n'y pouvait rien — restaurée avec son historique, elle est inscrite « faite » et ne se rejoue pas ; d'où une **fonction**, qui voyage dans le dump avec le schéma. `private.fn_crons_attendus()` porte nom, horaire, commande et état des 38 jobs, relevés en production (empreinte md5 `bf25c87f…`, recalculée par la migration elle-même : une retouche d'espace ou de fin de ligne la fait échouer) ; `private.fn_crons_replanifier()`, SECURITY DEFINER pour que les jobs appartiennent à `postgres` comme en production, ne touche qu'aux jobs absents, différents ou inactifs, signale les inattendus et ne retire jamais rien. `restore.sh` l'appelle (étape « 3 ter ») ; `bootstrap.sh` rejoue la suite des crons dans sa vérification finale (contrôle h) et **rougit** s'ils manquent. La suite `crons_planifies_tests.sql` gagne T7 et T8 : sa liste et les commandes réellement planifiées doivent être celles de la fonction — qui ajoute un cron par migration sans le reporter fait rougir la CI. *(3) Éprouvé* : banc SQL complet ; puis **aller-retour réel sur `pg_cron`** — pile bâtie depuis le dépôt, dumpée par la CLI (0 ligne de `cron.job` dans le dump, la fonction y est), démontée, restaurée : « 3 ter OK — 38 jobs planifiés, tous sous le rôle postgres », contrôle (h) vert ; contre-épreuve, table vidée → `deploy.sh --controle` rouge (38 absents), fonction → vert. *En production* : migration appliquée par la CI, `fn_crons_replanifier()` y rend `deja_en_place: 38, planifies: []`, et l'empreinte de `cron.job` est inchangée avant/après (`bf25c87f…`). Appris en passant : sur le dépôt rejoué, 14 commandes différaient de la production par la seule mise en forme (espaces, casse) — la fonction suit la production à l'octet. **Ce que cette clôture ne couvre pas** : l'aller-retour a porté sur une pile sans données ; la restauration d'un dump de la *production* postérieur à cette migration n'a pas été rejouée (elle l'avait été le même soir, avant, et c'est elle qui avait fait ouvrir l'item).",
           "pt": "**Fechado em 21/09, na mesma noite da abertura — os três « acabado quando » cumpridos, cada um com a sua medida.** Decisão de Xavier: a via da lista no repositório em vez de um quarto ficheiro de dump. *(1) A questão dos segredos*: medido em produção, **0 segredos literais e 0 URL fixas nos 38 comandos**; só um lê um segredo (`anarbib-health-probe`), na execução, em `vault.decrypted_secrets`. *(2) O que foi entregue* (commit `2237d433`, migração `20260921193147`): uma migração sozinha nada podia — restaurada com o seu histórico, fica inscrita como « feita » e não se repete; daí uma **função**, que viaja no dump com o esquema. `private.fn_crons_attendus()` leva nome, horário, comando e estado dos 38 jobs, levantados em produção (impressão md5 `bf25c87f…`, recalculada pela própria migração); `private.fn_crons_replanifier()`, SECURITY DEFINER para que os jobs pertençam a `postgres` como em produção, só toca nos jobs ausentes, diferentes ou inativos, assinala os inesperados e nunca retira nada. `restore.sh` chama-a (etapa « 3 ter »); `bootstrap.sh` repete a suíte dos crons na verificação final (controlo h) e **fica vermelho** se faltarem. A suíte `crons_planifies_tests.sql` ganha T7 e T8. *(3) Provado*: bancada SQL completa; depois **ida e volta real sobre `pg_cron`** — pilha construída a partir do repositório, despejada pela CLI (0 linhas de `cron.job` no dump, a função está lá), desmontada, restaurada: « 3 ter OK — 38 jobs », controlo (h) verde; contraprova, tabela esvaziada → vermelho, função → verde. *Em produção*: migração aplicada pela CI, `fn_crons_replanifier()` devolve `deja_en_place: 38, planifies: []`, e a impressão de `cron.job` não mudou. **O que este fecho não cobre**: a ida e volta foi feita numa pilha sem dados; a restauração de um dump da *produção* posterior a esta migração não foi repetida."
         }
+      ],
+      [
+        "E22",
+        "2026-09-22",
+        {
+          "fr": "**Clos le 22/09 : la feuille est nommée, l'accolade retirée, et une garde rougit avant le build.** Trouvée en comptant les accolades de chaque feuille de `src/` hors commentaires : `src/pages/painel/PanelPage.css`, ligne 632 — une fermante restée seule quand la règle `.ab-painel-tab-divider` a été remplacée par un commentaire (commit `83e68421`, 15/09). La ligne du minifieur (`<stdin>:632`) était la bonne : le lot ne comptait qu'une feuille. Effet dans les navigateurs : aucun — une fermante orpheline au premier niveau est jetée par l'analyseur CSS ; effet réel : un avertissement qu'on apprend à ne plus lire. Retirée (commit du 22/09), `npm run build` ne rend plus l'avertissement. La décision « un avertissement du minifieur doit-il faire échouer le build ? » tombe : `src/tests/css-accolades-equilibrees.test.js` parcourt chaque feuille suivie par git, hors commentaires et chaînes, et rougit en nommant feuille et ligne — avant le build, en CI.",
+          "pt": "**Fechado em 22/09: a folha está nomeada, a chaveta retirada, e uma guarda fica vermelha antes do build.** Encontrada contando as chavetas de cada folha de `src/`: `src/pages/painel/PanelPage.css`, linha 632 — uma chaveta de fecho que ficou sozinha quando a regra `.ab-painel-tab-divider` foi substituída por um comentário (commit `83e68421`, 15/09). Efeito nos navegadores: nenhum; efeito real: um aviso que se aprende a não ler. Retirada, `npm run build` já não devolve o aviso. `src/tests/css-accolades-equilibrees.test.js` percorre cada folha e fica vermelho nomeando folha e linha — antes do build, na CI."
+        }
       ]
     ]
   },
@@ -3023,52 +3031,6 @@
         "fr": "**03/09** — la formation (soirée 1 le 08/09/2026) comporte un **témoin léger** (étape 8 de `docs/journal/chantiers/PARCOURS_formation_BLMF_seance1_2026-09-08.md` : chercher, ouvrir, réserver au clavier seul, souris retournée). Ce n'est pas l'audit demandé par cette fiche : pas de lecteur d'écran, pas de personne concernée ; E1 reste ouvert et le discours reste « implémenté, pas audité ». La liste de blocages clavier qui en sortira entre ici. **03/09, fin de journée** — le témoin clavier léger se cale dans n'importe quelle soirée de la formation (sept soirées, plan du 01/09), pas « le 13/09 ». **06/09** — la navigation a changé le 05/09 : la page **« Je veux… »** (`/inicio`, 51 intentions par rôle, raccourcis en `localStorage`) et les **liens profonds vers les recueils PDF** (`#page=N` par langue). L'audit demandé devra parcourir ces deux chemins ; le témoin clavier de la formation peut commencer par « Je veux… ».",
         "pt": "**03/09** — a formação (noite 1 em 08/09/2026) tem uma **testemunha leve** (etapa 8: teclado só). Não é a auditoria pedida; E1 fica aberto, o discurso fica «implementado, não auditado». **03/09, fim do dia** — a testemunha leve cabe em qualquer noite da formação. **06/09** — a navegação mudou em 05/09 : página «Quero…» (`/inicio`, 51 intenções) e ligações profundas para os PDF. A auditoria terá de percorrer esses caminhos."
       }
-    },
-    {
-      "id": "E22",
-      "d": "E",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "front"
-      ],
-      "t": {
-        "fr": "Le build du front signale une accolade fermante en trop dans une feuille de style — personne ne l'a cherchée",
-        "pt": "O build do front assinala uma chaveta de fecho a mais numa folha de estilo — ninguém a procurou"
-      },
-      "v": {
-        "fr": "Lu le 21/09 dans la sortie de `npm run build` (commit `ba0f30eb`) : `[esbuild css minify] ▲ [WARNING] Unexpected \"}\" [css-syntax-error] <stdin>:632:0`. Le build aboutit (392 fichiers) et la CI est verte : un avertissement de minification ne fait rien rougir. `<stdin>` ne nomme pas la feuille — c'est un lot de CSS passé au minifieur, la ligne 632 est celle du lot, pas d'un fichier.",
-        "pt": "Lido em 21/09 na saída de `npm run build` (commit `ba0f30eb`): `[esbuild css minify] ▲ [WARNING] Unexpected \"}\" [css-syntax-error] <stdin>:632:0`. O build termina e a CI está verde. `<stdin>` não nomeia a folha."
-      },
-      "w": {
-        "fr": "Trouver la feuille : construire avec `build.cssMinify: false` et chercher l'accolade orpheline, ou passer chaque `.css` de `src/` à un analyseur. Corriger, puis décider si un avertissement du minifieur CSS doit faire échouer le build en CI.",
-        "pt": "Achar a folha: construir com `build.cssMinify: false` e procurar a chaveta órfã. Corrigir, e decidir se um aviso do minificador CSS deve fazer falhar o build na CI."
-      },
-      "y": {
-        "fr": "Une accolade en trop ferme un bloc plus tôt que voulu : selon l'endroit, tout ce qui suit dans la feuille s'applique hors de sa requête média ou de son sélecteur, ou est ignoré. Le projet a déjà payé des débordements mobiles dus à des règles qui ne s'appliquaient pas où l'on croyait.",
-        "pt": "Uma chaveta a mais fecha um bloco mais cedo do que se queria: o que se segue na folha aplica-se fora da sua media query ou do seu seletor, ou é ignorado."
-      },
-      "f": {
-        "fr": [
-          "La feuille et la ligne sont nommées ici.",
-          "`npm run build` ne rend plus cet avertissement."
-        ],
-        "pt": [
-          "A folha e a linha estão nomeadas aqui.",
-          "`npm run build` já não devolve este aviso."
-        ]
-      },
-      "r": [
-        "vite.config.js",
-        "src/**/*.css"
-      ],
-      "verif": [
-        {
-          "fr": "21/09 — avertissement lu deux fois dans la séance (builds de `ba0f30eb` et suivants) ; cause non cherchée.",
-          "pt": "21/09 — aviso lido duas vezes na sessão; causa não procurada."
-        }
-      ]
     },
     {
       "id": "E2",
@@ -5184,6 +5146,10 @@
         {
           "fr": "21/09 — construction, `--simulation` et `--vers-dossier` exécutés dans la séance ; image `git-pages-cli:1.10.0` inspectée (pas de shell, options `--dry-run`, `--token`, `--password-file`). Publication réelle : non faite.",
           "pt": "21/09 — construção, `--simulation` e `--vers-dossier` executados na sessão; imagem `git-pages-cli:1.10.0` inspecionada. Publicação real: não feita."
+        },
+        {
+          "fr": "22/09 — **la doc du serveur git-pages (README, « Authorization ») dit quel jeton convient, et lève le doute.** Hors d'un workflow, c'est la règle 7, *Forge Authorization (DNS allowlist)* : le serveur lit le TXT `_git-pages-forge-allowlist.<domaine>` (posé pour nos trois domaines), puis vérifie **par un appel à l'API de la forge** que le jeton reçu « accorde le push » sur l'un des dépôts listés. Un **jeton d'accès Codeberg** d'un compte qui a le droit de pousser sur `anarbib/anarbib` suffit donc ; portée à donner : `repository` en lecture *et* écriture (l'API lit `permissions.push`). Et `--essai` (`--dry-run`, en-tête `Dry-Run: yes`) est tenu côté serveur : « seuls les contrôles d'autorisation sont exécutés, aucune mise à jour ». Le geste, pour la personne qui a le jeton : le poser dans `~/anarbib-ops/git-pages.token` (chmod 600, hors dépôt), puis `GIT_PAGES_TOKEN=$(cat ~/anarbib-ops/git-pages.token) scripts/ci/publier-front.sh --essai` — trois lignes « autorisation acceptée, rien publié » ferment le premier critère. Sans jeton, rien de plus ne peut être fait d'ici.",
+          "pt": "22/09 — **a documentação do servidor git-pages diz que token serve.** Fora de um workflow é a regra 7, *Forge Authorization (DNS allowlist)*: o servidor lê o TXT `_git-pages-forge-allowlist.<domínio>` e verifica **por chamada à API da forja** que o token « concede push » no repositório. Um **token de acesso Codeberg** de uma conta com direito de push em `anarbib/anarbib` basta; âmbito `repository` leitura *e* escrita. E `--essai` (`--dry-run`) é garantido pelo servidor: só os controlos de autorização. O gesto: pôr o token em `~/anarbib-ops/git-pages.token` (chmod 600), depois `GIT_PAGES_TOKEN=$(cat ~/anarbib-ops/git-pages.token) scripts/ci/publier-front.sh --essai`. Sem token, nada mais pode ser feito daqui."
         }
       ]
     },
@@ -5240,7 +5206,7 @@
       "id": "F11",
       "d": "F",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno"
@@ -5282,6 +5248,10 @@
         {
           "fr": "21/09 — courriel de 20 h 45 lu par Xavier (PDF versé dans la séance) ; décompte 27/48 par lecture des `style=\"…\"` de `supabase/functions/**/*.ts` ; `color-scheme` : 0 occurrence. Le courriel de clôture de 21 h 20 (incident 14) n'a pas de bloc `<pre>` : il ne dit rien du correctif, qui attend la prochaine alerte structurelle pour être vu.",
           "pt": "21/09 — e-mail das 20h45 lido por Xavier; contagem 27/48 por leitura dos `style=\"…\"`; `color-scheme`: 0 ocorrências. O correctivo espera o próximo alerta estrutural para ser visto."
+        },
+        {
+          "fr": "22/09 — **deux critères sur trois tenus, le troisième ne peut l'être que par une personne.** Relu : le blanc sur blanc du 21/09 n'était pas un défaut de thème sombre du client — c'était de l'**héritage** (fond clair sans `color`, texte blanc hérité du corps), qui se produit dans n'importe quel client ; la fiche le disait mal. *(1)* Les 27 styles à fond sans couleur ont reçu la couleur de texte de leur document (`#ffffff`, `#f2f2f2` ou `#f3f4f6`, selon le `<body>` ; les fragments injectés dans `introHtml` prennent celle du gabarit) — onze fichiers, `layout.ts`, `register` et `request-password-reset` compris ; les traits (éléments vides) en sont dispensés. Garde `src/tests/mails-fond-et-couleur.test.js`, qui lit tous les `.ts` de `supabase/functions/`. *(2)* Choix écrit au REGISTRE (`MAIL-Q7`) : nos courriels sont sombres par conception et le **déclarent** — `color-scheme: dark` + `supported-color-schemes` dans les huit documents (le huitième, `notify-document-permission-request`, n'avait même pas de `<head>`). Un thème sombre n'est pas écrit : il n'y a rien à inverser. *(3)* **Reste à Xavier** : ouvrir un courriel de chaque famille dans un vrai client (Proton, Thunderbird, Gmail mobile) — la garde lit du HTML, elle ne prouve pas un rendu. Le prochain courriel réel sera celui d'une alerte ou d'un rappel ; le regarder suffit.",
+          "pt": "22/09 — **dois critérios em três cumpridos, o terceiro só por uma pessoa.** Relido: o branco sobre branco de 21/09 não era um defeito de tema escuro do cliente — era **herança** (fundo claro sem `color`, texto branco herdado do corpo), que ocorre em qualquer cliente. *(1)* Os 27 estilos com fundo sem cor receberam a cor de texto do seu documento — onze ficheiros, `layout.ts`, `register` e `request-password-reset` incluídos. Guarda `src/tests/mails-fond-et-couleur.test.js`. *(2)* Escolha escrita no REGISTRE (`MAIL-Q7`): os nossos e-mails são escuros por desenho e **declaram-no** — `color-scheme: dark` nos oito documentos (o oitavo nem tinha `<head>`). *(3)* **Fica para Xavier**: abrir um e-mail de cada família num cliente real — a guarda lê HTML, não prova um rendering."
         }
       ]
     },
