@@ -6,7 +6,7 @@ Les trois chantiers les plus utiles à AnarBib aujourd'hui ne demandent aucune c
 
 **Ce que le projet est vraiment.** Un seul mainteneur. Un seul administrateur de réseau. Un seul serveur d'intégration continue, sur son poste de travail. Nous préférons l'écrire que le taire : la contribution qui réduit une de ces trois dépendances vaut plus qu'une fonctionnalité de plus.
 
-Les chiffres ci-dessous ont été vérifiés en base et au dépôt le **29 août 2026**. Ils bougent — le détail à jour vit dans [`docs/backlogs/`](docs/backlogs/), sous les identifiants indiqués.
+Les chiffres ci-dessous ont été vérifiés en base et au dépôt le **29 août 2026** (la section `F11` date du 22 septembre). Ils bougent — le détail à jour vit dans [`docs/backlogs/`](docs/backlogs/), sous les identifiants indiqués.
 
 ---
 
@@ -50,6 +50,13 @@ Cette page a longtemps dit : « personne n'a jamais vérifié que ce projet est 
 **Ce que ça demande** : Docker, une machine, une soirée. Aucune connaissance du projet ; l'installateur parle les dix langues du projet.
 **Ce que ça apporte** : la première reconstruction a dit que le projet est reprenable ; la vôtre dira si l'installateur l'est. C'est l'une des conditions à réunir avant de quitter l'hébergeur actuel, et par définition elle ne peut pas venir de nous. **Un rapport d'échec détaillé vaut toujours plus qu'un correctif** : c'est la liste de ce qui ne marche que sur deux machines.
 
+## Lire nos courriels dans votre client de messagerie — `F11`
+
+Le 21 septembre 2026, un courriel d'alerte du projet est arrivé **blanc sur blanc** : un bloc à fond clair avait hérité du texte blanc du gabarit. Nous avons corrigé la cause partout dans le code (vingt-sept endroits, dont les courriels d'inscription et de mot de passe oublié), et une vérification automatique empêche qu'elle revienne. Mais une vérification automatique lit du HTML ; **elle ne prouve pas ce que voit une personne** dans Proton, Thunderbird, Gmail sur téléphone, en thème sombre ou clair.
+
+**Ce que ça demande** : avoir reçu un courriel d'AnarBib — une confirmation d'inscription, un rappel d'échéance, une invitation — l'ouvrir dans votre client habituel, et nous dire s'il se lit. Une capture d'écran vaut mieux qu'une description. Aucune compétence technique.
+**Ce que ça apporte** : la certitude que ce qu'on envoie se lit — un courriel illisible est un courriel qui n'est pas parti, et personne n'écrit pour dire qu'il n'a rien vu.
+
 ## Ranger la documentation — `J5`
 
 Le corpus est vaste et sa dérive est mesurée. Le registre qui fait foi porte deux sections numérotées `§17`, deux sections `MAP` aux verdicts opposés, et sept spécifications que plus aucun index ne référence.
@@ -78,7 +85,7 @@ Os três canteiros mais úteis ao AnarBib hoje não exigem nenhuma competência 
 
 **O que o projeto realmente é.** Um único mantenedor. Um·a único·a administrador·a de rede. Um único servidor de integração contínua, na estação de trabalho dele. Preferimos escrevê-lo a calá-lo: a contribuição que reduz uma dessas três dependências vale mais que mais uma funcionalidade.
 
-Os números abaixo foram verificados no banco e no repositório em **29 de agosto de 2026**. Eles mudam — o detalhe atualizado vive em [`docs/backlogs/`](docs/backlogs/), sob os identificadores indicados.
+Os números abaixo foram verificados no banco e no repositório em **29 de agosto de 2026** (a seção `F11` é de 22 de setembro). Eles mudam — o detalhe atualizado vive em [`docs/backlogs/`](docs/backlogs/), sob os identificadores indicados.
 
 ---
 
@@ -122,6 +129,13 @@ Esta página dizia há muito tempo: « ninguém jamais verificou se este projeto
 **O que exige**: Docker, uma máquina, uma noite. Nenhum conhecimento do projeto; o instalador fala as dez línguas do projeto.
 **O que traz**: a primeira reconstrução disse que o projeto é retomável; a sua dirá se o instalador também é. É uma das condições a reunir antes de deixar o provedor atual, e por definição ela não pode vir de nós. **Um relatório de falha detalhado vale sempre mais que uma correção**: é a lista do que só funciona em duas máquinas.
 
+## Ler nossos e-mails no seu cliente de correio — `F11`
+
+Em 21 de setembro de 2026, um e-mail de alerta do projeto chegou **branco sobre branco**: um bloco de fundo claro tinha herdado o texto branco do modelo. Corrigimos a causa em todo o código (vinte e sete lugares, inclusive os e-mails de cadastro e de senha esquecida), e uma verificação automática impede que volte. Mas uma verificação automática lê HTML; **ela não prova o que uma pessoa vê** no Proton, no Thunderbird, no Gmail do celular, em tema escuro ou claro.
+
+**O que exige**: ter recebido um e-mail do AnarBib — uma confirmação de cadastro, um lembrete de prazo, um convite — abri-lo no seu cliente habitual e nos dizer se ele se lê. Uma captura de tela vale mais que uma descrição. Nenhuma competência técnica.
+**O que traz**: a certeza de que o que enviamos se lê — um e-mail ilegível é um e-mail que não partiu, e ninguém escreve para dizer que não viu nada.
+
 ## Arrumar a documentação — `J5`
 
 O corpus é vasto e sua deriva é medida. O registro que faz fé traz duas seções numeradas `§17`, duas seções `MAP` com vereditos opostos, e sete especificações que nenhum índice referencia mais.
@@ -150,7 +164,7 @@ The three most useful pieces of work on AnarBib today need no technical skill at
 
 **What the project actually is.** One maintainer. One network administrator. One continuous-integration runner, on that maintainer's own workstation. We would rather write it down than hide it: a contribution that removes one of those three dependencies is worth more than one more feature.
 
-The figures below were checked against the database and the repository on **29 August 2026**. They move — the current detail lives in [`docs/backlogs/`](docs/backlogs/), under the identifiers shown.
+The figures below were checked against the database and the repository on **29 August 2026** (the `F11` section dates from 22 September). They move — the current detail lives in [`docs/backlogs/`](docs/backlogs/), under the identifiers shown.
 
 ---
 
@@ -189,6 +203,13 @@ For a long time this page said: "nobody has ever checked whether this project ca
 
 **What it takes**: Docker, a machine, an evening. No knowledge of the project; the installer speaks the project's ten languages.
 **What it gives**: the first rebuild said the project can be picked up; yours will say whether the installer can. It is one of the conditions to meet before leaving the current host, and by definition it cannot come from us. **A detailed failure report is still worth more than a fix**: it is the list of what only works on two machines.
+
+## Read our emails in your own mail client — `F11`
+
+On 21 September 2026 an alert email from the project arrived **white on white**: a light-background block had inherited the template's white text. We fixed the cause everywhere in the code (twenty-seven places, including the sign-up and forgotten-password emails), and an automatic check keeps it from coming back. But an automatic check reads HTML; **it does not prove what a person sees** in Proton, Thunderbird or Gmail on a phone, in dark or light theme.
+
+**What it takes**: having received an email from AnarBib — a sign-up confirmation, a due-date reminder, an invitation — opening it in your usual client, and telling us whether it reads. A screenshot beats a description. No technical skill.
+**What it gives**: the certainty that what we send can be read — an unreadable email is an email that never arrived, and nobody writes to say they saw nothing.
 
 ## Tidy the documentation — `J5`
 

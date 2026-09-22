@@ -1,6 +1,6 @@
 # Chantiers ouverts — par où commencer
 
-*Document d'orientation, mis à jour le 21 septembre 2026. **Il n'arbitre rien** : la préséance documentaire reste celle de `docs/INDEX.md` — le REGISTRE fait foi, puis la spec du domaine, puis le backlog. Cette page ne fait que dire où des bras seraient utiles.*
+*Document d'orientation, mis à jour le 22 septembre 2026. **Il n'arbitre rien** : la préséance documentaire reste celle de `docs/INDEX.md` — le REGISTRE fait foi, puis la spec du domaine, puis le backlog. Cette page ne fait que dire où des bras seraient utiles.*
 
 Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et chacun choisisse sans avoir à demander.
 
@@ -26,13 +26,13 @@ Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et
 
 ## 2. Achever la bascule vers l'auto-hébergement
 
-**Ce que c'est.** Aligner l'image GoTrue sur l'état réel des migrations, découpler la chaîne de déploiement de l'intégration continue, et poser un proxy inverse avec tunnel devant la pile.
+**Ce que c'est.** Poser un proxy inverse avec tunnel devant la pile, passer des tags d'images aux empreintes `sha256`, refaire la reconstruction à froid un mois après la dernière, et poser à l'hébergeur la question d'une visio à nous. Les deux autres points qui figuraient ici — aligner les images sur l'état réel des migrations, découpler le déploiement de l'intégration continue — sont faits (voir l'état).
 
 **Ce que ça demande.** De l'administration système, du réseau, des conteneurs. C'est le chantier le plus technique et le plus autonome du lot.
 
 **Ce que ça apporte.** La fin de la dépendance à un hébergeur tiers. C'est l'objectif que le projet s'est donné et qu'il n'a pas encore atteint.
 
-> **État au 21/09/2026.** Le gel du mainteneur a pris fin le 14 septembre. Ce qui doit être vrai avant la bascule chez Les Herbes Folles tient en huit conditions, aucune techniquement difficile, listées au backlog (`I21`) ; `install.sh` sur une machine tierce vierge — l'entrée 1 — en fait partie.
+> **État au 22/09/2026.** Le gel du mainteneur a pris fin le 14 septembre. Ce qui doit être vrai avant la bascule chez Les Herbes Folles tient en huit conditions, aucune techniquement difficile, listées au backlog (`I21`) ; `install.sh` sur une machine tierce vierge — l'entrée 1 — en fait partie. **Les 21 et 22 septembre ont réglé une part de ce que cette entrée demandait, et trouvé ce qu'aucune relecture n'aurait vu.** L'hébergeur actuel monte GoTrue et Storage de lui-même : les images épinglées de la pile étaient repassées *sous* la production sans que rien le dise — deux fois dans la même journée. Désormais une sonde le dit (`images_pins` dans `health-probe`, courriel aux administrateur·rices, marche à suivre incluse), et les pins se mesurent au banc (`deploy/banc-paliers.sh`). Un dump **réel** de la production a été restauré sous ces images en 62 secondes, décomptes identiques, objets servis octet pour octet — et cette passe a montré que `supabase db dump` n'emporte ni l'historique des migrations ni les crons : une instance restaurée ne pouvait plus être mise à jour et n'enverrait jamais un rappel. Les deux sont réparés (`restore.sh`, `restore-historique.sh`, `private.fn_crons_replanifier()`), et `bootstrap.sh` rougit si des crons manquent. Le déploiement est découplé de la forge des deux côtés : `scripts/ci/deployer-backend.sh` (depuis le 01/09) et `scripts/ci/publier-front.sh`, qui a publié pour de vrai sur `app.anarbib.is` le 22/09 ; `deploy/deploy.sh` reconstruit enfin le front d'une instance auto-hébergée. Détail et mesures : `journal/operations/NOTE_pins-images-remesures_2026-09-21`. Reste ce que dit « Ce que c'est » ci-dessus, et les sept conditions d'`I21` non encore cochées.
 
 ---
 
