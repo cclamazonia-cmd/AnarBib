@@ -139,7 +139,7 @@ serve(async (req) => {
     const dateFin = formatDateLocale(expiresAt, locale);
 
     const motHtml = mot
-      ? `<p style="margin:0 0 12px;padding:10px 12px;border-left:3px solid #c00000;background:rgba(255,255,255,.05);">` +
+      ? `<p style="margin:0 0 12px;padding:10px 12px;border-left:3px solid #c00000;background:rgba(255,255,255,.05);color:#f2f2f2;">` +
         `<b>${esc(tMail(locale, "invitation.accompanying"))}</b><br>${esc(mot)}</p>`
       : "";
 

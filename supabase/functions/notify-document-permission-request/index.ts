@@ -236,10 +236,11 @@ function renderEmail(opts) {
   const footerHtml = opts.footerHtml ? `<div style="margin-top:22px;color:#d1d5db;font-size:12px;line-height:1.55;">${opts.footerHtml}</div>` : "";
   const html = `<!doctype html>
 <html lang="pt-BR">
+  <head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"></head>
   <body style="margin:0;padding:0;background:#0b0b0d;color:#f3f4f6;font-family:Arial,Helvetica,sans-serif;">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(opts.preheader || opts.title)}</div>
     <div style="max-width:720px;margin:0 auto;padding:24px;">
-      <div style="background:#111216;border:1px solid #262932;border-radius:18px;padding:24px;box-shadow:0 18px 40px rgba(0,0,0,.32);">
+      <div style="background:#111216;color:#f3f4f6;border:1px solid #262932;border-radius:18px;padding:24px;box-shadow:0 18px 40px rgba(0,0,0,.32);">
         ${logoHtml}
         <h1 style="margin:0 0 12px;font-size:24px;line-height:1.25;color:#ffffff;">${esc(opts.title)}</h1>
         ${opts.greeting ? `<p style="margin:0 0 14px;color:#f3f4f6;font-size:15px;line-height:1.6;">${esc(opts.greeting)}</p>` : ""}

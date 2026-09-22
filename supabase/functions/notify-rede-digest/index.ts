@@ -98,12 +98,12 @@ function renderDigest(opts: {
     ? `<img src="${esc(logoUrl)}" alt="${esc(brand)}" style="display:block;max-width:96px;max-height:60px;width:auto;height:auto;object-fit:contain;">`
     : `<div style="font-size:20px;font-weight:700;color:#fff;">${esc(brand)}</div>`;
 
-  const html = `<!doctype html><html lang="${esc(loc)}"><head><meta charset="utf-8">`
+  const html = `<!doctype html><html lang="${esc(loc)}"><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">`
     + `<meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(subject)}</title></head>`
     + `<body style="margin:0;padding:0;background:#0f0f10;color:#f2f2f2;font-family:Arial,Helvetica,sans-serif;">`
-    + `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0f0f10;"><tr><td align="center" style="padding:24px;">`
-    + `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:680px;background:#18181b;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;">`
-    + `<tr><td style="padding:22px 24px;background:linear-gradient(135deg,#6f000f 0%,#b30018 45%,#111 100%);">`
+    + `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0f0f10;color:#f2f2f2;"><tr><td align="center" style="padding:24px;">`
+    + `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:680px;background:#18181b;color:#f2f2f2;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;">`
+    + `<tr><td style="padding:22px 24px;background:linear-gradient(135deg,#6f000f 0%,#b30018 45%,#111 100%);color:#f2f2f2;">`
     + `<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>`
     + `<td valign="middle" style="width:120px;">${logoHtml}</td>`
     + `<td valign="middle" style="padding-left:16px;"><h1 style="margin:0;font-size:22px;line-height:1.2;color:#fff;">${esc(title)}</h1></td>`

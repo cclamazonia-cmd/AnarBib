@@ -63,11 +63,11 @@ function renderHtml(loc: string, actionUrl: string): string {
   const logo = LOGO_URL
     ? `<img src="${esc(LOGO_URL)}" alt="AnarBib" style="display:block;max-width:120px;max-height:64px;width:auto;height:auto;object-fit:contain;margin:0 auto 8px;">`
     : "";
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(s.subject)}</title></head>` +
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(s.subject)}</title></head>` +
     `<body style="margin:0;background:#0f0f10;color:#ffffff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">` +
     `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:24px 12px;">` +
     `<table role="presentation" width="560" cellspacing="0" cellpadding="0" style="border-collapse:collapse;max-width:560px;width:100%;">` +
-    `<tr><td style="background:rgba(27,27,27,0.94);border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;">` +
+    `<tr><td style="background:rgba(27,27,27,0.94);color:#ffffff;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;">` +
     `<div style="padding:20px 18px 8px;text-align:center;">${logo}</div>` +
     `<div style="height:3px;background:#c00000;"></div>` +
     `<div style="padding:22px;">` +

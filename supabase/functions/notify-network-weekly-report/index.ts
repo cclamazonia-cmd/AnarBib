@@ -137,7 +137,7 @@ async function fetchAllRows(build) {
   return rows;
 }
 function renderTable(title, cols, rows) {
-  const header = cols.map((c)=>`<th style="text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,0.14);font-size:13px;background:rgba(255,255,255,0.06);">${esc(c)}</th>`).join("");
+  const header = cols.map((c)=>`<th style="text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,0.14);font-size:13px;background:rgba(255,255,255,0.06);color:#f2f2f2;">${esc(c)}</th>`).join("");
   const body = rows.map((r)=>`
     <tr>
       ${r.map((cell)=>`<td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;vertical-align:top;">${esc(cell)}</td>`).join("")}
@@ -158,18 +158,18 @@ function renderEmail(opts) {
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>${esc(opts.subject)}</title>
   </head>
   <body style="margin:0;padding:0;background:#0f0f10;color:#f2f2f2;font-family:Arial,Helvetica,sans-serif;">
     <div style="display:none;opacity:0;max-height:0;overflow:hidden;">${esc(opts.preheader)}</div>
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0f0f10;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0f0f10;color:#f2f2f2;">
       <tr>
         <td align="center" style="padding:24px;">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:860px;background:#18181b;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:860px;background:#18181b;color:#f2f2f2;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;">
             <tr>
-              <td style="padding:22px 24px;background:linear-gradient(135deg,#6f000f 0%,#b30018 45%,#111 100%);">
+              <td style="padding:22px 24px;background:linear-gradient(135deg,#6f000f 0%,#b30018 45%,#111 100%);color:#f2f2f2;">
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                   <tr>
                     <td valign="middle" style="width:120px;">${logoHtml}</td>

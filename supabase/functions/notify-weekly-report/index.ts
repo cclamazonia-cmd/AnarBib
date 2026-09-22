@@ -148,7 +148,7 @@ function illFluxStateLabel(state) {
   return ILL_FLUX_STATE_LABELS_PT[s] || s.replace(/_/g, " ");
 }
 function renderTable(title, cols, rows) {
-  const header = cols.map((c) => `<th style="text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,0.14);font-size:13px;background:rgba(255,255,255,0.06);">${esc(c)}</th>`).join("");
+  const header = cols.map((c) => `<th style="text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,0.14);font-size:13px;background:rgba(255,255,255,0.06);color:#ffffff;">${esc(c)}</th>`).join("");
   const body = rows.map((r) => `
     <tr>
       ${r.map((cell) => `<td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;vertical-align:top;">${esc(cell)}</td>`).join("")}
@@ -195,7 +195,7 @@ function renderReportEmail(opts) {
   const libraryLogoHtml = showLibraryLogo ? `<img src="${esc(opts.routing.libraryLogoUrl)}" alt="${esc(opts.routing.brandName)}" style="display:block;max-width:84px;max-height:52px;width:auto;height:auto;object-fit:contain;">` : "";
   const html = `<!doctype html>
 <html><head>
-<meta charset="utf-8">
+<meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(opts.subject)}</title>
 </head>
@@ -206,7 +206,7 @@ function renderReportEmail(opts) {
       <td align="center" style="padding:24px 12px;">
         <table role="presentation" width="680" cellspacing="0" cellpadding="0" style="border-collapse:collapse;max-width:680px;width:100%;">
           <tr>
-            <td style="background:rgba(27,27,27,0.94);border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;">
+            <td style="background:rgba(27,27,27,0.94);color:#ffffff;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;">
               <div style="padding:18px 18px 14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
                 <div style="display:flex;align-items:center;gap:12px;min-width:0;">
                   ${networkLogoHtml}

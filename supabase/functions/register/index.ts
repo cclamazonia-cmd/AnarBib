@@ -203,9 +203,9 @@ function generateOpaqueToken(byteLength = 32) {
 }
 function buildMailShell({ pretitle, title, subtitle, logoTable, contentHtml }) {
   return `
-    <div style="margin:0; padding:24px 0; background:${MAIL_BRAND.colors.bg}; background-image:linear-gradient(180deg, ${MAIL_BRAND.colors.bg} 0%, #140707 55%, ${MAIL_BRAND.colors.bg} 100%);">
+    <div style="margin:0; padding:24px 0; background:${MAIL_BRAND.colors.bg};color:#f2f2f2; background-image:linear-gradient(180deg, ${MAIL_BRAND.colors.bg} 0%, #140707 55%, ${MAIL_BRAND.colors.bg} 100%);">
       <div style="max-width:760px; margin:0 auto; padding:0 16px; font-family:${MAIL_BRAND.fonts.body}; color:${MAIL_BRAND.colors.textOnLight};">
-        <div style="border:1px solid ${MAIL_BRAND.colors.redDeep}; border-radius:24px; overflow:hidden; background:${MAIL_BRAND.colors.surface}; box-shadow:0 20px 48px rgba(0,0,0,.42);">
+        <div style="border:1px solid ${MAIL_BRAND.colors.redDeep}; border-radius:24px; overflow:hidden; background:${MAIL_BRAND.colors.surface};color:#f2f2f2; box-shadow:0 20px 48px rgba(0,0,0,.42);">
           <div style="background:${MAIL_BRAND.colors.hero}; padding:28px 28px 24px; color:${MAIL_BRAND.colors.textOnDark}; border-bottom:5px solid ${MAIL_BRAND.colors.red};">
             ${logoTable || ""}
             ${pretitle ? `<div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:${MAIL_BRAND.colors.mutedOnDark}; margin-bottom:10px;">${escapeHtml(pretitle)}</div>` : ""}

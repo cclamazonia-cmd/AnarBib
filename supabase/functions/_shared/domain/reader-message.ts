@@ -53,7 +53,7 @@ export async function handleReaderMessageEvent(recordId: number) {
   const staffIntro =
     `<p style="margin:0 0 10px;">${tMail(libLocale, "rmsg.staff.intro")}</p>` +
     (subject ? `<p style="margin:0 0 6px;"><b>${esc(subject)}</b></p>` : "") +
-    `<div style="margin:0;padding:10px 12px;background:rgba(255,255,255,.05);border-left:3px solid rgba(255,255,255,.2);border-radius:4px;line-height:1.55;">${bodyHtml}</div>`;
+    `<div style="margin:0;padding:10px 12px;background:rgba(255,255,255,.05);color:#f2f2f2;border-left:3px solid rgba(255,255,255,.2);border-radius:4px;line-height:1.55;">${bodyHtml}</div>`;
 
   const { html: ha, text: ta } = renderEmail({
     locale: libLocale,
@@ -78,7 +78,7 @@ export async function handleReaderMessageEvent(recordId: number) {
     const readerIntro =
       `<p style="margin:0 0 10px;">${tMail(locale, "rmsg.reader.intro")}</p>` +
       (subject ? `<p style="margin:0 0 6px;"><b>${esc(subject)}</b></p>` : "") +
-      `<div style="margin:0;padding:10px 12px;background:rgba(255,255,255,.05);border-left:3px solid rgba(255,255,255,.2);border-radius:4px;line-height:1.55;">${bodyHtml}</div>`;
+      `<div style="margin:0;padding:10px 12px;background:rgba(255,255,255,.05);color:#f2f2f2;border-left:3px solid rgba(255,255,255,.2);border-radius:4px;line-height:1.55;">${bodyHtml}</div>`;
 
     const { html, text } = renderEmail({
       locale: locale,
@@ -126,7 +126,7 @@ export async function handleLibraryMessageEvent(recordId: number) {
     const intro =
       `<p style="margin:0 0 10px;">${tMail(locale, "lmsg.reader.intro")}</p>` +
       (subject ? `<p style="margin:0 0 6px;"><b>${esc(subject)}</b></p>` : "") +
-      `<div style="margin:0;padding:10px 12px;background:rgba(255,255,255,.05);border-left:3px solid rgba(255,255,255,.2);border-radius:4px;line-height:1.55;">${bodyHtml}</div>`;
+      `<div style="margin:0;padding:10px 12px;background:rgba(255,255,255,.05);color:#f2f2f2;border-left:3px solid rgba(255,255,255,.2);border-radius:4px;line-height:1.55;">${bodyHtml}</div>`;
 
     const { html, text } = renderEmail({
       locale: locale,
