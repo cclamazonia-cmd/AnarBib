@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 70 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 10
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 8
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **58 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **57 items sur 70** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1615,7 +1615,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
 | **I25** | Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée | `P3` | Ouvert |
-| **I27** | Le chemin de secours du front n'a jamais publié pour de vrai — `publier-front.sh` attend son premier tir | `P2` | Ouvert |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1786,28 +1785,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Aucune.
 
 *Renvois : `scripts/ci/run-sql-suites.sh` · `.forgejo/workflows/sql-tests.yml` · `REGISTRE §0 DOC-SILENCE-1` · `REGISTRE §0 OPS-8`*
-
-#### I27 — Le chemin de secours du front n'a jamais publié pour de vrai — `publier-front.sh` attend son premier tir
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** `scripts/ci/publier-front.sh` (21/09, commit `0bd79bd3`) rejoue hors forge le job `app` de la CI : construire, puis publier sur les trois sites par `git-pages-cli`, l'image que l'action de la forge appelle. **Exécutés le 21/09** : le refus sans la clé publiable, la construction (392 fichiers, 23 Mo), `--simulation`, `--vers-dossier`. **Jamais exécutée** : la publication elle-même — il y faut un jeton Codeberg, qui ne se confie pas à une session. La garde `publier-front-coherence` tient la liste des sites égale à celle de `ci.yml` ; elle ne dit rien de l'autorisation.
-
-*Vérifié : [object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Un jour calme, par une personne : `GIT_PAGES_TOKEN=… scripts/ci/publier-front.sh --essai` (le `--dry-run` du serveur : l'autorisation est vérifiée, rien n'est publié), sur les trois sites. Si l'essai passe, une publication réelle sur `app.anarbib.is` seul (`--site`), puis le contrôle du nom haché du bundle que le script imprime. Noter ici quel jeton convient (portée, durée) et où il se range (Dashlane), et si la voie `GIT_PAGES_PASSWORD` (défi DNS, sans forge) mérite d'être préparée.
-
-**Pourquoi ça compte.** Un chemin jamais emprunté n'est pas un chemin qui marche, et celui-ci ne servira qu'un jour de panne — le runner de la CI tourne sur le poste du mainteneur (A3). Le découvrir cassé ce jour-là, c'est le découvrir trop tard.
-
-**Ce qui compte comme fini.**
-
-- `--essai` accepté par le serveur sur les trois sites, sortie consignée ici.
-- Une publication réelle faite par ce chemin, vérifiée par le nom haché du bundle servi.
-- Le jeton à employer et son rangement sont écrits.
-
-**Dépendances.** Sort de **I2** (découpler la CI, 21/09). Cousin de **A3** (tout tourne sur la machine du mainteneur).
-
-*Renvois : `scripts/ci/publier-front.sh` · `src/tests/publier-front-coherence.test.js` · `deploy/README.md §4` · `journal/operations/NOTE_pins-images-remesures_2026-09-21 §8`*
 
 ---
 
@@ -2237,6 +2214,7 @@ CI verte : lint et suite unitaire. |
 | I26 | 2026-09-21 | **Clos le 21/09, le soir même de son ouverture — les trois « fini quand » tenus, chacun avec sa mesure.** Décision de Xavier : la voie de la liste au dépôt plutôt qu'un quatrième fichier de dump. *(1) La question des secrets* : mesuré en production, **0 secret littéral et 0 URL en dur sur les 38 commandes** ; une seule lit un secret (`anarbib-health-probe`), à l'exécution, dans `vault.decrypted_secrets`. La liste peut donc vivre au dépôt. *(2) Ce qui a été livré* (commit `2237d433`, migration `20260921193147`) : une migration seule n'y pouvait rien — restaurée avec son historique, elle est inscrite « faite » et ne se rejoue pas ; d'où une **fonction**, qui voyage dans le dump avec le schéma. `private.fn_crons_attendus()` porte nom, horaire, commande et état des 38 jobs, relevés en production (empreinte md5 `bf25c87f…`, recalculée par la migration elle-même : une retouche d'espace ou de fin de ligne la fait échouer) ; `private.fn_crons_replanifier()`, SECURITY DEFINER pour que les jobs appartiennent à `postgres` comme en production, ne touche qu'aux jobs absents, différents ou inactifs, signale les inattendus et ne retire jamais rien. `restore.sh` l'appelle (étape « 3 ter ») ; `bootstrap.sh` rejoue la suite des crons dans sa vérification finale (contrôle h) et **rougit** s'ils manquent. La suite `crons_planifies_tests.sql` gagne T7 et T8 : sa liste et les commandes réellement planifiées doivent être celles de la fonction — qui ajoute un cron par migration sans le reporter fait rougir la CI. *(3) Éprouvé* : banc SQL complet ; puis **aller-retour réel sur `pg_cron`** — pile bâtie depuis le dépôt, dumpée par la CLI (0 ligne de `cron.job` dans le dump, la fonction y est), démontée, restaurée : « 3 ter OK — 38 jobs planifiés, tous sous le rôle postgres », contrôle (h) vert ; contre-épreuve, table vidée → `deploy.sh --controle` rouge (38 absents), fonction → vert. *En production* : migration appliquée par la CI, `fn_crons_replanifier()` y rend `deja_en_place: 38, planifies: []`, et l'empreinte de `cron.job` est inchangée avant/après (`bf25c87f…`). Appris en passant : sur le dépôt rejoué, 14 commandes différaient de la production par la seule mise en forme (espaces, casse) — la fonction suit la production à l'octet. **Ce que cette clôture ne couvre pas** : l'aller-retour a porté sur une pile sans données ; la restauration d'un dump de la *production* postérieur à cette migration n'a pas été rejouée (elle l'avait été le même soir, avant, et c'est elle qui avait fait ouvrir l'item). |
 | E22 | 2026-09-22 | **Clos le 22/09 : la feuille est nommée, l'accolade retirée, et une garde rougit avant le build.** Trouvée en comptant les accolades de chaque feuille de `src/` hors commentaires : `src/pages/painel/PanelPage.css`, ligne 632 — une fermante restée seule quand la règle `.ab-painel-tab-divider` a été remplacée par un commentaire (commit `83e68421`, 15/09). La ligne du minifieur (`<stdin>:632`) était la bonne : le lot ne comptait qu'une feuille. Effet dans les navigateurs : aucun — une fermante orpheline au premier niveau est jetée par l'analyseur CSS ; effet réel : un avertissement qu'on apprend à ne plus lire. Retirée (commit du 22/09), `npm run build` ne rend plus l'avertissement. La décision « un avertissement du minifieur doit-il faire échouer le build ? » tombe : `src/tests/css-accolades-equilibrees.test.js` parcourt chaque feuille suivie par git, hors commentaires et chaînes, et rougit en nommant feuille et ligne — avant le build, en CI. |
 | B28 | 2026-09-22 | **Clos le 22/09 au soir, sur mesure.** Trouvé le jour même en câblant la suppression de compte sur la page contributeur (`310be843`). Relevé complet de `pg_constraint` en production : **26 colonnes dans 20 tables** portaient une FK vers `profiles` ou `auth.users` en NO ACTION ou RESTRICT que `fn_delete_my_account` ne re-pointait pas — `authority_proposals.proposed_by` en tête (tout·e contributeur·ice ayant proposé une chose ne pouvait pas s'effacer), `library_requests.submitted_by_user_id` (RESTRICT), les éditeurs créés au catalogage, les messages archivés… Une première lecture des codes de `confdeltype` était fausse (deux tables nommées à tort, en SET NULL) ; rectifiée avant la migration. Migration `20260922214500_b28_l_effacement_repointe_tout_acte_sur_le_jeton` (`4f68cbfe`), repartie de la définition réelle : bloc « ACTES NOMMÉS » qui re-pointe les 26 colonnes sur le jeton pseudonyme, comme la gouvernance, et compte `pseudonymized_act_rows`. Suite `tests/sql/effacement_compte_fk_tests.sql` : T1 relit `pg_constraint` (**liste vivante** : une FK nouvelle non citée par la fonction fait rougir), T2–T5 effacent un compte qui a créé un éditeur et déposé une demande d'entrée. Premier run rouge sur le jeu d'essai (contraintes de `library_requests`), reproduit et corrigé en local avec le lanceur de la CI (`1fa81534`, 5/5). **CI verte** (sql-tests, rejeu-image, backend) ; **migration appliquée en production** (`schema_migrations` = `20260922214500`, corps de la fonction relu). Cas réel : le compte contributeur d'essai de l'essai de bascule s'est supprimé depuis sa page à 20 h 54 (`erasure_log`), avant la migration — il n'avait rien proposé ; le cas d'un compte ayant agi est couvert par la suite, pas encore par un compte réel. |
+| I27 | 2026-09-22 | **Clos le 22/09 : les trois critères tenus, les deux derniers par Xavier, chacun avec sa preuve.** *(1)* `--essai` : « dry-run ok » sur `app.anarbib.org`, `app.anarbib.is`, `app.anarbib.org.br` — après un premier refus instructif : un jeton à la seule permission `repository` lecture-écriture lisait le dépôt (`push: true` vu par l'API) mais git-pages commence par `GET /api/v1/user`, qui exige **`user` lecture** ; Codeberg répondait 403 et le serveur refusait. *(2)* Publication réelle sur le seul domaine de repli : `--sans-build --site https://app.anarbib.is/` → « result: replaced ». **Preuve** : `https://app.anarbib.is/.version-front` rend `68b18cf8` — un fichier que seul `publier-front.sh` écrit, et que le canonique publié par la CI n'a pas (il y répond par `index.html`, le repli SPA) ; bundle servi `index-B3w3O5ED.js`, le même que sur `app.anarbib.org` ; `Last-Modified` à l'heure du tir. Aucun changement pour les lectrices : c'est le `dist/` du même front. Nuance honnête : le bundle avait été construit sur `4ba95b8f` et le tampon porte `68b18cf8`, deux commits de documentation plus tard — le front est identique, le tampon dit le HEAD au moment de publier. *(3)* Jeton `publier-front-hors-forge` (Codeberg, permissions `repository` lecture-écriture + `user` lecture), dans `~/anarbib-ops/git-pages.token` (chmod 600) et Dashlane ; consigne dans l'en-tête du script. Le chemin de secours du front existe désormais pour de vrai — emprunté un jour calme. |
 
 ---
 
@@ -2268,4 +2246,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

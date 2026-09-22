@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-21** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-21** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 10
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 9
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 8
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-21.** **58 itens de 71** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-21.** **57 itens de 70** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1607,7 +1607,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
 | **I25** | A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada | `P3` | Aberto |
-| **I27** | O caminho de socorro do front nunca publicou de verdade — `publier-front.sh` espera o seu primeiro tiro | `P2` | Aberto |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1778,28 +1777,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Nenhuma.
 
 *Remissões : `scripts/ci/run-sql-suites.sh` · `.forgejo/workflows/sql-tests.yml` · `REGISTRE §0 DOC-SILENCE-1` · `REGISTRE §0 OPS-8`*
-
-#### I27 — O caminho de socorro do front nunca publicou de verdade — `publier-front.sh` espera o seu primeiro tiro
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** `scripts/ci/publier-front.sh` (21/09, commit `0bd79bd3`) repete fora da forja o job `app` da CI. **Executados em 21/09**: a recusa sem a chave publicável, a construção (392 ficheiros, 23 MB), `--simulation`, `--vers-dossier`. **Nunca executada**: a própria publicação — precisa de um token Codeberg, que não se confia a uma sessão.
-
-*Verificado : [object Object],[object Object],[object Object]*
-
-**O que é.** Num dia calmo, por uma pessoa: `GIT_PAGES_TOKEN=… scripts/ci/publier-front.sh --essai` nos três sites. Se passar, uma publicação real só em `app.anarbib.is` (`--site`), e o controlo do nome com hash do bundle. Anotar aqui que token serve e onde se guarda, e se a via `GIT_PAGES_PASSWORD` (desafio DNS) merece ser preparada.
-
-**Por que importa.** Um caminho nunca percorrido não é um caminho que funciona, e este só servirá num dia de avaria — o runner da CI roda no posto do mantenedor (A3).
-
-**O que conta como terminado.**
-
-- `--essai` aceite pelo servidor nos três sites, saída registada aqui.
-- Uma publicação real feita por este caminho, verificada pelo nome com hash do bundle servido.
-- O token a usar e onde se guarda estão escritos.
-
-**Dependências.** Sai de **I2**. Primo de **A3**.
-
-*Remissões : `scripts/ci/publier-front.sh` · `src/tests/publier-front-coherence.test.js` · `deploy/README.md §4` · `journal/operations/NOTE_pins-images-remesures_2026-09-21 §8`*
 
 ---
 
@@ -2219,6 +2196,7 @@ CI verde. |
 | I26 | 2026-09-21 | **Fechado em 21/09, na mesma noite da abertura — os três « acabado quando » cumpridos, cada um com a sua medida.** Decisão de Xavier: a via da lista no repositório em vez de um quarto ficheiro de dump. *(1) A questão dos segredos*: medido em produção, **0 segredos literais e 0 URL fixas nos 38 comandos**; só um lê um segredo (`anarbib-health-probe`), na execução, em `vault.decrypted_secrets`. *(2) O que foi entregue* (commit `2237d433`, migração `20260921193147`): uma migração sozinha nada podia — restaurada com o seu histórico, fica inscrita como « feita » e não se repete; daí uma **função**, que viaja no dump com o esquema. `private.fn_crons_attendus()` leva nome, horário, comando e estado dos 38 jobs, levantados em produção (impressão md5 `bf25c87f…`, recalculada pela própria migração); `private.fn_crons_replanifier()`, SECURITY DEFINER para que os jobs pertençam a `postgres` como em produção, só toca nos jobs ausentes, diferentes ou inativos, assinala os inesperados e nunca retira nada. `restore.sh` chama-a (etapa « 3 ter »); `bootstrap.sh` repete a suíte dos crons na verificação final (controlo h) e **fica vermelho** se faltarem. A suíte `crons_planifies_tests.sql` ganha T7 e T8. *(3) Provado*: bancada SQL completa; depois **ida e volta real sobre `pg_cron`** — pilha construída a partir do repositório, despejada pela CLI (0 linhas de `cron.job` no dump, a função está lá), desmontada, restaurada: « 3 ter OK — 38 jobs », controlo (h) verde; contraprova, tabela esvaziada → vermelho, função → verde. *Em produção*: migração aplicada pela CI, `fn_crons_replanifier()` devolve `deja_en_place: 38, planifies: []`, e a impressão de `cron.job` não mudou. **O que este fecho não cobre**: a ida e volta foi feita numa pilha sem dados; a restauração de um dump da *produção* posterior a esta migração não foi repetida. |
 | E22 | 2026-09-22 | **Fechado em 22/09: a folha está nomeada, a chaveta retirada, e uma guarda fica vermelha antes do build.** Encontrada contando as chavetas de cada folha de `src/`: `src/pages/painel/PanelPage.css`, linha 632 — uma chaveta de fecho que ficou sozinha quando a regra `.ab-painel-tab-divider` foi substituída por um comentário (commit `83e68421`, 15/09). Efeito nos navegadores: nenhum; efeito real: um aviso que se aprende a não ler. Retirada, `npm run build` já não devolve o aviso. `src/tests/css-accolades-equilibrees.test.js` percorre cada folha e fica vermelho nomeando folha e linha — antes do build, na CI. |
 | B28 | 2026-09-22 | **Encerrado em 22/09 à noite, sobre medida.** Levantamento completo de `pg_constraint` em produção: **26 colunas em 20 tabelas** com FK para `profiles` ou `auth.users` em NO ACTION ou RESTRICT que `fn_delete_my_account` não redirecionava — `authority_proposals.proposed_by` à frente. Migração `20260922214500` (`4f68cbfe`), partindo da definição real: bloco « ATOS NOMEADOS » redireciona as 26 colunas para o token pseudônimo. Suíte `effacement_compte_fk_tests.sql`: T1 relê `pg_constraint` (lista viva), T2–T5 apagam uma conta que agiu; jogo de teste corrigido em `1fa81534` (5/5). CI verde; migração aplicada em produção. A conta de teste do ensaio se excluiu pela página às 20h54, antes da migração — não tinha proposto nada. |
+| I27 | 2026-09-22 | **Fechado em 22/09: os três critérios cumpridos, os dois últimos por Xavier, cada um com a sua prova.** *(1)* `--essai`: « dry-run ok » nos três sites — depois de uma recusa instrutiva: um token só com `repository` leitura-escrita lia o repositório (`push: true`), mas o git-pages começa por `GET /api/v1/user`, que exige **`user` leitura**. *(2)* Publicação real só no domínio de recurso: `--sans-build --site https://app.anarbib.is/` → « result: replaced ». **Prova**: `https://app.anarbib.is/.version-front` devolve `68b18cf8` — um ficheiro que só `publier-front.sh` escreve, e que o canónico publicado pela CI não tem; bundle servido `index-B3w3O5ED.js`, o mesmo que em `app.anarbib.org`. Nenhuma mudança para as leitoras. *(3)* Token `publier-front-hors-forge` (`repository` leitura-escrita + `user` leitura), em `~/anarbib-ops/git-pages.token` e no Dashlane. O caminho de socorro do front existe agora de verdade — percorrido num dia calmo. |
 
 ---
 
@@ -2250,4 +2228,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-09-21 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2a9681e5`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-21 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2a9681e5`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

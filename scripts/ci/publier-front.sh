@@ -52,11 +52,12 @@
 #   GIT_PAGES_PASSWORD             autre voie d'autorisation de git-pages (défi
 #                                  DNS), si le jeton de forge n'est pas disponible.
 #
-# ⚠️ ÉTAT AU 22/09/2026 : construction, `--simulation` et `--essai` exécutés —
-# le 22/09 le serveur a accepté l'autorisation sur les trois sites (« dry-run
-# ok ») avec le jeton de Xavier. La publication réelle par ce chemin ne l'a PAS
-# encore été. Un chemin jamais emprunté n'est pas un chemin qui marche : le
-# premier tir réel doit se faire un jour calme, pas un jour de panne.
+# ÉTAT AU 22/09/2026 : chemin emprunté de bout en bout. `--essai` accepté sur
+# les trois sites (« dry-run ok »), puis une publication réelle sur
+# app.anarbib.is (« result: replaced ») : le site a servi `.version-front`
+# (fichier que seul ce script écrit) et le même bundle que le canonique. Le
+# premier tir a été fait un jour calme ; c'est pour ça qu'il marchera un jour
+# de panne.
 # =============================================================================
 
 set -uo pipefail

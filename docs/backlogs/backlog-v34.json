@@ -2186,6 +2186,14 @@
           "fr": "**Clos le 22/09 au soir, sur mesure.** Trouvé le jour même en câblant la suppression de compte sur la page contributeur (`310be843`). Relevé complet de `pg_constraint` en production : **26 colonnes dans 20 tables** portaient une FK vers `profiles` ou `auth.users` en NO ACTION ou RESTRICT que `fn_delete_my_account` ne re-pointait pas — `authority_proposals.proposed_by` en tête (tout·e contributeur·ice ayant proposé une chose ne pouvait pas s'effacer), `library_requests.submitted_by_user_id` (RESTRICT), les éditeurs créés au catalogage, les messages archivés… Une première lecture des codes de `confdeltype` était fausse (deux tables nommées à tort, en SET NULL) ; rectifiée avant la migration. Migration `20260922214500_b28_l_effacement_repointe_tout_acte_sur_le_jeton` (`4f68cbfe`), repartie de la définition réelle : bloc « ACTES NOMMÉS » qui re-pointe les 26 colonnes sur le jeton pseudonyme, comme la gouvernance, et compte `pseudonymized_act_rows`. Suite `tests/sql/effacement_compte_fk_tests.sql` : T1 relit `pg_constraint` (**liste vivante** : une FK nouvelle non citée par la fonction fait rougir), T2–T5 effacent un compte qui a créé un éditeur et déposé une demande d'entrée. Premier run rouge sur le jeu d'essai (contraintes de `library_requests`), reproduit et corrigé en local avec le lanceur de la CI (`1fa81534`, 5/5). **CI verte** (sql-tests, rejeu-image, backend) ; **migration appliquée en production** (`schema_migrations` = `20260922214500`, corps de la fonction relu). Cas réel : le compte contributeur d'essai de l'essai de bascule s'est supprimé depuis sa page à 20 h 54 (`erasure_log`), avant la migration — il n'avait rien proposé ; le cas d'un compte ayant agi est couvert par la suite, pas encore par un compte réel.",
           "pt": "**Encerrado em 22/09 à noite, sobre medida.** Levantamento completo de `pg_constraint` em produção: **26 colunas em 20 tabelas** com FK para `profiles` ou `auth.users` em NO ACTION ou RESTRICT que `fn_delete_my_account` não redirecionava — `authority_proposals.proposed_by` à frente. Migração `20260922214500` (`4f68cbfe`), partindo da definição real: bloco « ATOS NOMEADOS » redireciona as 26 colunas para o token pseudônimo. Suíte `effacement_compte_fk_tests.sql`: T1 relê `pg_constraint` (lista viva), T2–T5 apagam uma conta que agiu; jogo de teste corrigido em `1fa81534` (5/5). CI verde; migração aplicada em produção. A conta de teste do ensaio se excluiu pela página às 20h54, antes da migração — não tinha proposto nada."
         }
+      ],
+      [
+        "I27",
+        "2026-09-22",
+        {
+          "fr": "**Clos le 22/09 : les trois critères tenus, les deux derniers par Xavier, chacun avec sa preuve.** *(1)* `--essai` : « dry-run ok » sur `app.anarbib.org`, `app.anarbib.is`, `app.anarbib.org.br` — après un premier refus instructif : un jeton à la seule permission `repository` lecture-écriture lisait le dépôt (`push: true` vu par l'API) mais git-pages commence par `GET /api/v1/user`, qui exige **`user` lecture** ; Codeberg répondait 403 et le serveur refusait. *(2)* Publication réelle sur le seul domaine de repli : `--sans-build --site https://app.anarbib.is/` → « result: replaced ». **Preuve** : `https://app.anarbib.is/.version-front` rend `68b18cf8` — un fichier que seul `publier-front.sh` écrit, et que le canonique publié par la CI n'a pas (il y répond par `index.html`, le repli SPA) ; bundle servi `index-B3w3O5ED.js`, le même que sur `app.anarbib.org` ; `Last-Modified` à l'heure du tir. Aucun changement pour les lectrices : c'est le `dist/` du même front. Nuance honnête : le bundle avait été construit sur `4ba95b8f` et le tampon porte `68b18cf8`, deux commits de documentation plus tard — le front est identique, le tampon dit le HEAD au moment de publier. *(3)* Jeton `publier-front-hors-forge` (Codeberg, permissions `repository` lecture-écriture + `user` lecture), dans `~/anarbib-ops/git-pages.token` (chmod 600) et Dashlane ; consigne dans l'en-tête du script. Le chemin de secours du front existe désormais pour de vrai — emprunté un jour calme.",
+          "pt": "**Fechado em 22/09: os três critérios cumpridos, os dois últimos por Xavier, cada um com a sua prova.** *(1)* `--essai`: « dry-run ok » nos três sites — depois de uma recusa instrutiva: um token só com `repository` leitura-escrita lia o repositório (`push: true`), mas o git-pages começa por `GET /api/v1/user`, que exige **`user` leitura**. *(2)* Publicação real só no domínio de recurso: `--sans-build --site https://app.anarbib.is/` → « result: replaced ». **Prova**: `https://app.anarbib.is/.version-front` devolve `68b18cf8` — um ficheiro que só `publier-front.sh` escreve, e que o canónico publicado pela CI não tem; bundle servido `index-B3w3O5ED.js`, o mesmo que em `app.anarbib.org`. Nenhuma mudança para as leitoras. *(3)* Token `publier-front-hors-forge` (`repository` leitura-escrita + `user` leitura), em `~/anarbib-ops/git-pages.token` e no Dashlane. O caminho de socorro do front existe agora de verdade — percorrido num dia calmo."
+        }
       ]
     ]
   },
@@ -5102,68 +5110,6 @@
         "fr": "16/09 — journal du run 7092391 lu en entier (`sql-tests-sql-tests-9589171.log`), filet rejoué hors CI dans deux environnements, ticket #17 refermé au vert de la relance.",
         "pt": "16/09 — log do run 7092391 lido por inteiro, rede reproduzida fora da CI em dois ambientes, ticket #17 fechado no verde do relance."
       }
-    },
-    {
-      "id": "I27",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Le chemin de secours du front n'a jamais publié pour de vrai — `publier-front.sh` attend son premier tir",
-        "pt": "O caminho de socorro do front nunca publicou de verdade — `publier-front.sh` espera o seu primeiro tiro"
-      },
-      "v": {
-        "fr": "`scripts/ci/publier-front.sh` (21/09, commit `0bd79bd3`) rejoue hors forge le job `app` de la CI : construire, puis publier sur les trois sites par `git-pages-cli`, l'image que l'action de la forge appelle. **Exécutés le 21/09** : le refus sans la clé publiable, la construction (392 fichiers, 23 Mo), `--simulation`, `--vers-dossier`. **Jamais exécutée** : la publication elle-même — il y faut un jeton Codeberg, qui ne se confie pas à une session. La garde `publier-front-coherence` tient la liste des sites égale à celle de `ci.yml` ; elle ne dit rien de l'autorisation.",
-        "pt": "`scripts/ci/publier-front.sh` (21/09, commit `0bd79bd3`) repete fora da forja o job `app` da CI. **Executados em 21/09**: a recusa sem a chave publicável, a construção (392 ficheiros, 23 MB), `--simulation`, `--vers-dossier`. **Nunca executada**: a própria publicação — precisa de um token Codeberg, que não se confia a uma sessão."
-      },
-      "w": {
-        "fr": "Un jour calme, par une personne : `GIT_PAGES_TOKEN=… scripts/ci/publier-front.sh --essai` (le `--dry-run` du serveur : l'autorisation est vérifiée, rien n'est publié), sur les trois sites. Si l'essai passe, une publication réelle sur `app.anarbib.is` seul (`--site`), puis le contrôle du nom haché du bundle que le script imprime. Noter ici quel jeton convient (portée, durée) et où il se range (Dashlane), et si la voie `GIT_PAGES_PASSWORD` (défi DNS, sans forge) mérite d'être préparée.",
-        "pt": "Num dia calmo, por uma pessoa: `GIT_PAGES_TOKEN=… scripts/ci/publier-front.sh --essai` nos três sites. Se passar, uma publicação real só em `app.anarbib.is` (`--site`), e o controlo do nome com hash do bundle. Anotar aqui que token serve e onde se guarda, e se a via `GIT_PAGES_PASSWORD` (desafio DNS) merece ser preparada."
-      },
-      "y": {
-        "fr": "Un chemin jamais emprunté n'est pas un chemin qui marche, et celui-ci ne servira qu'un jour de panne — le runner de la CI tourne sur le poste du mainteneur (A3). Le découvrir cassé ce jour-là, c'est le découvrir trop tard.",
-        "pt": "Um caminho nunca percorrido não é um caminho que funciona, e este só servirá num dia de avaria — o runner da CI roda no posto do mantenedor (A3)."
-      },
-      "f": {
-        "fr": [
-          "`--essai` accepté par le serveur sur les trois sites, sortie consignée ici.",
-          "Une publication réelle faite par ce chemin, vérifiée par le nom haché du bundle servi.",
-          "Le jeton à employer et son rangement sont écrits."
-        ],
-        "pt": [
-          "`--essai` aceite pelo servidor nos três sites, saída registada aqui.",
-          "Uma publicação real feita por este caminho, verificada pelo nome com hash do bundle servido.",
-          "O token a usar e onde se guarda estão escritos."
-        ]
-      },
-      "dep": {
-        "fr": "Sort de **I2** (découpler la CI, 21/09). Cousin de **A3** (tout tourne sur la machine du mainteneur).",
-        "pt": "Sai de **I2**. Primo de **A3**."
-      },
-      "r": [
-        "scripts/ci/publier-front.sh",
-        "src/tests/publier-front-coherence.test.js",
-        "deploy/README.md §4",
-        "journal/operations/NOTE_pins-images-remesures_2026-09-21 §8"
-      ],
-      "verif": [
-        {
-          "fr": "21/09 — construction, `--simulation` et `--vers-dossier` exécutés dans la séance ; image `git-pages-cli:1.10.0` inspectée (pas de shell, options `--dry-run`, `--token`, `--password-file`). Publication réelle : non faite.",
-          "pt": "21/09 — construção, `--simulation` e `--vers-dossier` executados na sessão; imagem `git-pages-cli:1.10.0` inspecionada. Publicação real: não feita."
-        },
-        {
-          "fr": "22/09 — **la doc du serveur git-pages (README, « Authorization ») dit quel jeton convient, et lève le doute.** Hors d'un workflow, c'est la règle 7, *Forge Authorization (DNS allowlist)* : le serveur lit le TXT `_git-pages-forge-allowlist.<domaine>` (posé pour nos trois domaines), puis vérifie **par un appel à l'API de la forge** que le jeton reçu « accorde le push » sur l'un des dépôts listés. Un **jeton d'accès Codeberg** d'un compte qui a le droit de pousser sur `anarbib/anarbib` suffit donc ; portée à donner : `repository` en lecture *et* écriture (l'API lit `permissions.push`). Et `--essai` (`--dry-run`, en-tête `Dry-Run: yes`) est tenu côté serveur : « seuls les contrôles d'autorisation sont exécutés, aucune mise à jour ». Le geste, pour la personne qui a le jeton : le poser dans `~/anarbib-ops/git-pages.token` (chmod 600, hors dépôt), puis `GIT_PAGES_TOKEN=$(cat ~/anarbib-ops/git-pages.token) scripts/ci/publier-front.sh --essai` — trois lignes « autorisation acceptée, rien publié » ferment le premier critère. Sans jeton, rien de plus ne peut être fait d'ici.",
-          "pt": "22/09 — **a documentação do servidor git-pages diz que token serve.** Fora de um workflow é a regra 7, *Forge Authorization (DNS allowlist)*: o servidor lê o TXT `_git-pages-forge-allowlist.<domínio>` e verifica **por chamada à API da forja** que o token « concede push » no repositório. Um **token de acesso Codeberg** de uma conta com direito de push em `anarbib/anarbib` basta; âmbito `repository` leitura *e* escrita. E `--essai` (`--dry-run`) é garantido pelo servidor: só os controlos de autorização. O gesto: pôr o token em `~/anarbib-ops/git-pages.token` (chmod 600), depois `GIT_PAGES_TOKEN=$(cat ~/anarbib-ops/git-pages.token) scripts/ci/publier-front.sh --essai`. Sem token, nada mais pode ser feito daqui."
-        },
-        {
-          "fr": "22/09, soir — **premier et troisième critères tenus, par Xavier.** Premier tir avec un jeton à la seule permission `repository` lecture-écriture : refusé sur les trois sites, « cannot fetch authorized forge user: GET https://codeberg.org/api/v1/user returned 403 » — vérifié à part : le même jeton lisait le dépôt et l'API y voyait `push: true`, mais `/user` exige la permission **`user` lecture**, que git-pages appelle en premier pour identifier le compte. Jeton refait avec les deux permissions ; second tir `--sans-build --essai` : **« dry-run ok » sur `app.anarbib.org`, `app.anarbib.is`, `app.anarbib.org.br`**, rien publié. Le jeton s'appelle `publier-front-hors-forge` sur Codeberg, vit dans `~/anarbib-ops/git-pages.token` (chmod 600, hors dépôt) et dans Dashlane ; la consigne est dans l'en-tête du script. **Reste le deuxième critère** : une publication réelle par ce chemin, vérifiée par le nom haché du bundle servi — `--sans-build --site https://app.anarbib.is/` sur le seul domaine de repli, quand Xavier le décide.",
-          "pt": "22/09, noite — **primeiro e terceiro critérios cumpridos, por Xavier.** Primeiro tiro com um token só com `repository` leitura-escrita: recusado nos três sites, « GET /api/v1/user returned 403 » — o mesmo token lia o repositório com `push: true`, mas `/user` exige a permissão **`user` leitura**, que o git-pages chama primeiro para identificar a conta. Token refeito com as duas permissões; segundo tiro `--sans-build --essai`: **« dry-run ok » nos três sites**, nada publicado. O token chama-se `publier-front-hors-forge`, vive em `~/anarbib-ops/git-pages.token` (chmod 600) e no Dashlane. **Resta o segundo critério**: uma publicação real por este caminho, verificada pelo nome com hash do bundle servido — só em `app.anarbib.is`, quando Xavier decidir."
-        }
-      ]
     },
     {
       "id": "F10",
