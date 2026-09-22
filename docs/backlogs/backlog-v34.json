@@ -5861,6 +5861,55 @@
           "pt": "21/09 — **diagnosticado, reparado e verificado em produção; dois critérios em três cumpridos, o terceiro espera um dia de tráfego.** *Medido antes* (sob `set local role anon`, página por defeito do front): 1 obra = 2 106 ms, 50 obras = **3 533 ms** e 579 758 blocos temporários lidos (~4,4 GB), 200 obras = **27 311 ms** (~70 GB); a view sozinha devolve as suas 2 651 linhas em 5 ms. *Duas causas, na consulta*: (1) um custo **quadrático** — `library_names` relia todo o CTE `filtered` para CADA grupo da página, e `filtered` arrastava a linha inteira da view em jsonb; (2) um piso de **1,3 s** — `fn_work_display_title` chamada uma vez por obra do catálogo (2 449 chamadas). *Reparado* pela migração `20260921111344` (`1fb565b2`): `src` sem `row_json`, título num só passo (mesma cascata — **24 490 comparações, 0 diferenças**), edições e bibliotecas lidas só nas linhas da página; jsonb **igual** ao da função antiga. *Medido depois, em produção, sob o prazo real de 3 s*: 50 obras = **380 ms**, 200 = **460 ms**, nenhum ficheiro temporário; pela API REST com a chave anónima: HTTP 200 em 0,6 a 0,9 s. **Primeiro critério: cumprido. Terceiro: cumprido do lado da vigilância** — a sonda `catalogue_par_oeuvre` de `health-probe` (`5111ac5f`) chama a RPC de cinco em cinco minutos em anónimo. **Segundo: a reler** — nenhum `57014` nesta RPC durante um dia de tráfego real, a verificar em `postgres_logs` a partir de 22/09."
         }
       ]
+    },
+    {
+      "id": "B28",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "`fn_delete_my_account` échoue pour qui a signalé un doublon d'autorité ou proposé une fiche de bibliothèque — deux FK en NO ACTION",
+        "pt": "`fn_delete_my_account` falha para quem sinalizou uma autoridade duplicada ou propôs uma ficha de biblioteca — duas FK em NO ACTION"
+      },
+      "v": {
+        "fr": "**Trouvé le 22/09/2026** en câblant la suppression de compte sur la page contributeur (même RPC que la page lecteur). Relevé en production (`pg_constraint`, lecture seule) des clés étrangères vers `profiles`/`auth.users` que la fonction ne re-pointe pas avant `DELETE FROM profiles` : `authority_duplicate_reports.reported_by` et `.closed_by`, `library_profile_proposals.proposed_by` et `.cancelled_by` — toutes quatre en **NO ACTION**. Une personne qui a signalé un doublon d'autorité, ou proposé une modification de fiche de bibliothèque, verra sa suppression refusée par une violation de FK, avec un message brut. Les autres tables sont couvertes : `authority_proposals.proposed_by` et `authority_proposal_objections.objecting_by` sont en SET NULL, `network_contributors.user_id` en CASCADE (et re-pointé sur le jeton par la fonction), la gouvernance est pseudonymisée. La fonction en production fait 7 024 caractères ; sa définition réelle (`pg_get_functiondef`) a été lue le 22/09 — repartir d'elle, pas du baseline.",
+        "pt": "**Encontrado em 22/09/2026** ao ligar a exclusão de conta na página de contribuinte (mesma RPC da página de leitor). Levantamento em produção das FK para `profiles`/`auth.users` que a função não redireciona antes do `DELETE FROM profiles`: `authority_duplicate_reports.reported_by`/`closed_by` e `library_profile_proposals.proposed_by`/`cancelled_by`, todas em **NO ACTION**. Quem sinalizou uma autoridade duplicada ou propôs uma alteração de ficha de biblioteca terá a exclusão recusada por violação de FK, com mensagem bruta. As outras tabelas estão cobertas. Partir da definição real (`pg_get_functiondef`), não do baseline."
+      },
+      "w": {
+        "fr": "Migration : dans `fn_delete_my_account`, re-pointer ces quatre colonnes sur le jeton pseudonyme (`v_token`), comme la gouvernance, avant l'effacement ; compter les lignes dans le retour. Suite SQL : un compte qui a signalé un doublon et proposé une fiche se supprime, les lignes portent le jeton, `erasure_log` a sa ligne. Garde : une requête qui liste les FK vers `profiles`/`auth.users` en NO ACTION ou RESTRICT et échoue si l'une n'est pas citée dans la fonction.",
+        "pt": "Migração: em `fn_delete_my_account`, redirecionar essas quatro colunas para o token pseudônimo (`v_token`), como a governança, antes do apagamento. Suíte SQL: uma conta que sinalizou uma duplicata e propôs uma ficha se exclui, as linhas trazem o token. Guarda: uma consulta que lista as FK para `profiles`/`auth.users` em NO ACTION ou RESTRICT e falha se alguma não for citada na função."
+      },
+      "y": {
+        "fr": "Le droit à l'effacement ne souffre pas d'exception silencieuse : une suppression qui échoue sur une contrainte est une promesse de la politique de confidentialité non tenue, et l'usager n'a aucun moyen de comprendre le message.",
+        "pt": "O direito ao apagamento não admite exceção silenciosa: uma exclusão que falha numa restrição é uma promessa da política de privacidade não cumprida."
+      },
+      "f": {
+        "fr": [
+          "Un compte ayant une ligne dans chacune des quatre colonnes se supprime, en suite SQL et en production (compte d'essai).",
+          "La garde des FK non couvertes est verte et rouge si on retire une ligne de la fonction."
+        ],
+        "pt": [
+          "Uma conta com uma linha em cada uma das quatro colunas se exclui, na suíte SQL e em produção (conta de teste).",
+          "A guarda das FK não cobertas está verde, e vermelha se uma linha for retirada da função."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "supabase/migrations (fn_delete_my_account, définition réelle du 22/09)",
+        "src/pages/account/ContributorAccountPage.jsx",
+        "src/pages/account/AccountPage.jsx"
+      ],
+      "verif": {
+        "fr": "22/09 — `pg_constraint` en production, filtre `conrelid ~ 'authority|contributor|proposal'` (relevé partiel : les autres tables à FK NO ACTION vers profiles restent à lister, c'est l'objet de la garde) ; définition réelle lue par `pg_get_functiondef`.",
+        "pt": "22/09 — `pg_constraint` em produção (levantamento parcial, o resto é objeto da guarda); definição real lida por `pg_get_functiondef`."
+      }
     }
   ]
 }

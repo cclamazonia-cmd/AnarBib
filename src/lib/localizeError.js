@@ -258,10 +258,25 @@ export function localizeError(err, t, actionFallbackKey) {
     const wpCode = (typeof err === 'object' && typeof err.code === 'string') ? err.code : '';
     const wpMsg = (typeof err === 'object' && typeof err.message === 'string') ? err.message
       : (typeof err === 'string' ? err : '');
+    // 22/09/2026 — deux refus de Supabase Auth se ressemblent et ne disent pas la
+    // même chose. « New password should be different from the old password. »
+    // (code same_password) : même mot de passe qu'avant. « Password is known to
+    // be weak and easy to guess, please choose a different one. » (code
+    // weak_password, reasons ['pwned'] / ['length']) : mot de passe FAIBLE. Les
+    // formulaires testaient le mot « different » et montraient le premier message
+    // pour le second cas. On lit le code et les raisons, pas les mots.
+    if (wpCode === 'same_password' || /old password/i.test(wpMsg)) {
+      const translated = tryTranslate(t, 'auth.resetSamePassword');
+      if (translated) return translated;
+    }
+    const wpReasons = (typeof err === 'object' && Array.isArray(err.reasons)) ? err.reasons
+      : (typeof err === 'object' && Array.isArray(err.weak_password?.reasons)) ? err.weak_password.reasons : [];
     if (wpCode === 'weak_password'
+        || wpReasons.length > 0
         || /weak[_\s-]?password/i.test(wpMsg)
-        || /password should contain/i.test(wpMsg)) {
-      const translated = tryTranslate(t, 'auth.passwordPolicy');
+        || /easy to guess/i.test(wpMsg)
+        || /password should/i.test(wpMsg)) {
+      const translated = tryTranslate(t, wpReasons.includes('pwned') ? 'auth.passwordPwned' : 'auth.passwordPolicy');
       if (translated) return translated;
     }
   }

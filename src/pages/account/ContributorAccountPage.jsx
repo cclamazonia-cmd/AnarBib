@@ -12,7 +12,7 @@
 // styles ab-conta-* de l'AccountPage.
 // ============================================================================
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
@@ -38,6 +38,7 @@ export default function ContributorAccountPage({ nc }) {
   const { formatMessage } = useIntl();
   const t = (d, v) => formatMessage(d, v);
   const { user } = useAuth();
+  const navigate = useNavigate();
   useDocumentTitle(t({ id: 'contributor.conta.pageTitle', defaultMessage: 'Mon compte contributeur' }));
 
   const [form, setForm] = useState({ first_name: '', last_name: '', email: '', phone: '', affiliation_org: '' });
@@ -46,6 +47,25 @@ export default function ContributorAccountPage({ nc }) {
   const [pwdMsg, setPwdMsg] = useState(''); const [pwdErr, setPwdErr] = useState(false); const [pwdSaving, setPwdSaving] = useState(false);
   const [consent, setConsent] = useState(false); const [consentSaving, setConsentSaving] = useState(false);
   const [proposals, setProposals] = useState(null);
+  const [deleting, setDeleting] = useState(false); const [deleteConfirm, setDeleteConfirm] = useState('');
+
+  // Suppression du compte — même RPC et même garde-fou que la page lecteur
+  // (AccountPage) : `fn_delete_my_account` pseudonymise les actes de gouvernance
+  // et les propositions, puis efface le profil et le compte. Manquait ici : un
+  // contributeur sans bibliothèque ne pouvait pas supprimer son compte (22/09/2026).
+  async function deleteAccount() {
+    if (deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' })) return;
+    if (!confirm(t({ id: 'account.deleteAccount.confirmDialog' }))) return;
+    setDeleting(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_delete_my_account');
+      if (error) throw error;
+      if (data?.ok === false) { alert(data.error || t({ id: 'account.reserve.deleteError' })); setDeleting(false); return; }
+      await supabase.auth.signOut();
+      sessionStorage.removeItem('anarbib.libraryContext');
+      navigate('/');
+    } catch (err) { alert(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) })); setDeleting(false); }
+  }
 
   // Charge le profil (identité + consentement) dans le formulaire.
   useEffect(() => {
@@ -247,6 +267,28 @@ export default function ContributorAccountPage({ nc }) {
                   {t({ id: 'contributor.conta.privacy.link', defaultMessage: 'Politique de confidentialité' })}
                 </Link>
               </div>
+            </div>
+
+            {/* Suppression du compte — zone destructive isolée tout en bas, comme sur la page lecteur */}
+            <div style={{ marginTop: 40, padding: 22, borderRadius: 10, background: 'rgba(220,38,38,.04)', border: '1px solid rgba(220,38,38,.15)' }}>
+              <h4 style={{ margin: '0 0 6px', fontSize: '.95rem', fontWeight: 700, color: '#f87171', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'account.deleteAccount.title' })}</h4>
+              <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 12px' }}>{t({ id: 'account.deleteAccount.warning' })}</p>
+              <div style={{ marginBottom: 10 }}>
+                <label style={{ fontSize: '.85rem', fontWeight: 600, display: 'block', marginBottom: 4, color: 'var(--brand-muted)' }}>
+                  {t({ id: 'account.deleteAccount.confirmLabel' })}
+                </label>
+                <input type="text" value={deleteConfirm} onChange={e => setDeleteConfirm(e.target.value)}
+                  placeholder={t({ id: 'account.deleteAccount.confirmText' })}
+                  style={{ width: 200, padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(220,38,38,.3)', background: 'rgba(0,0,0,.2)', color: 'inherit' }} />
+              </div>
+              <button type="button" onClick={deleteAccount}
+                disabled={deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' }) || deleting}
+                style={{ padding: '10px 20px', borderRadius: 8, fontSize: '.9rem', fontWeight: 700, border: 'none',
+                  cursor: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) && !deleting ? 'pointer' : 'not-allowed',
+                  background: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'rgba(220,38,38,.85)' : 'rgba(220,38,38,.15)',
+                  color: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? '#fff' : 'rgba(255,255,255,.35)' }}>
+                {deleting ? t({ id: 'account.deleteAccount.deleting' }) : t({ id: 'account.deleteAccount.button' })}
+              </button>
             </div>
 
           </div>

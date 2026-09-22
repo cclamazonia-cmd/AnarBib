@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-21** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-21** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 4
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 5
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 12
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-21.** **59 itens de 72** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-21.** **60 itens de 73** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, B28, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -348,6 +348,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
 | **B27** | `api.catalog_works_v1` ultrapassa o prazo de 3 s do papel anónimo: o catálogo por obra falha em silêncio e a página recai na lista plana | `P1` | Em curso |
+| **B28** | `fn_delete_my_account` falha para quem sinalizou uma autoridade duplicada ou propôs uma ficha de biblioteca — duas FK em NO ACTION | `P2` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -436,6 +437,27 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Encontrado ao verificar **E17**. Toca **C11** e a obra OPAC por obra; primo de **B10**.
 
 *Remissões : `api.catalog_works_v1` · `src/pages/public/CatalogPage.jsx (worksServer, repli)` · `src/lib/catalogueFallback.js` · `anarbib-capacite-plafonds-mesures`*
+
+#### B28 — `fn_delete_my_account` falha para quem sinalizou uma autoridade duplicada ou propôs uma ficha de biblioteca — duas FK em NO ACTION
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** **Encontrado em 22/09/2026** ao ligar a exclusão de conta na página de contribuinte (mesma RPC da página de leitor). Levantamento em produção das FK para `profiles`/`auth.users` que a função não redireciona antes do `DELETE FROM profiles`: `authority_duplicate_reports.reported_by`/`closed_by` e `library_profile_proposals.proposed_by`/`cancelled_by`, todas em **NO ACTION**. Quem sinalizou uma autoridade duplicada ou propôs uma alteração de ficha de biblioteca terá a exclusão recusada por violação de FK, com mensagem bruta. As outras tabelas estão cobertas. Partir da definição real (`pg_get_functiondef`), não do baseline.
+
+*Verificado : 22/09 — `pg_constraint` em produção (levantamento parcial, o resto é objeto da guarda); definição real lida por `pg_get_functiondef`.*
+
+**O que é.** Migração: em `fn_delete_my_account`, redirecionar essas quatro colunas para o token pseudônimo (`v_token`), como a governança, antes do apagamento. Suíte SQL: uma conta que sinalizou uma duplicata e propôs uma ficha se exclui, as linhas trazem o token. Guarda: uma consulta que lista as FK para `profiles`/`auth.users` em NO ACTION ou RESTRICT e falha se alguma não for citada na função.
+
+**Por que importa.** O direito ao apagamento não admite exceção silenciosa: uma exclusão que falha numa restrição é uma promessa da política de privacidade não cumprida.
+
+**O que conta como terminado.**
+
+- Uma conta com uma linha em cada uma das quatro colunas se exclui, na suíte SQL e em produção (conta de teste).
+- A guarda das FK não cobertas está verde, e vermelha se uma linha for retirada da função.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `supabase/migrations (fn_delete_my_account, définition réelle du 22/09)` · `src/pages/account/ContributorAccountPage.jsx` · `src/pages/account/AccountPage.jsx`*
 
 ---
 
@@ -2268,4 +2290,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-21 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2a9681e5`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-09-21 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2a9681e5`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

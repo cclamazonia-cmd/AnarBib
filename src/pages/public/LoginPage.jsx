@@ -399,11 +399,12 @@ export default function LoginPage() {
         // sinon l'usager reste piégé sur un formulaire inutilisable.
         const sessionGone = r.includes('session') || r.includes('missing') ||
           r.includes('not authenticated') || r.includes('jwt');
+        // same_password et weak_password sont lus par localizeError (code + raisons),
+        // pas par les mots du message : « choose a different one » est un refus de
+        // FAIBLESSE, pas « identique à l'ancien » (22/09/2026).
         setResetMsg({
           text:
-            r.includes('same') || r.includes('different')
-              ? t({ id: 'auth.resetSamePassword' })
-              : (r.includes('expired') || sessionGone)
+            (r.includes('expired') || sessionGone)
               ? t({ id: 'auth.resetExpired' })
               : localizeError(error, t),
           kind: 'error',
@@ -463,14 +464,7 @@ export default function LoginPage() {
       // 1) Update du mdp côté auth.users via Supabase Auth
       const { error: authError } = await supabase.auth.updateUser({ password: newPw });
       if (authError) {
-        const r = (authError.message || '').toLowerCase();
-        setForceChangeMsg({
-          text:
-            r.includes('same') || r.includes('different')
-              ? t({ id: 'auth.resetSamePassword' })
-              : localizeError(authError, t),
-          kind: 'error',
-        });
+        setForceChangeMsg({ text: localizeError(authError, t), kind: 'error' });
         return;
       }
 

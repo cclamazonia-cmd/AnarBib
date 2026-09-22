@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 5
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **59 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **60 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, B28, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -348,6 +348,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B24** | Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer | `P2` | Ouvert |
 | **B27** | `api.catalog_works_v1` dépasse le délai de 3 s du rôle anonyme : le catalogue par œuvre échoue en silence et la page retombe sur la liste à plat | `P1` | En cours |
+| **B28** | `fn_delete_my_account` échoue pour qui a signalé un doublon d'autorité ou proposé une fiche de bibliothèque — deux FK en NO ACTION | `P2` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -436,6 +437,27 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Trouvé en vérifiant **E17**. Touche **C11** et le chantier OPAC par œuvre ; cousin de **B10** (hygiène de performance) et de la mémoire sur les plafonds de capacité (coût de planification des vues).
 
 *Renvois : `api.catalog_works_v1` · `src/pages/public/CatalogPage.jsx (worksServer, repli)` · `src/lib/catalogueFallback.js` · `anarbib-capacite-plafonds-mesures`*
+
+#### B28 — `fn_delete_my_account` échoue pour qui a signalé un doublon d'autorité ou proposé une fiche de bibliothèque — deux FK en NO ACTION
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** **Trouvé le 22/09/2026** en câblant la suppression de compte sur la page contributeur (même RPC que la page lecteur). Relevé en production (`pg_constraint`, lecture seule) des clés étrangères vers `profiles`/`auth.users` que la fonction ne re-pointe pas avant `DELETE FROM profiles` : `authority_duplicate_reports.reported_by` et `.closed_by`, `library_profile_proposals.proposed_by` et `.cancelled_by` — toutes quatre en **NO ACTION**. Une personne qui a signalé un doublon d'autorité, ou proposé une modification de fiche de bibliothèque, verra sa suppression refusée par une violation de FK, avec un message brut. Les autres tables sont couvertes : `authority_proposals.proposed_by` et `authority_proposal_objections.objecting_by` sont en SET NULL, `network_contributors.user_id` en CASCADE (et re-pointé sur le jeton par la fonction), la gouvernance est pseudonymisée. La fonction en production fait 7 024 caractères ; sa définition réelle (`pg_get_functiondef`) a été lue le 22/09 — repartir d'elle, pas du baseline.
+
+*Vérifié : 22/09 — `pg_constraint` en production, filtre `conrelid ~ 'authority|contributor|proposal'` (relevé partiel : les autres tables à FK NO ACTION vers profiles restent à lister, c'est l'objet de la garde) ; définition réelle lue par `pg_get_functiondef`.*
+
+**Ce que c'est.** Migration : dans `fn_delete_my_account`, re-pointer ces quatre colonnes sur le jeton pseudonyme (`v_token`), comme la gouvernance, avant l'effacement ; compter les lignes dans le retour. Suite SQL : un compte qui a signalé un doublon et proposé une fiche se supprime, les lignes portent le jeton, `erasure_log` a sa ligne. Garde : une requête qui liste les FK vers `profiles`/`auth.users` en NO ACTION ou RESTRICT et échoue si l'une n'est pas citée dans la fonction.
+
+**Pourquoi ça compte.** Le droit à l'effacement ne souffre pas d'exception silencieuse : une suppression qui échoue sur une contrainte est une promesse de la politique de confidentialité non tenue, et l'usager n'a aucun moyen de comprendre le message.
+
+**Ce qui compte comme fini.**
+
+- Un compte ayant une ligne dans chacune des quatre colonnes se supprime, en suite SQL et en production (compte d'essai).
+- La garde des FK non couvertes est verte et rouge si on retire une ligne de la fonction.
+
+**Dépendances.** Aucune.
+
+*Renvois : `supabase/migrations (fn_delete_my_account, définition réelle du 22/09)` · `src/pages/account/ContributorAccountPage.jsx` · `src/pages/account/AccountPage.jsx`*
 
 ---
 
@@ -2286,4 +2308,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
