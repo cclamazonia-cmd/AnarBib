@@ -2178,6 +2178,14 @@
           "fr": "**Clos le 22/09 : la feuille est nommée, l'accolade retirée, et une garde rougit avant le build.** Trouvée en comptant les accolades de chaque feuille de `src/` hors commentaires : `src/pages/painel/PanelPage.css`, ligne 632 — une fermante restée seule quand la règle `.ab-painel-tab-divider` a été remplacée par un commentaire (commit `83e68421`, 15/09). La ligne du minifieur (`<stdin>:632`) était la bonne : le lot ne comptait qu'une feuille. Effet dans les navigateurs : aucun — une fermante orpheline au premier niveau est jetée par l'analyseur CSS ; effet réel : un avertissement qu'on apprend à ne plus lire. Retirée (commit du 22/09), `npm run build` ne rend plus l'avertissement. La décision « un avertissement du minifieur doit-il faire échouer le build ? » tombe : `src/tests/css-accolades-equilibrees.test.js` parcourt chaque feuille suivie par git, hors commentaires et chaînes, et rougit en nommant feuille et ligne — avant le build, en CI.",
           "pt": "**Fechado em 22/09: a folha está nomeada, a chaveta retirada, e uma guarda fica vermelha antes do build.** Encontrada contando as chavetas de cada folha de `src/`: `src/pages/painel/PanelPage.css`, linha 632 — uma chaveta de fecho que ficou sozinha quando a regra `.ab-painel-tab-divider` foi substituída por um comentário (commit `83e68421`, 15/09). Efeito nos navegadores: nenhum; efeito real: um aviso que se aprende a não ler. Retirada, `npm run build` já não devolve o aviso. `src/tests/css-accolades-equilibrees.test.js` percorre cada folha e fica vermelho nomeando folha e linha — antes do build, na CI."
         }
+      ],
+      [
+        "B28",
+        "2026-09-22",
+        {
+          "fr": "**Clos le 22/09 au soir, sur mesure.** Trouvé le jour même en câblant la suppression de compte sur la page contributeur (`310be843`). Relevé complet de `pg_constraint` en production : **26 colonnes dans 20 tables** portaient une FK vers `profiles` ou `auth.users` en NO ACTION ou RESTRICT que `fn_delete_my_account` ne re-pointait pas — `authority_proposals.proposed_by` en tête (tout·e contributeur·ice ayant proposé une chose ne pouvait pas s'effacer), `library_requests.submitted_by_user_id` (RESTRICT), les éditeurs créés au catalogage, les messages archivés… Une première lecture des codes de `confdeltype` était fausse (deux tables nommées à tort, en SET NULL) ; rectifiée avant la migration. Migration `20260922214500_b28_l_effacement_repointe_tout_acte_sur_le_jeton` (`4f68cbfe`), repartie de la définition réelle : bloc « ACTES NOMMÉS » qui re-pointe les 26 colonnes sur le jeton pseudonyme, comme la gouvernance, et compte `pseudonymized_act_rows`. Suite `tests/sql/effacement_compte_fk_tests.sql` : T1 relit `pg_constraint` (**liste vivante** : une FK nouvelle non citée par la fonction fait rougir), T2–T5 effacent un compte qui a créé un éditeur et déposé une demande d'entrée. Premier run rouge sur le jeu d'essai (contraintes de `library_requests`), reproduit et corrigé en local avec le lanceur de la CI (`1fa81534`, 5/5). **CI verte** (sql-tests, rejeu-image, backend) ; **migration appliquée en production** (`schema_migrations` = `20260922214500`, corps de la fonction relu). Cas réel : le compte contributeur d'essai de l'essai de bascule s'est supprimé depuis sa page à 20 h 54 (`erasure_log`), avant la migration — il n'avait rien proposé ; le cas d'un compte ayant agi est couvert par la suite, pas encore par un compte réel.",
+          "pt": "**Encerrado em 22/09 à noite, sobre medida.** Levantamento completo de `pg_constraint` em produção: **26 colunas em 20 tabelas** com FK para `profiles` ou `auth.users` em NO ACTION ou RESTRICT que `fn_delete_my_account` não redirecionava — `authority_proposals.proposed_by` à frente. Migração `20260922214500` (`4f68cbfe`), partindo da definição real: bloco « ATOS NOMEADOS » redireciona as 26 colunas para o token pseudônimo. Suíte `effacement_compte_fk_tests.sql`: T1 relê `pg_constraint` (lista viva), T2–T5 apagam uma conta que agiu; jogo de teste corrigido em `1fa81534` (5/5). CI verde; migração aplicada em produção. A conta de teste do ensaio se excluiu pela página às 20h54, antes da migração — não tinha proposto nada."
+        }
       ]
     ]
   },
@@ -5831,55 +5839,6 @@
           "pt": "21/09 — **diagnosticado, reparado e verificado em produção; dois critérios em três cumpridos, o terceiro espera um dia de tráfego.** *Medido antes* (sob `set local role anon`, página por defeito do front): 1 obra = 2 106 ms, 50 obras = **3 533 ms** e 579 758 blocos temporários lidos (~4,4 GB), 200 obras = **27 311 ms** (~70 GB); a view sozinha devolve as suas 2 651 linhas em 5 ms. *Duas causas, na consulta*: (1) um custo **quadrático** — `library_names` relia todo o CTE `filtered` para CADA grupo da página, e `filtered` arrastava a linha inteira da view em jsonb; (2) um piso de **1,3 s** — `fn_work_display_title` chamada uma vez por obra do catálogo (2 449 chamadas). *Reparado* pela migração `20260921111344` (`1fb565b2`): `src` sem `row_json`, título num só passo (mesma cascata — **24 490 comparações, 0 diferenças**), edições e bibliotecas lidas só nas linhas da página; jsonb **igual** ao da função antiga. *Medido depois, em produção, sob o prazo real de 3 s*: 50 obras = **380 ms**, 200 = **460 ms**, nenhum ficheiro temporário; pela API REST com a chave anónima: HTTP 200 em 0,6 a 0,9 s. **Primeiro critério: cumprido. Terceiro: cumprido do lado da vigilância** — a sonda `catalogue_par_oeuvre` de `health-probe` (`5111ac5f`) chama a RPC de cinco em cinco minutos em anónimo. **Segundo: a reler** — nenhum `57014` nesta RPC durante um dia de tráfego real, a verificar em `postgres_logs` a partir de 22/09."
         }
       ]
-    },
-    {
-      "id": "B28",
-      "d": "B",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "`fn_delete_my_account` échoue pour qui a agi — 26 colonnes de FK en NO ACTION / RESTRICT non re-pointées, dont les propositions d'autorité",
-        "pt": "`fn_delete_my_account` falha para quem agiu — 26 colunas de FK em NO ACTION / RESTRICT não redirecionadas, entre elas as propostas de autoridade"
-      },
-      "v": {
-        "fr": "**Trouvé le 22/09/2026** en câblant la suppression de compte sur la page contributeur (même RPC que la page lecteur). **Rectifié le soir même** : ma première lecture de `pg_constraint.confdeltype` inversait les codes — `authority_duplicate_reports` et `library_profile_proposals`, que l'item nommait, sont en SET NULL et ne bloquent rien. Le relevé complet en production (`confdeltype IN ('a','r')`, hors schéma `auth`, colonne non citée dans le corps de la fonction) donne **26 colonnes** dans 20 tables : `authority_proposals.proposed_by` et `authority_proposal_objections.objecting_by` (NO ACTION — **tout·e contributeur·ice qui a proposé une chose ne pouvait pas supprimer son compte**), `library_requests.submitted_by_user_id` (RESTRICT), `library_request_messages.author_id`, `publishers.created_by`/`updated_by`, `cartography_entries.updated_by`, `cartography_submissions.reviewed_by`, `gazette_issue_locales.updated_by`, `gazette_submissions.reviewed_by`, `lettre_issues.created_by`/`sent_by`, `library_opening_hours.updated_by`, `library_public_contact.updated_by`, `library_request_claims.revoked_by_user_id`, `library_request_comments.author_admin_id`, `library_request_invitations.initiated_by`, `library_requests.proposed_by_admin_id`, `library_retention_policies.updated_by`, `library_team_invitation_ratifications.ratifier_user_id`, `library_team_invitations.proposed_by`, `library_unarchive_log.unarchived_by`, `reader_library_messages.deleted_by`/`staff_archived_by`, `user_library_memberships.pending_removal_requested_by`/`physically_validated_by_user_id`. Chacune refuse le `DELETE FROM profiles` par une violation de FK, message brut à l'écran.",
-        "pt": "**Encontrado em 22/09/2026** ao ligar a exclusão de conta na página de contribuinte. **Retificado na mesma noite**: a primeira leitura de `pg_constraint.confdeltype` invertia os códigos — as duas tabelas que o item nomeava estão em SET NULL e não bloqueiam nada. O levantamento completo em produção dá **26 colunas** em 20 tabelas em NO ACTION / RESTRICT não redirecionadas, entre elas `authority_proposals.proposed_by` (**quem propôs uma autoridade não conseguia excluir a conta**) e `library_requests.submitted_by_user_id` (RESTRICT). Cada uma recusa o `DELETE FROM profiles` por violação de FK."
-      },
-      "w": {
-        "fr": "Migration `20260922214500_b28_…` : repartie de la définition réelle (`pg_get_functiondef`, 22/09), un bloc « ACTES NOMMÉS » re-pointe les 26 colonnes sur le jeton pseudonyme (`v_token`), comme la gouvernance, et la réponse compte `pseudonymized_act_rows`. Suite `tests/sql/effacement_compte_fk_tests.sql` : T1 relit `pg_constraint` (liste VIVANTE : une FK nouvelle non citée fait rougir), T2–T5 effacent un compte qui a créé un éditeur et déposé une demande d'entrée. Clore quand la CI est verte et la migration en production.",
-        "pt": "Migração `20260922214500_b28_…`: partindo da definição real, um bloco « ATOS NOMEADOS » redireciona as 26 colunas para o token pseudônimo, como a governança. Suíte `tests/sql/effacement_compte_fk_tests.sql`: T1 relê `pg_constraint` (lista VIVA), T2–T5 apagam uma conta que agiu. Encerrar quando a CI estiver verde e a migração em produção."
-      },
-      "y": {
-        "fr": "Le droit à l'effacement ne souffre pas d'exception silencieuse : une suppression qui échoue sur une contrainte est une promesse de la politique de confidentialité non tenue, et l'usager n'a aucun moyen de comprendre le message.",
-        "pt": "O direito ao apagamento não admite exceção silenciosa: uma exclusão que falha numa restrição é uma promessa da política de privacidade não cumprida."
-      },
-      "f": {
-        "fr": [
-          "La suite est verte en CI : aucune FK NO ACTION/RESTRICT vers profiles/auth.users hors de la fonction, et un compte qui a agi se supprime.",
-          "La migration est appliquée en production (`supabase_migrations`), et la suppression d'un compte contributeur ayant une proposition passe."
-        ],
-        "pt": [
-          "A suíte está verde na CI, e uma conta que agiu se exclui.",
-          "A migração está aplicada em produção, e a exclusão de uma conta de contribuinte com uma proposta passa."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "supabase/migrations (fn_delete_my_account, définition réelle du 22/09)",
-        "src/pages/account/ContributorAccountPage.jsx",
-        "src/pages/account/AccountPage.jsx"
-      ],
-      "verif": {
-        "fr": "22/09 — `pg_constraint` en production, filtre `conrelid ~ 'authority|contributor|proposal'` (relevé partiel : les autres tables à FK NO ACTION vers profiles restent à lister, c'est l'objet de la garde) ; définition réelle lue par `pg_get_functiondef`. 22/09 soir — relevé complet `pg_constraint` en prod (26 colonnes, décodage vérifié : a=NO ACTION, r=RESTRICT, n=SET NULL, c=CASCADE) ; définition réelle relue ; migration et suite écrites.",
-        "pt": "22/09 — `pg_constraint` em produção (levantamento parcial, o resto é objeto da guarda); definição real lida por `pg_get_functiondef`."
-      }
     }
   ]
 }
