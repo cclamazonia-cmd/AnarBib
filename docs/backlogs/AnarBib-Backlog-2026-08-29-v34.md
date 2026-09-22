@@ -1052,7 +1052,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F11** | Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre | `P2` | Ouvert |
 | **F12** | Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours | `P2` | Ouvert |
 | **F13** | `notify-digital-share` : `sent_count` compte aussi les envois refusés | `P3` | Ouvert |
-| **F14** | Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup | `P2` | Ouvert |
+| **F14** | Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup | `P2` | En cours |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1280,11 +1280,11 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 #### F14 — Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : aucune compétence technique
 
 **État.** **Trouvé le 22/09/2026 pendant l'essai de bascule authentifié** (runbook des domaines, partie du 22/09). Le courriel de bienvenue d'un compte contributeur, envoyé par `register` à une adresse Riseup, est arrivé dans les indésirables avec l'en-tête `X-Spam-Status: Yes, score=6.9 required=6.0`. Le rapport SpamAssassin nomme la cause : `FROM_NOT_REPLYTO_SAME_DOMAIN` (3,0), `FREEMAIL_FORGED_REPLYTO` (2,5), `FROM_NOT_REPLYTO` (1,0), `REPLYTO_DIFF_DOMAIN` (0,2) — soit 6,7 des 6,9 points — parce que l'expéditeur est `no-reply@notifications.anarbib.org` et le **Reply-To `anarbib@proton.me`**, adresse d'un service gratuit sur un autre domaine : c'est le motif type d'une usurpation. Tout le reste est bon (SPF pass, DKIM valide, réputation « excellente »). Le Reply-To vient du réglage `ANARBIB_REPLY_TO_EMAIL` (`supabase/functions/register/index.ts`, l. 653 ; défaut = l'expéditeur), posé en `proton.me` à la suite de la décision du 16/09 d'éviter les adresses `.org` pour le canal humain. Le courriel de réinitialisation vers Gmail, lui, est arrivé en boîte de réception le même soir — les filtres diffèrent, la cause est la même.
 
-*Vérifié : 22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste.*
+*Vérifié : 22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste. **22/09 au soir, livré** : quatre secrets en production partageaient la même valeur (`ADMIN_EMAIL`, `ANARBIB_ADMIN_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`, `NETWORK_REPLY_TO_EMAIL`, même empreinte dans `supabase secrets list`) — les deux Reply-To retirés (`supabase secrets unset`), `register` retombe sur `SENDER_EMAIL` ; `notify-network-weekly-report` ne retombe plus sur `ADMIN_EMAIL` ; `notify-library-invitation` et `notify-library-request` n'écrivent plus de Reply-To Proton (l'adresse est dans leur corps) ; `welcome.autoMessage` ×10 dit « n'y réponds pas, pour joindre une personne : anarbib@proton.me » ; garde `src/tests/reply-to-meme-domaine.test.js` à liste fermée ; règle écrite dans `deploy/functions.env.example`. **Reste, à la main de Xavier : une inscription vers une adresse Riseup et la lecture de `X-Spam-Status`** — c'est le premier critère.*
 
 **Ce que c'est.** Retirer le Reply-To étranger sans revenir sur la décision du 16/09 : ne plus poser `ANARBIB_REPLY_TO_EMAIL` (le Reply-To retombe sur l'expéditeur, même domaine), et écrire l'adresse humaine `anarbib@proton.me` **dans le corps** des courriels qui invitent à répondre, là où un filtre ne la lit pas comme une usurpation. Vérifier les autres fonctions qui lisent un Reply-To d'environnement (`notify-network-weekly-report` : `NETWORK_REPLY_TO_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`). Puis rejouer : une inscription vers une adresse Riseup, lire `X-Spam-Status`.
 

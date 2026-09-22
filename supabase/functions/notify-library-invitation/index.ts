@@ -59,14 +59,15 @@ function esc(v: unknown): string {
 // Contexte mail « coordination ». Même précaution que notify-oai-opening : on ne
 // force pas sender_visible_email (Resend renverrait 403 si le domaine de
 // l'adresse n'est pas vérifié pour la clé) — l'identité est portée par le NOM
-// d'expéditeur et le reply-to, où les réponses arrivent réellement.
+// d'expéditeur. Pas de reply-to vers CONTACT_EMAIL (F14, 22/09/2026) : une adresse
+// Proton en Reply-To sur un expéditeur anarbib.org fait classer le courriel
+// indésirable ; l'adresse figure dans le corps (invitation.noPressure).
 const COORD_CTX = {
   sender_display_name: COORD_NAME,
   use_library_logo: false,
   use_library_name_as_sender: false,
   channel_active: true,
   delivery_mode: "platform_shared_local_reply",
-  reply_to_email: CONTACT_EMAIL,
   reply_to_name: COORD_NAME,
   admin_notification_email: CONTACT_EMAIL,
 };

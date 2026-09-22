@@ -4724,16 +4724,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η εγγραφή σου πρέπει να επικυρωθεί από την ομάδα: μόλις επικυρωθεί, θα μπορείς να δανείζεσαι και να κρατάς."
   },
   "welcome.autoMessage": {
-    "pt-BR": "Mensagem automática do cadastro AnarBib. As respostas a este e-mail serão encaminhadas para a gestão do projeto.",
-    fr: "Message automatique de l'inscription AnarBib. Les réponses à cet e-mail sont transmises à la gestion du projet.",
-    es: "Mensaje automático del registro AnarBib. Las respuestas a este correo serán reenviadas a la gestión del proyecto.",
-    en: "Automatic message from the AnarBib registration. Replies to this email are forwarded to the project management.",
-    it: "Messaggio automatico dell'iscrizione AnarBib. Le risposte a questa e-mail vengono inoltrate alla gestione del progetto.",
-    de: "Automatische Nachricht der AnarBib-Anmeldung. Antworten auf diese E-Mail werden an die Projektleitung weitergeleitet.",
-    ca: "Missatge automàtic de la inscripció AnarBib. Les respostes a aquest correu es transmeten a la gestió del projecte.",
-    eo: "Aŭtomata mesaĝo de la registriĝo AnarBib. La respondoj al ĉi tiu retpoŝto estas plusenditaj al la projektmastrumado.",
-    nl: "Automatisch bericht van de AnarBib-inschrijving. Antwoorden op deze e-mail worden doorgestuurd naar het projectbeheer.",
-    el: "Αυτόματο μήνυμα από την εγγραφή στο AnarBib. Οι απαντήσεις σε αυτό το email προωθούνται στη διαχείριση του εγχειρήματος."
+    "pt-BR": "Mensagem automática do cadastro AnarBib — não responda a este e-mail. Para falar com uma pessoa: anarbib@proton.me.",
+    fr: "Message automatique de l'inscription AnarBib — n'y réponds pas. Pour joindre une personne : anarbib@proton.me.",
+    es: "Mensaje automático del registro AnarBib — no respondas a este correo. Para hablar con una persona: anarbib@proton.me.",
+    en: "Automatic message from the AnarBib registration — please do not reply to it. To reach a person: anarbib@proton.me.",
+    it: "Messaggio automatico dell'iscrizione AnarBib — non rispondere a questa e-mail. Per parlare con una persona: anarbib@proton.me.",
+    de: "Automatische Nachricht der AnarBib-Anmeldung — bitte nicht darauf antworten. Um eine Person zu erreichen: anarbib@proton.me.",
+    ca: "Missatge automàtic de la inscripció AnarBib — no hi responguis. Per parlar amb una persona: anarbib@proton.me.",
+    eo: "Aŭtomata mesaĝo de la registriĝo AnarBib — ne respondu al ĝi. Por atingi homon: anarbib@proton.me.",
+    nl: "Automatisch bericht van de AnarBib-inschrijving — niet beantwoorden. Om een persoon te bereiken: anarbib@proton.me.",
+    el: "Αυτόματο μήνυμα από την εγγραφή στο AnarBib — μην απαντήσεις σε αυτό. Για να μιλήσεις με έναν άνθρωπο: anarbib@proton.me."
   },
   // ===== Paquet 6 criar-conta — mail welcome-reader-orphan (welcome.*.orphan) =
   "welcome.pretitle.orphan": {

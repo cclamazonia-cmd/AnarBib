@@ -297,9 +297,9 @@ async function sendViaResend(target, subject, htmlInlined, text) {
     html: htmlInlined,
     text
   };
-  if (isValidEmail(ADMIN_EMAIL)) {
-    payload.reply_to = formatMailAddress(ADMIN_EMAIL.trim().toLowerCase(), ADMIN_NAME);
-  }
+  // F14 (22/09/2026) : plus de reply_to vers ADMIN_EMAIL (une adresse Proton en
+  // production) — c'est le motif d'une usurpation pour les filtres. L'adresse
+  // humaine est écrite dans le corps des messages qui invitent à écrire.
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {

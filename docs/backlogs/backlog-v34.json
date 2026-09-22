@@ -5387,7 +5387,7 @@
       "id": "F14",
       "d": "F",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "aucune"
@@ -5428,8 +5428,8 @@
         "REGISTRE §38 OPS-10"
       ],
       "verif": {
-        "fr": "22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste.",
-        "pt": "22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail."
+        "fr": "22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste. **22/09 au soir, livré** : quatre secrets en production partageaient la même valeur (`ADMIN_EMAIL`, `ANARBIB_ADMIN_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`, `NETWORK_REPLY_TO_EMAIL`, même empreinte dans `supabase secrets list`) — les deux Reply-To retirés (`supabase secrets unset`), `register` retombe sur `SENDER_EMAIL` ; `notify-network-weekly-report` ne retombe plus sur `ADMIN_EMAIL` ; `notify-library-invitation` et `notify-library-request` n'écrivent plus de Reply-To Proton (l'adresse est dans leur corps) ; `welcome.autoMessage` ×10 dit « n'y réponds pas, pour joindre une personne : anarbib@proton.me » ; garde `src/tests/reply-to-meme-domaine.test.js` à liste fermée ; règle écrite dans `deploy/functions.env.example`. **Reste, à la main de Xavier : une inscription vers une adresse Riseup et la lecture de `X-Spam-Status`** — c'est le premier critère.",
+        "pt": "22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail. **22/09 à noite, entregue**: os dois Reply-To retirados dos segredos de produção; `notify-network-weekly-report` não recai mais em `ADMIN_EMAIL`; invitation e library-request sem Reply-To Proton; `welcome.autoMessage` ×10 com o endereço humano no corpo; guarda `reply-to-meme-domaine.test.js`. **Falta: um cadastro para um endereço Riseup e a leitura de `X-Spam-Status`.**"
       }
     },
     {

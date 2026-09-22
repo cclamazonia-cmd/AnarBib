@@ -1052,7 +1052,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F11** | Branco sobre branco: blocos dos nossos e-mails ficam ilegíveis num cliente em tema escuro | `P2` | Aberto |
 | **F12** | Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre | `P2` | Aberto |
 | **F13** | `notify-digital-share`: `sent_count` conta também os envios recusados | `P3` | Aberto |
-| **F14** | O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup | `P2` | Aberto |
+| **F14** | O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup | `P2` | Em curso |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1272,11 +1272,11 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 #### F14 — O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
+`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : nenhuma competência técnica
 
 **Estado.** **Encontrado em 22/09/2026 durante o ensaio de bascule autenticado.** O e-mail de boas-vindas de uma conta de contribuinte, enviado por `register` para um endereço Riseup, caiu no spam com `X-Spam-Status: Yes, score=6.9 required=6.0`. Causa nomeada pelo SpamAssassin: remetente `no-reply@notifications.anarbib.org` com **Reply-To `anarbib@proton.me`** (serviço gratuito, outro domínio) — 6,7 dos 6,9 pontos. SPF, DKIM e reputação estão bons. O Reply-To vem do ajuste `ANARBIB_REPLY_TO_EMAIL`, posto em `proton.me` após a decisão de 16/09 de evitar endereços `.org` no canal humano.
 
-*Verificado : 22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail.*
+*Verificado : 22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail. **22/09 à noite, entregue**: os dois Reply-To retirados dos segredos de produção; `notify-network-weekly-report` não recai mais em `ADMIN_EMAIL`; invitation e library-request sem Reply-To Proton; `welcome.autoMessage` ×10 com o endereço humano no corpo; guarda `reply-to-meme-domaine.test.js`. **Falta: um cadastro para um endereço Riseup e a leitura de `X-Spam-Status`.***
 
 **O que é.** Retirar o Reply-To estrangeiro sem voltar atrás na decisão de 16/09: deixar de definir `ANARBIB_REPLY_TO_EMAIL` (o Reply-To volta ao remetente, mesmo domínio) e escrever o endereço humano `anarbib@proton.me` **no corpo** dos e-mails. Verificar as outras funções que leem um Reply-To de ambiente. Depois repetir: um cadastro para um endereço Riseup, ler `X-Spam-Status`.
 
