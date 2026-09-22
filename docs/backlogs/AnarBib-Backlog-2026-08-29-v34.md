@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 70 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-22** · 70 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -10,7 +10,7 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 21 septembre 2026](#létat-réel-au-21-septembre-2026)
+- [L'état réel au 22 septembre 2026](#létat-réel-au-22-septembre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
@@ -58,11 +58,13 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 21 septembre 2026
+## L'état réel au 22 septembre 2026
+
+**Relevé du 22 septembre 2026 au soir** (`608995d0`), sur les seuls chantiers de la session des 21-22/09 — le reste de la photo ci-dessous date du 16/09 et n'est pas revérifié. **Clos sur pièces, avec leur mesure** : **I26** (une instance restaurée retrouve ses 38 crons — `private.fn_crons_replanifier()`, aller-retour réel sur `pg_cron`, sans effet en production), **E22** (l'accolade orpheline de `PanelPage.css` et la garde qui compte les accolades), **I27** (le chemin de secours du front a publié pour de vrai sur `app.anarbib.is`, preuve par `/.version-front`). Livré sans item : la sonde `images_pins` de `health-probe` et ses deux remesures (GoTrue v2.197.0, Storage v1.77.0 — la production a monté deux fois dans la journée), l'historique des migrations restauré avec le dump (troisième fichier), `deploy.sh` qui reconstruit enfin le front, `publier-front.sh`. **Ce qui reste à clore, et par qui** — *(a) par Xavier, sans code* : **F11** — ouvrir un courriel de chaque famille dans un vrai client et dire s'il se lit ; le code est en production depuis le 22/09 (`MAIL-Q7`), la garde tient, seul le regard manque. **I24** — requalifier la fiche : la sonde serveur alerte bien (deux courriels reçus), le gestionnaire systemd du poste sort sans cause établie ; décider si l'item vit encore. *(b) par une session, avec des mesures* : **I21** — sept conditions sur huit restent à cocher avec preuve (la connexion locale l'est depuis le 26/08, refaite le 21/09) ; **I2** — proxy inverse avec tunnel, tags en empreintes `sha256`, répétition à froid un mois plus tard, la question du Jitsi à poser à l'hébergeur. *(c) à surveiller, rien à faire* : l'incident `images_pins` se rouvrira de lui-même à la prochaine montée de GoTrue ou Storage — le courriel dit alors quoi faire (`deploy/banc-paliers.sh`, puis une migration qui remplace l'attendu, `.env.example` et `bootstrap.sh` ensemble). Pièce : `journal/operations/NOTE_pins-images-remesures_2026-09-21`.
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **57 items sur 70** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-22.** **57 items sur 70** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1185,7 +1187,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 *Vérifié : [object Object],[object Object]*
 
-**Ce que c'est.** Deux gestes. **(1)** La règle, mécanique : tout style en ligne qui fixe `background` fixe aussi `color` — une garde vitest sur `supabase/functions/**` la tient (le décompte ci-dessus est son point de départ, il ne peut que descendre). **(2)** Le choix, à faire une fois dans `layout.ts` : déclarer `<meta name="color-scheme" content="light only">` (on impose le clair, le plus simple et le plus prévisible) ou écrire un vrai thème sombre (`prefers-color-scheme`), que tous les clients ne suivent pas. Puis **regarder** : un courriel de chaque famille ouvert dans un client sombre (Proton, Thunderbird, Gmail mobile), capture à l'appui — une règle de style ne prouve pas un rendu.
+**Ce que c'est.** **Pour clore — un seul geste, à Xavier, sans code** : ouvrir un courriel de chaque famille dans un vrai client (Proton, Thunderbird, Gmail mobile), en thème sombre et en thème clair, et dire s'il se lit ; une capture par famille versée ici suffit. Les deux autres gestes sont faits le 22/09 (voir la vérification) : la règle « tout fond porte sa couleur » est tenue par `src/tests/mails-fond-et-couleur.test.js`, et le choix — courriels sombres par conception, déclarés `color-scheme: dark` — est au REGISTRE (`MAIL-Q7`). Le prochain courriel réel (rappel d'échéance, alerte) peut servir d'épreuve : pas besoin d'en provoquer un.
 
 **Pourquoi ça compte.** Un courriel qu'on ne peut pas lire est un courriel qui n'est pas parti. Ici c'était une alerte d'exploitation, lue par la seule personne qui pouvait agir ; ailleurs ce sont des rappels d'échéance et des liens d'inscription, reçus par des lectrices qui n'écriront pas pour dire qu'elles n'ont rien vu.
 
@@ -2246,4 +2248,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-22. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-22 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `608995d0` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

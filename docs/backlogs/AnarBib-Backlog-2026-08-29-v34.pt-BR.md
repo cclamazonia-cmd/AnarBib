@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-21** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-22** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 21 de setembro de 2026](#o-estado-real-em-21-de-setembro-de-2026)
+- [O estado real em 22 de setembro de 2026](#o-estado-real-em-22-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -58,11 +58,13 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 21 de setembro de 2026
+## O estado real em 22 de setembro de 2026
+
+**Levantamento de 22 de setembro de 2026, à noite** (`608995d0`), só sobre os canteiros da sessão de 21-22/09 — o resto da foto abaixo data de 16/09 e não foi reverificado. **Fechados sobre peças, com a sua medida**: **I26** (uma instância restaurada recupera os seus 38 crons), **E22** (a chaveta órfã de `PanelPage.css` e a guarda), **I27** (o caminho de socorro do front publicou de verdade em `app.anarbib.is`, prova por `/.version-front`). Entregue sem item: a sonda `images_pins` do `health-probe` e as suas duas remedições (GoTrue v2.197.0, Storage v1.77.0), o histórico das migrações restaurado com o dump, `deploy.sh` que reconstrói enfim o front, `publier-front.sh`. **O que falta fechar, e por quem** — *(a) por Xavier, sem código*: **F11** — abrir um e-mail de cada família num cliente real e dizer se se lê; o código está em produção desde 22/09 (`MAIL-Q7`), só falta o olhar. **I24** — requalificar a ficha. *(b) por uma sessão, com medidas*: **I21** — sete condições em oito por marcar com prova; **I2** — proxy inverso com túnel, tags em `sha256`, repetição a frio, a questão do Jitsi. *(c) a vigiar, nada a fazer*: o incidente `images_pins` reabrir-se-á sozinho na próxima subida de GoTrue ou Storage — o e-mail diz então o que fazer. Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`.
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-21.** **57 itens de 70** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-22.** **57 itens de 70** trazem uma verificação datada própria (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1177,7 +1179,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 *Verificado : [object Object],[object Object]*
 
-**O que é.** Dois gestos. **(1)** A regra, mecânica: todo o estilo em linha que fixa `background` fixa também `color` — uma guarda vitest mantém-na. **(2)** A escolha, em `layout.ts`: declarar `color-scheme: light only` ou escrever um verdadeiro tema escuro. Depois **olhar**: um e-mail de cada família aberto num cliente escuro, com captura.
+**O que é.** **Para fechar — um só gesto, de Xavier, sem código**: abrir um e-mail de cada família num cliente real (Proton, Thunderbird, Gmail móvel), em tema escuro e claro, e dizer se se lê; uma captura por família aqui basta. Os outros dois gestos estão feitos em 22/09: a regra « todo o fundo tem a sua cor » é garantida por `src/tests/mails-fond-et-couleur.test.js`, e a escolha — e-mails escuros por desenho, declarados `color-scheme: dark` — está no REGISTRE (`MAIL-Q7`). O próximo e-mail real pode servir de prova.
 
 **Por que importa.** Um e-mail que não se pode ler é um e-mail que não partiu. Aqui era um alerta de exploração; noutros sítios são lembretes e links de inscrição, recebidos por leitoras que não escreverão a dizer que nada viram.
 
@@ -2228,4 +2230,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-21 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `2a9681e5`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-22. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-09-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `608995d0`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
