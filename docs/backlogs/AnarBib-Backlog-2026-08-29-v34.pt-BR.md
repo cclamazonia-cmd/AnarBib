@@ -348,7 +348,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
 | **B27** | `api.catalog_works_v1` ultrapassa o prazo de 3 s do papel anónimo: o catálogo por obra falha em silêncio e a página recai na lista plana | `P1` | Em curso |
-| **B28** | `fn_delete_my_account` falha para quem sinalizou uma autoridade duplicada ou propôs uma ficha de biblioteca — duas FK em NO ACTION | `P2` | Aberto |
+| **B28** | `fn_delete_my_account` falha para quem agiu — 26 colunas de FK em NO ACTION / RESTRICT não redirecionadas, entre elas as propostas de autoridade | `P2` | Em curso |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -438,22 +438,22 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `api.catalog_works_v1` · `src/pages/public/CatalogPage.jsx (worksServer, repli)` · `src/lib/catalogueFallback.js` · `anarbib-capacite-plafonds-mesures`*
 
-#### B28 — `fn_delete_my_account` falha para quem sinalizou uma autoridade duplicada ou propôs uma ficha de biblioteca — duas FK em NO ACTION
+#### B28 — `fn_delete_my_account` falha para quem agiu — 26 colunas de FK em NO ACTION / RESTRICT não redirecionadas, entre elas as propostas de autoridade
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado.** **Encontrado em 22/09/2026** ao ligar a exclusão de conta na página de contribuinte (mesma RPC da página de leitor). Levantamento em produção das FK para `profiles`/`auth.users` que a função não redireciona antes do `DELETE FROM profiles`: `authority_duplicate_reports.reported_by`/`closed_by` e `library_profile_proposals.proposed_by`/`cancelled_by`, todas em **NO ACTION**. Quem sinalizou uma autoridade duplicada ou propôs uma alteração de ficha de biblioteca terá a exclusão recusada por violação de FK, com mensagem bruta. As outras tabelas estão cobertas. Partir da definição real (`pg_get_functiondef`), não do baseline.
+**Estado.** **Encontrado em 22/09/2026** ao ligar a exclusão de conta na página de contribuinte. **Retificado na mesma noite**: a primeira leitura de `pg_constraint.confdeltype` invertia os códigos — as duas tabelas que o item nomeava estão em SET NULL e não bloqueiam nada. O levantamento completo em produção dá **26 colunas** em 20 tabelas em NO ACTION / RESTRICT não redirecionadas, entre elas `authority_proposals.proposed_by` (**quem propôs uma autoridade não conseguia excluir a conta**) e `library_requests.submitted_by_user_id` (RESTRICT). Cada uma recusa o `DELETE FROM profiles` por violação de FK.
 
 *Verificado : 22/09 — `pg_constraint` em produção (levantamento parcial, o resto é objeto da guarda); definição real lida por `pg_get_functiondef`.*
 
-**O que é.** Migração: em `fn_delete_my_account`, redirecionar essas quatro colunas para o token pseudônimo (`v_token`), como a governança, antes do apagamento. Suíte SQL: uma conta que sinalizou uma duplicata e propôs uma ficha se exclui, as linhas trazem o token. Guarda: uma consulta que lista as FK para `profiles`/`auth.users` em NO ACTION ou RESTRICT e falha se alguma não for citada na função.
+**O que é.** Migração `20260922214500_b28_…`: partindo da definição real, um bloco « ATOS NOMEADOS » redireciona as 26 colunas para o token pseudônimo, como a governança. Suíte `tests/sql/effacement_compte_fk_tests.sql`: T1 relê `pg_constraint` (lista VIVA), T2–T5 apagam uma conta que agiu. Encerrar quando a CI estiver verde e a migração em produção.
 
 **Por que importa.** O direito ao apagamento não admite exceção silenciosa: uma exclusão que falha numa restrição é uma promessa da política de privacidade não cumprida.
 
 **O que conta como terminado.**
 
-- Uma conta com uma linha em cada uma das quatro colunas se exclui, na suíte SQL e em produção (conta de teste).
-- A guarda das FK não cobertas está verde, e vermelha se uma linha for retirada da função.
+- A suíte está verde na CI, e uma conta que agiu se exclui.
+- A migração está aplicada em produção, e a exclusão de uma conta de contribuinte com uma proposta passa.
 
 **Dependências.** Nenhuma.
 

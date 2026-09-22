@@ -488,3 +488,8 @@ tests/sql/images_pins_tests.sql
 # portait zéro job. La suite vide la table (= restauration) et vérifie que
 # private.fn_crons_replanifier() remet les 38, et eux seuls, sans rien retirer.
 tests/sql/crons_replanifier_tests.sql
+# 22/09 (B28) : l'effacement d'un compte butait sur 26 colonnes de FK en
+# NO ACTION / RESTRICT que fn_delete_my_account ne re-pointait pas (une
+# proposition d'autorité, une demande d'entrée, un éditeur créé…). La suite
+# relit pg_constraint — liste VIVANTE — et efface un compte qui a agi.
+tests/sql/effacement_compte_fk_tests.sql

@@ -5836,22 +5836,22 @@
       "id": "B28",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "sql"
       ],
       "t": {
-        "fr": "`fn_delete_my_account` échoue pour qui a signalé un doublon d'autorité ou proposé une fiche de bibliothèque — deux FK en NO ACTION",
-        "pt": "`fn_delete_my_account` falha para quem sinalizou uma autoridade duplicada ou propôs uma ficha de biblioteca — duas FK em NO ACTION"
+        "fr": "`fn_delete_my_account` échoue pour qui a agi — 26 colonnes de FK en NO ACTION / RESTRICT non re-pointées, dont les propositions d'autorité",
+        "pt": "`fn_delete_my_account` falha para quem agiu — 26 colunas de FK em NO ACTION / RESTRICT não redirecionadas, entre elas as propostas de autoridade"
       },
       "v": {
-        "fr": "**Trouvé le 22/09/2026** en câblant la suppression de compte sur la page contributeur (même RPC que la page lecteur). Relevé en production (`pg_constraint`, lecture seule) des clés étrangères vers `profiles`/`auth.users` que la fonction ne re-pointe pas avant `DELETE FROM profiles` : `authority_duplicate_reports.reported_by` et `.closed_by`, `library_profile_proposals.proposed_by` et `.cancelled_by` — toutes quatre en **NO ACTION**. Une personne qui a signalé un doublon d'autorité, ou proposé une modification de fiche de bibliothèque, verra sa suppression refusée par une violation de FK, avec un message brut. Les autres tables sont couvertes : `authority_proposals.proposed_by` et `authority_proposal_objections.objecting_by` sont en SET NULL, `network_contributors.user_id` en CASCADE (et re-pointé sur le jeton par la fonction), la gouvernance est pseudonymisée. La fonction en production fait 7 024 caractères ; sa définition réelle (`pg_get_functiondef`) a été lue le 22/09 — repartir d'elle, pas du baseline.",
-        "pt": "**Encontrado em 22/09/2026** ao ligar a exclusão de conta na página de contribuinte (mesma RPC da página de leitor). Levantamento em produção das FK para `profiles`/`auth.users` que a função não redireciona antes do `DELETE FROM profiles`: `authority_duplicate_reports.reported_by`/`closed_by` e `library_profile_proposals.proposed_by`/`cancelled_by`, todas em **NO ACTION**. Quem sinalizou uma autoridade duplicada ou propôs uma alteração de ficha de biblioteca terá a exclusão recusada por violação de FK, com mensagem bruta. As outras tabelas estão cobertas. Partir da definição real (`pg_get_functiondef`), não do baseline."
+        "fr": "**Trouvé le 22/09/2026** en câblant la suppression de compte sur la page contributeur (même RPC que la page lecteur). **Rectifié le soir même** : ma première lecture de `pg_constraint.confdeltype` inversait les codes — `authority_duplicate_reports` et `library_profile_proposals`, que l'item nommait, sont en SET NULL et ne bloquent rien. Le relevé complet en production (`confdeltype IN ('a','r')`, hors schéma `auth`, colonne non citée dans le corps de la fonction) donne **26 colonnes** dans 20 tables : `authority_proposals.proposed_by` et `authority_proposal_objections.objecting_by` (NO ACTION — **tout·e contributeur·ice qui a proposé une chose ne pouvait pas supprimer son compte**), `library_requests.submitted_by_user_id` (RESTRICT), `library_request_messages.author_id`, `publishers.created_by`/`updated_by`, `cartography_entries.updated_by`, `cartography_submissions.reviewed_by`, `gazette_issue_locales.updated_by`, `gazette_submissions.reviewed_by`, `lettre_issues.created_by`/`sent_by`, `library_opening_hours.updated_by`, `library_public_contact.updated_by`, `library_request_claims.revoked_by_user_id`, `library_request_comments.author_admin_id`, `library_request_invitations.initiated_by`, `library_requests.proposed_by_admin_id`, `library_retention_policies.updated_by`, `library_team_invitation_ratifications.ratifier_user_id`, `library_team_invitations.proposed_by`, `library_unarchive_log.unarchived_by`, `reader_library_messages.deleted_by`/`staff_archived_by`, `user_library_memberships.pending_removal_requested_by`/`physically_validated_by_user_id`. Chacune refuse le `DELETE FROM profiles` par une violation de FK, message brut à l'écran.",
+        "pt": "**Encontrado em 22/09/2026** ao ligar a exclusão de conta na página de contribuinte. **Retificado na mesma noite**: a primeira leitura de `pg_constraint.confdeltype` invertia os códigos — as duas tabelas que o item nomeava estão em SET NULL e não bloqueiam nada. O levantamento completo em produção dá **26 colunas** em 20 tabelas em NO ACTION / RESTRICT não redirecionadas, entre elas `authority_proposals.proposed_by` (**quem propôs uma autoridade não conseguia excluir a conta**) e `library_requests.submitted_by_user_id` (RESTRICT). Cada uma recusa o `DELETE FROM profiles` por violação de FK."
       },
       "w": {
-        "fr": "Migration : dans `fn_delete_my_account`, re-pointer ces quatre colonnes sur le jeton pseudonyme (`v_token`), comme la gouvernance, avant l'effacement ; compter les lignes dans le retour. Suite SQL : un compte qui a signalé un doublon et proposé une fiche se supprime, les lignes portent le jeton, `erasure_log` a sa ligne. Garde : une requête qui liste les FK vers `profiles`/`auth.users` en NO ACTION ou RESTRICT et échoue si l'une n'est pas citée dans la fonction.",
-        "pt": "Migração: em `fn_delete_my_account`, redirecionar essas quatro colunas para o token pseudônimo (`v_token`), como a governança, antes do apagamento. Suíte SQL: uma conta que sinalizou uma duplicata e propôs uma ficha se exclui, as linhas trazem o token. Guarda: uma consulta que lista as FK para `profiles`/`auth.users` em NO ACTION ou RESTRICT e falha se alguma não for citada na função."
+        "fr": "Migration `20260922214500_b28_…` : repartie de la définition réelle (`pg_get_functiondef`, 22/09), un bloc « ACTES NOMMÉS » re-pointe les 26 colonnes sur le jeton pseudonyme (`v_token`), comme la gouvernance, et la réponse compte `pseudonymized_act_rows`. Suite `tests/sql/effacement_compte_fk_tests.sql` : T1 relit `pg_constraint` (liste VIVANTE : une FK nouvelle non citée fait rougir), T2–T5 effacent un compte qui a créé un éditeur et déposé une demande d'entrée. Clore quand la CI est verte et la migration en production.",
+        "pt": "Migração `20260922214500_b28_…`: partindo da definição real, um bloco « ATOS NOMEADOS » redireciona as 26 colunas para o token pseudônimo, como a governança. Suíte `tests/sql/effacement_compte_fk_tests.sql`: T1 relê `pg_constraint` (lista VIVA), T2–T5 apagam uma conta que agiu. Encerrar quando a CI estiver verde e a migração em produção."
       },
       "y": {
         "fr": "Le droit à l'effacement ne souffre pas d'exception silencieuse : une suppression qui échoue sur une contrainte est une promesse de la politique de confidentialité non tenue, et l'usager n'a aucun moyen de comprendre le message.",
@@ -5859,12 +5859,12 @@
       },
       "f": {
         "fr": [
-          "Un compte ayant une ligne dans chacune des quatre colonnes se supprime, en suite SQL et en production (compte d'essai).",
-          "La garde des FK non couvertes est verte et rouge si on retire une ligne de la fonction."
+          "La suite est verte en CI : aucune FK NO ACTION/RESTRICT vers profiles/auth.users hors de la fonction, et un compte qui a agi se supprime.",
+          "La migration est appliquée en production (`supabase_migrations`), et la suppression d'un compte contributeur ayant une proposition passe."
         ],
         "pt": [
-          "Uma conta com uma linha em cada uma das quatro colunas se exclui, na suíte SQL e em produção (conta de teste).",
-          "A guarda das FK não cobertas está verde, e vermelha se uma linha for retirada da função."
+          "A suíte está verde na CI, e uma conta que agiu se exclui.",
+          "A migração está aplicada em produção, e a exclusão de uma conta de contribuinte com uma proposta passa."
         ]
       },
       "dep": {
@@ -5877,7 +5877,7 @@
         "src/pages/account/AccountPage.jsx"
       ],
       "verif": {
-        "fr": "22/09 — `pg_constraint` en production, filtre `conrelid ~ 'authority|contributor|proposal'` (relevé partiel : les autres tables à FK NO ACTION vers profiles restent à lister, c'est l'objet de la garde) ; définition réelle lue par `pg_get_functiondef`.",
+        "fr": "22/09 — `pg_constraint` en production, filtre `conrelid ~ 'authority|contributor|proposal'` (relevé partiel : les autres tables à FK NO ACTION vers profiles restent à lister, c'est l'objet de la garde) ; définition réelle lue par `pg_get_functiondef`. 22/09 soir — relevé complet `pg_constraint` en prod (26 colonnes, décodage vérifié : a=NO ACTION, r=RESTRICT, n=SET NULL, c=CASCADE) ; définition réelle relue ; migration et suite écrites.",
         "pt": "22/09 — `pg_constraint` em produção (levantamento parcial, o resto é objeto da guarda); definição real lida por `pg_get_functiondef`."
       }
     }
