@@ -17,7 +17,9 @@ const lire = (p) => readFileSync(join(ROOT, p), 'utf8');
 const ADMISES = {
   'notify-document-permission-request': 'REPLY_TO_EMAIL / ANARBIB_REPLY_TO_EMAIL, vides en production → aucun en-tête',
   'notify-mid-loan-reading': 'reply-to de la bibliothèque (canal local), pas de la plateforme',
+  'notify-network-weekly-report': 'routing.replyToEmail : résolution partagée, qui retombe sur SENDER_EMAIL',
   'notify-oai-opening': 'FEDERAL_EMAIL, même domaine que l\'expéditeur',
+  'notify-weekly-report': 'routing.replyToEmail : canal de la bibliothèque, sinon SENDER_EMAIL',
   'register': 'ANARBIB_REPLY_TO_EMAIL, vide en production → retombe sur SENDER_EMAIL',
 };
 

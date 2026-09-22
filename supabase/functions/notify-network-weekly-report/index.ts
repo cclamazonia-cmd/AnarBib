@@ -67,9 +67,10 @@ function resolveEnvSenderEmail() {
 function resolveEnvReplyToName() {
   return (Deno.env.get("NETWORK_REPLY_TO_NAME") || Deno.env.get("ADMIN_NAME") || resolveEnvSenderName()).trim();
 }
+// F14 (22/09/2026) : le Reply-To ne retombe plus sur l'adresse d'administration —
+// un Reply-To sur un autre domaine que l'expéditeur (a fortiori un webmail) fait
+// classer le courriel indésirable. Il retombe sur l'expéditeur.
 function resolveEnvReplyToEmail() {
-  // F14 (22/09/2026) : jamais ADMIN_EMAIL ici — un Reply-To sur un autre domaine que
-  // l'expéditeur (a fortiori un webmail) fait classer le courriel indésirable.
   return (Deno.env.get("NETWORK_REPLY_TO_EMAIL") || Deno.env.get("ANARBIB_REPLY_TO_EMAIL") || Deno.env.get("SENDER_EMAIL") || "").trim();
 }
 function resolveEnvNetworkWeeklyRecipient() {
