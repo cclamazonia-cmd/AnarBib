@@ -1793,7 +1793,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** `scripts/ci/publier-front.sh` (21/09, commit `0bd79bd3`) rejoue hors forge le job `app` de la CI : construire, puis publier sur les trois sites par `git-pages-cli`, l'image que l'action de la forge appelle. **Exécutés le 21/09** : le refus sans la clé publiable, la construction (392 fichiers, 23 Mo), `--simulation`, `--vers-dossier`. **Jamais exécutée** : la publication elle-même — il y faut un jeton Codeberg, qui ne se confie pas à une session. La garde `publier-front-coherence` tient la liste des sites égale à celle de `ci.yml` ; elle ne dit rien de l'autorisation.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Un jour calme, par une personne : `GIT_PAGES_TOKEN=… scripts/ci/publier-front.sh --essai` (le `--dry-run` du serveur : l'autorisation est vérifiée, rien n'est publié), sur les trois sites. Si l'essai passe, une publication réelle sur `app.anarbib.is` seul (`--site`), puis le contrôle du nom haché du bundle que le script imprime. Noter ici quel jeton convient (portée, durée) et où il se range (Dashlane), et si la voie `GIT_PAGES_PASSWORD` (défi DNS, sans forge) mérite d'être préparée.
 

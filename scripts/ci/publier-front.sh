@@ -37,17 +37,26 @@
 #                                  fait `exit 0` si elle manque : sans cette
 #                                  garde-ci, on publierait un instantané périmé
 #                                  EN SILENCE.
-#   GIT_PAGES_TOKEN                jeton Codeberg ayant droit d'écriture sur le
-#                                  dépôt (celui que la CI reçoit en forge.token).
-#                                  Jamais en argument, jamais dans un fichier
-#                                  suivi : il se lit dans l'environnement.
+#   GIT_PAGES_TOKEN                jeton d'accès Codeberg d'un compte qui peut
+#                                  pousser sur anarbib/anarbib, avec DEUX
+#                                  permissions : `repository` lecture-écriture ET
+#                                  `user` lecture. Mesuré le 22/09/2026 : sans
+#                                  `user`, git-pages demande GET /api/v1/user pour
+#                                  savoir qui vous êtes, Codeberg répond 403 et le
+#                                  serveur refuse — alors que le dépôt, lui, était
+#                                  bien lisible et poussable. Jamais en argument,
+#                                  jamais dans un fichier suivi : il se lit dans
+#                                  l'environnement (sur le poste du mainteneur :
+#                                  ~/anarbib-ops/git-pages.token, chmod 600, copie
+#                                  dans Dashlane « Codeberg — jeton publier-front »).
 #   GIT_PAGES_PASSWORD             autre voie d'autorisation de git-pages (défi
 #                                  DNS), si le jeton de forge n'est pas disponible.
 #
-# ⚠️ ÉTAT AU 21/09/2026 : la construction et `--simulation` ont été exécutées ;
-# la publication réelle par ce chemin ne l'a PAS encore été. Un chemin jamais
-# emprunté n'est pas un chemin qui marche : le premier tir réel doit se faire
-# un jour calme, pas un jour de panne.
+# ⚠️ ÉTAT AU 22/09/2026 : construction, `--simulation` et `--essai` exécutés —
+# le 22/09 le serveur a accepté l'autorisation sur les trois sites (« dry-run
+# ok ») avec le jeton de Xavier. La publication réelle par ce chemin ne l'a PAS
+# encore été. Un chemin jamais emprunté n'est pas un chemin qui marche : le
+# premier tir réel doit se faire un jour calme, pas un jour de panne.
 # =============================================================================
 
 set -uo pipefail

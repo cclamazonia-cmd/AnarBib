@@ -1785,7 +1785,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** `scripts/ci/publier-front.sh` (21/09, commit `0bd79bd3`) repete fora da forja o job `app` da CI. **Executados em 21/09**: a recusa sem a chave publicável, a construção (392 ficheiros, 23 MB), `--simulation`, `--vers-dossier`. **Nunca executada**: a própria publicação — precisa de um token Codeberg, que não se confia a uma sessão.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Num dia calmo, por uma pessoa: `GIT_PAGES_TOKEN=… scripts/ci/publier-front.sh --essai` nos três sites. Se passar, uma publicação real só em `app.anarbib.is` (`--site`), e o controlo do nome com hash do bundle. Anotar aqui que token serve e onde se guarda, e se a via `GIT_PAGES_PASSWORD` (desafio DNS) merece ser preparada.
 
