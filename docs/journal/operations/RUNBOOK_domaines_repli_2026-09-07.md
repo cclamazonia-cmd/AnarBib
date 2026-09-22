@@ -347,11 +347,37 @@ Le certificat de la vitrine `.org.br` a mis une vingtaine de minutes à venir ap
 mode avancé Registro.br délègue à `d.sec.dns.br` / `f.sec.dns.br` — **relever les NS délégués
 (`nslookup -type=NS`) avant d'interroger « l'autorité »**.
 
-**Reste à faire, avec un compte d'essai** (les quatre lignes authentifiées de la liste de la
-phase 6) : connexion, réinitialisation de mot de passe (le courriel mène à `SITE_URL`, donc au
-canonique — c'est voulu), création de compte avec défi Altcha, et une écriture en base depuis le
-domaine de repli. Elles demandent des identifiants : à faire avec Xavier, un jour calme, jamais
-la veille d'une soirée de formation.
+## Essai de bascule du 22/09/2026 — partie authentifiée, faite et verte
+
+*Les quatre lignes de la phase 6 qui demandent un compte. Xavier aux commandes dans une fenêtre
+privée sur `https://app.anarbib.is`, moi au journal du serveur (lecture seule) et au chronomètre.
+**Début 19 h 49, fin 20 h 06 : 17 minutes** pour les quatre pas, aucune erreur à l'écran.*
+
+| # | Pas | Vu à l'écran | Vu au serveur |
+|---|---|---|---|
+| 1 | Connexion (compte lecteur de `blmf-teste`), puis F5 | connecté, toujours connecté après F5, URL restée en `.is` | jeton 19 h 49 min 47 s, vérification de session avec `Referer: https://app.anarbib.is/` 19 h 49 min 48 s, 200 |
+| 2 | Mot de passe oublié | courriel reçu en 3 min (Gmail, boîte de réception) ; **le lien mène à `app.anarbib.org`** ; nouveau mot de passe accepté ; reconnexion sur `.is` après avoir retapé l'adresse | déconnexion depuis `.is` 19 h 52 min 04 s ; lien généré 19 h 52 min 30 s ; suivi 19 h 52 min 57 s (303 vers le canonique) ; mot de passe changé 19 h 53 min 39 s ; jeton et session depuis `.is` 19 h 54 min 46 s |
+| 3 | Création de compte, voie « contributeur·ice d'autorités (sans bibliothèque) » | défi Altcha résolu en moins d'une seconde ; courriel de bienvenue reçu à 19 h 58 — **dans les indésirables de Riseup** | `register` 19 h 58 min 39 s, 200 ; compte créé et confirmé 19 h 58 min 37 s |
+| 4 | Une note de lecture écrite depuis `.is` sur une notice publiée, relue depuis `.org` | publiée, visible à l'identique sur `app.anarbib.org/livro/2393`, puis supprimée par son auteur | ligne présente puis absente de `book_reading_notes` (suppression réelle) |
+
+**Trois choses apprises.**
+
+1. **Le lien du courriel ramène au canonique, et ce n'est pas un détail.** Tant que `SITE_URL`
+   n'est pas changée côté authentification, chaque courriel de réinitialisation ramène l'usager
+   vers `app.anarbib.org` — le jour où ce nom est mort, le parcours « mot de passe oublié » est
+   mort avec lui. C'est le premier geste de la phase 3 ; l'essai l'a rendu visible.
+2. **Le bac à sable n'accepte pas d'inscription publique** (`accepts_public_signup = false` sur
+   `blmf-teste`, voulu) : pour éprouver la création de compte sans déranger une coordination
+   réelle, la voie « sans bibliothèque » convient et laisse un compte facile à supprimer.
+3. **Le courriel de bienvenue est classé indésirable par Riseup**, score 6,9 pour un seuil de 6, et
+   la cause est chez nous : `FROM_NOT_REPLYTO_SAME_DOMAIN` (3,0), `FREEMAIL_FORGED_REPLYTO` (2,5),
+   `FROM_NOT_REPLYTO` (1,0) — l'expéditeur est `no-reply@notifications.anarbib.org` et le
+   **Reply-To est `anarbib@proton.me`**. SPF, DKIM et réputation sont bons ; sans ce Reply-To le
+   score serait d'environ 0,4. Sans rapport avec le domaine de repli — le courriel part du
+   serveur — mais trouvé grâce à l'essai : backlog **F14**.
+
+**Ménage** : note supprimée par son auteur pendant l'essai ; compte contributeur d'essai à
+supprimer par Xavier (page Réseau).
 
 ## 21/09/2026 — L'adresse du site de présentation a un foyer unique
 

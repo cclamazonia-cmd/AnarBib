@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-21** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-21** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 12
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 9
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 10
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-21.** **58 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, F12, F13, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-21.** **59 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, B27, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, E22, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, I27, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1030,6 +1030,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F11** | Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre | `P2` | Ouvert |
 | **F12** | Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours | `P2` | Ouvert |
 | **F13** | `notify-digital-share` : `sent_count` compte aussi les envois refusés | `P3` | Ouvert |
+| **F14** | Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1254,6 +1255,27 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 - Le cas « DÉFAUT CONNU » du banc est retourné et vert ; plus aucun cas de test du dépôt n'est épinglé sous ce nom.
 
 *Renvois : `supabase/functions/notify-digital-share/index.ts` · `src/tests/notify-digital-share-banc.test.js (cas « DÉFAUT CONNU »)` · `supabase/functions/_shared/domain/outbox-verdict.ts`*
+
+#### F14 — Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** **Trouvé le 22/09/2026 pendant l'essai de bascule authentifié** (runbook des domaines, partie du 22/09). Le courriel de bienvenue d'un compte contributeur, envoyé par `register` à une adresse Riseup, est arrivé dans les indésirables avec l'en-tête `X-Spam-Status: Yes, score=6.9 required=6.0`. Le rapport SpamAssassin nomme la cause : `FROM_NOT_REPLYTO_SAME_DOMAIN` (3,0), `FREEMAIL_FORGED_REPLYTO` (2,5), `FROM_NOT_REPLYTO` (1,0), `REPLYTO_DIFF_DOMAIN` (0,2) — soit 6,7 des 6,9 points — parce que l'expéditeur est `no-reply@notifications.anarbib.org` et le **Reply-To `anarbib@proton.me`**, adresse d'un service gratuit sur un autre domaine : c'est le motif type d'une usurpation. Tout le reste est bon (SPF pass, DKIM valide, réputation « excellente »). Le Reply-To vient du réglage `ANARBIB_REPLY_TO_EMAIL` (`supabase/functions/register/index.ts`, l. 653 ; défaut = l'expéditeur), posé en `proton.me` à la suite de la décision du 16/09 d'éviter les adresses `.org` pour le canal humain. Le courriel de réinitialisation vers Gmail, lui, est arrivé en boîte de réception le même soir — les filtres diffèrent, la cause est la même.
+
+*Vérifié : 22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste.*
+
+**Ce que c'est.** Retirer le Reply-To étranger sans revenir sur la décision du 16/09 : ne plus poser `ANARBIB_REPLY_TO_EMAIL` (le Reply-To retombe sur l'expéditeur, même domaine), et écrire l'adresse humaine `anarbib@proton.me` **dans le corps** des courriels qui invitent à répondre, là où un filtre ne la lit pas comme une usurpation. Vérifier les autres fonctions qui lisent un Reply-To d'environnement (`notify-network-weekly-report` : `NETWORK_REPLY_TO_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`). Puis rejouer : une inscription vers une adresse Riseup, lire `X-Spam-Status`.
+
+**Pourquoi ça compte.** Un courriel de bienvenue ou de réinitialisation qui tombe dans les indésirables est un compte perdu : la personne ne trouve ni son identifiant ni son mot de passe provisoire. Les collectifs militants sont justement chez Riseup, Autistici, Proton.
+
+**Ce qui compte comme fini.**
+
+- Une inscription vers une adresse Riseup arrive en boîte de réception, `X-Spam-Status: No`, et le rapport ne porte plus aucune règle `*REPLYTO*`.
+- L'adresse humaine figure dans le corps des courriels concernés, dix langues.
+
+**Dépendances.** Aucune.
+
+*Renvois : `docs/journal/operations/RUNBOOK_domaines_repli_2026-09-07.md (essai du 22/09)` · `supabase/functions/register/index.ts` · `REGISTRE §38 OPS-10`*
 
 ---
 
@@ -2264,4 +2286,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-21 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `2a9681e5` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
