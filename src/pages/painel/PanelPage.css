@@ -628,8 +628,9 @@
 /* (l'ancien `.ab-painel-tab-divider`, trait vertical entre « Travail du jour »
    — la vue d'ensemble — et les onglets de detail, est remplace par
    `.ab-tabbar__sep` : dans une barre qui revient a la ligne, un trait vertical
-   ne marque plus rien, l'ecart si.) */
-}
+   ne marque plus rien, l'ecart si. L'accolade fermante de la regle retiree
+   etait restee ici, seule, du 15/09 au 22/09/2026 : le minifieur CSS l'a
+   signalee a chaque build sans nommer la feuille, personne ne l'a lue — E22.) */
 
 /* ── #115 : fallback de chargement des onglets lazy (code-split) ──────
    Affichee brievement pendant le chargement a la demande d'un onglet
