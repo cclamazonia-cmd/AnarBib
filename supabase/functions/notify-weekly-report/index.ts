@@ -24,6 +24,7 @@ import {
 } from "../_shared/core/env.ts";
 import { resolveLibraryNotificationContext } from "../_shared/context/library-notification-context.ts";
 import { resolveMailRouting } from "../_shared/context/library-mail-routing.ts";
+import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 
 // ─── Helpers locaux ─────────────────────────────────────────────────────────
 
@@ -326,45 +327,20 @@ async function tryUpdateRunStatus(sb, runId, patch) {
 // du run : tryUpdateRunStatus(failed) avant re-throw, tryUpdateRunStatus(sent)
 // apres succes — comportement strictement preserve.
 // ============================================================================
-function formatMailAddress(email, name) {
-  const n = String(name || "").trim();
-  return n ? `${n} <${email}>` : email;
-}
-// --- Implementation Resend (cf. spec §4.4) ---------------------------------
-async function sendViaResend(opts) {
+// --- Envoi : une seule implementation, celle de _shared (F7, 23/09/2026) ---
+// Cette fonction portait sa propre copie de l'appel Resend. Le routage par
+// bibliotheque est calcule ici comme avant et passe EXPLICITEMENT : le From et
+// le Reply-To des messages restent ceux d'hier, seul le transport est partage.
+async function sendEmail(opts) {
   const { routing, subject, htmlContent, textContent } = opts;
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  if (!resendKey) {
-    throw new Error("RESEND_API_KEY absente des secrets Edge Function");
-  }
-  const payload: Record<string, unknown> = {
-    from: formatMailAddress(routing.senderEmail, routing.senderName),
-    to: [routing.recipientEmail],
+  return await sendEmailPartage({
+    toEmail: routing.recipientEmail,
     subject,
     html: htmlContent,
-    text: textContent
-  };
-  if (routing.replyToEmail) {
-    payload.reply_to = formatMailAddress(routing.replyToEmail, routing.replyToName);
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${resendKey}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
+    text: textContent,
+    routing,
+    label: "weekly-report"
   });
-  const resText = await res.text();
-  if (!res.ok) {
-    throw new Error(`Resend error HTTP ${res.status}: ${resText}`);
-  }
-  return resText;
-}
-// --- Wrapper neutre --------------------------------------------------------
-async function sendEmail(opts) {
-  console.log(`[weekly-report] envoi via resend`);
-  return await sendViaResend(opts);
 }
 
 serve(async (req) => {

@@ -2,6 +2,7 @@
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
+import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 const PAGE_SIZE = 1000;
 function mustEnv(name) {
   const value = Deno.env.get(name);
@@ -244,47 +245,19 @@ function normalizeName(row, ctx) {
 // CONTRAT : sendEmail ne renvoie rien d'utile au serve (envoi pour effet) et
 // throw sur erreur HTTP.
 // ============================================================================
-function formatMailAddress(email, name) {
-  const n = String(name || "").trim();
-  return n ? `${n} <${email}>` : email;
-}
-// --- Implementation Resend (cf. spec §4.4) ---------------------------------
-// Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
-// reply_to "Nom <email>", corps html/text. throw sur erreur HTTP.
-async function sendViaResend(opts) {
+// --- Envoi : une seule implementation, celle de _shared (F7, 23/09/2026) ---
+// Meme geste que pour notify-weekly-report : le routage reste calcule ici et
+// passe explicitement, seul le transport est partage.
+async function sendEmail(opts) {
   const { routing, subject, html, text } = opts;
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  if (!resendKey) {
-    throw new Error("RESEND_API_KEY absente des secrets Edge Function");
-  }
-  const payload: Record<string, unknown> = {
-    from: formatMailAddress(routing.senderEmail, routing.senderName),
-    to: [routing.recipientEmail],
+  return await sendEmailPartage({
+    toEmail: routing.recipientEmail,
     subject,
     html,
-    text
-  };
-  if (routing.replyToEmail) {
-    payload.reply_to = formatMailAddress(routing.replyToEmail, routing.replyToName);
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${resendKey}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
+    text,
+    routing,
+    label: "network-weekly-report"
   });
-  const resText = await res.text();
-  if (!res.ok) {
-    throw new Error(`Resend error HTTP ${res.status}: ${resText}`);
-  }
-  return resText;
-}
-// --- Wrapper neutre --------------------------------------------------------
-async function sendEmail(opts) {
-  console.log(`[network-weekly-report] envoi via resend`);
-  return await sendViaResend(opts);
 }
 
 serve(async (req)=>{

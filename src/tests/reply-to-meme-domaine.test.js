@@ -14,12 +14,17 @@ const lire = (p) => readFileSync(join(ROOT, p), 'utf8');
 
 // Liste FERMÉE des fonctions qui posent un reply_to hors du routage par bibliothèque,
 // avec la raison pour laquelle chacune est admise.
+// 23/09/2026 (F7, lot 1) — `notify-weekly-report` et `notify-network-weekly-report`
+// SORTENT de cette liste : elles ne posent plus l'en-tête elles-mêmes, elles passent
+// par `_shared/transport/email.ts` en lui donnant leur routage. La valeur envoyée est
+// la même qu'avant (routing.replyToEmail, qui retombe sur SENDER_EMAIL) ; seul
+// l'endroit où elle est écrite a changé, et cet endroit-là est hors du champ de ce
+// balayage, qui saute `_shared` exprès. Le contenu du payload partagé est désormais
+// figé par `src/tests/mail-transport-routage.test.js`.
 const ADMISES = {
   'notify-document-permission-request': 'REPLY_TO_EMAIL / ANARBIB_REPLY_TO_EMAIL, vides en production → aucun en-tête',
   'notify-mid-loan-reading': 'reply-to de la bibliothèque (canal local), pas de la plateforme',
-  'notify-network-weekly-report': 'routing.replyToEmail : résolution partagée, qui retombe sur SENDER_EMAIL',
   'notify-oai-opening': 'FEDERAL_EMAIL, même domaine que l\'expéditeur',
-  'notify-weekly-report': 'routing.replyToEmail : canal de la bibliothèque, sinon SENDER_EMAIL',
   'register': 'ANARBIB_REPLY_TO_EMAIL, vide en production → retombe sur SENDER_EMAIL',
 };
 

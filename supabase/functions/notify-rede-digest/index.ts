@@ -18,6 +18,7 @@
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
 import { tMail, greeting } from "../_shared/i18n/mail-strings.ts";
+import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { APP_BASE_URL as APP_URL } from "../_shared/core/app-url.ts";
 
 
@@ -40,26 +41,19 @@ function esc(value: unknown): string {
 function isValidEmail(email: unknown): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
 }
-function formatMailAddress(email: string, name?: string | null): string {
-  const n = String(name || "").trim();
-  return n ? `${n} <${email}>` : email;
-}
 
-async function sendViaResend(opts: { senderName: string; senderEmail: string; to: string; subject: string; html: string; text: string }): Promise<void> {
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  if (!resendKey) throw new Error("RESEND_API_KEY absente des secrets Edge Function");
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { "Authorization": `Bearer ${resendKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: formatMailAddress(opts.senderEmail, opts.senderName),
-      to: [opts.to],
-      subject: opts.subject,
-      html: opts.html,
-      text: opts.text,
-    }),
+// --- Envoi : une seule implementation, celle de _shared (F7, 23/09/2026) ---
+// Le digest n'a JAMAIS porte de reply_to : on le dit ici explicitement plutot
+// que de laisser le routage partage en poser un.
+async function sendDigestEmail(opts: { senderName: string; senderEmail: string; to: string; subject: string; html: string; text: string }): Promise<void> {
+  await sendEmailPartage({
+    toEmail: opts.to,
+    subject: opts.subject,
+    html: opts.html,
+    text: opts.text,
+    routing: { senderEmail: opts.senderEmail, senderName: opts.senderName, noReplyTo: true },
+    label: "rede-digest"
   });
-  if (!res.ok) throw new Error(`Resend error HTTP ${res.status}: ${await res.text()}`);
 }
 
 function section(headingHtml: string, itemsHtml: string): string {
@@ -201,7 +195,7 @@ Deno.serve(async (req) => {
       const unsubUrl = `${supabaseUrl}/functions/v1/lettre-unsubscribe?token=${encodeURIComponent(token)}`;
       const { subject, html, text } = renderDigest({ brand, loc, name: r.first_name, logoUrl, footerText, unsubUrl, gazettes, circles });
       try {
-        await sendViaResend({ senderName, senderEmail, to: r.email, subject, html, text });
+        await sendDigestEmail({ senderName, senderEmail, to: r.email, subject, html, text });
         sent++;
       } catch (e) {
         errors.push({ email: r.email, error: String((e as Error)?.message ?? e) });

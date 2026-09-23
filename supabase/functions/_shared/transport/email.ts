@@ -28,8 +28,27 @@ function formatAddress(email: string, name?: string): string {
   return n ? `${n} <${email}>` : email;
 }
 
+// ─── Routage explicite (F7, 23/09/2026) ────────────────────────────────────
+// Les fonctions qui portaient leur propre copie de l'envoi n'ont pas toutes la
+// même politique d'expéditeur : certaines calculent leur routage elles-mêmes
+// avant d'appeler, et `notify-library-request` n'envoie JAMAIS de `reply_to`
+// depuis F14 (22/09/2026) — une adresse de réponse hors du domaine d'envoi est
+// un motif d'usurpation pour les filtres. Les rassembler ici sans ce passage
+// explicite changerait le `From` ou rendrait un `Reply-To` retiré exprès : la
+// consolidation doit être invisible dans les messages reçus.
+//
+// `opts.routing` l'emporte sur le contexte ; `noReplyTo: true` coupe l'adresse
+// de réponse même quand le routage en porte une.
+export function routageEffectif(opts) {
+  const r = opts?.routing ? { ...opts.routing } : resolveMailRouting(opts?.context);
+  if (opts?.routing?.noReplyTo === true) {
+    return { ...r, replyToEmail: null, replyToName: null };
+  }
+  return r;
+}
+
 async function sendViaResend(opts) {
-  const r = resolveMailRouting(opts.context);
+  const r = routageEffectif(opts);
   const RESEND_KEY = Deno.env.get("RESEND_API_KEY") || "";
   if (!RESEND_KEY) {
     throw new Error("RESEND_API_KEY absente des secrets Edge Function");
@@ -58,7 +77,7 @@ async function sendViaResend(opts) {
 }
 
 async function sendViaConfiguredSmtp(opts) {
-  const r = resolveMailRouting(opts.context);
+  const r = routageEffectif(opts);
   const host = (Deno.env.get("SMTP_HOST") || "").trim();
   const port = parseInt(Deno.env.get("SMTP_PORT") || "587", 10);
   const user = (Deno.env.get("SMTP_USER") || "").trim();
