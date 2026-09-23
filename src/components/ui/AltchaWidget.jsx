@@ -20,6 +20,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { SUPABASE_URL } from '@/lib/supabase';
 
 const FONCTION_DEFI = 'altcha-challenge';
 
@@ -45,7 +46,7 @@ export default function AltchaWidget({ onSolved, resetKey = 0 }) {
 
     let defi;
     try {
-      const base = import.meta.env.VITE_SUPABASE_URL;
+      const base = SUPABASE_URL;
       const r = await fetch(`${base}/functions/v1/${FONCTION_DEFI}`, {
         headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
       });

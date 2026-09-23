@@ -1196,8 +1196,8 @@ export default function CatalogPage() {
           </Link>
           {/* E11 (03/09) : le flux des nouveautés de cette bibliothèque — sans requête,
               sans compte. La fonction ne répond que pour une bibliothèque publique. */}
-          {import.meta.env.VITE_SUPABASE_URL && (
-            <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-novidades/${routeLibrarySlug}`}
+          {SUPABASE_URL && (
+            <a href={`${SUPABASE_URL}/functions/v1/rss-novidades/${routeLibrarySlug}`}
                type="application/rss+xml" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.88rem' }}>
               {t({ id: 'bibliotecas.rssFeed' })}
             </a>

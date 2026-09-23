@@ -3,16 +3,15 @@ import { renderEmail, footerPadrao } from "../mail/layout.ts";
 import { inlineLogosInHtml } from "../mail/inline-images.ts";
 import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
+import { sendViaSmtp, resolveTimeout } from "../mail/smtp.ts";
+
 // ============================================================================
-// Transport mail — envoi via Resend
+// Transport mail — Hybride universel : SMTP ou API Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend) : R.2 avait introduit un dispatch
-// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
-// sendEmail() appelle desormais directement sendViaResend(). Le secret
-// MAIL_PROVIDER a ete retire de Supabase en R.7 (08/06/2026) ; n'est
-// plus lu par le code. safeSendEmail() est inchange, donc aucun handler de
-// _shared/domain/* n'est touche.
-// Spec : docs/specs/spec-migration-mail-resend.md.
+// Supporte :
+//   1. SMTP standard (mail.domaine.org, OVH, Gandi, Postfix, etc.)
+//   2. API Resend (https://api.resend.com/emails)
+//   3. Mock local (simulation explicite avec MAIL_TRANSPORT=mock, DOC-SILENCE-1)
 // ============================================================================
 
 // --- Implementation Resend ----------------------------------------------
@@ -58,12 +57,67 @@ async function sendViaResend(opts) {
   return body;
 }
 
+async function sendViaConfiguredSmtp(opts) {
+  const r = resolveMailRouting(opts.context);
+  const host = (Deno.env.get("SMTP_HOST") || "").trim();
+  const port = parseInt(Deno.env.get("SMTP_PORT") || "587", 10);
+  const user = (Deno.env.get("SMTP_USER") || "").trim();
+  const pass = (Deno.env.get("SMTP_PASS") || "").trim();
+  const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
+  const allowInsecure = (Deno.env.get("SMTP_ALLOW_INSECURE") || "").trim().toLowerCase() === "true";
+  const timeoutMs = resolveTimeout(Deno.env.get("SMTP_TIMEOUT_MS"));
+
+  return await sendViaSmtp({
+    host,
+    port,
+    user,
+    pass,
+    secure,
+    allowInsecure,
+    timeoutMs,
+    from: formatAddress(r.senderEmail, r.senderName),
+    to: [opts.toEmail],
+    replyTo: r.replyToEmail ? formatAddress(r.replyToEmail, r.replyToName) : undefined,
+    subject: opts.subject,
+    html: opts.html,
+    text: opts.text
+  });
+}
+
 // --- Wrapper neutre ------------------------------------------------------
 // Point d'entree unique. C'est la seule fonction d'envoi que le reste du
 // module (safeSendEmail) doit connaitre.
 export async function sendEmail(opts) {
-  console.log(`[transport] envoi via resend (label=${opts.label ?? "?"})`);
-  return await sendViaResend(opts);
+  const smtpHost = (Deno.env.get("SMTP_HOST") || "").trim();
+  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
+  const mailTransport = (Deno.env.get("MAIL_TRANSPORT") || "").trim().toLowerCase();
+
+  // 1. Simulation explicite demandée
+  if (mailTransport === "mock") {
+    console.log(`[transport] [EMAIL SIMULATION] MAIL_TRANSPORT=mock actif (DOC-SILENCE-1) : mail simulé à ${opts.toEmail} (« ${opts.subject} »)`);
+    return JSON.stringify({ ok: true, mocked: true, to: opts.toEmail, subject: opts.subject });
+  }
+
+  // 2. SMTP explicitement demandé ou configuré via SMTP_HOST (sauf si MAIL_TRANSPORT=resend)
+  if (mailTransport === "smtp" || (smtpHost && mailTransport !== "resend")) {
+    if (!smtpHost) {
+      throw new Error("MAIL_TRANSPORT=smtp configuré mais SMTP_HOST est vide ou manquant");
+    }
+    console.log(`[transport] envoi via SMTP (${smtpHost}) (label=${opts.label ?? "?"})`);
+    return await sendViaConfiguredSmtp(opts);
+  }
+
+  // 3. Resend configuré (ou transport explicite resend)
+  if (mailTransport === "resend" || resendKey) {
+    console.log(`[transport] envoi via Resend (label=${opts.label ?? "?"})`);
+    return await sendViaResend(opts);
+  }
+
+  // 4. Aucune configuration valide : interdiction du silence en prod (DOC-SILENCE-1)
+  throw new Error(
+    "Aucun service d'e-mail configuré : RESEND_API_KEY ou SMTP_HOST requis, " +
+    "ou MAIL_TRANSPORT=mock pour la simulation locale explicite (DOC-SILENCE-1)"
+  );
 }
 
 export function skippedEmailResult(label, reason, email) {
