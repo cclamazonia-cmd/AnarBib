@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-22** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-23** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-22.** **56 itens de 69** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-23.** **56 itens de 69** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F7, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1110,7 +1110,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
 
-**Estado.** A PR #28 adiciona um transporte híbrido SMTP / Resend / « mock »: sem `SMTP_HOST` nem `RESEND_API_KEY`, `sendEmail` devolve `{ok:true, mocked:true}`. É o caso (a) de `DOC-SILENCE-1`. Em produção nada muda hoje; no dia em que o segredo faltar, a produção responderá 200 sem enviar nada. **D4 (21h30)**: no instalador, a simulação vira opção 3, nunca padrão.
+**Estado.** A PR #28 adiciona um transporte híbrido SMTP / Resend / « mock »: sem `SMTP_HOST` nem `RESEND_API_KEY`, `sendEmail` devolve `{ok:true, mocked:true}`. É o caso (a) de `DOC-SILENCE-1`. Em produção nada muda hoje; no dia em que o segredo faltar, a produção responderá 200 sem enviar nada. **D4 (21h30)**: no instalador, a simulação vira opção 3, nunca padrão. **23/09 — o transporte foi entregue (PR #30, merge `2cd27d71`).** O companheiro (`ASR2026`) retomou F7 depois de fechar a sua #29: `_shared/mail/smtp.ts` (cliente SMTP puro Deno) e o encaminhamento de `_shared/transport/email.ts` — `mock` **só** com `MAIL_TRANSPORT=mock`, SMTP com `SMTP_HOST` (salvo `MAIL_TRANSPORT=resend`), Resend por padrão, e um `throw` legível sem configuração. **O primeiro critério está cumprido.** Seis correções pedidas na releitura, todas feitas: RFC 2047 (codificar só o display-name — um nome de biblioteca acentuado quebrava o `From:`), STARTTLS obrigatório com opt-in explícito `SMTP_ALLOW_INSECURE`, corpo em base64 dobrado a 76 colunas (o que também neutraliza o dot-stuffing), guarda sobre `SMTP_HOST` ausente, tempos-limite `SMTP_TIMEOUT_MS`, e um banco `src/tests/smtp-transport.test.js` que carrega o módulo real. Suíte verificada sobre o resultado do merge: 75 arquivos, 791 testes. Depois do deploy, sonda OPTIONS das 10 funções que passam pelo transporte: 200/405 em todas, nenhum 503. **O item continua ABERTO no segundo critério**: oito funções ainda chamam a API Resend diretamente, e `register/index.ts` pula o envio com um simples `console.warn` quando falta a chave — o caso (a) de `DOC-SILENCE-1` sobrevive aí. **Não provado até hoje**: nenhum envio real passou pelo novo `sendEmail` em produção desde o deploy de 23/09.
 
 *Verificado : [object Object],[object Object]*
 
@@ -2208,4 +2208,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-22. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60b16828`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-23. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `60b16828`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
