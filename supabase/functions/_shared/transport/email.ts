@@ -4,6 +4,7 @@ import { inlineLogosInHtml } from "../mail/inline-images.ts";
 import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
 import { sendViaSmtp, resolveTimeout } from "../mail/smtp.ts";
+import { supabaseAdmin } from "../core/env.ts";
 
 // ============================================================================
 // Transport mail — Hybride universel : SMTP ou API Resend
@@ -126,7 +127,42 @@ async function sendViaConfiguredSmtp(opts) {
 // --- Wrapper neutre ------------------------------------------------------
 // Point d'entree unique. C'est la seule fonction d'envoi que le reste du
 // module (safeSendEmail) doit connaitre.
+// ─── Un échec de transport se note (F7 / DOC-SILENCE-1, 24/09/2026) ────────
+// Chaque envoi du réseau passe ici. Quand le transport refuse, on l'écrit dans
+// mail_transport_failures AVANT de relancer l'erreur : la sonde
+// fn_healthcheck_mail_transport (health-probe) en fait un incident. Sans ça,
+// request-password-reset — qui répond 200 quoi qu'il arrive, par
+// anti-énumération — laissait une clé tournée invisible à tout le monde.
+// Jamais l'adresse du destinataire : le libellé, le nombre de destinataires,
+// l'erreur expurgée et tronquée. Et jamais de seconde erreur par-dessus la
+// première : si la note échoue, on le journalise et on relance l'originale.
+function expurger(message: string): string {
+  return String(message || "").replace(/[^\s@<>"']+@[^\s@<>"']+/g, "<adresse>").slice(0, 300);
+}
+
+async function noterEchecTransport(opts, err) {
+  try {
+    const { error } = await supabaseAdmin.from("mail_transport_failures").insert({
+      label: String(opts?.label ?? "?").slice(0, 120),
+      recipients: destinataires(opts).length,
+      error: expurger(err?.message || String(err))
+    });
+    if (error) console.warn("[transport] échec non noté :", error.message);
+  } catch (e) {
+    console.warn("[transport] échec non noté :", String((e as Error)?.message ?? e));
+  }
+}
+
 export async function sendEmail(opts) {
+  try {
+    return await aiguillerEtEnvoyer(opts);
+  } catch (err) {
+    await noterEchecTransport(opts, err);
+    throw err;
+  }
+}
+
+async function aiguillerEtEnvoyer(opts) {
   const smtpHost = (Deno.env.get("SMTP_HOST") || "").trim();
   const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
   const mailTransport = (Deno.env.get("MAIL_TRANSPORT") || "").trim().toLowerCase();

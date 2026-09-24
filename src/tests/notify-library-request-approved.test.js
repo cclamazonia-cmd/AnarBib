@@ -120,6 +120,7 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
         if (sp.endsWith('inline-images.ts')) return { inlineLogosInHtml: async (h) => h };
         if (sp.endsWith('format.ts')) return { firstNameOnly: (x) => x, fullName: (x) => x, isValidEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || '')) };
         if (sp.endsWith('smtp.ts')) return { sendViaSmtp: async () => 'smtp', resolveTimeout: () => 15000 };
+        if (sp.endsWith('core/env.ts')) return { supabaseAdmin: { from: () => ({ insert: async () => ({ error: null }) }) } };
         throw new Error(`import inattendu (transport) : ${sp}`);
       };
       const m = { exports: {} };

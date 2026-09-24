@@ -25,6 +25,9 @@ const RACINE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..
 const FONCTIONS = path.join(RACINE, 'supabase', 'functions');
 
 let dernierEnvoi = null;
+let ecrits = [];
+
+let panneResend = false;
 
 function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc' }) {
   const src = readFileSync(path.join(FONCTIONS, '_shared/transport/email.ts'), 'utf8');
@@ -48,6 +51,7 @@ function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc' }) {
       isValidEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || '')),
     },
     smtp: { sendViaSmtp: async () => 'smtp-ok', resolveTimeout: () => 15000 },
+    'core/env': { supabaseAdmin: { from: (table) => ({ insert: async (row) => { ecrits.push({ table, row }); return { error: null }; } }) } },
   };
   const requireDetourne = (id) => {
     const cle = Object.keys(stubs).find((k) => id.includes(k));
@@ -55,9 +59,10 @@ function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc' }) {
     return stubs[cle];
   };
 
-  dernierEnvoi = null;
+  dernierEnvoi = null; ecrits = [];
   globalThis.fetch = async (url, init) => {
     dernierEnvoi = { url: String(url), payload: JSON.parse(init.body) };
+    if (panneResend) return { ok: false, status: 500, text: async () => 'panne ' + init.body };
     return { ok: true, status: 200, text: async () => '{"id":"banc"}' };
   };
 
@@ -118,11 +123,30 @@ describe('transport partage — le routage explicite l emporte sur le contexte',
     expect(dernierEnvoi.payload.reply_to).toBe('Reponse du contexte <reponse-du-contexte@exemple.test>');
   });
 
+  it('un refus du transport est NOTE, sans l adresse, puis relance (DOC-SILENCE-1 cas a)', async () => {
+    const { sendEmail } = chargeTransport();
+    panneResend = true;
+    try {
+      await expect(
+        sendEmail({ toEmail: 'louise@exemple.test', ...CORPS, routing: { senderEmail: 'a@b.test', senderName: 'A' }, label: 'password-reset' }),
+      ).rejects.toThrow(/Resend HTTP 500/);
+    } finally { panneResend = false; }
+    expect(ecrits).toHaveLength(1);
+    expect(ecrits[0].table).toBe('mail_transport_failures');
+    expect(ecrits[0].row).toMatchObject({ label: 'password-reset', recipients: 1 });
+    expect(ecrits[0].row.error).toContain('Resend HTTP 500');
+    // Le corps de la reponse Resend recopiait le payload, donc l adresse : expurgee.
+    expect(ecrits[0].row.error).not.toContain('louise@exemple.test');
+    expect(ecrits[0].row.error).toContain('<adresse>');
+  });
+
   it('sans service configure, leve — le silence reste interdit (DOC-SILENCE-1)', async () => {
     const { sendEmail } = chargeTransport({});
     await expect(
       sendEmail({ toEmail: 'dest@exemple.test', ...CORPS, routing: { senderEmail: 'a@b.test', senderName: 'A' } }),
     ).rejects.toThrow(/Aucun service/);
+    expect(ecrits).toHaveLength(1);
+    expect(ecrits[0].row.error).toMatch(/Aucun service/);
   });
 });
 

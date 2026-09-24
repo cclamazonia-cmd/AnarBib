@@ -493,3 +493,8 @@ tests/sql/crons_replanifier_tests.sql
 # proposition d'autorité, une demande d'entrée, un éditeur créé…). La suite
 # relit pg_constraint — liste VIVANTE — et efface un compte qui a agi.
 tests/sql/effacement_compte_fk_tests.sql
+# 24/09 (F7 / DOC-SILENCE-1) : un échec de transport mail doit se voir. Le module
+# partagé note chaque échec dans mail_transport_failures ; la sonde
+# fn_healthcheck_mail_transport ouvre l'incident `mail_transport`. La suite éprouve
+# la table, la sonde (forme, fenêtre de 30 min), ses droits et la CHECK.
+tests/sql/mail_transport_tests.sql

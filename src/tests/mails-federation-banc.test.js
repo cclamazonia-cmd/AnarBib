@@ -22,7 +22,7 @@ describe('domain/cartography — une auto-déclaration à modérer', () => {
   const LIGNE = { id: 3, status: 'queued', event: 'cartography.submission_received', payload: { name: 'Ateneu Llibertari', city: 'Barcelona', country: 'ES', categorie: 'ateneu', site_url: 'https://ateneu.exemple.test' } };
   function monter({ env = {}, ligne = LIGNE, resend } = {}) {
     const ef = monterEF({ env, resend, repondre: (_s, table, a) => (table === 'cartography_submission_notification_outbox' && !a('update') ? { data: ligne, error: null } : { data: null, error: null }) });
-    return { ef, handle: ef.charger('_shared/domain/cartography.ts').handleCartographyEvent, etat: () => ef.ecrits.map((e) => e.donnees.status) };
+    return { ef, handle: ef.charger('_shared/domain/cartography.ts').handleCartographyEvent, etat: () => ef.ecrits.filter((e) => e.table === 'cartography_submission_notification_outbox').map((e) => e.donnees.status) };
   }
 
   it('la boîte éditoriale reçoit la fiche et le lien de modération ; la file passe à « sent »', async () => {
@@ -50,10 +50,16 @@ describe('domain/cartography — une auto-déclaration à modérer', () => {
     expect(r).toMatchObject({ ok: false, outbox_status: 'failed' });
     expect(ef.envois).toHaveLength(0);
     expect(etat()).toEqual(['failed']);
-    const d = ef.ecrits[0].donnees;
+    const d = ef.ecrits.find((e) => e.table === 'cartography_submission_notification_outbox').donnees;
     expect(d.last_error).toContain('fede@anarbib.org');
     expect(d.last_error).toContain('500');
     expect(d.sent_at).toBeUndefined();
+    // 24/09/2026 (F7 / DOC-SILENCE-1) : le transport partagé note l'échec pour la
+    // sonde mail_transport — sans l'adresse, contrairement à la file qui la garde.
+    const note = ef.ecrits.find((e) => e.table === 'mail_transport_failures');
+    expect(note).toBeTruthy();
+    expect(note.donnees.error).toContain('500');
+    expect(note.donnees.error).not.toContain('fede@anarbib.org');
   });
 });
 

@@ -698,6 +698,22 @@ Deno.serve(async (req: Request) => {
       conseil:
         'Tant que cet écart dure, un dump de la production risque de ne pas se restaurer sous la pile auto-hébergée. À faire : relever les versions servies (/auth/v1/health, /storage/v1/version), passer deploy/banc-paliers.sh avec le pin courant en témoin, puis remplacer ENSEMBLE private.fn_images_pins_attendus() (migration), deploy/.env.example et les seuils de deploy/bootstrap.sh — la garde pins-images-coherence refuse la moitié.',
     },
+    // 24/09/2026 — F7 / DOC-SILENCE-1 cas (a). request-password-reset répond 200
+    // quoi qu'il arrive (anti-énumération) : un transport qui refuse ne se voyait
+    // nulle part. Le module partagé _shared/transport/email.ts note chaque échec
+    // dans mail_transport_failures ; la sonde regarde les 30 dernières minutes.
+    // Un échec ouvre, trente minutes de calme referment. Le kind est dans la
+    // CHECK depuis la migration 20260924180538.
+    {
+      kind: 'mail_transport',
+      rpc: 'fn_healthcheck_mail_transport',
+      sujetOuvert: 'AnarBib — le transport des courriels a refusé un envoi',
+      titreOuvert: 'Courriels : un envoi a échoué au transport',
+      quoi: 'le transport des courriels',
+      deQuoi: 'du transport des courriels',
+      conseil:
+        "Lire l'erreur jointe : une clé Resend tournée ou absente, un domaine d'envoi suspendu, un serveur SMTP qui refuse. Tant que l'incident est ouvert, des personnes croient qu'un courriel leur est parti — la récupération de mot de passe répond « ok » quoi qu'il arrive, par anti-énumération. L'incident se referme de lui-même après trente minutes sans échec.",
+    },
   ];
 
   const actionsStructurelles: Record<string, string> = {};
@@ -795,6 +811,7 @@ Deno.serve(async (req: Request) => {
   // Purge de l'historique (evite une table qui grossit sans fin).
   const limite = new Date(Date.now() - RETENTION_JOURS * 86400_000).toISOString();
   await supabaseAdmin.from('service_health_probes').delete().lt('checked_at', limite);
+  await supabaseAdmin.from('mail_transport_failures').delete().lt('occurred_at', limite);
 
   return jsonResponse(200, {
     ok: true,
