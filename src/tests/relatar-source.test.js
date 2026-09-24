@@ -50,6 +50,8 @@ describe('« Signaler un problème » — les pièces tiennent ensemble (E14)', 
     expect(page).toContain('<AltchaWidget');
     expect(page).toContain("callEdgeFunction('submit-bug-report'");
     expect(page).toContain('name="website"'); // honeypot
+    // sans session, pas de bibliothèque par défaut dans le signalement (premier signalement réel, 24/09)
+    expect(page).toContain('library_hint: role ? (libraryName || null) : null');
   });
 
   it("la fonction : Altcha en deux temps (usage bug_report), compteur bug_ip, doublon ouvert rendu tel quel", () => {
@@ -71,6 +73,8 @@ describe('« Signaler un problème » — les pièces tiennent ensemble (E14)', 
     expect(handler).toContain('bugreport.ack.noreply');
     expect(handler).not.toMatch(/replyTo|reply_to/);
     expect(handler).toContain('verdictEnvois(');
+    // aucun identifiant du backlog dans le texte du courriel
+    expect(handler).not.toMatch(/`[^`]*\(E14\)[^`]*`/);
   });
 
   it('la migration : tables fermées, kind bug_ip, usage Altcha, aucune adresse cloud en dur ; suites et filet BG2 à jour', () => {

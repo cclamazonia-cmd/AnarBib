@@ -67,7 +67,8 @@ export async function handleBugReportEvent(recordId) {
     let admins = await destinatairesAdminsReseau(supabaseAdmin);
     if (!admins.length) admins = [{ email: ADMINS_FALLBACK, name: "Administration AnarBib", locale: localeAdmins, source: "extra" }];
     const sub = `Signalement ${ref} — ${String(p.page_path || "page inconnue")}`;
-    let introHtml = `<p>Un problème vient d'être signalé depuis l'application (E14) :</p>`;
+    // Pas d'identifiant du backlog dans le courriel : il ne dit rien à qui le lit (Xavier, 24/09).
+    let introHtml = `<p>Un problème vient d'être signalé depuis l'application :</p>`;
     introHtml += bloc("Ce qui s'est passé", p.what_happened);
     introHtml += bloc("Ce qui était attendu", p.expected);
     introHtml += bloc("Comment refaire", p.steps);

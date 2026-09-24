@@ -43,7 +43,9 @@ export default function RelatarProblemaPage() {
     setState('sending'); setErrMsg('');
     const res = await callEdgeFunction('submit-bug-report', {
       what_happened: f.what, expected: f.expected, steps: f.steps, reporter_email: f.email,
-      page_path: page || null, locale, role_hint: role || null, library_hint: libraryName || null,
+      // Sans session, le contexte de bibliothèque vaut « AnarBib » par défaut : ne rien envoyer
+      // plutôt qu'une bibliothèque qui n'est pas celle de la personne (premier signalement réel, 24/09).
+      page_path: page || null, locale, role_hint: role || null, library_hint: role ? (libraryName || null) : null,
       altcha_payload: altchaCharge, website: f.website,
     });
     if (res.ok && res.data?.id) {
