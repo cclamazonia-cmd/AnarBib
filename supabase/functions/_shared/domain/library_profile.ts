@@ -39,7 +39,7 @@ import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { appUrl } from "../core/app-url.ts";
-import { verdictEnvois } from "./outbox-verdict.ts";
+import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 
 // ─── Helpers communs ──────────────────────────────────────────────────────
 
@@ -50,11 +50,9 @@ async function markOutboxSent(outboxId) {
   }).eq("id", outboxId);
 }
 
-async function markOutboxFailed(outboxId, errorMsg) {
-  await supabaseAdmin.from("team_notification_outbox").update({
-    status: "failed",
-    last_error: errorMsg
-  }).eq("id", outboxId);
+// F12 (25/09/2026) : `verdictOuMessage` est le verdict (refusés compris) ou un message d'erreur.
+async function markOutboxFailed(outboxId, verdictOuMessage) {
+  await supabaseAdmin.from("team_notification_outbox").update(champsEchec(verdictOuMessage)).eq("id", outboxId);
 }
 
 // B12 / DOC-SILENCE-1 (21/09/2026) : ce module n'avait pas de « skipped » — un
@@ -235,7 +233,7 @@ export async function handleLibraryProfileEvent(recordId) {
     // envois (outbox-verdict.ts) — « sent » était posé sans condition.
     const verdict = verdictEnvois(result);
     if (verdict.status === "skipped") await markOutboxSkipped(row.id, verdict.detail);
-    else if (verdict.status === "failed") await markOutboxFailed(row.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(row.id, verdict);
     else await markOutboxSent(row.id);
     return { ...result, ok: verdict.status !== "failed", event, outbox_status: verdict.status };
   } catch (err) {

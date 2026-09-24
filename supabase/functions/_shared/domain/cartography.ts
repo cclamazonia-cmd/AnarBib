@@ -15,7 +15,7 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
-import { verdictEnvois } from "./outbox-verdict.ts";
+import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 
 const OUTBOX = "cartography_submission_notification_outbox";
 const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
@@ -38,8 +38,9 @@ async function markOutboxSent(id) {
 async function markOutboxSkipped(id, reason) {
   await supabaseAdmin.from(OUTBOX).update({ status: "skipped", skip_reason: String(reason || "raison_non_precisee") }).eq("id", id);
 }
-async function markOutboxFailed(id, errorMsg) {
-  await supabaseAdmin.from(OUTBOX).update({ status: "failed", last_error: errorMsg }).eq("id", id);
+// F12 (25/09/2026) : `verdictOuMessage` est le verdict (refusés compris) ou un message d'erreur.
+async function markOutboxFailed(id, verdictOuMessage) {
+  await supabaseAdmin.from(OUTBOX).update(champsEchec(verdictOuMessage)).eq("id", id);
 }
 
 export async function handleCartographyEvent(recordId) {
@@ -91,7 +92,7 @@ export async function handleCartographyEvent(recordId) {
     // envoi refusé par le transport passait pour « sent ».
     const verdict = verdictEnvois({ recipients_count: 1, result });
     if (verdict.status === "skipped") await markOutboxSkipped(outbox.id, verdict.detail);
-    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict);
     else await markOutboxSent(outbox.id);
     return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, recipients_count: 1, result };
   } catch (err) {

@@ -29,7 +29,16 @@
 // DESTINATAIRE refusé, jamais la ligne entière — les autres ont reçu leur courriel.
 // ============================================================================
 
-export type VerdictEnvoi = { status: "sent" | "skipped" | "failed"; detail: string | null };
+// `refuses` (F12, 25/09/2026) : les adresses refusées par le transport, EN DONNÉES —
+// c'est elles, et elles seules, que le cron de rejeu fera repartir. Vide hors échec.
+export type VerdictEnvoi = { status: "sent" | "skipped" | "failed"; detail: string | null; refuses: string[] };
+
+/** Les colonnes qu'une ligne de file en échec doit porter (F12) : la cause lisible et la liste des refusés. */
+export function champsEchec(verdictOuMessage: VerdictEnvoi | string) {
+  if (typeof verdictOuMessage === "string") return { status: "failed", last_error: verdictOuMessage, refused_recipients: null };
+  const v = verdictOuMessage;
+  return { status: "failed", last_error: v.detail, refused_recipients: v.refuses.length ? v.refuses : null };
+}
 
 function envoisDe(r): unknown[] {
   const out: unknown[] = [];
@@ -42,18 +51,19 @@ function envoisDe(r): unknown[] {
 }
 
 export function verdictEnvois(r): VerdictEnvoi {
-  if (!r || r.recipients_count === 0) return { status: "skipped", detail: "no_recipients" };
+  if (!r || r.recipients_count === 0) return { status: "skipped", detail: "no_recipients", refuses: [] };
   // deno-lint-ignore no-explicit-any
   const envois = envoisDe(r) as any[];
-  if (envois.length === 0) return { status: "sent", detail: null };
+  if (envois.length === 0) return { status: "sent", detail: null, refuses: [] };
   const refus = envois.filter((e) => e.ok === false && !e.skipped);
   if (refus.length) {
     const liste = refus.map((e) => `${e.email || e.label || "?"} : ${e.error || "envoi refuse"}`).join(" | ");
     const partis = envois.filter((e) => e.ok !== false && !e.skipped).length;
     const detail = envois.length === 1 ? liste : `${partis} parti(s), ${refus.length} refuse(s) — ${liste}`;
-    return { status: "failed", detail: detail.slice(0, 500) };
+    const refuses = [...new Set(refus.map((e) => String(e.email || "").trim().toLowerCase()).filter(Boolean))];
+    return { status: "failed", detail: detail.slice(0, 500), refuses };
   }
   const sautes = envois.filter((e) => e.skipped);
-  if (sautes.length === envois.length) return { status: "skipped", detail: `transport:${sautes[0].reason || "raison_non_precisee"}` };
-  return { status: "sent", detail: null };
+  if (sautes.length === envois.length) return { status: "skipped", detail: `transport:${sautes[0].reason || "raison_non_precisee"}`, refuses: [] };
+  return { status: "sent", detail: null, refuses: [] };
 }

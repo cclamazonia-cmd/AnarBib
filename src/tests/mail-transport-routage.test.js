@@ -52,6 +52,8 @@ function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc' }) {
     },
     smtp: { sendViaSmtp: async () => 'smtp-ok', resolveTimeout: () => 15000 },
     'core/env': { supabaseAdmin: { from: (table) => ({ insert: async (row) => { ecrits.push({ table, row }); return { error: null }; } }) } },
+    // F12 (25/09/2026) : la restriction des rejeux ; hors rejeu, personne n'est « déjà servi ».
+    restriction: { dejaServi: () => false },
   };
   const requireDetourne = (id) => {
     const cle = Object.keys(stubs).find((k) => id.includes(k));

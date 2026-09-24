@@ -17,7 +17,22 @@ import { handleBugReportEvent } from "../domain/bug-report.ts";
 import { handleLettreEvent } from "../domain/lettre.ts";
 import { handleEntraideRequestCircle } from "../domain/entraide.ts";
 import { handleAssembleiaEvent } from "../domain/assembleia.ts";
+import { executerPour } from "../transport/restriction.ts";
+
+// F12 (25/09/2026) : un REJEU arrive du cron anarbib-notify-outbox-retry avec la liste
+// des destinataires que le transport avait refusés (`seulement`). Le handler refait
+// son fan-out tel quel ; le transport, lui, ne sert que ces adresses et compte les
+// autres comme déjà servies. Sans `seulement` (envoi ordinaire, ou échec sans liste
+// connue), rien ne change.
 export async function dispatchNotifyEvent(event, recordId, payload) {
+  const seulement = Array.isArray(payload?.seulement) ? payload.seulement : null;
+  if (seulement && seulement.length) {
+    return await executerPour(seulement, () => dispatchInterne(event, recordId, payload));
+  }
+  return await dispatchInterne(event, recordId, payload);
+}
+
+async function dispatchInterne(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
   // Events network.assembleia.* (AG du reseau, P3) - handler dedie, AVANT le network.* generique.

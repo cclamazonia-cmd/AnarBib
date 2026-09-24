@@ -76,6 +76,8 @@ BEGIN
     ('anarbib-membership-expiry-daily',             '40 6 * * *',   true),
     ('anarbib-notify-cross-library-digest-weekly',  '30 8 * * 1',   true),
     ('anarbib-notify-loan-cycle-daily',             '15 9 * * *',   true),
+    -- F12 (25/09/2026) : rejeu des courriels refusés, ref. 20260924214108
+    ('anarbib-notify-outbox-retry',                 '*/15 * * * *', true),
     ('anarbib-notify-network-weekly-report-weekly', '15 8 * * 1',   true),
     ('anarbib-notify-weekly-report-weekly',         '0 8 * * 1',    true),
     ('anarbib-oai-harvest-weekly',                  '20 4 * * 2',   true),
@@ -181,8 +183,10 @@ BEGIN
   -- ─────────────────────────────────────────────────────────────────
   -- Une commande cron est du TEXTE : `pg_depend` ne la suit pas, un DROP ne
   -- prévient pas, et la panne n'arrive qu'au prochain déclenchement — un mois
-  -- plus tard pour la gazette. On résout donc les appels `public.`, `api.` et
-  -- `ingest.` de chaque commande et on exige qu'ils existent.
+  -- plus tard pour la gazette. On résout donc les appels `public.`, `api.`,
+  -- `ingest.` et `private.` de chaque commande et on exige qu'ils existent
+  -- (`private.` ajouté le 25/09/2026 avec F12 : le cron de rejeu appelle
+  -- private.fn_outbox_rejouer(), la sonde de santé private.fn_functions_base_url()).
   -- Les commandes qui n'exposent aucun appel de ce genre (celle de la sonde de
   -- santé, qui passe par net.http_post) ne sont PAS vérifiées : le bilan le
   -- dit, plutôt que de les compter comme vérifiées.
@@ -192,13 +196,13 @@ BEGIN
       INTO v_n, v_liste
       FROM cron.job j
       CROSS JOIN LATERAL regexp_matches(
-        j.command, '\m(public|api|ingest)\.([a-z_][a-z0-9_]*)\s*\(', 'g') AS m(parts)
+        j.command, '\m(public|api|ingest|private)\.([a-z_][a-z0-9_]*)\s*\(', 'g') AS m(parts)
      WHERE NOT EXISTS (
        SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
         WHERE n.nspname = m.parts[1] AND p.proname = m.parts[2]);
     SELECT count(*) INTO v_non_resolues
       FROM cron.job j
-     WHERE j.command !~ '\m(public|api|ingest)\.[a-z_][a-z0-9_]*\s*\(';
+     WHERE j.command !~ '\m(public|api|ingest|private)\.[a-z_][a-z0-9_]*\s*\(';
     IF v_n = 0 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1;
       v_failures := v_failures||(v_t||' : '||v_n||' appel(s) vers une fonction absente — '||v_liste);

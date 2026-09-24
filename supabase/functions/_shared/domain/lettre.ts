@@ -13,7 +13,7 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { tMail, greeting } from "../i18n/mail-strings.ts";
 import { appUrl } from "../core/app-url.ts";
-import { verdictEnvois } from "./outbox-verdict.ts";
+import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 import { marked } from "https://esm.sh/marked@12";
 
 const OUTBOX = "lettre_notification_outbox";
@@ -58,8 +58,9 @@ async function markOutboxSent(id) {
 async function markOutboxSkipped(id, reason) {
   await supabaseAdmin.from(OUTBOX).update({ status: "skipped", skip_reason: String(reason || "raison_non_precisee") }).eq("id", id);
 }
-async function markOutboxFailed(id, errorMsg) {
-  await supabaseAdmin.from(OUTBOX).update({ status: "failed", last_error: errorMsg }).eq("id", id);
+// F12 (25/09/2026) : `verdictOuMessage` est le verdict (refusés compris) ou un message d'erreur.
+async function markOutboxFailed(id, verdictOuMessage) {
+  await supabaseAdmin.from(OUTBOX).update(champsEchec(verdictOuMessage)).eq("id", id);
 }
 
 export async function handleLettreEvent(recordId) {
@@ -88,7 +89,7 @@ export async function handleLettreEvent(recordId) {
     // reponse le dit (ok:false) et la ligne garde le detail dans last_error.
     const verdict = verdictEnvois(result);
     if (verdict.status === "skipped") await markOutboxSkipped(outbox.id, verdict.detail);
-    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict);
     else await markOutboxSent(outbox.id);
     return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, ...result };
   } catch (err) {

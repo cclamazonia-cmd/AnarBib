@@ -23,7 +23,7 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
 import { tMail } from "../i18n/mail-strings.ts";
-import { verdictEnvois } from "./outbox-verdict.ts";
+import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 
 const OUTBOX = "bug_report_notification_outbox";
 const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts
@@ -106,7 +106,7 @@ export async function handleBugReportEvent(recordId) {
 
     const verdict = verdictEnvois({ recipients_count: results.length, results });
     if (verdict.status === "skipped") await marquer(outbox.id, { status: "skipped", skip_reason: verdict.detail });
-    else if (verdict.status === "failed") await marquer(outbox.id, { status: "failed", last_error: verdict.detail });
+    else if (verdict.status === "failed") await marquer(outbox.id, champsEchec(verdict));
     else await marquer(outbox.id, { status: "sent", sent_at: new Date().toISOString() });
     return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, recipients_count: results.length, results };
   } catch (err) {

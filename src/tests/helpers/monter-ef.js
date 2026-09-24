@@ -30,6 +30,11 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { transformSync } from 'esbuild';
+import { createRequire } from 'node:module';
+
+// Les modules intégrés de Node (`node:async_hooks`, F12 — la restriction des rejeux)
+// sont les VRAIS : Deno les sert à l'identique sous le même nom.
+const requireNode = createRequire(import.meta.url);
 
 export const FONCTIONS = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'supabase', 'functions');
 
@@ -118,6 +123,7 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
     const requerir = (spec) => {
       if (spec.includes('deno.land/std')) return { serve: (h) => { handler = h; } };
       if (/esm\.sh\/marked/.test(spec)) return { marked: { parse: (md) => `<p>${String(md)}</p>` } };
+      if (spec.startsWith('node:')) return requireNode(spec);
       if (!spec.startsWith('.')) throw new Error(`import non relatif inattendu : ${spec} (depuis ${abs})`);
       const cible = resolve(dirname(abs), spec);
       const suffixe = Object.keys(substituts).find((s) => cible.replace(/\\/g, '/').endsWith(s));

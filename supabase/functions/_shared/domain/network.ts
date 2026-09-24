@@ -58,7 +58,7 @@ import { fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { handleLibraryProfileEvent } from "./library_profile.ts";
 import { handleCrossLibraryCriticalAction } from "./cross_library.ts";
-import { verdictEnvois } from "./outbox-verdict.ts";
+import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 import { appUrl } from "../core/app-url.ts";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -78,11 +78,9 @@ async function markOutboxSent(outboxId) {
   }).eq("id", outboxId);
 }
 
-async function markOutboxFailed(outboxId, errorMsg) {
-  await supabaseAdmin.from("team_notification_outbox").update({
-    status: "failed",
-    last_error: errorMsg
-  }).eq("id", outboxId);
+// F12 (25/09/2026) : `verdictOuMessage` est le verdict (refusés compris) ou un message d'erreur.
+async function markOutboxFailed(outboxId, verdictOuMessage) {
+  await supabaseAdmin.from("team_notification_outbox").update(champsEchec(verdictOuMessage)).eq("id", outboxId);
 }
 
 // #153.E LP-C : fan-out vide (handler réussi mais aucun destinataire). Statut
@@ -255,7 +253,7 @@ export async function handleNetworkEvent(recordId) {
     if (verdict.status === "skipped") {
       await markOutboxSkipped(row.id, verdict.detail);
     } else if (verdict.status === "failed") {
-      await markOutboxFailed(row.id, verdict.detail);
+      await markOutboxFailed(row.id, verdict);
     } else {
       await markOutboxSent(row.id);
     }

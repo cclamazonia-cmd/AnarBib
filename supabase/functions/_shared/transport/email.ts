@@ -5,6 +5,7 @@ import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
 import { sendViaSmtp, resolveTimeout } from "../mail/smtp.ts";
 import { supabaseAdmin } from "../core/env.ts";
+import { dejaServi } from "./restriction.ts";
 
 // ============================================================================
 // Transport mail — Hybride universel : SMTP ou API Resend
@@ -210,6 +211,12 @@ export async function safeSendEmail(target, subject, html, text, label = "email"
   if (dr) return skippedEmailResult(label, dr);
   const em = target?.email?.trim() || "";
   if (!em || !isValidEmail(em)) return skippedEmailResult(label, em ? "invalid_email" : "empty_email", em || undefined);
+  // F12 (25/09/2026) : pendant un rejeu, un destinataire hors de la liste des refusés
+  // a déjà reçu ce courriel — on ne le renvoie pas, et il compte comme servi.
+  if (dejaServi(em)) {
+    console.log(`[${label}] rejeu : ${em} déjà servi, sauté`);
+    return { ok: true, label, email: em, deja_servi: true };
+  }
   try {
     // Inline les logos Supabase Storage en base64 pour eviter la reecriture
     // d'URLs par Brevo qui casse les images dans les archives mail.

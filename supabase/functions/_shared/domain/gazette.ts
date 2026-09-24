@@ -29,7 +29,7 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
-import { verdictEnvois } from "./outbox-verdict.ts";
+import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 import { tMail, greeting, formatDateLocale } from "../i18n/mail-strings.ts";
 
 const OUTBOX = "gazette_submission_notification_outbox";
@@ -55,8 +55,9 @@ async function markOutboxSent(id) {
 async function markOutboxSkipped(id, reason) {
   await supabaseAdmin.from(OUTBOX).update({ status: "skipped", skip_reason: String(reason || "raison_non_precisee") }).eq("id", id);
 }
-async function markOutboxFailed(id, errorMsg) {
-  await supabaseAdmin.from(OUTBOX).update({ status: "failed", last_error: errorMsg }).eq("id", id);
+// F12 (25/09/2026) : `verdictOuMessage` est le verdict (refusés compris) ou un message d'erreur.
+async function markOutboxFailed(id, verdictOuMessage) {
+  await supabaseAdmin.from(OUTBOX).update(champsEchec(verdictOuMessage)).eq("id", id);
 }
 
 // network_staff = network_administrators status='active', joints aux profiles
@@ -103,7 +104,7 @@ export async function handleGazetteEvent(recordId) {
     // envoi refusé par le transport passait pour « sent ».
     const verdict = verdictEnvois(result);
     if (verdict.status === "skipped") await markOutboxSkipped(outbox.id, verdict.detail);
-    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict.detail);
+    else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict);
     else await markOutboxSent(outbox.id);
     return { ...result, ok: verdict.status !== "failed", event, outbox_status: verdict.status };
   } catch (err) {

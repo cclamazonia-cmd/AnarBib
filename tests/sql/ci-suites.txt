@@ -504,3 +504,6 @@ tests/sql/ficedl_termes_tests.sql
 # 24/09 (E14) : « Signaler un problème » — tables verrouillées, file enfilée, RPC réservées à
 # l'admin réseau, Altcha bug_report, compteur bug_ip, dépêche par l'adresse de l'instance.
 tests/sql/signalements_tests.sql
+# 25/09 (F12) : un courriel refusé est rejoué (recul 15 min, 1 h, 6 h), abandonné à quatre
+# essais, acquitté par un admin réseau avec une raison ; la sonde distingue rejeu et abandon.
+tests/sql/courriels_rejeu_tests.sql

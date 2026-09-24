@@ -1673,3 +1673,27 @@ d'écrire).
 
 **Compte au 24/09.** 0029 = **422**, tous justifiés. 0028 = 26, inchangé : rien
 n'est ouvert à `anon` — la page publique passe par l'Edge Function, pas par une RPC.
+
+## Complément du 25/09/2026 — le rejeu des courriels refusés (F12)
+
+Migration `20260924214108_f12_rejeu_des_courriels_refuses`. Deux fonctions
+`SECURITY DEFINER` dans `api`, exposées à `authenticated` (le lint 0029 passe de
+422 à **424**), lues corps par corps :
+
+- **`api.fn_outbox_abandonnees()`** — première instruction :
+  `fn_caller_is_network_admin()` sinon `42501`. Rend les lignes `abandoned` des
+  cinq files nommées EN DUR dans le corps (aucun nom de table venu de l'appelant),
+  avec les adresses refusées. Verdict : **justifiée** — l'admin réseau reçoit déjà
+  ces courriels ou leurs copies ; c'est lui qui doit décider d'abandonner.
+- **`api.fn_outbox_acquitter(text, bigint, text)`** — même garde ; `p_file` doit
+  appartenir à la liste fermée des cinq files (`22023` sinon) et n'entre dans le
+  SQL que par `format('%I')` ; raison obligatoire ; `UPDATE` borné à
+  `status = 'abandoned'`, `P0002` si rien. Verdict : **justifiée**.
+
+Non concernées : `private.fn_outbox_rejouer()` (INVOKER, lancée par le cron,
+fermée à `PUBLIC`, `anon`, `authenticated`), `private.fn_outbox_programmer_rejeu()`
+(trigger, fermée), `private.fn_outbox_prochain_essai()` (SQL immuable, fermée) ;
+`public.fn_healthcheck_notifications` reprend son corps réel (md5 `551268a6`)
+avec deux remplacements comptés, droits inchangés.
+
+**Compte au 25/09.** 0029 = **424**, tous justifiés. 0028 = 26, inchangé.
