@@ -498,3 +498,6 @@ tests/sql/effacement_compte_fk_tests.sql
 # fn_healthcheck_mail_transport ouvre l'incident `mail_transport`. La suite éprouve
 # la table, la sonde (forme, fenêtre de 30 min), ses droits et la CHECK.
 tests/sql/mail_transport_tests.sql
+# 24/09 (H11) : le thésaurus FICEDL rejoué depuis zéro est celui de la production —
+# 621 termes dont 159 dates, empreinte imprimée au bilan, alignement vers une date possible.
+tests/sql/ficedl_termes_tests.sql
