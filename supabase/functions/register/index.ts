@@ -4,6 +4,7 @@ import { verifierSolution } from '../_shared/altcha.ts';
 import { createClient } from '../_shared/deps.ts';
 import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
+import { sendEmail as sendEmailPartage, transportConfigure } from "../_shared/transport/email.ts";
 import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/context/library-mail-routing.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
 import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
@@ -384,80 +385,20 @@ async function cleanupAuthUser(admin, userId, reason) {
   }
 }
 // ============================================================================
-// Transport mail — envoi via Resend
-// ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend) : R.3.3 avait introduit un dispatch
-// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
-// sendEmail() inline les logos (§4.5) puis appelle sendViaResend(). Le secret
-// MAIL_PROVIDER a ete retire de Supabase en R.7 (08/06/2026) ; n'est
-// plus lu par le code.
-//
-// R.7 (08/06/2026) : les 3 sites d'appel construisent desormais directement un
-// payload au format Resend ({ from, to:[email...], reply_to, subject, html }) ;
-// la traduction brevoPayloadToResend a ete supprimee. Plus aucune trace de Brevo.
+// Transport mail — une seule implementation, celle de _shared (F7, lot 3,
+// 24/09/2026). Cette fonction portait sa propre copie de l'appel Resend ; elle
+// passe par _shared/transport/email.ts avec un routage EXPLICITE (expediteur,
+// nom d'affichage, reply_to ANARBIB_REPLY_TO_EMAIL — vide en production, donc
+// SENDER_EMAIL, cf. F14). Les 3 sites d'appel passent un payload
+// { senderEmail, senderName, replyToEmail, replyToName, to:[...], subject, html }.
 //
 // CONTRAT DE RETOUR preserve : { requested, apiAccepted, status, responseText }.
-// Jamais de throw. Les 3 sites lisent .apiAccepted, inchanges.
+// Jamais de throw. Les 3 sites lisent .apiAccepted, inchanges ; la page
+// d'inscription lit email_usuaria_enviado et affiche son avertissement.
+// Sans transport configure (hier : MISSING_RESEND_API_KEY, sans requete), on
+// rend requested:false et MISSING_MAIL_TRANSPORT — mais la garde d'environnement
+// en tete du serve refuse deja la demande dans ce cas (transportConfigure()).
 // ============================================================================
-function formatMailAddress(email, name) {
-  const n = String(name || "").trim();
-  return n ? `${n} <${email}>` : email;
-}
-// --- Implementation Resend (cf. spec §4.4) ---------------------------------
-// payload : deja au format Resend ({ from, to:[email...], reply_to, subject,
-// html }), html deja inline. Envoye tel quel a api.resend.com.
-async function sendViaResend({ logLabel, payload }) {
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  if (!resendKey) {
-    console.warn(`register: ${logLabel} skipped, missing RESEND_API_KEY`);
-    return {
-      requested: false,
-      apiAccepted: false,
-      status: null,
-      responseText: "MISSING_RESEND_API_KEY"
-    };
-  }
-  console.log(`register: ${logLabel} request`, {
-    to: payload.to,
-    subject: payload.subject
-  });
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${resendKey}`,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-  const responseText = await response.text();
-  if (!response.ok) {
-    console.error(`register: ${logLabel} failed`, {
-      status: response.status,
-      responseText
-    });
-    return {
-      requested: true,
-      apiAccepted: false,
-      status: response.status,
-      responseText
-    };
-  }
-  console.log(`register: ${logLabel} accepted`, {
-    status: response.status,
-    responseText
-  });
-  return {
-    requested: true,
-    apiAccepted: true,
-    status: response.status,
-    responseText
-  };
-}
-// --- Wrapper neutre --------------------------------------------------------
-// Signature { logLabel, payload } : les 3 sites d'appel passent un payload au
-// format Resend. L'inlining des logos est fait ici UNE fois (spec §4.5), avant
-// l'envoi. sendViaResend lit RESEND_API_KEY.
 async function sendEmail({ logLabel, payload }) {
   // Inlining des logos Supabase Storage en data URI base64 — inconditionnel
   // (spec §4.5). Defensif : en cas d'echec, HTML d'origine conserve, mail
@@ -469,8 +410,51 @@ async function sendEmail({ logLabel, payload }) {
       console.warn(`register: ${logLabel} inlineLogosInHtml failed (mail sent anyway):`, e);
     }
   }
-  console.log(`register: ${logLabel} envoi via resend`);
-  return await sendViaResend({ logLabel, payload });
+  console.log(`register: ${logLabel} request`, {
+    to: payload.to,
+    subject: payload.subject
+  });
+  try {
+    const responseText = await sendEmailPartage({
+      toEmails: payload.to,
+      subject: payload.subject,
+      html: payload.html,
+      routing: {
+        senderEmail: payload.senderEmail,
+        senderName: payload.senderName,
+        replyToEmail: payload.replyToEmail,
+        replyToName: payload.replyToName
+      },
+      label: `register:${logLabel}`
+    });
+    console.log(`register: ${logLabel} accepted`, { responseText });
+    return {
+      requested: true,
+      apiAccepted: true,
+      status: 200,
+      responseText
+    };
+  } catch (error) {
+    const message = String(error?.message || error);
+    if (/Aucun service d'e-mail/.test(message)) {
+      console.warn(`register: ${logLabel} skipped, no mail transport configured`);
+      return {
+        requested: false,
+        apiAccepted: false,
+        status: null,
+        responseText: "MISSING_MAIL_TRANSPORT"
+      };
+    }
+    const m = message.match(/HTTP (\d{3})/);
+    const status = m ? Number(m[1]) : null;
+    console.error(`register: ${logLabel} failed`, { status, responseText: message });
+    return {
+      requested: true,
+      apiAccepted: false,
+      status,
+      responseText: message
+    };
+  }
 }
 serve(async (req)=>{
   if (req.method === "OPTIONS") {
@@ -644,16 +628,16 @@ serve(async (req)=>{
     // reader_orphan : aucun garde-fou de slug.
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_ROLE_KEY = secretKey();
-    // Gate dur sur la cle mail (chantier #110 R.6) : Resend est le seul provider.
-    // RESEND_API_KEY est lue ici uniquement pour la validation d'env ; l'envoi
-    // reel la relit dans sendViaResend.
-    const RESEND_API_KEY = (Deno.env.get("RESEND_API_KEY") || "").trim();
+    // Garde sur le transport mail (F7, 24/09/2026) : un transport doit etre
+    // configure — Resend, SMTP ou simulation explicite — sinon l'inscription
+    // creerait un compte que personne ne pourrait joindre. Hier la garde exigeait
+    // RESEND_API_KEY : une pile auto-hebergee en SMTP aurait eu MISSING_ENV.
     // R.7 : expediteur harmonise sur SENDER_EMAIL canonique (ex-ANARBIB_SENDER_EMAIL, aligne).
     const senderEmailEnv = readEnvEmail("SENDER_EMAIL", DEFAULT_ANARBIB_SENDER_EMAIL);
     const ANARBIB_REPLY_TO_EMAIL = readEnvEmail("ANARBIB_REPLY_TO_EMAIL", DEFAULT_ANARBIB_REPLY_TO_EMAIL);
     const ANARBIB_ADMIN_EMAIL = readEnvEmail("ANARBIB_ADMIN_EMAIL", DEFAULT_ANARBIB_ADMIN_EMAIL);
     const LIBRARY_REQUEST_URL = readEnvString("ANARBIB_LIBRARY_REQUEST_URL", DEFAULT_LIBRARY_REQUEST_URL);
-    if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !RESEND_API_KEY || !senderEmailEnv || !ANARBIB_REPLY_TO_EMAIL || !ANARBIB_ADMIN_EMAIL) {
+    if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !transportConfigure() || !senderEmailEnv || !ANARBIB_REPLY_TO_EMAIL || !ANARBIB_ADMIN_EMAIL) {
       return json({
         error: "MISSING_ENV"
       }, 500);
@@ -1253,9 +1237,11 @@ serve(async (req)=>{
     const userSendResult = await sendEmail({
       logLabel: "welcome email",
       payload: {
-        from: formatMailAddress(senderEmail, senderDisplayName),
+        senderEmail,
+        senderName: senderDisplayName,
         to: [email],
-        reply_to: formatMailAddress(replyToEmail, senderDisplayName),
+        replyToEmail: replyToEmail,
+        replyToName: senderDisplayName,
         subject: mailIsContributor
           ? tMail(userLocale, "welcome.subject.contributor")
           : mailIsOrphan
@@ -1283,9 +1269,11 @@ serve(async (req)=>{
       librarySendResult = await sendEmail({
         logLabel: "library internal email",
         payload: {
-          from: formatMailAddress(senderEmail, senderDisplayName),
+          senderEmail,
+        senderName: senderDisplayName,
           to: effectiveLibraryInternalRecipients,
-          reply_to: formatMailAddress(replyToEmail, senderDisplayName),
+          replyToEmail: replyToEmail,
+        replyToName: senderDisplayName,
           subject: tMail(internalLibLocale, "register.internal.subject", { displayName, publicId }),
           html: libraryMailHtml
         }
@@ -1301,9 +1289,11 @@ serve(async (req)=>{
       adminSendResult = await sendEmail({
         logLabel: "admin internal email",
         payload: {
-          from: formatMailAddress(senderEmail, senderDisplayName),
+          senderEmail,
+        senderName: senderDisplayName,
           to: adminRecipients,
-          reply_to: formatMailAddress(replyToEmail, senderDisplayName),
+          replyToEmail: replyToEmail,
+        replyToName: senderDisplayName,
           subject: tMail(internalAdminLocale, "register.internal.subject", { displayName, publicId }),
           html: adminMailHtml
         }

@@ -28,6 +28,26 @@ function formatAddress(email: string, name?: string): string {
   return n ? `${n} <${email}>` : email;
 }
 
+// ─── Destinataires (F7, lot 3, 24/09/2026) ─────────────────────────────────
+// `register` envoie ses avis internes à une LISTE (l'équipe de la biblio, les
+// admins) en un seul message ; les autres appelants donnent un `toEmail`.
+// `toEmails` l'emporte quand il est fourni et non vide.
+function destinataires(opts): string[] {
+  const liste = Array.isArray(opts?.toEmails) ? opts.toEmails.filter(Boolean) : [];
+  return liste.length ? liste : [opts.toEmail];
+}
+
+// Un transport est-il configuré ? Même règle que l'aiguillage de sendEmail —
+// pour les gardes d'environnement en tête de fonction (register exigeait
+// RESEND_API_KEY : une pile auto-hébergée en SMTP aurait rendu MISSING_ENV à
+// chaque inscription).
+export function transportConfigure(): boolean {
+  const t = (Deno.env.get("MAIL_TRANSPORT") || "").trim().toLowerCase();
+  if (t === "mock") return true;
+  if ((Deno.env.get("SMTP_HOST") || "").trim()) return true;
+  return Boolean((Deno.env.get("RESEND_API_KEY") || "").trim());
+}
+
 // ─── Routage explicite (F7, 23/09/2026) ────────────────────────────────────
 // Les fonctions qui portaient leur propre copie de l'envoi n'ont pas toutes la
 // même politique d'expéditeur : certaines calculent leur routage elles-mêmes
@@ -55,7 +75,7 @@ async function sendViaResend(opts) {
   }
   const payload: Record<string, unknown> = {
     from: formatAddress(r.senderEmail, r.senderName),
-    to: [opts.toEmail],
+    to: destinataires(opts),
     subject: opts.subject,
     html: opts.html,
     text: opts.text
@@ -95,7 +115,7 @@ async function sendViaConfiguredSmtp(opts) {
     allowInsecure,
     timeoutMs,
     from: formatAddress(r.senderEmail, r.senderName),
-    to: [opts.toEmail],
+    to: destinataires(opts),
     replyTo: r.replyToEmail ? formatAddress(r.replyToEmail, r.replyToName) : undefined,
     subject: opts.subject,
     html: opts.html,
@@ -113,7 +133,7 @@ export async function sendEmail(opts) {
 
   // 1. Simulation explicite demandée
   if (mailTransport === "mock") {
-    console.log(`[transport] [EMAIL SIMULATION] MAIL_TRANSPORT=mock actif (DOC-SILENCE-1) : mail simulé à ${opts.toEmail} (« ${opts.subject} »)`);
+    console.log(`[transport] [EMAIL SIMULATION] MAIL_TRANSPORT=mock actif (DOC-SILENCE-1) : mail simulé à ${destinataires(opts).join(", ")} (« ${opts.subject} »)`);
     return JSON.stringify({ ok: true, mocked: true, to: opts.toEmail, subject: opts.subject });
   }
 
