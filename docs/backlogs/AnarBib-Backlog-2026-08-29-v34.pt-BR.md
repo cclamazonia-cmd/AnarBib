@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-25** · 58 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-25** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,11 +16,11 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 2
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 6
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-25.** **45 itens de 58** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F12, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-25.** **43 itens de 56** trazem uma verificação datada própria (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -348,7 +348,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B24** | Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo | `P2` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -394,27 +393,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** **Bloqueado por A2.** Não começar antes.
 
 *Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
-
-#### B24 — Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** B18 (02/09) desativou as chaves legacy com um sinal verde numérico que só olhava o aplicativo. Só que o site vitrine `anarbib.org` é um **segundo repositório** (`codeberg.org/anarbib/pages`) cuja galeria *Explorar* lê `api.public_libraries` em produção com uma chave embutida em `data-supabase-key` em **dez `index.html`** (um por locale): desde o toggle, a galeria devolveu 401 — **página vazia durante seis dias**, consertada na noite de 07 para 08/09 pela sessão do mapa base (vitrine `df9ba40`), não pela vigilância que deveria ter visto. Essa vigilância (tarefa diária `anarbib-trafic-cles-legacy`) contava 4 a 7 requisições legacy por dia de 04 a 07/09 e as lia como abas fósseis; o `referer`, pedido em 08/09 pela primeira vez, apontou a vitrine numa linha. O harnês de carga do aplicativo também carregava a chave legacy em claro (`scripts/loadtest/anarbib-loadtest.mjs`), retirada em 07/09 (`e2f5d75a`). **Verificado em 08/09**: `grep -r eyJhbGciOi` devolve zero nos dois repositórios, `/fr/explorar/` publicada serve `sb_publishable_…`, zero requisição legacy desde a correção. O que falta já não é o conserto, é o que impede a repetição: a vitrine não tem **nenhuma guarda**, e sua chave vive em dez cópias que um `sed` teve de tocar uma a uma.
-
-*Verificado : 08/09 — logs edge 24 h: as 4 requisições legacy (todas 401) são a verificação pré-correção da sessão da vitrine, referer `anarbib.org` e `localhost:8765`, mesma rede; `curl anarbib.org/fr/explorar/` → `sb_publishable_…`; `grep eyJhbGciOi` = 0 em `anarbib` e `pages`.*
-
-**O que é.** Dois gestos no repositório `pages`, uma noite. (1) **Uma única cópia da chave**: tirá-la dos dez `index.html` para um `js/config.js` (ou um único `data-*` na tag raiz lido por `explorar.js`), para que uma rotação seja um commit de uma linha. (2) **Uma guarda que recusa uma chave legacy**: teste ou hook `pre-commit` que fica vermelho com `eyJhbGciOi` em qualquer lugar do repositório, e que verifica que a chave embutida começa com `sb_publishable_`. E no aplicativo: a lista dos repositórios a inventariar a cada rotação escrita em `B19` (feito em 08/09) e em `CONTRIBUTING.md`.
-
-**Por que importa.** B19 é o próximo gesto sobre as chaves: nesse dia uma página esquecida não devolverá mais 401, devolverá uma desconexão geral — reversível (a chave revogada volta para standby), mas geral. *(Corrigido em 15/09: esta frase dizia o gesto irreversível.)* E seis dias de galeria vazia são seis dias em que a vitrine dizia ao público «esta rede não tem nenhuma biblioteca» — indistinguível de uma pane, como diz `DOC-SILENCE-1`.
-
-**O que conta como terminado.**
-
-- A chave da vitrine vive num único lugar, e uma guarda fica vermelha com qualquer chave legacy ou com uma chave que não comece por `sb_publishable_`.
-- `B19` e `CONTRIBUTING.md` nomeiam os repositórios a inventariar antes e depois de qualquer rotação.
-
-**Dependências.** Não bloqueia mais **B19** (levantado em 15/09: o inventário está feito e verificado, e a revogação é reversível); os dois gestos protegem a rotação seguinte. Repositório `pages`: o congelamento acabou em 14/09.
-
-*Remissões : `REGISTRE §38 OPS-9` · `item B18 (clôture nuancée)` · `item B19` · `vitrine df9ba40` · `app e2f5d75a`*
 
 ---
 
@@ -914,7 +892,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
-| **F12** | Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre | `P2` | Aberto |
 | **F15** | Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva | `P2` | A verificar |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
@@ -1024,26 +1001,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 **Dependências.** Depois de **K5** (relay pedido em Bolonha). Não antes de **I2**: mudar de transporte e de hospedeiro na mesma semana são duas incógnitas.
 
 *Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
-
-#### F12 — Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre
-
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
-
-**Estado.** **Pedido por Xavier em 21/09/2026**, na sequência do correctivo « sent por engano ». Até essa noite, sete módulos de e-mail marcavam a sua linha de fila « sent », com `sent_at`, sem ler o resultado do envio. Leem agora `_shared/domain/outbox-verdict.ts` (commits `bbaaa606`, `bbcbef65`, `81af8a3d`): uma recusa dá **`failed`**, e `last_error` conta os enviados e nomeia os recusados. O registo diz a verdade — mas **ninguém relê uma linha `failed`**: *procurado em 21/09*, nenhum cron, nenhuma função, nenhum botão retoma uma linha `failed` das quatro filas (`team_notification_outbox`, `lettre_notification_outbox`, `gazette_submission_notification_outbox`, `cartography_submission_notification_outbox`). **Efeito a conhecer**: `fn_healthcheck_notifications()` (migração `20260817142747`) conta como « não tratada » qualquer linha cujo estado não seja `sent` nem `skipped` — uma linha `failed` deixa-a em `ok: false` enquanto existir.
-
-*Verificado : [object Object]*
-
-**O que é.** Um reenvio automático, limitado, **por destinatário recusado e nunca por linha**: quem já recebeu o e-mail não deve recebê-lo duas vezes. Exige: **(1)** guardar, de forma legível por máquina, QUEM foi recusado — hoje `last_error` é uma frase cortada a 500 caracteres; **(2)** um número de tentativas limitado, com recuo, e um estado final distinto quando se desiste; **(3)** um cron que retoma as linhas `failed` recentes, inscrito em `fn_crons_attendus()` (I26); **(4)** um gesto de quitação para as linhas abandonadas, para que a sonda volte ao verde. Bancada primeiro.
-
-**Por que importa.** Dizer que um e-mail não partiu não o faz partir. Uma hora de avaria no transportador, e são convocatórias de assembleia, decisões da gazeta, votos de cooptação que nunca chegam — sem que ninguém, salvo lendo a base, saiba a quem escrever.
-
-**O que conta como terminado.**
-
-- Um envio recusado é retentado sozinho, um número limitado de vezes, sem que nenhum destinatário já servido receba um duplicado — provado por uma bancada.
-- Uma linha abandonada leva um estado final e a sua razão; a sonda das notificações sabe distingui-la de uma linha em espera.
-- O cron do reenvio consta de `fn_crons_attendus()` e da suíte dos crons.
-
-*Remissões : `supabase/functions/_shared/domain/outbox-verdict.ts (en-tête : « rejouer par destinataire »)` · `supabase/migrations/20260817142747_healthcheck_notifications.sql (§3, files non traitées)` · `src/tests/equipe-reseau-file-banc.test.js, library-profile-banc.test.js, mails-federation-banc.test.js, lettre-banc.test.js` · `journal/operations/RUNBOOK_domaines_repli_2026-09-07 (« Trouvé en écrivant ces bancs »)`*
 
 #### F15 — Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva
 
@@ -1941,6 +1898,8 @@ CI verde. |
 | F11 | 2026-09-24 | **Fechado em 24/09: o último critério é cumprido por Xavier.** Os gestos de código estavam feitos em 22/09. Xavier olhou os e-mails no seu cliente, em tema escuro e claro, incluindo os dois nascidos em 24/09: **tudo se lê**. |
 | I15 | 2026-09-24 | **Fechado em 24/09 à noite: os três critérios cumpridos.** Segredo criado por Xavier, `ci.yml` alinhado (`f0a88461`), snapshot gerado às 20h57 UTC; nenhum workflow lê já o segredo antigo, que Xavier apagou em 24/09. |
 | E19 | 2026-09-25 | **Fechado em 25/09, sobre um critério reescrito por Xavier.** O primeiro « pronto quando » — « as três cartas visíveis sem deslizar num portátil » — era **impossível por construção**: o cabeçalho, a faixa, a identidade da pessoa e os vídeos tutoriais precedem o separador. **Critério reescrito por Xavier em 25/09**: *as três cartas vêm logo depois do perfil, antes de todo o resto do separador.* **Cumprido** desde `e09bf16a`: perfil, três cartas, « A minha biblioteca », endereço, o que se lê, e « Apagar a minha conta » em último. Guardado pelo banco `conta-decisions-sous-le-profil` (7 casos), verificado em produção, visto por Xavier. **Fora deste fecho**: a captura do Manual v5, fora do repositório (J9). |
+| B24 | 2026-09-25 | **Fechado em 25/09, os dois critérios cumpridos.** *(1)* No repositório da vitrine (`d4a110f`): endereço e chave publicável em **`js/config.js` e em nenhum outro lugar**; as dez páginas carregam `config.js`; **`tools/garde-cles.cjs`** recusa qualquer JWT legacy, chave secreta, chave publicável fora de `config.js`, atributo `data-supabase-key` ou chave que não comece por `sb_publishable_` — provada vermelha nos dois erros, verde no estado entregue; corre no pre-push, cuja cópia versionada vive em `tools/hooks/pre-push`. Verificado num navegador e em produção. *(2)* O `CONTRIBUTING.md` da aplicação nomeia cada lugar de cada chave e a releitura dos `edge_logs` após rotação. |
+| F12 | 2026-09-25 | **Fechado em 25/09, os três critérios cumpridos.** Entregue por `2a5d2642`. *(1)* O veredicto diz QUEM recusou; os oito handlers das cinco filas escrevem-no; o cron `anarbib-notify-outbox-retry` repõe com « seulement », e o transporte só serve os recusados — banco `courriels-rejeu-banc` (6 casos). *(2)* Após quatro tentativas, `abandoned`; `api.fn_outbox_acquitter` (administração da rede, razão obrigatória) fá-la sair; a sonda distingue `dont_en_rejeu` e `dont_abandonnees` — suite `courriels_rejeu_tests` (9). *(3)* Cron em `fn_crons_attendus()` (39) e na suite. Em produção em 25/09: migração aplicada, cron ativo, sete funções de envio sondadas, e le premier passage du cron, le 25/09 à 00 h 15 (heure de Paris), a réussi en 46 ms (aucune ligne en échec à reprendre). |
 
 ---
 
@@ -1972,4 +1931,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-25. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 58 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-25. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

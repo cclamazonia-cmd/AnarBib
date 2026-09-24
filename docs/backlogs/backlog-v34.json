@@ -2298,6 +2298,22 @@
           "fr": "**Clos le 25/09, sur un critère réécrit par Xavier.** Le premier « fini quand » de la fiche — « les trois cartes visibles sans défiler sur un écran de portable » — était **intenable par construction** : l en-tête, le bandeau, l identité de la personne et les vidéos tutos précèdent l onglet, quoi qu on y déplace (constat de Xavier, 25/09). **Critère réécrit par Xavier le 25/09** : *les trois cartes (export, notifications, lettre) viennent juste après le profil, avant tout le reste de l onglet.* **Tenu** depuis `e09bf16a` (24/09) : profil seul en haut, puis les trois cartes côte à côte (`repeat(3, minmax(0, 1fr))`, une colonne sous 900 px), puis « Ma bibliothèque », puis l adresse (formulaire coupé en deux le 21/09, `26e2421f`), puis ce qui se lit, et « Supprimer mon compte » seule, en dernier, en rouge. Gardé par le banc `conta-decisions-sous-le-profil` (7 cas : ordre des blocs, une seule grille, pistes `minmax`, plus de colonne à droite, chaque geste garde son appel). Vérifié en production le 24/09 à 23 h 30 (`AccountPage-Df-sqleY.css`, `AccountPage-Cwx3hTeR.js`), vu par Xavier sur son portable. Les autres critères : 360 px sans débordement (mesuré dans un harnais le 20/09 à 360, 700, 920 et 1 366 px, trois langues) ; suppression en dernier (banc). **Hors de cette clôture** : la capture de la page dans le Manuel v5, qui vit hors du dépôt (à reprendre avec **J9**).",
           "pt": "**Fechado em 25/09, sobre um critério reescrito por Xavier.** O primeiro « pronto quando » — « as três cartas visíveis sem deslizar num portátil » — era **impossível por construção**: o cabeçalho, a faixa, a identidade da pessoa e os vídeos tutoriais precedem o separador. **Critério reescrito por Xavier em 25/09**: *as três cartas vêm logo depois do perfil, antes de todo o resto do separador.* **Cumprido** desde `e09bf16a`: perfil, três cartas, « A minha biblioteca », endereço, o que se lê, e « Apagar a minha conta » em último. Guardado pelo banco `conta-decisions-sous-le-profil` (7 casos), verificado em produção, visto por Xavier. **Fora deste fecho**: a captura do Manual v5, fora do repositório (J9)."
         }
+      ],
+      [
+        "B24",
+        "2026-09-25",
+        {
+          "fr": "**Clos le 25/09, les deux critères tenus.** *(1) Une seule copie, une garde.* Dans le dépôt de la vitrine (`codeberg.org/anarbib/pages`, `d4a110f`) : l adresse du projet et la clé publiable vivent dans **`js/config.js` et nulle part ailleurs** (une rotation = une ligne) ; `explorar.js` les lit dans `window.ANARBIB_CONFIG` ; les dix pages `/<lang>/explorar/` chargent `config.js` avant lui et ne portent plus aucun attribut de clé. **`tools/garde-cles.cjs`** refuse tout JWT legacy et toute clé secrète dans le dépôt, toute clé publiable hors de `config.js`, tout attribut `data-supabase-key`, et une clé qui ne commence pas par `sb_publishable_` — **éprouvée rouge** sur une clé remise dans le HTML et sur un JWT dans `config.js`, verte sur l état livré (210 fichiers lus). Elle tourne au pre-push, dont une **copie versionnée** vit désormais dans `tools/hooks/pre-push` (README : l installer dans un clone neuf). Vérifié dans un navigateur (`/fr/` et `/el/explorar/` : trois bibliothèques, console sans erreur) puis **en production** (`anarbib.org/js/config.js` servi, `/fr/explorar/` charge `config.js`, zéro attribut de clé). *(2) L inventaire écrit.* `CONTRIBUTING.md` de l application (§ « Rotation d une clé », fr et en) nomme chaque lieu de chaque clé — secret Forgejo, vitrine, fonctions, poste — et la relecture des `edge_logs` après rotation (le `referer` désigne le lieu oublié). B19, clos le 15/09, porte l inventaire du 08/09.",
+          "pt": "**Fechado em 25/09, os dois critérios cumpridos.** *(1)* No repositório da vitrine (`d4a110f`): endereço e chave publicável em **`js/config.js` e em nenhum outro lugar**; as dez páginas carregam `config.js`; **`tools/garde-cles.cjs`** recusa qualquer JWT legacy, chave secreta, chave publicável fora de `config.js`, atributo `data-supabase-key` ou chave que não comece por `sb_publishable_` — provada vermelha nos dois erros, verde no estado entregue; corre no pre-push, cuja cópia versionada vive em `tools/hooks/pre-push`. Verificado num navegador e em produção. *(2)* O `CONTRIBUTING.md` da aplicação nomeia cada lugar de cada chave e a releitura dos `edge_logs` após rotação."
+        }
+      ],
+      [
+        "F12",
+        "2026-09-25",
+        {
+          "fr": "**Clos le 25/09, les trois critères tenus.** Livré par `2a5d2642`, migration `20260924214108`. *(1) Un envoi refusé est retenté seul, un nombre borné de fois, sans doublon.* Le verdict (`outbox-verdict.ts`) rend QUI a refusé ; les huit handlers des cinq files concernées (team — avec network, assembleia, library_profile —, lettre, gazette, cartography, bug_report) l écrivent dans `refused_recipients` ; un trigger programme le prochain essai (15 min, 1 h, 6 h) ; le cron `anarbib-notify-outbox-retry` (toutes les 15 min) reposte à `notify-event` avec « seulement » ; `core/dispatch.ts` enveloppe le handler dans la restriction (`transport/restriction.ts`, AsyncLocalStorage) et `safeSendEmail` saute tout destinataire déjà servi en le comptant comme servi. Prouvé par le banc `courriels-rejeu-banc` (6 cas : refus partiel nommé, rejeu qui ne sert que le refusé et passe à « sent », refus persistant, pas de fuite de la restriction, deux dépêches concurrentes). *(2) État final et raison ; la sonde distingue.* Après quatre essais la ligne passe en `abandoned` ; `api.fn_outbox_abandonnees` / `api.fn_outbox_acquitter` (admin réseau, raison obligatoire) l en font sortir en `skipped`, raison écrite ; `fn_healthcheck_notifications` compte à part `dont_en_rejeu` et `dont_abandonnees` (corps réel, deux remplacements comptés). Suite `courriels_rejeu_tests` (9 cas). *(3) Le cron est dans `fn_crons_attendus()` et dans la suite des crons* : 39 jobs ; la suite résout désormais aussi les appels `private.` (0 commande non vérifiée). **Éprouvé avant de pousser** : `node:async_hooks` sous Deno 2.7 et dans le binaire `edge-runtime` du conteneur local ; 111 suites SQL et 859 tests verts. **En production le 25/09** : 335 migrations = 335, cron actif, colonnes sur les cinq files, sonde `ok`, fonctions privées fermées, sept fonctions d envoi sondées (démarrage normal : 401, 400, 422, 200), et le premier passage du cron, le 25/09 à 00 h 15 (heure de Paris), a réussi en 46 ms (aucune ligne en échec à reprendre). Verdicts des deux RPC à l audit (0029 = 424). Hors périmètre, dit dans la migration : `authority_proposal_notification_outbox` (son handler ne lit pas le verdict) et les deux files `painel_*`.",
+          "pt": "**Fechado em 25/09, os três critérios cumpridos.** Entregue por `2a5d2642`. *(1)* O veredicto diz QUEM recusou; os oito handlers das cinco filas escrevem-no; o cron `anarbib-notify-outbox-retry` repõe com « seulement », e o transporte só serve os recusados — banco `courriels-rejeu-banc` (6 casos). *(2)* Após quatro tentativas, `abandoned`; `api.fn_outbox_acquitter` (administração da rede, razão obrigatória) fá-la sair; a sonda distingue `dont_en_rejeu` e `dont_abandonnees` — suite `courriels_rejeu_tests` (9). *(3)* Cron em `fn_crons_attendus()` (39) e na suite. Em produção em 25/09: migração aplicada, cron ativo, sete funções de envio sondadas, e le premier passage du cron, le 25/09 à 00 h 15 (heure de Paris), a réussi en 46 ms (aucune ligne en échec à reprendre)."
+        }
       ]
     ]
   },
@@ -4981,57 +4997,6 @@
       }
     },
     {
-      "id": "F12",
-      "d": "F",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "deno",
-        "sql"
-      ],
-      "t": {
-        "fr": "Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours",
-        "pt": "Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre"
-      },
-      "v": {
-        "fr": "**Demandé par Xavier le 21/09/2026**, à la suite du correctif « sent à tort ». Jusqu'à ce soir-là, sept modules de courriel (`lettre`, `gazette`, `team`, `network`, `cartography`, `assembleia`, `library_profile`) marquaient leur ligne de file « sent », avec un `sent_at`, sans lire le résultat de l'envoi : un refus du transport passait pour un envoi. Ils lisent désormais `_shared/domain/outbox-verdict.ts` (commits `bbaaa606`, `bbcbef65`, `81af8a3d`) : un refus donne **`failed`**, et `last_error` compte les partis et nomme les refusés (« 1 parti(s), 1 refuse(s) — adresse : cause »). Le journal dit donc vrai — mais **personne ne relit une ligne `failed`** : *cherché le 21/09* dans `supabase/functions/` et dans les migrations, aucun cron, aucune fonction, aucun bouton ne reprend une ligne `failed` des quatre files concernées (`team_notification_outbox`, `lettre_notification_outbox`, `gazette_submission_notification_outbox`, `cartography_submission_notification_outbox`). C'était déjà vrai avant ; simplement, le refus ne se voyait pas. **Effet de bord à connaître** : `fn_healthcheck_notifications()`, dans sa définition du 17/08 (migration `20260817142747`), compte comme « non traitée » toute ligne de file dont le statut n'est ni `sent` ni `skipped` — une ligne `failed` la fait donc passer à `ok: false`, et l'y laisse tant que la ligne existe. C'est une bonne chose (le refus devient visible), à condition qu'il existe un geste pour en sortir.",
-        "pt": "**Pedido por Xavier em 21/09/2026**, na sequência do correctivo « sent por engano ». Até essa noite, sete módulos de e-mail marcavam a sua linha de fila « sent », com `sent_at`, sem ler o resultado do envio. Leem agora `_shared/domain/outbox-verdict.ts` (commits `bbaaa606`, `bbcbef65`, `81af8a3d`): uma recusa dá **`failed`**, e `last_error` conta os enviados e nomeia os recusados. O registo diz a verdade — mas **ninguém relê uma linha `failed`**: *procurado em 21/09*, nenhum cron, nenhuma função, nenhum botão retoma uma linha `failed` das quatro filas (`team_notification_outbox`, `lettre_notification_outbox`, `gazette_submission_notification_outbox`, `cartography_submission_notification_outbox`). **Efeito a conhecer**: `fn_healthcheck_notifications()` (migração `20260817142747`) conta como « não tratada » qualquer linha cujo estado não seja `sent` nem `skipped` — uma linha `failed` deixa-a em `ok: false` enquanto existir."
-      },
-      "w": {
-        "fr": "Un rejeu automatique, borné, **par destinataire refusé et jamais par ligne** : une ligne vaut pour tous ses destinataires, et ceux qui ont reçu leur courriel ne doivent pas le recevoir deux fois (c'est écrit en tête de `outbox-verdict.ts`). Ce que cela demande : **(1)** garder, de façon lisible par une machine, QUI a été refusé — aujourd'hui `last_error` est une phrase tronquée à 500 caractères, pas une donnée ; **(2)** un nombre d'essais borné avec recul (la colonne `attempts` existe sur `team_notification_outbox` — à vérifier sur les trois autres files) et un état final distinct quand on renonce ; **(3)** un cron qui reprend les lignes `failed` récentes, inscrit dans `fn_crons_attendus()` (I26) ; **(4)** un geste d'acquittement pour les lignes auxquelles on renonce, afin que la sonde des notifications puisse repasser au vert. Banc d'abord, avec `src/tests/helpers/monter-ef.js`.",
-        "pt": "Um reenvio automático, limitado, **por destinatário recusado e nunca por linha**: quem já recebeu o e-mail não deve recebê-lo duas vezes. Exige: **(1)** guardar, de forma legível por máquina, QUEM foi recusado — hoje `last_error` é uma frase cortada a 500 caracteres; **(2)** um número de tentativas limitado, com recuo, e um estado final distinto quando se desiste; **(3)** um cron que retoma as linhas `failed` recentes, inscrito em `fn_crons_attendus()` (I26); **(4)** um gesto de quitação para as linhas abandonadas, para que a sonda volte ao verde. Bancada primeiro."
-      },
-      "y": {
-        "fr": "Dire qu'un courriel n'est pas parti ne le fait pas partir. Une panne d'une heure chez le transporteur, et ce sont des convocations d'assemblée, des décisions de la gazette, des votes de cooptation qui n'arrivent jamais — sans que personne, sauf à lire la base, sache à qui écrire.",
-        "pt": "Dizer que um e-mail não partiu não o faz partir. Uma hora de avaria no transportador, e são convocatórias de assembleia, decisões da gazeta, votos de cooptação que nunca chegam — sem que ninguém, salvo lendo a base, saiba a quem escrever."
-      },
-      "f": {
-        "fr": [
-          "Un envoi refusé est retenté seul, un nombre borné de fois, sans qu'aucun destinataire déjà servi reçoive un doublon — prouvé par un banc.",
-          "Une ligne à laquelle on renonce porte un état final et sa raison ; la sonde des notifications sait la distinguer d'une ligne en attente.",
-          "Le cron du rejeu figure dans `fn_crons_attendus()` et dans la suite des crons."
-        ],
-        "pt": [
-          "Um envio recusado é retentado sozinho, um número limitado de vezes, sem que nenhum destinatário já servido receba um duplicado — provado por uma bancada.",
-          "Uma linha abandonada leva um estado final e a sua razão; a sonda das notificações sabe distingui-la de uma linha em espera.",
-          "O cron do reenvio consta de `fn_crons_attendus()` e da suíte dos crons."
-        ]
-      },
-      "r": [
-        "supabase/functions/_shared/domain/outbox-verdict.ts (en-tête : « rejouer par destinataire »)",
-        "supabase/migrations/20260817142747_healthcheck_notifications.sql (§3, files non traitées)",
-        "src/tests/equipe-reseau-file-banc.test.js, library-profile-banc.test.js, mails-federation-banc.test.js, lettre-banc.test.js",
-        "journal/operations/RUNBOOK_domaines_repli_2026-09-07 (« Trouvé en écrivant ces bancs »)"
-      ],
-      "verif": [
-        {
-          "fr": "21/09 — recherche de `failed` dans `supabase/functions/**/*.ts` : hors des modules de domaine, les neuf fichiers qui le nomment parlent d'autre chose (moissons, imports, couvertures), aucun ne relit une file de courriels ; recherche de `retry|requeue|status = 'failed'` dans les migrations qui nomment une file : aucune reprise. Définition de `fn_healthcheck_notifications()` lue dans sa migration d'origine, pas dans la base : à relire en production avant de s'y fier.",
-          "pt": "21/09 — procura de `failed` em `supabase/functions/**/*.ts` e de `retry|requeue` nas migrações: nenhuma retoma de fila de e-mails. Definição de `fn_healthcheck_notifications()` lida na migração de origem, não na base: a reler em produção."
-        }
-      ]
-    },
-    {
       "id": "F15",
       "d": "F",
       "p": "P2",
@@ -5079,57 +5044,6 @@
       "verif": {
         "fr": "24/09/2026 — courriel reçu à 21 h 46 lu (PDF) ; `sendToAdmins` lu dans `notify-library-request/index.ts` ; un admin actif compté en base (`network_administrators` × `profiles`) ; `supabase secrets list` : `HEALTH_ALERT_CC` posée, `NETWORK_ADMIN_CC` absente. **Livré le 24/09 au soir** : module + six conversions + modèles d'environnement + garde et bancs (rendu réel de `notify-library-request`, `notify-cross-library-digest`, `membership-restriction`, `notify-network-weekly-report`). Reste le premier critère : un courriel réel lu dans la boîte, à la main de Xavier.",
         "pt": "24/09/2026 — e-mail recebido às 21h46 lido; `sendToAdmins` lido; uma admin ativa contada na base; `HEALTH_ALERT_CC` presente nos segredos, `NETWORK_ADMIN_CC` ausente. **Entregue em 24/09 à noite**: módulo + seis conversões + modelos de ambiente + guarda e bancadas. Falta o primeiro critério: um e-mail real lido na caixa, por Xavier."
-      }
-    },
-    {
-      "id": "B24",
-      "d": "B",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Une rotation de clé touche deux dépôts — la vitrine a cassé six jours après B18, et rien ne l'aurait empêché de recommencer",
-        "pt": "Uma rotação de chave toca dois repositórios — a vitrine quebrou seis dias depois de B18, e nada a impediria de acontecer de novo"
-      },
-      "v": {
-        "fr": "B18 (02/09) a désactivé les clés legacy sur un feu vert chiffré qui ne regardait que l'application. Or le site vitrine `anarbib.org` est un **second dépôt** (`codeberg.org/anarbib/pages`) dont la galerie *Explorer* lit `api.public_libraries` en production avec une clé embarquée en `data-supabase-key` dans **dix `index.html`** (un par locale) : dès le toggle, la galerie a rendu 401 — **page vide pendant six jours**, réparée dans la nuit du 07 au 08/09 par la session du fond de carte (vitrine `df9ba40`), pas par la surveillance qui était censée le voir. Cette surveillance (tâche quotidienne `anarbib-trafic-cles-legacy`) comptait 4 à 7 requêtes legacy par jour du 04 au 07/09 et les lisait comme des onglets fossiles ; le `referer`, demandé le 08/09 pour la première fois, a désigné la vitrine en une ligne. Le harnais de charge de l'application portait lui aussi la clé legacy en clair (`scripts/loadtest/anarbib-loadtest.mjs`), retirée le 07/09 (`e2f5d75a`). **Vérifié le 08/09** : `grep -r eyJhbGciOi` rend zéro dans les deux dépôts, `/fr/explorar/` déployée sert `sb_publishable_…`, zéro requête legacy depuis le correctif. Ce qui manque n'est plus la réparation, c'est ce qui empêche la répétition : la vitrine n'a **aucune garde**, et sa clé vit en dix copies qu'un `sed` a dû toucher une par une.",
-        "pt": "B18 (02/09) desativou as chaves legacy com um sinal verde numérico que só olhava o aplicativo. Só que o site vitrine `anarbib.org` é um **segundo repositório** (`codeberg.org/anarbib/pages`) cuja galeria *Explorar* lê `api.public_libraries` em produção com uma chave embutida em `data-supabase-key` em **dez `index.html`** (um por locale): desde o toggle, a galeria devolveu 401 — **página vazia durante seis dias**, consertada na noite de 07 para 08/09 pela sessão do mapa base (vitrine `df9ba40`), não pela vigilância que deveria ter visto. Essa vigilância (tarefa diária `anarbib-trafic-cles-legacy`) contava 4 a 7 requisições legacy por dia de 04 a 07/09 e as lia como abas fósseis; o `referer`, pedido em 08/09 pela primeira vez, apontou a vitrine numa linha. O harnês de carga do aplicativo também carregava a chave legacy em claro (`scripts/loadtest/anarbib-loadtest.mjs`), retirada em 07/09 (`e2f5d75a`). **Verificado em 08/09**: `grep -r eyJhbGciOi` devolve zero nos dois repositórios, `/fr/explorar/` publicada serve `sb_publishable_…`, zero requisição legacy desde a correção. O que falta já não é o conserto, é o que impede a repetição: a vitrine não tem **nenhuma guarda**, e sua chave vive em dez cópias que um `sed` teve de tocar uma a uma."
-      },
-      "w": {
-        "fr": "Deux gestes dans le dépôt `pages`, une soirée. (1) **Une seule copie de la clé** : la sortir des dix `index.html` vers un `js/config.js` (ou un seul `data-*` sur la balise racine lue par `explorar.js`), pour qu'une rotation soit un commit d'une ligne. (2) **Une garde qui refuse une clé legacy** : test ou hook `pre-commit` qui rougit sur `eyJhbGciOi` n'importe où dans le dépôt, et qui vérifie que la clé embarquée commence par `sb_publishable_`. Et dans l'application : la liste des dépôts à inventorier à chaque rotation écrite dans `B19` (fait le 08/09) et dans `CONTRIBUTING.md`.",
-        "pt": "Dois gestos no repositório `pages`, uma noite. (1) **Uma única cópia da chave**: tirá-la dos dez `index.html` para um `js/config.js` (ou um único `data-*` na tag raiz lido por `explorar.js`), para que uma rotação seja um commit de uma linha. (2) **Uma guarda que recusa uma chave legacy**: teste ou hook `pre-commit` que fica vermelho com `eyJhbGciOi` em qualquer lugar do repositório, e que verifica que a chave embutida começa com `sb_publishable_`. E no aplicativo: a lista dos repositórios a inventariar a cada rotação escrita em `B19` (feito em 08/09) e em `CONTRIBUTING.md`."
-      },
-      "y": {
-        "fr": "B19 est le prochain geste sur les clés : ce jour-là une page oubliée ne rendra plus 401, elle rendra une déconnexion générale — réversible (la clé révoquée se remet en standby), mais générale. *(Corrigé le 15/09 : cette phrase disait le geste irréversible.)* Et six jours de galerie vide, c'est six jours où la vitrine disait au public « ce réseau n'a aucune bibliothèque » — indistinguable d'une panne, comme le dit `DOC-SILENCE-1`.",
-        "pt": "B19 é o próximo gesto sobre as chaves: nesse dia uma página esquecida não devolverá mais 401, devolverá uma desconexão geral — reversível (a chave revogada volta para standby), mas geral. *(Corrigido em 15/09: esta frase dizia o gesto irreversível.)* E seis dias de galeria vazia são seis dias em que a vitrine dizia ao público «esta rede não tem nenhuma biblioteca» — indistinguível de uma pane, como diz `DOC-SILENCE-1`."
-      },
-      "f": {
-        "fr": [
-          "La clé de la vitrine vit en un seul endroit, et une garde rougit sur toute clé legacy ou sur une clé qui ne commence pas par `sb_publishable_`.",
-          "`B19` et `CONTRIBUTING.md` nomment les dépôts à inventorier avant et après toute rotation."
-        ],
-        "pt": [
-          "A chave da vitrine vive num único lugar, e uma guarda fica vermelha com qualquer chave legacy ou com uma chave que não comece por `sb_publishable_`.",
-          "`B19` e `CONTRIBUTING.md` nomeiam os repositórios a inventariar antes e depois de qualquer rotação."
-        ]
-      },
-      "dep": {
-        "fr": "Ne bloque plus **B19** (levé le 15/09 : l'inventaire est fait et vérifié, et la révocation est réversible) ; les deux gestes protègent la rotation suivante. Dépôt `pages` : le gel est levé depuis le 14/09.",
-        "pt": "Não bloqueia mais **B19** (levantado em 15/09: o inventário está feito e verificado, e a revogação é reversível); os dois gestos protegem a rotação seguinte. Repositório `pages`: o congelamento acabou em 14/09."
-      },
-      "r": [
-        "REGISTRE §38 OPS-9",
-        "item B18 (clôture nuancée)",
-        "item B19",
-        "vitrine df9ba40",
-        "app e2f5d75a"
-      ],
-      "verif": {
-        "fr": "08/09 — logs edge 24 h : les 4 requêtes legacy (toutes 401) sont la vérification pré-correctif de la session vitrine, referer `anarbib.org` et `localhost:8765`, même réseau ; `curl anarbib.org/fr/explorar/` → `sb_publishable_…` ; `grep eyJhbGciOi` = 0 dans `anarbib` et `pages`.",
-        "pt": "08/09 — logs edge 24 h: as 4 requisições legacy (todas 401) são a verificação pré-correção da sessão da vitrine, referer `anarbib.org` e `localhost:8765`, mesma rede; `curl anarbib.org/fr/explorar/` → `sb_publishable_…`; `grep eyJhbGciOi` = 0 em `anarbib` e `pages`."
       }
     },
     {
