@@ -13,8 +13,8 @@
     },
     "maj": "2026-09-24",
     "releve": {
-      "date": "2026-09-22",
-      "commit": "60b16828"
+      "date": "2026-09-24",
+      "commit": "3d9cf15b"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 22 septembre 2026 au soir** (`60b16828`) — production interrogée en lecture seule (`execute_sql`, advisors, journaux) et dépôt recompté ; **toutes les lignes ont été remesurées**, comme la veille au soir (`2a9681e5`, relevé complet, 56 commits en un jour). Ce qui a bougé en un jour : +2 migrations (330 = 330), +17 commits, +4 bancs, +1 clé, +1 suite SQL, 52 « index inutilisés » de moins ; fonctions, avis de sécurité et marqueurs de dette inchangés ; `auth.users` porte 20 comptes vivants et 2 jetons pseudonymes de comptes effacés. **Clos ce soir sur pièces : B27** — zéro `57014` sur `catalog_works_v1` en 24 h de journaux, 337 appels tous en 200, sonde en place (voir la clôture pour la nuance : ce trafic est celui de la sonde). **Clos sur pièces, avec leur mesure** : **I26** (une instance restaurée retrouve ses 38 crons — `private.fn_crons_replanifier()`, aller-retour réel sur `pg_cron`, sans effet en production), **E22** (l'accolade orpheline de `PanelPage.css` et la garde qui compte les accolades), **I27** (le chemin de secours du front a publié pour de vrai sur `app.anarbib.is`, preuve par `/.version-front`). Livré sans item : la sonde `images_pins` de `health-probe` et ses deux remesures (GoTrue v2.197.0, Storage v1.77.0 — la production a monté deux fois dans la journée), l'historique des migrations restauré avec le dump (troisième fichier), `deploy.sh` qui reconstruit enfin le front, `publier-front.sh`. **Ce qui reste à clore, et par qui** — *(a) par Xavier, sans code* : **F11** — ouvrir un courriel de chaque famille dans un vrai client et dire s'il se lit ; le code est en production depuis le 22/09 (`MAIL-Q7`), la garde tient, seul le regard manque. **I24** — requalifier la fiche : la sonde serveur alerte bien (deux courriels reçus), le gestionnaire systemd du poste sort sans cause établie ; décider si l'item vit encore. *(b) par une session, avec des mesures* : **I21** — sept conditions sur huit restent à cocher avec preuve (la connexion locale l'est depuis le 26/08, refaite le 21/09) ; **I2** — proxy inverse avec tunnel, tags en empreintes `sha256`, répétition à froid un mois plus tard, la question du Jitsi à poser à l'hébergeur. *(c) à surveiller, rien à faire* : l'incident `images_pins` se rouvrira de lui-même à la prochaine montée de GoTrue ou Storage — le courriel dit alors quoi faire (`deploy/banc-paliers.sh`, puis une migration qui remplace l'attendu, `.env.example` et `bootstrap.sh` ensemble). Pièce : `journal/operations/NOTE_pins-images-remesures_2026-09-21`.\n\nRelevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.",
-      "pt": "**Levantamento de 22 de setembro de 2026, à noite** (`60b16828`) — produção consultada em leitura apenas e repositório recontado; **todas as linhas foram remedidas**, como na véspera à noite (`2a9681e5`). O que mudou num dia: +2 migrações (330 = 330), +17 commits, +4 bancos, +1 chave, +1 suite SQL, menos 52 « índices não utilizados »; funções, avisos de segurança e marcadores de dívida inalterados; `auth.users` tem 20 contas vivas e 2 tokens pseudónimos de contas apagadas. **Fechado esta noite sobre peças: B27** — zero `57014` em `catalog_works_v1` em 24 h de registos, 337 chamadas todas em 200, sonda no lugar (ver o fecho para a nuance: esse tráfego é o da sonda). **Fechados sobre peças, com a sua medida**: **I26** (uma instância restaurada recupera os seus 38 crons), **E22** (a chaveta órfã de `PanelPage.css` e a guarda), **I27** (o caminho de socorro do front publicou de verdade em `app.anarbib.is`, prova por `/.version-front`). Entregue sem item: a sonda `images_pins` do `health-probe` e as suas duas remedições (GoTrue v2.197.0, Storage v1.77.0), o histórico das migrações restaurado com o dump, `deploy.sh` que reconstrói enfim o front, `publier-front.sh`. **O que falta fechar, e por quem** — *(a) por Xavier, sem código*: **F11** — abrir um e-mail de cada família num cliente real e dizer se se lê; o código está em produção desde 22/09 (`MAIL-Q7`), só falta o olhar. **I24** — requalificar a ficha. *(b) por uma sessão, com medidas*: **I21** — sete condições em oito por marcar com prova; **I2** — proxy inverso com túnel, tags em `sha256`, repetição a frio, a questão do Jitsi. *(c) a vigiar, nada a fazer*: o incidente `images_pins` reabrir-se-á sozinho na próxima subida de GoTrue ou Storage — o e-mail diz então o que fazer. Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`.\n\nLevantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos."
+      "fr": "**Relevé du 24 septembre 2026 au soir** (`3d9cf15b`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédents relevés complets : 22/09 `60b16828`, 21/09 `2a9681e5`). Deux jours consacrés au courriel : la **PR #30** fusionnée le 23/09 et **F7 clos le 24/09** par la voisine (une seule implémentation d envoi, l échec de transport ouvre un incident — +1 migration, +1 table, +1 fonction DEFINER fermée, +1 suite SQL, +2 bancs, +20 commits) ; advisors, clés, marqueurs, catalogue et réseau inchangés. Ce qui suit vient du relevé du 22/09 et reste vrai. **Clos sur pièces, avec leur mesure** : **I26** (une instance restaurée retrouve ses 38 crons — `private.fn_crons_replanifier()`, aller-retour réel sur `pg_cron`, sans effet en production), **E22** (l'accolade orpheline de `PanelPage.css` et la garde qui compte les accolades), **I27** (le chemin de secours du front a publié pour de vrai sur `app.anarbib.is`, preuve par `/.version-front`). Livré sans item : la sonde `images_pins` de `health-probe` et ses deux remesures (GoTrue v2.197.0, Storage v1.77.0 — la production a monté deux fois dans la journée), l'historique des migrations restauré avec le dump (troisième fichier), `deploy.sh` qui reconstruit enfin le front, `publier-front.sh`. **Ce qui reste à clore, et par qui** — *(a) par Xavier, sans code* : **F11** — ouvrir un courriel de chaque famille dans un vrai client et dire s'il se lit ; le code est en production depuis le 22/09 (`MAIL-Q7`), la garde tient, seul le regard manque. **I24** — requalifier la fiche : la sonde serveur alerte bien (deux courriels reçus), le gestionnaire systemd du poste sort sans cause établie ; décider si l'item vit encore. *(b) par une session, avec des mesures* : **I21** — sept conditions sur huit restent à cocher avec preuve (la connexion locale l'est depuis le 26/08, refaite le 21/09) ; **I2** — proxy inverse avec tunnel, tags en empreintes `sha256`, répétition à froid un mois plus tard, la question du Jitsi à poser à l'hébergeur. *(c) à surveiller, rien à faire* : l'incident `images_pins` se rouvrira de lui-même à la prochaine montée de GoTrue ou Storage — le courriel dit alors quoi faire (`deploy/banc-paliers.sh`, puis une migration qui remplace l'attendu, `.env.example` et `bootstrap.sh` ensemble). Pièce : `journal/operations/NOTE_pins-images-remesures_2026-09-21`.\n\nRelevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.",
+      "pt": "**Levantamento de 24 de setembro de 2026, à noite** (`3d9cf15b`) — produção consultada em leitura apenas e repositório recontado; **todas as linhas foram remedidas** (levantamentos completos anteriores: 22/09 `60b16828`, 21/09 `2a9681e5`). Dois dias dedicados ao e-mail: a **PR #30** fundida em 23/09 e **F7 fechado em 24/09** pela vizinha (uma só implementação de envio, a falha de transporte abre um incidente — +1 migração, +1 tabela, +1 função DEFINER fechada, +1 suite SQL, +2 bancos, +20 commits); advisors, chaves, marcadores, catálogo e rede inalterados. O que se segue vem do levantamento de 22/09 e continua verdadeiro. **Fechados sobre peças, com a sua medida**: **I26** (uma instância restaurada recupera os seus 38 crons), **E22** (a chaveta órfã de `PanelPage.css` e a guarda), **I27** (o caminho de socorro do front publicou de verdade em `app.anarbib.is`, prova por `/.version-front`). Entregue sem item: a sonda `images_pins` do `health-probe` e as suas duas remedições (GoTrue v2.197.0, Storage v1.77.0), o histórico das migrações restaurado com o dump, `deploy.sh` que reconstrói enfim o front, `publier-front.sh`. **O que falta fechar, e por quem** — *(a) por Xavier, sem código*: **F11** — abrir um e-mail de cada família num cliente real e dizer se se lê; o código está em produção desde 22/09 (`MAIL-Q7`), só falta o olhar. **I24** — requalificar a ficha. *(b) por uma sessão, com medidas*: **I21** — sete condições em oito por marcar com prova; **I2** — proxy inverso com túnel, tags em `sha256`, repetição a frio, a questão do Jitsi. *(c) a vigiar, nada a fazer*: o incidente `images_pins` reabrir-se-á sozinho na próxima subida de GoTrue ou Storage — o e-mail diz então o que fazer. Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`.\n\nLevantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos."
     },
     "photo": [
       {
@@ -375,10 +375,10 @@
               "fr": "Tables `public`",
               "pt": "Tabelas `public`"
             },
-            "191",
+            "192",
             {
-              "fr": "toutes avec RLS activé, **332 policies** — +4 tables depuis le 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), toutes classées au filet BG2 (191 sur 191 au rejeu local du 05/09).",
-              "pt": "todas com RLS ativado, **332 policies** — +4 tabelas desde 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`), todas classificadas no filete BG2."
+              "fr": "toutes avec RLS activé, **333 policies** tous schémas confondus (`public` 284, `storage` 47, `cron` 2). +1 le 24/09 : `mail_transport_failures` (F7 — le module de transport y note chaque échec d envoi, la sonde lit une fenêtre de 30 min), née avec sa RLS (lecture aux admins réseau, rien à `anon`) et **classée au filet BG2** (`bg2-known-tables.txt`, ligne 133 — vérifié : la sauvegarde ne bloquera pas). Les quatre d avant datent du 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`).",
+              "pt": "todas com RLS ativo, **333 policies** em todos os esquemas (`public` 284, `storage` 47, `cron` 2). +1 em 24/09: `mail_transport_failures` (F7 — o módulo de transporte regista aí cada falha de envio, a sonda lê uma janela de 30 min), nascida com a sua RLS (leitura aos admins da rede, nada a `anon`) e **classificada na rede BG2** (verificado: a cópia de segurança não bloqueará)."
             }
           ],
           [
@@ -408,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "924",
+            "925",
             {
-              "fr": "`public` 688 · `api` 189 · `ingest` 34 · `private` 13. Dont **708 SECURITY DEFINER**. **Inchangé depuis le 21/09 au soir** : aucune fonction créée ni supprimée (comptage par schéma identique, aucun `oid` postérieur aux cinq du 21/09) — les deux migrations du 22/09 remplacent des corps existants. Le lint 0029 ne bouge donc pas.",
-              "pt": "`public` 688 · `api` 189 · `ingest` 34 · `private` 13. Das quais **708 SECURITY DEFINER**. **Inalterado desde a noite de 21/09**: nenhuma função criada nem apagada — as duas migrações de 22/09 substituem corpos existentes. O lint 0029 não se move."
+              "fr": "`public` 689 · `api` 189 · `ingest` 34 · `private` 13. Dont **709 SECURITY DEFINER**. +1 le 24/09 : `public.fn_healthcheck_mail_transport` (DEFINER, **fermée** à `anon` et à `authenticated`, `search_path` figé — lu dans `has_function_privilege` et `proconfig`), la sonde qui ouvre l incident `mail_transport` quand un envoi échoue (F7, cas (a) de `DOC-SILENCE-1`). Le lint 0029 ne bouge pas.",
+              "pt": "`public` 689 · `api` 189 · `ingest` 34 · `private` 13. Das quais **709 SECURITY DEFINER**. +1 em 24/09: `public.fn_healthcheck_mail_transport` (DEFINER, **fechada** a `anon` e a `authenticated`, `search_path` fixo), a sonda que abre o incidente `mail_transport` quando um envio falha (F7). O lint 0029 não se move."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "330",
+            "331",
             {
-              "fr": "**330 appliquées en production = 330 numérotées au dépôt**. Les deux du 22/09 : `20260922185953` (délai de grâce de 15 min sur les files de notifications, sonde) et `20260922214500` (B28 : l effacement d un compte re-pointe sur le jeton pseudonyme les 26 colonnes de FK que rien ne traitait). Dernière appliquée : `20260922214500` ; rien n attend en file.",
-              "pt": "**330 aplicadas em produção = 330 numeradas no repositório**. As duas de 22/09: `20260922185953` (prazo de graça de 15 min nas filas de notificações, sonda) e `20260922214500` (B28: o apagamento de uma conta reaponta para o token pseudónimo as 26 colunas de FK que nada tratava). Nada em fila."
+              "fr": "**331 appliquées en production = 331 numérotées au dépôt**. La seule depuis le 22/09 : `20260924180538` (un échec de transport mail ouvre un incident — table `mail_transport_failures`, sonde `fn_healthcheck_mail_transport`, genre d incident `mail_transport` ; F7). Dernière appliquée : `20260924180538` ; rien n attend en file.",
+              "pt": "**331 aplicadas em produção = 331 numeradas no repositório**. A única desde 22/09: `20260924180538` (uma falha de transporte de e-mail abre um incidente — tabela `mail_transport_failures`, sonda `fn_healthcheck_mail_transport`; F7). Nada em fila."
             }
           ],
           [
@@ -443,8 +443,8 @@
             },
             "470",
             {
-              "fr": "0 ERROR · **420** WARN sur les DEFINER exposées à `authenticated` (0029), tous justifiés · **26** sur celles exposées à `anon` (0028), exactement la liste nommée T10 de `grants_herites_tests.sql` · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). **Inchangé depuis le 20/09**, relu le 22/09 au soir. Format groupé : compter `findings`, pas les entrées.",
-              "pt": "0 ERROR · **420** WARN nas DEFINER expostas a `authenticated` (0029), todas justificadas · **26** nas expostas a `anon` (0028), exatamente a lista nomeada T10 · 24 INFO « RLS sem policy ». **Inalterado desde 20/09**, relido em 22/09 à noite."
+              "fr": "0 ERROR · **420** WARN sur les DEFINER exposées à `authenticated` (0029), tous justifiés · **26** sur celles exposées à `anon` (0028), exactement la liste nommée T10 de `grants_herites_tests.sql` · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). **Inchangé depuis le 20/09**, relu le 24/09 au soir : la fonction du 24/09 naît fermée. Format groupé : compter `findings`, pas les entrées.",
+              "pt": "0 ERROR · **420** WARN nas DEFINER expostas a `authenticated` (0029), todas justificadas · **26** nas expostas a `anon` (0028), exatamente a lista nomeada T10 · 24 INFO « RLS sem policy ». **Inalterado desde 20/09**, relido em 24/09 à noite: a função de 24/09 nasce fechada."
             }
           ],
           [
@@ -454,8 +454,8 @@
             },
             "363",
             {
-              "fr": "**291 « index inutilisés »** (343 le 21/09, 344 le 20/09, 368 le 06/09 — 52 de moins en un jour : les compteurs repartent du redémarrage du 02/09 et baissent à mesure que les index servent ; la cause n est pas relevée index par index), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`.",
-              "pt": "**291 « índices não utilizados »** (343 em 21/09, 344 em 20/09, 368 em 06/09 — menos 52 num dia; a causa não foi levantada índice a índice), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 sem chave primária, 1 aviso sobre as conexões `auth`."
+              "fr": "**291 « index inutilisés »** (291 le 22/09, 343 le 21/09, 368 le 06/09 — les compteurs repartent du redémarrage du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. Inchangé depuis le 22/09, relu le 24/09.",
+              "pt": "**291 « índices não utilizados »** (291 em 22/09, 343 em 21/09, 368 em 06/09), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 sem chave primária, 1 aviso sobre as conexões `auth`. Inalterado desde 22/09, relido em 24/09."
             }
           ],
           [
@@ -588,8 +588,8 @@
             },
             "22",
             {
-              "fr": "**24** appartenances actives (inchangé) ; **22 lignes** dans `auth.users` : **20 comptes vivants** (fournisseur `email`, confirmés, chacun avec profil et appartenance) et **2 jetons pseudonymes** de comptes effacés (fournisseur `pseudonymized`, sans date de création, sans appartenance, jamais connectés — c est la trace que laisse `fn_delete_my_account`). La ligne disait 20 : elle comptait les vivants, ou les jetons n existaient pas encore — le relevé du 16/09 ne le dit pas. Quand ces deux effacements ont eu lieu n est pas relevé (les jetons ne portent pas de date).",
-              "pt": "**24** pertenças ativas (inalterado); **22 linhas** em `auth.users`: **20 contas vivas** (fornecedor `email`, confirmadas, cada uma com perfil e pertença) e **2 tokens pseudónimos** de contas apagadas (fornecedor `pseudonymized`, sem data de criação, sem pertença, nunca ligadas — o rasto que `fn_delete_my_account` deixa). A linha dizia 20: contava as vivas, ou os tokens ainda não existiam — o levantamento de 16/09 não o diz. Quando esses dois apagamentos aconteceram não foi levantado."
+              "fr": "**24** appartenances actives (inchangé) ; **22 lignes** dans `auth.users` : **20 comptes vivants** (fournisseur `email`, confirmés, chacun avec profil et appartenance) et **2 jetons pseudonymes** de comptes effacés (fournisseur `pseudonymized`, sans date de création, sans appartenance, jamais connectés — la trace que laisse `fn_delete_my_account`). Remesuré le 24/09 : inchangé depuis le 22/09. Quand ces deux effacements ont eu lieu n est pas relevé (les jetons ne portent pas de date).",
+              "pt": "**24** pertenças ativas (inalterado); **22 linhas** em `auth.users`: **20 contas vivas** e **2 tokens pseudónimos** de contas apagadas (fornecedor `pseudonymized`, sem data, sem pertença, nunca ligadas — o rasto que `fn_delete_my_account` deixa). Remedido em 24/09: inalterado desde 22/09."
             }
           ],
           [
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 802",
+            "2 822",
             {
-              "fr": "+17 depuis le relevé du 21/09 au soir, dont **14 le 22/09**, tous de sessions voisines : **B28** (26 colonnes de FK que l effacement d un compte ne re-pointait pas — migration et suite vivante sur `pg_constraint`), **F14** (plus aucun `Reply-To` étranger au domaine d expédition), **F11** (tout fond de courriel porte sa couleur de texte), **E22** (l accolade orpheline de `PanelPage.css` et sa garde), la suppression du compte contributeur depuis sa page et le mot de passe refusé qui dit pourquoi, le délai de grâce de la sonde des files, l essai de bascule authentifié (OPS-10, runbook et registre), **I27** clos. Tête au moment du relevé : `60b16828`.",
-              "pt": "+17 desde o levantamento da noite de 21/09, dos quais **14 em 22/09**, todos de sessões vizinhas: **B28** (26 colunas de FK que o apagamento de uma conta não reapontava — migração e suite viva sobre `pg_constraint`), **F14** (nenhum `Reply-To` estranho ao domínio de envio), **F11** (todo fundo de e-mail tem a sua cor de texto), **E22** (a chaveta órfã), a supressão da conta contribuidora a partir da sua página e a palavra-passe recusada que diz porquê, o prazo de graça da sonda das filas, o ensaio de comutação autenticado (OPS-10), **I27** fechado. Cabeça no momento do levantamento: `60b16828`."
+              "fr": "+20 depuis le relevé du 22/09 au soir : la **PR #30** du camarade (`ASR2026`) fusionnée par Xavier le 23/09 (transport mail hybride — SMTP, Resend, simulation explicite — et découplage du front ; sept commits des 20-21/09 entrés par la fusion), puis **F7** mené par la voisine en trois lots les 23-24/09 (les huit fonctions d envoi passent par `_shared/transport/email.ts`, plus aucune copie de l appel à Resend, et l échec de transport ouvre un incident). 5 commits le 23/09, 8 le 24/09. Tête au moment du relevé : `3d9cf15b`.",
+              "pt": "+20 desde o levantamento da noite de 22/09: a **PR #30** do camarada (`ASR2026`) fundida por Xavier em 23/09 (transporte de e-mail híbrido — SMTP, Resend, simulação explícita — e desacoplamento do front; sete commits de 20-21/09 entrados pela fusão), depois **F7** conduzido pela vizinha em três lotes em 23-24/09 (as oito funções de envio passam por `_shared/transport/email.ts`, e a falha de transporte abre um incidente). Cabeça no momento do levantamento: `3d9cf15b`."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "356",
+            "358",
             {
-              "fr": "+4 le 22/09, quatre bancs d essai : `css-accolades-equilibrees` (E22), `mails-fond-et-couleur` (F11), `mot-de-passe-refuse-dit-pourquoi` et `reply-to-meme-domaine` (F14). Aucun fichier de page ni de composant ajouté.",
-              "pt": "+4 em 22/09, quatro bancos de teste: `css-accolades-equilibrees` (E22), `mails-fond-et-couleur` (F11), `mot-de-passe-refuse-dit-pourquoi` e `reply-to-meme-domaine` (F14). Nenhum ficheiro de página nem de componente acrescentado."
+              "fr": "+2 depuis le 22/09, deux bancs d essai : `smtp-transport` (le client SMTP de la PR #30 : STARTTLS obligatoire, base64, délais) et `mail-transport-routage` (F7 : chaque fonction d envoi passe par le transport partagé, liste fermée vide). Aucun fichier de page ni de composant ajouté.",
+              "pt": "+2 desde 22/09, dois bancos de teste: `smtp-transport` (o cliente SMTP da PR #30) e `mail-transport-routage` (F7: cada função de envio passa pelo transporte partilhado, lista fechada vazia). Nenhum ficheiro de página nem de componente acrescentado."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "783 + 108",
+            "799 + 109",
             {
-              "fr": "**783 tests JS** (vitest, gate bloquant, 74 fichiers — relancés en entier le 22/09 à 21 h 52 sur `60b16828`, tous verts, deux passes) + **108 suites SQL** dans `ci-suites.txt` (+1 : `effacement_compte_fk_tests`, B28, dont le premier cas relit `pg_constraint` : une FK nouvelle non traitée par `fn_delete_my_account` fait rougir la CI). +86 tests JS en un jour : les quatre bancs du 22/09 et des cas ajoutés à des bancs existants.",
-              "pt": "**783 testes JS** (vitest, 74 ficheiros — relançados por inteiro em 22/09 às 21h52 sobre `60b16828`, todos verdes) + **108 suites SQL** em `ci-suites.txt` (+1: `effacement_compte_fk_tests`, B28, cujo primeiro caso relê `pg_constraint`). +86 testes JS num dia, os quatro bancos de 22/09."
+              "fr": "**799 tests JS** (vitest, gate bloquant, 76 fichiers — relancés en entier le 24/09 au soir sur `3d9cf15b`, tous verts) + **109 suites SQL** dans `ci-suites.txt` (+1 : `mail_transport_tests`, F7 — la table, la sonde et sa fenêtre de 30 min, ses droits, la CHECK). +16 tests JS depuis le 22/09 : les deux bancs du transport mail.",
+              "pt": "**799 testes JS** (vitest, 76 ficheiros — relançados por inteiro em 24/09 à noite sobre `3d9cf15b`, todos verdes) + **109 suites SQL** em `ci-suites.txt` (+1: `mail_transport_tests`, F7). +16 testes JS desde 22/09: os dois bancos do transporte de e-mail."
             }
           ],
           [
@@ -673,8 +673,8 @@
             },
             "18",
             {
-              "fr": "dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 22/09 comme aux 21, 20, 16 et 15/09. Aucun n est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
-              "pt": "dos quais 4 em `src/` — método fixo: 18 em 22/09 como em 21, 20, 16 e 15/09. Nenhum é uma tarefa aberta."
+              "fr": "dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 24/09 comme aux 22, 21, 20, 16 et 15/09. Aucun n est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
+              "pt": "dos quais 4 em `src/` — método fixo: 18 em 24/09 como em 22, 21, 20, 16 e 15/09. Nenhum é uma tarefa aberta."
             }
           ]
         ]
