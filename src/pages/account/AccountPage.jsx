@@ -1355,8 +1355,7 @@ export default function AccountPage() {
           {/* ═══ PERFIL ═══ */}
           {activeTab === 'perfil' && profile && (
             <div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'flex-start' }}>
-              <div style={{ flex: '1 1 380px', minWidth: 0 }}>
+              <div>
               <h2 className="ab-conta-section-title">{t({ id: 'account.profile.title' })}</h2>
               <p className="ab-conta-hint">{t({ id: 'account.profile.hint' })}</p>
 
@@ -1387,10 +1386,6 @@ export default function AccountPage() {
                   {msg && saveBloc === 'perfil' && <span role="status" className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
                 </div>
               </form>
-              </div>
-              <aside style={{ flex: '1 1 280px', minWidth: 0, maxWidth: 360 }}>
-                <MyLibraryContactCard />
-              </aside>
               </div>
 
               {/* ── E19 — Ce que la page demande de décider, juste sous le profil : export,
@@ -1552,6 +1547,13 @@ export default function AccountPage() {
                   </div>
                 </div>
               </section>
+
+              {/* ── Ma bibliothèque (E19, 24/09/2026, décision de Xavier) : la carte vivait dans une colonne
+                  à droite du profil ; plus haute que le formulaire, elle poussait les trois décisions sous
+                  la ligne de flottaison d'un portable. Elle vient désormais après elles. ── */}
+              <div className="ab-conta-bibliotheque">
+                <MyLibraryContactCard />
+              </div>
 
               {/* ── Adresse — second formulaire (E19, 21/09/2026) : sortie du formulaire du profil pour
                   que les trois décisions ci-dessus se voient sans défiler. Même enregistrement que le

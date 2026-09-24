@@ -60,6 +60,10 @@ describe('Mon compte, « Données personnelles » — les décisions sous le pro
       'account.export.title',
       'account.notifPrefs.title',
       'account.lettre.title',
+      // 24/09, décision de Xavier : la carte « Ma bibliothèque » vient APRÈS les trois cartes
+      // (dans une colonne à droite du profil, plus haute que lui, elle les poussait sous la ligne
+      // de flottaison d'un portable).
+      '<MyLibraryContactCard />',
       'data-bloc="adresse"',
       '<AddressForm ',
       'account.declared.title',
@@ -118,6 +122,13 @@ describe('Mon compte, « Données personnelles » — les décisions sous le pro
     }
     // et le geste note quel bouton a été cliqué
     expect(page).toContain("setSaveBloc(e.currentTarget?.dataset?.bloc === 'adresse' ? 'adresse' : 'perfil')");
+  });
+
+  it('le profil est seul en haut : plus de colonne à droite, la carte de la bibliothèque est montée une fois', () => {
+    const avantCartes = onglet.slice(0, onglet.indexOf('className="ab-conta-decisions"'));
+    expect(avantCartes).not.toContain('<aside');
+    expect(avantCartes).not.toContain('<MyLibraryContactCard');
+    expect(onglet.split('<MyLibraryContactCard />').length - 1).toBe(1);
   });
 
   it("rien n'est perdu en route : chaque geste garde son appel, une seule fois", () => {

@@ -67,6 +67,9 @@
 /* L'adresse a son propre formulaire depuis le 21/09 (même enregistrement que le profil),
    pour que les trois décisions se voient sans défiler. */
 .ab-conta-adresse { margin-top: 28px; }
+/* La carte « Ma bibliothèque » vient après les trois décisions (24/09, décision de Xavier) :
+   elle garde la largeur qu'elle avait dans sa colonne de droite. */
+.ab-conta-bibliotheque { margin-top: 28px; max-width: 480px; }
 .ab-conta-decisions-bloc > h3 { margin-top: 0; }
 .ab-conta-decisions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .ab-conta-decision {
