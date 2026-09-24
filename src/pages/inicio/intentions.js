@@ -30,6 +30,7 @@ export const INTENTIONS = [
   { id: 'map',           group: 'reader',    icon: '🗺️', to: '/cartografia' },
   { id: 'gazette',       group: 'reader',    icon: '📰', to: '/federacao/gazeta' },
   { id: 'profile',       group: 'reader',    icon: '🪪', to: '/conta?tab=perfil' },
+  { id: 'report',        group: 'reader',    icon: '🐞', to: '/signalar' }, /* E14 (24/09/2026) : sans compte aussi, par le pied de page */
 
   // ── Au comptoir et au catalogage ───────────────────────────────────
   { id: 'dayWork',       group: 'librarian', icon: '☀️', to: '/painel' },

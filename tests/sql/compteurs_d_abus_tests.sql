@@ -11,7 +11,8 @@ DECLARE
   v_ok int := 0;
   k text;
   n int;
-  kinds text[] := ARRAY['ip', 'email', 'geocode_ip', 'carto_ip', 'gazette_ip', 'gazette_email', 'gazette_prefill'];
+  -- 24/09/2026 (E14) : + 'bug_ip', le compteur de submit-bug-report.
+  kinds text[] := ARRAY['ip', 'email', 'geocode_ip', 'carto_ip', 'gazette_ip', 'gazette_email', 'gazette_prefill', 'bug_ip'];
 BEGIN
   -- T1
   FOREACH k IN ARRAY kinds LOOP

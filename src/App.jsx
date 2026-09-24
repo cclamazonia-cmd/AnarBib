@@ -26,6 +26,8 @@ const CatalogacaoPage = lazy(() => import('@/pages/catalogacao/CatalogacaoPage')
 const CriarContaPage = lazy(() => import('@/pages/public/CriarContaPage'));
 const LoginPage = lazy(() => import('@/pages/public/LoginPage'));
 const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibliotecaPage'));
+const SignalarPage = lazy(() => import('@/pages/public/SignalarPage')); /* « Signaler un problème », sans compte (E14, 24/09/2026) */
+const SignalamentosFilaPage = lazy(() => import('@/pages/federacao/SignalamentosFilaPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
 const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
 const FicedlThesaurusPage = lazy(() => import('@/pages/public/FicedlThesaurusPage'));
@@ -160,6 +162,7 @@ export default function App() {
                   <Route path="/cartografia/ajouter" element={<CartografiaAjouterPage />} />
                   {/* Modération des auto-déclarations (coordination réseau, MAP-J) */}
                   <Route path="/cartografia/moderacao" element={<ProtectedRoute><CartografiaModeracaoPage /></ProtectedRoute>} />
+                  <Route path="/signalar/fila" element={<ProtectedRoute><SignalamentosFilaPage /></ProtectedRoute>} />
 
                   {/* ── Pages authentifiées ────────── */}
                   <Route path="/conta" element={<ProtectedRoute><ContaRouter /></ProtectedRoute>} />
@@ -199,6 +202,7 @@ export default function App() {
                     element={<Navigate to={`/login${window.location.hash || ''}`} replace />}
                   />
                   <Route path="/solicitar-biblioteca" element={<SolicitarBibliotecaPage />} />
+                  <Route path="/signalar" element={<SignalarPage />} />
 
                   {/* ── Importações ──────────────────────── */}
                   <Route path="/importacoes" element={

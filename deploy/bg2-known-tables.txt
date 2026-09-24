@@ -31,6 +31,8 @@ book_reading_note_reports
 book_reading_notes
 book_subjects
 books
+bug_report_notification_outbox
+bug_reports
 cartography_entries
 cartography_submission_notification_outbox
 cartography_submissions

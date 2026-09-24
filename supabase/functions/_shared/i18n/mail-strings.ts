@@ -28,6 +28,56 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  // ── Signaler un problème : accusé de réception (E14, 24/09/2026) ─────────
+  "bugreport.ack.sub": {
+    "pt-BR": "Recebemos o teu aviso — {ref}",
+    fr: "Ton signalement est bien reçu — {ref}",
+    es: "Recibimos tu aviso — {ref}",
+    en: "We received your report — {ref}",
+    it: "Abbiamo ricevuto la tua segnalazione — {ref}",
+    de: "Deine Meldung ist angekommen — {ref}",
+    ca: "Hem rebut el teu avís — {ref}",
+    eo: "Ni ricevis vian raporton — {ref}",
+    nl: "We hebben je melding ontvangen — {ref}",
+    el: "Λάβαμε την αναφορά σου — {ref}"
+  },
+  "bugreport.ack.intro": {
+    "pt-BR": "Obrigada por avisar. As pessoas que administram a rede vão ler o teu aviso; não haverá acompanhamento automático.",
+    fr: "Merci d'avoir signalé ce problème. Les personnes qui administrent le réseau vont le lire ; il n'y aura pas de suivi automatique.",
+    es: "Gracias por avisar. Las personas que administran la red lo leerán; no habrá seguimiento automático.",
+    en: "Thank you for reporting this. The people who administer the network will read it; there will be no automatic follow-up.",
+    it: "Grazie per la segnalazione. Le persone che amministrano la rete la leggeranno; non ci sarà un seguito automatico.",
+    de: "Danke für die Meldung. Die Personen, die das Netzwerk verwalten, werden sie lesen; eine automatische Rückmeldung gibt es nicht.",
+    ca: "Gràcies per avisar. Les persones que administren la xarxa el llegiran; no hi haurà seguiment automàtic.",
+    eo: "Dankon pro la raporto. La homoj, kiuj administras la reton, legos ĝin; ne estos aŭtomata sekvado.",
+    nl: "Bedankt voor je melding. De mensen die het netwerk beheren lezen haar; er volgt geen automatische opvolging.",
+    el: "Ευχαριστούμε για την αναφορά. Τα άτομα που διαχειρίζονται το δίκτυο θα τη διαβάσουν· δεν θα υπάρξει αυτόματη συνέχεια."
+  },
+  "bugreport.ack.ref": {
+    "pt-BR": "Número do aviso: {ref}.",
+    fr: "Numéro du signalement : {ref}.",
+    es: "Número del aviso: {ref}.",
+    en: "Report number: {ref}.",
+    it: "Numero della segnalazione: {ref}.",
+    de: "Nummer der Meldung: {ref}.",
+    ca: "Número de l'avís: {ref}.",
+    eo: "Numero de la raporto: {ref}.",
+    nl: "Nummer van de melding: {ref}.",
+    el: "Αριθμός αναφοράς: {ref}."
+  },
+  "bugreport.ack.noreply": {
+    "pt-BR": "Não respondas a esta mensagem. Para falar com uma pessoa: {email}.",
+    fr: "Ne réponds pas à ce message. Pour joindre une personne : {email}.",
+    es: "No respondas a este mensaje. Para hablar con una persona: {email}.",
+    en: "Please do not reply to this message. To reach a person: {email}.",
+    it: "Non rispondere a questo messaggio. Per contattare una persona: {email}.",
+    de: "Bitte antworte nicht auf diese Nachricht. Um eine Person zu erreichen: {email}.",
+    ca: "No responguis a aquest missatge. Per parlar amb una persona: {email}.",
+    eo: "Ne respondu al ĉi tiu mesaĝo. Por atingi homon: {email}.",
+    nl: "Antwoord niet op dit bericht. Om een persoon te bereiken: {email}.",
+    el: "Μην απαντήσεις σε αυτό το μήνυμα. Για να μιλήσεις με κάποιο άτομο: {email}."
+  },
+
   // ── Accueil dans l'équipe : invitation (lot 4) ────────────────────────────
   "team.invitation_proposed.sub": {
     "pt-BR": "Um convite a endossar — {libraryName}",

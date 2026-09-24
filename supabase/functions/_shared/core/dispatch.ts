@@ -13,6 +13,7 @@ import { handlePartnershipLifecycle, handleTransparenceEnabled, handleConfigExpa
 import { handleAuthorityEvent } from "../domain/authority.ts";
 import { handleGazetteEvent } from "../domain/gazette.ts";
 import { handleCartographyEvent } from "../domain/cartography.ts";
+import { handleBugReportEvent } from "../domain/bug-report.ts";
 import { handleLettreEvent } from "../domain/lettre.ts";
 import { handleEntraideRequestCircle } from "../domain/entraide.ts";
 import { handleAssembleiaEvent } from "../domain/assembleia.ts";
@@ -34,6 +35,9 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events cartography.* (auto-déclaration carte, MAP-J) - handler dedie, lit
   // cartography_submission_notification_outbox par recordId. submission_received -> fede@anarbib.org.
   if (event.startsWith("cartography.")) return await handleCartographyEvent(recordId);
+  // Events bug_report.* (« Signaler un problème », E14, 24/09/2026) - handler dédié, lit
+  // bug_report_notification_outbox par recordId. received -> admins réseau (+ accusé de réception).
+  if (event.startsWith("bug_report.")) return await handleBugReportEvent(recordId);
   // Events lettre.* (Lettre de la fédération, opt-in) - handler dédié, lit
   // lettre_notification_outbox par recordId. optin.confirm -> e-mail de confirmation 1-clic.
   if (event.startsWith("lettre.")) return await handleLettreEvent(recordId);

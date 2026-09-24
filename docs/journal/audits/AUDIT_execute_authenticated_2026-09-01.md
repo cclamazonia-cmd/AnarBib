@@ -1650,3 +1650,26 @@ ce fait : les deux avaient déjà `authenticated=X`, écrit.
 15/09, 1 de ce complément. 0028 = **26**, la liste T10. Prochain relevé : à
 la prochaine migration qui crée une DEFINER exposée — le lint ne prévient
 pas, il compte.
+
+## Complément du 24/09/2026 — deux RPC de « Signaler un problème » (E14)
+
+Migration `20260924201133_e14_signaler_un_probleme`. Deux fonctions `SECURITY
+DEFINER` dans `api`, exposées à `authenticated` (le lint 0029 passe de 420 à
+**422**), lues corps par corps :
+
+- **`api.fn_bug_report_list()`** — première instruction : `fn_caller_is_network_admin()`
+  sinon `42501`. Rend les signalements `open` (contenu saisi, contexte, adresse
+  laissée). Aucune donnée de compte : la table ne porte pas de `user_id`. Verdict :
+  **justifiée** — même forme que `fn_cartography_submission_list`.
+- **`api.fn_bug_report_close(uuid, text)`** — même garde ; `UPDATE` borné à
+  `status = 'open'`, `closed_by = auth.uid()`, note tronquée à 2 000. `P0002` si
+  rien à clore. Verdict : **justifiée**.
+
+Non concernées : `fn_bug_report_enqueue` et `fn_bug_report_outbox_dispatch_trigger`
+(triggers DEFINER, `REVOKE … FROM PUBLIC`, `postgres` seul) ;
+`fn_consume_altcha_challenge` reprend sa définition réelle (md5 `a8e0233f`) avec un
+usage de plus, droits inchangés (`service_role` seul, relevé dans `proacl` avant
+d'écrire).
+
+**Compte au 24/09.** 0029 = **422**, tous justifiés. 0028 = 26, inchangé : rien
+n'est ouvert à `anon` — la page publique passe par l'Edge Function, pas par une RPC.

@@ -117,6 +117,10 @@ verify_jwt = false
 [functions.submit-cartography-entry]
 verify_jwt = false
 
+# E14 (24/09/2026) : « Signaler un problème », sans compte — Altcha + compteur bug_ip côté fonction.
+[functions.submit-bug-report]
+verify_jwt = false
+
 # Build mensuel de la Gazette (orchestré par pg_cron, protégé par X-Cron-Secret).
 [functions.gazette-monthly-build]
 verify_jwt = false

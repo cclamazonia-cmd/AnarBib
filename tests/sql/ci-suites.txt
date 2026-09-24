@@ -501,3 +501,6 @@ tests/sql/mail_transport_tests.sql
 # 24/09 (H11) : le thésaurus FICEDL rejoué depuis zéro est celui de la production —
 # 621 termes dont 159 dates, empreinte imprimée au bilan, alignement vers une date possible.
 tests/sql/ficedl_termes_tests.sql
+# 24/09 (E14) : « Signaler un problème » — tables verrouillées, file enfilée, RPC réservées à
+# l'admin réseau, Altcha bug_report, compteur bug_ip, dépêche par l'adresse de l'instance.
+tests/sql/signalements_tests.sql

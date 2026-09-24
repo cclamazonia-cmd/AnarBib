@@ -41,6 +41,7 @@ const TOLERE = {
   'geocode/index.ts': 1,                           // en-tête CORS par défaut, réécrit par avecOrigine
   'submit-cartography-entry/index.ts': 1,          // idem
   'submit-gazette-contribution/index.ts': 1,       // idem
+  'submit-bug-report/index.ts': 1,                 // idem (E14, 24/09/2026)
   'gazette-monthly-build/index.ts': 1,             // User-Agent du moissonneur : une identité, pas un lien servi
 };
 const DETTE = {};                                  // éteinte le 21/09/2026 — ne pas la rallumer
