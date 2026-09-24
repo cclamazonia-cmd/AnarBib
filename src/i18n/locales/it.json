@@ -163,7 +163,7 @@
   "account.history.deleteAll.body": "Tutta la tua cronologia di {domain} presso {library} sarà eliminata definitivamente.",
   "account.history.deleteAll.button": "Elimina {domain} ({count})",
   "account.history.deleteAll.confirmButton": "Elimina definitivamente",
-  "account.history.deleteAll.confirmWord": "ELIMINA",
+  "account.history.deleteAll.confirmWord": "CANCELLA",
   "account.history.deleteAll.domain.consultations": "consultazioni",
   "account.history.deleteAll.domain.loans": "prestiti",
   "account.history.deleteAll.domain.reservations": "prenotazioni",

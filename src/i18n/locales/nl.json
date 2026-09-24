@@ -163,7 +163,7 @@
   "account.history.deleteAll.body": "Je hele geschiedenis van {domain} bij {library} wordt definitief verwijderd.",
   "account.history.deleteAll.button": "{domain} verwijderen ({count})",
   "account.history.deleteAll.confirmButton": "Definitief verwijderen",
-  "account.history.deleteAll.confirmWord": "VERWIJDEREN",
+  "account.history.deleteAll.confirmWord": "WISSEN",
   "account.history.deleteAll.domain.consultations": "raadplegingen",
   "account.history.deleteAll.domain.loans": "uitleningen",
   "account.history.deleteAll.domain.reservations": "reserveringen",

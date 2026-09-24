@@ -163,7 +163,7 @@
   "account.history.deleteAll.body": "Όλο το ιστορικό {domain} σου στη {library} θα διαγραφεί οριστικά.",
   "account.history.deleteAll.button": "Διαγραφή {domain} ({count})",
   "account.history.deleteAll.confirmButton": "Οριστική διαγραφή",
-  "account.history.deleteAll.confirmWord": "ΔΙΑΓΡΑΦΗ",
+  "account.history.deleteAll.confirmWord": "ΕΚΚΑΘΑΡΙΣΗ",
   "account.history.deleteAll.domain.consultations": "μελετών",
   "account.history.deleteAll.domain.loans": "δανεισμών",
   "account.history.deleteAll.domain.reservations": "κρατήσεων",

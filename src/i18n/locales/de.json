@@ -163,7 +163,7 @@
   "account.history.deleteAll.body": "Dein gesamter Verlauf von {domain} bei {library} wird endgültig gelöscht.",
   "account.history.deleteAll.button": "{domain} löschen ({count})",
   "account.history.deleteAll.confirmButton": "Endgültig löschen",
-  "account.history.deleteAll.confirmWord": "LÖSCHEN",
+  "account.history.deleteAll.confirmWord": "LEEREN",
   "account.history.deleteAll.domain.consultations": "Einsichtnahmen",
   "account.history.deleteAll.domain.loans": "Ausleihen",
   "account.history.deleteAll.domain.reservations": "Reservierungen",

@@ -163,7 +163,7 @@
   "account.history.deleteAll.body": "Todo tu historial de {domain} en {library} se eliminará definitivamente.",
   "account.history.deleteAll.button": "Eliminar {domain} ({count})",
   "account.history.deleteAll.confirmButton": "Eliminar definitivamente",
-  "account.history.deleteAll.confirmWord": "ELIMINAR",
+  "account.history.deleteAll.confirmWord": "BORRAR",
   "account.history.deleteAll.domain.consultations": "consultas",
   "account.history.deleteAll.domain.loans": "préstamos",
   "account.history.deleteAll.domain.reservations": "reservas",

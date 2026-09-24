@@ -163,7 +163,7 @@
   "account.history.deleteAll.body": "Via tuta historio de {domain} ĉe {library} estos forigita por ĉiam.",
   "account.history.deleteAll.button": "Forigi {domain} ({count})",
   "account.history.deleteAll.confirmButton": "Forigi por ĉiam",
-  "account.history.deleteAll.confirmWord": "FORIGI",
+  "account.history.deleteAll.confirmWord": "VIŜI",
   "account.history.deleteAll.domain.consultations": "konsultoj",
   "account.history.deleteAll.domain.loans": "pruntoj",
   "account.history.deleteAll.domain.reservations": "rezervoj",
