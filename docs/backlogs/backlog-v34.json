@@ -2258,6 +2258,14 @@
           "fr": "**Clos le 24/09 sur pièces.** Xavier a relancé la personne lui-même (décision du 21/09) ; lu en production le 24/09 : l invitation du 30/08 est passée à **`accepted`** avant son expiration du 29/09. Les deux autres invitations du 01/09 : une acceptée, une en attente de ratification (expiration 01/10). Ce que l épisode dit, à verser à **G1** : l invitation par courriel n a pas suffi, la relance humaine oui.",
           "pt": "**Fechado em 24/09 sobre peças.** Xavier relançou a pessoa; lido em produção em 24/09: o convite de 30/08 passou a **`accepted`** antes de expirar. As duas outras de 01/09: uma aceite, uma à espera de ratificação. O que o episódio diz, para **G1**: o convite por e-mail não bastou, a relance humana sim."
         }
+      ],
+      [
+        "E14",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 au soir, sur pièces.** Livré en trois commits (`44ced60d`, `4dfb9d47`, `1145b32f`), déployé, et **emprunté pour de vrai** : à 22 h 55 (heure de Paris), Xavier a déposé le signalement `35a5dc22` depuis `/login`, sans session, et reçu le courriel des admins (PDF versé dans la séance) ; en base, la ligne de file est passée à `sent` au premier essai, accusé de réception compris. *Critère 1* (déposer un signalement depuis n importe quelle page sans rien connaître de Codeberg) : tenu, par ce geste. *Critère 2* (courriel aux admins, file avec un statut, un même défaut signalé cinq fois ne fait pas cinq courriels) : tenu — courriel reçu, file `/relatar-problema/fila`, doublon ouvert rendu tel quel (banc `relatar-banc`). *Critère 3* : dix locales, page titrée, formulaire au clavier (champs étiquetés, `role=alert`/`status`) ; **le rendu sur téléphone n a pas été regardé** — les champs sont en pleine largeur et en 16 px, sans grille, mais c est une lecture du code, pas une mesure. Deux corrections nées du premier signalement réel : le courriel ne cite plus « (E14) », qui ne dit rien à qui le lit (remarque de Xavier), et une personne sans compte n envoie plus « Bibliothèque : AnarBib » — c était le contexte par défaut de `LibraryContext`. Deux gardes avaient mordu avant : la CHECK de la table Altcha (rejeu local) et `salle_des_machines_tests` (privilège par défaut de `public`, fermé par `20260924204107`). La route a d abord dit « signalar », qui n est d aucune langue : `/relatar-problema`.",
+          "pt": "**Fechado em 24/09 à noite, sobre peças.** Entregue em três commits, implantado e **percorrido de verdade**: às 22h55 (hora de Paris), Xavier depositou o relato `35a5dc22` a partir de `/login`, sem sessão, e recebeu o e-mail da administração; em base, a linha da fila passou a `sent` à primeira tentativa, aviso de receção incluído. Critérios 1 e 2 cumpridos; critério 3: dez locales, página titulada, formulário por teclado — **o rendimento no telemóvel não foi visto**. Duas correções nascidas do primeiro relato real: o e-mail já não cita « (E14) », e uma pessoa sem conta já não envia « Biblioteca: AnarBib »."
+        }
       ]
     ]
   },
@@ -4006,7 +4014,7 @@
       "id": "I15",
       "d": "I",
       "p": "P3",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sysadmin"
@@ -4047,6 +4055,10 @@
         {
           "fr": "24/09 — à la main de Xavier : créer le secret `VITE_SUPABASE_PUBLISHABLE_KEY` dans Forgejo (Settings → Actions → Secrets), même valeur que `VITE_SUPABASE_ANON_KEY` — la valeur est la clé publiable `sb_publishable_…`, publique par nature (elle est dans chaque page servie ; lisible dans Supabase → Project Settings → API Keys). La ligne de `ci.yml` bascule dès que le secret existe.",
           "pt": "24/09 — à mão de Xavier: criar o segredo `VITE_SUPABASE_PUBLISHABLE_KEY` no Forgejo com o valor da chave publicável `sb_publishable_…` (pública por natureza). A linha do `ci.yml` muda assim que o segredo existir."
+        },
+        {
+          "fr": "24/09, 23 h — **deux critères sur trois tenus.** Xavier a créé le secret `VITE_SUPABASE_PUBLISHABLE_KEY` ; la ligne de `ci.yml` le lit (`f0a88461`) ; le build suivant (run 7258461, vert) a publié un `catalogue-snapshot.json` **généré à 20 h 57 UTC**, `Last-Modified` 20 h 57 — la clé est bien passée. **Reste** : supprimer l ancien secret `VITE_SUPABASE_ANON_KEY` dans les réglages Forgejo (geste de Xavier) ; plus rien ne le lit.",
+          "pt": "24/09, 23h — **dois critérios em três cumpridos.** Segredo criado por Xavier, linha do `ci.yml` alinhada (`f0a88461`), snapshot gerado às 20h57 UTC. **Resta**: apagar o segredo antigo `VITE_SUPABASE_ANON_KEY` no Forgejo."
         }
       ],
       "r": [
@@ -4461,75 +4473,6 @@
         {
           "fr": "21/09 — **premier critère tenu sur la forge, second en attente par construction ; la fiche avait cinq jours de retard.** Le job `rejeu-image` (`sql-tests.yml`, commit `d5228c7f`) a tourné **huit fois** sur la forge entre le 16/09 et le 21/09 (relevé par l'API `actions/tasks`), **huit fois vert**, lisible dans Actions — dont le 21/09 sur la migration de B27. Une autre session l'écrit « livré et vert sur la forge » le 21/09. Le second critère — « il a été rouge une fois pour une vraie raison, et la raison a été corrigée » — ne peut pas être provoqué : l'item reste ouvert pour lui, et pour lui seul.",
           "pt": "21/09 — **primeiro critério cumprido na forja, segundo em espera por construção.** O job `rejeu-image` correu **oito vezes** entre 16/09 e 21/09, **oito vezes verde**. O segundo critério — « ficou vermelho uma vez por uma razão real » — não se pode provocar: o item fica aberto só por ele."
-        }
-      ]
-    },
-    {
-      "id": "E14",
-      "d": "E",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "front",
-        "deno",
-        "sql",
-        "langue"
-      ],
-      "t": {
-        "fr": "Une page pour signaler un bug depuis l'application",
-        "pt": "Uma página para relatar um bug a partir do aplicativo"
-      },
-      "v": {
-        "fr": "**Demande de Xavier le 07/09/2026.** Vérifié le même jour : **aucun mécanisme de signalement n'existe dans l'app**, à aucun niveau. Pas de table (`bug_reports`, `feedback`, `signalements` — rien ; la seule table d'incidents, `service_health_incidents`, est la supervision automatique), aucune des 52 Edge Functions, aucune route dans `App.jsx` (pas de `/bug`, `/feedback`, `/contato`, `/aide`), aucune clé i18n (`*.bug.*`, `*.feedback.*`), aucun lien vers les issues Codeberg dans `src/` (les seules URL Codeberg de l'app sont dans la politique de confidentialité et le DPA). Le seul courriel de contact général, `mailto:contato@anarbib.org`, est enterré dans `PrivacyPolicyPage.jsx` ; les deux `mailto:anarbib@proton.me` sont réservés à l'onboarding. Le canal documenté vit hors de l'app et côté développeur : `CONTRIBUTING.md` et le README disent « ouvrir une issue sur Codeberg » — inaccessible à une bibliothécaire qui n'a pas de compte là-bas.\n\n**Trois patrons maison existent déjà**, et il n'y a rien à inventer : *(1)* `authority_duplicate_reports` + `report_authority_pair` (staff → coordination, index unique partiel anti-flood sur `status='open'`, `HINT` = clés i18n, `DO $$` de vérification — et son en-tête explique pourquoi une table générique à `entity_type` a été refusée) ; *(2)* `book_reading_note_reports` (modération, `UNIQUE (note_id, reporter)`) ; *(3)* **`cartography_submissions`** — le seul ouvert à `anon` : table verrouillée, Edge Function publique `submit-cartography-entry` avec défi altcha, outbox → `notify-event` vers `fede@anarbib.org`, trio `list/approve/reject`, écran de modération. C'est le modèle 3 qui couvre le besoin, avec l'anti-flood du modèle 1.",
-        "pt": "**Pedido de Xavier em 07/09/2026.** Verificado no mesmo dia: **nenhum mecanismo de relato existe no app**. Nenhuma tabela (`bug_reports`, `feedback` — nada; `service_health_incidents` é a supervisão automática), nenhuma das 52 Edge Functions, nenhuma rota em `App.jsx`, nenhuma chave i18n, nenhum link para as issues do Codeberg em `src/`. O único e-mail de contato geral, `contato@anarbib.org`, está enterrado na política de privacidade. O canal documentado vive fora do app, do lado do desenvolvedor: «abrir uma issue no Codeberg» — inacessível a uma bibliotecária sem conta lá.\n\n**Três padrões caseiros já existem**: *(1)* `authority_duplicate_reports` (staff → coordenação, índice único parcial anti-inundação, `HINT` = chaves i18n); *(2)* `book_reading_note_reports` (moderação); *(3)* **`cartography_submissions`** — o único aberto a `anon`: tabela trancada, Edge Function pública com altcha, outbox → `notify-event`, trio `list/approve/reject`, tela de moderação. É o modelo 3 que cobre a necessidade, com o anti-inundação do modelo 1."
-      },
-      "w": {
-        "fr": "Une page publique « Signaler un problème » (route à nommer, `/signalar` ou `/problema`), accessible **sans compte** et depuis **toutes** les pages : un lien dans le `Footer` (`src/components/layout/index.jsx`, aujourd'hui trois éléments : mention, confidentialité, langue) et une intention « Je veux signaler un problème » dans `intentions.js` (groupe lecteur — une ligne). Formulaire minimal : ce qui s'est passé, ce qui était attendu, comment refaire ; **le contexte se remplit seul** (page d'origine, locale, rôle et bibliothèque de session si connecté, navigateur) ; courriel de réponse facultatif ; jamais de mot de passe ni de capture obligatoire. Côté serveur, calquer `cartography_submissions` : table `bug_reports` verrouillée (`REVOKE ALL FROM anon, authenticated`), Edge Function `submit-bug-report` avec altcha pour les anonymes, outbox → `notify-event` vers `admins@anarbib.org` (le destinataire de supervision, F-domaine), statut `open/closed`, index unique partiel anti-flood, RPC `list/close` réservées aux admins réseau, et un onglet dans Rede (ou la page de modération existante) pour la file. **Deux décisions à prendre en écrivant** : *(a)* pont vers Codeberg (un admin recopie à la main vers une issue — le plus simple et le plus honnête) ou pas de pont ; *(b)* accusé de réception par courriel au signaleur quand il a laissé une adresse. Dix locales d'emblée (parité stricte, `i18n.test.js`), et un test qui garde la route et le `Footer`.",
-        "pt": "Uma página pública «Relatar um problema» (rota a nomear), acessível **sem conta** e a partir de **todas** as páginas: um link no `Footer` (`src/components/layout/index.jsx`) e uma intenção «Quero relatar um problema» em `intentions.js` (grupo leitor — uma linha). Formulário mínimo: o que aconteceu, o que era esperado, como refazer; **o contexto preenche-se sozinho** (página de origem, locale, papel e biblioteca de sessão, navegador); e-mail de resposta opcional. No servidor, copiar `cartography_submissions`: tabela `bug_reports` trancada, Edge Function `submit-bug-report` com altcha para anônimos, outbox → `notify-event` para `admins@anarbib.org`, status `open/closed`, índice único parcial anti-inundação, RPC `list/close` para admins de rede, e um separador na Rede para a fila. **Duas decisões ao escrever**: ponte para o Codeberg (um admin recopia à mão) ou não; acusar recebimento por e-mail quando houver endereço. Dez locales de imediato, e um teste que guarda a rota e o `Footer`."
-      },
-      "y": {
-        "fr": "La formation BLMF commence le 08/09 (sept soirées) : des coordinations vont buter sur des défauts, et la seule voie de retour aujourd'hui est l'oreille de Xavier. Un outil dont on ne peut pas dire qu'il est cassé sans passer par le mainteneur contredit `DOC-COLLECTIVE-1` ; et la promesse d'**A4** (« un premier retour sous une semaine ») n'a pas de porte d'entrée pour qui ne code pas.",
-        "pt": "A formação BLMF começa em 08/09 (sete noites): as coordenações vão topar com defeitos, e o único caminho de retorno hoje é o ouvido de Xavier. Uma ferramenta em que não se pode dizer «está quebrado» sem passar pelo mantenedor contradiz `DOC-COLLECTIVE-1`; e a promessa de **A4** não tem porta para quem não programa."
-      },
-      "f": [
-        {
-          "fr": "Depuis n'importe quelle page, connectée ou non, une personne dépose un signalement en moins de deux minutes sans rien connaître de Codeberg.",
-          "pt": "De qualquer página, com ou sem conta, uma pessoa deposita um relato em menos de dois minutos sem saber nada do Codeberg."
-        },
-        {
-          "fr": "Le signalement arrive par courriel aux admins réseau et figure dans une file avec un statut ; le même défaut signalé cinq fois ne fait pas cinq courriels.",
-          "pt": "O relato chega por e-mail aos admins de rede e figura numa fila com status; o mesmo defeito relatado cinco vezes não faz cinco e-mails."
-        },
-        {
-          "fr": "Dix locales, page titrée (`useDocumentTitle`), formulaire utilisable au clavier et sur mobile (`minmax(0,1fr)`).",
-          "pt": "Dez locales, página com título, formulário utilizável ao teclado e no celular."
-        }
-      ],
-      "dep": {
-        "fr": "Aucune bloquante. Voisin de **A4** (accueillir une contribution) et **E12** (le premier retour ergonomique de Xavier n'avait, lui non plus, pas de canal). Réutilise `notify-event` et altcha tels quels.",
-        "pt": "Nenhuma bloqueante. Vizinho de **A4** e **E12**. Reutiliza `notify-event` e altcha tal como estão."
-      },
-      "r": [
-        "src/components/layout/index.jsx (Footer)",
-        "src/pages/inicio/intentions.js",
-        "supabase/migrations/20260618182516_cartography_submissions.sql",
-        "supabase/functions/submit-cartography-entry",
-        "supabase/migrations/20260821130001_signaler_un_doublon_d_autorite.sql",
-        "CONTRIBUTING.md"
-      ],
-      "verif": [
-        {
-          "fr": "07/09 — grep sur `src/`, `supabase/functions/` (52 EF), `App.jsx` (routes), `fr.json` ; dépôt `eb790c33`. Aucun mécanisme, aucun item au backlog avant celui-ci.",
-          "pt": "07/09 — grep em `src/`, `supabase/functions/` (52 EF), `App.jsx`, `fr.json`; repositório `eb790c33`. Nenhum mecanismo, nenhum item no backlog antes deste."
-        },
-        {
-          "fr": "24/09 — **les deux décisions sont prises par Xavier** : *(a)* **aucun pont vers Codeberg** — file dans l application + courriel aux admins réseau, un admin recopie à la main s il le juge utile ; *(b)* **un accusé de réception simple** par courriel quand la personne a laissé une adresse (« reçu, merci », avec le numéro du signalement, sans suivi ensuite). Pris en main par cette session le 24/09.",
-          "pt": "24/09 — **as duas decisões foram tomadas por Xavier**: *(a)* nenhuma ponte para o Codeberg; *(b)* um aviso de receção simples por e-mail quando a pessoa deixou um endereço. Assumido por esta sessão em 24/09."
-        },
-        {
-          "fr": "24/09, soir — **livré et déployé** (`4dfb9d47`), sur les deux décisions de Xavier (aucun pont vers Codeberg, accusé de réception simple). *Page* `/relatar-problema`, publique, sans compte : trois champs libres, adresse facultative, preuve de travail Altcha, honeypot ; le contexte se remplit seul (page d origine lue dans `?de=`, langue, rôle et bibliothèque de session) ; jamais de mot de passe ni de capture. *Porte* : lien au pied de TOUTES les pages (`Footer`, avec la page d origine) et intention « Je veux signaler un problème » (`report`, groupe lecteur). *Fonction* `submit-bug-report` (publique) : honeypot, Altcha en deux temps (usage `bug_report` — la fonction ET la CHECK de la table `altcha_consumed_challenges`, élargies ensemble : la suite SQL a attrapé l oubli de la seconde au rejeu local, avant tout déploiement), compteur `bug_ip` (5/h/IP, CHECK et suite élargies), **un signalement identique encore ouvert rend l existant sans en créer un second** (donc sans second courriel), navigateur lu côté serveur, IP hachée. *Base* : `bug_reports` verrouillée (RLS, rien à `anon` ni `authenticated`), file `bug_report_notification_outbox` → `notify-event` par l adresse de l instance (`private.fn_functions_base_url()`, I20), RPC `api.fn_bug_report_list` / `_close` réservées à l admin réseau (42501 sinon ; verdicts au complément du 24/09 de l audit, 0029 = 422). *Courriels* (`_shared/domain/bug-report.ts`) : l alerte aux admins du réseau par la résolution unique de F15 (`network-admins.ts` : admins actif·ves + boîte collective, repli `admins@anarbib.org`), avec le lien de la file `/relatar-problema/fila` ; l accusé de réception dans la langue de la personne, canal humain dans le corps, jamais en Reply-To (F14) ; statut de la file d après le résultat des envois. *File admin* `/relatar-problema/fila` (protégée). *Dix locales* : 31 clés + 4 clés de courriel. *Bancs* : `relatar-banc` (13 cas — la preuve de travail est réelle, fabriquée et vérifiée par le code de la fonction ; doublon, frein, transport en panne), `relatar-source` (8), suite SQL `signalements_tests` (9) ; filet BG2 et garde des adresses à jour. Migrations `20260924201133` et `20260924204107` appliquées en production, fonction déployée et sondée : marqueur `deployed-functions` sur `4dfb9d47`, à 22 h 51 la fonction répond 422 `too_short` à un texte trop court et 403 `captcha_failed` sans preuve de travail, en 1,1 s ; le front servi (`Last-Modified` 20 h 42 UTC) porte la route ; 334 migrations = 334, les deux fonctions de trigger fermées à `authenticated`, `anon` et PUBLIC, la CHECK Altcha élargie, 0 signalement. **Deux gardes ont mordu avant la prod, et c est leur rôle** : la suite locale a vu que la CHECK de la table Altcha n avait pas suivi la liste de la fonction ; `salle_des_machines_tests` a vu sur la forge que les deux fonctions de trigger étaient nées exécutables par `authenticated` (privilège par défaut de `public`, qu un `REVOKE FROM PUBLIC` ne retire pas) — fermées vingt minutes plus tard. Et la route a d abord dit « signalar », qui n est d aucune langue : `/relatar-problema`, en portugais comme les autres. **Ce qui reste** : le premier « fini quand » (déposer un signalement en moins de deux minutes, depuis n importe quelle page, sans rien connaître de Codeberg) se prouve à l écran par une personne — Xavier, ou une coordination le 10/10 ; et le premier signalement réel dira si le courriel arrive bien dans la boîte collective.",
-          "pt": "24/09, à noite — **entregue e implantado** (`4dfb9d47`), sobre as duas decisões de Xavier (nenhuma ponte para o Codeberg, aviso de receção simples). *Página* `/relatar-problema`, pública, sem conta: três campos livres, endereço facultativo, prova de trabalho Altcha; o contexto preenche-se sozinho (página de origem, língua, papel e biblioteca de sessão); nunca uma palavra-passe. *Porta*: ligação no rodapé de TODAS as páginas e intenção « Quero avisar de um problema ». *Função* `submit-bug-report` (pública): honeypot, Altcha em dois tempos (uso `bug_report` — a função E a CHECK da tabela, alargadas juntas: a suite SQL apanhou o esquecimento da segunda no rejogo local), contador `bug_ip`, **um aviso idêntico ainda aberto devolve o existente sem criar um segundo**. *Base*: `bug_reports` bloqueada, fila → `notify-event` pelo endereço da instância (I20), RPC `api.fn_bug_report_list` / `_close` reservadas à administração da rede. *E-mails*: alerta à administração da rede pela resolução única de F15 (admins + caixa coletiva, recurso `admins@anarbib.org`), com a ligação da fila `/relatar-problema/fila`; aviso de receção na língua da pessoa, canal humano no corpo, nunca em Reply-To (F14). *Dez locales*: 31 chaves + 4 de e-mail. *Bancos*: `relatar-banc` (13), `relatar-source` (8), suite SQL `signalements_tests` (8). Migração aplicada em produção, função implantada e sondada: marqueur `deployed-functions` sur `4dfb9d47`, à 22 h 51 la fonction répond 422 `too_short` à un texte trop court et 403 `captcha_failed` sans preuve de travail, en 1,1 s ; le front servi (`Last-Modified` 20 h 42 UTC) porte la route ; 334 migrations = 334, les deux fonctions de trigger fermées à `authenticated`, `anon` et PUBLIC, la CHECK Altcha élargie, 0 signalement. **O que resta**: o primeiro « pronto quando » (depositar um aviso em menos de dois minutos) prova-se no ecrã, por uma pessoa."
         }
       ]
     },

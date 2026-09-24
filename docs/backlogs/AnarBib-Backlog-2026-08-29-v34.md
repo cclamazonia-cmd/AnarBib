@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-24** · 63 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-24** · 62 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 8
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 6
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-24.** **50 items sur 63** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F6, F10, F11, F12, F14, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-24.** **49 items sur 62** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E19, E20, F1, F3, F6, F10, F11, F12, F14, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -723,7 +723,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
-| **E14** | Une page pour signaler un bug depuis l'application | `P2` | À vérifier |
 | **E19** | Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas | `P2` | En cours |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 
@@ -878,30 +877,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Hérité de `#MOBILE P3`, `#MOBILE P5`, `#MOB-QR-A4`.
 
 *Renvois : `AnarBib-Backlog-2026-06-17-v33 §2.1`*
-
-#### E14 — Une page pour signaler un bug depuis l'application
-
-`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, langue maternelle
-
-**État.** **Demande de Xavier le 07/09/2026.** Vérifié le même jour : **aucun mécanisme de signalement n'existe dans l'app**, à aucun niveau. Pas de table (`bug_reports`, `feedback`, `signalements` — rien ; la seule table d'incidents, `service_health_incidents`, est la supervision automatique), aucune des 52 Edge Functions, aucune route dans `App.jsx` (pas de `/bug`, `/feedback`, `/contato`, `/aide`), aucune clé i18n (`*.bug.*`, `*.feedback.*`), aucun lien vers les issues Codeberg dans `src/` (les seules URL Codeberg de l'app sont dans la politique de confidentialité et le DPA). Le seul courriel de contact général, `mailto:contato@anarbib.org`, est enterré dans `PrivacyPolicyPage.jsx` ; les deux `mailto:anarbib@proton.me` sont réservés à l'onboarding. Le canal documenté vit hors de l'app et côté développeur : `CONTRIBUTING.md` et le README disent « ouvrir une issue sur Codeberg » — inaccessible à une bibliothécaire qui n'a pas de compte là-bas.
-
-**Trois patrons maison existent déjà**, et il n'y a rien à inventer : *(1)* `authority_duplicate_reports` + `report_authority_pair` (staff → coordination, index unique partiel anti-flood sur `status='open'`, `HINT` = clés i18n, `DO $$` de vérification — et son en-tête explique pourquoi une table générique à `entity_type` a été refusée) ; *(2)* `book_reading_note_reports` (modération, `UNIQUE (note_id, reporter)`) ; *(3)* **`cartography_submissions`** — le seul ouvert à `anon` : table verrouillée, Edge Function publique `submit-cartography-entry` avec défi altcha, outbox → `notify-event` vers `fede@anarbib.org`, trio `list/approve/reject`, écran de modération. C'est le modèle 3 qui couvre le besoin, avec l'anti-flood du modèle 1.
-
-*Vérifié : [object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Une page publique « Signaler un problème » (route à nommer, `/signalar` ou `/problema`), accessible **sans compte** et depuis **toutes** les pages : un lien dans le `Footer` (`src/components/layout/index.jsx`, aujourd'hui trois éléments : mention, confidentialité, langue) et une intention « Je veux signaler un problème » dans `intentions.js` (groupe lecteur — une ligne). Formulaire minimal : ce qui s'est passé, ce qui était attendu, comment refaire ; **le contexte se remplit seul** (page d'origine, locale, rôle et bibliothèque de session si connecté, navigateur) ; courriel de réponse facultatif ; jamais de mot de passe ni de capture obligatoire. Côté serveur, calquer `cartography_submissions` : table `bug_reports` verrouillée (`REVOKE ALL FROM anon, authenticated`), Edge Function `submit-bug-report` avec altcha pour les anonymes, outbox → `notify-event` vers `admins@anarbib.org` (le destinataire de supervision, F-domaine), statut `open/closed`, index unique partiel anti-flood, RPC `list/close` réservées aux admins réseau, et un onglet dans Rede (ou la page de modération existante) pour la file. **Deux décisions à prendre en écrivant** : *(a)* pont vers Codeberg (un admin recopie à la main vers une issue — le plus simple et le plus honnête) ou pas de pont ; *(b)* accusé de réception par courriel au signaleur quand il a laissé une adresse. Dix locales d'emblée (parité stricte, `i18n.test.js`), et un test qui garde la route et le `Footer`.
-
-**Pourquoi ça compte.** La formation BLMF commence le 08/09 (sept soirées) : des coordinations vont buter sur des défauts, et la seule voie de retour aujourd'hui est l'oreille de Xavier. Un outil dont on ne peut pas dire qu'il est cassé sans passer par le mainteneur contredit `DOC-COLLECTIVE-1` ; et la promesse d'**A4** (« un premier retour sous une semaine ») n'a pas de porte d'entrée pour qui ne code pas.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Aucune bloquante. Voisin de **A4** (accueillir une contribution) et **E12** (le premier retour ergonomique de Xavier n'avait, lui non plus, pas de canal). Réutilise `notify-event` et altcha tels quels.
-
-*Renvois : `src/components/layout/index.jsx (Footer)` · `src/pages/inicio/intentions.js` · `supabase/migrations/20260618182516_cartography_submissions.sql` · `supabase/functions/submit-cartography-entry` · `supabase/migrations/20260821130001_signaler_un_doublon_d_autorite.sql` · `CONTRIBUTING.md`*
 
 #### E19 — Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas
 
@@ -1467,7 +1442,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 |---|---|---|---|
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Ouvert |
 | **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Ouvert |
-| **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | Ouvert |
+| **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | À vérifier |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
@@ -1520,11 +1495,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### I15 — Le secret Forgejo de la clé publiable porte encore son ancien nom
 
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+`P3` Différé · État : **À vérifier** · Charge : une soirée · Ce que ça demande : administration système
 
 **État.** Depuis le 01/09, le code lit `VITE_SUPABASE_PUBLISHABLE_KEY` et sa valeur est bien la clé publiable — mais en CI, cette variable est alimentée par le secret Forgejo au nom historique `VITE_SUPABASE_ANON_KEY`. Découplage voulu : il évitait d'exiger un renommage de secret et un merge au même instant. Le piège est documenté dans `ci.yml` : `prebuild` fait `exit 0` si la variable manque, un nom désaccordé ne casse pas le build, il publie un instantané de catalogue périmé en silence.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Créer le secret `VITE_SUPABASE_PUBLISHABLE_KEY` dans les réglages Forgejo (même valeur), aligner la ligne de `ci.yml`, vérifier un build complet — la fraîcheur du `catalogue-snapshot.json` fait preuve — puis supprimer l'ancien secret.
 
@@ -2059,6 +2034,7 @@ CI verte : lint et suite unitaire. |
 | H11 | 2026-09-24 | **Clos le 24/09 sur pièces.** Migration `20260924194818` (`f4a531ce`), engendrée par le mapping du sync lui-même (`isSyncable` + `toRow` importés de `scripts/ficedl_thesaurus_sync.mjs`, jamais recopiés) depuis `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` : 621 termes (227 sujets, 234 géo, 1 mixte, **159 dates**), les deux fiches sans libellé ni H1 écartées (`mot532`, `mot538`), idempotente — l UPDATE ne touche qu une ligne dont le contenu diffère. **Comparée ligne à ligne à la production avant de pousser** (md5 par `mot_id`, 621 lignes) : 619 identiques, deux différaient — `mot136` et `mot137` portaient au dépôt le drapeau `hors_liste_cira` que la production n avait pas, parce que le sync du 03/09 (11 h 07) a précédé la ré-aspiration commitée à 13 h 17 (`2f314f15`). Le dépôt est la référence : la production a reçu ces deux drapeaux au déploiement, rien d autre. **Vérifié en production après la CI** : 621 termes, 159 dates, empreinte de la table `8d1e585e67e3c5f7059532a41adabcd0` = celle du rejeu local = celle que la suite imprime ; 332 migrations = 332. Suite `ficedl_termes_tests` (7 cas : comptes, un seul `harvested_at`, aucun terme sans libellé, empreinte, et un alignement vers un descripteur `dates` qui passe la clé étrangère — le sujet est créé par le test, aucun n existe en CI). `sql-tests` et `rejeu-image` verts. Le jour où le sync sera rejoué en production, la suite rougira : il faudra régénérer la migration (script au scratchpad de la session, recette dans l en-tête de la migration), pas ajuster le test. |
 | F4 | 2026-09-24 | **Clos le 24/09 : le dernier critère est tenu par Xavier.** Mesuré en production le 24/09 : `loan_cycle_notifications` porte trois envois, tous sur l emprunt 84 (BLMF) — l invitation à une note de lecture le 10/09 à 09 h 15, **le rappel J-3 le 18/09** et **le rappel du jour de l échéance le 21/09**, une fois chacun (unicité item × moment). Xavier confirme le 24/09 que ces courriels sont **arrivés, dans la langue de la personne**. Les interrupteurs commandent des envois réels depuis le 31/08 (EF `notify-loan-cycle`, cron quotidien 9 h 15 UTC, suite `rappels_echeance_tests`). Ce qui n est pas dans cette clôture : le J+7 (aucun retard depuis le 31/08 — l emprunt 84 est rendu) ; il partira au premier retard réel, et la table le dira. |
 | G14 | 2026-09-24 | **Clos le 24/09 sur pièces.** Xavier a relancé la personne lui-même (décision du 21/09) ; lu en production le 24/09 : l invitation du 30/08 est passée à **`accepted`** avant son expiration du 29/09. Les deux autres invitations du 01/09 : une acceptée, une en attente de ratification (expiration 01/10). Ce que l épisode dit, à verser à **G1** : l invitation par courriel n a pas suffi, la relance humaine oui. |
+| E14 | 2026-09-24 | **Clos le 24/09 au soir, sur pièces.** Livré en trois commits (`44ced60d`, `4dfb9d47`, `1145b32f`), déployé, et **emprunté pour de vrai** : à 22 h 55 (heure de Paris), Xavier a déposé le signalement `35a5dc22` depuis `/login`, sans session, et reçu le courriel des admins (PDF versé dans la séance) ; en base, la ligne de file est passée à `sent` au premier essai, accusé de réception compris. *Critère 1* (déposer un signalement depuis n importe quelle page sans rien connaître de Codeberg) : tenu, par ce geste. *Critère 2* (courriel aux admins, file avec un statut, un même défaut signalé cinq fois ne fait pas cinq courriels) : tenu — courriel reçu, file `/relatar-problema/fila`, doublon ouvert rendu tel quel (banc `relatar-banc`). *Critère 3* : dix locales, page titrée, formulaire au clavier (champs étiquetés, `role=alert`/`status`) ; **le rendu sur téléphone n a pas été regardé** — les champs sont en pleine largeur et en 16 px, sans grille, mais c est une lecture du code, pas une mesure. Deux corrections nées du premier signalement réel : le courriel ne cite plus « (E14) », qui ne dit rien à qui le lit (remarque de Xavier), et une personne sans compte n envoie plus « Bibliothèque : AnarBib » — c était le contexte par défaut de `LibraryContext`. Deux gardes avaient mordu avant : la CHECK de la table Altcha (rejeu local) et `salle_des_machines_tests` (privilège par défaut de `public`, fermé par `20260924204107`). La route a d abord dit « signalar », qui n est d aucune langue : `/relatar-problema`. |
 
 ---
 
@@ -2090,4 +2066,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-24. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 63 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-24. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 62 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
