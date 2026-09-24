@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-24** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-24** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,11 +19,11 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 9
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 8
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 8
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 7
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-24.** **55 itens de 68** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E15, E19, E20, F1, F3, F4, F6, F10, F11, F12, F13, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, I25, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-24.** **52 itens de 65** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F4, F6, F10, F11, F12, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -724,7 +724,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | Aberto |
-| **E15** | As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales | `P2` | Aberto |
 | **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Em curso |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
@@ -904,26 +903,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `src/components/layout/index.jsx (Footer)` · `src/pages/inicio/intentions.js` · `supabase/migrations/20260618182516_cartography_submissions.sql` · `supabase/functions/submit-cartography-entry` · `supabase/migrations/20260821130001_signaler_un_doublon_d_autorite.sql` · `CONTRIBUTING.md`*
 
-#### E15 — As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna
-
-**Estado.** **Verificado em `src/i18n/locales/` em 07/09.** Em pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` e `account.deleteAccount.confirmText` = `EXCLUIR`: dois gestos, duas palavras. Em fr, en, es, it, de, nl, el e eo, **as duas chaves carregam a mesma palavra** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Só o catalão distingue (`ELIMINA` / `SUPRIMIR`). Levantado primeiro pelo manual da leitora v2 de 03/09.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Escolher duas palavras distintas por locale, com as pessoas falantes quando houver (**E2** para nl e el), e pôr o manual de acordo.
-
-**Por que importa.** Uma palavra de confirmação serve para não confundir duas destruições. Quando é a mesma, não serve para nada — e é exatamente `DOC-DESTR-2`: dizer o que se destrói.
-
-**O que conta como terminado.**
-
-- Nove locales, duas palavras diferentes cada; o teste i18n passa.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03` · `REGISTRE §0 DOC-DESTR-2`*
-
 #### E19 — Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo
 
 `P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : React / JavaScript
@@ -987,7 +966,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
 | **F11** | Branco sobre branco: blocos dos nossos e-mails ficam ilegíveis num cliente em tema escuro | `P2` | A verificar |
 | **F12** | Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre | `P2` | Aberto |
-| **F13** | `notify-digital-share`: `sent_count` conta também os envios recusados | `P3` | Aberto |
 | **F14** | O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup | `P2` | Em curso |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
@@ -1165,25 +1143,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 - O cron do reenvio consta de `fn_crons_attendus()` e da suíte dos crons.
 
 *Remissões : `supabase/functions/_shared/domain/outbox-verdict.ts (en-tête : « rejouer par destinataire »)` · `supabase/migrations/20260817142747_healthcheck_notifications.sql (§3, files non traitées)` · `src/tests/equipe-reseau-file-banc.test.js, library-profile-banc.test.js, mails-federation-banc.test.js, lettre-banc.test.js` · `journal/operations/RUNBOOK_domaines_repli_2026-09-07 (« Trouvé en écrivant ces bancs »)`*
-
-#### F13 — `notify-digital-share`: `sent_count` conta também os envios recusados
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
-
-**Estado.** **Pedido por Xavier em 21/09/2026.** Encontrado no mesmo dia ao escrever `src/tests/notify-digital-share-banc.test.js`, e **fixado** aí como « DÉFAUT CONNU »: a função incrementa o contador sem ler o que o transporte respondeu. Com o transporte avariado, a resposta anuncia `sent_count: 1` para zero e-mails enviados. É só um número numa resposta que nada mostra hoje. É o último sítio conhecido com a forma do defeito « sent por engano » corrigido noutros lados em 21/09.
-
-*Verificado : [object Object]*
-
-**O que é.** Fazer `sendIll` devolver o resultado de `safeSendEmail`, contar só os envios feitos, e devolver ao lado a contagem dos recusados (com endereço e causa) e dos saltados. Na bancada, inverter o caso fixado: vermelho primeiro, verde depois.
-
-**Por que importa.** Um relatório que mente, mesmo pequeno, acaba por servir de prova. No dia em que alguém ligar um ecrã ou um alerta a este número, ele dirá que tudo partiu.
-
-**O que conta como terminado.**
-
-- `sent_count` só conta os envios aceites pelo transporte; as recusas são devolvidas à parte, nomeadas.
-- O caso « DÉFAUT CONNU » da bancada está invertido e verde; nenhum caso de teste do repositório fica fixado com esse nome.
-
-*Remissões : `supabase/functions/notify-digital-share/index.ts` · `src/tests/notify-digital-share-banc.test.js (cas « DÉFAUT CONNU »)` · `supabase/functions/_shared/domain/outbox-verdict.ts`*
 
 #### F14 — O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup
 
@@ -1563,7 +1522,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
-| **I25** | A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada | `P3` | Aberto |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1713,27 +1671,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Primo de **I12**. Ligado a **A3**.
 
 *Remissões : `deploy/ops/systemd/` · `anarbib-systemd-etat-non-fiable` · `anarbib-backup-stale-lock-selfheal` · `RUNBOOK_restauration_BG2_2026-07-01`*
-
-#### I25 — A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** Em 16/09 (run 7092391, `d5228c7f`), `sql-tests` ficou vermelho só em `paquet19_loan_wrappers_tests.sql`, cujo balanço diz « OK : 46/46 ». A rede de `run-sql-suites.sh` (`grep -qE` sob `pipefail`) deu FAIL nesse texto. Reproduzido byte a byte fora da CI (WSL e imagem `node:22`): PASS sempre. Nenhuma anomalia no log; suíte inalterada desde 02/09, quatro linhas por construção. Relançado por Xavier: verde às 22h05. Um acaso — e um acaso que dá vermelho custa um relance e um ticket; o inverso seria pior.
-
-*Verificado : 16/09 — log do run 7092391 lido por inteiro, rede reproduzida fora da CI em dois ambientes, ticket #17 fechado no verde do relance.*
-
-**O que é.** Não procurar na suíte. Instrumentar a rede: gravar `$out` em ficheiro, testar com `grep -c` no ficheiro (sem tubo, logo sem `pipefail` nem SIGPIPE), e em FAIL imprimir `PIPESTATUS` e `wc -c`. Se voltar, o log dirá qual elo mentiu.
-
-**Por que importa.** Uma CI que fica vermelha sem causa corrói a confiança: na terceira falsa alerta relança-se sem ler, e a verdadeira passa.
-
-**O que conta como terminado.**
-
-- A rede lê a saída de um ficheiro, sem tubo, e um FAIL imprime `PIPESTATUS` e o tamanho da saída.
-- Ou o vermelho voltou e o log nomeou a causa, ou três meses sem recidiva.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `scripts/ci/run-sql-suites.sh` · `.forgejo/workflows/sql-tests.yml` · `REGISTRE §0 DOC-SILENCE-1` · `REGISTRE §0 OPS-8`*
 
 ---
 
@@ -2156,6 +2093,9 @@ CI verde. |
 | I27 | 2026-09-22 | **Fechado em 22/09: os três critérios cumpridos, os dois últimos por Xavier, cada um com a sua prova.** *(1)* `--essai`: « dry-run ok » nos três sites — depois de uma recusa instrutiva: um token só com `repository` leitura-escrita lia o repositório (`push: true`), mas o git-pages começa por `GET /api/v1/user`, que exige **`user` leitura**. *(2)* Publicação real só no domínio de recurso: `--sans-build --site https://app.anarbib.is/` → « result: replaced ». **Prova**: `https://app.anarbib.is/.version-front` devolve `68b18cf8` — um ficheiro que só `publier-front.sh` escreve, e que o canónico publicado pela CI não tem; bundle servido `index-B3w3O5ED.js`, o mesmo que em `app.anarbib.org`. Nenhuma mudança para as leitoras. *(3)* Token `publier-front-hors-forge` (`repository` leitura-escrita + `user` leitura), em `~/anarbib-ops/git-pages.token` e no Dashlane. O caminho de socorro do front existe agora de verdade — percorrido num dia calmo. |
 | B27 | 2026-09-22 | **Fechado em 22/09 à noite, sobre peças: os três critérios cumpridos.** *(1)* Cumprido em 21/09 — uma chamada anónima com os argumentos do primeiro carregamento responde em **380 ms** (50 obras) e 460 ms (200), plano registado no cabeçalho da migração `20260921111344`; 3 533 ms e 27 311 ms antes. *(2)* Relido em 22/09 em `postgres_logs`, janela de 24 h: **zero `57014` em `catalog_works_v1`**; `edge_logs` na mesma janela: **337 chamadas, 337 × HTTP 200**. Nuance honesta: as 337 vêm de um só endereço, o da sonda — o « dia de tráfego real » é um dia de sonda de cinco em cinco minutos com os argumentos exatos do primeiro carregamento; nenhum visitante anónimo carregou o catálogo por obra na janela. Os sete `57014` do dia estão noutro lado: cinco leituras de `service_health_incidents` e dois `ALTER TABLE` sobre a mesma tabela, em 21/09 entre as 18h30 e as 18h39 UTC — uma espera de bloqueio numa tabela de sonda, não a RPC do catálogo; causa não levantada. *(3)* Cumprido — a sonda `catalogue_par_oeuvre` do `health-probe` (`5111ac5f`) chama a RPC em anónimo de cinco em cinco minutos, limiar 3 000 ms; o front regista o seu recuo. Suites em CI: `catalogue_par_oeuvre_cout_tests` (7 casos), banco `health-probe-catalogue-par-oeuvre` (3 casos). Fora do item: a view continua a ser o posto mais caro (`fn_library_visible_to_caller` avaliada por detenção, ~70 000 acessos a buffers por chamada). |
 | F7 | 2026-09-24 | **Atenção: o identificador `F7` designa dois objetos — os treze segredos vazios (fechado em 02/09, linha acima) e este, o transporte de e-mail.** **Fechado em 24/09 à noite, com provas: os dois critérios cumpridos, e o caso (a) de `DOC-SILENCE-1` que os motivava tem um alarme.** *(1)* Sem `MAIL_TRANSPORT=mock` explícito, uma função sem serviço configurado falha com mensagem legível — entregue pela PR #30 do companheiro (`ASR2026`), merge `2cd27d71` em 23/09 após seis correções obtidas na releitura (RFC 2047, STARTTLS obrigatório com opt-in `SMTP_ALLOW_INSECURE`, corpo em base64 dobrado a 76 colunas, guarda `SMTP_HOST`, `SMTP_TIMEOUT_MS`, banco `smtp-transport.test.js`). **Prova em produção**: uma reserva e o seu cancelamento em 23/09 às 19h30 dispararam quatro e-mails por `notify-event`, registrados como « `[transport] envoi via Resend` » — a maiúscula só existe no código novo. *(2)* Uma só implementação de envio, chamada por todas as funções: as oito cópias da chamada à Resend passaram para `_shared/transport/email.ts` em três lotes (`7a2ba5e9`, `c7db27e1`, `b0ff9970`/`badf88de`/`f2c36a6f`), cada uma passando o SEU roteamento explicitamente — o módulo punha um `Reply-To` por padrão a partir do contexto, o que devolveria a `notify-library-request` o que F14 acabara de retirar; daí `routing` e `noReplyTo`. O módulo aprendeu também `toEmails` e `transportConfigure()` (a guarda de `register` exigia `RESEND_API_KEY`: uma pilha SMTP teria `MISSING_ENV` em toda inscrição). **Guarda** `mail-transport-routage.test.js`: payload fixado e lista fechada das funções ainda diretas, **vazia**; provada por mutação. Implantado em três runs verdes (#1316, #1317, #1318); impressões novas constatadas, OPTIONS 200/405. **Retificação**: `register` nunca foi silencioso — devolve `email_usuaria_enviado: false` e a página de inscrição avisa. O caso (a) real era `request-password-reset`, cujo `catch` anti-enumeração (decisão correta, mantida) engolia toda falha de transporte. **Resposta em 24/09** (`91475d06`, migração em produção `20260924180538`): o módulo anota cada falha em `mail_transport_failures` — nunca o endereço — e `health-probe` traz a sonda `mail_transport`: uma falha nos últimos 30 minutos abre o incidente, trinta minutos de calma o fecham; `kind` na CHECK e em `sondesStructurelles` na mesma entrega; tabela classificada para o backup, purgada a 30 dias; suíte `mail_transport_tests` (6/6). Constatado após o deploy: volta da sonda às 20h35, zero incidente, sonda `ok`. **Não provado**: uma falha real abrindo um incidente real — Xavier escolheu não simular; a receita de F2 continua válida. |
+| I25 | 2026-09-24 | **Fechado em 24/09 sobre peças: a causa está nomeada, reproduzida e retirada.** A rede lia a saída por `echo "$out" | grep -qE ' OK : …'` sob `set -o pipefail`: `grep -q` sai na primeira linha « OK : », `echo` ainda não acabou de escrever o que se segue (« ROLLBACK »), recebe SIGPIPE, e `pipefail` faz do seu código 141 o veredicto — FAIL numa suite verde. Raro, porque esse resto cabe em poucos bytes. **Reproduzido em 24/09 fora da CI, 300 vezes em 300**, colocando 300 KB depois da linha « OK : »; **0 em 300 a partir de um ficheiro**. `scripts/ci/run-sql-suites.sh` lê agora a saída de um ficheiro (`grep -c`, nenhum tubo), e um FAIL imprime o código do psql, o do grep, o número de linhas « OK : » e o tamanho da saída. Reproduzido em local: duas suites PASS, uma suite sem balanço FAIL com a sua linha de diagnóstico. O segundo critério (« três meses sem recidiva ») fora escrito para uma causa desconhecida; a causa está nomeada. `32edb185`, `sql-tests` verde na CI. |
+| F13 | 2026-09-24 | **Fechado em 24/09 sobre peças.** `sendIll` devolve o veredicto de `safeSendEmail` por `verdictEnvois` (`_shared/domain/outbox-verdict.ts`, o mesmo juiz dos sete módulos corrigidos em 21/09): `sent_count` só conta os envios aceites pelo transporte; a resposta traz `refused_count`, `refused` (endereço e causa) e `skipped_count`. O caso marcado do banco foi virado — transporte em pane: `sent_count` 0, uma recusa nomeada; um caso novo verifica as três contagens num envio a dois (2 / 0 / 0). **Nenhum caso do repositório continua marcado « DÉFAUT CONNU »**. `32edb185`, CI verde, função implantada, sondada em produção: marqueur `deployed-functions` sur `32edb185`, trois appels sans secret → 401 en 0,3 à 1,7 s à 21 h 32, la fonction démarre. |
+| E15 | 2026-09-24 | **Entregue em 24/09, fechado sobre peças, com uma reserva.** Em oito locales, a palavra de « esvaziar o histórico » era a de « apagar a conta »: a palavra aprendida para um gesto abria o outro. A primeira muda, no modelo de pt-BR (APAGAR / EXCLUIR) e de ca: **fr EFFACER, en ERASE, es BORRAR, it CANCELLA, de LEEREN, nl WISSEN, el ΕΚΚΑΘΑΡΙΣΗ, eo VIŜI** — a palavra da conta não muda. Banco `confirmation-deux-gestes-deux-mots` (2 casos). Guardas i18n verdes. **Reserva**: as oito palavras são uma escolha de sessão, não de falantes (nl, el: E2) — « corrige-me »; e o manual do leitor, fora do repositório, ainda cita a palavra antiga (J9). `32edb185`, CI verde, em produção. |
 
 ---
 
@@ -2187,4 +2127,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

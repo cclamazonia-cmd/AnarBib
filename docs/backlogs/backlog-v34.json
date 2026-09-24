@@ -2210,6 +2210,30 @@
           "fr": "**Attention : l'identifiant `F7` désigne deux objets — les treize secrets vides (clos le 02/09, ligne plus haut) et celui-ci, le transport mail.** **Clos le 24/09 au soir, sur pièces : les deux critères tenus, et le cas (a) de `DOC-SILENCE-1` qui les motivait a une alarme.** *(1)* Sans `MAIL_TRANSPORT=mock` explicite, une fonction sans service configuré lève un message lisible — livré par la PR #30 du camarade (`ASR2026`), fusion `2cd27d71` le 23/09 après six corrections obtenues en relecture (RFC 2047 sur les noms accentués, STARTTLS obligatoire avec opt-in `SMTP_ALLOW_INSECURE`, corps en base64 plié à 76 colonnes, garde `SMTP_HOST`, délais `SMTP_TIMEOUT_MS`, banc `smtp-transport.test.js` qui charge le vrai module). **Preuve en production** : une réservation et son annulation le 23/09 à 19 h 30 ont fait partir quatre courriels par `notify-event`, journalisés « `[transport] envoi via Resend` » — la majuscule n'existe que dans le code fusionné. *(2)* Une seule implémentation d'envoi, appelée par toutes les fonctions : les huit copies de l'appel à Resend ont rejoint `_shared/transport/email.ts` en trois lots (`7a2ba5e9`, `c7db27e1`, `b0ff9970`/`badf88de`/`f2c36a6f`), chacune en passant SON routage explicitement — le module posait un `Reply-To` d'office depuis le contexte, ce qui aurait rendu à `notify-library-request` celui que F14 venait de retirer ; d'où `routing` et `noReplyTo`. Le module a aussi appris `toEmails` (une liste de destinataires en un message, pour `register`) et `transportConfigure()` (la garde de `register` exigeait `RESEND_API_KEY` : une pile SMTP aurait eu `MISSING_ENV` à chaque inscription). **Garde** `src/tests/mail-transport-routage.test.js` : payload figé (From du routage explicite, absence de Reply-To sous `noReplyTo`, repli sur le contexte, `throw` sans service) et liste fermée des fonctions encore en direct, **vide** ; éprouvée par mutation. La garde F14 (`reply-to-meme-domaine`) balaye désormais aussi un Reply-To passé en routage explicite. Déployé en trois runs verts (#1316, #1317, #1318) ; empreintes neuves constatées, OPTIONS 200/405 partout. **Rectification** : `register` n'a jamais été silencieux — il renvoie `email_usuaria_enviado: false` et la page d'inscription avertit. Le vrai cas (a) était `request-password-reset`, dont le `catch` anti-énumération (décision juste, gardée) avalait tout échec de transport. **Réponse le 24/09** (`91475d06`, migration prod `20260924180538`) : le module note chaque échec dans `mail_transport_failures` — jamais l'adresse, erreur expurgée `<adresse>` et tronquée — et `health-probe` porte la sonde `mail_transport` (`fn_healthcheck_mail_transport()`, `security definer` fermée à `anon`) : un échec dans les 30 dernières minutes ouvre l'incident, trente minutes de calme le referment ; `kind` dans la CHECK et dans `sondesStructurelles` par la même livraison ; table classée pour la sauvegarde, purgée à 30 jours ; suite `mail_transport_tests` (6/6) dans la liste des suites. Constaté après déploiement : tour de la sonde à 20 h 35, zéro incident, sonde `ok`. **Non éprouvé** : un vrai échec ouvrant un vrai incident — Xavier a choisi de ne pas simuler ; la recette de F2 (une ligne insérée, deux courriels) reste valable le jour où on voudra.",
           "pt": "**Atenção: o identificador `F7` designa dois objetos — os treze segredos vazios (fechado em 02/09, linha acima) e este, o transporte de e-mail.** **Fechado em 24/09 à noite, com provas: os dois critérios cumpridos, e o caso (a) de `DOC-SILENCE-1` que os motivava tem um alarme.** *(1)* Sem `MAIL_TRANSPORT=mock` explícito, uma função sem serviço configurado falha com mensagem legível — entregue pela PR #30 do companheiro (`ASR2026`), merge `2cd27d71` em 23/09 após seis correções obtidas na releitura (RFC 2047, STARTTLS obrigatório com opt-in `SMTP_ALLOW_INSECURE`, corpo em base64 dobrado a 76 colunas, guarda `SMTP_HOST`, `SMTP_TIMEOUT_MS`, banco `smtp-transport.test.js`). **Prova em produção**: uma reserva e o seu cancelamento em 23/09 às 19h30 dispararam quatro e-mails por `notify-event`, registrados como « `[transport] envoi via Resend` » — a maiúscula só existe no código novo. *(2)* Uma só implementação de envio, chamada por todas as funções: as oito cópias da chamada à Resend passaram para `_shared/transport/email.ts` em três lotes (`7a2ba5e9`, `c7db27e1`, `b0ff9970`/`badf88de`/`f2c36a6f`), cada uma passando o SEU roteamento explicitamente — o módulo punha um `Reply-To` por padrão a partir do contexto, o que devolveria a `notify-library-request` o que F14 acabara de retirar; daí `routing` e `noReplyTo`. O módulo aprendeu também `toEmails` e `transportConfigure()` (a guarda de `register` exigia `RESEND_API_KEY`: uma pilha SMTP teria `MISSING_ENV` em toda inscrição). **Guarda** `mail-transport-routage.test.js`: payload fixado e lista fechada das funções ainda diretas, **vazia**; provada por mutação. Implantado em três runs verdes (#1316, #1317, #1318); impressões novas constatadas, OPTIONS 200/405. **Retificação**: `register` nunca foi silencioso — devolve `email_usuaria_enviado: false` e a página de inscrição avisa. O caso (a) real era `request-password-reset`, cujo `catch` anti-enumeração (decisão correta, mantida) engolia toda falha de transporte. **Resposta em 24/09** (`91475d06`, migração em produção `20260924180538`): o módulo anota cada falha em `mail_transport_failures` — nunca o endereço — e `health-probe` traz a sonda `mail_transport`: uma falha nos últimos 30 minutos abre o incidente, trinta minutos de calma o fecham; `kind` na CHECK e em `sondesStructurelles` na mesma entrega; tabela classificada para o backup, purgada a 30 dias; suíte `mail_transport_tests` (6/6). Constatado após o deploy: volta da sonda às 20h35, zero incidente, sonda `ok`. **Não provado**: uma falha real abrindo um incidente real — Xavier escolheu não simular; a receita de F2 continua válida."
         }
+      ],
+      [
+        "I25",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 sur pièces : la cause est nommée, reproduite et retirée.** Le filet lisait la sortie par `echo \"$out\" | grep -qE ' OK : …'` sous `set -o pipefail` : `grep -q` quitte à la première ligne « OK : », `echo` n a pas fini d écrire ce qui la suit (« ROLLBACK »), reçoit SIGPIPE, et `pipefail` fait de son code 141 le verdict — FAIL sur une suite verte. Rare, parce que ce reste tient en quelques octets, le plus souvent déjà dans le tampon du tube. **Reproduit le 24/09 hors CI, 300 fois sur 300**, en plaçant 300 Ko après la ligne « OK : » (bash 5 sous Git Bash ; le mécanisme est celui de POSIX) ; **0 sur 300 depuis un fichier**. `scripts/ci/run-sql-suites.sh` lit désormais la sortie depuis un fichier (`grep -c`, aucun tube), et un FAIL imprime le code de psql, celui de grep, le nombre de lignes « OK : » et la taille de la sortie. Rejoué en local sur `supabase_db_anarbib` (325 migrations, 192 tables classées) : `mail_transport_tests` et `crons_planifies_tests` PASS ; une suite sans bilan FAIL avec sa ligne de diagnostic (« psql rc=0 · grep rc=1 · lignes OK=0 · 48 octets »). Le second critère (« trois mois sans récidive ») avait été écrit pour une cause inconnue ; la cause est nommée, l attente n a plus d objet. `32edb185`, `sql-tests` vert en CI.",
+          "pt": "**Fechado em 24/09 sobre peças: a causa está nomeada, reproduzida e retirada.** A rede lia a saída por `echo \"$out\" | grep -qE ' OK : …'` sob `set -o pipefail`: `grep -q` sai na primeira linha « OK : », `echo` ainda não acabou de escrever o que se segue (« ROLLBACK »), recebe SIGPIPE, e `pipefail` faz do seu código 141 o veredicto — FAIL numa suite verde. Raro, porque esse resto cabe em poucos bytes. **Reproduzido em 24/09 fora da CI, 300 vezes em 300**, colocando 300 KB depois da linha « OK : »; **0 em 300 a partir de um ficheiro**. `scripts/ci/run-sql-suites.sh` lê agora a saída de um ficheiro (`grep -c`, nenhum tubo), e um FAIL imprime o código do psql, o do grep, o número de linhas « OK : » e o tamanho da saída. Reproduzido em local: duas suites PASS, uma suite sem balanço FAIL com a sua linha de diagnóstico. O segundo critério (« três meses sem recidiva ») fora escrito para uma causa desconhecida; a causa está nomeada. `32edb185`, `sql-tests` verde na CI."
+        }
+      ],
+      [
+        "F13",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 sur pièces.** `sendIll` rend le verdict de `safeSendEmail` par `verdictEnvois` (`_shared/domain/outbox-verdict.ts`, le même juge que les sept modules corrigés le 21/09) : `sent_count` ne compte que les envois acceptés par le transport ; la réponse porte `refused_count`, `refused` (adresse et cause) et `skipped_count`. Le cas épinglé du banc `notify-digital-share-banc` est retourné — transport en panne : `sent_count` 0, un refus nommé (`dem@exemplo.test`) ; un cas neuf vérifie les trois comptes sur un envoi à deux (2 / 0 / 0). **Plus aucun cas du dépôt n est épinglé « DÉFAUT CONNU »** (il reste une mention au passé dans `library-profile-banc`). Rien n affiche encore cette réponse : c était le dernier endroit connu à garder la forme du défaut « sent à tort ». `32edb185`, CI verte (`app`, `backend`), fonction déployée (marqueur `deployed-functions`), sondée en production après le déploiement : marqueur `deployed-functions` sur `32edb185`, trois appels sans secret → 401 en 0,3 à 1,7 s à 21 h 32, la fonction démarre.",
+          "pt": "**Fechado em 24/09 sobre peças.** `sendIll` devolve o veredicto de `safeSendEmail` por `verdictEnvois` (`_shared/domain/outbox-verdict.ts`, o mesmo juiz dos sete módulos corrigidos em 21/09): `sent_count` só conta os envios aceites pelo transporte; a resposta traz `refused_count`, `refused` (endereço e causa) e `skipped_count`. O caso marcado do banco foi virado — transporte em pane: `sent_count` 0, uma recusa nomeada; um caso novo verifica as três contagens num envio a dois (2 / 0 / 0). **Nenhum caso do repositório continua marcado « DÉFAUT CONNU »**. `32edb185`, CI verde, função implantada, sondada em produção: marqueur `deployed-functions` sur `32edb185`, trois appels sans secret → 401 en 0,3 à 1,7 s à 21 h 32, la fonction démarre."
+        }
+      ],
+      [
+        "E15",
+        "2026-09-24",
+        {
+          "fr": "**Livré le 24/09, clos sur pièces, avec une réserve.** Dans huit locales, le mot de « vider l historique » (`account.history.deleteAll.confirmWord`) était celui de « supprimer le compte » (`account.deleteAccount.confirmText`) : le mot appris pour un geste ouvrait l autre. Le premier change, sur le modèle de pt-BR (APAGAR / EXCLUIR) et de ca (ELIMINA / SUPRIMIR) : **fr EFFACER, en ERASE, es BORRAR, it CANCELLA, de LEEREN, nl WISSEN, el ΕΚΚΑΘΑΡΙΣΗ, eo VIŜI** — le mot du compte ne bouge pas, personne n a rien à réapprendre pour le geste le plus grave. Banc `confirmation-deux-gestes-deux-mots` (2 cas : dix locales, deux mots en capitales, jamais le même ; chaque page compare au mot de SA locale, aucun mot en dur). Gardes i18n (parité 6 690 × 10, écriture) vertes. **Réserve** : les huit mots sont un choix de session, pas des locuteur·rices (nl, el : E2) — « corrige-moi », c est une ligne par locale ; et le manuel lecteur, hors dépôt, cite encore l ancien mot (à reprendre avec J9). `32edb185`, CI verte, en production.",
+          "pt": "**Entregue em 24/09, fechado sobre peças, com uma reserva.** Em oito locales, a palavra de « esvaziar o histórico » era a de « apagar a conta »: a palavra aprendida para um gesto abria o outro. A primeira muda, no modelo de pt-BR (APAGAR / EXCLUIR) e de ca: **fr EFFACER, en ERASE, es BORRAR, it CANCELLA, de LEEREN, nl WISSEN, el ΕΚΚΑΘΑΡΙΣΗ, eo VIŜI** — a palavra da conta não muda. Banco `confirmation-deux-gestes-deux-mots` (2 casos). Guardas i18n verdes. **Reserva**: as oito palavras são uma escolha de sessão, não de falantes (nl, el: E2) — « corrige-me »; e o manual do leitor, fora do repositório, ainda cita a palavra antiga (J9). `32edb185`, CI verde, em produção."
+        }
       ]
     ]
   },
@@ -5022,56 +5046,6 @@
       ]
     },
     {
-      "id": "I25",
-      "d": "I",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Le filet des suites SQL a rendu FAIL sur une suite verte — une fois, sans cause trouvée",
-        "pt": "A rede das suítes SQL deu FAIL numa suíte verde — uma vez, sem causa encontrada"
-      },
-      "v": {
-        "fr": "Le 16/09 (run 7092391, commit `d5228c7f`), `sql-tests` est rouge sur la seule `paquet19_loan_wrappers_tests.sql`, dont le bilan dit « LOAN-WRAPPERS OK : 46/46 tests passes ». Le filet de `scripts/ci/run-sql-suites.sh` (`echo \"$out\" | grep -qE ' OK : [0-9]+/[0-9]+'`, sous `set -uo pipefail`) a rendu FAIL sur ce texte. Rejoué à l'octet près hors CI (bash 5.3/grep 3.12 dans WSL ; bash 5.2/grep 3.8 dans l'image `node:22` de la CI ; sortie de 314 Ko en variante) : PASS à chaque fois. Le journal du run ne porte aucune anomalie (fork, mémoire, message de bash) ; la suite n'a pas changé depuis le 02/09 et n'imprime que quatre lignes par construction (aucun `RAISE NOTICE`). Relancé par Xavier : vert à 22 h 05. Un aléa, donc, et un aléa qui rougit pour rien coûte une relance et un ticket ; l'inverse (un vert pour rien) serait pire, et rien ne dit qu'il est impossible.",
-        "pt": "Em 16/09 (run 7092391, `d5228c7f`), `sql-tests` ficou vermelho só em `paquet19_loan_wrappers_tests.sql`, cujo balanço diz « OK : 46/46 ». A rede de `run-sql-suites.sh` (`grep -qE` sob `pipefail`) deu FAIL nesse texto. Reproduzido byte a byte fora da CI (WSL e imagem `node:22`): PASS sempre. Nenhuma anomalia no log; suíte inalterada desde 02/09, quatro linhas por construção. Relançado por Xavier: verde às 22h05. Um acaso — e um acaso que dá vermelho custa um relance e um ticket; o inverso seria pior."
-      },
-      "w": {
-        "fr": "Ne pas chercher dans la suite. Instrumenter le filet : écrire `$out` dans un fichier, tester avec `grep -c` sur le fichier (pas de tube, donc pas de `pipefail` ni de SIGPIPE possibles), et sur FAIL imprimer le code de retour de chaque maillon (`PIPESTATUS`) et `wc -c` de la sortie. Si le rouge revient, le journal dira lequel des maillons a menti ; s'il ne revient jamais, l'instrumentation reste sans coût.",
-        "pt": "Não procurar na suíte. Instrumentar a rede: gravar `$out` em ficheiro, testar com `grep -c` no ficheiro (sem tubo, logo sem `pipefail` nem SIGPIPE), e em FAIL imprimir `PIPESTATUS` e `wc -c`. Se voltar, o log dirá qual elo mentiu."
-      },
-      "y": {
-        "fr": "Une CI qui rougit sans cause érode la confiance qu'on lui doit : à la troisième fausse alerte on relance sans lire, et la vraie passe. DOC-SILENCE-1 vaut aussi pour le dispositif qui mesure.",
-        "pt": "Uma CI que fica vermelha sem causa corrói a confiança: na terceira falsa alerta relança-se sem ler, e a verdadeira passa."
-      },
-      "f": {
-        "fr": [
-          "Le filet lit la sortie depuis un fichier, sans tube, et un FAIL imprime `PIPESTATUS` et la taille de la sortie.",
-          "Soit le rouge est revenu et le journal a nommé la cause, soit trois mois sans récidive."
-        ],
-        "pt": [
-          "A rede lê a saída de um ficheiro, sem tubo, e um FAIL imprime `PIPESTATUS` e o tamanho da saída.",
-          "Ou o vermelho voltou e o log nomeou a causa, ou três meses sem recidiva."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "scripts/ci/run-sql-suites.sh",
-        ".forgejo/workflows/sql-tests.yml",
-        "REGISTRE §0 DOC-SILENCE-1",
-        "REGISTRE §0 OPS-8"
-      ],
-      "verif": {
-        "fr": "16/09 — journal du run 7092391 lu en entier (`sql-tests-sql-tests-9589171.log`), filet rejoué hors CI dans deux environnements, ticket #17 refermé au vert de la relance.",
-        "pt": "16/09 — log do run 7092391 lido por inteiro, rede reproduzida fora da CI em dois ambientes, ticket #17 fechado no verde do relance."
-      }
-    },
-    {
       "id": "F10",
       "d": "F",
       "p": "P2",
@@ -5225,53 +5199,6 @@
       ]
     },
     {
-      "id": "F13",
-      "d": "F",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "`notify-digital-share` : `sent_count` compte aussi les envois refusés",
-        "pt": "`notify-digital-share`: `sent_count` conta também os envios recusados"
-      },
-      "v": {
-        "fr": "**Demandé par Xavier le 21/09/2026.** Trouvé le même jour en écrivant `src/tests/notify-digital-share-banc.test.js`, et **épinglé** là sous le nom « DÉFAUT CONNU » : la fonction incrémente son compteur dès que `sendIll(...)` rend une valeur vraie (`supabase/functions/notify-digital-share/index.ts`, ligne 126 au 21/09), sans lire ce que le transport a répondu — `safeSendEmail` ne lève jamais. Avec un transport en panne, la réponse annonce donc `sent_count: 1` pour zéro courriel parti. Ce n'est qu'un chiffre dans une réponse que rien n'affiche aujourd'hui : aucun courriel n'est perdu à cause de lui et aucune file ne ment. C'est le dernier endroit connu qui garde la forme du défaut « sent à tort » corrigé ailleurs le 21/09.",
-        "pt": "**Pedido por Xavier em 21/09/2026.** Encontrado no mesmo dia ao escrever `src/tests/notify-digital-share-banc.test.js`, e **fixado** aí como « DÉFAUT CONNU »: a função incrementa o contador sem ler o que o transporte respondeu. Com o transporte avariado, a resposta anuncia `sent_count: 1` para zero e-mails enviados. É só um número numa resposta que nada mostra hoje. É o último sítio conhecido com a forma do defeito « sent por engano » corrigido noutros lados em 21/09."
-      },
-      "w": {
-        "fr": "Faire rendre à `sendIll` le résultat de `safeSendEmail`, ne compter que les envois partis, et rendre à côté le compte des refusés (avec l'adresse et la cause) et celui des sautés. Dans le banc, retourner le cas épinglé : rouge d'abord, vert ensuite. Compter les imports, sonder la fonction en production après le déploiement.",
-        "pt": "Fazer `sendIll` devolver o resultado de `safeSendEmail`, contar só os envios feitos, e devolver ao lado a contagem dos recusados (com endereço e causa) e dos saltados. Na bancada, inverter o caso fixado: vermelho primeiro, verde depois."
-      },
-      "y": {
-        "fr": "Un compte rendu qui ment, même petit, finit par servir de preuve. Le jour où quelqu'un branchera un écran ou une alerte sur ce chiffre, il dira que tout est parti.",
-        "pt": "Um relatório que mente, mesmo pequeno, acaba por servir de prova. No dia em que alguém ligar um ecrã ou um alerta a este número, ele dirá que tudo partiu."
-      },
-      "f": {
-        "fr": [
-          "`sent_count` ne compte que les envois acceptés par le transport ; les refus sont rendus à part, nommés.",
-          "Le cas « DÉFAUT CONNU » du banc est retourné et vert ; plus aucun cas de test du dépôt n'est épinglé sous ce nom."
-        ],
-        "pt": [
-          "`sent_count` só conta os envios aceites pelo transporte; as recusas são devolvidas à parte, nomeadas.",
-          "O caso « DÉFAUT CONNU » da bancada está invertido e verde; nenhum caso de teste do repositório fica fixado com esse nome."
-        ]
-      },
-      "r": [
-        "supabase/functions/notify-digital-share/index.ts",
-        "src/tests/notify-digital-share-banc.test.js (cas « DÉFAUT CONNU »)",
-        "supabase/functions/_shared/domain/outbox-verdict.ts"
-      ],
-      "verif": [
-        {
-          "fr": "21/09 — le cas épinglé du banc passe sur le code actuel : transport en 500, zéro envoi, `sent_count` à 1.",
-          "pt": "21/09 — o caso fixado da bancada passa no código atual: transporte em 500, zero envios, `sent_count` a 1."
-        }
-      ]
-    },
-    {
       "id": "F14",
       "d": "F",
       "p": "P2",
@@ -5319,58 +5246,6 @@
         "fr": "22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste. **22/09 au soir, livré** : quatre secrets en production partageaient la même valeur (`ADMIN_EMAIL`, `ANARBIB_ADMIN_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`, `NETWORK_REPLY_TO_EMAIL`, même empreinte dans `supabase secrets list`) — les deux Reply-To retirés (`supabase secrets unset`), `register` retombe sur `SENDER_EMAIL` ; `notify-network-weekly-report` ne retombe plus sur `ADMIN_EMAIL` ; `notify-library-invitation` et `notify-library-request` n'écrivent plus de Reply-To Proton (l'adresse est dans leur corps) ; `welcome.autoMessage` ×10 dit « n'y réponds pas, pour joindre une personne : anarbib@proton.me » ; garde `src/tests/reply-to-meme-domaine.test.js` à liste fermée ; règle écrite dans `deploy/functions.env.example`. **Reste, à la main de Xavier : une inscription vers une adresse Riseup et la lecture de `X-Spam-Status`** — c'est le premier critère.",
         "pt": "22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail. **22/09 à noite, entregue**: os dois Reply-To retirados dos segredos de produção; `notify-network-weekly-report` não recai mais em `ADMIN_EMAIL`; invitation e library-request sem Reply-To Proton; `welcome.autoMessage` ×10 com o endereço humano no corpo; guarda `reply-to-meme-domaine.test.js`. **Falta: um cadastro para um endereço Riseup e a leitura de `X-Spam-Status`.**"
       }
-    },
-    {
-      "id": "E15",
-      "d": "E",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "langue"
-      ],
-      "t": {
-        "fr": "Les mots de confirmation « vider l'historique » et « supprimer le compte » sont le même mot dans huit locales sur neuf",
-        "pt": "As palavras de confirmação «esvaziar o histórico» e «excluir a conta» são a mesma palavra em oito de nove locales"
-      },
-      "v": {
-        "fr": "**Vérifié dans `src/i18n/locales/` le 07/09.** En pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` et `account.deleteAccount.confirmText` = `EXCLUIR` : deux gestes, deux mots. Dans fr, en, es, it, de, nl, el et eo, **les deux clés portent le même mot** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Seul le catalan distingue (`ELIMINA` / `SUPRIMIR`). Relevé d'abord par le manuel lecteur v2 du 03/09.",
-        "pt": "**Verificado em `src/i18n/locales/` em 07/09.** Em pt-BR, `account.history.deleteAll.confirmWord` = `APAGAR` e `account.deleteAccount.confirmText` = `EXCLUIR`: dois gestos, duas palavras. Em fr, en, es, it, de, nl, el e eo, **as duas chaves carregam a mesma palavra** (`SUPPRIMER`/`SUPPRIMER`, `DELETE`/`DELETE`…). Só o catalão distingue (`ELIMINA` / `SUPRIMIR`). Levantado primeiro pelo manual da leitora v2 de 03/09."
-      },
-      "w": {
-        "fr": "Choisir deux mots distincts par locale, avec les locuteur·rices quand il y en a (**E2** pour nl et el), et mettre le manuel en accord.",
-        "pt": "Escolher duas palavras distintas por locale, com as pessoas falantes quando houver (**E2** para nl e el), e pôr o manual de acordo."
-      },
-      "y": {
-        "fr": "Un mot de confirmation sert à ce qu'on ne confonde pas deux destructions. Quand c'est le même, il ne sert à rien — et c'est précisément `DOC-DESTR-2` : dire ce qu'on détruit.",
-        "pt": "Uma palavra de confirmação serve para não confundir duas destruições. Quando é a mesma, não serve para nada — e é exatamente `DOC-DESTR-2`: dizer o que se destrói."
-      },
-      "f": {
-        "fr": [
-          "Neuf locales, deux mots différents chacune ; le test i18n passe."
-        ],
-        "pt": [
-          "Nove locales, duas palavras diferentes cada; o teste i18n passa."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "claude/MANUEL_LECTEUR_v2_refonte_2026-09-03",
-        "REGISTRE §0 DOC-DESTR-2"
-      ],
-      "verif": [
-        {
-          "fr": "07/09 — huit paires identiques constatées dans les fichiers de locale.",
-          "pt": "07/09 — oito pares idênticos constatados nos arquivos de locale."
-        },
-        {
-          "fr": "20/09 — constat du 07/09 confirmé à l'identique : de, el, en, eo, es, fr, it, nl portent le même mot sur les deux clés ; ca (`ELIMINA`/`SUPRIMIR`) et pt-BR (`APAGAR`/`EXCLUIR`) distinguent. À savoir pour choisir les mots : l'historique compare en majuscules après `trim()` (`AccountPage.jsx` l. 2544), la suppression du compte compare la saisie brute (l. 1805).",
-          "pt": "20/09 — constato de 07/09 confirmado tal e qual: de, el, en, eo, es, fr, it, nl têm a mesma palavra nas duas chaves; ca e pt-BR distinguem. A saber: o histórico compara em maiúsculas depois de `trim()` (l. 2544), a eliminação da conta compara a entrada bruta (l. 1805)."
-        }
-      ]
     },
     {
       "id": "G14",
