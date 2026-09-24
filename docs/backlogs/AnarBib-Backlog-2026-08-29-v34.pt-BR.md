@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-24** · 59 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-25** · 58 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 6
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-24.** **46 itens de 59** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E19, E20, F1, F3, F6, F10, F12, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-25.** **45 itens de 58** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F12, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -723,7 +723,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Aberto |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
-| **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Em curso |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
@@ -877,29 +876,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Herdado de `#MOBILE P3`, `#MOBILE P5`, `#MOB-QR-A4`.
 
 *Remissões : `AnarBib-Backlog-2026-06-17-v33 §2.1`*
-
-#### E19 — Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo
-
-`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : React / JavaScript
-
-**Estado.** **Pedido de Xavier em 08/09/2026, decidido após debate.** O separador «Dados pessoais» de `/conta` é o mais longo da página ; os três blocos de decisão (exportar, notificações, carta da federação) estão no fundo, e a supressão da conta a seguir. As preferências de conservação vivem em «Histórico» e aí ficam.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** Uma fila de **três cartões lado a lado** (exportar, notificações, carta) **logo depois do formulário do perfil** ; grelha em `minmax(0, 1fr)`, uma coluna abaixo de 640 px. «Suprimir a minha conta» fica sozinho no fundo, a toda a largura, a vermelho. Nenhuma RPC, nenhuma chave nova ; refazer a captura no Manual v5.
-
-**Por que importa.** O que a página pede para decidir deve ver-se antes do que dá a ler. E a supressão da conta, isolada, mantém o gesto raro à parte dos ordinários.
-
-**O que conta como terminado.**
-
-- Os três cartões visíveis sem rolar num portátil, sob o formulário do perfil.
-- A 360 px, uma coluna, sem transbordo.
-- A supressão da conta é o último bloco, sozinha, a vermelho.
-- Captura do Manual v5 refeita.
-
-**Dependências.** Nenhuma. Depois de 14/09 (congelamento). Vizinho de **E9**.
-
-*Remissões : `AccountPage.jsx (onglet perfil)` · `anarbib-mobile-grid-blowout-doctrine` · `Manuel v5 §Mon compte`*
 
 #### E20 — A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato
 
@@ -1964,6 +1940,7 @@ CI verde. |
 | F14 | 2026-09-24 | **Fechado em 24/09: o último critério é cumprido por Xavier.** Código em produção desde 22/09. Xavier refez a prova: uma inscrição para um endereço Riseup, e o e-mail de boas-vindas **chegou à caixa de entrada principal**. Nuance: o cabeçalho `X-Spam-Status` não foi relido linha a linha; é a chegada à caixa principal que faz prova. |
 | F11 | 2026-09-24 | **Fechado em 24/09: o último critério é cumprido por Xavier.** Os gestos de código estavam feitos em 22/09. Xavier olhou os e-mails no seu cliente, em tema escuro e claro, incluindo os dois nascidos em 24/09: **tudo se lê**. |
 | I15 | 2026-09-24 | **Fechado em 24/09 à noite: os três critérios cumpridos.** Segredo criado por Xavier, `ci.yml` alinhado (`f0a88461`), snapshot gerado às 20h57 UTC; nenhum workflow lê já o segredo antigo, que Xavier apagou em 24/09. |
+| E19 | 2026-09-25 | **Fechado em 25/09, sobre um critério reescrito por Xavier.** O primeiro « pronto quando » — « as três cartas visíveis sem deslizar num portátil » — era **impossível por construção**: o cabeçalho, a faixa, a identidade da pessoa e os vídeos tutoriais precedem o separador. **Critério reescrito por Xavier em 25/09**: *as três cartas vêm logo depois do perfil, antes de todo o resto do separador.* **Cumprido** desde `e09bf16a`: perfil, três cartas, « A minha biblioteca », endereço, o que se lê, e « Apagar a minha conta » em último. Guardado pelo banco `conta-decisions-sous-le-profil` (7 casos), verificado em produção, visto por Xavier. **Fora deste fecho**: a captura do Manual v5, fora do repositório (J9). |
 
 ---
 
@@ -1995,4 +1972,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 59 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-25. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 58 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

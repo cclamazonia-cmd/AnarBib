@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-24** · 59 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-25** · 58 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 6
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-24.** **46 items sur 59** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E19, E20, F1, F3, F6, F10, F12, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-25.** **45 items sur 58** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F12, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -723,7 +723,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
-| **E19** | Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas | `P2` | En cours |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
@@ -877,29 +876,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Hérité de `#MOBILE P3`, `#MOBILE P5`, `#MOB-QR-A4`.
 
 *Renvois : `AnarBib-Backlog-2026-06-17-v33 §2.1`*
-
-#### E19 — Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas
-
-`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : React / JavaScript
-
-**État.** **Demande de Xavier le 08/09/2026, tranchée après débat.** L'onglet « Données personnelles » de `/conta` (`AccountPage.jsx`, `activeTab === 'perfil'`, lignes 1352–1830) est le plus long de la page : le formulaire du profil, l'adresse, la carte de contact de la bibliothèque, ce qui a été déclaré, la configuration de l'adhésion (avec un repli), le compte de dépôt — puis, **tout en bas**, les trois blocs qui demandent une décision : « Exporter mes données » (`account.export.title`, `DataExportButton`), « Mes notifications » (`account.notifPrefs.title`) et « Lettre de la fédération » (`account.lettre.title`), et enfin « Supprimer mon compte » en rouge (`account.deleteAccount.*`). Il faut défiler longtemps pour trouver ce qu'on vient faire. Les préférences de conservation ne sont pas dans cet onglet : elles vivent dans « Historique », à côté des traces qu'elles gouvernent, et **y restent**.
-
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Une rangée de **trois cartes côte à côte** — export, notifications, lettre — placée **juste après le formulaire du profil**, avant l'adresse et les blocs d'adhésion (de la lecture plus que de la décision). La grille en `repeat(3, minmax(0, 1fr))`, qui passe à une colonne sous 640 px — jamais `1fr` nu (doctrine mobile, `src/styles/mobile.css`). Le bloc **« Supprimer mon compte » reste seul, tout en bas, sur toute la largeur**, en rouge : son caractère définitif se lit à sa place autant qu'à sa couleur. Aucune RPC, aucune clé nouvelle : un déplacement de JSX et une grille. Refaire ensuite la capture de cette page dans le Manuel v5 (`anarbib-manual-v5-portfolio-captures`).
-
-**Pourquoi ça compte.** Ce que la page demande de décider doit se voir avant ce qu'elle donne à lire. Et la suppression du compte, isolée, garde le geste rare à part des gestes ordinaires — c'est une règle d'interface qu'on retrouve partout où un bouton est irréversible.
-
-**Ce qui compte comme fini.**
-
-- Les trois cartes sont visibles sans défiler sur un écran de portable, sous le formulaire du profil.
-- Sur 360 px, une colonne, aucun débordement horizontal (test : `iframe` 360 px, doctrine mobile).
-- La suppression du compte est le dernier bloc de l'onglet, seule sur sa ligne, en rouge.
-- La capture du Manuel v5 est refaite.
-
-**Dépendances.** Aucune. À faire **après le 14/09** (gel du code jusqu'au retour de Bologne). Voisin de **E9** (mobile).
-
-*Renvois : `AccountPage.jsx (onglet perfil)` · `anarbib-mobile-grid-blowout-doctrine` · `Manuel v5 §Mon compte`*
 
 #### E20 — La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol
 
@@ -1974,6 +1950,7 @@ CI verte : lint et suite unitaire. |
 | F14 | 2026-09-24 | **Clos le 24/09 : le dernier critère est tenu par Xavier.** Le code est en production depuis le 22/09 au soir (les deux secrets de Reply-To retirés, `register` retombe sur l expéditeur, l adresse humaine `anarbib@proton.me` écrite dans le corps des courriels concernés, dix langues, garde `reply-to-meme-domaine`). Xavier a refait l épreuve : une inscription vers une adresse Riseup, et le courriel de bienvenue est **arrivé en boîte de réception principale** (plus dans les indésirables). Nuance honnête : l en-tête `X-Spam-Status` n a pas été relu ligne à ligne ; c est l arrivée en boîte principale qui fait preuve ici. |
 | F11 | 2026-09-24 | **Clos le 24/09 : le dernier critère est tenu par Xavier.** Les deux gestes de code étaient faits le 22/09 (les 27 fonds sans couleur de texte corrigés, garde `mails-fond-et-couleur` ; `color-scheme: dark` déclaré dans les huit documents, `MAIL-Q7`). Xavier a regardé les courriels dans son client, en thème sombre et en thème clair, dont les deux nés le 24/09 (l alerte de signalement et l accusé de réception) : **tout se lit**. Aucune capture versée au dépôt : la parole de Xavier fait preuve. |
 | I15 | 2026-09-24 | **Clos le 24/09 au soir : les trois critères tenus.** Xavier a créé le secret Forgejo `VITE_SUPABASE_PUBLISHABLE_KEY` (valeur : la clé publiable, publique par nature) ; `ci.yml` le lit (`f0a88461`) ; le build suivant (run 7258461, vert) a publié un `catalogue-snapshot.json` généré à 20 h 57 UTC — la clé est passée. Vérifié ensuite sur Codeberg (`9e36871c`) : plus aucun workflow ni aucun code ne lit `VITE_SUPABASE_ANON_KEY` (seul le commentaire historique de `ci.yml` le nomme). **Xavier a supprimé l ancien secret** le 24/09. Le piège reste écrit dans `ci.yml` : `prebuild` sort en 0 si la variable manque, la date du snapshot servi est la seule preuve d un build sain. |
+| E19 | 2026-09-25 | **Clos le 25/09, sur un critère réécrit par Xavier.** Le premier « fini quand » de la fiche — « les trois cartes visibles sans défiler sur un écran de portable » — était **intenable par construction** : l en-tête, le bandeau, l identité de la personne et les vidéos tutos précèdent l onglet, quoi qu on y déplace (constat de Xavier, 25/09). **Critère réécrit par Xavier le 25/09** : *les trois cartes (export, notifications, lettre) viennent juste après le profil, avant tout le reste de l onglet.* **Tenu** depuis `e09bf16a` (24/09) : profil seul en haut, puis les trois cartes côte à côte (`repeat(3, minmax(0, 1fr))`, une colonne sous 900 px), puis « Ma bibliothèque », puis l adresse (formulaire coupé en deux le 21/09, `26e2421f`), puis ce qui se lit, et « Supprimer mon compte » seule, en dernier, en rouge. Gardé par le banc `conta-decisions-sous-le-profil` (7 cas : ordre des blocs, une seule grille, pistes `minmax`, plus de colonne à droite, chaque geste garde son appel). Vérifié en production le 24/09 à 23 h 30 (`AccountPage-Df-sqleY.css`, `AccountPage-Cwx3hTeR.js`), vu par Xavier sur son portable. Les autres critères : 360 px sans débordement (mesuré dans un harnais le 20/09 à 360, 700, 920 et 1 366 px, trois langues) ; suppression en dernier (banc). **Hors de cette clôture** : la capture de la page dans le Manuel v5, qui vit hors du dépôt (à reprendre avec **J9**). |
 
 ---
 
@@ -2005,4 +1982,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-24. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 59 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-25. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 58 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
