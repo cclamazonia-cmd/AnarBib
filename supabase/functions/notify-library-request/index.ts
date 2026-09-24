@@ -2,6 +2,7 @@ import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
+import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
@@ -279,41 +280,13 @@ function renderEmail(opts) {
 // Signature positionnelle (target, subject, html, text) conservee : c'est le
 // contrat que consomme safeSendEmail. Contrat de retour : string + throw.
 // ============================================================================
-function formatMailAddress(email, name) {
-  const n = String(name || "").trim();
-  return n ? `${n} <${email}>` : email;
-}
-// --- Implementation Resend (cf. spec §4.4) ---------------------------------
-// htmlInlined : meme HTML deja inline que pour Brevo (§4.5).
-async function sendViaResend(target, subject, htmlInlined, text) {
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  if (!resendKey) {
-    throw new Error("RESEND_API_KEY absente des secrets Edge Function");
-  }
-  const payload: Record<string, unknown> = {
-    from: formatMailAddress(SENDER_EMAIL, BRAND_NAME),
-    to: [target.email],
-    subject,
-    html: htmlInlined,
-    text
-  };
-  // F14 (22/09/2026) : plus de reply_to vers ADMIN_EMAIL (une adresse Proton en
-  // production) — c'est le motif d'une usurpation pour les filtres. L'adresse
-  // humaine est écrite dans le corps des messages qui invitent à écrire.
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${resendKey}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-  const body = await res.text();
-  if (!res.ok) throw new Error(`Resend error HTTP ${res.status}: ${body}`);
-  return body;
-}
-// --- Wrapper neutre --------------------------------------------------------
-// Inline les logos une fois (spec §4.5), puis envoie via Resend.
+// --- Envoi : une seule implementation, celle de _shared (F7, lot 3, 24/09/2026) ---
+// Inline les logos une fois (spec §4.5), puis passe par le module partage avec
+// un routage EXPLICITE : expediteur d'environnement, et `noReplyTo` — F14
+// (22/09/2026) a retire le reply_to vers ADMIN_EMAIL (une adresse Proton en
+// production, motif d'usurpation pour les filtres) ; le module partage en
+// poserait un d'office depuis le contexte, on le lui interdit ici.
+// Contrat local inchange : string + throw, safeSendEmail ne bouge pas.
 async function sendEmail(target, subject, html, text) {
   // Inlining des logos Supabase Storage en data URI base64 — inconditionnel.
   // Defensif : en cas d'echec, HTML d'origine.
@@ -325,8 +298,15 @@ async function sendEmail(target, subject, html, text) {
       console.warn(`notify-library-request: inlineLogosInHtml failed (mail sent anyway):`, e);
     }
   }
-  console.log(`[library-request] envoi via resend`);
-  return await sendViaResend(target, subject, htmlInlined, text);
+  return await sendEmailPartage({
+    toEmail: target.email,
+    toName: target.name,
+    subject,
+    html: htmlInlined,
+    text,
+    routing: { senderEmail: SENDER_EMAIL, senderName: BRAND_NAME, noReplyTo: true },
+    label: "library-request"
+  });
 }
 async function safeSendEmail(label, target, subject, html, text) {
   if (!target || !isValidEmail(target.email)) {

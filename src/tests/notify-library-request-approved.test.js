@@ -27,6 +27,9 @@ const CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/in
 const STRINGS_CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/strings.ts', import.meta.url));
 const CLE_CODE = tsToCjs(new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url));
 const SITE_CODE = tsToCjs(new URL('../../supabase/functions/_shared/core/site-url.ts', import.meta.url));
+// F7 lot 3 (24/09/2026) : l'EF passe par le VRAI module de transport partagé —
+// c'est lui qui appelle Resend, donc lui que le fetchStub doit voir.
+const TRANSPORT_CODE = tsToCjs(new URL('../../supabase/functions/_shared/transport/email.ts', import.meta.url));
 
 const SECRET = 'webhook-de-test';
 const ENV = {
@@ -107,6 +110,22 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };
     if (spec.endsWith('inline-images.ts')) return { inlineLogosInHtml: async (h) => h };
     if (spec.endsWith('./strings.ts')) return strings;
+    if (spec.endsWith('transport/email.ts')) {
+      // Le module réel, avec le même fetch et le même Deno ; ses propres imports
+      // sont remplacés par le strict nécessaire (l'EF lui passe son routage
+      // explicitement, le contexte n'est jamais consulté).
+      const requireTransport = (sp) => {
+        if (sp.endsWith('library-mail-routing.ts')) return { resolveMailRouting: () => { throw new Error('routage du contexte consulté alors que la fonction le passe explicitement'); }, transportDisabledReason: () => null };
+        if (sp.endsWith('layout.ts')) return { renderEmail: () => ({ html: '', text: '' }), footerPadrao: () => '' };
+        if (sp.endsWith('inline-images.ts')) return { inlineLogosInHtml: async (h) => h };
+        if (sp.endsWith('format.ts')) return { firstNameOnly: (x) => x, fullName: (x) => x, isValidEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || '')) };
+        if (sp.endsWith('smtp.ts')) return { sendViaSmtp: async () => 'smtp', resolveTimeout: () => 15000 };
+        throw new Error(`import inattendu (transport) : ${sp}`);
+      };
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', 'fetch', TRANSPORT_CODE)(requireTransport, m, m.exports, DenoStub, fetchStub);
+      return m.exports;
+    }
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };
