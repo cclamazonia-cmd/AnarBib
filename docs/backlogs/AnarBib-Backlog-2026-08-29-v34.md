@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-24** · 62 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-24** · 59 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,10 +20,10 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 8
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 6
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 7
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 6
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-24.** **49 items sur 62** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E19, E20, F1, F3, F6, F10, F11, F12, F14, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-24.** **46 items sur 59** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E19, E20, F1, F3, F6, F10, F12, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -938,9 +938,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | Ouvert |
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
-| **F11** | Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre | `P2` | À vérifier |
 | **F12** | Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours | `P2` | Ouvert |
-| **F14** | Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup | `P2` | En cours |
 | **F15** | Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective | `P2` | À vérifier |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
@@ -1051,26 +1049,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 *Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
 
-#### F11 — Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre
-
-`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
-
-**État.** **Constaté par Xavier le 21/09/2026** sur le premier courriel réel de la sonde `images_pins` : le bilan JSON était **blanc sur blanc**. Cause : le `<pre>` fixait un fond clair (`#f4f4f4`) sans fixer la couleur du texte ; un client en thème sombre passe le texte en blanc et garde le fond. **Ce bloc-là est corrigé** (commit `6320a00d`, couleur et bordure posées) — mais il n'était pas seul. *Mesuré le même soir dans `supabase/functions/`* : sur **48** styles en ligne qui fixent un fond, **27 ne fixent pas la couleur du texte**, dans onze fichiers — `notify-network-weekly-report` (4), `notify-rede-digest`, `notify-library-request`, `notify-weekly-report`, `_shared/domain/reader-message.ts` et **le gabarit commun `_shared/mail/layout.ts`** (3 chacun), `register`, `request-password-reset`, `notify-mid-loan-reading` (2), `notify-library-invitation`, `notify-document-permission-request` (1). Et aucun gabarit ne déclare `color-scheme` ni `prefers-color-scheme` (0 occurrence) : chaque client décide seul de ce qu'il inverse. Parmi ces courriels, ceux de l'inscription et de la réinitialisation du mot de passe — les premiers qu'une personne reçoit.
-
-*Vérifié : [object Object],[object Object]*
-
-**Ce que c'est.** **Pour clore — un seul geste, à Xavier, sans code** : ouvrir un courriel de chaque famille dans un vrai client (Proton, Thunderbird, Gmail mobile), en thème sombre et en thème clair, et dire s'il se lit ; une capture par famille versée ici suffit. Les deux autres gestes sont faits le 22/09 (voir la vérification) : la règle « tout fond porte sa couleur » est tenue par `src/tests/mails-fond-et-couleur.test.js`, et le choix — courriels sombres par conception, déclarés `color-scheme: dark` — est au REGISTRE (`MAIL-Q7`). Le prochain courriel réel (rappel d'échéance, alerte) peut servir d'épreuve : pas besoin d'en provoquer un.
-
-**Pourquoi ça compte.** Un courriel qu'on ne peut pas lire est un courriel qui n'est pas parti. Ici c'était une alerte d'exploitation, lue par la seule personne qui pouvait agir ; ailleurs ce sont des rappels d'échéance et des liens d'inscription, reçus par des lectrices qui n'écriront pas pour dire qu'elles n'ont rien vu.
-
-**Ce qui compte comme fini.**
-
-- Plus aucun style en ligne ne fixe un fond sans fixer la couleur du texte, et une garde le tient.
-- Le choix clair imposé / thème sombre est écrit au REGISTRE et posé dans `layout.ts`.
-- Un courriel de chaque famille a été regardé dans un client en thème sombre, captures versées.
-
-*Renvois : `supabase/functions/_shared/mail/layout.ts` · `supabase/functions/health-probe/index.ts (bloc corrigé le 21/09)` · `journal/operations/NOTE_pins-images-remesures_2026-09-21 §6`*
-
 #### F12 — Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours
 
 `P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
@@ -1090,27 +1068,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 - Le cron du rejeu figure dans `fn_crons_attendus()` et dans la suite des crons.
 
 *Renvois : `supabase/functions/_shared/domain/outbox-verdict.ts (en-tête : « rejouer par destinataire »)` · `supabase/migrations/20260817142747_healthcheck_notifications.sql (§3, files non traitées)` · `src/tests/equipe-reseau-file-banc.test.js, library-profile-banc.test.js, mails-federation-banc.test.js, lettre-banc.test.js` · `journal/operations/RUNBOOK_domaines_repli_2026-09-07 (« Trouvé en écrivant ces bancs »)`*
-
-#### F14 — Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup
-
-`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** **Trouvé le 22/09/2026 pendant l'essai de bascule authentifié** (runbook des domaines, partie du 22/09). Le courriel de bienvenue d'un compte contributeur, envoyé par `register` à une adresse Riseup, est arrivé dans les indésirables avec l'en-tête `X-Spam-Status: Yes, score=6.9 required=6.0`. Le rapport SpamAssassin nomme la cause : `FROM_NOT_REPLYTO_SAME_DOMAIN` (3,0), `FREEMAIL_FORGED_REPLYTO` (2,5), `FROM_NOT_REPLYTO` (1,0), `REPLYTO_DIFF_DOMAIN` (0,2) — soit 6,7 des 6,9 points — parce que l'expéditeur est `no-reply@notifications.anarbib.org` et le **Reply-To `anarbib@proton.me`**, adresse d'un service gratuit sur un autre domaine : c'est le motif type d'une usurpation. Tout le reste est bon (SPF pass, DKIM valide, réputation « excellente »). Le Reply-To vient du réglage `ANARBIB_REPLY_TO_EMAIL` (`supabase/functions/register/index.ts`, l. 653 ; défaut = l'expéditeur), posé en `proton.me` à la suite de la décision du 16/09 d'éviter les adresses `.org` pour le canal humain. Le courriel de réinitialisation vers Gmail, lui, est arrivé en boîte de réception le même soir — les filtres diffèrent, la cause est la même.
-
-*Vérifié : 22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste. **22/09 au soir, livré** : quatre secrets en production partageaient la même valeur (`ADMIN_EMAIL`, `ANARBIB_ADMIN_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`, `NETWORK_REPLY_TO_EMAIL`, même empreinte dans `supabase secrets list`) — les deux Reply-To retirés (`supabase secrets unset`), `register` retombe sur `SENDER_EMAIL` ; `notify-network-weekly-report` ne retombe plus sur `ADMIN_EMAIL` ; `notify-library-invitation` et `notify-library-request` n'écrivent plus de Reply-To Proton (l'adresse est dans leur corps) ; `welcome.autoMessage` ×10 dit « n'y réponds pas, pour joindre une personne : anarbib@proton.me » ; garde `src/tests/reply-to-meme-domaine.test.js` à liste fermée ; règle écrite dans `deploy/functions.env.example`. **Reste, à la main de Xavier : une inscription vers une adresse Riseup et la lecture de `X-Spam-Status`** — c'est le premier critère.*
-
-**Ce que c'est.** Retirer le Reply-To étranger sans revenir sur la décision du 16/09 : ne plus poser `ANARBIB_REPLY_TO_EMAIL` (le Reply-To retombe sur l'expéditeur, même domaine), et écrire l'adresse humaine `anarbib@proton.me` **dans le corps** des courriels qui invitent à répondre, là où un filtre ne la lit pas comme une usurpation. Vérifier les autres fonctions qui lisent un Reply-To d'environnement (`notify-network-weekly-report` : `NETWORK_REPLY_TO_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`). Puis rejouer : une inscription vers une adresse Riseup, lire `X-Spam-Status`.
-
-**Pourquoi ça compte.** Un courriel de bienvenue ou de réinitialisation qui tombe dans les indésirables est un compte perdu : la personne ne trouve ni son identifiant ni son mot de passe provisoire. Les collectifs militants sont justement chez Riseup, Autistici, Proton.
-
-**Ce qui compte comme fini.**
-
-- Une inscription vers une adresse Riseup arrive en boîte de réception, `X-Spam-Status: No`, et le rapport ne porte plus aucune règle `*REPLYTO*`.
-- L'adresse humaine figure dans le corps des courriels concernés, dix langues.
-
-**Dépendances.** Aucune.
-
-*Renvois : `docs/journal/operations/RUNBOOK_domaines_repli_2026-09-07.md (essai du 22/09)` · `supabase/functions/register/index.ts` · `REGISTRE §38 OPS-10`*
 
 #### F15 — Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective
 
@@ -1442,7 +1399,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 |---|---|---|---|
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Ouvert |
 | **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Ouvert |
-| **I15** | Le secret Forgejo de la clé publiable porte encore son ancien nom | `P3` | À vérifier |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I22** | Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler | `P2` | Ouvert |
@@ -1492,26 +1448,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** **Bloqué par B6.** Gelé sur la production jusqu'au 14/09 ; le test en environnement d'essai est ouvert.
 
 *Renvois : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
-
-#### I15 — Le secret Forgejo de la clé publiable porte encore son ancien nom
-
-`P3` Différé · État : **À vérifier** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Depuis le 01/09, le code lit `VITE_SUPABASE_PUBLISHABLE_KEY` et sa valeur est bien la clé publiable — mais en CI, cette variable est alimentée par le secret Forgejo au nom historique `VITE_SUPABASE_ANON_KEY`. Découplage voulu : il évitait d'exiger un renommage de secret et un merge au même instant. Le piège est documenté dans `ci.yml` : `prebuild` fait `exit 0` si la variable manque, un nom désaccordé ne casse pas le build, il publie un instantané de catalogue périmé en silence.
-
-*Vérifié : [object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Créer le secret `VITE_SUPABASE_PUBLISHABLE_KEY` dans les réglages Forgejo (même valeur), aligner la ligne de `ci.yml`, vérifier un build complet — la fraîcheur du `catalogue-snapshot.json` fait preuve — puis supprimer l'ancien secret.
-
-**Pourquoi ça compte.** Le chantier des clés a payé deux fois le prix d'un nom qui ment — une variable de plateforme dont le contenu avait changé sans prévenir, et un contrôle `verify_jwt` que satisfaisait une clé publique. Autant ne pas en laisser un troisième en place, même bénin.
-
-**Ce qui compte comme fini.**
-
-- La ligne de `ci.yml` lit un secret du même nom que la variable, l'ancien secret n'existe plus, et un build postérieur a produit un snapshot daté du jour.
-
-**Dépendances.** Accès aux réglages du dépôt Forgejo (Settings → Actions → Secrets).
-
-*Renvois : `.forgejo/workflows/ci.yml` · `item B18`*
 
 #### I18 — Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse
 
@@ -2035,6 +1971,9 @@ CI verte : lint et suite unitaire. |
 | F4 | 2026-09-24 | **Clos le 24/09 : le dernier critère est tenu par Xavier.** Mesuré en production le 24/09 : `loan_cycle_notifications` porte trois envois, tous sur l emprunt 84 (BLMF) — l invitation à une note de lecture le 10/09 à 09 h 15, **le rappel J-3 le 18/09** et **le rappel du jour de l échéance le 21/09**, une fois chacun (unicité item × moment). Xavier confirme le 24/09 que ces courriels sont **arrivés, dans la langue de la personne**. Les interrupteurs commandent des envois réels depuis le 31/08 (EF `notify-loan-cycle`, cron quotidien 9 h 15 UTC, suite `rappels_echeance_tests`). Ce qui n est pas dans cette clôture : le J+7 (aucun retard depuis le 31/08 — l emprunt 84 est rendu) ; il partira au premier retard réel, et la table le dira. |
 | G14 | 2026-09-24 | **Clos le 24/09 sur pièces.** Xavier a relancé la personne lui-même (décision du 21/09) ; lu en production le 24/09 : l invitation du 30/08 est passée à **`accepted`** avant son expiration du 29/09. Les deux autres invitations du 01/09 : une acceptée, une en attente de ratification (expiration 01/10). Ce que l épisode dit, à verser à **G1** : l invitation par courriel n a pas suffi, la relance humaine oui. |
 | E14 | 2026-09-24 | **Clos le 24/09 au soir, sur pièces.** Livré en trois commits (`44ced60d`, `4dfb9d47`, `1145b32f`), déployé, et **emprunté pour de vrai** : à 22 h 55 (heure de Paris), Xavier a déposé le signalement `35a5dc22` depuis `/login`, sans session, et reçu le courriel des admins (PDF versé dans la séance) ; en base, la ligne de file est passée à `sent` au premier essai, accusé de réception compris. *Critère 1* (déposer un signalement depuis n importe quelle page sans rien connaître de Codeberg) : tenu, par ce geste. *Critère 2* (courriel aux admins, file avec un statut, un même défaut signalé cinq fois ne fait pas cinq courriels) : tenu — courriel reçu, file `/relatar-problema/fila`, doublon ouvert rendu tel quel (banc `relatar-banc`). *Critère 3* : dix locales, page titrée, formulaire au clavier (champs étiquetés, `role=alert`/`status`) ; **le rendu sur téléphone n a pas été regardé** — les champs sont en pleine largeur et en 16 px, sans grille, mais c est une lecture du code, pas une mesure. Deux corrections nées du premier signalement réel : le courriel ne cite plus « (E14) », qui ne dit rien à qui le lit (remarque de Xavier), et une personne sans compte n envoie plus « Bibliothèque : AnarBib » — c était le contexte par défaut de `LibraryContext`. Deux gardes avaient mordu avant : la CHECK de la table Altcha (rejeu local) et `salle_des_machines_tests` (privilège par défaut de `public`, fermé par `20260924204107`). La route a d abord dit « signalar », qui n est d aucune langue : `/relatar-problema`. |
+| F14 | 2026-09-24 | **Clos le 24/09 : le dernier critère est tenu par Xavier.** Le code est en production depuis le 22/09 au soir (les deux secrets de Reply-To retirés, `register` retombe sur l expéditeur, l adresse humaine `anarbib@proton.me` écrite dans le corps des courriels concernés, dix langues, garde `reply-to-meme-domaine`). Xavier a refait l épreuve : une inscription vers une adresse Riseup, et le courriel de bienvenue est **arrivé en boîte de réception principale** (plus dans les indésirables). Nuance honnête : l en-tête `X-Spam-Status` n a pas été relu ligne à ligne ; c est l arrivée en boîte principale qui fait preuve ici. |
+| F11 | 2026-09-24 | **Clos le 24/09 : le dernier critère est tenu par Xavier.** Les deux gestes de code étaient faits le 22/09 (les 27 fonds sans couleur de texte corrigés, garde `mails-fond-et-couleur` ; `color-scheme: dark` déclaré dans les huit documents, `MAIL-Q7`). Xavier a regardé les courriels dans son client, en thème sombre et en thème clair, dont les deux nés le 24/09 (l alerte de signalement et l accusé de réception) : **tout se lit**. Aucune capture versée au dépôt : la parole de Xavier fait preuve. |
+| I15 | 2026-09-24 | **Clos le 24/09 au soir : les trois critères tenus.** Xavier a créé le secret Forgejo `VITE_SUPABASE_PUBLISHABLE_KEY` (valeur : la clé publiable, publique par nature) ; `ci.yml` le lit (`f0a88461`) ; le build suivant (run 7258461, vert) a publié un `catalogue-snapshot.json` généré à 20 h 57 UTC — la clé est passée. Vérifié ensuite sur Codeberg (`9e36871c`) : plus aucun workflow ni aucun code ne lit `VITE_SUPABASE_ANON_KEY` (seul le commentaire historique de `ci.yml` le nomme). **Xavier a supprimé l ancien secret** le 24/09. Le piège reste écrit dans `ci.yml` : `prebuild` sort en 0 si la variable manque, la date du snapshot servi est la seule preuve d un build sain. |
 
 ---
 
@@ -2066,4 +2005,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-24. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 62 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-24. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 59 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

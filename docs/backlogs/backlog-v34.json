@@ -2266,6 +2266,30 @@
           "fr": "**Clos le 24/09 au soir, sur pièces.** Livré en trois commits (`44ced60d`, `4dfb9d47`, `1145b32f`), déployé, et **emprunté pour de vrai** : à 22 h 55 (heure de Paris), Xavier a déposé le signalement `35a5dc22` depuis `/login`, sans session, et reçu le courriel des admins (PDF versé dans la séance) ; en base, la ligne de file est passée à `sent` au premier essai, accusé de réception compris. *Critère 1* (déposer un signalement depuis n importe quelle page sans rien connaître de Codeberg) : tenu, par ce geste. *Critère 2* (courriel aux admins, file avec un statut, un même défaut signalé cinq fois ne fait pas cinq courriels) : tenu — courriel reçu, file `/relatar-problema/fila`, doublon ouvert rendu tel quel (banc `relatar-banc`). *Critère 3* : dix locales, page titrée, formulaire au clavier (champs étiquetés, `role=alert`/`status`) ; **le rendu sur téléphone n a pas été regardé** — les champs sont en pleine largeur et en 16 px, sans grille, mais c est une lecture du code, pas une mesure. Deux corrections nées du premier signalement réel : le courriel ne cite plus « (E14) », qui ne dit rien à qui le lit (remarque de Xavier), et une personne sans compte n envoie plus « Bibliothèque : AnarBib » — c était le contexte par défaut de `LibraryContext`. Deux gardes avaient mordu avant : la CHECK de la table Altcha (rejeu local) et `salle_des_machines_tests` (privilège par défaut de `public`, fermé par `20260924204107`). La route a d abord dit « signalar », qui n est d aucune langue : `/relatar-problema`.",
           "pt": "**Fechado em 24/09 à noite, sobre peças.** Entregue em três commits, implantado e **percorrido de verdade**: às 22h55 (hora de Paris), Xavier depositou o relato `35a5dc22` a partir de `/login`, sem sessão, e recebeu o e-mail da administração; em base, a linha da fila passou a `sent` à primeira tentativa, aviso de receção incluído. Critérios 1 e 2 cumpridos; critério 3: dez locales, página titulada, formulário por teclado — **o rendimento no telemóvel não foi visto**. Duas correções nascidas do primeiro relato real: o e-mail já não cita « (E14) », e uma pessoa sem conta já não envia « Biblioteca: AnarBib »."
         }
+      ],
+      [
+        "F14",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 : le dernier critère est tenu par Xavier.** Le code est en production depuis le 22/09 au soir (les deux secrets de Reply-To retirés, `register` retombe sur l expéditeur, l adresse humaine `anarbib@proton.me` écrite dans le corps des courriels concernés, dix langues, garde `reply-to-meme-domaine`). Xavier a refait l épreuve : une inscription vers une adresse Riseup, et le courriel de bienvenue est **arrivé en boîte de réception principale** (plus dans les indésirables). Nuance honnête : l en-tête `X-Spam-Status` n a pas été relu ligne à ligne ; c est l arrivée en boîte principale qui fait preuve ici.",
+          "pt": "**Fechado em 24/09: o último critério é cumprido por Xavier.** Código em produção desde 22/09. Xavier refez a prova: uma inscrição para um endereço Riseup, e o e-mail de boas-vindas **chegou à caixa de entrada principal**. Nuance: o cabeçalho `X-Spam-Status` não foi relido linha a linha; é a chegada à caixa principal que faz prova."
+        }
+      ],
+      [
+        "F11",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 : le dernier critère est tenu par Xavier.** Les deux gestes de code étaient faits le 22/09 (les 27 fonds sans couleur de texte corrigés, garde `mails-fond-et-couleur` ; `color-scheme: dark` déclaré dans les huit documents, `MAIL-Q7`). Xavier a regardé les courriels dans son client, en thème sombre et en thème clair, dont les deux nés le 24/09 (l alerte de signalement et l accusé de réception) : **tout se lit**. Aucune capture versée au dépôt : la parole de Xavier fait preuve.",
+          "pt": "**Fechado em 24/09: o último critério é cumprido por Xavier.** Os gestos de código estavam feitos em 22/09. Xavier olhou os e-mails no seu cliente, em tema escuro e claro, incluindo os dois nascidos em 24/09: **tudo se lê**."
+        }
+      ],
+      [
+        "I15",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 au soir : les trois critères tenus.** Xavier a créé le secret Forgejo `VITE_SUPABASE_PUBLISHABLE_KEY` (valeur : la clé publiable, publique par nature) ; `ci.yml` le lit (`f0a88461`) ; le build suivant (run 7258461, vert) a publié un `catalogue-snapshot.json` généré à 20 h 57 UTC — la clé est passée. Vérifié ensuite sur Codeberg (`9e36871c`) : plus aucun workflow ni aucun code ne lit `VITE_SUPABASE_ANON_KEY` (seul le commentaire historique de `ci.yml` le nomme). **Xavier a supprimé l ancien secret** le 24/09. Le piège reste écrit dans `ci.yml` : `prebuild` sort en 0 si la variable manque, la date du snapshot servi est la seule preuve d un build sain.",
+          "pt": "**Fechado em 24/09 à noite: os três critérios cumpridos.** Segredo criado por Xavier, `ci.yml` alinhado (`f0a88461`), snapshot gerado às 20h57 UTC; nenhum workflow lê já o segredo antigo, que Xavier apagou em 24/09."
+        }
       ]
     ]
   },
@@ -4011,62 +4035,6 @@
       ]
     },
     {
-      "id": "I15",
-      "d": "I",
-      "p": "P3",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Le secret Forgejo de la clé publiable porte encore son ancien nom",
-        "pt": "O secret do Forgejo da chave publicável ainda carrega seu nome antigo"
-      },
-      "v": {
-        "fr": "Depuis le 01/09, le code lit `VITE_SUPABASE_PUBLISHABLE_KEY` et sa valeur est bien la clé publiable — mais en CI, cette variable est alimentée par le secret Forgejo au nom historique `VITE_SUPABASE_ANON_KEY`. Découplage voulu : il évitait d'exiger un renommage de secret et un merge au même instant. Le piège est documenté dans `ci.yml` : `prebuild` fait `exit 0` si la variable manque, un nom désaccordé ne casse pas le build, il publie un instantané de catalogue périmé en silence.",
-        "pt": "Desde 01/09, o código lê `VITE_SUPABASE_PUBLISHABLE_KEY` e seu valor é mesmo a chave publicável — mas na CI essa variável é alimentada pelo secret do Forgejo com o nome histórico `VITE_SUPABASE_ANON_KEY`. Desacoplamento proposital: evitava exigir a renomeação do secret e o merge no mesmo instante. A armadilha está documentada no `ci.yml`: o `prebuild` faz `exit 0` se a variável faltar, um nome desalinhado não quebra o build, publica um instantâneo de catálogo vencido em silêncio."
-      },
-      "w": {
-        "fr": "Créer le secret `VITE_SUPABASE_PUBLISHABLE_KEY` dans les réglages Forgejo (même valeur), aligner la ligne de `ci.yml`, vérifier un build complet — la fraîcheur du `catalogue-snapshot.json` fait preuve — puis supprimer l'ancien secret.",
-        "pt": "Criar o secret `VITE_SUPABASE_PUBLISHABLE_KEY` nas configurações do Forgejo (mesmo valor), alinhar a linha do `ci.yml`, verificar um build completo — o frescor do `catalogue-snapshot.json` serve de prova — e então apagar o secret antigo."
-      },
-      "f": {
-        "fr": [
-          "La ligne de `ci.yml` lit un secret du même nom que la variable, l'ancien secret n'existe plus, et un build postérieur a produit un snapshot daté du jour."
-        ],
-        "pt": [
-          "A linha do `ci.yml` lê um secret com o mesmo nome da variável, o secret antigo não existe mais, e um build posterior produziu um snapshot com a data do dia."
-        ]
-      },
-      "y": {
-        "fr": "Le chantier des clés a payé deux fois le prix d'un nom qui ment — une variable de plateforme dont le contenu avait changé sans prévenir, et un contrôle `verify_jwt` que satisfaisait une clé publique. Autant ne pas en laisser un troisième en place, même bénin.",
-        "pt": "O canteiro das chaves pagou duas vezes o preço de um nome que mente — uma variável de plataforma cujo conteúdo mudou sem avisar, e um controle `verify_jwt` satisfeito por uma chave pública. Melhor não deixar um terceiro no lugar, mesmo benigno."
-      },
-      "dep": {
-        "fr": "Accès aux réglages du dépôt Forgejo (Settings → Actions → Secrets).",
-        "pt": "Acesso às configurações do repositório Forgejo (Settings → Actions → Secrets)."
-      },
-      "verif": [
-        {
-          "fr": "01/09 — `ci.yml` relu après la bascule : mappage `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` en place, commenté.",
-          "pt": "01/09 — `ci.yml` relido depois da virada: mapeamento `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` no lugar, comentado."
-        },
-        {
-          "fr": "24/09 — à la main de Xavier : créer le secret `VITE_SUPABASE_PUBLISHABLE_KEY` dans Forgejo (Settings → Actions → Secrets), même valeur que `VITE_SUPABASE_ANON_KEY` — la valeur est la clé publiable `sb_publishable_…`, publique par nature (elle est dans chaque page servie ; lisible dans Supabase → Project Settings → API Keys). La ligne de `ci.yml` bascule dès que le secret existe.",
-          "pt": "24/09 — à mão de Xavier: criar o segredo `VITE_SUPABASE_PUBLISHABLE_KEY` no Forgejo com o valor da chave publicável `sb_publishable_…` (pública por natureza). A linha do `ci.yml` muda assim que o segredo existir."
-        },
-        {
-          "fr": "24/09, 23 h — **deux critères sur trois tenus.** Xavier a créé le secret `VITE_SUPABASE_PUBLISHABLE_KEY` ; la ligne de `ci.yml` le lit (`f0a88461`) ; le build suivant (run 7258461, vert) a publié un `catalogue-snapshot.json` **généré à 20 h 57 UTC**, `Last-Modified` 20 h 57 — la clé est bien passée. **Reste** : supprimer l ancien secret `VITE_SUPABASE_ANON_KEY` dans les réglages Forgejo (geste de Xavier) ; plus rien ne le lit.",
-          "pt": "24/09, 23h — **dois critérios em três cumpridos.** Segredo criado por Xavier, linha do `ci.yml` alinhada (`f0a88461`), snapshot gerado às 20h57 UTC. **Resta**: apagar o segredo antigo `VITE_SUPABASE_ANON_KEY` no Forgejo."
-        }
-      ],
-      "r": [
-        ".forgejo/workflows/ci.yml",
-        "item B18"
-      ]
-    },
-    {
       "id": "J2",
       "d": "J",
       "p": "P2",
@@ -5005,59 +4973,6 @@
       }
     },
     {
-      "id": "F11",
-      "d": "F",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre",
-        "pt": "Branco sobre branco: blocos dos nossos e-mails ficam ilegíveis num cliente em tema escuro"
-      },
-      "v": {
-        "fr": "**Constaté par Xavier le 21/09/2026** sur le premier courriel réel de la sonde `images_pins` : le bilan JSON était **blanc sur blanc**. Cause : le `<pre>` fixait un fond clair (`#f4f4f4`) sans fixer la couleur du texte ; un client en thème sombre passe le texte en blanc et garde le fond. **Ce bloc-là est corrigé** (commit `6320a00d`, couleur et bordure posées) — mais il n'était pas seul. *Mesuré le même soir dans `supabase/functions/`* : sur **48** styles en ligne qui fixent un fond, **27 ne fixent pas la couleur du texte**, dans onze fichiers — `notify-network-weekly-report` (4), `notify-rede-digest`, `notify-library-request`, `notify-weekly-report`, `_shared/domain/reader-message.ts` et **le gabarit commun `_shared/mail/layout.ts`** (3 chacun), `register`, `request-password-reset`, `notify-mid-loan-reading` (2), `notify-library-invitation`, `notify-document-permission-request` (1). Et aucun gabarit ne déclare `color-scheme` ni `prefers-color-scheme` (0 occurrence) : chaque client décide seul de ce qu'il inverse. Parmi ces courriels, ceux de l'inscription et de la réinitialisation du mot de passe — les premiers qu'une personne reçoit.",
-        "pt": "**Constatado por Xavier em 21/09/2026** no primeiro e-mail real da sonda `images_pins`: o balanço JSON estava **branco sobre branco**. Causa: o `<pre>` fixava um fundo claro sem fixar a cor do texto. **Esse bloco está corrigido** (commit `6320a00d`) — mas não era o único. *Medido na mesma noite em `supabase/functions/`*: em **48** estilos em linha que fixam um fundo, **27 não fixam a cor do texto**, em onze ficheiros, entre eles **o gabarito comum `_shared/mail/layout.ts`**, `register` e `request-password-reset`. E nenhum gabarito declara `color-scheme` (0 ocorrências)."
-      },
-      "w": {
-        "fr": "**Pour clore — un seul geste, à Xavier, sans code** : ouvrir un courriel de chaque famille dans un vrai client (Proton, Thunderbird, Gmail mobile), en thème sombre et en thème clair, et dire s'il se lit ; une capture par famille versée ici suffit. Les deux autres gestes sont faits le 22/09 (voir la vérification) : la règle « tout fond porte sa couleur » est tenue par `src/tests/mails-fond-et-couleur.test.js`, et le choix — courriels sombres par conception, déclarés `color-scheme: dark` — est au REGISTRE (`MAIL-Q7`). Le prochain courriel réel (rappel d'échéance, alerte) peut servir d'épreuve : pas besoin d'en provoquer un.",
-        "pt": "**Para fechar — um só gesto, de Xavier, sem código**: abrir um e-mail de cada família num cliente real (Proton, Thunderbird, Gmail móvel), em tema escuro e claro, e dizer se se lê; uma captura por família aqui basta. Os outros dois gestos estão feitos em 22/09: a regra « todo o fundo tem a sua cor » é garantida por `src/tests/mails-fond-et-couleur.test.js`, e a escolha — e-mails escuros por desenho, declarados `color-scheme: dark` — está no REGISTRE (`MAIL-Q7`). O próximo e-mail real pode servir de prova."
-      },
-      "y": {
-        "fr": "Un courriel qu'on ne peut pas lire est un courriel qui n'est pas parti. Ici c'était une alerte d'exploitation, lue par la seule personne qui pouvait agir ; ailleurs ce sont des rappels d'échéance et des liens d'inscription, reçus par des lectrices qui n'écriront pas pour dire qu'elles n'ont rien vu.",
-        "pt": "Um e-mail que não se pode ler é um e-mail que não partiu. Aqui era um alerta de exploração; noutros sítios são lembretes e links de inscrição, recebidos por leitoras que não escreverão a dizer que nada viram."
-      },
-      "f": {
-        "fr": [
-          "Plus aucun style en ligne ne fixe un fond sans fixer la couleur du texte, et une garde le tient.",
-          "Le choix clair imposé / thème sombre est écrit au REGISTRE et posé dans `layout.ts`.",
-          "Un courriel de chaque famille a été regardé dans un client en thème sombre, captures versées."
-        ],
-        "pt": [
-          "Nenhum estilo em linha fixa um fundo sem fixar a cor do texto, e uma guarda garante-o.",
-          "A escolha claro imposto / tema escuro está escrita no REGISTRE e posta em `layout.ts`.",
-          "Um e-mail de cada família foi olhado num cliente em tema escuro, com capturas."
-        ]
-      },
-      "r": [
-        "supabase/functions/_shared/mail/layout.ts",
-        "supabase/functions/health-probe/index.ts (bloc corrigé le 21/09)",
-        "journal/operations/NOTE_pins-images-remesures_2026-09-21 §6"
-      ],
-      "verif": [
-        {
-          "fr": "21/09 — courriel de 20 h 45 lu par Xavier (PDF versé dans la séance) ; décompte 27/48 par lecture des `style=\"…\"` de `supabase/functions/**/*.ts` ; `color-scheme` : 0 occurrence. Le courriel de clôture de 21 h 20 (incident 14) n'a pas de bloc `<pre>` : il ne dit rien du correctif, qui attend la prochaine alerte structurelle pour être vu.",
-          "pt": "21/09 — e-mail das 20h45 lido por Xavier; contagem 27/48 por leitura dos `style=\"…\"`; `color-scheme`: 0 ocorrências. O correctivo espera o próximo alerta estrutural para ser visto."
-        },
-        {
-          "fr": "22/09 — **deux critères sur trois tenus, le troisième ne peut l'être que par une personne.** Relu : le blanc sur blanc du 21/09 n'était pas un défaut de thème sombre du client — c'était de l'**héritage** (fond clair sans `color`, texte blanc hérité du corps), qui se produit dans n'importe quel client ; la fiche le disait mal. *(1)* Les 27 styles à fond sans couleur ont reçu la couleur de texte de leur document (`#ffffff`, `#f2f2f2` ou `#f3f4f6`, selon le `<body>` ; les fragments injectés dans `introHtml` prennent celle du gabarit) — onze fichiers, `layout.ts`, `register` et `request-password-reset` compris ; les traits (éléments vides) en sont dispensés. Garde `src/tests/mails-fond-et-couleur.test.js`, qui lit tous les `.ts` de `supabase/functions/`. *(2)* Choix écrit au REGISTRE (`MAIL-Q7`) : nos courriels sont sombres par conception et le **déclarent** — `color-scheme: dark` + `supported-color-schemes` dans les huit documents (le huitième, `notify-document-permission-request`, n'avait même pas de `<head>`). Un thème sombre n'est pas écrit : il n'y a rien à inverser. *(3)* **Reste à Xavier** : ouvrir un courriel de chaque famille dans un vrai client (Proton, Thunderbird, Gmail mobile) — la garde lit du HTML, elle ne prouve pas un rendu. Le prochain courriel réel sera celui d'une alerte ou d'un rappel ; le regarder suffit.",
-          "pt": "22/09 — **dois critérios em três cumpridos, o terceiro só por uma pessoa.** Relido: o branco sobre branco de 21/09 não era um defeito de tema escuro do cliente — era **herança** (fundo claro sem `color`, texto branco herdado do corpo), que ocorre em qualquer cliente. *(1)* Os 27 estilos com fundo sem cor receberam a cor de texto do seu documento — onze ficheiros, `layout.ts`, `register` e `request-password-reset` incluídos. Guarda `src/tests/mails-fond-et-couleur.test.js`. *(2)* Escolha escrita no REGISTRE (`MAIL-Q7`): os nossos e-mails são escuros por desenho e **declaram-no** — `color-scheme: dark` nos oito documentos (o oitavo nem tinha `<head>`). *(3)* **Fica para Xavier**: abrir um e-mail de cada família num cliente real — a guarda lê HTML, não prova um rendering."
-        }
-      ]
-    },
-    {
       "id": "F12",
       "d": "F",
       "p": "P2",
@@ -5107,55 +5022,6 @@
           "pt": "21/09 — procura de `failed` em `supabase/functions/**/*.ts` e de `retry|requeue` nas migrações: nenhuma retoma de fila de e-mails. Definição de `fn_healthcheck_notifications()` lida na migração de origem, não na base: a reler em produção."
         }
       ]
-    },
-    {
-      "id": "F14",
-      "d": "F",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup",
-        "pt": "O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup"
-      },
-      "v": {
-        "fr": "**Trouvé le 22/09/2026 pendant l'essai de bascule authentifié** (runbook des domaines, partie du 22/09). Le courriel de bienvenue d'un compte contributeur, envoyé par `register` à une adresse Riseup, est arrivé dans les indésirables avec l'en-tête `X-Spam-Status: Yes, score=6.9 required=6.0`. Le rapport SpamAssassin nomme la cause : `FROM_NOT_REPLYTO_SAME_DOMAIN` (3,0), `FREEMAIL_FORGED_REPLYTO` (2,5), `FROM_NOT_REPLYTO` (1,0), `REPLYTO_DIFF_DOMAIN` (0,2) — soit 6,7 des 6,9 points — parce que l'expéditeur est `no-reply@notifications.anarbib.org` et le **Reply-To `anarbib@proton.me`**, adresse d'un service gratuit sur un autre domaine : c'est le motif type d'une usurpation. Tout le reste est bon (SPF pass, DKIM valide, réputation « excellente »). Le Reply-To vient du réglage `ANARBIB_REPLY_TO_EMAIL` (`supabase/functions/register/index.ts`, l. 653 ; défaut = l'expéditeur), posé en `proton.me` à la suite de la décision du 16/09 d'éviter les adresses `.org` pour le canal humain. Le courriel de réinitialisation vers Gmail, lui, est arrivé en boîte de réception le même soir — les filtres diffèrent, la cause est la même.",
-        "pt": "**Encontrado em 22/09/2026 durante o ensaio de bascule autenticado.** O e-mail de boas-vindas de uma conta de contribuinte, enviado por `register` para um endereço Riseup, caiu no spam com `X-Spam-Status: Yes, score=6.9 required=6.0`. Causa nomeada pelo SpamAssassin: remetente `no-reply@notifications.anarbib.org` com **Reply-To `anarbib@proton.me`** (serviço gratuito, outro domínio) — 6,7 dos 6,9 pontos. SPF, DKIM e reputação estão bons. O Reply-To vem do ajuste `ANARBIB_REPLY_TO_EMAIL`, posto em `proton.me` após a decisão de 16/09 de evitar endereços `.org` no canal humano."
-      },
-      "w": {
-        "fr": "Retirer le Reply-To étranger sans revenir sur la décision du 16/09 : ne plus poser `ANARBIB_REPLY_TO_EMAIL` (le Reply-To retombe sur l'expéditeur, même domaine), et écrire l'adresse humaine `anarbib@proton.me` **dans le corps** des courriels qui invitent à répondre, là où un filtre ne la lit pas comme une usurpation. Vérifier les autres fonctions qui lisent un Reply-To d'environnement (`notify-network-weekly-report` : `NETWORK_REPLY_TO_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`). Puis rejouer : une inscription vers une adresse Riseup, lire `X-Spam-Status`.",
-        "pt": "Retirar o Reply-To estrangeiro sem voltar atrás na decisão de 16/09: deixar de definir `ANARBIB_REPLY_TO_EMAIL` (o Reply-To volta ao remetente, mesmo domínio) e escrever o endereço humano `anarbib@proton.me` **no corpo** dos e-mails. Verificar as outras funções que leem um Reply-To de ambiente. Depois repetir: um cadastro para um endereço Riseup, ler `X-Spam-Status`."
-      },
-      "y": {
-        "fr": "Un courriel de bienvenue ou de réinitialisation qui tombe dans les indésirables est un compte perdu : la personne ne trouve ni son identifiant ni son mot de passe provisoire. Les collectifs militants sont justement chez Riseup, Autistici, Proton.",
-        "pt": "Um e-mail de boas-vindas ou de redefinição que cai no spam é uma conta perdida. Os coletivos militantes estão justamente no Riseup, Autistici, Proton."
-      },
-      "f": {
-        "fr": [
-          "Une inscription vers une adresse Riseup arrive en boîte de réception, `X-Spam-Status: No`, et le rapport ne porte plus aucune règle `*REPLYTO*`.",
-          "L'adresse humaine figure dans le corps des courriels concernés, dix langues."
-        ],
-        "pt": [
-          "Um cadastro para um endereço Riseup chega à caixa de entrada, `X-Spam-Status: No`, sem regra `*REPLYTO*`.",
-          "O endereço humano está no corpo dos e-mails, dez línguas."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "docs/journal/operations/RUNBOOK_domaines_repli_2026-09-07.md (essai du 22/09)",
-        "supabase/functions/register/index.ts",
-        "REGISTRE §38 OPS-10"
-      ],
-      "verif": {
-        "fr": "22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste. **22/09 au soir, livré** : quatre secrets en production partageaient la même valeur (`ADMIN_EMAIL`, `ANARBIB_ADMIN_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`, `NETWORK_REPLY_TO_EMAIL`, même empreinte dans `supabase secrets list`) — les deux Reply-To retirés (`supabase secrets unset`), `register` retombe sur `SENDER_EMAIL` ; `notify-network-weekly-report` ne retombe plus sur `ADMIN_EMAIL` ; `notify-library-invitation` et `notify-library-request` n'écrivent plus de Reply-To Proton (l'adresse est dans leur corps) ; `welcome.autoMessage` ×10 dit « n'y réponds pas, pour joindre une personne : anarbib@proton.me » ; garde `src/tests/reply-to-meme-domaine.test.js` à liste fermée ; règle écrite dans `deploy/functions.env.example`. **Reste, à la main de Xavier : une inscription vers une adresse Riseup et la lecture de `X-Spam-Status`** — c'est le premier critère.",
-        "pt": "22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail. **22/09 à noite, entregue**: os dois Reply-To retirados dos segredos de produção; `notify-network-weekly-report` não recai mais em `ADMIN_EMAIL`; invitation e library-request sem Reply-To Proton; `welcome.autoMessage` ×10 com o endereço humano no corpo; guarda `reply-to-meme-domaine.test.js`. **Falta: um cadastro para um endereço Riseup e a leitura de `X-Spam-Status`.**"
-      }
     },
     {
       "id": "F15",

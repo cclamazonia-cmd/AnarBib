@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-24** · 62 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-24** · 59 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,10 +20,10 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 8
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 6
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 7
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-24.** **49 itens de 62** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E19, E20, F1, F3, F6, F10, F11, F12, F14, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-24.** **46 itens de 59** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E19, E20, F1, F3, F6, F10, F12, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -938,9 +938,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
-| **F11** | Branco sobre branco: blocos dos nossos e-mails ficam ilegíveis num cliente em tema escuro | `P2` | A verificar |
 | **F12** | Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre | `P2` | Aberto |
-| **F14** | O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup | `P2` | Em curso |
 | **F15** | Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva | `P2` | A verificar |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
@@ -1051,26 +1049,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 *Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
 
-#### F11 — Branco sobre branco: blocos dos nossos e-mails ficam ilegíveis num cliente em tema escuro
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript
-
-**Estado.** **Constatado por Xavier em 21/09/2026** no primeiro e-mail real da sonda `images_pins`: o balanço JSON estava **branco sobre branco**. Causa: o `<pre>` fixava um fundo claro sem fixar a cor do texto. **Esse bloco está corrigido** (commit `6320a00d`) — mas não era o único. *Medido na mesma noite em `supabase/functions/`*: em **48** estilos em linha que fixam um fundo, **27 não fixam a cor do texto**, em onze ficheiros, entre eles **o gabarito comum `_shared/mail/layout.ts`**, `register` e `request-password-reset`. E nenhum gabarito declara `color-scheme` (0 ocorrências).
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** **Para fechar — um só gesto, de Xavier, sem código**: abrir um e-mail de cada família num cliente real (Proton, Thunderbird, Gmail móvel), em tema escuro e claro, e dizer se se lê; uma captura por família aqui basta. Os outros dois gestos estão feitos em 22/09: a regra « todo o fundo tem a sua cor » é garantida por `src/tests/mails-fond-et-couleur.test.js`, e a escolha — e-mails escuros por desenho, declarados `color-scheme: dark` — está no REGISTRE (`MAIL-Q7`). O próximo e-mail real pode servir de prova.
-
-**Por que importa.** Um e-mail que não se pode ler é um e-mail que não partiu. Aqui era um alerta de exploração; noutros sítios são lembretes e links de inscrição, recebidos por leitoras que não escreverão a dizer que nada viram.
-
-**O que conta como terminado.**
-
-- Nenhum estilo em linha fixa um fundo sem fixar a cor do texto, e uma guarda garante-o.
-- A escolha claro imposto / tema escuro está escrita no REGISTRE e posta em `layout.ts`.
-- Um e-mail de cada família foi olhado num cliente em tema escuro, com capturas.
-
-*Remissões : `supabase/functions/_shared/mail/layout.ts` · `supabase/functions/health-probe/index.ts (bloc corrigé le 21/09)` · `journal/operations/NOTE_pins-images-remesures_2026-09-21 §6`*
-
 #### F12 — Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
@@ -1090,27 +1068,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 - O cron do reenvio consta de `fn_crons_attendus()` e da suíte dos crons.
 
 *Remissões : `supabase/functions/_shared/domain/outbox-verdict.ts (en-tête : « rejouer par destinataire »)` · `supabase/migrations/20260817142747_healthcheck_notifications.sql (§3, files non traitées)` · `src/tests/equipe-reseau-file-banc.test.js, library-profile-banc.test.js, mails-federation-banc.test.js, lettre-banc.test.js` · `journal/operations/RUNBOOK_domaines_repli_2026-09-07 (« Trouvé en écrivant ces bancs »)`*
-
-#### F14 — O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup
-
-`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** **Encontrado em 22/09/2026 durante o ensaio de bascule autenticado.** O e-mail de boas-vindas de uma conta de contribuinte, enviado por `register` para um endereço Riseup, caiu no spam com `X-Spam-Status: Yes, score=6.9 required=6.0`. Causa nomeada pelo SpamAssassin: remetente `no-reply@notifications.anarbib.org` com **Reply-To `anarbib@proton.me`** (serviço gratuito, outro domínio) — 6,7 dos 6,9 pontos. SPF, DKIM e reputação estão bons. O Reply-To vem do ajuste `ANARBIB_REPLY_TO_EMAIL`, posto em `proton.me` após a decisão de 16/09 de evitar endereços `.org` no canal humano.
-
-*Verificado : 22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail. **22/09 à noite, entregue**: os dois Reply-To retirados dos segredos de produção; `notify-network-weekly-report` não recai mais em `ADMIN_EMAIL`; invitation e library-request sem Reply-To Proton; `welcome.autoMessage` ×10 com o endereço humano no corpo; guarda `reply-to-meme-domaine.test.js`. **Falta: um cadastro para um endereço Riseup e a leitura de `X-Spam-Status`.***
-
-**O que é.** Retirar o Reply-To estrangeiro sem voltar atrás na decisão de 16/09: deixar de definir `ANARBIB_REPLY_TO_EMAIL` (o Reply-To volta ao remetente, mesmo domínio) e escrever o endereço humano `anarbib@proton.me` **no corpo** dos e-mails. Verificar as outras funções que leem um Reply-To de ambiente. Depois repetir: um cadastro para um endereço Riseup, ler `X-Spam-Status`.
-
-**Por que importa.** Um e-mail de boas-vindas ou de redefinição que cai no spam é uma conta perdida. Os coletivos militantes estão justamente no Riseup, Autistici, Proton.
-
-**O que conta como terminado.**
-
-- Um cadastro para um endereço Riseup chega à caixa de entrada, `X-Spam-Status: No`, sem regra `*REPLYTO*`.
-- O endereço humano está no corpo dos e-mails, dez línguas.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `docs/journal/operations/RUNBOOK_domaines_repli_2026-09-07.md (essai du 22/09)` · `supabase/functions/register/index.ts` · `REGISTRE §38 OPS-10`*
 
 #### F15 — Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva
 
@@ -1442,7 +1399,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
 | **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Aberto |
-| **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | A verificar |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
@@ -1492,26 +1448,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** **Bloqueado por B6.** Congelado na produção até 14/09; o teste em ambiente de teste está aberto.
 
 *Remissões : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
-
-#### I15 — O secret do Forgejo da chave publicável ainda carrega seu nome antigo
-
-`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** Desde 01/09, o código lê `VITE_SUPABASE_PUBLISHABLE_KEY` e seu valor é mesmo a chave publicável — mas na CI essa variável é alimentada pelo secret do Forgejo com o nome histórico `VITE_SUPABASE_ANON_KEY`. Desacoplamento proposital: evitava exigir a renomeação do secret e o merge no mesmo instante. A armadilha está documentada no `ci.yml`: o `prebuild` faz `exit 0` se a variável faltar, um nome desalinhado não quebra o build, publica um instantâneo de catálogo vencido em silêncio.
-
-*Verificado : [object Object],[object Object],[object Object]*
-
-**O que é.** Criar o secret `VITE_SUPABASE_PUBLISHABLE_KEY` nas configurações do Forgejo (mesmo valor), alinhar a linha do `ci.yml`, verificar um build completo — o frescor do `catalogue-snapshot.json` serve de prova — e então apagar o secret antigo.
-
-**Por que importa.** O canteiro das chaves pagou duas vezes o preço de um nome que mente — uma variável de plataforma cujo conteúdo mudou sem avisar, e um controle `verify_jwt` satisfeito por uma chave pública. Melhor não deixar um terceiro no lugar, mesmo benigno.
-
-**O que conta como terminado.**
-
-- A linha do `ci.yml` lê um secret com o mesmo nome da variável, o secret antigo não existe mais, e um build posterior produziu um snapshot com a data do dia.
-
-**Dependências.** Acesso às configurações do repositório Forgejo (Settings → Actions → Secrets).
-
-*Remissões : `.forgejo/workflows/ci.yml` · `item B18`*
 
 #### I18 — O banco de CI não faz replay numa imagem Supabase — é preciso um que faça
 
@@ -2025,6 +1961,9 @@ CI verde. |
 | F4 | 2026-09-24 | **Fechado em 24/09: o último critério é cumprido por Xavier.** Medido em produção: `loan_cycle_notifications` tem três envios, todos sobre o empréstimo 84 — o convite a uma nota de leitura em 10/09, **o lembrete D-3 em 18/09** e **o do dia do prazo em 21/09**, uma vez cada. Xavier confirma em 24/09 que chegaram, na língua da pessoa. Fora deste fecho: o D+7 (nenhum atraso desde 31/08) — partirá no primeiro atraso real. |
 | G14 | 2026-09-24 | **Fechado em 24/09 sobre peças.** Xavier relançou a pessoa; lido em produção em 24/09: o convite de 30/08 passou a **`accepted`** antes de expirar. As duas outras de 01/09: uma aceite, uma à espera de ratificação. O que o episódio diz, para **G1**: o convite por e-mail não bastou, a relance humana sim. |
 | E14 | 2026-09-24 | **Fechado em 24/09 à noite, sobre peças.** Entregue em três commits, implantado e **percorrido de verdade**: às 22h55 (hora de Paris), Xavier depositou o relato `35a5dc22` a partir de `/login`, sem sessão, e recebeu o e-mail da administração; em base, a linha da fila passou a `sent` à primeira tentativa, aviso de receção incluído. Critérios 1 e 2 cumpridos; critério 3: dez locales, página titulada, formulário por teclado — **o rendimento no telemóvel não foi visto**. Duas correções nascidas do primeiro relato real: o e-mail já não cita « (E14) », e uma pessoa sem conta já não envia « Biblioteca: AnarBib ». |
+| F14 | 2026-09-24 | **Fechado em 24/09: o último critério é cumprido por Xavier.** Código em produção desde 22/09. Xavier refez a prova: uma inscrição para um endereço Riseup, e o e-mail de boas-vindas **chegou à caixa de entrada principal**. Nuance: o cabeçalho `X-Spam-Status` não foi relido linha a linha; é a chegada à caixa principal que faz prova. |
+| F11 | 2026-09-24 | **Fechado em 24/09: o último critério é cumprido por Xavier.** Os gestos de código estavam feitos em 22/09. Xavier olhou os e-mails no seu cliente, em tema escuro e claro, incluindo os dois nascidos em 24/09: **tudo se lê**. |
+| I15 | 2026-09-24 | **Fechado em 24/09 à noite: os três critérios cumpridos.** Segredo criado por Xavier, `ci.yml` alinhado (`f0a88461`), snapshot gerado às 20h57 UTC; nenhum workflow lê já o segredo antigo, que Xavier apagou em 24/09. |
 
 ---
 
@@ -2056,4 +1995,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 62 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 59 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
