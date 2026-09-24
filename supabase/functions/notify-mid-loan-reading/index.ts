@@ -17,6 +17,7 @@
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { supabaseAdmin } from "../_shared/core/env.ts";
+import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-webhook-secret",
@@ -151,56 +152,38 @@ function canSendForContext(ctx) {
 // ne throw jamais sur erreur HTTP (le serve lit sendResult.ok / .status /
 // .body) — sendViaResend renvoie ce meme objet.
 // ============================================================================
-function formatMailAddress(email, name) {
-  const n = (name || "").trim();
-  return n ? `${n} <${email}>` : email;
-}
-// --- Implementation Resend (cf. spec §4.4) ---------------------------------
-// Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
-// reply_to "Nom <email>", corps html/text. Retour aligne sur le contrat
 // local { ok, status, body } : pas de throw sur erreur HTTP.
-async function sendViaResend(opts) {
-  const senderEmail = senderEmailFromContext(opts.context);
-  const senderName = senderNameFromContext(opts.context);
-  const replyTo = replyToFromContext(opts.context);
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  if (!resendKey) {
-    return {
-      ok: false,
-      status: 0,
-      body: "RESEND_API_KEY absente des secrets Edge Function"
-    };
-  }
-  const payload: Record<string, unknown> = {
-    from: formatMailAddress(senderEmail, senderName),
-    to: [opts.toEmail],
-    subject: opts.subject,
-    html: opts.html,
-    text: opts.text
-  };
-  if (replyTo && replyTo.email) {
-    payload.reply_to = formatMailAddress(replyTo.email, replyTo.name);
-  }
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${resendKey}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-  const body = await response.text();
-  return {
-    ok: response.ok,
-    status: response.status,
-    body
-  };
-}
-// --- Wrapper neutre --------------------------------------------------------
-// sendEmail() : seule fonction d'envoi connue du reste de l'EF.
+// --- Envoi : une seule implementation, celle de _shared (F7, lot 2, 24/09/2026) ---
+// Le routage vient du contexte de la bibliotheque, comme avant, et il est
+// passe EXPLICITEMENT au module partage. Ce module leve sur erreur ; cette EF
+// attend { ok, status, body } et ne throw jamais (le serve lit sendResult.ok /
+// .status / .body) : on traduit l'exception, en gardant le statut HTTP quand
+// le message le porte (« Resend HTTP 4xx: ... »), 0 sinon — comme la cle
+// absente rendait status 0 hier.
 async function sendEmail(opts) {
-  console.log(`[mid-loan-reading] envoi via resend`);
-  return await sendViaResend(opts);
+  const replyTo = replyToFromContext(opts.context);
+  try {
+    const body = await sendEmailPartage({
+      toEmail: opts.toEmail,
+      toName: opts.toName,
+      subject: opts.subject,
+      html: opts.html,
+      text: opts.text,
+      context: opts.context,
+      routing: {
+        senderEmail: senderEmailFromContext(opts.context),
+        senderName: senderNameFromContext(opts.context),
+        replyToEmail: replyTo?.email || null,
+        replyToName: replyTo?.name || null
+      },
+      label: "mid-loan-reading"
+    });
+    return { ok: true, status: 200, body };
+  } catch (error) {
+    const message = String(error?.message || error);
+    const m = message.match(/HTTP (\d{3})/);
+    return { ok: false, status: m ? Number(m[1]) : 0, body: message };
+  }
 }
 function renderEmail(opts) {
   const brandName = brandNameFromContext(opts.context);

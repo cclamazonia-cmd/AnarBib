@@ -14,16 +14,18 @@ const lire = (p) => readFileSync(join(ROOT, p), 'utf8');
 
 // Liste FERMÉE des fonctions qui posent un reply_to hors du routage par bibliothèque,
 // avec la raison pour laquelle chacune est admise.
-// 23/09/2026 (F7, lot 1) — `notify-weekly-report` et `notify-network-weekly-report`
-// SORTENT de cette liste : elles ne posent plus l'en-tête elles-mêmes, elles passent
-// par `_shared/transport/email.ts` en lui donnant leur routage. La valeur envoyée est
-// la même qu'avant (routing.replyToEmail, qui retombe sur SENDER_EMAIL) ; seul
-// l'endroit où elle est écrite a changé, et cet endroit-là est hors du champ de ce
-// balayage, qui saute `_shared` exprès. Le contenu du payload partagé est désormais
-// figé par `src/tests/mail-transport-routage.test.js`.
+// 23/09/2026 (F7, lot 1) — `notify-weekly-report` SORT de cette liste : elle ne pose
+// plus l'en-tête elle-même, elle passe par `_shared/transport/email.ts` en lui donnant
+// son routage, résolu depuis le contexte de la bibliothèque. Le contenu du payload
+// partagé est figé par `src/tests/mail-transport-routage.test.js`.
+// 24/09/2026 (F7, lot 2) — le balayage voit désormais aussi un Reply-To passé en
+// routage explicite (`replyToEmail: ...`). `notify-network-weekly-report` y REVIENT :
+// son adresse de réponse vient de `resolveEnvReplyToEmail()`, une résolution
+// d'environnement, exactement ce que cette liste surveille.
 const ADMISES = {
-  'notify-document-permission-request': 'REPLY_TO_EMAIL / ANARBIB_REPLY_TO_EMAIL, vides en production → aucun en-tête',
-  'notify-mid-loan-reading': 'reply-to de la bibliothèque (canal local), pas de la plateforme',
+  'notify-document-permission-request': 'REPLY_TO_EMAIL / ANARBIB_REPLY_TO_EMAIL, vides en production → aucun en-tête (passé en routage explicite depuis F7 lot 2)',
+  'notify-mid-loan-reading': 'reply-to de la bibliothèque (canal local), pas de la plateforme (passé en routage explicite depuis F7 lot 2)',
+  'notify-network-weekly-report': 'resolveEnvReplyToEmail() : résolution d\'environnement qui retombe sur SENDER_EMAIL (routage explicite depuis F7 lot 1)',
   'notify-oai-opening': 'FEDERAL_EMAIL, même domaine que l\'expéditeur',
   'register': 'ANARBIB_REPLY_TO_EMAIL, vide en production → retombe sur SENDER_EMAIL',
 };
@@ -43,7 +45,9 @@ describe('F14 — Reply-To du même domaine que l\'expéditeur', () => {
     for (const f of fichiersTs(FN)) {
       const src = readFileSync(f, 'utf8');
       for (const ligne of src.split('\n')) {
-        if (!/\breply_to(_email)?\s*[:=]/.test(ligne)) continue;
+        // Depuis F7 lot 2 (24/09/2026), un Reply-To peut aussi etre passe en routage
+        // explicite au module partage (`replyToEmail: ...`) : on le balaye pareil.
+        if (!/\b(reply_to(_email)?|replyToEmail)\s*[:=]/.test(ligne)) continue;
         if (/ctx\??\./.test(ligne) || /^\s*\/\//.test(ligne)) continue;
         trouvees.add(f.slice(FN.length + 1).split(/[\\/]/)[0]);
       }

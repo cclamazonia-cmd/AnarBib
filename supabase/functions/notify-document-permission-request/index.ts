@@ -1,6 +1,7 @@
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
+import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustSecretKey();
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_DOCUMENT_PERMISSION_REQUEST");
@@ -290,45 +291,28 @@ function footerHtml() {
 // CONTRAT DE RETOUR LOCAL : string brute en succes, throw sur erreur HTTP —
 // safeSendEmail (try/catch) inchange.
 // ============================================================================
-function formatMailAddress(email, name) {
-  const n = String(name || "").trim();
-  return n ? `${n} <${email}>` : email;
-}
-// --- Implementation Resend (cf. spec §4.4) ---------------------------------
-// Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
-// reply_to "Nom <email>", corps html/text. Contrat identique a sendViaBrevo :
 // renvoie la string brute, throw sur erreur HTTP.
-async function sendViaResend(opts) {
-  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
-  if (!resendKey) {
-    throw new Error("RESEND_API_KEY absente des secrets Edge Function");
-  }
-  const payload: Record<string, unknown> = {
-    from: formatMailAddress(SENDER_EMAIL, SENDER_NAME),
-    to: [opts.toEmail],
+// --- Envoi : une seule implementation, celle de _shared (F7, lot 2, 24/09/2026) ---
+// Le routage est passe EXPLICITEMENT et reste celui d'hier : expediteur depuis
+// l'environnement, reply_to seulement si REPLY_TO_EMAIL est une adresse valide
+// (vide en production, cf. F14 et la liste fermee de reply-to-meme-domaine).
+// Contrat local inchange : string brute en succes, throw sur erreur —
+// safeSendEmail (try/catch) ne bouge pas.
+async function sendEmail(opts) {
+  return await sendEmailPartage({
+    toEmail: opts.toEmail,
+    toName: opts.toName,
     subject: opts.subject,
     html: opts.html,
-    text: opts.text
-  };
-  if (isValidEmail(REPLY_TO_EMAIL)) {
-    payload.reply_to = formatMailAddress(REPLY_TO_EMAIL, REPLY_TO_NAME);
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${resendKey}`,
-      "Content-Type": "application/json"
+    text: opts.text,
+    routing: {
+      senderEmail: SENDER_EMAIL,
+      senderName: SENDER_NAME,
+      replyToEmail: isValidEmail(REPLY_TO_EMAIL) ? REPLY_TO_EMAIL : null,
+      replyToName: REPLY_TO_NAME
     },
-    body: JSON.stringify(payload)
+    label: "document-permission-request"
   });
-  const body = await res.text();
-  if (!res.ok) throw new Error(`Resend error HTTP ${res.status}: ${body}`);
-  return body;
-}
-// --- Wrapper neutre --------------------------------------------------------
-async function sendEmail(opts) {
-  console.log(`[document-permission-request] envoi via resend`);
-  return await sendViaResend(opts);
 }
 async function safeSendEmail(target, subject, html, text, label) {
   const email = String(target?.email || "").trim().toLowerCase();

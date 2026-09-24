@@ -131,9 +131,7 @@ describe('transport partage — le routage explicite l emporte sur le contexte',
 // fonction neuve qui recopierait l'appel fait rougir ce test au lieu de
 // s'installer sans bruit.
 const ENCORE_EN_DIRECT = [
-  'notify-document-permission-request',
   'notify-library-request',
-  'notify-mid-loan-reading',
   'register',
   'request-password-reset',
 ];
@@ -147,8 +145,11 @@ describe('F7 — une seule implementation d envoi', () => {
     expect(coupables).toEqual(ENCORE_EN_DIRECT);
   });
 
-  it('les trois fonctions converties passent bien par le module partage', () => {
-    for (const f of ['notify-weekly-report', 'notify-network-weekly-report', 'notify-rede-digest']) {
+  it('les fonctions converties passent bien par le module partage', () => {
+    for (const f of [
+      'notify-weekly-report', 'notify-network-weekly-report', 'notify-rede-digest',   // lot 1, 23/09
+      'notify-document-permission-request', 'notify-mid-loan-reading',               // lot 2, 24/09
+    ]) {
       const src = readFileSync(path.join(FONCTIONS, f, 'index.ts'), 'utf8');
       expect(src).not.toContain('api.resend.com');
       expect(src).toContain('_shared/transport/email.ts');
