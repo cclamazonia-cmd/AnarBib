@@ -7,10 +7,11 @@
 // ne l'exécutait. Écrit avant de toucher à son adresse (dette app-url), sur la
 // vraie fonction, par src/tests/helpers/monter-ef.js.
 //
-// DÉFAUT CONNU, épinglé et non corrigé ici : `sent_count` compte un envoi même
-// quand le transport l'a refusé (safeSendEmail ne lève jamais, et la fonction ne
-// lit pas son résultat). Ce n'est qu'un chiffre dans une réponse que personne
-// n'affiche — mais c'est la même forme que le défaut de la Lettre. Dernier cas.
+// Le 21/09, le dernier cas épinglait un défaut : `sent_count` comptait un envoi
+// même quand le transport l'avait refusé (safeSendEmail ne lève jamais, et la
+// fonction ne lisait pas son résultat — la même forme que le défaut de la Lettre).
+// Corrigé le 24/09 (F13) : la fonction lit le verdict de chaque envoi ; `sent_count`
+// ne compte que les partis, les refusés sont rendus nommés, les sautés comptés.
 
 import { describe, it, expect } from 'vitest';
 import { monterEF, liens } from './helpers/monter-ef.js';
@@ -90,11 +91,21 @@ describe('notify-digital-share — qui est prévenu à chaque étape', () => {
     expect(liens(r.envois[0].html)).toContain('https://app.anarbib.is/painel');
   });
 
-  it('DÉFAUT CONNU : sent_count compte un envoi que le transport a refusé', async () => {
+  it('un envoi refusé par le transport ne compte pas : sent_count 0, le refus est nommé (F13)', async () => {
     const { notifier } = monter({ resend: () => new Response('panne', { status: 500 }) });
     const r = await notifier({ event: 'ill_accepted', share_id: 'share-1' });
     expect(r.envois).toHaveLength(0);
-    // Ce qu'on VOUDRAIT : 0. Ce qui est : 1. À reprendre avec outbox-verdict, en retournant ce cas.
-    expect(r.corps.sent_count).toBe(1);
+    expect(r.corps.sent_count).toBe(0);
+    expect(r.corps.refused_count).toBe(1);
+    expect(r.corps.refused).toHaveLength(1);
+    expect(r.corps.refused[0].email).toBe('dem@exemplo.test');
+    expect(String(r.corps.refused[0].reason)).not.toBe('');
+    expect(r.corps.skipped_count).toBe(0);
+  });
+
+  it('les envois partis sont comptés, et la réponse porte les trois comptes', async () => {
+    const { notifier } = monter();
+    const r = await notifier({ event: 'ill_requested', share_id: 'share-1' });
+    expect(r.corps).toMatchObject({ ok: true, sent_count: 2, refused_count: 0, refused: [], skipped_count: 0 });
   });
 });

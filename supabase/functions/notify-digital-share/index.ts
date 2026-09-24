@@ -19,6 +19,7 @@ import { tMail } from '../_shared/i18n/mail-strings.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
 import { appUrl } from '../_shared/core/app-url.ts';
+import { verdictEnvois, type VerdictEnvoi } from '../_shared/domain/outbox-verdict.ts';
 
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_DIGITAL_SHARE') || '').trim();
 const SHARE_URL = appUrl('/painel');
@@ -41,8 +42,8 @@ async function sendIll(
   subKey: string,
   introKey: string,
   params: Record<string, string>,
-): Promise<boolean> {
-  if (!target?.email) return false;
+): Promise<VerdictEnvoi> {
+  if (!target?.email) return { status: 'skipped', detail: 'empty_email' };
   const subject = tMail(locale, subKey, params);
   const intro = tMail(locale, introKey, params);
   const { html, text } = renderEmail({
@@ -55,11 +56,13 @@ async function sendIll(
     locale,
   });
   try {
-    await safeSendEmail(target, subject, html, text, 'ill_share', NETWORK_CTX);
-    return true;
+    // F13 (24/09) : on lit ce que le transport a répondu. safeSendEmail ne lève jamais :
+    // un refus revient en `ok: false`, un saut (transport coupé, adresse vide) en `skipped`.
+    const r = await safeSendEmail(target, subject, html, text, 'ill_share', NETWORK_CTX);
+    return verdictEnvois({ recipients_count: 1, result: r });
   } catch (e) {
     console.error('[notify-digital-share]', target.email, String((e as Error)?.message || e));
-    return false;
+    return { status: 'failed', detail: String((e as Error)?.message || e) };
   }
 }
 
@@ -120,10 +123,16 @@ Deno.serve((req) => serveJsonWebhook(
       bookTitle(s.book_id),
     ]);
 
-    let sent = 0;
+    // F13 : `sent_count` ne compte que les envois acceptés par le transport ; les refus
+    // sont rendus à part, nommés (adresse et cause), et les sautés comptés.
+    let sent = 0, skipped = 0;
+    const refused: { email: string; reason: string }[] = [];
     const fanout = async (recips: { email: string; name?: string; locale: string }[], subK: string, introK: string, params: Record<string, string>) => {
       for (const r of recips) {
-        if (await sendIll({ email: r.email, name: r.name }, r.locale, subK, introK, params)) sent++;
+        const v = await sendIll({ email: r.email, name: r.name }, r.locale, subK, introK, params);
+        if (v.status === 'sent') sent++;
+        else if (v.status === 'failed') refused.push({ email: r.email, reason: v.detail || 'envoi refuse' });
+        else skipped++;
       }
     };
 
@@ -159,6 +168,6 @@ Deno.serve((req) => serveJsonWebhook(
         return { ok: true, ignored: true, event };
     }
 
-    return { ok: true, event, share_id: shareId, sent_count: sent };
+    return { ok: true, event, share_id: shareId, sent_count: sent, refused_count: refused.length, refused, skipped_count: skipped };
   },
 ));
