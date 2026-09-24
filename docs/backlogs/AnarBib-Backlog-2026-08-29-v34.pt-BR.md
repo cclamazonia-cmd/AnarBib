@@ -723,7 +723,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Aberto |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
-| **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | Em curso |
+| **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | A verificar |
 | **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Em curso |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
@@ -881,13 +881,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E14 — Uma página para relatar um bug a partir do aplicativo
 
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, língua materna
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, língua materna
 
 **Estado.** **Pedido de Xavier em 07/09/2026.** Verificado no mesmo dia: **nenhum mecanismo de relato existe no app**. Nenhuma tabela (`bug_reports`, `feedback` — nada; `service_health_incidents` é a supervisão automática), nenhuma das 52 Edge Functions, nenhuma rota em `App.jsx`, nenhuma chave i18n, nenhum link para as issues do Codeberg em `src/`. O único e-mail de contato geral, `contato@anarbib.org`, está enterrado na política de privacidade. O canal documentado vive fora do app, do lado do desenvolvedor: «abrir uma issue no Codeberg» — inacessível a uma bibliotecária sem conta lá.
 
 **Três padrões caseiros já existem**: *(1)* `authority_duplicate_reports` (staff → coordenação, índice único parcial anti-inundação, `HINT` = chaves i18n); *(2)* `book_reading_note_reports` (moderação); *(3)* **`cartography_submissions`** — o único aberto a `anon`: tabela trancada, Edge Function pública com altcha, outbox → `notify-event`, trio `list/approve/reject`, tela de moderação. É o modelo 3 que cobre a necessidade, com o anti-inundação do modelo 1.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Uma página pública «Relatar um problema» (rota a nomear), acessível **sem conta** e a partir de **todas** as páginas: um link no `Footer` (`src/components/layout/index.jsx`) e uma intenção «Quero relatar um problema» em `intentions.js` (grupo leitor — uma linha). Formulário mínimo: o que aconteceu, o que era esperado, como refazer; **o contexto preenche-se sozinho** (página de origem, locale, papel e biblioteca de sessão, navegador); e-mail de resposta opcional. No servidor, copiar `cartography_submissions`: tabela `bug_reports` trancada, Edge Function `submit-bug-report` com altcha para anônimos, outbox → `notify-event` para `admins@anarbib.org`, status `open/closed`, índice único parcial anti-inundação, RPC `list/close` para admins de rede, e um separador na Rede para a fila. **Duas decisões ao escrever**: ponte para o Codeberg (um admin recopia à mão) ou não; acusar recebimento por e-mail quando houver endereço. Dez locales de imediato, e um teste que guarda a rota e o `Footer`.
 

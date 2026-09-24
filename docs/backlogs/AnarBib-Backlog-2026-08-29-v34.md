@@ -723,7 +723,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
-| **E14** | Une page pour signaler un bug depuis l'application | `P2` | En cours |
+| **E14** | Une page pour signaler un bug depuis l'application | `P2` | À vérifier |
 | **E19** | Mon compte, « Données personnelles » : les trois blocs de décision remontent après le profil, côte à côte ; la suppression du compte reste seule tout en bas | `P2` | En cours |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 
@@ -881,13 +881,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### E14 — Une page pour signaler un bug depuis l'application
 
-`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, langue maternelle
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, langue maternelle
 
 **État.** **Demande de Xavier le 07/09/2026.** Vérifié le même jour : **aucun mécanisme de signalement n'existe dans l'app**, à aucun niveau. Pas de table (`bug_reports`, `feedback`, `signalements` — rien ; la seule table d'incidents, `service_health_incidents`, est la supervision automatique), aucune des 52 Edge Functions, aucune route dans `App.jsx` (pas de `/bug`, `/feedback`, `/contato`, `/aide`), aucune clé i18n (`*.bug.*`, `*.feedback.*`), aucun lien vers les issues Codeberg dans `src/` (les seules URL Codeberg de l'app sont dans la politique de confidentialité et le DPA). Le seul courriel de contact général, `mailto:contato@anarbib.org`, est enterré dans `PrivacyPolicyPage.jsx` ; les deux `mailto:anarbib@proton.me` sont réservés à l'onboarding. Le canal documenté vit hors de l'app et côté développeur : `CONTRIBUTING.md` et le README disent « ouvrir une issue sur Codeberg » — inaccessible à une bibliothécaire qui n'a pas de compte là-bas.
 
 **Trois patrons maison existent déjà**, et il n'y a rien à inventer : *(1)* `authority_duplicate_reports` + `report_authority_pair` (staff → coordination, index unique partiel anti-flood sur `status='open'`, `HINT` = clés i18n, `DO $$` de vérification — et son en-tête explique pourquoi une table générique à `entity_type` a été refusée) ; *(2)* `book_reading_note_reports` (modération, `UNIQUE (note_id, reporter)`) ; *(3)* **`cartography_submissions`** — le seul ouvert à `anon` : table verrouillée, Edge Function publique `submit-cartography-entry` avec défi altcha, outbox → `notify-event` vers `fede@anarbib.org`, trio `list/approve/reject`, écran de modération. C'est le modèle 3 qui couvre le besoin, avec l'anti-flood du modèle 1.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Une page publique « Signaler un problème » (route à nommer, `/signalar` ou `/problema`), accessible **sans compte** et depuis **toutes** les pages : un lien dans le `Footer` (`src/components/layout/index.jsx`, aujourd'hui trois éléments : mention, confidentialité, langue) et une intention « Je veux signaler un problème » dans `intentions.js` (groupe lecteur — une ligne). Formulaire minimal : ce qui s'est passé, ce qui était attendu, comment refaire ; **le contexte se remplit seul** (page d'origine, locale, rôle et bibliothèque de session si connecté, navigateur) ; courriel de réponse facultatif ; jamais de mot de passe ni de capture obligatoire. Côté serveur, calquer `cartography_submissions` : table `bug_reports` verrouillée (`REVOKE ALL FROM anon, authenticated`), Edge Function `submit-bug-report` avec altcha pour les anonymes, outbox → `notify-event` vers `admins@anarbib.org` (le destinataire de supervision, F-domaine), statut `open/closed`, index unique partiel anti-flood, RPC `list/close` réservées aux admins réseau, et un onglet dans Rede (ou la page de modération existante) pour la file. **Deux décisions à prendre en écrivant** : *(a)* pont vers Codeberg (un admin recopie à la main vers une issue — le plus simple et le plus honnête) ou pas de pont ; *(b)* accusé de réception par courriel au signaleur quand il a laissé une adresse. Dix locales d'emblée (parité stricte, `i18n.test.js`), et un test qui garde la route et le `Footer`.
 
