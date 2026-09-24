@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-24** · 62 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-24** · 63 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 8
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 6
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 7
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-24.** **49 itens de 62** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F6, F10, F11, F12, F14, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-24.** **50 itens de 63** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F6, F10, F11, F12, F14, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -966,6 +966,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F11** | Branco sobre branco: blocos dos nossos e-mails ficam ilegíveis num cliente em tema escuro | `P2` | A verificar |
 | **F12** | Nada reenvia um e-mail recusado: uma linha de fila « failed » fica assim para sempre | `P2` | Aberto |
 | **F14** | O Reply-To em `proton.me` faz nossos e-mails caírem no spam — 6,9 para um limiar de 6 no Riseup | `P2` | Em curso |
+| **F15** | Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva | `P2` | A verificar |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1135,6 +1136,27 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 **Dependências.** Nenhuma.
 
 *Remissões : `docs/journal/operations/RUNBOOK_domaines_repli_2026-09-07.md (essai du 22/09)` · `supabase/functions/register/index.ts` · `REGISTRE §38 OPS-10`*
+
+#### F15 — Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva
+
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
+
+**Estado.** **Constatado em 24/09/2026 às 21h46**: « [AnarBib] Mise à jour d'une demande institutionnelle » (pedido da Anarchief.Org aprovado), enviado por `notify-library-request`, chegou à caixa pessoal de Xavier e a mais nenhum lugar. No código: a função escreve em leque às admins ativas de `network_administrators`, cada uma na sua língua, e `ADMIN_EMAIL` só serve de recurso; **em produção há UMA admin ativa**. A caixa coletiva `admins@anarbib.org` — destinatária dos alertas de saúde desde 28/08 (`HEALTH_ALERT_CC`) e dos relatórios DMARC — não via passar nenhum e-mail institucional. **Nove lugares** recarregavam `network_administrators` + `profiles` cada um à sua maneira, e três outros só escreviam a `ADMIN_EMAIL`. O precedente existia: `health-probe` já fazia admins ativas + variável de ambiente, sem duplicados, sem sair quando a tabela está vazia.
+
+*Verificado : 24/09/2026 — e-mail recebido às 21h46 lido; `sendToAdmins` lido; uma admin ativa contada na base; `HEALTH_ALERT_CC` presente nos segredos, `NETWORK_ADMIN_CC` ausente. **Entregue em 24/09 à noite**: módulo + seis conversões + modelos de ambiente + guarda e bancadas. Falta o primeiro critério: um e-mail real lido na caixa, por Xavier.*
+
+**O que é.** Uma única resolução dos destinatários de administração, `_shared/context/network-admins.ts`: admins ativas (cada uma na sua língua) **mais** a caixa coletiva lida em `NETWORK_ADMIN_CC` (recurso `HEALTH_ALERT_CC`, logo efetivo em produção sem novo segredo), em **pt-BR** (língua de referência, decisão de Xavier em 24/09), sem duplicados, nunca vazia enquanto houver uma caixa. **Acrescentar, não substituir**. **Nem tudo merece a caixa**: a governança entre admins (cooptação, retirada coletiva), a facilitação de AG, a gazeta e a oficina continuam endereçadas às pessoas. Passam pelo módulo: `notify-library-request`, `notify-document-permission-request`, `notify-network-weekly-report`, `notify-cross-library-digest`, `membership-restriction` (congelamento global), `health-probe`. Uma guarda de duas listas fechadas fica vermelha se uma função institucional voltar a ler a tabela diretamente.
+
+**Por que importa.** Um endereço institucional sobrevive às saídas, às ausências e às mudanças de endereço — o que a tabela das admins não garante. A rede tem uma só admin ativa: cada pedido de biblioteca, cada permissão documental, cada congelamento global depende hoje de uma caixa gmail pessoal.
+
+**O que conta como terminado.**
+
+- Um e-mail institucional real é lido na caixa `admins@anarbib.org`, em português, E na caixa pessoal da admin, na sua língua.
+- A guarda de listas fechadas está verde, e uma mutação a faz ficar vermelha.
+
+**Dependências.** Nenhuma. `HEALTH_ALERT_CC` já está em produção.
+
+*Remissões : `supabase/functions/_shared/context/network-admins.ts` · `src/tests/admins-reseau-destinataires.test.js` · `deploy/functions.env.example` · `mémoire anarbib-alertes-supervision-destinataires`*
 
 ---
 
@@ -2058,4 +2080,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 62 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 63 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

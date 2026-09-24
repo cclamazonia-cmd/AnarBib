@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-24** · 62 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-24** · 63 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 8
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 6
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 7
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-24.** **49 items sur 62** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F6, F10, F11, F12, F14, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-24.** **50 items sur 63** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F6, F10, F11, F12, F14, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -966,6 +966,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F11** | Blanc sur blanc : des blocs de nos courriels sont illisibles dans un client en thème sombre | `P2` | À vérifier |
 | **F12** | Rien ne rejoue un courriel refusé : une ligne de file « failed » le reste pour toujours | `P2` | Ouvert |
 | **F14** | Le Reply-To en `proton.me` fait classer nos courriels indésirables — 6,9 pour un seuil de 6 chez Riseup | `P2` | En cours |
+| **F15** | Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective | `P2` | À vérifier |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1135,6 +1136,27 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 **Dépendances.** Aucune.
 
 *Renvois : `docs/journal/operations/RUNBOOK_domaines_repli_2026-09-07.md (essai du 22/09)` · `supabase/functions/register/index.ts` · `REGISTRE §38 OPS-10`*
+
+#### F15 — Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective
+
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** **Constaté le 24/09/2026 à 21 h 46** : « [AnarBib] Mise à jour d'une demande institutionnelle » (demande d'Anarchief.Org approuvée), envoyé par `notify-library-request` (`admin_update`), est arrivé sur la boîte personnelle de Xavier et nulle part ailleurs. Lu dans le code : la fonction part en éventail vers les admins actif·ves de `network_administrators`, chacun·e dans sa langue, et `ADMIN_EMAIL` ne sert que de repli si personne n'est résolu·e ; **en production il y a UN admin actif** (relevé SQL du 24/09, profil gmail, fr). La boîte collective `admins@anarbib.org` — destinataire des alertes de santé depuis le 28/08 (`HEALTH_ALERT_CC`), des rapports DMARC depuis le 01/09, et nommée « le destinataire de supervision » par E14 — ne voyait donc passer aucun courriel institutionnel. **Neuf endroits** rechargeaient `network_administrators` + `profiles` chacun à leur façon (`notify-library-request`, `notify-cross-library-digest`, `health-probe`, `network.ts`, `team.ts`, `assembleia.ts`, `gazette.ts`, `authority.ts`, `library_profile.ts`), et trois autres n'écrivaient qu'à `ADMIN_EMAIL` seul (`membership-restriction` pour le gel global, `notify-document-permission-request`, `notify-network-weekly-report` en repli). Le précédent existait : `health-probe` faisait déjà admins actif·ves + variable d'environnement, dédoublonnés — avec la règle « ne pas sortir quand la table est vide » (28/08).
+
+*Vérifié : 24/09/2026 — courriel reçu à 21 h 46 lu (PDF) ; `sendToAdmins` lu dans `notify-library-request/index.ts` ; un admin actif compté en base (`network_administrators` × `profiles`) ; `supabase secrets list` : `HEALTH_ALERT_CC` posée, `NETWORK_ADMIN_CC` absente. **Livré le 24/09 au soir** : module + six conversions + modèles d'environnement + garde et bancs (rendu réel de `notify-library-request`, `notify-cross-library-digest`, `membership-restriction`, `notify-network-weekly-report`). Reste le premier critère : un courriel réel lu dans la boîte, à la main de Xavier.*
+
+**Ce que c'est.** Une seule résolution des destinataires d'administration, `supabase/functions/_shared/context/network-admins.ts` : admins actif·ves (chacun·e dans sa langue) **plus** la boîte collective lue dans `NETWORK_ADMIN_CC` (repli `HEALTH_ALERT_CC`, donc effectif en production sans nouveau secret), en **pt-BR** (langue de référence, décision Xavier 24/09), dédoublonnés, jamais vide tant qu'une boîte est posée. **Ajouter, pas remplacer** : l'éventail par personne reste. **Tout ne mérite pas la boîte** : les courriels de gouvernance entre admins (cooptation, retrait collectif, votes à motif nominatif), la facilitation d'AG, l'éditorial de la gazette et de l'atelier restent adressés aux personnes. Passent par le module : `notify-library-request`, `notify-document-permission-request`, `notify-network-weekly-report` (le destinataire historique reste en extra ; 422 seulement si personne), `notify-cross-library-digest`, `membership-restriction` (gel global), `health-probe` (garde SA variable). Une garde à deux listes fermées (`src/tests/admins-reseau-destinataires.test.js`) rougit si une fonction institutionnelle relit la table en direct. Ne pas prendre le raccourci `ADMIN_EMAIL=admins@` : cette variable alimente aussi des replis de Reply-To et l'inscription (six usages).
+
+**Pourquoi ça compte.** Une adresse institutionnelle survit aux départs, aux absences et aux changements d'adresse — ce que la table des admins ne garantit pas. Le réseau n'a qu'un admin actif : chaque demande de bibliothèque, chaque permission documentaire, chaque gel global ne tient aujourd'hui qu'à une boîte gmail personnelle. Et une fonction neuve qui recopie l'ancienne recette repartirait dans le même angle mort.
+
+**Ce qui compte comme fini.**
+
+- Un courriel institutionnel réel (demande de bibliothèque mise à jour, ou rapport hebdo du lundi) est lu dans la boîte `admins@anarbib.org`, en portugais, ET sur la boîte personnelle de l'admin, dans sa langue.
+- La garde à listes fermées est verte, et un essai de mutation (relire la table en direct dans une fonction institutionnelle) la fait rougir.
+
+**Dépendances.** Aucune. `HEALTH_ALERT_CC` est déjà posée en production.
+
+*Renvois : `supabase/functions/_shared/context/network-admins.ts` · `src/tests/admins-reseau-destinataires.test.js` · `deploy/functions.env.example` · `mémoire anarbib-alertes-supervision-destinataires`*
 
 ---
 
@@ -2068,4 +2090,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-24. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 62 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-24. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 63 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

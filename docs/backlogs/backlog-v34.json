@@ -5211,6 +5211,56 @@
       }
     },
     {
+      "id": "F15",
+      "d": "F",
+      "p": "P2",
+      "s": "a-verifier",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective",
+        "pt": "Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva"
+      },
+      "v": {
+        "fr": "**Constaté le 24/09/2026 à 21 h 46** : « [AnarBib] Mise à jour d'une demande institutionnelle » (demande d'Anarchief.Org approuvée), envoyé par `notify-library-request` (`admin_update`), est arrivé sur la boîte personnelle de Xavier et nulle part ailleurs. Lu dans le code : la fonction part en éventail vers les admins actif·ves de `network_administrators`, chacun·e dans sa langue, et `ADMIN_EMAIL` ne sert que de repli si personne n'est résolu·e ; **en production il y a UN admin actif** (relevé SQL du 24/09, profil gmail, fr). La boîte collective `admins@anarbib.org` — destinataire des alertes de santé depuis le 28/08 (`HEALTH_ALERT_CC`), des rapports DMARC depuis le 01/09, et nommée « le destinataire de supervision » par E14 — ne voyait donc passer aucun courriel institutionnel. **Neuf endroits** rechargeaient `network_administrators` + `profiles` chacun à leur façon (`notify-library-request`, `notify-cross-library-digest`, `health-probe`, `network.ts`, `team.ts`, `assembleia.ts`, `gazette.ts`, `authority.ts`, `library_profile.ts`), et trois autres n'écrivaient qu'à `ADMIN_EMAIL` seul (`membership-restriction` pour le gel global, `notify-document-permission-request`, `notify-network-weekly-report` en repli). Le précédent existait : `health-probe` faisait déjà admins actif·ves + variable d'environnement, dédoublonnés — avec la règle « ne pas sortir quand la table est vide » (28/08).",
+        "pt": "**Constatado em 24/09/2026 às 21h46**: « [AnarBib] Mise à jour d'une demande institutionnelle » (pedido da Anarchief.Org aprovado), enviado por `notify-library-request`, chegou à caixa pessoal de Xavier e a mais nenhum lugar. No código: a função escreve em leque às admins ativas de `network_administrators`, cada uma na sua língua, e `ADMIN_EMAIL` só serve de recurso; **em produção há UMA admin ativa**. A caixa coletiva `admins@anarbib.org` — destinatária dos alertas de saúde desde 28/08 (`HEALTH_ALERT_CC`) e dos relatórios DMARC — não via passar nenhum e-mail institucional. **Nove lugares** recarregavam `network_administrators` + `profiles` cada um à sua maneira, e três outros só escreviam a `ADMIN_EMAIL`. O precedente existia: `health-probe` já fazia admins ativas + variável de ambiente, sem duplicados, sem sair quando a tabela está vazia."
+      },
+      "w": {
+        "fr": "Une seule résolution des destinataires d'administration, `supabase/functions/_shared/context/network-admins.ts` : admins actif·ves (chacun·e dans sa langue) **plus** la boîte collective lue dans `NETWORK_ADMIN_CC` (repli `HEALTH_ALERT_CC`, donc effectif en production sans nouveau secret), en **pt-BR** (langue de référence, décision Xavier 24/09), dédoublonnés, jamais vide tant qu'une boîte est posée. **Ajouter, pas remplacer** : l'éventail par personne reste. **Tout ne mérite pas la boîte** : les courriels de gouvernance entre admins (cooptation, retrait collectif, votes à motif nominatif), la facilitation d'AG, l'éditorial de la gazette et de l'atelier restent adressés aux personnes. Passent par le module : `notify-library-request`, `notify-document-permission-request`, `notify-network-weekly-report` (le destinataire historique reste en extra ; 422 seulement si personne), `notify-cross-library-digest`, `membership-restriction` (gel global), `health-probe` (garde SA variable). Une garde à deux listes fermées (`src/tests/admins-reseau-destinataires.test.js`) rougit si une fonction institutionnelle relit la table en direct. Ne pas prendre le raccourci `ADMIN_EMAIL=admins@` : cette variable alimente aussi des replis de Reply-To et l'inscription (six usages).",
+        "pt": "Uma única resolução dos destinatários de administração, `_shared/context/network-admins.ts`: admins ativas (cada uma na sua língua) **mais** a caixa coletiva lida em `NETWORK_ADMIN_CC` (recurso `HEALTH_ALERT_CC`, logo efetivo em produção sem novo segredo), em **pt-BR** (língua de referência, decisão de Xavier em 24/09), sem duplicados, nunca vazia enquanto houver uma caixa. **Acrescentar, não substituir**. **Nem tudo merece a caixa**: a governança entre admins (cooptação, retirada coletiva), a facilitação de AG, a gazeta e a oficina continuam endereçadas às pessoas. Passam pelo módulo: `notify-library-request`, `notify-document-permission-request`, `notify-network-weekly-report`, `notify-cross-library-digest`, `membership-restriction` (congelamento global), `health-probe`. Uma guarda de duas listas fechadas fica vermelha se uma função institucional voltar a ler a tabela diretamente."
+      },
+      "y": {
+        "fr": "Une adresse institutionnelle survit aux départs, aux absences et aux changements d'adresse — ce que la table des admins ne garantit pas. Le réseau n'a qu'un admin actif : chaque demande de bibliothèque, chaque permission documentaire, chaque gel global ne tient aujourd'hui qu'à une boîte gmail personnelle. Et une fonction neuve qui recopie l'ancienne recette repartirait dans le même angle mort.",
+        "pt": "Um endereço institucional sobrevive às saídas, às ausências e às mudanças de endereço — o que a tabela das admins não garante. A rede tem uma só admin ativa: cada pedido de biblioteca, cada permissão documental, cada congelamento global depende hoje de uma caixa gmail pessoal."
+      },
+      "f": {
+        "fr": [
+          "Un courriel institutionnel réel (demande de bibliothèque mise à jour, ou rapport hebdo du lundi) est lu dans la boîte `admins@anarbib.org`, en portugais, ET sur la boîte personnelle de l'admin, dans sa langue.",
+          "La garde à listes fermées est verte, et un essai de mutation (relire la table en direct dans une fonction institutionnelle) la fait rougir."
+        ],
+        "pt": [
+          "Um e-mail institucional real é lido na caixa `admins@anarbib.org`, em português, E na caixa pessoal da admin, na sua língua.",
+          "A guarda de listas fechadas está verde, e uma mutação a faz ficar vermelha."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. `HEALTH_ALERT_CC` est déjà posée en production.",
+        "pt": "Nenhuma. `HEALTH_ALERT_CC` já está em produção."
+      },
+      "r": [
+        "supabase/functions/_shared/context/network-admins.ts",
+        "src/tests/admins-reseau-destinataires.test.js",
+        "deploy/functions.env.example",
+        "mémoire anarbib-alertes-supervision-destinataires"
+      ],
+      "verif": {
+        "fr": "24/09/2026 — courriel reçu à 21 h 46 lu (PDF) ; `sendToAdmins` lu dans `notify-library-request/index.ts` ; un admin actif compté en base (`network_administrators` × `profiles`) ; `supabase secrets list` : `HEALTH_ALERT_CC` posée, `NETWORK_ADMIN_CC` absente. **Livré le 24/09 au soir** : module + six conversions + modèles d'environnement + garde et bancs (rendu réel de `notify-library-request`, `notify-cross-library-digest`, `membership-restriction`, `notify-network-weekly-report`). Reste le premier critère : un courriel réel lu dans la boîte, à la main de Xavier.",
+        "pt": "24/09/2026 — e-mail recebido às 21h46 lido; `sendToAdmins` lido; uma admin ativa contada na base; `HEALTH_ALERT_CC` presente nos segredos, `NETWORK_ADMIN_CC` ausente. **Entregue em 24/09 à noite**: módulo + seis conversões + modelos de ambiente + guarda e bancadas. Falta o primeiro critério: um e-mail real lido na caixa, por Xavier."
+      }
+    },
+    {
       "id": "B24",
       "d": "B",
       "p": "P2",
