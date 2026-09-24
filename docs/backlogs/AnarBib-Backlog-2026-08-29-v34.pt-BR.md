@@ -884,7 +884,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Pedido de Xavier em 08/09/2026, decidido após debate.** O separador «Dados pessoais» de `/conta` é o mais longo da página ; os três blocos de decisão (exportar, notificações, carta da federação) estão no fundo, e a supressão da conta a seguir. As preferências de conservação vivem em «Histórico» e aí ficam.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Uma fila de **três cartões lado a lado** (exportar, notificações, carta) **logo depois do formulário do perfil** ; grelha em `minmax(0, 1fr)`, uma coluna abaixo de 640 px. «Suprimir a minha conta» fica sozinho no fundo, a toda a largura, a vermelho. Nenhuma RPC, nenhuma chave nova ; refazer a captura no Manual v5.
 
