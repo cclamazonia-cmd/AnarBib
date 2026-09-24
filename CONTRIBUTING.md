@@ -43,6 +43,18 @@ En cas de contradiction apparente entre deux documents, le REGISTRE tranche. Une
 
 `deploy/.env` et `deploy/functions.env` contiennent des secrets et sont ignorés par git. La `SERVICE_ROLE_KEY` n'a sa place ni dans le dépôt, ni dans le front, ni dans un message. Si vous pensez en avoir commis une, dites-le tout de suite : une clé qu'on révoque coûte cinq minutes, une clé qu'on ignore coûte le reste. Dans les Edge Functions, la clé secrète se lit par `secretKey()` / `mustSecretKey()` de `_shared/core/secret-key.ts`, jamais par la variable legacy `SUPABASE_SERVICE_ROLE_KEY` : la suite Vitest le garde (`src/tests/cle-legacy-garde.test.js`).
 
+#### Rotation d'une clé — l'inventaire avant et après (B24, 25/09/2026)
+
+Une clé de projet ne vit pas que dans ce dépôt. Le 02/09, la désactivation des clés legacy a laissé la galerie de la vitrine vide pendant six jours : elle portait sa clé dans dix pages HTML, et personne ne l'avait inventoriée. **Avant de tourner une clé, et après, passer ces lieux un par un :**
+
+| Clé | Où elle vit | Comment la changer |
+|---|---|---|
+| publiable (`sb_publishable_…`) | le front de l'application : secret Forgejo `VITE_SUPABASE_PUBLISHABLE_KEY` (lu par `ci.yml`), `.env.local` des postes | changer le secret, pousser ; preuve : la date du `catalogue-snapshot.json` servi |
+| publiable | **la vitrine** `codeberg.org/anarbib/pages` : `js/config.js`, et nulle part ailleurs (garde `tools/garde-cles.cjs` au pre-push) | une ligne, pousser ; preuve : `/fr/explorar/` montre les bibliothèques |
+| secrète (`sb_secret_…`) | les Edge Functions (`SUPABASE_SECRET_KEYS`, posé par la plateforme), les scripts du poste qui la demandent (Dashlane), une pile auto-hébergée (`deploy/functions.env`) | jamais dans un dépôt ; relire les journaux `edge_logs` 24 h après |
+
+Après la rotation : 24 h de journaux `edge_logs` sans 401 inattendu, et le `referer` de toute requête qui porte encore l'ancienne clé — c'est lui qui avait désigné la vitrine en une ligne.
+
 ### 4. Une dépendance des Edge Functions s'épingle en un seul endroit
 
 `supabase-js` est importé par toutes les fonctions **depuis `supabase/functions/_shared/deps.ts`**, et nulle part ailleurs — jamais `esm.sh/...@2` ni `npm:...@2` dans une fonction. Ce module épingle **une version exacte** ; la monter est un geste daté (changer le nombre, redéployer tout, noter la date). Le banc `src/tests/supabase-js-epingle.test.js` refuse tout import direct. Décision `I16` du 03/09/2026 : un régime mixte — une épinglée, trente flottantes — donne le pire des deux, on l'a payé le 01/09.
@@ -127,6 +139,8 @@ If you don't know where to start, `docs/CHANTIERS_OUVERTS.md` lists entry points
 Then, depending on what you touch: the inclusive-language charter for i18n (`docs/notes-audit/anarbib-charte-langage-inclusif-v2.md`), the active doctrines in `docs/journal/` for SQL and migrations, the cataloguing guides in `docs/guides/`, and `deploy/README.md` for the self-hosted stack.
 
 **Never commit secrets.** `deploy/.env` and `deploy/functions.env` are gitignored. The `SERVICE_ROLE_KEY` belongs neither in the repository, nor in the front end, nor in a message. If you think you committed one, say so immediately. In Edge Functions, read the secret key through `secretKey()` / `mustSecretKey()` from `_shared/core/secret-key.ts`, never through the legacy `SUPABASE_SERVICE_ROLE_KEY` variable: the Vitest suite guards it (`src/tests/cle-legacy-garde.test.js`).
+
+**Rotating a key: inventory before and after (B24).** A project key does not live in this repository only. The publishable key lives in the Forgejo secret `VITE_SUPABASE_PUBLISHABLE_KEY` (app front end) **and in the showcase repository** `codeberg.org/anarbib/pages`, in `js/config.js` only (guarded by `tools/garde-cles.cjs` at pre-push). The secret key lives in the Edge Functions (`SUPABASE_SECRET_KEYS`), the maintainer's password manager, and `deploy/functions.env` on a self-hosted stack — never in a repository. After any rotation, read 24 h of `edge_logs`: the `referer` of a request still carrying the old key names the forgotten place.
 
 **One place pins Edge Function dependencies.** Every function imports `supabase-js` from `supabase/functions/_shared/deps.ts` — never `esm.sh/...@2` or `npm:...@2` directly. That module pins an exact version; bumping it is a dated act (change the number, redeploy everything, note the date). `src/tests/supabase-js-epingle.test.js` rejects any direct import (decision `I16`, 2026-09-03).
 
