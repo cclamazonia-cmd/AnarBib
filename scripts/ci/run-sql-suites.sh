@@ -150,15 +150,26 @@ while IFS= read -r line; do
   [ -f "$suite" ] || { echo "::error::suite introuvable : $suite"; rc=1; continue; }
   ran=$((ran+1))
   echo "::group::suite $suite"
-  out="$(PT -v ON_ERROR_STOP=0 -f "$suite" 2>&1)"
-  bilan="$(echo "$out" | grep -E '(OK|ECHEC) :' | tail -1)"
-  if echo "$out" | grep -qE ' OK : [0-9]+/[0-9]+'; then
+  # I25 (24/09) : le filet lit la sortie depuis un FICHIER, sans tube. L'ancienne forme
+  # (`echo "$out" | grep -q …` sous `pipefail`) pouvait rendre FAIL sur une suite verte :
+  # `grep -q` quitte à la première ligne « OK : », `echo` n'a pas fini d'écrire ce qui
+  # suit (« ROLLBACK »), reçoit SIGPIPE, et `pipefail` fait du 141 de `echo` le verdict.
+  # Reproduit hors CI le 24/09 (rare, dépend de l'ordonnancement). Sur FAIL, le journal
+  # dit désormais le code de psql, celui de grep, le nombre de lignes « OK : » et la
+  # taille de la sortie — de quoi nommer le maillon si un rouge revenait.
+  out_f="$(mktemp)"
+  PT -v ON_ERROR_STOP=0 -f "$suite" > "$out_f" 2>&1; rc_psql=$?
+  bilan="$(grep -E '(OK|ECHEC) :' "$out_f" | tail -1)"
+  n_ok="$(grep -cE ' OK : [0-9]+/[0-9]+' "$out_f")"; rc_grep=$?
+  if [ "${n_ok:-0}" -gt 0 ]; then
     echo "✅ PASS — ${bilan#*ERROR:  }"
   else
     echo "❌ FAIL — ${bilan:-<aucun bilan : crash précoce>}"
-    echo "$out" | tail -25
+    echo "filet : psql rc=$rc_psql · grep rc=$rc_grep · lignes « OK : »=${n_ok:-?} · sortie $(wc -c < "$out_f") octets"
+    tail -25 "$out_f"
     rc=1
   fi
+  rm -f "$out_f"
   echo "::endgroup::"
 done < "$MANIFEST"
 
