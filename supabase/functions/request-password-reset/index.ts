@@ -18,10 +18,10 @@ import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
 import { APP_BASE_URL } from "../_shared/core/app-url.ts";
 import { frapper, sha256Hex } from "../_shared/core/rate-limit.ts";
+import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = secretKey() ?? "";
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const SENDER_EMAIL = (Deno.env.get("SENDER_EMAIL") || "no-reply@notifications.anarbib.org").trim();
 const SENDER_NAME = (Deno.env.get("SENDER_NAME") || Deno.env.get("BRAND_NAME") || "AnarBib").trim();
 const LOGO_URL = (Deno.env.get("LOGO_URL") || "").trim();
@@ -107,13 +107,19 @@ function getClientIP(req: Request): string {
 // bloque une fenêtre. ÉCHEC FERMÉ : un compteur qui ne répond pas n'envoie rien.
 const RL = { limite: 4, fenetreMin: 15 };
 
-async function sendViaResend(to: string, subject: string, html: string, text: string): Promise<void> {
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: `${SENDER_NAME} <${SENDER_EMAIL}>`, to: [to], subject, html, text }),
+// --- Envoi : une seule implementation, celle de _shared (F7, lot 3, 24/09/2026) ---
+// Routage explicite : expediteur d'environnement, sans Reply-To (il n'y en a
+// jamais eu ici). Le module leve sur erreur ou sans transport configure ; le
+// serve garde son catch et repond 200 quoi qu'il arrive (anti-enumeration).
+async function envoyerCourriel(to: string, subject: string, html: string, text: string): Promise<void> {
+  await sendEmailPartage({
+    toEmail: to,
+    subject,
+    html,
+    text,
+    routing: { senderEmail: SENDER_EMAIL, senderName: SENDER_NAME, noReplyTo: true },
+    label: "password-reset"
   });
-  if (!res.ok) throw new Error(`Resend HTTP ${res.status}: ${await res.text()}`);
 }
 
 const OK = () => new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -170,7 +176,7 @@ Deno.serve(async (req: Request) => {
     }
     const actionUrl = linkData.properties.action_link;
     const s = T[loc] || T["pt-BR"];
-    await sendViaResend(email, s.subject, renderHtml(loc, actionUrl), renderText(loc, actionUrl));
+    await envoyerCourriel(email, s.subject, renderHtml(loc, actionUrl), renderText(loc, actionUrl));
     console.log(`[request-password-reset] sent (locale=${loc})`);
     return OK();
   } catch (e) {
