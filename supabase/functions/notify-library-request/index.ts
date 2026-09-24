@@ -5,6 +5,7 @@ import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
+import { destinatairesAdminsReseau } from "../_shared/context/network-admins.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustSecretKey();
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_LIBRARY_REQUEST");
@@ -122,33 +123,23 @@ async function resolveSubmitterLocale(row) {
   const p = await fetchProfile(row.submitted_by_user_id).catch(() => null);
   return normalizeLocale(p?.preferred_language);
 }
-// Admins réseau actif·ves avec e-mail + langue (fan-out individuel, chacun·e
-// dans sa langue) — remplace l'envoi à une boîte ADMIN_EMAIL unique.
-async function fetchActiveAdmins() {
-  const { data: admins, error } = await supabaseAdmin.from("network_administrators").select("user_id").eq("status", "active");
-  if (error || !admins?.length) return [];
-  const ids = admins.map((a) => a.user_id);
-  const { data: profs } = await supabaseAdmin.from("profiles").select("email,preferred_language").in("id", ids);
-  return (profs || []).filter((p) => isValidEmail(p.email)).map((p) => ({
-    email: String(p.email).trim().toLowerCase(),
-    locale: normalizeLocale(p.preferred_language),
-  }));
-}
-// Fan-out vers les admins actif·ves (fallback ADMIN_EMAIL si aucun·e résolu·e,
-// pour ne jamais perdre une notification). buildFn(locale) -> e-mail rendu.
+// F15 (24/09/2026) : les destinataires d'administration viennent du module
+// partagé _shared/context/network-admins.ts — admins actif·ves, chacun·e dans
+// sa langue, PLUS la boîte collective (NETWORK_ADMIN_CC, repli HEALTH_ALERT_CC)
+// en pt-BR. Avant, « Mise à jour d'une demande institutionnelle » n'arrivait
+// que sur la boîte personnelle de l'unique admin actif. Le repli ADMIN_EMAIL ne
+// joue plus que si ni la table ni la variable ne donnent personne : une
+// notification ne se perd pas. buildFn(locale) -> e-mail rendu.
 async function sendToAdmins(label, buildFn, results) {
-  let admins = await fetchActiveAdmins();
-  if (admins.length === 0) {
+  let cibles = await destinatairesAdminsReseau(supabaseAdmin);
+  if (cibles.length === 0) {
     const a = adminTarget();
-    if (a) admins = [{ email: a.email, locale: FALLBACK_LOCALE }];
+    if (a) cibles = [{ email: a.email, name: a.name, locale: FALLBACK_LOCALE }];
   }
-  const seen = new Set();
-  for (const ad of admins) {
-    if (seen.has(ad.email)) continue;
-    seen.add(ad.email);
-    const email = buildFn(ad.locale);
+  for (const c of cibles) {
+    const email = buildFn(normalizeLocale(c.locale));
     const rendered = renderEmail(email);
-    results.push(await safeSendEmail(label, { email: ad.email }, email.subject, rendered.html, rendered.text));
+    results.push(await safeSendEmail(label, { email: c.email, name: c.name }, email.subject, rendered.html, rendered.text));
   }
 }
 function dedupeTargets(...targets) {

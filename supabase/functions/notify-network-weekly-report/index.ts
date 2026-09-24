@@ -3,6 +3,7 @@ import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
+import { destinatairesAdminsReseau } from "../_shared/context/network-admins.ts";
 const PAGE_SIZE = 1000;
 function mustEnv(name) {
   const value = Deno.env.get(name);
@@ -249,9 +250,10 @@ function normalizeName(row, ctx) {
 // Meme geste que pour notify-weekly-report : le routage reste calcule ici et
 // passe explicitement, seul le transport est partage.
 async function sendEmail(opts) {
-  const { routing, subject, html, text } = opts;
+  const { routing, subject, html, text, to } = opts;
   return await sendEmailPartage({
-    toEmail: routing.recipientEmail,
+    toEmail: to.email,
+    toName: to.name,
     subject,
     html,
     text,
@@ -296,7 +298,16 @@ serve(async (req)=>{
       }
     });
     const routing = resolveRouting();
-    if (!routing.recipientEmail || !isValidEmail(routing.recipientEmail)) {
+    // F15 (24/09/2026) : le rapport hebdo du réseau part aux admins actif·ves
+    // ET à la boîte collective (module partagé _shared/context/network-admins.ts),
+    // le destinataire historique NETWORK_WEEKLY_REPORT_EMAIL restant en extra.
+    // Le rapport est rendu en portugais : une seule composition, N envois.
+    // 422 seulement si PERSONNE n'est résolu·e — avant, une variable vide
+    // suffisait à rendre le rapport muet.
+    const destinataires = await destinatairesAdminsReseau(sb, {
+      extras: isValidEmail(routing.recipientEmail) ? [{ email: routing.recipientEmail, name: routing.recipientName || undefined }] : []
+    });
+    if (!destinataires.length) {
       return json(422, {
         ok: false,
         error: "No valid network weekly report recipient configured",
@@ -629,18 +640,24 @@ serve(async (req)=>{
     });
     // Transport mail : envoi via Resend (chantier #110, Brevo retire en R.6).
     // routing / subject / html / text deja calcules.
-    await sendEmail({
-      routing,
-      subject,
-      html,
-      text
-    });
+    // Un refus n'empêche pas les envois suivants ; il est relevé à la fin,
+    // avec l'adresse, et fait 500 (le cron le voit, le transport partagé a
+    // déjà noté l'échec pour la sonde mail_transport).
+    const refus = [];
+    for (const to of destinataires) {
+      try {
+        await sendEmail({ routing, subject, html, text, to });
+      } catch (e) {
+        refus.push(`${to.email}: ${String(e?.message ?? e)}`);
+      }
+    }
+    if (refus.length) throw new Error(`network weekly report: ${refus.length}/${destinataires.length} envoi(s) refusé(s) — ${refus.join(" ; ")}`);
     return json(200, {
       ok: true,
       run_id: runId,
       week_start: weekStart,
       week_end: weekEnd,
-      recipient_email: routing.recipientEmail,
+      recipient_emails: destinataires.map((d)=>d.email),
       subject,
       totals,
       peb_totals: pebTotals,

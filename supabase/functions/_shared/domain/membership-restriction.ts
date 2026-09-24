@@ -1,6 +1,7 @@
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
 import { profileRestrictionEnabled } from "../context/policies.ts";
+import { destinatairesAdminsReseau } from "../context/network-admins.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { ADMIN_EMAIL, ADMIN_NAME, supabaseAdmin } from "../core/env.ts";
 import { adminTarget, safeSendEmail, skippedEmailResult, userTargetFromProfile } from "../transport/email.ts";
@@ -17,7 +18,9 @@ import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.t
 //   - la/les BIBLIO(s) : copie gardée par profile_restriction_enabled de chaque
 //     biblio. Local = la biblio de l'acte ; global = TOUTES les biblios actives
 //     du membre (le gel les impacte aussi).
-//   - le RÉSEAU (gel global uniquement) : ADMIN_EMAIL, toujours.
+//   - le RÉSEAU (gel global uniquement) : les admins actif·ves + la boîte
+//     collective (F15, 24/09/2026, _shared/context/network-admins.ts) ;
+//     ADMIN_EMAIL n'est plus qu'un repli si personne n'est résolu·e.
 // Contenu : motif + portée (locale/réseau) + date. Réutilise les clés prof.*.
 // DOC-NOTIF-1 : on notifie le membre/les biblios impactées, pas l'acteur.
 // ============================================================================
@@ -114,13 +117,20 @@ export async function handleMembershipRestriction(event, payload) {
     biblio_results.push(await sendStaffCopy(lctx, adminTarget(lctx), "admin_copy"));
   }
 
-  // (3) Réseau — gel global uniquement, toujours (ADMIN_EMAIL).
+  // (3) Réseau — gel global uniquement. F15 (24/09/2026) : admins actif·ves
+  // dans leur langue + boîte collective en pt-BR (module partagé) ; ADMIN_EMAIL
+  // ne reste qu'en repli si ni la table ni la variable ne donnent personne.
+  // Un tableau de résultats (un par destinataire) remplace le résultat unique.
   let network_result = null;
   if (isGlobal) {
+    let cibles = await destinatairesAdminsReseau(supabaseAdmin);
     const nemail = String(ADMIN_EMAIL || "").trim();
-    network_result = nemail
-      ? await sendStaffCopy(ctx, { email: nemail, name: ADMIN_NAME || "AnarBib" }, "network_copy")
-      : skippedEmailResult("network_copy", "no_network_email");
+    if (!cibles.length && nemail) cibles = [{ email: nemail, name: ADMIN_NAME || "AnarBib", locale: String(ctx?.default_locale || "pt-BR") }];
+    network_result = [];
+    for (const c of cibles) {
+      network_result.push(await sendStaffCopy({ ...ctx, default_locale: c.locale }, { email: c.email, name: c.name }, "network_copy"));
+    }
+    if (!network_result.length) network_result = skippedEmailResult("network_copy", "no_network_email");
   }
 
   // (4) Réplique in-app B3 pour le membre (doctrine §4.5 ; NOTIF-PA1 pour les

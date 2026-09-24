@@ -30,6 +30,9 @@ const SITE_CODE = tsToCjs(new URL('../../supabase/functions/_shared/core/site-ur
 // F7 lot 3 (24/09/2026) : l'EF passe par le VRAI module de transport partagé —
 // c'est lui qui appelle Resend, donc lui que le fetchStub doit voir.
 const TRANSPORT_CODE = tsToCjs(new URL('../../supabase/functions/_shared/transport/email.ts', import.meta.url));
+// F15 (24/09/2026) : les destinataires d'administration viennent du module
+// partagé (admins actif·ves + boîte collective) — le vrai, sans import.
+const ADMINS_CODE = tsToCjs(new URL('../../supabase/functions/_shared/context/network-admins.ts', import.meta.url));
 
 const SECRET = 'webhook-de-test';
 const ENV = {
@@ -110,6 +113,11 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };
     if (spec.endsWith('inline-images.ts')) return { inlineLogosInHtml: async (h) => h };
     if (spec.endsWith('./strings.ts')) return strings;
+    if (spec.endsWith('network-admins.ts')) {
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', ADMINS_CODE)(requireStub, m, m.exports, DenoStub);
+      return m.exports;
+    }
     if (spec.endsWith('transport/email.ts')) {
       // Le module réel, avec le même fetch et le même Deno ; ses propres imports
       // sont remplacés par le strict nécessaire (l'EF lui passe son routage
@@ -191,6 +199,25 @@ describe("notify-library-request — le mail d'acceptation mène au guide d'accu
     expect(copie.subject).toBe(`[AnarBib] ${tr('de', 'admin_update.subject')}`);
     expect(copie.html).toContain(esc(tr('de', 'status.aprovada')));
     expect(envois).toHaveLength(2);
+  });
+
+  // F15 (24/09/2026) : ce courriel n'arrivait que sur la boîte personnelle de
+  // l'unique admin actif. La boîte collective (NETWORK_ADMIN_CC, repli
+  // HEALTH_ALERT_CC) reçoit désormais sa copie, en pt-BR, langue de référence.
+  it('la boîte collective reçoit la copie en pt-BR, en plus des admins dans leur langue', async () => {
+    const appeler = monterEF({ langueDemandeuse: 'fr', env: { NETWORK_ADMIN_CC: 'admins@exemplo.test' } });
+    const { envois } = await appeler('library_request_approved');
+    expect(envois.map((e) => e.to[0]).sort()).toEqual(['admin@exemplo.test', 'admins@exemplo.test', 'louise@exemplo.test']);
+    const boite = envois.find((e) => e.to[0] === 'admins@exemplo.test');
+    expect(boite.subject).toBe(`[AnarBib] ${tr('pt-BR', 'admin_update.subject')}`);
+    expect(boite.html).toContain(esc(tr('pt-BR', 'status.aprovada')));
+    expect(envois.find((e) => e.to[0] === 'admin@exemplo.test').subject).toBe(`[AnarBib] ${tr('de', 'admin_update.subject')}`);
+  });
+
+  it('sans admin actif, la boîte (ici par HEALTH_ALERT_CC) reçoit quand même : rien ne se perd', async () => {
+    const appeler = monterEF({ langueDemandeuse: 'fr', admins: [], env: { HEALTH_ALERT_CC: 'admins@exemplo.test' } });
+    const { envois } = await appeler('library_request_approved');
+    expect(envois.map((e) => e.to[0]).sort()).toEqual(['admins@exemplo.test', 'louise@exemplo.test']);
   });
 
   it('en grec, le bouton et la page sont ceux de la locale el', async () => {

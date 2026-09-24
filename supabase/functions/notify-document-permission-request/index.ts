@@ -2,6 +2,7 @@ import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
+import { destinatairesAdminsReseau } from "../_shared/context/network-admins.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustSecretKey();
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_DOCUMENT_PERMISSION_REQUEST");
@@ -529,9 +530,17 @@ serve(async (req)=>{
       });
       sends.push(send(contactTarget(targetContact), outgoing.subject, toTarget.html, toTarget.text, "target_library"));
       sends.push(send(contactTarget(requesterContact), requesterAck.subject, toRequester.html, toRequester.text, "requester_copy"));
-      const admin = adminTarget();
-      if (admin) {
-        sends.push(send(admin, outgoing.subject, toTarget.html, toTarget.text, "network_admin_copy"));
+      // F15 (24/09/2026) : la copie réseau part aux admins actif·ves ET à la
+      // boîte collective (module partagé _shared/context/network-admins.ts) ;
+      // ADMIN_EMAIL n'est plus qu'un repli si ni la table ni la variable ne
+      // donnent personne. Le courriel est en portugais : une composition.
+      let admins = await destinatairesAdminsReseau(supabaseAdmin);
+      if (!admins.length) {
+        const a = adminTarget();
+        if (a) admins = [a];
+      }
+      for (const a of admins) {
+        sends.push(send({ email: a.email, name: a.name }, outgoing.subject, toTarget.html, toTarget.text, "network_admin_copy"));
       }
     }
     if (eventType === "document_permission_request_accepted" || eventType === "document_permission_request_refused") {

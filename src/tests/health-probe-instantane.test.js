@@ -21,7 +21,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { transformSync } from 'esbuild';
+import { monterEF } from './helpers/monter-ef.js';
 
 const SRC = new URL('../../supabase/functions/health-probe/index.ts', import.meta.url);
 const src = readFileSync(SRC, 'utf8');
@@ -67,21 +67,26 @@ describe('health-probe — à qui part l’alerte', () => {
   // qu'UN administrateur, une alerte de supervision ne tenait qu'à une seule
   // boîte — et si la table est vide, elle ne partait NULLE PART, en silence.
   // `HEALTH_ALERT_CC` ajoute une adresse institutionnelle qui survit aux
-  // départs. Les deux fonctions pures sont transpilées depuis le vrai fichier.
-  const debut = src.indexOf('function ccsSupplementaires');
-  const finBloc = src.indexOf('async function destinataires');
-  if (debut < 0 || finBloc < 0) throw new Error('les helpers de destinataires sont introuvables');
-  const { code } = transformSync(src.slice(debut, finBloc), { loader: 'ts', format: 'cjs', target: 'es2022' });
-  const { ccsSupplementaires, fusionnerDestinataires } = (() => {
-    const exports = {};
-    new Function('exports', code + '\nexports.ccsSupplementaires = ccsSupplementaires;\nexports.fusionnerDestinataires = fusionnerDestinataires;')(exports);
-    return exports;
-  })();
+  // départs. F15 (24/09/2026) : la résolution vit dans le module partagé
+  // `_shared/context/network-admins.ts` (même règles, mêmes cas) ; health-probe
+  // lui passe SA variable. Le module réel est monté par helpers/monter-ef.js.
+  function module(admins = [], env = {}) {
+    const ef = monterEF({
+      env,
+      repondre: (_s, table) => {
+        if (table === 'network_administrators') return { data: admins.map((_p, i) => ({ user_id: `u-${i}` })), error: null };
+        if (table === 'profiles') return { data: admins.map((p, i) => ({ id: `u-${i}`, ...p })), error: null };
+        return { data: null, error: null };
+      },
+    });
+    return { mod: ef.charger('_shared/context/network-admins.ts'), client: ef.charger('_shared/core/env.ts').supabaseAdmin };
+  }
+  const emails = (r) => r.map((c) => c.email);
 
-  it('une variable vide ne change rien', () => {
-    expect(ccsSupplementaires('')).toEqual([]);
-    const admins = [{ email: 'x@exemple.org', name: 'X' }];
-    expect(fusionnerDestinataires(admins, [])).toEqual(admins);
+  it('une variable vide ne change rien', async () => {
+    const { mod, client } = module([{ email: 'x@exemple.org', first_name: 'X' }]);
+    expect(mod.adressesSupplementaires('')).toEqual([]);
+    expect(emails(await mod.destinatairesAdminsReseau(client, { cc: '' }))).toEqual(['x@exemple.org']);
   });
 
   it.each([
@@ -91,38 +96,35 @@ describe('health-probe — à qui part l’alerte', () => {
     ['admins@anarbib.org; autre@anarbib.org'],
     ['admins@anarbib.org autre@anarbib.org'],
   ])('accepte la forme %s', (brut) => {
-    const r = ccsSupplementaires(brut);
-    expect(r[0].email).toBe('admins@anarbib.org');
+    const { mod } = module();
+    expect(mod.adressesSupplementaires(brut)[0]).toBe('admins@anarbib.org');
   });
 
   it('ignore ce qui n’est pas une adresse', () => {
-    expect(ccsSupplementaires('pas-une-adresse, ni-celle-ci')).toEqual([]);
+    const { mod } = module();
+    expect(mod.adressesSupplementaires('pas-une-adresse, ni-celle-ci')).toEqual([]);
   });
 
-  it('ajoute l’adresse institutionnelle aux administrateurs', () => {
-    const r = fusionnerDestinataires(
-      [{ email: 'xavier@exemple.org', name: 'Xavier' }],
-      ccsSupplementaires('admins@anarbib.org'),
-    );
-    expect(r.map((c) => c.email)).toEqual(['xavier@exemple.org', 'admins@anarbib.org']);
+  it('ajoute l’adresse institutionnelle aux administrateurs', async () => {
+    const { mod, client } = module([{ email: 'xavier@exemple.org', first_name: 'Xavier' }]);
+    expect(emails(await mod.destinatairesAdminsReseau(client, { cc: 'admins@anarbib.org' }))).toEqual(['xavier@exemple.org', 'admins@anarbib.org']);
   });
 
-  it('n’envoie pas deux fois à la même adresse, quelle que soit la casse', () => {
-    const r = fusionnerDestinataires(
-      [{ email: 'Admins@AnarBib.org', name: 'Coordination' }],
-      ccsSupplementaires('admins@anarbib.org'),
-    );
-    expect(r).toHaveLength(1);
+  it('n’envoie pas deux fois à la même adresse, quelle que soit la casse', async () => {
+    const { mod, client } = module([{ email: 'Admins@AnarBib.org', first_name: 'Coordination' }]);
+    expect(await mod.destinatairesAdminsReseau(client, { cc: 'admins@anarbib.org' })).toHaveLength(1);
   });
 
-  it('alerte quand même si AUCUN administrateur n’est actif', () => {
+  it('alerte quand même si AUCUN administrateur n’est actif', async () => {
     // C'est le cas que l'ancien `if (!ids.length) return []` rendait muet.
-    const r = fusionnerDestinataires([], ccsSupplementaires('admins@anarbib.org'));
-    expect(r.map((c) => c.email)).toEqual(['admins@anarbib.org']);
+    const { mod, client } = module([]);
+    expect(emails(await mod.destinatairesAdminsReseau(client, { cc: 'admins@anarbib.org' }))).toEqual(['admins@anarbib.org']);
   });
 
-  it('le garde-fou du code : plus de sortie prématurée sur table vide', () => {
+  it('le garde-fou du code : plus de sortie prématurée sur table vide, et health-probe passe SA variable au module', () => {
     expect(src).not.toContain('if (!ids.length) return [];');
+    expect(src).toContain("cc: Deno.env.get('HEALTH_ALERT_CC')");
+    expect(src).toMatch(/context\/network-admins\.ts'/);
   });
 });
 

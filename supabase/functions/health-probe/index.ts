@@ -21,6 +21,7 @@
 import { supabaseAdmin } from '../_shared/core/env.ts';
 import { renderEmail, footerOps } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
+import { destinatairesAdminsReseau } from '../_shared/context/network-admins.ts';
 
 const BASE = (Deno.env.get('SUPABASE_URL') ?? '').replace(/\/+$/, '');
 const ANON = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
@@ -120,68 +121,21 @@ async function mesurer(s: Sonde) {
   }
 }
 
-// Destinataires SUPPLÉMENTAIRES des alertes de supervision, hors table des
-// administrateurs. Le réseau n’a longtemps eu qu’UN administrateur : une alerte
-// ne tenait donc qu’à une seule boîte, et à une seule personne joignable. Une
-// adresse institutionnelle survit aux départs, aux absences et aux changements
-// d’adresse — ce que `network_administrators` ne garantit pas.
+// Destinataires des alertes de supervision : admins actif·ves + adresse
+// institutionnelle HEALTH_ALERT_CC (posée le 28/08/2026). Le réseau n'a
+// longtemps eu qu'UN administrateur : une alerte ne tenait qu'à une seule
+// boîte, et si la table était vide elle ne partait NULLE PART, en silence —
+// l'adresse institutionnelle est précisément le filet de ce cas-là.
 //
-// En variable d’environnement et non en dur : le code de production gèle le 8
-// septembre, et une adresse écrite en dur ne serait plus corrigeable après cette
-// date. Vide (défaut) = comportement strictement inchangé.
-//
+// La résolution vit depuis F15 (24/09/2026) dans le module partagé
+// _shared/context/network-admins.ts, avec les mêmes règles : pas de sortie
+// sur table vide, dédoublonnage insensible à la casse, adresse en VARIABLE et
+// jamais en dur (une adresse écrite en dur ne se corrige pas sans redéployer).
+// health-probe garde SA variable, distincte de la boîte institutionnelle
+// NETWORK_ADMIN_CC : la supervision peut un jour partir ailleurs que le reste.
 // Séparateurs admis : virgule, point-virgule, espace.
-const HEALTH_ALERT_CC = Deno.env.get('HEALTH_ALERT_CC') ?? '';
-
-function ccsSupplementaires(brut: string) {
-  return brut
-    .split(/[,;\s]+/)
-    .map((s) => s.trim())
-    .filter((s) => s.includes('@'))
-    .map((email) => ({ email, name: undefined as string | undefined }));
-}
-
-// Le dédoublonnage est insensible à la casse, et il ne peut PAS voir qu’un alias
-// réexpédie vers une adresse déjà présente : si `admins@` renvoie chez un
-// administrateur, cette personne recevra deux copies. C’est le prix de la
-// redondance, et il se retire en changeant la variable — pas le code.
-function fusionnerDestinataires(
-  admins: { email: string; name?: string }[],
-  extras: { email: string; name?: string }[],
-) {
-  const vus = new Set<string>();
-  const out: { email: string; name?: string }[] = [];
-  for (const c of [...admins, ...extras]) {
-    const cle = (c.email ?? "").trim().toLowerCase();
-    if (!cle || vus.has(cle)) continue;
-    vus.add(cle);
-    out.push(c);
-  }
-  return out;
-}
-
 async function destinataires() {
-  const { data } = await supabaseAdmin
-    .from('network_administrators')
-    .select('user_id')
-    .eq('status', 'active');
-  const ids = (data ?? []).map((r: any) => r.user_id).filter(Boolean);
-
-  // NE PAS sortir ici quand la table est vide. Avant, aucun administrateur actif
-  // voulait dire AUCUNE alerte envoyée, en silence — la panne muette une fois de
-  // plus. L’adresse institutionnelle est précisément le filet de ce cas-là.
-  let admins: { email: string; name?: string }[] = [];
-  if (ids.length) {
-    const { data: profs } = await supabaseAdmin
-      .from('profiles')
-      .select('email, first_name')
-      .in('id', ids);
-    admins = (profs ?? [])
-      .filter((p: any) => p.email)
-      .map((p: any) => ({ email: String(p.email).trim(), name: p.first_name || undefined }));
-  }
-
-  return fusionnerDestinataires(admins, ccsSupplementaires(HEALTH_ALERT_CC));
+  return await destinatairesAdminsReseau(supabaseAdmin, { cc: Deno.env.get('HEALTH_ALERT_CC') ?? '' });
 }
 
 async function alerter(sujet: string, titre: string, corpsHtml: string) {

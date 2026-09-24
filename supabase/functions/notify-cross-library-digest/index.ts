@@ -36,7 +36,10 @@
 //     ce qui a été fait CHEZ ELLES (le pouvoir exercé sur vous doit vous être
 //     visible) ;
 //   * l'administration réseau → le récapitulatif consolidé, pour que les
-//     admins se voient collectivement agir.
+//     admins se voient collectivement agir — et, depuis F15 (24/09/2026), la
+//     boîte collective du réseau (NETWORK_ADMIN_CC, repli HEALTH_ALERT_CC), en
+//     pt-BR, via _shared/context/network-admins.ts : un instrument de
+//     transparence doit exister là où il survit aux personnes.
 // Chacun·e dans sa langue.
 //
 // ── Silence si rien ─────────────────────────────────────────────────────────
@@ -51,6 +54,7 @@ import { supabaseAdmin } from '../_shared/core/env.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
 import { tr, normalizeLocale, qualifiantEtape } from '../_shared/i18n/cross-library-strings.ts';
+import { destinatairesAdminsReseau } from '../_shared/context/network-admins.ts';
 
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_CROSS_LIBRARY_DIGEST') || '').trim();
 
@@ -271,29 +275,15 @@ Deno.serve((req) =>
     }
 
     // ── 2. Le récapitulatif consolidé, à l'administration réseau ─────────────
-    const { data: admins } = await supabaseAdmin
-      .from('network_administrators')
-      .select('user_id')
-      .eq('status', 'active');
-    const idsAdmins = (admins ?? []).map((a: any) => a.user_id).filter(Boolean);
-
-    if (idsAdmins.length) {
-      const { data: profAdmins } = await supabaseAdmin
-        .from('profiles')
-        .select('id, email, first_name, preferred_language')
-        .in('id', idsAdmins);
-
-      for (const p of (profAdmins ?? []) as any[]) {
-        if (!p.email) continue;
-        const locale = normalizeLocale(p.preferred_language);
-        await envoyer(
-          { email: String(p.email).trim(), name: p.first_name || undefined },
-          locale,
-          'network',
-          { start: jour(debut, locale), end: jour(fin, locale), count: String(actions.length) },
-          tableau(actions, locale, noms, biblios, true),
-        );
-      }
+    for (const c of await destinatairesAdminsReseau(supabaseAdmin)) {
+      const locale = normalizeLocale(c.locale);
+      await envoyer(
+        { email: c.email, name: c.name },
+        locale,
+        'network',
+        { start: jour(debut, locale), end: jour(fin, locale), count: String(actions.length) },
+        tableau(actions, locale, noms, biblios, true),
+      );
     }
 
     return {
