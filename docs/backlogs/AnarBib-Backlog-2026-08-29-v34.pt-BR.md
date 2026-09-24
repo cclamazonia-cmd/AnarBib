@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-24** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-24** · 62 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,9 +20,9 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 8
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 6
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 7
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-24.** **52 itens de 65** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F4, F6, F10, F11, F12, F14, G1, G6, G8, G10, G13, G14, H2, H9, H10, H11, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-24.** **49 itens de 62** trazem uma verificação datada própria (A1, A3, B10, B13, B24, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E14, E19, E20, F1, F3, F6, F10, F11, F12, F14, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I15, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -439,7 +439,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** As 19 migrações `conventions_*` estão aplicadas desde 21/08: os referenciais estão normalizados, as mecânicas seguras foram passadas, a fila de verificação existe e o aplicativo permite trabalhar nela. **O que resta é a parte que nenhuma máquina faz.**
 
-*Verificado : 31/08 — a fila `catalog_review_queue` medida, 310 linhas: o lote de **patronímicos está terminado** (0 a rever), `autorite_casse` quase (3 a rever), `titre_casse` carrega o grosso (174 a rever), e um quarto lote `autorite_collectivite` (2 a rever). **Restam 179 vereditos humanos.** **03/09** — 1 532 autoridades (+227 criadas pelo lote C5, não relidas), 1 468 sem tipo. **Auditoria em profundidade pedida, em nova sessão** : cadramento em `docs/journal/cadrages/REPRISE_audit_autorites_en_profondeur_2026-09-03.md`. **03/09, noite — auditoria feita** (`journal/audits/AUDIT_autorites_2026-09-03.md`): 1 532 autoridades, 23 livros sem autoridade (18 descartados + 5 com `autor` NULL), 3 órfãs (não 6), **13 pares de duplicatas exatas**, 9 delas nascidas do lote C5, 17 `preferred_name` em maiúsculas após a correção de 21/08, 14 coletividades invertidas que o padrão não via, 12 fichas duplas (O8). **Entregue**: cinco migrações testadas (CONV-2 em 17 fichas; homonímia sem caixa nem acentos + 8 sinalizações (os 5 pares de fixtures de formação excluídos); padrão das coletividades + nova semeadura ~36; segunda semeadura do lote caixa ~40; novo lote `autorite_forme` ~95). **A fila carrega agora ~170 vereditos a mais**, todos humanos: lotes `autorite_collectivite`, `autorite_casse`, `autorite_forme` em `/atelier-autoridades`. **Depois, na mesma noite, por decisão de Xavier (« corrige o que é evidente »): quatro migrações de evidências** — 10 duplicatas exatas fundidas, 4 não-agentes retirados, 24 contribuidores vinculados à sua ficha homônima exata, 43 linhas evidentes da fila decididas e aplicadas (Xavier havia posto 87 vereditos ele mesmo entre 20h00 e 20h07). Ficam à mão: as fichas duplas (decisão O8), os periódicos e a editora alojados em `authors`, os pseudônimos e as formas hispânicas ambíguas.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Retomar as três tabelas de revisão do esquema `conv_backup` — `titres_a_revoir_20260820` (211), `autorites_casse_a_revoir_20260820` (1 274), `autorites_patronyme_a_revoir_20260820` (22) — e tratá-las ficha por ficha a partir da Oficina de autoridades.
 
@@ -461,7 +461,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **722 fichas de 1 305 (55 %) não têm `country`.** Ora, é `country` que comanda a regra de entrada do nome: sem ele, a detecção dos duplos sobrenomes hispânicos só vê uma fração dos casos. Os 22 apontamentos são um **piso**, não um total.
 
-*Verificado : 31/08 — 726 de 1 305 fichas sem `country` (55,6 %): quatro a mais que em 29/08.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Preencher `country` por lotes, a partir dos registros, das fontes externas já conectadas (Wikidata, VIAF) e do conhecimento do acervo. Depois reexecutar a detecção dos sobrenomes.
 
@@ -616,18 +616,18 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **D3** | Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES | `P2` | Bloqueado |
+| **D3** | Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES | `P2` | Aberto |
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D6** | Retomar ou substituir o leitor EPUB | `P3` | Aberto |
 
 #### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
 
-`P2` Corrente · Estado : **Bloqueado** · Carga : alguns dias · O que exige : biblioteconomia
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
 
 **Estado.** O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo.
 
-*Verificado : 31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou. **15/09** — a biblioteca de destino existe e o lote está-lhe atribuído ; o resto continua bloqueado por C2/G7.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente.
 
@@ -723,7 +723,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Aberto |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
-| **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | Aberto |
+| **E14** | Uma página para relatar um bug a partir do aplicativo | `P2` | Em curso |
 | **E19** | Minha conta, «Dados pessoais» : os três blocos de decisão sobem para depois do perfil, lado a lado ; a supressão da conta fica sozinha no fundo | `P2` | Em curso |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
@@ -881,13 +881,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E14 — Uma página para relatar um bug a partir do aplicativo
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, língua materna
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript, Deno / TypeScript, SQL / PostgreSQL, língua materna
 
 **Estado.** **Pedido de Xavier em 07/09/2026.** Verificado no mesmo dia: **nenhum mecanismo de relato existe no app**. Nenhuma tabela (`bug_reports`, `feedback` — nada; `service_health_incidents` é a supervisão automática), nenhuma das 52 Edge Functions, nenhuma rota em `App.jsx`, nenhuma chave i18n, nenhum link para as issues do Codeberg em `src/`. O único e-mail de contato geral, `contato@anarbib.org`, está enterrado na política de privacidade. O canal documentado vive fora do app, do lado do desenvolvedor: «abrir uma issue no Codeberg» — inacessível a uma bibliotecária sem conta lá.
 
 **Três padrões caseiros já existem**: *(1)* `authority_duplicate_reports` (staff → coordenação, índice único parcial anti-inundação, `HINT` = chaves i18n); *(2)* `book_reading_note_reports` (moderação); *(3)* **`cartography_submissions`** — o único aberto a `anon`: tabela trancada, Edge Function pública com altcha, outbox → `notify-event`, trio `list/approve/reject`, tela de moderação. É o modelo 3 que cobre a necessidade, com o anti-inundação do modelo 1.
 
-*Verificado : 07/09 — grep em `src/`, `supabase/functions/` (52 EF), `App.jsx`, `fr.json`; repositório `eb790c33`. Nenhum mecanismo, nenhum item no backlog antes deste.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Uma página pública «Relatar um problema» (rota a nomear), acessível **sem conta** e a partir de **todas** as páginas: um link no `Footer` (`src/components/layout/index.jsx`) e uma intenção «Quero relatar um problema» em `intentions.js` (grupo leitor — uma linha). Formulário mínimo: o que aconteceu, o que era esperado, como refazer; **o contexto preenche-se sozinho** (página de origem, locale, papel e biblioteca de sessão, navegador); e-mail de resposta opcional. No servidor, copiar `cartography_submissions`: tabela `bug_reports` trancada, Edge Function `submit-bug-report` com altcha para anônimos, outbox → `notify-event` para `admins@anarbib.org`, status `open/closed`, índice único parcial anti-inundação, RPC `list/close` para admins de rede, e um separador na Rede para a fila. **Duas decisões ao escrever**: ponte para o Codeberg (um admin recopia à mão) ou não; acusar recebimento por e-mail quando houver endereço. Dez locales de imediato, e um teste que guarda a rota e o `Footer`.
 
@@ -961,7 +961,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **F1** | Auditar a cadeia de e-mail de ponta a ponta | `P1` | Aberto |
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
-| **F4** | Três bibliotecas tinham ativado lembretes que ninguém enviava | `P1` | Em curso |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | Aberto |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
 | **F11** | Branco sobre branco: blocos dos nossos e-mails ficam ilegíveis num cliente em tema escuro | `P2` | A verificar |
@@ -996,7 +995,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Quatro funções fazem resumos: `notify-weekly-report`, `notify-network-weekly-report`, `notify-cross-library-digest`, `notify-rede-digest`. Três funções servem documentos: `read-pdf`, `read-digital-asset`, `read-ill-shared-asset`. Duas exportam lotes: `export-catalog-lote`, `export-fonds-bundle`. E `mail-i18n-test`, função de teste, está implantada em produção na versão 1553.
 
-*Verificado : 31/08 — `mail-i18n-test` continua implantada (versão 1 566). O repositório tem 50 pastas de funções e 38 declarações `verify_jwt`.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Verificar o que cada uma faz de fato antes de concluir pela redundância — provavelmente têm destinatários e alcances diferentes. Depois fundir o que deve sê-lo, e retirar `mail-i18n-test` da produção.
 
@@ -1011,34 +1010,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **F1**. Atenção: a implantação de `notify-event` não passa por MCP, seu pacote é grande demais.
 
 *Remissões : `PLAN_DE_MARCHE §8` · `Relevé du 29/08/2026`*
-
-#### F4 — Três bibliotecas tinham ativado lembretes que ninguém enviava
-
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado.** `spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.
-
-**Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar.
-
-**Instruído e entregue em 31/08.** Os lembretes não existiam — mas **os interruptores que os comandam existiam**, e as três bibliotecas com política tinham-nos a `true` sem o saber. Seis momentos passam a **três** (`DOC-RAPPEL-1`). Um quarto envio substitui `notify-mid-loan-reading`, que perguntava «Como vai a leitura?» **em português fixo**: agora convida a deixar uma **nota de leitura sob pseudónimo** no catálogo. **Entregue**: EF `notify-loan-cycle`, tabela `loan_cycle_notifications` com unicidade (item, momento), suíte `rappels_echeance_tests.sql`.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Ver a CI verde, implantar, depois **provar a sério**: criar um empréstimo com vencimento a J-3 e verificar que um e-mail parte, na língua certa, uma só vez.
-
-**Por que importa.** O acompanhamento de oito semanas da formação BLMF prevê que uma consulta seja conduzida de ponta a ponta com negociação real: é o momento em que a ausência de lembrete aparecerá. Melhor saber antes.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** Verifica-se ao mesmo tempo que **F1**.
-
-*Remissões : `spec-flux-emprunts §2.4 et §10.2` · `REGISTRE DOC-RAPPEL-1, OPS-8, DOC-SILENCE-1` · `supabase/functions/notify-loan-cycle/` · `migration 20260831111700` · `tests/sql/rappels_echeance_tests.sql` · `public.book_reading_notes`*
 
 #### F6 — `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail
 
@@ -1179,7 +1150,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G9** | Implementar a cartografia da rede segundo a spec v1.0 | `P3` | Congelado |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G13** | Um comutador «redes constituídas» no OPAC: ver só os catálogos FICEDL, RebAL, NORLA… | `P2` | Aberto |
-| **G14** | Um convite de equipe espera desde 30/08 e expirará em 29/09 — a pessoa talvez não saiba | `P2` | Aberto |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1193,7 +1163,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: assembleias da rede (3), propostas e objeções de autoridade (3), referenciais `catalog_ref_*` (8), governança dos perfis (4, **e os dois crons continuam a rodar sobre elas a cada quinze minutos**), deliberação dos pedidos de adesão (5). Todos a zero inserções.
 
-*Verificado : 31/08 — remedido em produção: **62 tabelas de `public` em 189** a zero inserções. A conta é estável, a lista não. Empréstimo **#69** aberto na BLMF; o convite a escrever uma nota de leitura é esperado em **10/09**. **06/09** — dois circuitos a mais construídos sem uso : a oficina aberta às obras (0 proposta) e a revisão dos lotes importados (0 revisão) ; `network_contributors` continua a 0.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Escolher um bloco e percorrê-lo de verdade, do primeiro ao último gesto: realizar uma assembleia da rede, depositar uma nota de leitura, propor uma autoridade e deixar alguém objetar, fazer deliberar um pedido de adesão. Registrar o que falta, o que surpreende, o que trava.
 
@@ -1322,26 +1292,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)` · `docs/specs/spec-cartographie-reseau.md` · `src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)` · `supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)` · `api.libraries_public_v1 (baseline)` · `src/pages/federacao/CartographyMap.jsx` · `docs/cartographie/carte-reseau.umap`*
 
-#### G14 — Um convite de equipe espera desde 30/08 e expirará em 29/09 — a pessoa talvez não saiba
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** **Verificado no banco em 07/09**: em `library_team_invitations`, um convite criado em 30/08 continua `ready`, expira em 29/09 (dois outros de 01/09 estão `accepted` e `pending_ratification`). O plano de formação de 01/09 já o sinalizava: «é preciso avisá-la». O cron de expiração vai fechá-lo em silêncio.
-
-*Verificado : [object Object],[object Object],[object Object]*
-
-**O que é.** Uma mensagem à pessoa convidada, pelo canal humano (`DOC-COLLECTIVE-1`). Depois olhar por que o convite por e-mail não bastou — é **G1** em miniatura.
-
-**Por que importa.** Um circuito que expira sem que ninguém perceba é um circuito que não existe.
-
-**O que conta como terminado.**
-
-- O convite está `accepted` ou `declined` antes de 29/09, não expirado.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `claude/PLAN_formation_coordination_BLMF_2026-08-26 (annexe)` · `REGISTRE §0 DOC-COLLECTIVE-1`*
-
 ---
 
 ### H — Interoperabilidade, tesauro, coleta
@@ -1352,9 +1302,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
-| **H9** | Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco | `P1` | Congelado |
+| **H9** | Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco | `P1` | Aberto |
 | **H10** | Reler à mão os 98 alinhamentos FICEDL — 54 `close` dos quais uma parte são `broad` — e alinhar enfim as quatro rubricas históricas de Solidaires | `P2` | Aberto |
-| **H11** | O repositório diz 462 descritores FICEDL, a produção carrega 621 — regenerar a migração de dados antes que um replay do zero quebre | `P2` | Aberto |
 | **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
 | **H13** | O esboço SKOS dos 26 descritores não está nem no repositório nem no projeto — versá-lo em `docs/journal/ficedl/` para que seja doável e versionado | `P2` | A verificar |
 
@@ -1404,11 +1353,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H9 — Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco
 
-`P1` Prioritário · Estado : **Congelado** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
+`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
 
 **Estado.** **Verificado no banco e no repositório em 07/09.** O domínio de `subject_ficedl_links.match_type` agora carrega `exact`, `close`, `broad`, `narrow`, `related` (migração `20260907172508`), mas a porta ficou fechada de propósito: `api.fn_subject_add_ficedl_match` só aceita `exact`/`close`, porque **duas renderizações são binárias** — `src/pages/public/SubjectPage.jsx` (l. 163) mostra «exata» para tudo que não é `close`, e `src/lib/skosExport.js` serializa como `skos:exactMatch` tudo que não é `close`, no Turtle e no JSON-LD publicados. Um `broad` criado hoje seria publicado como correspondência exata.
 
-*Verificado : 07/09 — domínio estendido no banco, porta fechada, duas renderizações binárias constatadas no repositório.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Estender a guarda da RPC aos três valores; substituir os dois ternários por uma tabela de cinco entradas (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`); acrescentar três chaves `subject.matchBroad/Narrow/Related` nas dez locales (o teste i18n bloqueia se faltar). Entregar os três juntos, nunca um sem os outros.
 
@@ -1444,27 +1393,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de **H9**: sem os cinco valores abertos na tela, a releitura não tem ferramenta para dizer o que vê.
 
 *Remissões : `REGISTRE §30 THES-FIC4, THES-FIC-O1` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `CALENDRIER_bologne_2026-08-27 (rubriques historiques)`*
-
-#### H11 — O repositório diz 462 descritores FICEDL, a produção carrega 621 — regenerar a migração de dados antes que um replay do zero quebre
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** **Verificado em 07/09, repositório e produção.** `20260826191000_donnees_ficedl_thesaurus.sql` insere 462 linhas (227 assuntos, 234 geo, 1 dupla, **0 data**) — congelada na coleta de 30/06. A produção carrega a coleta de 03/09: **621** (159 datas a mais) porque `ficedl_thesaurus_sync.mjs` foi reexecutado. O replay a partir de um banco vazio ainda passa: os 47 `mot_id` referenciados pela migração de alinhamento estão todos nos 462. Vai quebrar no dia em que um alinhamento visar um termo posterior a 30/06 — é exatamente o que **H10** vai fazer. Duas datas da coleta (161) faltam no banco (159): sem rótulo, descartadas por `isSyncable`.
-
-*Verificado : 07/09 — 462 no repositório, 621 na produção, replay ainda verde.*
-
-**O que é.** Regenerar a migração de dados a partir de `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` (ou substituí-la por um seed reexecutado pelo sync na CI), e olhar as duas fichas sem rótulo. Nunca rodar o sync com `--prune`.
-
-**Por que importa.** Uma reconstrução do zero (**A2**, a virada **I2**) que não reexecuta os dados de produção não é uma reconstrução — é outro banco.
-
-**O que conta como terminado.**
-
-- `count(*)` de `ficedl_thesaurus_terms` idêntico na CI e na produção.
-- O replay de `sql-tests.yml` passa com um alinhamento para um descritor `dates`.
-
-**Dependências.** Antes de **H10**. Condiciona **A2** e **I2**.
-
-*Remissões : `REGISTRE §30 THES-FIC-O4` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `REPRISE_claude_code_2026-08-27 (piège --prune)`*
 
 #### H12 — As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração
 
@@ -1515,8 +1443,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 | | | | |
 |---|---|---|---|
-| **I2** | Concluir a migração para a auto-hospedagem | `P1` | Congelado |
-| **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Congelado |
+| **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
+| **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Aberto |
 | **I15** | O secret do Forgejo da chave publicável ainda carrega seu nome antigo | `P3` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
@@ -1525,11 +1453,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
-`P1` Prioritário · Estado : **Congelado** · Carga : várias semanas · O que exige : administração de sistemas
+`P1` Prioritário · Estado : **Aberto** · Carga : várias semanas · O que exige : administração de sistemas
 
 **Estado.** A pilha está reduzida de doze a **seis contêineres** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), as versões estão fixadas, `bootstrap.sh` foi executado de verdade em 26/08 com oito defeitos levantados e corrigidos, e o ensaio de 18/08 reexecutou 124 migrações e restaurou um dump de produção em 17 segundos. Reconstrução completa medida: **25 minutos**.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** O que resta: desacoplar a cadeia de implantação da integração contínua (**extração, não criação** — `scripts/ci/deployer-backend.sh` já existe), colocar um proxy reverso com túnel na frente da pilha, passar de tags para impressões `sha256`, e refazer o ensaio a frio um mês depois para verificar que nada divergiu. **Acrescentado em 08/09/2026, a colocar ao hospedeiro previsto (Les Herbes Folles), ou a um ou vários outros**: **um Jitsi nosso.** A videoconferência de apoio mútuo e de assembleias vivia na Autistici/Inventati; a A/I foi designada «SDGT» pelos Estados Unidos em 26/08 e fechou; em 08/09 mudámos para o Framatalk (Framasoft, Hetzner na Alemanha) — um terceiro de confiança, mas um terceiro, numa infraestrutura que uma medida do mesmo tipo pode atingir. Um Jitsi hospedado por nós (ou por um coletivo de hospedagem aliado, ou repartido entre vários) é a única saída completa. Não é a mesma carga que o resto da pilha: o videobridge consome largura de banda de subida na proporção das participantes. **Perguntas a fazer**: a VM aguenta um Jitsi (RAM, banda, porta UDP 10000); preferem uma segunda máquina; outro hospedeiro aliado (Chapril, Systemli, uma instância amiga) aceitaria carregar a videoconferência da rede, mesmo que não viva no mesmo lugar que a base? No mesmo dia, **o arquivo de fundo de mapa** (`map-tiles/planet-z12.pmtiles`, 18 GB, a reextrair em z15 a partir da VM: 138 GB) entrou no que se muda — a contar no disco pedido (I21).
 
@@ -1549,11 +1477,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### I3 — Testar o roteador `main` da pilha auto-hospedada
 
-`P1` Prioritário · Estado : **Congelado** · Carga : uma noite · O que exige : Deno / TypeScript
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
 
 **Estado.** `supabase/functions/main/index.ts` existe (6,9 KB), lê `config.toml` na inicialização, aplica uma **recusa por omissão** — só as dispensas `verify_jwt = false` são lidas, todo o resto exige um token — e recusa iniciar se o arquivo for ilegível. **Os quatro testes previstos não foram feitos.**
 
-*Verificado : 31/08 — `main/index.ts`: 6 885 bytes, presente; nenhum teste o menciona.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Os quatro testes da etapa 5 de `deploy/REPETITION.md`: função protegida sem cabeçalho de autorização → 401; com um token válido → 200; `health-probe` sem token → 200; nome inexistente → 404.
 
@@ -1574,7 +1502,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Desde 01/09, o código lê `VITE_SUPABASE_PUBLISHABLE_KEY` e seu valor é mesmo a chave publicável — mas na CI essa variável é alimentada pelo secret do Forgejo com o nome histórico `VITE_SUPABASE_ANON_KEY`. Desacoplamento proposital: evitava exigir a renomeação do secret e o merge no mesmo instante. A armadilha está documentada no `ci.yml`: o `prebuild` faz `exit 0` se a variável faltar, um nome desalinhado não quebra o build, publica um instantâneo de catálogo vencido em silêncio.
 
-*Verificado : 01/09 — `ci.yml` relido depois da virada: mapeamento `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` no lugar, comentado.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Criar o secret `VITE_SUPABASE_PUBLISHABLE_KEY` nas configurações do Forgejo (mesmo valor), alinhar a linha do `ci.yml`, verificar um build completo — o frescor do `catalogue-snapshot.json` serve de prova — e então apagar o secret antigo.
 
@@ -2096,6 +2024,9 @@ CI verde. |
 | I25 | 2026-09-24 | **Fechado em 24/09 sobre peças: a causa está nomeada, reproduzida e retirada.** A rede lia a saída por `echo "$out" | grep -qE ' OK : …'` sob `set -o pipefail`: `grep -q` sai na primeira linha « OK : », `echo` ainda não acabou de escrever o que se segue (« ROLLBACK »), recebe SIGPIPE, e `pipefail` faz do seu código 141 o veredicto — FAIL numa suite verde. Raro, porque esse resto cabe em poucos bytes. **Reproduzido em 24/09 fora da CI, 300 vezes em 300**, colocando 300 KB depois da linha « OK : »; **0 em 300 a partir de um ficheiro**. `scripts/ci/run-sql-suites.sh` lê agora a saída de um ficheiro (`grep -c`, nenhum tubo), e um FAIL imprime o código do psql, o do grep, o número de linhas « OK : » e o tamanho da saída. Reproduzido em local: duas suites PASS, uma suite sem balanço FAIL com a sua linha de diagnóstico. O segundo critério (« três meses sem recidiva ») fora escrito para uma causa desconhecida; a causa está nomeada. `32edb185`, `sql-tests` verde na CI. |
 | F13 | 2026-09-24 | **Fechado em 24/09 sobre peças.** `sendIll` devolve o veredicto de `safeSendEmail` por `verdictEnvois` (`_shared/domain/outbox-verdict.ts`, o mesmo juiz dos sete módulos corrigidos em 21/09): `sent_count` só conta os envios aceites pelo transporte; a resposta traz `refused_count`, `refused` (endereço e causa) e `skipped_count`. O caso marcado do banco foi virado — transporte em pane: `sent_count` 0, uma recusa nomeada; um caso novo verifica as três contagens num envio a dois (2 / 0 / 0). **Nenhum caso do repositório continua marcado « DÉFAUT CONNU »**. `32edb185`, CI verde, função implantada, sondada em produção: marqueur `deployed-functions` sur `32edb185`, trois appels sans secret → 401 en 0,3 à 1,7 s à 21 h 32, la fonction démarre. |
 | E15 | 2026-09-24 | **Entregue em 24/09, fechado sobre peças, com uma reserva.** Em oito locales, a palavra de « esvaziar o histórico » era a de « apagar a conta »: a palavra aprendida para um gesto abria o outro. A primeira muda, no modelo de pt-BR (APAGAR / EXCLUIR) e de ca: **fr EFFACER, en ERASE, es BORRAR, it CANCELLA, de LEEREN, nl WISSEN, el ΕΚΚΑΘΑΡΙΣΗ, eo VIŜI** — a palavra da conta não muda. Banco `confirmation-deux-gestes-deux-mots` (2 casos). Guardas i18n verdes. **Reserva**: as oito palavras são uma escolha de sessão, não de falantes (nl, el: E2) — « corrige-me »; e o manual do leitor, fora do repositório, ainda cita a palavra antiga (J9). `32edb185`, CI verde, em produção. |
+| H11 | 2026-09-24 | **Fechado em 24/09 sobre peças.** Migração `20260924194818` (`f4a531ce`), gerada pelo próprio mapping do sync (`isSyncable` + `toRow` importados, nunca recopiados) a partir da aspiração de 03/09: 621 termos (**159 datas**), idempotente. **Comparada linha a linha à produção antes de empurrar**: 619 idênticas, duas diferiam (`mot136`, `mot137`: bandeira `hors_liste_cira` posta pela re-aspiração de 13h17, depois do sync de 11h07) — a produção recebeu-as na implantação, nada mais. **Verificado em produção após a CI**: 621 termos, 159 datas, impressão digital `8d1e585e67e3c5f7059532a41adabcd0` = a do rejogo local = a que a suite imprime; 332 migrações = 332. Suite `ficedl_termes_tests` (7 casos, incluindo um alinhamento para um descritor `dates`). `sql-tests` e `rejeu-image` verdes. |
+| F4 | 2026-09-24 | **Fechado em 24/09: o último critério é cumprido por Xavier.** Medido em produção: `loan_cycle_notifications` tem três envios, todos sobre o empréstimo 84 — o convite a uma nota de leitura em 10/09, **o lembrete D-3 em 18/09** e **o do dia do prazo em 21/09**, uma vez cada. Xavier confirma em 24/09 que chegaram, na língua da pessoa. Fora deste fecho: o D+7 (nenhum atraso desde 31/08) — partirá no primeiro atraso real. |
+| G14 | 2026-09-24 | **Fechado em 24/09 sobre peças.** Xavier relançou a pessoa; lido em produção em 24/09: o convite de 30/08 passou a **`accepted`** antes de expirar. As duas outras de 01/09: uma aceite, uma à espera de ratificação. O que o episódio diz, para **G1**: o convite por e-mail não bastou, a relance humana sim. |
 
 ---
 
@@ -2127,4 +2058,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-24. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 62 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

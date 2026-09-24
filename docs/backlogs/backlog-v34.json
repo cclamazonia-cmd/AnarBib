@@ -2234,6 +2234,30 @@
           "fr": "**Livré le 24/09, clos sur pièces, avec une réserve.** Dans huit locales, le mot de « vider l historique » (`account.history.deleteAll.confirmWord`) était celui de « supprimer le compte » (`account.deleteAccount.confirmText`) : le mot appris pour un geste ouvrait l autre. Le premier change, sur le modèle de pt-BR (APAGAR / EXCLUIR) et de ca (ELIMINA / SUPRIMIR) : **fr EFFACER, en ERASE, es BORRAR, it CANCELLA, de LEEREN, nl WISSEN, el ΕΚΚΑΘΑΡΙΣΗ, eo VIŜI** — le mot du compte ne bouge pas, personne n a rien à réapprendre pour le geste le plus grave. Banc `confirmation-deux-gestes-deux-mots` (2 cas : dix locales, deux mots en capitales, jamais le même ; chaque page compare au mot de SA locale, aucun mot en dur). Gardes i18n (parité 6 690 × 10, écriture) vertes. **Réserve** : les huit mots sont un choix de session, pas des locuteur·rices (nl, el : E2) — « corrige-moi », c est une ligne par locale ; et le manuel lecteur, hors dépôt, cite encore l ancien mot (à reprendre avec J9). `32edb185`, CI verte, en production.",
           "pt": "**Entregue em 24/09, fechado sobre peças, com uma reserva.** Em oito locales, a palavra de « esvaziar o histórico » era a de « apagar a conta »: a palavra aprendida para um gesto abria o outro. A primeira muda, no modelo de pt-BR (APAGAR / EXCLUIR) e de ca: **fr EFFACER, en ERASE, es BORRAR, it CANCELLA, de LEEREN, nl WISSEN, el ΕΚΚΑΘΑΡΙΣΗ, eo VIŜI** — a palavra da conta não muda. Banco `confirmation-deux-gestes-deux-mots` (2 casos). Guardas i18n verdes. **Reserva**: as oito palavras são uma escolha de sessão, não de falantes (nl, el: E2) — « corrige-me »; e o manual do leitor, fora do repositório, ainda cita a palavra antiga (J9). `32edb185`, CI verde, em produção."
         }
+      ],
+      [
+        "H11",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 sur pièces.** Migration `20260924194818` (`f4a531ce`), engendrée par le mapping du sync lui-même (`isSyncable` + `toRow` importés de `scripts/ficedl_thesaurus_sync.mjs`, jamais recopiés) depuis `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` : 621 termes (227 sujets, 234 géo, 1 mixte, **159 dates**), les deux fiches sans libellé ni H1 écartées (`mot532`, `mot538`), idempotente — l UPDATE ne touche qu une ligne dont le contenu diffère. **Comparée ligne à ligne à la production avant de pousser** (md5 par `mot_id`, 621 lignes) : 619 identiques, deux différaient — `mot136` et `mot137` portaient au dépôt le drapeau `hors_liste_cira` que la production n avait pas, parce que le sync du 03/09 (11 h 07) a précédé la ré-aspiration commitée à 13 h 17 (`2f314f15`). Le dépôt est la référence : la production a reçu ces deux drapeaux au déploiement, rien d autre. **Vérifié en production après la CI** : 621 termes, 159 dates, empreinte de la table `8d1e585e67e3c5f7059532a41adabcd0` = celle du rejeu local = celle que la suite imprime ; 332 migrations = 332. Suite `ficedl_termes_tests` (7 cas : comptes, un seul `harvested_at`, aucun terme sans libellé, empreinte, et un alignement vers un descripteur `dates` qui passe la clé étrangère — le sujet est créé par le test, aucun n existe en CI). `sql-tests` et `rejeu-image` verts. Le jour où le sync sera rejoué en production, la suite rougira : il faudra régénérer la migration (script au scratchpad de la session, recette dans l en-tête de la migration), pas ajuster le test.",
+          "pt": "**Fechado em 24/09 sobre peças.** Migração `20260924194818` (`f4a531ce`), gerada pelo próprio mapping do sync (`isSyncable` + `toRow` importados, nunca recopiados) a partir da aspiração de 03/09: 621 termos (**159 datas**), idempotente. **Comparada linha a linha à produção antes de empurrar**: 619 idênticas, duas diferiam (`mot136`, `mot137`: bandeira `hors_liste_cira` posta pela re-aspiração de 13h17, depois do sync de 11h07) — a produção recebeu-as na implantação, nada mais. **Verificado em produção após a CI**: 621 termos, 159 datas, impressão digital `8d1e585e67e3c5f7059532a41adabcd0` = a do rejogo local = a que a suite imprime; 332 migrações = 332. Suite `ficedl_termes_tests` (7 casos, incluindo um alinhamento para um descritor `dates`). `sql-tests` e `rejeu-image` verdes."
+        }
+      ],
+      [
+        "F4",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 : le dernier critère est tenu par Xavier.** Mesuré en production le 24/09 : `loan_cycle_notifications` porte trois envois, tous sur l emprunt 84 (BLMF) — l invitation à une note de lecture le 10/09 à 09 h 15, **le rappel J-3 le 18/09** et **le rappel du jour de l échéance le 21/09**, une fois chacun (unicité item × moment). Xavier confirme le 24/09 que ces courriels sont **arrivés, dans la langue de la personne**. Les interrupteurs commandent des envois réels depuis le 31/08 (EF `notify-loan-cycle`, cron quotidien 9 h 15 UTC, suite `rappels_echeance_tests`). Ce qui n est pas dans cette clôture : le J+7 (aucun retard depuis le 31/08 — l emprunt 84 est rendu) ; il partira au premier retard réel, et la table le dira.",
+          "pt": "**Fechado em 24/09: o último critério é cumprido por Xavier.** Medido em produção: `loan_cycle_notifications` tem três envios, todos sobre o empréstimo 84 — o convite a uma nota de leitura em 10/09, **o lembrete D-3 em 18/09** e **o do dia do prazo em 21/09**, uma vez cada. Xavier confirma em 24/09 que chegaram, na língua da pessoa. Fora deste fecho: o D+7 (nenhum atraso desde 31/08) — partirá no primeiro atraso real."
+        }
+      ],
+      [
+        "G14",
+        "2026-09-24",
+        {
+          "fr": "**Clos le 24/09 sur pièces.** Xavier a relancé la personne lui-même (décision du 21/09) ; lu en production le 24/09 : l invitation du 30/08 est passée à **`accepted`** avant son expiration du 29/09. Les deux autres invitations du 01/09 : une acceptée, une en attente de ratification (expiration 01/10). Ce que l épisode dit, à verser à **G1** : l invitation par courriel n a pas suffi, la relance humaine oui.",
+          "pt": "**Fechado em 24/09 sobre peças.** Xavier relançou a pessoa; lido em produção em 24/09: o convite de 30/08 passou a **`accepted`** antes de expirar. As duas outras de 01/09: uma aceite, uma à espera de ratificação. O que o episódio diz, para **G1**: o convite por e-mail não bastou, a relance humana sim."
+        }
       ]
     ]
   },
@@ -2484,10 +2508,16 @@
         "AUDIT_conventions_catalographiques_2026-08-20",
         "REGISTRE §37 CONV"
       ],
-      "verif": {
-        "fr": "31/08 — la file `catalog_review_queue` mesurée, 310 lignes : le lot **patronymes est terminé** (20 validés, 2 écartés, 0 à revoir — les 9 suffixes de filiation, donnés pour le défaut le plus grave, sont derrière), `autorite_casse` presque (3 à revoir sur 61), `titre_casse` porte le gros du reste (174 à revoir sur 211), et un quatrième lot `autorite_collectivite` s'est ajouté (2 à revoir sur 16). **179 verdicts humains restent.** **03/09** — 1 532 autorités (1 305 à midi : +227 créées par le lot C5 le soir même, jamais relues, non typées), 1 468 non typées, `name_lang` sur 22, 6 orphelines, 2 doublons de forme de tri sans casse ; `conv_backup` : titres 211, casse 1 274, patronymes 22, inchangés. **Xavier demande un audit en profondeur des autorités et une correction propre, en nouvelle session** : cadrage écrit, `docs/journal/cadrages/REPRISE_audit_autorites_en_profondeur_2026-09-03.md` — recompter d'abord, rejouer l'audit du 20/08, corriger par lots de la file ou migrations testées, jamais en masse. **03/09, nuit — audit fait** (`journal/audits/AUDIT_autorites_2026-09-03.md`) : 1 532 autorités, 23 livres sans autorité (18 écartés + 5 à `autor` NULL), 3 orphelines (pas 6), **13 paires de doublons exacts** dont 9 nées du lot C5, 17 `preferred_name` en capitales après la correction du 21/08, 14 collectivités inversées ratées par le motif, 12 fiches doubles (O8). **Livré** : cinq migrations testées (CONV-2 sur 17 fiches ; homonymie sans casse ni accents + 8 signalements (les 5 paires de fixtures de formation exclues) ; motif des collectivités + re-semis ~36 ; second semis casse ~40 ; nouveau lot `autorite_forme` ~95). **La file porte désormais ~170 verdicts de plus**, tous humains : lots `autorite_collectivite`, `autorite_casse`, `autorite_forme` dans `/atelier-autoridades`. **Puis, le soir même, sur décision de Xavier (« corrige ce qui est évident ») : quatre migrations d'évidences** — 10 doublons exacts fusionnés, 4 non-agents retirés, 24 contributeurs liés à leur fiche homonyme exacte, 43 lignes évidentes de la file tranchées et appliquées (Xavier en avait posé 87 lui-même entre 20 h 00 et 20 h 07). Restent à la main : les fiches doubles (décision O8), les périodiques et l'éditeur logés dans `authors`, les pseudonymes et les formes hispaniques ambiguës.",
-        "pt": "31/08 — a fila `catalog_review_queue` medida, 310 linhas: o lote de **patronímicos está terminado** (0 a rever), `autorite_casse` quase (3 a rever), `titre_casse` carrega o grosso (174 a rever), e um quarto lote `autorite_collectivite` (2 a rever). **Restam 179 vereditos humanos.** **03/09** — 1 532 autoridades (+227 criadas pelo lote C5, não relidas), 1 468 sem tipo. **Auditoria em profundidade pedida, em nova sessão** : cadramento em `docs/journal/cadrages/REPRISE_audit_autorites_en_profondeur_2026-09-03.md`. **03/09, noite — auditoria feita** (`journal/audits/AUDIT_autorites_2026-09-03.md`): 1 532 autoridades, 23 livros sem autoridade (18 descartados + 5 com `autor` NULL), 3 órfãs (não 6), **13 pares de duplicatas exatas**, 9 delas nascidas do lote C5, 17 `preferred_name` em maiúsculas após a correção de 21/08, 14 coletividades invertidas que o padrão não via, 12 fichas duplas (O8). **Entregue**: cinco migrações testadas (CONV-2 em 17 fichas; homonímia sem caixa nem acentos + 8 sinalizações (os 5 pares de fixtures de formação excluídos); padrão das coletividades + nova semeadura ~36; segunda semeadura do lote caixa ~40; novo lote `autorite_forme` ~95). **A fila carrega agora ~170 vereditos a mais**, todos humanos: lotes `autorite_collectivite`, `autorite_casse`, `autorite_forme` em `/atelier-autoridades`. **Depois, na mesma noite, por decisão de Xavier (« corrige o que é evidente »): quatro migrações de evidências** — 10 duplicatas exatas fundidas, 4 não-agentes retirados, 24 contribuidores vinculados à sua ficha homônima exata, 43 linhas evidentes da fila decididas e aplicadas (Xavier havia posto 87 vereditos ele mesmo entre 20h00 e 20h07). Ficam à mão: as fichas duplas (decisão O8), os periódicos e a editora alojados em `authors`, os pseudônimos e as formas hispânicas ambíguas."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — la file `catalog_review_queue` mesurée, 310 lignes : le lot **patronymes est terminé** (20 validés, 2 écartés, 0 à revoir — les 9 suffixes de filiation, donnés pour le défaut le plus grave, sont derrière), `autorite_casse` presque (3 à revoir sur 61), `titre_casse` porte le gros du reste (174 à revoir sur 211), et un quatrième lot `autorite_collectivite` s'est ajouté (2 à revoir sur 16). **179 verdicts humains restent.** **03/09** — 1 532 autorités (1 305 à midi : +227 créées par le lot C5 le soir même, jamais relues, non typées), 1 468 non typées, `name_lang` sur 22, 6 orphelines, 2 doublons de forme de tri sans casse ; `conv_backup` : titres 211, casse 1 274, patronymes 22, inchangés. **Xavier demande un audit en profondeur des autorités et une correction propre, en nouvelle session** : cadrage écrit, `docs/journal/cadrages/REPRISE_audit_autorites_en_profondeur_2026-09-03.md` — recompter d'abord, rejouer l'audit du 20/08, corriger par lots de la file ou migrations testées, jamais en masse. **03/09, nuit — audit fait** (`journal/audits/AUDIT_autorites_2026-09-03.md`) : 1 532 autorités, 23 livres sans autorité (18 écartés + 5 à `autor` NULL), 3 orphelines (pas 6), **13 paires de doublons exacts** dont 9 nées du lot C5, 17 `preferred_name` en capitales après la correction du 21/08, 14 collectivités inversées ratées par le motif, 12 fiches doubles (O8). **Livré** : cinq migrations testées (CONV-2 sur 17 fiches ; homonymie sans casse ni accents + 8 signalements (les 5 paires de fixtures de formation exclues) ; motif des collectivités + re-semis ~36 ; second semis casse ~40 ; nouveau lot `autorite_forme` ~95). **La file porte désormais ~170 verdicts de plus**, tous humains : lots `autorite_collectivite`, `autorite_casse`, `autorite_forme` dans `/atelier-autoridades`. **Puis, le soir même, sur décision de Xavier (« corrige ce qui est évident ») : quatre migrations d'évidences** — 10 doublons exacts fusionnés, 4 non-agents retirés, 24 contributeurs liés à leur fiche homonyme exacte, 43 lignes évidentes de la file tranchées et appliquées (Xavier en avait posé 87 lui-même entre 20 h 00 et 20 h 07). Restent à la main : les fiches doubles (décision O8), les périodiques et l'éditeur logés dans `authors`, les pseudonymes et les formes hispaniques ambiguës.",
+          "pt": "31/08 — a fila `catalog_review_queue` medida, 310 linhas: o lote de **patronímicos está terminado** (0 a rever), `autorite_casse` quase (3 a rever), `titre_casse` carrega o grosso (174 a rever), e um quarto lote `autorite_collectivite` (2 a rever). **Restam 179 vereditos humanos.** **03/09** — 1 532 autoridades (+227 criadas pelo lote C5, não relidas), 1 468 sem tipo. **Auditoria em profundidade pedida, em nova sessão** : cadramento em `docs/journal/cadrages/REPRISE_audit_autorites_en_profondeur_2026-09-03.md`. **03/09, noite — auditoria feita** (`journal/audits/AUDIT_autorites_2026-09-03.md`): 1 532 autoridades, 23 livros sem autoridade (18 descartados + 5 com `autor` NULL), 3 órfãs (não 6), **13 pares de duplicatas exatas**, 9 delas nascidas do lote C5, 17 `preferred_name` em maiúsculas após a correção de 21/08, 14 coletividades invertidas que o padrão não via, 12 fichas duplas (O8). **Entregue**: cinco migrações testadas (CONV-2 em 17 fichas; homonímia sem caixa nem acentos + 8 sinalizações (os 5 pares de fixtures de formação excluídos); padrão das coletividades + nova semeadura ~36; segunda semeadura do lote caixa ~40; novo lote `autorite_forme` ~95). **A fila carrega agora ~170 vereditos a mais**, todos humanos: lotes `autorite_collectivite`, `autorite_casse`, `autorite_forme` em `/atelier-autoridades`. **Depois, na mesma noite, por decisão de Xavier (« corrige o que é evidente »): quatro migrações de evidências** — 10 duplicatas exatas fundidas, 4 não-agentes retirados, 24 contribuidores vinculados à sua ficha homônima exata, 43 linhas evidentes da fila decididas e aplicadas (Xavier havia posto 87 vereditos ele mesmo entre 20h00 e 20h07). Ficam à mão: as fichas duplas (decisão O8), os periódicos e a editora alojados em `authors`, os pseudônimos e as formas hispânicas ambíguas."
+        },
+        {
+          "fr": "24/09 — file `catalog_review_queue` mesurée : **203 lignes « à revoir »** (652 validées, 36 écartées, 35 corrigées), dont **174 de casse de titres**, 36 de forme d autorité, 5 de casse d autorité, 4 de collectivités, 2 de patronymes ; 18 du lot `autor_sans_autorite` restent non appliquées. Toujours de la main, dans l Atelier.",
+          "pt": "24/09 — fila medida: **203 linhas « a rever »**, das quais **174 de caixa de títulos**."
+        }
+      ]
     },
     {
       "id": "C4",
@@ -2532,10 +2562,16 @@
         "AUDIT_conventions_catalographiques_2026-08-20 A5",
         "REGISTRE §37 CONV-7"
       ],
-      "verif": {
-        "fr": "31/08 — 726 fiches sur 1 305 sans `country` (55,6 %) : quatre de plus qu'au 29/08. La dette avance plus vite que sa résorption.",
-        "pt": "31/08 — 726 de 1 305 fichas sem `country` (55,6 %): quatro a mais que em 29/08."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — 726 fiches sur 1 305 sans `country` (55,6 %) : quatre de plus qu'au 29/08. La dette avance plus vite que sa résorption.",
+          "pt": "31/08 — 726 de 1 305 fichas sem `country` (55,6 %): quatro a mais que em 29/08."
+        },
+        {
+          "fr": "24/09 — **925 autorités sur 1 505 sans `country` (61 %)**, contre 726 sur 1 305 le 31/08 (55,6 %) : la dette avance toujours plus vite que sa résorption, et le lot C5 (227 autorités créées le 03/09) y est pour beaucoup.",
+          "pt": "24/09 — **925 autoridades em 1 505 sem `country` (61 %)**, contra 55,6 % em 31/08."
+        }
+      ]
     },
     {
       "id": "C6",
@@ -2849,7 +2885,7 @@
       "id": "D3",
       "d": "D",
       "p": "P2",
-      "s": "bloque",
+      "s": "ouvert",
       "e": "M",
       "sk": [
         "biblio"
@@ -2890,10 +2926,16 @@
         "spec-periodiques-v0.1 §10",
         "REPRISE_claude_code_2026-08-27"
       ],
-      "verif": {
-        "fr": "31/08 — les 1 673 brouillons SOLIDAIRES sont en base (voir C2) et **aucun ne porte de `serial_id`** : le rattachement des fascicules n'a pas commencé. Toujours derrière G7. **15/09** — la bibliothèque de destination existe (Solidaires, 14/09) et le lot lui est attribué ; le rattachement des 91 fascicules et des 87 monographies suspectes reste à faire dans le lot, avant la promotion, et reste bloqué par C2/G7.",
-        "pt": "31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou. **15/09** — a biblioteca de destino existe e o lote está-lhe atribuído ; o resto continua bloqueado por C2/G7."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — les 1 673 brouillons SOLIDAIRES sont en base (voir C2) et **aucun ne porte de `serial_id`** : le rattachement des fascicules n'a pas commencé. Toujours derrière G7. **15/09** — la bibliothèque de destination existe (Solidaires, 14/09) et le lot lui est attribué ; le rattachement des 91 fascicules et des 87 monographies suspectes reste à faire dans le lot, avant la promotion, et reste bloqué par C2/G7.",
+          "pt": "31/08 — os 1 673 rascunhos SOLIDAIRES estão no banco (ver C2) e **nenhum traz `serial_id`**: o vínculo dos fascículos não começou. **15/09** — a biblioteca de destino existe e o lote está-lhe atribuído ; o resto continua bloqueado por C2/G7."
+        },
+        {
+          "fr": "24/09 — **débloqué** : la fiche disait « bloqué par C2, donc G7 et A1 » ; C2 et G7 sont clos (Solidaires admise le 15/09, lot 63 attribué). Mesuré : 0 brouillon sur 1 673 porte un `serial_id`. Le rattachement des 91 fascicules et l examen des 87 candidates sont à faire dans le lot, avant sa promotion — bibliothéconomie, dans l application.",
+          "pt": "24/09 — **desbloqueado**: C2 e G7 estão fechados (Solidaires admitida em 15/09). Medido: 0 rascunhos em 1 673 com `serial_id`. A ligar antes da promoção do lote."
+        }
+      ]
     },
     {
       "id": "D4",
@@ -3473,78 +3515,14 @@
         "PLAN_DE_MARCHE §8",
         "Relevé du 29/08/2026"
       ],
-      "verif": {
-        "fr": "31/08 — `mail-i18n-test` est toujours déployée en production (version 1 566, retouchée le jour même par un déploiement groupé). Le dépôt compte 50 dossiers de fonctions hors `_shared`, et `config.toml` porte 38 déclarations `verify_jwt`.",
-        "pt": "31/08 — `mail-i18n-test` continua implantada (versão 1 566). O repositório tem 50 pastas de funções e 38 declarações `verify_jwt`."
-      }
-    },
-    {
-      "id": "F4",
-      "d": "F",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Trois bibliothèques avaient activé des rappels que personne n'envoyait",
-        "pt": "Três bibliotecas tinham ativado lembretes que ninguém enviava"
-      },
-      "v": {
-        "fr": "`spec-flux-emprunts.md` §10.2 prévoit des rappels à J-5, J-3 et le jour même, puis des relances à J+1, J+7 et J+30. **Aucun job dédié n'est identifiable** parmi les 36 crons ; le seul voisin est `anarbib-notify-mid-loan-reading-daily`, qui fait autre chose. `membership_expiry_notifications` n'a jamais reçu la moindre ligne.\n\n**Vérifié le 30/08 : le manque est confirmé.** Les onze crons dont le nom évoque une échéance ou une relance ont été relus un par un — cooptation, adhésions, invitations d'équipe, votes OAI, réservations, autorités, cercles, et `anarbib-peb-detect-overdue-daily` qui concerne le **prêt entre bibliothèques**, pas le prêt aux lectrices. **Aucun ne rappelle une échéance d'emprunt ni ne relance un retard.** Le doute est levé : ce n'est plus un item à vérifier, c'est une décision à prendre.\n\n**Instruit et livré le 31/08 — et le constat était encore trop petit.** Les rappels n'existaient pas, c'était établi. Ce qui ne l'était pas : **les interrupteurs qui les commandent, eux, existent**. `library_notification_policies` porte `loan_reminders_enabled` et `loan_overdue_enabled`, exposés dans `v_library_notification_context` — la vue que lit la pile courriel. En production, **les trois bibliothèques dotées d'une politique les ont à `true`** : non parce qu'elles les ont activés, mais parce qu'ils naissent activés (« Default : tous à `true` », §2.4). Trois bibliothèques se croyaient couvertes par un dispositif absent — cas *(a)* de `DOC-SILENCE-1`, et même mécanique que le privilège `anon` retourné le même jour.\n\n**La référence de l'item était fausse** : la règle n'est pas au §10.2 — qui dit « hors périmètre, dette à confirmer » — mais au **§2.4**. Les deux sections sont amendées.\n\n**Six moments deviennent trois** (`DOC-RAPPEL-1`) : J-3, le jour de l'échéance, J+7. Motif `OPS-8` — un signal qui se répète cesse d'être lu, et une lectrice émoussée ne referme pas un ticket, elle cesse d'emprunter.\n\n**Un quatrième envoi en remplace un autre.** `notify-mid-loan-reading` demandait « Como vai a leitura? » — une question à laquelle un courriel ne permet pas de répondre — **en portugais en dur**, quelle que soit la langue de la lectrice. À mi-parcours, on invite désormais à déposer une **note de lecture sous pseudonyme** dans le catalogue : `book_reading_notes` est construite, déployée, et n'avait jamais reçu une seule ligne, et l'écran d'écriture existe déjà sur la page de l'œuvre. Son cron est désactivé — garder les deux, ce serait deux courriels le même jour.\n\n**Livré** : EF `notify-loan-cycle` (quatre moments, dix locales, 120 chaînes), table `loan_cycle_notifications` avec unicité (item, moment) — sans elle un cron rejoué enverrait deux fois le même rappel —, interrupteur `reading_notes_invite_enabled` né en même temps que l'envoi qu'il gouverne, cron quotidien à 9h15 UTC, suite `rappels_echeance_tests.sql` (7 tests, dont un qui écrit).",
-        "pt": "`spec-flux-emprunts.md` §10.2 prevê lembretes em D-5, D-3 e no próprio dia, depois cobranças em D+1, D+7 e D+30. **Nenhum job dedicado é identificável** entre os 36 crons; o único vizinho é `anarbib-notify-mid-loan-reading-daily`, que faz outra coisa.\n\n**Verificado em 30/08: a falta está confirmada.** Os onze crons cujo nome evoca um vencimento ou uma cobrança foram relidos um a um. **Nenhum lembra um vencimento de empréstimo nem cobra um atraso.** A dúvida está levantada: já não é um item a verificar, é uma decisão a tomar.\n\n**Instruído e entregue em 31/08.** Os lembretes não existiam — mas **os interruptores que os comandam existiam**, e as três bibliotecas com política tinham-nos a `true` sem o saber. Seis momentos passam a **três** (`DOC-RAPPEL-1`). Um quarto envio substitui `notify-mid-loan-reading`, que perguntava «Como vai a leitura?» **em português fixo**: agora convida a deixar uma **nota de leitura sob pseudónimo** no catálogo. **Entregue**: EF `notify-loan-cycle`, tabela `loan_cycle_notifications` com unicidade (item, momento), suíte `rappels_echeance_tests.sql`."
-      },
-      "w": {
-        "fr": "Voir la CI verte, déployer, puis **éprouver pour de bon** : créer un emprunt dont l'échéance tombe à J-3 et vérifier qu'un courriel part, dans la bonne langue, une seule fois. C'est la leçon d'`I5` : ne pas livrer un envoi sans l'avoir vu partir.",
-        "pt": "Ver a CI verde, implantar, depois **provar a sério**: criar um empréstimo com vencimento a J-3 e verificar que um e-mail parte, na língua certa, uma só vez."
-      },
-      "y": {
-        "fr": "Le suivi de huit semaines de la formation BLMF prévoit qu'une consulta soit menée de bout en bout avec négociation réelle : c'est le moment où l'absence de rappel se verra. Autant le savoir avant.",
-        "pt": "O acompanhamento de oito semanas da formação BLMF prevê que uma consulta seja conduzida de ponta a ponta com negociação real: é o momento em que a ausência de lembrete aparecerá. Melhor saber antes."
-      },
-      "f": [
-        {
-          "fr": "~~Un verdict écrit~~ — ils n'existaient pas, et trois bibliothèques croyaient le contraire.",
-          "pt": "~~Um veredicto escrito~~."
-        },
-        {
-          "fr": "~~Soit implémentés, soit la spec amendée~~ — les deux : spec ramenée à trois moments, puis implémentés.",
-          "pt": "~~Implementados ou spec emendada~~ — ambos."
-        },
-        {
-          "fr": "Chaque interrupteur commande un envoi réel, et chaque envoi a son interrupteur.",
-          "pt": "Cada interruptor comanda um envio real."
-        },
-        {
-          "fr": "Un rappel ne part **qu'une fois** par item et par moment.",
-          "pt": "Um lembrete parte **uma só vez**."
-        },
-        {
-          "fr": "Un envoi a été **vu partir**, dans la langue de la destinataire.",
-          "pt": "Um envio foi **visto partir**, na língua da destinatária."
-        }
-      ],
-      "dep": {
-        "fr": "Se vérifie en même temps que **F1**.",
-        "pt": "Verifica-se ao mesmo tempo que **F1**."
-      },
-      "r": [
-        "spec-flux-emprunts §2.4 et §10.2",
-        "REGISTRE DOC-RAPPEL-1, OPS-8, DOC-SILENCE-1",
-        "supabase/functions/notify-loan-cycle/",
-        "migration 20260831111700",
-        "tests/sql/rappels_echeance_tests.sql",
-        "public.book_reading_notes"
-      ],
       "verif": [
         {
-          "fr": "31/08 — relevé en base (36 crons relus, aucun pour le prêt aux lectrices ; 3 bibliothèques avec les deux interrupteurs à `true` ; `book_reading_notes` à zéro ligne) et dans le dépôt (l'ancien mi-parcours écrit en portugais en dur, aucune colonne de blog nulle part). Livré le jour même ; **pas encore éprouvé en envoi réel**.",
-          "pt": "31/08 — levantamento em base e no repositório. Entregue no mesmo dia; **ainda não provado em envio real**."
+          "fr": "31/08 — `mail-i18n-test` est toujours déployée en production (version 1 566, retouchée le jour même par un déploiement groupé). Le dépôt compte 50 dossiers de fonctions hors `_shared`, et `config.toml` porte 38 déclarations `verify_jwt`.",
+          "pt": "31/08 — `mail-i18n-test` continua implantada (versão 1 566). O repositório tem 50 pastas de funções e 38 declarações `verify_jwt`."
         },
         {
-          "fr": "16/09 — `loan_cycle_notifications` porte **un** envoi en septembre 2026 : le circuit a envoyé une fois pour de vrai. Reste à dire lequel (`moment`) et si c'est l'épreuve J-3 que l'item demandait.",
-          "pt": "16/09 — `loan_cycle_notifications` tem **um** envio em setembro de 2026: o circuito enviou uma vez de verdade. Falta dizer qual (`moment`) e se é a prova J-3 que o item pedia."
+          "fr": "24/09 — `mail-i18n-test` est toujours au dépôt (`supabase/functions/mail-i18n-test`) et dans `config.toml`, donc toujours déployée à chaque passage de la CI. Depuis F7 (24/09), les huit fonctions d envoi passent par un seul transport : l audit F1 et cette consolidation sont moins chers qu au 31/08.",
+          "pt": "24/09 — `mail-i18n-test` continua no repositório e no `config.toml`, portanto implantada. Desde F7, um só transporte: F1 e esta consolidação ficaram mais baratos."
         }
       ]
     },
@@ -3597,10 +3575,16 @@
         "item F4",
         "public.book_reading_notes"
       ],
-      "verif": {
-        "fr": "31/08 — remesuré en production : **62 tables de `public` sur 189** à zéro insertion (`pg_stat_user_tables.n_tup_ins`, croisé avec un décompte de lignes sur les tables citées). Le compte est stable, la liste ne l'est pas — `loan_cycle_notifications` y est entrée le jour de sa naissance. Emprunt **#69** ouvert à la BLMF ; l'invitation à écrire une note de lecture est attendue le **10/09**, et c'est la première sortie possible de cette liste. **06/09** — deux circuits de plus sont construits sans être empruntés : **l'atelier ouvert aux œuvres** (05/09 soir, cinq types de proposition, file « corrige-moi » de 1 452 titres) compte **0 proposition** ; la **révision des lots importés** (05/09) compte **0 révision** (`catalog_batch_reviews` vide) ; et `network_contributors` est toujours à **0** — l'atelier des autorités lui-même n'avait jamais reçu une proposition avant le 05/09. La liste des circuits jamais empruntés s'allonge plus vite qu'elle ne se vide.",
-        "pt": "31/08 — remedido em produção: **62 tabelas de `public` em 189** a zero inserções. A conta é estável, a lista não. Empréstimo **#69** aberto na BLMF; o convite a escrever uma nota de leitura é esperado em **10/09**. **06/09** — dois circuitos a mais construídos sem uso : a oficina aberta às obras (0 proposta) e a revisão dos lotes importados (0 revisão) ; `network_contributors` continua a 0."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — remesuré en production : **62 tables de `public` sur 189** à zéro insertion (`pg_stat_user_tables.n_tup_ins`, croisé avec un décompte de lignes sur les tables citées). Le compte est stable, la liste ne l'est pas — `loan_cycle_notifications` y est entrée le jour de sa naissance. Emprunt **#69** ouvert à la BLMF ; l'invitation à écrire une note de lecture est attendue le **10/09**, et c'est la première sortie possible de cette liste. **06/09** — deux circuits de plus sont construits sans être empruntés : **l'atelier ouvert aux œuvres** (05/09 soir, cinq types de proposition, file « corrige-moi » de 1 452 titres) compte **0 proposition** ; la **révision des lots importés** (05/09) compte **0 révision** (`catalog_batch_reviews` vide) ; et `network_contributors` est toujours à **0** — l'atelier des autorités lui-même n'avait jamais reçu une proposition avant le 05/09. La liste des circuits jamais empruntés s'allonge plus vite qu'elle ne se vide.",
+          "pt": "31/08 — remedido em produção: **62 tabelas de `public` em 189** a zero inserções. A conta é estável, a lista não. Empréstimo **#69** aberto na BLMF; o convite a escrever uma nota de leitura é esperado em **10/09**. **06/09** — dois circuitos a mais construídos sem uso : a oficina aberta às obras (0 proposta) e a revisão dos lotes importados (0 revisão) ; `network_contributors` continua a 0."
+        },
+        {
+          "fr": "24/09 — remesuré en production : **deux circuits de plus sont empruntés** — `network_contributors` porte 2 lignes actives (22/09) et `library_request_votes` 2 votes favorables (14 et 16/09, l admission de Solidaires). Toujours à zéro : notes de lecture (`book_reading_notes`), propositions d autorité ou d œuvre (`authority_proposals`), révisions de lots (`catalog_batch_reviews`). Et G14 le redit en miniature : une invitation par courriel n a pas suffi, la relance humaine a fait accepter.",
+          "pt": "24/09 — remedido: **dois circuitos a mais foram percorridos** — 2 contribuidores da rede (22/09) e 2 votos sobre pedidos de admissão (14 e 16/09). Ainda a zero: notas de leitura, propostas de autoridade ou obra, revisões de lotes."
+        }
+      ]
     },
     {
       "id": "G6",
@@ -3901,7 +3885,7 @@
       "id": "I2",
       "d": "I",
       "p": "P1",
-      "s": "gele",
+      "s": "ouvert",
       "e": "L",
       "sk": [
         "sysadmin"
@@ -3957,6 +3941,10 @@
         {
           "fr": "21/09 — **relu sur pièces et remesuré ; le « comment » de la fiche est en partie fait, et la journée a trouvé trois choses qu'aucune relecture ne pouvait voir.** *(a) Découpler la CI* : fait pour le backend depuis le 01/09 (`scripts/ci/deployer-backend.sh`, que `ci.yml` appelle) ; **fait ce jour pour le front** — `scripts/ci/publier-front.sh` rejoue hors forge le job `app` (l'action git-pages n'est qu'une image Docker, `git-pages-cli`), garde `publier-front-coherence` ; construction, `--simulation` et `--vers-dossier` exécutés, **publication réelle par ce chemin jamais faite** (`--essai` existe pour le premier tir). Et `deploy/deploy.sh` ne reconstruisait **jamais** le front d'une instance auto-hébergée (`install.sh` le construit une fois) : étape « Front » ajoutée, éprouvée sur une pile restaurée. *(b) Les pins d'images périmaient en silence* : la production était passée à GoTrue v2.197.0 (82 migrations) et Storage 1.73.1 (68) sous des pins à 77 et 65 ; remesurés au banc (`deploy/banc-paliers.sh`), puis **Storage a remonté le soir même** (1.77.5, 73 migrations, 20 h 43) — vu cette fois par la sonde `images_pins` de `health-probe`, livrée dans la journée (migrations `20260921181812` et `20260921190301`, incident ouvert, courriel reçu par Xavier à 20 h 45). Pins retenus : `v2.197.0` et `v1.77.0`, 344 colonnes `auth`+`storage` concordantes avec la production. *(c) Passe `--depuis-une-sauvegarde` sur un dump RÉEL sous ces images* : restauration en 62 s, huit décomptes identiques à la production (5 bibliothèques, 2 656 notices, 2 758 exemplaires, 20 comptes, 17 buckets, 833 objets), 831 fichiers reversés, deux objets servis octet pour octet, connexion par l'Edge Function `login`. Le dump, lui, a coûté 301 s (schéma) + 439 s (données, 37,6 Mo — le double du 26/08). **Trouvé en chemin** : `supabase db dump` n'emporte pas `supabase_migrations` — une instance restaurée ne pouvait plus jamais être mise à jour par `deploy.sh` (il rejouait le socle) ; **réparé** (troisième fichier `migrations.sql`, étape « 3 bis » de `restore.sh`, `restore-historique.sh`, garde-fou dans `apply-pending-migrations.sh`). Il n'emporte pas `cron.job` non plus : **I26**. Et un `pg_dump` lancé pendant qu'une migration attend en CI la fait mourir sur le statement timeout (run 1288, rouge d'une demi-heure, aucune écriture partielle). Pièce : `journal/operations/NOTE_pins-images-remesures_2026-09-21`. Restent au « comment » : le proxy inverse avec tunnel, les empreintes `sha256`, la répétition à froid, la question du Jitsi.",
           "pt": "21/09 — **relido sobre peças e remedido; o « como » da ficha está em parte feito, e o dia achou três coisas que nenhuma releitura podia ver.** *(a) Desacoplar a CI*: feito para o backend desde 01/09 (`scripts/ci/deployer-backend.sh`); **feito hoje para o front** — `scripts/ci/publier-front.sh` repete fora da forja o job `app` (a ação git-pages é só uma imagem Docker, `git-pages-cli`), guarda `publier-front-coherence`; construção, `--simulation` e `--vers-dossier` executados, **publicação real por este caminho nunca feita** (`--essai` existe para o primeiro tiro). E `deploy/deploy.sh` **nunca** reconstruía o front de uma instância auto-hospedada: etapa « Front » acrescentada, provada numa pilha restaurada. *(b) Os pins de imagens caducavam em silêncio*: a produção tinha passado a GoTrue v2.197.0 (82 migrações) e Storage 1.73.1 (68) sob pins a 77 e 65; remedidos na bancada (`deploy/banc-paliers.sh`), e **o Storage subiu de novo na mesma noite** (1.77.5, 73 migrações, 20h43) — visto desta vez pela sonda `images_pins` do `health-probe`, entregue no mesmo dia (migrações `20260921181812` e `20260921190301`, incidente aberto, e-mail recebido por Xavier às 20h45). Pins retidos: `v2.197.0` e `v1.77.0`, 344 colunas `auth`+`storage` concordantes com a produção. *(c) Passagem `--depuis-une-sauvegarde` num dump REAL sob estas imagens*: restauração em 62 s, oito contagens idênticas à produção, 831 ficheiros repostos, dois objetos servidos byte a byte, login pela Edge Function `login`. O dump custou 301 s (esquema) + 439 s (dados, 37,6 MB — o dobro de 26/08). **Achado pelo caminho**: `supabase db dump` não leva `supabase_migrations` — uma instância restaurada nunca mais podia ser atualizada por `deploy.sh`; **reparado** (terceiro ficheiro `migrations.sql`, etapa « 3 bis » de `restore.sh`, `restore-historique.sh`, guarda em `apply-pending-migrations.sh`). Também não leva `cron.job`: **I26**. E um `pg_dump` lançado enquanto uma migração espera na CI fá-la morrer no statement timeout (run 1288, vermelho de meia hora, nenhuma escrita parcial). Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`. Restam no « como »: o proxy inverso com túnel, as impressões `sha256`, a repetição a frio, a questão do Jitsi."
+        },
+        {
+          "fr": "24/09 — le gel « jusqu au 14/09 » est levé ; état remis à « ouvert ». Restent au « comment » : proxy inverse avec tunnel, empreintes `sha256`, répétition à froid, la question du Jitsi — et I21 devant.",
+          "pt": "24/09 — congelamento levantado; estado reposto em « aberto »."
         }
       ]
     },
@@ -3964,7 +3952,7 @@
       "id": "I3",
       "d": "I",
       "p": "P1",
-      "s": "gele",
+      "s": "ouvert",
       "e": "S",
       "sk": [
         "deno"
@@ -4003,10 +3991,16 @@
         "deploy/README.md",
         "deploy/REPETITION.md étape 5"
       ],
-      "verif": {
-        "fr": "31/08 — `supabase/functions/main/index.ts` : 6 885 octets, présent ; aucun test ne le mentionne dans `src/tests/` ni `tests/`. Le constat tient.",
-        "pt": "31/08 — `main/index.ts`: 6 885 bytes, presente; nenhum teste o menciona."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — `supabase/functions/main/index.ts` : 6 885 octets, présent ; aucun test ne le mentionne dans `src/tests/` ni `tests/`. Le constat tient.",
+          "pt": "31/08 — `main/index.ts`: 6 885 bytes, presente; nenhum teste o menciona."
+        },
+        {
+          "fr": "24/09 — le gel « jusqu au 14/09 » est levé ; état remis à « ouvert ». Les quatre tests du routeur restent à passer sur la pile locale (bloqué par B6 selon la fiche : à relire, B6 n est plus au backlog).",
+          "pt": "24/09 — congelamento levantado; estado reposto em « aberto ». Os quatro testes do router continuam por passar."
+        }
+      ]
     },
     {
       "id": "I15",
@@ -4045,10 +4039,16 @@
         "fr": "Accès aux réglages du dépôt Forgejo (Settings → Actions → Secrets).",
         "pt": "Acesso às configurações do repositório Forgejo (Settings → Actions → Secrets)."
       },
-      "verif": {
-        "fr": "01/09 — `ci.yml` relu après la bascule : mappage `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` en place, commenté.",
-        "pt": "01/09 — `ci.yml` relido depois da virada: mapeamento `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` no lugar, comentado."
-      },
+      "verif": [
+        {
+          "fr": "01/09 — `ci.yml` relu après la bascule : mappage `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` en place, commenté.",
+          "pt": "01/09 — `ci.yml` relido depois da virada: mapeamento `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}` no lugar, comentado."
+        },
+        {
+          "fr": "24/09 — à la main de Xavier : créer le secret `VITE_SUPABASE_PUBLISHABLE_KEY` dans Forgejo (Settings → Actions → Secrets), même valeur que `VITE_SUPABASE_ANON_KEY` — la valeur est la clé publiable `sb_publishable_…`, publique par nature (elle est dans chaque page servie ; lisible dans Supabase → Project Settings → API Keys). La ligne de `ci.yml` bascule dès que le secret existe.",
+          "pt": "24/09 — à mão de Xavier: criar o segredo `VITE_SUPABASE_PUBLISHABLE_KEY` no Forgejo com o valor da chave publicável `sb_publishable_…` (pública por natureza). A linha do `ci.yml` muda assim que o segredo existir."
+        }
+      ],
       "r": [
         ".forgejo/workflows/ci.yml",
         "item B18"
@@ -4468,7 +4468,7 @@
       "id": "E14",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "front",
@@ -4518,10 +4518,16 @@
         "supabase/migrations/20260821130001_signaler_un_doublon_d_autorite.sql",
         "CONTRIBUTING.md"
       ],
-      "verif": {
-        "fr": "07/09 — grep sur `src/`, `supabase/functions/` (52 EF), `App.jsx` (routes), `fr.json` ; dépôt `eb790c33`. Aucun mécanisme, aucun item au backlog avant celui-ci.",
-        "pt": "07/09 — grep em `src/`, `supabase/functions/` (52 EF), `App.jsx`, `fr.json`; repositório `eb790c33`. Nenhum mecanismo, nenhum item no backlog antes deste."
-      }
+      "verif": [
+        {
+          "fr": "07/09 — grep sur `src/`, `supabase/functions/` (52 EF), `App.jsx` (routes), `fr.json` ; dépôt `eb790c33`. Aucun mécanisme, aucun item au backlog avant celui-ci.",
+          "pt": "07/09 — grep em `src/`, `supabase/functions/` (52 EF), `App.jsx`, `fr.json`; repositório `eb790c33`. Nenhum mecanismo, nenhum item no backlog antes deste."
+        },
+        {
+          "fr": "24/09 — **les deux décisions sont prises par Xavier** : *(a)* **aucun pont vers Codeberg** — file dans l application + courriel aux admins réseau, un admin recopie à la main s il le juge utile ; *(b)* **un accusé de réception simple** par courriel quand la personne a laissé une adresse (« reçu, merci », avec le numéro du signalement, sans suivi ensuite). Pris en main par cette session le 24/09.",
+          "pt": "24/09 — **as duas decisões foram tomadas por Xavier**: *(a)* nenhuma ponte para o Codeberg; *(b)* um aviso de receção simples por e-mail quando a pessoa deixou um endereço. Assumido por esta sessão em 24/09."
+        }
+      ]
     },
     {
       "id": "G13",
@@ -4587,7 +4593,7 @@
       "id": "H9",
       "d": "H",
       "p": "P1",
-      "s": "gele",
+      "s": "ouvert",
       "e": "M",
       "sk": [
         "sql",
@@ -4632,10 +4638,16 @@
         "claude/VERIF_subject_ficedl_links_schema_2026-09-07",
         "migration 20260907172508"
       ],
-      "verif": {
-        "fr": "07/09 — domaine étendu en base, porte fermée, deux rendus binaires constatés dans le dépôt.",
-        "pt": "07/09 — domínio estendido no banco, porta fechada, duas renderizações binárias constatadas no repositório."
-      }
+      "verif": [
+        {
+          "fr": "07/09 — domaine étendu en base, porte fermée, deux rendus binaires constatés dans le dépôt.",
+          "pt": "07/09 — domínio estendido no banco, porta fechada, duas renderizações binárias constatadas no repositório."
+        },
+        {
+          "fr": "24/09 — le gel « jusqu au 14/09 » est levé depuis dix jours ; état remis à « ouvert ». Rien d autre n a bougé : porte fermée dans la RPC, deux rendus binaires.",
+          "pt": "24/09 — o congelamento até 14/09 acabou; estado reposto em « aberto »."
+        }
+      ]
     },
     {
       "id": "H10",
@@ -4684,55 +4696,6 @@
       "verif": {
         "fr": "07/09 — 98 liens, 54 `close`, 0 vers `dates`.",
         "pt": "07/09 — 98 vínculos, 54 `close`, 0 para `dates`."
-      }
-    },
-    {
-      "id": "H11",
-      "d": "H",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Le dépôt dit 462 descripteurs FICEDL, la production en porte 621 — régénérer la migration de données avant qu'un rejeu depuis zéro ne casse",
-        "pt": "O repositório diz 462 descritores FICEDL, a produção carrega 621 — regenerar a migração de dados antes que um replay do zero quebre"
-      },
-      "v": {
-        "fr": "**Vérifié le 07/09, dépôt et production.** `20260826191000_donnees_ficedl_thesaurus.sql` insère 462 lignes (227 sujets, 234 geo, 1 double, **0 date**) — figée sur l'aspiration du 30/06. La production porte l'aspiration du 03/09 : **621** (159 dates en plus) parce que `ficedl_thesaurus_sync.mjs` a été rejoué. Le rejeu depuis une base vide passe encore : les 47 `mot_id` référencés par la migration d'alignement sont tous dans les 462. Il cassera le jour où un alignement visera un terme postérieur au 30/06 — c'est exactement ce que **H10** va faire. Deux dates de l'aspiration (161) manquent en base (159) : sans libellé, écartées par `isSyncable`.",
-        "pt": "**Verificado em 07/09, repositório e produção.** `20260826191000_donnees_ficedl_thesaurus.sql` insere 462 linhas (227 assuntos, 234 geo, 1 dupla, **0 data**) — congelada na coleta de 30/06. A produção carrega a coleta de 03/09: **621** (159 datas a mais) porque `ficedl_thesaurus_sync.mjs` foi reexecutado. O replay a partir de um banco vazio ainda passa: os 47 `mot_id` referenciados pela migração de alinhamento estão todos nos 462. Vai quebrar no dia em que um alinhamento visar um termo posterior a 30/06 — é exatamente o que **H10** vai fazer. Duas datas da coleta (161) faltam no banco (159): sem rótulo, descartadas por `isSyncable`."
-      },
-      "w": {
-        "fr": "Régénérer la migration de données depuis `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` (ou la remplacer par un seed rejoué par le sync en CI), et regarder les deux fiches sans libellé. Ne jamais lancer le sync avec `--prune`.",
-        "pt": "Regenerar a migração de dados a partir de `docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json` (ou substituí-la por um seed reexecutado pelo sync na CI), e olhar as duas fichas sem rótulo. Nunca rodar o sync com `--prune`."
-      },
-      "y": {
-        "fr": "Une reconstruction depuis zéro (**A2**, la bascule **I2**) qui ne rejoue pas les données de production n'est pas une reconstruction — c'est une autre base.",
-        "pt": "Uma reconstrução do zero (**A2**, a virada **I2**) que não reexecuta os dados de produção não é uma reconstrução — é outro banco."
-      },
-      "f": {
-        "fr": [
-          "`count(*)` de `ficedl_thesaurus_terms` identique en CI et en production.",
-          "Le rejeu de `sql-tests.yml` passe avec un alignement vers un descripteur `dates`."
-        ],
-        "pt": [
-          "`count(*)` de `ficedl_thesaurus_terms` idêntico na CI e na produção.",
-          "O replay de `sql-tests.yml` passa com um alinhamento para um descritor `dates`."
-        ]
-      },
-      "dep": {
-        "fr": "Avant **H10**. Conditionne **A2** et **I2**.",
-        "pt": "Antes de **H10**. Condiciona **A2** e **I2**."
-      },
-      "r": [
-        "REGISTRE §30 THES-FIC-O4",
-        "claude/VERIF_subject_ficedl_links_schema_2026-09-07",
-        "REPRISE_claude_code_2026-08-27 (piège --prune)"
-      ],
-      "verif": {
-        "fr": "07/09 — 462 au dépôt, 621 en production, rejeu encore vert.",
-        "pt": "07/09 — 462 no repositório, 621 na produção, replay ainda verde."
       }
     },
     {
@@ -5246,62 +5209,6 @@
         "fr": "22/09 — en-tête `X-Spam-Report` lu dans la source du message reçu (Thunderbird, compte Riseup) ; `ANARBIB_REPLY_TO_EMAIL` localisé dans `register/index.ts` l. 16 et 653 ; valeur en production déduite de l'en-tête `Reply-To: AnarBib <anarbib@proton.me>` du courriel, le secret lui-même n'étant pas lisible depuis le poste. **22/09 au soir, livré** : quatre secrets en production partageaient la même valeur (`ADMIN_EMAIL`, `ANARBIB_ADMIN_EMAIL`, `ANARBIB_REPLY_TO_EMAIL`, `NETWORK_REPLY_TO_EMAIL`, même empreinte dans `supabase secrets list`) — les deux Reply-To retirés (`supabase secrets unset`), `register` retombe sur `SENDER_EMAIL` ; `notify-network-weekly-report` ne retombe plus sur `ADMIN_EMAIL` ; `notify-library-invitation` et `notify-library-request` n'écrivent plus de Reply-To Proton (l'adresse est dans leur corps) ; `welcome.autoMessage` ×10 dit « n'y réponds pas, pour joindre une personne : anarbib@proton.me » ; garde `src/tests/reply-to-meme-domaine.test.js` à liste fermée ; règle écrite dans `deploy/functions.env.example`. **Reste, à la main de Xavier : une inscription vers une adresse Riseup et la lecture de `X-Spam-Status`** — c'est le premier critère.",
         "pt": "22/09 — cabeçalho `X-Spam-Report` lido na fonte da mensagem recebida; `ANARBIB_REPLY_TO_EMAIL` localizado em `register/index.ts`; valor em produção deduzido do cabeçalho `Reply-To` do e-mail. **22/09 à noite, entregue**: os dois Reply-To retirados dos segredos de produção; `notify-network-weekly-report` não recai mais em `ADMIN_EMAIL`; invitation e library-request sem Reply-To Proton; `welcome.autoMessage` ×10 com o endereço humano no corpo; guarda `reply-to-meme-domaine.test.js`. **Falta: um cadastro para um endereço Riseup e a leitura de `X-Spam-Status`.**"
       }
-    },
-    {
-      "id": "G14",
-      "d": "G",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Une invitation d'équipe attend depuis le 30/08 et expirera le 29/09 — la personne ne le sait peut-être pas",
-        "pt": "Um convite de equipe espera desde 30/08 e expirará em 29/09 — a pessoa talvez não saiba"
-      },
-      "v": {
-        "fr": "**Vérifié en base le 07/09** : dans `library_team_invitations`, une invitation créée le 30/08 est toujours `ready`, expiration le 29/09 (deux autres du 01/09 sont `accepted` et `pending_ratification`). Le plan de formation du 01/09 la signalait déjà : « il faut la prévenir ». Le cron d'expiration la fermera en silence.",
-        "pt": "**Verificado no banco em 07/09**: em `library_team_invitations`, um convite criado em 30/08 continua `ready`, expira em 29/09 (dois outros de 01/09 estão `accepted` e `pending_ratification`). O plano de formação de 01/09 já o sinalizava: «é preciso avisá-la». O cron de expiração vai fechá-lo em silêncio."
-      },
-      "w": {
-        "fr": "Un message à la personne invitée, par le canal humain (`DOC-COLLECTIVE-1`). Puis regarder pourquoi l'invitation par courriel n'a pas suffi — c'est **G1** en miniature.",
-        "pt": "Uma mensagem à pessoa convidada, pelo canal humano (`DOC-COLLECTIVE-1`). Depois olhar por que o convite por e-mail não bastou — é **G1** em miniatura."
-      },
-      "y": {
-        "fr": "Un circuit qui expire sans que personne ne s'en aperçoive est un circuit qui n'existe pas.",
-        "pt": "Um circuito que expira sem que ninguém perceba é um circuito que não existe."
-      },
-      "f": {
-        "fr": [
-          "L'invitation est `accepted` ou `declined` avant le 29/09, pas expirée."
-        ],
-        "pt": [
-          "O convite está `accepted` ou `declined` antes de 29/09, não expirado."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "claude/PLAN_formation_coordination_BLMF_2026-08-26 (annexe)",
-        "REGISTRE §0 DOC-COLLECTIVE-1"
-      ],
-      "verif": [
-        {
-          "fr": "07/09 — `ready` depuis le 30/08, expiration 29/09.",
-          "pt": "07/09 — `ready` desde 30/08, expira em 29/09."
-        },
-        {
-          "fr": "16/09 — toujours `ready` en production : l'invitation du 30/08 n'est ni acceptée ni déclinée, elle expire le 29/09. Deux autres invitations du 01/09 : une acceptée, une en attente de ratification.",
-          "pt": "16/09 — ainda `ready` em produção: o convite de 30/08 não foi aceite nem recusado, expira em 29/09. Dois outros convites de 01/09: um aceite, um à espera de ratificação."
-        },
-        {
-          "fr": "21/09 — **décision de Xavier : il relance la personne lui-même.** Rien n'est touché en base. À relire le 28/09, veille de l'expiration : état de l'invitation, puis clôture ou nouvelle invitation.",
-          "pt": "21/09 — **decisão de Xavier: ele próprio relança a pessoa.** Nada é tocado na base. A reler em 28/09, véspera da expiração."
-        }
-      ]
     },
     {
       "id": "B24",
