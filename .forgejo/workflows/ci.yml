@@ -121,14 +121,15 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           # Renommage du 01/09/2026 : le code lit VITE_SUPABASE_PUBLISHABLE_KEY.
-          # Le secret Forgejo garde son nom historique VITE_SUPABASE_ANON_KEY —
-          # même contenu, on évite ainsi qu'un renommage de secret et un merge
-          # doivent se produire au même instant. ATTENTION : prebuild (snapshot
-          # catalogue + thésaurus SKOS) fait exit 0 si la variable manque — un
-          # nom désaccordé ne casse pas le build, il publie un instantané
-          # périmé EN SILENCE. À terme : renommer le secret dans les réglages
-          # Forgejo puis aligner cette ligne.
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # Du 01/09 au 24/09 le secret Forgejo gardait son nom historique
+          # VITE_SUPABASE_ANON_KEY (même contenu, la clé publiable). I15, 24/09 :
+          # le secret VITE_SUPABASE_PUBLISHABLE_KEY est créé par Xavier, la ligne
+          # lit un secret du même nom que la variable. ATTENTION, toujours vrai :
+          # prebuild (snapshot catalogue + thésaurus SKOS) fait exit 0 si la
+          # variable manque — un nom désaccordé ne casse pas le build, il publie
+          # un instantané périmé EN SILENCE. La preuve d'un build sain est la
+          # date du catalogue-snapshot.json servi.
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           # Visio d'entraide : instance Jitsi de Framasoft (association française,
           # serveurs Hetzner en Allemagne), ouverte en onglet dédié, pas d'embedding.
           # Jusqu'au 08/09/2026 : vc.autistici.org (accord A/I du 16/06) — A/I a été
