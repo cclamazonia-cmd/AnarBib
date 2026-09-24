@@ -1,6 +1,6 @@
 // @vitest-environment node
 //
-// CHEMIN DÉPÔT : src/tests/signalar-source.test.js
+// CHEMIN DÉPÔT : src/tests/relatar-problema-source.test.js
 //
 // CE QUE CE TEST PROTÈGE (E14, 24/09/2026). « Signaler un problème » tient à un
 // fil de pièces qui doivent rester ensemble : la route publique et la file
@@ -10,7 +10,7 @@
 // la preuve de travail en deux temps, le compteur bug_ip, l'anti-flood. Chaque
 // pièce qui manquerait laisserait une porte sans couloir derrière.
 // Un test de source n'est pas un test de rendu ; le comportement de la fonction
-// et des courriels est éprouvé dans signalar-banc.test.js.
+// et des courriels est éprouvé dans relatar-banc.test.js.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -24,28 +24,28 @@ const lire = (rel) => readFileSync(path.resolve(racine, rel), 'utf8');
 describe('« Signaler un problème » — les pièces tiennent ensemble (E14)', () => {
   it('la page est publique, la file est protégée, les deux sont chargées à la demande', () => {
     const app = lire('src/App.jsx');
-    expect(app).toContain("lazy(() => import('@/pages/public/SignalarPage'))");
-    expect(app).toContain("lazy(() => import('@/pages/federacao/SignalamentosFilaPage'))");
-    expect(app).toContain('<Route path="/signalar" element={<SignalarPage />} />');
-    expect(app).toContain('<Route path="/signalar/fila" element={<ProtectedRoute><SignalamentosFilaPage /></ProtectedRoute>} />');
+    expect(app).toContain("lazy(() => import('@/pages/public/RelatarProblemaPage'))");
+    expect(app).toContain("lazy(() => import('@/pages/federacao/RelatosFilaPage'))");
+    expect(app).toContain('<Route path="/relatar-problema" element={<RelatarProblemaPage />} />');
+    expect(app).toContain('<Route path="/relatar-problema/fila" element={<ProtectedRoute><RelatosFilaPage /></ProtectedRoute>} />');
   });
 
-  it('le pied de page mène à /signalar depuis toute page, avec la page d\'origine', () => {
+  it('le pied de page mène à /relatar-problema depuis toute page, avec la page d\'origine', () => {
     const layout = lire('src/components/layout/index.jsx');
     const footer = layout.slice(layout.indexOf('export function Footer()'));
-    expect(footer).toContain('/signalar?de=${encodeURIComponent(location.pathname)}');
+    expect(footer).toContain('/relatar-problema?de=${encodeURIComponent(location.pathname)}');
     expect(footer).toContain("t({ id: 'nav.report' })");
   });
 
   it("l'intention « signaler un problème » existe, pour tout compte, et mène à la page", () => {
     const intentions = lire('src/pages/inicio/intentions.js');
-    expect(intentions).toMatch(/id: 'report',\s+group: 'reader',[^}]*to: '\/signalar'/);
+    expect(intentions).toMatch(/id: 'report',\s+group: 'reader',[^}]*to: '\/relatar-problema'/);
   });
 
   it('la fonction est déclarée publique, et la page ne demande jamais de mot de passe', () => {
     const toml = lire('supabase/config.toml');
     expect(toml).toMatch(/\[functions\.submit-bug-report\]\s*\nverify_jwt = false/);
-    const page = lire('src/pages/public/SignalarPage.jsx');
+    const page = lire('src/pages/public/RelatarProblemaPage.jsx');
     expect(page).not.toMatch(/type="password"/);
     expect(page).toContain('<AltchaWidget');
     expect(page).toContain("callEdgeFunction('submit-bug-report'");
@@ -67,7 +67,7 @@ describe('« Signaler un problème » — les pièces tiennent ensemble (E14)', 
     const dispatch = lire('supabase/functions/_shared/core/dispatch.ts');
     expect(dispatch).toContain('if (event.startsWith("bug_report.")) return await handleBugReportEvent(recordId);');
     const handler = lire('supabase/functions/_shared/domain/bug-report.ts');
-    expect(handler).toContain('/signalar/fila');
+    expect(handler).toContain('/relatar-problema/fila');
     expect(handler).toContain('bugreport.ack.noreply');
     expect(handler).not.toMatch(/replyTo|reply_to/);
     expect(handler).toContain('verdictEnvois(');
@@ -98,7 +98,7 @@ describe('« Signaler un problème » — les pièces tiennent ensemble (E14)', 
     expect(locales).toHaveLength(10);
     for (const f of locales) {
       const m = JSON.parse(readFileSync(path.join(dirLocales, f), 'utf8'));
-      for (const k of ['signalar.title', 'signalar.what', 'signalar.duplicate', 'signalar.fila.title', 'nav.report', 'inicio.i.report', 'inicio.kw.report']) {
+      for (const k of ['relatar.title', 'relatar.what', 'relatar.duplicate', 'relatar.fila.title', 'nav.report', 'inicio.i.report', 'inicio.kw.report']) {
         expect(m[k], `${f} ${k}`).toBeTruthy();
       }
     }

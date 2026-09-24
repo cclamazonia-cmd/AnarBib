@@ -1,6 +1,6 @@
 // @vitest-environment node
 //
-// CHEMIN DÉPÔT : src/tests/signalar-banc.test.js
+// CHEMIN DÉPÔT : src/tests/relatar-problema-banc.test.js
 //
 // BANC DE « SIGNALER UN PROBLÈME » (E14, 24/09/2026) — la VRAIE Edge Function
 // submit-bug-report et le VRAI handler _shared/domain/bug-report.ts, montés par
@@ -154,7 +154,7 @@ describe('domain/bug-report — les courriels', () => {
     expect(admins.subject).toContain('11111111');
     expect(admins.html).toContain('Le bouton Enregistrer');
     expect(admins.html).toContain('Banc/1.0');
-    expect(liens(admins.html)).toContain('https://app.anarbib.org/signalar/fila');
+    expect(liens(admins.html)).toContain('https://app.anarbib.org/relatar-problema/fila');
     const ack = mailA(ef.envois, 'personne@exemple.test');
     expect(ack.subject).toContain('Ton signalement est bien reçu');
     expect(ack.subject).toContain('11111111');

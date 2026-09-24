@@ -6,7 +6,7 @@
 //      _shared/context/network-admins.ts (F15, 24/09) : les admins actif·ves de
 //      la table ET la boîte collective (NETWORK_ADMIN_CC, repli HEALTH_ALERT_CC) ;
 //      repli ultime admins@anarbib.org si rien n'est configuré. Langue de travail :
-//      français, données brutes telles que saisies. Lien vers la file /signalar/fila ;
+//      français, données brutes telles que saisies. Lien vers la file /relatar-problema/fila ;
 //   2. si la personne a laissé une adresse, un accusé de réception simple dans SA
 //      langue (« reçu, merci », numéro du signalement) — décision de Xavier du 24/09,
 //      sans suivi ensuite. L'adresse humaine est dans le corps, jamais en Reply-To (F14).
@@ -61,7 +61,7 @@ export async function handleBugReportEvent(recordId) {
 
     const ref = String(p.report_id || "").slice(0, 8);
     const localeAdmins = ctx?.default_locale || "pt-BR";
-    const fila = `${APP_URL}/signalar/fila`;
+    const fila = `${APP_URL}/relatar-problema/fila`;
 
     // 1. L'alerte à l'administration du réseau (une résolution des destinataires, F15).
     let admins = await destinatairesAdminsReseau(supabaseAdmin);

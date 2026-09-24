@@ -1,7 +1,7 @@
 // =============================================================================
-// SignalamentosFilaPage.jsx — la file des signalements de problème (E14, 24/09/2026)
+// RelatosFilaPage.jsx — la file des signalements de problème (E14, 24/09/2026)
 // =============================================================================
-// Route /signalar/fila (ProtectedRoute). Réservée à l'administration du réseau :
+// Route /relatar-problema/fila (ProtectedRoute). Réservée à l'administration du réseau :
 // api.fn_bug_report_list / _close lèvent 42501 sinon (la page affiche alors un
 // message). Aucun pont vers Codeberg (décision de Xavier, 24/09) : un admin qui
 // juge utile d'ouvrir une issue la recopie à la main. Modèle : CartografiaModeracaoPage.
@@ -13,9 +13,9 @@ import { PageShell, Topbar, Footer } from '@/components/layout';
 import { apiRpc } from '@/lib/supabase';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
-export default function SignalamentosFilaPage() {
+export default function RelatosFilaPage() {
   const { formatMessage: t } = useIntl();
-  useDocumentTitle(t({ id: 'signalar.fila.title' }));
+  useDocumentTitle(t({ id: 'relatar.fila.title' }));
   const [rows, setRows] = useState(null); // null = chargement | [] | liste
   const [forbidden, setForbidden] = useState(false);
   const [busy, setBusy] = useState(null);
@@ -29,12 +29,12 @@ export default function SignalamentosFilaPage() {
   useEffect(() => { load(); }, []);
 
   async function close(id) {
-    const note = window.prompt(t({ id: 'signalar.fila.closeNote' })) ?? '';
+    const note = window.prompt(t({ id: 'relatar.fila.closeNote' })) ?? '';
     setBusy(id); setMsg('');
     const { error } = await apiRpc('fn_bug_report_close', { p_id: id, p_note: note });
     setBusy(null);
-    if (error) { setMsg(t({ id: 'signalar.fila.error' })); return; }
-    setRows((r) => r.filter((x) => x.id !== id)); setMsg(t({ id: 'signalar.fila.done' }));
+    if (error) { setMsg(t({ id: 'relatar.fila.error' })); return; }
+    setRows((r) => r.filter((x) => x.id !== id)); setMsg(t({ id: 'relatar.fila.done' }));
   }
 
   const panel = {
@@ -54,23 +54,23 @@ export default function SignalamentosFilaPage() {
       <Topbar />
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '24px 16px 48px' }}>
         <div style={panel}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 10 }}>{t({ id: 'signalar.fila.title' })}</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 10 }}>{t({ id: 'relatar.fila.title' })}</h1>
           {msg && <p role="status" style={{ color: '#86efac', fontSize: '.85rem' }}>{msg}</p>}
-          {forbidden && <p style={{ color: '#fca5a5' }}>{t({ id: 'signalar.fila.error' })}</p>}
-          {rows && rows.length === 0 && !forbidden && <p style={dim}>{t({ id: 'signalar.fila.empty' })}</p>}
+          {forbidden && <p style={{ color: '#fca5a5' }}>{t({ id: 'relatar.fila.error' })}</p>}
+          {rows && rows.length === 0 && !forbidden && <p style={dim}>{t({ id: 'relatar.fila.empty' })}</p>}
           {rows && rows.map((r) => (
             <div key={r.id} style={card}>
               <div style={dim}>{String(r.id).slice(0, 8)} · {new Date(r.created_at).toLocaleString()}</div>
               <p style={pre}>{r.what_happened}</p>
-              {r.expected && <><div style={dim}>{t({ id: 'signalar.expected' })}</div><p style={pre}>{r.expected}</p></>}
-              {r.steps && <><div style={dim}>{t({ id: 'signalar.steps' })}</div><p style={pre}>{r.steps}</p></>}
+              {r.expected && <><div style={dim}>{t({ id: 'relatar.expected' })}</div><p style={pre}>{r.expected}</p></>}
+              {r.steps && <><div style={dim}>{t({ id: 'relatar.steps' })}</div><p style={pre}>{r.steps}</p></>}
               <div style={dim}>
-                {t({ id: 'signalar.fila.page' })} : {r.page_path || '—'} · {t({ id: 'signalar.fila.context' })} : {[r.locale, r.role_hint, r.library_hint].filter(Boolean).join(' · ') || '—'}
+                {t({ id: 'relatar.fila.page' })} : {r.page_path || '—'} · {t({ id: 'relatar.fila.context' })} : {[r.locale, r.role_hint, r.library_hint].filter(Boolean).join(' · ') || '—'}
               </div>
               <div style={dim}>{r.user_agent || ''}</div>
-              <div style={dim}>{t({ id: 'signalar.fila.contact' })} : {r.reporter_email || t({ id: 'signalar.fila.noContact' })}</div>
+              <div style={dim}>{t({ id: 'relatar.fila.contact' })} : {r.reporter_email || t({ id: 'relatar.fila.noContact' })}</div>
               <div style={{ marginTop: 10 }}>
-                <button type="button" style={btn} disabled={busy === r.id} onClick={() => close(r.id)}>{t({ id: 'signalar.fila.close' })}</button>
+                <button type="button" style={btn} disabled={busy === r.id} onClick={() => close(r.id)}>{t({ id: 'relatar.fila.close' })}</button>
               </div>
             </div>
           ))}

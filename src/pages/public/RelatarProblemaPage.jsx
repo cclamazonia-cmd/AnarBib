@@ -1,4 +1,4 @@
-// CHEMIN DÉPÔT : src/pages/public/SignalarPage.jsx
+// CHEMIN DÉPÔT : src/pages/public/RelatarProblemaPage.jsx
 //
 // « Signaler un problème » (E14, 24/09/2026). Accessible depuis toutes les pages
 // (lien au pied, intention « Je veux… »), SANS compte et sans Codeberg. Trois
@@ -19,9 +19,9 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import AltchaWidget from '@/components/ui/AltchaWidget';
 import { Button } from '@/components/ui';
 
-export default function SignalarPage() {
+export default function RelatarProblemaPage() {
   const { formatMessage: t, locale } = useIntl();
-  useDocumentTitle(t({ id: 'signalar.title' }));
+  useDocumentTitle(t({ id: 'relatar.title' }));
   const location = useLocation();
   const { libraryName, role } = useLibrary();
   const de = new URLSearchParams(location.search).get('de') || '';
@@ -37,9 +37,9 @@ export default function SignalarPage() {
 
   async function submit(e) {
     e.preventDefault();
-    if (f.what.trim().length < 10) { setErrMsg(t({ id: 'signalar.tooShort' })); setState('error'); return; }
+    if (f.what.trim().length < 10) { setErrMsg(t({ id: 'relatar.tooShort' })); setState('error'); return; }
     // Garde-fou d'interface : la vraie vérification est côté serveur.
-    if (!altchaCharge) { setErrMsg(t({ id: 'signalar.error' })); setState('error'); return; }
+    if (!altchaCharge) { setErrMsg(t({ id: 'relatar.error' })); setState('error'); return; }
     setState('sending'); setErrMsg('');
     const res = await callEdgeFunction('submit-bug-report', {
       what_happened: f.what, expected: f.expected, steps: f.steps, reporter_email: f.email,
@@ -50,7 +50,7 @@ export default function SignalarPage() {
       setRef(String(res.data.id).slice(0, 8));
       setState(res.data.duplicate ? 'duplicate' : 'done');
     } else {
-      setErrMsg(t({ id: 'signalar.error' })); setState('error');
+      setErrMsg(t({ id: 'relatar.error' })); setState('error');
     }
     // Une solution ne vaut qu'une fois (AR-4) : on en redemande une neuve dans tous les cas.
     setAltchaCharge(null);
@@ -77,18 +77,18 @@ export default function SignalarPage() {
       <div style={{ maxWidth: 640, margin: '0 auto', padding: '24px 16px 48px' }}>
         <div style={panel}>
           <h1 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: 6, fontFamily: 'var(--brand-font-body)' }}>
-            {t({ id: 'signalar.title' })}
+            {t({ id: 'relatar.title' })}
           </h1>
-          <p style={{ color: 'var(--brand-muted)', marginBottom: 8 }}>{t({ id: 'signalar.intro' })}</p>
-          <p style={{ color: 'var(--brand-muted)', fontSize: '.82rem', marginBottom: 4 }}>{t({ id: 'signalar.consent' })}</p>
+          <p style={{ color: 'var(--brand-muted)', marginBottom: 8 }}>{t({ id: 'relatar.intro' })}</p>
+          <p style={{ color: 'var(--brand-muted)', fontSize: '.82rem', marginBottom: 4 }}>{t({ id: 'relatar.consent' })}</p>
           <p style={{ color: 'var(--brand-muted)', fontSize: '.82rem', marginBottom: 12 }}>
-            {t({ id: 'signalar.context' }, { page: page || t({ id: 'signalar.noPage' }) })}
+            {t({ id: 'relatar.context' }, { page: page || t({ id: 'relatar.noPage' }) })}
           </p>
 
           {state === 'done' || state === 'duplicate' ? (
             <div role="status">
-              <p style={{ color: '#86efac', fontSize: '1rem' }}>{t({ id: state === 'done' ? 'signalar.success' : 'signalar.duplicate' })}</p>
-              <p style={{ color: 'var(--brand-muted)', fontSize: '.9rem' }}>{t({ id: 'signalar.ref' }, { ref })}</p>
+              <p style={{ color: '#86efac', fontSize: '1rem' }}>{t({ id: state === 'done' ? 'relatar.success' : 'relatar.duplicate' })}</p>
+              <p style={{ color: 'var(--brand-muted)', fontSize: '.9rem' }}>{t({ id: 'relatar.ref' }, { ref })}</p>
             </div>
           ) : (
             <form onSubmit={submit}>
@@ -96,19 +96,19 @@ export default function SignalarPage() {
               <input type="text" name="website" autoComplete="off" tabIndex={-1} value={f.website} onChange={set('website')}
                 style={{ position: 'absolute', left: -9999, opacity: 0, height: 0 }} aria-hidden="true" />
 
-              <label htmlFor="signalar-what" style={label}>{t({ id: 'signalar.what' })}</label>
-              <p style={hint}>{t({ id: 'signalar.whatHint' })}</p>
-              <textarea id="signalar-what" required minLength={10} maxLength={4000} rows={5} value={f.what} onChange={set('what')} style={{ ...input, resize: 'vertical' }} />
+              <label htmlFor="relatar-what" style={label}>{t({ id: 'relatar.what' })}</label>
+              <p style={hint}>{t({ id: 'relatar.whatHint' })}</p>
+              <textarea id="relatar-what" required minLength={10} maxLength={4000} rows={5} value={f.what} onChange={set('what')} style={{ ...input, resize: 'vertical' }} />
 
-              <label htmlFor="signalar-expected" style={label}>{t({ id: 'signalar.expected' })}</label>
-              <textarea id="signalar-expected" maxLength={2000} rows={3} value={f.expected} onChange={set('expected')} style={{ ...input, resize: 'vertical' }} />
+              <label htmlFor="relatar-expected" style={label}>{t({ id: 'relatar.expected' })}</label>
+              <textarea id="relatar-expected" maxLength={2000} rows={3} value={f.expected} onChange={set('expected')} style={{ ...input, resize: 'vertical' }} />
 
-              <label htmlFor="signalar-steps" style={label}>{t({ id: 'signalar.steps' })}</label>
-              <textarea id="signalar-steps" maxLength={4000} rows={3} value={f.steps} onChange={set('steps')} style={{ ...input, resize: 'vertical' }} />
+              <label htmlFor="relatar-steps" style={label}>{t({ id: 'relatar.steps' })}</label>
+              <textarea id="relatar-steps" maxLength={4000} rows={3} value={f.steps} onChange={set('steps')} style={{ ...input, resize: 'vertical' }} />
 
-              <label htmlFor="signalar-email" style={label}>{t({ id: 'signalar.email' })}</label>
-              <p style={hint}>{t({ id: 'signalar.emailHint' })}</p>
-              <input id="signalar-email" type="email" maxLength={200} value={f.email} onChange={set('email')} style={input} />
+              <label htmlFor="relatar-email" style={label}>{t({ id: 'relatar.email' })}</label>
+              <p style={hint}>{t({ id: 'relatar.emailHint' })}</p>
+              <input id="relatar-email" type="email" maxLength={200} value={f.email} onChange={set('email')} style={input} />
 
               {/* Anti-robots : preuve de travail résolue dans le navigateur. */}
               <div style={{ margin: '16px 0' }}>
@@ -117,7 +117,7 @@ export default function SignalarPage() {
 
               {state === 'error' && <p role="alert" style={{ color: '#fca5a5', fontSize: '.88rem' }}>{errMsg}</p>}
               <Button variant="primary" type="submit" disabled={state === 'sending'}>
-                {t({ id: state === 'sending' ? 'signalar.sending' : 'signalar.submit' })}
+                {t({ id: state === 'sending' ? 'relatar.sending' : 'relatar.submit' })}
               </Button>
             </form>
           )}

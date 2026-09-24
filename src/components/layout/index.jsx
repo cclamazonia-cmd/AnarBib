@@ -284,7 +284,7 @@ export function Footer() {
       </Link>
       <span aria-hidden="true" style={{ margin: '0 8px', color: 'var(--brand-muted, #888)' }}>·</span>
       {/* E14 (24/09/2026) : signaler un problème depuis n'importe quelle page, sans compte ; la page d'origine part avec. */}
-      <Link to={`/signalar?de=${encodeURIComponent(location.pathname)}`} style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 2 }}>
+      <Link to={`/relatar-problema?de=${encodeURIComponent(location.pathname)}`} style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 2 }}>
         {t({ id: 'nav.report' })}
       </Link>
       <span aria-hidden="true" style={{ margin: '0 8px', color: 'var(--brand-muted, #888)' }}>·</span>

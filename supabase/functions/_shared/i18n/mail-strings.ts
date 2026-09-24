@@ -30,7 +30,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
 
   // ── Signaler un problème : accusé de réception (E14, 24/09/2026) ─────────
   "bugreport.ack.sub": {
-    "pt-BR": "Recebemos o teu aviso — {ref}",
+    "pt-BR": "Recebemos o teu relato — {ref}",
     fr: "Ton signalement est bien reçu — {ref}",
     es: "Recibimos tu aviso — {ref}",
     en: "We received your report — {ref}",
@@ -42,7 +42,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Λάβαμε την αναφορά σου — {ref}"
   },
   "bugreport.ack.intro": {
-    "pt-BR": "Obrigada por avisar. As pessoas que administram a rede vão ler o teu aviso; não haverá acompanhamento automático.",
+    "pt-BR": "Obrigada por relatar. As pessoas que administram a rede vão ler o teu relato; não haverá acompanhamento automático.",
     fr: "Merci d'avoir signalé ce problème. Les personnes qui administrent le réseau vont le lire ; il n'y aura pas de suivi automatique.",
     es: "Gracias por avisar. Las personas que administran la red lo leerán; no habrá seguimiento automático.",
     en: "Thank you for reporting this. The people who administer the network will read it; there will be no automatic follow-up.",
@@ -54,7 +54,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ευχαριστούμε για την αναφορά. Τα άτομα που διαχειρίζονται το δίκτυο θα τη διαβάσουν· δεν θα υπάρξει αυτόματη συνέχεια."
   },
   "bugreport.ack.ref": {
-    "pt-BR": "Número do aviso: {ref}.",
+    "pt-BR": "Número do relato: {ref}.",
     fr: "Numéro du signalement : {ref}.",
     es: "Número del aviso: {ref}.",
     en: "Report number: {ref}.",

@@ -26,7 +26,7 @@ ALTER TABLE public.bug_report_notification_outbox DISABLE TRIGGER tg_bug_report_
 
 DO $$
 DECLARE
-  ok int := 0; total int := 8;
+  ok int := 0; total int := 9;
   r_id uuid; n int; p jsonb; cle text; def text; src text; ok_purpose boolean;
   v_uid uuid := gen_random_uuid();
 BEGIN
@@ -105,8 +105,19 @@ BEGIN
   IF src LIKE '%private.fn_functions_base_url()%' AND src NOT LIKE '%supabase.co%' THEN ok := ok + 1;
   ELSE RAISE WARNING 'T8 dépêche : adresse codée en dur ou helper absent'; END IF;
 
+  -- T9 : les deux fonctions de trigger (DEFINER, elles lisent le vault et sortent en HTTP)
+  --      sont fermées à authenticated, anon et PUBLIC — le privilège par défaut de
+  --      `public` les ouvre à authenticated à la création (attrapé par
+  --      salle_des_machines_tests sur la forge le 24/09, migration 20260924204107).
+  IF NOT has_function_privilege('authenticated', 'public.fn_bug_report_enqueue()', 'EXECUTE')
+     AND NOT has_function_privilege('authenticated', 'public.fn_bug_report_outbox_dispatch_trigger()', 'EXECUTE')
+     AND NOT has_function_privilege('anon', 'public.fn_bug_report_outbox_dispatch_trigger()', 'EXECUTE')
+     AND NOT has_function_privilege('public', 'public.fn_bug_report_outbox_dispatch_trigger()', 'EXECUTE') THEN
+    ok := ok + 1;
+  ELSE RAISE WARNING 'T9 : une fonction de trigger reste exécutable par authenticated, anon ou PUBLIC'; END IF;
+
   IF ok = total THEN
-    RAISE NOTICE 'SIGNALEMENTS OK : %/% tests passés — tables verrouillées, file enfilée, RPC admin réseau, Altcha bug_report, compteur bug_ip, dépêche par l''adresse de l''instance', ok, total;
+    RAISE NOTICE 'SIGNALEMENTS OK : %/% tests passés — tables verrouillées, file enfilée, RPC admin réseau, Altcha bug_report, compteur bug_ip, dépêche par l''adresse de l''instance, triggers fermés', ok, total;
   ELSE
     RAISE EXCEPTION 'SIGNALEMENTS ECHEC : %/% tests passés', ok, total;
   END IF;
