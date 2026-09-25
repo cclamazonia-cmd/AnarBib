@@ -1,0 +1,1036 @@
+{
+  "@context": {
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "dct": "http://purl.org/dc/terms/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "prefLabel": {
+      "@id": "skos:prefLabel",
+      "@container": "@language"
+    },
+    "scopeNote": {
+      "@id": "skos:scopeNote",
+      "@container": "@language"
+    },
+    "editorialNote": {
+      "@id": "skos:editorialNote",
+      "@container": "@language"
+    },
+    "notation": "skos:notation",
+    "broader": {
+      "@id": "skos:broader",
+      "@type": "@id"
+    },
+    "inScheme": {
+      "@id": "skos:inScheme",
+      "@type": "@id"
+    },
+    "member": {
+      "@id": "skos:member",
+      "@type": "@id"
+    },
+    "seeAlso": {
+      "@id": "rdfs:seeAlso",
+      "@type": "@id"
+    },
+    "type": "@type",
+    "id": "@id"
+  },
+  "@graph": [
+    {
+      "id": "_:liste-commune",
+      "type": "skos:ConceptScheme",
+      "dct:title": {
+        "@value": "Thésaurus partagé de la FICEDL — liste commune (sujets)",
+        "@language": "fr"
+      },
+      "dct:creator": "Anne Cassani, CIRA de Lausanne, 1985 — et les traductrices et traducteurs depuis",
+      "dct:description": {
+        "@value": "ESQUISSE — 28 descripteurs sur 623 fiches (621 aspirées), produits hors du site à partir d'une aspiration du 3 septembre 2026, révisée le 09/09/2026 après les réponses de la source du 07/09/2026. Ce fichier n'est PAS l'export officiel. Vocabulaire des sujets : 228 descripteurs.",
+        "@language": "fr"
+      },
+      "dct:date": "2026-09-03",
+      "dct:rights": {
+        "@value": "À FIXER. Réponse informelle de juin 2026 : « pas de droits dessus, tout le monde peut le partager, à condition que les évolutions se fassent collectivement ».",
+        "@language": "fr"
+      },
+      "editorialNote": {
+        "fr": "Deux vocabulaires, pas un — confirmé par la source le 07/09/2026 : la « liste commune » (facette sujets) et la « géo-histo » (facettes geo et dates). La FICEDL ne publie aucun URI de schéma : aucun n'est inventé ici, les deux schémas sont des nœuds anonymes à nommer par la source. Un fichier à deux schémas ou deux fichiers : question (c) ouverte. Identifiants (question 1 du 28/08), close le 07/09 : la forme canonique SPIP est ?motNN quel que soit le type d'URL affiché ; les « URL propres » sont des adresses, pas des identités. La proposition /id/motNN est retirée ; skos:notation porte le numéro nu."
+      }
+    },
+    {
+      "id": "_:geo-histo",
+      "type": "skos:ConceptScheme",
+      "dct:title": {
+        "@value": "Thésaurus partagé de la FICEDL — géo-histo (lieux, histoire, dates)",
+        "@language": "fr"
+      },
+      "dct:description": {
+        "@value": "ESQUISSE — 28 descripteurs sur 623 fiches (621 aspirées), produits hors du site à partir d'une aspiration du 3 septembre 2026, révisée le 09/09/2026 après les réponses de la source du 07/09/2026. Ce fichier n'est PAS l'export officiel. Vocabulaire géo-histo : 235 descripteurs geo et 161 dates (1868-2027 ; 159 avec libellé, 147 avec liens Placard / Cartoliste ; mot532, mot538 injoignables le 2026-09-03).",
+        "@language": "fr"
+      },
+      "dct:date": "2026-09-03",
+      "dct:rights": {
+        "@value": "À FIXER. Réponse informelle de juin 2026 : « pas de droits dessus, tout le monde peut le partager, à condition que les évolutions se fassent collectivement ».",
+        "@language": "fr"
+      },
+      "editorialNote": {
+        "fr": "Deux vocabulaires, pas un — confirmé par la source le 07/09/2026 : la « liste commune » (facette sujets) et la « géo-histo » (facettes geo et dates). La FICEDL ne publie aucun URI de schéma : aucun n'est inventé ici, les deux schémas sont des nœuds anonymes à nommer par la source. Un fichier à deux schémas ou deux fichiers : question (c) ouverte. Créateur·rice et date de la géo-histo : non établis depuis l'extérieur. Les dates n'ont pas de bloc de traduction : leur libellé est le titre de la page."
+      }
+    },
+    {
+      "id": "_:collection-art-courants",
+      "type": "skos:Collection",
+      "prefLabel": {
+        "fr": "art : courants"
+      },
+      "member": [
+        "https://thesaurus.ficedl.info/?mot24"
+      ],
+      "inScheme": "_:liste-commune",
+      "editorialNote": {
+        "fr": "Tête de libellé qui n'est pas un descripteur (comme « guerres », neuf fois, dans la géo-histo). Question (b) du 07/09, ouverte : groupe de mots-clés SPIP — alors la hiérarchie est une donnée du site, exportable en skos:broader — ou convention d'affichage — alors skos:Collection, comme écrit ici à titre provisoire."
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot1",
+      "type": "skos:Concept",
+      "notation": "1",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "action directe",
+        "en": "direct action",
+        "es": "acción directa",
+        "it": "azione diretta",
+        "pt": "ação direta",
+        "de": "direkte Aktion",
+        "nl": "directe actie",
+        "ca": "acció directa",
+        "el": "άμεση δράση",
+        "eo": "rekta ago",
+        "el-Latn": "ámesi̱ drási̱"
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=5",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7112",
+        "https://placard.ficedl.info/mot98.html",
+        "https://cartoliste.ficedl.info/mot538.html",
+        "https://ml.ficedl.info/?mot3",
+        "https://lille.cybertaria.org/biblio/spip.php?mot97",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot370",
+        "https://ml.ficedl.info/mot3.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot1"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot20",
+      "type": "skos:Concept",
+      "notation": "20",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : affiches",
+        "en": "art: posters",
+        "es": "arte: carteles",
+        "it": "arte: poster",
+        "pt": "arte: poster",
+        "de": "Kunst: Plakat",
+        "nl": "kunst: poster",
+        "ca": "art: cartells",
+        "el": "τέχνη : αφίσες",
+        "eo": "arto: afiŝoj",
+        "el-Latn": "téchni̱ : afíses"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=47",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7162",
+        "https://placard.ficedl.info/mot5170.html",
+        "https://cartoliste.ficedl.info/mot545.html",
+        "https://ml.ficedl.info/?mot15",
+        "https://lille.cybertaria.org/biblio/spip.php?mot115",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot3555",
+        "https://ml.ficedl.info/mot15.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot20"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot24",
+      "type": "skos:Concept",
+      "notation": "24",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : courants : surréalisme",
+        "en": "art: artistic movements: surrealism",
+        "es": "arte: movimientos artísticos: surrealismo",
+        "it": "arte: movimenti artistici: surrealismo",
+        "pt": "arte: movimentos de arte: surrealismo",
+        "de": "Kunst: künstlerischen Bewegungen: Surrealismus",
+        "nl": "kunst: kunststromingen: surrealisme",
+        "ca": "art: moviments artístics: surrealisme",
+        "el": "τέχνη : ρεύματα : σουρεαλισμός",
+        "eo": "arto: arta fluo: supperrealismo",
+        "el-Latn": "téchni̱ : rév̱mata : sourealismós"
+      },
+      "editorialNote": {
+        "fr": "Parent « art : courants » : pas un descripteur. Question (b) du 07/09, ouverte : groupe de mots-clés SPIP (alors la hiérarchie est une donnée du site) ou convention d'affichage (alors skos:Collection) ? Écrit ici comme skos:Collection, à titre provisoire."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=57",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7179",
+        "https://placard.ficedl.info/mot7506.html",
+        "https://cartoliste.ficedl.info/mot547.html",
+        "https://ml.ficedl.info/?mot16",
+        "https://lille.cybertaria.org/biblio/spip.php?mot119",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot380",
+        "https://ml.ficedl.info/mot16.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot24"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot2",
+      "type": "skos:Concept",
+      "notation": "2",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "économie : agriculture",
+        "en": "economy: agriculture",
+        "es": "economía: agricultura",
+        "it": "economia: agricoltura",
+        "pt": "economia: agricultura",
+        "de": "Wirtschaft: Landwirtschaft",
+        "nl": "economie: landbouw",
+        "ca": "economia: agricultura",
+        "el": "οικονομία : γεωργία",
+        "eo": "ekonomio: agrikulturo",
+        "el-Latn": "oikonomías : geo̱rgía"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot88",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7116",
+        "https://placard.ficedl.info/mot5192.html",
+        "https://cartoliste.ficedl.info/mot539.html",
+        "https://ml.ficedl.info/?mot4",
+        "https://lille.cybertaria.org/biblio/spip.php?mot98",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot352",
+        "https://ml.ficedl.info/mot4.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot2"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot14",
+      "type": "skos:Concept",
+      "notation": "14",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "économie : argent et monnaie",
+        "en": "economy: money",
+        "es": "economía: dinero",
+        "it": "economia: valuta",
+        "pt": "economia: dinheiro",
+        "de": "Wirtschaft: Geld",
+        "nl": "economie: geld",
+        "ca": "economia: diners i moneda",
+        "el": "οικονομία : χρήμα και νόμισμα",
+        "eo": "ekonomio: mono kaj monero",
+        "el-Latn": "oikonomías : chrí̱ma kai nómisma"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot88",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=40",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7134",
+        "https://placard.ficedl.info/mot4794.html",
+        "https://cartoliste.ficedl.info/mot588.html",
+        "https://ml.ficedl.info/?mot12",
+        "https://lille.cybertaria.org/biblio/spip.php?mot110",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot682",
+        "https://ml.ficedl.info/mot12.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot14"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot51",
+      "type": "skos:Concept",
+      "notation": "51",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "communication (généralités)",
+        "en": "communication (in general)",
+        "es": "comunicación (aspectos generales)",
+        "it": "comunicazione (generale)",
+        "pt": "comunicação (aspectos gerais)",
+        "de": "Mitteilung (geschichtlich)",
+        "nl": "communicatie (algemeen)",
+        "ca": "comunicació (general)",
+        "el": "επικοινωνία (γενικά)",
+        "eo": "komuniko (ĝenerale)",
+        "el-Latn": "epikoino̱nía (geniká)"
+      },
+      "scopeNote": {
+        "fr": "Marqué d'une astérisque à la source : mot absent, à l'époque, de la liste d'origine du CIRA."
+      },
+      "editorialNote": {
+        "fr": "L'astérisque est posée hors du bloc de traduction : elle porte sur la fiche, pas sur une langue."
+      },
+      "seeAlso": [
+        "https://ml.ficedl.info/?mot105",
+        "https://lille.cybertaria.org/biblio/spip.php?mot170",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot4338",
+        "https://ml.ficedl.info/mot105.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot51"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot303",
+      "type": "skos:Concept",
+      "notation": "303",
+      "inScheme": "_:geo-histo",
+      "prefLabel": {
+        "fr": "Allemagne : histoire : 1945-1989 (Est)",
+        "en": "Germania : history : (East)",
+        "es": "Alemania : historia : (Este)",
+        "it": "Germania : storia : (Est)",
+        "pt": "Alemanha : história : (Leste)",
+        "de": "Deutschland : Geschichte : (Osten)",
+        "nl": "Duitsland : geschiedenis : (Oost)",
+        "ca": "Alemanya : història : (Est)",
+        "el": "Γερμανία : ιστορία : (Ανατολή",
+        "eo": "Germanio : historio : (Oriento)",
+        "el-Latn": "Germanía : istoría : Anatolí̱)"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot410",
+      "editorialNote": {
+        "fr": "broader DÉDUIT du libellé (le parent existe tel quel comme descripteur) ; la nature de la hiérarchie côté site reste la question (b) du 07/09. Corrigé à la source entre le 27/08 et le 03/09 : les parenthèses sont entrées dans chaque langue (plus de « ) » orphelin). Reste, en grec, la fermante tombée dans la romanisation : « (Ανατολή » / « Anatolí̱) »."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=13",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7147",
+        "https://placard.ficedl.info/mot5861.html",
+        "https://cartoliste.ficedl.info/mot4197.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot303"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot331",
+      "type": "skos:Concept",
+      "notation": "331",
+      "inScheme": "_:geo-histo",
+      "prefLabel": {
+        "fr": "États-Unis : histoire : 1886 (Haymarket)",
+        "en": "United States : history",
+        "es": "Estados Unidos : historia",
+        "it": "Stati Uniti d'America : storia : Martiri di Chicago",
+        "pt": "Estados Unidos : história",
+        "de": "Vereinigte Staaten : Geschichte",
+        "nl": "Verenigde Staten : geschiedenis",
+        "ca": "Estats Units d'Amèrica : història",
+        "el": "Ηνωμένες Πολιτείες : ιστορία",
+        "eo": "Usono : historio",
+        "el-Latn": "I̱no̱ménes Politeíes : istoría"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot330",
+      "scopeNote": {
+        "fr": "Marqué d'une astérisque à la source : mot absent, à l'époque, de la liste d'origine du CIRA."
+      },
+      "editorialNote": {
+        "fr": "broader DÉDUIT du libellé (le parent existe tel quel comme descripteur) ; la nature de la hiérarchie côté site reste la question (b) du 07/09. L'astérisque est posée hors du bloc de traduction : elle porte sur la fiche, pas sur une langue. Corrigé à la source entre le 27/08 et le 03/09 : « 1886 (Haymarket) » en français, le segment portugais vide (« : ) * ») a disparu — le portugais s'arrête désormais à « história ». L'astérisque porte sur la fiche."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=454",
+        "https://placard.ficedl.info/mot6417.html",
+        "https://cartoliste.ficedl.info/mot4215.html",
+        "https://lille.cybertaria.org/biblio/spip.php?mot572"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot331"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot228",
+      "type": "skos:Concept",
+      "notation": "228",
+      "inScheme": [
+        "_:liste-commune",
+        "_:geo-histo"
+      ],
+      "prefLabel": {
+        "fr": "populations autochtones",
+        "en": "autochthonous people",
+        "es": "pueblo autóctono",
+        "it": "popoli autoctoni",
+        "pt": "povos autóctones",
+        "de": "autochtone Völker",
+        "nl": "autochtone volkeren",
+        "ca": "pobles Indígenes",
+        "el": "αυτόχθονες πληθυσμοί",
+        "eo": "aŭtoktonaj loĝantaroj",
+        "el-Latn": "af̱tóchthones pli̱thysmoí"
+      },
+      "editorialNote": {
+        "fr": "Deux facettes (sujets, geo) : le descripteur appartient aux deux vocabulaires."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=449",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7494",
+        "https://placard.ficedl.info/mot4363.html",
+        "https://cartoliste.ficedl.info/mot666.html",
+        "https://ml.ficedl.info/?mot211",
+        "https://lille.cybertaria.org/biblio/spip.php?mot322",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot3990",
+        "https://ml.ficedl.info/mot211.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot228"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot87",
+      "type": "skos:Concept",
+      "notation": "87",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "écologie",
+        "en": "ecology",
+        "es": "ecología",
+        "it": "ecologia",
+        "pt": "ecologia",
+        "de": "Ökologie",
+        "nl": "ecologie",
+        "ca": "ecologia",
+        "el": "οικολογία",
+        "eo": "ekologio",
+        "el-Latn": "oikología"
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=592",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7260",
+        "https://placard.ficedl.info/mot117.html",
+        "https://cartoliste.ficedl.info/mot586.html",
+        "https://ml.ficedl.info/?mot133",
+        "https://lille.cybertaria.org/biblio/spip.php?mot134",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot146",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot810",
+        "https://ml.ficedl.info/mot133.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot87"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot515",
+      "type": "skos:Concept",
+      "notation": "515",
+      "inScheme": "_:geo-histo",
+      "prefLabel": {
+        "fr": "1880"
+      },
+      "editorialNote": {
+        "fr": "Facette « dates » : aucun bloc de traduction (par construction, une année n'en a pas besoin). Libellé relevé dans le titre de la page, lien Placard relevé."
+      },
+      "seeAlso": [
+        "https://placard.ficedl.info/mot6669.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot515"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot516",
+      "type": "skos:Concept",
+      "notation": "516",
+      "inScheme": "_:geo-histo",
+      "prefLabel": {
+        "fr": "1881"
+      },
+      "editorialNote": {
+        "fr": "Facette « dates » : aucun bloc de traduction (par construction). Libellé relevé dans le titre de la page, lien Placard relevé."
+      },
+      "seeAlso": [
+        "https://placard.ficedl.info/mot6670.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot516"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot8",
+      "type": "skos:Concept",
+      "notation": "8",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "anarchisme",
+        "en": "anarchism",
+        "es": "anarquismo",
+        "it": "anarchismo",
+        "pt": "anarquismo",
+        "de": "Anarchismus",
+        "nl": "anarchisme",
+        "ca": "anarquisme",
+        "el": "αναρχισμός",
+        "eo": "anarkiismo",
+        "el-Latn": "anarchismós"
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=32",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7126",
+        "https://placard.ficedl.info/mot100.html",
+        "https://cartoliste.ficedl.info/mot723.html",
+        "https://ml.ficedl.info/?mot8",
+        "https://lille.cybertaria.org/biblio/spip.php?mot104",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot818",
+        "https://ml.ficedl.info/mot8.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot8"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot17",
+      "type": "skos:Concept",
+      "notation": "17",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art (généralités)",
+        "en": "art (in general)",
+        "es": "arte (general)",
+        "it": "arte",
+        "pt": "artes",
+        "de": "Künste (geschichtlich)",
+        "nl": "kunst (algemeen)",
+        "ca": "art (general)",
+        "el": "τέχνη (γενικά)",
+        "eo": "arto (ĝenerale)",
+        "el-Latn": "téchni̱ (geniká)"
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=46",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7139",
+        "https://placard.ficedl.info/mot4525.html",
+        "https://cartoliste.ficedl.info/mot725.html",
+        "https://ml.ficedl.info/?mot81",
+        "https://lille.cybertaria.org/biblio/spip.php?mot113",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot960",
+        "https://ml.ficedl.info/mot81.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot17"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot22",
+      "type": "skos:Concept",
+      "notation": "22",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : chanson",
+        "en": "art: song",
+        "es": "arte: canción",
+        "it": "arte: canzone",
+        "pt": "arte: canções",
+        "de": "Kunst : Song/Lied",
+        "nl": "kunst: zangkunst en liederen",
+        "ca": "art: cançó",
+        "el": "τέχνη : τραγούδι",
+        "eo": "arto: kanto",
+        "el-Latn": "téchni̱ : tragoúdi"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=116",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7207",
+        "https://placard.ficedl.info/mot4348.html",
+        "https://cartoliste.ficedl.info/mot111.html",
+        "https://ml.ficedl.info/?mot20",
+        "https://lille.cybertaria.org/biblio/spip.php?mot117",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot235",
+        "https://ml.ficedl.info/mot20.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot22"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot23",
+      "type": "skos:Concept",
+      "notation": "23",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : cinéma",
+        "en": "art: cinema",
+        "es": "arte: cine",
+        "it": "arte: cinema",
+        "pt": "arte: cinema",
+        "de": "Kunst: cinema",
+        "nl": "kunst: film",
+        "ca": "art: cinema",
+        "el": "τέχνη : κινηματογράφος",
+        "eo": "arto: kino",
+        "el-Latn": "téchni̱ : kini̱matográfos"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=123",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7213",
+        "https://placard.ficedl.info/mot67.html",
+        "https://cartoliste.ficedl.info/mot546.html",
+        "https://ml.ficedl.info/?mot95",
+        "https://lille.cybertaria.org/biblio/spip.php?mot118",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot2807",
+        "https://ml.ficedl.info/mot95.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot23"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot25",
+      "type": "skos:Concept",
+      "notation": "25",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : dessin",
+        "en": "art: drawings",
+        "es": "arte: dibujo",
+        "it": "arte: disegno",
+        "pt": "arte: desenho",
+        "de": "Kunst: Zeichnung",
+        "nl": "kunst: tekening",
+        "ca": "arte: dibuix",
+        "el": "τέχνη : σχέδιο",
+        "eo": "arto: desegno",
+        "el-Latn": "téchni̱ : schédio"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=59",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7165",
+        "https://placard.ficedl.info/mot4808.html",
+        "https://cartoliste.ficedl.info/mot548.html",
+        "https://ml.ficedl.info/?mot17",
+        "https://lille.cybertaria.org/biblio/spip.php?mot120",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot425",
+        "https://ml.ficedl.info/mot17.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot25"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot26",
+      "type": "skos:Concept",
+      "notation": "26",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : gravure",
+        "en": "art: engraving",
+        "es": "arte: grabado",
+        "it": "arte: incisione",
+        "pt": "arte: gravura",
+        "de": "Kunst: Gravieren",
+        "nl": "kunst: gravure",
+        "ca": "art: escriptura",
+        "el": "τέχνη : χαρακτική",
+        "eo": "arto: gravuraĵo",
+        "el-Latn": "téchni̱ : charaktikí̱"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=60",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7166",
+        "https://placard.ficedl.info/mot5171.html",
+        "https://cartoliste.ficedl.info/mot549.html",
+        "https://ml.ficedl.info/?mot18",
+        "https://lille.cybertaria.org/biblio/spip.php?mot121",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot28",
+        "https://ml.ficedl.info/mot18.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot26"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot27",
+      "type": "skos:Concept",
+      "notation": "27",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : musique",
+        "en": "art: music",
+        "es": "arte: música",
+        "it": "arte: musica",
+        "pt": "arte: música",
+        "de": "Kunst: Musik",
+        "nl": "kunst: muziek",
+        "ca": "art: música",
+        "el": "τέχνη : μουσική",
+        "eo": "arto: muziko",
+        "el-Latn": "téchni̱ : mousikí̱"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=61",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7446",
+        "https://placard.ficedl.info/mot4644.html",
+        "https://cartoliste.ficedl.info/mot510.html",
+        "https://ml.ficedl.info/?mot19",
+        "https://lille.cybertaria.org/biblio/spip.php?mot122",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot602",
+        "https://ml.ficedl.info/mot19.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot27"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot28",
+      "type": "skos:Concept",
+      "notation": "28",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : peinture",
+        "en": "art: painting",
+        "es": "arte: pintura",
+        "it": "arte: pittura",
+        "pt": "arte: pintura",
+        "de": "Kunst: Malerei",
+        "nl": "kunst: schilderkunst",
+        "ca": "art: pintura",
+        "el": "τέχνη : ζωγραφική",
+        "eo": "arto: pentrarto",
+        "el-Latn": "téchni̱ : zo̱grafikí̱"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=62",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7167",
+        "https://placard.ficedl.info/mot4917.html",
+        "https://cartoliste.ficedl.info/mot550.html",
+        "https://ml.ficedl.info/?mot21",
+        "https://lille.cybertaria.org/biblio/spip.php?mot123",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot30",
+        "https://ml.ficedl.info/mot21.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot28"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot29",
+      "type": "skos:Concept",
+      "notation": "29",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : photographie",
+        "en": "art: photography",
+        "es": "arte: fotografía",
+        "it": "arte: fotografia",
+        "pt": "arte: fotografia",
+        "de": "Kunst: Fotografie",
+        "nl": "kunst: fotografie",
+        "ca": "art: fotografia",
+        "el": "τέχνη : φωτογραφία",
+        "eo": "arto: foto",
+        "el-Latn": "téchni̱ : fo̱tografía"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=63",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7168",
+        "https://placard.ficedl.info/mot5172.html",
+        "https://cartoliste.ficedl.info/mot551.html",
+        "https://ml.ficedl.info/?mot96",
+        "https://lille.cybertaria.org/biblio/spip.php?mot124",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot3480",
+        "https://ml.ficedl.info/mot96.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot29"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot31",
+      "type": "skos:Concept",
+      "notation": "31",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : sculpture",
+        "en": "art: sculpture",
+        "es": "arte: escultura",
+        "it": "arte: scultura",
+        "pt": "arte: escultura",
+        "de": "Kunst: Skulptur",
+        "nl": "kunst: beeldhouwkunst",
+        "ca": "art: escultura",
+        "el": "τέχνη : γλυπτική",
+        "eo": "arto: skulptaĵo",
+        "el-Latn": "téchni̱ : glyptikí̱"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=64",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7169",
+        "https://placard.ficedl.info/mot4763.html",
+        "https://cartoliste.ficedl.info/mot537.html",
+        "https://ml.ficedl.info/?mot22",
+        "https://lille.cybertaria.org/biblio/spip.php?mot125",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot342",
+        "https://ml.ficedl.info/mot22.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot31"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot32",
+      "type": "skos:Concept",
+      "notation": "32",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : vidéo",
+        "en": "art : video",
+        "es": "arte: vídeos",
+        "it": "arte: video",
+        "pt": "art: vídeo",
+        "de": "Kunst: Video",
+        "nl": "kunst: video",
+        "ca": "vídeo",
+        "el": "τέχνη : βίντεο",
+        "eo": "arto: video",
+        "el-Latn": "téchni̱ : vínteo"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://placard.ficedl.info/mot5173.html",
+        "https://cartoliste.ficedl.info/mot553.html",
+        "https://ml.ficedl.info/?mot287",
+        "https://lille.cybertaria.org/biblio/spip.php?mot126",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot2893",
+        "https://ml.ficedl.info/mot287.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot32"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot34",
+      "type": "skos:Concept",
+      "notation": "34",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "art : théâtre",
+        "en": "art: theater",
+        "es": "arte: teatro",
+        "it": "arte: teatro",
+        "pt": "arte: teatro",
+        "de": "Kunst: Theater",
+        "nl": "kunst: theater",
+        "ca": "art: teatre",
+        "el": "τέχνη : θέατρο",
+        "eo": "arto: teatro",
+        "el-Latn": "téchni̱ : théatro"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot17",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=65",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7170",
+        "https://placard.ficedl.info/mot4480.html",
+        "https://cartoliste.ficedl.info/mot552.html",
+        "https://ml.ficedl.info/?mot419",
+        "https://lille.cybertaria.org/biblio/spip.php?mot128",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot233",
+        "https://ml.ficedl.info/mot419.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot34"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot88",
+      "type": "skos:Concept",
+      "notation": "88",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "économie (généralités)",
+        "en": "economy (in general)",
+        "es": "economía (aspectos generales)",
+        "it": "economia",
+        "pt": "economia",
+        "de": "Wirtschaft",
+        "nl": "economie",
+        "ca": "economia (general)",
+        "el": "οικονομία (γενικά)",
+        "eo": "ekonomio (ĝenerale)",
+        "el-Latn": "oikonomía (geniká)"
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=593",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7261",
+        "https://placard.ficedl.info/mot122.html",
+        "https://cartoliste.ficedl.info/mot587.html",
+        "https://ml.ficedl.info/?mot134",
+        "https://lille.cybertaria.org/biblio/spip.php?mot135",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot808",
+        "https://ml.ficedl.info/mot134.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot88"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot90",
+      "type": "skos:Concept",
+      "notation": "90",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "économie : banque",
+        "en": "economy: banking",
+        "es": "economía: banco",
+        "it": "economia: banca",
+        "pt": "economia: banco",
+        "de": "Wirtschaft: Bank",
+        "nl": "economie: banken en geldwezen",
+        "ca": "economia: bancs",
+        "el": "οικονομία : τράπεζα",
+        "eo": "ekonomio: banko",
+        "el-Latn": "oikonomías : trápeza"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot88",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://placard.ficedl.info/mot5193.html",
+        "https://cartoliste.ficedl.info/mot589.html",
+        "https://ml.ficedl.info/?mot136",
+        "https://lille.cybertaria.org/biblio/spip.php?mot138",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot940",
+        "https://ml.ficedl.info/mot136.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot90"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot91",
+      "type": "skos:Concept",
+      "notation": "91",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "économie : chômage",
+        "en": "economy: unumployment",
+        "es": "economía: desempleo",
+        "it": "economia: disoccupazione",
+        "pt": "economia: desemprego",
+        "de": "Wirtschaft: Arbeitslosigkeit",
+        "nl": "economie: werkloosheid",
+        "ca": "economia: atur",
+        "el": "οικονομία : ανεργία",
+        "eo": "ekonomio: senlaboreco",
+        "el-Latn": "oikonomías : anergía"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot88",
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie."
+      },
+      "seeAlso": [
+        "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=122",
+        "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7212",
+        "https://placard.ficedl.info/mot4806.html",
+        "https://cartoliste.ficedl.info/mot590.html",
+        "https://ml.ficedl.info/?mot64",
+        "https://lille.cybertaria.org/biblio/spip.php?mot139",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot4509",
+        "https://ml.ficedl.info/mot64.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot91"
+      }
+    },
+    {
+      "id": "https://thesaurus.ficedl.info/?mot93",
+      "type": "skos:Concept",
+      "notation": "93",
+      "inScheme": "_:liste-commune",
+      "prefLabel": {
+        "fr": "économie : démographie",
+        "en": "economy: demography",
+        "es": "economía: demografía",
+        "it": "economia: demografia",
+        "pt": "economia: demografia",
+        "de": "Wirtschaft: Demografie",
+        "nl": "economie: demografie",
+        "ca": "economia: demografia",
+        "el": "οικονομία : δημογραφία",
+        "eo": "ekonomio: demografio",
+        "el-Latn": "oikonomías : di̱mografía"
+      },
+      "broader": "https://thesaurus.ficedl.info/?mot88",
+      "scopeNote": {
+        "fr": "Marqué d'une astérisque à la source : mot absent, à l'époque, de la liste d'origine du CIRA."
+      },
+      "editorialNote": {
+        "fr": "broader CONFIRMÉ par la source le 07/09/2026 : « X (généralités) » est la tête de hiérarchie. L'astérisque est posée hors du bloc de traduction : elle porte sur la fiche, pas sur une langue."
+      },
+      "seeAlso": [
+        "https://ml.ficedl.info/?mot137",
+        "https://lille.cybertaria.org/biblio/spip.php?mot141",
+        "https://archives.cira-marseille.info/raforum/spip.php?mot2740",
+        "https://ml.ficedl.info/mot137.html"
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://thesaurus.ficedl.info/spip.php?mot93"
+      }
+    }
+  ]
+}

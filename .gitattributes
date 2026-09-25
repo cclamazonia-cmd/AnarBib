@@ -94,3 +94,8 @@ supabase/migrations/20260510000000_baseline_live.sql -text
 #
 # Pour reverifier qu'il ne reste rien a renormaliser :
 #     git add --renormalize . && git diff --cached --stat && git reset
+
+# Esquisse SKOS FICEDL (H13, 25/09/2026) : le CSV est ecrit en CRLF avec BOM
+# pour s ouvrir dans un tableur ; il doit sortir du depot octet pour octet tel
+# que scripts/ficedl_thesaurus_esquisse.mjs le produit.
+docs/journal/ficedl/ficedl_thesaurus_ESQUISSE.csv  -text
