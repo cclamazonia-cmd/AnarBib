@@ -507,3 +507,6 @@ tests/sql/signalements_tests.sql
 # 25/09 (F12) : un courriel refusé est rejoué (recul 15 min, 1 h, 6 h), abandonné à quatre
 # essais, acquitté par un admin réseau avec une raison ; la sonde distingue rejeu et abandon.
 tests/sql/courriels_rejeu_tests.sql
+# 25/09 (I22) : une migration appliquée hors CI (created_by non nul) ouvre l incident
+# « deploiement » tant qu une migration versée au dépôt ne l a pas acquittée.
+tests/sql/deploiement_tests.sql

@@ -668,6 +668,22 @@ Deno.serve(async (req: Request) => {
       conseil:
         "Lire l'erreur jointe : une clé Resend tournée ou absente, un domaine d'envoi suspendu, un serveur SMTP qui refuse. Tant que l'incident est ouvert, des personnes croient qu'un courriel leur est parti — la récupération de mot de passe répond « ok » quoi qu'il arrive, par anti-énumération. L'incident se referme de lui-même après trente minutes sans échec.",
     },
+    // 25/09/2026 — I22 / DOC-DEPLOY-1 (« interdire et contrôler »). Une migration
+    // appliquée par l'API de gestion (MCP apply_migration, tableau de bord) porte
+    // un auteur dans supabase_migrations.schema_migrations ; celles de la CI n'en
+    // portent pas. Toute version signée et non acquittée ouvre l'incident, qui ne
+    // se referme qu'à l'acquittement — par une migration versée au dépôt. Le kind
+    // est dans la CHECK depuis la migration 20260925082749.
+    {
+      kind: 'deploiement',
+      rpc: 'fn_healthcheck_deploiement',
+      sujetOuvert: 'AnarBib — une migration a été appliquée hors de la CI',
+      titreOuvert: 'Déploiement : une migration n’est pas passée par git push',
+      quoi: 'le déploiement des migrations',
+      deQuoi: 'du déploiement des migrations',
+      conseil:
+        "DOC-DEPLOY-1 interdit apply_migration (MCP), le tableau de bord et la CLI à la main : git push déploie tout. Pour chaque version jointe : vérifier que son fichier est au dépôt sous la MÊME version (sinon la prochaine db push la rejouera ou échouera), puis verser une migration qui l'inscrit dans deploiement_ecarts_acquittes avec son motif. L'incident ne se referme pas de lui-même.",
+    },
   ];
 
   const actionsStructurelles: Record<string, string> = {};
