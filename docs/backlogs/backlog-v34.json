@@ -2338,6 +2338,14 @@
           "fr": "**Clos le 25/09, le critère tenu.** Les deux fichiers sont au dépôt (`e0fbb024`), dans `docs/journal/ficedl/` : ceux du 09/09 emportés à Bologne — 28 descripteurs, deux schémas en nœuds anonymes, URI `?motNN`, `broader` « généralités » confirmés, « art : courants » en `skos:Collection` provisoire —, sha256 vérifiés contre les trois copies du disque E: (le disque F: de la mémoire n'était pas branché). **Régénérables par une commande documentée** dans le README du dossier : `node scripts/ficedl_thesaurus_esquisse.mjs docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json docs/journal/ficedl` — copie du `build_esquisse.mjs` du paquet hors ligne, sortie **identique octet pour octet** sur l'aspiration du 03/09 (identique elle aussi à celle du paquet). Le CSV (CRLF + BOM) est sorti de la conversion des fins de ligne pour le rester après un clone ; la garde vitest `ficedl-esquisse-regenerable` régénère et compare à chaque CI. La note du 28/08 est versée à côté, avec les trois points où elle est dépassée (26 descripteurs, un seul vocabulaire, `/id/motNN`).",
           "pt": "**Fechado em 25/09.** Os dois arquivos no repositório (`docs/journal/ficedl/`, os de 09/09 levados a Bolonha, sha256 verificados), regeneráveis por um comando documentado no README — saída idêntica byte a byte; o CSV fica fora da conversão de fins de linha; guarda vitest que regenera e compara. A nota de 28/08 ao lado, com os três pontos superados."
         }
+      ],
+      [
+        "H9",
+        "2026-09-25",
+        {
+          "fr": "**Clos le 25/09 au soir, les trois critères tenus.** Livré par `f67ff3d9` (migration `20260925084523`) : la RPC accepte les cinq relations, `skosExport.js` passe par la table `SKOS_MATCH` et ne publie plus rien par défaut, la page-sujet et l'éditeur de la coordination lisent `ficedlMatch.js` — l'éditeur n'offrait jusque-là **aucun** choix de relation —, cinq clés dans les dix locales (en de/nl, « close » ne porte plus le mot de « related »). *(1)* **Xavier a posé depuis l'écran** (capture du 25/09, 21 h 17) un alignement « plus large » : Anarchosyndicalisme (sujet 17) → `mot286` « syndicalisme révolutionnaire », lu en base (`match_type = broad`, 19:17 UTC) ; la page publique `/thesaurus/anarcossindicalismo` l'affiche « PLUS LARGE » à côté de l'« EXACT » de `mot272` (lu dans le navigateur) ; l'export réel `api.thesaurus_export_v1`, appelé en anonyme, passé dans le `skosExport.js` livré, sort `skos:broadMatch <…?mot286>` en Turtle comme en JSON-LD. *(2)* `npm test` vert : 878 tests, dont `skos-relations-h9` (15). *(3)* Le 4.2 de `20260907172508` est inversé dans `20260925084523` le même jour, et annoté là-bas. Suite SQL `alignement_ficedl_relations_tests` (6). Ouvre **H10**.",
+          "pt": "**Fechado em 25/09 à noite, os três critérios cumpridos.** Entregue por `f67ff3d9`. *(1)* Xavier pôs pela tela um alinhamento « mais amplo » (Anarcossindicalismo → `mot286`), lido na base, exibido « MAIS AMPLO » na página pública e exportado em `skos:broadMatch` (Turtle e JSON-LD, export real em anônimo). *(2)* `npm test` verde (878). *(3)* Bloco 4.2 invertido no mesmo dia."
+        }
       ]
     ]
   },
@@ -4498,70 +4506,6 @@
         "fr": "07/09 — production interrogée en lecture seule (jointure `cartography_entries` × `libraries` : trois lignes, réseaux et exemplaires ci-dessus) ; valeurs de `reseau` comptées sur `carte-reseau.umap` ; dépôt `eb790c33`.",
         "pt": "07/09 — produção consultada em leitura (junção `cartography_entries` × `libraries`: três linhas); valores de `reseau` contados em `carte-reseau.umap`; repositório `eb790c33`."
       }
-    },
-    {
-      "id": "H9",
-      "d": "H",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "sql",
-        "front",
-        "langue"
-      ],
-      "t": {
-        "fr": "Ouvrir les cinq relations SKOS aux consommateurs — RPC, page-sujet, sérialiseur, trente clés i18n, d'un bloc",
-        "pt": "Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco"
-      },
-      "v": {
-        "fr": "**Vérifié en base et dans le dépôt le 07/09.** Le domaine de `subject_ficedl_links.match_type` porte désormais `exact`, `close`, `broad`, `narrow`, `related` (migration `20260907172508`), mais la porte est restée fermée exprès : `api.fn_subject_add_ficedl_match` n'accepte que `exact`/`close`, parce que **deux rendus sont binaires** — `src/pages/public/SubjectPage.jsx` (l. 163) affiche « exacte » pour tout ce qui n'est pas `close`, et `src/lib/skosExport.js` sérialise en `skos:exactMatch` tout ce qui n'est pas `close`, dans le Turtle et le JSON-LD publiés. Un `broad` créé aujourd'hui serait publié comme correspondance exacte.",
-        "pt": "**Verificado no banco e no repositório em 07/09.** O domínio de `subject_ficedl_links.match_type` agora carrega `exact`, `close`, `broad`, `narrow`, `related` (migração `20260907172508`), mas a porta ficou fechada de propósito: `api.fn_subject_add_ficedl_match` só aceita `exact`/`close`, porque **duas renderizações são binárias** — `src/pages/public/SubjectPage.jsx` (l. 163) mostra «exata» para tudo que não é `close`, e `src/lib/skosExport.js` serializa como `skos:exactMatch` tudo que não é `close`, no Turtle e no JSON-LD publicados. Um `broad` criado hoje seria publicado como correspondência exata."
-      },
-      "w": {
-        "fr": "Étendre la garde de la RPC aux trois valeurs ; remplacer les deux ternaires par une table à cinq entrées (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`) ; ajouter trois clés `subject.matchBroad/Narrow/Related` dans les dix locales (le test i18n bloque sinon). Livrer les trois ensemble, jamais l'un sans les autres.",
-        "pt": "Estender a guarda da RPC aos três valores; substituir os dois ternários por uma tabela de cinco entradas (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`); acrescentar três chaves `subject.matchBroad/Narrow/Related` nas dez locales (o teste i18n bloqueia se faltar). Entregar os três juntos, nunca um sem os outros."
-      },
-      "y": {
-        "fr": "Tant que le domaine existe en base sans consommateur capable de le dire, chaque alignement « plus large » reste tassé en `close` — une sur-affirmation publiée. Et l'ouvrir sans les rendus ferait pire : un `broad` sortirait en `exactMatch` dans un fichier que d'autres catalogues peuvent moissonner.",
-        "pt": "Enquanto o domínio existir no banco sem consumidor capaz de dizê-lo, cada alinhamento «mais amplo» continua espremido em `close` — uma sobreafirmação publicada. E abri-lo sem as renderizações seria pior: um `broad` sairia como `exactMatch` num arquivo que outros catálogos podem coletar."
-      },
-      "f": {
-        "fr": [
-          "Un alignement `broad` posé depuis l'écran s'affiche « plus large » sur la page-sujet et sort en `skos:broadMatch` dans le Turtle et le JSON-LD.",
-          "`npm test` passe avec les trente clés.",
-          "La migration `20260907172508` voit son bloc de vérification 4.2 (porte fermée) retiré ou inversé le même jour."
-        ],
-        "pt": [
-          "Um alinhamento `broad` posto pela tela aparece «mais amplo» na página de assunto e sai como `skos:broadMatch` no Turtle e no JSON-LD.",
-          "`npm test` passa com as trinta chaves.",
-          "A migração `20260907172508` tem seu bloco de verificação 4.2 (porta fechada) retirado ou invertido no mesmo dia."
-        ]
-      },
-      "dep": {
-        "fr": "Gelé jusqu'au 14/09 (code de production). Précède **H10**.",
-        "pt": "Congelado até 14/09 (código de produção). Precede **H10**."
-      },
-      "r": [
-        "REGISTRE §0 DOC-THES-1",
-        "REGISTRE §30 THES-FIC4, THES-FIC5",
-        "claude/VERIF_subject_ficedl_links_schema_2026-09-07",
-        "migration 20260907172508"
-      ],
-      "verif": [
-        {
-          "fr": "07/09 — domaine étendu en base, porte fermée, deux rendus binaires constatés dans le dépôt.",
-          "pt": "07/09 — domínio estendido no banco, porta fechada, duas renderizações binárias constatadas no repositório."
-        },
-        {
-          "fr": "24/09 — le gel « jusqu au 14/09 » est levé depuis dix jours ; état remis à « ouvert ». Rien d autre n a bougé : porte fermée dans la RPC, deux rendus binaires.",
-          "pt": "24/09 — o congelamento até 14/09 acabou; estado reposto em « aberto »."
-        },
-        {
-          "fr": "25/09 — **livré** (`f67ff3d9`, migration `20260925084523`) : la RPC accepte les cinq relations (définition réelle de prod, seule la garde change), le 4.2 de `20260907172508` inversé ; `skosExport.js` passe par une table à cinq entrées et ne publie plus rien par défaut ; la page-sujet lit la même table ; l'éditeur de la coordination propose **enfin** un choix de relation (il n'en offrait aucun, pas même « proche ») ; cinq clés dans les dix locales, et en de/nl « close » ne porte plus le mot de « related ». Suite `alignement_ficedl_relations_tests` (6) et banc `skos-relations-h9` (15) verts ; critères 2 et 3 tenus. **Reste le premier critère, à la main de Xavier** : poser un alignement « plus large » depuis l'écran avec une session de coordination, le voir sur la page-sujet et en `skos:broadMatch` dans l'export.",
-          "pt": "25/09 — **entregue** (`f67ff3d9`): RPC aceita as cinco relações, 4.2 invertido, `skosExport.js` com tabela de cinco entradas, página do assunto e editor (com escolha da relação), dez locales. Suites verdes; critérios 2 e 3 cumpridos. **Falta o primeiro, por Xavier**: pôr um alinhamento « mais amplo » pela tela e vê-lo na página e em `skos:broadMatch`."
-        }
-      ]
     },
     {
       "id": "H10",

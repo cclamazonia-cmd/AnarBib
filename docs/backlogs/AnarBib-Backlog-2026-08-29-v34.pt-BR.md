@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-25** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-25** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 5
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 4
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 5
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-25.** **41 itens de 53** trazem uma verificação datada própria (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H9, H10, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-25.** **40 itens de 52** trazem uma verificação datada própria (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H10, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1189,7 +1189,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
-| **H9** | Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco | `P1` | A verificar |
 | **H10** | Reler à mão os 98 alinhamentos FICEDL — 54 `close` dos quais uma parte são `broad` — e alinhar enfim as quatro rubricas históricas de Solidaires | `P2` | Aberto |
 | **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
 
@@ -1236,28 +1235,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Outubro-novembro, se o companheiro topar. Ligado a **D4**.
 
 *Remissões : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6` · `VEILLE_leftovers_maydayrooms_2026-08-19`*
-
-#### H9 — Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco
-
-`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
-
-**Estado.** **Verificado no banco e no repositório em 07/09.** O domínio de `subject_ficedl_links.match_type` agora carrega `exact`, `close`, `broad`, `narrow`, `related` (migração `20260907172508`), mas a porta ficou fechada de propósito: `api.fn_subject_add_ficedl_match` só aceita `exact`/`close`, porque **duas renderizações são binárias** — `src/pages/public/SubjectPage.jsx` (l. 163) mostra «exata» para tudo que não é `close`, e `src/lib/skosExport.js` serializa como `skos:exactMatch` tudo que não é `close`, no Turtle e no JSON-LD publicados. Um `broad` criado hoje seria publicado como correspondência exata.
-
-*Verificado : [object Object],[object Object],[object Object]*
-
-**O que é.** Estender a guarda da RPC aos três valores; substituir os dois ternários por uma tabela de cinco entradas (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`); acrescentar três chaves `subject.matchBroad/Narrow/Related` nas dez locales (o teste i18n bloqueia se faltar). Entregar os três juntos, nunca um sem os outros.
-
-**Por que importa.** Enquanto o domínio existir no banco sem consumidor capaz de dizê-lo, cada alinhamento «mais amplo» continua espremido em `close` — uma sobreafirmação publicada. E abri-lo sem as renderizações seria pior: um `broad` sairia como `exactMatch` num arquivo que outros catálogos podem coletar.
-
-**O que conta como terminado.**
-
-- Um alinhamento `broad` posto pela tela aparece «mais amplo» na página de assunto e sai como `skos:broadMatch` no Turtle e no JSON-LD.
-- `npm test` passa com as trinta chaves.
-- A migração `20260907172508` tem seu bloco de verificação 4.2 (porta fechada) retirado ou invertido no mesmo dia.
-
-**Dependências.** Congelado até 14/09 (código de produção). Precede **H10**.
-
-*Remissões : `REGISTRE §0 DOC-THES-1` · `REGISTRE §30 THES-FIC4, THES-FIC5` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `migration 20260907172508`*
 
 #### H10 — Reler à mão os 98 alinhamentos FICEDL — 54 `close` dos quais uma parte são `broad` — e alinhar enfim as quatro rubricas históricas de Solidaires
 
@@ -1839,6 +1816,7 @@ CI verde. |
 | I22 | 2026-09-25 | **Fechado em 25/09 — decidido « proibir e controlar » (decisão de Xavier).** A nota ⚠️ do §30 passa a 🔵, REGISTRE 0.45. A assinatura é `schema_migrations.created_by` (autor quando passa pela API de gestão, nulo pela CI — confirmado pela própria migração do controle). Migração `20260925082749`: `fn_healthcheck_deploiement()` abre o incidente `deploiement` para toda versão assinada não quitada; a quitação só se faz por migração no repositório. Treze desvios anteriores quitados nominalmente, **dois nunca rastreados** (22/09 e 24/09). Suite `deploiement_tests` (9), guarda vitest. Em produção: controle ativo e verde, 57 quitados, health-probe leu a sonda às 08h50 UTC. |
 | J2 | 2026-09-25 | **Fechado em 25/09.** *(1)* A tabela do `INDEX.md` vai do v8 ao v34 sem buraco. *(2)* **`DOC-ARCH-1`** no REGISTRO (0.45, decisão de Xavier: não renomear nada, escrever a regra): o prefixo `-archive-` marca os nove arquivos anteriores à fusão de 20/05; depois, o nome de origem e a pasta bastam. |
 | H13 | 2026-09-25 | **Fechado em 25/09.** Os dois arquivos no repositório (`docs/journal/ficedl/`, os de 09/09 levados a Bolonha, sha256 verificados), regeneráveis por um comando documentado no README — saída idêntica byte a byte; o CSV fica fora da conversão de fins de linha; guarda vitest que regenera e compara. A nota de 28/08 ao lado, com os três pontos superados. |
+| H9 | 2026-09-25 | **Fechado em 25/09 à noite, os três critérios cumpridos.** Entregue por `f67ff3d9`. *(1)* Xavier pôs pela tela um alinhamento « mais amplo » (Anarcossindicalismo → `mot286`), lido na base, exibido « MAIS AMPLO » na página pública e exportado em `skos:broadMatch` (Turtle e JSON-LD, export real em anônimo). *(2)* `npm test` verde (878). *(3)* Bloco 4.2 invertido no mesmo dia. |
 
 ---
 
@@ -1870,4 +1848,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-25. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-25. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
