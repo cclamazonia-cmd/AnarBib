@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { pickLabel } from '@/lib/i18nLabel';
+import { MATCH_TYPES, MATCH_LABEL_KEY } from '@/lib/ficedlMatch';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SubjectLabelEditor — thésaurus v2 étape H-1 : éditeur de libellés multilingue.
@@ -37,6 +38,7 @@ export default function SubjectLabelEditor() {
   const [ficedl, setFicedl] = useState([]);        // descripteurs FICEDL alignés (P3b)
   const [ficQuery, setFicQuery] = useState('');
   const [ficResults, setFicResults] = useState([]);
+  const [ficMatch, setFicMatch] = useState('exact');  // relation SKOS du prochain alignement (H9)
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
 
@@ -106,7 +108,7 @@ export default function SubjectLabelEditor() {
 
   async function addFicedl(motId) {
     setBusy(true); setMsg(null);
-    const { error } = await supabase.schema('api').rpc('fn_subject_add_ficedl_match', { p_subject_id: subj.id, p_mot_id: motId });
+    const { error } = await supabase.schema('api').rpc('fn_subject_add_ficedl_match', { p_subject_id: subj.id, p_mot_id: motId, p_match_type: ficMatch });
     if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
     else { setFicQuery(''); setFicResults([]); await loadFicedl(subj.id); }
     setBusy(false);
@@ -257,10 +259,18 @@ export default function SubjectLabelEditor() {
               {ficedl.map((f) => (
                 <span key={f.mot_id} style={relChip}>
                   {pickLabel(f.labels, locale, 'fr')}
+                  {MATCH_LABEL_KEY[f.match_type] && <span style={{ opacity: .6 }}>· {t({ id: MATCH_LABEL_KEY[f.match_type] })}</span>}
                   <button type="button" disabled={busy} onClick={() => removeFicedl(f.mot_id)} style={relChipX} aria-label="✕">✕</button>
                 </span>
               ))}
             </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+              <label htmlFor="ab-ficedl-match" style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.subjectGov.ficedlMatchType' })}</label>
+              <select id="ab-ficedl-match" className="ab-input" value={ficMatch} onChange={(e) => setFicMatch(e.target.value)} style={{ maxWidth: 200 }}>
+                {MATCH_TYPES.map((m) => <option key={m} value={m}>{t({ id: MATCH_LABEL_KEY[m] })}</option>)}
+              </select>
+            </div>
+            <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #888)', marginBottom: 6 }}>{t({ id: 'catalogacao.subjectGov.ficedlMatchHint' })}</div>
             <input className="ab-input" type="search" value={ficQuery} onChange={(e) => setFicQuery(e.target.value)}
               placeholder={t({ id: 'catalogacao.subjectGov.ficedlAdd' })} style={{ maxWidth: 380 }} />
             {ficResults.length > 0 && (

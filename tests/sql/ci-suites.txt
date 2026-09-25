@@ -510,3 +510,5 @@ tests/sql/courriels_rejeu_tests.sql
 # 25/09 (I22) : une migration appliquée hors CI (created_by non nul) ouvre l incident
 # « deploiement » tant qu une migration versée au dépôt ne l a pas acquittée.
 tests/sql/deploiement_tests.sql
+# 25/09 (H9) : broad/narrow/related posés par la coordination, gardés et exportés tels quels.
+tests/sql/alignement_ficedl_relations_tests.sql

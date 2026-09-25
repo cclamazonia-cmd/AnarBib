@@ -12,6 +12,20 @@
 
 export const THESAURUS_BASE = 'https://app.anarbib.org/thesaurus/';
 
+// Alignement FICEDL : match_type (subject_ficedl_links) -> propriété SKOS.
+// Relation déclarée DEPUIS le sujet AnarBib VERS le descripteur FICEDL : `broad`
+// dit que le descripteur est plus large. Une valeur absente de la table n'est
+// PAS publiée — jamais d'« exact » par défaut, c'était la sur-affirmation que
+// H9 retire (le ternaire binaire publiait tout ce qui n'était pas `close` en
+// skos:exactMatch).
+export const SKOS_MATCH = {
+  exact: 'skos:exactMatch',
+  close: 'skos:closeMatch',
+  broad: 'skos:broadMatch',
+  narrow: 'skos:narrowMatch',
+  related: 'skos:relatedMatch',
+};
+
 const esc = (s) => String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\r/g, '').replace(/\n/g, '\\n');
 const iri = (base, slug) => base + encodeURIComponent(slug);
 
@@ -49,8 +63,9 @@ export function toTurtle(data, base = THESAURUS_BASE) {
     for (const rel of (relMap[c.slug] || [])) P.push(`   skos:related <${encodeURIComponent(rel)}>`);
     // Alignement thésaurus partagé FICEDL : URI externe absolue, écrite telle quelle.
     for (const fm of (c.ficedl || [])) {
-      if (!fm.uri) continue;
-      P.push(`   ${fm.match === 'close' ? 'skos:closeMatch' : 'skos:exactMatch'} <${fm.uri}>`);
+      const prop = SKOS_MATCH[fm.match];
+      if (!fm.uri || !prop) continue;
+      P.push(`   ${prop} <${fm.uri}>`);
     }
     if (c.deprecated) P.push('   owl:deprecated true');
     L.push(`<${encodeURIComponent(c.slug)}>`);
@@ -84,10 +99,10 @@ export function toJsonLd(data, base = THESAURUS_BASE) {
     const rels = relMap[c.slug] || []; if (rels.length) node['skos:related'] = rels.map((r) => ({ '@id': iri(base, r) }));
     // Alignement FICEDL : URI externe absolue (pas d'iri()/encodage).
     const fic = c.ficedl || [];
-    const exact = fic.filter((f) => f.uri && f.match !== 'close').map((f) => ({ '@id': f.uri }));
-    const close = fic.filter((f) => f.uri && f.match === 'close').map((f) => ({ '@id': f.uri }));
-    if (exact.length) node['skos:exactMatch'] = exact;
-    if (close.length) node['skos:closeMatch'] = close;
+    for (const [match, prop] of Object.entries(SKOS_MATCH)) {
+      const cibles = fic.filter((f) => f.uri && f.match === match).map((f) => ({ '@id': f.uri }));
+      if (cibles.length) node[prop] = cibles;
+    }
     if (c.deprecated) node['owl:deprecated'] = true;
     return node;
   });

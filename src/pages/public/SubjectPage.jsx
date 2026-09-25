@@ -18,6 +18,7 @@ import { PageShell, Topbar, Footer } from '@/components/layout';
 import { supabase } from '@/lib/supabase';
 import { pickLabel } from '@/lib/i18nLabel';
 import { normalizePartnerLinks } from '@/lib/ficedlPartners';
+import { MATCH_LABEL_KEY } from '@/lib/ficedlMatch';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 export default function SubjectPage() {
@@ -159,9 +160,11 @@ export default function SubjectPage() {
                     {ficedl.map((f) => (
                       <Link key={f.mot_id} to={`/thesaurus-ficedl/${f.mot_id}`} style={{ ...chip, ...linkBlue }}>
                         {pickLabel(f.labels, locale, 'fr')}
-                        <span style={{ fontSize: '.68rem', color: 'var(--brand-muted)', textTransform: 'uppercase' }}>
-                          {f.match_type === 'close' ? t({ id: 'subject.matchClose' }) : t({ id: 'subject.matchExact' })}
-                        </span>
+                        {MATCH_LABEL_KEY[f.match_type] && (
+                          <span style={{ fontSize: '.68rem', color: 'var(--brand-muted)', textTransform: 'uppercase' }}>
+                            {t({ id: MATCH_LABEL_KEY[f.match_type] })}
+                          </span>
+                        )}
                       </Link>
                     ))}
                   </div>

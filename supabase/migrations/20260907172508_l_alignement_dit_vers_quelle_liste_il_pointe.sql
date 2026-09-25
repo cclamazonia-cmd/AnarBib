@@ -127,6 +127,8 @@ BEGIN
   END IF;
 
   -- 4.2 La porte reste fermée : la RPC d'écriture n'accepte toujours que exact/close.
+  --     Inversé le 25/09/2026 par 20260925084523 (H9), porte ouverte. Au rejeu, ce
+  --     bloc passe encore : il s'exécute avant l'ouverture.
   SELECT pg_get_functiondef(p.oid) INTO v_def
   FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
   WHERE n.nspname = 'api' AND p.proname = 'fn_subject_add_ficedl_match';
