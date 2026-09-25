@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-25** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-25** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,9 +22,9 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 6
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 5
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 5
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-25.** **43 itens de 56** trazem uma verificação datada própria (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H9, H10, H13, I2, I3, I18, I21, I24, J2, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-25.** **41 itens de 53** trazem uma verificação datada própria (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H9, H10, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1189,10 +1189,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
-| **H9** | Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco | `P1` | Aberto |
+| **H9** | Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco | `P1` | A verificar |
 | **H10** | Reler à mão os 98 alinhamentos FICEDL — 54 `close` dos quais uma parte são `broad` — e alinhar enfim as quatro rubricas históricas de Solidaires | `P2` | Aberto |
 | **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
-| **H13** | O esboço SKOS dos 26 descritores não está nem no repositório nem no projeto — versá-lo em `docs/journal/ficedl/` para que seja doável e versionado | `P2` | A verificar |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1240,11 +1239,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H9 — Abrir as cinco relações SKOS aos consumidores — RPC, página de assunto, serializador, trinta chaves i18n, num só bloco
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
 
 **Estado.** **Verificado no banco e no repositório em 07/09.** O domínio de `subject_ficedl_links.match_type` agora carrega `exact`, `close`, `broad`, `narrow`, `related` (migração `20260907172508`), mas a porta ficou fechada de propósito: `api.fn_subject_add_ficedl_match` só aceita `exact`/`close`, porque **duas renderizações são binárias** — `src/pages/public/SubjectPage.jsx` (l. 163) mostra «exata» para tudo que não é `close`, e `src/lib/skosExport.js` serializa como `skos:exactMatch` tudo que não é `close`, no Turtle e no JSON-LD publicados. Um `broad` criado hoje seria publicado como correspondência exata.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Estender a guarda da RPC aos três valores; substituir os dois ternários por uma tabela de cinco entradas (`skos:broadMatch`, `skos:narrowMatch`, `skos:relatedMatch`); acrescentar três chaves `subject.matchBroad/Narrow/Related` nas dez locales (o teste i18n bloqueia se faltar). Entregar os três juntos, nunca um sem os outros.
 
@@ -1302,26 +1301,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `REGISTRE §30 THES-FIC-O2` · `claude/REPONSE_hortical_deux_thesaurus_2026-09-07` · `claude/spec-periodiques-v0.1 §5`*
 
-#### H13 — O esboço SKOS dos 26 descritores não está nem no repositório nem no projeto — versá-lo em `docs/journal/ficedl/` para que seja doável e versionado
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** O dossiê de Bolonha de 03/09 diz: `ficedl_thesaurus_ESQUISSE.csv` e `.jsonld` «não estão no projeto», a levar em pendrive. **Verificado em 07/09**: `docs/journal/ficedl/` contém as quatro coletas e as auditorias, **nenhum arquivo `ESQUISSE`**; o projeto Claude tampouco. O raspador e o sync, esses, estão no repositório (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — essa metade já é doável.
-
-*Verificado : 07/09 — ausentes do repositório e do projeto; sua existência em disco não foi verificada.*
-
-**O que é.** Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada — e, desde a nota da fonte sobre as URL: URI canônica `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, a forma `/id/motNN` retirada.
-
-**Por que importa.** É a peça que você põe na mesa em Bolonha. Uma peça que só existe num pendrive não é contribuição, é demonstração.
-
-**O que conta como terminado.**
-
-- Os dois arquivos no repositório, regeneráveis por um comando documentado.
-
-**Dependências.** Ligado a **H2** e **K6**.
-
-*Remissões : `claude/DOSSIER_rencontre_leftovers_bologne_2026-09-12 §B.1` · `claude/NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
-
 ---
 
 ### I — Auto-hospedagem, operação, backups, CI
@@ -1334,7 +1313,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
-| **I22** | Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar | `P2` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
 
 #### I2 — Concluir a migração para a auto-hospedagem
@@ -1424,26 +1402,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `claude/DECISION_herbesfolles_offre_confirmee_2026-09-07` · `claude/NOTE_sortie_services_etats_uniens_2026-09-05` · `claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)`*
 
-#### I22 — Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** Em 07/09, a migração `20260907172508` foi aplicada em produção por `apply_migration` (MCP) — o que `DOC-DEPLOY-1` proíbe com todas as letras. Desvio constatado depois, rastreado no REGISTRE §30, recuperado sem dupla aplicação (arquivo renomeado com o timestamp registrado em `supabase_migrations.schema_migrations`). O registro deixa a questão aberta e lembra que, enquanto estiver, **a regra escrita vale**.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Duas saídas, uma linha no registro cada: tolerar em caráter excepcional e rastreado, no modelo de `DOC-DEPLOY-3` — ou reafirmar a proibição e pôr o controle que a torna verificável: uma versão presente em `supabase_migrations.schema_migrations` cujo arquivo não está no repositório é a assinatura exata do desvio (uma consulta, executável na CI).
-
-**Por que importa.** Uma regra infringida sem consequência vira regra decorativa. A consequência pode ser uma exceção escrita; não pode ser o silêncio.
-
-**O que conta como terminado.**
-
-- A linha `DOC-DEPLOY-1` do registro não carrega mais o ⚠️ de 07/09.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `REGISTRE §0 DOC-DEPLOY-1` · `REGISTRE §30 (écart tracé)` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07 §4`*
-
 #### I24 — O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
@@ -1474,30 +1432,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 | | | | |
 |---|---|---|---|
-| **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
 | **J9** | Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px | `P2` | A verificar |
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
-
-#### J2 — Reparar o índice dos backlogs e decidir a convenção de arquivamento
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** **Corrigido em 31/08: a linha do v32 está restabelecida desde 29/08.** Restam: as duas convenções de nomenclatura (9 arquivos com prefixo `-archive-`, 27 sem) e um cabeçalho do INDEX que já deriva (« 90 itens », « restam 84 », quando o JSON conta 83).
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Acrescentar a linha do v32, as do v33 e do v34, e decidir a convenção de arquivamento numa frase inscrita no REGISTRO.
-
-**Por que importa.** O índice dos backlogs é o que permite saber qual versão faz fé. Uma linhagem com um buraco e duas convenções concorrentes não cumpre esse ofício.
-
-**O que conta como terminado.**
-
-- A tabela está completa do v8 ao v34.
-- Uma única convenção de nomenclatura está inscrita no REGISTRO.
-
-**Dependências.** Faz-se ao depositar este backlog.
-
-*Remissões : `docs/backlogs/INDEX.md`*
 
 #### J9 — Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px
 
@@ -1900,6 +1836,9 @@ CI verde. |
 | E19 | 2026-09-25 | **Fechado em 25/09, sobre um critério reescrito por Xavier.** O primeiro « pronto quando » — « as três cartas visíveis sem deslizar num portátil » — era **impossível por construção**: o cabeçalho, a faixa, a identidade da pessoa e os vídeos tutoriais precedem o separador. **Critério reescrito por Xavier em 25/09**: *as três cartas vêm logo depois do perfil, antes de todo o resto do separador.* **Cumprido** desde `e09bf16a`: perfil, três cartas, « A minha biblioteca », endereço, o que se lê, e « Apagar a minha conta » em último. Guardado pelo banco `conta-decisions-sous-le-profil` (7 casos), verificado em produção, visto por Xavier. **Fora deste fecho**: a captura do Manual v5, fora do repositório (J9). |
 | B24 | 2026-09-25 | **Fechado em 25/09, os dois critérios cumpridos.** *(1)* No repositório da vitrine (`d4a110f`): endereço e chave publicável em **`js/config.js` e em nenhum outro lugar**; as dez páginas carregam `config.js`; **`tools/garde-cles.cjs`** recusa qualquer JWT legacy, chave secreta, chave publicável fora de `config.js`, atributo `data-supabase-key` ou chave que não comece por `sb_publishable_` — provada vermelha nos dois erros, verde no estado entregue; corre no pre-push, cuja cópia versionada vive em `tools/hooks/pre-push`. Verificado num navegador e em produção. *(2)* O `CONTRIBUTING.md` da aplicação nomeia cada lugar de cada chave e a releitura dos `edge_logs` após rotação. |
 | F12 | 2026-09-25 | **Fechado em 25/09, os três critérios cumpridos.** Entregue por `2a5d2642`. *(1)* O veredicto diz QUEM recusou; os oito handlers das cinco filas escrevem-no; o cron `anarbib-notify-outbox-retry` repõe com « seulement », e o transporte só serve os recusados — banco `courriels-rejeu-banc` (6 casos). *(2)* Após quatro tentativas, `abandoned`; `api.fn_outbox_acquitter` (administração da rede, razão obrigatória) fá-la sair; a sonda distingue `dont_en_rejeu` e `dont_abandonnees` — suite `courriels_rejeu_tests` (9). *(3)* Cron em `fn_crons_attendus()` (39) e na suite. Em produção em 25/09: migração aplicada, cron ativo, sete funções de envio sondadas, e le premier passage du cron, le 25/09 à 00 h 15 (heure de Paris), a réussi en 46 ms (aucune ligne en échec à reprendre). |
+| I22 | 2026-09-25 | **Fechado em 25/09 — decidido « proibir e controlar » (decisão de Xavier).** A nota ⚠️ do §30 passa a 🔵, REGISTRE 0.45. A assinatura é `schema_migrations.created_by` (autor quando passa pela API de gestão, nulo pela CI — confirmado pela própria migração do controle). Migração `20260925082749`: `fn_healthcheck_deploiement()` abre o incidente `deploiement` para toda versão assinada não quitada; a quitação só se faz por migração no repositório. Treze desvios anteriores quitados nominalmente, **dois nunca rastreados** (22/09 e 24/09). Suite `deploiement_tests` (9), guarda vitest. Em produção: controle ativo e verde, 57 quitados, health-probe leu a sonda às 08h50 UTC. |
+| J2 | 2026-09-25 | **Fechado em 25/09.** *(1)* A tabela do `INDEX.md` vai do v8 ao v34 sem buraco. *(2)* **`DOC-ARCH-1`** no REGISTRO (0.45, decisão de Xavier: não renomear nada, escrever a regra): o prefixo `-archive-` marca os nove arquivos anteriores à fusão de 20/05; depois, o nome de origem e a pasta bastam. |
+| H13 | 2026-09-25 | **Fechado em 25/09.** Os dois arquivos no repositório (`docs/journal/ficedl/`, os de 09/09 levados a Bolonha, sha256 verificados), regeneráveis por um comando documentado no README — saída idêntica byte a byte; o CSV fica fora da conversão de fins de linha; guarda vitest que regenera e compara. A nota de 28/08 ao lado, com os três pontos superados. |
 
 ---
 
@@ -1931,4 +1870,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-25. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-25. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

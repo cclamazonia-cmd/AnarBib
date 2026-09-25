@@ -2314,6 +2314,30 @@
           "fr": "**Clos le 25/09, les trois critères tenus.** Livré par `2a5d2642`, migration `20260924214108`. *(1) Un envoi refusé est retenté seul, un nombre borné de fois, sans doublon.* Le verdict (`outbox-verdict.ts`) rend QUI a refusé ; les huit handlers des cinq files concernées (team — avec network, assembleia, library_profile —, lettre, gazette, cartography, bug_report) l écrivent dans `refused_recipients` ; un trigger programme le prochain essai (15 min, 1 h, 6 h) ; le cron `anarbib-notify-outbox-retry` (toutes les 15 min) reposte à `notify-event` avec « seulement » ; `core/dispatch.ts` enveloppe le handler dans la restriction (`transport/restriction.ts`, AsyncLocalStorage) et `safeSendEmail` saute tout destinataire déjà servi en le comptant comme servi. Prouvé par le banc `courriels-rejeu-banc` (6 cas : refus partiel nommé, rejeu qui ne sert que le refusé et passe à « sent », refus persistant, pas de fuite de la restriction, deux dépêches concurrentes). *(2) État final et raison ; la sonde distingue.* Après quatre essais la ligne passe en `abandoned` ; `api.fn_outbox_abandonnees` / `api.fn_outbox_acquitter` (admin réseau, raison obligatoire) l en font sortir en `skipped`, raison écrite ; `fn_healthcheck_notifications` compte à part `dont_en_rejeu` et `dont_abandonnees` (corps réel, deux remplacements comptés). Suite `courriels_rejeu_tests` (9 cas). *(3) Le cron est dans `fn_crons_attendus()` et dans la suite des crons* : 39 jobs ; la suite résout désormais aussi les appels `private.` (0 commande non vérifiée). **Éprouvé avant de pousser** : `node:async_hooks` sous Deno 2.7 et dans le binaire `edge-runtime` du conteneur local ; 111 suites SQL et 859 tests verts. **En production le 25/09** : 335 migrations = 335, cron actif, colonnes sur les cinq files, sonde `ok`, fonctions privées fermées, sept fonctions d envoi sondées (démarrage normal : 401, 400, 422, 200), et le premier passage du cron, le 25/09 à 00 h 15 (heure de Paris), a réussi en 46 ms (aucune ligne en échec à reprendre). Verdicts des deux RPC à l audit (0029 = 424). Hors périmètre, dit dans la migration : `authority_proposal_notification_outbox` (son handler ne lit pas le verdict) et les deux files `painel_*`.",
           "pt": "**Fechado em 25/09, os três critérios cumpridos.** Entregue por `2a5d2642`. *(1)* O veredicto diz QUEM recusou; os oito handlers das cinco filas escrevem-no; o cron `anarbib-notify-outbox-retry` repõe com « seulement », e o transporte só serve os recusados — banco `courriels-rejeu-banc` (6 casos). *(2)* Após quatro tentativas, `abandoned`; `api.fn_outbox_acquitter` (administração da rede, razão obrigatória) fá-la sair; a sonda distingue `dont_en_rejeu` e `dont_abandonnees` — suite `courriels_rejeu_tests` (9). *(3)* Cron em `fn_crons_attendus()` (39) e na suite. Em produção em 25/09: migração aplicada, cron ativo, sete funções de envio sondadas, e le premier passage du cron, le 25/09 à 00 h 15 (heure de Paris), a réussi en 46 ms (aucune ligne en échec à reprendre)."
         }
+      ],
+      [
+        "I22",
+        "2026-09-25",
+        {
+          "fr": "**Clos le 25/09 — tranché « interdire et contrôler » (décision de Xavier), le critère tenu.** La ligne `DOC-DEPLOY-1` ne porte plus l'écart ouvert : la note ⚠️ du §30 devient 🔵 « tranché le 25/09 », REGISTRE 0.45. **Le contrôle n'est pas celui que l'item proposait** : une version sans fichier au dépôt n'aurait rien vu, puisque le fichier de l'écart du 07/09 y était, sous la version inscrite. La signature retenue est `supabase_migrations.schema_migrations.created_by` — un auteur quand la migration passe par l'API de gestion (MCP, tableau de bord), rien quand c'est la CI : lu sur les 335 versions de la production le 25/09, et **confirmé par la migration du contrôle elle-même**, appliquée par la CI sans auteur. Migration `20260925082749` (`d4fa5152`) : `fn_healthcheck_deploiement()` ouvre l'incident `deploiement` sur toute version signée absente de `deploiement_ecarts_acquittes`, qui ne se remplit **que par une migration versée au dépôt** — l'acquittement passe lui-même par la CI. Le bilan ne porte jamais l'auteur. **Treize écarts antérieurs acquittés nommément**, chacun avec le commit qui le trace, **dont deux jamais tracés** (`20260922185953` le 22/09, `20260924180538` le 24/09 ; fichiers au dépôt sous la même version) ; 44 d'avant le 20/08 en bloc. Suite `deploiement_tests` (9 cas, dont le bilan sans auteur) ; garde vitest `health-probe-kinds-check` : tout kind inséré par health-probe doit figurer dans la dernière CHECK (éprouvée rouge). **En production le 25/09** : 336 migrations, contrôle `actif` et vert, 57 écarts acquittés, sonde fermée à anon et authenticated, et health-probe l'a lue au tour de 08 h 50 UTC (`\"deploiement\": true`). Angle mort dit au registre : une `db push` lancée à la main depuis un poste.",
+          "pt": "**Fechado em 25/09 — decidido « proibir e controlar » (decisão de Xavier).** A nota ⚠️ do §30 passa a 🔵, REGISTRE 0.45. A assinatura é `schema_migrations.created_by` (autor quando passa pela API de gestão, nulo pela CI — confirmado pela própria migração do controle). Migração `20260925082749`: `fn_healthcheck_deploiement()` abre o incidente `deploiement` para toda versão assinada não quitada; a quitação só se faz por migração no repositório. Treze desvios anteriores quitados nominalmente, **dois nunca rastreados** (22/09 e 24/09). Suite `deploiement_tests` (9), guarda vitest. Em produção: controle ativo e verde, 57 quitados, health-probe leu a sonda às 08h50 UTC."
+        }
+      ],
+      [
+        "J2",
+        "2026-09-25",
+        {
+          "fr": "**Clos le 25/09, les deux critères tenus.** *(1)* Le tableau de `INDEX.md` court sans trou du v8 au v34 : 36 lignes pour les 36 fichiers d'`archive/`, plus la version courante (relu le 25/09). *(2)* **`DOC-ARCH-1`** au REGISTRE (0.45, décision de Xavier : « ne rien renommer, écrire la règle ») : le préfixe `-archive-` marque les neuf fichiers des lignées d'avant la fusion du 20/05, dont les numéros (v8, v10 à v15) ont été repris par la lignée unifiée — c'est lui qui les distingue ; toute version archivée depuis garde son nom d'origine, le dossier suffit et les liens restent valides. La note de l'INDEX le dit et renvoie au registre. L'en-tête de l'INDEX date désormais son « 90 items » (« à l'écriture ») au lieu de dériver.",
+          "pt": "**Fechado em 25/09.** *(1)* A tabela do `INDEX.md` vai do v8 ao v34 sem buraco. *(2)* **`DOC-ARCH-1`** no REGISTRO (0.45, decisão de Xavier: não renomear nada, escrever a regra): o prefixo `-archive-` marca os nove arquivos anteriores à fusão de 20/05; depois, o nome de origem e a pasta bastam."
+        }
+      ],
+      [
+        "H13",
+        "2026-09-25",
+        {
+          "fr": "**Clos le 25/09, le critère tenu.** Les deux fichiers sont au dépôt (`e0fbb024`), dans `docs/journal/ficedl/` : ceux du 09/09 emportés à Bologne — 28 descripteurs, deux schémas en nœuds anonymes, URI `?motNN`, `broader` « généralités » confirmés, « art : courants » en `skos:Collection` provisoire —, sha256 vérifiés contre les trois copies du disque E: (le disque F: de la mémoire n'était pas branché). **Régénérables par une commande documentée** dans le README du dossier : `node scripts/ficedl_thesaurus_esquisse.mjs docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json docs/journal/ficedl` — copie du `build_esquisse.mjs` du paquet hors ligne, sortie **identique octet pour octet** sur l'aspiration du 03/09 (identique elle aussi à celle du paquet). Le CSV (CRLF + BOM) est sorti de la conversion des fins de ligne pour le rester après un clone ; la garde vitest `ficedl-esquisse-regenerable` régénère et compare à chaque CI. La note du 28/08 est versée à côté, avec les trois points où elle est dépassée (26 descripteurs, un seul vocabulaire, `/id/motNN`).",
+          "pt": "**Fechado em 25/09.** Os dois arquivos no repositório (`docs/journal/ficedl/`, os de 09/09 levados a Bolonha, sha256 verificados), regeneráveis por um comando documentado no README — saída idêntica byte a byte; o CSV fica fora da conversão de fins de linha; guarda vitest que regenera e compara. A nota de 28/08 ao lado, com os três pontos superados."
+        }
       ]
     ]
   },
@@ -4059,59 +4083,6 @@
       ]
     },
     {
-      "id": "J2",
-      "d": "J",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Réparer l'index des backlogs et trancher la convention d'archivage",
-        "pt": "Reparar o índice dos backlogs e decidir a convenção de arquivamento"
-      },
-      "v": {
-        "fr": "**Corrigé le 31/08 : la ligne du v32 est rétablie depuis le 29/08** (`INDEX.md`, avec la note « elle manquait à ce tableau depuis juin »). Restent : les deux conventions de nommage qui coexistent — 9 archives avec le préfixe `-archive-`, 27 sans — et un en-tête d'INDEX qui dérive déjà : « 90 items » puis « les items restent 84 » dans le même paragraphe, quand le JSON en compte 83.",
-        "pt": "**Corrigido em 31/08: a linha do v32 está restabelecida desde 29/08.** Restam: as duas convenções de nomenclatura (9 arquivos com prefixo `-archive-`, 27 sem) e um cabeçalho do INDEX que já deriva (« 90 itens », « restam 84 », quando o JSON conta 83)."
-      },
-      "w": {
-        "fr": "Ajouter la ligne du v32, celles du v33 et du v34, et trancher la convention d'archivage en une phrase inscrite au REGISTRE.",
-        "pt": "Acrescentar a linha do v32, as do v33 e do v34, e decidir a convenção de arquivamento numa frase inscrita no REGISTRO."
-      },
-      "y": {
-        "fr": "L'index des backlogs est ce qui permet de savoir quelle version fait foi. Une lignée avec un trou et deux conventions concurrentes ne remplit pas cet office.",
-        "pt": "O índice dos backlogs é o que permite saber qual versão faz fé. Uma linhagem com um buraco e duas convenções concorrentes não cumpre esse ofício."
-      },
-      "f": {
-        "fr": [
-          "Le tableau est complet du v8 au v34.",
-          "Une seule convention de nommage est inscrite au REGISTRE."
-        ],
-        "pt": [
-          "A tabela está completa do v8 ao v34.",
-          "Uma única convenção de nomenclatura está inscrita no REGISTRO."
-        ]
-      },
-      "dep": {
-        "fr": "Se fait en posant ce backlog.",
-        "pt": "Faz-se ao depositar este backlog."
-      },
-      "r": [
-        "docs/backlogs/INDEX.md"
-      ],
-      "verif": [
-        {
-          "fr": "31/08 — `INDEX.md` relu, archives comptées : 9 avec le préfixe `-archive-`, 27 sans.",
-          "pt": "31/08 — `INDEX.md` relido, arquivos contados: 9 com prefixo `-archive-`, 27 sem."
-        },
-        {
-          "fr": "21/09 — **premier critère tenu, second en attente d'une phrase de Xavier.** `INDEX.md` relu : le tableau nomme toutes les versions du v8 au v34 sans trou ; les archives vivent dans `docs/backlogs/archive/` (36 fichiers, dont 8 au préfixe `-archive-`). Aucune entrée du REGISTRE ne fixe la convention de nommage : c'est le seul reste.",
-          "pt": "21/09 — **primeiro critério cumprido, segundo à espera de uma frase de Xavier.** `INDEX.md` relido: a tabela nomeia todas as versões de v8 a v34; os arquivos vivem em `docs/backlogs/archive/` (36 ficheiros, 8 com o prefixo `-archive-`). Nenhuma entrada do REGISTO fixa a convenção de nomes."
-        }
-      ]
-    },
-    {
       "id": "K1",
       "d": "K",
       "p": "P0",
@@ -4532,7 +4503,7 @@
       "id": "H9",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql",
@@ -4585,6 +4556,10 @@
         {
           "fr": "24/09 — le gel « jusqu au 14/09 » est levé depuis dix jours ; état remis à « ouvert ». Rien d autre n a bougé : porte fermée dans la RPC, deux rendus binaires.",
           "pt": "24/09 — o congelamento até 14/09 acabou; estado reposto em « aberto »."
+        },
+        {
+          "fr": "25/09 — **livré** (`f67ff3d9`, migration `20260925084523`) : la RPC accepte les cinq relations (définition réelle de prod, seule la garde change), le 4.2 de `20260907172508` inversé ; `skosExport.js` passe par une table à cinq entrées et ne publie plus rien par défaut ; la page-sujet lit la même table ; l'éditeur de la coordination propose **enfin** un choix de relation (il n'en offrait aucun, pas même « proche ») ; cinq clés dans les dix locales, et en de/nl « close » ne porte plus le mot de « related ». Suite `alignement_ficedl_relations_tests` (6) et banc `skos-relations-h9` (15) verts ; critères 2 et 3 tenus. **Reste le premier critère, à la main de Xavier** : poser un alignement « plus large » depuis l'écran avec une session de coordination, le voir sur la page-sujet et en `skos:broadMatch` dans l'export.",
+          "pt": "25/09 — **entregue** (`f67ff3d9`): RPC aceita as cinco relações, 4.2 invertido, `skosExport.js` com tabela de cinco entradas, página do assunto e editor (com escolha da relação), dez locales. Suites verdes; critérios 2 e 3 cumpridos. **Falta o primeiro, por Xavier**: pôr um alinhamento « mais amplo » pela tela e vê-lo na página e em `skos:broadMatch`."
         }
       ]
     },
@@ -4682,52 +4657,6 @@
         "claude/REPONSE_hortical_deux_thesaurus_2026-09-07",
         "claude/spec-periodiques-v0.1 §5"
       ]
-    },
-    {
-      "id": "H13",
-      "d": "H",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "L'esquisse SKOS des 26 descripteurs n'est ni au dépôt ni au projet — la verser à `docs/journal/ficedl/` pour qu'elle soit donnable et versionnée",
-        "pt": "O esboço SKOS dos 26 descritores não está nem no repositório nem no projeto — versá-lo em `docs/journal/ficedl/` para que seja doável e versionado"
-      },
-      "v": {
-        "fr": "Le dossier Bologne du 03/09 le dit : `ficedl_thesaurus_ESQUISSE.csv` et `.jsonld` « ne sont pas dans le projet », à emporter sur clé USB. **Vérifié le 07/09** : `docs/journal/ficedl/` contient les quatre aspirations et les audits, **aucun fichier `ESQUISSE`** ; le projet Claude non plus. Le racleur et le sync, eux, sont au dépôt (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — cette moitié-là est déjà donnable.",
-        "pt": "O dossiê de Bolonha de 03/09 diz: `ficedl_thesaurus_ESQUISSE.csv` e `.jsonld` «não estão no projeto», a levar em pendrive. **Verificado em 07/09**: `docs/journal/ficedl/` contém as quatro coletas e as auditorias, **nenhum arquivo `ESQUISSE`**; o projeto Claude tampouco. O raspador e o sync, esses, estão no repositório (`scripts/ficedl_thesaurus_scrape.mjs`, `_sync.mjs`) — essa metade já é doável."
-      },
-      "w": {
-        "fr": "Retrouver les deux fichiers (Downloads ?) ou les régénérer depuis l'aspiration du 03/09, et les commiter avec la note du 28/08 à côté. Depuis le 07/09 l'esquisse est à réviser : deux `skos:ConceptScheme`, les têtes `guerres`/`art : courants` en `skos:Collection`, jamais d'URI de schéma inventé — et, depuis la note de la source sur les URL : URI canonique `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = le numéro, la forme `/id/motNN` retirée.",
-        "pt": "Reencontrar os dois arquivos (Downloads?) ou regenerá-los a partir da coleta de 03/09, e commitá-los com a nota de 28/08 ao lado. Desde 07/09 o esboço está para revisar: dois `skos:ConceptScheme`, as cabeças `guerres`/`art : courants` em `skos:Collection`, nunca URI de esquema inventada — e, desde a nota da fonte sobre as URL: URI canônica `https://thesaurus.ficedl.info/?motNN`, `skos:notation` = o número, a forma `/id/motNN` retirada."
-      },
-      "y": {
-        "fr": "C'est la pièce que tu poses sur la table à Bologne. Une pièce qui n'existe que sur une clé n'est pas une contribution, c'est une démonstration.",
-        "pt": "É a peça que você põe na mesa em Bolonha. Uma peça que só existe num pendrive não é contribuição, é demonstração."
-      },
-      "f": {
-        "fr": [
-          "Les deux fichiers au dépôt, régénérables par une commande documentée."
-        ],
-        "pt": [
-          "Os dois arquivos no repositório, regeneráveis por um comando documentado."
-        ]
-      },
-      "dep": {
-        "fr": "Lié à **H2** et **K6**.",
-        "pt": "Ligado a **H2** e **K6**."
-      },
-      "r": [
-        "claude/DOSSIER_rencontre_leftovers_bologne_2026-09-12 §B.1",
-        "claude/NOTE_export_thesaurus_questions_ouvertes_2026-08-28"
-      ],
-      "verif": {
-        "fr": "07/09 — absents du dépôt et du projet ; leur existence sur disque n'a pas été vérifiée.",
-        "pt": "07/09 — ausentes do repositório e do projeto; sua existência em disco não foi verificada."
-      }
     },
     {
       "id": "K10",
@@ -4832,49 +4761,6 @@
           "fr": "21/09 — **une affirmation du constat tombe, relue sur pièces.** La fiche dit « la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ». C'était déjà faux le 07/09, jour où elle a été écrite : `journal/operations/NOTE_bootstrap-premiere-execution_2026-08-26` §5 décrit l'essai fait le 26/08, après le retrait de Turnstile (AR-2/AR-3) — compte créé par l'API admin, connexion directe GoTrue, **connexion par l'Edge Function `login` : HTTP 200, jeton émis**, zéro appel à `challenges.cloudflare.com`. La rédaction du 07/09 n'avait pas ouvert cette note. **Refait le 21/09** sur une pile reconstruite par `bootstrap.sh --depuis-le-depot --sel-jetable` aux pins remesurés ce jour (GoTrue v2.197.0, Storage v1.72.0) : création 200, GoTrue direct 200, `login` 200 avec jeton, mauvais mot de passe 401, le jeton lit `rest/v1/libraries` en 200, zéro occurrence de « cloudflare » ou « turnstile » dans les journaux des six conteneurs (`journal/operations/NOTE_pins-images-remesures_2026-09-21` §4). Cette condition-là est donc **tenue, avec preuve datée** ; ce qu'elle ne couvre pas : un navigateur réel devant le front reconstruit, et un compte revenu d'un dump de production. Les sept autres conditions sont inchangées.",
           "pt": "21/09 — **uma afirmação do constato cai, relida sobre peças.** A ficha diz « a conexão autenticada na pilha local nunca retestada desde a retirada do Turnstile ». Já era falso em 07/09, dia em que foi escrita: `journal/operations/NOTE_bootstrap-premiere-execution_2026-08-26` §5 descreve o ensaio feito em 26/08, depois da retirada do Turnstile (AR-2/AR-3) — conta criada pela API admin, conexão direta ao GoTrue, **conexão pela Edge Function `login`: HTTP 200, token emitido**, zero chamadas a `challenges.cloudflare.com`. A redação de 07/09 não tinha aberto essa nota. **Refeito em 21/09** numa pilha reconstruída por `bootstrap.sh --depuis-le-depot --sel-jetable` com os pins remedidos nesse dia (GoTrue v2.197.0, Storage v1.72.0): criação 200, GoTrue direto 200, `login` 200 com token, senha errada 401, o token lê `rest/v1/libraries` em 200, zero ocorrências de « cloudflare » ou « turnstile » nos diários dos seis contêineres (`journal/operations/NOTE_pins-images-remesures_2026-09-21` §4). Essa condição está portanto **cumprida, com prova datada**; o que ela não cobre: um navegador real diante do front reconstruído, e uma conta vinda de um dump de produção. As outras sete condições não mudam."
         }
-      ]
-    },
-    {
-      "id": "I22",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Trancher `DOC-DEPLOY-1` après l'écart du 07/09 : tolérer et tracer, ou interdire et contrôler",
-        "pt": "Decidir `DOC-DEPLOY-1` após o desvio de 07/09: tolerar e rastrear, ou proibir e controlar"
-      },
-      "v": {
-        "fr": "Le 07/09, la migration `20260907172508` a été appliquée en production par `apply_migration` (MCP) — ce que `DOC-DEPLOY-1` interdit en toutes lettres. Écart constaté après coup, tracé au REGISTRE §30, rattrapé sans double application (fichier renommé sur l'horodatage enregistré dans `supabase_migrations.schema_migrations`). Le registre laisse la question ouverte et rappelle que, tant qu'elle l'est, **la règle écrite vaut**.",
-        "pt": "Em 07/09, a migração `20260907172508` foi aplicada em produção por `apply_migration` (MCP) — o que `DOC-DEPLOY-1` proíbe com todas as letras. Desvio constatado depois, rastreado no REGISTRE §30, recuperado sem dupla aplicação (arquivo renomeado com o timestamp registrado em `supabase_migrations.schema_migrations`). O registro deixa a questão aberta e lembra que, enquanto estiver, **a regra escrita vale**."
-      },
-      "w": {
-        "fr": "Deux issues, une ligne au registre chacune : tolérer à titre exceptionnel et tracé, sur le modèle de `DOC-DEPLOY-3` — ou réaffirmer l'interdiction et poser le contrôle qui la rend vérifiable : une version présente dans `supabase_migrations.schema_migrations` dont le fichier n'est pas au dépôt est la signature exacte de l'écart (une requête, jouable en CI).",
-        "pt": "Duas saídas, uma linha no registro cada: tolerar em caráter excepcional e rastreado, no modelo de `DOC-DEPLOY-3` — ou reafirmar a proibição e pôr o controle que a torna verificável: uma versão presente em `supabase_migrations.schema_migrations` cujo arquivo não está no repositório é a assinatura exata do desvio (uma consulta, executável na CI)."
-      },
-      "y": {
-        "fr": "Une règle enfreinte sans suite devient une règle décorative. La suite peut être une exception écrite ; ce ne peut pas être le silence.",
-        "pt": "Uma regra infringida sem consequência vira regra decorativa. A consequência pode ser uma exceção escrita; não pode ser o silêncio."
-      },
-      "f": {
-        "fr": [
-          "La ligne `DOC-DEPLOY-1` du registre ne porte plus le ⚠️ du 07/09."
-        ],
-        "pt": [
-          "A linha `DOC-DEPLOY-1` do registro não carrega mais o ⚠️ de 07/09."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "REGISTRE §0 DOC-DEPLOY-1",
-        "REGISTRE §30 (écart tracé)",
-        "claude/VERIF_subject_ficedl_links_schema_2026-09-07 §4"
       ]
     },
     {
