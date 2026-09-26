@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-25** · 52 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-26** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -18,11 +18,11 @@
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 2
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 4
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 18
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 5
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-25.** **40 items sur 52** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H10, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **12** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-26.** **53 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H10, H14, H15, H16, H17, H18, H19, H20, H21, H23, H24, H26, H27, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -598,6 +598,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D6** | Reprendre ou remplacer le lecteur EPUB | `P3` | Ouvert |
+| **D7** | Les archives de collectifs n'ont pas de modèle hiérarchique (fonds, série, dossier, pièce) | `P3` | Décision collective |
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
 
@@ -685,6 +686,26 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `package.json` · `Relevé du 29/08/2026`*
+
+#### D7 — Les archives de collectifs n'ont pas de modèle hiérarchique (fonds, série, dossier, pièce)
+
+`P3` Différé · État : **Décision collective** · Charge : un chantier long · Ce que ça demande : bibliothéconomie
+
+**État.** DIRA décrit ses archives de collectifs dans des tableurs d'inventaire. AnarBib connaît un type « dossier » (`dossier_scope`, `dossier_period`, `dossier_organizations`, `dossier_context` dans `book_drafts`), mais il est **à plat**. Rien ne rattache une pièce à un dossier, un dossier à une série, une série à un fonds. L'import CSV ferait donc une notice par ligne d'inventaire.
+
+*Vérifié : 26/09 — colonnes `dossier_*` de `book_drafts` en production, sans lien hiérarchique.*
+
+**Ce que c'est.** Décision collective, avant tout code. Soit un modèle archivistique dans AnarBib (niveaux ISAD(G), export EAD), soit un renvoi assumé vers un outil dédié (AtoM, par exemple), avec un lien depuis la notice. Recueillir d'abord les besoins de DIRA, du CIRA et du FICEDL.
+
+**Pourquoi ça compte.** Les archives de collectifs sont une part essentielle des fonds libertaires, et elles sont rarement décrites ailleurs. Les aplatir en notices de livre, c'est perdre justement ce qui en fait des archives : leur contexte.
+
+**Ce qui compte comme fini.**
+
+- Décision écrite au registre, avec sa raison.
+
+**Dépendances.** Soulevé par **G15**. Sans dépendance technique.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
 ---
 
@@ -1037,6 +1058,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G9** | Implémenter la cartographie du réseau selon la spec v1.0 | `P3` | Gelé |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
 | **G13** | Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA… | `P2` | Ouvert |
+| **G15** | DIRA : un essai d'import sur échantillon avant toute adhésion, PMB restant la base de référence | `P1` | Ouvert |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1179,6 +1201,29 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)` · `docs/specs/spec-cartographie-reseau.md` · `src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)` · `supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)` · `api.libraries_public_v1 (baseline)` · `src/pages/federacao/CartographyMap.jsx` · `docs/cartographie/carte-reseau.umap`*
 
+#### G15 — DIRA : un essai d'import sur échantillon avant toute adhésion, PMB restant la base de référence
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : aucune compétence technique, bibliothéconomie
+
+**État.** Le 26/09/2026, DIRA a écrit au réseau (« Demande d'adhésion au réseau AnarBib — DIRA ») : une bibliothèque sous **PMB**, avec une collection multilingue, des zines, des archives de collectifs et un comité documentaire actif. Sa question centrale est la pérennité : que deviennent ses données si le projet s'arrête ? La réponse préparée le même jour ne promet pas un aller-retour qui n'existe pas encore (voir **H23**, **H24**). Elle propose un essai sur un échantillon d'une cinquantaine de notices en UNIMARC ISO 2709 avec exemplaires (995), la version de PMB et l'encodage de la base, sans données de lecteur·ices ni de prêts. **Mesuré le 26/09 en production** : aucune instance d'essai séparée n'existe (le projet « staging » est la production). L'essai se fait donc sur le banc (**H14**), sans rien publier.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Envoyer la réponse (Xavier). À réception de l'échantillon, le passer au banc (**H14**), avec l'encodage (**H15**) et les exemplaires (**H19**). Renvoyer à DIRA le rapport de couverture (**H16**) : ce qui passe, ce qui se perd, ce qui reste à construire. Décider ensuite, par écrit, d'ouvrir ou non un accès. L'adhésion elle-même suit le circuit ordinaire des admins réseau.
+
+**Pourquoi ça compte.** C'est la première bibliothèque qui vient d'un autre SIGB avec une vraie exigence de réversibilité. Si l'essai est honnête, il fait de DIRA une bibliothèque qui rend le projet durable ; s'il survend, on la perd, et avec elle la crédibilité de l'argument « vos données restent à vous ».
+
+**Ce qui compte comme fini.**
+
+- Réponse envoyée, datée.
+- Échantillon reçu, avec version de PMB et encodage.
+- Rapport de couverture envoyé à DIRA.
+- Décision d'accès écrite, avec sa raison.
+
+**Dépendances.** Avant le compte rendu : **H14**, **H15**, **H16**, **H19**. Avant toute bascule : **H21**, **H23**, **H24**, **H27**. Les archives : **D7**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
 ---
 
 ### H — Interopérabilité, thésaurus, moisson
@@ -1191,6 +1236,20 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
 | **H10** | Relire à la main les 98 alignements FICEDL — 54 `close` dont une part sont des `broad` — et aligner enfin les quatre rubriques historiques de Solidaires | `P2` | Ouvert |
 | **H12** | Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration | `P3` | Ouvert |
+| **H14** | Un PMB de banc sur le poste, pour éprouver l'aller-retour sans dépendre d'une bibliothèque | `P1` | Ouvert |
+| **H15** | L'import lit un fichier qui n'est pas en UTF-8 au lieu de le corrompre en silence | `P1` | Ouvert |
+| **H16** | Un rapport de couverture par import : chaque zone du fichier que l'import ne reprend pas est comptée et montrée | `P1` | Ouvert |
+| **H17** | Le mapping UNIMARC reprend les zones courantes d'un catalogue PMB | `P1` | Ouvert |
+| **H18** | Les responsabilités importées gardent leur rôle, leur nature (personne ou collectivité) et leur lien d'autorité | `P1` | Ouvert |
+| **H19** | Les exemplaires d'un catalogue importé (995 en UNIMARC, 852 en MARC21) deviennent des exemplaires AnarBib | `P1` | Ouvert |
+| **H20** | L'identifiant d'origine d'une notice est gardé par bibliothèque, pas seulement sur la notice partagée | `P1` | Ouvert |
+| **H21** | Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer | `P2` | Ouvert |
+| **H22** | Lire l'export XML propre à PMB, s'il le faut | `P3` | Ouvert |
+| **H23** | Un export UNIMARC (ISO 2709 et XML), miroir exact de l'import | `P1` | Ouvert |
+| **H24** | L'export d'une bibliothèque contient tout ce qu'elle a catalogué : exemplaires, responsabilités, sujets, collection, identifiants | `P1` | Ouvert |
+| **H25** | Exporter les autorités (UNIMARC Autorités), pour que les liens $3 de l'export mènent quelque part | `P2` | Ouvert |
+| **H26** | L'export d'un gros catalogue ne dépend plus de la mémoire d'une edge function | `P2` | Ouvert |
+| **H27** | La preuve de l'aller-retour : un test de CI, un réimport réel dans PMB et le tableau public de ce qui passe | `P1` | Ouvert |
 
 #### H2 — Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus
 
@@ -1277,6 +1336,302 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Après **K5**. Touche `spec-periodiques` et **C3** (autorités).
 
 *Renvois : `REGISTRE §30 THES-FIC-O2` · `claude/REPONSE_hortical_deux_thesaurus_2026-09-07` · `claude/spec-periodiques-v0.1 §5`*
+
+#### H14 — Un PMB de banc sur le poste, pour éprouver l'aller-retour sans dépendre d'une bibliothèque
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système, bibliothéconomie
+
+**État.** **Mesuré le 26/09 en production** : 8 imports ont jamais tourné (`ingest.partner_catalog_import_runs`) : 5 CSV et 3 RIS, **aucun MARC**. Le parseur MARC (`process-partner-catalog-import/marc.ts`, UNIMARC et MARC21, ISO 2709 et MARCXML) n'a donc jamais lu un fichier réel. Ses tests unitaires (`marc.test.ts`) sont des tests **Deno**, et rien ne les lance : ni `ci.yml`, ni `sql-tests.yml`, ni le poste, où Deno n'est pas installé. L'export MARCXML (`export-catalog-lote`) n'a jamais été relu par PMB. Le projet n'a aucune instance de PMB.
+
+*Vérifié : 26/09 — `ingest.partner_catalog_import_runs` : 8 runs (5 CSV, 3 RIS, 0 MARC) ; aucun `deno test` en CI.*
+
+**Ce que c'est.** Monter PMB (PHP + MySQL) en conteneur sur le poste, dans une version proche de celle de DIRA, et écrire la recette au dépôt. Y saisir un jeu de notices qui couvre les cas difficiles : zines, alphabets non latins, collectivités, tomes, dépouillement de périodique, notice à plusieurs exemplaires. L'exporter en UNIMARC ISO 2709 et verser le fichier au dépôt comme fixture (`tests/fixtures/pmb/`), en UTF-8 et, si PMB le permet, en ISO-8859-1.
+
+**Pourquoi ça compte.** Sans relire nos fichiers dans le vrai logiciel, « relisible par PMB » reste une supposition. Et on ne peut pas demander à une bibliothèque d'être notre banc d'essai à chaque itération.
+
+**Ce qui compte comme fini.**
+
+- PMB tourne sur le poste ; recette au dépôt.
+- Fixture UNIMARC exportée par PMB versée au dépôt (UTF-8, et latin-1 si possible).
+
+**Dépendances.** Socle de **H15** à **H27**. La version de PMB se cale sur celle de DIRA (**G15**).
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H15 — L'import lit un fichier qui n'est pas en UTF-8 au lieu de le corrompre en silence
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** `process-partner-catalog-import/index.ts` (l. 623) et `marc.ts` (l. 303) décodent **toujours en UTF-8** (`new TextDecoder('utf-8')`, sans `fatal`). Seul le MARC-8 (leader/9 blanc) déclenche un avertissement. Une base PMB en ISO-8859-1, courante sur les installations anciennes, donnerait des accents remplacés par U+FFFD, **sans aucun avertissement**. Il en va de même pour un CSV enregistré en Windows-1252 par un tableur.
+
+*Vérifié : 26/09 — `index.ts` l. 623 et `marc.ts` l. 303 relus au commit `f59bd81a`.*
+
+**Ce que c'est.** Décoder en UTF-8 strict (`fatal: true`) ; en cas d'échec, relire en Windows-1252 et **le dire** dans les avertissements du run. Pour l'ISO 2709 UNIMARC, lire aussi le jeu de caractères déclaré en 100 $a/26-29. Ajouter un réglage `forced_encoding` à `adapter_overrides` (utf-8, iso-8859-1, windows-1252). Tester avec une fixture latin-1 (**H14**).
+
+**Pourquoi ça compte.** Une corruption silencieuse est la pire des pertes : personne ne la voit avant qu'une lectrice cherche un titre accentué. Et elle frapperait justement les bibliothèques européennes qui viennent de PMB.
+
+**Ce qui compte comme fini.**
+
+- Fixture latin-1 importée sans U+FFFD.
+- L'encodage retenu apparaît dans les avertissements du run.
+- Test au banc des edge functions.
+
+**Dépendances.** Fixture de **H14** (sinon, en fabriquer une à la main).
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H16 — Un rapport de couverture par import : chaque zone du fichier que l'import ne reprend pas est comptée et montrée
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL, React / JavaScript
+
+**État.** L'enregistrement brut est bien gardé : `ingest.partner_catalog_staging_rows.raw_payload`, recopié en `book_drafts.marc_json` par `ingest.fn_create_book_drafts_from_import_rows`, puis en `books.marc_json` à la publication (2 250 brouillons en portent un au 26/09). Mais **rien ne dit quelles zones ont été laissées de côté**. Aujourd'hui la perte ne se voit pas : ni dans Importações, ni dans le rapport de révision de lot (`fn_batch_review_report`).
+
+*Vérifié : 26/09 — 2 250 `book_drafts.marc_json` non nuls ; aucun inventaire de zones dans `summary`.*
+
+**Ce que c'est.** Au parse, calculer pour chaque run l'inventaire des zones et sous-zones : présentes, reprises, ignorées, avec leur nombre d'occurrences et un exemple. Pour un CSV, lister les colonnes non mappées. Le stocker dans `partner_catalog_import_runs.summary`. L'afficher dans Importations et le joindre à `fn_batch_review_report`. Le rendre téléchargeable, pour l'envoyer tel quel à la bibliothèque (c'est le compte rendu promis à DIRA). Dix locales.
+
+**Pourquoi ça compte.** C'est ce qui rend l'import **sûr** : rien ne se perd sans qu'on le voie. Et c'est aussi la liste de travail de **H17**, tirée des catalogues réels plutôt que d'une norme lue de loin.
+
+**Ce qui compte comme fini.**
+
+- Rapport visible pour un import MARC et pour un import CSV.
+- Joint au rapport de révision de lot.
+- Téléchargeable ; dix locales ; test.
+
+**Dépendances.** Avant **H17** (il dit quelles zones comptent).
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H17 — Le mapping UNIMARC reprend les zones courantes d'un catalogue PMB
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, bibliothéconomie
+
+**État.** La table `UNIMARC` de `marc.ts` (l. 55-74) ne reprend que 200 $a$e$f, 205, 210 $a$c$d, la première 101, 010, 011, 70x/71x $a$b et 60x $a. Elle ignore : **214** (publication, UNIMARC récent), **215** (pages), **225/410** (collection), **300/327/330** (notes, sommaire, résumé), **676/686** (classification), **856** (URL), **200 $h$i** (tomes), les subdivisions **60x $x$y$z** et **461/463** (dépouillement de périodique).
+
+*Vérifié : 26/09 — table `UNIMARC` de `marc.ts` relue au commit `f59bd81a`.*
+
+**Ce que c'est.** Étendre la table et la forme normalisée, zone par zone, dans l'ordre que donne le rapport de couverture (**H16**) sur le jeu de **H14** et sur l'échantillon de DIRA. Faire les mêmes ajouts côté MARC21 (300, 490, 5xx, 082, 856) pour garder la symétrie. Chaque champ nouveau suit la règle des trois endroits (`book_drafts`, `publish_book_draft`, `create_book_draft_from_book`). Un test par zone.
+
+**Pourquoi ça compte.** Une notice qui arrive sans pagination, sans collection, sans résumé ni classification oblige à tout reprendre à la main. Ça annule l'intérêt d'importer.
+
+**Ce qui compte comme fini.**
+
+- Les zones listées sont reprises, testées une à une.
+- Le rapport de couverture de la fixture PMB ne montre plus que des zones délibérément laissées.
+
+**Dépendances.** Après **H16**. 461/463 touche les périodiques (`serials`, autorité de titre). Les responsabilités sont dans **H18**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H18 — Les responsabilités importées gardent leur rôle, leur nature (personne ou collectivité) et leur lien d'autorité
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL, bibliothéconomie
+
+**État.** `authorNames()` (`marc.ts`) réduit chaque zone 70x/71x à une chaîne « $a, $b ». Les codes de rôle **$4** sont perdus, le numéro d'autorité **$3** aussi, et une collectivité (71x) devient un nom parmi d'autres. **Mesuré le 26/09 en production** : la table `authors` n'a aucune colonne `kind`, `entity_type`, `is_corporate`, `author_type` ni `type`. La nature se lit donc ailleurs, ou pas du tout (à instruire). La source de vérité des responsabilités est `book_contributors` (`book_authors` en est dérivée).
+
+*Vérifié : 26/09 — `authors` sans colonne de nature (requête sur `information_schema`).*
+
+**Ce que c'est.** Rendre une forme structurée `{ nom, nature, rôle, référence d'autorité }`, avec une table de correspondance des codes $4 vers les rôles AnarBib. Alimenter `book_contributors` depuis les brouillons. Rapprocher les autorités par `fn_conv_autorite_homonyme` (la recherche par nom) et présenter les rapprochements en révision de lot, jamais d'office. Même travail en MARC21 (100/110/111/700/710/711, $e/$4).
+
+**Pourquoi ça compte.** Un traducteur importé comme auteur, ou un collectif militant importé comme une personne : c'est exactement le genre d'erreur qu'un comité documentaire repère en premier, et qui fait perdre confiance dans tout le lot.
+
+**Ce qui compte comme fini.**
+
+- Rôles et nature conservés sur la fixture PMB.
+- Rapprochements d'autorité proposés en révision, pas appliqués d'office.
+- Tests.
+
+**Dépendances.** Avant **H24** (l'export relit les mêmes rôles).
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H19 — Les exemplaires d'un catalogue importé (995 en UNIMARC, 852 en MARC21) deviennent des exemplaires AnarBib
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
+
+**État.** Le parseur ignore la 995, où PMB exporte ses exemplaires. **Mesuré le 26/09 en production** : l'infrastructure existe mais n'a jamais servi à l'import. `exemplar_drafts`, `publish_exemplar_draft` et `ingest.fn_create_exemplar_drafts_from_import_rows` sont en base, mais **0** ligne de staging porte un `created_exemplar_draft_id`. Et `exemplares.tombo` est **unique sur toute la base** (`exemplares_unique_tombo`) : les codes-barres de deux bibliothèques peuvent entrer en collision (23505).
+
+*Vérifié : 26/09 — 0 `created_exemplar_draft_id` sur 2 172 lignes de staging ; `exemplares_unique_tombo` présent.*
+
+**Ce que c'est.** Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`). Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source.
+
+**Pourquoi ça compte.** Une bibliothèque, ce sont des livres sur des étagères. Sans cotes ni codes-barres, l'import donne un catalogue qu'on ne peut ni prêter ni ranger. Et un essai sans exemplaires ne prouve rien à DIRA.
+
+**Ce qui compte comme fini.**
+
+- Les exemplaires de la fixture PMB arrivent en brouillons, puis se publient.
+- Aucune collision de tombo (préfixe).
+- Tests SQL et edge function.
+
+**Dépendances.** Fixture de **H14**. Avant **H21** et **H24**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H20 — L'identifiant d'origine d'une notice est gardé par bibliothèque, pas seulement sur la notice partagée
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** **Mesuré le 26/09 en production** : le 001 (`external_key`) va bien de `ingest.fn_create_book_drafts_from_import_rows` jusqu'à `books.source_record_id` (254 notices en portent un). Mais `books` est **partagée par le réseau**. Quand l'import rattache une notice à une notice déjà cataloguée par une autre bibliothèque, l'identifiant PMB n'a pas de place qui soit à la bibliothèque qui importe (à vérifier sur un cas réel). `book_holdings.local_bib_ref` existe (2 426 valeurs), mais elle porte la référence locale d'AnarBib, pas celle de PMB.
+
+*Vérifié : 26/09 — 254 `books.source_record_id` ; `fn_create_book_drafts_from_import_rows` copie `external_key`.*
+
+**Ce que c'est.** Une table `book_external_ids (book_id, library_id, scheme, value)` avec un index unique `(library_id, scheme, value)`, alimentée à la publication d'un brouillon importé. Ou bien une colonne sur la détention, si elle suffit. Trancher après avoir lu comment `publish_book_draft` traite un brouillon rattaché à une notice existante.
+
+**Pourquoi ça compte.** C'est la clé de l'aller-retour. Sans elle, pas de réimport qui met à jour (**H21**), et l'export ne peut pas rendre à PMB ses propres numéros de notice (**H24**).
+
+**Ce qui compte comme fini.**
+
+- L'identifiant PMB est retrouvable par bibliothèque, y compris pour une notice rattachée à une notice existante.
+- Test SQL.
+
+**Dépendances.** Avant **H21** et **H24**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H21 — Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer
+
+`P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript
+
+**État.** La marche en parallèle promise à DIRA suppose qu'elle continue de cataloguer dans PMB et qu'on réimporte. Aujourd'hui, un réimport repasse par la détection de doublons, puis par la révision : il n'existe aucune notion de « notice déjà importée, à mettre à jour ». `book_drafts.action` connaît pourtant `update` (valeur présente en base).
+
+*Vérifié : 26/09 — `book_drafts.action` ∈ {create, update} en base.*
+
+**Ce que c'est.** Rapprocher d'abord par `(bibliothèque, identifiant d'origine)` (**H20**). Produire des brouillons `update` avec la différence montrée en révision de lot. Traiter les exemplaires ajoutés et retirés. Quand une notice a été modifiée dans AnarBib depuis l'import, la signaler en conflit : **jamais d'écrasement silencieux**.
+
+**Pourquoi ça compte.** Sans réimport incrémental, la marche en parallèle se réduit à ressaisir deux fois ou à dupliquer. Autrement dit, elle est impraticable. Et PMB ne peut rester un filet que s'il reste la base vivante.
+
+**Ce qui compte comme fini.**
+
+- Réimporter la fixture modifiée ne crée aucun doublon et montre les différences.
+- Un conflit est signalé, pas écrasé.
+
+**Dépendances.** Après **H20** et **H19**. Avant toute bascule (**G15**).
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H22 — Lire l'export XML propre à PMB, s'il le faut
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** `looksLikeMarcXml()` n'accepte que du vrai MARCXML (`<record>`, `<datafield>`). À notre connaissance, PMB a aussi un XML qui lui est propre (`<notice><f c="200">…`), que l'import ne reconnaîtrait pas. **Non vérifié** : à constater sur le PMB de banc (**H14**).
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Seulement si une bibliothèque ne peut pas sortir de l'ISO 2709 ni du MARCXML. Il suffirait alors d'un lecteur vers le modèle commun de `marc.ts` (leader + zones), sans rien changer en aval.
+
+**Pourquoi ça compte.** Inutile tant que l'ISO 2709 suffit. Gardé ici pour que personne ne croie que « XML » veut dire « compatible ».
+
+**Ce qui compte comme fini.**
+
+- Constat fait sur le banc ; lecteur écrit ou item clos sans objet.
+
+**Dépendances.** **H14**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H23 — Un export UNIMARC (ISO 2709 et XML), miroir exact de l'import
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, bibliothéconomie
+
+**État.** `export-catalog-lote/serialize.ts` ne sait écrire que du CSV, du **MARCXML en MARC21** et du JSON (`SUPPORTED_FORMATS`). Son en-tête annonce « UNIMARC ISO 2709 / Dublin Core / BibTeX viendront ensuite » : aucun n'existe. PMB travaille nativement en UNIMARC. La correspondance des zones est écrite **deux fois**, dans `marc.ts` pour l'import et dans `serialize.ts` pour l'export, et rien ne garantit que les deux restent symétriques.
+
+*Vérifié : 26/09 — `SUPPORTED_FORMATS = csv, marcxml, json` au commit `f59bd81a`.*
+
+**Ce que c'est.** Une seule table de correspondance partagée par l'import et l'export (`_shared/marc/`). Un écrivain ISO 2709 : les longueurs du répertoire se comptent en **octets UTF-8**, pas en caractères. Un leader correct et le jeu de caractères déclaré en 100 $a/26-29 (Unicode). Un MARCXML UNIMARC. Des tests `parse(serialize(x)) = x` sur la fixture.
+
+**Pourquoi ça compte.** « Vos données restent à vous » ne vaut que si elles ressortent dans le format du logiciel d'où elles viennent. Un MARC21 que PMB devrait d'abord convertir, c'est une promesse de réversibilité qui s'arrête à mi-chemin.
+
+**Ce qui compte comme fini.**
+
+- Export UNIMARC ISO 2709 et XML disponibles dans Importations.
+- Table de zones unique ; tests aller-retour unitaires verts.
+
+**Dépendances.** Contenu complet : **H24**. Preuve : **H27**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H24 — L'export d'une bibliothèque contient tout ce qu'elle a catalogué : exemplaires, responsabilités, sujets, collection, identifiants
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript
+
+**État.** **Mesuré le 26/09 en production** : d'après la définition réelle de `fn_export_catalog_lote`, l'export livre les notices détenues par la bibliothèque, et rien de plus. **Aucun exemplaire** (ni tombo, ni cote, ni statut). Les auteurs sortent de `book_authors` (table dérivée), par leur seul `preferred_name`, sans rôle. Les sujets sont du texte découpé sur `;`/`,`, et non l'autorité du thésaurus. L'écrivain MARCXML met toujours `100 1_`, même pour une collectivité. Rien ne sort sur l'œuvre ni sur le périodique.
+
+*Vérifié : 26/09 — définition de `fn_export_catalog_lote` lue en production.*
+
+**Ce que c'est.** Réécrire `fn_export_catalog_lote` **depuis sa définition réelle**. Y mettre : les exemplaires de la bibliothèque, et d'elle seule ; `book_contributors` avec rôle, nature et autorité ; les sujets du thésaurus avec leurs subdivisions ; collection, notes, périodique (461), œuvre (titre uniforme) ; en 001 l'identifiant d'origine (**H20**), sinon le `bib_ref`, et les autres identifiants en 035. **À trancher** : réémettre les zones non reprises depuis `books.marc_json` pour les notices venues de PMB. On y gagne en fidélité, mais on risque de réémettre une valeur périmée si la notice a été retouchée depuis.
+
+**Pourquoi ça compte.** Une bibliothèque qui part sans ses cotes ni ses exemplaires doit refaire son récolement. En pratique, elle ne peut pas partir. C'est la moitié de la promesse de pérennité.
+
+**Ce qui compte comme fini.**
+
+- Export de la fixture réimportée : mêmes exemplaires, mêmes rôles, mêmes sujets.
+- Test SQL sur la RPC.
+
+**Dépendances.** Après **H23**, **H20**, **H19**, **H18**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H25 — Exporter les autorités (UNIMARC Autorités), pour que les liens $3 de l'export mènent quelque part
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, bibliothéconomie
+
+**État.** Aucun export d'autorités n'existe (personnes, collectivités, sujets). PMB importe ses autorités à part. Sans elles, un export qui porte des références d'autorité en $3 (**H24**) pointe dans le vide, et PMB recrée une autorité par notice.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Sérialiser les autorités de la bibliothèque (celles qui sont liées à ses notices) en UNIMARC Autorités : 200/210/250, formes rejetées en 4xx, liens en 5xx. Le SKOS du thésaurus existe déjà (`thesaurus.ttl`) et peut servir de source pour les sujets.
+
+**Pourquoi ça compte.** Sans les autorités, le catalogue retourne dans PMB à plat, et tout le travail de dédoublonnage des noms est perdu.
+
+**Ce qui compte comme fini.**
+
+- Les autorités de la fixture se réimportent dans le PMB de banc, liées à leurs notices.
+
+**Dépendances.** Après **H24**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H26 — L'export d'un gros catalogue ne dépend plus de la mémoire d'une edge function
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
+
+**État.** `export-catalog-lote` construit tout le fichier en mémoire, en une seule réponse. `export-fonds-bundle` est déjà plafonné (150 fichiers, 80 Mo) pour la même raison. **Mesuré le 26/09 en production** : le plus gros catalogue du réseau compte 2 184 détentions. Personne n'a mesuré la limite réelle. La taille du catalogue de DIRA est inconnue.
+
+*Vérifié : 26/09 — plus gros catalogue : 2 184 détentions.*
+
+**Ce que c'est.** Mesurer la limite avec un catalogue synthétique (10 000 et 50 000 notices). Si elle est trop basse, passer à une génération asynchrone : un travail en file, le fichier déposé dans le Storage, un lien envoyé quand il est prêt.
+
+**Pourquoi ça compte.** Un export qui échoue le jour où une bibliothèque veut partir vaut moins que pas d'export du tout : il fait croire à une porte qui n'ouvre pas.
+
+**Ce qui compte comme fini.**
+
+- Limite mesurée et écrite ; au-delà, export asynchrone éprouvé.
+
+**Dépendances.** Après **H24**. La taille de DIRA vient de **G15**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### H27 — La preuve de l'aller-retour : un test de CI, un réimport réel dans PMB et le tableau public de ce qui passe
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL, bibliothéconomie
+
+**État.** `export-catalog-lote/serialize.test.ts` fait bien un aller-retour, mais en mémoire : deux notices écrites à la main sont passées en MARCXML (MARC21), puis relues par `marc.ts`, et seuls le titre, le sous-titre et les auteurs sont comparés. Aucun test ne passe par la base (import → publication → export), par l'UNIMARC, par un fichier réel ou par les exemplaires. Surtout, **ces tests Deno ne tournent nulle part** : aucun `deno test` dans `ci.yml` ni dans `sql-tests.yml`, et Deno n'est pas installé sur le poste. Les autres edge functions sont éprouvées sous vitest (`src/tests/helpers/monter-ef.js`, modèle `gazette-monthly-build.test.js`).
+
+*Vérifié : 26/09 — `serialize.test.ts` importe `marc.ts` (aller-retour MARC21 en mémoire) ; aucun `deno` dans `.forgejo/workflows/` ; `deno` absent du poste.*
+
+**Ce que c'est.** (0) Faire tourner `marc.test.ts` et `serialize.test.ts` en CI, soit en les portant sous vitest comme les autres edge functions, soit en ajoutant un `deno test`. (1) Un test de CI : fixture PMB (**H14**) → import → publication sur le banc SQL → `fn_export_catalog_lote` → export UNIMARC → comparaison zone par zone avec la source. La **liste des pertes acceptées** est écrite dans le test : toute perte nouvelle le fait échouer. (2) Un réimport réel de l'export dans le PMB de banc, avec les nombres de notices et d'exemplaires comparés. (3) Un tableau de couverture, dans les deux sens, publié pour les bibliothèques.
+
+**Pourquoi ça compte.** C'est la seule pièce qui permette de dire à une bibliothèque « vous pouvez basculer ». Tout le reste n'est qu'une intention.
+
+**Ce qui compte comme fini.**
+
+- Test de CI vert, avec ses pertes acceptées écrites.
+- Réimport PMB fait, nombres identiques.
+- Tableau de couverture publié.
+
+**Dépendances.** Clôt la série : après **H14**-**H24**.
+
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
 ---
 
@@ -1858,4 +2213,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-25. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 52 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-26. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
