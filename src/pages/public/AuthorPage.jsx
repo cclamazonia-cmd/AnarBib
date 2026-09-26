@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { detectLocale } from '@/i18n';
 import { getCountryName } from '@/lib/countries';
+import { languageLabel } from '@/lib/languages';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
@@ -83,6 +84,8 @@ function buildHeroIntro(author, booksCount, t, locale) {
   }
   const years = yearsLabel(author.birth_year, author.death_year);
   if (years) parts.push(years);
+  const langue = languageLabel(author.writing_language, t);
+  if (langue) parts.push(t({ id: 'author.writingLanguage' }, { language: langue }));
   if (booksCount > 0) parts.push(t({ id: 'author.booksCount' }, { count: booksCount }));
   return parts.join(' · ') || '';
 }

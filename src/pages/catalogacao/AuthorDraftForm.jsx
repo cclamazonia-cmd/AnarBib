@@ -7,6 +7,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import PortraitCropper from '@/components/catalogacao/PortraitCropper';
 import CountrySelect from '@/components/forms/CountrySelect';
+import { languageOptions } from '@/lib/languages';
 
 // ── Authority types ───────────────────────────────────────
 const AUTHORITY_TYPE_KEYS = {
@@ -120,7 +121,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const EMPTY_FORM = {
     id: '', published_author_id: '', batch_id: '', action: 'create', status: 'draft',
     preferred_name: '', sort_name: '', biography: '', birth_year: '', death_year: '',
-    country: '', source_kind: '', source_label: '', source_url: '',
+    country: '', writing_language: '', source_kind: '', source_label: '', source_url: '',
     viaf_id: '', isni: '', wikidata_id: '', photo_object_path: '', notes: '',
   };
 
@@ -283,6 +284,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       birth_year: r.birth_year ? String(r.birth_year) : '',
       death_year: r.death_year ? String(r.death_year) : '',
       country: r.country || '',
+      writing_language: r.writing_language || '',
       source_kind: r.source_kind || '',
       source_label: r.source_label || '',
       source_url: r.source_url || '',
@@ -399,6 +401,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         birth_year: f('birth_year') ? Number(f('birth_year')) : null,
         death_year: f('death_year') ? Number(f('death_year')) : null,
         country: f('country') || null,
+        writing_language: f('writing_language') || null,
         source_kind: f('source_kind') || null,
         source_label: f('source_label') || null,
         source_url: f('source_url') || null,
@@ -869,6 +872,15 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <label style={ls}>{t({ id: 'catalogacao.author.country' })}</label>
             <CountrySelect value={f('country')} onChange={v => set('country', v)}
               ariaLabel={t({ id: 'catalogacao.author.country' })} style={fs} />
+          </div>
+          {/* Langue d'écriture principale (26/09/2026) : même référentiel que la langue des
+              notices (src/lib/languages.js) — un code, jamais un libellé (DOC-CONV-1). */}
+          <div className="cat-field">
+            <label style={ls} htmlFor="ab-author-writing-language">{t({ id: 'catalogacao.author.writingLanguage' })}</label>
+            <select id="ab-author-writing-language" value={f('writing_language')} onChange={e => set('writing_language', e.target.value)} style={fs}>
+              <option value="">—</option>
+              {languageOptions(t).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
           </div>
 
           {/* ── Source + identifiers ──────────────────── */}
