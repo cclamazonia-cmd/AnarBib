@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-26.** **52 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H14, H15, H16, H17, H18, H19, H20, H21, H23, H24, H26, H27, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-26.** **53 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1220,7 +1220,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - Rapport de couverture envoyé à DIRA.
 - Décision d'accès écrite, avec sa raison.
 
-**Dépendances.** Avant le compte rendu : **H14**, **H15**, **H16**, **H19**. Avant toute bascule : **H21**, **H23**, **H24**, **H27**. Les archives : **D7**.
+**Dépendances.** Avant le compte rendu : **H28** (fait — sans lui aucun ISO 2709 ne s'importait), **H14**, **H15**, **H16**, **H19**. Avant toute bascule : **H21**, **H23**, **H24**, **H27**. Les archives : **D7**.
 
 *Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1235,8 +1235,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
 | **H12** | Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration | `P3` | Ouvert |
-| **H14** | Un PMB de banc sur le poste, pour éprouver l'aller-retour sans dépendre d'une bibliothèque | `P1` | Ouvert |
-| **H15** | L'import lit un fichier qui n'est pas en UTF-8 au lieu de le corrompre en silence | `P1` | Ouvert |
+| **H28** | Un fichier MARC ISO 2709 s'importe : le format détecté est admis par la base | `P1` | À vérifier |
+| **H15** | L'import lit un fichier qui n'est pas en UTF-8 au lieu de le corrompre en silence | `P1` | À vérifier |
 | **H16** | Un rapport de couverture par import : chaque zone du fichier que l'import ne reprend pas est comptée et montrée | `P1` | Ouvert |
 | **H17** | Le mapping UNIMARC reprend les zones courantes d'un catalogue PMB | `P1` | Ouvert |
 | **H18** | Les responsabilités importées gardent leur rôle, leur nature (personne ou collectivité) et leur lien d'autorité | `P1` | Ouvert |
@@ -1315,34 +1315,34 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `REGISTRE §30 THES-FIC-O2` · `claude/REPONSE_hortical_deux_thesaurus_2026-09-07` · `claude/spec-periodiques-v0.1 §5`*
 
-#### H14 — Un PMB de banc sur le poste, pour éprouver l'aller-retour sans dépendre d'une bibliothèque
+#### H28 — Un fichier MARC ISO 2709 s'importe : le format détecté est admis par la base
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système, bibliothéconomie
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
 
-**État.** **Mesuré le 26/09 en production** : 8 imports ont jamais tourné (`ingest.partner_catalog_import_runs`) : 5 CSV et 3 RIS, **aucun MARC**. Le parseur MARC (`process-partner-catalog-import/marc.ts`, UNIMARC et MARC21, ISO 2709 et MARCXML) n'a donc jamais lu un fichier réel. Ses tests unitaires (`marc.test.ts`) sont des tests **Deno**, et rien ne les lance : ni `ci.yml`, ni `sql-tests.yml`, ni le poste, où Deno n'est pas installé. L'export MARCXML (`export-catalog-lote`) n'a jamais été relu par PMB. Le projet n'a aucune instance de PMB.
+**État.** **Trouvé le 26/09 par la cartographie de l'import, confirmé en production.** La CHECK `partner_catalog_import_runs_detected_format_check` n'admettait ni `marc_iso2709` — le mot que `process-partner-catalog-import` écrit pour tout ISO 2709 reconnu — ni `marc21`, que le front envoyait pour un `.mrc` ou un `.marc`. Le front échouait donc à la **création** du run (23514) ; l'EF, elle, échouait à son **UPDATE final**, après avoir inséré ses lignes : run « failed », lignes invisibles à l'écran. **Aucun run MARC n'avait jamais tourné** (8 runs : 5 CSV, 3 RIS) — le défaut était invisible. Or PMB livre ses exports UNIMARC en `.marc` : c'était le premier fichier que DIRA aurait envoyé.
 
-*Vérifié : 26/09 — `ingest.partner_catalog_import_runs` : 8 runs (5 CSV, 3 RIS, 0 MARC) ; aucun `deno test` en CI.*
+*Vérifié : 26/09 — migration `20260926184500` appliquée par la CI (`created_by` vide) ; CHECK en production : `marc_iso2709` présent ; banc de la vraie EF sur l'export PMB : `detected_format = marc_iso2709` écrit.*
 
-**Ce que c'est.** Monter PMB (PHP + MySQL) en conteneur sur le poste, dans une version proche de celle de DIRA, et écrire la recette au dépôt. Y saisir un jeu de notices qui couvre les cas difficiles : zines, alphabets non latins, collectivités, tomes, dépouillement de périodique, notice à plusieurs exemplaires. L'exporter en UNIMARC ISO 2709 et verser le fichier au dépôt comme fixture (`tests/fixtures/pmb/`), en UTF-8 et, si PMB le permet, en ISO-8859-1.
+**Ce que c'est.** **Livré le 26/09** (`d008bb51`, migration `20260926184500`) : `marc_iso2709` admis, `marc21` toujours refusé (un vocabulaire, pas un format — `forced_vocabulary`) ; une seule copie de `detectFileKind` (`src/lib/importFileKind.js`, il y en avait deux), `.mrc`/`.marc`/`.iso` → `marc_iso2709`, suffixe `.iso` accepté ; garde vitest `import-file-kind` (chaque format écrit par le front ou par l'EF appartient à la CHECK de la **dernière** migration qui la pose) ; suite SQL `import_format_marc_tests`. Reste : **un premier import ISO 2709 réel en production** (l'échantillon de DIRA, ou un export PMB du banc déposé par une coordination).
 
-**Pourquoi ça compte.** Sans relire nos fichiers dans le vrai logiciel, « relisible par PMB » reste une supposition. Et on ne peut pas demander à une bibliothèque d'être notre banc d'essai à chaque itération.
+**Pourquoi ça compte.** C'est la porte d'entrée de tout l'aller-retour PMB : sans elle, aucun des items H15 à H27 n'aurait pu servir.
 
 **Ce qui compte comme fini.**
 
-- PMB tourne sur le poste ; recette au dépôt.
-- Fixture UNIMARC exportée par PMB versée au dépôt (UTF-8, et latin-1 si possible).
+- La CHECK admet `marc_iso2709` en production (fait, 26/09).
+- Un import ISO 2709 réel passe en production jusqu'à « prêt à revoir ».
 
-**Dépendances.** Socle de **H15** à **H27**. La version de PMB se cale sur celle de DIRA (**G15**).
+**Dépendances.** Avant **H15** et **H19** (faits ou en cours). Éprouvé en vrai par **G15**.
 
-*Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+*Renvois : `claude/aller-retour-PMB_2026-09-26` · `tests/pmb/README.md`*
 
 #### H15 — L'import lit un fichier qui n'est pas en UTF-8 au lieu de le corrompre en silence
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
 
-**État.** `process-partner-catalog-import/index.ts` (l. 623) et `marc.ts` (l. 303) décodent **toujours en UTF-8** (`new TextDecoder('utf-8')`, sans `fatal`). Seul le MARC-8 (leader/9 blanc) déclenche un avertissement. Une base PMB en ISO-8859-1, courante sur les installations anciennes, donnerait des accents remplacés par U+FFFD, **sans aucun avertissement**. Il en va de même pour un CSV enregistré en Windows-1252 par un tableur.
+**État.** `process-partner-catalog-import/index.ts` (l. 623) et `marc.ts` (l. 303) décodent **toujours en UTF-8** (`new TextDecoder('utf-8')`, sans `fatal`). Seul le MARC-8 (leader/9 blanc) déclenche un avertissement. Une base PMB en ISO-8859-1, courante sur les installations anciennes, donnerait des accents remplacés par U+FFFD, **sans aucun avertissement**. Il en va de même pour un CSV enregistré en Windows-1252 par un tableur. **Mesuré sur le banc PMB le 26/09** (`tests/pmb`) : sur un vrai export PMB transcodé en latin-1, **29 notices sur 50** portaient U+FFFD, et chaque UNIMARC recevait un **faux « MARC-8 détecté »** (leader/9 blanc, non défini en UNIMARC — PMB 8.1 l'écrit ainsi). **Livré le 26/09** (`f1159947`, `6ab73436`, migration `20260926191500`) : UTF-8 strict, repli windows-1252 **supposé** et dit (`summary.encoding`, `summary.warnings`, première ligne) ; `forced_encoding` lu avant le décodage ; MARC-8 réservé au MARC21 ; 100 `$a`/26-29 relu et confronté ; `fn_import_set_adapter_overrides` gagne `p_forced_encoding` et **fusionne** (elle effaçait `profile_id`) ; `fn_import_dispatch` refuse de retraiter un import déjà promu (le lien ligne → brouillon partait en cascade) ; écran : sélecteur, panneau « encodage lu », geste « Retraiter », 14 clés × 10 locales.
 
-*Vérifié : 26/09 — `index.ts` l. 623 et `marc.ts` l. 303 relus au commit `f59bd81a`.*
+*Vérifié : 26/09 — la variante latin-1 de l'export PMB donne exactement les mêmes notices que l'UTF-8 (`pmb-fixtures-parseur`, banc de la vraie EF `process-partner-catalog-import-banc`) ; suite SQL `import_encodage_overrides_tests` 6/6. Reste : un import réel en latin-1 en production, et le panneau vu à l'écran par une coordination.*
 
 **Ce que c'est.** Décoder en UTF-8 strict (`fatal: true`) ; en cas d'échec, relire en Windows-1252 et **le dire** dans les avertissements du run. Pour l'ISO 2709 UNIMARC, lire aussi le jeu de caractères déclaré en 100 $a/26-29. Ajouter un réglage `forced_encoding` à `adapter_overrides` (utf-8, iso-8859-1, windows-1252). Tester avec une fixture latin-1 (**H14**).
 
@@ -1354,7 +1354,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - L'encodage retenu apparaît dans les avertissements du run.
 - Test au banc des edge functions.
 
-**Dépendances.** Fixture de **H14** (sinon, en fabriquer une à la main).
+**Dépendances.** Après **H28** (fait). Fixture de **H14** (faite).
 
 *Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1362,7 +1362,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL, React / JavaScript
 
-**État.** L'enregistrement brut est bien gardé : `ingest.partner_catalog_staging_rows.raw_payload`, recopié en `book_drafts.marc_json` par `ingest.fn_create_book_drafts_from_import_rows`, puis en `books.marc_json` à la publication (2 250 brouillons en portent un au 26/09). Mais **rien ne dit quelles zones ont été laissées de côté**. Aujourd'hui la perte ne se voit pas : ni dans Importações, ni dans le rapport de révision de lot (`fn_batch_review_report`).
+**État.** L'enregistrement brut est bien gardé : `ingest.partner_catalog_staging_rows.raw_payload`, recopié en `book_drafts.marc_json` par `ingest.fn_create_book_drafts_from_import_rows`, puis en `books.marc_json` à la publication (2 250 brouillons en portent un au 26/09). Mais **rien ne dit quelles zones ont été laissées de côté**. Aujourd'hui la perte ne se voit pas : ni dans Importações, ni dans le rapport de révision de lot (`fn_batch_review_report`). **Depuis H15 (26/09)**, `summary` porte déjà `encoding`, `warnings` et `adapter` : la couverture s'y range à côté. Relevé du 26/09 : l'import Solidaires (run 29, 1 673 lignes CSV) n'a reconnu que **4 colonnes sur 17** (`titulo`, `autor`, `idioma`, `numero`) — `tipo_material`, `assunto_local`, `subtitulo_sugerido` et dix autres ont été ignorées sans un mot.
 
 *Vérifié : 26/09 — 2 250 `book_drafts.marc_json` non nuls ; aucun inventaire de zones dans `summary`.*
 
@@ -1384,7 +1384,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, bibliothéconomie
 
-**État.** La table `UNIMARC` de `marc.ts` (l. 55-74) ne reprend que 200 $a$e$f, 205, 210 $a$c$d, la première 101, 010, 011, 70x/71x $a$b et 60x $a. Elle ignore : **214** (publication, UNIMARC récent), **215** (pages), **225/410** (collection), **300/327/330** (notes, sommaire, résumé), **676/686** (classification), **856** (URL), **200 $h$i** (tomes), les subdivisions **60x $x$y$z** et **461/463** (dépouillement de périodique).
+**État.** La table `UNIMARC` de `marc.ts` (l. 55-74) ne reprend que 200 $a$e$f, 205, 210 $a$c$d, la première 101, 010, 011, 70x/71x $a$b et 60x $a. Elle ignore : **214** (publication, UNIMARC récent), **215** (pages), **225/410** (collection), **300/327/330** (notes, sommaire, résumé), **676/686** (classification), **856** (URL), **200 $h$i** (tomes), les subdivisions **60x $x$y$z** et **461/463** (dépouillement de périodique). **Zones présentes dans un export PMB réel** (jeu de test PMB 8.1, 26/09) : 001 009 010 100 101 102 200 210 **214** 215 225 300 319 327 330 410 461 462 463 464 530 606 610 676 700 701 702 710 711 801 856 896 995 996 — soit la liste de travail, dans cet ordre de fréquence à mesurer par **H16**.
 
 *Vérifié : 26/09 — table `UNIMARC` de `marc.ts` relue au commit `f59bd81a`.*
 
@@ -1427,7 +1427,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
 
-**État.** Le parseur ignore la 995, où PMB exporte ses exemplaires. **Mesuré le 26/09 en production** : l'infrastructure existe mais n'a jamais servi à l'import. `exemplar_drafts`, `publish_exemplar_draft` et `ingest.fn_create_exemplar_drafts_from_import_rows` sont en base, mais **0** ligne de staging porte un `created_exemplar_draft_id`. Et `exemplares.tombo` est **unique sur toute la base** (`exemplares_unique_tombo`) : les codes-barres de deux bibliothèques peuvent entrer en collision (23505).
+**État.** Le parseur ignore la 995, où PMB exporte ses exemplaires. **Mesuré le 26/09 en production** : l'infrastructure existe mais n'a jamais servi à l'import. `exemplar_drafts`, `publish_exemplar_draft` et `ingest.fn_create_exemplar_drafts_from_import_rows` sont en base, mais **0** ligne de staging porte un `created_exemplar_draft_id`. Et `exemplares.tombo` est **unique sur toute la base** (`exemplares_unique_tombo`) : les codes-barres de deux bibliothèques peuvent entrer en collision (23505). **Relevé du 26/09 (cartographie + banc PMB).** Conventions 995 de PMB 8.1, vues dans ses exports : `$a`/`$c` propriétaire, `$f` code-barres, `$k` cote, `$u` note, `$r` type, `$q` public/section (+ une 996 propre à PMB). Trois pièges côté AnarBib : *(1)* `publish_book_draft` pose `greatest(1, initial_copies)` — importer N exemplaires ET publier la notice en ferait **N+1** ; *(2)* sur collision, `publish_exemplar_draft` **régénère le tombo en silence** (`fn_next_tombo`, qui lève si la biblio n'a pas de `tombo_pattern`) — le code-barres d'origine serait perdu ; *(3)* `ingest.fn_unreconcile_staging_on_exemplar_draft` remet la ligne de staging à « pending » dès qu'UN brouillon d'exemplaire lié est annulé — ne pas réutiliser `created_exemplar_draft_id` pour N exemplaires. Côté PMB (retour) : `func_bdp` **ignore le propriétaire de la 995** (il vient du formulaire).
 
 *Vérifié : 26/09 — 0 `created_exemplar_draft_id` sur 2 172 lignes de staging ; `exemplares_unique_tombo` présent.*
 
@@ -1491,9 +1491,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
 
-**État.** `looksLikeMarcXml()` n'accepte que du vrai MARCXML (`<record>`, `<datafield>`). À notre connaissance, PMB a aussi un XML qui lui est propre (`<notice><f c="200">…`), que l'import ne reconnaîtrait pas. **Non vérifié** : à constater sur le PMB de banc (**H14**).
+**État.** `looksLikeMarcXml()` n'accepte que du vrai MARCXML (`<record>`, `<datafield>`). À notre connaissance, PMB a aussi un XML qui lui est propre (`<notice><f c="200">…`), que l'import ne reconnaîtrait pas. **Vérifié le 26/09 sur le banc** : l'export « UNIMARC PMB XML » est bien `<unimarc><notice><f c="200"><s c="a">…` et notre import rend `null` (figé par `pmb-fixtures-parseur`, fixture `pmb-8.1.1.1_jeu-de-test.pmbxml.xml`). PMB sait aussi sortir du « XML MARC » (sans espace de noms), que l'import lit déjà à l'identique de l'ISO 2709 : ce lecteur n'est utile que si une bibliothèque ne peut produire ni l'un ni l'autre.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 26/09 — fixture PMB XML versée, non reconnue (`pmb-fixtures-parseur`).*
 
 **Ce que c'est.** Seulement si une bibliothèque ne peut pas sortir de l'ISO 2709 ni du MARCXML. Il suffirait alors d'un lecteur vers le modèle commun de `marc.ts` (leader + zones), sans rien changer en aval.
 
@@ -1532,7 +1532,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript
 
-**État.** **Mesuré le 26/09 en production** : d'après la définition réelle de `fn_export_catalog_lote`, l'export livre les notices détenues par la bibliothèque, et rien de plus. **Aucun exemplaire** (ni tombo, ni cote, ni statut). Les auteurs sortent de `book_authors` (table dérivée), par leur seul `preferred_name`, sans rôle. Les sujets sont du texte découpé sur `;`/`,`, et non l'autorité du thésaurus. L'écrivain MARCXML met toujours `100 1_`, même pour une collectivité. Rien ne sort sur l'œuvre ni sur le périodique.
+**État.** **Mesuré le 26/09 en production** : d'après la définition réelle de `fn_export_catalog_lote`, l'export livre les notices détenues par la bibliothèque, et rien de plus. **Aucun exemplaire** (ni tombo, ni cote, ni statut). Les auteurs sortent de `book_authors` (table dérivée), par leur seul `preferred_name`, sans rôle. Les sujets sont du texte découpé sur `;`/`,`, et non l'autorité du thésaurus. L'écrivain MARCXML met toujours `100 1_`, même pour une collectivité. Rien ne sort sur l'œuvre ni sur le périodique. **Côté PMB (banc, 26/09)** : même un export parfait perd en entrant dans PMB par sa fonction d'import par défaut (`func_bdp`) — 200 `$f`/`$g`, seconde 700, 606 fondues en une 610, Dewey tronquée à 5 caractères, propriétaire de la 995 ignoré (`tests/pmb/README.md`). À traiter dans **H27**.
 
 *Vérifié : 26/09 — définition de `fn_export_catalog_lote` lue en production.*
 
@@ -1593,11 +1593,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL, bibliothéconomie
 
-**État.** `export-catalog-lote/serialize.test.ts` fait bien un aller-retour, mais en mémoire : deux notices écrites à la main sont passées en MARCXML (MARC21), puis relues par `marc.ts`, et seuls le titre, le sous-titre et les auteurs sont comparés. Aucun test ne passe par la base (import → publication → export), par l'UNIMARC, par un fichier réel ou par les exemplaires. Surtout, **ces tests Deno ne tournent nulle part** : aucun `deno test` dans `ci.yml` ni dans `sql-tests.yml`, et Deno n'est pas installé sur le poste. Les autres edge functions sont éprouvées sous vitest (`src/tests/helpers/monter-ef.js`, modèle `gazette-monthly-build.test.js`).
+**État.** `export-catalog-lote/serialize.test.ts` fait bien un aller-retour, mais en mémoire : deux notices écrites à la main sont passées en MARCXML (MARC21), puis relues par `marc.ts`, et seuls le titre, le sous-titre et les auteurs sont comparés. Aucun test ne passe par la base (import → publication → export), par l'UNIMARC, par un fichier réel ou par les exemplaires. Surtout, **ces tests Deno ne tournaient nulle part** : aucun `deno test` dans `ci.yml` ni dans `sql-tests.yml`, et vitest exclut `supabase/functions/**`. *(Correction du 26/09 : Deno 2.8.2 est bien installé sur le poste, dans `~/.deno/bin`, hors du PATH — la fiche disait le contraire.)* Les autres edge functions sont éprouvées sous vitest (`src/tests/helpers/monter-ef.js`, modèle `gazette-monthly-build.test.js`).
 
-*Vérifié : 26/09 — `serialize.test.ts` importe `marc.ts` (aller-retour MARC21 en mémoire) ; aucun `deno` dans `.forgejo/workflows/` ; `deno` absent du poste.*
+*Vérifié : 26/09 — pont vitest en CI (`deno-tests-pont`, 25 tests) ; Deno 2.8.2 présent dans `~/.deno/bin` (hors PATH) ; `importer-pmb.mjs` éprouvé (14 notices, 13 exemplaires créés).*
 
-**Ce que c'est.** (0) Faire tourner `marc.test.ts` et `serialize.test.ts` en CI, soit en les portant sous vitest comme les autres edge functions, soit en ajoutant un `deno test`. (1) Un test de CI : fixture PMB (**H14**) → import → publication sur le banc SQL → `fn_export_catalog_lote` → export UNIMARC → comparaison zone par zone avec la source. La **liste des pertes acceptées** est écrite dans le test : toute perte nouvelle le fait échouer. (2) Un réimport réel de l'export dans le PMB de banc, avec les nombres de notices et d'exemplaires comparés. (3) Un tableau de couverture, dans les deux sens, publié pour les bibliothèques.
+**Ce que c'est.** (0) Faire tourner `marc.test.ts` et `serialize.test.ts` en CI, soit en les portant sous vitest comme les autres edge functions, soit en ajoutant un `deno test`. (1) Un test de CI : fixture PMB (**H14**) → import → publication sur le banc SQL → `fn_export_catalog_lote` → export UNIMARC → comparaison zone par zone avec la source. La **liste des pertes acceptées** est écrite dans le test : toute perte nouvelle le fait échouer. (2) Un réimport réel de l'export dans le PMB de banc, avec les nombres de notices et d'exemplaires comparés. (3) Un tableau de couverture, dans les deux sens, publié pour les bibliothèques. **(0) est livré le 26/09** (`66750198`) : un pont vitest joue les tests Deno **tels quels** (`Deno.test` → `it`, `jsr:@std/assert` servi par une cale sur `expect`), compte exact exigé, contrôle de mutation fait ; 25 tests pontés depuis H15. **Le retour dans PMB a son script** (`importer-pmb.mjs`, **H14**) — et un constat : la fonction d'import par défaut `func_bdp` **perd** 200 `$f`/`$g`, la seconde 700, fond les 606 en une 610, tronque la Dewey et ignore le propriétaire de la 995 (`tests/pmb/README.md`). Le tableau de couverture devra dire **quelle fonction d'import PMB** employer, ou en fournir une.
 
 **Pourquoi ça compte.** C'est la seule pièce qui permette de dire à une bibliothèque « vous pouvez basculer ». Tout le reste n'est qu'une intention.
 
@@ -2161,6 +2161,7 @@ CI verte : lint et suite unitaire. |
 | H13 | 2026-09-25 | **Clos le 25/09, le critère tenu.** Les deux fichiers sont au dépôt (`e0fbb024`), dans `docs/journal/ficedl/` : ceux du 09/09 emportés à Bologne — 28 descripteurs, deux schémas en nœuds anonymes, URI `?motNN`, `broader` « généralités » confirmés, « art : courants » en `skos:Collection` provisoire —, sha256 vérifiés contre les trois copies du disque E: (le disque F: de la mémoire n'était pas branché). **Régénérables par une commande documentée** dans le README du dossier : `node scripts/ficedl_thesaurus_esquisse.mjs docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json docs/journal/ficedl` — copie du `build_esquisse.mjs` du paquet hors ligne, sortie **identique octet pour octet** sur l'aspiration du 03/09 (identique elle aussi à celle du paquet). Le CSV (CRLF + BOM) est sorti de la conversion des fins de ligne pour le rester après un clone ; la garde vitest `ficedl-esquisse-regenerable` régénère et compare à chaque CI. La note du 28/08 est versée à côté, avec les trois points où elle est dépassée (26 descripteurs, un seul vocabulaire, `/id/motNN`). |
 | H9 | 2026-09-25 | **Clos le 25/09 au soir, les trois critères tenus.** Livré par `f67ff3d9` (migration `20260925084523`) : la RPC accepte les cinq relations, `skosExport.js` passe par la table `SKOS_MATCH` et ne publie plus rien par défaut, la page-sujet et l'éditeur de la coordination lisent `ficedlMatch.js` — l'éditeur n'offrait jusque-là **aucun** choix de relation —, cinq clés dans les dix locales (en de/nl, « close » ne porte plus le mot de « related »). *(1)* **Xavier a posé depuis l'écran** (capture du 25/09, 21 h 17) un alignement « plus large » : Anarchosyndicalisme (sujet 17) → `mot286` « syndicalisme révolutionnaire », lu en base (`match_type = broad`, 19:17 UTC) ; la page publique `/thesaurus/anarcossindicalismo` l'affiche « PLUS LARGE » à côté de l'« EXACT » de `mot272` (lu dans le navigateur) ; l'export réel `api.thesaurus_export_v1`, appelé en anonyme, passé dans le `skosExport.js` livré, sort `skos:broadMatch <…?mot286>` en Turtle comme en JSON-LD. *(2)* `npm test` vert : 878 tests, dont `skos-relations-h9` (15). *(3)* Le 4.2 de `20260907172508` est inversé dans `20260925084523` le même jour, et annoté là-bas. Suite SQL `alignement_ficedl_relations_tests` (6). Ouvre **H10**. |
 | H10 | 2026-09-26 | **Clos le 26/09, les deux critères tenus.** Relevé du matin : 99 liens (44 `exact`, 54 `close`, 1 `broad` posé à l'écran le 25/09), aucun vers la facette `dates`. **Relecture ligne à ligne** (`CONV-EXEC-3`) consignée dans `docs/journal/arbitrages/RELECTURE_alignements_ficedl_2026-09-26.md`, **fiche validée en bloc par Xavier le 26/09**. *(1) Chaque lien porte une relation choisie* : sur les 54 `close`, 19 deviennent « plus large », 21 « plus étroit » (les rubriques composites de Solidaires), 5 « associé », 9 sont confirmés ; sur les 44 `exact`, 6 étaient trop affirmés (3 « plus large » — le descripteur couvre les deux faces, 3 « proche » — une révolution n'est pas une période), 38 sont confirmés nommément dans la fiche. *(2)* **Huit alignements vers la facette `dates`** (Commune ×2 → 1871, Mai-Juin 1936 → 1936, Mai 68 → 1968, révolution russe ×2 → 1917, révolution allemande → 1918 et 1919 — 1789 et 1848 n'existent pas dans la facette, qui commence en 1868), plus trois meilleures cibles trouvées en chemin (Proche et Moyen-Orient, Allemagne 1917-1921, conseils ouvriers). Migration `20260926182521` (`e38f7310`) : clé (slug, `mot_id`), un lien n'est changé que s'il porte encore la relation relevée, vérification des 71 décisions une à une. **Éprouvée avant de pousser** : en lecture seule contre la prod (71/71 visent juste, 0 écart d'état), sur copie jetable du banc (71 tenues, idempotente, refuse un lien modifié entre-temps en le nommant). **En production le 26/09** : migration appliquée par la CI (338 migrations, sans auteur, sonde de déploiement verte), **110 liens — 38 exact, 14 close, 26 broad, 22 narrow, 10 related**, exactement la répartition attendue par la fiche ; **8 vers la facette dates** ; l'export anonyme réel, passé dans `skosExport.js`, sort par exemple Commune de Paris en `skos:broadMatch` vers 1871 et la révolution russe en `skos:closeMatch` vers 1917-1921 et `skos:relatedMatch` vers 1917. |
+| H14 | 2026-09-26 | **Clos le 26/09 au soir, les deux critères tenus.** *(1)* PMB 8.1.1.1 (archive officielle, somme SHA256 vérifiée) tourne sur le poste en deux conteneurs (projet compose `pmb-banc`, PHP 8.3 + Apache, MariaDB 10.11 réglée selon les pré-requis PMB 8.1), recette **sans clic** au dépôt sous `tests/pmb/banc` : installation par POST vers `install_rep.php` (sa branche « base existante » — le mode création fabrique `bibli@localhost`, injoignable d'un autre conteneur), montée du schéma v5.34 → v6.03, **export** et **import** pilotés par HTTP (`exporter-pmb.mjs`, `importer-pmb.mjs`) — commits `d8695a68`, `5bfa50ff`. *(2)* Fixtures **exportées par PMB lui-même** sous `tests/pmb/fixtures` : le jeu de test PMB (50 notices, 33 exemplaires 995) en UNIMARC ISO 2709, en XML MARC et dans le XML propre à PMB ; 14 **cas difficiles** (zine, grec, cyrillique, arabe, chinois, collectivité, congrès, rôles, tomes, trois exemplaires, périodique et article, 606 à subdivisions) importés dans PMB puis réexportés. **Latin-1 : pas par PMB** — PMB 8.1 n'installe qu'en UTF-8 (`install_rep.php` force `utf-8`) ; la variante latin-1 est transcodée par `yaz-marcdump` (longueurs ISO 2709 recalculées), et le dit. Ce que PMB perd en réimportant (`func_bdp`) est consigné dans `tests/pmb/README.md` pour **H24**/**H27**. |
 
 ---
 

@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-26.** **52 itens de 67** trazem uma verificação datada própria (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H14, H15, H16, H17, H18, H19, H20, H21, H23, H24, H26, H27, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-26.** **53 itens de 67** trazem uma verificação datada própria (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1220,7 +1220,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Relatório de cobertura enviado à DIRA.
 - Decisão de acesso escrita, com a razão.
 
-**Dependências.** Antes do relatório: **H14**, **H15**, **H16**, **H19**. Antes de qualquer migração: **H21**, **H23**, **H24**, **H27**. Arquivos: **D7**.
+**Dependências.** Antes do relatório: **H28** (feito), **H14**, **H15**, **H16**, **H19**. Antes de qualquer migração: **H21**, **H23**, **H24**, **H27**. Arquivos: **D7**.
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1235,8 +1235,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
 | **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
-| **H14** | Um PMB de banco na máquina, para testar o ida-e-volta sem depender de uma biblioteca | `P1` | Aberto |
-| **H15** | A importação lê um arquivo que não está em UTF-8 em vez de corrompê-lo em silêncio | `P1` | Aberto |
+| **H28** | Um arquivo MARC ISO 2709 é importado: o formato detectado é aceito pela base | `P1` | A verificar |
+| **H15** | A importação lê um arquivo que não está em UTF-8 em vez de corrompê-lo em silêncio | `P1` | A verificar |
 | **H16** | Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada | `P1` | Aberto |
 | **H17** | O mapeamento UNIMARC aproveita as zonas correntes de um catálogo PMB | `P1` | Aberto |
 | **H18** | As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade | `P1` | Aberto |
@@ -1315,34 +1315,34 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `REGISTRE §30 THES-FIC-O2` · `claude/REPONSE_hortical_deux_thesaurus_2026-09-07` · `claude/spec-periodiques-v0.1 §5`*
 
-#### H14 — Um PMB de banco na máquina, para testar o ida-e-volta sem depender de uma biblioteca
+#### H28 — Um arquivo MARC ISO 2709 é importado: o formato detectado é aceito pela base
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas, biblioteconomia
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, React / JavaScript
 
-**Estado.** Medido em 26/09: 8 importações já rodaram, 5 CSV e 3 RIS, **nenhuma MARC**. O parser MARC nunca leu um arquivo real, e seus testes Deno (`marc.test.ts`) não rodam em lugar nenhum (nem na CI, nem na máquina); o export MARCXML nunca foi relido pelo PMB. O projeto não tem nenhuma instância de PMB.
+**Estado.** Achado em 26/09, confirmado em produção: a CHECK de `detected_format` não aceitava nem `marc_iso2709` (escrito pela EF) nem `marc21` (enviado pelo front para `.mrc`/`.marc`). Todo import ISO 2709 falhava — na criação ou na atualização final. Nenhum run MARC jamais rodou. O PMB exporta em `.marc`.
 
-*Verificado : 26/09 — 8 runs (5 CSV, 3 RIS, 0 MARC); nenhum `deno test` na CI.*
+*Verificado : 26/09 — migração aplicada pela CI; CHECK em produção com `marc_iso2709`; banco da EF real escreve `marc_iso2709`.*
 
-**O que é.** Subir o PMB (PHP + MySQL) em contêiner, versão próxima da da DIRA, receita no repositório. Cadastrar um jogo de registros com os casos difíceis (zines, alfabetos não latinos, coletividades, tomos, periódicos, vários exemplares), exportar em UNIMARC ISO 2709 e versar como fixture (`tests/fixtures/pmb/`), em UTF-8 e, se possível, ISO-8859-1.
+**O que é.** **Entregue em 26/09** (`d008bb51`, migração `20260926184500`): `marc_iso2709` aceito, `marc21` recusado (vocabulário, não formato); uma só `detectFileKind`; guarda vitest e suíte SQL. Falta: **uma primeira importação ISO 2709 real em produção**.
 
-**Por que importa.** Sem reler nossos arquivos no software real, «legível pelo PMB» é uma suposição. E não se pode pedir a uma biblioteca que seja nosso banco de testes a cada iteração.
+**Por que importa.** É a porta de entrada de todo o ida-e-volta PMB.
 
 **O que conta como terminado.**
 
-- PMB rodando na máquina; receita no repositório.
-- Fixture UNIMARC exportada pelo PMB no repositório (UTF-8, e latin-1 se possível).
+- A CHECK aceita `marc_iso2709` em produção (feito, 26/09).
+- Uma importação ISO 2709 real chega a « pronta para revisão » em produção.
 
-**Dependências.** Base de **H15** a **H27**. Versão do PMB alinhada à da DIRA (**G15**).
+**Dependências.** Antes de **H15** e **H19**. Provado de verdade por **G15**.
 
-*Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+*Remissões : `claude/aller-retour-PMB_2026-09-26` · `tests/pmb/README.md`*
 
 #### H15 — A importação lê um arquivo que não está em UTF-8 em vez de corrompê-lo em silêncio
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
 
-**Estado.** `index.ts` (l. 623) e `marc.ts` (l. 303) decodificam **sempre em UTF-8**, sem `fatal`; só o MARC-8 gera aviso. Uma base PMB em ISO-8859-1 teria os acentos trocados por U+FFFD **sem nenhum aviso**; idem para um CSV em Windows-1252.
+**Estado.** `index.ts` (l. 623) e `marc.ts` (l. 303) decodificam **sempre em UTF-8**, sem `fatal`; só o MARC-8 gera aviso. Uma base PMB em ISO-8859-1 teria os acentos trocados por U+FFFD **sem nenhum aviso**; idem para um CSV em Windows-1252. **Medido no banco PMB em 26/09**: 29 de 50 registros com U+FFFD em latin-1, e um falso « MARC-8 » em todo UNIMARC. **Entregue em 26/09**: UTF-8 estrito, recuo windows-1252 suposto e dito, `forced_encoding`, MARC-8 só em MARC21, 100 $a relido; RPC com `p_forced_encoding` em fusão; reprocessamento recusado após promoção; tela com seletor, painel e « Reprocessar », 10 locales.
 
-*Verificado : 26/09 — lidos no commit `f59bd81a`.*
+*Verificado : 26/09 — a variante latin-1 dá exatamente os mesmos registros que o UTF-8 (testes nas fixtures PMB e banco da EF real); suíte SQL 6/6. Falta: uma importação latin-1 real em produção e o painel visto na tela.*
 
 **O que é.** Decodificar em UTF-8 estrito (`fatal: true`); se falhar, reler em Windows-1252 e **dizê-lo** nos avisos do run. No ISO 2709 UNIMARC, ler também 100 $a/26-29. Ajustar `forced_encoding` em `adapter_overrides`. Testar com fixture latin-1.
 
@@ -1354,7 +1354,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - A codificação adotada aparece nos avisos do run.
 - Teste no banco das edge functions.
 
-**Dependências.** Fixture de **H14** (ou fabricar uma à mão).
+**Dependências.** Depois de **H28** (feito). Fixture de **H14** (feita).
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1427,7 +1427,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 `P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
 
-**Estado.** O parser ignora a 995. Medido em 26/09: `exemplar_drafts`, `publish_exemplar_draft` e `ingest.fn_create_exemplar_drafts_from_import_rows` existem, mas **0** linha de staging tem `created_exemplar_draft_id`. `exemplares.tombo` é **único na base toda**: colisões possíveis (23505).
+**Estado.** O parser ignora a 995. Medido em 26/09: `exemplar_drafts`, `publish_exemplar_draft` e `ingest.fn_create_exemplar_drafts_from_import_rows` existem, mas **0** linha de staging tem `created_exemplar_draft_id`. `exemplares.tombo` é **único na base toda**: colisões possíveis (23505). **Levantamento de 26/09**: 995 do PMB = `$a`/`$c` proprietário, `$f` código de barras, `$k` cota, `$u` nota, `$r` tipo, `$q`. Armadilhas: N+1 exemplares (`greatest(1, initial_copies)`), tombo regenerado em silêncio em colisão, gatilho que devolve a linha a « pending » ao cancelar UM exemplar.
 
 *Verificado : 26/09 — 0 de 2 172 linhas; índice único de tombo presente.*
 
@@ -1491,9 +1491,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 `P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
 
-**Estado.** `looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c="200">`), não reconhecido. **Não verificado**: constatar em **H14**.
+**Estado.** `looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c="200">`), não reconhecido. **Verificado em 26/09 no banco**: o XML próprio do PMB não é reconhecido; o « XML MARC » do PMB já é lido.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 26/09 — fixture XML do PMB, não reconhecida.*
 
 **O que é.** Só se uma biblioteca não conseguir sair do ISO 2709 nem do MARCXML: um leitor para o modelo comum de `marc.ts`.
 
@@ -1593,11 +1593,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 `P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, biblioteconomia
 
-**Estado.** `serialize.test.ts` faz um ida-e-volta em memória (duas notícias escritas à mão, MARCXML MARC21, título/subtítulo/autores). Nenhum teste passa pela base, pelo UNIMARC, por um arquivo real ou pelos exemplares. E **esses testes Deno não rodam em lugar nenhum**: nenhum `deno test` na CI, Deno ausente da máquina. As outras edge functions são testadas no vitest (`monter-ef.js`).
+**Estado.** `serialize.test.ts` faz um ida-e-volta em memória (duas notícias escritas à mão, MARCXML MARC21, título/subtítulo/autores). Nenhum teste passa pela base, pelo UNIMARC, por um arquivo real ou pelos exemplares. E **esses testes Deno não rodam em lugar nenhum**: nenhum `deno test` na CI, Deno presente na máquina em `~/.deno/bin`, fora do PATH (correção de 26/09). As outras edge functions são testadas no vitest (`monter-ef.js`).
 
-*Verificado : 26/09 — `serialize.test.ts` importa `marc.ts`; nenhum `deno` em `.forgejo/workflows/`; `deno` ausente da máquina.*
+*Verificado : 26/09 — ponte vitest na CI (25 testes); Deno 2.8.2 em `~/.deno/bin`; `importer-pmb.mjs` testado.*
 
-**O que é.** (0) Fazer rodar `marc.test.ts` e `serialize.test.ts` na CI (vitest ou `deno test`). (1) Teste de CI: fixture → import → publicação no banco SQL → export UNIMARC → comparação zona a zona, com a **lista de perdas aceitas** no teste. (2) Reimportação real no PMB de banco. (3) Tabela de cobertura publicada.
+**O que é.** (0) Fazer rodar `marc.test.ts` e `serialize.test.ts` na CI (vitest ou `deno test`). (1) Teste de CI: fixture → import → publicação no banco SQL → export UNIMARC → comparação zona a zona, com a **lista de perdas aceitas** no teste. (2) Reimportação real no PMB de banco. (3) Tabela de cobertura publicada. **(0) entregue em 26/09**: ponte vitest que roda os testes Deno como estão. **O retorno ao PMB tem seu script** (`importer-pmb.mjs`) — e a função de importação padrão `func_bdp` perde 200 $f/$g, a segunda 700, funde as 606, trunca a Dewey e ignora o proprietário da 995: a tabela de cobertura deverá dizer qual função usar, ou fornecer uma.
 
 **Por que importa.** É a única peça que permite dizer a uma biblioteca «pode migrar».
 
@@ -2151,6 +2151,7 @@ CI verde. |
 | H13 | 2026-09-25 | **Fechado em 25/09.** Os dois arquivos no repositório (`docs/journal/ficedl/`, os de 09/09 levados a Bolonha, sha256 verificados), regeneráveis por um comando documentado no README — saída idêntica byte a byte; o CSV fica fora da conversão de fins de linha; guarda vitest que regenera e compara. A nota de 28/08 ao lado, com os três pontos superados. |
 | H9 | 2026-09-25 | **Fechado em 25/09 à noite, os três critérios cumpridos.** Entregue por `f67ff3d9`. *(1)* Xavier pôs pela tela um alinhamento « mais amplo » (Anarcossindicalismo → `mot286`), lido na base, exibido « MAIS AMPLO » na página pública e exportado em `skos:broadMatch` (Turtle e JSON-LD, export real em anônimo). *(2)* `npm test` verde (878). *(3)* Bloco 4.2 invertido no mesmo dia. |
 | H10 | 2026-09-26 | **Fechado em 26/09, os dois critérios cumpridos.** Releitura linha a linha dos 99 vínculos (`CONV-EXEC-3`), ficha validada em bloco por Xavier e registrada em `docs/journal/arbitrages/RELECTURE_alignements_ficedl_2026-09-26.md`: dos 54 `close`, 19 viram « mais amplo », 21 « mais restrito », 5 « relacionado », 9 confirmados; 6 `exact` exagerados corrigidos, 38 confirmados. **Oito alinhamentos para a faceta `dates`** e três alvos melhores. Migração `20260926182521`, verificada decisão por decisão; testada antes do push (leitura em produção, cópia descartável). |
+| H14 | 2026-09-26 | **Fechado em 26/09 à noite, os dois critérios cumpridos.** *(1)* PMB 8.1.1.1 (arquivo oficial, SHA256 verificado) roda na máquina em dois contêineres, receita **sem cliques** no repositório (`tests/pmb/banc`): instalação, atualização do esquema, **exportação** e **importação** por HTTP. *(2)* Fixtures **exportadas pelo próprio PMB** (`tests/pmb/fixtures`): o jogo de teste do PMB (50 registros, 33 exemplares) em ISO 2709, XML MARC e XML próprio do PMB, e 14 **casos difíceis** passados pelo PMB. Latin-1: não pelo PMB (o 8.1 só instala em UTF-8) — variante transcodificada por `yaz-marcdump`, dito. O que o PMB perde ao reimportar está em `tests/pmb/README.md` (**H24**/**H27**). |
 
 ---
 
