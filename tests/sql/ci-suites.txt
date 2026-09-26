@@ -512,3 +512,6 @@ tests/sql/courriels_rejeu_tests.sql
 tests/sql/deploiement_tests.sql
 # 25/09 (H9) : broad/narrow/related posés par la coordination, gardés et exportés tels quels.
 tests/sql/alignement_ficedl_relations_tests.sql
+# 26/09 (H28) : un fichier MARC ISO 2709 s importe — marc_iso2709 admis par la CHECK
+# detected_format, marc21 (un vocabulaire) toujours refuse ; le front envoie le meme mot que l EF.
+tests/sql/import_format_marc_tests.sql

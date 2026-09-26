@@ -11,26 +11,12 @@ import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './ImportacoesPage.css';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
+import { detectFileKind, ACCEPTED_IMPORT_EXTENSIONS as ACCEPTED_EXTENSIONS } from '../../lib/importFileKind.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
-const ACCEPTED_EXTENSIONS = '.csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.xlsx,.xls,.ods,.pdf,.json,.xml,.zip,.marc,.marcxml';
 // Champs cibles d'un profil d'import (mapping colonne→champ + valeurs par défaut).
 // Clés techniques alignées sur le parseur (process-partner-catalog-import).
 const PROFILE_FIELDS = ['title', 'subtitle', 'author', 'publisher', 'place', 'year', 'language', 'subjects', 'isbn', 'issn', 'edition', 'itemType', 'externalKey'];
-
-function detectFileKind(fileName) {
-  const n = (fileName || '').toLowerCase();
-  if (n.endsWith('.csv')) return 'csv';
-  if (n.endsWith('.tsv')) return 'tsv';
-  if (n.endsWith('.ris')) return 'ris';
-  if (n.endsWith('.bib') || n.endsWith('.bibtex')) return 'bibtex';
-  if (n.endsWith('.mrc') || n.endsWith('.marc')) return 'marc21';
-  if (n.endsWith('.marcxml')) return 'marcxml';
-  if (n.endsWith('.json')) return 'json';
-  if (n.endsWith('.xml')) return 'xml';
-  if (n.endsWith('.zip')) return 'zip'; // EX-3 : paquet de fonds (manifest + fichiers)
-  return 'unknown';
-}
 
 function formatDate(iso) {
   if (!iso) return '—';

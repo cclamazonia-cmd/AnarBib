@@ -8,6 +8,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import './ImportacoesPage.css';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
+import { detectFileKind } from '../../lib/importFileKind.js';
 
 // =============================================================================
 // ImportWizard — assistant « Novo import » (IMP-8).
@@ -34,20 +35,6 @@ const STEPS = [
 // (doublon potentiel) -> sur un catalogue mutualise, ne JAMAIS promouvoir a
 // l'aveugle. Ces lignes sont surlignees + jamais auto-promues.
 const DUP_STATUSES = new Set(['possible_duplicate', 'matched_book', 'matched_draft']);
-
-function detectFileKind(fileName) {
-  const n = (fileName || '').toLowerCase();
-  if (n.endsWith('.csv')) return 'csv';
-  if (n.endsWith('.tsv')) return 'tsv';
-  if (n.endsWith('.ris')) return 'ris';
-  if (n.endsWith('.bib') || n.endsWith('.bibtex')) return 'bibtex';
-  if (n.endsWith('.mrc') || n.endsWith('.marc')) return 'marc21';
-  if (n.endsWith('.marcxml')) return 'marcxml';
-  if (n.endsWith('.json')) return 'json';
-  if (n.endsWith('.xml')) return 'xml';
-  if (n.endsWith('.zip')) return 'zip'; // EX-3 : paquet de fonds (manifest + fichiers)
-  return 'unknown';
-}
 
 export default function ImportWizard() {
   const { role, isNetworkAdmin } = useLibrary();
@@ -318,7 +305,7 @@ export default function ImportWizard() {
               </label>
               <label style={{ display: 'grid', gap: 6 }}>
                 <span className="imp-note">{t({ id: 'importacoes.wizard.source.fileLabel' })}</span>
-                <input type="file" accept=".csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.marc,.marcxml,.xml,.json,.zip" onChange={(e) => setFile(e.target.files?.[0] || null)} disabled={busy} />
+                <input type="file" accept=".csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.marc,.iso,.marcxml,.xml,.json,.zip" onChange={(e) => setFile(e.target.files?.[0] || null)} disabled={busy} />
                 <span className="imp-note" style={{ opacity: 0.8 }}>{t({ id: 'importacoes.wizard.source.fondsHint' })}</span>
               </label>
               <div>
