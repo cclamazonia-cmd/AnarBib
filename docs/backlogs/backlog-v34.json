@@ -2362,6 +2362,14 @@
           "fr": "**Clos le 26/09 au soir, les deux critères tenus.** *(1)* PMB 8.1.1.1 (archive officielle, somme SHA256 vérifiée) tourne sur le poste en deux conteneurs (projet compose `pmb-banc`, PHP 8.3 + Apache, MariaDB 10.11 réglée selon les pré-requis PMB 8.1), recette **sans clic** au dépôt sous `tests/pmb/banc` : installation par POST vers `install_rep.php` (sa branche « base existante » — le mode création fabrique `bibli@localhost`, injoignable d'un autre conteneur), montée du schéma v5.34 → v6.03, **export** et **import** pilotés par HTTP (`exporter-pmb.mjs`, `importer-pmb.mjs`) — commits `d8695a68`, `5bfa50ff`. *(2)* Fixtures **exportées par PMB lui-même** sous `tests/pmb/fixtures` : le jeu de test PMB (50 notices, 33 exemplaires 995) en UNIMARC ISO 2709, en XML MARC et dans le XML propre à PMB ; 14 **cas difficiles** (zine, grec, cyrillique, arabe, chinois, collectivité, congrès, rôles, tomes, trois exemplaires, périodique et article, 606 à subdivisions) importés dans PMB puis réexportés. **Latin-1 : pas par PMB** — PMB 8.1 n'installe qu'en UTF-8 (`install_rep.php` force `utf-8`) ; la variante latin-1 est transcodée par `yaz-marcdump` (longueurs ISO 2709 recalculées), et le dit. Ce que PMB perd en réimportant (`func_bdp`) est consigné dans `tests/pmb/README.md` pour **H24**/**H27**.",
           "pt": "**Fechado em 26/09 à noite, os dois critérios cumpridos.** *(1)* PMB 8.1.1.1 (arquivo oficial, SHA256 verificado) roda na máquina em dois contêineres, receita **sem cliques** no repositório (`tests/pmb/banc`): instalação, atualização do esquema, **exportação** e **importação** por HTTP. *(2)* Fixtures **exportadas pelo próprio PMB** (`tests/pmb/fixtures`): o jogo de teste do PMB (50 registros, 33 exemplares) em ISO 2709, XML MARC e XML próprio do PMB, e 14 **casos difíceis** passados pelo PMB. Latin-1: não pelo PMB (o 8.1 só instala em UTF-8) — variante transcodificada por `yaz-marcdump`, dito. O que o PMB perde ao reimportar está em `tests/pmb/README.md` (**H24**/**H27**)."
         }
+      ],
+      [
+        "C8",
+        "2026-09-26",
+        {
+          "fr": "**Clos le 26/09, les deux critères tenus** (demande de Xavier : « compléter l'ensemble des fiches auteurs », carte blanche sur la méthode). Deux phases, chacune par une migration de données passée par la CI : **Wikidata** (`20260926193111`, `b418e149`) — 607 fiches ; **Library of Congress** (`20260926200208`, `abaa4755`) — 288 fiches liées, 90 complétées. Règles et échantillons dans `docs/journal/operations/enrichissement-autorites-2026-09-26/` (README + `decisions.csv`, `decisions-lc.csv`) : nom identique ET aucune contradiction ET dates concordantes ou deux signaux indépendants (Wikidata), titre de l'auteur au catalogue cité dans la notice ou dates concordantes (LC) ; justesse mesurée sur échantillon aléatoire : 60/60. On ne remplit que le vide, trace par fiche dans `external_ids` (`wikidata_releve`, `lc_releve`). *(1) Couverture en identifiants externes* (Wikidata, VIAF, ISNI ou LC), mesurée en production le 26/09 : **51 %** de toutes les autorités, **78 %** de celles à trois livres ou plus, **86 %** à cinq, **96 %** à dix — le seuil de 20 % est dépassé partout. *(2) Aucun pseudonyme militant remplacé par un nom civil* : aucune forme de nom n'est touchée (forme retenue, forme de tri, variantes) — par construction, et c'est la garde de la migration (id ET forme retenue du relevé). Au passage, la langue d'écriture a reçu sa colonne (`writing_language`, `20260926191225`, `6bcb3fa5`) : 503 fiches renseignées. **En production le 26/09** : 344 migrations, sonde de déploiement verte ; 614 fiches liées à Wikidata, 288 à la LC ; restent 716 fiches sans année de naissance. Les formes variantes (troisième constat de la fiche) n'ont pas été enrichies : Wikidata en porte, mais une variante mal choisie brouille la recherche — à faire à la main si le besoin se montre.",
+          "pt": "**Fechado em 26/09, os dois critérios cumpridos.** Duas fases por migração de dados via CI: Wikidata (607 fichas) e Library of Congress (288 ligadas, 90 completadas); regras, amostras e planilhas em `docs/journal/operations/enrichissement-autorites-2026-09-26/`; precisão medida numa amostra aleatória: 60/60. Só se preenche o vazio, com rastro por ficha. (1) Cobertura em identificadores externos: 51 % de todas as autoridades, 78 % das com três livros ou mais, 96 % das com dez. (2) Nenhuma forma de nome tocada. A língua de escrita ganhou sua coluna (503 fichas)."
+        }
       ]
     ]
   },
@@ -2627,7 +2635,7 @@
       "id": "C4",
       "d": "C",
       "p": "P2",
-      "s": "ouvert",
+      "s": "decision",
       "e": "M",
       "sk": [
         "biblio"
@@ -2674,6 +2682,10 @@
         {
           "fr": "24/09 — **925 autorités sur 1 505 sans `country` (61 %)**, contre 726 sur 1 305 le 31/08 (55,6 %) : la dette avance toujours plus vite que sa résorption, et le lot C5 (227 autorités créées le 03/09) y est pour beaucoup.",
           "pt": "24/09 — **925 autoridades em 1 505 sem `country` (61 %)**, contra 55,6 % em 31/08."
+        },
+        {
+          "fr": "26/09 — **mesuré après l'enrichissement des autorités** (Wikidata puis Library of Congress, voir la clôture de C8) : 185 pays posés, **740 fiches sur 1 505 (49 %) toujours sans pays**. Le critère « sous 20 % » n'est **pas atteignable par des sources d'autorité** : 668 des 735 fiches restantes (copie de banc) ont un seul livre au catalogue — brochures, travaux universitaires brésiliens (371 en portugais) et hispano-américains (155) — et ne figurent ni dans Wikidata ni, avec une preuve, à la LC. Déduire la nationalité de la langue ou du lieu d'édition serait une supposition : non fait. **Décision à prendre par Xavier** : réécrire le critère (par exemple « sous 20 % parmi les autorités à deux livres ou plus »), ou garder l'item pour une relecture humaine sur `decisions.csv`. Le second critère (rejouer la détection des doubles patronymes) peut se faire dès maintenant sur les 185 pays neufs.",
+          "pt": "26/09 — medido após o enriquecimento das autoridades: 185 países postos, 740 de 1 505 fichas (49 %) ainda sem país; o critério « abaixo de 20 % » não é alcançável por fontes de autoridade (668 das restantes têm um só livro no catálogo). Decisão de Xavier: reescrever o critério ou manter para revisão humana."
         }
       ]
     },
@@ -2772,54 +2784,6 @@
       "verif": {
         "fr": "31/08 — 1 122 notices indexées sur 2 659 (42,2 %), 1 279 affectations, 89 sujets. Les quatre comptes ont légèrement baissé depuis le 29/08 : les fusions de doublons du 31/08 ont retiré des notices, pas des indexations.",
         "pt": "31/08 — 1 122 de 2 659 registros indexados (42,2 %), 1 279 atribuições, 89 assuntos. As fusões de duplicatas de 31/08 explicam a leve queda."
-      }
-    },
-    {
-      "id": "C8",
-      "d": "C",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "L",
-      "sk": [
-        "biblio"
-      ],
-      "t": {
-        "fr": "Enrichir les autorités : dates, identifiants externes, formes variantes",
-        "pt": "Enriquecer as autoridades: datas, identificadores externos, formas variantes"
-      },
-      "v": {
-        "fr": "Sur 1 305 autorités : **726 (56 %) sans date de naissance**, environ **1 272 (98 %) sans identifiant VIAF, ISNI ou Wikidata**, environ **1 275 (98 %) sans `variant_forms`**. Le code d'enrichissement existe et fonctionne ; la couverture est de l'ordre de 1 à 2 %.",
-        "pt": "De 1 305 autoridades: **726 (56 %) sem data de nascimento**, cerca de **1 272 (98 %) sem identificador VIAF, ISNI ou Wikidata**, cerca de **1 275 (98 %) sem `variant_forms`**."
-      },
-      "w": {
-        "fr": "Passes d'enrichissement par les sources déjà branchées, avec relecture. Les pseudonymes militants sont un cas à part : l'entrée se fait à la forme la plus connue du mouvement, avec renvoi depuis le nom civil, **jamais l'inverse**.",
-        "pt": "Passagens de enriquecimento pelas fontes já conectadas, com revisão. Os pseudônimos militantes são um caso à parte: a entrada se faz pela forma mais conhecida do movimento, com remissão a partir do nome civil, **nunca o contrário**."
-      },
-      "y": {
-        "fr": "Les identifiants externes sont ce qui permettra à un autre catalogue de reconnaître nos autorités sans les redécrire. Les formes variantes sont ce qui permet de trouver quelqu'un sous le nom qu'on connaît. Et pour un pseudonyme militant, la forme d'usage **porte souvent la seule trace d'une répression** : elle ne s'écrase pas.",
-        "pt": "Os identificadores externos são o que permitirá a outro catálogo reconhecer nossas autoridades sem redescrevê-las. As formas variantes são o que permite encontrar alguém sob o nome que se conhece. E para um pseudônimo militante, a forma de uso **carrega frequentemente o único rastro de uma repressão**: não se sobrescreve."
-      },
-      "f": {
-        "fr": [
-          "La couverture en identifiants externes dépasse 20 % sur les autorités les plus citées.",
-          "Aucun pseudonyme militant n'a été remplacé par un nom civil."
-        ],
-        "pt": [
-          "A cobertura em identificadores externos passa de 20 % nas autoridades mais citadas.",
-          "Nenhum pseudônimo militante foi substituído por um nome civil."
-        ]
-      },
-      "dep": {
-        "fr": "Après **C4** (les pays aident les alignements).",
-        "pt": "Depois de **C4** (os países ajudam os alinhamentos)."
-      },
-      "r": [
-        "AUDIT_conventions_catalographiques_2026-08-20 A7-A9",
-        "REGISTRE §12 CAT-D6"
-      ],
-      "verif": {
-        "fr": "31/08 — sur 1 305 autorités : 728 sans année de naissance (56 %), 1 276 sans identifiant VIAF, ISNI ou Wikidata (98 %), 1 280 sans `variant_forms` (98 %). Le constat tient.",
-        "pt": "31/08 — de 1 305 autoridades: 728 sem ano de nascimento, 1 276 sem identificador externo, 1 280 sem `variant_forms`. O constato se mantém."
       }
     },
     {

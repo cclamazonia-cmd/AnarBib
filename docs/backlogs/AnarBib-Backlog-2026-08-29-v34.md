@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-26** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-26** · 66 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,7 +17,7 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 2
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-26.** **53 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-26.** **52 items sur 66** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -403,10 +403,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
-| **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Ouvert |
+| **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Décision collective |
 | **C6** | Livrer les trois assistances de saisie prévues par la spec des conventions | `P2` | Ouvert |
 | **C7** | Indexer par matière les 1 549 notices qui n'ont aucun sujet | `P2` | Ouvert |
-| **C8** | Enrichir les autorités : dates, identifiants externes, formes variantes | `P3` | Ouvert |
 | **C9** | Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main | `P2` | Ouvert |
 | **C10** | Renommer l'une des deux colonnes `rights_status` | `P2` | Ouvert |
 | **C11** | Arbitrer ce que l'OPAC par œuvre a mis en file : tomes, œuvres scindées, titres pré-traduits, notes MLEG | `P2` | Ouvert |
@@ -435,11 +434,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### C4 — Renseigner les pays manquants sur 722 fiches d'autorité
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
+`P2` Courant · État : **Décision collective** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
 
 **État.** **722 fiches sur 1 305 (55 %) n'ont pas de `country`.** Or c'est `country` qui pilote la règle d'entrée du nom : sans lui, la détection des doubles patronymes hispaniques ne voit qu'une fraction des cas. Les 22 signalements sont un **plancher**, pas un total.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Renseigner `country` par lots, à partir des notices, des sources externes déjà branchées (Wikidata, VIAF) et de la connaissance du fonds. Puis rejouer la détection des patronymes.
 
@@ -497,27 +496,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune. **Entrée sans compétence technique.**
 
 *Renvois : `AnarBib-Backlog-2026-06-17-v33 §5` · `ETAT-lancement-consolide-2026-07-03 §2 item 6`*
-
-#### C8 — Enrichir les autorités : dates, identifiants externes, formes variantes
-
-`P3` Différé · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : bibliothéconomie
-
-**État.** Sur 1 305 autorités : **726 (56 %) sans date de naissance**, environ **1 272 (98 %) sans identifiant VIAF, ISNI ou Wikidata**, environ **1 275 (98 %) sans `variant_forms`**. Le code d'enrichissement existe et fonctionne ; la couverture est de l'ordre de 1 à 2 %.
-
-*Vérifié : 31/08 — sur 1 305 autorités : 728 sans année de naissance (56 %), 1 276 sans identifiant VIAF, ISNI ou Wikidata (98 %), 1 280 sans `variant_forms` (98 %). Le constat tient.*
-
-**Ce que c'est.** Passes d'enrichissement par les sources déjà branchées, avec relecture. Les pseudonymes militants sont un cas à part : l'entrée se fait à la forme la plus connue du mouvement, avec renvoi depuis le nom civil, **jamais l'inverse**.
-
-**Pourquoi ça compte.** Les identifiants externes sont ce qui permettra à un autre catalogue de reconnaître nos autorités sans les redécrire. Les formes variantes sont ce qui permet de trouver quelqu'un sous le nom qu'on connaît. Et pour un pseudonyme militant, la forme d'usage **porte souvent la seule trace d'une répression** : elle ne s'écrase pas.
-
-**Ce qui compte comme fini.**
-
-- La couverture en identifiants externes dépasse 20 % sur les autorités les plus citées.
-- Aucun pseudonyme militant n'a été remplacé par un nom civil.
-
-**Dépendances.** Après **C4** (les pays aident les alignements).
-
-*Renvois : `AUDIT_conventions_catalographiques_2026-08-20 A7-A9` · `REGISTRE §12 CAT-D6`*
 
 #### C9 — Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main
 
@@ -2162,6 +2140,7 @@ CI verte : lint et suite unitaire. |
 | H9 | 2026-09-25 | **Clos le 25/09 au soir, les trois critères tenus.** Livré par `f67ff3d9` (migration `20260925084523`) : la RPC accepte les cinq relations, `skosExport.js` passe par la table `SKOS_MATCH` et ne publie plus rien par défaut, la page-sujet et l'éditeur de la coordination lisent `ficedlMatch.js` — l'éditeur n'offrait jusque-là **aucun** choix de relation —, cinq clés dans les dix locales (en de/nl, « close » ne porte plus le mot de « related »). *(1)* **Xavier a posé depuis l'écran** (capture du 25/09, 21 h 17) un alignement « plus large » : Anarchosyndicalisme (sujet 17) → `mot286` « syndicalisme révolutionnaire », lu en base (`match_type = broad`, 19:17 UTC) ; la page publique `/thesaurus/anarcossindicalismo` l'affiche « PLUS LARGE » à côté de l'« EXACT » de `mot272` (lu dans le navigateur) ; l'export réel `api.thesaurus_export_v1`, appelé en anonyme, passé dans le `skosExport.js` livré, sort `skos:broadMatch <…?mot286>` en Turtle comme en JSON-LD. *(2)* `npm test` vert : 878 tests, dont `skos-relations-h9` (15). *(3)* Le 4.2 de `20260907172508` est inversé dans `20260925084523` le même jour, et annoté là-bas. Suite SQL `alignement_ficedl_relations_tests` (6). Ouvre **H10**. |
 | H10 | 2026-09-26 | **Clos le 26/09, les deux critères tenus.** Relevé du matin : 99 liens (44 `exact`, 54 `close`, 1 `broad` posé à l'écran le 25/09), aucun vers la facette `dates`. **Relecture ligne à ligne** (`CONV-EXEC-3`) consignée dans `docs/journal/arbitrages/RELECTURE_alignements_ficedl_2026-09-26.md`, **fiche validée en bloc par Xavier le 26/09**. *(1) Chaque lien porte une relation choisie* : sur les 54 `close`, 19 deviennent « plus large », 21 « plus étroit » (les rubriques composites de Solidaires), 5 « associé », 9 sont confirmés ; sur les 44 `exact`, 6 étaient trop affirmés (3 « plus large » — le descripteur couvre les deux faces, 3 « proche » — une révolution n'est pas une période), 38 sont confirmés nommément dans la fiche. *(2)* **Huit alignements vers la facette `dates`** (Commune ×2 → 1871, Mai-Juin 1936 → 1936, Mai 68 → 1968, révolution russe ×2 → 1917, révolution allemande → 1918 et 1919 — 1789 et 1848 n'existent pas dans la facette, qui commence en 1868), plus trois meilleures cibles trouvées en chemin (Proche et Moyen-Orient, Allemagne 1917-1921, conseils ouvriers). Migration `20260926182521` (`e38f7310`) : clé (slug, `mot_id`), un lien n'est changé que s'il porte encore la relation relevée, vérification des 71 décisions une à une. **Éprouvée avant de pousser** : en lecture seule contre la prod (71/71 visent juste, 0 écart d'état), sur copie jetable du banc (71 tenues, idempotente, refuse un lien modifié entre-temps en le nommant). **En production le 26/09** : migration appliquée par la CI (338 migrations, sans auteur, sonde de déploiement verte), **110 liens — 38 exact, 14 close, 26 broad, 22 narrow, 10 related**, exactement la répartition attendue par la fiche ; **8 vers la facette dates** ; l'export anonyme réel, passé dans `skosExport.js`, sort par exemple Commune de Paris en `skos:broadMatch` vers 1871 et la révolution russe en `skos:closeMatch` vers 1917-1921 et `skos:relatedMatch` vers 1917. |
 | H14 | 2026-09-26 | **Clos le 26/09 au soir, les deux critères tenus.** *(1)* PMB 8.1.1.1 (archive officielle, somme SHA256 vérifiée) tourne sur le poste en deux conteneurs (projet compose `pmb-banc`, PHP 8.3 + Apache, MariaDB 10.11 réglée selon les pré-requis PMB 8.1), recette **sans clic** au dépôt sous `tests/pmb/banc` : installation par POST vers `install_rep.php` (sa branche « base existante » — le mode création fabrique `bibli@localhost`, injoignable d'un autre conteneur), montée du schéma v5.34 → v6.03, **export** et **import** pilotés par HTTP (`exporter-pmb.mjs`, `importer-pmb.mjs`) — commits `d8695a68`, `5bfa50ff`. *(2)* Fixtures **exportées par PMB lui-même** sous `tests/pmb/fixtures` : le jeu de test PMB (50 notices, 33 exemplaires 995) en UNIMARC ISO 2709, en XML MARC et dans le XML propre à PMB ; 14 **cas difficiles** (zine, grec, cyrillique, arabe, chinois, collectivité, congrès, rôles, tomes, trois exemplaires, périodique et article, 606 à subdivisions) importés dans PMB puis réexportés. **Latin-1 : pas par PMB** — PMB 8.1 n'installe qu'en UTF-8 (`install_rep.php` force `utf-8`) ; la variante latin-1 est transcodée par `yaz-marcdump` (longueurs ISO 2709 recalculées), et le dit. Ce que PMB perd en réimportant (`func_bdp`) est consigné dans `tests/pmb/README.md` pour **H24**/**H27**. |
+| C8 | 2026-09-26 | **Clos le 26/09, les deux critères tenus** (demande de Xavier : « compléter l'ensemble des fiches auteurs », carte blanche sur la méthode). Deux phases, chacune par une migration de données passée par la CI : **Wikidata** (`20260926193111`, `b418e149`) — 607 fiches ; **Library of Congress** (`20260926200208`, `abaa4755`) — 288 fiches liées, 90 complétées. Règles et échantillons dans `docs/journal/operations/enrichissement-autorites-2026-09-26/` (README + `decisions.csv`, `decisions-lc.csv`) : nom identique ET aucune contradiction ET dates concordantes ou deux signaux indépendants (Wikidata), titre de l'auteur au catalogue cité dans la notice ou dates concordantes (LC) ; justesse mesurée sur échantillon aléatoire : 60/60. On ne remplit que le vide, trace par fiche dans `external_ids` (`wikidata_releve`, `lc_releve`). *(1) Couverture en identifiants externes* (Wikidata, VIAF, ISNI ou LC), mesurée en production le 26/09 : **51 %** de toutes les autorités, **78 %** de celles à trois livres ou plus, **86 %** à cinq, **96 %** à dix — le seuil de 20 % est dépassé partout. *(2) Aucun pseudonyme militant remplacé par un nom civil* : aucune forme de nom n'est touchée (forme retenue, forme de tri, variantes) — par construction, et c'est la garde de la migration (id ET forme retenue du relevé). Au passage, la langue d'écriture a reçu sa colonne (`writing_language`, `20260926191225`, `6bcb3fa5`) : 503 fiches renseignées. **En production le 26/09** : 344 migrations, sonde de déploiement verte ; 614 fiches liées à Wikidata, 288 à la LC ; restent 716 fiches sans année de naissance. Les formes variantes (troisième constat de la fiche) n'ont pas été enrichies : Wikidata en porte, mais une variante mal choisie brouille la recherche — à faire à la main si le besoin se montre. |
 
 ---
 
@@ -2193,4 +2172,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-26. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-26. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 66 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
