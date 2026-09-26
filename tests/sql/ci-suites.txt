@@ -518,3 +518,6 @@ tests/sql/import_format_marc_tests.sql
 # 26/09 (H15) : forced_encoding pose par fusion (profile_id garde), liste fermee, oracle
 # d existence ; un import deja promu en brouillons ne se retraite pas (HINT reel).
 tests/sql/import_encodage_overrides_tests.sql
+# 26/09 (H16) : le rapport de revision d un lot importe porte la couverture de chaque import
+# d origine (comptes, encodage, lignes ecartees, seuls les elements NON repris).
+tests/sql/import_couverture_tests.sql

@@ -25,8 +25,9 @@
 
 import { it, expect, vi, afterAll } from 'vitest';
 
-// marc.test.ts 13 + encoding.test.ts 5 + serialize.test.ts 7 (26/09/2026, H15)
-const ATTENDUS = 25;
+// marc.test.ts 14 + encoding.test.ts 5 + coverage.test.ts 4 + serialize.test.ts 7
+// (26/09/2026, H16)
+const ATTENDUS = 30;
 
 let enregistres = 0;
 vi.stubGlobal('Deno', {
@@ -41,6 +42,7 @@ afterAll(() => vi.unstubAllGlobals());
 // de Vite) ; un fichier ajouté ici doit l'être aussi dans ATTENDUS.
 await import('../../supabase/functions/process-partner-catalog-import/marc.test.ts');
 await import('../../supabase/functions/process-partner-catalog-import/encoding.test.ts');
+await import('../../supabase/functions/process-partner-catalog-import/coverage.test.ts');
 await import('../../supabase/functions/export-catalog-lote/serialize.test.ts');
 
 it('le pont a enregistré tous les tests Deno attendus', () => {

@@ -9,6 +9,7 @@ import {
   buildParsedEntriesFromMarc,
   unimarcDeclaredCharset,
   unimarcCharsetWarnings,
+  marcCoverage,
 } from './marc.ts';
 
 // ── Fixtures XML ────────────────────────────────────────────
@@ -283,6 +284,50 @@ Deno.test('H15 unimarcDeclaredCharset + unimarcCharsetWarnings', () => {
   assertEquals(w2.length, 1);
   assert(w2[0].includes('ISO 5426'));
   assertEquals(unimarcCharsetWarnings(['03'], { encoding: 'utf-8', fallback: false }, false), []);
+});
+
+// ── H16 (26/09/2026) : couverture ────────────────────────────
+
+Deno.test('H16 marcCoverage : repris (table du dialecte) / brut, surplus, zone de controle, exemple tronque', () => {
+  const long = 'x'.repeat(120);
+  const entries = buildParsedEntriesFromMarc([{
+    leader: '00000nam0 2200000   450 ',
+    fields: [
+      { tag: '001', value: 'C-1' },
+      { tag: '009', value: 'horodatage PMB' },
+      { tag: '101', ind1: '0', ind2: ' ', subfields: [{ code: 'a', value: 'fre' }, { code: 'a', value: 'spa' }] },
+      { tag: '200', ind1: '1', ind2: ' ', subfields: [{ code: 'a', value: 'Titre' }] },
+      { tag: '215', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: '32 p.' }] },
+      { tag: '330', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: long }] },
+      { tag: '606', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: 'Anarchisme' }, { code: 'x', value: 'Histoire' }] },
+      { tag: '606', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: 'Syndicalisme' }] },
+      { tag: '995', ind1: ' ', ind2: ' ', subfields: [{ code: 'f', value: 'CB-1' }] },
+      { tag: '995', ind1: ' ', ind2: ' ', subfields: [{ code: 'f', value: 'CB-2' }] },
+    ],
+  }], [], 'unimarc');
+  const cov = marcCoverage(entries);
+  const z = (tag, code) => cov.zones.find((x) => x.tag === tag && x.code === code);
+  assertEquals(cov.kind, 'marc');
+  assertEquals(cov.records, 1);
+  assertEquals(z('001', '').status, 'repris');
+  assertEquals(z('009', '').status, 'brut');
+  assertEquals(z('200', 'a').status, 'repris');
+  assertEquals(z('215', 'a').status, 'brut');
+  // La 2e 101 $a d'un livre bilingue n'entre nulle part : surplus.
+  assertEquals(z('101', 'a').status, 'repris');
+  assertEquals(z('101', 'a').surplus, 1);
+  // Les sujets sont tous repris (liste) : pas de surplus ; $x ne l'est pas.
+  assertEquals(z('606', 'a').status, 'repris');
+  assertEquals(z('606', 'a').occurrences, 2);
+  assertEquals(z('606', 'a').surplus, 0);
+  assertEquals(z('606', 'x').status, 'brut');
+  // Exemplaires : deux occurrences, une notice.
+  assertEquals(z('995', 'f').status, 'brut');
+  assertEquals(z('995', 'f').occurrences, 2);
+  assertEquals(z('995', 'f').records, 1);
+  assertEquals(z('995', 'f').example, 'CB-1');
+  assertEquals(z('330', 'a').example.length, 81); // 80 + « … »
+  assertEquals(cov.truncated, false);
 });
 
 Deno.test('buildParsedEntriesFromMarc : numerotation + dialecte mixte', () => {

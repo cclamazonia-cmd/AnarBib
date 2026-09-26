@@ -1,8 +1,9 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from '../_shared/deps.ts';
-import { parseMarcFile, MARC_PARSER_VERSION, unimarcCharsetWarnings } from './marc.ts';
+import { parseMarcFile, MARC_PARSER_VERSION, unimarcCharsetWarnings, marcCoverage } from './marc.ts';
 import { decodeImportBytes, encodingWarning, normalizeForcedEncoding } from './encoding.ts';
+import { csvCoverage, risCoverage, coverageCounts } from './coverage.ts';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-import-secret',
@@ -375,6 +376,31 @@ function firstNonEmpty(record, aliases) {
   }
   return null;
 }
+// Alias des colonnes CSV reconnues, par champ (en-têtes normalisés). Une seule
+// liste : mapRecord la lit pour importer, csvCoverage pour dire ce qui est repris
+// (H16) — une colonne ajoutée ici passe d'elle-même en « reprise » au rapport.
+const FIELD_ALIASES = {
+  title: ['title', 'titulo', 'titulo_livro', 'titulo_principal', 'name'],
+  subtitle: ['subtitle', 'subtitulo', 'sub_title'],
+  author: ['author', 'authors', 'autor', 'autores', 'creator', 'creators'],
+  publisher: ['publisher', 'editora', 'editor', 'imprint'],
+  place: ['place_of_publication', 'publication_place', 'local_de_publicacao', 'cidade', 'place'],
+  year: ['publication_year', 'year', 'ano', 'date', 'publication_date'],
+  language: ['language', 'idioma', 'lang'],
+  subjects: ['subjects', 'subject', 'assuntos', 'assunto', 'palavra_chave', 'keywords', 'tags'],
+  isbn: ['isbn', 'isbn_10', 'isbn_13'],
+  issn: ['issn'],
+  edition: ['edition_statement', 'edition', 'edicao'],
+  itemType: ['item_type', 'type', 'document_type'],
+  externalKey: ['external_key', 'id_externo', 'partner_id', 'record_id', 'numero']
+};
+// Colonnes et balises que le SQL relit APRÈS coup dans raw_payload (prod,
+// 26/09/2026) : ingest.fn_partner_catalog_extract_collection_hint (collection)
+// et …_local_classification_hint (cote locale, versée en note de provenance).
+const CSV_HINT_KEYS = { collection: 'collection', series: 'collection', call_number: 'cote', cote: 'cote', shelfmark: 'cote' };
+const RIS_HINT_TAGS = { T2: 'collection', CN: 'cote' };
+// Balises lues par mapRisRecord (garder alignées).
+const RIS_CONSUMED = ['TI', 'T1', 'CT', 'ST', 'T2', 'BT', 'AU', 'A1', 'A2', 'A3', 'PB', 'CY', 'PP', 'PY', 'Y1', 'DA', 'Y2', 'LA', 'KW', 'SN', 'ET', 'TY', 'ID', 'AN', 'CN'];
 function mapRecord(record, columnMappings) {
   const cm = columnMappings || {};
   // Profil (axe Perfil) : si une colonne est explicitement mappee pour ce champ, on la
@@ -383,85 +409,19 @@ function mapRecord(record, columnMappings) {
     const col = cm[field];
     return firstNonEmpty(record, col ? [normalizeHeader(String(col)), ...aliases] : aliases);
   };
-  const title = get('title', [
-    'title',
-    'titulo',
-    'titulo_livro',
-    'titulo_principal',
-    'name'
-  ]);
-  const subtitle = get('subtitle', [
-    'subtitle',
-    'subtitulo',
-    'sub_title'
-  ]);
-  const author = get('author', [
-    'author',
-    'authors',
-    'autor',
-    'autores',
-    'creator',
-    'creators'
-  ]);
-  const publisher = get('publisher', [
-    'publisher',
-    'editora',
-    'editor',
-    'imprint'
-  ]);
-  const placeOfPublication = get('place', [
-    'place_of_publication',
-    'publication_place',
-    'local_de_publicacao',
-    'cidade',
-    'place'
-  ]);
-  const publicationYearRaw = get('year', [
-    'publication_year',
-    'year',
-    'ano',
-    'date',
-    'publication_date'
-  ]);
-  const language = get('language', [
-    'language',
-    'idioma',
-    'lang'
-  ]);
-  const subjectsRaw = get('subjects', [
-    'subjects',
-    'subject',
-    'assuntos',
-    'assunto',
-    'palavra_chave',
-    'keywords',
-    'tags'
-  ]);
-  const isbn = get('isbn', [
-    'isbn',
-    'isbn_10',
-    'isbn_13'
-  ]);
-  const issn = get('issn', [
-    'issn'
-  ]);
-  const editionStatement = get('edition', [
-    'edition_statement',
-    'edition',
-    'edicao'
-  ]);
-  const itemType = get('itemType', [
-    'item_type',
-    'type',
-    'document_type'
-  ]);
-  const externalKey = get('externalKey', [
-    'external_key',
-    'id_externo',
-    'partner_id',
-    'record_id',
-    'numero'
-  ]);
+  const title = get('title', FIELD_ALIASES.title);
+  const subtitle = get('subtitle', FIELD_ALIASES.subtitle);
+  const author = get('author', FIELD_ALIASES.author);
+  const publisher = get('publisher', FIELD_ALIASES.publisher);
+  const placeOfPublication = get('place', FIELD_ALIASES.place);
+  const publicationYearRaw = get('year', FIELD_ALIASES.year);
+  const language = get('language', FIELD_ALIASES.language);
+  const subjectsRaw = get('subjects', FIELD_ALIASES.subjects);
+  const isbn = get('isbn', FIELD_ALIASES.isbn);
+  const issn = get('issn', FIELD_ALIASES.issn);
+  const editionStatement = get('edition', FIELD_ALIASES.edition);
+  const itemType = get('itemType', FIELD_ALIASES.itemType);
+  const externalKey = get('externalKey', FIELD_ALIASES.externalKey);
   const authorsArray = splitAuthors(author);
   const subjectsArray = splitSemiStructuredList(subjectsRaw);
   return {
@@ -653,6 +613,8 @@ Deno.serve(async (req)=>{
     let detectedDelimiterLabel = null;
     let parsedEntries = [];
     let declaredCharsets = [];
+    // H16 : ce que l'import reprend du fichier, et ce qu'il garde seulement en brut.
+    let coverage = null;
     // Parseurs unitaires (reutilises en auto comme en force).
     const runMarc = () => {
       const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename, forcedDialect: forcedVocabulary, encoding: decoded.encoding });
@@ -663,6 +625,7 @@ Deno.serve(async (req)=>{
       parserVersion = MARC_PARSER_VERSION;
       headers = ['leader']; // MARC n'a pas de ligne d'en-tete ; valeur nominale
       if (!parsedEntries.length) throw new Error('MARC file contains no records.');
+      coverage = marcCoverage(parsedEntries);
       return true;
     };
     const runRis = () => {
@@ -673,6 +636,7 @@ Deno.serve(async (req)=>{
       parserVersion = RIS_PARSER_VERSION;
       if (!headers.length) throw new Error('RIS tags not found.');
       if (!parsedEntries.length) throw new Error('RIS contains no records.');
+      coverage = risCoverage({ records: parsedRis.records, consumed: RIS_CONSUMED, hintTags: RIS_HINT_TAGS });
     };
     const runCsv = (forcedDelimiter) => {
       const delimiter = forcedDelimiter || detectDelimiter(fileText);
@@ -680,6 +644,10 @@ Deno.serve(async (req)=>{
       const parsedObjects = rowsToObjects(parsedCsv);
       headers = parsedObjects.headers;
       parsedEntries = buildParsedEntries(parsedObjects.records, profileColumnMappings);
+      coverage = csvCoverage({
+        headers: parsedObjects.headers, records: parsedObjects.records, fieldAliases: FIELD_ALIASES,
+        columnMappings: profileColumnMappings, hintKeys: CSV_HINT_KEYS, normalize: normalizeHeader
+      });
       detectedFormat = delimiter === '\t' ? 'tsv' : 'csv';
       detectedDelimiterLabel = delimiter === '\t' ? '\\t' : delimiter;
       parserVersion = CSV_PARSER_VERSION;
@@ -791,6 +759,12 @@ Deno.serve(async (req)=>{
       delimiter: detectedDelimiterLabel,
       encoding: encodingSummary,
       warnings: runWarnings,
+      // H16 : ce qui est repris, relu en indice, ou gardé seulement en brut ; et
+      // les entrées écartées faute de tout contenu bibliographique (jusqu'ici
+      // écartées sans trace).
+      coverage,
+      coverage_counts: coverageCounts(coverage),
+      skipped_rows: parsedEntries.length - stagingRows.length,
       // Les axes d'adaptateur EMPLOYÉS pour ce passage : l'écran les relit pour
       // « Retraiter » en ne changeant que l'encodage (fn_import_list_runs ne
       // renvoie pas adapter_overrides).
@@ -825,6 +799,7 @@ Deno.serve(async (req)=>{
           inserted_rows: stagingRows.length,
           delimiter: detectedDelimiterLabel,
           encoding: encodingSummary,
+          coverage_counts: coverageCounts(coverage),
           parsed_at: new Date().toISOString()
         }
       }).eq('id', sourceFileId);

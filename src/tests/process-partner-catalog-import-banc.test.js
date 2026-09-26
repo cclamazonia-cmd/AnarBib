@@ -77,6 +77,12 @@ describe('process-partner-catalog-import sur un export PMB réel (H15, H28)', ()
     expect(r.finale.summary.warnings).toEqual([]);
     expect(r.lignes.flatMap((l) => l.warnings)).toEqual([]);
     expect(r.fichierMaj.meta.encoding.used).toBe('utf-8');
+    // H16 : la couverture est au run (et ses comptes au fichier).
+    expect(r.finale.summary.coverage).toMatchObject({ kind: 'marc', records: 50 });
+    expect(r.finale.summary.coverage.zones.find((z) => z.tag === '995' && z.code === 'f')).toMatchObject({ status: 'brut', occurrences: 33 });
+    expect(r.finale.summary.coverage_counts.total).toBe(r.finale.summary.coverage.zones.length);
+    expect(r.finale.summary.skipped_rows).toBe(0);
+    expect(r.fichierMaj.meta.coverage_counts).toEqual(r.finale.summary.coverage_counts);
     expect(JSON.stringify(r.lignes.map((l) => [l.title, l.authors, l.publisher]))).not.toContain('�');
     titresUtf8 = r.lignes.map((l) => l.title);
   });
@@ -118,5 +124,21 @@ describe('process-partner-catalog-import sur un export PMB réel (H15, H28)', ()
     expect(r.lignes.map((l) => l.title)).toEqual(['Déjà vu', 'L’œuvre']);
     expect(r.lignes[0].warnings[0]).toContain('suppose windows-1252');
     expect(r.finale.summary.encoding).toMatchObject({ used: 'windows-1252', fallback: true, declared_unimarc: [] });
+  });
+
+  it('H16 — un CSV : colonnes reprises, relues en indice, gardées en brut ; lignes vides écartées et comptées', async () => {
+    const texte = 'titulo;autor;cote;tipo_material\r\nO Estado;Bakunin;320 BAK;livro\r\n;;;livro\r\nA Anarquia;Malatesta;320 MAL;livro\r\n';
+    const r = await banc({ fichier: new TextEncoder().encode(texte), nom: 'catalogue.csv' })();
+    expect(r.statut).toBe(200);
+    const col = (h) => r.finale.summary.coverage.columns.find((c) => c.header === h);
+    expect(r.finale.summary.coverage.kind).toBe('csv');
+    expect(col('titulo')).toMatchObject({ status: 'repris', field: 'title', occurrences: 2 });
+    expect(col('autor')).toMatchObject({ status: 'repris', field: 'author' });
+    expect(col('cote')).toMatchObject({ status: 'indice', field: 'cote' });
+    expect(col('tipo_material')).toMatchObject({ status: 'brut', field: null, occurrences: 3 });
+    expect(r.finale.summary.coverage_counts).toEqual({ repris: 2, indice: 1, brut: 1, total: 4 });
+    // La ligne « ;;;livro » n'a aucun contenu bibliographique : écartée, et comptée.
+    expect(r.lignes).toHaveLength(2);
+    expect(r.finale.summary.skipped_rows).toBe(1);
   });
 });

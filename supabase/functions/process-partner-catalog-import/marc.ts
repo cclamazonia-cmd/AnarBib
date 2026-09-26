@@ -442,6 +442,79 @@ export function unimarcCharsetWarnings(declared, decoded, hasNonAscii) {
 
 // ── Entree de haut niveau ───────────────────────────────────
 
+// ── Couverture (H16, 26/09/2026) ────────────────────────────
+//
+// Ce que l'import REPREND d'un fichier MARC, et ce qu'il laisse seulement dans
+// l'enregistrement brut (raw_payload -> book_drafts.marc_json : rien n'est
+// detruit, mais rien n'entre dans les champs de la notice). La SEULE reference
+// de « repris » est la table de zones du dialecte (MARC21 / UNIMARC ci-dessus) :
+// ajouter une zone a la table la fait passer d'elle-meme en « reprise ».
+//
+// Par sous-zone : occurrences, notices concernees, un exemple (tronque), et
+// `surplus` = occurrences repetees dans une meme notice alors que la table n'en
+// reprend qu'UNE (titre, editeur, langue… : firstFromList) — la 2e 101 $a d'un
+// livre bilingue, par exemple, n'entre nulle part.
+const COVERAGE_MAX_ZONES = 400;
+const COVERAGE_EXAMPLE_LEN = 80;
+
+function consumedSubfields(def) {
+  const m = new Map();
+  for (const k of ['title', 'subtitle', 'responsibility', 'edition', 'place', 'publisher', 'year', 'language', 'isbn', 'issn']) {
+    for (const { tag, code } of def[k]) m.set(`${tag}$${code}`, 'first');
+  }
+  for (const tag of def.authorTags) for (const code of def.nameCodes) m.set(`${tag}$${code}`, 'all');
+  for (const { tag, code } of def.subjects) m.set(`${tag}$${code}`, 'all');
+  return m;
+}
+const CONSUMED = { marc21: consumedSubfields(MARC21), unimarc: consumedSubfields(UNIMARC) };
+
+// entries : sortie de buildParsedEntriesFromMarc ({ dialect, rawPayload }).
+// → { kind: 'marc', records, zones: [{ dialect, tag, code, status, occurrences,
+//     records, surplus, example }], truncated }
+//   status : 'repris' | 'brut' ; code '' pour une zone de controle.
+export function marcCoverage(entries) {
+  const zones = new Map();
+  for (const e of entries || []) {
+    const dialect = e.dialect === 'unimarc' ? 'unimarc' : 'marc21';
+    const def = dialect === 'unimarc' ? UNIMARC : MARC21;
+    const consumed = CONSUMED[dialect];
+    const perRecord = new Map();
+    const note = (tag, code, value, status, kind) => {
+      const key = `${dialect}|${tag}|${code}`;
+      let z = zones.get(key);
+      if (!z) {
+        z = { dialect, tag, code, status, occurrences: 0, records: 0, surplus: 0, example: null };
+        zones.set(key, z);
+      }
+      z.occurrences += 1;
+      const n = (perRecord.get(key) || 0) + 1;
+      perRecord.set(key, n);
+      if (n === 1) z.records += 1;
+      else if (kind === 'first') z.surplus += 1;
+      const v = clean(value);
+      if (!z.example && v) z.example = v.length > COVERAGE_EXAMPLE_LEN ? v.slice(0, COVERAGE_EXAMPLE_LEN) + '…' : v;
+    };
+    for (const f of (e.rawPayload?.fields || [])) {
+      if (typeof f.value === 'string') {
+        note(f.tag, '', f.value, f.tag === def.control ? 'repris' : 'brut', null);
+      } else {
+        for (const s of (f.subfields || [])) {
+          const kind = consumed.get(`${f.tag}$${s.code}`) || null;
+          note(f.tag, s.code, s.value, kind ? 'repris' : 'brut', kind);
+        }
+      }
+    }
+  }
+  const all = [...zones.values()].sort((a, b) =>
+    a.dialect.localeCompare(b.dialect) || a.tag.localeCompare(b.tag) || a.code.localeCompare(b.code));
+  return {
+    kind: 'marc',
+    records: (entries || []).length,
+    zones: all.slice(0, COVERAGE_MAX_ZONES),
+    truncated: all.length > COVERAGE_MAX_ZONES,
+  };
+}
+
 // Construit les entrees normalisees a partir d'enregistrements MARC deja parses.
 // Chaque entree : { rowNo, rawPayload, mapped, warnings, dialect }.
 export function buildParsedEntriesFromMarc(records, baseWarnings = [], forcedDialect = null) {

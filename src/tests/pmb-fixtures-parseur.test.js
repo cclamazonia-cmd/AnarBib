@@ -25,7 +25,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { parseMarcFile, unimarcCharsetWarnings } from '../../supabase/functions/process-partner-catalog-import/marc.ts';
+import { parseMarcFile, unimarcCharsetWarnings, marcCoverage } from '../../supabase/functions/process-partner-catalog-import/marc.ts';
 import { decodeImportBytes } from '../../supabase/functions/process-partner-catalog-import/encoding.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -87,6 +87,23 @@ describe('fixtures PMB 8.1.1.1 : le parseur lit ce que PMB exporte', () => {
   it('XML propre à PMB (<unimarc><notice><f c=…>) : non reconnu — H22 ouvert', () => {
     const p = importer(`${V}.pmbxml.xml`);
     expect(p.res).toBeNull();
+  });
+
+  // H16 : le rapport de couverture dit ce qu'un export PMB perd à l'import —
+  // mesuré le 26/09 : 111 sous-zones, 17 reprises. Les exemplaires (995), la
+  // collation (215), la collection (225), le résumé (330), la Dewey (676)
+  // restent en brut : c'est la liste de travail de H17 et H19.
+  it('couverture de l\'export PMB : ce qui est repris, ce qui reste en brut', () => {
+    const cov = marcCoverage(utf8.res.entries);
+    const z = (tag, code) => cov.zones.find((x) => x.tag === tag && x.code === code);
+    expect(cov).toMatchObject({ kind: 'marc', records: 50, truncated: false });
+    expect(z('200', 'a')).toMatchObject({ status: 'repris', occurrences: 50 });
+    expect(z('001', '')).toMatchObject({ status: 'repris' });
+    expect(z('995', 'f')).toMatchObject({ status: 'brut', occurrences: 33, records: 31 });
+    for (const [tag, code] of [['215', 'a'], ['225', 'a'], ['330', 'a'], ['676', 'a'], ['856', 'u']]) {
+      expect(z(tag, code)?.status, `${tag} $${code}`).toBe('brut');
+    }
+    expect(JSON.stringify(cov).length).toBeLessThan(40000); // tient dans summary, liste des runs comprise
   });
 });
 
