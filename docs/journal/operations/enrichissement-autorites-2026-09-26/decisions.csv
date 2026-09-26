@@ -1,0 +1,1444 @@
+﻿id;nom;decision;ecrite_le_26_09;qid;wikidata_libelle;naissance;mort;pays;langue;signaux;candidats_et_motifs
+1;Élisée Reclus;acceptée;oui;Q20951;Élisée Reclus;1830;1905;FR;fr;biblio+metier+anarchisme;Q20951 {biblio+metier+anarchisme}
+2;Francesco Codello;introuvable;;;;;;;;;
+3;Mikhail Bakunin;acceptée;oui;Q27645;Mikhaïl Bakounine;1814;1876;RU;ru;biblio+metier+anarchisme;Q27645 {biblio+metier+anarchisme} | Q4076109 [naissance 1764 ≠ 1814, mort 1837 ≠ 1876] | Q56750716 [naissance 1730 ≠ 1814, mort 1803 ≠ 1876]
+4;Errico Malatesta;acceptée;oui;Q215673;Errico Malatesta;1853;1932;IT;it;biblio+metier+anarchisme;Q215673 {biblio+metier+anarchisme}
+5;Piotr Kropotkin;déjà liée;;Q5752;Pierre Kropotkine;1842;1921;RU;;biblio+metier;Q5752 {biblio+metier}
+6;Serge Latouche;acceptée;oui;Q1095066;Serge Latouche;1940;;FR;;biblio+metier;Q1095066 {biblio+metier}
+8;Daniel Guérin;acceptée;oui;Q465156;Daniel Guérin;1904;1988;FR;fr;biblio+metier;Q465156 {biblio+metier} | Q55367561 | Q65584351 [naissance 1954 ≠ 1904, mort 2025 ≠ 1988] | Q65584353 [naissance 1951 ≠ 1904] | Q65584352 [naissance 1947 ≠ 1904] {biblio} | Q63764497 [naissance 1963 ≠ 1904, né 1963, publié dès 1968]
+9;Noam Chomsky;acceptée;oui;Q9049;Noam Chomsky;1928;;US;en;biblio+metier;Q9049 {biblio+metier}
+10;Murray Bookchin;acceptée;oui;Q315910;Murray Bookchin;1921;2006;US;en;biblio+metier;Q315910 {biblio+metier}
+11;Abraham Guillén;déjà liée;oui;Q205381;Abraham Guillén;1913;1993;ES;es;biblio+metier+anarchisme;Q205381 {biblio+metier+anarchisme}
+12;Frank Mintz;acceptée;oui;Q3082722;Frank Mintz;1941;;FR;fr;biblio+metier;Q3082722 {biblio+metier} | Q141055119 [naissance 1947 ≠ 1941] {biblio+metier}
+13;Michael Albert;acceptée;oui;Q742079;Michael Albert;1947;;US;en;biblio+metier;Q742079 {biblio+metier} | Q1176646 [naissance 1836 ≠ 1947] {biblio+metier} | Q20753154 [naissance 1836 ≠ 1947] {biblio} | Q6830854 [naissance 1962 ≠ 1947] {biblio} | Q22003062 [naissance 1966 ≠ 1947] {biblio} | Q112447398 [naissance 1951 ≠ 1947] {biblio} | Q102876314
+14;Pablo Ortellado;acceptée;oui;Q48872574;Pablo Ortellado;;;BR;;biblio+metier;Q48872574 {biblio+metier}
+15;Neno Vasco;contradiction;;;;;;;;;Q10336169 [mort 1923 ≠ 1920] {biblio+metier}
+16;José Oiticica;acceptée;oui;Q6293593;José Oiticica;1882;1957;BR;pt;biblio+metier;Q22114000 [naissance 1906 ≠ 1882, mort 1964 ≠ 1957] {biblio} | Q6293593 {biblio+metier}
+17;Guillaume Goutte;à relire (un seul signal);;Q116182511;Guillaume Goutte;;;;fr;biblio;Q116182511 {biblio}
+18;Fabiano de Oliveira Bringel;introuvable;;;;;;;;;
+19;Cátia de Oliveira Macedo;introuvable;;;;;;;;;
+21;Floréal Romero;à relire (un seul signal);;Q130289935;Floreal M. Romero;;;ES;;biblio;Q130289935 {biblio}
+22;Vincent Gerber;à relire (un seul signal);;Q130289932;Vincent Gerber;;;CH;fr;biblio;Q130289932 {biblio}
+23;Marianne Enckell;acceptée;oui;Q15407366;Marianne Enckell;1944;;CH;;biblio+metier+anarchisme;Q15407366 {biblio+metier+anarchisme}
+24;Diego Abad De Santillán;acceptée;oui;Q952737;Diego Abad de Santillán;1897;1983;ES;es;biblio+metier+anarchisme;Q952737 {biblio+metier+anarchisme}
+25;Karl Marx;acceptée;oui;Q9061;Karl Marx;1818;1883;;de;biblio+metier;Q9061 {biblio+metier} | Q16062483 [naissance 1857 ≠ 1818, mort 1891 ≠ 1883] | Q1732309 [naissance 1929 ≠ 1818, mort 2008 ≠ 1883] {biblio+metier} | Q1732308 [naissance 1897 ≠ 1818, mort 1966 ≠ 1883] {biblio+metier} | Q882538 [naissance 1897 ≠ 1818, mort 1985 ≠ 1883] {biblio} | Q1732312 [naissance 1844 ≠ 1818, mort 1914 ≠ 1883] {biblio} | Q109536209 [naissance 1832 ≠ 1818, mort 1890 ≠ 1883] {biblio+metier}
+26;Friedrich Engels;acceptée;oui;Q34787;Friedrich Engels;1820;1895;DE;de;biblio+metier;Q34787 {biblio+metier} | Q1458971 [naissance 1796 ≠ 1820, mort 1860 ≠ 1895] {biblio}
+27;Paul Boino;introuvable;;;;;;;;;
+28;Paulo Olivio Correa de Aquino Júnior;introuvable;;;;;;;;;
+29;Pierre-Joseph Proudhon;acceptée;oui;Q5749;Pierre-Joseph Proudhon;1809;1865;FR;fr;biblio+metier+anarchisme;Q5749 {biblio+metier+anarchisme}
+30;Osvaldo Bayer;acceptée;oui;Q366890;Osvaldo Bayer;1927;2018;AR;es;biblio+metier;Q366890 {biblio+metier}
+32;Lorenzo Kom'boa Ervin;acceptée;oui;Q1614124;Lorenzo Kom'boa Ervin;1947;;US;en;biblio+metier;Q1614124 {biblio+metier}
+33;Juan Carlos Mechoso;acceptée;oui;Q94363445;Juan C. Mechoso;1935;2022;UY;es;biblio+metier+anarchisme;Q94363445 {biblio+metier+anarchisme}
+34;Edson Passetti;introuvable;;;;;;;;;
+36;Ronald Creagh;acceptée;oui;Q3441508;Ronald Creagh;1929;2023;;;biblio+metier;Q3441508 {biblio+metier}
+37;Eduardo Colombo;acceptée;oui;Q18419954;Eduardo Colombo;1929;2018;AR;;biblio+metier;Q18419954 {biblio+metier}
+38;Carlo Aldegheri;déjà liée;;Q105620548;Carlo Aldegheri;1902;1995;IT;;biblio;Q105620548 {biblio}
+39;Victor Serge;acceptée;oui;Q362009;Victor Serge;1890;1947;;fr;biblio+metier;Q362009 {biblio+metier}
+40;Max Nettlau;acceptée;oui;Q77339;Max Nettlau;1865;1944;;de;biblio+metier+anarchisme;Q77339 {biblio+metier+anarchisme}
+41;Edgard Leuenroth;acceptée;oui;Q729564;Edgard Leuenroth;1881;1968;BR;pt;biblio+metier;Q729564 {biblio+metier}
+42;Edgar Rodrigues;acceptée;oui;Q10270177;Edgar Rodrigues;1921;2009;PT;pt;biblio+metier;Q10270177 {biblio+metier} | Q27530786 [naissance 1982 ≠ 1921, né 1982, publié dès 1959]
+43;Maurício Tragtenberg;acceptée;oui;Q10327679;Maurício Tragtenberg;1929;1998;BR;;biblio+metier;Q10327679 {biblio+metier}
+44;Felipe Corrêa;déjà liée;;Q90127525;Felipe Corrêa;;;;;chercheur;Q90127525 {chercheur}
+45;Ursula Kroeber Le Guin;acceptée;oui;Q181659;Ursula K. Le Guin;1929;2018;US;en;biblio+metier;Q181659 {biblio+metier}
+46;Maria Lacerda De Moura;acceptée;oui;Q3030431;Maria Lacerda de Moura;;1945;BR;pt;biblio+metier+anarchisme;Q3030431 {biblio+metier+anarchisme}
+48;Rafael Viana Da Silva;introuvable;;;;;;;;;
+51;René Berthier;acceptée;oui;Q15407392;René Berthier;1946;;FR;;biblio+metier;Q3425837 [naissance 1912 ≠ 1946] {biblio} | Q110089817 [naissance 1927 ≠ 1946] {biblio} | Q15407392 {biblio+metier}
+52;Emma Goldman;déjà liée;oui;Q79969;Emma Goldman;1869;1940;LT;en;biblio+metier+anarchisme;Q79969 {biblio+metier+anarchisme}
+53;Frédéric Antonini;introuvable;;;;;;;;;
+10004;Henri Arvon;contradiction;;;;;;;;;Q3130577 [naissance 1914 ≠ 1921, mort 1992 ≠ 2011] {biblio+metier}
+10005;Paul Avrich;acceptée;oui;Q952181;Paul Avrich;1931;2006;US;en;biblio+metier+anarchisme;Q952181 {biblio+metier+anarchisme}
+10006;Alexander Berkman;déjà liée;oui;Q195390;Alexandre Berkman;1870;1936;LT;en;biblio+metier+anarchisme;Q195390 {biblio+metier+anarchisme}
+10007;Pierre Besnard;acceptée;oui;Q3383974;Pierre Besnard;1886;1947;FR;fr;biblio+metier;Q3383974 {biblio+metier} | Q3383969 [naissance 1966 ≠ 1886] | Q3383970 [naissance 1741 ≠ 1886, mort 1808 ≠ 1947] {biblio} | Q112419350 [naissance 1936 ≠ 1886, mort 2022 ≠ 1947] {biblio+metier} | Q137538477 | Q137538478
+10009;Plínio Augusto Coelho;introuvable;;;;;;;;;
+10010;Michel Foucault;acceptée;oui;Q44272;Michel Foucault;1926;1984;FR;fr;biblio+metier;Q44272 {biblio+metier}
+10012;David Graeber;acceptée;oui;Q1174579;David Graeber;1961;2020;US;en;biblio+metier;Q1174579 {biblio+metier} | Q138649355 [naissance 1928 ≠ 1961, mort 2010 ≠ 2020]
+10013;José Ingenieros;acceptée;oui;Q733019;José Ingenieros;1877;1925;AR;es;biblio+metier;Q733019 {biblio+metier}
+10014;Maurice Joyeux;acceptée;oui;Q3300969;Maurice Joyeux;1910;1991;FR;;biblio+metier;Q3300969 {biblio+metier} | Q107108588 [naissance 1954 ≠ 1910] {biblio}
+10015;Gaston Leval;acceptée;oui;Q2718613;Gaston Leval;1895;1978;FR;;biblio+metier+anarchisme;Q2718613 {biblio+metier+anarchisme}
+10017;Alexander Sutherland Neill;déjà liée;;Q316792;Alexander Sutherland Neill;1883;1973;GB;;biblio+metier;Q316792 {biblio+metier}
+10018;José Peirats;déjà liée;oui;Q966715;José Peirats Valls;1908;1989;ES;es;biblio+metier+anarchisme;Q966715 {biblio+metier+anarchisme}
+10019;Herbert Read;acceptée;oui;Q460061;Herbert Read;1893;1968;GB;en;biblio+metier+anarchisme;Q460061 {biblio+metier+anarchisme}
+10020;Rudolf Rocker;acceptée;oui;Q213562;Rudolf Rocker;1873;1958;DE;de;biblio+metier+anarchisme;Q213562 {biblio+metier+anarchisme}
+10021;Alexandre Ribeiro Samis;introuvable;;;;;;;;;
+10022;Afonso Schmidt;déjà liée;oui;Q4689387;Afonso Schmidt;1890;1964;BR;pt;biblio+metier;Q4689387 {biblio+metier}
+10023;Lev Tolstói;déjà liée;oui;Q7243;Léon Tolstoï;1828;1910;RU;ru;biblio+metier;Q7243 {biblio+metier}
+10024;Ivan Illich;acceptée;oui;Q84186;Ivan Illich;1926;2002;AT;pt;biblio+metier;Q84186 {biblio+metier}
+10025;Onésime Reclus;acceptée;oui;Q2618343;Onésime Reclus;1837;1916;FR;fr;biblio+metier;Q2618343 {biblio+metier}
+10026;Élie Reclus;acceptée;oui;Q1227381;Élie Reclus;1827;1904;FR;fr;biblio+metier+anarchisme;Q1227381 {biblio+metier+anarchisme}
+10027;Ángel Cappelletti;déjà liée;oui;Q8076816;Ángel J. Cappelletti;1927;1995;AR;es;biblio+metier;Q8076816 {biblio+metier}
+10028;Carlos Díaz;acceptée;oui;Q8263867;Carlos Díaz;1944;;ES;es;biblio+metier;Q5750175 | Q20630937 [naissance 1993 ≠ 1944, né 1993, publié dès 1977] | Q8263867 {biblio+metier} | Q5042003 [naissance 1970 ≠ 1944, né 1970, publié dès 1977] | Q2939327 [naissance 1955 ≠ 1944] {biblio} | Q5042002 [naissance 1982 ≠ 1944, né 1982, publié dès 1977] | Q5749564 [naissance 1974 ≠ 1944, né 1974, publié dès 1977] | Q16204039 [naissance 1970 ≠ 1944, né 1970, publié dès 1977]
+10029;Nestor Makhno;acceptée;oui;Q47900;Nestor Makhno;1888;1934;UA;;biblio+metier;Q47900 {biblio+metier}
+10030;Rafael Barrett;acceptée;oui;Q353806;Rafael Barrett;1876;1910;ES;es;biblio+metier;Q353806 {biblio+metier}
+10031;Luigi Fabbri;acceptée;oui;Q2569930;Luigi Fabbri;1877;1935;IT;it;biblio+metier+anarchisme;Q2569930 {biblio+metier+anarchisme} | Q18223322 [naissance 1888 ≠ 1877, mort 1966 ≠ 1935] {biblio} | Q15120158 [naissance 1949 ≠ 1877, né 1949, publié dès 1921] {biblio}
+10032;Paul Goodman;acceptée;oui;Q943567;Paul Goodman;1911;1972;US;en;biblio+metier+anarchisme;Q943567 {biblio+metier+anarchisme} | Q7150945 [naissance 1959 ≠ 1911, né 1959, publié dès 1960] {biblio+metier} | Q7150944 [naissance 1905 ≠ 1911, mort 1959 ≠ 1972] | Q74496161 [naissance 1875 ≠ 1911, mort 1949 ≠ 1972] {biblio+metier} | Q7150943 | Q74496194 [naissance 1934 ≠ 1911, mort 1995 ≠ 1972] {biblio+metier} | Q7150942 [naissance 1943 ≠ 1911] | Q112544662 [naissance 1974 ≠ 1911, né 1974, publié dès 1960] {biblio} | Q42364173 {chercheur}
+10033;Georges Gurvitch;acceptée;oui;Q1996730;Georges Gurvitch;1894;1965;RU;;biblio+metier;Q1996730 {biblio+metier}
+10034;Rosa Luxemburgo;acceptée;oui;Q7231;Rosa Luxemburg;1871;1919;PL;de;biblio+metier;Q7231 {biblio+metier}
+10035;Ricardo Mella;acceptée;oui;Q3049391;Ricardo Mella;1861;1925;ES;es;biblio+metier+anarchisme;Q3049391 {biblio+metier+anarchisme}
+10037;E. P. Thompson;acceptée;oui;Q434160;E. P. Thompson;1924;1993;GB;;biblio+metier;Q434160 {biblio+metier} | Q111230853 [naissance 1852 ≠ 1924, mort 1905 ≠ 1993]
+10038;Nicolas Walter;acceptée;oui;Q7029863;Nicolas Walter;1934;2000;GB;;biblio+metier+anarchisme;Q7029863 {biblio+metier+anarchisme} | Q64645575 {chercheur}
+10039;Colin Ward;acceptée;oui;Q1108751;Colin Ward;1924;2010;GB;en;biblio+metier+anarchisme;Q1108751 {biblio+metier+anarchisme} | Q5145654 [naissance 1960 ≠ 1924] | Q67191924 [naissance 1943 ≠ 1924, mort 2017 ≠ 2010] {biblio} | Q5145656 [naissance 1970 ≠ 1924] | Q5145655 [naissance 1971 ≠ 1924] | Q57892061 [naissance 1945 ≠ 1924, mort 2018 ≠ 2010] {biblio} | Q22987791 | Q75353375 [naissance 1977 ≠ 1924, né 1977, publié dès 1982]
+10040;Maurizio Antonioli;contradiction;;;;;;;;;Q56326491 [naissance 1945 ≠ 1950] {biblio}
+10041;Émile Armand;déjà liée;oui;Q274891;E. Armand;1872;1962;FR;fr;biblio+metier+anarchisme;Q274891 {biblio+metier+anarchisme}
+10042;Machado de Assis;déjà liée;oui;Q311145;Joaquim Maria Machado de Assis;1839;1908;BR;pt;biblio+metier;Q311145 {biblio+metier}
+10043;Luiz Büchner;introuvable;;;;;;;;;
+10045;Maria Luiza Tucci Carneiro;contradiction;;;;;;;;;Q113821955 [naissance 1949 ≠ 1960] {biblio+metier}
+10046;Jacinto Cimazo;contradiction;;;;;;;;;Q5924491 [naissance 1907 ≠ 1904, mort 1997 ≠ 1989] {biblio+metier}
+10047;Sam Dolgoff;acceptée;oui;Q2467449;Sam Dolgoff;1902;1990;US;en;biblio+anarchisme;Q2467449 {biblio+anarchisme}
+10048;Luce Fabbri;déjà liée;oui;Q459233;Luce Fabbri;1908;2000;IT;es;biblio+metier;Q459233 {biblio+metier}
+10049;Sébastien Faure;déjà liée;oui;Q1375013;Sébastien Faure;1858;1942;FR;fr;biblio+metier+anarchisme;Q1375013 {biblio+metier+anarchisme}
+10050;Carlos da Fonseca;introuvable;;;;;;;;;
+10051;Sílvio Gallo;déjà liée;oui;Q10371585;Silvio Gallo;1963;;BR;pt;biblio;Q10371585 {biblio}
+10053;Arthur Lehning;acceptée;oui;Q710368;Arthur Lehning;1899;2000;NL;nl;biblio+metier;Q710368 {biblio+metier}
+10054;Lily Litvak;contradiction;;;;;;;;;Q108916105 [naissance 1938 ≠ 1943] {biblio+metier} | Q231376 [naissance 1921 ≠ 1943] {biblio}
+10055;Jean Maitron;acceptée;oui;Q3173331;Jean Maitron;1910;1987;FR;fr;biblio+metier;Q3173331 {biblio+metier}
+10057;Louise Michel;acceptée;oui;Q216092;Louise Michel;1830;1905;FR;fr;biblio+metier+anarchisme;Q216092 {biblio+metier+anarchisme} | Q116027125
+10058;Brian Morris;acceptée;oui;Q4964812;Brian Morris;1936;;GB;en;biblio+metier+anarchisme;Q4964814 [naissance 1963 ≠ 1936] {biblio+metier} | Q16732884 [naissance 1950 ≠ 1936] {biblio} | Q4964812 {biblio+metier+anarchisme} | Q16732883 [naissance 1939 ≠ 1936] {biblio} | Q100887838 | Q4964811 [naissance 1930 ≠ 1936, mort 2001 ≠ 2022] {biblio+metier} | Q100887837 | Q100887836 | Q94412505 [naissance 1953 ≠ 1936] {biblio} | Q53996919 {chercheur}
+10059;Cristina Escrivá Moscardó;contradiction;;;;;;;;;Q26836117 [naissance 1959 ≠ 1963] | Q136982914 [naissance 1959 ≠ 1963] {biblio}
+10060;Roberto das Neves;contradiction;;;;;;;;;Q12354595 [mort 1981 ≠ 1979] {biblio}
+10061;José Prat;acceptée;oui;Q9014685;Josep Prat;1866;1932;ES;es;biblio+metier;Q9014685 {biblio+metier} | Q2838948 [naissance 1911 ≠ 1867, mort 1988 ≠ 1932] | Q3393539 [naissance 1905 ≠ 1867, mort 1994 ≠ 1932] {biblio+metier}
+10062;Fernando Quesada;contradiction;;;;;;;;;Q15711162 [naissance 1994 ≠ 1910, né 1994, publié dès 1974] | Q24703763 [naissance 1933 ≠ 1910, mort 2016 ≠ 1976] {biblio+metier} | Q84049935 {chercheur}
+10063;Jorge E. Silva;introuvable;;;;;;;;;
+10064;Pedro Ferreira da Silva;à relire (un seul signal);;Q64854243;Pedro Manuel Vieira de Castro Ferreira da Silva;;;;;biblio+chercheur;Q10347461 | Q64854243 {biblio+chercheur}
+10065;Ênio Silveira;acceptée;oui;Q10396371;Ênio Silveira;1925;1996;BR;;biblio+metier;Q10396371 {biblio+metier}
+10066;Agustín Souchy;acceptée;oui;Q66787;Augustin Souchy;1892;1984;DE;de;biblio+metier+anarchisme;Q66787 {biblio+metier+anarchisme}
+10067;Henry David Thoreau;acceptée;oui;Q131149;Henry David Thoreau;1817;1862;US;en;biblio+metier;Q131149 {biblio+metier}
+10068;Pierre Ansart;déjà liée;oui;Q3383737;Pierre Ansart;1922;2016;FR;fr;biblio+metier;Q3383737 {biblio+metier}
+10069;Tito Batini;introuvable;;;;;;;;;
+10070;Jorge Luis Borges;acceptée;oui;Q909;Jorge Luis Borges;1899;1986;AR;es;biblio+metier;Q909 {biblio+metier}
+10071;Antônio José Botelho;introuvable;;;;;;;;;
+10072;Edward Carpenter;acceptée;oui;Q984217;Edward Carpenter;1844;1929;GB;en;biblio+metier;Q984217 {biblio+metier} | Q5342215 [naissance 1910 ≠ 1844, mort 1998 ≠ 1929, né 1910, publié dès 1910] {biblio} | Q103939010 [naissance 1813 ≠ 1844, mort 1889 ≠ 1929] {biblio} | Q100275715 | Q102523894 [naissance 1777 ≠ 1844, mort 1813 ≠ 1929] | Q121464892 [naissance 1700 ≠ 1844, mort 1778 ≠ 1929] | Q91941451
+10073;Júlio Carrapato;contradiction;;;;;;;;;Q123584759 [naissance 1947 ≠ 1951] {biblio+anarchisme} | Q10313424 [naissance 1919 ≠ 1951] {biblio}
+10074;Juan Gómez Casas;contradiction;;;;;;;;;Q3394229 [mort 2001 ≠ 2005] {biblio+metier}
+10075;Maurice Cranston;contradiction;;;;;;;;;Q6792980 [mort 1993 ≠ 1985] {biblio+metier}
+10076;Jaime Cubero;contradiction;;;;;;;;;Q10304930 [mort 1998 ≠ 2010] {biblio+metier} | Q57236342 {chercheur}
+10078;Daniel Aarão Reis Filho;acceptée;oui;Q10263900;Daniel Aarão Reis Filho;1946;;BR;pt;biblio+metier;Q10263900 {biblio+metier}
+10079;Luis Di Filippo;contradiction;;;;;;;;;Q30015812 [naissance 1902 ≠ 1924, mort 1997 ≠ 2008] {biblio+metier}
+10080;Martins Fontes;acceptée;oui;Q10326974;Martins Fontes;1884;1937;BR;pt;biblio+metier;Q10326974 {biblio+metier}
+10081;Víctor García;contradiction;;;;;;;;;Q16300558 [naissance 1981 ≠ 1919, né 1981, publié dès 1966] {biblio} | Q3564455 [naissance 1985 ≠ 1919, né 1985, publié dès 1966] {biblio} | Q7944621 [naissance 1975 ≠ 1919, né 1975, publié dès 1966] {biblio} | Q373911 [naissance 1990 ≠ 1919, né 1990, publié dès 1966] | Q3564451 [naissance 1974 ≠ 1919, né 1974, publié dès 1966] {biblio} | Q7944624 [naissance 1950 ≠ 1919] | Q3848851 [naissance 1970 ≠ 1919, né 1970, publié dès 1966] {biblio} | Q7944642 [naissance 1994 ≠ 1919, né 1994, publié dès 1966] | Q59442184 [naissance 1980 ≠ 1919, né 1980, publié dès 1966]
+10082;Willian Godwin;introuvable;;;;;;;;;
+10083;Adelaide Gonçalves;introuvable;;;;;;;;;
+10084;Pietro Gori;acceptée;oui;Q607278;Pietro Gori;1865;1911;IT;it;biblio+metier+anarchisme;Q607278 {biblio+metier+anarchisme} | Q80142571 [naissance 1854 ≠ 1865, mort 1930 ≠ 1911] {biblio+metier} | Q123033104 [naissance 1977 ≠ 1865, né 1977, publié dès 1911] {biblio+metier}
+10085;J. M. Guyau;acceptée;oui;Q707490;Jean-Marie Guyau;1854;1888;FR;fr;biblio+metier;Q707490 {biblio+metier}
+10086;Augustin Hamon;acceptée;oui;Q2871586;Augustin Hamon;1862;1945;FR;;biblio+metier;Q2871586 {biblio+metier}
+10087;Francisco Foot Hardman;acceptée;oui;Q112404788;Francisco Foot Hardman;1952;;;;biblio;Q112404788 {biblio}
+10088;Irving Louis Horowitz;acceptée;oui;Q973835;Irving Louis Horowitz;1929;2012;US;en;biblio+metier;Q973835 {biblio+metier}
+10089;Victor Hugo;contradiction;;;;;;;;;Q116197974 [naissance 1883 ≠ 1802, mort 1956 ≠ 1885] {metier} | Q6165541 [naissance 1982 ≠ 1802, né 1982, publié dès 1929] | Q47541607 [naissance 1942 ≠ 1802, mort 1993 ≠ 1885, né 1942, publié dès 1929] | Q16185389 [naissance 1953 ≠ 1802, né 1953, publié dès 1929]
+10090;Tomás Ibáñez;acceptée;oui;Q30914854;Tomás Ibáñez;1944;;ES;es;biblio+metier;Q30914854 {biblio+metier}
+10093;Sebastián Marotta;contradiction;;;;;;;;;Q24960144 [naissance 1888 ≠ 1901] {metier} | Q102338224 {chercheur}
+10094;Carlos Penelas;contradiction;;;;;;;;;Q60367123 [naissance 1946 ≠ 1930] {biblio+metier}
+10095;Maria Oly Pey;introuvable;;;;;;;;;
+10096;Paulo Sérgio Pinheiro;contradiction;;;;;;;;;Q7155314 [naissance 1944 ≠ 1939] {biblio+metier}
+10097;Larry Portis;acceptée;oui;Q6490971;Larry Portis;1943;2011;US;fr;biblio+metier;Q6490971 {biblio+metier}
+10098;Antonio Arnoni Prado;acceptée;oui;Q107042437;Antônio Arnoni Prado;1943;;;;biblio+metier;Q107042437 {biblio+metier}
+10099;Carlos Pronzato;acceptée;oui;Q9697297;Carlos Pronzato;1959;;BR;pt;biblio;Q9697297 {biblio}
+10100;Margareth Rago;contradiction;;;;;;;;;Q93794462 [naissance 1948 ≠ 1955] {biblio+metier}
+10101;Han Ryner;acceptée;oui;Q268322;Han Ryner;1861;1938;FR;fr;biblio+metier+anarchisme;Q268322 {biblio+metier+anarchisme}
+10102;Ramón Safón;à relire (un seul signal);;Q140548573;Ramon Safon;;;;;biblio;Q140548573 {biblio}
+10103;Emídio Santana;contradiction;;;;;;;;;Q10272592 [naissance 1906 ≠ 1895] {biblio}
+10104;Fabio Santin;à relire (un seul signal);;Q124719788;Fabio Santin;;;IT;it;biblio;Q124719788 {biblio}
+10105;Mário Ferreira dos Santos;acceptée;oui;Q672004;Mário Ferreira dos Santos;1907;1968;BR;pt;biblio+metier;Q672004 {biblio+metier} | Q3331969 [naissance 1968 ≠ 1907, né 1968, publié dès 1964] {biblio}
+10106;Alexandre Skirda;acceptée;oui;Q2834029;Alexandre Skirda;1942;2020;FR;;biblio+metier;Q2834029 {biblio+metier}
+10107;Juan Suriano;contradiction;;;;;;;;;Q115982882 [naissance 1948 ≠ 1960] {biblio+metier}
+10110;Fernando López Trujillo;introuvable;;;;;;;;;
+10111;Volin;acceptée;oui;Q715195;Voline;1882;1945;RU;fr;biblio+metier+anarchisme;Q715195 {biblio+metier+anarchisme}
+10112;George Woodcock;acceptée;oui;Q954360;George Woodcock;1912;1995;CA;en;biblio+metier;Q954360 {biblio+metier} | Q5546495 [naissance 1904 ≠ 1912, mort 1979 ≠ 1995] {biblio+metier} | Q5546496 [naissance 1894 ≠ 1912, mort 1968 ≠ 1995]
+10113;George Orwell;acceptée;oui;Q3335;George Orwell;1903;1950;GB;;biblio+metier;Q3335 {biblio+metier}
+10116;Cornelius Castoriadis;acceptée;oui;Q158030;Cornelius Castoriadis;1922;1997;;;biblio+metier;Q158030 {biblio+metier}
+10120;Hugues Lenoir;acceptée;oui;Q93751545;Hugues Lenoir;1953;;;;biblio+metier;Q93751545 {biblio+metier}
+10121;Carlos Baqueiro;introuvable;;;;;;;;;
+10122;Max Stirner;acceptée;oui;Q76725;Max Stirner;1806;1856;DE;de;biblio+metier;Q76725 {biblio+metier}
+10123;Gilles Deleuze;acceptée;oui;Q184226;Gilles Deleuze;1925;1995;FR;fr;biblio+metier;Q184226 {biblio+metier}
+10124;Jean Baudrillard;acceptée;oui;Q182847;Jean Baudrillard;1929;2007;FR;fr;biblio+metier;Q182847 {biblio+metier}
+10125;Pierre Clastres;acceptée;oui;Q463151;Pierre Clastres;1934;1977;FR;;biblio+metier;Q463151 {biblio+metier}
+10126;Herbert Spencer;acceptée;oui;Q144535;Herbert Spencer;1820;1903;GB;en;biblio+metier;Q144535 {biblio+metier} | Q98834374 [naissance 1915 ≠ 1820, mort 1993 ≠ 1903] {biblio} | Q5735635 [naissance 1924 ≠ 1820, mort 2002 ≠ 1903] {biblio+metier} | Q53977117 [naissance 1875 ≠ 1820, mort 1945 ≠ 1903] | Q5735828 [naissance 1905 ≠ 1820, mort 1992 ≠ 1903] {biblio}
+10127;Maurice Blanchot;acceptée;oui;Q315210;Maurice Blanchot;1907;2003;FR;fr;biblio+metier;Q315210 {biblio+metier} | Q139067834 [naissance 1934 ≠ 1907, mort 2014 ≠ 2003] {biblio}
+10128;Paul Veyne;acceptée;oui;Q739537;Paul Veyne;1930;2022;FR;fr;biblio+metier;Q739537 {biblio+metier}
+10129;Paul Valéry;acceptée;oui;Q200639;Paul Valéry;1871;1945;FR;fr;biblio+metier;Q200639 {biblio+metier}
+10130;Stanley Milgram;acceptée;oui;Q208236;Stanley Milgram;1933;1984;US;;biblio;Q208236 {biblio}
+10131;Oscar Wilde;acceptée;oui;Q30875;Oscar Wilde;1854;1900;IE;en;biblio+metier;Q30875 {biblio+metier} | Q3568150 [naissance 1967 ≠ 1854]
+10132;Fernando Pessoa;acceptée;oui;Q173481;Fernando Pessoa;1888;1935;PT;pt;biblio+metier;Q173481 {biblio+metier} | Q59225853
+10133;William Morris;acceptée;oui;Q182589;William Morris;1834;1896;GB;en;biblio+metier;Q182589 {biblio+metier} | Q11169604 [naissance 1861 ≠ 1834, mort 1936 ≠ 1896] {biblio} | Q15290209 [naissance 1939 ≠ 1834] | Q8015832 [naissance 1957 ≠ 1834] {biblio} | Q13132363 [naissance 1705 ≠ 1834, mort 1763 ≠ 1896] {biblio} | Q335487 [naissance 1877 ≠ 1834, mort 1963 ≠ 1896] {biblio} | Q8015834 [naissance 1925 ≠ 1834, mort 2013 ≠ 1896]
+10134;Dario Fo;acceptée;oui;Q765;Dario Fo;1926;2016;IT;;biblio+metier;Q765 {biblio+metier}
+10135;Hans Magnus Enzensberger;acceptée;oui;Q44584;Hans Magnus Enzensberger;1929;2022;DE;de;biblio+metier;Q44584 {biblio+metier}
+10136;Katherine Anne Porter;acceptée;oui;Q236958;Katherine Anne Porter;1890;1980;US;en;biblio+metier;Q236958 {biblio+metier}
+10137;Manuel Rojas;acceptée;oui;Q1891716;Manuel Rojas;1896;1973;CL;es;biblio+metier;Q1891716 {biblio+metier} | Q2634596 [naissance 1954 ≠ 1896] | Q23005730 [naissance 1930 ≠ 1896, mort 1995 ≠ 1973] {biblio} | Q1171056 [naissance 1831 ≠ 1896, mort 1903 ≠ 1973] {metier} | Q54377986 {chercheur}
+10138;Georges Darien;acceptée;oui;Q1508877;Georges Darien;1862;1921;FR;fr;biblio+metier;Q1508877 {biblio+metier}
+10139;Lewis Mumford;acceptée;oui;Q469888;Lewis Mumford;1895;1990;US;en;biblio+metier;Q469888 {biblio+metier}
+10140;Benedict Anderson;ambiguë;;;;;;;;;Q212993 {biblio+metier} | Q124639063 {biblio+metier}
+10141;Antony Beevor;acceptée;oui;Q380229;Antony Beevor;1946;;GB;;biblio+metier;Q380229 {biblio+metier}
+10142;Hugh Thomas;acceptée;oui;Q335150;Hugh Thomas;1931;2017;GB;;biblio+metier;Q335150 {biblio+metier} | Q17199211 [naissance 1706 ≠ 1931, mort 1780 ≠ 2017] {biblio} | Q5932857 | Q47916966 {chercheur} | Q5932860 [naissance 1949 ≠ 1931] {biblio} | Q5932864 [naissance 1948 ≠ 1931] | Q20733207 [naissance 1673 ≠ 1931, mort 1720 ≠ 2017] | Q5932866 [mort 1976 ≠ 2017]
+10143;Raymond Carr;acceptée;oui;Q3179517;Raymond Carr;1919;2015;GB;;biblio+metier;Q3179517 {biblio+metier}
+10144;John Reed;acceptée;oui;Q310800;John Reed;1887;1920;;en;biblio+metier;Q310800 {biblio+metier} | Q19876338 [naissance 1864 ≠ 1887, mort 1955 ≠ 1920] | Q6254461 [naissance 1916 ≠ 1887, mort 2010 ≠ 1920] {biblio} | Q6254459 [naissance 1901 ≠ 1887, mort 1981 ≠ 1920] {biblio} | Q6254453 [naissance 1805 ≠ 1887, mort 1843 ≠ 1920] | Q10517212 [naissance 1972 ≠ 1887] | Q6254463 [naissance 1969 ≠ 1887] {biblio+metier} | Q105230296 | Q111411396 [naissance 1909 ≠ 1887, mort 1999 ≠ 1920] {biblio} | Q110941301 [naissance 1777 ≠ 1887, mort 1845 ≠ 1920] {biblio}
+10145;Pierre Broué;acceptée;oui;Q473006;Pierre Broué;1926;2005;FR;;biblio+metier;Q473006 {biblio+metier}
+10146;Lysander Spooner;acceptée;oui;Q538091;Lysander Spooner;1808;1887;US;en;biblio+metier+anarchisme;Q538091 {biblio+metier+anarchisme}
+10147;Piotr Archinov;contradiction;;;;;;;;;Q721177 [mort 1940 ≠ 1938] {biblio+anarchisme}
+10148;Vernon Richards;acceptée;oui;Q513120;Vernon Richards;1915;2001;GB;;biblio+metier+anarchisme;Q513120 {biblio+metier+anarchisme}
+10149;Andrés Nin;acceptée;oui;Q317923;Andreu Nin;1892;1937;ES;;biblio+metier;Q317923 {biblio+metier}
+10150;Murray Rothbard;acceptée;oui;Q297079;Murray Rothbard;1926;1995;US;en;biblio+metier;Q297079 {biblio+metier}
+10151;René Viénet;acceptée;oui;Q2144893;René Viénet;1944;;FR;;biblio+metier;Q2144893 {biblio+metier}
+10152;Pietro Ferrua;introuvable;;;;;;;;;
+10153;Josefa Martín Luengo;acceptée;oui;Q468757;Josefa Martín Luengo;1944;2009;ES;;biblio+metier;Q468757 {biblio+metier}
+10154;Manuel Joaquim de Sousa;contradiction;;;;;;;;;Q18473906 [naissance 1883 ≠ 1893, mort 1944 ≠ 1947] {biblio+metier}
+10155;Bio Panclasta;introuvable;;;;;;;;;
+10156;Stewart Home;acceptée;oui;Q1422563;Stewart Home;1962;;GB;;biblio+metier;Q1422563 {biblio+metier}
+10157;Paulo Freire;acceptée;oui;Q164797;Paulo Freire;1921;1997;BR;pt;biblio+metier;Q164797 {biblio+metier} | Q16212612 [naissance 1970 ≠ 1921, né 1970, publié dès 1974] {biblio} | Q108877271 {chercheur} | Q108877159 {chercheur}
+10158;Rubem Alves;acceptée;oui;Q189042;Rubem Alves;1933;2014;BR;pt;biblio+metier;Q189042 {biblio+metier}
+10159;Everett Reimer;acceptée;oui;Q3061467;Everett Reimer;1910;1998;US;;biblio+metier;Q3061467 {biblio+metier}
+10160;Florestan Fernandes;acceptée;oui;Q2387448;Florestan Fernandes;1920;1995;BR;pt;biblio+metier;Q2387448 {biblio+metier}
+10161;Clóvis Moura;acceptée;oui;Q16939940;Clóvis Moura;1925;2003;BR;pt;biblio+metier;Q16939940 {biblio+metier}
+10162;Edgard Carone;acceptée;oui;Q10270185;Edgard Carone;1923;2003;BR;;biblio+metier;Q10270185 {biblio+metier}
+10163;Roberto Freire;acceptée;oui;Q366250;Roberto Freire;1927;2008;BR;pt;biblio+metier;Q7351701 [naissance 1942 ≠ 1927] {biblio} | Q366250 {biblio+metier}
+10164;Florentino de Carvalho;contradiction;;;;;;;;;Q10282832 [naissance 1889 ≠ 1871] {metier} | Q137118217 [naissance 1883 ≠ 1871] {biblio}
+10165;Fábio Luz;déjà liée;;Q94538962;Fábio Luz;1864;1938;BR;;biblio+metier;Q94538962 {biblio+metier}
+10166;Martha Ackelsberg;acceptée;oui;Q89052941;Martha Ackelsberg;1946;;US;;biblio+metier;Q89052941 {biblio+metier}
+10167;Lucien Van Der Walt;acceptée;oui;Q16214249;Lucien van der Walt;1972;;ZA;en;biblio+metier;Q16214249 {biblio+metier}
+10168;Jean Bancal;contradiction;;;;;;;;;Q57201327 [naissance 1905 ≠ 1920] | Q56064908 [naissance 1926 ≠ 1920, mort 2008 ≠ 2005] {biblio}
+10169;Christian Ferrer;acceptée;oui;Q5767430;Christian Ferrer;1960;;AR;;biblio+metier;Q5767430 {biblio+metier}
+10170;Edgar Wind;acceptée;oui;Q72294;Edgar Wind;1900;1971;DE;;biblio+metier;Q72294 {biblio+metier}
+10171;Claudio Lavazza;introuvable;;;;;;;;;
+10173;Nildo Avelino;introuvable;;;;;;;;;
+10174;Joseph Staline;acceptée;oui;Q855;Joseph Staline;1878;1953;GE;ka;biblio+metier;Q855 {biblio+metier}
+10175;CrimethInc.;introuvable;;;;;;;;;
+10176;Gabriel Jackson;contradiction;;;;;;;;;Q3751007 [mort 2019 ≠ 2005] {biblio+metier} | Q17305946 [naissance 1962 ≠ 1921] {biblio} | Q3966988 [naissance 1963 ≠ 1921] {biblio} | Q16233874 [naissance 1991 ≠ 1921, né 1991, publié dès 1978] | Q94650028 [naissance 1765 ≠ 1921, mort 1850 ≠ 2005] {biblio}
+10177;Fernando C. Prestes Motta;introuvable;;;;;;;;;
+10178;Renata Pallottini;acceptée;oui;Q101242721;Renata Pallottini;1931;2021;BR;pt;biblio+metier;Q101242721 {biblio+metier}
+10179;María Galindo;acceptée;oui;Q3296444;María Galindo;1964;;BO;;biblio+metier;Q3296444 {biblio+metier} | Q139574191 [naissance 2008 ≠ 1964] | Q51064286 {chercheur}
+10180;Rudolf de Jong;acceptée;oui;Q50665569;Rudolf de Jong;1932;;NL;nl;biblio+metier;Q50665569 {biblio+metier} | Q113680315 [naissance 1958 ≠ 1932, mort 2024 ≠ 2019] {biblio}
+10181;Grégory Chambat;acceptée;oui;Q45491429;Grégory Chambat;1974;;;fr;biblio;Q45491429 {biblio}
+10182;Sheldon Leslie Maram;introuvable;;;;;;;;;
+10183;Antonina Rodrigo;acceptée;oui;Q8201111;Antonina Rodrigo;1935;;ES;es;biblio+metier;Q8201111 {biblio+metier}
+10184;Jean-Paul Sartre;acceptée;oui;Q9364;Jean-Paul Sartre;1905;1980;FR;fr;biblio+metier;Q9364 {biblio+metier} | Q135195927
+10185;Aldous Huxley;acceptée;oui;Q81447;Aldous Huxley;1894;1963;GB;en;biblio+metier;Q81447 {biblio+metier}
+10186;Howard Zinn;acceptée;oui;Q119546;Howard Zinn;1922;2010;US;en;biblio+metier;Q119546 {biblio+metier}
+10187;Bertrand Russell;acceptée;oui;Q33760;Bertrand Russell;1872;1970;GB;en;biblio+metier;Q33760 {biblio+metier}
+10188;Wilhelm Reich;ambiguë;;;;;;;;;Q84412 {biblio+metier} | Q118782312 [naissance 1881 ≠ 1897, mort 1951 ≠ 1957] {biblio} | Q105655190 [mort 1945 ≠ 1957] | Q94909393 [naissance 1852 ≠ 1897, mort 1929 ≠ 1957] {biblio} | Q41859843 [mort 1980 ≠ 1957] {biblio+metier} | Q116189786 [naissance 1870 ≠ 1897, mort 1923 ≠ 1957] | Q95764562 {biblio+metier} | Q94820779 [naissance 1855 ≠ 1897] {biblio} | Q18035577 [naissance 1852 ≠ 1897, mort 1927 ≠ 1957] {biblio}
+10189;Raoul Vaneigem;acceptée;oui;Q537924;Raoul Vaneigem;1934;2026;BE;fr;biblio+metier;Q537924 {biblio+metier}
+10190;Georges Sorel;acceptée;oui;Q313666;Georges Sorel;1847;1922;FR;fr;biblio+metier;Q313666 {biblio+metier} | Q3103497 [naissance 1948 ≠ 1847]
+10191;Carlos Drummond De Andrade;acceptée;oui;Q379745;Carlos Drummond de Andrade;1902;1987;BR;pt;biblio+metier;Q379745 {biblio+metier}
+10192;Máximo Gorki;acceptée;oui;Q12706;Maxime Gorki;1868;1936;RU;ru;biblio+metier;Q12706 {biblio+metier}
+10193;Antonin Artaud;acceptée;oui;Q187166;Antonin Artaud;1896;1948;FR;fr;biblio+metier;Q187166 {biblio+metier}
+10194;Abel Paz;acceptée;oui;Q318488;Abel Paz;1921;2009;ES;es;biblio+metier+anarchisme;Q318488 {biblio+metier+anarchisme}
+10195;Eric HOBSBAWM;acceptée;oui;Q34933;Eric Hobsbawm;1917;2012;GB;en;biblio+metier;Q34933 {biblio+metier}
+10196;Giovanni Rossi;acceptée;oui;Q925403;Giovanni Rossi;1856;1943;IT;;biblio+metier+anarchisme;Q3107332 [naissance 1926 ≠ 1856, mort 1983 ≠ 1943] | Q925403 {biblio+metier+anarchisme} | Q3107324 [naissance 1984 ≠ 1856] | Q98921898 [naissance 1861 ≠ 1856, mort 1926 ≠ 1943] {biblio} | Q108451627 [mort 1466 ≠ 1943] | Q60820930 [naissance 1776 ≠ 1856, mort 1852 ≠ 1943] {biblio+metier} | Q16268716 [naissance 1974 ≠ 1856] {biblio+metier} | Q16560157 [naissance 1887 ≠ 1856, mort 1975 ≠ 1943] {biblio} | Q3768059 [naissance 1785 ≠ 1856, mort 1867 ≠ 1943] {biblio+metier}
+10197;Elizabeth Gurley Flynn;acceptée;oui;Q463265;Elizabeth Gurley Flynn;1890;1964;US;en;biblio+metier;Q463265 {biblio+metier}
+10198;Howard Fast;acceptée;oui;Q380202;Howard Fast;1914;2003;US;en;biblio+metier;Q380202 {biblio+metier}
+10199;Marquis de Sade;acceptée;oui;Q123867;Marquis de Sade;1740;1814;FR;fr;biblio+metier;Q123867 {biblio+metier}
+10200;Janusz Korczak;acceptée;oui;Q152441;Janusz Korczak;1878;1942;PL;;biblio+metier;Q152441 {biblio+metier}
+10201;Camilo Berneri;acceptée;oui;Q969881;Camillo Berneri;1897;1937;IT;es;biblio+metier+anarchisme;Q969881 {biblio+metier+anarchisme}
+10202;Manuel González Prada;déjà liée;oui;Q2475822;Manuel González Prada;1844;1918;PE;es;biblio+metier;Q2475822 {biblio+metier}
+10203;Lewis Carroll;acceptée;oui;Q38082;Lewis Carroll;1832;1898;GB;en;biblio+metier;Q38082 {biblio+metier} | Q107061935 [naissance 1845 ≠ 1832, mort 1907 ≠ 1898] | Q140305560 [naissance 1906 ≠ 1832, mort 1954 ≠ 1898] {biblio}
+10204;Jorge Amado;acceptée;oui;Q184440;Jorge Amado;1912;2001;BR;;biblio+metier;Q184440 {biblio+metier} | Q51769974 [naissance 1979 ≠ 1912] | Q106904935
+10205;Léon Metchnikoff;acceptée;oui;Q4292405;Léon Metchnikoff;1838;1888;RU;ru;biblio+metier;Q4292405 {biblio+metier}
+10206;Paul Singer;ambiguë;;;;;;;;;Q6511841 [naissance 1944 ≠ 1932] {biblio+metier} | Q90284 {biblio+metier} | Q67212 [naissance 1844 ≠ 1932, mort 1911 ≠ 2018] {biblio+metier} | Q110616352 | Q22665450 | Q111724411 | Q102290402 | Q104628105 [naissance 1911 ≠ 1932, mort 1985 ≠ 2018] | Q119170505
+10207;Cipriano Mera;acceptée;oui;Q977325;Cipriano Mera;1897;1975;ES;es;biblio+metier;Q977325 {biblio+metier}
+10208;Eugen Relgis;acceptée;oui;Q2904922;Eugen Relgis;1895;1987;RO;es;biblio+metier;Q2904922 {biblio+metier}
+10209;Guillaume Apollinaire;acceptée;oui;Q133855;Guillaume Apollinaire;1880;1918;FR;fr;biblio+metier;Q133855 {biblio+metier}
+10210;João Bernardo;acceptée;oui;Q47468517;João Bernardo;1946;;PT;pt;biblio+metier;Q47468517 {biblio+metier} | Q59174930
+10211;André Reszler;acceptée;oui;Q2848522;André Reszler;1933;2022;HU;;biblio+metier;Q2848522 {biblio+metier}
+10212;Isidro Guardia Abella;acceptée;oui;Q56000530;Isidro Guardia Abella;1921;2012;;;biblio;Q56000530 {biblio}
+10213;Carlos Abreu;ambiguë;;;;;;;;;Q86092565 | Q96098029 {biblio+chercheur} | Q115407145 {biblio+metier}
+10214;Julio C. Acerete;introuvable;;;;;;;;;
+10215;Carlos Augusto Addor;introuvable;;;;;;;;;
+10216;S. Agourski;introuvable;;;;;;;;;
+10217;Moysés Aguiar;introuvable;;;;;;;;;
+10218;Roberto A. R. De Aguiar;introuvable;;;;;;;;;
+10219;Ronaldo Conde Aguiar;introuvable;;;;;;;;;
+10220;Anoar Aiex;introuvable;;;;;;;;;
+10221;Felipe Aláiz;acceptée;oui;Q3572766;Felipe Alaiz;1887;1959;ES;es;biblio+metier;Q3572766 {biblio+metier}
+10222;Anna Gicelle Garcia Alaniz;à relire (un seul signal);;Q139089640;Anna Gicelle García Alaniz;1964;;;;biblio;Q139089640 {biblio}
+10223;Martín Albornoz;acceptée;oui;Q137114658;Martín Albornoz;1978;;;;biblio+metier;Q42394368 | Q137114658 {biblio+metier}
+10224;John Alcorn;ambiguë;;;;;;;;;Q3809034 {biblio+metier} | Q6218479 {biblio} | Q15408507 | Q116259460 {biblio+metier} | Q88511431 {chercheur}
+10225;José de Alencar;acceptée;oui;Q455703;José Martiniano de Alencar;1829;1877;BR;pt;biblio+metier;Q455703 {biblio+metier}
+10226;Juan Maestre Alfonso;acceptée;oui;Q93608017;Juan Maestre Alfonso;1938;;;es;biblio+metier;Q93608017 {biblio+metier}
+10227;Oscar Algarve;introuvable;;;;;;;;;
+10228;Demerval Saviani et Alli;introuvable;;;;;;;;;
+10229;Herminio Almendros;acceptée;oui;Q4116474;Herminio Almendros;1898;1974;ES;es;biblio+metier;Q4116474 {biblio+metier}
+10230;Ramón Alvarez;ambiguë;;;;;;;;;Q3418549 {biblio} | Q3929981 | Q2842574 {biblio} | Q7290581
+10231;Paulo Alves;ambiguë;;;;;;;;;Q934127 | Q10346428 | Q61879340 | Q56459142 {chercheur} | Q18062599 [né 1993, publié dès 2002] | Q63671458 {biblio+metier}
+10232;Valter Roberto Alves;introuvable;;;;;;;;;
+10233;Luis Amado;ambiguë;;;;;;;;;Q1382641 {biblio} | Q2287985 | Q2245166 {biblio+metier} | Q117833346
+10235;Miguel Amorós;acceptée;oui;Q977783;Miguel Amorós;1949;;ES;es;biblio+metier;Q977783 {biblio+metier}
+10236;Rivista Anarchica;introuvable;;;;;;;;;
+10238;Taller Anarquista;introuvable;;;;;;;;;
+10239;Martins de Andrade;introuvable;;;;;;;;;
+10240;Pedro de Andrade;introuvable;;;;;;;;;
+10241;Silvia Maria Belfort Vilela de Andrade;introuvable;;;;;;;;;
+10242;Augusto Chacho Andrés;à relire (un seul signal);;Q60498007;"Augusto ""Chacho"" Andrés";1936;;UY;es;biblio;Q60498007 {biblio}
+10243;Satana Angelo;introuvable;;;;;;;;;
+10245;Allan Antiff;introuvable;;;;;;;;;
+10246;João Antônio;acceptée;oui;Q10311068;João Antônio;1937;1996;BR;pt;biblio+metier;Q64846297 [naissance 1952 ≠ 1937] | Q64833490 [naissance 1987 ≠ 1937, né 1987, publié dès 1977] | Q10311068 {biblio+metier}
+10247;Caderno de Apontamentos;introuvable;;;;;;;;;
+10248;Cassio M. L. de Aquino;introuvable;;;;;;;;;
+10249;Cássio Macedo Lopes de Aquino;introuvable;;;;;;;;;
+10250;Angela M. C. Araujo;introuvable;;;;;;;;;
+10251;Alejandro Arellano Y Buenrostro;introuvable;;;;;;;;;
+10252;Alejandro Buenrostro y Arellano;introuvable;;;;;;;;;
+10253;Dom Paulo Evaristo Arns;introuvable;;;;;;;;;
+10254;Carlos Arruda;introuvable;;;;;;;;;
+10255;João Arruda;contradiction;;;;;;;;;Q23822823 [naissance 1976 ≠ 1861, né 1976, publié dès 1932] | Q10311325 [naissance 1914 ≠ 1861, mort 1973 ≠ 1943]
+10256;Rinaldo Sérgio Vieira Arruda;introuvable;;;;;;;;;
+10258;Nelson Ascher;acceptée;oui;Q1976947;Nelson Ascher;1958;;BR;pt;biblio+metier;Q1976947 {biblio+metier}
+10259;Thimothy Garton Ash;introuvable;;;;;;;;;
+10260;Svetlana Askoldova;introuvable;;;;;;;;;
+10261;Danilo Augusto;introuvable;;;;;;;;;
+10262;Claire Auzias;acceptée;oui;Q2975000;Claire Auzias;1951;2024;FR;fr;biblio+metier;Q2975000 {biblio+metier}
+10263;Luis Carlos Avila;introuvable;;;;;;;;;
+10264;Darcy Azambuja;acceptée;oui;Q10264206;Darcy Pereira de Azambuja;;1970;BR;pt;biblio+metier;Q10264206 {biblio+metier}
+10265;Aluísio Azevedo;acceptée;oui;Q2840554;Aluísio Azevedo;1857;1913;BR;pt;biblio+metier;Q2840554 {biblio+metier}
+10266;Álvares de Azevedo;acceptée;oui;Q250754;Álvares de Azevedo;1831;1852;BR;pt;biblio+metier;Q250754 {biblio+metier} | Q55073010 [naissance 1834 ≠ 1831, mort 1854 ≠ 1852] {metier}
+10267;Raquel De Azevedo;introuvable;;;;;;;;;
+10268;Flávio Bá;introuvable;;;;;;;;;
+10269;Patrick Bade;ambiguë;;;;;;;;;Q26211971 [né 1997, publié dès 1999] | Q100723532 [né 1990, publié dès 1999] | Q120584791 {biblio} | Q134113981
+10270;Luciana Badin;introuvable;;;;;;;;;
+10271;Antônio Ladislau Monteiro Baena;acceptée;oui;Q16491870;António Ladislau Monteiro Baena;1782;1850;PT;;biblio+metier;Q16491870 {biblio+metier}
+10272;Osvaldo Baigorria;acceptée;oui;Q6054198;Osvaldo Baigorria;1948;;AR;es;biblio+metier;Q6054198 {biblio+metier}
+10273;Normand Baillargeon;acceptée;oui;Q3343837;Normand Baillargeon;1958;;CA;fr;biblio+metier;Q3343837 {biblio+metier}
+10274;Quentin Bajac;à relire (un seul signal);;Q3414162;Quentin Bajac;1965;;FR;fr;biblio;Q3414162 {biblio}
+10275;Catherine Baker;contradiction;;;;;;;;;Q2941824 [naissance 1947 ≠ 1949] {biblio+metier} | Q61749701 [naissance 1982 ≠ 1949] {biblio+metier} | Q122583054 [naissance 1965 ≠ 1949] {biblio} | Q4959218 [naissance 1930 ≠ 1949] {biblio+metier} | Q75642288 [naissance 1760 ≠ 1949] | Q76291426 [naissance 1818 ≠ 1949] | Q75806137 | Q75642099 | Q102742682
+10276;Michel Bakounine;acceptée;oui;Q27645;Mikhaïl Bakounine;1814;1876;RU;ru;biblio+metier+anarchisme;Q27645 {biblio+metier+anarchisme}
+10277;Giovanni Baldelli;acceptée;oui;Q5563688;Giovanni Baldelli;1914;1986;IT;;biblio+metier;Q5563688 {biblio+metier}
+10278;Gr Balkanski;introuvable;;;;;;;;;
+10279;Luigi Balsamini;acceptée;oui;Q106650977;Luigi Balsamini;1977;;IT;it;biblio+metier;Q106650977 {biblio+metier}
+10280;Moniz Bandeira;acceptée;oui;Q9296503;Moniz Bandeira;1935;2017;BR;pt;biblio+metier;Q9296503 {biblio+metier}
+10281;Noniz Bandeira;introuvable;;;;;;;;;
+10282;Antonio Bar;introuvable;;;;;;;;;
+10283;Carlos Barbáchano;à relire (un seul signal);;Q53550163;Carlos Barbáchano;1947;;ES;;biblio;Q53550163 {biblio}
+10284;Francisco de Assis Barbosa;acceptée;oui;Q5484097;Francisco de Assis Barbosa;1914;1991;BR;pt;biblio+metier;Q5484097 {biblio+metier}
+10285;Rui Barbosa;acceptée;oui;Q916935;Ruy Barbosa de Oliveira;1849;1923;BR;pt;biblio+metier;Q43271956 {chercheur} | Q916935 {biblio+metier} | Q90889808 {chercheur}
+10286;Antonio Garcia Barón;acceptée;oui;Q4776641;Antonio García Barón;1921;2008;ES;;metier+anarchisme;Q4776641 {metier+anarchisme}
+10287;Rafael Barret;acceptée;oui;Q353806;Rafael Barrett;1876;1910;ES;es;biblio+metier;Q353806 {biblio+metier}
+10288;Lima Barreto;acceptée;oui;Q383442;Afonso Henriques de Lima Barreto;1881;1922;BR;pt;biblio+metier;Q383442 {biblio+metier} | Q955301 [naissance 1906 ≠ 1881, mort 1982 ≠ 1922] {biblio}
+10289;Nelson Ramos Barretto;à relire (un seul signal);;Q20046067;Nelson Ramos Barretto;;;BR;pt;metier;Q20046067 {metier}
+10290;Haroldo Barros;introuvable;;;;;;;;;
+10291;Luitgarde Oliveira Cavalcanti Barros;acceptée;oui;Q113821780;Luitgarde Oliveira Cavalcanti Barros;;;;;biblio+metier;Q113821780 {biblio+metier}
+10292;Melka Barros;introuvable;;;;;;;;;
+10293;Neimar de Barros;acceptée;oui;Q10336026;Neimar de Barros;1943;2012;BR;pt;biblio+metier;Q10336026 {biblio+metier}
+10294;Max Barry;acceptée;oui;Q1912232;Max Barry;1973;;AU;;biblio+metier;Q1912232 {biblio+metier}
+10295;Robert F. Barsky;contradiction;;;;;;;;;Q7341907 [naissance 1961 ≠ 1949] {biblio+metier}
+10296;Jacques Barzun;acceptée;oui;Q712946;Jacques Barzun;1907;2012;FR;;biblio+metier;Q712946 {biblio+metier}
+10297;Franco Basaglia;acceptée;oui;Q929630;Franco Basaglia;1924;1980;IT;it;biblio+metier;Q929630 {biblio+metier}
+10298;Jean-Pierre Bastian;acceptée;oui;Q113778992;Jean-Pierre Bastian;1947;;;es;biblio+metier;Q113778992 {biblio+metier}
+10299;Jorge Basurto;non corroborée;;;;;;;;;Q17333798
+10300;Claudio H. M. Batalha;introuvable;;;;;;;;;
+10302;Paulo Cesar Batista;non corroborée;;;;;;;;;Q586708
+10303;Charles Baudelaire;acceptée;oui;Q501;Charles Baudelaire;1821;1867;FR;fr;biblio+metier;Q501 {biblio+metier} | Q481146 [naissance 1903 ≠ 1821, mort 1979 ≠ 1867] {biblio+metier} | Q19138093
+10304;Agustín Souchy Bauer;introuvable;;;;;;;;;
+10306;Carlos Bauer;introuvable;;;;;;;;;
+10307;Ruth M. Beard;à relire (un seul signal);;Q112443292;Ruth M. Beard;1919;;;;biblio;Q112443292 {biblio}
+10308;Paula Beiguelman;acceptée;oui;Q84991112;Paula Beiguelman;1926;2009;BR;;biblio+metier;Q84991112 {biblio+metier}
+10309;Kazimierz Bein;acceptée;oui;Q12749;Kazimierz Bein;1872;1959;PL;;biblio+metier;Q12749 {biblio+metier}
+10310;Raúl Ruano Bellido;introuvable;;;;;;;;;
+10311;Ierecê Rego Beltrão;introuvable;;;;;;;;;
+10312;Jane Felipe Beltrão;à relire (un seul signal);;Q101219133;Jane Felipe Beltrão;;;;;metier;Q101219133 {metier}
+10313;Robert Benedetti;ambiguë;;;;;;;;;Q64064677 {biblio} | Q139191810 {biblio}
+10314;Mouzar Benedito;acceptée;oui;Q139067993;Mouzar Benedito;1946;;;;biblio+metier;Q139067993 {biblio+metier}
+10315;César Benjamin;à relire (un seul signal);;Q8353140;César Benjamin;1954;;BR;pt;metier;Q8353140 {metier}
+10316;Eugenio Bentaberry;introuvable;;;;;;;;;
+10317;Jeremy Benthan;introuvable;;;;;;;;;
+10318;Javier Benyo;introuvable;;;;;;;;;
+10319;Paul Berman;ambiguë;;;;;;;;;Q685711 {biblio+metier} | Q106379508 [né 1964, publié dès 1972] | Q7153465 [né 1966, publié dès 1972] {biblio+metier} | Q85521287 | Q133709929 {biblio}
+10320;Raúl Ornelas Bernal;introuvable;;;;;;;;;
+10321;Jean-Claude Bernardet;contradiction;;;;;;;;;Q10306512 [mort 2025 ≠ 2012] {biblio+metier}
+10322;Célia de Bernardi;introuvable;;;;;;;;;
+10323;Ladisael Bernardo;introuvable;;;;;;;;;
+10324;Walther L. Bernecker;acceptée;oui;Q2547292;Walther L. Bernecker;1947;2026;DE;;biblio+metier;Q2547292 {biblio+metier}
+10325;Camillo Berneri;acceptée;oui;Q969881;Camillo Berneri;1897;1937;IT;it;biblio+metier+anarchisme;Q969881 {biblio+metier+anarchisme}
+10326;María Luisa Berneri;acceptée;oui;Q441947;Marie-Louise Berneri;1918;1949;IT;es;biblio+metier+anarchisme;Q441947 {biblio+metier+anarchisme}
+10327;David Berry;contradiction;;;;;;;;;Q5231376 [naissance 1943 ≠ 1965] {biblio} | Q5799843 [naissance 1984 ≠ 1965] {biblio+metier} | Q5231374 [naissance 1951 ≠ 1965] | Q41786500 {chercheur} | Q115860882 [naissance 1957 ≠ 1965] {biblio+metier} | Q16193471 [naissance 1960 ≠ 1965] {biblio+metier} | Q56186939 [naissance 1943 ≠ 1965] {biblio+metier} | Q16065446 [naissance 1795 ≠ 1965] | Q57150930 {chercheur} | Q5231373 [naissance 1978 ≠ 1965]
+10328;Juan Luis Berterretche;à relire (un seul signal);;Q139063980;Juan Luis Berterretche;1941;;;;biblio;Q139063980 {biblio}
+10329;Paul Berthelot;ambiguë;;;;;;;;;Q3370632 {biblio+anarchisme} | Q115004514 {metier}
+10330;Claude Bertin;à relire (un seul signal);;Q5128714;Claude Bertin;1653;1705;FR;;biblio;Q5128714 {biblio}
+10331;Franco Bertolucci;ambiguë;;;;;;;;;Q113254497 {biblio} | Q56326718 {biblio+metier} | Q133506922 {biblio}
+10332;João Fábio Bertonha;acceptée;oui;Q112522302;João Fábio Bertonha;1968;;;pt;biblio+metier;Q112522302 {biblio+metier}
+10333;Frei Betto;acceptée;oui;Q1453782;Frei Betto;1944;;BR;pt;biblio+metier;Q1453782 {biblio+metier}
+10334;Hakim Bey;acceptée;oui;Q551377;Hakim Bey;1945;2022;US;en;biblio+metier+anarchisme;Q551377 {biblio+metier+anarchisme}
+10335;Janet Biehl;acceptée;oui;Q535664;Janet Biehl;1953;;US;;biblio+metier+anarchisme;Q535664 {biblio+metier+anarchisme}
+10336;Isabel Bilhão;introuvable;;;;;;;;;
+10337;Edgardo J. Bilsky;introuvable;;;;;;;;;
+10338;Jeanne Bisilliat-Gardet;introuvable;;;;;;;;;
+10339;Antonio Bivar;acceptée;oui;Q9621049;Antônio Bivar;1939;2020;BR;pt;biblio+metier;Q9621049 {biblio+metier}
+10340;Bob Black;ambiguë;;;;;;;;;Q1266007 {biblio+metier+anarchisme} | Q4931841 [naissance 1862 ≠ 1951] | Q42421345 [naissance 1939 ≠ 1951] | Q100752067 | Q25208975 {biblio} | Q4920385 [naissance 1780 ≠ 1951] {biblio} | Q140285646 [naissance 1922 ≠ 1951] | Q106515733 [naissance 1922 ≠ 1951] {biblio+metier}
+10341;Luther Blissett;non corroborée;;;;;;;;;Q10531
+10342;Gérard Bloch;à relire (un seul signal);;Q109853807;Gérard Bloch;1920;1987;;;biblio;Q109853807 {biblio}
+10343;Georges Blond;acceptée;oui;Q3102319;Georges Blond;1906;1989;FR;fr;biblio+metier;Q3102319 {biblio+metier}
+10344;Augusto Boal;acceptée;oui;Q434805;Augusto Boal;1931;2009;BR;pt;biblio+metier;Q434805 {biblio+metier}
+10345;Miguel Bodela;introuvable;;;;;;;;;
+10346;Larissa Mies Bombardi;acceptée;oui;Q116262150;Larissa Bombardi;1972;;BR;;biblio+metier;Q116262150 {biblio+metier}
+10349;Alfredo María Bonanno;acceptée;oui;Q439074;Alfredo M. Bonanno;1937;2023;IT;;biblio+metier+anarchisme;Q439074 {biblio+metier+anarchisme}
+10350;Stefano Boni;acceptée;oui;Q125369708;Stefano Boni;1970;;IT;;biblio+metier;Q125369708 {biblio+metier}
+10351;Angel Borda;contradiction;;;;;;;;;Q94626311 [naissance 1901 ≠ 1906, mort 1980 ≠ 1986] {biblio}
+10352;Francesc Foguet I. Boreu;acceptée;oui;Q85955330;Francesc Foguet i Boreu;1971;;;es;biblio+metier;Q85955330 {biblio+metier}
+10353;José Francisco Borges;acceptée;oui;Q10304583;J. Borges;1935;2024;BR;pt;biblio+metier;Q10304583 {biblio+metier}
+10354;Armando Borghi;acceptée;oui;Q978183;Armando Borghi;1882;1968;IT;it;biblio+metier;Q978183 {biblio+metier}
+10355;Lamberto Borghi;acceptée;oui;Q3826314;Lamberto Borghi;1907;2000;IT;it;biblio+metier;Q3826314 {biblio+metier}
+10356;J. Carlos Boscolo;introuvable;;;;;;;;;
+10358;John Brademas;acceptée;oui;Q533169;John Brademas;1927;2016;US;;biblio;Q533169 {biblio}
+10360;Henry N. Brailsford;introuvable;;;;;;;;;
+10361;Octavio Brandão;acceptée;oui;Q10340169;Octávio Brandão;1896;1980;BR;pt;biblio;Q10340169 {biblio}
+10363;L. I. Brezhnev;introuvable;;;;;;;;;
+10364;Maurice Brinton;acceptée;oui;Q5107677;Chris Pallis;1923;2005;GB;en;biblio+metier;Q5107677 {biblio+metier}
+10365;José Brissa;acceptée;oui;Q137529424;;;1949;ES;;biblio+metier;Q137529424 {biblio+metier}
+10366;José Carlos Aguiar Brito;introuvable;;;;;;;;;
+10367;Brito Broca;acceptée;oui;Q9667031;Brito Broca;1903;1961;BR;pt;biblio+metier;Q9667031 {biblio+metier}
+10368;Alain Brossat;acceptée;oui;Q2829621;Alain Brossat;1946;;FR;fr;biblio+metier;Q2829621 {biblio+metier}
+10370;Lúcia Bruno;à relire (un seul signal);;Q16193723;Bruno Lucia;1960;;AU;;biblio;Q16193723 {biblio}
+10371;Fritz Brupbacher;ambiguë;;;;;;;;;Q117511 {biblio+metier+anarchisme} | Q133083928 {biblio}
+10372;Wilson R. Bueno;introuvable;;;;;;;;;
+10373;Waldirio Bulgarelli;à relire (un seul signal);;Q139061150;Waldirio Bulgarelli;1930;;;;biblio;Q139061150 {biblio}
+10374;Judith Butler;acceptée;oui;Q219368;Judith Butler;1956;;US;;biblio+metier;Q219368 {biblio+metier} | Q75611264 [naissance 1707 ≠ 1956] | Q75634674 | Q75764759 [naissance 1785 ≠ 1956] | Q75651253 [naissance 1953 ≠ 1956] | Q75651807 | Q140285314
+10375;Marco Aurélio Buzetto;introuvable;;;;;;;;;
+10376;Mário H. F. Buzzulini;introuvable;;;;;;;;;
+10377;Victor M. Muñoz C.;introuvable;;;;;;;;;
+10378;Evaldo Cabral De Mello;contradiction;;;;;;;;;Q2226041 [naissance 1936 ≠ 1929] {biblio+metier}
+10379;Max Cafard;introuvable;;;;;;;;;
+10380;Carlo Cafiero;acceptée;oui;Q563138;Carlo Cafiero;1846;1892;IT;it;biblio+metier+anarchisme;Q563138 {biblio+metier+anarchisme} | Q96167533 [naissance 1964 ≠ 1846] {biblio+metier}
+10381;Santiago Ramón y Cajal;acceptée;oui;Q150526;Santiago Ramón y Cajal;1852;1934;ES;es;biblio+metier;Q150526 {biblio+metier}
+10382;Roseli Salete Caldart;introuvable;;;;;;;;;
+10383;Clovis Caldeira;introuvable;;;;;;;;;
+10384;Agustín García Calvo;acceptée;oui;Q130746;Agustín García Calvo;1926;2012;ES;;biblio+metier;Q130746 {biblio+metier} | Q118559346 [naissance 1905 ≠ 1926, mort 1936 ≠ 2012]
+10385;Enrique Gil Calvo;acceptée;oui;Q37438673;Enrique Gil Calvo;1946;;ES;es;biblio+metier;Q37438673 {biblio+metier}
+10386;Luis de Camões;acceptée;oui;Q590;Luís de Camões;;1580;PT;pt;biblio+metier;Q590 {biblio+metier}
+10387;Javier Campo;non corroborée;;;;;;;;;Q56875927 {chercheur}
+10388;Cristina de Campos;à relire (un seul signal);;Q93793957;Cristina de Campos;;;BR;;biblio+chercheur;Q93793957 {biblio+chercheur}
+10389;Cristina Hebling Campos;introuvable;;;;;;;;;
+10390;Reynaldo Pompeu de Campos;introuvable;;;;;;;;;
+10391;Elizabeth Cancelli;introuvable;;;;;;;;;
+10392;Néstor García Canclini;acceptée;oui;Q2558727;Néstor García Canclini;1939;;AR;;biblio+metier;Q2558727 {biblio+metier}
+10393;René Cannac;acceptée;oui;Q64171626;René Cannac;;;FR;fr;biblio+metier;Q64171626 {biblio+metier}
+10394;Martín Caparrós;acceptée;oui;Q457402;Martín Caparrós;1957;;AR;es;biblio+metier;Q457402 {biblio+metier}
+10395;Jose Capela;acceptée;oui;Q110225815;José Capela;1932;2014;;pt;biblio+metier;Q110225815 {biblio+metier}
+10396;William Andrés Mesa Cárdenas;introuvable;;;;;;;;;
+10397;Carlos A. Gomes Cardim;introuvable;;;;;;;;;
+10398;Alvaro Cardoso;non corroborée;;;;;;;;;Q8076675 | Q48867596
+10399;Ana Claudia Moreira Cardoso;introuvable;;;;;;;;;
+10400;Paulo Amorim Cardoso;acceptée;oui;Q12353698;Paulo Amorim Cardoso;1921;2018;BR;es;biblio+metier;Q12353698 {biblio+metier}
+10401;Beatriz Scigliano Carneiro;introuvable;;;;;;;;;
+10402;Daniele Carneiro;introuvable;;;;;;;;;
+10403;Edgar Carone;acceptée;oui;Q10270185;Edgard Carone;1923;2003;BR;pt;biblio+metier;Q10270185 {biblio+metier}
+10404;Campio Carpio;acceptée;oui;Q17413212;Campio Carpio;1902;1989;ES;es;biblio+metier;Q17413212 {biblio+metier}
+10405;E. H. Carr;acceptée;oui;Q274764;Edward Hallett Carr;1892;1982;GB;en;biblio+metier;Q274764 {biblio+metier}
+10406;Emili Coratvitarte i Carral;introuvable;;;;;;;;;
+10407;Marcio Luiz Carreri;introuvable;;;;;;;;;
+10408;April Carter;acceptée;oui;Q4782004;April Carter;1937;2022;GB;en;biblio+metier;Q4782004 {biblio+metier}
+10409;Paul Carton;ambiguë;;;;;;;;;Q3370823 {biblio+metier} | Q110211504 {biblio} | Q80720780
+10410;Elysio de Carvalho;acceptée;oui;Q94406779;Elysio de Carvalho;1880;1925;;;biblio+metier;Q94406779 {biblio+metier}
+10411;Pablo González Casanova;acceptée;oui;Q1714521;Pablo González Casanova;1922;2023;MX;es;biblio+metier;Q1714521 {biblio+metier} | Q6056031 [naissance 1889 ≠ 1922] {biblio+metier}
+10412;Eduardo Góes de Castro;introuvable;;;;;;;;;
+10413;Rogério de Castro;introuvable;;;;;;;;;
+10414;Pedro Catallo;introuvable;;;;;;;;;
+10415;Fernando Catroga;acceptée;oui;Q19708195;Fernando Catroga;1945;;PT;pt;biblio+metier;Q19708195 {biblio+metier}
+10416;Jardel Cavalcanti;introuvable;;;;;;;;;
+10417;Isabel Cerruti;acceptée;oui;Q109929043;Isabel Cerruti;1886;1970;BR;;biblio+metier+anarchisme;Q109929043 {biblio+metier+anarchisme}
+10418;Júlio César;ambiguë;;;;;;;;;Q182459 {biblio} | Q1825279 | Q603190 | Q58433811 | Q6321698 | Q2455284 | Q10313398 | Q10313399
+10419;Marcos Cesar;introuvable;;;;;;;;;
+10420;Mário César;acceptée;oui;Q69181346;Mário César;1982;;BR;;biblio+metier;Q6764628 | Q69181346 {biblio+metier}
+10421;Murilo Dias Cesar;introuvable;;;;;;;;;
+10422;Gabriel Chalita;acceptée;oui;Q10287850;Gabriel Chalita;1969;;BR;pt;biblio+metier;Q10287850 {biblio+metier}
+10423;Bernard Chantebout;à relire (un seul signal);;Q2897667;Bernard Chantebout;1936;;FR;;biblio;Q2897667 {biblio}
+10424;Teilhard de Chardin;acceptée;oui;Q189564;Pierre Teilhard de Chardin;1881;1955;FR;fr;biblio+metier;Q189564 {biblio+metier}
+10425;Sylla Chaves;acceptée;oui;Q10375437;Sylla Chaves;1929;2009;BR;eo;biblio+metier;Q10375437 {biblio+metier}
+10426;Fiamma Chessa;introuvable;;;;;;;;;
+10427;Rivaldo Chinem;introuvable;;;;;;;;;
+10428;José Chrispiniano;introuvable;;;;;;;;;
+10430;Stuart Christie;acceptée;oui;Q981988;Stuart Christie;1946;2020;GB;en;biblio+metier+anarchisme;Q981988 {biblio+metier+anarchisme}
+10431;Daniel Chutorianscy;introuvable;;;;;;;;;
+10432;Giuseppe Ciancabilla;acceptée;oui;Q5565377;Giuseppe Ciancabilla;;1904;IT;;biblio+metier+anarchisme;Q5565377 {biblio+metier+anarchisme}
+10433;E. M. Cioran;acceptée;oui;Q193405;Emil Cioran;1911;1995;RO;ro;biblio+metier;Q193405 {biblio+metier}
+10434;Piero Cipriano;introuvable;;;;;;;;;
+10435;Marcos Cirano;acceptée;oui;Q139060997;Marcos Cirano;1952;;;;biblio+metier;Q139060997 {biblio+metier}
+10436;Márcia Regina Ciscati;introuvable;;;;;;;;;
+10437;John Clark;ambiguë;;;;;;;;;Q1624695 {biblio+metier} | Q6226187 [naissance 1932 ≠ 1945] {biblio+metier} | Q56205786 [naissance 1948 ≠ 1945] {biblio} | Q27074113 | Q3182410 [naissance 1885 ≠ 1945] {biblio} | Q1320783 [naissance 1766 ≠ 1945] {biblio} | Q719865 [naissance 1941 ≠ 1945] | Q18575850 | Q1699619 [naissance 1964 ≠ 1945] {biblio} | Q6226191 [naissance 1784 ≠ 1945] {biblio}
+10438;Arnould Clausse;introuvable;;;;;;;;;
+10439;Voltairine de Cleyre;acceptée;oui;Q235361;Voltairine de Cleyre;1866;1912;US;en;biblio+metier+anarchisme;Q235361 {biblio+metier+anarchisme}
+10440;Geraldo Mártires Coelho;introuvable;;;;;;;;;
+10441;Jeff Collins;ambiguë;;;;;;;;;Q6173599 | Q26709562 | Q100771208 | Q133307248 {biblio} | Q100771209 | Q100771210 | Q27661778 {biblio} | Q89387919 {chercheur}
+10442;Eduardo Comín Colomer;acceptée;oui;Q3048319;Eduardo Comín Colomer;1908;1975;ES;es;biblio+metier;Q3048319 {biblio+metier}
+10443;Daniel Colson;déjà liée;oui;Q3013875;Daniel Colson;1943;2026;FR;fr;biblio+metier+anarchisme;Q3013875 {biblio+metier+anarchisme}
+10444;Ai Ferri Conti;introuvable;;;;;;;;;
+10445;Edelmira Del Carmen Alveal Contreras;introuvable;;;;;;;;;
+10446;Edna Copparoni;introuvable;;;;;;;;;
+10447;Cristiano Cordeiro;contradiction;;;;;;;;;Q2633452 [né 1973, publié dès 1982] | Q10261634 | Q79915371 {chercheur}
+10448;Hector Adolfo Cordero;introuvable;;;;;;;;;
+10449;Christiano Cornelissen;introuvable;;;;;;;;;
+10450;Joël Cornuault;non corroborée;;;;;;;;;Q130681785
+10451;Manuel Correia De Andrade;acceptée;oui;Q10324075;Manuel Correia de Oliveira Andrade;1922;2007;BR;pt;biblio+metier;Q10324075 {biblio+metier}
+10452;Julio Cortázar;acceptée;oui;Q174210;Julio Cortázar;1914;1984;;es;biblio+metier;Q174210 {biblio+metier}
+10453;Darío A. Cortés;introuvable;;;;;;;;;
+10454;André Corvisier;acceptée;oui;Q2847554;André Corvisier;1918;2014;FR;fr;biblio+metier;Q2847554 {biblio+metier}
+10455;Hélio Da Costa;introuvable;;;;;;;;;
+10456;Marisa C. Vorraber Costa;introuvable;;;;;;;;;
+10457;Rafael Costa;non corroborée;;;;;;;;;Q7282093 | Q93043400 {chercheur} | Q51124482 {chercheur} | Q96580758 {chercheur} | Q88692392 {chercheur}
+10458;Sérgio Amad Costa;introuvable;;;;;;;;;
+10459;Túlio Costa;non corroborée;;;;;;;;;Q714354
+10460;Grabiela Costanzo;introuvable;;;;;;;;;
+10461;Carlos Nelson Coutinho;acceptée;oui;Q9697252;Carlos Nelson Coutinho;1943;2012;BR;pt;biblio+metier;Q9697252 {biblio+metier}
+10462;Alain Coutte;introuvable;;;;;;;;;
+10463;Buenaventura Delgado Criado;acceptée;oui;Q93380185;Buenaventura Delgado;1935;2007;ES;es;biblio+metier;Q93380185 {biblio+metier}
+10464;Luis Woollands (Juan Crusao);introuvable;;;;;;;;;
+10466;Fernando O'Neill Cuesta;à relire (un seul signal);;Q42401903;Fernando O´Neill Cuesta;1924;2005;UY;es;metier;Q42401903 {metier}
+10467;Ian Curtis;ambiguë;;;;;;;;;Q207867 {biblio+metier} | Q5981345 | Q5981335 {biblio}
+10468;Silvia Rivera Cusicanqui;acceptée;oui;Q7517038;Silvia Rivera Cusicanqui;1949;;BO;;biblio+metier;Q7517038 {biblio+metier}
+10469;Robert M. Cutler;acceptée;oui;Q58148981;Robert M Cutler;;;US;en;biblio+metier;Q7347109 | Q58148981 {biblio+metier}
+10470;Armand Cuvillier;acceptée;oui;Q2861816;Armand Cuvillier;1887;1973;FR;;biblio+metier;Q2861816 {biblio+metier}
+10471;Alain C. D. H;introuvable;;;;;;;;;
+10472;Aníbal A. D´Auria;introuvable;;;;;;;;;
+10473;Stig Dagerman;acceptée;oui;Q442535;Stig Dagerman;1923;1954;SE;sv;biblio+metier;Q442535 {biblio+metier}
+10474;Hellmuth Günther Dahms;acceptée;oui;Q1602995;Hellmuth G. Dahms;1918;2010;DE;;biblio+metier;Q1602995 {biblio+metier}
+10475;Gigi Damiani;acceptée;oui;Q10289485;Gigi Damiani;1876;1953;IT;it;biblio+metier;Q10289485 {biblio+metier}
+10476;Alberto Daneri;à relire (un seul signal);;Q138925834;Alberto Daneri;;;;;biblio;Q138925834 {biblio}
+10477;J. S. Daniels;introuvable;;;;;;;;;
+10478;Gilson Dantas;non corroborée;;;;;;;;;Q109760080
+10480;Robert Darton;introuvable;;;;;;;;;
+10481;Charles Darwin;acceptée;oui;Q1035;Charles Darwin;1809;1882;GB;en;biblio+metier;Q1035 {biblio+metier} | Q5076724 [naissance 1758 ≠ 1809, mort 1778 ≠ 1882] {biblio+metier} | Q5076728 [naissance 1894 ≠ 1809, mort 1941 ≠ 1882] | Q1064506 [naissance 1887 ≠ 1809, mort 1962 ≠ 1882] {biblio+metier}
+10482;Alexandra David-Néel;acceptée;oui;Q230456;Alexandra David-Néel;1868;1969;FR;fr;biblio+metier+anarchisme;Q230456 {biblio+metier+anarchisme}
+10483;Henry David;ambiguë;;;;;;;;;Q4153569 [né 1979, publié dès 1958] {biblio} | Q105533624 {biblio} | Q59627852 {biblio+metier} | Q37379128 {biblio+chercheur}
+10484;Angela Davis;ambiguë;;;;;;;;;Q160456 {biblio+metier} | Q16979885 | Q104520606 {metier} | Q90569344 {biblio+metier} | Q64697968 {chercheur} | Q133252396 {metier} | Q92610959 {chercheur}
+10485;Dorothy Day;ambiguë;;;;;;;;;Q150281 {biblio+metier+anarchisme} | Q24661922 | Q76173795 [mort 1997 ≠ 1980] | Q110266347 [mort 1975 ≠ 1980] {biblio} | Q116762655 [naissance 1747 ≠ 1897, mort 1819 ≠ 1980] | Q29616916 [naissance 1915 ≠ 1897, mort 2001 ≠ 1980] {biblio}
+10486;Douglas Day;ambiguë;;;;;;;;;Q5301407 {biblio+metier} | Q107369619 {metier} | Q57240192 {chercheur} | Q123390653 {biblio+metier}
+10487;Edmondo De Amicis;acceptée;oui;Q240576;Edmondo De Amicis;1846;1908;IT;it;biblio+metier;Q240576 {biblio+metier} | Q60840398 [naissance 1885 ≠ 1846, mort 1945 ≠ 1908]
+10488;Simone de Beauvoir;acceptée;oui;Q7197;Simone de Beauvoir;1908;1986;FR;fr;biblio+metier;Q7197 {biblio+metier}
+10489;Paulo de Castro;non corroborée;;;;;;;;;Q99671557
+10492;Guillaume De Greef;acceptée;oui;Q5769755;Guillaume De Greef;1842;1924;BE;fr;biblio+metier;Q5769755 {biblio+metier}
+10493;Almir de Lima Pereira;introuvable;;;;;;;;;
+10494;Leandro Delgado;acceptée;oui;Q42400011;Leandro Delgado;1967;;UY;;biblio+metier;Q6509632 | Q42400011 {biblio+metier}
+10495;Alèssi Dell'umbria;déjà liée;oui;Q16170957;Alèssi Dell'Umbria;;;FR;es;biblio+metier;Q16170957 {biblio+metier}
+10496;Juan Pablo Calero Delso;introuvable;;;;;;;;;
+10497;Sandra McGee Deutsch;acceptée;oui;Q67100330;Sandra McGee Deutsch;1950;;US;;biblio+metier;Q67100330 {biblio+metier}
+10498;Eduardo Devés;acceptée;oui;Q18649883;Eduardo Devés;1951;;CL;es;biblio+metier;Q18649883 {biblio+metier} | Q141014597
+10499;Pasquale Di Paolo;introuvable;;;;;;;;;
+10500;Everardo Dias;acceptée;oui;Q10278476;Everardo Dias;1883;1966;BR;pt;biblio+metier;Q10278476 {biblio+metier}
+10502;Laureano Riera Díaz;introuvable;;;;;;;;;
+10503;CESIT Dieese;introuvable;;;;;;;;;
+10504;Gerard Dilger;introuvable;;;;;;;;;
+10505;Gilberto Dimenstein;acceptée;oui;Q1979166;Gilberto Dimenstein;1956;2020;BR;pt;biblio+metier;Q1979166 {biblio+metier}
+10506;Elias Diniz;introuvable;;;;;;;;;
+10508;Dilar Dirik;introuvable;;;;;;;;;
+10509;Willful Disobedience;introuvable;;;;;;;;;
+10510;Emmanuel Malolo Dissakè;ambiguë;;;;;;;;;Q124695819 {metier} | Q139067597 {biblio}
+10511;Reaxiones Adversas Distro;introuvable;;;;;;;;;
+10513;E. L. Doctorow;acceptée;oui;Q335232;E. L. Doctorow;1931;2015;US;en;biblio+metier;Q335232 {biblio+metier}
+10514;Guillaume Doizy;contradiction;;;;;;;;;Q3119811 [naissance 1970 ≠ 1968] {biblio+metier}
+10515;J-A Doléris;introuvable;;;;;;;;;
+10516;Mário Domingues;acceptée;oui;Q28890066;Mário Domingues;1899;1977;PT;;biblio+metier;Q28890066 {biblio+metier}
+10517;Maurice Dommanget;acceptée;oui;Q3300694;Maurice Dommanget;1888;1976;FR;;biblio+metier;Q3300694 {biblio+metier}
+10518;Igor Goicovic Donoso;ambiguë;;;;;;;;;Q85871260 {metier} | Q112558836 {biblio+metier}
+10519;A. de Sampaio Doria;introuvable;;;;;;;;;
+10520;Elsa Dorlin;acceptée;oui;Q3051714;Elsa Dorlin;1974;;FR;;biblio+metier;Q3051714 {biblio+metier}
+10521;F. M. Dostoiévski;introuvable;;;;;;;;;
+10522;Fédor Dostoievski;acceptée;oui;Q991;Fiodor Dostoïevski;1821;1881;RU;ru;biblio+metier;Q991 {biblio+metier}
+10523;Fiódor M. Dostoievski;introuvable;;;;;;;;;
+10524;Wolfgang Dressen;acceptée;oui;Q1369916;Wolfgang Dreßen;1942;;DE;;biblio+metier;Q1369916 {biblio+metier}
+10525;Ozeas Duarte;introuvable;;;;;;;;;
+10526;Regina Horta Duarte;ambiguë;;;;;;;;;Q123735486 {metier} | Q138979687 {biblio+metier}
+10527;Henri Dubief;ambiguë;;;;;;;;;Q16056005 {biblio} | Q96575696 {biblio+metier}
+10528;Pierre Duchesne;ambiguë;;;;;;;;;Q1368389 {biblio} | Q3384833 [né 1964, publié dès 1971] {biblio+metier} | Q3384830 | Q102252699 | Q137356117
+10529;Jacques Duclos;acceptée;oui;Q377790;Jacques Duclos;1896;1975;FR;fr;biblio+metier;Q377790 {biblio+metier} | Q124937319 [naissance 1872 ≠ 1896, mort 1935 ≠ 1975] | Q139606784 [naissance 1950 ≠ 1896]
+10530;John W. F. Dulles;acceptée;oui;Q10307903;John W.F. Dulles;1913;2008;US;;biblio+metier;Q10307903 {biblio+metier}
+10531;René Dumesnil;acceptée;oui;Q3426141;René Dumesnil;1879;1967;FR;fr;biblio+metier;Q3426141 {biblio+metier} | Q23982826 [naissance 1829 ≠ 1879, mort 1893 ≠ 1967] {biblio+metier}
+10532;Lionel Dupuy;acceptée;oui;Q3241864;Lionel Dupuy;1974;;FR;fr;biblio+metier;Q3241864 {biblio+metier} | Q57986400 {chercheur}
+10534;Émile Durkheim;acceptée;oui;Q15948;Émile Durkheim;1858;1917;FR;fr;biblio+metier;Q15948 {biblio+metier}
+10535;Eliana de Freitas Dutra;introuvable;;;;;;;;;
+10536;Chris Ealham;contradiction;;;;;;;;;Q18762204 [naissance 1965 ≠ 1970] {biblio+metier}
+10538;Ilya Ehrenburg;acceptée;oui;Q348497;Ilya Ehrenbourg;1891;1967;UA;ru;biblio+metier;Q348497 {biblio+metier}
+10539;Howard J. Ehrlich;acceptée;oui;Q5919552;Howard Ehrlich;1932;2015;US;en;biblio+metier+anarchisme;Q5919552 {biblio+metier+anarchisme}
+10540;Uri Eisenzweig;contradiction;;;;;;;;;Q6561833 [naissance 1946 ≠ 1953] {biblio+metier}
+10541;Juan Puis Elias;introuvable;;;;;;;;;
+10542;Paulo Eltzbacher;introuvable;;;;;;;;;
+10543;Fábio Emecê;introuvable;;;;;;;;;
+10544;José Antonio Emmanuel;acceptée;oui;Q133441105;José Antonio Emmanuel;;;;;biblio+metier;Q133441105 {biblio+metier}
+10545;Frederich Engel;introuvable;;;;;;;;;
+10546;Critical Art Ensemble;introuvable;;;;;;;;;
+10547;Vanina Escales;introuvable;;;;;;;;;
+10548;Osvaldo Arias Escobedo;introuvable;;;;;;;;;
+10549;Cruz Escribano;introuvable;;;;;;;;;
+10550;Osvaldo Escribano;introuvable;;;;;;;;;
+10551;Cristina Escrivá;introuvable;;;;;;;;;
+10553;Jorge Etchenique;introuvable;;;;;;;;;
+10554;Catriel Etcheverri;introuvable;;;;;;;;;
+10555;Richard F. Fleck;introuvable;;;;;;;;;
+10556;Clifton Fadiman;acceptée;oui;Q1101372;Clifton Fadiman;1904;1999;US;;biblio+metier;Q1101372 {biblio+metier}
+10557;Eduardo Fagnani;acceptée;oui;Q90906226;Eduardo Fagnani;;;;;biblio+metier;Q90906226 {biblio+metier}
+10558;Candace Falk;contradiction;;;;;;;;;Q98800167 [naissance 1947 ≠ 1945] {biblio+metier}
+10559;Frantz Fanon;acceptée;oui;Q193670;Frantz Fanon;1925;1961;;fr;biblio+metier;Q193670 {biblio+metier}
+10560;Sérgio Fantini;non corroborée;;;;;;;;;Q100411135 {chercheur}
+10561;Emil Farhat;acceptée;oui;Q37805746;Emil Farhat;1914;2000;BR;pt;biblio+metier;Q37805746 {biblio+metier}
+10562;Álvaro Alves de Faria;acceptée;oui;Q10395743;Álvaro Alves de Faria;1942;;BR;pt;biblio+metier;Q10395743 {biblio+metier}
+10563;Wilson de Faria;introuvable;;;;;;;;;
+10564;Elie Faure;acceptée;oui;Q274646;Élie Faure;1873;1937;FR;fr;biblio+metier;Q274646 {biblio+metier} | Q74229214 [mort 1953 ≠ 1937] {biblio}
+10566;Francis McCollum Feeley;acceptée;oui;Q55624535;Francis McCollum Feeley;1946;;US;en;biblio+metier;Q55624535 {biblio+metier}
+10567;José Pablo Feinmann;acceptée;oui;Q1418232;José Pablo Feinmann;1943;2021;AR;es;biblio+metier;Q1418232 {biblio+metier}
+10568;Isabelle Felici;non corroborée;;;;;;;;;Q110914092
+10569;Almir Valente Felitte;introuvable;;;;;;;;;
+10570;Rubem César Fernandes;acceptée;oui;Q10365065;Rubem César Fernandes;1943;;BR;pt;biblio+metier;Q10365065 {biblio+metier}
+10571;Frank Fernández;ambiguë;;;;;;;;;Q5868504 [naissance 1992 ≠ 1944, né 1992, publié dès 1994] | Q5486598 {biblio+metier+anarchisme} | Q5486594 {biblio} | Q5486592 | Q125221105 {biblio} | Q130280750
+10572;Gonzalo D. Fernandez;introuvable;;;;;;;;;
+10573;Germán Ferrari;acceptée;oui;Q139102646;Germán Ferrari;1969;;;;biblio+metier;Q139102646 {biblio+metier}
+10574;Celso Ferraris;introuvable;;;;;;;;;
+10575;Pinto Ferraz;introuvable;;;;;;;;;
+10576;Acácio Ferreira;introuvable;;;;;;;;;
+10577;Fernanda Durão Ferreira;introuvable;;;;;;;;;
+10578;Maria Nazareth Ferreira;à relire (un seul signal);;Q101242666;Maria Nazareth Ferreira;;;BR;;metier;Q101242666 {metier}
+10580;Silvestre Pinheiro Ferreira;acceptée;oui;Q10371546;Silvestre Pinheiro Ferreira;1769;1846;PT;pt;biblio+metier;Q10371546 {biblio+metier}
+10581;Francisco Ferrer Y Guardia;acceptée;oui;Q354202;Francisco Ferrer Guardia;1859;1909;ES;;biblio+metier+anarchisme;Q354202 {biblio+metier+anarchisme}
+10582;Alejandro Tiana Ferrer;acceptée;oui;Q51881965;Alejandro Tiana Ferrer;1951;;ES;es;biblio+metier;Q51881965 {biblio+metier}
+10583;Julio Ferrer;ambiguë;;;;;;;;;Q21502957 {biblio} | Q39044161 | Q133749507 {biblio+metier}
+10584;Rai Ferrer;acceptée;oui;Q51883507;Rai Ferrer;1942;2017;ES;es;biblio+metier;Q51883507 {biblio+metier}
+10585;Sol Ferrer;à relire (un seul signal);;Q136123265;Sol Ferrer;;;;;biblio;Q136123265 {biblio}
+10586;Norberto Osvaldo Ferreras;introuvable;;;;;;;;;
+10587;Retlav Avles Ferret;introuvable;;;;;;;;;
+10588;Enrique Ferri;introuvable;;;;;;;;;
+10590;Piero Ferrua;introuvable;;;;;;;;;
+10591;Roseli Figaro;à relire (un seul signal);;Q101236203;Roseli Figaro;;;BR;;metier;Q101236203 {metier}
+10592;Vera Figner;acceptée;oui;Q266783;Véra Figner;1852;1942;RU;;biblio+metier;Q266783 {biblio+metier}
+10593;Alípio de Sousa Filho;acceptée;oui;Q9609299;Alípio de Sousa Filho;1961;;BR;pt;biblio+metier;Q9609299 {biblio+metier}
+10594;Fábio Luz Filho;introuvable;;;;;;;;;
+10595;Olavo Cabral Ramos Filho;introuvable;;;;;;;;;
+10596;Federico Finchelstein;acceptée;oui;Q24204451;Federico Finchelstein;1975;;AR;es;biblio+metier;Q24204451 {biblio+metier}
+10597;Paolo Finzi;contradiction;;;;;;;;;Q124694602 [naissance 1951 ≠ 1957] {biblio+metier+anarchisme}
+10598;Marie Fleming;ambiguë;;;;;;;;;Q110737111 {biblio+metier} | Q97924794 | Q117117613 {biblio+metier}
+10599;Pere Foix;introuvable;;;;;;;;;
+10600;Giulio Folena;introuvable;;;;;;;;;
+10601;Carlos Fonseca;ambiguë;;;;;;;;;Q13978574 [naissance 1987 ≠ 1959] | Q5042084 [naissance 1955 ≠ 1959] | Q50981159 {biblio+chercheur} | Q370691 [naissance 1936 ≠ 1959] {biblio+metier} | Q50891202 {biblio+chercheur} | Q61881238 [naissance 1970 ≠ 1959] | Q38175471 [naissance 1987 ≠ 1959] {biblio+metier} | Q105906744 [naissance 1981 ≠ 1959]
+10602;Eilton Fonseca;introuvable;;;;;;;;;
+10603;Tomaz da Fonseca;introuvable;;;;;;;;;
+10604;Alfonso Font;acceptée;oui;Q763129;Alfonso Font;1946;;ES;;biblio+metier;Q763129 {biblio+metier}
+10605;Hugo Fontana;acceptée;oui;Q5904481;Hugo Fontana;1955;2022;UY;es;biblio+metier;Q5904481 {biblio+metier} | Q47036877
+10606;Isleide Arruda Fontenelle;introuvable;;;;;;;;;
+10607;Epitéto Fontes;introuvable;;;;;;;;;
+10608;João Neves da Fontoura;acceptée;oui;Q636323;João Neves da Fontoura;1887;1963;BR;pt;biblio+metier;Q636323 {biblio+metier}
+10609;Henry Ford;acceptée;oui;Q8768;Henry Ford;1863;1947;US;en;biblio+metier;Q8768 {biblio+metier} | Q516858 [naissance 1917 ≠ 1863, mort 1987 ≠ 1947] {biblio} | Q5721393 [naissance 1828 ≠ 1863, mort 1894 ≠ 1947] {biblio+metier} | Q5724147 [naissance 1860 ≠ 1863, mort 1941 ≠ 1947] {biblio+metier} | Q5721389 [naissance 1971 ≠ 1863, né 1971, publié dès 1954] | Q19865736 [naissance 1931 ≠ 1863, mort 2021 ≠ 1947] | Q5721398 [naissance 1619 ≠ 1863, mort 1684 ≠ 1947] {biblio} | Q5721396 [naissance 1898 ≠ 1863, mort 1919 ≠ 1947] | Q109853854 [naissance 1845 ≠ 1863, mort 1910 ≠ 1947] {biblio}
+10610;James D. Forman;acceptée;oui;Q47112629;James D. Forman;1932;2009;US;en;biblio+metier;Q47112629 {biblio+metier} | Q125419994
+10611;Alex Foti;introuvable;;;;;;;;;
+10612;Walter Francini;acceptée;oui;Q12356699;Walter Francini;1926;1996;BR;;biblio+metier;Q12356699 {biblio+metier}
+10613;José Francisco;non corroborée;;;;;;;;;Q64846301
+10614;F. de A. Carvalho Franco;introuvable;;;;;;;;;
+10615;Maria Laura P. B. Franco;introuvable;;;;;;;;;
+10617;Joseph Frank;acceptée;oui;Q20742162;Joseph Frank;1918;2013;US;;biblio+metier;Q4492358 [naissance 1771 ≠ 1918, mort 1842 ≠ 2013] {biblio+metier} | Q20742162 {biblio+metier} | Q99286340 [naissance 1916 ≠ 1918, mort 1993 ≠ 2013] {biblio+metier} | Q6283209 [naissance 1857 ≠ 1918, mort 1940 ≠ 2013] | Q136750948 [mort 1898 ≠ 2013] | Q104544329 [mort 1945 ≠ 2013]
+10618;Felix Frankfurter;acceptée;oui;Q1403472;Felix Frankfurter;1882;1965;US;en;biblio+metier;Q1403472 {biblio+metier}
+10619;Jo Freeman;acceptée;oui;Q2403438;Jo Freeman;1945;;US;en;biblio+metier;Q2403438 {biblio+metier}
+10620;João Freire;ambiguë;;;;;;;;;Q10311528 {biblio} | Q126193144 [naissance 1582 ≠ 1942] {biblio} | Q40226968 {chercheur} | Q17280340 {biblio+metier}
+10621;Susanita Freire;introuvable;;;;;;;;;
+10622;Allan de Freitas;non corroborée;;;;;;;;;Q140198825
+10623;Décio Freitas;acceptée;oui;Q10269281;Décio Freitas;1922;2004;BR;pt;biblio+metier;Q10269281 {biblio+metier}
+10624;Jeanne Marie Machado de Freitas;introuvable;;;;;;;;;
+10625;Yves Fremion;acceptée;oui;Q3573652;Yves Frémion;1947;;FR;;biblio+metier;Q3573652 {biblio+metier}
+10626;Sigmund Freud;acceptée;oui;Q9215;Sigmund Freud;1856;1939;CZ;de;biblio+metier;Q9215 {biblio+metier}
+10627;Ricardo Fuego;introuvable;;;;;;;;;
+10628;Rene Furth;contradiction;;;;;;;;;Q15406915 [naissance 1934 ≠ 1924] {biblio+metier}
+10629;Jostein Gaarder;acceptée;oui;Q185548;Jostein Gaarder;1952;;NO;no;biblio+metier;Q185548 {biblio+metier}
+10630;Eugenio de Barros Raja Gabaglia;acceptée;oui;Q10278195;Eugênio de Barros Raja Gabaglia;1862;1919;BR;pt;;Q10278195
+10631;Jeanne Gaillard;ambiguë;;;;;;;;;Q3176052 {biblio+metier} | Q47117607 | Q131730913
+10632;Eduardo Galeano;acceptée;oui;Q44575;Eduardo Galeano;1940;2015;UY;es;biblio+metier;Q44575 {biblio+metier}
+10633;Jairo Galindo;introuvable;;;;;;;;;
+10634;Gregorio Gallego;acceptée;oui;Q55950439;Gregorio Gallego;1916;2007;ES;es;biblio+metier;Q55950439 {biblio+metier}
+10635;Emily Games;introuvable;;;;;;;;;
+10636;Mahatma Gandhi;acceptée;oui;Q1001;Mohandas Karamchand Gandhi;1869;1948;IN;gu;biblio+metier;Q1001 {biblio+metier} | Q16575010 [naissance 1992 ≠ 1869]
+10637;Elias Garcia;acceptée;oui;Q10309321;José Elias Garcia;1830;1891;PT;;biblio+metier;Q67519001 | Q10309321 {biblio+metier}
+10638;Huascar Rodríguez García;introuvable;;;;;;;;;
+10639;Hugo Garcia;ambiguë;;;;;;;;;Q96748489 [né 1993, publié dès 1972] | Q18418271 [né 1981, publié dès 1972] | Q127947079 [né 2005, publié dès 1972] | Q85767652 | Q16326124 {biblio+metier} | Q42908274 [né 1989, publié dès 1972]
+10640;Juan Guillermo Gómez García;acceptée;oui;Q133441239;Juan Guillermo Gómez García;1959;;;es;biblio+metier;Q133441239 {biblio+metier}
+10641;Luis Lamela García;acceptée;oui;Q12392511;V. Luís Lamela García;1945;;ES;;biblio+metier;Q12392511 {biblio+metier}
+10642;Juan José Garfia;à relire (un seul signal);;Q5950272;Juan José Garfia;1966;;ES;;metier;Q5950272 {metier}
+10643;Zélia Gattai;acceptée;oui;Q247526;Zélia Gattai;1916;2008;BR;pt;biblio+metier;Q247526 {biblio+metier}
+10644;Peter Gelderloos;acceptée;oui;Q4363838;Peter Gelderloos;1982;;US;en;biblio+metier+anarchisme;Q4363838 {biblio+metier+anarchisme}
+10645;Emilio Gennari;introuvable;;;;;;;;;
+10646;René E. Gertz;introuvable;;;;;;;;;
+10647;Alberto Ghiraldo;acceptée;oui;Q5663077;Alberto Ghiraldo;1875;1946;AR;es;biblio+metier;Q5663077 {biblio+metier}
+10648;Giancarlo Giannini;à relire (un seul signal);;Q315258;Giancarlo Giannini;1942;;IT;it;biblio;Q315258 {biblio}
+10649;Moisés Gicovate;introuvable;;;;;;;;;
+10650;Carlo Ginzburg;acceptée;oui;Q355251;Carlo Ginzburg;1939;2026;IT;it;biblio+metier;Q355251 {biblio+metier}
+10651;Alibrando Giovannetti;ambiguë;;;;;;;;;Q109854569 {biblio} | Q137907355 {metier}
+10652;Luiz Giovanni;introuvable;;;;;;;;;
+10653;Julio Godio;acceptée;oui;Q3189814;Julio Godio;1939;2011;AR;es;biblio+metier;Q3189814 {biblio+metier}
+10654;William Godwin;acceptée;oui;Q188569;William Godwin;1756;1836;GB;en;biblio+metier+anarchisme;Q188569 {biblio+metier+anarchisme} | Q8009959 [naissance 1803 ≠ 1756, mort 1832 ≠ 1836] {biblio+metier} | Q20707582 [naissance 1912 ≠ 1756, mort 2000 ≠ 1836] | Q22336821 [mort 1557 ≠ 1836] | Q105188277 [naissance 1957 ≠ 1756] | Q100795990 | Q125211931 [naissance 1813 ≠ 1756, mort 1883 ≠ 1836] {biblio} | Q75657568
+10655;Maria Conceição Pinto de Góes;introuvable;;;;;;;;;
+10656;Sonia Goldfeder;introuvable;;;;;;;;;
+10657;Raymond Goldsmith;introuvable;;;;;;;;;
+10658;Ângela Maria de Castro Gomes;à relire (un seul signal);;Q59693692;Angela Maria de Castro Gomes;;;BR;;metier;Q59693692 {metier}
+10659;Paulo Emilio Salles Gomes;acceptée;oui;Q2064014;Paulo Emílio Sales Gomes;1916;1977;BR;pt;biblio+metier;Q2064014 {biblio+metier}
+10660;Alfredo Gómez;contradiction;;;;;;;;;Q11904985 [né 1989, publié dès 1980]
+10661;Francisco Pineda Gómez;introuvable;;;;;;;;;
+10662;Adelto Gonçalves;acceptée;oui;Q9582642;Adelto Gonçalves;;;BR;pt;biblio+metier;Q9582642 {biblio+metier}
+10663;Rodolfo González Pacheco;contradiction;;;;;;;;;Q2161241 [naissance 1883 ≠ 1881] {biblio+metier}
+10664;Julio Reyelo González;introuvable;;;;;;;;;
+10665;Marcos Gonzalez;contradiction;;;;;;;;;Q924825 | Q95946545 {chercheur} | Q18222047 [né 1990, publié dès 1993]
+10666;Xosé Tarrio González;acceptée;oui;Q12402889;Xosé Tarrío González;1968;2005;ES;;biblio+metier;Q12402889 {biblio+metier}
+10667;Juan Goytisolo;acceptée;oui;Q353762;Juan Goytisolo;1931;2017;ES;es;biblio+metier;Q353762 {biblio+metier}
+10668;John Grand-Carteret;acceptée;oui;Q3181629;John Grand-Carteret;1850;1927;FR;fr;biblio+metier;Q3181629 {biblio+metier}
+10669;J. Grave;introuvable;;;;;;;;;
+10670;João Grave;acceptée;oui;Q5769261;João Grave;1872;1934;PT;pt;biblio+metier;Q5769261 {biblio+metier}
+10671;Juan Grave;introuvable;;;;;;;;;
+10672;Gilbert Green;ambiguë;;;;;;;;;Q3105734 {biblio} | Q5560531 {biblio}
+10673;Waldemar de Gregori;acceptée;oui;Q6166079;Waldemar De Gregori;1935;;BR;pt;biblio+metier;Q6166079 {biblio+metier}
+10674;George Grosz;acceptée;oui;Q107194;George Grosz;1893;1959;DE;de;biblio+metier;Q107194 {biblio+metier}
+10675;Andrej Grubacic;contradiction;;;;;;;;;Q4756039 [naissance 1976 ≠ 1974] {biblio+metier+anarchisme}
+10676;Félix Guattari;acceptée;oui;Q352465;Félix Guattari;1930;1992;FR;fr;biblio+metier;Q352465 {biblio+metier}
+10677;Armand Guerra;ambiguë;;;;;;;;;Q62615811 [naissance 1933 ≠ 1886] | Q2861868 {biblio+metier} | Q95898856 {biblio}
+10678;Agustín Guillamón;contradiction;;;;;;;;;Q30229466 [naissance 1950 ≠ 1952] {biblio+metier}
+10679;James Guillaume;ambiguë;;;;;;;;;Q116617 {biblio+metier} | Q102260181 {biblio} | Q90425712 {chercheur}
+10680;Rafael Guimaraens;ambiguë;;;;;;;;;Q110617413 {biblio+metier} | Q97337883 {biblio+metier}
+10681;James Gullaume;introuvable;;;;;;;;;
+10682;Pippo Gurrieri;introuvable;;;;;;;;;
+10683;Salvador Gurucharri;à relire (un seul signal);;Q20968816;Salvador Gurucharri;1936;2014;ES;es;biblio;Q20968816 {biblio}
+10684;José Antonio Gutiérrez Danton;introuvable;;;;;;;;;
+10686;Jean-Marie Guyau;acceptée;oui;Q707490;Jean-Marie Guyau;1854;1888;FR;fr;biblio+metier;Q707490 {biblio+metier}
+10689;Cristina Guzzo;introuvable;;;;;;;;;
+10690;Ernest Haeckel;acceptée;oui;Q48246;Ernst Haeckel;1834;1919;DE;de;biblio+metier;Q48246 {biblio+metier}
+10691;A. Suprema Mestre Ching Hai;introuvable;;;;;;;;;
+10692;Marta Harnecker;acceptée;oui;Q452797;Marta Harnecker;1937;2019;CL;;biblio+metier;Q452797 {biblio+metier}
+10693;Clifford Harper;acceptée;oui;Q5132962;Clifford Harper;1949;;GB;en;biblio+metier+anarchisme;Q5132962 {biblio+metier+anarchisme}
+10694;Frank Harris;ambiguë;;;;;;;;;Q763507 {biblio+metier} | Q5487120 [naissance 1858 ≠ 1855, mort 1939 ≠ 1931] | Q5487126 [naissance 1907 ≠ 1855, mort 1936 ≠ 1931] | Q5487124 [naissance 1899 ≠ 1855, mort 1983 ≠ 1931] | Q18356117 [naissance 1883 ≠ 1855, mort 1961 ≠ 1931] | Q5487122 [naissance 1943 ≠ 1855, mort 2020 ≠ 1931] {biblio} | Q14950304 [naissance 1964 ≠ 1855] | Q16729665 [naissance 1948 ≠ 1855] | Q110154065 | Q112827079 {biblio+metier}
+10695;Jacque Lesage de La Haye;introuvable;;;;;;;;;
+10696;John Heartfield;acceptée;oui;Q168671;John Heartfield;1891;1968;DE;;biblio+metier;Q168671 {biblio+metier}
+10697;Jacqueline Heinen;acceptée;oui;Q3157739;Jacqueline Heinen;1940;;FR;;biblio+metier;Q3157739 {biblio+metier}
+10698;Peter Heintz;acceptée;oui;Q1748762;Peter Heintz;1920;1983;CH;;biblio+metier;Q1748762 {biblio+metier} | Q134251286 [naissance 1879 ≠ 1920, mort 1934 ≠ 1983]
+10699;Benoît-P. Hepner;acceptée;oui;Q140386597;Benoît P. Hepner;;;;fr;biblio+metier;Q140386597 {biblio+metier}
+10700;Henry Eric Hernández;à relire (un seul signal);;Q115380318;Henry Eric Hernandez;1971;;CU;;biblio;Q115380318 {biblio}
+10701;Aventuras na História;introuvable;;;;;;;;;
+10702;Antônio Hohlfeldt;acceptée;oui;Q16336728;Antônio Hohlfeldt;1948;;BR;pt;biblio+metier;Q16336728 {biblio+metier}
+10703;Bob Holton;acceptée;oui;Q19877938;Robert J. Holton;1946;;;en;biblio+metier;Q19877938 {biblio+metier}
+10704;F. Hombourger;introuvable;;;;;;;;;
+10707;Constantino Ianni;acceptée;oui;Q56221422;Constantino Ianni;1913;1977;BR;;biblio+metier;Q56221422 {biblio+metier}
+10708;Vicente Blasco Ibáñez;acceptée;oui;Q219646;Vicente Blasco Ibáñez;1867;1928;ES;es;biblio+metier;Q219646 {biblio+metier}
+10709;Salvador Gurucharri y Tomás Ibáñez;introuvable;;;;;;;;;
+10710;Dolores Ibarruri;acceptée;oui;Q238955;Dolores Ibárruri;1895;1989;;es;biblio+metier;Q238955 {biblio+metier}
+10711;Abelardo Iglesias;introuvable;;;;;;;;;
+10712;Anistia Internacional;introuvable;;;;;;;;;
+10713;IVa Internacional;introuvable;;;;;;;;;
+10716;Carlos Issa;introuvable;;;;;;;;;
+10717;Helena Iswolsky;introuvable;;;;;;;;;
+10719;Brian Jackson;ambiguë;;;;;;;;;Q55163166 {chercheur} | Q4964177 {biblio} | Q2402879 | Q18936006 {biblio+metier} | Q4964172 | Q4964166 [né 1987, publié dès 1981] | Q16091880 | Q4964173 | Q100982983 | Q4964167 {biblio}
+10720;J. Hampden Jackson;introuvable;;;;;;;;;
+10721;Mat Jacob;à relire (un seul signal);;Q99476641;Mat Jacob;1966;;FR;;biblio;Q99476641 {biblio}
+10722;Clemência Jacquinet;introuvable;;;;;;;;;
+10725;Paul Janet;acceptée;oui;Q565381;Paul Janet;1823;1899;FR;fr;biblio+metier;Q565381 {biblio+metier} | Q3371515 [naissance 1863 ≠ 1823, mort 1937 ≠ 1899] {biblio+metier} | Q6153321 [naissance 1919 ≠ 1823, mort 2004 ≠ 1899, né 1919, publié dès 1912] {biblio+metier} | Q76039412 [mort 1842 ≠ 1899]
+10726;Antony Jay;acceptée;oui;Q4354177;Antony Jay;1930;2016;GB;;biblio+metier;Q4354177 {biblio+metier} | Q121078848
+10727;Frank Jellinek;acceptée;oui;Q22670580;Frank Jellinek;1908;1975;US;;biblio+metier;Q22670580 {biblio+metier}
+10728;Marcolino Jeremias;introuvable;;;;;;;;;
+10729;Francisco García Jiménez;acceptée;oui;Q5865795;Francisco García Jiménez;1899;1983;AR;es;biblio+metier;Q5865795 {biblio+metier} | Q100754284 [naissance 1924 ≠ 1899, mort 1991 ≠ 1983]
+10730;Bernardo Joffily;acceptée;oui;Q9655325;Bernardo Joffily;1950;;BR;pt;biblio+metier;Q9655325 {biblio+metier}
+10731;James Joll;acceptée;oui;Q128229;James Joll;1918;1994;GB;;biblio+metier;Q128229 {biblio+metier} | Q75653604
+10732;Regina Celia Mazoni Jomini;introuvable;;;;;;;;;
+10733;Carlos M. Jordán;introuvable;;;;;;;;;
+10734;Édouard Jourdain;acceptée;oui;Q56682515;Édouard Jourdain;1981;;FR;;biblio+metier;Q56682515 {biblio+metier}
+10735;Camila Jourdan;acceptée;oui;Q108761279;Camila Jourdan;1980;;BR;;biblio+metier+anarchisme;Q108761279 {biblio+metier+anarchisme}
+10736;Paulo José da Costa Jr.;introuvable;;;;;;;;;
+10737;Armando Boito Jr.;introuvable;;;;;;;;;
+10738;Paulo Ghiraldelli Jr.;acceptée;oui;Q85876490;Paulo Ghiraldelli;1957;;BR;;biblio+metier;Q85876490 {biblio+metier}
+10740;Pedro Fontan Jubero;introuvable;;;;;;;;;
+10741;Jacques Julliard;acceptée;oui;Q3159199;Jacques Julliard;1933;2023;FR;fr;biblio+metier;Q3159199 {biblio+metier}
+10742;José Álvarez Junco;acceptée;oui;Q9014964;José Álvarez Junco;1942;;ES;es;biblio+metier;Q9014964 {biblio+metier}
+10743;Hilário Franco Júnior;acceptée;oui;Q139098638;Hilário Franco Júnior;1948;;;;biblio+metier;Q20049730 | Q139098638 {biblio+metier}
+10744;Luiz Augusto Costacurta Junqueira;introuvable;;;;;;;;;
+10745;Guerra Junqueiro;acceptée;oui;Q336918;Guerra Junqueiro;1850;1923;PT;pt;biblio+metier;Q336918 {biblio+metier}
+10746;Michel Justamand;introuvable;;;;;;;;;
+10747;Franz Kafka;acceptée;oui;Q905;Franz Kafka;1883;1924;CZ;de;biblio+metier;Q905 {biblio+metier} | Q111962205 [naissance 1894 ≠ 1883]
+10748;William Young and David E. KAISER;introuvable;;;;;;;;;
+10749;Temma Kaplan;acceptée;oui;Q29052250;Temma Kaplan;1942;;US;;biblio+metier;Q29052250 {biblio+metier}
+10750;Dainis Karepovs;contradiction;;;;;;;;;Q112384790 [naissance 1957 ≠ 1960] {biblio+metier}
+10752;Clóvis Nicanor Kassick;introuvable;;;;;;;;;
+10753;Paul Kenny;ambiguë;;;;;;;;;Q7151758 {biblio+metier} | Q28043419 | Q99592140 | Q110232767 {biblio} | Q106231815 | Q98970822
+10754;Jefferson Wille Kielwagen;introuvable;;;;;;;;;
+10755;Arthur Koestler;acceptée;oui;Q78494;Arthur Koestler;1905;1983;HU;;biblio+metier;Q78494 {biblio+metier}
+10756;Caterina Koltai;introuvable;;;;;;;;;
+10757;Boris Koval;acceptée;oui;Q112393995;Boris Koval;1930;2016;RU;;biblio+metier;Q112393995 {biblio+metier}
+10759;General Walter G. Krivitski;introuvable;;;;;;;;;
+10760;Acacia Kuenzer;introuvable;;;;;;;;;
+10761;M. Kun;à relire (un seul signal);;Q60041821;Mária Kun;1949;;HU;;biblio;Q60041821 {biblio}
+10762;Graziela Kunsch;acceptée;oui;Q28769457;Graziela Kunsch;1979;;BR;pt;biblio+metier;Q28769457 {biblio+metier}
+10763;Amir Labaki;ambiguë;;;;;;;;;Q16489812 {metier} | Q138927072 {biblio}
+10764;Benoît Ladarre;introuvable;;;;;;;;;
+10765;Paul Lafargue;acceptée;oui;Q317152;Paul Lafargue;1842;1911;FR;fr;biblio+metier;Q317152 {biblio+metier} | Q65147794 [naissance 1988 ≠ 1842, né 1988, publié dès 1975] | Q102304809 [mort 1921 ≠ 1911] {metier}
+10766;Gustav Landauer;acceptée;oui;Q61723;Gustav Landauer;1870;1919;DE;de;biblio+metier+anarchisme;Q61723 {biblio+metier+anarchisme} | Q105654419 [naissance 1887 ≠ 1870, mort 1944 ≠ 1919] | Q20879063 [naissance 1866 ≠ 1870, mort 1944 ≠ 1919] {biblio} | Q95248499 [mort 1881 ≠ 1919] {biblio}
+10767;Homer Lane;acceptée;oui;Q343438;Homer Lane;1875;1925;US;;biblio+metier;Q343438 {biblio+metier}
+10768;Jacques Langlois;ambiguë;;;;;;;;;Q98804971 {biblio} | Q98804969 {biblio} | Q98804957 {biblio} | Q98804963 {biblio+metier} | Q65587662 {biblio} | Q66121511 | Q123251019 {biblio} | Q137354986
+10769;E. Lanti;introuvable;;;;;;;;;
+10770;Luciano Lanza;contradiction;;;;;;;;;Q113794913 [naissance 1945 ≠ 1947] {biblio+metier}
+10771;François Laplantine;acceptée;oui;Q2382219;François Laplantine;1943;;FR;;biblio+metier;Q2382219 {biblio+metier}
+10772;Jean-Pierre Lardin;introuvable;;;;;;;;;
+10773;Companhia do Latão;introuvable;;;;;;;;;
+10774;Juan Lazarte;acceptée;oui;Q130356380;Juan Lazarte;1891;1963;AR;;biblio+metier;Q130356380 {biblio+metier}
+10775;Pigault Lebrun;acceptée;oui;Q3388279;Pigault-Lebrun;1753;1835;FR;fr;biblio+metier;Q3388279 {biblio+metier}
+10776;Gilbert R. Ledon;acceptée;oui;Q12348263;Gilbert Ledon;1931;2003;;eo;biblio+metier;Q12348263 {biblio+metier}
+10777;Dennis Lehane;acceptée;oui;Q311744;Dennis Lehane;1965;;US;en;biblio+metier;Q311744 {biblio+metier}
+10778;Ascendino Leite;acceptée;oui;Q139057579;Ascendino Leite;1915;;;;biblio+metier;Q139057579 {biblio+metier}
+10779;Miriam Lifchitz Moreira Leite;acceptée;oui;Q111743980;Miriam Moreira Leite;1926;2013;BR;;biblio+metier;Q111743980 {biblio+metier}
+10780;Floriano de Lemos;introuvable;;;;;;;;;
+10781;Alcir Lenharo;contradiction;;;;;;;;;Q133840252 [mort 1996 ≠ 1993] {metier}
+10782;Vladimir Ilich Lênin;acceptée;oui;Q1394;Lénine;1870;1924;RU;ru;biblio+metier;Q1394 {biblio+metier}
+10783;Deise Leopoldi;introuvable;;;;;;;;;
+10784;Sheldon Leslie;introuvable;;;;;;;;;
+10785;Simon Leys;acceptée;oui;Q732583;Simon Leys;1935;2014;BE;fr;biblio+metier;Q732583 {biblio+metier}
+10787;Ramón Liarte;déjà liée;oui;Q11944696;Ramón Liarte Viu;1918;2004;ES;es;biblio+metier;Q11944696 {biblio+metier}
+10788;Nelson Libero;introuvable;;;;;;;;;
+10789;Albert Libertad;déjà liée;oui;Q603868;Albert Libertad;1875;1908;FR;fr;biblio+metier+anarchisme;Q603868 {biblio+metier+anarchisme}
+10795;George Lichtheim;acceptée;oui;Q693613;George Lichtheim;1912;1973;DE;;biblio+metier;Q693613 {biblio+metier}
+10796;Clara E. Lida;acceptée;oui;Q5771128;Clara Lida;1941;;AR;es;biblio+metier;Q5771128 {biblio+metier}
+10797;Adolfo Lima;contradiction;;;;;;;;;Q4684246 [naissance 1990 ≠ 1883, né 1990, publié dès 1909] | Q9583502 [naissance 1874 ≠ 1883] {biblio+metier}
+10799;Maria Emilia A. T. Lima;introuvable;;;;;;;;;
+10800;Rogério Lima;non corroborée;;;;;;;;;Q95718171
+10801;Hermínio Linhares;introuvable;;;;;;;;;
+10802;Edmond Marc Lipiansky;contradiction;;;;;;;;;Q3047919 [naissance 1939 ≠ 1931] {biblio+metier}
+10804;Abel Lisman;introuvable;;;;;;;;;
+10805;Jesús Lizano;acceptée;oui;Q11032899;Jesús Lizano;1931;2015;ES;;biblio+metier;Q11032899 {biblio+metier}
+10806;Joan Llarch;acceptée;oui;Q16943161;Joan Llarch;1920;1987;ES;es;biblio+metier;Q16943161 {biblio+metier}
+10807;Elisabeth Souza Lobo;acceptée;oui;Q133585839;Elisabeth Souza Lobo;1943;1991;;;biblio+metier;Q133585839 {biblio+metier}
+10808;Julio Lobos;introuvable;;;;;;;;;
+10809;Michel Lobrot;contradiction;;;;;;;;;Q3310198 [mort 2019 ≠ 2006] {biblio+metier}
+10810;Beatriz Pellizzetti Lolla;à relire (un seul signal);;Q139067791;Beatriz Pellizzetti Lolla;1930;;;;biblio;Q139067791 {biblio}
+10811;Jack London;acceptée;oui;Q45765;Jack London;1876;1916;US;en;biblio+metier;Q45765 {biblio+metier} | Q1384076 [naissance 1905 ≠ 1876, mort 1966 ≠ 1916] {biblio} | Q6113731 [naissance 1913 ≠ 1876, mort 1963 ≠ 1916] {biblio} | Q109982296 [naissance 1949 ≠ 1876]
+10812;Alberto da Costa Lopes;introuvable;;;;;;;;;
+10813;Ana Beatriz Crespo Fernandes Lopes;introuvable;;;;;;;;;
+10814;Marcos Antonio Lopes;non corroborée;;;;;;;;;Q58433015 {chercheur}
+10815;Maria Margaret Lopes;à relire (un seul signal);;Q59150756;Maria Margaret Lopes;;;;;biblio+chercheur;Q59150756 {biblio+chercheur}
+10816;Milton Lopes;non corroborée;;;;;;;;;Q10330128
+10817;Alfredo López;non corroborée;;;;;;;;;Q24956290
+10818;Antonio López;ambiguë;;;;;;;;;Q1257924 {biblio+metier} | Q299360 [né 1981, publié dès 1987] | Q602865 {biblio+metier} | Q189145 {biblio} | Q57422715 {biblio+chercheur} | Q63677085 | Q363872
+10819;Fábio López López;introuvable;;;;;;;;;
+10820;Christina Da Silva Roquette Lopreato;à relire (un seul signal);;Q139063997;Christina da Silva Roquette Lopreato;1953;;;;biblio;Q139063997 {biblio}
+10822;Francisco Valdomiro Lorenz;acceptée;oui;Q55963;František Lorenz;1872;1957;CZ;cs;biblio+metier;Q55963 {biblio+metier}
+10823;Anselmo Lorenzo;acceptée;oui;Q174770;Anselmo Lorenzo;1841;1914;ES;es;biblio+metier+anarchisme;Q174770 {biblio+metier+anarchisme}
+10824;Albert Low;acceptée;oui;Q4710748;Albert Low;1928;2016;CA;;biblio+metier;Q4710748 {biblio+metier} | Q105557656 [naissance 1930 ≠ 1928]
+10825;Juan G. de Luaces;acceptée;oui;Q93427693;Juan G. de Luaces;1906;1963;;;biblio;Q93427693 {biblio}
+10827;Lya Fett Luft;acceptée;oui;Q545476;Lya Luft;1938;2021;BR;pt;biblio+metier;Q545476 {biblio+metier}
+10828;Flávio Luizzetto;introuvable;;;;;;;;;
+10830;Asel Luzarraga;acceptée;oui;Q3572157;Asel Luzarraga;1971;;ES;;biblio+metier;Q3572157 {biblio+metier}
+10831;Joaquim Manuel de Macedo;acceptée;oui;Q727148;Joaquim Manuel de Macedo;1820;1882;BR;pt;biblio+metier;Q727148 {biblio+metier} | Q20048188 [naissance 1847 ≠ 1820, mort 1925 ≠ 1882]
+10832;António de Alcântara Machado;acceptée;oui;Q4713403;Alcântara Machado;1901;1935;BR;pt;biblio+metier;Q4713403 {biblio+metier}
+10833;Paulo Henrique Machado;non corroborée;;;;;;;;;Q109983070
+10834;Jesús Giráldez Macía;introuvable;;;;;;;;;
+10835;Juan Madri;introuvable;;;;;;;;;
+10836;Eduado Maffei;introuvable;;;;;;;;;
+10837;Eduardo Maffei;introuvable;;;;;;;;;
+10838;Diógenes Magalhães;introuvable;;;;;;;;;
+10839;Silvia Lang Magnani;introuvable;;;;;;;;;
+10840;Ricardo Flores Magón;acceptée;oui;Q146948;Ricardo Flores Magón;1873;1922;MX;es;biblio+metier+anarchisme;Q146948 {biblio+metier+anarchisme}
+10842;Norman Mailer;acceptée;oui;Q180962;Norman Mailer;1923;2007;US;en;biblio+metier;Q180962 {biblio+metier} | Q139409478 [naissance 1925 ≠ 1923]
+10843;Jordi Maíz;acceptée;oui;Q4889143;Jorge Maíz Chacón;1977;;ES;es;biblio+metier;Q4889143 {biblio+metier}
+10844;Carlos Malato;acceptée;oui;Q2959746;Charles Malato;1857;1938;FR;fr;biblio+metier+anarchisme;Q2959746 {biblio+metier+anarchisme}
+10845;Laren H. de Maldonado;introuvable;;;;;;;;;
+10846;Rogerio R. Malta;introuvable;;;;;;;;;
+10847;Mario Alighiero Manacorda;contradiction;;;;;;;;;Q3848268 [mort 2013 ≠ 2004] {biblio+metier}
+10848;Jean-Marc Mandosio;acceptée;oui;Q3167430;Jean-Marc Mandosio;1963;;FR;;biblio+metier;Q3167430 {biblio+metier}
+10849;Sílvia Maria Manfredi;introuvable;;;;;;;;;
+10850;Karl Mannheim;acceptée;oui;Q76823;Karl Mannheim;1893;1947;HU;hu;biblio+metier;Q76823 {biblio+metier} | Q60029688 | Q133319065 [naissance 1963 ≠ 1893, né 1963, publié dès 1972] {biblio}
+10851;Maria de Lourdes Manzini-Covre;introuvable;;;;;;;;;
+10852;Meli Wixan Mapu;introuvable;;;;;;;;;
+10853;Alexandre Marc;acceptée;oui;Q2643756;Alexandre Marc;1904;2000;UA;ru;biblio+metier;Q2643756 {biblio+metier} | Q3090733 [naissance 1959 ≠ 1904, né 1959, publié dès 1945]
+10854;João Batista Marçal;introuvable;;;;;;;;;
+10855;Tito Marcondes;introuvable;;;;;;;;;
+10856;Subcomandante Insurgente Marcos;acceptée;oui;Q491635;Sous-commandant Marcos;1957;;MX;;biblio+metier;Q491635 {biblio+metier}
+10858;Francisco Pi y Margall;acceptée;oui;Q450271;Francisco Pi y Margall;1824;1901;ES;es;biblio+metier;Q450271 {biblio+metier}
+10860;Dolors Marín;acceptée;oui;Q65684106;Dolors Marín Silvestre;1957;;ES;;biblio+metier;Q65684106 {biblio+metier}
+10861;Isabelle Marinone;acceptée;oui;Q131774177;Isabelle Marinone;1975;;;;biblio+metier;Q123574237 | Q131774177 {biblio+metier}
+10862;Vera Regina Beltrão Marques;introuvable;;;;;;;;;
+10864;Alejandro Marti;à relire (un seul signal);;Q57234318;Alejandro Marti;1945;;;;biblio+chercheur;Q108237331 | Q57234318 {biblio+chercheur}
+10866;Beltrán Roca Martínez;déjà liée;oui;Q113381038;Beltrán Roca Martínez;1979;;ES;es;biblio+metier;Q113381038 {biblio+metier}
+10867;Jose Augustin Martinez;introuvable;;;;;;;;;
+10868;Orlando Villanueva Martínez;introuvable;;;;;;;;;
+10869;Oliveira Martins;contradiction;;;;;;;;;Q1399091 [mort 1894 ≠ 1898] {biblio+metier}
+10870;Victor Martins;à relire (un seul signal);;Q9095355;Vítor Martins;1944;;BR;pt;biblio;Q28043364 [né 2001, publié dès 2003] | Q9095355 {biblio}
+10871;Domenico De Masi;acceptée;oui;Q3713005;Domenico De Masi;1938;2023;IT;it;biblio+metier;Q3713005 {biblio+metier}
+10872;Pier Carlo Masini;acceptée;oui;Q1276741;Pier Carlo Masini;1923;1998;IT;it;biblio+metier;Q1276741 {biblio+metier}
+10873;Eduard Masjuan;acceptée;oui;Q85951203;Eduard Masjuan i Bracons;1956;;ES;es;biblio+metier;Q85951203 {biblio+metier}
+10874;João da Mata;non corroborée;;;;;;;;;Q10312375 | Q10312379
+10875;Andityas Soares de Costa Matos;introuvable;;;;;;;;;
+10876;Marcelo Badaró Mattos;acceptée;oui;Q137106544;Marcelo Badaró Mattos;1966;;;;biblio+metier;Q137106544 {biblio+metier}
+10877;Carlos Semprun Maura;acceptée;oui;Q2555120;Carlos Semprún Maura;1926;2009;ES;;biblio+metier;Q2555120 {biblio+metier}
+10878;Jacques Maurice;ambiguë;;;;;;;;;Q65592586 | Q14517540 {biblio+metier} | Q37822599 {biblio+metier}
+10879;Arno J. Mayer;acceptée;oui;Q688955;Arno Mayer;1926;2023;LU;;biblio+metier;Q688955 {biblio+metier}
+10880;Mark Mazower;acceptée;oui;Q984165;Mark Mazower;1958;;GB;;biblio+metier;Q984165 {biblio+metier}
+10881;Ulrike Meinhof;acceptée;oui;Q76543;Ulrike Meinhof;1934;1976;DE;de;biblio+metier;Q76543 {biblio+metier}
+10882;Aníbal Vaz de Melo;introuvable;;;;;;;;;
+10883;Ângela Mendes De Almeida;à relire (un seul signal);;Q133827817;Angela Mendes de Almeida;1938;;;;biblio;Q133827817 {biblio}
+10884;Manuel da Silva Mendes;acceptée;oui;Q10324597;Manuel da Silva Mendes;1867;1931;PT;pt;biblio+metier;Q10324597 {biblio+metier} | Q133699740 [naissance 1876 ≠ 1867] {biblio}
+10885;José Carlos Mendonça;introuvable;;;;;;;;;
+10886;Gino Amleto Meneghetti;contradiction;;;;;;;;;Q3764669 [naissance 1878 ≠ 1882] {biblio}
+10887;Djacir Menezes;acceptée;oui;Q10267663;Djacir Menezes;1907;1996;BR;pt;biblio+metier;Q10267663 {biblio+metier}
+10888;Lená Medeiros de Menezes;introuvable;;;;;;;;;
+10889;Sud Mennucci;acceptée;oui;Q7215716;Sud Mennucci;1892;1948;BR;pt;biblio+metier;Q7215716 {biblio+metier}
+10890;Louis Mercier-Vega;acceptée;oui;Q15407203;Louis Mercier-Vega;1914;1977;BE;fr;biblio;Q15407203 {biblio}
+10891;Saverio Merlino;introuvable;;;;;;;;;
+10892;István Mészáros;acceptée;oui;Q128179;István Mészáros;1930;2017;HU;;biblio+metier;Q128179 {biblio+metier} | Q936520 [naissance 1899 ≠ 1930, mort 1944 ≠ 2017] | Q1213048 [mort 2007 ≠ 2017] {biblio} | Q1213046 [naissance 1980 ≠ 1930] | Q63163203 [naissance 1950 ≠ 1930] | Q109887635 | Q957882 [naissance 1969 ≠ 1930] | Q15126747 [naissance 1933 ≠ 1930, mort 1994 ≠ 2017] | Q51880830 [naissance 1959 ≠ 1930] | Q1213051 [naissance 1890 ≠ 1930, mort 1964 ≠ 2017] {biblio+metier}
+10893;Ida Mett;acceptée;oui;Q274122;Ida Mett;1901;1973;BY;;biblio+metier;Q274122 {biblio+metier}
+10894;Jules Michelet;acceptée;oui;Q310791;Jules Michelet;1798;1874;FR;fr;biblio+metier;Q310791 {biblio+metier}
+10895;Ruth Middleton;non corroborée;;;;;;;;;Q18156643 | Q75332364 | Q76314969
+10896;Maria Alice Millet;introuvable;;;;;;;;;
+10897;Carlos Minc;acceptée;oui;Q2464253;Carlos Minc;1951;;BR;pt;biblio+metier;Q2464253 {biblio+metier}
+10898;Helene Minkin;à relire (un seul signal);;Q59884818;Helene Minkin;1873;1954;;;biblio;Q59884818 {biblio}
+10899;Jerome R. Mintz;contradiction;;;;;;;;;Q16581371 [mort 1997 ≠ 2019] {biblio+metier}
+10901;José Luis Carretero Miramar;introuvable;;;;;;;;;
+10902;Pontes de Miranda;introuvable;;;;;;;;;
+10903;Octave Mirbeau;acceptée;oui;Q23441;Octave Mirbeau;1848;1917;FR;fr;biblio+metier;Q23441 {biblio+metier}
+10904;Renato Modernell;acceptée;oui;Q10359355;Renato Modernell;1953;;BR;pt;biblio+metier;Q10359355 {biblio+metier}
+10905;José Álvaro Moisés;à relire (un seul signal);;Q21290371;José Álvaro Moisés;1945;2026;;;metier;Q21290371 {metier}
+10906;Carlo Molaschi;acceptée;oui;Q63302027;Carlo Molaschi;1886;1953;IT;it;biblio+metier+anarchisme;Q63302027 {biblio+metier+anarchisme}
+10907;José Luís Gutiérrez Molina;acceptée;oui;Q51862284;José Luis Gutiérrez Molina;1952;;ES;es;biblio+metier;Q51862284 {biblio+metier}
+10908;Gustavo de Molinari;introuvable;;;;;;;;;
+10909;Fabrício Pinto Monteiro;introuvable;;;;;;;;;
+10910;Federica Montseny;acceptée;oui;Q549307;Federica Montseny;1905;1994;ES;es;biblio+anarchisme;Q549307 {biblio+anarchisme}
+10911;Frederica Montseny;acceptée;oui;Q549307;Federica Montseny;1905;1994;ES;es;biblio+anarchisme;Q549307 {biblio+anarchisme}
+10912;Michael Moore;ambiguë;;;;;;;;;Q174908 {biblio+metier} | Q333446 [naissance 1965 ≠ 1954] | Q47468073 [naissance 1970 ≠ 1954] | Q40220120 {chercheur} | Q6832887 [naissance 1950 ≠ 1954] | Q1752903 [naissance 1945 ≠ 1954] {biblio} | Q6833205 [naissance 1963 ≠ 1954] | Q1928646 {biblio} | Q6832892 [naissance 1976 ≠ 1954] {biblio} | Q110318554
+10913;João Baptista de Moraes;introuvable;;;;;;;;;
+10914;Wallace Moraes;introuvable;;;;;;;;;
+10917;Juan Diaz del Moral;acceptée;oui;Q5575370;Juan Díaz del Moral;1870;1948;ES;es;biblio+metier;Q5575370 {biblio+metier}
+10918;Ana Paula Massadar Morel;introuvable;;;;;;;;;
+10919;Edmar Morel;acceptée;oui;Q10270440;Edmar Morel;1912;;BR;pt;biblio+metier;Q10270440 {biblio+metier}
+10920;Giménez Moreno;introuvable;;;;;;;;;
+10921;Eduard Mörike;acceptée;oui;Q63699;Eduard Mörike;1804;1875;DE;de;biblio+metier;Q63699 {biblio+metier} | Q1289373 [naissance 1877 ≠ 1804, mort 1929 ≠ 1875] {biblio+metier}
+10922;Mitsue Morissawa;introuvable;;;;;;;;;
+10923;Félix García Moriyón;acceptée;oui;Q93435798;Félix García Moriyón;1950;;;;biblio+metier;Q93435798 {biblio+metier}
+10924;Fabian Moro;introuvable;;;;;;;;;
+10925;Félix García Moryón;introuvable;;;;;;;;;
+10926;Johann Most;acceptée;oui;Q213632;Johann Most;1846;1906;DE;de;biblio+metier+anarchisme;Q213632 {biblio+metier+anarchisme}
+10927;Shozo Motoyama;acceptée;oui;Q139064963;Shozo Motoyama;1940;;;;biblio+metier;Q131341277 | Q139064963 {biblio+metier}
+10929;Claúdio Moura Castro;introuvable;;;;;;;;;
+10930;Esmeralda Blanco Bolsonaro de Moura;acceptée;oui;Q56849510;Esmeralda Blanco Bolsonaro de Moura;;;BR;;biblio+metier;Q56849510 {biblio+metier}
+10931;Helena Isabel Mueller;introuvable;;;;;;;;;
+10932;Erich Mühsan;introuvable;;;;;;;;;
+10933;Alfredo Gómez Muller;à relire (un seul signal);;Q132989147;Alfredo Gomez-Muller;1950;;;;biblio;Q132989147 {biblio}
+10934;Julián Vadillo Muñoz;introuvable;;;;;;;;;
+10935;Manuel Morales Muñoz;acceptée;oui;Q137121041;Manuel Morales Muñoz;1954;;;;biblio+metier;Q137121041 {biblio+metier}
+10936;V. Muñoz;introuvable;;;;;;;;;
+10937;Vladimiro Muñoz;contradiction;;;;;;;;;Q55999376 [naissance 1920 ≠ 1930, mort 2004 ≠ 2020] {biblio+metier}
+10938;Adrián Murano;à relire (un seul signal);;Q139098015;Adrián Murano;1973;;;;biblio;Q139098015 {biblio}
+10939;Matteu Muratori;introuvable;;;;;;;;;
+10940;Alfred de Musset;acceptée;oui;Q179680;Alfred de Musset;1810;1857;FR;fr;biblio+metier;Q179680 {biblio+metier}
+10942;Ignacio Vidal y Pedro Costa Musté;introuvable;;;;;;;;;
+10943;Rogério H. Z. Nasciemnto;introuvable;;;;;;;;;
+10944;Rogério Humberto Zeferino Nascimento;à relire (un seul signal);;Q139101726;Rogério Humberto Zeferino Nascimento;1966;;;;biblio;Q139101726 {biblio}
+10945;David Nasser;contradiction;;;;;;;;;Q85653939 | Q1791543 [mort 1980 ≠ 1986] {biblio+metier}
+10947;André Nataf;acceptée;oui;Q117471189;Andre Nataf;1915;1968;FR;;biblio+metier;Q131803323 | Q117471189 {biblio+metier}
+10948;Francisco Javier Navarro Navarro;ambiguë;;;;;;;;;Q118712925 {metier} | Q137108551 {biblio+metier}
+10949;Javier Navarro;non corroborée;;;;;;;;;Q135266852 | Q164073
+10950;Sergei Nechayev;acceptée;oui;Q430883;Serge Netchaïev;1847;1882;RU;;biblio+metier;Q430883 {biblio+metier}
+10951;Eric Nepomuceno;acceptée;oui;Q28145555;Eric Nepomuceno;1948;;BR;pt;biblio+metier;Q28145555 {biblio+metier}
+10952;Adalberto Coutinho de Araujo Neto;introuvable;;;;;;;;;
+10953;Candido de Mello Neto;introuvable;;;;;;;;;
+10954;Oscar Farinha Neto;introuvable;;;;;;;;;
+10955;Hermano Neves;acceptée;oui;Q94516482;Hermano Neves;1884;1929;PT;;biblio+metier;Q94516482 {biblio+metier}
+10956;Lucília de Almeida Neves;introuvable;;;;;;;;;
+10957;D. Nicolici;introuvable;;;;;;;;;
+10958;Agustín Nieto;non corroborée;;;;;;;;;Q102355050 | Q122954000
+10959;Friedrich Nietzsche;acceptée;oui;Q9358;Friedrich Nietzsche;1844;1900;DE;de;biblio+metier;Q9358 {biblio+metier} | Q28471262 [naissance 1795 ≠ 1844, mort 1833 ≠ 1900] {biblio+metier}
+10960;Arnaldo Niskier;acceptée;oui;Q690448;Arnaldo Niskier;1935;;BR;pt;biblio+metier;Q690448 {biblio+metier}
+10961;Francisco José Cuevas Noa;introuvable;;;;;;;;;
+10962;Cristina Noble;introuvable;;;;;;;;;
+10963;Marco Aurélio Nogueira;à relire (un seul signal);;Q10325306;Marco Aurélio Nogueira;1949;;;;metier;Q10325306 {metier}
+10964;Max Nomad;acceptée;oui;Q1914046;Max Nomad;1881;1973;UA;de;biblio+metier+anarchisme;Q1914046 {biblio+metier+anarchisme}
+10965;Sérgio Augusto Queiroz Norte;introuvable;;;;;;;;;
+10966;J. Novicow;introuvable;;;;;;;;;
+10967;Notes from Nowhere;introuvable;;;;;;;;;
+10968;Alfredo Velasco Núñez;introuvable;;;;;;;;;
+10969;Geni Núñez;à relire (un seul signal);;Q125471857;Geni Papos;;;BR;;metier;Q125471857 {metier}
+10970;Howard Vicent O'Brien;introuvable;;;;;;;;;
+10971;Flor O'squarr;à relire (exclue à la relecture);;Q105808686;Charles Flor O'Squarr;1830;1890;BE;;biblio+metier;Q105808686 {biblio+metier}
+10973;Abdullah Öcalan;déjà liée;oui;Q191530;Abdullah Öcalan;;;TR;tr;biblio+metier;Q191530 {biblio+metier}
+10974;Georges Ohsawa;acceptée;oui;Q561917;Georges Ohsawa;1893;1966;JP;;biblio+metier;Q561917 {biblio+metier}
+10975;Antônio Carlos de Oliveira;à relire (un seul signal);;Q16336699;Antônio Carlos de Oliveira;1948;;BR;pt;biblio;Q16336699 {biblio} | Q109981859
+10976;César de Oliveira;ambiguë;;;;;;;;;Q24701338 {biblio+metier} | Q30939636 {metier} | Q5202657 [né 1977, publié dès 1974]
+10977;Jane Oliveira;introuvable;;;;;;;;;
+10978;Joelson Ferreira Oliveira;introuvable;;;;;;;;;
+10979;Paulo de Salles Oliveira;à relire (un seul signal);;Q112454959;Paulo de Salles Oliveira;1950;;;;biblio;Q112454959 {biblio}
+10980;Roberta Pires de Oliveira;à relire (un seul signal);;Q113822596;Roberta Pires de Oliveira;;;;;biblio;Q113822596 {biblio}
+10981;Pedro García Olivo;acceptée;oui;Q11940708;Pedro García Olivo;1961;;ES;es;biblio+metier;Q11940708 {biblio+metier}
+10982;Maria Aparecida Munhoz De Omena;introuvable;;;;;;;;;
+10983;Amedeo Bertolo Org.;introuvable;;;;;;;;;
+10984;Célia Reis Camargo Org.;introuvable;;;;;;;;;
+10986;José Antonio Gutiérrez D. Org.;introuvable;;;;;;;;;
+10987;Luigi Galleani Org.;introuvable;;;;;;;;;
+10988;Miguel Abensour Org.;introuvable;;;;;;;;;
+10989;Helmut Ortner;acceptée;oui;Q23060763;Helmut Ortner;1950;;DE;;biblio+metier;Q40329837 | Q23060763 {biblio+metier}
+10990;Hernando Calvo Ospina;acceptée;oui;Q425825;Hernando Calvo Ospina;1961;;CO;es;biblio+metier;Q425825 {biblio+metier}
+10991;Geraldina P. Witter e Outros;introuvable;;;;;;;;;
+10992;Iaacov Oved;introuvable;;;;;;;;;
+10993;Pierre Van Paassen;acceptée;oui;Q12410568;Pierre van Paassen;1895;1968;NL;nl;biblio+metier;Q12410568 {biblio+metier}
+10994;Antônio Luiz Paixão;introuvable;;;;;;;;;
+10995;Leopoldo Palacios;introuvable;;;;;;;;;
+10996;G. Palante;introuvable;;;;;;;;;
+10997;Georges Palante;acceptée;oui;Q603485;Georges Palante;1862;1925;FR;fr;biblio+metier;Q603485 {biblio+metier}
+10998;Aércio Palheta;introuvable;;;;;;;;;
+10999;Marco Pandin;introuvable;;;;;;;;;
+11000;Javier Paniagua;acceptée;oui;Q3163161;Javier Paniagua;1946;;ES;es;biblio+metier;Q3163161 {biblio+metier}
+11001;Anton Pannekoek;déjà liée;oui;Q347930;Anton Pannekoek;1873;1960;;nl;biblio+metier;Q347930 {biblio+metier}
+11002;Julio R. Parcos;introuvable;;;;;;;;;
+11003;Bárbara Parham;introuvable;;;;;;;;;
+11004;Robert Paris;ambiguë;;;;;;;;;Q7348273 [né 1978, publié dès 1974] | Q7348275 | Q42953468 {biblio+metier} | Q98251912
+11005;Lucy Parsons;acceptée;oui;Q3090218;Lucy Parsons;1851;1942;US;;biblio+metier+anarchisme;Q3090218 {biblio+metier+anarchisme} | Q138935983 | Q107339468 [mort 1793 ≠ 1942]
+11006;Silvina Pascucci;introuvable;;;;;;;;;
+11007;Masimo Passamani;introuvable;;;;;;;;;
+11008;Louis Patsouras;acceptée;oui;Q110936958;Louis Patsouras;;;;en;biblio+metier;Q110936958 {biblio+metier}
+11009;Zuleide de Paula;introuvable;;;;;;;;;
+11010;Maria Célia Rua de Almeida Paulillo;introuvable;;;;;;;;;
+11011;Ouvidoria do Estado de São Paulo;introuvable;;;;;;;;;
+11012;Luis Pazos;ambiguë;;;;;;;;;Q6700980 {biblio+metier} | Q5984153 {biblio+metier} | Q133323017 {biblio}
+11013;Pere Peinard;introuvable;;;;;;;;;
+11014;Nize Maria Campos Pellanda;introuvable;;;;;;;;;
+11015;Dr Madeleine Pelletier;introuvable;;;;;;;;;
+11016;Philippe Pelletier;acceptée;oui;Q3380513;Philippe Pelletier;1956;;FR;fr;biblio+metier+anarchisme;Q3380513 {biblio+metier+anarchisme} | Q65595568 [naissance 1958 ≠ 1956] | Q137693714
+11017;Maria Valéria Junho Pena;introuvable;;;;;;;;;
+11018;Jacob Penteado;introuvable;;;;;;;;;
+11019;Manoel Perdigão Saavedra;introuvable;;;;;;;;;
+11020;Dionísio Pereira;acceptée;oui;Q12387111;Dionisio Pereira;1953;;ES;es;biblio+metier;Q95980725 | Q12387111 {biblio+metier}
+11021;Luiz Pereira;non corroborée;;;;;;;;;Q23893615 | Q64846747
+11022;Benjamín Péret;acceptée;oui;Q284769;Benjamin Péret;1899;1959;FR;fr;biblio+metier;Q284769 {biblio+metier} | Q56943631 [naissance 1980 ≠ 1899] {biblio+chercheur}
+11023;Manuel Pérez;ambiguë;;;;;;;;;Q962854 {biblio} | Q16105181 {biblio+metier} | Q1891675 | Q888747 | Q6752808 | Q110226636 {biblio} | Q3299323 {biblio}
+11024;Nilmara Cristina Perissini;introuvable;;;;;;;;;
+11025;Nestor Perlongher;acceptée;oui;Q7071482;Néstor Perlongher;1949;1992;AR;es;biblio+metier;Q7071482 {biblio+metier}
+11026;Michel Perraudeau;à relire (un seul signal);;Q131565246;Michel Perraudeau;1949;;FR;;biblio;Q131565246 {biblio}
+11027;Michelle Perrot;acceptée;oui;Q3311452;Michelle Perrot;1928;;FR;fr;biblio+metier;Q3311452 {biblio+metier}
+11028;Sílvia Regina Ferraz Petersen;acceptée;oui;Q23893515;Sílvia Regina Ferraz Petersen;1940;;BR;pt;biblio+metier;Q23893515 {biblio+metier}
+11029;Silvia Regina Ferraz Peterson;introuvable;;;;;;;;;
+11030;Jean-Christian Petitfils;acceptée;oui;Q3164719;Jean-Christian Petitfils;1944;;FR;fr;biblio+metier;Q3164719 {biblio+metier}
+11031;Aymará Petrabissi;introuvable;;;;;;;;;
+11032;S. M. Petritchenko;introuvable;;;;;;;;;
+11033;Yves Peyraut;acceptée;oui;Q3573893;Yves Peyraut;1934;2002;FR;fr;biblio+metier;Q3573893 {biblio+metier}
+11034;Óscar Peyrou;introuvable;;;;;;;;;
+11035;Duka e Marco Philopat;introuvable;;;;;;;;;
+11037;Marco Philopat;acceptée;oui;Q3846361;Marco Philopat;1962;;IT;it;biblio+metier;Q3846361 {biblio+metier}
+11038;Marc Pierrot;acceptée;oui;Q80510979;Marc Pierrot;1871;1950;FR;;biblio+anarchisme;Q80510979 {biblio+anarchisme} | Q139611696
+11039;Valdir Pietre;introuvable;;;;;;;;;
+11040;Alberto Pimenta;acceptée;oui;Q2543124;Alberto Pimenta;1937;;PT;pt;biblio+metier;Q2543124 {biblio+metier}
+11041;Antonio de Serpa Pimentel;acceptée;oui;Q558201;António de Serpa Pimentel;1825;1900;PT;pt;biblio;Q558201 {biblio}
+11042;Beatriz Pinheiro;acceptée;oui;Q9652430;Beatriz Pinheiro;1871;1922;PT;pt;biblio+metier;Q9652430 {biblio+metier}
+11043;Paulo Sérgio de Moraes Sarmento Pinheiro;introuvable;;;;;;;;;
+11044;Céli Regina J. Pinto;introuvable;;;;;;;;;
+11045;Lúcio Flávio Pinto;à relire (un seul signal);;Q6711448;Lúcio Flávio Pinto;1949;;BR;;metier;Q6711448 {metier}
+11046;Patrizia Piozzi;introuvable;;;;;;;;;
+11047;Camille Pissarro;acceptée;oui;Q134741;Camille Pissarro;1830;1903;;fr;biblio+metier;Q134741 {biblio+metier}
+11048;Fernando Planche;introuvable;;;;;;;;;
+11049;Alice Anabuki Plancherel;introuvable;;;;;;;;;
+11050;Jean Poirier;ambiguë;;;;;;;;;Q23855295 {biblio+metier} | Q76757800 {biblio+metier} | Q29622345 | Q3174064 | Q101511041 | Q125209154
+11051;Leon Pomer;à relire (un seul signal);;Q140478476;;1928;2024;AR;;metier;Q140478476 {metier}
+11052;Joshua Popenoe;introuvable;;;;;;;;;
+11053;Baltazar Porcel;introuvable;;;;;;;;;
+11054;Richard Porton;à relire (un seul signal);;Q111033942;Richard Porton;;;US;;biblio;Q111033942 {biblio}
+11055;Emile Pouget;acceptée;oui;Q286358;Émile Pouget;1860;1931;FR;fr;biblio+metier;Q286358 {biblio+metier} | Q117832267
+11056;Sergio Pereira Poza;introuvable;;;;;;;;;
+11058;Antônio de Almeida Prado;déjà liée;;Q9623207;Antônio de Almeida Prado;1889;1965;BR;;biblio+metier;Q9623207 {biblio+metier}
+11059;Camilo Prado;introuvable;;;;;;;;;
+11060;Dino Preti;à relire (un seul signal);;Q10266491;Dino Preti;1930;2024;BR;pt;biblio;Q10266491 {biblio}
+11061;Andy Price;ambiguë;;;;;;;;;Q4761191 {biblio} | Q16734717 {biblio+metier} | Q95800052 {biblio}
+11062;Edmond Privat;acceptée;oui;Q12571;Edmond Privat;1889;1962;CH;fr;biblio+metier;Q12571 {biblio+metier} | Q117771327
+11063;Georgio Prodi;introuvable;;;;;;;;;
+11065;B. Prus;introuvable;;;;;;;;;
+11066;Mimmo Pucciarelli;contradiction;;;;;;;;;Q61482420 [naissance 1954 ≠ 1942] {biblio+anarchisme}
+11067;Isaac Puente;acceptée;oui;Q2595685;Isaac Puente Amestoy;1896;1936;ES;es;biblio+metier+anarchisme;Q2595685 {biblio+metier+anarchisme}
+11068;Cnl (R) Orlando Mario Punzi;introuvable;;;;;;;;;
+11069;Graham Purchase;acceptée;oui;Q108764102;Graham Purchase;1964;;;en;biblio+metier+anarchisme;Q108764102 {biblio+metier+anarchisme}
+11070;Eugene Pyziur;introuvable;;;;;;;;;
+11071;Miriam Qarmat;introuvable;;;;;;;;;
+11073;Clara Queiroz;à relire (un seul signal);;Q110953256;Clara Queiroz;1933;;PT;pt;biblio;Q110953256 {biblio}
+11074;Eça de Queiroz;acceptée;oui;Q316327;Eça de Queirós;1845;1900;PT;pt;biblio+metier;Q316327 {biblio+metier}
+11075;Renato da Silva Queiroz;introuvable;;;;;;;;;
+11076;Pierre Quiroule;acceptée;oui;Q9059566;Joaquín Alejo Falconnet;1867;1938;FR;es;biblio+metier;Q9059566 {biblio+metier}
+11077;Michel Ragon;acceptée;oui;Q363870;Michel Ragon;1924;2020;FR;fr;biblio+metier;Q363870 {biblio+metier}
+11078;Dómingos Antônio Raiol;acceptée;oui;Q10268026;Domingos Antônio Raiol;1830;1912;BR;pt;biblio+metier;Q10268026 {biblio+metier}
+11079;José Ricardo Ramalho;introuvable;;;;;;;;;
+11080;Manuel González Ramírez;introuvable;;;;;;;;;
+11081;John Randolph;ambiguë;;;;;;;;;Q2341317 {biblio+metier} | Q532715 {biblio} | Q7528015 {biblio} | Q16738541 | Q6254210 {biblio+metier} | Q6254205 | Q6254208 {biblio} | Q106827724 {metier}
+11082;Jesus Ranieri;introuvable;;;;;;;;;
+11083;J. M. Raynaud;introuvable;;;;;;;;;
+11084;Hebert Read;introuvable;;;;;;;;;
+11085;Hilhem Reich;introuvable;;;;;;;;;
+11086;Roberno Reinoso;introuvable;;;;;;;;;
+11088;Cultive Resistência;introuvable;;;;;;;;;
+11089;Sevla Retlav;introuvable;;;;;;;;;
+11090;John Rewald;acceptée;oui;Q90497;John Rewald;1912;1994;DE;en;biblio+metier;Q90497 {biblio+metier}
+11091;Alfonso Rey;acceptée;oui;Q137821907;Alfonso Rey;1946;;ES;es;biblio+metier;Q137821907 {biblio+metier}
+11092;Marcos Rey;acceptée;oui;Q6757923;Marcos Rey;1925;1999;BR;pt;biblio+metier;Q6757923 {biblio+metier} | Q138567158
+11094;Bruno Ribeiro;ambiguë;;;;;;;;;Q4979379 {biblio} | Q108871706 {biblio+metier} | Q26214256 {biblio} | Q110946321 | Q61038179 {chercheur} | Q94513743 {chercheur} | Q81319343 {chercheur} | Q92958308 {chercheur}
+11095;Joaquim Ribeiro;à relire (un seul signal);;Q43269602;Joaquim A. Ribeiro;;;;;biblio+chercheur;Q117356554 [naissance 1882 ≠ 1907, mort 1953 ≠ 1964] | Q43269602 {biblio+chercheur}
+11096;Maria Alice Rosa Ribeiro;à relire (un seul signal);;Q133637335;Maria Alice Rosa Ribeiro;1952;;;;biblio;Q93794467 {chercheur} | Q133637335 {biblio}
+11097;Agnaldo Prandini Ricieri;introuvable;;;;;;;;;
+11098;Penny Rimbaud;acceptée;oui;Q321672;Penny Rimbaud;1943;;GB;;biblio+metier;Q321672 {biblio+metier}
+11099;Bokar Rimpoche;introuvable;;;;;;;;;
+11100;Wilson Rio Apa;introuvable;;;;;;;;;
+11101;Manuel Rivas;ambiguë;;;;;;;;;Q2320966 {biblio+metier} | Q20005462 {metier+anarchisme} | Q61739883 {chercheur}
+11102;F. Javier Uribe Rivera;introuvable;;;;;;;;;
+11103;André Rocha;non corroborée;;;;;;;;;Q2307210 | Q130243206
+11104;Antonio Penalves Rocha;acceptée;oui;Q93793847;Antonio Penalves Rocha;;;BR;pt;biblio+metier;Q93793847 {biblio+metier}
+11105;Bruno Lima Rocha;introuvable;;;;;;;;;
+11106;Luis Filipe Rocha;à relire (un seul signal);;Q1878434;Luís Filipe Rocha;1947;;PT;pt;biblio;Q1878434 {biblio}
+11107;Carlos Rocque;introuvable;;;;;;;;;
+11108;Arakcy Martins Rodrigues;introuvable;;;;;;;;;
+11109;Jacinto Rodrigues;contradiction;;;;;;;;;Q10304718 | Q112960802 [né 1973, publié dès 1976]
+11110;João Rodrigues;ambiguë;;;;;;;;;Q28604374 [né 1994, publié dès 1960] | Q1710206 {biblio+metier} | Q10312149 [né 1967, publié dès 1960] | Q6298371 [né 1971, publié dès 1960] {biblio} | Q11728722 [né 1991, publié dès 1960] | Q43637411 {chercheur} | Q99193233 | Q63493699 {biblio+chercheur}
+11111;José Albertino Rodrigues;introuvable;;;;;;;;;
+11112;Leôncio Martins Rodrigues;contradiction;;;;;;;;;Q107178398 [mort 2021 ≠ 2019] {biblio+metier}
+11113;Sérgio Rodrigues;ambiguë;;;;;;;;;Q10376219 {biblio+metier} | Q16091611 | Q61770506 | Q64848196 {metier} | Q16090569 {biblio+metier}
+11114;Isaac Sandoval Rodríguez;à relire (un seul signal);;Q97124380;Isaac Sandoval;1937;2020;;;biblio;Q97124380 {biblio}
+11115;Miguel Rodríguez;ambiguë;;;;;;;;;Q100144493 [né 2003, publié dès 1980] | Q952680 | Q6844772 | Q6844773 [né 1973, publié dès 1980] {biblio} | Q3312999 | Q36975241 {biblio} | Q124333692 [né 2003, publié dès 1980]
+11116;José Luiz Del Roio;non corroborée;;;;;;;;;Q10309850
+11117;Sara Rojo;ambiguë;;;;;;;;;Q7421753 {biblio+metier} | Q139409777 | Q138926946 {biblio+metier}
+11118;Juan Rosales;contradiction;;;;;;;;;Q16585104 | Q135367556 [né 1996, publié dès 2001] | Q98565037 {chercheur}
+11119;Josep Maria Roselló;à relire (un seul signal);;Q23540782;Josep Maria Roselló i Prados;1835;1872;ES;es;biblio;Q23540782 {biblio}
+11120;Pauline Rosen-Cros;introuvable;;;;;;;;;
+11121;José Paschoal Rossetti;à relire (un seul signal);;Q109781551;José Paschoal Rossetti;1941;;BR;;metier;Q109781551 {metier}
+11122;Clóvis Rossi;acceptée;oui;Q1981540;Clóvis Rossi;1943;2019;BR;pt;biblio+metier;Q1981540 {biblio+metier}
+11123;Sadi Dal Rosso;non corroborée;;;;;;;;;Q95720298
+11124;Jean Jacques Rousseau;acceptée;oui;Q6527;Jean-Jacques Rousseau;1712;1778;CH;fr;biblio+metier;Q6527 {biblio+metier} | Q36191907 [naissance 1861 ≠ 1712, mort 1938 ≠ 1778] {biblio+metier} | Q3166403 [naissance 1946 ≠ 1712, mort 2014 ≠ 1778] {biblio} | Q17745373 [mort 1858 ≠ 1778] | Q112358739 [naissance 1942 ≠ 1712] {biblio}
+11125;Gonzalo Zaragoza Rovira;introuvable;;;;;;;;;
+11126;Richard S. Rudner;introuvable;;;;;;;;;
+11127;Antonio Cleber Rudy;introuvable;;;;;;;;;
+11128;Benjamín Cano Ruiz;contradiction;;;;;;;;;Q125760230 [mort 1998 ≠ 2003] {biblio+metier+anarchisme}
+11129;Higinio Noja Ruiz;acceptée;oui;Q67038802;Higinio Noja Ruiz;1894;1972;ES;;biblio+metier;Q67038802 {biblio+metier}
+11130;Ramón Eduardo Ruiz;acceptée;oui;Q7290472;Ramón Eduardo Ruiz;1921;2010;US;;biblio+metier;Q7290472 {biblio+metier}
+11131;Jaqueline Russ;introuvable;;;;;;;;;
+11132;Francis Russell;ambiguë;;;;;;;;;Q7526726 | Q2000654 {biblio} | Q2084556 {biblio} | Q25687 {biblio} | Q3750946 {biblio} | Q76008593 | Q75419986 | Q7526728 | Q26735758 {biblio} | Q75290979
+11133;Fernando Sabino;acceptée;oui;Q1346664;Fernando Sabino;1923;2004;BR;;biblio+metier;Q1346664 {biblio+metier}
+11134;Giorgio Sacchetti;acceptée;oui;Q6999455;Giorgio Sacchetti;1951;;IT;it;biblio+metier;Q6999455 {biblio+metier}
+11135;Leopold Von Sacher-Masoch;acceptée;oui;Q78474;Leopold von Sacher-Masoch;1836;1895;UA;de;biblio+metier;Q78474 {biblio+metier}
+11136;Heleieth Saffioti;acceptée;oui;Q9002416;Heleieth Saffioti;1934;2010;BR;pt;biblio+metier;Q9002416 {biblio+metier}
+11137;Marshall Sahlins;acceptée;oui;Q345300;Marshall Sahlins;1930;2021;US;en;biblio+metier;Q345300 {biblio+metier}
+11138;Michel Sahuc;introuvable;;;;;;;;;
+11139;C. A. Sainte-Beuve;introuvable;;;;;;;;;
+11140;Iza Salles;introuvable;;;;;;;;;
+11141;Luis Alberto Sanchez;ambiguë;;;;;;;;;Q969753 {biblio+metier} | Q5982703 | Q92946704
+11142;Gianfranco Sanguinetti;acceptée;oui;Q3105216;Gianfranco Sanguinetti;1948;2025;IT;;biblio+metier;Q3105216 {biblio+metier}
+11143;Moacir Medeiros de Sant'ana;introuvable;;;;;;;;;
+11144;Enzo Santarelli;acceptée;oui;Q3726638;Enzo Santarelli;1922;2004;IT;it;biblio+metier;Q3726638 {biblio+metier}
+11145;Pérsio Santos De Oliveira;introuvable;;;;;;;;;
+11146;Lucy Woellner dos Santos;introuvable;;;;;;;;;
+11147;Beppe De Sario;à relire (un seul signal);;Q133742560;Beppe De Sario;1973;;;;biblio;Q133742560 {biblio}
+11148;Hélène Sarrazin;acceptée;oui;Q100321832;Hélène Sarrazin;1920;2016;FR;fr;biblio+metier;Q100321832 {biblio+metier} | Q87484732
+11149;Ferdinand de Saussure;à relire (un seul signal);;Q13230;Ferdinand de Saussure;1857;1913;CH;fr;biblio;Q13230 {biblio}
+11150;João de Scantimburgo;acceptée;oui;Q10312532;João de Scantimburgo;1915;2013;BR;pt;biblio+metier;Q10312532 {biblio+metier}
+11151;A. Scarabelli;introuvable;;;;;;;;;
+11152;Leonard Schäfer;introuvable;;;;;;;;;
+11153;Stephen Schecter;à relire (un seul signal);;Q96091000;Stephen Schecter;;;;;metier;Q96091000 {metier}
+11154;Paul F. Schimdt;introuvable;;;;;;;;;
+11155;Neala Schleuning;introuvable;;;;;;;;;
+11156;Bernhard Schlink;acceptée;oui;Q76699;Bernhard Schlink;1944;;DE;de;biblio+metier;Q76699 {biblio+metier}
+11157;Michael Schmidt;contradiction;;;;;;;;;Q112538287 [naissance 1963 ≠ 1980] {biblio+metier} | Q63460768 [naissance 1957 ≠ 1980] | Q1555341 [naissance 1945 ≠ 1980] {biblio} | Q64754951 | Q12326991 [naissance 1985 ≠ 1980] {biblio} | Q73301739 [naissance 1962 ≠ 1980] {biblio} | Q116699255 [naissance 1970 ≠ 1980] | Q99752425 [naissance 1963 ≠ 1980] | Q84081302 [naissance 1966 ≠ 1980] {biblio+metier+anarchisme}
+11158;Paul F. Schmidt;introuvable;;;;;;;;;
+11159;Héctor Schujman;introuvable;;;;;;;;;
+11160;Charles M. Schulz;acceptée;oui;Q298920;Charles M. Schulz;1922;2000;US;en;biblio+metier;Q298920 {biblio+metier}
+11161;James C. Scott;acceptée;oui;Q3025403;James C. Scott;1936;2024;US;en;biblio+metier+anarchisme;Q3025403 {biblio+metier+anarchisme} | Q97949067 [naissance 1889 ≠ 1936] {metier} | Q39895815 {chercheur} | Q130604191 [naissance 1955 ≠ 1936] {biblio+metier}
+11162;Edwing R. A. Seligman;introuvable;;;;;;;;;
+11163;Ramon J. Sender;acceptée;oui;Q734397;Ramón J. Sender;1901;1982;ES;es;biblio+metier+anarchisme;Q734397 {biblio+metier+anarchisme}
+11164;Alain Sergent;contradiction;;;;;;;;;Q124453188 | Q2848216 [naissance 1908 ≠ 1917] {biblio+metier}
+11165;António Sérgio;acceptée;oui;Q4777615;António Sérgio;1883;1969;PT;pt;biblio+metier;Q4777615 {biblio+metier} | Q2378074 [naissance 1950 ≠ 1883, mort 2009 ≠ 1969, né 1950, publié dès 1957] {biblio+metier}
+11167;Retlav Sevla;introuvable;;;;;;;;;
+11168;Edward Sexby;à relire (un seul signal);;Q3048668;Edward Sexby;1616;1658;;;biblio;Q3048668 {biblio}
+11169;Giuseppina Sferra;introuvable;;;;;;;;;
+11170;Yamandú Gonzales Sierra;introuvable;;;;;;;;;
+11171;Alan B. T. Silva;introuvable;;;;;;;;;
+11172;Gabriel Pombo da Silva;introuvable;;;;;;;;;
+11173;Nicoláo Duarte Silva;introuvable;;;;;;;;;
+11174;Paulo Renato Oliveira Silva;introuvable;;;;;;;;;
+11175;Henri Simon;ambiguë;;;;;;;;;Q15998896 {biblio} | Q787943 {biblio+metier} | Q1428142 {biblio} | Q3132016 {biblio} | Q64553141 {biblio+metier} | Q3132014 | Q681776 {biblio+metier} | Q48818195
+11179;Helena Singer;non corroborée;;;;;;;;;Q105652368
+11180;Alfredo Sirkis;acceptée;oui;Q9603192;Alfredo Sirkis;1950;2020;BR;pt;biblio+metier;Q9603192 {biblio+metier}
+11181;Internacional Situcionista;introuvable;;;;;;;;;
+11182;Robert Skidelsky;acceptée;oui;Q335331;Robert Skidelsky;1939;2026;GB;;biblio+metier;Q335331 {biblio+metier}
+11183;John M. Smith;ambiguë;;;;;;;;;Q6245964 | Q136370057 | Q96097118 {chercheur} | Q530230 {biblio}
+11184;Michael P. Smith;ambiguë;;;;;;;;;Q110082270 {biblio} | Q64021332 {biblio+metier} | Q42317575 {chercheur}
+11186;G. W. Sok;à relire (un seul signal);;Q5512105;G.W. Sok;1957;;NL;;biblio;Q5512105 {biblio}
+11187;José Luís Solazzi;introuvable;;;;;;;;;
+11188;Carlos A. Solero;introuvable;;;;;;;;;
+11189;Jorge N. Solomonoff;introuvable;;;;;;;;;
+11190;G. Sorel;introuvable;;;;;;;;;
+11191;Juan Manuel Fernández Soria;introuvable;;;;;;;;;
+11192;M. Ricardo de Sousa;introuvable;;;;;;;;;
+11194;Clei Souza;introuvable;;;;;;;;;
+11195;Denise Souza;non corroborée;;;;;;;;;Q10265095
+11196;Dimas Antônio de Souza;introuvable;;;;;;;;;
+11197;Ismara Izepe de Souza;introuvable;;;;;;;;;
+11198;José Crisóstomo de Souza;introuvable;;;;;;;;;
+11199;Percival de Souza;acceptée;oui;Q10348505;Percival de Souza;1943;;BR;pt;biblio+metier;Q10348505 {biblio+metier}
+11200;Vicente de Souza;non corroborée;;;;;;;;;Q131354105
+11201;Hobart Spalding;introuvable;;;;;;;;;
+11202;Tamsin Spargo;acceptée;oui;Q112368110;Tamsin Spargo;1960;;;;biblio+metier;Q112368110 {biblio+metier}
+11203;M. Splayne;introuvable;;;;;;;;;
+11204;Joel Spring;contradiction;;;;;;;;;Q6213990 [naissance 1940 ≠ 1938] {biblio}
+11205;Andrea Staid;acceptée;oui;Q135778662;Andrea Staid;1982;;IT;;biblio+metier;Q102770899 | Q135778662 {biblio+metier}
+11206;Carla Stampa;introuvable;;;;;;;;;
+11207;Ernildo Stein;acceptée;oui;Q10274105;Ernildo Stein;1934;;BR;pt;biblio+metier;Q10274105 {biblio+metier}
+11208;Jeff Stein;ambiguë;;;;;;;;;Q6175050 {biblio+metier} | Q114797371 | Q132767437
+11210;John Steinbeck;ambiguë;;;;;;;;;Q39212 {biblio+metier} | Q98373525 [mort 1935 ≠ 1968] | Q135003819 [naissance 1971 ≠ 1902, né 1971, publié dès 1953] | Q64014202 {biblio+metier}
+11211;Max Stinner;introuvable;;;;;;;;;
+11212;Svetozar Stojanovic;acceptée;oui;Q1858030;Svetozar Stojanović;1931;2010;RS;;biblio+metier;Q1858030 {biblio+metier}
+11213;Danilo R. Streck;acceptée;oui;Q113773875;Danilo Romeu Streck;1948;;;;biblio+metier;Q113773875 {biblio+metier}
+11214;Horacio Suárez;introuvable;;;;;;;;;
+11215;Piro Subrat;introuvable;;;;;;;;;
+11216;O. Racional Superior;introuvable;;;;;;;;;
+11217;Victor Suvorov;acceptée;oui;Q130786;Viktor Souvorov;1947;;RU;ru;biblio+metier;Q130786 {biblio+metier}
+11218;Jonathan Swift;acceptée;oui;Q41166;Jonathan Swift;1667;1745;;en;biblio+metier;Q41166 {biblio+metier} | Q106692412 [naissance 1964 ≠ 1667, né 1964, publié dès 1971] {metier} | Q59388947 [naissance 1943 ≠ 1667, mort 2010 ≠ 1745] {biblio} | Q75582640 [naissance 1640 ≠ 1667, mort 1667 ≠ 1745] | Q113450041 | Q59670832 {chercheur} | Q110139455
+11219;Jacques Talbot;non corroborée;;;;;;;;;Q65603072 | Q6120890 | Q101507564
+11220;Adelino Tavares De Pinho;introuvable;;;;;;;;;
+11221;José Tavares;ambiguë;;;;;;;;;Q592058 {biblio+metier} | Q100319459 {metier} | Q41800014 {metier} | Q64032180 {biblio+metier}
+11222;Meredith Tax;acceptée;oui;Q6818984;Meredith Tax;1942;2022;US;en;biblio+metier;Q6818984 {biblio+metier}
+11223;Varlan Tchrkesoff;introuvable;;;;;;;;;
+11224;Antonio Tellez;ambiguë;;;;;;;;;Q2857481 {biblio+metier+anarchisme} | Q135684191 {biblio+metier}
+11225;Moshik Temkin;ambiguë;;;;;;;;;Q112110821 {metier} | Q133715327 {biblio+metier}
+11226;Josep Termes;acceptée;oui;Q3184124;Josep Termes i Ardèvol;1936;2011;ES;es;biblio+metier;Q3184124 {biblio+metier}
+11227;M. Testa;non corroborée;;;;;;;;;Q77405427 {chercheur}
+11228;Michel Thiollent;introuvable;;;;;;;;;
+11229;Bernard Thomas;ambiguë;;;;;;;;;Q118788708 {biblio+metier} | Q2898665 {biblio+metier} | Q16440226 {biblio+metier} | Q65603528 | Q65603531 | Q65603530 {biblio} | Q111682141 | Q28099675 {biblio}
+11230;Augusto Thompson;à relire (un seul signal);;Q18238209;Augusto Thompson;1933;2007;;;biblio;Q18238209 {biblio}
+11231;Harold H. Thompson;acceptée;oui;Q2661858;Harold H. Thompson;1942;2008;US;;biblio+anarchisme;Q2661858 {biblio+anarchisme} | Q2661913
+11232;G. Thonar;introuvable;;;;;;;;;
+11233;Marcia Tiburi;acceptée;oui;Q10334275;Márcia Tiburi;1970;;BR;pt;biblio+metier;Q10334275 {biblio+metier}
+11234;Edilene Toledo;introuvable;;;;;;;;;
+11235;Regina de Toledo;introuvable;;;;;;;;;
+11236;Tina Tomassi;introuvable;;;;;;;;;
+11237;Alberto Toninello;introuvable;;;;;;;;;
+11238;Alejandro R. Díez Torre;introuvable;;;;;;;;;
+11239;Sergio Grez Toso;acceptée;oui;Q6125466;Sergio Grez;1953;;CL;es;biblio+metier;Q6125466 {biblio+metier}
+11240;François Tosquelles;acceptée;oui;Q3085937;François Tosquelles;1912;1994;ES;ca;biblio+metier;Q3085937 {biblio+metier}
+11241;Stuart Townsend;à relire (un seul signal);;Q363525;Stuart Townsend;1972;;IE;;biblio;Q363525 {biblio} | Q55634126
+11242;Filippo Trasatti;introuvable;;;;;;;;;
+11243;Alessandra Garcia Trindade;à relire (un seul signal);;Q21099607;Alessandra Garcia Trindade;1970;;BR;pt;biblio;Q21099607 {biblio}
+11244;Francisco Trindade;introuvable;;;;;;;;;
+11246;Léon Trotsky;acceptée;oui;Q33391;Léon Trotski;1879;1940;UA;;biblio+metier;Q33391 {biblio+metier}
+11247;Annez Andraus Troyano;à relire (un seul signal);;Q109794228;Annez Andraus Troyano;1944;;BR;;metier;Q109794228 {metier}
+11248;Davide Turcato;acceptée;oui;Q115689125;Davide Turcato;;;;;biblio+metier;Q115689125 {biblio+metier}
+11249;Mark Twain;acceptée;oui;Q7245;Mark Twain;1835;1910;US;;biblio+metier;Q7245 {biblio+metier}
+11250;Helena Uehara;introuvable;;;;;;;;;
+11251;Joan Connelly Ullman;acceptée;oui;Q16189752;Joan Connelly Ullman;1929;2022;US;;biblio+metier;Q16189752 {biblio+metier}
+11252;Federico Urales;acceptée;oui;Q740191;Federico Urales;1864;1942;ES;ca;biblio+metier+anarchisme;Q740191 {biblio+metier+anarchisme}
+11253;Lucio Urtubia;acceptée;oui;Q984418;Lucio Urtubia;1931;2020;ES;fr;biblio+metier+anarchisme;Q984418 {biblio+metier+anarchisme}
+11255;Rafael Uzcátegui;à relire (un seul signal);;Q125386607;Rafael Uzcátegui;1973;;VE;;metier;Q125386607 {metier} | Q131623950 [né 2004, publié dès 2010]
+11256;Salvo Vaccaro;acceptée;oui;Q3946302;Salvo Vaccaro;1959;;IT;;biblio+metier;Q3946302 {biblio+metier}
+11257;Walter Vadala;introuvable;;;;;;;;;
+11258;Nanci Valadares De Carvalho;introuvable;;;;;;;;;
+11259;Jorge Valadas;acceptée;oui;Q47899761;Charles Reeve;1945;;PT;pt;biblio+metier;Q57006695 {chercheur} | Q47899761 {biblio+metier}
+11260;Silza Maria Pasello Valente;introuvable;;;;;;;;;
+11261;Eduardo Valladares;introuvable;;;;;;;;;
+11262;Spencer Vampré;acceptée;oui;Q10373698;Spencer Vampré;1888;1964;BR;pt;biblio+metier;Q10373698 {biblio+metier}
+11263;Bartolomeo Vanzetti;acceptée;oui;Q2886112;Bartolomeo Vanzetti;1888;1927;IT;;biblio+metier+anarchisme;Q2886112 {biblio+metier+anarchisme}
+11264;Hugo Marcelo Sandoval Vargas;introuvable;;;;;;;;;
+11265;Maria Thereza Vargas;non corroborée;;;;;;;;;Q126069507
+11266;Domingo Varone;à relire (un seul signal);;Q94634669;Domingo Varone;1900;1979;;;biblio;Q94634669 {biblio}
+11267;Pano Vassilev;introuvable;;;;;;;;;
+11270;Francisco Daudt Da Veiga;introuvable;;;;;;;;;
+11271;Valo Velho;introuvable;;;;;;;;;
+11272;Randolfo Vella;introuvable;;;;;;;;;
+11274;Roberto Venosa;introuvable;;;;;;;;;
+11275;António Ventura;ambiguë;;;;;;;;;Q107092746 | Q56349036 | Q28465706 {biblio+metier} | Q99498129 | Q5700042 {biblio+metier}
+11276;Zuenir Ventura;acceptée;oui;Q8075004;Zuenir Ventura;1931;2026;BR;pt;biblio+metier;Q8075004 {biblio+metier}
+11277;Erico Verissimo;acceptée;oui;Q288501;Erico Verissimo;1905;1975;BR;pt;biblio+metier;Q288501 {biblio+metier}
+11278;Luis Fernando Verissimo;acceptée;oui;Q2347007;Luís Fernando Veríssimo;1936;2025;BR;pt;biblio+metier;Q2347007 {biblio+metier}
+11279;Rodrigo Vescovi;acceptée;oui;Q138957745;Rodrigo Vescovi;1970;;;;biblio+metier;Q125927143 | Q138957745 {biblio+metier}
+11280;J. M. Gonçalves Viana;introuvable;;;;;;;;;
+11281;Nildo Viana;acceptée;oui;Q1349408;Nildo Viana;1965;;BR;pt;biblio+metier;Q1349408 {biblio+metier}
+11282;César Vidal;ambiguë;;;;;;;;;Q5202646 | Q55651939 {biblio+metier} | Q614869 {biblio+metier} | Q133283645
+11283;Alexandre Vieira;ambiguë;;;;;;;;;Q18707853 [né 1965, publié dès 1970] | Q16488214 {biblio+metier} | Q103001797 | Q87683425 {chercheur}
+11284;Antônio Vieira;ambiguë;;;;;;;;;Q9623079 [naissance 1920 ≠ 1608, mort 2009 ≠ 1697] {biblio} | Q4777673 | Q16491211 [naissance 1919 ≠ 1608, mort 2003 ≠ 1697] {biblio+metier} | Q458650 {biblio+metier}
+11285;Enrique López Viejo;introuvable;;;;;;;;;
+11286;Samuel Vila;à relire (un seul signal);;Q107330755;Samuel Vila;1902;1992;ES;ca;biblio;Q107330755 {biblio}
+11287;Vargas Vila;introuvable;;;;;;;;;
+11288;Manuel Vilar;contradiction;;;;;;;;;Q9028220 [naissance 1812 ≠ 1904, mort 1860 ≠ 1972] {biblio+metier} | Q10324549 [mort 1941 ≠ 1972] | Q140723046
+11289;Anne-Marie Villefranche;à relire (un seul signal);;Q109832484;Anne-Marie Villefranche;1899;1980;;;biblio;Q109832484 {biblio}
+11290;David Viñas;acceptée;oui;Q965392;David Viñas;1927;2011;AR;es;biblio+metier;Q965392 {biblio+metier}
+11291;Alex S. Vitale;acceptée;oui;Q96788538;Alex S. Vitale;1965;;US;;biblio+metier;Q96788538 {biblio+metier}
+11292;Artur José Renda Vitorino;introuvable;;;;;;;;;
+11293;A. E. Van Vogt;acceptée;oui;Q315059;A. E. van Vogt;1912;2000;CA;;biblio+metier;Q315059 {biblio+metier}
+11294;Eugene Volin;introuvable;;;;;;;;;
+11295;Pascual Vuotto;introuvable;;;;;;;;;
+11296;Are Waerland;acceptée;oui;Q4102349;Are Waerland;1876;1955;FI;;biblio+metier;Q4102349 {biblio+metier}
+11297;Ebba Waerland;à relire (un seul signal);;Q48459702;Ebba Langenskiöld-Hoffmann;1897;1981;;;biblio;Q48459702 {biblio}
+11298;Alan Watts;acceptée;oui;Q354867;Alan Watts;1915;1973;GB;;biblio+metier;Q354867 {biblio+metier} | Q11957219 [naissance 1925 ≠ 1915] {biblio+metier} | Q88918726 {chercheur} | Q75555640 [mort 1957 ≠ 1973] | Q91890161 {chercheur}
+11299;Pierre Weil;acceptée;oui;Q3387348;Pierre Weil;1924;2008;FR;pt;biblio+metier;Q3387348 {biblio+metier}
+11300;Simone Weil;acceptée;oui;Q157309;Simone Weil;1909;1943;FR;fr;biblio+metier;Q157309 {biblio+metier} | Q99383511
+11301;Félix Weinberg;ambiguë;;;;;;;;;Q111994989 {biblio+metier} | Q5442357 {biblio+metier} | Q112472617 {biblio}
+11302;Alice Wexler;acceptée;oui;Q107607736;Alice Wexler;1942;;US;en;biblio+metier;Q107607736 {biblio+metier}
+11303;Marcel Willard;à relire (un seul signal);;Q3289487;Marcel Willard;1889;1956;FR;fr;biblio;Q3289487 {biblio}
+11304;Liz Willis;à relire (un seul signal);;Q94510988;Liz Willis;1951;;;;biblio;Q94510988 {biblio}
+11305;Harold B. Wilson;à relire (un seul signal);;Q137697076;Harold B. Wilson;;;CA;;metier;Q137697076 {metier}
+11306;Alain Wisner;acceptée;oui;Q2830370;Alain Wisner;1923;2004;FR;;biblio;Q2830370 {biblio}
+11307;Naomi Wolf;acceptée;oui;Q237875;Naomi Wolf;1962;;US;;biblio+metier;Q237875 {biblio+metier}
+11308;Hector Woollands;introuvable;;;;;;;;;
+11309;Joan Zambrana;acceptée;oui;Q93429837;Joan Zambrana;1960;;;;biblio+metier;Q93429837 {biblio+metier}
+11311;Lázaro Luíz Zamenhof;acceptée;oui;Q11758;Louis-Lazare Zamenhof;1859;1917;PL;;biblio+metier;Q11758 {biblio+metier}
+11312;Patxi Zamoro;introuvable;;;;;;;;;
+11313;Roberto Zani;introuvable;;;;;;;;;
+11314;Micael Zaramella;introuvable;;;;;;;;;
+11315;Ilya Zemtsov;à relire (un seul signal);;Q63900082;Ilya Zemtsov;1938;;AZ;;biblio;Q63900082 {biblio}
+11316;Federico Zenoni;acceptée;oui;Q137836984;Federico Zenoni;1966;;IT;;biblio+metier;Q137836984 {biblio+metier}
+11318;Raúl Zibechi;contradiction;;;;;;;;;Q7299862 [naissance 1952 ≠ 1954] {biblio+metier}
+11319;Hector Zoccoli;introuvable;;;;;;;;;
+11320;Émile Zola;acceptée;oui;Q504;Émile Zola;1840;1902;FR;fr;biblio+metier;Q504 {biblio+metier}
+11321;Alenka Zupancic;acceptée;oui;Q1642178;Alenka Zupančič;1966;;SI;;biblio+metier;Q1642178 {biblio+metier} | Q114378604 [naissance 1969 ≠ 1966] {biblio+chercheur} | Q114325747 [naissance 1946 ≠ 1966] {biblio+chercheur}
+11324;Lina Wertmüller;déjà liée;;Q53039;Lina Wertmüller;1928;2021;IT;;biblio+metier;Q53039 {biblio+metier}
+11325;Franco Schirone;introuvable;;;;;;;;;
+11333;Edson Gonçalves Filho;introuvable;;;;;;;;;
+11334;Ricardo Marcelo Fonseca;à relire (un seul signal);;Q10361183;Ricardo Marcelo Fonseca;;;BR;pt;biblio;Q10361183 {biblio}
+11335;Daniel Rodrigues Aurélio;introuvable;;;;;;;;;
+11336;Wellington Gallarza;introuvable;;;;;;;;;
+11338;Carme Regina Schons;introuvable;;;;;;;;;
+11341;Lewis Herber;introuvable;;;;;;;;;
+11342;Silvia Araújo;non corroborée;;;;;;;;;Q57699818 {chercheur}
+11343;Martín Alberto Acri;introuvable;;;;;;;;;
+11344;Petter Baiestorf;non corroborée;;;;;;;;;Q10348931
+11345;Henfil;acceptée;oui;Q1999056;Henfil;1944;1988;BR;pt;biblio+metier;Q1999056 {biblio+metier}
+11346;Gramsci;acceptée;oui;Q83003;Antonio Gramsci;1891;1937;IT;it;biblio+metier;Q83003 {biblio+metier}
+11350;Filósofo da Selva;introuvable;;;;;;;;;
+11351;Beni;ambiguë;;;;;;;;;Q269526 {biblio} | Q61879390 | Q64852110 | Q4887887 | Q137273563
+11352;Juan Manuel Heredia;acceptée;oui;Q112562189;Juan Manuel Heredia;1966;;;es;biblio+metier;Q112562189 {biblio+metier}
+11353;Vivien García;ambiguë;;;;;;;;;Q112270196 {metier} | Q137106615 {biblio+metier}
+11354;Rubem Fonseca;acceptée;oui;Q470133;Rubem Fonseca;1925;2020;BR;pt;biblio+metier;Q470133 {biblio+metier}
+11355;George Berger;à relire (un seul signal);;Q109501746;George Berger;1796;1868;;;metier;Q109501746 {metier}
+11356;Ward Churchill;acceptée;oui;Q707156;Ward Churchill;1947;2026;US;en;biblio+metier;Q707156 {biblio+metier}
+11357;Pedro Celso Uchôa Cavalcanti;introuvable;;;;;;;;;
+11358;Roberto Fanjul;introuvable;;;;;;;;;
+11359;Antonio Serra & Cristina Pereira;introuvable;;;;;;;;;
+11360;José Bové;acceptée;oui;Q5819;José Bové;1953;;FR;;biblio+metier;Q5819 {biblio+metier} | Q136239712
+11361;Osvaldo Coggiola;acceptée;oui;Q10342340;Osvaldo Coggiola;;;AR;pt;biblio+metier;Q10342340 {biblio+metier}
+11362;Ricard de Vargas Golarons;acceptée;oui;Q19301744;Ricard de Vargas Golarons;1949;;ES;;biblio+metier;Q19301744 {biblio+metier}
+11363;Diy;introuvable;;;;;;;;;
+11368;Daniela Carneiro;non corroborée;;;;;;;;;Q59205144
+11370;David E. Apter;acceptée;oui;Q5233147;David Apter;1924;2010;US;en;biblio+metier;Q5233147 {biblio+metier}
+11372;Valter Bracht;introuvable;;;;;;;;;
+11374;Juan Carlos Beas;introuvable;;;;;;;;;
+11375;Giselle Beiguelman-Messina;introuvable;;;;;;;;;
+11376;Janet Biehl/Murray Bookchin;introuvable;;;;;;;;;
+11379;Antonio Rabinad;acceptée;oui;Q8201623;Antonio Rabinad;1927;2009;ES;;biblio+metier;Q8201623 {biblio+metier}
+11380;Guillaume Davranche;acceptée;oui;Q50102708;Guillaume Davranche;1977;;FR;;biblio+metier;Q50102708 {biblio+metier}
+11381;Jean Bécarud;acceptée;oui;Q51077449;Jean Bécarud;1925;2014;FR;;biblio+metier;Q51077449 {biblio+metier}
+11382;Alcina de Lara Cardoso;introuvable;;;;;;;;;
+11384;Winter Bastos;introuvable;;;;;;;;;
+11385;Jean Andreu;acceptée;oui;Q132918314;Jean Andreu;1935;;;;biblio+metier;Q132918314 {biblio+metier}
+11386;Miguel Orduña Carson;introuvable;;;;;;;;;
+11388;Chuang;introuvable;;;;;;;;;
+11389;Sonia Alem Marrach (Org.) Doris Accioly e Silva;introuvable;;;;;;;;;
+11390;Guilherme Falleiros;introuvable;;;;;;;;;
+11392;Goya;ambiguë;;;;;;;;;Q5432 {biblio+metier} | Q4900761 {biblio+metier}
+11393;Marie Goldsmith;acceptée;oui;Q6761322;Marie Goldsmith;1871;1933;RU;;biblio+metier+anarchisme;Q6761322 {biblio+metier+anarchisme}
+11394;José Yañez García;non corroborée;;;;;;;;;Q20536244
+11395;Jordi Albaladejo;introuvable;;;;;;;;;
+11396;Antoine Gimenez;ambiguë;;;;;;;;;Q3618823 {biblio} | Q65583441 | Q139606985
+11397;Francesc Ferrer I. Guàrdia;acceptée;oui;Q354202;Francisco Ferrer Guardia;1859;1909;ES;es;biblio+metier+anarchisme;Q354202 {biblio+metier+anarchisme}
+11400;Octavio Alberola;acceptée;oui;Q20006123;Octavio Alberola Suriñach;1928;2025;ES;es;biblio+metier;Q20006123 {biblio+metier}
+11401;Henrique Magalhães;ambiguë;;;;;;;;;Q48862073 {biblio+metier} | Q50823174 | Q26505884
+11402;Leda Gitahy;introuvable;;;;;;;;;
+11404;Vito Giannotti;à relire (un seul signal);;Q21290535;Vito Giannotti;1943;2015;;;biblio;Q21290535 {biblio}
+11405;Yves Delage Goldsmith;introuvable;;;;;;;;;
+11407;Luis Felipe Falcão;introuvable;;;;;;;;;
+11408;Aleksandr N. Afanásiev;introuvable;;;;;;;;;
+11410;Miguel Gonzalez Arroyo;introuvable;;;;;;;;;
+11412;Daniel Halevy;acceptée;oui;Q966745;Daniel Halévy;1872;1962;FR;fr;biblio+metier;Q966745 {biblio+metier}
+11413;Paola Domingo;introuvable;;;;;;;;;
+11414;Avles;introuvable;;;;;;;;;
+11415;Katrina Vanden Heuvel;acceptée;oui;Q6378002;Katrina vanden Heuvel;1959;;US;;biblio+metier;Q6378002 {biblio+metier}
+11416;Jacques Ellul;acceptée;oui;Q322922;Jacques Ellul;1912;1994;FR;fr;biblio+metier;Q322922 {biblio+metier}
+11418;Francisca Nogueira de Azevedo;introuvable;;;;;;;;;
+11419;Clément Duval;ambiguë;;;;;;;;;Q2556213 {biblio+metier+anarchisme} | Q110089466 {biblio} | Q136401623
+11420;Giorgio Sacchetti, Augusto Gayubas, Manuel Vicent Balaguer, Ignacio Donézar, José Luis Gutiérrez Molina;introuvable;;;;;;;;;
+11421;Fernando Antônio Peres;introuvable;;;;;;;;;
+11423;Miguel Angel Diéguez;introuvable;;;;;;;;;
+11424;Durval Muniz de Albuquerque Júnior, Alfredo Veiga-Neto, Alípio de Souza Filho (orgs.);introuvable;;;;;;;;;
+11425;Patrícia Galvão;acceptée;oui;Q653496;Pagu;1910;1962;BR;pt;biblio+metier;Q653496 {biblio+metier}
+11426;Luiz Antonio De Assis Brasil;acceptée;oui;Q10320610;Luiz Antonio de Assis Brasil;1945;;BR;pt;biblio+metier;Q10320610 {biblio+metier}
+11427;John Rajchman;acceptée;oui;Q3182337;John Rajchman;1946;;US;;biblio+metier;Q3182337 {biblio+metier}
+11428;Ana Paula Portella;introuvable;;;;;;;;;
+11429;Maripoza;introuvable;;;;;;;;;
+11430;Michel Misse;à relire (un seul signal);;Q110789538;Michel Misse;;2025;;;biblio;Q110789538 {biblio}
+11432;Angela Maria Souza Martins;introuvable;;;;;;;;;
+11433;Gilmar Rocha;introuvable;;;;;;;;;
+11434;Ricardo Líper;introuvable;;;;;;;;;
+11436;Javier Ortega Pérez;introuvable;;;;;;;;;
+11437;Ratgeb;ambiguë;;;;;;;;;Q567523 {biblio+metier} | Q537924 {biblio+metier}
+11438;Albert Meltzer;ambiguë;;;;;;;;;Q4710834 {biblio+metier+anarchisme} | Q133342527 {biblio}
+11439;Mauricio Morales;non corroborée;;;;;;;;;Q10327545 | Q84727577
+11440;Michel Antony;acceptée;oui;Q15406906;Michel Antony;1950;;FR;;biblio+metier;Q15406906 {biblio+metier}
+11441;Ignacio de Llorens;à relire (un seul signal);;Q53552122;Ignacio de Llorens;1957;;;;biblio;Q53552122 {biblio}
+11442;Jaddson Luiz;introuvable;;;;;;;;;
+11443;J.R Schmid;introuvable;;;;;;;;;
+11444;David R. Roediger;acceptée;oui;Q5239167;David Roediger;1952;;US;en;biblio+metier;Q5239167 {biblio+metier}
+11445;Pigault-Lebrun;acceptée;oui;Q3388279;Pigault-Lebrun;1753;1835;FR;fr;biblio+metier;Q3388279 {biblio+metier}
+11446;Deise Mancebo;introuvable;;;;;;;;;
+11448;Aline (et al.) LUDMILA;introuvable;;;;;;;;;
+11449;Pier Francesco Zarcone;introuvable;;;;;;;;;
+11450;Andreza Poitena;introuvable;;;;;;;;;
+11451;Maurice Moissonnier;acceptée;oui;Q23071906;Maurice Moissonnier;1927;2009;FR;fr;biblio+metier;Q23071906 {biblio+metier}
+11452;Marcos Cesar (Grito);introuvable;;;;;;;;;
+11453;Rossana Rossanda;acceptée;oui;Q272650;Rossana Rossanda;1924;2020;IT;it;biblio+metier;Q272650 {biblio+metier}
+11454;Angela Maria Roberti Martins;introuvable;;;;;;;;;
+11455;John Lyons;ambiguë;;;;;;;;;Q1700903 {biblio+metier} | Q704704 | Q6245648 | Q2035240 {biblio} | Q263894 [né 1977, publié dès 1983] | Q6245637 | Q97610137 | Q75849731 | Q6245641 {biblio} | Q6245639
+11457;Noir et Rouge;introuvable;;;;;;;;;
+11458;Dalila Andrade Oliveira;acceptée;oui;Q112555115;Dalila Andrade Oliveira;1964;;BR;pt;biblio+metier;Q112555115 {biblio+metier}
+11459;José Gay da Cunha;introuvable;;;;;;;;;
+11460;Nicodemus Piek;introuvable;;;;;;;;;
+11461;Maria Alice Nogueira;introuvable;;;;;;;;;
+11462;Nauá;introuvable;;;;;;;;;
+11463;Miguel Velasco;introuvable;;;;;;;;;
+11464;Margaret S. Mahler;acceptée;oui;Q213648;Margaret Mahler;1897;1985;HU;;biblio+metier;Q213648 {biblio+metier}
+11465;Kauan Willian dos Santos;introuvable;;;;;;;;;
+11467;John Holloway;ambiguë;;;;;;;;;Q37380328 {chercheur} | Q575948 {biblio+metier} | Q6239638 | Q6239639 {biblio+metier} | Q316155 {biblio+metier} | Q16567445 | Q56855958 {metier} | Q27925510 | Q105528240 | Q53336864
+11468;Josè J. Queiróz;introuvable;;;;;;;;;
+11469;Meltzer;introuvable;;;;;;;;;
+11470;Jean-Marc Raynaud;acceptée;oui;Q95986931;Jean-Marc Raynaud;1947;;FR;;biblio+metier;Q95986931 {biblio+metier}
+11471;Platão;ambiguë;;;;;;;;;Q859 {biblio+metier} | Q30939779 | Q2035656
+11472;Jaguar;ambiguë;;;;;;;;;Q6122865 {biblio+metier} | Q11309692 {biblio} | Q6122859
+11473;Pierre Karila-Cohen;acceptée;oui;Q41711211;Pierre Karila-Cohen;1972;;FR;;biblio+metier;Q41711211 {biblio+metier}
+11474;Imprensa Marginal;introuvable;;;;;;;;;
+11475;MORAES, Carla Kelen de Andrade. Acioli, Edane de Jesus França et al.;introuvable;;;;;;;;;
+11476;Luís Alfredo Galvão;introuvable;;;;;;;;;
+11477;Nélio Parra;introuvable;;;;;;;;;
+11479;Daigo Oliva;introuvable;;;;;;;;;
+11480;Nicola Sacco;acceptée;oui;Q2672924;Nicola Sacco;1891;1927;IT;en;biblio+metier;Q2672924 {biblio+metier} | Q123296690 {chercheur}
+11481;Edgar Jorge Kolling;introuvable;;;;;;;;;
+11482;Thomaz Jefferson;introuvable;;;;;;;;;
+11483;Plekanov;introuvable;;;;;;;;;
+11484;Dee Dee Ramone;à relire (un seul signal);;Q346607;Dee Dee Ramone;1951;2002;US;;biblio;Q346607 {biblio}
+11485;Ricardo Maranhão;contradiction;;;;;;;;;Q125508993 [né 1986, publié dès 1981]
+11486;Rius;acceptée;oui;Q1362191;Rius;1934;2017;MX;;biblio+metier;Q1362191 {biblio+metier}
+11488;Francisco Madrid;acceptée;oui;Q3818461;Francisco Madrid;1900;1952;ES;es;biblio+metier;Q3818461 {biblio+metier}
+11489;Rosamund Bartlett;acceptée;oui;Q7367298;Rosamund Bartlett;;;GB;en;biblio+metier;Q7367298 {biblio+metier}
+11491;Gabriele Ínvernizzi;non corroborée;;;;;;;;;Q19635280
+11492;Sebastian Kalicha;acceptée;oui;Q111221555;Sebastian Kalicha;1984;;;de;biblio+anarchisme;Q111221555 {biblio+anarchisme}
+11494;Paulo Capra;introuvable;;;;;;;;;
+11495;Rogério Nascimento;introuvable;;;;;;;;;
+11496;Jose Luis Catalinas;introuvable;;;;;;;;;
+11497;Elisa Reis;introuvable;;;;;;;;;
+11498;Newton Stadler de Souza;introuvable;;;;;;;;;
+11499;Richard Robinson;ambiguë;;;;;;;;;Q259994 {biblio} | Q18783924 {biblio+metier} | Q7328699 | Q107131818 {metier} | Q7328700 {biblio+metier} | Q25711399 [né 1971, publié dès 1974] | Q7328701 | Q110226071 {biblio} | Q7328697 {biblio} | Q1246985 {biblio+metier}
+11500;Mary Alice MC CABE;introuvable;;;;;;;;;
+11501;Philippe Van Parijs;acceptée;oui;Q1345191;Philippe Van Parijs;1951;;BE;fr;biblio+metier;Q1345191 {biblio+metier}
+11502;Vladimir Illitch Lênin;introuvable;;;;;;;;;
+11503;Federico Mayor;acceptée;oui;Q457158;Federico Mayor Zaragoza;1934;2024;ES;;biblio+metier;Q457158 {biblio+metier} | Q92577934 {chercheur}
+11504;Pierre Louÿs;acceptée;oui;Q334958;Pierre Louÿs;1870;1925;FR;fr;biblio+metier;Q334958 {biblio+metier}
+11505;Leila Maria da Silva Blass;introuvable;;;;;;;;;
+11506;Priscila da Silva Nascimento;introuvable;;;;;;;;;
+11508;René Gertz;acceptée;oui;Q18708097;René Gertz;1949;;BR;;biblio+metier;Q18708097 {biblio+metier}
+11509;Maxiliano Astroza-Leon;introuvable;;;;;;;;;
+11512;Paulo Sergio Tumolo;introuvable;;;;;;;;;
+11515;Mark Bray;ambiguë;;;;;;;;;Q96026067 {biblio+metier} | Q6766831 {biblio+metier} | Q100759140
+11516;Emma M.;contradiction;;;;;;;;;Q109417998 [né 1992, publié dès 2001]
+11518;Salvador Neves;introuvable;;;;;;;;;
+11519;Sam Mbah;acceptée;oui;Q7407861;Sam Mbah;1963;2014;NG;;biblio+metier+anarchisme;Q7407861 {biblio+metier+anarchisme}
+11520;Pako;ambiguë;;;;;;;;;Q9201330 {biblio+metier} | Q59244912 | Q60439769 {biblio+metier}
+11521;Rockwell;ambiguë;;;;;;;;;Q271884 {biblio+metier} | Q1299664 {biblio} | Q108776331
+11522;Bernardo Kocher;introuvable;;;;;;;;;
+11523;Miguel Bodea;introuvable;;;;;;;;;
+11524;Nicolina Luiza De Petta;introuvable;;;;;;;;;
+11525;Lúcia Silva Parra;introuvable;;;;;;;;;
+11526;Tomaso Marabini;introuvable;;;;;;;;;
+11527;Reginaldo Moraes;introuvable;;;;;;;;;
+11528;José Alfredo Vidigal Pontes;introuvable;;;;;;;;;
+11529;Ramatís;introuvable;;;;;;;;;
+11530;José Honório Rodrigues;acceptée;oui;Q10309586;José Honório Rodrigues;1913;1987;BR;pt;biblio+metier;Q10309586 {biblio+metier}
+11531;Khapaz;introuvable;;;;;;;;;
+11532;James Cleugh;acceptée;oui;Q6131455;James Cleugh;1891;1969;;;biblio+metier;Q6131455 {biblio+metier}
+11533;Fernand Planche;acceptée;oui;Q80823901;Fernand Planche;1900;1974;;fr;biblio+metier;Q80823901 {biblio+metier}
+11535;Starhawk;acceptée;oui;Q272205;Starhawk;1951;;US;en;biblio+metier;Q272205 {biblio+metier}
+11537;Vera Zasulic;acceptée;oui;Q234980;Véra Zassoulitch;1849;1919;RU;ru;biblio+metier;Q234980 {biblio+metier}
+11538;Voltaire;ambiguë;;;;;;;;;Q9068 {biblio+metier} | Q944759 {biblio+metier} | Q21556140 | Q7965060 {biblio}
+11539;Floreal Samitier Arroyos;à relire (un seul signal);;Q5862991;Floreal Samitier Arroyos;1934;2012;ES;es;metier;Q5862991 {metier}
+11540;Beatriz (et al.) SILVÉRIO;introuvable;;;;;;;;;
+11541;Yolanda Lhullier dos Santos;à relire (un seul signal);;Q101242783;Yolanda Lhullier dos Santos;;;BR;;metier;Q101242783 {metier}
+11542;Dad Squarisi;acceptée;oui;Q10263680;Dad Squarisi;1946;2023;BR;pt;biblio+metier;Q10263680 {biblio+metier}
+11543;Stepniak;acceptée;oui;Q546520;Sergueï Stepniak-Kravtchinski;;1895;UA;ru;biblio+metier;Q546520 {biblio+metier} | Q1551218
+11545;Felipe del Solar;introuvable;;;;;;;;;
+11546;Robert A. Scalapino;acceptée;oui;Q556163;Robert A. Scalapino;1919;2011;US;;biblio+metier;Q556163 {biblio+metier}
+11547;Maria Sardelich;introuvable;;;;;;;;;
+11548;Subcomandante Marcos;acceptée;oui;Q491635;Sous-commandant Marcos;1957;;MX;es;biblio+metier;Q491635 {biblio+metier}
+11550;Chico Whitaker;à relire (un seul signal);;Q287089;Francisco Whitaker;1931;;BR;pt;biblio;Q287089 {biblio}
+11551;Carlos Zubillaga;acceptée;oui;Q5752163;Carlos Zubillaga;1941;;UY;es;biblio+metier;Q5752163 {biblio+metier}
+11552;Zizen;introuvable;;;;;;;;;
+11556;Daniel Santini;introuvable;;;;;;;;;
+11559;Biblioteca Terra Livre;introuvable;;;;;;;;;
+11563;Christian Bay;acceptée;oui;Q22234122;Christian Bay;1921;1990;NO;;biblio+metier;Q22234122 {biblio+metier} | Q89227217 {chercheur}
+11564;Charles C. Walker;introuvable;;;;;;;;;
