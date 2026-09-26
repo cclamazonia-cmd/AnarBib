@@ -1,0 +1,39 @@
+# Banc PMB (H14). Projet compose à nom propre : `docker compose down -v` ici
+# ne touche jamais le stack de dev `anarbib`.
+# Mots de passe : valeurs de banc, locales, sans rien derrière. Les ports ne
+# sont liés qu'à 127.0.0.1.
+name: pmb-banc
+
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: pmb-banc-root
+    volumes:
+      - db:/var/lib/mysql
+      - ./mariadb.cnf:/etc/mysql/conf.d/zz-pmb.cnf:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      retries: 30
+
+  web:
+    build:
+      context: .
+      additional_contexts:
+        pmbdl: ${PMB_DL_DIR:?lancer par banc.sh}
+      args:
+        PMB_VERSION: ${PMB_VERSION}
+        PMB_SHA256: ${PMB_SHA256}
+    image: pmb-banc-web:${PMB_VERSION}
+    ports:
+      - "127.0.0.1:8088:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Échanges avec l'hôte : fichiers à importer, exports récupérés.
+      - ${PMB_ECHANGE_DIR:?lancer par banc.sh}:/echange
+
+volumes:
+  db:

@@ -1,0 +1,5268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unimarc>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">1</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Bac en poche</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-211-04459-X</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">166 p.</s>
+    <s c="c">couv. ill. en coul.</s>
+    <s c="d">19 cm</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">La terre est devenue plate comme on se l'imaginait au Moyen Age et il ne faut pas trop s'approcher du bord... -- Services Documentaires Multimédia, C'était, évidemment, une journée magnifique. Une journée pour le Catalogue de la Compagnie. A ce moment là, le bureau de Kin donnait sur un lagon frangé de palmiers. Des rouleaux se brisaient contre les récifs...</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Souton</s>
+    <s c="b">Dominique</s>
+    <s c="4">070</s>
+    <s c="9">id:1</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">L'École des loisirs</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:1</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">L'École des loisirs</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:1</s>
+  </f>
+  <f c="225" ind="2 ">
+    <s c="a">Médium</s>
+    <s c="9">id:1</s>
+  </f>
+  <f c="410" ind=" 0">
+    <s c="t">Médium</s>
+    <s c="9">id:1</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">840</s>
+    <s c="l">Littérature française</s>
+    <s c="9">id:85</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=1&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700004388761</s>
+    <s c="k">JR SOU</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700004388761</s>
+    <s c="k">JR SOU</s>
+    <s c="m">20040803</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Romans Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:1</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700004388761</s>
+    <s c="9">expl_cote:JR SOU</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:13</s>
+    <s c="9">section_libelle:Romans Jeunes</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-03</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2112</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Roman d'aventure</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">2</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Catfish blues</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-02-029506-7</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">154 p.</s>
+    <s c="c">couv. ill. en coul.</s>
+    <s c="d">20 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">Bibliogr., discogr. des oeuvres de l'auteur, 2 p.</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Catfish Blues, 12 ans, n'a qu'une idée en tête: fuir la plantation de coton où travaillent ses frères et soeurs et suivre son oncle Eddie pour devenir chanteur de blues à Chicago. Chronique de la vie d'un petit Noir aux prises avec les escrocs de tout poil, y compris le Ku Klux Klan, ce roman vaut aussi par la vivacité de son écriture. Un beau portrait d'époque. --Laurence Liban, ©Lire</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Herzhaft</s>
+    <s c="b">Gérard</s>
+    <s c="4">070</s>
+    <s c="N">http://perso.wanadoo.fr/cielj/charte/annuaire/herzhaft.htm</s>
+    <s c="9">id:2</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Seuil</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:2</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Seuil</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:2</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=2&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">22020295067</s>
+    <s c="k">JR HER</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">22020295067</s>
+    <s c="k">JR HER</s>
+    <s c="m">20040803</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliobus</s>
+    <s c="x">Romans Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:2</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:22020295067</s>
+    <s c="9">expl_cote:JR HER</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:13</s>
+    <s c="9">section_libelle:Romans Jeunes</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-03</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliobus</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">6438646236</s>
+    <s c="k">R HER</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">6438646236</s>
+    <s c="k">R HER</s>
+    <s c="m">20040913</s>
+    <s c="n">20040913</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Romans Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:32</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:6438646236</s>
+    <s c="9">expl_cote:R HER</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:13</s>
+    <s c="9">section_libelle:Romans Jeunes</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_retour:2004-09-13</s>
+    <s c="9">expl_date_depot:2004-09-13</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">coton;blues;musique;racisme</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2045</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Littérature française</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">3</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1998-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Trois fêlés et un pendu</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-84146-554-3</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">29 p.</s>
+    <s c="c">couv. ill. en coul.</s>
+    <s c="d">18 cm</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Lucien a trouvé un trésor dans une grange abandonnée. Lorsqu'il y retourne avec ses copains, un homme est pendu au centre du bâtiment. Subterfuge pour les faire fuir, le pendu n'est pas mort et le trésor est sien. Grâce à Dédé qui s'est sauvé chercher du secours, le criminel est écroué. -- Services Documentaires Multimédia</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Oppel</s>
+    <s c="b">Jean-Hugues</s>
+    <s c="4">070</s>
+    <s c="f">1957-....</s>
+    <s c="N">http://www.ricochet-jeunes.org/auteur.asp?name=Oppel&amp;surname=Jean-Hugues</s>
+    <s c="9">id:3</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Syros jeunesse</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:3</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Syros jeunesse</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:3</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">800</s>
+    <s c="l">Littérature</s>
+    <s c="9">id:81</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=3&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700003413727</s>
+    <s c="k">ER OPP</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003413727</s>
+    <s c="k">ER OPP</s>
+    <s c="m">20040803</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Romans Enfants</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:3</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003413727</s>
+    <s c="9">expl_cote:ER OPP</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:12</s>
+    <s c="9">section_libelle:Romans Enfants</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-03</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">copains;policier</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2045</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Littérature française</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">4</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1998-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Le dieu devenu homme</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-86274-547-2</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">125 p.</s>
+    <s c="d">21 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">Recueil de nouvelles</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">Quatorze nouvelles dont l'intrigue, ayant un personnage célèbre comme actant, se déroule entre 1820 et 1867. On doit ajouter pour l'intérêt du lecteur que quelques-uns des personnages se nomment Hugo, Lamartine, Vigny, Musset, Balzac... -- Services Documentaires Multimédia</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Zimmermann</s>
+    <s c="b">Daniel</s>
+    <s c="4">070</s>
+    <s c="f">1935-2000</s>
+    <s c="N">http://www.humanite.presse.fr/journal/2000-12-08/2000-12-08-236014</s>
+    <s c="9">id:4</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">le Cherche-Midi éd.</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:4</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">le Cherche-Midi éd.</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:4</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">840</s>
+    <s c="l">Littérature française</s>
+    <s c="9">id:85</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=4&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700003470461</s>
+    <s c="k">R ZIM</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003470461</s>
+    <s c="k">R ZIM</s>
+    <s c="m">20040803</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Romans &amp; Romans étrangers</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:4</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003470461</s>
+    <s c="9">expl_cote:R ZIM</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:24</s>
+    <s c="9">section_libelle:Romans &amp; Romans étrangers</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-03</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">roman historique,fiction;nouvelle;nouvelles</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1436</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Nouvelles</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">5</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Sarah de Cordoue</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-84146-452-0</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">136 p.</s>
+    <s c="c">couv. ill. en coul.</s>
+    <s c="d">21 cm</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">A défaut de fils, un vieux savant mal en point fait de sa fille aînée son disciple. La grande bibliothèque de Cordoue est interdite aux femmes. Pour accomplir les voeux de son père Sarah accepte de se travestir, de devenir Samuel. Elle reçoit un poème galant d'un jeune étudiant musulman. Qui, de Samuel ou de Sarah aime-t-il? Une belle histoire d'amour avec, en toile de fond, une fresque de Cordoue du 12e siècle. -- Services Documentaires Multimédia</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Causse</s>
+    <s c="b">Rolande</s>
+    <s c="4">070</s>
+    <s c="f">1939-....</s>
+    <s c="N">http://www.ricochet-jeunes.org/auteur.asp?name=Causse&amp;surname=Rolande</s>
+    <s c="9">id:5</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Syros jeunesse</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:3</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Syros jeunesse</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:3</s>
+  </f>
+  <f c="225" ind="2 ">
+    <s c="a">Les |uns, les autres</s>
+    <s c="9">id:5</s>
+  </f>
+  <f c="410" ind=" 0">
+    <s c="t">Les |uns, les autres</s>
+    <s c="9">id:5</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">840</s>
+    <s c="l">Littérature française</s>
+    <s c="9">id:85</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=5&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700003719453</s>
+    <s c="k">JR CAU</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003719453</s>
+    <s c="k">JR CAU</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Romans Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:5</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003719453</s>
+    <s c="9">expl_cote:JR CAU</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:13</s>
+    <s c="9">section_libelle:Romans Jeunes</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1936</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Espagne</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">6</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1998-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Le mille-pattes</s>
+    <s c="e">roman</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-207-24700-7</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">233 p.</s>
+    <s c="d">21 cm</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Le titre crypté désigne les onze joueurs de l'équipe de France de football impliqués en ce récit dans une intrigue "alternative" par rapport à l'événement de 1998. -- Services Documentaires Multimédia</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Riou</s>
+    <s c="b">Jean-Michel</s>
+    <s c="4">070</s>
+    <s c="9">id:6</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Denoël</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:5</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Denoël</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:5</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=6&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700003550072</s>
+    <s c="k">RX RIO</s>
+    <s c="u">Reliure bibliographique très abîmée. Comparer coût réparation et rééquipement. </s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003550072</s>
+    <s c="k">RX RIO</s>
+    <s c="u">Reliure bibliographique très abîmée. Comparer coût réparation et rééquipement. </s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliobus</s>
+    <s c="x">Romans policiers</s>
+    <s c="e">Livre</s>
+    <s c="1">Détérioré</s>
+    <s c="9">expl_id:6</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003550072</s>
+    <s c="9">expl_cote:RX RIO</s>
+    <s c="9">expl_statut:11</s>
+    <s c="9">statut_libelle:Détérioré</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_note:Reliure bibliographique très abîmée. Comparer coût réparation et rééquipement. </s>
+    <s c="9">expl_section:21</s>
+    <s c="9">section_libelle:Romans policiers</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:0</s>
+    <s c="9">location_libelle:Bibliobus</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">bleus;champions du monde;1998;policier;ballon rond</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2045</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Littérature française</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2279</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Football</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">7</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2016-03-29 12:51:49</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Le puits</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-08-164155-0</s>
+  </f>
+  <f c="101" ind="1 ">
+    <s c="a">fre</s>
+    <s c="c">ame</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">110 p.</s>
+    <s c="c">ill., couv. ill. en coul.</s>
+    <s c="d">17 cm</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">La sécheresse a tari tous les puits de la région. Tous sauf celui des Logan, famille de fermiers noirs aisée. Les Logan partagent cette eau précieuse de grand cœur, avec tous. Mais en 1910, dans le Sud américain, les rancœurs contre les Noirs sont tenaces... Tout au long de l'été, la tension monte, aussi accablante que la chaleur.</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Vassallo-Villaneau</s>
+    <s c="b">Rose-Marie</s>
+    <s c="f">1946-....</s>
+    <s c="9">id:8</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Taylor</s>
+    <s c="b">Mildred D.</s>
+    <s c="4">070</s>
+    <s c="N">http://falcon.jmu.edu/~ramseyil/taylor.htm</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">[Paris]</s>
+    <s c="b">[Paris]</s>
+    <s c="c">Flammarion</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:6</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">[Paris]</s>
+    <s c="b">[Paris]</s>
+    <s c="c">Flammarion</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:6</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">810</s>
+    <s c="l">Littérature américaine</s>
+    <s c="9">id:82</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=7&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700004389030</s>
+    <s c="k">JRK TAY</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700004389030</s>
+    <s c="k">JRK TAY</s>
+    <s c="m">20040804</s>
+    <s c="n">20040804</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliobus</s>
+    <s c="x">Romans Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:7</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700004389030</s>
+    <s c="9">expl_cote:JRK TAY</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:13</s>
+    <s c="9">section_libelle:Romans Jeunes</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_retour:2004-08-04</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliobus</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700004389026</s>
+    <s c="k">JRK TAY</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700004389026</s>
+    <s c="k">JRK TAY</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Romans Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:8</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700004389026</s>
+    <s c="9">expl_cote:JRK TAY</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:13</s>
+    <s c="9">section_libelle:Romans Jeunes</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">coton;policier</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1445</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Littérature américaine</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">8</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1993-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-09-21 13:55:07</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Ghetto 9</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-7234-1542-2</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">47 p.</s>
+    <s c="c">ill. en coul., couv. ill. en coul.</s>
+    <s c="d">33 cm</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">Dans une Afrique futuriste, un consortium exploite à outrance les ressources du continent. Et quand Dayak découvre que l'homme qui dirige cet empire technologique n'est autre que son propre frère, la lutte prend une dimension fascinante. Dayak possède l'énergie et la force des meilleures sagas de S.F. et confirme le talent visionnaire du dessin d'Adamov, qui signe là son premier scénario.</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Adamov</s>
+    <s c="b">Philippe</s>
+    <s c="4">070</s>
+    <s c="f">1956-....</s>
+    <s c="N">http://www.lambiek.net/fr/adamov_philippe.html</s>
+    <s c="9">id:9</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1993</s>
+    <s c="h">1993-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1993</s>
+    <s c="h">1993-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="225" ind="2 ">
+    <s c="a">Dayak.</s>
+    <s c="9">id:8</s>
+  </f>
+  <f c="410" ind=" 0">
+    <s c="t">Dayak.</s>
+    <s c="9">id:8</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">760</s>
+    <s c="l">Arts graphiques - graphisme</s>
+    <s c="9">id:77</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=8&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700003669468</s>
+    <s c="k">BD ADA</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003669468</s>
+    <s c="k">BD ADA</s>
+    <s c="m">20040804</s>
+    <s c="n">20040804</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliobus</s>
+    <s c="x">Bande-dessinée Adultes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:9</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003669468</s>
+    <s c="9">expl_cote:BD ADA</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:16</s>
+    <s c="9">section_libelle:Bande-dessinée Adultes</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_retour:2004-08-04</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliobus</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1414</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Science-fiction</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">9</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-09-21 13:55:07</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Zaks</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-7234-2083-3</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">47 p.</s>
+    <s c="c">ill. en coul., couv. ill. en coul.</s>
+    <s c="d">32 cm</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">Une fois la ville-mère détruite, implosée, Dayak a réussi à échapper aux intercepteurs.En compagnie de son fidèle P'tit Caille, le voilà au coeur du désert, prêt à se fondre dans cet univers inhospitalier, mais toujours suivi, à quelque distance, par son frère Simon, plus que jamais décidé à le rattraper. Or le Grand Désert est aussi le domaine des Zaks, les hommes-masques aux yeux sanguins. N'est-ce qu'un peuple de légende, où sont-ils vraiment là, cachés dans un dédale de galeries souterraines labyrinthiques ?Dayak ne tardera pas à être fixé . Bientôt résonneront les tambours des traditions humaines les plus anciennes, et les ombres démesurées des silhouettes primitives viendront s'allonger auprès de lui.Grâce à leur intervention, Dayak parviendra à triompher définitivement de son frère, si tant est que la mort, pour les gens de son espèce, soit vraiment une fin...Alors, qui sont au juste ces Zaks qui s'expriment en ces lieux désertiques ?Et si Dayak, d'une certaine façon, finissait par devenir l'un des leurs ?...</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Adamov</s>
+    <s c="b">Philippe</s>
+    <s c="4">070</s>
+    <s c="f">1956-....</s>
+    <s c="N">http://www.lambiek.net/fr/adamov_philippe.html</s>
+    <s c="9">id:9</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="225" ind="2 ">
+    <s c="a">Dayak.</s>
+    <s c="9">id:8</s>
+  </f>
+  <f c="410" ind=" 0">
+    <s c="t">Dayak.</s>
+    <s c="9">id:8</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">760</s>
+    <s c="l">Arts graphiques - graphisme</s>
+    <s c="9">id:77</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=9&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700003669484</s>
+    <s c="k">BD ADA</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003669484</s>
+    <s c="k">BD ADA</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Bande-dessinée Adultes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:10</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003669484</s>
+    <s c="9">expl_cote:BD ADA</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:16</s>
+    <s c="9">section_libelle:Bande-dessinée Adultes</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1414</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Science-fiction</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">10</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1994-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-09-21 13:55:07</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">La chambre verte</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-7234-1727-1</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">47 p.</s>
+    <s c="c">ill. en coul., couv. ill. en coul.</s>
+    <s c="d">32 cm</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">La nouvelle Addis Abeba est née !Fini le ghetto, sa misère et sa crasse... Simon Colbius, leader de la C.P.M., a fait surgir une mégalopole où les techniques les plus sophistiquées côtoient les traditions les plus anciennes.Un monde où P'tit Caille est devenu le valet de chambre du nouveau despote et Cori une courtisane que le nouveau comportement de Dayak trouble à peine.Car Dayak sait maintenant qu'il est le frère de Simon, il a retrouvé dans de lointains souvenirs la vision fugace de cette Chambre verte où, enfants, ils percevaient les formidables changements que leur père orchestrait.Devenu le clone de Simon, Dayak parviendra-t-il à briser les chaînes qui le relient à ce frère qui se rêve maître de l'Afrique et empereur d'un nouvel âge ?</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Adamov</s>
+    <s c="b">Philippe</s>
+    <s c="4">070</s>
+    <s c="f">1956-....</s>
+    <s c="N">http://www.lambiek.net/fr/adamov_philippe.html</s>
+    <s c="9">id:9</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1994</s>
+    <s c="h">1994-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1994</s>
+    <s c="h">1994-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="225" ind="2 ">
+    <s c="a">Dayak.</s>
+    <s c="9">id:8</s>
+  </f>
+  <f c="410" ind=" 0">
+    <s c="t">Dayak.</s>
+    <s c="9">id:8</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">760</s>
+    <s c="l">Arts graphiques - graphisme</s>
+    <s c="9">id:77</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=10&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700003669485</s>
+    <s c="k">BD ADA</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003669485</s>
+    <s c="k">BD ADA</s>
+    <s c="m">20040804</s>
+    <s c="n">20040804</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Albums Enfants</s>
+    <s c="e">Livre</s>
+    <s c="1">Perdu</s>
+    <s c="9">expl_id:11</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003669485</s>
+    <s c="9">expl_cote:BD ADA</s>
+    <s c="9">expl_statut:12</s>
+    <s c="9">statut_libelle:Perdu</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:26</s>
+    <s c="9">section_libelle:Albums Enfants</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_retour:2004-08-04</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:0</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1414</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Science-fiction</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">11</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1996-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-09-21 13:55:07</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Le chirurgien hollandais</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-7234-2062-0</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">47 p.</s>
+    <s c="c">ill. en coul., couv. ill. en coul.</s>
+    <s c="d">32 cm</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">Ile de Java, région de Semarang en 1897. Un décor exotique pour une aventure riche en rebondissements. Ironie et drame se conjugent pour ce premier tome d'une nouvelle série qui confirme le talent de Christian Lamquet.
+Un chirurgien hollandais a découvert un crâne qu'il cherche à faire authentifier comme l'un des chaînons manquant de l'histoire de l'homme. Autour de lui, des personnages haut en couleurs : savants baroques, veuve éplorée, la guenon Lucy, un journaliste zélé, une femme qui ne rêve que de maternité. Et enfin : Pete, le crâne, lui-même personnage central de ce récit utilisant habilement théosophie, un mélange d'occultisme et de spiritisme, et anthropologie.
+Parce qu'il est convaincu d'avoir mis à jour des fossiles du fameux "chaînon manquant", Jacob Boos, un chirurgien hollandais en garnison à Semarang, est bien décidé à remuer ciel, terre, océan et bonne conscience pour prouver au monde la réalité de sa découverte...
+" Pete " comme il le surnomme affectueusement, était-il vraiment ce petit "homme-singe debout" parcourant la savane voici deux millions d'années ?
+Pour l'heure, ce qu'il a laissé de lui sommeille dans une valise : quelques bouts de vertèbres, un crâne, un morceau de mâchoire. Si Jacob y investit tous ses espoirs, d'autres vont y engluer les précieuses reliques dans les délires de leurs utopies, de leurs passions ou de leur bêtises...
+ Et puis tous ces malheurs qui se succèdent...
+Pete, du fond de sa valise, porterait-il la poisse ?  </s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Lamquet</s>
+    <s c="b">Chris</s>
+    <s c="4">070</s>
+    <s c="f">1954-....</s>
+    <s c="9">id:10</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1996</s>
+    <s c="h">1996-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Grenoble</s>
+    <s c="b">Grenoble</s>
+    <s c="c">Glénat</s>
+    <s c="d">1996</s>
+    <s c="h">1996-01-01</s>
+    <s c="9">id:7</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">760</s>
+    <s c="l">Arts graphiques - graphisme</s>
+    <s c="9">id:77</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=11&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700004243164</s>
+    <s c="k">JBD LAM</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700004243164</s>
+    <s c="k">JBD LAM</s>
+    <s c="m">20040804</s>
+    <s c="n">20040804</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Bande-dessinée Enfants</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:12</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700004243164</s>
+    <s c="9">expl_cote:JBD LAM</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:17</s>
+    <s c="9">section_libelle:Bande-dessinée Enfants</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_retour:2004-08-04</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">bande dessinée</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1391</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Bande dessinée</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">12</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-09-21 13:55:07</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">La Chrysalide Diaprée</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-86967-551-8</s>
+    <s c="d">EUR 11,40</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">Cartonné - 48 pages</s>
+    <s c="d">23 x 32</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">Pour sauver son grand-père qui se meurt, Benjamin doit ramener le Mangecoeur, un papillon funeste, avant l'aube. Poursuivi par des clowns cruels dans une fête foraine où seuls les adultes sont admis, il rencontre Rififi, seul allié dans sa fuite. Mais cet ami et son compagnon Pantagas utilisent Benjamin à des fins peu louables... Le rêve et la magie règnent en maîtres dans ce conte merveilleux peuplé de clowns dangereusement malicieux. Le trait brillant de Jean-Baptiste Andréae s'associe au scénario plus qu'efficace de Mathieu Gallié.  </s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="701" ind=" 1">
+    <s c="a">Andréaé</s>
+    <s c="b">Jean-Baptiste</s>
+    <s c="4">440</s>
+    <s c="9">id:12</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Gallié</s>
+    <s c="b">Mathieu</s>
+    <s c="4">070</s>
+    <s c="9">id:11</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Issy-les-Moulineaux</s>
+    <s c="b">31, rue Ernest-Renan
+
+92130
+Issy-les-Moulineaux
+France</s>
+    <s c="c">Vents d'Ouest</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:8</s>
+    <s c="9">web:http://www.ventsdouest.com</s>
+    <s c="9">cp:92130</s>
+    <s c="9">adr1:31, rue Ernest-Renan</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Issy-les-Moulineaux</s>
+    <s c="b">31, rue Ernest-Renan
+
+92130
+Issy-les-Moulineaux
+France</s>
+    <s c="c">Vents d'Ouest</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:8</s>
+    <s c="9">web:http://www.ventsdouest.com</s>
+    <s c="9">cp:92130</s>
+    <s c="9">adr1:31, rue Ernest-Renan</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=12&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700003868672</s>
+    <s c="k">JBD GAL</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003868672</s>
+    <s c="k">JBD GAL</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Bande-dessinée Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:13</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003868672</s>
+    <s c="9">expl_cote:JBD GAL</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:20</s>
+    <s c="9">section_libelle:Bande-dessinée Jeunes</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">bande dessinée</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1391</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Bande dessinée</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">13</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1998-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-09-21 13:55:07</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Monsieur Je-sais-tout</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-8001-2334-6</s>
+    <s c="d">7,79 €</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">48 p.</s>
+    <s c="c">ill. en coul., couv. ill. en coul.</s>
+    <s c="d">30 cm</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Geerts</s>
+    <s c="b">André</s>
+    <s c="4">070</s>
+    <s c="f">1955-....</s>
+    <s c="9">id:13</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">[Paris]</s>
+    <s c="b">[Paris]</s>
+    <s c="c">Dupuis</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:9</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">[Paris]</s>
+    <s c="b">[Paris]</s>
+    <s c="c">Dupuis</s>
+    <s c="d">1998</s>
+    <s c="h">1998-01-01</s>
+    <s c="9">id:9</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">760</s>
+    <s c="l">Arts graphiques - graphisme</s>
+    <s c="9">id:77</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=13&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700004243347</s>
+    <s c="k">EBD GEE</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700004243347</s>
+    <s c="k">EBD GEE</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Bande-dessinée Enfants</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:14</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700004243347</s>
+    <s c="9">expl_cote:EBD GEE</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:17</s>
+    <s c="9">section_libelle:Bande-dessinée Enfants</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1599</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Bande dessinée</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">14</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Paroles de bonheur</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-226-09017-7</s>
+    <s c="d">9,50 €</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">Non paginé [59] p.</s>
+    <s c="c">ill. en coul., couv. ill. en coul.</s>
+    <s c="d">22 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">Bibliogr., 2 p.</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Collection anthologique de textes de tous les temps et de tous les pays sur un thème donné. Présentation originale où les écrits sont enclavés dans les illustrations. -- Services Documentaires Multimédia</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Got</s>
+    <s c="b">Yves</s>
+    <s c="f">1939-....</s>
+    <s c="9">id:15</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Robin</s>
+    <s c="b">Christian</s>
+    <s c="4">340</s>
+    <s c="f">1961-....</s>
+    <s c="9">id:14</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">A. Michel</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:10</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">A. Michel</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:10</s>
+  </f>
+  <f c="225" ind="2 ">
+    <s c="a">Paroles</s>
+    <s c="9">id:11</s>
+  </f>
+  <f c="410" ind=" 0">
+    <s c="t">Paroles</s>
+    <s c="9">id:11</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">800</s>
+    <s c="l">Littérature</s>
+    <s c="9">id:81</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=14&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">33700003453202</s>
+    <s c="k">J 808 PAR</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003453202</s>
+    <s c="k">J 808 PAR</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:15</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003453202</s>
+    <s c="9">expl_cote:J 808 PAR</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:25</s>
+    <s c="9">section_libelle:Documentaires Jeunes</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Jeunes</s>
+    <s c="9">statisdoc_codage_import:j</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1655</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Psychologie - Psychanalyse</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">15</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">La métamorphose des fleurs</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-7324-2351-3</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">143 p. dont 4 dépl.</s>
+    <s c="c">ill. en coul., jaquette ill. en coul.</s>
+    <s c="d">30 cm</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">Avec Microcosmos, des milliers de lecteurs se sont émerveillés devant les prodiges insoupçonnés d'un petit carré d'herbes folles. Dans la Métamorphose des Fleurs, Claude Nuridsany et Marie Pérennou sillonnent prairies et jardins et invitent nos yeux inattentifs à se poser sur un bouton gorgé de sève, un pétale qui s'entrouvre ou la chute d'une corolle. Autant de moments phares de la vie flamboyante d'une fleur, architecture de rêve construite et défaite en quelques jours. Transfigurées par la magie de la macrophotographie, une vingtaine d'espèces florales naissent, vivent et meurent sous nos yeux. Marie Pérennou et Claude Nuridsany ont inventé, pour notre plus grand plaisir, un nouveau regard sur la nature, à mi-chemin entre la biologie et la poésie.</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="701" ind=" 1">
+    <s c="a">Pérennou</s>
+    <s c="b">Marie</s>
+    <s c="4">007</s>
+    <s c="f">1946-....</s>
+    <s c="9">id:17</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Nuridsany</s>
+    <s c="b">Claude</s>
+    <s c="4">070</s>
+    <s c="f">1946-....</s>
+    <s c="9">id:16</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">La Martinière</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:11</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">La Martinière</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:11</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">580</s>
+    <s c="l">Botanique - (les plantes)</s>
+    <s c="9">id:59</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=15&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700004118010</s>
+    <s c="k">582 NUR</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700004118010</s>
+    <s c="k">582 NUR</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:16</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700004118010</s>
+    <s c="9">expl_cote:582 NUR</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">fleur;pistil;étamine;macrophotographie</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2214</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Fleurs</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">16</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Rwanda</s>
+    <s c="e">un peuple avec une histoire</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-7384-5292-2</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">271 p.</s>
+    <s c="d">22 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">En appendice, choix de documents</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Overdulve</s>
+    <s c="b">Cornelis Marinus</s>
+    <s c="4">070</s>
+    <s c="f">1929-....</s>
+    <s c="9">id:18</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">l'Harmattan</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:12</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">l'Harmattan</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:12</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">960</s>
+    <s c="l">Histoire de l'Afrique</s>
+    <s c="9">id:97</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=16&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700003286792</s>
+    <s c="k">967 OVE</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700003286792</s>
+    <s c="k">967 OVE</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:17</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700003286792</s>
+    <s c="9">expl_cote:967 OVE</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">afrique franchophone;rwanda;histoire de la colonisation</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1884</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Rwanda</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>e</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">17</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2002-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Carte routière : Ardèche - Haute-Loire, N° 11331</s>
+    <s c="e">Carte routière et touristique</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-06-100392-3</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">25 x 16</s>
+    <s c="d">Carte 1/150000 13e édition</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Présentation de l'éditeur
+La nouvelle génération des cartes routières Michelin ! Toutes les informations pour découvrir, sur une seule carte, un, deux ou trois départements de France et se repérer facilement en voiture.
+
+De nombreuses nouveautés ont été intégrées à la carte « LOCAL » :
+- une carte plus lisible grâce à une échelle agrandie : 1/150 000e ou 1/175 000e
+- un index complet des localités pour accéder rapidement à l'information
+- des plans de ville pour circuler dans les grandes agglomérations
+- une légende en image pour bien comprendre les symboles de la carte
+- une carte des terroirs
+Une nouvelle collection de cartes centrées sur le "LOCAL" pour vivre la route autrement !
+pixel</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="710" ind="02">
+    <s c="a">Editions Michelin</s>
+    <s c="4">650</s>
+    <s c="9">id:19</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Michelin</s>
+    <s c="d">2002</s>
+    <s c="h">2002-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:13</s>
+    <s c="9">web:www.michelin.fr</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Michelin</s>
+    <s c="d">2002</s>
+    <s c="h">2002-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:13</s>
+    <s c="9">web:www.michelin.fr</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=17&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451291</s>
+    <s c="k">910 MIC</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451291</s>
+    <s c="k">910 MIC</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Cartes et plans</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:19</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451291</s>
+    <s c="9">expl_cote:910 MIC</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:16</s>
+    <s c="9">tdoc_libelle:Cartes et plans</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">bas-vivarais;boutières;brisadois;cévennes;haut-vivarais;margeriche;velay</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1748</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Pays de la Loire</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>g</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">18</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2002-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Chili</s>
+    <s c="e">la glace et le feu</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">1 DVD vidéo monoface zone 2 (1 h 21 min)</s>
+    <s c="c">4/3, coul. (PAL)</s>
+    <s c="e">1 brochure (14 p. : ill. ; 18 cm)</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">Contient aussi : making of, documentaires ("le monde vu du ciel", "sites du monde", "le monde en fêtes")</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Brouwers</s>
+    <s c="b">Pierre</s>
+    <s c="9">id:20</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Loyola</s>
+    <s c="b">Annabel</s>
+    <s c="9">id:21</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Brouwers</s>
+    <s c="b">Magali</s>
+    <s c="9">id:22</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Reuter</s>
+    <s c="b">Philippe</s>
+    <s c="9">id:23</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Boulogne-Billancourt</s>
+    <s c="b">Boulogne-Billancourt</s>
+    <s c="c">TF1 vidéo éd.</s>
+    <s c="d">2002 (DL)</s>
+    <s c="h">2002-01-01</s>
+    <s c="9">id:14</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Boulogne-Billancourt</s>
+    <s c="b">Boulogne-Billancourt</s>
+    <s c="c">TF1 vidéo éd.</s>
+    <s c="d">2002 (DL)</s>
+    <s c="h">2002-01-01</s>
+    <s c="9">id:14</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=18&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451290</s>
+    <s c="k">DVD TF1</s>
+    <s c="u">vérifier la présence du livret avant de prêter</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451290</s>
+    <s c="k">DVD TF1</s>
+    <s c="u">vérifier la présence du livret avant de prêter</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">DVD</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:18</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451290</s>
+    <s c="9">expl_cote:DVD TF1</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:14</s>
+    <s c="9">tdoc_libelle:DVD</s>
+    <s c="9">expl_note:vérifier la présence du livret avant de prêter</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">Chili;Pâques</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1828</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Chili</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>m</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">19</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2001-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">La Loire Angevine au temps de Joachim du Bellay</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="e">1 disque optique numérique (CD-ROM) : coul., son. ; 12</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Contient un index et un glossaire
+Configuration(s) requise(s) :    
+PC ; 16 Mo de mémoire vive ; Windows 95 ou ultérieur ; lecteur de CD-ROM octuple vitesse ; affichage en 65 000 coul. ; carte son ; Macintosh ; 16 Mo de mémoire vive ; système 7.5 ou ultérieur ; lecteur de CD-ROM octuple vitesse ; affichage en 65 000 coul. ; carte son</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Hunot</s>
+    <s c="b">Jean-Yves</s>
+    <s c="4">070</s>
+    <s c="9">id:26</s>
+  </f>
+  <f c="711" ind="02">
+    <s c="a">Altaïr productions multimédia</s>
+    <s c="9">id:27</s>
+  </f>
+  <f c="701" ind=" 1">
+    <s c="a">Prigent</s>
+    <s c="b">Daniel</s>
+    <s c="4">070</s>
+    <s c="9">id:25</s>
+  </f>
+  <f c="710" ind="02">
+    <s c="a">Conseil général du Maine-et-Loire (CG49)</s>
+    <s c="4">723</s>
+    <s c="9">id:24</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Angers</s>
+    <s c="b">place Michel Debré
+
+49100
+Angers
+France</s>
+    <s c="c">Conseil général du Maine-et-Loire (CG49)</s>
+    <s c="d">2001</s>
+    <s c="h">2001-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:15</s>
+    <s c="9">web:http://www.cg49.fr</s>
+    <s c="9">cp:49100</s>
+    <s c="9">adr1:place Michel Debré</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Angers</s>
+    <s c="b">place Michel Debré
+
+49100
+Angers
+France</s>
+    <s c="c">Conseil général du Maine-et-Loire (CG49)</s>
+    <s c="d">2001</s>
+    <s c="h">2001-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:15</s>
+    <s c="9">web:http://www.cg49.fr</s>
+    <s c="9">cp:49100</s>
+    <s c="9">adr1:place Michel Debré</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=19&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451292</s>
+    <s c="k">CDROM LOI</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451292</s>
+    <s c="k">CDROM LOI</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Cédéroms</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:20</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451292</s>
+    <s c="9">expl_cote:CDROM LOI</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:17</s>
+    <s c="9">tdoc_libelle:Cédéroms</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">Du Bellay, Joachim;art de la Renaissance;architecture de la Renaissance;Anjou</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1423</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Renaissance</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1447</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Poésie</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>s</bl>
+  <hl>1</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">24</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:42</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Géo</s>
+    <s c="e">Un nouveau monde : la Terre</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Prisma Presse</s>
+    <s c="h">0000-00-00</s>
+    <s c="z">France</s>
+    <s c="9">id:16</s>
+    <s c="9">web:http://www.geomagazine.fr</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Prisma Presse</s>
+    <s c="h">0000-00-00</s>
+    <s c="z">France</s>
+    <s c="9">id:16</s>
+    <s c="9">web:http://www.geomagazine.fr</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=24&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1406</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Géographie</s>
+  </f>
+  <f c="462" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="462" id="2" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="464" id="33" ind="  ">
+    <s c="0">33</s>
+    <s c="t">Paysages afghans</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:33</s>
+    <s c="9">page:p. 26</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="35" ind="  ">
+    <s c="0">35</s>
+    <s c="t">Peuples d'Afghanistan</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:35</s>
+    <s c="9">page:p. 102</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="36" ind="  ">
+    <s c="0">36</s>
+    <s c="t">Tribus Pachtounes</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:36</s>
+    <s c="9">page:p. 72</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="37" ind="  ">
+    <s c="0">37</s>
+    <s c="t">femmes afghanes</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:37</s>
+    <s c="9">page:p. 120</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="38" ind="  ">
+    <s c="0">38</s>
+    <s c="t">Histoire de l'Afghanistan</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:38</s>
+    <s c="9">page:p. 64</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="39" ind="  ">
+    <s c="0">39</s>
+    <s c="t">Islam afghan</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:39</s>
+    <s c="9">page:p. 118</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="40" ind="  ">
+    <s c="0">40</s>
+    <s c="t">Famille Allix</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:40</s>
+    <s c="9">page:Famille Allix</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="41" ind="  ">
+    <s c="0">41</s>
+    <s c="t">Chateaux de la Loire (1)</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="9">id:41</s>
+    <s c="9">page:p. 126</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="25" ind="  ">
+    <s c="0">25</s>
+    <s c="t">Crise en Argentine</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="9">id:25</s>
+    <s c="9">page:p. 18</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="26" ind="  ">
+    <s c="0">26</s>
+    <s c="t">Australie vue par J.-P. Ferrero</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="9">id:26</s>
+    <s c="9">page:p. 38</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="29" ind="  ">
+    <s c="0">29</s>
+    <s c="t">Bagnes à Madagascar</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="9">id:29</s>
+    <s c="9">page:p. 49</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="30" ind="  ">
+    <s c="0">30</s>
+    <s c="t">Tatars de Crimée</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="9">id:30</s>
+    <s c="9">page:58</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="31" ind="  ">
+    <s c="0">31</s>
+    <s c="t">Marigot africain</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="9">id:31</s>
+    <s c="9">page:p. 70</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="464" id="32" ind="  ">
+    <s c="0">32</s>
+    <s c="t">Chateaux de la Loire (2)</s>
+    <s c="t"> </s>
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="9">id:32</s>
+    <s c="9">page:p. 126</s>
+    <s c="9">lnk:art</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">33</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Paysages afghans</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 26</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=33&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1976</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Afghanistan</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">35</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Peuples d'Afghanistan</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 102</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=35&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1976</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Afghanistan</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">36</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Tribus Pachtounes</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 72</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=36&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1976</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Afghanistan</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">37</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">femmes afghanes</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 120</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=37&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1976</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Afghanistan</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">38</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Histoire de l'Afghanistan</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 64</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=38&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1976</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Afghanistan</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">39</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Islam afghan</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 118</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=39&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1721</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Islam</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1976</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Afghanistan</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">40</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Famille Allix</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">Famille Allix</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=40&amp;database=bibli</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">41</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Chateaux de la Loire (1)</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 126</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=41&amp;database=bibli</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">chateau;loire;chenonceau;chambord;cheverny</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1545</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Voyage</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1748</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Pays de la Loire</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="1" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">25</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2016-03-29 12:51:37</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Crise en Argentine</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 18</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">330</s>
+    <s c="l">Economie - finances, production, consommation</s>
+    <s c="9">id:34</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=25&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1648</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Economie</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1830</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Argentine</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2297</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Mondialisation</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="2" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">26</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Australie vue par J.-P. Ferrero</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 38</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=26&amp;database=bibli</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">australie;aborigènes;désert</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1844</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Australie</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="2" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">29</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Bagnes à Madagascar</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 49</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=29&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1899</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Madagascar</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="2" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">30</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Tatars de Crimée</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">58</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=30&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1545</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Voyage</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="2" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">31</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Marigot africain</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 70</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=31&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1410</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Afrique</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="2" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">32</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Chateaux de la Loire (2)</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">p. 126</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=32&amp;database=bibli</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1748</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Pays de la Loire</s>
+  </f>
+  <f c="461" id="24" ind="  ">
+    <s c="0">24</s>
+    <s c="t">Géo</s>
+    <s c="9">id:24</s>
+    <s c="9">lnk:perio</s>
+  </f>
+  <f c="463" id="2" ind="  ">
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">1-bull</f>
+  <f c="100" ind="  ">
+    <s c="a">20260926u        u  u0frey50      ba</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Notice de bulletin</s>
+    <s c="d">Article_expl_bulletin</s>
+    <s c="h">Géo</s>
+    <s c="i">277</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+  </f>
+  <f c="463" ind="  ">
+    <s c="0">24</s>
+    <s c="d">2004-08-04</s>
+    <s c="v">277</s>
+    <s c="t"> </s>
+    <s c="t">Géo</s>
+    <s c="9">id:1</s>
+    <s c="9">lnk:bull_expl</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451293</s>
+    <s c="k">MAG GEO</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451293</s>
+    <s c="k">MAG GEO</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Périodique</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:22</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451293</s>
+    <s c="9">expl_cote:MAG GEO</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:18</s>
+    <s c="9">tdoc_libelle:Périodique</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>a</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">2-bull</f>
+  <f c="100" ind="  ">
+    <s c="a">20260926u        u  u0frey50      ba</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Notice de bulletin</s>
+    <s c="d">Article_expl_bulletin</s>
+    <s c="h">Géo</s>
+    <s c="i">278</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+  </f>
+  <f c="463" ind="  ">
+    <s c="0">24</s>
+    <s c="d">2004-08-04</s>
+    <s c="v">278</s>
+    <s c="t"> </s>
+    <s c="t">Géo</s>
+    <s c="9">id:2</s>
+    <s c="9">lnk:bull_expl</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451294</s>
+    <s c="k">MAG GEO</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451294</s>
+    <s c="k">MAG GEO</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliobus</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Périodique</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:21</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451294</s>
+    <s c="9">expl_cote:MAG GEO</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:18</s>
+    <s c="9">tdoc_libelle:Périodique</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliobus</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>b</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">42</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:42</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Charte du XIIIe siècle, par laquelle Guillaume de Rezay de la paroisse de Ceaux (Maine et Loire) vend à Messire de Vernée, chevalier, sept sous et six deniers de rente.</s>
+    <s c="e">Acte passé en la cour d'Angers le jeudi avant la Saint Urbain l'an mille deux cent quatre vingt dix neuf.</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fro</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">un feuillet manuscript</s>
+    <s c="e">a conservé son sceau et son contre-sceau</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">excellent état de conservation</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">date en vieux style (V.ST.) - M. DU POUGET, archiviste-paléographe de l'Indre, a bien voulu attirer mon attention sur le fait que cette charte était datée du joedi devant la Saint Alban (Saint Aubin d'Angers, qui se fête le 1er mars - Pâques tombant en 1299 le 19 avril, il y a effectivement bien lieu de considérer que cette charte est du 25 février 1300, nouveau style (N.ST.)</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Rezay</s>
+    <s c="b">Guillaume de</s>
+    <s c="4">720</s>
+    <s c="9">id:28</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="h">0000-00-00</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="h">0000-00-00</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">940</s>
+    <s c="l">Histoire de l'Europe</s>
+    <s c="9">id:95</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=42&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451295</s>
+    <s c="k">MANUSCRIPT</s>
+    <s c="u">Document sorti du fond ancien</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451295</s>
+    <s c="k">MANUSCRIPT</s>
+    <s c="u">Document sorti du fond ancien</s>
+    <s c="m">20040804</s>
+    <s c="n">20040804</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">H (Histoire locale)</s>
+    <s c="e">Oeuvre d'art</s>
+    <s c="1">Consultation sur place</s>
+    <s c="9">expl_id:23</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451295</s>
+    <s c="9">expl_cote:MANUSCRIPT</s>
+    <s c="9">expl_statut:13</s>
+    <s c="9">statut_libelle:Consultation sur place</s>
+    <s c="9">expl_typdoc:15</s>
+    <s c="9">tdoc_libelle:Oeuvre d'art</s>
+    <s c="9">expl_note:Document sorti du fond ancien</s>
+    <s c="9">expl_section:18</s>
+    <s c="9">section_libelle:H (Histoire locale)</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_retour:2004-08-04</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:0</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">charte;rente;archive;Ceaux;paroisse;cens;Angers;Maine-et-Loire</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1748</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Pays de la Loire</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>i</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">44</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Bruit de cochon</s>
+  </f>
+  <f c="856" ind="  ">
+    <s c="u">http://soundfishing.jexiste.fr/bruitages/animaux/cochons%20SF.mp3</s>
+    <s c="q">Fichier MP3</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">2 pistes audios sur cd gravé</s>
+    <s c="d">12 x 12</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">Bruitage courts. Bonne qualité d'enregistrement.</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="710" ind="02">
+    <s c="a">sound-fishing.net</s>
+    <s c="4">370</s>
+    <s c="9">id:30</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">sound-fishing.net</s>
+    <s c="d">2004</s>
+    <s c="h">2004-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:17</s>
+    <s c="9">web:http://www.sound-fishing.net</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">sound-fishing.net</s>
+    <s c="d">2004</s>
+    <s c="h">2004-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:17</s>
+    <s c="9">web:http://www.sound-fishing.net</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">590</s>
+    <s c="l">Zoologie - (les animaux)</s>
+    <s c="9">id:60</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=44&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451296</s>
+    <s c="k">CD COC</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451296</s>
+    <s c="k">CD COC</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">CD audio</s>
+    <s c="1">Consultation sur place</s>
+    <s c="9">expl_id:24</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451296</s>
+    <s c="9">expl_cote:CD COC</s>
+    <s c="9">expl_statut:13</s>
+    <s c="9">statut_libelle:Consultation sur place</s>
+    <s c="9">expl_typdoc:13</s>
+    <s c="9">tdoc_libelle:CD audio</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:0</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">cochon;porc;truie;verrat;porcelet;goret;cochette;suidés;artiodactyles;groin</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1525</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Mammifères</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>j</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">46</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1999-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2016-03-29 12:51:49</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">L'adagio d'Albinoni</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">1 cd audio</s>
+    <s c="e">livret</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">On connaît mal ce compositeur vénitien exactement contemporain de Vivaldi, mais une seule œuvre, pourtant, a assuré sa notoriété, l’Adagio pour cordes, extrait en fait du Concerto en ré majeur. Cette longue cantilène plaintive a servi au film Quatre mariages et un enterrement.</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">Canon de Pachelbel, Jésus que ma joie demeure de J.S. Bach, Andante pour mandoline de Vivaldi, Menuet de Mozart, Menuet de Boccherini</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Marion</s>
+    <s c="b">Alain</s>
+    <s c="4">545</s>
+    <s c="9">id:32</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Bride</s>
+    <s c="b">Philip</s>
+    <s c="4">250</s>
+    <s c="9">id:31</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Forlane</s>
+    <s c="d">1999</s>
+    <s c="h">1999-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:18</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Forlane</s>
+    <s c="d">1999</s>
+    <s c="h">1999-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:18</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">780</s>
+    <s c="l">Musique</s>
+    <s c="9">id:79</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=46&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">BDP</s>
+    <s c="c">BDP</s>
+    <s c="f">3370000451301</s>
+    <s c="k">780 BRI</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451301</s>
+    <s c="k">780 BRI</s>
+    <s c="m">20040804</s>
+    <s c="n">00000000</s>
+    <s c="a">BDP</s>
+    <s c="b">1</s>
+    <s c="v">Bibliobus</s>
+    <s c="x">Documentaires</s>
+    <s c="e">CD audio</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:25</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451301</s>
+    <s c="9">expl_cote:780 BRI</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:13</s>
+    <s c="9">tdoc_libelle:CD audio</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:1</s>
+    <s c="9">lender_libelle:BDP</s>
+    <s c="9">codestat_libelle:Indéterminé</s>
+    <s c="9">statisdoc_codage_import:u</s>
+    <s c="9">expl_date_depot:2004-08-04</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliobus</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>k</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">47</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1953-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Couverture du magazine rustica</s>
+    <s c="e">Ce que doit être le porc parfait</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">une page fac-similé de la couverture</s>
+    <s c="d">in-8</s>
+  </f>
+  <f c="330" ind="  ">
+    <s c="a">" Ce que doit être le porc parfait " mentionné en couverture</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Rustica</s>
+    <s c="d">1953</s>
+    <s c="h">1953-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:19</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Rustica</s>
+    <s c="d">1953</s>
+    <s c="h">1953-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:19</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">590</s>
+    <s c="l">Zoologie - (les animaux)</s>
+    <s c="9">id:60</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=47&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451298</s>
+    <s c="k">590 RUS</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451298</s>
+    <s c="k">590 RUS</s>
+    <s c="m">20040805</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Oeuvre d'art</s>
+    <s c="1">Consultation sur place</s>
+    <s c="9">expl_id:26</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451298</s>
+    <s c="9">expl_cote:590 RUS</s>
+    <s c="9">expl_statut:13</s>
+    <s c="9">statut_libelle:Consultation sur place</s>
+    <s c="9">expl_typdoc:15</s>
+    <s c="9">tdoc_libelle:Oeuvre d'art</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-05</s>
+    <s c="9">pret_flag:0</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1525</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Mammifères</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1639</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Mammifères</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>r</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">48</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:42</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Canne</s>
+    <s c="e">à pommeau en forme de cochon</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="d">85 cm, pommeau de 13 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">canne en bois précieux, bichromie, pommeau sculpté et peint</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Favulier</s>
+    <s c="b">Jacques</s>
+    <s c="4">705</s>
+    <s c="9">id:33</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="h">0000-00-00</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="h">0000-00-00</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">680</s>
+    <s c="l">Articles manufacturés</s>
+    <s c="9">id:69</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=48&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451299</s>
+    <s c="k">680 FAV</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451299</s>
+    <s c="k">680 FAV</s>
+    <s c="m">20040805</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Oeuvre d'art</s>
+    <s c="1">Consultation sur place</s>
+    <s c="9">expl_id:27</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451299</s>
+    <s c="9">expl_cote:680 FAV</s>
+    <s c="9">expl_statut:13</s>
+    <s c="9">statut_libelle:Consultation sur place</s>
+    <s c="9">expl_typdoc:15</s>
+    <s c="9">tdoc_libelle:Oeuvre d'art</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-05</s>
+    <s c="9">pret_flag:0</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">canne;cochon;pied;porc;pommeau argent;ouvrage précieux;sculpture</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1401</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Sculpture</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>f</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">49</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1765-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Tours. N°65. Flle 78</s>
+  </f>
+  <f c="856" ind="  ">
+    <s c="u">http://gallica.bnf.fr/scripts/ConsultationTout.exe?O=07711576</s>
+    <s c="q">Images numérisées</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">1 carte</s>
+    <s c="c">en couleur</s>
+    <s c="d">60 x 95 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">Carte de Cassini</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Cote : Ge FF 18595 (65) BNF Richelieu Cartes et Plans Reprod. Sc 96/614
+. - Carte levée entre 1760 et 1762 par Bottin, Langelay, vérifiée en 1763 et 1764 par La Briffe Ponsan. Lettre par Chambon. 78e feuille publiée.</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Cassini de Thury</s>
+    <s c="b">César-François</s>
+    <s c="4">180</s>
+    <s c="9">id:34</s>
+  </f>
+  <f c="102" ind="  ">
+    <s c="a">fr</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Dépôt de la Guerre</s>
+    <s c="d">1765</s>
+    <s c="h">1765-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:20</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris
+France</s>
+    <s c="c">Dépôt de la Guerre</s>
+    <s c="d">1765</s>
+    <s c="h">1765-01-01</s>
+    <s c="z">France</s>
+    <s c="9">id:20</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=49&amp;database=bibli</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">Tours;Indre-et-Loire;France</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1740</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Centre</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">50</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1985-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Le Cochon d'Hollywood</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-07-039125-6</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">[62] p.</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Fraxler</s>
+    <s c="b">Hans</s>
+    <s c="4">070</s>
+    <s c="9">id:35</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">[Paris]</s>
+    <s c="b">[Paris]</s>
+    <s c="c">Gallimard</s>
+    <s c="d">1985</s>
+    <s c="h">1985-01-01</s>
+    <s c="9">id:21</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">[Paris]</s>
+    <s c="b">[Paris]</s>
+    <s c="c">Gallimard</s>
+    <s c="d">1985</s>
+    <s c="h">1985-01-01</s>
+    <s c="9">id:21</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=50&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451300</s>
+    <s c="k">JR COC</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451300</s>
+    <s c="k">JR COC</s>
+    <s c="m">20040805</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Romans Jeunes</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:28</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451300</s>
+    <s c="9">expl_cote:JR COC</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:13</s>
+    <s c="9">section_libelle:Romans Jeunes</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_depot:2004-08-05</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">cochon;porc;hollywood;acteur;studio;cinéma</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1596</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Livre</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">51</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1887-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Le Porc et les produits de la charcuterie, hygiène, inspection, règlementation, par Th. Bourrier,..</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">In-18, XII-585 p.</s>
+  </f>
+  <f c="327" ind="  ">
+    <s c="a">Exemples illustrés, gravures représentant une ferme en Indre-et-Loire</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Bourrier</s>
+    <s c="b">Théodore</s>
+    <s c="4">070</s>
+    <s c="9">id:36</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Asselin et Houzeau</s>
+    <s c="d">1887</s>
+    <s c="h">1887-01-01</s>
+    <s c="9">id:22</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Asselin et Houzeau</s>
+    <s c="d">1887</s>
+    <s c="h">1887-01-01</s>
+    <s c="9">id:22</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">640</s>
+    <s c="l">Arts ménagers - cuisine, coutûre, soins de beauté</s>
+    <s c="9">id:65</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=51&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">3370000451302</s>
+    <s c="k">590 BOU</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">3370000451302</s>
+    <s c="k">590 BOU</s>
+    <s c="m">20040805</s>
+    <s c="n">20040805</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:29</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:3370000451302</s>
+    <s c="9">expl_cote:590 BOU</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_retour:2004-08-05</s>
+    <s c="9">expl_date_depot:2004-08-05</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">Indre-et-Loire;ferme;porc;élevage;verrat;truie;porcelet;cochelle</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2125</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Aliments</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">53</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1997-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Nimitz</s>
+    <s c="e">roman</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">2-226-09568-3</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">443 p.</s>
+    <s c="c">ill., couv. ill. en coul.</s>
+    <s c="d">24 cm</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Langlois-Chassaignon</s>
+    <s c="b">Claudie</s>
+    <s c="f">1937-....</s>
+    <s c="9">id:38</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Robinson</s>
+    <s c="b">Patrick</s>
+    <s c="4">070</s>
+    <s c="9">id:37</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">A. Michel</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:10</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">A. Michel</s>
+    <s c="d">1997</s>
+    <s c="h">1997-01-01</s>
+    <s c="9">id:10</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">800</s>
+    <s c="l">Littérature</s>
+    <s c="9">id:81</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=53&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">33700004500167</s>
+    <s c="k">RK ROB</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">33700004500167</s>
+    <s c="k">RK ROB</s>
+    <s c="m">20040805</s>
+    <s c="n">20040805</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:30</s>
+    <s c="9">create_date:2005-01-01 00:00:00</s>
+    <s c="9">expl_cb:33700004500167</s>
+    <s c="9">expl_cote:RK ROB</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">expl_date_retour:2004-08-05</s>
+    <s c="9">expl_date_depot:2004-08-05</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:2110</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Roman et nouvelle</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">54</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1865-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Études archéologiques dans la Loire-Inférieure, ...</s>
+    <s c="e">Arrondissements de Nantes et de Paimboeuf</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">140 p.</s>
+    <s c="c">carte et pl.</s>
+    <s c="d">In-8</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Orieux</s>
+    <s c="b">Eugène</s>
+    <s c="4">070</s>
+    <s c="f">1823-1901</s>
+    <s c="9">id:39</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Nantes</s>
+    <s c="b">Nantes</s>
+    <s c="c">impr. de Mme Vve Mellinet</s>
+    <s c="d">1865</s>
+    <s c="h">1865-01-01</s>
+    <s c="9">id:23</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Nantes</s>
+    <s c="b">Nantes</s>
+    <s c="c">impr. de Mme Vve Mellinet</s>
+    <s c="d">1865</s>
+    <s c="h">1865-01-01</s>
+    <s c="9">id:23</s>
+  </f>
+  <f c="676" ind="  ">
+    <s c="a">910</s>
+    <s c="l">Géographie - voyages</s>
+    <s c="9">id:92</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=54&amp;database=bibli</s>
+  </f>
+  <f c="610" ind="0 ">
+    <s c="a">Loire-Atlantique</s>
+  </f>
+  <f c="606" ind=" 1">
+    <s c="9">id:1748</s>
+    <s c="9">lang:fr_FR</s>
+    <s c="9">idthes:1</s>
+    <s c="a">Pays de la Loire</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">57</f>
+  <f c="100" ind="  ">
+    <s c="a">20050101u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">1995-01-01</s>
+    <s c="c">2005-01-01 00:00:00</s>
+    <s c="u">2010-07-30 04:23:43</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">Germinal</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="d">18 cm</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Pichard</s>
+    <s c="b">Georges</s>
+    <s c="4">070</s>
+    <s c="f">1920-2003</s>
+    <s c="9">id:40</s>
+  </f>
+  <f c="702" ind=" 1">
+    <s c="a">Zola</s>
+    <s c="b">Émile</s>
+    <s c="f">1840-1902</s>
+    <s c="9">id:41</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Média 1000</s>
+    <s c="d">1995-</s>
+    <s c="h">1995-01-01</s>
+    <s c="9">id:24</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Média 1000</s>
+    <s c="d">1995-</s>
+    <s c="h">1995-01-01</s>
+    <s c="9">id:24</s>
+  </f>
+  <f c="225" ind="2 ">
+    <s c="a">BD adultes</s>
+    <s c="9">id:15</s>
+  </f>
+  <f c="410" ind=" 0">
+    <s c="t">BD adultes</s>
+    <s c="9">id:15</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=57&amp;database=bibli</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">58</f>
+  <f c="100" ind="  ">
+    <s c="a">20121130u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2008-01-01</s>
+    <s c="c">2012-11-30 14:57:10</s>
+    <s c="u">2016-03-29 12:51:37</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">S'organiser pour réussir</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">978-2-84899-209-9</s>
+    <s c="d">21,90 EUR</s>
+  </f>
+  <f c="101" ind="1 ">
+    <s c="a">fre</s>
+    <s c="c">eng</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">1 vol. (287 p.)</s>
+    <s c="c">couv. ill. en coul.</s>
+    <s c="d">23 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">La couv. porte en plus : "Getting things done, la méthode GTD ou l'art de l'efficacité sans le stress"
+Index</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Allen</s>
+    <s c="b">David</s>
+    <s c="4">070</s>
+    <s c="f">1945-....</s>
+    <s c="9">id:42</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Leduc. S éd.</s>
+    <s c="d">impr. 2008</s>
+    <s c="h">2008-01-01</s>
+    <s c="9">id:25</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Leduc. S éd.</s>
+    <s c="d">impr. 2008</s>
+    <s c="h">2008-01-01</s>
+    <s c="9">id:25</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=58&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">12</s>
+    <s c="k">658.4 ALL</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">12</s>
+    <s c="k">658.4 ALL</s>
+    <s c="m">00000000</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:33</s>
+    <s c="9">create_date:2012-11-30 14:57:31</s>
+    <s c="9">expl_cb:12</s>
+    <s c="9">expl_cote:658.4 ALL</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">59</f>
+  <f c="100" ind="  ">
+    <s c="a">20121130u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2008-01-01</s>
+    <s c="c">2012-11-30 15:03:32</s>
+    <s c="u">2016-03-29 12:51:37</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">S'initier à la programmation</s>
+    <s c="e">avec des exemples en C, C++, C#, Java et PHP</s>
+  </f>
+  <f c="010" ind="  ">
+    <s c="a">978-2-212-11990-9</s>
+    <s c="d">25 EUR</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="215" ind="  ">
+    <s c="a">1 vol. (XXI-346 p.)</s>
+    <s c="c">ill., couv. ill.</s>
+    <s c="d">23 cm</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">Index</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Delannoy</s>
+    <s c="b">Claude</s>
+    <s c="4">070</s>
+    <s c="f">1946-....</s>
+    <s c="9">id:43</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Eyrolles</s>
+    <s c="d">DL 2008</s>
+    <s c="h">2008-01-01</s>
+    <s c="9">id:26</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="a">Paris</s>
+    <s c="b">Paris</s>
+    <s c="c">Eyrolles</s>
+    <s c="d">DL 2008</s>
+    <s c="h">2008-01-01</s>
+    <s c="9">id:26</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=59&amp;database=bibli</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="a">Fonds propre</s>
+    <s c="c">Fonds propre</s>
+    <s c="f">16</s>
+    <s c="k">005.1 DEL</s>
+    <s c="r">uu</s>
+    <s c="q">u</s>
+  </f>
+  <f c="996" ind="  ">
+    <s c="f">16</s>
+    <s c="k">005.1 DEL</s>
+    <s c="m">00000000</s>
+    <s c="n">00000000</s>
+    <s c="a">Fonds propre</s>
+    <s c="b">2</s>
+    <s c="v">Bibliothèque principale</s>
+    <s c="x">Documentaires</s>
+    <s c="e">Livre</s>
+    <s c="1">Document en bon état</s>
+    <s c="3">1</s>
+    <s c="9">expl_id:34</s>
+    <s c="9">create_date:2012-11-30 15:03:41</s>
+    <s c="9">expl_cb:16</s>
+    <s c="9">expl_cote:005.1 DEL</s>
+    <s c="9">expl_statut:1</s>
+    <s c="9">statut_libelle:Document en bon état</s>
+    <s c="9">expl_typdoc:1</s>
+    <s c="9">tdoc_libelle:Livre</s>
+    <s c="9">expl_section:10</s>
+    <s c="9">section_libelle:Documentaires</s>
+    <s c="9">expl_owner:2</s>
+    <s c="9">lender_libelle:Fonds propre</s>
+    <s c="9">codestat_libelle:Adultes</s>
+    <s c="9">statisdoc_codage_import:a</s>
+    <s c="9">pret_flag:1</s>
+    <s c="9">location_libelle:Bibliothèque principale</s>
+  </f>
+</notice>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>s</bl>
+  <hl>2</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">60</f>
+  <f c="100" ind="  ">
+    <s c="a">20121130u        u  u0frey50      ba</s>
+  </f>
+  <f c="009" ind="  ">
+    <s c="a">2004-08-04</s>
+    <s c="c">2012-11-30 16:36:12</s>
+    <s c="u">2016-03-29 12:51:37</s>
+  </f>
+  <f c="200" ind="1 ">
+    <s c="a">278</s>
+    <s c="h">278</s>
+    <s c="9">id:2</s>
+  </f>
+  <f c="530" ind="  ">
+    <s c="a">Géo</s>
+  </f>
+  <f c="210" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="214" ind="  ">
+    <s c="d">2004</s>
+    <s c="h">2004-08-04</s>
+  </f>
+  <f c="101" ind="0 ">
+    <s c="a">fre</s>
+  </f>
+  <f c="300" ind="  ">
+    <s c="a">C'est un très bon bulletin</s>
+  </f>
+  <f c="319" ind="  ">
+    <s c="a">Aucun droit spécifique</s>
+  </f>
+  <f c="896" ind="  ">
+    <s c="a">http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&amp;id=60&amp;database=bibli</s>
+  </f>
+  <f c="461" ind="  ">
+    <s c="0">24</s>
+    <s c="9">bl:s1</s>
+    <s c="9">id:24</s>
+    <s c="9">rank:0</s>
+    <s c="9">type_lnk:b</s>
+    <s c="9">lnk:parent</s>
+    <s c="t">Géo</s>
+  </f>
+  <f c="801" ind="  ">
+    <s c="a">INTERNE</s>
+    <s c="b">FR</s>
+    <s c="c">20260926</s>
+  </f>
+</notice>
+</unimarc>

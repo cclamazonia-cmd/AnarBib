@@ -1,0 +1,1022 @@
+01801nam0 22002651i 450 
+001 1
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Bac en poche
+010    $a 2-211-04459-X
+101 0  $a fre
+215    $a 166 p. $c couv. ill. en coul. $d 19 cm
+327    $a La terre est devenue plate comme on se l'imaginait au Moyen Age et il ne faut pas trop s'approcher du bord... -- Services Documentaires Multimédia, C'était, évidemment, une journée magnifique. Une journée pour le Catalogue de la Compagnie. A ce moment là, le bureau de Kin donnait sur un lagon frangé de palmiers. Des rouleaux se brisaient contre les récifs...
+319    $a Aucun droit spécifique
+700  1 $a Souton $b Dominique $4 070 $9 id:1
+210    $a Paris $b Paris $c L'École des loisirs $d 1997 $h 1997-01-01 $9 id:1
+214    $a Paris $b Paris $c L'École des loisirs $d 1997 $h 1997-01-01 $9 id:1
+225 2  $a Médium $9 id:1
+410  0 $t Médium $9 id:1
+676    $a 840 $l Littérature française $9 id:85
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=1&database=bibli
+995    $a BDP $c BDP $f 33700004388761 $k JR SOU $r uu $q u
+996    $f 33700004388761 $k JR SOU $m 20040803 $n 00000000 $a BDP $b 1 $v Bibliothèque principale $x Romans Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:1 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700004388761 $9 expl_cote:JR SOU $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:13 $9 section_libelle:Romans Jeunes $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-03 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:2112 $9 lang:fr_FR $9 idthes:1 $a Roman d'aventure
+801    $a INTERNE $b FR $c 20260926
+
+02504nam0 22002771i 450 
+001 2
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Catfish blues
+010    $a 2-02-029506-7
+101 0  $a fre
+215    $a 154 p. $c couv. ill. en coul. $d 20 cm
+300    $a Bibliogr., discogr. des oeuvres de l'auteur, 2 p.
+327    $a Catfish Blues, 12 ans, n'a qu'une idée en tête: fuir la plantation de coton où travaillent ses frères et soeurs et suivre son oncle Eddie pour devenir chanteur de blues à Chicago. Chronique de la vie d'un petit Noir aux prises avec les escrocs de tout poil, y compris le Ku Klux Klan, ce roman vaut aussi par la vivacité de son écriture. Un beau portrait d'époque. --Laurence Liban, ©Lire
+319    $a Aucun droit spécifique
+700  1 $a Herzhaft $b Gérard $4 070 $N http://perso.wanadoo.fr/cielj/charte/annuaire/herzhaft.htm $9 id:2
+210    $a Paris $b Paris $c Seuil $d 1997 $h 1997-01-01 $9 id:2
+214    $a Paris $b Paris $c Seuil $d 1997 $h 1997-01-01 $9 id:2
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=2&database=bibli
+995    $a Fonds propre $c Fonds propre $f 22020295067 $k JR HER $r uu $q u
+996    $f 22020295067 $k JR HER $m 20040803 $n 00000000 $a Fonds propre $b 2 $v Bibliobus $x Romans Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:2 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:22020295067 $9 expl_cote:JR HER $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:13 $9 section_libelle:Romans Jeunes $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-03 $9 pret_flag:1 $9 location_libelle:Bibliobus
+995    $a Fonds propre $c Fonds propre $f 6438646236 $k R HER $r uu $q u
+996    $f 6438646236 $k R HER $m 20040913 $n 20040913 $a Fonds propre $b 2 $v Bibliothèque principale $x Romans Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:32 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:6438646236 $9 expl_cote:R HER $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:13 $9 section_libelle:Romans Jeunes $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_retour:2004-09-13 $9 expl_date_depot:2004-09-13 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a coton;blues;musique;racisme
+606  1 $9 id:2045 $9 lang:fr_FR $9 idthes:1 $a Littérature française
+801    $a INTERNE $b FR $c 20260926
+
+01863nam0 22002531i 450 
+001 3
+100    $a 20050101u        u  u0frey50  
+009    $a 1998-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Trois fêlés et un pendu
+010    $a 2-84146-554-3
+101 0  $a fre
+215    $a 29 p. $c couv. ill. en coul. $d 18 cm
+327    $a Lucien a trouvé un trésor dans une grange abandonnée. Lorsqu'il y retourne avec ses copains, un homme est pendu au centre du bâtiment. Subterfuge pour les faire fuir, le pendu n'est pas mort et le trésor est sien. Grâce à Dédé qui s'est sauvé chercher du secours, le criminel est écroué. -- Services Documentaires Multimédia
+319    $a Aucun droit spécifique
+700  1 $a Oppel $b Jean-Hugues $4 070 $f 1957-.... $N http://www.ricochet-jeunes.org/auteur.asp?name=Oppel&surname=Jean-Hugues $9 id:3
+210    $a Paris $b Paris $c Syros jeunesse $d 1998 $h 1998-01-01 $9 id:3
+214    $a Paris $b Paris $c Syros jeunesse $d 1998 $h 1998-01-01 $9 id:3
+676    $a 800 $l Littérature $9 id:81
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=3&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700003413727 $k ER OPP $r uu $q u
+996    $f 33700003413727 $k ER OPP $m 20040803 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Romans Enfants $e Livre $1 Document en bon état $3 1 $9 expl_id:3 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003413727 $9 expl_cote:ER OPP $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:12 $9 section_libelle:Romans Enfants $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-03 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a copains;policier
+606  1 $9 id:2045 $9 lang:fr_FR $9 idthes:1 $a Littérature française
+801    $a INTERNE $b FR $c 20260926
+
+01869nam0 22002651i 450 
+001 4
+100    $a 20050101u        u  u0frey50  
+009    $a 1998-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Le dieu devenu homme
+010    $a 2-86274-547-2
+101 0  $a fre
+215    $a 125 p. $d 21 cm
+300    $a Recueil de nouvelles
+330    $a Quatorze nouvelles dont l'intrigue, ayant un personnage célèbre comme actant, se déroule entre 1820 et 1867. On doit ajouter pour l'intérêt du lecteur que quelques-uns des personnages se nomment Hugo, Lamartine, Vigny, Musset, Balzac... -- Services Documentaires Multimédia
+319    $a Aucun droit spécifique
+700  1 $a Zimmermann $b Daniel $4 070 $f 1935-2000 $N http://www.humanite.presse.fr/journal/2000-12-08/2000-12-08-236014 $9 id:4
+210    $a Paris $b Paris $c le Cherche-Midi éd. $d 1998 $h 1998-01-01 $9 id:4
+214    $a Paris $b Paris $c le Cherche-Midi éd. $d 1998 $h 1998-01-01 $9 id:4
+676    $a 840 $l Littérature française $9 id:85
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=4&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700003470461 $k R ZIM $r uu $q u
+996    $f 33700003470461 $k R ZIM $m 20040803 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Romans & Romans étrangers $e Livre $1 Document en bon état $3 1 $9 expl_id:4 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003470461 $9 expl_cote:R ZIM $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:24 $9 section_libelle:Romans & Romans étrangers $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-03 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a roman historique,fiction;nouvelle;nouvelles
+606  1 $9 id:1436 $9 lang:fr_FR $9 idthes:1 $a Nouvelles
+801    $a INTERNE $b FR $c 20260926
+
+01984nam0 22002651i 450 
+001 5
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Sarah de Cordoue
+010    $a 2-84146-452-0
+101 0  $a fre
+215    $a 136 p. $c couv. ill. en coul. $d 21 cm
+327    $a A défaut de fils, un vieux savant mal en point fait de sa fille aînée son disciple. La grande bibliothèque de Cordoue est interdite aux femmes. Pour accomplir les voeux de son père Sarah accepte de se travestir, de devenir Samuel. Elle reçoit un poème galant d'un jeune étudiant musulman. Qui, de Samuel ou de Sarah aime-t-il? Une belle histoire d'amour avec, en toile de fond, une fresque de Cordoue du 12e siècle. -- Services Documentaires Multimédia
+319    $a Aucun droit spécifique
+700  1 $a Causse $b Rolande $4 070 $f 1939-.... $N http://www.ricochet-jeunes.org/auteur.asp?name=Causse&surname=Rolande $9 id:5
+210    $a Paris $b Paris $c Syros jeunesse $d 1997 $h 1997-01-01 $9 id:3
+214    $a Paris $b Paris $c Syros jeunesse $d 1997 $h 1997-01-01 $9 id:3
+225 2  $a Les |uns, les autres $9 id:5
+410  0 $t Les |uns, les autres $9 id:5
+676    $a 840 $l Littérature française $9 id:85
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=5&database=bibli
+995    $a BDP $c BDP $f 33700003719453 $k JR CAU $r uu $q u
+996    $f 33700003719453 $k JR CAU $m 20040804 $n 00000000 $a BDP $b 1 $v Bibliothèque principale $x Romans Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:5 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003719453 $9 expl_cote:JR CAU $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:13 $9 section_libelle:Romans Jeunes $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:1936 $9 lang:fr_FR $9 idthes:1 $a Espagne
+801    $a INTERNE $b FR $c 20260926
+
+01854nam0 22002531i 450 
+001 6
+100    $a 20050101u        u  u0frey50  
+009    $a 1998-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Le mille-pattes $e roman
+010    $a 2-207-24700-7
+101 0  $a fre
+215    $a 233 p. $d 21 cm
+327    $a Le titre crypté désigne les onze joueurs de l'équipe de France de football impliqués en ce récit dans une intrigue "alternative" par rapport à l'événement de 1998. -- Services Documentaires Multimédia
+319    $a Aucun droit spécifique
+700  1 $a Riou $b Jean-Michel $4 070 $9 id:6
+210    $a Paris $b Paris $c Denoël $d 1998 $h 1998-01-01 $9 id:5
+214    $a Paris $b Paris $c Denoël $d 1998 $h 1998-01-01 $9 id:5
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=6&database=bibli
+995    $a BDP $c BDP $f 33700003550072 $k RX RIO $u Reliure bibliographique très abîmée. Comparer coût réparation et rééquipement.  $r uu $q u
+996    $f 33700003550072 $k RX RIO $u Reliure bibliographique très abîmée. Comparer coût réparation et rééquipement.  $m 20040804 $n 00000000 $a BDP $b 1 $v Bibliobus $x Romans policiers $e Livre $1 Détérioré $9 expl_id:6 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003550072 $9 expl_cote:RX RIO $9 expl_statut:11 $9 statut_libelle:Détérioré $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_note:Reliure bibliographique très abîmée. Comparer coût réparation et rééquipement.  $9 expl_section:21 $9 section_libelle:Romans policiers $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:0 $9 location_libelle:Bibliobus
+610 0  $a bleus;champions du monde;1998;policier;ballon rond
+606  1 $9 id:2045 $9 lang:fr_FR $9 idthes:1 $a Littérature française
+606  1 $9 id:2279 $9 lang:fr_FR $9 idthes:1 $a Football
+801    $a INTERNE $b FR $c 20260926
+
+02452nam0 22002891i 450 
+001 7
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2016-03-29 12:51:49
+200 1  $a Le puits
+010    $a 2-08-164155-0
+101 1  $a fre $c ame
+215    $a 110 p. $c ill., couv. ill. en coul. $d 17 cm
+330    $a La sécheresse a tari tous les puits de la région. Tous sauf celui des Logan, famille de fermiers noirs aisée. Les Logan partagent cette eau précieuse de grand cœur, avec tous. Mais en 1910, dans le Sud américain, les rancœurs contre les Noirs sont tenaces... Tout au long de l'été, la tension monte, aussi accablante que la chaleur.
+319    $a Aucun droit spécifique
+702  1 $a Vassallo-Villaneau $b Rose-Marie $f 1946-.... $9 id:8
+700  1 $a Taylor $b Mildred D. $4 070 $N http://falcon.jmu.edu/~ramseyil/taylor.htm $9 id:7
+210    $a [Paris] $b [Paris] $c Flammarion $d 1997 $h 1997-01-01 $9 id:6
+214    $a [Paris] $b [Paris] $c Flammarion $d 1997 $h 1997-01-01 $9 id:6
+676    $a 810 $l Littérature américaine $9 id:82
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=7&database=bibli
+995    $a BDP $c BDP $f 33700004389030 $k JRK TAY $r uu $q u
+996    $f 33700004389030 $k JRK TAY $m 20040804 $n 20040804 $a BDP $b 1 $v Bibliobus $x Romans Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:7 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700004389030 $9 expl_cote:JRK TAY $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:13 $9 section_libelle:Romans Jeunes $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_retour:2004-08-04 $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliobus
+995    $a BDP $c BDP $f 33700004389026 $k JRK TAY $r uu $q u
+996    $f 33700004389026 $k JRK TAY $m 20040804 $n 00000000 $a BDP $b 1 $v Bibliothèque principale $x Romans Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:8 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700004389026 $9 expl_cote:JRK TAY $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:13 $9 section_libelle:Romans Jeunes $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a coton;policier
+606  1 $9 id:1445 $9 lang:fr_FR $9 idthes:1 $a Littérature américaine
+801    $a INTERNE $b FR $c 20260926
+
+01942nam0 22002651i 450 
+001 8
+100    $a 20050101u        u  u0frey50  
+009    $a 1993-01-01 $c 2005-01-01 00:00:00 $u 2010-09-21 13:55:07
+200 1  $a Ghetto 9
+010    $a 2-7234-1542-2
+101 0  $a fre
+215    $a 47 p. $c ill. en coul., couv. ill. en coul. $d 33 cm
+330    $a Dans une Afrique futuriste, un consortium exploite à outrance les ressources du continent. Et quand Dayak découvre que l'homme qui dirige cet empire technologique n'est autre que son propre frère, la lutte prend une dimension fascinante. Dayak possède l'énergie et la force des meilleures sagas de S.F. et confirme le talent visionnaire du dessin d'Adamov, qui signe là son premier scénario.
+319    $a Aucun droit spécifique
+700  1 $a Adamov $b Philippe $4 070 $f 1956-.... $N http://www.lambiek.net/fr/adamov_philippe.html $9 id:9
+210    $a Grenoble $b Grenoble $c Glénat $d 1993 $h 1993-01-01 $9 id:7
+214    $a Grenoble $b Grenoble $c Glénat $d 1993 $h 1993-01-01 $9 id:7
+225 2  $a Dayak. $9 id:8
+410  0 $t Dayak. $9 id:8
+676    $a 760 $l Arts graphiques - graphisme $9 id:77
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=8&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700003669468 $k BD ADA $r uu $q u
+996    $f 33700003669468 $k BD ADA $m 20040804 $n 20040804 $a Fonds propre $b 2 $v Bibliobus $x Bande-dessinée Adultes $e Livre $1 Document en bon état $3 1 $9 expl_id:9 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003669468 $9 expl_cote:BD ADA $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:16 $9 section_libelle:Bande-dessinée Adultes $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_retour:2004-08-04 $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliobus
+606  1 $9 id:1414 $9 lang:fr_FR $9 idthes:1 $a Science-fiction
+801    $a INTERNE $b FR $c 20260926
+
+02575nam0 22002651i 450 
+001 9
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-09-21 13:55:07
+200 1  $a Zaks
+010    $a 2-7234-2083-3
+101 0  $a fre
+215    $a 47 p. $c ill. en coul., couv. ill. en coul. $d 32 cm
+330    $a Une fois la ville-mère détruite, implosée, Dayak a réussi à échapper aux intercepteurs.En compagnie de son fidèle P'tit Caille, le voilà au coeur du désert, prêt à se fondre dans cet univers inhospitalier, mais toujours suivi, à quelque distance, par son frère Simon, plus que jamais décidé à le rattraper. Or le Grand Désert est aussi le domaine des Zaks, les hommes-masques aux yeux sanguins. N'est-ce qu'un peuple de légende, où sont-ils vraiment là, cachés dans un dédale de galeries souterraines labyrinthiques ?Dayak ne tardera pas à être fixé . Bientôt résonneront les tambours des traditions humaines les plus anciennes, et les ombres démesurées des silhouettes primitives viendront s'allonger auprès de lui.Grâce à leur intervention, Dayak parviendra à triompher définitivement de son frère, si tant est que la mort, pour les gens de son espèce, soit vraiment une fin...Alors, qui sont au juste ces Zaks qui s'expriment en ces lieux désertiques ?Et si Dayak, d'une certaine façon, finissait par devenir l'un des leurs ?...
+319    $a Aucun droit spécifique
+700  1 $a Adamov $b Philippe $4 070 $f 1956-.... $N http://www.lambiek.net/fr/adamov_philippe.html $9 id:9
+210    $a Grenoble $b Grenoble $c Glénat $d 1997 $h 1997-01-01 $9 id:7
+214    $a Grenoble $b Grenoble $c Glénat $d 1997 $h 1997-01-01 $9 id:7
+225 2  $a Dayak. $9 id:8
+410  0 $t Dayak. $9 id:8
+676    $a 760 $l Arts graphiques - graphisme $9 id:77
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=9&database=bibli
+995    $a BDP $c BDP $f 33700003669484 $k BD ADA $r uu $q u
+996    $f 33700003669484 $k BD ADA $m 20040804 $n 00000000 $a BDP $b 1 $v Bibliothèque principale $x Bande-dessinée Adultes $e Livre $1 Document en bon état $3 1 $9 expl_id:10 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003669484 $9 expl_cote:BD ADA $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:16 $9 section_libelle:Bande-dessinée Adultes $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:1414 $9 lang:fr_FR $9 idthes:1 $a Science-fiction
+801    $a INTERNE $b FR $c 20260926
+
+02303nam0 22002651i 450 
+001 10
+100    $a 20050101u        u  u0frey50  
+009    $a 1994-01-01 $c 2005-01-01 00:00:00 $u 2010-09-21 13:55:07
+200 1  $a La chambre verte
+010    $a 2-7234-1727-1
+101 0  $a fre
+215    $a 47 p. $c ill. en coul., couv. ill. en coul. $d 32 cm
+330    $a La nouvelle Addis Abeba est née !Fini le ghetto, sa misère et sa crasse... Simon Colbius, leader de la C.P.M., a fait surgir une mégalopole où les techniques les plus sophistiquées côtoient les traditions les plus anciennes.Un monde où P'tit Caille est devenu le valet de chambre du nouveau despote et Cori une courtisane que le nouveau comportement de Dayak trouble à peine.Car Dayak sait maintenant qu'il est le frère de Simon, il a retrouvé dans de lointains souvenirs la vision fugace de cette Chambre verte où, enfants, ils percevaient les formidables changements que leur père orchestrait.Devenu le clone de Simon, Dayak parviendra-t-il à briser les chaînes qui le relient à ce frère qui se rêve maître de l'Afrique et empereur d'un nouvel âge ?
+319    $a Aucun droit spécifique
+700  1 $a Adamov $b Philippe $4 070 $f 1956-.... $N http://www.lambiek.net/fr/adamov_philippe.html $9 id:9
+210    $a Grenoble $b Grenoble $c Glénat $d 1994 $h 1994-01-01 $9 id:7
+214    $a Grenoble $b Grenoble $c Glénat $d 1994 $h 1994-01-01 $9 id:7
+225 2  $a Dayak. $9 id:8
+410  0 $t Dayak. $9 id:8
+676    $a 760 $l Arts graphiques - graphisme $9 id:77
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=10&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700003669485 $k BD ADA $r uu $q u
+996    $f 33700003669485 $k BD ADA $m 20040804 $n 20040804 $a Fonds propre $b 2 $v Bibliothèque principale $x Albums Enfants $e Livre $1 Perdu $9 expl_id:11 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003669485 $9 expl_cote:BD ADA $9 expl_statut:12 $9 statut_libelle:Perdu $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:26 $9 section_libelle:Albums Enfants $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_retour:2004-08-04 $9 expl_date_depot:2004-08-04 $9 pret_flag:0 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:1414 $9 lang:fr_FR $9 idthes:1 $a Science-fiction
+801    $a INTERNE $b FR $c 20260926
+
+03043nam0 22002531i 450 
+001 11
+100    $a 20050101u        u  u0frey50  
+009    $a 1996-01-01 $c 2005-01-01 00:00:00 $u 2010-09-21 13:55:07
+200 1  $a Le chirurgien hollandais
+010    $a 2-7234-2062-0
+101 0  $a fre
+215    $a 47 p. $c ill. en coul., couv. ill. en coul. $d 32 cm
+330    $a Ile de Java, région de Semarang en 1897. Un décor exotique pour une aventure riche en rebondissements. Ironie et drame se conjugent pour ce premier tome d'une nouvelle série qui confirme le talent de Christian Lamquet.
+Un chirurgien hollandais a découvert un crâne qu'il cherche à faire authentifier comme l'un des chaînons manquant de l'histoire de l'homme. Autour de lui, des personnages haut en couleurs : savants baroques, veuve éplorée, la guenon Lucy, un journaliste zélé, une femme qui ne rêve que de maternité. Et enfin : Pete, le crâne, lui-même personnage central de ce récit utilisant habilement théosophie, un mélange d'occultisme et de spiritisme, et anthropologie.
+Parce qu'il est convaincu d'avoir mis à jour des fossiles du fameux "chaînon manquant", Jacob Boos, un chirurgien hollandais en garnison à Semarang, est bien décidé à remuer ciel, terre, océan et bonne conscience pour prouver au monde la réalité de sa découverte...
+" Pete " comme il le surnomme affectueusement, était-il vraiment ce petit "homme-singe debout" parcourant la savane voici deux millions d'années ?
+Pour l'heure, ce qu'il a laissé de lui sommeille dans une valise : quelques bouts de vertèbres, un crâne, un morceau de mâchoire. Si Jacob y investit tous ses espoirs, d'autres vont y engluer les précieuses reliques dans les délires de leurs utopies, de leurs passions ou de leur bêtises...
+ Et puis tous ces malheurs qui se succèdent...
+Pete, du fond de sa valise, porterait-il la poisse ?  
+319    $a Aucun droit spécifique
+700  1 $a Lamquet $b Chris $4 070 $f 1954-.... $9 id:10
+210    $a Grenoble $b Grenoble $c Glénat $d 1996 $h 1996-01-01 $9 id:7
+214    $a Grenoble $b Grenoble $c Glénat $d 1996 $h 1996-01-01 $9 id:7
+676    $a 760 $l Arts graphiques - graphisme $9 id:77
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=11&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700004243164 $k JBD LAM $r uu $q u
+996    $f 33700004243164 $k JBD LAM $m 20040804 $n 20040804 $a Fonds propre $b 2 $v Bibliothèque principale $x Bande-dessinée Enfants $e Livre $1 Document en bon état $3 1 $9 expl_id:12 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700004243164 $9 expl_cote:JBD LAM $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:17 $9 section_libelle:Bande-dessinée Enfants $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_retour:2004-08-04 $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a bande dessinée
+606  1 $9 id:1391 $9 lang:fr_FR $9 idthes:1 $a Bande dessinée
+801    $a INTERNE $b FR $c 20260926
+
+02320nam0 22002651i 450 
+001 12
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-09-21 13:55:07
+200 1  $a La Chrysalide Diaprée
+010    $a 2-86967-551-8 $d EUR 11,40
+101 0  $a fre
+215    $a Cartonné - 48 pages $d 23 x 32
+330    $a Pour sauver son grand-père qui se meurt, Benjamin doit ramener le Mangecoeur, un papillon funeste, avant l'aube. Poursuivi par des clowns cruels dans une fête foraine où seuls les adultes sont admis, il rencontre Rififi, seul allié dans sa fuite. Mais cet ami et son compagnon Pantagas utilisent Benjamin à des fins peu louables... Le rêve et la magie règnent en maîtres dans ce conte merveilleux peuplé de clowns dangereusement malicieux. Le trait brillant de Jean-Baptiste Andréae s'associe au scénario plus qu'efficace de Mathieu Gallié.  
+319    $a Aucun droit spécifique
+701  1 $a Andréaé $b Jean-Baptiste $4 440 $9 id:12
+700  1 $a Gallié $b Mathieu $4 070 $9 id:11
+102    $a fr
+210    $a Issy-les-Moulineaux $b 31, rue Ernest-Renan
+
+92130
+Issy-les-Moulineaux
+France $c Vents d'Ouest $d 1997 $h 1997-01-01 $z France $9 id:8 $9 web:http://www.ventsdouest.com $9 cp:92130 $9 adr1:31, rue Ernest-Renan
+214    $a Issy-les-Moulineaux $b 31, rue Ernest-Renan
+
+92130
+Issy-les-Moulineaux
+France $c Vents d'Ouest $d 1997 $h 1997-01-01 $z France $9 id:8 $9 web:http://www.ventsdouest.com $9 cp:92130 $9 adr1:31, rue Ernest-Renan
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=12&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700003868672 $k JBD GAL $r uu $q u
+996    $f 33700003868672 $k JBD GAL $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Bande-dessinée Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:13 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003868672 $9 expl_cote:JBD GAL $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:20 $9 section_libelle:Bande-dessinée Jeunes $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a bande dessinée
+606  1 $9 id:1391 $9 lang:fr_FR $9 idthes:1 $a Bande dessinée
+801    $a INTERNE $b FR $c 20260926
+
+01407nam0 22002291i 450 
+001 13
+100    $a 20050101u        u  u0frey50  
+009    $a 1998-01-01 $c 2005-01-01 00:00:00 $u 2010-09-21 13:55:07
+200 1  $a Monsieur Je-sais-tout
+010    $a 2-8001-2334-6 $d 7,79 €
+101 0  $a fre
+215    $a 48 p. $c ill. en coul., couv. ill. en coul. $d 30 cm
+319    $a Aucun droit spécifique
+700  1 $a Geerts $b André $4 070 $f 1955-.... $9 id:13
+210    $a [Paris] $b [Paris] $c Dupuis $d 1998 $h 1998-01-01 $9 id:9
+214    $a [Paris] $b [Paris] $c Dupuis $d 1998 $h 1998-01-01 $9 id:9
+676    $a 760 $l Arts graphiques - graphisme $9 id:77
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=13&database=bibli
+995    $a BDP $c BDP $f 33700004243347 $k EBD GEE $r uu $q u
+996    $f 33700004243347 $k EBD GEE $m 20040804 $n 00000000 $a BDP $b 1 $v Bibliothèque principale $x Bande-dessinée Enfants $e Livre $1 Document en bon état $3 1 $9 expl_id:14 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700004243347 $9 expl_cote:EBD GEE $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:17 $9 section_libelle:Bande-dessinée Enfants $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:1599 $9 lang:fr_FR $9 idthes:1 $a Bande dessinée
+801    $a INTERNE $b FR $c 20260926
+
+01781nam0 22002891i 450 
+001 14
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Paroles de bonheur
+010    $a 2-226-09017-7 $d 9,50 €
+101 0  $a fre
+215    $a Non paginé [59] p. $c ill. en coul., couv. ill. en coul. $d 22 cm
+300    $a Bibliogr., 2 p.
+327    $a Collection anthologique de textes de tous les temps et de tous les pays sur un thème donné. Présentation originale où les écrits sont enclavés dans les illustrations. -- Services Documentaires Multimédia
+319    $a Aucun droit spécifique
+702  1 $a Got $b Yves $f 1939-.... $9 id:15
+702  1 $a Robin $b Christian $4 340 $f 1961-.... $9 id:14
+210    $a Paris $b Paris $c A. Michel $d 1997 $h 1997-01-01 $9 id:10
+214    $a Paris $b Paris $c A. Michel $d 1997 $h 1997-01-01 $9 id:10
+225 2  $a Paroles $9 id:11
+410  0 $t Paroles $9 id:11
+676    $a 800 $l Littérature $9 id:81
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=14&database=bibli
+995    $a BDP $c BDP $f 33700003453202 $k J 808 PAR $r uu $q u
+996    $f 33700003453202 $k J 808 PAR $m 20040804 $n 00000000 $a BDP $b 1 $v Bibliothèque principale $x Documentaires Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:15 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003453202 $9 expl_cote:J 808 PAR $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:25 $9 section_libelle:Documentaires Jeunes $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Jeunes $9 statisdoc_codage_import:j $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:1655 $9 lang:fr_FR $9 idthes:1 $a Psychologie - Psychanalyse
+801    $a INTERNE $b FR $c 20260926
+
+02348nam0 22002651i 450 
+001 15
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a La métamorphose des fleurs
+010    $a 2-7324-2351-3
+101 0  $a fre
+215    $a 143 p. dont 4 dépl. $c ill. en coul., jaquette ill. en coul. $d 30 cm
+330    $a Avec Microcosmos, des milliers de lecteurs se sont émerveillés devant les prodiges insoupçonnés d'un petit carré d'herbes folles. Dans la Métamorphose des Fleurs, Claude Nuridsany et Marie Pérennou sillonnent prairies et jardins et invitent nos yeux inattentifs à se poser sur un bouton gorgé de sève, un pétale qui s'entrouvre ou la chute d'une corolle. Autant de moments phares de la vie flamboyante d'une fleur, architecture de rêve construite et défaite en quelques jours. Transfigurées par la magie de la macrophotographie, une vingtaine d'espèces florales naissent, vivent et meurent sous nos yeux. Marie Pérennou et Claude Nuridsany ont inventé, pour notre plus grand plaisir, un nouveau regard sur la nature, à mi-chemin entre la biologie et la poésie.
+319    $a Aucun droit spécifique
+701  1 $a Pérennou $b Marie $4 007 $f 1946-.... $9 id:17
+700  1 $a Nuridsany $b Claude $4 070 $f 1946-.... $9 id:16
+210    $a Paris $b Paris $c La Martinière $d 1997 $h 1997-01-01 $9 id:11
+214    $a Paris $b Paris $c La Martinière $d 1997 $h 1997-01-01 $9 id:11
+676    $a 580 $l Botanique - (les plantes) $9 id:59
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=15&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700004118010 $k 582 NUR $r uu $q u
+996    $f 33700004118010 $k 582 NUR $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Livre $1 Document en bon état $3 1 $9 expl_id:16 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700004118010 $9 expl_cote:582 NUR $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a fleur;pistil;étamine;macrophotographie
+606  1 $9 id:2214 $9 lang:fr_FR $9 idthes:1 $a Fleurs
+801    $a INTERNE $b FR $c 20260926
+
+01516nam0 22002531i 450 
+001 16
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Rwanda $e un peuple avec une histoire
+010    $a 2-7384-5292-2
+101 0  $a fre
+215    $a 271 p. $d 22 cm
+300    $a En appendice, choix de documents
+319    $a Aucun droit spécifique
+700  1 $a Overdulve $b Cornelis Marinus $4 070 $f 1929-.... $9 id:18
+210    $a Paris $b Paris $c l'Harmattan $d 1997 $h 1997-01-01 $9 id:12
+214    $a Paris $b Paris $c l'Harmattan $d 1997 $h 1997-01-01 $9 id:12
+676    $a 960 $l Histoire de l'Afrique $9 id:97
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=16&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700003286792 $k 967 OVE $r uu $q u
+996    $f 33700003286792 $k 967 OVE $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Livre $1 Document en bon état $3 1 $9 expl_id:17 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700003286792 $9 expl_cote:967 OVE $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a afrique franchophone;rwanda;histoire de la colonisation
+606  1 $9 id:1884 $9 lang:fr_FR $9 idthes:1 $a Rwanda
+801    $a INTERNE $b FR $c 20260926
+
+02388nem0 22002651i 450 
+001 17
+100    $a 20050101u        u  u0frey50  
+009    $a 2002-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Carte routière : Ardèche - Haute-Loire, N° 11331 $e Carte routière et touristique
+010    $a 2-06-100392-3
+101 0  $a fre
+215    $a 25 x 16 $d Carte 1/150000 13e édition
+327    $a Présentation de l'éditeur
+La nouvelle génération des cartes routières Michelin ! Toutes les informations pour découvrir, sur une seule carte, un, deux ou trois départements de France et se repérer facilement en voiture.
+
+De nombreuses nouveautés ont été intégrées à la carte « LOCAL » :
+- une carte plus lisible grâce à une échelle agrandie : 1/150 000e ou 1/175 000e
+- un index complet des localités pour accéder rapidement à l'information
+- des plans de ville pour circuler dans les grandes agglomérations
+- une légende en image pour bien comprendre les symboles de la carte
+- une carte des terroirs
+Une nouvelle collection de cartes centrées sur le "LOCAL" pour vivre la route autrement !
+pixel
+319    $a Aucun droit spécifique
+710 02 $a Editions Michelin $4 650 $9 id:19
+102    $a fr
+210    $a Paris $b Paris
+France $c Michelin $d 2002 $h 2002-01-01 $z France $9 id:13 $9 web:www.michelin.fr
+214    $a Paris $b Paris
+France $c Michelin $d 2002 $h 2002-01-01 $z France $9 id:13 $9 web:www.michelin.fr
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=17&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451291 $k 910 MIC $r uu $q u
+996    $f 3370000451291 $k 910 MIC $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Cartes et plans $1 Document en bon état $3 1 $9 expl_id:19 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451291 $9 expl_cote:910 MIC $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:16 $9 tdoc_libelle:Cartes et plans $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a bas-vivarais;boutières;brisadois;cévennes;haut-vivarais;margeriche;velay
+606  1 $9 id:1748 $9 lang:fr_FR $9 idthes:1 $a Pays de la Loire
+801    $a INTERNE $b FR $c 20260926
+
+01914ngm0 22002771i 450 
+001 18
+100    $a 20050101u        u  u0frey50  
+009    $a 2002-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Chili $e la glace et le feu
+101 0  $a fre
+215    $a 1 DVD vidéo monoface zone 2 (1 h 21 min) $c 4/3, coul. (PAL) $e 1 brochure (14 p. : ill. ; 18 cm)
+300    $a Contient aussi : making of, documentaires ("le monde vu du ciel", "sites du monde", "le monde en fêtes")
+319    $a Aucun droit spécifique
+702  1 $a Brouwers $b Pierre $9 id:20
+702  1 $a Loyola $b Annabel $9 id:21
+702  1 $a Brouwers $b Magali $9 id:22
+702  1 $a Reuter $b Philippe $9 id:23
+210    $a Boulogne-Billancourt $b Boulogne-Billancourt $c TF1 vidéo éd. $d 2002 (DL) $h 2002-01-01 $9 id:14
+214    $a Boulogne-Billancourt $b Boulogne-Billancourt $c TF1 vidéo éd. $d 2002 (DL) $h 2002-01-01 $9 id:14
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=18&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451290 $k DVD TF1 $u vérifier la présence du livret avant de prêter $r uu $q u
+996    $f 3370000451290 $k DVD TF1 $u vérifier la présence du livret avant de prêter $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e DVD $1 Document en bon état $3 1 $9 expl_id:18 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451290 $9 expl_cote:DVD TF1 $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:14 $9 tdoc_libelle:DVD $9 expl_note:vérifier la présence du livret avant de prêter $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a Chili;Pâques
+606  1 $9 id:1828 $9 lang:fr_FR $9 idthes:1 $a Chili
+801    $a INTERNE $b FR $c 20260926
+
+02331nmm0 22002891i 450 
+001 19
+100    $a 20050101u        u  u0frey50  
+009    $a 2001-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a La Loire Angevine au temps de Joachim du Bellay
+101 0  $a fre
+215    $e 1 disque optique numérique (CD-ROM) : coul., son. ; 12
+327    $a Contient un index et un glossaire
+Configuration(s) requise(s) :    
+PC ; 16 Mo de mémoire vive ; Windows 95 ou ultérieur ; lecteur de CD-ROM octuple vitesse ; affichage en 65 000 coul. ; carte son ; Macintosh ; 16 Mo de mémoire vive ; système 7.5 ou ultérieur ; lecteur de CD-ROM octuple vitesse ; affichage en 65 000 coul. ; carte son
+319    $a Aucun droit spécifique
+702  1 $a Hunot $b Jean-Yves $4 070 $9 id:26
+711 02 $a Altaïr productions multimédia $9 id:27
+701  1 $a Prigent $b Daniel $4 070 $9 id:25
+710 02 $a Conseil général du Maine-et-Loire (CG49) $4 723 $9 id:24
+102    $a fr
+210    $a Angers $b place Michel Debré
+
+49100
+Angers
+France $c Conseil général du Maine-et-Loire (CG49) $d 2001 $h 2001-01-01 $z France $9 id:15 $9 web:http://www.cg49.fr $9 cp:49100 $9 adr1:place Michel Debré
+214    $a Angers $b place Michel Debré
+
+49100
+Angers
+France $c Conseil général du Maine-et-Loire (CG49) $d 2001 $h 2001-01-01 $z France $9 id:15 $9 web:http://www.cg49.fr $9 cp:49100 $9 adr1:place Michel Debré
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=19&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451292 $k CDROM LOI $r uu $q u
+996    $f 3370000451292 $k CDROM LOI $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Cédéroms $1 Document en bon état $3 1 $9 expl_id:20 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451292 $9 expl_cote:CDROM LOI $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:17 $9 tdoc_libelle:Cédéroms $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a Du Bellay, Joachim;art de la Renaissance;architecture de la Renaissance;Anjou
+606  1 $9 id:1423 $9 lang:fr_FR $9 idthes:1 $a Renaissance
+606  1 $9 id:1447 $9 lang:fr_FR $9 idthes:1 $a Poésie
+801    $a INTERNE $b FR $c 20260926
+
+02079nas1 22003731i 450 
+001 24
+100    $a 20050101u        u  u0frey50  
+009    $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:42
+200 1  $a Géo $e Un nouveau monde : la Terre
+101 0  $a fre
+319    $a Aucun droit spécifique
+102    $a fr
+210    $a Paris $b Paris
+France $c Prisma Presse $h 0000-00-00 $z France $9 id:16 $9 web:http://www.geomagazine.fr
+214    $a Paris $b Paris
+France $c Prisma Presse $h 0000-00-00 $z France $9 id:16 $9 web:http://www.geomagazine.fr
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=24&database=bibli
+606  1 $9 id:1406 $9 lang:fr_FR $9 idthes:1 $a Géographie
+462    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+462    $d 2004-08-04 $v 278 $t   $9 id:2 $9 lnk:bull
+464    $0 33 $t Paysages afghans $t   $d 2004-08-04 $v 277 $9 id:33 $9 page:p. 26 $9 lnk:art
+464    $0 35 $t Peuples d'Afghanistan $t   $d 2004-08-04 $v 277 $9 id:35 $9 page:p. 102 $9 lnk:art
+464    $0 36 $t Tribus Pachtounes $t   $d 2004-08-04 $v 277 $9 id:36 $9 page:p. 72 $9 lnk:art
+464    $0 37 $t femmes afghanes $t   $d 2004-08-04 $v 277 $9 id:37 $9 page:p. 120 $9 lnk:art
+464    $0 38 $t Histoire de l'Afghanistan $t   $d 2004-08-04 $v 277 $9 id:38 $9 page:p. 64 $9 lnk:art
+464    $0 39 $t Islam afghan $t   $d 2004-08-04 $v 277 $9 id:39 $9 page:p. 118 $9 lnk:art
+464    $0 40 $t Famille Allix $t   $d 2004-08-04 $v 277 $9 id:40 $9 page:Famille Allix $9 lnk:art
+464    $0 41 $t Chateaux de la Loire (1) $t   $d 2004-08-04 $v 277 $9 id:41 $9 page:p. 126 $9 lnk:art
+464    $0 25 $t Crise en Argentine $t   $d 2004-08-04 $v 278 $9 id:25 $9 page:p. 18 $9 lnk:art
+464    $0 26 $t Australie vue par J.-P. Ferrero $t   $d 2004-08-04 $v 278 $9 id:26 $9 page:p. 38 $9 lnk:art
+464    $0 29 $t Bagnes à Madagascar $t   $d 2004-08-04 $v 278 $9 id:29 $9 page:p. 49 $9 lnk:art
+464    $0 30 $t Tatars de Crimée $t   $d 2004-08-04 $v 278 $9 id:30 $9 page:58 $9 lnk:art
+464    $0 31 $t Marigot africain $t   $d 2004-08-04 $v 278 $9 id:31 $9 page:p. 70 $9 lnk:art
+464    $0 32 $t Chateaux de la Loire (2) $t   $d 2004-08-04 $v 278 $9 id:32 $9 page:p. 126 $9 lnk:art
+801    $a INTERNE $b FR $c 20260926
+
+00672naa2 22002051i 450 
+001 33
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Paysages afghans
+101 0  $a fre
+215    $a p. 26
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=33&database=bibli
+606  1 $9 id:1976 $9 lang:fr_FR $9 idthes:1 $a Afghanistan
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00678naa2 22002051i 450 
+001 35
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Peuples d'Afghanistan
+101 0  $a fre
+215    $a p. 102
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=35&database=bibli
+606  1 $9 id:1976 $9 lang:fr_FR $9 idthes:1 $a Afghanistan
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00673naa2 22002051i 450 
+001 36
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Tribus Pachtounes
+101 0  $a fre
+215    $a p. 72
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=36&database=bibli
+606  1 $9 id:1976 $9 lang:fr_FR $9 idthes:1 $a Afghanistan
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00622naa2 22001931i 450 
+001 37
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a femmes afghanes
+101 0  $a fre
+215    $a p. 120
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=37&database=bibli
+606  1 $9 id:1976 $9 lang:fr_FR $9 idthes:1 $a Afghanistan
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00681naa2 22002051i 450 
+001 38
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Histoire de l'Afghanistan
+101 0  $a fre
+215    $a p. 64
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=38&database=bibli
+606  1 $9 id:1976 $9 lang:fr_FR $9 idthes:1 $a Afghanistan
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00672naa2 22002051i 450 
+001 39
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Islam afghan
+101 0  $a fre
+215    $a p. 118
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=39&database=bibli
+606  1 $9 id:1721 $9 lang:fr_FR $9 idthes:1 $a Islam
+606  1 $9 id:1976 $9 lang:fr_FR $9 idthes:1 $a Afghanistan
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00568naa2 22001811i 450 
+001 40
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Famille Allix
+101 0  $a fre
+215    $a Famille Allix
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=40&database=bibli
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00799naa2 22002291i 450 
+001 41
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Chateaux de la Loire (1)
+101 0  $a fre
+215    $a p. 126
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=41&database=bibli
+610 0  $a chateau;loire;chenonceau;chambord;cheverny
+606  1 $9 id:1545 $9 lang:fr_FR $9 idthes:1 $a Voyage
+606  1 $9 id:1748 $9 lang:fr_FR $9 idthes:1 $a Pays de la Loire
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 277 $t   $9 id:1 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00814naa2 22002291i 450 
+001 25
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2016-03-29 12:51:37
+200 1  $a Crise en Argentine
+101 0  $a fre
+215    $a p. 18
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 330 $l Economie - finances, production, consommation $9 id:34
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=25&database=bibli
+606  1 $9 id:1648 $9 lang:fr_FR $9 idthes:1 $a Economie
+606  1 $9 id:1830 $9 lang:fr_FR $9 idthes:1 $a Argentine
+606  1 $9 id:2297 $9 lang:fr_FR $9 idthes:1 $a Mondialisation
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 278 $t   $9 id:2 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00731naa2 22002171i 450 
+001 26
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Australie vue par J.-P. Ferrero
+101 0  $a fre
+215    $a p. 38
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=26&database=bibli
+610 0  $a australie;aborigènes;désert
+606  1 $9 id:1844 $9 lang:fr_FR $9 idthes:1 $a Australie
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 278 $t   $9 id:2 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00675naa2 22002051i 450 
+001 29
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Bagnes à Madagascar
+101 0  $a fre
+215    $a p. 49
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=29&database=bibli
+606  1 $9 id:1899 $9 lang:fr_FR $9 idthes:1 $a Madagascar
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 278 $t   $9 id:2 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00665naa2 22002051i 450 
+001 30
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Tatars de Crimée
+101 0  $a fre
+215    $a 58
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=30&database=bibli
+606  1 $9 id:1545 $9 lang:fr_FR $9 idthes:1 $a Voyage
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 278 $t   $9 id:2 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00618naa2 22001931i 450 
+001 31
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Marigot africain
+101 0  $a fre
+215    $a p. 70
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=31&database=bibli
+606  1 $9 id:1410 $9 lang:fr_FR $9 idthes:1 $a Afrique
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 278 $t   $9 id:2 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00686naa2 22002051i 450 
+001 32
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-08-04 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Chateaux de la Loire (2)
+101 0  $a fre
+215    $a p. 126
+319    $a Aucun droit spécifique
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=32&database=bibli
+606  1 $9 id:1748 $9 lang:fr_FR $9 idthes:1 $a Pays de la Loire
+461    $0 24 $t Géo $9 id:24 $9 lnk:perio
+463    $d 2004-08-04 $v 278 $t   $9 id:2 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+00909naa2 22001211i 450 
+001 1-bull
+100    $a 20260926u        u  u0frey50  
+200 1  $a Notice de bulletin $d Article_expl_bulletin $h Géo $i 277
+210    $d 2004
+214    $d 2004
+463    $0 24 $d 2004-08-04 $v 277 $t   $t Géo $9 id:1 $9 lnk:bull_expl
+995    $a Fonds propre $c Fonds propre $f 3370000451293 $k MAG GEO $r uu $q u
+996    $f 3370000451293 $k MAG GEO $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Périodique $1 Document en bon état $3 1 $9 expl_id:22 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451293 $9 expl_cote:MAG GEO $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:18 $9 tdoc_libelle:Périodique $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+
+00879naa2 22001211i 450 
+001 2-bull
+100    $a 20260926u        u  u0frey50  
+200 1  $a Notice de bulletin $d Article_expl_bulletin $h Géo $i 278
+210    $d 2004
+214    $d 2004
+463    $0 24 $d 2004-08-04 $v 278 $t   $t Géo $9 id:2 $9 lnk:bull_expl
+995    $a Fonds propre $c Fonds propre $f 3370000451294 $k MAG GEO $r uu $q u
+996    $f 3370000451294 $k MAG GEO $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliobus $x Documentaires $e Périodique $1 Document en bon état $3 1 $9 expl_id:21 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451294 $9 expl_cote:MAG GEO $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:18 $9 tdoc_libelle:Périodique $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliobus
+
+02253nbm0 22002531i 450 
+001 42
+100    $a 20050101u        u  u0frey50  
+009    $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:42
+200 1  $a Charte du XIIIe siècle, par laquelle Guillaume de Rezay de la paroisse de Ceaux (Maine et Loire) vend à Messire de Vernée, chevalier, sept sous et six deniers de rente. $e Acte passé en la cour d'Angers le jeudi avant la Saint Urbain l'an mille deux cent quatre vingt dix neuf.
+101 0  $a fro
+215    $a un feuillet manuscript $e a conservé son sceau et son contre-sceau
+300    $a excellent état de conservation
+327    $a date en vieux style (V.ST.) - M. DU POUGET, archiviste-paléographe de l'Indre, a bien voulu attirer mon attention sur le fait que cette charte était datée du joedi devant la Saint Alban (Saint Aubin d'Angers, qui se fête le 1er mars - Pâques tombant en 1299 le 19 avril, il y a effectivement bien lieu de considérer que cette charte est du 25 février 1300, nouveau style (N.ST.)
+319    $a Aucun droit spécifique
+700  1 $a Rezay $b Guillaume de $4 720 $9 id:28
+210    $h 0000-00-00
+214    $h 0000-00-00
+676    $a 940 $l Histoire de l'Europe $9 id:95
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=42&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451295 $k MANUSCRIPT $u Document sorti du fond ancien $r uu $q u
+996    $f 3370000451295 $k MANUSCRIPT $u Document sorti du fond ancien $m 20040804 $n 20040804 $a Fonds propre $b 2 $v Bibliothèque principale $x H (Histoire locale) $e Oeuvre d'art $1 Consultation sur place $9 expl_id:23 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451295 $9 expl_cote:MANUSCRIPT $9 expl_statut:13 $9 statut_libelle:Consultation sur place $9 expl_typdoc:15 $9 tdoc_libelle:Oeuvre d'art $9 expl_note:Document sorti du fond ancien $9 expl_section:18 $9 section_libelle:H (Histoire locale) $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_retour:2004-08-04 $9 expl_date_depot:2004-08-04 $9 pret_flag:0 $9 location_libelle:Bibliothèque principale
+610 0  $a charte;rente;archive;Ceaux;paroisse;cens;Angers;Maine-et-Loire
+606  1 $9 id:1748 $9 lang:fr_FR $9 idthes:1 $a Pays de la Loire
+801    $a INTERNE $b FR $c 20260926
+
+01721nim0 22002531i 450 
+001 44
+100    $a 20050101u        u  u0frey50  
+009    $a 2004-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Bruit de cochon
+856    $u http://soundfishing.jexiste.fr/bruitages/animaux/cochons%20SF.mp3 $q Fichier MP3
+215    $a 2 pistes audios sur cd gravé $d 12 x 12
+300    $a Bruitage courts. Bonne qualité d'enregistrement.
+319    $a Aucun droit spécifique
+710 02 $a sound-fishing.net $4 370 $9 id:30
+102    $a fr
+210    $a Paris $b Paris
+France $c sound-fishing.net $d 2004 $h 2004-01-01 $z France $9 id:17 $9 web:http://www.sound-fishing.net
+214    $a Paris $b Paris
+France $c sound-fishing.net $d 2004 $h 2004-01-01 $z France $9 id:17 $9 web:http://www.sound-fishing.net
+676    $a 590 $l Zoologie - (les animaux) $9 id:60
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=44&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451296 $k CD COC $r uu $q u
+996    $f 3370000451296 $k CD COC $m 20040804 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e CD audio $1 Consultation sur place $9 expl_id:24 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451296 $9 expl_cote:CD COC $9 expl_statut:13 $9 statut_libelle:Consultation sur place $9 expl_typdoc:13 $9 tdoc_libelle:CD audio $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-04 $9 pret_flag:0 $9 location_libelle:Bibliothèque principale
+610 0  $a cochon;porc;truie;verrat;porcelet;goret;cochette;suidés;artiodactyles;groin
+606  1 $9 id:1525 $9 lang:fr_FR $9 idthes:1 $a Mammifères
+801    $a INTERNE $b FR $c 20260926
+
+01743njm0 22002531i 450 
+001 46
+100    $a 20050101u        u  u0frey50  
+009    $a 1999-01-01 $c 2005-01-01 00:00:00 $u 2016-03-29 12:51:49
+200 1  $a L'adagio d'Albinoni
+101 0  $a fre
+215    $a 1 cd audio $e livret
+327    $a On connaît mal ce compositeur vénitien exactement contemporain de Vivaldi, mais une seule œuvre, pourtant, a assuré sa notoriété, l’Adagio pour cordes, extrait en fait du Concerto en ré majeur. Cette longue cantilène plaintive a servi au film Quatre mariages et un enterrement.
+330    $a Canon de Pachelbel, Jésus que ma joie demeure de J.S. Bach, Andante pour mandoline de Vivaldi, Menuet de Mozart, Menuet de Boccherini
+319    $a Aucun droit spécifique
+702  1 $a Marion $b Alain $4 545 $9 id:32
+700  1 $a Bride $b Philip $4 250 $9 id:31
+102    $a fr
+210    $a Paris $b Paris
+France $c Forlane $d 1999 $h 1999-01-01 $z France $9 id:18
+214    $a Paris $b Paris
+France $c Forlane $d 1999 $h 1999-01-01 $z France $9 id:18
+676    $a 780 $l Musique $9 id:79
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=46&database=bibli
+995    $a BDP $c BDP $f 3370000451301 $k 780 BRI $r uu $q u
+996    $f 3370000451301 $k 780 BRI $m 20040804 $n 00000000 $a BDP $b 1 $v Bibliobus $x Documentaires $e CD audio $1 Document en bon état $3 1 $9 expl_id:25 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451301 $9 expl_cote:780 BRI $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:13 $9 tdoc_libelle:CD audio $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_depot:2004-08-04 $9 pret_flag:1 $9 location_libelle:Bibliobus
+801    $a INTERNE $b FR $c 20260926
+
+01557nkm0 22002411i 450 
+001 47
+100    $a 20050101u        u  u0frey50  
+009    $a 1953-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Couverture du magazine rustica $e Ce que doit être le porc parfait
+101 0  $a fre
+215    $a une page fac-similé de la couverture $d in-8
+330    $a " Ce que doit être le porc parfait " mentionné en couverture
+319    $a Aucun droit spécifique
+102    $a fr
+210    $a Paris $b Paris
+France $c Rustica $d 1953 $h 1953-01-01 $z France $9 id:19
+214    $a Paris $b Paris
+France $c Rustica $d 1953 $h 1953-01-01 $z France $9 id:19
+676    $a 590 $l Zoologie - (les animaux) $9 id:60
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=47&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451298 $k 590 RUS $r uu $q u
+996    $f 3370000451298 $k 590 RUS $m 20040805 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Oeuvre d'art $1 Consultation sur place $9 expl_id:26 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451298 $9 expl_cote:590 RUS $9 expl_statut:13 $9 statut_libelle:Consultation sur place $9 expl_typdoc:15 $9 tdoc_libelle:Oeuvre d'art $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-05 $9 pret_flag:0 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:1525 $9 lang:fr_FR $9 idthes:1 $a Mammifères
+606  1 $9 id:1639 $9 lang:fr_FR $9 idthes:1 $a Mammifères
+801    $a INTERNE $b FR $c 20260926
+
+01419nrm0 22002291i 450 
+001 48
+100    $a 20050101u        u  u0frey50  
+009    $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:42
+200 1  $a Canne $e à pommeau en forme de cochon
+215    $d 85 cm, pommeau de 13 cm
+300    $a canne en bois précieux, bichromie, pommeau sculpté et peint
+319    $a Aucun droit spécifique
+700  1 $a Favulier $b Jacques $4 705 $9 id:33
+210    $h 0000-00-00
+214    $h 0000-00-00
+676    $a 680 $l Articles manufacturés $9 id:69
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=48&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451299 $k 680 FAV $r uu $q u
+996    $f 3370000451299 $k 680 FAV $m 20040805 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Oeuvre d'art $1 Consultation sur place $9 expl_id:27 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451299 $9 expl_cote:680 FAV $9 expl_statut:13 $9 statut_libelle:Consultation sur place $9 expl_typdoc:15 $9 tdoc_libelle:Oeuvre d'art $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-05 $9 pret_flag:0 $9 location_libelle:Bibliothèque principale
+610 0  $a canne;cochon;pied;porc;pommeau argent;ouvrage précieux;sculpture
+606  1 $9 id:1401 $9 lang:fr_FR $9 idthes:1 $a Sculpture
+801    $a INTERNE $b FR $c 20260926
+
+01215nfm0 22002531i 450 
+001 49
+100    $a 20050101u        u  u0frey50  
+009    $a 1765-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Tours. N°65. Flle 78
+856    $u http://gallica.bnf.fr/scripts/ConsultationTout.exe?O=07711576 $q Images numérisées
+101 0  $a fre
+215    $a 1 carte $c en couleur $d 60 x 95 cm
+300    $a Carte de Cassini
+327    $a Cote : Ge FF 18595 (65) BNF Richelieu Cartes et Plans Reprod. Sc 96/614
+. - Carte levée entre 1760 et 1762 par Bottin, Langelay, vérifiée en 1763 et 1764 par La Briffe Ponsan. Lettre par Chambon. 78e feuille publiée.
+319    $a Aucun droit spécifique
+700  1 $a Cassini de Thury $b César-François $4 180 $9 id:34
+102    $a fr
+210    $a Paris $b Paris
+France $c Dépôt de la Guerre $d 1765 $h 1765-01-01 $z France $9 id:20
+214    $a Paris $b Paris
+France $c Dépôt de la Guerre $d 1765 $h 1765-01-01 $z France $9 id:20
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=49&database=bibli
+610 0  $a Tours;Indre-et-Loire;France
+606  1 $9 id:1740 $9 lang:fr_FR $9 idthes:1 $a Centre
+801    $a INTERNE $b FR $c 20260926
+
+01357nam0 22002291i 450 
+001 50
+100    $a 20050101u        u  u0frey50  
+009    $a 1985-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Le Cochon d'Hollywood
+010    $a 2-07-039125-6
+101 0  $a fre
+215    $a [62] p.
+319    $a Aucun droit spécifique
+700  1 $a Fraxler $b Hans $4 070 $9 id:35
+210    $a [Paris] $b [Paris] $c Gallimard $d 1985 $h 1985-01-01 $9 id:21
+214    $a [Paris] $b [Paris] $c Gallimard $d 1985 $h 1985-01-01 $9 id:21
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=50&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451300 $k JR COC $r uu $q u
+996    $f 3370000451300 $k JR COC $m 20040805 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Romans Jeunes $e Livre $1 Document en bon état $3 1 $9 expl_id:28 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451300 $9 expl_cote:JR COC $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:13 $9 section_libelle:Romans Jeunes $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_depot:2004-08-05 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a cochon;porc;hollywood;acteur;studio;cinéma
+606  1 $9 id:1596 $9 lang:fr_FR $9 idthes:1 $a Livre
+801    $a INTERNE $b FR $c 20260926
+
+01659nam0 22002411i 450 
+001 51
+100    $a 20050101u        u  u0frey50  
+009    $a 1887-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Le Porc et les produits de la charcuterie, hygiène, inspection, règlementation, par Th. Bourrier,..
+101 0  $a fre
+215    $a In-18, XII-585 p.
+327    $a Exemples illustrés, gravures représentant une ferme en Indre-et-Loire
+319    $a Aucun droit spécifique
+700  1 $a Bourrier $b Théodore $4 070 $9 id:36
+210    $a Paris $b Paris $c Asselin et Houzeau $d 1887 $h 1887-01-01 $9 id:22
+214    $a Paris $b Paris $c Asselin et Houzeau $d 1887 $h 1887-01-01 $9 id:22
+676    $a 640 $l Arts ménagers - cuisine, coutûre, soins de beauté $9 id:65
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=51&database=bibli
+995    $a Fonds propre $c Fonds propre $f 3370000451302 $k 590 BOU $r uu $q u
+996    $f 3370000451302 $k 590 BOU $m 20040805 $n 20040805 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Livre $1 Document en bon état $3 1 $9 expl_id:29 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:3370000451302 $9 expl_cote:590 BOU $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_retour:2004-08-05 $9 expl_date_depot:2004-08-05 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a Indre-et-Loire;ferme;porc;élevage;verrat;truie;porcelet;cochelle
+606  1 $9 id:2125 $9 lang:fr_FR $9 idthes:1 $a Aliments
+801    $a INTERNE $b FR $c 20260926
+
+01467nam0 22002411i 450 
+001 53
+100    $a 20050101u        u  u0frey50  
+009    $a 1997-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Nimitz $e roman
+010    $a 2-226-09568-3
+101 0  $a fre
+215    $a 443 p. $c ill., couv. ill. en coul. $d 24 cm
+319    $a Aucun droit spécifique
+702  1 $a Langlois-Chassaignon $b Claudie $f 1937-.... $9 id:38
+700  1 $a Robinson $b Patrick $4 070 $9 id:37
+210    $a Paris $b Paris $c A. Michel $d 1997 $h 1997-01-01 $9 id:10
+214    $a Paris $b Paris $c A. Michel $d 1997 $h 1997-01-01 $9 id:10
+676    $a 800 $l Littérature $9 id:81
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=53&database=bibli
+995    $a Fonds propre $c Fonds propre $f 33700004500167 $k RK ROB $r uu $q u
+996    $f 33700004500167 $k RK ROB $m 20040805 $n 20040805 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Livre $1 Document en bon état $3 1 $9 expl_id:30 $9 create_date:2005-01-01 00:00:00 $9 expl_cb:33700004500167 $9 expl_cote:RK ROB $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 expl_date_retour:2004-08-05 $9 expl_date_depot:2004-08-05 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+606  1 $9 id:2110 $9 lang:fr_FR $9 idthes:1 $a Roman et nouvelle
+801    $a INTERNE $b FR $c 20260926
+
+00873nam0 22002051i 450 
+001 54
+100    $a 20050101u        u  u0frey50  
+009    $a 1865-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Études archéologiques dans la Loire-Inférieure, ... $e Arrondissements de Nantes et de Paimboeuf
+101 0  $a fre
+215    $a 140 p. $c carte et pl. $d In-8
+319    $a Aucun droit spécifique
+700  1 $a Orieux $b Eugène $4 070 $f 1823-1901 $9 id:39
+210    $a Nantes $b Nantes $c impr. de Mme Vve Mellinet $d 1865 $h 1865-01-01 $9 id:23
+214    $a Nantes $b Nantes $c impr. de Mme Vve Mellinet $d 1865 $h 1865-01-01 $9 id:23
+676    $a 910 $l Géographie - voyages $9 id:92
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=54&database=bibli
+610 0  $a Loire-Atlantique
+606  1 $9 id:1748 $9 lang:fr_FR $9 idthes:1 $a Pays de la Loire
+801    $a INTERNE $b FR $c 20260926
+
+00702nam0 22002051i 450 
+001 57
+100    $a 20050101u        u  u0frey50  
+009    $a 1995-01-01 $c 2005-01-01 00:00:00 $u 2010-07-30 04:23:43
+200 1  $a Germinal
+101 0  $a fre
+215    $d 18 cm
+319    $a Aucun droit spécifique
+700  1 $a Pichard $b Georges $4 070 $f 1920-2003 $9 id:40
+702  1 $a Zola $b Émile $f 1840-1902 $9 id:41
+210    $a Paris $b Paris $c Média 1000 $d 1995- $h 1995-01-01 $9 id:24
+214    $a Paris $b Paris $c Média 1000 $d 1995- $h 1995-01-01 $9 id:24
+225 2  $a BD adultes $9 id:15
+410  0 $t BD adultes $9 id:15
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=57&database=bibli
+801    $a INTERNE $b FR $c 20260926
+
+01363nam0 22002051i 450 
+001 58
+100    $a 20121130u        u  u0frey50  
+009    $a 2008-01-01 $c 2012-11-30 14:57:10 $u 2016-03-29 12:51:37
+200 1  $a S'organiser pour réussir
+010    $a 978-2-84899-209-9 $d 21,90 EUR
+101 1  $a fre $c eng
+215    $a 1 vol. (287 p.) $c couv. ill. en coul. $d 23 cm
+300    $a La couv. porte en plus : "Getting things done, la méthode GTD ou l'art de l'efficacité sans le stress"
+Index
+319    $a Aucun droit spécifique
+700  1 $a Allen $b David $4 070 $f 1945-.... $9 id:42
+210    $a Paris $b Paris $c Leduc. S éd. $d impr. 2008 $h 2008-01-01 $9 id:25
+214    $a Paris $b Paris $c Leduc. S éd. $d impr. 2008 $h 2008-01-01 $9 id:25
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=58&database=bibli
+995    $a Fonds propre $c Fonds propre $f 12 $k 658.4 ALL $r uu $q u
+996    $f 12 $k 658.4 ALL $m 00000000 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Livre $1 Document en bon état $3 1 $9 expl_id:33 $9 create_date:2012-11-30 14:57:31 $9 expl_cb:12 $9 expl_cote:658.4 ALL $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+
+01289nam0 22002051i 450 
+001 59
+100    $a 20121130u        u  u0frey50  
+009    $a 2008-01-01 $c 2012-11-30 15:03:32 $u 2016-03-29 12:51:37
+200 1  $a S'initier à la programmation $e avec des exemples en C, C++, C#, Java et PHP
+010    $a 978-2-212-11990-9 $d 25 EUR
+101 0  $a fre
+215    $a 1 vol. (XXI-346 p.) $c ill., couv. ill. $d 23 cm
+300    $a Index
+319    $a Aucun droit spécifique
+700  1 $a Delannoy $b Claude $4 070 $f 1946-.... $9 id:43
+210    $a Paris $b Paris $c Eyrolles $d DL 2008 $h 2008-01-01 $9 id:26
+214    $a Paris $b Paris $c Eyrolles $d DL 2008 $h 2008-01-01 $9 id:26
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=59&database=bibli
+995    $a Fonds propre $c Fonds propre $f 16 $k 005.1 DEL $r uu $q u
+996    $f 16 $k 005.1 DEL $m 00000000 $n 00000000 $a Fonds propre $b 2 $v Bibliothèque principale $x Documentaires $e Livre $1 Document en bon état $3 1 $9 expl_id:34 $9 create_date:2012-11-30 15:03:41 $9 expl_cb:16 $9 expl_cote:005.1 DEL $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:1 $9 tdoc_libelle:Livre $9 expl_section:10 $9 section_libelle:Documentaires $9 expl_owner:2 $9 lender_libelle:Fonds propre $9 codestat_libelle:Adultes $9 statisdoc_codage_import:a $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+
+00581nas2 22001811i 450 
+001 60
+100    $a 20121130u        u  u0frey50  
+009    $a 2004-08-04 $c 2012-11-30 16:36:12 $u 2016-03-29 12:51:37
+200 1  $a 278 $h 278 $9 id:2
+530    $a Géo
+210    $d 2004 $h 2004-08-04
+214    $d 2004 $h 2004-08-04
+101 0  $a fre
+300    $a C'est un très bon bulletin
+319    $a Aucun droit spécifique
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=60&database=bibli
+461    $0 24 $9 bl:s1 $9 id:24 $9 rank:0 $9 type_lnk:b $9 lnk:parent $t Géo
+801    $a INTERNE $b FR $c 20260926
+

@@ -1,0 +1,19 @@
+# § 5 des pré-requis PMB 8.1 : jeu de caractères utf8mb3, moteur MyISAM,
+# sql_mode vide. key_buffer_size réduit (1G conseillé en production ; le banc
+# porte quelques centaines de notices).
+[mysqld]
+character_set_server = utf8mb3
+collation_server = utf8mb3_unicode_ci
+default_storage_engine = MyISAM
+sql_mode = ''
+interactive_timeout = 300
+wait_timeout = 300
+join_buffer_size = 4M
+key_buffer_size = 64M
+max_allowed_packet = 64M
+open_files_limit = 10000
+tmp_table_size = 64M
+max_heap_table_size = 64M
+
+[mysqldump]
+max_allowed_packet = 64M
