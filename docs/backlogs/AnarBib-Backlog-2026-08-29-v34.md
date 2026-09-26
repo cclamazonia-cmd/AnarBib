@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-26** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-26** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 18
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 5
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-26.** **53 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H10, H14, H15, H16, H17, H18, H19, H20, H21, H23, H24, H26, H27, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-26.** **52 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C8, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H14, H15, H16, H17, H18, H19, H20, H21, H23, H24, H26, H27, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1234,7 +1234,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 |---|---|---|---|
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
-| **H10** | Relire à la main les 98 alignements FICEDL — 54 `close` dont une part sont des `broad` — et aligner enfin les quatre rubriques historiques de Solidaires | `P2` | Ouvert |
 | **H12** | Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration | `P3` | Ouvert |
 | **H14** | Un PMB de banc sur le poste, pour éprouver l'aller-retour sans dépendre d'une bibliothèque | `P1` | Ouvert |
 | **H15** | L'import lit un fichier qui n'est pas en UTF-8 au lieu de le corrompre en silence | `P1` | Ouvert |
@@ -1294,27 +1293,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Octobre-novembre, si le camarade s'y met. Lié à **D4**.
 
 *Renvois : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26 §6` · `VEILLE_leftovers_maydayrooms_2026-08-19`*
-
-#### H10 — Relire à la main les 98 alignements FICEDL — 54 `close` dont une part sont des `broad` — et aligner enfin les quatre rubriques historiques de Solidaires
-
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
-
-**État.** **Vérifié en base le 07/09.** 98 liens dans `subject_ficedl_links` : 44 `exact`, 54 `close`. Jusqu'au 07/09 le domaine n'avait que ces deux valeurs, donc tout ce qui est réellement « plus large » ou « voisin » a été tassé en `close`. Par vocabulaire visé : 72 vers la liste commune, 26 vers la géo-histo, **0 vers la facette `dates`** — les quatre rubriques historiques de Solidaires (guerres, périodes) ne sont donc toujours pas alignées, alors que les 159 dates sont en base depuis le 03/09 (H1 clos).
-
-*Vérifié : 07/09 — 98 liens, 54 `close`, 0 vers `dates`.*
-
-**Ce que c'est.** Fiche par fiche, jamais par passe automatique (`CONV-EXEC-3`) : pour chaque `close`, décider s'il reste `close` ou devient `broad`/`narrow`/`related` ; poser les alignements manquants vers la facette `dates` pour les rubriques historiques ; passer aussi les 44 alignements du lot Solidaires du 28/08.
-
-**Pourquoi ça compte.** Un `skos:closeMatch` dit « presque le même concept ». Quand le sujet local est plus étroit, c'est faux — et c'est publié dans l'export que d'autres catalogues peuvent lire.
-
-**Ce qui compte comme fini.**
-
-- Chaque lien porte une relation choisie, pas héritée d'un domaine à deux valeurs.
-- Au moins un alignement vers un descripteur `dates` existe.
-
-**Dépendances.** Après **H9** : sans les cinq valeurs ouvertes à l'écran, la relecture n'a pas d'outil pour dire ce qu'elle voit.
-
-*Renvois : `REGISTRE §30 THES-FIC4, THES-FIC-O1` · `claude/VERIF_subject_ficedl_links_schema_2026-09-07` · `CALENDRIER_bologne_2026-08-27 (rubriques historiques)`*
 
 #### H12 — Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration
 
@@ -2182,6 +2160,7 @@ CI verte : lint et suite unitaire. |
 | J2 | 2026-09-25 | **Clos le 25/09, les deux critères tenus.** *(1)* Le tableau de `INDEX.md` court sans trou du v8 au v34 : 36 lignes pour les 36 fichiers d'`archive/`, plus la version courante (relu le 25/09). *(2)* **`DOC-ARCH-1`** au REGISTRE (0.45, décision de Xavier : « ne rien renommer, écrire la règle ») : le préfixe `-archive-` marque les neuf fichiers des lignées d'avant la fusion du 20/05, dont les numéros (v8, v10 à v15) ont été repris par la lignée unifiée — c'est lui qui les distingue ; toute version archivée depuis garde son nom d'origine, le dossier suffit et les liens restent valides. La note de l'INDEX le dit et renvoie au registre. L'en-tête de l'INDEX date désormais son « 90 items » (« à l'écriture ») au lieu de dériver. |
 | H13 | 2026-09-25 | **Clos le 25/09, le critère tenu.** Les deux fichiers sont au dépôt (`e0fbb024`), dans `docs/journal/ficedl/` : ceux du 09/09 emportés à Bologne — 28 descripteurs, deux schémas en nœuds anonymes, URI `?motNN`, `broader` « généralités » confirmés, « art : courants » en `skos:Collection` provisoire —, sha256 vérifiés contre les trois copies du disque E: (le disque F: de la mémoire n'était pas branché). **Régénérables par une commande documentée** dans le README du dossier : `node scripts/ficedl_thesaurus_esquisse.mjs docs/journal/ficedl/ficedl_thesaurus_2026-09-03.json docs/journal/ficedl` — copie du `build_esquisse.mjs` du paquet hors ligne, sortie **identique octet pour octet** sur l'aspiration du 03/09 (identique elle aussi à celle du paquet). Le CSV (CRLF + BOM) est sorti de la conversion des fins de ligne pour le rester après un clone ; la garde vitest `ficedl-esquisse-regenerable` régénère et compare à chaque CI. La note du 28/08 est versée à côté, avec les trois points où elle est dépassée (26 descripteurs, un seul vocabulaire, `/id/motNN`). |
 | H9 | 2026-09-25 | **Clos le 25/09 au soir, les trois critères tenus.** Livré par `f67ff3d9` (migration `20260925084523`) : la RPC accepte les cinq relations, `skosExport.js` passe par la table `SKOS_MATCH` et ne publie plus rien par défaut, la page-sujet et l'éditeur de la coordination lisent `ficedlMatch.js` — l'éditeur n'offrait jusque-là **aucun** choix de relation —, cinq clés dans les dix locales (en de/nl, « close » ne porte plus le mot de « related »). *(1)* **Xavier a posé depuis l'écran** (capture du 25/09, 21 h 17) un alignement « plus large » : Anarchosyndicalisme (sujet 17) → `mot286` « syndicalisme révolutionnaire », lu en base (`match_type = broad`, 19:17 UTC) ; la page publique `/thesaurus/anarcossindicalismo` l'affiche « PLUS LARGE » à côté de l'« EXACT » de `mot272` (lu dans le navigateur) ; l'export réel `api.thesaurus_export_v1`, appelé en anonyme, passé dans le `skosExport.js` livré, sort `skos:broadMatch <…?mot286>` en Turtle comme en JSON-LD. *(2)* `npm test` vert : 878 tests, dont `skos-relations-h9` (15). *(3)* Le 4.2 de `20260907172508` est inversé dans `20260925084523` le même jour, et annoté là-bas. Suite SQL `alignement_ficedl_relations_tests` (6). Ouvre **H10**. |
+| H10 | 2026-09-26 | **Clos le 26/09, les deux critères tenus.** Relevé du matin : 99 liens (44 `exact`, 54 `close`, 1 `broad` posé à l'écran le 25/09), aucun vers la facette `dates`. **Relecture ligne à ligne** (`CONV-EXEC-3`) consignée dans `docs/journal/arbitrages/RELECTURE_alignements_ficedl_2026-09-26.md`, **fiche validée en bloc par Xavier le 26/09**. *(1) Chaque lien porte une relation choisie* : sur les 54 `close`, 19 deviennent « plus large », 21 « plus étroit » (les rubriques composites de Solidaires), 5 « associé », 9 sont confirmés ; sur les 44 `exact`, 6 étaient trop affirmés (3 « plus large » — le descripteur couvre les deux faces, 3 « proche » — une révolution n'est pas une période), 38 sont confirmés nommément dans la fiche. *(2)* **Huit alignements vers la facette `dates`** (Commune ×2 → 1871, Mai-Juin 1936 → 1936, Mai 68 → 1968, révolution russe ×2 → 1917, révolution allemande → 1918 et 1919 — 1789 et 1848 n'existent pas dans la facette, qui commence en 1868), plus trois meilleures cibles trouvées en chemin (Proche et Moyen-Orient, Allemagne 1917-1921, conseils ouvriers). Migration `20260926182521` (`e38f7310`) : clé (slug, `mot_id`), un lien n'est changé que s'il porte encore la relation relevée, vérification des 71 décisions une à une. **Éprouvée avant de pousser** : en lecture seule contre la prod (71/71 visent juste, 0 écart d'état), sur copie jetable du banc (71 tenues, idempotente, refuse un lien modifié entre-temps en le nommant). **En production le 26/09** : migration appliquée par la CI (338 migrations, sans auteur, sonde de déploiement verte), **110 liens — 38 exact, 14 close, 26 broad, 22 narrow, 10 related**, exactement la répartition attendue par la fiche ; **8 vers la facette dates** ; l'export anonyme réel, passé dans `skosExport.js`, sort par exemple Commune de Paris en `skos:broadMatch` vers 1871 et la révolution russe en `skos:closeMatch` vers 1917-1921 et `skos:relatedMatch` vers 1917. |
 
 ---
 
@@ -2213,4 +2192,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-26. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-26. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
