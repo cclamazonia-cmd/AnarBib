@@ -5,7 +5,14 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { '@': path.resolve(__dirname, 'src') },
+    alias: [
+      { find: '@', replacement: path.resolve(__dirname, 'src') },
+      // Les tests Deno des edge functions (marc.test.ts, serialize.test.ts) sont
+      // joués TELS QUELS par src/tests/deno-tests-pont.test.js : leur import
+      // `jsr:@std/assert` (épinglé ou non) est servi par une cale sur `expect`.
+      // Sans ce pont ils ne tournaient nulle part (H27(0), 26/09/2026).
+      { find: /^jsr:@std\/assert(@[\d.]+)?$/, replacement: path.resolve(__dirname, 'src/tests/helpers/std-assert-pont.js') },
+    ],
   },
   test: {
     environment: 'jsdom',
@@ -23,7 +30,9 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
-      '**/supabase/functions/**', // Edge Functions Supabase (Deno, pas Node)
+      // Edge Functions Supabase (Deno, pas Node). Leurs tests purs (sans API
+      // Deno autre que Deno.test) passent par src/tests/deno-tests-pont.test.js.
+      '**/supabase/functions/**',
     ],
   },
 });
