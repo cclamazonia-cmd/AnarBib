@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Cas difficiles pour l'aller-retour PMB <-> AnarBib (H14).
+  Quatorze notices UNIMARC FICTIVES (auteurs, éditeurs, ISBN, codes-barres
+  inventés) de bibliothèque libertaire, en MARCXML, source de
+  tests/pmb/fixtures/pmb-8.1.1.1_cas-difficiles.* :
+
+    CD-01  (a) zine photocopié, ni ISBN ni éditeur commercial ; (c) 710 auteur
+    CD-02  (b) grec, titre parallèle français en 200 $d + 510
+    CD-03  (b) russe, 200 et 700 doublés en translittération ISO 9 ($6/$7)
+    CD-04  (b) ukrainien, « » et apostrophes ’ / ʼ dans le cyrillique
+    CD-05  (b) arabe (droite à gauche), chiffres latins dans le texte
+    CD-06  (b) chinois, titre parallèle anglais
+    CD-07  (d) traductrice 702 $4 730 et préfacière 702 $4 080 ; (h) ß ñ ł ä
+           œ ’ « » € ; (j) 205, 225/410, 330, 454, 676, 856 ; (i) 606
+    CD-08  (e) notice d'ensemble (2 vol.) ; (h) č ň
+    CD-09  (e) tome 1 : 200 $h/$i + 461 vers CD-08, liens à la manière PMB ($9)
+    CD-10  (e) tome 2 : 200 $h/$i seuls, sans 461
+    CD-11  (f) trois exemplaires 995, deux cotes, deux propriétaires qui
+           existent dans le jeu de test (BDP, Fonds propre) ;
+           (i) 606 $x $y $z ; (j) 330, 676, 856
+    CD-12  (g) périodique : 462 bulletin et 464 article, liens à la manière PMB
+    CD-13  (g) article dépouillé : 461 lnk:perio + 463 lnk:bull
+    CD-14  (c) congrès : 710 ind1=1 ($d $e $f) + collectivité 712 $4 557
+
+  Conventions reprises de l'export PMB (pmb-8.1.1.1_jeu-de-test.unimarc.txt) :
+  995 $a/$c propriétaire, $f code-barres, $k cote, $u note, $r uu, $q u ;
+  liens 46X en $9 (bl:, id:, type_lnk:, lnk:) et $0 ; 100 $a positions 26-29
+  = « 50 » suivi de deux blancs (UTF-8). Conversion : yaz-marcdump -i marcxml
+  -o marc.
+-->
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+
+  <!-- CD-01 (a) zine photocopié ; (c) collectivité auteur principale -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-01</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="d">prix libre</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2023    m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Brûler les frontières</subfield>
+      <subfield code="e">zine sur l’accueil des exilé·es</subfield>
+      <subfield code="f">Collectif Brûlot</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">[Toulouse]</subfield>
+      <subfield code="c">[s.n.]</subfield>
+      <subfield code="d">2023</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">24 p.</subfield>
+      <subfield code="c">ill.</subfield>
+      <subfield code="d">21 cm</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Zine photocopié en noir et blanc, agrafé, diffusé à prix libre lors des permanences.</subfield>
+    </datafield>
+    <datafield tag="610" ind1="0" ind2=" ">
+      <subfield code="a">zine</subfield>
+    </datafield>
+    <datafield tag="610" ind1="0" ind2=" ">
+      <subfield code="a">frontières</subfield>
+    </datafield>
+    <datafield tag="710" ind1="0" ind2="2">
+      <subfield code="a">Collectif Brûlot</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">FR</subfield>
+      <subfield code="b">AnarBib-banc</subfield>
+      <subfield code="c">20260926</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000001</subfield>
+      <subfield code="k">ZINE BRU</subfield>
+      <subfield code="u">Photocopie agrafée, fragile</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-02 (b) grec, titre parallèle français -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-02</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-618-85012-0-1</subfield>
+      <subfield code="d">16 €</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2024    m  y0frey50      ga</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">gre</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">GR</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Η κοινότητα των Εξαρχείων</subfield>
+      <subfield code="d">La communauté d’Exarchia</subfield>
+      <subfield code="z">fre</subfield>
+      <subfield code="e">χρονικό μιας γειτονιάς, 1973-2023</subfield>
+      <subfield code="f">Νίκος Παπαδόπουλος</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Αθήνα</subfield>
+      <subfield code="c">Εκδόσεις Ελεύθερος Τύπος</subfield>
+      <subfield code="d">2024</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">312 σ.</subfield>
+      <subfield code="c">εικ.</subfield>
+      <subfield code="d">21 εκ.</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">Χρονικό της γειτονιάς των Εξαρχείων στην Αθήνα, από την εξέγερση του Πολυτεχνείου έως σήμερα: στέκια, συνελεύσεις, βιβλιοπωλεία και αυτοοργανωμένοι χώροι.</subfield>
+    </datafield>
+    <datafield tag="510" ind1="1" ind2=" ">
+      <subfield code="a">La communauté d’Exarchia</subfield>
+      <subfield code="z">fre</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Anarchisme</subfield>
+      <subfield code="y">Grèce</subfield>
+      <subfield code="y">Athènes (Grèce)</subfield>
+      <subfield code="z">1970-....</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Παπαδόπουλος</subfield>
+      <subfield code="b">Νίκος</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000002</subfield>
+      <subfield code="k">GR 949.5 PAP</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-03 (b) russe, 200 et 700 doublés en translittération ISO 9 -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-03</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-6040000-1-4</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2022    m  y0frea50      ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="6">z01</subfield>
+      <subfield code="7">ca</subfield>
+      <subfield code="a">Взаимопомощь в рабочих артелях Урала</subfield>
+      <subfield code="e">очерки, 1880–1917</subfield>
+      <subfield code="f">Анна Кузнецова</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="6">z01</subfield>
+      <subfield code="7">ba</subfield>
+      <subfield code="a">Vzaimopomoŝʹ v rabočih artelâh Urala</subfield>
+      <subfield code="e">očerki, 1880–1917</subfield>
+      <subfield code="f">Anna Kuznecova</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Екатеринбург</subfield>
+      <subfield code="c">Вольное слово</subfield>
+      <subfield code="d">2022</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">204 с.</subfield>
+      <subfield code="d">20 см</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Coopératives ouvrières</subfield>
+      <subfield code="y">Russie</subfield>
+      <subfield code="y">Oural (Russie)</subfield>
+      <subfield code="z">1880-1917</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="6">z02</subfield>
+      <subfield code="7">ca</subfield>
+      <subfield code="a">Кузнецова</subfield>
+      <subfield code="b">Анна</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="6">z02</subfield>
+      <subfield code="7">ba</subfield>
+      <subfield code="a">Kuznecova</subfield>
+      <subfield code="b">Anna</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000003</subfield>
+      <subfield code="k">RU 334.6 KUZ</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-04 (b) ukrainien : guillemets « » et apostrophes ’ (U+2019) / ʼ (U+02BC) -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-04</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-617-7000-01-2</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2020    m  y0frey50      ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">ukr</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Вільна територія</subfield>
+      <subfield code="e">Гуляйпільський район, 1918–1921</subfield>
+      <subfield code="e">памʼять і документи</subfield>
+      <subfield code="f">упорядниця Олена Шевчук</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Запоріжжя</subfield>
+      <subfield code="c">Видавництво «Набат»</subfield>
+      <subfield code="d">2020</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">432 с.</subfield>
+      <subfield code="c">іл., карти</subfield>
+      <subfield code="d">22 см</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">Збірка спогадів учасників руху та документів з обласного архіву; окремий розділ присвячено з’їзду селян у Гуляйполі.</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Makhnovchtchina</subfield>
+      <subfield code="x">Sources</subfield>
+      <subfield code="y">Ukraine</subfield>
+      <subfield code="z">1918-1921</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Шевчук</subfield>
+      <subfield code="b">Олена</subfield>
+      <subfield code="4">220</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000004</subfield>
+      <subfield code="k">UK 947.7 SHE</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-05 (b) arabe, écriture de droite à gauche -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-05</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-977-00-0000-7</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2021    m  y0frey50      fa</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">ara</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">EG</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">الأناركية والعمل النقابي في مصر</subfield>
+      <subfield code="e">دراسة تاريخية (1919–1952)</subfield>
+      <subfield code="d">L’anarchisme et le syndicalisme en Égypte</subfield>
+      <subfield code="z">fre</subfield>
+      <subfield code="f">ليلى الشريف</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">القاهرة</subfield>
+      <subfield code="c">دار الحرية للنشر</subfield>
+      <subfield code="d">2021</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">248 ص.</subfield>
+      <subfield code="d">24 سم</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">يتناول هذا الكتاب تاريخ الجماعات الأناركية والنقابات العمالية في الإسكندرية والقاهرة بين 1919 و1952.</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Syndicalisme</subfield>
+      <subfield code="y">Égypte</subfield>
+      <subfield code="z">1919-1952</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">الشريف</subfield>
+      <subfield code="b">ليلى</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000005</subfield>
+      <subfield code="k">AR 331.88 SHA</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-06 (b) chinois, titre parallèle anglais -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-06</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-7-5000-0000-6</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2019    m  y0frey50      ea</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">chi</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">CN</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">广州无政府主义报刊研究</subfield>
+      <subfield code="e">1912—1927</subfield>
+      <subfield code="d">Anarchist periodicals in Guangzhou, 1912-1927</subfield>
+      <subfield code="z">eng</subfield>
+      <subfield code="f">李明华著</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">广州</subfield>
+      <subfield code="c">自由出版社</subfield>
+      <subfield code="d">2019</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">356页</subfield>
+      <subfield code="c">图</subfield>
+      <subfield code="d">23厘米</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Presse anarchiste</subfield>
+      <subfield code="y">Chine</subfield>
+      <subfield code="y">Canton (Chine)</subfield>
+      <subfield code="z">1900-1945</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">李</subfield>
+      <subfield code="b">明华</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000006</subfield>
+      <subfield code="k">ZH 079.51 LI</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-07 (d) auteure 070, traductrice 730, préfacière 080 ; (h) ; (i) ; (j) -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-07</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-2-9587412-0-4</subfield>
+      <subfield code="b">br.</subfield>
+      <subfield code="d">18 €</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2025    m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="1" ind2=" ">
+      <subfield code="a">fre</subfield>
+      <subfield code="c">ger</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">La rue est à nous</subfield>
+      <subfield code="e">chroniques de l’autogestion à Barcelone, 1936-1937</subfield>
+      <subfield code="f">Käthe Weiß</subfield>
+      <subfield code="g">traduit de l’allemand par Pilar Muñoz</subfield>
+      <subfield code="g">préface de Małgorzata Kowalczyk</subfield>
+    </datafield>
+    <datafield tag="205" ind1=" " ind2=" ">
+      <subfield code="a">2e édition revue et augmentée</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Lyon</subfield>
+      <subfield code="c">Éditions de l’Œil noir</subfield>
+      <subfield code="d">2025</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">287 p.</subfield>
+      <subfield code="c">ill., cartes</subfield>
+      <subfield code="d">22 cm</subfield>
+    </datafield>
+    <datafield tag="225" ind1="2" ind2=" ">
+      <subfield code="a">Mémoires sociales</subfield>
+      <subfield code="v">7</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Titre original : Die Straße gehört uns</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">Témoignage d’une militante allemande réfugiée à Barcelone : les collectivités, les « comités de quartier », la vie quotidienne… Un récit où l’œuvre d’entraide se mêle aux débats sur l’autogestion.</subfield>
+    </datafield>
+    <datafield tag="410" ind1=" " ind2="0">
+      <subfield code="t">Mémoires sociales</subfield>
+      <subfield code="v">7</subfield>
+    </datafield>
+    <datafield tag="454" ind1=" " ind2="1">
+      <subfield code="t">Die Straße gehört uns</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Autogestion</subfield>
+      <subfield code="y">Espagne</subfield>
+      <subfield code="y">Barcelone (Espagne)</subfield>
+      <subfield code="z">1936-1939</subfield>
+    </datafield>
+    <datafield tag="676" ind1=" " ind2=" ">
+      <subfield code="a">946.081</subfield>
+      <subfield code="v">23</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Weiß</subfield>
+      <subfield code="b">Käthe</subfield>
+      <subfield code="f">1905-1987</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Muñoz</subfield>
+      <subfield code="b">Pilar</subfield>
+      <subfield code="4">730</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Kowalczyk</subfield>
+      <subfield code="b">Małgorzata</subfield>
+      <subfield code="4">080</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2=" ">
+      <subfield code="u">https://example.org/anarbib-banc/la-rue-est-a-nous</subfield>
+      <subfield code="q">text/html</subfield>
+      <subfield code="z">Présentation de l’éditeur</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000007</subfield>
+      <subfield code="k">946.081 WEI</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-08 (e) notice d'ensemble en deux volumes ; (h) č ň -->
+  <record>
+    <leader>00000nam1 22000001i 450 </leader>
+    <controlfield tag="001">CD-08</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-2-9587412-1-1</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926g20242025m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Chroniques de l’entraide ouvrière</subfield>
+      <subfield code="f">Zdeňka Černá</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Marseille</subfield>
+      <subfield code="c">Éditions du Crépuscule rouge</subfield>
+      <subfield code="d">2024-2025</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">2 vol.</subfield>
+      <subfield code="d">21 cm</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Černá</subfield>
+      <subfield code="b">Zdeňka</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-09 (e) tome 1 : 200 $h/$i et 461 vers CD-08, à la manière PMB -->
+  <record>
+    <leader>00000nam2 22000001i 450 </leader>
+    <controlfield tag="001">CD-09</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-2-9587412-2-8</subfield>
+      <subfield code="d">22 €</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2024    m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Chroniques de l’entraide ouvrière</subfield>
+      <subfield code="h">Tome 1</subfield>
+      <subfield code="i">Les sociétés de secours mutuel, 1848-1871</subfield>
+      <subfield code="f">Zdeňka Černá</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Marseille</subfield>
+      <subfield code="c">Éditions du Crépuscule rouge</subfield>
+      <subfield code="d">2024</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">318 p.</subfield>
+      <subfield code="d">21 cm</subfield>
+    </datafield>
+    <datafield tag="461" ind1=" " ind2="0">
+      <subfield code="t">Chroniques de l’entraide ouvrière</subfield>
+      <subfield code="v">1</subfield>
+      <subfield code="9">bl:m0</subfield>
+      <subfield code="9">id:CD-08</subfield>
+      <subfield code="9">rank:1</subfield>
+      <subfield code="9">type_lnk:c</subfield>
+      <subfield code="9">lnk:parent</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Černá</subfield>
+      <subfield code="b">Zdeňka</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000008</subfield>
+      <subfield code="k">334.7 CER 1</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-10 (e) tome 2 : 200 $h/$i seuls -->
+  <record>
+    <leader>00000nam2 22000001i 450 </leader>
+    <controlfield tag="001">CD-10</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-2-9587412-3-5</subfield>
+      <subfield code="d">22 €</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2025    m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Chroniques de l’entraide ouvrière</subfield>
+      <subfield code="h">Tome 2</subfield>
+      <subfield code="i">Des bourses du travail aux coopératives, 1871-1914</subfield>
+      <subfield code="f">Zdeňka Černá</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Marseille</subfield>
+      <subfield code="c">Éditions du Crépuscule rouge</subfield>
+      <subfield code="d">2025</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">352 p.</subfield>
+      <subfield code="d">21 cm</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Černá</subfield>
+      <subfield code="b">Zdeňka</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000009</subfield>
+      <subfield code="k">334.7 CER 2</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-11 (f) trois exemplaires, deux cotes, deux propriétaires ; (i) ; (j) -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-11</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-2-9587412-4-2</subfield>
+      <subfield code="d">12,50 €</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2022    m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Petite histoire des bibliothèques ouvrières</subfield>
+      <subfield code="e">de la Commune aux athénées libertaires</subfield>
+      <subfield code="f">Élise Garnier-Leroux</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Paris</subfield>
+      <subfield code="c">Éditions du Chat-Huant</subfield>
+      <subfield code="d">2022</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">176 p.</subfield>
+      <subfield code="d">19 cm</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">Des cabinets de lecture des sociétés ouvrières aux ateneos espagnols : comment les travailleur·ses ont bâti leurs propres bibliothèques, hors de l’État et de l’Église.</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Bibliothèques ouvrières</subfield>
+      <subfield code="x">Histoire</subfield>
+      <subfield code="y">France</subfield>
+      <subfield code="z">19e siècle</subfield>
+      <subfield code="2">rameau</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Athénées libertaires</subfield>
+      <subfield code="y">Espagne</subfield>
+      <subfield code="z">1900-1939</subfield>
+      <subfield code="2">rameau</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Anarchisme</subfield>
+      <subfield code="x">Aspect éducatif</subfield>
+      <subfield code="y">Espagne</subfield>
+      <subfield code="z">20e siècle</subfield>
+      <subfield code="2">rameau</subfield>
+    </datafield>
+    <datafield tag="676" ind1=" " ind2=" ">
+      <subfield code="a">027.6</subfield>
+      <subfield code="l">Bibliothèques pour groupes particuliers</subfield>
+      <subfield code="v">23</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Garnier-Leroux</subfield>
+      <subfield code="b">Élise</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2=" ">
+      <subfield code="u">https://example.org/anarbib-banc/bibliotheques-ouvrieres?lang=fr&amp;format=pdf</subfield>
+      <subfield code="q">application/pdf</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000010</subfield>
+      <subfield code="k">027.6 GAR</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000011</subfield>
+      <subfield code="k">027.6 GAR</subfield>
+      <subfield code="u">Exemplaire de consultation</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">Fonds propre</subfield>
+      <subfield code="c">Fonds propre</subfield>
+      <subfield code="f">CDF0000000012</subfield>
+      <subfield code="k">ARCH GAR 1</subfield>
+      <subfield code="u">Exemplaire dédicacé</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-12 (g) périodique : bulletin (462) et article (464), liens à la manière PMB -->
+  <record>
+    <leader>00000nas1 22000001i 450 </leader>
+    <controlfield tag="001">CD-12</controlfield>
+    <datafield tag="011" ind1=" " ind2=" ">
+      <subfield code="a">2555-0004</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926a20189999m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Le Rat des bibliothèques</subfield>
+      <subfield code="e">bulletin de liaison des bibliothèques et centres de documentation libertaires</subfield>
+    </datafield>
+    <datafield tag="207" ind1=" " ind2="0">
+      <subfield code="a">N° 1 (printemps 2018)-</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Lyon</subfield>
+      <subfield code="c">[s.n.]</subfield>
+      <subfield code="d">2018-</subfield>
+    </datafield>
+    <datafield tag="326" ind1=" " ind2=" ">
+      <subfield code="a">Trimestriel</subfield>
+    </datafield>
+    <datafield tag="462" ind1=" " ind2=" ">
+      <subfield code="d">2025-03-01</subfield>
+      <subfield code="v">12</subfield>
+      <subfield code="t">Printemps 2025</subfield>
+      <subfield code="9">id:CD-B12</subfield>
+      <subfield code="9">lnk:bull</subfield>
+    </datafield>
+    <datafield tag="464" ind1=" " ind2=" ">
+      <subfield code="0">CD-13</subfield>
+      <subfield code="t">Classer sans dominer</subfield>
+      <subfield code="t">Printemps 2025</subfield>
+      <subfield code="d">2025-03-01</subfield>
+      <subfield code="v">12</subfield>
+      <subfield code="9">id:CD-13</subfield>
+      <subfield code="9">page:p. 4-9</subfield>
+      <subfield code="9">lnk:art</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-13 (g) article dépouillé du n° 12 de CD-12 -->
+  <record>
+    <leader>00000naa2 22000001i 450 </leader>
+    <controlfield tag="001">CD-13</controlfield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2025    m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Classer sans dominer</subfield>
+      <subfield code="e">la CDU à l’épreuve de l’autogestion</subfield>
+      <subfield code="f">Nuria Ibáñez</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">p. 4-9</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">Retour d’expérience d’un centre de documentation qui a abandonné la CDU pour un plan de classement décidé en assemblée.</subfield>
+    </datafield>
+    <datafield tag="461" ind1=" " ind2=" ">
+      <subfield code="0">CD-12</subfield>
+      <subfield code="t">Le Rat des bibliothèques</subfield>
+      <subfield code="9">id:CD-12</subfield>
+      <subfield code="9">lnk:perio</subfield>
+    </datafield>
+    <datafield tag="463" ind1=" " ind2=" ">
+      <subfield code="d">2025-03-01</subfield>
+      <subfield code="v">12</subfield>
+      <subfield code="t">Printemps 2025</subfield>
+      <subfield code="9">id:CD-B12</subfield>
+      <subfield code="9">lnk:bull</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Classification décimale universelle</subfield>
+      <subfield code="x">Critique et interprétation</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Ibáñez</subfield>
+      <subfield code="b">Nuria</subfield>
+      <subfield code="4">070</subfield>
+    </datafield>
+  </record>
+
+  <!-- CD-14 (c) congrès : 710 ind1=1 ($d numéro, $e lieu, $f date) + 712 organisateur -->
+  <record>
+    <leader>00000nam0 22000001i 450 </leader>
+    <controlfield tag="001">CD-14</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-2-9587412-5-9</subfield>
+      <subfield code="d">20 €</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20260926d2020    m  y0frey50      ba</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">fre</subfield>
+      <subfield code="a">por</subfield>
+      <subfield code="a">spa</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Archiver les luttes</subfield>
+      <subfield code="e">actes de la IIIe Rencontre internationale des centres de documentation libertaires, Lisbonne, 12-14 avril 2019</subfield>
+      <subfield code="f">textes réunis par João Ferreira</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Paris</subfield>
+      <subfield code="c">Éditions du Chat-Huant</subfield>
+      <subfield code="d">2020</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">264 p.</subfield>
+      <subfield code="d">24 cm</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="a">Centres de documentation</subfield>
+      <subfield code="x">Congrès</subfield>
+      <subfield code="y">Europe</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Ferreira</subfield>
+      <subfield code="b">João</subfield>
+      <subfield code="4">340</subfield>
+    </datafield>
+    <datafield tag="710" ind1="1" ind2="2">
+      <subfield code="a">Rencontre internationale des centres de documentation libertaires</subfield>
+      <subfield code="d">3</subfield>
+      <subfield code="e">Lisbonne</subfield>
+      <subfield code="f">2019</subfield>
+    </datafield>
+    <datafield tag="712" ind1="0" ind2="2">
+      <subfield code="a">Arquivo Libertário do Tejo</subfield>
+      <subfield code="4">557</subfield>
+    </datafield>
+    <datafield tag="995" ind1=" " ind2=" ">
+      <subfield code="a">BDP</subfield>
+      <subfield code="c">BDP</subfield>
+      <subfield code="f">CDF0000000013</subfield>
+      <subfield code="k">027.4 ARC</subfield>
+      <subfield code="r">uu</subfield>
+      <subfield code="q">u</subfield>
+    </datafield>
+  </record>
+
+</collection>

@@ -1,0 +1,270 @@
+01648nam0 22002291i 450 
+001 61
+100    $a 20260926u        u  u0frey50  
+009    $a 2023-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Brûler les frontières $e zine sur l’accueil des exilé·es
+010    $d prix libre
+101 0  $a fre
+215    $a 24 p. $c ill. $d 21 cm
+300    $a Zine photocopié en noir et blanc, agrafé, diffusé à prix libre lors des permanences.
+319    $a Aucun droit spécifique
+710 02 $a Collectif Brûlot $4 070 $9 id:44
+210    $a [Toulouse] $b [Toulouse] $c s.n. $d 2023 $h 2023-01-01 $9 id:27
+214    $a [Toulouse] $b [Toulouse] $c s.n. $d 2023 $h 2023-01-01 $9 id:27
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=61&database=bibli
+995    $a BDP $c BDP $f CDF0000000001 $k ZINE BRU $u Photocopie agrafée, fragile $r uu $q u
+996    $f CDF0000000001 $k ZINE BRU $u Photocopie agrafée, fragile $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:35 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000001 $9 expl_cote:ZINE BRU $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_note:Photocopie agrafée, fragile $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a zine ; frontières
+801    $a AnarBib-banc $b FR $c 20260926
+
+01984nam0 22002291i 450 
+001 62
+100    $a 20260926u        u  u0frey50  
+009    $a 2024-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Η κοινότητα των Εξαρχείων $d La communauté d’Exarchia $e χρονικό μιας γειτονιάς, 1973-2023
+010    $a 978-618-85012-0-1 $d 16 €
+101 0  $a gre
+215    $a 312 σ. $c εικ. $d 21 εκ.
+330    $a Χρονικό της γειτονιάς των Εξαρχείων στην Αθήνα, από την εξέγερση του Πολυτεχνείου έως σήμερα: στέκια, συνελεύσεις, βιβλιοπωλεία και αυτοοργανωμένοι χώροι.
+319    $a Aucun droit spécifique
+700  1 $a Παπαδόπουλος $b Νίκος $4 070 $9 id:45
+210    $a Αθήνα $b Αθήνα $c Εκδόσεις Ελεύθερος Τύπος $d 2024 $h 2024-01-01 $9 id:28
+214    $a Αθήνα $b Αθήνα $c Εκδόσεις Ελεύθερος Τύπος $d 2024 $h 2024-01-01 $9 id:28
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=62&database=bibli
+995    $a BDP $c BDP $f CDF0000000002 $k GR 949.5 PAP $r uu $q u
+996    $f CDF0000000002 $k GR 949.5 PAP $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:36 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000002 $9 expl_cote:GR 949.5 PAP $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Anarchisme ; Grèce ; Athènes (Grèce) ; 1970-....
+801    $a INTERNE $b FR $c 20260926
+
+01712nam0 22002171i 450 
+001 63
+100    $a 20260926u        u  u0frey50  
+009    $a 2022-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Взаимопомощь в рабочих артелях Урала ; Vzaimopomoŝʹ v rabočih artelâh Urala $e очерки, 1880–1917 ; očerki, 1880–1917
+010    $a 978-5-604-00001-4
+101 0  $a rus
+215    $a 204 с. $d 20 см
+319    $a Aucun droit spécifique
+700  1 $a Кузнецова $b Анна $4 070 $9 id:46
+210    $a Екатеринбург $b Екатеринбург $c Вольное слово $d 2022 $h 2022-01-01 $9 id:29
+214    $a Екатеринбург $b Екатеринбург $c Вольное слово $d 2022 $h 2022-01-01 $9 id:29
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=63&database=bibli
+995    $a BDP $c BDP $f CDF0000000003 $k RU 334.6 KUZ $r uu $q u
+996    $f CDF0000000003 $k RU 334.6 KUZ $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:37 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000003 $9 expl_cote:RU 334.6 KUZ $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Coopératives ouvrières ; Russie ; Oural (Russie) ; 1880-1917
+801    $a INTERNE $b FR $c 20260926
+
+01908nam0 22002291i 450 
+001 64
+100    $a 20260926u        u  u0frey50  
+009    $a 2020-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Вільна територія $e Гуляйпільський район, 1918–1921 ; памʼять і документи
+010    $a 978-617-7000-01-2
+101 0  $a ukr
+215    $a 432 с. $c іл., карти $d 22 см
+330    $a Збірка спогадів учасників руху та документів з обласного архіву; окремий розділ присвячено з’їзду селян у Гуляйполі.
+319    $a Aucun droit spécifique
+700  1 $a Шевчук $b Олена $4 220 $9 id:47
+210    $a Запоріжжя $b Запоріжжя $c Видавництво «Набат» $d 2020 $h 2020-01-01 $9 id:30
+214    $a Запоріжжя $b Запоріжжя $c Видавництво «Набат» $d 2020 $h 2020-01-01 $9 id:30
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=64&database=bibli
+995    $a BDP $c BDP $f CDF0000000004 $k UK 947.7 SHE $r uu $q u
+996    $f CDF0000000004 $k UK 947.7 SHE $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:38 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000004 $9 expl_cote:UK 947.7 SHE $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Makhnovchtchina ; Sources ; Ukraine ; 1918-1921
+801    $a INTERNE $b FR $c 20260926
+
+01830nam0 22002291i 450 
+001 65
+100    $a 20260926u        u  u0frey50  
+009    $a 2021-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a الأناركية والعمل النقابي في مصر $d L’anarchisme et le syndicalisme en Égypte $e دراسة تاريخية (1919–1952)
+010    $a 978-977-00-0000-7
+101 0  $a ara
+215    $a 248 ص. $d 24 سم
+330    $a يتناول هذا الكتاب تاريخ الجماعات الأناركية والنقابات العمالية في الإسكندرية والقاهرة بين 1919 و1952.
+319    $a Aucun droit spécifique
+700  1 $a الشريف $b ليلى $4 070 $9 id:48
+210    $a القاهرة $b القاهرة $c دار الحرية للنشر $d 2021 $h 2021-01-01 $9 id:31
+214    $a القاهرة $b القاهرة $c دار الحرية للنشر $d 2021 $h 2021-01-01 $9 id:31
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=65&database=bibli
+995    $a BDP $c BDP $f CDF0000000005 $k AR 331.88 SHA $r uu $q u
+996    $f CDF0000000005 $k AR 331.88 SHA $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:39 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000005 $9 expl_cote:AR 331.88 SHA $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Syndicalisme ; Égypte ; 1919-1952
+801    $a INTERNE $b FR $c 20260926
+
+01532nam0 22002171i 450 
+001 66
+100    $a 20260926u        u  u0frey50  
+009    $a 2019-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a 广州无政府主义报刊研究 $d Anarchist periodicals in Guangzhou, 1912-1927 $e 1912—1927
+010    $a 978-7-5000-0000-6
+101 0  $a chi
+215    $a 356页 $c 图 $d 23厘米
+319    $a Aucun droit spécifique
+700  1 $a 李 $b 明华 $4 070 $9 id:49
+210    $a 广州 $b 广州 $c 自由出版社 $d 2019 $h 2019-01-01 $9 id:32
+214    $a 广州 $b 广州 $c 自由出版社 $d 2019 $h 2019-01-01 $9 id:32
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=66&database=bibli
+995    $a BDP $c BDP $f CDF0000000006 $k ZH 079.51 LI $r uu $q u
+996    $f CDF0000000006 $k ZH 079.51 LI $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:40 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000006 $9 expl_cote:ZH 079.51 LI $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Presse anarchiste ; Chine ; Canton (Chine) ; 1900-1945
+801    $a INTERNE $b FR $c 20260926
+
+02188nam0 22003251i 450 
+001 67
+100    $a 20260926u        u  u0frey50  
+009    $a 2025-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a La rue est à nous $e chroniques de l’autogestion à Barcelone, 1936-1937
+010    $a 978-2-9587412-0-4 $d 18 €
+856    $u https://example.org/anarbib-banc/la-rue-est-a-nous $q text/html
+101 1  $a fre $c ger
+205    $a 2e édition revue et augmentée
+215    $a 287 p. $c ill., cartes $d 22 cm
+300    $a Titre original : Die Straße gehört uns
+330    $a Témoignage d’une militante allemande réfugiée à Barcelone : les collectivités, les « comités de quartier », la vie quotidienne… Un récit où l’œuvre d’entraide se mêle aux débats sur l’autogestion.
+319    $a Aucun droit spécifique
+700  1 $a Weiß $b Käthe $4 070 $f 1905-1987 $9 id:50
+702  1 $a Muñoz $b Pilar $4 730 $9 id:51
+702  1 $a Kowalczyk $b Małgorzata $4 080 $9 id:52
+210    $a Lyon $b Lyon $c Éditions de l’Œil noir $d 2025 $h 2025-01-01 $9 id:33
+214    $a Lyon $b Lyon $c Éditions de l’Œil noir $d 2025 $h 2025-01-01 $9 id:33
+225 2  $a Mémoires sociales $v 7 $9 id:16
+410  0 $t Mémoires sociales $v 7 $9 id:16
+676    $a 946.0 $9 id:101
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=67&database=bibli
+995    $a BDP $c BDP $f CDF0000000007 $k 946.081 WEI $r uu $q u
+996    $f CDF0000000007 $k 946.081 WEI $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:41 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000007 $9 expl_cote:946.081 WEI $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Autogestion ; Espagne ; Barcelone (Espagne) ; 1936-1939
+801    $a INTERNE $b FR $c 20260926
+
+00847nam0 22001931i 450 
+001 68
+100    $a 20260926u        u  u0frey50  
+009    $a 2024-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Chroniques de l’entraide ouvrière
+010    $a 978-2-9587412-1-1
+101 0  $a fre
+215    $a 2 vol. $d 21 cm
+319    $a Aucun droit spécifique
+700  1 $a Černá $b Zdeňka $4 070 $9 id:53
+210    $a Marseille $b Marseille $c Éditions du Crépuscule rouge $d 2024-2025 $h 2024-01-01 $9 id:34
+214    $a Marseille $b Marseille $c Éditions du Crépuscule rouge $d 2024-2025 $h 2024-01-01 $9 id:34
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=68&database=bibli
+462    $0 69 $9 bl:m0 $9 id:69 $9 rank:0 $9 type_lnk:c $9 lnk:child $y 978-2-9587412-2-8 $t Chroniques de l’entraide ouvrière $a Černá, Zdeňka
+801    $a INTERNE $b FR $c 20260926
+
+01641nam0 22002291i 450 
+001 69
+100    $a 20260926u        u  u0frey50  
+009    $a 2024-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Chroniques de l’entraide ouvrière
+010    $a 978-2-9587412-2-8 $d 22 €
+101 0  $a fre
+215    $a 318 p. $d 21 cm
+319    $a Aucun droit spécifique
+700  1 $a Černá $b Zdeňka $4 070 $9 id:53
+210    $a Marseille $b Marseille $c Éditions du Crépuscule rouge $d 2024 $h 2024-01-01 $9 id:34
+214    $a Marseille $b Marseille $c Éditions du Crépuscule rouge $d 2024 $h 2024-01-01 $9 id:34
+461  0 $t Chroniques de l’entraide ouvrière $v 1
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=69&database=bibli
+995    $a BDP $c BDP $f CDF0000000008 $k 334.7 CER 1 $r uu $q u
+996    $f CDF0000000008 $k 334.7 CER 1 $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:42 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000008 $9 expl_cote:334.7 CER 1 $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+410    $0 68 $9 bl:m0 $9 id:68 $9 rank:0 $9 type_lnk:c $9 lnk:parent $y 978-2-9587412-1-1 $t Chroniques de l’entraide ouvrière $a Černá, Zdeňka
+801    $a INTERNE $b FR $c 20260926
+
+01521nam0 22002171i 450 
+001 70
+100    $a 20260926u        u  u0frey50  
+009    $a 2025-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Chroniques de l’entraide ouvrière
+010    $a 978-2-9587412-3-5 $d 22 €
+101 0  $a fre
+215    $a 352 p. $d 21 cm
+319    $a Aucun droit spécifique
+700  1 $a Černá $b Zdeňka $4 070 $9 id:53
+210    $a Marseille $b Marseille $c Éditions du Crépuscule rouge $d 2025 $h 2025-01-01 $9 id:34
+214    $a Marseille $b Marseille $c Éditions du Crépuscule rouge $d 2025 $h 2025-01-01 $9 id:34
+461  0 $t Des bourses du travail aux coopératives, 1871-1914 $v Tome 2
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=70&database=bibli
+995    $a BDP $c BDP $f CDF0000000009 $k 334.7 CER 2 $r uu $q u
+996    $f CDF0000000009 $k 334.7 CER 2 $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:43 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000009 $9 expl_cote:334.7 CER 2 $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+801    $a INTERNE $b FR $c 20260926
+
+03670nam0 22003011i 450 
+001 71
+100    $a 20260926u        u  u0frey50  
+009    $a 2022-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Petite histoire des bibliothèques ouvrières $e de la Commune aux athénées libertaires
+010    $a 978-2-9587412-4-2 $d 12,50 €
+856    $u https://example.org/anarbib-banc/bibliotheques-ouvrieres?lang=fr&format=pdf $q application/pdf
+101 0  $a fre
+215    $a 176 p. $d 19 cm
+330    $a Des cabinets de lecture des sociétés ouvrières aux ateneos espagnols : comment les travailleur·ses ont bâti leurs propres bibliothèques, hors de l’État et de l’Église.
+319    $a Aucun droit spécifique
+700  1 $a Garnier-Leroux $b Élise $4 070 $9 id:54
+210    $a Paris $b Paris $c Éditions du Chat-Huant $d 2022 $h 2022-01-01 $9 id:35
+214    $a Paris $b Paris $c Éditions du Chat-Huant $d 2022 $h 2022-01-01 $9 id:35
+676    $a 027.6 $l Bibliothèques pour groupes particuliers $9 id:102
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=71&database=bibli
+995    $a BDP $c BDP $f CDF0000000010 $k 027.6 GAR $r uu $q u
+996    $f CDF0000000010 $k 027.6 GAR $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:44 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000010 $9 expl_cote:027.6 GAR $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+995    $a BDP $c BDP $f CDF0000000011 $k 027.6 GAR $u Exemplaire de consultation $r uu $q u
+996    $f CDF0000000011 $k 027.6 GAR $u Exemplaire de consultation $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:45 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000011 $9 expl_cote:027.6 GAR $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_note:Exemplaire de consultation $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+995    $a BDP $c BDP $f CDF0000000012 $k ARCH GAR 1 $u Exemplaire dédicacé $r uu $q u
+996    $f CDF0000000012 $k ARCH GAR 1 $u Exemplaire dédicacé $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:46 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000012 $9 expl_cote:ARCH GAR 1 $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_note:Exemplaire dédicacé $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Bibliothèques ouvrières ; Histoire ; France ; 19e siècle ; Athénées libertaires ; Espagne ; 1900-1939 ; Anarchisme ; Aspect éducatif ; Espagne ; 20e siècle
+801    $a INTERNE $b FR $c 20260926
+
+00779nas1 22001811i 450 
+001 72
+100    $a 20260926u        u  u0frey50  
+009    $a 2018-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Le Rat des bibliothèques $e bulletin de liaison des bibliothèques et centres de documentation libertaires
+010    $a 2555-0004
+101 0  $a fre
+319    $a Aucun droit spécifique
+210    $a Lyon $b Lyon $c s.n. $d 2018- $h 2018-01-01 $9 id:36
+214    $a Lyon $b Lyon $c s.n. $d 2018- $h 2018-01-01 $9 id:36
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=72&database=bibli
+462    $d 2025-03-01 $v 12 $t Printemps 2025 $9 id:3 $9 lnk:bull
+464    $0 73 $t Classer sans dominer $t Printemps 2025 $d 2025-03-01 $v 12 $9 id:73 $9 page:p. 4-9 $9 lnk:art
+801    $a INTERNE $b FR $c 20260926
+
+00930naa2 22002171i 450 
+001 73
+100    $a 20260926u        u  u0frey50  
+009    $a 2025-03-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Classer sans dominer $e la CDU à l’épreuve de l’autogestion
+101 0  $a fre
+215    $a p. 4-9
+330    $a Retour d’expérience d’un centre de documentation qui a abandonné la CDU pour un plan de classement décidé en assemblée.
+319    $a Aucun droit spécifique
+700  1 $a Ibáñez $b Nuria $4 070 $9 id:55
+210    $d 2025 $h 2025-03-01
+214    $d 2025 $h 2025-03-01
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=73&database=bibli
+610 0  $a  ; Classification décimale universelle ; Critique et interprétation
+461    $0 72 $t Le Rat des bibliothèques $x 2555-0004 $9 id:72 $9 lnk:perio
+463    $d 2025-03-01 $v 12 $t Printemps 2025 $9 id:3 $9 lnk:bull
+801    $a INTERNE $b FR $c 20260926
+
+01751nam0 22002411i 450 
+001 74
+100    $a 20260926u        u  u0frey50  
+009    $a 2020-01-01 $c 2026-09-26 18:53:20 $u 2026-09-26 18:53:20
+200 1  $a Archiver les luttes $e actes de la IIIe Rencontre internationale des centres de documentation libertaires, Lisbonne, 12-14 avril 2019
+010    $a 978-2-9587412-5-9 $d 20 €
+101 0  $a fre $a por $a spa
+215    $a 264 p. $d 24 cm
+319    $a Aucun droit spécifique
+710 12 $a Rencontre internationale des centres de documentation libertaires $d 3 $f 2019 $e Lisbonne $K Lisbonne $9 id:56
+702  1 $a Ferreira $b João $4 340 $9 id:57
+712 02 $a Arquivo Libertário do Tejo $4 557 $9 id:58
+210    $a Paris $b Paris $c Éditions du Chat-Huant $d 2020 $h 2020-01-01 $9 id:35
+214    $a Paris $b Paris $c Éditions du Chat-Huant $d 2020 $h 2020-01-01 $9 id:35
+896    $a http://127.0.0.1:8088/pmb/opac_css/thumbnail.php?type=1&id=74&database=bibli
+995    $a BDP $c BDP $f CDF0000000013 $k 027.4 ARC $r uu $q u
+996    $f CDF0000000013 $k 027.4 ARC $m 20260926 $n 20260926 $a BDP $b 1 $v Bibliothèque principale $x indéterminé $y u $e indéterminé / indéterminé $r uu $1 Document en bon état $3 1 $9 expl_id:47 $9 create_date:2026-09-26 18:53:20 $9 expl_cb:CDF0000000013 $9 expl_cote:027.4 ARC $9 expl_statut:1 $9 statut_libelle:Document en bon état $9 expl_typdoc:19 $9 tdoc_libelle:indéterminé / indéterminé $9 tdoc_codage_import:uu $9 expl_section:27 $9 section_libelle:indéterminé $9 sdoc_codage_import:u $9 expl_owner:1 $9 lender_libelle:BDP $9 codestat_libelle:Indéterminé $9 statisdoc_codage_import:u $9 expl_date_retour:2026-09-26 $9 expl_date_depot:2026-09-26 $9 pret_flag:1 $9 location_libelle:Bibliothèque principale
+610 0  $a  ; Centres de documentation ; Congrès ; Europe
+801    $a INTERNE $b FR $c 20260926
+

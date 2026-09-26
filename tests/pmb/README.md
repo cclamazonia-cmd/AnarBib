@@ -20,7 +20,12 @@ bash tests/pmb/banc/banc.sh up -d --build # projet compose « pmb-banc », http:
 bash tests/pmb/banc/installer-pmb.sh      # base + jeu de test PMB (notices, exemplaires, périodiques)
 bash tests/pmb/banc/maj-base-pmb.sh       # schéma à la version attendue par le code (v5.34 → v6.03 en 8.1.1.1)
 node tests/pmb/banc/exporter-pmb.mjs "UNIMARC ISO2709" ~/pmb-banc/echange/export.iso
+node tests/pmb/banc/importer-pmb.mjs fichier.iso [bilan.json]   # import de notices + exemplaires (995)
 ```
+
+L'import **n'est pas idempotent** : une notice sans ISBN est recréée à chaque
+passage. Sauvegarder la base avant (`mariadb-dump`), la restaurer avant de
+rejouer.
 
 Démonter : `bash tests/pmb/banc/banc.sh down` (garde la base) ou `down -v`
 (repart de zéro). Le projet compose porte son propre nom : son `down -v` ne
@@ -69,8 +74,60 @@ Formats de sortie de PMB essayés : `UNIMARC ISO2709` (`.iso`), `XML MARC`
 (`<unimarc><notice><f c="200">…` — XML **propre à PMB**, que notre import ne
 reconnaît pas : **H22**).
 
+## Les cas difficiles (14 notices fictives, `banc/cas-difficiles.marcxml.xml`)
+
+Zine photocopié sans ISBN, grec, russe (cyrillique + translittération ISO 9),
+ukrainien, arabe, chinois, collectivité et congrès, traductrice et préfacière
+(`$4` 730/080), œuvre en deux tomes (461 et 200 `$h/$i`), notice à trois
+exemplaires, périodique + bulletin + article dépouillé, caractères latins
+difficiles (œ ’ « » € ß ł ñ č), 606 à subdivisions, 856, 330, 225, 676.
+Importées dans PMB par `importer-pmb.mjs` (fonction `func_bdp`), puis
+**réexportées par PMB** : `fixtures/pmb-8.1.1.1_cas-difficiles.*` est donc
+ce que PMB rend de ces notices (restreint aux notices 61-74, octets intacts).
+
+### Ce que PMB fait d'un fichier qu'il importe (mesuré le 26/09/2026)
+
+C'est le chemin RETOUR de l'aller-retour (**H24**, **H27**) : un export
+AnarBib parfait peut encore perdre de l'information en entrant dans PMB. Avec
+la fonction d'import par défaut (`func_bdp`) :
+
+- **Intact** : les écritures non latines (47 valeurs sur 52 ressortent octet
+  pour octet ; les 5 autres sont des 200 `$f`, perdues pour une autre raison),
+  les caractères latins difficiles, 205, 215, 300, 330, 101 (tous les `$a`),
+  225/410, les rôles `$4` (070, 730, 080, 220, 340, 557).
+- **Perdu** : 200 `$f`/`$g` (mentions de responsabilité), `$z`, `$h`/`$i`
+  (le tome devient une « série » PMB) ; la **seconde 700** (translittération :
+  PMB ne garde que la première) ; 102, 454, 510, 207, 326 ; 010 `$b` ; 856
+  `$z` ; 676 `$v`.
+- **Transformé** : **toutes les 606 fondues en une seule 610** (`$x/$y/$z` et
+  `$2` perdus, aucune catégorie créée) ; Dewey tronquée à 5 caractères
+  (`pmb_limitation_dewey`) ; les deux 200 d'une notice fusionnées en un `$a`
+  « … ; … » ; 461 type `c` ressort en 410 + 461 ; ISSN de 011 vers 010 `$a` ;
+  guide réécrit (niveau hiérarchique 0) ; 100 `$a` réécrit (dates, public,
+  écriture du titre perdus) ; 801 `$a`/`$b` inversés.
+- **Exemplaires** : les 13 × 995 ressortent (+ 13 × 996), mais **le
+  propriétaire de la 995 est ignoré** — propriétaire, statut et localisation
+  viennent du formulaire d'import ; les dates de dépôt/retour prennent le jour
+  de l'import.
+- **Ajouté** : 009, 214 (copie de la 210), 319, 896, 801 « INTERNE », des
+  `$9 id:` sur 210, 225, 410, 676 et 7XX ; 001 renuméroté.
+
+Conséquence pour l'aller-retour : il faudra dire à une bibliothèque **quelle
+fonction d'import PMB employer** pour relire un export AnarBib (`func_bdp`
+détruit les sujets structurés) — ou en écrire une. À instruire dans **H27**.
+
+## Mesure de départ du parseur
+
 Mesure de départ de notre parseur (`marc.ts`, commit `d15098cf`) sur ces
 fixtures : l'ISO 2709 UTF-8 se lit (50/50) mais avec un **faux avertissement
 « MARC-8 »** (leader/9 blanc) ; la variante latin-1 donne **29 notices sur 50
 avec U+FFFD**, sans autre alerte (**H15**) ; le XML propre à PMB n'est pas
 reconnu (**H22**).
+
+Après H15 (même soir) : plus de faux avertissement MARC-8 en UNIMARC ; la
+variante latin-1 est reconnue comme non-UTF-8, lue en Windows-1252 (supposé,
+dit au run) et donne **exactement** les mêmes notices que l'UTF-8 ; le jeu
+déclaré en 100 `$a` est relu et confronté à l'encodage retenu. Figé par
+`src/tests/pmb-fixtures-parseur.test.js` et
+`src/tests/process-partner-catalog-import-banc.test.js` (la vraie EF, nourrie
+de ces fichiers).
