@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Repritrakti",
   "importacoes.run.reprocess.done": "Importo #{id} relanĉita: la linioj estos relegataj.",
   "importacoes.run.reprocess.locked": "Ĉi tiu importo jam kreis malnetojn: ĝi ne plu povas esti repritraktata. Por relegi ĝin, importu la dosieron denove.",
-  "error.import.reparse_after_promotion": "Ĉi tiu importo jam kreis malnetojn: ĝi ne plu povas esti repritraktata (la malnetoj perdus la ligon al la importo). Importu la dosieron denove."
+  "error.import.reparse_after_promotion": "Ĉi tiu importo jam kreis malnetojn: ĝi ne plu povas esti repritraktata (la malnetoj perdus la ligon al la importo). Importu la dosieron denove.",
+  "importacoes.coverage.title": "Kion la importo prenis el la dosiero",
+  "importacoes.coverage.counts": "{repris} prenitaj, {indice} relegitaj kiel indiko, {brut} konservitaj nur krude (el {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# linio forĵetita} other {# linioj forĵetitaj}} pro manko de ajna bibliografia enhavo.",
+  "importacoes.coverage.explain": "« Konservita krude »: la informo restas en la origina registro, sed nutras neniun katalogan kampon.",
+  "importacoes.coverage.notTaken": "Ne prenitaj en la registron",
+  "importacoes.coverage.status.repris": "prenita",
+  "importacoes.coverage.status.indice": "relegita kiel indiko",
+  "importacoes.coverage.status.brut": "konservita krude",
+  "importacoes.coverage.occurrences": "{n, plural, one {# apero} other {# aperoj}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# ripeto ne prenita} other {# ripetoj ne prenitaj}} (nur la unua eniras la registron)",
+  "importacoes.coverage.more": "… kaj {n} pliaj.",
+  "importacoes.coverage.download": "Elŝuti la raporton (CSV)",
+  "importacoes.coverage.none": "Neniu raporto pri kovro por ĉi tiu importo (antaŭ la 26-a de septembro 2026).",
+  "review.report.coverage": "Kion la importoj flankenlasis",
+  "review.report.coverage.run": "Importo #{id} — {file}",
+  "review.report.coverage.allTaken": "Ĉio estis prenita."
 }

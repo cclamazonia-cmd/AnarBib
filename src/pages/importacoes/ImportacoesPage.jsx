@@ -13,6 +13,7 @@ import './ImportacoesPage.css';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { detectFileKind, ACCEPTED_IMPORT_EXTENSIONS as ACCEPTED_EXTENSIONS } from '../../lib/importFileKind.js';
 import RunEncodingPanel from './RunEncodingPanel.jsx';
+import RunCoveragePanel from './RunCoveragePanel.jsx';
 
 const BUCKET = 'catalogos_parceiros_raw';
 // Champs cibles d'un profil d'import (mapping colonne→champ + valeurs par défaut).
@@ -1657,6 +1658,10 @@ export default function ImportacoesPage() {
                   reprocessing={reprocessing}
                   onReprocess={handleReprocess}
                 />
+              )}
+              {/* Couverture : ce que l'import a repris du fichier (H16). */}
+              {selectedRunId && !runProcessing && !runFailed && selectedRun && (
+                <RunCoveragePanel run={selectedRun} />
               )}
 
               {/* Rows table (uniquement si traitement terminé) */}

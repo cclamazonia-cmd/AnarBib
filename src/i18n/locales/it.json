@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Rielabora",
   "importacoes.run.reprocess.done": "Importazione #{id} rilanciata: le righe verranno rilette.",
   "importacoes.run.reprocess.locked": "Questa importazione ha già prodotto bozze: non può più essere rielaborata. Per rileggerla, importate di nuovo il file.",
-  "error.import.reparse_after_promotion": "Questa importazione ha già prodotto bozze: non può più essere rielaborata (le bozze perderebbero il legame con l’importazione). Importate di nuovo il file."
+  "error.import.reparse_after_promotion": "Questa importazione ha già prodotto bozze: non può più essere rielaborata (le bozze perderebbero il legame con l’importazione). Importate di nuovo il file.",
+  "importacoes.coverage.title": "Ciò che l’importazione ha ripreso dal file",
+  "importacoes.coverage.counts": "{repris} ripresi, {indice} riletti come indizio, {brut} conservati solo grezzi (su {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# riga scartata} other {# righe scartate}} perché prive di ogni contenuto bibliografico.",
+  "importacoes.coverage.explain": "« Conservato grezzo »: l’informazione resta nel record d’origine della scheda, ma non alimenta nessun campo del catalogo.",
+  "importacoes.coverage.notTaken": "Non ripresi nella scheda",
+  "importacoes.coverage.status.repris": "ripreso",
+  "importacoes.coverage.status.indice": "riletto come indizio",
+  "importacoes.coverage.status.brut": "conservato grezzo",
+  "importacoes.coverage.occurrences": "{n, plural, one {# occorrenza} other {# occorrenze}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# ripetizione non ripresa} other {# ripetizioni non riprese}} (solo la prima entra nella scheda)",
+  "importacoes.coverage.more": "… e altri {n}.",
+  "importacoes.coverage.download": "Scarica il resoconto (CSV)",
+  "importacoes.coverage.none": "Nessun resoconto di copertura per questa importazione (anteriore al 26/09/2026).",
+  "review.report.coverage": "Ciò che le importazioni hanno lasciato da parte",
+  "review.report.coverage.run": "Importazione #{id} — {file}",
+  "review.report.coverage.allTaken": "Tutto è stato ripreso."
 }

@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Opnieuw verwerken",
   "importacoes.run.reprocess.done": "Import #{id} opnieuw gestart: de regels worden opnieuw gelezen.",
   "importacoes.run.reprocess.locked": "Deze import heeft al concepten opgeleverd: hij kan niet meer opnieuw verwerkt worden. Importeer het bestand opnieuw om het opnieuw te lezen.",
-  "error.import.reparse_after_promotion": "Deze import heeft al concepten opgeleverd: hij kan niet meer opnieuw verwerkt worden (de concepten zouden hun koppeling met de import verliezen). Importeer het bestand opnieuw."
+  "error.import.reparse_after_promotion": "Deze import heeft al concepten opgeleverd: hij kan niet meer opnieuw verwerkt worden (de concepten zouden hun koppeling met de import verliezen). Importeer het bestand opnieuw.",
+  "importacoes.coverage.title": "Wat de import uit het bestand heeft overgenomen",
+  "importacoes.coverage.counts": "{repris} overgenomen, {indice} als aanwijzing herlezen, {brut} alleen als ruwe gegevens bewaard (van {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# regel overgeslagen} other {# regels overgeslagen}} omdat er geen enkele bibliografische inhoud in stond.",
+  "importacoes.coverage.explain": "„Ruw bewaard”: de informatie blijft in het oorspronkelijke record, maar vult geen enkel catalogusveld.",
+  "importacoes.coverage.notTaken": "Niet in het record overgenomen",
+  "importacoes.coverage.status.repris": "overgenomen",
+  "importacoes.coverage.status.indice": "als aanwijzing herlezen",
+  "importacoes.coverage.status.brut": "ruw bewaard",
+  "importacoes.coverage.occurrences": "{n, plural, one {# keer} other {# keer}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# herhaling niet overgenomen} other {# herhalingen niet overgenomen}} (alleen de eerste komt in het record)",
+  "importacoes.coverage.more": "… en nog {n}.",
+  "importacoes.coverage.download": "Rapport downloaden (CSV)",
+  "importacoes.coverage.none": "Geen dekkingsrapport voor deze import (van vóór 26/09/2026).",
+  "review.report.coverage": "Wat de imports lieten liggen",
+  "review.report.coverage.run": "Import nr. {id} — {file}",
+  "review.report.coverage.allTaken": "Alles is overgenomen."
 }

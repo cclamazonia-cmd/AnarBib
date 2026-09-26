@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Neu verarbeiten",
   "importacoes.run.reprocess.done": "Import #{id} neu gestartet: Die Zeilen werden neu gelesen.",
   "importacoes.run.reprocess.locked": "Dieser Import hat bereits Entwürfe erzeugt: Er kann nicht mehr neu verarbeitet werden. Um ihn neu zu lesen, importiert die Datei erneut.",
-  "error.import.reparse_after_promotion": "Dieser Import hat bereits Entwürfe erzeugt: Er kann nicht mehr neu verarbeitet werden (die Entwürfe verlören ihre Verbindung zum Import). Importiert die Datei erneut."
+  "error.import.reparse_after_promotion": "Dieser Import hat bereits Entwürfe erzeugt: Er kann nicht mehr neu verarbeitet werden (die Entwürfe verlören ihre Verbindung zum Import). Importiert die Datei erneut.",
+  "importacoes.coverage.title": "Was der Import aus der Datei übernommen hat",
+  "importacoes.coverage.counts": "{repris} übernommen, {indice} als Hinweis nachgelesen, {brut} nur als Rohdaten behalten (von {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# Zeile verworfen} other {# Zeilen verworfen}}, weil ohne jeden bibliografischen Inhalt.",
+  "importacoes.coverage.explain": "„Als Rohdaten behalten“: Die Angabe bleibt im Ursprungsdatensatz des Titels, speist aber kein Katalogfeld.",
+  "importacoes.coverage.notTaken": "Nicht in den Titel übernommen",
+  "importacoes.coverage.status.repris": "übernommen",
+  "importacoes.coverage.status.indice": "als Hinweis nachgelesen",
+  "importacoes.coverage.status.brut": "als Rohdaten behalten",
+  "importacoes.coverage.occurrences": "{n, plural, one {# Vorkommen} other {# Vorkommen}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# Wiederholung nicht übernommen} other {# Wiederholungen nicht übernommen}} (nur die erste geht in den Titel ein)",
+  "importacoes.coverage.more": "… und {n} weitere.",
+  "importacoes.coverage.download": "Bericht herunterladen (CSV)",
+  "importacoes.coverage.none": "Kein Abdeckungsbericht für diesen Import (älter als der 26.09.2026).",
+  "review.report.coverage": "Was die Importe beiseitegelassen haben",
+  "review.report.coverage.run": "Import Nr. {id} — {file}",
+  "review.report.coverage.allTaken": "Alles wurde übernommen."
 }

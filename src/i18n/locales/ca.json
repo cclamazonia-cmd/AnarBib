@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Reprocessar",
   "importacoes.run.reprocess.done": "Importació #{id} rellançada: les línies es tornaran a llegir.",
   "importacoes.run.reprocess.locked": "Aquesta importació ja ha generat esborranys: ja no es pot reprocessar. Per tornar-la a llegir, importeu de nou el fitxer.",
-  "error.import.reparse_after_promotion": "Aquesta importació ja ha generat esborranys: ja no es pot reprocessar (els esborranys perdrien el vincle amb la importació). Importeu de nou el fitxer."
+  "error.import.reparse_after_promotion": "Aquesta importació ja ha generat esborranys: ja no es pot reprocessar (els esborranys perdrien el vincle amb la importació). Importeu de nou el fitxer.",
+  "importacoes.coverage.title": "El que la importació ha recuperat del fitxer",
+  "importacoes.coverage.counts": "{repris} recuperats, {indice} rellegits com a indici, {brut} desats només en brut (de {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# línia descartada} other {# línies descartades}} per no tenir cap contingut bibliogràfic.",
+  "importacoes.coverage.explain": "« Desat en brut »: la informació es queda al registre d’origen de la fitxa, però no alimenta cap camp del catàleg.",
+  "importacoes.coverage.notTaken": "No recuperats a la fitxa",
+  "importacoes.coverage.status.repris": "recuperat",
+  "importacoes.coverage.status.indice": "rellegit com a indici",
+  "importacoes.coverage.status.brut": "desat en brut",
+  "importacoes.coverage.occurrences": "{n, plural, one {# ocurrència} other {# ocurrències}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# repetició no recuperada} other {# repeticions no recuperades}} (només la primera entra a la fitxa)",
+  "importacoes.coverage.more": "… i {n} més.",
+  "importacoes.coverage.download": "Baixar l’informe (CSV)",
+  "importacoes.coverage.none": "Cap informe de cobertura per a aquesta importació (anterior al 26/09/2026).",
+  "review.report.coverage": "El que les importacions han deixat de banda",
+  "review.report.coverage.run": "Importació #{id} — {file}",
+  "review.report.coverage.allTaken": "S’ha recuperat tot."
 }

@@ -1,6 +1,9 @@
 import { useIntl } from 'react-intl';
+import { coverageItemLabel } from '../../lib/importCoverage.js';
 
 // BatchReviewReport — rendu du rapport de revision d'un lot (05/09/2026).
+// H16 (26/09/2026) : section « couverture » — pour chaque import dont le lot
+// est issu, ce qui n'a PAS été repris dans les notices (report.coverage).
 //
 // Le rapport est produit par la base (fn_batch_review_report) : conventions,
 // doublons, autorites, chacun avec un compte total et un echantillon borne a
@@ -21,6 +24,7 @@ export default function BatchReviewReport({ report }) {
   const dup = report.duplicates || {};
   const auth = report.authorities || {};
   const matching = dup.import_matching && typeof dup.import_matching === 'object' ? Object.entries(dup.import_matching) : [];
+  const coverage = Array.isArray(report.coverage) ? report.coverage : [];
 
   const draftLabel = (it) => (
     <>
@@ -108,6 +112,43 @@ export default function BatchReviewReport({ report }) {
           </ul>
         )}
       </section>
+
+      {coverage.length > 0 && (
+        <section data-testid="review-coverage">
+          <h5 style={secTitle}>{t({ id: 'review.report.coverage' })}</h5>
+          {coverage.map((c) => {
+            const items = Array.isArray(c.not_taken) ? c.not_taken : [];
+            return (
+              <details key={c.run_id} style={{ marginBottom: 4 }}>
+                <summary style={{ cursor: 'pointer' }}>
+                  {t({ id: 'review.report.coverage.run' }, { id: c.run_id, file: c.original_filename || '—' })}
+                  {c.counts ? <> · {t({ id: 'importacoes.coverage.counts' }, c.counts)}</> : null}
+                </summary>
+                {Number(c.skipped_rows || 0) > 0 && (
+                  <div style={muted}>{t({ id: 'importacoes.coverage.skipped' }, { n: Number(c.skipped_rows) })}</div>
+                )}
+                {c.encoding?.fallback && (
+                  <div style={muted}>{t({ id: 'importacoes.run.encoding.fallback' }, { enc: c.encoding.used })}</div>
+                )}
+                {items.length === 0 ? (
+                  <div style={muted}>{t({ id: c.counts ? 'review.report.coverage.allTaken' : 'importacoes.coverage.none' })}</div>
+                ) : (
+                  <ul style={list}>
+                    {items.slice(0, 40).map((it, i) => (
+                      <li key={i}>
+                        <code>{coverageItemLabel(it)}</code> — {t({ id: `importacoes.coverage.status.${it.status}` })}
+                        {' · '}{t({ id: 'importacoes.coverage.occurrences' }, { n: it.occurrences || 0 })}
+                        {it.example ? <span style={muted}> : {it.example}</span> : null}
+                      </li>
+                    ))}
+                    {more(items.length, Math.min(items.length, 40))}
+                  </ul>
+                )}
+              </details>
+            );
+          })}
+        </section>
+      )}
     </div>
   );
 }

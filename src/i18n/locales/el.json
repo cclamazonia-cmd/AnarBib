@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Επανεπεξεργασία",
   "importacoes.run.reprocess.done": "Η εισαγωγή #{id} ξεκίνησε ξανά: οι γραμμές θα διαβαστούν εκ νέου.",
   "importacoes.run.reprocess.locked": "Αυτή η εισαγωγή έχει ήδη δημιουργήσει πρόχειρα: δεν μπορεί πλέον να επανεπεξεργαστεί. Για νέα ανάγνωση, εισαγάγετε ξανά το αρχείο.",
-  "error.import.reparse_after_promotion": "Αυτή η εισαγωγή έχει ήδη δημιουργήσει πρόχειρα: δεν μπορεί πλέον να επανεπεξεργαστεί (τα πρόχειρα θα έχαναν τον σύνδεσμο με την εισαγωγή). Εισαγάγετε ξανά το αρχείο."
+  "error.import.reparse_after_promotion": "Αυτή η εισαγωγή έχει ήδη δημιουργήσει πρόχειρα: δεν μπορεί πλέον να επανεπεξεργαστεί (τα πρόχειρα θα έχαναν τον σύνδεσμο με την εισαγωγή). Εισαγάγετε ξανά το αρχείο.",
+  "importacoes.coverage.title": "Τι πήρε η εισαγωγή από το αρχείο",
+  "importacoes.coverage.counts": "{repris} ελήφθησαν, {indice} ξαναδιαβάστηκαν ως ένδειξη, {brut} κρατήθηκαν μόνο ως ακατέργαστα δεδομένα (από {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# γραμμή απορρίφθηκε} other {# γραμμές απορρίφθηκαν}} λόγω έλλειψης κάθε βιβλιογραφικού περιεχομένου.",
+  "importacoes.coverage.explain": "«Κρατήθηκε ακατέργαστο»: η πληροφορία μένει στην αρχική εγγραφή, αλλά δεν τροφοδοτεί κανένα πεδίο του καταλόγου.",
+  "importacoes.coverage.notTaken": "Δεν μπήκαν στην εγγραφή",
+  "importacoes.coverage.status.repris": "ελήφθη",
+  "importacoes.coverage.status.indice": "ξαναδιαβάστηκε ως ένδειξη",
+  "importacoes.coverage.status.brut": "κρατήθηκε ακατέργαστο",
+  "importacoes.coverage.occurrences": "{n, plural, one {# εμφάνιση} other {# εμφανίσεις}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# επανάληψη δεν ελήφθη} other {# επαναλήψεις δεν ελήφθησαν}} (μόνο η πρώτη μπαίνει στην εγγραφή)",
+  "importacoes.coverage.more": "… και {n} ακόμη.",
+  "importacoes.coverage.download": "Λήψη της αναφοράς (CSV)",
+  "importacoes.coverage.none": "Καμία αναφορά κάλυψης για αυτή την εισαγωγή (προγενέστερη της 26/09/2026).",
+  "review.report.coverage": "Τι άφησαν στην άκρη οι εισαγωγές",
+  "review.report.coverage.run": "Εισαγωγή #{id} — {file}",
+  "review.report.coverage.allTaken": "Όλα ελήφθησαν."
 }

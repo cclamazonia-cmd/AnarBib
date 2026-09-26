@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Reprocesar",
   "importacoes.run.reprocess.done": "Importación #{id} relanzada: las líneas se volverán a leer.",
   "importacoes.run.reprocess.locked": "Esta importación ya generó borradores: ya no se puede reprocesar. Para releerla, importa de nuevo el archivo.",
-  "error.import.reparse_after_promotion": "Esta importación ya generó borradores: ya no se puede reprocesar (los borradores perderían el vínculo con su importación). Importa de nuevo el archivo."
+  "error.import.reparse_after_promotion": "Esta importación ya generó borradores: ya no se puede reprocesar (los borradores perderían el vínculo con su importación). Importa de nuevo el archivo.",
+  "importacoes.coverage.title": "Lo que la importación retomó del archivo",
+  "importacoes.coverage.counts": "{repris} retomados, {indice} releídos como indicio, {brut} guardados solo en bruto (de {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# línea descartada} other {# líneas descartadas}} por no tener ningún contenido bibliográfico.",
+  "importacoes.coverage.explain": "« Guardado en bruto »: la información queda en el registro de origen de la ficha, pero no alimenta ningún campo del catálogo.",
+  "importacoes.coverage.notTaken": "No retomados en la ficha",
+  "importacoes.coverage.status.repris": "retomado",
+  "importacoes.coverage.status.indice": "releído como indicio",
+  "importacoes.coverage.status.brut": "guardado en bruto",
+  "importacoes.coverage.occurrences": "{n, plural, one {# ocurrencia} other {# ocurrencias}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# repetición no retomada} other {# repeticiones no retomadas}} (solo la primera entra en la ficha)",
+  "importacoes.coverage.more": "… y {n} más.",
+  "importacoes.coverage.download": "Descargar el informe (CSV)",
+  "importacoes.coverage.none": "Ningún informe de cobertura para esta importación (anterior al 26/09/2026).",
+  "review.report.coverage": "Lo que las importaciones dejaron de lado",
+  "review.report.coverage.run": "Importación #{id} — {file}",
+  "review.report.coverage.allTaken": "Todo fue retomado."
 }

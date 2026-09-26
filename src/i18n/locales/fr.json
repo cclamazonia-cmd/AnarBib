@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Retraiter",
   "importacoes.run.reprocess.done": "Import #{id} relancé : les lignes vont être relues.",
   "importacoes.run.reprocess.locked": "Cet import a déjà produit des brouillons : il ne peut plus être retraité. Pour le relire, importez de nouveau le fichier.",
-  "error.import.reparse_after_promotion": "Cet import a déjà produit des brouillons : il ne peut plus être retraité (les brouillons perdraient le lien vers leur import). Importez de nouveau le fichier."
+  "error.import.reparse_after_promotion": "Cet import a déjà produit des brouillons : il ne peut plus être retraité (les brouillons perdraient le lien vers leur import). Importez de nouveau le fichier.",
+  "importacoes.coverage.title": "Ce que l’import a repris du fichier",
+  "importacoes.coverage.counts": "{repris} repris, {indice} relus en indice, {brut} gardés seulement en brut (sur {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# ligne écartée} other {# lignes écartées}} faute de tout contenu bibliographique.",
+  "importacoes.coverage.explain": "« Gardé en brut » : l’information reste dans l’enregistrement d’origine de la notice, mais n’alimente aucun champ du catalogue.",
+  "importacoes.coverage.notTaken": "Non repris dans la notice",
+  "importacoes.coverage.status.repris": "repris",
+  "importacoes.coverage.status.indice": "relu en indice",
+  "importacoes.coverage.status.brut": "gardé en brut",
+  "importacoes.coverage.occurrences": "{n, plural, one {# occurrence} other {# occurrences}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# répétition non reprise} other {# répétitions non reprises}} (seule la première entre dans la notice)",
+  "importacoes.coverage.more": "… et {n} de plus.",
+  "importacoes.coverage.download": "Télécharger le rapport (CSV)",
+  "importacoes.coverage.none": "Aucun rapport de couverture pour cet import (antérieur au 26/09/2026).",
+  "review.report.coverage": "Ce que les imports ont laissé de côté",
+  "review.report.coverage.run": "Import nº {id} — {file}",
+  "review.report.coverage.allTaken": "Tout a été repris."
 }

@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Reprocess",
   "importacoes.run.reprocess.done": "Import #{id} restarted: the rows will be read again.",
   "importacoes.run.reprocess.locked": "This import has already produced drafts: it can no longer be reprocessed. To read it again, import the file anew.",
-  "error.import.reparse_after_promotion": "This import has already produced drafts: it can no longer be reprocessed (the drafts would lose their link to the import). Import the file anew."
+  "error.import.reparse_after_promotion": "This import has already produced drafts: it can no longer be reprocessed (the drafts would lose their link to the import). Import the file anew.",
+  "importacoes.coverage.title": "What the import took from the file",
+  "importacoes.coverage.counts": "{repris} taken, {indice} read back as hints, {brut} kept only as raw data (of {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# row skipped} other {# rows skipped}} for lack of any bibliographic content.",
+  "importacoes.coverage.explain": "“Kept raw”: the information stays in the record’s original data, but feeds no catalogue field.",
+  "importacoes.coverage.notTaken": "Not taken into the record",
+  "importacoes.coverage.status.repris": "taken",
+  "importacoes.coverage.status.indice": "read back as a hint",
+  "importacoes.coverage.status.brut": "kept raw",
+  "importacoes.coverage.occurrences": "{n, plural, one {# occurrence} other {# occurrences}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# repetition not taken} other {# repetitions not taken}} (only the first goes into the record)",
+  "importacoes.coverage.more": "… and {n} more.",
+  "importacoes.coverage.download": "Download the report (CSV)",
+  "importacoes.coverage.none": "No coverage report for this import (older than 26/09/2026).",
+  "review.report.coverage": "What the imports left aside",
+  "review.report.coverage.run": "Import #{id} — {file}",
+  "review.report.coverage.allTaken": "Everything was taken."
 }

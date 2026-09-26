@@ -6738,5 +6738,21 @@
   "importacoes.run.reprocess.button": "Reprocessar",
   "importacoes.run.reprocess.done": "Importação #{id} relançada: as linhas vão ser relidas.",
   "importacoes.run.reprocess.locked": "Esta importação já gerou rascunhos: não pode mais ser reprocessada. Para relê-la, importe o arquivo de novo.",
-  "error.import.reparse_after_promotion": "Esta importação já gerou rascunhos: não pode mais ser reprocessada (os rascunhos perderiam o vínculo com a importação). Importe o arquivo de novo."
+  "error.import.reparse_after_promotion": "Esta importação já gerou rascunhos: não pode mais ser reprocessada (os rascunhos perderiam o vínculo com a importação). Importe o arquivo de novo.",
+  "importacoes.coverage.title": "O que a importação aproveitou do arquivo",
+  "importacoes.coverage.counts": "{repris} aproveitados, {indice} relidos como indício, {brut} guardados só em bruto (de {total})",
+  "importacoes.coverage.skipped": "{n, plural, one {# linha descartada} other {# linhas descartadas}} por não ter nenhum conteúdo bibliográfico.",
+  "importacoes.coverage.explain": "« Guardado em bruto »: a informação fica no registro de origem da notícia, mas não alimenta nenhum campo do catálogo.",
+  "importacoes.coverage.notTaken": "Não aproveitados na notícia",
+  "importacoes.coverage.status.repris": "aproveitado",
+  "importacoes.coverage.status.indice": "relido como indício",
+  "importacoes.coverage.status.brut": "guardado em bruto",
+  "importacoes.coverage.occurrences": "{n, plural, one {# ocorrência} other {# ocorrências}}",
+  "importacoes.coverage.surplus": "{n, plural, one {# repetição não aproveitada} other {# repetições não aproveitadas}} (só a primeira entra na notícia)",
+  "importacoes.coverage.more": "… e mais {n}.",
+  "importacoes.coverage.download": "Baixar o relatório (CSV)",
+  "importacoes.coverage.none": "Nenhum relatório de cobertura para esta importação (anterior a 26/09/2026).",
+  "review.report.coverage": "O que as importações deixaram de lado",
+  "review.report.coverage.run": "Importação #{id} — {file}",
+  "review.report.coverage.allTaken": "Tudo foi aproveitado."
 }

@@ -181,6 +181,7 @@ const IDENTIQUE_A_EN_LEGITIME = [
   'importacoes.wizard.source.fileLabel',      // « File (CSV, RIS, MARCXML…) » — it
   'panel.history.itemsCount',                 // « {count} document(s) » — es
   'ficedl.count',                             // « # descriptor(s) » — ca
+  'importacoes.coverage.occurrences',         // « # occurrence(s) » — fr (H16, 26/09/2026)
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
