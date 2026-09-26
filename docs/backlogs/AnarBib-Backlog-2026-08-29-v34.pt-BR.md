@@ -1237,10 +1237,10 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
 | **H28** | Um arquivo MARC ISO 2709 é importado: o formato detectado é aceito pela base | `P1` | A verificar |
 | **H15** | A importação lê um arquivo que não está em UTF-8 em vez de corrompê-lo em silêncio | `P1` | A verificar |
-| **H16** | Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada | `P1` | Aberto |
+| **H16** | Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada | `P1` | A verificar |
 | **H17** | O mapeamento UNIMARC aproveita as zonas correntes de um catálogo PMB | `P1` | Aberto |
 | **H18** | As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade | `P1` | Aberto |
-| **H19** | Os exemplares de um catálogo importado (995 UNIMARC, 852 MARC21) viram exemplares AnarBib | `P1` | Aberto |
+| **H19** | Os exemplares de um catálogo importado (995 UNIMARC, 852 MARC21) viram exemplares AnarBib | `P1` | Decisão coletiva |
 | **H20** | O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado | `P1` | Aberto |
 | **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | Aberto |
 | **H22** | Ler o export XML próprio do PMB, se for preciso | `P3` | Aberto |
@@ -1360,13 +1360,13 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H16 — Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, React / JavaScript
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, React / JavaScript
 
 **Estado.** O registro bruto é guardado (`raw_payload` → `book_drafts.marc_json` → `books.marc_json`; 2 250 rascunhos com ele em 26/09), mas **nada diz quais zonas foram deixadas de lado**. A perda não aparece nem em Importações nem no relatório de revisão de lote.
 
-*Verificado : 26/09 — 2 250 `marc_json` não nulos; nenhum inventário de zonas.*
+*Verificado : 26/09 — suíte SQL 5/5; banco da EF real no export PMB e num CSV; tela renderizada em fr e el. Implantado em 26/09 à noite: migração aplicada pela CI, `coverage` presente em produção, EF reimplantadas e sondadas.*
 
-**O que é.** No parse, calcular por run o inventário de zonas/subzonas (presentes, aproveitadas, ignoradas, ocorrências, exemplo); para CSV, colunas não mapeadas. Guardar em `summary`, mostrar em Importações, anexar a `fn_batch_review_report`, baixável para enviar à biblioteca. Dez locales.
+**O que é.** No parse, calcular por run o inventário de zonas/subzonas (presentes, aproveitadas, ignoradas, ocorrências, exemplo); para CSV, colunas não mapeadas. Guardar em `summary`, mostrar em Importações, anexar a `fn_batch_review_report`, baixável para enviar à biblioteca. Dez locales. **Entregue em 26/09**: cobertura MARC/CSV/RIS no `summary` do run, chave `coverage` no relatório de revisão, painel na tela e **CSV para baixar**, 10 locales. Medido no export PMB: 111 subcampos, 17 aproveitados. **Falta**: a coleta OAI ainda não escreve cobertura; ver o painel numa importação real.
 
 **Por que importa.** É o que torna a importação **segura**: nada se perde sem ser visto. E é a lista de trabalho de **H17**, tirada de catálogos reais.
 
@@ -1425,13 +1425,13 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H19 — Os exemplares de um catálogo importado (995 UNIMARC, 852 MARC21) viram exemplares AnarBib
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
+`P1` Prioritário · Estado : **Decisão coletiva** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
 
 **Estado.** O parser ignora a 995. Medido em 26/09: `exemplar_drafts`, `publish_exemplar_draft` e `ingest.fn_create_exemplar_drafts_from_import_rows` existem, mas **0** linha de staging tem `created_exemplar_draft_id`. `exemplares.tombo` é **único na base toda**: colisões possíveis (23505). **Levantamento de 26/09**: 995 do PMB = `$a`/`$c` proprietário, `$f` código de barras, `$k` cota, `$u` nota, `$r` tipo, `$q`. Armadilhas: N+1 exemplares (`greatest(1, initial_copies)`), tombo regenerado em silêncio em colisão, gatilho que devolve a linha a « pending » ao cancelar UM exemplar.
 
 *Verificado : 26/09 — 0 de 2 172 linhas; índice único de tombo presente.*
 
-**O que é.** Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; `tombo` prefixado (como `SOL-`); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB.
+**O que é.** Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; `tombo` prefixado (como `SOL-`); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB. **Decisões esperadas de Xavier (expostas em 26/09):** numeração (A: código PMB prefixado; **B, recomendada**: esquema AnarBib + código PMB em coluna própria; C: por perfil); código de origem em coluna dedicada (chave de H21 e H24); correspondência 995 no perfil da biblioteca (IMP-19); status PMB → `circulation_policy`.
 
 **Por que importa.** Sem cotas nem códigos de barras, a importação dá um catálogo que não se empresta nem se arruma.
 

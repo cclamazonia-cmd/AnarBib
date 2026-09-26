@@ -5145,7 +5145,7 @@
       "id": "H16",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno",
@@ -5161,8 +5161,8 @@
         "pt": "O registro bruto é guardado (`raw_payload` → `book_drafts.marc_json` → `books.marc_json`; 2 250 rascunhos com ele em 26/09), mas **nada diz quais zonas foram deixadas de lado**. A perda não aparece nem em Importações nem no relatório de revisão de lote."
       },
       "w": {
-        "fr": "Au parse, calculer pour chaque run l'inventaire des zones et sous-zones : présentes, reprises, ignorées, avec leur nombre d'occurrences et un exemple. Pour un CSV, lister les colonnes non mappées. Le stocker dans `partner_catalog_import_runs.summary`. L'afficher dans Importations et le joindre à `fn_batch_review_report`. Le rendre téléchargeable, pour l'envoyer tel quel à la bibliothèque (c'est le compte rendu promis à DIRA). Dix locales.",
-        "pt": "No parse, calcular por run o inventário de zonas/subzonas (presentes, aproveitadas, ignoradas, ocorrências, exemplo); para CSV, colunas não mapeadas. Guardar em `summary`, mostrar em Importações, anexar a `fn_batch_review_report`, baixável para enviar à biblioteca. Dez locales."
+        "fr": "Au parse, calculer pour chaque run l'inventaire des zones et sous-zones : présentes, reprises, ignorées, avec leur nombre d'occurrences et un exemple. Pour un CSV, lister les colonnes non mappées. Le stocker dans `partner_catalog_import_runs.summary`. L'afficher dans Importations et le joindre à `fn_batch_review_report`. Le rendre téléchargeable, pour l'envoyer tel quel à la bibliothèque (c'est le compte rendu promis à DIRA). Dix locales. **Livré le 26/09** (`c38e400b`, `4be5fee9`, migration `20260926194500`) : `marcCoverage` (seule référence : la table de zones du dialecte ; `surplus` = répétitions non reprises), `csvCoverage`/`risCoverage` (alias CSV sortis de `mapRecord` en une seule liste ; « indice » = colonnes et balises relues par le SQL : collection, cote locale), `summary.coverage`/`coverage_counts`/`skipped_rows` ; `fn_batch_review_report` gagne `coverage` (seuls les éléments non repris, corps extrait du banc au md5 de la prod) ; écran : panneau « ce que l'import a repris du fichier », section du rapport de révision, **CSV téléchargeable** (le compte rendu à renvoyer à DIRA), 16 clés × 10 locales. Mesuré sur l'export PMB : 111 sous-zones, 17 reprises ; 995, 215, 225, 330, 676 en brut. **Reste** : le moissonnage OAI (`harvest-oai-pmh`, par lots sur un même run) n'écrit pas encore de couverture ; le panneau vu à l'écran sur un import réel.",
+        "pt": "No parse, calcular por run o inventário de zonas/subzonas (presentes, aproveitadas, ignoradas, ocorrências, exemplo); para CSV, colunas não mapeadas. Guardar em `summary`, mostrar em Importações, anexar a `fn_batch_review_report`, baixável para enviar à biblioteca. Dez locales. **Entregue em 26/09**: cobertura MARC/CSV/RIS no `summary` do run, chave `coverage` no relatório de revisão, painel na tela e **CSV para baixar**, 10 locales. Medido no export PMB: 111 subcampos, 17 aproveitados. **Falta**: a coleta OAI ainda não escreve cobertura; ver o painel numa importação real."
       },
       "y": {
         "fr": "C'est ce qui rend l'import **sûr** : rien ne se perd sans qu'on le voie. Et c'est aussi la liste de travail de **H17**, tirée des catalogues réels plutôt que d'une norme lue de loin.",
@@ -5189,8 +5189,8 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — 2 250 `book_drafts.marc_json` non nuls ; aucun inventaire de zones dans `summary`.",
-        "pt": "26/09 — 2 250 `marc_json` não nulos; nenhum inventário de zonas."
+        "fr": "26/09 — suite SQL `import_couverture_tests` 5/5 ; banc de la vraie EF sur l'export PMB et sur un CSV (lignes écartées comptées) ; écran rendu avec les locales fr et el (`import-coverage-ecran`). Déployé le 26/09 au soir : migration `20260926194500` appliquée par la CI (`created_by` vide), `fn_batch_review_report` porte `coverage` en production, droits inchangés (pas anon) ; EF redéployées (`deployed-functions` = `4be5fee9`), sondées au démarrage.",
+        "pt": "26/09 — suíte SQL 5/5; banco da EF real no export PMB e num CSV; tela renderizada em fr e el. Implantado em 26/09 à noite: migração aplicada pela CI, `coverage` presente em produção, EF reimplantadas e sondadas."
       }
     },
     {
@@ -5298,7 +5298,7 @@
       "id": "H19",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "decision",
       "e": "M",
       "sk": [
         "deno",
@@ -5313,8 +5313,8 @@
         "pt": "O parser ignora a 995. Medido em 26/09: `exemplar_drafts`, `publish_exemplar_draft` e `ingest.fn_create_exemplar_drafts_from_import_rows` existem, mas **0** linha de staging tem `created_exemplar_draft_id`. `exemplares.tombo` é **único na base toda**: colisões possíveis (23505). **Levantamento de 26/09**: 995 do PMB = `$a`/`$c` proprietário, `$f` código de barras, `$k` cota, `$u` nota, `$r` tipo, `$q`. Armadilhas: N+1 exemplares (`greatest(1, initial_copies)`), tombo regenerado em silêncio em colisão, gatilho que devolve a linha a « pending » ao cancelar UM exemplar."
       },
       "w": {
-        "fr": "Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`). Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source.",
-        "pt": "Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; `tombo` prefixado (como `SOL-`); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB."
+        "fr": "Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`). Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source. **Décisions attendues de Xavier (exposées le 26/09, rien n'est construit avant) :** *(1)* **numérotation** — A : `tombo` = code PMB préfixé ; **B (recommandée)** : `tombo` selon le schéma AnarBib de la bibliothèque, code PMB dans une colonne dédiée ; C : au choix dans le profil ; *(2)* le **code d'origine dans une colonne dédiée**, unique par bibliothèque (et non dans une note) — il est la clé de **H21** (réimport) et de **H24** (995 `$f` à l'export) ; *(3)* la **correspondance 995** réglée dans le profil de la bibliothèque (précise IMP-19 au REGISTRE) ; *(4)* les **statuts PMB → `circulation_policy`** : attendre l'échantillon de DIRA, ou règle par défaut « tout prêtable sauf mention ». Faits qui cadrent *(1)* : `tombo` unique sur toute la base ; chaque biblio a son schéma (`BTL-TL-EX-000909-R`, `MLEG-2026-0270`, `CCLA.2026.91`, `SOL-…`) ; les étiquettes AnarBib sont des QR portant l'identifiant interne de l'exemplaire (`LabelSheetPrinter.jsx`), et le prêt passe par la référence de la notice vers la détention (`create_loan_at_counter`) — un code-barres PMB n'est lu par AnarBib dans aucun cas.",
+        "pt": "Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; `tombo` prefixado (como `SOL-`); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB. **Decisões esperadas de Xavier (expostas em 26/09):** numeração (A: código PMB prefixado; **B, recomendada**: esquema AnarBib + código PMB em coluna própria; C: por perfil); código de origem em coluna dedicada (chave de H21 e H24); correspondência 995 no perfil da biblioteca (IMP-19); status PMB → `circulation_policy`."
       },
       "y": {
         "fr": "Une bibliothèque, ce sont des livres sur des étagères. Sans cotes ni codes-barres, l'import donne un catalogue qu'on ne peut ni prêter ni ranger. Et un essai sans exemplaires ne prouve rien à DIRA.",
