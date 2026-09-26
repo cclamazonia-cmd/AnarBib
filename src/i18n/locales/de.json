@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Kontext",
   "nav.report": "Problem melden",
   "inicio.i.report": "Ein Problem in der Anwendung melden",
-  "inicio.kw.report": "melden, Problem, Fehler, Bug, kaputt, funktioniert nicht"
+  "inicio.kw.report": "melden, Problem, Fehler, Bug, kaputt, funktioniert nicht",
+  "importacoes.adapter.encoding": "Zeichenkodierung",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Kodierung der Datei",
+  "importacoes.run.encoding.auto": "Gelesen als {enc} (erkannt).",
+  "importacoes.run.encoding.forced": "Gelesen als {enc} (vorgegeben).",
+  "importacoes.run.encoding.fallback": "Gelesen als {enc}, angenommen: Die Datei ist kein gültiges UTF-8. Prüft die Umlaute und Akzente der ersten Datensätze; sind sie falsch, verarbeitet die Datei mit vorgegebener Kodierung neu.",
+  "importacoes.run.encoding.declaredUnicode": "Die Datei erklärt Unicode (UNIMARC 100 $a), ist aber kein UTF-8: Der Export ist widersprüchlich.",
+  "importacoes.run.encoding.declaredUnsupported": "Die Datei erklärt einen nicht unterstützten Zeichensatz ({codes}): Einige Zeichen können falsch sein. Bitte als UTF-8 neu exportieren.",
+  "importacoes.run.reprocess.title": "Datei neu lesen mit Kodierung",
+  "importacoes.run.reprocess.button": "Neu verarbeiten",
+  "importacoes.run.reprocess.done": "Import #{id} neu gestartet: Die Zeilen werden neu gelesen.",
+  "importacoes.run.reprocess.locked": "Dieser Import hat bereits Entwürfe erzeugt: Er kann nicht mehr neu verarbeitet werden. Um ihn neu zu lesen, importiert die Datei erneut.",
+  "error.import.reparse_after_promotion": "Dieser Import hat bereits Entwürfe erzeugt: Er kann nicht mehr neu verarbeitet werden (die Entwürfe verlören ihre Verbindung zum Import). Importiert die Datei erneut."
 }

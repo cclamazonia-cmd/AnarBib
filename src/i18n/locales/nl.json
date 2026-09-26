@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Context",
   "nav.report": "Probleem melden",
   "inicio.i.report": "Een probleem in de toepassing melden",
-  "inicio.kw.report": "melden, probleem, fout, bug, kapot, werkt niet"
+  "inicio.kw.report": "melden, probleem, fout, bug, kapot, werkt niet",
+  "importacoes.adapter.encoding": "Codering",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Codering van het bestand",
+  "importacoes.run.encoding.auto": "Gelezen als {enc} (gedetecteerd).",
+  "importacoes.run.encoding.forced": "Gelezen als {enc} (opgelegd).",
+  "importacoes.run.encoding.fallback": "Gelezen als {enc}, bij veronderstelling: het bestand is geen geldige UTF-8. Controleer de accenten van de eerste records; kloppen ze niet, verwerk dan opnieuw met een opgelegde codering.",
+  "importacoes.run.encoding.declaredUnicode": "Het bestand verklaart Unicode (UNIMARC 100 $a) maar is geen UTF-8: de export is inconsistent.",
+  "importacoes.run.encoding.declaredUnsupported": "Het bestand verklaart een niet-ondersteunde tekenset ({codes}): sommige tekens kunnen fout zijn. Exporteer opnieuw als UTF-8.",
+  "importacoes.run.reprocess.title": "Bestand opnieuw lezen met codering",
+  "importacoes.run.reprocess.button": "Opnieuw verwerken",
+  "importacoes.run.reprocess.done": "Import #{id} opnieuw gestart: de regels worden opnieuw gelezen.",
+  "importacoes.run.reprocess.locked": "Deze import heeft al concepten opgeleverd: hij kan niet meer opnieuw verwerkt worden. Importeer het bestand opnieuw om het opnieuw te lezen.",
+  "error.import.reparse_after_promotion": "Deze import heeft al concepten opgeleverd: hij kan niet meer opnieuw verwerkt worden (de concepten zouden hun koppeling met de import verliezen). Importeer het bestand opnieuw."
 }

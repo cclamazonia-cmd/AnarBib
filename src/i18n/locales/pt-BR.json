@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Contexto",
   "nav.report": "Relatar um problema",
   "inicio.i.report": "Relatar um problema na aplicação",
-  "inicio.kw.report": "relatar, aviso, problema, erro, bug, falha, não funciona"
+  "inicio.kw.report": "relatar, aviso, problema, erro, bug, falha, não funciona",
+  "importacoes.adapter.encoding": "Codificação",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Codificação do arquivo",
+  "importacoes.run.encoding.auto": "Lido em {enc} (detectado).",
+  "importacoes.run.encoding.forced": "Lido em {enc} (imposto).",
+  "importacoes.run.encoding.fallback": "Lido em {enc}, por suposição: o arquivo não é UTF-8 válido. Confira os acentos das primeiras notícias; se estiverem errados, reprocesse impondo a codificação.",
+  "importacoes.run.encoding.declaredUnicode": "O arquivo declara Unicode (UNIMARC 100 $a) mas não é UTF-8: incoerência da exportação.",
+  "importacoes.run.encoding.declaredUnsupported": "O arquivo declara um conjunto de caracteres não suportado ({codes}): alguns caracteres podem estar errados. Reexporte em UTF-8.",
+  "importacoes.run.reprocess.title": "Reler o arquivo com a codificação",
+  "importacoes.run.reprocess.button": "Reprocessar",
+  "importacoes.run.reprocess.done": "Importação #{id} relançada: as linhas vão ser relidas.",
+  "importacoes.run.reprocess.locked": "Esta importação já gerou rascunhos: não pode mais ser reprocessada. Para relê-la, importe o arquivo de novo.",
+  "error.import.reparse_after_promotion": "Esta importação já gerou rascunhos: não pode mais ser reprocessada (os rascunhos perderiam o vínculo com a importação). Importe o arquivo de novo."
 }

@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Contesto",
   "nav.report": "Segnalare un problema",
   "inicio.i.report": "Segnalare un problema nell'applicazione",
-  "inicio.kw.report": "segnalare, problema, errore, bug, guasto, non funziona"
+  "inicio.kw.report": "segnalare, problema, errore, bug, guasto, non funziona",
+  "importacoes.adapter.encoding": "Codifica",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Codifica del file",
+  "importacoes.run.encoding.auto": "Letto come {enc} (rilevato).",
+  "importacoes.run.encoding.forced": "Letto come {enc} (imposto).",
+  "importacoes.run.encoding.fallback": "Letto come {enc}, per ipotesi: il file non è UTF-8 valido. Controllate gli accenti delle prime schede; se sono sbagliati, rielaborate imponendo la codifica.",
+  "importacoes.run.encoding.declaredUnicode": "Il file dichiara Unicode (UNIMARC 100 $a) ma non è in UTF-8: esportazione incoerente.",
+  "importacoes.run.encoding.declaredUnsupported": "Il file dichiara un set di caratteri non supportato ({codes}): alcuni caratteri possono essere sbagliati. Riesportate in UTF-8.",
+  "importacoes.run.reprocess.title": "Rileggere il file con la codifica",
+  "importacoes.run.reprocess.button": "Rielabora",
+  "importacoes.run.reprocess.done": "Importazione #{id} rilanciata: le righe verranno rilette.",
+  "importacoes.run.reprocess.locked": "Questa importazione ha già prodotto bozze: non può più essere rielaborata. Per rileggerla, importate di nuovo il file.",
+  "error.import.reparse_after_promotion": "Questa importazione ha già prodotto bozze: non può più essere rielaborata (le bozze perderebbero il legame con l’importazione). Importate di nuovo il file."
 }

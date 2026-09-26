@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Contexte",
   "nav.report": "Signaler un problème",
   "inicio.i.report": "Signaler un problème dans l'application",
-  "inicio.kw.report": "signaler, problème, erreur, bug, bogue, ça ne marche pas"
+  "inicio.kw.report": "signaler, problème, erreur, bug, bogue, ça ne marche pas",
+  "importacoes.adapter.encoding": "Encodage",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Encodage du fichier",
+  "importacoes.run.encoding.auto": "Lu en {enc} (détecté).",
+  "importacoes.run.encoding.forced": "Lu en {enc} (imposé).",
+  "importacoes.run.encoding.fallback": "Lu en {enc}, par supposition : le fichier n’est pas de l’UTF-8 valide. Vérifiez les accents des premières notices ; s’ils sont faux, retraitez en imposant l’encodage.",
+  "importacoes.run.encoding.declaredUnicode": "Le fichier déclare de l’Unicode (UNIMARC 100 $a) mais n’est pas en UTF-8 : incohérence de l’export.",
+  "importacoes.run.encoding.declaredUnsupported": "Le fichier déclare un jeu de caractères non pris en charge ({codes}) : des caractères peuvent être faux. Ré-exportez en UTF-8.",
+  "importacoes.run.reprocess.title": "Relire le fichier avec l’encodage",
+  "importacoes.run.reprocess.button": "Retraiter",
+  "importacoes.run.reprocess.done": "Import #{id} relancé : les lignes vont être relues.",
+  "importacoes.run.reprocess.locked": "Cet import a déjà produit des brouillons : il ne peut plus être retraité. Pour le relire, importez de nouveau le fichier.",
+  "error.import.reparse_after_promotion": "Cet import a déjà produit des brouillons : il ne peut plus être retraité (les brouillons perdraient le lien vers leur import). Importez de nouveau le fichier."
 }

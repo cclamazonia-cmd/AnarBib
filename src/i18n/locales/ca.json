@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Context",
   "nav.report": "Avisar d'un problema",
   "inicio.i.report": "Avisar d'un problema a l'aplicació",
-  "inicio.kw.report": "avisar, problema, error, bug, fallada, no funciona"
+  "inicio.kw.report": "avisar, problema, error, bug, fallada, no funciona",
+  "importacoes.adapter.encoding": "Codificació",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Codificació del fitxer",
+  "importacoes.run.encoding.auto": "Llegit en {enc} (detectat).",
+  "importacoes.run.encoding.forced": "Llegit en {enc} (imposat).",
+  "importacoes.run.encoding.fallback": "Llegit en {enc}, per suposició: el fitxer no és UTF-8 vàlid. Reviseu els accents de les primeres fitxes; si són incorrectes, reprocesseu imposant la codificació.",
+  "importacoes.run.encoding.declaredUnicode": "El fitxer declara Unicode (UNIMARC 100 $a) però no és UTF-8: incoherència de l’exportació.",
+  "importacoes.run.encoding.declaredUnsupported": "El fitxer declara un joc de caràcters no admès ({codes}): alguns caràcters poden ser incorrectes. Torneu a exportar en UTF-8.",
+  "importacoes.run.reprocess.title": "Tornar a llegir el fitxer amb la codificació",
+  "importacoes.run.reprocess.button": "Reprocessar",
+  "importacoes.run.reprocess.done": "Importació #{id} rellançada: les línies es tornaran a llegir.",
+  "importacoes.run.reprocess.locked": "Aquesta importació ja ha generat esborranys: ja no es pot reprocessar. Per tornar-la a llegir, importeu de nou el fitxer.",
+  "error.import.reparse_after_promotion": "Aquesta importació ja ha generat esborranys: ja no es pot reprocessar (els esborranys perdrien el vincle amb la importació). Importeu de nou el fitxer."
 }

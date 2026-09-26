@@ -515,3 +515,6 @@ tests/sql/alignement_ficedl_relations_tests.sql
 # 26/09 (H28) : un fichier MARC ISO 2709 s importe — marc_iso2709 admis par la CHECK
 # detected_format, marc21 (un vocabulaire) toujours refuse ; le front envoie le meme mot que l EF.
 tests/sql/import_format_marc_tests.sql
+# 26/09 (H15) : forced_encoding pose par fusion (profile_id garde), liste fermee, oracle
+# d existence ; un import deja promu en brouillons ne se retraite pas (HINT reel).
+tests/sql/import_encodage_overrides_tests.sql

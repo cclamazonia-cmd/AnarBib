@@ -12,6 +12,7 @@ import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './ImportacoesPage.css';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { detectFileKind, ACCEPTED_IMPORT_EXTENSIONS as ACCEPTED_EXTENSIONS } from '../../lib/importFileKind.js';
+import RunEncodingPanel from './RunEncodingPanel.jsx';
 
 const BUCKET = 'catalogos_parceiros_raw';
 // Champs cibles d'un profil d'import (mapping colonne→champ + valeurs par défaut).
@@ -114,9 +115,15 @@ export default function ImportacoesPage() {
   const [newSourceDest, setNewSourceDest] = useState('');
   const [destLibraries, setDestLibraries] = useState([]);
   const [registeringSource, setRegisteringSource] = useState(false);
-  // ── Adaptateur : overrides Estrutura / Vocabulário ('auto' = laisser l'auto-détection) ──
+  // ── Adaptateur : overrides Estrutura / Vocabulário / Encodage ('auto' = laisser l'auto-détection) ──
   const [adapterFormat, setAdapterFormat] = useState('auto');
   const [adapterVocabulary, setAdapterVocabulary] = useState('auto');
+  // H15 (26/09/2026) : sans forçage, l'EF lit en UTF-8 strict puis SUPPOSE
+  // windows-1252 (latin-1) et le dit ; forcer sert quand la supposition est fausse.
+  const [adapterEncoding, setAdapterEncoding] = useState('auto');
+  // Retraiter un run (relire le même fichier avec un autre encodage).
+  const [reprocessEncoding, setReprocessEncoding] = useState('auto');
+  const [reprocessing, setReprocessing] = useState(false);
   // ── Profils d'import (axe Perfil) ──────────────────────
   const [adapterProfile, setAdapterProfile] = useState(''); // '' = Padrão (aucun)
   const [profiles, setProfiles] = useState([]);
@@ -359,16 +366,18 @@ export default function ImportacoesPage() {
       // mauvais adaptateur coûte plus cher qu'un import qui ne part pas. Le
       // `throw` rejoint le catch en bas de la fonction (toast localizeError) ;
       // le run reste créé et non dispatché, donc reprenable.
-      if (adapterFormat !== 'auto' || adapterVocabulary !== 'auto') {
+      if (adapterFormat !== 'auto' || adapterVocabulary !== 'auto' || adapterEncoding !== 'auto') {
         const { data: overridesData, error: overridesErr } = await supabase.rpc('fn_import_set_adapter_overrides', {
           p_run_id: Number(runId),
           p_forced_format: adapterFormat === 'auto' ? null : adapterFormat,
           p_forced_vocabulary: adapterVocabulary === 'auto' ? null : adapterVocabulary,
+          p_forced_encoding: adapterEncoding === 'auto' ? null : adapterEncoding,
         });
         if (overridesErr) throw overridesErr;
         assertRpcOk(overridesData);
       }
-      // Adaptateur (axe Perfil) : associe le profil choisi au run (après les overrides, qui remplacent).
+      // Adaptateur (axe Perfil) : associe le profil choisi au run. Depuis H15
+      // (26/09/2026) les overrides FUSIONNENT : l'ordre n'importe plus.
       if (adapterProfile) {
         const { data: profileData, error: profileErr } = await supabase.rpc('fn_import_set_profile', { p_run_id: Number(runId), p_profile_id: Number(adapterProfile) });
         if (profileErr) throw profileErr;
@@ -393,6 +402,39 @@ export default function ImportacoesPage() {
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setUploading(false); }
+  }
+
+  // ── Retraiter un run : relire le MÊME fichier avec un autre encodage (H15) ──
+  // Les autres axes sont ceux EMPLOYÉS au passage précédent (summary.adapter,
+  // écrit par l'EF) ; le profil reste posé (les overrides fusionnent). Un run
+  // déjà promu en brouillons est refusé par fn_import_dispatch (HINT
+  // error.import.reparse_after_promotion) : ses brouillons perdraient le lien
+  // vers leur import.
+  async function handleReprocess() {
+    if (!selectedRun) return;
+    setReprocessing(true);
+    try {
+      const ad = selectedRun.summary?.adapter || {};
+      const { data: ovData, error: ovErr } = await supabase.rpc('fn_import_set_adapter_overrides', {
+        p_run_id: Number(selectedRun.id),
+        p_forced_format: ad.forced_format ?? null,
+        p_forced_vocabulary: ad.forced_vocabulary ?? null,
+        p_forced_encoding: reprocessEncoding === 'auto' ? null : reprocessEncoding,
+      });
+      if (ovErr) throw ovErr;
+      assertRpcOk(ovData);
+      const { data: dispatchData, error: dispatchErr } = await supabase.rpc('fn_import_dispatch', {
+        p_run_id: Number(selectedRun.id), p_force_reparse: true,
+      });
+      if (dispatchErr) throw dispatchErr;
+      assertRpcOk(dispatchData);
+      setMsg({ text: t({ id: 'importacoes.run.reprocess.done' }, { id: selectedRun.id }), kind: 'ok' });
+      setRunRows([]);
+      setSelectedRows(new Set());
+      await loadRuns();
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setReprocessing(false); }
   }
 
   // ── Nouvelle source de dépôt (sans entité catalog_partners) ────────────
@@ -1150,6 +1192,14 @@ export default function ImportacoesPage() {
                   </select>
                 </div>
                 <div className="ab-field">
+                  <label className="ab-field__label">{t({ id: 'importacoes.adapter.encoding' })}</label>
+                  <select className="ab-select" value={adapterEncoding} onChange={e => setAdapterEncoding(e.target.value)} disabled={uploading}>
+                    <option value="auto">{t({ id: 'importacoes.adapter.autoDetect' })}</option>
+                    <option value="utf-8">{t({ id: 'importacoes.adapter.encodingUtf8' })}</option>
+                    <option value="windows-1252">{t({ id: 'importacoes.adapter.encodingLatin1' })}</option>
+                  </select>
+                </div>
+                <div className="ab-field">
                   <label className="ab-field__label">{t({ id: 'importacoes.adapter.profile' })}</label>
                   <select className="ab-select" value={adapterProfile} onChange={e => setAdapterProfile(e.target.value)} disabled={uploading}>
                     <option value="">{t({ id: 'importacoes.adapter.defaultProfile' })}</option>
@@ -1594,6 +1644,19 @@ export default function ImportacoesPage() {
                   <p style={{ fontWeight: 600, margin: '0 0 6px' }}>{t({ id: 'importacoes.fila.failed.title' })}</p>
                   <p className="imp-note" style={{ maxWidth: 520, margin: '0 auto' }}>{t({ id: 'importacoes.fila.failed.desc' })}</p>
                 </div>
+              )}
+
+              {/* Encodage lu + retraitement (H15). Le résumé vient de l'EF
+                  (summary.encoding) ; on le traduit ici plutôt que d'afficher
+                  les phrases de l'EF, écrites en une seule langue. */}
+              {selectedRunId && !runProcessing && selectedRun && (
+                <RunEncodingPanel
+                  run={selectedRun}
+                  reprocessEncoding={reprocessEncoding}
+                  setReprocessEncoding={setReprocessEncoding}
+                  reprocessing={reprocessing}
+                  onReprocess={handleReprocess}
+                />
               )}
 
               {/* Rows table (uniquement si traitement terminé) */}

@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Kunteksto",
   "nav.report": "Raporti problemon",
   "inicio.i.report": "Raporti problemon en la aplikaĵo",
-  "inicio.kw.report": "raporti, problemo, eraro, cimo, difekto, ne funkcias"
+  "inicio.kw.report": "raporti, problemo, eraro, cimo, difekto, ne funkcias",
+  "importacoes.adapter.encoding": "Kodoprezento",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Kodoprezento de la dosiero",
+  "importacoes.run.encoding.auto": "Legita kiel {enc} (detektita).",
+  "importacoes.run.encoding.forced": "Legita kiel {enc} (trudita).",
+  "importacoes.run.encoding.fallback": "Legita kiel {enc}, supoze: la dosiero ne estas valida UTF-8. Kontrolu la supersignojn de la unuaj registroj; se ili estas malĝustaj, repritraktu trudante la kodoprezenton.",
+  "importacoes.run.encoding.declaredUnicode": "La dosiero deklaras Unikodon (UNIMARC 100 $a) sed ne estas UTF-8: nekohera eksporto.",
+  "importacoes.run.encoding.declaredUnsupported": "La dosiero deklaras ne subtenatan signaron ({codes}): kelkaj signoj povas esti malĝustaj. Reeksportu en UTF-8.",
+  "importacoes.run.reprocess.title": "Relegi la dosieron kun la kodoprezento",
+  "importacoes.run.reprocess.button": "Repritrakti",
+  "importacoes.run.reprocess.done": "Importo #{id} relanĉita: la linioj estos relegataj.",
+  "importacoes.run.reprocess.locked": "Ĉi tiu importo jam kreis malnetojn: ĝi ne plu povas esti repritraktata. Por relegi ĝin, importu la dosieron denove.",
+  "error.import.reparse_after_promotion": "Ĉi tiu importo jam kreis malnetojn: ĝi ne plu povas esti repritraktata (la malnetoj perdus la ligon al la importo). Importu la dosieron denove."
 }

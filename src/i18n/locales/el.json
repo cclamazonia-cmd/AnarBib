@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Πλαίσιο",
   "nav.report": "Αναφορά προβλήματος",
   "inicio.i.report": "Αναφορά προβλήματος στην εφαρμογή",
-  "inicio.kw.report": "αναφορά, πρόβλημα, σφάλμα, bug, βλάβη, δεν λειτουργεί"
+  "inicio.kw.report": "αναφορά, πρόβλημα, σφάλμα, bug, βλάβη, δεν λειτουργεί",
+  "importacoes.adapter.encoding": "Κωδικοποίηση",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Κωδικοποίηση αρχείου",
+  "importacoes.run.encoding.auto": "Διαβάστηκε ως {enc} (εντοπίστηκε).",
+  "importacoes.run.encoding.forced": "Διαβάστηκε ως {enc} (επιβλήθηκε).",
+  "importacoes.run.encoding.fallback": "Διαβάστηκε ως {enc}, κατ’ υπόθεση: το αρχείο δεν είναι έγκυρο UTF-8. Ελέγξτε τους τόνους των πρώτων εγγραφών· αν είναι λάθος, επανεπεξεργαστείτε επιβάλλοντας την κωδικοποίηση.",
+  "importacoes.run.encoding.declaredUnicode": "Το αρχείο δηλώνει Unicode (UNIMARC 100 $a) αλλά δεν είναι UTF-8: ασυνέπεια της εξαγωγής.",
+  "importacoes.run.encoding.declaredUnsupported": "Το αρχείο δηλώνει μη υποστηριζόμενο σύνολο χαρακτήρων ({codes}): ορισμένοι χαρακτήρες μπορεί να είναι λάθος. Εξαγάγετε ξανά σε UTF-8.",
+  "importacoes.run.reprocess.title": "Νέα ανάγνωση του αρχείου με κωδικοποίηση",
+  "importacoes.run.reprocess.button": "Επανεπεξεργασία",
+  "importacoes.run.reprocess.done": "Η εισαγωγή #{id} ξεκίνησε ξανά: οι γραμμές θα διαβαστούν εκ νέου.",
+  "importacoes.run.reprocess.locked": "Αυτή η εισαγωγή έχει ήδη δημιουργήσει πρόχειρα: δεν μπορεί πλέον να επανεπεξεργαστεί. Για νέα ανάγνωση, εισαγάγετε ξανά το αρχείο.",
+  "error.import.reparse_after_promotion": "Αυτή η εισαγωγή έχει ήδη δημιουργήσει πρόχειρα: δεν μπορεί πλέον να επανεπεξεργαστεί (τα πρόχειρα θα έχαναν τον σύνδεσμο με την εισαγωγή). Εισαγάγετε ξανά το αρχείο."
 }

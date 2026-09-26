@@ -136,6 +136,8 @@ const EL_SANS_GREC_LEGITIME = [
   'catalogacao.material.zine',
   'catalogacao.ph.audioFormatTech',
   'catalogacao.ocr.badgeOcr',
+  'importacoes.adapter.encodingLatin1',   // « Latin-1 / Windows-1252 » : noms d'encodage (H15)
+  'importacoes.adapter.encodingUtf8',     // « UTF-8 » : nom d'encodage (H15)
   'importacoes.fila.table',
   'importacoes.rss.exampleUrl',
   'importacoes.reception.libSlugPlaceholder',

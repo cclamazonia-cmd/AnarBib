@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Context",
   "nav.report": "Report a problem",
   "inicio.i.report": "Report a problem in the application",
-  "inicio.kw.report": "report, problem, error, bug, broken, not working"
+  "inicio.kw.report": "report, problem, error, bug, broken, not working",
+  "importacoes.adapter.encoding": "Encoding",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "File encoding",
+  "importacoes.run.encoding.auto": "Read as {enc} (detected).",
+  "importacoes.run.encoding.forced": "Read as {enc} (forced).",
+  "importacoes.run.encoding.fallback": "Read as {enc}, by assumption: the file is not valid UTF-8. Check the accents of the first records; if they are wrong, reprocess with a forced encoding.",
+  "importacoes.run.encoding.declaredUnicode": "The file declares Unicode (UNIMARC 100 $a) but is not UTF-8: the export is inconsistent.",
+  "importacoes.run.encoding.declaredUnsupported": "The file declares an unsupported character set ({codes}): some characters may be wrong. Re-export as UTF-8.",
+  "importacoes.run.reprocess.title": "Read the file again with encoding",
+  "importacoes.run.reprocess.button": "Reprocess",
+  "importacoes.run.reprocess.done": "Import #{id} restarted: the rows will be read again.",
+  "importacoes.run.reprocess.locked": "This import has already produced drafts: it can no longer be reprocessed. To read it again, import the file anew.",
+  "error.import.reparse_after_promotion": "This import has already produced drafts: it can no longer be reprocessed (the drafts would lose their link to the import). Import the file anew."
 }

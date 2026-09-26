@@ -6724,5 +6724,19 @@
   "relatar.fila.context": "Contexto",
   "nav.report": "Avisar de un problema",
   "inicio.i.report": "Avisar de un problema en la aplicación",
-  "inicio.kw.report": "aviso, problema, error, bug, falla, no funciona"
+  "inicio.kw.report": "aviso, problema, error, bug, falla, no funciona",
+  "importacoes.adapter.encoding": "Codificación",
+  "importacoes.adapter.encodingUtf8": "UTF-8",
+  "importacoes.adapter.encodingLatin1": "Latin-1 / Windows-1252",
+  "importacoes.run.encoding.label": "Codificación del archivo",
+  "importacoes.run.encoding.auto": "Leído en {enc} (detectado).",
+  "importacoes.run.encoding.forced": "Leído en {enc} (impuesto).",
+  "importacoes.run.encoding.fallback": "Leído en {enc}, por suposición: el archivo no es UTF-8 válido. Revisa los acentos de las primeras fichas; si están mal, reprocesa imponiendo la codificación.",
+  "importacoes.run.encoding.declaredUnicode": "El archivo declara Unicode (UNIMARC 100 $a) pero no está en UTF-8: incoherencia de la exportación.",
+  "importacoes.run.encoding.declaredUnsupported": "El archivo declara un juego de caracteres no admitido ({codes}): algunos caracteres pueden estar mal. Vuelve a exportar en UTF-8.",
+  "importacoes.run.reprocess.title": "Releer el archivo con la codificación",
+  "importacoes.run.reprocess.button": "Reprocesar",
+  "importacoes.run.reprocess.done": "Importación #{id} relanzada: las líneas se volverán a leer.",
+  "importacoes.run.reprocess.locked": "Esta importación ya generó borradores: ya no se puede reprocesar. Para releerla, importa de nuevo el archivo.",
+  "error.import.reparse_after_promotion": "Esta importación ya generó borradores: ya no se puede reprocesar (los borradores perderían el vínculo con su importación). Importa de nuevo el archivo."
 }
