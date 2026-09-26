@@ -24,6 +24,9 @@
 //                                           Toute autre adresse lève.
 // Un banc peut remplacer d'autres modules par suffixe (`remplacements`), et doit
 // alors le dire dans son en-tête.
+// Ajouts du 26/09/2026 (banc de process-partner-catalog-import, H15) :
+//   - `stockage` (option)                 → faux `client.storage.from(b).download(p)` ;
+//   - `jsr:…/edge-runtime.d.ts`           → module vide (déclarations de types seules).
 // ═══════════════════════════════════════════════════════════
 
 import { readFileSync } from 'node:fs';
@@ -63,8 +66,9 @@ const VIDE = { data: null, error: null };
  * @param {object}   [o.auth]          objet `auth` du faux client
  * @param {object}   [o.remplacements] { 'suffixe.ts': moduleDeRemplacement }
  * @param {function} [o.resend]        (payload) → Response ; défaut 200
+ * @param {function} [o.stockage]      (bucket, chemin) → { data: Blob|null, error } ; défaut : fichier absent
  */
-export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => VIDE, auth = {}, remplacements = {}, resend } = {}) {
+export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => VIDE, auth = {}, remplacements = {}, resend, stockage } = {}) {
   const ENV = { ...ENV_BASE, ...env };
   const ecrits = [];
   const rpcs = [];
@@ -91,11 +95,20 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
     return proxy;
   };
   const appelRpc = (schema) => async (nom, args) => { rpcs.push({ schema, nom, args }); return rpc(schema, nom, args) || VIDE; };
+  const telechargements = [];
   const client = {
     from: (t) => requete('public', t),
     rpc: appelRpc('public'),
     schema: (s) => ({ from: (t) => requete(s, t), rpc: appelRpc(s) }),
     auth,
+    storage: {
+      from: (bucket) => ({
+        download: async (chemin) => {
+          telechargements.push({ bucket, chemin });
+          return stockage ? stockage(bucket, chemin) : { data: null, error: { message: `objet absent : ${bucket}/${chemin}` } };
+        },
+      }),
+    },
   };
 
   const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
@@ -124,6 +137,7 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
       if (spec.includes('deno.land/std')) return { serve: (h) => { handler = h; } };
       if (/esm\.sh\/marked/.test(spec)) return { marked: { parse: (md) => `<p>${String(md)}</p>` } };
       if (spec.startsWith('node:')) return requireNode(spec);
+      if (/^jsr:@supabase\/functions-js\/edge-runtime\.d\.ts$/.test(spec)) return {};
       if (!spec.startsWith('.')) throw new Error(`import non relatif inattendu : ${spec} (depuis ${abs})`);
       const cible = resolve(dirname(abs), spec);
       const suffixe = Object.keys(substituts).find((s) => cible.replace(/\\/g, '/').endsWith(s));
@@ -142,8 +156,8 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
 
   return {
     charger,
-    ecrits, rpcs, envois,
-    vider() { ecrits.length = 0; rpcs.length = 0; envois.length = 0; },
+    ecrits, rpcs, envois, telechargements,
+    vider() { ecrits.length = 0; rpcs.length = 0; envois.length = 0; telechargements.length = 0; },
     /** Appelle le gestionnaire de la fonction avec une Request ; rend { statut, corps | texte }. */
     async appeler(req) {
       const res = await handler(req);

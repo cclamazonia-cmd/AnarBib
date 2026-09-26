@@ -10,11 +10,16 @@
 //     placeOfPublication, publicationYear, editionStatement, language,
 //     isbn, issn, subjectsArray, itemType, externalKey }
 //
-// Frontiere d'encodage (ISO 2709) : on decode en UTF-8 (cas PMB / exports
-// modernes). Si le leader indique MARC-8 (position 9 = ' '), on emet un
-// warning explicite plutot que de corrompre silencieusement — le transcodage
-// MARC-8 -> Unicode (table de centaines d'entrees + diacritiques combinants)
-// est hors perimetre de ce lot.
+// Frontiere d'encodage (ISO 2709) : on decode avec l'encodage que l'appelant a
+// retenu (index.ts, encoding.ts : UTF-8 strict, sinon windows-1252 suppose, ou
+// l'encodage impose) — 'utf-8' par defaut. Si une notice MARC21 a son leader/9
+// blanc (MARC-8), on emet un warning explicite plutot que de corrompre
+// silencieusement — le transcodage MARC-8 -> Unicode (table de centaines
+// d'entrees + diacritiques combinants) est hors perimetre.
+// H15 (26/09/2026) : en UNIMARC, leader/9 n'est PAS defini et vaut un blanc
+// (constate sur un export reel de PMB 8.1) ; l'avertissement MARC-8 y etait
+// faux sur chaque fichier. L'UNIMARC declare son jeu de caracteres en
+// 100 $a positions 26-29 (unimarcDeclaredCharset).
 
 export const MARC_PARSER_VERSION = 'marc_v1';
 
@@ -293,14 +298,18 @@ export function looksLikeIso2709(bytes) {
 
 function leaderIsMarc8(leaderBytes) {
   // Position 9 du leader : 'a' (0x61) = UCS/Unicode, ' ' (0x20) = MARC-8.
+  // Sens MARC21 seulement : en UNIMARC cette position n'est pas definie.
   return leaderBytes[9] === 0x20;
 }
 
 // Parse un buffer ISO 2709 (potentiellement multi-enregistrements).
 // Retourne { records, warnings } ; warnings collecte les avertissements
-// globaux (ex. encodage MARC-8 detecte).
-export function parseMarcIso2709(bytes) {
-  const decoder = new TextDecoder('utf-8');
+// globaux (ex. encodage MARC-8 sur une notice MARC21).
+// options.encoding : encodage retenu par l'appelant (defaut 'utf-8') ;
+// options.forcedDialect : 'unimarc' | 'marc21' | null (sinon detectDialect).
+export function parseMarcIso2709(bytes, options = {}) {
+  const decoder = new TextDecoder(options.encoding || 'utf-8');
+  const forcedDialect = options.forcedDialect || null;
   const records = [];
   const warnings = [];
   let marc8Warned = false;
@@ -324,10 +333,7 @@ export function parseMarcIso2709(bytes) {
 
     const leaderBytes = rec.subarray(0, 24);
     const leader = decoder.decode(leaderBytes);
-    if (!marc8Warned && leaderIsMarc8(leaderBytes)) {
-      warnings.push('Encodage MARC-8 detecte (leader/9=blank) : decode en UTF-8, caracteres non-ASCII potentiellement corrompus. Re-exporter en UTF-8 recommande.');
-      marc8Warned = true;
-    }
+    const leader9Blank = leaderIsMarc8(leaderBytes);
 
     // Base address of data = leader[12..16].
     const baseAddr = parseInt(decoder.decode(rec.subarray(12, 17)), 10);
@@ -378,10 +384,60 @@ export function parseMarcIso2709(bytes) {
       }
     }
 
-    records.push({ leader, fields });
+    const record = { leader, fields };
+    // Le leader/9 blanc ne dit « MARC-8 » qu'en MARC21 : le dialecte se decide
+    // sur la notice entiere (ou est impose par forced_vocabulary).
+    if (!marc8Warned && leader9Blank && (forcedDialect || detectDialect(record)) === 'marc21') {
+      warnings.push(`Encodage MARC-8 detecte (MARC21, leader/9=blank) : decode en ${decoder.encoding}, caracteres non-ASCII potentiellement corrompus. Re-exporter en UTF-8 recommande.`);
+      marc8Warned = true;
+    }
+    records.push(record);
   }
 
   return { records, warnings };
+}
+
+// ── Jeu de caracteres declare (UNIMARC) ─────────────────────
+//
+// UNIMARC 100 $a, positions 26-27 (jeu G0) et 28-29 (jeu G1). Codes :
+// 01 ISO 646 (ASCII), 02 ISO Registration #37 (cyrillique de base),
+// 03 ISO 5426 (latin etendu), 04 ISO DIS 5427 (cyrillique etendu),
+// 05 ISO 5428 (grec), 06 ISO 6438 (Afrique), 07 ISO 10586 (georgien),
+// 08/09 ISO 8957 (hebreu), 11 ISO 5426-2, 50 ISO 10646 (Unicode).
+// PMB 8.1 ecrit « 50 » (constate sur son jeu de test).
+export const UNIMARC_CHARSETS = {
+  '01': 'ISO 646', '02': 'ISO Registration #37', '03': 'ISO 5426', '04': 'ISO DIS 5427',
+  '05': 'ISO 5428', '06': 'ISO 6438', '07': 'ISO 10586', '08': 'ISO 8957 (1)',
+  '09': 'ISO 8957 (2)', '11': 'ISO 5426-2', '50': 'ISO 10646 (Unicode)',
+};
+
+// → { g0, g1 } (codes a 2 caracteres, blancs retires ; '' si absent) ou null
+//   si la notice n'a pas de 100 $a assez long.
+export function unimarcDeclaredCharset(record) {
+  const f = (record?.fields || []).find((x) => x.tag === '100' && Array.isArray(x.subfields));
+  const a = f?.subfields.find((s) => s.code === 'a')?.value;
+  if (typeof a !== 'string' || a.length < 28) return null;
+  return { g0: a.slice(26, 28).trim(), g1: a.slice(28, 30).trim() };
+}
+
+// Avertissements de run tires du jeu declare, compare a l'encodage retenu.
+// declared : liste des codes G0 distincts des notices UNIMARC ;
+// decoded  : { encoding, fallback } (encoding.ts) ; hasNonAscii : le fichier
+// contient-il un octet > 0x7F (sinon aucun jeu ne peut etre faux).
+export function unimarcCharsetWarnings(declared, decoded, hasNonAscii) {
+  const out = [];
+  const codes = [...new Set((declared || []).filter(Boolean))];
+  if (!codes.length || !hasNonAscii) return out;
+  if (codes.includes('50') && decoded?.fallback) {
+    out.push('Le fichier declare de l\'Unicode (UNIMARC 100 $a/26-27 = 50) mais n\'est pas de l\'UTF-8 valide : encodage suppose ' + decoded.encoding + '.');
+  }
+  const nonGeres = codes.filter((c) => c !== '50' && c !== '01');
+  if (nonGeres.length) {
+    out.push('Jeu de caracteres declare non pris en charge (UNIMARC 100 $a/26-27 = '
+      + nonGeres.map((c) => `${c} ${UNIMARC_CHARSETS[c] || 'inconnu'}`).join(', ')
+      + ') : decode en ' + (decoded?.encoding || 'utf-8') + ', caracteres non-ASCII potentiellement faux. Re-exporter en UTF-8 recommande.');
+  }
+  return out;
 }
 
 // ── Entree de haut niveau ───────────────────────────────────
@@ -403,26 +459,41 @@ export function buildParsedEntriesFromMarc(records, baseWarnings = [], forcedDia
   });
 }
 
+// Jeux G0 declares (UNIMARC 100 $a/26-27) des notices UNIMARC, distincts.
+function declaredCharsets(entries) {
+  const out = new Set();
+  for (const e of entries) {
+    if (e.dialect !== 'unimarc') continue;
+    const cs = unimarcDeclaredCharset(e.rawPayload);
+    if (cs && cs.g0) out.add(cs.g0);
+  }
+  return [...out];
+}
+
 // Detecte + parse un fichier MARC. Retourne null si ce n'est pas du MARC,
-// sinon { format, entries }.
+// sinon { format, entries, declaredCharsets }.
 //   format : 'marcxml' | 'marc_iso2709'
-export function parseMarcFile({ text, bytes, filename, forcedDialect = null }) {
+//   encoding : encodage retenu par l'appelant pour les octets ISO 2709
+//              (le MARCXML arrive deja decode dans `text`).
+export function parseMarcFile({ text, bytes, filename, forcedDialect = null, encoding = 'utf-8' }) {
   const name = (filename || '').toLowerCase();
 
   // 1. MARCXML (texte). Prioritaire : signature XML tres distinctive.
   if (looksLikeMarcXml(text) || (name.endsWith('.xml') && /<(?:\w+:)?record\b/.test(text || ''))) {
     const records = parseMarcXml(text);
     if (records.length) {
-      return { format: 'marcxml', entries: buildParsedEntriesFromMarc(records, [], forcedDialect) };
+      const entries = buildParsedEntriesFromMarc(records, [], forcedDialect);
+      return { format: 'marcxml', entries, declaredCharsets: declaredCharsets(entries) };
     }
   }
 
   // 2. ISO 2709 binaire (octets).
   if (bytes && (looksLikeIso2709(bytes) || name.endsWith('.mrc') || name.endsWith('.marc') || name.endsWith('.iso'))) {
     if (looksLikeIso2709(bytes)) {
-      const { records, warnings } = parseMarcIso2709(bytes);
+      const { records, warnings } = parseMarcIso2709(bytes, { encoding, forcedDialect });
       if (records.length) {
-        return { format: 'marc_iso2709', entries: buildParsedEntriesFromMarc(records, warnings, forcedDialect) };
+        const entries = buildParsedEntriesFromMarc(records, warnings, forcedDialect);
+        return { format: 'marc_iso2709', entries, declaredCharsets: declaredCharsets(entries) };
       }
     }
   }

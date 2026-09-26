@@ -7,6 +7,8 @@ import {
   detectDialect,
   parseMarcFile,
   buildParsedEntriesFromMarc,
+  unimarcDeclaredCharset,
+  unimarcCharsetWarnings,
 } from './marc.ts';
 
 // ── Fixtures XML ────────────────────────────────────────────
@@ -113,16 +115,27 @@ function concat(arrs) {
 
 // Encodeur ISO 2709 minimal (byte-accurate, UTF-8) pour fabriquer des fixtures.
 // charCoding : 'a' = UTF-8 (leader/9='a'), ' ' = MARC-8 (leader/9=' ').
-function buildIso2709(fields, charCoding = 'a') {
+// encode : encodeur des DONNEES (UTF-8 par defaut ; windows-1252 pour H15) —
+// le leader et le repertoire sont en ASCII. Windows-1252 = latin-1 + 0x80-0x9F
+// (€, œ, guillemets typographiques…) : un caractere hors table fait echouer le
+// test plutot que d'etre tronque en silence.
+const CP1252_HAUT = { '€': 0x80, '‚': 0x82, '„': 0x84, '…': 0x85, 'Œ': 0x8C, '‘': 0x91, '’': 0x92, '“': 0x93, '”': 0x94, '–': 0x96, '—': 0x97, 'œ': 0x9C };
+const latin1 = (s) => Uint8Array.from([...s].map((c) => {
+  if (c in CP1252_HAUT) return CP1252_HAUT[c];
+  const n = c.charCodeAt(0);
+  if (n > 0xFF || (n >= 0x80 && n <= 0x9F)) throw new Error(`hors windows-1252 : ${c}`);
+  return n;
+}));
+function buildIso2709(fields, charCoding = 'a', encode = (s) => enc.encode(s)) {
   const fieldDatas = fields.map((f) => {
     const parts = [];
     if ('value' in f) {
-      parts.push(enc.encode(f.value));
+      parts.push(encode(f.value));
     } else {
-      parts.push(enc.encode((f.ind1 || ' ') + (f.ind2 || ' ')));
+      parts.push(encode((f.ind1 || ' ') + (f.ind2 || ' ')));
       for (const s of f.subfields) {
         parts.push(new Uint8Array([SD]));
-        parts.push(enc.encode(s.code + s.value));
+        parts.push(encode(s.code + s.value));
       }
     }
     parts.push(new Uint8Array([FT]));
@@ -202,6 +215,74 @@ Deno.test('ISO 2709 : routage via parseMarcFile + buildParsedEntries warnings su
   assertEquals(res.format, 'marc_iso2709');
   assertEquals(res.entries.length, 1);
   assert(res.entries[0].warnings.length >= 1);
+});
+
+// ── H15 (26/09/2026) : encodage ──────────────────────────────
+
+Deno.test('H15 ISO 2709 UNIMARC a leader/9 blanc : AUCUN avertissement MARC-8 (position non definie en UNIMARC)', () => {
+  const bytes = buildIso2709([
+    { tag: '001', value: 'U-1' },
+    { tag: '100', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: '20050101u        u  u0frey50      ba' }] },
+    { tag: '200', ind1: '1', ind2: ' ', subfields: [{ code: 'a', value: 'L\'Anarchie' }] },
+  ], ' ');
+  const { records, warnings } = parseMarcIso2709(bytes);
+  assertEquals(records.length, 1);
+  assertEquals(warnings, []);
+  const res = parseMarcFile({ text: '', bytes, filename: 'export.marc' });
+  assertEquals(res.entries[0].warnings, []);
+  assertEquals(res.declaredCharsets, ['50']);
+});
+
+Deno.test('H15 ISO 2709 MARC21 a leader/9 blanc : avertissement MARC-8 conserve, meme via forcedDialect', () => {
+  const bytes = buildIso2709([
+    { tag: '001', value: 'M-1' },
+    { tag: '200', ind1: '1', ind2: ' ', subfields: [{ code: 'a', value: 'Titre ambigu' }] },
+  ], ' ');
+  // Sans forcage, 200 fait conclure a l'UNIMARC : pas d'avertissement.
+  assertEquals(parseMarcIso2709(bytes).warnings, []);
+  // Vocabulaire impose MARC21 : le leader/9 blanc redevient « MARC-8 ».
+  const { warnings } = parseMarcIso2709(bytes, { forcedDialect: 'marc21' });
+  assertEquals(warnings.length, 1);
+  assert(warnings[0].includes('MARC-8'));
+});
+
+Deno.test('H15 ISO 2709 en latin-1 decode en windows-1252 : texte exact, offsets justes, aucun U+FFFD', () => {
+  const bytes = buildIso2709([
+    { tag: '001', value: 'L1-1' },
+    { tag: '200', ind1: '1', ind2: ' ', subfields: [{ code: 'a', value: 'Déjà vu' }, { code: 'e', value: 'œuvres complètes' }, { code: 'f', value: 'Élisée Reclus' }] },
+    { tag: '210', ind1: ' ', ind2: ' ', subfields: [{ code: 'c', value: 'Éditions du Monde libertaire' }, { code: 'd', value: '1996' }] },
+  ], ' ', latin1);
+  // Decodage UTF-8 (l'ancien comportement) : corruption silencieuse.
+  const faux = mapMarcRecord(parseMarcIso2709(bytes).records[0], 'unimarc');
+  assert(faux.title.includes('�'));
+  // Decodage windows-1252 : exact.
+  const { records } = parseMarcIso2709(bytes, { encoding: 'windows-1252' });
+  const m = mapMarcRecord(records[0], 'unimarc');
+  assertEquals(m.title, 'Déjà vu');
+  assertEquals(m.subtitle, 'œuvres complètes');
+  assertEquals(m.responsibilityStatement, 'Élisée Reclus');
+  assertEquals(m.publisher, 'Éditions du Monde libertaire');
+  assertEquals(m.publicationYear, '1996');
+  // parseMarcFile relaie l'encodage retenu.
+  const res = parseMarcFile({ text: '', bytes, filename: 'x.iso', encoding: 'windows-1252' });
+  assertEquals(res.entries[0].mapped.title, 'Déjà vu');
+});
+
+Deno.test('H15 unimarcDeclaredCharset + unimarcCharsetWarnings', () => {
+  const rec = { leader: '', fields: [{ tag: '100', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: '19990101d1999    m  y0frey0103    ba' }] }] };
+  assertEquals(unimarcDeclaredCharset(rec), { g0: '01', g1: '03' });
+  assertEquals(unimarcDeclaredCharset({ leader: '', fields: [] }), null);
+  // Unicode declare + UTF-8 valide : rien a dire.
+  assertEquals(unimarcCharsetWarnings(['50'], { encoding: 'utf-8', fallback: false }, true), []);
+  // Unicode declare mais repli windows-1252 : contradiction signalee.
+  const w1 = unimarcCharsetWarnings(['50'], { encoding: 'windows-1252', fallback: true }, true);
+  assertEquals(w1.length, 1);
+  assert(w1[0].includes('Unicode'));
+  // ISO 5426 declare : non pris en charge, signale (s'il y a du non-ASCII).
+  const w2 = unimarcCharsetWarnings(['03'], { encoding: 'utf-8', fallback: false }, true);
+  assertEquals(w2.length, 1);
+  assert(w2[0].includes('ISO 5426'));
+  assertEquals(unimarcCharsetWarnings(['03'], { encoding: 'utf-8', fallback: false }, false), []);
 });
 
 Deno.test('buildParsedEntriesFromMarc : numerotation + dialecte mixte', () => {

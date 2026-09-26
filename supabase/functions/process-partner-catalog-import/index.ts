@@ -1,7 +1,8 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from '../_shared/deps.ts';
-import { parseMarcFile, MARC_PARSER_VERSION } from './marc.ts';
+import { parseMarcFile, MARC_PARSER_VERSION, unimarcCharsetWarnings } from './marc.ts';
+import { decodeImportBytes, encodingWarning, normalizeForcedEncoding } from './encoding.ts';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-import-secret',
@@ -615,22 +616,28 @@ Deno.serve(async (req)=>{
     const { data: fileBlob, error: downloadError } = await supabaseAdmin.storage.from(bucketId).download(storagePath);
     if (downloadError) throw downloadError;
     if (!fileBlob) throw new Error('Storage download returned no file.');
-    // Lecture en octets puis decodage UTF-8 : indispensable pour l'ISO 2709
-    // binaire, dont les offsets du directory se comptent en OCTETS (un decode
-    // texte prealable decalerait les positions sur les caracteres multi-octets).
+    // Overrides de l'adaptateur (axes orthogonaux) : forced_format saute la detection
+    // de structure ; forced_vocabulary force le dialecte MARC (sinon detectDialect, auto) ;
+    // forced_encoding impose l'encodage (sinon UTF-8 strict, puis windows-1252 SUPPOSE).
+    // Lus AVANT le decodage : l'encodage decide de tout ce qui suit (H15).
+    const adapterOv = (run && run.adapter_overrides) || {};
+    const forcedFormat = clean(adapterOv.forced_format);         // 'marc'|'ris'|'csv'|'tsv'|null
+    const forcedVocabulary = clean(adapterOv.forced_vocabulary); // 'unimarc'|'marc21'|null
+    const forcedEncodingRaw = clean(adapterOv.forced_encoding);
+    const forcedEncoding = normalizeForcedEncoding(forcedEncodingRaw); // 'utf-8'|'windows-1252'|'iso-8859-1'|null
+    // Lecture en octets : indispensable pour l'ISO 2709 binaire, dont les offsets
+    // du directory se comptent en OCTETS (un decode texte prealable decalerait les
+    // positions sur les caracteres multi-octets). Le texte, lui, sert au CSV, au
+    // RIS et au MARCXML. Jusqu'au 26/09/2026 : UTF-8 non strict, U+FFFD en silence.
     const fileBuffer = await fileBlob.arrayBuffer();
     const fileBytes = new Uint8Array(fileBuffer);
-    const fileText = new TextDecoder('utf-8').decode(fileBytes);
+    const decoded = decodeImportBytes(fileBytes, forcedEncoding);
+    const fileText = decoded.text;
     if (!clean(fileText)) {
       throw new Error('Import file is empty.');
     }
     const filenameLooksRis = (originalFilename ?? '').toLowerCase().endsWith('.ris');
     const risDetected = filenameLooksRis || detectRis(fileText);
-    // Overrides de l'adaptateur (axes orthogonaux) : forced_format saute la detection
-    // de structure ; forced_vocabulary force le dialecte MARC (sinon detectDialect, auto).
-    const adapterOv = (run && run.adapter_overrides) || {};
-    const forcedFormat = clean(adapterOv.forced_format);         // 'marc'|'ris'|'csv'|'tsv'|null
-    const forcedVocabulary = clean(adapterOv.forced_vocabulary); // 'unimarc'|'marc21'|null
     // Profil (axe Perfil) : column_mappings (prioritaires sur les alias CSV) + default_values.
     const profileId = adapterOv.profile_id ? Number(adapterOv.profile_id) : null;
     let profileColumnMappings = null;
@@ -645,11 +652,13 @@ Deno.serve(async (req)=>{
     let detectedFormat = 'csv';
     let detectedDelimiterLabel = null;
     let parsedEntries = [];
+    let declaredCharsets = [];
     // Parseurs unitaires (reutilises en auto comme en force).
     const runMarc = () => {
-      const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename, forcedDialect: forcedVocabulary });
+      const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename, forcedDialect: forcedVocabulary, encoding: decoded.encoding });
       if (!marcResult) return false;
       parsedEntries = marcResult.entries;
+      declaredCharsets = marcResult.declaredCharsets || [];
       detectedFormat = marcResult.format; // 'marcxml' | 'marc_iso2709'
       parserVersion = MARC_PARSER_VERSION;
       headers = ['leader']; // MARC n'a pas de ligne d'en-tete ; valeur nominale
@@ -748,6 +757,28 @@ Deno.serve(async (req)=>{
         selected_for_draft: false
       };
     }).filter((row)=>row !== null);
+    // Avertissements de RUN (encodage suppose, jeu declare contradictoire ou non
+    // pris en charge, encodage impose inconnu) : dans summary.warnings, et sur la
+    // PREMIERE ligne gardee — seul endroit que l'ecran de revision lit ligne a
+    // ligne (une entree ecartee faute de contenu les aurait perdus).
+    const hasNonAscii = fileBytes.some((b)=>b > 0x7f);
+    const runWarnings = [
+      forcedEncodingRaw && !forcedEncoding ? `Encodage impose inconnu (« ${forcedEncodingRaw} ») : ignore, detection automatique.` : null,
+      encodingWarning(decoded),
+      ...unimarcCharsetWarnings(declaredCharsets, decoded, hasNonAscii)
+    ].filter(Boolean);
+    if (runWarnings.length && stagingRows.length) {
+      stagingRows[0].warnings = [
+        ...runWarnings,
+        ...stagingRows[0].warnings.filter((w)=>!runWarnings.includes(w))
+      ];
+    }
+    const encodingSummary = {
+      used: decoded.encoding,
+      forced: decoded.forced,
+      fallback: decoded.fallback,
+      declared_unimarc: declaredCharsets
+    };
     await insertInBatches(supabaseAdmin, stagingRows);
     const parsedAt = new Date().toISOString();
     const { matchingResult, counterRefreshResult } = await runMatchingAndRefreshCounters(supabaseIngestRpc, runId);
@@ -758,6 +789,17 @@ Deno.serve(async (req)=>{
       inserted_rows: stagingRows.length,
       headers,
       delimiter: detectedDelimiterLabel,
+      encoding: encodingSummary,
+      warnings: runWarnings,
+      // Les axes d'adaptateur EMPLOYÉS pour ce passage : l'écran les relit pour
+      // « Retraiter » en ne changeant que l'encodage (fn_import_list_runs ne
+      // renvoie pas adapter_overrides).
+      adapter: {
+        forced_format: forcedFormat,
+        forced_vocabulary: forcedVocabulary,
+        forced_encoding: forcedEncoding,
+        profile_id: profileId
+      },
       parsed_at: parsedAt,
       matching_executed: true,
       counters_refreshed: true,
@@ -782,6 +824,7 @@ Deno.serve(async (req)=>{
           parser: parserVersion,
           inserted_rows: stagingRows.length,
           delimiter: detectedDelimiterLabel,
+          encoding: encodingSummary,
           parsed_at: new Date().toISOString()
         }
       }).eq('id', sourceFileId);
@@ -795,6 +838,8 @@ Deno.serve(async (req)=>{
       original_filename: originalFilename,
       detected_format: detectedFormat,
       inserted_rows: stagingRows.length,
+      encoding: encodingSummary,
+      warnings: runWarnings,
       matching_executed: true,
       counters_refreshed: true,
       headers,
