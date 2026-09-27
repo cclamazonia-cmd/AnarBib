@@ -427,7 +427,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Décision collective |
-| **C6** | Livrer les trois assistances de saisie prévues par la spec des conventions | `P2` | Ouvert |
+| **C6** | Livrer les trois assistances de saisie prévues par la spec des conventions | `P2` | À vérifier |
 | **C7** | Indexer par matière les 1 549 notices qui n'ont aucun sujet | `P2` | Ouvert |
 | **C9** | Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main | `P2` | Ouvert |
 | **C10** | Renommer l'une des deux colonnes `rights_status` | `P2` | Ouvert |
@@ -477,9 +477,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### C6 — Livrer les trois assistances de saisie prévues par la spec des conventions
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript, bibliothéconomie
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : React / JavaScript, bibliothéconomie
 
-**État.** La base sait normaliser ; l'interface de saisie n'assiste pas encore. Trois dispositifs sont spécifiés et non livrés : l'assistant de découpage du nom (§7.1), le bouton « Normalizar maiúsculas » avec aperçu (§7.2), et la file de contrôles de cohérence en arrière-plan (§7.3).
+**État.** La base sait normaliser ; l'interface de saisie n'assiste pas encore. Trois dispositifs sont spécifiés et non livrés : l'assistant de découpage du nom (§7.1), le bouton « Normalizar maiúsculas » avec aperçu (§7.2), et la file de contrôles de cohérence en arrière-plan (§7.3). **Livré le 27/09, les trois, dans l'ordre de la fiche.** *§7.2* (`b9177403`) : bouton « Normaliser la casse » sous le titre de la notice, inactif sans langue couverte, aperçu avant/après, appliquer puis annuler (`src/lib/titleCase.js`, miroir exact de `fn_conv_lower_stopwords` — mêmes douze cas au banc vitest et à la suite SQL `title_case_tests`). *§7.1* (`0c3bb62f`) : sous le nom tapé comme on le dit, le point d'accès proposé et la règle en une ligne ; Confirmer, Corriger (clic sur le mot où commence le nom), Nom unique / pseudonyme ; la forme de tri dérivée passe par la même règle (`src/lib/nameEntry.js`) ; exemples sans capitales (CONV-1). Limite assumée : la proposition est prudente (dernier nom, particules avec le prénom, filiation attachée) ; le double nom hispanique n'est qu'une **variante offerte** quand le pays est hispanophone — la spec veut `name_lang` (CONV-6, à confirmer), absent du formulaire. *§7.3* (`7eb72630`) : les contrôles existaient depuis le 21/08 (console), la file n'avait été semée que le 21/08 et le 03/09 ; un cron du lundi (`anarbib-conv-file-alimenter`) passe désormais les cinq semeurs (celui des titres créé, sans le bac à sable de formation), notes datées, verdicts jamais reproposés ; premier passage en production : 4 lignes (une autorité en capitales, deux formes, une collectivité non typée), aucun titre — les trois repérés sont des exercices du bac à sable de formation, écartés exprès. Critères : (1) trois dispositifs, aucun bloquant — tenu ; (2) proposition refusable, original conservé — le nom tapé n'est jamais réécrit, le titre s'annule, la file s'écarte ; (3) libellés dans les dix locales — 20 clés. **Reste : un regard de Xavier connecté** sur une nouvelle autorité et une nouvelle notice (`/catalogacao` exige une session), puis clôture. À noter : **171 titres attendent dans le lot « titre_casse » depuis le 21/08**.
 
 *Constat du 29/08, non revérifié depuis.*
 

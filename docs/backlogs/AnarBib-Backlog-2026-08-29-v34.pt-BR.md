@@ -427,7 +427,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C4** | Preencher os países ausentes em 722 fichas de autoridade | `P2` | Decisão coletiva |
-| **C6** | Entregar as três assistências de digitação previstas pela spec das convenções | `P2` | Aberto |
+| **C6** | Entregar as três assistências de digitação previstas pela spec das convenções | `P2` | A verificar |
 | **C7** | Indexar por assunto os 1 549 registros que não têm nenhum assunto | `P2` | Aberto |
 | **C9** | As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão | `P2` | Aberto |
 | **C10** | Renomear uma das duas colunas `rights_status` | `P2` | Aberto |
@@ -477,9 +477,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C6 — Entregar as três assistências de digitação previstas pela spec das convenções
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, biblioteconomia
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : React / JavaScript, biblioteconomia
 
-**Estado.** O banco sabe normalizar; a interface de digitação ainda não assiste. Três dispositivos estão especificados e não entregues: o assistente de separação do nome (§7.1), o botão «Normalizar maiúsculas» com pré-visualização (§7.2), e a fila de controles de coerência em segundo plano (§7.3).
+**Estado.** O banco sabe normalizar; a interface de digitação ainda não assiste. Três dispositivos estão especificados e não entregues: o assistente de separação do nome (§7.1), o botão «Normalizar maiúsculas» com pré-visualização (§7.2), e a fila de controles de coerência em segundo plano (§7.3). **Entregue em 27/09, os três.** §7.2 (`b9177403`) botão «Normalizar maiúsculas» com prévia e desfazer; §7.1 (`0c3bb62f`) assistente do ponto de acesso (Confirmar, Corrigir palavra por palavra, Nome único), variante hispânica só oferecida; §7.3 (`7eb72630`) cron semanal que alimenta a fila do Ateliê pelos cinco semeadores, sem o ambiente de formação; primeira passagem: 4 lignes (une autorité en capitales, deux formes, une collectivité non typée), aucun titre — les trois repérés sont des exercices du bac à sable de formation, écartés exprès. Falta o olhar de Xavier conectado, depois fechar. 171 títulos esperam no lote «titre_casse» desde 21/08.
 
 *Constato de 29/08, não reverificado desde então.*
 
