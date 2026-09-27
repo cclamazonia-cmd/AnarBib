@@ -319,6 +319,92 @@ describe('cover_lookup — le PDF d’une ressource externe passe par le serveur
   });
 });
 
+describe('cover_lookup — les vignettes des propositions du lot (action apercus, 27/09/2026)', () => {
+  // L'écran de revue montre des candidates trouvées des heures plus tôt par
+  // cover-batch, qui n'en garde que les adresses : le serveur rapatrie les
+  // vignettes, le navigateur ne contacte pas le tiers.
+  it('Open Library et Inventaire : rendues en data: URI, sous leur adresse', async () => {
+    const net = reseau();
+    const { handle } = charger('cover_lookup/index.ts', net);
+    const ol = 'https://covers.openlibrary.org/b/id/951719-M.jpg';
+    const inv = `https://inventaire.io/img/entities/200x300/${HASH}`;
+    const r = await handle({ action: 'apercus', urls: [ol, inv, ol] }, '');
+    expect(r.ok).toBe(true);
+    expect(r.apercus[ol]).toMatch(/^data:image\/jpeg;base64,/);
+    expect(r.apercus[inv]).toMatch(/^data:image\/webp;base64,/);
+    // une adresse demandée deux fois n'est téléchargée qu'une fois
+    expect(net.demandes).toEqual([ol, inv]);
+  });
+
+  it('tout autre hôte, http ou adresse privée : ignoré, sans une seule requête — ce n’est pas un relais', async () => {
+    const net = reseau();
+    const { handle } = charger('cover_lookup/index.ts', net);
+    const r = await handle({ action: 'apercus', urls: [
+      'https://exemple.org/x.jpg', 'http://covers.openlibrary.org/b/id/1-M.jpg',
+      'https://127.0.0.1/x.jpg', 'https://covers.openlibrary.org.evil.example/x.jpg', 'pas une adresse',
+    ] }, '');
+    expect(r).toEqual({ ok: true, apercus: {} });
+    expect(net.demandes).toEqual([]);
+  });
+
+  it('36 vignettes au plus par appel', async () => {
+    const net = reseau();
+    const { handle } = charger('cover_lookup/index.ts', net);
+    const urls = Array.from({ length: 50 }, (_, k) => `https://covers.openlibrary.org/b/id/${k + 1}-M.jpg`);
+    await handle({ action: 'apercus', urls }, '');
+    expect(net.demandes).toHaveLength(36);
+  });
+});
+
+describe('cover_lookup — ranger la capa choisie (action store)', () => {
+  // Le serveur va chercher une adresse DONNÉE PAR LE NAVIGATEUR : mêmes gardes
+  // que pour le PDF (27/09/2026).
+  const avecProjet = async (fn) => {
+    const avant = globalThis.Deno;
+    globalThis.Deno = { env: { get: (k) => ({ SUPABASE_URL: 'https://projet.example' })[k] } };
+    try { return await fn(); } finally { if (avant === undefined) delete globalThis.Deno; else globalThis.Deno = avant; }
+  };
+  const reseauStockage = () => {
+    const demandes = [];
+    const f = async (url, init = {}) => {
+      demandes.push(`${init.method || 'GET'} ${url}`);
+      if (String(url).startsWith('https://projet.example/storage/')) return jsonRep({ Key: 'ok' });
+      return image('image/jpeg');
+    };
+    f.demandes = demandes;
+    return f;
+  };
+
+  it('hôte local, adresse privée ou schéma exotique : refusés avant toute requête', async () => {
+    const net = reseauStockage();
+    const { handle } = charger('cover_lookup/index.ts', net);
+    for (const u of ['http://127.0.0.1/x.jpg', 'https://192.168.0.2/x.jpg', 'http://localhost:54321/x.jpg', 'https://[::1]/x.jpg']) {
+      await expect(handle({ action: 'store', imageUrl: u, key: 'BTL-TL-000447' }, ''), u).rejects.toThrow('not allowed');
+    }
+    await expect(handle({ action: 'store', imageUrl: 'file:///etc/passwd', key: 'K' }, '')).rejects.toThrow('http(s)');
+    expect(net.demandes).toEqual([]);
+  });
+
+  it('le formulaire range sous front.<ext> ; l’écran de revue sous un nom neuf, jamais un autre', async () => {
+    const net = reseauStockage();
+    const { handle } = charger('cover_lookup/index.ts', net);
+    await avecProjet(async () => {
+      const a = await handle({ action: 'store', imageUrl: 'https://covers.openlibrary.org/b/id/951719-L.jpg', key: 'BTL-TL-000447' }, '');
+      expect(a.storagePath).toBe('books/BTL-TL-000447/front.jpg');
+      const b = await handle({ action: 'store', imageUrl: 'https://covers.openlibrary.org/b/id/951719-L.jpg', key: 'BTL-TL-000447', nom: 'capa-mg3k2x1a' }, '');
+      expect(b.storagePath).toBe('books/BTL-TL-000447/capa-mg3k2x1a.jpg');
+      // un nom qui sortirait du dossier, ou quelconque : ramené à front
+      const c = await handle({ action: 'store', imageUrl: 'https://covers.openlibrary.org/b/id/951719-L.jpg', key: 'K', nom: '../../autre/front' }, '');
+      expect(c.storagePath).toBe('books/K/front.jpg');
+    });
+    expect(net.demandes.filter((d) => d.startsWith('POST'))).toEqual([
+      'POST https://projet.example/storage/v1/object/covers/books/BTL-TL-000447/front.jpg',
+      'POST https://projet.example/storage/v1/object/covers/books/BTL-TL-000447/capa-mg3k2x1a.jpg',
+      'POST https://projet.example/storage/v1/object/covers/books/K/front.jpg',
+    ]);
+  });
+});
+
 describe('_shared/capas/sources.ts', () => {
   const src = readFileSync(resolve(FONCTIONS, '_shared', 'capas', 'sources.ts'), 'utf8');
   const mod = (options) => charger('_shared/capas/sources.ts', reseau(options));

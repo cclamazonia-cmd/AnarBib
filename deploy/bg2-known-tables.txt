@@ -61,6 +61,7 @@ circles
 consulta_item_workflow_v2
 consulta_linhas_v2
 consultas_locais_v2
+cover_proposals
 digital_assets
 document_permission_request_notification_events
 document_permission_requests

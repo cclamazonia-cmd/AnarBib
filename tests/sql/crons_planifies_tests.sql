@@ -63,6 +63,8 @@ BEGIN
   CREATE TEMP TABLE attendus (jobname text, schedule text, active boolean);
   INSERT INTO attendus VALUES
     ('anarbib-authority-resolve-due-daily',         '45 3 * * *',   true),
+    -- Capas en lot (27/09/2026) : la recherche de couvertures passe du bouton au lot, ref. 20260927180120
+    ('anarbib-capas-lot',                           '7-59/10 * * * *', true),
     ('anarbib-catalog-audit-snapshot-purge',        '17 4 * * *',   true),
     ('anarbib-circle-resolve-due-daily',            '30 3 * * *',   true),
     ('anarbib-collective-removal-execute-daily',    '15 3 * * *',   true),

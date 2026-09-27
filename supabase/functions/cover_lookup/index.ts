@@ -11,7 +11,9 @@
 //  vers le bucket `covers` se fait cote frontend a la selection).
 //
 //  SOURCES — leur code vit dans _shared/capas/sources.ts, partage avec la
-//  sonde temoin de health-probe (une fois par heure, meme code, memes URL).
+//  sonde temoin de health-probe (une fois par heure, meme code, memes URL) ;
+//  l'ordre de recherche (ISBN, puis titre a defaut) vit dans
+//  _shared/capas/recherche.ts, partage avec la recherche EN LOT (cover-batch).
 //  -------
 //    - openlibrary        : Open Library Books API, par ISBN       [CAT-C1]
 //    - inventaire         : Inventaire, par ISBN                   (27/09/2026)
@@ -33,6 +35,11 @@
 //         sources: [{ id, label, count, ok, skipped?, error? }] }
 //    POST { action: 'pdf', url } -> le PDF lui-meme, en application/octet-stream
 //    (capa « page 1 du PDF » : le serveur le recupere, pas le navigateur).
+//    POST { action: 'store', imageUrl, key, nom?, source?, license? }
+//    -> { ok, storagePath: 'books/<key>/<nom>.<ext>' } ; `nom` vaut `front`
+//    par defaut (le formulaire), `capa-<suffixe>` pour l'ecran de revue.
+//    POST { action: 'apercus', urls } -> { ok, apercus: { <url>: data URI } }
+//    (les vignettes des propositions du lot ; hotes des sources seulement).
 //    `ok: false` : la source a ECHOUE — le formulaire le dit a l'ecran. Jusqu'au
 //    27/09/2026 il l'ignorait, et une voie ISBN en 404 depuis une date inconnue
 //    s'affichait comme « aucune capa trouvee ». `skipped: true` : la source n'a
@@ -43,16 +50,8 @@
 // =============================================================================
 
 import type { Candidate } from '../_shared/capas/sources.ts';
-import {
-  envGet,
-  fetchWithTimeout,
-  fromInventaireIsbn,
-  fromOpenLibraryIsbn,
-  fromOpenLibrarySearch,
-  isbnValide,
-  langueRecherche,
-  normalizeIsbn,
-} from '../_shared/capas/sources.ts';
+import { envGet, fetchWithTimeout, normalizeIsbn } from '../_shared/capas/sources.ts';
+import { candidatesUniques, chercherCapas, runSource } from '../_shared/capas/recherche.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -147,34 +146,6 @@ async function fromOgImage(url: string, authHeader: string): Promise<Candidate[]
   return [{ thumbnailUrl: img, fullUrl: img, source: 'og_image', license: null, voie: 'url' }];
 }
 
-interface SourceSummary {
-  id: string;
-  label: string;
-  count: number;
-  ok: boolean;
-  /** Source non interrogee : ni panne, ni resultat. */
-  skipped?: boolean;
-  error?: string;
-}
-
-async function runSource(
-  id: string,
-  label: string,
-  enabled: boolean,
-  fn: () => Promise<Candidate[]>,
-): Promise<{ candidates: Candidate[]; summary: SourceSummary }> {
-  if (!enabled) return { candidates: [], summary: { id, label, count: 0, ok: true, skipped: true } };
-  try {
-    const candidates = await fn();
-    return { candidates, summary: { id, label, count: candidates.length, ok: true } };
-  } catch (error) {
-    return {
-      candidates: [],
-      summary: { id, label, count: 0, ok: false, error: error instanceof Error ? error.message : 'failed' },
-    };
-  }
-}
-
 // ── Mode store : telechargement serveur de la capa choisie -> bucket [CAT-C3] ──
 // Evite les blocages CORS du navigateur sur OpenLibrary/Google et garde une
 // copie propre (anti link-rot). Ecrit via la Storage REST API avec le JWT de
@@ -192,13 +163,31 @@ function sanitizeKey(key: string): string {
   return String(key || '').replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 120);
 }
 
+// Le nom du fichier dans le dossier de la notice. `front` pour le formulaire,
+// le chemin de toujours. L'ecran de revue (27/09/2026) en donne un NEUF a chaque
+// capa posee : ecrire `front.jpg` pourrait remplacer, sous la meme adresse, la
+// capa qu'une autre personne vient de poser par le formulaire sur la meme
+// notice — et la RPC d'acceptation, qui refuse alors d'ecrire, ne pourrait plus
+// rendre l'image ecrasee.
+function nomDeFichier(brut: unknown): string {
+  const nom = String(brut || '').trim();
+  return /^(front|capa-[a-z0-9]{1,20})$/.test(nom) ? nom : 'front';
+}
+
 async function handleStore(body: Record<string, unknown>, authHeader: string) {
   const imageUrl = String(body.imageUrl || '').trim();
   const key = sanitizeKey(String(body.key || ''));
+  const nom = nomDeFichier(body.nom);
   const source = String(body.source || '').trim() || null;
   const license = String(body.license || '').trim() || null;
   if (!imageUrl) throw new Error('Provide imageUrl.');
   if (!key) throw new Error('Provide key (bib_ref or draft id).');
+  // Le serveur va chercher une adresse DONNEE PAR LE NAVIGATEUR : ni hote local
+  // ni adresse privee (meme garde que le PDF), http(s) seulement.
+  let adresse: URL;
+  try { adresse = new URL(imageUrl); } catch { throw new Error('Invalid image URL.'); }
+  if (adresse.protocol !== 'https:' && adresse.protocol !== 'http:') throw new Error('Image URL must use http(s).');
+  if (hoteInterdit(adresse.hostname)) throw new Error('Image host not allowed.');
 
   const base = envGet('SUPABASE_URL');
   if (!base) throw new Error('SUPABASE_URL unavailable.');
@@ -212,7 +201,7 @@ async function handleStore(body: Record<string, unknown>, authHeader: string) {
   const bytes = new Uint8Array(await imgRes.arrayBuffer());
   if (bytes.byteLength === 0) throw new Error('Empty image.');
 
-  const storagePath = `books/${key}/front.${ext}`;
+  const storagePath = `books/${key}/${nom}.${ext}`;
   const putUrl = `${base}/storage/v1/object/covers/${storagePath}`;
   const putRes = await fetchWithTimeout(putUrl, {
     method: 'POST',
@@ -243,48 +232,22 @@ async function handleSearch(body: Record<string, unknown>, authHeader: string) {
     throw new Error('Provide at least isbn, title, or url.');
   }
 
-  const openlibrary = envBool('COVER_LOOKUP_ENABLE_OPENLIBRARY', true);
-  const inventaire = envBool('COVER_LOOKUP_ENABLE_INVENTAIRE', true);
-
-  // 1. Les correspondances EXACTES (ISBN), et og:image, en parallele.
-  //    Inventaire rejette la requete entiere sur une cle de controle fausse :
-  //    il n'est interroge qu'avec un ISBN valide.
-  const [parIsbnOl, parIsbnInv, parUrl] = await Promise.all([
-    runSource('openlibrary', 'Open Library (ISBN)', openlibrary && !!isbn, () => fromOpenLibraryIsbn(isbn)),
-    runSource('inventaire', 'Inventaire (ISBN)', inventaire && isbnValide(isbn), () => fromInventaireIsbn(isbn)),
-    runSource('og_image', 'og:image', envBool('COVER_LOOKUP_ENABLE_OGIMAGE', true) && !!url,
-      () => fromOgImage(url, authHeader)),
-  ]);
-
-  // 2. La recherche floue par titre, A DEFAUT de correspondance exacte : quand
-  //    un ISBN repond, inutile d'ajouter des a-peu-pres derriere une certitude.
-  //    Jusqu'au 27/09/2026 elle etait coupee des qu'un ISBN etait SAISI, meme
-  //    quand il ne rendait rien ou que la source etait en panne : une notice a
-  //    ISBN inconnu des sources restait sans aucune candidate. En sequence, et
-  //    non en parallele : on ne sollicite pas pour rien des communs associatifs.
-  const exactes = parIsbnOl.candidates.length + parIsbnInv.candidates.length;
-  // La langue de la notice fait passer devant l'édition dans cette langue.
-  const langue = langueRecherche(String(body.idioma || ''));
-  const parTitre = await runSource('openlibrary_search', 'Open Library (titre)',
-    openlibrary && !!title && exactes === 0, () => fromOpenLibrarySearch(title, author, langue));
-
-  // L'exact d'abord, donc en tete de galerie.
-  const settled = [parIsbnOl, parIsbnInv, parTitre, parUrl];
-
-  // Dedupe par fullUrl, en conservant l'ordre des sources.
-  const seen = new Set<string>();
-  const candidates: Candidate[] = [];
-  for (const s of settled) {
-    for (const c of s.candidates) {
-      if (seen.has(c.fullUrl)) continue;
-      seen.add(c.fullUrl);
-      candidates.push(c);
-    }
-  }
+  // ISBN (Open Library, Inventaire) et og:image en parallele, puis le titre a
+  // defaut de correspondance exacte : l'ordre vit dans _shared/capas/recherche.ts,
+  // le meme pour la recherche en lot.
+  const settled = await chercherCapas(
+    { isbn, title, author, idioma: String(body.idioma || '') },
+    {
+      openlibrary: envBool('COVER_LOOKUP_ENABLE_OPENLIBRARY', true),
+      inventaire: envBool('COVER_LOOKUP_ENABLE_INVENTAIRE', true),
+    },
+    [runSource('og_image', 'og:image', envBool('COVER_LOOKUP_ENABLE_OGIMAGE', true) && !!url,
+      () => fromOgImage(url, authHeader))],
+  );
 
   // Seules les candidates effectivement renvoyees sont rapatriees : inutile de
   // telecharger des apercus que personne ne verra.
-  const retenues = candidates.slice(0, maxRecords);
+  const retenues = candidatesUniques(settled).slice(0, maxRecords);
   await rapatrierApercus(retenues);
 
   return {
@@ -295,9 +258,38 @@ async function handleSearch(body: Record<string, unknown>, authHeader: string) {
   };
 }
 
+// ── Mode apercus : les vignettes des propositions du lot (27/09/2026) ──────
+// L'ecran de revue montre des candidates trouvees des heures plus tot par
+// cover-batch, qui n'en garde que les adresses. Le serveur rapatrie les
+// vignettes ici, comme pour la galerie du formulaire : le navigateur ne
+// contacte pas le tiers. Hotes admis : ceux des sources du lot, et eux seuls —
+// cette action ne doit pas devenir un relais vers n'importe quelle adresse.
+const HOTES_APERCUS = new Set(['covers.openlibrary.org', 'inventaire.io']);
+const APERCUS_MAX = 36;
+
+function apercuAdmis(adresse: string): boolean {
+  try {
+    const u = new URL(adresse);
+    return u.protocol === 'https:' && HOTES_APERCUS.has(u.hostname);
+  } catch {
+    return false;
+  }
+}
+
+async function handleApercus(body: Record<string, unknown>) {
+  const urls = [...new Set((Array.isArray(body.urls) ? body.urls : []).map(String).filter(apercuAdmis))]
+    .slice(0, APERCUS_MAX);
+  const lot: Candidate[] = urls.map((u) => ({ thumbnailUrl: u, fullUrl: u, source: '', license: null }));
+  await rapatrierApercus(lot);
+  const apercus: Record<string, string> = {};
+  for (const c of lot) if (c.thumbnailData) apercus[c.thumbnailUrl] = c.thumbnailData;
+  return { ok: true, apercus };
+}
+
 async function handle(body: Record<string, unknown>, authHeader: string) {
   const action = String(body.action || 'search').trim();
   if (action === 'store') return handleStore(body, authHeader);
+  if (action === 'apercus') return handleApercus(body);
   return handleSearch(body, authHeader);
 }
 

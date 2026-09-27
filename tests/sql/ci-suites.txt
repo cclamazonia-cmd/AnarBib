@@ -544,3 +544,7 @@ tests/sql/index_redondants_garde_tests.sql
 # 27/09 (volumes) : un ISBN d ensemble est porte par chacun de ses volumes — deux notices aux
 # numeros de volume differents ne sont pas des doublons ; meme volume ou volume absent : refus comme avant.
 tests/sql/isbn_volumes_tests.sql
+# 27/09 (capas en lot) : le lot ne cherche que des livro sans capa hors bac a sable, range sans
+# ecraser une decision ; l ecran de revue ne tranche que dans le perimetre de la personne et pose
+# la provenance de la PROPOSITION ; une capa posee entre-temps n est jamais remplacee.
+tests/sql/capas_lot_tests.sql

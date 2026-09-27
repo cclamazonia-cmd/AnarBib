@@ -133,6 +133,11 @@ verify_jwt = false
 [functions.work-titles-autofill]
 verify_jwt = false
 
+# Recherche de capas en lot (27/09/2026) : appelée par pg_cron (fn_capas_lot_call),
+# protégée par X-Cron-Secret. Elle propose, ne pose rien : l'écran de revue décide.
+[functions.cover-batch]
+verify_jwt = false
+
 # Lettre de la fédération : confirmation double opt-in + désabonnement 1-clic (publics, token-gated).
 [functions.lettre-confirm]
 verify_jwt = false
