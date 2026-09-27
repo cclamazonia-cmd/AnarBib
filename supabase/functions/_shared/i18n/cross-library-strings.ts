@@ -25,7 +25,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
   "pt-BR": {
     subtitle: "Transparência da rede · resumo automático",
     greeting: "Olá!",
-    footer: "Este resumo é enviado toda semana para que nenhuma ação da rede passe despercebida. Em caso de dúvida, responde a este e-mail.",
+    footer: "Este resumo é enviado toda semana para que nenhuma ação da rede passe despercebida. Em caso de dúvida, responda a este e-mail.",
     "library.subject": "Ações da rede na biblioteca {library} ({start} a {end})",
     "library.title": "O que a rede fez na sua biblioteca",
     "library.intro": "Entre {start} e {end}, {count} ação(ões) foram realizadas na biblioteca {library} por pessoas da administração da rede. Segue o detalhe, para conhecimento.",

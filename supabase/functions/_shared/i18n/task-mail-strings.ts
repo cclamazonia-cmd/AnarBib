@@ -34,7 +34,7 @@ const TASK_STRINGS = {
     assigned: {
       subject: "Nova tarefa interna",
       title: "Nova tarefa interna",
-      introHtml: `<p style="margin:0 0 10px;">Tu recebeste uma <b>nova tarefa interna</b>.</p><p style="margin:0;">Consulta o painel para acompanhar o andamento e registrar qualquer atualização necessária.</p>`
+      introHtml: `<p style="margin:0 0 10px;">Você recebeu uma <b>nova tarefa interna</b>.</p><p style="margin:0;">Consulte o painel para acompanhar o andamento e registrar qualquer atualização necessária.</p>`
     },
     reminder: {
       subject: "Lembrete de tarefa interna",
@@ -42,14 +42,14 @@ const TASK_STRINGS = {
       introHtml: `<p style="margin:0 0 10px;">Esta tarefa entrou no bloco <b>Trabalho do dia</b>.</p><p style="margin:0;">Se ela já foi resolvida, vale atualizar o status no painel.</p>`
     },
     orgCreated: {
-      subject: "Nova tarefa interna sob tua responsabilidade",
+      subject: "Nova tarefa interna sob sua responsabilidade",
       title: "Nova tarefa interna",
-      introHtml: `<p style="margin:0 0 10px;">Uma <b>nova tarefa interna</b> foi registrada sob tua responsabilidade.</p><p style="margin:0;">Abre o painel da biblioteca para acompanhar o andamento e organizar os próximos passos.</p>`
+      introHtml: `<p style="margin:0 0 10px;">Uma <b>nova tarefa interna</b> foi registrada sob sua responsabilidade.</p><p style="margin:0;">Abra o painel da biblioteca para acompanhar o andamento e organizar os próximos passos.</p>`
     },
     orgUpdated: {
       subject: "Atualização importante em tarefa interna",
       title: "Atualização importante em tarefa interna",
-      introHtml: `<p style="margin:0 0 10px;">Uma tarefa interna sob tua responsabilidade recebeu uma <b>atualização importante</b>.</p><p style="margin:0;">Confere o painel da biblioteca para validar a nova situação e ajustar o acompanhamento.</p>`
+      introHtml: `<p style="margin:0 0 10px;">Uma tarefa interna sob sua responsabilidade recebeu uma <b>atualização importante</b>.</p><p style="margin:0;">Confira o painel da biblioteca para validar a nova situação e ajustar o acompanhamento.</p>`
     },
     libCreated: {
       subject: "Nova tarefa interna registrada",
@@ -64,7 +64,7 @@ const TASK_STRINGS = {
     invitation: {
       subject: "Convite para tarefa interna",
       title: "Convite para tarefa interna",
-      introHtml: `<p style="margin:0 0 10px;">Tu recebeste um <b>convite para participar de uma tarefa interna</b> da biblioteca.</p><p style="margin:0;">Se fizer sentido para ti, abre o painel da biblioteca para acompanhar a organização desta tarefa.</p>`
+      introHtml: `<p style="margin:0 0 10px;">Você recebeu um <b>convite para participar de uma tarefa interna</b> da biblioteca.</p><p style="margin:0;">Se fizer sentido para você, abra o painel da biblioteca para acompanhar a organização desta tarefa.</p>`
     }
   },
 

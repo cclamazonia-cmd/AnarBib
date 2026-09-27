@@ -144,7 +144,7 @@ describe('gazette.contribution.rejected — la décision est dite, dans la langu
   it('sans locale, repli sur la langue de base du réseau (pt-BR), jamais une clé brute', async () => {
     const traiter = monter([rejet({ locale: null })]);
     const r = await traiter(1);
-    expect(r.envois[0].sujet).toContain('Tua nota');
+    expect(r.envois[0].sujet).toContain('Sua nota');
     expect(r.envois[0].sujet).not.toContain('gazette.contribution');
   });
 

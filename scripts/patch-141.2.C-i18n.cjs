@@ -98,7 +98,7 @@ patchZone('M1',
     de: "Deine Anfrage zur lokalen Einsichtnahme wird vorbereitet. Die Bibliothek wird bald einen Termin vorschlagen."
   },
   "cwf.reader.nao_compareceu": {
-    "pt-BR": "Voc\u00EA foi marcado(a/e) como ausente na consulta local agendada para {date}, das {time_start} \u00E0s {time_end}. A biblioteca tinha se preparado para te receber. Caso queira marcar um novo hor\u00E1rio, entre em contato com a biblioteca.",
+    "pt-BR": "Voc\u00EA foi marcado(a/e) como ausente na consulta local agendada para {date}, das {time_start} \u00E0s {time_end}. A biblioteca tinha se preparado para receber voc\u00EA. Caso queira marcar um novo hor\u00E1rio, entre em contato com a biblioteca.",
     fr: "Tu as \u00E9t\u00E9 marqu\u00E9\u00B7e comme absent\u00B7e \u00E0 la consultation pr\u00E9vue le {date}, de {time_start} \u00E0 {time_end}. La biblioth\u00E8que s'\u00E9tait pr\u00E9par\u00E9e \u00E0 t'accueillir. Si tu souhaites fixer un nouvel horaire, contacte la biblioth\u00E8que.",
     es: "Has sido marcado(a/e) como ausente en la consulta local programada para {date}, de {time_start} a {time_end}. La biblioteca se hab\u00EDa preparado para recibirte. Si quieres fijar un nuevo horario, contact\u00E1 a la biblioteca.",
     en: "You have been marked as absent for the local consultation scheduled on {date}, from {time_start} to {time_end}. The library had prepared to welcome you. If you wish to schedule a new time, please contact the library.",

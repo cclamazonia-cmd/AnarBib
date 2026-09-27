@@ -30,7 +30,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
 
   // ── Signaler un problème : accusé de réception (E14, 24/09/2026) ─────────
   "bugreport.ack.sub": {
-    "pt-BR": "Recebemos o teu relato — {ref}",
+    "pt-BR": "Recebemos o seu relato — {ref}",
     fr: "Ton signalement est bien reçu — {ref}",
     es: "Recibimos tu aviso — {ref}",
     en: "We received your report — {ref}",
@@ -42,7 +42,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Λάβαμε την αναφορά σου — {ref}"
   },
   "bugreport.ack.intro": {
-    "pt-BR": "Obrigada por relatar. As pessoas que administram a rede vão ler o teu relato; não haverá acompanhamento automático.",
+    "pt-BR": "Obrigada por relatar. As pessoas que administram a rede vão ler o seu relato; não haverá acompanhamento automático.",
     fr: "Merci d'avoir signalé ce problème. Les personnes qui administrent le réseau vont le lire ; il n'y aura pas de suivi automatique.",
     es: "Gracias por avisar. Las personas que administran la red lo leerán; no habrá seguimiento automático.",
     en: "Thank you for reporting this. The people who administer the network will read it; there will be no automatic follow-up.",
@@ -66,7 +66,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Αριθμός αναφοράς: {ref}."
   },
   "bugreport.ack.noreply": {
-    "pt-BR": "Não respondas a esta mensagem. Para falar com uma pessoa: {email}.",
+    "pt-BR": "Não responda a esta mensagem. Para falar com uma pessoa: {email}.",
     fr: "Ne réponds pas à ce message. Pour joindre une personne : {email}.",
     es: "No respondas a este mensaje. Para hablar con una persona: {email}.",
     en: "Please do not reply to this message. To reach a person: {email}.",
@@ -335,7 +335,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
 
   // ── Cotisation : expiration (notify-event · #25, J-7 rappel) ──────────────
   "cotisation.expiring.subject": {
-    "pt-BR": "A tua contribuição está perto do vencimento",
+    "pt-BR": "A sua contribuição está perto do vencimento",
     fr: "Ta cotisation arrive à échéance",
     es: "Tu cuota está por vencer",
     en: "Your membership dues are about to expire",
@@ -347,7 +347,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η συνδρομή σου λήγει σύντομα"
   },
   "cotisation.expiring.intro": {
-    "pt-BR": "A tua contribuição à {library} vence em {date}. Lembra-te de renová-la junto à biblioteca para continuar a pegar emprestado.",
+    "pt-BR": "A sua contribuição à {library} vence em {date}. Lembre-se de renová-la junto à biblioteca para continuar a pegar emprestado.",
     fr: "Ta cotisation à {library} expire le {date}. Pense à la renouveler auprès de la bibliothèque pour continuer à emprunter.",
     es: "Tu cuota en {library} vence el {date}. Acordate de renovarla en la biblioteca para seguir tomando préstamos.",
     en: "Your membership dues at {library} expire on {date}. Remember to renew them with the library to keep borrowing.",
@@ -360,7 +360,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   // ── Cotisation : expiration (notify-event · #25, J-0 jour J) ──────────────
   "cotisation.expiring_today.subject": {
-    "pt-BR": "A tua contribuição vence hoje",
+    "pt-BR": "A sua contribuição vence hoje",
     fr: "Ta cotisation expire aujourd'hui",
     es: "Tu cuota vence hoy",
     en: "Your membership dues expire today",
@@ -372,7 +372,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η συνδρομή σου λήγει σήμερα"
   },
   "cotisation.expiring_today.intro": {
-    "pt-BR": "A tua contribuição à {library} vence hoje ({date}). Renova-a junto à biblioteca para continuar a pegar emprestado.",
+    "pt-BR": "A sua contribuição à {library} vence hoje ({date}). Renove-a junto à biblioteca para continuar a pegar emprestado.",
     fr: "Ta cotisation à {library} expire aujourd'hui ({date}). Renouvelle-la auprès de la bibliothèque pour continuer à emprunter.",
     es: "Tu cuota en {library} vence hoy ({date}). Renovala en la biblioteca para seguir tomando préstamos.",
     en: "Your membership dues at {library} expire today ({date}). Renew them with the library to keep borrowing.",
@@ -386,7 +386,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
 
   // ── Entraide (notify-event · notif au cercle) ─────────────────────────────
   "entraide.request_circle.sub": {
-    "pt-BR": "Novo chamado de apoio mútuo no teu círculo {circle}",
+    "pt-BR": "Novo chamado de apoio mútuo no seu círculo {circle}",
     fr: "Nouvel appel d'entraide dans ton cercle {circle}",
     es: "Nueva llamada de ayuda mutua en tu círculo {circle}",
     en: "New mutual-aid call in your circle {circle}",
@@ -398,7 +398,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Νέο κάλεσμα αλληλοβοήθειας στον κύκλο σου {circle}"
   },
   "entraide.request_circle.intro": {
-    "pt-BR": "Uma biblioteca do teu círculo « {circle} » publicou um chamado de apoio mútuo: {subject}. Podes responder na aba Apoio mútuo.",
+    "pt-BR": "Uma biblioteca do seu círculo « {circle} » publicou um chamado de apoio mútuo: {subject}. Você pode responder na aba Apoio mútuo.",
     fr: "Une biblio de ton cercle « {circle} » a posté un appel à l'aide : {subject}. Tu peux y répondre dans l'onglet Entraide.",
     es: "Una biblioteca de tu círculo « {circle} » publicó una llamada de ayuda: {subject}. Puedes responder en la pestaña Ayuda mutua.",
     en: "A library in your circle “{circle}” posted a help call: {subject}. You can respond in the Mutual Aid tab.",
@@ -498,7 +498,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Επανυποβολή σημειώματος που είχε απορριφθεί: αυτή είναι η διορθωμένη εκδοχή από το άτομο."
   },
   "gazette.contribution.rejected.sub": {
-    "pt-BR": "Tua nota « {title} » não foi retida — eis por quê",
+    "pt-BR": "Sua nota « {title} » não foi retida — eis por quê",
     fr: "Ta brève « {title} » n'a pas été retenue — voici pourquoi",
     es: "Tu nota « {title} » no fue retenida — te contamos por qué",
     en: "Your bulletin “{title}” was not retained — here is why",
@@ -510,7 +510,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Το σημείωμά σου «{title}» δεν κρατήθηκε — να γιατί"
   },
   "gazette.contribution.rejected.intro": {
-    "pt-BR": "A equipe da rede leu tua proposta para a rubrica « {rubric} » e decidiu não a publicar tal como está. O motivo, escrito por quem a leu:",
+    "pt-BR": "A equipe da rede leu sua proposta para a rubrica « {rubric} » e decidiu não a publicar tal como está. O motivo, escrito por quem a leu:",
     fr: "L'équipe réseau a lu ta proposition pour la rubrique « {rubric} » et a décidé de ne pas la publier telle quelle. Le motif, écrit par la personne qui l'a lue :",
     es: "El equipo de la red leyó tu propuesta para la sección « {rubric} » y decidió no publicarla tal como está. El motivo, escrito por quien la leyó:",
     en: "The network team read your proposal for the “{rubric}” section and decided not to publish it as it stands. The reason, in the words of the person who read it:",
@@ -522,7 +522,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η ομάδα του δικτύου διάβασε την πρότασή σου για την ενότητα «{rubric}» και αποφάσισε να μην τη δημοσιεύσει ως έχει. Ο λόγος, όπως τον έγραψε το άτομο που τη διάβασε:"
   },
   "gazette.contribution.rejected.resubmit.title": {
-    "pt-BR": "Podes corrigir tua nota e reenviá-la",
+    "pt-BR": "Você pode corrigir sua nota e reenviá-la",
     fr: "Tu peux corriger ta brève et la renvoyer",
     es: "Puedes corregir tu nota y volver a enviarla",
     en: "You can revise your bulletin and send it again",
@@ -546,7 +546,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Διόρθωση και επαναποστολή"
   },
   "gazette.contribution.rejected.resubmit.expires": {
-    "pt-BR": "O link abre o formulário já preenchido com teu texto e o motivo. Serve uma única vez e vale até {date}. Se preferires não retomar, não há nada a fazer.",
+    "pt-BR": "O link abre o formulário já preenchido com seu texto e o motivo. Serve uma única vez e vale até {date}. Se preferir não retomar, não há nada a fazer.",
     fr: "Le lien ouvre le formulaire déjà rempli avec ton texte et le motif. Il ne sert qu'une fois et vaut jusqu'au {date}. Si tu préfères en rester là, il n'y a rien à faire.",
     es: "El enlace abre el formulario ya rellenado con tu texto y el motivo. Sirve una sola vez y vale hasta el {date}. Si prefieres dejarlo así, no hay nada que hacer.",
     en: "The link opens the form already filled in with your text and the reason. It works once and is valid until {date}. If you would rather leave it there, nothing else is needed.",
@@ -558,7 +558,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ο σύνδεσμος ανοίγει τη φόρμα ήδη συμπληρωμένη με το κείμενό σου και τον λόγο. Ισχύει μία μόνο φορά, έως {date}. Αν προτιμάς να το αφήσεις εκεί, δεν χρειάζεται να κάνεις τίποτα."
   },
   "gazette.contribution.accepted.sub": {
-    "pt-BR": "Tua nota « {title} » foi aceita para a Gazeta",
+    "pt-BR": "Sua nota « {title} » foi aceita para a Gazeta",
     fr: "Ta brève « {title} » est retenue pour la Gazette",
     es: "Tu nota « {title} » fue aceptada para la Gaceta",
     en: "Your bulletin “{title}” has been accepted for the Gazette",
@@ -570,7 +570,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Το σημείωμά σου «{title}» έγινε δεκτό για την εφημερίδα"
   },
   "gazette.contribution.accepted.intro": {
-    "pt-BR": "A equipe da rede leu tua proposta « {title} » e a reteve. Ela entrará na página « Vida da rede » do próximo número, traduzida nas dez línguas da rede. Obrigado por teres escrito: é dessas notas que a página é feita.",
+    "pt-BR": "A equipe da rede leu sua proposta « {title} » e a reteve. Ela entrará na página « Vida da rede » do próximo número, traduzida nas dez línguas da rede. Obrigado por ter escrito: é dessas notas que a página é feita.",
     fr: "L'équipe réseau a lu ta proposition « {title} » et l'a retenue. Elle entrera dans la page « Vie du réseau » du prochain numéro, traduite dans les dix langues du réseau. Merci d'avoir écrit : c'est de ces brèves que la page est faite.",
     es: "El equipo de la red leyó tu propuesta « {title} » y la retuvo. Entrará en la página « Vida de la red » del próximo número, traducida a las diez lenguas de la red. Gracias por escribir: de esas notas está hecha la página.",
     en: "The network team read your proposal “{title}” and kept it. It will appear on the “Network life” page of the next issue, translated into the network's ten languages. Thank you for writing — that page is made of these bulletins.",
@@ -596,7 +596,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
 
   // === Lettre de la fédération (double opt-in : confirmation + pages de retour) ===
   "lettre.optin.confirm.sub": {
-    "pt-BR": "Confirma tua inscrição no Boletim da rede",
+    "pt-BR": "Confirme sua inscrição no Boletim da rede",
     fr: "Confirme ton abonnement à la Lettre de la fédération",
     es: "Confirma tu suscripción al Boletín de la red",
     en: "Confirm your subscription to the federation letter",
@@ -608,7 +608,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Επιβεβαίωσε την εγγραφή σου στο ενημερωτικό δελτίο του δικτύου"
   },
   "lettre.optin.confirm.intro": {
-    "pt-BR": "Tu pediste para receber o Boletim da rede. Para confirmar tua inscrição, clica no botão abaixo.",
+    "pt-BR": "Você pediu para receber o Boletim da rede. Para confirmar sua inscrição, clique no botão abaixo.",
     fr: "Tu as demandé à recevoir la Lettre de la fédération. Pour confirmer ton abonnement, clique sur le bouton ci-dessous.",
     es: "Pediste recibir el Boletín de la red. Para confirmar tu suscripción, haz clic en el botón de abajo.",
     en: "You asked to receive the federation letter. To confirm your subscription, click the button below.",
@@ -632,7 +632,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Επιβεβαίωση της εγγραφής μου"
   },
   "lettre.optin.confirm.note": {
-    "pt-BR": "Se não foste tu quem fez este pedido, ignora esta mensagem: nada será enviado sem tua confirmação.",
+    "pt-BR": "Se não foi você quem fez este pedido, ignore esta mensagem: nada será enviado sem sua confirmação.",
     fr: "Si tu n'es pas à l'origine de cette demande, ignore ce message : rien ne te sera envoyé sans ta confirmation.",
     es: "Si no hiciste esta solicitud, ignora este mensaje: no se te enviará nada sin tu confirmación.",
     en: "If you didn't make this request, just ignore this message: nothing will be sent without your confirmation.",
@@ -649,7 +649,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Terug naar AnarBib", el: "Επιστροφή στο AnarBib"
   },
   "lettre.landing.confirmed": {
-    "pt-BR": "Inscrição confirmada! Vais receber o Boletim da rede.",
+    "pt-BR": "Inscrição confirmada! Você vai receber o Boletim da rede.",
     fr: "Abonnement confirmé ! Tu recevras la Lettre de la fédération.",
     es: "¡Suscripción confirmada! Recibirás el Boletín de la red.",
     en: "Subscription confirmed! You'll receive the federation letter.",
@@ -661,7 +661,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η εγγραφή επιβεβαιώθηκε! Θα λαμβάνεις το ενημερωτικό δελτίο του δικτύου."
   },
   "lettre.landing.already": {
-    "pt-BR": "Tua inscrição já estava confirmada.",
+    "pt-BR": "Sua inscrição já estava confirmada.",
     fr: "Ton abonnement était déjà confirmé.",
     es: "Tu suscripción ya estaba confirmada.",
     en: "Your subscription was already confirmed.",
@@ -673,7 +673,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η εγγραφή σου είχε ήδη επιβεβαιωθεί."
   },
   "lettre.landing.expired": {
-    "pt-BR": "Este link de confirmação expirou. Podes pedir um novo a partir da tua conta.",
+    "pt-BR": "Este link de confirmação expirou. Você pode pedir um novo a partir da sua conta.",
     fr: "Ce lien de confirmation a expiré. Tu peux en redemander un depuis ton compte.",
     es: "Este enlace de confirmación ha caducado. Puedes pedir uno nuevo desde tu cuenta.",
     en: "This confirmation link has expired. You can request a new one from your account.",
@@ -691,14 +691,14 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Μη έγκυρος ή ληγμένος σύνδεσμος."
   },
   "lettre.landing.error": {
-    "pt-BR": "Ocorreu um erro. Tenta de novo mais tarde.", fr: "Une erreur est survenue. Réessaie plus tard.",
+    "pt-BR": "Ocorreu um erro. Tente de novo mais tarde.", fr: "Une erreur est survenue. Réessaie plus tard.",
     es: "Se ha producido un error. Inténtalo de nuevo más tarde.", en: "Something went wrong. Please try again later.",
     it: "Si è verificato un errore. Riprova più tardi.", de: "Etwas ist schiefgelaufen. Bitte versuche es später erneut.",
     ca: "S'ha produït un error. Torna-ho a provar més tard.", eo: "Okazis eraro. Bonvolu reprovi poste.",
     nl: "Er ging iets mis. Probeer het later opnieuw.", el: "Κάτι πήγε στραβά. Δοκίμασε ξανά αργότερα."
   },
   "lettre.landing.unsubscribed": {
-    "pt-BR": "Pronto! Deixaste de receber o Boletim da rede.",
+    "pt-BR": "Pronto! Você deixou de receber o Boletim da rede.",
     fr: "C'est fait : tu es désabonné·e de la Lettre de la fédération.",
     es: "Listo: te has dado de baja del Boletín de la red.",
     en: "Done: you've been unsubscribed from the federation letter.",
@@ -734,7 +734,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Komende vergaderingen", el: "Επερχόμενες συνελεύσεις"
   },
   "lettre.issue.gazetteLink": {
-    "pt-BR": "Saiu o n.º {number} da Fractale — vem ler",
+    "pt-BR": "Saiu o n.º {number} da Fractale — venha ler",
     fr: "Le n°{number} de Fractale est paru — à lire",
     es: "Ya salió el n.º {number} de Fractale — a leer",
     en: "Fractale no. {number} is out — read it",
@@ -753,7 +753,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Niets nieuws deze keer — tot snel.", el: "Τίποτα νέο αυτή τη φορά — τα λέμε σύντομα."
   },
   "lettre.issue.unsubscribePrefix": {
-    "pt-BR": "Recebes este boletim porque te inscreveste nele.",
+    "pt-BR": "Você recebe este boletim porque se inscreveu nele.",
     fr: "Tu reçois cette lettre parce que tu t'y es abonné·e.",
     es: "Recibes este boletín porque te suscribiste a él.",
     en: "You're receiving this letter because you subscribed to it.",
@@ -2988,7 +2988,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ο λογαριασμός μου"
   },
   "reader_identity_assigned.subject": {
-    "pt-BR": "Tua identidade de leitor(a/e)",
+    "pt-BR": "Sua identidade de leitor(a/e)",
     fr: "Ton identité de lecteur·rice",
     es: "Tu identidad de lectore",
     en: "Your reader identity",
@@ -3000,7 +3000,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η ταυτότητά σου ως αναγνώστη/στριας"
   },
   "reader_identity_assigned.intro": {
-    "pt-BR": "A equipe te atribuiu uma identidade nesta biblioteca. Podes apresentá-la nas tuas visitas.",
+    "pt-BR": "A equipe atribuiu a você uma identidade nesta biblioteca. Você pode apresentá-la nas suas visitas.",
     fr: "L'équipe t'a attribué une identité dans cette bibliothèque. Tu peux la présenter lors de tes passages.",
     es: "El equipo te asignó una identidad en esta biblioteca. Puedes presentarla en tus visitas.",
     en: "The team assigned you an identity at this library. You can show it when you visit.",
@@ -4714,7 +4714,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Επαφή βιβλιοθήκης:"
   },
   "welcome.howItWorks.title": {
-    "pt-BR": "Como funciona tua biblioteca",
+    "pt-BR": "Como funciona sua biblioteca",
     fr: "Comment marche ta bibliothèque",
     es: "Cómo funciona tu biblioteca",
     en: "How your library works",
@@ -4726,7 +4726,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Πώς λειτουργεί η βιβλιοθήκη σου"
   },
   "welcome.howItWorks.card": {
-    "pt-BR": "Vais receber uma carteira de leitor(a/e).",
+    "pt-BR": "Você vai receber uma carteira de leitor(a/e).",
     fr: "Tu recevras une carte de lecteur·rice.",
     es: "Recibirás una tarjeta de lectore.",
     en: "You'll receive a reader card.",
@@ -4738,7 +4738,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Θα λάβεις κάρτα αναγνώστη/στριας."
   },
   "welcome.howItWorks.identity.remote": {
-    "pt-BR": "Tua identidade de leitor(a/e) te será enviada por e-mail.",
+    "pt-BR": "Sua identidade de leitor(a/e) será enviada a você por e-mail.",
     fr: "Ton identité de lecteur·rice te sera envoyée par e-mail.",
     es: "Tu identidad de lectore te será enviada por correo.",
     en: "Your reader identity will be sent to you by e-mail.",
@@ -4750,7 +4750,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου σταλεί με email."
   },
   "welcome.howItWorks.identity.presential": {
-    "pt-BR": "Tua identidade de leitor(a/e) te será atribuída na tua primeira visita.",
+    "pt-BR": "Sua identidade de leitor(a/e) será atribuída a você na sua primeira visita.",
     fr: "Ton identité de lecteur·rice te sera attribuée à ton premier passage.",
     es: "Tu identidad de lectore te será asignada en tu primera visita.",
     en: "Your reader identity will be assigned on your first visit.",
@@ -4762,7 +4762,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου αποδοθεί στην πρώτη σου επίσκεψη."
   },
   "welcome.pending": {
-    "pt-BR": "Tua inscrição precisa ser validada pela equipe: poderás pegar emprestado e reservar assim que for validada.",
+    "pt-BR": "Sua inscrição precisa ser validada pela equipe: você poderá pegar emprestado e reservar assim que for validada.",
     fr: "Ton inscription doit être validée par l'équipe : tu pourras emprunter et réserver une fois validée.",
     es: "Tu inscripción debe ser validada por el equipo: podrás tomar prestado y reservar una vez validada.",
     en: "Your sign-up must be validated by the team: you'll be able to borrow and reserve once validated.",
@@ -4929,7 +4929,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Υπενθύμιση · εκκρεμεί ψήφος για την κοόπτηση του/της {proposedName}"
   },
   "network.cooptation_reminder.intro": {
-    "pt-BR": "Uma proposta de cooptação foi aberta há vários dias e ainda aguarda vossa decisão. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo.",
+    "pt-BR": "Uma proposta de cooptação foi aberta há vários dias e ainda aguarda sua decisão. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo.",
     fr: "Une proposition de cooptation a été ouverte il y a plusieurs jours et attend encore votre décision. L'unanimité des administrateur·rices actif·ves est nécessaire pour conclure le processus.",
     es: "Una propuesta de cooptación fue abierta hace varios días y aún espera vuestra decisión. La unanimidad de les administradores activos es necesaria para cerrar el proceso.",
     en: "A cooptation proposal was opened several days ago and is still awaiting your decision. Unanimity among active network administrators is required to complete the process.",
@@ -4979,7 +4979,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Αξιολόγηση αιτημάτων — απαιτείται ενέργεια"
   },
   "network.request_eval_digest.intro_proposal": {
-    "pt-BR": "Uma proposta de decisão sobre uma solicitação de adesão aguarda vosso voto. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s da rede é necessária.",
+    "pt-BR": "Uma proposta de decisão sobre uma solicitação de adesão aguarda seu voto. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s da rede é necessária.",
     fr: "Une proposition de décision sur une demande d'adhésion attend votre vote. L'unanimité des administrateur·rices réseau actif·ves est requise.",
     es: "Una propuesta de decisión sobre una solicitud de adhesión espera vuestro voto. Se requiere la unanimidad de les administradores activos de la red.",
     en: "A decision proposal on a membership request is awaiting your vote. Unanimity among active network administrators is required.",
@@ -5031,7 +5031,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Πρόταση συλλογικής απομάκρυνσης · {proposedName}"
   },
   "network.collective_removal_proposed.intro": {
-    "pt-BR": "{proposerName} abriu uma proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}. Esta é uma decisão política grave que exige unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s (excluíd(o/a/e) (o/a/e) próprio(a/e) target). Vosso voto é necessário.",
+    "pt-BR": "{proposerName} abriu uma proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}. Esta é uma decisão política grave que exige unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s (excluíd(o/a/e) (o/a/e) próprio(a/e) target). Seu voto é necessário.",
     fr: "{proposerName} a ouvert une proposition de retrait collectif de l'administrateur·rice {proposedName}. Il s'agit d'une décision politique grave qui requiert l'unanimité des administrateur·rices actif·ves (à l'exclusion de la personne ciblée). Votre vote est nécessaire.",
     es: "{proposerName} abrió una propuesta de retiro colectivo de le administrade {proposedName}. Es una decisión política grave que exige la unanimidad de les administradores activos (excluide le propie target). Vuestro voto es necesario.",
     en: "{proposerName} has opened a proposal for the collective removal of network administrator {proposedName}. This is a serious political decision requiring unanimity among active administrators (excluding the target). Your vote is needed.",
@@ -5085,7 +5085,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ψήφος καταχωρίστηκε · συλλογική απομάκρυνση του/της {proposedName}"
   },
   "network.collective_removal_vote_cast.intro": {
-    "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}, aberta por {proposerName}. Acessai a app para ver o estado atual da deliberação e votar.",
+    "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}, aberta por {proposerName}. Acesse o aplicativo para ver o estado atual da deliberação e votar.",
     fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de retrait collectif de l'administrateur·rice {proposedName}, ouverte par {proposerName}. Accédez à l'app pour voir l'état actuel de la délibération et voter.",
     es: "Une administrade de red acaba de votar sobre la propuesta de retiro colectivo de le administrade {proposedName}, abierta por {proposerName}. Accedé a la app para ver el estado actual de la deliberación y votar.",
     en: "A network administrator has just cast a vote on the collective removal proposal of administrator {proposedName}, opened by {proposerName}. Open the app to see the current state of the deliberation and vote.",
@@ -5139,7 +5139,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Επιτεύχθηκε ομοφωνία των διαχειριστών/στριών του δικτύου για τη συλλογική απομάκρυνση του/της {proposedName}. Ισχύει περίοδος χάριτος 7 ημερών πριν την εκτέλεση. Σε αυτό το διάστημα, κάθε ψηφοφόρος μπορεί να ακυρώσει την απόφαση αν αλλάξει η συλλογική θέση."
   },
   "network.collective_removal_unanimous.target_intro": {
-    "pt-BR": "Esta mensagem informa que a unanimidade d(o/a/e)s outr(o/a/e)s administrador(a/e)s ativ(o/a/e)s foi alcançada sobre a vossa retirada coletiva. Uma carência de 7 dias se aplica antes da efetivação. Vossa palavra é livre durante esta janela.",
+    "pt-BR": "Esta mensagem informa que a unanimidade d(o/a/e)s outr(o/a/e)s administrador(a/e)s ativ(o/a/e)s foi alcançada sobre a sua retirada coletiva. Uma carência de 7 dias se aplica antes da efetivação. Sua palavra é livre durante esta janela.",
     fr: "Ce message vous informe que l'unanimité des autres administrateur·rices actif·ves a été atteinte sur votre retrait collectif. Une carence de 7 jours s'applique avant exécution. Votre parole est libre durant cette fenêtre.",
     es: "Este mensaje le informa que se alcanzó la unanimidad de les otres administradores activos sobre vuestro retiro colectivo. Se aplica un período de gracia de 7 días antes de la ejecución. Vuestra palabra es libre durante esta ventana.",
     en: "This message informs you that unanimity among the other active network administrators has been reached regarding your collective removal. A 7-day grace period applies before execution. Your voice remains free during this window.",
@@ -5244,7 +5244,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Μετά την περίοδο χάριτος 7 ημερών, η συλλογική απομάκρυνση του/της {proposedName} πραγματοποιήθηκε. Αυτό το άτομο δεν κατέχει πλέον τον ρόλο του/της διαχειριστή/στριας δικτύου. Η απόφαση καταγράφεται στο αγωνιστικό ιστορικό του AnarBib."
   },
   "network.collective_removal_executed.target_intro": {
-    "pt-BR": "A carência de 7 dias terminou e a retirada coletiva votada por unanimidade está agora efetiva. Vossa função d(o/a/e) administrador(a/e) de rede no AnarBib foi removida. Esta decisão é registrada no histórico militante.",
+    "pt-BR": "A carência de 7 dias terminou e a retirada coletiva votada por unanimidade está agora efetiva. Sua função d(o/a/e) administrador(a/e) de rede no AnarBib foi removida. Esta decisão é registrada no histórico militante.",
     fr: "La carence de 7 jours est arrivée à terme et le retrait collectif voté à l'unanimité prend effet. Votre fonction d'administrateur·rice de réseau dans AnarBib a été retirée. Cette décision est consignée dans l'historique militant.",
     es: "Terminó el período de gracia de 7 días y el retiro colectivo votado por unanimidad entra en vigor. Vuestra función de administrade de red en AnarBib fue retirada. Esta decisión queda registrada en el historial militante.",
     en: "The 7-day grace period has ended and the unanimously-voted collective removal now takes effect. Your network administrator role in AnarBib has been removed. This decision is recorded in the militant history.",
@@ -5290,7 +5290,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Συνέλευση του δικτύου συγκλήθηκε — {title}"
   },
   "network.assembleia.convocada.intro": {
-    "pt-BR": "Uma assembleia da rede foi convocada: « {title} ». A ordem do dia está se constituindo — é hora de avisar sua biblioteca e preparar o mandato de quem vos representará.",
+    "pt-BR": "Uma assembleia da rede foi convocada: « {title} ». A ordem do dia está se constituindo — é hora de avisar sua biblioteca e preparar o mandato de quem a representará.",
     fr: "Une assemblée du réseau est convoquée : « {title} ». L'ordre du jour se constitue — c'est le moment de prévenir ta bibliothèque et de préparer le mandat de votre délégué·e.",
     es: "Se ha convocado una asamblea de la red: « {title} ». El orden del día se está formando — es momento de avisar a tu biblioteca y preparar el mandato de quien os represente.",
     en: "A network assembly has been convened: “{title}”. The agenda is taking shape — it's time to inform your library and prepare your delegate's mandate.",
@@ -5326,7 +5326,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Δημοσιεύτηκε η ημερήσια διάταξη — {title}"
   },
   "network.assembleia.agenda_published.intro": {
-    "pt-BR": "A ordem do dia de « {title} » está fixada e traduzida. Tomem conhecimento e mandatem quem vos representará ponto a ponto antes da realização.",
+    "pt-BR": "A ordem do dia de « {title} » está fixada e traduzida. Tomem conhecimento e mandatem quem representará vocês ponto a ponto antes da realização.",
     fr: "L'ordre du jour de « {title} » est figé et traduit. Prenez-en connaissance et mandatez votre délégué·e point par point avant la tenue.",
     es: "El orden del día de « {title} » está fijado y traducido. Tomen conocimiento y manden a quien os represente punto por punto antes de la celebración.",
     en: "The agenda for “{title}” is finalised and translated. Review it and mandate your delegate point by point before the assembly is held.",
@@ -5402,7 +5402,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Πρόταση κοόπτησης: {proposedName}"
   },
   "network.cooptation_proposed.intro": {
-    "pt-BR": "{proposerName} propôs cooptar {proposedName} como administrador(a/e) de rede. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo. Vosso voto é esperado.",
+    "pt-BR": "{proposerName} propôs cooptar {proposedName} como administrador(a/e) de rede. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo. Seu voto é esperado.",
     fr: "{proposerName} propose de coopter {proposedName} comme administrateur·rice du réseau. L'unanimité des administrateur·rices actif·ves est nécessaire pour conclure le processus. Votre vote est attendu.",
     es: "{proposerName} propone cooptar a {proposedName} como administrade de red. La unanimidad de les administradores activos es necesaria para cerrar el proceso. Vuestro voto es esperado.",
     en: "{proposerName} proposes to coopt {proposedName} as a network administrator. Unanimity among active network administrators is required to complete the process. Your vote is expected.",
@@ -5426,7 +5426,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Άνοιξε την πρόταση και ψήφισε"
   },
   "network.cooptation_proposed.motivation_label": {
-    "pt-BR": "Motivacao invocada :",
+    "pt-BR": "Motivação invocada :",
     fr: "Motivation invoquee :",
     es: "Motivacion invocada :",
     en: "Stated motivation:",
@@ -5455,7 +5455,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ψήφος καταχωρίστηκε · κοόπτηση του/της {proposedName}"
   },
   "network.cooptation_voted.intro": {
-    "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de cooptação de {proposedName}, aberta por {proposerName}. Acessai a app para ver o estado atual da deliberação e votar se ainda não o fizeste.",
+    "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de cooptação de {proposedName}, aberta por {proposerName}. Acesse o aplicativo para ver o estado atual da deliberação e votar se ainda não o fez.",
     fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de cooptation de {proposedName}, ouverte par {proposerName}. Accédez à l'app pour voir l'état actuel de la délibération et voter si ce n'est pas déjà fait.",
     es: "Une administrade de red acaba de votar sobre la propuesta de cooptación de {proposedName}, abierta por {proposerName}. Accedé a la app para ver el estado actual de la deliberación y votar si aún no lo hiciste.",
     en: "A network administrator has just cast a vote on the cooptation proposal of {proposedName}, opened by {proposerName}. Open the app to see the current state of the deliberation and vote if you haven't already.",
@@ -5508,7 +5508,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}, απορρίφθηκε από τουλάχιστον μία αρνητική ψήφο. Η απαιτούμενη ομοφωνία δεν επιτεύχθηκε και η διαδικασία έκλεισε."
   },
   "network.cooptation_rejected.target_intro": {
-    "pt-BR": "Olá {targetName}. Uma proposta de cooptação para integrar-te como administrador(a/e) de rede AnarBib foi aberta e discutida pel(o/a/e)s administrador(a/e)s ativ(o/a/e)s. Esta proposta não foi acolhida à unanimidade : recebeu pelo menos um voto contrário e o processo é encerrado. Esta decisão é coletiva e política, não pessoal.",
+    "pt-BR": "Olá {targetName}. Uma proposta de cooptação para integrar você como administrador(a/e) de rede AnarBib foi aberta e discutida pel(o/a/e)s administrador(a/e)s ativ(o/a/e)s. Esta proposta não foi acolhida à unanimidade : recebeu pelo menos um voto contrário e o processo é encerrado. Esta decisão é coletiva e política, não pessoal.",
     fr: "Bonjour {targetName}. Une proposition de cooptation pour t'intégrer comme administrateur·rice du réseau AnarBib a été ouverte et discutée par les administrateur·rices actif·ves. Cette proposition n'a pas recueilli l'unanimité : elle a reçu au moins un vote défavorable et le processus est clos. Cette décision est collective et politique, non personnelle.",
     es: "Hola {targetName}. Una propuesta de cooptación para integrarte como administrade de red AnarBib fue abierta y discutida por les administradores activos. Esta propuesta no obtuvo unanimidad : recibió al menos un voto contrario y el proceso se cierra. Esta decisión es colectiva y política, no personal.",
     en: "Hello {targetName}. A cooptation proposal to integrate you as a network administrator of AnarBib was opened and discussed by the active administrators. This proposal did not reach unanimity: it received at least one opposing vote and the process is closed. This decision is collective and political, not personal.",
@@ -5548,7 +5548,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}, ολοκληρώθηκε ομόφωνα. Ο/Η {proposedName} γίνεται ενεργός/ή διαχειριστής/στρια του δικτύου AnarBib."
   },
   "network.cooptation_completed.target_intro": {
-    "pt-BR": "Olá {targetName}. A proposta de cooptação para integrar-te como administrador(a/e) de rede AnarBib foi concluída à unanimidade. Sejas bem-vind(o/a/e) na equipa de administração de rede.",
+    "pt-BR": "Olá {targetName}. A proposta de cooptação para integrar você como administrador(a/e) de rede AnarBib foi concluída à unanimidade. Seja bem-vind(o/a/e) à equipe de administração de rede.",
     fr: "Bonjour {targetName}. La proposition de cooptation pour t'intégrer comme administrateur·rice du réseau AnarBib a été conclue à l'unanimité. Bienvenue dans l'équipe d'administration du réseau.",
     es: "Hola {targetName}. La propuesta de cooptación para integrarte como administrade de red AnarBib fue concluida por unanimidad. ¡Bienvenide al equipo de administración de red!",
     en: "Hello {targetName}. The cooptation proposal to integrate you as a network administrator of AnarBib has been concluded unanimously. Welcome to the network administration team.",
@@ -5785,7 +5785,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Το αίτημά σου για επιτόπια μελέτη προετοιμάζεται. Η βιβλιοθήκη θα σου προτείνει χρόνο σύντομα."
   },
   "cwf.reader.nao_compareceu": {
-    "pt-BR": "Você foi marcado(a/e) como ausente na consulta local agendada para {date}, das {time_start} às {time_end}. A biblioteca tinha se preparado para te receber. Caso queira marcar um novo horário, entre em contato com a biblioteca.",
+    "pt-BR": "Você foi marcado(a/e) como ausente na consulta local agendada para {date}, das {time_start} às {time_end}. A biblioteca tinha se preparado para receber você. Caso queira marcar um novo horário, entre em contato com a biblioteca.",
     fr: "Tu as été marqué·e comme absent·e à la consultation prévue le {date}, de {time_start} à {time_end}. La bibliothèque s'était préparée à t'accueillir. Si tu souhaites fixer un nouvel horaire, contacte la bibliothèque.",
     es: "Has sido marcado(a/e) como ausente en la consulta local programada para {date}, de {time_start} a {time_end}. La biblioteca se había preparado para recibirte. Si quieres fijar un nuevo horario, contactá a la biblioteca.",
     en: "You have been marked as absent for the local consultation scheduled on {date}, from {time_start} to {time_end}. The library had prepared to welcome you. If you wish to schedule a new time, please contact the library.",
@@ -7503,7 +7503,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ειδοποίηση διαγραφής δεδομένων — δανεισμοί"
   },
   "rgpd.purge.loans.intro": {
-    "pt-BR": "Conforme nossa política de retenção de dados, teu histórico de empréstimos antigos será excluído em 30 dias.",
+    "pt-BR": "Conforme nossa política de retenção de dados, seu histórico de empréstimos antigos será excluído em 30 dias.",
     fr: "Conformément à notre politique de rétention de données, ton historique d'emprunts anciens sera supprimé dans 30 jours.",
     es: "Conforme a nuestra política de retención de datos, tu historial de préstamos antiguos será eliminado en 30 días.",
     en: "In accordance with our data retention policy, your history of old loans will be deleted in 30 days.",
@@ -7527,7 +7527,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ειδοποίηση διαγραφής δεδομένων — κρατήσεις"
   },
   "rgpd.purge.reservations.intro": {
-    "pt-BR": "Conforme nossa política de retenção de dados, teu histórico de reservas antigas será excluído em 30 dias.",
+    "pt-BR": "Conforme nossa política de retenção de dados, seu histórico de reservas antigas será excluído em 30 dias.",
     fr: "Conformément à notre politique de rétention de données, ton historique de réservations anciennes sera supprimé dans 30 jours.",
     es: "Conforme a nuestra política de retención de datos, tu historial de reservas antiguas será eliminado en 30 días.",
     en: "In accordance with our data retention policy, your history of old reservations will be deleted in 30 days.",
@@ -7551,7 +7551,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ειδοποίηση διαγραφής δεδομένων — επιτόπιες μελέτες"
   },
   "rgpd.purge.consultations.intro": {
-    "pt-BR": "Conforme nossa política de retenção de dados, teu histórico de consultas locais antigas será excluído em 30 dias.",
+    "pt-BR": "Conforme nossa política de retenção de dados, seu histórico de consultas locais antigas será excluído em 30 dias.",
     fr: "Conformément à notre politique de rétention de données, ton historique de consultations sur place anciennes sera supprimé dans 30 jours.",
     es: "Conforme a nuestra política de retención de datos, tu historial de consultas locales antiguas será eliminado en 30 días.",
     en: "In accordance with our data retention policy, your history of old on-site consultations will be deleted in 30 days.",
@@ -7575,7 +7575,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Αυτή η διαγραφή είναι αυτόματη και οριστική. Κανένα αντίγραφο δεν διατηρείται μετά την προθεσμία."
   },
   "rgpd.purge.howToCancel": {
-    "pt-BR": "Se quiseres exportar teus dados antes da exclusão, entra em contato com a biblioteca pelos canais habituais.",
+    "pt-BR": "Se quiser exportar seus dados antes da exclusão, entre em contato com a biblioteca pelos canais habituais.",
     fr: "Si tu souhaites exporter tes données avant la suppression, contacte la bibliothèque par les canaux habituels.",
     es: "Si deseas exportar tus datos antes de la eliminación, contacta con la biblioteca por los canales habituales.",
     en: "If you wish to export your data before deletion, contact the library through the usual channels.",
@@ -7746,7 +7746,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Verzoek om digitaal delen — {book}", el: "Αίτημα ψηφιακής κοινοποίησης — {book}"
   },
   "ill.requested.intro": {
-    "pt-BR": "{requester} solicita a partilha digital do documento « {book} ». A ti aceitar, recusar ou sinalizar a indisponibilidade.",
+    "pt-BR": "{requester} solicita a partilha digital do documento « {book} ». Cabe a você aceitar, recusar ou sinalizar a indisponibilidade.",
     fr: "{requester} sollicite le partage numérique du document « {book} ». À toi d'accepter, refuser ou signaler l'indisponibilité.",
     es: "{requester} solicita la compartición digital del documento « {book} ». Te toca aceptar, rechazar o señalar la indisponibilidad.",
     en: "{requester} requests the digital sharing of « {book} ». It's up to you to accept, refuse or mark it unavailable.",
