@@ -741,7 +741,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E2** | Trancher les conventions néerlandaise et grecque | `P1` | Ouvert |
 | **E3** | Uniformiser le registre d'adresse entre les dix locales | `P2` | Décision collective |
 | **E4** | Régler les paires irrégulières de l'italien | `P2` | Ouvert |
-| **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | Ouvert |
+| **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | En cours |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
@@ -835,9 +835,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### E6 — Découper les cinq écrans qui pèsent plus de cent kilooctets
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript
 
-**État.** `BookDraftForm.jsx` fait **197 Ko**, `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154 Ko, `PanelPage.jsx` 114 Ko, `ImportacoesPage.jsx` 109 Ko. 29 des 38 routes sont déjà en chargement paresseux, et `vite.config.js` déclare quatre lots de dépendances — le problème n'est pas le chargement initial, c'est la taille d'un fichier unique.
+**État.** `BookDraftForm.jsx` fait **197 Ko**, `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154 Ko, `PanelPage.jsx` 114 Ko, `ImportacoesPage.jsx` 109 Ko. 29 des 38 routes sont déjà en chargement paresseux, et `vite.config.js` déclare quatre lots de dépendances — le problème n'est pas le chargement initial, c'est la taille d'un fichier unique. **Lot 1 le 27/09 (mesuré avant : `BookDraftForm.jsx` 214 Ko, 3 803 lignes).** Les constantes et fonctions PURES — types de matériel, rôles, liaison MARC → autorités, cote d'étiquette, formulaire vide, candidat BN Brasil, zones ISBD — sortent dans `src/lib/catalogacao/bookDraft.js` (18 Ko), lignes déplacées par script sans ressaisie ; les zones ISBD reçoivent le formulaire et `t` au lieu de les lire dans la fermeture. `BookDraftForm.jsx` : **198 Ko**. Banc `book-draft-lib.test.js` (11 cas), build Vite vert, 1 160 tests. **Reste l'essentiel** : sous 60 Ko il faut découper le JSX (sous-formulaires, panneaux ressources numériques, ISBD, contributeurs) en composants — un changement qui se vérifie à l'écran, connecté, un panneau à la fois.
 
 *Vérifié : 31/08 — les cinq mêmes fichiers, aux tailles voisines : `BookDraftForm.jsx` 197 Ko, `BibliotecaPage.jsx` 186 Ko, `AccountPage.jsx` 155 Ko, `PanelPage.jsx` 116 Ko, `ImportacoesPage.jsx` 111 Ko.*
 

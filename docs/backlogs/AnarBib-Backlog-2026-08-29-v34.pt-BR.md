@@ -741,7 +741,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E2** | Decidir as convenções neerlandesa e grega | `P1` | Aberto |
 | **E3** | Uniformizar o registro de tratamento entre as dez locales | `P2` | Decisão coletiva |
 | **E4** | Resolver os pares irregulares do italiano | `P2` | Aberto |
-| **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Aberto |
+| **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Em curso |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
@@ -835,9 +835,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E6 — Dividir as cinco telas que pesam mais de cem quilobytes
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript
 
-**Estado.** `BookDraftForm.jsx` tem **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único.
+**Estado.** `BookDraftForm.jsx` tem **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js`; o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela.
 
 *Verificado : 31/08 — os cinco mesmos arquivos, com tamanhos vizinhos (197, 186, 155, 116 e 111 KB).*
 
