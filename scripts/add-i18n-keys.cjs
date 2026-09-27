@@ -645,7 +645,7 @@ const NEW_KEYS = {
     "el": "CDD:"
   },
   "catalogacao.shelf.cotePrefix": {
-    "pt-BR": "Cote:",
+    "pt-BR": "Número de chamada:",
     "en": "Call no.:",
     "fr": "Cote :",
     "es": "Signatura:",

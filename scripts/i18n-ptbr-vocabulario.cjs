@@ -55,7 +55,8 @@
  *   terme européen de la cote de bibliothèque, mais c'est la NOTION même de
  *   l'écran Numeração (« a cota identifica a ficha », distincte de la « cota
  *   de arrumação ») : la renommer (« número de chamada » ?) est une décision
- *   de vocabulaire de catalogage, pas une correction.
+ *   de vocabulaire de catalogage, pas une correction. — TRANCHÉ le soir
+ *   même par Xavier : « número de chamada » (scripts/i18n-ptbr-frances.cjs).
  *
  * Réécriture DE → PARA, comme i18n-ptbr-voce.cjs : une clé n'est réécrite que
  * si elle porte EXACTEMENT l'ancienne valeur ; déjà brésilienne, elle est

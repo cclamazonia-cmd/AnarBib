@@ -10,7 +10,7 @@ const LOCALES_DIR = path.resolve(__dirname, '../src/i18n/locales');
 
 const NEW_KEYS = {
   'pt-BR': {
-    'importacoes.fontes.importCandidate': 'Importer',
+    'importacoes.fontes.importCandidate': 'Importar',
     'importacoes.fontes.importingCandidate': 'Importando candidato(a/e)…',
     'importacoes.fontes.candidateImported': '« {title} » importado(a/e) na fila de revisao.',
   },

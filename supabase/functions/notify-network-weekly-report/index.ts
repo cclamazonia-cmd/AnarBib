@@ -553,11 +553,11 @@ serve(async (req)=>{
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.atrasos_ativos)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB criados na semana (intercâmbios)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB criados na semana (intercâmbios)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebTotals.criados)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;"><b>PEB em circulação na rede (fim da semana)</b></td>
+            <td style="padding:10px;"><b>EEB em circulação na rede (fim da semana)</b></td>
             <td style="padding:10px;text-align:right;"><b>${countOr0(pebTotals.em_circulacao)}</b></td>
           </tr>
         </table>
@@ -628,7 +628,7 @@ serve(async (req)=>{
           "E-mail de notificação (admin)",
           "Estado"
         ], attentionRows),
-        renderTable("Intercâmbios interbibliotecas da rede (PEB criados na semana)", [
+        renderTable("Intercâmbios interbibliotecas da rede (EEB criados na semana)", [
           "Biblioteca emprestadora",
           "Biblioteca tomadora",
           "Estado",

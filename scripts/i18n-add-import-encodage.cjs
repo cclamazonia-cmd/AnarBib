@@ -19,7 +19,7 @@ const ADD = {
     'importacoes.run.encoding.label': 'Codificação do arquivo',
     'importacoes.run.encoding.auto': 'Lido em {enc} (detectado).',
     'importacoes.run.encoding.forced': 'Lido em {enc} (imposto).',
-    'importacoes.run.encoding.fallback': 'Lido em {enc}, por suposição: o arquivo não é UTF-8 válido. Confira os acentos das primeiras notícias; se estiverem errados, reprocesse impondo a codificação.',
+    'importacoes.run.encoding.fallback': 'Lido em {enc}, por suposição: o arquivo não é UTF-8 válido. Confira os acentos das primeiras fichas; se estiverem errados, reprocesse impondo a codificação.',
     'importacoes.run.encoding.declaredUnicode': 'O arquivo declara Unicode (UNIMARC 100 $a) mas não é UTF-8: incoerência da exportação.',
     'importacoes.run.encoding.declaredUnsupported': 'O arquivo declara um conjunto de caracteres não suportado ({codes}): alguns caracteres podem estar errados. Reexporte em UTF-8.',
     'importacoes.run.reprocess.title': 'Reler o arquivo com a codificação',

@@ -89,6 +89,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { TU_EUROPEU } from './helpers/ptbr-tu-europeu.js';
 import { PT_EUROPEU } from './helpers/ptbr-pt-europeu.js';
+import { FRANCES_EM_PT } from './helpers/ptbr-frances.js';
 
 const ici = dirname(fileURLToPath(import.meta.url));
 const DOSSIER = resolve(ici, '../i18n/locales');
@@ -371,11 +372,14 @@ const TU_LEGITIME = [];
 // Chemin (5), pt-BR — le VOCABULAIRE du Portugal. Le motif `PT_EUROPEU` (son
 // critère d'admission, ses motifs de structure, son angle mort mesuré) vit
 // dans `helpers/ptbr-pt-europeu.js` depuis le 27/09/2026 : la garde des
-// courriels pt-BR (`mail-ptbr-voce.test.js`) le partage tel quel.
+// courriels pt-BR (`mail-ptbr-voce.test.js`) le partage tel quel. Même
+// chemin, même partage pour les mots FRANÇAIS restés dans la traduction
+// (`FRANCES_EM_PT`, `helpers/ptbr-frances.js`, 27/09 au soir).
 
 // Valeurs où l'une de ces formes serait légitime (citation d'un texte
-// portugais, nom d'une institution). Vide au 27/09/2026.
+// portugais ou français, nom d'une institution). Vides au 27/09/2026.
 const PT_EUROPEU_LEGITIME = [];
+const FRANCES_LEGITIME = [];
 
 const GREC = /[Ͱ-Ͽἀ-῿]/;
 
@@ -555,7 +559,7 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
   });
 
   // ── 4 bis. Vocabulaire brésilien ──────────────────────────────────────────
-  describe('chemin (5) — pt-BR parle brésilien, pas portugais', () => {
+  describe('chemin (5) — pt-BR parle brésilien, ni portugais ni français', () => {
     it('pt-BR.json — aucun mot ni tournure propre au Portugal', () => {
       const fautes = [];
       for (const [k, v] of Object.entries(TOUT['pt-BR'])) {
@@ -569,6 +573,21 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
           'Écris en brésilien (arquivo, registro, compartilhamento, contato, seção, ' +
           '« Carregando… »). Si la forme est légitime (citation d\'un texte portugais), ' +
           'ajoute la clé à PT_EUROPEU_LEGITIME en citant le passage.',
+      ).toEqual([]);
+    });
+
+    it('pt-BR.json — aucun mot français laissé dans la traduction', () => {
+      const fautes = [];
+      for (const [k, v] of Object.entries(TOUT['pt-BR'])) {
+        if (FRANCES_LEGITIME.includes(k)) continue;
+        const m = prose(v).match(FRANCES_EM_PT);
+        if (m) fautes.push(`${k} → « ${m[1]} » dans « ${v.slice(0, 70)} »`);
+      }
+      expect(
+        fautes,
+        `pt-BR : ${fautes.length} valeur(s) avec un mot français\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
+          'Traduis (feed, etiqueta de lombada, número de chamada, EEB, importar, e-mail). ' +
+          'Si le mot est légitime (citation, nom propre), ajoute la clé à FRANCES_LEGITIME en citant le passage.',
       ).toEqual([]);
     });
   });

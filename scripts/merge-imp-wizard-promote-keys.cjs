@@ -20,7 +20,7 @@ const K = (loading, empty, summary, btn, promoting, done, viewDrafts, finish) =>
 });
 
 const KEYS = {
-  'pt-BR': K('Carregando…', 'Nenhuma linha para importar.', '{n} notícia(s) pronta(s) para promoção.', 'Promover para os rascunhos', 'Promovendo…', 'Import concluído! {n} rascunho(s) criado(s).', 'Ver os rascunhos (Catalogação)', 'Concluir'),
+  'pt-BR': K('Carregando…', 'Nenhuma linha para importar.', '{n} ficha(s) pronta(s) para promoção.', 'Promover para os rascunhos', 'Promovendo…', 'Importação concluída! {n} rascunho(s) criado(s).', 'Ver os rascunhos (Catalogação)', 'Concluir'),
   fr: K('Chargement…', 'Aucune ligne à importer.', '{n} notice(s) prête(s) à être promue(s).', 'Promouvoir vers les brouillons', 'Promotion en cours…', 'Import terminé ! {n} brouillon(s) créé(s).', 'Voir les brouillons (Catalogage)', 'Terminer'),
   es: K('Cargando…', 'Ninguna línea para importar.', '{n} ficha(s) lista(s) para promoción.', 'Promover a los borradores', 'Promoviendo…', '¡Importación completada! {n} borrador(es) creado(s).', 'Ver los borradores (Catalogación)', 'Finalizar'),
   en: K('Loading…', 'No row to import.', '{n} record(s) ready for promotion.', 'Promote to drafts', 'Promoting…', 'Import complete! {n} draft(s) created.', 'View drafts (Cataloging)', 'Finish'),

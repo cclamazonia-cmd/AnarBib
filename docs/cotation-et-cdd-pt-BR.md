@@ -1,4 +1,4 @@
-# Cotação BLMF — norma de tombo + grade CDD anarquista
+# Números de chamada BLMF — norma de tombo + grade CDD anarquista
 
 > Documento de trabalho de catalogação. Fonte CDD: sumários Dewey públicos
 > (10 classes / 100 divisões), adaptados às estantes reais da coleção.
@@ -33,7 +33,7 @@ nenhuma colisão é possível. Apenas a safra corrente segue a regra « max+1 »
 
 ## 2. Grade CDD direcionada (estantes anarquistas)
 
-A cota anarquista de referência em Dewey é **335.83 (Anarquismo)**. A maioria
+O número de chamada anarquista de referência em Dewey é **335.83 (Anarquismo)**. A maioria
 das obras de teoria vai para lá; o restante se distribui por **tema** (educação,
 trabalho, terra, história de uma revolução específica, biografia).
 
@@ -52,7 +52,7 @@ trabalho, terra, história de uma revolução específica, biografia).
 | 331.88 | Sindicalismo, sindicatos | sindicalismo, « imprensa operária » |
 | 333.3 | Posse da terra | MST, luta pela terra, questão agrária |
 | 334 | Cooperativas, autogestão | « Autogestão », cooperativismo |
-| **335.83** | **Anarquismo** | **teoria anarquista (cota por padrão)** |
+| **335.83** | **Anarquismo** | **teoria anarquista (número de chamada padrão)** |
 | 335.4 | Marxismo | marxismo, comparações |
 | 355 | Ciência militar, militarismo | « Militarismo na América latina » |
 | 365 | Prisões | prisão, abolição |
@@ -85,7 +85,7 @@ trabalho, terra, história de uma revolução específica, biografia).
 ### Heurística de decisão
 
 1. **Teoria anarquista geral** → `335.83`.
-2. Tema dominante identificável → cota do tema (educação `370.1`,
+2. Tema dominante identificável → número de chamada do tema (educação `370.1`,
    sindicalismo `331.88`, terra `333.3`, feminismo `305.42`…).
 3. **História** de um evento/país → `9xx` regional.
 4. **Biografia** de um(a/e) militante → `920`.

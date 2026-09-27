@@ -37,6 +37,13 @@
 // (« gerir » existe au Brésil, soutenu), ni « Você junta-se » (la syntaxe),
 // ni « basculhar » (calque du français). Même plancher, même lecture.
 //
+// FRANÇAIS. Le soir même, scripts/i18n-ptbr-frances.cjs retire de pt-BR.json
+// les mots français (flux, cote, PEB, Importer…) et partage son motif
+// (helpers/ptbr-frances.js) : ce test le passe aussi. Aucun module de chaînes
+// n'en portait ; le seul du côté des courriels était du texte en dur — « PEB »
+// ×3 dans le rapport hebdomadaire réseau (index.ts), hors de portée ici,
+// corrigé par le même script.
+//
 // MÉTHODE : les modules sont du TypeScript pour Deno ; on les transpile avec
 // esbuild et on les évalue, comme digest-cross-library-labels.test.js. Un
 // PLANCHER de valeurs par module fait rougir le test si le chargement décroche
@@ -47,6 +54,7 @@ import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { TU_EUROPEU } from './helpers/ptbr-tu-europeu.js';
 import { PT_EUROPEU } from './helpers/ptbr-pt-europeu.js';
+import { FRANCES_EM_PT } from './helpers/ptbr-frances.js';
 
 const FONCTIONS = new URL('../../supabase/functions/', import.meta.url);
 const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
@@ -97,6 +105,13 @@ describe('courriels pt-BR — registre « você » (DOC-ADDR-1) et vocabulaire d
   it('le motif du vocabulaire est vivant : il voit « partilha » et épargne « compartilhamento »', () => {
     expect(PT_EUROPEU.test('Pedido de partilha digital — {book}')).toBe(true);
     expect(PT_EUROPEU.test('Pedido de compartilhamento digital — {book}')).toBe(false);
+  });
+
+  it('le motif du français est vivant : il voit « PEB », « por mail » et épargne « e-mail »', () => {
+    expect(FRANCES_EM_PT.test('PEB criados na semana')).toBe(true);
+    expect(FRANCES_EM_PT.test('enviado por mail')).toBe(true);
+    expect(FRANCES_EM_PT.test('EEB criados na semana')).toBe(false);
+    expect(FRANCES_EM_PT.test('enviado por e-mail')).toBe(false);
   });
 
   it('le motif est vivant : il voit le « tu » européen et épargne « mútua »', () => {
@@ -155,6 +170,19 @@ describe('courriels pt-BR — registre « você » (DOC-ADDR-1) et vocabulaire d
           `${nom} : ${fautes.length} valeur(s) au vocabulaire du Portugal\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
             'Écris en brésilien, comme l\'écran (compartilhamento, arquivo, registro, contato, ' +
             '« Carregando… »). Si la forme est légitime, ajoute « module:clé » à PT_EUROPEU_LEGITIME.',
+        ).toEqual([]);
+      });
+
+      it('aucune valeur pt-BR avec un mot français', () => {
+        const fautes = [];
+        for (const [k, v] of valeurs) {
+          const m = texte(v).match(FRANCES_EM_PT);
+          if (m) fautes.push(`${k} → « ${m[1]} » dans « ${v.slice(0, 70)} »`);
+        }
+        expect(
+          fautes,
+          `${nom} : ${fautes.length} valeur(s) avec un mot français\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
+            'Traduis comme l\'écran (feed, EEB, importar, e-mail, governança).',
         ).toEqual([]);
       });
     });

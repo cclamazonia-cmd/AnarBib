@@ -28,7 +28,7 @@ const NEW_KEYS = {
     'importacoes.circuit.migracao': 'Migração de sistema',
     'importacoes.circuit.arquivo': 'Importação de arquivo',
     'importacoes.circuit.fontes': 'Fontes externas',
-    'importacoes.circuit.migracao.hint': 'Import maciço via ISO 2709 / UNIMARC para migrar de um SIGB existente.',
+    'importacoes.circuit.migracao.hint': 'Importação em massa via ISO 2709 / UNIMARC para migrar de um SIGB existente.',
     'importacoes.circuit.arquivo.hint': 'Importação manual de um arquivo (CSV, RIS, BibTeX, JSON…) a partir de uma fonte parceira.',
     'importacoes.circuit.fontes.hint': 'Busca em catálogos externos (bibliotecas companheiras ou fontes institucionais).',
     'importacoes.stat.stagingRows': 'Linhas em staging',

@@ -31,7 +31,7 @@ const K = (title, subtitle, launch, stCircuit, stSource, stPreview, stPromote, c
 });
 
 const KEYS = {
-  'pt-BR': K('Novo import', 'Assistente guiado de importação, passo a passo.', 'Novo import', 'Circuito', 'Fonte', 'Pré-visualização', 'Promoção', 'Migração de sistema', 'Importação de arquivo', 'Fontes externas', 'Voltar', 'Próximo', 'Etapa em construção (em breve).'),
+  'pt-BR': K('Nova importação', 'Assistente guiado de importação, passo a passo.', 'Nova importação', 'Circuito', 'Fonte', 'Pré-visualização', 'Promoção', 'Migração de sistema', 'Importação de arquivo', 'Fontes externas', 'Voltar', 'Próximo', 'Etapa em construção (em breve).'),
   fr: K('Nouvel import', 'Assistant d\'import guidé, étape par étape.', 'Nouvel import', 'Circuit', 'Source', 'Aperçu', 'Promotion', 'Migration de système', 'Import de fichier', 'Sources externes', 'Retour', 'Suivant', 'Étape en construction (bientôt).'),
   es: K('Nueva importación', 'Asistente de importación guiado, paso a paso.', 'Nueva importación', 'Circuito', 'Fuente', 'Vista previa', 'Promoción', 'Migración de sistema', 'Importación de archivo', 'Fuentes externas', 'Atrás', 'Siguiente', 'Etapa en construcción (próximamente).'),
   en: K('New import', 'Guided step-by-step import assistant.', 'New import', 'Circuit', 'Source', 'Preview', 'Promotion', 'System migration', 'File import', 'External sources', 'Back', 'Next', 'Step under construction (coming soon).'),
