@@ -3037,7 +3037,7 @@
       "d": "C",
       "p": "P2",
       "s": "ouvert",
-      "e": "S",
+      "e": "M",
       "sk": [
         "sql"
       ],
@@ -3046,12 +3046,12 @@
         "pt": "Renomear uma das duas colunas `rights_status`"
       },
       "v": {
-        "fr": "`digital_assets.rights_status` est un **état de workflow** (`to_review`, `public_domain_confirmed`) qui commande la visibilité. Le vocabulaire des droits d'auteur porte le même nom depuis la migration `20260820235000_vocabulaire_rights_status`. Deux sens, un nom.",
+        "fr": "`digital_assets.rights_status` est un **état de workflow** (`to_review`, `public_domain_confirmed`) qui commande la visibilité. Le vocabulaire des droits d'auteur porte le même nom depuis la migration `20260820235000_vocabulaire_rights_status`. Deux sens, un nom. **Mesuré le 27/09 en production — plus gros que « S ».** Quatre colonnes portent le nom : `digital_assets.rights_status` (l'état de revue : `to_review`, `public_domain_confirmed`, `source_reuse_allowed`, `restricted`, `do_not_publish` — **c'est lui qui commande la visibilité publique**), `book_digital_resources` et `book_draft_digital_resources` (le vocabulaire des droits : `dominio_publico`, `cessao_autoral`, `licenca_livre`, `sob_direitos`), `ingest.partner_catalog_received_assets` (le statut déclaré par la partenaire, en clair). Douze fonctions DEFINER contiennent le nom ; **six** visent la colonne de revue : `fn_attach_received_asset_record`, `fn_confirm_digital_asset_rights`, `fn_export_fonds_eligible_count`, `fn_export_fonds_records`, `fn_list_verified_digital_assets`, `fn_publish_digital_asset_from_resource` ; plus l'index `digital_assets_rights_status_idx`. Deux sorties d'API portent le nom (la colonne rendue par `fn_list_verified_digital_assets` — changer son type de retour impose DROP + CREATE et de reposer les droits —, la clé JSON de `fn_attach_received_asset_record`) et **le format d'échange des fonds** (`fn_export_fonds_records`, relu par `deposit-fonds-direct`) : les paquets déjà exportés garderont `rights_status`. Front : 5 fichiers ; Edge Functions : 4.",
         "pt": "`digital_assets.rights_status` é um **estado de workflow** (`to_review`, `public_domain_confirmed`) que comanda a visibilidade. O vocabulário de direitos autorais leva o mesmo nome desde a migração `20260820235000_vocabulaire_rights_status`. Dois sentidos, um nome."
       },
       "w": {
-        "fr": "Renommer la colonne de workflow — `review_state` par exemple — et propager au front et aux RPC. Le vocabulaire des droits garde le nom, puisque c'est lui qui parle de droits.",
-        "pt": "Renomear a coluna de workflow — `review_state` por exemplo — e propagar ao front e às RPC. O vocabulário de direitos guarda o nome, já que é ele que fala de direitos."
+        "fr": "**Plan (27/09, décision de Xavier : chantier à part).** (1) Renommer `digital_assets.rights_status` en `review_state` (colonne, CHECK, index), et les six fonctions par remplacements comptés depuis leur définition RÉELLE ; (2) les sorties : `review_state` dans la liste des vérifiés et la clé JSON de l'attachement, le front et les Edge Functions suivent dans le même commit ; (3) l'export écrit `review_state`, l'import (`deposit-fonds-direct`) lit `review_state` puis, à défaut, `rights_status` — un paquet d'avant reste lisible ; (4) un banc qui prouve que la visibilité publique ne bouge pas (mêmes fichiers servis en anonyme avant et après, par empreinte en production) ; (5) le rappel `access_scope` dans le formulaire de catalogage (critère 2).",
+        "pt": "**Plano (27/09):** renomear `digital_assets.rights_status` para `review_state` (coluna, CHECK, índice, seis funções derivadas da definição real), saídas de API e front/EF no mesmo commit, exportação em `review_state` com importação que aceita os dois nomes, banco provando que a visibilidade pública não muda, lembrete `access_scope` no formulário."
       },
       "y": {
         "fr": "Confusion garantie sinon, et sur un sujet où la confusion se paie : c'est l'état des droits qui décide si un document est visible du public. Un piège documenté s'y ajoute — `access_scope` vaut `conta_ativa` **par défaut**, si bien qu'un document du domaine public reste réservé aux comptes actifs tant que personne n'a posé `publico` explicitement.",

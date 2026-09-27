@@ -587,13 +587,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C10 — Renomear uma das duas colunas `rights_status`
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** `digital_assets.rights_status` é um **estado de workflow** (`to_review`, `public_domain_confirmed`) que comanda a visibilidade. O vocabulário de direitos autorais leva o mesmo nome desde a migração `20260820235000_vocabulaire_rights_status`. Dois sentidos, um nome.
 
 *Verificado : [object Object],[object Object]*
 
-**O que é.** Renomear a coluna de workflow — `review_state` por exemplo — e propagar ao front e às RPC. O vocabulário de direitos guarda o nome, já que é ele que fala de direitos.
+**O que é.** **Plano (27/09):** renomear `digital_assets.rights_status` para `review_state` (coluna, CHECK, índice, seis funções derivadas da definição real), saídas de API e front/EF no mesmo commit, exportação em `review_state` com importação que aceita os dois nomes, banco provando que a visibilidade pública não muda, lembrete `access_scope` no formulário.
 
 **Por que importa.** Confusão garantida do contrário, e num assunto em que a confusão se paga: é o estado dos direitos que decide se um documento é visível ao público. Uma armadilha documentada se acrescenta — `access_scope` vale `conta_ativa` **por omissão**, de modo que um documento de domínio público continua reservado às contas ativas enquanto ninguém tiver posto `publico` explicitamente.
 
