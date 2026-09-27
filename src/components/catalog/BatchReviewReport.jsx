@@ -14,6 +14,8 @@ import { coverageItemLabel } from '../../lib/importCoverage.js';
 const secTitle = { margin: '0 0 6px', fontSize: '.86rem', fontWeight: 700 };
 const list = { margin: '4px 0 0 18px', padding: 0, lineHeight: 1.5 };
 const muted = { color: 'var(--brand-muted, #999)' };
+// H19 : raisons d'un exemplaire importé bloquant (fn_batch_review_report, clé items).
+const ITEM_REASONS = ['without_library', 'library_mismatch', 'library_without_numbering', 'code_taken', 'code_twice', 'code_pending_elsewhere'];
 
 export default function BatchReviewReport({ report }) {
   const { formatMessage: t, formatDate } = useIntl();
@@ -25,6 +27,12 @@ export default function BatchReviewReport({ report }) {
   const auth = report.authorities || {};
   const matching = dup.import_matching && typeof dup.import_matching === 'object' ? Object.entries(dup.import_matching) : [];
   const coverage = Array.isArray(report.coverage) ? report.coverage : [];
+  // H19 : les exemplaires importés du lot (promus avec une notice, ou venus
+  // d'un rapprochement), et ce qui empêcherait leur publication ; 40 problèmes
+  // au plus, les comptes portent sur tout.
+  const items = report.items && typeof report.items === 'object' ? report.items : null;
+  const itemProblems = Array.isArray(items?.problems) ? items.problems : [];
+  const itemProblemCount = Math.max(itemProblems.length, ITEM_REASONS.reduce((n, k) => n + Number(items?.[k] || 0), 0));
 
   const draftLabel = (it) => (
     <>
@@ -112,6 +120,28 @@ export default function BatchReviewReport({ report }) {
           </ul>
         )}
       </section>
+
+      {items && (items.count ?? 0) > 0 && (
+        <section data-testid="review-items">
+          <h5 style={secTitle}>{t({ id: 'review.report.items' })}</h5>
+          <div>{t({ id: 'review.report.items.summary' }, { count: items.count ?? 0, withCode: items.with_code ?? 0 })}</div>
+          {itemProblems.length === 0 ? (
+            <div style={muted}>{t({ id: 'review.report.noIssues' })}</div>
+          ) : (
+            <ul style={list}>
+              {itemProblems.slice(0, 40).map((p) => (
+                <li key={p.item_draft_id} data-item-problem={p.reason}>
+                  {/* Un exemplaire de rapprochement n'a pas de brouillon de notice : le titre de la notice visée. */}
+                  {p.draft_id ? draftLabel(p) : (p.titulo || '—')}
+                  {p.source_item_code ? <> · <code>{p.source_item_code}</code></> : null}
+                  {' — '}<strong>{t({ id: `review.report.items.reason.${p.reason}` })}</strong>
+                </li>
+              ))}
+              {more(itemProblemCount, Math.min(itemProblems.length, 40))}
+            </ul>
+          )}
+        </section>
+      )}
 
       {coverage.length > 0 && (
         <section data-testid="review-coverage">

@@ -19,6 +19,12 @@ const BUCKET = 'catalogos_parceiros_raw';
 // Champs cibles d'un profil d'import (mapping colonne→champ + valeurs par défaut).
 // Clés techniques alignées sur le parseur (process-partner-catalog-import).
 const PROFILE_FIELDS = ['title', 'subtitle', 'author', 'publisher', 'place', 'year', 'language', 'subjects', 'isbn', 'issn', 'edition', 'itemType', 'externalKey'];
+// H19 : clés de la correspondance des exemplaires, et la convention de PMB 8.1
+// (UNIMARC 995) montrée en exemple — même défaut que DEFAULT_ITEM_MAPPINGS (marc.ts).
+const PROFILE_ITEM_KEYS = ['tag', 'code', 'call_number', 'note', 'owner', 'item_type', 'public', 'status'];
+// Grisés : la convention appliquée à une case VIDE, UNIMARC (PMB 8.1, 995) · MARC21 (852) —
+// marc.ts DEFAULT_ITEM_MAPPINGS. Une case remplie vaut pour les deux dialectes.
+const PROFILE_ITEM_HINTS = { tag: '995 · 852', code: 'f · p', call_number: 'k · hi', note: 'u · z', owner: 'a · b', item_type: 'r · —', public: 'q · —', status: '— · —' };
 
 function formatDate(iso) {
   if (!iso) return '—';
@@ -132,6 +138,9 @@ export default function ImportacoesPage() {
   const [profileName, setProfileName] = useState('');
   const [profileMapRows, setProfileMapRows] = useState([{ field: 'title', column: '' }]);
   const [profileDefRows, setProfileDefRows] = useState([{ field: 'language', value: '' }]);
+  // H19 (IMP-21 c) : correspondance des sous-zones d'exemplaire (995/852) ;
+  // une case vide garde la convention de PMB 8.1 (DEFAULT_ITEM_MAPPINGS, marc.ts).
+  const [profileItems, setProfileItems] = useState(() => Object.fromEntries(PROFILE_ITEM_KEYS.map(k => [k, ''])));
   const [profileSaving, setProfileSaving] = useState(false);
 
   // ── Fontes externas search ─────────────────────────────
@@ -494,16 +503,21 @@ export default function ImportacoesPage() {
     for (const r of profileMapRows) { if (r.field && r.column.trim()) mappings[r.field] = r.column.trim(); }
     const defaults = {};
     for (const r of profileDefRows) { if (r.field && r.value.trim()) defaults[r.field] = r.value.trim(); }
+    // H19 : seules les cases remplies partent ; aucune = convention PMB 8.1 (NULL en base).
+    const items = {};
+    for (const k of PROFILE_ITEM_KEYS) { const v = (profileItems[k] || '').trim().toLowerCase(); if (v) items[k] = v; }
     setProfileSaving(true);
     try {
       const { data, error } = await supabase.rpc('fn_import_profile_create', {
         p_library_id: libraryId, p_name: profileName.trim(),
         p_column_mappings: mappings, p_default_values: defaults,
+        p_items_mapping: Object.keys(items).length ? items : null,
       });
       if (error) throw error;
       assertRpcOk(data);
       setMsg({ text: t({ id: 'importacoes.adapter.profileCreated' }, { name: profileName.trim() }), kind: 'ok' });
       setProfileName(''); setProfileMapRows([{ field: 'title', column: '' }]); setProfileDefRows([{ field: 'language', value: '' }]);
+      setProfileItems(Object.fromEntries(PROFILE_ITEM_KEYS.map(k => [k, ''])));
       setProfileFormOpen(false);
       await reloadProfiles();
       if (data?.id) setAdapterProfile(String(data.id));
@@ -580,12 +594,21 @@ export default function ImportacoesPage() {
     setPromotingSel(true);
     setMsg({ text: t({ id: 'importacoes.fila.reconciling' }), kind: 'info' });
     try {
-      const { error } = await supabase.rpc('fn_import_reconcile_duplicates', {
+      const { data, error } = await supabase.rpc('fn_import_reconcile_duplicates', {
         p_run_id: Number(selectedRunId),
         p_row_ids: ids,
       });
       if (error) throw error;
-      setMsg({ text: t({ id: 'importacoes.fila.reconciled' }), kind: 'ok' });
+      // H19 : un exemplaire dont le code d'origine est déjà dans la bibliothèque
+      // n'est pas recréé ; une ligne entièrement détenue est marquée rejetée.
+      const skipped = Number(data?.items_skipped_code_taken || 0);
+      const held = Number(data?.rows_already_held || 0);
+      setMsg({
+        text: skipped || held
+          ? t({ id: 'importacoes.fila.reconciledCounts' }, { created: Number(data?.created_items || 0), skipped, held })
+          : t({ id: 'importacoes.fila.reconciled' }),
+        kind: 'ok',
+      });
       setSelectedRows(new Set());
       await loadRuns();
       await loadRunRows(selectedRunId);
@@ -1259,6 +1282,19 @@ export default function ImportacoesPage() {
                     onClick={() => setProfileDefRows(rows => [...rows, { field: 'language', value: '' }])}>
                     {t({ id: 'importacoes.adapter.profileAddRow' })}
                   </button>
+                  {/* H19 (IMP-21 c) : la correspondance des exemplaires (995 / 852) */}
+                  <p className="imp-note" style={{ margin: '0 0 2px', fontWeight: 600 }}>{t({ id: 'importacoes.adapter.profileItems' })}</p>
+                  <p className="imp-note" style={{ margin: '0 0 6px', fontSize: '.76rem' }}>{t({ id: 'importacoes.adapter.profileItemsHelp' })}</p>
+                  <div data-testid="profile-items" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 150px), 1fr))', gap: 8, marginBottom: 12 }}>
+                    {PROFILE_ITEM_KEYS.map(k => (
+                      <label key={k} className="ab-field" style={{ minWidth: 0 }}>
+                        <span className="ab-field__label">{t({ id: `importacoes.adapter.profileItems.${k}` })}</span>
+                        <input className="ab-input" value={profileItems[k]} maxLength={k === 'tag' ? 3 : 4}
+                          placeholder={PROFILE_ITEM_HINTS[k]}
+                          onChange={e => setProfileItems(p => ({ ...p, [k]: e.target.value }))} />
+                      </label>
+                    ))}
+                  </div>
                   <div>
                     <button className="cat-btn primary" type="button" disabled={profileSaving || !profileName.trim()} onClick={handleCreateProfile}>
                       {profileSaving ? t({ id: 'importacoes.adapter.profileSaving' }) : t({ id: 'importacoes.adapter.profileSave' })}

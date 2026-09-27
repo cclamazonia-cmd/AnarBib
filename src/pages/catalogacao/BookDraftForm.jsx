@@ -295,6 +295,27 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const msgRef = useRef(null);
 
+  // H19 (27/09/2026) : une notice importée porte ses exemplaires du fichier
+  // (995/852). Ils sont publiés avec elle, À LA PLACE des exemplaires initiaux,
+  // dans la bibliothèque qui leur a été attribuée : le nombre et le choix de
+  // bibliothèque ci-dessous ne s'appliquent pas, l'écran le dit.
+  const [importedItems, setImportedItems] = useState(0);
+  // Relu à chaque chargement de la notice (fillFromRecord), pas seulement quand
+  // son id change : une fusion ou un écart faits dans la file entre-temps.
+  const [importedCheck, setImportedCheck] = useState(0);
+  useEffect(() => {
+    const id = Number(form.id);
+    if (!id || form.published_book_id) { setImportedItems(0); return undefined; }
+    let cancelled = false;
+    (async () => {
+      const { count } = await supabase.from('exemplar_drafts')
+        .select('id', { count: 'exact', head: true })
+        .eq('book_draft_id', id).in('status', ['draft', 'ready']);
+      if (!cancelled) setImportedItems(count || 0);
+    })();
+    return () => { cancelled = true; };
+  }, [form.id, form.published_book_id, importedCheck]);
+
   // Scroll vers le message quand il apparaît (chantier E — UX erreurs)
   const showMsg = useCallback((text, kind) => {
     setMsg({ text, kind });
@@ -2134,6 +2155,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ── Load existing draft ────────────────────────────────
   function fillFromRecord(record) {
     const r = record || {};
+    setImportedCheck((c) => c + 1);   // H19 : relire les exemplaires importés
     setForm({
       id: String(r.id || ''),
       published_book_id: String(r.published_book_id || ''),
@@ -3576,6 +3598,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         {!f('published_book_id') && (
           <div style={{ marginTop: 16, padding: 12, borderRadius: 10, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.15)' }}>
             <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 8 }}>{t({ id: 'catalogacao.publish.copiesTitle' })}</div>
+            {importedItems > 0 ? (
+              <div data-testid="copies-imported" style={{ fontSize: '.8rem' }}>
+                {t({ id: 'catalogacao.publish.copiesImported' }, { n: importedItems })}
+              </div>
+            ) : (
             <div className="cat-book-grid">
               <div className="cat-field">
                 <label>{t({ id: 'catalogacao.publish.copiesLabel' })}</label>
@@ -3595,6 +3622,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 </div>
               )}
             </div>
+            )}
           </div>
         )}
 

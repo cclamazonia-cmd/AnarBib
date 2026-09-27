@@ -68,7 +68,11 @@ async function attacherDestinations(items) {
   return items;
 }
 
-async function bulkByType(sel, run) {
+// `compter` (facultatif) : compte les lignes RENDUES par la requête qui ont
+// réellement changé, au lieu des ids demandés. H19 : un exemplaire importé suit
+// sa notice ; restauré ou déplacé seul, il peut ne pas bouger (déclencheur
+// exemplar_drafts_import_links_locked), et l'écran ne doit pas l'annoncer.
+async function bulkByType(sel, run, compter = null) {
   const byType = new Map();
   for (const { type, id } of sel) {
     if (!byType.has(type)) byType.set(type, []);
@@ -77,8 +81,8 @@ async function bulkByType(sel, run) {
   let ok = 0;
   for (const [type, ids] of byType) {
     for (const part of chunkIds(ids)) {
-      const { error } = await run(TABLE_FOR[type], part);
-      if (!error) ok += part.length;
+      const { data, error } = await run(TABLE_FOR[type], part);
+      if (!error) ok += (compter && Array.isArray(data)) ? compter(data) : part.length;
     }
   }
   return ok;
@@ -443,8 +447,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
     const ok = await bulkByType(sel, (table, ids) =>
-      supabase.from(table).update({ batch_id: Number(batchId) }).in('id', ids));
-    setMsg({ text: t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok }), kind: 'ok' });
+      supabase.from(table).update({ batch_id: Number(batchId) }).in('id', ids).select('id, batch_id'),
+      (rows) => rows.filter((r) => String(r.batch_id) === String(batchId)).length);
+    const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.importedFollowRecord' }) : '';
+    setMsg({ text: t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok }) + note, kind: 'ok' });
     await loadQueue();
     onChanged?.();
   }
@@ -454,8 +460,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     const sel = getTrashSelectedItems();
     if (!sel.length) return;
     const ok = await bulkByType(sel, (table, ids) =>
-      supabase.from(table).update({ status: 'draft' }).in('id', ids));
-    setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }), kind: 'ok' });
+      supabase.from(table).update({ status: 'draft' }).in('id', ids).select('id, status'),
+      (rows) => rows.filter((r) => r.status !== 'cancelled').length);
+    const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.importedFollowRecord' }) : '';
+    setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }) + note, kind: 'ok' });
     await loadQueue(); await loadTrash();
     onChanged?.();
   }

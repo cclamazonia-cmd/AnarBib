@@ -3,30 +3,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
+import { parseShelfLocation, formatShelfLocation, emptyShelfLocation } from '@/lib/shelfLocation';
 
-// ── Shelf location structured format ──────────────────────
-function parseShelfLocation(raw) {
-  const clean = (raw || '').replace(/\s+/g, ' ').trim();
-  const empty = { library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' };
-  if (!clean) return empty;
-  const labels = [['biblioteca','library'],['setor/sala','sector'],['estante','shelfUnit'],['prateleira','shelfLevel'],['observação','note'],['observacao','note'],['obs','note']];
-  const parsed = { ...empty };
-  let matched = 0;
-  clean.split(/\s+·\s+/).forEach(part => {
-    const sep = part.indexOf(':');
-    if (sep === -1) return;
-    const lbl = part.slice(0, sep).replace(/\s+/g, ' ').trim().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-    const val = part.slice(sep + 1).trim();
-    const entry = labels.find(([l]) => lbl === l);
-    if (entry && val) { parsed[entry[1]] = val; matched++; }
-  });
-  return matched ? parsed : empty;
-}
-
-function formatShelfLocation(parts) {
-  return [['Biblioteca',parts.library],['Setor/sala',parts.sector],['Estante',parts.shelfUnit],['Prateleira',parts.shelfLevel],['Observação',parts.note]]
-    .filter(([,v]) => (v||'').trim()).map(([l,v]) => `${l}: ${v.trim()}`).join(' · ');
-}
+// Localisation : src/lib/shelfLocation.js (la cote importée brute est gardée, H19).
 
 // ── Label helpers (trigramme from BookDraftForm) ──────────
 function stripDia(v) { return (v||'').normalize('NFD').replace(/[̀-ͯ]/g, ''); }
@@ -56,11 +35,15 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   const [form, setForm] = useState({
     id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending',
     target_bib_ref: '', target_library_id: '', target_holding_id: '',
+    book_draft_id: '', import_staging_row_id: '', source_item_code: '',   // H19 : exemplaire importé (lecture seule)
     tombo: '', notes: '',
     circulation_policy: '', visibility: 'public',
     acquisition_mode: '', acquisition_date: '', provenance_note: '', source_library: '',
   });
-  const [loc, setLoc] = useState({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
+  const [loc, setLoc] = useState(emptyShelfLocation);
+  // H19 : champ « cote / localisation d'origine » (texte non structuré), montré
+  // quand le brouillon en porte un ou vient d'un import.
+  const [showRawLoc, setShowRawLoc] = useState(false);
   // #UX-CAT (10/06) — aide à la saisie : biblio identifiée intuitivement (slug /
   // nom / nom+ville) → affiche le dernier tombo de sa série au-dessus du Tombo.
   const [libOptions, setLibOptions] = useState([]);
@@ -89,6 +72,10 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     // exemplaire d'une autre biblio du reseau retombait alors, en publication,
     // sur la biblio primaire du catalogueur (cf. AnarBib #cross-lib-mismatch).
     setForm(prev => {
+      // H19 : un exemplaire importé garde la bibliothèque qui lui a été attribuée
+      // (tampon de la promotion, réattribution du lot) : « Biblioteca » n'est ici
+      // qu'une partie de la localisation.
+      if (prev.book_draft_id || prev.import_staging_row_id) return prev;
       if (prev.target_library_id === lib.id) return prev;
       const next = { ...prev, target_library_id: lib.id };
       if (prev.target_holding_id) next.target_holding_id = ''; // holding d'une autre biblio, invalide desormais
@@ -106,7 +93,9 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       // deja pris par l'exemplaire auto-cree -> collision exemplares_unique_tombo.
       try {
         const { data: nextT } = await supabase.rpc('fn_next_tombo', { p_library_id: lib.id });
-        if (!cancelled && nextT) setForm(prev => prev.tombo ? prev : { ...prev, tombo: nextT });
+        // H19 : pas de tombo figé d'avance pour un exemplaire importé — il le reçoit
+        // à la publication, du schéma de SA bibliothèque (IMP-21 a).
+        if (!cancelled && nextT) setForm(prev => (prev.tombo || prev.book_draft_id || prev.import_staging_row_id) ? prev : { ...prev, tombo: nextT });
       } catch { /* biblio sans tombo_pattern -> saisie manuelle */ }
     })();
     return () => { cancelled = true; };
@@ -191,8 +180,9 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {
-    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', tombo: '', notes: '', circulation_policy: '', visibility: 'public', acquisition_mode: '', acquisition_date: '', provenance_note: '', source_library: '' });
-    setLoc({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
+    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', book_draft_id: '', import_staging_row_id: '', source_item_code: '', tombo: '', notes: '', circulation_policy: '', visibility: 'public', acquisition_mode: '', acquisition_date: '', provenance_note: '', source_library: '' });
+    setLoc(emptyShelfLocation());
+    setShowRawLoc(false);
     setLabel({ title: '', author: '', cdd: '', note: '' });
     setParentBook(null);
     setBibRefChecked(false);
@@ -208,11 +198,14 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       status: r.status || 'draft', label_status: r.label_status || 'pending',
       target_bib_ref: r.target_bib_ref || '', target_library_id: r.target_library_id || '',
       target_holding_id: String(r.target_holding_id || ''), tombo: r.tombo || '', notes: r.notes || '',
+      book_draft_id: String(r.book_draft_id || ''), import_staging_row_id: String(r.import_staging_row_id || ''), source_item_code: r.source_item_code || '',
       circulation_policy: r.circulation_policy || '', visibility: r.visibility || 'public',
       acquisition_mode: r.acquisition_mode || '', acquisition_date: r.acquisition_date || '',
       provenance_note: r.provenance_note || '', source_library: r.source_library || '',
     });
-    setLoc(parseShelfLocation(r.shelf_location || ''));
+    const parsedLoc = parseShelfLocation(r.shelf_location || '');
+    setLoc(parsedLoc);
+    setShowRawLoc(!!parsedLoc.raw || !!r.book_draft_id || !!r.import_staging_row_id);
     setLabel({ title: r.label_title_override || '', author: r.label_author_override || '', cdd: r.label_cdd_override || '', note: r.label_note || '' });
     setDraftState(r.status === 'ready' ? 'ready' : r.status === 'published' ? 'published' : r.id ? 'saved' : 'new');
     setMsg({ text: '', kind: '' });
@@ -298,7 +291,9 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   // ── Save ────────────────────────────────────────────────
   async function handleSave(e) {
     e?.preventDefault();
-    if (!f('target_bib_ref').trim() && !f('tombo').trim()) { setMsg({ text: t({ id: 'catalogacao.exemplar.refOrTomboRequired' }), kind: 'error' }); return; }
+    // H19 : un exemplaire importé est rattaché à sa notice (book_draft_id) ; son
+    // tombo viendra du schéma de la bibliothèque à la publication (IMP-21 a).
+    if (!f('target_bib_ref').trim() && !f('tombo').trim() && !f('book_draft_id')) { setMsg({ text: t({ id: 'catalogacao.exemplar.refOrTomboRequired' }), kind: 'error' }); return; }
 
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
@@ -582,6 +577,11 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
               )}
               <input type="text" value={f('tombo')} onChange={e => set('tombo', e.target.value)}
                 placeholder="123-CCLA-2026 ou 123-CCLA-2026-02" style={fs} />
+              {f('source_item_code') && (
+                <div data-testid="exemplar-source-code" style={{ fontSize: '.7rem', color: 'var(--brand-muted, #aaa)', marginTop: 3 }}>
+                  {t({ id: 'catalogacao.exemplar.sourceItemCode' }, { code: f('source_item_code') })}
+                </div>
+              )}
             </div>
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.exemplar.sectorRoom' })}</label>
@@ -603,6 +603,13 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
               <input type="text" value={loc.note} onChange={e => setL('note', e.target.value)}
                 placeholder={t({ id: 'catalogacao.exemplar.locNote.ph' })} style={fs} />
             </div>
+            {(showRawLoc || loc.raw) && (
+              <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+                <label style={ls}>{t({ id: 'catalogacao.exemplar.shelfRaw' })}</label>
+                <input type="text" data-testid="exemplar-shelf-raw" value={loc.raw} onChange={e => setL('raw', e.target.value)}
+                  placeholder={t({ id: 'catalogacao.exemplar.shelfRaw.ph' })} style={fs} />
+              </div>
+            )}
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.notes' })}</label>
               <textarea value={f('notes')} onChange={e => set('notes', e.target.value)}
