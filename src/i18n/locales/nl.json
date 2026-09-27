@@ -1873,6 +1873,7 @@
   "catalogacao.nameEntry.pickSurname": "Klik op het woord waar de achternaam begint",
   "catalogacao.nameEntry.caseExplain": "Natuurlijke schrijfwijze: één hoofdletter per woord, partikels (de, da, dos…) klein, initialen en Romeinse cijfers blijven. Nooit alles in hoofdletters in het toegangspunt.",
   "catalogacao.nameEntry.caseHint": "Een eigen schrijfwijze van de naam (De Amicis, bell hooks)? Klik op het woord om de hoofdletter terug te geven of weg te nemen.",
+  "catalogacao.nameEntry.caseExplainOrg": "Naam van een collectief: hoofdletters voor de hoofdwoorden, functiewoorden klein, afkortingen blijven. In het Frans (taal van de naam) alleen een hoofdletter aan het eerste woord en aan eigennamen.",
   "catalogacao.author.sortNameLabel": "Sorteernaam",
   "catalogacao.author.source": "Bron",
   "catalogacao.author.sourceKind.book": "Fysiek boek in handen",

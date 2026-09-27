@@ -1873,6 +1873,7 @@
   "catalogacao.nameEntry.pickSurname": "Klicken Sie auf das Wort, mit dem der Familienname beginnt",
   "catalogacao.nameEntry.caseExplain": "Natürliche Schreibung: ein Großbuchstabe pro Wort, Partikeln (de, da, dos…) klein, Initialen und römische Zahlen bleiben. Nie Versalien in der Ansetzung.",
   "catalogacao.nameEntry.caseHint": "Eine eigene Schreibweise des Namens (De Amicis, bell hooks)? Klicken Sie auf das Wort, um den Großbuchstaben wiederherzustellen oder zu entfernen.",
+  "catalogacao.nameEntry.caseExplainOrg": "Name einer Körperschaft: Hauptwörter groß, Funktionswörter klein, Abkürzungen bleiben. Im Französischen (Sprache des Namens) nur das erste Wort und Eigennamen groß.",
   "catalogacao.author.sortNameLabel": "Sortierform",
   "catalogacao.author.source": "Quelle",
   "catalogacao.author.sourceKind.book": "Physisches Buch in der Hand",

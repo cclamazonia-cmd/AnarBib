@@ -1873,6 +1873,7 @@
   "catalogacao.nameEntry.pickSurname": "Click the word where the surname begins",
   "catalogacao.nameEntry.caseExplain": "Natural case: one capital per word, particles (de, da, dos…) in lower case, initials and Roman numerals kept. Never all capitals in the access point.",
   "catalogacao.nameEntry.caseHint": "A spelling of its own (De Amicis, bell hooks)? Click the word to give back or take away its capital.",
+  "catalogacao.nameEntry.caseExplainOrg": "Name of a collective body: capitals on the main words, function words in lower case, acronyms kept. In French (language of the name), capital on the first word and proper names only.",
   "catalogacao.author.sortNameLabel": "Sort name",
   "catalogacao.author.source": "Source",
   "catalogacao.author.sourceKind.book": "Physical book in hand",

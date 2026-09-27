@@ -115,6 +115,8 @@ const LETTRE = /\p{L}/u;
 export const cleNom = (w) => String(w).replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '')
   .normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const MOTS_PROPRES = new Set(NOMS_PROPRES_MOTS);
+/** Le mot est-il un nom propre attesté (dictionnaire engendré) ? */
+export const estNomPropreAtteste = (w) => MOTS_PROPRES.has(cleNom(w));
 const PHRASES_PAR_TETE = new Map();
 for (const p of NOMS_PROPRES_PHRASES) {
   const w = p.split(' ');

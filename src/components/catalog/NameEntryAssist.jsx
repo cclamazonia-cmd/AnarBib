@@ -12,16 +12,17 @@
 // mot se clique pour lui rendre ou lui retirer sa majuscule, appliquer, annuler.
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { proposerPointAcces, formeDepuis, proposerCasseNom, basculerMajuscule } from '@/lib/nameEntry';
+import { proposerPointAcces, formeDepuis, proposerCasseNom, proposerCasseCollectivite, basculerMajuscule } from '@/lib/nameEntry';
 
-export default function NameEntryAssist({ nom, country, nameLang, formeActuelle, onChoisir, onNom }) {
+// `collectivite` : seul le bloc de casse (la découpe « Nom, Prénom » ne vaut que pour une personne).
+export default function NameEntryAssist({ nom, country, nameLang, formeActuelle, onChoisir, onNom, collectivite = false }) {
   const { formatMessage: t } = useIntl();
   const [corriger, setCorriger] = useState(false);
   const [casse, setCasse] = useState(null);       // mots proposés, modifiables
   const [original, setOriginal] = useState(null); // le nom avant la normalisation
   const p = proposerPointAcces(nom, { country, nameLang });
-  const pc = proposerCasseNom(nom);
-  if (p.regle === 'vide' || p.regle === 'inverse') return null;
+  const pc = collectivite ? proposerCasseCollectivite(nom, { nameLang }) : proposerCasseNom(nom);
+  if (collectivite ? !(nom || '').trim() : (p.regle === 'vide' || p.regle === 'inverse')) return null;
   const motBtn = { background: 'none', border: 'none', borderBottom: '1px dotted rgba(255,255,255,.35)', color: 'inherit', font: 'inherit', fontWeight: 600, padding: 0, cursor: 'pointer' };
 
   const muted = { fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' };
@@ -54,7 +55,7 @@ export default function NameEntryAssist({ nom, country, nameLang, formeActuelle,
       {casse && (
         <div role="group" aria-label={t({ id: 'catalogacao.titleCase.preview' })}
           style={{ border: '1px solid rgba(255,255,255,.15)', borderRadius: 8, padding: 8, display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <div style={muted}>{t({ id: 'catalogacao.nameEntry.caseExplain' })}</div>
+          <div style={muted}>{t({ id: collectivite ? 'catalogacao.nameEntry.caseExplainOrg' : 'catalogacao.nameEntry.caseExplain' })}</div>
           <div style={{ fontSize: '.85rem' }} data-testid="name-case-after">
             {casse.map((m, i) => (
               <span key={`${m.texte}-${i}`}>
@@ -68,7 +69,7 @@ export default function NameEntryAssist({ nom, country, nameLang, formeActuelle,
               </span>
             ))}
           </div>
-          <div style={muted}>{t({ id: 'catalogacao.nameEntry.caseHint' })}</div>
+          <div style={muted}>{t({ id: collectivite ? 'catalogacao.titleCase.properHint' : 'catalogacao.nameEntry.caseHint' })}</div>
           <div style={{ display: 'flex', gap: 6 }}>
             <button type="button" className="ab-button ab-button--sm"
               onClick={() => { setOriginal(nom); onNom(casse.map((m) => m.texte).join(' ')); setCasse(null); }}>
@@ -80,6 +81,7 @@ export default function NameEntryAssist({ nom, country, nameLang, formeActuelle,
           </div>
         </div>
       )}
+      {!collectivite && (<>
       <div style={{ fontSize: '.8rem' }}>
         <span style={muted}>{t({ id: 'catalogacao.nameEntry.proposed' })} </span>
         <strong>{p.forme}</strong>
@@ -124,6 +126,7 @@ export default function NameEntryAssist({ nom, country, nameLang, formeActuelle,
           </div>
         </div>
       )}
+      </>)}
     </div>
   );
 }

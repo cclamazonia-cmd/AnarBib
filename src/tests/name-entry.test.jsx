@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import fr from '../i18n/locales/fr.json';
-import { proposerPointAcces, formeDepuis, proposerCasseNom, basculerMajuscule } from '../lib/nameEntry.js';
+import { proposerPointAcces, formeDepuis, proposerCasseNom, basculerMajuscule, proposerCasseCollectivite } from '../lib/nameEntry.js';
 import NameEntryAssist from '../components/catalog/NameEntryAssist.jsx';
 
 describe('proposerPointAcces', () => {
@@ -136,6 +136,30 @@ describe('proposerCasseNom — la casse naturelle (CONV-1)', () => {
   });
 });
 
+const casseOrg = (n, nameLang) => proposerCasseCollectivite(n, { nameLang });
+
+describe('proposerCasseCollectivite — la casse d’un nom de collectivité', () => {
+  it.each([
+    ['CONFEDERACIÓN NACIONAL DEL TRABAJO', 'es', 'Confederación Nacional del Trabajo'],
+    ['confederación nacional del trabajo', '', 'Confederación Nacional del Trabajo'],
+    ['industrial workers of the world', 'en', 'Industrial Workers of the World'],
+    ['Fédération Anarchiste', 'fr', 'Fédération anarchiste'],
+    ['FÉDÉRATION ANARCHISTE', 'fr', 'Fédération anarchiste'],
+  ])('%s (%s) → %s', (nom, lang, attendu) => {
+    const p = casseOrg(nom, lang);
+    expect(p.mots.map((m) => m.texte).join(' ')).toBe(attendu);
+    expect(p.change).toBe(true);
+  });
+
+  it('sigles de toute longueur, noms déjà justes : rien à proposer', () => {
+    for (const [n, l] of [['DIEESE', ''], ['CIRA Marseille', 'fr'], ['Centro de Cultura Social', ''],
+      ['Confédération générale du travail', 'fr'], ['MOVIMENTO - Centro de Cultura e Autoformação', 'pt-BR'],
+      ['Federação Operária de São Paulo', 'pt-BR']]) {
+      expect(casseOrg(n, l).change, n).toBe(false);
+    }
+  });
+});
+
 const monter = (props) => render(
   <IntlProvider locale="fr" messages={fr}><NameEntryAssist {...props} /></IntlProvider>,
 );
@@ -218,7 +242,22 @@ describe('NameEntryAssist', () => {
   it('le formulaire d’autorité saisit name_lang et la passe à l’assistant', () => {
     const src = readFileSync('src/pages/catalogacao/AuthorDraftForm.jsx', 'utf8');
     expect(src).toContain("nameLang={f('name_lang')}");
-    expect(src).toContain("name_lang: meta.authorityType === 'person' ? (f('name_lang') || null) : null");
     expect(src).toMatch(/id="ab-author-name-lang"/);
+  });
+
+  it('collectivité : seul le bloc de casse, sans découpe « Nom, Prénom »', () => {
+    const onNom = vi.fn();
+    monter({ collectivite: true, nom: 'FÉDÉRATION ANARCHISTE', nameLang: 'fr', formeActuelle: '', onChoisir: vi.fn(), onNom });
+    expect(screen.queryByText(fr['catalogacao.nameEntry.proposed'])).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.button'] }));
+    expect(screen.getByText(fr['catalogacao.nameEntry.caseExplainOrg'])).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.apply'] }));
+    expect(onNom).toHaveBeenCalledWith('Fédération anarchiste');
+  });
+
+  it('le formulaire monte l’assistant pour une collectivité et y montre la langue du nom', () => {
+    const src = readFileSync('src/pages/catalogacao/AuthorDraftForm.jsx', 'utf8');
+    expect(src).toContain("<NameEntryAssist collectivite nom={f('preferred_name')}");
+    expect(src).toContain("name_lang: ['person', 'collective'].includes(meta.authorityType) ? (f('name_lang') || null) : null");
   });
 });

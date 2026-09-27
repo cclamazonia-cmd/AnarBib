@@ -1873,6 +1873,7 @@
   "catalogacao.nameEntry.pickSurname": "Clique na palavra em que começa o sobrenome",
   "catalogacao.nameEntry.caseExplain": "Casa natural: uma maiúscula por palavra, partículas (de, da, dos…) em minúscula, iniciais e números romanos mantidos. Nada de maiúsculas no ponto de acesso.",
   "catalogacao.nameEntry.caseHint": "Uso próprio do nome (De Amicis, bell hooks)? Clique na palavra para lhe devolver ou tirar a maiúscula.",
+  "catalogacao.nameEntry.caseExplainOrg": "Nome de coletividade: maiúscula nas palavras principais, palavras gramaticais em minúscula, siglas mantidas. Em francês (língua do nome), maiúscula só na primeira palavra e nos nomes próprios.",
   "catalogacao.author.sortNameLabel": "Nome para ordenação",
   "catalogacao.author.source": "Fonte",
   "catalogacao.author.sourceKind.book": "Livro físico em mãos",

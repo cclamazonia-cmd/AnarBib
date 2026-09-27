@@ -16,6 +16,8 @@
 // quels mots sont des prénoms, les imposer mettrait « Juan Carlos Mechoso » à
 // « Carlos Mechoso, Juan ».
 
+import { stopwordsFor, estNomPropreAtteste } from './titleCase.js';
+
 const sansAccents = (v) => (v || '').normalize('NFD').replace(/[̀-ͯ]/g, '');
 const cle = (w) => sansAccents(w).toLowerCase().replace(/[.,]/g, '');
 
@@ -164,4 +166,48 @@ export function basculerMajuscule(texte) {
   const c = texte[k];
   const autre = c === c.toLocaleLowerCase() ? c.toLocaleUpperCase() : c.toLocaleLowerCase();
   return texte.slice(0, k) + autre + texte.slice(k + 1);
+}
+
+// ── La casse d'un nom de collectivité (27/09, demande de Xavier) ──────────────
+// Un nom de collectivité est un nom propre, mais sa casse dépend de sa langue
+// (name_lang, CONV-6) : en français, majuscule au premier mot et aux noms propres
+// seulement (« Fédération anarchiste », « Confédération générale du travail ») ;
+// ailleurs, ou langue inconnue, majuscule aux mots principaux et mots-outils en
+// minuscules (« Confederación Nacional del Trabajo », « Centro de Cultura Social »).
+// Un mot en capitales dans un nom qui ne l'est pas tout entier est un sigle, de
+// toute longueur (DIEESE, ANTEAG) ; un nom d'un seul mot en capitales aussi.
+
+const LANGUES_OUTILS = ['pt', 'es', 'fr', 'it', 'en', 'ca', 'eo', 'de'];
+const TOUS_OUTILS = new Set(LANGUES_OUTILS.flatMap((l) => [...stopwordsFor(l)]));
+const nuDe = (w) => w.replace(/^[^\p{L}\d]+|[^\p{L}\d]+$/gu, '');
+
+export function proposerCasseCollectivite(nom, { nameLang } = {}) {
+  const tokens = (nom || '').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+  if (!tokens.length) return { mots: [], change: false };
+  const langue = String(nameLang || '').split('-')[0].toLowerCase();
+  const phrase = langue === 'fr';
+  const stop = (langue && stopwordsFor(langue)) || TOUS_OUTILS;
+  const toutCapitales = tokens.length > 1 && !/\p{Ll}/u.test(tokens.join(''));
+  const plein = (w) => nuDe(w).length >= 3 && !stop.has(nuDe(w).toLowerCase());
+  // Déjà en casse de phrase (français), ou nom qui commence par un sigle (« CIRA
+  // Marseille », « CNT Toulouse ») : les majuscules restantes sont des noms propres.
+  const confiance = phrase && (tokens.some((w, i) => i > 0 && /^\P{L}*\p{Ll}/u.test(w) && plein(w))
+    || (!toutCapitales && tokens.length > 1 && /^\p{Lu}{2,}$/u.test(nuDe(tokens[0]))));
+  let initial = true;
+  const mots = tokens.map((w) => {
+    const debut = initial;
+    initial = /[:;?!]$/.test(w) || ['-', '–', '—', '/'].includes(w);
+    const nu = nuDe(w);
+    const fige = !nu || /\d/.test(nu)
+      || (/^(\p{Lu}\.)+\p{Lu}?\.?$/u.test(nu) && nu.includes('.'))
+      || (/^[IVX]{2,}$/.test(nu) && ROMAIN_NOM.test(nu))
+      || (!toutCapitales && /^\p{Lu}{2,}$/u.test(nu));
+    if (fige) return { texte: w, fige: true };
+    if (confiance && !debut && /^\P{L}*\p{Lu}[\p{Ll}'’-]*\P{L}*$/u.test(w)) return { texte: w, fige: false };
+    const bas = w.toLocaleLowerCase();
+    const outil = stop.has(nu.toLowerCase());
+    const maj = debut || (phrase ? estNomPropreAtteste(w) : !outil);
+    return { texte: maj ? bas.split('-').map(majInitiale).join('-') : bas, fige: false };
+  });
+  return { mots, change: mots.map((m) => m.texte).join(' ') !== tokens.join(' ') };
 }

@@ -1873,6 +1873,7 @@
   "catalogacao.nameEntry.pickSurname": "Faccia clic sulla parola in cui inizia il cognome",
   "catalogacao.nameEntry.caseExplain": "Maiuscole naturali: una maiuscola per parola, particelle (de, da, dos…) in minuscolo, iniziali e numeri romani conservati. Mai tutto maiuscolo nel punto d’accesso.",
   "catalogacao.nameEntry.caseHint": "Un uso proprio del nome (De Amicis, bell hooks)? Faccia clic sulla parola per restituirle o toglierle la maiuscola.",
+  "catalogacao.nameEntry.caseExplainOrg": "Nome di ente: maiuscola alle parole principali, parole grammaticali in minuscolo, sigle mantenute. In francese (lingua del nome), maiuscola solo alla prima parola e ai nomi propri.",
   "catalogacao.author.sortNameLabel": "Nome per ordinamento",
   "catalogacao.author.source": "Fonte",
   "catalogacao.author.sourceKind.book": "Libro fisico in mano",

@@ -403,7 +403,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         death_year: f('death_year') ? Number(f('death_year')) : null,
         country: f('country') || null,
         writing_language: f('writing_language') || null,
-        name_lang: meta.authorityType === 'person' ? (f('name_lang') || null) : null,
+        name_lang: ['person', 'collective'].includes(meta.authorityType) ? (f('name_lang') || null) : null,
         source_kind: f('source_kind') || null,
         source_label: f('source_label') || null,
         source_url: f('source_url') || null,
@@ -789,6 +789,11 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               <NameEntryAssist nom={f('preferred_name')} country={f('country')} nameLang={f('name_lang')} formeActuelle={f('sort_name')}
                 onChoisir={(forme) => set('sort_name', forme)} onNom={handlePreferredNameChange} />
             )}
+            {/* La casse d'un nom de collectivité (27/09) : selon la langue du nom, sigles gardés */}
+            {meta.authorityType === 'collective' && (
+              <NameEntryAssist collectivite nom={f('preferred_name')} nameLang={f('name_lang')} formeActuelle={f('sort_name')}
+                onChoisir={() => {}} onNom={handlePreferredNameChange} />
+            )}
           </div>
 
           <div className="cat-field">
@@ -892,7 +897,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           {/* Langue de la forme du nom (CONV-6, confirmé le 27/09) : elle pilote la découpe
               du point d'accès — particule gardée en italien, article en français, deux noms
               de famille en espagnol. Distincte de la langue d'écriture. */}
-          {meta.authorityType === 'person' && (
+          {['person', 'collective'].includes(meta.authorityType) && (
             <div className="cat-field">
               <label style={ls} htmlFor="ab-author-name-lang">{t({ id: 'catalogacao.author.nameLang' })}</label>
               <select id="ab-author-name-lang" value={f('name_lang')} onChange={e => set('name_lang', e.target.value)} style={fs}>
