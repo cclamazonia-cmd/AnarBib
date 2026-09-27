@@ -28,6 +28,8 @@ Fusionnées : *Alexandra David-Neel*, *O Racionalismo Combatente*, *Trabajan par
 
 « Doit passer dans les livres en volumes », le thème comme volume. Les six volumes thématiques de l'édition Imaginário (2010-2011), éclatés entre quatre œuvres, rejoignent l'œuvre 880, renommée « O Homem e a Terra » : 1510 *Progresso*, 1511 *Internacionais*, 1512 *O Estado Moderno*, 1515 *Educação*, 1516 *A Indústria e o Comércio*, 1517 *A Cultura e a Propriedade*. Le regroupement suit pas à pas `merge_works`. Restent à part l'édition espagnole de 1986 (Fondo de Cultura Económica) et l'anthologie *Textos escolhidos* (Intermezzo, 2015).
 
+**Correction du 27/09, après déploiement** : l'en-tête de la migration affirme que la paire 1510 / 1511 quitte « À décider » une fois les volumes posés. C'est faux, constaté en production — la règle « un tome n'est jamais un doublon » ne joue pas sur des volumes nommés par leur thème ; l'affirmation avait été écrite sans être éprouvée. Et le renommage de l'œuvre fait apparaître une paire nouvelle dans « Œuvres scindées » : *O Homem e a Terra* / *Textos escolhidos* (l'ancien verdict « séparées » est parti avec l'œuvre 25, absorbée). Les deux verdicts sont laissés à Xavier dans l'assistant (« Pas un doublon », « Garder séparées »).
+
 ## M. Notes MLEG — appliquées par la migration
 
 Une matière **existante** par catégorie (THES-4 : aucune matière créée) ; aucune note effacée.
