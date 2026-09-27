@@ -11,9 +11,9 @@
 // Ce que le banc garde :
 //   · la même recherche que le formulaire (ISBN d'abord, titre à défaut, dans
 //     la langue de la notice), sans aperçus : la base ne garde que des adresses ;
-//   · les égards pour les sources : deux notices à la fois au plus, arrêt après
-//     trois notices d'affilée dont TOUTES les sources sont en panne, budget de
-//     temps ;
+//   · les égards pour les sources : une notice à la fois, une seconde d'écart
+//     entre deux, arrêt après trois notices d'affilée dont TOUTES les sources
+//     sont en panne, budget de temps ;
 //   · une RPC qui échoue n'arrête pas le passage, elle est dite dans le bilan.
 
 import { describe, it, expect } from 'vitest';
@@ -109,6 +109,9 @@ function base(notices, { erreurEnregistrer = null } = {}) {
   return { rpc, enregistrees };
 }
 
+// Le banc n'attend pas pour de vrai : il NOTE les pauses demandées.
+const sansAttente = () => { const f = async (ms) => { f.pauses.push(ms); }; f.pauses = []; return f; };
+
 const notice = (book_id, extra = {}) => ({ book_id, isbn: null, titulo: 'Titre sans écho', autor: null, idioma: null, ...extra });
 const RECHERCHE_OL = /openlibrary\.org\/search\.json/;
 
@@ -121,7 +124,7 @@ describe('cover-batch — la même recherche que le formulaire, en lot', () => {
       notice(2, { titulo: 'Los gallegos anarquistas en la Argentina', autor: 'Penelas', idioma: 'es' }),
       notice(3),
     ]);
-    const bilan = await traiterLot({ rpc: db.rpc });
+    const bilan = await traiterLot({ rpc: db.rpc, attendre: sansAttente() });
 
     expect(bilan).toMatchObject({ ok: true, notices: 3, traitees: 3, a_revoir: 2, sans_resultat: 1, en_panne: 0, arret: null });
     const par = Object.fromEntries(db.enregistrees.map((e) => [e.p_book_id, e]));
@@ -139,7 +142,7 @@ describe('cover-batch — la même recherche que le formulaire, en lot', () => {
     const net = reseau();
     const { traiterLot } = charger('cover-batch/lot.ts', net);
     const db = base([notice(1, { isbn: '1904859062', titulo: 'Post-Scarcity Anarchism' })]);
-    await traiterLot({ rpc: db.rpc });
+    await traiterLot({ rpc: db.rpc, attendre: sansAttente() });
     expect(net.vers(/covers\.openlibrary\.org|\/img\/entities/)).toEqual([]);
     expect(db.enregistrees[0].p_candidates[0].thumbnailData).toBeUndefined();
   });
@@ -147,33 +150,36 @@ describe('cover-batch — la même recherche que le formulaire, en lot', () => {
   it('six candidates au plus par notice', async () => {
     const { traiterLot, CANDIDATES_PAR_NOTICE } = charger('cover-batch/lot.ts', reseau());
     const db = base([notice(1, { titulo: 'La conquista del pan', autor: 'Kropotkin' })]);
-    await traiterLot({ rpc: db.rpc });
+    await traiterLot({ rpc: db.rpc, attendre: sansAttente() });
     expect(CANDIDATES_PAR_NOTICE).toBe(6);
     expect(db.enregistrees[0].p_candidates).toHaveLength(6);
   });
 });
 
 describe('cover-batch — les égards pour les sources', () => {
-  it('deux notices à la fois, jamais plus', async () => {
+  it('une notice à la fois, une seconde d’écart entre deux — jamais deux requêtes en vol chez Open Library', async () => {
     const net = reseau();
-    const { traiterLot } = charger('cover-batch/lot.ts', net);
+    const { traiterLot, PAUSE_MS } = charger('cover-batch/lot.ts', net);
     const db = base(Array.from({ length: 10 }, (_, k) => notice(k + 1)));
-    const bilan = await traiterLot({ rpc: db.rpc });
+    const attendre = sansAttente();
+    const bilan = await traiterLot({ rpc: db.rpc, attendre });
     expect(bilan.traitees).toBe(10);
-    // une notice sans ISBN = une seule requête ; deux ouvriers = deux en vol au plus
-    expect(net.maxEnCours).toBe(2);
+    // une notice sans ISBN = une seule requête ; une notice à la fois = une en vol
+    expect(net.maxEnCours).toBe(1);
+    // une pause ENTRE deux notices, pas avant la première ni après la dernière
+    expect(PAUSE_MS).toBe(1000);
+    expect(attendre.pauses).toEqual(Array(9).fill(1000));
   });
 
   it('trois notices d’affilée aux sources toutes en panne : le passage s’arrête', async () => {
     const net = reseau({ enPanne: true });
     const { traiterLot } = charger('cover-batch/lot.ts', net);
     const db = base(Array.from({ length: 20 }, (_, k) => notice(k + 1, { isbn: '9782296035072' })));
-    const bilan = await traiterLot({ rpc: db.rpc });
+    const bilan = await traiterLot({ rpc: db.rpc, attendre: sansAttente() });
     expect(bilan.arret).toBe('sources_en_panne');
-    // trois notices, plus au plus celle que le second ouvrier avait déjà prise
-    expect(bilan.traitees).toBeGreaterThanOrEqual(3);
-    expect(bilan.traitees).toBeLessThanOrEqual(4);
-    expect(bilan.en_panne).toBe(bilan.traitees);
+    // les trois en panne sont rangées (« en_panne » : elles se referont le lendemain), pas une de plus
+    expect(bilan.traitees).toBe(3);
+    expect(bilan.en_panne).toBe(3);
     expect(db.enregistrees.every((e) => e.p_sources.some((s) => s.ok === false))).toBe(true);
   });
 
@@ -190,7 +196,7 @@ describe('cover-batch — les égards pour les sources', () => {
     let t = 0;
     const maintenant = () => { t += BUDGET_MS / 4; return t; };   // chaque regard sur l'horloge « coûte » un quart du budget
     const db = base(Array.from({ length: 24 }, (_, k) => notice(k + 1)));
-    const bilan = await traiterLot({ rpc: db.rpc, maintenant });
+    const bilan = await traiterLot({ rpc: db.rpc, maintenant, attendre: sansAttente() });
     expect(bilan.arret).toBe('budget');
     expect(bilan.traitees).toBeLessThan(24);
     expect(net.demandes.length).toBe(bilan.traitees);
@@ -201,7 +207,7 @@ describe('cover-batch — les erreurs', () => {
   it('une RPC d’enregistrement qui échoue est dite, le passage continue', async () => {
     const { traiterLot } = charger('cover-batch/lot.ts', reseau());
     const db = base([notice(1), notice(2), notice(3)], { erreurEnregistrer: (a) => a.p_book_id === 2 });
-    const bilan = await traiterLot({ rpc: db.rpc });
+    const bilan = await traiterLot({ rpc: db.rpc, attendre: sansAttente() });
     expect(bilan.ok).toBe(false);
     expect(bilan.traitees).toBe(2);
     expect(bilan.erreurs).toEqual([{ book_id: 2, error: 'violates foreign key constraint' }]);

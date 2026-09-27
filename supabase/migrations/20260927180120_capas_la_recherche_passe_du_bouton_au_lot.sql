@@ -29,8 +29,10 @@
 -- réseau) — le périmètre où `create_book_draft_from_book` laisse déjà reprendre
 -- une notice. Une proposition écartée n'est jamais reproposée par le lot.
 --
--- ÉGARDS POUR LES SOURCES. 24 notices au plus par passage, deux à la fois,
--- toutes les 10 minutes : le stock est parcouru en une vingtaine d'heures. Une
+-- ÉGARDS POUR LES SOURCES. 24 notices au plus par passage, une à la fois, une
+-- seconde d'écart entre deux, toutes les 10 minutes : Open Library ne reçoit
+-- jamais deux requêtes à la fois de notre part, et le stock est parcouru en une
+-- vingtaine d'heures. Une
 -- recherche sans résultat se refait après 90 jours (les sources grandissent),
 -- une recherche en panne le lendemain — jamais tout de suite : une notice qui
 -- ferait tomber une source ne doit pas boucler en tête de file.

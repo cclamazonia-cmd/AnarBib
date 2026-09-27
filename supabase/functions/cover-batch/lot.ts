@@ -14,19 +14,22 @@
 //  montrer (cover_lookup, action `apercus`), la base ne garde que des adresses.
 //
 //  ÉGARDS POUR LES SOURCES. Open Library et Inventaire sont tenus par des
-//  associations. Deux notices à la fois, 24 au plus par passage (le cron passe
-//  toutes les 10 minutes) : en pointe une requête toutes les quelques secondes,
-//  et le stock parcouru en une vingtaine d'heures. Si trois notices d'affilée
-//  trouvent TOUTES leurs sources en panne, le passage s'arrête : insister
-//  contre un service tombé n'apprend rien et le charge. Le budget de temps
-//  (80 s) laisse la place aux notices en cours sous le plafond de la plateforme.
+//  associations. Une notice à la fois, une seconde d'écart entre deux, 24 au
+//  plus par passage (le cron passe toutes les 10 minutes) : Open Library ne
+//  reçoit jamais deux requêtes en même temps de notre part, et guère plus d'une
+//  par seconde ; le stock est parcouru en une vingtaine d'heures. Si trois
+//  notices d'affilée trouvent TOUTES leurs sources en panne, le passage
+//  s'arrête : insister contre un service tombé n'apprend rien et le charge. Le
+//  budget de temps (80 s) laisse la place à la notice en cours sous le plafond
+//  de la plateforme.
 // =============================================================================
 
 import { candidatesUniques, chercherCapas } from '../_shared/capas/recherche.ts';
 import type { SourceSummary, VoiesCapas } from '../_shared/capas/recherche.ts';
 
 export const TAILLE_LOT = 24;
-export const EN_PARALLELE = 2;
+/** Entre deux notices : pas plus d'une requête par seconde chez Open Library, ou presque. */
+export const PAUSE_MS = 1000;
 export const BUDGET_MS = 80_000;
 export const PANNES_D_AFFILEE = 3;
 /** Ce que l'écran de revue montre d'une notice : les meilleures, pas toute la galerie. */
@@ -46,6 +49,8 @@ export interface DependancesLot {
   /** Les RPC du lot (service_role) : fn_capas_lot_a_chercher, fn_capas_lot_enregistrer. */
   rpc: (nom: string, args: Record<string, unknown>) => Promise<ReponseRpc>;
   maintenant?: () => number;
+  /** L'attente entre deux notices (remplacée au banc). */
+  attendre?: (ms: number) => Promise<void>;
   voies?: VoiesCapas;
 }
 
@@ -74,6 +79,7 @@ export function toutEnPanne(sources: SourceSummary[]): boolean {
 
 export async function traiterLot(deps: DependancesLot, limite = TAILLE_LOT): Promise<BilanLot> {
   const maintenant = deps.maintenant ?? Date.now;
+  const attendre = deps.attendre ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
   const voies = deps.voies ?? { openlibrary: true, inventaire: true };
   const debut = maintenant();
 
@@ -86,38 +92,32 @@ export async function traiterLot(deps: DependancesLot, limite = TAILLE_LOT): Pro
     a_revoir: 0, sans_resultat: 0, en_panne: 0, arret: null, erreurs: [],
   };
 
-  let prochaine = 0;
   let pannesDAffilee = 0;
-  const suivante = (): NoticeAChercher | null => {
-    if (bilan.arret) return null;
-    if (maintenant() - debut > BUDGET_MS) { bilan.arret = 'budget'; return null; }
-    return prochaine < notices.length ? notices[prochaine++] : null;
-  };
+  for (let i = 0; i < notices.length; i++) {
+    if (i > 0) await attendre(PAUSE_MS);
+    if (maintenant() - debut > BUDGET_MS) { bilan.arret = 'budget'; break; }
+    const n = notices[i];
 
-  const ouvrier = async () => {
-    for (let n = suivante(); n; n = suivante()) {
-      const resultats = await chercherCapas(
-        { isbn: n.isbn, title: n.titulo, author: n.autor, idioma: n.idioma }, voies);
-      const sources = resultats.map((r) => r.summary);
-      pannesDAffilee = toutEnPanne(sources) ? pannesDAffilee + 1 : 0;
-      if (pannesDAffilee >= PANNES_D_AFFILEE && !bilan.arret) bilan.arret = 'sources_en_panne';
-
-      const candidates = candidatesUniques(resultats).slice(0, CANDIDATES_PAR_NOTICE);
-      const { data: statut, error: err } = await deps.rpc('fn_capas_lot_enregistrer', {
-        p_book_id: n.book_id, p_candidates: candidates, p_sources: sources,
-      });
-      if (err) {
-        bilan.erreurs.push({ book_id: n.book_id, error: message(err).slice(0, 300) });
-        continue;
-      }
+    const resultats = await chercherCapas(
+      { isbn: n.isbn, title: n.titulo, author: n.autor, idioma: n.idioma }, voies);
+    const sources = resultats.map((r) => r.summary);
+    const candidates = candidatesUniques(resultats).slice(0, CANDIDATES_PAR_NOTICE);
+    const { data: statut, error: err } = await deps.rpc('fn_capas_lot_enregistrer', {
+      p_book_id: n.book_id, p_candidates: candidates, p_sources: sources,
+    });
+    if (err) {
+      bilan.erreurs.push({ book_id: n.book_id, error: message(err).slice(0, 300) });
+    } else {
       bilan.traitees++;
       if (statut === 'a_revoir') bilan.a_revoir++;
       else if (statut === 'sans_resultat') bilan.sans_resultat++;
       else if (statut === 'en_panne') bilan.en_panne++;
     }
-  };
 
-  await Promise.all(Array.from({ length: EN_PARALLELE }, ouvrier));
+    pannesDAffilee = toutEnPanne(sources) ? pannesDAffilee + 1 : 0;
+    if (pannesDAffilee >= PANNES_D_AFFILEE) { bilan.arret = 'sources_en_panne'; break; }
+  }
+
   bilan.ok = bilan.erreurs.length === 0;
   return bilan;
 }
