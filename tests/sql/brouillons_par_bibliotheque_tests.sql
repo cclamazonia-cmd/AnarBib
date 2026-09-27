@@ -3,6 +3,7 @@
 -- à leur bibliothèque (B29, REGISTRE CAT-E18)
 -- Date    : 2026-09-27
 -- Ref     : migration 20260927160000_b29_brouillons_par_bibliotheque
+--           + 20260927200627_b29_aides_internes_fermees_aux_comptes (T31)
 --
 -- Cinq personnes : coordination de A (seed), bibliothécaire de B, staff de A
 -- ET de B, lectrice de A, admin réseau sans adhésion ; plus une coordination
@@ -50,6 +51,9 @@
 -- T30 résolution d'un exemplaire (notice sans owner : créateur, import, admin) ;
 --     rejeu d'une autorité sans créateur refusé ; créateur d'un lot qui n'est
 --     plus staff : ne le voit plus.
+-- T31 aides internes (appelées par des DEFINER seulement) fermées aux comptes,
+--     aides servies ouvertes ; les DEFINER qui les portent, joués sous le rôle
+--     authenticated, refusent pour la raison métier (jamais le privilège).
 --
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'BROUILLONS-PAR-BIBLIOTHEQUE OK : N/N'
@@ -74,6 +78,7 @@ DECLARE
   v_exA bigint; v_hint2 text; v_k2 int; v_ok3 boolean; v_id2 bigint;
   v_lotX6 bigint; v_id3 bigint; v_x2 bigint; v_x3 bigint; v_ex uuid; v_row2 bigint;
   v_bFusS bigint; v_bFusL bigint; v_xFusA bigint; v_xFusB bigint;
+  v_lot31A bigint; v_lot31B bigint; v_b31A bigint; v_b31B bigint; v_a31B bigint; v_x31B bigint; v_f text;
 BEGIN
   -- ── Décor (postgres) ────────────────────────────────────────────────
   INSERT INTO public.network_administrators (user_id, status) VALUES (v_admin, 'active');
@@ -942,6 +947,87 @@ BEGIN
     IF v_ok AND v_hint = 'error.catalog.author_draft_creator_only' AND v_n = 0
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : resolution='||coalesce(v_ok::text,'∅')||' rejeu='||coalesce(v_hint,'accepte')||' lot vu par son ancienne creatrice='||v_n); END IF;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T31 ─────────────────────────────────────────────────────────────
+  -- 20260927200627 : cinq aides ne servaient que des fonctions DEFINER ; elles
+  -- sont fermées aux comptes. Le risque d'une fermeture, c'est un appelant qui
+  -- s'exécute sous authenticated : on joue donc aussi, SOUS ce rôle, les
+  -- fonctions DEFINER qui les portent, et l'on attend leur refus métier —
+  -- jamais un 42501 de privilège.
+  v_t := 'T31 aides internes fermees aux comptes ; aides servies ouvertes ; les DEFINER qui les portent repondent sous authenticated';
+  BEGIN
+    v_txt := '';
+    -- (a) les deux camps, chaque fonction nommée
+    FOREACH v_f IN ARRAY ARRAY[
+      'public.fn_caller_can_edit_draft_library(uuid, uuid)', 'public.fn_caller_can_edit_exemplar_draft(bigint)',
+      'public.fn_caller_can_edit_author_draft(bigint)', 'public.fn_caller_can_edit_batch(bigint, boolean)',
+      'public.fn_caller_can_see_batch(bigint)'] LOOP
+      IF has_function_privilege('authenticated', v_f, 'EXECUTE') OR has_function_privilege('anon', v_f, 'EXECUTE') THEN
+        v_txt := v_txt || 'ouverte:' || v_f || ' ';
+      END IF;
+    END LOOP;
+    FOREACH v_f IN ARRAY ARRAY[
+      'public.fn_caller_staff_library_ids()', 'public.fn_caller_coordinator_library_ids()', 'public.fn_caller_staff_library()',
+      'public.fn_book_draft_creator_library(bigint, uuid)', 'public.fn_exemplar_draft_fallback_library(bigint, bigint, uuid)',
+      'public.fn_caller_can_edit_book_draft(bigint)', 'public.fn_caller_owns_batch(bigint)',
+      'public.fn_caller_coordinates_batch(bigint)', 'public.fn_caller_batch_library(bigint)',
+      'public.fn_caller_batch_library_sans_attente(bigint)', 'public.fn_batch_delete_blockers(bigint)'] LOOP
+      IF NOT has_function_privilege('authenticated', v_f, 'EXECUTE') THEN v_txt := v_txt || 'fermee:' || v_f || ' '; END IF;
+      IF has_function_privilege('anon', v_f, 'EXECUTE') THEN v_txt := v_txt || 'anon:' || v_f || ' '; END IF;
+    END LOOP;
+    -- décor propre (postgres : les déclencheurs de B29 le laissent passer)
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 T31 lot de A', v_coordA, v_libA) RETURNING id INTO v_lot31A;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 T31 lot de B', v_libBibB, v_libB) RETURNING id INTO v_lot31B;
+    INSERT INTO public.author_drafts (preferred_name, status, created_by, batch_id) VALUES ('B29 T31 Autorite de multi dans A', 'draft', v_multi, v_lot31A);
+    INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status)
+    VALUES ('B29 T31 Notice de A', 'livro', v_libA, v_coordA, 'draft') RETURNING id INTO v_b31A;
+    INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status)
+    VALUES ('B29 T31 Notice de B', 'livro', v_libB, v_libBibB, 'draft') RETURNING id INTO v_b31B;
+    INSERT INTO public.author_drafts (preferred_name, status, created_by) VALUES ('B29 T31 Autorite de B', 'draft', v_libBibB) RETURNING id INTO v_a31B;
+    INSERT INTO public.exemplar_drafts (action, status, label_status, target_library_id, created_by)
+    VALUES ('create', 'draft', 'pending', v_libB, v_libBibB) RETURNING id INTO v_x31B;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    -- (b) appelée en direct, une aide fermée est refusée par le privilège
+    BEGIN PERFORM public.fn_caller_can_see_batch(v_lot31A); v_txt := v_txt || 'direct:can_see_batch ';
+    EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+    BEGIN PERFORM public.fn_caller_can_edit_batch(v_lot31A, true); v_txt := v_txt || 'direct:can_edit_batch ';
+    EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+    BEGIN PERFORM public.fn_caller_can_edit_draft_library(v_libA, v_coordA); v_txt := v_txt || 'direct:can_edit_draft_library ';
+    EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+    BEGIN PERFORM public.fn_caller_can_edit_exemplar_draft(v_x31B); v_txt := v_txt || 'direct:can_edit_exemplar_draft ';
+    EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+    BEGIN PERFORM public.fn_caller_can_edit_author_draft(v_a31B); v_txt := v_txt || 'direct:can_edit_author_draft ';
+    EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+    -- (c) les prédicats servis qui les appellent répondent juste
+    BEGIN
+      IF NOT public.fn_caller_owns_batch(v_lot31A) OR public.fn_caller_owns_batch(v_lot31B) THEN v_txt := v_txt || 'owns_batch '; END IF;
+      IF public.fn_batch_caller_can_edit(v_lot31B) THEN v_txt := v_txt || 'batch_caller_can_edit '; END IF;
+      IF NOT public.fn_caller_can_edit_book_draft(v_b31A) OR public.fn_caller_can_edit_book_draft(v_b31B) THEN v_txt := v_txt || 'can_edit_book_draft '; END IF;
+    EXCEPTION WHEN OTHERS THEN v_txt := v_txt || 'predicats:' || SQLSTATE || ' ';
+    END;
+    -- (d) les publications refusent pour la raison métier
+    v_hint := NULL;
+    BEGIN PERFORM public.publish_catalog_batch(v_lot31B); v_hint := 'publie';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_hint := coalesce(nullif(v_hint, ''), SQLSTATE); END;
+    IF v_hint IS DISTINCT FROM 'error.batch.other_libraries' THEN v_txt := v_txt || 'lot-de-B:' || v_hint || ' '; END IF;
+    v_hint := NULL;
+    BEGIN PERFORM public.publish_catalog_batch(v_lot31A); v_hint := 'publie';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_hint := coalesce(nullif(v_hint, ''), SQLSTATE); END;
+    IF v_hint IS DISTINCT FROM 'error.batch.other_authors' THEN v_txt := v_txt || 'lot-aux-autorites:' || v_hint || ' '; END IF;
+    v_hint := NULL;
+    BEGIN PERFORM public.publish_author_draft(v_a31B); v_hint := 'publie';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_hint := coalesce(nullif(v_hint, ''), SQLSTATE); END;
+    IF v_hint IS DISTINCT FROM 'error.catalog.author_draft_creator_only' THEN v_txt := v_txt || 'autorite-de-B:' || v_hint || ' '; END IF;
+    v_hint := NULL;
+    BEGIN PERFORM public.publish_exemplar_draft(v_x31B); v_hint := 'publie';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_hint := coalesce(nullif(v_hint, ''), SQLSTATE); END;
+    IF v_hint IS DISTINCT FROM 'error.publish.other_library' THEN v_txt := v_txt || 'exemplaire-de-B:' || v_hint || ' '; END IF;
+    EXECUTE 'RESET ROLE';
+    IF v_txt = ''
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
