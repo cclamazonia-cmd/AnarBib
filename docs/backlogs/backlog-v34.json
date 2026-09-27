@@ -2410,6 +2410,14 @@
           "fr": "**Clos le 27/09 : décision écrite au REGISTRE (section `ARCH`), avec sa raison** — son seul critère. **Décidé par Xavier** : un **modèle archivistique complet dans AnarBib** (niveaux ISAD(G) fonds, sous-fonds, série, sous-série, dossier, pièce ; producteurs en autorités ISAAR(CPF) ; export EAD dès la première version — `ARCH-1`), un **niveau de description variable selon le fonds** (`ARCH-2`), des **conditions d'accès par niveau dès la première version** (`ARCH-3`), présentés pour avis à DIRA, au CIRA et au FICEDL avant tout code (`ARCH-4`). Réalisation : **D8**.",
           "pt": "**Fechado em 27/09: decisão escrita no REGISTRO (seção `ARCH`), com a sua razão.** **Decidido por Xavier**: um modelo arquivístico completo no AnarBib (níveis ISAD(G), produtores em autoridades ISAAR(CPF), exportação EAD desde a primeira versão), nível de descrição variável segundo o fundo, condições de acesso por nível desde a primeira versão; apresentado para parecer a DIRA, CIRA e FICEDL antes de qualquer código. Realização: **D8**."
         }
+      ],
+      [
+        "I3",
+        "2026-09-27",
+        {
+          "fr": "**Clos le 27/09 — les quatre tests passent, et trois de plus.** Le routeur `supabase/functions/main/index.ts` lancé seul dans `supabase/edge-runtime:v1.74.0` (la version de `deploy/.env.example`), fonctions et `config.toml` montés comme dans `deploy/compose.yml`, secret JWT tiré au hasard pour l'essai : il démarre (40 fonctions dispensées, 54 montées, aucune dispense orpheline) et décide juste — nom inexistant 404, fonction protégée sans jeton 401, avec un jeton valide la fonction s'exécute (405, sa propre réponse à un GET), jeton signé d'un autre secret 401, jeton expiré 401, chemin sans `/functions/v1` 401 ; une fonction dispensée (`health-probe`) n'est pas bloquée, son travailleur est lancé — il échoue ensuite (500, « supabaseKey is required ») faute de base et de secrets dans le conteneur isolé : **répondre 200 relève de la répétition complète, I21**. *Critère 2* : les 14 fonctions qui exigent un jeton (`attach-received-asset`, `audio_fingerprint_lookup`, `authority_lookup`, `author_portrait_lookup`, `catalog_metadata_lookup`, `cover_lookup`, `deposit-fonds-direct`, `export-catalog-lote`, `export-fonds-bundle`, `geocode`, `mail-i18n-test`, `notify-library-invitation`, `probe-partner-catalog`, `revoke-digital-asset`) sont toutes appelées par l'application avec une session ou, pour `geocode`, le jeton anonyme de la pile auto-hébergée : voulu. L'essai est au dépôt, rejouable : `deploy/scripts/essai-routeur-main.sh` (docker, openssl, curl ; 7/7).",
+          "pt": "**Fechado em 27/09 — os quatro testes passam, e mais três.** O roteador `main` lançado sozinho em `edge-runtime` v1.74.0 com segredo de teste: 404 para nome inexistente, 401 sem token, com token inválido ou expirado, a função protegida executa com token válido, a dispensada não é bloqueada (responder 200 exige a pilha completa, I21). As 14 funções que exigem token são chamadas pelo app com sessão: comportamento desejado. Teste reproduzível: `deploy/scripts/essai-routeur-main.sh`."
+        }
       ]
     ]
   },
@@ -4142,60 +4150,6 @@
         {
           "fr": "24/09 — le gel « jusqu au 14/09 » est levé ; état remis à « ouvert ». Restent au « comment » : proxy inverse avec tunnel, empreintes `sha256`, répétition à froid, la question du Jitsi — et I21 devant.",
           "pt": "24/09 — congelamento levantado; estado reposto em « aberto »."
-        }
-      ]
-    },
-    {
-      "id": "I3",
-      "d": "I",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Tester le routeur `main` de la pile auto-hébergée",
-        "pt": "Testar o roteador `main` da pilha auto-hospedada"
-      },
-      "v": {
-        "fr": "`supabase/functions/main/index.ts` existe (6,9 Ko), lit `config.toml` au démarrage, applique un **refus par défaut** — seules les dispenses `verify_jwt = false` sont lues, tout le reste exige un jeton — et refuse de démarrer si le fichier est illisible. **Les quatre tests prévus n'ont pas été passés.**",
-        "pt": "`supabase/functions/main/index.ts` existe (6,9 KB), lê `config.toml` na inicialização, aplica uma **recusa por omissão** — só as dispensas `verify_jwt = false` são lidas, todo o resto exige um token — e recusa iniciar se o arquivo for ilegível. **Os quatro testes previstos não foram feitos.**"
-      },
-      "w": {
-        "fr": "Les quatre tests de l'étape 5 de `deploy/REPETITION.md` : fonction protégée sans en-tête d'autorisation → 401 ; avec un jeton valide → 200 ; `health-probe` sans jeton → 200 ; nom inexistant → 404.",
-        "pt": "Os quatro testes da etapa 5 de `deploy/REPETITION.md`: função protegida sem cabeçalho de autorização → 401; com um token válido → 200; `health-probe` sem token → 200; nome inexistente → 404."
-      },
-      "y": {
-        "fr": "Le routeur est ce qui remplace la protection par défaut de la plateforme le jour de la bascule. Comme `config.toml` ne déclare que 31 fonctions sur 48, **le refus par défaut du routeur fermera dix-huit fonctions qui fonctionnent aujourd'hui** — il faut le savoir avant, pas après.",
-        "pt": "O roteador é o que substitui a proteção por omissão da plataforma no dia da migração. Como `config.toml` só declara 31 funções de 48, **a recusa por omissão do roteador fechará dezoito funções que hoje funcionam** — é preciso saber isso antes, não depois."
-      },
-      "f": {
-        "fr": [
-          "Les quatre tests passent.",
-          "Le comportement pour les 18 fonctions non déclarées est connu et voulu."
-        ],
-        "pt": [
-          "Os quatro testes passam.",
-          "O comportamento para as 18 funções não declaradas é conhecido e desejado."
-        ]
-      },
-      "dep": {
-        "fr": "**Bloqué par B6.** Gelé sur la production jusqu'au 14/09 ; le test en environnement d'essai est ouvert.",
-        "pt": "**Bloqueado por B6.** Congelado na produção até 14/09; o teste em ambiente de teste está aberto."
-      },
-      "r": [
-        "deploy/README.md",
-        "deploy/REPETITION.md étape 5"
-      ],
-      "verif": [
-        {
-          "fr": "31/08 — `supabase/functions/main/index.ts` : 6 885 octets, présent ; aucun test ne le mentionne dans `src/tests/` ni `tests/`. Le constat tient.",
-          "pt": "31/08 — `main/index.ts`: 6 885 bytes, presente; nenhum teste o menciona."
-        },
-        {
-          "fr": "24/09 — le gel « jusqu au 14/09 » est levé ; état remis à « ouvert ». Les quatre tests du routeur restent à passer sur la pile locale (bloqué par B6 selon la fiche : à relire, B6 n est plus au backlog).",
-          "pt": "24/09 — congelamento levantado; estado reposto em « aberto ». Os quatro testes do router continuam por passar."
         }
       ]
     },

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-27** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-27** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 6
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 5
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-27.** **51 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C9, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-27.** **50 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C9, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1642,7 +1642,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Ouvert |
-| **I3** | Tester le routeur `main` de la pile auto-hébergée | `P1` | Ouvert |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
@@ -1671,27 +1670,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** **Gelé sur la production jusqu'au 14/09.** Dépend de **I1**. À faire avant de louer quoi que ce soit : reprendre la connexion authentifiée en local, bloquée par une résolution IPv6 sans route — **ce blocage a probablement disparu de lui-même**, le vérifier coûte cinq minutes et peut épargner une machine montée pour rien.
 
 *Renvois : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
-
-#### I3 — Tester le routeur `main` de la pile auto-hébergée
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
-
-**État.** `supabase/functions/main/index.ts` existe (6,9 Ko), lit `config.toml` au démarrage, applique un **refus par défaut** — seules les dispenses `verify_jwt = false` sont lues, tout le reste exige un jeton — et refuse de démarrer si le fichier est illisible. **Les quatre tests prévus n'ont pas été passés.**
-
-*Vérifié : [object Object],[object Object]*
-
-**Ce que c'est.** Les quatre tests de l'étape 5 de `deploy/REPETITION.md` : fonction protégée sans en-tête d'autorisation → 401 ; avec un jeton valide → 200 ; `health-probe` sans jeton → 200 ; nom inexistant → 404.
-
-**Pourquoi ça compte.** Le routeur est ce qui remplace la protection par défaut de la plateforme le jour de la bascule. Comme `config.toml` ne déclare que 31 fonctions sur 48, **le refus par défaut du routeur fermera dix-huit fonctions qui fonctionnent aujourd'hui** — il faut le savoir avant, pas après.
-
-**Ce qui compte comme fini.**
-
-- Les quatre tests passent.
-- Le comportement pour les 18 fonctions non déclarées est connu et voulu.
-
-**Dépendances.** **Bloqué par B6.** Gelé sur la production jusqu'au 14/09 ; le test en environnement d'essai est ouvert.
-
-*Renvois : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
 
 #### I18 — Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse
 
@@ -2212,6 +2190,7 @@ CI verte : lint et suite unitaire. |
 | C6 | 2026-09-27 | **Clos le 27/09 — vérifié à l'écran par Xavier, connecté (« vérifié, fonctionnel »).** Les trois assistances de la spec des conventions (§7) livrées le même jour. *§7.2* bouton « Normaliser la casse » sous le titre de la notice (`b9177403`) ; **sur remarque de Xavier** (« lE tRuc qui FAIT cHIER », bouton grisé : la première version n'abaissait que les mots-outils), il applique depuis `1782dfcb` la casse de la langue selon §4.1 — casse de phrase pt/es/fr/it/ca/eo/nl/el, title case en anglais, mots-outils seuls en allemand, sigles et chiffres romains figés, aperçu où chaque mot se clique pour les noms propres. *§7.1* assistant du point d'accès sous le nom d'une personne (`0c3bb62f` : Confirmer, Corriger mot par mot, Nom unique ; variante hispanique seulement offerte) et, **à la demande de Xavier**, la même normalisation de casse pour le nom (`8c73b850`, CONV-1 : « osvaldo BAYER » → « Osvaldo Bayer », particules, initiales, rangs, noms composés et élidés). *§7.3* cron du lundi `anarbib-conv-file-alimenter` (`7eb72630`) qui passe les cinq semeurs de la file de vérification, bac à sable de formation exclu ; premier passage en production : 4 lignes. Critères : (1) trois dispositifs, aucun bloquant ; (2) chaque proposition refusable, original conservé (aperçus, annuler après coup, la file s'écarte) ; (3) libellés dans les dix locales. Limites laissées : le lot « titre_casse » de l'Atelier (171 titres) propose encore l'ancienne forme (mots-outils seuls) ; la casse des collectivités n'a pas d'outil ; `name_lang` (CONV-6) n'est pas au formulaire. **Les trois limites traitées le soir même, à la demande de Xavier.** (a) Un dictionnaire des noms propres attestés (`src/lib/nomsPropres.js`, 1 378 mots et 719 phrases, engendré par `scripts/noms-propres-attestes.mjs` depuis le catalogue, les patronymes, les pays et les collectivités ; mots communs écartés) : le bouton ne les abaisse plus ; la règle a son miroir SQL `fn_conv_casse_titre` (`20260927154351`, parité 26/26 au banc et 173/173 sur les titres réels, par empreinte) qui fait la proposition du lot « titre_casse » ; les 171 propositions en attente refaites (`20260927163827`, fiche `C6_propositions_casse_file_titres_2026-09-27.md` vue par Xavier), 0 écart en production. (b) `name_lang` se saisit (`20260927160008`, datée après B29 qu'elle prolonge) et pilote la découpe (it/af/en particule gardée, fr article, es deux noms). (c) La casse des collectivités (`d421774d`) : mots principaux, français en casse de phrase, sigles de toute longueur gardés. |
 | B10 | 2026-09-27 | **Clos le 27/09 au soir, sur pièces : les trois critères tenus, et trois gardes pour qu'ils le restent.** *(1) Policies* — les avis `multiple_permissive_policies` sont résorbés (**25 → 0**, avis relu en production le 27/09). Une permissive par (rôle, commande) sur les 25 tables (`20260927180000`), puis chaque OU ordonné : ce qui ne dépend pas de la ligne d'abord, la lecture publique ensuite, le staff ligne à ligne en dernier (`20260927180030`). Rien n'a changé de qui voit quoi : empreinte md5 des clés visibles, pour `anon` et chacun des 20 comptes réels, **identique sur les 25 tables** avant, après la passe 1 et après la passe 1 bis. Et l'ordre paie : `count(*)` sur `books` sous un compte lecteur **208 → 90 ms**, bibliothécaire 209 → 89 ms, admin réseau **39 → 1,4 ms** ; `exemplares` 177 → 100 ms (lecteur), 40 → 0,9 ms (admin) ; anonyme inchangé. Garde : `policies_permissives_uniques_tests` (33 tests : aucune paire dans aucun schéma, liste fermée vide ; la lecture publique, désormais en deux copies, doit rester identique ; trente lectures et écritures réelles). *(2) Clés étrangères* — **21 indexées** (`20260927180100`) : toutes celles dont le parent est supprimé en exploitation — du 02/09 au 27/09, 146 œuvres, 37 autorités, 21 notices et 2 comptes supprimés, et chaque brouillon purgé coûtait deux parcours complets de la plus grosse table d'import. La liste assumée de B21 passe de **38 à 17**, règle écrite en tête (codes `catalog_ref_*`, bibliothèques, partenaires : des parents qui ne se suppriment pas). *(3) Index* — **22 retirés, raison écrite pour chacun** : 10 redondants jamais empruntés (`20260927180200`) et 12 sans aucun lecteur sur le chemin d'écriture (`20260927180300` : 6 sur `books`, qui en portait 27, 4 sur `book_drafts`, les 3,5 Mo de `idx_shp_endpoint`, un doublon ; son premier essai, tombé dans le `pg_dump` de la sauvegarde hebdomadaire, a été annulé sans rien appliquer et rejoué au run suivant). Garde : `index_redondants_garde_tests` (plus de nouveau redondant ; les 22 redondants empruntés, nommés avec leurs compteurs, se retirent sur mesure). Les 108 index sans lecteur restants sont inventoriés un par un, avec origine et verdict (`docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`). Nés des constats : **B31** (trois lectures anonymes lèvent une erreur au lieu de rendre zéro ligne), **B32** (le catalogue public relit toute sa vue matérialisée à chaque page, et calcule la visibilité ligne à ligne), **B33** (la recherche ne peut emprunter aucun de ses index trigramme), **B34** (l'effacement de compte ne traite pas le journal du catalogue), **I28** (le hook `pre-commit` ne tourne pas dans les worktrees WSL). **Écart tracé** : les cinq migrations enfreignent `DOC-DEPLOY-4` (heure ronde, datées dans le futur), sans collision ni effet d'ordre — audit §7. |
 | D7 | 2026-09-27 | **Clos le 27/09 : décision écrite au REGISTRE (section `ARCH`), avec sa raison** — son seul critère. **Décidé par Xavier** : un **modèle archivistique complet dans AnarBib** (niveaux ISAD(G) fonds, sous-fonds, série, sous-série, dossier, pièce ; producteurs en autorités ISAAR(CPF) ; export EAD dès la première version — `ARCH-1`), un **niveau de description variable selon le fonds** (`ARCH-2`), des **conditions d'accès par niveau dès la première version** (`ARCH-3`), présentés pour avis à DIRA, au CIRA et au FICEDL avant tout code (`ARCH-4`). Réalisation : **D8**. |
+| I3 | 2026-09-27 | **Clos le 27/09 — les quatre tests passent, et trois de plus.** Le routeur `supabase/functions/main/index.ts` lancé seul dans `supabase/edge-runtime:v1.74.0` (la version de `deploy/.env.example`), fonctions et `config.toml` montés comme dans `deploy/compose.yml`, secret JWT tiré au hasard pour l'essai : il démarre (40 fonctions dispensées, 54 montées, aucune dispense orpheline) et décide juste — nom inexistant 404, fonction protégée sans jeton 401, avec un jeton valide la fonction s'exécute (405, sa propre réponse à un GET), jeton signé d'un autre secret 401, jeton expiré 401, chemin sans `/functions/v1` 401 ; une fonction dispensée (`health-probe`) n'est pas bloquée, son travailleur est lancé — il échoue ensuite (500, « supabaseKey is required ») faute de base et de secrets dans le conteneur isolé : **répondre 200 relève de la répétition complète, I21**. *Critère 2* : les 14 fonctions qui exigent un jeton (`attach-received-asset`, `audio_fingerprint_lookup`, `authority_lookup`, `author_portrait_lookup`, `catalog_metadata_lookup`, `cover_lookup`, `deposit-fonds-direct`, `export-catalog-lote`, `export-fonds-bundle`, `geocode`, `mail-i18n-test`, `notify-library-invitation`, `probe-partner-catalog`, `revoke-digital-asset`) sont toutes appelées par l'application avec une session ou, pour `geocode`, le jeton anonyme de la pile auto-hébergée : voulu. L'essai est au dépôt, rejouable : `deploy/scripts/essai-routeur-main.sh` (docker, openssl, curl ; 7/7). |
 
 ---
 
@@ -2243,4 +2222,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

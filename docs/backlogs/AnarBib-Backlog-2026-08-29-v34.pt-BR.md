@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-27** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-27** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 5
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-27.** **51 itens de 69** trazem uma verificação datada própria (A1, A3, B13, B29, B30, C3, C4, C9, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-27.** **50 itens de 68** trazem uma verificação datada própria (A1, A3, B13, B29, B30, C3, C4, C9, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1642,7 +1642,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | | | | |
 |---|---|---|---|
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
-| **I3** | Testar o roteador `main` da pilha auto-hospedada | `P1` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
@@ -1671,27 +1670,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** **Congelado na produção até 14/09.** Depende de **I1**. A fazer antes de alugar o que quer que seja: retomar a conexão autenticada em local, bloqueada por uma resolução IPv6 sem rota — **esse bloqueio provavelmente desapareceu sozinho**, verificá-lo custa cinco minutos e pode poupar uma máquina montada à toa.
 
 *Remissões : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
-
-#### I3 — Testar o roteador `main` da pilha auto-hospedada
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
-
-**Estado.** `supabase/functions/main/index.ts` existe (6,9 KB), lê `config.toml` na inicialização, aplica uma **recusa por omissão** — só as dispensas `verify_jwt = false` são lidas, todo o resto exige um token — e recusa iniciar se o arquivo for ilegível. **Os quatro testes previstos não foram feitos.**
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Os quatro testes da etapa 5 de `deploy/REPETITION.md`: função protegida sem cabeçalho de autorização → 401; com um token válido → 200; `health-probe` sem token → 200; nome inexistente → 404.
-
-**Por que importa.** O roteador é o que substitui a proteção por omissão da plataforma no dia da migração. Como `config.toml` só declara 31 funções de 48, **a recusa por omissão do roteador fechará dezoito funções que hoje funcionam** — é preciso saber isso antes, não depois.
-
-**O que conta como terminado.**
-
-- Os quatro testes passam.
-- O comportamento para as 18 funções não declaradas é conhecido e desejado.
-
-**Dependências.** **Bloqueado por B6.** Congelado na produção até 14/09; o teste em ambiente de teste está aberto.
-
-*Remissões : `deploy/README.md` · `deploy/REPETITION.md étape 5`*
 
 #### I18 — O banco de CI não faz replay numa imagem Supabase — é preciso um que faça
 
@@ -2202,6 +2180,7 @@ CI verde. |
 | C6 | 2026-09-27 | **Fechado em 27/09 — verificado na tela por Xavier, conectado.** As três assistências da spec das convenções (§7): botão «Normalizar maiúsculas» do título, corrigido por observação de Xavier para aplicar a caixa da língua (§4.1, `1782dfcb`); assistente do ponto de acesso e normalização da caixa do nome de pessoa (`0c3bb62f`, `8c73b850`); cron semanal que alimenta a fila de verificação (`7eb72630`). Limites: o lote «titre_casse» ainda propõe a forma antiga; coletividades sem ferramenta de caixa; `name_lang` fora do formulário. **As três limitações tratadas na mesma noite:** dicionário de nomes próprios atestados + espelho SQL (171 propostas da fila refeitas, 0 divergência); `name_lang` no formulário e na separação do nome; caixa dos nomes de coletividades. |
 | B10 | 2026-09-27 | **Fechado em 27/09 à noite, com provas: os três critérios cumpridos, e três guardas para mantê-los.** (1) Os avisos `multiple_permissive_policies` foram resolvidos (25 → 0): uma permissiva por (papel, comando) nas 25 tabelas, com o OU ordenado — primeiro o que não depende da linha, depois a leitura pública, depois o staff linha a linha. A impressão digital das linhas visíveis para anon e para cada uma das 20 contas reais é idêntica nas 25 tabelas antes e depois; `count(*)` em `books` sob leitor 208 → 90 ms, admin 39 → 1,4 ms. Guarda: `policies_permissives_uniques_tests` (33 testes). (2) 21 chaves estrangeiras indexadas — as de pais realmente excluídos em operação; a lista assumida do B21 passa de 38 a 17, com a regra escrita. (3) 22 índices retirados com o motivo escrito (10 redundantes nunca usados, 12 sem leitor no caminho de escrita); guarda `index_redondants_garde_tests`. Os 108 índices sem leitor restantes estão inventariados na auditoria. Novos itens: B31, B32, B33, B34, I28. Desvio registrado a `DOC-DEPLOY-4` (auditoria §7). |
 | D7 | 2026-09-27 | **Fechado em 27/09: decisão escrita no REGISTRO (seção `ARCH`), com a sua razão.** **Decidido por Xavier**: um modelo arquivístico completo no AnarBib (níveis ISAD(G), produtores em autoridades ISAAR(CPF), exportação EAD desde a primeira versão), nível de descrição variável segundo o fundo, condições de acesso por nível desde a primeira versão; apresentado para parecer a DIRA, CIRA e FICEDL antes de qualquer código. Realização: **D8**. |
+| I3 | 2026-09-27 | **Fechado em 27/09 — os quatro testes passam, e mais três.** O roteador `main` lançado sozinho em `edge-runtime` v1.74.0 com segredo de teste: 404 para nome inexistente, 401 sem token, com token inválido ou expirado, a função protegida executa com token válido, a dispensada não é bloqueada (responder 200 exige a pilha completa, I21). As 14 funções que exigem token são chamadas pelo app com sessão: comportamento desejado. Teste reproduzível: `deploy/scripts/essai-routeur-main.sh`. |
 
 ---
 
@@ -2233,4 +2212,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
