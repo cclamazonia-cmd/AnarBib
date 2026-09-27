@@ -61,12 +61,14 @@ describe('TitleCaseAssist', () => {
 
   it('un clic sur un mot de l’aperçu lui rend sa majuscule (nom propre)', () => {
     const onApply = vi.fn();
-    monter({ titulo: 'Le Mouvement Anarchiste En France', subtitulo: '', idioma: 'fr', onApply });
+    // « France » est dans le dictionnaire des noms propres ; « Zorglub » non : un clic le rattrape.
+    monter({ titulo: 'Le Voyage De Zorglub En France', subtitulo: '', idioma: 'fr', onApply });
     fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.button'] }));
     expect(screen.getByText(fr['catalogacao.titleCase.properHint'])).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'france' }));
+    expect(screen.getByTestId('title-case-after').textContent).toBe('Le voyage de zorglub en France');
+    fireEvent.click(screen.getByRole('button', { name: 'zorglub' }));
     fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.apply'] }));
-    expect(onApply).toHaveBeenCalledWith('Le mouvement anarchiste en France', '');
+    expect(onApply).toHaveBeenCalledWith('Le voyage de Zorglub en France', '');
   });
 
   it('un titre déjà en casse de phrase garde ses noms propres : rien à proposer', () => {

@@ -60,7 +60,8 @@ BEGIN
   -- 1 ----------------------------------------------------------------
   SELECT apres_propose INTO v_txt FROM public.catalog_review_queue
    WHERE lot = 'titre_casse' AND entity_id = f.b_casse AND decision = 'a_revoir';
-  IF v_txt = 'História do Anarquismo no Brasil' THEN ok := ok + 1;
+  -- depuis 20260927154351, la proposition est la casse de la langue (Brasil : nom propre attesté)
+  IF v_txt = 'História do anarquismo no Brasil' THEN ok := ok + 1;
   ELSE RAISE WARNING 'T1 titre semé : proposition « % »', v_txt; END IF;
 
   -- 2 ----------------------------------------------------------------

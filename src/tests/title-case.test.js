@@ -8,10 +8,10 @@
 // l'une des deux implémentations dérive, l'un des deux bancs rougit.
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { lowerStopwords, hasTitleCaseRule, normaliserCasse, proposerCasse } from '../lib/titleCase.js';
+import { lowerStopwords, hasTitleCaseRule, normaliserCasse, proposerCasse, stopwordsFor } from '../lib/titleCase.js';
 
 export const CAS = [
   ['A Revolução Desconhecida', 'pt-BR', 'A Revolução Desconhecida'],
@@ -66,7 +66,7 @@ describe('titleCase — miroir de fn_conv_lower_stopwords', () => {
 // les mots-outils. Le premier cas est la remarque de Xavier.
 export const CAS_BOUTON = [
   ['lE tRuc qui FAIT cHIER', 'fr', 'Le truc qui fait chier'],
-  ['Le Mouvement Anarchiste En France', 'fr', 'Le mouvement anarchiste en france'],
+  ['Le Mouvement Anarchiste En France', 'fr', 'Le mouvement anarchiste en France'],
   ['Le mouvement anarchiste en France', 'fr', 'Le mouvement anarchiste en France'],
   ['La C.N.T. Y La Revolución', 'es', 'La C.N.T. y la revolución'],
   ['La CNT Y La Revolución', 'es', 'La CNT y la revolución'],
@@ -82,8 +82,19 @@ export const CAS_BOUTON = [
   ['ΕΛΕΥΘΕΡΙΑ ΚΑΙ ΑΝΑΡΧΙΑ', 'el', 'Ελευθερια και αναρχια'],
 ];
 
+// Les noms propres attestés (src/lib/nomsPropres.js). Mêmes cas dans tests/sql/casse_titre_tests.sql.
+export const CAS_DICO = [
+  ['Tratado Geral Do Brasil', 'pt-BR', 'Tratado geral do Brasil'],
+  ['La Guerra Civil En España', 'es', 'La guerra civil en España'],
+  ['Da Escravidao Nos Estados Unidos', 'pt-BR', 'Da escravidao nos Estados Unidos'],
+  ['Conversaciones Con Bakunin', 'es', 'Conversaciones con Bakunin'],
+  ['The doctrine of anarchism of Michael A. Bakunin', 'en', 'The Doctrine of Anarchism of Michael A. Bakunin'],
+  ['Congreso De La Confederación Nacional Del Trabajo', 'es', 'Congreso de la Confederación Nacional del Trabajo'],
+  ['Anarquismo e Estado', 'pt-BR', 'Anarquismo e estado'],
+];
+
 describe('normaliserCasse — le bouton (spec §4.1)', () => {
-  for (const [titre, langue, attendu] of CAS_BOUTON) {
+  for (const [titre, langue, attendu] of [...CAS_BOUTON, ...CAS_DICO]) {
     it(`${langue} : ${titre}`, () => expect(normaliserCasse(titre, langue)).toBe(attendu));
   }
 
@@ -99,5 +110,38 @@ describe('normaliserCasse — le bouton (spec §4.1)', () => {
   it('langue sans règle : rien', () => {
     expect(proposerCasse('Война И Мир', 'ru')).toBeNull();
     expect(normaliserCasse('Война И Мир', 'ru')).toBe('Война И Мир');
+  });
+});
+
+describe('la règle côté base est le miroir du bouton', () => {
+  const racine = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+  const dir = path.join(racine, 'supabase/migrations');
+  const derniere = (motif) => readdirSync(dir).filter((x) => motif.test(x)).sort().pop();
+  const mig = readFileSync(path.join(dir, derniere(/^\d{14}_c6_la_casse_de_la_langue_cote_base\.sql$/)), 'utf8');
+  const tableauSql = (nom) => {
+    const bloc = mig.match(new RegExp(`function private\\.${nom}\\(\\)[\\s\\S]*?select array\\[([\\s\\S]*?)\\]::text\\[\\]`));
+    return [...bloc[1].matchAll(/'((?:[^']|'')*)'/g)].map((m) => m[1].replace(/''/g, "'"));
+  };
+
+  it('le dictionnaire SQL est celui de src/lib/nomsPropres.js', async () => {
+    const { NOMS_PROPRES_MOTS, NOMS_PROPRES_PHRASES } = await import('../lib/nomsPropres.js');
+    expect(tableauSql('conv_noms_propres_mots')).toEqual(NOMS_PROPRES_MOTS);
+    expect(tableauSql('conv_noms_propres_phrases')).toEqual(NOMS_PROPRES_PHRASES);
+  });
+
+  it('les mots-outils SQL sont ceux du JS', () => {
+    for (const l of ['pt', 'es', 'fr', 'it', 'en', 'ca', 'eo', 'de']) {
+      const bloc = mig.match(new RegExp(`when p_lang like '${l}%' then array\\[([^\\]]*)\\]`));
+      expect(bloc, l).not.toBeNull();
+      expect([...bloc[1].matchAll(/'((?:[^']|'')*)'/g)].map((m) => m[1]), l).toEqual([...stopwordsFor(l)]);
+    }
+  });
+
+  it('la suite SQL porte les mêmes cas que ce banc', () => {
+    const suite = readFileSync(path.join(racine, 'tests/sql/casse_titre_tests.sql'), 'utf8');
+    for (const [titre, , attendu] of [...CAS_BOUTON, ...CAS_DICO]) {
+      expect(suite.includes(`'${titre.replace(/'/g, "''")}'`), titre).toBe(true);
+      expect(suite.includes(`'${attendu.replace(/'/g, "''")}'`), attendu).toBe(true);
+    }
   });
 });

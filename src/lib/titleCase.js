@@ -24,6 +24,8 @@
 // contredire la règle (`bell hooks`) : un bouton, un aperçu où chaque mot se
 // clique, et jamais rien d'automatique à la frappe.
 
+import { NOMS_PROPRES_MOTS, NOMS_PROPRES_PHRASES } from './nomsPropres.js';
+
 const MOTS_OUTILS = [
   ['pt', ['a', 'o', 'as', 'os', 'um', 'uma', 'uns', 'umas', 'de', 'da', 'do', 'das', 'dos',
     'em', 'na', 'no', 'nas', 'nos', 'por', 'pela', 'pelo', 'pelas', 'pelos', 'para',
@@ -109,6 +111,17 @@ export function lowerStopwords(title, lang) {
 const ROMAIN = /^(?=[MDCLXVI]{2,}$)M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$/;
 const LETTRE = /\p{L}/u;
 
+/** Clé d'un mot pour le dictionnaire : sans ponctuation autour, minuscules, sans accents. */
+export const cleNom = (w) => String(w).replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '')
+  .normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const MOTS_PROPRES = new Set(NOMS_PROPRES_MOTS);
+const PHRASES_PAR_TETE = new Map();
+for (const p of NOMS_PROPRES_PHRASES) {
+  const w = p.split(' ');
+  if (!PHRASES_PAR_TETE.has(w[0])) PHRASES_PAR_TETE.set(w[0], []);
+  PHRASES_PAR_TETE.get(w[0]).push(w);
+}
+
 /** Sigle, chiffre romain ou mot à chiffres : gardé tel quel. Un mot de quatre
  *  lettres ou plus en capitales est traité comme un mot crié, pas comme un sigle ;
  *  dans un titre tout en capitales la casse ne dit plus rien : seuls les sigles
@@ -117,6 +130,7 @@ function estFige(w, { toutCapitales = false, stop = new Set() } = {}) {
   const nu = w.replace(/^[«»"'()¿¡]+|[,;:!?«»"'()]+$/g, '');   // garde le point final d'un sigle
   if (!nu || /\d/.test(nu)) return true;
   if (/^(\p{Lu}\.){2,}$/u.test(nu) || /^(\p{Lu}\.)+\p{Lu}$/u.test(nu)) return true; // C.N.T.
+  if (/^\p{Lu}\.$/u.test(nu)) return true;                                          // initiale : Michael A. Bakunin
   const mot = nu.replace(/\.$/, '');
   if (toutCapitales) return /^[IVX]{2,}$/.test(mot) && ROMAIN.test(mot);
   if (ROMAIN.test(mot)) return true;                                     // IV, XIX
@@ -159,8 +173,20 @@ export function proposerCasse(title, lang, { sousTitre = false } = {}) {
   // les majuscules restantes sont probablement des noms propres — on les garde.
   const plein = (w) => w.replace(PONCT, '').length >= 3 && !stop.has(w.replace(PONCT, '').toLowerCase());
   const confiance = regle === 'phrase' && parts.some((w, i) => i > 0 && estMinuscule(w) && plein(w));
+  // Noms propres attestés (src/lib/nomsPropres.js) : un mot, ou une suite de mots
+  // (« estados unidos »), que la casse de phrase ne doit pas abaisser.
+  const cles = parts.map(cleNom);
+  const propre = new Set();
+  if (regle === 'phrase') {
+    cles.forEach((k, i) => {
+      if (MOTS_PROPRES.has(k)) propre.add(i);
+      for (const ph of PHRASES_PAR_TETE.get(k) || []) {
+        if (ph.every((x, j) => cles[i + j] === x)) ph.forEach((x, j) => { if (!stop.has(x)) propre.add(i + j); });
+      }
+    });
+  }
   let initial = !sousTitre;
-  const mots = parts.map((w) => {
+  const mots = parts.map((w, i) => {
     const debut = initial;
     initial = estFrontiere(w);
     if (estFige(w, { toutCapitales, stop })) return { texte: w, fige: true };
@@ -170,7 +196,7 @@ export function proposerCasse(title, lang, { sousTitre = false } = {}) {
       const outil = stop.has(bas.replace(PONCT, ''));
       return { texte: debut || !outil ? avecMajuscule(bas, loc) : bas, fige: false };
     }
-    return { texte: debut ? avecMajuscule(bas, loc) : bas, fige: false };
+    return { texte: debut || propre.has(i) ? avecMajuscule(bas, loc) : bas, fige: false };
   });
   return { mots };
 }
