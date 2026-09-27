@@ -15,7 +15,7 @@ const ADD = {
   'pt-BR': {
     'rede.tab.lettre': 'Boletim',
     'rede.lettre.title': 'Boletim da rede',
-    'rede.lettre.lead': 'Compõe e envia um número do boletim às pessoas inscritas.',
+    'rede.lettre.lead': 'Componha e envie um número do boletim às pessoas inscritas.',
     'rede.lettre.newDraft': 'Novo rascunho',
     'rede.lettre.draftCreated': 'Rascunho criado (montado a partir da vida da rede).',
     'rede.lettre.empty': 'Nenhum número por enquanto.',

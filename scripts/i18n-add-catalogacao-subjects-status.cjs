@@ -16,7 +16,7 @@ const K = ['proposed', 'proposedHint', 'missingLabelHint'];
 
 const V = {
   fr: ['proposé', 'Terme proposé — en attente d’activation par la coordination catalogage.', 'Aucun libellé dans ta langue — affiché par repli. Tu peux le compléter.'],
-  'pt-BR': ['proposto', 'Termo proposto — aguardando ativação pela coordenação de catalogação.', 'Sem rótulo no teu idioma — exibido por padrão. Podes completá-lo.'],
+  'pt-BR': ['proposto', 'Termo proposto — aguardando ativação pela coordenação de catalogação.', 'Sem rótulo no seu idioma — exibido por padrão. Você pode completá-lo.'],
   es: ['propuesto', 'Término propuesto — a la espera de activación por la coordinación de catalogación.', 'Sin etiqueta en tu idioma — mostrado por defecto. Puedes completarlo.'],
   en: ['proposed', 'Proposed term — awaiting activation by the cataloging coordination.', 'No label in your language — shown by fallback. You can complete it.'],
   it: ['proposto', 'Termine proposto — in attesa di attivazione dalla coordinazione di catalogazione.', 'Nessuna etichetta nella tua lingua — mostrata per ripiego. Puoi completarla.'],

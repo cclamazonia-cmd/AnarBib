@@ -12,7 +12,7 @@ const KEYS = ['notif.welcome.title', 'notif.welcome.body'];
 const T = {
   'pt-BR': [
     'Boas-vindas à rede AnarBib!',
-    'A tua conta foi criada. Para começar: explora o catálogo, faz a tua primeira reserva ou consulta, e completa o teu perfil em «Minha conta».',
+    'A sua conta foi criada. Para começar: explore o catálogo, faça a sua primeira reserva ou consulta, e complete o seu perfil em «Minha conta».',
   ],
   fr: [
     'Bienvenue dans le réseau AnarBib !',

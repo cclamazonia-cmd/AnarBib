@@ -14,7 +14,7 @@ const SENTINEL = 'federacao.inicio.toLettre';
 const ADD = {
   'pt-BR': {
     'federacao.inicio.lettre': 'Boletim da rede',
-    'federacao.inicio.lettre.desc': 'O caderno da rede na tua caixa de entrada, se pedires.',
+    'federacao.inicio.lettre.desc': 'O caderno da rede na sua caixa de entrada, se você pedir.',
     'federacao.inicio.toLettre': 'Inscrever-me',
   },
   fr: {

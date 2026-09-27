@@ -14,7 +14,7 @@ const ADD = {
   'pt-BR': {
     'biblioteca.tab.events': 'Eventos',
     'biblioteca.events.title': 'Eventos da biblioteca',
-    'biblioteca.events.hint': 'Cria e publica as leituras públicas, debates, oficinas… da tua biblioteca. Os eventos públicos futuros aparecem na conta dos membros leitores.',
+    'biblioteca.events.hint': 'Crie e publique as leituras públicas, debates, oficinas… da sua biblioteca. Os eventos públicos futuros aparecem na conta dos membros leitores.',
     'biblioteca.events.listTitle': 'Eventos programados',
     'biblioteca.events.empty': 'Nenhum evento por enquanto.',
     'biblioteca.events.created': 'Evento criado.',
@@ -47,7 +47,7 @@ const ADD = {
     'biblioteca.events.form.startRequired': 'A data de início é obrigatória.',
     'biblioteca.events.form.endBeforeStart': 'O fim deve ser depois do início.',
     'account.tab.events': 'Eventos',
-    'account.tab.events.hint': 'As leituras públicas, debates e encontros futuros das tuas bibliotecas.',
+    'account.tab.events.hint': 'As leituras públicas, debates e encontros futuros das suas bibliotecas.',
     'account.events.title': 'Próximos eventos',
     'account.events.empty': 'Nenhum evento futuro por enquanto.',
     'account.events.type.lecture_publique': 'Leitura pública',

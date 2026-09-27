@@ -16,7 +16,7 @@ const KEYS = {
     de: 'Überarbeiten', ca: 'Corregir', eo: 'Korekti', nl: 'Aanpassen', el: 'Διόρθωση',
   },
   'rede.gazeta.correct.hint': {
-    'pt-BR': 'Corrige tu mesma o que impede a nota de sair. A pessoa será avisada de que foi retida com correções, com o texto que sairá; a tradução recomeça.',
+    'pt-BR': 'Corrija você mesma o que impede a nota de sair. A pessoa será avisada de que foi retida com correções, com o texto que sairá; a tradução recomeça.',
     fr: 'Corrige toi-même ce qui empêche la brève de paraître. La personne sera prévenue qu’elle est retenue avec corrections, texte à l’appui ; la traduction repart.',
     es: 'Corrige tú misme lo que impide que la nota salga. La persona será avisada de que fue retenida con correcciones, con el texto que saldrá; la traducción vuelve a empezar.',
     en: 'Fix yourself what keeps the bulletin from being published. The contributor will be told it was accepted with corrections, with the text as it will appear; translation starts over.',

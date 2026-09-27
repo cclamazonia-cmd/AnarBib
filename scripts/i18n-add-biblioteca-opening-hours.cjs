@@ -14,7 +14,7 @@ const SENTINEL = 'biblioteca.openingHours.notePlaceholder';
 const ADD = {
   'pt-BR': {
     'biblioteca.openingHours.title': 'Horários de atendimento / plantões',
-    'biblioteca.openingHours.hint': 'Faixas semanais — adiciona quantas precisares (plantões, aberturas…). Visível pelos membros da biblioteca.',
+    'biblioteca.openingHours.hint': 'Faixas semanais — adicione quantas precisar (plantões, aberturas…). Visível pelos membros da biblioteca.',
     'biblioteca.openingHours.start': 'Início',
     'biblioteca.openingHours.end': 'Fim',
     'biblioteca.openingHours.labelPlaceholder': 'Rótulo (opcional)',

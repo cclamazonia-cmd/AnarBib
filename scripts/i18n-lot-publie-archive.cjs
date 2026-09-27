@@ -30,8 +30,8 @@ const V = {
   'pt-BR': [
     '{count} em curso',
     '{count} publicado(s)',
-    'Este lote tem {count} ficha(s) já publicada(s) no catálogo: ele guarda a memória dessa sessão de catalogação. Um lote publicado arquiva-se — usa «Arquivar».',
-    'Este lote ainda retém trabalho em curso. Trata-o ou manda-o para a lixeira antes de excluir o lote.',
+    'Este lote tem {count} ficha(s) já publicada(s) no catálogo: ele guarda a memória dessa sessão de catalogação. Um lote publicado arquiva-se — use «Arquivar».',
+    'Este lote ainda retém trabalho em curso. Trate-o ou mande-o para a lixeira antes de excluir o lote.',
     'Este lote tem fichas publicadas: ele arquiva-se, não se exclui.',
   ],
   es: [

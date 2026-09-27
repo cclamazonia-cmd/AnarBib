@@ -39,7 +39,7 @@ const T = {
     'Your motivation (optional)'
   ],
   'auth.create.motivationHint': [
-    'Algumas palavras sobre o que te traz à AnarBib. Esta mensagem é enviada à equipe.',
+    'Algumas palavras sobre o que traz você à AnarBib. Esta mensagem é enviada à equipe.',
     "Quelques mots sur ce qui t'amène à AnarBib. Ce message est transmis à l'équipe.",
     'Unas palabras sobre lo que te trae a AnarBib. Este mensaje se envía al equipo.',
     'A few words about what brings you to AnarBib. This message is sent to the team.'

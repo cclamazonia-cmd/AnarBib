@@ -40,7 +40,7 @@ const V = {
     'Cada exclusão guarda um instantâneo restaurável por 90 dias. Depois disso, o registo permanece, o instantâneo não.',
     'Nenhuma exclusão definitiva registada.',
     'Restaurar',
-    'Restaurar este rascunho excluído? Ele voltará para a lixeira, de onde podes devolvê-lo a rascunho.',
+    'Restaurar este rascunho excluído? Ele voltará para a lixeira, de onde você pode devolvê-lo a rascunho.',
     'Rascunho {id} restaurado.',
     'Esta entrada de registo não existe, ou não é uma exclusão.',
     'O instantâneo deste rascunho foi purgado (mais de 90 dias): o registo permanece, mas já não é restaurável.',

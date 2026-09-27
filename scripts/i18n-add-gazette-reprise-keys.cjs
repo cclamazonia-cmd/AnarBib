@@ -28,7 +28,7 @@ const KEYS = {
     nl: 'Reden van afwijzing (gaat naar de persoon)', el: 'Λόγος απόρριψης (αποστέλλεται στο άτομο)',
   },
   'rede.gazeta.reject.notePlaceholder': {
-    'pt-BR': 'Diz por quê, e o que tornaria a nota publicável.', fr: 'Dis pourquoi, et ce qui rendrait la brève publiable.',
+    'pt-BR': 'Diga por quê, e o que tornaria a nota publicável.', fr: 'Dis pourquoi, et ce qui rendrait la brève publiable.',
     es: 'Di por qué, y qué haría publicable la nota.', en: 'Say why, and what would make the bulletin publishable.',
     it: 'Di’ perché, e cosa renderebbe la breve pubblicabile.', de: 'Sag warum, und was die Kurzmeldung veröffentlichbar machen würde.',
     ca: 'Digues per què, i què faria publicable la breu.', eo: 'Diru kial, kaj kio farus la novaĵeton publikigebla.',
@@ -112,13 +112,13 @@ const KEYS = {
 
   // ── Formulaire public : corriger et renvoyer ────────────────────────────
   'federacao.gazeta.resubmit.title': {
-    'pt-BR': 'Corrigir e reenviar tua nota', fr: 'Corriger et renvoyer ta brève', es: 'Corregir y reenviar tu nota',
+    'pt-BR': 'Corrigir e reenviar sua nota', fr: 'Corriger et renvoyer ta brève', es: 'Corregir y reenviar tu nota',
     en: 'Revise and resend your bulletin', it: 'Correggere e rimandare la tua breve', de: 'Deine Kurzmeldung überarbeiten und erneut senden',
     ca: 'Corregir i reenviar la teva breu', eo: 'Korekti kaj resendi vian novaĵeton', nl: 'Je bericht aanpassen en opnieuw insturen',
     el: 'Διόρθωσε και ξαναστείλε το σημείωμά σου',
   },
   'federacao.gazeta.resubmit.intro': {
-    'pt-BR': 'Tua nota foi lida e não foi retida tal como está. Eis o motivo; corrige o que for preciso e reenvia-a: a equipe da rede a relerá como uma nova proposta.',
+    'pt-BR': 'Sua nota foi lida e não foi retida tal como está. Eis o motivo; corrija o que for preciso e reenvie-a: a equipe da rede a relerá como uma nova proposta.',
     fr: 'Ta brève a été relue et n’a pas été retenue telle quelle. Voici le motif ; corrige ce qui doit l’être, puis renvoie-la : l’équipe réseau la relira comme une nouvelle proposition.',
     es: 'Tu nota fue leída y no fue retenida tal como está. Este es el motivo; corrige lo necesario y vuelve a enviarla: el equipo de la red la releerá como una nueva propuesta.',
     en: 'Your bulletin was read and not retained as it stands. Here is the reason; revise what needs it, then resend it: the network team will read it again as a new proposal.',
@@ -135,7 +135,7 @@ const KEYS = {
     nl: 'Reden van afwijzing', el: 'Λόγος απόρριψης',
   },
   'federacao.gazeta.resubmit.loading': {
-    'pt-BR': 'Recuperando tua nota…', fr: 'Récupération de ta brève…', es: 'Recuperando tu nota…', en: 'Fetching your bulletin…',
+    'pt-BR': 'Recuperando sua nota…', fr: 'Récupération de ta brève…', es: 'Recuperando tu nota…', en: 'Fetching your bulletin…',
     it: 'Recupero della tua breve…', de: 'Deine Kurzmeldung wird geladen…', ca: 'Recuperant la teva breu…', eo: 'Reprenante vian novaĵeton…',
     nl: 'Je bericht wordt opgehaald…', el: 'Ανάκτηση του σημειώματός σου…',
   },
@@ -145,14 +145,14 @@ const KEYS = {
     nl: 'Aangepast bericht opnieuw insturen', el: 'Επαναποστολή του διορθωμένου σημειώματος',
   },
   'federacao.gazeta.resubmit.success': {
-    'pt-BR': 'Obrigado, tua nota corrigida foi transmitida à equipe da rede.', fr: 'Merci, ta brève corrigée a été transmise à l’équipe réseau.',
+    'pt-BR': 'Obrigado, sua nota corrigida foi transmitida à equipe da rede.', fr: 'Merci, ta brève corrigée a été transmise à l’équipe réseau.',
     es: 'Gracias, tu nota corregida fue transmitida al equipo de la red.', en: 'Thank you, your revised bulletin has been passed on to the network team.',
     it: 'Grazie, la tua breve corretta è stata trasmessa all’équipe della rete.', de: 'Danke, deine überarbeitete Kurzmeldung wurde an das Netzwerk-Team weitergegeben.',
     ca: 'Gràcies, la teva breu corregida s’ha transmès a l’equip de la xarxa.', eo: 'Dankon, via korektita novaĵeto estis transdonita al la reta teamo.',
     nl: 'Bedankt, je aangepaste bericht is doorgegeven aan het netwerkteam.', el: 'Ευχαριστούμε, το διορθωμένο σημείωμά σου διαβιβάστηκε στην ομάδα του δικτύου.',
   },
   'federacao.gazeta.resubmit.error.invalid': {
-    'pt-BR': 'Este link de retomada não é válido. Podes propor tua nota de novo pelo formulário habitual.',
+    'pt-BR': 'Este link de retomada não é válido. Você pode propor sua nota de novo pelo formulário habitual.',
     fr: 'Ce lien de reprise n’est pas valable. Tu peux proposer ta brève à nouveau depuis le formulaire habituel.',
     es: 'Este enlace de retoma no es válido. Puedes proponer tu nota de nuevo desde el formulario habitual.',
     en: 'This resubmission link is not valid. You can propose your bulletin again from the usual form.',
@@ -164,14 +164,14 @@ const KEYS = {
     el: 'Αυτός ο σύνδεσμος επανυποβολής δεν ισχύει. Μπορείς να προτείνεις ξανά το σημείωμά σου από τη συνηθισμένη φόρμα.',
   },
   'federacao.gazeta.resubmit.error.used': {
-    'pt-BR': 'Este link já foi usado: tua nota corrigida já foi transmitida.', fr: 'Ce lien a déjà servi : ta brève corrigée a bien été transmise.',
+    'pt-BR': 'Este link já foi usado: sua nota corrigida já foi transmitida.', fr: 'Ce lien a déjà servi : ta brève corrigée a bien été transmise.',
     es: 'Este enlace ya se usó: tu nota corregida ya fue transmitida.', en: 'This link has already been used: your revised bulletin was passed on.',
     it: 'Questo link è già stato usato: la tua breve corretta è già stata trasmessa.', de: 'Dieser Link wurde bereits verwendet: deine überarbeitete Kurzmeldung ist angekommen.',
     ca: 'Aquest enllaç ja s’ha fet servir: la teva breu corregida ja s’ha transmès.', eo: 'Ĉi tiu ligilo jam estis uzita: via korektita novaĵeto jam estis transdonita.',
     nl: 'Deze link is al gebruikt: je aangepaste bericht is doorgegeven.', el: 'Αυτός ο σύνδεσμος έχει ήδη χρησιμοποιηθεί: το διορθωμένο σημείωμά σου έχει διαβιβαστεί.',
   },
   'federacao.gazeta.resubmit.error.expired': {
-    'pt-BR': 'Este link de retomada expirou (60 dias). Podes propor tua nota de novo pelo formulário habitual.',
+    'pt-BR': 'Este link de retomada expirou (60 dias). Você pode propor sua nota de novo pelo formulário habitual.',
     fr: 'Ce lien de reprise a expiré (60 jours). Tu peux proposer ta brève à nouveau depuis le formulaire habituel.',
     es: 'Este enlace de retoma expiró (60 días). Puedes proponer tu nota de nuevo desde el formulario habitual.',
     en: 'This resubmission link has expired (60 days). You can propose your bulletin again from the usual form.',

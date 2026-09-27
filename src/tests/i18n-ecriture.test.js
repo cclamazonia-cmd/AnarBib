@@ -52,6 +52,9 @@
 //       collectif) sont nommées une par une dans `PLURIEL_LEGITIME`.
 //       ANGLE MORT : ne couvre que fr et es, seules locales relues ce jour ;
 //       it, de, ca, nl, el ont aussi un vouvoiement et attendent leur passe.
+//       pt-BR s'y ajoute le 27/09/2026, dans l'autre sens : son registre est
+//       « você », la faute y est le « tu » EUROPÉEN (`TU_EUROPEU`, plus bas,
+//       avec son propre angle mort, mesuré).
 //
 //   (3) FORMES FAUTIVES CERTAINES — motifs dont l'absence de diacritique n'est
 //       jamais un homographe.
@@ -235,6 +238,68 @@ const PLURIEL_LEGITIME = [
   'privacy.register',        // « …comme le ferait un texte rédigé au vouvoiement » / « …de usted »
 ];
 
+// Chemin (4), pt-BR — le registre y est « você » (`DOC-ADDR-1` : « você en
+// pt-BR »), donc la faute n'est pas le vouvoiement mais le « tu » EUROPÉEN.
+// Relevé le 27/09/2026 pendant B29 : 102 valeurs de pt-BR.json le parlaient —
+// « Podes ajustar », « Conecta-te com teu e-mail », « Receberás um e-mail »,
+// « Vossa decisão é decisiva », « Verifica o horário no separador » — dans
+// l'inscription, la lettre, l'entraide, la Fractale, « Relatar », les étapes
+// du régime de circulation. Réécrites par `scripts/i18n-ptbr-voce.cjs`.
+//
+// CE QUE LE MOTIF VOIT : pronoms et possessifs de 2e personne (tu, te, ti,
+// contigo, teu·s, tua·s), l'enclise « -te », le « vós » et ses possessifs,
+// des formes verbales de 2e personne SANS HOMOGRAPHE (« podes », « estás »,
+// « receberás »…), et les impératifs de `IMPERATIVO_TU` en tête de phrase ou
+// après « : », « — », « ( ».
+//
+// ANGLE MORT, et il est de structure : l'impératif du « tu » est l'homographe
+// exact de l'indicatif de 3e personne — « Verifica o horário » (faute) /
+// « o sistema verifica » (juste). La liste ne prend donc que des verbes
+// qu'aucune phrase descriptive du fichier n'emploie à ces places ;
+// « Registra », « Liga », « Busca », « Conta » en sont exclus, parce qu'une
+// infobulle descriptive ou un nom les emploie légitimement. Rejoué sur le
+// fichier d'avant correction, le motif trouve 96 des 102 valeurs ; les six
+// autres commencent par l'un de ces homographes exclus ou placent l'impératif
+// après une virgule (« Se o texto público mudar, revisa… ») : elles ne sont
+// tombées qu'à la relecture. Son chiffre est un PLANCHER.
+//
+// Pas de borne après une virgule, parce qu'une virgule ouvre aussi les
+// incises descriptives ; pas de minuscule pour « vai », « faz », « diz » :
+// « — vai direto para o AnarBib » est descriptif. « -se » écarte l'impersonnel
+// (« publica-se após revisão »).
+//
+// Bornes de mot : `\b` est ASCII en JavaScript — « mútua » y contient le mot
+// « tua » (« confirmação mútua », « ajuda mútua » : deux faux positifs sur le
+// fichier réel). D'où les bornes `\p{L}` et le drapeau `u`.
+const PT_2A_PESSOA = [
+  'tu', 'te', 'ti', 'contigo', 'teu', 'teus', 'tua', 'tuas',
+  'vós', 'vosso', 'vossos', 'vossa', 'vossas', 'convosco', 'verificai', 'explicai',
+  'és', 'estás', 'podes', 'tens', 'queres', 'fazes', 'vais', 'vês', 'sabes',
+  'consegues', 'deves', 'recebes', 'esperavas', 'viste',
+  'tiveres', 'pedires', 'precisares', 'quiseres', 'puderes',
+];
+const IMPERATIVO_TU = [
+  'Verifica', 'Clica', 'Explora', 'Descreve', 'Corrige', 'Insere', 'Escolhe',
+  'Usa', 'Escreve', 'Tenta', 'Adiciona', 'Salva', 'Responde', 'Trata',
+  'Conecta', 'Confere', 'Coloca', 'Revisa', 'Cria', 'Compõe', 'Restaura',
+  'Define', 'Publica', 'Vai', 'Faz', 'Diz',
+];
+const SO_EM_MAIUSCULA = ['Vai', 'Faz', 'Diz'];
+const maiuscula = (w) => w[0].toUpperCase() + w.slice(1);
+const TU_EUROPEU = new RegExp(
+  `(?<![\\p{L}-])(${PT_2A_PESSOA.flatMap((w) => [w, maiuscula(w)]).join('|')})(?![\\p{L}])` +
+    `|(\\p{L}-te)(?![\\p{L}])` +
+    `|(?<![\\p{L}-])(\\p{L}{2,}(?:arás|erás|irás))(?![\\p{L}])` +
+    `|(?:^|[.!?…]\\s+|\\n\\s*|[•:;—–(]\\s*)(${IMPERATIVO_TU.flatMap((w) =>
+      SO_EM_MAIUSCULA.includes(w) ? [w] : [w, w.toLowerCase()]).join('|')})(?![\\p{L}]|-se(?![\\p{L}]))`,
+  'u',
+);
+
+// Valeurs où l'une de ces formes serait légitime (citation, nom propre,
+// phrase descriptive à la 3e personne). Vide au 27/09/2026 : chaque entrée
+// se défend en citant le passage.
+const TU_LEGITIME = [];
+
 const GREC = /[Ͱ-Ͽἀ-῿]/;
 
 // Retire ce qui n'est pas de la prose : balises, URL, mails, et l'ARMATURE des
@@ -392,6 +457,22 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
         ).toEqual([]);
       });
     }
+
+    it('pt-BR.json — aucune valeur au « tu » européen (le registre est « você »)', () => {
+      const fautes = [];
+      for (const [k, v] of Object.entries(TOUT['pt-BR'])) {
+        if (TU_LEGITIME.includes(k)) continue;
+        const m = prose(v).match(TU_EUROPEU);
+        if (m) fautes.push(`${k} → « ${m.slice(1).find(Boolean)} » dans « ${v.slice(0, 70)} »`);
+      }
+      expect(
+        fautes,
+        `pt-BR : ${fautes.length} valeur(s) au « tu » européen\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
+          'Réécris au « você » (seu/sua, « verifique », « clique », « a você »). Si la ' +
+          'forme est légitime (citation, phrase descriptive à la 3e personne), ajoute ' +
+          'la clé à TU_LEGITIME en citant le passage.',
+      ).toEqual([]);
+    });
   });
 
   // ── 5. Le grec provisoire ─────────────────────────────────────────────────

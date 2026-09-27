@@ -13,7 +13,7 @@ const SENTINEL = 'federacao.inicio.pending';
 const ADD = {
   'pt-BR': {
     "federacao.inicio.welcome": "Boas-vindas à federação",
-    "federacao.inicio.pending": "O que te espera",
+    "federacao.inicio.pending": "O que espera por você",
     "federacao.inicio.pending.body": "Um pedido de adesão aguarda o consentimento do círculo « {circle} ».",
     "federacao.inicio.annuaire": "O diretório dos coletivos",
     "federacao.inicio.toCircles": "Abrir os círculos",

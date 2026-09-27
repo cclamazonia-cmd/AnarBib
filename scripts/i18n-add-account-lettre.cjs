@@ -15,13 +15,13 @@ const SENTINEL = 'account.lettre.note';
 const ADD = {
   'pt-BR': {
     'account.lettre.title': 'Boletim da rede',
-    'account.lettre.intro': 'Um caderno da vida da rede, enviado por e-mail só se tu pedires.',
+    'account.lettre.intro': 'Um caderno da vida da rede, enviado por e-mail só se você pedir.',
     'account.lettre.toggle': 'Receber o Boletim da rede',
-    'account.lettre.confirmationSent': 'Enviámos-te um e-mail de confirmação — clica no link para validar tua inscrição.',
-    'account.lettre.pending': 'Confirmação pendente: verifica tua caixa de entrada (e o spam).',
-    'account.lettre.subscribed': 'A tua inscrição está ativa.',
-    'account.lettre.unsubscribed': 'A tua inscrição foi cancelada.',
-    'account.lettre.note': 'Podes cancelar a qualquer momento, com um clique. Sem rastreio, sem revenda.',
+    'account.lettre.confirmationSent': 'Enviamos um e-mail de confirmação para você — clique no link para validar sua inscrição.',
+    'account.lettre.pending': 'Confirmação pendente: verifique sua caixa de entrada (e o spam).',
+    'account.lettre.subscribed': 'A sua inscrição está ativa.',
+    'account.lettre.unsubscribed': 'A sua inscrição foi cancelada.',
+    'account.lettre.note': 'Você pode cancelar a qualquer momento, com um clique. Sem rastreamento, sem revenda.',
   },
   fr: {
     'account.lettre.title': 'Lettre de la fédération',

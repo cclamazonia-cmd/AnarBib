@@ -16,7 +16,7 @@ const K = ['suggestions', 'suggestionsHint'];
 
 const V = {
   fr: ['Suggestions :', 'D’après les autres livres de l’auteur·rice. Clique pour ajouter.'],
-  'pt-BR': ['Sugestões:', 'A partir dos outros livros da autoria. Clica para adicionar.'],
+  'pt-BR': ['Sugestões:', 'A partir dos outros livros da autoria. Clique para adicionar.'],
   es: ['Sugerencias:', 'A partir de los otros libros de la autoría. Haz clic para añadir.'],
   en: ['Suggestions:', 'From the author’s other books. Click to add.'],
   it: ['Suggerimenti:', 'Dagli altri libri dell’autore/trice. Clicca per aggiungere.'],

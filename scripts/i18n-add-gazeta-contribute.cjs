@@ -42,7 +42,7 @@ const ADD = {
   'pt-BR': {
     'federacao.gazeta.contribute.cta': 'Propor uma nota',
     'federacao.gazeta.contribute.title': 'Propor uma nota',
-    'federacao.gazeta.contribute.intro': 'Tua proposta é enviada à equipe da rede, que a revisa antes de qualquer publicação.',
+    'federacao.gazeta.contribute.intro': 'Sua proposta é enviada à equipe da rede, que a revisa antes de qualquer publicação.',
     'federacao.gazeta.contribute.rubric': 'Rubrica',
     'federacao.gazeta.rubric.une': 'A Capa',
     'federacao.gazeta.rubric.reseau': 'Vida da rede',
@@ -61,7 +61,7 @@ const ADD = {
     'federacao.gazeta.contribute.field.email': 'E-mail (confirmação de recebimento)',
     'federacao.gazeta.contribute.submit': 'Enviar a proposta',
     'federacao.gazeta.contribute.sending': 'Enviando…',
-    'federacao.gazeta.contribute.success': 'Tua proposta foi enviada à equipe da rede.',
+    'federacao.gazeta.contribute.success': 'Sua proposta foi enviada à equipe da rede.',
     'federacao.gazeta.contribute.error.validation': 'Verifique os campos: rubrica, título e texto são obrigatórios.',
     'federacao.gazeta.contribute.error.rateLimited': 'Muitas propostas enviadas. Tente novamente mais tarde.',
     'federacao.gazeta.contribute.error.generic': 'Falha no envio. Tente novamente em instantes.',

@@ -61,7 +61,7 @@ const ADD = {
     'review.report.items.reason.library_without_numbering': 'a biblioteca não tem padrão de numeração',
     'review.report.items.reason.code_taken': 'código de origem já usado na biblioteca',
     'review.report.items.reason.code_twice': 'código de origem presente duas vezes no lote',
-    'error.publish.item_before_record': 'Este exemplar importado é publicado com a sua ficha: publica a ficha.',
+    'error.publish.item_before_record': 'Este exemplar importado é publicado com a sua ficha: publique a ficha.',
     'error.publish.item_without_library': 'Este exemplar importado não tem biblioteca: reatribui primeiro o lote.',
     'error.publish.source_item_code_taken': 'O código de origem deste exemplar já é usado por outro exemplar da biblioteca.',
     'error.publish.items_without_library': 'Os exemplares importados desta ficha não têm biblioteca: reatribui primeiro o lote.',
@@ -425,9 +425,9 @@ const ADD4 = {
     'catalogacao.queue.importedFollowRecord': 'Certains éléments n’ont pas changé : un exemplaire importé suit sa notice (restaure ou déplace la notice).',
   },
   'pt-BR': {
-    'error.catalog.restore_record_first': 'A ficha deste exemplar foi apagada: restaura primeiro a ficha (ela traz de volta os seus exemplares).',
-    'error.import.profile_missing': 'O perfil de importação deste arquivo foi apagado: escolhe um perfil e importa o arquivo de novo.',
-    'catalogacao.queue.importedFollowRecord': 'Alguns itens não mudaram: um exemplar importado segue a sua ficha (restaura ou move a ficha).',
+    'error.catalog.restore_record_first': 'A ficha deste exemplar foi apagada: restaure primeiro a ficha (ela traz de volta os seus exemplares).',
+    'error.import.profile_missing': 'O perfil de importação deste arquivo foi apagado: escolha um perfil e importe o arquivo de novo.',
+    'catalogacao.queue.importedFollowRecord': 'Alguns itens não mudaram: um exemplar importado segue a sua ficha (restaure ou mova a ficha).',
   },
   es: {
     'error.catalog.restore_record_first': 'La ficha de este ejemplar fue eliminada: restaura primero la ficha (trae de vuelta sus ejemplares).',

@@ -13,7 +13,7 @@ const ADD = {
   'pt-BR': {
     'rede.lettre.body': 'Corpo da carta (markdown), por idioma',
     'rede.lettre.bodyTitle': 'Título (este idioma)',
-    'rede.lettre.bodyPlaceholder': 'Escreve a carta em markdown (títulos, listas, negrito, links…)',
+    'rede.lettre.bodyPlaceholder': 'Escreva a carta em markdown (títulos, listas, negrito, links…)',
     'rede.lettre.saveLocale': 'Guardar este idioma',
     'rede.lettre.ts.machine': 'Tradução automática',
     'rede.lettre.ts.reviewed': 'Revisado por pessoa',

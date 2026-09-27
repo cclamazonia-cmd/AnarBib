@@ -20,7 +20,7 @@ const V = {
   ],
   'pt-BR': [
     'Exclusão definitiva: coordenação',
-    'Este rascunho está vinculado a uma biblioteca da qual não fazes parte. A publicação cabe a essa biblioteca ou a uma administradora da rede.',
+    'Este rascunho está vinculado a uma biblioteca da qual você não faz parte. A publicação cabe a essa biblioteca ou a uma administradora da rede.',
   ],
   es: [
     'Eliminación definitiva: coordinación',
