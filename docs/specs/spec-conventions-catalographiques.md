@@ -416,7 +416,7 @@ les sections nouvelles prennent les numéros suivants.)*
 | **CONV-3** | Casse des titres pilotée par la langue du titre | ✅ acté 20/08 |
 | **CONV-4** | Article non-classant porté par `title_nonfiling`, jamais par mutilation | ✅ acté 20/08 |
 | **CONV-5** | Dates = entiers + qualificatif ; EDTF différé mais compatible | ✅ acté 20/08 |
-| **CONV-6** | `name_lang` (BCP-47) sur l'autorité pilote la règle d'entrée | 🟡 à confirmer |
+| **CONV-6** | `name_lang` (BCP-47) sur l'autorité pilote la règle d'entrée | ✅ acté 03/09 (registre) ; saisi au formulaire et appliqué par l'assistant depuis le 27/09 |
 | **CONV-7** | Normalisation `idioma` (BCP-47) et `country` (ISO 3166-1 α-2) = **prérequis dur** | ✅ acté 20/08 |
 
 ### Points ouverts

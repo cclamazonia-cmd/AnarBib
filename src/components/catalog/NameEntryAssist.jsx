@@ -14,12 +14,12 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { proposerPointAcces, formeDepuis, proposerCasseNom, basculerMajuscule } from '@/lib/nameEntry';
 
-export default function NameEntryAssist({ nom, country, formeActuelle, onChoisir, onNom }) {
+export default function NameEntryAssist({ nom, country, nameLang, formeActuelle, onChoisir, onNom }) {
   const { formatMessage: t } = useIntl();
   const [corriger, setCorriger] = useState(false);
   const [casse, setCasse] = useState(null);       // mots proposés, modifiables
   const [original, setOriginal] = useState(null); // le nom avant la normalisation
-  const p = proposerPointAcces(nom, { country });
+  const p = proposerPointAcces(nom, { country, nameLang });
   const pc = proposerCasseNom(nom);
   if (p.regle === 'vide' || p.regle === 'inverse') return null;
   const motBtn = { background: 'none', border: 'none', borderBottom: '1px dotted rgba(255,255,255,.35)', color: 'inherit', font: 'inherit', fontWeight: 600, padding: 0, cursor: 'pointer' };
@@ -30,7 +30,9 @@ export default function NameEntryAssist({ nom, country, formeActuelle, onChoisir
     background: actif ? 'rgba(255,255,255,.18)' : 'transparent', color: 'inherit',
   });
   const choisir = (forme) => { onChoisir(forme); setCorriger(false); };
-  const regleCle = p.regle === 'mononyme' ? 'single' : p.regle;   // direct | filiation | single
+  // Clé de l'explication : direct | filiation | single | hispanic | kept | article
+  const CLE_REGLE = { mononyme: 'single', hispanique: 'hispanic', conservee: 'kept' };
+  const regleCle = CLE_REGLE[p.regle] || p.regle;
 
   return (
     <div data-testid="name-entry-assist" style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -103,7 +105,7 @@ export default function NameEntryAssist({ nom, country, formeActuelle, onChoisir
       </div>
       {p.variante && (
         <div style={{ fontSize: '.78rem', display: 'flex', gap: 6, alignItems: 'baseline', flexWrap: 'wrap' }}>
-          <span style={muted}>{t({ id: 'catalogacao.nameEntry.rule.hispanic' })}</span>
+          <span style={muted}>{t({ id: `catalogacao.nameEntry.rule.${CLE_REGLE[p.variante.regle] || p.variante.regle}` })}</span>
           <button type="button" className="ab-button ab-button--ghost ab-button--sm" onClick={() => choisir(p.variante.forme)}>
             {p.variante.forme}
           </button>

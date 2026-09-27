@@ -23,6 +23,11 @@ export const PARTICULES = new Set(['da', 'de', 'del', 'della', 'dalla', 'di', 'd
   'e', 'i', 'y', 'la', 'le', 'los', 'las', 'van', 'von', 'der', 'den']);
 export const FILIATIONS = new Set(['filho', 'filha', 'junior', 'jr', 'neto', 'neta', 'sobrinho', 'sobrinha']);
 
+/** Langues où la particule entre avec le nom (« De Amicis », « Van der Walt », « De la Mare »). */
+export const PARTICULE_CONSERVEE = new Set(['it', 'af', 'en']);
+/** En français, l'article et la contraction entrent avec le nom ; « de » reste au prénom. */
+export const ARTICLES_FR = new Set(['le', 'la', 'les', 'du', 'des']);
+
 /** Pays où l'usage est d'entrer aux deux noms de famille (variante offerte). */
 export const PAYS_HISPANOPHONES = new Set(['ES', 'AR', 'BO', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'GT', 'HN',
   'MX', 'NI', 'PA', 'PE', 'PR', 'PY', 'SV', 'UY', 'VE']);
@@ -43,9 +48,11 @@ export function formeDepuis(tokens, debut) {
 /**
  * Propose le point d'accès d'une personne.
  * @returns {{ forme: string, regle: string, tokens: string[], debut: number, variante: null | { forme: string, regle: string, debut: number } }}
- *   regle ∈ 'vide' | 'inverse' | 'mononyme' | 'direct' | 'filiation' ; variante.regle = 'hispanique'
+ *   regle ∈ 'vide' | 'inverse' | 'mononyme' | 'direct' | 'filiation' | 'hispanique' | 'conservee' | 'article' ;
+ *   variante.regle = 'hispanique' (pays hispanophone, langue du nom inconnue) ou 'direct' (nom espagnol).
+ *   `nameLang` (CONV-6, authors.name_lang) : la langue de la FORME DU NOM ; elle pilote la règle.
  */
-export function proposerPointAcces(nom, { country } = {}) {
+export function proposerPointAcces(nom, { country, nameLang } = {}) {
   const propre = (nom || '').replace(/\s+/g, ' ').trim();
   if (!propre) return { forme: '', regle: 'vide', tokens: [], debut: 0, variante: null };
   if (propre.includes(',')) return { forme: propre, regle: 'inverse', tokens: propre.split(' '), debut: 0, variante: null };
@@ -63,14 +70,41 @@ export function proposerPointAcces(nom, { country } = {}) {
     regle = 'filiation';
   }
 
-  let variante = null;
-  if (regle === 'direct' && PAYS_HISPANOPHONES.has(String(country || '').toUpperCase())) {
-    // Avant-dernier mot qui n'est pas une particule : début du double nom.
+  // Avant-dernier mot qui n'est pas une particule : début du double nom hispanique.
+  const debutDouble = () => {
     let avant = debut - 1;
     while (avant > 0 && PARTICULES.has(cle(tokens[avant]))) avant--;
-    if (avant >= 1 && !PARTICULES.has(cle(tokens[avant]))) {
-      variante = { forme: formeDepuis(tokens, avant), regle: 'hispanique', debut: avant };
+    return avant >= 1 && !PARTICULES.has(cle(tokens[avant])) ? avant : null;
+  };
+
+  // CONV-6 : quand la langue du nom est connue, sa règle d'entrée décide (spec §3.1).
+  const langue = String(nameLang || '').split('-')[0].toLowerCase();
+  if (langue && regle === 'direct') {
+    if (langue === 'es') {
+      const avant = debutDouble();
+      if (avant !== null) {
+        return { forme: formeDepuis(tokens, avant), regle: 'hispanique', tokens, debut: avant,
+          variante: { forme: formeDepuis(tokens, debut), regle: 'direct', debut } };
+      }
+    } else if (PARTICULE_CONSERVEE.has(langue) || langue === 'fr') {
+      // it/af/en : les particules qui précèdent le nom entrent avec lui ; fr : seuls
+      // l'article et la contraction (Le, La, Les, Du, Des), « de » reste au prénom.
+      const garde = langue === 'fr' ? (w) => ARTICLES_FR.has(cle(w)) : (w) => PARTICULES.has(cle(w));
+      let d = debut;
+      while (d > 1 && garde(tokens[d - 1])) d--;
+      if (d < debut) {
+        const t2 = tokens.slice();
+        t2[d] = t2[d].charAt(0).toLocaleUpperCase() + t2[d].slice(1);   // « Van der Walt », « Le Brun »
+        return { forme: formeDepuis(t2, d), regle: langue === 'fr' ? 'article' : 'conservee', tokens, debut: d, variante: null };
+      }
     }
+    return { forme: formeDepuis(tokens, debut), regle, tokens, debut, variante: null };
+  }
+
+  let variante = null;
+  if (regle === 'direct' && PAYS_HISPANOPHONES.has(String(country || '').toUpperCase())) {
+    const avant = debutDouble();
+    if (avant !== null) variante = { forme: formeDepuis(tokens, avant), regle: 'hispanique', debut: avant };
   }
   return { forme: formeDepuis(tokens, debut), regle, tokens, debut, variante };
 }

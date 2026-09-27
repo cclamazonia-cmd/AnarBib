@@ -118,7 +118,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const EMPTY_FORM = {
     id: '', published_author_id: '', batch_id: '', action: 'create', status: 'draft',
     preferred_name: '', sort_name: '', biography: '', birth_year: '', death_year: '',
-    country: '', writing_language: '', source_kind: '', source_label: '', source_url: '',
+    country: '', writing_language: '', name_lang: '', source_kind: '', source_label: '', source_url: '',
     viaf_id: '', isni: '', wikidata_id: '', photo_object_path: '', notes: '',
   };
 
@@ -285,6 +285,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       death_year: r.death_year ? String(r.death_year) : '',
       country: r.country || '',
       writing_language: r.writing_language || '',
+      name_lang: r.name_lang || '',
       source_kind: r.source_kind || '',
       source_label: r.source_label || '',
       source_url: r.source_url || '',
@@ -402,6 +403,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         death_year: f('death_year') ? Number(f('death_year')) : null,
         country: f('country') || null,
         writing_language: f('writing_language') || null,
+        name_lang: meta.authorityType === 'person' ? (f('name_lang') || null) : null,
         source_kind: f('source_kind') || null,
         source_label: f('source_label') || null,
         source_url: f('source_url') || null,
@@ -784,7 +786,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               placeholder={meta.authorityType === 'person' ? 'Osvaldo Bayer' : meta.authorityType === 'collective' ? 'Confederación Nacional del Trabajo' : ''} required style={fs} />
             {/* C6 §7.1 — le point d'accès proposé, expliqué, corrigeable ; jamais bloquant */}
             {meta.authorityType === 'person' && (
-              <NameEntryAssist nom={f('preferred_name')} country={f('country')} formeActuelle={f('sort_name')}
+              <NameEntryAssist nom={f('preferred_name')} country={f('country')} nameLang={f('name_lang')} formeActuelle={f('sort_name')}
                 onChoisir={(forme) => set('sort_name', forme)} onNom={handlePreferredNameChange} />
             )}
           </div>
@@ -887,6 +889,22 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               {languageOptions(t).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
+          {/* Langue de la forme du nom (CONV-6, confirmé le 27/09) : elle pilote la découpe
+              du point d'accès — particule gardée en italien, article en français, deux noms
+              de famille en espagnol. Distincte de la langue d'écriture. */}
+          {meta.authorityType === 'person' && (
+            <div className="cat-field">
+              <label style={ls} htmlFor="ab-author-name-lang">{t({ id: 'catalogacao.author.nameLang' })}</label>
+              <select id="ab-author-name-lang" value={f('name_lang')} onChange={e => set('name_lang', e.target.value)} style={fs}>
+                <option value="">—</option>
+                {f('name_lang') && !languageOptions(t).some(o => o.value === f('name_lang')) && (
+                  <option value={f('name_lang')}>{f('name_lang')}</option>
+                )}
+                {languageOptions(t).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+              <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{t({ id: 'catalogacao.author.nameLangHint' })}</div>
+            </div>
+          )}
 
           {/* ── Source + identifiers ──────────────────── */}
           <div className="cat-field">

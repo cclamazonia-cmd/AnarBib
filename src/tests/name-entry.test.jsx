@@ -76,6 +76,36 @@ describe('proposerPointAcces', () => {
 
 const casse = (n) => proposerCasseNom(n).mots.map((m) => m.texte).join(' ');
 
+describe('proposerPointAcces — la langue du nom décide (CONV-6, spec §3.1)', () => {
+  it.each([
+    ['Edmondo De Amicis', 'it', 'De Amicis, Edmondo', 'conservee'],
+    ['Lucien van der Walt', 'af', 'Van der Walt, Lucien', 'conservee'],
+    ['Walter de la Mare', 'en', 'De la Mare, Walter', 'conservee'],
+    ['Charles Le Brun', 'fr', 'Le Brun, Charles', 'article'],
+    ['Jean de La Fontaine', 'fr', 'La Fontaine, Jean de', 'article'],
+    ['Simone de Beauvoir', 'fr', 'Beauvoir, Simone de', 'direct'],
+    ['Juan Gómez Casas', 'es', 'Gómez Casas, Juan', 'hispanique'],
+    ['Santiago Ramón y Cajal', 'es', 'Ramón y Cajal, Santiago', 'hispanique'],
+    ['Osvaldo Bayer', 'es', 'Bayer, Osvaldo', 'direct'],
+    ['Fabiano de Oliveira Bringel', 'pt-BR', 'Bringel, Fabiano de Oliveira', 'direct'],
+    ['Rudolf de Jong', 'nl', 'Jong, Rudolf de', 'direct'],
+    ['Max von Nettlau', 'de', 'Nettlau, Max von', 'direct'],
+    ['Fábio Luz Filho', 'pt-BR', 'Luz Filho, Fábio', 'filiation'],
+  ])('%s (%s) → %s', (nom, nameLang, forme, regle) => {
+    expect(proposerPointAcces(nom, { nameLang })).toMatchObject({ forme, regle });
+  });
+
+  it('espagnol : le seul dernier nom reste offert en variante', () => {
+    expect(proposerPointAcces('Juan Carlos Mechoso', { nameLang: 'es' }).variante).toMatchObject({ forme: 'Mechoso, Juan Carlos', regle: 'direct' });
+  });
+
+  it('sans langue du nom : la règle prudente, le pays n’offre qu’une variante (jamais deviné, CONV-6)', () => {
+    const p = proposerPointAcces('Edmondo De Amicis', { country: 'IT' });
+    expect(p.forme).toBe('Amicis, Edmondo De');
+    expect(p.regle).toBe('direct');
+  });
+});
+
 describe('proposerCasseNom — la casse naturelle (CONV-1)', () => {
   it.each([
     ['osvaldo BAYER', 'Osvaldo Bayer'],
@@ -177,5 +207,18 @@ describe('NameEntryAssist', () => {
   it('le formulaire d’autorité passe le nom par handlePreferredNameChange', () => {
     const src = readFileSync('src/pages/catalogacao/AuthorDraftForm.jsx', 'utf8');
     expect(src).toMatch(/onNom={handlePreferredNameChange}/);
+  });
+
+  it('la langue du nom est passée à la règle et son explication s’affiche', () => {
+    monter({ nom: 'Edmondo De Amicis', nameLang: 'it', formeActuelle: '', onChoisir: vi.fn() });
+    expect(screen.getByText('De Amicis, Edmondo')).toBeTruthy();
+    expect(screen.getByText(fr['catalogacao.nameEntry.rule.kept'])).toBeTruthy();
+  });
+
+  it('le formulaire d’autorité saisit name_lang et la passe à l’assistant', () => {
+    const src = readFileSync('src/pages/catalogacao/AuthorDraftForm.jsx', 'utf8');
+    expect(src).toContain("nameLang={f('name_lang')}");
+    expect(src).toContain("name_lang: meta.authorityType === 'person' ? (f('name_lang') || null) : null");
+    expect(src).toMatch(/id="ab-author-name-lang"/);
   });
 });

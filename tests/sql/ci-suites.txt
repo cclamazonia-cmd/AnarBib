@@ -534,3 +534,4 @@ tests/sql/capas_provenance_tests.sql
 # 27/09 (B29, CAT-E18) : les brouillons de catalogage appartiennent a leur bibliotheque —
 # politiques par bibliotheque, autorites en lecture commune, gardes des fonctions DEFINER alignees.
 tests/sql/brouillons_par_bibliotheque_tests.sql
+tests/sql/name_lang_tests.sql
