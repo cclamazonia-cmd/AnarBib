@@ -279,7 +279,7 @@ const KEYS = {
   },
   'deposit.panel.noActiveRule': {
     'pt-BR': 'Ative uma regra de caução para cobrar um depósito.',
-    fr: 'Activez une règle de dépôt pour percevoir une caution.',
+    fr: 'Active une règle de dépôt pour percevoir une caution.',
     es: 'Activa una regla de depósito para cobrar una caución.',
     en: 'Add an active deposit rule to collect a deposit.',
     it: 'Attiva una regola di cauzione per riscuotere un deposito.',

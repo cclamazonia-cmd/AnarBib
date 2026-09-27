@@ -36,7 +36,7 @@ const KEYS = {
   'recolement.intro': {
     'pt-BR': 'Inicie uma sessão e leia as etiquetas QR dos exemplares para conferir o acervo. Ao terminar, gere o relatório de presentes, faltantes e intrusos.',
     en: 'Start a session and scan the exemplars’ QR labels to check the collection. When done, get the report of present, missing and intruder items.',
-    fr: 'Démarrez une session et scannez les étiquettes QR des exemplaires pour vérifier le fonds. À la fin, obtenez le rapport des présents, manquants et intrus.',
+    fr: 'Démarre une session et scanne les étiquettes QR des exemplaires pour vérifier le fonds. À la fin, obtiens le rapport des présents, manquants et intrus.',
     es: 'Inicie una sesión y escanee las etiquetas QR de los ejemplares para verificar el fondo. Al terminar, obtenga el informe de presentes, faltantes e intrusos.',
     de: 'Starte eine Sitzung und scanne die QR-Etiketten der Exemplare, um den Bestand zu prüfen. Am Ende erhältst du den Bericht über vorhandene, fehlende und fremde Exemplare.',
     it: 'Avvia una sessione e scansiona le etichette QR delle copie per verificare il fondo. Al termine, ottieni il rapporto di presenti, mancanti e intrusi.',
@@ -75,7 +75,7 @@ const KEYS = {
   'recolement.scan.prompt': {
     'pt-BR': 'Aponte para o QR da etiqueta do exemplar',
     en: 'Aim at the exemplar label’s QR code',
-    fr: 'Visez le QR de l’étiquette de l’exemplaire',
+    fr: 'Vise le QR de l’étiquette de l’exemplaire',
     es: 'Apunte al QR de la etiqueta del ejemplar',
     de: 'Ziele auf den QR-Code des Exemplar-Etiketts',
     it: 'Inquadra il QR dell’etichetta della copia',
@@ -242,7 +242,7 @@ const KEYS = {
   },
   'recolement.error.generic': {
     'pt-BR': 'Ocorreu um erro, tente novamente.', en: 'An error occurred, please try again.',
-    fr: 'Une erreur est survenue, réessayez.', es: 'Se produjo un error, inténtelo de nuevo.',
+    fr: 'Une erreur est survenue, réessaie.', es: 'Se produjo un error, inténtelo de nuevo.',
     de: 'Ein Fehler ist aufgetreten, bitte erneut versuchen.', it: 'Si è verificato un errore, riprova.',
     ca: 'S’ha produït un error, torneu-ho a provar.', eo: 'Eraro okazis, bonvolu reprovi.',
     nl: 'Er is een fout opgetreden, probeer opnieuw.', el: 'Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά.',
@@ -269,7 +269,7 @@ const KEYS = {
   },
   'recolement.error.not_authenticated': {
     'pt-BR': 'Você precisa estar conectado.', en: 'You must be signed in.',
-    fr: 'Vous devez être connecté·e.', es: 'Debe haber iniciado sesión.',
+    fr: 'Tu dois être connecté·e.', es: 'Debe haber iniciado sesión.',
     de: 'Du musst angemeldet sein.', it: 'Devi aver effettuato l’accesso.',
     ca: 'Heu d’haver iniciat la sessió.', eo: 'Vi devas esti ensalutinta.',
     nl: 'Je moet ingelogd zijn.', el: 'Πρέπει να έχετε συνδεθεί.',

@@ -433,7 +433,7 @@ const NEW_KEYS = {
   "catalogacao.isbd.notGenerated": {
     "pt-BR": "ISBD: ainda não gerado neste rascunho. Clique em \"Preparar ISBD\" acima.",
     "en": "ISBD: not yet generated for this draft. Click \"Prepare ISBD\" above.",
-    "fr": "ISBD : pas encore généré pour ce brouillon. Cliquez sur « Préparer ISBD » ci-dessus.",
+    "fr": "ISBD : pas encore généré pour ce brouillon. Clique sur « Préparer ISBD » ci-dessus.",
     "es": "ISBD: aun no generado para este borrador. Haga clic en \"Preparar ISBD\" arriba.",
     "de": "ISBD: für diesen Entwurf noch nicht erstellt. Klicken Sie oben auf „ISBD vorbereiten“.",
     "it": "ISBD: non ancora generato per questa bozza. Clicca su \"Prepara ISBD\" sopra.",
@@ -697,7 +697,7 @@ const NEW_KEYS = {
   "catalogacao.queue.selectAtLeast": {
     "pt-BR": "Selecione ao menos um item.",
     "en": "Select at least one item.",
-    "fr": "Sélectionnez au moins un élément.",
+    "fr": "Sélectionne au moins un élément.",
     "es": "Seleccione al menos un item.",
     "de": "Wählen Sie mindestens ein Element aus.",
     "it": "Seleziona almeno un elemento.",
@@ -829,7 +829,7 @@ const NEW_KEYS = {
   "catalogacao.queue.description": {
     "pt-BR": "Rascunhos ativos de documentos, autoridades e exemplares. Gerencie o ciclo de vida: edite, marque como pronto, publique ou descarte.",
     "en": "Active drafts of documents, authorities and copies. Manage the lifecycle: edit, mark ready, publish or discard.",
-    "fr": "Brouillons actifs de documents, autorités et exemplaires. Gérez le cycle de vie : éditez, marquez comme prêt, publiez ou mettez au rebut.",
+    "fr": "Brouillons actifs de documents, autorités et exemplaires. Gère le cycle de vie : édite, marque comme prêt, publie ou mets au rebut.",
     "es": "Borradores activos de documentos, autoridades y ejemplares. Gestione el ciclo de vida: edite, marque como listo, publique o descarte.",
     "de": "Aktive Entwürfe von Dokumenten, Autoritäten und Exemplaren. Verwalten Sie den Lebenszyklus: bearbeiten, als bereit markieren, veröffentlichen oder verwerfen.",
     "it": "Bozze attive di documenti, autorità e esemplari. Gestisci il ciclo di vita: modifica, segna come pronto, pubblica o scarta.",
@@ -1057,7 +1057,7 @@ const NEW_KEYS = {
   "catalogacao.queue.trashDescription": {
     "pt-BR": "Rascunhos descartados. Você pode restaurar ou apagar definitivamente.",
     "en": "Discarded drafts. You can restore or permanently delete.",
-    "fr": "Brouillons mis au rebut. Vous pouvez restaurer ou supprimer définitivement.",
+    "fr": "Brouillons mis au rebut. Tu peux restaurer ou supprimer définitivement.",
     "es": "Borradores descartados. Puede restaurar o eliminar definitivamente.",
     "de": "Verworfene Entwürfe. Sie können wiederherstellen oder endgültig löschen.",
     "it": "Bozze scartate. Puoi ripristinare o eliminare definitivamente.",
@@ -1229,7 +1229,7 @@ const NEW_KEYS = {
   "catalogacao.catalog.description": {
     "pt-BR": "Consulte documentos, autoridades e exemplares já publicados. Retome para editar ou descarte do catálogo.",
     "en": "Browse published documents, authorities and copies. Resume to edit or discard from catalog.",
-    "fr": "Consultez les documents, autorités et exemplaires publiés. Reprenez pour modifier ou mettre au rebut.",
+    "fr": "Consulte les documents, autorités et exemplaires publiés. Reprends pour modifier ou mettre au rebut.",
     "es": "Consulte documentos, autoridades y ejemplares publicados. Retome para editar o descarte del catalogo.",
     "de": "Durchsuchen Sie veröffentlichte Dokumente, Autoritäten und Exemplare. Wiederaufnehmen zum Bearbeiten oder aus dem Katalog verwerfen.",
     "it": "Consulta documenti, autorità e esemplari pubblicati. Riprendi per modificare o scarta dal catalogo.",
@@ -1265,7 +1265,7 @@ const NEW_KEYS = {
   "catalogacao.catalog.refreshBusy": {
     "pt-BR": "Atualização já em curso — tente de novo em instantes.",
     "en": "Refresh already in progress — try again shortly.",
-    "fr": "Actualisation déjà en cours — réessayez dans un instant.",
+    "fr": "Actualisation déjà en cours — réessaie dans un instant.",
     "es": "Actualizacion ya en curso — intente de nuevo en unos instantes.",
     "de": "Aktualisierung läuft bereits — versuchen Sie es gleich erneut.",
     "it": "Aggiornamento già in corso — riprova tra un momento.",
@@ -1325,7 +1325,7 @@ const NEW_KEYS = {
   "catalogacao.catalog.retakeCreatedNoEdit": {
     "pt-BR": "Rascunho de retomada criado (ID {id}). Abra a aba correspondente para editar.",
     "en": "Update draft created (ID {id}). Open the corresponding tab to edit.",
-    "fr": "Brouillon de reprise créé (ID {id}). Ouvrez l’onglet correspondant pour modifier.",
+    "fr": "Brouillon de reprise créé (ID {id}). Ouvre l’onglet correspondant pour modifier.",
     "es": "Borrador de retomada creado (ID {id}). Abra la pestana correspondiente para editar.",
     "de": "Wiederaufnahme-Entwurf erstellt (ID {id}). Öffnen Sie den entsprechenden Tab zum Bearbeiten.",
     "it": "Bozza di ripresa creata (ID {id}). Apri la scheda corrispondente per modificare.",

@@ -15,7 +15,7 @@ const T = {
   'federacao.carte.edit': { fr:'Éditer', 'pt-BR':'Editar', es:'Editar', it:'Modifica', de:'Bearbeiten', en:'Edit', ca:'Edita', eo:'Redakti', nl:'Bewerken', el:'Επεξεργασία' },
   'federacao.carte.edit.title': { fr:'Éditer la fiche', 'pt-BR':'Editar a ficha', es:'Editar la ficha', it:'Modifica la scheda', de:'Eintrag bearbeiten', en:'Edit entry', ca:'Edita la fitxa', eo:'Redakti la slipon', nl:'Vermelding bewerken', el:'Επεξεργασία καταχώρισης' },
   'federacao.carte.edit.localeNote': {
-    fr:"Le nom et les notes s'éditent dans votre langue d'affichage.",
+    fr:"Le nom et les notes s'éditent dans ta langue d'affichage.",
     'pt-BR':'O nome e as notas são editados no seu idioma de exibição.',
     es:'El nombre y las notas se editan en tu idioma de visualización.',
     it:'Nome e note si modificano nella tua lingua di visualizzazione.',
@@ -39,7 +39,7 @@ const T = {
   'federacao.carte.edit.adminSection': { fr:'Coordination (champs partagés)', 'pt-BR':'Coordenação (campos compartilhados)', es:'Coordinación (campos compartidos)', it:'Coordinamento (campi condivisi)', de:'Koordination (geteilte Felder)', en:'Coordination (shared fields)', ca:'Coordinació (camps compartits)', eo:'Kunordigo (komunaj kampoj)', nl:'Coördinatie (gedeelde velden)', el:'Συντονισμός (κοινά πεδία)' },
   'federacao.carte.edit.category': { fr:'Catégorie', 'pt-BR':'Categoria', es:'Categoría', it:'Categoria', de:'Kategorie', en:'Category', ca:'Categoria', eo:'Kategorio', nl:'Categorie', el:'Κατηγορία' },
   'federacao.carte.edit.status': { fr:'Statut dans le réseau', 'pt-BR':'Status na rede', es:'Estatus en la red', it:'Stato nella rete', de:'Status im Netzwerk', en:'Network status', ca:'Estatus a la xarxa', eo:'Statuso en la reto', nl:'Status in het netwerk', el:'Κατάσταση στο δίκτυο' },
-  'federacao.carte.edit.position': { fr:'Position (cliquez ou glissez le repère)', 'pt-BR':'Posição (clique ou arraste o marcador)', es:'Posición (haz clic o arrastra el marcador)', it:'Posizione (clicca o trascina il segnaposto)', de:'Position (klicken oder Markierung ziehen)', en:'Location (click or drag the marker)', ca:'Posició (fes clic o arrossega el marcador)', eo:'Pozicio (alklaku aŭ trenu la markilon)', nl:'Locatie (klik of sleep de markering)', el:'Θέση (κάντε κλικ ή σύρετε τον δείκτη)' },
+  'federacao.carte.edit.position': { fr:'Position (clique ou glisse le repère)', 'pt-BR':'Posição (clique ou arraste o marcador)', es:'Posición (haz clic o arrastra el marcador)', it:'Posizione (clicca o trascina il segnaposto)', de:'Position (klicken oder Markierung ziehen)', en:'Location (click or drag the marker)', ca:'Posició (fes clic o arrossega el marcador)', eo:'Pozicio (alklaku aŭ trenu la markilon)', nl:'Locatie (klik of sleep de markering)', el:'Θέση (κάντε κλικ ή σύρετε τον δείκτη)' },
   'federacao.carte.edit.save': { fr:'Enregistrer', 'pt-BR':'Salvar', es:'Guardar', it:'Salva', de:'Speichern', en:'Save', ca:'Desa', eo:'Konservi', nl:'Opslaan', el:'Αποθήκευση' },
   'federacao.carte.edit.cancel': { fr:'Annuler', 'pt-BR':'Cancelar', es:'Cancelar', it:'Annulla', de:'Abbrechen', en:'Cancel', ca:'Cancel·la', eo:'Nuligi', nl:'Annuleren', el:'Άκυρο' },
   'federacao.carte.edit.saved': { fr:'Fiche mise à jour', 'pt-BR':'Ficha atualizada', es:'Ficha actualizada', it:'Scheda aggiornata', de:'Eintrag aktualisiert', en:'Entry updated', ca:'Fitxa actualitzada', eo:'Slipo ĝisdatigita', nl:'Vermelding bijgewerkt', el:'Η καταχώριση ενημερώθηκε' },

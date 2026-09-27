@@ -517,7 +517,7 @@ const BYLOCALE = {
     "federacao.circulos.dormancy.adormecer": "Mettre en sommeil",
     "federacao.circulos.dormancy.arquivar": "Archiver",
     "federacao.circulos.dormancy.reativar.done": "Cercle réactivé.",
-    "federacao.circulos.dormancy.adormecer.done": "Cercle mis en sommeil. Il peut être réveillé quand vous voulez.",
+    "federacao.circulos.dormancy.adormecer.done": "Cercle mis en sommeil. Il peut être réveillé quand tu veux.",
     "federacao.circulos.dormancy.arquivar.done": "Cercle archivé. Rien n'est effacé — la mémoire demeure.",
     "federacao.circulos.leave": "Quitter le cercle",
     "federacao.circulos.leave.done": "Ta bibliothèque a quitté le cercle.",

@@ -28,7 +28,7 @@ const NEW_KEYS = {
   fr: {
     'importacoes.oai.title': 'Moissonnage OAI-PMH',
     'importacoes.oai.desc': 'Moissonnage automatique hebdomadaire de catalogues exposes via le protocole OAI-PMH. La configuration des sources est reservee a l\'admin reseau.',
-    'importacoes.oai.noSources': 'Aucune source OAI-PMH configuree. Contactez l\'admin reseau.',
+    'importacoes.oai.noSources': 'Aucune source OAI-PMH configurée. Contacte l\'admin réseau.',
     'importacoes.oai.harvestNow': 'Moissonner maintenant',
     'importacoes.oai.harvesting': 'Moissonnage en cours…',
     'importacoes.oai.harvestStarted': 'Moissonnage lance (run #{id}).',

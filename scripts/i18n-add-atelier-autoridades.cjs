@@ -16,8 +16,8 @@ const T = {
   'atelier.action.refresh':       ['Atualizar', 'Actualiser', 'Actualizar', 'Refresh'],
   'atelier.action.apply':         ['Aplicar', 'Appliquer', 'Aplicar', 'Apply'],
   'atelier.action.withdraw':      ['Retirar', 'Retirer', 'Retirar', 'Withdraw'],
-  'atelier.form.error.ids':       ['Informe os dois identificadores (duplicata e canônica).', 'Indiquez les deux identifiants (duplicata et canonique).', 'Indique los dos identificadores (duplicado y canónico).', 'Provide both identifiers (duplicate and canonical).'],
-  'atelier.form.error.rationale': ['Explique brevemente o motivo da proposta.', 'Expliquez brièvement le motif de la proposition.', 'Explique brevemente el motivo de la propuesta.', 'Briefly explain the reason for the proposal.'],
+  'atelier.form.error.ids':       ['Informe os dois identificadores (duplicata e canônica).', 'Indique les deux identifiants (duplicata et canonique).', 'Indique los dos identificadores (duplicado y canónico).', 'Provide both identifiers (duplicate and canonical).'],
+  'atelier.form.error.rationale': ['Explique brevemente o motivo da proposta.', 'Explique brièvement le motif de la proposition.', 'Explique brevemente el motivo de la propuesta.', 'Briefly explain the reason for the proposal.'],
   'atelier.form.success':         ['Proposta registrada. A discussão fica aberta até o prazo.', "Proposition enregistrée. La discussion reste ouverte jusqu'à l'échéance.", 'Propuesta registrada. La discusión queda abierta hasta el plazo.', 'Proposal registered. The discussion stays open until the deadline.'],
   'atelier.form.title':           ['Propor a fusão de uma duplicata', "Proposer la fusion d'une duplicata", 'Proponer la fusión de un duplicado', 'Propose merging a duplicate'],
   'atelier.form.targetKind':      ['Tipo de autoridade', "Type d'autorité", 'Tipo de autoridad', 'Authority type'],
@@ -34,14 +34,14 @@ const T = {
   // criar-conta : option « compte contributeur » (Atelier autorités).
   'auth.create.intent.optionContributor': ['Sou contribuinte de autoridades (sem biblioteca)', "Je suis contributeur·rice d'autorités (sans bibliothèque)", 'Soy contribuyente de autoridades (sin biblioteca)', "I'm an authorities contributor (no library)"],
   'auth.create.intent.contributor.title': ['Conta de contribuinte de autoridades', 'Compte de contribution aux autorités', 'Cuenta de contribución a autoridades', 'Authorities contributor account'],
-  'auth.create.intent.contributor.body':  ['Uma conta de rede, sem vínculo a uma biblioteca, para colaborar com o corpus compartilhado de autoridades (pessoas, coletividades, matérias): propor fusões, correções, traduções. Você propõe; a aplicação se dá por consentimento.', "Un compte réseau, sans rattachement à une bibliothèque, pour collaborer au corpus partagé d'autorités (personnes, collectivités, matières) : proposer des fusions, corrections, traductions. Vous proposez ; l'application se fait par consentement.", 'Una cuenta de red, sin vínculo a una biblioteca, para colaborar con el corpus compartido de autoridades (personas, colectividades, materias): proponer fusiones, correcciones, traducciones. Tú propones; la aplicación se hace por consentimiento.', 'A network account, not tied to a library, to collaborate on the shared authorities corpus (people, collectivities, subjects): propose merges, corrections, translations. You propose; application happens by consent.'],
+  'auth.create.intent.contributor.body':  ['Uma conta de rede, sem vínculo a uma biblioteca, para colaborar com o corpus compartilhado de autoridades (pessoas, coletividades, matérias): propor fusões, correções, traduções. Você propõe; a aplicação se dá por consentimento.', "Un compte réseau, sans rattachement à une bibliothèque, pour collaborer au corpus partagé d'autorités (personnes, collectivités, matières) : proposer des fusions, corrections, traductions. Tu proposes ; l'application se fait par consentement.", 'Una cuenta de red, sin vínculo a una biblioteca, para colaborar con el corpus compartido de autoridades (personas, colectividades, materias): proponer fusiones, correcciones, traducciones. Tú propones; la aplicación se hace por consentimiento.', 'A network account, not tied to a library, to collaborate on the shared authorities corpus (people, collectivities, subjects): propose merges, corrections, translations. You propose; application happens by consent.'],
   // Objection (atelier page) — coordenador d'une biblio utilisatrice.
   'atelier.action.object':   ['Objetar', 'Objecter', 'Objetar', 'Object'],
   'atelier.obj.library':     ['Biblioteca que objeta', 'Bibliothèque qui objecte', 'Biblioteca que objeta', 'Objecting library'],
   'atelier.obj.libraryPh':   ['Escolha…', 'Choisir…', 'Elegir…', 'Choose…'],
   'atelier.obj.reason':      ['Motivação (mín. 20 caracteres)', 'Motivation (min. 20 caractères)', 'Motivación (mín. 20 caracteres)', 'Reason (min. 20 characters)'],
   'atelier.obj.submit':      ['Registrar objeção', "Enregistrer l'objection", 'Registrar objeción', 'Register objection'],
-  'atelier.obj.error.lib':   ['Selecione a biblioteca que objeta.', 'Choisissez la bibliothèque qui objecte.', 'Seleccione la biblioteca que objeta.', 'Select the objecting library.'],
+  'atelier.obj.error.lib':   ['Selecione a biblioteca que objeta.', 'Choisis la bibliothèque qui objecte.', 'Seleccione la biblioteca que objeta.', 'Select the objecting library.'],
   'atelier.obj.error.reason':['A objeção precisa de uma motivação (mín. 20 caracteres).', "L'objection requiert une motivation (min. 20 caractères).", 'La objeción necesita una motivación (mín. 20 caracteres).', 'The objection needs a reason (min. 20 characters).'],
   'atelier.obj.refused':     ['Objeção registrada — a proposta foi recusada (2+ bibliotecas usuárias).', 'Objection enregistrée — la proposition est refusée (2+ bibliothèques utilisatrices).', 'Objeción registrada — la propuesta fue rechazada (2+ bibliotecas usuarias).', 'Objection registered — the proposal was refused (2+ using libraries).'],
   'atelier.obj.contested':   ['Objeção registrada — a discussão está aberta.', 'Objection enregistrée — la discussion est ouverte.', 'Objeción registrada — la discusión está abierta.', 'Objection registered — the discussion is open.'],
@@ -53,14 +53,14 @@ const T = {
   'atelier.form.authorId':       ['ID da autoridade (pessoa)', "ID de l'autorité (personne)", 'ID de la autoridad (persona)', 'Authority ID (person)'],
   'atelier.form.lang':           ['Idioma', 'Langue', 'Idioma', 'Language'],
   'atelier.form.bio':            ['Biografia traduzida', 'Biographie traduite', 'Biografía traducida', 'Translated biography'],
-  'atelier.form.error.authorId': ['Informe o ID da autoridade (pessoa).', "Indiquez l'ID de l'autorité (personne).", 'Indique el ID de la autoridad (persona).', 'Provide the authority ID (person).'],
-  'atelier.form.error.bio':      ['Escreva a biografia traduzida.', 'Saisissez la biographie traduite.', 'Escriba la biografía traducida.', 'Write the translated biography.'],
+  'atelier.form.error.authorId': ['Informe o ID da autoridade (pessoa).', "Indique l'ID de l'autorité (personne).", 'Indique el ID de la autoridad (persona).', 'Provide the authority ID (person).'],
+  'atelier.form.error.bio':      ['Escreva a biografia traduzida.', 'Saisis la biographie traduite.', 'Escriba la biografía traducida.', 'Write the translated biography.'],
   // Bouton générique + champs nom (id + nom de l'autorité).
   'atelier.action.newProposal':  ['Fazer uma proposta', 'Faire une proposition', 'Hacer una propuesta', 'Make a proposal'],
   'atelier.form.nameDup':        ['Nome da duplicata', 'Nom de la duplicata', 'Nombre del duplicado', 'Duplicate name'],
   'atelier.form.nameCan':        ['Nome da canônica', 'Nom de la canonique', 'Nombre de la canónica', 'Canonical name'],
   'atelier.form.nameAuthor':     ['Nome da autoridade (pessoa/coletivo)', "Nom de l'autorité (personne/collectif)", 'Nombre de la autoridad (persona/colectivo)', 'Authority name (person/collective)'],
-  'atelier.form.error.names':    ['Informe o nome da autoridade.', "Indiquez le nom de l'autorité.", 'Indique el nombre de la autoridad.', 'Provide the authority name.'],
+  'atelier.form.error.names':    ['Informe o nome da autoridade.', "Indique le nom de l'autorité.", 'Indique el nombre de la autoridad.', 'Provide the authority name.'],
 };
 
 function valFor(loc, quad) {

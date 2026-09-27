@@ -47,9 +47,12 @@
 //       compris. 163 chaînes françaises et 52 espagnoles vouvoyaient ce jour-là,
 //       alors que la doctrine était actée depuis le 04/06 — troisième doctrine
 //       du §0 trouvée écrite et non tenue en deux jours. Le motif cherche le
-//       pronom ou le possessif de politesse ; « rendez-vous » est exclu par
-//       construction, et les adresses au PLURIEL (à une assemblée, à un
-//       collectif) sont nommées une par une dans `PLURIEL_LEGITIME`.
+//       pronom ou le possessif de politesse et, depuis le 27/09/2026 (186
+//       impératifs en « -ez » passés au travers), l'impératif du vouvoiement
+//       (`VOUVOIEMENT_FR`, plus bas, avec ses angles morts) ; « rendez-vous »
+//       est exclu par construction, et les adresses au PLURIEL (à une
+//       assemblée, à un collectif) sont nommées une par une dans
+//       `PLURIEL_LEGITIME`.
 //       ANGLE MORT : ne couvre que fr et es, seules locales relues ce jour ;
 //       it, de, ca, nl, el ont aussi un vouvoiement et attendent leur passe.
 //       pt-BR s'y ajoute le 27/09/2026, dans l'autre sens : son registre est
@@ -225,8 +228,51 @@ const ASCII_VOULU = [
 
 // Chemin (4) — vouvoiement. Une entrée par locale relue ; le motif de chaque
 // langue est le sien, pas une traduction du motif français.
+//
+// fr, élargi le 27/09/2026. Le motif du 07/09 ne cherchait que le pronom et le
+// possessif (vous, votre, vos). Un impératif n'a pas de pronom : 186 valeurs
+// de fr.json s'adressaient encore au membre par un impératif au vouvoiement
+// — « Réessayez ou contactez un·e bibliothécaire », « Saisissez
+// le mot de passe », « Glissez un PDF ici, ou cliquez », « Veuillez
+// reessayer » — et la garde était verte. Réécrites par
+// `scripts/i18n-fr-tu-imperatifs.cjs`.
+//
+// CE QUE LE MOTIF VOIT, en plus du pronom et du possessif : tout mot terminé
+// en « -ez », N'IMPORTE OÙ dans la phrase, et les deux impératifs irréguliers
+// « faites » / « dites » quand ils portent un pronom (« Dites-le ») ou ouvrent
+// une phrase. Le français le permet là où le portugais ne le permet pas : la
+// 2e personne du pluriel sans « vous » ne peut être qu'un impératif, et tout
+// impératif du vouvoiement finit en « -ez » (soyez, ayez, sachez, veuillez
+// compris) sauf « faites » et « dites ». Pas de borne de position : une
+// variante qui ne cherchait qu'en tête de phrase ou après « : », « , »,
+// « ou », « et » ne retrouvait que 173 des 186 valeurs sur le fichier d'avant
+// correction — elle manquait « — réessayez », « N'utilisez », « Double-
+// cliquez », « Ré-exportez ». Le motif retenu les retrouve toutes (186/186),
+// et ne signale rien d'autre dans ce fichier-là.
+//
+// Ce 186/186 n'est pas un rappel mesuré contre une vérité indépendante : les
+// 186 ont été recensées par ce même critère morphologique. Ce qui fonde la
+// complétude, c'est la conjugaison, pas le chiffre. D'où les ANGLES MORTS,
+// qui sont ceux de la conjugaison :
+//   — « rendez-vous » est exclu comme nom ; l'impératif « Rendez-vous à
+//     l'accueil » passe ;
+//   — « faites » / « dites » sans pronom au milieu d'une phrase passent :
+//     ce sont aussi des participes (« modifications faites en assemblée ») ;
+//   — les mots en « -ez » qui ne sont pas des verbes sont nommés dans
+//     `MOTS_EN_EZ_NON_VERBES` — un nom propre en « -ez » (« Suez »,
+//     « Sánchez ») y entre, avec sa raison.
+// Bornes `\p{L}` et drapeau `u` : `\b` est ASCII en JavaScript, il coupe un
+// mot au premier « é ».
+const MOTS_EN_EZ_NON_VERBES = ['chez', 'assez', 'nez', 'rez'];
+const VOUVOIEMENT_FR = new RegExp(
+  '(?<![\\p{L}])(?<!rendez-)(vous|votre|vos)(?![\\p{L}])' +
+    `|(?<![\\p{L}])(?!(?:${MOTS_EN_EZ_NON_VERBES.join('|')}|rendez-vous)(?![\\p{L}]))(\\p{L}+ez)(?![\\p{L}])` +
+    '|(?<![\\p{L}])((?:fai|di)tes-(?:le|la|les|lui|leur|nous|moi|en|y))(?![\\p{L}])' +
+    '|(?:^|[.!?…:;—–(]\\s*)((?:fai|di)tes)(?![\\p{L}])',
+  'iu',
+);
 const VOUVOIEMENT = {
-  fr: /\b(?<!rendez-)(vous|votre|vos)\b/i,
+  fr: VOUVOIEMENT_FR,
   es: /\b(usted|ustedes|Desea|Consulte|Retome|Ponga|Haga|Indique|Seleccione|Verifique|Contacte)\b/,
 };
 
@@ -237,6 +283,7 @@ const PLURIEL_LEGITIME = [
   'atelier.doctrine.text',   // « Asseyez-vous à plusieurs devant l'écran »
   'banner.profile.body',     // « discutez-en en assemblée »
   'privacy.register',        // « …comme le ferait un texte rédigé au vouvoiement » / « …de usted »
+  'federacao.assembleias.fac.rotativityHint', // « Fonctions tournantes : alternez d'une AG à l'autre » — pluriel en pt-BR (« alternem ») et en es (« alternen »)
 ];
 
 // Chemin (4), pt-BR — le registre y est « você », la faute le « tu » EUROPÉEN.
@@ -396,13 +443,15 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
         for (const [k, v] of Object.entries(TOUT[l])) {
           if (PLURIEL_LEGITIME.includes(k)) continue;
           const m = prose(v).match(rx);
-          if (m) fautes.push(`${k} → « ${m[1]} » dans « ${v.slice(0, 70)} »`);
+          if (m) fautes.push(`${k} → « ${m.slice(1).find(Boolean)} » dans « ${v.slice(0, 70)} »`);
         }
         expect(
           fautes,
           `${l} : ${fautes.length} valeur(s) au vouvoiement\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
-            'Si la phrase s\'adresse à un collectif au pluriel, ajoute la clé à ' +
-            'PLURIEL_LEGITIME en citant le passage.',
+            'Réécris au tu (« Réessaie », « Choisis », « Reprends »). Si la phrase ' +
+            's\'adresse à un collectif au pluriel, ajoute la clé à PLURIEL_LEGITIME en ' +
+            'citant le passage ; si le mot en -ez n\'est pas un verbe, ajoute-le à ' +
+            'MOTS_EN_EZ_NON_VERBES.',
         ).toEqual([]);
       });
     }

@@ -23,7 +23,7 @@ const ADD = {
   },
   fr: {
     'biblioteca.publicFiche.title': 'Fiche publique',
-    'biblioteca.publicFiche.hint': 'Choisissez ce qui apparaît sur la fiche publique de votre bibliothèque. Désactivé par défaut.',
+    'biblioteca.publicFiche.hint': 'Choisis ce qui apparaît sur la fiche publique de ta bibliothèque. Désactivé par défaut.',
     'biblioteca.publicFiche.contactToggle': 'Afficher le contact public',
     'biblioteca.publicFiche.hoursToggle': 'Afficher les horaires / permanences',
     'biblioteca.publicFiche.collective': 'Rendre des informations publiques engage le collectif : à décider ensemble.',

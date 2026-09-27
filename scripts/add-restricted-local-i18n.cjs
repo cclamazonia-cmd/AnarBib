@@ -28,7 +28,7 @@ const TEXTS = {
   'pt-BR':
     'Conta restringida localmente pela sua biblioteca. Motivo: {reason}. Procure a equipe da biblioteca para regularizar.',
   'fr':
-    'Compte restreint localement par votre bibliothèque. Motif : {reason}. Rapprochez-vous de l’équipe de la bibliothèque pour régulariser.',
+    'Compte avec restriction locale par ta bibliothèque : {reason}',
   'es':
     'Cuenta restringida localmente por su biblioteca. Motivo: {reason}. Acérquese al equipo de la biblioteca para regularizar.',
   'it':
