@@ -121,12 +121,16 @@ BEGIN
   v_t := 'T7 liste : le périmètre de la coordination (possédé ou détenu), ISBN d''abord';
   -- b6 remis « à revoir » : il ne doit PAS paraître (possédé ailleurs, pas détenu ici)
   UPDATE public.cover_proposals SET statut = 'a_revoir', candidates = c_cands - 1 WHERE book_id = b6;
-  SELECT array_agg(book_id ORDER BY book_id) INTO v_ids FROM api.capas_revue_liste(50, 0);
+  v_ids := NULL; v_err := NULL;
+  BEGIN SELECT array_agg(book_id ORDER BY book_id) INTO v_ids FROM api.capas_revue_liste(50, 0);
+  EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
   IF v_ids = ARRAY[b1, b7, b8] THEN v_passed := v_passed + 1;
-  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_ids::text, 'rien')); END IF;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_ids::text, v_err, 'rien')); END IF;
 
   v_t := 'T8 résumé : trois à revoir dans le périmètre, une en panne';
-  v_j := api.capas_revue_resume();
+  v_j := NULL;
+  BEGIN v_j := api.capas_revue_resume();
+  EXCEPTION WHEN OTHERS THEN v_j := jsonb_build_object('erreur', SQLERRM); END;
   IF (v_j->>'a_revoir')::int = 3 AND (v_j->>'en_panne')::int = 1 AND (v_j->>'a_chercher')::int = 0 THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_j::text); END IF;
@@ -156,7 +160,9 @@ BEGIN
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_err, 'accepté')); END IF;
 
   v_t := 'T12 accepter pose la capa, avec la provenance de la proposition';
-  v_txt := api.capas_revue_accepter(b1, c_ol, 'books/CAPAS-T1/capa-mg3k2x1a.jpg');
+  v_txt := NULL;
+  BEGIN v_txt := api.capas_revue_accepter(b1, c_ol, 'books/CAPAS-T1/capa-mg3k2x1a.jpg');
+  EXCEPTION WHEN OTHERS THEN v_txt := 'erreur : ' || SQLERRM; END;
   SELECT b.cover_object_path, b.cover_source, b.cover_license, b.updated_by, p.statut, p.retenue->>'fullUrl' AS retenue, p.decided_by
     INTO v_row
     FROM public.books b JOIN public.cover_proposals p ON p.book_id = b.id WHERE b.id = b1;
@@ -183,7 +189,9 @@ BEGIN
 
   v_t := 'T15 détenue ici (bib_ref à nettoyer) ; une capa posée entre-temps n''est pas remplacée';
   UPDATE public.books SET cover_object_path = 'books/CAPAS_T7__/front.jpg', cover_source = 'manual' WHERE id = b7;
-  v_txt := api.capas_revue_accepter(b7, c_ol, 'books/CAPAS_T7__/capa-abc.jpg');
+  v_txt := NULL;
+  BEGIN v_txt := api.capas_revue_accepter(b7, c_ol, 'books/CAPAS_T7__/capa-abc.jpg');
+  EXCEPTION WHEN OTHERS THEN v_txt := 'erreur : ' || SQLERRM; END;
   SELECT b.cover_object_path, b.cover_source, p.statut INTO v_row
     FROM public.books b JOIN public.cover_proposals p ON p.book_id = b.id WHERE b.id = b7;
   IF v_txt = 'perimee' AND v_row.cover_object_path = 'books/CAPAS_T7__/front.jpg'
@@ -192,7 +200,9 @@ BEGIN
 
   -- ── Écarter, rouvrir ───────────────────────────────────────────────
   v_t := 'T16 écartée : plus jamais reproposée par le lot, même après 100 jours';
-  v_txt := api.capas_revue_ecarter(b8);
+  v_txt := NULL;
+  BEGIN v_txt := api.capas_revue_ecarter(b8);
+  EXCEPTION WHEN OTHERS THEN v_txt := 'erreur : ' || SQLERRM; END;
   UPDATE public.cover_proposals SET cherche_le = now() - interval '100 days' WHERE book_id = b8;
   IF v_txt = 'ecartee'
      AND NOT EXISTS (SELECT 1 FROM public.fn_capas_lot_a_chercher(100) WHERE book_id = b8)
@@ -200,7 +210,9 @@ BEGIN
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_txt, '')); END IF;
 
   v_t := 'T17 rouvrir défait l''écartement';
-  v_txt := api.capas_revue_rouvrir(b8);
+  v_txt := NULL;
+  BEGIN v_txt := api.capas_revue_rouvrir(b8);
+  EXCEPTION WHEN OTHERS THEN v_txt := 'erreur : ' || SQLERRM; END;
   IF v_txt = 'a_revoir' AND (SELECT decided_by FROM public.cover_proposals WHERE book_id = b8) IS NULL THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_txt, '')); END IF;
@@ -209,8 +221,11 @@ BEGIN
   v_t := 'T18 administration du réseau : le hors-périmètre paraît';
   INSERT INTO public.network_administrators (user_id, status) VALUES (c_admin, 'active');
   PERFORM set_config('request.jwt.claims', json_build_object('sub', c_admin, 'role', 'authenticated')::text, true);
-  IF EXISTS (SELECT 1 FROM api.capas_revue_liste(50, 0) WHERE book_id = b6) THEN v_passed := v_passed + 1;
-  ELSE v_failed := v_failed + 1; v_failures := v_failures || v_t; END IF;
+  v_ids := NULL; v_err := NULL;
+  BEGIN SELECT array_agg(book_id) INTO v_ids FROM api.capas_revue_liste(50, 0);
+  EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
+  IF b6 = ANY (v_ids) THEN v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_ids::text, v_err, 'rien')); END IF;
 
   -- ── Le cron ────────────────────────────────────────────────────────
   PERFORM set_config('request.jwt.claims', '', true);
