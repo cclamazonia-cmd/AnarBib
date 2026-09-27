@@ -530,3 +530,6 @@ tests/sql/conv_file_alimentee_tests.sql
 # 27/09 (capas) : la provenance et la licence d une capa vont par paire et suivent l image —
 # publication neuve, reprise, republication (meme image / autre image x provenance presente / absente), retrait.
 tests/sql/capas_provenance_tests.sql
+# 27/09 (B29, CAT-E18) : les brouillons de catalogage appartiennent a leur bibliotheque —
+# politiques par bibliotheque, autorites en lecture commune, gardes des fonctions DEFINER alignees.
+tests/sql/brouillons_par_bibliotheque_tests.sql

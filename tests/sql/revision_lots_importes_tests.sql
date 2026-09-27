@@ -44,15 +44,16 @@ BEGIN
   INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — lot importe', 'open') RETURNING id INTO v_lot_imp;
   INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — lot a la main', 'open') RETURNING id INTO v_lot_main;
 
-  INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, bib_ref, ano)
-  VALUES ('A CONQUISTA DO PAO', v_lot_imp, 'draft', 'livro', 'ESSAI-REV-1', '1892') RETURNING id INTO v_draft_imp;
+  -- B29 : les brouillons du lot appartiennent à la bibliothèque de test.
+  INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, bib_ref, ano, owner_library_id)
+  VALUES ('A CONQUISTA DO PAO', v_lot_imp, 'draft', 'livro', 'ESSAI-REV-1', '1892', v_lib) RETURNING id INTO v_draft_imp;
   INSERT INTO public.book_draft_contributors (draft_id, name, role, is_primary)
   VALUES (v_draft_imp, 'PIOTR KROPOTKINE', 'autor', true);
   INSERT INTO ingest.partner_catalog_row_to_draft (staging_row_id, run_id, draft_id, batch_id)
   VALUES (v_row, v_run, v_draft_imp, v_lot_imp);
 
-  INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, bib_ref, ano)
-  VALUES ('Germinal', v_lot_main, 'draft', 'livro', 'ESSAI-REV-2', '1885') RETURNING id INTO v_draft_main;
+  INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, bib_ref, ano, owner_library_id)
+  VALUES ('Germinal', v_lot_main, 'draft', 'livro', 'ESSAI-REV-2', '1885', v_lib) RETURNING id INTO v_draft_main;
 
   -- ─────────────────────────────────────────────────────────────────
   v_t := 'T1 fn_batch_is_imported distingue le lot ne d''un import du lot a la main';

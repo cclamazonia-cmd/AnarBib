@@ -478,10 +478,18 @@ BEGIN
            (v_run6, 4, 'pris', 'Code deja dans la bibliotheque', 'new_record', 'accept_new', jsonb_build_object('items', '[{"source_item_code":"CDF0000000001"}]'::jsonb));
     v_lot7 := (public.fn_import_promote(v_run6, ARRAY['new_record'], ARRAY['accept_new'])->>'batch_id')::bigint;
     SELECT m.draft_id INTO v_d_mis FROM ingest.partner_catalog_row_to_draft m JOIN ingest.partner_catalog_staging_rows s ON s.id = m.staging_row_id WHERE s.run_id = v_run6 AND s.row_no = 2;
-    UPDATE public.book_drafts SET owner_library_id = v_lib2 WHERE id = v_d_mis;
+    -- B29 : une notice donnée à une autre bibliothèque rendrait le lot mixte (rapport
+    -- refusé à la coordination) ; le décalage se fabrique donc sur l'exemplaire.
+    UPDATE public.exemplar_drafts SET target_library_id = v_lib2 WHERE book_draft_id = v_d_mis;
     v_rep := public.fn_batch_review_report(v_lot7);
+    -- B29 (CAT-E18) : hors staff de la bibliothèque du lot, le rapport entier est refusé
+    -- (avant : lu, avec « code pris » tu).
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_other, 'role', 'authenticated')::text, true);
-    v_res := public.fn_batch_review_report(v_lot7);
+    v_hint := NULL;
+    BEGIN
+      v_res := public.fn_batch_review_report(v_lot7);
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
+    END;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     IF (v_rep->'items'->>'count')::int = 48
        AND (v_rep->'items'->>'code_twice')::int = 45
@@ -489,10 +497,10 @@ BEGIN
        AND (v_rep->'items'->>'code_pending_elsewhere')::int = 1
        AND (v_rep->'items'->>'code_taken')::int = 1
        AND jsonb_array_length(v_rep->'items'->'problems') = 40
-       -- Hors staff de la bibliotheque : pas de « code pris ».
-       AND (v_res->'items'->>'code_taken')::int = 0
+       -- Hors staff de la bibliotheque : pas de rapport du tout (B29).
+       AND v_hint = 'error.batch.other_libraries'
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_rep->'items') - 'problems','null'::jsonb)::text, 300)||' / hors staff '||coalesce(v_res->'items'->>'code_taken','NULL')); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_rep->'items') - 'problems','null'::jsonb)::text, 300)||' / hors staff '||coalesce(v_hint,'rapport rendu')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T17 ─────────────────────────────────────────────────────────────
@@ -730,7 +738,12 @@ BEGIN
     INSERT INTO public.exemplar_drafts (batch_id, action, status, label_status, target_library_id, import_staging_row_id, tombo, target_bib_ref)
     VALUES (v_lot5, 'create', 'draft', 'pending', v_other, v_r1, 'T26-1', 'X'),
            (v_lot5, 'create', 'draft', 'pending', v_other, v_r1, NULL, 'X');
+    -- B29 (CAT-E18) : le rapport d'un lot est à qui en possède tous les
+    -- brouillons ; la coordination est aussi staff de la bibliothèque visée.
+    INSERT INTO public.user_library_memberships (user_id, library_id, role, status, is_primary)
+    VALUES (v_coord, v_other, 'librarian', 'active', false);
     v_rep := public.fn_batch_review_report(v_lot5);
+    DELETE FROM public.user_library_memberships WHERE user_id = v_coord AND library_id = v_other;
     IF (v_rep->'items'->>'count')::int = 2 AND (v_rep->'items'->>'library_without_numbering')::int = 1
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_rep->'items') - 'problems','null'::jsonb)::text, 300)); END IF;
@@ -743,8 +756,9 @@ BEGIN
     UPDATE public.user_library_memberships SET is_primary = false WHERE user_id = v_other;
     INSERT INTO public.user_library_memberships (user_id, library_id, role, status, is_primary)
     VALUES (v_other, v_lib, 'reader', 'active', true);
-    INSERT INTO public.exemplar_drafts (action, status, label_status, target_bib_ref, tombo)
-    VALUES ('create', 'draft', 'pending', (SELECT bib_ref FROM public.books WHERE id = v_book_zero), 'ESSAI-H19-T27')
+    -- B29 : le brouillon est à la bibliothèque de qui l'a créé (sans cible).
+    INSERT INTO public.exemplar_drafts (action, status, label_status, target_bib_ref, tombo, created_by)
+    VALUES ('create', 'draft', 'pending', (SELECT bib_ref FROM public.books WHERE id = v_book_zero), 'ESSAI-H19-T27', v_other)
     RETURNING id INTO v_id;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_other, 'role', 'authenticated')::text, true);
     PERFORM public.publish_exemplar_draft(v_id);

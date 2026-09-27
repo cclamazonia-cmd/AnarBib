@@ -41,8 +41,9 @@ BEGIN
     json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
 
   -- ── Jeu d'essai : un brouillon de livre avec un contributeur ─────
-  INSERT INTO public.book_drafts (titulo, autor, status)
-  VALUES ('Le talon de fer', 'Jack London', 'cancelled') RETURNING id INTO v_draft;
+  -- B29 : le brouillon appartient à la bibliothèque de qui l'a créé.
+  INSERT INTO public.book_drafts (titulo, autor, status, created_by)
+  VALUES ('Le talon de fer', 'Jack London', 'cancelled', v_coord) RETURNING id INTO v_draft;
   DELETE FROM public.book_draft_contributors WHERE draft_id = v_draft;   -- le trigger de seed peut en poser
   INSERT INTO public.book_draft_contributors (draft_id, name, role, position)
   VALUES (v_draft, 'Jack London', 'autor', 1), (v_draft, 'Paul Gruyer', 'tradutor', 2);
@@ -67,7 +68,7 @@ BEGIN
   -- ─────────────────────────────────────────────────────────────────
   v_t := 'T2 une mise a la corbeille n''ecrit PAS de ligne de suppression';
   BEGIN
-    INSERT INTO public.book_drafts (titulo, status) VALUES ('Germinal', 'draft') RETURNING id INTO v_draft2;
+    INSERT INTO public.book_drafts (titulo, status, created_by) VALUES ('Germinal', 'draft', v_coord) RETURNING id INTO v_draft2;
     UPDATE public.book_drafts SET status = 'cancelled' WHERE id = v_draft2;
     SELECT count(*) INTO v_n FROM public.catalog_audit_log
      WHERE action = 'delete' AND entity_type = 'book' AND entity_id = v_draft2;

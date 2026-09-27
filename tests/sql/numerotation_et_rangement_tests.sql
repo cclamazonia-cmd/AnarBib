@@ -179,8 +179,9 @@ BEGIN
   v_t := 'T8 refus : proprietaires melanges (mixed_owner), sans proprietaire (no_owner), sans convention (no_convention), lot ferme (not_open)';
   BEGIN
     INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — cotes 2', 'open') RETURNING id INTO v_lot2;
-    INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id) VALUES ('Mixte A', v_lot2, 'draft', 'livro', v_lib);
-    INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id) VALUES ('Mixte B', v_lot2, 'draft', 'livro', v_lib2);
+    -- B29 : créés par la coordination de test (sans propriétaire, ils sont à sa bibliothèque).
+    INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id, created_by) VALUES ('Mixte A', v_lot2, 'draft', 'livro', v_lib, v_coord);
+    INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id, created_by) VALUES ('Mixte B', v_lot2, 'draft', 'livro', v_lib2, v_coord);
     v_txt := '';
     BEGIN PERFORM public.fn_batch_assign_bib_refs(v_lot2);
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_txt := v_txt || coalesce(v_hint,'?') || ';'; END;

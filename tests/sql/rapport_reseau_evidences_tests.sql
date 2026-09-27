@@ -106,8 +106,8 @@ BEGIN
      WHERE n.nspname = 'public' AND p.proname = 'fn_batch_review_report';
     IF position('create temp table' IN lower(v_def)) > 0 THEN RAISE EXCEPTION 'table temporaire encore la'; END IF;
     INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — rapport', 'open') RETURNING id INTO v_lot;
-    INSERT INTO public.book_drafts (titulo, autor, batch_id, status, tipo_material, bib_ref, ano)
-    VALUES ('Antologia anarchica', 'AA. VV.', v_lot, 'draft', 'livro', 'ESSAI-RR-D1', '1990') RETURNING id INTO v_draft;
+    INSERT INTO public.book_drafts (titulo, autor, batch_id, status, tipo_material, bib_ref, ano, created_by)
+    VALUES ('Antologia anarchica', 'AA. VV.', v_lot, 'draft', 'livro', 'ESSAI-RR-D1', '1990', v_coord) RETURNING id INTO v_draft;
     INSERT INTO public.book_draft_contributors (draft_id, name, role, is_primary) VALUES (v_draft, 'Anônimo', 'autor', true);
     v_rep := public.fn_batch_review_report(v_lot);
     IF (v_rep->'batch'->>'title_entries')::int = 1

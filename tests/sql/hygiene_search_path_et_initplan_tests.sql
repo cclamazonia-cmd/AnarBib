@@ -1,7 +1,9 @@
 -- Hygiène gardée sur toute la base (06/09/2026, migration 20260906111308) :
 -- T1 aucune fonction applicative sans search_path figé ;
 -- T2 aucune policy qui appelle auth.uid() hors d'un (select auth.uid()) ;
--- T3 la policy du 05/09 garde exactement son prédicat (admin ou staff actif).
+-- T3 la policy des révisions garde son prédicat : depuis B29 (27/09, CAT-E18),
+--    l'admin, ou qui possède tout le lot (fn_caller_owns_batch) —
+--    avant : le staff de n'importe quelle bibliothèque.
 -- Rien n'est écrit : ROLLBACK par convention.
 BEGIN;
 
@@ -32,11 +34,8 @@ BEGIN
   SELECT count(*) INTO n FROM pg_policy p
    WHERE p.polname = 'catalog_batch_reviews_read_staff'
      AND p.polcmd = 'r'
-     AND pg_get_expr(p.polqual, p.polrelid) ~ 'fn_caller_is_network_admin\(\)'
-     AND pg_get_expr(p.polqual, p.polrelid) ~ 'user_library_memberships'
-     AND pg_get_expr(p.polqual, p.polrelid) ~ 'librarian'
-     AND pg_get_expr(p.polqual, p.polrelid) ~ 'coordenador';
-  IF n <> 1 THEN RAISE EXCEPTION 'TEST 3 ÉCHOUÉ : catalog_batch_reviews_read_staff n''a plus son prédicat (admin ou staff actif).'; END IF;
+     AND pg_get_expr(p.polqual, p.polrelid) ~ 'fn_caller_owns_batch\(batch_id\)';
+  IF n <> 1 THEN RAISE EXCEPTION 'TEST 3 ÉCHOUÉ : catalog_batch_reviews_read_staff n''a plus son prédicat (admin ou lot entièrement à soi).'; END IF;
   v_ok := v_ok + 1; RAISE NOTICE 'TEST 3 OK — la policy des révisions garde son prédicat.';
 
   RAISE NOTICE 'HYGIENE OK : %/3 tests passés.', v_ok;
