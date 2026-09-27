@@ -524,3 +524,5 @@ tests/sql/import_couverture_tests.sql
 # 26/09 (H19, IMP-21) : les exemplaires d un catalogue importe (995/852) deviennent des exemplaires —
 # rattaches a leur notice, tombo du schema, code d origine unique par biblio, pas d exemplaire automatique.
 tests/sql/import_exemplaires_tests.sql
+# 27/09 (C6 §7.2) : la règle de casse des titres, SQL et miroir JS de la saisie d accord.
+tests/sql/title_case_tests.sql

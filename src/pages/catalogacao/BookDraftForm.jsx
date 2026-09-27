@@ -5,6 +5,7 @@ import SubjectAuthorityPicker from './SubjectAuthorityPicker';
 import SerialAuthorityPicker from './SerialAuthorityPicker';
 import AudioSegmentsBlock from './AudioSegmentsBlock';
 import WorkToolsBlock from './WorkToolsBlock';
+import TitleCaseAssist from '@/components/catalog/TitleCaseAssist';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
@@ -2881,6 +2882,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           })()}
           {rrf('titulo')}
           {rrf('subtitulo')}
+          {/* C6 §7.2 — normaliser la casse du titre selon sa langue, avec aperçu (jamais à la frappe) */}
+          <TitleCaseAssist titulo={f('titulo')} subtitulo={f('subtitulo')} idioma={f('idioma')}
+            onApply={(ti, st) => { set('titulo', ti); set('subtitulo', st); }} />
 
           {/* ── Autores e outras responsabilidades ────── */}
           <div style={{ gridColumn: 'span 3' }}>
