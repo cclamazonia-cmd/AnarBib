@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Cet ISBN désigne l'édition {trouvee} ; la notice indique {notice}. Réimpression, autre édition ou ISBN erroné : vérifie avant de retenir cette couverture.",
   "catalogacao.ui.coverIsbnVerifier": "À vérifier",
   "catalogacao.ui.coverIsbnConcordant": "ISBN concordant",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "E-mail, ID public ou mot de passe incorrect.",
+  "auth.loginRateLimited": "Trop de tentatives. Réessaie dans une heure.",
+  "auth.loginServerError": "Erreur serveur. Réessaie dans un instant."
 }

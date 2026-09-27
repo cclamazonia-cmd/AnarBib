@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Este ISBN corresponde à edição {trouvee}; a notícia indica {notice}. Reimpressão, outra edição ou ISBN incorreto: confira antes de escolher esta capa.",
   "catalogacao.ui.coverIsbnVerifier": "Verificar",
   "catalogacao.ui.coverIsbnConcordant": "ISBN confere",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "E-mail, ID público ou senha incorretos.",
+  "auth.loginRateLimited": "Muitas tentativas. Tente novamente em uma hora.",
+  "auth.loginServerError": "Erro no servidor. Tente novamente em instantes."
 }

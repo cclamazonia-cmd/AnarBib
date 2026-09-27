@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Aquest ISBN correspon a l'edició {trouvee}; la fitxa indica {notice}. Reimpressió, una altra edició o ISBN erroni: verifiqueu-ho abans de triar aquesta coberta.",
   "catalogacao.ui.coverIsbnVerifier": "Cal verificar",
   "catalogacao.ui.coverIsbnConcordant": "ISBN coincident",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "Correu electrònic, ID públic o contrasenya incorrectes.",
+  "auth.loginRateLimited": "Massa intents. Torna-ho a provar d’aquí a una hora.",
+  "auth.loginServerError": "Error del servidor. Torna-ho a provar d’aquí a un moment."
 }

@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Questo ISBN corrisponde all'edizione {trouvee}; la scheda indica {notice}. Ristampa, altra edizione o ISBN errato: verifichi prima di scegliere questa copertina.",
   "catalogacao.ui.coverIsbnVerifier": "Da verificare",
   "catalogacao.ui.coverIsbnConcordant": "ISBN coincide",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "Email, ID pubblico o password errati.",
+  "auth.loginRateLimited": "Troppi tentativi. Riprova tra un’ora.",
+  "auth.loginServerError": "Errore del server. Riprova tra un momento."
 }

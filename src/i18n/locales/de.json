@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Diese ISBN gehört zur Ausgabe {trouvee}; der Datensatz nennt {notice}. Nachdruck, andere Ausgabe oder falsche ISBN: Bitte prüfen Sie das, bevor Sie dieses Cover wählen.",
   "catalogacao.ui.coverIsbnVerifier": "Zu prüfen",
   "catalogacao.ui.coverIsbnConcordant": "ISBN passt",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "E-Mail, öffentliche ID oder Passwort falsch.",
+  "auth.loginRateLimited": "Zu viele Versuche. Versuche es in einer Stunde erneut.",
+  "auth.loginServerError": "Serverfehler. Versuche es gleich noch einmal."
 }

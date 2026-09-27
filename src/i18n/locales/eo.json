@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Ĉi tiu ISBN respondas al la eldono {trouvee}; la katalogero indikas {notice}. Represo, alia eldono aŭ erara ISBN: kontrolu antaŭ ol elekti ĉi tiun kovrilon.",
   "catalogacao.ui.coverIsbnVerifier": "Kontrolinda",
   "catalogacao.ui.coverIsbnConcordant": "ISBN kongruas",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "Malĝusta retpoŝto, publika ID aŭ pasvorto.",
+  "auth.loginRateLimited": "Tro da provoj. Reprovu post unu horo.",
+  "auth.loginServerError": "Servila eraro. Reprovu post momento."
 }

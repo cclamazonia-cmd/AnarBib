@@ -35,6 +35,21 @@ function getSafeNextUrl(searchParams) {
   return raw;
 }
 
+// Les refus de l'Edge Function `login` portent un `code` stable (27/09/2026) ;
+// c'est lui qu'on traduit. Jusque-là l'écran affichait le texte `error` de la
+// fonction tel quel — en français dans les dix langues, et au vouvoiement.
+// Ce texte ne sert plus que de repli, le temps qu'une fonction pas encore
+// redéployée réponde sans code. Un code ajouté côté fonction doit l'être ici
+// aussi : src/tests/login-compteurs-haches.test.js compare les deux listes.
+function messageRefusLogin(corps, t) {
+  switch (corps?.code) {
+    case 'LOGIN_INVALID': return t({ id: 'auth.loginInvalid' });
+    case 'LOGIN_RATE_LIMITED': return t({ id: 'auth.loginRateLimited' });
+    case 'LOGIN_SERVER_ERROR': return t({ id: 'auth.loginServerError' });
+    default: return corps?.error || null;
+  }
+}
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -297,13 +312,13 @@ export default function LoginPage() {
 
       // Erreur réseau ou erreur côté Edge Function (status 4xx/5xx)
       if (invokeError) {
-        // Tenter d'extraire un message structuré { error: "..." }
+        // Tenter d'extraire un refus structuré { code, error }
         let msg = t({ id: 'auth.networkError' });
         try {
           const ctx = invokeError.context;
           if (ctx) {
             const body = await ctx.json?.();
-            if (body?.error) msg = body.error;
+            msg = messageRefusLogin(body, t) || msg;
           }
         } catch {}
         setLoginMsg({ text: msg, kind: 'error' });
@@ -312,7 +327,7 @@ export default function LoginPage() {
 
       // Erreur logique retournée explicitement par l'Edge Function
       if (data?.error) {
-        setLoginMsg({ text: data.error, kind: 'error' });
+        setLoginMsg({ text: messageRefusLogin(data, t), kind: 'error' });
         return;
       }
 

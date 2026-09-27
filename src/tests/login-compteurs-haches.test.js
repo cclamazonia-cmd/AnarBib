@@ -17,6 +17,10 @@
 //      du DELETE traverse les journaux edge.
 //   3. Un DELETE refusé se voit (console.error) et ne casse pas la connexion ;
 //      un compteur illisible ferme la porte (500), il ne laisse pas passer.
+//   4. (27/09/2026) Chaque refus porte un `code` que LoginPage.jsx traduit, et
+//      l'écran connaît tous les codes que la fonction émet. Avant, l'écran
+//      affichait le texte `error` tel quel : en français dans les dix langues,
+//      et au vouvoiement. Le texte de repli, lui, reste au tu (DOC-ADDR-1).
 
 import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -35,7 +39,7 @@ const IP = '88.189.243.104';
 const EMAIL = 'louise@test.local';
 const HEX = /^[0-9a-f]{64}$/;
 
-function monterEF({ connexion = 'ok', erreurDelete = null, erreurLecture = null } = {}) {
+function monterEF({ connexion = 'ok', erreurDelete = null, erreurLecture = null, bloque = false } = {}) {
   const clients = [];
   const appels = []; // { client, table, chaine }
 
@@ -49,7 +53,8 @@ function monterEF({ connexion = 'ok', erreurDelete = null, erreurLecture = null 
               appels.push({ client: indice, table, chaine: [...chaine] });
               if (chaine.some((c) => c.op === 'delete')) return ok({ data: null, error: erreurDelete });
               if (chaine.some((c) => ['insert', 'update', 'upsert'].includes(c.op))) return ok({ data: null, error: null });
-              return ok({ data: null, error: erreurLecture });
+              const blocage = bloque ? { blocked_until: new Date(Date.now() + 3_600_000).toISOString() } : null;
+              return ok({ data: blocage, error: erreurLecture });
             };
           }
           return (...args) => { chaine.push({ op: prop, args }); return proxy; };
@@ -174,6 +179,45 @@ describe('login — les erreurs du magasin ne sont plus silencieuses', () => {
       expect(r.clients.every((c) => c.auth.appels === 0)).toBe(true);
     } finally {
       erreur.mockRestore();
+    }
+  });
+});
+
+describe('login — chaque refus porte un code que l’écran traduit', () => {
+  // Texte de repli : jamais de vouvoiement (pronom, possessif ou impératif en -ez).
+  const VOUVOIEMENT = /(?<![\p{L}])(vous|votre|vos|\p{L}+ez)(?![\p{L}])/iu;
+  const refus = [
+    ['identifiant vide', {}, { email: '', password: '' }, 400, 'LOGIN_INVALID'],
+    ['mot de passe faux', { connexion: 'echec' }, { email: EMAIL, password: 'faux' }, 401, 'LOGIN_INVALID'],
+    ['compteur bloqué', { bloque: true }, { email: EMAIL, password: 'secret' }, 429, 'LOGIN_RATE_LIMITED'],
+    ['compteur illisible', { erreurLecture: { code: '57P01', message: 'terminating connection' } },
+      { email: EMAIL, password: 'secret' }, 500, 'LOGIN_SERVER_ERROR'],
+  ];
+  for (const [cas, options, corps, statut, code] of refus) {
+    it(`${cas} : ${statut}, code ${code}, repli au tu`, async () => {
+      const erreur = vi.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        const r = await monterEF(options)(corps);
+        expect(r.statut).toBe(statut);
+        expect(r.corps.code).toBe(code);
+        expect(r.corps.error).toBeTruthy();
+        expect(r.corps.error).not.toMatch(VOUVOIEMENT);
+      } finally {
+        erreur.mockRestore();
+      }
+    }, 10_000);
+  }
+
+  it('l’écran traduit tous les codes que la fonction émet, et chaque clé existe dans les dix locales', () => {
+    const ef = readFileSync(SRC, 'utf8');
+    const ecran = readFileSync(new URL('../pages/public/LoginPage.jsx', import.meta.url), 'utf8');
+    const emis = [...ef.matchAll(/code:\s*"(LOGIN_[A-Z_]+)"/g)].map((m) => m[1]).sort();
+    const traduits = [...ecran.matchAll(/case '(LOGIN_[A-Z_]+)':\s*return t\(\{ id: '([\w.]+)' \}\)/g)];
+    expect(emis).toEqual(['LOGIN_INVALID', 'LOGIN_RATE_LIMITED', 'LOGIN_SERVER_ERROR']);
+    expect(traduits.map((m) => m[1]).sort()).toEqual(emis);
+    for (const l of ['pt-BR', 'fr', 'en', 'de', 'it', 'es', 'ca', 'eo', 'nl', 'el']) {
+      const loc = JSON.parse(readFileSync(new URL(`../i18n/locales/${l}.json`, import.meta.url), 'utf8'));
+      for (const [, , cle] of traduits) expect(loc[cle], `${l} : ${cle}`).toBeTruthy();
     }
   });
 });

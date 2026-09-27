@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "This ISBN points to the edition {trouvee}; the record says {notice}. A reprint, another edition or a wrong ISBN: check before choosing this cover.",
   "catalogacao.ui.coverIsbnVerifier": "To check",
   "catalogacao.ui.coverIsbnConcordant": "ISBN matches",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "Incorrect email, public ID or password.",
+  "auth.loginRateLimited": "Too many attempts. Try again in an hour.",
+  "auth.loginServerError": "Server error. Try again in a moment."
 }

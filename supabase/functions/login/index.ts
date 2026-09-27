@@ -47,9 +47,16 @@ const RATE_LIMIT_EMAIL = {
   blockMinutes: 60,
 };
 
-const GENERIC_LOGIN_ERROR = "Email ou mot de passe incorrect.";
-const RATE_LIMITED_ERROR  = "Trop de tentatives. Réessayez dans une heure.";
-const SERVER_ERROR        = "Erreur serveur. Réessayez dans un instant.";
+// Chaque refus porte un `code` stable que l'écran traduit (LoginPage.jsx,
+// clés auth.loginInvalid / auth.loginRateLimited / auth.loginServerError).
+// Jusqu'au 27/09/2026, l'écran affichait `error` tel quel : ces trois phrases
+// sortaient en français dans les dix langues de l'app, et au vouvoiement
+// (DOC-ADDR-1). `error` reste, au tu, comme repli d'un client pas encore
+// rechargé. LOGIN_INVALID couvre à dessein l'identifiant inconnu ET le mot de
+// passe faux : un code de plus rouvrirait l'énumération que ferme ce fichier.
+const GENERIC_LOGIN_ERROR = { code: "LOGIN_INVALID",      error: "E-mail, ID public ou mot de passe incorrect." };
+const RATE_LIMITED_ERROR  = { code: "LOGIN_RATE_LIMITED", error: "Trop de tentatives. Réessaie dans une heure." };
+const SERVER_ERROR        = { code: "LOGIN_SERVER_ERROR", error: "Erreur serveur. Réessaie dans un instant." };
 
 // ─── CORS ──────────────────────────────────────────────────
 
@@ -265,7 +272,7 @@ Deno.serve(async (req: Request) => {
     // Validation basique des inputs
     if (!identifier || !password) {
       await plancher(t0);
-      return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 400);
+      return jsonResponse(GENERIC_LOGIN_ERROR, 400);
     }
 
     // Client Supabase avec la clé secrète (service_role : contourne la RLS de
@@ -292,7 +299,7 @@ Deno.serve(async (req: Request) => {
 
     // ─── Rate limit par IP, avant toute autre opération ────────
     if (await isRateLimited(supabase, "ip", ipKey)) {
-      return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
+      return jsonResponse(RATE_LIMITED_ERROR, 429);
     }
 
     // ─── Pas d'anti-robots ici, et c'est délibéré (AR-2, 2026-08-20) ──
@@ -343,7 +350,7 @@ Deno.serve(async (req: Request) => {
           recordFailure(supabase, "email", inconnuKey, RATE_LIMIT_EMAIL),
         ]);
         await plancher(t0);
-        return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 401);
+        return jsonResponse(GENERIC_LOGIN_ERROR, 401);
       }
       email = String(found).trim().toLowerCase();
     }
@@ -352,7 +359,7 @@ Deno.serve(async (req: Request) => {
     // ─── Rate limit par e-mail (après résolution) ──────────────
     if (await isRateLimited(supabase, "email", emailKey)) {
       await plancher(t0);
-      return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
+      return jsonResponse(RATE_LIMITED_ERROR, 429);
     }
 
     // ─── Tentative de login — sur le client à part ─────────────
@@ -366,7 +373,7 @@ Deno.serve(async (req: Request) => {
         recordFailure(supabase, "email", emailKey, RATE_LIMIT_EMAIL),
       ]);
       await plancher(t0);
-      return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 401);
+      return jsonResponse(GENERIC_LOGIN_ERROR, 401);
     }
 
     // ─── Login réussi : reset des compteurs (client de service, clés hachées) ──
@@ -379,6 +386,6 @@ Deno.serve(async (req: Request) => {
     });
   } catch (err) {
     console.error("Edge Function login error:", err);
-    return jsonResponse({ error: SERVER_ERROR }, 500);
+    return jsonResponse(SERVER_ERROR, 500);
   }
 });

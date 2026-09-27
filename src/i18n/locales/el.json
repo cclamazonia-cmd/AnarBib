@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Αυτό το ISBN αντιστοιχεί στην έκδοση {trouvee}· η εγγραφή αναφέρει {notice}. Ανατύπωση, άλλη έκδοση ή λάθος ISBN: έλεγξέ το πριν διαλέξεις αυτό το εξώφυλλο.",
   "catalogacao.ui.coverIsbnVerifier": "Προς έλεγχο",
   "catalogacao.ui.coverIsbnConcordant": "Το ISBN συμφωνεί",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "Λάθος email, δημόσιο αναγνωριστικό ή κωδικός.",
+  "auth.loginRateLimited": "Πάρα πολλές προσπάθειες. Δοκίμασε ξανά σε μία ώρα.",
+  "auth.loginServerError": "Σφάλμα διακομιστή. Δοκίμασε ξανά σε λίγο."
 }

@@ -6840,5 +6840,8 @@
   "catalogacao.ui.coverIsbnEcart": "Dit ISBN hoort bij de uitgave {trouvee}; de fiche vermeldt {notice}. Herdruk, andere uitgave of fout ISBN: controleer dit voordat je deze omslag kiest.",
   "catalogacao.ui.coverIsbnVerifier": "Te controleren",
   "catalogacao.ui.coverIsbnConcordant": "ISBN klopt",
-  "catalogacao.ui.coverIsbnSeul": "ISBN"
+  "catalogacao.ui.coverIsbnSeul": "ISBN",
+  "auth.loginInvalid": "Onjuist e-mailadres, openbare ID of wachtwoord.",
+  "auth.loginRateLimited": "Te veel pogingen. Probeer het over een uur opnieuw.",
+  "auth.loginServerError": "Serverfout. Probeer het zo meteen opnieuw."
 }
