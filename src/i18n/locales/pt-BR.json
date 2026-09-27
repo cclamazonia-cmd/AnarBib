@@ -6845,7 +6845,7 @@
   "auth.loginInvalid": "E-mail, ID público ou senha incorretos.",
   "auth.loginRateLimited": "Muitas tentativas. Tente novamente em uma hora.",
   "auth.loginServerError": "Erro no servidor. Tente novamente em instantes.",
-  "catalogacao.ui.coverIsbnVolume": "Notícia do volume {volume}: o ISBN de uma obra em vários volumes costuma valer para todos eles. Confira se esta capa é mesmo a do volume {volume}.",
+  "catalogacao.ui.coverIsbnVolume": "Ficha do volume {volume}: o ISBN de uma obra em vários volumes costuma valer para todos eles. Confira se esta capa é mesmo a do volume {volume}.",
   "catalogacao.ui.coverTitreProbable": "Edição provável",
   "catalogacao.ui.coverTitreSeul": "Pelo título",
   "catalogacao.ui.coverOeuvre": "Outra edição"
