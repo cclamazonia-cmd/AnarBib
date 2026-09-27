@@ -129,7 +129,8 @@ BEGIN
   -- qu'à un visiteur. Le texte anon doit figurer TEL QUEL dans le OU ; sa
   -- place n'est pas imposée (passe 1 bis, 20260927180030 : ce qui ne dépend
   -- pas de la ligne passe d'abord). Ne regarde que les tables qui portent
-  -- LES DEUX copies.
+  -- LES DEUX copies. (16 paires depuis B31, 27/09 : les règles de circulation
+  -- n'ont plus de lecture anonyme.)
   BEGIN
     SELECT count(*) FILTER (WHERE position(qa in qu) > 0),
            string_agg(tbl, ', ' ORDER BY tbl) FILTER (WHERE coalesce(position(qa in qu), 0) = 0)
@@ -147,8 +148,8 @@ BEGIN
            AND pu.polname = c.relname || '_select_authenticated'
       ) s
      WHERE s.qa IS NOT NULL;  -- une table sans lecture anon n'a qu'une copie (ex. oai_opening_requests)
-    IF v_txt IS NULL AND v_n >= 18 THEN v_passed := v_passed + 1;
-    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_n || ' paires conformes (18 au moins attendues), divergentes : ' || coalesce(v_txt, '∅')); END IF;
+    IF v_txt IS NULL AND v_n >= 16 THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_n || ' paires conformes (16 au moins attendues), divergentes : ' || coalesce(v_txt, '∅')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   -- ═══════════════════════════ FIXTURES (postgres) ═══════════════════════════

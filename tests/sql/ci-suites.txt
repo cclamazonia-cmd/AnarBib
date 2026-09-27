@@ -551,3 +551,6 @@ tests/sql/capas_lot_tests.sql
 # 27/09 (capas, campagne photo) : la liste de campagne (détenues, sans couverture, ordre des tombos), la recherche par
 # etiquette QR / ISBN / chiffres du tombo / titre, et poser : provenance photo, dossier de la notice, remplacement sur demande seulement.
 tests/sql/capas_photo_tests.sql
+# 27/09 (B31) : une relation accordée se lit sans erreur — sous anon et sous un compte sans adhésion,
+# toute relation de public/api lisible par le rôle se lit sans 42501 (liste fermée vide).
+tests/sql/lecture_accordee_sans_erreur_tests.sql
