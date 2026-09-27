@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Esta ficha traz {n, plural, one {# exemplar vindo} other {# exemplares vindos}} da importação: publicados com ela, no lugar dos exemplares iniciais, na biblioteca que lhes foi atribuída.",
   "error.catalog.restore_record_first": "A ficha deste exemplar foi apagada: restaura primeiro a ficha (ela traz de volta os seus exemplares).",
   "error.import.profile_missing": "O perfil de importação deste arquivo foi apagado: escolhe um perfil e importa o arquivo de novo.",
-  "catalogacao.queue.importedFollowRecord": "Alguns itens não mudaram: um exemplar importado segue a sua ficha (restaura ou move a ficha)."
+  "catalogacao.queue.importedFollowRecord": "Alguns itens não mudaram: um exemplar importado segue a sua ficha (restaura ou move a ficha).",
+  "catalogacao.ui.coverLookupSourcesDown": "Nenhuma capa encontrada — sem resposta de: {sources}. A busca pode dar resultado mais tarde.",
+  "catalogacao.ui.coverLookupPartial": "Algumas fontes não responderam ({sources}): a lista de capas pode estar incompleta."
 }

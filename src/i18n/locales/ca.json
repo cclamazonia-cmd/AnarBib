@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Aquesta fitxa porta {n, plural, one {# exemplar vingut} other {# exemplars vinguts}} de la importació: es publiquen amb ella, en lloc dels exemplars inicials, a la biblioteca que se’ls ha assignat.",
   "error.catalog.restore_record_first": "La fitxa d’aquest exemplar s’ha suprimit: restaura primer la fitxa (en torna els exemplars).",
   "error.import.profile_missing": "El perfil d’importació d’aquest fitxer s’ha suprimit: tria un perfil i torna a importar el fitxer.",
-  "catalogacao.queue.importedFollowRecord": "Alguns elements no han canviat: un exemplar importat segueix la seva fitxa (restaura o mou la fitxa)."
+  "catalogacao.queue.importedFollowRecord": "Alguns elements no han canviat: un exemplar importat segueix la seva fitxa (restaura o mou la fitxa).",
+  "catalogacao.ui.coverLookupSourcesDown": "No s'ha trobat cap coberta — sense resposta de: {sources}. La cerca pot funcionar més tard.",
+  "catalogacao.ui.coverLookupPartial": "Algunes fonts no han respost ({sources}): la llista de cobertes pot ser incompleta."
 }

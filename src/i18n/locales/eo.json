@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Ĉi tiu registro portas {n, plural, one {# ekzempleron} other {# ekzemplerojn}} el la importo: ili publikiĝas kun ĝi, anstataŭ la komencaj ekzempleroj, en la biblioteko al kiu ili estas atribuitaj.",
   "error.catalog.restore_record_first": "La registro de ĉi tiu ekzemplero estis forigita: unue restarigu la registron (ĝi revenigas siajn ekzemplerojn).",
   "error.import.profile_missing": "La importa profilo de ĉi tiu dosiero estis forigita: elektu profilon kaj reimportu la dosieron.",
-  "catalogacao.queue.importedFollowRecord": "Kelkaj eroj ne ŝanĝiĝis: importita ekzemplero sekvas sian registron (restarigu aŭ movu la registron)."
+  "catalogacao.queue.importedFollowRecord": "Kelkaj eroj ne ŝanĝiĝis: importita ekzemplero sekvas sian registron (restarigu aŭ movu la registron).",
+  "catalogacao.ui.coverLookupSourcesDown": "Neniu kovrilo trovita — neniu respondo de: {sources}. La serĉo eble sukcesos poste.",
+  "catalogacao.ui.coverLookupPartial": "Kelkaj fontoj ne respondis ({sources}): la listo de kovriloj eble estas nekompleta."
 }

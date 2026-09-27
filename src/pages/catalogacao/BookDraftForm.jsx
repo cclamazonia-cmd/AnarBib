@@ -11,6 +11,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { writeCoverThumb, removeCoverThumb } from '@/lib/coverThumbs';
+import { messageRechercheCapas } from '@/lib/coverSources';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
@@ -204,7 +205,7 @@ const EMPTY_FORM = {
   serial_id: '',                    // #périodiques P7 : titre de revue en forme d'autorité
 
   cdd: '', idioma: '', paginas: '', loanable: 'true', circulation_default: 'emprestavel',
-  notas: '', subjects: '', cover_object_path: '', marc_json: '',
+  notas: '', subjects: '', cover_object_path: '', cover_source: '', cover_license: '', marc_json: '',
   // Acquisition bridge
   acquisition_mode: '', acquisition_date: '',
   owner_library: '', holder_library: '',
@@ -1034,6 +1035,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       // mémoire (pas de retéléchargement). Best-effort : voir coverThumbs.js.
       await writeCoverThumb(storagePath, coverFile);
       set('cover_object_path', storagePath);
+      // Provenance de l'image qu'on vient d'envoyer : sans ça, elle héritait de
+      // celle de la capa précédente (une candidate Open Library, par exemple).
+      set('cover_source', 'manual');
+      set('cover_license', '');
       setCoverFile(null);
       return storagePath;
     } catch (err) {
@@ -1063,9 +1068,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       if (error && !data) throw error;
       if (!data?.ok) throw new Error(data?.error || 'lookup failed');
       setCoverCandidates(data.candidates || []);
-      if (!data.candidates?.length) {
-        setMsg({ text: t({ id: 'catalogacao.ui.coverLookupEmpty' }), kind: 'info' });
-      }
+      // Le bilan des sources dit ce qui a ÉCHOUÉ : une voie en panne ne doit
+      // plus passer pour un livre introuvable (cf. lib/coverSources.js).
+      const avis = messageRechercheCapas(data);
+      if (avis) setMsg({ text: t({ id: avis.id }, avis.values), kind: avis.kind });
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
@@ -1908,10 +1914,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setMsg({ text: '', kind: '' });
 
     try {
-      // Upload cover if file selected
-      if (coverFile) {
-        await uploadCover();
-      }
+      // Upload cover if file selected. Le chemin vient du RETOUR d'uploadCover :
+      // `f()` lit l'état de CE rendu, d'avant l'envoi — la charge utile
+      // repartait sans le chemin du fichier qu'on venait d'envoyer.
+      const envoye = coverFile ? await uploadCover() : null;
       const isUpdate = !!f('id');
       const payload = {
         ...(isUpdate ? { id: Number(f('id')) } : {}),
@@ -1953,7 +1959,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         circulation_default: NON_LOANABLE_TYPES.has(materialType) ? 'consulta' : (f('circulation_default') || 'emprestavel'),
         loanable: NON_LOANABLE_TYPES.has(materialType) ? false : (f('circulation_default') || 'emprestavel') !== 'consulta',
         colecao: f('colecao') || null,
-        cover_object_path: f('cover_object_path') || null,
+        cover_object_path: envoye || f('cover_object_path') || null,
+        // Provenance et licence suivent l'image (spec capas §4.3). Elles étaient
+        // posées dans l'état et jamais envoyées : 0 capa attribuée sur 250.
+        cover_source: envoye ? 'manual' : (f('cover_source') || null),
+        cover_license: envoye ? null : (f('cover_license') || null),
         marc_json: f('marc_json') ? JSON.parse(f('marc_json')) : null,
         // Acquisition
         acquisition_mode: f('acquisition_mode') || null,
@@ -2190,6 +2200,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       notas: r.notas || '',
       subjects: r.marc_json?.anarbib_subjects?.join(' ; ') || '',
       cover_object_path: r.cover_object_path || '',
+      cover_source: r.cover_source || '',
+      cover_license: r.cover_license || '',
       marc_json: r.marc_json ? JSON.stringify(r.marc_json, null, 2) : '',
       acquisition_mode: r.acquisition_mode || '',
       acquisition_date: r.acquisition_date || '',

@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Cette notice porte {n, plural, one {# exemplaire venu} other {# exemplaires venus}} de l’import : publiés avec elle, à la place des exemplaires initiaux, dans la bibliothèque qui leur a été attribuée.",
   "error.catalog.restore_record_first": "La notice de cet exemplaire a été supprimée : restaure d’abord la notice (elle ramène ses exemplaires).",
   "error.import.profile_missing": "Le profil d’import de ce fichier a été supprimé : choisis un profil et importe de nouveau le fichier.",
-  "catalogacao.queue.importedFollowRecord": "Certains éléments n’ont pas changé : un exemplaire importé suit sa notice (restaure ou déplace la notice)."
+  "catalogacao.queue.importedFollowRecord": "Certains éléments n’ont pas changé : un exemplaire importé suit sa notice (restaure ou déplace la notice).",
+  "catalogacao.ui.coverLookupSourcesDown": "Aucune couverture trouvée — sans réponse de : {sources}. La recherche peut aboutir plus tard.",
+  "catalogacao.ui.coverLookupPartial": "Certaines sources n'ont pas répondu ({sources}) : la liste des couvertures peut être incomplète."
 }

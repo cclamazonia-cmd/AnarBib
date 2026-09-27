@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Questa scheda porta {n, plural, one {# esemplare venuto} other {# esemplari venuti}} dall’importazione: vengono pubblicati con essa, al posto degli esemplari iniziali, nella biblioteca a cui sono assegnati.",
   "error.catalog.restore_record_first": "La scheda di questo esemplare è stata eliminata: ripristina prima la scheda (riporta i suoi esemplari).",
   "error.import.profile_missing": "Il profilo d’importazione di questo file è stato eliminato: scegli un profilo e importa di nuovo il file.",
-  "catalogacao.queue.importedFollowRecord": "Alcuni elementi non sono cambiati: un esemplare importato segue la sua scheda (ripristina o sposta la scheda)."
+  "catalogacao.queue.importedFollowRecord": "Alcuni elementi non sono cambiati: un esemplare importato segue la sua scheda (ripristina o sposta la scheda).",
+  "catalogacao.ui.coverLookupSourcesDown": "Nessuna copertina trovata — nessuna risposta da: {sources}. La ricerca potrebbe riuscire più tardi.",
+  "catalogacao.ui.coverLookupPartial": "Alcune fonti non hanno risposto ({sources}): l'elenco delle copertine potrebbe essere incompleto."
 }

@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "This record carries {n, plural, one {# item} other {# items}} from the import: published with it, instead of the initial copies, in the library they were assigned to.",
   "error.catalog.restore_record_first": "This item’s record was deleted: restore the record first (it brings its items back).",
   "error.import.profile_missing": "This file’s import profile was deleted: choose a profile and import the file again.",
-  "catalogacao.queue.importedFollowRecord": "Some entries did not change: an imported item follows its record (restore or move the record)."
+  "catalogacao.queue.importedFollowRecord": "Some entries did not change: an imported item follows its record (restore or move the record).",
+  "catalogacao.ui.coverLookupSourcesDown": "No cover found — no response from: {sources}. The search may succeed later.",
+  "catalogacao.ui.coverLookupPartial": "Some sources did not respond ({sources}): the list of covers may be incomplete."
 }

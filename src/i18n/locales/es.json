@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Esta ficha trae {n, plural, one {# ejemplar venido} other {# ejemplares venidos}} de la importación: se publican con ella, en lugar de los ejemplares iniciales, en la biblioteca que se les asignó.",
   "error.catalog.restore_record_first": "La ficha de este ejemplar fue eliminada: restaura primero la ficha (trae de vuelta sus ejemplares).",
   "error.import.profile_missing": "El perfil de importación de este archivo fue eliminado: elige un perfil e importa de nuevo el archivo.",
-  "catalogacao.queue.importedFollowRecord": "Algunos elementos no cambiaron: un ejemplar importado sigue a su ficha (restaura o mueve la ficha)."
+  "catalogacao.queue.importedFollowRecord": "Algunos elementos no cambiaron: un ejemplar importado sigue a su ficha (restaura o mueve la ficha).",
+  "catalogacao.ui.coverLookupSourcesDown": "No se encontró ninguna portada — sin respuesta de: {sources}. La búsqueda puede dar resultado más tarde.",
+  "catalogacao.ui.coverLookupPartial": "Algunas fuentes no respondieron ({sources}): la lista de portadas puede estar incompleta."
 }

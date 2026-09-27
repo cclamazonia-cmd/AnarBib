@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Dieser Titel trägt {n, plural, one {# Exemplar} other {# Exemplare}} aus dem Import: Sie werden mit ihm veröffentlicht, anstelle der Anfangsexemplare, in der Bibliothek, der sie zugeordnet sind.",
   "error.catalog.restore_record_first": "Der Titel dieses Exemplars wurde gelöscht: stelle zuerst den Titel wieder her (er bringt seine Exemplare mit).",
   "error.import.profile_missing": "Das Importprofil dieser Datei wurde gelöscht: wähle ein Profil und importiere die Datei erneut.",
-  "catalogacao.queue.importedFollowRecord": "Einige Einträge haben sich nicht geändert: ein importiertes Exemplar folgt seinem Titel (stelle den Titel wieder her oder verschiebe ihn)."
+  "catalogacao.queue.importedFollowRecord": "Einige Einträge haben sich nicht geändert: ein importiertes Exemplar folgt seinem Titel (stelle den Titel wieder her oder verschiebe ihn).",
+  "catalogacao.ui.coverLookupSourcesDown": "Kein Cover gefunden — keine Antwort von: {sources}. Die Suche kann später gelingen.",
+  "catalogacao.ui.coverLookupPartial": "Einige Quellen haben nicht geantwortet ({sources}): Die Liste der Cover ist möglicherweise unvollständig."
 }

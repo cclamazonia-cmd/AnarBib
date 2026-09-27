@@ -6811,5 +6811,7 @@
   "catalogacao.publish.copiesImported": "Dit record draagt {n, plural, one {# exemplaar} other {# exemplaren}} uit de import: ze worden ermee gepubliceerd, in plaats van de initiële exemplaren, in de bibliotheek waaraan ze zijn toegewezen.",
   "error.catalog.restore_record_first": "Het record van dit exemplaar is verwijderd: herstel eerst het record (het brengt zijn exemplaren terug).",
   "error.import.profile_missing": "Het importprofiel van dit bestand is verwijderd: kies een profiel en importeer het bestand opnieuw.",
-  "catalogacao.queue.importedFollowRecord": "Sommige items zijn niet gewijzigd: een geïmporteerd exemplaar volgt zijn record (herstel of verplaats het record)."
+  "catalogacao.queue.importedFollowRecord": "Sommige items zijn niet gewijzigd: een geïmporteerd exemplaar volgt zijn record (herstel of verplaats het record).",
+  "catalogacao.ui.coverLookupSourcesDown": "Geen omslag gevonden — geen antwoord van: {sources}. De zoekopdracht kan later wel lukken.",
+  "catalogacao.ui.coverLookupPartial": "Sommige bronnen gaven geen antwoord ({sources}): de lijst met omslagen is mogelijk onvolledig."
 }
