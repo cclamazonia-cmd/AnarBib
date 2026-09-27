@@ -562,3 +562,6 @@ tests/sql/effacement_journal_catalogue_tests.sql
 tests/sql/lot_a_une_bibliotheque_tests.sql
 # 27/09 (editions) : suggest_editions_for_book repond enfin — 42702 a chaque appel depuis le 20/06 (book_id ambigu).
 tests/sql/editions_suggerees_tests.sql
+# 27/09 (B33) : les recherches empruntent leurs index trigramme — autocomplétion publique, autorités,
+# éditeurs, déclencheur de publication (preuve : chemins bitmap seuls, compteur de la transaction).
+tests/sql/recherche_index_trigramme_tests.sql
