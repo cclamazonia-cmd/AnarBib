@@ -176,6 +176,15 @@ describe('cover_lookup — la recherche par titre prend le relais', () => {
     expect(r.candidates.length).toBeGreaterThan(0);
   });
 
+  it('on ne cherche que des mots : le trait d’union (opérateur pour Open Library) devient un espace', async () => {
+    // En vrai, « El Anarco-Sindicalismo … » + auteur rend 0 résultat ; sans le
+    // trait d'union, la notice du fonds et sa couverture (sonde du 27/09, 14 h UTC).
+    const { net } = await chercher({ title: 'El Anarco-Sindicalismo en la Era tecnologica', author: 'Confederación Nacional del Trabajo' });
+    const [url] = net.vers(RECHERCHE_OL);
+    expect(new URL(url).searchParams.get('q'))
+      .toBe('El Anarco Sindicalismo en la Era tecnologica Confederación Nacional del Trabajo');
+  });
+
   it('sans ISBN : aucune voie exacte n’est appelée, seulement le titre', async () => {
     const { r, net } = await chercher({ title: 'A Conquista do Pão', author: 'KROPOTKIN, Piotr' });
     expect(net.vers(LIVRES_OL)).toHaveLength(0);
@@ -207,6 +216,13 @@ describe('_shared/capas/sources.ts', () => {
     const { isbnValide } = mod();
     for (const bon of ['1904859062', '857164165X', '9782296035072', '2296035078']) expect(isbnValide(bon), bon).toBe(true);
     for (const faux of ['9782296035073', '1904859063', '12345', '97822960350721', 'X857164165', '']) expect(isbnValide(faux), faux).toBe(false);
+  });
+
+  it('motsDeRecherche : les opérateurs de requête deviennent des espaces, le reste ne bouge pas', () => {
+    const { motsDeRecherche } = mod();
+    expect(motsDeRecherche('Post-Scarcity Anarchism Bookchin')).toBe('Post Scarcity Anarchism Bookchin');
+    expect(motsDeRecherche('Anarquismo: teoria (1) "prática" 50/50')).toBe('Anarquismo teoria 1 prática 50 50');
+    expect(motsDeRecherche("L'anarchisme aujourd'hui GARCÍA, Vivien")).toBe("L'anarchisme aujourd'hui GARCÍA, Vivien");
   });
 
   it('sonde témoin : trois voies vertes', async () => {

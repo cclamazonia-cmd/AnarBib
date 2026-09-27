@@ -159,9 +159,20 @@ export async function fromInventaireIsbn(isbn: string): Promise<Candidate[]> {
 // est souvent celle d'une AUTRE édition (vu le 27/09/2026 : pour « A Conquista
 // do Pão », Guimarães 1975, la page de titre de Tresse & Stock, 1892). D'où le
 // `label` affiché à la sélection : une capa fausse est pire qu'une capa absente.
+//
+// ON NE CHERCHE QUE DES MOTS. Le langage de requête d'Open Library (Solr) lit
+// certains signes comme des opérateurs. Constaté en production par la sonde
+// témoin, le 27/09/2026 à 14 h UTC : « Post-Scarcity Anarchism Bookchin » → 0
+// résultat, « Post Scarcity Anarchism Bookchin » → le livre et sa couverture ;
+// même chose pour « El Anarco-Sindicalismo en la Era tecnologica » (au fonds).
+// Ces signes deviennent des espaces.
+export function motsDeRecherche(texte: string): string {
+  return String(texte || '').replace(/[+\-!(){}[\]^"~*?:\\/&|]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 export async function fromOpenLibrarySearch(title: string, author: string): Promise<Candidate[]> {
   if (!title) return [];
-  const q = encodeURIComponent([title, author].filter(Boolean).join(' '));
+  const q = encodeURIComponent(motsDeRecherche([title, author].filter(Boolean).join(' ')));
   const url = `https://openlibrary.org/search.json?q=${q}`
     + '&fields=title,author_name,first_publish_year,cover_i&limit=5';
   const res = await fetchWithTimeout(url, { headers: { Accept: 'application/json' } });
