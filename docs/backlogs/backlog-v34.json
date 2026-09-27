@@ -2402,6 +2402,14 @@
           "fr": "**Clos le 27/09 au soir, sur pièces : les trois critères tenus, et trois gardes pour qu'ils le restent.** *(1) Policies* — les avis `multiple_permissive_policies` sont résorbés (**25 → 0**, avis relu en production le 27/09). Une permissive par (rôle, commande) sur les 25 tables (`20260927180000`), puis chaque OU ordonné : ce qui ne dépend pas de la ligne d'abord, la lecture publique ensuite, le staff ligne à ligne en dernier (`20260927180030`). Rien n'a changé de qui voit quoi : empreinte md5 des clés visibles, pour `anon` et chacun des 20 comptes réels, **identique sur les 25 tables** avant, après la passe 1 et après la passe 1 bis. Et l'ordre paie : `count(*)` sur `books` sous un compte lecteur **208 → 90 ms**, bibliothécaire 209 → 89 ms, admin réseau **39 → 1,4 ms** ; `exemplares` 177 → 100 ms (lecteur), 40 → 0,9 ms (admin) ; anonyme inchangé. Garde : `policies_permissives_uniques_tests` (33 tests : aucune paire dans aucun schéma, liste fermée vide ; la lecture publique, désormais en deux copies, doit rester identique ; trente lectures et écritures réelles). *(2) Clés étrangères* — **21 indexées** (`20260927180100`) : toutes celles dont le parent est supprimé en exploitation — du 02/09 au 27/09, 146 œuvres, 37 autorités, 21 notices et 2 comptes supprimés, et chaque brouillon purgé coûtait deux parcours complets de la plus grosse table d'import. La liste assumée de B21 passe de **38 à 17**, règle écrite en tête (codes `catalog_ref_*`, bibliothèques, partenaires : des parents qui ne se suppriment pas). *(3) Index* — **22 retirés, raison écrite pour chacun** : 10 redondants jamais empruntés (`20260927180200`) et 12 sans aucun lecteur sur le chemin d'écriture (`20260927180300` : 6 sur `books`, qui en portait 27, 4 sur `book_drafts`, les 3,5 Mo de `idx_shp_endpoint`, un doublon ; son premier essai, tombé dans le `pg_dump` de la sauvegarde hebdomadaire, a été annulé sans rien appliquer et rejoué au run suivant). Garde : `index_redondants_garde_tests` (plus de nouveau redondant ; les 22 redondants empruntés, nommés avec leurs compteurs, se retirent sur mesure). Les 108 index sans lecteur restants sont inventoriés un par un, avec origine et verdict (`docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`). Nés des constats : **B31** (trois lectures anonymes lèvent une erreur au lieu de rendre zéro ligne), **B32** (le catalogue public relit toute sa vue matérialisée à chaque page, et calcule la visibilité ligne à ligne), **B33** (la recherche ne peut emprunter aucun de ses index trigramme), **B34** (l'effacement de compte ne traite pas le journal du catalogue), **I28** (le hook `pre-commit` ne tourne pas dans les worktrees WSL). **Écart tracé** : les cinq migrations enfreignent `DOC-DEPLOY-4` (heure ronde, datées dans le futur), sans collision ni effet d'ordre — audit §7.",
           "pt": "**Fechado em 27/09 à noite, com provas: os três critérios cumpridos, e três guardas para mantê-los.** (1) Os avisos `multiple_permissive_policies` foram resolvidos (25 → 0): uma permissiva por (papel, comando) nas 25 tabelas, com o OU ordenado — primeiro o que não depende da linha, depois a leitura pública, depois o staff linha a linha. A impressão digital das linhas visíveis para anon e para cada uma das 20 contas reais é idêntica nas 25 tabelas antes e depois; `count(*)` em `books` sob leitor 208 → 90 ms, admin 39 → 1,4 ms. Guarda: `policies_permissives_uniques_tests` (33 testes). (2) 21 chaves estrangeiras indexadas — as de pais realmente excluídos em operação; a lista assumida do B21 passa de 38 a 17, com a regra escrita. (3) 22 índices retirados com o motivo escrito (10 redundantes nunca usados, 12 sem leitor no caminho de escrita); guarda `index_redondants_garde_tests`. Os 108 índices sem leitor restantes estão inventariados na auditoria. Novos itens: B31, B32, B33, B34, I28. Desvio registrado a `DOC-DEPLOY-4` (auditoria §7)."
         }
+      ],
+      [
+        "D7",
+        "2026-09-27",
+        {
+          "fr": "**Clos le 27/09 : décision écrite au REGISTRE (section `ARCH`), avec sa raison** — son seul critère. **Décidé par Xavier** : un **modèle archivistique complet dans AnarBib** (niveaux ISAD(G) fonds, sous-fonds, série, sous-série, dossier, pièce ; producteurs en autorités ISAAR(CPF) ; export EAD dès la première version — `ARCH-1`), un **niveau de description variable selon le fonds** (`ARCH-2`), des **conditions d'accès par niveau dès la première version** (`ARCH-3`), présentés pour avis à DIRA, au CIRA et au FICEDL avant tout code (`ARCH-4`). Réalisation : **D8**.",
+          "pt": "**Fechado em 27/09: decisão escrita no REGISTRO (seção `ARCH`), com a sua razão.** **Decidido por Xavier**: um modelo arquivístico completo no AnarBib (níveis ISAD(G), produtores em autoridades ISAAR(CPF), exportação EAD desde a primeira versão), nível de descrição variável segundo o fundo, condições de acesso por nível desde a primeira versão; apresentado para parecer a DIRA, CIRA e FICEDL antes de qualquer código. Realização: **D8**."
+        }
       ]
     ]
   },
@@ -5860,25 +5868,27 @@
       }
     },
     {
-      "id": "D7",
+      "id": "D8",
       "d": "D",
       "p": "P3",
-      "s": "decision",
+      "s": "bloque",
       "e": "XL",
       "sk": [
+        "sql",
+        "front",
         "biblio"
       ],
       "t": {
-        "fr": "Les archives de collectifs n'ont pas de modèle hiérarchique (fonds, série, dossier, pièce)",
-        "pt": "Os arquivos de coletivos não têm modelo hierárquico (fundo, série, dossiê, peça)"
+        "fr": "Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD",
+        "pt": "Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD"
       },
       "v": {
-        "fr": "DIRA décrit ses archives de collectifs dans des tableurs d'inventaire. AnarBib connaît un type « dossier » (`dossier_scope`, `dossier_period`, `dossier_organizations`, `dossier_context` dans `book_drafts`), mais il est **à plat**. Rien ne rattache une pièce à un dossier, un dossier à une série, une série à un fonds. L'import CSV ferait donc une notice par ligne d'inventaire.",
-        "pt": "A DIRA descreve seus arquivos em planilhas. O AnarBib tem um tipo «dossiê», mas **plano**: nada liga peça a dossiê, dossiê a série, série a fundo. O import CSV faria um registro por linha."
+        "fr": "Décision **D7** (REGISTRE `ARCH-1` à `ARCH-4`, Xavier, 27/09) : un modèle archivistique complet dans AnarBib. Aujourd'hui, un type « dossier » **à plat** (`dossier_scope`, `dossier_period`, `dossier_organizations`, `dossier_context` sur `books` et `book_drafts`, inutilisées en production le 27/09) : rien ne rattache une pièce à un dossier, un dossier à une série, une série à un fonds ; l'import CSV d'un inventaire ferait une notice par ligne.",
+        "pt": "Decisão **D7** (REGISTRO `ARCH-1` a `ARCH-4`, Xavier, 27/09): um modelo arquivístico completo no AnarBib. Hoje, um tipo «dossiê» plano, sem hierarquia."
       },
       "w": {
-        "fr": "Décision collective, avant tout code. Soit un modèle archivistique dans AnarBib (niveaux ISAD(G), export EAD), soit un renvoi assumé vers un outil dédié (AtoM, par exemple), avec un lien depuis la notice. Recueillir d'abord les besoins de DIRA, du CIRA et du FICEDL.",
-        "pt": "Decisão coletiva antes de qualquer código: modelo arquivístico no AnarBib (ISAD(G), EAD) ou remissão assumida a uma ferramenta dedicada (AtoM) com link. Recolher antes as necessidades da DIRA, do CIRA e do FICEDL."
+        "fr": "Après l'avis du réseau (`ARCH-4`). *(1)* Des unités de description rattachées (niveau ISAD(G), parent, ordre, cote archivistique), aux zones essentielles d'ISAD(G) (identification, contexte, contenu, conditions d'accès et d'utilisation, sources complémentaires) — en repartant des colonnes `dossier_*`. *(2)* Les producteurs en autorités (ISAAR(CPF)) : l'autorité existe (`authors`, `authority_type` personne, collectivité, congrès) ; y ajouter la famille et l'histoire du producteur si besoin. *(3)* Des conditions d'accès et de reproduction par niveau, héritées du parent, respectées par l'OPAC et par les exports (membres seulement, masqué). *(4)* L'arbre à l'OPAC et au catalogage. *(5)* Un export EAD ; un import d'inventaire en tableur qui reconstruit la hiérarchie (cote hiérarchique ou colonne de niveau et de parent), sur un inventaire réel de DIRA.",
+        "pt": "Depois do parecer da rede: unidades de descrição vinculadas (ISAD(G)), produtores em autoridades (ISAAR(CPF)), condições de acesso por nível herdadas, árvore no OPAC e na catalogação, exportação EAD, importação de inventário em planilha."
       },
       "y": {
         "fr": "Les archives de collectifs sont une part essentielle des fonds libertaires, et elles sont rarement décrites ailleurs. Les aplatir en notices de livre, c'est perdre justement ce qui en fait des archives : leur contexte.",
@@ -5886,23 +5896,27 @@
       },
       "f": {
         "fr": [
-          "Décision écrite au registre, avec sa raison."
+          "Un fonds réel de DIRA décrit à plusieurs niveaux, du fonds à la pièce là où il le faut.",
+          "Une unité restreinte n'apparaît ni à l'OPAC ni dans un export public ; ses enfants en héritent.",
+          "Export EAD validé contre le schéma EAD, et relu par une personne du réseau qui pratique l'archivistique."
         ],
         "pt": [
-          "Decisão escrita no registro, com a razão."
+          "Um fundo real de DIRA descrito em vários níveis.",
+          "Uma unidade restrita não aparece nem no OPAC nem numa exportação pública; os filhos herdam.",
+          "Exportação EAD validada contra o esquema EAD e relida por alguém da rede."
         ]
       },
       "dep": {
-        "fr": "Soulevé par **G15**. Sans dépendance technique.",
-        "pt": "Levantado por **G15**. Sem dependência técnica."
+        "fr": "Bloqué par l'avis de DIRA, du CIRA et du FICEDL sur la décision (`ARCH-4`). Un inventaire réel de DIRA (**G15**) pour éprouver l'import.",
+        "pt": "Bloqueado pelo parecer de DIRA, CIRA e FICEDL (`ARCH-4`). Um inventário real de DIRA (**G15**)."
       },
       "r": [
-        "claude/aller-retour-PMB_2026-09-26",
+        "docs/specs/REGISTRE_decisions.md",
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — colonnes `dossier_*` de `book_drafts` en production, sans lien hiérarchique.",
-        "pt": "26/09 — colunas `dossier_*`, sem vínculo hierárquico."
+        "fr": "27/09 — colonnes `dossier_*` présentes sur `books` et `book_drafts` en production, aucune hiérarchie, 0 ligne renseignée.",
+        "pt": "27/09 — colunas `dossier_*` presentes, sem hierarquia, 0 linha preenchida."
       }
     }
   ]

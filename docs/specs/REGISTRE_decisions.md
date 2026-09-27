@@ -739,6 +739,17 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 > Licences : Chromaprint **LGPL-2.1** compatible AGPL ; modèle/schéma MB = inspiration ; données core MB **CC0** ; ⚠️ données supplémentaires MB **CC-BY-NC-SA** (clause NC) = **non utilisées** (FS-D1) — à réévaluer si l'enrichissement dépassait le seul MBID.
 
 
+## 36. Archives de collectifs — `ARCH` *(backlog `D7`, décidé ; réalisation `D8` ; soulevé par `G15`, demande de DIRA du 26/09/2026)*
+
+> **Raison** (item `D7`) : les archives de collectifs sont une part essentielle des fonds libertaires, et elles sont rarement décrites ailleurs ; les aplatir en notices de livre, c'est perdre ce qui en fait des archives — leur contexte. DIRA décrit les siennes dans des tableurs d'inventaire ; AnarBib n'a qu'un type « dossier » **à plat** (colonnes `dossier_scope`, `dossier_period`, `dossier_organizations`, `dossier_context` sur `books` et `book_drafts`, inutilisées en production le 27/09). Le choix du modèle complet, plutôt qu'une hiérarchie légère ou qu'un renvoi vers un outil dédié (AtoM), est une **décision de Xavier** (27/09).
+
+| ID | Décision | Statut |
+|---|---|---|
+| **ARCH-1** | **Un modèle archivistique complet dans AnarBib** : les niveaux de description d'ISAD(G) (fonds, sous-fonds, série, sous-série, dossier, pièce), rattachés les uns aux autres ; les producteurs (personnes, collectivités, familles) décrits comme autorités selon ISAAR(CPF) ; un **export EAD dès la première version**. Ni hiérarchie légère provisoire, ni renvoi vers un outil dédié. | ✅ décidé 27/09 (Xavier) |
+| **ARCH-2** | **Le niveau de description varie selon le fonds**, comme ISAD(G) le permet : un fonds peut s'arrêter au dossier, un autre descendre à la pièce (un tract, une lettre). Le modèle accepte tous les niveaux et n'en impose aucun. | ✅ décidé 27/09 (Xavier) |
+| **ARCH-3** | **Des conditions d'accès et de reproduction à chaque niveau dès la première version** (ISAD(G) 3.4) — noms de militant·es, pièces sensibles, délais de communication : une unité peut n'être visible que des membres, ou masquée à l'OPAC, et elle hérite des conditions de son parent. | ✅ décidé 27/09 (Xavier) |
+| **ARCH-4** | **Procédure** : décision de Xavier, présentée pour avis à DIRA, au CIRA et au FICEDL **avant tout code** ; leurs pratiques d'inventaire (tableurs, outils, volume) et leurs besoins d'export orientent la réalisation (`D8`), pas le choix du modèle. | 🟡 avis du réseau attendu |
+
 ## 42. Confidentialité — `PRIV` *(PrivacyPolicyPage.jsx in-app + site vitrine généré)*
 
 > **Renumérotée le 29/08/2026** — cette section portait le numéro **17**, déjà tenu par `IMP` (Importações / Exportações). Deux sections homonymes dans le foyer qui fait foi : la règle `#HYG-REG-1` dit qu'on ne renumérote pas le normatif déjà inscrit et que les sections nouvelles prennent les numéros suivants — `PRIV`, arrivée après le §41, prend donc le 42. Aucun renvoi n'a été cassé : le corpus cite cette section par ses identifiants (`PRIV-1`, `PRIV-2`, `PRIV-3`), jamais par son numéro. Elle reste **physiquement à sa place** dans le fichier, entre le §35 et le §BG2 : l'ordre d'écriture de ce registre n'a jamais suivi la numérotation, et déplacer cent lignes de normatif pour une question de rangement ferait courir plus de risque que le désordre n'en coûte.
