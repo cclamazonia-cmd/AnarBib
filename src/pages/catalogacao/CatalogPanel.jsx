@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import ConvRevuePanel from '@/components/atelier/ConvRevuePanel';
+import CapasRevuePanel from './CapasRevuePanel';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -340,6 +341,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
           introKey="catalogacao.revue.intro"
           collapsible />
       )}
+
+      {/* Les capas proposées par la recherche en lot (27/09/2026) : même place
+          que la file des titres — une capa appartient à la notice, pas au
+          corpus partagé des autorités. Replié, et muet s'il n'y a rien. */}
+      {view === 'book' && <CapasRevuePanel />}
 
       {/* ── Sub-tabs ─────────────────────────────────── */}
       <div className="ab-tabbar ab-tabbar--sub">
