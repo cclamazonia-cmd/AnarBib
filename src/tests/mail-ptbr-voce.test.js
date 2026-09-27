@@ -211,3 +211,69 @@ describe('courriel de bienvenue = écran de fin d\'inscription', () => {
     });
   }
 });
+
+// LE TEXTE EN DUR. Certains courriels ne passent par aucun module de chaînes :
+// les deux rapports hebdomadaires, la consultation d'échange documentaire, la
+// relance de mi-prêt, les gabarits de l'ancien système, le pied de page par
+// défaut. Ils sont rédigés en pt-BR seul, dans le code. Deux fois le
+// 27/09/2026 une faute y a échappé aux passes qui ne lisaient que les
+// modules : « Responde apenas se… » (_shared/core/env.ts), puis « Partilhas
+// digitais », « PEB », « à clôture da semana » dans le rapport hebdomadaire
+// de la bibliothèque — sur des lignes de gabarit HTML multiligne sans
+// guillemets, qu'un balayage « ligne à littéral » ne voyait pas.
+//
+// La liste des fichiers est FERMÉE et nommée : ce sont ceux dont le texte est
+// en portugais seul. Un fichier qui porte plusieurs langues (request-password-
+// reset, gazette-monthly-build) n'y entre pas — l'espagnol y dit « tu » et
+// « te » à bon droit. On retire les commentaires, puis on prend les nœuds de
+// texte HTML et les littéraux, lignes de gabarit comprises ; un morceau sans
+// espace est un identifiant (« reserva_cancelada_leitor »), pas de la prose.
+const TEXTE_EN_DUR_PT = [
+  'notify-weekly-report/index.ts',
+  'notify-network-weekly-report/index.ts',
+  'notify-document-permission-request/index.ts',
+  'notify-mid-loan-reading/index.ts',
+  '_shared/domain/legacy.ts',
+  '_shared/shared/events.ts',
+  '_shared/core/env.ts',
+  'opds/index.ts',
+];
+
+function textesEnDur(rel) {
+  const src = readFileSync(new URL(rel, FONCTIONS), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/(^|[^:])\/\/.*$/gm, '$1');
+  const morceaux = new Set();
+  for (const m of src.matchAll(/>([^<>{}`]+)</g)) morceaux.add(m[1]);
+  for (const m of src.matchAll(/"((?:[^"\\\n]|\\.)+)"|'((?:[^'\\\n]|\\.)+)'|`([^`]+)`/g)) {
+    const s = (m[1] || m[2] || m[3]).replace(/\$\{[^}]*\}/g, ' ').replace(/<[^>]*>/g, '\n');
+    for (const bout of s.split('\n')) morceaux.add(bout);
+  }
+  return [...morceaux].map((t) => t.replace(/\s+/g, ' ').trim()).filter((t) => /\p{L}+\s+\p{L}+/u.test(t));
+}
+
+describe('texte en dur des Edge Functions rédigées en pt-BR seul', () => {
+  for (const rel of TEXTE_EN_DUR_PT) {
+    it(`${rel} — ni « tu » européen, ni vocabulaire du Portugal, ni mot français`, () => {
+      const morceaux = textesEnDur(rel);
+      // un fichier de la liste qui ne rend plus de prose, c'est l'extraction qui a lâché
+      expect(morceaux.length, `${rel} : aucune phrase extraite`).toBeGreaterThan(0);
+      const fautes = [];
+      for (const t of morceaux) {
+        for (const [nom, rx] of [['tu', TU_EUROPEU], ['Portugal', PT_EUROPEU], ['français', FRANCES_EM_PT]]) {
+          const m = t.match(rx);
+          if (m) fautes.push(`${nom} « ${m.slice(1).find(Boolean)} » dans « ${t.slice(0, 80)} »`);
+        }
+      }
+      expect(fautes, `${rel} :\n  ${fautes.join('\n  ')}`).toEqual([]);
+    });
+  }
+
+  it('la garde voit les fautes du 27/09 (contre-épreuve)', () => {
+    const rx = [TU_EUROPEU, PT_EUROPEU, FRANCES_EM_PT];
+    for (const faute of ['Responde apenas se o campo de resposta indicar um contato local.',
+      'Partilhas digitais fornecidas (semana)', 'PEB em circulação', 'Atrasos ativos (à clôture da semana)']) {
+      expect(rx.some((r) => r.test(faute)), faute).toBe(true);
+    }
+  });
+});

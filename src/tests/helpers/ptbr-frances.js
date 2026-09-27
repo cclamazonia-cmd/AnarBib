@@ -27,14 +27,17 @@
 // c'est aussi la cotation boursière), pour « basculhar » (« basculer », vu
 // dans un courriel par 49047ae3) et pour l'espace typographique français
 // avant « : », légitime dans la ponctuation prescrite de l'ISBD. Ceux-là ne
-// tombent qu'à la relecture ; le chiffre est un PLANCHER. Hors de portée
-// aussi, côté courriels : le texte en dur des index.ts (le rapport
-// hebdomadaire réseau disait « PEB »), qu'aucun module de chaînes ne porte.
+// tombent qu'à la relecture ; le chiffre est un PLANCHER. Le texte en dur des
+// index.ts, qu'aucun module de chaînes ne porte, est lu depuis le 27/09/2026
+// au soir par mail-ptbr-voce.test.js (liste fermée TEXTE_EN_DUR_PT) : le
+// rapport hebdomadaire de la bibliothèque y disait encore « PEB » ×4 et
+// « à clôture da semana » ×3 — d'où « clôture », sans homographe portugais
+// (le portugais écrit « fechamento », sans accent circonflexe sur le o).
 // ─────────────────────────────────────────────────────────────────────────────
 
 const capitalizada = (w) => w[0].toUpperCase() + w.slice(1);
 
-const FRANCES_EM_PT_FORMAS = ['flux', 'cote', 'cotes', 'gouvernance', 'importer', 'import', 'tract', 'tracto', 'mail'];
+const FRANCES_EM_PT_FORMAS = ['flux', 'cote', 'cotes', 'gouvernance', 'importer', 'import', 'tract', 'tracto', 'mail', 'clôture'];
 const SIGLAS_FRANCESAS = ['PEB'];
 export const FRANCES_EM_PT = new RegExp(
   `(?<![\\p{L}-])(${[...FRANCES_EM_PT_FORMAS.flatMap((w) => [w, capitalizada(w)]), ...SIGLAS_FRANCESAS].join('|')})(?![\\p{L}-])`,

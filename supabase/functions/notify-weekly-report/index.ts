@@ -791,31 +791,31 @@ serve(async (req) => {
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(returnsCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Atrasos ativos (à clôture da semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Atrasos ativos (fim da semana)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(overdueActiveCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB consentidos (como emprestadora)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB concedidos (como emprestadora)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebLentCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB solicitados (como tomadora)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB solicitados (como tomadora)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebBorrowedCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB em circulação (à clôture da semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB em circulação (fim da semana)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebInCirculationCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Partilhas digitais fornecidas (semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Compartilhamentos digitais fornecidos (semana)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdProvidedCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Partilhas digitais solicitadas (semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Compartilhamentos digitais solicitados (semana)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdRequestedCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Partilhas digitais em curso (à clôture da semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Compartilhamentos digitais em curso (fim da semana)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdOngoingCount)}</b></td>
           </tr>
           <tr>
@@ -847,7 +847,7 @@ serve(async (req) => {
         renderTable("Renovações (últimas 50)", ["ID", "Renovado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], renewalsRows),
         renderTable("Devoluções (últimas 50 linhas agrupadas por empréstimo)", ["Empréstimo", "Devolvido em", "Livro(s)", "Leitor(a/e)"], returnsRows),
         renderTable("Atrasos ativos (top 50)", ["Empréstimo", "Vencimento", "Livro(s)", "Leitor(a/e)"], overdueRows),
-        renderTable("Intercâmbios interbibliotecas (PEB criados na semana, últimos 50)", ["Referência", "Papel", "Biblioteca parceira", "Estado", "Documentos"], pebRows),
+        renderTable("Intercâmbios interbibliotecas (EEB criados na semana, últimos 50)", ["Referência", "Papel", "Biblioteca parceira", "Estado", "Documentos"], pebRows),
         renderTable("Compartilhamentos digitais (pedidos da semana, últimos 50)", ["Documento", "Papel", "Biblioteca parceira", "Estado"], pdRows)
       ],
       context: ctx,
