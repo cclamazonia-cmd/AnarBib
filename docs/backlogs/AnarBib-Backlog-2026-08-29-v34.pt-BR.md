@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-27** · 66 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-27** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 6
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 5
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-27.** **52 itens de 66** trazem uma verificação datada própria (A1, A3, B10, B13, B29, C3, C4, C7, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-27.** **51 itens de 65** trazem uma verificação datada própria (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -428,7 +428,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C4** | Preencher os países ausentes em 722 fichas de autoridade | `P2` | Decisão coletiva |
 | **C6** | Entregar as três assistências de digitação previstas pela spec das convenções | `P2` | A verificar |
-| **C7** | Indexar por assunto os 1 549 registros que não têm nenhum assunto | `P2` | Em curso |
 | **C9** | As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão | `P2` | Aberto |
 | **C10** | Renomear uma das duas colunas `rights_status` | `P2` | Aberto |
 
@@ -496,28 +495,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Apoia-se nas migrações `conventions_*` já em vigor.
 
 *Remissões : `spec-conventions-catalographiques-v0.1 §7`*
-
-#### C7 — Indexar por assunto os 1 549 registros que não têm nenhum assunto
-
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : biblioteconomia, nenhuma competência técnica
-
-**Estado.** Verificado em 29/08: **1 127 registros indexados de 2 676**, ou seja 42 %. 1 284 atribuições distribuídas em 89 assuntos locais. Do lado público anônimo, a cobertura é ainda mais baixa. **27/09 — critérios 1 e 2 cumpridos, o 3 espera um gesto.** 851 registros indexados pelo vocabulário existente (ficha validada A + B por Xavier, migração `20260927124038` aplicada pela CI): +1 180 atribuições, nenhuma matéria criada. Cobertura pública medida como anônimo: 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` não existe mais; `anarcocomunismo` verificado. Falta levar os oito assuntos à FICEDL (gesto de Xavier); 466 registros ficam fora do vocabulário.
-
-*Verificado : 31/08 — 1 122 de 2 659 registros indexados (42,2 %), 1 279 atribuições, 89 assuntos. As fusões de duplicatas de 31/08 explicam a leve queda.*
-
-**O que é.** Indexar, registro por registro, com o vocabulário local e o tesauro FICEDL já carregado. Nenhuma competência técnica: é um trabalho de biblioteca, feito a partir do aplicativo.
-
-**Por que importa.** Um catálogo com 42 % de indexação não se percorre: busca-se por título, o que pressupõe saber o que se procura. O assunto é o único caminho de entrada para quem vem ver o que há sobre uma questão. E, como o tesauro está traduzido em dez línguas, cada atribuição vale simultaneamente para as dez.
-
-**O que conta como terminado.**
-
-- A cobertura passa de 70 % dos registros públicos.
-- O assunto parasita `pierre-joseph-proudhon` (0 livro) é suprimido, e `anarcocomunismo` é verificado.
-- Os oito assuntos AnarBib sem equivalente FICEDL continuam vinculados a um termo mais amplo e são **levados à federação como contribuição, não como queixa**: educação libertária (64 livros), abolicionismo penal (13), ecologia social (10), anarcafeminismo, comunismo libertário, anarcopunk, especifismo, cabanagem.
-
-**Dependências.** Nenhuma. **Entrada sem competência técnica.**
-
-*Remissões : `AnarBib-Backlog-2026-06-17-v33 §5` · `ETAT-lancement-consolide-2026-07-03 §2 item 6`*
 
 #### C9 — As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão
 
@@ -2131,6 +2108,7 @@ CI verde. |
 | H14 | 2026-09-26 | **Fechado em 26/09 à noite, os dois critérios cumpridos.** *(1)* PMB 8.1.1.1 (arquivo oficial, SHA256 verificado) roda na máquina em dois contêineres, receita **sem cliques** no repositório (`tests/pmb/banc`): instalação, atualização do esquema, **exportação** e **importação** por HTTP. *(2)* Fixtures **exportadas pelo próprio PMB** (`tests/pmb/fixtures`): o jogo de teste do PMB (50 registros, 33 exemplares) em ISO 2709, XML MARC e XML próprio do PMB, e 14 **casos difíceis** passados pelo PMB. Latin-1: não pelo PMB (o 8.1 só instala em UTF-8) — variante transcodificada por `yaz-marcdump`, dito. O que o PMB perde ao reimportar está em `tests/pmb/README.md` (**H24**/**H27**). |
 | C8 | 2026-09-26 | **Fechado em 26/09, os dois critérios cumpridos.** Duas fases por migração de dados via CI: Wikidata (607 fichas) e Library of Congress (288 ligadas, 90 completadas); regras, amostras e planilhas em `docs/journal/operations/enrichissement-autorites-2026-09-26/`; precisão medida numa amostra aleatória: 60/60. Só se preenche o vazio, com rastro por ficha. (1) Cobertura em identificadores externos: 51 % de todas as autoridades, 78 % das com três livros ou mais, 96 % das com dez. (2) Nenhuma forma de nome tocada. A língua de escrita ganhou sua coluna (503 fichas). |
 | C11 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 3 cumpridos, o 2 fica como prática contínua (decisão de Xavier).** Ficha validada em bloco; fusões e reuniões de tomos feitas por Xavier no assistente (a migração que agia em seu nome foi recusada, com razão); o resto por duas migrações em nome próprio (`20260927112143`, `20260927114232`): O Capital, O Homem e a Terra em seis volumes, sete famílias de tomos reunidas, Peirats devolvido à fila, matérias MLEG. Em produção: as três abas vazias; 175 notas MLEG com decisão escrita. Critério 2 não mensurável: 1 676 títulos automáticos, revisão contínua pela fila do Ateliê. |
+| C7 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 2 cumpridos, o 3 dispensado por decisão de Xavier.** 851 registros indexados pelo vocabulário existente (ficha validada A + B, migração `20260927124038` pela CI): cobertura pública medida como anônimo 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` suprimido, `anarcocomunismo` verificado. Levar os oito assuntos à FICEDL deixa de ser pedido (decisão de Xavier, «se não criar fork»): não há fork — a cópia do tesauro tem 621 termos, todos colhidos na fonte em 03/09, nenhum acrescentado localmente, nenhum vínculo `exact` para os oito. 466 registros ficam fora do vocabulário. |
 
 ---
 
@@ -2162,4 +2140,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 66 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
