@@ -19,6 +19,9 @@
 -- conditionnelle comptée comme pleine), et les FK des schémas hors
 -- public/ingest. Même méthode que l'advisor Supabase, résultats identiques
 -- à l'unité au 02/09 (38).
+--
+-- 27/09/2026 (B10, passe 2) : 21 FK indexées, 17 restent assumées — la
+-- règle et les deux familles sont écrites en tête de la liste ci-dessous.
 
 DO $$
 DECLARE
@@ -29,19 +32,25 @@ DECLARE
   v_liste text;
 BEGIN
   -- ───────────────────────────────────────────────────────────────────
-  -- LA LISTE ASSUMÉE — 38 entrées au 02/09/2026, trois familles motivées.
+  -- LA LISTE ASSUMÉE — 17 entrées au 27/09/2026 (38 au 02/09), deux familles.
   -- Ajouter une entrée ici doit être un acte (commit qui dit pourquoi),
   -- jamais un réflexe pour faire taire le rouge.
   --
+  -- La règle, posée par B10 le 27/09 : une FK sans index ne coûte qu'à la
+  -- suppression de son PARENT (parcours complet de la table enfant, pour
+  -- vérifier, mettre à NULL ou supprimer en cascade). On indexe donc toute FK
+  -- dont le parent est supprimé en exploitation — 21 l'ont été ce jour-là
+  -- (20260927180100 : brouillons purgés, œuvres, autorités, notices et revues
+  -- fusionnées, comptes effacés) — et on n'assume que celles dont le parent
+  -- ne se supprime pas :
+  --
   -- (a) 15 FK vers les tables de codes `catalog_ref_*` : référentiels de
-  --     quelques dizaines de lignes, jamais parcourus en sens inverse —
-  --     les résiduelles voulues du solde du 02/07, intactes depuis.
-  -- (b) 17 colonnes d'acteur des tables de qualité catalographique (qui a
-  --     signalé, décidé, appliqué → comptes) + rattachements de brouillon :
-  --     volumétrie minuscule, aucune jointure inverse en requête chaude.
-  --     Indexer se décidera à l'usage (B10), pas par principe.
-  -- (c) 6 FK du schéma `ingest` : transit d'import, tables de staging
-  --     purgées par lot, jamais interrogées par les écrans.
+  --     quelques dizaines de lignes, jamais supprimés — les résiduelles
+  --     voulues du solde du 02/07, intactes depuis.
+  -- (b) 2 FK vers des référentiels jamais supprimés en exploitation : les
+  --     bibliothèques (une bibliothèque se désactive, `is_active` ; aucune
+  --     suppression du 02/09 au 27/09) et les partenaires de catalogue
+  --     d'import (3 lignes).
   -- ───────────────────────────────────────────────────────────────────
   CREATE TEMP TABLE _fk_assumees(tbl text, conname text) ON COMMIT DROP;
   INSERT INTO _fk_assumees VALUES
@@ -61,31 +70,9 @@ BEGIN
     ('public.book_draft_import_events','book_draft_import_events_import_method_code_fkey'),
     ('public.book_draft_import_events','book_draft_import_events_review_status_code_fkey'),
     ('public.book_draft_import_events','book_draft_import_events_source_format_code_fkey'),
-    -- (b) colonnes d'acteur et rattachements
-    ('public.author_not_duplicate','author_not_duplicate_author_id_b_fkey'),
-    ('public.author_not_duplicate','author_not_duplicate_created_by_fkey'),
-    ('public.authority_duplicate_reports','authority_duplicate_reports_author_id_b_fkey'),
-    ('public.authority_duplicate_reports','authority_duplicate_reports_closed_by_fkey'),
-    ('public.authority_duplicate_reports','authority_duplicate_reports_reported_by_fkey'),
+    -- (b) référentiels jamais supprimés
     ('public.book_drafts','book_drafts_initial_copies_library_id_fkey'),
-    ('public.book_drafts','book_drafts_work_id_fkey'),
-    ('public.book_reading_note_reports','book_reading_note_reports_reporter_user_id_fkey'),
-    ('public.book_reading_note_reports','book_reading_note_reports_resolved_by_fkey'),
-    ('public.book_reading_notes','book_reading_notes_hidden_by_fkey'),
-    ('public.catalog_duplicate_reports','catalog_duplicate_reports_book_id_b_fkey'),
-    ('public.catalog_duplicate_reports','catalog_duplicate_reports_closed_by_fkey'),
-    ('public.catalog_duplicate_reports','catalog_duplicate_reports_reported_by_fkey'),
-    ('public.catalog_review_queue','catalog_review_queue_applique_par_fkey'),
-    ('public.catalog_review_queue','catalog_review_queue_decided_by_fkey'),
-    ('public.library_request_claims','library_request_claims_revoked_by_user_id_fkey'),
-    ('public.serial_not_duplicate','serial_not_duplicate_serial_id_b_fkey'),
-    -- (c) transit d'import (ingest)
-    ('ingest.partner_catalog_row_to_draft','partner_catalog_row_to_draft_batch_id_fkey'),
-    ('ingest.partner_catalog_sources','partner_catalog_sources_catalog_partner_id_fkey'),
-    ('ingest.partner_catalog_staging_rows','partner_catalog_staging_rows_created_book_draft_id_fkey'),
-    ('ingest.partner_catalog_staging_rows','partner_catalog_staging_rows_proposed_book_draft_id_fkey'),
-    ('ingest.partner_catalog_staging_rows','partner_catalog_staging_rows_proposed_book_id_fkey'),
-    ('ingest.partner_catalog_staging_rows','partner_catalog_staging_rows_source_file_id_fkey');
+    ('ingest.partner_catalog_sources','partner_catalog_sources_catalog_partner_id_fkey');
 
   CREATE TEMP TABLE _fk_sans_index ON COMMIT DROP AS
   SELECT n.nspname||'.'||t.relname AS tbl, c.conname
@@ -143,5 +130,5 @@ BEGIN
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'FK_SANS_INDEX_GARDE ECHEC : %/% — %', v_failed, v_passed + v_failed, array_to_string(v_failures, ' | ');
   END IF;
-  RAISE EXCEPTION 'FK_SANS_INDEX_GARDE OK : %/% tests passés (38 entrées assumées)', v_passed, v_passed;
+  RAISE EXCEPTION 'FK_SANS_INDEX_GARDE OK : %/% tests passés (17 entrées assumées)', v_passed, v_passed;
 END $$;
