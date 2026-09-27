@@ -521,3 +521,6 @@ tests/sql/import_encodage_overrides_tests.sql
 # 26/09 (H16) : le rapport de revision d un lot importe porte la couverture de chaque import
 # d origine (comptes, encodage, lignes ecartees, seuls les elements NON repris).
 tests/sql/import_couverture_tests.sql
+# 26/09 (H19, IMP-21) : les exemplaires d un catalogue importe (995/852) deviennent des exemplaires —
+# rattaches a leur notice, tombo du schema, code d origine unique par biblio, pas d exemplaire automatique.
+tests/sql/import_exemplaires_tests.sql
