@@ -2576,6 +2576,57 @@
       }
     },
     {
+      "id": "B29",
+      "d": "B",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "L",
+      "sk": [
+        "sql",
+        "front"
+      ],
+      "t": {
+        "fr": "Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens",
+        "pt": "Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus"
+      },
+      "v": {
+        "fr": "Relevé le 27/09 pendant la revue de H19 (baseline, l.53888, 54047, 54406) : les politiques `author_drafts_catalogacao_librarian_all`, `book_drafts_catalogacao_librarian_all` et `exemplar_drafts_catalogacao_librarian_all` ne demandent que `api.my_access.can_access_catalogacao`, **sans aucune portée de bibliothèque**, en lecture comme en écriture. Toute personne qui catalogue, dans n'importe quelle bibliothèque, lit et modifie les brouillons de toutes les autres — y compris ceux d'une bibliothèque privée, et ceux d'un dépôt compagnon en attente d'admission. H19 a fermé ce qui passait par les RPC de publication (garde d'appartenance dans `publish_exemplar_draft`, liens d'import non écrivables par l'API), pas l'accès direct aux tables. **Règle posée par Xavier le 27/09** : possible pour un·e catalogueur·se qui est par ailleurs admin réseau, pas pour une coordination ni une bibliothécaire.",
+        "pt": "Levantado em 27/09 na revisão de H19: as políticas de `author_drafts`, `book_drafts` e `exemplar_drafts` só exigem `can_access_catalogacao`, **sem nenhum escopo de biblioteca**, em leitura e escrita. **Regra de Xavier (27/09)**: possível para quem cataloga e é admin da rede, não para coordenação nem bibliotecária."
+      },
+      "w": {
+        "fr": "Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin.",
+        "pt": "Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir."
+      },
+      "y": {
+        "fr": "Risque de casser des gestes aujourd'hui ouverts (file de catalogage multi-bibliothèques, fusions, corbeille, étiquettes) : une restriction de lecture qui masque une ligne rend des mises à jour silencieusement nulles. Avancer table par table, avec une suite SQL par rôle.",
+        "pt": "Risco de quebrar gestos hoje abertos: uma restrição de leitura torna atualizações silenciosamente nulas. Avançar tabela por tabela."
+      },
+      "f": {
+        "fr": [
+          "Une bibliothécaire de A ne lit ni ne modifie un brouillon de B (notice, exemplaire), par l'API comme par les RPC.",
+          "L'administration du réseau garde la vue et l'action sur tout.",
+          "Les trois questions à trancher sont écrites au REGISTRE."
+        ],
+        "pt": [
+          "Uma bibliotecária de A não lê nem modifica um rascunho de B.",
+          "A administração da rede mantém tudo.",
+          "As questões decididas estão no REGISTRO."
+        ]
+      },
+      "dep": {
+        "fr": "Après la livraison de H19 (même zone, colonnes neuves de `exemplar_drafts`).",
+        "pt": "Depois da entrega de H19."
+      },
+      "r": [
+        "supabase/migrations/20260510000000_baseline_live.sql",
+        "supabase/migrations/20260927113000_h19_exemplaires_importes.sql"
+      ],
+      "verif": {
+        "fr": "27/09 — politiques lues dans le baseline ; aucune migration ultérieure ne les redéfinit.",
+        "pt": "27/09 — políticas lidas no baseline."
+      }
+    },
+    {
       "id": "C3",
       "d": "C",
       "p": "P1",
@@ -5266,7 +5317,7 @@
       "id": "H19",
       "d": "H",
       "p": "P1",
-      "s": "decision",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno",
@@ -5281,8 +5332,8 @@
         "pt": "O parser ignora a 995. Medido em 26/09: `exemplar_drafts`, `publish_exemplar_draft` e `ingest.fn_create_exemplar_drafts_from_import_rows` existem, mas **0** linha de staging tem `created_exemplar_draft_id`. `exemplares.tombo` é **único na base toda**: colisões possíveis (23505). **Levantamento de 26/09**: 995 do PMB = `$a`/`$c` proprietário, `$f` código de barras, `$k` cota, `$u` nota, `$r` tipo, `$q`. Armadilhas: N+1 exemplares (`greatest(1, initial_copies)`), tombo regenerado em silêncio em colisão, gatilho que devolve a linha a « pending » ao cancelar UM exemplar."
       },
       "w": {
-        "fr": "Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`). Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source. **Décisions attendues de Xavier (exposées le 26/09, rien n'est construit avant) :** *(1)* **numérotation** — A : `tombo` = code PMB préfixé ; **B (recommandée)** : `tombo` selon le schéma AnarBib de la bibliothèque, code PMB dans une colonne dédiée ; C : au choix dans le profil ; *(2)* le **code d'origine dans une colonne dédiée**, unique par bibliothèque (et non dans une note) — il est la clé de **H21** (réimport) et de **H24** (995 `$f` à l'export) ; *(3)* la **correspondance 995** réglée dans le profil de la bibliothèque (précise IMP-19 au REGISTRE) ; *(4)* les **statuts PMB → `circulation_policy`** : attendre l'échantillon de DIRA, ou règle par défaut « tout prêtable sauf mention ». Faits qui cadrent *(1)* : `tombo` unique sur toute la base ; chaque biblio a son schéma (`BTL-TL-EX-000909-R`, `MLEG-2026-0270`, `CCLA.2026.91`, `SOL-…`) ; les étiquettes AnarBib sont des QR portant l'identifiant interne de l'exemplaire (`LabelSheetPrinter.jsx`), et le prêt passe par la référence de la notice vers la détention (`create_loan_at_counter`) — un code-barres PMB n'est lu par AnarBib dans aucun cas.",
-        "pt": "Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; `tombo` prefixado (como `SOL-`); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB. **Decisões esperadas de Xavier (expostas em 26/09):** numeração (A: código PMB prefixado; **B, recomendada**: esquema AnarBib + código PMB em coluna própria; C: por perfil); código de origem em coluna dedicada (chave de H21 e H24); correspondência 995 no perfil da biblioteca (IMP-19); status PMB → `circulation_policy`."
+        "fr": "Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`). Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source. **Décisions attendues de Xavier (exposées le 26/09, rien n'est construit avant) :** *(1)* **numérotation** — A : `tombo` = code PMB préfixé ; **B (recommandée)** : `tombo` selon le schéma AnarBib de la bibliothèque, code PMB dans une colonne dédiée ; C : au choix dans le profil ; *(2)* le **code d'origine dans une colonne dédiée**, unique par bibliothèque (et non dans une note) — il est la clé de **H21** (réimport) et de **H24** (995 `$f` à l'export) ; *(3)* la **correspondance 995** réglée dans le profil de la bibliothèque (précise IMP-19 au REGISTRE) ; *(4)* les **statuts PMB → `circulation_policy`** : attendre l'échantillon de DIRA, ou règle par défaut « tout prêtable sauf mention ». Faits qui cadrent *(1)* : `tombo` unique sur toute la base ; chaque biblio a son schéma (`BTL-TL-EX-000909-R`, `MLEG-2026-0270`, `CCLA.2026.91`, `SOL-…`) ; les étiquettes AnarBib sont des QR portant l'identifiant interne de l'exemplaire (`LabelSheetPrinter.jsx`), et le prêt passe par la référence de la notice vers la détention (`create_loan_at_counter`) — un code-barres PMB n'est lu par AnarBib dans aucun cas. **Décidé le 26/09 (IMP-21) et livré le 27/09** (`3efd89b0`, `a7b2d44d`, `02000b89`, migration `20260927113000`) : numérotation B (tombo du schéma de la bibliothèque), code d'origine dans `exemplares.source_item_code` unique par bibliothèque (jamais dans une note), correspondance 995/852 dans le profil d'import (défaut PMB 8.1), statuts PMB gardés dans la note de provenance en attendant l'échantillon de DIRA. L'EF lit les zones d'exemplaire (sous-zones répétées comprises) ; la promotion crée un brouillon d'exemplaire par exemplaire, rattaché à sa notice et publié AVEC elle, à la place de l'exemplaire automatique ; le rapprochement aussi (dépôt compagnon réservé à l'administration, versé à la destination, code déjà présent non recréé, ligne entièrement détenue rejetée) ; le rapport de révision gagne `items` (six raisons, 40 au plus, en un passage). **Trois revues contradictoires** avant tout déploiement (26-27/09, chaque constat passé devant un sceptique) : garde d'appartenance dans `publish_exemplar_draft` (la tête ne demandait qu'un rôle QUELQUE PART), tombo gardé à la republication, cote brute gardée par le formulaire (`src/lib/shelfLocation.js`), exclusion mutuelle promotion/rapprochement, suivi de la notice (corbeille, restauration, lot, fusions de doublons, journal des suppressions), liens d'import non écrivables par l'API, retraitement refusé après rapprochement, profil supprimé refusé dès l'envoi. **Reste** : un import PMB réel (DIRA) mené jusqu'à la publication ; la correspondance statuts → `circulation_policy` (IMP-21 d).",
+        "pt": "Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; `tombo` prefixado (como `SOL-`); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB. **Decisões esperadas de Xavier (expostas em 26/09):** numeração (A: código PMB prefixado; **B, recomendada**: esquema AnarBib + código PMB em coluna própria; C: por perfil); código de origem em coluna dedicada (chave de H21 e H24); correspondência 995 no perfil da biblioteca (IMP-19); status PMB → `circulation_policy`. **Decidido em 26/09 (IMP-21), entregue em 27/09** (`3efd89b0`, `a7b2d44d`, `02000b89`, migração `20260927113000`): numeração B, código de origem em coluna própria única por biblioteca, correspondência 995/852 no perfil, status PMB na nota de proveniência até a amostra da DIRA. Três revisões contraditórias antes de qualquer implantação. **Falta**: uma importação PMB real (DIRA) até a publicação; status → `circulation_policy`."
       },
       "y": {
         "fr": "Une bibliothèque, ce sont des livres sur des étagères. Sans cotes ni codes-barres, l'import donne un catalogue qu'on ne peut ni prêter ni ranger. Et un essai sans exemplaires ne prouve rien à DIRA.",
@@ -5309,8 +5360,8 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — 0 `created_exemplar_draft_id` sur 2 172 lignes de staging ; `exemplares_unique_tombo` présent.",
-        "pt": "26/09 — 0 de 2 172 linhas; índice único de tombo presente."
+        "fr": "27/09 — suite SQL `import_exemplaires_tests` 30/30 et les 118 suites de la CI ; banc de la vraie EF sur l'export PMB (profil honoré, profil supprimé ou illisible sans rien effacer) ; tests Deno du parseur (sous-zones répétées) ; écran rendu en fr et el (`import-exemplaires-ecran`, `shelf-location`).",
+        "pt": "27/09 — suíte SQL 27/27 e as 118 suítes da CI; banco da EF real no export PMB; testes Deno do parser; tela em fr e el."
       }
     },
     {

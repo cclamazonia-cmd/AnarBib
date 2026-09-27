@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-27** · 66 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-27** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 2
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-27.** **52 items sur 66** portent une vérification datée qui leur est propre (A1, A3, B10, B13, C3, C4, C7, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-27.** **53 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B29, C3, C4, C7, C9, C10, C11, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -348,6 +348,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
+| **B29** | Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens | `P1` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -393,6 +394,28 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** **Bloqué par A2.** Ne pas commencer avant.
 
 *Renvois : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
+
+#### B29 — Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens
+
+`P1` Prioritaire · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+
+**État.** Relevé le 27/09 pendant la revue de H19 (baseline, l.53888, 54047, 54406) : les politiques `author_drafts_catalogacao_librarian_all`, `book_drafts_catalogacao_librarian_all` et `exemplar_drafts_catalogacao_librarian_all` ne demandent que `api.my_access.can_access_catalogacao`, **sans aucune portée de bibliothèque**, en lecture comme en écriture. Toute personne qui catalogue, dans n'importe quelle bibliothèque, lit et modifie les brouillons de toutes les autres — y compris ceux d'une bibliothèque privée, et ceux d'un dépôt compagnon en attente d'admission. H19 a fermé ce qui passait par les RPC de publication (garde d'appartenance dans `publish_exemplar_draft`, liens d'import non écrivables par l'API), pas l'accès direct aux tables. **Règle posée par Xavier le 27/09** : possible pour un·e catalogueur·se qui est par ailleurs admin réseau, pas pour une coordination ni une bibliothécaire.
+
+*Vérifié : 27/09 — politiques lues dans le baseline ; aucune migration ultérieure ne les redéfinit.*
+
+**Ce que c'est.** Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin.
+
+**Pourquoi ça compte.** Risque de casser des gestes aujourd'hui ouverts (file de catalogage multi-bibliothèques, fusions, corbeille, étiquettes) : une restriction de lecture qui masque une ligne rend des mises à jour silencieusement nulles. Avancer table par table, avec une suite SQL par rôle.
+
+**Ce qui compte comme fini.**
+
+- Une bibliothécaire de A ne lit ni ne modifie un brouillon de B (notice, exemplaire), par l'API comme par les RPC.
+- L'administration du réseau garde la vue et l'action sur tout.
+- Les trois questions à trancher sont écrites au REGISTRE.
+
+**Dépendances.** Après la livraison de H19 (même zone, colonnes neuves de `exemplar_drafts`).
+
+*Renvois : `supabase/migrations/20260510000000_baseline_live.sql` · `supabase/migrations/20260927113000_h19_exemplaires_importes.sql`*
 
 ---
 
@@ -1218,7 +1241,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H16** | Un rapport de couverture par import : chaque zone du fichier que l'import ne reprend pas est comptée et montrée | `P1` | À vérifier |
 | **H17** | Le mapping UNIMARC reprend les zones courantes d'un catalogue PMB | `P1` | Ouvert |
 | **H18** | Les responsabilités importées gardent leur rôle, leur nature (personne ou collectivité) et leur lien d'autorité | `P1` | Ouvert |
-| **H19** | Les exemplaires d'un catalogue importé (995 en UNIMARC, 852 en MARC21) deviennent des exemplaires AnarBib | `P1` | Décision collective |
+| **H19** | Les exemplaires d'un catalogue importé (995 en UNIMARC, 852 en MARC21) deviennent des exemplaires AnarBib | `P1` | À vérifier |
 | **H20** | L'identifiant d'origine d'une notice est gardé par bibliothèque, pas seulement sur la notice partagée | `P1` | Ouvert |
 | **H21** | Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer | `P2` | Ouvert |
 | **H22** | Lire l'export XML propre à PMB, s'il le faut | `P3` | Ouvert |
@@ -1403,13 +1426,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### H19 — Les exemplaires d'un catalogue importé (995 en UNIMARC, 852 en MARC21) deviennent des exemplaires AnarBib
 
-`P1` Prioritaire · État : **Décision collective** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
+`P1` Prioritaire · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
 
 **État.** Le parseur ignore la 995, où PMB exporte ses exemplaires. **Mesuré le 26/09 en production** : l'infrastructure existe mais n'a jamais servi à l'import. `exemplar_drafts`, `publish_exemplar_draft` et `ingest.fn_create_exemplar_drafts_from_import_rows` sont en base, mais **0** ligne de staging porte un `created_exemplar_draft_id`. Et `exemplares.tombo` est **unique sur toute la base** (`exemplares_unique_tombo`) : les codes-barres de deux bibliothèques peuvent entrer en collision (23505). **Relevé du 26/09 (cartographie + banc PMB).** Conventions 995 de PMB 8.1, vues dans ses exports : `$a`/`$c` propriétaire, `$f` code-barres, `$k` cote, `$u` note, `$r` type, `$q` public/section (+ une 996 propre à PMB). Trois pièges côté AnarBib : *(1)* `publish_book_draft` pose `greatest(1, initial_copies)` — importer N exemplaires ET publier la notice en ferait **N+1** ; *(2)* sur collision, `publish_exemplar_draft` **régénère le tombo en silence** (`fn_next_tombo`, qui lève si la biblio n'a pas de `tombo_pattern`) — le code-barres d'origine serait perdu ; *(3)* `ingest.fn_unreconcile_staging_on_exemplar_draft` remet la ligne de staging à « pending » dès qu'UN brouillon d'exemplaire lié est annulé — ne pas réutiliser `created_exemplar_draft_id` pour N exemplaires. Côté PMB (retour) : `func_bdp` **ignore le propriétaire de la 995** (il vient du formulaire).
 
-*Vérifié : 26/09 — 0 `created_exemplar_draft_id` sur 2 172 lignes de staging ; `exemplares_unique_tombo` présent.*
+*Vérifié : 27/09 — suite SQL `import_exemplaires_tests` 30/30 et les 118 suites de la CI ; banc de la vraie EF sur l'export PMB (profil honoré, profil supprimé ou illisible sans rien effacer) ; tests Deno du parseur (sous-zones répétées) ; écran rendu en fr et el (`import-exemplaires-ecran`, `shelf-location`).*
 
-**Ce que c'est.** Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`). Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source. **Décisions attendues de Xavier (exposées le 26/09, rien n'est construit avant) :** *(1)* **numérotation** — A : `tombo` = code PMB préfixé ; **B (recommandée)** : `tombo` selon le schéma AnarBib de la bibliothèque, code PMB dans une colonne dédiée ; C : au choix dans le profil ; *(2)* le **code d'origine dans une colonne dédiée**, unique par bibliothèque (et non dans une note) — il est la clé de **H21** (réimport) et de **H24** (995 `$f` à l'export) ; *(3)* la **correspondance 995** réglée dans le profil de la bibliothèque (précise IMP-19 au REGISTRE) ; *(4)* les **statuts PMB → `circulation_policy`** : attendre l'échantillon de DIRA, ou règle par défaut « tout prêtable sauf mention ». Faits qui cadrent *(1)* : `tombo` unique sur toute la base ; chaque biblio a son schéma (`BTL-TL-EX-000909-R`, `MLEG-2026-0270`, `CCLA.2026.91`, `SOL-…`) ; les étiquettes AnarBib sont des QR portant l'identifiant interne de l'exemplaire (`LabelSheetPrinter.jsx`), et le prêt passe par la référence de la notice vers la détention (`create_loan_at_counter`) — un code-barres PMB n'est lu par AnarBib dans aucun cas.
+**Ce que c'est.** Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`). Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source. **Décisions attendues de Xavier (exposées le 26/09, rien n'est construit avant) :** *(1)* **numérotation** — A : `tombo` = code PMB préfixé ; **B (recommandée)** : `tombo` selon le schéma AnarBib de la bibliothèque, code PMB dans une colonne dédiée ; C : au choix dans le profil ; *(2)* le **code d'origine dans une colonne dédiée**, unique par bibliothèque (et non dans une note) — il est la clé de **H21** (réimport) et de **H24** (995 `$f` à l'export) ; *(3)* la **correspondance 995** réglée dans le profil de la bibliothèque (précise IMP-19 au REGISTRE) ; *(4)* les **statuts PMB → `circulation_policy`** : attendre l'échantillon de DIRA, ou règle par défaut « tout prêtable sauf mention ». Faits qui cadrent *(1)* : `tombo` unique sur toute la base ; chaque biblio a son schéma (`BTL-TL-EX-000909-R`, `MLEG-2026-0270`, `CCLA.2026.91`, `SOL-…`) ; les étiquettes AnarBib sont des QR portant l'identifiant interne de l'exemplaire (`LabelSheetPrinter.jsx`), et le prêt passe par la référence de la notice vers la détention (`create_loan_at_counter`) — un code-barres PMB n'est lu par AnarBib dans aucun cas. **Décidé le 26/09 (IMP-21) et livré le 27/09** (`3efd89b0`, `a7b2d44d`, `02000b89`, migration `20260927113000`) : numérotation B (tombo du schéma de la bibliothèque), code d'origine dans `exemplares.source_item_code` unique par bibliothèque (jamais dans une note), correspondance 995/852 dans le profil d'import (défaut PMB 8.1), statuts PMB gardés dans la note de provenance en attendant l'échantillon de DIRA. L'EF lit les zones d'exemplaire (sous-zones répétées comprises) ; la promotion crée un brouillon d'exemplaire par exemplaire, rattaché à sa notice et publié AVEC elle, à la place de l'exemplaire automatique ; le rapprochement aussi (dépôt compagnon réservé à l'administration, versé à la destination, code déjà présent non recréé, ligne entièrement détenue rejetée) ; le rapport de révision gagne `items` (six raisons, 40 au plus, en un passage). **Trois revues contradictoires** avant tout déploiement (26-27/09, chaque constat passé devant un sceptique) : garde d'appartenance dans `publish_exemplar_draft` (la tête ne demandait qu'un rôle QUELQUE PART), tombo gardé à la republication, cote brute gardée par le formulaire (`src/lib/shelfLocation.js`), exclusion mutuelle promotion/rapprochement, suivi de la notice (corbeille, restauration, lot, fusions de doublons, journal des suppressions), liens d'import non écrivables par l'API, retraitement refusé après rapprochement, profil supprimé refusé dès l'envoi. **Reste** : un import PMB réel (DIRA) mené jusqu'à la publication ; la correspondance statuts → `circulation_policy` (IMP-21 d).
 
 **Pourquoi ça compte.** Une bibliothèque, ce sont des livres sur des étagères. Sans cotes ni codes-barres, l'import donne un catalogue qu'on ne peut ni prêter ni ranger. Et un essai sans exemplaires ne prouve rien à DIRA.
 
@@ -2172,4 +2195,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 66 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
