@@ -40,7 +40,9 @@ export const INTENTIONS = [
   { id: 'welcomeReader', group: 'librarian', icon: '🤝', to: '/painel/leitor' },
   { id: 'validate',      group: 'librarian', icon: '✅', to: '/painel/validacoes' },
   { id: 'recolement',    group: 'librarian', icon: '📋', to: '/painel/recolement' },
+  { id: 'coverPhotos',   group: 'librarian', icon: '📷', to: '/painel/capas' },          /* capas, 27/09/2026 */
   { id: 'catalog',       group: 'librarian', icon: '📄', to: '/catalogacao#tab=booksPanel' },
+  { id: 'coverReview',   group: 'librarian', icon: '🖼️', to: '/catalogacao#tab=catalogPanel' }, /* capas en lot, 27/09/2026 */
   { id: 'authors',       group: 'librarian', icon: '✒️', to: '/catalogacao#tab=authorsPanel' },
   { id: 'subjects',      group: 'librarian', icon: '🗂️', to: '/catalogacao#tab=materiaPanel' },
   { id: 'labels',        group: 'librarian', icon: '🏷️', to: '/catalogacao#tab=labelsPanel' },

@@ -548,3 +548,6 @@ tests/sql/isbn_volumes_tests.sql
 # ecraser une decision ; l ecran de revue ne tranche que dans le perimetre de la personne et pose
 # la provenance de la PROPOSITION ; une capa posee entre-temps n est jamais remplacee.
 tests/sql/capas_lot_tests.sql
+# 27/09 (capas, campagne photo) : la liste de campagne (détenues, sans couverture, ordre des tombos), la recherche par
+# etiquette QR / ISBN / chiffres du tombo / titre, et poser : provenance photo, dossier de la notice, remplacement sur demande seulement.
+tests/sql/capas_photo_tests.sql

@@ -21,7 +21,7 @@ describe('registre des intentions', () => {
   });
   it('les onglets cités existent dans la convention de chaque page', () => {
     const conta = ['perfil', 'reservar', 'curso', 'historico', 'avisos', 'desejos', 'notas', 'biblios', 'eventos'];
-    const painel = ['trabalho-do-dia', 'acoes', 'reservas', 'consultas-locais', 'emprestimos', 'leitor', 'historico', 'contribuicoes', 'validacoes', 'recolement'];
+    const painel = ['trabalho-do-dia', 'acoes', 'reservas', 'consultas-locais', 'emprestimos', 'leitor', 'historico', 'contribuicoes', 'validacoes', 'recolement', 'capas'];
     const catalogacao = ['booksPanel', 'authorsPanel', 'indexPanel', 'labelsPanel', 'ocrPanel', 'queuePanel', 'batchesPanel', 'catalogPanel', 'materiaPanel', 'periodicosPanel', 'dedupPanel'];
     const biblioteca = ['identity', 'comms', 'regulation', 'privacy', 'documents', 'transicoes', 'team', 'leitores', 'eventos', 'exchanges', 'ill', 'reports', 'notas', 'tasks'];
     const rede = ['overview', 'requests', 'invitations', 'reviews', 'libraries', 'members', 'admins', 'reports', 'gazeta', 'lettre', 'oaisource'];

@@ -33,6 +33,8 @@ const TabContribuicoes   = lazy(() => import('./tabs/TabContribuicoes'));
 // MULTI P5 (volet staff) : validation des inscriptions pending_validation.
 const TabValidacoes      = lazy(() => import('./tabs/TabValidacoes'));
 const TabRecolement      = lazy(() => import('./tabs/TabRecolement'));
+// Capas (27/09/2026) : photographier les couvertures qui manquent, livre en main.
+const TabCapas           = lazy(() => import('./tabs/TabCapas'));
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -227,7 +229,7 @@ function PanelPageInner() {
   const { tab: routeTab } = useParams();
   useEffect(() => {
     if (routeTab && ['trabalho-do-dia', 'acoes', 'reservas', 'consultas-locais', 'emprestimos',
-      'leitor', 'historico', 'contribuicoes', 'validacoes', 'recolement'].includes(routeTab)) {
+      'leitor', 'historico', 'contribuicoes', 'validacoes', 'recolement', 'capas'].includes(routeTab)) {
       setTab(routeTab);
     }
   }, [routeTab]);
@@ -1592,6 +1594,8 @@ function PanelPageInner() {
     // MOBILE P4 : récolement (inventaire par scan). Staff de terrain uniquement.
     ...(canRecolement ? [
       { key: 'recolement', icon: '🔍', label: t({ id: 'panel.tab.recolement' }), hint: t({ id: 'panel.tab.recolement.hint' }) },
+      // Capas (27/09/2026) : même staff de terrain que le récolement, même geste — le livre en main.
+      { key: 'capas', icon: '📷', label: t({ id: 'panel.tab.capas' }), hint: t({ id: 'panel.tab.capas.hint' }) },
     ] : []),
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
@@ -2064,6 +2068,11 @@ function PanelPageInner() {
           {/* ═══ Récolement (inventaire par scan, MOBILE P4) ═══════ */}
           {tab === 'recolement' && canRecolement && (
             <TabRecolement t={t} locale={locale} libraryId={libraryId} libraryName={libraryName} />
+          )}
+
+          {/* ═══ Capas (photographier les couvertures, 27/09/2026) ═══ */}
+          {tab === 'capas' && canRecolement && (
+            <TabCapas t={t} libraryId={libraryId} />
           )}
 
           </Suspense>
