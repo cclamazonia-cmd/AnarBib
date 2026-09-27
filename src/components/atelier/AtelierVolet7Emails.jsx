@@ -9,8 +9,9 @@ import { useToast } from '@/contexts/ToastContext';
 // Volet 7 « E-mails » : identité d'envoi e-mail de la biblio.
 //   • contact_email / reply_to_email  → library_commons. Édité sur la biblio
 //     pré-active : l'UPDATE passe par library_commons_staff_update et la lecture
-//     par library_commons_staff_read (migration 20260613134350) — sans quoi
-//     fn_library_visible_to_caller bloquerait le SELECT (is_active=true exigé).
+//     par la branche staff de library_commons_select_authenticated (ex-
+//     library_commons_staff_read, 20260613134350 ; fusionnée par B10 le 27/09) —
+//     sans quoi fn_library_visible_to_caller bloquerait le SELECT (is_active=true exigé).
 //   • transport + envois actifs       → library_mail_channels.
 //
 // INTERRUPTEUR-UNIQUE (30/08/2026). Ce volet pilotait `email_delivery_mode`

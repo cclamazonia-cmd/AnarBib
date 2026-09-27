@@ -58,7 +58,8 @@ export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
     case 6:
       return <AtelierVolet6Adesao libraryId={libraryId} canEdit={canEdit} />;
     case 7:
-      // E-mails — identité d'envoi (library_commons), lue via library_commons_staff_read
+      // E-mails — identité d'envoi (library_commons), lue via la branche staff de
+      // library_commons_select_authenticated (ex-library_commons_staff_read, B10)
       // (sinon fn_library_visible_to_caller bloque le SELECT sur une biblio pré-active).
       return <AtelierVolet7Emails libraryId={libraryId} canEdit={canEdit} />;
     case 8:

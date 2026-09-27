@@ -535,3 +535,6 @@ tests/sql/capas_provenance_tests.sql
 # politiques par bibliotheque, autorites en lecture commune, gardes des fonctions DEFINER alignees.
 tests/sql/brouillons_par_bibliotheque_tests.sql
 tests/sql/name_lang_tests.sql
+# 27/09 (B10, passe 1) : une policy permissive par (role, commande) — invariant global a liste fermee vide,
+# anti-derive des deux copies de la lecture publique, lectures et ecritures reelles apres fusion.
+tests/sql/policies_permissives_uniques_tests.sql

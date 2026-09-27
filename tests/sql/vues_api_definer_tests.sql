@@ -16,6 +16,12 @@
 -- est desormais ENONCE (policy `profiles_select_gouvernance_en_cours`) au
 -- lieu d'etre contourne.
 --
+-- Le 27/09 (B10, migration 20260927180000), les deux policies SELECT de
+-- `profiles` ont ete consolidees en une seule, `profiles_select_consolidated`
+-- (mon profil et ceux de mes bibliotheques d'abord, la gouvernance en cours
+-- ensuite), comme T4 l'avait envisage. T2 et T4 regardent donc le CONTENU de
+-- la policy consolidee : chacun des deux cas doit y rester enonce.
+--
 -- T3 est le test le plus important de cette suite. Il garde le decompte des
 -- votes de retrait pour la personne VISEE : sa policy ne couvrait qu'elle
 -- les admins, si bien que la personne visee aurait lu « 0 vote » au lieu du
@@ -47,10 +53,12 @@ BEGIN
   -- l'administratrice qui doit decider -- et la tentation revient de
   -- ressortir la vue des policies pour « que ca remarche ».
   BEGIN
+    -- Depuis B10 (27/09) : porte par la policy SELECT consolidee de profiles.
     SELECT count(*) INTO v_n
       FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid
      WHERE c.relname = 'profiles' AND c.relnamespace = 'public'::regnamespace
-       AND p.polname = 'profiles_select_gouvernance_en_cours'
+       AND p.polname = 'profiles_select_consolidated'
+       AND p.polcmd = 'r'
        AND p.polpermissive
        AND pg_get_expr(p.polqual, p.polrelid) LIKE '%cooptation_proposals%'
        AND pg_get_expr(p.polqual, p.polrelid) LIKE '%collective_removal_proposals%';
@@ -77,17 +85,19 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T4 la policy historique de profiles est intacte';
-  -- On a AJOUTE un cas le 30/08. Si quelqu'un consolide un jour les deux
-  -- policies en une seule, ce test le dira avant que le cas historique --
-  -- mon profil, ceux de mes bibliotheques -- ne parte avec.
+  v_t := 'T4 le cas historique de profiles est intact dans la policy consolidee';
+  -- On a AJOUTE un cas le 30/08 ; les deux policies ont ete consolidees le
+  -- 27/09 (B10). Ce test dit si le cas historique -- mon profil, ceux de mes
+  -- bibliotheques -- est parti avec une reecriture.
   BEGIN
     SELECT count(*) INTO v_n
       FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid
      WHERE c.relname = 'profiles' AND c.relnamespace = 'public'::regnamespace
-       AND p.polname = 'profiles_select_consolidated';
+       AND p.polname = 'profiles_select_consolidated'
+       AND pg_get_expr(p.polqual, p.polrelid) LIKE '%id = ( SELECT auth.uid()%'
+       AND pg_get_expr(p.polqual, p.polrelid) LIKE '%can_manage_profile_from_my_libraries(id)%';
     IF v_n = 1 THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : profiles_select_consolidated a disparu'); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : profiles_select_consolidated a disparu ou ne porte plus le cas historique'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
