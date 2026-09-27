@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import fr from '../i18n/locales/fr.json';
-import { proposerPointAcces, formeDepuis } from '../lib/nameEntry.js';
+import { proposerPointAcces, formeDepuis, proposerCasseNom, basculerMajuscule } from '../lib/nameEntry.js';
 import NameEntryAssist from '../components/catalog/NameEntryAssist.jsx';
 
 describe('proposerPointAcces', () => {
@@ -74,6 +74,38 @@ describe('proposerPointAcces', () => {
   });
 });
 
+const casse = (n) => proposerCasseNom(n).mots.map((m) => m.texte).join(' ');
+
+describe('proposerCasseNom — la casse naturelle (CONV-1)', () => {
+  it.each([
+    ['osvaldo BAYER', 'Osvaldo Bayer'],
+    ['Eric HOBSBAWM', 'Eric Hobsbawm'],
+    ['FABIANO DE OLIVEIRA BRINGEL', 'Fabiano de Oliveira Bringel'],
+    ['jean-paul SARTRE', 'Jean-Paul Sartre'],
+    ['e. p. THOMPSON', 'E. P. Thompson'],
+    ["conor O'BRIEN", "Conor O'Brien"],
+    ["jean le rond D'ALEMBERT", "Jean le Rond d'Alembert"],
+    ['alfredo VEIGA-NETO', 'Alfredo Veiga-Neto'],
+    ['Mary Alice MC CABE', 'Mary Alice Mc Cabe'],
+    ['VOLINE', 'Voline'],
+  ])('%s → %s', (nom, attendu) => {
+    expect(casse(nom)).toBe(attendu);
+    expect(proposerCasseNom(nom).change).toBe(true);
+  });
+
+  it('un nom déjà en casse naturelle ne bouge pas', () => {
+    for (const n of ['Osvaldo Bayer', 'Fabiano de Oliveira Bringel', 'Pio XII', 'Louis XIV', "Conor O'Brien", 'E. P. Thompson']) {
+      expect(proposerCasseNom(n).change, n).toBe(false);
+    }
+  });
+
+  it('chiffres romains et initiales sont figés ; le clic bascule la majuscule', () => {
+    expect(proposerCasseNom('JEAN XXIII').mots.map((m) => m.fige)).toEqual([false, true]);
+    expect(basculerMajuscule('hooks')).toBe('Hooks');
+    expect(basculerMajuscule('De')).toBe('de');
+  });
+});
+
 const monter = (props) => render(
   <IntlProvider locale="fr" messages={fr}><NameEntryAssist {...props} /></IntlProvider>,
 );
@@ -121,5 +153,29 @@ describe('NameEntryAssist', () => {
   it('rien pour un nom vide ou déjà inversé', () => {
     const { container } = monter({ nom: 'Bayer, Osvaldo', formeActuelle: '', onChoisir: vi.fn() });
     expect(container.querySelector('[data-testid="name-entry-assist"]')).toBeNull();
+  });
+
+  it('casse : aperçu, clic sur un mot, appliquer puis annuler', () => {
+    const onNom = vi.fn();
+    const { rerender } = monter({ nom: 'EDMONDO DE AMICIS', formeActuelle: '', onChoisir: vi.fn(), onNom });
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.button'] }));
+    expect(screen.getByTestId('name-case-after').textContent).toBe('Edmondo de Amicis');
+    fireEvent.click(screen.getByRole('button', { name: 'de' }));            // l'usage italien : « De »
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.apply'] }));
+    expect(onNom).toHaveBeenLastCalledWith('Edmondo De Amicis');
+    rerender(<IntlProvider locale="fr" messages={fr}><NameEntryAssist nom="Edmondo De Amicis" formeActuelle="" onChoisir={vi.fn()} onNom={onNom} /></IntlProvider>);
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.undo'] }));
+    expect(onNom).toHaveBeenLastCalledWith('EDMONDO DE AMICIS');
+  });
+
+  it('casse : rien à proposer pour un nom déjà naturel', () => {
+    monter({ nom: 'Osvaldo Bayer', formeActuelle: '', onChoisir: vi.fn(), onNom: vi.fn() });
+    expect(bouton('confirm')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: fr['catalogacao.titleCase.button'] })).toBeNull();
+  });
+
+  it('le formulaire d’autorité passe le nom par handlePreferredNameChange', () => {
+    const src = readFileSync('src/pages/catalogacao/AuthorDraftForm.jsx', 'utf8');
+    expect(src).toMatch(/onNom={handlePreferredNameChange}/);
   });
 });

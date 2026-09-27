@@ -1867,6 +1867,8 @@
   "catalogacao.nameEntry.correct": "Διόρθωση",
   "catalogacao.nameEntry.single": "Μοναδικό όνομα / ψευδώνυμο",
   "catalogacao.nameEntry.pickSurname": "Κάνε κλικ στη λέξη όπου αρχίζει το επώνυμο",
+  "catalogacao.nameEntry.caseExplain": "Φυσική γραφή: ένα κεφαλαίο ανά λέξη, τα μόρια (de, da, dos…) με πεζά, τα αρχικά και οι λατινικοί αριθμοί μένουν. Ποτέ όλα κεφαλαία στο σημείο πρόσβασης.",
+  "catalogacao.nameEntry.caseHint": "Ιδιαίτερη γραφή του ονόματος (De Amicis, bell hooks); Κάνε κλικ στη λέξη για να της ξαναδώσεις ή να της αφαιρέσεις το κεφαλαίο.",
   "catalogacao.author.sortNameLabel": "Όνομα ταξινόμησης",
   "catalogacao.author.source": "Πηγή",
   "catalogacao.author.sourceKind.book": "Φυσικό βιβλίο στα χέρια",

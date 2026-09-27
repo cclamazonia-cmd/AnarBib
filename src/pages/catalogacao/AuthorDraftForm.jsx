@@ -779,7 +779,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             {/* C6 §7.1 — le point d'accès proposé, expliqué, corrigeable ; jamais bloquant */}
             {meta.authorityType === 'person' && (
               <NameEntryAssist nom={f('preferred_name')} country={f('country')} formeActuelle={f('sort_name')}
-                onChoisir={(forme) => set('sort_name', forme)} />
+                onChoisir={(forme) => set('sort_name', forme)} onNom={handlePreferredNameChange} />
             )}
           </div>
 

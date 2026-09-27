@@ -1867,6 +1867,8 @@
   "catalogacao.nameEntry.correct": "Corregir",
   "catalogacao.nameEntry.single": "Nombre único / seudónimo",
   "catalogacao.nameEntry.pickSurname": "Haz clic en la palabra donde empieza el apellido",
+  "catalogacao.nameEntry.caseExplain": "Caja natural: una mayúscula por palabra, partículas (de, da, dos…) en minúscula, iniciales y números romanos conservados. Nunca mayúsculas en el punto de acceso.",
+  "catalogacao.nameEntry.caseHint": "¿Un uso propio del nombre (De Amicis, bell hooks)? Haz clic en la palabra para devolverle o quitarle la mayúscula.",
   "catalogacao.author.sortNameLabel": "Nombre de ordenación",
   "catalogacao.author.source": "Fuente",
   "catalogacao.author.sourceKind.book": "Libro físico en mano",

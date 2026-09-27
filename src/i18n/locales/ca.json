@@ -1867,6 +1867,8 @@
   "catalogacao.nameEntry.correct": "Corregir",
   "catalogacao.nameEntry.single": "Nom únic / pseudònim",
   "catalogacao.nameEntry.pickSurname": "Feu clic a la paraula on comença el cognom",
+  "catalogacao.nameEntry.caseExplain": "Majúscules naturals: una majúscula per paraula, partícules (de, da, dos…) en minúscula, inicials i xifres romanes conservades. Mai majúscules a tot el punt d’accés.",
+  "catalogacao.nameEntry.caseHint": "Un ús propi del nom (De Amicis, bell hooks)? Feu clic a la paraula per tornar-li o treure-li la majúscula.",
   "catalogacao.author.sortNameLabel": "Nom d'ordenació",
   "catalogacao.author.source": "Font",
   "catalogacao.author.sourceKind.book": "Llibre físic a les mans",

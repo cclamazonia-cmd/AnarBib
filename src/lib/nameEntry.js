@@ -74,3 +74,60 @@ export function proposerPointAcces(nom, { country } = {}) {
   }
   return { forme: formeDepuis(tokens, debut), regle, tokens, debut, variante };
 }
+
+// ── La casse d'un nom de personne (CONV-1 : casse naturelle, jamais de capitales) ──
+// « osvaldo BAYER » → « Osvaldo Bayer ». Ce que la machine sait : une majuscule
+// par mot, les particules en minuscules hors tête, les initiales, les chiffres
+// romains, les noms composés (Jean-Paul, Veiga-Neto) et élidés (O'Brien,
+// d'Alembert). Ce qu'elle ne sait pas : l'usage propre à chaque nom (« De
+// Amicis » en italien, « bell hooks ») — l'aperçu laisse cliquer un mot pour lui
+// rendre ou lui retirer sa majuscule. Jamais automatique à la frappe.
+
+// Dans un nom, un chiffre romain est un rang (Pio XII, Jean XXIII) : I, V, X seulement — « MC » n'est pas 1 100.
+const ROMAIN_NOM = /^(?=[IVX]+$)(X{0,3})(I[XV]|V?I{0,3})$/;
+const majInitiale = (s) => (s ? s[0].toLocaleUpperCase() + s.slice(1) : s);
+
+function casseMot(w, enTete) {
+  const bas = w.toLocaleLowerCase();
+  if (/^(\p{L}\.)+$/u.test(w)) return { texte: w.toLocaleUpperCase(), fige: true };        // E. / E.P.
+  if (ROMAIN_NOM.test(w) && !enTete) return { texte: w, fige: true }; // Pio XII
+  if (/\d/.test(w)) return { texte: w, fige: true };
+  if (!enTete && PARTICULES.has(cle(w))) return { texte: bas, fige: false };                // de, da, von
+  // Élision : O'Brien, D'Annunzio (en tête), d'Alembert (particule)
+  const el = bas.match(/^(\p{L})['’](.+)$/u);
+  if (el) {
+    const avant = el[1] === 'o' || enTete ? el[1].toLocaleUpperCase() : el[1];
+    return { texte: avant + w[1] + el[2].split('-').map(majInitiale).join('-'), fige: false };
+  }
+  return { texte: bas.split('-').map(majInitiale).join('-'), fige: false };
+}
+
+/**
+ * Propose la casse naturelle d'un nom de personne tapé « comme on le dit ».
+ * @returns {{ mots: { texte: string, fige: boolean }[], change: boolean }}
+ *   Un nom déjà en casse naturelle (une majuscule par mot, particules en
+ *   minuscules, pas de mot en capitales) est laissé tel quel : `change` = false.
+ */
+export function proposerCasseNom(nom) {
+  const tokens = (nom || '').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+  const naturel = (w, i) => /^(\p{L}\.)+$/u.test(w) || /\d/.test(w)
+    || (i > 0 && ROMAIN_NOM.test(w))
+    || (i > 0 && PARTICULES.has(cle(w)) && w === w.toLocaleLowerCase())
+    || /^\p{Lu}[\p{Ll}'’]*(-\p{Lu}[\p{Ll}'’]*)*$/u.test(w)                // Bayer, Jean-Paul
+    || /^\p{L}['’]\p{Lu}\p{Ll}*$/u.test(w)                                 // O'Brien, d'Alembert
+    || /^(Mc|Mac)\p{Lu}\p{Ll}+$/u.test(w);                                 // McDonald
+  if (!tokens.length || tokens.every(naturel)) {
+    return { mots: tokens.map((texte) => ({ texte, fige: false })), change: false };
+  }
+  const mots = tokens.map((w, i) => casseMot(w, i === 0));
+  return { mots, change: mots.map((m) => m.texte).join(' ') !== tokens.join(' ') };
+}
+
+/** Bascule la majuscule initiale d'un mot (le clic « nom propre » de l'aperçu). */
+export function basculerMajuscule(texte) {
+  const k = texte.search(/\p{L}/u);
+  if (k < 0) return texte;
+  const c = texte[k];
+  const autre = c === c.toLocaleLowerCase() ? c.toLocaleUpperCase() : c.toLocaleLowerCase();
+  return texte.slice(0, k) + autre + texte.slice(k + 1);
+}

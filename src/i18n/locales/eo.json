@@ -1867,6 +1867,8 @@
   "catalogacao.nameEntry.correct": "Korekti",
   "catalogacao.nameEntry.single": "Unika nomo / pseŭdonimo",
   "catalogacao.nameEntry.pickSurname": "Alklaku la vorton, kie komenciĝas la familia nomo",
+  "catalogacao.nameEntry.caseExplain": "Natura uskleco: unu majusklo por vorto, partikuloj (de, da, dos…) minuskle, inicialoj kaj romiaj ciferoj konservitaj. Neniam ĉiujn majusklojn en la alirpunkto.",
+  "catalogacao.nameEntry.caseHint": "Ĉu propra skribmaniero de la nomo (De Amicis, bell hooks)? Alklaku la vorton por redoni aŭ forpreni ĝian majusklon.",
   "catalogacao.author.sortNameLabel": "Ordiga nomo",
   "catalogacao.author.source": "Fonto",
   "catalogacao.author.sourceKind.book": "Fizika libro enmane",

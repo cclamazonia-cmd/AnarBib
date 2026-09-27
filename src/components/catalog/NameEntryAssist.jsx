@@ -6,15 +6,23 @@
 // mot où commence le nom de famille), Nom unique / pseudonyme. Quand le pays
 // est hispanophone, il offre en plus la variante à deux noms de famille.
 // Rien n'est jamais bloquant : c'est une proposition, la fiche part quand même.
+//
+// Depuis le 27/09, il propose aussi la CASSE NATURELLE du nom (CONV-1 : « osvaldo
+// BAYER » → « Osvaldo Bayer »), comme le bouton des titres : un aperçu où chaque
+// mot se clique pour lui rendre ou lui retirer sa majuscule, appliquer, annuler.
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { proposerPointAcces, formeDepuis } from '@/lib/nameEntry';
+import { proposerPointAcces, formeDepuis, proposerCasseNom, basculerMajuscule } from '@/lib/nameEntry';
 
-export default function NameEntryAssist({ nom, country, formeActuelle, onChoisir }) {
+export default function NameEntryAssist({ nom, country, formeActuelle, onChoisir, onNom }) {
   const { formatMessage: t } = useIntl();
   const [corriger, setCorriger] = useState(false);
+  const [casse, setCasse] = useState(null);       // mots proposés, modifiables
+  const [original, setOriginal] = useState(null); // le nom avant la normalisation
   const p = proposerPointAcces(nom, { country });
+  const pc = proposerCasseNom(nom);
   if (p.regle === 'vide' || p.regle === 'inverse') return null;
+  const motBtn = { background: 'none', border: 'none', borderBottom: '1px dotted rgba(255,255,255,.35)', color: 'inherit', font: 'inherit', fontWeight: 600, padding: 0, cursor: 'pointer' };
 
   const muted = { fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' };
   const chip = (actif) => ({
@@ -26,6 +34,50 @@ export default function NameEntryAssist({ nom, country, formeActuelle, onChoisir
 
   return (
     <div data-testid="name-entry-assist" style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+      {onNom && (pc.change || original !== null) && !casse && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+          {pc.change && (
+            <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => setCasse(pc.mots)}>
+              {t({ id: 'catalogacao.titleCase.button' })}
+            </button>
+          )}
+          {original !== null && (
+            <button type="button" className="ab-button ab-button--ghost ab-button--sm"
+              onClick={() => { onNom(original); setOriginal(null); }}>
+              {t({ id: 'catalogacao.titleCase.undo' })}
+            </button>
+          )}
+        </div>
+      )}
+      {casse && (
+        <div role="group" aria-label={t({ id: 'catalogacao.titleCase.preview' })}
+          style={{ border: '1px solid rgba(255,255,255,.15)', borderRadius: 8, padding: 8, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <div style={muted}>{t({ id: 'catalogacao.nameEntry.caseExplain' })}</div>
+          <div style={{ fontSize: '.85rem' }} data-testid="name-case-after">
+            {casse.map((m, i) => (
+              <span key={`${m.texte}-${i}`}>
+                {i > 0 && ' '}
+                {m.fige ? <strong>{m.texte}</strong> : (
+                  <button type="button" style={motBtn}
+                    onClick={() => setCasse((c) => c.map((x, j) => (j === i ? { ...x, texte: basculerMajuscule(x.texte) } : x)))}>
+                    {m.texte}
+                  </button>
+                )}
+              </span>
+            ))}
+          </div>
+          <div style={muted}>{t({ id: 'catalogacao.nameEntry.caseHint' })}</div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <button type="button" className="ab-button ab-button--sm"
+              onClick={() => { setOriginal(nom); onNom(casse.map((m) => m.texte).join(' ')); setCasse(null); }}>
+              {t({ id: 'catalogacao.titleCase.apply' })}
+            </button>
+            <button type="button" className="ab-button ab-button--ghost ab-button--sm" onClick={() => setCasse(null)}>
+              {t({ id: 'catalogacao.titleCase.cancel' })}
+            </button>
+          </div>
+        </div>
+      )}
       <div style={{ fontSize: '.8rem' }}>
         <span style={muted}>{t({ id: 'catalogacao.nameEntry.proposed' })} </span>
         <strong>{p.forme}</strong>

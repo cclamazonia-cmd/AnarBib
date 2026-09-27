@@ -1873,6 +1873,8 @@
   "catalogacao.nameEntry.correct": "Corriger",
   "catalogacao.nameEntry.single": "Nom unique / pseudonyme",
   "catalogacao.nameEntry.pickSurname": "Clique sur le mot où commence le nom de famille",
+  "catalogacao.nameEntry.caseExplain": "Casse naturelle : une majuscule par mot, les particules (de, da, dos…) en minuscules, initiales et chiffres romains gardés. Jamais de capitales dans le point d’accès.",
+  "catalogacao.nameEntry.caseHint": "Un usage propre au nom (De Amicis, bell hooks) ? Clique sur le mot pour lui rendre ou lui retirer sa majuscule.",
   "catalogacao.author.sortNameLabel": "Forme de tri",
   "catalogacao.author.source": "Source",
   "catalogacao.author.sourceKind.book": "Livre physique en main",
