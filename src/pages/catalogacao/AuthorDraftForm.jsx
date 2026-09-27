@@ -7,6 +7,8 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import PortraitCropper from '@/components/catalogacao/PortraitCropper';
 import CountrySelect from '@/components/forms/CountrySelect';
+import NameEntryAssist from '@/components/catalog/NameEntryAssist';
+import { proposerPointAcces } from '@/lib/nameEntry';
 import { languageOptions } from '@/lib/languages';
 
 // ── Authority types ───────────────────────────────────────
@@ -46,24 +48,16 @@ const ACTION_KEYS = {
 };
 
 // ── Name helpers (sort name from preferred name) ──────────
-function stripDiacritics(v) { return (v || '').normalize('NFD').replace(/[̀-ͯ]/g, ''); }
 
 function buildSortName(preferredName, authorityType) {
   const clean = (preferredName || '').replace(/\s+/g, ' ').trim();
   if (!clean) return '';
   if (authorityType !== 'person') return clean;
-  // Person: "Osvaldo BAYER" → "BAYER, Osvaldo"
-  const tokens = clean.split(/\s+/);
-  if (tokens.length < 2) return clean;
-  const particles = new Set(['da', 'de', 'del', 'della', 'di', 'do', 'dos', 'das', 'du', 'des', 'e', 'la', 'le', 'los', 'las', 'van', 'von', 'y']);
-  // Find the last non-particle token
-  let surnameIdx = tokens.length - 1;
-  for (let i = tokens.length - 1; i >= 0; i--) {
-    if (!particles.has(stripDiacritics(tokens[i]).toLowerCase())) { surnameIdx = i; break; }
-  }
-  const surname = tokens[surnameIdx];
-  const rest = [...tokens.slice(0, surnameIdx), ...tokens.slice(surnameIdx + 1)].join(' ').trim();
-  return rest ? `${surname}, ${rest}` : surname;
+  // C6 §7.1 (27/09/2026) : la personne passe par src/lib/nameEntry.js — même règle
+  // prudente qu'avant (dernier nom de famille, particules avec le prénom), plus les
+  // marques de filiation attachées au nom : « Alípio de Sousa Filho » donne
+  // « Sousa Filho, Alípio de » et non plus « Filho, Alípio de Sousa ».
+  return proposerPointAcces(clean).forme;
 }
 
 // ── Structured meta (dedicated jsonb column) ─────────────
@@ -781,13 +775,18 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           <div className="cat-field" style={{ gridColumn: 'span 2' }}>
             <label style={ls}>{t({ id: meta.authorityType === 'person' ? 'catalogacao.author.preferredNameLabel' : meta.authorityType === 'collective' ? 'catalogacao.author.preferredNameLabelOrg' : 'catalogacao.author.preferredNameLabelGeneric' })}</label>
             <input type="text" value={f('preferred_name')} onChange={e => handlePreferredNameChange(e.target.value)}
-              placeholder={meta.authorityType === 'person' ? 'Osvaldo BAYER' : meta.authorityType === 'collective' ? 'Confederación Nacional del Trabajo' : ''} required style={fs} />
+              placeholder={meta.authorityType === 'person' ? 'Osvaldo Bayer' : meta.authorityType === 'collective' ? 'Confederación Nacional del Trabajo' : ''} required style={fs} />
+            {/* C6 §7.1 — le point d'accès proposé, expliqué, corrigeable ; jamais bloquant */}
+            {meta.authorityType === 'person' && (
+              <NameEntryAssist nom={f('preferred_name')} country={f('country')} formeActuelle={f('sort_name')}
+                onChoisir={(forme) => set('sort_name', forme)} />
+            )}
           </div>
 
           <div className="cat-field">
             <label style={ls}>{t({ id: 'catalogacao.author.sortNameLabel' })}</label>
             <input type="text" value={f('sort_name')} onChange={e => set('sort_name', e.target.value)}
-              placeholder={meta.authorityType === 'person' ? 'BAYER, Osvaldo' : meta.authorityType === 'collective' ? 'Confederación Nacional del Trabajo' : ''} style={{ ...fs, opacity: f('published_author_id') ? 1 : 0.7 }}
+              placeholder={meta.authorityType === 'person' ? 'Bayer, Osvaldo' : meta.authorityType === 'collective' ? 'Confederación Nacional del Trabajo' : ''} style={{ ...fs, opacity: f('published_author_id') ? 1 : 0.7 }}
               readOnly={!f('published_author_id')} />
             <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{t({ id: 'catalogacao.author.sortNameHint' })}</div>
           </div>
