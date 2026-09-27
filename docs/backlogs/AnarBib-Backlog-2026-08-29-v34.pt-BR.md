@@ -428,7 +428,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C4** | Preencher os países ausentes em 722 fichas de autoridade | `P2` | Decisão coletiva |
 | **C6** | Entregar as três assistências de digitação previstas pela spec das convenções | `P2` | A verificar |
-| **C7** | Indexar por assunto os 1 549 registros que não têm nenhum assunto | `P2` | Aberto |
+| **C7** | Indexar por assunto os 1 549 registros que não têm nenhum assunto | `P2` | Em curso |
 | **C9** | As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão | `P2` | Aberto |
 | **C10** | Renomear uma das duas colunas `rights_status` | `P2` | Aberto |
 
@@ -499,9 +499,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C7 — Indexar por assunto os 1 549 registros que não têm nenhum assunto
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia, nenhuma competência técnica
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : biblioteconomia, nenhuma competência técnica
 
-**Estado.** Verificado em 29/08: **1 127 registros indexados de 2 676**, ou seja 42 %. 1 284 atribuições distribuídas em 89 assuntos locais. Do lado público anônimo, a cobertura é ainda mais baixa.
+**Estado.** Verificado em 29/08: **1 127 registros indexados de 2 676**, ou seja 42 %. 1 284 atribuições distribuídas em 89 assuntos locais. Do lado público anônimo, a cobertura é ainda mais baixa. **27/09 — critérios 1 e 2 cumpridos, o 3 espera um gesto.** 851 registros indexados pelo vocabulário existente (ficha validada A + B por Xavier, migração `20260927124038` aplicada pela CI): +1 180 atribuições, nenhuma matéria criada. Cobertura pública medida como anônimo: 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` não existe mais; `anarcocomunismo` verificado. Falta levar os oito assuntos à FICEDL (gesto de Xavier); 466 registros ficam fora do vocabulário.
 
 *Verificado : 31/08 — 1 122 de 2 659 registros indexados (42,2 %), 1 279 atribuições, 89 assuntos. As fusões de duplicatas de 31/08 explicam a leve queda.*
 

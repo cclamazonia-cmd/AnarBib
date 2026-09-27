@@ -428,7 +428,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Décision collective |
 | **C6** | Livrer les trois assistances de saisie prévues par la spec des conventions | `P2` | À vérifier |
-| **C7** | Indexer par matière les 1 549 notices qui n'ont aucun sujet | `P2` | Ouvert |
+| **C7** | Indexer par matière les 1 549 notices qui n'ont aucun sujet | `P2` | En cours |
 | **C9** | Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main | `P2` | Ouvert |
 | **C10** | Renommer l'une des deux colonnes `rights_status` | `P2` | Ouvert |
 
@@ -499,9 +499,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### C7 — Indexer par matière les 1 549 notices qui n'ont aucun sujet
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, aucune compétence technique
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, aucune compétence technique
 
-**État.** Vérifié le 29/08 : **1 127 notices indexées sur 2 676**, soit 42 %. 1 284 affectations réparties sur 89 sujets locaux. Côté public anonyme, la couverture est encore plus basse.
+**État.** Vérifié le 29/08 : **1 127 notices indexées sur 2 676**, soit 42 %. 1 284 affectations réparties sur 89 sujets locaux. Côté public anonyme, la couverture est encore plus basse. **27/09 — critères 1 et 2 tenus, le 3 attend un geste.** Mesuré le matin : 2 633 notices visibles d'un·e anonyme, 1 316 indexées (50,0 %) ; les 1 317 autres à 88 % l'import Zotero de la BTL (titre, auteur, éditeur, année, rien d'autre). Chaque notice lue une à une ; 851 propositions dans le vocabulaire existant (629 sûres, 222 probables, toutes listées) — fiche `docs/journal/arbitrages/C7_propositions_matieres_2026-09-27.md` et son tableur, **validée A + B par Xavier**. Migration de données `20260927124038` (notice retrouvée par id ET titre, seulement si encore sans sujet, refus sur matière inactive ; éprouvée sur copie jetable du banc), appliquée par la CI : **+851 notices, +1 180 affectations, 89 matières (aucune créée, THES-4)**. *(1)* **Couverture publique mesurée en anonyme : 2 167 / 2 633 = 82,3 %.** *(2)* `pierre-joseph-proudhon` n'existe plus ; `anarcocomunismo` est actif, libellé « Communisme libertaire », `broad` → « anarchisme », 3 notices depuis ce jour. *(3)* Sept des huit sujets sont rattachés à un terme FICEDL plus large ; `abolicionismo-penal` n'a qu'un lien `related` → « prison » (H10) ; **aucune pièce ne montre qu'ils aient été portés à la fédération** — c'est le geste qui reste, à Xavier. Restent aussi 466 notices sans sujet, hors du vocabulaire (littérature générale, philosophie, sciences sociales, esperanto, spiritualité, histoire du Brésil) : l'étendre est une décision à part.
 
 *Vérifié : 31/08 — 1 122 notices indexées sur 2 659 (42,2 %), 1 279 affectations, 89 sujets. Les quatre comptes ont légèrement baissé depuis le 29/08 : les fusions de doublons du 31/08 ont retiré des notices, pas des indexations.*
 

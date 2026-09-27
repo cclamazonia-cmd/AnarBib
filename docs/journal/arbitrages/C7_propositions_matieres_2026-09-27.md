@@ -316,3 +316,9 @@ Le critère 1 de C7 (« plus de 70 % des notices publiques ») est tenu dès A.
 ## Application prévue
 
 Une migration de données en son propre nom : pour chaque ligne retenue, la notice est retrouvée par **son id et son titre** (titre changé → ligne sautée, avec une notice), le sujet par son slug actif ; insertion seulement si la notice n'a toujours aucun sujet ; vérification finale du compte et de la couverture. Aucune matière créée, aucune notice modifiée.
+
+## Décision et application (27/09)
+
+- **Xavier : A + B**, sans retrait.
+- Migration `20260927124038_c7_indexation_matiere_des_notices_sans_sujet.sql`, appliquée par la CI le 27/09 à 14 h 54 : 851 notices indexées, 1 180 affectations, aucune sautée, 89 matières avant comme après.
+- Mesuré en anonyme après application : **2 167 / 2 633 notices indexées, 82,3 %**.
