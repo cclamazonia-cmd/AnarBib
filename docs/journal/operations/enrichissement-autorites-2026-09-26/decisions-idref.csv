@@ -1,0 +1,980 @@
+﻿id;nom;decision;ppn_idref;vedette_idref;preuve;naissance;mort;pays_102;langues_101;ecrit_le_27_09;candidats_et_motifs
+2;Francesco Codello;accepte;108497046;Codello, Francesco;titre « la buona educazione »;;;IT;it;idref+langue;Codello, Francesco
+5;Piotr Kropotkin;introuvable;;;;;;;;;
+6;Serge Latouche;accepte;026968126;"Latouche, Serge (1940-.... ; économiste)";titre « os perigos do mercado planetario »;1940;;FR;fr;idref+langue;"Latouche, Serge | Latouche, Serge (1940-.... ; économiste)"
+14;Pablo Ortellado;accepte;091876613;Ortellado, Pablo;titre « estamos vencendo resistencia global no brasil »;;;BR;pt-BR;idref+langue;Ortellado, Pablo
+15;Neno Vasco;contradiction;;;;;;;;;Vasco, Neno (1878-1923) [mort 1923 ≠ 1920]
+17;Guillaume Goutte;accepte;158692365;Goutte, Guillaume (1988-....);titre « tout pour tous »;1988;;FR;fr;idref+langue;Goutte, Guillaume (1988-....)
+19;Cátia de Oliveira Macedo;introuvable;;;;;;;;;
+21;Floréal Romero;contradiction;;;;;;;;;Romero, Floréal (19..-....) [pays ES ≠ FR]
+23;Marianne Enckell;accepte;030448301;Enckell, Marianne (1944-....);titre « ciao anarchici »;1944;;CH;fr,en;idref;Enckell, Marianne (1944-....)
+27;Paul Boino;accepte;068867743;Boino, Paul (1965-....);dates;1965;;FR;fr;idref+langue;Boino, Paul (1965-....)
+28;Paulo Olivio Correa de Aquino Júnior;introuvable;;;;;;;;;
+36;Ronald Creagh;accepte;026804794;Creagh, Ronald (1929-2023);titre « histoire de l anarchisme aux etats unis d amerique »;1929;2023;GB,FR;en,fr;idref;Creagh, Ronald (1929-2023)
+37;Eduardo Colombo;accepte;055849547;Colombo, Eduardo (1929-2018);titre « los desconocidos y los olvidados »;1929;2018;AR,FR;fr,es;idref;Colombo, Eduardo (1929-2018)
+38;Carlo Aldegheri;introuvable;;;;;;;;;
+43;Maurício Tragtenberg;accepte;078393396;Tragtenberg, Maurício (1929-....);titre « burocracia e ideologia »;1929;1998;BR;pt-BR;idref+langue;Tragtenberg, Maurício (1929-....)
+48;Rafael Viana Da Silva;introuvable;;;;;;;;;
+53;Frédéric Antonini;non_corrobore;;;;;;;;;Antonini, Frédéric
+10004;Henri Arvon;contradiction;;;;;;;;;Arvon, Henri (1914-1992) [naissance 1914 ≠ 1921, mort 1992 ≠ 2011]
+10014;Maurice Joyeux;accepte;026942259;Joyeux, Maurice (1910-1991);titre « autogestao gestao operaria gestao directa »;1910;1991;FR;fr;idref+langue;Joyeux, Maurice (1910-1991)
+10015;Gaston Leval;accepte;026987406;Leval, Gaston (1895-1978);titre « la falacia del marxismo »;1895;1978;FR;fr;idref+langue;Leval, Gaston (1895-1978)
+10021;Alexandre Ribeiro Samis;introuvable;;;;;;;;;
+10029;Nestor Makhno;introuvable;;;;;;;;;
+10033;Georges Gurvitch;contradiction;;;;;;;;;"Gurvitch, Georges (1894-1965 ; sociologue) [pays FR ≠ RU]"
+10038;Nicolas Walter;contradiction;;;;;;;;;Walter, Nicolas [pays FR ≠ GB] | Walter, Nicolas | Walter, Nicolas [pays FR ≠ GB] | Walter, Nicolas (1934-2000)
+10040;Maurizio Antonioli;contradiction;;;;;;;;;Antonioli, Maurizio (1945-....) [naissance 1945 ≠ 1950]
+10043;Luiz Büchner;introuvable;;;;;;;;;
+10045;Maria Luiza Tucci Carneiro;accepte;029325455;Carneiro, Maria Luiza Tucci;titre « o racismo na historia do brasil »;;;BR;pt-BR;idref+langue;Carneiro, Maria Luiza Tucci
+10046;Jacinto Cimazo;accepte;077884256;Cimazo, Jacinto;titre « luis danussi »;;;;;idref;Cimazo, Jacinto
+10050;Carlos da Fonseca;accepte;033204071;"Fonseca, Carlos da (1940-2017 ; historien)";titre « para uma analise do movimento libertario e da sua historia »;;;PT;pt-BR;idref+langue;"Fonseca, Carlos da (1940-2017 ; historien)"
+10054;Lily Litvak;contradiction;;;;;;;;;Litvak, Lily [pays US ≠ ES]
+10059;Cristina Escrivá Moscardó;accepte;132316242;Escrivá Moscardó, Cristina;titre « los institutos para obreros »;;;ES;es;idref+langue;Escrivá Moscardó, Cristina
+10060;Roberto das Neves;accepte;297467123;Neves, Roberto das (1906-1980);dates;1906;1980;BR;pt-BR,eo;idref;Neves, Roberto das (1906-1980)
+10062;Fernando Quesada;contradiction;;;;;;;;;Quesada, Fernando (1969-....) [naissance 1969 ≠ 1910, pays ES ≠ AR] | Quesada, Fernando (1940-....) [naissance 1940 ≠ 1910, pays ES ≠ AR]
+10063;Jorge E. Silva;introuvable;;;;;;;;;
+10064;Pedro Ferreira da Silva;non_corrobore;;;;;;;;;Silva, Pedro Ferreira da (19..-....)
+10065;Ênio Silveira;accepte;24524333X;Silveira, Enio (1925-1996);dates;1925;1996;BR;pt-BR;idref+langue;Silveira, Enio (1925-1996)
+10069;Tito Batini;accepte;194169413;Batini, Tito (19..-....);titre « filhos do povo »;;;BR;pt-BR;idref+langue;Batini, Tito (19..-....)
+10071;Antônio José Botelho;non_corrobore;;;;;;;;;Botelho, Antônio José (19..-....)
+10073;Júlio Carrapato;accepte;221687122;Carrapato, Júlio;titre « uma campanha de salubridade »;;;PT;pt-BR;idref+langue;Carrapato, Júlio
+10074;Juan Gómez Casas;contradiction;;;;;;;;;Gómez Casas, Juan (1921-2001) [mort 2001 ≠ 2005]
+10075;Maurice Cranston;introuvable;;;;;;;;;
+10076;Jaime Cubero;introuvable;;;;;;;;;
+10079;Luis Di Filippo;introuvable;;;;;;;;;
+10081;Víctor García;non_corrobore;;;;;;;;;García, Víctor | Garcia, Victor
+10082;Willian Godwin;introuvable;;;;;;;;;
+10083;Adelaide Gonçalves;non_corrobore;;;;;;;;;Gonçalves, Adelaide (19..-....)
+10086;Augustin Hamon;accepte;026913585;Hamon, Augustin (1862-1945);titre « psicologia del socialista anarquista »;1862;1945;FR;fr;idref+langue;Hamon, Augustin (1862-1945)
+10087;Francisco Foot Hardman;accepte;02807386X;Hardman, Francisco Foot (1952-....);titre « nem patria nem patrao »;1952;;BR;pt-BR;idref+langue;Hardman, Francisco Foot (1952-....)
+10089;Victor Hugo;introuvable;;;;;;;;;
+10093;Sebastián Marotta;non_corrobore;;;;;;;;;Marotta, Sebastián
+10094;Carlos Penelas;contradiction;;;;;;;;;"Penelas, Carlos (1946-.... ; poète) [naissance 1946 ≠ 1930]"
+10095;Maria Oly Pey;introuvable;;;;;;;;;
+10096;Paulo Sérgio Pinheiro;contradiction;;;;;;;;;"Pinheiro, Paulo Sérgio (1944-.... ; sociologue) [naissance 1944 ≠ 1939]"
+10098;Antonio Arnoni Prado;accepte;034492860;Prado, Antônio Arnoni (1943-....);titre « libertarios no brasil »;1943;;BR;pt-BR;idref+langue;Prado, Antônio Arnoni (1943-....)
+10100;Margareth Rago;accepte;080139744;"Rago, Margareth (19..-.... ; historienne)";titre « entre a historia e a liberdade »;;;BR;pt-BR;idref+langue;"Rago, Margareth (19..-.... ; historienne)"
+10102;Ramón Safón;accepte;029290686;Safon, Ramon;titre « la educacion en la espana revolucionaria 1936 1939 »;;;;;idref;Safon, Ramon
+10103;Emídio Santana;contradiction;;;;;;;;;Santana, Emídio (1909-1988) [naissance 1909 ≠ 1895]
+10104;Fabio Santin;accepte;079824307;Santin, Fabio (19..-....);titre « gaetano bresci »;;;IT;it;idref+pays+langue;Santin, Fabio (19..-....)
+10107;Juan Suriano;accepte;061501611;Suriano, Juan (19..-....);titre « auge y caida del anarquismo »;;;AR;es;idref+langue;Suriano, Juan (19..-....)
+10110;Fernando López Trujillo;contradiction;;;;;;;;;López Trujillo, Fernando [pays AR ≠ ES]
+10116;Cornelius Castoriadis;accepte;026772086;"Castoriadis, Cornelius (1922-1997 ; philosophe)";dates;1922;1997;FR;fr;idref+langue;"Castoriadis, Cornelius (1922-1997 ; philosophe)"
+10120;Hugues Lenoir;accepte;028296397;Lenoir, Hugues (1953-....);dates;1953;;FR;fr;idref+langue;Lenoir, Hugues (1953-....)
+10121;Carlos Baqueiro;introuvable;;;;;;;;;
+10130;Stanley Milgram;accepte;033096244;Milgram, Stanley (1933-1984);dates;1933;1984;US;en;idref+langue;Milgram, Stanley (1933-1984)
+10140;Benedict Anderson;accepte;031865186;Anderson, Benedict (1936-2015);dates;1936;2015;US;en,id,nl;idref;Anderson, Benedict (1936-2015)
+10143;Raymond Carr;accepte;031419798;"Carr, Raymond (1919-2015 ; historien)";titre « estudios sobre la republica y la guerra civil espanola »;1919;2015;GB;en;idref+langue;"Carr, Raymond (1919-2015 ; historien)"
+10145;Pierre Broué;accepte;026754959;"Broué, Pierre (1926-2005 ; politiste)";dates;1926;2005;FR;fr;idref+langue;"Broué, Pierre (19..-.... ; médecin pédiatre) | Broué, Pierre (1926-2005 ; politiste)"
+10147;Piotr Archinov;non_corrobore;;;;;;;;;Archinov, Piotr
+10148;Vernon Richards;accepte;027099105;Richards, Vernon (1915-....);titre « ensenanzas de la revolucion espanola »;1915;2001;GB;en;idref+langue;Richards, Vernon (1915-....)
+10151;René Viénet;accepte;027184617;Viénet, René (1944-....);dates;1944;;FR;fr;idref+langue;Viénet, René (1944-....)
+10152;Pietro Ferrua;accepte;026863340;Ferrua, Pietro (1930-....);dates;1930;;IT;it,fr,en;idref;Ferrua, Pietro (1930-....)
+10154;Manuel Joaquim de Sousa;introuvable;;;;;;;;;
+10155;Bio Panclasta;introuvable;;;;;;;;;
+10159;Everett Reimer;accepte;082297126;Reimer, Everett (1910-1998);dates;1910;1998;US;en;idref+langue;Reimer, Everett (1910-1998)
+10162;Edgard Carone;accepte;028349113;Carone, Edgard (1923-2003);titre « socialismo e anarquismo no inicio do seculo »;1923;2003;BR;pt-BR;idref+langue;Carone, Edgard (1923-2003)
+10164;Florentino de Carvalho;introuvable;;;;;;;;;
+10165;Fábio Luz;accepte;129448974;Luz, Fábio (1864-1938);dates;1864;1938;ES,BR;es,pt-BR;idref;Luz, Fábio (1864-1938)
+10166;Martha Ackelsberg;introuvable;;;;;;;;;
+10168;Jean Bancal;contradiction;;;;;;;;;Bancal, Jean | Bancal, Jean (1926-2008) [naissance 1926 ≠ 1920]
+10169;Christian Ferrer;accepte;111915996;Ferrer, Christian (1960-....);dates;1960;;AR;es;idref+langue;"Ferrer, Christian (1948-....) [naissance 1948 ≠ 1960, pays FR ≠ AR] | Ferrer, Christian (1960-....) | Ferrer, Christian (19..-.... ; traducteur) [pays FR ≠ AR] | Ferrer, Christian (Scénariste et interprète)"
+10170;Edgar Wind;contradiction;;;;;;;;;Wind, Edgar (1900-1971) [pays GB ≠ DE]
+10171;Claudio Lavazza;introuvable;;;;;;;;;
+10173;Nildo Avelino;non_corrobore;;;;;;;;;Avelino, Nildo (19..-....)
+10174;Joseph Staline;accepte;027147029;Staline, Joseph (1879-1953);titre « anarchisme ou socialisme »;1879;1953;;ru;idref;Staline, Joseph (1879-1953)
+10175;CrimethInc.;nom_trop_court;;;;;;;;;
+10176;Gabriel Jackson;contradiction;;;;;;;;;"Jackson, Gabriel (1962-.... ; compositeur) [naissance 1962 ≠ 1921, pays GB ≠ US] | Jackson, Gabriel (1921-2019) [mort 2019 ≠ 2005]"
+10177;Fernando C. Prestes Motta;introuvable;;;;;;;;;
+10179;María Galindo;non_corrobore;;;;;;;;;Galindo, María (19..-....)
+10182;Sheldon Leslie Maram;accepte;149472765;Maram, Sheldon Leslie (1942-1998);titre « anarquistas imigrantes e o movimento operario brasileiro »;1942;1998;;en;idref+mort+langue;Maram, Sheldon Leslie (1942-1998)
+10188;Wilhelm Reich;accepte;027093174;Reich, Wilhelm (1897-1957);dates;1897;1957;AT;de,en;idref;Reich, Wilhelm (1897-1957)
+10196;Giovanni Rossi;contradiction;;;;;;;;;Rossi, Giovanni | Rossi, Giovanni | Rossi, Giovanni | Rossi, Giovanni (1964-....) [naissance 1964 ≠ 1856] | Rossi, Giovanni (1987-....) [naissance 1987 ≠ 1856]
+10206;Paul Singer;accepte;029076153;"Singer, Paul (1932-2018 ; économiste)";dates;1932;2018;BR;pt-BR;idref+langue;"Singer, Paul | Singer, Paul (1932-2018 ; économiste) | Singer, Paul (1844-1911) [naissance 1844 ≠ 1932, mort 1911 ≠ 2018, pays DE ≠ BR] | Singer, Paul (1934-2005) [naissance 1934 ≠ 1932, mort 2005 ≠ 2018, pays IL ≠ BR] | Singer, Paul (1904-1977) [naissance 1904 ≠ 1932, mort 1977 ≠ 2018, pays US ≠ BR]"
+10211;André Reszler;accepte;027095827;"Reszler, André (1933-2022 ; historien)";titre « la estetica anarquista »;1933;2022;CH;fr;idref+langue;"Reszler, André (1933-2022 ; historien)"
+10212;Isidro Guardia Abella;accepte;082048290;Guardia Abella, Isidro (1921-....);titre « conversaciones sobre el movimiento obrero »;1921;;;es;idref+langue;Guardia Abella, Isidro (1921-....)
+10213;Carlos Abreu;non_corrobore;;;;;;;;;Abreu, Carlos (1949-....) | Abreu, Carlos (1976-....)
+10214;Julio C. Acerete;non_corrobore;;;;;;;;;Acerete, Julio C.
+10215;Carlos Augusto Addor;accepte;298252104;Addor, Carlos Augusto (19..-....);titre « historia do anarquismo no brasil »;;;BR;pt-BR;idref+pays+langue;Addor, Carlos Augusto (19..-....)
+10216;S. Agourski;nom_trop_court;;;;;;;;;
+10217;Moysés Aguiar;introuvable;;;;;;;;;
+10218;Roberto A. R. De Aguiar;introuvable;;;;;;;;;
+10219;Ronaldo Conde Aguiar;accepte;058648682;Aguiar, Ronaldo Conde;titre « o rebelde esquecido »;;;BR;pt-BR;idref+pays+langue;Aguiar, Ronaldo Conde
+10220;Anoar Aiex;non_corrobore;;;;;;;;;Aiex, Anoar (19..-....)
+10222;Anna Gicelle Garcia Alaniz;introuvable;;;;;;;;;
+10223;Martín Albornoz;accepte;158987314;Albornoz, Martín (1978-....);titre « cuando el anarquismo causaba sensacion »;1978;;;es;idref;Albornoz, Martín (1978-....)
+10224;John Alcorn;non_corrobore;;;;;;;;;Alcorn, John (1923-....) | Alcorn, John (1935-1992)
+10226;Juan Maestre Alfonso;introuvable;;;;;;;;;
+10227;Oscar Algarve;introuvable;;;;;;;;;
+10228;Demerval Saviani et Alli;introuvable;;;;;;;;;
+10230;Ramón Alvarez;non_corrobore;;;;;;;;;Alvarez, Ramón | Álvarez, Ramón (19..-....)
+10231;Paulo Alves;non_corrobore;;;;;;;;;Alves, Paulo
+10232;Valter Roberto Alves;introuvable;;;;;;;;;
+10233;Luis Amado;non_corrobore;;;;;;;;;Amado, Luís (1953-....)
+10236;Rivista Anarchica;introuvable;;;;;;;;;
+10238;Taller Anarquista;introuvable;;;;;;;;;
+10239;Martins de Andrade;introuvable;;;;;;;;;
+10240;Pedro de Andrade;non_corrobore;;;;;;;;;Andrade, Pedro de
+10241;Silvia Maria Belfort Vilela de Andrade;introuvable;;;;;;;;;
+10242;Augusto Chacho Andrés;introuvable;;;;;;;;;
+10243;Satana Angelo;introuvable;;;;;;;;;
+10245;Allan Antiff;introuvable;;;;;;;;;
+10247;Caderno de Apontamentos;introuvable;;;;;;;;;
+10248;Cassio M. L. de Aquino;introuvable;;;;;;;;;
+10249;Cássio Macedo Lopes de Aquino;introuvable;;;;;;;;;
+10250;Angela M. C. Araujo;introuvable;;;;;;;;;
+10251;Alejandro Arellano Y Buenrostro;introuvable;;;;;;;;;
+10252;Alejandro Buenrostro y Arellano;introuvable;;;;;;;;;
+10253;Dom Paulo Evaristo Arns;introuvable;;;;;;;;;
+10254;Carlos Arruda;introuvable;;;;;;;;;
+10255;João Arruda;accepte;088932753;Arruda, João;titre « o moloch moderno »;;;;pt-BR;idref+langue;Arruda, João
+10256;Rinaldo Sérgio Vieira Arruda;introuvable;;;;;;;;;
+10259;Thimothy Garton Ash;introuvable;;;;;;;;;
+10260;Svetlana Askoldova;introuvable;;;;;;;;;
+10261;Danilo Augusto;introuvable;;;;;;;;;
+10263;Luis Carlos Avila;introuvable;;;;;;;;;
+10267;Raquel De Azevedo;non_corrobore;;;;;;;;;Azevedo, Raquel de
+10268;Flávio Bá;introuvable;;;;;;;;;
+10269;Patrick Bade;non_corrobore;;;;;;;;;Bade, Patrick
+10270;Luciana Badin;introuvable;;;;;;;;;
+10271;Antônio Ladislau Monteiro Baena;accepte;109400267;Baena, Antonio Ladislau Monteiro (1782-1850);titre « compendio das eras da provincia do para »;1782;1850;;pt-BR;idref+langue;Baena, Antonio Ladislau Monteiro (1782-1850)
+10274;Quentin Bajac;accepte;05247559X;Bajac, Quentin (1965-....);titre « la commune photographiee »;1965;;FR;fr;idref+naissance+pays+langue;Bajac, Quentin (1965-....)
+10275;Catherine Baker;contradiction;;;;;;;;;"Baker, Catherine | Baker, Catherine (1944-...) [naissance 1944 ≠ 1949] | Baker, Catherine (1982-....) [naissance 1982 ≠ 1949, pays GB ≠ FR] | Baker, Catherine (19..-.... ; médecin) | Baker, Catherine (1989-....) [naissance 1989 ≠ 1949]"
+10277;Giovanni Baldelli;accepte;052465128;"Baldelli, Giovanni (1914-1986. ; poète)";dates;1914;1986;IT;;idref;"Baldelli, Giovanni (1914-1986. ; poète)"
+10278;Gr Balkanski;introuvable;;;;;;;;;
+10281;Noniz Bandeira;introuvable;;;;;;;;;
+10282;Antonio Bar;introuvable;;;;;;;;;
+10283;Carlos Barbáchano;non_corrobore;;;;;;;;;Barbáchano, Carlos
+10286;Antonio Garcia Barón;introuvable;;;;;;;;;
+10289;Nelson Ramos Barretto;introuvable;;;;;;;;;
+10290;Haroldo Barros;introuvable;;;;;;;;;
+10291;Luitgarde Oliveira Cavalcanti Barros;non_corrobore;;;;;;;;;Barros, Luitgarde Oliveira Cavalcanti (1941-....)
+10292;Melka Barros;introuvable;;;;;;;;;
+10294;Max Barry;introuvable;;;;;;;;;
+10295;Robert F. Barsky;contradiction;;;;;;;;;Barsky, Robert F. (1961-....) [naissance 1961 ≠ 1949, pays US/FR ≠ CA]
+10296;Jacques Barzun;contradiction;;;;;;;;;Barzun, Jacques (1907-2012) [pays US ≠ FR] | Barzun, Jacques (17..-18..)
+10298;Jean-Pierre Bastian;accepte;030162556;"Bastian, Jean-Pierre (1947-.... ; historien)";dates;1947;;FR;fr,es;idref+pays;"Bastian, Jean-Pierre (1947-.... ; historien)"
+10299;Jorge Basurto;non_corrobore;;;;;;;;;Basurto, Jorge (historien)
+10300;Claudio H. M. Batalha;introuvable;;;;;;;;;
+10302;Paulo Cesar Batista;introuvable;;;;;;;;;
+10304;Agustín Souchy Bauer;introuvable;;;;;;;;;
+10307;Ruth M. Beard;introuvable;;;;;;;;;
+10308;Paula Beiguelman;non_corrobore;;;;;;;;;Beiguelman, Paula
+10309;Kazimierz Bein;contradiction;;;;;;;;;Bein, Kazimierz [pays DK ≠ PL]
+10310;Raúl Ruano Bellido;introuvable;;;;;;;;;
+10311;Ierecê Rego Beltrão;introuvable;;;;;;;;;
+10312;Jane Felipe Beltrão;non_corrobore;;;;;;;;;Beltrão, Jane Felipe
+10313;Robert Benedetti;non_corrobore;;;;;;;;;Benedetti, Robert (1939-....)
+10314;Mouzar Benedito;introuvable;;;;;;;;;
+10315;César Benjamin;non_corrobore;;;;;;;;;Benjamin, César (1954-....)
+10316;Eugenio Bentaberry;introuvable;;;;;;;;;
+10317;Jeremy Benthan;introuvable;;;;;;;;;
+10318;Javier Benyo;introuvable;;;;;;;;;
+10319;Paul Berman;non_corrobore;;;;;;;;;Berman, Paul (1949-....)
+10320;Raúl Ornelas Bernal;introuvable;;;;;;;;;
+10321;Jean-Claude Bernardet;contradiction;;;;;;;;;Bernardet, Jean-Claude (1936-....) [pays FR ≠ BR]
+10322;Célia de Bernardi;introuvable;;;;;;;;;
+10323;Ladisael Bernardo;introuvable;;;;;;;;;
+10324;Walther L. Bernecker;accepte;028507266;Bernecker, Walther L. (1947-....);titre « colectividades y revolucion social »;1947;;DE;de;idref+langue;Bernecker, Walther L. (1947-....)
+10327;David Berry;contradiction;;;;;;;;;Berry, David | Berry, David (1957-....) [naissance 1957 ≠ 1965] | Berry, David (1960-....) [naissance 1960 ≠ 1965] | Berry, David (19..-....)
+10328;Juan Luis Berterretche;introuvable;;;;;;;;;
+10329;Paul Berthelot;non_corrobore;;;;;;;;;"Berthelot, Paul (1985-....) | Berthelot, Paul (juriste) | Berthelot, Paul (19..-.... ; traducteur) | Berthelot, Paul (1863-1932) | Berthelot, Paul (1881-1910) | Berthelot, Paul (1917-1980 ; médecin) | Berthelot, Paul (20..-.... ; étudiant en Master d'urbanisme et aménagement)"
+10330;Claude Bertin;non_corrobore;;;;;;;;;"Bertin, Claude (1947-....) | Bertin, Claude (19..-.... ; historien) | Bertin, Claude (15..-1642) | Bertin, Claude (1650-1705)"
+10331;Franco Bertolucci;accepte;03562292X;Bertolucci, Franco (1957-....);titre « anarchismo e lotte sociali a pisa 1871 1901 »;1957;;IT;it;idref+naissance+pays+langue;Bertolucci, Franco (1957-....)
+10332;João Fábio Bertonha;accepte;080480268;Bertonha, João Fábio (1968-....);titre « sob a sombra de mussolini »;1968;;BR;pt-BR;idref+pays;Bertonha, João Fábio (1968-....)
+10335;Janet Biehl;contradiction;;;;;;;;;Biehl, Janet (1953-....) [pays CA ≠ US]
+10336;Isabel Bilhão;introuvable;;;;;;;;;
+10337;Edgardo J. Bilsky;introuvable;;;;;;;;;
+10338;Jeanne Bisilliat-Gardet;introuvable;;;;;;;;;
+10340;Bob Black;introuvable;;;;;;;;;
+10341;Luther Blissett;introuvable;;;;;;;;;
+10342;Gérard Bloch;non_corrobore;;;;;;;;;"Bloch, Gérard (1936-.... ; médecin) | Bloch, Gérard (chercheur) | Bloch, Gérard (1920-1987 ; homme politique)"
+10345;Miguel Bodela;introuvable;;;;;;;;;
+10349;Alfredo María Bonanno;accepte;134030516;Bonanno, Alfredo Maria (1937-2023);dates;1937;2023;IT;it;idref+langue;Bonanno, Alfredo Maria (1937-2023)
+10351;Angel Borda;introuvable;;;;;;;;;
+10352;Francesc Foguet I. Boreu;introuvable;;;;;;;;;
+10356;J. Carlos Boscolo;introuvable;;;;;;;;;
+10360;Henry N. Brailsford;introuvable;;;;;;;;;
+10363;L. I. Brezhnev;nom_trop_court;;;;;;;;;
+10365;José Brissa;introuvable;;;;;;;;;
+10366;José Carlos Aguiar Brito;introuvable;;;;;;;;;
+10370;Lúcia Bruno;introuvable;;;;;;;;;
+10372;Wilson R. Bueno;introuvable;;;;;;;;;
+10373;Waldirio Bulgarelli;introuvable;;;;;;;;;
+10375;Marco Aurélio Buzetto;introuvable;;;;;;;;;
+10376;Mário H. F. Buzzulini;introuvable;;;;;;;;;
+10377;Victor M. Muñoz C.;introuvable;;;;;;;;;
+10378;Evaldo Cabral De Mello;introuvable;;;;;;;;;
+10379;Max Cafard;introuvable;;;;;;;;;
+10382;Roseli Salete Caldart;non_corrobore;;;;;;;;;Caldart, Roseli Salete (1961-....)
+10383;Clovis Caldeira;non_corrobore;;;;;;;;;Caldeira, Clovis
+10387;Javier Campo;non_corrobore;;;;;;;;;Campo, Javier
+10388;Cristina de Campos;introuvable;;;;;;;;;
+10389;Cristina Hebling Campos;accepte;168911701;Campos, Cristina Hebling;titre « o sonhar libertario »;;;BR;pt-BR;idref+pays+langue;Campos, Cristina Hebling
+10390;Reynaldo Pompeu de Campos;introuvable;;;;;;;;;
+10391;Elizabeth Cancelli;non_corrobore;;;;;;;;;Cancelli, Elizabeth
+10393;René Cannac;non_corrobore;;;;;;;;;Cannac, René
+10395;Jose Capela;accepte;034022376;"Capela, José (1932-2014 ; pseud.)";dates;1932;2014;PT;pt-BR;idref+pays;"Capela, José (19..-....) | Capela, José (1932-2014 ; pseud.)"
+10396;William Andrés Mesa Cárdenas;introuvable;;;;;;;;;
+10397;Carlos A. Gomes Cardim;introuvable;;;;;;;;;
+10398;Alvaro Cardoso;introuvable;;;;;;;;;
+10399;Ana Claudia Moreira Cardoso;accepte;12883448X;Cardoso, Ana Claudia Moreira (1971-....);titre « tempos de trabalho tempos de nao trabalho »;1971;;BR;pt-BR,fr;idref+naissance+pays;Cardoso, Ana Claudia Moreira (1971-....)
+10401;Beatriz Scigliano Carneiro;introuvable;;;;;;;;;
+10402;Daniele Carneiro;introuvable;;;;;;;;;
+10406;Emili Coratvitarte i Carral;introuvable;;;;;;;;;
+10407;Marcio Luiz Carreri;introuvable;;;;;;;;;
+10409;Paul Carton;non_corrobore;;;;;;;;;Carton, Paul (1891-1969) | Carton, Paul (1875-1947) | Carton, Paul (docteur en médecine) | Carton, Paul (1920-2012) | Carton, Paul (auteur d'une thèse de chimie-physique)
+10410;Elysio de Carvalho;accepte;129305200;Carvalho, Elysio de (1880-1925);titre « barbaros e europeus »;1880;1925;BR;pt-BR,fr;idref;Carvalho, Elysio de (1880-1925)
+10412;Eduardo Góes de Castro;introuvable;;;;;;;;;
+10413;Rogério de Castro;introuvable;;;;;;;;;
+10414;Pedro Catallo;introuvable;;;;;;;;;
+10416;Jardel Cavalcanti;introuvable;;;;;;;;;
+10418;Júlio César;non_corrobore;;;;;;;;;Cesar, Julio (..-....)
+10419;Marcos Cesar;introuvable;;;;;;;;;
+10421;Murilo Dias Cesar;introuvable;;;;;;;;;
+10423;Bernard Chantebout;non_corrobore;;;;;;;;;"Chantebout, Bernard (1936-.... ; juriste)"
+10426;Fiamma Chessa;accepte;136861148;Chessa, Fiamma;titre « aurelio chessa »;;;IT;it;idref+pays+langue;Chessa, Fiamma
+10427;Rivaldo Chinem;introuvable;;;;;;;;;
+10428;José Chrispiniano;accepte;087541572;Chrispiniano, José;titre « a guerrilha surreal »;;;BR;pt-BR;idref+pays+langue;Chrispiniano, José
+10431;Daniel Chutorianscy;introuvable;;;;;;;;;
+10432;Giuseppe Ciancabilla;accepte;194132102;Ciancabilla, Giuseppe (1872-1904);dates;1872;1904;IT;it;idref+langue;Ciancabilla, Giuseppe (1872-1904)
+10434;Piero Cipriano;non_corrobore;;;;;;;;;"Cipriano, Piero (1976-.... ; anthropologue)"
+10435;Marcos Cirano;accepte;14974806X;Cirano, Marcos (19..-....);titre « os caminhos de dom helder »;;;BR;pt-BR;idref+pays+langue;Cirano, Marcos (19..-....)
+10436;Márcia Regina Ciscati;introuvable;;;;;;;;;
+10437;John Clark;contradiction;;;;;;;;;"Clark, John (1958-.... ; politologue) [naissance 1958 ≠ 1945]"
+10438;Arnould Clausse;non_corrobore;;;;;;;;;Clausse, Arnould (19..-....)
+10440;Geraldo Mártires Coelho;introuvable;;;;;;;;;
+10441;Jeff Collins;non_corrobore;;;;;;;;;Collins, Jeff
+10444;Ai Ferri Conti;introuvable;;;;;;;;;
+10445;Edelmira Del Carmen Alveal Contreras;introuvable;;;;;;;;;
+10446;Edna Copparoni;introuvable;;;;;;;;;
+10447;Cristiano Cordeiro;introuvable;;;;;;;;;
+10448;Hector Adolfo Cordero;accepte;085233900;Cordero, Héctor Adolfo;titre « alberto ghiraldo »;;;;es;idref+langue;Cordero, Héctor Adolfo
+10449;Christiano Cornelissen;introuvable;;;;;;;;;
+10450;Joël Cornuault;accepte;02679974X;Cornuault, Joël (1950-....);titre « elisee reclus geographe et poete »;1950;;FR;fr;idref+naissance+pays+langue;Cornuault, Joël (1950-....)
+10453;Darío A. Cortés;non_corrobore;;;;;;;;;Cortés, Darío A. (1950-....)
+10455;Hélio Da Costa;introuvable;;;;;;;;;
+10456;Marisa C. Vorraber Costa;introuvable;;;;;;;;;
+10457;Rafael Costa;non_corrobore;;;;;;;;;"Costa, Rafael | Costa, Rafael | Costa, Rafael (19..-....) | Costa, Rafael (1963-2024 ; photographe)"
+10458;Sérgio Amad Costa;introuvable;;;;;;;;;
+10459;Túlio Costa;introuvable;;;;;;;;;
+10460;Grabiela Costanzo;introuvable;;;;;;;;;
+10462;Alain Coutte;non_corrobore;;;;;;;;;"Coutte, Alain | Coutte, Alain (1956-....) | Coutté, Alain (19..-.... ; médecin)"
+10464;Luis Woollands (Juan Crusao);introuvable;;;;;;;;;
+10466;Fernando O'Neill Cuesta;accepte;076697983;O'Neill Cuesta, Fernando (1924-....);titre « el caso pardeiro »;1924;;UY;es;idref+naissance+pays+langue;O'Neill Cuesta, Fernando (1924-....)
+10468;Silvia Rivera Cusicanqui;introuvable;;;;;;;;;
+10469;Robert M. Cutler;introuvable;;;;;;;;;
+10470;Armand Cuvillier;accepte;026807904;Cuvillier, Armand (1887-1973);titre « introducao a sociologia »;1887;1973;FR;fr;idref+langue;Cuvillier, Armand (1887-1973)
+10471;Alain C. D. H;nom_trop_court;;;;;;;;;
+10472;Aníbal A. D´Auria;introuvable;;;;;;;;;
+10474;Hellmuth Günther Dahms;accepte;087226812;Dahms, Hellmuth Günther (1918-....);dates;1918;;;de;idref+langue;Dahms, Hellmuth Günther (1918-....)
+10476;Alberto Daneri;non_corrobore;;;;;;;;;Daneri, Alberto
+10477;J. S. Daniels;nom_trop_court;;;;;;;;;
+10478;Gilson Dantas;accepte;24108136X;Dantas, Gilson;titre « estatistica da miseria e a miseria da estatistica »;;;BR;pt-BR;idref+pays;Dantas, Gilson
+10480;Robert Darton;introuvable;;;;;;;;;
+10483;Henry David;accepte;09283017X;David, Henry (1907-....);titre « the history of the haymarket affair »;1907;;;en;idref+naissance+langue;David, Henry (1907-....)
+10484;Angela Davis;non_corrobore;;;;;;;;;Davis, Angela (1944-....) | Davis, Angela (1981-....)
+10486;Douglas Day;accepte;050435639;Day, Douglas (1932-2004);titre « los cuadernos de la carcel de ricardo flores magon »;1932;2004;US;en;idref+naissance+mort+pays+langue;Day, Douglas | Day, Douglas (1932-2004)
+10489;Paulo de Castro;non_corrobore;;;;;;;;;Castro, Paulo de
+10493;Almir de Lima Pereira;introuvable;;;;;;;;;
+10496;Juan Pablo Calero Delso;introuvable;;;;;;;;;
+10499;Pasquale Di Paolo;non_corrobore;;;;;;;;;Di Paolo, Pasquale
+10502;Laureano Riera Díaz;introuvable;;;;;;;;;
+10503;CESIT Dieese;introuvable;;;;;;;;;
+10504;Gerard Dilger;introuvable;;;;;;;;;
+10506;Elias Diniz;introuvable;;;;;;;;;
+10508;Dilar Dirik;non_corrobore;;;;;;;;;Dirik, Dilar
+10509;Willful Disobedience;introuvable;;;;;;;;;
+10510;Emmanuel Malolo Dissakè;introuvable;;;;;;;;;
+10511;Reaxiones Adversas Distro;introuvable;;;;;;;;;
+10514;Guillaume Doizy;contradiction;;;;;;;;;Doizy, Guillaume (1970-....) [naissance 1970 ≠ 1968]
+10515;J-A Doléris;nom_trop_court;;;;;;;;;
+10516;Mário Domingues;accepte;070349843;Domingues, Mário (1899-1977);titre « a afirmacao negra e a questao colonial »;1899;1977;PT;pt-BR;idref+langue;Domingues, Mário (1899-1977)
+10518;Igor Goicovic Donoso;introuvable;;;;;;;;;
+10519;A. de Sampaio Doria;non_corrobore;;;;;;;;;Dória, A. de Sampaio
+10520;Elsa Dorlin;accepte;056216238;"Dorlin, Elsa (1974-.... ; philosophe)";dates;1974;;FR;fr;idref+langue;"Dorlin, Elsa (1974-.... ; philosophe)"
+10521;F. M. Dostoiévski;nom_trop_court;;;;;;;;;
+10523;Fiódor M. Dostoievski;introuvable;;;;;;;;;
+10524;Wolfgang Dressen;introuvable;;;;;;;;;
+10525;Ozeas Duarte;introuvable;;;;;;;;;
+10526;Regina Horta Duarte;accepte;078203678;Duarte, Regina Horta (1963-....);dates;1963;;BR;pt-BR;idref+langue;Duarte, Regina Horta (1963-....)
+10527;Henri Dubief;non_corrobore;;;;;;;;;Dubief, Henri (1910-1995)
+10528;Pierre Duchesne;accepte;026840839;Duchesne, Pierre (1942-1995);titre « sacco et vanzetti »;1942;1995;FR;fr;idref+naissance+mort+pays+langue;Duchesne, Pierre (1969-....) | Duchesne, Pierre (1964-....) | Duchesne, Pierre (1942-1995) | Duchesne, Pierre
+10530;John W. F. Dulles;introuvable;;;;;;;;;
+10535;Eliana de Freitas Dutra;non_corrobore;;;;;;;;;Dutra, Eliana de Freitas (1951-....)
+10536;Chris Ealham;contradiction;;;;;;;;;Ealham, Chris (1965-....) [naissance 1965 ≠ 1970]
+10540;Uri Eisenzweig;contradiction;;;;;;;;;Eisenzweig, Uri (1946-....) [naissance 1946 ≠ 1953]
+10541;Juan Puis Elias;introuvable;;;;;;;;;
+10542;Paulo Eltzbacher;introuvable;;;;;;;;;
+10543;Fábio Emecê;introuvable;;;;;;;;;
+10544;José Antonio Emmanuel;non_corrobore;;;;;;;;;Emmanuel, José Antonio
+10545;Frederich Engel;introuvable;;;;;;;;;
+10546;Critical Art Ensemble;introuvable;;;;;;;;;
+10547;Vanina Escales;non_corrobore;;;;;;;;;Escales, Vanina
+10548;Osvaldo Arias Escobedo;introuvable;;;;;;;;;
+10549;Cruz Escribano;introuvable;;;;;;;;;
+10550;Osvaldo Escribano;introuvable;;;;;;;;;
+10551;Cristina Escrivá;introuvable;;;;;;;;;
+10553;Jorge Etchenique;accepte;080199682;Etchenique, Jorge;titre « pampa libre »;;;AR;es;idref+pays+langue;Etchenique, Jorge
+10554;Catriel Etcheverri;non_corrobore;;;;;;;;;Etcheverri, Catriel (19..-....)
+10555;Richard F. Fleck;accepte;035132620;Fleck, Richard F (1937-....);titre « the indians of thoreau »;1937;;US;en;idref+naissance+pays+langue;Fleck, Richard F (1937-....)
+10557;Eduardo Fagnani;non_corrobore;;;;;;;;;Fagnani, Eduardo
+10558;Candace Falk;accepte;081101570;Falk, Candace;titre « love anarchy and emma goldman »;;;;en;idref+langue;Falk, Candace
+10560;Sérgio Fantini;non_corrobore;;;;;;;;;Fantini, Sergio | Fantini, Sérgio (1961-....)
+10563;Wilson de Faria;non_corrobore;;;;;;;;;Faria, Wilson de
+10568;Isabelle Felici;non_corrobore;;;;;;;;;Felici, Isabelle (19..-....)
+10569;Almir Valente Felitte;introuvable;;;;;;;;;
+10571;Frank Fernández;non_corrobore;;;;;;;;;Fernández, Frank (19..-....) | Fernandez, Frank (compositeur)
+10573;Germán Ferrari;introuvable;;;;;;;;;
+10574;Celso Ferraris;introuvable;;;;;;;;;
+10575;Pinto Ferraz;introuvable;;;;;;;;;
+10576;Acácio Ferreira;introuvable;;;;;;;;;
+10577;Fernanda Durão Ferreira;introuvable;;;;;;;;;
+10578;Maria Nazareth Ferreira;introuvable;;;;;;;;;
+10581;Francisco Ferrer Y Guardia;introuvable;;;;;;;;;
+10583;Julio Ferrer;contradiction;;;;;;;;;Ferrer, Julio (1944-....) [naissance 1944 ≠ 1976]
+10585;Sol Ferrer;accepte;088590224;Ferrer, Sol;titre « le veritable francisco ferrer »;;;;fr;idref+langue;Ferrer, Sol
+10586;Norberto Osvaldo Ferreras;non_corrobore;;;;;;;;;Ferreras, Norberto Osvaldo
+10587;Retlav Avles Ferret;introuvable;;;;;;;;;
+10588;Enrique Ferri;introuvable;;;;;;;;;
+10590;Piero Ferrua;introuvable;;;;;;;;;
+10591;Roseli Figaro;non_corrobore;;;;;;;;;Figaro, Roseli
+10594;Fábio Luz Filho;accepte;269130284;Luz Filho, Fábio;titre « cooperativas escolares »;;;BR;pt-BR;idref+langue;Luz Filho, Fábio
+10595;Olavo Cabral Ramos Filho;introuvable;;;;;;;;;
+10597;Paolo Finzi;contradiction;;;;;;;;;Finzi, Paolo (1951-2020) [naissance 1951 ≠ 1957]
+10598;Marie Fleming;accepte;243481543;Fleming, Marie (1943-....);titre « the geography of freedom »;1943;;CA;en;idref+naissance+pays+langue;Fleming, Marie (19..-....) | Fleming, Marie (1943-....)
+10599;Pere Foix;accepte;059347260;Foix, Pere (1893-1978);titre « los archivos del terrorismo blanco »;1893;1978;ES;ca;idref+naissance+mort+pays+langue;Foix, Pere (1893-1978)
+10600;Giulio Folena;introuvable;;;;;;;;;
+10601;Carlos Fonseca;accepte;075443376;Fonseca, Carlos (1959-....);titre « garrote vil para dos inocentes »;1959;;ES;es;idref+langue;Fonseca, Carlos [pays PT ≠ ES] | Fonseca, Carlos (1959-....)
+10602;Eilton Fonseca;introuvable;;;;;;;;;
+10603;Tomaz da Fonseca;introuvable;;;;;;;;;
+10604;Alfonso Font;accepte;026868326;Font, Alfonso (1946-....);dates;1946;;ES;es;idref+langue;Font, Alfonso (1946-....)
+10606;Isleide Arruda Fontenelle;introuvable;;;;;;;;;
+10607;Epitéto Fontes;introuvable;;;;;;;;;
+10611;Alex Foti;accepte;14270606X;Foti, Alex (1966-....);titre « anarchy in the eu »;1966;;IT;it;idref+naissance+pays+langue;Foti, Alex (1966-....)
+10612;Walter Francini;introuvable;;;;;;;;;
+10613;José Francisco;introuvable;;;;;;;;;
+10614;F. de A. Carvalho Franco;introuvable;;;;;;;;;
+10615;Maria Laura P. B. Franco;introuvable;;;;;;;;;
+10617;Joseph Frank;introuvable;;;;;;;;;
+10621;Susanita Freire;introuvable;;;;;;;;;
+10622;Allan de Freitas;introuvable;;;;;;;;;
+10624;Jeanne Marie Machado de Freitas;introuvable;;;;;;;;;
+10625;Yves Fremion;accepte;026874458;Frémion, Yves (1947-....);dates;1947;;FR;fr;idref+langue;Frémion, Yves (1947-....)
+10627;Ricardo Fuego;introuvable;;;;;;;;;
+10628;Rene Furth;non_corrobore;;;;;;;;;Furth, René (19..-....)
+10631;Jeanne Gaillard;accepte;02687847X;Gaillard, Jeanne (1909-1983);titre « communes de province commune de paris 1870 1871 »;1909;1983;FR;fr;idref+naissance+mort+pays+langue;Gaillard, Jeanne (1931-....) | Gaillard, Jeanne (1909-1983)
+10633;Jairo Galindo;introuvable;;;;;;;;;
+10635;Emily Games;introuvable;;;;;;;;;
+10636;Mahatma Gandhi;introuvable;;;;;;;;;
+10637;Elias Garcia;introuvable;;;;;;;;;
+10638;Huascar Rodríguez García;introuvable;;;;;;;;;
+10639;Hugo Garcia;non_corrobore;;;;;;;;;García, Hugo (1975-....) | Garcia, Hugo (choriste)
+10640;Juan Guillermo Gómez García;introuvable;;;;;;;;;
+10641;Luis Lamela García;introuvable;;;;;;;;;
+10642;Juan José Garfia;introuvable;;;;;;;;;
+10645;Emilio Gennari;introuvable;;;;;;;;;
+10646;René E. Gertz;introuvable;;;;;;;;;
+10648;Giancarlo Giannini;non_corrobore;;;;;;;;;"Giannini, Giancarlo (1942-.... ; acteur)"
+10649;Moisés Gicovate;non_corrobore;;;;;;;;;Gicovate, Moisés
+10651;Alibrando Giovannetti;non_corrobore;;;;;;;;;Giovannetti, Alibrando (1876-1954)
+10652;Luiz Giovanni;introuvable;;;;;;;;;
+10655;Maria Conceição Pinto de Góes;introuvable;;;;;;;;;
+10656;Sonia Goldfeder;non_corrobore;;;;;;;;;Goldfeder, Sonia
+10657;Raymond Goldsmith;introuvable;;;;;;;;;
+10660;Alfredo Gómez;introuvable;;;;;;;;;
+10661;Francisco Pineda Gómez;introuvable;;;;;;;;;
+10662;Adelto Gonçalves;accepte;059163267;Gonçalves, Adelto (1951-....);titre « barcelona brasileira »;1951;;BR;pt-BR;idref+naissance;Gonçalves, Adelto (1951-....)
+10663;Rodolfo González Pacheco;accepte;144507102;González Pacheco, Rodolfo (1882-1949);dates;1882;1949;AR;es;idref+langue;González Pacheco, Rodolfo (1882-1949)
+10664;Julio Reyelo González;introuvable;;;;;;;;;
+10665;Marcos Gonzalez;non_corrobore;;;;;;;;;González, Marcos (19..-)
+10666;Xosé Tarrio González;introuvable;;;;;;;;;
+10669;J. Grave;nom_trop_court;;;;;;;;;
+10671;Juan Grave;introuvable;;;;;;;;;
+10672;Gilbert Green;non_corrobore;;;;;;;;;Green, Gilbert
+10675;Andrej Grubacic;contradiction;;;;;;;;;Grubačić, Andrej (19..-....) [pays US ≠ RS]
+10677;Armand Guerra;accepte;035514744;Guerra, Armand (1886-1939);titre « a traves de la metralla »;1886;1939;ES;es;idref+langue;Guerra, Armand (1886-1939)
+10678;Agustín Guillamón;contradiction;;;;;;;;;Guillamón, Agustín (1950-....) [naissance 1950 ≠ 1952]
+10680;Rafael Guimaraens;accepte;134482697;Guimaraens, Rafael (1956-....);titre « tragedia da rua da praia »;1956;;;pt-BR;idref+naissance+langue;Guimaraens, Rafael (1956-....)
+10681;James Gullaume;introuvable;;;;;;;;;
+10682;Pippo Gurrieri;non_corrobore;;;;;;;;;Gurrieri, Pippo (1955-....)
+10683;Salvador Gurucharri;accepte;091912040;Gurucharri, Salvador;titre « bibliografia del anarquismo espanol 1869 1975 »;;;ES;es;idref+pays+langue;Gurucharri, Salvador
+10684;José Antonio Gutiérrez Danton;introuvable;;;;;;;;;
+10689;Cristina Guzzo;introuvable;;;;;;;;;
+10691;A. Suprema Mestre Ching Hai;introuvable;;;;;;;;;
+10692;Marta Harnecker;accepte;028803698;"Harnecker, Marta (1937-2019 ; psychologue)";titre « os desafios da esquerda latino americana »;1937;2019;CL;es;idref+langue;"Harnecker, Marta (1937-2019 ; psychologue)"
+10694;Frank Harris;contradiction;;;;;;;;;"Harris, Frank [pays US ≠ IE] | Harris, Frank (19..-.... ; constructeur) [pays GB ≠ IE] | Harris, Frank (1856-1931) [pays US ≠ IE]"
+10695;Jacque Lesage de La Haye;introuvable;;;;;;;;;
+10697;Jacqueline Heinen;accepte;026917742;Heinen, Jacqueline (1940-....);dates;1940;;FR;fr;idref+langue;Heinen, Jacqueline (1940-....)
+10698;Peter Heintz;accepte;030781000;Heintz, Peter (1920-1983);titre « problematica de la autoridad en proudhon »;1920;1983;CH;de;idref+langue;Heintz, Peter | Heintz, Peter (1920-1983)
+10699;Benoît-P. Hepner;accepte;033322120;"Hepner, Benoît-P. (19..-.... ; politiste)";titre « bakounine et le panslavisme revolutionnaire »;;;FR;fr;idref+pays;"Hepner, Benoît-P. (19..-.... ; politiste)"
+10701;Aventuras na História;introuvable;;;;;;;;;
+10703;Bob Holton;accepte;082734623;Holton, Bob;titre « british syndicalism 1900 1914 »;;;;en;idref;Holton, Bob
+10704;F. Hombourger;nom_trop_court;;;;;;;;;
+10707;Constantino Ianni;introuvable;;;;;;;;;
+10709;Salvador Gurucharri y Tomás Ibáñez;introuvable;;;;;;;;;
+10711;Abelardo Iglesias;introuvable;;;;;;;;;
+10712;Anistia Internacional;introuvable;;;;;;;;;
+10713;IVa Internacional;introuvable;;;;;;;;;
+10716;Carlos Issa;introuvable;;;;;;;;;
+10717;Helena Iswolsky;introuvable;;;;;;;;;
+10719;Brian Jackson;non_corrobore;;;;;;;;;"Jackson, Brian (1952-....) | Jackson, Brian (1932-1983) | Jackson, Brian (1932-1983 ; pédagogue)"
+10720;J. Hampden Jackson;introuvable;;;;;;;;;
+10721;Mat Jacob;non_corrobore;;;;;;;;;Jacob, Mat (1966-....)
+10722;Clemência Jacquinet;introuvable;;;;;;;;;
+10727;Frank Jellinek;accepte;083265856;Jellinek, Frank (1908-1975);titre « la guerra civil en espana »;1908;1975;US;en;idref+langue;Jellinek, Frank (1908-1975)
+10728;Marcolino Jeremias;introuvable;;;;;;;;;
+10732;Regina Celia Mazoni Jomini;introuvable;;;;;;;;;
+10733;Carlos M. Jordán;introuvable;;;;;;;;;
+10734;Édouard Jourdain;accepte;135386136;"Jourdain, Édouard (1981-.... ; docteur en études politiques)";dates;1981;;FR;fr;idref+langue;"Jourdain, Édouard (1981-.... ; docteur en études politiques)"
+10735;Camila Jourdan;introuvable;;;;;;;;;
+10736;Paulo José da Costa Jr.;introuvable;;;;;;;;;
+10737;Armando Boito Jr.;introuvable;;;;;;;;;
+10738;Paulo Ghiraldelli Jr.;accepte;159694124;Ghiraldelli Jr., Paulo (1957-....);dates;1957;;BR;en;idref;Ghiraldelli Jr., Paulo (1957-....)
+10740;Pedro Fontan Jubero;introuvable;;;;;;;;;
+10743;Hilário Franco Júnior;accepte;060274131;Franco Júnior, Hilário (1948-....);dates;1948;;BR;pt-BR;idref+pays+langue;Franco Júnior, Hilário (1948-....)
+10744;Luiz Augusto Costacurta Junqueira;introuvable;;;;;;;;;
+10746;Michel Justamand;introuvable;;;;;;;;;
+10748;William Young and David E. KAISER;introuvable;;;;;;;;;
+10749;Temma Kaplan;contradiction;;;;;;;;;"Kaplan, Temma (1942-.... ; historienne) [pays ES ≠ US]"
+10750;Dainis Karepovs;contradiction;;;;;;;;;Karepovs, Dainis (1957-....) [naissance 1957 ≠ 1960]
+10752;Clóvis Nicanor Kassick;introuvable;;;;;;;;;
+10753;Paul Kenny;non_corrobore;;;;;;;;;Kenny, Paul (1959-....) | Kenny, Paul
+10754;Jefferson Wille Kielwagen;introuvable;;;;;;;;;
+10755;Arthur Koestler;accepte;29597446X;Koestler, Arthur (1905-1983);dates;1905;1983;HU,GB;en;idref;Koestler, Arthur (1905-1983) | Koestler, Arthur (1905-1983) [pays GB ≠ HU]
+10756;Caterina Koltai;introuvable;;;;;;;;;
+10757;Boris Koval;introuvable;;;;;;;;;
+10759;General Walter G. Krivitski;introuvable;;;;;;;;;
+10760;Acacia Kuenzer;introuvable;;;;;;;;;
+10761;M. Kun;nom_trop_court;;;;;;;;;
+10763;Amir Labaki;non_corrobore;;;;;;;;;Labaki, Amir
+10764;Benoît Ladarre;introuvable;;;;;;;;;
+10767;Homer Lane;introuvable;;;;;;;;;
+10768;Jacques Langlois;accepte;026964651;Langlois, Jacques (1944-....);titre « defense et actualite de proudhon »;1944;;FR;fr;idref+naissance+pays+langue;"Langlois, Jacques (1945-....) | Langlois, Jacques (1929-....) | Langlois, Jacques (1875-) | Langlois, Jacques (19..-.... ; médecin) | Langlois, Jacques (1950-....) | Langlois, Jacques (19..-....) | Langlois, Jacques (1944-....) | Langlois, Jacques (1664-1701) | Langlois, Jacques (1930-.... ; Médecin)"
+10769;E. Lanti;nom_trop_court;;;;;;;;;
+10770;Luciano Lanza;contradiction;;;;;;;;;Lanza, Luciano (1945-....) [naissance 1945 ≠ 1947]
+10771;François Laplantine;accepte;026965763;"Laplantine, François (1943-.... ; ethnologue)";dates;1943;;FR;fr;idref+langue;"Laplantine, François (1943-.... ; ethnologue)"
+10772;Jean-Pierre Lardin;non_corrobore;;;;;;;;;Lardin, Jean-Pierre (19..-....)
+10773;Companhia do Latão;introuvable;;;;;;;;;
+10776;Gilbert R. Ledon;introuvable;;;;;;;;;
+10778;Ascendino Leite;accepte;029047021;Leite, Ascendino (1915-....);dates;1915;;BR;pt-BR;idref+langue;Leite, Ascendino (1915-....)
+10779;Miriam Lifchitz Moreira Leite;introuvable;;;;;;;;;
+10780;Floriano de Lemos;introuvable;;;;;;;;;
+10781;Alcir Lenharo;introuvable;;;;;;;;;
+10783;Deise Leopoldi;introuvable;;;;;;;;;
+10784;Sheldon Leslie;introuvable;;;;;;;;;
+10788;Nelson Libero;introuvable;;;;;;;;;
+10795;George Lichtheim;contradiction;;;;;;;;;"Lichtheim, George (1912-1972 ; politiste) [pays GB ≠ DE]"
+10797;Adolfo Lima;contradiction;;;;;;;;;Lima, Adolfo (1874-1943) [naissance 1874 ≠ 1883]
+10799;Maria Emilia A. T. Lima;non_corrobore;;;;;;;;;Lima, Maria Emília A. T.
+10800;Rogério Lima;non_corrobore;;;;;;;;;Lima, Rogério
+10801;Hermínio Linhares;introuvable;;;;;;;;;
+10802;Edmond Marc Lipiansky;contradiction;;;;;;;;;Lipiansky, Edmond Marc (1939-....) [naissance 1939 ≠ 1931]
+10804;Abel Lisman;introuvable;;;;;;;;;
+10805;Jesús Lizano;accepte;061397628;Lizano, Jesús (1931-....);dates;1931;;ES;es;idref+langue;Lizano, Jesús (1931-....)
+10807;Elisabeth Souza Lobo;introuvable;;;;;;;;;
+10808;Julio Lobos;introuvable;;;;;;;;;
+10809;Michel Lobrot;contradiction;;;;;;;;;Lobrot, Michel (1924-2019) [mort 2019 ≠ 2006]
+10810;Beatriz Pellizzetti Lolla;introuvable;;;;;;;;;
+10812;Alberto da Costa Lopes;non_corrobore;;;;;;;;;Lopes, Alberto da Costa
+10813;Ana Beatriz Crespo Fernandes Lopes;introuvable;;;;;;;;;
+10814;Marcos Antonio Lopes;introuvable;;;;;;;;;
+10815;Maria Margaret Lopes;accepte;069797889;Lopes, Maria Margaret;titre « o brasil descobre a pesquisa cientifica »;;;BR;pt-BR;idref+pays+langue;Lopes, Maria Margaret
+10816;Milton Lopes;accepte;124492983;Lopes, Milton;titre « cronica dos primeiros anarquistas no rio de janeiro »;;;BR;pt-BR;idref+pays+langue;Lopes, Milton | Lopes, Milton
+10817;Alfredo López;accepte;082990239;López, Alfredo (1904-);titre « historia del movimiento social y la clase obrera argentina »;;;;es;idref+langue;López, Alfredo (1904-)
+10818;Antonio López;non_corrobore;;;;;;;;;López, Antonio | Lopez, Antonio
+10819;Fábio López López;introuvable;;;;;;;;;
+10820;Christina Da Silva Roquette Lopreato;accepte;091946700;Lopreato, Christina da Silva Roquette (1953-....);titre « o espirito da revolta »;1953;;BR;pt-BR;idref+naissance+pays+langue;Lopreato, Christina da Silva Roquette (1953-....)
+10824;Albert Low;accepte;035033339;Low, Albert (1928-....);dates;1928;;GB;en;idref+langue;Low, Albert (1928-....)
+10828;Flávio Luizzetto;introuvable;;;;;;;;;
+10833;Paulo Henrique Machado;introuvable;;;;;;;;;
+10834;Jesús Giráldez Macía;introuvable;;;;;;;;;
+10835;Juan Madri;introuvable;;;;;;;;;
+10836;Eduado Maffei;introuvable;;;;;;;;;
+10837;Eduardo Maffei;introuvable;;;;;;;;;
+10838;Diógenes Magalhães;introuvable;;;;;;;;;
+10839;Silvia Lang Magnani;introuvable;;;;;;;;;
+10845;Laren H. de Maldonado;introuvable;;;;;;;;;
+10846;Rogerio R. Malta;introuvable;;;;;;;;;
+10847;Mario Alighiero Manacorda;non_corrobore;;;;;;;;;Manacorda, Mario Alighiero
+10849;Sílvia Maria Manfredi;accepte;178067660;Manfredi, Sílvia Maria (1946-...);titre « formacao sindical no brasil »;1946;;BR;pt-BR;idref+naissance+pays+langue;Manfredi, Sílvia Maria (1946-...)
+10851;Maria de Lourdes Manzini-Covre;introuvable;;;;;;;;;
+10852;Meli Wixan Mapu;introuvable;;;;;;;;;
+10854;João Batista Marçal;non_corrobore;;;;;;;;;Marçal, João Batista
+10855;Tito Marcondes;introuvable;;;;;;;;;
+10856;Subcomandante Insurgente Marcos;introuvable;;;;;;;;;
+10860;Dolors Marín;introuvable;;;;;;;;;
+10861;Isabelle Marinone;accepte;084317035;Marinone, Isabelle (1975-....);titre « cinema e anarquia »;1975;;FR;fr;idref+pays+langue;Marinone, Isabelle (1975-....)
+10862;Vera Regina Beltrão Marques;non_corrobore;;;;;;;;;Marques, Vera Regina Beltrão (19..-....)
+10864;Alejandro Marti;non_corrobore;;;;;;;;;Martí, Alejandro
+10867;Jose Augustin Martinez;introuvable;;;;;;;;;
+10868;Orlando Villanueva Martínez;introuvable;;;;;;;;;
+10869;Oliveira Martins;introuvable;;;;;;;;;
+10870;Victor Martins;non_corrobore;;;;;;;;;Martins, Víctor (19..-....)
+10874;João da Mata;accepte;264856996;Mata, João da (1968-....);dates;1968;;BR;pt-BR;idref+pays+langue;Mata, João da (1968-....)
+10875;Andityas Soares de Costa Matos;introuvable;;;;;;;;;
+10876;Marcelo Badaró Mattos;accepte;084689633;Mattos, Marcelo Badaró;titre « o sindicalismo brasileiro apos 1930 »;;;BR;pt-BR;idref+pays;Mattos, Marcelo Badaró
+10877;Carlos Semprun Maura;introuvable;;;;;;;;;
+10878;Jacques Maurice;introuvable;;;;;;;;;
+10882;Aníbal Vaz de Melo;introuvable;;;;;;;;;
+10883;Ângela Mendes De Almeida;introuvable;;;;;;;;;
+10885;José Carlos Mendonça;introuvable;;;;;;;;;
+10886;Gino Amleto Meneghetti;introuvable;;;;;;;;;
+10888;Lená Medeiros de Menezes;non_corrobore;;;;;;;;;"Menezes, Lená Medeiros de (19..-.... ; historienne)"
+10891;Saverio Merlino;introuvable;;;;;;;;;
+10892;István Mészáros;accepte;079407277;Mészáros, István (1930-....);titre « a necessidade do controle social »;1930;;;en;idref;Mészáros, István (1927-....) [naissance 1927 ≠ 1930] | Mészáros, István (1930-....)
+10893;Ida Mett;contradiction;;;;;;;;;Mett, Ida | Mett, Ida (1901-1973) [pays RU ≠ BY]
+10895;Ruth Middleton;accepte;29662733X;Middleton, Ruth;titre « alexandra david neel »;;;;en;idref+langue;Middleton, Ruth
+10896;Maria Alice Millet;introuvable;;;;;;;;;
+10898;Helene Minkin;accepte;189493690;Minkin, Helene (1873-1954);titre « storm in my heart »;1873;1954;US;en;idref+pays+langue;Minkin, Helene (1873-1954)
+10899;Jerome R. Mintz;accepte;028837053;Mintz, Jerome R.;titre « the anarchists of casas viejas »;;;US;en;idref+langue;Mintz, Jerome R.
+10902;Pontes de Miranda;introuvable;;;;;;;;;
+10905;José Álvaro Moisés;accepte;028495047;Moisés, José Álvaro;titre « greve de massa e crise politica »;;;BR;pt-BR;idref+pays+langue;Moisés, José Álvaro
+10908;Gustavo de Molinari;introuvable;;;;;;;;;
+10909;Fabrício Pinto Monteiro;introuvable;;;;;;;;;
+10912;Michael Moore;accepte;060313455;"Moore, Michael (1954-.... ; cinéaste)";titre « mike s election guide 2008 »;1954;;US;en;idref+langue;"Moore, Michael (traducteur) | Moore, Michael (19..-.... ; philosophe) | Moore, Michael (1970-.... ; musicien) [naissance 1970 ≠ 1954] | Moore, Michael (neurologue) | Moore, Michael (archéologue) [pays IE ≠ US] | Moore, Michael (1954-.... ; cinéaste)"
+10913;João Baptista de Moraes;introuvable;;;;;;;;;
+10914;Wallace Moraes;introuvable;;;;;;;;;
+10918;Ana Paula Massadar Morel;introuvable;;;;;;;;;
+10920;Giménez Moreno;introuvable;;;;;;;;;
+10922;Mitsue Morissawa;accepte;096319224;Morissawa, Mitsue;titre « a historia da luta pela terra e o mst »;;;;pt-BR;idref+langue;Morissawa, Mitsue
+10923;Félix García Moriyón;introuvable;;;;;;;;;
+10924;Fabian Moro;introuvable;;;;;;;;;
+10925;Félix García Moryón;introuvable;;;;;;;;;
+10927;Shozo Motoyama;accepte;137650493;Motoyama, Shozo  (1940-....);dates;1940;;BR;pt-BR;idref+pays+langue;Motoyama, Shozo  (1940-....)
+10929;Claúdio Moura Castro;introuvable;;;;;;;;;
+10930;Esmeralda Blanco Bolsonaro de Moura;accepte;111664233;Moura, Esmeralda Blanco Bolsonaro de;titre « trabalho feminino e condicao social do menor em sao paulo 1890 1920 »;;;BR;pt-BR;idref+langue;Moura, Esmeralda Blanco Bolsonaro de
+10931;Helena Isabel Mueller;introuvable;;;;;;;;;
+10932;Erich Mühsan;introuvable;;;;;;;;;
+10933;Alfredo Gómez Muller;introuvable;;;;;;;;;
+10934;Julián Vadillo Muñoz;introuvable;;;;;;;;;
+10935;Manuel Morales Muñoz;introuvable;;;;;;;;;
+10936;V. Muñoz;nom_trop_court;;;;;;;;;
+10937;Vladimiro Muñoz;introuvable;;;;;;;;;
+10938;Adrián Murano;non_corrobore;;;;;;;;;Murano, Adrián (1973-....)
+10939;Matteu Muratori;introuvable;;;;;;;;;
+10942;Ignacio Vidal y Pedro Costa Musté;introuvable;;;;;;;;;
+10943;Rogério H. Z. Nasciemnto;introuvable;;;;;;;;;
+10944;Rogério Humberto Zeferino Nascimento;introuvable;;;;;;;;;
+10945;David Nasser;contradiction;;;;;;;;;Nasser, David | Nasser, David (1917-1980) [mort 1980 ≠ 1986]
+10947;André Nataf;contradiction;;;;;;;;;Nataf, André | Nataf, André (1935-....) [naissance 1935 ≠ 1915]
+10948;Francisco Javier Navarro Navarro;introuvable;;;;;;;;;
+10949;Javier Navarro;non_corrobore;;;;;;;;;Navarro, Javier (19..-....)
+10950;Sergei Nechayev;introuvable;;;;;;;;;
+10952;Adalberto Coutinho de Araujo Neto;introuvable;;;;;;;;;
+10953;Candido de Mello Neto;introuvable;;;;;;;;;
+10954;Oscar Farinha Neto;introuvable;;;;;;;;;
+10955;Hermano Neves;contradiction;;;;;;;;;Neves, Hermano (1932-....) [naissance 1932 ≠ 1884]
+10956;Lucília de Almeida Neves;introuvable;;;;;;;;;
+10957;D. Nicolici;nom_trop_court;;;;;;;;;
+10958;Agustín Nieto;introuvable;;;;;;;;;
+10961;Francisco José Cuevas Noa;introuvable;;;;;;;;;
+10962;Cristina Noble;non_corrobore;;;;;;;;;Noble, Cristina (19..-....)
+10963;Marco Aurélio Nogueira;non_corrobore;;;;;;;;;Nogueira, Marco Aurélio (1949-....)
+10965;Sérgio Augusto Queiroz Norte;introuvable;;;;;;;;;
+10966;J. Novicow;nom_trop_court;;;;;;;;;
+10967;Notes from Nowhere;introuvable;;;;;;;;;
+10968;Alfredo Velasco Núñez;introuvable;;;;;;;;;
+10969;Geni Núñez;introuvable;;;;;;;;;
+10970;Howard Vicent O'Brien;introuvable;;;;;;;;;
+10971;Flor O'squarr;introuvable;;;;;;;;;
+10974;Georges Ohsawa;accepte;027119394;Ohsawa, Georges (1893-1966);dates;1893;1966;JP;ja;idref+langue;Ohsawa, Georges (1893-1966)
+10975;Antônio Carlos de Oliveira;non_corrobore;;;;;;;;;Oliveira, Antonio Carlos de
+10976;César de Oliveira;introuvable;;;;;;;;;
+10977;Jane Oliveira;introuvable;;;;;;;;;
+10978;Joelson Ferreira Oliveira;introuvable;;;;;;;;;
+10979;Paulo de Salles Oliveira;introuvable;;;;;;;;;
+10980;Roberta Pires de Oliveira;non_corrobore;;;;;;;;;Oliveira, Roberta Pires de (1963-....)
+10982;Maria Aparecida Munhoz De Omena;introuvable;;;;;;;;;
+10983;Amedeo Bertolo Org.;introuvable;;;;;;;;;
+10984;Célia Reis Camargo Org.;introuvable;;;;;;;;;
+10986;José Antonio Gutiérrez D. Org.;introuvable;;;;;;;;;
+10987;Luigi Galleani Org.;introuvable;;;;;;;;;
+10988;Miguel Abensour Org.;introuvable;;;;;;;;;
+10989;Helmut Ortner;accepte;032328788;Ortner, Helmut (1950-....);dates;1950;;DE;de;idref+langue;"Ortner, Helmut (1950-....) | Ortner, Helmut (19..-.... ; juriste) [pays AT ≠ DE]"
+10991;Geraldina P. Witter e Outros;introuvable;;;;;;;;;
+10992;Iaacov Oved;accepte;117566446;Oved, Iaacov;titre « el anarquismo y el movimiento obrero en argentina »;;;;;idref;Oved, Iaacov
+10994;Antônio Luiz Paixão;introuvable;;;;;;;;;
+10995;Leopoldo Palacios;non_corrobore;;;;;;;;;Palacios, Léopoldo (1988-....)
+10996;G. Palante;nom_trop_court;;;;;;;;;
+10998;Aércio Palheta;introuvable;;;;;;;;;
+10999;Marco Pandin;introuvable;;;;;;;;;
+11002;Julio R. Parcos;introuvable;;;;;;;;;
+11003;Bárbara Parham;introuvable;;;;;;;;;
+11004;Robert Paris;accepte;032517505;"Paris, Robert (1937-2020 ; philosophe)";titre « as origens do fascismo »;1937;2020;FR;fr;idref+naissance+mort+pays+langue;"Paris, Robert | Paris, Robert | Paris, Robert | Paris, Robert (1937-2020 ; philosophe)"
+11005;Lucy Parsons;introuvable;;;;;;;;;
+11006;Silvina Pascucci;accepte;14081339X;Pascucci, Silvina (19..-....);titre « costureras monjas y anarquistas »;;;AR;es;idref+pays+langue;Pascucci, Silvina (19..-....)
+11007;Masimo Passamani;introuvable;;;;;;;;;
+11008;Louis Patsouras;accepte;032742886;Patsouras, Louis;titre « the anarchism of jean grave »;;;US;en;idref+pays;Patsouras, Louis
+11009;Zuleide de Paula;introuvable;;;;;;;;;
+11010;Maria Célia Rua de Almeida Paulillo;non_corrobore;;;;;;;;;Paulillo, Maria Célia Rua de Almeida (19..-....)
+11011;Ouvidoria do Estado de São Paulo;introuvable;;;;;;;;;
+11012;Luis Pazos;non_corrobore;;;;;;;;;Pazos, Luis (1940-2023) | Pazos, Luis (1947-....)
+11013;Pere Peinard;introuvable;;;;;;;;;
+11014;Nize Maria Campos Pellanda;introuvable;;;;;;;;;
+11015;Dr Madeleine Pelletier;introuvable;;;;;;;;;
+11017;Maria Valéria Junho Pena;introuvable;;;;;;;;;
+11018;Jacob Penteado;introuvable;;;;;;;;;
+11019;Manoel Perdigão Saavedra;introuvable;;;;;;;;;
+11021;Luiz Pereira;introuvable;;;;;;;;;
+11023;Manuel Pérez;non_corrobore;;;;;;;;;Perez, Manuel | Pérez, Manuel
+11024;Nilmara Cristina Perissini;introuvable;;;;;;;;;
+11026;Michel Perraudeau;non_corrobore;;;;;;;;;"Perraudeau, Michel (1949-....) | Perraudeau, Michel (19..-.... ; docteur en physique)"
+11029;Silvia Regina Ferraz Peterson;introuvable;;;;;;;;;
+11031;Aymará Petrabissi;introuvable;;;;;;;;;
+11032;S. M. Petritchenko;nom_trop_court;;;;;;;;;
+11034;Óscar Peyrou;non_corrobore;;;;;;;;;Peyrou, Oscar (1945-)
+11035;Duka e Marco Philopat;introuvable;;;;;;;;;
+11038;Marc Pierrot;accepte;230903908;Pierrot, Marc (1871-1950);dates;1871;1950;FR;fr;idref+langue;Pierrot, Marc | Pierrot, Marc (chirurgien dentiste) [naissance 1987 ≠ 1871] | Pierrot, Marc (1968-....) [naissance 1968 ≠ 1871] | Pierrot, Marc (1871-1950)
+11039;Valdir Pietre;introuvable;;;;;;;;;
+11043;Paulo Sérgio de Moraes Sarmento Pinheiro;introuvable;;;;;;;;;
+11044;Céli Regina J. Pinto;introuvable;;;;;;;;;
+11045;Lúcio Flávio Pinto;non_corrobore;;;;;;;;;Pinto, Lúcio Flávio (1949-....)
+11046;Patrizia Piozzi;introuvable;;;;;;;;;
+11048;Fernando Planche;introuvable;;;;;;;;;
+11049;Alice Anabuki Plancherel;introuvable;;;;;;;;;
+11050;Jean Poirier;non_corrobore;;;;;;;;;Poirier, Jean | Poirier, Jean (rédacteur) | Poirier, Jean (1938-....) | Poirier, Jean (1931-....) | Poirier, Jean (démographe)
+11052;Joshua Popenoe;introuvable;;;;;;;;;
+11053;Baltazar Porcel;introuvable;;;;;;;;;
+11054;Richard Porton;accepte;086028898;Porton, Richard;titre « cine y anarquismo »;;;US;en;idref+langue;Porton, Richard
+11056;Sergio Pereira Poza;introuvable;;;;;;;;;
+11058;Antônio de Almeida Prado;accepte;148608019;Prado, Antonio de Almeida (1889-....);dates;1889;;BR;pt-BR;idref+langue;Prado, Antonio de Almeida (1889-....)
+11059;Camilo Prado;introuvable;;;;;;;;;
+11060;Dino Preti;accepte;029590744;Preti, Dino (1930-);titre « analise de textos orais »;1930;;BR;pt-BR;idref+naissance+pays+langue;Preti, Dino (1930-)
+11061;Andy Price;accepte;282912932;Price, Andy (1984-....);titre « recovering bookchin »;1984;;US;en;idref+naissance+pays+langue;"Price, Andy (1984-....) | Price, Andy (19..-.... ; dessinateur de bandes dessinées)"
+11063;Georgio Prodi;introuvable;;;;;;;;;
+11065;B. Prus;nom_trop_court;;;;;;;;;
+11066;Mimmo Pucciarelli;introuvable;;;;;;;;;
+11068;Cnl (R) Orlando Mario Punzi;introuvable;;;;;;;;;
+11069;Graham Purchase;introuvable;;;;;;;;;
+11070;Eugene Pyziur;accepte;155282301;Pyziur, Eugène (1917-....);titre « the doctrine of anarchism of michael a bakunin »;1917;;;en;idref+naissance+langue;Pyziur, Eugène (1917-....)
+11071;Miriam Qarmat;introuvable;;;;;;;;;
+11073;Clara Queiroz;introuvable;;;;;;;;;
+11075;Renato da Silva Queiroz;non_corrobore;;;;;;;;;Queiroz, Renato da Silva
+11079;José Ricardo Ramalho;introuvable;;;;;;;;;
+11080;Manuel González Ramírez;accepte;033147647;González Ramírez, Manuel (1904-1979);titre « epistolario y textos de ricardo flores magon »;1904;1979;MX;es;idref+langue;González Ramírez, Manuel (1904-1979)
+11081;John Randolph;accepte;131324918;Randolph, John (1967-....);titre « the house in the garden »;1967;;US;en;idref+naissance+pays+langue;"Randolph, John (1967-....) | Randolph, John (19..-....) | Randolph, John (1773-1833) | Randolph, John (1693-1737 ; Sir)"
+11082;Jesus Ranieri;introuvable;;;;;;;;;
+11083;J. M. Raynaud;nom_trop_court;;;;;;;;;
+11084;Hebert Read;introuvable;;;;;;;;;
+11085;Hilhem Reich;introuvable;;;;;;;;;
+11086;Roberno Reinoso;introuvable;;;;;;;;;
+11088;Cultive Resistência;introuvable;;;;;;;;;
+11089;Sevla Retlav;introuvable;;;;;;;;;
+11094;Bruno Ribeiro;non_corrobore;;;;;;;;;Ribeiro, Bruno (1989-....) | Ribeiro, Bruno (19..-....) | Ribeiro, Bruno (1989 - ...)
+11095;Joaquim Ribeiro;accepte;02913143X;Ribeiro, Joaquim (1907-1964);dates;1907;1964;BR;pt-BR;idref+langue;Ribeiro, Joaquim (1907-1964)
+11096;Maria Alice Rosa Ribeiro;introuvable;;;;;;;;;
+11097;Agnaldo Prandini Ricieri;introuvable;;;;;;;;;
+11098;Penny Rimbaud;accepte;187484007;Rimbaud, Penny (1943-...);dates;1943;;GB;en;idref+langue;Rimbaud, Penny (1943-...)
+11099;Bokar Rimpoche;introuvable;;;;;;;;;
+11100;Wilson Rio Apa;introuvable;;;;;;;;;
+11101;Manuel Rivas;non_corrobore;;;;;;;;;Rivas, Manuel (1957-....) | Rivas, Manuel (1975-...)
+11102;F. Javier Uribe Rivera;introuvable;;;;;;;;;
+11103;André Rocha;introuvable;;;;;;;;;
+11104;Antonio Penalves Rocha;introuvable;;;;;;;;;
+11105;Bruno Lima Rocha;introuvable;;;;;;;;;
+11106;Luis Filipe Rocha;introuvable;;;;;;;;;
+11107;Carlos Rocque;non_corrobore;;;;;;;;;Rocque, Carlos
+11108;Arakcy Martins Rodrigues;introuvable;;;;;;;;;
+11109;Jacinto Rodrigues;non_corrobore;;;;;;;;;Rodrigues, Jacinto
+11110;João Rodrigues;non_corrobore;;;;;;;;;Rodrigues, João (19..-....) | Rodrigues, João  (1977)
+11111;José Albertino Rodrigues;introuvable;;;;;;;;;
+11113;Sérgio Rodrigues;accepte;183696727;Rodrigues, Sérgio (1962-....);titre « elza a garota »;1962;;BR;pt-BR;idref+naissance+pays+langue;Rodrigues, Sergio (1972-....) | Rodrigues, Sergio (1927-....) | Rodrigues, Sérgio (1962-....)
+11114;Isaac Sandoval Rodríguez;introuvable;;;;;;;;;
+11115;Miguel Rodríguez;non_corrobore;;;;;;;;;Rodriguez, Miguel | Rodriguez, Miguel | Rodriguez, Miguel
+11116;José Luiz Del Roio;non_corrobore;;;;;;;;;Roio, José Luiz del (19..-....)
+11117;Sara Rojo;non_corrobore;;;;;;;;;Rojo, Sara
+11118;Juan Rosales;non_corrobore;;;;;;;;;Rosales, Juan (19..-....)
+11119;Josep Maria Roselló;introuvable;;;;;;;;;
+11120;Pauline Rosen-Cros;accepte;148536638;Rosen-Cros, Pauline;titre « duro companer s »;1985;;FR;fr;idref+naissance+pays+langue;Rosen-Cros, Pauline
+11121;José Paschoal Rossetti;introuvable;;;;;;;;;
+11123;Sadi Dal Rosso;introuvable;;;;;;;;;
+11125;Gonzalo Zaragoza Rovira;introuvable;;;;;;;;;
+11126;Richard S. Rudner;non_corrobore;;;;;;;;;Rudner, Richard S.
+11127;Antonio Cleber Rudy;introuvable;;;;;;;;;
+11128;Benjamín Cano Ruiz;introuvable;;;;;;;;;
+11129;Higinio Noja Ruiz;introuvable;;;;;;;;;
+11131;Jaqueline Russ;introuvable;;;;;;;;;
+11132;Francis Russell;non_corrobore;;;;;;;;;Russell, Francis | Russell, Francis (1910-....) | Russell, Francis (1949-....) | Russell, Francis (chirurgien)
+11133;Fernando Sabino;accepte;030829852;Sabino, Fernando (1923-2004);titre « o homem nu »;1923;2004;BR;pt-BR;idref+langue;Sabino, Fernando (1923-2004)
+11138;Michel Sahuc;accepte;126040419;Sahuc, Michel;titre « un regard noir »;;;FR;fr;idref+pays+langue;Sahuc, Michel
+11139;C. A. Sainte-Beuve;introuvable;;;;;;;;;
+11140;Iza Salles;accepte;09305369X;Salles, Iza;titre « um cadaver ao sol »;;;BR;pt-BR;idref+pays;Salles, Iza
+11141;Luis Alberto Sanchez;accepte;02712147X;Sánchez, Luis Alberto (1900-1994);titre « don manuel »;1900;1994;PE;es;idref+naissance+mort+pays+langue;Sánchez, Luis Alberto (1900-1994)
+11142;Gianfranco Sanguinetti;accepte;027121941;Sanguinetti, Gianfranco (1948-2025);dates;1948;2025;IT;it;idref+langue;Sanguinetti, Gianfranco (1948-2025)
+11143;Moacir Medeiros de Sant'ana;non_corrobore;;;;;;;;;Sant'ana, Moacir Medeiros de
+11145;Pérsio Santos De Oliveira;introuvable;;;;;;;;;
+11146;Lucy Woellner dos Santos;introuvable;;;;;;;;;
+11147;Beppe De Sario;introuvable;;;;;;;;;
+11149;Ferdinand de Saussure;non_corrobore;;;;;;;;;Saussure, Ferdinand de (1857-1913)
+11151;A. Scarabelli;nom_trop_court;;;;;;;;;
+11152;Leonard Schäfer;introuvable;;;;;;;;;
+11153;Stephen Schecter;non_corrobore;;;;;;;;;Schecter, Stephen (1947-....) | Schecter, Stephen (19..-....)
+11154;Paul F. Schimdt;introuvable;;;;;;;;;
+11155;Neala Schleuning;non_corrobore;;;;;;;;;Schleuning, Neala
+11157;Michael Schmidt;contradiction;;;;;;;;;Schmidt, Michael | Schmidt, Michael | Schmidt, Michael | Schmidt, Michael [pays DE ≠ ZA] | Schmidt, Michael | Schmidt, Michael [pays DE ≠ ZA] | Schmidt, Michael [pays FR ≠ ZA] | Schmidt, Michael (philosophe) [pays DE ≠ ZA] | Schmidt, Michael (1961?-....) [naissance 1961 ≠ 1980, pays DE ≠ ZA]
+11158;Paul F. Schmidt;introuvable;;;;;;;;;
+11159;Héctor Schujman;non_corrobore;;;;;;;;;Schujman, Héctor (19..)
+11162;Edwing R. A. Seligman;introuvable;;;;;;;;;
+11164;Alain Sergent;accepte;027132714;Sergent, Alain;titre « histoire de l anarchie »;;;FR;fr;idref+langue;Sergent, Alain | Sergent, Alain (1967-....) [naissance 1967 ≠ 1917] | Sergent, Alain | Sergent, Alain (1941-....) [naissance 1941 ≠ 1917]
+11167;Retlav Sevla;introuvable;;;;;;;;;
+11168;Edward Sexby;non_corrobore;;;;;;;;;Sexby, Edward (16..-1658)
+11169;Giuseppina Sferra;introuvable;;;;;;;;;
+11170;Yamandú Gonzales Sierra;introuvable;;;;;;;;;
+11171;Alan B. T. Silva;introuvable;;;;;;;;;
+11172;Gabriel Pombo da Silva;introuvable;;;;;;;;;
+11173;Nicoláo Duarte Silva;introuvable;;;;;;;;;
+11174;Paulo Renato Oliveira Silva;introuvable;;;;;;;;;
+11175;Henri Simon;accepte;027966321;Simon, Henri (1922-2024);titre « novo movimento »;1922;2024;FR;fr;idref+naissance+mort+pays+langue;"Simon, Henri (1983-....) | Simon, Henri (1861-1935 ; avocat) | Simon, Henri (1922-2024)"
+11179;Helena Singer;non_corrobore;;;;;;;;;"Singer, Helena (19..-.... ; sociologue)"
+11181;Internacional Situcionista;introuvable;;;;;;;;;
+11183;John M. Smith;introuvable;;;;;;;;;
+11184;Michael P. Smith;introuvable;;;;;;;;;
+11186;G. W. Sok;nom_trop_court;;;;;;;;;
+11187;José Luís Solazzi;introuvable;;;;;;;;;
+11188;Carlos A. Solero;introuvable;;;;;;;;;
+11189;Jorge N. Solomonoff;non_corrobore;;;;;;;;;Solomonoff, Jorge N.
+11190;G. Sorel;nom_trop_court;;;;;;;;;
+11191;Juan Manuel Fernández Soria;introuvable;;;;;;;;;
+11192;M. Ricardo de Sousa;introuvable;;;;;;;;;
+11194;Clei Souza;introuvable;;;;;;;;;
+11195;Denise Souza;introuvable;;;;;;;;;
+11196;Dimas Antônio de Souza;accepte;133030644;Souza, Dimas Antônio de;titre « o mito politico no teatro anarquista brasileiro »;;;;pt-BR;idref+langue;Souza, Dimas Antônio de
+11197;Ismara Izepe de Souza;accepte;11904286X;Souza, Ismara Izepe de;titre « republica espanhola »;;;BR;pt-BR;idref+pays+langue;Souza, Ismara Izepe de
+11198;José Crisóstomo de Souza;introuvable;;;;;;;;;
+11200;Vicente de Souza;introuvable;;;;;;;;;
+11201;Hobart Spalding;accepte;081229569;Spalding, Hobart;titre « la clase trabajadora argentina »;;;;;idref;Spalding, Hobart
+11202;Tamsin Spargo;non_corrobore;;;;;;;;;Spargo, Tamsin (19..-....)
+11203;M. Splayne;nom_trop_court;;;;;;;;;
+11204;Joel Spring;introuvable;;;;;;;;;
+11205;Andrea Staid;accepte;12870098X;Staid, Andrea;titre « gli arditi del popolo »;;;IT;it;idref+langue;Staid, Andrea
+11206;Carla Stampa;introuvable;;;;;;;;;
+11208;Jeff Stein;non_corrobore;;;;;;;;;Stein, Jeff
+11211;Max Stinner;introuvable;;;;;;;;;
+11212;Svetozar Stojanovic;accepte;029012759;Stojanović, Svetozar (1931-2010);dates;1931;2010;RS;sr;idref+langue;Stojanović, Svetozar (1931-2010)
+11213;Danilo R. Streck;introuvable;;;;;;;;;
+11214;Horacio Suárez;introuvable;;;;;;;;;
+11215;Piro Subrat;accepte;250524759;Subrat, Piro (1990-....);titre « invertidos y rompepatrias »;1990;;ES;es;idref+naissance+pays+langue;Subrat, Piro (1990-....)
+11216;O. Racional Superior;introuvable;;;;;;;;;
+11219;Jacques Talbot;non_corrobore;;;;;;;;;"Talbot, Jacques | Talbot, Jacques (médecin) | Talbot, Jacques (19..-.... ; médecin)"
+11220;Adelino Tavares De Pinho;introuvable;;;;;;;;;
+11221;José Tavares;non_corrobore;;;;;;;;;Tavares, José | Tavares, José | Tavares, José (photographe)
+11223;Varlan Tchrkesoff;introuvable;;;;;;;;;
+11224;Antonio Tellez;introuvable;;;;;;;;;
+11225;Moshik Temkin;accepte;140779442;Temkin, Moshik (1971-);titre « the sacco vanzetti affair »;1971;;GB;en;idref+naissance+pays+langue;Temkin, Moshik (1971-)
+11227;M. Testa;nom_trop_court;;;;;;;;;
+11228;Michel Thiollent;non_corrobore;;;;;;;;;Thiollent, Michel
+11229;Bernard Thomas;non_corrobore;;;;;;;;;"Thomas, Bernard | Thomas, Bernard (19..-.... ; photographe) | Thomas, Bernard (1944-....)"
+11230;Augusto Thompson;non_corrobore;;;;;;;;;Thompson, Augusto
+11231;Harold H. Thompson;introuvable;;;;;;;;;
+11234;Edilene Toledo;accepte;112332897;Toledo, Edilene;titre « travessias revolucionarias »;;;BR;pt-BR;idref+pays;Toledo, Edilene
+11235;Regina de Toledo;introuvable;;;;;;;;;
+11236;Tina Tomassi;introuvable;;;;;;;;;
+11237;Alberto Toninello;non_corrobore;;;;;;;;;Toninello, Alberto (1945-....)
+11238;Alejandro R. Díez Torre;introuvable;;;;;;;;;
+11241;Stuart Townsend;non_corrobore;;;;;;;;;Townsend, Stuart (1972-....)
+11242;Filippo Trasatti;non_corrobore;;;;;;;;;Trasatti, Filippo (19..-....)
+11243;Alessandra Garcia Trindade;introuvable;;;;;;;;;
+11244;Francisco Trindade;introuvable;;;;;;;;;
+11246;Léon Trotsky;introuvable;;;;;;;;;
+11247;Annez Andraus Troyano;introuvable;;;;;;;;;
+11248;Davide Turcato;non_corrobore;;;;;;;;;Turcato, Davide
+11250;Helena Uehara;introuvable;;;;;;;;;
+11251;Joan Connelly Ullman;accepte;095623329;Ullman, Joan Connelly;titre « la semana tragica »;;;;en;idref+langue;Ullman, Joan Connelly
+11255;Rafael Uzcátegui;non_corrobore;;;;;;;;;Uzcátegui, Rafael (1973-)
+11256;Salvo Vaccaro;accepte;029599628;Vaccaro, Salvo (1959-....);dates;1959;;IT;it;idref+langue;Vaccaro, Salvo (1959-....)
+11257;Walter Vadala;introuvable;;;;;;;;;
+11258;Nanci Valadares De Carvalho;introuvable;;;;;;;;;
+11260;Silza Maria Pasello Valente;introuvable;;;;;;;;;
+11261;Eduardo Valladares;introuvable;;;;;;;;;
+11264;Hugo Marcelo Sandoval Vargas;introuvable;;;;;;;;;
+11265;Maria Thereza Vargas;non_corrobore;;;;;;;;;Vargas, Maria Thereza
+11266;Domingo Varone;introuvable;;;;;;;;;
+11267;Pano Vassilev;introuvable;;;;;;;;;
+11271;Valo Velho;introuvable;;;;;;;;;
+11272;Randolfo Vella;introuvable;;;;;;;;;
+11274;Roberto Venosa;non_corrobore;;;;;;;;;Venosa, Roberto
+11275;António Ventura;accepte;079943349;"Ventura, António (1953-.... ; historien)";titre « anarquistas republicanos e socialistas em portugal »;1953;;PT;pt-BR;idref+naissance+pays+langue;"Ventura, Antonio | Ventura, Antonio (1938- ; poète) | Ventura, Antonio (1946-) | Ventura, Antonio (1954-....) | Ventura, António (1953-.... ; historien)"
+11280;J. M. Gonçalves Viana;introuvable;;;;;;;;;
+11282;César Vidal;non_corrobore;;;;;;;;;Vidal, César (1958-) | Vidal, César (1899-1954)
+11283;Alexandre Vieira;accepte;136569471;Vieira, Alexandre (1884-1973);titre « para a historia do sindicalismo em portugal »;;;PT;pt-BR;idref+pays+langue;"Vieira, Alexandre | Vieira, Alexandre (1884-1973) | Vieira, Alexandre (1992-.... ; auteur en automatique-productique)"
+11285;Enrique López Viejo;introuvable;;;;;;;;;
+11286;Samuel Vila;non_corrobore;;;;;;;;;Vila, Samuel
+11287;Vargas Vila;introuvable;;;;;;;;;
+11288;Manuel Vilar;introuvable;;;;;;;;;
+11289;Anne-Marie Villefranche;introuvable;;;;;;;;;
+11291;Alex S. Vitale;non_corrobore;;;;;;;;;Vitale, Alex S.
+11292;Artur José Renda Vitorino;introuvable;;;;;;;;;
+11294;Eugene Volin;introuvable;;;;;;;;;
+11295;Pascual Vuotto;non_corrobore;;;;;;;;;Vuotto, Pascual
+11296;Are Waerland;non_corrobore;;;;;;;;;Waerland, Are (1876-1955)
+11297;Ebba Waerland;introuvable;;;;;;;;;
+11301;Félix Weinberg;accepte;029709385;Weinberg, Félix;titre « dos utopias argentinas de principios de siglo »;;;AR;es;idref+pays+langue;Weinberg, Félix
+11303;Marcel Willard;non_corrobore;;;;;;;;;Willard, Marcel (1899-1956)
+11304;Liz Willis;non_corrobore;;;;;;;;;Willis, Liz (19..-....)
+11305;Harold B. Wilson;introuvable;;;;;;;;;
+11306;Alain Wisner;accepte;027198634;"Wisner, Alain (1923-2004 ; Médecin ergonome)";dates;1923;2004;FR;fr;idref+langue;"Wisner, Alain (1923-2004 ; Médecin ergonome)"
+11308;Hector Woollands;introuvable;;;;;;;;;
+11309;Joan Zambrana;accepte;095658998;Zambrana, Joan (1960-....);titre « la alternativa libertaria »;1960;;ES;ca,es;idref+pays;Zambrana, Joan (1960-....)
+11311;Lázaro Luíz Zamenhof;introuvable;;;;;;;;;
+11312;Patxi Zamoro;introuvable;;;;;;;;;
+11313;Roberto Zani;accepte;133342921;Zani, Roberto;titre « alla prova del sessantotto »;;;IT;it;idref+pays+langue;Zani, Roberto
+11314;Micael Zaramella;introuvable;;;;;;;;;
+11315;Ilya Zemtsov;introuvable;;;;;;;;;
+11316;Federico Zenoni;introuvable;;;;;;;;;
+11318;Raúl Zibechi;contradiction;;;;;;;;;"Zibechi, Raúl (1952-.... ; journaliste) [naissance 1952 ≠ 1954]"
+11319;Hector Zoccoli;introuvable;;;;;;;;;
+11321;Alenka Zupancic;accepte;034164332;Zupančič, Alenka (1966-....);dates;1966;;SI;;idref;Zupančič, Alenka | Zupančič, Alenka (1966-....)
+11324;Lina Wertmüller;contradiction;;;;;;;;;Wertmüller, Lina (1926-2021) [naissance 1926 ≠ 1928]
+11325;Franco Schirone;accepte;059378832;Schirone, Franco (1950-....);titre « il canto anarchico in italia »;1950;;IT;it;idref+langue;Schirone, Franco (1950-....)
+11333;Edson Gonçalves Filho;introuvable;;;;;;;;;
+11334;Ricardo Marcelo Fonseca;non_corrobore;;;;;;;;;Fonseca, Ricardo Marcelo
+11335;Daniel Rodrigues Aurélio;introuvable;;;;;;;;;
+11336;Wellington Gallarza;introuvable;;;;;;;;;
+11338;Carme Regina Schons;introuvable;;;;;;;;;
+11341;Lewis Herber;non_corrobore;;;;;;;;;Herber, Lewis (1921-2006)
+11342;Silvia Araújo;non_corrobore;;;;;;;;;Araújo, Sílvia (19..-)
+11343;Martín Alberto Acri;introuvable;;;;;;;;;
+11344;Petter Baiestorf;introuvable;;;;;;;;;
+11350;Filósofo da Selva;introuvable;;;;;;;;;
+11351;Beni;nom_trop_court;;;;;;;;;
+11353;Vivien García;accepte;11658162X;"García, Vivien (1983-.... ; auteur en philosophie)";titre « l anarchisme aujourd hui »;1983;;FR;fr;idref+naissance+pays+langue;"García, Vivien (1983-.... ; auteur en philosophie)"
+11355;George Berger;non_corrobore;;;;;;;;;Berger, George (1963-....)
+11357;Pedro Celso Uchôa Cavalcanti;non_corrobore;;;;;;;;;Cavalcanti, Pedro Celso Uchôa
+11358;Roberto Fanjul;introuvable;;;;;;;;;
+11359;Antonio Serra & Cristina Pereira;introuvable;;;;;;;;;
+11360;José Bové;accepte;052637107;Bové, José (1953-....);dates;1953;;FR;fr;idref+langue;Bové, José (1953-....)
+11361;Osvaldo Coggiola;contradiction;;;;;;;;;Coggiola, Osvaldo (1950-....) [pays BR ≠ AR]
+11362;Ricard de Vargas Golarons;introuvable;;;;;;;;;
+11363;Diy;nom_trop_court;;;;;;;;;
+11368;Daniela Carneiro;introuvable;;;;;;;;;
+11372;Valter Bracht;introuvable;;;;;;;;;
+11374;Juan Carlos Beas;introuvable;;;;;;;;;
+11375;Giselle Beiguelman-Messina;introuvable;;;;;;;;;
+11376;Janet Biehl/Murray Bookchin;introuvable;;;;;;;;;
+11379;Antonio Rabinad;accepte;027961761;Rabinad, Antonio (1927-....);dates;1927;;ES;es;idref+langue;Rabinad, Antonio (1927-....)
+11380;Guillaume Davranche;non_corrobore;;;;;;;;;Davranche, Guillaume (19..-....)
+11381;Jean Bécarud;accepte;029328799;Bécarud, Jean (1925-2014);titre « los anarquistas espanoles »;1925;2014;FR;fr;idref+langue;Bécarud, Jean (1925-2014)
+11382;Alcina de Lara Cardoso;introuvable;;;;;;;;;
+11384;Winter Bastos;introuvable;;;;;;;;;
+11385;Jean Andreu;non_corrobore;;;;;;;;;Andreu, Jean
+11386;Miguel Orduña Carson;introuvable;;;;;;;;;
+11388;Chuang;nom_trop_court;;;;;;;;;
+11389;Sonia Alem Marrach (Org.) Doris Accioly e Silva;introuvable;;;;;;;;;
+11390;Guilherme Falleiros;introuvable;;;;;;;;;
+11392;Goya;nom_trop_court;;;;;;;;;
+11393;Marie Goldsmith;contradiction;;;;;;;;;Goldsmith, Marie (1873-1933) [naissance 1873 ≠ 1871]
+11394;José Yañez García;introuvable;;;;;;;;;
+11395;Jordi Albaladejo;introuvable;;;;;;;;;
+11396;Antoine Gimenez;accepte;101339860;Gimenez, Antoine (1910-1982);titre « les fils de la nuit »;1910;1982;IT;fr;idref+naissance+mort+pays+langue;Gimenez, Antoine (1910-1982)
+11401;Henrique Magalhães;introuvable;;;;;;;;;
+11402;Leda Gitahy;introuvable;;;;;;;;;
+11404;Vito Giannotti;non_corrobore;;;;;;;;;Giannotti, Vito
+11405;Yves Delage Goldsmith;introuvable;;;;;;;;;
+11407;Luis Felipe Falcão;introuvable;;;;;;;;;
+11408;Aleksandr N. Afanásiev;introuvable;;;;;;;;;
+11410;Miguel Gonzalez Arroyo;introuvable;;;;;;;;;
+11413;Paola Domingo;accepte;088444015;Domingo, Paola (1968-....);titre « amerique s anarchiste s »;1968;;;fr;idref+naissance+langue;Domingo, Paola (1968-....)
+11414;Avles;nom_trop_court;;;;;;;;;
+11415;Katrina Vanden Heuvel;introuvable;;;;;;;;;
+11418;Francisca Nogueira de Azevedo;introuvable;;;;;;;;;
+11419;Clément Duval;non_corrobore;;;;;;;;;Duval, Clément (1994-....) | Duval, Clément (1902-1976) | Duval, Clément (1850-1935)
+11420;Giorgio Sacchetti, Augusto Gayubas, Manuel Vicent Balaguer, Ignacio Donézar, José Luis Gutiérrez Molina;introuvable;;;;;;;;;
+11421;Fernando Antônio Peres;introuvable;;;;;;;;;
+11423;Miguel Angel Diéguez;introuvable;;;;;;;;;
+11424;Durval Muniz de Albuquerque Júnior, Alfredo Veiga-Neto, Alípio de Souza Filho (orgs.);introuvable;;;;;;;;;
+11428;Ana Paula Portella;introuvable;;;;;;;;;
+11429;Maripoza;nom_trop_court;;;;;;;;;
+11430;Michel Misse;non_corrobore;;;;;;;;;Misse, Michel
+11432;Angela Maria Souza Martins;accepte;16725023X;Martins, Angela Maria Souza;titre « trajetorias historicas da educacao »;;;BR;pt-BR;idref+pays+langue;Martins, Angela Maria Souza
+11433;Gilmar Rocha;introuvable;;;;;;;;;
+11434;Ricardo Líper;introuvable;;;;;;;;;
+11436;Javier Ortega Pérez;introuvable;;;;;;;;;
+11437;Ratgeb;nom_trop_court;;;;;;;;;
+11438;Albert Meltzer;non_corrobore;;;;;;;;;Meltzer, Albert (1920-1996)
+11439;Mauricio Morales;introuvable;;;;;;;;;
+11440;Michel Antony;non_corrobore;;;;;;;;;"Antony, Michel (19..-....) | Antony, Michel (19..-....) | Antony, Michel (19..-.... ; spécialiste du cinéma vietnamien)"
+11441;Ignacio de Llorens;introuvable;;;;;;;;;
+11442;Jaddson Luiz;introuvable;;;;;;;;;
+11443;J.R Schmid;nom_trop_court;;;;;;;;;
+11446;Deise Mancebo;introuvable;;;;;;;;;
+11448;Aline (et al.) LUDMILA;introuvable;;;;;;;;;
+11449;Pier Francesco Zarcone;non_corrobore;;;;;;;;;Zarcone, Pier Francesco (19..-....)
+11450;Andreza Poitena;introuvable;;;;;;;;;
+11452;Marcos Cesar (Grito);introuvable;;;;;;;;;
+11454;Angela Maria Roberti Martins;introuvable;;;;;;;;;
+11455;John Lyons;non_corrobore;;;;;;;;;"Lyons, John (19..-.... ; cavalier)"
+11457;Noir et Rouge;introuvable;;;;;;;;;
+11459;José Gay da Cunha;introuvable;;;;;;;;;
+11460;Nicodemus Piek;introuvable;;;;;;;;;
+11461;Maria Alice Nogueira;introuvable;;;;;;;;;
+11462;Nauá;nom_trop_court;;;;;;;;;
+11463;Miguel Velasco;introuvable;;;;;;;;;
+11464;Margaret S. Mahler;contradiction;;;;;;;;;Mahler, Margaret S. (1897-1985) [pays AT ≠ HU]
+11465;Kauan Willian dos Santos;introuvable;;;;;;;;;
+11467;John Holloway;non_corrobore;;;;;;;;;"Holloway, John | Holloway, John (1944-....) | Holloway, John (1954-....) | Holloway, John (1947-....) | Holloway, John (1948-.... ; violoniste)"
+11468;Josè J. Queiróz;accepte;147576741;Queiróz, José J. (19..-....);titre « a cultura do povo »;;;BR;pt-BR;idref+pays+langue;Queiróz, José J. (19..-....)
+11469;Meltzer;nom_trop_court;;;;;;;;;
+11470;Jean-Marc Raynaud;non_corrobore;;;;;;;;;Raynaud, Jean-Marc
+11471;Platão;nom_trop_court;;;;;;;;;
+11472;Jaguar;nom_trop_court;;;;;;;;;
+11473;Pierre Karila-Cohen;accepte;035827858;Karila-Cohen, Pierre (1972-....);titre « lecon d histoire sur le syndicalisme en france »;1972;;FR;fr;idref+langue;Karila-Cohen, Pierre (1972-....)
+11474;Imprensa Marginal;introuvable;;;;;;;;;
+11475;MORAES, Carla Kelen de Andrade. Acioli, Edane de Jesus França et al.;introuvable;;;;;;;;;
+11476;Luís Alfredo Galvão;non_corrobore;;;;;;;;;Galvão, Luís Alfredo
+11477;Nélio Parra;introuvable;;;;;;;;;
+11479;Daigo Oliva;introuvable;;;;;;;;;
+11481;Edgar Jorge Kolling;introuvable;;;;;;;;;
+11482;Thomaz Jefferson;introuvable;;;;;;;;;
+11483;Plekanov;nom_trop_court;;;;;;;;;
+11484;Dee Dee Ramone;non_corrobore;;;;;;;;;Ramone, Dee Dee (1952-2002)
+11485;Ricardo Maranhão;non_corrobore;;;;;;;;;Maranhão, Ricardo
+11486;Rius;nom_trop_court;;;;;;;;;
+11489;Rosamund Bartlett;non_corrobore;;;;;;;;;Bartlett, Rosamund (19..-....)
+11491;Gabriele Ínvernizzi;non_corrobore;;;;;;;;;"Invernizzi, Gabriele (19..-.... ; journaliste)"
+11492;Sebastian Kalicha;non_corrobore;;;;;;;;;Kalicha, Sebastian
+11494;Paulo Capra;introuvable;;;;;;;;;
+11495;Rogério Nascimento;introuvable;;;;;;;;;
+11496;Jose Luis Catalinas;introuvable;;;;;;;;;
+11497;Elisa Reis;non_corrobore;;;;;;;;;Reis, Elisa
+11498;Newton Stadler de Souza;introuvable;;;;;;;;;
+11499;Richard Robinson;non_corrobore;;;;;;;;;Robinson, Richard | Robinson, Richard | Robinson, Richard (1950-....) | Robinson, Richard (1967-) | Robinson, Richard (1946-....)
+11500;Mary Alice MC CABE;introuvable;;;;;;;;;
+11502;Vladimir Illitch Lênin;introuvable;;;;;;;;;
+11503;Federico Mayor;accepte;029455162;Mayor, Federico (1934-2024);dates;1934;2024;ES;es;idref+langue;Mayor, Federico (1934-2024)
+11505;Leila Maria da Silva Blass;non_corrobore;;;;;;;;;Blass, Leila Maria da Silva
+11506;Priscila da Silva Nascimento;introuvable;;;;;;;;;
+11508;René Gertz;accepte;031081436;Gertz, René (1949-....);dates;1949;;BR;pt-BR;idref+langue;Gertz, René (1949-....)
+11509;Maxiliano Astroza-Leon;introuvable;;;;;;;;;
+11512;Paulo Sergio Tumolo;non_corrobore;;;;;;;;;Tumolo, Paulo Sergio
+11515;Mark Bray;non_corrobore;;;;;;;;;"Bray, Mark (1952-....) | Bray, Mark (19..-.... ; historien)"
+11516;Emma M.;nom_trop_court;;;;;;;;;
+11518;Salvador Neves;accepte;168592576;Neves, Salvador;titre « polvora y tinta »;;;UY;es;idref+pays;Neves, Salvador
+11519;Sam Mbah;accepte;282932143;Mbah, Sam;dates;1963;2014;NG;en;idref;Mbah, Sam
+11520;Pako;nom_trop_court;;;;;;;;;
+11521;Rockwell;nom_trop_court;;;;;;;;;
+11522;Bernardo Kocher;non_corrobore;;;;;;;;;Kocher, Bernardo
+11523;Miguel Bodea;introuvable;;;;;;;;;
+11524;Nicolina Luiza De Petta;introuvable;;;;;;;;;
+11525;Lúcia Silva Parra;introuvable;;;;;;;;;
+11526;Tomaso Marabini;non_corrobore;;;;;;;;;Marabini, Tomaso
+11527;Reginaldo Moraes;introuvable;;;;;;;;;
+11528;José Alfredo Vidigal Pontes;non_corrobore;;;;;;;;;Pontes, José Alfredo Vidigal (1948-....)
+11529;Ramatís;nom_trop_court;;;;;;;;;
+11531;Khapaz;nom_trop_court;;;;;;;;;
+11532;James Cleugh;accepte;083877169;Cleugh, James;titre « furia espanola »;;;GB;en;idref+pays+langue;Cleugh, James
+11533;Fernand Planche;accepte;085541095;Planche, Fernand (1900-1974);dates;1900;1974;FR;fr;idref+pays;Planche, Fernand (1900-1974)
+11538;Voltaire;nom_trop_court;;;;;;;;;
+11539;Floreal Samitier Arroyos;introuvable;;;;;;;;;
+11540;Beatriz (et al.) SILVÉRIO;introuvable;;;;;;;;;
+11541;Yolanda Lhullier dos Santos;introuvable;;;;;;;;;
+11543;Stepniak;nom_trop_court;;;;;;;;;
+11545;Felipe del Solar;non_corrobore;;;;;;;;;Solar, Felipe del (19..-....)
+11546;Robert A. Scalapino;accepte;029352339;Scalapino, Robert A. (1919-....);titre « el movimiento anarquista en china »;1919;;US;en;idref+langue;Scalapino, Robert A. (1919-....)
+11547;Maria Sardelich;accepte;078395801;Sardelich, Maria;titre « o que vamos guardar de nos »;;;;pt-BR;idref+langue;Sardelich, Maria
+11550;Chico Whitaker;introuvable;;;;;;;;;
+11552;Zizen;nom_trop_court;;;;;;;;;
+11556;Daniel Santini;introuvable;;;;;;;;;
+11559;Biblioteca Terra Livre;introuvable;;;;;;;;;
+11563;Christian Bay;accepte;089320239;Bay, Christian (1921-....);dates;1921;;;en;idref;Bay, Christian | Bay, Christian (19..-....) | Bay, Christian (1921-....)
+11564;Charles C. Walker;non_corrobore;;;;;;;;;Walker, Charles C.

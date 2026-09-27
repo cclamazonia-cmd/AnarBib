@@ -80,6 +80,20 @@ Résultat : **288 fiches liées** (`external_ids.lccn` + trace `lc_releve`), don
 
 **Cas relevés pour une relecture humaine** : Cioran (langue posée : roumain, langue maternelle ; il écrit en français après 1949) ; Flor O'Squarr (exclu, dates) ; les listes des deux tableurs.
 
+## Troisième phase — IdRef (27/09)
+
+**Demande :** Xavier, 26/09 — « une phase 3 avec une bibliothèque brésilienne ou sud-américaine » ; relevé présenté et application validée le 27/09. **Appliqué par** `supabase/migrations/20260927091555_autorites_liees_a_idref.sql`.
+
+**Les sources sud-américaines sont fermées à l'accès automatisé**, constaté le 27/09 : la Biblioteca Nacional do Brasil répond 403 à toute requête, navigateur compris ; la Biblioteca Nacional Mariano Moreno (Aleph) refuse ses X-Services au public (« User WWW-X denied permission ») ; VIAF, qui agrège la BN du Brésil, ne répond rien. Aucun contournement.
+
+Source retenue : **IdRef** (ABES, autorités des bibliothèques universitaires françaises), API publique : la nationalité (UNIMARC 102), la langue (101) et les dates (103), et de nombreux auteurs brésiliens et hispano-américains traduits ou étudiés en France. **ISNI** a été sondé : dates et titres, mais ni nationalité ni langue — non retenu pour cette phase.
+
+Règle : vedette IdRef (sans précisions) identique à la forme de tri ; preuve obligatoire — un titre de l'auteur au catalogue AnarBib, **deux mots significatifs au moins** (« Anarquistas » seul ne prouve rien), parmi les documents SUDOC liés à la notice, ou des dates concordantes ; années du 103 seulement si la vedette ne les contredit pas (Alexandre Vieira : 1884 dans la vedette, 1880 dans le 103) ; langue seulement si unique et confirmée par les livres au catalogue ou par le pays (IdRef donne « eng » à Paulo Ghiraldelli Jr.). Pays relus un par un (66).
+
+Résultat : **187 fiches liées** (`external_ids.idref` + trace `idref_releve`), dont 164 complétées : langue 150, pays 66, naissance 33, mort 9. Non retenus : 524 introuvables, 173 non corroborés, 50 contradictions, 45 noms trop courts — liste `decisions-idref.csv`. Éprouvée sur copie de l'état de production du 27/09 : 187 appliquées, idempotente, refus si une fiche a changé.
+
+Après les trois phases (copie de banc des 1 499 fiches visibles) : **669 fiches sans pays (~45 %)**, 680 sans année de naissance, 653 avec une langue d'écriture. Le critère de C4 reste hors de portée des sources d'autorité.
+
 ## Outils (trace, non exécutés par la CI)
 
-`wd-rapprocher.mjs` et `loc-rapprocher.mjs` (rapprochements, lecture seule, cache disque des réponses), `engendrer-migration.mjs`, `assembler-migration.cjs`, `engendrer-migration-loc.cjs`, `etats-historiques.json`. Ils lisent un export des autorités par l'API publique (`authors`) et des notices (`api.catalog_books_public_v2` : auteur principal, année, langue).
+`wd-rapprocher.mjs`, `loc-rapprocher.mjs` et `idref-rapprocher.mjs` (rapprochements, lecture seule, cache disque des réponses), `engendrer-migration.mjs`, `assembler-migration.cjs`, `engendrer-migration-loc.cjs`, `engendrer-migration-idref.cjs`, `etats-historiques.json`. Ils lisent un export des autorités par l'API publique (`authors`) et des notices (`api.catalog_books_public_v2` : auteur principal, année, langue).
