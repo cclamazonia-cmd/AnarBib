@@ -31,6 +31,18 @@ import path from 'node:path';
 
 const SCRIPT = fileURLToPath(new URL('../../scripts/ci/deployer-backend.sh', import.meta.url));
 
+// Sous Windows, `bash` désigne le lanceur de WSL (C:\Windows\System32\bash.exe) :
+// le script partait dans WSL avec des chemins Windows qu'il n'y trouvait pas —
+// code 127, les neuf cas rouges à chaque `npm test` local (constaté le 27/09/2026,
+// `uname -s` y répond « Linux »). On prend Git Bash quand il est installé ; sans
+// lui, le banc est sauté ici — il vit pour la CI, qui tourne sous Linux.
+const BASH = process.platform === 'win32'
+  ? ['C:\\Program Files\\Git\\bin\\bash.exe', 'C:\\Program Files\\Git\\usr\\bin\\bash.exe'].find((p) => existsSync(p)) ?? null
+  : 'bash';
+// Et chaque lancement de Git Bash y coûte cher : ~8 s par cas isolé, et plus de
+// 30 s pour le cas d'échec (plusieurs essais) quand toute la suite tourne à côté.
+const DELAI = process.platform === 'win32' ? 180_000 : 30_000;
+
 let racine;      // bac à sable
 let origine;     // dépôt nu : la « forge »
 let travail;     // clone d'où l'on pousse, comme depuis le poste
@@ -51,7 +63,7 @@ function runCI(args = ['--fonctions', '--marqueur'], { echecSur = '', profond = 
   let sortie;
   let code = 0;
   try {
-    sortie = execFileSync('bash', [path.join(clone, 'scripts/ci/deployer-backend.sh'), ...args], {
+    sortie = execFileSync(BASH, [path.join(clone, 'scripts/ci/deployer-backend.sh'), ...args], {
       cwd: clone,
       encoding: 'utf8',
       env: {
@@ -140,7 +152,7 @@ beforeAll(() => {
   git(travail, 'add', '-A');
   git(travail, 'commit', '--quiet', '-m', 'c1 — état initial');
   git(travail, 'push', '--quiet', '-u', 'origin', 'main');
-}, 30_000); // meme raison que le timeout du describe : une dizaine de spawns git
+}, DELAI); // meme raison que le timeout du describe : une dizaine de spawns git
 
 afterAll(() => {
   if (racine) rmSync(racine, { recursive: true, force: true });
@@ -151,7 +163,7 @@ afterAll(() => {
 // dix fois le prix Linux, 5 s tombent en timeout des que la machine est
 // chargee. Un plafond n'est pas une assertion : l'elargir ne prouve rien de
 // moins, ca retire seulement un faux rouge local.
-describe('deployer-backend.sh — le marqueur de ce qui est réellement déployé', { timeout: 30_000 }, () => {
+describe.skipIf(!BASH)('deployer-backend.sh — le marqueur de ce qui est réellement déployé', { timeout: DELAI }, () => {
   it('pose le marqueur au premier passage, et déploie tout faute de référence', () => {
     const c1 = git(travail, 'rev-parse', 'HEAD');
     const { sortie, code, deployees } = runCI();
@@ -269,7 +281,7 @@ describe('deployer-backend.sh — le marqueur de ce qui est réellement déploy�
 
     let sortie = '';
     try {
-      sortie = execFileSync('bash', [path.join(clone, 'scripts/ci/deployer-backend.sh'), '--fonctions', '--marqueur'], {
+      sortie = execFileSync(BASH, [path.join(clone, 'scripts/ci/deployer-backend.sh'), '--fonctions', '--marqueur'], {
         cwd: clone,
         encoding: 'utf8',
         env: {
