@@ -85,7 +85,7 @@ const KEYS = {
     ca: 'Cap regla de dipòsit. Afegeix-ne una per començar.',
     eo: 'Neniu regulo de depono. Aldonu unu por komenci.',
     nl: 'Geen waarborgregels. Voeg er een toe om te beginnen.',
-    el: 'Κανένας κανόνας εγγύησης. Προσθέστε έναν για να ξεκινήσετε.',
+    el: 'Κανένας κανόνας εγγύησης. Πρόσθεσε έναν για να ξεκινήσεις.',
   },
   'deposit.config.rule.name': {
     'pt-BR': 'Nome', fr: 'Nom', es: 'Nombre', en: 'Name', it: 'Nome', de: 'Name',
@@ -287,7 +287,7 @@ const KEYS = {
     ca: 'Activa una regla de dipòsit per cobrar una caució.',
     eo: 'Aktivigu regulon de depono por kolekti deponon.',
     nl: 'Activeer een waarborgregel om een waarborg te innen.',
-    el: 'Ενεργοποιήστε έναν κανόνα εγγύησης για να εισπράξετε εγγύηση.',
+    el: 'Ενεργοποίησε έναν κανόνα εγγύησης για να εισπράξεις εγγύηση.',
   },
   'deposit.panel.msg.collected': {
     'pt-BR': 'Caução registrada.', fr: 'Dépôt collecté.', es: 'Depósito cobrado.', en: 'Deposit collected.',
@@ -381,7 +381,7 @@ const KEYS = {
     es: 'El importe debe ser positivo (o usa « exención »).', en: 'The amount must be positive (or use "exemption").',
     it: "L'importo deve essere positivo (o usa « esenzione »).", de: 'Der Betrag muss positiv sein (oder „Befreiung" verwenden).',
     ca: "L'import ha de ser positiu (o usa « exempció »).", eo: 'La sumo devas esti pozitiva (aŭ uzu « sendevigo »).',
-    nl: 'Het bedrag moet positief zijn (of gebruik "vrijstelling").', el: 'Το ποσό πρέπει να είναι θετικό (ή χρησιμοποιήστε «απαλλαγή»).',
+    nl: 'Het bedrag moet positief zijn (of gebruik "vrijstelling").', el: 'Το ποσό πρέπει να είναι θετικό (ή χρησιμοποίησε «απαλλαγή»).',
   },
   'panel.apiError.deposit_not_found': {
     'pt-BR': 'Caução não encontrada.', fr: 'Dépôt introuvable.', es: 'Depósito no encontrado.',
@@ -636,7 +636,7 @@ const KEYS = {
     ca: 'Reemborsament impossible: encara hi ha préstecs en curs. Retorna el dipòsit rotatori quan tot estigui tornat.',
     eo: 'Repago neebla: ankoraŭ estas pruntoj en kurso. Redonu la daŭran deponon kiam ĉio estas reprenita.',
     nl: 'Terugbetaling niet mogelijk: er lopen nog uitleningen. Betaal de doorlopende waarborg terug zodra alles is ingeleverd.',
-    el: 'Η επιστροφή δεν είναι δυνατή: υπάρχουν ακόμη ενεργοί δανεισμοί. Επιστρέψτε τη μόνιμη εγγύηση μόλις επιστραφούν όλα.',
+    el: 'Η επιστροφή δεν είναι δυνατή: υπάρχουν ακόμη ενεργοί δανεισμοί. Επίστρεψε τη μόνιμη εγγύηση μόλις επιστραφούν όλα.',
   },
 };
 

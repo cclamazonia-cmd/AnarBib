@@ -98,7 +98,7 @@ const ADD = {
     'biblioteca.publicFiche.hint': 'Επίλεξε τι εμφανίζεται στη δημόσια σελίδα της βιβλιοθήκης σου. Απενεργοποιημένο από προεπιλογή.',
     'biblioteca.publicFiche.contactToggle': 'Εμφάνιση δημόσιας επικοινωνίας',
     'biblioteca.publicFiche.hoursToggle': 'Εμφάνιση ωραρίων / βαρδιών',
-    'biblioteca.publicFiche.collective': 'Η δημοσιοποίηση πληροφοριών αφορά τη συλλογικότητα — αποφασίστε μαζί.',
+    'biblioteca.publicFiche.collective': 'Η δημοσιοποίηση πληροφοριών αφορά τη συλλογικότητα — να αποφασιστεί από κοινού.',
     'biblioteca.publicFiche.requiresPublic': 'Ισχύει μόνο αν η βιβλιοθήκη είναι δημόσια καταχωρισμένη.',
     'bibliotecaPublica.contact': 'Επικοινωνία',
   },

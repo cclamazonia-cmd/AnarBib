@@ -43,7 +43,7 @@ const KEYS = {
     ca: 'Inicia una sessió i escaneja les etiquetes QR dels exemplars per verificar el fons. En acabar, obtindràs l’informe de presents, faltants i intrusos.',
     eo: 'Komencu seancon kaj skanu la QR-etikedojn de la ekzempleroj por kontroli la kolekton. Fine, ricevu la raporton pri ĉeestantaj, mankantaj kaj fremdaj ekzempleroj.',
     nl: 'Start een sessie en scan de QR-etiketten van de exemplaren om de collectie te controleren. Daarna krijg je het rapport met aanwezige, ontbrekende en vreemde exemplaren.',
-    el: 'Ξεκινήστε μια συνεδρία και σαρώστε τις ετικέτες QR των αντιτύπων για να ελέγξετε τη συλλογή. Στο τέλος, λάβετε την αναφορά παρόντων, ελλειπόντων και ξένων.',
+    el: 'Ξεκίνησε μια συνεδρία και σάρωσε τις ετικέτες QR των αντιτύπων για να ελέγξεις τη συλλογή. Στο τέλος, λάβε την αναφορά παρόντων, ελλειπόντων και ξένων.',
   },
   'recolement.start': {
     'pt-BR': 'Iniciar inventário', en: 'Start inventory', fr: 'Démarrer un récolement',
@@ -82,7 +82,7 @@ const KEYS = {
     ca: 'Apunta al QR de l’etiqueta de l’exemplar',
     eo: 'Celu la QR-kodon de la etikedo de la ekzemplero',
     nl: 'Richt op de QR-code van het exemplaaretiket',
-    el: 'Στοχεύστε στον κωδικό QR της ετικέτας του αντιτύπου',
+    el: 'Στόχευσε στον κωδικό QR της ετικέτας του αντιτύπου',
   },
   'recolement.scan.open': {
     'pt-BR': 'Abrir a câmera', en: 'Open the camera', fr: 'Ouvrir la caméra',
@@ -245,7 +245,7 @@ const KEYS = {
     fr: 'Une erreur est survenue, réessaie.', es: 'Se produjo un error, inténtelo de nuevo.',
     de: 'Ein Fehler ist aufgetreten, bitte erneut versuchen.', it: 'Si è verificato un errore, riprova.',
     ca: 'S’ha produït un error, torna-ho a provar.', eo: 'Eraro okazis, bonvolu reprovi.',
-    nl: 'Er is een fout opgetreden, probeer opnieuw.', el: 'Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά.',
+    nl: 'Er is een fout opgetreden, probeer opnieuw.', el: 'Παρουσιάστηκε σφάλμα, δοκίμασε ξανά.',
   },
   'recolement.error.not_staff_of_library': {
     'pt-BR': 'Reservado à equipe desta biblioteca.', en: 'Reserved for this library’s staff.',
@@ -272,7 +272,7 @@ const KEYS = {
     fr: 'Tu dois être connecté·e.', es: 'Debe haber iniciado sesión.',
     de: 'Du musst angemeldet sein.', it: 'Devi aver effettuato l’accesso.',
     ca: 'Has d’haver iniciat la sessió.', eo: 'Vi devas esti ensalutinta.',
-    nl: 'Je moet ingelogd zijn.', el: 'Πρέπει να έχετε συνδεθεί.',
+    nl: 'Je moet ingelogd zijn.', el: 'Πρέπει να έχεις συνδεθεί.',
   },
 };
 

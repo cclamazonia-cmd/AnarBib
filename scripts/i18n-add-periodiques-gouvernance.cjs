@@ -50,7 +50,7 @@ const KEYS = {
     ca: 'Pots consultar aquesta llista; promoure o depreciar correspon a la coordinació de catalogació.',
     eo: 'Vi povas konsulti ĉi tiun liston; promocii aŭ malrekomendi apartenas al la kunordigo de katalogado.',
     nl: 'Je kunt deze lijst bekijken; bevestigen of afvoeren is aan de catalogiseringscoördinatie.',
-    el: 'Μπορείτε να δείτε αυτή τη λίστα· η προαγωγή ή η απόσυρση ανήκει στον συντονισμό καταλογογράφησης.',
+    el: 'Μπορείς να δεις αυτή τη λίστα· η προαγωγή ή η απόσυρση ανήκει στον συντονισμό καταλογογράφησης.',
   },
   'catalogacao.serialGov.empty': {
     'pt-BR': 'Nenhum título de periódico ainda.', fr: 'Aucun titre de périodique pour l’instant.',
@@ -113,7 +113,7 @@ const KEYS = {
     'pt-BR': 'ver a página pública', fr: 'voir la page publique', es: 'ver la página pública',
     en: 'view the public page', it: 'vedere la pagina pubblica', de: 'öffentliche Seite ansehen',
     ca: 'veure la pàgina pública', eo: 'vidi la publikan paĝon', nl: 'bekijk de publieke pagina',
-    el: 'δείτε τη δημόσια σελίδα',
+    el: 'δες τη δημόσια σελίδα',
   },
   'catalogacao.serialGov.holdings': {
     'pt-BR': 'Estado da coleção', fr: 'État de collection', es: 'Estado de la colección',
@@ -131,7 +131,7 @@ const KEYS = {
     ca: 'El que declares és el que es mostra. El càlcul de sota només acompanya: diu què està catalogat, mai que una llacuna sigui definitiva.',
     eo: 'Kion vi deklaras, tio aperas. La suba kalkulo nur akompanas: ĝi diras kio estas katalogita, neniam ke manko estas definitiva.',
     nl: 'Wat jij aangeeft, is wat getoond wordt. De berekening hieronder begeleidt alleen: zij zegt wat gecatalogiseerd is, nooit dat een hiaat definitief is.',
-    el: 'Αυτό που δηλώνετε είναι αυτό που εμφανίζεται. Ο παρακάτω υπολογισμός απλώς συνοδεύει: λέει τι έχει καταλογογραφηθεί, ποτέ ότι ένα κενό είναι οριστικό.',
+    el: 'Αυτό που δηλώνεις είναι αυτό που εμφανίζεται. Ο παρακάτω υπολογισμός απλώς συνοδεύει: λέει τι έχει καταλογογραφηθεί, ποτέ ότι ένα κενό είναι οριστικό.',
   },
   'catalogacao.serialGov.holdings.computed': {
     'pt-BR': 'Calculado: {first}–{last} ({count})', fr: 'Calculé : {first}–{last} ({count})',

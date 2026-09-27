@@ -8,7 +8,7 @@ const DIR = path.join(__dirname, '..', 'src', 'i18n', 'locales');
 
 const T = {
   'federacao.carte.edit.geocode': { fr:"Localiser depuis l'adresse", 'pt-BR':'Localizar pelo endereço', es:'Localizar desde la dirección', it:"Localizza dall'indirizzo", de:'Aus Adresse lokalisieren', en:'Locate from address', ca:"Localitza des de l'adreça", eo:'Lokalizi laŭ adreso', nl:'Lokaliseren via adres', el:'Εντοπισμός από τη διεύθυνση' },
-  'federacao.carte.edit.geocodeFail': { fr:'Adresse introuvable — place le point manuellement.', 'pt-BR':'Endereço não encontrado — posicione o ponto manualmente.', es:'Dirección no encontrada — coloca el punto manualmente.', it:'Indirizzo non trovato — posiziona il punto manualmente.', de:'Adresse nicht gefunden — Punkt manuell setzen.', en:'Address not found — place the point manually.', ca:'Adreça no trobada — col·loca el punt manualment.', eo:'Adreso netrovita — metu la punkton permane.', nl:'Adres niet gevonden — plaats het punt handmatig.', el:'Η διεύθυνση δεν βρέθηκε — τοποθετήστε το σημείο χειροκίνητα.' },
+  'federacao.carte.edit.geocodeFail': { fr:'Adresse introuvable — place le point manuellement.', 'pt-BR':'Endereço não encontrado — posicione o ponto manualmente.', es:'Dirección no encontrada — coloca el punto manualmente.', it:'Indirizzo non trovato — posiziona il punto manualmente.', de:'Adresse nicht gefunden — Punkt manuell setzen.', en:'Address not found — place the point manually.', ca:'Adreça no trobada — col·loca el punt manualment.', eo:'Adreso netrovita — metu la punkton permane.', nl:'Adres niet gevonden — plaats het punt handmatig.', el:'Η διεύθυνση δεν βρέθηκε — τοποθέτησε το σημείο χειροκίνητα.' },
 };
 
 let total = 0;

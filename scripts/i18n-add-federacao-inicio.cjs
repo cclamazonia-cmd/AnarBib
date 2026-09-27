@@ -93,8 +93,8 @@ const ADD = {
     "federacao.inicio.soon": "Binnenkort"
   },
   el: {
-    "federacao.inicio.welcome": "Καλώς ήρθατε στην ομοσπονδία",
-    "federacao.inicio.pending": "Τι σας περιμένει",
+    "federacao.inicio.welcome": "Καλώς ήρθες στην ομοσπονδία",
+    "federacao.inicio.pending": "Τι σε περιμένει",
     "federacao.inicio.pending.body": "Ένα αίτημα ένταξης περιμένει τη συναίνεση του κύκλου « {circle} ».",
     "federacao.inicio.annuaire": "Ο κατάλογος των συλλογικοτήτων",
     "federacao.inicio.toCircles": "Άνοιγμα των κύκλων",

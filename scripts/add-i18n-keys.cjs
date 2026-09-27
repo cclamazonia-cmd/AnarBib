@@ -435,12 +435,12 @@ const NEW_KEYS = {
     "en": "ISBD: not yet generated for this draft. Click \"Prepare ISBD\" above.",
     "fr": "ISBD : pas encore généré pour ce brouillon. Clique sur « Préparer ISBD » ci-dessus.",
     "es": "ISBD: aun no generado para este borrador. Haga clic en \"Preparar ISBD\" arriba.",
-    "de": "ISBD: für diesen Entwurf noch nicht erstellt. Klicken Sie oben auf „ISBD vorbereiten“.",
+    "de": "ISBD: für diesen Entwurf noch nicht erstellt. Klicke oben auf „ISBD vorbereiten“.",
     "it": "ISBD: non ancora generato per questa bozza. Clicca su \"Prepara ISBD\" sopra.",
     "ca": "ISBD: encara no generat per a aquest esborrany. Fes clic a \"Preparar ISBD\" a dalt.",
     "eo": "ISBD: ankoray ne kreita por ĉi tiu malneto. Klaku \"Prepari ISBD\" supre.",
     "nl": "ISBD: nog niet gegenereerd voor dit concept. Klik hierboven op \"ISBD voorbereiden\".",
-    "el": "ISBD: δεν έχει δημιουργηθεί ακόμα. Κάντε κλικ στο \"Prepare ISBD\" παραπάνω."
+    "el": "ISBD: δεν έχει δημιουργηθεί ακόμα. Κάνε κλικ στο \"Prepare ISBD\" παραπάνω."
   },
 
   // ── Digital resources ──
@@ -699,12 +699,12 @@ const NEW_KEYS = {
     "en": "Select at least one item.",
     "fr": "Sélectionne au moins un élément.",
     "es": "Seleccione al menos un item.",
-    "de": "Wählen Sie mindestens ein Element aus.",
+    "de": "Wähle mindestens ein Element aus.",
     "it": "Seleziona almeno un elemento.",
     "ca": "Selecciona almenys un element.",
     "eo": "Elektu almenaŭ unu eron.",
     "nl": "Selecteer ten minste één item.",
-    "el": "Επιλέξτε τουλάχιστον ένα στοιχείο."
+    "el": "Επίλεξε τουλάχιστον ένα στοιχείο."
   },
   "catalogacao.queue.publishConfirm": {
     "pt-BR": "Publicar {count} rascunho(s) selecionado(s)?",
@@ -831,7 +831,7 @@ const NEW_KEYS = {
     "en": "Active drafts of documents, authorities and copies. Manage the lifecycle: edit, mark ready, publish or discard.",
     "fr": "Brouillons actifs de documents, autorités et exemplaires. Gère le cycle de vie : édite, marque comme prêt, publie ou mets au rebut.",
     "es": "Borradores activos de documentos, autoridades y ejemplares. Gestione el ciclo de vida: edite, marque como listo, publique o descarte.",
-    "de": "Aktive Entwürfe von Dokumenten, Autoritäten und Exemplaren. Verwalten Sie den Lebenszyklus: bearbeiten, als bereit markieren, veröffentlichen oder verwerfen.",
+    "de": "Aktive Entwürfe von Dokumenten, Autoritäten und Exemplaren. Verwalte den Lebenszyklus: bearbeiten, als bereit markieren, veröffentlichen oder verwerfen.",
     "it": "Bozze attive di documenti, autorità e esemplari. Gestisci il ciclo di vita: modifica, segna come pronto, pubblica o scarta.",
     "ca": "Esborranys actius de documents, autoritats i exemplars. Gestiona el cicle de vida: edita, marca com a preparat, publica o descarta.",
     "eo": "Aktivaj malnetoj de dokumentoj, aŭtorecoj kaj ekzempleroj. Administru la vivociklon: redaktu, marku kiel pretan, publikigi aŭ foriĝi.",
@@ -1063,8 +1063,8 @@ const NEW_KEYS = {
     "it": "Bozze scartate. Puoi ripristinare o eliminare definitivamente.",
     "ca": "Esborranys descartats. Pots restaurar o eliminar definitivament.",
     "eo": "Foriĝitaj malnetoj. Vi povas reaŭdikigi aŭ definitive forigi.",
-    "nl": "Verwijderde concepten. U kunt herstellen of definitief verwijderen.",
-    "el": "Απορριφθέντα προσχέδια. Μπορείτε να επαναφέρετε ή να διαγράψετε οριστικά."
+    "nl": "Verwijderde concepten. Je kunt herstellen of definitief verwijderen.",
+    "el": "Απορριφθέντα προσχέδια. Μπορείς να επαναφέρεις ή να διαγράψεις οριστικά."
   },
   "catalogacao.queue.restoreSelected": {
     "pt-BR": "Restaurar selecionados ({count})",
@@ -1231,12 +1231,12 @@ const NEW_KEYS = {
     "en": "Browse published documents, authorities and copies. Resume to edit or discard from catalog.",
     "fr": "Consulte les documents, autorités et exemplaires publiés. Reprends pour modifier ou mettre au rebut.",
     "es": "Consulte documentos, autoridades y ejemplares publicados. Retome para editar o descarte del catalogo.",
-    "de": "Durchsuchen Sie veröffentlichte Dokumente, Autoritäten und Exemplare. Wiederaufnehmen zum Bearbeiten oder aus dem Katalog verwerfen.",
+    "de": "Durchsuche veröffentlichte Dokumente, Autoritäten und Exemplare. Wiederaufnehmen zum Bearbeiten oder aus dem Katalog verwerfen.",
     "it": "Consulta documenti, autorità e esemplari pubblicati. Riprendi per modificare o scarta dal catalogo.",
     "ca": "Consulta documents, autoritats i exemplars publicats. Reprèn per editar o descarta del catàleg.",
     "eo": "Konsultu dokumentojn, aŭtorecojn kaj ekzemplerojn jam publikigitajn. Reprenu por redakti aŭ forigu el la katalogo.",
     "nl": "Bekijk gepubliceerde documenten, autoriteiten en exemplaren. Hervat om te bewerken of verwijder uit de catalogus.",
-    "el": "Περιηγηθείτε δημοσιευμένα έγγραφα, αρχεία και αντίτυπα."
+    "el": "Περιηγήσου στα δημοσιευμένα έγγραφα, αρχεία και αντίτυπα."
   },
   "catalogacao.catalog.refreshTooltip": {
     "pt-BR": "Recompila as listas públicas do catálogo a partir das tabelas publicadas.",
@@ -1267,12 +1267,12 @@ const NEW_KEYS = {
     "en": "Refresh already in progress — try again shortly.",
     "fr": "Actualisation déjà en cours — réessaie dans un instant.",
     "es": "Actualizacion ya en curso — intente de nuevo en unos instantes.",
-    "de": "Aktualisierung läuft bereits — versuchen Sie es gleich erneut.",
+    "de": "Aktualisierung läuft bereits — versuche es gleich erneut.",
     "it": "Aggiornamento già in corso — riprova tra un momento.",
     "ca": "Actualització ja en curs — torna a provar en un moment.",
     "eo": "Aŭdatigo jam okazas — reprovu post momento.",
     "nl": "Bijwerken is al bezig — probeer het zo opnieuw.",
-    "el": "Η ανανέωση είναι ήδη σε εξέλιξη — δοκιμάστε ξανά σε λίγο."
+    "el": "Η ανανέωση είναι ήδη σε εξέλιξη — δοκίμασε ξανά σε λίγο."
   },
   "catalogacao.catalog.refreshDone": {
     "pt-BR": "Catálogo público atualizado.",
@@ -1327,12 +1327,12 @@ const NEW_KEYS = {
     "en": "Update draft created (ID {id}). Open the corresponding tab to edit.",
     "fr": "Brouillon de reprise créé (ID {id}). Ouvre l’onglet correspondant pour modifier.",
     "es": "Borrador de retomada creado (ID {id}). Abra la pestana correspondiente para editar.",
-    "de": "Wiederaufnahme-Entwurf erstellt (ID {id}). Öffnen Sie den entsprechenden Tab zum Bearbeiten.",
+    "de": "Wiederaufnahme-Entwurf erstellt (ID {id}). Öffne den entsprechenden Tab zum Bearbeiten.",
     "it": "Bozza di ripresa creata (ID {id}). Apri la scheda corrispondente per modificare.",
     "ca": "Esborrany de represa creat (ID {id}). Obre la pestanya corresponent per editar.",
     "eo": "Reprena malneto kreita (ID {id}). Malfermu la respondan langeton por redakti.",
     "nl": "Hervatconcept aangemaakt (ID {id}). Open het bijbehorende tabblad om te bewerken.",
-    "el": "Προσχέδιο επανάληψης δημιουργήθηκε (ID {id}). Ανοίξτε την αντίστοιχη καρτέλα."
+    "el": "Προσχέδιο επανάληψης δημιουργήθηκε (ID {id}). Άνοιξε την αντίστοιχη καρτέλα."
   },
   "catalogacao.catalog.discardConfirm": {
     "pt-BR": "Descartar \"{label}\" do catálogo publicado?\n\nEsta ação é irreversível.",

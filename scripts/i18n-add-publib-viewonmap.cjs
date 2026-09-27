@@ -12,7 +12,7 @@ const SENTINEL = 'bibliotecaPublica.viewOnMap';
 const VAL = {
   'pt-BR': 'Ver no mapa', fr: 'Voir sur la carte', es: 'Ver en el mapa', en: 'View on map',
   it: 'Vedi sulla mappa', de: 'Auf der Karte ansehen', ca: 'Veure al mapa', eo: 'Vidi sur la mapo',
-  nl: 'Bekijk op de kaart', el: 'Δείτε στον χάρτη',
+  nl: 'Bekijk op de kaart', el: 'Δες στον χάρτη',
 };
 
 for (const loc of LOCALES) {

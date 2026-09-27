@@ -56,7 +56,9 @@
 //       ANGLE MORT : ne couvre que fr et es, seules locales relues ce jour ;
 //       it, de, ca, nl, el ont aussi un vouvoiement et attendent leur passe.
 //       ca relu le 27/09/2026 (312 valeurs au « vós », `VOUVOIEMENT_CA`) ;
-//       restent it, de, nl, el.
+//       it, de, nl, el relus le même jour (402 valeurs) : toute locale qui
+//       connaît un registre de politesse a désormais son motif (en et eo n'en
+//       ont pas ; pt-BR a le sien, dans l'autre sens : « você »).
 //       pt-BR s'y ajoute le 27/09/2026, dans l'autre sens : son registre est
 //       « você », la faute y est le « tu » EUROPÉEN (`TU_EUROPEU`, plus bas,
 //       avec son propre angle mort, mesuré).
@@ -342,10 +344,80 @@ const VOUVOIEMENT_CA = new RegExp(
     `((?:${VERBES_EN_TIU.join('|')})|\\p{L}*(?:[^ts\\P{L}]iu|eu|ïu)|\\p{L}*(?<![ts])iu)(?:-\\p{L}+)?(?!${LETTRE_CA})`,
   'iu',
 );
+// it, de, nl, el — relus le 27/09/2026, après ca. Tous tutoyaient déjà pour
+// l'essentiel ; le formel restait par îlots : la politique de confidentialité
+// (it au « Lei », de au « Sie »), les fenêtres de cooptation et de retrait
+// (it au « voi »), les assistants de catalogage et les messages d'erreur
+// (de « Klicken Sie », el « Επιλέξτε »). it 65, de 147, nl 18, el 172 valeurs,
+// réécrites par `scripts/i18n-it-de-nl-el-tu.cjs`. Chaque motif suit la
+// structure de sa langue ; les chiffres sont mesurés sur les fichiers d'avant.
+const TETE_DE_PHRASE = '(?:^|[.!?…:;•\\n„"“«(]\\s*)';
+//
+// nl — « u », « uw », « uzelf » : aucun homographe, sauf l'heure (« 1u32min »)
+// et « U.S. », écartés par les bornes. 16/18 : les deux autres disaient
+// « jullie » (pluriel familier) à une seule personne — pas un vouvoiement, pas
+// visé ; un « jullie » adressé à une personne passe.
+const VOUVOIEMENT_NL = /(?<![\p{L}\d])(u|U|uw|Uw|uzelf|Uzelf)(?![\p{L}\d]|\.\p{L})/u;
+//
+// de — la majuscule EST la marque : « Sie », « Ihr… », « Ihnen » au milieu
+// d'une phrase ne peuvent être que la politesse (« sie », « ihr » = elle, ils,
+// leur, s'écrivent en minuscule). En tête de phrase, « Sie » est aussi
+// « elle / ils » (« Sie verlässt die aktive Liste » : la Fernleihe) ; seul le
+// DÉBUT DE LA VALEUR est tranché — une valeur qui commence par « Sie » n'a pas
+// d'antécédent. 139/147 ; ANGLE MORT : « Sie können… » en tête d'une phrase
+// qui n'ouvre pas la valeur (6), et le « ihr / euer » familier pluriel (2).
+const VOUVOIEMENT_DE = new RegExp(
+  `(?<!${TETE_DE_PHRASE})(?<![\\p{L}-])(Sie|Ihr|Ihre|Ihren|Ihrem|Ihres|Ihrer|Ihnen)(?![\\p{L}])` +
+    '|^\\s*(Sie|Ihr|Ihre|Ihren|Ihrem|Ihres|Ihrer|Ihnen)(?![\\p{L}])',
+  'u',
+);
+//
+// it — le « voi » (vostro, voi, présent en -ete : « potete »), « Lei » en
+// majuscule, les majuscules de courtoisie « Sua / Suo » au milieu d'une
+// phrase, les impératifs du « Lei » et du « voi » en tête de phrase. L'impératif
+// en « -ate / -ite » est l'homographe du participe féminin (« Inviate »,
+// « Scartate » sont des étiquettes) : il n'entre que listé ET suivi d'un mot.
+// 25/65 seulement : le « Lei » en MINUSCULE (« il suo account », « Può
+// esportare ») est l'homographe exact de la 3e personne. La politique de
+// confidentialité entière y était — 40 valeurs — et c'est le test croisé
+// plus bas (possessifs fr ↔ it) qui les voit : 62/65 à eux deux.
+const IMPERATIVI_LEI = ['Verifichi', 'Inserisca', 'Selezioni', 'Clicchi', 'Scelga', 'Compili', 'Indichi', 'Scriva', 'Legga',
+  'Apra', 'Prema', 'Utilizzi', 'Aggiunga', 'Carichi', 'Confermi', 'Chieda', 'Attenda', 'Riprovi', 'Vada', 'Esporti'];
+const IMPERATIVI_VOI_ATE_ITE = ['Verificate', 'Spiegate', 'Controllate', 'Riesportate', 'Selezionate', 'Rifate', 'Importate',
+  'Cliccate', 'Inserite', 'Contattate', 'Salvate', 'Compilate', 'Indicate', 'Usate', 'Utilizzate', 'Provate', 'Riprovate',
+  'Caricate', 'Aprite', 'Seguite', 'Riempite', 'Definite'];
+const NOMI_IN_ETE = ['Rete', 'Interprete', 'Sete', 'Prete', 'Parete', 'Abete'];
+const VOUVOIEMENT_IT = new RegExp(
+  '(?<![\\p{L}])(vostr[oaie]|Vostr[oaie]|voi|Voi|Lei|potete|dovete|volete|avete|siete|sapete|Potete|Dovete|Volete|Avete|Siete)(?![\\p{L}])' +
+    `|(?<!${TETE_DE_PHRASE})(?<![\\p{L}])(Sua|Suo|Sue|Suoi)(?![\\p{L}])` +
+    `|${TETE_DE_PHRASE}(${IMPERATIVI_LEI.join('|')})(?=\\s+\\p{L})` +
+    `|${TETE_DE_PHRASE}(${IMPERATIVI_VOI_ATE_ITE.join('|')})(?=\\s+\\p{L})` +
+    `|${TETE_DE_PHRASE}(?!(?:${NOMI_IN_ETE.join('|')})(?![\\p{L}]))(\\p{Lu}\\p{Ll}+ete)(?![\\p{L}])`,
+  'u',
+);
+//
+// el — la 2e personne du pluriel grecque finit TOUJOURS en « -τε » (présent,
+// aoriste, impératif, médiopassif : « Επιλέξτε », « μπορείτε », « ήρθατε »,
+// « Διαχειριστείτε »), plus « σας » / « εσείς ». Écartés : les mots en « -τε »
+// qui ne sont pas des verbes (`EL_NON_VERBES`), les indéfinis en « -δήποτε »
+// et la 1re personne en « -μαστε » (« είμαστε »). 172/172 sur le fichier
+// d'avant, rien d'autre. ANGLE MORT : un nom ou adverbe en « -τε » absent de
+// la liste ferait rougir à tort — on l'y ajoute, avec sa raison.
+const EL_NON_VERBES = ['τότε', 'Τότε', 'ούτε', 'Ούτε', 'ώστε', 'Ώστε', 'μήτε', 'πέντε', 'εκάστοτε', 'πότε', 'Πότε', 'όποτε',
+  'κάποτε', 'οπότε'];
+const VOUVOIEMENT_EL = new RegExp(
+  '(?<![\\p{L}])(σας|Σας|σάς|εσείς|Εσείς|εσάς|Εσάς)(?![\\p{L}])' +
+    `|(?<![\\p{L}])(?!(?:${EL_NON_VERBES.join('|')})(?![\\p{L}]))(?!\\p{L}*(?:δήποτε|μαστε)(?![\\p{L}]))(\\p{L}+τε)(?![\\p{L}])`,
+  'u',
+);
 const VOUVOIEMENT = {
   fr: VOUVOIEMENT_FR,
   es: VOUVOIEMENT_ES,
   ca: VOUVOIEMENT_CA,
+  it: VOUVOIEMENT_IT,
+  de: VOUVOIEMENT_DE,
+  nl: VOUVOIEMENT_NL,
+  el: VOUVOIEMENT_EL,
 };
 
 // Adresses au PLURIEL, à un collectif — ce n'est pas du vouvoiement — et
@@ -554,6 +626,30 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
           'Réécris au « você » (seu/sua, « verifique », « clique », « a você »). Si la ' +
           'forme est légitime (citation, phrase descriptive à la 3e personne), ajoute ' +
           'la clé à TU_LEGITIME en citant le passage.',
+      ).toEqual([]);
+    });
+
+    // Chemin (4) CROISÉ, it — le « Lei » en minuscule est invisible au motif
+    // (homographe de la 3e personne), mais pas au français, qui est gardé :
+    // là où fr dit « ton / ta / tes », l'italien doit dire « tuo / tua / tuoi /
+    // tue » ; « suo / sua / suoi / sue » sans aucun possessif du tu, c'est le
+    // « Lei ». 40/40 des valeurs de la politique de confidentialité sur le
+    // fichier d'avant, aucune autre. ANGLE MORT : une phrase au « Lei » sans
+    // possessif (« quali diritti ha », « può scrivere », « su di lei ») — trois
+    // valeurs le 27/09, vues à la relecture seulement.
+    it('it.json — pas de possessif du « Lei » là où fr tutoie', () => {
+      const FR_POSS = /(?<![\p{L}])(ton|ta|tes)(?![\p{L}])/iu;
+      const LEI = /(?<![\p{L}])(suo|sua|suoi|sue)(?![\p{L}])/iu;
+      const TU = /(?<![\p{L}])(tuo|tua|tuoi|tue)(?![\p{L}])/iu;
+      const fautes = Object.keys(TOUT.it).filter((k) => typeof TOUT.it[k] === 'string'
+        && typeof TOUT.fr[k] === 'string' && !PLURIEL_LEGITIME.includes(k)
+        && FR_POSS.test(prose(TOUT.fr[k])) && LEI.test(prose(TOUT.it[k])) && !TU.test(prose(TOUT.it[k])))
+        .map((k) => `${k} → « ${TOUT.it[k].slice(0, 70)} »`);
+      expect(
+        fautes,
+        `it : ${fautes.length} valeur(s) au « Lei » (fr tutoie)\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
+          'Réécris au tu (tuo/tua, « puoi », « hai », « te »). Si le possessif désigne un ' +
+          'tiers (« la biblioteca e i suoi lettori »), c\'est que fr dit « ses » : relis fr.',
       ).toEqual([]);
     });
   });

@@ -156,7 +156,7 @@ const NEW_KEYS = {
   el: {
     'importacoes.oai.title': 'Συλλογη OAI-PMH',
     'importacoes.oai.desc': 'Αυτοματη εβδομαδιαια συλλογη καταλογων μεσω πρωτοκολλου OAI-PMH. Η διαμορφωση πηγων ειναι μονο για διαχειριστες δικτυου.',
-    'importacoes.oai.noSources': 'Δεν εχουν ρυθμιστει πηγες OAI-PMH. Επικοινωνηστε με τον διαχειριστη δικτυου.',
+    'importacoes.oai.noSources': 'Δεν έχουν ρυθμιστεί πηγές OAI-PMH. Επικοινώνησε με τον διαχειριστή δικτύου.',
     'importacoes.oai.harvestNow': 'Συλλογη τωρα',
     'importacoes.oai.harvesting': 'Συλλογη σε εξελιξη…',
     'importacoes.oai.harvestStarted': 'Συλλογη ξεκινησε (run #{id}).',
