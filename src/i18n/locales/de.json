@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "Der Stapel wurde nicht gelöscht: das ist Sache einer Koordination, deren Bibliotheken alle seine Entwürfe halten, oder der Netzwerk-Administration.",
   "error.batch.other_authors": "Dieser Stapel enthält Normdaten-Entwürfe anderer Personen: du kannst nicht den ganzen Stapel veröffentlichen. Veröffentliche deine einzeln oder frag die Netzwerk-Administration.",
   "catalogacao.batchTrashedLeft": "{count} verworfene(r) Entwurf/Entwürfe einer anderen Bibliothek oder Person bleiben in ihrem Papierkorb, vom Stapel gelöst: das endgültige Löschen ist nicht deine Sache.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} erfasste(s) Exemplar(e) einer anderen Bibliothek oder ohne Bibliothek haben den Stapel verlassen: sie bleiben in der Warteschlange, außerhalb des Stapels."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} erfasste(s) Exemplar(e) einer anderen Bibliothek oder ohne Bibliothek haben den Stapel verlassen: sie bleiben in der Warteschlange, außerhalb des Stapels.",
+  "catalogacao.ui.coverIsbnEcart": "Diese ISBN gehört zur Ausgabe {trouvee}; der Datensatz nennt {notice}. Nachdruck, andere Ausgabe oder falsche ISBN: Bitte prüfen Sie das, bevor Sie dieses Cover wählen.",
+  "catalogacao.ui.coverIsbnVerifier": "Zu prüfen",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN passt",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }

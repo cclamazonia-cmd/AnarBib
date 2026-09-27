@@ -12,10 +12,14 @@
 //    en production, alors que la spec capas §4.3 en fait une exigence.
 // 3. Un fichier choisi puis « Enregistrer » directement : la charge utile relisait
 //    `cover_object_path` dans l'état React d'AVANT l'envoi du fichier.
+// 4. Une candidate trouvée par ISBN n'est plus tenue pour certaine : l'édition que
+//    l'ISBN désigne est confrontée à la notice. Cas réel du 27/09 : BTL-TL-002335
+//    (Ramparts Press, 1971) portait l'ISBN de l'édition AK Press de 2004, et la
+//    galerie a proposé la couverture de 2004 sans rien signaler.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { sourcesEnPanne, messageRechercheCapas } from '../lib/coverSources.js';
+import { sourcesEnPanne, messageRechercheCapas, accordEdition, motsEditeur, anneeDe } from '../lib/coverSources.js';
 
 const FORM = readFileSync(new URL('../pages/catalogacao/BookDraftForm.jsx', import.meta.url), 'utf8');
 
@@ -68,6 +72,70 @@ describe('messageRechercheCapas', () => {
 
   it('des candidates, tout a répondu : rien à dire', () => {
     expect(messageRechercheCapas({ candidates: [{}], sources: [] })).toBeNull();
+  });
+});
+
+describe('accordEdition — l’édition que désigne l’ISBN, confrontée à la notice', () => {
+  const ak2004 = { edition: { annee: '2004', editeurs: ['AK Press'] } };
+
+  it('le cas réel : notice Ramparts Press 1971, ISBN de l’édition AK Press 2004 → écart, les deux nommées', () => {
+    expect(accordEdition(ak2004, { ano: '1971', editora: 'Ramparts Press' })).toEqual({
+      statut: 'ecart', ecartAnnee: true, ecartEditeur: true,
+      trouvee: 'AK Press, 2004', notice: 'Ramparts Press, 1971',
+    });
+  });
+
+  it('même éditeur, années éloignées (réimpression sous le même ISBN ?) → écart d’année seul', () => {
+    const a = accordEdition({ edition: { annee: '2002', editeurs: ['Cultrix'] } }, { ano: '2007', editora: 'Editora Cultrix' });
+    expect(a).toMatchObject({ statut: 'ecart', ecartAnnee: true, ecartEditeur: false });
+  });
+
+  it('la bonne notice → concordant', () => {
+    expect(accordEdition(ak2004, { ano: '2004', editora: 'AK Press' })).toMatchObject({ statut: 'concordant' });
+  });
+
+  it('un an d’écart est toléré (dépôt légal, fin d’année)', () => {
+    expect(accordEdition({ edition: { annee: '1986', editeurs: [] } }, { ano: '1987', editora: '' }))
+      .toMatchObject({ statut: 'concordant', ecartAnnee: false });
+  });
+
+  it('les mots génériques et les accents ne comptent pas', () => {
+    const imaginario = { edition: { annee: '2010', editeurs: ['Imaginario'] } };
+    expect(accordEdition(imaginario, { ano: '2010', editora: 'Editora Imaginário' })).toMatchObject({ statut: 'concordant' });
+    const letras = { edition: { annee: '1998', editeurs: ['Companhia das Letras'] } };
+    expect(accordEdition(letras, { ano: '1998', editora: 'Cia. das Letras' })).toMatchObject({ statut: 'concordant' });
+  });
+
+  it('rien à comparer → inconnu (ni certitude, ni alarme)', () => {
+    expect(accordEdition(ak2004, { ano: '', editora: '' })).toMatchObject({ statut: 'inconnu' });
+    expect(accordEdition({ edition: { annee: null, editeurs: [] } }, { ano: '1971', editora: 'Ramparts Press' }))
+      .toMatchObject({ statut: 'inconnu' });
+  });
+
+  it('une candidate trouvée par titre n’a pas d’édition à confronter', () => {
+    expect(accordEdition({ source: 'openlibrary', label: 'x' }, { ano: '1971' })).toBeNull();
+  });
+
+  it('outils : années libres et mots d’éditeur', () => {
+    expect(anneeDe('[c1971]')).toBe(1971);
+    expect(anneeDe('0200')).toBeNull();
+    expect([...motsEditeur("Éditions L'Harmattan")]).toEqual(['harmattan']);
+    expect([...motsEditeur('L&PM Editores')]).toEqual(['pm']);
+  });
+});
+
+describe('BookDraftForm — galerie : l’écart d’édition est dit', () => {
+  it('chaque candidate est confrontée à l’année et à l’éditeur de la notice', () => {
+    expect(FORM).toMatch(/accordEdition\(c, \{ ano: f\('ano'\), editora: f\('editora'\) \}\)/);
+  });
+
+  it('un écart s’affiche au-dessus des vignettes, avec les deux éditions', () => {
+    expect(FORM).toMatch(/t\(\{ id: 'catalogacao\.ui\.coverIsbnEcart' \}, \{ trouvee: ecartCapas\.trouvee/);
+  });
+
+  it('la vignette en écart porte « À vérifier », la concordante « ISBN concordant »', () => {
+    expect(FORM).toContain("t({ id: 'catalogacao.ui.coverIsbnVerifier' })");
+    expect(FORM).toContain("t({ id: 'catalogacao.ui.coverIsbnConcordant' })");
   });
 });
 

@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "The batch was not deleted: deleting it is up to a coordination whose libraries hold all its drafts, or to the network administration.",
   "error.batch.other_authors": "This batch contains authority drafts created by other people: you cannot publish the whole batch. Publish yours one by one, or ask the network administration.",
   "catalogacao.batchTrashedLeft": "{count} discarded draft(s) from another library or another person remain in their trash, detached from the batch: permanently deleting them is not up to you.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} manually entered copy draft(s) from another library, or with no library, left the batch: they stay in the queue, outside any batch."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} manually entered copy draft(s) from another library, or with no library, left the batch: they stay in the queue, outside any batch.",
+  "catalogacao.ui.coverIsbnEcart": "This ISBN points to the edition {trouvee}; the record says {notice}. A reprint, another edition or a wrong ISBN: check before choosing this cover.",
+  "catalogacao.ui.coverIsbnVerifier": "To check",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN matches",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }

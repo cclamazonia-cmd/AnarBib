@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "El lote no se eliminó: su eliminación corresponde a una coordinación cuyas bibliotecas tienen todos sus borradores, o a la administración de la red.",
   "error.batch.other_authors": "Este lote contiene borradores de autoridad creados por otras personas: no puedes publicar el lote entero. Publica los tuyos uno a uno, o pídeselo a la administración de la red.",
   "catalogacao.batchTrashedLeft": "{count} borrador(es) descartado(s) de otra biblioteca o de otra persona siguen en su papelera, fuera del lote: su eliminación definitiva no te corresponde.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} ejemplar(es) registrado(s) de otra biblioteca, o sin biblioteca, salieron del lote: siguen en la cola, fuera del lote."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} ejemplar(es) registrado(s) de otra biblioteca, o sin biblioteca, salieron del lote: siguen en la cola, fuera del lote.",
+  "catalogacao.ui.coverIsbnEcart": "Este ISBN corresponde a la edición {trouvee}; el registro indica {notice}. Reimpresión, otra edición o ISBN erróneo: verifica antes de elegir esta portada.",
+  "catalogacao.ui.coverIsbnVerifier": "Por verificar",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN coincide",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }

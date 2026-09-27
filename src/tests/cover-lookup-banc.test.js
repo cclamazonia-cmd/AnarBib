@@ -53,6 +53,8 @@ const image = (type) => new Response(new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 1, 
 const OL_LIVRES = {
   '1904859062': {
     title: 'Post-scarcity anarchism',
+    publish_date: '2004',
+    publishers: [{ name: 'AK Press' }],
     cover: {
       small: 'https://covers.openlibrary.org/b/id/951719-S.jpg',
       medium: 'https://covers.openlibrary.org/b/id/951719-M.jpg',
@@ -66,7 +68,7 @@ const INVENTAIRE = {
 };
 
 /** Open Library et Inventaire tels qu'ils répondent le 27/09/2026, sauf pannes demandées. */
-function reseau({ olLivres = 200, olRecherche = 200, inventaire = 200 } = {}) {
+function reseau({ olLivres = 200, olRecherche = 200, inventaire = 200, inventaireEditeur = 200 } = {}) {
   const demandes = [];
   const f = async (url) => {
     const u = String(url);
@@ -92,10 +94,16 @@ function reseau({ olLivres = 200, olRecherche = 200, inventaire = 200 } = {}) {
       return e
         ? jsonRep({
           entities: { 'inv:783a': { type: 'edition', image: { url: `/img/entities/${HASH}` },
-            claims: { 'wdt:P1476': [e.titre], 'wdt:P577': [e.date] } } },
+            claims: { 'wdt:P1476': [e.titre], 'wdt:P577': [e.date], 'wdt:P123': ['wd:Q3579383'] } } },
           redirects: { [`isbn:${m[1]}`]: 'inv:783a' },
         })
         : jsonRep({ entities: {}, redirects: {}, notFound: [`isbn:${m[1]}`] });
+    }
+    // L'éditeur, lu à part : ses libellés viennent en désordre, le coréen d'abord.
+    if (u === 'https://inventaire.io/api/entities/by-uris?uris=wd%3AQ3579383') {
+      if (inventaireEditeur !== 200) return jsonRep({}, inventaireEditeur);
+      return jsonRep({ entities: { 'wd:Q3579383': { type: 'publisher',
+        labels: { ko: '아르마탕', fr: "Éditions L'Harmattan", en: "L'Harmattan" } } }, redirects: {} });
     }
     if (u.startsWith('https://covers.openlibrary.org/b/id/')) return image('image/jpeg');
     if (u.startsWith('https://inventaire.io/img/entities/')) return image('image/webp');
@@ -127,6 +135,16 @@ describe('cover_lookup — les voies exactes (ISBN)', () => {
     expect(source(r, 'openlibrary')).toMatchObject({ ok: true, count: 1 });
   });
 
+  it('la candidate dit QUELLE édition l’ISBN désigne (éditeur, année) — c’est ce que l’écran confronte à la notice', async () => {
+    // Le cas réel du 27/09 : BTL-TL-002335 (Ramparts Press, 1971) porte cet ISBN,
+    // qui est celui de l'édition AK Press de 2004.
+    const { r } = await chercher({ isbn: '1904859062', title: 'Post-Scarcity Anarchism' });
+    expect(r.candidates[0]).toMatchObject({
+      label: 'Post-scarcity anarchism · AK Press, 2004',
+      edition: { annee: '2004', editeurs: ['AK Press'] },
+    });
+  });
+
   it('une correspondance exacte suffit : pas d’à-peu-près par titre derrière une certitude', async () => {
     const { r, net } = await chercher({ isbn: '1904859062', title: 'Post Scarcity Anarchism', author: 'BOOKCHIN, Murray' });
     expect(net.vers(RECHERCHE_OL)).toHaveLength(0);
@@ -139,11 +157,22 @@ describe('cover_lookup — les voies exactes (ISBN)', () => {
     expect(c).toMatchObject({
       fullUrl: `https://inventaire.io/img/entities/${HASH}`,
       thumbnailUrl: `https://inventaire.io/img/entities/200x300/${HASH}`,
-      label: "L'anarchisme aujourd'hui (2007)",
+      // L'éditeur est une référence lue à part ; son libellé coréen vient en
+      // premier, on prend celui d'une langue du réseau.
+      label: "L'anarchisme aujourd'hui · Éditions L'Harmattan, 2007",
+      edition: { annee: '2007', editeurs: ["Éditions L'Harmattan"] },
       license: null,
     });
     expect(c.thumbnailData).toMatch(/^data:image\/webp;base64,/);
     expect(net.vers(RECHERCHE_OL)).toHaveLength(0);
+  });
+
+  it('l’éditeur d’Inventaire illisible : la candidate reste, seule son année est dite', async () => {
+    const { r } = await chercher({ isbn: '9782296035072' }, { inventaireEditeur: 500 });
+    expect(r.candidates.find((x) => x.source === 'inventaire')).toMatchObject({
+      label: "L'anarchisme aujourd'hui · 2007",
+      edition: { annee: '2007', editeurs: [] },
+    });
   });
 
   it('Inventaire accepte aussi un ISBN-10', async () => {
@@ -216,6 +245,15 @@ describe('_shared/capas/sources.ts', () => {
     const { isbnValide } = mod();
     for (const bon of ['1904859062', '857164165X', '9782296035072', '2296035078']) expect(isbnValide(bon), bon).toBe(true);
     for (const faux of ['9782296035073', '1904859063', '12345', '97822960350721', 'X857164165', '']) expect(isbnValide(faux), faux).toBe(false);
+  });
+
+  it('anneeDe : la première année plausible d’une date libre', () => {
+    const { anneeDe } = mod();
+    expect(anneeDe('March 2004')).toBe('2004');
+    expect(anneeDe('c1971')).toBe('1971');
+    expect(anneeDe('2015-10-09')).toBe('2015');
+    expect(anneeDe('0200')).toBeNull();
+    expect(anneeDe(undefined)).toBeNull();
   });
 
   it('motsDeRecherche : les opérateurs de requête deviennent des espaces, le reste ne bouge pas', () => {

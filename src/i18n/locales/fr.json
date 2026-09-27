@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "Le lot n’a pas été supprimé : sa suppression revient à une coordination dont les bibliothèques détiennent tous ses brouillons, ou à l’administration du réseau.",
   "error.batch.other_authors": "Ce lot contient des brouillons d’autorité créés par d’autres personnes : tu ne peux pas publier tout le lot. Publie les tiens un par un, ou demande à l’administration du réseau.",
   "catalogacao.batchTrashedLeft": "{count} brouillon(s) jeté(s) d’une autre bibliothèque ou d’une autre personne restent à leur corbeille, détachés du lot : leur suppression définitive ne te revient pas.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} exemplaire(s) saisi(s) d’une autre bibliothèque, ou sans bibliothèque, sont sortis du lot : ils restent dans la file, hors lot."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} exemplaire(s) saisi(s) d’une autre bibliothèque, ou sans bibliothèque, sont sortis du lot : ils restent dans la file, hors lot.",
+  "catalogacao.ui.coverIsbnEcart": "Cet ISBN désigne l'édition {trouvee} ; la notice indique {notice}. Réimpression, autre édition ou ISBN erroné : vérifie avant de retenir cette couverture.",
+  "catalogacao.ui.coverIsbnVerifier": "À vérifier",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN concordant",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }

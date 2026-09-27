@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "Il lotto non è stato eliminato: eliminarlo spetta a un coordinamento le cui biblioteche detengono tutte le sue bozze, o all’amministrazione della rete.",
   "error.batch.other_authors": "Questo lotto contiene bozze d’autorità create da altre persone: non puoi pubblicare l’intero lotto. Pubblica le tue una per una, o chiedi all’amministrazione della rete.",
   "catalogacao.batchTrashedLeft": "{count} bozza/e scartata/e di un’altra biblioteca o di un’altra persona restano nel loro cestino, fuori dal lotto: l’eliminazione definitiva non spetta a te.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} esemplare/i inserito/i di un’altra biblioteca, o senza biblioteca, sono usciti dal lotto: restano nella coda, fuori dal lotto."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} esemplare/i inserito/i di un’altra biblioteca, o senza biblioteca, sono usciti dal lotto: restano nella coda, fuori dal lotto.",
+  "catalogacao.ui.coverIsbnEcart": "Questo ISBN corrisponde all'edizione {trouvee}; la scheda indica {notice}. Ristampa, altra edizione o ISBN errato: verifichi prima di scegliere questa copertina.",
+  "catalogacao.ui.coverIsbnVerifier": "Da verificare",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN coincide",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }

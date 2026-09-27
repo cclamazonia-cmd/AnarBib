@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "De reeks is niet verwijderd: dat is aan een coördinatie waarvan de bibliotheken al haar concepten hebben, of aan het netwerkbeheer.",
   "error.batch.other_authors": "Deze reeks bevat autoriteitsconcepten van andere personen: je kunt niet de hele reeks publiceren. Publiceer de jouwe een voor een, of vraag het netwerkbeheer.",
   "catalogacao.batchTrashedLeft": "{count} weggegooid(e) concept(en) van een andere bibliotheek of persoon blijven in hun prullenbak, los van de reeks: definitief verwijderen is niet aan jou.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} ingevoerd(e) exemplaar(en) van een andere bibliotheek, of zonder bibliotheek, hebben de reeks verlaten: ze blijven in de wachtrij, buiten de reeks."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} ingevoerd(e) exemplaar(en) van een andere bibliotheek, of zonder bibliotheek, hebben de reeks verlaten: ze blijven in de wachtrij, buiten de reeks.",
+  "catalogacao.ui.coverIsbnEcart": "Dit ISBN hoort bij de uitgave {trouvee}; de fiche vermeldt {notice}. Herdruk, andere uitgave of fout ISBN: controleer dit voordat je deze omslag kiest.",
+  "catalogacao.ui.coverIsbnVerifier": "Te controleren",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN klopt",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }

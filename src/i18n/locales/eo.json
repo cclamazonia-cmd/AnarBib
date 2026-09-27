@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "La aro ne estis forigita: tio apartenas al kunordigo, kies bibliotekoj tenas ĉiujn ĝiajn malnetojn, aŭ al la reta administrado.",
   "error.batch.other_authors": "Ĉi tiu aro enhavas aŭtoritatajn malnetojn de aliaj personoj: vi ne povas publikigi la tutan aron. Publikigu viajn unu post la alia, aŭ petu la retan administradon.",
   "catalogacao.batchTrashedLeft": "{count} forĵetita(j) malneto(j) de alia biblioteko aŭ de alia persono restas en sia rubujo, apartigita(j) de la aro: la definitiva forigo ne apartenas al vi.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} enigita(j) ekzemplero(j) de alia biblioteko, aŭ sen biblioteko, eliris el la aro: ili restas en la vico, ekster la aro."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} enigita(j) ekzemplero(j) de alia biblioteko, aŭ sen biblioteko, eliris el la aro: ili restas en la vico, ekster la aro.",
+  "catalogacao.ui.coverIsbnEcart": "Ĉi tiu ISBN respondas al la eldono {trouvee}; la katalogero indikas {notice}. Represo, alia eldono aŭ erara ISBN: kontrolu antaŭ ol elekti ĉi tiun kovrilon.",
+  "catalogacao.ui.coverIsbnVerifier": "Kontrolinda",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN kongruas",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }

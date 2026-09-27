@@ -12,7 +12,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { writeCoverThumb, removeCoverThumb } from '@/lib/coverThumbs';
-import { messageRechercheCapas } from '@/lib/coverSources';
+import { messageRechercheCapas, accordEdition } from '@/lib/coverSources';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
@@ -725,6 +725,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ── Cover preview URL ──────────────────────────────────
   const coverDisplayUrl = coverPreviewUrl
     || (f('cover_object_path') ? `${SUPABASE_URL}/storage/v1/object/public/covers/${f('cover_object_path')}` : '');
+
+  // Capas : l'édition que désigne l'ISBN de chaque candidate, confrontée à la
+  // notice (lib/coverSources.js). Un écart est dit au-dessus de la galerie et sur
+  // la vignette : la candidate n'est plus présentée comme certaine. Vu le 27/09 :
+  // une notice Ramparts Press 1971 portait l'ISBN de l'édition AK Press de 2004.
+  const accordsCapas = coverCandidates.map((c) => accordEdition(c, { ano: f('ano'), editora: f('editora') }));
+  const ecartCapas = accordsCapas.find((a) => a?.statut === 'ecart') || null;
 
   // ═══════════════════════════════════════════════════════
   // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, DNB, ICCU, LoC, OL, Wikidata + BN Brasil)
@@ -2690,6 +2697,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             {coverCandidates.length > 0 && (
               <div style={{ marginBottom: 10, padding: 10, borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.08)' }}>
                 <div style={{ fontSize: '.75rem', fontWeight: 700, marginBottom: 6 }}>{t({id:'catalogacao.ui.coverGalleryTitle'})}</div>
+                {ecartCapas && (
+                  <div role="alert" style={{ fontSize: '.72rem', lineHeight: 1.4, color: '#fbbf24', marginBottom: 8 }}>
+                    {t({ id: 'catalogacao.ui.coverIsbnEcart' }, { trouvee: ecartCapas.trouvee || '?', notice: ecartCapas.notice || '?' })}
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {/* `label` = ce que la source dit avoir trouvé (titre, auteur·rices,
                       année). Sur une correspondance par titre, elle est FLOUE : Open
@@ -2699,7 +2711,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   {coverCandidates.map((c, i) => (
                     <button key={i} type="button" title={[c.label, c.source, c.license].filter(Boolean).join(' · ')}
                       onClick={() => selectCoverCandidate(c)} disabled={!!coverStoring}
-                      style={{ padding: 0, border: '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
+                      style={{ padding: 0, border: accordsCapas[i]?.statut === 'ecart' ? '1px solid #fbbf24' : '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
                       {/* Aperçu rapatrié par l'EF (data: URI), jamais l'URL du
                           tiers : afficher `c.thumbnailUrl` ferait contacter
                           Open Library ou Google par le navigateur qui catalogue,
@@ -2708,6 +2720,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       {c.thumbnailData
                         ? <img src={c.thumbnailData} alt={c.source} style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: '6px 6px 0 0', display: 'block' }} />
                         : <div aria-hidden="true" style={{ width: '100%', height: 96, borderRadius: '6px 6px 0 0', background: 'rgba(255,255,255,.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', opacity: .35 }}>📖</div>}
+                      {/* Candidate trouvée par ISBN : son édition concorde-t-elle
+                          avec la notice ? Rien pour une candidate trouvée par titre. */}
+                      {accordsCapas[i] && (
+                        <div style={{ fontSize: '.55rem', fontWeight: 700, padding: '1px 3px 0', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                          color: accordsCapas[i].statut === 'ecart' ? '#fbbf24' : accordsCapas[i].statut === 'concordant' ? '#4ade80' : 'var(--brand-muted, #aaa)' }}>
+                          {accordsCapas[i].statut === 'ecart' ? t({ id: 'catalogacao.ui.coverIsbnVerifier' })
+                            : accordsCapas[i].statut === 'concordant' ? t({ id: 'catalogacao.ui.coverIsbnConcordant' })
+                            : t({ id: 'catalogacao.ui.coverIsbnSeul' })}
+                        </div>
+                      )}
                       <div style={{ fontSize: '.58rem', color: 'var(--brand-muted, #aaa)', padding: '2px 3px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {/* Le titre trouvé plutôt que la source : depuis le retrait de
                             Google, la source est presque toujours la même, alors que

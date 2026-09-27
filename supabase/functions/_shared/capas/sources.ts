@@ -72,6 +72,32 @@ export interface Candidate {
    * retenir.
    */
   label?: string;
+  /**
+   * Voies ISBN seulement : l'ÉDITION que l'ISBN désigne chez la source. L'écran
+   * la confronte à la notice (lib/coverSources.js, accordEdition). Pourquoi
+   * (27/09/2026) : la notice BTL-TL-002335 décrit Ramparts Press, 1971, mais
+   * porte l'ISBN de l'édition AK Press de 2004 ; la galerie, qui tenait l'ISBN
+   * pour certain et n'affichait que le titre, a proposé la couverture de 2004.
+   */
+  edition?: EditionTrouvee;
+}
+
+export interface EditionTrouvee {
+  /** Année sur quatre chiffres, telle que la source la date. */
+  annee: string | null;
+  /** Éditeur·rices tel·les que la source les nomme (trois au plus). */
+  editeurs: string[];
+}
+
+/** Première année plausible (1500–2099) d'un texte de date libre : « March 2004 », « c1971 ». */
+export function anneeDe(texte: unknown): string | null {
+  const m = String(texte ?? '').match(/(1[5-9]|20)\d{2}/);
+  return m ? m[0] : null;
+}
+
+/** « AK Press, 2004 » — ce qu'on lit sous la vignette et dans l'avertissement. */
+export function designationEdition(edition: EditionTrouvee): string {
+  return [edition.editeurs.join(', '), edition.annee].filter(Boolean).join(', ');
 }
 
 // ── ISBN ───────────────────────────────────────────────────────────────────
@@ -110,10 +136,18 @@ export async function fromOpenLibraryIsbn(isbn: string): Promise<Candidate[]> {
   const full = cover.large || cover.medium || cover.small;
   const thumb = cover.medium || cover.small || cover.large;
   if (!full) return [];
+  const edition: EditionTrouvee = {
+    annee: anneeDe(entry?.publish_date),
+    editeurs: (Array.isArray(entry?.publishers) ? entry.publishers : [])
+      .map((p: { name?: unknown }) => String(p?.name ?? '').trim())
+      .filter(Boolean)
+      .slice(0, 3),
+  };
   // Couvertures Open Library : licence non garantie -> null (à vérifier humain).
   return [{
     thumbnailUrl: thumb, fullUrl: full, source: 'openlibrary', license: null,
-    label: entry?.title ? String(entry.title) : undefined,
+    label: [entry?.title ? String(entry.title) : '', designationEdition(edition)].filter(Boolean).join(' · ') || undefined,
+    edition,
   }];
 }
 
@@ -131,12 +165,14 @@ export async function fromInventaireIsbn(isbn: string): Promise<Candidate[]> {
   const res = await fetchWithTimeout(url, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
-  const edition = data?.entities?.[data?.redirects?.[uri] || uri];
-  const m = String(edition?.image?.url || '').match(IMAGE_INVENTAIRE);
+  const fiche = data?.entities?.[data?.redirects?.[uri] || uri];
+  const m = String(fiche?.image?.url || '').match(IMAGE_INVENTAIRE);
   if (!m) return [];
-  const titre = edition?.claims?.['wdt:P1476']?.[0];
-  const date = edition?.claims?.['wdt:P577']?.[0];
-  const annee = date ? String(date).slice(0, 4) : '';
+  const titre = fiche?.claims?.['wdt:P1476']?.[0];
+  const edition: EditionTrouvee = {
+    annee: anneeDe(fiche?.claims?.['wdt:P577']?.[0]),
+    editeurs: await libellesEditeurs(fiche?.claims?.['wdt:P123']),
+  };
   return [{
     // Aperçu : image réduite servie par Inventaire (WebP d'une dizaine de ko),
     // sous le plafond d'aperçu ; la capa retenue est l'image pleine (JPEG).
@@ -145,8 +181,33 @@ export async function fromInventaireIsbn(isbn: string): Promise<Candidate[]> {
     source: 'inventaire',
     // Données CC0 ; la licence de l'IMAGE, elle, n'est pas dite : à vérifier.
     license: null,
-    label: titre ? `${titre}${annee ? ` (${annee})` : ''}` : undefined,
+    label: [titre ? String(titre) : '', designationEdition(edition)].filter(Boolean).join(' · ') || undefined,
+    edition,
   }];
+}
+
+// L'éditeur d'une édition Inventaire est une RÉFÉRENCE (wd:Q…, inv:…) : son nom
+// se lit en un appel de plus, seulement quand l'édition a une couverture. Ses
+// libellés existent en plusieurs langues, parfois d'abord en coréen ou en
+// arabe : on préfère une langue du réseau. Un échec ne coûte que le nom.
+const LANGUES_LIBELLE = ['fr', 'en', 'es', 'pt', 'it', 'de', 'ca', 'nl', 'eo'];
+
+async function libellesEditeurs(uris: unknown): Promise<string[]> {
+  const liste = (Array.isArray(uris) ? uris : []).map(String).filter(Boolean).slice(0, 2);
+  if (!liste.length) return [];
+  try {
+    const url = `${INVENTAIRE}/api/entities/by-uris?uris=${liste.map(encodeURIComponent).join('|')}`;
+    const res = await fetchWithTimeout(url, { headers: { Accept: 'application/json' } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return liste.map((u) => {
+      const labels = data?.entities?.[data?.redirects?.[u] || u]?.labels || {};
+      const langue = LANGUES_LIBELLE.find((l) => labels[l]);
+      return String(langue ? labels[langue] : Object.values(labels)[0] ?? '').trim();
+    }).filter(Boolean);
+  } catch {
+    return [];
+  }
 }
 
 // ── Source 2 : Open Library par titre + auteur ─────────────────────────────

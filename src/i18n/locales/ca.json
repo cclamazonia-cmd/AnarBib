@@ -6832,5 +6832,9 @@
   "catalogacao.batchDeleteNothing": "El lot no s’ha suprimit: suprimir-lo correspon a una coordinació les biblioteques de la qual tenen tots els seus esborranys, o a l’administració de la xarxa.",
   "error.batch.other_authors": "Aquest lot conté esborranys d’autoritat creats per altres persones: no pots publicar tot el lot. Publica els teus un per un, o demana-ho a l’administració de la xarxa.",
   "catalogacao.batchTrashedLeft": "{count} esborrany(s) descartat(s) d’una altra biblioteca o d’una altra persona continuen a la seva paperera, fora del lot: la supressió definitiva no et correspon.",
-  "catalogacao.batch.reassign.warn.itemsDetached": "{count} exemplar(s) introduït(s) d’una altra biblioteca, o sense biblioteca, han sortit del lot: continuen a la cua, fora del lot."
+  "catalogacao.batch.reassign.warn.itemsDetached": "{count} exemplar(s) introduït(s) d’una altra biblioteca, o sense biblioteca, han sortit del lot: continuen a la cua, fora del lot.",
+  "catalogacao.ui.coverIsbnEcart": "Aquest ISBN correspon a l'edició {trouvee}; la fitxa indica {notice}. Reimpressió, una altra edició o ISBN erroni: verifiqueu-ho abans de triar aquesta coberta.",
+  "catalogacao.ui.coverIsbnVerifier": "Cal verificar",
+  "catalogacao.ui.coverIsbnConcordant": "ISBN coincident",
+  "catalogacao.ui.coverIsbnSeul": "ISBN"
 }
