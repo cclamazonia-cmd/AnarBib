@@ -403,7 +403,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Vérifié : 27/09 — politiques lues dans le baseline ; aucune migration ultérieure ne les redéfinit.*
 
-**Ce que c'est.** Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin.
+**Ce que c'est.** Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin. **Tranché le 27/09 par Xavier (REGISTRE `CAT-E18`)** : *(1)* un brouillon sans bibliothèque appartient à celle de l'adhésion de staff active de qui l'a créé — sans le repli sur qui publie, qui rendrait tout visible —, sinon à son créateur et à l'administration ; *(2)* les brouillons d'autorités restent lisibles par toute personne qui catalogue, modifiables par qui les a créés et par l'administration ; *(3)* le mutirão passe par une adhésion temporaire dans la bibliothèque hôte, à laquelle appartiennent ses brouillons.
 
 **Pourquoi ça compte.** Risque de casser des gestes aujourd'hui ouverts (file de catalogage multi-bibliothèques, fusions, corbeille, étiquettes) : une restriction de lecture qui masque une ligne rend des mises à jour silencieusement nulles. Avancer table par table, avec une suite SQL par rôle.
 
@@ -411,11 +411,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 - Une bibliothécaire de A ne lit ni ne modifie un brouillon de B (notice, exemplaire), par l'API comme par les RPC.
 - L'administration du réseau garde la vue et l'action sur tout.
-- Les trois questions à trancher sont écrites au REGISTRE.
+- Les trois questions tranchées le 27/09 (`CAT-E18`) sont réalisées telles qu'écrites.
 
 **Dépendances.** Après la livraison de H19 (même zone, colonnes neuves de `exemplar_drafts`).
 
-*Renvois : `supabase/migrations/20260510000000_baseline_live.sql` · `supabase/migrations/20260927113000_h19_exemplaires_importes.sql`*
+*Renvois : `supabase/migrations/20260510000000_baseline_live.sql` · `supabase/migrations/20260927113000_h19_exemplaires_importes.sql` · `docs/specs/REGISTRE_decisions.md`*
 
 ---
 

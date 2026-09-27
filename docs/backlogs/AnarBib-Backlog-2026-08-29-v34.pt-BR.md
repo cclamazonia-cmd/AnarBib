@@ -403,7 +403,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Verificado : 27/09 — políticas lidas no baseline.*
 
-**O que é.** Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir.
+**O que é.** Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir. **Decidido em 27/09 por Xavier (REGISTRO `CAT-E18`)**: *(1)* rascunho sem biblioteca = biblioteca da adesão de staff ativa de quem o criou (sem o recurso a quem publica), senão quem o criou e a administração; *(2)* rascunhos de autoridade: leitura comum, escrita por quem criou e pela administração; *(3)* mutirão por adesão temporária na biblioteca anfitriã, dona dos rascunhos.
 
 **Por que importa.** Risco de quebrar gestos hoje abertos: uma restrição de leitura torna atualizações silenciosamente nulas. Avançar tabela por tabela.
 
@@ -411,11 +411,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 - Uma bibliotecária de A não lê nem modifica um rascunho de B.
 - A administração da rede mantém tudo.
-- As questões decididas estão no REGISTRO.
+- As três questões decididas em 27/09 (`CAT-E18`) estão realizadas como escritas.
 
 **Dependências.** Depois da entrega de H19.
 
-*Remissões : `supabase/migrations/20260510000000_baseline_live.sql` · `supabase/migrations/20260927113000_h19_exemplaires_importes.sql`*
+*Remissões : `supabase/migrations/20260510000000_baseline_live.sql` · `supabase/migrations/20260927113000_h19_exemplaires_importes.sql` · `docs/specs/REGISTRE_decisions.md`*
 
 ---
 

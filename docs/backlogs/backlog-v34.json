@@ -2594,8 +2594,8 @@
         "pt": "Levantado em 27/09 na revisão de H19: as políticas de `author_drafts`, `book_drafts` e `exemplar_drafts` só exigem `can_access_catalogacao`, **sem nenhum escopo de biblioteca**, em leitura e escrita. **Regra de Xavier (27/09)**: possível para quem cataloga e é admin da rede, não para coordenação nem bibliotecária."
       },
       "w": {
-        "fr": "Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin.",
-        "pt": "Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir."
+        "fr": "Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin. **Tranché le 27/09 par Xavier (REGISTRE `CAT-E18`)** : *(1)* un brouillon sans bibliothèque appartient à celle de l'adhésion de staff active de qui l'a créé — sans le repli sur qui publie, qui rendrait tout visible —, sinon à son créateur et à l'administration ; *(2)* les brouillons d'autorités restent lisibles par toute personne qui catalogue, modifiables par qui les a créés et par l'administration ; *(3)* le mutirão passe par une adhésion temporaire dans la bibliothèque hôte, à laquelle appartiennent ses brouillons.",
+        "pt": "Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir. **Decidido em 27/09 por Xavier (REGISTRO `CAT-E18`)**: *(1)* rascunho sem biblioteca = biblioteca da adesão de staff ativa de quem o criou (sem o recurso a quem publica), senão quem o criou e a administração; *(2)* rascunhos de autoridade: leitura comum, escrita por quem criou e pela administração; *(3)* mutirão por adesão temporária na biblioteca anfitriã, dona dos rascunhos."
       },
       "y": {
         "fr": "Risque de casser des gestes aujourd'hui ouverts (file de catalogage multi-bibliothèques, fusions, corbeille, étiquettes) : une restriction de lecture qui masque une ligne rend des mises à jour silencieusement nulles. Avancer table par table, avec une suite SQL par rôle.",
@@ -2605,12 +2605,12 @@
         "fr": [
           "Une bibliothécaire de A ne lit ni ne modifie un brouillon de B (notice, exemplaire), par l'API comme par les RPC.",
           "L'administration du réseau garde la vue et l'action sur tout.",
-          "Les trois questions à trancher sont écrites au REGISTRE."
+          "Les trois questions tranchées le 27/09 (`CAT-E18`) sont réalisées telles qu'écrites."
         ],
         "pt": [
           "Uma bibliotecária de A não lê nem modifica um rascunho de B.",
           "A administração da rede mantém tudo.",
-          "As questões decididas estão no REGISTRO."
+          "As três questões decididas em 27/09 (`CAT-E18`) estão realizadas como escritas."
         ]
       },
       "dep": {
@@ -2619,7 +2619,8 @@
       },
       "r": [
         "supabase/migrations/20260510000000_baseline_live.sql",
-        "supabase/migrations/20260927113000_h19_exemplaires_importes.sql"
+        "supabase/migrations/20260927113000_h19_exemplaires_importes.sql",
+        "docs/specs/REGISTRE_decisions.md"
       ],
       "verif": {
         "fr": "27/09 — politiques lues dans le baseline ; aucune migration ultérieure ne les redéfinit.",
