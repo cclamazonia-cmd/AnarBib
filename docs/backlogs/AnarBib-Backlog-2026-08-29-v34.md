@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-27** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-27** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,7 +17,7 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 4
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 3
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-27.** **50 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C9, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-27.** **49 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -516,7 +516,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Décision collective |
-| **C9** | Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main | `P2` | Ouvert |
 | **C10** | Renommer l'une des deux colonnes `rights_status` | `P2` | Ouvert |
 
 #### C3 — Mener la revue humaine des autorités : patronymes, casse, titres
@@ -561,29 +560,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Prérequis de la seconde passe de **C3**.
 
 *Renvois : `AUDIT_conventions_catalographiques_2026-08-20 A5` · `REGISTRE §37 CONV-7`*
-
-#### C9 — Les huit questions des conventions sont tranchées : reste une clé, un rafraîchissement et cinq gestes à la main
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie
-
-**État.** `CONV-6` reste « à confirmer » et `CONV-O1` à `CONV-O8` sont ouverts. Deux d'entre eux portent du travail chiffré : `CONV-O7` (le type d'autorité existe mais reste illisible par le SQL — **16 verdicts de collectivités restent à poser**) et `CONV-O8` (la scission d'autorité n'existe pas — **3 découpages restent**).
-
-*Vérifié : 31/08 — sur les 16 verdicts de collectivités, **14 sont posés** (lot `autorite_collectivite` de la file : 14 validés, 2 à revoir) ; `authors.authority_type` porte 19 `collective`, 45 `person`, 1 241 fiches non typées. La scission d'autorité n'existe toujours pas : aucune table ni fonction en base. Rien de mesuré sur les huit questions `CONV-O*` elles-mêmes. **03/09** — un verdict proposé par question dans la page des cinq décisions (O1 oui ; O2 convention provisoire ; O3 = C5 ; O4 pas de bascule sans déclencheur ; O5 le périmètre est la file ; O6 garde stricte + rafraîchissement ; O7 `authority_type` est la vérité ; O8 pas de scission avant la quatrième) ; file : collectivités 14 appliqués, 2 à revoir ; 1 241 autorités non typées. **Recommandé A**. Verdict attendu. **03/09 — tranché : A, les huit.** Passe de « décision » à « ouvert », effort S. **03/09, après-midi** — O5 livré, O6 constaté déjà fait ; il ne reste que f[3], le travail de main (2 collectivités à revoir, 3 découpages), à l'Atelier autorités. **03/09, nuit — f[3] a changé de taille** : l'audit des autorités compte **12 fiches doubles**, pas 3 (trois anciennes non vues, six nées du lot C5) ; le verdict O8 « pas de scission avant la quatrième » est dépassé par les faits et `fn_authority_split` existe depuis la migration 17 — **décision à reprendre** (REGISTRE §37, MàJ 03/09 nuit). Les 2 collectivités à revoir restent ; le lot en reçoit ~36 de plus (motif refait).*
-
-**Ce que c'est.** **Tranché le 03/09 (C9 = A, les huit — `CONV-6`, `CONV-O1..O8` actés au REGISTRE v0.16).** Ce qui reste est du code petit et du travail à la main : **O5** renommer l'intitulé de `/atelier-autoridades` en « file de vérification du catalogue » (une clé, dix locales) ; **O6** rafraîchir `avant` à l'affichage de la file ; **O2** poser les deux verdicts de collectivités « à revoir » ; **O8** traiter à la main les trois fiches doubles (créer, repointer, fusion inverse). `O7` : vérifier que le SQL lit `authority_type` là où il affiche.
-
-**Pourquoi ça compte.** La colonne `name_lang` a été créée nullable et sans contrainte validée : **la créer n'engage rien, l'utiliser oui**. Tant que la question reste ouverte, chaque nouvelle règle d'entrée doit se demander sur quoi elle s'appuie.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** Éclaire **C6**.
-
-*Renvois : `REGISTRE §37 CONV-6, CONV-O1..O8`*
 
 #### C10 — Renommer l'une des deux colonnes `rights_status`
 
@@ -2191,6 +2167,7 @@ CI verte : lint et suite unitaire. |
 | B10 | 2026-09-27 | **Clos le 27/09 au soir, sur pièces : les trois critères tenus, et trois gardes pour qu'ils le restent.** *(1) Policies* — les avis `multiple_permissive_policies` sont résorbés (**25 → 0**, avis relu en production le 27/09). Une permissive par (rôle, commande) sur les 25 tables (`20260927180000`), puis chaque OU ordonné : ce qui ne dépend pas de la ligne d'abord, la lecture publique ensuite, le staff ligne à ligne en dernier (`20260927180030`). Rien n'a changé de qui voit quoi : empreinte md5 des clés visibles, pour `anon` et chacun des 20 comptes réels, **identique sur les 25 tables** avant, après la passe 1 et après la passe 1 bis. Et l'ordre paie : `count(*)` sur `books` sous un compte lecteur **208 → 90 ms**, bibliothécaire 209 → 89 ms, admin réseau **39 → 1,4 ms** ; `exemplares` 177 → 100 ms (lecteur), 40 → 0,9 ms (admin) ; anonyme inchangé. Garde : `policies_permissives_uniques_tests` (33 tests : aucune paire dans aucun schéma, liste fermée vide ; la lecture publique, désormais en deux copies, doit rester identique ; trente lectures et écritures réelles). *(2) Clés étrangères* — **21 indexées** (`20260927180100`) : toutes celles dont le parent est supprimé en exploitation — du 02/09 au 27/09, 146 œuvres, 37 autorités, 21 notices et 2 comptes supprimés, et chaque brouillon purgé coûtait deux parcours complets de la plus grosse table d'import. La liste assumée de B21 passe de **38 à 17**, règle écrite en tête (codes `catalog_ref_*`, bibliothèques, partenaires : des parents qui ne se suppriment pas). *(3) Index* — **22 retirés, raison écrite pour chacun** : 10 redondants jamais empruntés (`20260927180200`) et 12 sans aucun lecteur sur le chemin d'écriture (`20260927180300` : 6 sur `books`, qui en portait 27, 4 sur `book_drafts`, les 3,5 Mo de `idx_shp_endpoint`, un doublon ; son premier essai, tombé dans le `pg_dump` de la sauvegarde hebdomadaire, a été annulé sans rien appliquer et rejoué au run suivant). Garde : `index_redondants_garde_tests` (plus de nouveau redondant ; les 22 redondants empruntés, nommés avec leurs compteurs, se retirent sur mesure). Les 108 index sans lecteur restants sont inventoriés un par un, avec origine et verdict (`docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`). Nés des constats : **B31** (trois lectures anonymes lèvent une erreur au lieu de rendre zéro ligne), **B32** (le catalogue public relit toute sa vue matérialisée à chaque page, et calcule la visibilité ligne à ligne), **B33** (la recherche ne peut emprunter aucun de ses index trigramme), **B34** (l'effacement de compte ne traite pas le journal du catalogue), **I28** (le hook `pre-commit` ne tourne pas dans les worktrees WSL). **Écart tracé** : les cinq migrations enfreignent `DOC-DEPLOY-4` (heure ronde, datées dans le futur), sans collision ni effet d'ordre — audit §7. |
 | D7 | 2026-09-27 | **Clos le 27/09 : décision écrite au REGISTRE (section `ARCH`), avec sa raison** — son seul critère. **Décidé par Xavier** : un **modèle archivistique complet dans AnarBib** (niveaux ISAD(G) fonds, sous-fonds, série, sous-série, dossier, pièce ; producteurs en autorités ISAAR(CPF) ; export EAD dès la première version — `ARCH-1`), un **niveau de description variable selon le fonds** (`ARCH-2`), des **conditions d'accès par niveau dès la première version** (`ARCH-3`), présentés pour avis à DIRA, au CIRA et au FICEDL avant tout code (`ARCH-4`). Réalisation : **D8**. |
 | I3 | 2026-09-27 | **Clos le 27/09 — les quatre tests passent, et trois de plus.** Le routeur `supabase/functions/main/index.ts` lancé seul dans `supabase/edge-runtime:v1.74.0` (la version de `deploy/.env.example`), fonctions et `config.toml` montés comme dans `deploy/compose.yml`, secret JWT tiré au hasard pour l'essai : il démarre (40 fonctions dispensées, 54 montées, aucune dispense orpheline) et décide juste — nom inexistant 404, fonction protégée sans jeton 401, avec un jeton valide la fonction s'exécute (405, sa propre réponse à un GET), jeton signé d'un autre secret 401, jeton expiré 401, chemin sans `/functions/v1` 401 ; une fonction dispensée (`health-probe`) n'est pas bloquée, son travailleur est lancé — il échoue ensuite (500, « supabaseKey is required ») faute de base et de secrets dans le conteneur isolé : **répondre 200 relève de la répétition complète, I21**. *Critère 2* : les 14 fonctions qui exigent un jeton (`attach-received-asset`, `audio_fingerprint_lookup`, `authority_lookup`, `author_portrait_lookup`, `catalog_metadata_lookup`, `cover_lookup`, `deposit-fonds-direct`, `export-catalog-lote`, `export-fonds-bundle`, `geocode`, `mail-i18n-test`, `notify-library-invitation`, `probe-partner-catalog`, `revoke-digital-asset`) sont toutes appelées par l'application avec une session ou, pour `geocode`, le jeton anonyme de la pile auto-hébergée : voulu. L'essai est au dépôt, rejouable : `deploy/scripts/essai-routeur-main.sh` (docker, openssl, curl ; 7/7). |
+| C9 | 2026-09-27 | **Clos le 27/09 — le travail de main qui restait est fait, sur pièces.** *O5/O6* livrés le 03/09 (déjà écrit à la fiche). *O2* : mesuré le 27/09, plus aucune collectivité « à revoir » dans la file (les deux ont été tranchées entre-temps). *O8* : le verdict « pas de scission avant la quatrième » étant dépassé (douze fiches doubles au 03/09), une fiche « qui devient quoi » (`docs/journal/arbitrages/C9_scissions_des_fiches_a_plusieurs_personnes_2026-09-27.md`) a été **validée par Xavier** (« tout, sauf 4955 »), avec, sur sa parole, « Sorel, G. » réuni à « Sorel, Georges ». Migration `20260927193940`, en son propre nom, appliquée par la CI : **dix fiches scindées** — six personnes reliées à leur fiche existante (Gurucharri, Ibáñez, Philopat, Biehl, Bookchin, Sacchetti), deux fiches doubles fusionnées puis supprimées, dix fiches créées —, rôle organizador pour les deux ouvrages « (orgs.) » ; Ludmila et Silvério sans « (et al.) » ni capitales ; Noir et Rouge en collectivité ; **trois fusions** au journal (`merged_by` nul, motif écrit). Recherche demandée par Xavier des « Prénom Nom & Prénom Nom » : aucune autre fiche publiée, mais **dix brouillons** (lots 8 et 63) qui en auraient créé à la publication — ils portent désormais une contribution par personne (25), reliée à l'autorité existante quand il y en a une. Vérifié en production le soir même. |
 
 ---
 
@@ -2222,4 +2199,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
