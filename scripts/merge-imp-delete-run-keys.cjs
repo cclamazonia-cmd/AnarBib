@@ -22,7 +22,7 @@ const KEYS = {
   en: K('Delete run', 'Delete run #{id} and its file? Drafts already created are kept.', 'Deleting…', 'Run deleted.'),
   it: K('Elimina l’elaborazione', 'Eliminare l’elaborazione #{id} e il suo file? Le bozze già create vengono mantenute.', 'Eliminazione…', 'Elaborazione eliminata.'),
   de: K('Lauf löschen', 'Lauf #{id} und seine Datei löschen? Bereits erstellte Entwürfe bleiben erhalten.', 'Wird gelöscht…', 'Lauf gelöscht.'),
-  ca: K('Suprimeix el tractament', 'Voleu suprimir el tractament #{id} i el seu fitxer? Els esborranys ja creats es conserven.', 'S’està suprimint…', 'Tractament suprimit.'),
+  ca: K('Suprimeix el tractament', 'Vols suprimir el tractament #{id} i el seu fitxer? Els esborranys ja creats es conserven.', 'S’està suprimint…', 'Tractament suprimit.'),
   eo: K('Forigi la traktadon', 'Ĉu forigi la traktadon #{id} kaj ĝian dosieron? La jam kreitaj malnetoj restas.', 'Forigado…', 'Traktado forigita.'),
   nl: K('Run verwijderen', 'Run #{id} en het bestand verwijderen? Reeds aangemaakte concepten blijven behouden.', 'Bezig met verwijderen…', 'Run verwijderd.'),
   el: K('Διαγραφή επεξεργασίας', 'Διαγραφή της επεξεργασίας #{id} και του αρχείου της; Τα προσχέδια που έχουν ήδη δημιουργηθεί διατηρούνται.', 'Διαγραφή…', 'Η επεξεργασία διαγράφηκε.'),

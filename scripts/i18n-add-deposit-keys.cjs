@@ -186,7 +186,7 @@ const KEYS = {
     'pt-BR': 'Desativar esta regra de caução?', fr: 'Désactiver cette règle de dépôt ?',
     es: '¿Desactivar esta regla de depósito?', en: 'Deactivate this deposit rule?',
     it: 'Disattivare questa regola di cauzione?', de: 'Diese Kautionsregel deaktivieren?',
-    ca: 'Voleu desactivar aquesta regla de dipòsit?', eo: 'Ĉu malaktivigi ĉi tiun regulon de depono?',
+    ca: 'Vols desactivar aquesta regla de dipòsit?', eo: 'Ĉu malaktivigi ĉi tiun regulon de depono?',
     nl: 'Deze waarborgregel deactiveren?', el: 'Απενεργοποίηση αυτού του κανόνα εγγύησης;',
   },
   'deposit.config.action.delete': {
@@ -200,7 +200,7 @@ const KEYS = {
     en: 'Permanently delete the rule "{name}"?',
     it: 'Eliminare definitivamente la regola « {name} »?',
     de: 'Die Regel „{name}“ endgültig löschen?',
-    ca: 'Voleu suprimir definitivament la regla « {name} »?',
+    ca: 'Vols suprimir definitivament la regla « {name} »?',
     eo: 'Ĉu forigi definitive la regulon « {name} »?',
     nl: 'De regel “{name}” definitief verwijderen?',
     el: 'Οριστική διαγραφή του κανόνα « {name} »;',

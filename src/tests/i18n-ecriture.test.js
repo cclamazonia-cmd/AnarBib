@@ -55,6 +55,8 @@
 //       `PLURIEL_LEGITIME`.
 //       ANGLE MORT : ne couvre que fr et es, seules locales relues ce jour ;
 //       it, de, ca, nl, el ont aussi un vouvoiement et attendent leur passe.
+//       ca relu le 27/09/2026 (312 valeurs au « vós », `VOUVOIEMENT_CA`) ;
+//       restent it, de, nl, el.
 //       pt-BR s'y ajoute le 27/09/2026, dans l'autre sens : son registre est
 //       « você », la faute y est le « tu » EUROPÉEN (`TU_EUROPEU`, plus bas,
 //       avec son propre angle mort, mesuré).
@@ -305,9 +307,44 @@ const VOUVOIEMENT_ES = new RegExp(
     `|(?:^|[.!?…:;—–(¡¿]\\s*)(?!(?:\\p{L}*[dt]ad|${NOMS_EN_AD_ED_ID.join('|')})(?![\\p{L}]))(\\p{Lu}\\p{Ll}*(?:ad|ed|id))(?![\\p{L}])`,
   'u',
 );
+// ca, relu le 27/09/2026 — la passe du 07/09 n'avait lu que fr et es. ca.json
+// parlait au « vós » dans 312 valeurs : « Voleu suprimir…? » (41 fois),
+// « Indiqueu », « Comproveu la vostra connexió i torneu a provar »,
+// « Se us redirigirà », toute la politique de confidentialité — jusque sur
+// l'écran de connexion. Réécrites par `scripts/i18n-ca-tu.cjs`.
+//
+// CE QUE LE MOTIF VOIT : les possessifs (vostre, vostra, vostres), vós,
+// vosaltres, vostè, le clitique « us » et l'enclise « -vos », « sou » et
+// « vau », et TOUT mot en « -eu / -iu / -ïu » n'importe où — même raison
+// qu'en français : la 2e personne du pluriel catalane finit toujours en
+// « -u » (« Voleu », « podeu », « Introduïu », « escriviu », « sou »).
+// Sont écartés, nommés : les mots en « -eu/-iu » qui ne sont pas des verbes
+// (`MOTS_EN_EU_IU_NON_VERBES` : ce qui restait dans le fichier une fois
+// réécrit, vérifié mot par mot), et les adjectifs en « -tiu/-siu » (actiu,
+// col·lectiu, definitiu…), sauf les verbes de `VERBES_EN_TIU` (« sortiu »,
+// qui était dans le fichier). Sur le fichier d'avant correction : 312/312 et
+// rien d'autre. Comme en français, le chiffre vient du même critère que le
+// recensement : c'est la conjugaison qui fonde la complétude.
+// ANGLES MORTS : « correu » est écarté comme nom (courriel) — c'est aussi le
+// « vós » de córrer ; un verbe en « -tiu/-siu » absent de `VERBES_EN_TIU`
+// passe ; le registre « vostè » (3e personne) ne se voit que par son pronom,
+// ses verbes sont ceux d'une phrase descriptive.
+const MOTS_EN_EU_IU_NON_VERBES = ['arreu', 'arxiu', 'ateneu', 'breu', 'correu', 'descriu', 'deu', 'diu', 'escriu',
+  'eu' /* « EU-U.S. Data Privacy Framework » */, 'europeu', 'greu', 'meu', 'nadiu', 'preu', 'relleu', 'seu',
+  'sobreescriu', 'teu', 'treu', 'veu'];
+const VERBES_EN_TIU = ['sortiu', 'sentiu', 'partiu', 'repartiu', 'consentiu', 'assentiu', 'mentiu', 'convertiu',
+  'invertiu', 'advertiu', 'divertiu', 'pervertiu', 'revertiu'];
+const LETTRE_CA = '[\\p{L}·]'; // « col·lectiu » est un seul mot
+const VOUVOIEMENT_CA = new RegExp(
+  `(?<!${LETTRE_CA})([Vv]ostr(?:e|a|es)|[Vv]ós|[Vv]osaltres|[Vv]ostès?|[Uu]s|\\p{L}+-vos|[Ss]ou|[Vv]au)(?!${LETTRE_CA})` +
+    `|(?<!${LETTRE_CA})(?!(?:${MOTS_EN_EU_IU_NON_VERBES.join('|')})(?!${LETTRE_CA}))` +
+    `((?:${VERBES_EN_TIU.join('|')})|\\p{L}*(?:[^ts\\P{L}]iu|eu|ïu)|\\p{L}*(?<![ts])iu)(?:-\\p{L}+)?(?!${LETTRE_CA})`,
+  'iu',
+);
 const VOUVOIEMENT = {
   fr: VOUVOIEMENT_FR,
   es: VOUVOIEMENT_ES,
+  ca: VOUVOIEMENT_CA,
 };
 
 // Adresses au PLURIEL, à un collectif — ce n'est pas du vouvoiement — et
@@ -318,6 +355,7 @@ const PLURIEL_LEGITIME = [
   'banner.profile.body',     // « discutez-en en assemblée »
   'privacy.register',        // « …comme le ferait un texte rédigé au vouvoiement » / « …de usted »
   'federacao.assembleias.fac.rotativityHint', // « Fonctions tournantes : alternez d'une AG à l'autre » — pluriel en pt-BR (« alternem ») et en es (« alternen »)
+  'biblioteca.exchanges.suggestedMessage', // lettre d'une bibliothèque à une autre — ca « Hola, companyes i companys de {partner}. Us escrivim… »
 ];
 
 // Chemin (4), pt-BR — le registre y est « você », la faute le « tu » EUROPÉEN.

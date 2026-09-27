@@ -121,7 +121,7 @@ const BYLOCALE = {
     "federacao.circulos.dormancy.adormecer": "Adormir",
     "federacao.circulos.dormancy.arquivar": "Arxivar",
     "federacao.circulos.dormancy.reativar.done": "Cercle reactivat.",
-    "federacao.circulos.dormancy.adormecer.done": "Cercle adormit. Es pot despertar quan vulgueu.",
+    "federacao.circulos.dormancy.adormecer.done": "Cercle adormit. Es pot despertar quan vulguis.",
     "federacao.circulos.dormancy.arquivar.done": "Cercle arxivat. No s'esborra res — la memòria roman.",
     "federacao.circulos.leave": "Sortir del cercle",
     "federacao.circulos.leave.done": "La teva biblioteca ha sortit del cercle.",

@@ -295,7 +295,7 @@ const ADD = {
     'biblioteca.events.empty': 'Cap esdeveniment de moment.',
     'biblioteca.events.created': 'Esdeveniment creat.',
     'biblioteca.events.updated': 'Esdeveniment actualitzat.',
-    'biblioteca.events.deleteConfirm': 'Voleu suprimir definitivament « {title} »?',
+    'biblioteca.events.deleteConfirm': 'Vols suprimir definitivament « {title} »?',
     'biblioteca.events.cancel': 'Cancel·la',
     'biblioteca.events.reactivate': 'Reactiva',
     'biblioteca.events.badge.draft': 'Esborrany (no visible)',

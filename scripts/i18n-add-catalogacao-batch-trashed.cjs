@@ -20,7 +20,7 @@ const V = {
   en: ['This batch only holds {count} draft(s) in the trash. They will be permanently deleted along with the batch. Continue?'],
   it: ['Questo lotto trattiene solo {count} bozza/e nel cestino. Saranno eliminate definitivamente insieme al lotto. Continuare?'],
   de: ['Dieses Los enthält nur noch {count} Entwurf/Entwürfe im Papierkorb. Sie werden zusammen mit dem Los endgültig gelöscht. Fortfahren?'],
-  ca: ['Aquest lot només reté {count} esborrany(s) a la paperera. S’eliminaran definitivament juntament amb el lot. Voleu continuar?'],
+  ca: ['Aquest lot només reté {count} esborrany(s) a la paperera. S’eliminaran definitivament juntament amb el lot. Vols continuar?'],
   eo: ['Ĉi tiu loto retenas nur {count} malneto(j)n en la rubujo. Ili estos definitive forigitaj kune kun la loto. Ĉu daŭrigi?'],
   nl: ['Dit lot bevat alleen nog {count} concept(en) in de prullenbak. Ze worden samen met het lot definitief verwijderd. Doorgaan?'],
   el: ['Αυτή η παρτίδα κρατά μόνο {count} πρόχειρο(α) στον κάδο. Θα διαγραφούν οριστικά μαζί με την παρτίδα. Συνέχεια;'],

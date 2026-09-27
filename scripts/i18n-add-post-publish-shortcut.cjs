@@ -49,7 +49,7 @@ const ADD = {
   },
   ca: {
     'catalogacao.postPublish.title': '« {title} » publicat',
-    'catalogacao.postPublish.body': 'Voleu afegir un exemplar d’aquest document al catàleg?',
+    'catalogacao.postPublish.body': 'Vols afegir un exemplar d’aquest document al catàleg?',
     'catalogacao.postPublish.addExemplar': 'Afegeix un exemplar',
     'catalogacao.postPublish.openBook': 'Veure la fitxa',
   },

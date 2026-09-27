@@ -108,7 +108,7 @@ const NEW_KEYS = {
   ca: {
     'importacoes.oai.title': 'Recol-leccio OAI-PMH',
     'importacoes.oai.desc': 'Recol-leccio automatica setmanal de catalegs exposats via protocol OAI-PMH. La configuracio de fonts es reservada a le administrador-a-e de xarxa.',
-    'importacoes.oai.noSources': 'Cap font OAI-PMH configurada. Contacteu le administrador-a-e de xarxa.',
+    'importacoes.oai.noSources': 'Cap font OAI-PMH configurada. Contacta le administrador-a-e de xarxa.',
     'importacoes.oai.harvestNow': 'Recollir ara',
     'importacoes.oai.harvesting': 'Recol-leccio en curs…',
     'importacoes.oai.harvestStarted': 'Recol-leccio iniciada (run #{id}).',

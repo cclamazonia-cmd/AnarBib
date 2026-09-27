@@ -437,7 +437,7 @@ const NEW_KEYS = {
     "es": "ISBD: aun no generado para este borrador. Haga clic en \"Preparar ISBD\" arriba.",
     "de": "ISBD: für diesen Entwurf noch nicht erstellt. Klicken Sie oben auf „ISBD vorbereiten“.",
     "it": "ISBD: non ancora generato per questa bozza. Clicca su \"Prepara ISBD\" sopra.",
-    "ca": "ISBD: encara no generat per a aquest esborrany. Feu clic a \"Preparar ISBD\" a dalt.",
+    "ca": "ISBD: encara no generat per a aquest esborrany. Fes clic a \"Preparar ISBD\" a dalt.",
     "eo": "ISBD: ankoray ne kreita por ĉi tiu malneto. Klaku \"Prepari ISBD\" supre.",
     "nl": "ISBD: nog niet gegenereerd voor dit concept. Klik hierboven op \"ISBD voorbereiden\".",
     "el": "ISBD: δεν έχει δημιουργηθεί ακόμα. Κάντε κλικ στο \"Prepare ISBD\" παραπάνω."
@@ -701,7 +701,7 @@ const NEW_KEYS = {
     "es": "Seleccione al menos un item.",
     "de": "Wählen Sie mindestens ein Element aus.",
     "it": "Seleziona almeno un elemento.",
-    "ca": "Seleccioneu almenys un element.",
+    "ca": "Selecciona almenys un element.",
     "eo": "Elektu almenaŭ unu eron.",
     "nl": "Selecteer ten minste één item.",
     "el": "Επιλέξτε τουλάχιστον ένα στοιχείο."
@@ -833,7 +833,7 @@ const NEW_KEYS = {
     "es": "Borradores activos de documentos, autoridades y ejemplares. Gestione el ciclo de vida: edite, marque como listo, publique o descarte.",
     "de": "Aktive Entwürfe von Dokumenten, Autoritäten und Exemplaren. Verwalten Sie den Lebenszyklus: bearbeiten, als bereit markieren, veröffentlichen oder verwerfen.",
     "it": "Bozze attive di documenti, autorità e esemplari. Gestisci il ciclo di vita: modifica, segna come pronto, pubblica o scarta.",
-    "ca": "Esborranys actius de documents, autoritats i exemplars. Gestioneu el cicle de vida: editeu, marqueu com a preparat, publiqueu o descarteu.",
+    "ca": "Esborranys actius de documents, autoritats i exemplars. Gestiona el cicle de vida: edita, marca com a preparat, publica o descarta.",
     "eo": "Aktivaj malnetoj de dokumentoj, aŭtorecoj kaj ekzempleroj. Administru la vivociklon: redaktu, marku kiel pretan, publikigi aŭ foriĝi.",
     "nl": "Actieve concepten van documenten, autoriteiten en exemplaren. Beheer de levenscyclus: bewerk, markeer als gereed, publiceer of verwijder.",
     "el": "Ενεργά προσχέδια εγγράφων, αρχείων και αντιτύπων."
@@ -1061,7 +1061,7 @@ const NEW_KEYS = {
     "es": "Borradores descartados. Puede restaurar o eliminar definitivamente.",
     "de": "Verworfene Entwürfe. Sie können wiederherstellen oder endgültig löschen.",
     "it": "Bozze scartate. Puoi ripristinare o eliminare definitivamente.",
-    "ca": "Esborranys descartats. Podeu restaurar o eliminar definitivament.",
+    "ca": "Esborranys descartats. Pots restaurar o eliminar definitivament.",
     "eo": "Foriĝitaj malnetoj. Vi povas reaŭdikigi aŭ definitive forigi.",
     "nl": "Verwijderde concepten. U kunt herstellen of definitief verwijderen.",
     "el": "Απορριφθέντα προσχέδια. Μπορείτε να επαναφέρετε ή να διαγράψετε οριστικά."
@@ -1233,7 +1233,7 @@ const NEW_KEYS = {
     "es": "Consulte documentos, autoridades y ejemplares publicados. Retome para editar o descarte del catalogo.",
     "de": "Durchsuchen Sie veröffentlichte Dokumente, Autoritäten und Exemplare. Wiederaufnehmen zum Bearbeiten oder aus dem Katalog verwerfen.",
     "it": "Consulta documenti, autorità e esemplari pubblicati. Riprendi per modificare o scarta dal catalogo.",
-    "ca": "Consulteu documents, autoritats i exemplars publicats. Repreneu per editar o descarteu del catàleg.",
+    "ca": "Consulta documents, autoritats i exemplars publicats. Reprèn per editar o descarta del catàleg.",
     "eo": "Konsultu dokumentojn, aŭtorecojn kaj ekzemplerojn jam publikigitajn. Reprenu por redakti aŭ forigu el la katalogo.",
     "nl": "Bekijk gepubliceerde documenten, autoriteiten en exemplaren. Hervat om te bewerken of verwijder uit de catalogus.",
     "el": "Περιηγηθείτε δημοσιευμένα έγγραφα, αρχεία και αντίτυπα."
@@ -1269,7 +1269,7 @@ const NEW_KEYS = {
     "es": "Actualizacion ya en curso — intente de nuevo en unos instantes.",
     "de": "Aktualisierung läuft bereits — versuchen Sie es gleich erneut.",
     "it": "Aggiornamento già in corso — riprova tra un momento.",
-    "ca": "Actualització ja en curs — torneu a provar en un moment.",
+    "ca": "Actualització ja en curs — torna a provar en un moment.",
     "eo": "Aŭdatigo jam okazas — reprovu post momento.",
     "nl": "Bijwerken is al bezig — probeer het zo opnieuw.",
     "el": "Η ανανέωση είναι ήδη σε εξέλιξη — δοκιμάστε ξανά σε λίγο."
@@ -1329,7 +1329,7 @@ const NEW_KEYS = {
     "es": "Borrador de retomada creado (ID {id}). Abra la pestana correspondiente para editar.",
     "de": "Wiederaufnahme-Entwurf erstellt (ID {id}). Öffnen Sie den entsprechenden Tab zum Bearbeiten.",
     "it": "Bozza di ripresa creata (ID {id}). Apri la scheda corrispondente per modificare.",
-    "ca": "Esborrany de represa creat (ID {id}). Obriu la pestanya corresponent per editar.",
+    "ca": "Esborrany de represa creat (ID {id}). Obre la pestanya corresponent per editar.",
     "eo": "Reprena malneto kreita (ID {id}). Malfermu la respondan langeton por redakti.",
     "nl": "Hervatconcept aangemaakt (ID {id}). Open het bijbehorende tabblad om te bewerken.",
     "el": "Προσχέδιο επανάληψης δημιουργήθηκε (ID {id}). Ανοίξτε την αντίστοιχη καρτέλα."

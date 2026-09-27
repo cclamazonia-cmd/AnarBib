@@ -71,7 +71,7 @@ const ADD = {
     'biblioteca.publicFiche.hint': 'Tria què apareix a la fitxa pública de la teva biblioteca. Desactivat per defecte.',
     'biblioteca.publicFiche.contactToggle': 'Mostrar el contacte públic',
     'biblioteca.publicFiche.hoursToggle': 'Mostrar els horaris / torns',
-    'biblioteca.publicFiche.collective': 'Fer pública informació compromet el col·lectiu: decidiu-ho juntes.',
+    'biblioteca.publicFiche.collective': 'Fer pública informació compromet el col·lectiu: cal decidir-ho juntes.',
     'biblioteca.publicFiche.requiresPublic': 'Només té efecte si la biblioteca apareix públicament.',
     'bibliotecaPublica.contact': 'Contacte',
   },
