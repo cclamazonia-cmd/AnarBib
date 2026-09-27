@@ -2613,7 +2613,7 @@
       "id": "B30",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql",
@@ -2628,8 +2628,8 @@
         "pt": "B29 deduz «de quem é um lote» a partir dos seus rascunhos; quatro verificações acharam sempre novos casos-limite. Limites conhecidos no REGISTRO (CAT-E18)."
       },
       "w": {
-        "fr": "Colonne `catalog_batches.library_id` (nulle = lot de l'administration), posée à la création (écran : la bibliothèque de staff choisie ; import : bibliothèque du run pour un catalogue propre, destination pour un dépôt, nulle si inconnue ; réattribution : la nouvelle) et figée par l'API ; rangement d'un brouillon seulement si sa bibliothèque est celle du lot ; toutes les règles de lot (voir, modifier, réviser, supprimer) ramenées à cette colonne. Reprise des lots existants : la bibliothèque commune de leurs brouillons en cours et publiés, sinon nulle (administration). Repartir des définitions RÉELLES de `fn_import_promote`, `fn_batch_reassign_library` et des fonctions de rapprochement (H19).",
-        "pt": "Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes."
+        "fr": "Colonne `catalog_batches.library_id` (nulle = lot de l'administration), posée à la création (écran : la bibliothèque de staff choisie ; import : bibliothèque du run pour un catalogue propre, destination pour un dépôt, nulle si inconnue ; réattribution : la nouvelle) et figée par l'API ; rangement d'un brouillon seulement si sa bibliothèque est celle du lot ; toutes les règles de lot (voir, modifier, réviser, supprimer) ramenées à cette colonne. Reprise des lots existants : la bibliothèque commune de leurs brouillons en cours et publiés, sinon nulle (administration). Repartir des définitions RÉELLES de `fn_import_promote`, `fn_batch_reassign_library` et des fonctions de rapprochement (H19). **Livré le 27/09** (`3a0e036f`, `2ecdaea3`, migration `20260927191059`), règle et choix au REGISTRE (CAT-E18, paragraphe « B30 ») : colonne posée à la création (écran : la bibliothèque active, un menu pour le staff de plusieurs bibliothèques, « Administration du réseau » pour l'administration), figée par l'API, changée par la seule réattribution (« Changer la bibliothèque du lot » remplace « confier ») ; toutes les règles de lot lues sur la colonne ; un brouillon ne se range que dans un lot de sa bibliothèque ; imports : bibliothèque du run ou destination de la source ; publier ouvert à l'administration sans adhésion (adhésion ACTIVE exigée du staff) ; une notice importée sans bibliothèque ne se publie pas. Reprise en production : lot 8 → MLEG et 63 → Solidaires (brouillons en cours), 57 → BLMF (fiches publiées). **Une revue contradictoire (28 constats, 2 bloquants), deux vérifications des corrections (10 puis 2 constats), contre-épreuve à 17 mutants.**",
+        "pt": "Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes. **Entregue em 27/09** (`3a0e036f`, `2ecdaea3`, migração `20260927191059`), regra e escolhas no REGISTRO (CAT-E18): coluna posta na criação e congelada, mudada só pela reatribuição; todas as regras de lote lidas na coluna; um rascunho só entra num lote da sua biblioteca. Retomada em produção: lote 8 → MLEG, 63 → Solidaires, 57 → BLMF. Uma revisão contraditória, duas verificações das correções, contraprova com 17 mutantes."
       },
       "y": {
         "fr": "Touche les fonctions d'import livrées avec H19 : une revue contradictoire avant tout déploiement.",
@@ -2653,8 +2653,15 @@
       },
       "r": [
         "supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql",
-        "docs/specs/REGISTRE_decisions.md"
-      ]
+        "docs/specs/REGISTRE_decisions.md",
+        "supabase/migrations/20260927191059_b30_lot_a_une_bibliotheque.sql",
+        "tests/sql/lot_a_une_bibliotheque_tests.sql",
+        "src/lib/useStaffLibraries.js"
+      ],
+      "verif": {
+        "fr": "27/09 — suite SQL `lot_a_une_bibliotheque_tests` 17/17 (huit profils) et les 132 suites de la CI ; vitest 107 fichiers ; production en lecture seule après le déploiement (tag `deployed-functions` = `2ecdaea3`, migration `created_by` nul) : lots 8, 57, 63 à MLEG, BLMF, Solidaires, `updated_at` intact, aucun lot à l'administration ; la coordination de chaque bibliothèque voit son lot et seulement lui ; déclencheurs *_zz_batch_guarded posés, anciens retirés ; droits des fonctions neuves conformes (aucune à anon).",
+        "pt": "27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele."
+      }
     },
     {
       "id": "B31",

@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-27.** **50 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-27.** **51 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -348,7 +348,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
 | **B29** | Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens | `P1` | À vérifier |
-| **B30** | Donner une bibliothèque propre au lot de catalogage (suite de B29) | `P2` | Ouvert |
+| **B30** | Donner une bibliothèque propre au lot de catalogage (suite de B29) | `P2` | À vérifier |
 | **B31** | Lecture anonyme : trois tables lèvent une erreur au lieu de rendre zéro ligne | `P2` | Ouvert |
 | **B32** | Catalogue public : chaque page relit toute la vue matérialisée, et la visibilité se calcule ligne à ligne | `P2` | Ouvert |
 | **B33** | Recherche : des index trigramme que la forme des requêtes empêche d'emprunter | `P2` | Ouvert |
@@ -399,13 +399,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### B30 — Donner une bibliothèque propre au lot de catalogage (suite de B29)
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
 
 **État.** B29 (27/09) déduit « à qui est un lot » de ses brouillons : en cours, publiés, jetés, réattribués (IMP-20 c), exemplaires importés qui suivent leur notice, lots d'import de l'administration. Quatre vérifications de suite ont trouvé à chaque fois de nouveaux cas limites (18, 21, 21, 29 constats) : la règle tient, mais par une dizaine de prédicats (`fn_caller_can_see_batch`, `fn_caller_can_edit_batch`, `fn_caller_owns_batch`, `fn_caller_coordinates_batch`, déclencheur de rangement, politiques de `catalog_batches`). Limites connues au REGISTRE (CAT-E18) : une personne staff de deux bibliothèques peut rendre un lot mixte ; un brouillon restauré qui sort de son lot ne le dit pas ; le lot d'un compte d'administration n'est visible de personne d'autre tant qu'elle ne l'a pas confié.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 27/09 — suite SQL `lot_a_une_bibliotheque_tests` 17/17 (huit profils) et les 132 suites de la CI ; vitest 107 fichiers ; production en lecture seule après le déploiement (tag `deployed-functions` = `2ecdaea3`, migration `created_by` nul) : lots 8, 57, 63 à MLEG, BLMF, Solidaires, `updated_at` intact, aucun lot à l'administration ; la coordination de chaque bibliothèque voit son lot et seulement lui ; déclencheurs *_zz_batch_guarded posés, anciens retirés ; droits des fonctions neuves conformes (aucune à anon).*
 
-**Ce que c'est.** Colonne `catalog_batches.library_id` (nulle = lot de l'administration), posée à la création (écran : la bibliothèque de staff choisie ; import : bibliothèque du run pour un catalogue propre, destination pour un dépôt, nulle si inconnue ; réattribution : la nouvelle) et figée par l'API ; rangement d'un brouillon seulement si sa bibliothèque est celle du lot ; toutes les règles de lot (voir, modifier, réviser, supprimer) ramenées à cette colonne. Reprise des lots existants : la bibliothèque commune de leurs brouillons en cours et publiés, sinon nulle (administration). Repartir des définitions RÉELLES de `fn_import_promote`, `fn_batch_reassign_library` et des fonctions de rapprochement (H19).
+**Ce que c'est.** Colonne `catalog_batches.library_id` (nulle = lot de l'administration), posée à la création (écran : la bibliothèque de staff choisie ; import : bibliothèque du run pour un catalogue propre, destination pour un dépôt, nulle si inconnue ; réattribution : la nouvelle) et figée par l'API ; rangement d'un brouillon seulement si sa bibliothèque est celle du lot ; toutes les règles de lot (voir, modifier, réviser, supprimer) ramenées à cette colonne. Reprise des lots existants : la bibliothèque commune de leurs brouillons en cours et publiés, sinon nulle (administration). Repartir des définitions RÉELLES de `fn_import_promote`, `fn_batch_reassign_library` et des fonctions de rapprochement (H19). **Livré le 27/09** (`3a0e036f`, `2ecdaea3`, migration `20260927191059`), règle et choix au REGISTRE (CAT-E18, paragraphe « B30 ») : colonne posée à la création (écran : la bibliothèque active, un menu pour le staff de plusieurs bibliothèques, « Administration du réseau » pour l'administration), figée par l'API, changée par la seule réattribution (« Changer la bibliothèque du lot » remplace « confier ») ; toutes les règles de lot lues sur la colonne ; un brouillon ne se range que dans un lot de sa bibliothèque ; imports : bibliothèque du run ou destination de la source ; publier ouvert à l'administration sans adhésion (adhésion ACTIVE exigée du staff) ; une notice importée sans bibliothèque ne se publie pas. Reprise en production : lot 8 → MLEG et 63 → Solidaires (brouillons en cours), 57 → BLMF (fiches publiées). **Une revue contradictoire (28 constats, 2 bloquants), deux vérifications des corrections (10 puis 2 constats), contre-épreuve à 17 mutants.**
 
 **Pourquoi ça compte.** Touche les fonctions d'import livrées avec H19 : une revue contradictoire avant tout déploiement.
 
@@ -417,7 +417,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **Dépendances.** Après la vérification de B29 en production.
 
-*Renvois : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md`*
+*Renvois : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md` · `supabase/migrations/20260927191059_b30_lot_a_une_bibliotheque.sql` · `tests/sql/lot_a_une_bibliotheque_tests.sql` · `src/lib/useStaffLibraries.js`*
 
 #### B31 — Lecture anonyme : trois tables lèvent une erreur au lieu de rendre zéro ligne
 

@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-27.** **50 itens de 69** trazem uma verificação datada própria (A1, A3, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-27.** **51 itens de 69** trazem uma verificação datada própria (A1, A3, B13, B29, B30, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -348,7 +348,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B29** | Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus | `P1` | A verificar |
-| **B30** | Dar ao lote de catalogação uma biblioteca própria (sequência de B29) | `P2` | Aberto |
+| **B30** | Dar ao lote de catalogação uma biblioteca própria (sequência de B29) | `P2` | A verificar |
 | **B31** | Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha | `P2` | Aberto |
 | **B32** | Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha | `P2` | Aberto |
 | **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | Aberto |
@@ -399,13 +399,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B30 — Dar ao lote de catalogação uma biblioteca própria (sequência de B29)
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
 
 **Estado.** B29 deduz «de quem é um lote» a partir dos seus rascunhos; quatro verificações acharam sempre novos casos-limite. Limites conhecidos no REGISTRO (CAT-E18).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele.*
 
-**O que é.** Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes.
+**O que é.** Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes. **Entregue em 27/09** (`3a0e036f`, `2ecdaea3`, migração `20260927191059`), regra e escolhas no REGISTRO (CAT-E18): coluna posta na criação e congelada, mudada só pela reatribuição; todas as regras de lote lidas na coluna; um rascunho só entra num lote da sua biblioteca. Retomada em produção: lote 8 → MLEG, 63 → Solidaires, 57 → BLMF. Uma revisão contraditória, duas verificações das correções, contraprova com 17 mutantes.
 
 **Por que importa.** Toca as funções de importação de H19: revisão contraditória antes de implantar.
 
@@ -417,7 +417,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Dependências.** Depois da verificação de B29 em produção.
 
-*Remissões : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md`*
+*Remissões : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md` · `supabase/migrations/20260927191059_b30_lot_a_une_bibliotheque.sql` · `tests/sql/lot_a_une_bibliotheque_tests.sql` · `src/lib/useStaffLibraries.js`*
 
 #### B31 — Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha
 
