@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-27** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-27** · 64 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 5
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 4
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-27.** **51 itens de 65** trazem uma verificação datada própria (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-27.** **51 itens de 64** trazem uma verificação datada própria (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -427,7 +427,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C4** | Preencher os países ausentes em 722 fichas de autoridade | `P2` | Decisão coletiva |
-| **C6** | Entregar as três assistências de digitação previstas pela spec das convenções | `P2` | A verificar |
 | **C9** | As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão | `P2` | Aberto |
 | **C10** | Renomear uma das duas colunas `rights_status` | `P2` | Aberto |
 
@@ -473,28 +472,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Pré-requisito da segunda passagem de **C3**.
 
 *Remissões : `AUDIT_conventions_catalographiques_2026-08-20 A5` · `REGISTRE §37 CONV-7`*
-
-#### C6 — Entregar as três assistências de digitação previstas pela spec das convenções
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : React / JavaScript, biblioteconomia
-
-**Estado.** O banco sabe normalizar; a interface de digitação ainda não assiste. Três dispositivos estão especificados e não entregues: o assistente de separação do nome (§7.1), o botão «Normalizar maiúsculas» com pré-visualização (§7.2), e a fila de controles de coerência em segundo plano (§7.3). **Entregue em 27/09, os três.** §7.2 (`b9177403`) botão «Normalizar maiúsculas» com prévia e desfazer; §7.1 (`0c3bb62f`) assistente do ponto de acesso (Confirmar, Corrigir palavra por palavra, Nome único), variante hispânica só oferecida; §7.3 (`7eb72630`) cron semanal que alimenta a fila do Ateliê pelos cinco semeadores, sem o ambiente de formação; primeira passagem: 4 lignes (une autorité en capitales, deux formes, une collectivité non typée), aucun titre — les trois repérés sont des exercices du bac à sable de formation, écartés exprès. Falta o olhar de Xavier conectado, depois fechar. 171 títulos esperam no lote «titre_casse» desde 21/08.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Três telas, nesta ordem de valor: o botão de normalização de caixa (o mais simples, ativo só se a língua estiver preenchida); o assistente de separação, que propõe palavra por palavra com um botão «Corrigir» e uma explicação de uma linha; a fila de controles, que sinaliza sem bloquear.
-
-**Por que importa.** É a restrição de concepção mais firme do projeto: **toda regra deve ser ou invisível porque calculada, ou assistida porque proposta e confirmada, nunca um saber prévio exigido na digitação.** As pessoas que catalogam não são bibliotecárias nem informáticas. Sem essas três telas, as convenções continuam uma doutrina que só seu autor sabe aplicar.
-
-**O que conta como terminado.**
-
-- Os três dispositivos existem e **nenhum é bloqueante**.
-- Cada proposta é recusável, com o original conservado.
-- Os rótulos existem nas dez locales numa só passagem.
-
-**Dependências.** Apoia-se nas migrações `conventions_*` já em vigor.
-
-*Remissões : `spec-conventions-catalographiques-v0.1 §7`*
 
 #### C9 — As oito perguntas das convenções estão decididas: falta uma chave, uma atualização e cinco gestos à mão
 
@@ -2109,6 +2086,7 @@ CI verde. |
 | C8 | 2026-09-26 | **Fechado em 26/09, os dois critérios cumpridos.** Duas fases por migração de dados via CI: Wikidata (607 fichas) e Library of Congress (288 ligadas, 90 completadas); regras, amostras e planilhas em `docs/journal/operations/enrichissement-autorites-2026-09-26/`; precisão medida numa amostra aleatória: 60/60. Só se preenche o vazio, com rastro por ficha. (1) Cobertura em identificadores externos: 51 % de todas as autoridades, 78 % das com três livros ou mais, 96 % das com dez. (2) Nenhuma forma de nome tocada. A língua de escrita ganhou sua coluna (503 fichas). |
 | C11 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 3 cumpridos, o 2 fica como prática contínua (decisão de Xavier).** Ficha validada em bloco; fusões e reuniões de tomos feitas por Xavier no assistente (a migração que agia em seu nome foi recusada, com razão); o resto por duas migrações em nome próprio (`20260927112143`, `20260927114232`): O Capital, O Homem e a Terra em seis volumes, sete famílias de tomos reunidas, Peirats devolvido à fila, matérias MLEG. Em produção: as três abas vazias; 175 notas MLEG com decisão escrita. Critério 2 não mensurável: 1 676 títulos automáticos, revisão contínua pela fila do Ateliê. |
 | C7 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 2 cumpridos, o 3 dispensado por decisão de Xavier.** 851 registros indexados pelo vocabulário existente (ficha validada A + B, migração `20260927124038` pela CI): cobertura pública medida como anônimo 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` suprimido, `anarcocomunismo` verificado. Levar os oito assuntos à FICEDL deixa de ser pedido (decisão de Xavier, «se não criar fork»): não há fork — a cópia do tesauro tem 621 termos, todos colhidos na fonte em 03/09, nenhum acrescentado localmente, nenhum vínculo `exact` para os oito. 466 registros ficam fora do vocabulário. |
+| C6 | 2026-09-27 | **Fechado em 27/09 — verificado na tela por Xavier, conectado.** As três assistências da spec das convenções (§7): botão «Normalizar maiúsculas» do título, corrigido por observação de Xavier para aplicar a caixa da língua (§4.1, `1782dfcb`); assistente do ponto de acesso e normalização da caixa do nome de pessoa (`0c3bb62f`, `8c73b850`); cron semanal que alimenta a fila de verificação (`7eb72630`). Limites: o lote «titre_casse» ainda propõe a forma antiga; coletividades sem ferramenta de caixa; `name_lang` fora do formulário. |
 
 ---
 
@@ -2140,4 +2118,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 64 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

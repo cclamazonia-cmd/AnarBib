@@ -2386,6 +2386,14 @@
           "fr": "**Clos le 27/09 — critères 1 et 2 tenus sur pièces, le 3 levé par décision de Xavier.** 1 317 notices sans sujet lues une à une (88 % : import Zotero de la BTL, titre seul) ; 851 propositions dans le vocabulaire existant, fiche `docs/journal/arbitrages/C7_propositions_matieres_2026-09-27.md` validée A + B par Xavier ; migration de données `20260927124038` appliquée par la CI : +851 notices, +1 180 affectations, 89 matières avant comme après (THES-4). *(1)* **Mesuré en anonyme : 2 167 / 2 633 notices indexées, 82,3 %** (50,0 % le matin). *(2)* `pierre-joseph-proudhon` n'existe plus ; `anarcocomunismo` actif, « Communisme libertaire », `broad` → « anarchisme », 3 notices. *(3)* Sept des huit sujets sont rattachés à un terme FICEDL plus large, `abolicionismo-penal` est `related` → « prison » (H10). Les porter à la fédération n'est plus demandé : **décision de Xavier, le 27/09, « si ça ne crée pas de fork »** — et il n'y en a pas, mesuré le jour même : la copie du thésaurus compte 621 termes, tous moissonnés à la source le 03/09, aucun terme ajouté localement ni ressemblant aux huit, aucun lien `exact` vers eux ; les huit vivent dans le vocabulaire AnarBib et ne touchent la FICEDL que par des liens SKOS. Restent 466 notices hors vocabulaire (littérature générale, philosophie, sciences sociales, esperanto, spiritualité, histoire du Brésil) : l'étendre serait un autre item.",
           "pt": "**Fechado em 27/09 — critérios 1 e 2 cumpridos, o 3 dispensado por decisão de Xavier.** 851 registros indexados pelo vocabulário existente (ficha validada A + B, migração `20260927124038` pela CI): cobertura pública medida como anônimo 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` suprimido, `anarcocomunismo` verificado. Levar os oito assuntos à FICEDL deixa de ser pedido (decisão de Xavier, «se não criar fork»): não há fork — a cópia do tesauro tem 621 termos, todos colhidos na fonte em 03/09, nenhum acrescentado localmente, nenhum vínculo `exact` para os oito. 466 registros ficam fora do vocabulário."
         }
+      ],
+      [
+        "C6",
+        "2026-09-27",
+        {
+          "fr": "**Clos le 27/09 — vérifié à l'écran par Xavier, connecté (« vérifié, fonctionnel »).** Les trois assistances de la spec des conventions (§7) livrées le même jour. *§7.2* bouton « Normaliser la casse » sous le titre de la notice (`b9177403`) ; **sur remarque de Xavier** (« lE tRuc qui FAIT cHIER », bouton grisé : la première version n'abaissait que les mots-outils), il applique depuis `1782dfcb` la casse de la langue selon §4.1 — casse de phrase pt/es/fr/it/ca/eo/nl/el, title case en anglais, mots-outils seuls en allemand, sigles et chiffres romains figés, aperçu où chaque mot se clique pour les noms propres. *§7.1* assistant du point d'accès sous le nom d'une personne (`0c3bb62f` : Confirmer, Corriger mot par mot, Nom unique ; variante hispanique seulement offerte) et, **à la demande de Xavier**, la même normalisation de casse pour le nom (`8c73b850`, CONV-1 : « osvaldo BAYER » → « Osvaldo Bayer », particules, initiales, rangs, noms composés et élidés). *§7.3* cron du lundi `anarbib-conv-file-alimenter` (`7eb72630`) qui passe les cinq semeurs de la file de vérification, bac à sable de formation exclu ; premier passage en production : 4 lignes. Critères : (1) trois dispositifs, aucun bloquant ; (2) chaque proposition refusable, original conservé (aperçus, annuler après coup, la file s'écarte) ; (3) libellés dans les dix locales. Limites laissées : le lot « titre_casse » de l'Atelier (171 titres) propose encore l'ancienne forme (mots-outils seuls) ; la casse des collectivités n'a pas d'outil ; `name_lang` (CONV-6) n'est pas au formulaire.",
+          "pt": "**Fechado em 27/09 — verificado na tela por Xavier, conectado.** As três assistências da spec das convenções (§7): botão «Normalizar maiúsculas» do título, corrigido por observação de Xavier para aplicar a caixa da língua (§4.1, `1782dfcb`); assistente do ponto de acesso e normalização da caixa do nome de pessoa (`0c3bb62f`, `8c73b850`); cron semanal que alimenta a fila de verificação (`7eb72630`). Limites: o lote «titre_casse» ainda propõe a forma antiga; coletividades sem ferramenta de caixa; `name_lang` fora do formulário."
+        }
       ]
     ]
   },
@@ -2759,52 +2767,6 @@
           "fr": "27/09 — **troisième phase, IdRef** (`20260927091555`, `62553dc6`) : les bibliothèques nationales du Brésil (403 à toute requête) et d'Argentine (X-Services refusés au public) ferment l'accès automatisé — non contourné ; IdRef (ABES) porte la nationalité (102) et couvre beaucoup d'auteurs brésiliens et hispano-américains étudiés en France. 187 fiches liées, **66 pays**, 150 langues, 33 naissances, 9 morts, chacune prouvée par un titre du catalogue ou des dates concordantes (`decisions-idref.csv`). **En production : 674 fiches sur 1 505 sans pays (45 %)**, 683 sans année de naissance, 820 liées à au moins une source (Wikidata, VIAF, ISNI, LC ou IdRef). Le critère « sous 20 % » reste hors de portée des sources d'autorité ; la décision de Xavier reste ouverte (réécrire le critère ou relecture humaine).",
           "pt": "27/09 — terceira fase, IdRef: as bibliotecas nacionais do Brasil (403) e da Argentina (X-Services recusados) fecham o acesso automatizado — não contornado; 187 fichas ligadas, 66 países, 150 línguas. Em produção: 674 de 1 505 fichas sem país (45 %). O critério « abaixo de 20 % » continua fora do alcance; decisão de Xavier em aberto."
         }
-      ]
-    },
-    {
-      "id": "C6",
-      "d": "C",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "front",
-        "biblio"
-      ],
-      "t": {
-        "fr": "Livrer les trois assistances de saisie prévues par la spec des conventions",
-        "pt": "Entregar as três assistências de digitação previstas pela spec das convenções"
-      },
-      "v": {
-        "fr": "La base sait normaliser ; l'interface de saisie n'assiste pas encore. Trois dispositifs sont spécifiés et non livrés : l'assistant de découpage du nom (§7.1), le bouton « Normalizar maiúsculas » avec aperçu (§7.2), et la file de contrôles de cohérence en arrière-plan (§7.3). **Livré le 27/09, les trois, dans l'ordre de la fiche.** *§7.2* (`b9177403`) : bouton « Normaliser la casse » sous le titre de la notice, inactif sans langue couverte, aperçu avant/après, appliquer puis annuler (`src/lib/titleCase.js`, miroir exact de `fn_conv_lower_stopwords` — mêmes douze cas au banc vitest et à la suite SQL `title_case_tests`). *§7.1* (`0c3bb62f`) : sous le nom tapé comme on le dit, le point d'accès proposé et la règle en une ligne ; Confirmer, Corriger (clic sur le mot où commence le nom), Nom unique / pseudonyme ; la forme de tri dérivée passe par la même règle (`src/lib/nameEntry.js`) ; exemples sans capitales (CONV-1). Limite assumée : la proposition est prudente (dernier nom, particules avec le prénom, filiation attachée) ; le double nom hispanique n'est qu'une **variante offerte** quand le pays est hispanophone — la spec veut `name_lang` (CONV-6, à confirmer), absent du formulaire. *§7.3* (`7eb72630`) : les contrôles existaient depuis le 21/08 (console), la file n'avait été semée que le 21/08 et le 03/09 ; un cron du lundi (`anarbib-conv-file-alimenter`) passe désormais les cinq semeurs (celui des titres créé, sans le bac à sable de formation), notes datées, verdicts jamais reproposés ; premier passage en production : 4 lignes (une autorité en capitales, deux formes, une collectivité non typée), aucun titre — les trois repérés sont des exercices du bac à sable de formation, écartés exprès. Critères : (1) trois dispositifs, aucun bloquant — tenu ; (2) proposition refusable, original conservé — le nom tapé n'est jamais réécrit, le titre s'annule, la file s'écarte ; (3) libellés dans les dix locales — 20 clés. **Reste : un regard de Xavier connecté** sur une nouvelle autorité et une nouvelle notice (`/catalogacao` exige une session), puis clôture. À noter : **171 titres attendent dans le lot « titre_casse » depuis le 21/08**.",
-        "pt": "O banco sabe normalizar; a interface de digitação ainda não assiste. Três dispositivos estão especificados e não entregues: o assistente de separação do nome (§7.1), o botão «Normalizar maiúsculas» com pré-visualização (§7.2), e a fila de controles de coerência em segundo plano (§7.3). **Entregue em 27/09, os três.** §7.2 (`b9177403`) botão «Normalizar maiúsculas» com prévia e desfazer; §7.1 (`0c3bb62f`) assistente do ponto de acesso (Confirmar, Corrigir palavra por palavra, Nome único), variante hispânica só oferecida; §7.3 (`7eb72630`) cron semanal que alimenta a fila do Ateliê pelos cinco semeadores, sem o ambiente de formação; primeira passagem: 4 lignes (une autorité en capitales, deux formes, une collectivité non typée), aucun titre — les trois repérés sont des exercices du bac à sable de formation, écartés exprès. Falta o olhar de Xavier conectado, depois fechar. 171 títulos esperam no lote «titre_casse» desde 21/08."
-      },
-      "w": {
-        "fr": "Trois écrans, dans cet ordre de valeur : le bouton de normalisation de casse (le plus simple, actif seulement si la langue est renseignée) ; l'assistant de découpage, qui propose mot par mot avec un bouton « Corrigir » et une explication d'une ligne ; la file de contrôles, qui signale sans bloquer.",
-        "pt": "Três telas, nesta ordem de valor: o botão de normalização de caixa (o mais simples, ativo só se a língua estiver preenchida); o assistente de separação, que propõe palavra por palavra com um botão «Corrigir» e uma explicação de uma linha; a fila de controles, que sinaliza sem bloquear."
-      },
-      "y": {
-        "fr": "C'est la contrainte de conception la plus ferme du projet : **toute règle doit être soit invisible parce que calculée, soit assistée parce que proposée et confirmée, jamais un savoir préalable exigé à la saisie.** Les personnes qui cataloguent ne sont ni bibliothécaires ni informaticiennes. Sans ces trois écrans, les conventions restent une doctrine que seul leur auteur sait appliquer.",
-        "pt": "É a restrição de concepção mais firme do projeto: **toda regra deve ser ou invisível porque calculada, ou assistida porque proposta e confirmada, nunca um saber prévio exigido na digitação.** As pessoas que catalogam não são bibliotecárias nem informáticas. Sem essas três telas, as convenções continuam uma doutrina que só seu autor sabe aplicar."
-      },
-      "f": {
-        "fr": [
-          "Les trois dispositifs existent et **aucun n'est bloquant**.",
-          "Chaque proposition est refusable, avec l'original conservé.",
-          "Les libellés existent dans les dix locales en une seule passe."
-        ],
-        "pt": [
-          "Os três dispositivos existem e **nenhum é bloqueante**.",
-          "Cada proposta é recusável, com o original conservado.",
-          "Os rótulos existem nas dez locales numa só passagem."
-        ]
-      },
-      "dep": {
-        "fr": "S'appuie sur les migrations `conventions_*` déjà en place.",
-        "pt": "Apoia-se nas migrações `conventions_*` já em vigor."
-      },
-      "r": [
-        "spec-conventions-catalographiques-v0.1 §7"
       ]
     },
     {
