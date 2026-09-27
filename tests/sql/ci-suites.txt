@@ -538,3 +538,6 @@ tests/sql/name_lang_tests.sql
 # 27/09 (B10, passe 1) : une policy permissive par (role, commande) — invariant global a liste fermee vide,
 # anti-derive des deux copies de la lecture publique, lectures et ecritures reelles apres fusion.
 tests/sql/policies_permissives_uniques_tests.sql
+# 27/09 (B10, passe 3) : aucun index redondant (prefixe exact d un autre, memes classes, predicat, sans INCLUDE)
+# hors des 22 assumes — empruntes, a retirer sur mesure ; les 10 jamais empruntes ont ete retires.
+tests/sql/index_redondants_garde_tests.sql
