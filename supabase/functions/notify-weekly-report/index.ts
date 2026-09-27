@@ -848,7 +848,7 @@ serve(async (req) => {
         renderTable("Devoluções (últimas 50 linhas agrupadas por empréstimo)", ["Empréstimo", "Devolvido em", "Livro(s)", "Leitor(a/e)"], returnsRows),
         renderTable("Atrasos ativos (top 50)", ["Empréstimo", "Vencimento", "Livro(s)", "Leitor(a/e)"], overdueRows),
         renderTable("Intercâmbios interbibliotecas (PEB criados na semana, últimos 50)", ["Referência", "Papel", "Biblioteca parceira", "Estado", "Documentos"], pebRows),
-        renderTable("Partilhas digitais (pedidos da semana, últimos 50)", ["Documento", "Papel", "Biblioteca parceira", "Estado"], pdRows)
+        renderTable("Compartilhamentos digitais (pedidos da semana, últimos 50)", ["Documento", "Papel", "Biblioteca parceira", "Estado"], pdRows)
       ],
       context: ctx,
       routing

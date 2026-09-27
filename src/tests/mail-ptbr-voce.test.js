@@ -27,6 +27,16 @@
 // Hors de portée aussi : le texte en dur des index.ts (pied de page par
 // défaut de _shared/core/env.ts, corrigé le même jour à la main).
 //
+// VOCABULAIRE. Même histoire, une passe plus tard : faae6e0e a mis pt-BR.json
+// au vocabulaire du Brésil (« compartilhamento », « gerenciar »…) avec sa
+// garde PT_EUROPEU, restée locale à i18n-ecriture.test.js tant que les
+// courriels disaient encore « Pedido de partilha digital », « Gerir a
+// parceria ». Leur passe faite (scripts/mail-ptbr-vocabulario.cjs, 16
+// valeurs), le motif est partagé (helpers/ptbr-pt-europeu.js) et ce test le
+// passe aussi. Il en voyait 11 sur les 15 des modules : ni « Gerir » ×2
+// (« gerir » existe au Brésil, soutenu), ni « Você junta-se » (la syntaxe),
+// ni « basculhar » (calque du français). Même plancher, même lecture.
+//
 // MÉTHODE : les modules sont du TypeScript pour Deno ; on les transpile avec
 // esbuild et on les évalue, comme digest-cross-library-labels.test.js. Un
 // PLANCHER de valeurs par module fait rougir le test si le chargement décroche
@@ -36,6 +46,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { TU_EUROPEU } from './helpers/ptbr-tu-europeu.js';
+import { PT_EUROPEU } from './helpers/ptbr-pt-europeu.js';
 
 const FONCTIONS = new URL('../../supabase/functions/', import.meta.url);
 const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
@@ -79,8 +90,15 @@ const texte = (v) => v
 // Valeurs où l'une de ces formes serait légitime (citation, 3e personne).
 // Vide au 27/09/2026 : chaque entrée se défend en citant le passage.
 const TU_LEGITIME = [];
+// Même règle pour le vocabulaire (citation d'un texte portugais). Vide au 27/09/2026.
+const PT_EUROPEU_LEGITIME = [];
 
-describe('courriels pt-BR — registre « você » (DOC-ADDR-1)', () => {
+describe('courriels pt-BR — registre « você » (DOC-ADDR-1) et vocabulaire du Brésil', () => {
+  it('le motif du vocabulaire est vivant : il voit « partilha » et épargne « compartilhamento »', () => {
+    expect(PT_EUROPEU.test('Pedido de partilha digital — {book}')).toBe(true);
+    expect(PT_EUROPEU.test('Pedido de compartilhamento digital — {book}')).toBe(false);
+  });
+
   it('le motif est vivant : il voit le « tu » européen et épargne « mútua »', () => {
     // Fautes relevées le 27/09/2026 — dont celles que le motif ne voyait pas
     // avant son élargissement —, et leurs phrases justes : « apoio mútuo »,
@@ -122,6 +140,21 @@ describe('courriels pt-BR — registre « você » (DOC-ADDR-1)', () => {
           `${nom} : ${fautes.length} valeur(s) au « tu » européen\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
             'Réécris au « você » (seu/sua, « confirme », « clique », « a você »). Si la forme ' +
             'est légitime (citation, 3e personne), ajoute « module:clé » à TU_LEGITIME en citant le passage.',
+        ).toEqual([]);
+      });
+
+      it('aucune valeur pt-BR au vocabulaire du Portugal', () => {
+        const fautes = [];
+        for (const [k, v] of valeurs) {
+          if (PT_EUROPEU_LEGITIME.includes(`${nom}:${k}`)) continue;
+          const m = texte(v).match(PT_EUROPEU);
+          if (m) fautes.push(`${k} → « ${m.slice(1).find(Boolean)} » dans « ${v.slice(0, 70)} »`);
+        }
+        expect(
+          fautes,
+          `${nom} : ${fautes.length} valeur(s) au vocabulaire du Portugal\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
+            'Écris en brésilien, comme l\'écran (compartilhamento, arquivo, registro, contato, ' +
+            '« Carregando… »). Si la forme est légitime, ajoute « module:clé » à PT_EUROPEU_LEGITIME.',
         ).toEqual([]);
       });
     });

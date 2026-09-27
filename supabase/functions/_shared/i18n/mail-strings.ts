@@ -2758,7 +2758,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Συνεργαζόμενη βιβλιοθήκη"
   },
   "partnership.actionTitle": {
-    "pt-BR": "Gerir a parceria", fr: "Gérer le partenariat", es: "Gestionar la asociación",
+    "pt-BR": "Gerenciar a parceria", fr: "Gérer le partenariat", es: "Gestionar la asociación",
     en: "Manage the partnership", it: "Gestisci il partenariato", de: "Partnerschaft verwalten",
     ca: "Gestionar el partenariat", eo: "Administri la partnerecon", nl: "Partnerschap beheren",
     el: "Διαχείριση της συνεργασίας"
@@ -2874,7 +2874,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Εμπλεκόμενες βιβλιοθήκες"
   },
   "partnership_transparence_enabled.actionTitle": {
-    "pt-BR": "Gerir seu consentimento", fr: "Gérer ton consentement", es: "Gestionar tu consentimiento",
+    "pt-BR": "Gerenciar seu consentimento", fr: "Gérer ton consentement", es: "Gestionar tu consentimiento",
     en: "Manage your consent", it: "Gestisci il tuo consenso", de: "Deine Zustimmung verwalten",
     ca: "Gestionar el teu consentiment", eo: "Administri vian konsenton", nl: "Je toestemming beheren",
     el: "Διαχείριση της συγκατάθεσής σου"
@@ -3780,7 +3780,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Έγινες δεκτός/ή ως συντονιστής/στρια"
   },
   "team.promoted_to_coordenador.intro": {
-    "pt-BR": "Você acaba de ser admitid(o/a/e) coordenador(o/a/e) na {libraryName} de maneira concertada. Você junta-se ao círculo de coordenação. Suas responsabilidades se ampliam: governança da equipe, validações sensíveis. O regimento interno está aqui: {regimentoUrl}",
+    "pt-BR": "Você acaba de ser admitid(o/a/e) coordenador(o/a/e) na {libraryName} de maneira concertada. Você se junta ao círculo de coordenação. Suas responsabilidades se ampliam: governança da equipe, validações sensíveis. O regimento interno está aqui: {regimentoUrl}",
     fr: "Tu viens d'être admis·e coordinateur·rice à la {libraryName} de manière concertée. Tu rejoins le cercle de coordination. Tes responsabilités s'élargissent : gouvernance de l'équipe, validations sensibles. Le règlement intérieur est ici : {regimentoUrl}",
     es: "Acabás de ser admitide coordinadore en le {libraryName} de manera concertada. Te sumás al círculo de coordinación. Tus responsabilidades se amplían: gobernanza de le equipo, validaciones sensibles. El reglamento interno está acá: {regimentoUrl}",
     en: "You have just been admitted as a coordinator at {libraryName} through a concerted decision. You join the coordination circle. Your responsibilities expand: team governance, sensitive validations. The internal rules are here: {regimentoUrl}",
@@ -6313,7 +6313,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Ο/Η <b>{proposerName}</b> απέσυρε τη δική του/της πρόταση μετάβασης για <b>{axisLoc}</b> στη <b>{libraryName}</b> (που ήταν: από <i>{oldValueLoc}</i> σε <i>{newValueLoc}</i>). Η τρέχουσα ρύθμιση παραμένει σε ισχύ."
   },
   "library_profile.executed.intro": {
-    "pt-BR": "A <b>{libraryName}</b> acaba de basculhar seu <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
+    "pt-BR": "A <b>{libraryName}</b> acaba de mudar seu <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
     fr: "<b>{libraryName}</b> adopte un nouveau <b>{axisLoc}</b> : à partir de maintenant, <i>{oldValueLoc}</i> devient <b>{newValueLoc}</b>. Cette transition a été décidée collectivement.",
     es: "<b>{libraryName}</b> adopta un nuevo <b>{axisLoc}</b>: a partir de ahora, <i>{oldValueLoc}</i> deviene <b>{newValueLoc}</b>. Esta transición fue decidida colectivamente.",
     en: "<b>{libraryName}</b> adopts a new <b>{axisLoc}</b>: from now on, <i>{oldValueLoc}</i> becomes <b>{newValueLoc}</b>. This transition was decided collectively.",
@@ -7739,14 +7739,14 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // Params : {requester} {source} {book} {reason}.
   // ========================================================================
   "ill.requested.sub": {
-    "pt-BR": "Pedido de partilha digital — {book}", fr: "Demande de partage numérique — {book}",
+    "pt-BR": "Pedido de compartilhamento digital — {book}", fr: "Demande de partage numérique — {book}",
     es: "Solicitud de compartición digital — {book}", en: "Digital sharing request — {book}",
     it: "Richiesta di condivisione digitale — {book}", de: "Anfrage zur digitalen Teilung — {book}",
     ca: "Sol·licitud de compartició digital — {book}", eo: "Peto de cifereca kunhavigo — {book}",
     nl: "Verzoek om digitaal delen — {book}", el: "Αίτημα ψηφιακής κοινοποίησης — {book}"
   },
   "ill.requested.intro": {
-    "pt-BR": "{requester} solicita a partilha digital do documento « {book} ». Cabe a você aceitar, recusar ou sinalizar a indisponibilidade.",
+    "pt-BR": "{requester} solicita o compartilhamento digital do documento « {book} ». Cabe a você aceitar, recusar ou sinalizar a indisponibilidade.",
     fr: "{requester} sollicite le partage numérique du document « {book} ». À toi d'accepter, refuser ou signaler l'indisponibilité.",
     es: "{requester} solicita la compartición digital del documento « {book} ». Te toca aceptar, rechazar o señalar la indisponibilidad.",
     en: "{requester} requests the digital sharing of « {book} ». It's up to you to accept, refuse or mark it unavailable.",
@@ -7758,13 +7758,13 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η/Ο {requester} ζητά την ψηφιακή κοινοποίηση του τεκμηρίου « {book} ». Σε εσένα να αποδεχθείς, να αρνηθείς ή να δηλώσεις μη διαθεσιμότητα."
   },
   "ill.accepted.sub": {
-    "pt-BR": "Partilha aceita — {book}", fr: "Partage accepté — {book}", es: "Compartición aceptada — {book}",
+    "pt-BR": "Compartilhamento aceito — {book}", fr: "Partage accepté — {book}", es: "Compartición aceptada — {book}",
     en: "Sharing accepted — {book}", it: "Condivisione accettata — {book}", de: "Teilung angenommen — {book}",
     ca: "Compartició acceptada — {book}", eo: "Kunhavigo akceptita — {book}",
     nl: "Delen geaccepteerd — {book}", el: "Η κοινοποίηση έγινε δεκτή — {book}"
   },
   "ill.accepted.intro": {
-    "pt-BR": "{source} aceitou seu pedido de partilha para « {book} ». A digitalização segue.",
+    "pt-BR": "{source} aceitou seu pedido de compartilhamento para « {book} ». A digitalização segue.",
     fr: "{source} a accepté ta demande de partage pour « {book} ». La numérisation suit.",
     es: "{source} aceptó tu solicitud de compartición para « {book} ». La digitalización sigue.",
     en: "{source} accepted your sharing request for « {book} ». Digitization follows.",
@@ -7776,13 +7776,13 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η/Ο {source} αποδέχθηκε το αίτημά σου για « {book} ». Ακολουθεί η ψηφιοποίηση."
   },
   "ill.refused.sub": {
-    "pt-BR": "Partilha recusada — {book}", fr: "Partage refusé — {book}", es: "Compartición rechazada — {book}",
+    "pt-BR": "Compartilhamento recusado — {book}", fr: "Partage refusé — {book}", es: "Compartición rechazada — {book}",
     en: "Sharing refused — {book}", it: "Condivisione rifiutata — {book}", de: "Teilung abgelehnt — {book}",
     ca: "Compartició rebutjada — {book}", eo: "Kunhavigo rifuzita — {book}",
     nl: "Delen geweigerd — {book}", el: "Η κοινοποίηση απορρίφθηκε — {book}"
   },
   "ill.refused.intro": {
-    "pt-BR": "{source} recusou seu pedido de partilha para « {book} ». Motivo: {reason}",
+    "pt-BR": "{source} recusou seu pedido de compartilhamento para « {book} ». Motivo: {reason}",
     fr: "{source} a refusé ta demande de partage pour « {book} ». Motif : {reason}",
     es: "{source} rechazó tu solicitud de compartición para « {book} ». Motivo: {reason}",
     en: "{source} refused your sharing request for « {book} ». Reason: {reason}",
@@ -7801,7 +7801,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Document niet beschikbaar — {book}", el: "Μη διαθέσιμο τεκμήριο — {book}"
   },
   "ill.unavailable.intro": {
-    "pt-BR": "{source} sinaliza que « {book} » está indisponível para partilha no momento.",
+    "pt-BR": "{source} sinaliza que « {book} » está indisponível para compartilhamento no momento.",
     fr: "{source} signale que « {book} » est indisponible au partage pour le moment.",
     es: "{source} señala que « {book} » no está disponible para compartir por ahora.",
     en: "{source} reports that « {book} » is unavailable for sharing at the moment.",
@@ -7820,7 +7820,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Document verzonden — {book}", el: "Το τεκμήριο διαβιβάστηκε — {book}"
   },
   "ill.transmitted.intro": {
-    "pt-BR": "{source} transmitiu « {book} ». Você pode consultá-lo no espaço de partilha.",
+    "pt-BR": "{source} transmitiu « {book} ». Você pode consultá-lo no espaço de compartilhamento.",
     fr: "{source} a transmis « {book} ». Tu peux le consulter dans l'espace de partage.",
     es: "{source} transmitió « {book} ». Puedes consultarlo en el espacio de compartición.",
     en: "{source} transmitted « {book} ». You can view it in the sharing space.",
@@ -7832,13 +7832,13 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η/Ο {source} διαβίβασε το « {book} ». Μπορείς να το δεις στον χώρο κοινοποίησης."
   },
   "ill.closed.sub": {
-    "pt-BR": "Partilha encerrada — {book}", fr: "Partage clôturé — {book}", es: "Compartición cerrada — {book}",
+    "pt-BR": "Compartilhamento encerrado — {book}", fr: "Partage clôturé — {book}", es: "Compartición cerrada — {book}",
     en: "Sharing closed — {book}", it: "Condivisione chiusa — {book}", de: "Teilung abgeschlossen — {book}",
     ca: "Compartició tancada — {book}", eo: "Kunhavigo fermita — {book}",
     nl: "Delen afgesloten — {book}", el: "Η κοινοποίηση έκλεισε — {book}"
   },
   "ill.closed.intro": {
-    "pt-BR": "A partilha digital de « {book} » foi encerrada.",
+    "pt-BR": "O compartilhamento digital de « {book} » foi encerrado.",
     fr: "Le partage numérique de « {book} » est clôturé.",
     es: "La compartición digital de « {book} » ha sido cerrada.",
     en: "The digital sharing of « {book} » has been closed.",
@@ -7850,7 +7850,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η ψηφιακή κοινοποίηση του « {book} » έκλεισε."
   },
   "ill.cta": {
-    "pt-BR": "Abrir a partilha", fr: "Ouvrir le partage", es: "Abrir la compartición", en: "Open the share",
+    "pt-BR": "Abrir o compartilhamento", fr: "Ouvrir le partage", es: "Abrir la compartición", en: "Open the share",
     it: "Apri la condivisione", de: "Teilung öffnen", ca: "Obrir la compartició", eo: "Malfermi la kunhavigon",
     nl: "Delen openen", el: "Άνοιγμα κοινοποίησης"
   },
