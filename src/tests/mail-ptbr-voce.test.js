@@ -17,12 +17,13 @@
 // notify-library-request/strings.ts (demandes d'adhésion) — passées au motif
 // `TU_EUROPEU`, LE MÊME objet que celui de pt-BR.json (helpers/ptbr-tu-europeu.js).
 //
-// ANGLE MORT, mesuré sur les valeurs d'avant correction : le motif en trouve
-// 50 sur 61. Il ne voit ni « Não respondas », ni « Deixaste de receber », ni
-// « Acessai a app », ni « vem ler », ni « quem vos representará », ni
-// « Consulta o painel » (homographe du nom « consulta », exclu à dessein), ni
-// l'impératif « responde » après une virgule. Son chiffre est un PLANCHER :
-// la correction s'est faite en LISANT les 862 valeurs, pas par la regex.
+// ANGLE MORT, mesuré sur les valeurs d'avant correction : le motif en
+// trouvait 50 sur 61. Élargi le soir même (« Não respondas », « Deixaste »,
+// « Acessai », « fizeste », « vos », « responde a este e-mail » — détail et
+// mesure dans le module du motif), il en trouve 58. Restent invisibles
+// « Consulta o painel » ×2 (homographe du nom « Consulta local », exclu à
+// dessein) et « — vem ler » en minuscule. Son chiffre est un PLANCHER : la
+// correction s'est faite en LISANT les 862 valeurs, pas par la regex.
 // Hors de portée aussi : le texte en dur des index.ts (pied de page par
 // défaut de _shared/core/env.ts, corrigé le même jour à la main).
 //
@@ -81,12 +82,24 @@ const TU_LEGITIME = [];
 
 describe('courriels pt-BR — registre « você » (DOC-ADDR-1)', () => {
   it('le motif est vivant : il voit le « tu » européen et épargne « mútua »', () => {
-    // Trois fautes relevées le 27/09/2026, et deux phrases justes : « apoio
-    // mútuo », « ajuda mútua » contiennent « tua » pour un `\b` ASCII.
-    for (const faute of ['Recebemos o teu relato', 'Podes responder na aba', 'aguarda vossa decisão.']) {
+    // Fautes relevées le 27/09/2026 — dont celles que le motif ne voyait pas
+    // avant son élargissement —, et leurs phrases justes : « apoio mútuo »,
+    // « ajuda mútua » contiennent « tua » pour un `\b` ASCII ; « Consulta
+    // local » est le nom que l'impératif « Consulta » aurait fait rougir.
+    for (const faute of [
+      'Recebemos o teu relato', 'Podes responder na aba', 'aguarda vossa decisão.',
+      'Não respondas a esta mensagem.', 'Pronto! Deixaste de receber o Boletim.',
+      'Acessai a app para votar.', 'votar se ainda não o fizeste.',
+      'preparar o mandato de quem vos representará.', 'Em caso de dúvida, responde a este e-mail.',
+    ]) {
       expect(TU_EUROPEU.test(faute), faute).toBe(true);
     }
-    for (const juste of ['Novo chamado de apoio mútuo no seu círculo', 'confirmação mútua', 'Você pode responder na aba']) {
+    for (const juste of [
+      'Novo chamado de apoio mútuo no seu círculo', 'confirmação mútua', 'Você pode responder na aba',
+      'Não responda a esta mensagem.', 'Pronto! Você deixou de receber o Boletim.',
+      'Acesse o aplicativo para votar.', 'A coordenação respondeu a este e-mail.',
+      'Consulta local registrada como realizada', 'Recarrega os dados da página.',
+    ]) {
       expect(TU_EUROPEU.test(juste), juste).toBe(false);
     }
   });
