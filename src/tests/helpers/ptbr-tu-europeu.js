@@ -70,6 +70,8 @@
 export const PT_2A_PESSOA = [
   'tu', 'te', 'ti', 'contigo', 'teu', 'teus', 'tua', 'tuas', 'sê',
   'vós', 'vos', 'vosso', 'vossos', 'vossa', 'vossas', 'convosco', 'verificai', 'explicai', 'acessai',
+  // impératif du « vós » — « Exponei » ×2 dans les fenêtres rede, vu le 27/09/2026
+  'exponei',
   'és', 'estás', 'podes', 'tens', 'queres', 'fazes', 'vais', 'vês', 'sabes',
   'consegues', 'deves', 'recebes', 'esperavas', 'viste', 'estavas', 'tinhas', 'conheces', 'encontras',
   'tiveres', 'pedires', 'precisares', 'quiseres', 'puderes', 'preferires', 'fizeres', 'teres',

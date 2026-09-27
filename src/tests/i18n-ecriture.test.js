@@ -277,9 +277,37 @@ const VOUVOIEMENT_FR = new RegExp(
     '|(?:^|[.!?…:;—–(]\\s*)((?:fai|di)tes)(?![\\p{L}])',
   'iu',
 );
+// es, élargi le 27/09/2026. Le motif du 07/09 cherchait « usted » EN
+// MINUSCULE, sans drapeau `i` : les trois « Usted » en tête de phrase
+// (« Usted está en modo de solo lectura », « Usted confirmó ese horario »)
+// passaient. Et il ne connaissait pas le « vosotros » : les fenêtres de
+// cooptation et de retrait collectif disaient « Verificad », « Exponed »,
+// « Seleccionad », « Explicad », « Vuestra decisión es decisiva » à la
+// personne qui propose ou qui vote. Douze valeurs, réécrites par
+// `scripts/i18n-es-ptbr-registre.cjs`.
+//
+// CE QUE LE MOTIF VOIT : « usted/ustedes » dans les deux casses, les
+// impératifs de politesse de la liste d'origine, les pronoms et possessifs du
+// « vosotros » (vosotros, vuestro…, « os »), le présent en « -áis/-éis » et
+// « sois », et l'impératif du « vosotros » (« -ad/-ed/-id ») en TÊTE DE
+// PHRASE seulement. Sur le fichier d'avant correction : 12/12, rien d'autre ;
+// l'ancien motif : 0/12.
+// ANGLES MORTS : ailleurs qu'en tête de phrase, « -ad/-ed/-id » est trop
+// souvent un nom (« red », « ciudad », « identidad » : 432 clés) ; en tête,
+// les noms en « -dad/-tad » sont écartés, donc les impératifs en « -dad/-tad »
+// passent (« Votad », « Editad », « Ayudad ») ; l'enclise « -os » (« Poneos »)
+// passe, homographe des pluriels (« deseos », « correos »). Le voseo
+// (« escribís », « Venís ») est un tutoiement, il n'est pas visé.
+const NOMS_EN_AD_ED_ID = ['Red', 'Sed', 'Pared', 'Huésped', 'Césped', 'Madrid', 'David', 'Feed', 'Download', 'Id', 'Lid', 'Vid'];
+const VOUVOIEMENT_ES = new RegExp(
+  '(?<![\\p{L}])([Uu]sted|[Uu]stedes|[Vv]osotr[oa]s|[Vv]uestr[oa]s?|os|Desea|Consulte|Retome|Ponga|Haga|Indique|Seleccione|Verifique|Contacte)(?![\\p{L}])' +
+    '|(?<![\\p{L}])(\\p{L}+(?:áis|éis)|[Ss]ois)(?![\\p{L}])' +
+    `|(?:^|[.!?…:;—–(¡¿]\\s*)(?!(?:\\p{L}*[dt]ad|${NOMS_EN_AD_ED_ID.join('|')})(?![\\p{L}]))(\\p{Lu}\\p{Ll}*(?:ad|ed|id))(?![\\p{L}])`,
+  'u',
+);
 const VOUVOIEMENT = {
   fr: VOUVOIEMENT_FR,
-  es: /\b(usted|ustedes|Desea|Consulte|Retome|Ponga|Haga|Indique|Seleccione|Verifique|Contacte)\b/,
+  es: VOUVOIEMENT_ES,
 };
 
 // Adresses au PLURIEL, à un collectif — ce n'est pas du vouvoiement — et
