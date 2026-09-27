@@ -541,3 +541,6 @@ tests/sql/policies_permissives_uniques_tests.sql
 # 27/09 (B10, passe 3) : aucun index redondant (prefixe exact d un autre, memes classes, predicat, sans INCLUDE)
 # hors des 22 assumes — empruntes, a retirer sur mesure ; les 10 jamais empruntes ont ete retires.
 tests/sql/index_redondants_garde_tests.sql
+# 27/09 (volumes) : un ISBN d ensemble est porte par chacun de ses volumes — deux notices aux
+# numeros de volume differents ne sont pas des doublons ; meme volume ou volume absent : refus comme avant.
+tests/sql/isbn_volumes_tests.sql
