@@ -91,7 +91,7 @@ Supersédé par : —
    par appel). *(Migration `20260612230500_ill_digital_share_flux_lot_i1`.)*
 3. ✅ **i18n** : clés frontend `digishare.*` ×10 locales (`DOC-I18N-1`) + notif `ill.*` ×10 (mail maison).
 4. ✅ **Frontend** (I3) : `LibraryDigitalSharesSection` dans BibliotecaPage onglet `ill` (zone PEB/échanges).
-   **Notif** (I4) : EF `notify-digital-share`. **Hebdo** (I5) : section « Partilhas digitais » dans
+   **Notif** (I4) : EF `notify-digital-share`. **Hebdo** (I5) : section « Compartilhamentos digitais » (« Partilhas digitais » jusqu'au 27/09/2026, `49047ae3` et `6f762f8f`) dans
    `notify-weekly-report` (ILL-7).
 
 ---
