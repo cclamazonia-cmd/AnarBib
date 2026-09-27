@@ -2,14 +2,16 @@
 -- AnarBib — Tests : une policy permissive par (rôle, commande)
 -- Date    : 2026-09-27  ·  Item B10, passe 1 (avis 0006 multiple_permissive_policies)
 -- Ref     : 20260927180000_b10_une_policy_permissive_par_role_et_commande
+--           20260927180030_b10_ce_qui_ne_depend_pas_de_la_ligne_d_abord
 --
 -- Deux permissives pour le même rôle et la même commande ne sont pas un trou :
 -- PostgreSQL les combine par un OU. Mais c'est un OU dont on ne choisit pas
 -- l'ordre. Mesuré en production le 27/09 : pour un compte lecteur, la branche
 -- staff de `books` était essayée avant la branche publique, ligne à ligne —
 -- `count(*)` à 205 ms contre 92 ms pour `anon`. La migration de référence a
--- réécrit les 25 tables concernées en UNE permissive par (rôle, commande), la
--- branche publique en tête.
+-- réécrit les 25 tables concernées en UNE permissive par (rôle, commande), et
+-- la passe 1 bis a ordonné chaque OU : ce qui ne dépend pas de la ligne
+-- (calculé une fois), puis la lecture publique, puis le staff ligne à ligne.
 --
 -- Ce que la suite tient :
 --   T1  l'invariant, pour TOUTE table de tout schéma applicatif (liste fermée
@@ -17,8 +19,9 @@
 --       moment où la migration s'écrit — pas huit semaines après, dans l'avis.
 --   T2  le détecteur mord (fixture en table temporaire, FOR ALL compris).
 --   T3  la lecture publique existe désormais en DEUX copies (la policy `anon`
---       et la tête du OU de `<table>_select_authenticated`) : toute migration
---       qui change l'une doit changer l'autre. T3 l'exige, texte pour texte.
+--       et une branche du OU de `<table>_select_authenticated`) : toute
+--       migration qui change l'une doit changer l'autre. T3 l'exige, texte
+--       pour texte.
 --   T4  lectures réelles sous anon, lectrice, hors-adhésion, staff, admin
 --       réseau, network_staff : ce que la fusion devait préserver.
 --   T5  écritures réelles sur les FOR ALL scindés en INSERT/UPDATE/DELETE.
@@ -120,14 +123,16 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T3 chaque <table>_select_authenticated commence par la lecture anon de sa table, texte pour texte';
+  v_t := 'T3 chaque <table>_select_authenticated porte la lecture anon de sa table, texte pour texte';
   -- La lecture publique vit en deux copies : la changer pour anon sans la
   -- changer pour authenticated ferait voir MOINS à une personne connectée
-  -- qu'à un visiteur. `position = 2` : juste après la parenthèse du OU.
-  -- Ne regarde que les tables qui portent LES DEUX copies.
+  -- qu'à un visiteur. Le texte anon doit figurer TEL QUEL dans le OU ; sa
+  -- place n'est pas imposée (passe 1 bis, 20260927180030 : ce qui ne dépend
+  -- pas de la ligne passe d'abord). Ne regarde que les tables qui portent
+  -- LES DEUX copies.
   BEGIN
-    SELECT count(*) FILTER (WHERE position(qa in qu) = 2),
-           string_agg(tbl, ', ' ORDER BY tbl) FILTER (WHERE position(qa in qu) IS DISTINCT FROM 2)
+    SELECT count(*) FILTER (WHERE position(qa in qu) > 0),
+           string_agg(tbl, ', ' ORDER BY tbl) FILTER (WHERE coalesce(position(qa in qu), 0) = 0)
       INTO v_n, v_txt
       FROM (
         SELECT c.relname AS tbl,
