@@ -300,16 +300,20 @@ export function localizeError(err, t, actionFallbackKey) {
     }
   }
 
-  // Cas 1c : refus d'une politique RLS sur un brouillon de catalogage (B29,
+  // Cas 1c : refus d'une politique RLS sur un brouillon ou un lot de catalogage (B29,
   // REGISTRE CAT-E18) — « new row violates row-level security policy for table
   // "book_drafts" » : ranger un brouillon dans une bibliothèque où l'on n'est
   // pas staff, modifier l'autorité d'autrui. Un refus métier, pas une panne :
   // on le dit, plutôt qu'une « erreur système ».
+  // B30 : le lot a sa bibliothèque — créer (ou modifier) un lot d'une
+  // bibliothèque où l'on n'est pas staff est refusé par la politique de
+  // catalog_batches.
   if (typeof err === 'object' && err.code === '42501' && typeof err.message === 'string') {
     const m = /row-level security policy for table "([a-z_]+)"/i.exec(err.message);
     const table = m ? m[1] : '';
     const cle = table === 'author_drafts' ? 'error.catalog.author_draft_creator_only'
       : /^(book_drafts|exemplar_drafts|book_draft_[a-z_]+)$/.test(table) ? 'error.catalog.draft_other_library'
+      : table === 'catalog_batches' ? 'error.batch.library_not_yours'
       : null;
     const translated = cle ? tryTranslate(t, cle) : null;
     if (translated) return translated;

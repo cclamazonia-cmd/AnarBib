@@ -2,7 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
-import { useStaffLibraries, bibliothequesProposables } from '@/lib/useStaffLibraries';
+import { useStaffLibraries, bibliothequesProposables, lotsProposables, lotDeLaBibliotheque, libelleLot } from '@/lib/useStaffLibraries';
 import SerialAuthorityPicker from './SerialAuthorityPicker';
 import AudioSegmentsBlock from './AudioSegmentsBlock';
 import WorkToolsBlock from './WorkToolsBlock';
@@ -625,14 +625,26 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // bibliothèque active peut être celle d'une adhésion de lectrice : la base
   // refuserait le brouillon). Sinon, sa seule bibliothèque de staff ; plusieurs
   // → à choisir (la base pose la principale si on n'en choisit aucune).
+  // B30 : seulement pour une notice NEUVE — une notice enregistrée sans
+  // bibliothèque (d'avant B29) reçoit à l'enregistrement celle de son créateur
+  // (tg_drafts_library_fixed), pas la bibliothèque active. Et un lot déjà
+  // choisi l'emporte : la liste de staff a pu arriver APRÈS le choix du lot,
+  // et une notice d'une bibliothèque rangée dans le lot d'une autre serait
+  // refusée à la création (42501 error.batch.library_mismatch). Lot hors de
+  // portée : la notice prend la bibliothèque active et sort du lot.
   useEffect(() => {
     if (!networkLibraries.length) return;
+    if (f('id')) return;
     if (f('action') !== 'create' && f('action') !== '') return;
     if (f('owner_library_id')) return; // already set
     if (!isNetworkAdmin && !staffConnu) return; // B29 : attendre la liste (l'effet se rejoue)
-    const cible = libraryId && (isNetworkAdmin || staffLibraryIds.includes(libraryId))
-      ? libraryId
-      : (!isNetworkAdmin && staffLibraryIds.length === 1 ? staffLibraryIds[0] : null);
+    const peutRanger = (id) => isNetworkAdmin || staffLibraryIds.includes(id);
+    const lot = f('batch_id') ? batches.find(b => String(b.id) === String(f('batch_id'))) : null;
+    const cible = lot?.library_id && peutRanger(lot.library_id)
+      ? lot.library_id
+      : libraryId && peutRanger(libraryId)
+        ? libraryId
+        : (!isNetworkAdmin && staffLibraryIds.length === 1 ? staffLibraryIds[0] : null);
     const lib = cible ? networkLibraries.find(l => l.id === cible) : null;
     if (lib) {
       setMany({
@@ -640,6 +652,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         owner_library: lib.name,
         holder_library_id: lib.id,
         holder_library: lib.name,
+        ...(lot && !lotDeLaBibliotheque(lot, lib.id) ? { batch_id: '' } : {}),
       });
     }
   }, [libraryId, networkLibraries.length, isNetworkAdmin, staffLibraryIds.join(','), staffConnu]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -2090,10 +2103,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         result = data;
       }
 
-      setForm(prev => ({ ...prev, id: String(result.id) }));
+      // B30 : l'écran montre ce que la base a GARDÉ, pas ce qui a été demandé.
+      // Une notice d'avant B29 reçoit à l'enregistrement la bibliothèque de
+      // son créateur (tg_drafts_library_fixed), et un rangement dans le lot
+      // d'une autre bibliothèque est refusé en silence (le brouillon reste dans
+      // son ancien lot) : sans cette relecture, le menu afficherait un lot que
+      // la notice n'a pas.
+      const lotDemande = String(f('batch_id') || '');
+      const lotGarde = 'batch_id' in result ? String(result.batch_id || '') : lotDemande;
+      setForm(prev => ({
+        ...prev,
+        id: String(result.id),
+        batch_id: lotGarde,
+        ...(result.owner_library_id ? { owner_library_id: result.owner_library_id, owner_library: result.owner_library || prev.owner_library } : {}),
+      }));
 
       // Save contributors
       const warnings = [];
+      if (lotGarde !== lotDemande) warnings.push(t({ id: 'error.batch.library_mismatch' }));
       try {
         syncAutorFromContributors();
         await saveContributors(result.id);
@@ -2323,7 +2350,49 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const ownerLibraries = staffConnu
     ? bibliothequesProposables(networkLibraries, { isNetworkAdmin, staffLibraryIds, garder: f('owner_library_id') })
     : networkLibraries;   // B29 : liste inconnue — la base tranchera
-  const ctx = { f, set, t, networkLibraries, ownerLibraries };
+  // B30 : le lot a SA bibliothèque. Changer la bibliothèque propriétaire
+  // d'une notice rangée dans le lot d'une autre bibliothèque la sort du lot
+  // (la base ferait de même au prochain enregistrement). Pour tout le monde,
+  // administration du réseau comprise — que la base, elle, ne trie pas : un
+  // lot, une bibliothèque, comme ExemplarDraftForm (champ Biblioteca et
+  // réattribution d'un exemplaire).
+  function setChamp(key, value) {
+    set(key, value);
+    if (key !== 'owner_library_id' || !value || !f('batch_id')) return;
+    const lot = batches.find(b => String(b.id) === String(f('batch_id')));
+    if (lot && !lotDeLaBibliotheque(lot, value)) set('batch_id', '');
+  }
+  // B30 : les lots proposés sont ceux de la bibliothèque de la notice (tous
+  // pour l'administration) ; le lot enregistré reste toujours proposé. Liste
+  // de staff inconnue : pas de filtre, la base tranche.
+  const lotsDeLaNotice = lotsProposables(batches, {
+    isNetworkAdmin,
+    staffLibraryIds: staffConnu ? staffLibraryIds : null,
+    libraryId: f('owner_library_id') || null,
+    garder: f('batch_id') || null,
+  });
+  // Choisir un lot pour une notice NEUVE sans bibliothèque (staff de plusieurs
+  // bibliothèques, l'active n'en étant pas une ; ou liste de staff pas encore
+  // chargée) : le lot la fixe — le champ propriétaire n'est visible qu'en mode
+  // complet. Liste de staff inconnue : on pose quand même, la base vérifiera
+  // (sinon l'effet de pré-remplissage poserait ensuite la bibliothèque active,
+  // peut-être une autre que celle du lot). Une notice ENREGISTRÉE sans
+  // bibliothèque (d'avant B29) n'en reçoit pas ici : la base lui donne celle
+  // de son créateur à l'enregistrement, et juge le lot sur celle-là.
+  function choisirLot(valeur) {
+    set('batch_id', valeur);
+    if (!valeur || f('owner_library_id') || f('id')) return;
+    const lot = batches.find(b => String(b.id) === String(valeur));
+    if (!lot?.library_id) return;
+    if (!isNetworkAdmin && staffConnu && !staffLibraryIds.includes(lot.library_id)) return;
+    const nom = networkLibraries.find(l => l.id === lot.library_id)?.name || lot.library?.name || '';
+    setMany({
+      owner_library_id: lot.library_id,
+      owner_library: nom,
+      ...(f('holder_library_id') ? {} : { holder_library_id: lot.library_id, holder_library: nom }),
+    });
+  }
+  const ctx = { f, set: setChamp, t, networkLibraries, ownerLibraries };
   const rrf = (id) => renderRegistryField(id, ctx, catalogTier, materialType);
 
   // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────
@@ -2913,9 +2982,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {/* ── Lote (hors registre — options dynamiques depuis le prop batches) ── */}
           <div className="ab-field">
             <label className="ab-field__label">{t({ id: 'catalogacao.field.batch' })}</label>
-            <select className="ab-select" value={f('batch_id')} onChange={e => set('batch_id', e.target.value)}>
+            <select className="ab-select" value={f('batch_id')} onChange={e => choisirLot(e.target.value)}>
               <option value="">{t({id:'catalogacao.ui.noLot'})}</option>
-              {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
+              {lotsDeLaNotice.map(b => <option key={b.id} value={String(b.id)}>{libelleLot(b, t)}</option>)}
             </select>
           </div>
 

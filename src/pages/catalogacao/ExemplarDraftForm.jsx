@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
-import { useStaffLibraries, bibliothequesProposables } from '@/lib/useStaffLibraries';
+import { useStaffLibraries, bibliothequesProposables, lotsProposables, lotDeLaBibliotheque, libelleLot } from '@/lib/useStaffLibraries';
 import { parseShelfLocation, formatShelfLocation, emptyShelfLocation } from '@/lib/shelfLocation';
 
 // Localisation : src/lib/shelfLocation.js (la cote importée brute est gardée, H19).
@@ -95,6 +95,15 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       if (prev.target_library_id === lib.id) return prev;
       const next = { ...prev, target_library_id: lib.id };
       if (prev.target_holding_id) next.target_holding_id = ''; // holding d'une autre biblio, invalide desormais
+      // B30 : le lot a SA bibliothèque — un exemplaire qui change de
+      // bibliothèque sort d'un lot qui n'est pas de la nouvelle (la base ferait
+      // de même). Pour tout le monde, administration du réseau comprise (que la
+      // base ne trie pas) : même règle que handleReassignLibrary et que le
+      // champ propriétaire de BookDraftForm — un lot, une bibliothèque.
+      if (prev.batch_id) {
+        const lot = (batches || []).find(b => String(b.id) === String(prev.batch_id));
+        if (lot && !lotDeLaBibliotheque(lot, lib.id)) next.batch_id = '';
+      }
       return next;
     });
     let cancelled = false;
@@ -142,6 +151,20 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); if (['saved','ready'].includes(draftState)) setDraftState('dirty'); }
   function setL(k, v) { setLoc(p => ({ ...p, [k]: v })); if (['saved','ready'].includes(draftState)) setDraftState('dirty'); }
   function setLb(k, v) { setLabel(p => ({ ...p, [k]: v })); if (['saved','ready'].includes(draftState)) setDraftState('dirty'); }
+  // B30 : choisir un lot pour un exemplaire saisi NEUF encore sans
+  // bibliothèque (staff de plusieurs bibliothèques) : le lot la fixe — sinon la
+  // base poserait la principale et refuserait le rangement. Liste de staff pas
+  // encore chargée : on pose quand même, la base vérifiera. Un exemplaire
+  // ENREGISTRÉ sans bibliothèque (d'avant B29) n'en reçoit pas ici : la base
+  // lui donne à l'enregistrement celle de son créateur, et juge le lot sur
+  // celle-là (tg_drafts_library_fixed, puis le garde de rangement).
+  function choisirLot(valeur) {
+    set('batch_id', valeur);
+    if (!valeur || f('id') || f('target_library_id') || f('book_draft_id') || f('import_staging_row_id')) return;
+    const lot = (batches || []).find(b => String(b.id) === String(valeur));
+    if (!lot?.library_id) return;
+    if (isNetworkAdmin || !staffConnu || staffLibraryIds.includes(lot.library_id)) set('target_library_id', lot.library_id);
+  }
 
   // ── Load drafts ─────────────────────────────────────────
   const loadDrafts = useCallback(async () => {
@@ -349,11 +372,19 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         const { data, error } = await supabase.from('exemplar_drafts').insert(payload).select().single();
         if (error) throw error; result = data;
       }
+      // B30 : un rangement dans le lot d'une autre bibliothèque est refusé en
+      // silence (l'exemplaire reste dans son ancien lot) ; fillFromRecord montre
+      // le lot gardé, on dit pourquoi. Un exemplaire importé suit sa notice.
+      const lotRefuse = !f('book_draft_id') && 'batch_id' in result
+        && String(result.batch_id || '') !== String(f('batch_id') || '');
       fillFromRecord(result);
       setDraftState('saved');
       await loadDrafts();
       onChanged?.();
-      setMsg({ text: isUpdate ? t({ id: 'catalogacao.exemplar.draftUpdated' }) : t({ id: 'catalogacao.exemplar.draftCreated' }), kind: 'ok' });
+      const fait = isUpdate ? t({ id: 'catalogacao.exemplar.draftUpdated' }) : t({ id: 'catalogacao.exemplar.draftCreated' });
+      setMsg(lotRefuse
+        ? { text: `${fait} ${t({ id: 'error.batch.library_mismatch' })}`, kind: 'warn' }
+        : { text: fait, kind: 'ok' });
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setSaving(false); }
@@ -399,8 +430,15 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
     setReassigning(true); setMsg({ text: '', kind: '' });
     try {
+      // B30 : un exemplaire ne reste pas dans le lot d'une autre bibliothèque
+      // que la sienne — batch_id nul si le lot n'est pas de la nouvelle.
+      const lotActuel = f('batch_id') ? (batches || []).find(b => String(b.id) === String(f('batch_id'))) : null;
+      const sortDuLot = !!lotActuel && !lotDeLaBibliotheque(lotActuel, lib.id);
       const { error: saveErr } = await supabase.from('exemplar_drafts')
-        .update({ target_library_id: lib.id, target_holding_id: null, tombo: null, updated_by: user?.id || null })
+        .update({
+          target_library_id: lib.id, target_holding_id: null, tombo: null, updated_by: user?.id || null,
+          ...(sortDuLot ? { batch_id: null } : {}),
+        })
         .eq('id', Number(f('id')));
       if (saveErr) throw saveErr;
       const { error: pubErr } = await supabase.rpc('publish_exemplar_draft', { p_draft_id: Number(f('id')) });
@@ -540,9 +578,18 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             </div>
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.author.batchLabel' })}</label>
-              <select value={f('batch_id')} onChange={e => set('batch_id', e.target.value)} style={fs}>
+              {/* B30 : lots de la bibliothèque de l'exemplaire (lot enregistré
+                  toujours proposé) ; un exemplaire importé suit le lot de sa
+                  notice : champ en lecture seule. */}
+              <select value={f('batch_id')} onChange={e => choisirLot(e.target.value)} style={fs}
+                disabled={!!f('book_draft_id')}>
                 <option value="">{t({ id: 'catalogacao.author.noBatch' })}</option>
-                {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
+                {lotsProposables(batches, {
+                  isNetworkAdmin,
+                  staffLibraryIds: staffConnu ? staffLibraryIds : null,
+                  libraryId: f('target_library_id') || null,
+                  garder: f('batch_id') || null,
+                }).map(b => <option key={b.id} value={String(b.id)}>{libelleLot(b, t)}</option>)}
               </select>
             </div>
           </div>

@@ -79,6 +79,22 @@ export default function BatchReviewsPanel() {
   // le verdict attend la demande de la coordination — la regle ne change pas.
   const queued = rows.filter(r => !r.review_id && r.batch_status === 'open');
   const fmt = (d) => (d ? formatDate(d, { dateStyle: 'medium', timeStyle: 'short' }) : '—');
+  // B30 : chaque lot a SA bibliothèque (nulle = administration du réseau) —
+  // l'administration tranche en sachant pour qui. Colonne absente (RPC
+  // d'avant la migration) : rien.
+  function nomBibliotheque(r) {
+    if (!r || !('batch_library_id' in r)) return null;
+    const nom = r.batch_library_id == null
+      ? t({ id: 'catalogacao.batch.library.network' })
+      : (r.batch_library_name || '—');
+    return <span style={muted}>{t({ id: 'rede.reviews.library' }, { library: nom })}</span>;
+  }
+  const titreLot = (r) => (
+    <span style={{ display: 'inline-flex', gap: 8, flexWrap: 'wrap', alignItems: 'baseline' }}>
+      <strong>{r.batch_name}</strong>
+      {nomBibliotheque(r)}
+    </span>
+  );
 
   return (
     <div>
@@ -93,7 +109,7 @@ export default function BatchReviewsPanel() {
       {pending.map(r => (
         <div key={r.review_id} style={card}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'baseline' }}>
-            <strong>{r.batch_name}</strong>
+            {titreLot(r)}
             <span style={muted}>{t({ id: 'catalogacao.batch.review.round' }, { n: r.round })} · {t({ id: 'rede.reviews.drafts' }, { n: r.drafts_active ?? 0 })}</span>
           </div>
           <div style={muted}>{t({ id: 'rede.reviews.requestedBy' }, { name: r.requester_name || '—', date: fmt(r.requested_at) })}</div>
@@ -132,7 +148,7 @@ export default function BatchReviewsPanel() {
           {queued.map(r => (
             <div key={r.batch_id} style={card}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <strong>{r.batch_name}</strong>
+                {titreLot(r)}
                 <span style={muted}>{t({ id: 'rede.reviews.drafts' }, { n: r.drafts_active ?? 0 })}</span>
               </div>
               {live[r.batch_id]
@@ -159,7 +175,7 @@ export default function BatchReviewsPanel() {
           {decided.map(r => (
             <div key={r.review_id} style={{ ...card, marginTop: 10 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-                <strong>{r.batch_name}</strong>
+                {titreLot(r)}
                 <span style={{ fontSize: '.8rem', color: r.status === 'approved' ? '#4ade80' : '#fbbf24' }}>
                   {t({ id: `catalogacao.batch.review.${r.status}` })} · {t({ id: 'catalogacao.batch.review.round' }, { n: r.round })}
                 </span>

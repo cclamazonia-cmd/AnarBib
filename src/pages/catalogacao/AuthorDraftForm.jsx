@@ -4,6 +4,7 @@ import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useStaffLibraries, lotsProposables, libelleLot } from '@/lib/useStaffLibraries';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import PortraitCropper from '@/components/catalogacao/PortraitCropper';
 import CountrySelect from '@/components/forms/CountrySelect';
@@ -73,6 +74,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const { effectiveRole, isNetworkAdmin } = useLibrary();
   const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const { user } = useAuth();
+  // B30 : une autorité n'a pas de bibliothèque ; elle se range dans un lot
+  // d'une bibliothèque où l'on est staff (l'administration : tous les lots).
+  const { staffLibraryIds, loaded: staffConnu } = useStaffLibraries();
   const [drafts, setDrafts] = useState([]);
   const [draftsLoading, setDraftsLoading] = useState(false);
   const [form, setForm] = useState({});
@@ -1144,7 +1148,12 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <label style={ls}>{t({ id: 'catalogacao.author.batchLabel' })}</label>
             <select value={f('batch_id')} onChange={e => set('batch_id', e.target.value)} style={fs}>
               <option value="">{t({ id: 'catalogacao.author.noBatch' })}</option>
-              {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
+              {/* B30 : lots de ses bibliothèques de staff ; le lot enregistré reste proposé. */}
+              {lotsProposables(batches, {
+                isNetworkAdmin,
+                staffLibraryIds: staffConnu ? staffLibraryIds : null,
+                garder: f('batch_id') || null,
+              }).map(b => <option key={b.id} value={String(b.id)}>{libelleLot(b, t)}</option>)}
             </select>
           </div>
         </div>

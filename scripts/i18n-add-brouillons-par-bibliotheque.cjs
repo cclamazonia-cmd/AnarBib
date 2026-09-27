@@ -16,9 +16,12 @@ const path = require('path');
 const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
 const DIR = path.join(__dirname, '..', 'src', 'i18n', 'locales');
 // pt-BR au « você » (DOC-ADDR-1), après la revue du 27/09 : réécrites si elles diffèrent.
+// B30 (27/09) : error.batch.other_libraries et catalogacao.batchDeleteNothing
+// sont désormais tenues par i18n-add-lot-bibliotheque.cjs (le lot a SA
+// bibliothèque) — retirées d'ici, sinon rejouer ce script rétablirait la règle B29.
 const REECRITES = ['catalogacao.queue.emptyTrashConfirm', 'error.catalog.draft_other_library', 'error.catalog.author_draft_creator_only',
-  'error.batch.other_libraries', 'catalogacao.queue.someUnchanged', 'catalogacao.exemplar.libraryNotYours',
-  'catalogacao.batchDeleteNothing', 'catalogacao.batch.reassign.warn.itemsDetached'];   // la corbeille ne compte plus (IMP-20 c)
+  'catalogacao.queue.someUnchanged', 'catalogacao.exemplar.libraryNotYours',
+  'catalogacao.batch.reassign.warn.itemsDetached'];   // la corbeille ne compte plus (IMP-20 c)
 
 const ADD = {
   fr: {

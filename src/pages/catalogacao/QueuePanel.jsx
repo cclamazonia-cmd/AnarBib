@@ -6,6 +6,7 @@ import DuplicateCompareModal from './DuplicateCompareModal';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useStaffLibraries, libelleLot, partagerPourLeLot } from '@/lib/useStaffLibraries';
 
 // Labels resolved inside component via t()
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
@@ -44,10 +45,11 @@ function chunkIds(ids, size = ID_CHUNK) {
 // Rend le nombre de lignes REELLEMENT traitees : un paquet en echec ne compte
 // pas, la ou le `catch {}` par ligne des boucles d'origine incrementait quand
 // meme et pouvait annoncer « 300 traites » sans que rien ne bouge.
-// Rendre la propriete LISIBLE plutot que la cloisonner : on ne cloisonne pas
-// les rascunhos par bibliotheque (les lots n'en portent pas, 1784 rascunhos sur
-// 2227 non plus, et une autorite est un commun federal), mais on peut au moins
-// dire A QUI appartient le travail qu'on s'apprete a toucher.
+// Rendre la propriete LISIBLE : depuis B29 les rascunhos sont cloisonnes par
+// bibliotheque (une autorite, commun federal, reste lisible de tous), et depuis
+// B30 chaque lot porte la sienne (catalog_batches.library_id, nulle pour
+// l'administration du reseau) — on dit A QUI appartient le travail qu'on
+// s'apprete a toucher.
 //
 // La destination vient de la vue v_book_draft_destination, qui appelle la MEME
 // fonction que la publication : afficher une destination calculee autrement
@@ -183,6 +185,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // montre, sans les proposer aux gestes de masse.
   const { user } = useAuth();
   const { isNetworkAdmin } = useLibrary();
+  // B30 : on ne range que dans un lot de SA bibliothèque de staff.
+  const { staffLibraryIds, loaded: staffConnu } = useStaffLibraries();
   const [libs, setLibs] = useState({});
   // Journal des suppressions DEFINITIVES, et leur rejeu. Sans cet ecran, la
   // RPC de restauration serait un chemin que personne n'emprunte — donc un
@@ -208,7 +212,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       // Books
       if (!typeFilter || typeFilter === 'book') {
         let q = supabase.from('book_drafts')
-          .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, updated_at, last_opened_at', { count: 'exact' })
+          .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, owner_library_id, updated_at, last_opened_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
@@ -250,7 +254,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       // Exemplars
       if (!typeFilter || typeFilter === 'exemplar') {
         let q = supabase.from('exemplar_drafts')
-          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, target_library_id, updated_at, last_opened_at', { count: 'exact' })
+          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, target_library_id, book_draft_id, updated_at, last_opened_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
@@ -290,11 +294,12 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     setTrashLoading(true); setTrashSelected(new Set());
     try {
       const all = [];
-      const { data: bk } = await scopeToBatch(supabase.from('book_drafts').select('id, titulo, autor, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
+      // batch_id : pour dire, à la restauration, qui est sorti de son lot (B30).
+      const { data: bk } = await scopeToBatch(supabase.from('book_drafts').select('id, titulo, autor, status, batch_id, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (bk || []).forEach(d => all.push({ ...d, _type: 'book', _label: d.titulo || t({ id: 'catalogacao.queue.noTitle' }), _sub: d.autor || '' }));
-      const { data: au } = await siennes(scopeToBatch(supabase.from('author_drafts').select('id, preferred_name, status, updated_at').eq('status', 'cancelled'), trashBatch), 'author').order('updated_at', { ascending: false }).limit(100);
+      const { data: au } = await siennes(scopeToBatch(supabase.from('author_drafts').select('id, preferred_name, status, batch_id, updated_at').eq('status', 'cancelled'), trashBatch), 'author').order('updated_at', { ascending: false }).limit(100);
       (au || []).forEach(d => all.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: '' }));
-      const { data: ex } = await scopeToBatch(supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, target_library_id, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
+      const { data: ex } = await scopeToBatch(supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, target_library_id, batch_id, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: '', _libId: d.target_library_id, _libEnregistree: true }));
       all.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
       await attacherDestinations(all);
@@ -420,8 +425,11 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   const lotsFiltrables = batches.filter(
     b => ((b._enCours ?? 0) + (b._publies ?? 0) + (b._corbeille ?? 0)) > 0);
 
+  // B30 : « nom — bibliothèque du lot », pour qu'une personne staff de
+  // plusieurs bibliothèques sache à qui est le lot qu'elle filtre ou vide.
   function labelLot(b) {
-    return b.status === 'open' ? b.name : `${b.name} (${t({ id: 'catalogacao.queue.batchClosed' })})`;
+    const nom = libelleLot(b, t);
+    return b.status === 'open' ? nom : `${nom} (${t({ id: 'catalogacao.queue.batchClosed' })})`;
   }
 
   // Compte reel de la corbeille, toutes tables. La LISTE affichee est plafonnee
@@ -487,18 +495,72 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     onChanged?.();
   }
 
+  // B30 : lots où l'on peut ranger — ouverts, et de l'une de ses bibliothèques
+  // de staff (l'administration : tous). Liste inconnue : tous, la base tranche.
+  function peutModifierLot(b) {
+    if (isNetworkAdmin || !staffConnu || b.library_id === undefined) return true;
+    return b.library_id != null && staffLibraryIds.includes(b.library_id);
+  }
+  const lotsRangeables = batches.filter(b => b.status === 'open' && peutModifierLot(b));
+
+  // B30 : bibliothèque de chaque élément sélectionné, pour ne ranger dans un
+  // lot que ce qui est de SA bibliothèque. La sélection peut couvrir tout le
+  // filtre (hors de la page chargée) : ce que la page ne dit pas se relit.
+  // Une relecture en échec (réseau, délai) laisse ses éléments SANS info : ils
+  // partent tels quels et la base tranche (partagerPourLeLot), au lieu d'être
+  // annoncés à tort « d'une autre bibliothèque ».
+  async function bibliothequesDeLaSelection(sel) {
+    const connus = new Map(items.map(it => [`${it._type}:${it.id}`, it]));
+    const info = new Map();
+    const manquants = { book: [], exemplar: [] };
+    for (const { type, id } of sel) {
+      const it = connus.get(`${type}:${id}`);
+      if (type === 'book' && it && 'owner_library_id' in it) info.set(`book:${id}`, { lib: it.owner_library_id ?? null });
+      else if (type === 'exemplar' && it && 'book_draft_id' in it) info.set(`exemplar:${id}`, { lib: it.target_library_id ?? null, importe: it.book_draft_id != null });
+      else if (type in manquants) manquants[type].push(id);
+    }
+    for (const part of chunkIds(manquants.book)) {
+      const { data, error } = await supabase.from('book_drafts').select('id, owner_library_id').in('id', part);
+      if (error) continue;
+      (data || []).forEach(r => info.set(`book:${r.id}`, { lib: r.owner_library_id ?? null }));
+    }
+    for (const part of chunkIds(manquants.exemplar)) {
+      const { data, error } = await supabase.from('exemplar_drafts').select('id, target_library_id, book_draft_id').in('id', part);
+      if (error) continue;
+      (data || []).forEach(r => info.set(`exemplar:${r.id}`, { lib: r.target_library_id ?? null, importe: r.book_draft_id != null }));
+    }
+    return info;
+  }
+
   async function assignBatchToSelected(batchId) {
     if (!batchId) return;
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
+    // B30 : un brouillon ne se range que dans un lot de SA bibliothèque
+    // (notice : owner_library_id ; exemplaire saisi : target_library_id ;
+    // autorité, sans bibliothèque : dans un lot où l'on est staff). Un
+    // exemplaire importé suit sa notice : on ne l'envoie pas. On écarte
+    // d'avance ce qui est CONNU pour être d'une autre bibliothèque, et on dit
+    // combien ; une bibliothèque inconnue (NULLE : brouillon d'avant B29) part,
+    // la base la résout (celle du créateur) et refuse en silence au besoin.
+    // L'administration : pas de tri.
+    const lot = batches.find(b => String(b.id) === String(batchId));
+    let aEnvoyer = sel;
+    let autres = 0;
+    if (!isNetworkAdmin && lot && lot.library_id !== undefined) {
+      const info = await bibliothequesDeLaSelection(sel);
+      ({ aEnvoyer, autres } = partagerPourLeLot(sel, lot, info, { autoritesRangeables: peutModifierLot(lot) }));
+    }
     const erreurs = [];
-    const ok = await bulkByType(sel, (table, ids) =>
+    const ok = aEnvoyer.length === 0 ? 0 : await bulkByType(aEnvoyer, (table, ids) =>
       supabase.from(table).update({ batch_id: Number(batchId) }).in('id', ids).select('id, batch_id'),
       (rows) => rows.filter((r) => String(r.batch_id) === String(batchId)).length,
       erreurs);
-    const bilan = t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok });
-    if (erreurs.length) setMsg({ text: `${localizeError(erreurs[0], t)} ${bilan}`, kind: 'error' });
-    else setMsg({ text: bilan + (ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.someUnchanged' }) : ''), kind: 'ok' });
+    const bilan = [t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok })];
+    if (autres > 0) bilan.push(t({ id: 'catalogacao.queue.batchAssignOtherLibrary' }, { count: autres }));
+    if (ok + autres < sel.length) bilan.push(t({ id: 'catalogacao.queue.someUnchanged' }));
+    if (erreurs.length) setMsg({ text: `${localizeError(erreurs[0], t)} ${bilan.join(' ')}`, kind: 'error' });
+    else setMsg({ text: bilan.join(' '), kind: autres > 0 ? 'warn' : 'ok' });
     await loadQueue();
     onChanged?.();
   }
@@ -507,11 +569,24 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   async function restoreTrashSelected() {
     const sel = getTrashSelectedItems();
     if (!sel.length) return;
-    const ok = await bulkByType(sel, (table, ids) =>
-      supabase.from(table).update({ status: 'draft' }).in('id', ids).select('id, status'),
-      (rows) => rows.filter((r) => r.status !== 'cancelled').length);
+    // B30 (CAT-E18) : la base SORT du lot (batch_id nul) un brouillon restauré
+    // qui ne peut pas y revenir — lot d'une autre bibliothèque que la sienne,
+    // ou d'une bibliothèque où l'on n'est pas staff. On le dit : on compare le
+    // lot d'avant (liste de la corbeille) à celui que la base a gardé.
+    const lotAvant = new Map(trash.map(it => [`${it._type}:${it.id}`, it.batch_id ?? null]));
+    const typeDe = Object.fromEntries(Object.entries(TABLE_FOR).map(([type, table]) => [table, type]));
+    let sortis = 0;
+    const restaurer = async (table, ids) => {
+      const res = await supabase.from(table).update({ status: 'draft' }).in('id', ids).select('id, status, batch_id');
+      for (const r of (res.error ? [] : res.data || [])) {
+        if (r.status !== 'cancelled' && r.batch_id == null && lotAvant.get(`${typeDe[table]}:${r.id}`) != null) sortis++;
+      }
+      return res;
+    };
+    const ok = await bulkByType(sel, restaurer, (rows) => rows.filter((r) => r.status !== 'cancelled').length);
     const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.someUnchanged' }) : '';
-    setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }) + note, kind: 'ok' });
+    const sortie = sortis > 0 ? ' ' + t({ id: 'catalogacao.queue.restoreLeftBatch' }, { count: sortis }) : '';
+    setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }) + note + sortie, kind: sortis > 0 ? 'warn' : 'ok' });
     await loadQueue(); await loadTrash();
     onChanged?.();
   }
@@ -539,9 +614,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     if (!total) return;
     // Une corbeille non filtree porte sur tout le reseau : le dire, plutot que
     // de poser la meme question anodine dans les deux cas.
+    const lotVide = batches.find(b => String(b.id) === String(trashBatch));
     const lot = trashBatch === 'none'
       ? t({ id: 'catalogacao.queue.noBatch' })
-      : (batches.find(b => String(b.id) === String(trashBatch))?.name || trashBatch);
+      : (lotVide ? libelleLot(lotVide, t) : trashBatch);
     const question = trashBatch
       ? t({ id: 'catalogacao.queue.emptyTrashBatchConfirm' }, { count: total, batch: lot })
       : t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: total });
@@ -710,7 +786,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         <select style={{ ...fs, width: 'auto', fontSize: '.72rem', padding: '4px 8px' }}
           onChange={e => { if (e.target.value) { assignBatchToSelected(e.target.value); e.target.value = ''; } }}>
           <option value="">{t({ id: 'catalogacao.queue.assignBatch' })}</option>
-          {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
+          {lotsRangeables.map(b => <option key={b.id} value={String(b.id)}>{libelleLot(b, t)}</option>)}
         </select>
         <button type="button" className="ab-button ab-button--danger ab-button--sm" onClick={discardSelected} disabled={!selected.size}>
           {t({ id: 'catalogacao.queue.discardBatch' })}

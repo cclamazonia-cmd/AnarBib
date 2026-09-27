@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIntl } from 'react-intl';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useStaffLibraries, useCoordLibraries, bibliothequesProposables, bibliothequeDuLot, brouillonsDAutresBibliotheques, peutRouvrirRevision } from '@/lib/useStaffLibraries';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import './CatalogacaoPage.css';
 import BookDraftForm from './BookDraftForm';
@@ -89,6 +90,9 @@ export default function CatalogacaoPage() {
   const [batches, setBatches] = useState([]);
   // Cf. QueuePanel : supprimer un lot emporte sa corbeille, meme porte donc,
   // et un DELETE refuse par RLS ne leve pas d'erreur.
+  // B30 : ce booléen global (« coordination QUELQUE PART ») ne sert plus que
+  // de repli tant que la liste des bibliothèques coordonnées n'est pas
+  // chargée — les gestes de coordination se décident lot par lot.
   const [isCoord, setIsCoord] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editTarget, setEditTarget] = useState(null); // { kind, id } -- handoff catalogo/fila -> editeur (Lot 0)
@@ -130,15 +134,30 @@ export default function CatalogacaoPage() {
       // Les comptes viennent de v_catalog_batch_draft_counts, la meme definition
       // que celle qu'interroge deleteBatch avant de refuser. Sans eux, on
       // n'apprend qu'un lot est vide — donc supprimable — qu'en cliquant.
-      const [lots, comptes] = await Promise.all([
-        supabase.from('catalog_batches').select('*').order('created_at', { ascending: false }),
+      // B30 : chaque lot porte SA bibliothèque (catalog_batches.library_id,
+      // nulle = lot de l'administration du réseau), embarquée ici pour que
+      // tous les menus et le tableau Lots la nomment sans rien déduire des
+      // brouillons. L'embarquement exige la clé étrangère : si l'écran est
+      // publié avant la migration (PGRST200), on relit sans elle plutôt que
+      // de vider tous les menus de lots.
+      const [lotsAvecBib, comptes] = await Promise.all([
+        supabase.from('catalog_batches')
+          .select('*, library:libraries(id, name, short_name, slug, is_active)')
+          .order('created_at', { ascending: false }),
         supabase.from('v_catalog_batch_draft_counts').select('batch_id, en_cours, publies, corbeille'),
       ]);
+      const lots = lotsAvecBib.error
+        ? await supabase.from('catalog_batches').select('*').order('created_at', { ascending: false })
+        : lotsAvecBib;
       const par = new Map((comptes.data || []).map(c => [c.batch_id, c]));
       const data = (lots.data || []).map(b => {
         const c = par.get(b.id);
         return {
           ...b,
+          // library_id absente = colonne pas encore là (undefined) : on la
+          // laisse telle quelle, les droits par lot retombent sur l'affichage
+          // d'avant B30.
+          library: b.library || null,
           _enCours: c ? Number(c.en_cours) : 0,
           _publies: c ? Number(c.publies) : 0,
           _corbeille: c ? Number(c.corbeille) : 0,
@@ -557,12 +576,42 @@ const BATCH_STATUS_LABEL_IDS = {
 // Les trois tables de brouillons rattachables a un lot.
 const BATCH_DRAFT_TABLES = ['book_drafts', 'author_drafts', 'exemplar_drafts'];
 
+// B30 : valeur du choix « Administration du réseau » à la création d'un lot
+// (library_id nulle, réservée à l'administration du réseau).
+const LOT_RESEAU = '__reseau__';
+
 function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   const { formatMessage: t } = useIntl();
+  const { libraryId } = useLibrary();
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState('');
   const [newNotes, setNewNotes] = useState('');
+  // null = pas encore choisie : la valeur par défaut (bibliothèque active, ou
+  // seule bibliothèque de staff) s'applique ; '' = à choisir.
+  const [newLibraryId, setNewLibraryId] = useState(null);
   const [msg, setMsg] = useState(null);
+
+  // ── B30 (27/09/2026) : le lot a SA bibliothèque ─────────────────────
+  // catalog_batches.library_id (nulle = lot de l'administration du réseau)
+  // décide de qui voit et agit sur le lot : staff de cette bibliothèque pour
+  // le modifier (publier, fermer, archiver, cotes, classes, rapport),
+  // coordination de cette bibliothèque pour le supprimer ou en demander la
+  // révision. Les deux prédicats ci-dessous ne font que l'affichage ; la base
+  // (politiques de catalog_batches, RPC) reste l'autorité. Tant que les listes
+  // ne sont pas chargées — ou que la colonne n'existe pas encore (écran publié
+  // avant la migration : library_id undefined) —, on garde l'affichage d'avant.
+  const { staffLibraryIds, loaded: staffConnu } = useStaffLibraries();
+  const { coordLibraryIds, loaded: coordConnu } = useCoordLibraries();
+  function peutModifier(b, avant = true) {
+    if (isNetworkAdmin) return true;
+    if (!staffConnu || b.library_id === undefined) return avant;
+    return b.library_id != null && staffLibraryIds.includes(b.library_id);
+  }
+  function coordonne(b) {
+    if (isNetworkAdmin) return true;
+    if (!coordConnu || b.library_id === undefined) return isCoord;
+    return b.library_id != null && coordLibraryIds.includes(b.library_id);
+  }
 
   // ── Revision des lots importes (05/09/2026) ──────────────────────────
   // Un lot ne d'un import ne se publie qu'apres une revision approuvee par
@@ -606,28 +655,43 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     } catch { /* la colonne reste muette ; la regle de destination est en base */ }
   }, []);
   useEffect(() => { loadOwners(); }, [loadOwners, batches]);
+  // B30 : la liste des bibliothèques sert dès l'ouverture — choisir la
+  // bibliothèque d'un lot à sa création, puis en changer (administration).
   useEffect(() => {
-    if (!reassign || libraries.length > 0) return undefined;
     let vivant = true;
-    supabase.from('libraries').select('id, name, is_active').order('name').then(({ data, error }) => {
+    supabase.from('libraries').select('id, name, short_name, is_active').order('name').then(({ data, error }) => {
       if (vivant && !error && data) setLibraries(data);
     });
     return () => { vivant = false; };
-  }, [reassign, libraries.length]);
+  }, []);
 
-  function renderOwners(b) {
-    const rows = owners[b.id] || [];
-    if (rows.length === 0) return <span style={{ color: 'var(--brand-muted, #666)' }}>—</span>;
-    const secondaire = { color: 'var(--brand-muted, #888)' };
+  // B30 : la colonne « Bibliothèque » nomme la bibliothèque DU LOT (nulle :
+  // administration du réseau). fn_batch_owner_libraries ne sert plus qu'au
+  // contrôle : des brouillons en cours d'une AUTRE bibliothèque (rangés avant
+  // la règle) se signalent en ambre. Une notice sans owner_library_id (d'avant
+  // B29) ne compte pas : la fonction rend la colonne brute, non résolue, et sa
+  // bibliothèque réelle (celle de son créateur) est souvent celle du lot.
+  function brouillonsAutres(b) {
+    return b ? brouillonsDAutresBibliotheques(b, owners[b.id]) : 0;
+  }
+  function renderLibrary(b) {
+    const nom = bibliothequeDuLot(b, t);
+    const autres = brouillonsAutres(b);
     return (
       <span style={{ display: 'inline-flex', flexDirection: 'column', gap: 2 }}>
-        {rows.map((r, i) => r.library_id
-          ? <span key={i}>{r.library_name} <span style={secondaire}>({r.drafts})</span></span>
-          : (
-            <span key={i} style={{ color: '#fbbf24' }} title={t({ id: 'catalogacao.batch.library.noneHint' })}>
-              {t({ id: 'catalogacao.batch.library.none' })} <span style={secondaire}>({r.drafts})</span>
+        {nom
+          ? (
+            <span style={b.library_id === null ? { color: 'var(--brand-muted, #aaa)' } : undefined}
+              title={b.library_id === null ? t({ id: 'catalogacao.batch.library.noneHint' }) : undefined}>
+              {nom}
             </span>
-          ))}
+          )
+          : <span style={{ color: 'var(--brand-muted, #666)' }}>—</span>}
+        {autres > 0 && (
+          <span style={{ color: '#fbbf24' }} title={t({ id: 'catalogacao.batch.library.mismatchHint' })}>
+            {t({ id: 'catalogacao.batch.library.mismatch' }, { count: autres })}
+          </span>
+        )}
       </span>
     );
   }
@@ -705,8 +769,19 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     }
   }
 
+  // B30 : « Changer la bibliothèque du lot » est LE geste qui change
+  // catalog_batches.library_id (la colonne est figée pour l'API). Un lot vide
+  // change aussi de bibliothèque : le message nomme la nouvelle bibliothèque
+  // même quand aucun brouillon n'a bougé. Même bibliothèque : rien à faire,
+  // sauf s'il reste des brouillons en cours d'une autre bibliothèque — le
+  // geste les rattache alors à celle du lot.
+  function reassignInchange(r) {
+    if (!r?.libraryId) return true;
+    return r.libraryId === (r.batch.library_id || '') && brouillonsAutres(r.batch) === 0;
+  }
+
   async function submitReassign() {
-    if (!reassign?.libraryId) return;
+    if (!reassign?.libraryId || reassignInchange(reassign)) return;
     setReassigning(true);
     setMsg(null);
     try {
@@ -715,8 +790,11 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
       });
       if (error) throw error;
       const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
-      const parts = [t({ id: 'catalogacao.batch.reassign.ok' }, {
-        count: Number(data?.drafts_updated ?? 0), library: data?.library_name || '',
+      const choisie = libraries.find(l => l.id === reassign.libraryId);
+      const parts = [t({ id: 'catalogacao.batch.reassign.okBatch' }, {
+        name: reassign.batch.name,
+        library: data?.library_name || choisie?.name || '',
+        count: Number(data?.drafts_updated ?? 0),
       })];
       // Des avertissements, pas des refus : reattribuer et preparer la biblio
       // (serie de tombos, activation) sont deux responsabilites.
@@ -724,6 +802,8 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
       if (warnings.includes('library_inactive')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.inactive' }));
       // B29 : les exemplaires saisis d'une autre bibliothèque sortent du lot.
       if (warnings.includes('items_detached')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.itemsDetached' }, { count: Number(data?.items_detached ?? 0) }));
+      // B30 : les autorités d'une personne qui n'est pas staff de la nouvelle bibliothèque aussi.
+      if (warnings.includes('authors_detached')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.authorsDetached' }, { count: Number(data?.authors_detached ?? 0) }));
       setMsg({ text: parts.join(' '), kind: 'ok' });
       setReassign(null);
       await loadOwners();
@@ -752,7 +832,10 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     }
   }
 
-  async function requestReview(b) {
+  // B30 : rouvrir = un nouveau tour sur un lot approuvé (administration seule) —
+  // la sortie qu'annonce error.batch.reassign.review_approved.
+  async function requestReview(b, rouvrir = false) {
+    if (rouvrir && !window.confirm(t({ id: 'catalogacao.batch.review.reopenConfirm' }, { name: b.name }))) return;
     const message = window.prompt(t({ id: 'catalogacao.batch.review.requestPrompt' }), '');
     if (message === null) return;
     try {
@@ -788,19 +871,46 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     );
   }
 
+  // ── B30 : bibliothèque d'un lot neuf ────────────────────────────────
+  // Staff d'une seule bibliothèque : fixée (affichée). Plusieurs : à choisir
+  // parmi ses bibliothèques de staff, la bibliothèque active présélectionnée
+  // si elle en fait partie. Administration du réseau : toutes, plus
+  // « Administration du réseau » (library_id nulle). La politique d'INSERT
+  // refuse une bibliothèque hors de ses adhésions de staff (localizeError :
+  // error.batch.library_not_yours).
+  const bibsCreation = isNetworkAdmin
+    ? libraries
+    : bibliothequesProposables(libraries, { isNetworkAdmin: false, staffLibraryIds });
+  const bibCreationFixee = !isNetworkAdmin && staffConnu && staffLibraryIds.length === 1 ? staffLibraryIds[0] : null;
+  const bibCreationDefaut = bibCreationFixee
+    || (libraryId && (isNetworkAdmin || staffLibraryIds.includes(libraryId)) ? libraryId : '');
+  const bibCreation = bibCreationFixee || (newLibraryId ?? bibCreationDefaut);
+  const creationPrete = isNetworkAdmin || staffConnu;
+
   async function createBatch() {
     if (!newName.trim()) { setMsg({text: t({id:'catalogacao.batchNameRequired'}), kind:'error'}); return; }
+    if (!creationPrete) return;
+    if (!bibCreation) { setMsg({text: t({id:'catalogacao.batch.libraryRequired'}), kind:'error'}); return; }
     setCreating(true);
     setMsg(null);
     try {
-      const { error } = await supabase.from('catalog_batches').insert({
+      const lot = {
         name: newName.trim(),
         notes: newNotes.trim() || null,
         status: 'open',
+      };
+      let { error } = await supabase.from('catalog_batches').insert({
+        ...lot,
+        library_id: bibCreation === LOT_RESEAU ? null : bibCreation,
       });
+      // PGRST204 : colonne pas encore là (écran publié avant la migration B30).
+      if (error?.code === 'PGRST204' && /library_id/.test(error.message || '')) {
+        ({ error } = await supabase.from('catalog_batches').insert(lot));
+      }
       if (error) throw error;
       setNewName('');
       setNewNotes('');
+      setNewLibraryId(null);
       setMsg({text: t({id:'common.dataSaved'}), kind:'ok'});
       onRefresh();
     } catch (err) {
@@ -817,8 +927,8 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
         .update({ status: 'closed' })
         .eq('id', id).select('id');
       if (error) throw error;
-      // B29 (CAT-E18) : un lot qui porte des brouillons d'autres bibliothèques
-      // ne se ferme que par l'administration — la base filtre, on le dit.
+      // B30 : un lot d'une bibliothèque où l'on n'est pas staff (ou de
+      // l'administration du réseau) ne se ferme pas — la base filtre, on le dit.
       if (!data?.length) alert(t({id:'catalogacao.batchUpdateNothing'}));
       onRefresh();
     } catch (err) {
@@ -866,8 +976,15 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
       // du trigger qui refusera en base si on passe outre.
       const { data: c } = await supabase.from('v_catalog_batch_draft_counts')
         .select('en_cours, publies, corbeille').eq('batch_id', id).maybeSingle();
-      const enCours = Number(c?.en_cours ?? 0);
-      const publies = Number(c?.publies ?? 0);
+      // B30 : la vue ne compte que ce qu'on voit ; le garde de suppression
+      // compte TOUT le lot (fiches publiées d'une autre bibliothèque avant une
+      // réattribution, IMP-20 c). fn_batch_delete_blockers donne ses comptes à
+      // la coordination du lot (aucune ligne sinon : les RPC ci-dessous le disent).
+      const { data: bloq, error: eBloq } = await supabase
+        .rpc('fn_batch_delete_blockers', { p_batch_id: Number(id) }).maybeSingle();
+      if (eBloq && eBloq.code !== 'PGRST202') throw eBloq;
+      const enCours = Number((bloq ?? c)?.en_cours ?? 0);
+      const publies = Number((bloq ?? c)?.publies ?? 0);
       const jetes = Number(c?.corbeille ?? 0);
 
       // Du travail vivant : le traiter ou le jeter, pas l'effacer par la bande.
@@ -882,10 +999,10 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
         alert(t({id:'catalogacao.batchPublishedArchiveInstead'},{count: publies}));
         return;
       }
-      // B29 (CAT-E18) : les comptes ci-dessus ne voient que NOS brouillons. Un
-      // lot qui en porte d'autres bibliothèques ne se supprime pas — le savoir
-      // AVANT d'avoir vidé sa corbeille pour rien.
-      // Et le supprimer revient à la coordination DE ce lot.
+      // B30 : supprimer un lot revient à la coordination de SA bibliothèque
+      // (ou à l'administration du réseau) — le savoir AVANT d'avoir vidé sa
+      // corbeille pour rien. Les deux RPC lisent désormais la bibliothèque du
+      // lot ; elles restent la vérité, le bouton n'est qu'un affichage.
       const [{ data: aMoi, error: eOwn }, { data: coord, error: eCoord }] = await Promise.all([
         supabase.rpc('fn_caller_owns_batch', { p_batch_id: Number(id) }),
         supabase.rpc('fn_caller_coordinates_batch', { p_batch_id: Number(id) }),
@@ -918,9 +1035,9 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
         .delete()
         .eq('id', id).select('id');
       if (error) throw error;
-      // B29 (CAT-E18) : les comptes ci-dessus ne voient que nos brouillons ; un
-      // lot qui en porte d'autres bibliothèques (en cours ou publiés), ou une
-      // personne qui ne coordonne pas, et la base ne supprime rien — le dire.
+      // B29/B30 : une personne qui ne coordonne pas la bibliothèque du lot, ou
+      // un lot qui porte encore des fiches d'autres bibliothèques (comptes
+      // ci-dessus : nos brouillons seulement), et la base ne supprime rien — le dire.
       if (!suppr?.length) alert(t({id:'catalogacao.batchDeleteNothing'}));
       else if (restants > 0) alert(t({id:'catalogacao.batchTrashedLeft'},{count: restants}));
       onRefresh();
@@ -1004,7 +1121,30 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
               }}
             />
           </div>
-          <button className="ab-button" onClick={createBatch} disabled={creating}>
+          {/* B30 : la bibliothèque du lot (fixée si l'on n'est staff que d'une seule) */}
+          <div style={{ flex: '1 1 200px' }}>
+            <label style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.libraryLabel'})}</label>
+            {bibCreationFixee ? (
+              <div style={{ padding: '7px 10px', fontSize: '.85rem' }}>
+                {(() => { const l = libraries.find(x => x.id === bibCreationFixee); return l ? l.name : t({ id: 'common.loading' }); })()}
+              </div>
+            ) : (
+              <select value={bibCreation} onChange={e => setNewLibraryId(e.target.value)} disabled={!creationPrete}
+                style={{
+                  width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)',
+                  background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem',
+                }}>
+                <option value="">{t({ id: 'catalogacao.batch.reassign.pickPlaceholder' })}</option>
+                {isNetworkAdmin && <option value={LOT_RESEAU}>{t({ id: 'catalogacao.batch.library.network' })}</option>}
+                {bibsCreation.map(l => (
+                  <option key={l.id} value={l.id}>
+                    {l.name}{l.is_active === false ? ' ' + t({ id: 'catalogacao.batch.reassign.libraryInactive' }) : ''}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+          <button className="ab-button" onClick={createBatch} disabled={creating || !creationPrete}>
             {creating ? t({id:'common.saving'}) : t({id:'catalogacao.createBatch'})}
           </button>
         </div>
@@ -1117,7 +1257,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
         </div>
       )}
 
-      {/* Reattribuer un lot a une bibliotheque (administration du reseau) */}
+      {/* Changer la bibliotheque d'un lot (administration du reseau, B30) */}
       {reassign && (
         <div role="dialog" aria-modal="true" onClick={() => !reassigning && setReassign(null)}
           style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
@@ -1127,6 +1267,11 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
             <p style={{ margin: '0 0 12px', fontSize: '.82rem', color: 'var(--brand-muted, #aaa)' }}>
               {t({ id: 'catalogacao.batch.reassign.intro' }, { name: reassign.batch.name })}
             </p>
+            {reassign.batch.library_id !== undefined && (
+              <p style={{ margin: '0 0 12px', fontSize: '.85rem' }}>
+                {t({ id: 'catalogacao.batch.reassign.current' }, { library: bibliothequeDuLot(reassign.batch, t) || '—' })}
+              </p>
+            )}
             <label style={{ display: 'block', fontSize: '.75rem', color: 'var(--brand-muted, #aaa)', marginBottom: 4 }}>
               {t({ id: 'catalogacao.batch.reassign.pick' })}
             </label>
@@ -1143,7 +1288,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
               <button className="ab-button ab-button--ghost" style={{ fontSize: '.8rem', padding: '6px 12px' }}
                 disabled={reassigning} onClick={() => setReassign(null)}>{t({ id: 'common.cancel' })}</button>
               <button className="ab-button ab-button--secondary" style={{ fontSize: '.8rem', padding: '6px 12px' }}
-                disabled={reassigning || !reassign.libraryId} onClick={submitReassign}>
+                disabled={reassigning || reassignInchange(reassign)} onClick={submitReassign}>
                 {reassigning ? t({ id: 'common.saving' }) : t({ id: 'catalogacao.batch.reassign.submit' })}
               </button>
             </div>
@@ -1174,20 +1319,26 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                   <td style={{ padding: '8px', color: 'var(--brand-muted, #aaa)' }}>{b.notes || '—'}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
-                  <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderOwners(b)}</td>
+                  <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderLibrary(b)}</td>
                   <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderReview(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
                     {reviews[b.id]?.imported && (
                       <>
-                        <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
-                          onClick={() => openReport(b)}>{t({id:'catalogacao.batch.review.report'})}</button>
-                        {isCoord && (!reviews[b.id].status || reviews[b.id].status === 'changes_requested') && (
+                        {peutModifier(b) && (
+                          <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                            onClick={() => openReport(b)}>{t({id:'catalogacao.batch.review.report'})}</button>
+                        )}
+                        {coordonne(b) && (!reviews[b.id].status || reviews[b.id].status === 'changes_requested') && (
                           <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                             onClick={() => requestReview(b)}>{t({id:'catalogacao.batch.review.request'})}</button>
                         )}
+                        {peutRouvrirRevision(reviews[b.id], b, isNetworkAdmin) && (
+                          <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                            onClick={() => requestReview(b, true)}>{t({id:'catalogacao.batch.review.reopen'})}</button>
+                        )}
                       </>
                     )}
-                    {isCoord && (
+                    {peutModifier(b, isCoord) && (
                       <>
                         <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                           onClick={() => openBibRefs(b)}>{t({id:'catalogacao.batch.bibrefs'})}</button>
@@ -1197,15 +1348,19 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                     )}
                     {isNetworkAdmin && (
                       <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
-                        onClick={() => setReassign({ batch: b, libraryId: '' })}>{t({id:'catalogacao.batch.reassign'})}</button>
+                        onClick={() => setReassign({ batch: b, libraryId: b.library_id || '' })}>{t({id:'catalogacao.batch.reassign'})}</button>
                     )}
-                    <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
-                      disabled={reviewLocked(b)}
-                      title={reviewLocked(b) ? t({id:'catalogacao.batch.review.publishLocked'}) : undefined}
-                      onClick={() => publishBatch(b.id)}>{t({id:'catalogacao.publishBatch'})}</button>
-                    <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
-                      onClick={() => closeBatch(b.id)}>{t({id:'catalogacao.closeBatch'})}</button>
-                    {isCoord && estVide(b) && (
+                    {peutModifier(b) && (
+                      <>
+                        <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                          disabled={reviewLocked(b)}
+                          title={reviewLocked(b) ? t({id:'catalogacao.batch.review.publishLocked'}) : undefined}
+                          onClick={() => publishBatch(b.id)}>{t({id:'catalogacao.publishBatch'})}</button>
+                        <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                          onClick={() => closeBatch(b.id)}>{t({id:'catalogacao.closeBatch'})}</button>
+                      </>
+                    )}
+                    {coordonne(b) && estVide(b) && (
                       <button className="ab-button ab-button--ghost" style={{ marginLeft: 6, fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
                         onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
                     )}
@@ -1230,6 +1385,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thStatus'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thDrafts'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thLibrary'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
@@ -1244,10 +1400,13 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                   </td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
+                  <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderLibrary(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
-                    <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
-                      onClick={() => archiveBatch(b.id)}>{t({id:'catalogacao.archiveBatch'})}</button>
-                    {isCoord && (
+                    {peutModifier(b) && (
+                      <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                        onClick={() => archiveBatch(b.id)}>{t({id:'catalogacao.archiveBatch'})}</button>
+                    )}
+                    {coordonne(b) && (
                       <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
                         onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
                     )}
@@ -1271,6 +1430,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thName'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thDrafts'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thLibrary'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
@@ -1280,8 +1440,9 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                   <td style={{ padding: '8px' }}>{b.name}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
+                  <td style={{ padding: '8px', fontSize: '.78rem' }}>{renderLibrary(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
-                    {isCoord && (
+                    {coordonne(b) && (
                       <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
                         onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
                     )}

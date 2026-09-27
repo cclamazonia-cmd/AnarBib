@@ -33,6 +33,12 @@ export default function BatchReviewReport({ report }) {
   const items = report.items && typeof report.items === 'object' ? report.items : null;
   const itemProblems = Array.isArray(items?.problems) ? items.problems : [];
   const itemProblemCount = Math.max(itemProblems.length, ITEM_REASONS.reduce((n, k) => n + Number(items?.[k] || 0), 0));
+  // B30 (27/09/2026) : le rapport dit pour quelle bibliothèque il a été rendu
+  // (report.batch.library_id / library_name ; nulle = administration du
+  // réseau). Les instantanés figés avant B30 n'en ont pas : on n'affiche rien.
+  const bibliotheque = ('library_id' in b || 'library_name' in b)
+    ? (b.library_name || (b.library_id == null ? t({ id: 'catalogacao.batch.library.network' }) : null))
+    : null;
 
   const draftLabel = (it) => (
     <>
@@ -48,6 +54,9 @@ export default function BatchReviewReport({ report }) {
     <div style={{ fontSize: '.84rem', display: 'grid', gap: 14 }}>
       <div>
         <div>{t({ id: 'review.report.summary' }, { active: b.drafts_active ?? 0, published: b.drafts_published ?? 0, cancelled: b.drafts_cancelled ?? 0 })}</div>
+        {bibliotheque && (
+          <div data-testid="review-report-library" style={muted}>{t({ id: 'review.report.library' }, { library: bibliotheque })}</div>
+        )}
         <div style={{ fontWeight: 600 }}>{t({ id: 'review.report.totals' }, { issues: tot.convention_issues ?? 0, dups: tot.duplicates ?? 0, unlinked: tot.unlinked_authorities ?? 0 })}</div>
         {(b.title_entries ?? 0) > 0 && (
           <div style={muted}>{t({ id: 'review.report.titleEntries' }, { n: b.title_entries })}</div>
