@@ -527,3 +527,6 @@ tests/sql/import_exemplaires_tests.sql
 # 27/09 (C6 §7.2) : la règle de casse des titres, SQL et miroir JS de la saisie d accord.
 tests/sql/title_case_tests.sql
 tests/sql/conv_file_alimentee_tests.sql
+# 27/09 (capas) : la provenance et la licence d une capa vont par paire et suivent l image —
+# publication neuve, reprise, republication (meme image / autre image x provenance presente / absente), retrait.
+tests/sql/capas_provenance_tests.sql
