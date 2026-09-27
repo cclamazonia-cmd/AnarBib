@@ -36,9 +36,11 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const src = (rel) => readFileSync(path.resolve(here, '..', rel), 'utf8');
 
 const form = src('pages/catalogacao/BookDraftForm.jsx');
+// Depuis E6 (27/09), les constantes et le formulaire vide vivent dans le module.
+const lib = src('lib/catalogacao/bookDraft.js');
 
 function materialSectionIds() {
-  const m = form.match(/^const MATERIAL_SECTION_IDS = \[([^\]]*)\];/m);
+  const m = lib.match(/^export const MATERIAL_SECTION_IDS = \[([^\]]*)\];/m);
   expect(m, 'MATERIAL_SECTION_IDS introuvable').toBeTruthy();
   return [...m[1].matchAll(/'([^']+)'/g)].map(x => x[1]);
 }
@@ -102,6 +104,6 @@ describe('serial_id fait l’aller-retour avec book_drafts', () => {
     expect(form).toMatch(/serial_id: r\.serial_id != null \? String\(r\.serial_id\) : '',/);
   });
   it('existe dans le formulaire vide', () => {
-    expect(form).toMatch(/^\s+serial_id: '',/m);
+    expect(lib).toMatch(/^\s+serial_id: '',/m);
   });
 });
