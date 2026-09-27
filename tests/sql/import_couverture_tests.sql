@@ -106,7 +106,7 @@ BEGIN
   -- ── T3 ──────────────────────────────────────────────────────────────
   v_t := 'T3 lot sans import : coverage vide';
   BEGIN
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('Lot manuel couverture', v_coord) RETURNING id INTO v_lot_man;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('Lot manuel couverture', v_coord, v_lib) RETURNING id INTO v_lot_man;   -- B30
     v_cov := public.fn_batch_review_report(v_lot_man)->'coverage';
     IF v_cov = '[]'::jsonb THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(v_cov::text,'NULL')); END IF;

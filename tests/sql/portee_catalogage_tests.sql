@@ -153,7 +153,7 @@ BEGIN
   INSERT INTO public.book_drafts (titulo, bib_ref, tipo_material, status, created_by)
   VALUES ('A supprimer', 'TEST-PORTEE-004', 'livro', 'cancelled', v_coord)
   RETURNING id INTO v_draft;
-  INSERT INTO public.catalog_batches (name, status) VALUES ('Lot de test portee', 'closed')
+  INSERT INTO public.catalog_batches (name, status, library_id) VALUES ('Lot de test portee', 'closed', v_biblio)
   RETURNING id INTO v_lot;
 
   -- ─────────────────────────────────────────────────────────────────

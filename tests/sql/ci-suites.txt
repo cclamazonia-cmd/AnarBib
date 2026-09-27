@@ -557,3 +557,6 @@ tests/sql/lecture_accordee_sans_erreur_tests.sql
 # 27/09 (B34) : l'effacement d'un compte re-pointe aussi le journal du catalogue — acteur et comptes
 # nommés par les instantanés de brouillon (created_by, updated_by) passent au jeton.
 tests/sql/effacement_journal_catalogue_tests.sql
+# 27/09 (B30, CAT-E18) : un lot de catalogage a une bibliotheque — creation, droits,
+# rangement des brouillons, reattribution, imports, reprises, rejeu.
+tests/sql/lot_a_une_bibliotheque_tests.sql

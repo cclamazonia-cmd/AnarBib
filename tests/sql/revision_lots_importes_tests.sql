@@ -41,8 +41,9 @@ BEGIN
   INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, editorial_decision)
   VALUES (v_run, 1, 'rev-1', 'A CONQUISTA DO PAO', 'new_record', 'accept_new') RETURNING id INTO v_row;
 
-  INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — lot importe', 'open') RETURNING id INTO v_lot_imp;
-  INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — lot a la main', 'open') RETURNING id INTO v_lot_main;
+  -- B30 : un lot a une bibliothèque (celle de ses brouillons).
+  INSERT INTO public.catalog_batches (name, status, library_id) VALUES ('Essai — lot importe', 'open', v_lib) RETURNING id INTO v_lot_imp;
+  INSERT INTO public.catalog_batches (name, status, library_id) VALUES ('Essai — lot a la main', 'open', v_lib) RETURNING id INTO v_lot_main;
 
   -- B29 : les brouillons du lot appartiennent à la bibliothèque de test.
   INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, bib_ref, ano, owner_library_id)

@@ -279,6 +279,8 @@ BEGIN
     UPDATE public.exemplar_drafts SET status = 'cancelled' WHERE id = v_x2;
     IF (SELECT created_exemplar_draft_id IS NULL AND editorial_decision = 'pending' FROM ingest.partner_catalog_staging_rows WHERE id = v_row)
        AND (SELECT count(*) FROM public.exemplar_drafts WHERE import_staging_row_id = v_row AND source_item_code IN ('RAP-1', 'RAP-2')) = 2
+       -- B30 : le lot d'un rapprochement du catalogue propre est à la bibliothèque du run.
+       AND (SELECT b.library_id FROM public.catalog_batches b JOIN public.exemplar_drafts x ON x.batch_id = b.id WHERE x.id = v_x2) = v_lib
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : le dernier annule n''a pas remis la ligne en attente'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -456,7 +458,7 @@ BEGIN
     END IF;
     -- Restauree seule, la notice etant vivante : permis.
     UPDATE public.exemplar_drafts SET status = 'draft' WHERE book_draft_id = v_d5 AND source_item_code = 'CORB-2';
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('Essai H19 lot cible', v_coord) RETURNING id INTO v_lot6;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('Essai H19 lot cible', v_coord, v_lib) RETURNING id INTO v_lot6;   -- B30
     UPDATE public.book_drafts SET batch_id = v_lot6 WHERE id = v_d5;
     IF (SELECT count(*) FROM public.exemplar_drafts WHERE book_draft_id = v_d5 AND batch_id = v_lot6) = 2
        AND (public.fn_batch_review_report(v_lot6)->'items'->>'count')::int = 2
@@ -525,6 +527,10 @@ BEGIN
     IF v_hint = 'error.import.deposit_admin_only'
        AND (v_res->>'created_items')::int = 2
        AND NOT EXISTS (SELECT 1 FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_row AND x.target_library_id IS DISTINCT FROM v_lib2)
+       -- B30 : le lot d'un dépôt compagnon est à la destination de la source.
+       AND NOT EXISTS (SELECT 1 FROM public.exemplar_drafts x JOIN public.catalog_batches b ON b.id = x.batch_id
+                        WHERE x.import_staging_row_id = v_row AND b.library_id IS DISTINCT FROM v_lib2)
+       AND EXISTS (SELECT 1 FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_row AND x.batch_id IS NOT NULL)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : hint='||coalesce(v_hint,'NULL')||' res='||left(coalesce(v_res::text,'NULL'), 200)); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -734,7 +740,9 @@ BEGIN
   BEGIN
     INSERT INTO public.libraries (id, slug, name, is_active, visibility_level)
     VALUES (gen_random_uuid(), 'essai-h19-sans-schema', 'Essai — sans schema H19', true, 'private') RETURNING id INTO v_other;
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('Essai H19 T26', v_coord) RETURNING id INTO v_lot5;
+    -- B30 : le lot est à la bibliothèque de ses exemplaires (le rapport ne
+    -- montre, hors administration, que ceux de la bibliothèque du lot).
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('Essai H19 T26', v_coord, v_other) RETURNING id INTO v_lot5;
     INSERT INTO public.exemplar_drafts (batch_id, action, status, label_status, target_library_id, import_staging_row_id, tombo, target_bib_ref)
     VALUES (v_lot5, 'create', 'draft', 'pending', v_other, v_r1, 'T26-1', 'X'),
            (v_lot5, 'create', 'draft', 'pending', v_other, v_r1, NULL, 'X');

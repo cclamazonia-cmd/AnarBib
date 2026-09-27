@@ -136,7 +136,7 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── Jeu d'essai : un lot BLMF de quatre brouillons ────────────────────
-  INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — cotes', 'open') RETURNING id INTO v_lot;
+  INSERT INTO public.catalog_batches (name, status, library_id) VALUES ('Essai — cotes', 'open', v_lib) RETURNING id INTO v_lot;   -- B30
   INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id, marc_json)
   VALUES ('Premier', v_lot, 'draft', 'livro', v_lib, '{"ingest":{"raw_payload":{"assunto_local":"Histoire"}}}'::jsonb) RETURNING id INTO v_d1;
   INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id, bib_ref, cdd, marc_json)
@@ -178,16 +178,26 @@ BEGIN
   -- ── T8 : refus des cotes ──────────────────────────────────────────────
   v_t := 'T8 refus : proprietaires melanges (mixed_owner), sans proprietaire (no_owner), sans convention (no_convention), lot ferme (not_open)';
   BEGIN
-    INSERT INTO public.catalog_batches (name, status) VALUES ('Essai — cotes 2', 'open') RETURNING id INTO v_lot2;
+    INSERT INTO public.catalog_batches (name, status, library_id) VALUES ('Essai — cotes 2', 'open', v_lib2) RETURNING id INTO v_lot2;   -- B30 : le lot 2 est à lib2
     -- B29 : créés par la coordination de test (sans propriétaire, ils sont à sa bibliothèque).
     INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id, created_by) VALUES ('Mixte A', v_lot2, 'draft', 'livro', v_lib, v_coord);
     INSERT INTO public.book_drafts (titulo, batch_id, status, tipo_material, owner_library_id, created_by) VALUES ('Mixte B', v_lot2, 'draft', 'livro', v_lib2, v_coord);
     v_txt := '';
     BEGIN PERFORM public.fn_batch_assign_bib_refs(v_lot2);
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_txt := v_txt || coalesce(v_hint,'?') || ';'; END;
-    UPDATE public.book_drafts SET owner_library_id = NULL WHERE batch_id = v_lot2;
+    -- B30 : « sans propriétaire », c'est un lot sans bibliothèque — celui de
+    -- l'administration : la coordination ne l'atteint plus (staff_only), une
+    -- personne de l'administration, si (no_owner).
+    UPDATE public.catalog_batches SET library_id = NULL WHERE id = v_lot2;
     BEGIN PERFORM public.fn_batch_assign_bib_refs(v_lot2);
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_txt := v_txt || coalesce(v_hint,'?') || ';'; END;
+    INSERT INTO public.network_administrators (user_id, status) VALUES (v_other, 'active');
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_other, 'role', 'authenticated')::text, true);
+    BEGIN PERFORM public.fn_batch_assign_bib_refs(v_lot2);
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_txt := v_txt || coalesce(v_hint,'?') || ';'; END;
+    DELETE FROM public.network_administrators WHERE user_id = v_other;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    UPDATE public.catalog_batches SET library_id = v_lib2 WHERE id = v_lot2;
     UPDATE public.book_drafts SET owner_library_id = v_lib2 WHERE batch_id = v_lot2;
     UPDATE public.libraries SET bib_ref_auto = false WHERE id = v_lib2;
     BEGIN PERFORM public.fn_batch_assign_bib_refs(v_lot2);
@@ -197,7 +207,7 @@ BEGIN
     BEGIN PERFORM public.fn_batch_assign_bib_refs(v_lot2);
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_txt := v_txt || coalesce(v_hint,'?') || ';'; END;
     UPDATE public.catalog_batches SET status = 'open' WHERE id = v_lot2;
-    IF v_txt = 'error.bibref.batch.mixed_owner;error.bibref.batch.no_owner;error.bibref.batch.no_convention;error.bibref.batch.not_open;'
+    IF v_txt = 'error.bibref.batch.mixed_owner;error.bibref.batch.staff_only;error.bibref.batch.no_owner;error.bibref.batch.no_convention;error.bibref.batch.not_open;'
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;

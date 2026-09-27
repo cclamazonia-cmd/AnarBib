@@ -98,8 +98,10 @@ BEGIN
     (v_coordB, v_libB, 'coordenador', 'active', true),
     (v_coordB, v_libA, 'librarian', 'active', false);
 
-  INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot A', v_coordA) RETURNING id INTO v_lotA;
-  INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot mixte', v_coordA) RETURNING id INTO v_lotMix;
+  -- B30 : un lot a une bibliothèque ; le lot mixte (héritage d'avant B30) n'en a
+  -- pas : il est à l'administration.
+  INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot A', v_coordA, v_libA) RETURNING id INTO v_lotA;
+  INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot mixte', v_coordA, NULL) RETURNING id INTO v_lotMix;
   INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
   VALUES ('B29 Notice de A', 'livro', v_libA, v_coordA, v_lotA, 'draft') RETURNING id INTO v_bA;
   INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status)
@@ -367,9 +369,10 @@ BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_libBibB, 'role', 'authenticated')::text, true);
     SELECT count(*) INTO v_n FROM public.fn_batch_reviews_list() r WHERE r.batch_id IN (v_lotA, v_lotMix);
     SELECT count(*) INTO v_m FROM public.fn_batch_owner_libraries() o WHERE o.batch_id = v_lotA;
-    SELECT (r.report IS NULL) INTO v_ok FROM public.fn_batch_reviews_list() r WHERE r.batch_id = v_lotMix AND v_ok;
+    -- B30 : le lot hérité mixte est à l'administration : libB ne le liste plus.
+    v_ok := v_ok AND NOT EXISTS (SELECT 1 FROM public.fn_batch_reviews_list() r WHERE r.batch_id = v_lotMix);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_multi, 'role', 'authenticated')::text, true);
-    IF coalesce(v_ok, false) AND v_n = 1 AND v_m = 0 AND public.fn_batch_caller_can_edit(v_lotMix)
+    IF coalesce(v_ok, false) AND v_n = 0 AND v_m = 0 AND NOT public.fn_batch_caller_can_edit(v_lotMix)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : ok='||coalesce(v_ok::text,'∅')||' hint='||coalesce(v_hint,'∅')||' err='||coalesce(v_txt,'∅')||' revisions libB='||v_n||' owners lotA='||v_m); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -425,10 +428,10 @@ BEGIN
   BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_libBibB, 'role', 'authenticated')::text, true);
     EXECUTE 'SET LOCAL ROLE authenticated';
-    SELECT c.en_cours INTO v_n FROM public.v_catalog_batch_draft_counts c WHERE c.batch_id = v_lotMix;
+    SELECT count(*) INTO v_n FROM public.v_catalog_batch_draft_counts c WHERE c.batch_id = v_lotMix;   -- B30 : 0 (lot de l'administration)
     SELECT count(*) INTO v_m FROM public.v_book_draft_destination v WHERE v.draft_id IN (v_bA, v_bOrph);
     EXECUTE 'RESET ROLE';
-    IF v_n = 1 AND v_m = 0
+    IF v_n = 0 AND v_m = 0
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : en_cours lot mixte='||coalesce(v_n::text,'∅')||' destinations='||v_m); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -452,10 +455,11 @@ BEGIN
     EXECUTE 'RESET ROLE';
     -- La liste des révisions masque l'instantané d'un lot qu'on ne possède pas.
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_libBibB, 'role', 'authenticated')::text, true);
-    SELECT (r.report IS NULL) INTO v_ok FROM public.fn_batch_reviews_list() r WHERE r.batch_id = v_lotMix;
+    -- B30 : un lot qu'on ne voit pas n'est pas listé du tout.
+    v_ok := NOT EXISTS (SELECT 1 FROM public.fn_batch_reviews_list() r WHERE r.batch_id IN (v_lotA, v_lotMix));
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
     SELECT v_ok AND (r.report IS NOT NULL) INTO v_ok FROM public.fn_batch_reviews_list() r WHERE r.batch_id = v_lotA;
-    SELECT v_ok AND (r.report IS NULL) INTO v_ok FROM public.fn_batch_reviews_list() r WHERE r.batch_id = v_lotMix;
+    v_ok := v_ok AND NOT EXISTS (SELECT 1 FROM public.fn_batch_reviews_list() r WHERE r.batch_id = v_lotMix);
     IF v_n = 0 AND v_m = 1 AND v_k = 2 AND coalesce(v_ok, false)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : libB='||v_n||' coordA='||v_m||' admin='||v_k||' masquage liste='||coalesce(v_ok::text,'∅')); END IF;
@@ -472,6 +476,7 @@ BEGIN
       v_hint := 'accepte';
     EXCEPTION WHEN OTHERS THEN v_hint := SQLSTATE;
     END;
+    SELECT batch_id IS DISTINCT FROM v_lotMix INTO v_ok FROM public.book_drafts WHERE id = v_bOrph;   -- B30 : resté hors du lot mixte
     UPDATE public.book_drafts SET batch_id = v_lotA WHERE id = v_bOrph;
     GET DIAGNOSTICS v_n = ROW_COUNT;
     EXECUTE 'RESET ROLE';
@@ -488,9 +493,12 @@ BEGIN
     v_res := NULL;
     BEGIN PERFORM public.create_book_draft_from_book(v_bookB, v_lotMix); v_res := '"accepte"';
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_txt2 = PG_EXCEPTION_HINT; END;
-    IF v_hint = '42501' AND v_n = 1 AND v_txt = '42501' AND v_res IS NULL AND v_txt2 = 'error.batch.other_libraries'
+    -- B30 : un rangement refusé ne lève plus (gestes de masse) : le brouillon
+    -- reste où il était ; la création refusée, elle, lève 42501.
+    IF v_hint = 'accepte' AND v_n = 1 AND v_txt = '42501' AND v_res IS NULL AND v_txt2 = 'error.batch.other_libraries'
+       AND (SELECT batch_id FROM public.book_drafts WHERE id = v_bOrph) = v_lotA AND coalesce(v_ok, false)
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : vers mixte='||coalesce(v_hint,'∅')||' vers A='||v_n||' intruse='||coalesce(v_txt,'∅')||' reprise='||coalesce(v_txt2,'acceptee')); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : vers mixte='||coalesce(v_hint,'∅')||' reste hors du mixte='||coalesce(v_ok::text,'∅')||' vers A='||v_n||' intruse='||coalesce(v_txt,'∅')||' reprise='||coalesce(v_txt2,'acceptee')); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T16 ─────────────────────────────────────────────────────────────
@@ -506,11 +514,19 @@ BEGIN
     UPDATE public.catalog_batches SET created_by = v_coordA WHERE id = v_lotB;
     EXECUTE 'RESET ROLE';
     v_ok := v_ok AND (SELECT created_by FROM public.catalog_batches WHERE id = v_lotB) = v_libBibB;
+    -- B30 : coordA a créé v_lotMix, lot de l'administration : ni le voir, ni le modifier.
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    SELECT count(*) INTO v_k FROM public.catalog_batches WHERE id = v_lotMix;
+    UPDATE public.catalog_batches SET notes = 'b30' WHERE id = v_lotMix;
+    GET DIAGNOSTICS v_id2 = ROW_COUNT;
+    EXECUTE 'RESET ROLE';
+    v_ok := v_ok AND v_k = 0 AND v_id2 = 0;
     -- Un lot de A qui n'a plus que sa corbeille (le déclencheur existant refuse
     -- la suppression d'un lot au travail vivant). coordB, réduite à la
     -- coordination de B : le lot vide d'une collègue de B se supprime, pas
     -- celui de A.
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot jete de A', v_coordA) RETURNING id INTO v_lotC;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot jete de A', v_coordA, v_libA) RETURNING id INTO v_lotC;
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
     VALUES ('B29 Jetee du lot C', 'livro', v_libA, v_coordA, v_lotC, 'cancelled');
     -- coordB, simple bibliothécaire en A : le lot de A n'est pas le sien à
@@ -532,7 +548,7 @@ BEGIN
     INSERT INTO public.user_library_memberships (user_id, library_id, role, status, is_primary) VALUES (v_coordB, v_libA, 'librarian', 'active', false);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
     SELECT count(*) INTO v_ok2 FROM public.fn_batch_owner_libraries() o WHERE o.batch_id = v_lotA;
-    IF v_n = 1 AND v_m = 0 AND v_ok AND v_k2 = 0 AND v_ok3 AND v_k = 0 AND v_id = 1 AND v_ok2 >= 1
+    IF v_n = 0 AND v_m = 0 AND v_ok AND v_k2 = 0 AND v_ok3 AND v_k = 0 AND v_id = 1 AND v_ok2 >= 1   -- B30 : v_n = 0
        AND (SELECT status FROM public.catalog_batches WHERE id = v_lotMix) = 'open'
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : vus='||v_n||' modifies='||v_m||' createur fige='||coalesce(v_ok::text,'∅')||' suppr lot de A par coordB bib. de A='||v_k2||' owns lot C='||coalesce((NOT v_ok3)::text,'∅')||' suppr lot de A='||v_k||' suppr collegue='||v_id||' owners admin='||v_ok2); END IF;
@@ -669,7 +685,8 @@ BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
     PERFORM public.fn_batch_reassign_library(v_lotImp, v_libA);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
-    IF v_ok AND v_hint = 'error.batch.other_libraries' AND v_n = 0 AND v_txt = '42501'
+    IF v_ok AND v_hint = 'error.batch.other_libraries' AND v_n = 0 AND v_txt = 'accepte'   -- B30 : sans effet, sans erreur
+       AND (SELECT batch_id FROM public.book_drafts WHERE id = v_bOrph) = v_lotA
        AND (SELECT owner_library_id FROM public.book_drafts WHERE id = v_id) IS NULL
        AND public.fn_caller_owns_batch(v_lotImp)
     THEN v_passed := v_passed+1;
@@ -679,8 +696,8 @@ BEGIN
   -- ── T23 ─────────────────────────────────────────────────────────────
   v_t := 'T23 ranger dans le lot vide ou publie d''une autre bibliotheque : refuse ; le publier aussi';
   BEGIN
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot vide de B', v_libBibB) RETURNING id INTO v_lotVideB;
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot publie de B', v_libBibB) RETURNING id INTO v_lotPubB;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot vide de B', v_libBibB, v_libB) RETURNING id INTO v_lotVideB;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot publie de B', v_libBibB, v_libB) RETURNING id INTO v_lotPubB;
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
     VALUES ('B29 Publiee de B', 'livro', v_libB, v_libBibB, v_lotPubB, 'published');
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
@@ -707,7 +724,9 @@ BEGIN
     UPDATE public.book_drafts SET batch_id = v_lotVideB WHERE id = v_bB;
     GET DIAGNOSTICS v_n = ROW_COUNT;
     EXECUTE 'RESET ROLE';
-    IF v_txt = '42501 42501' AND v_hint = 'error.batch.other_libraries' AND v_n = 1 AND v_ok
+    IF v_txt = 'vide-accepte publie-accepte' AND v_hint = 'error.batch.other_libraries' AND v_n = 1 AND v_ok   -- B30 : sans effet, sans erreur
+       AND (SELECT batch_id FROM public.book_drafts WHERE id = v_bB) = v_lotVideB
+       AND (SELECT batch_id FROM public.book_drafts WHERE id = v_bA) = v_lotA
        AND v_txt2 = 'error.batch.other_libraries error.batch.other_libraries'
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : coordA='||v_txt||' publier='||coalesce(v_hint,'accepte')||' libB range='||v_n||' peut agir='||coalesce((NOT v_ok)::text,'∅')||' reprises='||coalesce(v_txt2,'∅')); END IF;
@@ -716,7 +735,7 @@ BEGIN
   -- ── T24 ─────────────────────────────────────────────────────────────
   v_t := 'T24 publier un lot qui porte les autorites d''une autre personne : refus distinct';
   BEGIN
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot aux autorites', v_coordA) RETURNING id INTO v_lotAut;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot aux autorites', v_coordA, v_libA) RETURNING id INTO v_lotAut;
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
     VALUES ('B29 Notice du lot aux autorites', 'livro', v_libA, v_coordA, v_lotAut, 'draft');
     INSERT INTO public.author_drafts (preferred_name, status, created_by, batch_id) VALUES ('B29 Autorite de B dans A', 'draft', v_libBibB, v_lotAut);
@@ -756,21 +775,24 @@ BEGIN
     PERFORM public.fn_restore_deleted_draft(v_audit);
     INSERT INTO public.user_library_memberships (user_id, library_id, role, status, is_primary) VALUES (v_libBibB, v_libB, 'librarian', 'active', true);
     v_ok2 := CASE WHEN (SELECT owner_library_id FROM public.book_drafts WHERE id = v_id) = v_libB THEN 1 ELSE 0 END;
-    -- Lot confié par l'administration.
+    -- Lot confié par l'administration : B30, c'est le réattribuer (son
+    -- créateur, lui, reste figé).
     INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot a confier', v_admin) RETURNING id INTO v_lotB;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
     EXECUTE 'SET LOCAL ROLE authenticated';
     UPDATE public.catalog_batches SET created_by = v_libBibB WHERE id = v_lotB;
     EXECUTE 'RESET ROLE';
-    IF v_ok AND v_ok2 = 1 AND (SELECT created_by FROM public.catalog_batches WHERE id = v_lotB) = v_libBibB
+    PERFORM public.fn_batch_reassign_library(v_lotB, v_libB);
+    IF v_ok AND v_ok2 = 1 AND (SELECT created_by FROM public.catalog_batches WHERE id = v_lotB) = v_admin
+       AND (SELECT library_id FROM public.catalog_batches WHERE id = v_lotB) = v_libB
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : owner du depot='||coalesce((SELECT owner_library_id::text FROM public.book_drafts WHERE id = v_bNone),'∅')||' rejeu='||coalesce((SELECT owner_library_id::text FROM public.book_drafts WHERE id = v_id),'∅')||' lot confie a '||coalesce((SELECT created_by::text FROM public.catalog_batches WHERE id = v_lotB),'∅')); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : owner du depot='||coalesce((SELECT owner_library_id::text FROM public.book_drafts WHERE id = v_bNone),'∅')||' rejeu='||coalesce((SELECT owner_library_id::text FROM public.book_drafts WHERE id = v_id),'∅')||' lot confie a '||coalesce((SELECT library_id::text FROM public.catalog_batches WHERE id = v_lotB),'∅')); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T26 ─────────────────────────────────────────────────────────────
   v_t := 'T26 sortie de corbeille dans un lot qui n''est plus a soi : le brouillon revient, hors du lot';
   BEGIN
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot reattribue a A', v_admin) RETURNING id INTO v_lotX2;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot reattribue a A', v_admin, v_libA) RETURNING id INTO v_lotX2;
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
     VALUES ('B29 Notice de A du lot reattribue', 'livro', v_libA, v_coordA, v_lotX2, 'draft');
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
@@ -789,7 +811,7 @@ BEGIN
     -- Un lot ENTIÈREMENT publié par A (plus rien en cours), la corbeille de B
     -- dedans : B la restaure → hors du lot ; B n'y range rien ; exemplaire saisi
     -- de B jeté dans le lot de A : même chose.
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot publie par A', v_admin) RETURNING id INTO v_lotX6;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot publie par A', v_admin, v_libA) RETURNING id INTO v_lotX6;
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
     VALUES ('B29 Publiee par A', 'livro', v_libA, v_coordA, v_lotX6, 'published');
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
@@ -805,7 +827,8 @@ BEGIN
     BEGIN UPDATE public.book_drafts SET batch_id = v_lotX6 WHERE id = v_bB; v_hint2 := 'accepte';
     EXCEPTION WHEN OTHERS THEN v_hint2 := SQLSTATE; END;
     EXECUTE 'RESET ROLE';
-    v_ok3 := v_ok3 AND v_hint2 = '42501'
+    v_ok3 := v_ok3 AND v_hint2 = 'accepte'   -- B30 : sans effet, sans erreur
+             AND (SELECT batch_id FROM public.book_drafts WHERE id = v_bB) = v_lotVideB
              AND (SELECT batch_id FROM public.book_drafts WHERE id = v_id3) IS NULL
              AND (SELECT batch_id FROM public.exemplar_drafts WHERE id = v_x2) IS NULL;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
@@ -822,7 +845,7 @@ BEGIN
   -- ── T27 ─────────────────────────────────────────────────────────────
   v_t := 'T27 demander la revision d''un lot importe : la coordination DE sa bibliotheque';
   BEGIN
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot importe de A', v_coordA) RETURNING id INTO v_lotX3;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot importe de A', v_coordA, v_libA) RETURNING id INTO v_lotX3;
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status, partner_source)
     VALUES ('B29 Importee de A', 'livro', v_libA, v_coordA, v_lotX3, 'draft', 'other_partner');
     -- coordB coordonne B et n'est que bibliothécaire en A.
@@ -842,7 +865,7 @@ BEGIN
   -- ── T28 ─────────────────────────────────────────────────────────────
   v_t := 'T28 reattribution : un exemplaire saisi d''une autre bibliotheque sort du lot, qui reste gerable';
   BEGIN
-    INSERT INTO public.catalog_batches (name, created_by) VALUES ('B29 lot a reattribuer a B', v_admin) RETURNING id INTO v_lotX4;
+    INSERT INTO public.catalog_batches (name, created_by, library_id) VALUES ('B29 lot a reattribuer a B', v_admin, v_libA) RETURNING id INTO v_lotX4;
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, batch_id, status)
     VALUES ('B29 Notice du lot a reattribuer', 'livro', v_libA, v_coordA, v_lotX4, 'draft');
     INSERT INTO public.exemplar_drafts (action, status, label_status, target_library_id, created_by, batch_id)
