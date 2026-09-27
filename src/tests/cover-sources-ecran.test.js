@@ -20,6 +20,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { sourcesEnPanne, messageRechercheCapas, accordEdition, motsEditeur, anneeDe } from '../lib/coverSources.js';
+import { volumesDifferents } from '../lib/volumes.js';
 
 const FORM = readFileSync(new URL('../pages/catalogacao/BookDraftForm.jsx', import.meta.url), 'utf8');
 
@@ -80,7 +81,7 @@ describe('accordEdition — l’édition que désigne l’ISBN, confrontée à l
 
   it('le cas réel : notice Ramparts Press 1971, ISBN de l’édition AK Press 2004 → écart, les deux nommées', () => {
     expect(accordEdition(ak2004, { ano: '1971', editora: 'Ramparts Press' })).toEqual({
-      statut: 'ecart', ecartAnnee: true, ecartEditeur: true,
+      statut: 'ecart', ecartAnnee: true, ecartEditeur: true, volume: null,
       trouvee: 'AK Press, 2004', notice: 'Ramparts Press, 1971',
     });
   });
@@ -124,9 +125,55 @@ describe('accordEdition — l’édition que désigne l’ISBN, confrontée à l
   });
 });
 
+describe('volumes — l’ISBN d’un ensemble porté par chacun de ses volumes', () => {
+  // BTL-TL-000447 et BTL-TL-000448 : volumes 2 et 3 de « La C.N.T. y la
+  // Revolución Española », même ISBN, même éditeur, même année.
+  const ensemble = { edition: { annee: '1988', editeurs: ['Associación Artística La Cuchilla'] } };
+
+  it('notice d’un volume : jamais « concordant », même éditeur et même année', () => {
+    expect(accordEdition(ensemble, { ano: '1988', editora: 'Associación Artística La Cuchilla', volume: '2' }))
+      .toMatchObject({ statut: 'volume', volume: '2', ecartAnnee: false, ecartEditeur: false });
+  });
+
+  it('un écart d’édition garde la priorité sur le volume', () => {
+    expect(accordEdition(ensemble, { ano: '1971', editora: 'Ramparts Press', volume: '2' }))
+      .toMatchObject({ statut: 'ecart', volume: '2' });
+  });
+
+  it('sans volume, rien ne change', () => {
+    expect(accordEdition(ensemble, { ano: '1988', editora: 'La Cuchilla', volume: '' })).toMatchObject({ statut: 'concordant', volume: null });
+  });
+
+  it('volumesDifferents : les deux renseignés et différents, casse et espaces ignorés', () => {
+    expect(volumesDifferents('2', '3')).toBe(true);
+    expect(volumesDifferents(' III ', 'iii')).toBe(false);
+    expect(volumesDifferents('2', '')).toBe(false);
+    expect(volumesDifferents(null, '3')).toBe(false);
+  });
+
+  it('l’avertissement de doublon écarte les autres VOLUMES d’un même ISBN', () => {
+    const detect = FORM.slice(FORM.indexOf('async function detectDuplicate()'), FORM.indexOf('// Digital resources CRUD'));
+    expect(detect).toMatch(/volumesDifferents\(b\.volume, f\('volume'\)\)/);
+    expect(detect).toMatch(/s\.match_kind === 'isbn' && autres\.has\(s\.book_id\)/);
+  });
+
+  it('la galerie transmet le volume de la notice et dit pourquoi vérifier', () => {
+    expect(FORM).toMatch(/accordEdition\(c, \{ ano: f\('ano'\), editora: f\('editora'\), volume: f\('volume'\) \}\)/);
+    expect(FORM).toContain("t({ id: 'catalogacao.ui.coverIsbnVolume' }, { volume: volumeCapas.volume })");
+  });
+});
+
+describe('BookDraftForm — capa « page 1 du PDF » : le navigateur ne contacte pas la source', () => {
+  it('un PDF externe est demandé à cover_lookup (action pdf), plus jamais par fetch()', () => {
+    const pdf = FORM.slice(FORM.indexOf('async function generateCoverFromPdf()'), FORM.indexOf('// Contributors management'));
+    expect(pdf).not.toMatch(/fetch\(resource\.source_url\)/);
+    expect(pdf).toMatch(/body: \{ action: 'pdf', url: resource\.source_url \}/);
+  });
+});
+
 describe('BookDraftForm — galerie : l’écart d’édition est dit', () => {
   it('chaque candidate est confrontée à l’année et à l’éditeur de la notice', () => {
-    expect(FORM).toMatch(/accordEdition\(c, \{ ano: f\('ano'\), editora: f\('editora'\) \}\)/);
+    expect(FORM).toMatch(/accordEdition\(c, \{ ano: f\('ano'\), editora: f\('editora'\)/);
   });
 
   it('un écart s’affiche au-dessus des vignettes, avec les deux éditions', () => {

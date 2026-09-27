@@ -6844,5 +6844,6 @@
   "catalogacao.ui.coverIsbnSeul": "ISBN",
   "auth.loginInvalid": "Onjuist e-mailadres, openbare ID of wachtwoord.",
   "auth.loginRateLimited": "Te veel pogingen. Probeer het over een uur opnieuw.",
-  "auth.loginServerError": "Serverfout. Probeer het zo meteen opnieuw."
+  "auth.loginServerError": "Serverfout. Probeer het zo meteen opnieuw.",
+  "catalogacao.ui.coverIsbnVolume": "Fiche van deel {volume}: het ISBN van een meerdelig werk geldt vaak voor alle delen. Controleer of deze omslag echt die van deel {volume} is."
 }

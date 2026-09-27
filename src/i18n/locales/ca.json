@@ -6844,5 +6844,6 @@
   "catalogacao.ui.coverIsbnSeul": "ISBN",
   "auth.loginInvalid": "Correu electrònic, ID públic o contrasenya incorrectes.",
   "auth.loginRateLimited": "Massa intents. Torna-ho a provar d’aquí a una hora.",
-  "auth.loginServerError": "Error del servidor. Torna-ho a provar d’aquí a un moment."
+  "auth.loginServerError": "Error del servidor. Torna-ho a provar d’aquí a un moment.",
+  "catalogacao.ui.coverIsbnVolume": "Fitxa del volum {volume}: l'ISBN d'una obra en diversos volums sovint val per a tots. Verifiqueu que aquesta coberta és ben bé la del volum {volume}."
 }

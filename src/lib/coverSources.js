@@ -99,8 +99,8 @@ export function designationEdition(editeurs, annee) {
 
 /**
  * Confronte l'édition désignée par l'ISBN d'une candidate à la notice.
- * @returns {null | { statut: 'concordant'|'ecart'|'inconnu', ecartAnnee: boolean,
- *   ecartEditeur: boolean, trouvee: string, notice: string }}
+ * @returns {null | { statut: 'concordant'|'ecart'|'volume'|'inconnu', ecartAnnee: boolean,
+ *   ecartEditeur: boolean, volume: string|null, trouvee: string, notice: string }}
  *   null pour une candidate qui n'est pas passée par l'ISBN (pas d'`edition`).
  */
 export function accordEdition(candidate, notice) {
@@ -119,9 +119,16 @@ export function accordEdition(candidate, notice) {
   let statut = 'inconnu';
   if (ecartAnnee || ecartEditeur) statut = 'ecart';
   else if (anneeComparable || editeurComparable) statut = 'concordant';
+  // Volumes (27/09/2026) : l'ISBN d'un ensemble est souvent porté par tous ses
+  // volumes (BTL-TL-000447 et 000448, volumes 2 et 3, même ISBN) ; sa couverture
+  // peut être celle d'un AUTRE volume. Même éditeur, même année : l'écran aurait
+  // dit « concordant ». Une notice de volume n'est donc jamais concordante ; un
+  // écart d'édition, plus grave, garde la priorité.
+  const volume = String(notice?.volume ?? '').trim();
+  if (volume && statut !== 'ecart') statut = 'volume';
 
   return {
-    statut, ecartAnnee, ecartEditeur,
+    statut, ecartAnnee, ecartEditeur, volume: volume || null,
     trouvee: designationEdition(ed.editeurs, ed.annee),
     notice: designationEdition([String(notice?.editora ?? '').trim()], aNotice ?? String(notice?.ano ?? '').trim()),
   };

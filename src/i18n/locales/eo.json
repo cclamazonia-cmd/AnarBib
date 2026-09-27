@@ -6844,5 +6844,6 @@
   "catalogacao.ui.coverIsbnSeul": "ISBN",
   "auth.loginInvalid": "Malĝusta retpoŝto, publika ID aŭ pasvorto.",
   "auth.loginRateLimited": "Tro da provoj. Reprovu post unu horo.",
-  "auth.loginServerError": "Servila eraro. Reprovu post momento."
+  "auth.loginServerError": "Servila eraro. Reprovu post momento.",
+  "catalogacao.ui.coverIsbnVolume": "Katalogero de volumo {volume}: la ISBN de plurvoluma verko ofte validas por ĉiuj volumoj. Kontrolu, ke ĉi tiu kovrilo vere estas tiu de volumo {volume}."
 }

@@ -6844,5 +6844,6 @@
   "catalogacao.ui.coverIsbnSeul": "ISBN",
   "auth.loginInvalid": "E-mail, ID public ou mot de passe incorrect.",
   "auth.loginRateLimited": "Trop de tentatives. Réessaie dans une heure.",
-  "auth.loginServerError": "Erreur serveur. Réessaie dans un instant."
+  "auth.loginServerError": "Erreur serveur. Réessaie dans un instant.",
+  "catalogacao.ui.coverIsbnVolume": "Notice du volume {volume} : l'ISBN d'un ouvrage en plusieurs volumes vaut souvent pour tous. Vérifie que cette couverture est bien celle du volume {volume}."
 }

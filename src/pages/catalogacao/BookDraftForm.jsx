@@ -13,6 +13,7 @@ import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { writeCoverThumb, removeCoverThumb } from '@/lib/coverThumbs';
 import { messageRechercheCapas, accordEdition } from '@/lib/coverSources';
+import { volumesDifferents } from '@/lib/volumes';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
@@ -730,8 +731,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // notice (lib/coverSources.js). Un écart est dit au-dessus de la galerie et sur
   // la vignette : la candidate n'est plus présentée comme certaine. Vu le 27/09 :
   // une notice Ramparts Press 1971 portait l'ISBN de l'édition AK Press de 2004.
-  const accordsCapas = coverCandidates.map((c) => accordEdition(c, { ano: f('ano'), editora: f('editora') }));
+  const accordsCapas = coverCandidates.map((c) => accordEdition(c, { ano: f('ano'), editora: f('editora'), volume: f('volume') }));
   const ecartCapas = accordsCapas.find((a) => a?.statut === 'ecart') || null;
+  // Notice d'un volume : l'ISBN d'un ensemble peut mener à la couverture d'un autre volume.
+  const volumeCapas = ecartCapas ? null : (accordsCapas.find((a) => a?.statut === 'volume') || null);
+  const aVerifier = (a) => a?.statut === 'ecart' || a?.statut === 'volume';
 
   // ═══════════════════════════════════════════════════════
   // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, DNB, ICCU, LoC, OL, Wikidata + BN Brasil)
@@ -1164,9 +1168,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         if (error) throw error;
         arrayBuffer = await data.arrayBuffer();
       } else if (resource.source_url) {
-        const res = await fetch(resource.source_url);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        arrayBuffer = await res.arrayBuffer();
+        // Anti-pistage (spec capas §4.3) : le PDF externe est récupéré CÔTÉ
+        // SERVEUR par cover_lookup ; le navigateur qui catalogue ne contacte
+        // jamais la source (il le faisait jusqu'au 27/09/2026).
+        const { data, error } = await supabase.functions.invoke('cover_lookup', {
+          body: { action: 'pdf', url: resource.source_url },
+        });
+        if (error) throw error;
+        if (!(data instanceof Blob)) throw new Error(data?.error || 'pdf fetch failed');
+        arrayBuffer = await data.arrayBuffer();
       } else {
         throw new Error('no source');
       }
@@ -1665,7 +1675,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         p_exclude_book_id: excludeId,
       });
       if (error) throw error;
-      const top = (data || [])[0];
+      let suggestions = data || [];
+      // Un autre VOLUME du même ensemble n'est pas un doublon, même ISBN (même
+      // règle que publish_book_draft, lib/volumes.js). Sinon l'avertissement
+      // poussait à enregistrer le volume 4 comme un exemplaire du volume 2.
+      const idsIsbn = suggestions.filter((s) => s.match_kind === 'isbn').map((s) => s.book_id);
+      if (f('volume').trim() && idsIsbn.length) {
+        const { data: vols } = await supabase.from('books').select('id, volume').in('id', idsIsbn);
+        const autres = new Set((vols || []).filter((b) => volumesDifferents(b.volume, f('volume'))).map((b) => b.id));
+        suggestions = suggestions.filter((s) => !(s.match_kind === 'isbn' && autres.has(s.book_id)));
+      }
+      const top = suggestions[0];
       if (!top) return null;
       const detail = [
         top.titulo || '',
@@ -2702,6 +2722,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     {t({ id: 'catalogacao.ui.coverIsbnEcart' }, { trouvee: ecartCapas.trouvee || '?', notice: ecartCapas.notice || '?' })}
                   </div>
                 )}
+                {volumeCapas && (
+                  <div role="alert" style={{ fontSize: '.72rem', lineHeight: 1.4, color: '#fbbf24', marginBottom: 8 }}>
+                    {t({ id: 'catalogacao.ui.coverIsbnVolume' }, { volume: volumeCapas.volume })}
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {/* `label` = ce que la source dit avoir trouvé (titre, auteur·rices,
                       année). Sur une correspondance par titre, elle est FLOUE : Open
@@ -2711,7 +2736,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   {coverCandidates.map((c, i) => (
                     <button key={i} type="button" title={[c.label, c.source, c.license].filter(Boolean).join(' · ')}
                       onClick={() => selectCoverCandidate(c)} disabled={!!coverStoring}
-                      style={{ padding: 0, border: accordsCapas[i]?.statut === 'ecart' ? '1px solid #fbbf24' : '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
+                      style={{ padding: 0, border: aVerifier(accordsCapas[i]) ? '1px solid #fbbf24' : '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
                       {/* Aperçu rapatrié par l'EF (data: URI), jamais l'URL du
                           tiers : afficher `c.thumbnailUrl` ferait contacter
                           Open Library ou Google par le navigateur qui catalogue,
@@ -2724,8 +2749,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                           avec la notice ? Rien pour une candidate trouvée par titre. */}
                       {accordsCapas[i] && (
                         <div style={{ fontSize: '.55rem', fontWeight: 700, padding: '1px 3px 0', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                          color: accordsCapas[i].statut === 'ecart' ? '#fbbf24' : accordsCapas[i].statut === 'concordant' ? '#4ade80' : 'var(--brand-muted, #aaa)' }}>
-                          {accordsCapas[i].statut === 'ecart' ? t({ id: 'catalogacao.ui.coverIsbnVerifier' })
+                          color: aVerifier(accordsCapas[i]) ? '#fbbf24' : accordsCapas[i].statut === 'concordant' ? '#4ade80' : 'var(--brand-muted, #aaa)' }}>
+                          {aVerifier(accordsCapas[i]) ? t({ id: 'catalogacao.ui.coverIsbnVerifier' })
                             : accordsCapas[i].statut === 'concordant' ? t({ id: 'catalogacao.ui.coverIsbnConcordant' })
                             : t({ id: 'catalogacao.ui.coverIsbnSeul' })}
                         </div>

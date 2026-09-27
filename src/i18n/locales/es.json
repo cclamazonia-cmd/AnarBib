@@ -6844,5 +6844,6 @@
   "catalogacao.ui.coverIsbnSeul": "ISBN",
   "auth.loginInvalid": "Correo, ID público o contraseña incorrectos.",
   "auth.loginRateLimited": "Demasiados intentos. Vuelve a intentarlo en una hora.",
-  "auth.loginServerError": "Error del servidor. Vuelve a intentarlo en un momento."
+  "auth.loginServerError": "Error del servidor. Vuelve a intentarlo en un momento.",
+  "catalogacao.ui.coverIsbnVolume": "Registro del volumen {volume}: el ISBN de una obra en varios volúmenes suele valer para todos. Verifica que esta portada sea la del volumen {volume}."
 }

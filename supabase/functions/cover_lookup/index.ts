@@ -29,6 +29,8 @@
 //         candidates: [{ thumbnailUrl, thumbnailData, fullUrl, source,
 //                        license, label? }],
 //         sources: [{ id, label, count, ok, skipped?, error? }] }
+//    POST { action: 'pdf', url } -> le PDF lui-meme, en application/octet-stream
+//    (capa « page 1 du PDF » : le serveur le recupere, pas le navigateur).
 //    `ok: false` : la source a ECHOUE — le formulaire le dit a l'ecran. Jusqu'au
 //    27/09/2026 il l'ignorait, et une voie ISBN en 404 depuis une date inconnue
 //    s'affichait comme « aucune capa trouvee ». `skipped: true` : la source n'a
@@ -294,6 +296,44 @@ async function handle(body: Record<string, unknown>, authHeader: string) {
   return handleSearch(body, authHeader);
 }
 
+// ── Mode pdf : le PDF d'une ressource numérique, récupéré CÔTÉ SERVEUR ─────
+// Pour la capa « page 1 du PDF » (P3), le formulaire rend la première page
+// dans le navigateur. Quand le PDF n'était pas dans le Storage, il le
+// téléchargeait lui-même depuis `source_url` : le navigateur qui catalogue
+// contactait donc le tiers, ce que la spec capas exclut (§4.3, §6 : « aucune
+// ressource tierce chargée dans le navigateur »). Relevé le 27/09/2026 ; le
+// serveur le récupère désormais et le rend tel quel.
+//
+// Garde-fous : https seulement ; pas d'hôte local ni d'adresse privée (la
+// fonction ne doit pas servir de relais vers un réseau interne) ; 30 Mo au
+// plus ; signature « %PDF » exigée, quel que soit le type annoncé.
+const PDF_MAX_OCTETS = 30 * 1024 * 1024;
+
+function hoteInterdit(hote: string): boolean {
+  const h = hote.toLowerCase().replace(/^\[|\]$/g, '');
+  if (h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) return true;
+  if (/^(127\.|10\.|0\.|169\.254\.|192\.168\.)/.test(h)) return true;
+  if (/^172\.(1[6-9]|2\d|3[01])\./.test(h)) return true;
+  if (h === '::1' || h.startsWith('fc') || h.startsWith('fd') || h.startsWith('fe80')) return true;
+  return false;
+}
+
+async function recupererPdf(adresse: string): Promise<Uint8Array> {
+  let url: URL;
+  try { url = new URL(adresse); } catch { throw new Error('Invalid PDF URL.'); }
+  if (url.protocol !== 'https:') throw new Error('PDF URL must use https.');
+  if (hoteInterdit(url.hostname)) throw new Error('PDF host not allowed.');
+  const res = await fetchWithTimeout(url.toString(), { headers: { Accept: 'application/pdf' } });
+  if (!res.ok) throw new Error(`PDF fetch HTTP ${res.status}`);
+  const annonce = Number(res.headers.get('content-length'));
+  if (Number.isFinite(annonce) && annonce > PDF_MAX_OCTETS) throw new Error('PDF too large.');
+  const octets = new Uint8Array(await res.arrayBuffer());
+  if (octets.byteLength > PDF_MAX_OCTETS) throw new Error('PDF too large.');
+  const signature = String.fromCharCode(...octets.subarray(0, 5));
+  if (signature !== '%PDF-') throw new Error('Not a PDF.');
+  return octets;
+}
+
 // deno-lint-ignore no-explicit-any
 const runtime = (globalThis as any).Deno;
 if (runtime?.serve) {
@@ -303,6 +343,11 @@ if (runtime?.serve) {
     try {
       const body = await req.json().catch(() => ({}));
       const authHeader = req.headers.get('Authorization') || '';
+      if (String(body.action || '').trim() === 'pdf') {
+        // octet-stream : supabase-js rend alors un Blob au formulaire.
+        const octets = await recupererPdf(String(body.url || '').trim());
+        return new Response(octets, { status: 200, headers: { ...CORS, 'Content-Type': 'application/octet-stream' } });
+      }
       const payload = await handle(body, authHeader);
       return json(payload, 200);
     } catch (error) {
@@ -311,4 +356,4 @@ if (runtime?.serve) {
   });
 }
 
-export { handle };
+export { handle, recupererPdf };

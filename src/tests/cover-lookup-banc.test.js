@@ -105,6 +105,16 @@ function reseau({ olLivres = 200, olRecherche = 200, inventaire = 200, inventair
       return jsonRep({ entities: { 'wd:Q3579383': { type: 'publisher',
         labels: { ko: '아르마탕', fr: "Éditions L'Harmattan", en: "L'Harmattan" } } }, redirects: {} });
     }
+    // Ressources numériques externes (capa « page 1 du PDF »).
+    if (u === 'https://exemple.org/livre.pdf') {
+      return new Response(new TextEncoder().encode('%PDF-1.4\n% faux pdf de banc\n'), { status: 200, headers: { 'content-type': 'application/pdf' } });
+    }
+    if (u === 'https://exemple.org/page.html') {
+      return new Response('<html><body>pas un pdf</body></html>', { status: 200, headers: { 'content-type': 'text/html' } });
+    }
+    if (u === 'https://exemple.org/gros.pdf') {
+      return new Response('%PDF-1.4', { status: 200, headers: { 'content-type': 'application/pdf', 'content-length': String(40 * 1024 * 1024) } });
+    }
     if (u.startsWith('https://covers.openlibrary.org/b/id/')) return image('image/jpeg');
     if (u.startsWith('https://inventaire.io/img/entities/')) return image('image/webp');
     throw new Error(`fetch inattendu : ${u}`);
@@ -229,6 +239,36 @@ describe('cover_lookup — la recherche par titre prend le relais', () => {
     expect(r.candidates).toEqual([]);
     expect(r.sources.filter((s) => s.ok === false).map((s) => s.id).sort())
       .toEqual(['inventaire', 'openlibrary', 'openlibrary_search']);
+  });
+});
+
+describe('cover_lookup — le PDF d’une ressource externe passe par le serveur', () => {
+  // Jusqu'au 27/09/2026, le formulaire le téléchargeait lui-même depuis
+  // `source_url` : le navigateur qui catalogue contactait le tiers (spec §4.3).
+  const pdf = () => {
+    const net = reseau();
+    return { net, recupererPdf: charger('cover_lookup/index.ts', net).recupererPdf };
+  };
+
+  it('un PDF en https : rendu tel quel', async () => {
+    const { recupererPdf } = pdf();
+    const octets = await recupererPdf('https://exemple.org/livre.pdf');
+    expect(new TextDecoder().decode(octets.subarray(0, 5))).toBe('%PDF-');
+  });
+
+  it('http, hôte local ou adresse privée : refusés, sans une seule requête', async () => {
+    const { net, recupererPdf } = pdf();
+    await expect(recupererPdf('http://exemple.org/livre.pdf')).rejects.toThrow('https');
+    for (const u of ['https://localhost/x.pdf', 'https://192.168.1.10/x.pdf', 'https://10.0.0.5/x.pdf', 'https://172.20.0.1/x.pdf', 'https://[::1]/x.pdf']) {
+      await expect(recupererPdf(u), u).rejects.toThrow('not allowed');
+    }
+    expect(net.demandes).toEqual([]);
+  });
+
+  it('ce qui n’est pas un PDF, ou un PDF de plus de 30 Mo : refusé', async () => {
+    const { recupererPdf } = pdf();
+    await expect(recupererPdf('https://exemple.org/page.html')).rejects.toThrow('Not a PDF');
+    await expect(recupererPdf('https://exemple.org/gros.pdf')).rejects.toThrow('too large');
   });
 });
 
