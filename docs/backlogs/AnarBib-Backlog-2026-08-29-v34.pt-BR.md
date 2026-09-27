@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-27** · 64 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-27** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 4
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 4
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-27.** **51 itens de 64** trazem uma verificação datada própria (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-27.** **51 itens de 65** trazem uma verificação datada própria (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -348,7 +348,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-| **B29** | Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus | `P1` | Aberto |
+| **B29** | Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus | `P1` | A verificar |
+| **B30** | Dar ao lote de catalogação uma biblioteca própria (sequência de B29) | `P2` | Aberto |
 
 #### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
 
@@ -397,13 +398,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B29 — Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus
 
-`P1` Prioritário · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript
+`P1` Prioritário · Estado : **A verificar** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript
 
 **Estado.** Levantado em 27/09 na revisão de H19: as políticas de `author_drafts`, `book_drafts` e `exemplar_drafts` só exigem `can_access_catalogacao`, **sem nenhum escopo de biblioteca**, em leitura e escrita. **Regra de Xavier (27/09)**: possível para quem cataloga e é admin da rede, não para coordenação nem bibliotecária.
 
-*Verificado : 27/09 — políticas lidas no baseline.*
+*Verificado : 27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção.*
 
-**O que é.** Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir. **Decidido em 27/09 por Xavier (REGISTRO `CAT-E18`)**: *(1)* rascunho sem biblioteca = biblioteca da adesão de staff ativa de quem o criou (sem o recurso a quem publica), senão quem o criou e a administração; *(2)* rascunhos de autoridade: leitura comum, escrita por quem criou e pela administração; *(3)* mutirão por adesão temporária na biblioteca anfitriã, dona dos rascunhos.
+**O que é.** Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir. **Decidido em 27/09 por Xavier (REGISTRO `CAT-E18`)**: *(1)* rascunho sem biblioteca = biblioteca da adesão de staff ativa de quem o criou (sem o recurso a quem publica), senão quem o criou e a administração; *(2)* rascunhos de autoridade: leitura comum, escrita por quem criou e pela administração; *(3)* mutirão por adesão temporária na biblioteca anfitriã, dona dos rascunhos. **Entregue em 27/09** (`2c8a9af0`, `faea418c`, migração `20260927160000`), regra e escolhas no REGISTRO (CAT-E18): políticas por biblioteca, autoridades com leitura comum e escrita por quem criou, gardas das funções SECURITY DEFINER alinhadas, lotes segundo os seus rascunhos em curso. Uma revisão contraditória e quatro verificações das correções.
 
 **Por que importa.** Risco de quebrar gestos hoje abertos: uma restrição de leitura torna atualizações silenciosamente nulas. Avançar tabela por tabela.
 
@@ -416,6 +417,28 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois da entrega de H19.
 
 *Remissões : `supabase/migrations/20260510000000_baseline_live.sql` · `supabase/migrations/20260927113000_h19_exemplaires_importes.sql` · `docs/specs/REGISTRE_decisions.md`*
+
+#### B30 — Dar ao lote de catalogação uma biblioteca própria (sequência de B29)
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+
+**Estado.** B29 deduz «de quem é um lote» a partir dos seus rascunhos; quatro verificações acharam sempre novos casos-limite. Limites conhecidos no REGISTRO (CAT-E18).
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes.
+
+**Por que importa.** Toca as funções de importação de H19: revisão contraditória antes de implantar.
+
+**O que conta como terminado.**
+
+- Um lote tem uma biblioteca ou é da administração.
+- Os predicados deduzidos do conteúdo desaparecem.
+- Os testes de B29 continuam verdes.
+
+**Dependências.** Depois da verificação de B29 em produção.
+
+*Remissões : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md`*
 
 ---
 
@@ -2118,4 +2141,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 64 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

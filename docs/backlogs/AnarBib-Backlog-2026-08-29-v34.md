@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-27** · 64 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-27** · 65 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 4
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-27.** **51 items sur 64** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-27.** **51 items sur 65** portent une vérification datée qui leur est propre (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -348,7 +348,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **B10** | Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double | `P3` | Ouvert |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
-| **B29** | Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens | `P1` | Ouvert |
+| **B29** | Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens | `P1` | À vérifier |
+| **B30** | Donner une bibliothèque propre au lot de catalogage (suite de B29) | `P2` | Ouvert |
 
 #### B10 — Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double
 
@@ -397,13 +398,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### B29 — Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens
 
-`P1` Prioritaire · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+`P1` Prioritaire · État : **À vérifier** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
 
 **État.** Relevé le 27/09 pendant la revue de H19 (baseline, l.53888, 54047, 54406) : les politiques `author_drafts_catalogacao_librarian_all`, `book_drafts_catalogacao_librarian_all` et `exemplar_drafts_catalogacao_librarian_all` ne demandent que `api.my_access.can_access_catalogacao`, **sans aucune portée de bibliothèque**, en lecture comme en écriture. Toute personne qui catalogue, dans n'importe quelle bibliothèque, lit et modifie les brouillons de toutes les autres — y compris ceux d'une bibliothèque privée, et ceux d'un dépôt compagnon en attente d'admission. H19 a fermé ce qui passait par les RPC de publication (garde d'appartenance dans `publish_exemplar_draft`, liens d'import non écrivables par l'API), pas l'accès direct aux tables. **Règle posée par Xavier le 27/09** : possible pour un·e catalogueur·se qui est par ailleurs admin réseau, pas pour une coordination ni une bibliothécaire.
 
-*Vérifié : 27/09 — politiques lues dans le baseline ; aucune migration ultérieure ne les redéfinit.*
+*Vérifié : 27/09 — suite SQL `brouillons_par_bibliotheque_tests` 30/30 (cinq profils : coordination de A, bibliothécaire de B, staff de A et B, lectrice, admin sans adhésion, admin aussi staff) et les 122 suites de la CI ; vitest 1 061 ; relevé de production (1 820 notices en cours, toutes rattachées ; un seul lot, 57, porte des notices publiées sans bibliothèque).*
 
-**Ce que c'est.** Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin. **Tranché le 27/09 par Xavier (REGISTRE `CAT-E18`)** : *(1)* un brouillon sans bibliothèque appartient à celle de l'adhésion de staff active de qui l'a créé — sans le repli sur qui publie, qui rendrait tout visible —, sinon à son créateur et à l'administration ; *(2)* les brouillons d'autorités restent lisibles par toute personne qui catalogue, modifiables par qui les a créés et par l'administration ; *(3)* le mutirão passe par une adhésion temporaire dans la bibliothèque hôte, à laquelle appartiennent ses brouillons.
+**Ce que c'est.** Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin. **Tranché le 27/09 par Xavier (REGISTRE `CAT-E18`)** : *(1)* un brouillon sans bibliothèque appartient à celle de l'adhésion de staff active de qui l'a créé — sans le repli sur qui publie, qui rendrait tout visible —, sinon à son créateur et à l'administration ; *(2)* les brouillons d'autorités restent lisibles par toute personne qui catalogue, modifiables par qui les a créés et par l'administration ; *(3)* le mutirão passe par une adhésion temporaire dans la bibliothèque hôte, à laquelle appartiennent ses brouillons. **Livré le 27/09** (`2c8a9af0`, `faea418c`, migration `20260927160000`), règle et choix de réalisation au REGISTRE (CAT-E18, « Mise en œuvre » et « Limites connues ») : politiques par bibliothèque (mêmes noms), autorités en lecture commune et écriture par le créateur, suppression définitive par la coordination DE la bibliothèque du brouillon ; par l'API, `created_by` figé, bibliothèque fixée à la création, rangement dans un lot gardé ; une cinquantaine de fonctions SECURITY DEFINER alignées, refus avant tout autre contrôle ; lots vus, modifiés, révisés et supprimés selon leurs brouillons en cours (lot mixte : l'administration ; suppression et demande de révision : la coordination du lot) ; `publish_book_draft` et `create_book_draft_from_book` repartent de leur version capas. **Une revue contradictoire et quatre vérifications des corrections** (18, 21, 21 et 29 constats, un seul bloquant — NULL lu comme « à soi » —, les importants corrigés) ; pire cas mesuré 20-35 ms (dépôt de 1 800 notices et 1 800 exemplaires sans bibliothèque, appelant d'une troisième bibliothèque).
 
 **Pourquoi ça compte.** Risque de casser des gestes aujourd'hui ouverts (file de catalogage multi-bibliothèques, fusions, corbeille, étiquettes) : une restriction de lecture qui masque une ligne rend des mises à jour silencieusement nulles. Avancer table par table, avec une suite SQL par rôle.
 
@@ -416,6 +417,28 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Après la livraison de H19 (même zone, colonnes neuves de `exemplar_drafts`).
 
 *Renvois : `supabase/migrations/20260510000000_baseline_live.sql` · `supabase/migrations/20260927113000_h19_exemplaires_importes.sql` · `docs/specs/REGISTRE_decisions.md`*
+
+#### B30 — Donner une bibliothèque propre au lot de catalogage (suite de B29)
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+
+**État.** B29 (27/09) déduit « à qui est un lot » de ses brouillons : en cours, publiés, jetés, réattribués (IMP-20 c), exemplaires importés qui suivent leur notice, lots d'import de l'administration. Quatre vérifications de suite ont trouvé à chaque fois de nouveaux cas limites (18, 21, 21, 29 constats) : la règle tient, mais par une dizaine de prédicats (`fn_caller_can_see_batch`, `fn_caller_can_edit_batch`, `fn_caller_owns_batch`, `fn_caller_coordinates_batch`, déclencheur de rangement, politiques de `catalog_batches`). Limites connues au REGISTRE (CAT-E18) : une personne staff de deux bibliothèques peut rendre un lot mixte ; un brouillon restauré qui sort de son lot ne le dit pas ; le lot d'un compte d'administration n'est visible de personne d'autre tant qu'elle ne l'a pas confié.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Colonne `catalog_batches.library_id` (nulle = lot de l'administration), posée à la création (écran : la bibliothèque de staff choisie ; import : bibliothèque du run pour un catalogue propre, destination pour un dépôt, nulle si inconnue ; réattribution : la nouvelle) et figée par l'API ; rangement d'un brouillon seulement si sa bibliothèque est celle du lot ; toutes les règles de lot (voir, modifier, réviser, supprimer) ramenées à cette colonne. Reprise des lots existants : la bibliothèque commune de leurs brouillons en cours et publiés, sinon nulle (administration). Repartir des définitions RÉELLES de `fn_import_promote`, `fn_batch_reassign_library` et des fonctions de rapprochement (H19).
+
+**Pourquoi ça compte.** Touche les fonctions d'import livrées avec H19 : une revue contradictoire avant tout déploiement.
+
+**Ce qui compte comme fini.**
+
+- Un lot a une bibliothèque, visible à l'écran, ou relève de l'administration.
+- Les prédicats de lot déduits du contenu disparaissent au profit de la colonne.
+- Les tests de B29 restent verts.
+
+**Dépendances.** Après la vérification de B29 en production.
+
+*Renvois : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md`*
 
 ---
 
@@ -2128,4 +2151,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 64 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 65 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
