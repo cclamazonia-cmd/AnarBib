@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-26",
+    "maj": "2026-09-27",
     "releve": {
       "date": "2026-09-24",
       "commit": "3d9cf15b"
@@ -2686,6 +2686,10 @@
         {
           "fr": "26/09 — **mesuré après l'enrichissement des autorités** (Wikidata puis Library of Congress, voir la clôture de C8) : 185 pays posés, **740 fiches sur 1 505 (49 %) toujours sans pays**. Le critère « sous 20 % » n'est **pas atteignable par des sources d'autorité** : 668 des 735 fiches restantes (copie de banc) ont un seul livre au catalogue — brochures, travaux universitaires brésiliens (371 en portugais) et hispano-américains (155) — et ne figurent ni dans Wikidata ni, avec une preuve, à la LC. Déduire la nationalité de la langue ou du lieu d'édition serait une supposition : non fait. **Décision à prendre par Xavier** : réécrire le critère (par exemple « sous 20 % parmi les autorités à deux livres ou plus »), ou garder l'item pour une relecture humaine sur `decisions.csv`. Le second critère (rejouer la détection des doubles patronymes) peut se faire dès maintenant sur les 185 pays neufs.",
           "pt": "26/09 — medido após o enriquecimento das autoridades: 185 países postos, 740 de 1 505 fichas (49 %) ainda sem país; o critério « abaixo de 20 % » não é alcançável por fontes de autoridade (668 das restantes têm um só livro no catálogo). Decisão de Xavier: reescrever o critério ou manter para revisão humana."
+        },
+        {
+          "fr": "27/09 — **troisième phase, IdRef** (`20260927091555`, `62553dc6`) : les bibliothèques nationales du Brésil (403 à toute requête) et d'Argentine (X-Services refusés au public) ferment l'accès automatisé — non contourné ; IdRef (ABES) porte la nationalité (102) et couvre beaucoup d'auteurs brésiliens et hispano-américains étudiés en France. 187 fiches liées, **66 pays**, 150 langues, 33 naissances, 9 morts, chacune prouvée par un titre du catalogue ou des dates concordantes (`decisions-idref.csv`). **En production : 674 fiches sur 1 505 sans pays (45 %)**, 683 sans année de naissance, 820 liées à au moins une source (Wikidata, VIAF, ISNI, LC ou IdRef). Le critère « sous 20 % » reste hors de portée des sources d'autorité ; la décision de Xavier reste ouverte (réécrire le critère ou relecture humaine).",
+          "pt": "27/09 — terceira fase, IdRef: as bibliotecas nacionais do Brasil (403) e da Argentina (X-Services recusados) fecham o acesso automatizado — não contornado; 187 fichas ligadas, 66 países, 150 línguas. Em produção: 674 de 1 505 fichas sem país (45 %). O critério « abaixo de 20 % » continua fora do alcance; decisão de Xavier em aberto."
         }
       ]
     },
