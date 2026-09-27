@@ -9,7 +9,7 @@ const path = require('path');
 const dir = path.join(__dirname, '..', 'src', 'i18n', 'locales');
 const KEY = 'federacao.assembleias.firstPoints.q9';
 const T = {
-  'pt-BR': 'Vocabulário matéria: até onde apoiar-se no tesauro partilhado FICEDL? (a decidir com a FICEDL)',
+  'pt-BR': 'Vocabulário matéria: até onde apoiar-se no tesauro compartilhado FICEDL? (a decidir com a FICEDL)',
   fr: "Vocabulaire matière : jusqu'où s'appuyer sur le thésaurus partagé FICEDL ? (à trancher avec la FICEDL)",
   es: 'Vocabulario de materias: ¿hasta dónde apoyarse en el tesauro compartido FICEDL? (a decidir con la FICEDL)',
   en: 'Subject vocabulary: how far to rely on the shared FICEDL thesaurus? (to be decided with FICEDL)',

@@ -42,7 +42,7 @@ const ADD = {
     'biblioteca.events.form.description': 'Descrição',
     'biblioteca.events.form.isPublic': 'Visível para os membros leitores',
     'biblioteca.events.form.create': 'Criar evento',
-    'biblioteca.events.form.saveEdit': 'Guardar',
+    'biblioteca.events.form.saveEdit': 'Salvar',
     'biblioteca.events.form.titleRequired': 'O título é obrigatório.',
     'biblioteca.events.form.startRequired': 'A data de início é obrigatória.',
     'biblioteca.events.form.endBeforeStart': 'O fim deve ser depois do início.',

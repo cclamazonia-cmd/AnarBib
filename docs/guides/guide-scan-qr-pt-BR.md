@@ -42,7 +42,7 @@ nenhum dado pessoal dentro dele.
 
 **Como tu, no balcão, usas:**
 
-1. Vai em **Painel › Gerir leitor·a**.
+1. Vai em **Painel › Gerenciar leitor·a**.
 2. Clica em **« Escanear »** e aponta a câmera para o QR da carteirinha.
 3. O AnarBib resolve o código e mostra **quem é** a pessoa (e se há alguma
    restrição ativa). Pronto para emprestar, devolver, etc.

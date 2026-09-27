@@ -65,6 +65,11 @@
 //       qui est dans `FORMES_FAUTIVES`. Son chiffre est un PLANCHER, jamais un
 //       total. Élargir la liste est un travail légitime et attendu.
 //
+//   (5) VOCABULAIRE DU PORTUGAL — pt-BR.json seulement : « ficheiro »,
+//       « registo », « partilha », « A carregar… »… Ajouté le 27/09/2026
+//       (`PT_EUROPEU`, plus bas, avec son angle mort mesuré) : même logique
+//       que (3), un mot n'y entre que s'il n'a AUCUN homographe brésilien.
+//
 // DEUX MESURES FAUSSES ONT PRÉCÉDÉ CELLES-CI, et le dire fait partie du relevé.
 // Un premier essai comparait chaque valeur ASCII au lexique accentué de son
 // propre fichier : 570 « fautes » en néerlandais, parce que *een*/*één* et
@@ -296,6 +301,79 @@ const PLURIEL_LEGITIME = [
 // se défend en citant le passage.
 const TU_LEGITIME = [];
 
+// Chemin (5), pt-BR — le VOCABULAIRE du Portugal. Relevé le 27/09/2026 après
+// la passe « você » : 78 valeurs parlaient européen — « ficheiro » 32 fois
+// (écran Exportação), « partilha digital » alors que le droit s'appelle
+// « Compartilhamento digital » dans Parcerias, « Guardar », « A carregar… »,
+// « registo », « Gerir leitor(a/e) », « Valores por omissão ». Réécrites par
+// `scripts/i18n-ptbr-vocabulario.cjs`.
+//
+// CRITÈRE D'ADMISSION, celui du chemin (3) : un mot n'entre dans
+// `PT_EUROPEU_FORMAS` que s'il n'existe pas au Brésil dans un sens que l'app
+// pourrait employer. « partilha » y entre bien que le droit brésilien parle de
+// « partilha de bens » (succession) : ce sens-là n'a rien à faire dans un
+// catalogue de bibliothèque.
+//
+// Quatre motifs de STRUCTURE s'y ajoutent, sans homographe non plus :
+//   — le progressif « A carregar… » en tête de phrase (le Brésil dit
+//     « Carregando… ») ; points de suspension exigés, parce que « a
+//     verificar » sans eux est un statut brésilien (« à vérifier ») ;
+//   — « está/estão/estava… a + infinitif », sauf « a par » et « a seguir »,
+//     qui sont brésiliens (« estar a par », « as instruções estão a seguir ») ;
+//   — le passé « -ámos » (« criámos », « enviámos ») : le Brésil n'accentue
+//     jamais la 1re personne du pluriel ;
+//   — le timbre ouvert devant m/n (« género », « anónimo », « académico »,
+//     « eletrónico ») : le Brésil écrit « gênero », « anônimo »… Mots en
+//     minuscule seulement, pour laisser passer un nom propre (« Émile »).
+//
+// ANGLE MORT, mesuré : rejoué sur le fichier d'avant correction, le motif
+// trouve 53 des 78 valeurs réécrites. Les 25 autres emploient un mot qui
+// EXISTE au Brésil dans un autre sens ou à un autre registre, et que la liste
+// ne peut donc pas prendre : « gerir » ×12 (brésilien soutenu, « gerenciar »
+// à l'écran), « Guardar » ×7 (enregistrer, au Portugal ; garder, au Brésil —
+// « Guarde as informações abaixo » est juste), « Eliminar » ×2, « por
+// omissão » (sens juridique au Brésil), « fecho » (fermeture éclair, « eu
+// fecho »), « cinzento », « entretanto » (« cependant », au Brésil). « na
+// mesma » (« na mesma página ») n'est tombé que par son voisin « criámos ».
+// Même raison pour « equipa » (verbe « equipar »), « facto » (« de facto »
+// latin), « separador » (le caractère), « cota » (la cotisation), « rastreio »
+// (dépistage), « sítio », « rato », « apelido », « descarregar », « aceder ».
+// Ils ne tombent qu'à la relecture ; le chiffre de ce chemin est un PLANCHER.
+// Il ne voit pas non plus la syntaxe (enclise, « já não », « à espera de »),
+// ni les calques du français (« notícia » pour une notice, « flux RSS »,
+// « cote »), qui ne sont pas européens.
+//
+// Local à ce fichier, PAS dans `helpers/` avec `TU_EUROPEU` : les courriels
+// des Edge Functions disent encore « partilha digital », « Gerir a parceria »
+// — le partager ferait tomber leur garde avant leur passe.
+const capitalizada = (w) => w[0].toUpperCase() + w.slice(1);
+const PT_EUROPEU_FORMAS = [
+  'ficheiro', 'ficheiros',
+  'registo', 'registos', 'registar', 'registado', 'registada', 'registados', 'registadas', 'registe', 'registou',
+  'partilha', 'partilhas', 'partilhar', 'partilhado', 'partilhada', 'partilhados', 'partilhadas',
+  'partilhe', 'partilham', 'partilhável',
+  'ecrã', 'ecrãs', 'utilizador', 'utilizadores', 'utilizadora', 'utilizadoras', 'utente', 'utentes',
+  'telemóvel', 'telemóveis', 'factos', 'planeamento', 'palavra-passe', 'palavras-passe',
+  'contacto', 'contactos', 'contactar', 'contacte', 'contactado', 'contactada',
+  'secção', 'secções', 'plafond',
+  'actual', 'actuais', 'actualmente', 'actualizar', 'actualizado', 'actualizada', 'actualização', 'actualizações',
+  'acção', 'acções', 'direcção', 'colecção', 'colecções', 'selecção', 'correcção', 'correcções', 'protecção',
+  'objecto', 'objectos', 'projecto', 'projectos', 'óptimo', 'óptima',
+];
+const PT_EUROPEU = new RegExp(
+  `(?<![\\p{L}-])(${PT_EUROPEU_FORMAS.flatMap((w) => [w, capitalizada(w)]).join('|')})(?![\\p{L}])` +
+    `|(?:^|[.!?:;—–(]\\s*)(A\\s+\\p{Ll}+(?:ar|er|ir|pôr)(?:…|\\.\\.\\.))` +
+    `|(?<![\\p{L}])((?:está|estão|estava|estavam|esteja|estejam|estiver|estiverem|estar)\\s+a\\s+` +
+    `(?!(?:par|seguir)(?![\\p{L}]))\\p{L}+(?:ar|er|ir))(?![\\p{L}])` +
+    `|(?<![\\p{L}])(\\p{L}+ámos)(?![\\p{L}])` +
+    `|(?<![\\p{L}])(\\p{Ll}\\p{L}*[óé][mn][aeiouáéíóú]\\p{L}*)`,
+  'u',
+);
+
+// Valeurs où l'une de ces formes serait légitime (citation d'un texte
+// portugais, nom d'une institution). Vide au 27/09/2026.
+const PT_EUROPEU_LEGITIME = [];
+
 const GREC = /[Ͱ-Ͽἀ-῿]/;
 
 // Retire ce qui n'est pas de la prose : balises, URL, mails, et l'ARMATURE des
@@ -469,6 +547,25 @@ describe('i18n — écriture des locales (DOC-PS-1)', () => {
           'Réécris au « você » (seu/sua, « verifique », « clique », « a você »). Si la ' +
           'forme est légitime (citation, phrase descriptive à la 3e personne), ajoute ' +
           'la clé à TU_LEGITIME en citant le passage.',
+      ).toEqual([]);
+    });
+  });
+
+  // ── 4 bis. Vocabulaire brésilien ──────────────────────────────────────────
+  describe('chemin (5) — pt-BR parle brésilien, pas portugais', () => {
+    it('pt-BR.json — aucun mot ni tournure propre au Portugal', () => {
+      const fautes = [];
+      for (const [k, v] of Object.entries(TOUT['pt-BR'])) {
+        if (PT_EUROPEU_LEGITIME.includes(k)) continue;
+        const m = prose(v).match(PT_EUROPEU);
+        if (m) fautes.push(`${k} → « ${m.slice(1).find(Boolean)} » dans « ${v.slice(0, 70)} »`);
+      }
+      expect(
+        fautes,
+        `pt-BR : ${fautes.length} valeur(s) au vocabulaire du Portugal\n  ${fautes.slice(0, 10).join('\n  ')}\n` +
+          'Écris en brésilien (arquivo, registro, compartilhamento, contato, seção, ' +
+          '« Carregando… »). Si la forme est légitime (citation d\'un texte portugais), ' +
+          'ajoute la clé à PT_EUROPEU_LEGITIME en citant le passage.',
       ).toEqual([]);
     });
   });

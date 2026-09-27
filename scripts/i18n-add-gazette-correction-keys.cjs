@@ -28,12 +28,12 @@ const KEYS = {
     el: 'Διόρθωσε μόνη σου ό,τι εμποδίζει τη δημοσίευση. Το άτομο θα ενημερωθεί ότι το σημείωμα κρατήθηκε με διορθώσεις, μαζί με το κείμενο που θα δημοσιευτεί· η μετάφραση ξεκινά από την αρχή.',
   },
   'rede.gazeta.correct.saveAccept': {
-    'pt-BR': 'Guardar e aceitar', fr: 'Enregistrer et accepter', es: 'Guardar y aceptar', en: 'Save and accept',
+    'pt-BR': 'Salvar e aceitar', fr: 'Enregistrer et accepter', es: 'Guardar y aceptar', en: 'Save and accept',
     it: 'Salvare e accogliere', de: 'Speichern und annehmen', ca: 'Desar i acceptar', eo: 'Konservi kaj akcepti',
     nl: 'Opslaan en aannemen', el: 'Αποθήκευση και αποδοχή',
   },
   'rede.gazeta.correct.save': {
-    'pt-BR': 'Guardar a correção', fr: 'Enregistrer la correction', es: 'Guardar la corrección', en: 'Save the correction',
+    'pt-BR': 'Salvar a correção', fr: 'Enregistrer la correction', es: 'Guardar la corrección', en: 'Save the correction',
     it: 'Salvare la correzione', de: 'Korrektur speichern', ca: 'Desar la correcció', eo: 'Konservi la korekton',
     nl: 'Correctie opslaan', el: 'Αποθήκευση διόρθωσης',
   },

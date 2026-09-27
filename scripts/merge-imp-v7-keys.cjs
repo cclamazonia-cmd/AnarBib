@@ -76,7 +76,7 @@ const NEW_KEYS = {
     'importacoes.diario.runCreated': 'Tratamento criado',
     'importacoes.export.frontier.title': 'Exportação de registros',
     'importacoes.export.frontier.desc': 'Exportar registros da coleção para outras bibliotecas, para o intercâmbio federado ou como fonte aberta.',
-    'importacoes.export.partilha.title': 'Partilha ILL',
+    'importacoes.export.partilha.title': 'Compartilhamento ILL',
     'importacoes.export.partilha.desc': 'Empréstimo entre bibliotecas federadas (circuito ILL-1..9). Funcionalidade em desenvolvimento.',
     'importacoes.export.lote.title': 'Exportação de lote',
     'importacoes.export.lote.desc': 'Exportar uma seleção de registros em formato normalizado (UNIMARC, CSV, JSON). Funcionalidade em desenvolvimento.',

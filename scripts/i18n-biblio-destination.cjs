@@ -19,7 +19,7 @@ const V = {
     'Bibliothèque de destination déduite de l’adhésion de la personne qui a catalogué : rien ne rattache formellement ce brouillon à cette bibliothèque.',
   ],
   'pt-BR': [
-    'Biblioteca de destino, registada no rascunho.',
+    'Biblioteca de destino, registrada no rascunho.',
     'Biblioteca de destino deduzida do vínculo de quem catalogou: nada liga formalmente este rascunho a essa biblioteca.',
   ],
   es: [
