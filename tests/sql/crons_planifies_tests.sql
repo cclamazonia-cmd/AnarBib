@@ -66,6 +66,8 @@ BEGIN
     ('anarbib-catalog-audit-snapshot-purge',        '17 4 * * *',   true),
     ('anarbib-circle-resolve-due-daily',            '30 3 * * *',   true),
     ('anarbib-collective-removal-execute-daily',    '15 3 * * *',   true),
+    -- C6 §7.3 (27/09/2026) : la file de vérification s'alimente seule, ref. 20260927121437
+    ('anarbib-conv-file-alimenter',                 '10 5 * * 1',   true),
     ('anarbib-cooptation-reminders-daily',          '25 9 * * *',   true),
     ('anarbib-gazette-monthly-start',               '0 6 15 * *',   true),
     ('anarbib-gazette-reconcile-tick',              '*/5 * * * *',  true),

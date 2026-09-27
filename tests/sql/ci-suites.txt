@@ -526,3 +526,4 @@ tests/sql/import_couverture_tests.sql
 tests/sql/import_exemplaires_tests.sql
 # 27/09 (C6 §7.2) : la règle de casse des titres, SQL et miroir JS de la saisie d accord.
 tests/sql/title_case_tests.sql
+tests/sql/conv_file_alimentee_tests.sql
