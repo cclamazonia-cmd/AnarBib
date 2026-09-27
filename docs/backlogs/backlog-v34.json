@@ -2394,6 +2394,14 @@
           "fr": "**Clos le 27/09 — vérifié à l'écran par Xavier, connecté (« vérifié, fonctionnel »).** Les trois assistances de la spec des conventions (§7) livrées le même jour. *§7.2* bouton « Normaliser la casse » sous le titre de la notice (`b9177403`) ; **sur remarque de Xavier** (« lE tRuc qui FAIT cHIER », bouton grisé : la première version n'abaissait que les mots-outils), il applique depuis `1782dfcb` la casse de la langue selon §4.1 — casse de phrase pt/es/fr/it/ca/eo/nl/el, title case en anglais, mots-outils seuls en allemand, sigles et chiffres romains figés, aperçu où chaque mot se clique pour les noms propres. *§7.1* assistant du point d'accès sous le nom d'une personne (`0c3bb62f` : Confirmer, Corriger mot par mot, Nom unique ; variante hispanique seulement offerte) et, **à la demande de Xavier**, la même normalisation de casse pour le nom (`8c73b850`, CONV-1 : « osvaldo BAYER » → « Osvaldo Bayer », particules, initiales, rangs, noms composés et élidés). *§7.3* cron du lundi `anarbib-conv-file-alimenter` (`7eb72630`) qui passe les cinq semeurs de la file de vérification, bac à sable de formation exclu ; premier passage en production : 4 lignes. Critères : (1) trois dispositifs, aucun bloquant ; (2) chaque proposition refusable, original conservé (aperçus, annuler après coup, la file s'écarte) ; (3) libellés dans les dix locales. Limites laissées : le lot « titre_casse » de l'Atelier (171 titres) propose encore l'ancienne forme (mots-outils seuls) ; la casse des collectivités n'a pas d'outil ; `name_lang` (CONV-6) n'est pas au formulaire. **Les trois limites traitées le soir même, à la demande de Xavier.** (a) Un dictionnaire des noms propres attestés (`src/lib/nomsPropres.js`, 1 378 mots et 719 phrases, engendré par `scripts/noms-propres-attestes.mjs` depuis le catalogue, les patronymes, les pays et les collectivités ; mots communs écartés) : le bouton ne les abaisse plus ; la règle a son miroir SQL `fn_conv_casse_titre` (`20260927154351`, parité 26/26 au banc et 173/173 sur les titres réels, par empreinte) qui fait la proposition du lot « titre_casse » ; les 171 propositions en attente refaites (`20260927163827`, fiche `C6_propositions_casse_file_titres_2026-09-27.md` vue par Xavier), 0 écart en production. (b) `name_lang` se saisit (`20260927160008`, datée après B29 qu'elle prolonge) et pilote la découpe (it/af/en particule gardée, fr article, es deux noms). (c) La casse des collectivités (`d421774d`) : mots principaux, français en casse de phrase, sigles de toute longueur gardés.",
           "pt": "**Fechado em 27/09 — verificado na tela por Xavier, conectado.** As três assistências da spec das convenções (§7): botão «Normalizar maiúsculas» do título, corrigido por observação de Xavier para aplicar a caixa da língua (§4.1, `1782dfcb`); assistente do ponto de acesso e normalização da caixa do nome de pessoa (`0c3bb62f`, `8c73b850`); cron semanal que alimenta a fila de verificação (`7eb72630`). Limites: o lote «titre_casse» ainda propõe a forma antiga; coletividades sem ferramenta de caixa; `name_lang` fora do formulário. **As três limitações tratadas na mesma noite:** dicionário de nomes próprios atestados + espelho SQL (171 propostas da fila refeitas, 0 divergência); `name_lang` no formulário e na separação do nome; caixa dos nomes de coletividades."
         }
+      ],
+      [
+        "B10",
+        "2026-09-27",
+        {
+          "fr": "**Clos le 27/09 au soir, sur pièces : les trois critères tenus, et trois gardes pour qu'ils le restent.** *(1) Policies* — les avis `multiple_permissive_policies` sont résorbés (**25 → 0**, avis relu en production le 27/09). Une permissive par (rôle, commande) sur les 25 tables (`20260927180000`), puis chaque OU ordonné : ce qui ne dépend pas de la ligne d'abord, la lecture publique ensuite, le staff ligne à ligne en dernier (`20260927180030`). Rien n'a changé de qui voit quoi : empreinte md5 des clés visibles, pour `anon` et chacun des 20 comptes réels, **identique sur les 25 tables** avant, après la passe 1 et après la passe 1 bis. Et l'ordre paie : `count(*)` sur `books` sous un compte lecteur **208 → 90 ms**, bibliothécaire 209 → 89 ms, admin réseau **39 → 1,4 ms** ; `exemplares` 177 → 100 ms (lecteur), 40 → 0,9 ms (admin) ; anonyme inchangé. Garde : `policies_permissives_uniques_tests` (33 tests : aucune paire dans aucun schéma, liste fermée vide ; la lecture publique, désormais en deux copies, doit rester identique ; trente lectures et écritures réelles). *(2) Clés étrangères* — **21 indexées** (`20260927180100`) : toutes celles dont le parent est supprimé en exploitation — du 02/09 au 27/09, 146 œuvres, 37 autorités, 21 notices et 2 comptes supprimés, et chaque brouillon purgé coûtait deux parcours complets de la plus grosse table d'import. La liste assumée de B21 passe de **38 à 17**, règle écrite en tête (codes `catalog_ref_*`, bibliothèques, partenaires : des parents qui ne se suppriment pas). *(3) Index* — **22 retirés, raison écrite pour chacun** : 10 redondants jamais empruntés (`20260927180200`) et 12 sans aucun lecteur sur le chemin d'écriture (`20260927180300` : 6 sur `books`, qui en portait 27, 4 sur `book_drafts`, les 3,5 Mo de `idx_shp_endpoint`, un doublon ; son premier essai, tombé dans le `pg_dump` de la sauvegarde hebdomadaire, a été annulé sans rien appliquer et rejoué au run suivant). Garde : `index_redondants_garde_tests` (plus de nouveau redondant ; les 22 redondants empruntés, nommés avec leurs compteurs, se retirent sur mesure). Les 108 index sans lecteur restants sont inventoriés un par un, avec origine et verdict (`docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`). Nés des constats : **B31** (trois lectures anonymes lèvent une erreur au lieu de rendre zéro ligne), **B32** (le catalogue public relit toute sa vue matérialisée à chaque page, et calcule la visibilité ligne à ligne), **B33** (la recherche ne peut emprunter aucun de ses index trigramme), **B34** (l'effacement de compte ne traite pas le journal du catalogue), **I28** (le hook `pre-commit` ne tourne pas dans les worktrees WSL). **Écart tracé** : les cinq migrations enfreignent `DOC-DEPLOY-4` (heure ronde, datées dans le futur), sans collision ni effet d'ordre — audit §7.",
+          "pt": "**Fechado em 27/09 à noite, com provas: os três critérios cumpridos, e três guardas para mantê-los.** (1) Os avisos `multiple_permissive_policies` foram resolvidos (25 → 0): uma permissiva por (papel, comando) nas 25 tabelas, com o OU ordenado — primeiro o que não depende da linha, depois a leitura pública, depois o staff linha a linha. A impressão digital das linhas visíveis para anon e para cada uma das 20 contas reais é idêntica nas 25 tabelas antes e depois; `count(*)` em `books` sob leitor 208 → 90 ms, admin 39 → 1,4 ms. Guarda: `policies_permissives_uniques_tests` (33 testes). (2) 21 chaves estrangeiras indexadas — as de pais realmente excluídos em operação; a lista assumida do B21 passa de 38 a 17, com a regra escrita. (3) 22 índices retirados com o motivo escrito (10 redundantes nunca usados, 12 sem leitor no caminho de escrita); guarda `index_redondants_garde_tests`. Os 108 índices sem leitor restantes estão inventariados na auditoria. Novos itens: B31, B32, B33, B34, I28. Desvio registrado a `DOC-DEPLOY-4` (auditoria §7)."
+        }
       ]
     ]
   },
@@ -2498,56 +2506,6 @@
       "verif": {
         "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé.",
         "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local` em `.forgejo/workflows/`. Nada mudou."
-      }
-    },
-    {
-      "id": "B10",
-      "d": "B",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Hygiène de performance : 170 index inutilisés, 38 clés étrangères non indexées, 24 policies permissives en double",
-        "pt": "Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas"
-      },
-      "v": {
-        "fr": "256 avis de performance au 29/08. Les tables les plus chargées en index inutilisés sont `library_partnerships` (6), `books` (5), `membership_payments` (4). Les 24 policies permissives en double portent toutes sur le rôle `authenticated` en `SELECT`, sur des tables centrales (`books`, `authors`, `exemplares`, `subjects`, `works`).\n\n**Requalifié par la mesure (GLB v17 ch. 8.1, contre-vérifiée le 02/09).** Le volet clés étrangères avait été « soldé » le 02/07 (151 → 15) ; il est à **38** (32 `public` + 6 `ingest`) huit semaines plus tard, par le fonctionnement normal du projet et sans qu'aucune faute soit commise — chaque table de qualité catalographique apporte ses colonnes d'acteur, chaque colonne d'acteur sa FK non indexée. La campagne reste différée à raison ; **le garde qui l'empêche de se rouvrir est extrait en B21** et, lui, n'attend pas la volumétrie.",
-        "pt": "256 avisos de performance em 29/08. As tabelas mais carregadas de índices não usados são `library_partnerships` (6), `books` (5), `membership_payments` (4). As 24 policies permissivas duplicadas incidem todas sobre o papel `authenticated` em `SELECT`, em tabelas centrais (`books`, `authors`, `exemplares`, `subjects`, `works`).\n\n**Requalificado pela medida (GLB v17 cap. 8.1, contraverificada em 02/09).** As FK sem índice, «saldadas» em 02/07 (151 → 15), estão em **38** oito semanas depois, pelo funcionamento normal do projeto. A campanha segue adiada com razão; **a guarda que impede a reabertura foi extraída em B21** e não espera a volumetria."
-      },
-      "w": {
-        "fr": "Trois passes distinctes, à ne pas mélanger : fusionner les paires de policies permissives ; indexer les clés étrangères qui servent réellement ; ne supprimer un index inutilisé que si l'on comprend pourquoi il avait été créé.",
-        "pt": "Três passagens distintas, a não misturar: fundir os pares de policies permissivas; indexar as chaves estrangeiras que realmente servem; só suprimir um índice não usado se se compreender por que foi criado."
-      },
-      "y": {
-        "fr": "À la volumétrie actuelle — 2 676 notices, 16 comptes — **rien de ceci ne se voit**. C'est un chantier de pré-montée en charge, différé à dessein depuis juillet. Le noter permet de ne pas le redécouvrir en urgence le jour où une bibliothèque arrive avec 100 000 notices.",
-        "pt": "Na volumetria atual — 2 676 registros, 16 contas — **nada disso se vê**. É um canteiro de pré-crescimento, adiado de propósito desde julho. Anotá-lo permite não redescobri-lo às pressas no dia em que uma biblioteca chegar com 100 000 registros."
-      },
-      "f": {
-        "fr": [
-          "Les 24 avis de policies en double sont résorbés — c'est la passe la plus rentable.",
-          "Les clés étrangères des tables réellement écrites sont indexées.",
-          "Les index supprimés le sont avec la raison écrite."
-        ],
-        "pt": [
-          "Os 24 avisos de policies duplicadas estão resolvidos — é a passagem mais rentável.",
-          "As chaves estrangeiras das tabelas realmente escritas estão indexadas.",
-          "Os índices suprimidos o são com o motivo escrito."
-        ]
-      },
-      "dep": {
-        "fr": "À reprendre si une bibliothèque à gros fonds rejoint le réseau.",
-        "pt": "A retomar se uma biblioteca de grande acervo entrar na rede."
-      },
-      "r": [
-        "ETAT-lancement-consolide-2026-07-03 §2 item 7",
-        "Advisors performance du 29/08/2026"
-      ],
-      "verif": {
-        "fr": "31/08 — 254 avis : 167 index inutilisés, 38 clés étrangères non indexées, **25** tables en policies permissives en double (`book_reading_notes` s'y est ajoutée avec les notes de lecture), 14 tables sans clé primaire, 1 avis de connexions.",
-        "pt": "31/08 — 254 avisos: 167 índices sem uso, 38 chaves estrangeiras sem índice, **25** tabelas com policies permissivas em dobro (`book_reading_notes` entrou na lista), 14 sem chave primária."
       }
     },
     {
@@ -2696,6 +2654,186 @@
       "r": [
         "supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql",
         "docs/specs/REGISTRE_decisions.md"
+      ]
+    },
+    {
+      "id": "B31",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Lecture anonyme : trois tables lèvent une erreur au lieu de rendre zéro ligne",
+        "pt": "Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha"
+      },
+      "v": {
+        "fr": "Constaté pendant B10 (27/09), antérieur à lui. Sous `anon`, lire `library_circulation_policy_sets` ou `library_circulation_policy_rules` lève **42501** `permission denied for function fn_library_has_full_sigb` : la policy de lecture publique appelle une fonction fermée à `anon` depuis le socle du 10/05. Lire `library_deposit_rules` lève **42501** `permission denied for table user_library_memberships` : sa policy de lecture est `TO public` et lit les adhésions. Latent : ces tables ne sont lues que par des écrans connectés (`RegimeStateBox`, `PolicySetManager`, `LoanDepositPanel`), qui avalent d'ailleurs l'erreur. B10 a gardé ces trois policies telles quelles, exprès (une fusion ne change pas un comportement).",
+        "pt": "Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas."
+      },
+      "w": {
+        "fr": "Décider ce que doit voir un·e visiteur·se : soit rien (policies `TO authenticated`, zéro ligne au lieu d'une erreur), soit les règles d'une bibliothèque en SIGB complet (ouvrir `fn_library_has_full_sigb` à `anon`, avec son entrée au T12 de `grants_herites_tests.sql`).",
+        "pt": "Decidir o que um visitante deve ver: nada (policies `TO authenticated`, zero linha em vez de erro) ou as regras de uma biblioteca em SIGB completo (abrir `fn_library_has_full_sigb` a `anon`, com entrada no T12)."
+      },
+      "y": {
+        "fr": "Une erreur n'est pas un refus : un client anonyme reçoit un 401/403 au lieu d'une liste vide, et une future page publique « règles de prêt » casserait sans prévenir.",
+        "pt": "Um erro não é uma recusa: um cliente anônimo recebe 401/403 em vez de lista vazia, e uma futura página pública de regras quebraria sem aviso."
+      },
+      "f": {
+        "fr": [
+          "Une lecture anonyme des trois tables rend zéro ligne ou les lignes voulues, jamais une erreur.",
+          "Le choix est écrit dans la migration, et gardé par une suite."
+        ],
+        "pt": [
+          "Uma leitura anônima das três tabelas devolve zero linha ou as linhas desejadas, nunca um erro.",
+          "A escolha está escrita na migração e guardada por uma suíte."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §2",
+        "supabase/migrations/20260927180000_b10_une_policy_permissive_par_role_et_commande.sql"
+      ]
+    },
+    {
+      "id": "B32",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Catalogue public : chaque page relit toute la vue matérialisée, et la visibilité se calcule ligne à ligne",
+        "pt": "Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha"
+      },
+      "v": {
+        "fr": "Constaté pendant B10 (27/09). **(1)** Depuis SECU-MV-FIX2 (15/06), les vues du catalogue lisent les deux vues matérialisées à travers `private.fn_catalog_public_rows()` / `_network_rows()` — SQL, SECURITY DEFINER, `SET search_path` : PostgreSQL ne les insère jamais en ligne. Chaque page (`catalog_works_v1`, facettes, recherche d'identifiants, liste plate) matérialise donc **toute** la vue : 20 828 parcours séquentiels de la vue publique en 25 jours, zéro scan de ses 19 index secondaires. **(2)** `api.catalog_works_v1` est SECURITY INVOKER et joint `books` : la RLS de `books` s'y paie ligne à ligne. En anonyme, `count(*)` sur `books` coûte 88 ms pour 2 634 notices — `fn_library_visible_to_caller`, fonction DEFINER, appelée pour chaque exemplaire. À 100 000 notices, l'un et l'autre dépassent les 3 s du rôle `anon` : c'est le mécanisme de fond de B27, que son plan corrigé du 21/09 ne supprime pas.",
+        "pt": "Constatado durante o B10 (27/09). (1) Desde SECU-MV-FIX2 (15/06), as visões do catálogo leem as visões materializadas por invólucros SECURITY DEFINER nunca inseridos em linha: cada página lê a visão inteira (20 828 varreduras sequenciais em 25 dias, zero uso dos 19 índices secundários). (2) `catalog_works_v1` é INVOKER e junta `books`: a RLS de `books` é paga linha a linha (88 ms para 2 634 registros sob anon). Com 100 000 registros, ambos ultrapassam os 3 s do papel anon."
+      },
+      "w": {
+        "fr": "Deux leviers, à mesurer séparément. (a) Une lecture paramétrée qui filtre DANS la fonction, pour que filtres et tri atteignent la vue matérialisée — les 19 index secondaires, gardés par B10, y redeviendraient utiles ou seraient remplacés par ceux que la nouvelle requête écrit. (b) La visibilité par bibliothèque calculée une fois par requête (l'ensemble des bibliothèques visibles en InitPlan) au lieu d'une fonction par ligne — même règle que la passe 1 bis de B10.",
+        "pt": "Duas alavancas, a medir separadamente: (a) leitura parametrizada que filtra DENTRO da função; (b) visibilidade por biblioteca calculada uma vez por consulta (InitPlan) em vez de uma função por linha."
+      },
+      "y": {
+        "fr": "Le coût d'une page croît avec le catalogue, par construction. Le jour où une bibliothèque arrive avec 100 000 notices, le catalogue anonyme tombe en `57014`.",
+        "pt": "O custo de uma página cresce com o catálogo. No dia em que uma biblioteca chegar com 100 000 registros, o catálogo anônimo cai em `57014`."
+      },
+      "f": {
+        "fr": [
+          "Une page du catalogue anonyme ne parcourt plus toute la vue matérialisée (plan à l'appui).",
+          "La visibilité par bibliothèque se calcule une fois par requête (plan à l'appui).",
+          "Mesure sur 100 000 notices synthétiques : sous les 3 s du rôle anon.",
+          "Le sort des 19 index secondaires des vues matérialisées est tranché."
+        ],
+        "pt": [
+          "Uma página do catálogo anônimo não percorre mais toda a visão materializada.",
+          "A visibilidade é calculada uma vez por consulta.",
+          "Medida com 100 000 registros sintéticos: abaixo de 3 s.",
+          "O destino dos 19 índices secundários está decidido."
+        ]
+      },
+      "dep": {
+        "fr": "Après B10 (clos le 27/09). Même zone que B27.",
+        "pt": "Depois do B10. Mesma zona que o B27."
+      },
+      "r": [
+        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5",
+        "supabase/migrations/20260510000000_baseline_live.sql (SECU-MV-FIX2, lignes 45, 9876, 9992)"
+      ]
+    },
+    {
+      "id": "B33",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Recherche : des index trigramme que la forme des requêtes empêche d'emprunter",
+        "pt": "Busca: índices trigrama que a forma das consultas impede de usar"
+      },
+      "v": {
+        "fr": "Constaté pendant B10 (27/09). `api.search_catalog_v1` (autocomplétion, 177 ms en moyenne sur 40 appels, à 2 600 notices) écrit `… % v OR … LIKE v||'%' OR EXISTS (SELECT … FROM unnest(tokens) … ~ …)` : la branche `OR EXISTS` interdit tout BitmapOr, ses cinq index trigramme ne servent jamais ; pour `sort_name` s'y ajoute `f_normalize_search(COALESCE(sort_name,''))`, qui n'est pas l'expression de l'index. Même motif pour `idx_books_autor_trgm` (`CatalogPanel`, `fn_peb_search_exemplares` : un OU avec `isbn`, `bib_ref` ou `tombo` sans trigramme) et `serials_uniform_title_trgm`. Et `fn_sync_publisher_id_on_publish` cherche l'éditeur par `lower(p.name) = …` **sans aucun index**, à chaque notice publiée — le GIN trigramme sur `name` brut ne sert personne. Quatre index gardés par B10 attendent cet item : `authors_sort_name_norm_trgm_idx`, `idx_publishers_name_trgm`, `idx_authors_external_ids` (MBID jamais câblé ; les usages réels sont `->>` et `NOT ?`), `serials_issn_idx`.",
+        "pt": "Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice."
+      },
+      "w": {
+        "fr": "Réécrire la branche en un seul motif regexp que `gin_trgm` sait servir (`~ '(^|\\s)(tok1|tok2)'`) ; aligner les expressions sur celles des index (retirer le `COALESCE`, inutile dans un WHERE) ; donner à la publication un index sur `lower(name)` ou réécrire sa recherche sur l'index existant ; puis retirer, raison écrite, les index qui resteraient sans lecteur.",
+        "pt": "Reescrever o ramo num único padrão regexp que `gin_trgm` sabe servir; alinhar as expressões às dos índices; dar à publicação um índice em `lower(name)`; depois retirar os índices que ficarem sem leitor."
+      },
+      "y": {
+        "fr": "Ces index coûtent à chaque écriture et ne servent pas ; la recherche, elle, croît linéairement avec le catalogue et les autorités.",
+        "pt": "Esses índices custam a cada escrita e não servem; a busca cresce linearmente com o catálogo."
+      },
+      "f": {
+        "fr": [
+          "`search_catalog_v1` emprunte ses index trigramme (plan à l'appui).",
+          "La publication d'une notice ne parcourt plus `publishers`.",
+          "Les index restés sans lecteur sont retirés, raison écrite."
+        ],
+        "pt": [
+          "`search_catalog_v1` usa seus índices trigrama (plano como prova).",
+          "A publicação de um registro não percorre mais `publishers`.",
+          "Os índices sem leitor são retirados, com o motivo escrito."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune ; à croiser avec B32 (mêmes vues matérialisées).",
+        "pt": "Nenhuma; cruzar com B32."
+      },
+      "r": [
+        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (grappes 1, 2, 4 et « Surprises »)"
+      ]
+    },
+    {
+      "id": "B34",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Effacement de compte : le journal du catalogue garde l'identifiant de la personne effacée",
+        "pt": "Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída"
+      },
+      "v": {
+        "fr": "Constaté pendant B10 (27/09), **à instruire**. `fn_delete_my_account` pseudonymise ou vide une cinquantaine de tables et supprime le compte, mais ne touche pas `catalog_audit_log`, dont `actor_id` (sans clé étrangère) garderait l'uuid de la personne effacée — alors que trois autres journaux sont pseudonymisés (`library_unarchive_log`, `network_admin_cross_library_actions_log`, `network_administrator_audit`). La table porte aussi `label` et `details` (jsonb), non relus. Au 27/09, **aucune ligne n'est concernée** : 1 749 lignes, un seul acteur, toujours actif.",
+        "pt": "Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo)."
+      },
+      "w": {
+        "fr": "Relire ce que `catalog_audit_log` conserve d'une personne (`label`, `details`) ; aligner l'effacement sur les trois journaux pseudonymisés (`UPDATE … WHERE actor_id = …`, servi par `catalog_audit_log_actor_idx`, gardé par B10 pour cela) ; ajouter le cas à la suite de l'effacement.",
+        "pt": "Reler o que `catalog_audit_log` guarda de uma pessoa; alinhar a exclusão aos três diários pseudonimizados; acrescentar o caso à suíte de exclusão."
+      },
+      "y": {
+        "fr": "Un effacement qui laisse un identifiant dans un journal n'efface pas tout ; l'uuid seul ne nomme personne, mais le journal peut porter davantage.",
+        "pt": "Uma exclusão que deixa um identificador num diário não apaga tudo."
+      },
+      "f": {
+        "fr": [
+          "`catalog_audit_log` est traité par l'effacement comme les trois autres journaux, ou la raison contraire est écrite.",
+          "La suite de l'effacement le vérifie."
+        ],
+        "pt": [
+          "`catalog_audit_log` é tratado pela exclusão como os outros três diários, ou a razão contrária está escrita.",
+          "A suíte da exclusão o verifica."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)"
       ]
     },
     {
@@ -4682,6 +4820,52 @@
           "fr": "21/09 — les trois flux du dimanche 20/09 sont attestés par les témoins en base (`fn_backup_heartbeat_status`) : `court` parti à 19 h 00 (instantané `47b476f1`), `long` à 20 h 01 (`6e05608e`), et **`storage`, celui qui avait été tué le 15/09, parti à 21 h 01 et terminé à 21 h 21 (`38035670`)** — premier passage hebdomadaire complet depuis l'incident. Rien n'a été changé aux unités : le passage a tenu parce que la session WSL a tenu. Les trois restes de la fiche (gestionnaire systemd qui sort, drapeaux locaux muets, seuil de 216 h) sont inchangés.",
           "pt": "21/09 — os três fluxos de domingo 20/09 estão atestados na base: `court` às 19h00, `long` às 20h01, e **`storage`, o que tinha sido morto em 15/09, saiu às 21h01 e terminou às 21h21 (`38035670`)**. Nada foi alterado nas unidades; os três restos da ficha mantêm-se."
         }
+      ]
+    },
+    {
+      "id": "I28",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Les règles du hook pre-commit ne s'appliquent pas aux commits faits depuis WSL",
+        "pt": "As regras do hook pre-commit não se aplicam aos commits feitos a partir do WSL"
+      },
+      "v": {
+        "fr": "Constaté pendant B10 (27/09). Le hook `.githooks/pre-commit` (règles bloquantes dont celles de `DOC-DEPLOY-4` : pas d'heure ronde, pas d'horodatage dans le futur, pas de collision de version) n'est actif que dans le checkout Windows (`core.hooksPath = .githooks`). Ni `~/anarbib` ni ses worktrees WSL — où travaillent les sessions depuis le 21/08 — ne le règlent, et son lanceur appelle `powershell.exe`. Mesure : **15 des 129 migrations** versées depuis le 31/08 sont à l'heure ronde ; les cinq de B10 ont en plus été datées dans le futur (18 h UTC, écrites entre 16 h 30 et 17 h 10) sans que rien ne l'arrête — une migration voisine (`20260927164619`) est tombée dans la fenêtre, sans dommage cette fois (aucun objet commun). I9 a été clos le 30/08 « par une règle » : la règle ne tourne pas là où l'on travaille.",
+        "pt": "Constatado durante o B10 (27/09). O hook `pre-commit` (regras de `DOC-DEPLOY-4`: sem hora redonda, sem data no futuro, sem colisão de versão) só está ativo no checkout Windows; não em `~/anarbib` nem nos worktrees WSL onde as sessões trabalham desde 21/08. 15 das 129 migrações desde 31/08 estão em hora redonda; as cinco do B10 foram datadas no futuro sem que nada as parasse."
+      },
+      "w": {
+        "fr": "Porter en CI ce qui peut l'être, puisque la CI tourne pour tout le monde : une garde sur `supabase/migrations/` — version unique ; pas de `…0000` pour un fichier ajouté après le 30/08 ; version antérieure à la date du commit qui l'ajoute (`git log --diff-filter=A`). Et régler `core.hooksPath` dans la recette de création d'un worktree, avec un lanceur qui fonctionne sous WSL.",
+        "pt": "Levar para a CI o que for possível (versão única; sem `…0000` para arquivo acrescentado depois de 30/08; versão anterior à data do commit que o acrescenta) e configurar `core.hooksPath` na receita de criação de worktree, com um lançador que funcione no WSL."
+      },
+      "y": {
+        "fr": "Une collision de version donne un déploiement vert et une migration jamais exécutée ; une migration datée dans le futur rend l'ordre du dépôt différent de l'ordre d'application. Ni l'un ni l'autre ne s'annonce.",
+        "pt": "Uma colisão de versão dá um deploy verde e uma migração nunca executada; uma migração datada no futuro torna a ordem do repositório diferente da ordem de aplicação. Nenhum dos dois se anuncia."
+      },
+      "f": {
+        "fr": [
+          "Une migration ajoutée à l'heure ronde, datée dans le futur ou en collision fait rougir la CI.",
+          "La recette de worktree active le hook, ou la CI le rend inutile."
+        ],
+        "pt": [
+          "Uma migração em hora redonda, no futuro ou em colisão deixa a CI vermelha.",
+          "A receita de worktree ativa o hook, ou a CI o torna inútil."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        ".githooks/pre-commit.ps1 (règles 7 et 8)",
+        "docs/specs/REGISTRE_decisions.md (DOC-DEPLOY-4)",
+        "clôture I9 (30/08)",
+        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §7"
       ]
     },
     {

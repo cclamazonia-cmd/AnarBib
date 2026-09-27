@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-27** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-27** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,14 +16,14 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 4
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 4
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 5
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-27.** **51 itens de 65** trazem uma verificação datada própria (A1, A3, B10, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-27.** **50 itens de 69** trazem uma verificação datada própria (A1, A3, B13, B29, C3, C4, C9, C10, D3, D6, D7, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I3, I18, I21, I24, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -346,34 +346,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B10** | Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas | `P3` | Aberto |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
 | **B29** | Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus | `P1` | A verificar |
 | **B30** | Dar ao lote de catalogação uma biblioteca própria (sequência de B29) | `P2` | Aberto |
-
-#### B10 — Higiene de performance: 170 índices não usados, 38 chaves estrangeiras não indexadas, 24 policies permissivas duplicadas
-
-`P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado.** 256 avisos de performance em 29/08. As tabelas mais carregadas de índices não usados são `library_partnerships` (6), `books` (5), `membership_payments` (4). As 24 policies permissivas duplicadas incidem todas sobre o papel `authenticated` em `SELECT`, em tabelas centrais (`books`, `authors`, `exemplares`, `subjects`, `works`).
-
-**Requalificado pela medida (GLB v17 cap. 8.1, contraverificada em 02/09).** As FK sem índice, «saldadas» em 02/07 (151 → 15), estão em **38** oito semanas depois, pelo funcionamento normal do projeto. A campanha segue adiada com razão; **a guarda que impede a reabertura foi extraída em B21** e não espera a volumetria.
-
-*Verificado : 31/08 — 254 avisos: 167 índices sem uso, 38 chaves estrangeiras sem índice, **25** tabelas com policies permissivas em dobro (`book_reading_notes` entrou na lista), 14 sem chave primária.*
-
-**O que é.** Três passagens distintas, a não misturar: fundir os pares de policies permissivas; indexar as chaves estrangeiras que realmente servem; só suprimir um índice não usado se se compreender por que foi criado.
-
-**Por que importa.** Na volumetria atual — 2 676 registros, 16 contas — **nada disso se vê**. É um canteiro de pré-crescimento, adiado de propósito desde julho. Anotá-lo permite não redescobri-lo às pressas no dia em que uma biblioteca chegar com 100 000 registros.
-
-**O que conta como terminado.**
-
-- Os 24 avisos de policies duplicadas estão resolvidos — é a passagem mais rentável.
-- As chaves estrangeiras das tabelas realmente escritas estão indexadas.
-- Os índices suprimidos o são com o motivo escrito.
-
-**Dependências.** A retomar se uma biblioteca de grande acervo entrar na rede.
-
-*Remissões : `ETAT-lancement-consolide-2026-07-03 §2 item 7` · `Advisors performance du 29/08/2026`*
+| **B31** | Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha | `P2` | Aberto |
+| **B32** | Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha | `P2` | Aberto |
+| **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | Aberto |
+| **B34** | Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída | `P2` | Aberto |
 
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
@@ -439,6 +418,93 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois da verificação de B29 em produção.
 
 *Remissões : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md`*
+
+#### B31 — Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Decidir o que um visitante deve ver: nada (policies `TO authenticated`, zero linha em vez de erro) ou as regras de uma biblioteca em SIGB completo (abrir `fn_library_has_full_sigb` a `anon`, com entrada no T12).
+
+**Por que importa.** Um erro não é uma recusa: um cliente anônimo recebe 401/403 em vez de lista vazia, e uma futura página pública de regras quebraria sem aviso.
+
+**O que conta como terminado.**
+
+- Uma leitura anônima das três tabelas devolve zero linha ou as linhas desejadas, nunca um erro.
+- A escolha está escrita na migração e guardada por uma suíte.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §2` · `supabase/migrations/20260927180000_b10_une_policy_permissive_par_role_et_commande.sql`*
+
+#### B32 — Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+
+**Estado.** Constatado durante o B10 (27/09). (1) Desde SECU-MV-FIX2 (15/06), as visões do catálogo leem as visões materializadas por invólucros SECURITY DEFINER nunca inseridos em linha: cada página lê a visão inteira (20 828 varreduras sequenciais em 25 dias, zero uso dos 19 índices secundários). (2) `catalog_works_v1` é INVOKER e junta `books`: a RLS de `books` é paga linha a linha (88 ms para 2 634 registros sob anon). Com 100 000 registros, ambos ultrapassam os 3 s do papel anon.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Duas alavancas, a medir separadamente: (a) leitura parametrizada que filtra DENTRO da função; (b) visibilidade por biblioteca calculada uma vez por consulta (InitPlan) em vez de uma função por linha.
+
+**Por que importa.** O custo de uma página cresce com o catálogo. No dia em que uma biblioteca chegar com 100 000 registros, o catálogo anônimo cai em `57014`.
+
+**O que conta como terminado.**
+
+- Uma página do catálogo anônimo não percorre mais toda a visão materializada.
+- A visibilidade é calculada uma vez por consulta.
+- Medida com 100 000 registros sintéticos: abaixo de 3 s.
+- O destino dos 19 índices secundários está decidido.
+
+**Dependências.** Depois do B10. Mesma zona que o B27.
+
+*Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5` · `supabase/migrations/20260510000000_baseline_live.sql (SECU-MV-FIX2, lignes 45, 9876, 9992)`*
+
+#### B33 — Busca: índices trigrama que a forma das consultas impede de usar
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+
+**Estado.** Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Reescrever o ramo num único padrão regexp que `gin_trgm` sabe servir; alinhar as expressões às dos índices; dar à publicação um índice em `lower(name)`; depois retirar os índices que ficarem sem leitor.
+
+**Por que importa.** Esses índices custam a cada escrita e não servem; a busca cresce linearmente com o catálogo.
+
+**O que conta como terminado.**
+
+- `search_catalog_v1` usa seus índices trigrama (plano como prova).
+- A publicação de um registro não percorre mais `publishers`.
+- Os índices sem leitor são retirados, com o motivo escrito.
+
+**Dependências.** Nenhuma; cruzar com B32.
+
+*Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (grappes 1, 2, 4 et « Surprises »)`*
+
+#### B34 — Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo).
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Reler o que `catalog_audit_log` guarda de uma pessoa; alinhar a exclusão aos três diários pseudonimizados; acrescentar o caso à suíte de exclusão.
+
+**Por que importa.** Uma exclusão que deixa um identificador num diário não apaga tudo.
+
+**O que conta como terminado.**
+
+- `catalog_audit_log` é tratado pela exclusão como os outros três diários, ou a razão contrária está escrita.
+- A suíte da exclusão o verifica.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)`*
 
 ---
 
@@ -1578,6 +1644,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
+| **I28** | As regras do hook pre-commit não se aplicam aos commits feitos a partir do WSL | `P1` | Aberto |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1687,6 +1754,27 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Primo de **I12**. Ligado a **A3**.
 
 *Remissões : `deploy/ops/systemd/` · `anarbib-systemd-etat-non-fiable` · `anarbib-backup-stale-lock-selfheal` · `RUNBOOK_restauration_BG2_2026-07-01`*
+
+#### I28 — As regras do hook pre-commit não se aplicam aos commits feitos a partir do WSL
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Constatado durante o B10 (27/09). O hook `pre-commit` (regras de `DOC-DEPLOY-4`: sem hora redonda, sem data no futuro, sem colisão de versão) só está ativo no checkout Windows; não em `~/anarbib` nem nos worktrees WSL onde as sessões trabalham desde 21/08. 15 das 129 migrações desde 31/08 estão em hora redonda; as cinco do B10 foram datadas no futuro sem que nada as parasse.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Levar para a CI o que for possível (versão única; sem `…0000` para arquivo acrescentado depois de 30/08; versão anterior à data do commit que o acrescenta) e configurar `core.hooksPath` na receita de criação de worktree, com um lançador que funcione no WSL.
+
+**Por que importa.** Uma colisão de versão dá um deploy verde e uma migração nunca executada; uma migração datada no futuro torna a ordem do repositório diferente da ordem de aplicação. Nenhum dos dois se anuncia.
+
+**O que conta como terminado.**
+
+- Uma migração em hora redonda, no futuro ou em colisão deixa a CI vermelha.
+- A receita de worktree ativa o hook, ou a CI o torna inútil.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `.githooks/pre-commit.ps1 (règles 7 et 8)` · `docs/specs/REGISTRE_decisions.md (DOC-DEPLOY-4)` · `clôture I9 (30/08)` · `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §7`*
 
 ---
 
@@ -2110,6 +2198,7 @@ CI verde. |
 | C11 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 3 cumpridos, o 2 fica como prática contínua (decisão de Xavier).** Ficha validada em bloco; fusões e reuniões de tomos feitas por Xavier no assistente (a migração que agia em seu nome foi recusada, com razão); o resto por duas migrações em nome próprio (`20260927112143`, `20260927114232`): O Capital, O Homem e a Terra em seis volumes, sete famílias de tomos reunidas, Peirats devolvido à fila, matérias MLEG. Em produção: as três abas vazias; 175 notas MLEG com decisão escrita. Critério 2 não mensurável: 1 676 títulos automáticos, revisão contínua pela fila do Ateliê. |
 | C7 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 2 cumpridos, o 3 dispensado por decisão de Xavier.** 851 registros indexados pelo vocabulário existente (ficha validada A + B, migração `20260927124038` pela CI): cobertura pública medida como anônimo 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` suprimido, `anarcocomunismo` verificado. Levar os oito assuntos à FICEDL deixa de ser pedido (decisão de Xavier, «se não criar fork»): não há fork — a cópia do tesauro tem 621 termos, todos colhidos na fonte em 03/09, nenhum acrescentado localmente, nenhum vínculo `exact` para os oito. 466 registros ficam fora do vocabulário. |
 | C6 | 2026-09-27 | **Fechado em 27/09 — verificado na tela por Xavier, conectado.** As três assistências da spec das convenções (§7): botão «Normalizar maiúsculas» do título, corrigido por observação de Xavier para aplicar a caixa da língua (§4.1, `1782dfcb`); assistente do ponto de acesso e normalização da caixa do nome de pessoa (`0c3bb62f`, `8c73b850`); cron semanal que alimenta a fila de verificação (`7eb72630`). Limites: o lote «titre_casse» ainda propõe a forma antiga; coletividades sem ferramenta de caixa; `name_lang` fora do formulário. **As três limitações tratadas na mesma noite:** dicionário de nomes próprios atestados + espelho SQL (171 propostas da fila refeitas, 0 divergência); `name_lang` no formulário e na separação do nome; caixa dos nomes de coletividades. |
+| B10 | 2026-09-27 | **Fechado em 27/09 à noite, com provas: os três critérios cumpridos, e três guardas para mantê-los.** (1) Os avisos `multiple_permissive_policies` foram resolvidos (25 → 0): uma permissiva por (papel, comando) nas 25 tabelas, com o OU ordenado — primeiro o que não depende da linha, depois a leitura pública, depois o staff linha a linha. A impressão digital das linhas visíveis para anon e para cada uma das 20 contas reais é idêntica nas 25 tabelas antes e depois; `count(*)` em `books` sob leitor 208 → 90 ms, admin 39 → 1,4 ms. Guarda: `policies_permissives_uniques_tests` (33 testes). (2) 21 chaves estrangeiras indexadas — as de pais realmente excluídos em operação; a lista assumida do B21 passa de 38 a 17, com a regra escrita. (3) 22 índices retirados com o motivo escrito (10 redundantes nunca usados, 12 sem leitor no caminho de escrita); guarda `index_redondants_garde_tests`. Os 108 índices sem leitor restantes estão inventariados na auditoria. Novos itens: B31, B32, B33, B34, I28. Desvio registrado a `DOC-DEPLOY-4` (auditoria §7). |
 
 ---
 
@@ -2141,4 +2230,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-27. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
