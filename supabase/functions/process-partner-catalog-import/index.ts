@@ -551,6 +551,17 @@ Deno.serve(async (req)=>{
     }).limit(1).maybeSingle();
     if (fileLookupError) throw fileLookupError;
     const sourceFileId = uploadedFile?.id ?? null;
+    // Profil (axe Perfil) : column_mappings (prioritaires sur les alias CSV) +
+    // default_values ; H19 (IMP-21 c) : items_mapping, la correspondance des
+    // sous-zones d'exemplaire (995/852), null = défaut PMB 8.1.
+    // Lu et validé AVANT de toucher au run (27/09, revues) : un profil supprimé
+    // depuis l'import (« Retraiter » garde son id) ou illisible n'efface plus
+    // les lignes déjà analysées — le run garde son état, l'erreur va à son
+    // journal ; sans ligne à protéger (premier import), le run passe en échec
+    // comme pour toute autre erreur, visible à l'écran. fn_import_dispatch
+    // refuse déjà un profil supprimé à l'envoi ; ceci couvre l'appel direct.
+    // `*` et non la liste des colonnes : la CI déploie l'EF AVANT la
+    // migration qui ajoute items_mapping.
     const { count: existingCount, error: existingCountError } = await supabaseAdmin.schema('ingest').from('partner_catalog_staging_rows').select('*', {
       count: 'exact',
       head: true
@@ -561,6 +572,31 @@ Deno.serve(async (req)=>{
         error: `Run ${runId} already has staging rows.`,
         hint: 'Use {"run_id": X, "force_reparse": true} only if you explicitly want to replace them.'
       }, 409);
+    }
+    const adapterOv = (run && run.adapter_overrides) || {};
+    const profileId = adapterOv.profile_id ? Number(adapterOv.profile_id) : null;
+    let profileColumnMappings = null;
+    let profileDefaults = null;
+    let profileItemsMapping = null;
+    if (profileId) {
+      const { data: profileRow, error: profileError } = await supabaseAdmin.schema('ingest').from('import_profiles')
+        .select('*').eq('id', profileId).maybeSingle();
+      const profileProblem = profileError
+        ? `Import profile ${profileId} unreadable: ${profileError.message}`
+        : (!profileRow ? `Import profile ${profileId} not found (deleted?): choose a profile and import the file again.` : null);
+      if (profileProblem) {
+        await appendRunError(supabaseAdmin, runId, profileProblem);
+        if (!((existingCount ?? 0) > 0)) {
+          await supabaseAdmin.schema('ingest').from('partner_catalog_import_runs').update({
+            run_status: 'failed',
+            finished_at: new Date().toISOString()
+          }).eq('id', runId);
+        }
+        return json({ ok: false, run_id: runId, error: profileProblem }, 409);
+      }
+      profileColumnMappings = profileRow.column_mappings || null;
+      profileDefaults = profileRow.default_values || null;
+      profileItemsMapping = profileRow.items_mapping || null;
     }
     const { error: runProcessingError } = await supabaseAdmin.schema('ingest').from('partner_catalog_import_runs').update({
       run_status: 'processing',
@@ -580,7 +616,6 @@ Deno.serve(async (req)=>{
     // de structure ; forced_vocabulary force le dialecte MARC (sinon detectDialect, auto) ;
     // forced_encoding impose l'encodage (sinon UTF-8 strict, puis windows-1252 SUPPOSE).
     // Lus AVANT le decodage : l'encodage decide de tout ce qui suit (H15).
-    const adapterOv = (run && run.adapter_overrides) || {};
     const forcedFormat = clean(adapterOv.forced_format);         // 'marc'|'ris'|'csv'|'tsv'|null
     const forcedVocabulary = clean(adapterOv.forced_vocabulary); // 'unimarc'|'marc21'|null
     const forcedEncodingRaw = clean(adapterOv.forced_encoding);
@@ -598,16 +633,6 @@ Deno.serve(async (req)=>{
     }
     const filenameLooksRis = (originalFilename ?? '').toLowerCase().endsWith('.ris');
     const risDetected = filenameLooksRis || detectRis(fileText);
-    // Profil (axe Perfil) : column_mappings (prioritaires sur les alias CSV) + default_values.
-    const profileId = adapterOv.profile_id ? Number(adapterOv.profile_id) : null;
-    let profileColumnMappings = null;
-    let profileDefaults = null;
-    if (profileId) {
-      const { data: profileRow } = await supabaseAdmin.schema('ingest').from('import_profiles')
-        .select('column_mappings, default_values').eq('id', profileId).maybeSingle();
-      profileColumnMappings = (profileRow && profileRow.column_mappings) || null;
-      profileDefaults = (profileRow && profileRow.default_values) || null;
-    }
     let headers = [];
     let detectedFormat = 'csv';
     let detectedDelimiterLabel = null;
@@ -617,7 +642,7 @@ Deno.serve(async (req)=>{
     let coverage = null;
     // Parseurs unitaires (reutilises en auto comme en force).
     const runMarc = () => {
-      const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename, forcedDialect: forcedVocabulary, encoding: decoded.encoding });
+      const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename, forcedDialect: forcedVocabulary, encoding: decoded.encoding, itemMapping: profileItemsMapping });
       if (!marcResult) return false;
       parsedEntries = marcResult.entries;
       declaredCharsets = marcResult.declaredCharsets || [];
@@ -625,7 +650,7 @@ Deno.serve(async (req)=>{
       parserVersion = MARC_PARSER_VERSION;
       headers = ['leader']; // MARC n'a pas de ligne d'en-tete ; valeur nominale
       if (!parsedEntries.length) throw new Error('MARC file contains no records.');
-      coverage = marcCoverage(parsedEntries);
+      coverage = marcCoverage(parsedEntries, profileItemsMapping);
       return true;
     };
     const runRis = () => {
@@ -714,7 +739,10 @@ Deno.serve(async (req)=>{
           item_type: mapped.itemType,
           external_key: mapped.externalKey,
           parser_version: parserVersion,
-          detected_delimiter: detectedDelimiterLabel
+          detected_delimiter: detectedDelimiterLabel,
+          // H19 : les exemplaires physiques (MARC 995/852) ; la promotion en fait
+          // des brouillons d'exemplaires rattachés au brouillon de notice.
+          items: Array.isArray(mapped.items) ? mapped.items : []
         },
         parse_status: 'parsed',
         match_status: 'unreviewed',
@@ -765,6 +793,12 @@ Deno.serve(async (req)=>{
       coverage,
       coverage_counts: coverageCounts(coverage),
       skipped_rows: parsedEntries.length - stagingRows.length,
+      // H19 : combien d'exemplaires physiques le fichier porte (lignes gardées).
+      items: {
+        rows_with_items: stagingRows.filter((r)=>r.normalized_payload.items.length > 0).length,
+        items: stagingRows.reduce((n, r)=>n + r.normalized_payload.items.length, 0),
+        with_code: stagingRows.reduce((n, r)=>n + r.normalized_payload.items.filter((i)=>i.source_item_code).length, 0)
+      },
       // Les axes d'adaptateur EMPLOYÉS pour ce passage : l'écran les relit pour
       // « Retraiter » en ne changeant que l'encodage (fn_import_list_runs ne
       // renvoie pas adapter_overrides).

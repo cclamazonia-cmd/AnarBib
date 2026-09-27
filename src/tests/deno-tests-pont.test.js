@@ -25,9 +25,9 @@
 
 import { it, expect, vi, afterAll } from 'vitest';
 
-// marc.test.ts 14 + encoding.test.ts 5 + coverage.test.ts 4 + serialize.test.ts 7
-// (26/09/2026, H16)
-const ATTENDUS = 30;
+// marc.test.ts 19 + encoding.test.ts 5 + coverage.test.ts 4 + serialize.test.ts 7
+// (27/09/2026, H19 : sous-zones répétées)
+const ATTENDUS = 35;
 
 let enregistres = 0;
 vi.stubGlobal('Deno', {

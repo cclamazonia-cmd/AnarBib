@@ -90,20 +90,33 @@ describe('fixtures PMB 8.1.1.1 : le parseur lit ce que PMB exporte', () => {
   });
 
   // H16 : le rapport de couverture dit ce qu'un export PMB perd à l'import —
-  // mesuré le 26/09 : 111 sous-zones, 17 reprises. Les exemplaires (995), la
-  // collation (215), la collection (225), le résumé (330), la Dewey (676)
-  // restent en brut : c'est la liste de travail de H17 et H19.
+  // mesuré le 26/09 : 111 sous-zones, 17 reprises avant H19. La collation
+  // (215), la collection (225), le résumé (330), la Dewey (676) restent en
+  // brut : la liste de travail de H17. Depuis H19 la 995 est lue (exemplaires).
   it('couverture de l\'export PMB : ce qui est repris, ce qui reste en brut', () => {
     const cov = marcCoverage(utf8.res.entries);
     const z = (tag, code) => cov.zones.find((x) => x.tag === tag && x.code === code);
     expect(cov).toMatchObject({ kind: 'marc', records: 50, truncated: false });
     expect(z('200', 'a')).toMatchObject({ status: 'repris', occurrences: 50 });
     expect(z('001', '')).toMatchObject({ status: 'repris' });
-    expect(z('995', 'f')).toMatchObject({ status: 'brut', occurrences: 33, records: 31 });
+    expect(z('995', 'f')).toMatchObject({ status: 'repris', occurrences: 33, records: 31 });
+    expect(z('995', 'k')).toMatchObject({ status: 'repris' });
+    expect(z('995', 'r')).toMatchObject({ status: 'indice' });
     for (const [tag, code] of [['215', 'a'], ['225', 'a'], ['330', 'a'], ['676', 'a'], ['856', 'u']]) {
       expect(z(tag, code)?.status, `${tag} $${code}`).toBe('brut');
     }
     expect(JSON.stringify(cov).length).toBeLessThan(40000); // tient dans summary, liste des runs comprise
+  });
+
+  // H19 : les 33 exemplaires du jeu de test deviennent 33 exemplaires, avec
+  // leur code-barres PMB et leur cote.
+  it('exemplaires : 33 sur 31 notices, codes et cotes lus, aucun code en double', () => {
+    const items = utf8.res.entries.flatMap((e) => e.mapped.items);
+    expect(items).toHaveLength(33);
+    expect(utf8.res.entries.filter((e) => e.mapped.items.length > 0)).toHaveLength(31);
+    expect(items.every((i) => i.source_item_code && i.call_number)).toBe(true);
+    expect(new Set(items.map((i) => i.source_item_code)).size).toBe(33);
+    expect(items[0]).toMatchObject({ source_item_code: '33700004388761', call_number: 'JR SOU', owner: 'BDP', item_type: 'uu', public: 'u' });
   });
 });
 
@@ -136,6 +149,14 @@ describe('fixtures PMB 8.1.1.1 : les cas difficiles réexportés par PMB', () =>
     const n995 = iso.res.entries.map((e) => e.rawPayload.fields.filter((f) => f.tag === '995').length);
     expect(n995.reduce((a, b) => a + b, 0)).toBe(13);
     expect(Math.max(...n995)).toBe(3);
+  });
+
+  it('H19 — la notice à trois exemplaires donne trois exemplaires, deux cotes, une note', () => {
+    const e = iso.res.entries.find((x) => x.mapped.items.length === 3);
+    expect(e.mapped.title).toBe('Petite histoire des bibliothèques ouvrières');
+    expect(e.mapped.items.map((i) => i.source_item_code)).toEqual(['CDF0000000010', 'CDF0000000011', 'CDF0000000012']);
+    expect(new Set(e.mapped.items.map((i) => i.call_number))).toEqual(new Set(['027.6 GAR', 'ARCH GAR 1']));
+    expect(e.mapped.items[2].note).toBe('Exemplaire dédicacé');
   });
 
   it('l\'export « XML MARC » des mêmes notices donne les mêmes notices', () => {

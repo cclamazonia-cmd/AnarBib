@@ -78,6 +78,85 @@ const UNIMARC = {
   control: '001',
 };
 
+// ── Exemplaires (H19, 26/09/2026 — REGISTRE IMP-21) ─────────
+//
+// Une zone d'exemplaire par exemplaire physique : 995 en UNIMARC (convention
+// PMB), 852 en MARC21. Chaque cle de la correspondance nomme la ou les
+// sous-zones a lire (plusieurs lettres = concatenees, dans cet ordre) :
+//   code        -> code d'origine (code-barres PMB) : exemplares.source_item_code
+//   call_number -> cote : shelf_location
+//   note        -> note d'exemplaire : notes
+//   owner       -> proprietaire / preteur : source_library
+//   item_type, public, status -> gardes dans la note de provenance ; la
+//                  correspondance vers la politique de circulation attend
+//                  l'echantillon de DIRA (IMP-21 d).
+// Defaut UNIMARC = ce que PMB 8.1 ecrit (fixtures tests/pmb) ; la
+// correspondance se regle dans le PROFIL d'import de la bibliotheque
+// (ingest.import_profiles.items_mapping), qui surcharge cle par cle.
+export const DEFAULT_ITEM_MAPPINGS = {
+  unimarc: { tag: '995', code: 'f', call_number: 'k', note: 'u', owner: 'a', item_type: 'r', public: 'q', status: '' },
+  marc21: { tag: '852', code: 'p', call_number: 'hi', note: 'z', owner: 'b', item_type: '', public: '', status: '' },
+};
+export const ITEM_STRUCTURED_KEYS = ['code', 'call_number', 'note', 'owner'];
+export const ITEM_NOTE_KEYS = ['item_type', 'public', 'status'];
+const ITEM_KEYS = [...ITEM_STRUCTURED_KEYS, ...ITEM_NOTE_KEYS];
+// Une seule valeur par exemplaire : la PREMIERE occurrence de la sous-zone ;
+// une repetition dans la meme zone est comptee en surplus par la couverture.
+// Les autres cles lisent TOUTES les occurrences (852 $i ou $z sont repetables
+// en MARC21 : « v.2 » ou une seconde note ne se perdent pas).
+export const ITEM_SINGLE_KEYS = ['code', 'owner'];
+const ITEM_JOIN = { call_number: ' ', note: ' ; ', item_type: ', ', public: ', ', status: ', ' };
+
+// Surcharge du profil sur le defaut du dialecte ; une valeur invalide est
+// ignoree (le defaut reste), une chaine vide coupe la cle.
+export function resolveItemMapping(dialect, override) {
+  const base = { ...(dialect === 'marc21' ? DEFAULT_ITEM_MAPPINGS.marc21 : DEFAULT_ITEM_MAPPINGS.unimarc) };
+  if (!override || typeof override !== 'object') return base;
+  if (typeof override.tag === 'string' && /^\d{3}$/.test(override.tag.trim())) base.tag = override.tag.trim();
+  for (const k of ITEM_KEYS) {
+    const v = override[k];
+    if (typeof v !== 'string') continue;
+    const s = v.trim().toLowerCase();
+    if (s === '' || /^[0-9a-z]{1,4}$/.test(s)) base[k] = s;
+  }
+  return base;
+}
+
+function readItemValue(field, codes, key) {
+  if (!codes) return null;
+  const single = ITEM_SINGLE_KEYS.includes(key);
+  const parts = [];
+  for (const c of codes) {
+    const found = (field.subfields || []).filter((s) => s.code === c);
+    for (const sf of (single ? found.slice(0, 1) : found)) {
+      const v = clean(sf?.value);
+      if (v) parts.push(v);
+    }
+  }
+  return parts.length ? parts.join(ITEM_JOIN[key] || ' ') : null;
+}
+
+// → [{ source_item_code, call_number, note, owner, item_type, public, status }]
+//   (un objet par zone d'exemplaire ayant au moins une valeur lue)
+export function extractItems(record, dialect, mappingOverride = null) {
+  const m = resolveItemMapping(dialect, mappingOverride);
+  const out = [];
+  for (const f of fieldsByTag(record, m.tag)) {
+    if (!f.subfields) continue;
+    const item = {
+      source_item_code: readItemValue(f, m.code, 'code'),
+      call_number: readItemValue(f, m.call_number, 'call_number'),
+      note: readItemValue(f, m.note, 'note'),
+      owner: readItemValue(f, m.owner, 'owner'),
+      item_type: readItemValue(f, m.item_type, 'item_type'),
+      public: readItemValue(f, m.public, 'public'),
+      status: readItemValue(f, m.status, 'status'),
+    };
+    if (Object.values(item).some((v) => v !== null)) out.push(item);
+  }
+  return out;
+}
+
 // ── Helpers d'acces au modele ───────────────────────────────
 
 function clean(value) {
@@ -171,7 +250,7 @@ export function detectDialect(record) {
 
 // ── Mapping vers la forme normalisee ────────────────────────
 
-export function mapMarcRecord(record, dialect) {
+export function mapMarcRecord(record, dialect, itemMapping = null) {
   const def = dialect === 'unimarc' ? UNIMARC : MARC21;
 
   const title = firstFromList(record, def.title);
@@ -212,6 +291,9 @@ export function mapMarcRecord(record, dialect) {
     subjectsArray,
     itemType,
     externalKey,
+    // H19 : les exemplaires physiques (995 / 852), selon la correspondance
+    // du profil de la bibliotheque (defaut PMB 8.1).
+    items: extractItems(record, dialect, itemMapping),
   };
 }
 
@@ -457,29 +539,47 @@ export function unimarcCharsetWarnings(declared, decoded, hasNonAscii) {
 const COVERAGE_MAX_ZONES = 400;
 const COVERAGE_EXAMPLE_LEN = 80;
 
-function consumedSubfields(def) {
+function consumedSubfields(def, itemMapping) {
   const m = new Map();
   for (const k of ['title', 'subtitle', 'responsibility', 'edition', 'place', 'publisher', 'year', 'language', 'isbn', 'issn']) {
     for (const { tag, code } of def[k]) m.set(`${tag}$${code}`, 'first');
   }
   for (const tag of def.authorTags) for (const code of def.nameCodes) m.set(`${tag}$${code}`, 'all');
   for (const { tag, code } of def.subjects) m.set(`${tag}$${code}`, 'all');
+  // H19 : sous-zones d'exemplaire. Les cles structurees entrent dans
+  // l'exemplaire (reprises) ; type, public, statut vont dans sa note de
+  // provenance (indice), en attendant leur correspondance (IMP-21 d).
+  // 'item_single' (code, proprietaire) : une repetition DANS la meme zone
+  // n'est pas reprise (surplus) ; une lettre lue aussi par une cle a valeurs
+  // multiples ne perd rien ('item' l'emporte).
+  if (itemMapping) {
+    for (const k of ITEM_SINGLE_KEYS) for (const c of (itemMapping[k] || '')) m.set(`${itemMapping.tag}$${c}`, 'item_single');
+    for (const k of ITEM_STRUCTURED_KEYS) {
+      if (ITEM_SINGLE_KEYS.includes(k)) continue;
+      for (const c of (itemMapping[k] || '')) m.set(`${itemMapping.tag}$${c}`, 'item');
+    }
+    for (const k of ITEM_NOTE_KEYS) for (const c of (itemMapping[k] || '')) if (!m.has(`${itemMapping.tag}$${c}`)) m.set(`${itemMapping.tag}$${c}`, 'item_note');
+  }
   return m;
 }
-const CONSUMED = { marc21: consumedSubfields(MARC21), unimarc: consumedSubfields(UNIMARC) };
 
 // entries : sortie de buildParsedEntriesFromMarc ({ dialect, rawPayload }).
+// itemMappingOverride : correspondance d'exemplaires du profil (H19), ou null.
 // → { kind: 'marc', records, zones: [{ dialect, tag, code, status, occurrences,
 //     records, surplus, example }], truncated }
-//   status : 'repris' | 'brut' ; code '' pour une zone de controle.
-export function marcCoverage(entries) {
+//   status : 'repris' | 'indice' | 'brut' ; code '' pour une zone de controle.
+export function marcCoverage(entries, itemMappingOverride = null) {
   const zones = new Map();
+  const CONSUMED = {
+    marc21: consumedSubfields(MARC21, resolveItemMapping('marc21', itemMappingOverride)),
+    unimarc: consumedSubfields(UNIMARC, resolveItemMapping('unimarc', itemMappingOverride)),
+  };
   for (const e of entries || []) {
     const dialect = e.dialect === 'unimarc' ? 'unimarc' : 'marc21';
     const def = dialect === 'unimarc' ? UNIMARC : MARC21;
     const consumed = CONSUMED[dialect];
     const perRecord = new Map();
-    const note = (tag, code, value, status, kind) => {
+    const note = (tag, code, value, status, kind, repeatedInField = false) => {
       const key = `${dialect}|${tag}|${code}`;
       let z = zones.get(key);
       if (!z) {
@@ -491,6 +591,9 @@ export function marcCoverage(entries) {
       perRecord.set(key, n);
       if (n === 1) z.records += 1;
       else if (kind === 'first') z.surplus += 1;
+      // Une notice porte plusieurs zones d'exemplaire : le surplus d'un code
+      // d'exemplaire se compte PAR ZONE, pas par notice.
+      if (kind === 'item_single' && repeatedInField) z.surplus += 1;
       const v = clean(value);
       if (!z.example && v) z.example = v.length > COVERAGE_EXAMPLE_LEN ? v.slice(0, COVERAGE_EXAMPLE_LEN) + '…' : v;
     };
@@ -498,9 +601,13 @@ export function marcCoverage(entries) {
       if (typeof f.value === 'string') {
         note(f.tag, '', f.value, f.tag === def.control ? 'repris' : 'brut', null);
       } else {
+        const perField = new Map();
         for (const s of (f.subfields || [])) {
           const kind = consumed.get(`${f.tag}$${s.code}`) || null;
-          note(f.tag, s.code, s.value, kind ? 'repris' : 'brut', kind);
+          const status = !kind ? 'brut' : (kind === 'item_note' ? 'indice' : 'repris');
+          const nf = (perField.get(s.code) || 0) + 1;
+          perField.set(s.code, nf);
+          note(f.tag, s.code, s.value, status, kind, nf > 1);
         }
       }
     }
@@ -517,11 +624,11 @@ export function marcCoverage(entries) {
 
 // Construit les entrees normalisees a partir d'enregistrements MARC deja parses.
 // Chaque entree : { rowNo, rawPayload, mapped, warnings, dialect }.
-export function buildParsedEntriesFromMarc(records, baseWarnings = [], forcedDialect = null) {
+export function buildParsedEntriesFromMarc(records, baseWarnings = [], forcedDialect = null, itemMapping = null) {
   return records.map((record, idx) => {
     // forcedDialect ('unimarc' | 'marc21') = override de l'axe Vocabulário ; sinon auto.
     const dialect = forcedDialect || detectDialect(record);
-    const mapped = mapMarcRecord(record, dialect);
+    const mapped = mapMarcRecord(record, dialect, itemMapping);
     return {
       rowNo: idx + 1,
       rawPayload: { leader: record.leader, fields: record.fields, marc_dialect: dialect },
@@ -548,14 +655,15 @@ function declaredCharsets(entries) {
 //   format : 'marcxml' | 'marc_iso2709'
 //   encoding : encodage retenu par l'appelant pour les octets ISO 2709
 //              (le MARCXML arrive deja decode dans `text`).
-export function parseMarcFile({ text, bytes, filename, forcedDialect = null, encoding = 'utf-8' }) {
+//   itemMapping : correspondance d'exemplaires du profil (H19), ou null.
+export function parseMarcFile({ text, bytes, filename, forcedDialect = null, encoding = 'utf-8', itemMapping = null }) {
   const name = (filename || '').toLowerCase();
 
   // 1. MARCXML (texte). Prioritaire : signature XML tres distinctive.
   if (looksLikeMarcXml(text) || (name.endsWith('.xml') && /<(?:\w+:)?record\b/.test(text || ''))) {
     const records = parseMarcXml(text);
     if (records.length) {
-      const entries = buildParsedEntriesFromMarc(records, [], forcedDialect);
+      const entries = buildParsedEntriesFromMarc(records, [], forcedDialect, itemMapping);
       return { format: 'marcxml', entries, declaredCharsets: declaredCharsets(entries) };
     }
   }
@@ -565,7 +673,7 @@ export function parseMarcFile({ text, bytes, filename, forcedDialect = null, enc
     if (looksLikeIso2709(bytes)) {
       const { records, warnings } = parseMarcIso2709(bytes, { encoding, forcedDialect });
       if (records.length) {
-        const entries = buildParsedEntriesFromMarc(records, warnings, forcedDialect);
+        const entries = buildParsedEntriesFromMarc(records, warnings, forcedDialect, itemMapping);
         return { format: 'marc_iso2709', entries, declaredCharsets: declaredCharsets(entries) };
       }
     }

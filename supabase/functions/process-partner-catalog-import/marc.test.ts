@@ -10,6 +10,8 @@ import {
   unimarcDeclaredCharset,
   unimarcCharsetWarnings,
   marcCoverage,
+  extractItems,
+  resolveItemMapping,
 } from './marc.ts';
 
 // ── Fixtures XML ────────────────────────────────────────────
@@ -321,13 +323,91 @@ Deno.test('H16 marcCoverage : repris (table du dialecte) / brut, surplus, zone d
   assertEquals(z('606', 'a').occurrences, 2);
   assertEquals(z('606', 'a').surplus, 0);
   assertEquals(z('606', 'x').status, 'brut');
-  // Exemplaires : deux occurrences, une notice.
-  assertEquals(z('995', 'f').status, 'brut');
+  // Exemplaires : deux occurrences, une notice ; depuis H19 le code d'origine
+  // est repris (correspondance par defaut PMB 8.1).
+  assertEquals(z('995', 'f').status, 'repris');
+  assertEquals(z('995', 'f').surplus, 0);
   assertEquals(z('995', 'f').occurrences, 2);
   assertEquals(z('995', 'f').records, 1);
   assertEquals(z('995', 'f').example, 'CB-1');
   assertEquals(z('330', 'a').example.length, 81); // 80 + « … »
   assertEquals(cov.truncated, false);
+});
+
+// ── H19 (26/09/2026) : exemplaires ───────────────────────────
+
+const REC_995 = {
+  leader: '',
+  fields: [
+    { tag: '001', value: 'E-1' },
+    { tag: '200', ind1: '1', ind2: ' ', subfields: [{ code: 'a', value: 'Petite histoire des bibliothèques ouvrières' }] },
+    { tag: '995', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: 'BDP' }, { code: 'c', value: 'BDP' }, { code: 'f', value: 'CDF0000000010' }, { code: 'k', value: '027.6 GAR' }, { code: 'r', value: 'uu' }, { code: 'q', value: 'u' }] },
+    { tag: '995', ind1: ' ', ind2: ' ', subfields: [{ code: 'a', value: 'Fonds propre' }, { code: 'f', value: 'CDF0000000012' }, { code: 'k', value: 'ARCH GAR 1' }, { code: 'u', value: 'Exemplaire dédicacé' }] },
+    { tag: '995', ind1: ' ', ind2: ' ', subfields: [] },
+  ],
+};
+
+Deno.test('H19 extractItems : une 995 = un exemplaire, correspondance PMB 8.1 par defaut', () => {
+  assertEquals(extractItems(REC_995, 'unimarc'), [
+    { source_item_code: 'CDF0000000010', call_number: '027.6 GAR', note: null, owner: 'BDP', item_type: 'uu', public: 'u', status: null },
+    { source_item_code: 'CDF0000000012', call_number: 'ARCH GAR 1', note: 'Exemplaire dédicacé', owner: 'Fonds propre', item_type: null, public: null, status: null },
+  ]);
+  // mapMarcRecord porte les exemplaires.
+  assertEquals(mapMarcRecord(REC_995, 'unimarc').items.length, 2);
+  // Aucune 995 : aucun exemplaire.
+  assertEquals(mapMarcRecord(parseMarcXml(UNIMARC_XML)[0], 'unimarc').items, []);
+});
+
+Deno.test('H19 resolveItemMapping : le profil surcharge cle par cle, une valeur invalide est ignoree', () => {
+  const m = resolveItemMapping('unimarc', { code: 'b', call_number: 'kd', note: '', tag: '996', owner: '$$$', status: 'o' });
+  assertEquals(m, { tag: '996', code: 'b', call_number: 'kd', note: '', owner: 'a', item_type: 'r', public: 'q', status: 'o' });
+  // Surcharge par le profil appliquee a l'extraction : proprietaire lu en $c.
+  const items = extractItems(REC_995, 'unimarc', { owner: 'c' });
+  assertEquals(items.map((i) => i.owner), ['BDP', null]);
+});
+
+Deno.test('H19 MARC21 852 : $p code, $h + $i cote concatenes, $z note, $b localisation', () => {
+  const rec = { leader: '', fields: [
+    { tag: '245', ind1: '1', ind2: '0', subfields: [{ code: 'a', value: 'Mutual Aid' }] },
+    { tag: '852', ind1: ' ', ind2: ' ', subfields: [{ code: 'b', value: 'Main' }, { code: 'h', value: '335.83' }, { code: 'i', value: 'KRO' }, { code: 'p', value: '31234000123' }, { code: 'z', value: 'Signed' }] },
+  ] };
+  assertEquals(extractItems(rec, 'marc21'), [
+    { source_item_code: '31234000123', call_number: '335.83 KRO', note: 'Signed', owner: 'Main', item_type: null, public: null, status: null },
+  ]);
+});
+
+Deno.test('H19 sous-zones repetees dans UNE zone : cote et note gardent tout, le code prend la 1re et le surplus se compte', () => {
+  const rec = { leader: '', fields: [
+    { tag: '245', ind1: '1', ind2: '0', subfields: [{ code: 'a', value: 'Mutual Aid' }] },
+    { tag: '852', ind1: ' ', ind2: ' ', subfields: [
+      { code: 'b', value: 'Main' }, { code: 'h', value: '335.83' }, { code: 'i', value: 'KRO' }, { code: 'i', value: 'v.2' },
+      { code: 'p', value: '31234000123' }, { code: 'p', value: '31234000999' },
+      { code: 'z', value: 'Signé' }, { code: 'z', value: 'Jaquette manquante' }] },
+    // Deux zones d'exemplaire dans une notice : pas un surplus.
+    { tag: '852', ind1: ' ', ind2: ' ', subfields: [{ code: 'p', value: '31234000124' }] },
+  ] };
+  assertEquals(extractItems(rec, 'marc21'), [
+    { source_item_code: '31234000123', call_number: '335.83 KRO v.2', note: 'Signé ; Jaquette manquante', owner: 'Main', item_type: null, public: null, status: null },
+    { source_item_code: '31234000124', call_number: null, note: null, owner: null, item_type: null, public: null, status: null },
+  ]);
+  const cov = marcCoverage(buildParsedEntriesFromMarc([rec], [], 'marc21'));
+  const z = (code) => cov.zones.find((x) => x.tag === '852' && x.code === code);
+  assertEquals([z('p').status, z('p').occurrences, z('p').surplus], ['repris', 3, 1]);
+  assertEquals([z('i').status, z('i').surplus], ['repris', 0]);
+  assertEquals([z('z').status, z('z').surplus], ['repris', 0]);
+});
+
+Deno.test('H19 couverture : sous-zones d\'exemplaire reprises (code, cote, note, proprietaire), indice (type, public)', () => {
+  const cov = marcCoverage(buildParsedEntriesFromMarc([REC_995], [], 'unimarc'));
+  const z = (code) => cov.zones.find((x) => x.tag === '995' && x.code === code);
+  for (const c of ['f', 'k', 'u', 'a']) assertEquals(z(c).status, 'repris');
+  assertEquals(z('r').status, 'indice');
+  assertEquals(z('q').status, 'indice');
+  assertEquals(z('c').status, 'brut');
+  // Avec un profil qui lit le proprietaire en $c, $c devient repris et $a brut.
+  const cov2 = marcCoverage(buildParsedEntriesFromMarc([REC_995], [], 'unimarc', { owner: 'c' }), { owner: 'c' });
+  assertEquals(cov2.zones.find((x) => x.tag === '995' && x.code === 'c').status, 'repris');
+  assertEquals(cov2.zones.find((x) => x.tag === '995' && x.code === 'a').status, 'brut');
 });
 
 Deno.test('buildParsedEntriesFromMarc : numerotation + dialecte mixte', () => {
