@@ -70,12 +70,15 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // Paquet DOUBLONS P4 (21/08/2026) : la fusion d'autorités est réservée à la
   // coordination. La liste des doublons probables, elle, reste visible : savoir
   // qu'il y a un doublon n'a jamais rien cassé.
-  const { effectiveRole } = useLibrary();
+  const { effectiveRole, isNetworkAdmin } = useLibrary();
   const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const { user } = useAuth();
   const [drafts, setDrafts] = useState([]);
   const [draftsLoading, setDraftsLoading] = useState(false);
   const [form, setForm] = useState({});
+  // B29 (CAT-E18 2) : un brouillon d'autorité se lit partout, mais ne s'écrit
+  // (ni ne se publie) que par qui l'a créé, ou par l'administration du réseau.
+  const [draftCreator, setDraftCreator] = useState('');
   const [meta, setMeta] = useState({
     authorityType: 'person', acronym: '', activityPeriod: '', affiliation: '', variantNames: '',
     pseudonyms: '', activityPlace: '', contextLinks: '',
@@ -120,6 +123,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   };
 
   function f(k) { return form[k] || ''; }
+  const lectureSeule = !!f('id') && !!draftCreator && draftCreator !== user?.id && !isNetworkAdmin;
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty'); }
   function setM(k, v) { setMeta(p => ({ ...p, [k]: v })); if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty'); }
 
@@ -158,6 +162,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {
     setForm({ ...EMPTY_FORM });
+    setDraftCreator('');
     setMeta({ authorityType: 'person', acronym: '', activityPeriod: '', affiliation: '', variantNames: '', pseudonyms: '', activityPlace: '', contextLinks: '' });
     setAssistRaw('');
     setDraftState('new');
@@ -266,6 +271,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
   function fillFromRecord(r) {
     const sm = r.structured_meta || {};
+    setDraftCreator(r.created_by || '');
     setForm({
       id: String(r.id || ''),
       published_author_id: String(r.published_author_id || ''),
@@ -1148,12 +1154,17 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         )}
 
         {/* ── Actions ─────────────────────────────────── */}
+        {lectureSeule && (
+          <div data-testid="author-draft-read-only" style={{ marginTop: 12, fontSize: '.8rem', color: 'var(--brand-muted, #999)' }}>
+            {t({ id: 'catalogacao.author.readOnlyOtherCreator' })}
+          </div>
+        )}
         <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
-          <button type="submit" className="ab-button" disabled={saving}>
+          <button type="submit" className="ab-button" disabled={saving || lectureSeule}>
             {saving ? t({ id: 'catalogacao.saving' }) : t({ id: 'catalogacao.ui.saveDraft' })}
           </button>
           <button type="button" className="ab-button" style={{ background: 'rgba(21,128,61,.7)' }}
-            disabled={publishing || !f('id')} onClick={handlePublish}>
+            disabled={publishing || !f('id') || lectureSeule} onClick={handlePublish}>
             {publishing ? t({ id: 'catalogacao.author.publishing' }) : t({ id: 'catalogacao.author.publishDraft' })}
           </button>
           <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>{t({id:'catalogacao.ui.clear'})}</button>

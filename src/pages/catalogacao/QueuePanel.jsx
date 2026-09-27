@@ -4,6 +4,8 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import DuplicateCompareModal from './DuplicateCompareModal';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLibrary } from '@/contexts/LibraryContext';
 
 // Labels resolved inside component via t()
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
@@ -72,7 +74,10 @@ async function attacherDestinations(items) {
 // réellement changé, au lieu des ids demandés. H19 : un exemplaire importé suit
 // sa notice ; restauré ou déplacé seul, il peut ne pas bouger (déclencheur
 // exemplar_drafts_import_links_locked), et l'écran ne doit pas l'annoncer.
-async function bulkByType(sel, run, compter = null) {
+// `erreurs` (facultatif) recueille les refus de la base, pour les DIRE (B29 :
+// ranger dans le lot d'une autre bibliothèque) au lieu de « certains
+// éléments n'ont pas changé ».
+async function bulkByType(sel, run, compter = null, erreurs = null) {
   const byType = new Map();
   for (const { type, id } of sel) {
     if (!byType.has(type)) byType.set(type, []);
@@ -82,7 +87,8 @@ async function bulkByType(sel, run, compter = null) {
   for (const [type, ids] of byType) {
     for (const part of chunkIds(ids)) {
       const { data, error } = await run(TABLE_FOR[type], part);
-      if (!error) ok += (compter && Array.isArray(data)) ? compter(data) : part.length;
+      if (error) erreurs?.push(error);
+      else ok += (compter && Array.isArray(data)) ? compter(data) : part.length;
     }
   }
   return ok;
@@ -148,6 +154,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // ── Pagination (serveur) ────────────────────────────────
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
+  const [totalSelectable, setTotalSelectable] = useState(0);   // B29 : hors autorités d'autrui
   const [totalPages, setTotalPages] = useState(1);
   // Recherche cote serveur, debounce 300ms ; toute nouvelle recherche revient page 1
   const [dSearch, setDSearch] = useState('');
@@ -171,6 +178,11 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // repond 204. Sans cette garde cote ecran, le bouton dirait « supprimes »
   // sans que rien ne bouge — le pire des deux mondes.
   const [isCoord, setIsCoord] = useState(false);
+  // B29 (CAT-E18) : les brouillons d'autorités se lisent partout, mais ne
+  // s'écrivent que par qui les a créés (ou l'administration) : la file les
+  // montre, sans les proposer aux gestes de masse.
+  const { user } = useAuth();
+  const { isNetworkAdmin } = useLibrary();
   const [libs, setLibs] = useState({});
   // Journal des suppressions DEFINITIVES, et leur rejeu. Sans cet ecran, la
   // RPC de restauration serait un chemin que personne n'emprunte — donc un
@@ -187,7 +199,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       // Sanitise pour la syntaxe .or() de PostgREST (virgules/parentheses la cassent)
       const s = dSearch.trim().replace(/[,()]/g, ' ').trim();
       const allItems = [];
-      let totalCount = 0, maxCount = 0;
+      let totalCount = 0, maxCount = 0, selectableCount = 0;
       // Tri : colonnes physiques → ordre serveur ; sinon fenêtre récente (updated_at desc) + tri client.
       const orderCol = SERVER_SORT_COLS.includes(sortBy) ? sortBy : 'updated_at';
       const orderAsc = SERVER_SORT_COLS.includes(sortBy) ? sortDir === 'asc' : false;
@@ -210,7 +222,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       // Authors
       if (!typeFilter || typeFilter === 'author') {
         let q = supabase.from('author_drafts')
-          .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, updated_at, last_opened_at', { count: 'exact' })
+          .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, created_by, updated_at, last_opened_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
@@ -218,7 +230,21 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         if (s) q = q.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
         const { data, count } = await q.order(orderCol, orderOpts).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
-        (data || []).forEach(d => allItems.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: d.sort_name || '' }));
+        (data || []).forEach(d => allItems.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: d.sort_name || '', _readOnly: !isNetworkAdmin && d.created_by !== user?.id }));
+        // B29 : les autorités d'autrui se lisent, ne se sélectionnent pas — le
+        // total « tout le filtre » ne compte que les siennes.
+        let siennesCount = count || 0;
+        if (!isNetworkAdmin) {
+          let q2 = supabase.from('author_drafts').select('id', { count: 'exact', head: true })
+            .in('status', statuses).eq('created_by', user?.id);
+          if (actionFilter) q2 = q2.eq('action', actionFilter);
+          if (batchFilter === 'none') q2 = q2.is('batch_id', null);
+          else if (batchFilter) q2 = q2.eq('batch_id', Number(batchFilter));
+          if (s) q2 = q2.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
+          const { count: c2 } = await q2;
+          siennesCount = c2 || 0;
+        }
+        selectableCount += siennesCount - (count || 0);
       }
 
       // Exemplars
@@ -240,11 +266,12 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       await attacherDestinations(allItems);
       setItems(allItems);
       setTotal(totalCount);
+      setTotalSelectable(totalCount + selectableCount);
       // Pages basees sur la couche la plus volumineuse (evite des pages vides en "Todas")
       setTotalPages(Math.max(1, Math.ceil(maxCount / PAGE_SIZE)));
     } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setLoading(false); }
-  }, [typeFilter, statusFilter, actionFilter, batchFilter, dSearch, page, sortBy, sortDir, t]);
+  }, [typeFilter, statusFilter, actionFilter, batchFilter, dSearch, page, sortBy, sortDir, t, isNetworkAdmin, user?.id]);
 
   useEffect(() => { loadQueue(); }, [loadQueue]);
 
@@ -265,7 +292,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       const all = [];
       const { data: bk } = await scopeToBatch(supabase.from('book_drafts').select('id, titulo, autor, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (bk || []).forEach(d => all.push({ ...d, _type: 'book', _label: d.titulo || t({ id: 'catalogacao.queue.noTitle' }), _sub: d.autor || '' }));
-      const { data: au } = await scopeToBatch(supabase.from('author_drafts').select('id, preferred_name, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
+      const { data: au } = await siennes(scopeToBatch(supabase.from('author_drafts').select('id, preferred_name, status, updated_at').eq('status', 'cancelled'), trashBatch), 'author').order('updated_at', { ascending: false }).limit(100);
       (au || []).forEach(d => all.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: '' }));
       const { data: ex } = await scopeToBatch(supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, target_library_id, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: '', _libId: d.target_library_id, _libEnregistree: true }));
@@ -274,7 +301,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       setTrash(all);
       setTrashTotal(await countTrash());
     } catch {} finally { setTrashLoading(false); }
-  }, [t, trashBatch]);
+  }, [t, trashBatch, isNetworkAdmin, user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { loadTrash(); }, [loadTrash]);
 
@@ -316,9 +343,22 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     return () => { vivant = false; };
   }, []);
 
+  // B29 (CAT-E18 2) : une autorité ne s'écrit (ne se jette, ne se supprime) que
+  // par qui l'a créée, ou par l'administration. La corbeille ne montre donc que
+  // les siennes : celles d'autrui n'y seraient ni restaurables ni supprimables.
+  function siennes(q, type) {
+    return type === 'author' && !isNetworkAdmin ? q.eq('created_by', user?.id) : q;
+  }
+
   // ── Selection helpers ───────────────────────────────────
   function toggleSelect(key) { setSelected(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; }); }
-  function selectAll() { if (selected.size === items.length) setSelected(new Set()); else setSelected(new Set(items.map(it => `${it._type}:${it.id}`))); }
+  // B29 : « tout sélectionner » laisse de côté les lignes en lecture seule
+  // (autorités d'autrui), comme la sélection de tout le filtre.
+  function selectAll() {
+    const modifiables = items.filter(it => !it._readOnly);
+    if (modifiables.length && modifiables.every(it => selected.has(`${it._type}:${it.id}`))) setSelected(new Set());
+    else setSelected(new Set(modifiables.map(it => `${it._type}:${it.id}`)));
+  }
   function toggleTrashSelect(key) { setTrashSelected(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; }); }
   function selectAllTrash() { if (trashSelected.size === trash.length) setTrashSelected(new Set()); else setTrashSelected(new Set(trash.map(it => `${it._type}:${it.id}`))); }
 
@@ -342,6 +382,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       }
       if (!typeFilter || typeFilter === 'author') {
         let q = supabase.from('author_drafts').select('id').in('status', statuses).limit(5000);
+        if (!isNetworkAdmin) q = q.eq('created_by', user?.id);   // B29 : les siennes
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
@@ -387,8 +428,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // a 100 par type : s'appuyer sur elle pour compter ou pour vider ne traite
   // qu'une tranche, en laissant croire que le reste a resiste.
   async function countTrash() {
-    const rs = await Promise.all(Object.values(TABLE_FOR).map(tb =>
-      scopeToBatch(supabase.from(tb).select('id', { count: 'exact', head: true }).eq('status', 'cancelled'), trashBatch)));
+    const rs = await Promise.all(Object.entries(TABLE_FOR).map(([type, tb]) =>
+      siennes(scopeToBatch(supabase.from(tb).select('id', { count: 'exact', head: true }).eq('status', 'cancelled'), trashBatch), type)));
     return rs.reduce((s, r) => s + (r.count || 0), 0);
   }
 
@@ -426,8 +467,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     if (!confirm(t({ id: 'catalogacao.queue.discardConfirm' }, { count: sel.length }))) return;
     setMsg({ text: '', kind: '' });
     const ok = await bulkByType(sel, (table, ids) =>
-      supabase.from(table).update({ status: 'cancelled' }).in('id', ids));
-    setMsg({ text: t({ id: 'catalogacao.queue.discardResult' }, { count: ok }), kind: 'ok' });
+      supabase.from(table).update({ status: 'cancelled' }).in('id', ids).select('id'),
+      (rows) => rows.length);
+    const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.someUnchanged' }) : '';
+    setMsg({ text: t({ id: 'catalogacao.queue.discardResult' }, { count: ok }) + note, kind: 'ok' });
     await loadQueue(); await loadTrash();
     onChanged?.();
   }
@@ -436,8 +479,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
     const ok = await bulkByType(sel, (table, ids) =>
-      supabase.from(table).update({ status: 'ready' }).in('id', ids));
-    setMsg({ text: t({ id: 'catalogacao.queue.markedReadyResult' }, { count: ok }), kind: 'ok' });
+      supabase.from(table).update({ status: 'ready' }).in('id', ids).select('id'),
+      (rows) => rows.length);
+    const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.someUnchanged' }) : '';
+    setMsg({ text: t({ id: 'catalogacao.queue.markedReadyResult' }, { count: ok }) + note, kind: 'ok' });
     await loadQueue();
     onChanged?.();
   }
@@ -446,11 +491,14 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     if (!batchId) return;
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
+    const erreurs = [];
     const ok = await bulkByType(sel, (table, ids) =>
       supabase.from(table).update({ batch_id: Number(batchId) }).in('id', ids).select('id, batch_id'),
-      (rows) => rows.filter((r) => String(r.batch_id) === String(batchId)).length);
-    const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.importedFollowRecord' }) : '';
-    setMsg({ text: t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok }) + note, kind: 'ok' });
+      (rows) => rows.filter((r) => String(r.batch_id) === String(batchId)).length,
+      erreurs);
+    const bilan = t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok });
+    if (erreurs.length) setMsg({ text: `${localizeError(erreurs[0], t)} ${bilan}`, kind: 'error' });
+    else setMsg({ text: bilan + (ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.someUnchanged' }) : ''), kind: 'ok' });
     await loadQueue();
     onChanged?.();
   }
@@ -462,7 +510,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     const ok = await bulkByType(sel, (table, ids) =>
       supabase.from(table).update({ status: 'draft' }).in('id', ids).select('id, status'),
       (rows) => rows.filter((r) => r.status !== 'cancelled').length);
-    const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.importedFollowRecord' }) : '';
+    const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.someUnchanged' }) : '';
     setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }) + note, kind: 'ok' });
     await loadQueue(); await loadTrash();
     onChanged?.();
@@ -470,7 +518,13 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
 
   async function deleteTrashItem(type, id) {
     if (!confirm(t({ id: 'catalogacao.queue.deleteConfirm' }))) return;
-    try { await supabase.from(tableFor(type)).delete().eq('id', id); } catch {}
+    setMsg({ text: '', kind: '' });
+    try {
+      const { data, error } = await supabase.from(tableFor(type)).delete().eq('id', id).select('id');
+      if (error) throw error;
+      // B29 : la base ne supprime que dans les bibliothèques qu'on coordonne.
+      if (!data || data.length === 0) setMsg({ text: t({ id: 'catalogacao.queue.deleteNothing' }), kind: 'error' });
+    } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     await loadTrash();
     // Le decompte de brouillons du lot depend de cette ligne : sans cet appel,
     // l'onglet « Lots » gardait son ancien compte jusqu'a un rechargement.
@@ -493,14 +547,20 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       : t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: total });
     if (!confirm(question)) return;
     setMsg({ text: '', kind: '' });
-    for (const table of Object.values(TABLE_FOR)) {
-      const { error } = await scopeToBatch(supabase.from(table).delete().eq('status', 'cancelled'), trashBatch);
-      if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); break; }
+    let echec = null;
+    for (const [type, table] of Object.entries(TABLE_FOR)) {
+      const { error } = await siennes(scopeToBatch(supabase.from(table).delete().eq('status', 'cancelled'), trashBatch), type);
+      if (error) { echec = error; break; }
     }
     // Le compte annonce est ce que la base a REELLEMENT perdu, pas ce qu'on
-    // croyait lui demander.
+    // croyait lui demander. B29 : ce qui reste (brouillons d'une bibliothèque
+    // qu'on ne coordonne pas) est dit, pas tu ; une erreur, elle, est dite
+    // telle quelle (elle n'est pas « la coordination d'une autre bibliothèque »).
     const reste = await countTrash();
-    setMsg({ text: t({ id: 'catalogacao.queue.emptyTrashResult' }, { count: total - reste }), kind: 'ok' });
+    const bilan = t({ id: 'catalogacao.queue.emptyTrashResult' }, { count: total - reste });
+    if (echec) setMsg({ text: `${localizeError(echec, t)} ${bilan}`, kind: 'error' });
+    else if (reste > 0) setMsg({ text: `${bilan} ${t({ id: 'catalogacao.queue.emptyTrashSomeKept' }, { count: reste })}`, kind: 'error' });
+    else setMsg({ text: bilan, kind: 'ok' });
     await loadTrash();
     onChanged?.();
   }
@@ -617,12 +677,17 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       {/* ── Batch actions bar ────────────────────────── */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 10, padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
         <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={selectAll}>
-          {selected.size === items.length && items.length > 0 ? t({ id: 'catalogacao.queue.deselectAll' }) : t({ id: 'catalogacao.queue.selectAllCount' }, { count: items.length })}
+          {(() => {
+            const modifiables = items.filter(it => !it._readOnly);
+            return modifiables.length > 0 && modifiables.every(it => selected.has(`${it._type}:${it.id}`))
+              ? t({ id: 'catalogacao.queue.deselectAll' })
+              : t({ id: 'catalogacao.queue.selectAllCount' }, { count: modifiables.length });
+          })()}
         </button>
-        {total > items.length && (
+        {totalSelectable > items.filter(it => !it._readOnly).length && (
           <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-            onClick={selectAllInFilter} disabled={loading || selected.size === total}>
-            {selected.size >= total ? t({ id: 'catalogacao.queue.selectedAllFilter' }, { count: total }) : t({ id: 'catalogacao.queue.selectAllFilter' }, { count: total })}
+            onClick={selectAllInFilter} disabled={loading || selected.size === totalSelectable}>
+            {selected.size >= totalSelectable ? t({ id: 'catalogacao.queue.selectedAllFilter' }, { count: totalSelectable }) : t({ id: 'catalogacao.queue.selectAllFilter' }, { count: totalSelectable })}
           </button>
         )}
         <span style={{ fontSize: '.75rem', color: selected.size > items.length ? '#4ade80' : 'var(--brand-muted, #aaa)', fontWeight: selected.size > items.length ? 700 : 400 }}>
@@ -683,7 +748,9 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
               borderBottom: '1px solid rgba(255,255,255,.04)',
             }}>
               <span style={{ width: COLW.check, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(key)} />
+                <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(key)}
+                  disabled={!!it._readOnly && !isSelected}
+                  title={it._readOnly ? t({ id: 'catalogacao.queue.authorOtherCreator' }) : undefined} />
               </span>
               <span className={`cat-pill ${it._type === 'book' ? 'info' : it._type === 'author' ? 'warn' : 'ok'}`}
                 style={{ fontSize: '.6rem', flexShrink: 0, width: COLW.type, textAlign: 'center' }}>

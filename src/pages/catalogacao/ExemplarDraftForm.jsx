@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLibrary } from '@/contexts/LibraryContext';
+import { useStaffLibraries, bibliothequesProposables } from '@/lib/useStaffLibraries';
 import { parseShelfLocation, formatShelfLocation, emptyShelfLocation } from '@/lib/shelfLocation';
 
 // Localisation : src/lib/shelfLocation.js (la cote importée brute est gardée, H19).
@@ -47,6 +49,14 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   // #UX-CAT (10/06) — aide à la saisie : biblio identifiée intuitivement (slug /
   // nom / nom+ville) → affiche le dernier tombo de sa série au-dessus du Tombo.
   const [libOptions, setLibOptions] = useState([]);
+  // B29 (CAT-E18) : un exemplaire se range dans une bibliothèque où l'on est
+  // staff (l'administration : toutes) — la base refuserait les autres.
+  const { isNetworkAdmin } = useLibrary();
+  // Tant que la liste n'est pas connue (chargement, échec, écran publié avant
+  // la migration), on ne filtre ni n'avertit : « staff nulle part » serait faux.
+  const { staffLibraryIds, loaded: staffConnu } = useStaffLibraries();
+  const libChoix = (isNetworkAdmin || !staffConnu) ? libOptions : bibliothequesProposables(libOptions, { isNetworkAdmin, staffLibraryIds });
+  const peutReattribuer = isNetworkAdmin || staffLibraryIds.length >= 2;
   const [lastTombo, setLastTombo] = useState(null);
   useEffect(() => {
     let cancelled = false;
@@ -58,14 +68,20 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     })();
     return () => { cancelled = true; };
   }, []);
+  // B29 : une bibliothèque reconnue dans « Biblioteca » mais où l'on n'est pas
+  // staff — l'exemplaire n'y sera pas rangé ; on le dit au lieu de l'ignorer.
+  const [libHorsPortee, setLibHorsPortee] = useState(null);
   useEffect(() => {
     const q = String(loc.library || '').trim().toLowerCase();
-    const lib = q ? libOptions.find((l) => {
+    const reconnue = (l) => {
       const slug = String(l.slug || '').toLowerCase();
       const sn = String(l.short_name || '').toLowerCase();
       const nm = String(l.name || '').toLowerCase();
       return (slug && q.includes(slug)) || (sn && q.includes(sn)) || (nm && q.includes(nm)) || (nm && nm.includes(q) && q.length >= 3);
-    }) : null;
+    };
+    const lib = q ? libChoix.find(reconnue) : null;
+    const autre = q && !lib && staffConnu ? libOptions.find(reconnue) : null;
+    setLibHorsPortee(autre ? (autre.short_name || autre.name) : null);
     if (!lib) { setLastTombo(null); return; }
     // #fix-attrib (17/07) — la biblio identifiee ici servait deja a suggerer le
     // prochain tombo, mais n'etait jamais ecrite dans target_library_id : un
@@ -99,7 +115,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       } catch { /* biblio sans tombo_pattern -> saisie manuelle */ }
     })();
     return () => { cancelled = true; };
-  }, [loc.library, libOptions]);
+  }, [loc.library, libOptions, staffLibraryIds.join(','), isNetworkAdmin, staffConnu]); // eslint-disable-line react-hooks/exhaustive-deps
   const [label, setLabel] = useState({ title: '', author: '', cdd: '', note: '' });
   const [parentBook, setParentBook] = useState(null); // resolved book from bib_ref
   // #fix-ux (18/07) — distingue "pas encore verifie" de "verifie et introuvable" :
@@ -563,10 +579,15 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
               <input type="text" list="cat-lib-options" value={loc.library} onChange={e => setL('library', e.target.value)}
                 placeholder="BLMF - Belém do Pará" style={fs} />
               <datalist id="cat-lib-options">
-                {libOptions.map(l => (
+                {libChoix.map(l => (
                   <option key={l.id} value={`${l.short_name || l.name}${l.city ? ' - ' + l.city : ''}`} />
                 ))}
               </datalist>
+              {libHorsPortee && (
+                <div data-testid="exemplar-library-not-yours" role="alert" style={{ fontSize: '.7rem', color: 'var(--brand-warn, #e0a44a)', marginTop: 3 }}>
+                  {t({ id: 'catalogacao.exemplar.libraryNotYours' }, { library: libHorsPortee })}
+                </div>
+              )}
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.tombo' })}</label>
@@ -622,7 +643,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         {/* ═══════════════════════════════════════════════ */}
         {/* Reattribuer a outra biblioteca (exemplar ja publicado apenas) */}
         {/* ═══════════════════════════════════════════════ */}
-        {f('published_exemplar_id') && (
+        {f('published_exemplar_id') && peutReattribuer && (
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(180,83,9,.06)', border: '1px solid rgba(180,83,9,.2)', marginBottom: 14 }}>
             <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 6 }}>{t({ id: 'catalogacao.exemplar.reassignStep' })}</div>
             <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 8 }}>
@@ -640,7 +661,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
                 <label style={ls}>{t({ id: 'catalogacao.exemplar.reassignNewLibrary' })}</label>
                 <select value={reassignTarget} onChange={e => setReassignTarget(e.target.value)} style={fs}>
                   <option value="">—</option>
-                  {libOptions.filter(l => l.id !== f('target_library_id')).map(l => (
+                  {libChoix.filter(l => l.id !== f('target_library_id')).map(l => (
                     <option key={l.id} value={l.id}>{`${l.short_name || l.name}${l.city ? ' - ' + l.city : ''}`}</option>
                   ))}
                 </select>

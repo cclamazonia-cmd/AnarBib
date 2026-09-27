@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
+import { useStaffLibraries, bibliothequesProposables } from '@/lib/useStaffLibraries';
 import SerialAuthorityPicker from './SerialAuthorityPicker';
 import AudioSegmentsBlock from './AudioSegmentsBlock';
 import WorkToolsBlock from './WorkToolsBlock';
@@ -247,6 +248,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const { isNetworkAdmin, libraryId, effectiveRole } = useLibrary();
+  // B29 (CAT-E18) : un brouillon se range dans une bibliothèque où l'on est staff.
+  const { staffLibraryIds, loaded: staffConnu } = useStaffLibraries();
   // Paquet DOUBLONS P4 (21/08/2026) : fusionner et ecarter sont reserves a la
   // coordination. Le poste de catalogage garde « Meme oeuvre » et le signalement.
   const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
@@ -617,11 +620,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }, []);
 
   // Auto-populate owner/holder with active library on new draft
+  // B29 (CAT-E18) : seulement une bibliothèque où l'on est staff (la
+  // bibliothèque active peut être celle d'une adhésion de lectrice : la base
+  // refuserait le brouillon). Sinon, sa seule bibliothèque de staff ; plusieurs
+  // → à choisir (la base pose la principale si on n'en choisit aucune).
   useEffect(() => {
-    if (!libraryId || !networkLibraries.length) return;
+    if (!networkLibraries.length) return;
     if (f('action') !== 'create' && f('action') !== '') return;
     if (f('owner_library_id')) return; // already set
-    const lib = networkLibraries.find(l => l.id === libraryId);
+    if (!isNetworkAdmin && !staffConnu) return; // B29 : attendre la liste (l'effet se rejoue)
+    const cible = libraryId && (isNetworkAdmin || staffLibraryIds.includes(libraryId))
+      ? libraryId
+      : (!isNetworkAdmin && staffLibraryIds.length === 1 ? staffLibraryIds[0] : null);
+    const lib = cible ? networkLibraries.find(l => l.id === cible) : null;
     if (lib) {
       setMany({
         owner_library_id: lib.id,
@@ -630,7 +641,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         holder_library: lib.name,
       });
     }
-  }, [libraryId, networkLibraries.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [libraryId, networkLibraries.length, isNetworkAdmin, staffLibraryIds.join(','), staffConnu]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Reset ──────────────────────────────────────────────
   function resetForm() {
@@ -2031,7 +2042,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         zine_format: isZine ? (f('zine_format') || null) : null,
         // Subjects (transversal)
         subjects: f('subjects') || null,
-        created_by: user?.id || null,
         updated_by: user?.id || null,
       };
 
@@ -2277,7 +2287,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // (Le sélecteur de titre de revue n'est plus déclaré ici via `sectionExtras` :
   // voir le montage en ligne, en tête de la zone Periódico, et le commentaire
   // qui l'accompagne.)
-  const ctx = { f, set, t, networkLibraries };
+  // B29 : la bibliothèque PROPRIÉTAIRE ne se choisit que parmi les siennes
+  // (l'administration : toutes) ; la détentrice reste libre.
+  const ownerLibraries = staffConnu
+    ? bibliothequesProposables(networkLibraries, { isNetworkAdmin, staffLibraryIds, garder: f('owner_library_id') })
+    : networkLibraries;   // B29 : liste inconnue — la base tranchera
+  const ctx = { f, set, t, networkLibraries, ownerLibraries };
   const rrf = (id) => renderRegistryField(id, ctx, catalogTier, materialType);
 
   // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────

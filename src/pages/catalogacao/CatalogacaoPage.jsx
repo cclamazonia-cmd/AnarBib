@@ -722,6 +722,8 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
       // (serie de tombos, activation) sont deux responsabilites.
       if (warnings.includes('library_without_tombo_pattern')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.tombo' }));
       if (warnings.includes('library_inactive')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.inactive' }));
+      // B29 : les exemplaires saisis d'une autre bibliothèque sortent du lot.
+      if (warnings.includes('items_detached')) parts.push(t({ id: 'catalogacao.batch.reassign.warn.itemsDetached' }, { count: Number(data?.items_detached ?? 0) }));
       setMsg({ text: parts.join(' '), kind: 'ok' });
       setReassign(null);
       await loadOwners();
@@ -811,10 +813,13 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   async function closeBatch(id) {
     if (!confirm(t({id:'catalogacao.closeBatchConfirm'}))) return;
     try {
-      const { error } = await supabase.from('catalog_batches')
+      const { data, error } = await supabase.from('catalog_batches')
         .update({ status: 'closed' })
-        .eq('id', id);
+        .eq('id', id).select('id');
       if (error) throw error;
+      // B29 (CAT-E18) : un lot qui porte des brouillons d'autres bibliothèques
+      // ne se ferme que par l'administration — la base filtre, on le dit.
+      if (!data?.length) alert(t({id:'catalogacao.batchUpdateNothing'}));
       onRefresh();
     } catch (err) {
       alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
@@ -836,10 +841,11 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   async function archiveBatch(id) {
     if (!confirm(t({id:'catalogacao.archiveBatchConfirm'}))) return;
     try {
-      const { error } = await supabase.from('catalog_batches')
+      const { data, error } = await supabase.from('catalog_batches')
         .update({ status: 'archived' })
-        .eq('id', id);
+        .eq('id', id).select('id');
       if (error) throw error;
+      if (!data?.length) alert(t({id:'catalogacao.batchUpdateNothing'}));   // B29
       onRefresh();
     } catch (err) {
       alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
@@ -876,22 +882,47 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
         alert(t({id:'catalogacao.batchPublishedArchiveInstead'},{count: publies}));
         return;
       }
+      // B29 (CAT-E18) : les comptes ci-dessus ne voient que NOS brouillons. Un
+      // lot qui en porte d'autres bibliothèques ne se supprime pas — le savoir
+      // AVANT d'avoir vidé sa corbeille pour rien.
+      // Et le supprimer revient à la coordination DE ce lot.
+      const [{ data: aMoi, error: eOwn }, { data: coord, error: eCoord }] = await Promise.all([
+        supabase.rpc('fn_caller_owns_batch', { p_batch_id: Number(id) }),
+        supabase.rpc('fn_caller_coordinates_batch', { p_batch_id: Number(id) }),
+      ]);
+      // (PGRST202 : fonction pas encore là — l'écran est publié avant la
+      // migration ; la base, alors, n'applique pas encore B29 non plus.)
+      if (eOwn && eOwn.code !== 'PGRST202') throw eOwn;
+      if (eCoord && eCoord.code !== 'PGRST202') throw eCoord;
+      if (aMoi === false || coord === false) { alert(t({id:'catalogacao.batchDeleteNothing'})); return; }
       if (jetes > 0 && !confirm(t({id:'catalogacao.batchTrashedWillBeDeleted'},{count: jetes}))) return;
 
       // Une requete par table, pas une par ligne : PostgREST filtre le DELETE
       // cote serveur, sous exactement les memes policies que la suppression a
-      // l'unite depuis la corbeille.
+      // l'unite depuis la corbeille. B29 : ce qui RESTE a la corbeille du lot
+      // (jetes d'une autre bibliotheque ou d'une autre personne) est recompte
+      // apres coup — une somme des lignes supprimees manquerait les exemplaires
+      // importes, partis en cascade avec leur notice.
+      let restants = 0;
       if (jetes > 0) {
         for (const table of BATCH_DRAFT_TABLES) {
           const { error } = await supabase.from(table).delete()
             .eq('batch_id', id).eq('status', 'cancelled');
           if (error) throw error;
         }
+        const { data: c2 } = await supabase.from('v_catalog_batch_draft_counts')
+          .select('corbeille').eq('batch_id', id).maybeSingle();
+        restants = Number(c2?.corbeille ?? 0);
       }
-      const { error } = await supabase.from('catalog_batches')
+      const { data: suppr, error } = await supabase.from('catalog_batches')
         .delete()
-        .eq('id', id);
+        .eq('id', id).select('id');
       if (error) throw error;
+      // B29 (CAT-E18) : les comptes ci-dessus ne voient que nos brouillons ; un
+      // lot qui en porte d'autres bibliothèques (en cours ou publiés), ou une
+      // personne qui ne coordonne pas, et la base ne supprime rien — le dire.
+      if (!suppr?.length) alert(t({id:'catalogacao.batchDeleteNothing'}));
+      else if (restants > 0) alert(t({id:'catalogacao.batchTrashedLeft'},{count: restants}));
       onRefresh();
     } catch (err) {
       alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));

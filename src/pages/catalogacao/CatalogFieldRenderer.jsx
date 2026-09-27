@@ -111,7 +111,8 @@ export function renderField(field, ctx) {
   if (type === 'library_select') {
     // field.id is 'owner_library' or 'holder_library'; paired uuid column is '<id>_id'
     const idKey = field.id + '_id';
-    const libs = ctx.networkLibraries || [];
+    // B29 : la propriétaire parmi les bibliothèques de la personne (ctx.ownerLibraries).
+    const libs = (field.id === 'owner_library' && ctx.ownerLibraries) ? ctx.ownerLibraries : (ctx.networkLibraries || []);
     return (
       <div className={className} key={field.id}>
         <label className="ab-field__label">{label}</label>
