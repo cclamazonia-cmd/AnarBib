@@ -48,3 +48,7 @@ Une matière **existante** par catégorie (THES-4 : aucune matière créée) ; a
 ## Hors de cette fiche
 
 Les 1 452 titres automatiques « corrige-moi » se relisent dans la fiche de l'œuvre, à son ouverture (critère 2 de C11), pas en lot.
+
+## Clôture (27/09, après-midi)
+
+Xavier a fusionné le Peirats (1290 gardée) et tranché la troisième notice *Living my Life*, apparue avec le renommage de l'œuvre réunie. **Mesuré en production : « Volumes » 0, « Œuvres scindées » 0, « À décider » 0.** C11 clos ; le critère des titres automatiques (1 676 sur 187 œuvres) reste une pratique continue par la file des titres de l'Atelier, décision de Xavier.
