@@ -12,7 +12,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { writeCoverThumb, removeCoverThumb } from '@/lib/coverThumbs';
-import { messageRechercheCapas, accordEdition } from '@/lib/coverSources';
+import { messageRechercheCapas, accordEdition, parIsbn, etiquetteCandidate, ordonnerCandidates } from '@/lib/coverSources';
 import { volumesDifferents } from '@/lib/volumes';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
@@ -732,10 +732,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // la vignette : la candidate n'est plus présentée comme certaine. Vu le 27/09 :
   // une notice Ramparts Press 1971 portait l'ISBN de l'édition AK Press de 2004.
   const accordsCapas = coverCandidates.map((c) => accordEdition(c, { ano: f('ano'), editora: f('editora'), volume: f('volume') }));
-  const ecartCapas = accordsCapas.find((a) => a?.statut === 'ecart') || null;
+  // Les deux avertissements parlent de l'ISBN : on ne les tire que des candidates
+  // trouvées par l'ISBN ; celles du titre ont leur étiquette, sous la vignette.
+  const ecartCapas = accordsCapas.find((a, i) => parIsbn(coverCandidates[i]) && a?.statut === 'ecart') || null;
   // Notice d'un volume : l'ISBN d'un ensemble peut mener à la couverture d'un autre volume.
-  const volumeCapas = ecartCapas ? null : (accordsCapas.find((a) => a?.statut === 'volume') || null);
-  const aVerifier = (a) => a?.statut === 'ecart' || a?.statut === 'volume';
+  const volumeCapas = ecartCapas ? null : (accordsCapas.find((a, i) => parIsbn(coverCandidates[i]) && a?.statut === 'volume') || null);
+  const etiquettesCapas = coverCandidates.map((c, i) => etiquetteCandidate(c, accordsCapas[i]));
 
   // ═══════════════════════════════════════════════════════
   // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, DNB, ICCU, LoC, OL, Wikidata + BN Brasil)
@@ -1085,11 +1087,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setCoverCandidates([]);
     try {
       const { data, error } = await supabase.functions.invoke('cover_lookup', {
-        body: { action: 'search', isbn: isbn || null, title: title || null, author: author || null, url: url || null },
+        // idioma : la recherche par titre fait passer devant l'édition dans la langue de la notice.
+        body: { action: 'search', isbn: isbn || null, title: title || null, author: author || null, idioma: f('idioma') || null, url: url || null },
       });
       if (error && !data) throw error;
       if (!data?.ok) throw new Error(data?.error || 'lookup failed');
-      setCoverCandidates(data.candidates || []);
+      // ISBN d'abord, puis la plus probable des éditions trouvées par le titre.
+      setCoverCandidates(ordonnerCandidates(data.candidates, { ano: f('ano'), editora: f('editora'), volume: f('volume') }));
       // Le bilan des sources dit ce qui a ÉCHOUÉ : une voie en panne ne doit
       // plus passer pour un livre introuvable (cf. lib/coverSources.js).
       const avis = messageRechercheCapas(data);
@@ -2736,7 +2740,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   {coverCandidates.map((c, i) => (
                     <button key={i} type="button" title={[c.label, c.source, c.license].filter(Boolean).join(' · ')}
                       onClick={() => selectCoverCandidate(c)} disabled={!!coverStoring}
-                      style={{ padding: 0, border: aVerifier(accordsCapas[i]) ? '1px solid #fbbf24' : '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
+                      style={{ padding: 0, border: etiquettesCapas[i]?.ton === 'attention' ? '1px solid #fbbf24' : '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
                       {/* Aperçu rapatrié par l'EF (data: URI), jamais l'URL du
                           tiers : afficher `c.thumbnailUrl` ferait contacter
                           Open Library ou Google par le navigateur qui catalogue,
@@ -2745,13 +2749,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       {c.thumbnailData
                         ? <img src={c.thumbnailData} alt={c.source} style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: '6px 6px 0 0', display: 'block' }} />
                         : <div aria-hidden="true" style={{ width: '100%', height: 96, borderRadius: '6px 6px 0 0', background: 'rgba(255,255,255,.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', opacity: .35 }}>📖</div>}
-                      {/* Candidate trouvée par ISBN : son édition concorde-t-elle
-                          avec la notice ? Rien pour une candidate trouvée par titre. */}
-                      {accordsCapas[i] && (
+                      {/* L'édition de la candidate concorde-t-elle avec la notice ?
+                          Par l'ISBN comme par le titre ; « Autre édition » pour une
+                          couverture d'œuvre (lib/coverSources.js, etiquetteCandidate). */}
+                      {etiquettesCapas[i] && (
                         <div style={{ fontSize: '.55rem', fontWeight: 700, padding: '1px 3px 0', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                          color: aVerifier(accordsCapas[i]) ? '#fbbf24' : accordsCapas[i].statut === 'concordant' ? '#4ade80' : 'var(--brand-muted, #aaa)' }}>
-                          {aVerifier(accordsCapas[i]) ? t({ id: 'catalogacao.ui.coverIsbnVerifier' })
-                            : accordsCapas[i].statut === 'concordant' ? t({ id: 'catalogacao.ui.coverIsbnConcordant' })
+                          color: etiquettesCapas[i].ton === 'attention' ? '#fbbf24' : etiquettesCapas[i].ton === 'ok' ? '#4ade80' : 'var(--brand-muted, #aaa)' }}>
+                          {etiquettesCapas[i].code === 'oeuvre' ? t({ id: 'catalogacao.ui.coverOeuvre' })
+                            : etiquettesCapas[i].code === 'verifier' ? t({ id: 'catalogacao.ui.coverIsbnVerifier' })
+                            : etiquettesCapas[i].code === 'isbnConcordant' ? t({ id: 'catalogacao.ui.coverIsbnConcordant' })
+                            : etiquettesCapas[i].code === 'titreProbable' ? t({ id: 'catalogacao.ui.coverTitreProbable' })
+                            : etiquettesCapas[i].code === 'titreSeul' ? t({ id: 'catalogacao.ui.coverTitreSeul' })
                             : t({ id: 'catalogacao.ui.coverIsbnSeul' })}
                         </div>
                       )}

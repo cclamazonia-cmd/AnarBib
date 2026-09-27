@@ -6845,5 +6845,8 @@
   "auth.loginInvalid": "Incorrect email, public ID or password.",
   "auth.loginRateLimited": "Too many attempts. Try again in an hour.",
   "auth.loginServerError": "Server error. Try again in a moment.",
-  "catalogacao.ui.coverIsbnVolume": "Record for volume {volume}: the ISBN of a multi-volume work often covers every volume. Check that this cover is really that of volume {volume}."
+  "catalogacao.ui.coverIsbnVolume": "Record for volume {volume}: the ISBN of a multi-volume work often covers every volume. Check that this cover is really that of volume {volume}.",
+  "catalogacao.ui.coverTitreProbable": "Likely edition",
+  "catalogacao.ui.coverTitreSeul": "By title",
+  "catalogacao.ui.coverOeuvre": "Other edition"
 }

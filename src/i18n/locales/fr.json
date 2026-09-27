@@ -6845,5 +6845,8 @@
   "auth.loginInvalid": "E-mail, ID public ou mot de passe incorrect.",
   "auth.loginRateLimited": "Trop de tentatives. Réessaie dans une heure.",
   "auth.loginServerError": "Erreur serveur. Réessaie dans un instant.",
-  "catalogacao.ui.coverIsbnVolume": "Notice du volume {volume} : l'ISBN d'un ouvrage en plusieurs volumes vaut souvent pour tous. Vérifie que cette couverture est bien celle du volume {volume}."
+  "catalogacao.ui.coverIsbnVolume": "Notice du volume {volume} : l'ISBN d'un ouvrage en plusieurs volumes vaut souvent pour tous. Vérifie que cette couverture est bien celle du volume {volume}.",
+  "catalogacao.ui.coverTitreProbable": "Édition probable",
+  "catalogacao.ui.coverTitreSeul": "Par le titre",
+  "catalogacao.ui.coverOeuvre": "Autre édition"
 }

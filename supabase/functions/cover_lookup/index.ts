@@ -24,7 +24,9 @@
 //
 //  CONTRAT
 //  -------
-//    POST { isbn?, title?, author?, url?, maxRecords? }
+//    POST { isbn?, title?, author?, idioma?, url?, maxRecords? }
+//    (idioma : la langue de la notice ; la recherche par titre privilegie
+//    l'edition dans cette langue)
 //    -> { ok, total,
 //         candidates: [{ thumbnailUrl, thumbnailData, fullUrl, source,
 //                        license, label? }],
@@ -48,6 +50,7 @@ import {
   fromOpenLibraryIsbn,
   fromOpenLibrarySearch,
   isbnValide,
+  langueRecherche,
   normalizeIsbn,
 } from '../_shared/capas/sources.ts';
 
@@ -141,7 +144,7 @@ async function fromOgImage(url: string, authHeader: string): Promise<Candidate[]
   const data = await res.json();
   const img = data?.image;
   if (!img) return [];
-  return [{ thumbnailUrl: img, fullUrl: img, source: 'og_image', license: null }];
+  return [{ thumbnailUrl: img, fullUrl: img, source: 'og_image', license: null, voie: 'url' }];
 }
 
 interface SourceSummary {
@@ -260,8 +263,10 @@ async function handleSearch(body: Record<string, unknown>, authHeader: string) {
   //    ISBN inconnu des sources restait sans aucune candidate. En sequence, et
   //    non en parallele : on ne sollicite pas pour rien des communs associatifs.
   const exactes = parIsbnOl.candidates.length + parIsbnInv.candidates.length;
+  // La langue de la notice fait passer devant l'édition dans cette langue.
+  const langue = langueRecherche(String(body.idioma || ''));
   const parTitre = await runSource('openlibrary_search', 'Open Library (titre)',
-    openlibrary && !!title && exactes === 0, () => fromOpenLibrarySearch(title, author));
+    openlibrary && !!title && exactes === 0, () => fromOpenLibrarySearch(title, author, langue));
 
   // L'exact d'abord, donc en tete de galerie.
   const settled = [parIsbnOl, parIsbnInv, parTitre, parUrl];

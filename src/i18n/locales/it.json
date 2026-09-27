@@ -6845,5 +6845,8 @@
   "auth.loginInvalid": "Email, ID pubblico o password errati.",
   "auth.loginRateLimited": "Troppi tentativi. Riprova tra un’ora.",
   "auth.loginServerError": "Errore del server. Riprova tra un momento.",
-  "catalogacao.ui.coverIsbnVolume": "Scheda del volume {volume}: l'ISBN di un'opera in più volumi vale spesso per tutti. Verifichi che questa copertina sia proprio quella del volume {volume}."
+  "catalogacao.ui.coverIsbnVolume": "Scheda del volume {volume}: l'ISBN di un'opera in più volumi vale spesso per tutti. Verifichi che questa copertina sia proprio quella del volume {volume}.",
+  "catalogacao.ui.coverTitreProbable": "Edizione probabile",
+  "catalogacao.ui.coverTitreSeul": "Dal titolo",
+  "catalogacao.ui.coverOeuvre": "Altra edizione"
 }

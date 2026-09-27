@@ -97,6 +97,51 @@ export function designationEdition(editeurs, annee) {
   return [(editeurs || []).filter(Boolean).join(', '), annee].filter(Boolean).join(', ');
 }
 
+/** Une candidate trouvée par l'ISBN (les anciennes réponses n'avaient pas `voie`). */
+export function parIsbn(candidate) {
+  return candidate?.voie === 'isbn' || (!!candidate?.edition && !candidate?.voie);
+}
+
+/**
+ * L'étiquette sous la vignette (27/09/2026, recherche par titre au niveau de
+ * l'édition) : un code, que l'écran traduit, et un ton.
+ *   isbnConcordant · isbnSeul — trouvée par l'ISBN, édition concordante / rien à comparer
+ *   titreProbable · titreSeul — trouvée par le titre, même éditeur et année / rien à comparer
+ *   verifier — écart d'édition, ou notice d'un volume
+ *   oeuvre   — couverture de l'ŒUVRE, faute de couverture pour l'édition : une autre édition
+ * @returns {null | { code: string, ton: 'ok'|'attention'|'neutre' }}
+ */
+export function etiquetteCandidate(candidate, accord) {
+  if (candidate?.niveau === 'oeuvre') return { code: 'oeuvre', ton: 'attention' };
+  if (!accord) return null;
+  const titre = candidate?.voie === 'titre';
+  if (accord.statut === 'ecart' || accord.statut === 'volume') return { code: 'verifier', ton: 'attention' };
+  if (accord.statut === 'concordant') return { code: titre ? 'titreProbable' : 'isbnConcordant', ton: 'ok' };
+  return { code: titre ? 'titreSeul' : 'isbnSeul', ton: 'neutre' };
+}
+
+const RANG_ACCORD = { concordant: 0, inconnu: 1, volume: 2, ecart: 3 };
+
+/**
+ * L'ordre de la galerie : l'ISBN d'abord (dans l'ordre du serveur), puis les
+ * éditions trouvées par le titre — la plus probable devant —, puis les
+ * couvertures d'œuvre, puis og:image (souvent le logo du site).
+ */
+export function ordonnerCandidates(candidates, notice) {
+  const rang = (c, i) => {
+    if (c?.voie === 'titre') {
+      if (c.niveau === 'oeuvre') return [2, 0, i];
+      return [1, RANG_ACCORD[accordEdition(c, notice)?.statut] ?? 1, i];
+    }
+    if (c?.voie === 'url') return [3, 0, i];
+    return [0, 0, i];
+  };
+  return (Array.isArray(candidates) ? candidates : [])
+    .map((c, i) => ({ c, r: rang(c, i) }))
+    .sort((x, y) => x.r[0] - y.r[0] || x.r[1] - y.r[1] || x.r[2] - y.r[2])
+    .map((x) => x.c);
+}
+
 /**
  * Confronte l'édition désignée par l'ISBN d'une candidate à la notice.
  * @returns {null | { statut: 'concordant'|'ecart'|'volume'|'inconnu', ecartAnnee: boolean,

@@ -6845,5 +6845,8 @@
   "auth.loginInvalid": "Λάθος email, δημόσιο αναγνωριστικό ή κωδικός.",
   "auth.loginRateLimited": "Πάρα πολλές προσπάθειες. Δοκίμασε ξανά σε μία ώρα.",
   "auth.loginServerError": "Σφάλμα διακομιστή. Δοκίμασε ξανά σε λίγο.",
-  "catalogacao.ui.coverIsbnVolume": "Εγγραφή του τόμου {volume}: το ISBN ενός έργου σε πολλούς τόμους ισχύει συχνά για όλους. Έλεγξε ότι αυτό το εξώφυλλο είναι πράγματι του τόμου {volume}."
+  "catalogacao.ui.coverIsbnVolume": "Εγγραφή του τόμου {volume}: το ISBN ενός έργου σε πολλούς τόμους ισχύει συχνά για όλους. Έλεγξε ότι αυτό το εξώφυλλο είναι πράγματι του τόμου {volume}.",
+  "catalogacao.ui.coverTitreProbable": "Πιθανή έκδοση",
+  "catalogacao.ui.coverTitreSeul": "Από τον τίτλο",
+  "catalogacao.ui.coverOeuvre": "Άλλη έκδοση"
 }

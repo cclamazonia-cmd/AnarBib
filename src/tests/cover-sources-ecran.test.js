@@ -19,7 +19,10 @@
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { sourcesEnPanne, messageRechercheCapas, accordEdition, motsEditeur, anneeDe } from '../lib/coverSources.js';
+import {
+  sourcesEnPanne, messageRechercheCapas, accordEdition, motsEditeur, anneeDe,
+  parIsbn, etiquetteCandidate, ordonnerCandidates,
+} from '../lib/coverSources.js';
 import { volumesDifferents } from '../lib/volumes.js';
 
 const FORM = readFileSync(new URL('../pages/catalogacao/BookDraftForm.jsx', import.meta.url), 'utf8');
@@ -122,6 +125,44 @@ describe('accordEdition — l’édition que désigne l’ISBN, confrontée à l
     expect(anneeDe('0200')).toBeNull();
     expect([...motsEditeur("Éditions L'Harmattan")]).toEqual(['harmattan']);
     expect([...motsEditeur('L&PM Editores')]).toEqual(['pm']);
+  });
+});
+
+describe('recherche par titre : l’édition, pas l’œuvre', () => {
+  // Notice Torres Agüero, 1996 (« Los gallegos anarquistas en la Argentina »).
+  const notice = { ano: '1996', editora: 'Torres Agüero Editor', volume: '' };
+  const titreBon = { voie: 'titre', niveau: 'edition', label: 'bon', edition: { annee: '1996', editeurs: ['Torres Agüero Editor'] } };
+  const titreEcart = { voie: 'titre', niveau: 'edition', label: 'écart', edition: { annee: '2011', editeurs: ['RBA Libros'] } };
+  const titreSans = { voie: 'titre', niveau: 'edition', label: 'sans', edition: { annee: null, editeurs: [] } };
+  const oeuvre = { voie: 'titre', niveau: 'oeuvre', label: 'œuvre' };
+  const isbn = { voie: 'isbn', label: 'isbn', edition: { annee: '1996', editeurs: ['Torres Agüero'] } };
+  const url = { voie: 'url', label: 'og' };
+
+  it('étiquettes : « Édition probable », « À vérifier », « Par le titre », « Autre édition »', () => {
+    expect(etiquetteCandidate(titreBon, accordEdition(titreBon, notice))).toEqual({ code: 'titreProbable', ton: 'ok' });
+    expect(etiquetteCandidate(titreEcart, accordEdition(titreEcart, notice))).toEqual({ code: 'verifier', ton: 'attention' });
+    expect(etiquetteCandidate(titreSans, accordEdition(titreSans, notice))).toEqual({ code: 'titreSeul', ton: 'neutre' });
+    expect(etiquetteCandidate(oeuvre, accordEdition(oeuvre, notice))).toEqual({ code: 'oeuvre', ton: 'attention' });
+    expect(etiquetteCandidate(isbn, accordEdition(isbn, notice))).toEqual({ code: 'isbnConcordant', ton: 'ok' });
+    expect(etiquetteCandidate(url, accordEdition(url, notice))).toBeNull();
+  });
+
+  it('ordre : ISBN, puis l’édition la plus probable, puis l’écart, puis l’œuvre, puis og:image', () => {
+    const ordre = ordonnerCandidates([url, oeuvre, titreEcart, titreSans, titreBon, isbn], notice).map((c) => c.label);
+    expect(ordre).toEqual(['isbn', 'bon', 'sans', 'écart', 'œuvre', 'og']);
+  });
+
+  it('parIsbn : seules les candidates de l’ISBN portent les avertissements d’en-tête', () => {
+    expect(parIsbn(isbn)).toBe(true);
+    expect(parIsbn({ edition: { annee: '2004', editeurs: [] } })).toBe(true); // réponse d'avant `voie`
+    expect(parIsbn(titreBon)).toBe(false);
+  });
+
+  it('le formulaire envoie la langue de la notice et range la galerie', () => {
+    expect(FORM).toMatch(/idioma: f\('idioma'\) \|\| null/);
+    expect(FORM).toMatch(/setCoverCandidates\(ordonnerCandidates\(data\.candidates,/);
+    expect(FORM).toContain("t({ id: 'catalogacao.ui.coverTitreProbable' })");
+    expect(FORM).toContain("t({ id: 'catalogacao.ui.coverOeuvre' })");
   });
 });
 

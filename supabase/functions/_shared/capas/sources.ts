@@ -80,6 +80,13 @@ export interface Candidate {
    * pour certain et n'affichait que le titre, a proposé la couverture de 2004.
    */
   edition?: EditionTrouvee;
+  /** Par où la candidate a été trouvée : l'ISBN (exact), le titre (flou), une URL (og:image). */
+  voie?: 'isbn' | 'titre' | 'url';
+  /**
+   * Voie « titre » : la couverture est-elle celle de l'édition appariée, ou
+   * celle de l'œuvre — donc, bien souvent, d'une autre édition ?
+   */
+  niveau?: 'edition' | 'oeuvre';
 }
 
 export interface EditionTrouvee {
@@ -148,6 +155,7 @@ export async function fromOpenLibraryIsbn(isbn: string): Promise<Candidate[]> {
     thumbnailUrl: thumb, fullUrl: full, source: 'openlibrary', license: null,
     label: [entry?.title ? String(entry.title) : '', designationEdition(edition)].filter(Boolean).join(' · ') || undefined,
     edition,
+    voie: 'isbn',
   }];
 }
 
@@ -183,6 +191,7 @@ export async function fromInventaireIsbn(isbn: string): Promise<Candidate[]> {
     license: null,
     label: [titre ? String(titre) : '', designationEdition(edition)].filter(Boolean).join(' · ') || undefined,
     edition,
+    voie: 'isbn',
   }];
 }
 
@@ -216,10 +225,18 @@ async function libellesEditeurs(uris: unknown): Promise<string[]> {
 // Retiré : exclu par la spec §4.2 (« pistage, conditions d'usage »), et mesuré
 // inopérant — HTTP 429 sur 50 requêtes sur 50, sans clé d'API.
 //
-// ATTENTION : correspondance FLOUE, et couverture de l'ŒUVRE (`cover_i`), qui
-// est souvent celle d'une AUTRE édition (vu le 27/09/2026 : pour « A Conquista
-// do Pão », Guimarães 1975, la page de titre de Tresse & Stock, 1892). D'où le
-// `label` affiché à la sélection : une capa fausse est pire qu'une capa absente.
+// L'ÉDITION, PAS L'ŒUVRE (27/09/2026). La recherche rendait la couverture de
+// l'ŒUVRE (`cover_i`), souvent celle d'une autre édition : pour « A Conquista do
+// Pão » (Guimarães, 1975), la page de titre de Tresse & Stock, 1892. Mesure du
+// matin sur 80 notices sans capa tirées au hasard : 22 galeries non vides, AUCUNE
+// vignette rattachable à l'édition. On demande désormais l'édition la mieux
+// appariée (`editions.*`), dans la langue de la notice (`lang`, qui la fait
+// passer devant) : sa couverture, son éditeur et son année — l'écran la confronte
+// alors à la notice comme une candidate par ISBN (« Édition probable » : 8 des 72
+// notices sans ISBN de l'échantillon, même éditeur et même année). À défaut de
+// couverture pour l'édition, celle de l'œuvre reste proposée, marquée
+// `niveau: 'oeuvre'` : l'écran la dit « Autre édition ». Un titre sans rapport
+// (Dice < 0,5 sur les mots significatifs) est écarté : c'était 16 fois sur 80.
 //
 // ON NE CHERCHE QUE DES MOTS. Le langage de requête d'Open Library (Solr) lit
 // certains signes comme des opérateurs. Constaté en production par la sonde
@@ -231,27 +248,86 @@ export function motsDeRecherche(texte: string): string {
   return String(texte || '').replace(/[+\-!(){}[\]^"~*?:\\/&|]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-export async function fromOpenLibrarySearch(title: string, author: string): Promise<Candidate[]> {
+// Mots vides des langues du fonds : ils ne départagent pas deux titres.
+const MOTS_VIDES = new Set((
+  'a o as os e de do da dos das em no na nos nas um uma el la los las y del en un una le les des du '
+  + 'et l d the of and in il lo gli di della delle dei per con por para com sobre su sus al au aux to '
+  + 'for on an i ou or que qui els i amb pel per'
+).split(' '));
+
+function motsSignificatifs(texte: string): Set<string> {
+  return new Set(String(texte || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    .split(/[^a-z0-9]+/).filter((m) => m.length > 1 && !MOTS_VIDES.has(m)));
+}
+
+/** Dice sur les mots significatifs, accents ôtés : 1 = mêmes mots, 0 = aucun en commun. */
+export function similariteTitre(a: string, b: string): number {
+  const A = motsSignificatifs(a);
+  const B = motsSignificatifs(b);
+  if (!A.size || !B.size) return 0;
+  let communs = 0;
+  for (const m of A) if (B.has(m)) communs++;
+  return (2 * communs) / (A.size + B.size);
+}
+
+const SEUIL_TITRE = 0.5;
+
+/** La langue de la notice (« pt-BR », « es »…) pour le paramètre `lang` d'Open Library. */
+export function langueRecherche(idioma: string): string | null {
+  const m = String(idioma || '').trim().toLowerCase().match(/^([a-z]{2})(?:[-_]|$)/);
+  return m ? m[1] : null;
+}
+
+const CHAMPS_RECHERCHE = [
+  'key', 'title', 'author_name', 'first_publish_year', 'cover_i',
+  'editions', 'editions.key', 'editions.title', 'editions.cover_i',
+  'editions.language', 'editions.publisher', 'editions.publish_date',
+].join(',');
+
+export async function fromOpenLibrarySearch(title: string, author: string, langue: string | null = null): Promise<Candidate[]> {
   if (!title) return [];
   const q = encodeURIComponent(motsDeRecherche([title, author].filter(Boolean).join(' ')));
-  const url = `https://openlibrary.org/search.json?q=${q}`
-    + '&fields=title,author_name,first_publish_year,cover_i&limit=5';
+  const url = `https://openlibrary.org/search.json?q=${q}${langue ? `&lang=${encodeURIComponent(langue)}` : ''}`
+    + `&fields=${CHAMPS_RECHERCHE}&limit=5`;
   const res = await fetchWithTimeout(url, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   const out: Candidate[] = [];
   for (const doc of data?.docs || []) {
-    const id = doc?.cover_i;
-    if (!id) continue;
-    const auteurs = Array.isArray(doc?.author_name) ? doc.author_name.slice(0, 2).join(', ') : '';
-    const annee = doc?.first_publish_year ? ` (${doc.first_publish_year})` : '';
-    out.push({
-      thumbnailUrl: `https://covers.openlibrary.org/b/id/${id}-M.jpg`,
-      fullUrl: `https://covers.openlibrary.org/b/id/${id}-L.jpg`,
-      source: 'openlibrary',
-      license: null,
-      label: [doc?.title, auteurs].filter(Boolean).join(' · ') + annee,
-    });
+    const ed = doc?.editions?.docs?.[0];
+    // Le titre de l'édition appariée compte autant que celui de l'œuvre : une
+    // traduction a son titre à elle (« Conquista Do Pão » / « La conquête du pain »).
+    const proche = Math.max(similariteTitre(title, ed?.title ?? ''), similariteTitre(title, doc?.title ?? ''));
+    if (proche < SEUIL_TITRE) continue;
+
+    if (ed?.cover_i) {
+      const edition: EditionTrouvee = {
+        annee: anneeDe(Array.isArray(ed.publish_date) ? ed.publish_date[0] : ed.publish_date),
+        editeurs: (Array.isArray(ed.publisher) ? ed.publisher : []).map((p: unknown) => String(p ?? '').trim()).filter(Boolean).slice(0, 3),
+      };
+      out.push({
+        thumbnailUrl: `https://covers.openlibrary.org/b/id/${ed.cover_i}-M.jpg`,
+        fullUrl: `https://covers.openlibrary.org/b/id/${ed.cover_i}-L.jpg`,
+        source: 'openlibrary',
+        license: null,
+        voie: 'titre',
+        niveau: 'edition',
+        edition,
+        label: [String(ed.title || doc?.title || ''), designationEdition(edition)].filter(Boolean).join(' · '),
+      });
+    } else if (doc?.cover_i) {
+      const auteurs = Array.isArray(doc?.author_name) ? doc.author_name.slice(0, 2).join(', ') : '';
+      const annee = doc?.first_publish_year ? ` (${doc.first_publish_year})` : '';
+      out.push({
+        thumbnailUrl: `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`,
+        fullUrl: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
+        source: 'openlibrary',
+        license: null,
+        voie: 'titre',
+        niveau: 'oeuvre',
+        label: [doc?.title, auteurs].filter(Boolean).join(' · ') + annee,
+      });
+    }
   }
   return out;
 }

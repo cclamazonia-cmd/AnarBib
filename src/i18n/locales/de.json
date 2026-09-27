@@ -6845,5 +6845,8 @@
   "auth.loginInvalid": "E-Mail, öffentliche ID oder Passwort falsch.",
   "auth.loginRateLimited": "Zu viele Versuche. Versuche es in einer Stunde erneut.",
   "auth.loginServerError": "Serverfehler. Versuche es gleich noch einmal.",
-  "catalogacao.ui.coverIsbnVolume": "Datensatz zu Band {volume}: Die ISBN eines mehrbändigen Werks gilt oft für alle Bände. Bitte prüfen Sie, ob dieses Cover wirklich zu Band {volume} gehört."
+  "catalogacao.ui.coverIsbnVolume": "Datensatz zu Band {volume}: Die ISBN eines mehrbändigen Werks gilt oft für alle Bände. Bitte prüfen Sie, ob dieses Cover wirklich zu Band {volume} gehört.",
+  "catalogacao.ui.coverTitreProbable": "Wahrscheinliche Ausgabe",
+  "catalogacao.ui.coverTitreSeul": "Nach Titel",
+  "catalogacao.ui.coverOeuvre": "Andere Ausgabe"
 }

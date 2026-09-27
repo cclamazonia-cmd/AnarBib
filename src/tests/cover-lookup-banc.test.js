@@ -67,6 +67,26 @@ const INVENTAIRE = {
   '2296035078': { titre: "L'anarchisme aujourd'hui", date: '2007' },
 };
 
+// Réponses de la recherche par titre, relevées sur le vrai Open Library le 27/09.
+const edition = (title, cover_i, publisher, publish_date, language) =>
+  ({ editions: { numFound: 1, docs: [{ key: '/books/OLxM', title, ...(cover_i ? { cover_i } : {}), publisher, publish_date, language }] } });
+const RECHERCHES = [
+  // L'édition portugaise n'a pas de couverture : seule reste celle de l'œuvre (Tresse & Stock, 1892).
+  [/Conquista/i, [{ key: '/works/OL1W', title: 'La conquête du pain', author_name: ['Peter Kropotkin'], first_publish_year: 1892, cover_i: 7296134,
+    ...edition('Conquista Do Pão', null, ['Independently Published'], ['2021'], ['por']) }]],
+  // L'édition appariée a sa couverture ; le second résultat est un AUTRE livre.
+  [/gallegos/i, [
+    { key: '/works/OL2W', title: 'Los gallegos anarquistas en la Argentina', author_name: ['Carlos Penelas'], first_publish_year: 1996, cover_i: 6117217,
+      ...edition('Los gallegos anarquistas en la Argentina', 6117217, ['Torres Agüero Editor'], ['1996'], ['spa']) },
+    { key: '/works/OL3W', title: 'Història del moviment anarquista a Espanya (1870-1980)', cover_i: 8237852,
+      ...edition('Historia del anarquismo en España', 8237852, ['RBA Libros'], ['2011'], ['spa']) },
+  ]],
+  [/Scarcity/i, [{ key: '/works/OL4W', title: 'Post-scarcity anarchism', author_name: ['Murray Bookchin'], first_publish_year: 1971, cover_i: 5415952,
+    ...edition('Post-scarcity anarchism', 5415952, ['Ramparts Press'], ['1971'], ['eng']) }]],
+  [/Deus e o Estado/i, [{ key: '/works/OL5W', title: 'Dieu et l\'État', author_name: ['Mikhail Bakunin'], first_publish_year: 1882, cover_i: 1111,
+    ...edition('Deus e o Estado', 2222, ['Imaginário'], ['2000'], ['por']) }]],
+];
+
 /** Open Library et Inventaire tels qu'ils répondent le 27/09/2026, sauf pannes demandées. */
 function reseau({ olLivres = 200, olRecherche = 200, inventaire = 200, inventaireEditeur = 200 } = {}) {
   const demandes = [];
@@ -82,10 +102,11 @@ function reseau({ olLivres = 200, olRecherche = 200, inventaire = 200, inventair
     }
     if (/^https:\/\/openlibrary\.org\/search\.json\?q=/.test(u)) {
       if (olRecherche !== 200) return jsonRep({}, olRecherche);
-      return jsonRep({ docs: [
-        { title: 'La conquête du pain', author_name: ['Peter Kropotkin'], first_publish_year: 1892, cover_i: 7296134 },
-        { title: 'Sans couverture', author_name: ['X'] },
-      ] });
+      // Comme Open Library aujourd'hui : l'œuvre, et sous `editions` l'édition la
+      // mieux appariée à la requête — avec ou sans couverture à elle.
+      const q = new URL(u).searchParams.get('q') || '';
+      const trouve = RECHERCHES.find(([motif]) => motif.test(q));
+      return jsonRep({ docs: trouve ? trouve[1] : [] });
     }
     m = u.match(/^https:\/\/inventaire\.io\/api\/entities\/by-uris\?uris=isbn%3A([0-9X]+)$/);
     if (m) {
@@ -203,7 +224,7 @@ describe('cover_lookup — la recherche par titre prend le relais', () => {
     const { r, net } = await chercher({ isbn: '9788585362553', title: 'Deus e o Estado', author: 'BAKUNIN, Mikhail' });
     expect(net.vers(RECHERCHE_OL)).toHaveLength(1);
     expect(r.candidates).toHaveLength(1);
-    expect(r.candidates[0]).toMatchObject({ source: 'openlibrary', label: 'La conquête du pain · Peter Kropotkin (1892)' });
+    expect(r.candidates[0]).toMatchObject({ source: 'openlibrary', voie: 'titre', niveau: 'edition', label: 'Deus e o Estado · Imaginário, 2000' });
     expect(source(r, 'openlibrary_search')).toMatchObject({ ok: true, count: 1 });
     expect(source(r, 'openlibrary_search').skipped).toBeUndefined();
   });
@@ -222,6 +243,32 @@ describe('cover_lookup — la recherche par titre prend le relais', () => {
     const [url] = net.vers(RECHERCHE_OL);
     expect(new URL(url).searchParams.get('q'))
       .toBe('El Anarco Sindicalismo en la Era tecnologica Confederación Nacional del Trabajo');
+  });
+
+  it('par le titre : la couverture de l’ÉDITION appariée, avec son éditeur et son année — et le titre sans rapport écarté', async () => {
+    const { r, net } = await chercher({ title: 'Los gallegos anarquistas en la Argentina', author: 'PENELAS, Carlos', idioma: 'es' });
+    expect(new URL(net.vers(RECHERCHE_OL)[0]).searchParams.get('lang')).toBe('es');
+    expect(r.candidates).toHaveLength(1); // « Historia del anarquismo en España » : autre livre, écarté
+    expect(r.candidates[0]).toMatchObject({
+      voie: 'titre', niveau: 'edition',
+      fullUrl: 'https://covers.openlibrary.org/b/id/6117217-L.jpg',
+      edition: { annee: '1996', editeurs: ['Torres Agüero Editor'] },
+      label: 'Los gallegos anarquistas en la Argentina · Torres Agüero Editor, 1996',
+    });
+  });
+
+  it('l’édition appariée sans couverture : celle de l’œuvre reste, marquée niveau « oeuvre » (une autre édition)', async () => {
+    const { r } = await chercher({ title: 'A Conquista do Pão', author: 'KROPOTKIN, Piotr', idioma: 'pt-BR' });
+    expect(r.candidates).toEqual([expect.objectContaining({
+      voie: 'titre', niveau: 'oeuvre', fullUrl: 'https://covers.openlibrary.org/b/id/7296134-L.jpg',
+      label: 'La conquête du pain · Peter Kropotkin (1892)',
+    })]);
+    expect(r.candidates[0].edition).toBeUndefined();
+  });
+
+  it('pt-BR se cherche en « pt » chez Open Library', async () => {
+    const { net } = await chercher({ title: 'A Conquista do Pão', idioma: 'pt-BR' });
+    expect(new URL(net.vers(RECHERCHE_OL)[0]).searchParams.get('lang')).toBe('pt');
   });
 
   it('sans ISBN : aucune voie exacte n’est appelée, seulement le titre', async () => {
@@ -285,6 +332,17 @@ describe('_shared/capas/sources.ts', () => {
     const { isbnValide } = mod();
     for (const bon of ['1904859062', '857164165X', '9782296035072', '2296035078']) expect(isbnValide(bon), bon).toBe(true);
     for (const faux of ['9782296035073', '1904859063', '12345', '97822960350721', 'X857164165', '']) expect(isbnValide(faux), faux).toBe(false);
+  });
+
+  it('similariteTitre : traductions appariées par l’édition, livres différents séparés', () => {
+    const { similariteTitre, langueRecherche } = mod();
+    expect(similariteTitre('A Conquista do Pão', 'Conquista Do Pão')).toBe(1);
+    expect(similariteTitre('A Conquista do Pão', 'La conquête du pain')).toBe(0);
+    expect(similariteTitre('Los gallegos anarquistas en la Argentina', 'Historia del anarquismo en España')).toBeLessThan(0.5);
+    expect(similariteTitre('Anarquismo y sindicalismo en España', 'Anarquismo y Sindicalismo En España 1864-1881')).toBeGreaterThan(0.5);
+    expect(langueRecherche('pt-BR')).toBe('pt');
+    expect(langueRecherche('es')).toBe('es');
+    expect(langueRecherche('')).toBeNull();
   });
 
   it('anneeDe : la première année plausible d’une date libre', () => {

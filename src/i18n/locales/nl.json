@@ -6845,5 +6845,8 @@
   "auth.loginInvalid": "Onjuist e-mailadres, openbare ID of wachtwoord.",
   "auth.loginRateLimited": "Te veel pogingen. Probeer het over een uur opnieuw.",
   "auth.loginServerError": "Serverfout. Probeer het zo meteen opnieuw.",
-  "catalogacao.ui.coverIsbnVolume": "Fiche van deel {volume}: het ISBN van een meerdelig werk geldt vaak voor alle delen. Controleer of deze omslag echt die van deel {volume} is."
+  "catalogacao.ui.coverIsbnVolume": "Fiche van deel {volume}: het ISBN van een meerdelig werk geldt vaak voor alle delen. Controleer of deze omslag echt die van deel {volume} is.",
+  "catalogacao.ui.coverTitreProbable": "Waarschijnlijke uitgave",
+  "catalogacao.ui.coverTitreSeul": "Op titel",
+  "catalogacao.ui.coverOeuvre": "Andere uitgave"
 }
