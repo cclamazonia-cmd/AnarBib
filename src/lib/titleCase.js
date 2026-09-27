@@ -10,11 +10,19 @@
 // `src/tests/title-case.test.js` et la suite SQL `title_case_tests.sql`
 // portent les MÊMES cas attendus.
 //
-// Ce que la règle fait : abaisser les seuls mots-outils (articles,
-// prépositions, conjonctions) hors position initiale. Ce qu'elle ne fait
-// pas : recaser le titre — une machine ne reconnaît pas un nom propre, un
-// titre peut légitimement contredire la règle (`bell hooks`, sigles).
-// D'où un bouton, un aperçu, et jamais rien d'automatique à la frappe.
+// Deux règles vivent ici :
+//   * `lowerStopwords` — abaisser les seuls mots-outils hors position
+//     initiale. C'est le miroir du CONTRÔLE (règle T1, lot « titre_casse »),
+//     rien de plus ;
+//   * `proposerCasse` / `normaliserCasse` — ce que fait le BOUTON depuis le
+//     27/09 : la casse de la langue selon la spec §4.1 (casse de phrase pour
+//     pt/es/fr/it/ca/eo/nl/el, title case pour l'anglais, mots-outils seuls
+//     pour l'allemand). La première version du bouton n'appliquait que
+//     `lowerStopwords` : « lE tRuc qui FAIT cHIER » ne bougeait pas, le bouton
+//     restait grisé (remarque de Xavier, 27/09).
+// Une machine ne reconnaît pas un nom propre, un titre peut légitimement
+// contredire la règle (`bell hooks`) : un bouton, un aperçu où chaque mot se
+// clique, et jamais rien d'automatique à la frappe.
 
 const MOTS_OUTILS = [
   ['pt', ['a', 'o', 'as', 'os', 'um', 'uma', 'uns', 'umas', 'de', 'da', 'do', 'das', 'dos',
@@ -44,8 +52,25 @@ export function stopwordsFor(lang) {
   return hit ? new Set(hit[1]) : null;
 }
 
+// Spec §4.1 : la langue du titre décide. Casse de phrase (majuscule au premier
+// mot et aux noms propres) pour les langues romanes, l'espéranto, le néerlandais
+// et le grec ; title case pour l'anglais ; l'allemand garde la majuscule de ses
+// substantifs, qu'une machine ne sait pas reconnaître — pour lui, seuls les
+// mots-outils bougent.
+const PHRASE = ['pt', 'es', 'fr', 'it', 'ca', 'eo', 'nl', 'el'];
+const regleDe = (lang) => {
+  const l = String(lang || '');
+  if (PHRASE.some((p) => l.startsWith(p))) return 'phrase';
+  if (l.startsWith('en')) return 'titre';
+  if (l.startsWith('de')) return 'outils';
+  return null;
+};
+
+/** 'phrase' | 'titre' | 'outils' | null — la règle de casse de la langue. */
+export const titleCaseRule = regleDe;
+
 /** La langue a-t-elle une règle ? (le bouton n'est actif que si oui) */
-export const hasTitleCaseRule = (lang) => stopwordsFor(lang) !== null;
+export const hasTitleCaseRule = (lang) => regleDe(lang) !== null;
 
 // btrim(w, '.,;:!?«»"''()')
 const PONCT = /^[.,;:!?«»"'()]+|[.,;:!?«»"'()]+$/g;
@@ -73,4 +98,85 @@ export function lowerStopwords(title, lang) {
       || w === '-' || w === '–' || w === '—';
   });
   return out.join(' ');
+}
+
+// ── Normaliser la casse (le bouton du formulaire, §4.1) ───────────────────────
+// Ce que la machine sait : la position (premier mot, après une ponctuation
+// forte), les mots-outils, les sigles courts. Ce qu'elle ne sait pas : les noms
+// propres. D'où les mots rendus un par un — l'aperçu laisse cliquer un mot pour
+// lui rendre (ou lui retirer) sa majuscule avant d'appliquer.
+
+const ROMAIN = /^(?=[MDCLXVI]{2,}$)M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$/;
+const LETTRE = /\p{L}/u;
+
+/** Sigle, chiffre romain ou mot à chiffres : gardé tel quel. Un mot de quatre
+ *  lettres ou plus en capitales est traité comme un mot crié, pas comme un sigle ;
+ *  dans un titre tout en capitales la casse ne dit plus rien : seuls les sigles
+ *  pointés, les chiffres romains en I/V/X et les mots à chiffres restent figés. */
+function estFige(w, { toutCapitales = false, stop = new Set() } = {}) {
+  const nu = w.replace(/^[«»"'()¿¡]+|[,;:!?«»"'()]+$/g, '');   // garde le point final d'un sigle
+  if (!nu || /\d/.test(nu)) return true;
+  if (/^(\p{Lu}\.){2,}$/u.test(nu) || /^(\p{Lu}\.)+\p{Lu}$/u.test(nu)) return true; // C.N.T.
+  const mot = nu.replace(/\.$/, '');
+  if (toutCapitales) return /^[IVX]{2,}$/.test(mot) && ROMAIN.test(mot);
+  if (ROMAIN.test(mot)) return true;                                     // IV, XIX
+  return /^\p{Lu}{2,3}$/u.test(mot) && !stop.has(mot.toLowerCase());     // CNT, FAI, PCB
+}
+
+// Un mot « propre » : majuscule initiale, le reste en minuscules (Brasil, France).
+const estCapitalise = (w) => /^\P{L}*\p{Lu}[\p{Ll}'’-]*\P{L}*$/u.test(w);
+// Un mot plein écrit en minuscules : le titre est déjà en casse de phrase.
+const estMinuscule = (w) => /^\P{L}*\p{Ll}[\p{Ll}'’-]*\P{L}*$/u.test(w);
+
+/** Première lettre en majuscule, en sautant la ponctuation d'ouverture (« ¿ " ( ). */
+export function avecMajuscule(w, lang) {
+  const i = w.search(LETTRE);
+  if (i < 0) return w;
+  return w.slice(0, i) + w[i].toLocaleUpperCase(lang) + w.slice(i + 1);
+}
+
+const estFrontiere = (w) => /[:;?!]$/.test(w)
+  || (/\.$/.test(w) && !/\..*\./.test(w) && w.length > 2)
+  || w === '-' || w === '–' || w === '—';
+
+/**
+ * Propose la casse d'un titre (ou d'un sous-titre) selon sa langue.
+ * @returns {{ mots: { texte: string, fige: boolean }[] } | null}  null si la langue n'a pas de règle.
+ *   `fige` : sigle ou chiffre, que le clic « nom propre » ne doit pas toucher.
+ * Le sous-titre ne prend pas de majuscule initiale (casse de phrase ISBD, spec §4.3).
+ */
+export function proposerCasse(title, lang, { sousTitre = false } = {}) {
+  const regle = regleDe(lang);
+  if (!regle) return null;
+  const parts = String(title || '').split(/\s+/).filter(Boolean);
+  if (regle === 'outils') {
+    return { mots: lowerStopwords(parts.join(' '), lang).split(' ').filter(Boolean).map((texte) => ({ texte, fige: estFige(texte) })) };
+  }
+  const stop = stopwordsFor(lang) || new Set();
+  const loc = String(lang).split('-')[0];
+  const toutCapitales = parts.length > 1 && !/\p{Ll}/u.test(parts.join(''));
+  // Casse de phrase déjà là (un mot plein en minuscules, hors mots-outils) :
+  // les majuscules restantes sont probablement des noms propres — on les garde.
+  const plein = (w) => w.replace(PONCT, '').length >= 3 && !stop.has(w.replace(PONCT, '').toLowerCase());
+  const confiance = regle === 'phrase' && parts.some((w, i) => i > 0 && estMinuscule(w) && plein(w));
+  let initial = !sousTitre;
+  const mots = parts.map((w) => {
+    const debut = initial;
+    initial = estFrontiere(w);
+    if (estFige(w, { toutCapitales, stop })) return { texte: w, fige: true };
+    if (confiance && !debut && estCapitalise(w)) return { texte: w, fige: false };
+    const bas = w.toLocaleLowerCase(loc);
+    if (regle === 'titre') {
+      const outil = stop.has(bas.replace(PONCT, ''));
+      return { texte: debut || !outil ? avecMajuscule(bas, loc) : bas, fige: false };
+    }
+    return { texte: debut ? avecMajuscule(bas, loc) : bas, fige: false };
+  });
+  return { mots };
+}
+
+/** Le titre normalisé, en une chaîne (sans intervention sur les noms propres). */
+export function normaliserCasse(title, lang, opts) {
+  const p = proposerCasse(title, lang, opts);
+  return p ? p.mots.map((m) => m.texte).join(' ') : title;
 }

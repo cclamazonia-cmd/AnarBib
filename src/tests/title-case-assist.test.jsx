@@ -27,9 +27,9 @@ describe('TitleCaseAssist', () => {
     monter({ titulo: 'História Do Anarquismo', subtitulo: 'Uma Introdução Ao Tema', idioma: 'pt-BR', onApply });
     fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.button'] }));
     expect(onApply).not.toHaveBeenCalled();                                   // l'aperçu n'écrit rien
-    expect(screen.getByText('História do Anarquismo : Uma Introdução ao Tema')).toBeTruthy();
+    expect(screen.getByTestId('title-case-after').textContent).toBe('História do anarquismo : uma introdução ao tema');
     fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.apply'] }));
-    expect(onApply).toHaveBeenCalledWith('História do Anarquismo', 'Uma Introdução ao Tema');
+    expect(onApply).toHaveBeenCalledWith('História do anarquismo', 'uma introdução ao tema');
   });
 
   it('« Laisser tel quel » referme l’aperçu sans rien écrire', () => {
@@ -47,5 +47,31 @@ describe('TitleCaseAssist', () => {
     fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.apply'] }));
     fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.undo'] }));
     expect(onApply).toHaveBeenLastCalledWith('História Do Anarquismo', '');
+  });
+
+  it('le titre de Xavier : le bouton est actif et rend la casse de phrase', () => {
+    const onApply = vi.fn();
+    monter({ titulo: 'lE tRuc qui FAIT cHIER', subtitulo: '', idioma: 'fr', onApply });
+    const b = screen.getByRole('button', { name: fr['catalogacao.titleCase.button'] });
+    expect(b.disabled).toBe(false);
+    fireEvent.click(b);
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.apply'] }));
+    expect(onApply).toHaveBeenCalledWith('Le truc qui fait chier', '');
+  });
+
+  it('un clic sur un mot de l’aperçu lui rend sa majuscule (nom propre)', () => {
+    const onApply = vi.fn();
+    monter({ titulo: 'Le Mouvement Anarchiste En France', subtitulo: '', idioma: 'fr', onApply });
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.button'] }));
+    expect(screen.getByText(fr['catalogacao.titleCase.properHint'])).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'france' }));
+    fireEvent.click(screen.getByRole('button', { name: fr['catalogacao.titleCase.apply'] }));
+    expect(onApply).toHaveBeenCalledWith('Le mouvement anarchiste en France', '');
+  });
+
+  it('un titre déjà en casse de phrase garde ses noms propres : rien à proposer', () => {
+    monter({ titulo: 'Le mouvement anarchiste en France', subtitulo: '', idioma: 'fr', onApply: vi.fn() });
+    expect(screen.getByRole('button', { name: fr['catalogacao.titleCase.button'] }).disabled).toBe(true);
+    expect(screen.getByText(fr['catalogacao.titleCase.unchanged'])).toBeTruthy();
   });
 });

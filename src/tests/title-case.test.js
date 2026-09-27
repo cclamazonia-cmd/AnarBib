@@ -11,7 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { lowerStopwords, hasTitleCaseRule } from '../lib/titleCase.js';
+import { lowerStopwords, hasTitleCaseRule, normaliserCasse, proposerCasse } from '../lib/titleCase.js';
 
 export const CAS = [
   ['A Revolução Desconhecida', 'pt-BR', 'A Revolução Desconhecida'],
@@ -36,7 +36,8 @@ describe('titleCase — miroir de fn_conv_lower_stopwords', () => {
   it('sans langue, ou langue non couverte : rien ne bouge et le bouton est inactif', () => {
     expect(lowerStopwords('A Revolução', null)).toBe('A Revolução');
     expect(hasTitleCaseRule('')).toBe(false);
-    expect(hasTitleCaseRule('el')).toBe(false);
+    expect(hasTitleCaseRule('el')).toBe(true);     // casse de phrase depuis le 27/09
+    expect(hasTitleCaseRule('ru')).toBe(false);
     expect(hasTitleCaseRule('pt-BR')).toBe(true);
   });
 
@@ -58,5 +59,45 @@ describe('titleCase — miroir de fn_conv_lower_stopwords', () => {
     const racine = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
     const src = readFileSync(path.join(racine, 'src/pages/catalogacao/BookDraftForm.jsx'), 'utf8');
     expect(src).toMatch(/<TitleCaseAssist titulo=\{f\('titulo'\)\} subtitulo=\{f\('subtitulo'\)\} idioma=\{f\('idioma'\)\}/);
+  });
+});
+
+// Le bouton, depuis le 27/09 : la casse de la langue (spec §4.1), pas seulement
+// les mots-outils. Le premier cas est la remarque de Xavier.
+export const CAS_BOUTON = [
+  ['lE tRuc qui FAIT cHIER', 'fr', 'Le truc qui fait chier'],
+  ['Le Mouvement Anarchiste En France', 'fr', 'Le mouvement anarchiste en france'],
+  ['Le mouvement anarchiste en France', 'fr', 'Le mouvement anarchiste en France'],
+  ['La C.N.T. Y La Revolución', 'es', 'La C.N.T. y la revolución'],
+  ['La CNT Y La Revolución', 'es', 'La CNT y la revolución'],
+  ['¿QUÉ ES LA PROPIEDAD?', 'es', '¿Qué es la propiedad?'],
+  ['Capítulo IV Do Livro XIX', 'pt-BR', 'Capítulo IV do livro XIX'],
+  ['O Anarquismo: Uma Introdução', 'pt-BR', 'O anarquismo: Uma introdução'],
+  ["L'ANARCHIE", 'fr', "L'anarchie"],
+  ['MI VIDA', 'es', 'Mi vida'],
+  ['CNT', 'es', 'CNT'],
+  ['the story of CRASS', 'en', 'The Story of Crass'],
+  ["A PEOPLE'S HISTORY OF THE UNITED STATES", 'en', "A People's History of the United States"],
+  ['Die Revolution Und Der Staat', 'de', 'Die Revolution und der Staat'],
+  ['ΕΛΕΥΘΕΡΙΑ ΚΑΙ ΑΝΑΡΧΙΑ', 'el', 'Ελευθερια και αναρχια'],
+];
+
+describe('normaliserCasse — le bouton (spec §4.1)', () => {
+  for (const [titre, langue, attendu] of CAS_BOUTON) {
+    it(`${langue} : ${titre}`, () => expect(normaliserCasse(titre, langue)).toBe(attendu));
+  }
+
+  it('le sous-titre ne prend pas de majuscule initiale', () => {
+    expect(normaliserCasse('Uma Introdução Ao Tema', 'pt-BR', { sousTitre: true })).toBe('uma introdução ao tema');
+  });
+
+  it('sigles et chiffres romains sont marqués figés (le clic « nom propre » ne les touche pas)', () => {
+    const { mots } = proposerCasse('La CNT En 1936 Tomo II', 'es');
+    expect(mots.filter((m) => m.fige).map((m) => m.texte)).toEqual(['CNT', '1936', 'II']);
+  });
+
+  it('langue sans règle : rien', () => {
+    expect(proposerCasse('Война И Мир', 'ru')).toBeNull();
+    expect(normaliserCasse('Война И Мир', 'ru')).toBe('Война И Мир');
   });
 });
