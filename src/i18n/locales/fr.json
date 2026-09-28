@@ -6928,5 +6928,7 @@
   "review.report.contributors.linked": "Rattaché",
   "review.report.contributors.linkFailed": "Pas rattaché : la ligne a changé depuis, ou tu n’as pas les droits. Relance la recherche.",
   "importacoes.export.lote.warnings": "Le fichier est prêt, avec {n, plural, one {# remarque} other {# remarques}} : le format n’a pas pu tout porter (zone raccourcie ou découpée, notes ou zones d’origine omises, ou notice de plus de 99 999 octets écartée).",
-  "importacoes.export.lote.progress": "{n} / {total} notices lues…"
+  "importacoes.export.lote.progress": "{n} / {total} notices lues…",
+  "importacoes.export.lote.formatAutorites": "UNIMARC Autorités — ISO 2709",
+  "importacoes.export.lote.autoritesHint": "Dans PMB, importe d’abord ce fichier (Autorités > Import), dans le thésaurus par défaut de PMB ; puis importe les notices avec la fonction « Catégories RAMEAU », « Oui » à « Tenir compte des notices d’autorités » et l’origine AnarBib. Sinon, PMB ne rapproche les auteurs que par la forme de leur nom : deux homonymes n’en font qu’un, une forme différente en crée un second."
 }

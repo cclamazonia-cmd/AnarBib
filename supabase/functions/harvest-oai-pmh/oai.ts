@@ -235,6 +235,8 @@ export interface MappedRecord {
   isbn: string | null;
   issn: string | null;
   subjectsArray: string[];
+  // H27 : les mots-clés libres d'une notice MARC (610 / 653), à part des vedettes.
+  keywordsArray?: string[];
   itemType: string | null;
   externalKey: string | null;
   notes: string | null;
@@ -315,5 +317,6 @@ export function mapDublinCore(metadataXml: string): MappedRecord {
 export function hasBibliographicContent(m: Partial<MappedRecord>): boolean {
   return !!(m.title || m.subtitle || m.responsibilityStatement || m.publisher
     || m.placeOfPublication || m.publicationYear || m.language || m.isbn || m.issn
-    || (Array.isArray(m.subjectsArray) && m.subjectsArray.length > 0));
+    || (Array.isArray(m.subjectsArray) && m.subjectsArray.length > 0)
+    || (Array.isArray(m.keywordsArray) && m.keywordsArray.length > 0));
 }

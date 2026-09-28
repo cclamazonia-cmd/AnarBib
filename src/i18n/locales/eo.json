@@ -6928,5 +6928,7 @@
   "review.report.contributors.linked": "Ligita",
   "review.report.contributors.linkFailed": "Ne ligita: la linio ŝanĝiĝis intertempe, aŭ vi ne rajtas. Serĉu denove.",
   "importacoes.export.lote.warnings": "La dosiero pretas, kun {n, plural, one {# rimarko} other {# rimarkoj}}: la formato ne povis porti ĉion (kampo mallongigita aŭ dividita, notoj aŭ originaj kampoj preterlasitaj, aŭ registro de pli ol 99 999 bajtoj preterlasita).",
-  "importacoes.export.lote.progress": "{n} / {total} registroj legitaj…"
+  "importacoes.export.lote.progress": "{n} / {total} registroj legitaj…",
+  "importacoes.export.lote.formatAutorites": "UNIMARC Aŭtoritatoj — ISO 2709",
+  "importacoes.export.lote.autoritesHint": "En PMB, unue importu ĉi tiun dosieron per la menuo « Autorités », en la defaŭltan tezaŭron de PMB; poste importu la registrojn per la funkcio « Catégories RAMEAU », kun « Oui » (jes) ĉe « Tenir compte des notices d’autorités » kaj la deveno AnarBib. Alie PMB kongruigas aŭtorojn nur laŭ la formo de ilia nomo: du samnomuloj fariĝas unu, kaj alia formo kreas duan."
 }

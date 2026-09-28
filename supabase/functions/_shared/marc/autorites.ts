@@ -3,15 +3,19 @@
 // Les fiches d'autorité d'une bibliothèque (public.fn_export_authorities_lote)
 // deviennent des notices d'autorité au modèle commun ({ leader, fields }),
 // sérialisées ensuite par iso2709.ts ou marcxml.ts. Leur 001 est le numéro
-// que l'export bibliographique porte en $3 (700-712, 606) : c'est ce qui relie
-// la notice à son autorité dans le logiciel qui les réimporte.
+// que l'export bibliographique porte en $3 (700-712, 606 ; numeroAutorite,
+// ecriture.ts). Dans PMB (import avec « Tenir compte des notices
+// d'autorités ») : une 7XX rejoint sa fiche par ce $3 (numéro, type, origine
+// AnarBib) ; une 606, elle, est rapprochée par son LIBELLÉ, dans le thésaurus
+// par défaut de PMB (func_cpt_rameau_first_level ignore le $3) — les
+// vedettes doivent donc y être importées (tests/pmb/README.md).
 //
 //   200 personne ($a nom, $b prénom, $f dates) · 210 collectivité ou congrès
 //   (ind1 0 / 1 ; $d $f $e d'un congrès) · 250 sujet · 4XX formes rejetées ·
 //   550 $5 g le terme générique, 550 les termes associés · 033 les
 //   identifiants pérennes (VIAF, ISNI, Wikidata, IdRef, LCCN) · 100 $a
 //   données générales (jeu 50, Unicode) · 102 pays · 801 AnarBib.
-import { codePays, codeLangue, type ChampMarc, type NoticeMarc, type SousZone } from './ecriture.ts';
+import { codePays, codeLangue, congres, numeroAutorite, type ChampMarc, type NoticeMarc, type SousZone } from './ecriture.ts';
 
 export interface AutoriteNom {
   id: number | string; type?: string | null; preferredName?: string | null; sortName?: string | null;
@@ -41,7 +45,7 @@ function champ(tag: string, ind: string, subs: (SousZone | null)[]): ChampMarc |
   const s = subs.filter((x): x is SousZone => x !== null);
   return s.length ? { tag, ind1: ind[0] ?? ' ', ind2: ind[1] ?? ' ', subfields: s } : null;
 }
-const numeroParDefaut = (_genre: 'nom' | 'sujet', id: number | string) => String(id);
+const numeroParDefaut = (genre: 'nom' | 'sujet', id: number | string) => numeroAutorite(genre, id) ?? String(id);
 
 // Guide UNIMARC/A : n (nouvelle), x (notice d'autorité), 9 = type d'entité
 // (a personne, b collectivité — congrès compris —, j sujet).
@@ -57,22 +61,19 @@ function donneesGenerales(date: string, langue: string): ChampMarc {
 }
 // 801 : PMB range chaque autorité importée sous l'origine nommée par 801 $b
 // (origin_authorities) et la retrouve par (001, type, origine) ; $a le pays.
-function pied(date: string, pays: string | null): ChampMarc[] {
-  return [champ('801', ' 0', [sz('a', codePays(pays)), sz('b', 'AnarBib'), sz('c', date)])!];
-}
-
-// « Nom (3 ; 1907 ; Lieu) » d'un congrès → $a, $d, $f, $e (l'ordre de l'import).
-function congres(nom: string): (SousZone | null)[] {
-  const m = nom.match(/^(.*\S)\s*\(([^()]*)\)$/);
-  if (!m) return [sz('a', nom)];
-  const parts = m[2].split(/\s*;\s*/).filter(Boolean);
-  if (parts.length === 1) return [sz('a', m[1]), sz(/^\d{4}/.test(parts[0]) ? 'f' : 'd', parts[0])];
-  return [sz('a', m[1]), ...['d', 'f', 'e'].map((c, i) => sz(c, parts[i]))];
+// Pas de $c (date) : PMB ne met à jour une fiche déjà importée que si 801 $c
+// est postérieure à sa dernière mise à jour (authority_import.class.php,
+// DATEDIFF > 0) — une correction réimportée le même jour serait ignorée en
+// silence. Sans $c, PMB met toujours à jour : AnarBib est la référence. La
+// date reste en 100 $a (revue du 28/09).
+function pied(pays: string | null): ChampMarc[] {
+  return [champ('801', ' 0', [sz('a', codePays(pays)), sz('b', 'AnarBib')])!];
 }
 
 function nomEnZone(tag: string, type: string, nom: string, dates: string | null): ChampMarc | null {
   if (type === 'collective') return champ(tag, '02', [sz('a', nom)]);
-  if (type === 'congress') return champ(tag, '12', congres(nom));
+  // Congrès : le même découpage que la 71X des notices (ecriture.ts).
+  if (type === 'congress') { const q = congres(nom, ['d', 'f', 'e']); return champ(tag, '12', [sz('a', q.base), ...q.subs]); }
   const i = nom.indexOf(', ');
   return champ(tag, i > 0 ? ' 1' : ' 0', [sz('a', i > 0 ? nom.slice(0, i) : nom), sz('b', i > 0 ? nom.slice(i + 2) : null), sz('f', dates)]);
 }
@@ -107,7 +108,7 @@ export function autoriteNom(a: AutoriteNom, opts: OptionsAutorites = {}): Notice
     vus.add(f);
     fields.push(nomEnZone(tagRenvoi, type, f, null));
   }
-  fields.push(...pied(date, txt(opts.bibliotheque?.pays)));
+  fields.push(...pied(txt(opts.bibliotheque?.pays)));
   const tries = fields.filter((f): f is ChampMarc => !!f)
     .map((f, i) => [f, i] as const).sort((x, y) => (x[0].tag < y[0].tag ? -1 : x[0].tag > y[0].tag ? 1 : x[1] - y[1])).map(([f]) => f);
   return { leader: guide(type === 'person' ? 'a' : 'b'), fields: tries };
@@ -130,7 +131,7 @@ export function autoriteSujet(s: AutoriteSujet, parId: Map<string, AutoriteSujet
     ...(s.alt ?? []).filter((x) => txt(x) && txt(x) !== txt(s.label)).map((x) => champ('450', '  ', [sz('a', x)])),
     s.broader !== null && s.broader !== undefined ? renvoi(s.broader, 'g') : null,
     ...(s.related ?? []).map((r) => renvoi(r, null)),
-    ...pied(date, txt(opts.bibliotheque?.pays)),
+    ...pied(txt(opts.bibliotheque?.pays)),
   ];
   const tries = fields.filter((f): f is ChampMarc => !!f)
     .map((f, i) => [f, i] as const).sort((x, y) => (x[0].tag < y[0].tag ? -1 : x[0].tag > y[0].tag ? 1 : x[1] - y[1])).map(([f]) => f);

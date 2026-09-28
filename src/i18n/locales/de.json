@@ -6928,5 +6928,7 @@
   "review.report.contributors.linked": "Verknüpft",
   "review.report.contributors.linkFailed": "Nicht verknüpft: Die Zeile hat sich seitdem geändert, oder dir fehlt die Berechtigung. Suche erneut.",
   "importacoes.export.lote.warnings": "Die Datei ist fertig, mit {n, plural, one {# Hinweis} other {# Hinweisen}}: Das Format konnte nicht alles aufnehmen (Feld gekürzt oder geteilt, Anmerkungen oder Ursprungsfelder weggelassen oder ein Datensatz über 99 999 Bytes ausgelassen).",
-  "importacoes.export.lote.progress": "{n} / {total} Datensätze gelesen…"
+  "importacoes.export.lote.progress": "{n} / {total} Datensätze gelesen…",
+  "importacoes.export.lote.formatAutorites": "UNIMARC Normdaten — ISO 2709",
+  "importacoes.export.lote.autoritesHint": "Importiere diese Datei in PMB zuerst über das Menü « Authorities » (« Autorités » in einem französischen PMB), in den Standard-Thesaurus von PMB; importiere danach die Datensätze mit der Funktion « Catégories RAMEAU », « Ja » bei « Tenir compte des notices d’autorités » und der Herkunft AnarBib. Sonst ordnet PMB Autoren nur nach der Form ihres Namens zu: Zwei Namensgleiche werden zu einem, eine andere Form ergibt einen zweiten."
 }

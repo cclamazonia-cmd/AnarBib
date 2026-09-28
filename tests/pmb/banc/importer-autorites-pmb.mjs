@@ -19,7 +19,7 @@
 // Usage : node tests/pmb/banc/importer-autorites-pmb.mjs autorites.iso [bilan.json]
 // Options : type « toutes », liens créés (formes rejetées, termes associés)
 // vers les seules autorités présentes, sans mise à jour forcée, UTF-8.
-// Variables : PMB_URL_BANC, PMB_THESAURUS (libellé ; défaut : le premier),
+// Variables : PMB_URL_BANC, PMB_THESAURUS (libellé ; défaut : le thésaurus par défaut de PMB),
 // PMB_DB_CONTENEUR, PMB_TRACE_DIR. Identifiants de banc : admin / admin.
 // Importer les autorités AVANT les notices (importer-pmb.mjs avec
 // PMB_AUTORITES_NOTICES=1 et PMB_ORIGINE=AnarBib).
@@ -111,7 +111,15 @@ if (!cookies['PhpMyBibli-SESSID']) throw new Error('connexion PMB refusée');
 
 const URL_AUT = `${BASE}/autorites/import/iimport_authorities.php`;
 let r = await req(URL_AUT);
-const thesaurus = choisir(r.text, 'id_thesaurus', process.env.PMB_THESAURUS);
+// Le thésaurus : celui que nomme PMB_THESAURUS, sinon le thésaurus PAR DÉFAUT
+// de PMB (parametres thesaurus/defaut) — c'est là que l'import des notices
+// (func_cpt_rameau_first_level) cherche une 606 par son libellé ; importées
+// ailleurs, les vedettes ne seraient rattachées à rien (revue du 28/09).
+const thDefaut = sql("select valeur_param from parametres where type_param = 'thesaurus' and sstype_param = 'defaut'")[0]?.[0];
+const thOptions = options(r.text, 'id_thesaurus');
+const thesaurus = process.env.PMB_THESAURUS || !thOptions.some((o) => o.valeur === thDefaut)
+  ? choisir(r.text, 'id_thesaurus', process.env.PMB_THESAURUS)
+  : thOptions.find((o) => o.valeur === thDefaut);
 const fd = new FormData();
 for (const [k, v] of Object.entries({
   action: 'upload', authorities_type: 'all', category_or_concept: 'category', id_thesaurus: thesaurus.valeur, scheme_uri: '',

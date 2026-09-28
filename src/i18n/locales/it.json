@@ -6928,5 +6928,7 @@
   "review.report.contributors.linked": "Collegato",
   "review.report.contributors.linkFailed": "Non collegato: la riga è cambiata nel frattempo, o non hai i permessi. Rifai la ricerca.",
   "importacoes.export.lote.warnings": "Il file è pronto, con {n, plural, one {# osservazione} other {# osservazioni}}: il formato non ha potuto contenere tutto (campo accorciato o diviso, note o campi d’origine omessi, o record di oltre 99 999 byte escluso).",
-  "importacoes.export.lote.progress": "{n} / {total} record letti…"
+  "importacoes.export.lote.progress": "{n} / {total} record letti…",
+  "importacoes.export.lote.formatAutorites": "UNIMARC Autorità — ISO 2709",
+  "importacoes.export.lote.autoritesHint": "In PMB, importa prima questo file dal menu « Responsabilità » (« Autorités » in un PMB in francese), nel thesaurus predefinito di PMB; poi importa i record con la funzione « Catégories RAMEAU », « Sì » a « Tenir compte des notices d’autorités » e l’origine AnarBib. Altrimenti PMB abbina gli autori solo in base alla forma del nome: due omonimi diventano uno solo e una forma diversa ne crea un secondo."
 }

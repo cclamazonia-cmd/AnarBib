@@ -6928,5 +6928,7 @@
   "review.report.contributors.linked": "Συνδέθηκε",
   "review.report.contributors.linkFailed": "Δεν συνδέθηκε: η γραμμή άλλαξε στο μεταξύ ή δεν έχεις δικαίωμα. Ξαναρχίζεις την αναζήτηση.",
   "importacoes.export.lote.warnings": "Το αρχείο είναι έτοιμο, με {n, plural, one {# παρατήρηση} other {# παρατηρήσεις}}: η μορφή δεν μπόρεσε να τα χωρέσει όλα (πεδίο συντομεύτηκε ή χωρίστηκε, σημειώσεις ή αρχικά πεδία παραλείφθηκαν, ή εγγραφή πάνω από 99 999 byte αφέθηκε εκτός).",
-  "importacoes.export.lote.progress": "{n} / {total} εγγραφές διαβάστηκαν…"
+  "importacoes.export.lote.progress": "{n} / {total} εγγραφές διαβάστηκαν…",
+  "importacoes.export.lote.formatAutorites": "UNIMARC Καθιερωμένοι όροι — ISO 2709",
+  "importacoes.export.lote.autoritesHint": "Στο PMB, εισήγαγε πρώτα αυτό το αρχείο από το μενού « Autorités », στον προεπιλεγμένο θησαυρό του PMB· έπειτα εισήγαγε τις εγγραφές με τη λειτουργία « Catégories RAMEAU », « Oui » (ναι) στο « Tenir compte des notices d’autorités » και προέλευση AnarBib. Αλλιώς το PMB αντιστοιχίζει τους συγγραφείς μόνο με τη μορφή του ονόματός τους: δύο συνώνυμοι γίνονται ένας, και μια διαφορετική μορφή δημιουργεί δεύτερο."
 }

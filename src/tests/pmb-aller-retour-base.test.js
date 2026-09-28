@@ -12,8 +12,10 @@
 //   3. ici, cet attendu — donc ce que la base exporte — est écrit en UNIMARC
 //      par le chemin de l'écran Importations (serializeCatalog), relu, et
 //      comparé zone par zone à l'enregistrement PMB d'origine. Les PERTES
-//      ACCEPTÉES sont écrites ci-dessous avec leur raison : toute perte
-//      nouvelle fait échouer le test.
+//      ACCEPTÉES sont écrites ci-dessous avec leur raison, et les pertes
+//      elles-mêmes, notice par notice, sont figées dans
+//      tests/pmb/aller-retour-pertes.json : toute perte nouvelle fait échouer
+//      le test, même sur une clé déjà acceptée.
 // Le test exige la suite SQL à jour. Pour l'engendrer, puis refaire l'attendu
 // quand l'import ou l'export change EXPRÈS (et relire le diff de l'attendu) :
 //   REGENERER_H27=1 npx vitest run src/tests/pmb-aller-retour-base.test.js
@@ -33,6 +35,7 @@ const RACINE = path.resolve(here, '..', '..');
 const FIX = path.join(RACINE, 'tests', 'pmb', 'fixtures');
 const SUITE = path.join(RACINE, 'tests', 'sql', 'aller_retour_pmb_tests.sql');
 const ATTENDU = path.join(RACINE, 'tests', 'pmb', 'aller-retour-attendu.json');
+const PERTES = path.join(RACINE, 'tests', 'pmb', 'aller-retour-pertes.json');
 const FICHIERS = ['pmb-8.1.1.1_jeu-de-test.unimarc.iso', 'pmb-8.1.1.1_cas-difficiles.unimarc.iso'];
 const SECRET = 'banc-secret';
 
@@ -262,9 +265,9 @@ export const PERTES_ACCEPTEES = {
   '410$t': COLLECTION,
   '410$v': COLLECTION,
   '410$y': COLLECTION,
-  '461$t': 'l\'ensemble d\'un ouvrage en plusieurs tomes est gardé en collection + tome (225) ; un fascicule PMB exporté comme notice perd le lien vers son périodique (backlog H24 : rattacher les fascicules à leur périodique)',
-  '461$v': 'l\'ensemble d\'un ouvrage en plusieurs tomes est gardé en collection + tome (225)',
-  '463$t': `${BULLETIN} — le titre du périodique revient en 200 et 530, pas en 463`,
+  '461$t': 'l\'ensemble d\'un ouvrage en plusieurs tomes est gardé en collection (225 $a) ; un fascicule PMB exporté comme notice perd le lien vers son périodique (backlog H24 : rattacher les fascicules à leur périodique)',
+  '461$v': 'le tome d\'un ouvrage en plusieurs tomes est gardé en volume (200 $h)',
+  '463$t': 'titre du fascicule : AnarBib n\'a pas de champ pour lui ; pour une notice de bulletin PMB, c\'est le titre du périodique, qui revient en 200 et 530',
   '676$l': 'libellé de l\'indice Dewey : AnarBib garde l\'indice seul',
   '700$N': 'sous-zone propre à PMB (adresse web de l\'auteur), hors UNIMARC',
   '710$K': 'sous-zone propre à PMB (ville de la collectivité), hors UNIMARC',
@@ -345,5 +348,38 @@ describe('H27 — la preuve de l\'aller-retour PMB, par la base', async () => {
     expect(nouvelles.map((k) => `${k} ×${pertes.get(k).length} : ${pertes.get(k).slice(0, 2).join(' ; ')}`)).toEqual([]);
     // Une perte acceptée qui ne se produit plus est retirée de la liste.
     expect(Object.keys(PERTES_ACCEPTEES).filter((k) => !pertes.has(k)).sort()).toEqual([]);
+    // Les pertes ELLES-MÊMES, notice par notice, sont figées (revue du 28/09) :
+    // accepter une clé ne doit pas laisser passer une perte de plus sur une
+    // autre notice (tous les titres, toutes les langues…). Refaites avec la
+    // suite (REGENERER_H27=1) ; relire leur diff avant de committer.
+    const figees = Object.fromEntries([...pertes].sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => [k, [...v].sort()]));
+    if (process.env.REGENERER_H27 === '1') writeFileSync(PERTES, JSON.stringify(figees, null, 1) + '\n');
+    expect(figees, 'pertes changées : REGENERER_H27=1, puis relire le diff de tests/pmb/aller-retour-pertes.json')
+      .toEqual(JSON.parse(readFileSync(PERTES, 'utf8')));
+    // « La collection revient en 225 », « le tome en 200 $h » : vérifié, pas
+    // seulement dit (hors fascicules et articles, dont la 461 est la revue).
+    const REVIENT = { '410$t': '225$a', '461$t': '225$a', '410$v': '225$v', '461$v': '200$h' };
+    const nonRevenues = [];
+    lignes.forEach((l, i) => {
+      if (['periodico', 'artigo'].includes(attendu.records[i].materialType)) return;
+      const ailleurs = relues[i].rawPayload.fields.filter((f) => f.tag === '225' || f.tag === '200').flatMap(valeursDe);
+      for (const p of pertesDe(l.raw_payload.fields, relues[i].rawPayload.fields)) {
+        const cible = REVIENT[p.cle];
+        if (cible && !ailleurs.some((x) => x.cle === cible && x.v === p.v)) nonRevenues.push(`${l.external_key} ${p.cle} « ${p.v} »`);
+      }
+    });
+    // « Le titre du périodique revient en 200 et 530 » (463 $t d'une notice de
+    // bulletin PMB), et son numéro en 200 $h : vérifié aussi.
+    const REVIENT_BULLETIN = { '463$t': ['200$a', '530$a'], '200$i': ['200$h'] };
+    lignes.forEach((l, i) => {
+      if (attendu.records[i].materialType !== 'periodico') return;
+      const relus = relues[i].rawPayload.fields.flatMap(valeursDe);
+      for (const p of pertesDe(l.raw_payload.fields, relues[i].rawPayload.fields)) {
+        for (const cible of REVIENT_BULLETIN[p.cle] ?? []) {
+          if (!relus.some((x) => x.cle === cible && x.v === p.v)) nonRevenues.push(`${l.external_key} ${p.cle} « ${p.v} » → ${cible}`);
+        }
+      }
+    });
+    expect(nonRevenues).toEqual([]);
   });
 });

@@ -136,30 +136,63 @@ de ces fichiers).
 
 L'écran Importations exporte, à côté des notices, les **autorités** d'une
 bibliothèque en UNIMARC Autorités (ISO 2709) : les noms et les vedettes du
-thésaurus liés à ses notices, leurs formes rejetées (4XX) et leurs liens (5XX),
-801 `$b` « AnarBib ». Leur 001 est le `$3` que portent les 7XX et les 606 des
-notices exportées. Pour que PMB rattache ses notices à ces fiches au lieu d'en
-recréer une par notice, **dans cet ordre** :
+thésaurus liés à ses notices (et les ancêtres de ces vedettes), leurs formes
+rejetées (4XX) et leurs liens (5XX), 801 `$b` « AnarBib », sans `$c` (voir
+plus bas). Leur 001 est le `$3` que portent les 7XX et les 606 des notices
+exportées : `AnarBib-A…` pour un nom, `AnarBib-S…` pour une vedette.
 
-1. **Autorités > Import** : le fichier d'autorités (`banc/importer-autorites-pmb.mjs`).
+Ce qui relie, dans PMB, une notice à ces fiches :
+
+- **une 7XX**, par son `$3` : l'import des notices, avec « Tenir compte des
+  notices d'autorités », retrouve la fiche par (numéro, type, origine
+  AnarBib) dans `authorities_sources` (`keep_authority_infos`). Le numéro est
+  préfixé parce que PMB relance cette recherche **sans filtrer l'origine** :
+  un « 12 » nu retrouverait l'auteur 12 d'une autre origine. Il ne fait
+  jamais 14 caractères, longueur que PMB tronque (`format_authority_number`).
+- **une 606**, par son **libellé**, pas par son `$3` :
+  `func_cpt_rameau_first_level` cherche la catégorie par son libellé fr_FR
+  dans le **thésaurus par défaut de PMB** (Administration > Outils >
+  Paramètres > Thésaurus, `thesaurus`/`defaut`), et en crée une à la racine
+  s'il n'en trouve pas. Les vedettes doivent donc être importées dans CE
+  thésaurus. Deux vedettes AnarBib de même libellé deviennent une seule
+  catégorie PMB, quel que soit leur `$3`.
+
+La marche à suivre, **dans cet ordre** (l'écran la rappelle quand on choisit ce
+format) :
+
+1. **Autorités > Import** : le fichier d'autorités, dans le thésaurus par
+   défaut de PMB (`banc/importer-autorites-pmb.mjs` le choisit ; `PMB_THESAURUS`
+   pour un autre).
 2. **Administration > Import** des notices, avec :
    - la fonction d'import **`func_cpt_rameau_first_level`** (« Catégories
      RAMEAU ») — elle garde les 606 en catégories ; `func_bdp`, la fonction par
      défaut, les fond en une 610 ;
-   - **« Tenir compte des notices d'autorités »** coché
-     (`authorities_notices=1`) ;
+   - **« Oui » à « Tenir compte des notices d'autorités »**
+     (`authorities_notices=1` ; un choix Oui/Non, « Non » par défaut ; « Take
+     authority records into account » dans un PMB en anglais) ;
    - **l'origine des autorités : AnarBib** (`authorities_default_origin`).
+
+   Sans cette option, PMB ne rapproche les auteurs que par la forme de leur nom
+   (`auteur::import`) : deux homonymes n'en font qu'un, une forme différente en
+   crée un second, et aucun lien vers la fiche AnarBib n'est écrit. Les menus de
+   PMB sont traduits (« Autorités » : « Autoridades » en pt_BR et es_ES,
+   « Authorities » en en_UK et de_DE, « Responsabilità » en it_IT…).
 
    Au banc : `PMB_FONCTION_IMPORT=func_cpt_rameau_first_level.inc
    PMB_AUTORITES_NOTICES=1 PMB_ORIGINE=AnarBib node banc/importer-pmb.mjs …`.
 
+Réimporter les autorités après une correction : sans 801 `$c`, PMB met toujours
+la fiche à jour. Avec une date, il ne le ferait que si elle est postérieure à sa
+dernière mise à jour — une correction réimportée le même jour serait ignorée en
+silence (`authority_import.class.php`, `update_authority`).
+
 Essai du 28/09 (`src/tests/essai-h25-pmb.test.js`, les 64 notices des deux
-fixtures telles qu'AnarBib les garde, dans un PMB qui les avait déjà reçues ;
-base sauvegardée avant, restaurée après) :
+fixtures telles qu'AnarBib les garde, dans un PMB qui les avait déjà reçues et
+qui n'a qu'un thésaurus ; base sauvegardée avant, restaurée après) :
 
 | | |
 |---|---|
 | autorités traitées | 88 (57 noms, 31 vedettes), 0 erronée |
 | notices créées | 62 sur 64 (les 2 autres, « Géo » et « Le Rat des bibliothèques », sont des périodiques que PMB avait déjà) ; 46 exemplaires |
-| responsabilités rattachées à une fiche AnarBib | **61 sur 61** ; 0 auteur recréé par l'import des notices |
-| catégories rattachées à une fiche AnarBib | **47 sur 47** |
+| responsabilités rattachées à leur fiche AnarBib, par le `$3` | **61 sur 61** ; 0 auteur recréé par l'import des notices |
+| catégories rattachées à une fiche AnarBib, par le libellé | **47 sur 47** |

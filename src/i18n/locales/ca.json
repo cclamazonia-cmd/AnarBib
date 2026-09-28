@@ -6928,5 +6928,7 @@
   "review.report.contributors.linked": "Vinculat",
   "review.report.contributors.linkFailed": "No vinculat: la línia ha canviat des de llavors, o no tens permís. Torna a cercar.",
   "importacoes.export.lote.warnings": "El fitxer és a punt, amb {n, plural, one {# observació} other {# observacions}}: el format no ho ha pogut portar tot (camp escurçat o dividit, notes o camps d’origen omesos, o registre de més de 99 999 octets deixat fora).",
-  "importacoes.export.lote.progress": "{n} / {total} registres llegits…"
+  "importacoes.export.lote.progress": "{n} / {total} registres llegits…",
+  "importacoes.export.lote.formatAutorites": "UNIMARC Autoritats — ISO 2709",
+  "importacoes.export.lote.autoritesHint": "A PMB, importa primer aquest fitxer des del menú « Autoritats » (« Autorités » en un PMB en francès), al tesaurus per defecte de PMB; després importa els registres amb la funció « Catégories RAMEAU », « Sí » a « Tenir compte des notices d’autorités » i l’origen AnarBib. Si no, PMB només relaciona els autors per la forma del nom: dos homònims queden en un de sol i una forma diferent en crea un segon."
 }

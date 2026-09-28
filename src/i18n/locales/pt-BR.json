@@ -6928,5 +6928,7 @@
   "review.report.contributors.linked": "Vinculado",
   "review.report.contributors.linkFailed": "Não vinculado: a linha mudou desde então, ou você não tem permissão. Refaça a busca.",
   "importacoes.export.lote.warnings": "O arquivo está pronto, com {n, plural, one {# observação} other {# observações}}: o formato não comportou tudo (campo encurtado ou dividido, notas ou campos de origem omitidos, ou registro com mais de 99 999 bytes deixado de fora).",
-  "importacoes.export.lote.progress": "{n} / {total} registros lidos…"
+  "importacoes.export.lote.progress": "{n} / {total} registros lidos…",
+  "importacoes.export.lote.formatAutorites": "UNIMARC Autoridades — ISO 2709",
+  "importacoes.export.lote.autoritesHint": "No PMB, importe primeiro este arquivo pelo menu « Autoridades » (« Autorités » em um PMB em francês), no tesauro padrão do PMB; depois importe os registros com a função « Catégories RAMEAU », « Sim » em « Tenir compte des notices d’autorités » e a origem AnarBib. Senão, o PMB só associa os autores pela forma do nome: dois homônimos viram um só, e uma forma diferente cria um segundo."
 }

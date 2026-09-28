@@ -2,6 +2,7 @@
 // Lancer : deno test --no-check autorites.test.ts — joués aussi par le pont vitest.
 import { assertEquals } from 'jsr:@std/assert';
 import { autorites, autoriteNom } from './autorites.ts';
+import { enregistrement } from './ecriture.ts';
 import { ecrireIso2709 } from './iso2709.ts';
 import { parseMarcIso2709 } from '../../process-partner-catalog-import/marc.ts';
 
@@ -13,7 +14,7 @@ Deno.test('Autorités : personne (200 $a $b $f), formes rejetées en 400, identi
     variants: ['Cerna, Zdenka', 'Zdeňka Černá'], viaf: '123', wikidata: 'Q42', country: 'cz' }, OPTS);
   assertEquals(r.leader.slice(5, 10), 'nx  a');
   assertEquals(r.leader.length, 24);
-  assertEquals(r.fields[0], { tag: '001', value: '44' });
+  assertEquals(r.fields[0], { tag: '001', value: 'AnarBib-A00000044' });
   assertEquals(sf(r, '200'), ['aČerná bZdeňka f1950-....']);
   assertEquals(sf(r, '400'), ['aZdeňka Černá', 'aCerna bZdenka']);
   assertEquals(sf(r, '033'), ['ahttp://viaf.org/viaf/123 2VIAF', 'ahttp://www.wikidata.org/entity/Q42 2Wikidata']);
@@ -41,7 +42,7 @@ Deno.test('Autorités : collectivité (210 ind 02), congrès qualifié (210 ind 
   assertEquals(sf(lot[1], '210'), ['aCongrès anarchiste d3 f1907 eAmsterdam']);
   assertEquals(sf(lot[2], '250'), ['aSyndicalisme']);
   assertEquals(sf(lot[2], '450'), ['aSyndicats']);
-  assertEquals(sf(lot[2], '550'), ['310 aMouvement ouvrier 5g', '313 aCoopératives']);
+  assertEquals(sf(lot[2], '550'), ['3AnarBib-S00000010 aMouvement ouvrier 5g', '3AnarBib-S00000013 aCoopératives']);
   // un renvoi vers un sujet absent de l'envoi n'est pas écrit
   assertEquals(sf(lot[5], '550'), []);
 });
@@ -54,4 +55,24 @@ Deno.test('Autorités : l\'ISO 2709 se relit, numéros préfixés au besoin', ()
   assertEquals(records.map((r) => r.fields.find((f) => f.tag === '001').value), ['N44', 'S12']);
   assertEquals(records[0].leader.slice(5, 10), 'nx  a');
   assertEquals(records[1].leader[9], 'j');
+});
+
+// ── Revue contradictoire du 28/09 ───────────────────────────────────────────
+Deno.test('Revue H25 : la 001 d\'une fiche est le $3 de ses notices ; congrès découpés comme leur 71X ; 801 sans $c', () => {
+  const noms = ['Congrès anarchiste (3 ; 1907 ; Amsterdam)', 'Congrès anarchiste (1907 ; Amsterdam)', 'Congrès anarchiste (Amsterdam)',
+    'Rencontre (3 ; Lisbonne)', 'Congrès ouvrier (1-8 sept. 1907)'];
+  noms.forEach((nom, i) => {
+    const aut = autoriteNom({ id: 900 + i, type: 'congress', sortName: nom }, OPTS);
+    const bib = enregistrement({ id: 1, title: 'T', materialType: 'livro', contributors: [
+      { name: 'Auteur, Un', nature: 'person', role: 'autor', primary: true, authorId: 1 },
+      { name: nom, nature: 'congress', role: 'autor', primary: false, authorId: 900 + i }] }, { dialecte: 'unimarc', ...OPTS });
+    const z71 = bib.fields.find((f) => f.tag === '711');
+    const sans = z71.subfields.filter((s) => s.code !== '4' && s.code !== '3').map((s) => s.code + s.value).join(' ');
+    assertEquals(sf(aut, '210'), [sans], nom);
+    assertEquals(z71.subfields.find((s) => s.code === '3').value, aut.fields.find((f) => f.tag === '001').value);
+  });
+  const p = autoriteNom({ id: 12, sortName: 'Kropotkine, Pierre' }, OPTS);
+  assertEquals(sf(p, '801'), ['aBR bAnarBib']);
+  // jamais 14 caractères (PMB tronque une 001 de 14 caractères)
+  assertEquals([p.fields[0].value.length, autoriteNom({ id: 123456789, sortName: 'X' }, OPTS).fields[0].value], [17, 'AnarBib-A123456789']);
 });

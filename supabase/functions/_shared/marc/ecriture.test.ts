@@ -93,7 +93,7 @@ Deno.test('UNIMARC : responsabilités 700/710/701/702/711, congrès qualifié, c
   const r = enregistrement(NOTICE, OPTS);
   const z = (tag) => r.fields.filter((f) => f.tag === tag);
   assertEquals(z('700').length, 1);
-  assertEquals(z('700')[0].subfields.map((s) => s.code + s.value), ['aČerná', 'bZdeňka', 'f1950-....', '4070', '344']);
+  assertEquals(z('700')[0].subfields.map((s) => s.code + s.value), ['aČerná', 'bZdeňka', 'f1950-....', '4070', '3AnarBib-A00000044']);
   // la collectivité co-auteure en 711 ind1 0 (la principale est une personne)
   assertEquals(z('711')[0].ind1 + z('711')[0].ind2, '02');
   assertEquals(z('711')[0].subfields.map((s) => s.code + s.value), ['aCollectif Brûlot', '4070']);
@@ -116,7 +116,7 @@ Deno.test('Notes : adresse → 856, « Assuntos importados » → 606, le reste 
   assertEquals(sf(r, '300', 'a'), ['Note générale.', 'Classificação / cote local preservada da parceira: 334.7 CER.']);
   assertEquals(sf(r, '856', 'u'), ['https://example.org/h23']);
   const s606 = r.fields.filter((f) => f.tag === '606').map((f) => f.subfields.map((s) => s.code + s.value).join(' '));
-  assertEquals(s606, ['aSyndicalisme 312 2anarbib', 'aAnarchisme xHistoire x19e siècle', 'aCoopératives']);
+  assertEquals(s606, ['aSyndicalisme 3AnarBib-S00000012 2anarbib', 'aAnarchisme xHistoire x19e siècle', 'aCoopératives']);
   assertEquals(sf(r, '610', 'a'), ['bourses du travail']);
 });
 
@@ -164,7 +164,7 @@ Deno.test('Aller-retour UNIMARC (ISO 2709 et XML) : l\'import relit ce que l\'ex
     ['Collectif Brûlot', 'collective', 'autor', '070', false],
     ['Congrès anarchiste (3 ; 1907 ; Amsterdam)', 'congress', 'autor', '070', false],
   ]);
-  assertEquals(m.contributors[0].authorityRef, '44');
+  assertEquals(m.contributors[0].authorityRef, 'AnarBib-A00000044');
   assertEquals(m.subjectsArray, ['Syndicalisme', 'Anarchisme -- Histoire -- 19e siècle', 'Coopératives']);
   // H27 : le mot-clé libre revient en mot-clé (610), pas en vedette
   assertEquals(m.keywordsArray, ['bourses du travail']);
@@ -334,4 +334,39 @@ Deno.test('H27 : le niveau d\'une responsabilité secondaire (701/702, 711/712) 
   const sans = enregistrement({ ...rec, source: { ...source, dialect: 'marc21' } }, OPTS);
   const qui2 = (tag) => sans.fields.filter((f) => f.tag === tag).map((f) => f.subfields.find((s) => s.code === 'a').value);
   assertEquals([qui2('701'), qui2('702'), qui2('711')], [['Hunot'], ['Andréaé', 'Muñoz'], ['Arquivo Libertário do Tejo']]);
+});
+
+Deno.test('Revue H27 : le niveau d\'origine par nom COMPLET et par fonction ; une zone nue ne décide rien', () => {
+  const z = (tag, subs, i1 = ' ', i2 = '1') => ({ tag, ind1: i1, ind2: i2, subfields: subs.map(([code, value]) => ({ code, value })) });
+  const niveaux = (source, contributors) => {
+    const r = enregistrement({ id: 1, title: 'T', materialType: 'livro', source: { dialect: 'unimarc', fields: source },
+      contributors: [{ name: 'Principal, Le', nature: 'person', role: 'autor', roleCode: '070', primary: true }, ...contributors] }, OPTS);
+    return r.fields.filter((f) => /^7[01][12]$/.test(f.tag))
+      .map((f) => `${f.tag} ${f.subfields.find((s) => s.code === 'a').value} ${f.subfields.find((s) => s.code === '4')?.value ?? ''}`);
+  };
+  // A : la même personne à deux fonctions, chacune à son niveau d'origine
+  assertEquals(niveaux([z('701', [['a', 'Andréaé'], ['b', 'Jean'], ['4', '070']]), z('701', [['a', 'Andréaé'], ['b', 'Jean'], ['4', '440']])], [
+    { name: 'Andréaé, Jean', nature: 'person', role: 'autor', roleCode: '070', primary: false },
+    { name: 'Andréaé, Jean', nature: 'person', role: 'ilustrador', roleCode: '440', primary: false }]),
+    ['701 Andréaé 070', '701 Andréaé 440']);
+  // B : une seule zone, deux $4
+  assertEquals(niveaux([z('701', [['a', 'Andréaé'], ['b', 'Jean'], ['4', '070'], ['4', '440']])], [
+    { name: 'Andréaé, Jean', nature: 'person', role: 'ilustrador', roleCode: '440', primary: false }]), ['701 Andréaé 440']);
+  // C : une 702 nue ne dit pas de fonction : la table décide (outro → 702,
+  // autor → 701) — plus de joker qui garderait le niveau d'origine à un rôle changé
+  const zola = [z('702', [['a', 'Zola'], ['b', 'Émile']])];
+  const outro = CODE_ROLE.unimarc.outro;
+  assertEquals(niveaux(zola, [{ name: 'Zola, Émile', nature: 'person', role: 'outro', primary: false }]), [`702 Zola ${outro}`]);
+  assertEquals(niveaux(zola, [{ name: 'Zola, Émile', nature: 'person', role: 'autor', primary: false }]), ['701 Zola 070']);
+  // D : deux collectivités « France » : la clé est le nom complet ($a. $b)
+  assertEquals(niveaux([z('711', [['a', 'France'], ['b', 'Ministère de la culture'], ['4', '070']], '0', '2'), z('712', [['a', 'France'], ['4', '070']], '0', '2')], [
+    { name: 'France. Ministère de la culture', nature: 'collective', role: 'autor', roleCode: '070', primary: false },
+    { name: 'France', nature: 'collective', role: 'autor', roleCode: '070', primary: false }]),
+    ['711 France. Ministère de la culture 070', '712 France 070']);
+  // E : deux congrès de même nom : les qualificatifs font la différence
+  assertEquals(niveaux([z('711', [['a', 'Congrès anarchiste'], ['d', '1'], ['f', '1877'], ['e', 'Verviers'], ['4', '070']], '1', '2'),
+    z('712', [['a', 'Congrès anarchiste'], ['d', '2'], ['f', '1907'], ['e', 'Amsterdam'], ['4', '070']], '1', '2')], [
+    { name: 'Congrès anarchiste (1 ; 1877 ; Verviers)', nature: 'congress', role: 'autor', roleCode: '070', primary: false },
+    { name: 'Congrès anarchiste (2 ; 1907 ; Amsterdam)', nature: 'congress', role: 'autor', roleCode: '070', primary: false }]),
+    ['711 Congrès anarchiste 070', '712 Congrès anarchiste 070']);
 });

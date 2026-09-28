@@ -1,41 +1,49 @@
 -- =====================================================================
--- 20260928135910_h27_ce_que_la_preuve_de_l_aller_retour_a_trouve
+-- 20260928170909_h27_ce_que_la_preuve_de_l_aller_retour_a_trouve
 -- H27 (28/09/2026) — ce que la preuve de l'aller-retour PMB a trouvé côté
 -- base (tests/sql/aller_retour_pmb_tests.sql : les deux fixtures exportées par
--- PMB 8.1, importées par la vraie edge function, promues, publiées, exportées).
+-- PMB 8.1, importées par la vraie edge function, promues, publiées, exportées),
+-- et ce que sa revue contradictoire y a ajouté.
 -- Aucun import MARC n'est encore allé jusqu'à la publication en production :
 -- rien à rattraper (lu le 28/09 : 0 brouillon dont la langue viole la CHECK,
--- 0 brouillon dont l'auteur s'écrit dans un alphabet non latin).
+-- 0 brouillon dont l'auteur s'écrit dans un alphabet non latin, 0 article).
 --
 -- 1. LA LANGUE. L'import recopiait dans le brouillon le code BRUT (101 $a
---    UNIMARC, 008/35-37 et 041 MARC21 : `fre`, `rus`, `chi`…) ;
---    `publish_book_draft` le recopie dans `books.idioma`, dont la CHECK
---    `books_idioma_bcp47_chk` n'admet qu'un BCP-47 court
---    (`^[a-z]{2}(-[A-Z]{2})?$`, CONV-7) : 23514, le lot entier refusé.
---    `ingest.fn_idioma_bcp47` convertit une fois, à la frontière de
---    l'import : les 36 langues de `src/lib/languages.js` (ISO 639-1, 639-2/B
---    et /T, BCP-47 à région), les libellés portugais que CONV-7 normalisait ;
---    « pt » et ses variantes → « pt-BR » (la convention du catalogue). Hors des
---    36, un code à deux lettres garde sa forme canonique (admise par la
---    CHECK) ; le reste (« fro », « mul », « und »…) devient NULL — le code
---    d'origine reste dans l'enregistrement brut (`marc_json`). Réciproque de
---    `codeLangue` (`_shared/marc/ecriture.ts`).
+--    UNIMARC, 041 MARC21 : `fre`, `rus`, `chi`…) ; `publish_book_draft` le
+--    recopie dans `books.idioma`, dont la CHECK `books_idioma_bcp47_chk`
+--    n'admet qu'un BCP-47 court (`^[a-z]{2}(-[A-Z]{2})?$`, CONV-7) : 23514,
+--    le lot entier refusé. `ingest.fn_idioma_bcp47` convertit une fois, à la
+--    frontière de l'import, vers les 36 langues de `src/lib/languages.js` :
+--    la langue primaire de toute étiquette (ISO 639-1, 639-2/B et /T, BCP-47
+--    à script ou à région : « zh-Hans », « es-419 »), « pt » → « pt-BR »,
+--    « no » / « nor » → « nb », et des libellés courants (« Français »,
+--    « Português do Brasil »…). Hors des 36 : NULL — le code d'origine reste
+--    dans l'enregistrement brut (`marc_json`). Réciproque de `codeLangue`
+--    (`_shared/marc/ecriture.ts`).
 -- 2. LES NOMS NON LATINS. `fn_conv_est_non_agent` (CONV-8) compare la forme
 --    normalisée (`normalize_author_alias` : minuscules, accents latins
 --    retirés, tout le reste effacé) à une liste où figure la chaîne vide : un
---    nom grec, cyrillique, arabe ou chinois se normalise en « » et passait
---    pour « Collectif ». Ses responsabilités étaient écartées à l'import, au
---    rattrapage H18, au rapport de révision et aux candidats d'autorité. Seul
---    un nom vide ou fait de ponctuation ASCII est désormais un non-agent.
+--    nom grec, cyrillique, arabe ou chinois passait pour « Collectif ». Ses
+--    responsabilités étaient écartées à l'import, au rattrapage H18, au
+--    rapport de révision et aux candidats d'autorité. Seul un nom SANS LETTRE
+--    (vide, ponctuation, tirets, espaces) est désormais un non-agent.
+--    Du même coup, deux lieux qui rapprochent par cette forme normalisée ne
+--    prennent plus la clé vide pour un nom : `v_author_alias_worklist` (une
+--    notice « Бакунин » se rattachait à TOUTE autorité non latine) et
+--    `api.report_autorites_doublons` (toutes les autorités non latines en un
+--    seul « doublon »).
 -- 3. LES MOTS-CLÉS LIBRES (610 / 653). L'edge function les gardait avec les
 --    vedettes (606 / 650) ; l'export les rendait donc en 606, que PMB change
 --    en catégories au réimport. Ils arrivent à part (`normalized_payload.
 --    keywords`) et la création du brouillon les note en un paragraphe
 --    « Palavras-chave importadas: … », que l'export rend en 610 / 653.
+-- 4. L'ISSN D'UN ARTICLE est celui de sa revue (461 $x / 773 $x) d'abord.
 --
--- Recréées depuis leur définition réelle (md5 identiques en production) :
--- `ingest.fn_create_book_drafts_from_import_rows` (46b2967f…, deux
--- endroits changés), `public.fn_conv_est_non_agent` (2dea4bed…).
+-- Recréés depuis leur définition réelle (md5 identiques en production) :
+-- `ingest.fn_create_book_drafts_from_import_rows` (46b2967f…, trois endroits
+-- changés), `public.fn_conv_est_non_agent` (2dea4bed…),
+-- `public.v_author_alias_worklist` (189ef9e9…, désormais security_invoker :
+-- voir plus bas), `api.report_autorites_doublons` (d5108912…).
 -- =====================================================================
 
 CREATE OR REPLACE FUNCTION ingest.fn_idioma_bcp47(p_langue text)
@@ -44,34 +52,41 @@ CREATE OR REPLACE FUNCTION ingest.fn_idioma_bcp47(p_langue text)
  IMMUTABLE
  SET search_path TO 'pg_catalog'
 AS $function$
-  WITH v AS (SELECT lower(btrim(coalesce(p_langue, ''))) AS x)
+  WITH v AS (SELECT lower(btrim(coalesce(p_langue, ''))) AS x),
+  -- la langue primaire d'une étiquette (« zh-hans » → « zh », « es-419 » → « es »)
+  p AS (SELECT v.x, CASE WHEN v.x ~ '^[a-z]{2,3}([-_][a-z0-9]{1,8})*$'
+                         THEN split_part(replace(v.x, '_', '-'), '-', 1) END AS prim
+          FROM v)
   SELECT CASE
-    WHEN v.x = '' THEN NULL
-    -- deux lettres, avec ou sans région : la langue de base si elle est des 36
-    WHEN v.x ~ '^[a-z]{2}([-_][a-z]{2})?$' THEN coalesce(
-      (SELECT b FROM (VALUES
+    WHEN p.x = '' THEN NULL
+    WHEN length(p.prim) = 2 THEN (SELECT b FROM (VALUES
       ('ar', 'ar'), ('bg', 'bg'), ('ca', 'ca'), ('cs', 'cs'), ('da', 'da'), ('de', 'de'), ('el', 'el'), ('en', 'en'),
       ('eo', 'eo'), ('es', 'es'), ('eu', 'eu'), ('fa', 'fa'), ('fi', 'fi'), ('fr', 'fr'), ('gl', 'gl'), ('he', 'he'),
       ('hi', 'hi'), ('hr', 'hr'), ('hu', 'hu'), ('id', 'id'), ('it', 'it'), ('ja', 'ja'), ('ko', 'ko'), ('nb', 'nb'),
       ('nl', 'nl'), ('oc', 'oc'), ('pl', 'pl'), ('pt', 'pt-BR'), ('ro', 'ro'), ('ru', 'ru'), ('sk', 'sk'), ('sr', 'sr'),
-      ('sv', 'sv'), ('tr', 'tr'), ('uk', 'uk'), ('zh', 'zh')) t(c, b) WHERE t.c = left(v.x, 2)),
-      CASE WHEN length(v.x) = 2 THEN v.x ELSE left(v.x, 2) || '-' || upper(right(v.x, 2)) END)
-    WHEN v.x ~ '^[a-z]{3}$' THEN (SELECT b FROM (VALUES
+      ('sv', 'sv'), ('tr', 'tr'), ('uk', 'uk'), ('zh', 'zh'), ('no', 'nb')) t(c, b) WHERE t.c = p.prim)
+    WHEN length(p.prim) = 3 THEN (SELECT b FROM (VALUES
       ('ara', 'ar'), ('bul', 'bg'), ('cat', 'ca'), ('cze', 'cs'), ('ces', 'cs'), ('dan', 'da'), ('ger', 'de'), ('deu', 'de'),
       ('gre', 'el'), ('ell', 'el'), ('eng', 'en'), ('epo', 'eo'), ('spa', 'es'), ('baq', 'eu'), ('eus', 'eu'), ('per', 'fa'),
       ('fas', 'fa'), ('fin', 'fi'), ('fre', 'fr'), ('fra', 'fr'), ('glg', 'gl'), ('heb', 'he'), ('hin', 'hi'), ('hrv', 'hr'),
-      ('hun', 'hu'), ('ind', 'id'), ('ita', 'it'), ('jpn', 'ja'), ('kor', 'ko'), ('nob', 'nb'), ('dut', 'nl'), ('nld', 'nl'),
-      ('oci', 'oc'), ('pol', 'pl'), ('por', 'pt-BR'), ('rum', 'ro'), ('ron', 'ro'), ('rus', 'ru'), ('slo', 'sk'), ('slk', 'sk'),
-      ('srp', 'sr'), ('swe', 'sv'), ('tur', 'tr'), ('ukr', 'uk'), ('chi', 'zh'), ('zho', 'zh')) t(c, b) WHERE t.c = v.x)
+      ('hun', 'hu'), ('ind', 'id'), ('ita', 'it'), ('jpn', 'ja'), ('kor', 'ko'), ('nob', 'nb'), ('nor', 'nb'), ('dut', 'nl'),
+      ('nld', 'nl'), ('oci', 'oc'), ('pol', 'pl'), ('por', 'pt-BR'), ('rum', 'ro'), ('ron', 'ro'), ('rus', 'ru'), ('slo', 'sk'),
+      ('slk', 'sk'), ('srp', 'sr'), ('swe', 'sv'), ('tur', 'tr'), ('ukr', 'uk'), ('chi', 'zh'), ('zho', 'zh')) t(c, b) WHERE t.c = p.prim)
     ELSE (SELECT b FROM (VALUES
-      ('português', 'pt-BR'), ('espanhol', 'es'), ('francês', 'fr'), ('inglês', 'en'), ('italiano', 'it'), ('alemão', 'de'),
-      ('esperanto', 'eo'), ('catalão', 'ca'), ('holandês', 'nl'), ('neerlandês', 'nl'), ('grego', 'el')) t(c, b) WHERE t.c = v.x)
+      ('português', 'pt-BR'), ('português do brasil', 'pt-BR'), ('portugues', 'pt-BR'), ('portugais', 'pt-BR'), ('portuguese', 'pt-BR'), ('portugués', 'pt-BR'),
+      ('espanhol', 'es'), ('español', 'es'), ('espanol', 'es'), ('castellano', 'es'), ('espagnol', 'es'), ('spanish', 'es'),
+      ('francês', 'fr'), ('français', 'fr'), ('francais', 'fr'), ('francés', 'fr'), ('french', 'fr'), ('inglês', 'en'),
+      ('english', 'en'), ('inglés', 'en'), ('anglais', 'en'), ('italiano', 'it'), ('italien', 'it'), ('italian', 'it'),
+      ('alemão', 'de'), ('deutsch', 'de'), ('alemán', 'de'), ('allemand', 'de'), ('german', 'de'), ('esperanto', 'eo'),
+      ('catalão', 'ca'), ('català', 'ca'), ('catalán', 'ca'), ('catalan', 'ca'), ('holandês', 'nl'), ('neerlandês', 'nl'),
+      ('nederlands', 'nl'), ('néerlandais', 'nl'), ('dutch', 'nl'), ('grego', 'el'), ('ελληνικά', 'el'), ('griego', 'el'),
+      ('grec', 'el'), ('greek', 'el')) t(c, b) WHERE t.c = p.x)
   END
-  FROM v;
+  FROM p;
 $function$;
 
 COMMENT ON FUNCTION ingest.fn_idioma_bcp47(text) IS
-  'H27 : code de langue importé (ISO 639-1, 639-2/B et /T, BCP-47, libellé portugais) → books.idioma (BCP-47 court, 36 langues de src/lib/languages.js) ; inconnu → NULL.';
+  'H27 : langue importee (ISO 639-1, 639-2/B et /T, etiquette BCP-47, libelle courant) → books.idioma : une des 36 langues de src/lib/languages.js, sinon NULL.';
 
 REVOKE EXECUTE ON FUNCTION ingest.fn_idioma_bcp47(text) FROM PUBLIC, anon, authenticated;
 
@@ -83,11 +98,11 @@ CREATE OR REPLACE FUNCTION public.fn_conv_est_non_agent(p_nom text)
 AS $function$
   -- H27 : un nom écrit dans un autre alphabet (grec, cyrillique, arabe,
   -- chinois…) ne se normalise en rien — ce n'est pas une raison d'en faire un
-  -- « Collectif » ; seul un nom vide, ou fait de ponctuation ASCII, ne désigne
-  -- personne.
+  -- « Collectif ». Seul un nom sans aucune lettre (vide, ponctuation, tirets,
+  -- espaces, en ASCII ou non) ne désigne personne.
   select case
     when btrim(coalesce(p_nom, '')) = '' then true
-    when btrim(public.normalize_author_alias(p_nom)) = '' then p_nom !~ '[^\x01-\x7F]'
+    when btrim(public.normalize_author_alias(p_nom)) = '' then p_nom !~ '[[:alpha:]]'
     else btrim(public.normalize_author_alias(p_nom)) in (
     '', 'aa vv', 'vv aa', 'aavv', 'vvaa', 'autori vari', 'autores varios', 'varios autores',
     'varios', 'divers', 'auteurs divers', 'collectif', 'coletivo', 'colectivo', 'collettivo',
@@ -266,9 +281,14 @@ begin
       nullif(trim(rec.publisher), ''),
       nullif(trim(rec.publication_year), ''),
       nullif(trim(rec.isbn), ''),
-      coalesce(nullif(trim(rec.issn), ''),                       -- H17 : l'ISSN de la revue d'un article
-               case when rec.normalized_payload->>'material_type' in ('artigo', 'periodico')
-                    then nullif(btrim(rec.normalized_payload->'host'->>'issn'), '') end),
+      -- H17 / H27 : un article n'a pas d'ISSN à lui — celui de sa revue d'abord
+      -- (461 $x, 773 $x), l'export le rend en 461 $x ; un périodique, le sien.
+      case when rec.normalized_payload->>'material_type' = 'artigo'
+           then coalesce(nullif(btrim(rec.normalized_payload->'host'->>'issn'), ''), nullif(trim(rec.issn), ''))
+           else coalesce(nullif(trim(rec.issn), ''),
+                         case when rec.normalized_payload->>'material_type' = 'periodico'
+                              then nullif(btrim(rec.normalized_payload->'host'->>'issn'), '') end)
+      end,
       ingest.fn_idioma_bcp47(rec.language),
       -- tipo_material : H17, le type déduit du guide MARC (article dépouillé,
       -- périodique, son…) quand il est valide ; sinon le type brut (RIS/BibTeX).
@@ -455,15 +475,111 @@ end;
 $function$
 ;
 
-DO $$
+-- security_invoker = true (doctrine, R4) : son seul lecteur,
+-- api.report_auteurs_non_resolus, est DEFINER et appartient à postgres,
+-- comme la vue — elle lit sous le même rôle qu'avant ; anon et authenticated
+-- n'y ont aucun SELECT (lu en production le 28/09).
+CREATE OR REPLACE VIEW public.v_author_alias_worklist WITH (security_invoker = true) AS
+ WITH remaining AS (
+         SELECT b.id AS book_id,
+            b.bib_ref,
+            b.titulo,
+            TRIM(BOTH FROM b.autor) AS autor,
+            normalize_author_alias(b.autor) AS autor_norm
+           FROM (books b
+             LEFT JOIN ( SELECT DISTINCT author_books_public.book_id
+                   FROM author_books_public) abp ON ((abp.book_id = b.id)))
+          WHERE ((COALESCE(NULLIF(TRIM(BOTH FROM b.autor), ''::text), ''::text) <> ''::text) AND (abp.book_id IS NULL) AND (b.autor !~~ '%;%'::text) AND (NOT fn_conv_est_non_agent(b.autor)))
+        ), alias_hits AS (
+         SELECT ana.alias_norm,
+            count(DISTINCT ana.author_id) AS alias_matches,
+            string_agg(DISTINCT (ana.author_id)::text, ', '::text ORDER BY (ana.author_id)::text) AS alias_author_ids
+           FROM author_name_aliases ana
+          WHERE (ana.is_active = true)
+          GROUP BY ana.alias_norm
+        ), candidate_hits AS (
+         SELECT r_1.autor_norm,
+            count(DISTINCT a.id) AS candidate_matches,
+            string_agg(DISTINCT (a.id)::text, ', '::text ORDER BY (a.id)::text) AS candidate_author_ids
+           FROM (( SELECT DISTINCT remaining.autor_norm
+                   FROM remaining
+                  WHERE (btrim(remaining.autor_norm) <> ''::text)) r_1
+             JOIN authors a ON (((normalize_author_alias(a.preferred_name) = r_1.autor_norm) OR (normalize_author_alias(a.sort_name) = r_1.autor_norm))))
+          GROUP BY r_1.autor_norm
+        )
+ SELECT r.autor,
+    r.autor_norm,
+    count(*) AS books_count,
+    min(r.bib_ref) AS sample_bib_ref,
+    min(r.titulo) AS sample_title,
+    COALESCE(ah.alias_matches, (0)::bigint) AS alias_matches,
+    ah.alias_author_ids,
+    COALESCE(ch.candidate_matches, (0)::bigint) AS candidate_matches,
+    ch.candidate_author_ids,
+        CASE
+            WHEN (COALESCE(ah.alias_matches, (0)::bigint) > 0) THEN 'alias_exists'::text
+            WHEN (COALESCE(ch.candidate_matches, (0)::bigint) = 1) THEN 'candidate_existing_author'::text
+            WHEN (COALESCE(ch.candidate_matches, (0)::bigint) > 1) THEN 'ambiguous_existing_author'::text
+            ELSE 'needs_new_author'::text
+        END AS status
+   FROM ((remaining r
+     LEFT JOIN alias_hits ah ON (((ah.alias_norm = r.autor_norm) AND (btrim(r.autor_norm) <> ''::text))))
+     LEFT JOIN candidate_hits ch ON ((ch.autor_norm = r.autor_norm)))
+  GROUP BY r.autor, r.autor_norm, ah.alias_matches, ah.alias_author_ids, ch.candidate_matches, ch.candidate_author_ids;
+
+CREATE OR REPLACE FUNCTION api.report_autorites_doublons()
+ RETURNS TABLE(nom_normalise text, n bigint, author_ids bigint[], noms text)
+ LANGUAGE plpgsql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_catalog'
+AS $function$
 BEGIN
-  IF ingest.fn_idioma_bcp47('fre') IS DISTINCT FROM 'fr' OR ingest.fn_idioma_bcp47('POR') IS DISTINCT FROM 'pt-BR'
-     OR ingest.fn_idioma_bcp47('zho') IS DISTINCT FROM 'zh' OR ingest.fn_idioma_bcp47('pt-pt') IS DISTINCT FROM 'pt-BR'
-     OR ingest.fn_idioma_bcp47('fro') IS NOT NULL OR ingest.fn_idioma_bcp47('Português') IS DISTINCT FROM 'pt-BR' THEN
-    RAISE EXCEPTION 'H27 : fn_idioma_bcp47 ne convertit pas comme attendu';
+  IF NOT public.fn_caller_is_network_admin() THEN
+    RAISE EXCEPTION 'Relatorio reservado a administracao da rede.' USING ERRCODE = '42501';
   END IF;
+
+  RETURN QUERY
+  WITH norm AS (
+    SELECT au.id, au.preferred_name,
+      public.normalize_author_alias(COALESCE(NULLIF(btrim(au.sort_name),''), au.preferred_name)) AS nrm
+    FROM public.authors au
+  )
+  SELECT n.nrm, count(*)::bigint,
+         array_agg(n.id ORDER BY n.id),
+         string_agg(n.preferred_name, ' | ' ORDER BY n.id)
+  FROM norm n
+  -- H27 : un nom non latin se normalise en blancs, pas en doublon des autres.
+  WHERE btrim(COALESCE(n.nrm,'')) <> ''
+  GROUP BY n.nrm
+  HAVING count(*) > 1
+  ORDER BY count(*) DESC, n.nrm;
+END;
+$function$
+;
+
+DO $$
+DECLARE
+  v_l text; v_b text;
+BEGIN
+  FOR v_l, v_b IN SELECT * FROM (VALUES
+      ('fre', 'fr'), ('POR', 'pt-BR'), ('zho', 'zh'), ('pt-pt', 'pt-BR'), ('pt_BR', 'pt-BR'), ('zh-Hans', 'zh'),
+      ('es-419', 'es'), ('sr-Latn', 'sr'), ('nor', 'nb'), ('no', 'nb'), ('Português', 'pt-BR'),
+      ('Português do Brasil', 'pt-BR'), ('Français', 'fr'), ('English', 'en')) t(l, b) LOOP
+    IF ingest.fn_idioma_bcp47(v_l) IS DISTINCT FROM v_b THEN
+      RAISE EXCEPTION 'H27 : fn_idioma_bcp47(%) = %, attendu %', v_l, ingest.fn_idioma_bcp47(v_l), v_b;
+    END IF;
+  END LOOP;
+  FOR v_l IN SELECT * FROM (VALUES ('fro'), ('mul'), ('und'), ('NA'), ('xx-yy'), ('iw'), (''), (NULL)) t(l) LOOP
+    IF ingest.fn_idioma_bcp47(v_l) IS NOT NULL THEN
+      RAISE EXCEPTION 'H27 : fn_idioma_bcp47(%) = %, attendu NULL', v_l, ingest.fn_idioma_bcp47(v_l);
+    END IF;
+  END LOOP;
+  -- Une base dont la locale ne connaît que les lettres ASCII ferait passer un
+  -- nom chinois pour un non-agent : la migration échoue plutôt.
   IF public.fn_conv_est_non_agent('Παπαδόπουλος, Νίκος') OR public.fn_conv_est_non_agent('王小明')
+     OR public.fn_conv_est_non_agent('Кропоткин, Пётр')
      OR NOT public.fn_conv_est_non_agent('Collectif') OR NOT public.fn_conv_est_non_agent('---')
+     OR NOT public.fn_conv_est_non_agent('—') OR NOT public.fn_conv_est_non_agent('…')
      OR NOT public.fn_conv_est_non_agent('') OR NOT public.fn_conv_est_non_agent(NULL) THEN
     RAISE EXCEPTION 'H27 : fn_conv_est_non_agent ne tranche pas comme attendu';
   END IF;
@@ -471,6 +587,12 @@ BEGIN
        'ingest.fn_create_book_drafts_from_import_rows(bigint,bigint[],text,text,uuid)'::regprocedure)) = 0
      OR position('Palavras-chave importadas' IN pg_get_functiondef(
        'ingest.fn_create_book_drafts_from_import_rows(bigint,bigint[],text,text,uuid)'::regprocedure)) = 0 THEN
-    RAISE EXCEPTION 'H27 : la création des brouillons n''a pas ses deux changements';
+    RAISE EXCEPTION 'H27 : la création des brouillons n''a pas ses changements';
+  END IF;
+  IF position('btrim(r.autor_norm)' IN pg_get_viewdef('public.v_author_alias_worklist'::regclass)) = 0
+     OR NOT EXISTS (SELECT 1 FROM pg_class c WHERE c.oid = 'public.v_author_alias_worklist'::regclass
+                     AND 'security_invoker=true' = ANY (coalesce(c.reloptions, '{}')))
+     OR position('btrim(COALESCE(n.nrm' IN pg_get_functiondef('api.report_autorites_doublons()'::regprocedure)) = 0 THEN
+    RAISE EXCEPTION 'H27 : la vue des alias ou le rapport des doublons prend encore la clé vide pour un nom';
   END IF;
 END $$;

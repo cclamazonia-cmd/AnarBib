@@ -25,7 +25,7 @@
 // personne que la fiche d'autorité ne donne pas, le type d'enregistrement du
 // guide (carte, musique…) quand il dit encore le type qu'AnarBib tient.
 import {
-  CHAMPS, SUJETS, SEPARATEUR_SUBDIVISION, RESPONSABILITES, CODE_ROLE, roleDepuisCode,
+  CHAMPS, SUJETS, SEPARATEUR_SUBDIVISION, RESPONSABILITES, CODE_ROLE, roleDepuisCode, codeRelation,
   DEFAULT_ITEM_MAPPINGS, guidePourType, typeDepuisGuide, type Dialecte,
 } from './correspondance.ts';
 
@@ -187,10 +187,23 @@ export function codeFonction(d: Dialecte, c: Contributeur): string {
 
 const AUTEURS = new Set(['autor', 'coautor', 'organizacao']);
 
+// Le numéro d'une fiche d'autorité : la 001 de l'export d'autorités (H25) et le
+// $3 qui y mène depuis une notice. Préfixé (revue du 28/09) : PMB cherche un
+// numéro favori sans filtrer l'origine (import_func.inc.php, keep_authority_
+// infos) — un « 12 » nu retrouverait l'auteur 12 d'une autre origine. Jamais
+// 14 caractères : authority_import::format_authority_number tronque une 001 de
+// 14 caractères (« FRBNF »), pas le $3 des notices.
+export function numeroAutorite(genre: 'nom' | 'sujet', id: unknown): string | null {
+  const v = txt(id);
+  return v === null ? null : `AnarBib-${genre === 'sujet' ? 'S' : 'A'}${v.padStart(8, '0')}`;
+}
+
 // « Congrès anarchiste (3 ; 1907 ; Amsterdam) » → base + qualificatifs
 // (UNIMARC $d $f $e ; MARC21 $n $d $c). L'import ne joint que les
 // qualificatifs présents : la date (un millésime) fixe la place des autres.
-function congres(nom: string, codes: string[]): { base: string; subs: (SousZone | null)[] } {
+// Partagé avec l'export d'autorités (autorites.ts) : la 210 d'un congrès et
+// la 71X de ses notices disent la même chose.
+export function congres(nom: string, codes: string[]): { base: string; subs: (SousZone | null)[] } {
   const m = nom.match(/^(.*\S)\s*\(([^()]*)\)$/);
   if (!m) return { base: nom, subs: [] };
   const parts = m[2].split(/\s*;\s*/).map((x) => x.trim()).filter(Boolean);
@@ -223,22 +236,30 @@ function datesDOrigine(d: Dialecte, rec: NoticeExport): Map<string, string> {
 }
 
 // Le niveau d'une responsabilité secondaire en UNIMARC (70x/71x : 1 = autre
-// auteur, 2 = secondaire) : celui de la zone d'origine qui porte le même nom
-// et la même fonction (ou aucune) — même dialecte, bibliothèque d'origine.
-// PMB range un illustrateur en 701 là où la table d'AnarBib dirait 702 ; rien
-// ne contredit le choix d'origine tant que le rôle n'a pas changé (H27).
-function niveauxDOrigine(d: Dialecte, rec: NoticeExport): Map<string, { niveau: string; code: string | null }> {
-  const m = new Map<string, { niveau: string; code: string | null }>();
+// auteur, 2 = secondaire) : celui de la zone d'origine qui porte le même nom —
+// formé comme l'import le forme (« $a, $b » ; « $a. $b (qualificatifs) ») —
+// et la même fonction. Même dialecte, bibliothèque d'origine. PMB range un
+// illustrateur en 701 là où la table d'AnarBib dirait 702 ; rien ne contredit
+// le choix d'origine tant que la fonction n'a pas changé (H27, revues du
+// 28/09). Une zone nue (sans $4) ne dit pas de fonction : la table décide, et
+// redonne le niveau dont l'import a tiré le rôle (autor → 1, outro → 2).
+// Clé : « famille|nom|code » (famille 0 = 70x, 1 = 71x).
+function niveauxDOrigine(d: Dialecte, rec: NoticeExport): Map<string, string> {
+  const m = new Map<string, string>();
   if (d !== 'unimarc' || !rec.source || rec.source.dialect !== d) return m;
+  const zones = new Map(RESPONSABILITES[d].map((z) => [z.tag, z]));
   for (const f of rec.source.fields ?? []) {
     const t = /^7([01])([12])$/.exec(f?.tag ?? '');
     if (!t || !Array.isArray(f.subfields)) continue;
     const val = (c: string) => f.subfields!.filter((s) => s?.code === c).map((s) => txt(s.value)).filter((x): x is string => !!x);
-    const code = val('4')[0] ?? null;
-    const noms = t[1] === '0' ? [[...val('a'), ...val('b')].join(', ')] : [val('a')[0] ?? '', [...val('a'), ...val('b')].join('. ')];
-    for (const nom of noms) {
-      const cle = `${t[1]}|${nom}`;
-      if (nom && !m.has(cle)) m.set(cle, { niveau: t[2], code });
+    const base = [...val('a'), ...val('b')].join(t[1] === '0' ? ', ' : '. ');
+    if (!base) continue;
+    const q = (zones.get(f.tag)?.qualificatifs ?? []).map((c) => val(c)[0]).filter(Boolean);
+    const nom = q.length ? `${base} (${q.join(' ; ')})` : base;
+    const codes = val('4').map((c) => codeRelation(c)).filter(Boolean);
+    for (const code of codes) {
+      const cle = `${t[1]}|${nom}|${code}`;
+      if (!m.has(cle)) m.set(cle, t[2]);
     }
   }
   return m;
@@ -250,10 +271,8 @@ function responsabilites(d: Dialecte, rec: NoticeExport): ChampMarc[] {
   const qualif = (tag: string) => RESPONSABILITES[d].find((z) => z.tag === tag)?.qualificatifs ?? [];
   const datesSource = datesDOrigine(d, rec);
   const niveaux = niveauxDOrigine(d, rec);
-  const niveauDOrigine = (famille: '0' | '1', nom: string, code: string): string | null => {
-    const o = niveaux.get(`${famille}|${nom}`);
-    return o && (o.code === null || o.code === code) ? o.niveau : null;
-  };
+  const niveauDOrigine = (famille: '0' | '1', nom: string, code: string): string | null =>
+    niveaux.get(`${famille}|${nom}|${code}`) ?? null;
   for (const c of contributeurs(rec)) {
     const nature = c.nature === 'collective' || c.nature === 'congress' ? c.nature : 'person';
     const estPrincipale = !!c.primary && !principale;
@@ -262,20 +281,20 @@ function responsabilites(d: Dialecte, rec: NoticeExport): ChampMarc[] {
     const nom = String(c.name).trim();
     const dates = nature === 'person' ? (txt(c.dates) ?? datesSource.get(nom) ?? null) : null;
     if (d === 'unimarc') {
-      const base = nature === 'congress' ? congres(nom, qualif('711')).base : nom;
+      const role = txt(c.role) || 'autor';
       const rang = estPrincipale ? '0'
-        : niveauDOrigine(nature === 'person' ? '0' : '1', base, code) ?? (AUTEURS.has(txt(c.role) || 'autor') ? '1' : '2');
+        : niveauDOrigine(nature === 'person' ? '0' : '1', nom, code) ?? (AUTEURS.has(role) ? '1' : '2');
       if (nature === 'person') {
         const i = nom.indexOf(', ');
         out.push(champ(`70${rang}`, ind(d, `70${rang}`), [
           sz('a', i > 0 ? nom.slice(0, i) : nom), sz('b', i > 0 ? nom.slice(i + 2) : null),
-          sz('f', dates), sz('4', code), sz('3', c.authorId),
+          sz('f', dates), sz('4', code), sz('3', numeroAutorite('nom', c.authorId)),
         ])!);
       } else {
         const tag = `71${rang}`;
         const q = nature === 'congress' ? congres(nom, qualif(tag)) : { base: nom, subs: [] };
         out.push(champ(tag, nature === 'congress' ? '12' : '02', [
-          sz('a', q.base), ...q.subs, sz('4', code), sz('3', c.authorId),
+          sz('a', q.base), ...q.subs, sz('4', code), sz('3', numeroAutorite('nom', c.authorId)),
         ])!);
       }
     } else {
@@ -321,7 +340,7 @@ function sujets(d: Dialecte, rec: NoticeExport, depuisNotes: string[], motsDesNo
     const subs = [sz('a', parts[0]), ...(orig && orig.length === parts.length - 1
       ? orig.map((s) => sz(s.code, s.value)) : parts.slice(1).map((p) => sz('x', p)))];
     if (thesaurus) {
-      subs.push(d === 'unimarc' ? sz('3', id) : sz('0', `(AnarBib)${id}`), sz('2', 'anarbib'));
+      subs.push(d === 'unimarc' ? sz('3', numeroAutorite('sujet', id)) : sz('0', `(AnarBib)${id}`), sz('2', 'anarbib'));
     }
     out.push(champ(tag, d === 'unimarc' ? '  ' : (thesaurus ? ' 7' : ' 4'), subs)!);
   };

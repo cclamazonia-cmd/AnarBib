@@ -1912,7 +1912,7 @@ export default function ImportacoesPage() {
 
             <div className="imp-sheet">
               <div className="imp-sheet__head">
-                <span className="imp-sheet__title">{t({ id: 'importacoes.export.lote.title' })}<Pill variant="ok">CSV · MARCXML · JSON</Pill></span>
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.lote.title' })}<Pill variant="ok">UNIMARC · MARC21 · CSV · JSON</Pill></span>
               </div>
               <div className="imp-sheet__body">
                 <p className="imp-note">{t({ id: 'importacoes.export.lote.desc' })}</p>
@@ -1929,7 +1929,7 @@ export default function ImportacoesPage() {
                         XML (« XML MARC ») ; MARC21 en ISO 2709 et en MARCXML. */}
                     <option value="unimarc_iso2709">UNIMARC — ISO 2709</option>
                     <option value="unimarc_xml">UNIMARC — XML</option>
-                    <option value="unimarc_autorites">UNIMARC Autorités — ISO 2709</option>
+                    <option value="unimarc_autorites">{t({ id: 'importacoes.export.lote.formatAutorites' })}</option>
                     <option value="marc21_iso2709">MARC21 — ISO 2709</option>
                     <option value="marcxml">MARC21 — MARCXML</option>
                     <option value="csv">CSV</option>
@@ -1943,6 +1943,11 @@ export default function ImportacoesPage() {
                     {exportLoading ? t({ id: 'importacoes.export.lote.exporting' }) : t({ id: 'importacoes.export.lote.download' })}
                   </button>
                 </div>
+                {/* H25 : la marche à suivre dans PMB, sans laquelle PMB recrée un
+                    auteur par notice (tests/pmb/README.md). */}
+                {exportFormat === 'unimarc_autorites' && (
+                  <p className="imp-note" style={{ marginTop: 8 }}>{t({ id: 'importacoes.export.lote.autoritesHint' })}</p>
+                )}
               </div>
             </div>
 

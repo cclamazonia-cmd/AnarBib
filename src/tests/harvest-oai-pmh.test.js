@@ -512,3 +512,19 @@ describe("T11 — un run qui n'est pas un moissonnage est refusé", () => {
     expect(verrou(r.ecrits)).toBeNull();
   });
 });
+
+describe('T15 — une notice MARC qui ne porte que des mots-clés est gardée (H27)', () => {
+  it('001 + 653 seulement → une ligne, mots-clés dans normalized_payload.keywords', async () => {
+    const seulMotsCles = `<record><header><identifier>oai:x:653</identifier><datestamp>2026-08-01</datestamp></header><metadata>` +
+      `<record xmlns="http://www.loc.gov/MARC21/slim"><leader>00000nam a2200000 a 4500</leader>` +
+      `<controlfield tag="001">ctrl-653</controlfield>` +
+      `<datafield tag="653" ind1=" " ind2=" "><subfield code="a">anarquismo</subfield><subfield code="a">sindicalismo</subfield></datafield>` +
+      `</record></metadata></record>`;
+    const r = await monterEF(etatNeuf(), [listRecords([seulMotsCles])])();
+    expect(r.corps.empty_skipped ?? 0).toBe(0);
+    const lignes = lignesInserees(r.ecrits);
+    expect(lignes).toHaveLength(1);
+    expect(lignes[0].subjects).toEqual([]);
+    expect(lignes[0].normalized_payload.keywords).toEqual(['anarquismo', 'sindicalismo']);
+  });
+});
