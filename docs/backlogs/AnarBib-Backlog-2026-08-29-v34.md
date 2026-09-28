@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-28** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-28** · 65 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,14 +16,14 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 6
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 3
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 5
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-28.** **52 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, B31, B33, B34, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-28.** **52 items sur 65** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, B31, B33, B34, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **13** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -351,7 +351,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B29** | Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens | `P1` | À vérifier |
 | **B30** | Donner une bibliothèque propre au lot de catalogage (suite de B29) | `P2` | À vérifier |
 | **B31** | Lecture anonyme : trois tables lèvent une erreur au lieu de rendre zéro ligne | `P2` | clos |
-| **B32** | Catalogue public : chaque page relit toute la vue matérialisée, et la visibilité se calcule ligne à ligne | `P2` | En cours |
 | **B33** | Recherche : des index trigramme que la forme des requêtes empêche d'emprunter | `P2` | clos |
 | **B34** | Effacement de compte : le journal du catalogue garde l'identifiant de la personne effacée | `P2` | clos |
 
@@ -440,29 +439,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §2` · `supabase/migrations/20260927180000_b10_une_policy_permissive_par_role_et_commande.sql`*
-
-#### B32 — Catalogue public : chaque page relit toute la vue matérialisée, et la visibilité se calcule ligne à ligne
-
-`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Constaté pendant B10 (27/09). **(1)** Depuis SECU-MV-FIX2 (15/06), les vues du catalogue lisent les deux vues matérialisées à travers `private.fn_catalog_public_rows()` / `_network_rows()` — SQL, SECURITY DEFINER, `SET search_path` : PostgreSQL ne les insère jamais en ligne. Chaque page (`catalog_works_v1`, facettes, recherche d'identifiants, liste plate) matérialise donc **toute** la vue : 20 828 parcours séquentiels de la vue publique en 25 jours, zéro scan de ses 19 index secondaires. **(2)** `api.catalog_works_v1` est SECURITY INVOKER et joint `books` : la RLS de `books` s'y paie ligne à ligne. En anonyme, `count(*)` sur `books` coûte 88 ms pour 2 634 notices — `fn_library_visible_to_caller`, fonction DEFINER, appelée pour chaque exemplaire. À 100 000 notices, l'un et l'autre dépassent les 3 s du rôle `anon` : c'est le mécanisme de fond de B27, que son plan corrigé du 21/09 ne supprime pas. **28/09 — en cours dans l'autre session, au banc** : bases `anarbib_perf_b32_avant` et `anarbib_perf_b32` (100 003 notices synthétiques), `books_public_read` réécrite avec `fn_visible_library_ids()` calculée une fois par requête. Xavier a tranché le 28/09 : cette session le garde ; l'autre relit à la livraison.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Deux leviers, à mesurer séparément. (a) Une lecture paramétrée qui filtre DANS la fonction, pour que filtres et tri atteignent la vue matérialisée — les 19 index secondaires, gardés par B10, y redeviendraient utiles ou seraient remplacés par ceux que la nouvelle requête écrit. (b) La visibilité par bibliothèque calculée une fois par requête (l'ensemble des bibliothèques visibles en InitPlan) au lieu d'une fonction par ligne — même règle que la passe 1 bis de B10.
-
-**Pourquoi ça compte.** Le coût d'une page croît avec le catalogue, par construction. Le jour où une bibliothèque arrive avec 100 000 notices, le catalogue anonyme tombe en `57014`.
-
-**Ce qui compte comme fini.**
-
-- Une page du catalogue anonyme ne parcourt plus toute la vue matérialisée (plan à l'appui).
-- La visibilité par bibliothèque se calcule une fois par requête (plan à l'appui).
-- Mesure sur 100 000 notices synthétiques : sous les 3 s du rôle anon.
-- Le sort des 19 index secondaires des vues matérialisées est tranché.
-
-**Dépendances.** Après B10 (clos le 27/09). Même zone que B27.
-
-*Renvois : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5` · `supabase/migrations/20260510000000_baseline_live.sql (SECU-MV-FIX2, lignes 45, 9876, 9992)`*
 
 #### B33 — Recherche : des index trigramme que la forme des requêtes empêche d'emprunter
 
@@ -1622,7 +1598,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I24** | Le flux de sauvegarde `storage` est tué quand la session WSL s'arrête, et son alerte `OnFailure` ne part pas | `P1` | Ouvert |
-| **I28** | Les règles du hook pre-commit ne s'appliquent pas aux commits faits depuis WSL | `P1` | Ouvert |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1711,27 +1686,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Cousin de **I12** (le `die` du miroir sans destinataire) : même cause, l'alerte n'a pas de chemin qui survive au poste. Lié à **A3** (tout tourne sur la machine du mainteneur).
 
 *Renvois : `deploy/ops/systemd/` · `anarbib-systemd-etat-non-fiable` · `anarbib-backup-stale-lock-selfheal` · `RUNBOOK_restauration_BG2_2026-07-01`*
-
-#### I28 — Les règles du hook pre-commit ne s'appliquent pas aux commits faits depuis WSL
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** Constaté pendant B10 (27/09). Le hook `.githooks/pre-commit` (règles bloquantes dont celles de `DOC-DEPLOY-4` : pas d'heure ronde, pas d'horodatage dans le futur, pas de collision de version) n'est actif que dans le checkout Windows (`core.hooksPath = .githooks`). Ni `~/anarbib` ni ses worktrees WSL — où travaillent les sessions depuis le 21/08 — ne le règlent, et son lanceur appelle `powershell.exe`. Mesure : **15 des 129 migrations** versées depuis le 31/08 sont à l'heure ronde ; les cinq de B10 ont en plus été datées dans le futur (18 h UTC, écrites entre 16 h 30 et 17 h 10) sans que rien ne l'arrête — une migration voisine (`20260927164619`) est tombée dans la fenêtre, sans dommage cette fois (aucun objet commun). I9 a été clos le 30/08 « par une règle » : la règle ne tourne pas là où l'on travaille.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Porter en CI ce qui peut l'être, puisque la CI tourne pour tout le monde : une garde sur `supabase/migrations/` — version unique ; pas de `…0000` pour un fichier ajouté après le 30/08 ; version antérieure à la date du commit qui l'ajoute (`git log --diff-filter=A`). Et régler `core.hooksPath` dans la recette de création d'un worktree, avec un lanceur qui fonctionne sous WSL.
-
-**Pourquoi ça compte.** Une collision de version donne un déploiement vert et une migration jamais exécutée ; une migration datée dans le futur rend l'ordre du dépôt différent de l'ordre d'application. Ni l'un ni l'autre ne s'annonce.
-
-**Ce qui compte comme fini.**
-
-- Une migration ajoutée à l'heure ronde, datée dans le futur ou en collision fait rougir la CI.
-- La recette de worktree active le hook, ou la CI le rend inutile.
-
-**Dépendances.** Aucune.
-
-*Renvois : `.githooks/pre-commit.ps1 (règles 7 et 8)` · `docs/specs/REGISTRE_decisions.md (DOC-DEPLOY-4)` · `clôture I9 (30/08)` · `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §7`*
 
 ---
 
@@ -2174,6 +2128,8 @@ CI verte : lint et suite unitaire. |
 | B31 | 2026-09-28 | Livré par l'autre session le 27/09 (`507afb03`, migration `20260927184425`) : 13 relations pour `anon` et 10 pour un compte sans adhésion levaient 42501 ; toutes rendent zéro ligne. Vérifié en prod le 28/09 sous `anon` : les trois tables du constat rendent 0 ligne sans erreur, politiques SELECT `TO authenticated`. Suite `lecture_accordee_sans_erreur_tests` en CI. Clos par Xavier sur ces constats. |
 | B33 | 2026-09-28 | Livré par l'autre session le 27/09 (`6bdd4331`, migrations `20260927193314`/`…315` ; T1 corrigé le 28/09, `8eaa180c`). Vérifié en prod le 28/09 : `search_catalog_v1` porte le motif regexp unique ; plan à l'appui — `BitmapOr` de six `Bitmap Index Scan` sur les deux index trigramme de `authors` (4,5 ms) ; `publishers_lower_name_idx` sert la publication ; `idx_publishers_name_trgm`, `idx_authors_external_ids`, `serials_issn_idx` retirés, raison écrite. Réserve notée : l'appel complet sous `anon` reste à 183 ms, le temps est ailleurs que dans les branches trigramme. Clos par Xavier sur ces constats. |
 | B34 | 2026-09-28 | Livré par l'autre session le 27/09 (`df4dcec1`, migration `20260927184954`) : `fn_delete_my_account` re-pointe l'acteur de `catalog_audit_log` et les comptes des instantanés de brouillons. Vérifié en prod le 28/09 : le corps de la fonction traite le journal ; 1 750 lignes, un seul acteur (actif), aucun uuid orphelin. Suite `effacement_journal_catalogue_tests` en CI. Clos par Xavier sur ces constats. |
+| I28 | 2026-09-28 | **Clos le 28/09 : la CI tient les règles du hook, pour tout le monde, puisqu'elle tourne pour tout le monde.** `src/tests/doctrine-migrations-garde.test.js` (dans `npm test`, donc au job `app` de chaque push) : 10 tests — nom à 14 chiffres ; version unique (une collision, c'est une migration sautée sans erreur) ; pas d'heure ronde depuis le 31/08, hors une liste close des 15 déjà versées, dont la garde vérifie qu'elles existent ; pas de date dans le futur (dix minutes de tolérance) ; la doctrine SQL du hook sur toute migration depuis le 31/08 (DEFINER sans `SET search_path`, nouvelle DEFINER sans `REVOKE … FROM PUBLIC`, table sans RLS, vue sans `security_invoker`, table de `public` sans `GRANT`). Livré le 27/09 avec B31 et B34 (`df4dcec1`). Éprouvé le jour même : relancée à chaque rebase sur les migrations des autres sessions (capas, B30, C9), et elle a arrêté un brouillon de B33 (un `CREATE FUNCTION` dans une migration qui citait « SECURITY DEFINER » sans `SET search_path`). Le second critère est rempli par le premier : la recette de worktree n'a plus besoin du hook. |
+| B32 | 2026-09-28 | **Clos le 28/09, sur pièces, à 100 000 notices synthétiques.** Trois migrations (`20260928122316`, `…17`, `…18`). *(b)* La visibilité par bibliothèque se calcule une fois par requête — `fn_visible_library_ids()` en InitPlan dans les 21 policies, la règle restant écrite dans `fn_library_visible_to_caller` : `count(*)` sur `books` sous anon 3,0 s → 52 ms, en session 29,8 s → 0,79 s ; visibilité identique (13 tables, 6 identités). *(a)* Les vues du catalogue lisent les vues matérialisées par deux vues `private` (plus d'enveloppe DEFINER par ligne), et les index sont enfin empruntés (`book_id` 2 193 parcours sur 24 requêtes réelles, `titulo`, `autor_trgm`, `ano`…). Devant la vraie vue, `catalog_works_v1` basculait en boucles imbriquées (1 ligne estimée pour 77 000 — des heures) : elle assemble son WHERE des filtres présents, lit `volume` par la vue, prend le titre de repli dans le catalogue qu'elle sert, matérialise `titres` et interdit les boucles imbriquées le temps de sa requête. Au passage, `catalog_search_ids_v1` rendait `LIMIT 500` sans ordre total : `book_id` départage. *(c)* `fn_locale_from_idioma` s'insère en ligne (plus de `SET`). Quarante parcours de l'OPAC identiques avant/après (md5 du JSON rendu). Mesures finales, anon : page par défaut 15,9 s → 1,8 s, tri auteur·rice 11,3 → 1,7 s, recherche 0,75 s, liste plate par titre 132 → 0,8 ms ; session : page par défaut 54,8 → 2,2 s. Index secondaires : tous gardés, raison écrite ; trois sans parcours (`autor_norm_trgm`, `library_slug`, `titulo_trgm`) à relire aux compteurs de production dans un mois. Le coût d'une page reste linéaire dans le nombre d'œuvres (total, tri global) : une vue par œuvre au-delà de 200 000 notices, ce n'est pas le problème d'aujourd'hui. Vérifié en production le 28/09 (déployé 14:05 UTC) : visibilité identique pour les 21 identités ; 39 parcours sur 40 identiques, le quarantième identique à ce que l'ancienne logique rend sur les mêmes données ; page par défaut anonyme 383 → 74 ms, recherche 335 → 49 ms, `count(*)` 87 → 4 ms, page en session 442 → 135 ms ; lint 0028 = 27, attendu. Audit : `journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md`. |
 
 ---
 
@@ -2205,4 +2161,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-28. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-28. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 65 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
