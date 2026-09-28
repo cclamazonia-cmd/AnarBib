@@ -102,3 +102,29 @@ une mutualisation (`DEDUP-8`) : elle appartient aux collectifs, pas à une corre
 Rien d'ouvert côté outil : le lot tourne (cron actif, `fn_crons_attendus` = 41), la
 revue et la campagne photo sont en production. Le rendement de l'automatique est
 connu et plafonne ; le nombre de couvertures suivra la photo en rayon.
+
+## Suite du 28/09 — une capa neuve a une adresse neuve (`CAPAS-6`)
+
+Xavier pose six couvertures sur deux séries de tomes de Peirats (MLEG-0145 à 0147,
+BTL-TL-000447 à 000449) et en remplace deux dans la foulée. La page Œuvre montre
+alors, pour un tome de chaque série, la couverture d'un autre tome — alors que les
+six fichiers du bucket sont justes. Cause : le formulaire écrivait chaque capa à
+`books/<clé>/front.<ext>` par `upsert`, et le bucket sert ses objets avec
+`Cache-Control: max-age=3600` ; le navigateur qui venait d'afficher la première
+version (celui de la personne qui catalogue, forcément) et le CDN devant lui
+resservaient l'ancienne image pendant une heure. Le commentaire de
+`writeCoverThumb` (coverThumbs.js) le savait pour le dérivé ; l'original avait le
+même défaut.
+
+Correctif, sans migration : `cheminCapaNeuf()` (coverThumbs.js) donne à chaque dépôt
+du formulaire — fichier, candidate choisie via `cover_lookup` (`nom: capa-…`), page 1
+d'un PDF — une adresse neuve `books/<clé>/capa-<horodatage base 36>.<ext>`, jamais
+d'`upsert` ; la clé du dossier est nettoyée comme par `cover_lookup` et
+`photoCapa.js` (une référence à espace ou barre ne fait plus de sous-dossier) ; le
+dérivé `.thumb.jpg` suit le nom, donc change d'adresse aussi. L'ancien objet reste
+tant qu'une notice ou un brouillon le désigne (un brouillon abandonné ne doit pas
+laisser la notice sans image) ; `scripts/purge-orphelins-covers.py` le retire une
+fois remplacé (classe B). `front.<ext>` reste un nom valide pour le stock d'avant et
+pour un appelant de `cover_lookup` sans `nom`. Gardes : `coverThumbs.test.js` (deux
+dépôts successifs ne partagent ni adresse ni dérivé), `cover-sources-ecran.test.js`
+(le formulaire n'écrit plus `front.` et ne remplace plus en place).
