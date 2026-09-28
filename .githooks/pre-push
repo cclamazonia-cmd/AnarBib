@@ -13,6 +13,10 @@
 # commit ET un fichier qui déploie, on refuse — et on dit quoi faire : pousser
 # le code seul, puis la doc ; ou amender le message de la doc si elle n'a pas
 # quitté le poste. Actif via `git config core.hooksPath .githooks` (cf. CLAUDE.md).
+# Ne concerne que Codeberg, où vit la CI : le miroir GitHub (et le miroir nu
+# local) rattrapent plusieurs pushes d'un coup, leur lot est mixte par nature
+# et rien n'y tourne — vécu le 28/09 : le hook a refusé un push GitHub.
+case "$2" in *codeberg.org*) ;; *) exit 0 ;; esac
 # Reçoit sur stdin : <ref locale> <sha local> <ref distante> <sha distant>.
 zero=0000000000000000000000000000000000000000
 while read -r lref lsha rref rsha; do
