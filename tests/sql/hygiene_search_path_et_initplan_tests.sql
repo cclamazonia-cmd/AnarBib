@@ -18,7 +18,13 @@ BEGIN
     FROM pg_proc p JOIN pg_namespace ns ON ns.oid = p.pronamespace
    WHERE ns.nspname IN ('public', 'api', 'ingest', 'private')
      AND p.prokind = 'f'
-     AND NOT EXISTS (SELECT 1 FROM unnest(coalesce(p.proconfig, '{}')) c WHERE c LIKE 'search_path=%');
+     AND NOT EXISTS (SELECT 1 FROM unnest(coalesce(p.proconfig, '{}')) c WHERE c LIKE 'search_path=%')
+     -- B32 (28/09/2026), seule exception nommée : fn_locale_from_idioma est une
+     -- fonction SQL IMMUTABLE réduite à une expression, toutes références
+     -- qualifiées pg_catalog — un SET l'empêcherait d'être insérée en ligne
+     -- (un appel par ligne au lieu d'une expression). Le search_path n'a pas
+     -- de prise sur elle ; la migration 20260928122318 le vérifie et le dit.
+     AND NOT (ns.nspname = 'public' AND p.proname = 'fn_locale_from_idioma');
   IF n <> 0 THEN RAISE EXCEPTION 'TEST 1 ÉCHOUÉ : % fonction(s) sans search_path figé : %', n, v_list; END IF;
   v_ok := v_ok + 1; RAISE NOTICE 'TEST 1 OK — toutes les fonctions applicatives ont un search_path figé.';
 
