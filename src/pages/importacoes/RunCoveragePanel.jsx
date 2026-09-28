@@ -36,8 +36,10 @@ export default function RunCoveragePanel({ run }) {
       </p>
     ) : null;
   }
+  // H17 : le brut d'abord (à instruire), puis l'indice, puis le laissé exprès.
+  const ORDRE = { brut: 0, indice: 1, laisse: 2 };
   const nonRepris = coverageItems(coverage).filter((it) => it.status !== 'repris')
-    .sort((a, b) => (b.occurrences || 0) - (a.occurrences || 0));
+    .sort((a, b) => ((ORDRE[a.status] ?? 3) - (ORDRE[b.status] ?? 3)) || ((b.occurrences || 0) - (a.occurrences || 0)));
   const surplus = coverageItems(coverage).filter((it) => it.status === 'repris' && (it.surplus || 0) > 0);
   return (
     <div className="imp-sheet" style={{ marginBottom: 12 }} data-testid="run-coverage">
@@ -46,6 +48,11 @@ export default function RunCoveragePanel({ run }) {
         {counts && (
           <p className="imp-note" style={{ margin: '4px 0 0' }} data-coverage-counts>
             {t({ id: 'importacoes.coverage.counts' }, counts)}
+          </p>
+        )}
+        {Number(counts?.laisse || 0) > 0 && (
+          <p className="imp-note" style={{ margin: '2px 0 0' }} data-coverage-laisse>
+            {t({ id: 'importacoes.coverage.countsLaisse' }, { n: Number(counts.laisse) })}
           </p>
         )}
         {skipped > 0 && (
@@ -65,7 +72,10 @@ export default function RunCoveragePanel({ run }) {
                   {nonRepris.slice(0, MAX_LIGNES).map((it) => (
                     <tr key={`${it.dialect || ''}|${coverageItemLabel(it)}`} data-coverage-item={coverageItemLabel(it)}>
                       <td style={{ ...cell, whiteSpace: 'nowrap', fontFamily: 'monospace' }}>{coverageItemLabel(it)}</td>
-                      <td style={cell}>{t({ id: `importacoes.coverage.status.${it.status}` })}</td>
+                      <td style={cell}>
+                        {t({ id: `importacoes.coverage.status.${it.status}` })}
+                        {it.status === 'laisse' && it.motif ? <span style={muted}> · {t({ id: `importacoes.coverage.motif.${it.motif}` })}</span> : null}
+                      </td>
                       <td style={{ ...cell, whiteSpace: 'nowrap' }}>{t({ id: 'importacoes.coverage.occurrences' }, { n: it.occurrences || 0 })}</td>
                       <td style={{ ...cell, ...muted, wordBreak: 'break-word' }}>{it.example || ''}</td>
                     </tr>

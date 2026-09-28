@@ -84,9 +84,14 @@ describe('fixtures PMB 8.1.1.1 : le parseur lit ce que PMB exporte', () => {
     expect(x.res.entries.map(essentiel)).toEqual(utf8.res.entries.map(essentiel));
   });
 
-  it('XML propre à PMB (<unimarc><notice><f c=…>) : non reconnu — H22 ouvert', () => {
+  // H22 (27/09/2026) : le XML propre à PMB est lu — et donne EXACTEMENT les
+  // mêmes notices normalisées que l'ISO 2709 du même catalogue (zones H17,
+  // responsabilités H18 et exemplaires H19 compris).
+  it('XML propre à PMB (<unimarc><notice><f c=…>) : lu, mêmes notices que l\'ISO 2709', () => {
     const p = importer(`${V}.pmbxml.xml`);
-    expect(p.res).toBeNull();
+    expect(p.res.format).toBe('pmb_xml');
+    expect(p.res.entries).toHaveLength(50);
+    expect(p.res.entries.map((e) => e.mapped)).toEqual(utf8.res.entries.map((e) => e.mapped));
   });
 
   // H16 : le rapport de couverture dit ce qu'un export PMB perd à l'import —
@@ -102,10 +107,23 @@ describe('fixtures PMB 8.1.1.1 : le parseur lit ce que PMB exporte', () => {
     expect(z('995', 'f')).toMatchObject({ status: 'repris', occurrences: 33, records: 31 });
     expect(z('995', 'k')).toMatchObject({ status: 'repris' });
     expect(z('995', 'r')).toMatchObject({ status: 'indice' });
-    for (const [tag, code] of [['215', 'a'], ['225', 'a'], ['330', 'a'], ['676', 'a'], ['856', 'u']]) {
-      expect(z(tag, code)?.status, `${tag} $${code}`).toBe('brut');
+    // H17 : la collation, la collection, le résumé, la Dewey, l'adresse sont
+    // repris ; ce qui ne l'est pas est LAISSÉ EXPRÈS, avec sa raison — plus
+    // aucune zone brute (critère 2 de H17).
+    for (const [tag, code] of [['215', 'a'], ['225', 'a'], ['330', 'a'], ['676', 'a'], ['856', 'u'], ['461', 't'], ['463', 'v'], ['700', '4']]) {
+      expect(z(tag, code)?.status, `${tag} $${code}`).toBe('repris');
     }
+    expect(z('996', 'f')).toMatchObject({ status: 'laisse' });
+    expect(z('009', '').motif).toBe('interne');
+    expect(cov.zones.filter((x) => x.status === 'brut').map((x) => `${x.tag}$${x.code}`)).toEqual([]);
+    expect(cov.zones.filter((x) => x.status === 'laisse' && !x.motif)).toEqual([]);
     expect(JSON.stringify(cov).length).toBeLessThan(40000); // tient dans summary, liste des runs comprise
+  });
+
+  it('cas difficiles : aucune zone brute non plus', () => {
+    const cd = importer('pmb-8.1.1.1_cas-difficiles.unimarc.iso');
+    const cov = marcCoverage(cd.res.entries);
+    expect(cov.zones.filter((x) => x.status === 'brut').map((x) => `${x.tag}$${x.code}`)).toEqual([]);
   });
 
   // H19 : les 33 exemplaires du jeu de test deviennent 33 exemplaires, avec

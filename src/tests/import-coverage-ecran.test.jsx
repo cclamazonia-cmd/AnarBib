@@ -64,14 +64,61 @@ describe('RunCoveragePanel — ce que l\'import a repris', () => {
   it('le CSV téléchargé porte tout, repris compris, et échappe ce qu\'il faut', () => {
     const csv = coverageToCsv(RUN.summary.coverage, { filename: 'export-pmb.marc', runId: 42 });
     const lignes = csv.trim().split('\r\n');
-    expect(lignes[0]).toBe('import,fichier,format,element,statut,champ,occurrences,notices,repetitions_non_reprises,exemple');
+    expect(lignes[0]).toBe('import,fichier,format,element,statut,motif,champ,occurrences,notices,repetitions_non_reprises,exemple');
     expect(lignes).toHaveLength(5);
-    expect(lignes[4]).toBe('42,export-pmb.marc,marc,995 $f,brut,,33,31,0,33700004388761');
+    expect(lignes[4]).toBe('42,export-pmb.marc,marc,995 $f,brut,,,33,31,0,33700004388761');
     expect(coverageToCsv({ kind: 'csv', columns: [{ header: 'titre', status: 'brut', occurrences: 1, example: 'Ni dieu, ni maître' }] }))
       .toContain('"Ni dieu, ni maître"');
     expect(coverageItemLabel({ tag: '001', code: '' })).toBe('001');
     expect(coverageItemLabel({ header: 'titulo' })).toBe('titulo');
     expect(coverageItemLabel({ tag: 'SP', status: 'brut' })).toBe('SP');
+  });
+});
+
+describe('H17 — le laissé exprès, avec son motif', () => {
+  const RUN_H17 = {
+    id: 44, original_filename: 'export-pmb.marc', run_status: 'ready_for_review', created_drafts: 0,
+    summary: {
+      coverage: { kind: 'marc', records: 50, truncated: false, zones: [
+        { dialect: 'unimarc', tag: '801', code: 'b', status: 'laisse', motif: 'interne', occurrences: 50, records: 50, surplus: 0, example: 'PMB' },
+        { dialect: 'unimarc', tag: '200', code: 'a', status: 'repris', occurrences: 50, records: 50, surplus: 0, example: 'Titre' },
+        { dialect: 'unimarc', tag: '999', code: 'z', status: 'brut', occurrences: 2, records: 2, surplus: 0, example: 'x' },
+      ] },
+      coverage_counts: { repris: 1, indice: 0, brut: 1, laisse: 1, total: 3 },
+    },
+  };
+
+  it('écran Importations : le compte du laissé exprès, le brut avant le laissé, le motif traduit', () => {
+    const { container } = rendre(<RunCoveragePanel run={RUN_H17} />);
+    expect(container.querySelector('[data-coverage-laisse]').textContent).toMatch(/^1 élément laissé exprès/);
+    const lignes = [...container.querySelectorAll('[data-coverage-item]')].map((r) => r.getAttribute('data-coverage-item'));
+    expect(lignes).toEqual(['999 $z', '801 $b']);
+    expect(container.textContent).toContain(fr['importacoes.coverage.status.laisse'] + ' · ' + fr['importacoes.coverage.motif.interne']);
+    const csv = coverageToCsv(RUN_H17.summary.coverage, { filename: 'export-pmb.marc', runId: 44 });
+    expect(csv).toContain('44,export-pmb.marc,marc,801 $b,laisse,interne,,50,50,0,PMB');
+  });
+
+  it('rapport de révision : le brut d\'abord, le laissé ensuite avec son motif', () => {
+    const report = {
+      batch: { id: 8, drafts_active: 1 }, totals: {}, conventions: [], duplicates: {}, authorities: {},
+      coverage: [{ run_id: 44, original_filename: 'export-pmb.marc', kind: 'marc', counts: RUN_H17.summary.coverage_counts,
+        skipped_rows: 0, encoding: { used: 'utf-8', fallback: false },
+        not_taken: RUN_H17.summary.coverage.zones.filter((z) => z.status !== 'repris') }],
+    };
+    const { container } = rendre(<BatchReviewReport report={report} />);
+    const items = [...container.querySelectorAll('[data-testid="review-coverage"] li')].map((li) => li.textContent);
+    expect(items[0]).toMatch(/^999 \$z — gardé en brut/);
+    expect(items[1]).toContain('801 $b — ' + fr['importacoes.coverage.status.laisse'] + ' (' + fr['importacoes.coverage.motif.interne'] + ')');
+    expect(container.querySelector('[data-testid="review-coverage"] summary').textContent).toContain('1 élément laissé exprès');
+  });
+
+  it('les six motifs existent dans les 10 langues', async () => {
+    const motifs = ['interne', 'sans_champ', 'redondant', 'materiel', 'liens', 'codees'];
+    for (const loc of ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR']) {
+      const dico = (await import(`@/i18n/locales/${loc}.json`)).default;
+      for (const m of motifs) expect(dico[`importacoes.coverage.motif.${m}`], `${loc} ${m}`).toBeTruthy();
+      expect(dico['importacoes.coverage.status.laisse'], loc).toBeTruthy();
+    }
   });
 });
 

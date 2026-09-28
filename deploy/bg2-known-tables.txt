@@ -25,6 +25,7 @@ book_draft_digital_resources
 book_draft_import_events
 book_draft_subjects
 book_drafts
+book_external_ids
 book_holdings
 book_not_duplicate
 book_reading_note_reports

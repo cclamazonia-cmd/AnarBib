@@ -1,7 +1,7 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from '../_shared/deps.ts';
-import { parseMarcFile, MARC_PARSER_VERSION, unimarcCharsetWarnings, marcCoverage } from './marc.ts';
+import { parseMarcFile, MARC_PARSER_VERSION, unimarcCharsetWarnings, marcCoverage, mappedExtras } from './marc.ts';
 import { decodeImportBytes, encodingWarning, normalizeForcedEncoding } from './encoding.ts';
 import { csvCoverage, risCoverage, coverageCounts } from './coverage.ts';
 const corsHeaders = {
@@ -742,7 +742,12 @@ Deno.serve(async (req)=>{
           detected_delimiter: detectedDelimiterLabel,
           // H19 : les exemplaires physiques (MARC 995/852) ; la promotion en fait
           // des brouillons d'exemplaires rattachés au brouillon de notice.
-          items: Array.isArray(mapped.items) ? mapped.items : []
+          items: Array.isArray(mapped.items) ? mapped.items : [],
+          // H17 / H18 (MARC seulement ; absents d'un CSV ou d'un RIS) : ce que la
+          // promotion recopie dans le brouillon — pages, volume, collection,
+          // notes, classification, adresse, périodique et article — et les
+          // responsabilités structurées (nom, nature, rôle, code d'origine).
+          ...mappedExtras(mapped)
         },
         parse_status: 'parsed',
         match_status: 'unreviewed',

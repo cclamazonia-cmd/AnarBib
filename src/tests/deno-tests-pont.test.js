@@ -26,8 +26,11 @@
 import { it, expect, vi, afterAll } from 'vitest';
 
 // marc.test.ts 19 + encoding.test.ts 5 + coverage.test.ts 4 + serialize.test.ts 7
-// (27/09/2026, H19 : sous-zones répétées)
-const ATTENDUS = 35;
+// (27/09/2026, H19 : sous-zones répétées) + ecriture.test.ts 9 (28/09/2026, H23 :
+// l'écriture MARC, miroir de la lecture)
+// + marc.test.ts 2 (28/09/2026, revue contradictoire de H17/H18)
+// + ecriture.test.ts 4 (28/09/2026, revue contradictoire de H23/H24)
+const ATTENDUS = 57;
 
 let enregistres = 0;
 vi.stubGlobal('Deno', {
@@ -44,6 +47,7 @@ await import('../../supabase/functions/process-partner-catalog-import/marc.test.
 await import('../../supabase/functions/process-partner-catalog-import/encoding.test.ts');
 await import('../../supabase/functions/process-partner-catalog-import/coverage.test.ts');
 await import('../../supabase/functions/export-catalog-lote/serialize.test.ts');
+await import('../../supabase/functions/_shared/marc/ecriture.test.ts');
 
 it('le pont a enregistré tous les tests Deno attendus', () => {
   expect(enregistres).toBe(ATTENDUS);

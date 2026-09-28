@@ -35,7 +35,7 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from '../_shared/deps.ts';
-import { parseMarcXml, buildParsedEntriesFromMarc, MARC_PARSER_VERSION } from '../process-partner-catalog-import/marc.ts';
+import { parseMarcXml, buildParsedEntriesFromMarc, MARC_PARSER_VERSION, mappedExtras } from '../process-partner-catalog-import/marc.ts';
 import {
   OAI_PARSER_VERSION, parseOaiEnvelope, parseMetadataFormats, chooseMetadataPrefix,
   isMarcPrefix, buildOaiUrl, mapDublinCore, hasBibliographicContent,
@@ -374,6 +374,9 @@ Deno.serve(async (req) => {
           raw_payload: rawPayload,
           normalized_payload: {
             ...norm,
+            // H17 / H18 : pages, collection, classification, responsabilités…
+            // d'une notice MARC moissonnée (rien pour du Dublin Core).
+            ...mappedExtras(mapped as Record<string, unknown>),
             notes: (mapped as { notes?: string | null }).notes ?? null,
             parser_version: parserVersion,
             oai_metadata_prefix: prefix,

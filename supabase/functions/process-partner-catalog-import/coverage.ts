@@ -80,5 +80,6 @@ export function coverageCounts(coverage) {
   if (!coverage) return null;
   const items = coverage.zones || coverage.columns || coverage.tags || [];
   const n = (s) => items.filter((x) => x.status === s).length;
-  return { repris: n('repris'), indice: n('indice'), brut: n('brut'), total: items.length };
+  // H17 : « laisse » — laissé exprès, avec son motif (MARC seulement).
+  return { repris: n('repris'), indice: n('indice'), brut: n('brut'), laisse: n('laisse'), total: items.length };
 }

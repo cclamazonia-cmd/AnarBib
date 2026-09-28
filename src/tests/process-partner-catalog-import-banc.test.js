@@ -187,7 +187,7 @@ describe('process-partner-catalog-import sur un export PMB réel (H15, H28)', ()
     expect(col('autor')).toMatchObject({ status: 'repris', field: 'author' });
     expect(col('cote')).toMatchObject({ status: 'indice', field: 'cote' });
     expect(col('tipo_material')).toMatchObject({ status: 'brut', field: null, occurrences: 3 });
-    expect(r.finale.summary.coverage_counts).toEqual({ repris: 2, indice: 1, brut: 1, total: 4 });
+    expect(r.finale.summary.coverage_counts).toEqual({ repris: 2, indice: 1, brut: 1, laisse: 0, total: 4 });
     // La ligne « ;;;livro » n'a aucun contenu bibliographique : écartée, et comptée.
     expect(r.lignes).toHaveLength(2);
     expect(r.finale.summary.skipped_rows).toBe(1);

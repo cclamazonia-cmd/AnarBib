@@ -8,7 +8,11 @@
 // public.fn_export_catalog_lote (coordenador de la biblio, IMP-14) -> notices
 // normalisées (JSON) -> serializeCatalog() -> fichier (Content-Disposition).
 //
-// Requête : POST { library_id: uuid, format: 'csv'|'marcxml'|'json' }
+// Requête : POST { library_id: uuid, format: 'csv'|'marcxml'|'json'|'unimarc_iso2709'|'unimarc_xml'|'marc21_iso2709' }
+// H23 (28/09/2026) : UNIMARC (ISO 2709, XML) et MARC21 ISO 2709, depuis la table
+// commune à l'import (_shared/marc/) ; la bibliothèque (nom, pays, langue) que
+// rend le RPC signe les 995 et la 100/801. X-Export-Warnings : ce que le format
+// n'a pas pu porter (zone tronquée, notice écartée), compté.
 // Auth    : JWT requis (verify_jwt par défaut). Le RPC re-valide le rôle.
 
 import { createClient } from '../_shared/deps.ts';
@@ -21,7 +25,7 @@ const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Expose-Headers': 'Content-Disposition',
+  'Access-Control-Expose-Headers': 'Content-Disposition, X-Record-Count, X-Export-Warnings',
 };
 
 function json(body, status = 200) {
@@ -85,7 +89,10 @@ Deno.serve(async (req) => {
   const records = Array.isArray(data?.records) ? data.records : [];
   let serialized;
   try {
-    serialized = serializeCatalog(records, format);
+    const lib = data?.library ?? null;
+    serialized = serializeCatalog(records, format, {
+      bibliotheque: lib ? { nom: lib.short_name || lib.name || null, pays: lib.country ?? null, langue: lib.default_locale ?? null } : null,
+    });
   } catch (e) {
     return json({ error: String(e?.message || e) }, 400);
   }
@@ -94,6 +101,7 @@ Deno.serve(async (req) => {
   const filename = `catalogo-${libraryId}-${today}.${serialized.ext}`;
   // UTF-8 BOM pour le CSV (compat Excel / accents).
   const content = serialized.ext === 'csv' ? '﻿' + serialized.content : serialized.content;
+  const avertissements = serialized.avertissements ?? [];
 
   return new Response(content, {
     status: 200,
@@ -102,6 +110,7 @@ Deno.serve(async (req) => {
       'Content-Type': serialized.mime,
       'Content-Disposition': `attachment; filename="${filename}"`,
       'X-Record-Count': String(records.length),
+      'X-Export-Warnings': String(avertissements.length),
     },
   });
 });

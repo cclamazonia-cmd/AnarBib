@@ -12,6 +12,10 @@ import {
   marcCoverage,
   extractItems,
   resolveItemMapping,
+  looksLikeMarcXml,
+  looksLikePmbXml,
+  parsePmbXml,
+  mappedExtras,
 } from './marc.ts';
 
 // ── Fixtures XML ────────────────────────────────────────────
@@ -312,17 +316,20 @@ Deno.test('H16 marcCoverage : repris (table du dialecte) / brut, surplus, zone d
   assertEquals(cov.kind, 'marc');
   assertEquals(cov.records, 1);
   assertEquals(z('001', '').status, 'repris');
-  assertEquals(z('009', '').status, 'brut');
+  // H17 : la 009 de PMB est laissée exprès, avec sa raison ; la pagination est reprise.
+  assertEquals(z('009', '').status, 'laisse');
+  assertEquals(z('009', '').motif, 'interne');
   assertEquals(z('200', 'a').status, 'repris');
-  assertEquals(z('215', 'a').status, 'brut');
+  assertEquals(z('215', 'a').status, 'repris');
   // La 2e 101 $a d'un livre bilingue n'entre nulle part : surplus.
   assertEquals(z('101', 'a').status, 'repris');
   assertEquals(z('101', 'a').surplus, 1);
-  // Les sujets sont tous repris (liste) : pas de surplus ; $x ne l'est pas.
+  // Les sujets sont tous repris (liste) : pas de surplus ; depuis H17 leurs
+  // subdivisions aussi (« Anarchisme -- Histoire »).
   assertEquals(z('606', 'a').status, 'repris');
   assertEquals(z('606', 'a').occurrences, 2);
   assertEquals(z('606', 'a').surplus, 0);
-  assertEquals(z('606', 'x').status, 'brut');
+  assertEquals(z('606', 'x').status, 'repris');
   // Exemplaires : deux occurrences, une notice ; depuis H19 le code d'origine
   // est repris (correspondance par defaut PMB 8.1).
   assertEquals(z('995', 'f').status, 'repris');
@@ -403,7 +410,8 @@ Deno.test('H19 couverture : sous-zones d\'exemplaire reprises (code, cote, note,
   for (const c of ['f', 'k', 'u', 'a']) assertEquals(z(c).status, 'repris');
   assertEquals(z('r').status, 'indice');
   assertEquals(z('q').status, 'indice');
-  assertEquals(z('c').status, 'brut');
+  // H17 : le code du prêteur de PMB (redondant avec $a) est laissé exprès.
+  assertEquals(z('c').status, 'laisse');
   // Avec un profil qui lit le proprietaire en $c, $c devient repris et $a brut.
   const cov2 = marcCoverage(buildParsedEntriesFromMarc([REC_995], [], 'unimarc', { owner: 'c' }), { owner: 'c' });
   assertEquals(cov2.zones.find((x) => x.tag === '995' && x.code === 'c').status, 'repris');
@@ -421,4 +429,227 @@ Deno.test('buildParsedEntriesFromMarc : numerotation + dialecte mixte', () => {
   assertEquals(entries[0].dialect, 'unimarc');
   assertEquals(entries[1].rowNo, 2);
   assertEquals(entries[1].dialect, 'marc21');
+});
+
+// ── H17 / H18 / H22 (27/09/2026) : zones courantes, responsabilités, XML PMB ──
+
+const sf = (pairs) => pairs.map(([code, value]) => ({ code, value }));
+const REC_H17 = {
+  leader: '00000nam0 22000001i 450 ',
+  fields: [
+    { tag: '001', value: 'P-1' },
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Des bourses du travail'], ['h', 'Tome 2'], ['i', 'Les coopératives'], ['f', 'Zdeňka Černá'], ['g', 'trad. par Pilar Muñoz']]) },
+    { tag: '215', ind1: ' ', ind2: ' ', subfields: sf([['a', '352 p.'], ['c', 'ill.'], ['d', '21 cm']]) },
+    { tag: '225', ind1: '2', ind2: ' ', subfields: sf([['a', 'Mémoires sociales'], ['v', '7']]) },
+    { tag: '300', ind1: ' ', ind2: ' ', subfields: sf([['a', 'Note générale']]) },
+    { tag: '327', ind1: ' ', ind2: ' ', subfields: sf([['a', 'Sommaire']]) },
+    { tag: '330', ind1: ' ', ind2: ' ', subfields: sf([['a', 'Résumé']]) },
+    { tag: '606', ind1: ' ', ind2: ' ', subfields: sf([['a', 'Anarchisme'], ['x', 'Histoire'], ['y', 'France'], ['z', '19e siècle'], ['9', 'id:1']]) },
+    { tag: '610', ind1: '0', ind2: ' ', subfields: sf([['a', 'copains;policier']]) },
+    { tag: '676', ind1: ' ', ind2: ' ', subfields: sf([['a', '334.7'], ['l', 'Coopératives']]) },
+    { tag: '856', ind1: ' ', ind2: ' ', subfields: sf([['u', 'https://example.org/x'], ['q', 'pdf']]) },
+    { tag: '700', ind1: ' ', ind2: '1', subfields: sf([['a', 'Černá'], ['b', 'Zdeňka'], ['f', '1950-....'], ['4', '070'], ['9', 'id:53']]) },
+    { tag: '702', ind1: ' ', ind2: '1', subfields: sf([['a', 'Muñoz'], ['b', 'Pilar'], ['4', '730']]) },
+    { tag: '701', ind1: ' ', ind2: '1', subfields: sf([['a', 'Sans'], ['b', 'Code']]) },
+    { tag: '702', ind1: ' ', ind2: '1', subfields: sf([['a', 'Autre'], ['b', 'Code'], ['4', '999']]) },
+    { tag: '710', ind1: '0', ind2: '2', subfields: sf([['a', 'Collectif Brûlot'], ['4', '070']]) },
+    { tag: '711', ind1: '1', ind2: '2', subfields: sf([['a', 'Congrès anarchiste'], ['d', '3'], ['f', '1907'], ['e', 'Amsterdam']]) },
+  ],
+};
+
+Deno.test('H17 zones courantes UNIMARC : pages, volume, collection, notes, sujets subdivisés, classification, adresse', () => {
+  const m = mapMarcRecord(REC_H17, 'unimarc');
+  assertEquals(m.materialType, 'livro');
+  assertEquals([m.extent, m.pages], ['352 p.', 352]);
+  assertEquals(m.volume, 'Tome 2 : Les coopératives');
+  assertEquals(m.series, 'Mémoires sociales ; 7');
+  // Résumé d'abord, puis la note, puis le sommaire.
+  assertEquals(m.notes, 'Résumé\n\nNote générale\n\nSommaire');
+  assertEquals(m.classification, '334.7');
+  assertEquals(m.url, 'https://example.org/x');
+  assertEquals(m.responsibilityStatement, 'Zdeňka Černá ; trad. par Pilar Muñoz');
+  assertEquals(m.subjectsArray, ['Anarchisme -- Histoire -- France -- 19e siècle', 'copains', 'policier']);
+  assertEquals([m.host, m.issue], [null, null]);
+});
+
+Deno.test('H18 responsabilités UNIMARC : nature, rôle depuis $4, code inconnu gardé, congrès qualifié, principale d\'abord', () => {
+  const m = mapMarcRecord(REC_H17, 'unimarc');
+  const court = m.contributors.map((c) => [c.name, c.nature, c.role, c.roleCode, c.primary, c.tag]);
+  assertEquals(court, [
+    ['Černá, Zdeňka', 'person', 'autor', '070', true, '700'],
+    ['Collectif Brûlot', 'collective', 'autor', '070', true, '710'],
+    ['Muñoz, Pilar', 'person', 'tradutor', '730', false, '702'],
+    ['Sans, Code', 'person', 'autor', null, false, '701'],
+    ['Autre, Code', 'person', 'outro', '999', false, '702'],
+    ['Congrès anarchiste (3 ; 1907 ; Amsterdam)', 'congress', 'autor', null, false, '711'],
+  ]);
+  assertEquals(m.contributors[0].dates, '1950-....');
+  // Le $9 de PMB est un identifiant interne : pas une référence d'autorité.
+  assertEquals(m.contributors[0].authorityRef, null);
+  assertEquals(m.authorsArray, m.contributors.map((c) => c.name));
+});
+
+Deno.test('H17/H18 couverture : repris, laissés exprès avec raison (dont les $9 de PMB), plus rien en brut', () => {
+  const cov = marcCoverage(buildParsedEntriesFromMarc([REC_H17], [], 'unimarc'));
+  const z = (tag, code) => cov.zones.find((x) => x.tag === tag && x.code === code);
+  // 711 $f : une date de congrès qualifie le nom (reprise) ; 700 $f : les dates
+  // d'une personne n'ont pas de colonne (laissées, revue du 28/09).
+  for (const [t, c] of [['215', 'a'], ['225', 'v'], ['330', 'a'], ['606', 'x'], ['606', 'z'], ['676', 'a'], ['856', 'u'], ['700', '4'], ['711', 'd'], ['711', 'f'], ['711', 'e']]) {
+    assertEquals(z(t, c).status, 'repris', `${t} $${c}`);
+  }
+  for (const [t, c] of [['215', 'c'], ['215', 'd'], ['606', '9'], ['676', 'l'], ['856', 'q'], ['700', '9'], ['700', 'f']]) {
+    assertEquals(z(t, c).status, 'laisse', `${t} $${c}`);
+    assert(['interne', 'sans_champ', 'redondant', 'materiel', 'liens', 'codees'].includes(z(t, c).motif), `motif ${t} ${c}`);
+  }
+  assertEquals(cov.zones.filter((x) => x.status === 'brut'), []);
+});
+
+Deno.test('H17 article dépouillé (guide « aa ») : notice hôte 461, fascicule 463, pages non comptées', () => {
+  const rec = {
+    leader: '00000naa2 22000001i 450 ',
+    fields: [
+      { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Classer sans dominer']]) },
+      { tag: '215', ind1: ' ', ind2: ' ', subfields: sf([['a', 'p. 4-9']]) },
+      { tag: '461', ind1: ' ', ind2: ' ', subfields: sf([['0', '72'], ['t', 'Le Rat des bibliothèques'], ['x', '2555-0004'], ['9', 'lnk:perio']]) },
+      { tag: '463', ind1: ' ', ind2: ' ', subfields: sf([['d', '2025-03-01'], ['v', '12'], ['t', 'Printemps 2025']]) },
+    ],
+  };
+  const m = mapMarcRecord(rec, 'unimarc');
+  assertEquals(m.materialType, 'artigo');
+  assertEquals([m.extent, m.pages, m.volume], ['p. 4-9', null, null]);
+  assertEquals(m.host, { title: 'Le Rat des bibliothèques', issn: '2555-0004', volume: null });
+  assertEquals(m.issue, { number: '12', date: '2025-03-01', title: 'Printemps 2025' });
+});
+
+Deno.test('H18 responsabilités MARC21 : 1XX principale, terme $e, code $4, congrès 111, pages de « xii, 302 p. »', () => {
+  const rec = {
+    leader: '00000nam a2200000 a 4500',
+    fields: [
+      { tag: '245', ind1: '1', ind2: '0', subfields: sf([['a', 'Mutual aid']]) },
+      { tag: '700', ind1: '1', ind2: ' ', subfields: sf([['a', 'Doe, Jane'], ['4', 'trl']]) },
+      { tag: '100', ind1: '1', ind2: ' ', subfields: sf([['a', 'Kropotkin, Petr'], ['d', '1842-1921'], ['e', 'author.']]) },
+      { tag: '710', ind1: '2', ind2: ' ', subfields: sf([['a', 'Freedom Press'], ['e', 'publisher']]) },
+      { tag: '111', ind1: '2', ind2: ' ', subfields: sf([['a', 'International Anarchist Congress'], ['n', '1'], ['d', '1907'], ['c', 'Amsterdam']]) },
+      { tag: '300', ind1: ' ', ind2: ' ', subfields: sf([['a', 'xii, 302 p.'], ['c', '22 cm']]) },
+      { tag: '490', ind1: '0', ind2: ' ', subfields: sf([['a', 'Classics'], ['v', '4']]) },
+      { tag: '520', ind1: ' ', ind2: ' ', subfields: sf([['a', 'Summary']]) },
+      { tag: '082', ind1: '0', ind2: '4', subfields: sf([['a', '335.83']]) },
+      { tag: '650', ind1: ' ', ind2: '0', subfields: sf([['a', 'Anarchism'], ['x', 'History'], ['v', 'Sources']]) },
+      { tag: '653', ind1: ' ', ind2: ' ', subfields: sf([['a', 'mutual aid']]) },
+    ],
+  };
+  const m = mapMarcRecord(rec, 'marc21');
+  assertEquals(m.contributors.map((c) => [c.name, c.nature, c.role, c.primary]), [
+    ['Kropotkin, Petr', 'person', 'autor', true],
+    ['International Anarchist Congress (1 ; 1907 ; Amsterdam)', 'congress', 'autor', true],
+    ['Doe, Jane', 'person', 'tradutor', false],
+    ['Freedom Press', 'collective', 'outro', false],
+  ]);
+  assertEquals([m.pages, m.series, m.notes, m.classification], [302, 'Classics ; 4', 'Summary', '335.83']);
+  assertEquals(m.subjectsArray, ['Anarchism -- History -- Sources', 'mutual aid']);
+});
+
+Deno.test('H17/H18 mappedExtras : seulement ce qui a une valeur, responsabilités en snake_case', () => {
+  const x = mappedExtras(mapMarcRecord(REC_H17, 'unimarc'));
+  assertEquals(Object.keys(x).sort(), ['classification', 'contributors', 'extent', 'material_type', 'notes', 'pages', 'series', 'url', 'volume']);
+  assertEquals(x.contributors[2], { name: 'Muñoz, Pilar', nature: 'person', role: 'tradutor', role_code: '730', primary: false, dates: null, authority_ref: null, tag: '702' });
+  assertEquals(mappedExtras({ title: 'CSV', contributors: [] }), {});
+});
+
+const PMB_XML = `<?xml version="1.0" encoding="utf-8"?>
+<unimarc>
+<notice>
+  <rs>n</rs>
+  <dt>a</dt>
+  <bl>m</bl>
+  <hl>0</hl>
+  <el>1</el>
+  <ru>i</ru>
+  <f c="001">7</f>
+  <f c="200" ind="1 ">
+    <s c="a">Bac en poche &amp; autres</s>
+  </f>
+  <f c="700" ind=" 1">
+    <s c="a">Souton</s>
+    <s c="b">Dominique</s>
+    <s c="4">070</s>
+    <s c="9">id:1</s>
+  </f>
+  <f c="995" ind="  ">
+    <s c="f">337</s>
+    <s c="k">JR SOU</s>
+  </f>
+</notice>
+</unimarc>`;
+
+Deno.test('H22 XML propre à PMB : reconnu, guide reconstitué, lu comme de l\'UNIMARC', () => {
+  assert(looksLikePmbXml(PMB_XML));
+  assert(!looksLikeMarcXml(PMB_XML));
+  const [r] = parsePmbXml(PMB_XML);
+  assertEquals(r.leader.length, 24);
+  assertEquals(r.leader.slice(5, 9), 'nam0');
+  assertEquals(r.fields.find((f) => f.tag === '700').ind2, '1');
+  const res = parseMarcFile({ text: PMB_XML, bytes: new TextEncoder().encode(PMB_XML), filename: 'export.xml' });
+  assertEquals(res.format, 'pmb_xml');
+  assertEquals(res.entries[0].dialect, 'unimarc');
+  const m = res.entries[0].mapped;
+  assertEquals([m.title, m.externalKey, m.materialType], ['Bac en poche & autres', '7', 'livro']);
+  assertEquals(m.contributors[0].name, 'Souton, Dominique');
+  assertEquals(m.items[0].source_item_code, '337');
+});
+
+
+// ── Revue contradictoire du 28/09/2026 ─────────────────────────────────────
+Deno.test('Revue 28/09 : 702 nue en « outro », $4 et $e répétés, $4 en URI, termes pt/es, toutes les $b, guide MARC21 « b » et « m »', () => {
+  const uni = mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'T']]) },
+    { tag: '702', ind1: ' ', ind2: '1', subfields: sf([['a', 'Vassallo'], ['b', 'Rose']]) },
+    { tag: '712', ind1: '0', ind2: '2', subfields: sf([['a', 'France'], ['b', 'Ministère'], ['b', 'Service'], ['4', '557']]) },
+  ] }, 'unimarc');
+  assertEquals(uni.contributors.map((c) => [c.name, c.role]), [['Vassallo, Rose', 'outro'], ['France. Ministère. Service', 'organizacao']]);
+  const m21 = mapMarcRecord({ leader: '00000nab a2200000 a 4500', fields: [
+    { tag: '245', ind1: '1', ind2: '0', subfields: sf([['a', 'Anarchism and syndicalism :'], ['b', 'a history /'], ['c', 'by Jane Doe.']]) },
+    { tag: '100', ind1: '1', ind2: ' ', subfields: sf([['a', 'Bakunin, Mikhail,'], ['d', '1814-1876.'], ['e', 'author.']]) },
+    { tag: '700', ind1: '1', ind2: ' ', subfields: sf([['a', 'Doe, Jane,'], ['e', 'editor,'], ['e', 'translator.']]) },
+    { tag: '700', ind1: '1', ind2: ' ', subfields: sf([['a', 'Walker, Mildred D.'], ['4', 'http://id.loc.gov/vocabulary/relators/ill']]) },
+    { tag: '700', ind1: '1', ind2: ' ', subfields: sf([['a', 'Silva, Ana'], ['e', 'tradução']]) },
+    { tag: '700', ind1: '1', ind2: ' ', subfields: sf([['a', 'Pérez, Luis'], ['e', 'coordinador']]) },
+    { tag: '111', ind1: '2', ind2: ' ', subfields: sf([['a', 'International Anarchist Congress'], ['n', '(1st :'], ['d', '1907 :'], ['c', 'Amsterdam, Netherlands)']]) },
+    { tag: '773', ind1: '0', ind2: ' ', subfields: sf([['t', 'Anarchist Studies'], ['x', '0967-3393'], ['g', 'Vol. 12, no. 2']]) },
+  ] }, 'marc21');
+  assertEquals(m21.materialType, 'artigo');
+  assertEquals([m21.title, m21.subtitle, m21.responsibilityStatement], ['Anarchism and syndicalism', 'a history', 'by Jane Doe']);
+  assertEquals(m21.host, { title: 'Anarchist Studies', issn: '0967-3393', volume: null });
+  assertEquals(m21.contributors.map((c) => [c.name, c.role, c.roleCode]), [
+    ['Bakunin, Mikhail', 'autor', 'author'],
+    ['International Anarchist Congress (1st ; 1907 ; Amsterdam, Netherlands)', 'autor', null],
+    ['Doe, Jane', 'organizador', 'editor'],
+    ['Doe, Jane', 'tradutor', 'translator'],
+    ['Walker, Mildred D.', 'ilustrador', 'ill'],
+    ['Silva, Ana', 'tradutor', 'tradução'],
+    ['Pérez, Luis', 'coordenador', 'coordinador'],
+  ]);
+  assertEquals(m21.contributors[0].dates, '1814-1876');
+  // guide 06 'm' : fichier informatique en MARC21, multimédia (un livre) en UNIMARC
+  assertEquals(mapMarcRecord({ leader: '00000nmm a2200000 a 4500', fields: [] }, 'marc21').materialType, 'recurso_digital');
+  assertEquals(mapMarcRecord({ leader: '00000nmm0 22000001i 450 ', fields: [] }, 'unimarc').materialType, 'livro');
+  assertEquals(mapMarcRecord({ leader: '00000nlm0 22000001i 450 ', fields: [] }, 'unimarc').materialType, 'recurso_digital');
+});
+
+Deno.test('Revue 28/09 : pagination d\'un ensemble, feuillets et planches ; collection d\'une seule zone ; notice de bulletin PMB', () => {
+  const pages = (e) => mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '215', ind1: ' ', ind2: ' ', subfields: sf([['a', e]]) }] }, 'unimarc').pages;
+  assertEquals([pages('2 vol. (318, 352 p.)'), pages('2 p. l., 345 p.'), pages('20 f. de pl.'), pages('2 vol. (670 p.)')], [null, 345, null, 670]);
+  const col = mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '225', ind1: '2', ind2: ' ', subfields: sf([['a', 'Collection A']]) },
+    { tag: '225', ind1: '2', ind2: ' ', subfields: sf([['a', 'Collection B'], ['v', '12']]) }] }, 'unimarc');
+  assertEquals(col.series, 'Collection A');
+  // PMB : les exemplaires d'un fascicule sans notice propre
+  const b = mapMarcRecord({ leader: '00000naa2 22000001i 450 ', fields: [
+    { tag: '001', value: '1-bull' },
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Notice de bulletin'], ['d', 'Article_expl_bulletin'], ['h', 'Géo'], ['i', '277']]) },
+    { tag: '463', ind1: ' ', ind2: ' ', subfields: sf([['0', '24'], ['d', '2004-08-04'], ['v', '277'], ['t', ' '], ['t', 'Géo'], ['9', 'id:1'], ['9', 'lnk:bull_expl']]) },
+  ] }, 'unimarc');
+  assertEquals([b.materialType, b.title, b.keyTitle, b.volume], ['periodico', 'Géo', 'Géo', '277']);
+  assertEquals(b.issue, { number: '277', date: '2004-08-04', title: null });
 });

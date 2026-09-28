@@ -24,7 +24,7 @@ Deno.test('csvCoverage : repris par alias, indice relu par le SQL, brut, occurre
     { header: 'tipo_material', status: 'brut', field: null, occurrences: 2, example: 'livro' },
     { header: 'vide', status: 'brut', field: null, occurrences: 0, example: null },
   ]);
-  assertEquals(coverageCounts(cov), { repris: 2, indice: 1, brut: 2, total: 5 });
+  assertEquals(coverageCounts(cov), { repris: 2, indice: 1, brut: 2, laisse: 0, total: 5 });
 });
 
 Deno.test('csvCoverage : une colonne du profil devient reprise (le profil l\'emporte)', () => {
@@ -53,7 +53,7 @@ Deno.test('risCoverage : balises lues, indice, brutes ; valeurs vides ignorees',
   assertEquals(t('SP').occurrences, 3);
   assertEquals(t('M1'), undefined);
   assertEquals(t('CN').status, 'repris'); // lue par mapRisRecord ET relue en indice : reprise l'emporte
-  assertEquals(coverageCounts(cov), { repris: 4, indice: 0, brut: 1, total: 5 });
+  assertEquals(coverageCounts(cov), { repris: 4, indice: 0, brut: 1, laisse: 0, total: 5 });
 });
 
 Deno.test('coverageCounts : null sans couverture', () => {

@@ -569,3 +569,12 @@ tests/sql/ci_en_retard_kind_tests.sql
 # 28/09 (fusion) : la fusion de notices ne perd plus rien (sujets, personnes, champs vides, brouillons ouverts,
 # doublon entier dans merge_log) et la reference d un exemplaire suit son fonds (renommage, reference locale, creation).
 tests/sql/fusion_notices_complete_tests.sql
+# 27/09 (H20) : l'identifiant d'origine d'une notice est garde PAR bibliotheque (book_external_ids) ;
+# jamais le numero de la ligne de staging ; faux identifiants effaces, notices deja publiees reprises.
+tests/sql/identifiant_origine_tests.sql
+# 27/09 (H17/H18/H22) : l import reprend les zones courantes d un catalogue PMB et ses responsabilites
+# (nature, role, code d origine) ; rattrapage des brouillons importes ; rapprochements proposes en revision.
+tests/sql/import_zones_tests.sql
+# 28/09 (H24) : l'export d'une bibliotheque contient tout ce qu'elle a catalogue (identifiants d'origine,
+# responsabilites, sujets du thesaurus, exemplaires, oeuvre, periodique, article, MARC d'origine) — et rien d'une autre.
+tests/sql/export_catalogue_tests.sql

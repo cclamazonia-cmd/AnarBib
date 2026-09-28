@@ -17,6 +17,8 @@ const muted = { color: 'var(--brand-muted, #999)' };
 // H19 : raisons d'un exemplaire importé bloquant (fn_batch_review_report, clé items).
 const ITEM_REASONS = ['without_library', 'library_mismatch', 'library_without_numbering', 'code_taken', 'code_twice', 'code_pending_elsewhere'];
 
+const ORDRE_COUVERTURE = { brut: 0, indice: 1, laisse: 2 };
+
 export default function BatchReviewReport({ report }) {
   const { formatMessage: t, formatDate } = useIntl();
   if (!report) return null;
@@ -156,12 +158,16 @@ export default function BatchReviewReport({ report }) {
         <section data-testid="review-coverage">
           <h5 style={secTitle}>{t({ id: 'review.report.coverage' })}</h5>
           {coverage.map((c) => {
-            const items = Array.isArray(c.not_taken) ? c.not_taken : [];
+            // H17 : le brut d'abord (à instruire), puis l'indice, puis le laissé
+            // exprès — la liste est coupée à 40, le brut ne doit pas s'y noyer.
+            const items = (Array.isArray(c.not_taken) ? [...c.not_taken] : [])
+              .sort((a, b) => ((ORDRE_COUVERTURE[a.status] ?? 3) - (ORDRE_COUVERTURE[b.status] ?? 3)) || ((b.occurrences || 0) - (a.occurrences || 0)));
             return (
               <details key={c.run_id} style={{ marginBottom: 4 }}>
                 <summary style={{ cursor: 'pointer' }}>
                   {t({ id: 'review.report.coverage.run' }, { id: c.run_id, file: c.original_filename || '—' })}
                   {c.counts ? <> · {t({ id: 'importacoes.coverage.counts' }, c.counts)}</> : null}
+                  {Number(c.counts?.laisse || 0) > 0 ? <> · {t({ id: 'importacoes.coverage.countsLaisse' }, { n: Number(c.counts.laisse) })}</> : null}
                 </summary>
                 {Number(c.skipped_rows || 0) > 0 && (
                   <div style={muted}>{t({ id: 'importacoes.coverage.skipped' }, { n: Number(c.skipped_rows) })}</div>
@@ -176,6 +182,7 @@ export default function BatchReviewReport({ report }) {
                     {items.slice(0, 40).map((it, i) => (
                       <li key={i}>
                         <code>{coverageItemLabel(it)}</code> — {t({ id: `importacoes.coverage.status.${it.status}` })}
+                        {it.status === 'laisse' && it.motif ? <span style={muted}> ({t({ id: `importacoes.coverage.motif.${it.motif}` })})</span> : null}
                         {' · '}{t({ id: 'importacoes.coverage.occurrences' }, { n: it.occurrences || 0 })}
                         {it.example ? <span style={muted}> : {it.example}</span> : null}
                       </li>

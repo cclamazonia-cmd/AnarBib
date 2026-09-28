@@ -737,9 +737,15 @@ export default function ImportacoesPage() {
     }
   }
 
-  // ── Export de lote : appelle l'EF export-catalog-lote, télécharge le fichier ──
-  // L'accès (coordenador de la biblio, IMP-14) est re-validé côté RPC ; un rôle
-  // insuffisant renvoie 403 et le message d'erreur s'affiche.
+  // ── Export de lote : le catalogue par pages, le fichier assemblé ici ──
+  // L'accès (coordenador de la biblio, IMP-14) est re-validé par la RPC ; un rôle
+  // insuffisant renvoie son erreur, affichée.
+  // H26 (28/09/2026) : plus d'edge function entre la base et le fichier. Mesuré :
+  // sérialiser 2 200 notices en ISO 2709 coûtait déjà 2 s de CPU à une edge
+  // function (sa limite), 50 000 bien au-delà. La RPC rend le catalogue par
+  // pages de 1 000 (≈ 0,14 ms par notice en production, loin des 8 s du rôle),
+  // et le fichier est écrit ici avec le MÊME module que l'import relit
+  // (supabase/functions/_shared/marc, chargé à la demande).
   async function handleExportLote() {
     if (!libraryId) {
       setMsg({ text: t({ id: 'importacoes.export.lote.error' }, { message: 'library_id' }), kind: 'error' });
@@ -748,38 +754,40 @@ export default function ImportacoesPage() {
     setExportLoading(true);
     setMsg({ text: t({ id: 'importacoes.export.lote.exporting' }), kind: 'info' });
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/export-catalog-lote`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${session?.access_token}`,
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ library_id: libraryId, format: exportFormat }),
-        }
-      );
-      if (!res.ok) {
-        let m = `HTTP ${res.status}`;
-        try { const j = await res.json(); if (j?.error) m = j.error; } catch { /* corps non-JSON */ }
-        throw new Error(m);
-      }
-      const blob = await res.blob();
-      const cd = res.headers.get('Content-Disposition') || '';
-      const match = cd.match(/filename="?([^"]+)"?/);
-      const ext = exportFormat === 'marcxml' ? 'xml' : exportFormat;
-      const filename = match ? match[1] : `catalogo.${ext}`;
+      const records = [];
+      let apres = null;
+      let total = null;
+      let library = null;
+      do {
+        const { data, error } = await supabase.rpc('fn_export_catalog_lote', { p_library_id: libraryId, p_apres: apres, p_limite: 1000 });
+        if (error) throw error;
+        if (total === null && data?.total != null) total = Number(data.total);
+        library = data?.library ?? library;
+        if (Array.isArray(data?.records)) records.push(...data.records);
+        apres = data?.next ?? null;
+        setMsg({ text: t({ id: 'importacoes.export.lote.progress' }, { n: records.length, total: total ?? records.length }), kind: 'info' });
+      } while (apres);
+      const { serializeCatalog } = await import('../../../supabase/functions/export-catalog-lote/serialize.ts');
+      const r = serializeCatalog(records, exportFormat, {
+        bibliotheque: library ? { nom: library.short_name || library.name || null, pays: library.country ?? null, langue: library.default_locale ?? null } : null,
+      });
+      // UTF-8 BOM pour le CSV (compat Excel / accents).
+      const blob = new Blob([r.ext === 'csv' ? '\uFEFF' + r.content : r.content], { type: r.mime });
+      const jour = new Date().toISOString().slice(0, 10);
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = filename;
+      link.download = `catalogo-${library?.slug || libraryId}-${jour}.${r.ext}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      setMsg({ text: t({ id: 'importacoes.export.lote.success' }), kind: 'ok' });
+      // H23 : ce que le format n'a pas pu porter en entier (zone raccourcie,
+      // notice écartée).
+      const remarques = r.avertissements?.length || 0;
+      setMsg(remarques > 0
+        ? { text: t({ id: 'importacoes.export.lote.warnings' }, { n: remarques }), kind: 'info' }
+        : { text: t({ id: 'importacoes.export.lote.success' }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: t({ id: 'importacoes.export.lote.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
@@ -1893,8 +1901,13 @@ export default function ImportacoesPage() {
                     disabled={exportLoading}
                     style={{ maxWidth: 240 }}
                   >
+                    {/* H23 (28/09/2026) : UNIMARC, le format de PMB, en ISO 2709 et en
+                        XML (« XML MARC ») ; MARC21 en ISO 2709 et en MARCXML. */}
+                    <option value="unimarc_iso2709">UNIMARC — ISO 2709</option>
+                    <option value="unimarc_xml">UNIMARC — XML</option>
+                    <option value="marc21_iso2709">MARC21 — ISO 2709</option>
+                    <option value="marcxml">MARC21 — MARCXML</option>
                     <option value="csv">CSV</option>
-                    <option value="marcxml">MARCXML (MARC21)</option>
                     <option value="json">JSON</option>
                   </select>
                   <button

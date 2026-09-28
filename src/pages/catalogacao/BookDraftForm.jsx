@@ -217,6 +217,21 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [contributors, setContributors] = useState([
     { position: 1, name: '', role: 'autor', is_primary: true, author_id: null, author_label: '' },
   ]);
+  // H18 (revue du 28/09) : un rattachement fait dans le rapport du lot
+  // (ContributorCandidates) sur le brouillon ouvert ici : le formulaire, toujours
+  // monté, le reprend — sinon son prochain enregistrement (qui réécrit les
+  // contributeurs) l'effaçait sans bruit.
+  useEffect(() => {
+    function surRattachement(e) {
+      const d = e?.detail || {};
+      if (!d.draftId || String(d.draftId) !== String(form.id ?? '')) return;
+      setContributors(prev => prev.map(c => (!c.author_id && (c.name || '').trim() === d.name)
+        ? { ...c, author_id: d.authorId, author_label: d.authorLabel || '', nature: c.nature ?? d.nature ?? null }
+        : c));
+    }
+    window.addEventListener('anarbib:draft-contributor-linked', surRattachement);
+    return () => window.removeEventListener('anarbib:draft-contributor-linked', surRattachement);
+  }, [form.id]);
   // Sélecteur d'autorité (volet préventif) : un panneau de recherche ouvert à la fois
   const [authorSearch, setAuthorSearch] = useState({ index: null, results: [], loading: false });
 
@@ -1019,7 +1034,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   function updateContributor(index, field, value) {
-    setContributors(prev => prev.map((c, i) => i === index ? { ...c, [field]: value } : c));
+    // H18 : le code de fonction d'origine ($4) ne vaut que pour le rôle importé ;
+    // un rôle corrigé à la main le perd (l'export écrira celui du rôle).
+    setContributors(prev => prev.map((c, i) => {
+      if (i !== index) return c;
+      const next = { ...c, [field]: value };
+      if (field === 'role' && value !== c.role) next.role_code = null;
+      return next;
+    }));
     if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
   }
 
@@ -1100,12 +1122,22 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           is_primary: c.is_primary || false,
           author_id: c.author_id || null,
           author_label: '',
+          nature: c.nature ?? null,        // H18
+          role_code: c.role_code ?? null,  // H18 : code de fonction d'origine
         }))));
         return;
       }
       // Fallback : reprise d'un livre publie sans contributeurs de brouillon.
       if (publishedBookId) {
-        const { data: pub } = await supabase.rpc('get_book_contributors_public', { p_book_id: Number(publishedBookId) });
+        // H18 : la table d'abord (nature, code d'origine, que la RPC publique
+        // ne rend pas) ; la RPC en repli.
+        let { data: pub, error: pubErr } = await supabase.from('book_contributors')
+          .select('position, name, role, is_primary, author_id, nature, role_code')
+          .eq('book_id', Number(publishedBookId))
+          .order('position', { ascending: true });
+        if (pubErr || !pub?.length) {
+          ({ data: pub } = await supabase.rpc('get_book_contributors_public', { p_book_id: Number(publishedBookId) }));
+        }
         if (Array.isArray(pub) && pub.length) {
           setContributors(await enrichAuthorLabels(pub.map(c => ({
             position: c.position,
@@ -1114,6 +1146,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             is_primary: c.is_primary || false,
             author_id: c.author_id || null,
             author_label: '',
+            nature: c.nature ?? null,
+            role_code: c.role_code ?? null,
           }))));
         }
       }
@@ -1344,6 +1378,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         role: c.role,
         is_primary: c.is_primary,
         author_id: c.author_id || null,
+        // H18 : ne pas les perdre à l'enregistrement — et ne les envoyer que
+        // lorsqu'elles portent une valeur : un écran publié avant la migration
+        // ne doit pas échouer (colonne inconnue) après avoir effacé les lignes.
+        ...(c.nature != null ? { nature: c.nature } : {}),
+        ...(c.role_code != null ? { role_code: c.role_code } : {}),
       }));
       const { error } = await supabase.from('book_draft_contributors').insert(payload);
       if (error) throw error;
@@ -1742,7 +1781,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
       // Try linking contributors to authors (publish_book_draft renvoie l'id du livre créé)
       const publishedId = newBookId || f('published_book_id');
-      if (publishedId) {
+      // H18 : une notice importée ne se rattache pas d'office aux autorités ;
+      // ses rapprochements se proposent en révision du lot.
+      let importee = false;
+      try { const mj = JSON.parse(f('marc_json') || '{}'); importee = !!(mj && typeof mj === 'object' && 'ingest' in mj); } catch { importee = false; }
+      if (publishedId && !importee) {
         try {
           await supabase.rpc('link_book_contributors_to_authors', { p_book_id: Number(publishedId) });
         } catch {}

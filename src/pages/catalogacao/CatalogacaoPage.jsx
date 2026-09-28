@@ -19,6 +19,7 @@ import SubjectGovernancePanel from './SubjectGovernancePanel';
 import SerialGovernancePanel from './SerialGovernancePanel';
 import DedupAssistantPanel from './DedupAssistantPanel';
 import BatchReviewReport from '@/components/catalog/BatchReviewReport';
+import ContributorCandidates from '@/components/catalog/ContributorCandidates';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -1162,6 +1163,8 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
               <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }} onClick={() => setReportModal(null)}>{t({ id: 'common.close' })}</button>
             </div>
             {reportModal.loading ? <p style={{ color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'common.loading' })}</p> : <BatchReviewReport report={reportModal.report} />}
+            {/* H18 : les rapprochements d'autorité se proposent ici, jamais d'office. */}
+            {!reportModal.loading && reportModal.batch?.id && <ContributorCandidates batchId={reportModal.batch.id} />}
           </div>
         </div>
       )}

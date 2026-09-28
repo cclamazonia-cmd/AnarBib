@@ -30,6 +30,8 @@ import { transformSync } from 'esbuild';
 const SRC = new URL('../../supabase/functions/harvest-oai-pmh/index.ts', import.meta.url);
 const MARC = new URL('../../supabase/functions/process-partner-catalog-import/marc.ts', import.meta.url);
 const OAI = new URL('../../supabase/functions/harvest-oai-pmh/oai.ts', import.meta.url);
+// La table commune de lecture MARC (H17, 28/09/2026), importée par marc.ts.
+const CORRESPONDANCE = new URL('../../supabase/functions/_shared/marc/correspondance.ts', import.meta.url);
 const CLE = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
 
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), {
@@ -147,6 +149,7 @@ function monterEF(etat, reponses) {
     if (spec.includes('supabase-js') || spec.endsWith('deps.ts')) return { createClient: () => client('public') };
     if (spec.endsWith('marc.ts')) return evaluer(cjs(MARC), {});
     if (spec.endsWith('oai.ts')) return evaluer(cjs(OAI), {});
+    if (spec.endsWith('/marc/correspondance.ts')) return evaluer(cjs(CORRESPONDANCE), {});
     // Le vrai module, pas un stub. Depuis B18 (02/09/2026) le repli legacy
     // n'existe plus : le banc exerce SUPABASE_SECRET_KEYS, le seul chemin.
     if (spec.endsWith('secret-key.ts')) return evaluer(cjs(CLE), {});

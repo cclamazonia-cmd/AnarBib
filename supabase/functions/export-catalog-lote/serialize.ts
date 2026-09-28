@@ -1,22 +1,27 @@
-// Serialiseur de catalogue pour l'export de lote (Lot 5, IMP-13).
+// Serialiseur de catalogue pour l'export de lote (Lot 5, IMP-13 ; H23, H24).
 //
 // Session : Lot 5 — Export de lote
 // Auteur  : Claude Opus 4.8
 //
 // Miroir (sens inverse) du parser d'import marc.ts : prend un tableau de
 // notices NORMALISEES et produit un fichier dans un format de sortie.
-// Iteration 1 : CSV, MARCXML, JSON (UNIMARC ISO 2709 / Dublin Core / BibTeX
-// viendront ensuite, cf. IMP-13).
 //
-// Notice normalisee attendue (assemblee par l'EF depuis books + book_authors
-// + authors) :
-//   { id, bibRef, title, subtitle, authors: [{ name, role, ord }],
-//     responsibility, publisher, year, place, edition, isbn, issn, language,
-//     pages, cdd, subjects: [string], collection, materialType, notes }
+// H23 (28/09/2026) : les formats MARC s'écrivent depuis la table de
+// correspondance COMMUNE à l'import et à l'export (_shared/marc/) — UNIMARC en
+// ISO 2709 et en XML (la forme « XML MARC » que PMB relit), MARC21 en ISO 2709
+// et en MARCXML. La correspondance n'est plus écrite deux fois.
+//
+// Notice normalisée : la forme rendue par public.fn_export_catalog_lote (voir
+// NoticeExport, _shared/marc/ecriture.ts) ; la forme d'avant H24 (authors,
+// subjects en texte) reste lue.
 
-export const SERIALIZER_VERSION = 'export_v1';
+import { enregistrement, type NoticeExport } from '../_shared/marc/ecriture.ts';
+import { ecrireIso2709, type Avertissement } from '../_shared/marc/iso2709.ts';
+import { ecrireMarcXml } from '../_shared/marc/marcxml.ts';
 
-export const SUPPORTED_FORMATS = ['csv', 'marcxml', 'json'];
+export const SERIALIZER_VERSION = 'export_v2';
+
+export const SUPPORTED_FORMATS = ['csv', 'marcxml', 'json', 'unimarc_iso2709', 'unimarc_xml', 'marc21_iso2709'];
 
 function s(value) {
   if (value === null || value === undefined) return '';
@@ -24,13 +29,16 @@ function s(value) {
 }
 
 function authorNames(record) {
+  if (Array.isArray(record.contributors) && record.contributors.length) {
+    return record.contributors.map((c) => s(c?.name).trim()).filter(Boolean);
+  }
   const list = Array.isArray(record.authors) ? record.authors : [];
   return list.map((a) => s(a?.name).trim()).filter(Boolean);
 }
 
 function subjectList(record) {
   const list = Array.isArray(record.subjects) ? record.subjects : [];
-  return list.map((x) => s(x).trim()).filter(Boolean);
+  return list.map((x) => s(typeof x === 'object' && x !== null ? x.label : x).trim()).filter(Boolean);
 }
 
 // ── CSV (RFC 4180) ──────────────────────────────────────────
@@ -39,7 +47,7 @@ function subjectList(record) {
 // acceptent ces alias) -> un export CSV peut etre re-importe (round-trip).
 
 const CSV_COLUMNS = [
-  { header: 'external_key', get: (r) => s(r.bibRef) || s(r.id) },
+  { header: 'external_key', get: (r) => s(r.originId) || s(r.bibRef) || s(r.id) },
   { header: 'title', get: (r) => s(r.title) },
   { header: 'subtitle', get: (r) => s(r.subtitle) },
   { header: 'authors', get: (r) => authorNames(r).join('; ') },
@@ -70,67 +78,29 @@ export function toCsv(records) {
   return [header, ...lines].join('\r\n') + '\r\n';
 }
 
-// ── MARCXML (MARC21 slim) ───────────────────────────────────
+// ── MARC (UNIMARC, MARC21) ──────────────────────────────────
 
-function xmlEscape(value) {
-  return s(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+export interface OptionsMarc {
+  date?: string;
+  bibliotheque?: { nom?: string | null; pays?: string | null; langue?: string | null } | null;
 }
 
-// controlfield : omis si vide.
-function cf(tag, value) {
-  const v = s(value).trim();
-  if (!v) return '';
-  return `    <controlfield tag="${tag}">${xmlEscape(v)}</controlfield>`;
+function notices(records: NoticeExport[], dialecte: 'unimarc' | 'marc21', opts: OptionsMarc = {}) {
+  return records.map((r) => enregistrement(r, { dialecte, date: opts.date, bibliotheque: opts.bibliotheque }));
 }
 
-// datafield : subs = [[code, value], ...]. Sous-zones vides ignorees ;
-// le champ entier est omis si plus aucune sous-zone.
-function df(tag, ind1, ind2, subs) {
-  const sf = subs
-    .filter(([, v]) => s(v).trim())
-    .map(([code, v]) => `      <subfield code="${code}">${xmlEscape(v)}</subfield>`)
-    .join('\n');
-  if (!sf) return '';
-  return `    <datafield tag="${tag}" ind1="${ind1}" ind2="${ind2}">\n${sf}\n    </datafield>`;
+// MARCXML en MARC21 (espace de noms MARC21 slim).
+export function toMarcXml(records, opts: OptionsMarc = {}) {
+  return ecrireMarcXml(notices(records, 'marc21', opts), { espaceDeNoms: true });
 }
 
-function marcRecordXml(r) {
-  const names = authorNames(r);
-  const fields = [];
-  fields.push(cf('001', s(r.bibRef) || s(r.id)));
-  fields.push(df('020', ' ', ' ', [['a', r.isbn]]));
-  fields.push(df('022', ' ', ' ', [['a', r.issn]]));
-  fields.push(df('041', '0', ' ', [['a', r.language]]));
-  fields.push(df('082', '0', '4', [['a', r.cdd]]));
-  // 100 : entree principale (1re mention de responsabilite).
-  if (names[0]) fields.push(df('100', '1', ' ', [['a', names[0]]]));
-  // 245 : titre / sous-titre / mention de responsabilite.
-  fields.push(df('245', '1', '0', [['a', r.title], ['b', r.subtitle], ['c', r.responsibility]]));
-  fields.push(df('250', ' ', ' ', [['a', r.edition]]));
-  // 264 : production/publication (place / editeur / date).
-  fields.push(df('264', ' ', '1', [['a', r.place], ['b', r.publisher], ['c', r.year]]));
-  // 300 : description materielle (pagination).
-  fields.push(df('300', ' ', ' ', [['a', s(r.pages).trim() ? `${s(r.pages)} p.` : '']]));
-  fields.push(df('490', '0', ' ', [['a', r.collection]]));
-  fields.push(df('500', ' ', ' ', [['a', r.notes]]));
-  // 650 : sujets (un champ par sujet).
-  for (const subj of subjectList(r)) fields.push(df('650', ' ', '0', [['a', subj]]));
-  // 700 : entrees secondaires (auteur·rices au-dela de la premiere).
-  for (const name of names.slice(1)) fields.push(df('700', '1', ' ', [['a', name]]));
-
-  const leader = '00000nam a2200000 a 4500';
-  const body = fields.filter(Boolean).join('\n');
-  return `  <record>\n    <leader>${leader}</leader>\n${body}\n  </record>`;
+// UNIMARC en XML : la forme « XML MARC » de PMB, sans espace de noms.
+export function toUnimarcXml(records, opts: OptionsMarc = {}) {
+  return ecrireMarcXml(notices(records, 'unimarc', opts), { espaceDeNoms: false });
 }
 
-export function toMarcXml(records) {
-  const recs = records.map(marcRecordXml).join('\n');
-  return `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<collection xmlns="http://www.loc.gov/MARC21/slim">\n${recs}\n</collection>\n`;
+export function toIso2709(records, dialecte: 'unimarc' | 'marc21', opts: OptionsMarc = {}) {
+  return ecrireIso2709(notices(records, dialecte, opts));
 }
 
 // ── JSON ────────────────────────────────────────────────────
@@ -141,16 +111,26 @@ export function toJson(records) {
 
 // ── Dispatcher ──────────────────────────────────────────────
 
-// Retourne { ext, mime, content } pour le format demande.
-export function serializeCatalog(records, format) {
+// Retourne { ext, mime, content, avertissements } pour le format demande.
+// content : une chaîne, ou des octets (ISO 2709).
+export function serializeCatalog(records, format, opts: OptionsMarc = {}): {
+  ext: string; mime: string; content: string | Uint8Array; avertissements: Avertissement[];
+} {
   const rows = Array.isArray(records) ? records : [];
   switch (format) {
     case 'csv':
-      return { ext: 'csv', mime: 'text/csv; charset=utf-8', content: toCsv(rows) };
+      return { ext: 'csv', mime: 'text/csv; charset=utf-8', content: toCsv(rows), avertissements: [] };
     case 'marcxml':
-      return { ext: 'xml', mime: 'application/marcxml+xml; charset=utf-8', content: toMarcXml(rows) };
+      return { ext: 'xml', mime: 'application/marcxml+xml; charset=utf-8', content: toMarcXml(rows, opts), avertissements: [] };
+    case 'unimarc_xml':
+      return { ext: 'xml', mime: 'application/xml; charset=utf-8', content: toUnimarcXml(rows, opts), avertissements: [] };
+    case 'unimarc_iso2709':
+    case 'marc21_iso2709': {
+      const r = toIso2709(rows, format === 'unimarc_iso2709' ? 'unimarc' : 'marc21', opts);
+      return { ext: 'mrc', mime: 'application/marc', content: r.octets, avertissements: r.avertissements };
+    }
     case 'json':
-      return { ext: 'json', mime: 'application/json; charset=utf-8', content: toJson(rows) };
+      return { ext: 'json', mime: 'application/json; charset=utf-8', content: toJson(rows), avertissements: [] };
     default:
       throw new Error(`Unsupported export format: ${format}`);
   }

@@ -21,7 +21,17 @@
 // faux sur chaque fichier. L'UNIMARC declare son jeu de caracteres en
 // 100 $a positions 26-29 (unimarcDeclaredCharset).
 
-export const MARC_PARSER_VERSION = 'marc_v1';
+// H17/H18/H23 (27/09/2026) : les zones lues viennent de la table commune à
+// l'import et à l'export (_shared/marc/correspondance.ts) ; la forme normalisée
+// gagne pagination, collection, notes, classification, adresse, volume,
+// périodique et article (H17) et les responsabilités structurées — nom,
+// nature, rôle, code d'origine (H18). marc_v2 : cette forme-là.
+import {
+  CHAMPS, SUJETS, RESPONSABILITES, SEPARATEUR_SUBDIVISION, roleDepuisCode, codeRelation, zoneLaissee,
+  typeDepuisGuide, DEFAULT_ITEM_MAPPINGS as EXEMPLAIRES_PAR_DEFAUT,
+} from '../_shared/marc/correspondance.ts';
+
+export const MARC_PARSER_VERSION = 'marc_v2';
 
 // ── Modele commun ───────────────────────────────────────────
 //
@@ -34,49 +44,9 @@ export const MARC_PARSER_VERSION = 'marc_v1';
 //     ] }
 
 // ── Tables de zones par dialecte ────────────────────────────
-
-const MARC21 = {
-  title: [{ tag: '245', code: 'a' }],
-  subtitle: [{ tag: '245', code: 'b' }],
-  responsibility: [{ tag: '245', code: 'c' }],
-  edition: [{ tag: '250', code: 'a' }],
-  place: [{ tag: '264', code: 'a' }, { tag: '260', code: 'a' }],
-  publisher: [{ tag: '264', code: 'b' }, { tag: '260', code: 'b' }],
-  year: [{ tag: '264', code: 'c' }, { tag: '260', code: 'c' }],
-  language: [{ tag: '041', code: 'a' }],
-  isbn: [{ tag: '020', code: 'a' }],
-  issn: [{ tag: '022', code: 'a' }],
-  // Auteur·rices : zones principales + entrees secondaires. nameCodes = ordre
-  // des sous-zones a concatener pour le nom affiche.
-  authorTags: ['100', '110', '111', '700', '710', '711'],
-  nameCodes: ['a', 'b'],
-  subjects: [
-    { tag: '650', code: 'a' }, { tag: '600', code: 'a' }, { tag: '610', code: 'a' },
-    { tag: '611', code: 'a' }, { tag: '630', code: 'a' }, { tag: '651', code: 'a' },
-  ],
-  control: '001',
-};
-
-const UNIMARC = {
-  title: [{ tag: '200', code: 'a' }],
-  subtitle: [{ tag: '200', code: 'e' }],
-  responsibility: [{ tag: '200', code: 'f' }],
-  edition: [{ tag: '205', code: 'a' }],
-  place: [{ tag: '210', code: 'a' }],
-  publisher: [{ tag: '210', code: 'c' }],
-  year: [{ tag: '210', code: 'd' }],
-  language: [{ tag: '101', code: 'a' }],
-  isbn: [{ tag: '010', code: 'a' }],
-  issn: [{ tag: '011', code: 'a' }],
-  authorTags: ['700', '710', '701', '702', '711', '712'],
-  nameCodes: ['a', 'b'],
-  subjects: [
-    { tag: '606', code: 'a' }, { tag: '600', code: 'a' }, { tag: '601', code: 'a' },
-    { tag: '602', code: 'a' }, { tag: '604', code: 'a' }, { tag: '605', code: 'a' },
-    { tag: '607', code: 'a' },
-  ],
-  control: '001',
-};
+// Dans _shared/marc/correspondance.ts (CHAMPS, SUJETS, RESPONSABILITES) : une
+// seule table pour l'import, l'export et la couverture.
+const CONTROLE = '001';
 
 // ── Exemplaires (H19, 26/09/2026 — REGISTRE IMP-21) ─────────
 //
@@ -93,10 +63,7 @@ const UNIMARC = {
 // Defaut UNIMARC = ce que PMB 8.1 ecrit (fixtures tests/pmb) ; la
 // correspondance se regle dans le PROFIL d'import de la bibliotheque
 // (ingest.import_profiles.items_mapping), qui surcharge cle par cle.
-export const DEFAULT_ITEM_MAPPINGS = {
-  unimarc: { tag: '995', code: 'f', call_number: 'k', note: 'u', owner: 'a', item_type: 'r', public: 'q', status: '' },
-  marc21: { tag: '852', code: 'p', call_number: 'hi', note: 'z', owner: 'b', item_type: '', public: '', status: '' },
-};
+export const DEFAULT_ITEM_MAPPINGS = EXEMPLAIRES_PAR_DEFAUT;
 export const ITEM_STRUCTURED_KEYS = ['code', 'call_number', 'note', 'owner'];
 export const ITEM_NOTE_KEYS = ['item_type', 'public', 'status'];
 const ITEM_KEYS = [...ITEM_STRUCTURED_KEYS, ...ITEM_NOTE_KEYS];
@@ -179,9 +146,11 @@ function firstFromList(record, list) {
   for (const { tag, code } of list) {
     for (const f of fieldsByTag(record, tag)) {
       if (!f.subfields) continue;
-      const sf = f.subfields.find((s) => s.code === code);
-      const v = clean(sf?.value);
-      if (v) return v;
+      for (const s of f.subfields) {
+        if (s.code !== code) continue;
+        const v = clean(s.value);
+        if (v) return v;
+      }
     }
   }
   return null;
@@ -204,26 +173,143 @@ function allFromList(record, list) {
   return out;
 }
 
-// Noms d'auteur·rices : pour chaque zone auteur, concatene les sous-zones
-// nameCodes presentes (ex. UNIMARC 700 $a "Bakounine" + $b "Michel" ->
-// "Bakounine, Michel" ; MARC21 100 $a "Bakunin, Mikhail" -> tel quel).
-function authorNames(record, def) {
-  const out = [];
-  const seen = new Set();
-  for (const tag of def.authorTags) {
+// Un champ de la table commune : [tag, sous-zone] -> la 1re valeur, toutes, ou
+// toutes jointes.
+function lireChamp(record, champ) {
+  const liste = (champ?.zones || []).map(([tag, code]) => ({ tag, code }));
+  if (!champ || champ.mode === 'first') return liste.length ? firstFromList(record, liste) : null;
+  const toutes = liste.length ? allFromList(record, liste) : [];
+  return champ.mode === 'join' ? (toutes.length ? toutes.join(champ.sep || ' ; ') : null) : toutes;
+}
+
+function premiere(field, code) {
+  if (!code) return null;
+  return clean((field.subfields || []).find((s) => s.code === code)?.value);
+}
+
+function toutes(field, code) {
+  if (!code) return [];
+  return (field.subfields || []).filter((s) => s.code === code).map((s) => clean(s.value)).filter(Boolean);
+}
+
+// MARC21 (LC, OCLC, Koha…) garde la ponctuation ISBD dans les sous-zones ;
+// l'UNIMARC non. Retirée (revue du 28/09) : « Bakunin, Mikhail, » ne rejoignait
+// pas son autorité, « Anarchism : » gardait ses deux-points. Le point d'une
+// initiale (« Walker, Mildred D. ») et d'une abréviation courante reste.
+// qualif : un $n/$d/$c de 111, entre parenthèses.
+const INITIALE_FINALE = /(?:^|[\s.])\p{Lu}\.$/u;
+const ABREVIATION_FINALE = /\b(?:p|pp|v|vol|vols|il|ill|cm|mm|ed|éd|eds|org|orgs|dir|coord|trad|comp|rev|aum|impr|reimpr|ca|n|no|t|et al|etc|jr|sr|st|ste|dr|dra|prof|fig|col|coll)\.$/i;
+function sansIsbd(v, qualif = false) {
+  let s = clean(v);
+  if (!s) return null;
+  let avant;
+  do {
+    avant = s;
+    s = s.replace(/[\s,;:/=]+$/, '');
+    if (qualif) s = s.replace(/^\(\s*/, '').replace(/\s*\)$/, '');
+    if (s.endsWith('.') && !INITIALE_FINALE.test(s) && !ABREVIATION_FINALE.test(s)) s = s.slice(0, -1).trimEnd();
+  } while (s !== avant);
+  return s || null;
+}
+
+// H17 (revue) : le titre de collection et son numéro viennent de la MÊME zone
+// (225 / 410, ou 490 / 830) : la première qui porte un titre, puis son propre
+// $v — jamais le $v d'une autre occurrence.
+function collection(record, def) {
+  const numeros = new Map(def.seriesNumber.zones);
+  for (const [tag, code] of def.seriesTitle.zones) {
     for (const f of fieldsByTag(record, tag)) {
-      if (!f.subfields) continue;
-      const parts = [];
-      for (const code of def.nameCodes) {
-        const sf = f.subfields.find((s) => s.code === code);
-        const v = clean(sf?.value);
-        if (v) parts.push(v);
-      }
-      const name = parts.join(', ');
-      if (name && !seen.has(name)) { seen.add(name); out.push(name); }
+      const titre = premiere(f, code);
+      if (titre) return { titre, numero: premiere(f, numeros.get(tag)) };
     }
   }
+  return { titre: null, numero: null };
+}
+
+// Sujets : la vedette ($a, $b) puis ses subdivisions dans l'ordre de la zone
+// (UNIMARC 606 $a « Anarchisme » $y « France » $z « 19e siècle » ->
+// « Anarchisme -- France -- 19e siècle ») ; puis les mots-clés libres (610 /
+// 653), une zone pouvant en porter plusieurs séparés par « ; » (PMB).
+function sujets(record, dialect) {
+  const d = SUJETS[dialect];
+  const out = [];
+  const seen = new Set();
+  const ajouter = (v) => { if (v && !seen.has(v)) { seen.add(v); out.push(v); } };
+  for (const tag of d.tags) {
+    for (const f of fieldsByTag(record, tag)) {
+      if (!f.subfields) continue;
+      const vedette = d.vedette.map((c) => premiere(f, c)).filter(Boolean).join(', ');
+      const subdivisions = f.subfields.filter((s) => d.subdivisions.includes(s.code)).map((s) => clean(s.value)).filter(Boolean);
+      ajouter([vedette, ...subdivisions].filter(Boolean).join(SEPARATEUR_SUBDIVISION) || null);
+    }
+  }
+  for (const v of lireChamp(record, CHAMPS[dialect].keywords)) {
+    for (const mot of String(v).split(/\s*;\s*/)) ajouter(clean(mot));
+  }
   return out;
+}
+
+// Responsabilités (H18) : pour chaque zone 70x/71x (UNIMARC), 1XX/7XX (MARC21),
+// dans l'ordre de la notice, la zone principale d'abord : nom, nature
+// (personne, collectivité, congrès), rôle AnarBib (depuis $4, ou le terme en
+// clair $e/$j en MARC21), le code d'origine, les dates, la référence
+// d'autorité ($3 UNIMARC, $0 MARC21 ; le $9 de PMB est un identifiant interne,
+// laissé). Une personne : « $a, $b » ; une collectivité : « $a. $b ».
+function responsabilites(record, dialect) {
+  const zones = new Map(RESPONSABILITES[dialect].map((z) => [z.tag, z]));
+  const out = [];
+  const seen = new Set();
+  record.fields.forEach((f, ordre) => {
+    const z = zones.get(f.tag);
+    if (!z || !f.subfields) return;
+    const nature = z.nature === 'ind1' ? (f.ind1 === '1' ? 'congress' : 'collective') : z.nature;
+    const isbd = (v, q = false) => (dialect === 'marc21' ? sansIsbd(v, q) : clean(v));
+    // Toutes les $b (la hiérarchie d'une collectivité : « France. Ministère »).
+    const parts = z.nom.flatMap((c) => toutes(f, c)).map((v) => isbd(v)).filter(Boolean);
+    const base = parts.join(nature === 'person' ? ', ' : '. ');
+    if (!base) return;
+    // Numéro, date, lieu d'un congrès (ou d'une collectivité qui les porte).
+    const qualif = (z.qualificatifs || []).map((c) => isbd(premiere(f, c), true)).filter(Boolean);
+    const name = qualif.length ? `${base} (${qualif.join(' ; ')})` : base;
+    // Tous les rôles ($4, $e répétables) : une entrée par rôle.
+    const codes = toutes(f, z.role);
+    const termes = toutes(f, z.roleTerme).map((v) => isbd(v));
+    const paires = codes.length ? codes.map((c) => [c, termes[0] || null])
+      : termes.length ? termes.map((t) => [null, t]) : [[null, null]];
+    const authorityRef = (z.autorite || []).map((c) => premiere(f, c)).find(Boolean) || null;
+    for (const [roleCode, roleTerme] of paires) {
+      const role = roleDepuisCode(dialect, roleCode, roleTerme, !!z.secondaire);
+      const cle = `${name}|${role}`;
+      if (seen.has(cle)) continue;
+      seen.add(cle);
+      out.push({
+        name, nature, role, roleCode: codeRelation(roleCode) || roleTerme || null, primary: !!z.principale,
+        dates: isbd(premiere(f, z.dates)), authorityRef, tag: f.tag, ordre,
+      });
+    }
+  });
+  // La zone principale (700/710, 1XX) d'abord, puis l'ordre de la notice.
+  out.sort((a, b) => (Number(b.primary) - Number(a.primary)) || (a.ordre - b.ordre));
+  return out.map(({ ordre, ...c }) => c);
+}
+
+// Nombre de pages d'une étendue (215 $a / 300 $a) : « 166 p. », « 318 pages »,
+// « Cartonné - 48 pages », « 1 vol. (212 p.) ». Rien pour une étendue qui n'est
+// pas un nombre de pages (« p. 4-9 » d'un article, « 3 vol. ») : elle reste
+// entière dans extent.
+function pagesDepuisEtendue(extent) {
+  const v = clean(extent);
+  if (!v) return null;
+  // Plusieurs volumes paginés chacun (« 2 vol. (318, 352 p.) ») : aucun nombre
+  // ne vaut pour l'ensemble ; l'étendue reste entière.
+  const vol = v.match(/^(\d+)\s*(?:vols?|v|t|tomes?)\b\.?\s*(?:\(([^)]*)\))?/i);
+  if (vol && parseInt(vol[1], 10) > 1 && vol[2] && vol[2].includes(',')) return null;
+  // Feuillets préliminaires (« 2 p. l. ») et planches (« 20 f. de pl. ») : pas
+  // la pagination principale.
+  const m = v.match(/(\d{1,5})\s*(?:p\.|p\b|pages?\b|pp\.?|f\.|ff\.|folios?\b)(?!\.?\s*l\.)(?!\.?\s*(?:de|of)\s+pl)/i);
+  if (!m) return null;
+  const n = parseInt(m[1], 10);
+  return Number.isInteger(n) && n > 0 && n < 100000 ? n : null;
 }
 
 // Annee : extrait un millesime a 4 chiffres si present, sinon la valeur nettoyee.
@@ -251,30 +337,69 @@ export function detectDialect(record) {
 // ── Mapping vers la forme normalisee ────────────────────────
 
 export function mapMarcRecord(record, dialect, itemMapping = null) {
-  const def = dialect === 'unimarc' ? UNIMARC : MARC21;
+  const def = CHAMPS[dialect === 'unimarc' ? 'unimarc' : 'marc21'];
+  // MARC21 : la ponctuation ISBD retirée des zones descriptives (revue du 28/09).
+  const ISBD = new Set(['title', 'subtitle', 'responsibility', 'volumeNumber', 'volumeName', 'place', 'publisher', 'keyTitle', 'hostTitle']);
+  const lire = (k) => {
+    const v = lireChamp(record, def[k]);
+    return dialect === 'marc21' && ISBD.has(k) && typeof v === 'string' ? sansIsbd(v) : v;
+  };
 
-  const title = firstFromList(record, def.title);
-  const subtitle = firstFromList(record, def.subtitle);
-  const responsibility = firstFromList(record, def.responsibility);
-  const names = authorNames(record, def);
-  const publisher = firstFromList(record, def.publisher);
-  const placeOfPublication = firstFromList(record, def.place);
-  const publicationYear = yearText(firstFromList(record, def.year));
-  const editionStatement = firstFromList(record, def.edition);
-  const language = firstFromList(record, def.language);
-  const isbn = firstFromList(record, def.isbn);
-  const issn = firstFromList(record, def.issn);
-  const subjectsArray = allFromList(record, def.subjects);
-  const externalKey = controlValue(record, def.control);
+  let title = lire('title');
+  const subtitle = lire('subtitle');
+  const responsibility = lire('responsibility');
+  const contributors = responsabilites(record, dialect === 'unimarc' ? 'unimarc' : 'marc21');
+  const names = contributors.map((c) => c.name);
+  const publisher = lire('publisher');
+  const placeOfPublication = lire('place');
+  const publicationYear = yearText(lire('year'));
+  const editionStatement = lire('edition');
+  const language = lire('language');
+  const isbn = lire('isbn');
+  const issn = lire('issn');
+  const subjectsArray = sujets(record, dialect === 'unimarc' ? 'unimarc' : 'marc21');
+  const externalKey = controlValue(record, CONTROLE);
 
   // itemType : type d'enregistrement (leader/06) + niveau bibliographique
   // (leader/07), tels quels — diagnostic, non normalise plus avant ici.
+  // materialType : le type AnarBib qui s'en déduit (H17 : un article dépouillé,
+  // un périodique, un enregistrement sonore ne sont plus des « livro »).
   const leader = typeof record.leader === 'string' ? record.leader : '';
   const itemType = clean((leader[6] || '') + (leader[7] || '')) || null;
+  let materialType = typeDepuisGuide(leader, dialect === 'unimarc' ? 'unimarc' : 'marc21');
 
   // responsibilityStatement : la mention de responsabilite si presente,
   // sinon la liste des noms concatenee (fallback).
   const responsibilityStatement = responsibility || (names.length ? names.join('; ') : null);
+
+  // H17 : étendue et pages ; volume (200 $h $i, ou le $v d'une 461 de
+  // monographie) ; collection (225/410) ; notes (résumé, note, sommaire) ;
+  // classification (676 / 082) ; adresse (856) ; titre clé (530) ; notice hôte
+  // et fascicule d'un article dépouillé (461 / 463, 773).
+  const extent = lire('extent');
+  const host = { title: lire('hostTitle'), issn: lire('hostIssn'), volume: lire('hostVolume') };
+  const issue = { number: lire('issueNumber'), date: lire('issueDate'), title: lire('issueTitle') };
+  let volume = [lire('volumeNumber'), lire('volumeName')].filter(Boolean).join(' : ')
+    || (materialType !== 'artigo' ? host.volume : null) || null;
+  const serie = collection(record, def);
+  const seriesTitle = dialect === 'marc21' ? sansIsbd(serie.titre) : serie.titre;
+  const seriesNumber = dialect === 'marc21' ? sansIsbd(serie.numero) : serie.numero;
+  let keyTitle = lire('keyTitle');
+  // PMB : la « notice de bulletin » qui porte les exemplaires d'un fascicule
+  // sans notice propre (463 $9 lnk:bull_expl ; 200 « Notice de bulletin »,
+  // $h le périodique, $i le numéro). C'est un fascicule : un périodique, son
+  // titre, son numéro, sa date — pas un article sans revue (revue du 28/09).
+  const bulletinPmb = dialect === 'unimarc' && fieldsByTag(record, '463').some((f) =>
+    (f.subfields || []).some((s) => s.code === '9' && clean(s.value) === 'lnk:bull_expl'));
+  if (bulletinPmb) {
+    const perio = issue.title || lire('volumeNumber');
+    materialType = 'periodico';
+    keyTitle = perio || keyTitle;
+    title = perio || title;
+    volume = issue.number || lire('volumeName') || null;
+    issue.title = null;
+  }
+  const notes = [...lire('summary'), ...lire('notes'), ...lire('contents')];
 
   return {
     title,
@@ -294,7 +419,41 @@ export function mapMarcRecord(record, dialect, itemMapping = null) {
     // H19 : les exemplaires physiques (995 / 852), selon la correspondance
     // du profil de la bibliotheque (defaut PMB 8.1).
     items: extractItems(record, dialect, itemMapping),
+    // H17
+    materialType,
+    extent,
+    pages: pagesDepuisEtendue(extent),
+    volume,
+    series: seriesTitle ? (seriesNumber ? `${seriesTitle} ; ${seriesNumber}` : seriesTitle) : null,
+    notes: notes.length ? notes.join('\n\n') : null,
+    classification: lire('classification'),
+    url: lire('url'),
+    keyTitle,
+    host: (host.title || host.issn || host.volume) ? host : null,
+    issue: (issue.number || issue.date || issue.title) ? issue : null,
+    // H18
+    contributors,
   };
+}
+
+// H17 / H18 : ce que la forme normalisée MARC porte au-delà du socle commun
+// aux formats (CSV, RIS…), pour la ligne de staging (normalized_payload) —
+// seulement ce qui a une valeur. Lu par ingest.fn_create_book_drafts_from_import_rows.
+export function mappedExtras(mapped) {
+  const out = {};
+  const scalaires = {
+    material_type: mapped.materialType, extent: mapped.extent, pages: mapped.pages, volume: mapped.volume,
+    series: mapped.series, notes: mapped.notes, classification: mapped.classification, url: mapped.url,
+    key_title: mapped.keyTitle, host: mapped.host, issue: mapped.issue,
+  };
+  for (const [k, v] of Object.entries(scalaires)) if (v !== null && v !== undefined && v !== '') out[k] = v;
+  if (Array.isArray(mapped.contributors) && mapped.contributors.length) {
+    out.contributors = mapped.contributors.map((c) => ({
+      name: c.name, nature: c.nature, role: c.role, role_code: c.roleCode ?? null,
+      primary: !!c.primary, dates: c.dates ?? null, authority_ref: c.authorityRef ?? null, tag: c.tag ?? null,
+    }));
+  }
+  return out;
 }
 
 // ── MARCXML ─────────────────────────────────────────────────
@@ -356,6 +515,56 @@ export function parseMarcXml(text) {
       fields.push({ tag, ind1, ind2, subfields });
     }
 
+    records.push({ leader, fields });
+  }
+  return records;
+}
+
+// ── XML propre à PMB (H22) ──────────────────────────────────
+//
+// L'export « UNIMARC PMB XML » de PMB : <unimarc><notice> ; le guide éclaté en
+// <rs> (statut), <dt> (type), <bl> (niveau), <hl> (hiérarchie), <el> (niveau
+// de codage), <ru> (règles) ; <f c="001">valeur</f> ; <f c="200" ind="1 ">
+// <s c="a">…</s></f>. Lu vers le modèle commun : rien ne change en aval.
+export function looksLikePmbXml(text) {
+  if (!text) return false;
+  const head = text.slice(0, 4000);
+  return /<unimarc[\s>]/.test(head) && /<notice[\s>]/.test(text) && /<f\s+c="/.test(text);
+}
+
+export function parsePmbXml(text) {
+  const records = [];
+  const noticeRe = /<notice\b[^>]*>([\s\S]*?)<\/notice>/g;
+  let nm;
+  while ((nm = noticeRe.exec(text)) !== null) {
+    const body = nm[1];
+    const el = (name, defaut) => {
+      const m = body.match(new RegExp(`<${name}>([^<]*)</${name}>`));
+      const v = m ? decodeXmlEntities(m[1]) : '';
+      return (v || defaut).slice(0, 1);
+    };
+    // Guide UNIMARC reconstitué : longueur et adresse à zéro (sans objet hors
+    // ISO 2709), indicateurs « 22 », fin « 450 ».
+    const leader = `00000${el('rs', 'n')}${el('dt', 'a')}${el('bl', 'm')}${el('hl', ' ')} 2200000${el('el', ' ')}${el('ru', ' ')} 450 `;
+    const fields = [];
+    const fRe = /<f\s+c="([^"]*)"([^>]*)>([\s\S]*?)<\/f>/g;
+    let fm;
+    while ((fm = fRe.exec(body)) !== null) {
+      const tag = fm[1].trim();
+      const inner = fm[3];
+      if (!/<s\s+c="/.test(inner)) {
+        fields.push({ tag, value: decodeXmlEntities(inner) });
+        continue;
+      }
+      const ind = (fm[2].match(/\bind="([^"]*)"/) || [, '  '])[1];
+      const subfields = [];
+      const sRe = /<s\s+c="([^"]*)"[^>]*>([\s\S]*?)<\/s>/g;
+      let sm;
+      // PMB garde les fins de ligne Windows dans ce format (pas dans son ISO
+      // 2709) : normalisées, pour que les deux exports donnent la même notice.
+      while ((sm = sRe.exec(inner)) !== null) subfields.push({ code: sm[1], value: decodeXmlEntities(sm[2]).replace(/\r\n?/g, '\n') });
+      fields.push({ tag, ind1: ind[0] || ' ', ind2: ind[1] || ' ', subfields });
+    }
     records.push({ leader, fields });
   }
   return records;
@@ -539,13 +748,24 @@ export function unimarcCharsetWarnings(declared, decoded, hasNonAscii) {
 const COVERAGE_MAX_ZONES = 400;
 const COVERAGE_EXAMPLE_LEN = 80;
 
-function consumedSubfields(def, itemMapping) {
+// H17 : « repris » se lit dans la table commune — champs, sujets (vedette et
+// subdivisions), responsabilités (nom, dates, rôle, autorité) — ; « laissé »
+// (exprès, avec sa raison) dans ZONES_LAISSEES ; le reste est « brut ».
+function consumedSubfields(dialect, itemMapping) {
   const m = new Map();
-  for (const k of ['title', 'subtitle', 'responsibility', 'edition', 'place', 'publisher', 'year', 'language', 'isbn', 'issn']) {
-    for (const { tag, code } of def[k]) m.set(`${tag}$${code}`, 'first');
+  // Le titre du fascicule ne va dans aucun champ du brouillon : laissé.
+  const NON_ECRITS = new Set(['issueTitle']);
+  for (const [cle, champ] of Object.entries(CHAMPS[dialect])) {
+    if (NON_ECRITS.has(cle)) continue;
+    for (const [tag, code] of champ.zones) m.set(`${tag}$${code}`, champ.mode === 'first' ? 'first' : 'all');
   }
-  for (const tag of def.authorTags) for (const code of def.nameCodes) m.set(`${tag}$${code}`, 'all');
-  for (const { tag, code } of def.subjects) m.set(`${tag}$${code}`, 'all');
+  const s = SUJETS[dialect];
+  for (const tag of s.tags) for (const code of [...s.vedette, ...s.subdivisions]) m.set(`${tag}$${code}`, 'all');
+  for (const z of RESPONSABILITES[dialect]) {
+    // Les dates et la référence d'autorité de la source restent dans
+    // l'enregistrement d'origine (aucune colonne) : laissées, pas reprises.
+    for (const code of [...z.nom, z.role, z.roleTerme, ...(z.qualificatifs || [])].filter(Boolean)) m.set(`${z.tag}$${code}`, 'all');
+  }
   // H19 : sous-zones d'exemplaire. Les cles structurees entrent dans
   // l'exemplaire (reprises) ; type, public, statut vont dans sa note de
   // provenance (indice), en attendant leur correspondance (IMP-21 d).
@@ -567,23 +787,25 @@ function consumedSubfields(def, itemMapping) {
 // itemMappingOverride : correspondance d'exemplaires du profil (H19), ou null.
 // → { kind: 'marc', records, zones: [{ dialect, tag, code, status, occurrences,
 //     records, surplus, example }], truncated }
-//   status : 'repris' | 'indice' | 'brut' ; code '' pour une zone de controle.
+//   status : 'repris' | 'indice' | 'laisse' | 'brut' ; code '' pour une zone
+//   de controle ; motif : pourquoi une zone est laissée exprès (H17, codé :
+//   correspondance.ts, MOTIFS).
 export function marcCoverage(entries, itemMappingOverride = null) {
   const zones = new Map();
   const CONSUMED = {
-    marc21: consumedSubfields(MARC21, resolveItemMapping('marc21', itemMappingOverride)),
-    unimarc: consumedSubfields(UNIMARC, resolveItemMapping('unimarc', itemMappingOverride)),
+    marc21: consumedSubfields('marc21', resolveItemMapping('marc21', itemMappingOverride)),
+    unimarc: consumedSubfields('unimarc', resolveItemMapping('unimarc', itemMappingOverride)),
   };
   for (const e of entries || []) {
     const dialect = e.dialect === 'unimarc' ? 'unimarc' : 'marc21';
-    const def = dialect === 'unimarc' ? UNIMARC : MARC21;
     const consumed = CONSUMED[dialect];
     const perRecord = new Map();
     const note = (tag, code, value, status, kind, repeatedInField = false) => {
       const key = `${dialect}|${tag}|${code}`;
       let z = zones.get(key);
       if (!z) {
-        z = { dialect, tag, code, status, occurrences: 0, records: 0, surplus: 0, example: null };
+        const motif = status === 'laisse' ? zoneLaissee(dialect, tag, code || '*') : null;
+        z = { dialect, tag, code, status, occurrences: 0, records: 0, surplus: 0, example: null, ...(motif ? { motif } : {}) };
         zones.set(key, z);
       }
       z.occurrences += 1;
@@ -599,12 +821,13 @@ export function marcCoverage(entries, itemMappingOverride = null) {
     };
     for (const f of (e.rawPayload?.fields || [])) {
       if (typeof f.value === 'string') {
-        note(f.tag, '', f.value, f.tag === def.control ? 'repris' : 'brut', null);
+        note(f.tag, '', f.value, f.tag === CONTROLE ? 'repris' : (zoneLaissee(dialect, f.tag, '*') ? 'laisse' : 'brut'), null);
       } else {
         const perField = new Map();
         for (const s of (f.subfields || [])) {
           const kind = consumed.get(`${f.tag}$${s.code}`) || null;
-          const status = !kind ? 'brut' : (kind === 'item_note' ? 'indice' : 'repris');
+          const status = !kind ? (zoneLaissee(dialect, f.tag, s.code) ? 'laisse' : 'brut')
+            : (kind === 'item_note' ? 'indice' : 'repris');
           const nf = (perField.get(s.code) || 0) + 1;
           perField.set(s.code, nf);
           note(f.tag, s.code, s.value, status, kind, nf > 1);
@@ -631,7 +854,9 @@ export function buildParsedEntriesFromMarc(records, baseWarnings = [], forcedDia
     const mapped = mapMarcRecord(record, dialect, itemMapping);
     return {
       rowNo: idx + 1,
-      rawPayload: { leader: record.leader, fields: record.fields, marc_dialect: dialect },
+      // item_tag : la zone d'exemplaire lue (profil compris) ; l'export ne la
+      // réémet jamais de l'origine (H24).
+      rawPayload: { leader: record.leader, fields: record.fields, marc_dialect: dialect, item_tag: resolveItemMapping(dialect, itemMapping).tag },
       mapped,
       warnings: idx === 0 ? baseWarnings.slice() : [],
       dialect,
@@ -665,6 +890,15 @@ export function parseMarcFile({ text, bytes, filename, forcedDialect = null, enc
     if (records.length) {
       const entries = buildParsedEntriesFromMarc(records, [], forcedDialect, itemMapping);
       return { format: 'marcxml', entries, declaredCharsets: declaredCharsets(entries) };
+    }
+  }
+
+  // 1 bis. XML propre à PMB (H22) : toujours de l'UNIMARC.
+  if (looksLikePmbXml(text)) {
+    const records = parsePmbXml(text);
+    if (records.length) {
+      const entries = buildParsedEntriesFromMarc(records, [], forcedDialect || 'unimarc', itemMapping);
+      return { format: 'pmb_xml', entries, declaredCharsets: declaredCharsets(entries) };
     }
   }
 
