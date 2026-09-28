@@ -130,5 +130,8 @@ ont dans aucun instantané** depuis le 30/06 (BTL-TL-000252, 000260, 000357,
 
 Rien d'ouvert côté outil de fusion. Les rééditions réelles sont des éditions de la
 même œuvre (« Regrouper ») ; la règle des années ne se rouvre que par une décision
-au registre. Côté sujets : les sept notices sans sujet dans aucune sauvegarde
-restent à indexer un jour, comme n'importe quelle notice non indexée.
+au registre. Côté sujets : les sept notices sans sujet dans aucune sauvegarde ont
+été arbitrées le 28/09 au soir, dans le vocabulaire existant — six indexées
+(BTL-TL-000252 et 000260 → ficcao ; 000357 → marxismo, socialismo ; 001635 →
+anarquismo ; BLMF 0000261 et 0000264 → ditadura), une laissée sans matière
+(BTL-TL-001242, souvenirs d'école : aucune matière du thésaurus ne convient).
