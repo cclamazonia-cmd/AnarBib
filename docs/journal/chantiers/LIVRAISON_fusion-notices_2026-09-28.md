@@ -126,6 +126,18 @@ BTL-TL-001992 et 002335 (anarquismo) — restaurés par `20260928155533`. **Sept
 ont dans aucun instantané** depuis le 30/06 (BTL-TL-000252, 000260, 000357,
 001242, 001635 ; BLMF 0000261, 0000264) : rien à restaurer.
 
+### Découvert en chemin, bis : l'ISBN comparé chiffre à chiffre (`20260928163920`, `DEDUP-14`)
+
+BTL-TL-000504 et BTL-TL-000727 (*Anarquistas*, Suriano, Manantial, 2001), même édition
+de la même œuvre, n'étaient jamais proposées comme doublon : `987-500-069-8` (ISBN-10)
+et `978-987-500-069-8` (ISBN-13) passaient pour deux ISBN, donc deux éditions ; et
+« Manantial » / « Ediciones Manantial » pour deux éditeurs (similarité 0,5). Quatre
+paires masquées ainsi (000504~000727 ; 000301~BLMF 0000054 ; 001525~BLMF 0000258 ;
+001808~BLMF 0000060). Correctif : `fn_isbn_coeur` (douze chiffres sans clé), deux ISBN
+présents décident seuls, éditeurs comparés sans mots génériques (`fn_meme_editeur`),
+trois détecteurs alignés ; suite `editions_distinctes_tests` (8) — il n'y en avait
+aucune.
+
 ## Ce qui reste
 
 Rien d'ouvert côté outil de fusion. Les rééditions réelles sont des éditions de la
