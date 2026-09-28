@@ -100,8 +100,9 @@ par la vérification à l'écran de l'action « Même édition » (6276, 6277) s
 
 Vérifié à l'écran le 28/09 (session de Xavier) : sur BTL-TL-000181, « Suggérer des
 éditions » répond « Aucune édition à regrouper. » — seule notice de ce titre, et son
-autorité « Cristina Escrivá » (10551) est distincte de « Cristina Escrivá Moscardó »
-(10059), sous laquelle sont ses quatre autres livres ; sur BTL-TL-000881, la
+autorité « Cristina Escrivá » (10551) était distincte de « Cristina Escrivá Moscardó »
+(10059), sous laquelle sont ses quatre autres livres — réunies le 28/09 à 12:11 UTC
+par l'écran du catalogue publié (`merge_log` 150, cinq livres sous 10059) ; sur BTL-TL-000881, la
 suggestion *Estados Unidos do Brasil (1900)* porte bien « Regrouper » et « Même
 édition : fusionner dans cette notice ».
 
