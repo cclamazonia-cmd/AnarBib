@@ -1979,6 +1979,7 @@
   "catalogacao.dedup.finding": "Suche…",
   "catalogacao.dedup.merged": "{dup} in diese Normdatei zusammengeführt.",
   "catalogacao.dedup.none": "Kein Duplikat erkannt.",
+  "catalogacao.dedup.saveBeforeMerge": "Speichere den Datensatz zuerst: Das Zusammenführen lädt den Entwurf neu, und deine ungespeicherten Änderungen gingen verloren.",
   "catalogacao.dedup.title": "Mögliche Duplikate",
   "catalogacao.deleteBatch": "Löschen",
   "catalogacao.deleteBatchConfirm": "Diesen Posten endgültig löschen? Diese Aktion ist unwiderruflich.",

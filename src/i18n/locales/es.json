@@ -1979,6 +1979,7 @@
   "catalogacao.dedup.finding": "Buscando…",
   "catalogacao.dedup.merged": "{dup} fusionado en esta autoridad.",
   "catalogacao.dedup.none": "Ningún duplicado detectado.",
+  "catalogacao.dedup.saveBeforeMerge": "Guarda primero el registro: la fusión recarga el borrador y tus cambios sin guardar se perderían.",
   "catalogacao.dedup.title": "Posibles duplicados",
   "catalogacao.deleteBatch": "Eliminar",
   "catalogacao.deleteBatchConfirm": "¿Eliminar definitivamente este lote? Esta acción es irreversible.",

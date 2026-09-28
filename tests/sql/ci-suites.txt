@@ -566,3 +566,6 @@ tests/sql/editions_suggerees_tests.sql
 # éditeurs, déclencheur de publication (preuve : chemins bitmap seuls, compteur de la transaction).
 tests/sql/recherche_index_trigramme_tests.sql
 tests/sql/ci_en_retard_kind_tests.sql
+# 28/09 (fusion) : la fusion de notices ne perd plus rien (sujets, personnes, champs vides, brouillons ouverts,
+# doublon entier dans merge_log) et la reference d un exemplaire suit son fonds (renommage, reference locale, creation).
+tests/sql/fusion_notices_complete_tests.sql

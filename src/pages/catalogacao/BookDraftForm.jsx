@@ -1129,9 +1129,18 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   // Fusionne le livre doublon `dupId` DANS le livre courant (= canonique).
+  // La fusion reporte sur CE brouillon (ouvert sur la notice gardée) ce qu'elle
+  // reprend du doublon — champs vides, sujets, contributeur·rices — : on le
+  // recharge, sinon la prochaine publication réécrirait la notice avec ce qui
+  // est à l'écran, et effacerait tout. Des modifications non enregistrées
+  // seraient perdues au rechargement : on demande d'enregistrer d'abord.
   async function mergeBookDuplicateIntoCurrent(dupId, dupTitle) {
     const canonicalId = f('published_book_id');
     if (!canonicalId) return;
+    if (draftState === 'dirty') {
+      setMsg({ text: t({ id: 'catalogacao.dedup.saveBeforeMerge' }), kind: 'error' });
+      return;
+    }
     if (!confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup: dupTitle, canonical: f('titulo') }))) return;
     setBookDupBusy(dupId);
     try {
@@ -1139,6 +1148,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         p_canonical_id: Number(canonicalId), p_duplicate_id: Number(dupId),
       });
       if (error) throw error;
+      if (f('id')) {
+        const { data: rechargé } = await supabase.from('book_drafts').select('*').eq('id', Number(f('id'))).single();
+        if (rechargé) fillFromRecord(rechargé);   // efface le message : le nôtre vient après
+      }
       setMsg({ text: t({ id: 'catalogacao.dedup.merged' }, { dup: dupTitle }), kind: 'ok' });
       await findBookDuplicates(); // rafraichir
     } catch (err) {
@@ -2865,7 +2878,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── Assuntos + Notas + Cover path ─────────── */}
           {rrf('subjects')}
-          <SubjectAuthorityPicker draftId={f('id')} />
+          <SubjectAuthorityPicker draftId={f('id')} reloadKey={importedCheck} />
           {rrf('notas')}
           {rrf('cover_object_path')}
 

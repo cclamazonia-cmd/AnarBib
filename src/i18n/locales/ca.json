@@ -1979,6 +1979,7 @@
   "catalogacao.dedup.finding": "Cercant…",
   "catalogacao.dedup.merged": "{dup} fusionat en aquesta autoritat.",
   "catalogacao.dedup.none": "Cap duplicat detectat.",
+  "catalogacao.dedup.saveBeforeMerge": "Desa primer la fitxa: la fusió torna a carregar l'esborrany i els teus canvis no desats es perdrien.",
   "catalogacao.dedup.title": "Possibles duplicats",
   "catalogacao.deleteBatch": "Eliminar",
   "catalogacao.deleteBatchConfirm": "Eliminar definitivament aquest lot? Aquesta acció és irreversible.",

@@ -1979,6 +1979,7 @@
   "catalogacao.dedup.finding": "Serĉado…",
   "catalogacao.dedup.merged": "{dup} kunfandita en ĉi tiun aŭtoritaton.",
   "catalogacao.dedup.none": "Neniu duplikato detektita.",
+  "catalogacao.dedup.saveBeforeMerge": "Unue konservu la katalogeron: la kunfando reŝargas la malneton, kaj viaj nekonservitaj ŝanĝoj perdiĝus.",
   "catalogacao.dedup.title": "Eblaj duplikatoj",
   "catalogacao.deleteBatch": "Forigi",
   "catalogacao.deleteBatchConfirm": "Definitive forigi tiun ĉi loton? Tiu ĉi ago estas neinversebla.",

@@ -1979,6 +1979,7 @@
   "catalogacao.dedup.finding": "Αναζήτηση…",
   "catalogacao.dedup.merged": "Το {dup} συγχωνεύτηκε σε αυτή την καθιερωμένη εγγραφή.",
   "catalogacao.dedup.none": "Δεν εντοπίστηκε διπλότυπο.",
+  "catalogacao.dedup.saveBeforeMerge": "Αποθήκευσε πρώτα την εγγραφή: η συγχώνευση ξαναφορτώνει το προσχέδιο και οι μη αποθηκευμένες αλλαγές σου θα χάνονταν.",
   "catalogacao.dedup.title": "Πιθανά διπλότυπα",
   "catalogacao.deleteBatch": "Διαγραφή",
   "catalogacao.deleteBatchConfirm": "Οριστική διαγραφή αυτής της παρτίδας; Αυτή η ενέργεια είναι μη αναστρέψιμη.",

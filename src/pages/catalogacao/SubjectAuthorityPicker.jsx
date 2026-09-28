@@ -28,7 +28,9 @@ function isMissingLabel(labelI18n, locale) {
   return !labelI18n[locale] && !labelI18n[(locale || '').split('-')[0]];
 }
 
-export default function SubjectAuthorityPicker({ draftId }) {
+// `reloadKey` : le formulaire l'incrémente quand le brouillon est rechargé sans
+// changer d'identifiant (fusion d'un doublon : la base y a ajouté des sujets).
+export default function SubjectAuthorityPicker({ draftId, reloadKey = 0 }) {
   const { formatMessage: t, locale } = useIntl();
   const [selected, setSelected] = useState([]); // [{subject_id, slug, label_i18n, status}]
   const [query, setQuery] = useState('');
@@ -52,7 +54,7 @@ export default function SubjectAuthorityPicker({ draftId }) {
       }
     })();
     return () => { cancelled = true; };
-  }, [draftId]);
+  }, [draftId, reloadKey]);
 
   // Suggestions (G) : sujets fréquents des autres livres des auteur·rices du brouillon.
   useEffect(() => {

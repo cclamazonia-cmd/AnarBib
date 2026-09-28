@@ -1979,6 +1979,7 @@
   "catalogacao.dedup.finding": "Searching…",
   "catalogacao.dedup.merged": "{dup} merged into this authority.",
   "catalogacao.dedup.none": "No duplicate detected.",
+  "catalogacao.dedup.saveBeforeMerge": "Save the record first: merging reloads the draft, and your unsaved changes would be lost.",
   "catalogacao.dedup.title": "Possible duplicates",
   "catalogacao.deleteBatch": "Delete",
   "catalogacao.deleteBatchConfirm": "Permanently delete this batch? This action cannot be undone.",

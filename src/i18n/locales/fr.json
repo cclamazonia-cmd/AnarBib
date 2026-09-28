@@ -1985,6 +1985,7 @@
   "catalogacao.dedup.finding": "Recherche…",
   "catalogacao.dedup.merged": "{dup} fusionné·e dans cette autorité.",
   "catalogacao.dedup.none": "Aucun doublon détecté.",
+  "catalogacao.dedup.saveBeforeMerge": "Enregistre d'abord la notice : la fusion recharge le brouillon, et tes modifications non enregistrées seraient perdues.",
   "catalogacao.dedup.title": "Doublons possibles",
   "catalogacao.deleteBatch": "Supprimer",
   "catalogacao.deleteBatchConfirm": "Supprimer définitivement ce lot ? Cette action est irréversible.",
