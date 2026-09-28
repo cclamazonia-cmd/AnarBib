@@ -25,6 +25,51 @@
 
 export const COVER_BUCKET = 'covers';
 
+// ── L'adresse d'une capa neuve ──────────────────────────────────────────
+//
+// Jusqu'au 28/09/2026, le formulaire rangeait chaque capa a
+// `books/<cle>/front.<ext>` et REMPLACAIT en place (`upsert`). Meme adresse,
+// image differente : le bucket sert ses objets avec `Cache-Control:
+// max-age=3600`, donc le navigateur qui avait affiche la premiere version —
+// celui de la personne qui catalogue, forcement, puisqu'elle vient de la voir
+// dans le formulaire — et le CDN devant lui resservaient l'ancienne image
+// pendant une heure. Vecu le 28/09 sur deux series de tomes (MLEG-0145,
+// BTL-TL-000447) : les fichiers stockes etaient justes, la page Oeuvre
+// montrait la capa d'un autre tome, et rien en base ne l'expliquait.
+//
+// Regle depuis : une capa neuve a une adresse neuve, `capa-<horodatage en base
+// 36>` — le nom que l'ecran de revue donnait deja (REGISTRE CAPAS-4) — et le
+// depot se fait SANS upsert. L'ancien objet reste tant qu'une notice ou un
+// brouillon le designe (un brouillon abandonne ne doit pas laisser la notice
+// sans image) ; `scripts/purge-orphelins-covers.py` le retire une fois remplace
+// (classe B). `photo-…` (Painel) et `front.<ext>` (le stock d'avant) restent des
+// noms valides : la convention du derive ne depend pas du nom.
+
+/** La cle du dossier de la notice : bib_ref ou id, nettoyee comme par cover_lookup et photoCapa. */
+export function cleCapa(bibRefOuId) {
+  return String(bibRefOuId ?? '').replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 120);
+}
+
+/** Le nom neuf, dans la forme que cover_lookup accepte (`capa-[a-z0-9]{1,20}`). */
+export function nomCapaNeuf(horodatage = Date.now()) {
+  return `capa-${Number(horodatage).toString(36)}`;
+}
+
+/** L'extension d'un fichier choisi, en minuscules et sure ; `jpg` si elle ne se lit pas. */
+export function extensionCapa(nomFichier, defaut = 'jpg') {
+  const nom = String(nomFichier || '');
+  const i = nom.lastIndexOf('.');
+  const ext = i > 0 ? nom.slice(i + 1).toLowerCase() : '';
+  return /^[a-z0-9]{1,5}$/.test(ext) ? ext : defaut;
+}
+
+/** Le chemin complet d'une capa neuve dans le bucket ; vide sans cle. */
+export function cheminCapaNeuf(bibRefOuId, ext = 'jpg', horodatage = Date.now()) {
+  const cle = cleCapa(bibRefOuId);
+  if (!cle) return '';
+  return `books/${cle}/${nomCapaNeuf(horodatage)}.${ext}`;
+}
+
 // Boite du derive. L'affichage fait 30x44 px CSS dans la grille (24x34 en mode
 // compact) : 128x192 couvre les ecrans jusqu'a 4x sans jamais recadrer, pour
 // ~2 ko par vignette. Le ratio 2:3 est celui d'une couverture ; `contain` cote
@@ -130,8 +175,9 @@ export async function makeCoverThumbBlob(source) {
  * `source` est facultatif : sans lui, on retelecharge l'original par l'API
  * Storage (`download`) plutot que par l'URL publique. Ce detour est
  * volontaire — l'URL publique passe par le CDN, qui peut encore servir la
- * PRECEDENTE capa pendant une heure apres un remplacement (`upsert` sur un
- * chemin stable), ce qui produirait la vignette du mauvais livre.
+ * PRECEDENTE capa pendant une heure apres un remplacement en place (`upsert`
+ * sur un chemin stable : le stock `front.<ext>` d'avant le 28/09/2026, ou un
+ * script), ce qui produirait la vignette du mauvais livre.
  *
  * Best-effort assume : en cas d'echec, on n'interrompt pas le depot de la capa.
  * Le catalogue retombe alors sur l'original via le `onError` de la grille, et

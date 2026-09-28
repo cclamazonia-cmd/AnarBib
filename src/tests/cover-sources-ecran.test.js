@@ -255,3 +255,22 @@ describe('BookDraftForm — provenance et licence de la capa', () => {
     expect(FORM).toMatch(/cover_object_path: envoye \|\| f\('cover_object_path'\) \|\| null/);
   });
 });
+
+describe('BookDraftForm — une capa neuve a une adresse neuve (28/09/2026)', () => {
+  // Une capa remplacée en place à `books/<clé>/front.<ext>` restait servie une
+  // heure par le cache (max-age=3600) : la page Œuvre montrait la capa d'un
+  // autre tome. Le formulaire nomme désormais chaque dépôt, comme l'écran de
+  // revue, et ne remplace jamais (coverThumbs.js, cheminCapaNeuf).
+  it('aucun dépôt du formulaire n’écrit plus front.<ext> ni ne remplace en place', () => {
+    expect(FORM).not.toMatch(/\/front\.\$\{|\/front\.jpg/);
+    expect(FORM).not.toMatch(/from\('covers'\)[\s\S]{0,160}?upsert: true/);
+  });
+
+  it('fichier et page 1 de PDF passent par cheminCapaNeuf ; la candidate choisie donne un nom neuf à cover_lookup', () => {
+    expect(FORM).toMatch(/cheminCapaNeuf\(stableKey, ext\)/);
+    expect(FORM).toMatch(/cheminCapaNeuf\(stableKey, 'jpg'\)/);
+    expect(FORM).toMatch(/action: 'store',[\s\S]{0,400}?nom: nomCapaNeuf\(\)/);
+    expect(FORM).toMatch(/\.upload\(storagePath, coverFile, \{ upsert: false \}\)/);
+    expect(FORM).toMatch(/\.upload\(storagePath, blob, \{ upsert: false, contentType: 'image\/jpeg' \}\)/);
+  });
+});

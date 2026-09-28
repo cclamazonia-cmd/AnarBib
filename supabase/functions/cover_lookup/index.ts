@@ -36,8 +36,9 @@
 //    POST { action: 'pdf', url } -> le PDF lui-meme, en application/octet-stream
 //    (capa « page 1 du PDF » : le serveur le recupere, pas le navigateur).
 //    POST { action: 'store', imageUrl, key, nom?, source?, license? }
-//    -> { ok, storagePath: 'books/<key>/<nom>.<ext>' } ; `nom` vaut `front`
-//    par defaut (le formulaire), `capa-<suffixe>` pour l'ecran de revue.
+//    -> { ok, storagePath: 'books/<key>/<nom>.<ext>' } ; le formulaire et
+//    l'ecran de revue donnent un nom NEUF `capa-<suffixe>` (depuis le 28/09/2026,
+//    une capa neuve a une adresse neuve : coverThumbs.js) ; sans `nom`, `front`.
 //    POST { action: 'apercus', urls } -> { ok, apercus: { <url>: data URI } }
 //    (les vignettes des propositions du lot ; hotes des sources seulement).
 //    `ok: false` : la source a ECHOUE — le formulaire le dit a l'ecran. Jusqu'au
@@ -163,12 +164,13 @@ function sanitizeKey(key: string): string {
   return String(key || '').replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 120);
 }
 
-// Le nom du fichier dans le dossier de la notice. `front` pour le formulaire,
-// le chemin de toujours. L'ecran de revue (27/09/2026) en donne un NEUF a chaque
-// capa posee : ecrire `front.jpg` pourrait remplacer, sous la meme adresse, la
-// capa qu'une autre personne vient de poser par le formulaire sur la meme
-// notice — et la RPC d'acceptation, qui refuse alors d'ecrire, ne pourrait plus
-// rendre l'image ecrasee.
+// Le nom du fichier dans le dossier de la notice. L'ecran de revue (27/09/2026)
+// en donne un NEUF a chaque capa posee : ecrire `front.jpg` pourrait remplacer,
+// sous la meme adresse, la capa qu'une autre personne vient de poser sur la
+// meme notice — et la RPC d'acceptation, qui refuse alors d'ecrire, ne pourrait
+// plus rendre l'image ecrasee. Le formulaire fait de meme depuis le 28/09/2026
+// (une adresse reecrite en place restait servie une heure par le cache).
+// `front` reste le repli d'un appelant sans `nom` : le chemin de toujours.
 function nomDeFichier(brut: unknown): string {
   const nom = String(brut || '').trim();
   return /^(front|capa-[a-z0-9]{1,20})$/.test(nom) ? nom : 'front';

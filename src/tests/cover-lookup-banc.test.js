@@ -385,7 +385,7 @@ describe('cover_lookup — ranger la capa choisie (action store)', () => {
     expect(net.demandes).toEqual([]);
   });
 
-  it('le formulaire range sous front.<ext> ; l’écran de revue sous un nom neuf, jamais un autre', async () => {
+  it('sans nom : front.<ext> (le stock d’avant le 28/09/2026) ; un nom neuf capa-… sinon, jamais un autre', async () => {
     const net = reseauStockage();
     const { handle } = charger('cover_lookup/index.ts', net);
     await avecProjet(async () => {

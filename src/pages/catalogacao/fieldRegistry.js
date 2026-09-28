@@ -200,7 +200,7 @@ export const REGISTRY = [
     fields: [
       // Le chemin manuel reste un détail tier 3 ; le bouton « Buscar capa » est
       // rendu par le special à tous les paliers (ancre cover_object_path).
-      { id: 'cover_object_path', label: 'catalogacao.field.coverUpload', tier: 3, span: 3, phEx: 'books/0000123/front.jpg' },
+      { id: 'cover_object_path', label: 'catalogacao.field.coverUpload', tier: 3, span: 3, phEx: 'books/BTL-TL-000123/capa-mg3k2x1a.jpg' },
     ],
   },
 

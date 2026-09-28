@@ -15,7 +15,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
-import { writeCoverThumb, removeCoverThumb } from '@/lib/coverThumbs';
+import { writeCoverThumb, removeCoverThumb, cheminCapaNeuf, nomCapaNeuf, extensionCapa } from '@/lib/coverThumbs';
 import { messageRechercheCapas, accordEdition, parIsbn, etiquetteCandidate, ordonnerCandidates } from '@/lib/coverSources';
 import { volumesDifferents } from '@/lib/volumes';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
@@ -659,14 +659,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setMsg({ text: t({ id: 'catalogacao.ui.coverSaveFirst' }), kind: 'error' });
       return null;
     }
-    const ext = coverFile.name.split('.').pop() || 'jpg';
-    const storagePath = `books/${stableKey}/front.${ext}`;
+    const ext = extensionCapa(coverFile.name);
+    // Adresse NEUVE à chaque dépôt, jamais `upsert` : une image remplacée en
+    // place restait servie une heure par le cache (coverThumbs.js, 28/09/2026).
+    const storagePath = cheminCapaNeuf(stableKey, ext);
 
     setCoverUploading(true);
     try {
       const { error } = await supabase.storage
         .from('covers')
-        .upload(storagePath, coverFile, { upsert: true });
+        .upload(storagePath, coverFile, { upsert: false });
       if (error) throw error;
       // Dérivé pour la grille du catalogue, produit depuis le fichier déjà en
       // mémoire (pas de retéléchargement). Best-effort : voir coverThumbs.js.
@@ -732,6 +734,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           action: 'store',
           imageUrl: candidate.fullUrl,
           key: stableKey,
+          // Un nom neuf, comme l'écran de revue : jamais par-dessus la capa
+          // en place (cache d'une heure sur une adresse réécrite, 28/09/2026).
+          nom: nomCapaNeuf(),
           source: candidate.source || null,
           license: candidate.license || null,
         },
@@ -820,8 +825,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       // 3. Canvas -> blob -> upload bucket covers (blob local, pas de CORS).
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
       if (!blob) throw new Error('toBlob failed');
-      const storagePath = `books/${stableKey}/front.jpg`;
-      const { error: upErr } = await supabase.storage.from('covers').upload(storagePath, blob, { upsert: true, contentType: 'image/jpeg' });
+      // Adresse neuve, sans upsert : même règle que le fichier envoyé (28/09/2026).
+      const storagePath = cheminCapaNeuf(stableKey, 'jpg');
+      const { error: upErr } = await supabase.storage.from('covers').upload(storagePath, blob, { upsert: false, contentType: 'image/jpeg' });
       if (upErr) throw upErr;
       // Le canvas de la page 1 est encore là : on en tire le dérivé directement.
       await writeCoverThumb(storagePath, canvas);
