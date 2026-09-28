@@ -196,3 +196,60 @@ qui n'a qu'un thésaurus ; base sauvegardée avant, restaurée après) :
 | notices créées | 62 sur 64 (les 2 autres, « Géo » et « Le Rat des bibliothèques », sont des périodiques que PMB avait déjà) ; 46 exemplaires |
 | responsabilités rattachées à leur fiche AnarBib, par le `$3` | **61 sur 61** ; 0 auteur recréé par l'import des notices |
 | catégories rattachées à une fiche AnarBib, par le libellé | **47 sur 47** |
+
+## Réimporter dans PMB l'export tiré de la base (H27, mesuré le 28/09/2026)
+
+Le chemin complet : les 64 notices des deux fixtures (`fixtures/`), lues par la
+vraie edge function d'import, promues, révisées, publiées au banc SQL, puis
+exportées par `fn_export_catalog_lote` et écrites par le chemin de l'écran
+Importations (« UNIMARC — ISO 2709 ») — et réimportées dans un PMB **vidé** de
+son jeu de test, où rien ne se dédoublonne avec l'existant.
+
+```bash
+# 1. l'export complet, émis par la suite SQL (banc SQL reconstruit)
+PGOPTIONS='-c anarbib.h27_export=on' psql -d anarbib_test -f tests/sql/aller_retour_pmb_tests.sql 2>&1 \
+  | sed -n 's/.*NOTICE:  H27-EXPORT //p' > ~/pmb-banc/echange/h27/export-h27.json
+# 2. le fichier, par le chemin de l'écran
+ESSAI_H27_EXPORT=~/pmb-banc/echange/h27/export-h27.json ESSAI_H27_DIR=~/pmb-banc/echange/h27 \
+  npx vitest run src/tests/essai-h27-pmb.test.js
+# 3. sauvegarde, vidage, import, bilans avant/après, restauration
+bash tests/pmb/banc/essai-reimport-pmb.sh ~/pmb-banc/echange/h27/catalogue-h27.iso
+```
+
+Aucune autorité n'est exportée pour ces notices : une responsabilité importée
+n'est liée à une fiche qu'après la révision (propositions, jamais d'office).
+
+| | PMB d'origine | après le réimport |
+|---|---|---|
+| notices | 62 (44 monographies, 2 périodiques, 15 articles, 1 bulletin) | 64 (44 monographies, 5 périodiques, 15 articles) |
+| exemplaires | 46 (dont 2 sur des bulletins) | 53 |
+| bulletins · dépouillements | 3 · 15 | 3 · 15 |
+| responsabilités · auteurs | 61 · 57 | 61 · 57 |
+| éditeurs employés | 36 | 36 |
+| notices avec catégorie · liens de catégorie | 42 · 49 | 42 · 48 |
+| langues (de la notice · de l'original) | 62 · 3 | 59 · 0 |
+| collections employées · notices en collection | 6 · 8 | 8 · 10 |
+
+Chaque écart a sa cause :
+
+- **+2 notices, +3 périodiques, −1 bulletin** : PMB exporte deux « notices de
+  bulletin » (les exemplaires d'un fascicule sans notice propre) et une notice
+  de fascicule ; AnarBib les lit comme des fascicules de périodique, qui
+  reviennent en notices de périodique, sans lien vers leur titre (reste de
+  **H24** : rattacher les fascicules à leur périodique).
+- **+7 exemplaires** : à la publication, AnarBib donne un exemplaire
+  automatique à toute notice qui n'en a pas (22 ici : périodiques, articles,
+  ressources en ligne) ; l'export les rend ; PMB refuse les 15 posés sur des
+  articles et crée les 7 autres. **À trancher** : une notice importée sans
+  exemplaire devrait-elle en recevoir un ?
+- **−1 lien de catégorie** : dans PMB, « Couverture du magazine rustica » pointe
+  vers deux catégories distinctes de même libellé (« Mammifères »,
+  ids 1525 et 1639) ; AnarBib garde le libellé : une seule revient.
+- **−3 langues de notice, −3 langues de l'original** : AnarBib garde une langue
+  par notice (« fre, por, spa » → « fr »), aucune hors des 36 du catalogue
+  (« fro »), et pas la langue de l'original (101 `$c`).
+- **+2 collections** : l'ensemble d'un ouvrage en plusieurs tomes (461 `$t`)
+  est gardé en collection, et revient en 225.
+
+Tout le reste revient à l'identique : responsabilités, auteurs, éditeurs,
+bulletins, dépouillements, notices indexées.

@@ -16,7 +16,9 @@
 --    ses zones d'exemplaire, pour la bibliothèque qui l'a importé.
 --
 -- Capture de l'attendu : avec anarbib.h27_capture = on, la suite émet l'export
--- projeté en NOTICE (tests/pmb/capturer-attendu-h27.sh).
+-- projeté en NOTICE (tests/pmb/capturer-attendu-h27.sh) ; avec
+-- anarbib.h27_export = on, l'export complet et les autorités (le fichier du
+-- réimport dans PMB : tests/pmb/banc/essai-reimport-pmb.sh).
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'ALLER-RETOUR-PMB OK : N/N'
 -- =====================================================================
@@ -100,6 +102,18 @@ BEGIN
       JOIN ingest.partner_catalog_staging_rows s ON s.id = m.staging_row_id;
     IF current_setting('anarbib.h27_capture', true) = 'on' THEN
       RAISE NOTICE 'H27-CAPTURE %', v_proj::text;
+    END IF;
+    -- L'export COMPLET des notices du lot (tel que l'écran le reçoit) et celui
+    -- des autorités : le fichier du réimport dans PMB (tests/pmb/banc/essai-reimport-pmb.sh).
+    IF current_setting('anarbib.h27_export', true) = 'on' THEN
+      RAISE NOTICE 'H27-EXPORT %', jsonb_build_object(
+        'library', v_exp->'library',
+        'records', (SELECT jsonb_agg(r ORDER BY s.row_no)
+                      FROM jsonb_array_elements(v_exp->'records') r
+                      JOIN public.book_drafts d ON d.published_book_id = (r->>'id')::bigint AND d.batch_id = v_lot
+                      JOIN ingest.partner_catalog_row_to_draft m ON m.draft_id = d.id
+                      JOIN ingest.partner_catalog_staging_rows s ON s.id = m.staging_row_id),
+        'authorities', public.fn_export_authorities_lote(v_lib))::text;
     END IF;
     IF v_attendu IS NULL THEN
       v_failed := v_failed+1; v_failures := v_failures||(v_t||' : pas d''attendu figé (tests/pmb/capturer-attendu-h27.sh)');
