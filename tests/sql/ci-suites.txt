@@ -584,3 +584,6 @@ tests/sql/catalogue_grande_echelle_tests.sql
 # 28/09 (sujets) : un brouillon de reprise herite des sujets de sa notice ; un brouillon sans aucun sujet n efface plus
 # ceux de la notice a la publication (136 publications les avaient effaces depuis juin).
 tests/sql/sujets_suivent_la_reprise_tests.sql
+# 28/09 (facettes, suite de B32) : catalog_facets_v1 assemble ses prédicats des filtres présents — chaque filtre,
+# la sémantique « expand » (une facette ignore son propre filtre), les vides et les blancs, sur notices construites.
+tests/sql/facettes_catalogue_tests.sql
