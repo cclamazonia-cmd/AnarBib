@@ -603,7 +603,11 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
 // La confirmation exige de saisir la référence de la fiche qui disparaît —
 // taper le titre serait pénible, cliquer serait trop peu : la référence est
 // courte, et la lire oblige à regarder LAQUELLE des deux meurt.
-function ApercuFusion({ ex, r, busy, t, interdits, onSurvivant, onRetour, onSaisie, onReprise, onFusion }) {
+// Exporté (28/09/2026) : le formulaire de notice s'en sert pour fusionner une
+// édition suggérée que la détection ne propose pas (même édition, année
+// fautive). Là, la survivante est fixée — c'est la notice qu'on édite —,
+// `survivantFixe` retire le choix.
+export function ApercuFusion({ ex, r, busy, t, interdits, survivantFixe = false, onSurvivant, onRetour, onSaisie, onReprise, onFusion }) {
   const ap = ex.apercu;
   const perdues = ap.metadonnees_perdues || [];
   const divergentes = ap.metadonnees_divergentes || [];
@@ -645,18 +649,22 @@ function ApercuFusion({ ex, r, busy, t, interdits, onSurvivant, onRetour, onSais
         {t({ id: 'catalogacao.dedupAssist.step3Title' })}
       </div>
 
-      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #bbb)', marginBottom: 6 }}>
-        {t({ id: 'catalogacao.dedupAssist.keepWhich' })}
-      </div>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
-        {[r.book_id_a, r.book_id_b].map((id) => (
-          <button key={id} type="button" disabled={busy}
-            className={`ab-button ab-button--sm${ex.survivant === id ? '' : ' ab-button--secondary'}`}
-            onClick={() => onSurvivant(id)}>
-            {id === r.book_id_a ? r.ref_a : r.ref_b} — {id === r.book_id_a ? r.titulo_a : r.titulo_b}
-          </button>
-        ))}
-      </div>
+      {!survivantFixe && (
+        <>
+          <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #bbb)', marginBottom: 6 }}>
+            {t({ id: 'catalogacao.dedupAssist.keepWhich' })}
+          </div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+            {[r.book_id_a, r.book_id_b].map((id) => (
+              <button key={id} type="button" disabled={busy}
+                className={`ab-button ab-button--sm${ex.survivant === id ? '' : ' ab-button--secondary'}`}
+                onClick={() => onSurvivant(id)}>
+                {id === r.book_id_a ? r.ref_a : r.ref_b} — {id === r.book_id_a ? r.titulo_a : r.titulo_b}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
 
       {/* La perte sèche d'abord : ces valeurs n'existeront plus nulle part. */}
       <div style={{

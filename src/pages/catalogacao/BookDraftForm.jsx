@@ -6,6 +6,7 @@ import { useStaffLibraries, bibliothequesProposables, lotsProposables, lotDeLaBi
 import SerialAuthorityPicker from './SerialAuthorityPicker';
 import AudioSegmentsBlock from './AudioSegmentsBlock';
 import WorkToolsBlock from './WorkToolsBlock';
+import { ApercuFusion } from './DedupAssistantPanel';
 import DigitalResourcesPanel from './DigitalResourcesPanel';
 import TitleCaseAssist from '@/components/catalog/TitleCaseAssist';
 import { useAuth } from '@/contexts/AuthContext';
@@ -130,6 +131,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // P4 v2 : suggestions d'éditions à regrouper (même auteur·rice + titre proche)
   const [editionSugg, setEditionSugg] = useState(null); // null = pas cherché
   const [editionSuggLoading, setEditionSuggLoading] = useState(false);
+  // 28/09/2026 (décision Xavier) : une édition suggérée qui est en fait la MÊME
+  // édition (année fautive : BTL-TL-000880/881) se fusionne d'ici, par l'aperçu
+  // de l'assistant — la détection de doublons, elle, garde sa règle stricte.
+  // { bookId, titulo, apercu, saisie, reprises } ; la survivante est la notice éditée.
+  const [fusionEdition, setFusionEdition] = useState(null);
+  const [fusionBusy, setFusionBusy] = useState(false);
+  const [champsInterdits, setChampsInterdits] = useState([]); // demandés à la base, une fois
   // Pop-up de création : œuvre nouvelle vs nouvelle édition d'une œuvre existante
   const [creationChoice, setCreationChoice] = useState(null); // null (non choisi) | 'work' | 'edition'
   const [linkedWorkLabel, setLinkedWorkLabel] = useState(''); // titre de l'œuvre rattachée (affichage)
@@ -1152,7 +1160,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         const { data: rechargé } = await supabase.from('book_drafts').select('*').eq('id', Number(f('id'))).single();
         if (rechargé) fillFromRecord(rechargé);   // efface le message : le nôtre vient après
       }
-      setMsg({ text: t({ id: 'catalogacao.dedup.merged' }, { dup: dupTitle }), kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.dedup.mergedBook' }, { dup: dupTitle }), kind: 'ok' });
       await findBookDuplicates(); // rafraichir
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
@@ -1244,6 +1252,60 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setBookDupBusy(null); }
+  }
+
+  // Même édition (28/09/2026) : ouvrir l'aperçu de fusion pour une édition suggérée.
+  // La notice éditée survit ; l'autre disparaît. Mêmes gardes que le bouton des
+  // doublons : coordination seule (opposable en base), brouillon enregistré d'abord.
+  async function ouvrirFusionEdition(s) {
+    const canonicalId = f('published_book_id');
+    if (!canonicalId || !arbitreDoublons) return;
+    if (draftState === 'dirty') {
+      setMsg({ text: t({ id: 'catalogacao.dedup.saveBeforeMerge' }), kind: 'error' });
+      return;
+    }
+    setFusionBusy(true);
+    try {
+      let interdits = champsInterdits;
+      if (!interdits.length) {
+        const { data } = await supabase.rpc('fn_dedup_non_transferable_fields');
+        if (Array.isArray(data)) { interdits = data; setChampsInterdits(data); }
+      }
+      const { data: apercu, error } = await supabase.rpc('preview_merge_book', {
+        p_canonical_id: Number(canonicalId), p_duplicate_id: Number(s.book_id),
+      });
+      if (error) throw error;
+      // Cochées par défaut : les pertes sèches, et elles seules (comme l'assistant).
+      const reprises = (apercu?.metadonnees_perdues || []).map((m) => m.champ).filter((c) => !interdits.includes(c));
+      setFusionEdition({ bookId: Number(s.book_id), titulo: s.titulo, apercu, saisie: '', reprises });
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setFusionBusy(false); }
+  }
+
+  async function fusionnerEdition() {
+    const canonicalId = f('published_book_id');
+    if (!canonicalId || !fusionEdition) return;
+    setFusionBusy(true);
+    try {
+      const { error } = await supabase.rpc('merge_book_with_fields', {
+        p_canonical_id: Number(canonicalId), p_duplicate_id: fusionEdition.bookId,
+        p_fields: fusionEdition.reprises || [],
+      });
+      if (error) throw error;
+      const titre = fusionEdition.titulo;
+      setFusionEdition(null);
+      if (f('id')) {
+        const { data: rechargé } = await supabase.from('book_drafts').select('*').eq('id', Number(f('id'))).single();
+        if (rechargé) fillFromRecord(rechargé);   // efface le message : le nôtre vient après
+      }
+      setMsg({ text: t({ id: 'catalogacao.dedup.mergedBook' }, { dup: titre }), kind: 'ok' });
+      setWorkNonce(n => n + 1);
+      await findEditionSuggestions();
+      await findBookDuplicates();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setFusionBusy(false); }
   }
 
   // P2 : retirer la couverture (efface les champs + supprime l'objet Storage).
@@ -2682,12 +2744,46 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #aaa)' }}>{[s.editora, s.work_id ? t({ id: 'catalogacao.work.alreadyInWork' }) : null].filter(Boolean).join(' · ')}</div>
                       </div>
                       <span style={{ fontSize: '.6rem', color: 'var(--brand-muted, #aaa)' }}>{Math.round((Number(s.score) || 0) * 100)}%</span>
-                      <button type="button" className="ab-button ab-button--sm" disabled={bookDupBusy != null}
+                      <button type="button" className="ab-button ab-button--sm" disabled={bookDupBusy != null || fusionBusy}
                         onClick={async () => { await groupAsEditions(s.book_id); findEditionSuggestions(); }}>
                         {bookDupBusy === s.book_id ? '…' : t({ id: 'catalogacao.work.group' })}
                       </button>
+                      {arbitreDoublons && (
+                        <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                          disabled={bookDupBusy != null || fusionBusy}
+                          title={t({ id: 'catalogacao.work.sameEditionHint' })}
+                          onClick={() => ouvrirFusionEdition(s)}>
+                          {t({ id: 'catalogacao.work.sameEditionMerge' })}
+                        </button>
+                      )}
                     </div>
                   ))}
+                </div>
+              )}
+              {/* L'aperçu de l'assistant (temps 3), en ligne — jamais de modale (DEDUP-9). */}
+              {fusionEdition && (
+                <div style={{ marginTop: 8, border: '1px solid rgba(220,38,38,.35)', borderRadius: 8, padding: 10 }}>
+                  <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #bbb)', marginBottom: 8 }}>
+                    {t({ id: 'catalogacao.work.sameEditionHint' })}
+                  </div>
+                  <ApercuFusion
+                    ex={{ ...fusionEdition, survivant: Number(f('published_book_id')) }}
+                    r={{
+                      book_id_a: Number(f('published_book_id')), book_id_b: fusionEdition.bookId,
+                      ref_a: f('bib_ref'), ref_b: fusionEdition.apercu?.doublon?.ref || '',
+                      titulo_a: f('titulo'), titulo_b: fusionEdition.titulo,
+                    }}
+                    busy={fusionBusy} t={t} interdits={champsInterdits} survivantFixe
+                    onSurvivant={() => {}}
+                    onRetour={() => setFusionEdition(null)}
+                    onSaisie={(v) => setFusionEdition((p) => (p ? { ...p, saisie: v } : p))}
+                    onReprise={(champ) => setFusionEdition((p) => {
+                      if (!p) return p;
+                      const reprises = p.reprises.includes(champ) ? p.reprises.filter((c) => c !== champ) : [...p.reprises, champ];
+                      return { ...p, reprises };
+                    })}
+                    onFusion={fusionnerEdition}
+                  />
                 </div>
               )}
             </div>
