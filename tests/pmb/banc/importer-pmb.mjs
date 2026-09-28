@@ -44,6 +44,12 @@
 // PMB_ENCODAGE (utf8, iso8859, iso5426), PMB_LIENS (0/1), PMB_PROPRIETAIRE,
 // PMB_STATUT, PMB_LOCALISATION (libellés), PMB_DB_CONTENEUR, PMB_TRACE_DIR
 // (garde chaque page HTML).
+// H25 (28/09/2026) : PMB_AUTORITES_NOTICES=1 (« Tenir compte des notices
+// d'autorités » : une 7XX dont le $3 est connu de l'origine choisie se rattache à
+// l'autorité importée au lieu d'en recréer une) ; PMB_ORIGINE (libellé de
+// l'origine, ex. AnarBib, créée par l'import des autorités ; défaut : la
+// première). Le formulaire nomme la liste authorities_origin mais le script
+// d'import lit authorities_default_origin : c'est cette dernière qu'on envoie.
 // Identifiants de banc : admin / admin (installer-pmb.sh) ; base bibli/bibli.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -141,7 +147,7 @@ function sql(requete) {
   const out = execFileSync('docker', ['exec', DB, 'mariadb', '-ubibli', '-pbibli', '-N', '-B', 'bibli', '-e', requete], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
   return out.split('\n').filter((l) => l !== '').map((l) => l.split('\t'));
 }
-const TABLES = ['notices', 'exemplaires', 'bulletins', 'analysis', 'notices_relations', 'responsability', 'authors',
+const TABLES = ['notices', 'exemplaires', 'bulletins', 'analysis', 'notices_relations', 'responsability', 'authors', 'authorities_sources', 'notices_authorities_sources',
   'publishers', 'collections', 'sub_collections', 'series', 'indexint', 'categories', 'notices_categories',
   'notices_langues', 'docs_type', 'docs_section', 'docs_codestat', 'import_marc', 'error_log'];
 function comptes() {
@@ -172,7 +178,8 @@ const proprietaire = choisir(r.text, 'book_lender_id', process.env.PMB_PROPRIETA
 const statut = choisir(r.text, 'book_statut_id', process.env.PMB_STATUT || 'Document en bon état');
 const localisation = choisir(r.text, 'book_location_id', process.env.PMB_LOCALISATION || 'Bibliothèque principale');
 const statutNotice = choisir(r.text, 'statutnot');
-const origine = choisir(r.text, 'authorities_origin');
+const origine = choisir(r.text, 'authorities_origin', process.env.PMB_ORIGINE);
+const autoritesNotices = process.env.PMB_AUTORITES_NOTICES === '1';
 const liens = (process.env.PMB_LIENS ?? '1') === '1';
 
 // --- 3. Envoi du fichier (multipart) -----------------------------------------
@@ -180,7 +187,7 @@ const champs = {
   categ: 'import', sub: 'import_expl', action: 'afterupload',
   isbn_mandatory: '0', isbn_dedoublonnage: '1', isbn_only: '1',
   statutnot: statutNotice.valeur, link_generate: liens ? '1' : '0', notice_replace_links: '0',
-  import_force_notice_is_new: '0', authorities_notices: '0', import_notice_existing_replace: '0',
+  import_force_notice_is_new: '0', authorities_notices: autoritesNotices ? '1' : '0', import_notice_existing_replace: '0',
   authorities_default_origin: origine.valeur,
   book_lender_id: proprietaire.valeur, book_statut_id: statut.valeur, book_location_id: localisation.valeur,
   cote_mandatory: '0', tdoc_codage: '0', statisdoc_codage: '0', sdoc_codage: '0',
@@ -237,7 +244,7 @@ const bilan = {
   encodage: encodage || 'détection automatique',
   options: {
     proprietaire: proprietaire.libelle, statut: statut.libelle, localisation: localisation.libelle,
-    statut_notice: statutNotice.libelle, liens_46X: liens, dedoublonnage_isbn: true, isbn_obligatoire: false, cote_obligatoire: false,
+    statut_notice: statutNotice.libelle, liens_46X: liens, autorites_notices: autoritesNotices, origine: origine.libelle, dedoublonnage_isbn: true, isbn_obligatoire: false, cote_obligatoire: false,
   },
   relances: etapes,
   pmb: {

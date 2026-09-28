@@ -590,3 +590,6 @@ tests/sql/facettes_catalogue_tests.sql
 # 28/09 (DEDUP-14) : un meme ISBN est une meme edition sous ses deux formes (10/13), un editeur ne change pas de nom
 # pour un mot generique ; les trois detecteurs comparent l ISBN par son coeur.
 tests/sql/editions_distinctes_tests.sql
+# 28/09 (H25) : l'export des autorites d'une bibliotheque (noms et sujets lies a ses notices, ancetres des sujets),
+# et rien d'une autre ; garde de la coordination.
+tests/sql/export_autorites_tests.sql

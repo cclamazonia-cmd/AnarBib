@@ -754,6 +754,30 @@ export default function ImportacoesPage() {
     setExportLoading(true);
     setMsg({ text: t({ id: 'importacoes.export.lote.exporting' }), kind: 'info' });
     try {
+      // H25 : les autorités liées aux notices de la bibliothèque (UNIMARC
+      // Autorités) ; leur 001 est le $3 que portent les notices exportées.
+      if (exportFormat === 'unimarc_autorites') {
+        const { data, error } = await supabase.rpc('fn_export_authorities_lote', { p_library_id: libraryId });
+        if (error) throw error;
+        const [{ autorites }, { ecrireIso2709 }] = await Promise.all([
+          import('../../../supabase/functions/_shared/marc/autorites.ts'),
+          import('../../../supabase/functions/_shared/marc/iso2709.ts'),
+        ]);
+        const lib = data?.library ?? null;
+        const r = ecrireIso2709(autorites(data ?? {}, { bibliotheque: lib ? { pays: lib.country ?? null, langue: lib.default_locale ?? null } : null }));
+        const url = URL.createObjectURL(new Blob([r.octets], { type: 'application/marc' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `autoridades-${lib?.slug || libraryId}-${new Date().toISOString().slice(0, 10)}.mrc`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        setMsg(r.avertissements.length
+          ? { text: t({ id: 'importacoes.export.lote.warnings' }, { n: r.avertissements.length }), kind: 'info' }
+          : { text: t({ id: 'importacoes.export.lote.success' }), kind: 'ok' });
+        return;
+      }
       const records = [];
       let apres = null;
       let total = null;
@@ -1905,6 +1929,7 @@ export default function ImportacoesPage() {
                         XML (« XML MARC ») ; MARC21 en ISO 2709 et en MARCXML. */}
                     <option value="unimarc_iso2709">UNIMARC — ISO 2709</option>
                     <option value="unimarc_xml">UNIMARC — XML</option>
+                    <option value="unimarc_autorites">UNIMARC Autorités — ISO 2709</option>
                     <option value="marc21_iso2709">MARC21 — ISO 2709</option>
                     <option value="marcxml">MARC21 — MARCXML</option>
                     <option value="csv">CSV</option>

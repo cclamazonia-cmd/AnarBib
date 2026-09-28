@@ -30,7 +30,8 @@ import { it, expect, vi, afterAll } from 'vitest';
 // l'écriture MARC, miroir de la lecture)
 // + marc.test.ts 2 (28/09/2026, revue contradictoire de H17/H18)
 // + ecriture.test.ts 4 (28/09/2026, revue contradictoire de H23/H24)
-const ATTENDUS = 57;
+// + autorites.test.ts 3 (28/09/2026, H25 : UNIMARC Autorités)
+const ATTENDUS = 60;
 
 let enregistres = 0;
 vi.stubGlobal('Deno', {
@@ -48,6 +49,7 @@ await import('../../supabase/functions/process-partner-catalog-import/encoding.t
 await import('../../supabase/functions/process-partner-catalog-import/coverage.test.ts');
 await import('../../supabase/functions/export-catalog-lote/serialize.test.ts');
 await import('../../supabase/functions/_shared/marc/ecriture.test.ts');
+await import('../../supabase/functions/_shared/marc/autorites.test.ts');
 
 it('le pont a enregistré tous les tests Deno attendus', () => {
   expect(enregistres).toBe(ATTENDUS);

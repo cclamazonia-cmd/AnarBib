@@ -131,3 +131,35 @@ déclaré en 100 `$a` est relu et confronté à l'encodage retenu. Figé par
 `src/tests/pmb-fixtures-parseur.test.js` et
 `src/tests/process-partner-catalog-import-banc.test.js` (la vraie EF, nourrie
 de ces fichiers).
+
+## Les autorités d'AnarBib dans PMB (H25, mesuré le 28/09/2026)
+
+L'écran Importations exporte, à côté des notices, les **autorités** d'une
+bibliothèque en UNIMARC Autorités (ISO 2709) : les noms et les vedettes du
+thésaurus liés à ses notices, leurs formes rejetées (4XX) et leurs liens (5XX),
+801 `$b` « AnarBib ». Leur 001 est le `$3` que portent les 7XX et les 606 des
+notices exportées. Pour que PMB rattache ses notices à ces fiches au lieu d'en
+recréer une par notice, **dans cet ordre** :
+
+1. **Autorités > Import** : le fichier d'autorités (`banc/importer-autorites-pmb.mjs`).
+2. **Administration > Import** des notices, avec :
+   - la fonction d'import **`func_cpt_rameau_first_level`** (« Catégories
+     RAMEAU ») — elle garde les 606 en catégories ; `func_bdp`, la fonction par
+     défaut, les fond en une 610 ;
+   - **« Tenir compte des notices d'autorités »** coché
+     (`authorities_notices=1`) ;
+   - **l'origine des autorités : AnarBib** (`authorities_default_origin`).
+
+   Au banc : `PMB_FONCTION_IMPORT=func_cpt_rameau_first_level.inc
+   PMB_AUTORITES_NOTICES=1 PMB_ORIGINE=AnarBib node banc/importer-pmb.mjs …`.
+
+Essai du 28/09 (`src/tests/essai-h25-pmb.test.js`, les 64 notices des deux
+fixtures telles qu'AnarBib les garde, dans un PMB qui les avait déjà reçues ;
+base sauvegardée avant, restaurée après) :
+
+| | |
+|---|---|
+| autorités traitées | 88 (57 noms, 31 vedettes), 0 erronée |
+| notices créées | 62 sur 64 (les 2 autres, « Géo » et « Le Rat des bibliothèques », sont des périodiques que PMB avait déjà) ; 46 exemplaires |
+| responsabilités rattachées à une fiche AnarBib | **61 sur 61** ; 0 auteur recréé par l'import des notices |
+| catégories rattachées à une fiche AnarBib | **47 sur 47** |
