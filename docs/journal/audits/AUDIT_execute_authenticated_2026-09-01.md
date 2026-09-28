@@ -1794,6 +1794,18 @@ une ligne : les déclencheurs et les DEFINER qui s'en servent attendent la
 valeur réelle, il faudrait séparer une version interne. À faire avec la
 prochaine migration qui les touche, suites B29 et B30 rejouées.
 
+**Fait le 28/09 (B35), autrement : par le schéma `private`.** PostgREST n'expose
+que `public, graphql_public, api, ingest` (PGRST106 sur `private`, vérifié le 28/09).
+Les deux aides ont changé de schéma (`20260928105437`, commit `6721277b`, déployée
+à 11 h 12 UTC) : recréées dans `private` depuis leur définition réelle, les quinze
+appelants (tous par `public.fn_…(`, aucune citation nue) et les quatre politiques
+re-pointés sur leur définition réelle, les versions `public` supprimées sans
+CASCADE. `authenticated` garde EXECUTE (les politiques et les déclencheurs
+l'évaluent), `anon` et PUBLIC non ; plus aucune porte RPC — l'oracle se ferme
+sans qu'un corps ni une politique change de sens. Le lint 0029 passe de 443 à
+**441** : il ne compte que ce que l'API sert. Garde dans la migration, T32 de la
+suite B29 en continu, mutants éprouvés. Backlog B35 clos sur pièces.
+
 **Cinq ouvertures sans objet, fermées dans la foulée**
 (`20260927200627_b29_aides_internes_fermees_aux_comptes`, écrite le 27/09 au
 soir, déployée le 28/09 au matin par la CI — commit `f1808c85` ; le runner

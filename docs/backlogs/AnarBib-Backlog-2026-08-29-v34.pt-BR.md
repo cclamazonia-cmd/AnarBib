@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-28** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-28** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 8
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 7
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 3
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-28.** **49 itens de 68** trazem uma verificação datada própria (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-28.** **49 itens de 67** trazem uma verificação datada própria (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -354,7 +354,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B32** | Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha | `P2` | Aberto |
 | **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | Aberto |
 | **B34** | Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída | `P2` | Aberto |
-| **B35** | Duas ajudas do B29 devolvem a biblioteca de staff de qualquer conta — o oráculo que o B29 tinha fechado | `P3` | Aberto |
 
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
@@ -507,28 +506,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)`*
-
-#### B35 — Duas ajudas do B29 devolvem a biblioteca de staff de qualquer conta — o oráculo que o B29 tinha fechado
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Constatado no levantamento dos advisors de 27/09 (complemento da auditoria 0029). `fn_book_draft_creator_library` e `fn_exemplar_draft_fallback_library` são SECURITY DEFINER, expostas a `authenticated` porque as políticas de `book_drafts` e `exemplar_drafts` as chamam, e recebem o UUID de uma conta **qualquer**: com um rascunho qualquer e o UUID de outra pessoa, devolvem a biblioteca de staff dessa conta — o que `fn_user_staff_library`, fechada pelo B29 por essa mesma razão, já não devolve. Somam-se o estado de administração da rede de uma conta (devolvido NULL) e a biblioteca de qualquer rascunho de registro. Não é uma falha: `user_has_library_staff_role(uuid, uuid)`, exposta e chamada por seis políticas, já diz se uma conta é staff de uma biblioteca.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Limitar a resposta ao perímetro de quem chama — a própria pessoa, uma de suas bibliotecas de staff ou de coordenação, ou um contexto de servidor sem `auth.uid()` —, já que as políticas só comparam com esses conjuntos; manter uma versão interna não exposta para os gatilhos e as DEFINER que esperam o valor real. Repetir as suítes do B29 e do B30 e provar por um teste que o UUID de outra pessoa devolve NULL. A fazer com a próxima migração que tocar essas duas funções.
-
-**Por que importa.** O B29 fechou `fn_user_staff_library` para não oferecer um oráculo de adesão; duas de suas próprias ajudas o reabrem por outro caminho. Enquanto `user_has_library_staff_role` ficar exposta, a diferença é de forma; vira real no dia em que ela se fechar.
-
-**O que conta como terminado.**
-
-- Sob `authenticated`, as duas funções devolvem NULL para o UUID de outra pessoa; para si, o valor.
-- Políticas, gatilhos e publicações mantêm o mesmo comportamento: suítes do B29 (T30 incluído) e do B30 verdes.
-- O complemento da auditoria 0029 de 27/09 é anotado com a correção.
-
-**Dependências.** Nenhuma; a fazer com a próxima migração que tocar essas funções.
-
-*Remissões : `docs/journal/audits/AUDIT_execute_authenticated_2026-09-01.md, complément du 27/09 (« La forme à noter »)` · `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql (bloc $droits$)` · `supabase/migrations/20260927200627_b29_aides_internes_fermees_aux_comptes.sql`*
 
 ---
 
@@ -2182,6 +2159,7 @@ CI verde. |
 | D7 | 2026-09-27 | **Fechado em 27/09: decisão escrita no REGISTRO (seção `ARCH`), com a sua razão.** **Decidido por Xavier**: um modelo arquivístico completo no AnarBib (níveis ISAD(G), produtores em autoridades ISAAR(CPF), exportação EAD desde a primeira versão), nível de descrição variável segundo o fundo, condições de acesso por nível desde a primeira versão; apresentado para parecer a DIRA, CIRA e FICEDL antes de qualquer código. Realização: **D8**. |
 | I3 | 2026-09-27 | **Fechado em 27/09 — os quatro testes passam, e mais três.** O roteador `main` lançado sozinho em `edge-runtime` v1.74.0 com segredo de teste: 404 para nome inexistente, 401 sem token, com token inválido ou expirado, a função protegida executa com token válido, a dispensada não é bloqueada (responder 200 exige a pilha completa, I21). As 14 funções que exigem token são chamadas pelo app com sessão: comportamento desejado. Teste reproduzível: `deploy/scripts/essai-routeur-main.sh`. |
 | C9 | 2026-09-27 | **Fechado em 27/09 — o trabalho manual restante feito.** O2: nenhuma coletividade «a rever». O8: ficha de separação validada por Xavier; migração `20260927193940` pela CI: dez fichas separadas (seis pessoas ligadas à ficha existente, duas fichas duplas fundidas, dez criadas), três correções, «Sorel, G.» fundida em «Sorel, Georges», e dez rascunhos (lotes 8 e 63) com uma contribuição por pessoa. Verificado em produção. |
+| B35 | 2026-09-28 | **Fechado em 28/09 — pelo esquema `private`, com provas.** Aberto na mesma manhã como «adiado»: o caminho do item (limitar a resposta ao perímetro de quem chama, versão interna) custava quinze chamadores e quatro políticas a raciocinar um a um. Verificado entretanto: o PostgREST só expõe `public, graphql_public, api, ingest` (PGRST106 em `private`). As duas ajudas mudaram de esquema (migração `20260928105437`, commit `6721277b`, implantada pela CI em 28/09 às 11 h 12 UTC): recriadas em `private` a partir da definição real, os quinze chamadores e as quatro políticas reapontados, as versões `public` removidas; `authenticated` mantém EXECUTE para as políticas e os gatilhos, mas nenhuma porta RPC as serve mais — o oráculo fechou sem que um corpo mudasse. Guarda na migração, T32 da suíte do B29 em contínuo, mutantes provados. Em produção após a implantação: as duas funções ausentes de `public`, presentes em `private`, lint 0029 em 441. Decisão de Xavier de 28/09. |
 
 ---
 
@@ -2213,4 +2191,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-28. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-28. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

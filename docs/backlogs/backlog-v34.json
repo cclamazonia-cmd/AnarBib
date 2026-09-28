@@ -2426,6 +2426,14 @@
           "fr": "**Clos le 27/09 — le travail de main qui restait est fait, sur pièces.** *O5/O6* livrés le 03/09 (déjà écrit à la fiche). *O2* : mesuré le 27/09, plus aucune collectivité « à revoir » dans la file (les deux ont été tranchées entre-temps). *O8* : le verdict « pas de scission avant la quatrième » étant dépassé (douze fiches doubles au 03/09), une fiche « qui devient quoi » (`docs/journal/arbitrages/C9_scissions_des_fiches_a_plusieurs_personnes_2026-09-27.md`) a été **validée par Xavier** (« tout, sauf 4955 »), avec, sur sa parole, « Sorel, G. » réuni à « Sorel, Georges ». Migration `20260927193940`, en son propre nom, appliquée par la CI : **dix fiches scindées** — six personnes reliées à leur fiche existante (Gurucharri, Ibáñez, Philopat, Biehl, Bookchin, Sacchetti), deux fiches doubles fusionnées puis supprimées, dix fiches créées —, rôle organizador pour les deux ouvrages « (orgs.) » ; Ludmila et Silvério sans « (et al.) » ni capitales ; Noir et Rouge en collectivité ; **trois fusions** au journal (`merged_by` nul, motif écrit). Recherche demandée par Xavier des « Prénom Nom & Prénom Nom » : aucune autre fiche publiée, mais **dix brouillons** (lots 8 et 63) qui en auraient créé à la publication — ils portent désormais une contribution par personne (25), reliée à l'autorité existante quand il y en a une. Vérifié en production le soir même.",
           "pt": "**Fechado em 27/09 — o trabalho manual restante feito.** O2: nenhuma coletividade «a rever». O8: ficha de separação validada por Xavier; migração `20260927193940` pela CI: dez fichas separadas (seis pessoas ligadas à ficha existente, duas fichas duplas fundidas, dez criadas), três correções, «Sorel, G.» fundida em «Sorel, Georges», e dez rascunhos (lotes 8 e 63) com uma contribuição por pessoa. Verificado em produção."
         }
+      ],
+      [
+        "B35",
+        "2026-09-28",
+        {
+          "fr": "**Clos le 28/09 — par le schéma `private`, sur pièces.** Ouvert le matin même comme « différé » : la voie de l'item (borner la réponse au périmètre de l'appelant·e, version interne) coûtait quinze appelants et quatre politiques à raisonner un par un. Vérifié entre-temps : PostgREST n'expose que `public, graphql_public, api, ingest` (PGRST106 sur `private`). Les deux aides ont donc changé de schéma (migration `20260928105437`, commit `6721277b`, déployée par la CI le 28/09 à 11 h 12 UTC) : recréées dans `private` depuis leur définition réelle, les quinze appelants et les quatre politiques re-pointés sur leur définition réelle, les versions `public` supprimées ; `authenticated` garde EXECUTE pour les politiques et les déclencheurs, mais aucune porte RPC ne les sert plus — l'oracle est fermé sans qu'un corps change. Garde dans la migration (deux camps, plus aucun appelant, politique ni vue vers `public`), T32 de `brouillons_par_bibliotheque_tests` en continu (T30/T31 re-pointés), mutants éprouvés (sans re-pointage, sans ALTER POLICY, sans GRANT, sans REVOKE PUBLIC, appelant nu apparu). En prod après déploiement : les deux fonctions absentes de `public`, présentes dans `private`, lint 0029 à 441. Décision de Xavier du 28/09 (« fais-le par le schéma private »).",
+          "pt": "**Fechado em 28/09 — pelo esquema `private`, com provas.** Aberto na mesma manhã como «adiado»: o caminho do item (limitar a resposta ao perímetro de quem chama, versão interna) custava quinze chamadores e quatro políticas a raciocinar um a um. Verificado entretanto: o PostgREST só expõe `public, graphql_public, api, ingest` (PGRST106 em `private`). As duas ajudas mudaram de esquema (migração `20260928105437`, commit `6721277b`, implantada pela CI em 28/09 às 11 h 12 UTC): recriadas em `private` a partir da definição real, os quinze chamadores e as quatro políticas reapontados, as versões `public` removidas; `authenticated` mantém EXECUTE para as políticas e os gatilhos, mas nenhuma porta RPC as serve mais — o oráculo fechou sem que um corpo mudasse. Guarda na migração, T32 da suíte do B29 em contínuo, mutantes provados. Em produção após a implantação: as duas funções ausentes de `public`, presentes em `private`, lint 0029 em 441. Decisão de Xavier de 28/09."
+        }
       ]
     ]
   },
@@ -2868,54 +2876,6 @@
       "r": [
         "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)"
       ]
-    },
-    {
-      "id": "B35",
-      "d": "B",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Deux aides de B29 rendent la bibliothèque de staff de n'importe quel compte — l'oracle que B29 avait fermé",
-        "pt": "Duas ajudas do B29 devolvem a biblioteca de staff de qualquer conta — o oráculo que o B29 tinha fechado"
-      },
-      "v": {
-        "fr": "Constaté au relevé des advisors du 27/09 (complément d'audit 0029, « La forme à noter »). `fn_book_draft_creator_library(p_draft_id, p_created_by)` et `fn_exemplar_draft_fallback_library(p_book_draft_id, p_import_staging_row_id, p_created_by)` sont SECURITY DEFINER, exposées à `authenticated` parce que les politiques de `book_drafts` et `exemplar_drafts` les appellent, et prennent l'UUID d'un compte **arbitraire** : `rpc/fn_book_draft_creator_library` avec un brouillon quelconque et l'UUID d'autrui rend la bibliothèque de staff de ce compte — ce que `fn_user_staff_library`, fermée par B29 pour cette raison même, ne rend plus. S'y ajoutent le statut d'administration du réseau d'un compte (rendu NULL) et la bibliothèque de n'importe quel brouillon de notice (`fn_exemplar_draft_fallback_library(p_book_draft_id)`), que B29 cloisonne par ailleurs. Pas une faille : `user_has_library_staff_role(uuid, uuid)`, exposée et appelée par six politiques, dit déjà si un compte est staff d'une bibliothèque, et les bibliothèques se comptent.",
-        "pt": "Constatado no levantamento dos advisors de 27/09 (complemento da auditoria 0029). `fn_book_draft_creator_library` e `fn_exemplar_draft_fallback_library` são SECURITY DEFINER, expostas a `authenticated` porque as políticas de `book_drafts` e `exemplar_drafts` as chamam, e recebem o UUID de uma conta **qualquer**: com um rascunho qualquer e o UUID de outra pessoa, devolvem a biblioteca de staff dessa conta — o que `fn_user_staff_library`, fechada pelo B29 por essa mesma razão, já não devolve. Somam-se o estado de administração da rede de uma conta (devolvido NULL) e a biblioteca de qualquer rascunho de registro. Não é uma falha: `user_has_library_staff_role(uuid, uuid)`, exposta e chamada por seis políticas, já diz se uma conta é staff de uma biblioteca."
-      },
-      "w": {
-        "fr": "Borner la réponse au périmètre de l'appelant·e — sa propre personne, l'une de ses bibliothèques de staff ou de coordination, ou un contexte serveur sans `auth.uid()` — puisque les politiques ne comparent qu'à ces ensembles ; garder une version interne non exposée pour les déclencheurs et les DEFINER qui attendent la valeur réelle (`tg_drafts_library_fixed`, `tg_drafts_batch_guarded`, `publish_*`, `fn_batch_reassign_library`, `fn_restore_deleted_draft`…). Rejouer `brouillons_par_bibliotheque_tests` et `lot_a_une_bibliotheque_tests`, et éprouver par un test que l'UUID d'autrui rend NULL. À prendre avec la prochaine migration qui touche ces deux fonctions, pas pour lui-même.",
-        "pt": "Limitar a resposta ao perímetro de quem chama — a própria pessoa, uma de suas bibliotecas de staff ou de coordenação, ou um contexto de servidor sem `auth.uid()` —, já que as políticas só comparam com esses conjuntos; manter uma versão interna não exposta para os gatilhos e as DEFINER que esperam o valor real. Repetir as suítes do B29 e do B30 e provar por um teste que o UUID de outra pessoa devolve NULL. A fazer com a próxima migração que tocar essas duas funções."
-      },
-      "y": {
-        "fr": "B29 a fermé `fn_user_staff_library` pour ne pas offrir d'oracle d'adhésion ; deux de ses propres aides le rouvrent par un autre chemin. Tant que `user_has_library_staff_role` reste exposée, l'écart est de forme ; il devient réel le jour où celle-ci se ferme.",
-        "pt": "O B29 fechou `fn_user_staff_library` para não oferecer um oráculo de adesão; duas de suas próprias ajudas o reabrem por outro caminho. Enquanto `user_has_library_staff_role` ficar exposta, a diferença é de forma; vira real no dia em que ela se fechar."
-      },
-      "f": {
-        "fr": [
-          "Sous `authenticated`, `fn_book_draft_creator_library(<brouillon>, <uuid d'autrui>)` et `fn_exemplar_draft_fallback_library(NULL, NULL, <uuid d'autrui>)` rendent NULL ; sur soi, la valeur.",
-          "Politiques de `book_drafts` et `exemplar_drafts`, déclencheurs et publications gardent le même comportement : suites B29 (T30 compris) et B30 vertes.",
-          "Le complément d'audit 0029 du 27/09 est annoté de la correction."
-        ],
-        "pt": [
-          "Sob `authenticated`, as duas funções devolvem NULL para o UUID de outra pessoa; para si, o valor.",
-          "Políticas, gatilhos e publicações mantêm o mesmo comportamento: suítes do B29 (T30 incluído) e do B30 verdes.",
-          "O complemento da auditoria 0029 de 27/09 é anotado com a correção."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune ; à prendre avec la prochaine migration qui touche ces fonctions.",
-        "pt": "Nenhuma; a fazer com a próxima migração que tocar essas funções."
-      },
-      "r": [
-        "docs/journal/audits/AUDIT_execute_authenticated_2026-09-01.md, complément du 27/09 (« La forme à noter »)",
-        "supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql (bloc $droits$)",
-        "supabase/migrations/20260927200627_b29_aides_internes_fermees_aux_comptes.sql"
-      ],
-      "verif": null
     },
     {
       "id": "C3",

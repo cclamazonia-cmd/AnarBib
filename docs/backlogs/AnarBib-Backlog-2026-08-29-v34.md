@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-28** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-28** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 8
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 7
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 3
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-28.** **49 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-28.** **49 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -354,7 +354,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B32** | Catalogue public : chaque page relit toute la vue matérialisée, et la visibilité se calcule ligne à ligne | `P2` | Ouvert |
 | **B33** | Recherche : des index trigramme que la forme des requêtes empêche d'emprunter | `P2` | Ouvert |
 | **B34** | Effacement de compte : le journal du catalogue garde l'identifiant de la personne effacée | `P2` | Ouvert |
-| **B35** | Deux aides de B29 rendent la bibliothèque de staff de n'importe quel compte — l'oracle que B29 avait fermé | `P3` | Ouvert |
 
 #### B13 — Décider du sort des 221 migrations : squash ou pas
 
@@ -507,28 +506,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)`*
-
-#### B35 — Deux aides de B29 rendent la bibliothèque de staff de n'importe quel compte — l'oracle que B29 avait fermé
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Constaté au relevé des advisors du 27/09 (complément d'audit 0029, « La forme à noter »). `fn_book_draft_creator_library(p_draft_id, p_created_by)` et `fn_exemplar_draft_fallback_library(p_book_draft_id, p_import_staging_row_id, p_created_by)` sont SECURITY DEFINER, exposées à `authenticated` parce que les politiques de `book_drafts` et `exemplar_drafts` les appellent, et prennent l'UUID d'un compte **arbitraire** : `rpc/fn_book_draft_creator_library` avec un brouillon quelconque et l'UUID d'autrui rend la bibliothèque de staff de ce compte — ce que `fn_user_staff_library`, fermée par B29 pour cette raison même, ne rend plus. S'y ajoutent le statut d'administration du réseau d'un compte (rendu NULL) et la bibliothèque de n'importe quel brouillon de notice (`fn_exemplar_draft_fallback_library(p_book_draft_id)`), que B29 cloisonne par ailleurs. Pas une faille : `user_has_library_staff_role(uuid, uuid)`, exposée et appelée par six politiques, dit déjà si un compte est staff d'une bibliothèque, et les bibliothèques se comptent.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Borner la réponse au périmètre de l'appelant·e — sa propre personne, l'une de ses bibliothèques de staff ou de coordination, ou un contexte serveur sans `auth.uid()` — puisque les politiques ne comparent qu'à ces ensembles ; garder une version interne non exposée pour les déclencheurs et les DEFINER qui attendent la valeur réelle (`tg_drafts_library_fixed`, `tg_drafts_batch_guarded`, `publish_*`, `fn_batch_reassign_library`, `fn_restore_deleted_draft`…). Rejouer `brouillons_par_bibliotheque_tests` et `lot_a_une_bibliotheque_tests`, et éprouver par un test que l'UUID d'autrui rend NULL. À prendre avec la prochaine migration qui touche ces deux fonctions, pas pour lui-même.
-
-**Pourquoi ça compte.** B29 a fermé `fn_user_staff_library` pour ne pas offrir d'oracle d'adhésion ; deux de ses propres aides le rouvrent par un autre chemin. Tant que `user_has_library_staff_role` reste exposée, l'écart est de forme ; il devient réel le jour où celle-ci se ferme.
-
-**Ce qui compte comme fini.**
-
-- Sous `authenticated`, `fn_book_draft_creator_library(<brouillon>, <uuid d'autrui>)` et `fn_exemplar_draft_fallback_library(NULL, NULL, <uuid d'autrui>)` rendent NULL ; sur soi, la valeur.
-- Politiques de `book_drafts` et `exemplar_drafts`, déclencheurs et publications gardent le même comportement : suites B29 (T30 compris) et B30 vertes.
-- Le complément d'audit 0029 du 27/09 est annoté de la correction.
-
-**Dépendances.** Aucune ; à prendre avec la prochaine migration qui touche ces fonctions.
-
-*Renvois : `docs/journal/audits/AUDIT_execute_authenticated_2026-09-01.md, complément du 27/09 (« La forme à noter »)` · `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql (bloc $droits$)` · `supabase/migrations/20260927200627_b29_aides_internes_fermees_aux_comptes.sql`*
 
 ---
 
@@ -2192,6 +2169,7 @@ CI verte : lint et suite unitaire. |
 | D7 | 2026-09-27 | **Clos le 27/09 : décision écrite au REGISTRE (section `ARCH`), avec sa raison** — son seul critère. **Décidé par Xavier** : un **modèle archivistique complet dans AnarBib** (niveaux ISAD(G) fonds, sous-fonds, série, sous-série, dossier, pièce ; producteurs en autorités ISAAR(CPF) ; export EAD dès la première version — `ARCH-1`), un **niveau de description variable selon le fonds** (`ARCH-2`), des **conditions d'accès par niveau dès la première version** (`ARCH-3`), présentés pour avis à DIRA, au CIRA et au FICEDL avant tout code (`ARCH-4`). Réalisation : **D8**. |
 | I3 | 2026-09-27 | **Clos le 27/09 — les quatre tests passent, et trois de plus.** Le routeur `supabase/functions/main/index.ts` lancé seul dans `supabase/edge-runtime:v1.74.0` (la version de `deploy/.env.example`), fonctions et `config.toml` montés comme dans `deploy/compose.yml`, secret JWT tiré au hasard pour l'essai : il démarre (40 fonctions dispensées, 54 montées, aucune dispense orpheline) et décide juste — nom inexistant 404, fonction protégée sans jeton 401, avec un jeton valide la fonction s'exécute (405, sa propre réponse à un GET), jeton signé d'un autre secret 401, jeton expiré 401, chemin sans `/functions/v1` 401 ; une fonction dispensée (`health-probe`) n'est pas bloquée, son travailleur est lancé — il échoue ensuite (500, « supabaseKey is required ») faute de base et de secrets dans le conteneur isolé : **répondre 200 relève de la répétition complète, I21**. *Critère 2* : les 14 fonctions qui exigent un jeton (`attach-received-asset`, `audio_fingerprint_lookup`, `authority_lookup`, `author_portrait_lookup`, `catalog_metadata_lookup`, `cover_lookup`, `deposit-fonds-direct`, `export-catalog-lote`, `export-fonds-bundle`, `geocode`, `mail-i18n-test`, `notify-library-invitation`, `probe-partner-catalog`, `revoke-digital-asset`) sont toutes appelées par l'application avec une session ou, pour `geocode`, le jeton anonyme de la pile auto-hébergée : voulu. L'essai est au dépôt, rejouable : `deploy/scripts/essai-routeur-main.sh` (docker, openssl, curl ; 7/7). |
 | C9 | 2026-09-27 | **Clos le 27/09 — le travail de main qui restait est fait, sur pièces.** *O5/O6* livrés le 03/09 (déjà écrit à la fiche). *O2* : mesuré le 27/09, plus aucune collectivité « à revoir » dans la file (les deux ont été tranchées entre-temps). *O8* : le verdict « pas de scission avant la quatrième » étant dépassé (douze fiches doubles au 03/09), une fiche « qui devient quoi » (`docs/journal/arbitrages/C9_scissions_des_fiches_a_plusieurs_personnes_2026-09-27.md`) a été **validée par Xavier** (« tout, sauf 4955 »), avec, sur sa parole, « Sorel, G. » réuni à « Sorel, Georges ». Migration `20260927193940`, en son propre nom, appliquée par la CI : **dix fiches scindées** — six personnes reliées à leur fiche existante (Gurucharri, Ibáñez, Philopat, Biehl, Bookchin, Sacchetti), deux fiches doubles fusionnées puis supprimées, dix fiches créées —, rôle organizador pour les deux ouvrages « (orgs.) » ; Ludmila et Silvério sans « (et al.) » ni capitales ; Noir et Rouge en collectivité ; **trois fusions** au journal (`merged_by` nul, motif écrit). Recherche demandée par Xavier des « Prénom Nom & Prénom Nom » : aucune autre fiche publiée, mais **dix brouillons** (lots 8 et 63) qui en auraient créé à la publication — ils portent désormais une contribution par personne (25), reliée à l'autorité existante quand il y en a une. Vérifié en production le soir même. |
+| B35 | 2026-09-28 | **Clos le 28/09 — par le schéma `private`, sur pièces.** Ouvert le matin même comme « différé » : la voie de l'item (borner la réponse au périmètre de l'appelant·e, version interne) coûtait quinze appelants et quatre politiques à raisonner un par un. Vérifié entre-temps : PostgREST n'expose que `public, graphql_public, api, ingest` (PGRST106 sur `private`). Les deux aides ont donc changé de schéma (migration `20260928105437`, commit `6721277b`, déployée par la CI le 28/09 à 11 h 12 UTC) : recréées dans `private` depuis leur définition réelle, les quinze appelants et les quatre politiques re-pointés sur leur définition réelle, les versions `public` supprimées ; `authenticated` garde EXECUTE pour les politiques et les déclencheurs, mais aucune porte RPC ne les sert plus — l'oracle est fermé sans qu'un corps change. Garde dans la migration (deux camps, plus aucun appelant, politique ni vue vers `public`), T32 de `brouillons_par_bibliotheque_tests` en continu (T30/T31 re-pointés), mutants éprouvés (sans re-pointage, sans ALTER POLICY, sans GRANT, sans REVOKE PUBLIC, appelant nu apparu). En prod après déploiement : les deux fonctions absentes de `public`, présentes dans `private`, lint 0029 à 441. Décision de Xavier du 28/09 (« fais-le par le schéma private »). |
 
 ---
 
@@ -2223,4 +2201,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-28. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-28. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
