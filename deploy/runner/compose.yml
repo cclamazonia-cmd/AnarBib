@@ -34,6 +34,13 @@ services:
     volumes:
       - ./data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+    # Un démon qui tourne des mois : le journal Docker tourne, sinon il remplit
+    # le disque de la machine qui héberge le runner (30 Mo au plus ici).
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     # Le conteneur tourne en root pour lire la socket ; le runner lui-même ne
     # fait que créer des conteneurs de job. Sur un hôte où la socket appartient
     # au groupe docker, on peut passer `user: "1000:<gid docker>"`.

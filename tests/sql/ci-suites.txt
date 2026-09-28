@@ -565,3 +565,4 @@ tests/sql/editions_suggerees_tests.sql
 # 27/09 (B33) : les recherches empruntent leurs index trigramme — autocomplétion publique, autorités,
 # éditeurs, déclencheur de publication (preuve : chemins bitmap seuls, compteur de la transaction).
 tests/sql/recherche_index_trigramme_tests.sql
+tests/sql/ci_en_retard_kind_tests.sql
