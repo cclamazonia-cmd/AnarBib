@@ -2434,6 +2434,38 @@
           "fr": "**Clos le 28/09 — par le schéma `private`, sur pièces.** Ouvert le matin même comme « différé » : la voie de l'item (borner la réponse au périmètre de l'appelant·e, version interne) coûtait quinze appelants et quatre politiques à raisonner un par un. Vérifié entre-temps : PostgREST n'expose que `public, graphql_public, api, ingest` (PGRST106 sur `private`). Les deux aides ont donc changé de schéma (migration `20260928105437`, commit `6721277b`, déployée par la CI le 28/09 à 11 h 12 UTC) : recréées dans `private` depuis leur définition réelle, les quinze appelants et les quatre politiques re-pointés sur leur définition réelle, les versions `public` supprimées ; `authenticated` garde EXECUTE pour les politiques et les déclencheurs, mais aucune porte RPC ne les sert plus — l'oracle est fermé sans qu'un corps change. Garde dans la migration (deux camps, plus aucun appelant, politique ni vue vers `public`), T32 de `brouillons_par_bibliotheque_tests` en continu (T30/T31 re-pointés), mutants éprouvés (sans re-pointage, sans ALTER POLICY, sans GRANT, sans REVOKE PUBLIC, appelant nu apparu). En prod après déploiement : les deux fonctions absentes de `public`, présentes dans `private`, lint 0029 à 441. Décision de Xavier du 28/09 (« fais-le par le schéma private »).",
           "pt": "**Fechado em 28/09 — pelo esquema `private`, com provas.** Aberto na mesma manhã como «adiado»: o caminho do item (limitar a resposta ao perímetro de quem chama, versão interna) custava quinze chamadores e quatro políticas a raciocinar um a um. Verificado entretanto: o PostgREST só expõe `public, graphql_public, api, ingest` (PGRST106 em `private`). As duas ajudas mudaram de esquema (migração `20260928105437`, commit `6721277b`, implantada pela CI em 28/09 às 11 h 12 UTC): recriadas em `private` a partir da definição real, os quinze chamadores e as quatro políticas reapontados, as versões `public` removidas; `authenticated` mantém EXECUTE para as políticas e os gatilhos, mas nenhuma porta RPC as serve mais — o oráculo fechou sem que um corpo mudasse. Guarda na migração, T32 da suíte do B29 em contínuo, mutantes provados. Em produção após a implantação: as duas funções ausentes de `public`, presentes em `private`, lint 0029 em 441. Decisão de Xavier de 28/09."
         }
+      ],
+      [
+        "B13",
+        "2026-09-28",
+        {
+          "fr": "Décision écrite au REGISTRE (`DOC-MIGR-2`, actée par Xavier) : on ne squashe pas. Faits recomptés : 384 migrations, 9,0 Mo (socle 2,4 Mo, données FICEDL 1,9 Mo), rejeu complet sur l'image Supabase en 2 min 17 s (run 1418), non 25 min. Un squash refait un `pg_dump` porteur du défaut `DOC-GRANT-2` ; chaque migration est une trace citée par version ; le coût dépasse le gain. Rouvrir si le rejeu passe dix minutes ou si un socle est à refaire (I2).",
+          "pt": "Decisão escrita no REGISTRO (`DOC-MIGR-2`, confirmada por Xavier): não se faz squash. Fatos recontados: 384 migrações, 9,0 MB, reexecução completa em 2 min 17 s (run 1418). Um squash refaz um `pg_dump` com o defeito `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho."
+        }
+      ],
+      [
+        "B31",
+        "2026-09-28",
+        {
+          "fr": "Livré par l'autre session le 27/09 (`507afb03`, migration `20260927184425`) : 13 relations pour `anon` et 10 pour un compte sans adhésion levaient 42501 ; toutes rendent zéro ligne. Vérifié en prod le 28/09 sous `anon` : les trois tables du constat rendent 0 ligne sans erreur, politiques SELECT `TO authenticated`. Suite `lecture_accordee_sans_erreur_tests` en CI. Clos par Xavier sur ces constats.",
+          "pt": "Entregue pela outra sessão em 27/09 (`507afb03`): 13 relações para `anon` e 10 para conta sem adesão levantavam 42501; todas devolvem zero linhas. Verificado em produção em 28/09 sob `anon`. Suíte `lecture_accordee_sans_erreur_tests` na CI. Fechado por Xavier."
+        }
+      ],
+      [
+        "B33",
+        "2026-09-28",
+        {
+          "fr": "Livré par l'autre session le 27/09 (`6bdd4331`, migrations `20260927193314`/`…315` ; T1 corrigé le 28/09, `8eaa180c`). Vérifié en prod le 28/09 : `search_catalog_v1` porte le motif regexp unique ; plan à l'appui — `BitmapOr` de six `Bitmap Index Scan` sur les deux index trigramme de `authors` (4,5 ms) ; `publishers_lower_name_idx` sert la publication ; `idx_publishers_name_trgm`, `idx_authors_external_ids`, `serials_issn_idx` retirés, raison écrite. Réserve notée : l'appel complet sous `anon` reste à 183 ms, le temps est ailleurs que dans les branches trigramme. Clos par Xavier sur ces constats.",
+          "pt": "Entregue pela outra sessão em 27/09 (`6bdd4331`). Verificado em produção em 28/09: `search_catalog_v1` traz o padrão único; plano — `BitmapOr` de seis `Bitmap Index Scan` nos dois índices trigram de `authors`; `publishers_lower_name_idx` serve a publicação; três índices retirados. Reserva: a chamada completa sob `anon` fica em 183 ms. Fechado por Xavier."
+        }
+      ],
+      [
+        "B34",
+        "2026-09-28",
+        {
+          "fr": "Livré par l'autre session le 27/09 (`df4dcec1`, migration `20260927184954`) : `fn_delete_my_account` re-pointe l'acteur de `catalog_audit_log` et les comptes des instantanés de brouillons. Vérifié en prod le 28/09 : le corps de la fonction traite le journal ; 1 750 lignes, un seul acteur (actif), aucun uuid orphelin. Suite `effacement_journal_catalogue_tests` en CI. Clos par Xavier sur ces constats.",
+          "pt": "Entregue pela outra sessão em 27/09 (`df4dcec1`): `fn_delete_my_account` repõe o ator de `catalog_audit_log` e as contas dos instantâneos. Verificado em produção em 28/09: 1 750 linhas, um só ator, nenhum uuid órfão. Suíte na CI. Fechado por Xavier."
+        }
       ]
     ]
   },
@@ -2546,7 +2578,7 @@
       "id": "B13",
       "d": "B",
       "p": "P3",
-      "s": "a-verifier",
+      "s": "clos",
       "e": "L",
       "sk": [
         "sql",
@@ -2557,8 +2589,8 @@
         "pt": "Decidir o destino das 221 migrações: squash ou não"
       },
       "v": {
-        "fr": "221 migrations appliquées, dont la première est un `baseline_live` de **2,4 Mo** — le plus gros fichier du dépôt. Le squash est marqué « décidé, non commencé » depuis le 20/08, à une époque où le compte était de 146. **28/09 — décision proposée au REGISTRE, `DOC-MIGR-2` : on ne squashe pas.** Recompté : 384 migrations, 9,0 Mo (socle 2,4 Mo ; données FICEDL 1,9 Mo ; schéma < 5 Mo) ; rejeu complet sur l'image Supabase **2 min 17 s** (run 1418) — les 25 min du 29/08 ne sont plus vraies. Trois raisons : un squash refait un `pg_dump` qui porte le défaut de `DOC-GRANT-2` ; chaque migration est une trace citée par version (REGISTRE, fiches, suites) ; le coût (socle à refaire et à éprouver ailleurs, suites à réaligner) dépasse le gain (une minute de CI, 5 Mo). Rouvrir si le rejeu passe dix minutes ou si un socle est à refaire de toute façon (I2). Reste : que Xavier acte la ligne.",
-        "pt": "221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). Falta: Xavier confirmar a linha."
+        "fr": "221 migrations appliquées, dont la première est un `baseline_live` de **2,4 Mo** — le plus gros fichier du dépôt. Le squash est marqué « décidé, non commencé » depuis le 20/08, à une époque où le compte était de 146. **28/09 — décision proposée au REGISTRE, `DOC-MIGR-2` : on ne squashe pas.** Recompté : 384 migrations, 9,0 Mo (socle 2,4 Mo ; données FICEDL 1,9 Mo ; schéma < 5 Mo) ; rejeu complet sur l'image Supabase **2 min 17 s** (run 1418) — les 25 min du 29/08 ne sont plus vraies. Trois raisons : un squash refait un `pg_dump` qui porte le défaut de `DOC-GRANT-2` ; chaque migration est une trace citée par version (REGISTRE, fiches, suites) ; le coût (socle à refaire et à éprouver ailleurs, suites à réaligner) dépasse le gain (une minute de CI, 5 Mo). Rouvrir si le rejeu passe dix minutes ou si un socle est à refaire de toute façon (I2). **Acté par Xavier le 28/09** : la ligne du REGISTRE est basculée, B13 clos.",
+        "pt": "221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). **Confirmado por Xavier em 28/09**: a linha do REGISTRO está virada, B13 fechado."
       },
       "w": {
         "fr": "Soit reconstruire un `baseline` à partir du schéma courant et archiver les migrations antérieures, soit assumer la chaîne longue et documenter pourquoi. Le rejeu complet prend aujourd'hui environ 25 minutes, mesuré.",
@@ -2587,8 +2619,8 @@
         "docs/schema/baseline_schema_2026-06-11.sql"
       ],
       "verif": {
-        "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul. 28/09 — 384 migrations, 9,0 Mo ; rejeu complet 2 min 17 s (job `rejeu-image`, run 1418) ; décision écrite au REGISTRE (`DOC-MIGR-2`), statut « proposé ».",
-        "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), estado «proposto»."
+        "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul. 28/09 — 384 migrations, 9,0 Mo ; rejeu complet 2 min 17 s (job `rejeu-image`, run 1418) ; décision écrite au REGISTRE (`DOC-MIGR-2`), acté par Xavier le 28/09.",
+        "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), confirmado por Xavier em 28/09."
       }
     },
     {
@@ -2701,7 +2733,7 @@
       "id": "B31",
       "d": "B",
       "p": "P2",
-      "s": "a-verifier",
+      "s": "clos",
       "e": "S",
       "sk": [
         "sql"
@@ -2749,7 +2781,7 @@
       "id": "B32",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "sql"
@@ -2759,8 +2791,8 @@
         "pt": "Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha"
       },
       "v": {
-        "fr": "Constaté pendant B10 (27/09). **(1)** Depuis SECU-MV-FIX2 (15/06), les vues du catalogue lisent les deux vues matérialisées à travers `private.fn_catalog_public_rows()` / `_network_rows()` — SQL, SECURITY DEFINER, `SET search_path` : PostgreSQL ne les insère jamais en ligne. Chaque page (`catalog_works_v1`, facettes, recherche d'identifiants, liste plate) matérialise donc **toute** la vue : 20 828 parcours séquentiels de la vue publique en 25 jours, zéro scan de ses 19 index secondaires. **(2)** `api.catalog_works_v1` est SECURITY INVOKER et joint `books` : la RLS de `books` s'y paie ligne à ligne. En anonyme, `count(*)` sur `books` coûte 88 ms pour 2 634 notices — `fn_library_visible_to_caller`, fonction DEFINER, appelée pour chaque exemplaire. À 100 000 notices, l'un et l'autre dépassent les 3 s du rôle `anon` : c'est le mécanisme de fond de B27, que son plan corrigé du 21/09 ne supprime pas.",
-        "pt": "Constatado durante o B10 (27/09). (1) Desde SECU-MV-FIX2 (15/06), as visões do catálogo leem as visões materializadas por invólucros SECURITY DEFINER nunca inseridos em linha: cada página lê a visão inteira (20 828 varreduras sequenciais em 25 dias, zero uso dos 19 índices secundários). (2) `catalog_works_v1` é INVOKER e junta `books`: a RLS de `books` é paga linha a linha (88 ms para 2 634 registros sob anon). Com 100 000 registros, ambos ultrapassam os 3 s do papel anon."
+        "fr": "Constaté pendant B10 (27/09). **(1)** Depuis SECU-MV-FIX2 (15/06), les vues du catalogue lisent les deux vues matérialisées à travers `private.fn_catalog_public_rows()` / `_network_rows()` — SQL, SECURITY DEFINER, `SET search_path` : PostgreSQL ne les insère jamais en ligne. Chaque page (`catalog_works_v1`, facettes, recherche d'identifiants, liste plate) matérialise donc **toute** la vue : 20 828 parcours séquentiels de la vue publique en 25 jours, zéro scan de ses 19 index secondaires. **(2)** `api.catalog_works_v1` est SECURITY INVOKER et joint `books` : la RLS de `books` s'y paie ligne à ligne. En anonyme, `count(*)` sur `books` coûte 88 ms pour 2 634 notices — `fn_library_visible_to_caller`, fonction DEFINER, appelée pour chaque exemplaire. À 100 000 notices, l'un et l'autre dépassent les 3 s du rôle `anon` : c'est le mécanisme de fond de B27, que son plan corrigé du 21/09 ne supprime pas. **28/09 — en cours dans l'autre session, au banc** : bases `anarbib_perf_b32_avant` et `anarbib_perf_b32` (100 003 notices synthétiques), `books_public_read` réécrite avec `fn_visible_library_ids()` calculée une fois par requête. Xavier a tranché le 28/09 : cette session le garde ; l'autre relit à la livraison.",
+        "pt": "Constatado durante o B10 (27/09). (1) Desde SECU-MV-FIX2 (15/06), as visões do catálogo leem as visões materializadas por invólucros SECURITY DEFINER nunca inseridos em linha: cada página lê a visão inteira (20 828 varreduras sequenciais em 25 dias, zero uso dos 19 índices secundários). (2) `catalog_works_v1` é INVOKER e junta `books`: a RLS de `books` é paga linha a linha (88 ms para 2 634 registros sob anon). Com 100 000 registros, ambos ultrapassam os 3 s do papel anon. **28/09 — em curso na outra sessão, na bancada** : bases `anarbib_perf_b32_avant` e `anarbib_perf_b32` (100 003 registros sintéticos), `books_public_read` reescrita com `fn_visible_library_ids()` calculada uma vez por consulta. Xavier decidiu em 28/09: essa sessão fica com o item."
       },
       "w": {
         "fr": "Deux leviers, à mesurer séparément. (a) Une lecture paramétrée qui filtre DANS la fonction, pour que filtres et tri atteignent la vue matérialisée — les 19 index secondaires, gardés par B10, y redeviendraient utiles ou seraient remplacés par ceux que la nouvelle requête écrit. (b) La visibilité par bibliothèque calculée une fois par requête (l'ensemble des bibliothèques visibles en InitPlan) au lieu d'une fonction par ligne — même règle que la passe 1 bis de B10.",
@@ -2797,7 +2829,7 @@
       "id": "B33",
       "d": "B",
       "p": "P2",
-      "s": "a-verifier",
+      "s": "clos",
       "e": "M",
       "sk": [
         "sql"
@@ -2838,15 +2870,15 @@
         "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (grappes 1, 2, 4 et « Surprises »)"
       ],
       "verif": {
-        "fr": "28/09, prod : `api.search_catalog_v1` porte le motif unique ; `publishers_lower_name_idx` existe et `fn_sync_publisher_id_on_publish` compare `lower(name)` ; `idx_publishers_name_trgm`, `idx_authors_external_ids`, `serials_issn_idx` absents ; `authors_sort_name_norm_trgm_idx` gardé et emprunté (1 125 parcours, comme celui de `preferred_name`), les index `fn_normalize_name` 3 704 parcours. Le run 1416 rouge (T1) est celui que `8eaa180c` corrige ; 1418 vert. Reste le plan à l'appui au banc pour le premier critère.",
-        "pt": "28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde."
+        "fr": "28/09, prod : `api.search_catalog_v1` porte le motif unique ; `publishers_lower_name_idx` existe et `fn_sync_publisher_id_on_publish` compare `lower(name)` ; `idx_publishers_name_trgm`, `idx_authors_external_ids`, `serials_issn_idx` absents ; `authors_sort_name_norm_trgm_idx` gardé et emprunté (1 125 parcours, comme celui de `preferred_name`), les index `fn_normalize_name` 3 704 parcours. Le run 1416 rouge (T1) est celui que `8eaa180c` corrige ; 1418 vert. **Plan à l'appui (prod, 28/09, requête des autorités telle que la fonction l'écrit, rôle propriétaire)** : `Bitmap Heap Scan on authors` ← `BitmapOr` de six `Bitmap Index Scan` sur `authors_preferred_name_norm_trgm_idx` et `authors_sort_name_norm_trgm_idx`, un par opérateur (`%`, `LIKE`, `~` motif unique) — 4,5 ms. La branche des alias reste en `Seq Scan` (1 644 lignes, 27 blocs : le planificateur préfère lire la table ; la suite T1 prouve au banc que l'index est empruntable, `enable_seqscan off`). L'appel complet `search_catalog_v1('anarquismo brasil')` sous `anon` : 183 ms, 2 822 blocs — le temps n'est plus dans les branches trigramme.",
+        "pt": "28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde. Plano (produção, 28/09): `BitmapOr` de seis `Bitmap Index Scan` nos dois índices trigram de `authors`, um por operador — 4,5 ms; a ramificação dos apelidos fica em `Seq Scan` (1 644 linhas). Chamada completa sob `anon`: 183 ms — o tempo já não está nas ramificações trigram."
       }
     },
     {
       "id": "B34",
       "d": "B",
       "p": "P2",
-      "s": "a-verifier",
+      "s": "clos",
       "e": "S",
       "sk": [
         "sql"

@@ -347,21 +347,21 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | A verificar |
+| **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | clos |
 | **B29** | Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus | `P1` | A verificar |
 | **B30** | Dar ao lote de catalogação uma biblioteca própria (sequência de B29) | `P2` | A verificar |
-| **B31** | Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha | `P2` | A verificar |
-| **B32** | Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha | `P2` | Aberto |
-| **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | A verificar |
-| **B34** | Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída | `P2` | A verificar |
+| **B31** | Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha | `P2` | clos |
+| **B32** | Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha | `P2` | Em curso |
+| **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | clos |
+| **B34** | Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída | `P2` | clos |
 
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
-`P3` Adiado · Estado : **A verificar** · Carga : várias semanas · O que exige : SQL / PostgreSQL, administração de sistemas
+`P3` Adiado · Estado : **clos** · Carga : várias semanas · O que exige : SQL / PostgreSQL, administração de sistemas
 
-**Estado.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). Falta: Xavier confirmar a linha.
+**Estado.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). **Confirmado por Xavier em 28/09**: a linha do REGISTRO está virada, B13 fechado.
 
-*Verificado : 31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), estado «proposto».*
+*Verificado : 31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), confirmado por Xavier em 28/09.*
 
 **O que é.** Ou reconstruir um `baseline` a partir do esquema atual e arquivar as migrações anteriores, ou assumir a cadeia longa e documentar por quê. A reexecução completa leva hoje cerca de 25 minutos, medido.
 
@@ -422,7 +422,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B31 — Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha
 
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **clos** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
 **Estado.** Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas. **Entregue em 27/09 à noite pela outra sessão (`507afb03`)** : 13 relações para `anon` e 10 para uma conta sem adesão levantavam 42501; todas devolvem zero linhas agora; suíte `lecture_accordee_sans_erreur_tests` na CI.
 
@@ -443,9 +443,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B32 — Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
-**Estado.** Constatado durante o B10 (27/09). (1) Desde SECU-MV-FIX2 (15/06), as visões do catálogo leem as visões materializadas por invólucros SECURITY DEFINER nunca inseridos em linha: cada página lê a visão inteira (20 828 varreduras sequenciais em 25 dias, zero uso dos 19 índices secundários). (2) `catalog_works_v1` é INVOKER e junta `books`: a RLS de `books` é paga linha a linha (88 ms para 2 634 registros sob anon). Com 100 000 registros, ambos ultrapassam os 3 s do papel anon.
+**Estado.** Constatado durante o B10 (27/09). (1) Desde SECU-MV-FIX2 (15/06), as visões do catálogo leem as visões materializadas por invólucros SECURITY DEFINER nunca inseridos em linha: cada página lê a visão inteira (20 828 varreduras sequenciais em 25 dias, zero uso dos 19 índices secundários). (2) `catalog_works_v1` é INVOKER e junta `books`: a RLS de `books` é paga linha a linha (88 ms para 2 634 registros sob anon). Com 100 000 registros, ambos ultrapassam os 3 s do papel anon. **28/09 — em curso na outra sessão, na bancada** : bases `anarbib_perf_b32_avant` e `anarbib_perf_b32` (100 003 registros sintéticos), `books_public_read` reescrita com `fn_visible_library_ids()` calculada uma vez por consulta. Xavier decidiu em 28/09: essa sessão fica com o item.
 
 *Constato de 29/08, não reverificado desde então.*
 
@@ -466,11 +466,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B33 — Busca: índices trigrama que a forma das consultas impede de usar
 
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **clos** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice. **Entregue em 27/09 à noite pela outra sessão (`6bdd4331`)** : a ramificação `OR EXISTS` vira UM padrão regexp, as expressões alinham-se aos índices, a publicação encontra a editora por `publishers_lower_name_idx`, cinco índices sem leitor retirados com a razão escrita.
 
-*Verificado : 28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde.*
+*Verificado : 28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde. Plano (produção, 28/09): `BitmapOr` de seis `Bitmap Index Scan` nos dois índices trigram de `authors`, um por operador — 4,5 ms; a ramificação dos apelidos fica em `Seq Scan` (1 644 linhas). Chamada completa sob `anon`: 183 ms — o tempo já não está nas ramificações trigram.*
 
 **O que é.** Reescrever o ramo num único padrão regexp que `gin_trgm` sabe servir; alinhar as expressões às dos índices; dar à publicação um índice em `lower(name)`; depois retirar os índices que ficarem sem leitor.
 
@@ -488,7 +488,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B34 — Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída
 
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **clos** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
 **Estado.** Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo). **Entregue em 27/09 à noite pela outra sessão (`df4dcec1`)** : `fn_delete_my_account` repõe o ator do diário E as contas dos instantâneos de rascunhos; suíte `effacement_journal_catalogue_tests` na CI.
 
@@ -2160,6 +2160,10 @@ CI verde. |
 | I3 | 2026-09-27 | **Fechado em 27/09 — os quatro testes passam, e mais três.** O roteador `main` lançado sozinho em `edge-runtime` v1.74.0 com segredo de teste: 404 para nome inexistente, 401 sem token, com token inválido ou expirado, a função protegida executa com token válido, a dispensada não é bloqueada (responder 200 exige a pilha completa, I21). As 14 funções que exigem token são chamadas pelo app com sessão: comportamento desejado. Teste reproduzível: `deploy/scripts/essai-routeur-main.sh`. |
 | C9 | 2026-09-27 | **Fechado em 27/09 — o trabalho manual restante feito.** O2: nenhuma coletividade «a rever». O8: ficha de separação validada por Xavier; migração `20260927193940` pela CI: dez fichas separadas (seis pessoas ligadas à ficha existente, duas fichas duplas fundidas, dez criadas), três correções, «Sorel, G.» fundida em «Sorel, Georges», e dez rascunhos (lotes 8 e 63) com uma contribuição por pessoa. Verificado em produção. |
 | B35 | 2026-09-28 | **Fechado em 28/09 — pelo esquema `private`, com provas.** Aberto na mesma manhã como «adiado»: o caminho do item (limitar a resposta ao perímetro de quem chama, versão interna) custava quinze chamadores e quatro políticas a raciocinar um a um. Verificado entretanto: o PostgREST só expõe `public, graphql_public, api, ingest` (PGRST106 em `private`). As duas ajudas mudaram de esquema (migração `20260928105437`, commit `6721277b`, implantada pela CI em 28/09 às 11 h 12 UTC): recriadas em `private` a partir da definição real, os quinze chamadores e as quatro políticas reapontados, as versões `public` removidas; `authenticated` mantém EXECUTE para as políticas e os gatilhos, mas nenhuma porta RPC as serve mais — o oráculo fechou sem que um corpo mudasse. Guarda na migração, T32 da suíte do B29 em contínuo, mutantes provados. Em produção após a implantação: as duas funções ausentes de `public`, presentes em `private`, lint 0029 em 441. Decisão de Xavier de 28/09. |
+| B13 | 2026-09-28 | Decisão escrita no REGISTRO (`DOC-MIGR-2`, confirmada por Xavier): não se faz squash. Fatos recontados: 384 migrações, 9,0 MB, reexecução completa em 2 min 17 s (run 1418). Um squash refaz um `pg_dump` com o defeito `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. |
+| B31 | 2026-09-28 | Entregue pela outra sessão em 27/09 (`507afb03`): 13 relações para `anon` e 10 para conta sem adesão levantavam 42501; todas devolvem zero linhas. Verificado em produção em 28/09 sob `anon`. Suíte `lecture_accordee_sans_erreur_tests` na CI. Fechado por Xavier. |
+| B33 | 2026-09-28 | Entregue pela outra sessão em 27/09 (`6bdd4331`). Verificado em produção em 28/09: `search_catalog_v1` traz o padrão único; plano — `BitmapOr` de seis `Bitmap Index Scan` nos dois índices trigram de `authors`; `publishers_lower_name_idx` serve a publicação; três índices retirados. Reserva: a chamada completa sob `anon` fica em 183 ms. Fechado por Xavier. |
+| B34 | 2026-09-28 | Entregue pela outra sessão em 27/09 (`df4dcec1`): `fn_delete_my_account` repõe o ator de `catalog_audit_log` e as contas dos instantâneos. Verificado em produção em 28/09: 1 750 linhas, um só ator, nenhum uuid órfão. Suíte na CI. Fechado por Xavier. |
 
 ---
 
