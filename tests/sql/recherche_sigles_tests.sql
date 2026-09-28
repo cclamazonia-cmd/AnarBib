@@ -2,6 +2,7 @@
 -- AnarBib — Tests : la recherche du catalogue lit les sigles sans leurs points
 -- Date    : 2026-09-28
 -- Ref     : 20260928174350_la_recherche_du_catalogue_lit_les_sigles_sans_leurs_points
+--           20260928191324_la_recherche_unifiee_lit_les_sigles_sans_leurs_points
 --
 -- Le cas réel : les deux éditions d'une même œuvre, l'une écrite
 -- « La C.N.T. y la revolución española », l'autre « La CNT en la revolución
@@ -24,6 +25,14 @@
 --      « La C.N.T. » comme pour « La CNT » — le symptôme du 28/09 ;
 --   T8 le classement ne distingue plus les graphies : la similarité d'un
 --      titre à points et d'un titre sans points à la même requête est égale.
+--   La recherche unifiée de l'en-tête (20260928191324) — le pli est DANS
+--   f_normalize_search, que ses index trigramme et la colonne alias_norm
+--   portent :
+--   T9  f_normalize_search plie un sigle et laisse une abréviation ;
+--   T10 search_catalog_v1, sans compte, trouve les deux notices par « c.n.t. »
+--       comme par « cnt » ;
+--   T11 une autorité « C.N.T. » se trouve par « cnt » (nom préféré et alias
+--       stocké), et son alias_norm est écrit plié.
 --   Bilan OK : 'RECHERCHE-SIGLES OK : N/N'
 -- =====================================================================
 DO $$
@@ -31,7 +40,7 @@ DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
   c_lib    constant uuid := '51e1e500-0000-4000-8000-0000000000b1';
   c_membre constant uuid := '51e1e500-0000-4000-8000-000000000001';
-  v_points bigint; v_sans bigint; v_autre bigint; v_work bigint;
+  v_points bigint; v_sans bigint; v_autre bigint; v_work bigint; v_author bigint;
   v_n int; v_n2 int; v_txt text; v_json jsonb; v_r1 real; v_r2 real;
   r record;
 BEGIN
@@ -62,6 +71,14 @@ BEGIN
   -- Une seule œuvre pour les deux éditions (trg_books_ensure_work en crée une par notice).
   SELECT work_id INTO v_work FROM public.books WHERE id = v_points;
   UPDATE public.books SET work_id = v_work WHERE id = v_sans;
+  -- Une autorité collective écrite avec des points, liée à la première notice,
+  -- avec un alias stocké (alias_norm écrit comme le font les appelants).
+  INSERT INTO public.authors (preferred_name, sort_name, authority_type)
+  VALUES ('C.N.T. Zqx', 'C.N.T. Zqx', 'collective') RETURNING id INTO v_author;
+  INSERT INTO public.author_name_aliases (author_id, alias_text, alias_norm, match_kind, is_active)
+  VALUES (v_author, 'C.N.T. (Zqx)', public.f_normalize_search('C.N.T. (Zqx)'), 'manual', true);
+  INSERT INTO public.book_contributors (book_id, author_id, position, name, role, is_primary)
+  VALUES (v_points, v_author, 2, 'C.N.T. Zqx', 'autor', false);
   -- La vue publique (catalog_list_anon_v1) ne rend qu'une notice avec au moins un exemplaire.
   INSERT INTO public.book_holdings (book_id, library_id, loanable, exemplares_total, available_count)
   VALUES (v_points, c_lib, true, 1, 1), (v_sans, c_lib, true, 1, 1), (v_autre, c_lib, true, 1, 1);
@@ -168,6 +185,37 @@ BEGIN
     -- des deux à la requête doit être voisine (à 0,1 près), jamais nulle d'un côté.
     IF v_r1 IS NOT NULL AND v_r2 IS NOT NULL AND abs(v_r1 - v_r2) < 0.1 THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : rangs ' || coalesce(v_r1::text, '∅') || ' / ' || coalesce(v_r2::text, '∅')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ═══ La recherche unifiée (20260928191324) ═══════════════════════
+  v_t := 'T9 f_normalize_search plie un sigle et laisse une abréviation';
+  BEGIN
+    IF public.f_normalize_search('La C.N.T. y la Revolución Española') = 'la cnt y la revolucion espanola'
+       AND public.f_normalize_search('J. Peirats, ed. 2a ed.') = 'j. peirats, ed. 2a ed.'
+       AND public.f_normalize_search('U.G.T.-C.N.T.') = 'ugt-cnt'
+       AND public.f_normalize_search(NULL) IS NULL
+    THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(public.f_normalize_search('La C.N.T. y la Revolución Española'), '∅')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T10 search_catalog_v1, sans compte, trouve les deux notices par « c.n.t. » comme par « cnt »';
+  BEGIN
+    PERFORM set_config('request.jwt.claims', '', true);
+    SELECT count(*) INTO v_n  FROM api.search_catalog_v1('c.n.t. zqx') s WHERE s.kind = 'book' AND s.id IN (v_points, v_sans);
+    SELECT count(*) INTO v_n2 FROM api.search_catalog_v1('cnt zqx') s WHERE s.kind = 'book' AND s.id IN (v_points, v_sans);
+    IF v_n = 2 AND v_n2 = 2 THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : c.n.t. → ' || v_n || ', cnt → ' || v_n2); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T11 une autorité « C.N.T. » se trouve par « cnt », et son alias est stocké plié';
+  BEGIN
+    SELECT count(*) INTO v_n  FROM api.search_catalog_v1('cnt zqx') s WHERE s.kind = 'author' AND s.id = v_author;
+    SELECT count(*) INTO v_n2 FROM api.search_catalog_v1('c.n.t zqx') s WHERE s.kind = 'author' AND s.id = v_author;
+    SELECT alias_norm INTO v_txt FROM public.author_name_aliases WHERE author_id = v_author;
+    IF v_n = 1 AND v_n2 = 1 AND v_txt = 'cnt (zqx)' THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : cnt → ' || v_n || ', c.n.t → ' || v_n2 || ', alias_norm=' || coalesce(v_txt, '∅')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed > 0 THEN
