@@ -12,6 +12,11 @@
 -- (security_invoker, lues par FederacaoPage et EntraideTab), ce que la
 -- mesure « 0 appelant » n'avait pas vu (pg_rewrite). 46 fermées ; elle
 -- rejoint T3 avec les chemins vivants.
+--
+-- Sortie 20260928184700 : `assign_book_to_work` retrouve authenticated — son
+-- écran est arrivé le 04/09 (« Rattacher à une autre œuvre », WorkToolsBlock)
+-- sans le GRANT que le régime prévoyait ; l'écran a répondu 42501 jusqu'au
+-- 28/09. 45 fermées ; elle rejoint T3 avec les chemins vivants.
 
 DO $$
 DECLARE
@@ -22,13 +27,14 @@ DECLARE
   v_liste text;
   v_n int;
 BEGIN
-  -- T1 : les 46 fermées à la porte du navigateur (fn_circle_member_count : voir T3)
-  v_test_name := 'T1 les 46 fermées';
+  -- T1 : les 45 fermées à la porte du navigateur (fn_circle_member_count,
+  --      assign_book_to_work : voir T3)
+  v_test_name := 'T1 les 45 fermées';
   SELECT count(*) INTO v_n
   FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
   WHERE n.nspname = 'public'
     AND p.proname IN (
-      'assign_book_to_work','fn_activate_approved_library_request',
+      'fn_activate_approved_library_request',
       'fn_book_restricted_digital_state','fn_can_engage_library_for_storage',
       'fn_import_process_deposit',
       'fn_import_register_oai_source','fn_import_set_rows_review',
@@ -56,14 +62,14 @@ BEGIN
       'fn_v2_remove_emprestimo_interbibliotecas_itens',
       'fn_v2_return_emprestimo_interbibliotecas_linhas',
       'fn_v2_start_devolucao_emprestimo_interbibliotecas');
-  IF v_n <> 46 THEN
-    v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || v_n || '/46 présentes — liste et base divergent');
+  IF v_n <> 45 THEN
+    v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || v_n || '/45 présentes — liste et base divergent');
   ELSE
     SELECT string_agg(p.proname, ', ') INTO v_liste
     FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
     WHERE n.nspname = 'public'
       AND p.proname IN (
-        'assign_book_to_work','fn_activate_approved_library_request',
+        'fn_activate_approved_library_request',
         'fn_book_restricted_digital_state','fn_can_engage_library_for_storage',
         'fn_import_process_deposit',
         'fn_import_register_oai_source','fn_import_set_rows_review',
@@ -105,12 +111,13 @@ BEGIN
 
   -- T3 : les chemins vivants des mêmes familles restent ouverts — dont
   --      fn_circle_member_count, appelée par les vues des cercles
-  --      (rattrapage 20260902175631).
+  --      (rattrapage 20260902175631), et assign_book_to_work, appelée par
+  --      « Rattacher à une autre œuvre » (20260928184700).
   v_test_name := 'T3 chemins vivants ouverts';
   SELECT string_agg(a.nsp||'.'||a.nom, ', ') INTO v_liste
   FROM (VALUES ('api','fn_approve_library_request'),('public','fn_import_list_oai_sources'),
                ('public','fn_import_harvest_oai'),('public','merge_book_with_fields'),
-               ('public','fn_circle_member_count')) a(nsp, nom)
+               ('public','fn_circle_member_count'),('public','assign_book_to_work')) a(nsp, nom)
   WHERE NOT EXISTS (
     SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
     WHERE n.nspname = a.nsp AND p.proname = a.nom

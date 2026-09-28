@@ -74,13 +74,17 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T4 assign_book_to_work ne laisse pas l''oeuvre quittee vide';
+  v_t := 'T4 assign_book_to_work ne laisse pas l''oeuvre quittee vide, et l''ecran peut l''appeler';
   BEGIN
     PERFORM public.assign_book_to_work(v_b3, v_w1);
+    -- Cette suite tourne en postgres, qui execute tout : le droit de l'ecran se
+    -- lit a part (fermee du 02/09 au 28/09, l'ecran repondait 42501 — 20260928184700).
     IF (SELECT work_id FROM public.books WHERE id = v_b3) = v_w1
        AND NOT EXISTS (SELECT 1 FROM public.works WHERE id = v_w3)
+       AND has_function_privilege('authenticated', 'public.assign_book_to_work(bigint,bigint)', 'EXECUTE')
+       AND NOT has_function_privilege('anon', 'public.assign_book_to_work(bigint,bigint)', 'EXECUTE')
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : Walden survit ou la notice n''a pas bouge'); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : Walden survit, la notice n''a pas bouge, ou authenticated n''execute pas'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────

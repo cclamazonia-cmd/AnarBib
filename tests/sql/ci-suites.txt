@@ -596,3 +596,6 @@ tests/sql/export_autorites_tests.sql
 # 28/09 (H27) : la preuve de l'aller-retour PMB par la base — les lignes de staging de la vraie EF,
 # promues, publiees, exportees : l'export rend l'attendu fige (tests/pmb/aller-retour-attendu.json).
 tests/sql/aller_retour_pmb_tests.sql
+# 28/09 (sigles) : la recherche du catalogue lit les sigles sans leurs points — « C.N.T. », « CNT » et « C.N.T »
+# se trouvent l'un l'autre (meule et termes pliés par fn_sigle_sans_points), le catalogue par œuvre rend une ligne.
+tests/sql/recherche_sigles_tests.sql

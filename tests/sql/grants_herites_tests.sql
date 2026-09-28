@@ -412,6 +412,7 @@ BEGIN
       ('public.fn_oai_library_is_harvest_eligible'),
       ('public.fn_serial_caller_is_library_staff'),
       ('public.fn_set_retention_policy'),
+      ('public.fn_sigle_sans_points'),
       ('public.fn_submit_library_request'),
       ('public.fn_submit_library_request_via_claim'),
       ('public.fn_task_adopt_suggestion'),
