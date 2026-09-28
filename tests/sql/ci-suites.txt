@@ -581,3 +581,6 @@ tests/sql/export_catalogue_tests.sql
 # 28/09 (B32) : le catalogue tient la grande échelle — la visibilité par bibliothèque se calcule une fois
 # par requête (InitPlan, 21 policies), les vues de liste lisent la vue matérialisée elle-même (index servis).
 tests/sql/catalogue_grande_echelle_tests.sql
+# 28/09 (sujets) : un brouillon de reprise herite des sujets de sa notice ; un brouillon sans aucun sujet n efface plus
+# ceux de la notice a la publication (136 publications les avaient effaces depuis juin).
+tests/sql/sujets_suivent_la_reprise_tests.sql

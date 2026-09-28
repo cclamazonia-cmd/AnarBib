@@ -106,7 +106,25 @@ par l'écran du catalogue publié (`merge_log` 150, cinq livres sous 10059) ; su
 suggestion *Estados Unidos do Brasil (1900)* porte bien « Regrouper » et « Même
 édition : fusionner dans cette notice ».
 
+### Découvert en chemin : la reprise effaçait les sujets (`20260928133838`, `THES-5`)
+
+En ajoutant la mention d'édition à BTL-TL-000881 par « Éditer → Publier », la notice
+a perdu son sujet. Cause générale : le brouillon de reprise ne reprenait pas les
+sujets de la notice (`create_book_draft_from_book` ne touche pas
+`book_draft_subjects`), et la publication remplace les sujets de la notice par ceux
+du brouillon — vides. **136 brouillons de reprise publiés sans sujet depuis juin ;
+20 notices sans sujet aujourd'hui.** Correctif : semis des sujets à la création du
+brouillon (`trg_seed_draft_subjects`), garde à la publication (un brouillon sans
+aucun sujet n'efface rien), brouillons ouverts semés, sept notices réindexées
+(BTL-TL-000103, 000181, 000491, MLEG-0145/0146/0147 d'après la liste C7 ;
+BTL-TL-000881 : anarquismo). Les treize autres (BTL-TL-000029, 000252, 000260,
+000357, 000447, 000448, 000449, 001242, 001635, 001992, 002335 ; BLMF 0000261,
+0000264) n'avaient reçu de sujet par aucun chemin tracé ; si l'une en avait, seule
+une sauvegarde #BG2 antérieure à sa publication le dirait.
+
 ## Ce qui reste
 
-Rien d'ouvert côté outil. Les rééditions réelles sont des éditions de la même œuvre
-(« Regrouper ») ; la règle des années ne se rouvre que par une décision au registre.
+Rien d'ouvert côté outil de fusion. Les rééditions réelles sont des éditions de la
+même œuvre (« Regrouper ») ; la règle des années ne se rouvre que par une décision
+au registre. Côté sujets : réindexer à la main, si besoin, les treize notices citées
+ci-dessus.
