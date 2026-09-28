@@ -117,14 +117,18 @@ du brouillon — vides. **136 brouillons de reprise publiés sans sujet depuis j
 brouillon (`trg_seed_draft_subjects`), garde à la publication (un brouillon sans
 aucun sujet n'efface rien), brouillons ouverts semés, sept notices réindexées
 (BTL-TL-000103, 000181, 000491, MLEG-0145/0146/0147 d'après la liste C7 ;
-BTL-TL-000881 : anarquismo). Les treize autres (BTL-TL-000029, 000252, 000260,
-000357, 000447, 000448, 000449, 001242, 001635, 001992, 002335 ; BLMF 0000261,
-0000264) n'avaient reçu de sujet par aucun chemin tracé ; si l'une en avait, seule
-une sauvegarde #BG2 antérieure à sa publication le dirait.
+BTL-TL-000881 : anarquismo). Les treize autres n'avaient reçu de sujet par aucun
+chemin tracé : la sauvegarde #BG2 a tranché (flux long, `restic dump --no-lock`
+d'un instantané par notice — celui qui précède sa première publication sans sujet —,
+bloc `COPY public.book_subjects`). **Six en avaient**, tous posés le 8 juin :
+BTL-TL-000029 (feminismo), BTL-TL-000447/000448/000449 (revolucao-espanhola),
+BTL-TL-001992 et 002335 (anarquismo) — restaurés par `20260928155533`. **Sept n'en
+ont dans aucun instantané** depuis le 30/06 (BTL-TL-000252, 000260, 000357,
+001242, 001635 ; BLMF 0000261, 0000264) : rien à restaurer.
 
 ## Ce qui reste
 
 Rien d'ouvert côté outil de fusion. Les rééditions réelles sont des éditions de la
 même œuvre (« Regrouper ») ; la règle des années ne se rouvre que par une décision
-au registre. Côté sujets : réindexer à la main, si besoin, les treize notices citées
-ci-dessus.
+au registre. Côté sujets : les sept notices sans sujet dans aucune sauvegarde
+restent à indexer un jour, comme n'importe quelle notice non indexée.
