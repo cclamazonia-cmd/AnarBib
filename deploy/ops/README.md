@@ -29,6 +29,7 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 | `anarbib-bg2.sh` | Les trois flux restic (`court`, `long`, `storage`), le filet de classement des tables, le dump du Vault, l'auto-réparation des verrous |
 | `anarbib-notify-failure.sh` | Appelé par `OnFailure=` quand un flux échoue |
 | `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les dépôts restic et les marqueurs de tir, pose `.fraicheur-alerte` |
+| `RUNNER.md` | **Le runner d'intégration continue** : savoir s'il tourne, le remettre en route, l'installer sur une autre machine (A3) |
 | `forgejo-runner-notify-failure.sh` | Le message d'échec du runner Forgejo (hors chaîne de sauvegarde, même doctrine) |
 | `wait-for-docker.sh` | Attend le socket Docker (pont Docker Desktop ↔ WSL), appelé en `ExecStartPre` du runner |
 | `systemd/forgejo-runner.service` · `systemd/forgejo-runner.service.d/` | Le runner Forgejo et son drop-in |

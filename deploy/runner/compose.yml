@@ -1,0 +1,39 @@
+# =============================================================================
+# deploy/runner/compose.yml — le runner d'intégration continue, en conteneur (A3)
+# =============================================================================
+# Le même forgejo-runner que sur le poste du mainteneur (v12.10.2), mais lancé
+# par Docker : à déménager, il suffit de ce fichier et d'un enregistrement.
+#
+# Le runner parle au démon Docker de l'hôte par sa socket pour créer les
+# conteneurs des jobs (node:22, supabase/postgres…) : ils naissent à côté de
+# lui, pas dedans. C'est le mode « socket partagée » — le plus simple et le
+# plus courant ; il donne au runner tous les droits de Docker sur l'hôte, ce
+# qui est acceptable sur une machine dédiée à ça et à rien d'autre.
+#
+# Enregistrement (une fois, jeton d'enregistrement du dépôt — pas l'UUID) :
+#   mkdir -p data && chmod 700 data
+#   docker compose run --rm runner forgejo-runner register --no-interactive \
+#     --instance https://codeberg.org --token "$TOKEN" \
+#     --name anarbib-<machine> --labels "anarbib-local:docker://node:22"
+#   → écrit data/.runner (contient le jeton du runner : jamais dans le dépôt,
+#     data/ est ignoré).
+# Lancer : docker compose up -d       Journal : docker compose logs -f runner
+# Éprouvé le 28/09/2026 : `docker compose config` valide, l'image tire et rend
+# sa version ; l'enregistrement lui-même demande le jeton du dépôt (Xavier).
+# =============================================================================
+services:
+  runner:
+    image: code.forgejo.org/forgejo/runner:12.10.2
+    restart: unless-stopped
+    # `daemon` lit data/.runner et data/config.yml (facultatif). Le WorkingDirectory
+    # est /data, comme ~ sur le poste.
+    working_dir: /data
+    command: ["forgejo-runner", "daemon"]
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    # Le conteneur tourne en root pour lire la socket ; le runner lui-même ne
+    # fait que créer des conteneurs de job. Sur un hôte où la socket appartient
+    # au groupe docker, on peut passer `user: "1000:<gid docker>"`.

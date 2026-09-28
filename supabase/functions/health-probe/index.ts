@@ -24,6 +24,8 @@ import { safeSendEmail } from '../_shared/transport/email.ts';
 import { destinatairesAdminsReseau } from '../_shared/context/network-admins.ts';
 import { decisionSondeCapas, sonderSourcesCapas } from '../_shared/capas/sources.ts';
 import type { BilanCapas } from '../_shared/capas/sources.ts';
+import { lireTachesForgejo, diagnostiquerCi, decisionSondeCi } from '../_shared/ci/forgejo-tasks.ts';
+import type { DiagnosticCi } from '../_shared/ci/forgejo-tasks.ts';
 
 const BASE = (Deno.env.get('SUPABASE_URL') ?? '').replace(/\/+$/, '');
 const ANON = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
@@ -33,6 +35,10 @@ const ANON = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
 // et le statement_timeout du role anon est de 3 s.
 const SEUIL_LENT_MS = 3000;
 const RETENTION_JOURS = 30;
+// A3 — la liste des tâches de la forge (API publique, sans jeton). Vide : sonde
+// coupée (une instance sans CI Forgejo). Jamais en dur ailleurs qu'ici.
+const FORGE_TASKS_URL = Deno.env.get('FORGE_TASKS_URL')
+  ?? 'https://codeberg.org/api/v1/repos/anarbib/anarbib/actions/tasks?limit=40';
 
 const NETWORK_CTX = {
   use_library_logo: false,
@@ -855,6 +861,65 @@ Deno.serve(async (req: Request) => {
     }
   }
 
+  // ── A3 (28/09/2026) — la CI est-elle en retard ? ─────────────────────────
+  // Le runner tourne sur le poste du mainteneur : en veille, rien ne se déploie
+  // et rien ne le disait (27/09 au soir : un job figé 65 min, le `backend`
+  // jamais lancé, une migration en attente jusqu'au push du lendemain). Une
+  // mesure par heure (tick des minutes 5 à 9, après celui des capas) ou sur
+  // demande (`ci: true`) ; la règle vit dans _shared/ci/forgejo-tasks.ts. Un
+  // 504 de l'API rend `null` : on ne sait rien, on ne change rien.
+  let actionCi = 'pas de mesure à ce tour (une par heure)';
+  let diagCi: DiagnosticCi | null = null;
+  if (FORGE_TASKS_URL && (charge?.ci === true || (new Date().getUTCMinutes() >= 5 && new Date().getUTCMinutes() < 10))) {
+    const taches = await lireTachesForgejo(FORGE_TASKS_URL);
+    diagCi = taches ? diagnostiquerCi(taches) : null;
+
+    const { data: incCi } = await supabaseAdmin
+      .from('service_health_incidents')
+      .select('id, opened_at, reason')
+      .eq('kind', 'ci_en_retard')
+      .is('closed_at', null)
+      .order('opened_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const decision = decisionSondeCi(diagCi, incCi ?? null);
+    if (decision === 'ouvrir' && diagCi) {
+      const { data: inc, error: errCi } = await supabaseAdmin
+        .from('service_health_incidents')
+        .insert({ kind: 'ci_en_retard', reason: diagCi.raison })
+        .select('id')
+        .single();
+      if (errCi || !inc) {
+        actionCi = `incident NON enregistré (${errCi?.message ?? 'raison inconnue'}) — alerte retenue`;
+      } else {
+        const n = await alerter(
+          'AnarBib — la chaîne de déploiement est en retard',
+          'Intégration continue : un déploiement n’aboutit pas',
+          `<p style="margin:0 0 10px">La sonde horaire des tâches de la forge relève : <strong>${esc(diagCi.raison)}</strong>.</p>
+           <p style="margin:0 0 10px">Ce que ça veut dire : ce qui a été poussé sur <code>main</code> n'est pas (ou pas entièrement) en production. Le runner d'intégration continue tourne sur le poste du mainteneur (A3) : machine éteinte, en veille, ou Docker coupé, les jobs attendent ; un job interrompu est déclaré en échec au bout d'une heure et <strong>le job suivant ne se lance jamais de lui-même</strong>.</p>
+           <p style="margin:0 0 10px"><strong>Que faire :</strong> allumer la machine du runner et vérifier qu'il tourne (<code>journalctl -u forgejo-runner -n 20</code>, pas <code>systemctl</code>) ; puis, sur la page Actions du dépôt, <strong>relancer</strong> le dernier run en échec — un push ne suffit pas toujours, et sans relance une migration peut rester en attente. La procédure complète : <code>deploy/ops/RUNNER.md</code>.</p>
+           <p style="margin:0">Un e-mail suivra quand la file sera de nouveau à jour.</p>`,
+        );
+        await supabaseAdmin.from('service_health_incidents').update({ notified_at: new Date().toISOString() }).eq('id', inc.id);
+        actionCi = `incident ouvert, ${n} destinataire(s) alerté(s)`;
+      }
+    } else if (decision === 'clore' && incCi) {
+      await supabaseAdmin.from('service_health_incidents').update({ closed_at: new Date().toISOString() }).eq('id', incCi.id);
+      const depuis = new Date(incCi.opened_at).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
+      const n = await alerter(
+        'AnarBib — chaîne de déploiement : à jour',
+        'Intégration continue : la file est de nouveau à jour',
+        `<p style="margin:0 0 10px">Plus aucune tâche en attente au-delà du seuil, et le dernier déploiement a abouti. L'incident ouvert le ${esc(depuis)} est clos.</p>
+         <p style="margin:0">Cause relevée : ${esc(incCi.reason)}</p>`,
+      );
+      actionCi = `incident clos, ${n} destinataire(s) prévenu(s)`;
+    } else {
+      actionCi = diagCi === null ? 'forge injoignable : rien décidé'
+        : diagCi.ok ? 'file à jour' : 'incident déjà signalé, toujours ouvert';
+    }
+  }
+
   // Purge de l'historique (evite une table qui grossit sans fin).
   const limite = new Date(Date.now() - RETENTION_JOURS * 86400_000).toISOString();
   await supabaseAdmin.from('service_health_probes').delete().lt('checked_at', limite);
@@ -871,5 +936,7 @@ Deno.serve(async (req: Request) => {
     actions_structurelles: actionsStructurelles,
     sources_capas: bilanCapas,
     action_capas: actionCapas,
+    ci: diagCi,
+    action_ci: actionCi,
   });
 });
