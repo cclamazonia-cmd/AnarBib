@@ -11,6 +11,8 @@ import DigitalResourcesPanel from './DigitalResourcesPanel';
 import LookupPanel from './LookupPanel';
 import ContributorsPanel from './ContributorsPanel';
 import ReviewPanel from './ReviewPanel';
+import ShelfLabelPreview from './ShelfLabelPreview';
+import InitialCopiesBlock from './InitialCopiesBlock';
 import TitleCaseAssist from '@/components/catalog/TitleCaseAssist';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -24,7 +26,7 @@ import { renderMaterialSection, renderRegistryField } from './CatalogFieldRender
 import Modal from '@/components/ui/Modal';
 
 // Constantes et fonctions pures du formulaire : src/lib/catalogacao/bookDraft.js (E6, lot 1)
-import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, PDFJS_BASE, loadPdfjsCat, inferContributorRole, autoMatchContributors, buildShelfLabel, EMPTY_FORM, construireZonesIsbd } from '@/lib/catalogacao/bookDraft';
+import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, PDFJS_BASE, loadPdfjsCat, inferContributorRole, autoMatchContributors, EMPTY_FORM, construireZonesIsbd } from '@/lib/catalogacao/bookDraft';
 
 // ═══════════════════════════════════════════════════════════
 // BookDraftForm
@@ -2523,55 +2525,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {rrf('paginas')}
           {rrf('circulation_default')}
 
-          {/* ── Prévia de cote / étiquette (tier 3) ────── */}
-          {catalogTier >= 3 && (() => {
-            const label = buildShelfLabel({ author: f('autor'), title: f('titulo'), cdd: f('cdd') });
-            return (
-              <div style={{ gridColumn: 'span 3' }}>
-                <div style={{
-                  padding: 14, borderRadius: 10,
-                  background: 'rgba(255,255,255,.03)',
-                  border: '1px solid var(--brand-panel-border, rgba(255,255,255,.08))',
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 6 }}>
-                    <h4 style={{ margin: 0, fontSize: '.85rem' }}>{t({id:'catalogacao.ui.labelPreview'})}</h4>
-                    <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)' }}>
-                      {t({id:'catalogacao.ui.labelPreviewHint'})}
-                    </span>
-                  </div>
-                  <div style={{
-                    display: 'flex', gap: 16, alignItems: 'center',
-                    padding: '12px 16px', borderRadius: 8,
-                    background: 'rgba(0,0,0,.2)', border: '1px solid rgba(255,255,255,.06)',
-                  }}>
-                    <div style={{
-                      width: 64, height: 64, borderRadius: 8,
-                      background: 'var(--brand-color-primary, #7a0b14)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontWeight: 900, fontSize: '1.1rem', color: '#fff',
-                      letterSpacing: '.05em', flexShrink: 0,
-                    }}>
-                      {label?.authorCode || '---'}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '.88rem', fontWeight: 700, marginBottom: 2 }}>
-                        {f('titulo') || t({ id: 'catalogacao.ui.titleFallback' })}
-                      </div>
-                      <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>
-                        {t({id:'catalogacao.shelf.authorPrefix'})} {f('autor') || '—'}
-                      </div>
-                      <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>
-                        {t({id:'catalogacao.shelf.cddPrefix'})} {f('cdd') || '—'}
-                      </div>
-                      <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #666)', marginTop: 3 }}>
-                        {label ? `${t({id:'catalogacao.shelf.cotePrefix'})} ${label.shelfLine} (${label.reasonCodes.map(c => t({ id: 'catalogacao.shelf.' + c })).join(' + ')})` : t({id:'catalogacao.ui.labelFillHint'})}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })()}
+          {/* ── Prévia de cote / étiquette (tier 3 ; E6 lot 6 : ShelfLabelPreview) ── */}
+          {catalogTier >= 3 && <ShelfLabelPreview author={f('autor')} title={f('titulo')} cdd={f('cdd')} />}
 
           {/* ── Assuntos + Notas + Cover path ─────────── */}
           {rrf('subjects')}
@@ -2599,36 +2554,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           isbdEnabled={isbdEnabled} isbdData={isbdData} zoneLabels={ZONE_LABELS}
           onPrepareIsbd={prepareIsbd} onClearIsbd={clearIsbd} />
 
-        {/* ── Exemplaires initiaux (fiche non encore publiée) ─── */}
+        {/* ── Exemplaires initiaux (fiche non encore publiée ; E6 lot 6 : InitialCopiesBlock) ── */}
         {!f('published_book_id') && (
-          <div style={{ marginTop: 16, padding: 12, borderRadius: 10, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.15)' }}>
-            <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 8 }}>{t({ id: 'catalogacao.publish.copiesTitle' })}</div>
-            {importedItems > 0 ? (
-              <div data-testid="copies-imported" style={{ fontSize: '.8rem' }}>
-                {t({ id: 'catalogacao.publish.copiesImported' }, { n: importedItems })}
-              </div>
-            ) : (
-            <div className="cat-book-grid">
-              <div className="cat-field">
-                <label>{t({ id: 'catalogacao.publish.copiesLabel' })}</label>
-                <input type="number" min="1" max="50" value={f('initial_copies')}
-                  onChange={e => set('initial_copies', e.target.value)}
-                  style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
-                <div style={{ fontSize: '.7rem', color: 'var(--brand-muted,#888)', marginTop: 2 }}>{t({ id: 'catalogacao.publish.copiesHint' })}</div>
-              </div>
-              {isNetworkAdmin && (
-                <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                  <label>{t({ id: 'catalogacao.publish.copiesLibrary' })}</label>
-                  <select value={f('initial_copies_library_id')} onChange={e => set('initial_copies_library_id', e.target.value)}
-                    style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}>
-                    <option value="">{t({ id: 'catalogacao.publish.copiesLibraryDefault' })}</option>
-                    {catalogLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
-                  </select>
-                </div>
-              )}
-            </div>
-            )}
-          </div>
+          <InitialCopiesBlock importedItems={importedItems} copies={f('initial_copies')}
+            libraryIdValue={f('initial_copies_library_id')} isNetworkAdmin={isNetworkAdmin}
+            libraries={catalogLibraries} onChange={set} />
         )}
 
         {/* ── Action buttons ─────────────────────────── */}
