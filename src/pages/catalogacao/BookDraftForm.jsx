@@ -13,6 +13,7 @@ import ContributorsPanel from './ContributorsPanel';
 import ReviewPanel from './ReviewPanel';
 import ShelfLabelPreview from './ShelfLabelPreview';
 import InitialCopiesBlock from './InitialCopiesBlock';
+import ReassignPanel from './ReassignPanel';
 import TitleCaseAssist from '@/components/catalog/TitleCaseAssist';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -44,10 +45,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // Attribution réseau (admin réseau) : notice + exemplaires → bibliothèque cible
   const [catalogLibraries, setCatalogLibraries] = useState([]);
-  const [reassignTarget, setReassignTarget] = useState('');
-  const [reassignSource, setReassignSource] = useState('');  // biblio source (notice multi-biblios)
-  const [reassignBusy, setReassignBusy] = useState(false);
-  const [bookLibraries, setBookLibraries] = useState([]);    // biblios ou la notice a des exemplaires
 
   // i18n-aware lists built from t()
   const MATERIAL_TYPES = useMemo(() => MATERIAL_TYPE_KEYS.map(k => ({ value: k, label: t({ id: `catalogacao.material.${k}` }) })), [t]);
@@ -63,27 +60,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     return () => { cancelled = true; };
   }, [isNetworkAdmin]);
 
-  // Admin réseau : attribue la notice publiée + ses exemplaires à une bibliothèque.
-  async function reassignBookToLibrary() {
-    const bookId = f('published_book_id');
-    if (!bookId || !reassignTarget) return;
-    const lib = catalogLibraries.find(l => l.id === reassignTarget);
-    if (!confirm(t({ id: 'catalogacao.reassign.confirm' }, { library: lib?.name || '' }))) return;
-    setReassignBusy(true);
-    try {
-      const rpc = reassignSource ? 'network_admin_reassign_book_from_to_library' : 'network_admin_reassign_book_to_library';
-      const params = reassignSource
-        ? { p_book_id: Number(bookId), p_source_library_id: reassignSource, p_target_library_id: reassignTarget }
-        : { p_book_id: Number(bookId), p_target_library_id: reassignTarget };
-      const { data, error } = await supabase.rpc(rpc, params);
-      if (error) throw error;
-      setMsg({ text: t({ id: 'catalogacao.reassign.done' }, { library: data?.target_library || lib?.name || '', count: data?.exemplares_moved ?? 0 }), kind: 'ok' });
-      setReassignTarget(''); setReassignSource('');
-      onSaved?.();
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setReassignBusy(false); }
-  }
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const msgRef = useRef(null);
@@ -150,19 +126,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [editionSearching, setEditionSearching] = useState(false);
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
-
-  // Admin reseau : biblios ou la notice publiee a des exemplaires (alimente le source picker).
-  useEffect(() => {
-    if (!isNetworkAdmin || !form.published_book_id) { setBookLibraries([]); setReassignSource(''); return; }
-    let cancelled = false;
-    supabase.from('book_holdings').select('library_id').eq('book_id', Number(form.published_book_id))
-      .then(({ data }) => {
-        if (cancelled) return;
-        const ids = [...new Set((data || []).map(h => h.library_id).filter(Boolean))];
-        setBookLibraries(ids.map(id => ({ id, name: catalogLibraries.find(l => l.id === id)?.name || id })));
-      });
-    return () => { cancelled = true; };
-  }, [isNetworkAdmin, form.published_book_id, catalogLibraries]);
 
   // ── Exemplaires liés (card "para informação", anti-orphelin) ──
   const [linkedExemplars, setLinkedExemplars] = useState([]); // [{ library_id, library_name, count }]
@@ -1910,36 +1873,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         <button className="ab-button ab-button--ghost ab-button--sm" onClick={resetForm} type="button">{t({id:'catalogacao.ui.clearForm'})}</button>
       </div>
 
-      {/* ── Admin réseau : attribuer la notice + exemplaires à une bibliothèque (tête de fiche) ── */}
+      {/* ── Admin réseau : attribuer la notice + exemplaires à une bibliothèque (E6 lot 7 : ReassignPanel) ── */}
       {isNetworkAdmin && f('published_book_id') && (
-        <div style={{ marginBottom: 14, padding: '12px 14px', borderRadius: 10, background: 'rgba(29,78,216,.12)', border: '1px solid rgba(96,165,250,.35)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <span className="cat-pill info" style={{ fontSize: '.66rem' }}>{t({ id: 'catalogacao.reassign.badge' })}</span>
-            <span style={{ fontSize: '.85rem', fontWeight: 600 }}>{t({ id: 'catalogacao.reassign.title' })}</span>
-          </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
-            <select value={reassignSource} onChange={e => setReassignSource(e.target.value)}
-              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 'min(220px, 100%)' }}>
-              <option value="">{t({ id: bookLibraries.length > 1 ? 'catalogacao.reassign.sourcePick' : 'catalogacao.reassign.sourceAll' })}</option>
-              {bookLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
-            </select>
-            <span aria-hidden="true" style={{ fontSize: '.9rem', color: 'var(--brand-muted,#aaa)' }}>→</span>
-            <select value={reassignTarget} onChange={e => setReassignTarget(e.target.value)}
-              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 'min(220px, 100%)' }}>
-              <option value="">{t({ id: 'catalogacao.reassign.placeholder' })}</option>
-              {catalogLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
-            </select>
-            <button type="button" className="ab-button ab-button--sm"
-              disabled={!reassignTarget || reassignBusy || (bookLibraries.length > 1 && !reassignSource)}
-              onClick={reassignBookToLibrary}>
-              {reassignBusy ? t({ id: 'common.saving' }) : t({ id: 'catalogacao.reassign.action' })}
-            </button>
-          </div>
-          {bookLibraries.length > 1 && (
-            <div style={{ fontSize: '.74rem', color: '#fbbf24', marginTop: 6 }}>{t({ id: 'catalogacao.reassign.multiHint' })}</div>
-          )}
-          <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)', marginTop: 6 }}>{t({ id: 'catalogacao.reassign.hint' })}</div>
-        </div>
+        <ReassignPanel bookId={f('published_book_id')} catalogLibraries={catalogLibraries}
+          setMsg={setMsg} onSaved={onSaved} />
       )}
 
       {/* Message */}
