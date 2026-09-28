@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-27",
+    "maj": "2026-09-28",
     "releve": {
       "date": "2026-09-24",
       "commit": "3d9cf15b"
@@ -2486,7 +2486,7 @@
       "id": "A3",
       "d": "A",
       "p": "P0",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "L",
       "sk": [
         "sysadmin"
@@ -2496,8 +2496,8 @@
         "pt": "Tirar o runner de integração contínua da máquina do mantenedor"
       },
       "v": {
-        "fr": "`.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux.",
-        "pt": "`.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa."
+        "fr": "`.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux. **28/09 — ce que l'échec silencieux vaut, mesuré : le 27/09 à 22 h 40 min 30 s le portable s'est mis en veille pendant le job `app` de 911ad1db** (journal WSL : fin du boot à cette seconde ; à 22 h 37 déjà `ReportLog error: deadline_exceeded`). Codeberg a déclaré la tâche en échec à 23 h 45 ; le `backend` n'a jamais tourné ; la migration de ce commit a attendu le push suivant, le lendemain à 11 h 37 — sans qu'un mot ne parte. Les runners hébergés par Codeberg ne conviennent pas (mesuré sur `codeberg.org/actions/meta` : 10 min par job au plus, pas de Docker ; `sql-tests` et `rejeu-image` en ont besoin et durent 6 à 12 min). **Trois gestes faits sans machine, sur décision de Xavier** : (1) `deploy/ops/RUNNER.md` — ce que c'est, où il vit (relu sur la machine : binaire v12.10.2, `~/.runner`, unités = liens vers `deploy/ops/systemd/`), le savoir vivant en deux minutes (`journalctl`, jamais `systemctl`), la remise en route, l'installation sur une autre machine avec **le même label** (deux runners peuvent coexister, la bascule se fait sans coupure) et un drop-in local pour l'utilisateur ; (2) la sonde **`ci_en_retard`** de `health-probe` (`_shared/ci/forgejo-tasks.ts`, migration `20260928095045`) : une fois par heure, la liste des tâches de la forge — une tâche non terminée depuis plus de 2 h, ou le dernier `app`/`backend` en échec depuis plus de 30 min sans run plus récent, ouvre l'incident et envoie « que faire : allumer, vérifier, **relancer** » ; un `[skip ci]` n'est pas une fausse alerte (on ne compare pas au marqueur), un 504 de l'API ne change rien ; banc de 15 cas dont la vraie soirée du 27/09 ; (3) `deploy/runner/compose.yml` — le runner en conteneur (`code.forgejo.org/forgejo/runner:12.10.2`, socket Docker partagée), `compose config` valide et image éprouvée ; l'enregistrement demande le jeton du dépôt. **Reste la machine** : Xavier essaie son autre portable ; la VM des Herbes Folles attend I21. Et le runner reste unique, en série : sortir du poste règle la disponibilité, pas la lenteur (`rejeu-image` la nuit, ou un second runner).",
+        "pt": "`.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa. **28/09 —** medido: em 27/09 às 22h40 o portátil entrou em suspensão durante um job `app`; a tarefa foi dada como falha às 23h45, o `backend` nunca correu, uma migração esperou até ao push do dia seguinte, sem aviso. Os runners hospedados da Codeberg não servem (10 min por job, sem Docker). Três gestos sem máquina: `deploy/ops/RUNNER.md` (procedimento para quem não o instalou, mudança de máquina sem corte), a sonda `ci_en_retard` do `health-probe` (uma leitura por hora das tarefas da forja, e-mail «o que fazer: religar, verificar, relançar»), `deploy/runner/compose.yml` (runner em contêiner). Falta a máquina: Xavier tenta o outro portátil."
       },
       "w": {
         "fr": "Faire tourner le runner ailleurs que sur un poste de travail personnel : machine de l'hébergeur, seconde machine du réseau, ou runner partagé. La logique de déploiement est déjà extraite dans `scripts/ci/deployer-backend.sh` et rejouable à la main — la moitié du travail est faite.",
@@ -2511,12 +2511,14 @@
         "fr": [
           "Un push sur `main` déclenche un déploiement sans que la machine du mainteneur soit allumée.",
           "Le garde-fou d'exclusion du routeur `main` est préservé aux deux endroits (workflow et script).",
-          "La procédure de remise en route du runner est écrite pour quelqu'un qui ne l'a pas installé."
+          "La procédure de remise en route du runner est écrite pour quelqu'un qui ne l'a pas installé. — **fait le 28/09 : `deploy/ops/RUNNER.md`.**",
+          "Une panne du runner se voit : un courriel « chaîne de déploiement en retard » part dans les trois heures (sonde `ci_en_retard`, 28/09)."
         ],
         "pt": [
           "Um push em `main` dispara uma implantação sem que a máquina do mantenedor esteja ligada.",
           "A guarda de exclusão do roteador `main` é preservada nos dois lugares (workflow e script).",
-          "O procedimento de recolocação do runner em funcionamento está escrito para quem não o instalou."
+          "O procedimento de recolocação do runner em funcionamento está escrito para quem não o instalou.",
+          "Uma falha do runner é vista: e-mail «cadeia de implantação atrasada» em até três horas (sonda `ci_en_retard`, 28/09)."
         ]
       },
       "dep": {
@@ -3449,8 +3451,8 @@
         "pt": "Dividir as cinco telas que pesam mais de cem quilobytes"
       },
       "v": {
-        "fr": "`BookDraftForm.jsx` fait **197 Ko**, `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154 Ko, `PanelPage.jsx` 114 Ko, `ImportacoesPage.jsx` 109 Ko. 29 des 38 routes sont déjà en chargement paresseux, et `vite.config.js` déclare quatre lots de dépendances — le problème n'est pas le chargement initial, c'est la taille d'un fichier unique. **Lot 1 le 27/09 (mesuré avant : `BookDraftForm.jsx` 214 Ko, 3 803 lignes).** Les constantes et fonctions PURES — types de matériel, rôles, liaison MARC → autorités, cote d'étiquette, formulaire vide, candidat BN Brasil, zones ISBD — sortent dans `src/lib/catalogacao/bookDraft.js` (18 Ko), lignes déplacées par script sans ressaisie ; les zones ISBD reçoivent le formulaire et `t` au lieu de les lire dans la fermeture. `BookDraftForm.jsx` : **198 Ko**. Banc `book-draft-lib.test.js` (11 cas), build Vite vert, 1 160 tests. **Reste l'essentiel** : sous 60 Ko il faut découper le JSX (sous-formulaires, panneaux ressources numériques, ISBD, contributeurs) en composants — un changement qui se vérifie à l'écran, connecté, un panneau à la fois.",
-        "pt": "`BookDraftForm.jsx` tem **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js`; o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela."
+        "fr": "`BookDraftForm.jsx` fait **197 Ko**, `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154 Ko, `PanelPage.jsx` 114 Ko, `ImportacoesPage.jsx` 109 Ko. 29 des 38 routes sont déjà en chargement paresseux, et `vite.config.js` déclare quatre lots de dépendances — le problème n'est pas le chargement initial, c'est la taille d'un fichier unique. **Lot 1 le 27/09 (mesuré avant : `BookDraftForm.jsx` 214 Ko, 3 803 lignes).** Les constantes et fonctions PURES — types de matériel, rôles, liaison MARC → autorités, cote d'étiquette, formulaire vide, candidat BN Brasil, zones ISBD — sortent dans `src/lib/catalogacao/bookDraft.js` (18 Ko), lignes déplacées par script sans ressaisie ; les zones ISBD reçoivent le formulaire et `t` au lieu de les lire dans la fermeture. `BookDraftForm.jsx` : **198 Ko**. Banc `book-draft-lib.test.js` (11 cas), build Vite vert, 1 160 tests. **Reste l'essentiel** : sous 60 Ko il faut découper le JSX (sous-formulaires, panneaux ressources numériques, ISBD, contributeurs) en composants — un changement qui se vérifie à l'écran, connecté, un panneau à la fois. **Lot 2 le 28/09 : le panneau « Recursos digitais vinculados » devient `DigitalResourcesPanel.jsx`** (24 Ko : formulaire d'édition, téléversement dans le bon seau, enregistrement, suppression ; le parent garde la liste, que la couverture tirée du PDF lit, et son chargement). Lignes déplacées par script, une différence voulue : l'édition en cours se referme quand le brouillon change, pas seulement sur une fiche vierge. `BookDraftForm.jsx` : **173 Ko** (214 au départ). Lint, 98 tests de source, build Vite. Prochains panneaux, par taille : le panneau de recherche catalographique (lookup, ~200 lignes), les contributeurs (~90), le pack ISBD, la prévia de cote. Toujours à voir à l'écran, connecté, avant de clore.",
+        "pt": "`BookDraftForm.jsx` tem **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js`; o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela. **Lote 2 em 28/09:** o painel de recursos digitais passa a `DigitalResourcesPanel.jsx`; o formulário cai para 173 Ko."
       },
       "w": {
         "fr": "Extraire les sous-formulaires et les onglets en composants séparés, sans changer le comportement. Commencer par `BookDraftForm`, le plus gros et le plus édité.",

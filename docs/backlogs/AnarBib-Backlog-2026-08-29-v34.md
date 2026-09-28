@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-27** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-28** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 Relevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.
 
-**Fraîcheur des constats au 2026-09-27.** **49 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-28.** **49 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -292,7 +292,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **A1** | Obtenir au moins deux autres administrateur·rices réseau | `P0` | Décision collective |
-| **A3** | Sortir le runner d'intégration continue de la machine du mainteneur | `P0` | Ouvert |
+| **A3** | Sortir le runner d'intégration continue de la machine du mainteneur | `P0` | En cours |
 
 #### A1 — Obtenir au moins deux autres administrateur·rices réseau
 
@@ -318,9 +318,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### A3 — Sortir le runner d'intégration continue de la machine du mainteneur
 
-`P0` Structurel · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : administration système
+`P0` Structurel · État : **En cours** · Charge : plusieurs semaines · Ce que ça demande : administration système
 
-**État.** `.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux.
+**État.** `.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux. **28/09 — ce que l'échec silencieux vaut, mesuré : le 27/09 à 22 h 40 min 30 s le portable s'est mis en veille pendant le job `app` de 911ad1db** (journal WSL : fin du boot à cette seconde ; à 22 h 37 déjà `ReportLog error: deadline_exceeded`). Codeberg a déclaré la tâche en échec à 23 h 45 ; le `backend` n'a jamais tourné ; la migration de ce commit a attendu le push suivant, le lendemain à 11 h 37 — sans qu'un mot ne parte. Les runners hébergés par Codeberg ne conviennent pas (mesuré sur `codeberg.org/actions/meta` : 10 min par job au plus, pas de Docker ; `sql-tests` et `rejeu-image` en ont besoin et durent 6 à 12 min). **Trois gestes faits sans machine, sur décision de Xavier** : (1) `deploy/ops/RUNNER.md` — ce que c'est, où il vit (relu sur la machine : binaire v12.10.2, `~/.runner`, unités = liens vers `deploy/ops/systemd/`), le savoir vivant en deux minutes (`journalctl`, jamais `systemctl`), la remise en route, l'installation sur une autre machine avec **le même label** (deux runners peuvent coexister, la bascule se fait sans coupure) et un drop-in local pour l'utilisateur ; (2) la sonde **`ci_en_retard`** de `health-probe` (`_shared/ci/forgejo-tasks.ts`, migration `20260928095045`) : une fois par heure, la liste des tâches de la forge — une tâche non terminée depuis plus de 2 h, ou le dernier `app`/`backend` en échec depuis plus de 30 min sans run plus récent, ouvre l'incident et envoie « que faire : allumer, vérifier, **relancer** » ; un `[skip ci]` n'est pas une fausse alerte (on ne compare pas au marqueur), un 504 de l'API ne change rien ; banc de 15 cas dont la vraie soirée du 27/09 ; (3) `deploy/runner/compose.yml` — le runner en conteneur (`code.forgejo.org/forgejo/runner:12.10.2`, socket Docker partagée), `compose config` valide et image éprouvée ; l'enregistrement demande le jeton du dépôt. **Reste la machine** : Xavier essaie son autre portable ; la VM des Herbes Folles attend I21. Et le runner reste unique, en série : sortir du poste règle la disponibilité, pas la lenteur (`rejeu-image` la nuit, ou un second runner).
 
 *Vérifié : 31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé.*
 
@@ -332,7 +332,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 - Un push sur `main` déclenche un déploiement sans que la machine du mainteneur soit allumée.
 - Le garde-fou d'exclusion du routeur `main` est préservé aux deux endroits (workflow et script).
-- La procédure de remise en route du runner est écrite pour quelqu'un qui ne l'a pas installé.
+- La procédure de remise en route du runner est écrite pour quelqu'un qui ne l'a pas installé. — **fait le 28/09 : `deploy/ops/RUNNER.md`.**
+- Une panne du runner se voit : un courriel « chaîne de déploiement en retard » part dans les trois heures (sonde `ci_en_retard`, 28/09).
 
 **Dépendances.** Lié à **I2** (bascule auto-hébergée). Peut se faire avant, sur l'infrastructure actuelle.
 
@@ -813,7 +814,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 `P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript
 
-**État.** `BookDraftForm.jsx` fait **197 Ko**, `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154 Ko, `PanelPage.jsx` 114 Ko, `ImportacoesPage.jsx` 109 Ko. 29 des 38 routes sont déjà en chargement paresseux, et `vite.config.js` déclare quatre lots de dépendances — le problème n'est pas le chargement initial, c'est la taille d'un fichier unique. **Lot 1 le 27/09 (mesuré avant : `BookDraftForm.jsx` 214 Ko, 3 803 lignes).** Les constantes et fonctions PURES — types de matériel, rôles, liaison MARC → autorités, cote d'étiquette, formulaire vide, candidat BN Brasil, zones ISBD — sortent dans `src/lib/catalogacao/bookDraft.js` (18 Ko), lignes déplacées par script sans ressaisie ; les zones ISBD reçoivent le formulaire et `t` au lieu de les lire dans la fermeture. `BookDraftForm.jsx` : **198 Ko**. Banc `book-draft-lib.test.js` (11 cas), build Vite vert, 1 160 tests. **Reste l'essentiel** : sous 60 Ko il faut découper le JSX (sous-formulaires, panneaux ressources numériques, ISBD, contributeurs) en composants — un changement qui se vérifie à l'écran, connecté, un panneau à la fois.
+**État.** `BookDraftForm.jsx` fait **197 Ko**, `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154 Ko, `PanelPage.jsx` 114 Ko, `ImportacoesPage.jsx` 109 Ko. 29 des 38 routes sont déjà en chargement paresseux, et `vite.config.js` déclare quatre lots de dépendances — le problème n'est pas le chargement initial, c'est la taille d'un fichier unique. **Lot 1 le 27/09 (mesuré avant : `BookDraftForm.jsx` 214 Ko, 3 803 lignes).** Les constantes et fonctions PURES — types de matériel, rôles, liaison MARC → autorités, cote d'étiquette, formulaire vide, candidat BN Brasil, zones ISBD — sortent dans `src/lib/catalogacao/bookDraft.js` (18 Ko), lignes déplacées par script sans ressaisie ; les zones ISBD reçoivent le formulaire et `t` au lieu de les lire dans la fermeture. `BookDraftForm.jsx` : **198 Ko**. Banc `book-draft-lib.test.js` (11 cas), build Vite vert, 1 160 tests. **Reste l'essentiel** : sous 60 Ko il faut découper le JSX (sous-formulaires, panneaux ressources numériques, ISBD, contributeurs) en composants — un changement qui se vérifie à l'écran, connecté, un panneau à la fois. **Lot 2 le 28/09 : le panneau « Recursos digitais vinculados » devient `DigitalResourcesPanel.jsx`** (24 Ko : formulaire d'édition, téléversement dans le bon seau, enregistrement, suppression ; le parent garde la liste, que la couverture tirée du PDF lit, et son chargement). Lignes déplacées par script, une différence voulue : l'édition en cours se referme quand le brouillon change, pas seulement sur une fiche vierge. `BookDraftForm.jsx` : **173 Ko** (214 au départ). Lint, 98 tests de source, build Vite. Prochains panneaux, par taille : le panneau de recherche catalographique (lookup, ~200 lignes), les contributeurs (~90), le pack ISBD, la prévia de cote. Toujours à voir à l'écran, connecté, avant de clore.
 
 *Vérifié : 31/08 — les cinq mêmes fichiers, aux tailles voisines : `BookDraftForm.jsx` 197 Ko, `BibliotecaPage.jsx` 186 Ko, `AccountPage.jsx` 155 Ko, `PanelPage.jsx` 116 Ko, `ImportacoesPage.jsx` 111 Ko.*
 
@@ -2199,4 +2200,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-27. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-28. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-24 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `3d9cf15b` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
