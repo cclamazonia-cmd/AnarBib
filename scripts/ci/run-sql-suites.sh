@@ -92,6 +92,15 @@ apply authstub "$AUTHSTUB"; echo "stub auth appliqué"
 apply vaultstub "$VAULTSTUB"; echo "stub vault appliqué"
 apply storagestub "$STORAGESTUB"; echo "stub storage appliqué"
 apply cronstub "$CRONSTUB"; echo "stub cron appliqué"
+# Ce que la plate-forme pose avant toute migration et qu'un dump n'emporte pas :
+# le schéma `extensions` avec ses droits d'usage (ACL Supabase relevée en
+# production le 28/09/2026 : anon, authenticated, service_role = USAGE). Sans
+# lui, le premier parse d'une requête citant `extensions.*` sous anon lève 42501
+# — vu par B32 : quand les vues du catalogue ont remplacé les enveloppes, le
+# REFRESH d'une fixture a invalidé le plan compilé sous postgres, et le cache
+# de plan a cessé de masquer l'absence du droit (opac_par_oeuvre T8).
+PT -v ON_ERROR_STOP=1 -q -c "CREATE SCHEMA IF NOT EXISTS extensions; GRANT USAGE ON SCHEMA extensions TO anon, authenticated, service_role;" || fail "droits plate-forme sur extensions"
+echo "droits plate-forme (extensions) posés"
 # Toutes les migrations dans l'ordre lexicographique (baseline d'abord, puis
 # forward). [0-9]* ignore _TEMPLATE.sql et tout fichier hors convention.
 shopt -s nullglob

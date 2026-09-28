@@ -56,3 +56,43 @@ Après correctifs, mix complet fiche livre incluse :
 Le plafond structurel n'est ni `max_connections` (60) ni le CPU, mais le **pool
 de connexions PostgREST, limité à 20**. Les latences incluent le trajet réseau
 vers São Paulo (~100–130 ms depuis l'Europe).
+
+## Mesurer à grande échelle sur le banc LOCAL (B32, B33 — 27/09/2026)
+
+Le harnais ci-dessus mesure ce que la production encaisse aujourd'hui. Pour
+savoir ce qu'elle encaissera avec dix ou cinquante fois plus de notices, on
+fabrique un catalogue synthétique **dans une base jetable du banc local** — jamais
+en production : le script écrit des milliers d'autorités, de notices et de fonds.
+
+- `catalogue-synthetique.sql` : autorités (noms et formes de tri réalistes, alias
+  aux formes relevées en production), éditeurs, notices (titres de 2 à 6 mots,
+  une édition sur cinq rattachée à l'œuvre d'une autre), contributeurs, et des
+  fonds répartis entre la bibliothèque publique du seed et quatre bibliothèques
+  créées pour l'occasion — une par branche de `fn_library_visible_to_caller`
+  (publique, réseau, privée, isolée). Rafraîchit les deux vues matérialisées.
+- `catalogue-mesure.sql` : les parcours réels de l'OPAC (page par œuvre, recherche,
+  filtres, facettes, liste plate triée, `count(*)` sous RLS), sans compte puis en
+  session, quatre appels chronométrés par psql (`\timing`) ; `catalogue-mesure-resume.cjs`
+  en tire la moyenne des trois derniers, sans plafond de temps. Pas d'enveloppe
+  PL/pgSQL : l'image Supabase précharge `plpgsql_check`, dont la couche pldbgapi2
+  casse après certains appels imbriqués depuis une fonction (constaté le 28/09/2026).
+
+```bash
+# base jetable, clonée du banc (scripts/ci/run-sql-suites.sh l'a construit)
+psql -d postgres -c "CREATE DATABASE anarbib_perf TEMPLATE anarbib_test"
+psql -d anarbib_perf -v n_auteurs=50000 -v n_notices=100000 -v n_editeurs=10000 \
+     -f scripts/loadtest/catalogue-synthetique.sql
+psql -X -d anarbib_perf -f scripts/loadtest/catalogue-mesure.sql > mesure-avant.log
+node scripts/loadtest/catalogue-mesure-resume.cjs avant mesure-avant.log
+# … appliquer la migration à mesurer, puis :
+psql -X -d anarbib_perf -f scripts/loadtest/catalogue-mesure.sql > mesure-apres.log
+node scripts/loadtest/catalogue-mesure-resume.cjs apres mesure-apres.log
+psql -d postgres -c "DROP DATABASE anarbib_perf"
+```
+
+À 100 000 notices, la génération prend une bonne demi-heure (34 min le 28/09 :
+chaque notice traverse ses déclencheurs, dont ceux qui s'exécutent après
+l'instruction, un par notice). Le rôle `anon` n'a pas son
+plafond de 3 s sur le banc (réglage de rôle appliqué à la connexion, pas à
+`SET ROLE`) : `catalogue-mesure.sql` affiche la durée réelle, à comparer au
+plafond.

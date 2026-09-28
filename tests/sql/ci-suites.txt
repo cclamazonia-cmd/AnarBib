@@ -578,3 +578,6 @@ tests/sql/import_zones_tests.sql
 # 28/09 (H24) : l'export d'une bibliotheque contient tout ce qu'elle a catalogue (identifiants d'origine,
 # responsabilites, sujets du thesaurus, exemplaires, oeuvre, periodique, article, MARC d'origine) — et rien d'une autre.
 tests/sql/export_catalogue_tests.sql
+# 28/09 (B32) : le catalogue tient la grande échelle — la visibilité par bibliothèque se calcule une fois
+# par requête (InitPlan, 21 policies), les vues de liste lisent la vue matérialisée elle-même (index servis).
+tests/sql/catalogue_grande_echelle_tests.sql
