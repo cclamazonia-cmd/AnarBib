@@ -15,15 +15,18 @@
 -- servi ; une forme qui l'interdit retombe en parcours séquentiel, compteur
 -- inchangé (vérifié au banc le 27/09 sur l'ancienne forme).
 --
--- Deux pièges des index PARTIELS, vécus au banc le 27/09 : sur une petite
--- table, un index partiel dont le prédicat (is_active) est dans la requête peut
--- être parcouru EN ENTIER, sans condition — c'est souvent le moins cher, et un
--- tel parcours reste un « parcours bitmap ». Pour l'index des alias (lui-même
--- partiel), T1 retire donc les autres index partiels de la table dans la
--- transaction du test (annulée à la fin), et exige que le GIN rende MOINS
--- d'entrées que la table n'a d'alias actifs (pg_stat_get_xact_tuples_returned) :
--- l'ancienne forme le parcourait en entier (201 entrées sur 201), la nouvelle
--- par ses conditions (0).
+-- Le piège des index PARTIELS (vécu au banc le 27/09, puis au CI le 28/09) :
+-- un index partiel dont le prédicat (is_active) est dans la requête peut être
+-- parcouru EN ENTIER, sans condition — c'est souvent le moins cher sur une
+-- petite table, et cela reste un « parcours bitmap », compteur compris.
+-- L'index des alias en est un, comme deux btree de sa table. Compter les
+-- entrées rendues ne tranche pas non plus : les entrées mortes laissées par les
+-- suites précédentes s'y ajoutent (203 pour 201 alias vivants au CI). T1
+-- retire donc, dans la transaction du test annulée à la fin, les index
+-- partiels de la table et recrée le GIN SANS prédicat : un index non partiel
+-- ne se parcourt que par une condition de la requête. Contre-épreuve au banc,
+-- dans l'état exact laissé par les suites du CI : nouvelle forme, 3 parcours ;
+-- ancienne forme, 0 (parcours séquentiel).
 --
 -- Couvre :
 --   T1 search_catalog_v1, sans compte, emprunte ses quatre index par leurs
@@ -45,7 +48,7 @@ DECLARE
   c_membre constant uuid := 'b33b33b3-0000-4000-8000-000000000001';
   v_author bigint; v_book bigint; v_book2 bigint; v_pub bigint;
   v_idx text[]; v_avant bigint[]; v_apres bigint[]; v_n int; v_txt text; v_err text;
-  v_tup bigint; r record;
+  r record;
 BEGIN
   -- ── Fixtures ──
   INSERT INTO public.libraries (id, slug, name, visibility_level, catalog_mode, network_mode, is_active)
@@ -84,33 +87,24 @@ BEGIN
   -- ─────────────────────────────────────────────────────────────────
   v_t := 'T1 search_catalog_v1 (sans compte) emprunte ses quatre index, par leurs conditions';
   BEGIN
-    -- 200 alias actifs qui ne répondent pas à la requête : un parcours sans
-    -- condition de l'index des alias les rendrait tous.
-    INSERT INTO public.author_name_aliases (author_id, alias_text, alias_norm, match_kind, is_active)
-    SELECT v_author, 'B33 remplissage ' || g, 'b33 remplissage ' || md5(g::text), 'manual', true
-      FROM generate_series(1, 200) g;
-    -- Les index partiels concurrents (uq_author_name_aliases_norm_active,
-    -- author_name_aliases_author_id_idx, même prédicat) sortent du jeu le temps
-    -- de la transaction du test : il ne reste que le GIN comme chemin d'index.
+    -- Les index partiels de la table des alias sortent du jeu le temps de la
+    -- transaction du test, et le GIN revient SANS prédicat (voir l'en-tête).
     FOR r IN SELECT x.indexrelid::regclass AS idx FROM pg_index x
               WHERE x.indrelid = 'public.author_name_aliases'::regclass AND x.indpred IS NOT NULL
-                AND x.indexrelid <> 'public.author_name_aliases_alias_norm_trgm_idx'::regclass
     LOOP
       EXECUTE format('DROP INDEX %s', r.idx);
     END LOOP;
-    SELECT count(*) INTO v_n FROM public.author_name_aliases WHERE is_active;
-    v_idx := ARRAY['public.author_name_aliases_alias_norm_trgm_idx', 'public.authors_preferred_name_norm_trgm_idx',
+    CREATE INDEX b33_epreuve_alias_norm_trgm ON public.author_name_aliases
+      USING gin (alias_norm extensions.gin_trgm_ops);
+    v_idx := ARRAY['public.b33_epreuve_alias_norm_trgm', 'public.authors_preferred_name_norm_trgm_idx',
                    'public.authors_sort_name_norm_trgm_idx', 'public.mv_books_catalog_list_v1_titulo_norm_trgm_idx'];
     SELECT array_agg(pg_stat_get_xact_numscans(i::regclass) ORDER BY o) INTO v_avant FROM unnest(v_idx) WITH ORDINALITY u(i, o);
-    v_tup := pg_stat_get_xact_tuples_returned('public.author_name_aliases_alias_norm_trgm_idx'::regclass);
     PERFORM set_config('request.jwt.claims', '', true);
     PERFORM count(*) FROM api.search_catalog_v1('zuleikha xylofonia');
     SELECT array_agg(pg_stat_get_xact_numscans(i::regclass) ORDER BY o) INTO v_apres FROM unnest(v_idx) WITH ORDINALITY u(i, o);
-    v_tup := pg_stat_get_xact_tuples_returned('public.author_name_aliases_alias_norm_trgm_idx'::regclass) - v_tup;
     SELECT string_agg(v_idx[k], ', ') INTO v_txt FROM generate_series(1, 4) k WHERE v_apres[k] <= v_avant[k];
-    IF v_txt IS NULL AND v_tup < v_n THEN v_passed := v_passed + 1;
-    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : jamais parcouru(s) : ' || coalesce(v_txt, '∅')
-      || ' ; index des alias : ' || v_tup || ' entrées rendues pour ' || v_n || ' alias actifs (toutes = parcours sans condition)'); END IF;
+    IF v_txt IS NULL THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : jamais parcouru(s) : ' || v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
