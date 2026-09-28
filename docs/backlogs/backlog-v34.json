@@ -5297,7 +5297,7 @@
       "id": "H17",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno",
@@ -5308,8 +5308,8 @@
         "pt": "O mapeamento UNIMARC aproveita as zonas correntes de um catálogo PMB"
       },
       "v": {
-        "fr": "La table `UNIMARC` de `marc.ts` (l. 55-74) ne reprend que 200 $a$e$f, 205, 210 $a$c$d, la première 101, 010, 011, 70x/71x $a$b et 60x $a. Elle ignore : **214** (publication, UNIMARC récent), **215** (pages), **225/410** (collection), **300/327/330** (notes, sommaire, résumé), **676/686** (classification), **856** (URL), **200 $h$i** (tomes), les subdivisions **60x $x$y$z** et **461/463** (dépouillement de périodique). **Zones présentes dans un export PMB réel** (jeu de test PMB 8.1, 26/09) : 001 009 010 100 101 102 200 210 **214** 215 225 300 319 327 330 410 461 462 463 464 530 606 610 676 700 701 702 710 711 801 856 896 995 996 — soit la liste de travail, dans cet ordre de fréquence à mesurer par **H16**.",
-        "pt": "A tabela `UNIMARC` de `marc.ts` (l. 55-74) só aproveita 200 $a$e$f, 205, 210 $a$c$d, a primeira 101, 010, 011, 70x/71x $a$b, 60x $a. Ignora 214, 215, 225/410, 300/327/330, 676/686, 856, 200 $h$i, subdivisões 60x $x$y$z e 461/463."
+        "fr": "La table `UNIMARC` de `marc.ts` (l. 55-74) ne reprend que 200 $a$e$f, 205, 210 $a$c$d, la première 101, 010, 011, 70x/71x $a$b et 60x $a. Elle ignore : **214** (publication, UNIMARC récent), **215** (pages), **225/410** (collection), **300/327/330** (notes, sommaire, résumé), **676/686** (classification), **856** (URL), **200 $h$i** (tomes), les subdivisions **60x $x$y$z** et **461/463** (dépouillement de périodique). **Zones présentes dans un export PMB réel** (jeu de test PMB 8.1, 26/09) : 001 009 010 100 101 102 200 210 **214** 215 225 300 319 327 330 410 461 462 463 464 530 606 610 676 700 701 702 710 711 801 856 896 995 996 — soit la liste de travail, dans cet ordre de fréquence à mesurer par **H16**. **Livré le 28/09** (`8c80de27`, migration `20260928111814`) : type de matériel déduit du guide (article MARC21 « b », fascicule de bulletin PMB lu comme périodique), pages, volume, collection d'une seule zone (225 ou 410), notes (300, 327, 330), classification, adresse électronique (856), périodique et article (ISSN de la revue hôte, numéro, date) ; chaque zone laissée exprès a un motif codé, traduit dans les 10 langues, et le rapport de couverture les distingue ; MARC21 : ponctuation ISBD retirée. Suite SQL `import_zones_tests` (13 blocs). Revue contradictoire H17/H18/H22 : 34 constats confirmés, corrigés. **Reste** : un import PMB réel en production ; rattacher à leur périodique (`serials`) les fascicules importés.",
+        "pt": "A tabela `UNIMARC` de `marc.ts` (l. 55-74) só aproveita 200 $a$e$f, 205, 210 $a$c$d, a primeira 101, 010, 011, 70x/71x $a$b, 60x $a. Ignora 214, 215, 225/410, 300/327/330, 676/686, 856, 200 $h$i, subdivisões 60x $x$y$z e 461/463. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): tipo de material pelo guia, páginas, volume, coleção, notas (300, 327, 330), classificação, endereço eletrônico (856), periódico e artigo (ISSN da revista); cada zona deixada de propósito tem um motivo codificado, nas 10 línguas. Suíte `import_zones_tests` (13 blocos). **Falta**: uma importação PMB real em produção; ligar os fascículos importados ao seu periódico (`serials`)."
       },
       "w": {
         "fr": "Étendre la table et la forme normalisée, zone par zone, dans l'ordre que donne le rapport de couverture (**H16**) sur le jeu de **H14** et sur l'échantillon de DIRA. Faire les mêmes ajouts côté MARC21 (300, 490, 5xx, 082, 856) pour garder la symétrie. Chaque champ nouveau suit la règle des trois endroits (`book_drafts`, `publish_book_draft`, `create_book_draft_from_book`). Un test par zone.",
@@ -5338,15 +5338,15 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — table `UNIMARC` de `marc.ts` relue au commit `f59bd81a`.",
-        "pt": "26/09 — tabela lida no commit `f59bd81a`."
+        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; aucun import MARC encore en production (0 run `marc_iso2709`) : rien à constater sur des données réelles.",
+        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; nenhuma importação MARC em produção ainda."
       }
     },
     {
       "id": "H18",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno",
@@ -5358,8 +5358,8 @@
         "pt": "As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade"
       },
       "v": {
-        "fr": "`authorNames()` (`marc.ts`) réduit chaque zone 70x/71x à une chaîne « $a, $b ». Les codes de rôle **$4** sont perdus, le numéro d'autorité **$3** aussi, et une collectivité (71x) devient un nom parmi d'autres. **Mesuré le 26/09 en production** : la table `authors` n'a aucune colonne `kind`, `entity_type`, `is_corporate`, `author_type` ni `type`. La nature se lit donc ailleurs, ou pas du tout (à instruire). La source de vérité des responsabilités est `book_contributors` (`book_authors` en est dérivée).",
-        "pt": "`authorNames()` reduz cada 70x/71x a uma cadeia «$a, $b»: perdem-se o papel ($4), a autoridade ($3) e a natureza (71x vira um nome qualquer). `authors` não tem coluna de tipo (a instruir). A verdade é `book_contributors`."
+        "fr": "`authorNames()` (`marc.ts`) réduit chaque zone 70x/71x à une chaîne « $a, $b ». Les codes de rôle **$4** sont perdus, le numéro d'autorité **$3** aussi, et une collectivité (71x) devient un nom parmi d'autres. **Mesuré le 26/09 en production** : la table `authors` n'a aucune colonne `kind`, `entity_type`, `is_corporate`, `author_type` ni `type`. La nature se lit donc ailleurs, ou pas du tout (à instruire). La source de vérité des responsabilités est `book_contributors` (`book_authors` en est dérivée). **Livré le 28/09** (`8c80de27`, migration `20260928111814`) : `book_contributors` et `book_draft_contributors` gagnent `nature` (personne, collectivité, congrès) et `role_code` (le code d'origine) ; tous les $4/$e sont lus, une 702 sans code devient « outro », l'URI de relation est gardée ; la nature et le code suivent la publication, la reprise d'une notice, la fusion de notices et la scission d'autorité. Les rapprochements d'autorité sont **proposés** en révision, jamais appliqués, en une seule passe pour tout le lot (`fn_conv_autorites_homonymes` : 44 ms en production pour le lot 63, contre plus de 60 s nom par nom) ; le rapport de révision aussi. Rattrapage des brouillons importés en cours (jamais un non-agent). Au passage : la reprise d'une notice effaçait, à la republication, ses champs article, thèse, zine, distributeur et le texte des sujets (aucune notice touchée en production). **Reste** : un import MARC réel en production (aujourd'hui 0 contributeur y porte une nature).",
+        "pt": "`authorNames()` reduz cada 70x/71x a uma cadeia «$a, $b»: perdem-se o papel ($4), a autoridade ($3) e a natureza (71x vira um nome qualquer). `authors` não tem coluna de tipo (a instruir). A verdade é `book_contributors`. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): `nature` (pessoa, coletividade, congresso) e `role_code` em `book_contributors` e nos rascunhos; todos os $4/$e lidos; natureza e código seguem publicação, retomada, fusão e cisão de autoridade. Aproximações de autoridade **propostas** na revisão, numa só passada (44 ms em produção para o lote 63). **Falta**: uma importação MARC real em produção."
       },
       "w": {
         "fr": "Rendre une forme structurée `{ nom, nature, rôle, référence d'autorité }`, avec une table de correspondance des codes $4 vers les rôles AnarBib. Alimenter `book_contributors` depuis les brouillons. Rapprocher les autorités par `fn_conv_autorite_homonyme` (la recherche par nom) et présenter les rapprochements en révision de lot, jamais d'office. Même travail en MARC21 (100/110/111/700/710/711, $e/$4).",
@@ -5390,8 +5390,8 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — `authors` sans colonne de nature (requête sur `information_schema`).",
-        "pt": "26/09 — `authors` sem coluna de natureza."
+        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; `fn_conv_autorites_homonymes(text[])` et `ingest.fn_h18_nom_d_auteur(jsonb)` en base ; 0 `book_contributors` et 0 `book_draft_contributors` avec une nature (0 run MARC en production) ; lot 63 : 1 395 contributeurs de brouillon.",
+        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; funções em produção; 0 contribuidor com natureza (nenhuma importação MARC)."
       }
     },
     {
@@ -5449,7 +5449,7 @@
       "id": "H20",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -5459,8 +5459,8 @@
         "pt": "O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado"
       },
       "v": {
-        "fr": "**Mesuré le 26/09 en production** : le 001 (`external_key`) va bien de `ingest.fn_create_book_drafts_from_import_rows` jusqu'à `books.source_record_id` (254 notices en portent un). Mais `books` est **partagée par le réseau**. Quand l'import rattache une notice à une notice déjà cataloguée par une autre bibliothèque, l'identifiant PMB n'a pas de place qui soit à la bibliothèque qui importe (à vérifier sur un cas réel). `book_holdings.local_bib_ref` existe (2 426 valeurs), mais elle porte la référence locale d'AnarBib, pas celle de PMB.",
-        "pt": "Medido em 26/09: o 001 vai até `books.source_record_id` (254 registros), mas `books` é **compartilhada pela rede**: quando a importação liga a um registro já existente, o identificador PMB não tem lugar da biblioteca que importa (a verificar). `book_holdings.local_bib_ref` carrega a referência local AnarBib."
+        "fr": "**Mesuré le 26/09 en production** : le 001 (`external_key`) va bien de `ingest.fn_create_book_drafts_from_import_rows` jusqu'à `books.source_record_id` (254 notices en portent un). Mais `books` est **partagée par le réseau**. Quand l'import rattache une notice à une notice déjà cataloguée par une autre bibliothèque, l'identifiant PMB n'a pas de place qui soit à la bibliothèque qui importe (à vérifier sur un cas réel). `book_holdings.local_bib_ref` existe (2 426 valeurs), mais elle porte la référence locale d'AnarBib, pas celle de PMB. **Livré le 28/09** (`8c80de27`, migration `20260928111812`) : table `book_external_ids` (notice, bibliothèque, schéma, valeur ; unique par bibliothèque), posée à la publication, au rapprochement d'un exemplaire et à l'absorption d'un brouillon importé ; elle suit la notice gardée d'une fusion (`fn_fusion_notices`), et une clé ne passe plus d'une notice à l'autre. Ce qui n'est pas un identifiant (numéro de ligne de staging, numéro de fascicule d'un CSV de périodiques, clé répétée dans un même run) est jugé en un seul lieu (`ingest.fn_h20_identifiant_d_origine`) et effacé à l'import ; un run ne se supprime plus tant qu'un exemplaire rapproché l'attend. Revue contradictoire : 14 constats confirmés, corrigés ; contre-épreuve à 11 mutants. Suite SQL `identifiant_origine_tests` (11).",
+        "pt": "Medido em 26/09: o 001 vai até `books.source_record_id` (254 registros), mas `books` é **compartilhada pela rede**: quando a importação liga a um registro já existente, o identificador PMB não tem lugar da biblioteca que importa (a verificar). `book_holdings.local_bib_ref` carrega a referência local AnarBib. **Entregue em 28/09** (`8c80de27`, migração `20260928111812`): tabela `book_external_ids` (única por biblioteca), gravada na publicação, na aproximação de exemplar e na absorção de rascunho; segue a notícia mantida numa fusão. O que não é identificador (número de linha, número de fascículo de CSV, chave repetida) é apagado na importação. Suíte `identifiant_origine_tests` (11)."
       },
       "w": {
         "fr": "Une table `book_external_ids (book_id, library_id, scheme, value)` avec un index unique `(library_id, scheme, value)`, alimentée à la publication d'un brouillon importé. Ou bien une colonne sur la détention, si elle suffit. Trancher après avoir lu comment `publish_book_draft` traite un brouillon rattaché à une notice existante.",
@@ -5489,8 +5489,8 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — 254 `books.source_record_id` ; `fn_create_book_drafts_from_import_rows` copie `external_key`.",
-        "pt": "26/09 — 254 `source_record_id`; a função copia `external_key`."
+        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; `book_external_ids` : 264 lignes, toutes MLEG (notices publiées reprises) ; lot 63 : 0 brouillon sur 1 673 garde un faux identifiant (colonne et miroir `marc_json`) ; run 29 : 0. Les 10 brouillons publiés dont l'identifiant diffère du calcul portent des clés saisies à la main (`CCLA-…`, sans ligne de staging) : hors du périmètre de l'effacement, laissés.",
+        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; `book_external_ids`: 264 linhas (MLEG); lote 63: 0 identificador falso em 1 673 rascunhos."
       }
     },
     {
@@ -5547,7 +5547,7 @@
       "id": "H22",
       "d": "H",
       "p": "P3",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "deno"
@@ -5557,8 +5557,8 @@
         "pt": "Ler o export XML próprio do PMB, se for preciso"
       },
       "v": {
-        "fr": "`looksLikeMarcXml()` n'accepte que du vrai MARCXML (`<record>`, `<datafield>`). À notre connaissance, PMB a aussi un XML qui lui est propre (`<notice><f c=\"200\">…`), que l'import ne reconnaîtrait pas. **Vérifié le 26/09 sur le banc** : l'export « UNIMARC PMB XML » est bien `<unimarc><notice><f c=\"200\"><s c=\"a\">…` et notre import rend `null` (figé par `pmb-fixtures-parseur`, fixture `pmb-8.1.1.1_jeu-de-test.pmbxml.xml`). PMB sait aussi sortir du « XML MARC » (sans espace de noms), que l'import lit déjà à l'identique de l'ISO 2709 : ce lecteur n'est utile que si une bibliothèque ne peut produire ni l'un ni l'autre.",
-        "pt": "`looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c=\"200\">`), não reconhecido. **Verificado em 26/09 no banco**: o XML próprio do PMB não é reconhecido; o « XML MARC » do PMB já é lido."
+        "fr": "`looksLikeMarcXml()` n'accepte que du vrai MARCXML (`<record>`, `<datafield>`). À notre connaissance, PMB a aussi un XML qui lui est propre (`<notice><f c=\"200\">…`), que l'import ne reconnaîtrait pas. **Vérifié le 26/09 sur le banc** : l'export « UNIMARC PMB XML » est bien `<unimarc><notice><f c=\"200\"><s c=\"a\">…` et notre import rend `null` (figé par `pmb-fixtures-parseur`, fixture `pmb-8.1.1.1_jeu-de-test.pmbxml.xml`). PMB sait aussi sortir du « XML MARC » (sans espace de noms), que l'import lit déjà à l'identique de l'ISO 2709 : ce lecteur n'est utile que si une bibliothèque ne peut produire ni l'un ni l'autre. **Livré le 28/09** (`8c80de27`) : sur décision de Xavier (« Écrire le lecteur »), l'import lit le XML propre à PMB (`<unimarc><notice><f c=\"…\">`) vers le même modèle que l'ISO 2709 ; format `pmb_xml` admis par la CHECK (migration `20260928111814`) ; la fixture `pmb-8.1.1.1_jeu-de-test.pmbxml.xml` donne les mêmes notices que l'ISO 2709.",
+        "pt": "`looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c=\"200\">`), não reconhecido. **Verificado em 26/09 no banco**: o XML próprio do PMB não é reconhecido; o « XML MARC » do PMB já é lido. **Entregue em 28/09** (`8c80de27`): por decisão de Xavier, a importação lê o XML próprio do PMB; formato `pmb_xml` admitido; a fixture dá as mesmas notícias que o ISO 2709."
       },
       "w": {
         "fr": "Seulement si une bibliothèque ne peut pas sortir de l'ISO 2709 ni du MARCXML. Il suffirait alors d'un lecteur vers le modèle commun de `marc.ts` (leader + zones), sans rien changer en aval.",
@@ -5585,15 +5585,15 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — fixture PMB XML versée, non reconnue (`pmb-fixtures-parseur`).",
-        "pt": "26/09 — fixture XML do PMB, não reconhecida."
+        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27`.",
+        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`."
       }
     },
     {
       "id": "H23",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno",
@@ -5604,8 +5604,8 @@
         "pt": "Um export UNIMARC (ISO 2709 e XML), espelho exato da importação"
       },
       "v": {
-        "fr": "`export-catalog-lote/serialize.ts` ne sait écrire que du CSV, du **MARCXML en MARC21** et du JSON (`SUPPORTED_FORMATS`). Son en-tête annonce « UNIMARC ISO 2709 / Dublin Core / BibTeX viendront ensuite » : aucun n'existe. PMB travaille nativement en UNIMARC. La correspondance des zones est écrite **deux fois**, dans `marc.ts` pour l'import et dans `serialize.ts` pour l'export, et rien ne garantit que les deux restent symétriques.",
-        "pt": "`serialize.ts` só escreve CSV, **MARCXML em MARC21** e JSON; o cabeçalho anuncia UNIMARC ISO 2709, DC e BibTeX, que não existem. O PMB trabalha em UNIMARC. A correspondência de zonas está escrita **duas vezes** (import e export), sem garantia de simetria."
+        "fr": "`export-catalog-lote/serialize.ts` ne sait écrire que du CSV, du **MARCXML en MARC21** et du JSON (`SUPPORTED_FORMATS`). Son en-tête annonce « UNIMARC ISO 2709 / Dublin Core / BibTeX viendront ensuite » : aucun n'existe. PMB travaille nativement en UNIMARC. La correspondance des zones est écrite **deux fois**, dans `marc.ts` pour l'import et dans `serialize.ts` pour l'export, et rien ne garantit que les deux restent symétriques. **Livré le 28/09** (`8c80de27`) : une table unique `_shared/marc/correspondance.ts`, lue par l'import et par l'écrivain `_shared/marc/ecriture.ts` ; UNIMARC en ISO 2709 (longueurs en octets UTF-8, zone trop longue découpée ou raccourcie, notice trop longue écartée et dite) et en XML ; MARC21 en ISO 2709 (008, 040) et MARCXML ; langues en ISO 639-2, pays de la 801, types de subdivision et dates d'une personne repris de l'origine quand rien ne les contredit. Les 64 notices PMB des fixtures font PMB → AnarBib → UNIMARC → réimport à l'identique (`pmb-aller-retour-export`, `ecriture.test.ts` 13 tests pontés). Revue contradictoire H23/H24 : 35 constats confirmés, corrigés.",
+        "pt": "`serialize.ts` só escreve CSV, **MARCXML em MARC21** e JSON; o cabeçalho anuncia UNIMARC ISO 2709, DC e BibTeX, que não existem. O PMB trabalha em UNIMARC. A correspondência de zonas está escrita **duas vezes** (import e export), sem garantia de simetria. **Entregue em 28/09** (`8c80de27`): uma tabela única `_shared/marc/correspondance.ts` para importação e exportação; UNIMARC ISO 2709 (comprimentos em bytes UTF-8) e XML; MARC21 ISO 2709 e MARCXML. As 64 notícias PMB das fixtures fazem ida e volta idênticas."
       },
       "w": {
         "fr": "Une seule table de correspondance partagée par l'import et l'export (`_shared/marc/`). Un écrivain ISO 2709 : les longueurs du répertoire se comptent en **octets UTF-8**, pas en caractères. Un leader correct et le jeu de caractères déclaré en 100 $a/26-29 (Unicode). Un MARCXML UNIMARC. Des tests `parse(serialize(x)) = x` sur la fixture.",
@@ -5634,15 +5634,15 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — `SUPPORTED_FORMATS = csv, marcxml, json` au commit `f59bd81a`.",
-        "pt": "26/09 — `csv, marcxml, json` no commit `f59bd81a`."
+        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; formats proposés par l'écran Importations : UNIMARC ISO 2709, UNIMARC XML, MARC21 ISO 2709, MARCXML, CSV, JSON.",
+        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`."
       }
     },
     {
       "id": "H24",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql",
@@ -5653,8 +5653,8 @@
         "pt": "O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores"
       },
       "v": {
-        "fr": "**Mesuré le 26/09 en production** : d'après la définition réelle de `fn_export_catalog_lote`, l'export livre les notices détenues par la bibliothèque, et rien de plus. **Aucun exemplaire** (ni tombo, ni cote, ni statut). Les auteurs sortent de `book_authors` (table dérivée), par leur seul `preferred_name`, sans rôle. Les sujets sont du texte découpé sur `;`/`,`, et non l'autorité du thésaurus. L'écrivain MARCXML met toujours `100 1_`, même pour une collectivité. Rien ne sort sur l'œuvre ni sur le périodique. **Côté PMB (banc, 26/09)** : même un export parfait perd en entrant dans PMB par sa fonction d'import par défaut (`func_bdp`) — 200 `$f`/`$g`, seconde 700, 606 fondues en une 610, Dewey tronquée à 5 caractères, propriétaire de la 995 ignoré (`tests/pmb/README.md`). À traiter dans **H27**.",
-        "pt": "Medido em 26/09 (definição real de `fn_export_catalog_lote`): **nenhum exemplar**; autores de `book_authors` (derivada) só pelo nome, sem papel; assuntos como texto cortado, não autoridade; `100 1_` até para coletividade; nada de obra nem periódico."
+        "fr": "**Mesuré le 26/09 en production** : d'après la définition réelle de `fn_export_catalog_lote`, l'export livre les notices détenues par la bibliothèque, et rien de plus. **Aucun exemplaire** (ni tombo, ni cote, ni statut). Les auteurs sortent de `book_authors` (table dérivée), par leur seul `preferred_name`, sans rôle. Les sujets sont du texte découpé sur `;`/`,`, et non l'autorité du thésaurus. L'écrivain MARCXML met toujours `100 1_`, même pour une collectivité. Rien ne sort sur l'œuvre ni sur le périodique. **Côté PMB (banc, 26/09)** : même un export parfait perd en entrant dans PMB par sa fonction d'import par défaut (`func_bdp`) — 200 `$f`/`$g`, seconde 700, 606 fondues en une 610, Dewey tronquée à 5 caractères, propriétaire de la 995 ignoré (`tests/pmb/README.md`). À traiter dans **H27**. **Livré le 28/09** (`8c80de27`, migration `20260928111816`) : `fn_export_catalog_lote(p_library_id, p_apres, p_limite)` réécrite depuis sa définition réelle : identifiant d'origine de la bibliothèque (001), référence locale, responsabilités (`book_contributors`, rôle, nature, code), sujets du thésaurus dans la langue de la bibliothèque, mots-clés, exemplaires de cette seule bibliothèque, œuvre, périodique (numéro, date), article (revue hôte). **Réémission prudente** décidée par Xavier (REGISTRE IMP-22) : seules les zones qu'AnarBib ne tient pas, et seulement pour la bibliothèque d'où vient la notice (destination d'un dépôt compagnon comprise) ; jamais 001/005/100/995/996 d'origine. Suite SQL `export_catalogue_tests` (10). **Reste** : rattacher les fascicules importés à leur périodique (la 461 vers la notice de titre) ; les imports antérieurs au 28/09 n'ont pas gardé leur zone d'exemplaire (`item_tag`), l'export retombe alors sur celle du dialecte ; contre-épreuve par mutants de la RPC encore partielle.",
+        "pt": "Medido em 26/09 (definição real de `fn_export_catalog_lote`): **nenhum exemplar**; autores de `book_authors` (derivada) só pelo nome, sem papel; assuntos como texto cortado, não autoridade; `100 1_` até para coletividade; nada de obra nem periódico. **Entregue em 28/09** (`8c80de27`, migração `20260928111816`): `fn_export_catalog_lote` reescrita: identificador de origem da biblioteca, responsabilidades com papel e natureza, assuntos do tesauro, exemplares só dessa biblioteca, obra, periódico, artigo; **reemissão prudente** (REGISTRE IMP-22). **Falta**: ligar fascículos ao periódico; importações anteriores a 28/09 sem `item_tag`; mutantes da RPC parciais."
       },
       "w": {
         "fr": "Réécrire `fn_export_catalog_lote` **depuis sa définition réelle**. Y mettre : les exemplaires de la bibliothèque, et d'elle seule ; `book_contributors` avec rôle, nature et autorité ; les sujets du thésaurus avec leurs subdivisions ; collection, notes, périodique (461), œuvre (titre uniforme) ; en 001 l'identifiant d'origine (**H20**), sinon le `bib_ref`, et les autres identifiants en 035. **À trancher** : réémettre les zones non reprises depuis `books.marc_json` pour les notices venues de PMB. On y gagne en fidélité, mais on risque de réémettre une valeur périmée si la notice a été retouchée depuis.",
@@ -5683,15 +5683,15 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — définition de `fn_export_catalog_lote` lue en production.",
-        "pt": "26/09 — definição lida em produção."
+        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; signature en production : `fn_export_catalog_lote(p_library_id uuid, p_apres bigint, p_limite integer)`.",
+        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; assinatura em produção com paginação."
       }
     },
     {
       "id": "H25",
       "d": "H",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "deno",
@@ -5702,8 +5702,8 @@
         "pt": "Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar"
       },
       "v": {
-        "fr": "Aucun export d'autorités n'existe (personnes, collectivités, sujets). PMB importe ses autorités à part. Sans elles, un export qui porte des références d'autorité en $3 (**H24**) pointe dans le vide, et PMB recrée une autorité par notice.",
-        "pt": "Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro."
+        "fr": "Aucun export d'autorités n'existe (personnes, collectivités, sujets). PMB importe ses autorités à part. Sans elles, un export qui porte des références d'autorité en $3 (**H24**) pointe dans le vide, et PMB recrée une autorité par notice. **En cours le 28/09** (non poussé) : `fn_export_authorities_lote` (noms liés aux notices que la bibliothèque détient, formes rejetées, VIAF/ISNI/Wikidata/IdRef/LCCN ; sujets du thésaurus et leurs ancêtres) et l'écrivain `_shared/marc/autorites.ts` (UNIMARC Autorités : 200/210/250, 4XX, 550, 801 $b AnarBib ; 001 = le $3 des notices exportées). **Essai sur le banc PMB** : les autorités importées d'abord, puis les notices avec « Tenir compte des notices d'autorités » et l'origine AnarBib — les notices se rattachent aux fiches importées au lieu d'en recréer.",
+        "pt": "Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Em curso em 28/09**: `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); no banco PMB, as notícias se ligam às fichas importadas em vez de recriá-las."
       },
       "w": {
         "fr": "Sérialiser les autorités de la bibliothèque (celles qui sont liées à ses notices) en UNIMARC Autorités : 200/210/250, formes rejetées en 4xx, liens en 5xx. Le SKOS du thésaurus existe déjà (`thesaurus.ttl`) et peut servir de source pour les sujets.",
@@ -5734,7 +5734,7 @@
       "id": "H26",
       "d": "H",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno"
@@ -5744,8 +5744,8 @@
         "pt": "O export de um catálogo grande não depende mais da memória de uma edge function"
       },
       "v": {
-        "fr": "`export-catalog-lote` construit tout le fichier en mémoire, en une seule réponse. `export-fonds-bundle` est déjà plafonné (150 fichiers, 80 Mo) pour la même raison. **Mesuré le 26/09 en production** : le plus gros catalogue du réseau compte 2 184 détentions. Personne n'a mesuré la limite réelle. La taille du catalogue de DIRA est inconnue.",
-        "pt": "`export-catalog-lote` monta tudo em memória; `export-fonds-bundle` já é limitado (150 arquivos, 80 MB). Maior catálogo da rede: 2 184 detenções (26/09). Limite real não medida; tamanho da DIRA desconhecido."
+        "fr": "`export-catalog-lote` construit tout le fichier en mémoire, en une seule réponse. `export-fonds-bundle` est déjà plafonné (150 fichiers, 80 Mo) pour la même raison. **Mesuré le 26/09 en production** : le plus gros catalogue du réseau compte 2 184 détentions. Personne n'a mesuré la limite réelle. La taille du catalogue de DIRA est inconnue. **Livré le 28/09** (`8c80de27`) : la RPC d'export se lit par pages (`p_apres`, `p_limite`) et l'écran Importations assemble le fichier lui-même : plus aucune edge function ne tient le catalogue en mémoire. **Mesuré** (REGISTRE IMP-24) : 306 ms en production pour les 2 167 notices de BTL ; écriture ISO 2709 de 2 200 notices en 333 ms (1 167 ms avant), XML en 162 ms (427 ms avant). **Reste** : la mesure à 10 000 et 50 000 notices (`export-mesure-h26.test.js`, sauté par défaut) sur un catalogue synthétique, et la taille réelle de DIRA (**G15**).",
+        "pt": "`export-catalog-lote` monta tudo em memória; `export-fonds-bundle` já é limitado (150 arquivos, 80 MB). Maior catálogo da rede: 2 184 detenções (26/09). Limite real não medida; tamanho da DIRA desconhecido. **Entregue em 28/09** (`8c80de27`): exportação paginada, arquivo montado pela tela Importações; 306 ms em produção para as 2 167 notícias da BTL. **Falta**: medir 10 000 e 50 000 notícias."
       },
       "w": {
         "fr": "Mesurer la limite avec un catalogue synthétique (10 000 et 50 000 notices). Si elle est trop basse, passer à une génération asynchrone : un travail en file, le fichier déposé dans le Storage, un lien envoyé quand il est prêt.",
@@ -5772,8 +5772,8 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — plus gros catalogue : 2 184 détentions.",
-        "pt": "26/09 — maior catálogo: 2 184 detenções."
+        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; mesures au REGISTRE IMP-24.",
+        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`."
       }
     },
     {

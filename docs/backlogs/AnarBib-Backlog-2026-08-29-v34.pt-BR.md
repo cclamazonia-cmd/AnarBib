@@ -1237,16 +1237,16 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H28** | Um arquivo MARC ISO 2709 é importado: o formato detectado é aceito pela base | `P1` | A verificar |
 | **H15** | A importação lê um arquivo que não está em UTF-8 em vez de corrompê-lo em silêncio | `P1` | A verificar |
 | **H16** | Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada | `P1` | A verificar |
-| **H17** | O mapeamento UNIMARC aproveita as zonas correntes de um catálogo PMB | `P1` | Aberto |
-| **H18** | As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade | `P1` | Aberto |
+| **H17** | O mapeamento UNIMARC aproveita as zonas correntes de um catálogo PMB | `P1` | A verificar |
+| **H18** | As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade | `P1` | A verificar |
 | **H19** | Os exemplares de um catálogo importado (995 UNIMARC, 852 MARC21) viram exemplares AnarBib | `P1` | A verificar |
-| **H20** | O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado | `P1` | Aberto |
+| **H20** | O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado | `P1` | A verificar |
 | **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | Aberto |
-| **H22** | Ler o export XML próprio do PMB, se for preciso | `P3` | Aberto |
-| **H23** | Um export UNIMARC (ISO 2709 e XML), espelho exato da importação | `P1` | Aberto |
-| **H24** | O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores | `P1` | Aberto |
-| **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | Aberto |
-| **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | Aberto |
+| **H22** | Ler o export XML próprio do PMB, se for preciso | `P3` | A verificar |
+| **H23** | Um export UNIMARC (ISO 2709 e XML), espelho exato da importação | `P1` | A verificar |
+| **H24** | O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores | `P1` | A verificar |
+| **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | Em curso |
+| **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H27** | A prova do ida-e-volta: um teste de CI, uma reimportação real no PMB e a tabela pública do que passa | `P1` | Aberto |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
@@ -1381,11 +1381,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H17 — O mapeamento UNIMARC aproveita as zonas correntes de um catálogo PMB
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
 
-**Estado.** A tabela `UNIMARC` de `marc.ts` (l. 55-74) só aproveita 200 $a$e$f, 205, 210 $a$c$d, a primeira 101, 010, 011, 70x/71x $a$b, 60x $a. Ignora 214, 215, 225/410, 300/327/330, 676/686, 856, 200 $h$i, subdivisões 60x $x$y$z e 461/463.
+**Estado.** A tabela `UNIMARC` de `marc.ts` (l. 55-74) só aproveita 200 $a$e$f, 205, 210 $a$c$d, a primeira 101, 010, 011, 70x/71x $a$b, 60x $a. Ignora 214, 215, 225/410, 300/327/330, 676/686, 856, 200 $h$i, subdivisões 60x $x$y$z e 461/463. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): tipo de material pelo guia, páginas, volume, coleção, notas (300, 327, 330), classificação, endereço eletrônico (856), periódico e artigo (ISSN da revista); cada zona deixada de propósito tem um motivo codificado, nas 10 línguas. Suíte `import_zones_tests` (13 blocos). **Falta**: uma importação PMB real em produção; ligar os fascículos importados ao seu periódico (`serials`).
 
-*Verificado : 26/09 — tabela lida no commit `f59bd81a`.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; nenhuma importação MARC em produção ainda.*
 
 **O que é.** Estender a tabela zona por zona, na ordem dada por **H16** sobre **H14** e a amostra da DIRA; mesmos acréscimos em MARC21. Cada campo novo segue a regra dos três lugares. Um teste por zona.
 
@@ -1402,11 +1402,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H18 — As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, biblioteconomia
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, biblioteconomia
 
-**Estado.** `authorNames()` reduz cada 70x/71x a uma cadeia «$a, $b»: perdem-se o papel ($4), a autoridade ($3) e a natureza (71x vira um nome qualquer). `authors` não tem coluna de tipo (a instruir). A verdade é `book_contributors`.
+**Estado.** `authorNames()` reduz cada 70x/71x a uma cadeia «$a, $b»: perdem-se o papel ($4), a autoridade ($3) e a natureza (71x vira um nome qualquer). `authors` não tem coluna de tipo (a instruir). A verdade é `book_contributors`. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): `nature` (pessoa, coletividade, congresso) e `role_code` em `book_contributors` e nos rascunhos; todos os $4/$e lidos; natureza e código seguem publicação, retomada, fusão e cisão de autoridade. Aproximações de autoridade **propostas** na revisão, numa só passada (44 ms em produção para o lote 63). **Falta**: uma importação MARC real em produção.
 
-*Verificado : 26/09 — `authors` sem coluna de natureza.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; funções em produção; 0 contribuidor com natureza (nenhuma importação MARC).*
 
 **O que é.** Forma estruturada `{nome, natureza, papel, autoridade}`, tabela $4 → papéis AnarBib; alimentar `book_contributors`; aproximação de autoridades por `fn_conv_autorite_homonyme`, apresentada na revisão de lote, nunca de ofício. Idem MARC21.
 
@@ -1446,11 +1446,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H20 — O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado.** Medido em 26/09: o 001 vai até `books.source_record_id` (254 registros), mas `books` é **compartilhada pela rede**: quando a importação liga a um registro já existente, o identificador PMB não tem lugar da biblioteca que importa (a verificar). `book_holdings.local_bib_ref` carrega a referência local AnarBib.
+**Estado.** Medido em 26/09: o 001 vai até `books.source_record_id` (254 registros), mas `books` é **compartilhada pela rede**: quando a importação liga a um registro já existente, o identificador PMB não tem lugar da biblioteca que importa (a verificar). `book_holdings.local_bib_ref` carrega a referência local AnarBib. **Entregue em 28/09** (`8c80de27`, migração `20260928111812`): tabela `book_external_ids` (única por biblioteca), gravada na publicação, na aproximação de exemplar e na absorção de rascunho; segue a notícia mantida numa fusão. O que não é identificador (número de linha, número de fascículo de CSV, chave repetida) é apagado na importação. Suíte `identifiant_origine_tests` (11).
 
-*Verificado : 26/09 — 254 `source_record_id`; a função copia `external_key`.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; `book_external_ids`: 264 linhas (MLEG); lote 63: 0 identificador falso em 1 673 rascunhos.*
 
 **O que é.** Tabela `book_external_ids (book_id, library_id, scheme, value)` com índice único, alimentada na publicação; ou coluna na detenção se bastar. Decidir depois de ler `publish_book_draft` no caso de registro existente.
 
@@ -1488,11 +1488,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H22 — Ler o export XML próprio do PMB, se for preciso
 
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
+`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
 
-**Estado.** `looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c="200">`), não reconhecido. **Verificado em 26/09 no banco**: o XML próprio do PMB não é reconhecido; o « XML MARC » do PMB já é lido.
+**Estado.** `looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c="200">`), não reconhecido. **Verificado em 26/09 no banco**: o XML próprio do PMB não é reconhecido; o « XML MARC » do PMB já é lido. **Entregue em 28/09** (`8c80de27`): por decisão de Xavier, a importação lê o XML próprio do PMB; formato `pmb_xml` admitido; a fixture dá as mesmas notícias que o ISO 2709.
 
-*Verificado : 26/09 — fixture XML do PMB, não reconhecida.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`.*
 
 **O que é.** Só se uma biblioteca não conseguir sair do ISO 2709 nem do MARCXML: um leitor para o modelo comum de `marc.ts`.
 
@@ -1508,11 +1508,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H23 — Um export UNIMARC (ISO 2709 e XML), espelho exato da importação
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
 
-**Estado.** `serialize.ts` só escreve CSV, **MARCXML em MARC21** e JSON; o cabeçalho anuncia UNIMARC ISO 2709, DC e BibTeX, que não existem. O PMB trabalha em UNIMARC. A correspondência de zonas está escrita **duas vezes** (import e export), sem garantia de simetria.
+**Estado.** `serialize.ts` só escreve CSV, **MARCXML em MARC21** e JSON; o cabeçalho anuncia UNIMARC ISO 2709, DC e BibTeX, que não existem. O PMB trabalha em UNIMARC. A correspondência de zonas está escrita **duas vezes** (import e export), sem garantia de simetria. **Entregue em 28/09** (`8c80de27`): uma tabela única `_shared/marc/correspondance.ts` para importação e exportação; UNIMARC ISO 2709 (comprimentos em bytes UTF-8) e XML; MARC21 ISO 2709 e MARCXML. As 64 notícias PMB das fixtures fazem ida e volta idênticas.
 
-*Verificado : 26/09 — `csv, marcxml, json` no commit `f59bd81a`.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`.*
 
 **O que é.** Uma só tabela de correspondência compartilhada (`_shared/marc/`); escritor ISO 2709 (comprimentos em **bytes UTF-8**); leader e 100 $a/26-29 corretos; MARCXML UNIMARC; testes `parse(serialize(x)) = x`.
 
@@ -1529,11 +1529,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H24 — O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
 
-**Estado.** Medido em 26/09 (definição real de `fn_export_catalog_lote`): **nenhum exemplar**; autores de `book_authors` (derivada) só pelo nome, sem papel; assuntos como texto cortado, não autoridade; `100 1_` até para coletividade; nada de obra nem periódico.
+**Estado.** Medido em 26/09 (definição real de `fn_export_catalog_lote`): **nenhum exemplar**; autores de `book_authors` (derivada) só pelo nome, sem papel; assuntos como texto cortado, não autoridade; `100 1_` até para coletividade; nada de obra nem periódico. **Entregue em 28/09** (`8c80de27`, migração `20260928111816`): `fn_export_catalog_lote` reescrita: identificador de origem da biblioteca, responsabilidades com papel e natureza, assuntos do tesauro, exemplares só dessa biblioteca, obra, periódico, artigo; **reemissão prudente** (REGISTRE IMP-22). **Falta**: ligar fascículos ao periódico; importações anteriores a 28/09 sem `item_tag`; mutantes da RPC parciais.
 
-*Verificado : 26/09 — definição lida em produção.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; assinatura em produção com paginação.*
 
 **O que é.** Reescrever `fn_export_catalog_lote` **a partir da definição real**: exemplares da biblioteca (só dela), `book_contributors`, assuntos do tesauro, coleção, notas, periódico, obra, 001 de origem (**H20**) ou `bib_ref`, 035. **A decidir**: reemitir as zonas não aproveitadas de `books.marc_json` (fidelidade vs valor defasado).
 
@@ -1550,9 +1550,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H25 — Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
 
-**Estado.** Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro.
+**Estado.** Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Em curso em 28/09**: `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); no banco PMB, as notícias se ligam às fichas importadas em vez de recriá-las.
 
 *Constato de 29/08, não reverificado desde então.*
 
@@ -1570,11 +1570,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H26 — O export de um catálogo grande não depende mais da memória de uma edge function
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript
 
-**Estado.** `export-catalog-lote` monta tudo em memória; `export-fonds-bundle` já é limitado (150 arquivos, 80 MB). Maior catálogo da rede: 2 184 detenções (26/09). Limite real não medida; tamanho da DIRA desconhecido.
+**Estado.** `export-catalog-lote` monta tudo em memória; `export-fonds-bundle` já é limitado (150 arquivos, 80 MB). Maior catálogo da rede: 2 184 detenções (26/09). Limite real não medida; tamanho da DIRA desconhecido. **Entregue em 28/09** (`8c80de27`): exportação paginada, arquivo montado pela tela Importações; 306 ms em produção para as 2 167 notícias da BTL. **Falta**: medir 10 000 e 50 000 notícias.
 
-*Verificado : 26/09 — maior catálogo: 2 184 detenções.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`.*
 
 **O que é.** Medir a limite com catálogo sintético (10 000, 50 000); se baixa, geração assíncrona (fila, arquivo no Storage, link quando pronto).
 
