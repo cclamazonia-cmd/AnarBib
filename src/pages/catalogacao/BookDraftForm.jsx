@@ -85,6 +85,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     })();
     return () => { cancelled = true; };
   }, [form.id, form.published_book_id, importedCheck]);
+  // IMP-25 (28/09/2026) : un fichier MARC lu avec sa zone d'exemplaire (995 /
+  // 852) qui n'en décrit aucun pour cette notice — la publication n'en crée pas
+  // (publish_book_draft). Un CSV ou un RIS garde l'exemplaire automatique.
+  const fichierSansExemplaire = useMemo(() => {
+    try { return !!JSON.parse(form.marc_json || '{}')?.ingest?.raw_payload?.item_tag; } catch { return false; }
+  }, [form.marc_json]);
 
   // Scroll vers le message quand il apparaît (chantier E — UX erreurs)
   const showMsg = useCallback((text, kind) => {
@@ -2386,7 +2392,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         {!f('published_book_id') && (
           <InitialCopiesBlock importedItems={importedItems} copies={f('initial_copies')}
             libraryIdValue={f('initial_copies_library_id')} isNetworkAdmin={isNetworkAdmin}
-            libraries={catalogLibraries} onChange={set} />
+            libraries={catalogLibraries} onChange={set} fichierSansExemplaire={fichierSansExemplaire} />
         )}
 
         {/* ── Action buttons ─────────────────────────── */}

@@ -964,12 +964,6 @@
    "work": {
     "title": "Géo"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Géographie",
    "place": "Paris",
    "title": "Géo",
@@ -1005,12 +999,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Afghanistan",
    "title": "Paysages afghans",
    "source": {
@@ -1043,12 +1031,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Afghanistan",
    "title": "Peuples d'Afghanistan",
    "source": {
@@ -1081,12 +1063,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Afghanistan",
    "title": "Tribus Pachtounes",
    "source": {
@@ -1118,12 +1094,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Afghanistan",
    "title": "femmes afghanes",
    "source": {
@@ -1156,12 +1126,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Afghanistan",
    "title": "Histoire de l'Afghanistan",
    "source": {
@@ -1193,12 +1157,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Islam; Afghanistan",
    "title": "Islam afghan",
    "source": {
@@ -1230,12 +1188,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "title": "Famille Allix",
    "source": {
     "leader": "00568naa2 22001811i 450 ",
@@ -1267,12 +1219,6 @@
     "date": "2004-08-04",
     "number": "277"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Palavras-chave importadas: chateau; loire; chenonceau; chambord; cheverny\n\nAssuntos importados: Voyage; Pays de la Loire",
    "title": "Chateaux de la Loire (1)",
    "source": {
@@ -1305,12 +1251,6 @@
     "date": "2004-08-04",
     "number": "278"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Economie; Argentine; Mondialisation",
    "title": "Crise en Argentine",
    "source": {
@@ -1343,12 +1283,6 @@
     "date": "2004-08-04",
     "number": "278"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Palavras-chave importadas: australie; aborigènes; désert\n\nAssuntos importados: Australie",
    "title": "Australie vue par J.-P. Ferrero",
    "source": {
@@ -1381,12 +1315,6 @@
     "date": "2004-08-04",
     "number": "278"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Madagascar",
    "title": "Bagnes à Madagascar",
    "source": {
@@ -1419,12 +1347,6 @@
     "date": "2004-08-04",
     "number": "278"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Voyage",
    "title": "Tatars de Crimée",
    "source": {
@@ -1456,12 +1378,6 @@
     "date": "2004-08-04",
     "number": "278"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Afrique",
    "title": "Marigot africain",
    "source": {
@@ -1494,12 +1410,6 @@
     "date": "2004-08-04",
     "number": "278"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Assuntos importados: Pays de la Loire",
    "title": "Chateaux de la Loire (2)",
    "source": {
@@ -1807,12 +1717,6 @@
     "title": "Tours. N°65. Flle 78"
    },
    "year": "1765",
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Carte de Cassini\n\nCote : Ge FF 18595 (65) BNF Richelieu Cartes et Plans Reprod. Sc 96/614\n. - Carte levée entre 1760 et 1762 par Bottin, Langelay, vérifiée en 1763 et 1764 par La Briffe Ponsan. Lettre par Chambon. 78e feuille publiée.\n\nEndereço eletrônico: http://gallica.bnf.fr/scripts/ConsultationTout.exe?O=07711576\n\nPalavras-chave importadas: Tours; Indre-et-Loire; France\n\nAssuntos importados: Centre",
    "place": "Paris",
    "title": "Tours. N°65. Flle 78",
@@ -1991,12 +1895,6 @@
     "title": "Études archéologiques dans la Loire-Inférieure, ..."
    },
    "year": "1865",
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Palavras-chave importadas: Loire-Atlantique\n\nAssuntos importados: Pays de la Loire",
    "pages": 140,
    "place": "Nantes",
@@ -2034,12 +1932,6 @@
     "title": "Germinal"
    },
    "year": "1995",
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "place": "Paris",
    "title": "Germinal",
    "source": {
@@ -2172,12 +2064,6 @@
     "title": "278"
    },
    "year": "2004",
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "C'est un très bon bulletin",
    "title": "278",
    "source": {
@@ -2538,12 +2424,6 @@
     "title": "Chroniques de l’entraide ouvrière"
    },
    "year": "2024",
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "place": "Marseille",
    "title": "Chroniques de l’entraide ouvrière",
    "source": {
@@ -2732,12 +2612,6 @@
     "title": "Le Rat des bibliothèques"
    },
    "year": "2018",
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "place": "Lyon",
    "title": "Le Rat des bibliothèques",
    "source": {
@@ -2772,12 +2646,6 @@
     "date": "2025-03-01",
     "number": "12"
    },
-   "items": [
-    {
-     "visibility": "public",
-     "circulationPolicy": "emprestavel"
-    }
-   ],
    "notes": "Retour d’expérience d’un centre de documentation qui a abandonné la CDU pour un plan de classement décidé en assemblée.\n\nPalavras-chave importadas: Classification décimale universelle; Critique et interprétation",
    "title": "Classer sans dominer",
    "source": {

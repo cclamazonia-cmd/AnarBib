@@ -15,7 +15,7 @@
 //   3. aucun des deux n'écrit le formulaire ni ne lit un état du parent.
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -71,5 +71,28 @@ describe('exemplaires initiaux (E6 lot 6) — réellement montés', () => {
     }
     // la publication lit toujours ces deux champs dans le parent
     expect(form).toMatch(/initial_copies: Math\.max\(1, Math\.min\(50, parseInt\(f\('initial_copies'\), 10\) \|\| 1\)\)/);
+  });
+});
+
+// IMP-25 (28/09/2026) : une fiche importée d'un fichier MARC qui ne lui décrit
+// aucun exemplaire n'en reçoit pas à la publication ; le bloc le dit au lieu
+// d'offrir un nombre d'exemplaires qui ne serait pas créé. L'écran et la base
+// lisent le même signe : marc_json.ingest.raw_payload.item_tag.
+describe('exemplaires initiaux (IMP-25) — un fichier MARC sans exemplaire n’en fait pas créer', () => {
+  it('le parent passe le signe, lu dans marc_json, et le bloc dit qu’aucun ne sera créé', () => {
+    const mount = form.indexOf('<InitialCopiesBlock');
+    expect(form.slice(mount, form.indexOf('/>', mount))).toMatch(/fichierSansExemplaire=\{fichierSansExemplaire\}/);
+    expect(form).toMatch(/JSON\.parse\(form\.marc_json \|\| '\{\}'\)\?\.ingest\?\.raw_payload\?\.item_tag/);
+    expect(copies).toMatch(/data-testid="copies-none-imported"/);
+    expect(copies).toMatch(/catalogacao\.publish\.copiesNoneImported/);
+    // l'exemplaire importé l'emporte : le message « aucun » ne vient qu'après
+    expect(copies.indexOf('copies-imported')).toBeLessThan(copies.indexOf('copies-none-imported'));
+  });
+
+  it('la base applique la même règle (dernière définition de publish_book_draft)', () => {
+    const dir = path.resolve(here, '..', '..', 'supabase', 'migrations');
+    const derniere = readdirSync(dir).filter((n) => /^\d{14}_.*\.sql$/.test(n)).sort()
+      .filter((n) => /CREATE OR REPLACE FUNCTION public\.publish_book_draft\(/i.test(readFileSync(path.join(dir, n), 'utf8'))).pop();
+    expect(readFileSync(path.join(dir, derniere), 'utf8')).toMatch(/v_draft\.marc_json->'ingest'->'raw_payload' \? 'item_tag' then 0/);
   });
 });

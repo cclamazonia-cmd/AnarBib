@@ -2,12 +2,13 @@
 // Le bloc « exemplaires initiaux » d'une fiche non encore publiée, sorti de
 // BookDraftForm.jsx sans en changer une ligne : le nombre d'exemplaires à créer
 // à la publication et, pour l'administration du réseau, la bibliothèque qui les
-// reçoit ; ou le rappel qu'un import les a déjà fournis. Le bloc n'écrit pas le
+// reçoit ; ou le rappel qu'un import les a déjà fournis ; ou, IMP-25 (28/09),
+// qu'un fichier MARC n'en décrit aucun et qu'aucun ne sera créé. Le bloc n'écrit pas le
 // formulaire : chaque saisie remonte par `onChange(champ, valeur)`, câblé sur
 // `set` du parent. Le parent décide de l'afficher (fiche non publiée).
 import { useIntl } from 'react-intl';
 
-export default function InitialCopiesBlock({ importedItems, copies, libraryIdValue, isNetworkAdmin, libraries, onChange }) {
+export default function InitialCopiesBlock({ importedItems, copies, libraryIdValue, isNetworkAdmin, libraries, onChange, fichierSansExemplaire }) {
   const { formatMessage: t } = useIntl();
   return (
     <div style={{ marginTop: 16, padding: 12, borderRadius: 10, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.15)' }}>
@@ -15,6 +16,10 @@ export default function InitialCopiesBlock({ importedItems, copies, libraryIdVal
       {importedItems > 0 ? (
         <div data-testid="copies-imported" style={{ fontSize: '.8rem' }}>
           {t({ id: 'catalogacao.publish.copiesImported' }, { n: importedItems })}
+        </div>
+      ) : fichierSansExemplaire ? (
+        <div data-testid="copies-none-imported" style={{ fontSize: '.8rem' }}>
+          {t({ id: 'catalogacao.publish.copiesNoneImported' })}
         </div>
       ) : (
       <div className="cat-book-grid">

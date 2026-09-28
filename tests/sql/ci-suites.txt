@@ -602,3 +602,6 @@ tests/sql/recherche_sigles_tests.sql
 
 # Tâches internes : créer, instancier, régénérer — les chemins empruntés (29/09, suite de F6)
 tests/sql/taches_sept_etats_tests.sql
+# 28/09 (IMP-25) : une notice importee d'un fichier MARC qui ne lui decrit aucun exemplaire n'en recoit pas
+# d'automatique ; un CSV garde le sien ; une notice MARC avec exemplaires a exactement les siens.
+tests/sql/import_sans_exemplaire_tests.sql

@@ -222,7 +222,7 @@ n'est liée à une fiche qu'après la révision (propositions, jamais d'office).
 | | PMB d'origine | après le réimport |
 |---|---|---|
 | notices | 62 (44 monographies, 2 périodiques, 15 articles, 1 bulletin) | 64 (44 monographies, 5 périodiques, 15 articles) |
-| exemplaires | 46 (dont 2 sur des bulletins) | 53 |
+| exemplaires | 46 (dont 2 sur des bulletins) | 46 |
 | bulletins · dépouillements | 3 · 15 | 3 · 15 |
 | responsabilités · auteurs | 61 · 57 | 61 · 57 |
 | éditeurs employés | 36 | 36 |
@@ -237,11 +237,14 @@ Chaque écart a sa cause :
   de fascicule ; AnarBib les lit comme des fascicules de périodique, qui
   reviennent en notices de périodique, sans lien vers leur titre (reste de
   **H24** : rattacher les fascicules à leur périodique).
-- **+7 exemplaires** : à la publication, AnarBib donne un exemplaire
-  automatique à toute notice qui n'en a pas (22 ici : périodiques, articles,
-  ressources en ligne) ; l'export les rend ; PMB refuse les 15 posés sur des
-  articles et crée les 7 autres. **À trancher** : une notice importée sans
-  exemplaire devrait-elle en recevoir un ?
+- **Exemplaires, 46 = 46** : les 2 exemplaires rattachés à des bulletins
+  reviennent sur les notices qui représentent ces bulletins. Mesuré d'abord à
+  53 : la publication donnait un exemplaire automatique aux 22 notices qui
+  n'en ont pas (périodiques, articles, ressources en ligne), et PMB refusait
+  les 15 posés sur des articles. Depuis **IMP-25** (décision de Xavier,
+  28/09), une notice importée d'un fichier MARC qui ne lui décrit aucun
+  exemplaire n'en reçoit plus (un CSV, qui n'en décrit jamais, garde
+  l'exemplaire automatique).
 - **−1 lien de catégorie** : dans PMB, « Couverture du magazine rustica » pointe
   vers deux catégories distinctes de même libellé (« Mammifères »,
   ids 1525 et 1639) ; AnarBib garde le libellé : une seule revient.
@@ -251,5 +254,5 @@ Chaque écart a sa cause :
 - **+2 collections** : l'ensemble d'un ouvrage en plusieurs tomes (461 `$t`)
   est gardé en collection, et revient en 225.
 
-Tout le reste revient à l'identique : responsabilités, auteurs, éditeurs,
-bulletins, dépouillements, notices indexées.
+Tout le reste revient à l'identique : exemplaires, responsabilités, auteurs,
+éditeurs, bulletins, dépouillements, notices indexées.

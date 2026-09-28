@@ -85,8 +85,8 @@ function suiteSql(lignes, attendu) {
 -- le lot est approuvé, publié, puis exporté par fn_export_catalog_lote.
 --
 -- T1 promotion : une notice par ligne, un brouillon d'exemplaire par exemplaire (${nx}).
--- T2 publication du lot : toutes les notices ; les exemplaires du fichier, plus
---    l'exemplaire automatique des ${vides} notices qui n'en ont pas.
+-- T2 publication du lot : toutes les notices, et EXACTEMENT les exemplaires du
+--    fichier — les ${vides} notices qui n'en ont pas n'en reçoivent pas (IMP-25).
 -- T3 l'export rend EXACTEMENT l'attendu figé (tests/pmb/aller-retour-attendu.json),
 --    identifiants internes, tombos et id de la source mis à part.
 -- T4 la réémission (IMP-22) : l'enregistrement d'origine revient tel quel, sans
@@ -148,7 +148,7 @@ BEGIN
        AND (SELECT count(*) FROM public.exemplares e
               JOIN public.book_holdings h ON h.id = e.holding_id
               JOIN public.book_drafts d ON d.published_book_id = h.book_id AND d.batch_id = v_lot
-             WHERE e.library_id = v_lib) = ${nx + vides}
+             WHERE e.library_id = v_lib) = ${nx}
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce(v_res::text, 'NULL'), 400)); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
