@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-28.** **52 itens de 65** trazem uma verificação datada própria (A1, A3, B13, B29, B30, B31, B33, B34, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **13** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-28.** **53 itens de 65** trazem uma verificação datada própria (A1, A3, B13, B29, B30, B31, B33, B34, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1221,9 +1221,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H22** | Ler o export XML próprio do PMB, se for preciso | `P3` | A verificar |
 | **H23** | Um export UNIMARC (ISO 2709 e XML), espelho exato da importação | `P1` | A verificar |
 | **H24** | O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores | `P1` | A verificar |
-| **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | Em curso |
+| **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | A verificar |
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
-| **H27** | A prova do ida-e-volta: um teste de CI, uma reimportação real no PMB e a tabela pública do que passa | `P1` | Aberto |
+| **H27** | A prova do ida-e-volta: um teste de CI, uma reimportação real no PMB e a tabela pública do que passa | `P1` | Em curso |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1526,11 +1526,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H25 — Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar
 
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
 
-**Estado.** Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Em curso em 28/09**: `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); no banco PMB, as notícias se ligam às fichas importadas em vez de recriá-las.
+**Estado.** Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Entregue em 28/09** (`d83a7d0c`, revisão `a692a75e`): `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); formato em Importações, com o passo a passo no PMB, em 10 línguas. No banco PMB: 61 responsabilidades de 61 ligadas pelo $3, 47 categorias de 47 pelo rótulo, 0 autor recriado.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145.*
 
 **O que é.** Serializar as autoridades ligadas aos registros da biblioteca em UNIMARC Autoridades (200/210/250, 4xx, 5xx); o SKOS do tesauro já existe.
 
@@ -1566,11 +1566,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H27 — A prova do ida-e-volta: um teste de CI, uma reimportação real no PMB e a tabela pública do que passa
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, biblioteconomia
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, biblioteconomia
 
-**Estado.** `serialize.test.ts` faz um ida-e-volta em memória (duas notícias escritas à mão, MARCXML MARC21, título/subtítulo/autores). Nenhum teste passa pela base, pelo UNIMARC, por um arquivo real ou pelos exemplares. E **esses testes Deno não rodam em lugar nenhum**: nenhum `deno test` na CI, Deno presente na máquina em `~/.deno/bin`, fora do PATH (correção de 26/09). As outras edge functions são testadas no vitest (`monter-ef.js`).
+**Estado.** `serialize.test.ts` faz um ida-e-volta em memória (duas notícias escritas à mão, MARCXML MARC21, título/subtítulo/autores). Nenhum teste passa pela base, pelo UNIMARC, por um arquivo real ou pelos exemplares. E **esses testes Deno não rodam em lugar nenhum**: nenhum `deno test` na CI, Deno presente na máquina em `~/.deno/bin`, fora do PATH (correção de 26/09). As outras edge functions são testadas no vitest (`monter-ef.js`). **Critério 1 cumprido em 28/09** (`2ee5f7a7`): a prova pela base (64 notícias PMB, suíte SQL gerada, perdas aceitas com motivo e congeladas). Corrigidos: idioma bruto recusado na publicação, nomes não latinos descartados, palavras-chave em 606, ISSN de artigo. **Falta**: reimportação no PMB a partir da base; tabela de cobertura.
 
-*Verificado : 26/09 — ponte vitest na CI (25 testes); Deno 2.8.2 em `~/.deno/bin`; `importer-pmb.mjs` testado.*
+*Verificado : 28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145.*
 
 **O que é.** (0) Fazer rodar `marc.test.ts` e `serialize.test.ts` na CI (vitest ou `deno test`). (1) Teste de CI: fixture → import → publicação no banco SQL → export UNIMARC → comparação zona a zona, com a **lista de perdas aceitas** no teste. (2) Reimportação real no PMB de banco. (3) Tabela de cobertura publicada. **(0) entregue em 26/09**: ponte vitest que roda os testes Deno como estão. **O retorno ao PMB tem seu script** (`importer-pmb.mjs`) — e a função de importação padrão `func_bdp` perde 200 $f/$g, a segunda 700, funde as 606, trunca a Dewey e ignora o proprietário da 995: a tabela de cobertura deverá dizer qual função usar, ou fornecer uma.
 

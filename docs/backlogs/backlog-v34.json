@@ -5621,7 +5621,7 @@
       "id": "H25",
       "d": "H",
       "p": "P2",
-      "s": "en-cours",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno",
@@ -5632,8 +5632,8 @@
         "pt": "Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar"
       },
       "v": {
-        "fr": "Aucun export d'autorités n'existe (personnes, collectivités, sujets). PMB importe ses autorités à part. Sans elles, un export qui porte des références d'autorité en $3 (**H24**) pointe dans le vide, et PMB recrée une autorité par notice. **En cours le 28/09** (non poussé) : `fn_export_authorities_lote` (noms liés aux notices que la bibliothèque détient, formes rejetées, VIAF/ISNI/Wikidata/IdRef/LCCN ; sujets du thésaurus et leurs ancêtres) et l'écrivain `_shared/marc/autorites.ts` (UNIMARC Autorités : 200/210/250, 4XX, 550, 801 $b AnarBib ; 001 = le $3 des notices exportées). **Essai sur le banc PMB** : les autorités importées d'abord, puis les notices avec « Tenir compte des notices d'autorités » et l'origine AnarBib — les notices se rattachent aux fiches importées au lieu d'en recréer.",
-        "pt": "Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Em curso em 28/09**: `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); no banco PMB, as notícias se ligam às fichas importadas em vez de recriá-las."
+        "fr": "Aucun export d'autorités n'existe (personnes, collectivités, sujets). PMB importe ses autorités à part. Sans elles, un export qui porte des références d'autorité en $3 (**H24**) pointe dans le vide, et PMB recrée une autorité par notice. **Livré le 28/09** (`d83a7d0c`, revue `a692a75e`, migration `20260928170908`) : `fn_export_authorities_lote` (noms liés aux notices que la bibliothèque détient, formes rejetées, VIAF/ISNI/Wikidata/IdRef/LCCN ; vedettes du thésaurus et tous leurs ancêtres ; même garde que l'export des notices) et l'écrivain `_shared/marc/autorites.ts` (UNIMARC Autorités : 200/210/250, 4XX, 550, 033, 801 $b AnarBib sans $c) ; format « UNIMARC Autorités » dans Importations, avec la marche à suivre dans PMB, en 10 langues. Une fiche a UN type, le même dans les deux exports (`private.fn_nature_autorite`). La 001 d'une fiche est le $3 de ses notices, préfixé (`AnarBib-A…`, `AnarBib-S…`) : PMB cherche un numéro sans filtrer l'origine. **Essai au banc PMB 8.1** (64 notices des deux fixtures, base restaurée) : 88 autorités, 0 erronée ; **61 responsabilités sur 61** rattachées par le $3, 0 auteur recréé ; **47 catégories sur 47** — mais par leur LIBELLÉ, dans le thésaurus par défaut de PMB (`func_cpt_rameau_first_level` ignore le $3 d'une 606). Deux revues contradictoires (19 puis 6 constats confirmés, corrigés). Recette : `tests/pmb/README.md`. **Reste** : un essai avec le PMB de DIRA (plusieurs thésaurus ?).",
+        "pt": "Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Entregue em 28/09** (`d83a7d0c`, revisão `a692a75e`): `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); formato em Importações, com o passo a passo no PMB, em 10 línguas. No banco PMB: 61 responsabilidades de 61 ligadas pelo $3, 47 categorias de 47 pelo rótulo, 0 autor recriado."
       },
       "w": {
         "fr": "Sérialiser les autorités de la bibliothèque (celles qui sont liées à ses notices) en UNIMARC Autorités : 200/210/250, formes rejetées en 4xx, liens en 5xx. Le SKOS du thésaurus existe déjà (`thesaurus.ttl`) et peut servir de source pour les sujets.",
@@ -5658,7 +5658,11 @@
       "r": [
         "claude/aller-retour-PMB_2026-09-26",
         "Réponse à DIRA du 26/09/2026"
-      ]
+      ],
+      "verif": {
+        "fr": "28/09 — déployé : `deployed-functions` sur `a692a75e`, migrations `20260928170908` et `20260928170909` appliquées par la CI (`created_by` vide) ; en production, les 7 définitions recréées ont le md5 du banc, `v_author_alias_worklist` est en security_invoker, ni anon ni authenticated n'exécutent les nouvelles fonctions ; `fn_idioma_bcp47('fre')` = fr, un nom grec n'est plus un non-agent ; la règle de type coûte 180 ms pour les 2 255 responsabilités rattachées de BTL. Avant la poussée : vitest 1 447 tests, SQL 145/145.",
+        "pt": "28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145."
+      }
     },
     {
       "id": "H26",
@@ -5710,7 +5714,7 @@
       "id": "H27",
       "d": "H",
       "p": "P1",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "deno",
@@ -5722,8 +5726,8 @@
         "pt": "A prova do ida-e-volta: um teste de CI, uma reimportação real no PMB e a tabela pública do que passa"
       },
       "v": {
-        "fr": "`export-catalog-lote/serialize.test.ts` fait bien un aller-retour, mais en mémoire : deux notices écrites à la main sont passées en MARCXML (MARC21), puis relues par `marc.ts`, et seuls le titre, le sous-titre et les auteurs sont comparés. Aucun test ne passe par la base (import → publication → export), par l'UNIMARC, par un fichier réel ou par les exemplaires. Surtout, **ces tests Deno ne tournaient nulle part** : aucun `deno test` dans `ci.yml` ni dans `sql-tests.yml`, et vitest exclut `supabase/functions/**`. *(Correction du 26/09 : Deno 2.8.2 est bien installé sur le poste, dans `~/.deno/bin`, hors du PATH — la fiche disait le contraire.)* Les autres edge functions sont éprouvées sous vitest (`src/tests/helpers/monter-ef.js`, modèle `gazette-monthly-build.test.js`).",
-        "pt": "`serialize.test.ts` faz um ida-e-volta em memória (duas notícias escritas à mão, MARCXML MARC21, título/subtítulo/autores). Nenhum teste passa pela base, pelo UNIMARC, por um arquivo real ou pelos exemplares. E **esses testes Deno não rodam em lugar nenhum**: nenhum `deno test` na CI, Deno presente na máquina em `~/.deno/bin`, fora do PATH (correção de 26/09). As outras edge functions são testadas no vitest (`monter-ef.js`)."
+        "fr": "`export-catalog-lote/serialize.test.ts` fait bien un aller-retour, mais en mémoire : deux notices écrites à la main sont passées en MARCXML (MARC21), puis relues par `marc.ts`, et seuls le titre, le sous-titre et les auteurs sont comparés. Aucun test ne passe par la base (import → publication → export), par l'UNIMARC, par un fichier réel ou par les exemplaires. Surtout, **ces tests Deno ne tournaient nulle part** : aucun `deno test` dans `ci.yml` ni dans `sql-tests.yml`, et vitest exclut `supabase/functions/**`. *(Correction du 26/09 : Deno 2.8.2 est bien installé sur le poste, dans `~/.deno/bin`, hors du PATH — la fiche disait le contraire.)* Les autres edge functions sont éprouvées sous vitest (`src/tests/helpers/monter-ef.js`, modèle `gazette-monthly-build.test.js`). **Critère 1 tenu le 28/09** (`2ee5f7a7`, revue `a692a75e`) : `src/tests/pmb-aller-retour-base.test.js` fait lire les deux fixtures PMB (64 notices) par la vraie edge function et en engendre la suite SQL `aller_retour_pmb_tests` (promotion, révision, publication, export comparé à un attendu figé, réémission IMP-22) ; l'export, écrit en UNIMARC et relu, est comparé zone par zone à l'origine : chaque perte acceptée a sa raison, les pertes elles-mêmes sont figées notice par notice (`tests/pmb/aller-retour-pertes.json`), et « revient ailleurs » est vérifié. **Ce qu'elle a trouvé, corrigé** (migration `20260928170909`) : un lot MARC ne se publiait pas (langue brute « fre » contre la CHECK BCP-47) ; les noms grecs, cyrilliques, arabes, chinois passaient pour « Collectif » ; les mots-clés 610 ressortaient en 606 ; l'ISSN d'un article sortait en 011. **Reste** : (2) le réimport dans PMB de l'export tiré de la base, nombres comparés (l'essai H25 l'a fait depuis l'écrivain : 62 notices sur 64, 46 exemplaires) ; (3) le tableau de couverture publié.",
+        "pt": "`serialize.test.ts` faz um ida-e-volta em memória (duas notícias escritas à mão, MARCXML MARC21, título/subtítulo/autores). Nenhum teste passa pela base, pelo UNIMARC, por um arquivo real ou pelos exemplares. E **esses testes Deno não rodam em lugar nenhum**: nenhum `deno test` na CI, Deno presente na máquina em `~/.deno/bin`, fora do PATH (correção de 26/09). As outras edge functions são testadas no vitest (`monter-ef.js`). **Critério 1 cumprido em 28/09** (`2ee5f7a7`): a prova pela base (64 notícias PMB, suíte SQL gerada, perdas aceitas com motivo e congeladas). Corrigidos: idioma bruto recusado na publicação, nomes não latinos descartados, palavras-chave em 606, ISSN de artigo. **Falta**: reimportação no PMB a partir da base; tabela de cobertura."
       },
       "w": {
         "fr": "(0) Faire tourner `marc.test.ts` et `serialize.test.ts` en CI, soit en les portant sous vitest comme les autres edge functions, soit en ajoutant un `deno test`. (1) Un test de CI : fixture PMB (**H14**) → import → publication sur le banc SQL → `fn_export_catalog_lote` → export UNIMARC → comparaison zone par zone avec la source. La **liste des pertes acceptées** est écrite dans le test : toute perte nouvelle le fait échouer. (2) Un réimport réel de l'export dans le PMB de banc, avec les nombres de notices et d'exemplaires comparés. (3) Un tableau de couverture, dans les deux sens, publié pour les bibliothèques. **(0) est livré le 26/09** (`66750198`) : un pont vitest joue les tests Deno **tels quels** (`Deno.test` → `it`, `jsr:@std/assert` servi par une cale sur `expect`), compte exact exigé, contrôle de mutation fait ; 25 tests pontés depuis H15. **Le retour dans PMB a son script** (`importer-pmb.mjs`, **H14**) — et un constat : la fonction d'import par défaut `func_bdp` **perd** 200 `$f`/`$g`, la seconde 700, fond les 606 en une 610, tronque la Dewey et ignore le propriétaire de la 995 (`tests/pmb/README.md`). Le tableau de couverture devra dire **quelle fonction d'import PMB** employer, ou en fournir une.",
@@ -5754,8 +5758,8 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — pont vitest en CI (`deno-tests-pont`, 25 tests) ; Deno 2.8.2 présent dans `~/.deno/bin` (hors PATH) ; `importer-pmb.mjs` éprouvé (14 notices, 13 exemplaires créés).",
-        "pt": "26/09 — ponte vitest na CI (25 testes); Deno 2.8.2 em `~/.deno/bin`; `importer-pmb.mjs` testado."
+        "fr": "28/09 — déployé : `deployed-functions` sur `a692a75e`, migrations `20260928170908` et `20260928170909` appliquées par la CI (`created_by` vide) ; en production, les 7 définitions recréées ont le md5 du banc, `v_author_alias_worklist` est en security_invoker, ni anon ni authenticated n'exécutent les nouvelles fonctions ; `fn_idioma_bcp47('fre')` = fr, un nom grec n'est plus un non-agent ; la règle de type coûte 180 ms pour les 2 255 responsabilités rattachées de BTL. Avant la poussée : vitest 1 447 tests, SQL 145/145.",
+        "pt": "28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145."
       }
     },
     {
