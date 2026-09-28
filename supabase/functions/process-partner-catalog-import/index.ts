@@ -700,7 +700,7 @@ Deno.serve(async (req)=>{
     }
     const stagingRows = parsedEntries.map((entry)=>{
       const mapped = entry.mapped;
-      const hasBibliographicContent = !!mapped.title || !!mapped.subtitle || !!mapped.responsibilityStatement || !!mapped.publisher || !!mapped.placeOfPublication || !!mapped.publicationYear || !!mapped.language || !!mapped.isbn || !!mapped.issn || Array.isArray(mapped.subjectsArray) && mapped.subjectsArray.length > 0;
+      const hasBibliographicContent = !!mapped.title || !!mapped.subtitle || !!mapped.responsibilityStatement || !!mapped.publisher || !!mapped.placeOfPublication || !!mapped.publicationYear || !!mapped.language || !!mapped.isbn || !!mapped.issn || Array.isArray(mapped.subjectsArray) && mapped.subjectsArray.length > 0 || Array.isArray(mapped.keywordsArray) && mapped.keywordsArray.length > 0;
       if (!hasBibliographicContent) {
         return null;
       }

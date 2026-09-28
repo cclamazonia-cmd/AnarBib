@@ -165,7 +165,9 @@ Deno.test('Aller-retour UNIMARC (ISO 2709 et XML) : l\'import relit ce que l\'ex
     ['Congrès anarchiste (3 ; 1907 ; Amsterdam)', 'congress', 'autor', '070', false],
   ]);
   assertEquals(m.contributors[0].authorityRef, '44');
-  assertEquals(m.subjectsArray, ['Syndicalisme', 'Anarchisme -- Histoire -- 19e siècle', 'Coopératives', 'bourses du travail']);
+  assertEquals(m.subjectsArray, ['Syndicalisme', 'Anarchisme -- Histoire -- 19e siècle', 'Coopératives']);
+  // H27 : le mot-clé libre revient en mot-clé (610), pas en vedette
+  assertEquals(m.keywordsArray, ['bourses du travail']);
   assertEquals(m.url, 'https://example.org/h23');
   assertEquals(m.items.map((i) => [i.source_item_code, i.call_number, i.note, i.owner]), [
     ['CDF0000000009', '334.7 CER 2', 'Dédicacé', 'BLMF'], ['BLMF-2026-0001'.replace('0001', '0002'), '334.7 CER 2', null, 'BLMF']]);
@@ -282,4 +284,54 @@ Deno.test('Revue H23 : réémission sans doublon (titre uniforme, 035, zone d\'e
   // guide/6-7 d'origine : une affiche (k) le reste
   assertEquals(n.leader.slice(6, 8), 'km');
   assertEquals(enregistrement({ id: 1, title: 'A', materialType: 'artigo' }, OPTS).leader.slice(5, 9), 'naa2');
+});
+
+// ── H27 : ce que la preuve de l'aller-retour par la base a trouvé ───────────
+Deno.test('H27 : l\'ISSN d\'un article est celui de sa revue — 461 $x, jamais 011', () => {
+  const art = enregistrement({ id: 8, title: 'Classer sans dominer', materialType: 'artigo', issn: '2555-0004',
+    host: { title: 'Le Rat des bibliothèques' }, issue: { number: '12' } }, OPTS);
+  assertEquals(sf(art, '011', 'a'), []);
+  assertEquals(sf(art, '461', 'x'), ['2555-0004']);
+  // celui de la notice hôte l'emporte s'il est là ; un livre garde sa 011… d'ISSN de collection
+  const hote = enregistrement({ id: 9, title: 'A', materialType: 'artigo', issn: '1111-1111',
+    host: { title: 'R', issn: '2222-2222' } }, OPTS);
+  assertEquals([sf(hote, '461', 'x'), sf(hote, '011', 'a')], [['2222-2222'], []]);
+  assertEquals(sf(enregistrement({ id: 10, title: 'P', materialType: 'periodico', issn: '3333-3333' }, OPTS), '011', 'a'), ['3333-3333']);
+});
+
+Deno.test('H27 : « Palavras-chave importadas » redevient des 610, à part des 606', () => {
+  const d = deplierNotes('Note.\n\nPalavras-chave importadas: coton; blues; Chili\n\nAssuntos importados: Chili; Littérature française');
+  assertEquals([d.motsCles, d.sujets, d.paragraphes], [['coton', 'blues', 'Chili'], ['Chili', 'Littérature française'], ['Note.']]);
+  const r = enregistrement({ id: 11, title: 'Catfish blues', materialType: 'livro', keywords: ['racisme'],
+    notes: 'Palavras-chave importadas: coton; blues; Chili\n\nAssuntos importados: Chili' }, OPTS);
+  assertEquals(sf(r, '606', 'a'), ['Chili']);
+  // un mot-clé égal à une vedette n'est pas écarté : ce sont deux zones
+  assertEquals(sf(r, '610', 'a'), ['racisme', 'coton', 'blues', 'Chili']);
+  assertEquals(sf(r, '300', 'a'), []);
+});
+
+Deno.test('H27 : le niveau d\'une responsabilité secondaire (701/702, 711/712) repris de l\'origine si le rôle n\'a pas changé', () => {
+  const source = { dialect: 'unimarc', fields: [
+    { tag: '700', ind1: ' ', ind2: '1', subfields: [{ code: 'a', value: 'Gallié' }, { code: 'b', value: 'Mathieu' }, { code: '4', value: '070' }] },
+    { tag: '701', ind1: ' ', ind2: '1', subfields: [{ code: 'a', value: 'Andréaé' }, { code: 'b', value: 'Jean-Baptiste' }, { code: '4', value: '440' }] },
+    { tag: '702', ind1: ' ', ind2: '1', subfields: [{ code: 'a', value: 'Hunot' }, { code: 'b', value: 'Jean-Yves' }, { code: '4', value: '070' }] },
+    { tag: '702', ind1: ' ', ind2: '1', subfields: [{ code: 'a', value: 'Muñoz' }, { code: 'b', value: 'Pilar' }, { code: '4', value: '730' }] },
+    { tag: '712', ind1: '0', ind2: '2', subfields: [{ code: 'a', value: 'Arquivo Libertário do Tejo' }, { code: '4', value: '557' }] },
+  ] };
+  const rec = { id: 12, title: 'La Chrysalide', materialType: 'livro', source, contributors: [
+    { name: 'Gallié, Mathieu', nature: 'person', role: 'autor', roleCode: '070', primary: true },
+    { name: 'Andréaé, Jean-Baptiste', nature: 'person', role: 'ilustrador', roleCode: '440', primary: false },
+    { name: 'Hunot, Jean-Yves', nature: 'person', role: 'autor', roleCode: '070', primary: false },
+    // rôle changé depuis l'import (traducteur → préfacier) : la table décide
+    { name: 'Muñoz, Pilar', nature: 'person', role: 'prefaciador', roleCode: null, primary: false },
+    { name: 'Arquivo Libertário do Tejo', nature: 'collective', role: 'organizacao', roleCode: '557', primary: false },
+  ] };
+  const r = enregistrement(rec, OPTS);
+  const qui = (tag) => r.fields.filter((f) => f.tag === tag).map((f) => f.subfields.find((s) => s.code === 'a').value);
+  assertEquals([qui('700'), qui('701'), qui('702'), qui('711'), qui('712')],
+    [['Gallié'], ['Andréaé'], ['Hunot', 'Muñoz'], [], ['Arquivo Libertário do Tejo']]);
+  // sans origine (ou d'un autre dialecte), la table : l'illustrateur en 702, le co-auteur en 701
+  const sans = enregistrement({ ...rec, source: { ...source, dialect: 'marc21' } }, OPTS);
+  const qui2 = (tag) => sans.fields.filter((f) => f.tag === tag).map((f) => f.subfields.find((s) => s.code === 'a').value);
+  assertEquals([qui2('701'), qui2('702'), qui2('711')], [['Hunot'], ['Andréaé', 'Muñoz'], ['Arquivo Libertário do Tejo']]);
 });

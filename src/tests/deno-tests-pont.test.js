@@ -31,7 +31,9 @@ import { it, expect, vi, afterAll } from 'vitest';
 // + marc.test.ts 2 (28/09/2026, revue contradictoire de H17/H18)
 // + ecriture.test.ts 4 (28/09/2026, revue contradictoire de H23/H24)
 // + autorites.test.ts 3 (28/09/2026, H25 : UNIMARC Autorités)
-const ATTENDUS = 60;
+// + ecriture.test.ts 3, marc.test.ts 1 (28/09/2026, H27 : ce que la preuve de
+// l'aller-retour par la base a trouvé)
+const ATTENDUS = 64;
 
 let enregistres = 0;
 vi.stubGlobal('Deno', {

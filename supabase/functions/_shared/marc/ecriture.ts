@@ -136,16 +136,23 @@ function aujourdhui(): string {
 // ── Les notes : paragraphes, et ce que l'import y avait rangé ───────────────
 const RE_ADRESSE = /^Endereço eletrônico: (\S+)$/;
 const RE_SUJETS = /^Assuntos importados: (.*?)(?: (Classificação \/ cote local preservada da parceira: .*))?$/s;
+// H27 : les mots-clés libres (610 / 653) que l'import range à part des vedettes.
+const RE_MOTS_CLES = /^Palavras-chave importadas: (.*)$/s;
 const paragraphes = (t: string) => t.replace(/\r\n?/g, '\n').split(/\n[ \t]*\n/).map((x) => x.trim()).filter(Boolean);
 
-interface NotesDepliees { paragraphes: string[]; adresses: string[]; sujets: string[] }
+interface NotesDepliees { paragraphes: string[]; adresses: string[]; sujets: string[]; motsCles: string[] }
 export function deplierNotes(notes: unknown): NotesDepliees {
-  const out: NotesDepliees = { paragraphes: [], adresses: [], sujets: [] };
+  const out: NotesDepliees = { paragraphes: [], adresses: [], sujets: [], motsCles: [] };
   const t = txt(notes);
   if (!t) return out;
   for (const p of paragraphes(t)) {
     const a = p.match(RE_ADRESSE);
     if (a) { out.adresses.push(a[1]); continue; }
+    const k = p.match(RE_MOTS_CLES);
+    if (k) {
+      for (const x of k[1].split(/\s*;\s+/)) { const v = txt(x); if (v) out.motsCles.push(v); }
+      continue;
+    }
     const s = p.match(RE_SUJETS);
     if (s) {
       for (const x of s[1].split(/\s*;\s+/)) { const v = txt(x); if (v) out.sujets.push(v); }
@@ -215,11 +222,38 @@ function datesDOrigine(d: Dialecte, rec: NoticeExport): Map<string, string> {
   return m;
 }
 
+// Le niveau d'une responsabilité secondaire en UNIMARC (70x/71x : 1 = autre
+// auteur, 2 = secondaire) : celui de la zone d'origine qui porte le même nom
+// et la même fonction (ou aucune) — même dialecte, bibliothèque d'origine.
+// PMB range un illustrateur en 701 là où la table d'AnarBib dirait 702 ; rien
+// ne contredit le choix d'origine tant que le rôle n'a pas changé (H27).
+function niveauxDOrigine(d: Dialecte, rec: NoticeExport): Map<string, { niveau: string; code: string | null }> {
+  const m = new Map<string, { niveau: string; code: string | null }>();
+  if (d !== 'unimarc' || !rec.source || rec.source.dialect !== d) return m;
+  for (const f of rec.source.fields ?? []) {
+    const t = /^7([01])([12])$/.exec(f?.tag ?? '');
+    if (!t || !Array.isArray(f.subfields)) continue;
+    const val = (c: string) => f.subfields!.filter((s) => s?.code === c).map((s) => txt(s.value)).filter((x): x is string => !!x);
+    const code = val('4')[0] ?? null;
+    const noms = t[1] === '0' ? [[...val('a'), ...val('b')].join(', ')] : [val('a')[0] ?? '', [...val('a'), ...val('b')].join('. ')];
+    for (const nom of noms) {
+      const cle = `${t[1]}|${nom}`;
+      if (nom && !m.has(cle)) m.set(cle, { niveau: t[2], code });
+    }
+  }
+  return m;
+}
+
 function responsabilites(d: Dialecte, rec: NoticeExport): ChampMarc[] {
   const out: ChampMarc[] = [];
   let principale = false;
   const qualif = (tag: string) => RESPONSABILITES[d].find((z) => z.tag === tag)?.qualificatifs ?? [];
   const datesSource = datesDOrigine(d, rec);
+  const niveaux = niveauxDOrigine(d, rec);
+  const niveauDOrigine = (famille: '0' | '1', nom: string, code: string): string | null => {
+    const o = niveaux.get(`${famille}|${nom}`);
+    return o && (o.code === null || o.code === code) ? o.niveau : null;
+  };
   for (const c of contributeurs(rec)) {
     const nature = c.nature === 'collective' || c.nature === 'congress' ? c.nature : 'person';
     const estPrincipale = !!c.primary && !principale;
@@ -228,7 +262,9 @@ function responsabilites(d: Dialecte, rec: NoticeExport): ChampMarc[] {
     const nom = String(c.name).trim();
     const dates = nature === 'person' ? (txt(c.dates) ?? datesSource.get(nom) ?? null) : null;
     if (d === 'unimarc') {
-      const rang = estPrincipale ? '0' : AUTEURS.has(txt(c.role) || 'autor') ? '1' : '2';
+      const base = nature === 'congress' ? congres(nom, qualif('711')).base : nom;
+      const rang = estPrincipale ? '0'
+        : niveauDOrigine(nature === 'person' ? '0' : '1', base, code) ?? (AUTEURS.has(txt(c.role) || 'autor') ? '1' : '2');
       if (nature === 'person') {
         const i = nom.indexOf(', ');
         out.push(champ(`70${rang}`, ind(d, `70${rang}`), [
@@ -258,7 +294,7 @@ function responsabilites(d: Dialecte, rec: NoticeExport): ChampMarc[] {
 }
 
 // ── Sujets ──────────────────────────────────────────────────────────────────
-function sujets(d: Dialecte, rec: NoticeExport, depuisNotes: string[]): ChampMarc[] {
+function sujets(d: Dialecte, rec: NoticeExport, depuisNotes: string[], motsDesNotes: string[] = []): ChampMarc[] {
   const tag = d === 'unimarc' ? '606' : '650';
   const vus = new Set<string>();
   const out: ChampMarc[] = [];
@@ -294,11 +330,14 @@ function sujets(d: Dialecte, rec: NoticeExport, depuisNotes: string[]): ChampMar
     else if (s && txt(s.label)) poser(String(s.label).trim(), s.id);
   }
   for (const s of depuisNotes) poser(s, null);
-  // Mots-clés libres : 610 / 653, un par mot.
+  // Mots-clés libres : 610 / 653, un par mot — ceux de la notice, puis ceux
+  // que l'import a rangés dans les notes (H27). Dédoublonnés entre eux
+  // seulement : un mot-clé égal à une vedette est une autre zone.
   const [tk, ck] = zone(d, 'keywords') ?? [d === 'unimarc' ? '610' : '653', 'a'];
-  for (const k of rec.keywords ?? []) {
+  const mots = new Set<string>();
+  for (const k of [...(rec.keywords ?? []), ...motsDesNotes]) {
     const v = txt(k);
-    if (v && !vus.has(v)) { vus.add(v); out.push(champ(tk, ind(d, tk), [sz(ck, v)])!); }
+    if (v && !mots.has(v)) { mots.add(v); out.push(champ(tk, ind(d, tk), [sz(ck, v)])!); }
   }
   return out;
 }
@@ -401,7 +440,9 @@ export function enregistrement(rec: NoticeExport, opts: OptionsEcriture): Notice
 
   // Identifiants normalisés : un ISBN par zone.
   for (const i of String(rec.isbn ?? '').split(/\s*[;|]\s*/)) poser('isbn', i);
-  poser('issn', txt(rec.issn) ?? (type === 'periodico' ? rec.serial?.issn : null));
+  // Un article n'a pas d'ISSN à lui : celui qu'il porte est celui de sa revue
+  // (l'import l'y range, H17) ; il ressort en 461 $x, pas en 011 (H27).
+  if (type !== 'artigo') poser('issn', txt(rec.issn) ?? (type === 'periodico' ? rec.serial?.issn : null));
 
   const an = String(rec.year ?? '').match(/\d{4}/)?.[0];
   if (d === 'unimarc') {
@@ -453,7 +494,7 @@ export function enregistrement(rec: NoticeExport, opts: OptionsEcriture): Notice
   }
   if (type === 'artigo') {
     poser('hostTitle', rec.host?.title);
-    poser('hostIssn', rec.host?.issn);
+    poser('hostIssn', txt(rec.host?.issn) ?? rec.issn);
     poser('hostVolume', rec.host?.volume);
     poser('issueNumber', rec.issue?.number);
     poser('issueDate', rec.issue?.date);
@@ -521,7 +562,7 @@ export function enregistrement(rec: NoticeExport, opts: OptionsEcriture): Notice
   for (const c of notesSimples) push(c);
   push(titreUniforme);
   for (const c of adressesChamps) push(c);
-  for (const c of sujets(d, rec, n.sujets)) push(c);
+  for (const c of sujets(d, rec, n.sujets, n.motsCles)) push(c);
   for (const c of resps) push(c);
   // 801 : AnarBib, agence qui diffuse la notice, et le pays de la bibliothèque.
   if (d === 'unimarc') push(champ('801', ind(d, '801'), [sz('a', codePays(opts.bibliotheque?.pays)), sz('b', 'AnarBib'), sz('c', date)]));

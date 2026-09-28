@@ -243,8 +243,21 @@ function sujets(record, dialect) {
       ajouter([vedette, ...subdivisions].filter(Boolean).join(SEPARATEUR_SUBDIVISION) || null);
     }
   }
+  return out;
+}
+
+// Mots-clés libres (610 UNIMARC, 653 MARC21), une zone pouvant en porter
+// plusieurs séparés par « ; » (PMB). H27 : gardés à part des vedettes — un
+// mot-clé n'est pas une vedette, et l'export les rend à leur zone (610/653)
+// au lieu d'en faire des 606, que PMB change en catégories au réimport.
+function motsCles(record, dialect) {
+  const out = [];
+  const seen = new Set();
   for (const v of lireChamp(record, CHAMPS[dialect].keywords)) {
-    for (const mot of String(v).split(/\s*;\s*/)) ajouter(clean(mot));
+    for (const mot of String(v).split(/\s*;\s*/)) {
+      const m = clean(mot);
+      if (m && !seen.has(m)) { seen.add(m); out.push(m); }
+    }
   }
   return out;
 }
@@ -358,6 +371,7 @@ export function mapMarcRecord(record, dialect, itemMapping = null) {
   const isbn = lire('isbn');
   const issn = lire('issn');
   const subjectsArray = sujets(record, dialect === 'unimarc' ? 'unimarc' : 'marc21');
+  const keywordsArray = motsCles(record, dialect === 'unimarc' ? 'unimarc' : 'marc21');
   const externalKey = controlValue(record, CONTROLE);
 
   // itemType : type d'enregistrement (leader/06) + niveau bibliographique
@@ -414,6 +428,7 @@ export function mapMarcRecord(record, dialect, itemMapping = null) {
     isbn,
     issn,
     subjectsArray,
+    keywordsArray,
     itemType,
     externalKey,
     // H19 : les exemplaires physiques (995 / 852), selon la correspondance
@@ -447,6 +462,8 @@ export function mappedExtras(mapped) {
     key_title: mapped.keyTitle, host: mapped.host, issue: mapped.issue,
   };
   for (const [k, v] of Object.entries(scalaires)) if (v !== null && v !== undefined && v !== '') out[k] = v;
+  // H27 : les mots-clés libres, à part des vedettes (subjects).
+  if (Array.isArray(mapped.keywordsArray) && mapped.keywordsArray.length) out.keywords = mapped.keywordsArray;
   if (Array.isArray(mapped.contributors) && mapped.contributors.length) {
     out.contributors = mapped.contributors.map((c) => ({
       name: c.name, nature: c.nature, role: c.role, role_code: c.roleCode ?? null,

@@ -468,7 +468,9 @@ Deno.test('H17 zones courantes UNIMARC : pages, volume, collection, notes, sujet
   assertEquals(m.classification, '334.7');
   assertEquals(m.url, 'https://example.org/x');
   assertEquals(m.responsibilityStatement, 'Zdeňka Černá ; trad. par Pilar Muñoz');
-  assertEquals(m.subjectsArray, ['Anarchisme -- Histoire -- France -- 19e siècle', 'copains', 'policier']);
+  // H27 : les mots-clés libres (610) à part des vedettes (606).
+  assertEquals(m.subjectsArray, ['Anarchisme -- Histoire -- France -- 19e siècle']);
+  assertEquals(m.keywordsArray, ['copains', 'policier']);
   assertEquals([m.host, m.issue], [null, null]);
 });
 
@@ -546,12 +548,14 @@ Deno.test('H18 responsabilités MARC21 : 1XX principale, terme $e, code $4, cong
     ['Freedom Press', 'collective', 'outro', false],
   ]);
   assertEquals([m.pages, m.series, m.notes, m.classification], [302, 'Classics ; 4', 'Summary', '335.83']);
-  assertEquals(m.subjectsArray, ['Anarchism -- History -- Sources', 'mutual aid']);
+  assertEquals(m.subjectsArray, ['Anarchism -- History -- Sources']);
+  assertEquals(m.keywordsArray, ['mutual aid']);
 });
 
 Deno.test('H17/H18 mappedExtras : seulement ce qui a une valeur, responsabilités en snake_case', () => {
   const x = mappedExtras(mapMarcRecord(REC_H17, 'unimarc'));
-  assertEquals(Object.keys(x).sort(), ['classification', 'contributors', 'extent', 'material_type', 'notes', 'pages', 'series', 'url', 'volume']);
+  assertEquals(Object.keys(x).sort(), ['classification', 'contributors', 'extent', 'keywords', 'material_type', 'notes', 'pages', 'series', 'url', 'volume']);
+  assertEquals(x.keywords, ['copains', 'policier']);
   assertEquals(x.contributors[2], { name: 'Muñoz, Pilar', nature: 'person', role: 'tradutor', role_code: '730', primary: false, dates: null, authority_ref: null, tag: '702' });
   assertEquals(mappedExtras({ title: 'CSV', contributors: [] }), {});
 });
@@ -652,4 +656,17 @@ Deno.test('Revue 28/09 : pagination d\'un ensemble, feuillets et planches ; coll
   ] }, 'unimarc');
   assertEquals([b.materialType, b.title, b.keyTitle, b.volume], ['periodico', 'Géo', 'Géo', '277']);
   assertEquals(b.issue, { number: '277', date: '2004-08-04', title: null });
+});
+
+Deno.test('H27 : mots-clés libres (610) à part des vedettes (606), découpés sur « ; », vides retirés, même égaux à une vedette', () => {
+  const m = mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Catfish blues']]) },
+    { tag: '606', ind1: ' ', ind2: '1', subfields: sf([['a', 'Chili'], ['9', 'id:3']]) },
+    { tag: '610', ind1: '0', ind2: ' ', subfields: sf([['a', 'coton;blues;;Chili; blues']]) },
+  ] }, 'unimarc');
+  assertEquals(m.subjectsArray, ['Chili']);
+  assertEquals(m.keywordsArray, ['coton', 'blues', 'Chili']);
+  assertEquals(mappedExtras(m).keywords, ['coton', 'blues', 'Chili']);
+  // une notice sans vedette ni mot-clé n'a pas de clé « keywords »
+  assertEquals('keywords' in mappedExtras(mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [] }, 'unimarc')), false);
 });

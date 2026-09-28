@@ -593,3 +593,6 @@ tests/sql/editions_distinctes_tests.sql
 # 28/09 (H25) : l'export des autorites d'une bibliotheque (noms et sujets lies a ses notices, ancetres des sujets),
 # et rien d'une autre ; garde de la coordination.
 tests/sql/export_autorites_tests.sql
+# 28/09 (H27) : la preuve de l'aller-retour PMB par la base — les lignes de staging de la vraie EF,
+# promues, publiees, exportees : l'export rend l'attendu fige (tests/pmb/aller-retour-attendu.json).
+tests/sql/aller_retour_pmb_tests.sql
