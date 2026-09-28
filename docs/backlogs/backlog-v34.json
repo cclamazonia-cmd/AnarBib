@@ -2594,8 +2594,8 @@
         "REPRISE_bascule_autohebergee_2026-08-26"
       ],
       "verif": {
-        "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé.",
-        "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local` em `.forgejo/workflows/`. Nada mudou."
+        "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier.",
+        "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier."
       }
     },
     {
@@ -3511,8 +3511,8 @@
         "Relevé du 29/08/2026"
       ],
       "verif": {
-        "fr": "31/08 — les cinq mêmes fichiers, aux tailles voisines : `BookDraftForm.jsx` 197 Ko, `BibliotecaPage.jsx` 186 Ko, `AccountPage.jsx` 155 Ko, `PanelPage.jsx` 116 Ko, `ImportacoesPage.jsx` 111 Ko.",
-        "pt": "31/08 — os cinco mesmos arquivos, com tamanhos vizinhos (197, 186, 155, 116 e 111 KB)."
+        "fr": "**28/09** — `BookDraftForm.jsx` : 214 Ko (27/09) → 198 (lot 1) → 173 (lot 2) → 167 (lot 3) → **157 Ko** (lot 4) ; quatre modules sortis : `lib/catalogacao/bookDraft.js` (18 Ko), `DigitalResourcesPanel.jsx` (24,6), `LookupPanel.jsx` (15,7), `ContributorsPanel.jsx` (10,6). Lots 2 et 3 vus à l'écran, connecté, par Xavier : ok. Lot 4 publié (`app` vert 16 h 18), à voir de même. Quatre tests de source gardent les montages (`book-draft-lib`, `lookup-panel-monte`, `contributors-panel-monte`, `serial-picker-monte`). Le critère « aucun fichier de `src/` au-dessus de 60 Ko » reste loin : `BibliotecaPage.jsx` 184 Ko, `AccountPage.jsx` 154, `PanelPage.jsx` 114, `ImportacoesPage.jsx` 109 n'ont pas été touchés.",
+        "pt": "**28/09** — `BookDraftForm.jsx`: 214 Ko → 157 Ko em quatro lotes; quatro módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lote 4 publicado, a ver do mesmo modo. O critério «nenhum arquivo acima de 60 Ko» continua longe: as outras quatro telas não foram tocadas."
       }
     },
     {
