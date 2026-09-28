@@ -83,6 +83,15 @@ temps 3 : pertes sèches cochées d'office, divergences, exemplaires, confirmati
 la référence de la fiche supprimée), la survivante étant la notice éditée ; puis
 `merge_book_with_fields` et le rechargement du brouillon.
 
+### Correction sur BTL-TL-000881 (28/09, migration `20260928111729`)
+
+La notice fusionnée porte les deux exemplaires BTL — BTL-TL-EX-000881 (tirage 2010)
+et BTL-TL-EX-000880 (tirage 2011, venu de la notice fusionnée) —, chacun avec son
+tirage en note interne. Le troisième, CCLA.2026.93 (BLMF), avait été créé le 27/09
+à 19:18 UTC depuis un poste BLMF pendant que le doublon résistait à l'écran : la
+BLMF ne détient pas ce titre ; l'exemplaire et son fonds vide sont retirés, le
+brouillon d'exemplaire 39 est écarté avec la raison. La notice garde 2010.
+
 ## Ce qui reste
 
 Rien d'ouvert côté outil. Les rééditions réelles sont des éditions de la même œuvre
