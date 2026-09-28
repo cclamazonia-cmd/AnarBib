@@ -34,7 +34,10 @@ export async function handleLookupPayload(body) {
   }
   const sources = getEnabledSources();
   const settled = await Promise.all(sources.map((source)=>runSourceQuery(source, query, maxRecords)));
-  const mergedCandidates = dedupeAndRank(settled.flatMap((item)=>item.candidates), query).slice(0, maxRecords);
+  // maxRecords borne chaque source (paramètre SRU maximumRecords), pas la liste
+  // fusionnée : la tronquer à la même valeur cachait des sources entières dès
+  // que les premières en avaient rempli le quota (28/09/2026).
+  const mergedCandidates = dedupeAndRank(settled.flatMap((item)=>item.candidates), query);
   return {
     ok: true,
     mode: query.mode,
@@ -1003,11 +1006,26 @@ function flattenTagFields(datafields, tags, preferredCodes) {
   ;
   return values;
 }
+// Une candidate par NOTICE et par SOURCE, pas une par ISBN. Jusqu'au 28/09/2026
+// la clé de dédoublonnage était l'ISBN seul : en recherche par ISBN, toutes les
+// sources rendent le même ISBN, et neuf notices (BNE 2, BnF 2, ICCU 2, LoC 1,
+// Open Library 2) s'effondraient en UNE ligne à l'écran — la mieux notée, en
+// l'occurrence une édition de 1976 pour un ISBN que d'autres sources datent de
+// 1991. La personne qui catalogue doit pouvoir comparer ce que chaque source
+// dit de la même édition (réimpression, autre date, autre lieu) : la source fait
+// partie de la clé, ainsi que le titre et l'année, pour ne replier que les
+// vrais doublons (une source qui rend deux fois la même notice).
 function dedupeAndRank(candidates, query) {
   const scored = candidates.map((item)=>scoreCandidate(item, query)).sort((a, b)=>b.confidence - a.confidence);
   const seen = new Map();
   for (const candidate of scored){
-    const key = candidate.isbn[0] || `${candidate.issn[0] || ''}::${normalizeText(candidate.title)}::${normalizeName(candidate.contributors[0]?.label || '').sorted}::${extractYear(candidate.year)}`;
+    const key = [
+      candidate.source || '',
+      candidate.isbn[0] || candidate.issn[0] || '',
+      normalizeText(candidate.title),
+      normalizeName(candidate.contributors[0]?.label || '').sorted,
+      extractYear(candidate.year)
+    ].join('::');
     const existing = seen.get(key);
     if (!existing || candidate.confidence > existing.confidence) seen.set(key, candidate);
   }
