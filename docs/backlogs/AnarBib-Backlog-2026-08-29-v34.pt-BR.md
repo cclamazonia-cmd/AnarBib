@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
 
-**Frescor dos constatos em 2026-09-28.** **49 itens de 67** trazem uma verificação datada própria (A1, A3, B13, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-28.** **52 itens de 67** trazem uma verificação datada própria (A1, A3, B13, B29, B30, B31, B33, B34, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -347,21 +347,21 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
+| **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | A verificar |
 | **B29** | Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus | `P1` | A verificar |
 | **B30** | Dar ao lote de catalogação uma biblioteca própria (sequência de B29) | `P2` | A verificar |
-| **B31** | Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha | `P2` | Aberto |
+| **B31** | Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha | `P2` | A verificar |
 | **B32** | Catálogo público: cada página relê toda a visão materializada, e a visibilidade é calculada linha a linha | `P2` | Aberto |
-| **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | Aberto |
-| **B34** | Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída | `P2` | Aberto |
+| **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | A verificar |
+| **B34** | Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída | `P2` | A verificar |
 
 #### B13 — Decidir o destino das 221 migrações: squash ou não
 
-`P3` Adiado · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL, administração de sistemas
+`P3` Adiado · Estado : **A verificar** · Carga : várias semanas · O que exige : SQL / PostgreSQL, administração de sistemas
 
-**Estado.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146.
+**Estado.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). Falta: Xavier confirmar a linha.
 
-*Verificado : 31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08.*
+*Verificado : 31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), estado «proposto».*
 
 **O que é.** Ou reconstruir um `baseline` a partir do esquema atual e arquivar as migrações anteriores, ou assumir a cadeia longa e documentar por quê. A reexecução completa leva hoje cerca de 25 minutos, medido.
 
@@ -382,7 +382,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Levantado em 27/09 na revisão de H19: as políticas de `author_drafts`, `book_drafts` e `exemplar_drafts` só exigem `can_access_catalogacao`, **sem nenhum escopo de biblioteca**, em leitura e escrita. **Regra de Xavier (27/09)**: possível para quem cataloga e é admin da rede, não para coordenação nem bibliotecária.
 
-*Verificado : 27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção.*
+*Verificado : 27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção. **28/09, produção em leitura** : as políticas de `book_drafts` e `exemplar_drafts` exigem `can_access_catalogacao` E (admin da rede OU biblioteca do rascunho entre as bibliotecas de staff); `author_drafts` de leitura comum; `fn_user_staff_library` fechada às contas; 134 de 2 260 rascunhos sem `owner_library_id` (recuo pela biblioteca de quem criou). Conforme.*
 
 **O que é.** Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir. **Decidido em 27/09 por Xavier (REGISTRO `CAT-E18`)**: *(1)* rascunho sem biblioteca = biblioteca da adesão de staff ativa de quem o criou (sem o recurso a quem publica), senão quem o criou e a administração; *(2)* rascunhos de autoridade: leitura comum, escrita por quem criou e pela administração; *(3)* mutirão por adesão temporária na biblioteca anfitriã, dona dos rascunhos. **Entregue em 27/09** (`2c8a9af0`, `faea418c`, migração `20260927160000`), regra e escolhas no REGISTRO (CAT-E18): políticas por biblioteca, autoridades com leitura comum e escrita por quem criou, gardas das funções SECURITY DEFINER alinhadas, lotes segundo os seus rascunhos em curso. Uma revisão contraditória e quatro verificações das correções.
 
@@ -404,7 +404,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** B29 deduz «de quem é um lote» a partir dos seus rascunhos; quatro verificações acharam sempre novos casos-limite. Limites conhecidos no REGISTRO (CAT-E18).
 
-*Verificado : 27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele.*
+*Verificado : 27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele. **28/09, produção em leitura** : `catalog_batches.library_id` presente; 3 lotes, todos com biblioteca; as quatro políticas de `catalog_batches` comparam `library_id` às bibliotecas de staff ou de coordenação. Conforme.*
 
 **O que é.** Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes. **Entregue em 27/09** (`3a0e036f`, `2ecdaea3`, migração `20260927191059`), regra e escolhas no REGISTRO (CAT-E18): coluna posta na criação e congelada, mudada só pela reatribuição; todas as regras de lote lidas na coluna; um rascunho só entra num lote da sua biblioteca. Retomada em produção: lote 8 → MLEG, 63 → Solidaires, 57 → BLMF. Uma revisão contraditória, duas verificações das correções, contraprova com 17 mutantes.
 
@@ -422,11 +422,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B31 — Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado.** Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas.
+**Estado.** Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas. **Entregue em 27/09 à noite pela outra sessão (`507afb03`)** : 13 relações para `anon` e 10 para uma conta sem adesão levantavam 42501; todas devolvem zero linhas agora; suíte `lecture_accordee_sans_erreur_tests` na CI.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 28/09, produção sob `anon` : as três tabelas devolvem 0 linhas, sem erro; políticas SELECT `TO authenticated`. Conforme.*
 
 **O que é.** Decidir o que um visitante deve ver: nada (policies `TO authenticated`, zero linha em vez de erro) ou as regras de uma biblioteca em SIGB completo (abrir `fn_library_has_full_sigb` a `anon`, com entrada no T12).
 
@@ -466,11 +466,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B33 — Busca: índices trigrama que a forma das consultas impede de usar
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
-**Estado.** Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice.
+**Estado.** Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice. **Entregue em 27/09 à noite pela outra sessão (`6bdd4331`)** : a ramificação `OR EXISTS` vira UM padrão regexp, as expressões alinham-se aos índices, a publicação encontra a editora por `publishers_lower_name_idx`, cinco índices sem leitor retirados com a razão escrita.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde.*
 
 **O que é.** Reescrever o ramo num único padrão regexp que `gin_trgm` sabe servir; alinhar as expressões às dos índices; dar à publicação um índice em `lower(name)`; depois retirar os índices que ficarem sem leitor.
 
@@ -488,11 +488,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B34 — Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
-**Estado.** Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo).
+**Estado.** Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo). **Entregue em 27/09 à noite pela outra sessão (`df4dcec1`)** : `fn_delete_my_account` repõe o ator do diário E as contas dos instantâneos de rascunhos; suíte `effacement_journal_catalogue_tests` na CI.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 28/09, produção : `fn_delete_my_account` trata `catalog_audit_log`; 1 750 linhas, um só ator, nenhum uuid órfão. Conforme.*
 
 **O que é.** Reler o que `catalog_audit_log` guarda de uma pessoa; alinhar a exclusão aos três diários pseudonimizados; acrescentar o caso à suíte de exclusão.
 

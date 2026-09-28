@@ -2546,7 +2546,7 @@
       "id": "B13",
       "d": "B",
       "p": "P3",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "L",
       "sk": [
         "sql",
@@ -2557,8 +2557,8 @@
         "pt": "Decidir o destino das 221 migrações: squash ou não"
       },
       "v": {
-        "fr": "221 migrations appliquées, dont la première est un `baseline_live` de **2,4 Mo** — le plus gros fichier du dépôt. Le squash est marqué « décidé, non commencé » depuis le 20/08, à une époque où le compte était de 146.",
-        "pt": "221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146."
+        "fr": "221 migrations appliquées, dont la première est un `baseline_live` de **2,4 Mo** — le plus gros fichier du dépôt. Le squash est marqué « décidé, non commencé » depuis le 20/08, à une époque où le compte était de 146. **28/09 — décision proposée au REGISTRE, `DOC-MIGR-2` : on ne squashe pas.** Recompté : 384 migrations, 9,0 Mo (socle 2,4 Mo ; données FICEDL 1,9 Mo ; schéma < 5 Mo) ; rejeu complet sur l'image Supabase **2 min 17 s** (run 1418) — les 25 min du 29/08 ne sont plus vraies. Trois raisons : un squash refait un `pg_dump` qui porte le défaut de `DOC-GRANT-2` ; chaque migration est une trace citée par version (REGISTRE, fiches, suites) ; le coût (socle à refaire et à éprouver ailleurs, suites à réaligner) dépasse le gain (une minute de CI, 5 Mo). Rouvrir si le rejeu passe dix minutes ou si un socle est à refaire de toute façon (I2). Reste : que Xavier acte la ligne.",
+        "pt": "221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). Falta: Xavier confirmar a linha."
       },
       "w": {
         "fr": "Soit reconstruire un `baseline` à partir du schéma courant et archiver les migrations antérieures, soit assumer la chaîne longue et documenter pourquoi. Le rejeu complet prend aujourd'hui environ 25 minutes, mesuré.",
@@ -2587,8 +2587,8 @@
         "docs/schema/baseline_schema_2026-06-11.sql"
       ],
       "verif": {
-        "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul.",
-        "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08."
+        "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul. 28/09 — 384 migrations, 9,0 Mo ; rejeu complet 2 min 17 s (job `rejeu-image`, run 1418) ; décision écrite au REGISTRE (`DOC-MIGR-2`), statut « proposé ».",
+        "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), estado «proposto»."
       }
     },
     {
@@ -2639,8 +2639,8 @@
         "docs/specs/REGISTRE_decisions.md"
       ],
       "verif": {
-        "fr": "27/09 — suite SQL `brouillons_par_bibliotheque_tests` 30/30 (cinq profils : coordination de A, bibliothécaire de B, staff de A et B, lectrice, admin sans adhésion, admin aussi staff) et les 122 suites de la CI ; vitest 1 061 ; relevé de production (1 820 notices en cours, toutes rattachées ; un seul lot, 57, porte des notices publiées sans bibliothèque).",
-        "pt": "27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção."
+        "fr": "27/09 — suite SQL `brouillons_par_bibliotheque_tests` 30/30 (cinq profils : coordination de A, bibliothécaire de B, staff de A et B, lectrice, admin sans adhésion, admin aussi staff) et les 122 suites de la CI ; vitest 1 061 ; relevé de production (1 820 notices en cours, toutes rattachées ; un seul lot, 57, porte des notices publiées sans bibliothèque). **28/09, prod en lecture seule** : les politiques `*_catalogacao_librarian_all` de `book_drafts` et `exemplar_drafts` demandent `can_access_catalogacao` ET (admin réseau OU `COALESCE(owner_library_id, private.fn_book_draft_creator_library(…))` parmi les bibliothèques de staff) ; `author_drafts` : lecture commune au réseau, écriture par l'admin ou l'auteur·e ; `fn_user_staff_library` fermée aux comptes (`postgres`, `service_role`) ; les deux aides déplacées dans `private` par B35 ; 134 brouillons de notice sur 2 260 sans `owner_library_id` (repli par la bibliothèque du créateur), 20/20 brouillons d'exemplaire avec `target_library_id`. Conforme aux trois critères.",
+        "pt": "27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção. **28/09, produção em leitura** : as políticas de `book_drafts` e `exemplar_drafts` exigem `can_access_catalogacao` E (admin da rede OU biblioteca do rascunho entre as bibliotecas de staff); `author_drafts` de leitura comum; `fn_user_staff_library` fechada às contas; 134 de 2 260 rascunhos sem `owner_library_id` (recuo pela biblioteca de quem criou). Conforme."
       }
     },
     {
@@ -2693,15 +2693,15 @@
         "src/lib/useStaffLibraries.js"
       ],
       "verif": {
-        "fr": "27/09 — suite SQL `lot_a_une_bibliotheque_tests` 17/17 (huit profils) et les 132 suites de la CI ; vitest 107 fichiers ; production en lecture seule après le déploiement (tag `deployed-functions` = `2ecdaea3`, migration `created_by` nul) : lots 8, 57, 63 à MLEG, BLMF, Solidaires, `updated_at` intact, aucun lot à l'administration ; la coordination de chaque bibliothèque voit son lot et seulement lui ; déclencheurs *_zz_batch_guarded posés, anciens retirés ; droits des fonctions neuves conformes (aucune à anon).",
-        "pt": "27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele."
+        "fr": "27/09 — suite SQL `lot_a_une_bibliotheque_tests` 17/17 (huit profils) et les 132 suites de la CI ; vitest 107 fichiers ; production en lecture seule après le déploiement (tag `deployed-functions` = `2ecdaea3`, migration `created_by` nul) : lots 8, 57, 63 à MLEG, BLMF, Solidaires, `updated_at` intact, aucun lot à l'administration ; la coordination de chaque bibliothèque voit son lot et seulement lui ; déclencheurs *_zz_batch_guarded posés, anciens retirés ; droits des fonctions neuves conformes (aucune à anon). **28/09, prod en lecture seule** : `catalog_batches.library_id` présente ; 3 lots, tous avec une bibliothèque, aucun lot d'administration ; les quatre politiques de `catalog_batches` (lire, modifier, supprimer, suppression définitive) comparent `library_id` aux bibliothèques de staff ou de coordination de l'appelant·e — plus un prédicat déduit du contenu. Conforme aux trois critères.",
+        "pt": "27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele. **28/09, produção em leitura** : `catalog_batches.library_id` presente; 3 lotes, todos com biblioteca; as quatro políticas de `catalog_batches` comparam `library_id` às bibliotecas de staff ou de coordenação. Conforme."
       }
     },
     {
       "id": "B31",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -2711,8 +2711,8 @@
         "pt": "Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha"
       },
       "v": {
-        "fr": "Constaté pendant B10 (27/09), antérieur à lui. Sous `anon`, lire `library_circulation_policy_sets` ou `library_circulation_policy_rules` lève **42501** `permission denied for function fn_library_has_full_sigb` : la policy de lecture publique appelle une fonction fermée à `anon` depuis le socle du 10/05. Lire `library_deposit_rules` lève **42501** `permission denied for table user_library_memberships` : sa policy de lecture est `TO public` et lit les adhésions. Latent : ces tables ne sont lues que par des écrans connectés (`RegimeStateBox`, `PolicySetManager`, `LoanDepositPanel`), qui avalent d'ailleurs l'erreur. B10 a gardé ces trois policies telles quelles, exprès (une fusion ne change pas un comportement).",
-        "pt": "Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas."
+        "fr": "Constaté pendant B10 (27/09), antérieur à lui. Sous `anon`, lire `library_circulation_policy_sets` ou `library_circulation_policy_rules` lève **42501** `permission denied for function fn_library_has_full_sigb` : la policy de lecture publique appelle une fonction fermée à `anon` depuis le socle du 10/05. Lire `library_deposit_rules` lève **42501** `permission denied for table user_library_memberships` : sa policy de lecture est `TO public` et lit les adhésions. Latent : ces tables ne sont lues que par des écrans connectés (`RegimeStateBox`, `PolicySetManager`, `LoanDepositPanel`), qui avalent d'ailleurs l'erreur. B10 a gardé ces trois policies telles quelles, exprès (une fusion ne change pas un comportement). **Livré le 27/09 au soir par l'autre session (`507afb03`, migration `20260927184425`)** : le recensement a trouvé 13 relations pour `anon` et 10 pour un compte sans adhésion qui levaient 42501 ; toutes rendent zéro ligne désormais ; suite `lecture_accordee_sans_erreur_tests` en CI.",
+        "pt": "Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas. **Entregue em 27/09 à noite pela outra sessão (`507afb03`)** : 13 relações para `anon` e 10 para uma conta sem adesão levantavam 42501; todas devolvem zero linhas agora; suíte `lecture_accordee_sans_erreur_tests` na CI."
       },
       "w": {
         "fr": "Décider ce que doit voir un·e visiteur·se : soit rien (policies `TO authenticated`, zéro ligne au lieu d'une erreur), soit les règles d'une bibliothèque en SIGB complet (ouvrir `fn_library_has_full_sigb` à `anon`, avec son entrée au T12 de `grants_herites_tests.sql`).",
@@ -2739,7 +2739,11 @@
       "r": [
         "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §2",
         "supabase/migrations/20260927180000_b10_une_policy_permissive_par_role_et_commande.sql"
-      ]
+      ],
+      "verif": {
+        "fr": "28/09, prod sous `anon` (`set local role`) : `library_circulation_policy_sets`, `library_circulation_policy_rules`, `library_deposit_rules` rendent 0 ligne, aucune erreur ; leurs politiques SELECT sont `TO authenticated`. Conforme aux deux critères.",
+        "pt": "28/09, produção sob `anon` : as três tabelas devolvem 0 linhas, sem erro; políticas SELECT `TO authenticated`. Conforme."
+      }
     },
     {
       "id": "B32",
@@ -2793,7 +2797,7 @@
       "id": "B33",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql"
@@ -2803,8 +2807,8 @@
         "pt": "Busca: índices trigrama que a forma das consultas impede de usar"
       },
       "v": {
-        "fr": "Constaté pendant B10 (27/09). `api.search_catalog_v1` (autocomplétion, 177 ms en moyenne sur 40 appels, à 2 600 notices) écrit `… % v OR … LIKE v||'%' OR EXISTS (SELECT … FROM unnest(tokens) … ~ …)` : la branche `OR EXISTS` interdit tout BitmapOr, ses cinq index trigramme ne servent jamais ; pour `sort_name` s'y ajoute `f_normalize_search(COALESCE(sort_name,''))`, qui n'est pas l'expression de l'index. Même motif pour `idx_books_autor_trgm` (`CatalogPanel`, `fn_peb_search_exemplares` : un OU avec `isbn`, `bib_ref` ou `tombo` sans trigramme) et `serials_uniform_title_trgm`. Et `fn_sync_publisher_id_on_publish` cherche l'éditeur par `lower(p.name) = …` **sans aucun index**, à chaque notice publiée — le GIN trigramme sur `name` brut ne sert personne. Quatre index gardés par B10 attendent cet item : `authors_sort_name_norm_trgm_idx`, `idx_publishers_name_trgm`, `idx_authors_external_ids` (MBID jamais câblé ; les usages réels sont `->>` et `NOT ?`), `serials_issn_idx`.",
-        "pt": "Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice."
+        "fr": "Constaté pendant B10 (27/09). `api.search_catalog_v1` (autocomplétion, 177 ms en moyenne sur 40 appels, à 2 600 notices) écrit `… % v OR … LIKE v||'%' OR EXISTS (SELECT … FROM unnest(tokens) … ~ …)` : la branche `OR EXISTS` interdit tout BitmapOr, ses cinq index trigramme ne servent jamais ; pour `sort_name` s'y ajoute `f_normalize_search(COALESCE(sort_name,''))`, qui n'est pas l'expression de l'index. Même motif pour `idx_books_autor_trgm` (`CatalogPanel`, `fn_peb_search_exemplares` : un OU avec `isbn`, `bib_ref` ou `tombo` sans trigramme) et `serials_uniform_title_trgm`. Et `fn_sync_publisher_id_on_publish` cherche l'éditeur par `lower(p.name) = …` **sans aucun index**, à chaque notice publiée — le GIN trigramme sur `name` brut ne sert personne. Quatre index gardés par B10 attendent cet item : `authors_sort_name_norm_trgm_idx`, `idx_publishers_name_trgm`, `idx_authors_external_ids` (MBID jamais câblé ; les usages réels sont `->>` et `NOT ?`), `serials_issn_idx`. **Livré le 27/09 au soir par l'autre session (`6bdd4331`, migrations `20260927193314` et `…315` ; test T1 corrigé le 28/09, `8eaa180c`)** : la branche `OR EXISTS` devient UN motif regexp (jetons échappés), les expressions s'alignent sur les index, la publication trouve son éditeur par `publishers_lower_name_idx`, cinq index sans lecteur retirés avec la raison écrite (règle : sous RLS, seuls les opérateurs LEAKPROOF montent dans l'index — LIKE, ILIKE, `~`, `%` ne le sont pas).",
+        "pt": "Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice. **Entregue em 27/09 à noite pela outra sessão (`6bdd4331`)** : a ramificação `OR EXISTS` vira UM padrão regexp, as expressões alinham-se aos índices, a publicação encontra a editora por `publishers_lower_name_idx`, cinco índices sem leitor retirados com a razão escrita."
       },
       "w": {
         "fr": "Réécrire la branche en un seul motif regexp que `gin_trgm` sait servir (`~ '(^|\\s)(tok1|tok2)'`) ; aligner les expressions sur celles des index (retirer le `COALESCE`, inutile dans un WHERE) ; donner à la publication un index sur `lower(name)` ou réécrire sa recherche sur l'index existant ; puis retirer, raison écrite, les index qui resteraient sans lecteur.",
@@ -2832,13 +2836,17 @@
       },
       "r": [
         "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (grappes 1, 2, 4 et « Surprises »)"
-      ]
+      ],
+      "verif": {
+        "fr": "28/09, prod : `api.search_catalog_v1` porte le motif unique ; `publishers_lower_name_idx` existe et `fn_sync_publisher_id_on_publish` compare `lower(name)` ; `idx_publishers_name_trgm`, `idx_authors_external_ids`, `serials_issn_idx` absents ; `authors_sort_name_norm_trgm_idx` gardé et emprunté (1 125 parcours, comme celui de `preferred_name`), les index `fn_normalize_name` 3 704 parcours. Le run 1416 rouge (T1) est celui que `8eaa180c` corrige ; 1418 vert. Reste le plan à l'appui au banc pour le premier critère.",
+        "pt": "28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde."
+      }
     },
     {
       "id": "B34",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -2848,8 +2856,8 @@
         "pt": "Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída"
       },
       "v": {
-        "fr": "Constaté pendant B10 (27/09), **à instruire**. `fn_delete_my_account` pseudonymise ou vide une cinquantaine de tables et supprime le compte, mais ne touche pas `catalog_audit_log`, dont `actor_id` (sans clé étrangère) garderait l'uuid de la personne effacée — alors que trois autres journaux sont pseudonymisés (`library_unarchive_log`, `network_admin_cross_library_actions_log`, `network_administrator_audit`). La table porte aussi `label` et `details` (jsonb), non relus. Au 27/09, **aucune ligne n'est concernée** : 1 749 lignes, un seul acteur, toujours actif.",
-        "pt": "Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo)."
+        "fr": "Constaté pendant B10 (27/09), **à instruire**. `fn_delete_my_account` pseudonymise ou vide une cinquantaine de tables et supprime le compte, mais ne touche pas `catalog_audit_log`, dont `actor_id` (sans clé étrangère) garderait l'uuid de la personne effacée — alors que trois autres journaux sont pseudonymisés (`library_unarchive_log`, `network_admin_cross_library_actions_log`, `network_administrator_audit`). La table porte aussi `label` et `details` (jsonb), non relus. Au 27/09, **aucune ligne n'est concernée** : 1 749 lignes, un seul acteur, toujours actif. **Livré le 27/09 au soir par l'autre session (`df4dcec1`, migration `20260927184954`)** : `fn_delete_my_account` re-pointe l'acteur du journal ET les comptes `created_by`/`updated_by` des instantanés de brouillons (`details->'snapshot'`, plus de 1 660 lignes) ; suite `effacement_journal_catalogue_tests` en CI.",
+        "pt": "Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo). **Entregue em 27/09 à noite pela outra sessão (`df4dcec1`)** : `fn_delete_my_account` repõe o ator do diário E as contas dos instantâneos de rascunhos; suíte `effacement_journal_catalogue_tests` na CI."
       },
       "w": {
         "fr": "Relire ce que `catalog_audit_log` conserve d'une personne (`label`, `details`) ; aligner l'effacement sur les trois journaux pseudonymisés (`UPDATE … WHERE actor_id = …`, servi par `catalog_audit_log_actor_idx`, gardé par B10 pour cela) ; ajouter le cas à la suite de l'effacement.",
@@ -2875,7 +2883,11 @@
       },
       "r": [
         "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)"
-      ]
+      ],
+      "verif": {
+        "fr": "28/09, prod : le corps de `fn_delete_my_account` traite `catalog_audit_log` ; 1 750 lignes, un seul acteur (actif), 60 lignes sans acteur, aucun uuid orphelin. Conforme aux deux critères.",
+        "pt": "28/09, produção : `fn_delete_my_account` trata `catalog_audit_log`; 1 750 linhas, um só ator, nenhum uuid órfão. Conforme."
+      }
     },
     {
       "id": "C3",
