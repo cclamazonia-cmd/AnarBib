@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-28** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-28** · 61 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,13 +10,13 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 24 de setembro de 2026](#o-estado-real-em-24-de-setembro-de-2026)
+- [O estado real em 28 de setembro de 2026](#o-estado-real-em-28-de-setembro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 6
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 2
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 3
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
@@ -58,63 +58,61 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 24 de setembro de 2026
+## O estado real em 28 de setembro de 2026
 
-**Levantamento de 24 de setembro de 2026, à noite** (`3d9cf15b`) — produção consultada em leitura apenas e repositório recontado; **todas as linhas foram remedidas** (levantamentos completos anteriores: 22/09 `60b16828`, 21/09 `2a9681e5`). Dois dias dedicados ao e-mail: a **PR #30** fundida em 23/09 e **F7 fechado em 24/09** pela vizinha (uma só implementação de envio, a falha de transporte abre um incidente — +1 migração, +1 tabela, +1 função DEFINER fechada, +1 suite SQL, +2 bancos, +20 commits); advisors, chaves, marcadores, catálogo e rede inalterados. O que se segue vem do levantamento de 22/09 e continua verdadeiro. **Fechados sobre peças, com a sua medida**: **I26** (uma instância restaurada recupera os seus 38 crons), **E22** (a chaveta órfã de `PanelPage.css` e a guarda), **I27** (o caminho de socorro do front publicou de verdade em `app.anarbib.is`, prova por `/.version-front`). Entregue sem item: a sonda `images_pins` do `health-probe` e as suas duas remedições (GoTrue v2.197.0, Storage v1.77.0), o histórico das migrações restaurado com o dump, `deploy.sh` que reconstrói enfim o front, `publier-front.sh`. **O que falta fechar, e por quem** — *(a) por Xavier, sem código*: **F11** — abrir um e-mail de cada família num cliente real e dizer se se lê; o código está em produção desde 22/09 (`MAIL-Q7`), só falta o olhar. **I24** — requalificar a ficha. *(b) por uma sessão, com medidas*: **I21** — sete condições em oito por marcar com prova; **I2** — proxy inverso com túnel, tags em `sha256`, repetição a frio, a questão do Jitsi. *(c) a vigiar, nada a fazer*: o incidente `images_pins` reabrir-se-á sozinho na próxima subida de GoTrue ou Storage — o e-mail diz então o que fazer. Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`.
+**Levantamento de 28 de setembro de 2026 à noite** (`f36b4638`) — produção consultada em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 24/09 `3d9cf15b`). Quatro dias com duas sessões em paralelo: **60 migrações**, 188 commits, **oito fechamentos em 28/09** e nove em 27/09. O que mudou: +5 tabelas, +26 políticas, +72 funções; 47 registros e 70 obras a menos (fusões de duplicatas); **indexação por assunto: 2 146 de 2 609 registros têm assunto, 463 nenhum** (contra 1 184 e 1 472 em 24/09); 45 índices sem uso a menos e o catálogo público aguenta 100 000 registros (B32); +82 arquivos `src/`, +655 testes JS, +36 suítes SQL. Um aviso de segurança novo e deliberado: `fn_locale_from_idioma` sem `search_path` fixo (B32, alavanca c). Falta fechar: B29/B30 e os lotes de E6 (Xavier, na tela), H17 a H26, A1, A3, F11.
 
-Levantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos.
-
-**Frescor dos constatos em 2026-09-28.** **53 itens de 65** trazem uma verificação datada própria (A1, A3, B13, B29, B30, B31, B33, B34, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-28.** **49 itens de 61** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
 | | | |
 |---|---:|---|
-| Tabelas `public` | **192** | todas com RLS ativo, **333 policies** em todos os esquemas (`public` 284, `storage` 47, `cron` 2). +1 em 24/09: `mail_transport_failures` (F7 — o módulo de transporte regista aí cada falha de envio, a sonda lê uma janela de 30 min), nascida com a sua RLS (leitura aos admins da rede, nada a `anon`) e **classificada na rede BG2** (verificado: a cópia de segurança não bloqueará). |
-| Tabelas `ingest` | **10** | todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
-| Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda |
-| Funções aplicativas | **925** | `public` 689 · `api` 189 · `ingest` 34 · `private` 13. Das quais **709 SECURITY DEFINER**. +1 em 24/09: `public.fn_healthcheck_mail_transport` (DEFINER, **fechada** a `anon` e a `authenticated`, `search_path` fixo), a sonda que abre o incidente `mail_transport` quando um envio falha (F7). O lint 0029 não se move. |
-| Migrações aplicadas | **331** | **331 aplicadas em produção = 331 numeradas no repositório**. A única desde 22/09: `20260924180538` (uma falha de transporte de e-mail abre um incidente — tabela `mail_transport_failures`, sonda `fn_healthcheck_mail_transport`; F7). Nada em fila. |
-| Jobs `pg_cron` | **38** | ativos — +1 desde 03/09 (pré-tradução dos títulos de obra). |
-| Avisos de segurança | **470** | 0 ERROR · **420** WARN nas DEFINER expostas a `authenticated` (0029), todas justificadas · **26** nas expostas a `anon` (0028), exatamente a lista nomeada T10 · 24 INFO « RLS sem policy ». **Inalterado desde 20/09**, relido em 24/09 à noite: a função de 24/09 nasce fechada. |
-| Avisos de desempenho | **363** | **291 « índices não utilizados »** (291 em 22/09, 343 em 21/09, 368 em 06/09), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 sem chave primária, 1 aviso sobre as conexões `auth`. Inalterado desde 22/09, relido em 24/09. |
-| Esquemas de refugo | **1** | só `conv_backup` — não se purga. `backup_2026_05_07` saiu em 04/09 (B9). |
+| Tabelas `public` | **197** | todas com RLS, **359 políticas** (`public` 310, `storage` 47, `cron` 2); +5 tabelas e +26 políticas desde 24/09 (B10, B29/B30, F7). 27 tabelas com RLS sem política (aviso 0008): fechadas, deliberado. |
+| Tabelas `ingest` | **10** | todas com RLS, nenhuma política (aviso 0008): o esquema nunca foi exposto. Inalterado desde 29/08. |
+| Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER**. Inalterado desde 24/09. |
+| Funções aplicativas | **997** | `public` 734 · `api` 201 · `ingest` 42 · `private` 20; **755 SECURITY DEFINER**; +72 desde 24/09 (B29/B30, fusão de registros, PMB, B32). Uma só sem `search_path` fixo, deliberado (`fn_locale_from_idioma`, B32). |
+| Migrações aplicadas | **391** | **391 aplicadas = 391 numeradas no repositório**; +60 desde 24/09. Reexecução completa: 2 min 17 s. `DOC-MIGR-2`: sem squash. |
+| Jobs `pg_cron` | **41** | ativos — +3 desde 24/09 (`notify-outbox-retry`, `conv-file-alimenter`, `capas-lot`). |
+| Avisos de segurança | **499** | 0 ERROR · **444** WARN 0029 (+24: funções novas relidas), **27** 0028 (+1, `fn_visible_library_ids`, B32), 1 0011 (deliberado), 27 INFO 0008. |
+| Avisos de desempenho | **272** | **246 índices sem uso** (−45 desde 24/09: B10, B33, B32), 17 chaves estrangeiras sem índice, 8 tabelas sem chave primária (`conv_backup`, linhas de importação BLMF). |
+| Esquemas de refugo | **1** | só `conv_backup`, inalterado. |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **53** | + `_shared` ; **+1 desde 03/09 : `work-titles-autofill`**. O roteador `main` nunca é implantado, de propósito. |
-| Declarações `verify_jwt` | **38** | **todas a `false`** ; +1 desde 03/09. |
+| Pastas no repositório | **55** | + `_shared`; +2 líquidas desde 24/09 (`submit-bug-report`, `cover-batch`, `process-partner-catalog-import`). Todas implantadas pela CI. |
+| Declarações `verify_jwt` | **40** | **todas `false`**; +2 (PMB). |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 656** | 2 758 exemplares, **2 449 obras** (35 vazias suprimidas + fusões), **1 505 autoridades** (17 fusões C5), **3 497 títulos de obra** (pré-traduzidos, 1 452 a rever — C11). 0 proposta sobre obra ainda (G1). |
-| Rascunhos de catalogação | **2 250** | `draft` 1 820, `published` 430 — inalterado em número, mas **os 1 673 rascunhos do lote Solidaires (63) têm agora uma proprietária, uma biblioteca ativa e uma cota** (`SOL-00001`…`SOL-01673`). Esperam as classes de arrumação (35 rubricas, Christian), a revisão do lote e `publish_catalog_batch(63)`. |
-| Indexação de assunto | **1 184 / 2 656** | registos com pelo menos um assunto — **1 472 sem nenhum** (eram 1 537). Objeto de **C7**. |
-| Tesauro FICEDL | **621** | termos — 159 datas desde 03/09 (H1). 98 alinhamentos intactos. |
-| Periódicos | **4** | títulos, 7 fascículos vinculados. O **arbítrio de duplicatas** deles está aberto a qualquer `librarian` enquanto o dos livros é reservado à coordenação: desvio medido em 01/09, decidido, aguardando aviso prévio |
+| Fichas | **2 609** | 2 759 exemplares, **2 379 obras**, **1 508 autoridades**; −47 registros e −70 obras desde 24/09 (fusões de duplicatas). |
+| Rascunhos de catalogação | **2 294** | `draft` 1 820, `published` 474; cada rascunho e cada lote têm biblioteca (B29/B30). O lote Solidaires (1 673) continua a rever e publicar. |
+| Indexação de assunto | **2 146 / 2 609** | registros com pelo menos um assunto — **463 sem nenhum** (1 472 em 24/09): C7 indexou 851 registros em 27/09 e a fusão de registros devolveu os assuntos a 136 publicações. |
+| Tesauro FICEDL | **621** | termos, **10 locales**, **110 alinhamentos** (+12 por C7). |
+| Periódicos | **4** | títulos, **5 fascículos** (7 em 24/09: duas duplicatas fundidas). |
 
 ### Rede
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **5** | **todas ativas desde 15/09**: Solidaires (Paris, França) está **admitida** (decisão de Xavier em modo « só admin », `RES-D12` emendado, G7 fechado) — `is_active = true`, série de tombo `SOL-` + ano configurada na tela (E21), coordenação vinculada. Os seus 1 673 rascunhos têm cota `SOL-00001`…`SOL-01673`; falta as classes por rubricas, a revisão do lote e a publicação (C2, D3). |
-| Contas | **22** | **24** pertenças ativas (inalterado); **22 linhas** em `auth.users`: **20 contas vivas** e **2 tokens pseudónimos** de contas apagadas (fornecedor `pseudonymized`, sem data, sem pertença, nunca ligadas — o rasto que `fn_delete_my_account` deixa). Remedido em 24/09: inalterado desde 22/09. |
-| Administrador(a/e)s da rede | **1** | **é o item A1, e ele comanda todo o resto** |
-| Circulação viva | **6 / 19 / 22 / 0** | empréstimos / reservas / consultas / PEB abertos — inalterado. Dois PEB de maio, devolvidos, ficam como histórico. |
+| Bibliotecas | **5** | **ativas, de 6 linhas** (a sexta é a biblioteca de formação, inativa). |
+| Contas | **22** | **25** adesões ativas (+1); **22 linhas** em `auth.users`, **20 confirmadas**. |
+| Administrador(a/e)s da rede | **1** | **é o item A1, e comanda todo o resto**. |
+| Circulação viva | **6 / 20 / 22 / 0** | empréstimos / reservas / consultas / PEB **não arquivados** — mas **nenhum aberto**: todos encerrados; a circulação real acontece fora do AnarBib. |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **2 822** | +20 desde o levantamento da noite de 22/09: a **PR #30** do camarada (`ASR2026`) fundida por Xavier em 23/09 (transporte de e-mail híbrido — SMTP, Resend, simulação explícita — e desacoplamento do front; sete commits de 20-21/09 entrados pela fusão), depois **F7** conduzido pela vizinha em três lotes em 23-24/09 (as oito funções de envio passam por `_shared/transport/email.ts`, e a falha de transporte abre um incidente). Cabeça no momento do levantamento: `3d9cf15b`. |
-| Arquivos `src/` | **358** | +2 desde 22/09, dois bancos de teste: `smtp-transport` (o cliente SMTP da PR #30) e `mail-transport-routage` (F7: cada função de envio passa pelo transporte partilhado, lista fechada vazia). Nenhum ficheiro de página nem de componente acrescentado. |
-| Chaves i18n | **6 690** | paridade estrita nas dez locales (6 690 cada). +1 em 22/09: `auth.passwordPwned` (« esta palavra-passe consta de fugas de dados conhecidas », `310be843`), e `auth.passwordPolicy` reformulada no mesmo gesto. A chave morta de E16 não voltou. |
-| Testes | **799 + 109** | **799 testes JS** (vitest, 76 ficheiros — relançados por inteiro em 24/09 à noite sobre `3d9cf15b`, todos verdes) + **109 suites SQL** em `ci-suites.txt` (+1: `mail_transport_tests`, F7). +16 testes JS desde 22/09: os dois bancos do transporte de e-mail. |
-| Marcadores de dívida | **18** | dos quais 4 em `src/` — método fixo: 18 em 24/09 como em 22, 21, 20, 16 e 15/09. Nenhum é uma tarefa aberta. |
+| Commits | **3 010** | +188 desde 24/09, em quatro dias e duas sessões. |
+| Arquivos `src/` | **440** | +82 desde 24/09: onze componentes extraídos (E6), ajuda à caixa, painéis da fusão, uma trintena de bancadas. |
+| Chaves i18n | **6 932** | paridade estrita nas dez locales (6 932 cada); +242 desde 24/09. |
+| Testes | **1 454 + 145** | **1 454 testes JS** (124 arquivos; +655 desde 24/09) + **145 suítes SQL** (+36), todos verdes. |
+| Marcadores de dívida | **18** | dos quais 4 em `src/`; 18 como em 24/09. |
 
 ---
 
@@ -347,33 +345,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | clos |
 | **B29** | Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus | `P1` | A verificar |
 | **B30** | Dar ao lote de catalogação uma biblioteca própria (sequência de B29) | `P2` | A verificar |
-| **B31** | Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha | `P2` | clos |
-| **B33** | Busca: índices trigrama que a forma das consultas impede de usar | `P2` | clos |
-| **B34** | Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída | `P2` | clos |
-
-#### B13 — Decidir o destino das 221 migrações: squash ou não
-
-`P3` Adiado · Estado : **clos** · Carga : várias semanas · O que exige : SQL / PostgreSQL, administração de sistemas
-
-**Estado.** 221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). **Confirmado por Xavier em 28/09**: a linha do REGISTRO está virada, B13 fechado.
-
-*Verificado : 31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), confirmado por Xavier em 28/09.*
-
-**O que é.** Ou reconstruir um `baseline` a partir do esquema atual e arquivar as migrações anteriores, ou assumir a cadeia longa e documentar por quê. A reexecução completa leva hoje cerca de 25 minutos, medido.
-
-**Por que importa.** O risco do squash é inteiro: reescreve o único rastro ordenado do que foi feito, e o arnês de testes SQL reexecuta toda a cadeia a cada vez. Não fazê-lo custa tempo de CI; fazê-lo mal custa a capacidade de reconstruir. **Não se comprometer antes que A2 tenha sido bem-sucedido pelo menos uma vez.**
-
-**O que conta como terminado.**
-
-- Uma decisão escrita no REGISTRO, num sentido ou no outro.
-- Se squash: a reconstrução a partir do novo baseline foi testada numa máquina de terceiro.
-
-**Dependências.** **Bloqueado por A2.** Não começar antes.
-
-*Remissões : `ETAT-AVANCEMENT-multisessions` · `docs/schema/baseline_schema_2026-06-11.sql`*
 
 #### B29 — Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus
 
@@ -418,70 +391,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois da verificação de B29 em produção.
 
 *Remissões : `supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql` · `docs/specs/REGISTRE_decisions.md` · `supabase/migrations/20260927191059_b30_lot_a_une_bibliotheque.sql` · `tests/sql/lot_a_une_bibliotheque_tests.sql` · `src/lib/useStaffLibraries.js`*
-
-#### B31 — Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha
-
-`P2` Corrente · Estado : **clos** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas. **Entregue em 27/09 à noite pela outra sessão (`507afb03`)** : 13 relações para `anon` e 10 para uma conta sem adesão levantavam 42501; todas devolvem zero linhas agora; suíte `lecture_accordee_sans_erreur_tests` na CI.
-
-*Verificado : 28/09, produção sob `anon` : as três tabelas devolvem 0 linhas, sem erro; políticas SELECT `TO authenticated`. Conforme.*
-
-**O que é.** Decidir o que um visitante deve ver: nada (policies `TO authenticated`, zero linha em vez de erro) ou as regras de uma biblioteca em SIGB completo (abrir `fn_library_has_full_sigb` a `anon`, com entrada no T12).
-
-**Por que importa.** Um erro não é uma recusa: um cliente anônimo recebe 401/403 em vez de lista vazia, e uma futura página pública de regras quebraria sem aviso.
-
-**O que conta como terminado.**
-
-- Uma leitura anônima das três tabelas devolve zero linha ou as linhas desejadas, nunca um erro.
-- A escolha está escrita na migração e guardada por uma suíte.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §2` · `supabase/migrations/20260927180000_b10_une_policy_permissive_par_role_et_commande.sql`*
-
-#### B33 — Busca: índices trigrama que a forma das consultas impede de usar
-
-`P2` Corrente · Estado : **clos** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado.** Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice. **Entregue em 27/09 à noite pela outra sessão (`6bdd4331`)** : a ramificação `OR EXISTS` vira UM padrão regexp, as expressões alinham-se aos índices, a publicação encontra a editora por `publishers_lower_name_idx`, cinco índices sem leitor retirados com a razão escrita.
-
-*Verificado : 28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde. Plano (produção, 28/09): `BitmapOr` de seis `Bitmap Index Scan` nos dois índices trigram de `authors`, um por operador — 4,5 ms; a ramificação dos apelidos fica em `Seq Scan` (1 644 linhas). Chamada completa sob `anon`: 183 ms — o tempo já não está nas ramificações trigram.*
-
-**O que é.** Reescrever o ramo num único padrão regexp que `gin_trgm` sabe servir; alinhar as expressões às dos índices; dar à publicação um índice em `lower(name)`; depois retirar os índices que ficarem sem leitor.
-
-**Por que importa.** Esses índices custam a cada escrita e não servem; a busca cresce linearmente com o catálogo.
-
-**O que conta como terminado.**
-
-- `search_catalog_v1` usa seus índices trigrama (plano como prova).
-- A publicação de um registro não percorre mais `publishers`.
-- Os índices sem leitor são retirados, com o motivo escrito.
-
-**Dependências.** Nenhuma; cruzar com B32.
-
-*Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (grappes 1, 2, 4 et « Surprises »)`*
-
-#### B34 — Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída
-
-`P2` Corrente · Estado : **clos** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo). **Entregue em 27/09 à noite pela outra sessão (`df4dcec1`)** : `fn_delete_my_account` repõe o ator do diário E as contas dos instantâneos de rascunhos; suíte `effacement_journal_catalogue_tests` na CI.
-
-*Verificado : 28/09, produção : `fn_delete_my_account` trata `catalog_audit_log`; 1 750 linhas, um só ator, nenhum uuid órfão. Conforme.*
-
-**O que é.** Reler o que `catalog_audit_log` guarda de uma pessoa; alinhar a exclusão aos três diários pseudonimizados; acrescentar o caso à suíte de exclusão.
-
-**Por que importa.** Uma exclusão que deixa um identificador num diário não apaga tudo.
-
-**O que conta como terminado.**
-
-- `catalog_audit_log` é tratado pela exclusão como os outros três diários, ou a razão contrária está escrita.
-- A suíte da exclusão o verifica.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)`*
 
 ---
 
@@ -2152,4 +2061,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-28. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-09-24 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `3d9cf15b`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-28. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 61 itens em 11 domínios. O estado numérico foi levantado em 2026-09-28 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `f36b4638`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

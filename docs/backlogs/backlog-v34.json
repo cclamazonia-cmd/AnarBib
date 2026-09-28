@@ -13,8 +13,8 @@
     },
     "maj": "2026-09-28",
     "releve": {
-      "date": "2026-09-24",
-      "commit": "3d9cf15b"
+      "date": "2026-09-28",
+      "commit": "f36b4638"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 24 septembre 2026 au soir** (`3d9cf15b`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédents relevés complets : 22/09 `60b16828`, 21/09 `2a9681e5`). Deux jours consacrés au courriel : la **PR #30** fusionnée le 23/09 et **F7 clos le 24/09** par la voisine (une seule implémentation d envoi, l échec de transport ouvre un incident — +1 migration, +1 table, +1 fonction DEFINER fermée, +1 suite SQL, +2 bancs, +20 commits) ; advisors, clés, marqueurs, catalogue et réseau inchangés. Ce qui suit vient du relevé du 22/09 et reste vrai. **Clos sur pièces, avec leur mesure** : **I26** (une instance restaurée retrouve ses 38 crons — `private.fn_crons_replanifier()`, aller-retour réel sur `pg_cron`, sans effet en production), **E22** (l'accolade orpheline de `PanelPage.css` et la garde qui compte les accolades), **I27** (le chemin de secours du front a publié pour de vrai sur `app.anarbib.is`, preuve par `/.version-front`). Livré sans item : la sonde `images_pins` de `health-probe` et ses deux remesures (GoTrue v2.197.0, Storage v1.77.0 — la production a monté deux fois dans la journée), l'historique des migrations restauré avec le dump (troisième fichier), `deploy.sh` qui reconstruit enfin le front, `publier-front.sh`. **Ce qui reste à clore, et par qui** — *(a) par Xavier, sans code* : **F11** — ouvrir un courriel de chaque famille dans un vrai client et dire s'il se lit ; le code est en production depuis le 22/09 (`MAIL-Q7`), la garde tient, seul le regard manque. **I24** — requalifier la fiche : la sonde serveur alerte bien (deux courriels reçus), le gestionnaire systemd du poste sort sans cause établie ; décider si l'item vit encore. *(b) par une session, avec des mesures* : **I21** — sept conditions sur huit restent à cocher avec preuve (la connexion locale l'est depuis le 26/08, refaite le 21/09) ; **I2** — proxy inverse avec tunnel, tags en empreintes `sha256`, répétition à froid un mois plus tard, la question du Jitsi à poser à l'hébergeur. *(c) à surveiller, rien à faire* : l'incident `images_pins` se rouvrira de lui-même à la prochaine montée de GoTrue ou Storage — le courriel dit alors quoi faire (`deploy/banc-paliers.sh`, puis une migration qui remplace l'attendu, `.env.example` et `bootstrap.sh` ensemble). Pièce : `journal/operations/NOTE_pins-images-remesures_2026-09-21`.\n\nRelevé du **16 septembre 2026** au soir — production interrogée en lecture seule et dépôt recompté au commit `2e89c1de`. Deux journées denses depuis le relevé du 15/09 à 21 h (`60e0580a`) : la session voisine a fusionné la **PR #28** (installateur du camarade), livré GAZ-7 à GAZ-11 (reprise d'une brève rejetée, sonde des sources, correction par le staff, la gazette s'appelle **Fractale**), **E21** (numérotation à l'écran, cotes d'un lot), I19 (contrôle de santé de `pg_cron`), I18 (rejeu CI sur l'image `supabase/postgres`) et, à l'instant du relevé, **B22** (chaque ouverture à `anon` est une ligne écrite — migration au dépôt, en CI, pas encore en production : 322 au dépôt pour 321 appliquées) ; Xavier a **révoqué la HS256** (B19 clos, aucun 401 en 24 h) et **admis Solidaires** (G7 clos : bibliothèque active, 1 673 brouillons cotés `SOL-`) ; cette session a livré **B25/B26** (les compteurs d'abus comptent, clés hachées) et mené un inventaire des items ouverts contre les faits (A2, F9, I6 clos ; huit items annotés). Toutes les lignes ont été remesurées, advisors compris.",
-      "pt": "**Levantamento de 24 de setembro de 2026, à noite** (`3d9cf15b`) — produção consultada em leitura apenas e repositório recontado; **todas as linhas foram remedidas** (levantamentos completos anteriores: 22/09 `60b16828`, 21/09 `2a9681e5`). Dois dias dedicados ao e-mail: a **PR #30** fundida em 23/09 e **F7 fechado em 24/09** pela vizinha (uma só implementação de envio, a falha de transporte abre um incidente — +1 migração, +1 tabela, +1 função DEFINER fechada, +1 suite SQL, +2 bancos, +20 commits); advisors, chaves, marcadores, catálogo e rede inalterados. O que se segue vem do levantamento de 22/09 e continua verdadeiro. **Fechados sobre peças, com a sua medida**: **I26** (uma instância restaurada recupera os seus 38 crons), **E22** (a chaveta órfã de `PanelPage.css` e a guarda), **I27** (o caminho de socorro do front publicou de verdade em `app.anarbib.is`, prova por `/.version-front`). Entregue sem item: a sonda `images_pins` do `health-probe` e as suas duas remedições (GoTrue v2.197.0, Storage v1.77.0), o histórico das migrações restaurado com o dump, `deploy.sh` que reconstrói enfim o front, `publier-front.sh`. **O que falta fechar, e por quem** — *(a) por Xavier, sem código*: **F11** — abrir um e-mail de cada família num cliente real e dizer se se lê; o código está em produção desde 22/09 (`MAIL-Q7`), só falta o olhar. **I24** — requalificar a ficha. *(b) por uma sessão, com medidas*: **I21** — sete condições em oito por marcar com prova; **I2** — proxy inverso com túnel, tags em `sha256`, repetição a frio, a questão do Jitsi. *(c) a vigiar, nada a fazer*: o incidente `images_pins` reabrir-se-á sozinho na próxima subida de GoTrue ou Storage — o e-mail diz então o que fazer. Peça: `journal/operations/NOTE_pins-images-remesures_2026-09-21`.\n\nLevantamento de **16 de setembro de 2026** à noite — produção consultada em leitura apenas e repositório recontado no commit `2e89c1de`. Dois dias densos desde o levantamento de 15/09 às 21 h (`60e0580a`): a sessão vizinha fundiu a **PR #28** (instalador do companheiro), entregou GAZ-7 a GAZ-11 (retomada de uma nota rejeitada, sonda das fontes, correção pelo staff, a gazeta chama-se **Fractale**), **E21** (numeração na tela, cotas de um lote), I19, I18 e, no instante do levantamento, **B22** (migração no repositório, em CI, ainda não em produção: 322 no repositório para 321 aplicadas); Xavier **revogou a HS256** (B19 fechado, nenhum 401 em 24 h) e **admitiu Solidaires** (G7 fechado: biblioteca ativa, 1 673 rascunhos com cota `SOL-`); esta sessão entregou **B25/B26** (os contadores de abuso contam, chaves com hash) e fez um inventário dos itens abertos contra os factos (A2, F9, I6 fechados; oito itens anotados). Todas as linhas foram remedidas, advisors incluídos."
+      "fr": "**Relevé du 28 septembre 2026 au soir** (`f36b4638`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 24/09 `3d9cf15b`). Quatre jours à deux sessions en parallèle, et le jour le plus dense depuis le 29 août : **60 migrations** (28 le 27/09, 19 le 28/09, 13 les jours d'avant), 188 commits, **huit clôtures le 28/09** (B13, B31, B32, B33, B34, B35, C12, I28) et neuf le 27/09 (B10, C6, C7, C9, C11, H19, I3, capas). Ce qui a bougé et pourquoi : **la base** — +5 tables, +26 policies (une par rôle et par commande depuis B10, les brouillons et les lots par bibliothèque depuis B29/B30), +72 fonctions (aides de B29/B30, fusion de notices, PMB, sujets de reprise) ; **le catalogue** — 47 notices de moins (fusions de doublons, C5/C9 et la fusion de notices du 28/09), 70 œuvres de moins (mêmes fusions), et surtout **l'indexation matière : 2 146 notices sur 2 609 ont un sujet, 463 n'en ont aucun**, contre 1 184 et 1 472 le 24/09 — C7 (851 notices indexées par les vedettes MLEG et le thésaurus) et la reprise des sujets par la fusion ; **la performance** — 45 index inutilisés de moins (B10 en a retiré 22, B33 cinq, B32 en a fait servir) et le catalogue public tient 100 000 notices sous la seconde (B32, mesuré en production) ; **le dépôt** — 82 fichiers `src/` de plus, dont onze composants sortis de `BookDraftForm` et `BibliotecaPage` (E6) et une trentaine de bancs ; 655 tests JS de plus, 36 suites SQL de plus. **Un avis de sécurité nouveau, voulu** : `fn_locale_from_idioma` sans `search_path` figé — une fonction SQL qui en porte un ne s'insère pas en ligne dans le plan (B32, levier c) ; à garder à l'œil, elle ne lit aucune table. **Ce qui reste à clore, et par qui** — *par Xavier, à l'écran* : B29 et B30 (constats de prod du 28/09 à lire), les lots 4 à 8 de `BookDraftForm` et le lot 1 de `BibliotecaPage` (E6) ; H17 à H26 (PMB aller-retour, livrés le 28/09) ; *sans code* : A1 (toujours une seule administration), A3 (la machine du runner), F11 (les courriels dans un vrai client).",
+      "pt": "**Levantamento de 28 de setembro de 2026 à noite** (`f36b4638`) — produção consultada em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 24/09 `3d9cf15b`). Quatro dias com duas sessões em paralelo: **60 migrações**, 188 commits, **oito fechamentos em 28/09** e nove em 27/09. O que mudou: +5 tabelas, +26 políticas, +72 funções; 47 registros e 70 obras a menos (fusões de duplicatas); **indexação por assunto: 2 146 de 2 609 registros têm assunto, 463 nenhum** (contra 1 184 e 1 472 em 24/09); 45 índices sem uso a menos e o catálogo público aguenta 100 000 registros (B32); +82 arquivos `src/`, +655 testes JS, +36 suítes SQL. Um aviso de segurança novo e deliberado: `fn_locale_from_idioma` sem `search_path` fixo (B32, alavanca c). Falta fechar: B29/B30 e os lotes de E6 (Xavier, na tela), H17 a H26, A1, A3, F11."
     },
     "photo": [
       {
@@ -375,10 +375,10 @@
               "fr": "Tables `public`",
               "pt": "Tabelas `public`"
             },
-            "192",
+            "197",
             {
-              "fr": "toutes avec RLS activé, **333 policies** tous schémas confondus (`public` 284, `storage` 47, `cron` 2). +1 le 24/09 : `mail_transport_failures` (F7 — le module de transport y note chaque échec d envoi, la sonde lit une fenêtre de 30 min), née avec sa RLS (lecture aux admins réseau, rien à `anon`) et **classée au filet BG2** (`bg2-known-tables.txt`, ligne 133 — vérifié : la sauvegarde ne bloquera pas). Les quatre d avant datent du 03/09 (`work_titles`, `work_not_same`, `volume_group_dismissals`, `catalog_batch_reviews`).",
-              "pt": "todas com RLS ativo, **333 policies** em todos os esquemas (`public` 284, `storage` 47, `cron` 2). +1 em 24/09: `mail_transport_failures` (F7 — o módulo de transporte regista aí cada falha de envio, a sonda lê uma janela de 30 min), nascida com a sua RLS (leitura aos admins da rede, nada a `anon`) e **classificada na rede BG2** (verificado: a cópia de segurança não bloqueará)."
+              "fr": "toutes avec RLS activé, **359 policies** tous schémas confondus (`public` 310, `storage` 47, `cron` 2). +5 tables depuis le relevé du 24/09 : `bug_reports` et `bug_report_notification_outbox` (rapports de bogue, 24/09 au soir), `deploiement_ecarts_acquittes` (I22, le contrôle des migrations hors CI), `cover_proposals` (capas) et `book_external_ids` (H17, l'identifiant d'origine d'une notice importée). +26 policies : B10 a d'abord fondu 25 doublons (une policy permissive par rôle et par commande), puis B29/B30 ont posé celles des brouillons et des lots par bibliothèque, et chaque table neuve porte les siennes. 27 tables ont la RLS sans policy (avis 0008, `ingest` et des tables techniques de `public` : défis Altcha, rapports de bogue, lignes d'import) : fermées, voulu.",
+              "pt": "todas com RLS, **359 políticas** (`public` 310, `storage` 47, `cron` 2); +5 tabelas e +26 políticas desde 24/09 (B10, B29/B30, F7). 27 tabelas com RLS sem política (aviso 0008): fechadas, deliberado."
             }
           ],
           [
@@ -388,8 +388,8 @@
             },
             "10",
             {
-              "fr": "toutes avec RLS depuis le 29/08 au soir (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE`",
-              "pt": "todas com RLS desde a noite de 29/08 (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele"
+              "fr": "toutes avec RLS ; aucune n'a de policy (avis 0008, les 10) — le schéma n'a jamais été exposé, ni `anon` ni `authenticated` n'y a `USAGE`. Inchangé depuis le 29/08 (B1).",
+              "pt": "todas com RLS, nenhuma política (aviso 0008): o esquema nunca foi exposto. Inalterado desde 29/08."
             }
           ],
           [
@@ -399,8 +399,8 @@
             },
             "68",
             {
-              "fr": "**67 SECURITY INVOKER, 1 DEFINER** — contre 65/3 le 29/08 : deux vues de gouvernance sont repassées en invoker. `CREATE OR REPLACE VIEW` réinitialise cette option, et le T2 de `vues_api_definer_tests` la garde",
-              "pt": "**67 SECURITY INVOKER, 1 DEFINER** — contra 65/3 em 29/08: duas views de governança voltaram a invoker. `CREATE OR REPLACE VIEW` reinicializa essa opção, e o T2 de `vues_api_definer_tests` a guarda"
+              "fr": "**67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, la seule tolérée par la suite `vues_api_definer_tests`). Inchangé depuis le 24/09 ; B32 a réécrit les deux vues du catalogue public sans en changer le compte.",
+              "pt": "**67 SECURITY INVOKER, 1 DEFINER**. Inalterado desde 24/09."
             }
           ],
           [
@@ -408,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "925",
+            "997",
             {
-              "fr": "`public` 689 · `api` 189 · `ingest` 34 · `private` 13. Dont **709 SECURITY DEFINER**. +1 le 24/09 : `public.fn_healthcheck_mail_transport` (DEFINER, **fermée** à `anon` et à `authenticated`, `search_path` figé — lu dans `has_function_privilege` et `proconfig`), la sonde qui ouvre l incident `mail_transport` quand un envoi échoue (F7, cas (a) de `DOC-SILENCE-1`). Le lint 0029 ne bouge pas.",
-              "pt": "`public` 689 · `api` 189 · `ingest` 34 · `private` 13. Das quais **709 SECURITY DEFINER**. +1 em 24/09: `public.fn_healthcheck_mail_transport` (DEFINER, **fechada** a `anon` e a `authenticated`, `search_path` fixo), a sonda que abre o incidente `mail_transport` quando um envio falha (F7). O lint 0029 não se move."
+              "fr": "`public` 734 · `api` 201 · `ingest` 42 · `private` 20. Dont **755 SECURITY DEFINER**. +72 depuis le 24/09 : les aides de B29/B30 (portée des brouillons et des lots), les huit fonctions de la fusion de notices, le PMB aller-retour, les sujets de reprise, `fn_visible_library_ids` (B32). Une seule a un `search_path` non figé, **voulu** : `public.fn_locale_from_idioma` (avis 0011 ; B32 levier c, une fonction SQL avec `SET` ne s'insère pas en ligne ; elle ne lit aucune table).",
+              "pt": "`public` 734 · `api` 201 · `ingest` 42 · `private` 20; **755 SECURITY DEFINER**; +72 desde 24/09 (B29/B30, fusão de registros, PMB, B32). Uma só sem `search_path` fixo, deliberado (`fn_locale_from_idioma`, B32)."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "331",
+            "391",
             {
-              "fr": "**331 appliquées en production = 331 numérotées au dépôt**. La seule depuis le 22/09 : `20260924180538` (un échec de transport mail ouvre un incident — table `mail_transport_failures`, sonde `fn_healthcheck_mail_transport`, genre d incident `mail_transport` ; F7). Dernière appliquée : `20260924180538` ; rien n attend en file.",
-              "pt": "**331 aplicadas em produção = 331 numeradas no repositório**. A única desde 22/09: `20260924180538` (uma falha de transporte de e-mail abre um incidente — tabela `mail_transport_failures`, sonda `fn_healthcheck_mail_transport`; F7). Nada em fila."
+              "fr": "**391 appliquées en production = 391 numérotées au dépôt** (les 8 fichiers de plus dans `supabase/migrations/` sont le gabarit et sept scripts de retour arrière, jamais rejoués). +60 depuis le 24/09, dont 28 le 27/09 et 19 le 28/09. Rejeu complet sur l'image Supabase : **2 min 17 s** (run 1418 du 28/09) — `DOC-MIGR-2`, on ne squashe pas.",
+              "pt": "**391 aplicadas = 391 numeradas no repositório**; +60 desde 24/09. Reexecução completa: 2 min 17 s. `DOC-MIGR-2`: sem squash."
             }
           ],
           [
@@ -430,10 +430,10 @@
               "fr": "Jobs `pg_cron`",
               "pt": "Jobs `pg_cron`"
             },
-            "38",
+            "41",
             {
-              "fr": "actifs — +1 depuis le 03/09 (le tick de pré-traduction des titres d'œuvre, `work-titles-autofill`).",
-              "pt": "ativos — +1 desde 03/09 (pré-tradução dos títulos de obra)."
+              "fr": "actifs — +3 depuis le relevé du 24/09 : `anarbib-notify-outbox-retry` (F7, posé le 24/09 au soir après le relevé), `anarbib-conv-file-alimenter` (C6, la file de vérification s'alimente seule) et `anarbib-capas-lot` (capas, la recherche de couvertures par lot). La sonde `ci_en_retard` (A3) passe par le tick horaire existant de `health-probe`, sans job propre. Une instance restaurée les retrouve par `private.fn_crons_replanifier()` (I26).",
+              "pt": "ativos — +3 desde 24/09 (`notify-outbox-retry`, `conv-file-alimenter`, `capas-lot`)."
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "470",
+            "499",
             {
-              "fr": "0 ERROR · **420** WARN sur les DEFINER exposées à `authenticated` (0029), tous justifiés · **26** sur celles exposées à `anon` (0028), exactement la liste nommée T10 de `grants_herites_tests.sql` · 24 INFO « RLS sans policy » (la liste attendue de `bootstrap.sh`, verdicts B4). **Inchangé depuis le 20/09**, relu le 24/09 au soir : la fonction du 24/09 naît fermée. Format groupé : compter `findings`, pas les entrées.",
-              "pt": "0 ERROR · **420** WARN nas DEFINER expostas a `authenticated` (0029), todas justificadas · **26** nas expostas a `anon` (0028), exatamente a lista nomeada T10 · 24 INFO « RLS sem policy ». **Inalterado desde 20/09**, relido em 24/09 à noite: a função de 24/09 nasce fechada."
+              "fr": "0 ERROR · **444** WARN sur les DEFINER exposées à `authenticated` (0029 ; 420 le 24/09, +24 : les fonctions neuves de B29/B30, de la fusion et du PMB, chacune relue à sa livraison — complément d'audit du 27/09 et du 28/09), **27** sur celles exposées à `anon` (0028 ; 26 + `fn_visible_library_ids`, appelée par les policies publiques de B32, à annoter), **1** `search_path` non figé (0011, `fn_locale_from_idioma`, voulu, B32), 27 INFO « RLS sans policy » (0008). La règle reste : chaque DEFINER exposée est nommée et justifiée dans un audit, une recréation n'est pas un nouvel avis.",
+              "pt": "0 ERROR · **444** WARN 0029 (+24: funções novas relidas), **27** 0028 (+1, `fn_visible_library_ids`, B32), 1 0011 (deliberado), 27 INFO 0008."
             }
           ],
           [
@@ -452,10 +452,10 @@
               "fr": "Avis de performance",
               "pt": "Avisos de desempenho"
             },
-            "363",
+            "272",
             {
-              "fr": "**291 « index inutilisés »** (291 le 22/09, 343 le 21/09, 368 le 06/09 — les compteurs repartent du redémarrage du 02/09 et baissent à mesure que les index servent), 38 FK sans index (toutes assumées, gardées par B21), 25 tables à policies permissives multiples, 8 tables sans clé primaire, 1 avis sur les connexions `auth`. Inchangé depuis le 22/09, relu le 24/09.",
-              "pt": "**291 « índices não utilizados »** (291 em 22/09, 343 em 21/09, 368 em 06/09), 38 FK sem índice (todas assumidas, guardadas por B21), 25 tabelas com policies permissivas múltiplas, 8 sem chave primária, 1 aviso sobre as conexões `auth`. Inalterado desde 22/09, relido em 24/09."
+              "fr": "**246 « index inutilisés »** (291 le 24/09, −45 : B10 en a retiré 22, B33 cinq sans lecteur, B32 en a fait emprunter — les compteurs repartent du redémarrage du 02/09), **17** clés étrangères sans index (`ingest` et `public`, toutes de tables techniques, gardées par la suite à liste fermée), **8** tables sans clé primaire (les six tables de revue humaine de `conv_backup` et les deux tables de lignes d'import BLMF), 1 note sur les connexions `auth`.",
+              "pt": "**246 índices sem uso** (−45 desde 24/09: B10, B33, B32), 17 chaves estrangeiras sem índice, 8 tabelas sem chave primária (`conv_backup`, linhas de importação BLMF)."
             }
           ],
           [
@@ -465,8 +465,8 @@
             },
             "1",
             {
-              "fr": "`conv_backup` seul — il porte les trois tables de revue humaine de C3 et **ne se purge pas**. `backup_2026_05_07` est parti le 04/09 au soir (B9, décision de Xavier après relecture des 50 lignes).",
-              "pt": "só `conv_backup` — não se purga. `backup_2026_05_07` saiu em 04/09 (B9)."
+              "fr": "`conv_backup` seul — il porte les six tables de revue humaine de C3/C5 (dont trois du 20/08) et **ne se purge pas** tant que les fiches ne sont pas relues. Inchangé.",
+              "pt": "só `conv_backup`, inalterado."
             }
           ]
         ]
@@ -482,10 +482,10 @@
               "fr": "Dossiers au dépôt",
               "pt": "Pastas no repositório"
             },
-            "53",
+            "55",
             {
-              "fr": "+ `_shared` ; **+1 depuis le 03/09 : `work-titles-autofill`** (pré-traduction des titres d'œuvre, « corrige-moi »). Dont le routeur `main`, jamais déployé sur Supabase, et c'est voulu.",
-              "pt": "+ `_shared` ; **+1 desde 03/09 : `work-titles-autofill`**. O roteador `main` nunca é implantado, de propósito."
+              "fr": "+ `_shared` ; **+2 net depuis le 24/09** — ajoutées depuis le soir du 24/09 : `submit-bug-report` (rapports de bogue), `cover-batch` (capas par lot) et `process-partner-catalog-import` (import d'un catalogue partenaire) ; l'aller-retour PMB (H17-H26) passe par des RPC, sans fonction Edge. Dont le routeur `main`, jamais déployé (garde-fou aux deux endroits, I3 le prouve en runtime isolé). Toutes déployées par la CI (marqueur `deployed-functions`), plus jamais à la main.",
+              "pt": "+ `_shared`; +2 líquidas desde 24/09 (`submit-bug-report`, `cover-batch`, `process-partner-catalog-import`). Todas implantadas pela CI."
             }
           ],
           [
@@ -493,10 +493,10 @@
               "fr": "Déclarations `verify_jwt`",
               "pt": "Declarações `verify_jwt`"
             },
-            "38",
+            "40",
             {
-              "fr": "**toutes à `false`** — compte des lignes `^verify_jwt = ` ; +1 depuis le 03/09 (`work-titles-autofill`, appelée par cron avec son secret).",
-              "pt": "**todas a `false`** ; +1 desde 03/09."
+              "fr": "**toutes à `false`** — compte des lignes `^verify_jwt = ` dans `supabase/config.toml` ; +2 (PMB). Le Bearer ne prouve donc rien : chaque fonction vérifie son appelant elle-même (secret partagé ou session relue).",
+              "pt": "**todas `false`**; +2 (PMB)."
             }
           ]
         ]
@@ -512,10 +512,10 @@
               "fr": "Notices",
               "pt": "Fichas"
             },
-            "2 656",
+            "2 609",
             {
-              "fr": "2 758 exemplaires, **2 449 œuvres** (2 495 le 03/09 : 35 œuvres vides supprimées et des fusions — lot 1 de l'OPAC par œuvre), **1 505 autorités** (1 532 le 03/09 : 17 fusions du lot C5 et les doublons exacts du 03/09), **3 497 titres d'œuvre** dans `work_titles` (pré-traduits, « corrige-moi », 1 452 à relire — C11). Trois notices de moins : les fusions d'éditions. 0 proposition sur une œuvre encore : l'atelier des œuvres est ouvert depuis le 05/09 au soir, jamais emprunté (G1).",
-              "pt": "2 758 exemplares, **2 449 obras** (35 vazias suprimidas + fusões), **1 505 autoridades** (17 fusões C5), **3 497 títulos de obra** (pré-traduzidos, 1 452 a rever — C11). 0 proposta sobre obra ainda (G1)."
+              "fr": "2 759 exemplaires, **2 379 œuvres**, **1 508 autorités**. −47 notices et −70 œuvres depuis le 24/09 : les fusions de doublons (C5, C9 le 27/09, la fusion de notices réparée le 28/09 — 136 publications qui effaçaient les sujets, six notices retrouvées depuis la sauvegarde #BG2). +1 exemplaire net (BTL-TL-000881 : l'exemplaire BLMF créé par erreur retiré, deux exemplaires BTL avec leur tirage).",
+              "pt": "2 759 exemplares, **2 379 obras**, **1 508 autoridades**; −47 registros e −70 obras desde 24/09 (fusões de duplicatas)."
             }
           ],
           [
@@ -523,10 +523,10 @@
               "fr": "Brouillons de catalogage",
               "pt": "Rascunhos de catalogação"
             },
-            "2 250",
+            "2 294",
             {
-              "fr": "`draft` 1 820, `published` 430 — inchangé en nombre, mais **les 1 673 brouillons du lot Solidaires (63) ont désormais une propriétaire, une bibliothèque active et une cote** (`SOL-00001`…`SOL-01673`, bouton « Cotes manquantes » de E21, geste de Xavier le 15/09). Ils attendent leurs classes de rangement (35 rubriques, Christian), la révision du lot et `publish_catalog_batch(63)`.",
-              "pt": "`draft` 1 820, `published` 430 — inalterado em número, mas **os 1 673 rascunhos do lote Solidaires (63) têm agora uma proprietária, uma biblioteca ativa e uma cota** (`SOL-00001`…`SOL-01673`). Esperam as classes de arrumação (35 rubricas, Christian), a revisão do lote e `publish_catalog_batch(63)`."
+              "fr": "`draft` 1 820, `published` 474 (+44 publiés depuis le 24/09). **Chaque brouillon a sa bibliothèque** depuis B29 (134 sur 2 260 sans `owner_library_id`, résolus par la bibliothèque de leur créateur) et **chaque lot la sienne** depuis B30 (3 lots : 8 → MLEG, 63 → Solidaires, 57 → BLMF). Le lot Solidaires (1 673 brouillons) reste à réviser et publier.",
+              "pt": "`draft` 1 820, `published` 474; cada rascunho e cada lote têm biblioteca (B29/B30). O lote Solidaires (1 673) continua a rever e publicar."
             }
           ],
           [
@@ -534,10 +534,10 @@
               "fr": "Indexation matière",
               "pt": "Indexação de assunto"
             },
-            "1 184 / 2 656",
+            "2 146 / 2 609",
             {
-              "fr": "notices avec au moins un sujet — **1 472 sans aucun** (1 537 le 03/09 : les « Assuntos importados » de MLEG devenus matières quand le thésaurus les avait, 04/09 soir). Reste l'objet de **C7**.",
-              "pt": "registos com pelo menos um assunto — **1 472 sem nenhum** (eram 1 537). Objeto de **C7**."
+              "fr": "notices avec au moins un sujet — **463 sans aucun** (1 472 le 24/09, 1 537 le 03/09) : **C7** le 27/09 a indexé 851 notices depuis les vedettes MLEG et le thésaurus (option A + B, décision de Xavier), et la fusion de notices du 28/09 a rendu leurs sujets à 136 publications qui les effaçaient. Les 463 restantes sont pour l'essentiel des notices sans vedette d'origine : à indexer à la main, ou par la file de vérification.",
+              "pt": "registros com pelo menos um assunto — **463 sem nenhum** (1 472 em 24/09): C7 indexou 851 registros em 27/09 e a fusão de registros devolveu os assuntos a 136 publicações."
             }
           ],
           [
@@ -547,8 +547,8 @@
             },
             "621",
             {
-              "fr": "termes, **10 locales complètes**, 159 dates (1868-2027) depuis le 03/09 (H1), onglet « Dates » en ligne. 98 alignements vers les sujets locaux, intacts.",
-              "pt": "termos — 159 datas desde 03/09 (H1). 98 alinhamentos intactos."
+              "fr": "termes, **10 locales complètes**, 159 dates ; **110 alignements** vers les sujets locaux (98 le 24/09 : +12 par C7, chaque sujet nouveau aligné à sa création). L'esquisse SKOS révisée et le racleur hors ligne attendent Bologne (H13).",
+              "pt": "termos, **10 locales**, **110 alinhamentos** (+12 por C7)."
             }
           ],
           [
@@ -558,8 +558,8 @@
             },
             "4",
             {
-              "fr": "titres, 7 fascicules rattachés. Leur **arbitrage de doublons** est ouvert à tout rôle `librarian` alors que celui des livres est réservé à la coordination : écart mesuré le 01/09, décidé, en attente de préavis",
-              "pt": "títulos, 7 fascículos vinculados. O **arbítrio de duplicatas** deles está aberto a qualquer `librarian` enquanto o dos livros é reservado à coordenação: desvio medido em 01/09, decidido, aguardando aviso prévio"
+              "fr": "titres, **5 fascicules rattachés** (7 le 24/09 : deux étaient des doublons, fondus). L'autorité de titre (`serials`) tient ; l'arbitrage de doublons des périodiques reste ouvert à tout rôle `librarian`, celui des livres réservé à la coordination.",
+              "pt": "títulos, **5 fascículos** (7 em 24/09: duas duplicatas fundidas)."
             }
           ]
         ]
@@ -577,8 +577,8 @@
             },
             "5",
             {
-              "fr": "**toutes actives depuis le 15/09** : Solidaires (Paris, France) est **admise** (décision de Xavier en mode « seul·e admin », `RES-D12` amendé, G7 clos) — `is_active = true`, série d'inventaire `SOL-` + millésime réglée à l'écran (E21), coordination rattachée. Ses 1 673 brouillons portent une cote `SOL-00001`…`SOL-01673` ; reste les classes par rubriques, la révision du lot et sa publication (C2, D3).",
-              "pt": "**todas ativas desde 15/09**: Solidaires (Paris, França) está **admitida** (decisão de Xavier em modo « só admin », `RES-D12` emendado, G7 fechado) — `is_active = true`, série de tombo `SOL-` + ano configurada na tela (E21), coordenação vinculada. Os seus 1 673 rascunhos têm cota `SOL-00001`…`SOL-01673`; falta as classes por rubricas, a revisão do lote e a publicação (C2, D3)."
+              "fr": "**actives, sur 6 lignes** (la sixième est la bibliothèque de formation `blmf-teste`, inactive, fixtures en production). Solidaires admise depuis le 15/09 ; toutes les cinq ont une bibliothèque propriétaire pour leurs brouillons et leurs lots (B29/B30).",
+              "pt": "**ativas, de 6 linhas** (a sexta é a biblioteca de formação, inativa)."
             }
           ],
           [
@@ -588,8 +588,8 @@
             },
             "22",
             {
-              "fr": "**24** appartenances actives (inchangé) ; **22 lignes** dans `auth.users` : **20 comptes vivants** (fournisseur `email`, confirmés, chacun avec profil et appartenance) et **2 jetons pseudonymes** de comptes effacés (fournisseur `pseudonymized`, sans date de création, sans appartenance, jamais connectés — la trace que laisse `fn_delete_my_account`). Remesuré le 24/09 : inchangé depuis le 22/09. Quand ces deux effacements ont eu lieu n est pas relevé (les jetons ne portent pas de date).",
-              "pt": "**24** pertenças ativas (inalterado); **22 linhas** em `auth.users`: **20 contas vivas** e **2 tokens pseudónimos** de contas apagadas (fornecedor `pseudonymized`, sem data, sem pertença, nunca ligadas — o rasto que `fn_delete_my_account` deixa). Remedido em 24/09: inalterado desde 22/09."
+              "fr": "**25** appartenances actives (+1 depuis le 24/09) ; **22 lignes** dans `auth.users`, **20 confirmées** (deux invitations jamais honorées, inchangé). Depuis B25/B26, les tentatives de connexion sont comptées et limitées côté base (`auth_rate_limits`).",
+              "pt": "**25** adesões ativas (+1); **22 linhas** em `auth.users`, **20 confirmadas**."
             }
           ],
           [
@@ -599,8 +599,8 @@
             },
             "1",
             {
-              "fr": "**c'est l'item A1, et il commande tout le reste**",
-              "pt": "**é o item A1, e ele comanda todo o resto**"
+              "fr": "**c'est l'item A1, et il commande tout le reste** — inchangé depuis le 29/08.",
+              "pt": "**é o item A1, e comanda todo o resto**."
             }
           ],
           [
@@ -608,10 +608,10 @@
               "fr": "Circulation vivante",
               "pt": "Circulação viva"
             },
-            "6 / 19 / 22 / 0",
+            "6 / 20 / 22 / 0",
             {
-              "fr": "emprunts / réservations / consultations / PEB ouverts — inchangé depuis le 03/09. Deux PEB de mai 2026 (n° 24 et 25, rendus, `devolvido`) restent en base comme historique ; le 03/09 ne comptait que les ouverts, cette ligne aussi. Dernière écriture d'emprunt le 31/08.",
-              "pt": "empréstimos / reservas / consultas / PEB abertos — inalterado. Dois PEB de maio, devolvidos, ficam como histórico."
+              "fr": "emprunts / réservations / consultations / PEB **non archivés** — mais **aucun n'est ouvert** : les 6 emprunts, les 20 réservations et les 22 consultations sont tous « encerrado », les deux PEB de mai 2026 (n° 24 et 25) « devolvido », archivables. La circulation réelle du réseau se fait hors AnarBib ; le SIGB complet n'est exercé que par la bibliothèque de formation. Le chiffre du 24/09 (6 / 19 / 22 / 0) comptait la même chose.",
+              "pt": "empréstimos / reservas / consultas / PEB **não arquivados** — mas **nenhum aberto**: todos encerrados; a circulação real acontece fora do AnarBib."
             }
           ]
         ]
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "2 822",
+            "3 010",
             {
-              "fr": "+20 depuis le relevé du 22/09 au soir : la **PR #30** du camarade (`ASR2026`) fusionnée par Xavier le 23/09 (transport mail hybride — SMTP, Resend, simulation explicite — et découplage du front ; sept commits des 20-21/09 entrés par la fusion), puis **F7** mené par la voisine en trois lots les 23-24/09 (les huit fonctions d envoi passent par `_shared/transport/email.ts`, plus aucune copie de l appel à Resend, et l échec de transport ouvre un incident). 5 commits le 23/09, 8 le 24/09. Tête au moment du relevé : `3d9cf15b`.",
-              "pt": "+20 desde o levantamento da noite de 22/09: a **PR #30** do camarada (`ASR2026`) fundida por Xavier em 23/09 (transporte de e-mail híbrido — SMTP, Resend, simulação explícita — e desacoplamento do front; sete commits de 20-21/09 entrados pela fusão), depois **F7** conduzido pela vizinha em três lotes em 23-24/09 (as oito funções de envio passam por `_shared/transport/email.ts`, e a falha de transporte abre um incidente). Cabeça no momento do levantamento: `3d9cf15b`."
+              "fr": "+188 depuis le relevé du 24/09 au soir, en quatre jours et deux sessions : B10 et sa suite (B29 à B35), C5 à C11, H17 à H28, E6, A3, la fusion de notices, les capas. Codeberg, miroir nu, WSL et GitHub alignés à chaque push.",
+              "pt": "+188 desde 24/09, em quatro dias e duas sessões."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "358",
+            "440",
             {
-              "fr": "+2 depuis le 22/09, deux bancs d essai : `smtp-transport` (le client SMTP de la PR #30 : STARTTLS obligatoire, base64, délais) et `mail-transport-routage` (F7 : chaque fonction d envoi passe par le transport partagé, liste fermée vide). Aucun fichier de page ni de composant ajouté.",
-              "pt": "+2 desde 22/09, dois bancos de teste: `smtp-transport` (o cliente SMTP da PR #30) e `mail-transport-routage` (F7: cada função de envio passa pelo transporte partilhado, lista fechada vazia). Nenhum ficheiro de página nem de componente acrescentado."
+              "fr": "+82 depuis le 24/09 : onze composants sortis de `BookDraftForm.jsx` (214 → 130 Ko) et de `BibliotecaPage.jsx` (184 → 152 Ko) par E6, `src/lib/catalogacao/bookDraft.js`, l'aide à la casse (`titleCase.js`, `nameEntry.js`, `nomsPropres.js`, deux composants), les panneaux de la fusion, et une trentaine de bancs d'essai.",
+              "pt": "+82 desde 24/09: onze componentes extraídos (E6), ajuda à caixa, painéis da fusão, uma trintena de bancadas."
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 690",
+            "6 932",
             {
-              "fr": "parité stricte sur les dix locales (6 690 chacune). +1 le 22/09 : `auth.passwordPwned` (« ce mot de passe figure dans des fuites de données connues », `310be843`), et `auth.passwordPolicy` reformulée dans le même geste. La clé morte d E16 (21/09) n est pas revenue.",
-              "pt": "paridade estrita nas dez locales (6 690 cada). +1 em 22/09: `auth.passwordPwned` (« esta palavra-passe consta de fugas de dados conhecidas », `310be843`), e `auth.passwordPolicy` reformulada no mesmo gesto. A chave morta de E16 não voltou."
+              "fr": "parité stricte sur les dix locales (6 932 chacune, gardée en CI). +242 depuis le 24/09 : l'aide à la casse et à la saisie des noms (C6), la fusion de notices (« Même édition : fusionner dans cette notice »), le PMB, les libellés des lots et des bibliothèques (B29/B30), la page Réseau.",
+              "pt": "paridade estrita nas dez locales (6 932 cada); +242 desde 24/09."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "799 + 109",
+            "1 454 + 145",
             {
-              "fr": "**799 tests JS** (vitest, gate bloquant, 76 fichiers — relancés en entier le 24/09 au soir sur `3d9cf15b`, tous verts) + **109 suites SQL** dans `ci-suites.txt` (+1 : `mail_transport_tests`, F7 — la table, la sonde et sa fenêtre de 30 min, ses droits, la CHECK). +16 tests JS depuis le 22/09 : les deux bancs du transport mail.",
-              "pt": "**799 testes JS** (vitest, 76 ficheiros — relançados por inteiro em 24/09 à noite sobre `3d9cf15b`, todos verdes) + **109 suites SQL** em `ci-suites.txt` (+1: `mail_transport_tests`, F7). +16 testes JS desde 22/09: os dois bancos do transporte de e-mail."
+              "fr": "**1 454 tests JS** (vitest, gate bloquant, 124 fichiers — relancés en entier le 28/09 au soir, tous verts ; 799 et 76 fichiers le 24/09 : +655, dont les bancs de B29/B30 par mutants, ceux de la fusion, du PMB, de la sonde CI, et neuf tests de source qui gardent les montages d'E6) + **145 suites SQL** dans `ci-suites.txt` (109 le 24/09 : +36, une par migration livrée), toutes vertes au dernier run. Rejeu-image : 2 min 17 s.",
+              "pt": "**1 454 testes JS** (124 arquivos; +655 desde 24/09) + **145 suítes SQL** (+36), todos verdes."
             }
           ],
           [
@@ -673,8 +673,8 @@
             },
             "18",
             {
-              "fr": "dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 24/09 comme aux 22, 21, 20, 16 et 15/09. Aucun n est une tâche ouverte : la dette nommée vit au backlog, pas dans le code.",
-              "pt": "dos quais 4 em `src/` — método fixo: 18 em 24/09 como em 22, 21, 20, 16 e 15/09. Nenhum é uma tarefa aberta."
+              "fr": "dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18 au 28/09 comme aux 24, 22, 21, 20, 16 et 15/09. Aucun n'est une tâche ouverte ; ils nomment des choix assumés.",
+              "pt": "dos quais 4 em `src/`; 18 como em 24/09."
             }
           ]
         ]
@@ -2599,55 +2599,6 @@
       }
     },
     {
-      "id": "B13",
-      "d": "B",
-      "p": "P3",
-      "s": "clos",
-      "e": "L",
-      "sk": [
-        "sql",
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Décider du sort des 221 migrations : squash ou pas",
-        "pt": "Decidir o destino das 221 migrações: squash ou não"
-      },
-      "v": {
-        "fr": "221 migrations appliquées, dont la première est un `baseline_live` de **2,4 Mo** — le plus gros fichier du dépôt. Le squash est marqué « décidé, non commencé » depuis le 20/08, à une époque où le compte était de 146. **28/09 — décision proposée au REGISTRE, `DOC-MIGR-2` : on ne squashe pas.** Recompté : 384 migrations, 9,0 Mo (socle 2,4 Mo ; données FICEDL 1,9 Mo ; schéma < 5 Mo) ; rejeu complet sur l'image Supabase **2 min 17 s** (run 1418) — les 25 min du 29/08 ne sont plus vraies. Trois raisons : un squash refait un `pg_dump` qui porte le défaut de `DOC-GRANT-2` ; chaque migration est une trace citée par version (REGISTRE, fiches, suites) ; le coût (socle à refaire et à éprouver ailleurs, suites à réaligner) dépasse le gain (une minute de CI, 5 Mo). Rouvrir si le rejeu passe dix minutes ou si un socle est à refaire de toute façon (I2). **Acté par Xavier le 28/09** : la ligne du REGISTRE est basculée, B13 clos.",
-        "pt": "221 migrações aplicadas, das quais a primeira é um `baseline_live` de **2,4 MB** — o maior arquivo do repositório. O squash está marcado «decidido, não iniciado» desde 20/08, numa época em que a contagem era de 146. **28/09 — decisão proposta no REGISTRO, `DOC-MIGR-2`: não se faz squash.** Recontado: 384 migrações, 9,0 MB; reexecução completa na imagem Supabase em **2 min 17 s** (run 1418). Três razões: um squash refaz um `pg_dump` com o defeito de `DOC-GRANT-2`; cada migração é um rastro citado por versão; o custo supera o ganho. Reabrir se a reexecução passar de dez minutos ou se um alicerce tiver de ser refeito (I2). **Confirmado por Xavier em 28/09**: a linha do REGISTRO está virada, B13 fechado."
-      },
-      "w": {
-        "fr": "Soit reconstruire un `baseline` à partir du schéma courant et archiver les migrations antérieures, soit assumer la chaîne longue et documenter pourquoi. Le rejeu complet prend aujourd'hui environ 25 minutes, mesuré.",
-        "pt": "Ou reconstruir um `baseline` a partir do esquema atual e arquivar as migrações anteriores, ou assumir a cadeia longa e documentar por quê. A reexecução completa leva hoje cerca de 25 minutos, medido."
-      },
-      "y": {
-        "fr": "Le risque du squash est entier : il réécrit la seule trace ordonnée de ce qui a été fait, et le harnais de tests SQL rejoue toute la chaîne à chaque fois. Ne pas le faire coûte du temps de CI ; le faire mal coûte la capacité à reconstruire. **Ne pas s'y engager avant que A2 ait réussi au moins une fois.**",
-        "pt": "O risco do squash é inteiro: reescreve o único rastro ordenado do que foi feito, e o arnês de testes SQL reexecuta toda a cadeia a cada vez. Não fazê-lo custa tempo de CI; fazê-lo mal custa a capacidade de reconstruir. **Não se comprometer antes que A2 tenha sido bem-sucedido pelo menos uma vez.**"
-      },
-      "f": {
-        "fr": [
-          "Une décision écrite au REGISTRE, dans un sens ou dans l'autre.",
-          "Si squash : la reconstruction depuis le nouveau baseline a été éprouvée sur une machine tierce."
-        ],
-        "pt": [
-          "Uma decisão escrita no REGISTRO, num sentido ou no outro.",
-          "Se squash: a reconstrução a partir do novo baseline foi testada numa máquina de terceiro."
-        ]
-      },
-      "dep": {
-        "fr": "**Bloqué par A2.** Ne pas commencer avant.",
-        "pt": "**Bloqueado por A2.** Não começar antes."
-      },
-      "r": [
-        "ETAT-AVANCEMENT-multisessions",
-        "docs/schema/baseline_schema_2026-06-11.sql"
-      ],
-      "verif": {
-        "fr": "31/08 — 243 migrations appliquées : vingt-deux de plus qu'au 29/08. L'argument du squash grossit tout seul. 28/09 — 384 migrations, 9,0 Mo ; rejeu complet 2 min 17 s (job `rejeu-image`, run 1418) ; décision écrite au REGISTRE (`DOC-MIGR-2`), acté par Xavier le 28/09.",
-        "pt": "31/08 — 243 migrações aplicadas: vinte e duas a mais que em 29/08. 28/09 — 384 migrações, 9,0 MB; reexecução completa em 2 min 17 s (run 1418); decisão escrita no REGISTRO (`DOC-MIGR-2`), confirmado por Xavier em 28/09."
-      }
-    },
-    {
       "id": "B29",
       "d": "B",
       "p": "P1",
@@ -2751,150 +2702,6 @@
       "verif": {
         "fr": "27/09 — suite SQL `lot_a_une_bibliotheque_tests` 17/17 (huit profils) et les 132 suites de la CI ; vitest 107 fichiers ; production en lecture seule après le déploiement (tag `deployed-functions` = `2ecdaea3`, migration `created_by` nul) : lots 8, 57, 63 à MLEG, BLMF, Solidaires, `updated_at` intact, aucun lot à l'administration ; la coordination de chaque bibliothèque voit son lot et seulement lui ; déclencheurs *_zz_batch_guarded posés, anciens retirés ; droits des fonctions neuves conformes (aucune à anon). **28/09, prod en lecture seule** : `catalog_batches.library_id` présente ; 3 lots, tous avec une bibliothèque, aucun lot d'administration ; les quatre politiques de `catalog_batches` (lire, modifier, supprimer, suppression définitive) comparent `library_id` aux bibliothèques de staff ou de coordination de l'appelant·e — plus un prédicat déduit du contenu. Conforme aux trois critères.",
         "pt": "27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele. **28/09, produção em leitura** : `catalog_batches.library_id` presente; 3 lotes, todos com biblioteca; as quatro políticas de `catalog_batches` comparam `library_id` às bibliotecas de staff ou de coordenação. Conforme."
-      }
-    },
-    {
-      "id": "B31",
-      "d": "B",
-      "p": "P2",
-      "s": "clos",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Lecture anonyme : trois tables lèvent une erreur au lieu de rendre zéro ligne",
-        "pt": "Leitura anônima: três tabelas lançam um erro em vez de devolver zero linha"
-      },
-      "v": {
-        "fr": "Constaté pendant B10 (27/09), antérieur à lui. Sous `anon`, lire `library_circulation_policy_sets` ou `library_circulation_policy_rules` lève **42501** `permission denied for function fn_library_has_full_sigb` : la policy de lecture publique appelle une fonction fermée à `anon` depuis le socle du 10/05. Lire `library_deposit_rules` lève **42501** `permission denied for table user_library_memberships` : sa policy de lecture est `TO public` et lit les adhésions. Latent : ces tables ne sont lues que par des écrans connectés (`RegimeStateBox`, `PolicySetManager`, `LoanDepositPanel`), qui avalent d'ailleurs l'erreur. B10 a gardé ces trois policies telles quelles, exprès (une fusion ne change pas un comportement). **Livré le 27/09 au soir par l'autre session (`507afb03`, migration `20260927184425`)** : le recensement a trouvé 13 relations pour `anon` et 10 pour un compte sans adhésion qui levaient 42501 ; toutes rendent zéro ligne désormais ; suite `lecture_accordee_sans_erreur_tests` en CI.",
-        "pt": "Constatado durante o B10 (27/09), anterior a ele. Sob `anon`, ler `library_circulation_policy_sets` ou `_rules` lança **42501** (`fn_library_has_full_sigb` fechada a `anon` desde a base de 10/05); ler `library_deposit_rules` lança **42501** (policy `TO public` que lê `user_library_memberships`). Latente: só telas autenticadas leem essas tabelas. **Entregue em 27/09 à noite pela outra sessão (`507afb03`)** : 13 relações para `anon` e 10 para uma conta sem adesão levantavam 42501; todas devolvem zero linhas agora; suíte `lecture_accordee_sans_erreur_tests` na CI."
-      },
-      "w": {
-        "fr": "Décider ce que doit voir un·e visiteur·se : soit rien (policies `TO authenticated`, zéro ligne au lieu d'une erreur), soit les règles d'une bibliothèque en SIGB complet (ouvrir `fn_library_has_full_sigb` à `anon`, avec son entrée au T12 de `grants_herites_tests.sql`).",
-        "pt": "Decidir o que um visitante deve ver: nada (policies `TO authenticated`, zero linha em vez de erro) ou as regras de uma biblioteca em SIGB completo (abrir `fn_library_has_full_sigb` a `anon`, com entrada no T12)."
-      },
-      "y": {
-        "fr": "Une erreur n'est pas un refus : un client anonyme reçoit un 401/403 au lieu d'une liste vide, et une future page publique « règles de prêt » casserait sans prévenir.",
-        "pt": "Um erro não é uma recusa: um cliente anônimo recebe 401/403 em vez de lista vazia, e uma futura página pública de regras quebraria sem aviso."
-      },
-      "f": {
-        "fr": [
-          "Une lecture anonyme des trois tables rend zéro ligne ou les lignes voulues, jamais une erreur.",
-          "Le choix est écrit dans la migration, et gardé par une suite."
-        ],
-        "pt": [
-          "Uma leitura anônima das três tabelas devolve zero linha ou as linhas desejadas, nunca um erro.",
-          "A escolha está escrita na migração e guardada por uma suíte."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §2",
-        "supabase/migrations/20260927180000_b10_une_policy_permissive_par_role_et_commande.sql"
-      ],
-      "verif": {
-        "fr": "28/09, prod sous `anon` (`set local role`) : `library_circulation_policy_sets`, `library_circulation_policy_rules`, `library_deposit_rules` rendent 0 ligne, aucune erreur ; leurs politiques SELECT sont `TO authenticated`. Conforme aux deux critères.",
-        "pt": "28/09, produção sob `anon` : as três tabelas devolvem 0 linhas, sem erro; políticas SELECT `TO authenticated`. Conforme."
-      }
-    },
-    {
-      "id": "B33",
-      "d": "B",
-      "p": "P2",
-      "s": "clos",
-      "e": "M",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Recherche : des index trigramme que la forme des requêtes empêche d'emprunter",
-        "pt": "Busca: índices trigrama que a forma das consultas impede de usar"
-      },
-      "v": {
-        "fr": "Constaté pendant B10 (27/09). `api.search_catalog_v1` (autocomplétion, 177 ms en moyenne sur 40 appels, à 2 600 notices) écrit `… % v OR … LIKE v||'%' OR EXISTS (SELECT … FROM unnest(tokens) … ~ …)` : la branche `OR EXISTS` interdit tout BitmapOr, ses cinq index trigramme ne servent jamais ; pour `sort_name` s'y ajoute `f_normalize_search(COALESCE(sort_name,''))`, qui n'est pas l'expression de l'index. Même motif pour `idx_books_autor_trgm` (`CatalogPanel`, `fn_peb_search_exemplares` : un OU avec `isbn`, `bib_ref` ou `tombo` sans trigramme) et `serials_uniform_title_trgm`. Et `fn_sync_publisher_id_on_publish` cherche l'éditeur par `lower(p.name) = …` **sans aucun index**, à chaque notice publiée — le GIN trigramme sur `name` brut ne sert personne. Quatre index gardés par B10 attendent cet item : `authors_sort_name_norm_trgm_idx`, `idx_publishers_name_trgm`, `idx_authors_external_ids` (MBID jamais câblé ; les usages réels sont `->>` et `NOT ?`), `serials_issn_idx`. **Livré le 27/09 au soir par l'autre session (`6bdd4331`, migrations `20260927193314` et `…315` ; test T1 corrigé le 28/09, `8eaa180c`)** : la branche `OR EXISTS` devient UN motif regexp (jetons échappés), les expressions s'alignent sur les index, la publication trouve son éditeur par `publishers_lower_name_idx`, cinq index sans lecteur retirés avec la raison écrite (règle : sous RLS, seuls les opérateurs LEAKPROOF montent dans l'index — LIKE, ILIKE, `~`, `%` ne le sont pas).",
-        "pt": "Constatado durante o B10 (27/09). `search_catalog_v1` (177 ms em média) usa `OR EXISTS (… unnest …)`, o que impede qualquer uso de seus cinco índices trigrama; `sort_name` ainda usa uma expressão diferente da do índice. Mesmo padrão em `idx_books_autor_trgm` e `serials_uniform_title_trgm`. E a publicação de cada registro procura a editora por `lower(name)` sem índice. **Entregue em 27/09 à noite pela outra sessão (`6bdd4331`)** : a ramificação `OR EXISTS` vira UM padrão regexp, as expressões alinham-se aos índices, a publicação encontra a editora por `publishers_lower_name_idx`, cinco índices sem leitor retirados com a razão escrita."
-      },
-      "w": {
-        "fr": "Réécrire la branche en un seul motif regexp que `gin_trgm` sait servir (`~ '(^|\\s)(tok1|tok2)'`) ; aligner les expressions sur celles des index (retirer le `COALESCE`, inutile dans un WHERE) ; donner à la publication un index sur `lower(name)` ou réécrire sa recherche sur l'index existant ; puis retirer, raison écrite, les index qui resteraient sans lecteur.",
-        "pt": "Reescrever o ramo num único padrão regexp que `gin_trgm` sabe servir; alinhar as expressões às dos índices; dar à publicação um índice em `lower(name)`; depois retirar os índices que ficarem sem leitor."
-      },
-      "y": {
-        "fr": "Ces index coûtent à chaque écriture et ne servent pas ; la recherche, elle, croît linéairement avec le catalogue et les autorités.",
-        "pt": "Esses índices custam a cada escrita e não servem; a busca cresce linearmente com o catálogo."
-      },
-      "f": {
-        "fr": [
-          "`search_catalog_v1` emprunte ses index trigramme (plan à l'appui).",
-          "La publication d'une notice ne parcourt plus `publishers`.",
-          "Les index restés sans lecteur sont retirés, raison écrite."
-        ],
-        "pt": [
-          "`search_catalog_v1` usa seus índices trigrama (plano como prova).",
-          "A publicação de um registro não percorre mais `publishers`.",
-          "Os índices sem leitor são retirados, com o motivo escrito."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune ; à croiser avec B32 (mêmes vues matérialisées).",
-        "pt": "Nenhuma; cruzar com B32."
-      },
-      "r": [
-        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (grappes 1, 2, 4 et « Surprises »)"
-      ],
-      "verif": {
-        "fr": "28/09, prod : `api.search_catalog_v1` porte le motif unique ; `publishers_lower_name_idx` existe et `fn_sync_publisher_id_on_publish` compare `lower(name)` ; `idx_publishers_name_trgm`, `idx_authors_external_ids`, `serials_issn_idx` absents ; `authors_sort_name_norm_trgm_idx` gardé et emprunté (1 125 parcours, comme celui de `preferred_name`), les index `fn_normalize_name` 3 704 parcours. Le run 1416 rouge (T1) est celui que `8eaa180c` corrige ; 1418 vert. **Plan à l'appui (prod, 28/09, requête des autorités telle que la fonction l'écrit, rôle propriétaire)** : `Bitmap Heap Scan on authors` ← `BitmapOr` de six `Bitmap Index Scan` sur `authors_preferred_name_norm_trgm_idx` et `authors_sort_name_norm_trgm_idx`, un par opérateur (`%`, `LIKE`, `~` motif unique) — 4,5 ms. La branche des alias reste en `Seq Scan` (1 644 lignes, 27 blocs : le planificateur préfère lire la table ; la suite T1 prouve au banc que l'index est empruntable, `enable_seqscan off`). L'appel complet `search_catalog_v1('anarquismo brasil')` sous `anon` : 183 ms, 2 822 blocs — le temps n'est plus dans les branches trigramme.",
-        "pt": "28/09, produção : `search_catalog_v1` traz o padrão único; `publishers_lower_name_idx` existe; três índices removidos; `authors_sort_name_norm_trgm_idx` mantido e usado (1 125 varreduras). Run 1416 vermelho (T1) é o que `8eaa180c` corrige; 1418 verde. Plano (produção, 28/09): `BitmapOr` de seis `Bitmap Index Scan` nos dois índices trigram de `authors`, um por operador — 4,5 ms; a ramificação dos apelidos fica em `Seq Scan` (1 644 linhas). Chamada completa sob `anon`: 183 ms — o tempo já não está nas ramificações trigram."
-      }
-    },
-    {
-      "id": "B34",
-      "d": "B",
-      "p": "P2",
-      "s": "clos",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Effacement de compte : le journal du catalogue garde l'identifiant de la personne effacée",
-        "pt": "Exclusão de conta: o diário do catálogo guarda o identificador da pessoa excluída"
-      },
-      "v": {
-        "fr": "Constaté pendant B10 (27/09), **à instruire**. `fn_delete_my_account` pseudonymise ou vide une cinquantaine de tables et supprime le compte, mais ne touche pas `catalog_audit_log`, dont `actor_id` (sans clé étrangère) garderait l'uuid de la personne effacée — alors que trois autres journaux sont pseudonymisés (`library_unarchive_log`, `network_admin_cross_library_actions_log`, `network_administrator_audit`). La table porte aussi `label` et `details` (jsonb), non relus. Au 27/09, **aucune ligne n'est concernée** : 1 749 lignes, un seul acteur, toujours actif. **Livré le 27/09 au soir par l'autre session (`df4dcec1`, migration `20260927184954`)** : `fn_delete_my_account` re-pointe l'acteur du journal ET les comptes `created_by`/`updated_by` des instantanés de brouillons (`details->'snapshot'`, plus de 1 660 lignes) ; suite `effacement_journal_catalogue_tests` en CI.",
-        "pt": "Constatado durante o B10 (27/09), **a instruir**. `fn_delete_my_account` não trata `catalog_audit_log`, cujo `actor_id` (sem chave estrangeira) guardaria o uuid da pessoa excluída — enquanto três outros diários são pseudonimizados. Em 27/09, nenhuma linha está envolvida (um único ator, ativo). **Entregue em 27/09 à noite pela outra sessão (`df4dcec1`)** : `fn_delete_my_account` repõe o ator do diário E as contas dos instantâneos de rascunhos; suíte `effacement_journal_catalogue_tests` na CI."
-      },
-      "w": {
-        "fr": "Relire ce que `catalog_audit_log` conserve d'une personne (`label`, `details`) ; aligner l'effacement sur les trois journaux pseudonymisés (`UPDATE … WHERE actor_id = …`, servi par `catalog_audit_log_actor_idx`, gardé par B10 pour cela) ; ajouter le cas à la suite de l'effacement.",
-        "pt": "Reler o que `catalog_audit_log` guarda de uma pessoa; alinhar a exclusão aos três diários pseudonimizados; acrescentar o caso à suíte de exclusão."
-      },
-      "y": {
-        "fr": "Un effacement qui laisse un identifiant dans un journal n'efface pas tout ; l'uuid seul ne nomme personne, mais le journal peut porter davantage.",
-        "pt": "Uma exclusão que deixa um identificador num diário não apaga tudo."
-      },
-      "f": {
-        "fr": [
-          "`catalog_audit_log` est traité par l'effacement comme les trois autres journaux, ou la raison contraire est écrite.",
-          "La suite de l'effacement le vérifie."
-        ],
-        "pt": [
-          "`catalog_audit_log` é tratado pela exclusão como os outros três diários, ou a razão contrária está escrita.",
-          "A suíte da exclusão o verifica."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md §5 (« Surprises », point 5)"
-      ],
-      "verif": {
-        "fr": "28/09, prod : le corps de `fn_delete_my_account` traite `catalog_audit_log` ; 1 750 lignes, un seul acteur (actif), 60 lignes sans acteur, aucun uuid orphelin. Conforme aux deux critères.",
-        "pt": "28/09, produção : `fn_delete_my_account` trata `catalog_audit_log`; 1 750 linhas, um só ator, nenhum uuid órfão. Conforme."
       }
     },
     {
