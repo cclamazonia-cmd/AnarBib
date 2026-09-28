@@ -97,6 +97,15 @@ describe('catalog_metadata_lookup — une candidate par notice et par source', (
     expect(r.candidates).toHaveLength(1);
   });
 
+  it('deux notices distinctes d une source, sans année ni titre différent, restent deux (identifiant 001)', async () => {
+    // Vu en prod le 28/09 : ICCU rend deux notices sans date pour le même ISBN.
+    const a = notice({ id: 'iccu-a', titre: 'Titre', auteur: 'A', editeur: 'E', annee: '' });
+    const b = notice({ id: 'iccu-b', titre: 'Titre', auteur: 'A', editeur: 'E', annee: '' });
+    const ef = monterEF({ bne: [a, b], loc: [] });
+    const r = await ef.handleLookupPayload({ isbn: ISBN });
+    expect(r.candidates.map((c) => c.source_record_id).sort()).toEqual(['iccu-a', 'iccu-b']);
+  });
+
   it('les pastilles et la liste disent le même nombre (le total n est plus tronqué à maximumRecords)', async () => {
     const bne = Array.from({ length: 3 }, (_, i) => notice({ id: `b${i}`, titre: `Titre ${i}`, auteur: 'A', editeur: 'E', annee: `19${70 + i}` }));
     const loc = Array.from({ length: 3 }, (_, i) => notice({ id: `l${i}`, titre: `Titre ${i}`, auteur: 'A', editeur: 'E', annee: `19${70 + i}` }));

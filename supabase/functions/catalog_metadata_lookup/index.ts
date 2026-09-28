@@ -1013,14 +1013,17 @@ function flattenTagFields(datafields, tags, preferredCodes) {
 // l'occurrence une édition de 1976 pour un ISBN que d'autres sources datent de
 // 1991. La personne qui catalogue doit pouvoir comparer ce que chaque source
 // dit de la même édition (réimpression, autre date, autre lieu) : la source fait
-// partie de la clé, ainsi que le titre et l'année, pour ne replier que les
-// vrais doublons (une source qui rend deux fois la même notice).
+// partie de la clé, avec l'identifiant de la notice chez elle (001, BID, clé OL,
+// QID), le titre et l'année — vérifié en prod le 28/09 : sans l'identifiant,
+// deux notices ICCU sans année et deux clés Open Library se repliaient encore.
+// Ne se replie que la même notice rendue deux fois.
 function dedupeAndRank(candidates, query) {
   const scored = candidates.map((item)=>scoreCandidate(item, query)).sort((a, b)=>b.confidence - a.confidence);
   const seen = new Map();
   for (const candidate of scored){
     const key = [
       candidate.source || '',
+      candidate.source_record_id || '',
       candidate.isbn[0] || candidate.issn[0] || '',
       normalizeText(candidate.title),
       normalizeName(candidate.contributors[0]?.label || '').sorted,
