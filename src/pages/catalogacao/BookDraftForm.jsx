@@ -1829,6 +1829,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   function fillFromRecord(record) {
     const r = record || {};
     setImportedCheck((c) => c + 1);   // H19 : relire les exemplaires importés
+    // Les éditions suggérées et l'aperçu de fusion appartiennent à la notice
+    // précédente : vu le 28/09, « Aucune édition à regrouper » restait affiché
+    // sur la notice ouverte ensuite.
+    setEditionSugg(null);
+    setFusionEdition(null);
     setForm({
       id: String(r.id || ''),
       published_book_id: String(r.published_book_id || ''),

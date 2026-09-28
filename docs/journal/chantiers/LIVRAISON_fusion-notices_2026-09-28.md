@@ -14,8 +14,10 @@ migration) ; `11da0df8` (fusion complète, invariant, 43 exemplaires, formulaire
 ## Pourquoi
 
 Le 27/09 au soir, Xavier ne parvient pas à retirer un doublon : *Da Escravidão nos
-Estados Unidos* (Élisée Reclus) existe deux fois à la BTL, 000880 (2011) et 000881
-(2010), même édition, une année fautive. Trois choses se révèlent.
+Estados Unidos* (Élisée Reclus) existe deux fois à la BTL, 000880 (2ª edição, 2011)
+et 000881 (1ª edição, 2010) — deux éditions successives du même éditeur, que la
+coordination choisit de réunir sous une notice, l'édition notée sur chaque
+exemplaire. Trois choses se révèlent.
 
 1. **La suggestion d'éditions n'a jamais répondu.** `suggest_editions_for_book`
    plantait à chaque appel depuis sa création le 20/06 (« column reference book_id is
@@ -83,14 +85,25 @@ temps 3 : pertes sèches cochées d'office, divergences, exemplaires, confirmati
 la référence de la fiche supprimée), la survivante étant la notice éditée ; puis
 `merge_book_with_fields` et le rechargement du brouillon.
 
-### Correction sur BTL-TL-000881 (28/09, migration `20260928111729`)
+### Correction sur BTL-TL-000881 (28/09, migrations `20260928111729` et `20260928114148`)
 
-La notice fusionnée porte les deux exemplaires BTL — BTL-TL-EX-000881 (tirage 2010)
-et BTL-TL-EX-000880 (tirage 2011, venu de la notice fusionnée) —, chacun avec son
-tirage en note interne. Le troisième, CCLA.2026.93 (BLMF), avait été créé le 27/09
-à 19:18 UTC depuis un poste BLMF pendant que le doublon résistait à l'écran : la
-BLMF ne détient pas ce titre ; l'exemplaire et son fonds vide sont retirés, le
-brouillon d'exemplaire 39 est écarté avec la raison. La notice garde 2010.
+La notice réunit deux éditions successives du même éditeur, par décision de la
+coordination : elle garde la première (2010), et chaque exemplaire BTL porte son
+édition en note interne, en portugais — BTL-TL-EX-000881 « 1ª edição, 2010 »,
+BTL-TL-EX-000880 « 2ª edição, 2011 » (venu de la notice BTL-TL-000880). Le
+troisième exemplaire, CCLA.2026.93 (BLMF), avait été créé le 27/09 à 19:18 UTC
+depuis un poste BLMF pendant que le doublon résistait à l'écran : la BLMF ne
+détient pas ce titre ; l'exemplaire et son fonds vide sont retirés, le brouillon
+d'exemplaire 39 est écarté avec la raison. Les deux brouillons de reprise ouverts
+par la vérification à l'écran de l'action « Même édition » (6276, 6277) sont
+écartés, sans modification.
+
+Vérifié à l'écran le 28/09 (session de Xavier) : sur BTL-TL-000181, « Suggérer des
+éditions » répond « Aucune édition à regrouper. » — seule notice de ce titre, et son
+autorité « Cristina Escrivá » (10551) est distincte de « Cristina Escrivá Moscardó »
+(10059), sous laquelle sont ses quatre autres livres ; sur BTL-TL-000881, la
+suggestion *Estados Unidos do Brasil (1900)* porte bien « Regrouper » et « Même
+édition : fusionner dans cette notice ».
 
 ## Ce qui reste
 
