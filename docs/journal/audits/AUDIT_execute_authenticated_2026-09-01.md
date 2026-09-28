@@ -1697,3 +1697,139 @@ fermée à `PUBLIC`, `anon`, `authenticated`), `private.fn_outbox_programmer_rej
 avec deux remplacements comptés, droits inchangés.
 
 **Compte au 25/09.** 0029 = **424**, tous justifiés. 0028 = 26, inchangé.
+
+---
+
+# Complément du 27/09/2026 — les vingt-quatre RPC nées le 27/09 (B29, capas, B30)
+
+**27 septembre 2026, 22 h 45** · base `uflwmikiyjfnikiphtcp` en lecture seule · relevé `get_advisors` de 19 h 47 UTC, format groupé.
+
+Le lint 0029 est passé de **424** (25/09) à **448** : **+24 fonctions
+`SECURITY DEFINER` exécutables par `authenticated`**, toutes nées le 27/09,
+de trois chantiers : **B29**, les brouillons portés par leur bibliothèque
+(`20260927160000`, treize aides) ; **les capas**, revue du lot et photo en
+rayon (`20260927180120`, cinq RPC ; `20260927182008`, trois) ; **B30**, un
+lot a une bibliothèque (`20260927191059`, trois). Le tableau de bord affichait
+« 474 warnings » : 26 du lint 0028, la liste T10, inchangée, et ces 448.
+
+Relevées par `oid` décroissant après `api.fn_outbox_acquitter`, la dernière du
+complément du 25/09 : **28 `oid`, dont 4 recréations déjà comptées**. Un
+`DROP` + `CREATE` pour changer de signature donne un `oid` neuf à une fonction
+ancienne : `fn_import_set_adapter_overrides` (H15, `20260926191500`),
+`fn_import_profile_create` et `fn_import_profiles_list` (H19,
+`20260927113000`), `fn_batch_reviews_list` (B29 puis B30). On les écarte par
+la **première** migration qui les nomme dans
+`supabase_migrations.schema_migrations` (le socle pour les trois d'import,
+`20260905093000` pour la liste des révisions), et 424 + 24 = 448 le confirme.
+Leurs corps recréés ont été relus : gardes inchangées (coordination de la
+bibliothèque ou admin pour les trois d'import, avec le message unifié « Run
+introuvável » pour `fn_import_set_adapter_overrides` ; lots des bibliothèques
+de l'appelant·e pour la liste des révisions). Les vingt-quatre sont lues dans
+`pg_proc.prosrc` en production, au même critère : *que peut demander une
+inconnue qui vient de s'inscrire ?*
+
+## Verdict : aucune faille, une forme à noter, cinq ouvertures sans objet fermées dans la foulée
+
+**B29 — treize aides.** Pour une aide, la question qui tranche n'est pas sa
+garde mais **qui l'appelle sous `authenticated`** : une politique RLS, une vue
+`security_invoker`, un déclencheur INVOKER ou le front ont besoin du
+privilège ; une fonction DEFINER, non (elle exécute ses appels sous son
+propriétaire).
+
+| Fonction | Qui l'appelle sous `authenticated` | Ce qu'une inconnue inscrite obtient | Verdict |
+|---|---|---|---|
+| `fn_caller_staff_library_ids()` | 7 politiques (`book_drafts`, `exemplar_drafts`, `catalog_batches`, `catalog_audit_log`) ; le front (`useStaffLibraries`) | ses propres bibliothèques de staff : `{}` | **justifiée** |
+| `fn_caller_coordinator_library_ids()` | 3 politiques ; le front | les siennes : `{}` | **justifiée** |
+| `fn_caller_staff_library()` | déclencheurs INVOKER `tg_drafts_library_fixed`, `tg_catalog_batches_library_fixed` | la sienne : `NULL` | **justifiée** |
+| `fn_caller_can_edit_book_draft(p_draft_id)` | la politique de `merge_log` | `false`, que le brouillon existe ou non (« pas d'oracle d'existence », dit le corps) | **justifiée** |
+| `fn_caller_owns_batch(p_batch_id)` | la politique de `catalog_batch_reviews` ; le front (`CatalogacaoPage`) | `false` | **justifiée** |
+| `fn_caller_coordinates_batch(p_batch_id)` | le front (`CatalogacaoPage`) | `false` | **justifiée** |
+| `fn_book_draft_creator_library(p_draft_id, p_created_by)` | 2 politiques de `book_drafts` ; déclencheurs INVOKER | la bibliothèque de staff de **n'importe quel compte** dont on connaît l'UUID — voir la forme | **justifiée**, forme notée |
+| `fn_exemplar_draft_fallback_library(p_book_draft_id, p_import_staging_row_id, p_created_by)` | 2 politiques de `exemplar_drafts` ; déclencheurs INVOKER | idem, et la bibliothèque de n'importe quel brouillon de notice | **justifiée**, forme notée |
+| `fn_caller_can_edit_draft_library(p_library, p_created_by)` | **personne** — seules des DEFINER | `false` (`true` seulement si `p_created_by` est l'appelant·e, staff) | **fermée** |
+| `fn_caller_can_edit_exemplar_draft(p_draft_id)` | **personne** | `false` | **fermée** |
+| `fn_caller_can_edit_author_draft(p_draft_id)` | **personne** | `false` | **fermée** |
+| `fn_caller_can_edit_batch(p_batch_id, p_all_kinds)` | **personne** | `false` | **fermée** |
+| `fn_caller_can_see_batch(p_batch_id)` | **personne** | `false` | **fermée** |
+
+**Capas — huit RPC.**
+
+| Fonction | Garde lue dans le corps | Ce qu'une inconnue inscrite obtient | Verdict |
+|---|---|---|---|
+| `api.capas_revue_resume()` | staff actif (`fn_caller_staff_library_ids`) ou admin **en tête** ; comptes bornés par `fn_capas_dans_le_perimetre` — les notices que ses bibliothèques **possèdent ou détiennent** | rien (`42501`, `staff_only`) | **justifiée** |
+| `api.capas_revue_liste(p_limite, p_decalage)` | même garde, même périmètre ; page bornée à 1–50 | rien | **justifiée** |
+| `api.capas_revue_accepter(p_book_id, p_full_url, p_object_path)` | même garde ; notice verrouillée (`FOR UPDATE`) et **dans le périmètre** ; proposition `a_revoir` ; **provenance et licence lues dans la proposition**, jamais dans le navigateur (`p_full_url` doit être l'une de ses candidates) ; chemin contraint à `books/<bib_ref nettoyée>/(front\|capa-…).(jpg\|png\|webp\|gif)` ; une capa posée entre-temps n'est jamais remplacée (→ `perimee`) | rien | **justifiée** |
+| `api.capas_revue_ecarter(p_book_id)`, `api.capas_revue_rouvrir(p_book_id)` | même garde ; notice dans le périmètre ; transition bornée `a_revoir` ↔ `ecartee` | rien | **justifiées** |
+| `api.capas_photo_resume(p_library_id)`, `api.capas_photo_liste(p_library_id, p_recherche, …)` | **staff de CETTE bibliothèque** (`user_has_library_staff_role(auth.uid(), p_library_id)`) ou admin | rien | **justifiées** — la garde par bibliothèque, la bonne pour une campagne qui lui appartient ; la recherche ne bâtit d'expression régulière qu'à partir de chiffres (`^\d{1,9}$`) |
+| `api.capas_photo_poser(p_book_id, p_object_path, p_remplacer)` | staff ou admin ; notice verrouillée et dans le périmètre ; chemin `books/<bib_ref>/photo-….jpg` ; ne remplace une capa que sur `p_remplacer` (sinon `deja_une_capa`) ; périme la proposition qui attendait | rien | **justifiée** |
+
+**B30 — trois.**
+
+| Fonction | Qui l'appelle, et sa garde | Ce qu'une inconnue inscrite obtient | Verdict |
+|---|---|---|---|
+| `fn_caller_batch_library(p_batch_id)` | déclencheur INVOKER `tg_drafts_batch_guarded` (et des DEFINER) ; la bibliothèque n'est rendue qu'à l'admin ou au staff de CE lot, et le `FOR KEY SHARE` ne verrouille qu'un lot visible | `NULL` | **justifiée** |
+| `fn_caller_batch_library_sans_attente(p_batch_id)` | idem, `SKIP LOCKED` (l'interblocage évité par B30) | `NULL` | **justifiée** |
+| `fn_batch_delete_blockers(p_batch_id)` | le front (`CatalogacaoPage`) ; les comptes ne sortent que si `fn_caller_coordinates_batch` | aucune ligne | **justifiée** |
+
+**La forme à noter.** `fn_book_draft_creator_library(p_draft_id, p_created_by)`
+et `fn_exemplar_draft_fallback_library(…)` prennent un UUID de compte
+**arbitraire** : `rpc/fn_book_draft_creator_library` avec un brouillon
+quelconque et l'UUID d'autrui rend la bibliothèque de staff de ce compte. Elles
+rouvrent ainsi `fn_user_staff_library`, que B29 a fermée à `authenticated`
+pour cette raison même (« pas d'oracle d'existence ou d'adhésion », dit son
+bloc `$droits$`). On ne peut pas les fermer : les politiques de
+`book_drafts` et `exemplar_drafts` les appellent, sous `authenticated`, avec
+le `created_by` de la ligne. Ce n'est pas une faille : l'information n'est pas
+neuve — `user_has_library_staff_role(p_user_id, p_library_id)`, exposée et
+appelée par six politiques, dit déjà si un compte est staff d'une
+bibliothèque, et les bibliothèques se comptent. Ce qu'elles ajoutent : le
+statut d'administration du réseau d'un compte (rendu `NULL`), et la
+bibliothèque de n'importe quel brouillon de notice
+(`fn_exemplar_draft_fallback_library(p_book_draft_id)`), que B29 cloisonne
+par ailleurs. La correction, si elle vaut un jour la peine : borner la
+réponse au périmètre de l'appelant·e (sa bibliothèque, l'une de ses
+bibliothèques de staff ou de coordination, ou un contexte serveur sans
+`auth.uid()`) — les politiques ne comparent qu'à ces ensembles. Ce n'est pas
+une ligne : les déclencheurs et les DEFINER qui s'en servent attendent la
+valeur réelle, il faudrait séparer une version interne. À faire avec la
+prochaine migration qui les touche, suites B29 et B30 rejouées.
+
+**Cinq ouvertures sans objet, fermées dans la foulée**
+(`20260927200627_b29_aides_internes_fermees_aux_comptes`, écrite le 27/09 au
+soir, déployée le 28/09 au matin par la CI — commit `f1808c85` ; le runner
+était éteint la nuit). Le bloc `$droits$`
+de B29 ouvrait ses treize aides à `authenticated` d'un seul geste ; cinq n'ont
+aucun appelant qui s'exécute sous ce rôle. Cherché en production avant le
+`REVOKE`, selon la liste du REGISTRE : aucune politique, aucune vue, aucune
+dépendance de catalogue (`pg_depend` : défaut, contrainte, index, règle),
+aucune fonction INVOKER (`prosrc`), aucun appel dans `src/` ni dans une Edge
+Function ; ACL lue d'abord (`authenticated=X` direct, pas de `PUBLIC` : le
+`REVOKE` n'est pas un no-op). Leurs appelants sont tous DEFINER et tous servis :
+`publish_book_draft`, `publish_exemplar_draft`, `publish_author_draft`,
+`publish_catalog_batch`, `api.merge_book_drafts`, `fn_restore_deleted_draft`,
+`create_book_draft_from_book`, `create_exemplar_draft_from_exemplar`,
+`fn_batch_caller_can_edit`, `fn_caller_owns_batch`,
+`fn_caller_can_edit_book_draft`. Les suites SQL les appelaient en `postgres`,
+jeton simulé : aucune n'a eu à changer. Le bloc DO de la migration revérifie
+au déploiement l'absence d'appelant sous `authenticated` et les deux camps
+(les cinq fermées, les onze servies ouvertes, aucune à `anon`) ; en continu,
+`brouillons_par_bibliotheque_tests.sql` **T31** garde le catalogue ET joue,
+sous le rôle `authenticated`, les DEFINER qui portent les aides fermées : leur
+refus doit être métier (`error.batch.other_libraries`,
+`error.batch.other_authors`, `error.catalog.author_draft_creator_only`,
+`error.publish.other_library`), jamais un `42501` de privilège. Contre-épreuve
+par mutants sur le banc : migration absente, fermeture d'une aide servie, porteur
+devenu INVOKER — chacun fait rougir T31 ; appelant INVOKER, politique ou aide
+servie fermée apparus avant le déploiement — chacun fait échouer la migration.
+
+**Compte au 27/09.** 0029 = **448** au relevé, tous justifiés : 424 du 25/09
+et 24 de ce complément ; **443** après `20260927200627`
+(relevé  du 28/09 à 10 h 05 UTC, format groupé : 26 + 443 = 469 warnings, les cinq sorties de la liste ; le compte SQL dit la même chose). 0028 = **26**, la liste T10, inchangée : aucune des
+vingt-quatre n'est exécutable par `anon` (`has_function_privilege`). Le
+`sql-tests` de `f1808c85` est rouge par héritage : `recherche_index_trigramme_tests`
+(B33, `6bdd4331`, déjà rouge sans ce commit) échoue à l'identique avec et sans
+l'effet de la migration, vérifié au banc sur deux copies ; au banc, sur l'arbre
+poussé, les 133 autres suites sont vertes, dont `brouillons_par_bibliotheque`
+31/31. La suite B33 a été corrigée en amont le 28/09 au matin (`8eaa180c`). Le lint
+0029 continuera de croître avec chaque RPC — il compte l'API elle-même ;
+c'est ce complément, pas le chiffre, qui doit suivre.
