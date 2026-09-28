@@ -27,7 +27,11 @@ import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 
 // ── Storage keys ────────────────────────────────────────────
 const MODE_KEY = 'catalogacaoMode';
-const TAB_KEY  = 'catalogacaoActiveTab';
+// Onglet de reference a l'ouverture de la page (sans #tab= dans l'adresse).
+// L'ancienne cle `catalogacaoActiveTab` (dernier onglet visite) n'est plus
+// lue ni ecrite depuis le 28/09/2026 ; ce qui en reste dans un navigateur
+// est inerte.
+const DEFAULT_TAB = 'catalogPanel';
 
 // ═══════════════════════════════════════════════════════════
 // CatalogacaoPage — Tranche 1 : squelette complet
@@ -48,8 +52,13 @@ export default function CatalogacaoPage() {
   // et le reseau. `icon` = repere visuel du premier niveau ; `separator` marque
   // le debut d'un groupe (ancien `.tab-separator`, meme semantique : l'ecart est
   // AVANT la pastille marquee).
+  //
+  // Le catalogue deja publie ouvre la barre et c'est l'onglet de reference a
+  // l'ouverture de la page (demande de Xavier, 28/09/2026) : on part de ce qui
+  // existe avant de saisir. Le groupe de la saisie commence donc APRES lui.
   const TABS = [
-    { id: 'booksPanel',     icon: '📄', label: t({ id: 'catalogacao.tab.documento' }) },
+    { id: 'catalogPanel',   icon: '📇', label: t({ id: 'catalogacao.tab.catalogo' }) },
+    { id: 'booksPanel',     icon: '📄', label: t({ id: 'catalogacao.tab.documento' }), separator: true },
     { id: 'authorsPanel',   icon: '✒️', label: t({ id: 'catalogacao.tab.autoria' }) },
     { id: 'indexPanel',     icon: '🔖', label: t({ id: 'catalogacao.tab.indexacao' }) },
     { id: 'labelsPanel',    icon: '🏷️', label: t({ id: 'catalogacao.tab.etiquetas' }) },
@@ -57,7 +66,6 @@ export default function CatalogacaoPage() {
     { id: 'ocrPanel',       icon: '📷', label: t({ id: 'catalogacao.tab.ocr' }), separator: true },
     { id: 'queuePanel',     icon: '📥', label: t({ id: 'catalogacao.tab.fila' }), separator: true },
     { id: 'batchesPanel',   icon: '📦', label: t({ id: 'catalogacao.tab.lotes' }) },
-    { id: 'catalogPanel',   icon: '📇', label: t({ id: 'catalogacao.tab.catalogo' }) },
     { id: 'materiaPanel',   icon: '🗂️', label: t({ id: 'catalogacao.tab.materia' }), separator: true },
     { id: 'periodicosPanel', icon: '📰', label: t({ id: 'catalogacao.tab.periodicos' }) },
     ...(arbitreDoublons
@@ -71,14 +79,14 @@ export default function CatalogacaoPage() {
   });
 
   // ── Active tab ─────────────────────────────────────────
+  // A l'ouverture, la page montre le catalogue deja publie, sauf lien profond
+  // (#tab=…, pose par « Je veux… », la cloche ou un rechargement de la page).
+  // L'onglet visite en dernier n'est plus retenu d'une visite a l'autre : il
+  // masquait l'onglet de reference a toute personne ayant deja ouvert la page.
   const [activeTab, setActiveTab] = useState(() => {
     const hash = window.location.hash.replace('#tab=', '');
     if (TABS.some(t => t.id === hash)) return hash;
-    try {
-      const stored = localStorage.getItem(TAB_KEY);
-      if (TABS.some(t => t.id === stored)) return stored;
-    } catch {}
-    return 'booksPanel';
+    return DEFAULT_TAB;
   });
 
   // ── Stats ──────────────────────────────────────────────
@@ -307,7 +315,6 @@ export default function CatalogacaoPage() {
   function switchTab(tabId) {
     if (!TABS.some(t => t.id === tabId)) return;
     setActiveTab(tabId);
-    try { localStorage.setItem(TAB_KEY, tabId); } catch {}
     try { window.history.replaceState(null, '', `#tab=${tabId}`); } catch {}
   }
 
@@ -479,6 +486,11 @@ export default function CatalogacaoPage() {
 
           {/* ── Panels ───────────────────────────────────── */}
 
+          {/* 0. Catálogo(s) já publicado(s) — onglet de reference, en tete comme dans la barre */}
+          <div className={`cat-panel${activeTab === 'catalogPanel' ? ' active' : ''}`}>
+            <CatalogPanel onEdit={openForEdit} requestedView={catalogReq.view} requestNonce={catalogReq.nonce} onChanged={refreshAll} />
+          </div>
+
           {/* 1. Documento */}
           <div className={`cat-panel${activeTab === 'booksPanel' ? ' active' : ''}`}>
             <div className="cat-panel-header">
@@ -523,11 +535,6 @@ export default function CatalogacaoPage() {
               <h3>{t({id:'catalogacao.tab.lotes'})}</h3>
             </div>
             <BatchesPanel batches={batches} onRefresh={refreshAll} isCoord={isCoord} isNetworkAdmin={isNetworkAdmin} />
-          </div>
-
-          {/* 6. Catálogo(s) já publicado(s) */}
-          <div className={`cat-panel${activeTab === 'catalogPanel' ? ' active' : ''}`}>
-            <CatalogPanel onEdit={openForEdit} requestedView={catalogReq.view} requestNonce={catalogReq.nonce} onChanged={refreshAll} />
           </div>
 
           {/* 7. Coordenação de matéria (gouvernance thésaurus — étape 2c) */}
