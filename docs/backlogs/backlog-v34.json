@@ -2870,6 +2870,54 @@
       ]
     },
     {
+      "id": "B35",
+      "d": "B",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Deux aides de B29 rendent la bibliothèque de staff de n'importe quel compte — l'oracle que B29 avait fermé",
+        "pt": "Duas ajudas do B29 devolvem a biblioteca de staff de qualquer conta — o oráculo que o B29 tinha fechado"
+      },
+      "v": {
+        "fr": "Constaté au relevé des advisors du 27/09 (complément d'audit 0029, « La forme à noter »). `fn_book_draft_creator_library(p_draft_id, p_created_by)` et `fn_exemplar_draft_fallback_library(p_book_draft_id, p_import_staging_row_id, p_created_by)` sont SECURITY DEFINER, exposées à `authenticated` parce que les politiques de `book_drafts` et `exemplar_drafts` les appellent, et prennent l'UUID d'un compte **arbitraire** : `rpc/fn_book_draft_creator_library` avec un brouillon quelconque et l'UUID d'autrui rend la bibliothèque de staff de ce compte — ce que `fn_user_staff_library`, fermée par B29 pour cette raison même, ne rend plus. S'y ajoutent le statut d'administration du réseau d'un compte (rendu NULL) et la bibliothèque de n'importe quel brouillon de notice (`fn_exemplar_draft_fallback_library(p_book_draft_id)`), que B29 cloisonne par ailleurs. Pas une faille : `user_has_library_staff_role(uuid, uuid)`, exposée et appelée par six politiques, dit déjà si un compte est staff d'une bibliothèque, et les bibliothèques se comptent.",
+        "pt": "Constatado no levantamento dos advisors de 27/09 (complemento da auditoria 0029). `fn_book_draft_creator_library` e `fn_exemplar_draft_fallback_library` são SECURITY DEFINER, expostas a `authenticated` porque as políticas de `book_drafts` e `exemplar_drafts` as chamam, e recebem o UUID de uma conta **qualquer**: com um rascunho qualquer e o UUID de outra pessoa, devolvem a biblioteca de staff dessa conta — o que `fn_user_staff_library`, fechada pelo B29 por essa mesma razão, já não devolve. Somam-se o estado de administração da rede de uma conta (devolvido NULL) e a biblioteca de qualquer rascunho de registro. Não é uma falha: `user_has_library_staff_role(uuid, uuid)`, exposta e chamada por seis políticas, já diz se uma conta é staff de uma biblioteca."
+      },
+      "w": {
+        "fr": "Borner la réponse au périmètre de l'appelant·e — sa propre personne, l'une de ses bibliothèques de staff ou de coordination, ou un contexte serveur sans `auth.uid()` — puisque les politiques ne comparent qu'à ces ensembles ; garder une version interne non exposée pour les déclencheurs et les DEFINER qui attendent la valeur réelle (`tg_drafts_library_fixed`, `tg_drafts_batch_guarded`, `publish_*`, `fn_batch_reassign_library`, `fn_restore_deleted_draft`…). Rejouer `brouillons_par_bibliotheque_tests` et `lot_a_une_bibliotheque_tests`, et éprouver par un test que l'UUID d'autrui rend NULL. À prendre avec la prochaine migration qui touche ces deux fonctions, pas pour lui-même.",
+        "pt": "Limitar a resposta ao perímetro de quem chama — a própria pessoa, uma de suas bibliotecas de staff ou de coordenação, ou um contexto de servidor sem `auth.uid()` —, já que as políticas só comparam com esses conjuntos; manter uma versão interna não exposta para os gatilhos e as DEFINER que esperam o valor real. Repetir as suítes do B29 e do B30 e provar por um teste que o UUID de outra pessoa devolve NULL. A fazer com a próxima migração que tocar essas duas funções."
+      },
+      "y": {
+        "fr": "B29 a fermé `fn_user_staff_library` pour ne pas offrir d'oracle d'adhésion ; deux de ses propres aides le rouvrent par un autre chemin. Tant que `user_has_library_staff_role` reste exposée, l'écart est de forme ; il devient réel le jour où celle-ci se ferme.",
+        "pt": "O B29 fechou `fn_user_staff_library` para não oferecer um oráculo de adesão; duas de suas próprias ajudas o reabrem por outro caminho. Enquanto `user_has_library_staff_role` ficar exposta, a diferença é de forma; vira real no dia em que ela se fechar."
+      },
+      "f": {
+        "fr": [
+          "Sous `authenticated`, `fn_book_draft_creator_library(<brouillon>, <uuid d'autrui>)` et `fn_exemplar_draft_fallback_library(NULL, NULL, <uuid d'autrui>)` rendent NULL ; sur soi, la valeur.",
+          "Politiques de `book_drafts` et `exemplar_drafts`, déclencheurs et publications gardent le même comportement : suites B29 (T30 compris) et B30 vertes.",
+          "Le complément d'audit 0029 du 27/09 est annoté de la correction."
+        ],
+        "pt": [
+          "Sob `authenticated`, as duas funções devolvem NULL para o UUID de outra pessoa; para si, o valor.",
+          "Políticas, gatilhos e publicações mantêm o mesmo comportamento: suítes do B29 (T30 incluído) e do B30 verdes.",
+          "O complemento da auditoria 0029 de 27/09 é anotado com a correção."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune ; à prendre avec la prochaine migration qui touche ces fonctions.",
+        "pt": "Nenhuma; a fazer com a próxima migração que tocar essas funções."
+      },
+      "r": [
+        "docs/journal/audits/AUDIT_execute_authenticated_2026-09-01.md, complément du 27/09 (« La forme à noter »)",
+        "supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql (bloc $droits$)",
+        "supabase/migrations/20260927200627_b29_aides_internes_fermees_aux_comptes.sql"
+      ],
+      "verif": null
+    },
+    {
       "id": "C3",
       "d": "C",
       "p": "P1",
