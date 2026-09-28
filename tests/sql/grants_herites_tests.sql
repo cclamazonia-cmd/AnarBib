@@ -141,13 +141,19 @@ BEGIN
     SELECT count(*), coalesce(string_agg(DISTINCT c.relname, ', ' ORDER BY c.relname), '')
       INTO v_n, v_txt
       FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
-     WHERE n.nspname = 'public' AND c.relkind = 'v'
+     WHERE n.nspname IN ('public', 'private') AND c.relkind = 'v'
        AND coalesce((SELECT option_value FROM pg_options_to_table(c.reloptions)
                       WHERE option_name = 'security_invoker'), 'false') <> 'true'
        AND EXISTS (SELECT 1 FROM information_schema.role_table_grants g
-                    WHERE g.table_schema = 'public' AND g.table_name = c.relname
+                    WHERE g.table_schema = n.nspname AND g.table_name = c.relname
                       AND g.grantee IN ('anon', 'authenticated')
-                      AND g.privilege_type = 'SELECT');
+                      AND g.privilege_type = 'SELECT')
+       -- B32 (27/09/2026) : les deux lectures des vues matérialisées du
+       -- catalogue, seule exception nommée. Une vue matérialisée n'a pas de
+       -- RLS : sans security_invoker, ces vues ne contournent aucune policy,
+       -- elles évitent un GRANT sur la vue matérialisée (exposée dans public).
+       AND (n.nspname, c.relname) NOT IN (('private', 'catalog_public_rows'),
+                                          ('private', 'catalog_network_rows'));
     IF v_n = 0 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' -> '||left(v_txt, 200)); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -195,7 +201,10 @@ BEGIN
         ('public.user_can_engage_library(uuid)'),
         ('public.fn_caller_is_network_admin()'),
         ('public.fn_library_visible_to_caller(uuid)'),
-        ('public.fn_caller_is_library_staff(uuid)')
+        ('public.fn_caller_is_library_staff(uuid)'),
+        -- B32 (27/09) : l'ensemble des bibliothèques visibles, calculé une fois
+        -- par requête dans les 21 policies qui appelaient fn_library_visible_to_caller.
+        ('public.fn_visible_library_ids()')
       ) AS f(sig)
      WHERE NOT has_function_privilege('anon', f.sig::regprocedure, 'EXECUTE');
     IF v_n = 0 THEN v_passed := v_passed+1;
@@ -250,6 +259,7 @@ BEGIN
       ('public.fn_serial_caller_is_library_staff'),
       ('public.fn_submit_library_request'),
       ('public.fn_submit_library_request_via_claim'),
+      ('public.fn_visible_library_ids'),
       ('public.get_accessible_digital_asset_by_id_v2'),
       ('public.get_book_contributors_public'),
       ('public.get_book_primary_public_digital_asset_v2'),
@@ -356,10 +366,7 @@ BEGIN
       ('api.subject_tree_v1'),
       ('api.thesaurus_export_v1'),
       ('api.work_public_detail'),
-      ('private.fn_book_work_id'),
       ('private.fn_cartography_public_rows'),
-      ('private.fn_catalog_public_rows'),
-      ('private.fn_publisher_display'),
       ('public._anarbib_safe_date'),
       ('public._anarbib_trim_or_null'),
       ('public.catalog_bridge_block'),
@@ -414,6 +421,7 @@ BEGIN
       ('public.fn_task_invite'),
       ('public.fn_task_update_status'),
       ('public.fn_touch_draft_opened'),
+      ('public.fn_visible_library_ids'),
       ('public.fn_volume_marker'),
       ('public.fn_volume_rank'),
       ('public.fn_work_display_title'),
