@@ -1,0 +1,33 @@
+#!/bin/sh
+# .githooks/pre-push — un push qui mêle « [skip ci] » et du code ne part pas.
+#
+# POURQUOI (28/09/2026). Forgejo saute TOUT un push dès qu'un de ses commits
+# porte « [skip ci] » — pas seulement le commit de tête. Deux fois le même jour,
+# du code est resté au dépôt sans se déployer, sans un rouge : la sonde A3 et
+# sa migration poussées sous un commit de backlog « [skip ci] » ; puis un commit
+# de test poussé par-dessus un commit « [skip ci] » d'une autre session, ramené
+# par le rebase. Le déploiement n'a pas échoué : il n'a pas eu lieu.
+#
+# LA RÈGLE. « [skip ci] » n'a sa place que dans un push exclusivement
+# documentaire (docs/, notes-audit/, *.md). Si le lot poussé contient un tel
+# commit ET un fichier qui déploie, on refuse — et on dit quoi faire : pousser
+# le code seul, puis la doc ; ou amender le message de la doc si elle n'a pas
+# quitté le poste. Actif via `git config core.hooksPath .githooks` (cf. CLAUDE.md).
+# Reçoit sur stdin : <ref locale> <sha local> <ref distante> <sha distant>.
+zero=0000000000000000000000000000000000000000
+while read -r lref lsha rref rsha; do
+  [ "$lsha" = "$zero" ] && continue                      # suppression d'une branche
+  if [ "$rsha" = "$zero" ]; then range="$lsha"; else range="$rsha..$lsha"; fi
+  sauts=$(git log --format='%h %s' "$range" 2>/dev/null | grep -iE '\[(skip ci|ci skip)\]')
+  [ -z "$sauts" ] && continue
+  code=$(git diff --name-only "$rsha" "$lsha" 2>/dev/null | grep -vE '^(docs|notes-audit)/|\.md$')
+  [ -z "$code" ] && continue
+  echo "REFUS DU PUSH — un commit [skip ci] et du code dans le même lot ($range) :" >&2
+  echo "$sauts" | sed 's/^/  commit : /' >&2
+  echo "$code"  | head -8 | sed 's/^/  code   : /' >&2
+  echo "Forgejo sauterait TOUT le push : rien ne se déploierait, sans un rouge (28/09/2026)." >&2
+  echo "Pousser le code SEUL d'abord (git push <url> <sha du code>:main), puis la doc ;" >&2
+  echo "ou retirer [skip ci] du message de la doc (git commit --amend) si elle n'a pas quitté le poste." >&2
+  exit 1
+done
+exit 0
