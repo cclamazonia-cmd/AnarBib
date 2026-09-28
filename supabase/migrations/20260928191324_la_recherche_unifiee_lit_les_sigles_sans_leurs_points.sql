@@ -28,12 +28,17 @@
 --      deux vues matérialisées, qui rebâtit les leurs. Sans cela, un index
 --      calculé avec l'ancienne fonction servirait une requête pliée : des
 --      absences silencieuses (l'index dit « pas là » pour un titre présent).
---   3. author_name_aliases.alias_norm, colonne STOCKÉE écrite par les
---      appelants avec f_normalize_search, est recalculée là où elle change ;
---      un alias dont la forme pliée existe déjà, active, chez le même auteur
---      devient inactif (index unique uq_author_name_aliases_norm_active). En
---      production au 28/09 : 0 alias à replier, 0 conflit — le geste est écrit
---      pour les instances qui en auraient.
+--   3. author_name_aliases.alias_norm, colonne STOCKÉE, est pliée sur place
+--      (fn_sigle_sans_points(alias_norm)) là où elle porte encore un sigle à
+--      points ; un alias dont la forme pliée existe déjà, active, chez le même
+--      auteur devient inactif (index unique uq_author_name_aliases_norm_active).
+--      On ne la RECALCULE PAS depuis alias_text : plusieurs normalisations
+--      l'écrivent (forme de tri sans virgule, sans espaces, f_normalize_search…
+--      — 530 lignes sur 1 644 diffèrent de f_normalize_search(alias_text) en
+--      production, à bon droit ; c'est la première version de cette migration
+--      qui l'a appris, refusée par sa propre vérification au premier push).
+--      En production au 28/09 : 0 alias à replier, 0 conflit — deux alias
+--      « C.N.T. » y sont déjà stockés « cnt » à la main.
 --   Suivent sans rien recopier : api.search_catalog_v1 (titres, autorités,
 --   alias), api.search_subjects et api.fn_serial_search (les deux côtés du LIKE).
 --   Effet de bord assumé : fn_serials_autoslug et fn_subjects_autoslug
@@ -77,21 +82,22 @@ $function$;
 COMMENT ON FUNCTION public.f_normalize_search(text) IS
   'Forme de recherche : minuscules, sans accents, sigles pliés sur leurs lettres (« C.N.T. » → « cnt », fn_sigle_sans_points). Portée par les index trigramme des autorités et des vues matérialisées du catalogue, et par author_name_aliases.alias_norm : toute modification exige leur reconstruction (migration 20260928191324).';
 
--- 3. La colonne stockée des alias suit ; un doublon né du pli devient inactif.
+-- 3. La colonne stockée des alias se plie SUR PLACE ; un doublon né du pli
+--    devient inactif. Jamais recalculée depuis alias_text (voir l'en-tête).
 DO $alias$
 DECLARE v_repliees int; v_desactivees int;
 BEGIN
   UPDATE public.author_name_aliases a
      SET is_active = false
    WHERE a.is_active
-     AND a.alias_norm IS DISTINCT FROM public.f_normalize_search(a.alias_text)
+     AND public.fn_sigle_sans_points(a.alias_norm) <> a.alias_norm
      AND EXISTS (SELECT 1 FROM public.author_name_aliases b
                   WHERE b.id <> a.id AND b.author_id = a.author_id AND b.is_active
-                    AND b.alias_norm = public.f_normalize_search(a.alias_text));
+                    AND b.alias_norm = public.fn_sigle_sans_points(a.alias_norm));
   GET DIAGNOSTICS v_desactivees = ROW_COUNT;
   UPDATE public.author_name_aliases a
-     SET alias_norm = public.f_normalize_search(a.alias_text)
-   WHERE a.alias_norm IS DISTINCT FROM public.f_normalize_search(a.alias_text);
+     SET alias_norm = public.fn_sigle_sans_points(a.alias_norm)
+   WHERE public.fn_sigle_sans_points(a.alias_norm) <> a.alias_norm;
   GET DIAGNOSTICS v_repliees = ROW_COUNT;
   RAISE NOTICE 'sigles unifiée : % alias repliés, % doublons désactivés', v_repliees, v_desactivees;
 END
@@ -117,8 +123,8 @@ BEGIN
   END IF;
   IF public.f_normalize_search(NULL) IS NOT NULL THEN RAISE EXCEPTION 'sigles unifiée : NULL doit rester NULL'; END IF;
   SELECT count(*) INTO v_n FROM public.author_name_aliases a
-   WHERE a.alias_norm IS DISTINCT FROM public.f_normalize_search(a.alias_text);
-  IF v_n > 0 THEN RAISE EXCEPTION 'sigles unifiée : % alias dont alias_norm ne suit pas f_normalize_search', v_n; END IF;
+   WHERE public.fn_sigle_sans_points(a.alias_norm) <> a.alias_norm;
+  IF v_n > 0 THEN RAISE EXCEPTION 'sigles unifiée : % alias dont alias_norm porte encore un sigle à points', v_n; END IF;
   SELECT count(*) INTO v_n FROM pg_index i
    WHERE i.indexrelid IN ('public.authors_preferred_name_norm_trgm_idx'::regclass, 'public.authors_sort_name_norm_trgm_idx'::regclass,
                           'public.mv_books_catalog_list_v1_titulo_norm_trgm_idx'::regclass, 'public.mv_books_catalog_list_v1_autor_norm_trgm_idx'::regclass,
