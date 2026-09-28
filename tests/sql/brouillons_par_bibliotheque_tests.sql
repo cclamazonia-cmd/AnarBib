@@ -4,6 +4,7 @@
 -- Date    : 2026-09-27
 -- Ref     : migration 20260927160000_b29_brouillons_par_bibliotheque
 --           + 20260927200627_b29_aides_internes_fermees_aux_comptes (T31)
+--           + 20260928105437_b35_deux_aides_de_b29_passent_dans_private (T30-T32)
 --
 -- Cinq personnes : coordination de A (seed), bibliothécaire de B, staff de A
 -- ET de B, lectrice de A, admin réseau sans adhésion ; plus une coordination
@@ -54,6 +55,9 @@
 -- T31 aides internes (appelées par des DEFINER seulement) fermées aux comptes,
 --     aides servies ouvertes ; les DEFINER qui les portent, joués sous le rôle
 --     authenticated, refusent pour la raison métier (jamais le privilège).
+-- T32 B35 : les deux aides qui résolvent la bibliothèque d'un brouillon vivent
+--     dans private (hors API) — authenticated oui, anon et PUBLIC non ; plus
+--     aucun appelant ni politique vers public ; la lecture résout le créateur.
 --
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'BROUILLONS-PAR-BIBLIOTHEQUE OK : N/N'
@@ -921,11 +925,11 @@ BEGIN
     INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status)
     VALUES ('B29 Importee par coordA', 'livro', NULL, v_coordA, 'draft') RETURNING id INTO v_id3;
     INSERT INTO ingest.partner_catalog_row_to_draft (staging_row_id, run_id, draft_id, created_by) VALUES (v_row2, v_run, v_id3, v_coordA);
-    v_ok := public.fn_exemplar_draft_fallback_library(v_bOrph, NULL, NULL) = v_libA
-            AND public.fn_exemplar_draft_fallback_library(v_bNone, NULL, NULL) IS NULL
-            AND public.fn_exemplar_draft_fallback_library(v_id3, NULL, NULL) IS NULL
-            AND public.fn_exemplar_draft_fallback_library(NULL, NULL, v_coordA) = v_libA
-            AND public.fn_exemplar_draft_fallback_library(NULL, NULL, v_adminA) IS NULL;
+    v_ok := private.fn_exemplar_draft_fallback_library(v_bOrph, NULL, NULL) = v_libA
+            AND private.fn_exemplar_draft_fallback_library(v_bNone, NULL, NULL) IS NULL
+            AND private.fn_exemplar_draft_fallback_library(v_id3, NULL, NULL) IS NULL
+            AND private.fn_exemplar_draft_fallback_library(NULL, NULL, v_coordA) = v_libA
+            AND private.fn_exemplar_draft_fallback_library(NULL, NULL, v_adminA) IS NULL;
     -- Rejeu d'une autorité sans créateur : refusé à qui n'est pas admin.
     INSERT INTO public.author_drafts (preferred_name, status, created_by) VALUES ('B29 Autorite sans createur', 'cancelled', NULL) RETURNING id INTO v_id2;
     DELETE FROM public.author_drafts WHERE id = v_id2;
@@ -969,7 +973,7 @@ BEGIN
     END LOOP;
     FOREACH v_f IN ARRAY ARRAY[
       'public.fn_caller_staff_library_ids()', 'public.fn_caller_coordinator_library_ids()', 'public.fn_caller_staff_library()',
-      'public.fn_book_draft_creator_library(bigint, uuid)', 'public.fn_exemplar_draft_fallback_library(bigint, bigint, uuid)',
+      'private.fn_book_draft_creator_library(bigint, uuid)', 'private.fn_exemplar_draft_fallback_library(bigint, bigint, uuid)',
       'public.fn_caller_can_edit_book_draft(bigint)', 'public.fn_caller_owns_batch(bigint)',
       'public.fn_caller_coordinates_batch(bigint)', 'public.fn_caller_batch_library(bigint)',
       'public.fn_caller_batch_library_sans_attente(bigint)', 'public.fn_batch_delete_blockers(bigint)'] LOOP
@@ -1025,6 +1029,63 @@ BEGIN
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_hint := coalesce(nullif(v_hint, ''), SQLSTATE); END;
     IF v_hint IS DISTINCT FROM 'error.publish.other_library' THEN v_txt := v_txt || 'exemplaire-de-B:' || v_hint || ' '; END IF;
     EXECUTE 'RESET ROLE';
+    IF v_txt = ''
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T32 ─────────────────────────────────────────────────────────────
+  -- B35 : les deux aides qui résolvent la bibliothèque d'un brouillon (créateur,
+  -- notice) prennent l'UUID d'un compte arbitraire ; dans `private`, PostgREST
+  -- ne les sert plus, tandis que les politiques et les déclencheurs (sous
+  -- authenticated) gardent le privilège. Ici : les deux camps, plus aucun
+  -- chemin vers `public` — et la politique de lecture, jouée sous le rôle,
+  -- résout toujours la bibliothèque du créateur (une notice sans owner de
+  -- coordA est lue par coordA, pas par B).
+  v_t := 'T32 B35 : les deux aides vivent dans private (authenticated oui, anon non, PUBLIC non), plus aucun appelant ni politique vers public, et la lecture resout toujours le createur';
+  BEGIN
+    v_txt := '';
+    FOREACH v_f IN ARRAY ARRAY['fn_book_draft_creator_library', 'fn_exemplar_draft_fallback_library'] LOOP
+      IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace WHERE n.nspname = 'public' AND p.proname = v_f) THEN
+        v_txt := v_txt || 'encore-dans-public:' || v_f || ' ';
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace WHERE n.nspname = 'private' AND p.proname = v_f AND p.prosecdef) THEN
+        v_txt := v_txt || 'absente-de-private:' || v_f || ' ';
+      END IF;
+    END LOOP;
+    IF v_txt = '' THEN
+      FOREACH v_f IN ARRAY ARRAY['private.fn_book_draft_creator_library(bigint, uuid)', 'private.fn_exemplar_draft_fallback_library(bigint, bigint, uuid)'] LOOP
+        IF NOT has_function_privilege('authenticated', v_f, 'EXECUTE') THEN v_txt := v_txt || 'authenticated-sans-execute:' || v_f || ' '; END IF;
+        IF has_function_privilege('anon', v_f, 'EXECUTE') THEN v_txt := v_txt || 'anon-execute:' || v_f || ' '; END IF;
+        IF EXISTS (SELECT 1 FROM pg_proc p, aclexplode(p.proacl) a WHERE p.oid = v_f::regprocedure AND a.grantee = 0) THEN v_txt := v_txt || 'ouverte-a-PUBLIC:' || v_f || ' '; END IF;
+      END LOOP;
+    END IF;
+    SELECT count(*) INTO v_n FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+     WHERE n.nspname IN ('public', 'api', 'private', 'ingest')
+       AND p.proname NOT IN ('fn_book_draft_creator_library', 'fn_exemplar_draft_fallback_library')
+       AND p.prosrc ~ '(^|[^.[:alnum:]_])(public\.)?(fn_book_draft_creator_library|fn_exemplar_draft_fallback_library)\(';
+    IF v_n > 0 THEN v_txt := v_txt || 'appelants-vers-public:' || v_n || ' '; END IF;
+    SELECT count(*) INTO v_n FROM pg_policy pol
+     WHERE coalesce(pg_get_expr(pol.polqual, pol.polrelid), '') || ' ' || coalesce(pg_get_expr(pol.polwithcheck, pol.polrelid), '')
+           ~ 'private\.(fn_book_draft_creator_library|fn_exemplar_draft_fallback_library)\(';
+    IF v_n <> 4 THEN v_txt := v_txt || 'politiques-vers-private=' || v_n || ' '; END IF;
+    SELECT count(*) INTO v_n FROM pg_policy pol
+     WHERE coalesce(pg_get_expr(pol.polqual, pol.polrelid), '') || ' ' || coalesce(pg_get_expr(pol.polwithcheck, pol.polrelid), '')
+           ~ '(^|[^.[:alnum:]_])(public\.)?(fn_book_draft_creator_library|fn_exemplar_draft_fallback_library)\(';
+    IF v_n > 0 THEN v_txt := v_txt || 'politiques-vers-public=' || v_n || ' '; END IF;
+    -- la politique, sous le rôle : la notice orpheline de coordA (v_bOrph) se
+    -- lit par coordA et par la coordination de B qui est aussi staff de A, pas
+    -- par la bibliothécaire de B seule.
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    SELECT count(*) INTO v_n FROM public.book_drafts WHERE id = v_bOrph;
+    EXECUTE 'RESET ROLE';
+    IF v_n <> 1 THEN v_txt := v_txt || 'orpheline-invisible-a-coordA '; END IF;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_libBibB, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    SELECT count(*) INTO v_n FROM public.book_drafts WHERE id = v_bOrph;
+    EXECUTE 'RESET ROLE';
+    IF v_n <> 0 THEN v_txt := v_txt || 'orpheline-visible-de-B '; END IF;
     IF v_txt = ''
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
