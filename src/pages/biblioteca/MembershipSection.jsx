@@ -9,10 +9,12 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { useLibrary } from '@/contexts/LibraryContext';
 import { fs, ls, bx, lw } from './styles';
 
 export default function MembershipSection({ libraryId, lib, setLib, rules, setRules, setMsg }) {
   const { formatMessage: t } = useIntl();
+  const { patchLibrary } = useLibrary();
   const [saving, setSaving] = useState(false);
   const membershipRules = rules;
   const setMembershipRules = setRules;
@@ -26,6 +28,9 @@ export default function MembershipSection({ libraryId, lib, setLib, rules, setRu
       const { error } = await supabase.from('libraries').update({ membership_enabled: next }).eq('id', libraryId);
       if (error) throw error;
       setLib(prev => prev ? { ...prev, membership_enabled: next } : prev);
+      // « Mon compte » et le tableau de bord lisent ce réglage dans le contexte
+      // de session : sans ce report, il ne s'y voyait qu'après un rechargement.
+      patchLibrary(libraryId, { membership_enabled: next });
       setMsg({ text: t({ id: next ? 'membership.config.msg.enabledOn' : 'membership.config.msg.enabledOff' }), kind: 'ok' });
     } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
     finally { setSaving(false); }

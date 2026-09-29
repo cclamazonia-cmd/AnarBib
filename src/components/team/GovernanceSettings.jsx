@@ -21,7 +21,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
  */
 export default function GovernanceSettings({ libraryId }) {
   const { formatMessage: t } = useIntl();
-  const { effectiveRole } = useLibrary();
+  const { effectiveRole, patchLibrary } = useLibrary();
   const canToggle = effectiveRole === 'coordenador' || effectiveRole === 'network_admin';
 
   const [settings, setSettings] = useState(null); // { team_admission_mode, allow_direct_coordenador }
@@ -56,6 +56,8 @@ export default function GovernanceSettings({ libraryId }) {
         .eq('id', libraryId);
       if (error) throw error;
       setSettings(prev => ({ ...prev, allow_direct_coordenador: next }));
+      // le contexte de session porte aussi ce réglage (LeitoresPanel y lit sa valeur de départ)
+      patchLibrary(libraryId, { allow_direct_coordenador: next });
       setMsg({ text: t({ id: next ? 'team.governance.directCoord.msgOn' : 'team.governance.directCoord.msgOff' }), kind: 'ok' });
     } catch (e) {
       setMsg({ text: localizeError(e, t), kind: 'error' });

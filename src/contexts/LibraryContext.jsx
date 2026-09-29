@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo } 
 import { supabase } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { useTheme } from '@/lib/theme';
+import { appliquerReglage } from './libraryPatch';
 
 const STORAGE_KEY = 'anarbib.libraryContext';
 
@@ -46,6 +47,7 @@ const STAFF_ROLES = new Set(['librarian', 'coordenador', 'administrador', 'netwo
 const LibraryContext = createContext({
   ...DEFAULT_CONTEXT,
   setLibrary: () => {},
+  patchLibrary: () => {},
   libraries: [],
   isNetworkAdmin: false,
   effectiveRole: null,
@@ -286,6 +288,20 @@ export function LibraryProvider({ children }) {
     writeToSession(next);
   }, [libraries]);
 
+  // Un reglage de bibliotheque change a l'ecran (cotisation, carte-lecteur, saut
+  // collegial) se reporte ici, pour que « Mon compte » et le tableau de bord le
+  // voient sans rechargement (29/09/2026). Liste fermee et regle dans
+  // libraryPatch.js ; le contexte courant ne bouge que si la bibliotheque reglee
+  // est la bibliotheque active.
+  const patchLibrary = useCallback((libraryId, fields) => {
+    setLibraries(prev => appliquerReglage(null, prev, libraryId, fields).libraries);
+    setCtx(prev => {
+      const next = appliquerReglage(prev, null, libraryId, fields).ctx;
+      if (next !== prev) writeToSession(next);
+      return next;
+    });
+  }, []);
+
   // E.3 : derives memoises a partir de role + isNetworkAdmin
   const effectiveRole = useMemo(
     () => computeEffectiveRole(ctx.role, isNetworkAdmin),
@@ -301,6 +317,7 @@ export function LibraryProvider({ children }) {
     () => ({
       ...ctx,
       setLibrary,
+      patchLibrary,
       libraries,
       isNetworkAdmin,
       effectiveRole,
@@ -309,7 +326,7 @@ export function LibraryProvider({ children }) {
       libraryLoading,
       themeReady: themeSettledSlug === ctx.themeSlug,
     }),
-    [ctx, setLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess, libraryLoading, themeSettledSlug]
+    [ctx, setLibrary, patchLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess, libraryLoading, themeSettledSlug]
   );
 
   return (

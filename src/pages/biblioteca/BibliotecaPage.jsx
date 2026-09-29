@@ -61,7 +61,7 @@ const HEAVY_TABS = ['ill', 'exchanges', 'tasks', 'reports'];
 
 export default function BibliotecaPage() {
   const { user } = useAuth();
-  const { libraryId, libraryName, role, governance_mode } = useLibrary();
+  const { libraryId, libraryName, role, governance_mode, patchLibrary } = useLibrary();
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.biblioteca' }));
   const roleLoaded = role !== null && role !== undefined;
@@ -426,7 +426,12 @@ export default function BibliotecaPage() {
       // PATCH 09/05/2026 paquet 6.3 : default_locale ajouté à l'update.
       // C'est l'identité linguistique de la biblio, configurable depuis le
       // sélecteur ajouté dans la grille identité (champ après country).
-      await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential', accepts_public_signup:lib.accepts_public_signup===true }).eq('id', libraryId);
+      const { error: libErr } = await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential', accepts_public_signup:lib.accepts_public_signup===true }).eq('id', libraryId);
+      // 29/09/2026 : un refus de la base ne disait rien (« enregistré » quand même) ;
+      // et la carte-lecteur, que « Mon compte » lit dans le contexte de session,
+      // ne s'y voyait qu'après un rechargement.
+      if (libErr) throw libErr;
+      patchLibrary(libraryId, { reader_cards_enabled: lib.reader_cards_enabled === true });
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
       if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message, reading_notes_enabled:serviceState.reading_notes_enabled }).eq('library_id', libraryId);
       setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
