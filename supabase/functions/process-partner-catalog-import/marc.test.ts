@@ -16,7 +16,9 @@ import {
   looksLikePmbXml,
   parsePmbXml,
   mappedExtras,
+  issnDepuis,
 } from './marc.ts';
+import { zoneLaissee } from '../_shared/marc/correspondance.ts';
 
 // ── Fixtures XML ────────────────────────────────────────────
 
@@ -719,6 +721,7 @@ Deno.test('Revue H27 : le titre de série PMB (461 $t) d\'une monographie qui a 
 });
 
 Deno.test('Revue H27 : 463 $x $e, 225 $i $x, 410 $x et 411 sont laissés exprès, avec leur raison', () => {
+  assertEquals(zoneLaissee('unimarc', '463', 'x'), 'sans_champ');
   const rec = { leader: '00000naa2 22000001i 450 ', fields: [
     { tag: '225', ind1: '2', ind2: ' ', subfields: sf([['a', 'Coll'], ['i', 'Sous-coll'], ['x', '1234-5678']]) },
     { tag: '410', ind1: ' ', ind2: '0', subfields: sf([['t', 'Coll'], ['x', '1234-5678']]) },
@@ -729,4 +732,43 @@ Deno.test('Revue H27 : 463 $x $e, 225 $i $x, 410 $x et 411 sont laissés exprès
   const z = (tag, code) => cov.zones.find((x) => x.tag === tag && x.code === code);
   for (const [t, c] of [['225', 'i'], ['225', 'x'], ['410', 'x'], ['411', 't'], ['463', 'x'], ['463', 'e']]) assertEquals(z(t, c).status, 'laisse', `${t} $${c}`);
   assertEquals(cov.zones.filter((x) => x.status === 'brut'), []);
+});
+
+Deno.test('Revue H27 (2) : ISSN en 010 $a — formes que PMB laisse saisir, périodique de tout support, jamais un ISBN', () => {
+  const lire = (leader, code) => { const m = mapMarcRecord({ leader, fields: [
+    { tag: '010', ind1: ' ', ind2: ' ', subfields: sf([['a', code]]) }] }, 'unimarc'); return [m.isbn, m.issn]; };
+  const S = '00000nas0 22000001i 450 ';
+  for (const v of ['2555-0004', 'ISSN 2555-0004', 'issn : 2555-0004', '2555-0004 (en ligne)', '2555\u20130004', '2555 0004', '25550004', '2049-363x']) {
+    assertEquals(lire(S, v)[0], null, v);
+    assertEquals(lire(S, v)[1], v === '2049-363x' ? '2049-363X' : '2555-0004', v);
+  }
+  // une publication en série sur un autre support (ressource électronique, vidéo) : le niveau du guide décide
+  assertEquals(lire('00000nls0 22000001i 450 ', '2555-0004'), [null, '2555-0004']);
+  assertEquals(lire('00000ngs0 22000001i 450 ', '2555-0004'), [null, '2555-0004']);
+  // un ISBN reste un ISBN, même sur un périodique ; une monographie garde son code tel quel
+  assertEquals(lire(S, '978-2-921561-00-0'), ['978-2-921561-00-0', null]);
+  assertEquals(lire(S, '2-211-04459-X'), ['2-211-04459-X', null]);
+  assertEquals(lire('00000nam0 22000001i 450 ', 'ISSN 2555-0004'), ['ISSN 2555-0004', null]);
+  assertEquals(issnDepuis('2555-00041'), null);
+});
+
+Deno.test('Revue H27 (2) : la note « Série: » ne vient que de la zone de série de PMB (461 sans $9 lnk:), une fois, comparée sans la casse', () => {
+  const avec = (champs, dialecte = 'unimarc', leader = '00000nam0 22000001i 450 ') => mapMarcRecord({ leader, fields: champs }, dialecte).notes;
+  const c225 = { tag: '225', ind1: '2', ind2: ' ', subfields: sf([['a', 'Histoire du mouvement']]) };
+  // un lien entre notices (461 $9 lnk:parent) n'est pas une série
+  assertEquals(avec([c225, { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Boîte 12'], ['9', 'lnk:parent'], ['9', 'type_lnk:d']]) }]), null);
+  // la série à côté d'un lien : c'est elle qui est notée
+  assertEquals(avec([c225,
+    { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Boîte 12'], ['9', 'lnk:parent']]) },
+    { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Œuvres'], ['v', '3'], ['9', 'id:6']]) }]), 'Série: Œuvres');
+  // même titre à la casse près, ou égal au titre propre : rien
+  assertEquals(avec([c225, { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Histoire du Mouvement']]) }]), null);
+  assertEquals(avec([{ tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Des bourses du travail']]) }, c225,
+    { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Des bourses du travail'], ['v', 'Tome 2']]) }]), null);
+  // déjà en note (un second import du même export) : pas deux fois
+  assertEquals(avec([c225, { tag: '300', ind1: ' ', ind2: ' ', subfields: sf([['a', 'Série: Œuvres']]) },
+    { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Œuvres']]) }]), 'Série: Œuvres');
+  // MARC21 : la 773 est une notice hôte, pas une série
+  assertEquals(avec([{ tag: '490', ind1: '0', ind2: ' ', subfields: sf([['a', 'Studies']]) },
+    { tag: '773', ind1: '0', ind2: ' ', subfields: sf([['t', 'Host book']]) }], 'marc21', '00000nam a2200000 a 4500'), null);
 });

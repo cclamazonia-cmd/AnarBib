@@ -605,3 +605,5 @@ tests/sql/taches_sept_etats_tests.sql
 # 28/09 (IMP-25) : une notice importee d'un fichier MARC qui ne lui decrit aucun exemplaire n'en recoit pas
 # d'automatique ; un CSV garde le sien ; une notice MARC avec exemplaires a exactement les siens.
 tests/sql/import_sans_exemplaire_tests.sql
+# 29/09 (revue de la fin de H27) : le rapprochement par ISSN ne prend pas un article pour sa revue.
+tests/sql/import_rapprochement_issn_tests.sql

@@ -349,8 +349,17 @@ export function detectDialect(record) {
 
 // ── Mapping vers la forme normalisee ────────────────────────
 
-// La forme d'un ISSN (« 2555-0004 »), pour reconnaître celui qu'un PMB écrit en 010 $a.
-const RE_ISSN = /^\d{4}-?\d{3}[\dXx]$/;
+// L'ISSN qu'un PMB écrit en 010 $a, son champ « code », un texte libre : « 2555-0004 », mais aussi
+// « ISSN 2555-0004 », « 2555-0004 (en ligne) », « 2555–0004 » (tiret typographique), « 2555 0004 ».
+// → la forme nue « NNNN-NNNC », ou null si ce n'est pas un ISSN.
+export function issnDepuis(valeur) {
+  const v = clean(valeur);
+  if (!v) return null;
+  const nu = v.replace(/^issn\s*:?\s*/i, '').replace(/\s*\([^)]*\)\s*$/, '').replace(/[\u2010-\u2015\u2212\s]+/g, '-');
+  const m = nu.match(/^(\d{4})-?(\d{3}[\dXx])$/);
+  return m ? `${m[1]}-${m[2].toUpperCase()}` : null;
+}
+const normalise = (s) => String(s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 export function mapMarcRecord(record, dialect, itemMapping = null) {
   const def = CHAMPS[dialect === 'unimarc' ? 'unimarc' : 'marc21'];
@@ -423,17 +432,27 @@ export function mapMarcRecord(record, dialect, itemMapping = null) {
     issue.title = titreBulletin && titreBulletin !== perio ? titreBulletin : null;
   }
   // PMB écrit le « code » de toute notice en 010 $a, l'ISSN d'un périodique
-  // compris, et ne produit jamais de 011 (export.class.php) : sur un
-  // périodique, un 010 $a de forme ISSN est un ISSN (revue du 28/09 : « Le Rat
-  // des bibliothèques » avait le sien en ISBN).
-  if (materialType === 'periodico' && !issn && isbn && RE_ISSN.test(isbn)) { issn = isbn; isbn = null; }
-  // PMB range le titre de série d'une monographie en 461 $t. Sans collection,
-  // il en tient lieu (ingest : l'indice de collection) ; avec une collection,
-  // il n'avait aucun champ (revue du 28/09) : en note, comme l'adresse.
-  const serieNote = materialType !== 'artigo' && materialType !== 'periodico' && seriesTitle && host.title
-      && host.title !== seriesTitle && host.title !== title
-    ? `Série: ${host.title}` : null;
-  const notes = [...lire('summary'), ...lire('notes'), ...lire('contents'), ...(serieNote ? [serieNote] : [])];
+  // compris, et ne produit jamais de 011 (export.class.php) : sur une
+  // publication en série (guide, position 7 = « s », quel que soit son
+  // support) ou une notice de bulletin, un 010 $a qui est un ISSN va en ISSN
+  // (revue du 28/09 : « Le Rat des bibliothèques » avait le sien en ISBN).
+  if ((leader[7] === 's' || bulletinPmb) && !issn && issnDepuis(isbn)) { issn = issnDepuis(isbn); isbn = null; }
+  // PMB range le titre de série d'une monographie en 461 $t, SANS $9 « lnk: »
+  // (une 461 à $9 lnk:… est un lien entre notices, pas une série). Sans
+  // collection, ce titre en tient lieu (ingest : l'indice de collection) ; avec
+  // une collection, il n'avait aucun champ (revue du 28/09) : en note, comme
+  // l'adresse — sauf s'il redit la collection, le titre, ou une note déjà là.
+  const zoneDeSerie = dialect === 'unimarc' && materialType !== 'artigo' && materialType !== 'periodico'
+    ? fieldsByTag(record, '461').find((f) => premiere(f, 't')
+      && !(f.subfields || []).some((s) => s.code === '9' && /^lnk:/.test(clean(s.value) || '')))
+    : null;
+  const titreDeSerie = zoneDeSerie ? premiere(zoneDeSerie, 't') : null;
+  const lues = [...lire('summary'), ...lire('notes'), ...lire('contents')];
+  const serieNote = titreDeSerie && seriesTitle
+      && normalise(titreDeSerie) !== normalise(seriesTitle) && normalise(titreDeSerie) !== normalise(title)
+      && !lues.some((p) => normalise(p) === normalise(`Série: ${titreDeSerie}`))
+    ? `Série: ${titreDeSerie}` : null;
+  const notes = [...lues, ...(serieNote ? [serieNote] : [])];
 
   return {
     title,

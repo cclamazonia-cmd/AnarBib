@@ -122,6 +122,25 @@ BEGIN
     FROM jsonb_to_recordset(${dollar(donnees)}::jsonb)
       AS r(${COLONNES.map((c) => `${c} ${TYPES_SQL[c] || 'text'}`).join(', ')});
 
+  -- ── T0 ──────────────────────────────────────────────────────────────
+  -- Revue du 29/09 : le statut des lignes est posé ci-dessus à la main ; le
+  -- chemin de l'écran, lui, passe par le rapprochement, qui cherche les
+  -- doublons INTERNES au lot. Une revue et ses fascicules, un ensemble et ses
+  -- tomes portent le même titre : aucun ne doit être pris pour le doublon de
+  -- l'autre — une ligne signalée n'a plus que « Rejeter » à l'écran.
+  v_t := 'T0 doublons internes au lot : aucune notice des fixtures n''est prise pour une autre';
+  BEGIN
+    v_res := ingest.fn_flag_intra_run_duplicates(v_run);
+    IF (v_res->>'lignes_signalees')::int = 0
+       AND NOT EXISTS (SELECT 1 FROM ingest.partner_catalog_staging_rows WHERE run_id = v_run AND match_status <> 'new_record')
+    THEN v_passed := v_passed+1;
+    ELSE
+      v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : '||(SELECT string_agg(coalesce(external_key, id::text), ', ' ORDER BY row_no)
+                                                FROM ingest.partner_catalog_staging_rows WHERE run_id = v_run AND match_status <> 'new_record'));
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   -- ── T1 ──────────────────────────────────────────────────────────────
   v_t := 'T1 promotion : une notice par ligne, un brouillon d''exemplaire par exemplaire';
   BEGIN
@@ -330,14 +349,19 @@ describe('H27 — la preuve de l\'aller-retour PMB, par la base', async () => {
       .toEqual(JSON.parse(readFileSync(PERTES, 'utf8')));
     // « La collection revient en 225 », « le tome en 200 $h » : vérifié, pas
     // seulement dit (hors fascicules et articles, dont la 461 est la revue).
-    const REVIENT = { '410$t': '225$a', '461$t': '225$a', '410$v': '225$v', '461$v': '200$h' };
+    // Le titre de série PMB (461 $t) revient en collection, ou — quand la
+    // notice a déjà une collection — en note « Série: » (revue du 29/09).
+    const REVIENT = {
+      '410$t': [['225$a', (v) => v]], '410$v': [['225$v', (v) => v]], '461$v': [['200$h', (v) => v]],
+      '461$t': [['225$a', (v) => v], ['300$a', (v) => `Série: ${v}`]],
+    };
     const nonRevenues = [];
     lignes.forEach((l, i) => {
       if (['periodico', 'artigo'].includes(attendu.records[i].materialType)) return;
-      const ailleurs = relue(i).rawPayload.fields.filter((f) => f.tag === '225' || f.tag === '200').flatMap(valeursDe);
+      const ailleurs = relue(i).rawPayload.fields.filter((f) => ['225', '200', '300'].includes(f.tag)).flatMap(valeursDe);
       for (const p of pertesDe(l.raw_payload.fields, relue(i).rawPayload.fields)) {
-        const cible = REVIENT[p.cle];
-        if (cible && !ailleurs.some((x) => x.cle === cible && x.v === p.v)) nonRevenues.push(`${l.external_key} ${p.cle} « ${p.v} »`);
+        const cibles = REVIENT[p.cle];
+        if (cibles && !cibles.some(([cle, f]) => ailleurs.some((x) => x.cle === cle && x.v === f(p.v)))) nonRevenues.push(`${l.external_key} ${p.cle} « ${p.v} »`);
       }
     });
     // « Le titre du périodique revient en 200 et 530 » (463 $t d'une notice de
@@ -347,7 +371,10 @@ describe('H27 — la preuve de l\'aller-retour PMB, par la base', async () => {
     lignes.forEach((l, i) => {
       if (attendu.records[i].materialType !== 'periodico') return;
       const relus = relue(i).rawPayload.fields.flatMap(valeursDe);
+      // d'une 463 à deux $t, le premier est le titre du BULLETIN : il ne revient pas (sans champ)
+      const titres463 = l.raw_payload.fields.filter((f) => f.tag === '463').flatMap(valeursDe).filter((x) => x.cle === '463$t').map((x) => x.v);
       for (const p of pertesDe(l.raw_payload.fields, relue(i).rawPayload.fields)) {
+        if (p.cle === '463$t' && titres463.length > 1 && p.v === titres463[0]) continue;
         for (const cible of REVIENT_BULLETIN[p.cle] ?? []) {
           if (!relus.some((x) => x.cle === cible && x.v === p.v)) nonRevenues.push(`${l.external_key} ${p.cle} « ${p.v} » → ${cible}`);
         }

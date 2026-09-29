@@ -34,7 +34,9 @@ import { it, expect, vi, afterAll } from 'vitest';
 // + ecriture.test.ts 3, marc.test.ts 1 (28/09/2026, H27 : ce que la preuve de
 // l'aller-retour par la base a trouvé)
 // + autorites.test.ts 1, ecriture.test.ts 1 (28/09/2026, revue contradictoire de H25/H27)
-const ATTENDUS = 72;
+// + marc.test.ts 6, ecriture.test.ts 2, serialize.test.ts 1 (29/09/2026, les deux revues
+// contradictoires de la fin de H27)
+const ATTENDUS = 75;
 
 let enregistres = 0;
 vi.stubGlobal('Deno', {

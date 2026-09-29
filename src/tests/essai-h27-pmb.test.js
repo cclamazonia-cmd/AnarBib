@@ -14,13 +14,19 @@
 //   autorites-h27.iso : UNIMARC Autorités, s'il y en a (une notice importée
 //                       n'est liée à une autorité qu'après la révision) ;
 //   essai-h27.json    : ce que le fichier porte (notices, exemplaires 995, …),
-//                       pour comparer aux nombres de PMB.
+//                       pour comparer aux nombres de PMB ;
+//   catalogue-sans-tri.iso, sous ESSAI_H27_SANS_TRI=1 : le CONTRE-ESSAI — le
+//                       même export dans l'ordre reçu (celui de la RPC de
+//                       l'écran, par id), sans ranger les périodiques avant
+//                       les articles : ce que l'écran écrivait avant la revue
+//                       du 28/09 (mesuré : 7 articles rattachés sur 15).
 // Tout le reste (sauvegarde, vidage, import, comptes, restauration) :
 // tests/pmb/banc/essai-reimport-pmb.sh.
 import { describe, it, expect } from 'vitest';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { serializeCatalog } from '../../supabase/functions/export-catalog-lote/serialize.ts';
+import { enregistrement } from '../../supabase/functions/_shared/marc/ecriture.ts';
 import { autorites } from '../../supabase/functions/_shared/marc/autorites.ts';
 import { ecrireIso2709 } from '../../supabase/functions/_shared/marc/iso2709.ts';
 import { parseMarcIso2709 } from '../../supabase/functions/process-partner-catalog-import/marc.ts';
@@ -38,6 +44,12 @@ describe.skipIf(!EXPORT || !SORTIE)('essai H27 : le fichier du réimport dans PM
     expect(cat.avertissements).toEqual([]);
     mkdirSync(SORTIE, { recursive: true });
     writeFileSync(path.join(SORTIE, 'catalogue-h27.iso'), cat.content);
+    // Le contre-essai : par l'écrivain, notice par notice — serializeCatalog, lui, range toujours.
+    if (process.env.ESSAI_H27_SANS_TRI === '1') {
+      const brut = ecrireIso2709(exp.records.map((r) => enregistrement(r, { dialecte: 'unimarc', bibliotheque })));
+      expect(brut.avertissements).toEqual([]);
+      writeFileSync(path.join(SORTIE, 'catalogue-sans-tri.iso'), brut.octets);
+    }
     const aut = exp.authorities ?? {};
     const nAut = (aut.authors?.length ?? 0) + (aut.subjects?.length ?? 0);
     if (nAut) {

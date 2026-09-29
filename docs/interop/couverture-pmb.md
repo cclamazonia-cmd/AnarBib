@@ -1,12 +1,13 @@
 # AnarBib ↔ PMB : ce qui passe, dans les deux sens
 
-> Engendré par `src/tests/couverture-pmb.test.js`. Les § 1 et 2 viennent du code : la table partagée de
-> l'import et de l'export (`supabase/functions/_shared/marc/correspondance.ts`), ce que l'export réémet
-> (`ecriture.ts`), les pertes acceptées de la preuve de l'aller-retour (`src/tests/helpers/pmb-pertes-acceptees.js`)
-> et les pertes mesurées sur les 64 notices des fixtures exportées par PMB 8.1 (`tests/pmb/aller-retour-pertes.json`).
-> Le tableau du § 4 vient du bilan de l'essai (`tests/pmb/reimport-h27-bilan.json`). La marche à suivre dans
-> PMB (§ 3), les écarts expliqués et les limites sont rédigés à la main dans le générateur, et datés. Ne pas
-> modifier ce fichier à la main : `REGENERER_COUVERTURE=1 npx vitest run src/tests/couverture-pmb.test.js`.
+> Engendré par `src/tests/couverture-pmb.test.js`. Viennent du code : au § 1, les zones de chaque champ, les
+> zones laissées exprès avec leur motif et leur raison, et la colonne « À l'export »
+> (`supabase/functions/_shared/marc/correspondance.ts`, `ecriture.ts`) ; au § 2, le nombre de valeurs perdues,
+> mesuré sur les 64 notices des fixtures exportées par PMB 8.1 (`tests/pmb/aller-retour-pertes.json`). Viennent
+> des essais au banc PMB : les tableaux des § 3 et 4 et leurs réglages (`tests/pmb/bilans/`). Le reste — ce que
+> chaque champ devient, ce qui est écrit, la marche à suivre dans PMB, les écarts expliqués, les limites — est
+> rédigé à la main dans le générateur, et daté. Ne pas modifier ce fichier à la main :
+> `REGENERER_COUVERTURE=1 npx vitest run src/tests/couverture-pmb.test.js`.
 
 ## En bref
 
@@ -16,7 +17,8 @@
   son rapport de couverture : ce qui est repris, ce qui est laissé et pourquoi. Rien n'est publié sans révision
   du lot.
 - **D'AnarBib vers PMB** : Importations > Exportation par lot, format « UNIMARC — ISO 2709 » (le catalogue)
-  et « UNIMARC Autorités — ISO 2709 » (ses autorités). La marche à suivre dans PMB est au § 3.
+  et « UNIMARC Autorités — ISO 2709 » (ses autorités). La marche à suivre dans PMB est au § 3 : deux réglages
+  de PMB y décident de tout, l'onglet d'import et « Générer les liens entre notices ? ».
 - **Mesuré** : les 64 notices des fixtures PMB passent PMB → AnarBib → PMB ; les écarts sont au § 4.
 
 ## 1. De PMB vers AnarBib (import UNIMARC)
@@ -36,7 +38,7 @@
 | 210 $c (sinon 214 $c) | éditeur — la première maison seulement (un second éditeur PMB, seconde 210, n'est pas repris) |
 | 210 $d (sinon 214 $d) | année |
 | 101 $a | langue — une seule, parmi les 36 du catalogue |
-| 010 $a | ISBN ; l'ISSN d'un périodique, que PMB écrit en 010 $a, va dans ISSN |
+| 010 $a | ISBN ; d'une publication en série, l'ISSN que PMB écrit en 010 $a va dans ISSN |
 | 011 $a | ISSN (d'un article : celui de sa revue) |
 | 215 $a | nombre de pages, quand l'étendue en donne un (« XII-318 p. » → 318 ; « 2 vol. », « 1 DVD », « 312 σ. » : rien) ; d'un article, la pagination entière — le reste de la collation reste dans l'enregistrement d'origine, sans revenir à l'export |
 | 225 $a (sinon 410 $t) | collection |
@@ -47,7 +49,7 @@
 | 676 $a | indice Dewey |
 | 856 $u | adresse en ligne : le champ de la ressource pour une ressource électronique (guide « l »), sinon en note |
 | 530 $a | titre clé (périodique) |
-| 461 $t | revue hôte (article) ; d'une monographie, le titre de série PMB : sa collection si elle n'en a pas, sinon en note « Série: » |
+| 461 $t | revue hôte (article) ; d'une monographie, le titre de série PMB (461 sans $9 lnk:) : sa collection si elle n'en a pas, sinon en note « Série: » |
 | 461 $x | ISSN de la revue hôte |
 | 461 $v | volume de la revue hôte (article) ; d'une monographie, le tome, à défaut de 200 $h et $i |
 | 463 $v | numéro du fascicule |
@@ -56,7 +58,7 @@
 | 700, 701, 702, 710, 711, 712 | responsabilités : nom ($a, $b), nature (personne, collectivité, congrès — par la zone et l'indicateur), rôle tiré de la fonction $4 (le code d'origine est gardé ; sans $4, une 702/712 reçoit « autre », les autres « auteur »), qualificatifs d'un congrès ($d, $f, $e) ; un rapprochement avec une autorité est **proposé** en révision, jamais fait d'office |
 | 600, 601, 602, 604, 605, 606, 607, 608 | vedettes ($a, $b et les subdivisions $j, $x, $y, $z), notées « Assuntos importados » pour la révision : le thésaurus ne se remplit jamais d'office |
 | 995 | exemplaires, un par zone : code d'origine $f, cote $k, note $u, propriétaire $a ; $r et $q — les codes d'import du type et de la section de PMB (« uu » et « u » dans un PMB sans codes) — en note de provenance ; le statut ($o) n'est pas lu. Le numéro d'inventaire suit la série de la bibliothèque ; le code d'origine est gardé à part. Réglable par bibliothèque (profil d'import ; la 996 peut être lue à la place) |
-| notice de bulletin PMB (463 $9 lnk:bull_expl) | un périodique : titre et titre clé = le périodique (200 $h, sinon le dernier 463 $t), numéro 463 $v, date 463 $d ; le titre du bulletin, s'il en a un, est gardé à part ; le 200 $a « Notice de bulletin » et le $d de PMB sont écartés |
+| notice de bulletin PMB (463 $9 lnk:bull_expl) | un périodique : titre et titre clé = le périodique (200 $h, sinon le dernier 463 $t), numéro 463 $v, date 463 $d ; le titre du bulletin, s'il en a un, reste dans l'enregistrement d'origine (sans champ : il ne revient pas à l'export) ; le 200 $a et le $d que PMB y écrit sont écartés |
 
 ### Ce qui est laissé exprès
 
@@ -89,7 +91,7 @@ pas — colonne « À l'export » ; le § 2 mesure ces pertes.
 | 702 | $f | sans champ dans AnarBib | dates de la personne : pas de colonne de contributeur | oui, si la fiche d'autorité n'a pas de dates |
 | toutes | $3 | sans champ dans AnarBib | numéro d'autorité de la source : jamais rattaché d'office (rapprochements proposés en révision) | dans les zones rendues entières seulement |
 | 463 | $t | sans champ dans AnarBib | titre du fascicule : sans champ (numéro et date sont repris) ; d'une notice de bulletin PMB, le second $t est le périodique, repris en titre | non |
-| 463 | $x | redit une zone reprise | ISSN du périodique, répété sur le fascicule : celui de la notice de périodique fait foi | non |
+| 463 | $x | sans champ dans AnarBib | ISSN du périodique, porté par la notice de bulletin : non repris tant que le fascicule n'est pas rattaché à son périodique (backlog H24) | non |
 | 463 | $e | redit une zone reprise | mention de date du fascicule : la date ($d) est reprise | non |
 | 225 | $i | sans champ dans AnarBib | sous-collection, sans champ (PMB la relit en 411, réémise à la bibliothèque d'origine) | non |
 | 225 | $x | sans champ dans AnarBib | ISSN de la collection, sans champ | non |
@@ -107,7 +109,7 @@ pas — colonne « À l'export » ; le § 2 mesure ces pertes.
 | 410 | $a | sans champ dans AnarBib | auteur de la collection, sans champ | non |
 | 410 | $y | sans champ dans AnarBib | ISBN de l'ensemble, sans champ | non |
 | 462 | toutes | lien entre notices propre au logiciel d’origine | lien vers une notice fille dans PMB : AnarBib ne tient pas ces liens (ils se refont en œuvres et en tomes) | oui, telle quelle |
-| 464 | toutes | lien entre notices propre au logiciel d’origine | lien de PMB vers un article dépouillé : réémis tel quel à la bibliothèque d'origine — c'est par lui que PMB rattache l'article à sa revue au retour (l'article, écrit en 461/463 sans les $9 de PMB, ne lui suffit pas) | oui, telle quelle |
+| 464 | toutes | lien entre notices propre au logiciel d’origine | lien de PMB vers un article dépouillé : réémis tel quel à la bibliothèque d'origine — au retour, un article dont la 461 ne porte pas à la fois le titre et un volume n'est rattaché à sa revue que par cette 464, lue avant lui | oui, telle quelle |
 | 856 | $q | sans champ dans AnarBib | format du fichier en ligne, sans champ | non |
 | 995 | $c | redit une zone reprise | code du prêteur (PMB), redondant avec le propriétaire en $a | non |
 
@@ -124,8 +126,8 @@ Motifs : *donnée interne au logiciel d’origine*, *sans champ dans AnarBib*, *
 - les vedettes en 606 (celles du thésaurus portent leur numéro en $3, `AnarBib-S…`), les mots-clés en 610 ;
 - les exemplaires **de la seule bibliothèque qui exporte** en 995 ($a, $f, $k, $u ; type et section
   « indéterminé », $r uu $q u, la valeur que PMB écrit lui-même pour un type sans code) ;
-- les périodiques d'abord, les articles en dernier : PMB rattache un article à sa revue par la 464 de la revue,
-  qu'il doit lire avant l'article ;
+- les périodiques d'abord, les articles en dernier : un article dont la 461 ne porte pas à la fois le titre et
+  un volume n'est rattaché à sa revue que par la 464 de la revue, que PMB doit lire avant lui ;
 - pour une notice qu'elle a importée elle-même, les zones entières de l'enregistrement d'origine qu'AnarBib
   n'écrit pas, telles quelles (réémission prudente, décision IMP-22) — jamais une zone qu'AnarBib tient, ni
   009, 100 et 996 ; une sous-zone laissée d'une zone tenue ne revient donc pas (tableau ci-dessous), sauf les
@@ -208,53 +210,70 @@ Mesuré sur les 64 notices des fixtures PMB : combien de valeurs de chaque sous-
 | 996$x | 46 | 996 : la zone d'exemplaire détaillée de PMB (type, section, localisation, statut en clair), jamais réémise (IMP-22) — l'exemplaire revient en 995, type et section « indéterminé » |
 | 996$y | 13 | 996 : la zone d'exemplaire détaillée de PMB (type, section, localisation, statut en clair), jamais réémise (IMP-22) — l'exemplaire revient en 995, type et section « indéterminé » |
 
-Et ce qui revient changé sans être perdu : une responsabilité sans fonction dans PMB revient avec une fonction
-(570 « Autre » pour une 702 ou une 712, 070 « Auteur » pour les autres) ; le propriétaire d'un exemplaire (995 $a)
-est la bibliothèque qui exporte.
+Et ce qui revient changé sans que cette mesure le voie : une responsabilité sans fonction dans PMB revient avec
+une fonction (570 « Autre » pour une 702 ou une 712, 070 « Auteur » pour les autres) ; le type et la section d'un
+exemplaire (995 $r, $q) reviennent toujours « uu » et « u » — les fixtures les portaient déjà, un PMB qui a réglé
+ses codes d'import les verrait remplacés.
 
 ## 3. Dans PMB : quelle fonction d'import, quels réglages
 
-(PMB 8.1.1.1, vérifié au banc — `tests/pmb/README.md`.) Dans cet ordre :
+(PMB 8.1.1.1 ; chaque réglage a été joué au banc le 29/09/2026 — `tests/pmb/README.md`.) Dans cet ordre :
 
 1. **Autorités > Import** : le fichier « UNIMARC Autorités », dans le **thésaurus par défaut** de PMB
    (Administration > Outils > Paramètres > Thésaurus). S'il est vide — un catalogue importé que la révision
-   n'a pas encore rattaché n'exporte aucune autorité —, sauter cette étape et laisser « Non » ci-dessous.
+   n'a pas encore rattaché n'exporte aucune autorité —, sauter cette étape.
 2. **Administration > Imports > Exemplaires UNIMARC** (« Importer des notices et exemplaires ») — pas l'onglet
    voisin « Notices UNIMARC », qui importe les notices mais ignore les 995 sans le dire —, avec :
    - la fonction d'import **« Catégories RAMEAU »** (`func_cpt_rameau_first_level`) : elle garde les 606 en
      catégories. La fonction par défaut (`func_bdp`) les fond en une seule 610 (aucune catégorie) ;
-   - **« Oui »** à « Tenir compte des notices d'autorités » (« Non » par défaut) et l'origine des autorités
-     **AnarBib**, si des autorités ont été importées à l'étape 1 ;
+   - **« Oui »** à « Générer les liens entre notices ? » (« Non » par défaut) : sans lui, PMB ne lit aucune zone
+     de lien — mesuré : 0 bulletin, 0 article rattaché sur 15 ;
+   - « Tenir compte des notices d'autorités » : **laisser « Non »** dans PMB 8.1.1.1. Le formulaire de cet onglet
+     ne transmet pas l'origine qu'on y choisit (sa liste s'appelle `authorities_origin`, l'import lit
+     `authorities_default_origin`) : avec « Oui », le $3 ne rejoint aucune fiche, et PMB écrit des liens vers
+     des sources qui n'existent pas (tableau ci-dessous) ;
    - le prêteur (propriétaire), le statut et la localisation des exemplaires, choisis dans ce formulaire :
      PMB ne lit pas la 995 $a.
 
+Mesuré, les autorités importées d'abord (autorites-h25.iso, puis notices-h25.iso : 64 notices à $3) :
+
+| « Tenir compte des notices d'autorités » | responsabilités → auteurs | auteurs recréés | liens notice → fiche | dont vers une source absente |
+|---|---|---|---|---|
+| « Non » | 61 → 57 | 0 | 0 | 0 |
+| « Oui », origine « AnarBib » choisie à l'écran (PMB 8.1.1.1 ne la reçoit pas) | 61 → 57 | 0 | 44 | 44 |
+| « Oui », origine « AnarBib » reçue par PMB (l'outil du banc, ou un PMB corrigé) | 61 → 57 | 0 | 61 | 0 |
+
 Ce que PMB en fait :
 
-- une responsabilité rejoint sa fiche par le $3 (numéro, type, origine) : aucun auteur recréé ;
+- PMB rapproche les auteurs par la forme du nom et les dates (700-702 $f ; pour une collectivité ou un congrès,
+  aussi la subdivision, le lieu et le numéro) : deux homonymes sans dates, ou aux mêmes dates, n'en font
+  qu'un ; une autre forme ou d'autres dates (une même personne avec et sans dates) en créent un second ;
+- le $3 d'une responsabilité ne rejoint sa fiche que si l'origine arrive à l'import. Dans un PMB dont le
+  formulaire est corrigé (une ligne de `admin/import/import_func.inc.php` :
+  `origin::gen_combo_box("authorities", "authorities_default_origin")`), « Oui » et l'origine **AnarBib**
+  rattachent chaque responsabilité à sa fiche, quelle que soit la forme du nom ;
 - une vedette est rapprochée par son **libellé**, dans le thésaurus par défaut (le $3 d'une 606 n'est pas lu) :
   deux vedettes de même libellé deviennent une seule catégorie ;
-- sans « Tenir compte des notices d'autorités », ou pour une responsabilité sans $3, PMB rapproche les auteurs
-  par la forme du nom et les dates (700-702 $f ; pour une collectivité ou un congrès, aussi la subdivision, le
-  lieu et le numéro) : deux homonymes sans dates, ou aux mêmes dates, n'en font qu'un ; une autre forme ou
-  d'autres dates (une même personne avec et sans dates) en créent un second ;
 - un exemplaire prend le type « indéterminé / indéterminé » et la section « indéterminé » (les $r uu et $q u
-  de la 995) : PMB ne reçoit ni le type de document, ni la section, ni le code statistique d'origine — le type
-  règle la durée de prêt, à reprendre dans PMB après l'import ;
+  de la 995) : PMB les retrouve par ces codes, ou les crée — le type avec une durée de prêt de 0 jour. PMB ne
+  reçoit ni le type de document, ni la section, ni le code statistique d'origine : à reprendre dans PMB
+  avant de prêter ;
 - réimporter les autorités met toujours la fiche à jour (l'export n'écrit pas de date en 801 $c) ;
 - PMB refuse un exemplaire posé sur une notice d'article.
 
 ## 4. Mesuré : un aller-retour complet (29/09/2026)
 
 Les 64 notices des fixtures, importées dans AnarBib, publiées, exportées par l'écran (« UNIMARC — ISO 2709 »),
-réimportées dans un PMB vidé de son jeu de test (`tests/pmb/banc/essai-reimport-pmb.sh` ; le thésaurus et la
-table Dewey de PMB restent, comme dans une bibliothèque : vedettes et indices y sont rapprochés par leur
-libellé).
+réimportées dans un PMB vidé de son jeu de test (`tests/pmb/banc/essai-reimport-pmb.sh`). Le thésaurus et la
+table Dewey de PMB restent, comme dans une bibliothèque — vedettes et indices y sont rapprochés par leur
+libellé —, ainsi que ses types de documents, sections, codes statistiques et localisations.
 
 Réglages de la mesure :
 
 - Administration > Imports > Exemplaires UNIMARC ;
 - fonction d'import : func_cpt_rameau_first_level.inc.php (Catégories RAMEAU) ;
-- « Tenir compte des notices d'autorités » : Non, origine « Catalogue Interne » — aucune autorité n'est exportée pour des notices importées que la révision n'a pas encore rattachées : le fichier ne porte aucun $3, et les auteurs sont rapprochés par leur nom et leurs dates ;
+- « Générer les liens entre notices ? » : Oui ;
+- « Tenir compte des notices d'autorités » : Non — aucune autorité n'est exportée pour des notices importées que la révision n'a pas encore rattachées : le fichier ne porte aucun $3 ;
 - exemplaires : prêteur « BDP », statut « Document en bon état », localisation « Bibliothèque principale ».
 
 | | PMB d'origine | après l'aller-retour |
@@ -273,7 +292,6 @@ Réglages de la mesure :
 | collections employées · notices en collection | 6 · 8 | 8 · 10 |
 | séries employées · notices en série | 2 · 2 | 0 · 0 |
 | liens entre notices | 2 | 0 |
-| responsabilités rattachées à une fiche AnarBib (par le $3) | 0 | 0 |
 
 Les écarts :
 
@@ -286,6 +304,8 @@ Les écarts :
 - **l'ordre du fichier compte** : le même export écrit dans l'ordre des identifiants, sans ranger les périodiques
   avant les articles, ne laisse que 7 articles rattachés à leur revue sur 15 (contre-essai du 29/09/2026 :
   52 monographies, 5 périodiques, 7 articles) — l'export range donc les périodiques d'abord ;
+- **sans « Générer les liens entre notices ? »** (contre-essai du 29/09/2026) : 0 bulletin et 0 dépouillement,
+  les articles entrent sans leur revue ;
 - **deux catégories PMB distinctes de même libellé** (« Mammifères ») n'en font qu'une : un lien de moins ;
 - **une langue par notice**, aucune hors des langues du catalogue (« fro »), pas de langue de l'original ;
 - **les deux séries PMB reviennent en collections** (461 $t → 225) : l'ensemble « Chroniques de l'entraide
@@ -300,8 +320,11 @@ Les écarts :
 - Un fascicule importé n'est pas encore rattaché à son périodique (backlog H24) ; une « notice de bulletin »
   PMB revient en notice de périodique.
 - Un article né dans AnarBib (sans 464 d'origine à réémettre) n'est rattaché par PMB que si sa 461 porte le
-  titre de la revue et un numéro de volume ; sinon PMB en fait une monographie (lu dans `import_func.inc.php`,
-  non mesuré).
+  titre de la revue et un numéro de volume ; sinon PMB en fait une monographie (lu dans `import_func.inc.php` ;
+  observé sur le fichier de l'essai des autorités, dont les articles n'ont pas de 464 à réémettre).
+- Réimporter dans un PMB qui détient déjà ces notices ne met rien à jour : PMB ne dédoublonne que sur l'ISBN,
+  écarte une notice dont l'ISBN est déjà là et recrée celles qui n'en ont pas (mesuré le 26/09/2026,
+  `tests/pmb/README.md`).
 - Le type de document, la section, la localisation et le statut d'un exemplaire PMB (996) ne passent pas : au
   retour, PMB range l'exemplaire en type et section « indéterminé ».
 - Un second éditeur (seconde 210), une sous-collection (225 $i) et l'ISSN de collection ne sont pas repris ; ils

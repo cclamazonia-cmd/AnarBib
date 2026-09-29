@@ -85,13 +85,15 @@ export interface OptionsMarc {
   bibliotheque?: { nom?: string | null; pays?: string | null; langue?: string | null } | null;
 }
 
-// PMB lit un fichier dans l'ordre et ne rattache un article à sa revue que par
-// la 464 de la revue, lue AVANT lui (admin/import/import_func.inc.php : la 464
-// met l'article « en attente », consommée quand sa notice arrive ; un article
-// lu avant sa revue, sans rien en attente, redevient une monographie). Revue du
-// 28/09 : l'écran exportait par id, et neuf articles de « Géo » précédaient
-// leur revue. Les périodiques d'abord, les articles en dernier, l'ordre reçu
-// entre eux — en MARC seulement (le CSV et le JSON gardent l'ordre reçu).
+// PMB lit un fichier dans l'ordre. Un article dont la 461 ne porte pas à la
+// fois le titre et un volume n'est rattaché à sa revue que par la 464 de la
+// revue, lue AVANT lui (admin/import/import_func.inc.php, sous « Générer les
+// liens entre notices ? » : la 464 met l'article « en attente », consommée
+// quand sa notice arrive ; un article lu sans rien en attente redevient une
+// monographie). Mesuré au banc le 29/09 : dans l'ordre de l'écran (par id),
+// huit articles précédaient leur revue, 7 rattachés sur 15 ; rangés, 15 sur 15.
+// Les périodiques d'abord, les articles en dernier, l'ordre reçu entre eux —
+// en MARC seulement (le CSV et le JSON gardent l'ordre reçu).
 const RANG_MARC: Record<string, number> = { periodico: 0, artigo: 2 };
 export function ordreMarc<T extends { materialType?: string | null }>(records: T[]): T[] {
   return records.map((r, i) => ({ r, i }))

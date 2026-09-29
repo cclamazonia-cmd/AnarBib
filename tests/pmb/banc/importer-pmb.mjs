@@ -48,8 +48,16 @@
 // d'autorités » : une 7XX dont le $3 est connu de l'origine choisie se rattache à
 // l'autorité importée au lieu d'en recréer une) ; PMB_ORIGINE (libellé de
 // l'origine, ex. AnarBib, créée par l'import des autorités ; défaut : la
-// première). Le formulaire nomme la liste authorities_origin mais le script
-// d'import lit authorities_default_origin : c'est cette dernière qu'on envoie.
+// première). Le formulaire de « Exemplaires UNIMARC » nomme la liste
+// authorities_origin (import_func.inc.php : origin::gen_combo_box("authorities"),
+// nom par défaut) mais le script d'import lit authorities_default_origin
+// (import_func.inc.php, import_new_notice) : le choix fait à l'écran n'est PAS
+// transmis par PMB 8.1.1.1. L'outil envoie authorities_default_origin — ce que
+// PMB voulait recevoir ; PMB_COMME_LE_NAVIGATEUR=1 envoie ce qu'un navigateur
+// envoie (authorities_origin), pour mesurer ce qu'obtient une bibliothèque qui
+// clique (revue du 29/09). « Générer les liens entre notices ? » : « Oui » ici
+// (PMB_LIENS=0 pour « Non », le défaut du formulaire) — sans lui, PMB ne
+// rattache aucun article à sa revue.
 // Identifiants de banc : admin / admin (installer-pmb.sh) ; base bibli/bibli.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -181,6 +189,7 @@ const statutNotice = choisir(r.text, 'statutnot');
 const origine = choisir(r.text, 'authorities_origin', process.env.PMB_ORIGINE);
 const autoritesNotices = process.env.PMB_AUTORITES_NOTICES === '1';
 const liens = (process.env.PMB_LIENS ?? '1') === '1';
+const commeLeNavigateur = process.env.PMB_COMME_LE_NAVIGATEUR === '1';
 
 // --- 3. Envoi du fichier (multipart) -----------------------------------------
 const champs = {
@@ -188,7 +197,7 @@ const champs = {
   isbn_mandatory: '0', isbn_dedoublonnage: '1', isbn_only: '1',
   statutnot: statutNotice.valeur, link_generate: liens ? '1' : '0', notice_replace_links: '0',
   import_force_notice_is_new: '0', authorities_notices: autoritesNotices ? '1' : '0', import_notice_existing_replace: '0',
-  authorities_default_origin: origine.valeur,
+  [commeLeNavigateur ? 'authorities_origin' : 'authorities_default_origin']: origine.valeur,
   book_lender_id: proprietaire.valeur, book_statut_id: statut.valeur, book_location_id: localisation.valeur,
   cote_mandatory: '0', tdoc_codage: '0', statisdoc_codage: '0', sdoc_codage: '0',
 };
@@ -244,7 +253,7 @@ const bilan = {
   encodage: encodage || 'détection automatique',
   options: {
     proprietaire: proprietaire.libelle, statut: statut.libelle, localisation: localisation.libelle,
-    statut_notice: statutNotice.libelle, liens_46X: liens, autorites_notices: autoritesNotices, origine: origine.libelle, dedoublonnage_isbn: true, isbn_obligatoire: false, cote_obligatoire: false,
+    statut_notice: statutNotice.libelle, liens_46X: liens, autorites_notices: autoritesNotices, origine: origine.libelle, origine_transmise: !commeLeNavigateur, dedoublonnage_isbn: true, isbn_obligatoire: false, cote_obligatoire: false,
   },
   relances: etapes,
   pmb: {

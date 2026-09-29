@@ -1,7 +1,7 @@
 {
  "mesure": "2026-09-29",
  "fichiers": {
-  "catalogue": "catalogue-h27.iso",
+  "catalogue": "catalogue-sans-tri.iso",
   "autorites": null
  },
  "reglages": {
@@ -14,6 +14,7 @@
   "liens_46X": true,
   "autorites_notices": false,
   "origine": "Catalogue Interne",
+  "origine_transmise": true,
   "dedoublonnage_isbn": true,
   "isbn_obligatoire": false,
   "cote_obligatoire": false
@@ -41,12 +42,14 @@
   "series_employees": 2,
   "notices_en_serie": 2,
   "liens_entre_notices": 2,
+  "liens_notice_source_d_autorite": 0,
+  "liens_notice_source_d_autorite_sans_source": 0,
   "responsabilites_rattachees_a_une_fiche_AnarBib": 0,
   "categories_par_notice": "Australie vue par J.-P. Ferrero:1 | Bac en poche:1 | Bagnes à Madagascar:1 | Bruit de cochon:1 | Canne:1 | Carte routière : Ardèche - Haute-Loire, :1 | Catfish blues:1 | Charte du XIIIe siècle, par laquelle Gui:1 | Chateaux de la Loire (1):2 | Chateaux de la Loire (2):1 | Chili:1 | Couverture du magazine rustica:2 | Crise en Argentine:3 | Études archéologiques dans la Loire-Infé:1 | femmes afghanes:1 | Géo:1 | Ghetto 9:1 | Histoire de l'Afghanistan:1 | Islam afghan:2 | La chambre verte:1 | La Chrysalide Diaprée:1 | La Loire Angevine au temps de Joachim du:2 | La métamorphose des fleurs:1 | Le chirurgien hollandais:1 | Le Cochon d'Hollywood:1 | Le dieu devenu homme:1 | Le mille-pattes:2 | Le Porc et les produits de la charcuteri:1 | Le puits:1 | Marigot africain:1 | Monsieur Je-sais-tout:1 | Nimitz:1 | Paroles de bonheur:1 | Paysages afghans:1 | Peuples d'Afghanistan:1 | Rwanda:1 | Sarah de Cordoue:1 | Tatars de Crimée:1 | Tours. N°65. Flle 78:1 | Tribus Pachtounes:1 | Trois fêlés et un pendu:1 | Zaks:1"
  },
  "reimport": {
   "notices": 64,
-  "notices_par_niveau": "a2=15 m0=44 s1=5",
+  "notices_par_niveau": "a2=7 m0=52 s1=5",
   "exemplaires": 46,
   "exemplaires_sur_bulletins": 0,
   "exemplaires_par_type": "indéterminé / indéterminé=46",
@@ -54,7 +57,7 @@
   "exemplaires_par_code_statistique": "Indéterminé=46",
   "notices_sans_exemplaire": 22,
   "bulletins": 3,
-  "depouillements": 15,
+  "depouillements": 7,
   "responsabilites": 61,
   "responsabilites_sans_fonction": 0,
   "auteurs_employes": 57,
@@ -67,25 +70,44 @@
   "series_employees": 0,
   "notices_en_serie": 0,
   "liens_entre_notices": 0,
+  "liens_notice_source_d_autorite": 0,
+  "liens_notice_source_d_autorite_sans_source": 0,
   "responsabilites_rattachees_a_une_fiche_AnarBib": 0,
   "categories_par_notice": "Australie vue par J.-P. Ferrero:1 | Bac en poche:1 | Bagnes à Madagascar:1 | Bruit de cochon:1 | Canne:1 | Carte routière : Ardèche - Haute-Loire, :1 | Catfish blues:1 | Charte du XIIIe siècle, par laquelle Gui:1 | Chateaux de la Loire (1):2 | Chateaux de la Loire (2):1 | Chili:1 | Couverture du magazine rustica:1 | Crise en Argentine:3 | Études archéologiques dans la Loire-Infé:1 | femmes afghanes:1 | Géo:1 | Ghetto 9:1 | Histoire de l'Afghanistan:1 | Islam afghan:2 | La chambre verte:1 | La Chrysalide Diaprée:1 | La Loire Angevine au temps de Joachim du:2 | La métamorphose des fleurs:1 | Le chirurgien hollandais:1 | Le Cochon d'Hollywood:1 | Le dieu devenu homme:1 | Le mille-pattes:2 | Le Porc et les produits de la charcuteri:1 | Le puits:1 | Marigot africain:1 | Monsieur Je-sais-tout:1 | Nimitz:1 | Paroles de bonheur:1 | Paysages afghans:1 | Peuples d'Afghanistan:1 | Rwanda:1 | Sarah de Cordoue:1 | Tatars de Crimée:1 | Tours. N°65. Flle 78:1 | Tribus Pachtounes:1 | Trois fêlés et un pendu:1 | Zaks:1"
+ },
+ "cree_par_l_import_des_notices": {
+  "notices": 64,
+  "exemplaires": 46,
+  "bulletins": 3,
+  "analysis": 7,
+  "notices_relations": 0,
+  "responsability": 61,
+  "authors": 57,
+  "authorities_sources": 0,
+  "notices_authorities_sources": 0,
+  "publishers": 36,
+  "collections": 8,
+  "sub_collections": 0,
+  "series": 0,
+  "indexint": 0,
+  "categories": 0,
+  "notices_categories": 48,
+  "notices_langues": 59,
+  "docs_type": 0,
+  "docs_section": 0,
+  "docs_codestat": 0,
+  "import_marc": 0,
+  "error_log": 31
  },
  "pmb": {
   "notices_a_charger": 64,
   "notices_invalides": 0,
   "erreurs": [
    {
-    "origine": "import_6877380966.inc",
+    "origine": "import_2709839396.inc",
     "erreur": "Notice : créée avec ISBN vide",
     "nb": 31
    }
   ]
- },
- "contre_essai_sans_tri": {
-  "mesure": "2026-09-29",
-  "quoi": "le même export, écrit dans l'ordre des id (celui de la RPC de l'écran) sans ranger les périodiques avant les articles",
-  "notices_par_niveau": "a2=7 m0=52 s1=5",
-  "bulletins": 3,
-  "depouillements": 7
  }
 }

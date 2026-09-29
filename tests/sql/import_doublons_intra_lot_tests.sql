@@ -215,6 +215,78 @@ BEGIN
     END;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- ═════════════════════════════════════════════════════════════════
+  -- 29/09/2026 (migration 20260929102719_le_rapprochement_distingue_le_fascicule_de_sa_revue) : un fichier MARC porte des notices de
+  -- même titre qui ne sont pas la même notice — une revue et ses fascicules,
+  -- un ensemble et ses tomes. La clé prend le numéro et la date du fascicule.
+  -- Un troisième lot, pour ne rien changer aux comptes de T1 à T15.
+  DECLARE
+    v_run3 bigint; v_res3 jsonb;
+    v_revue bigint; v_f12 bigint; v_f13 bigint; v_f1a bigint; v_f1b bigint; v_d1 bigint; v_d2 bigint;
+    v_ens bigint; v_t1 bigint; v_t2 bigint;
+  BEGIN
+    INSERT INTO ingest.partner_catalog_import_runs (source_id, storage_path, original_filename)
+    VALUES (v_src, 'essai/c.iso', 'c.iso') RETURNING id INTO v_run3;
+    -- une revue, et deux de ses fascicules (notices de bulletin PMB : le titre est celui de la revue)
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, normalized_payload)
+    VALUES (v_run3, 1, '24', 'Géo', 'new_record', '{"material_type": "periodico"}') RETURNING id INTO v_revue;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, normalized_payload)
+    VALUES (v_run3, 2, '1-bull', 'Géo', 'new_record', '{"material_type": "periodico", "volume": "277", "issue": {"number": "277", "date": "2004-08-04"}}') RETURNING id INTO v_f12;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, normalized_payload)
+    VALUES (v_run3, 3, '2-bull', 'Géo', 'new_record', '{"material_type": "periodico", "volume": "278", "issue": {"number": "278", "date": "2004-09-01"}}') RETURNING id INTO v_f13;
+    -- une revue qui renumérote chaque année : même numéro, dates différentes
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, normalized_payload)
+    VALUES (v_run3, 4, 'r-1', 'Le Monde libertaire', 'new_record', '{"issue": {"number": "1", "date": "2024-01-01"}}') RETURNING id INTO v_f1a;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, normalized_payload)
+    VALUES (v_run3, 5, 'r-2', 'Le Monde libertaire', 'new_record', '{"issue": {"number": "1", "date": "2025-01-01"}}') RETURNING id INTO v_f1b;
+    -- le même fascicule saisi deux fois
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, normalized_payload)
+    VALUES (v_run3, 6, 'd-1', 'Réfractions', 'new_record', '{"issue": {"number": "N° 12", "date": "2004-05-01"}}') RETURNING id INTO v_d1;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, normalized_payload)
+    VALUES (v_run3, 7, 'd-2', 'Réfractions', 'new_record', '{"issue": {"number": "n°12", "date": "2004-05-01"}}') RETURNING id INTO v_d2;
+    -- un ensemble et ses deux tomes, même titre, même responsabilité
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, responsibility_statement, match_status, normalized_payload)
+    VALUES (v_run3, 8, '68', 'Chroniques de l''entraide ouvrière', 'Zdeňka Černá', 'new_record', '{}') RETURNING id INTO v_ens;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, responsibility_statement, match_status, normalized_payload)
+    VALUES (v_run3, 9, '69', 'Chroniques de l''entraide ouvrière', 'Zdeňka Černá', 'new_record', '{"volume": "1"}') RETURNING id INTO v_t1;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, responsibility_statement, match_status, normalized_payload)
+    VALUES (v_run3, 10, '70', 'Chroniques de l''entraide ouvrière', 'Zdeňka Černá', 'new_record', '{"volume": "Tome 2"}') RETURNING id INTO v_t2;
+
+    v_res3 := ingest.fn_flag_intra_run_duplicates(v_run3);
+
+    v_t := 'T16 une revue et deux de ses fascicules ne sont pas des doublons';
+    BEGIN
+      IF (SELECT count(*) FROM ingest.partner_catalog_staging_rows WHERE id IN (v_revue, v_f12, v_f13) AND match_status = 'new_record') = 3
+      THEN v_passed := v_passed+1;
+      ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_res3::text); END IF;
+    EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+    v_t := 'T17 deux fascicules de même numéro et de dates différentes ne sont pas des doublons';
+    BEGIN
+      IF (SELECT count(*) FROM ingest.partner_catalog_staging_rows WHERE id IN (v_f1a, v_f1b) AND match_status = 'new_record') = 2
+      THEN v_passed := v_passed+1;
+      ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_res3::text); END IF;
+    EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+    v_t := 'T18 le même fascicule saisi deux fois reste signalé, et la clé se nomme';
+    BEGIN
+      IF (SELECT count(*) FROM ingest.partner_catalog_staging_rows WHERE id IN (v_d1, v_d2) AND match_status = 'possible_duplicate') = 2
+         AND (v_res3->>'groupes')::int = 1 AND (v_res3->>'lignes_signalees')::int = 2
+         AND (SELECT w->>'cle' FROM ingest.partner_catalog_staging_rows sr, jsonb_array_elements(sr.warnings) w
+               WHERE sr.id = v_d1 AND w->>'kind' = 'intra_run_duplicate') = 'titre+responsabilite+numero'
+      THEN v_passed := v_passed+1;
+      ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_res3::text); END IF;
+    EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+    v_t := 'T19 un ensemble et ses tomes ne sont pas des doublons';
+    BEGIN
+      IF (SELECT count(*) FROM ingest.partner_catalog_staging_rows WHERE id IN (v_ens, v_t1, v_t2) AND match_status = 'new_record') = 3
+      THEN v_passed := v_passed+1;
+      ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_res3::text); END IF;
+    EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||('T16-T19 : '||SQLERRM);
+  END;
+
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'IMPORT-DOUBLONS-INTRA OK : %/% tests passés', v_passed, (v_passed+v_failed);
   ELSE

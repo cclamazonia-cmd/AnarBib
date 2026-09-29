@@ -18,14 +18,20 @@
 #    entrée par son libellé ; tout le reste est recréé ;
 # 3. importe les autorités s'il y en a (importer-autorites-pmb.mjs), puis les
 #    notices ET leurs exemplaires par l'onglet « Exemplaires UNIMARC »
-#    (tests/pmb/README.md) : fonction « Catégories RAMEAU » ; et, si des
-#    autorités ont été importées, « Oui » à « Tenir compte des notices
-#    d'autorités » avec l'origine AnarBib — sinon « Non », et les auteurs sont
-#    rapprochés par leur nom et leurs dates ;
+#    (tests/pmb/README.md) : fonction « Catégories RAMEAU », « Générer les
+#    liens entre notices ? » à Oui ; et, si des autorités ont été importées,
+#    « Oui » à « Tenir compte des notices d'autorités » avec l'origine AnarBib —
+#    sinon « Non », et les auteurs sont rapprochés par leur nom et leurs dates.
+#    Réglages surchargeables par l'appelant (importer-pmb.mjs) : PMB_LIENS=0
+#    (le défaut du formulaire de PMB), PMB_AUTORITES_NOTICES=0,
+#    PMB_COMME_LE_NAVIGATEUR=1 (l'origine envoyée comme le formulaire l'envoie :
+#    PMB 8.1.1.1 ne la reçoit pas) ;
 # 4. dresse le même bilan (« réimport ») et écrit bilan-h27.json : la date, les
-#    réglages, les deux bilans et le compte rendu de PMB. C'est ce fichier,
-#    versé en tests/pmb/reimport-h27-bilan.json, que src/tests/couverture-pmb.test.js
-#    lit pour le § 4 de docs/interop/couverture-pmb.md.
+#    réglages, les deux bilans, ce que l'import des notices a créé et le compte
+#    rendu de PMB. Ces fichiers, versés TELS QUELS dans tests/pmb/bilans/, sont
+#    ceux que src/tests/couverture-pmb.test.js lit (docs/interop/couverture-pmb.md) :
+#    l'aller-retour, ses deux contre-essais (sans le tri, sans les liens) et les
+#    trois réglages d'autorités — la recette est dans tests/pmb/README.md.
 # Le bilan ne compte que ce qui SERT (une collection du jeu de test que rien
 # n'emploie n'est pas comptée), plus les catégories notice par notice et la
 # répartition des exemplaires par type, section et code statistique.
@@ -73,6 +79,8 @@ bilan() {
   "series_employees": $(Q "select count(distinct tparent_id) from notices where tparent_id <> 0"),
   "notices_en_serie": $(Q "select count(*) from notices where tparent_id <> 0"),
   "liens_entre_notices": $(Q "select count(distinct least(num_notice, linked_notice), greatest(num_notice, linked_notice), relation_type) from notices_relations"),
+  "liens_notice_source_d_autorite": $(Q "select count(*) from notices_authorities_sources"),
+  "liens_notice_source_d_autorite_sans_source": $(Q "select count(*) from notices_authorities_sources l where not exists (select 1 from authorities_sources s where s.id_authority_source = l.num_authority_source)"),
   "responsabilites_rattachees_a_une_fiche_AnarBib": $(Q "select count(*) from responsability r where exists (select 1 from authorities_sources s join origin_authorities o on o.id_origin_authorities = s.num_origin_authority where s.num_authority = r.responsability_author and s.authority_type = 'author' and o.origin_authorities_name = 'AnarBib')"),
   "categories_par_notice": "$(Q "select group_concat(concat(replace(left(n.tit1, 40), '\"', ''), ':', c.k) order by n.tit1 separator ' | ') from (select notcateg_notice, count(*) k from notices_categories group by 1) c join notices n on n.notice_id = c.notcateg_notice")"
 }
@@ -118,8 +126,9 @@ if [ -n "$AUT" ]; then
   node "$ICI/importer-autorites-pmb.mjs" "$AUT" "$OUT/bilan-autorites.json" > /dev/null 2> "$OUT/err-autorites.txt"; rc=$?
   echo "autorités : rc $rc ($(tail -1 "$OUT/err-autorites.txt" 2>/dev/null))"
   [ "$rc" = 0 ] || { echo "import des autorités en échec : l'essai s'arrête (un réimport sans elles serait un autre essai)"; RC=1; exit 1; }
-  # l'origine « AnarBib » n'existe qu'une fois des autorités importées (801 $b)
-  export PMB_AUTORITES_NOTICES=1 PMB_ORIGINE=AnarBib
+  # l'origine « AnarBib » n'existe qu'une fois des autorités importées (801 $b) ;
+  # PMB_AUTORITES_NOTICES=0 posé par l'appelant mesure « Non » après un import d'autorités
+  export PMB_AUTORITES_NOTICES="${PMB_AUTORITES_NOTICES:-1}" PMB_ORIGINE="${PMB_ORIGINE:-AnarBib}"
 fi
 PMB_FONCTION_IMPORT=func_cpt_rameau_first_level.inc \
   node "$ICI/importer-pmb.mjs" "$CAT" "$OUT/bilan-notices.json" > /dev/null 2> "$OUT/err-notices.txt"; rc=$?
@@ -143,8 +152,8 @@ const bilan = {
   mesure: new Date().toISOString().slice(0, 10),
   fichiers: { catalogue: path.basename(CAT), autorites: AUT ? path.basename(AUT) : null },
   reglages: { onglet: 'Administration > Imports > Exemplaires UNIMARC', fonction_import: b.fonction_import, ...(b.options || {}) },
-  origine: o, reimport: r, pmb,
+  origine: o, reimport: r, cree_par_l_import_des_notices: (b.base && b.base.delta) || null, pmb,
 };
 fs.writeFileSync(path.join(OUT, 'bilan-h27.json'), JSON.stringify(bilan, null, 1) + '\n');
-console.log(`bilan-h27.json écrit dans ${OUT} — à verser en tests/pmb/reimport-h27-bilan.json si cette mesure fait foi`);
+console.log(`bilan-h27.json écrit dans ${OUT} — à verser dans tests/pmb/bilans/ si cette mesure fait foi`);
 JS

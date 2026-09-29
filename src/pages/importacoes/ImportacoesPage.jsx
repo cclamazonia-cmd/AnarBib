@@ -1943,10 +1943,16 @@ export default function ImportacoesPage() {
                     {exportLoading ? t({ id: 'importacoes.export.lote.exporting' }) : t({ id: 'importacoes.export.lote.download' })}
                   </button>
                 </div>
-                {/* H25 : la marche à suivre dans PMB, sans laquelle PMB recrée un
-                    auteur par notice (tests/pmb/README.md). */}
+                {/* H25, H27 : la marche à suivre dans PMB (tests/pmb/README.md,
+                    docs/interop/couverture-pmb.md § 3). Sous le catalogue : l'onglet
+                    d'import de PMB et « Générer les liens entre notices ? », sans
+                    lesquels ni les exemplaires ni les articles n'entrent ; sous les
+                    autorités : l'ordre des deux fichiers. */}
+                {exportFormat === 'unimarc_iso2709' && (
+                  <p className="imp-note" data-testid="export-pmb-hint" style={{ marginTop: 8 }}>{t({ id: 'importacoes.export.lote.pmbHint' })}</p>
+                )}
                 {exportFormat === 'unimarc_autorites' && (
-                  <p className="imp-note" style={{ marginTop: 8 }}>{t({ id: 'importacoes.export.lote.autoritesHint' })}</p>
+                  <p className="imp-note" data-testid="export-autorites-hint" style={{ marginTop: 8 }}>{t({ id: 'importacoes.export.lote.autoritesHint' })}</p>
                 )}
               </div>
             </div>

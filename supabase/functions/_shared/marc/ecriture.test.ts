@@ -380,3 +380,10 @@ Deno.test('Revue H27 : 995 — type et section « indéterminé » (uu / u), la 
   const it = mapMarcRecord(parseMarcIso2709(ecrireIso2709([r]).octets).records[0], 'unimarc').items[0];
   assertEquals([it.source_item_code, it.item_type, it.public], ['C1', 'uu', 'u']);
 });
+
+Deno.test('Revue H27 (2) : 995 $r / $q sont TOUJOURS « uu » / « u », même pour un exemplaire dont la provenance porte un type d\'origine', () => {
+  const r = enregistrement({ id: 10, title: 'Y', materialType: 'livro',
+    items: [{ code: 'C2', callNumber: 'B 2', note: 'Proveniência: importação. Tipo: LIV. Publico: A.' }] }, OPTS);
+  const z = r.fields.filter((f) => f.tag === '995');
+  assertEquals(z[0].subfields.filter((s) => s.code === 'r' || s.code === 'q').map((s) => s.code + s.value), ['ruu', 'qu']);
+});
