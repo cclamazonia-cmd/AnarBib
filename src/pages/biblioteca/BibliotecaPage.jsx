@@ -835,7 +835,7 @@ export default function BibliotecaPage() {
               <textarea value={openingHours.public_note||''} onChange={e=>{ setOpeningHours(p=>({...p,public_note:e.target.value})); setOhMsg(''); }} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({ id: 'biblioteca.openingHours.notePlaceholder' })} maxLength={300} />
             </div>
             <div style={{ display:'flex', gap:12, alignItems:'center' }}>
-              <button type="button" onClick={saveHours} disabled={ohSaving} style={{ padding:'10px 18px', borderRadius:8, border:'none', background:'var(--brand-accent, #c0392b)', color:'#fff', cursor:ohSaving?'wait':'pointer', fontWeight:600, fontSize:'.9rem', opacity:ohSaving?.6:1 }}>{t({ id: 'common.save' })}</button>
+              <button type="button" className="ab-button" onClick={saveHours} disabled={ohSaving}>{t({ id: 'common.save' })}</button>
               {ohMsg && <span style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{ohMsg}</span>}
             </div>
           </div>
