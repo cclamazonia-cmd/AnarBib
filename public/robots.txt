@@ -1,0 +1,81 @@
+# robots.txt — app.anarbib.org (et ses replis app.anarbib.is, app.anarbib.org.br)
+#
+# Deux règles, décidées le 29/09/2026 :
+#   1. Les robots des entreprises d'IA (entraînement, assistants, moteurs de
+#      réponse) sont refusés partout. Les catalogues et les notes de lecture des
+#      bibliothèques ne sont pas une matière première.
+#   2. Les moteurs de recherche peuvent parcourir le catalogue public (notices,
+#      œuvres, autorités, périodiques, bibliothèques, thésaurus, cartographie),
+#      pas les espaces de travail ni les formulaires.
+#
+# Ce fichier est une politesse, pas une protection : les pages de travail
+# exigent une session, et c'est la RLS qui garde les données.
+# Garde : src/tests/robots-txt.test.js — toute nouvelle route de src/App.jsx
+# doit y être classée (publique ou refusée ici).
+
+# ── Robots d'IA : refusés partout ─────────────────────────────────────────
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: claude-web
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: meta-externalagent
+User-agent: meta-externalfetcher
+User-agent: FacebookBot
+User-agent: Amazonbot
+User-agent: Bytespider
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: MistralAI-User
+User-agent: AI2Bot
+User-agent: Ai2Bot-Dolma
+User-agent: DuckAssistBot
+User-agent: YouBot
+User-agent: Diffbot
+User-agent: ImagesiftBot
+User-agent: Omgilibot
+User-agent: Omgili
+User-agent: Timpibot
+User-agent: PanguBot
+User-agent: Kangaroo Bot
+User-agent: iaskspider/2.0
+User-agent: Webzio-Extended
+User-agent: VelenPublicWebCrawler
+User-agent: img2dataset
+Disallow: /
+
+# ── Tous les autres : catalogue public oui, espaces de travail non ────────
+User-agent: *
+Crawl-delay: 5
+# Espaces réservés aux membres (ProtectedRoute)
+Disallow: /painel
+Disallow: /catalogacao
+Disallow: /importacoes
+Disallow: /conta
+Disallow: /inicio
+Disallow: /atelier
+Disallow: /biblioteca
+Allow: /bibliotecas
+Disallow: /federacao
+Disallow: /rede
+Disallow: /cartografia/moderacao
+Disallow: /relatar-problema
+# Formulaires et connexion : rien à indexer
+Disallow: /login
+Disallow: /entrar
+Disallow: /cadastro
+Disallow: /criar-conta
+Disallow: /solicitar-biblioteca
+Disallow: /cartografia/ajouter
+# Liseuse : documents lourds, la notice (/livro/) suffit à les faire trouver
+Disallow: /ler
+# Banc de développement
+Disallow: /dev/
