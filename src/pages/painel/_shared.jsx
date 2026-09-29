@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
 import { formatPublicId } from '@/lib/publicId';
+import { TASK_ADVANCE, taskStatusLabel } from '@/lib/taskStatus';
 
 // ═══════════════════════════════════════════════════════════
 // Helpers et composants partagés du Painel (chantier E.1 / OT-4)
@@ -222,9 +223,7 @@ export function TaskBucket({ title, tasks, setTab, onTaskAction }) {
                     }
                   }}>
                   <option value="">{t({ id: 'panel.tasks.advance' })}</option>
-                  <option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option>
-                  <option value="concluida">{t({ id: 'task.status.concluida' })}</option>
-                  <option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
+                  {TASK_ADVANCE.map(s => <option key={s} value={s}>{taskStatusLabel(t, s)}</option>)}
                 </select>
               )}
             </div>

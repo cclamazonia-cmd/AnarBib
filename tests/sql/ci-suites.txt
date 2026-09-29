@@ -599,3 +599,6 @@ tests/sql/aller_retour_pmb_tests.sql
 # 28/09 (sigles) : la recherche du catalogue lit les sigles sans leurs points — « C.N.T. », « CNT » et « C.N.T »
 # se trouvent l'un l'autre (meule et termes pliés par fn_sigle_sans_points), le catalogue par œuvre rend une ligne.
 tests/sql/recherche_sigles_tests.sql
+
+# Tâches internes : créer, instancier, régénérer — les chemins empruntés (29/09, suite de F6)
+tests/sql/taches_sept_etats_tests.sql

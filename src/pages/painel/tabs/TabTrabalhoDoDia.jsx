@@ -5,6 +5,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { SummaryCard, TaskBucket, TabHeader } from '../_shared';
 import WriteToReaderBox from './WriteToReaderBox';
+import { TASK_STATES, taskStatusLabel } from '@/lib/taskStatus';
 
 // ═══════════════════════════════════════════════════════════
 // TabTrabalhoDoDia — onglet « Travail du jour » (chantier E.1 / OT-4)
@@ -224,7 +225,7 @@ export default function TabTrabalhoDoDia({
                       {isOverdue && <span className="ab-painel-itask-overdue">{t({ id: 'panel.overdue' })}</span>}
                     </div>
                     <div className="ab-painel-itask-meta">
-                      {tk.status === 'em_andamento' ? t({id:'task.status.em_andamento'}) : t({id:'task.status.pendente'})}
+                      {taskStatusLabel(t, tk.status)}
                       {tk.owner && ` · ${tk.owner}`}
                       {tk.due_date && ` · ${t({id:'panel.task.detail.prazo'})}: ${tk.due_date}`}
                       {tk.tags?.length > 0 && ` · ${tk.tags.join(', ')}`}
@@ -249,10 +250,7 @@ export default function TabTrabalhoDoDia({
                           notifyError(localizeError(err, t, 'panel.error.taskStatus'), err);
                         }
                       }}>
-                      <option value="pendente">{t({ id: 'task.status.pendente' })}</option>
-                      <option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option>
-                      <option value="concluida">{t({ id: 'task.status.concluida' })}</option>
-                      <option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
+                      {TASK_STATES.map(s => <option key={s} value={s}>{taskStatusLabel(t, s)}</option>)}
                     </select>
                   </div>
                 </div>

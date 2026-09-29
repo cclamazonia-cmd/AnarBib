@@ -22,6 +22,7 @@ import { fmtD, useSort } from './_shared';
 import { normalizePublicId } from '@/lib/publicId';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
+import { taskStatusLabel } from '@/lib/taskStatus';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
 const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
 const TabConsultasLocais = lazy(() => import('./tabs/TabConsultasLocais'));
@@ -1357,7 +1358,7 @@ function PanelPageInner() {
       const isOverdue = dueDay && dueDay < today;
       const isDueToday = dueDay === today;
       const priLabel = tk.priority === 'alta' ? t({id:'panel.task.priority.high'}) : tk.priority === 'baixa' ? t({id:'panel.task.priority.low'}) : t({id:'panel.task.priority.normal'});
-      const statusLabel = tk.status === 'em_andamento' ? t({id:'task.status.em_andamento'}) : t({id:'task.status.pendente'});
+      const statusLabel = taskStatusLabel(t, tk.status);
       tasks.push({
         priority: isOverdue || tk.priority === 'alta' ? 'alta' : 'media',
         bucket: isDueToday ? 'hoje' : isOverdue ? 'atencao' : 'acompanhamento',

@@ -41,6 +41,7 @@ import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
+import { TASK_STATES, taskStatusLabel } from '@/lib/taskStatus';
 // SERVICE_MODES built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
 // TASK_PRIO   built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
 // ILL_STATUS built inside component with t()
@@ -81,18 +82,21 @@ export default function BibliotecaPage() {
   // TASK_PRIO localized via t() — was hardcoded pt-BR before audit 07/05/2026.
   const TASK_PRIO = useMemo(() => ({
     alta:   t({ id: 'biblioteca.tasks.priority.alta' }),
+    // `media` est la valeur de la base (CHECK des modèles, défaut des tâches) ; `normal`
+    // n'a jamais existé qu'à l'écran — gardé pour une ligne saisie avant le 29/09/2026.
+    media:  t({ id: 'biblioteca.tasks.priority.normal' }),
     normal: t({ id: 'biblioteca.tasks.priority.normal' }),
     baixa:  t({ id: 'biblioteca.tasks.priority.baixa' }),
   }), [t]);
 
   // FIX BUG #2: TASK_STATUS was referenced but never defined, causing ReferenceError
   // when calling generateReportText(). Built here via useMemo to localize labels.
-  const TASK_STATUS = useMemo(() => ({
-    pendente: t({ id: 'task.status.pendente' }),
-    em_andamento: t({ id: 'task.status.em_andamento' }),
-    concluida: t({ id: 'task.status.concluida' }),
-    cancelada: t({ id: 'task.status.cancelada' }),
-  }), [t]);
+  // Les sept états de la base (src/lib/taskStatus.js), plus `pendente` pour une ligne
+  // d'avant la contrainte du 31/08 : le rapport ne doit jamais imprimer un code brut.
+  const TASK_STATUS = useMemo(
+    () => Object.fromEntries([...TASK_STATES, 'pendente'].map(s => [s, taskStatusLabel(t, s)])),
+    [t],
+  );
 
   // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css), commune a
   // toutes les pages a onglets. `separator` marque le debut d'un groupe (ecart

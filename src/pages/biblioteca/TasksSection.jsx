@@ -13,6 +13,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { fs, ls, bx, lr, lw } from './styles';
+import { TASK_STATES, taskStatusLabel, isTaskClosed } from '@/lib/taskStatus';
 
 export default function TasksSection({ libraryId, tasks, templates, suggestions, taskPrio, setMsg, onChanged }) {
   const { formatMessage: t, locale } = useIntl();
@@ -27,7 +28,7 @@ export default function TasksSection({ libraryId, tasks, templates, suggestions,
     }
     return fallback || '';
   };
-  const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'normal', owner: '' });
+  const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'media', owner: '' });
   // Chantier #TASKS etape 6 (24/05/2026) : sous-onglets de l'onglet « Tarefas
   // internas ». Paquet 1 ne remplit que 'lista' (vue par echeance + drapeau
   // stale) ; 'modelos' et 'catalogo' sont des placeholders, remplis aux
@@ -47,7 +48,7 @@ export default function TasksSection({ libraryId, tasks, templates, suggestions,
     if (!newTask.title.trim()) { setMsg({ text: t({ id: 'biblioteca.tasks.titleRequired' }), kind: 'error' }); return; }
     try {
       // EA-15 (21/05/2026) : bascule sur fn_task_create (RPC).
-      // Les defaults backend ('pendente' pour status, '{}' pour tags) sont
+      // Les defaults backend ('aberta' pour status, '{}' pour tags) sont
       // appliques cote RPC si les params sont absents ou vides.
       const tags = (newTask.tagsText || '').split(',').map(tag => tag.trim()).filter(Boolean);
       const { error } = await supabase.rpc('fn_task_create', {
@@ -251,7 +252,7 @@ export default function TasksSection({ libraryId, tasks, templates, suggestions,
     const today = new Date().toISOString().slice(0, 10);
     const buckets = { atrasada: [], hoje: [], futura: [], sem_prazo: [] };
     for (const tk of tasks) {
-      if (tk.status === 'concluida' || tk.status === 'cancelada') continue;
+      if (isTaskClosed(tk.status)) continue;
       if (!tk.due_date) { buckets.sem_prazo.push(tk); continue; }
       if (tk.due_date < today) buckets.atrasada.push(tk);
       else if (tk.due_date === today) buckets.hoje.push(tk);
@@ -269,7 +270,7 @@ export default function TasksSection({ libraryId, tasks, templates, suggestions,
   // Taches deja closes (concluida/cancelada), affichees a part en bas de la
   // vue Lista pour ne pas encombrer les seaux d'echeance.
   const closedTasks = useMemo(
-    () => tasks.filter(tk => tk.status === 'concluida' || tk.status === 'cancelada'),
+    () => tasks.filter(tk => isTaskClosed(tk.status)),
     [tasks],
   );
 
@@ -312,7 +313,7 @@ export default function TasksSection({ libraryId, tasks, templates, suggestions,
         <div style={{ display:'flex', gap:4, flexShrink:0, alignItems:'center' }}>
           <span className={`cat-pill ${tk.priority==='alta'?'danger':tk.priority==='baixa'?'info':'warn'}`} style={{ fontSize:'.65rem' }}>{TASK_PRIO[tk.priority]||tk.priority}</span>
           <select value={tk.status} onChange={e=>updateTaskStatus(tk.id,e.target.value)} style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
-            <option value="pendente">{t({ id: 'task.status.pendente' })}</option><option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option><option value="concluida">{t({ id: 'task.status.concluida' })}</option><option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
+            {TASK_STATES.map(s => <option key={s} value={s}>{taskStatusLabel(t, s)}</option>)}
           </select>
           <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm(t({ id: 'biblioteca.tasks.discardConfirm' })))return;try{const{error}=await supabase.rpc('fn_task_delete',{p_task_id:tk.id});if(error)throw error;await onChanged?.();}catch(err){setMsg({text:t({id:'common.errorPrefix'},{message:localizeError(err, t)}),kind:'error'});}}}>{t({ id: 'common.discard' })}</button>
         </div>
@@ -368,7 +369,7 @@ export default function TasksSection({ libraryId, tasks, templates, suggestions,
         <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.tasks.new' })}</h4>
         <div className="cat-book-grid" style={{ marginBottom:10 }}>
           <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.tasks.titleField' })}</label><input type="text" value={newTask.title} onChange={e=>setNewTask(p=>({...p,title:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.titlePlaceholder' })} /></div>
-          <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.priority' })}</label><select value={newTask.priority} onChange={e=>setNewTask(p=>({...p,priority:e.target.value}))} style={fs}><option value="baixa">{t({ id: 'biblioteca.tasks.priority.low' })}</option><option value="normal">{t({ id: 'biblioteca.tasks.priority.normal' })}</option><option value="alta">{t({ id: 'biblioteca.tasks.priority.high' })}</option></select></div>
+          <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.priority' })}</label><select value={newTask.priority} onChange={e=>setNewTask(p=>({...p,priority:e.target.value}))} style={fs}><option value="baixa">{t({ id: 'biblioteca.tasks.priority.low' })}</option><option value="media">{t({ id: 'biblioteca.tasks.priority.normal' })}</option><option value="alta">{t({ id: 'biblioteca.tasks.priority.high' })}</option></select></div>
           <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.owner' })}</label><input type="text" value={newTask.owner} onChange={e=>setNewTask(p=>({...p,owner:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.ownerPlaceholder' })} /></div>
           <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.dueDate' })}</label><input type="date" value={newTask.dueDate||''} onChange={e=>setNewTask(p=>({...p,dueDate:e.target.value}))} style={fs} /></div>
           <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.tags' })}</label><input type="text" value={newTask.tagsText||''} onChange={e=>setNewTask(p=>({...p,tagsText:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.tagsPlaceholder' })} /></div>
