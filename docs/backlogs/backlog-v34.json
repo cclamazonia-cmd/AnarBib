@@ -5234,7 +5234,7 @@
       "id": "H21",
       "d": "H",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "L",
       "sk": [
         "sql",
@@ -5250,8 +5250,8 @@
         "pt": "A marcha em paralelo supõe continuar catalogando no PMB e reimportar. Hoje, um reimport passa pela detecção de duplicatas: não há noção de «registro já importado, a atualizar». `book_drafts.action` já conhece `update`."
       },
       "w": {
-        "fr": "Rapprocher d'abord par `(bibliothèque, identifiant d'origine)` (**H20**). Produire des brouillons `update` avec la différence montrée en révision de lot. Traiter les exemplaires ajoutés et retirés. Quand une notice a été modifiée dans AnarBib depuis l'import, la signaler en conflit : **jamais d'écrasement silencieux**.",
-        "pt": "Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**."
+        "fr": "Rapprocher d'abord par `(bibliothèque, identifiant d'origine)` (**H20**). Produire des brouillons `update` avec la différence montrée en révision de lot. Traiter les exemplaires ajoutés et retirés. Quand une notice a été modifiée dans AnarBib depuis l'import, la signaler en conflit : **jamais d'écrasement silencieux**. **Décidé le 29/09 par Xavier (REGISTRE `IMP-26`, précise `IMP-23`)** : reprendre une notice à la main est réservé à ses détentrices ; une divergence trouvée sur une notice partagée est traitée par n'importe quelle détentrice, et l'écarter fait avancer la base ; « retiré » est un constat réversible (non prêtable, masqué à l'OPAC, exclu de l'export, jamais supprimé), proposé seulement pour les exemplaires venus de la même source, d'un fichier MARC à exemplaires déclaré « export complet » ; H21 vise DIRA seule (MLEG ne réimportera pas) ; `accept_duplicate` veut dire « rattaché », jamais une création. **Plan en neuf lots**, chacun livrable et prouvé au banc : 0 préalables (porte de révision, promotion de la seule sélection, `accept_duplicate`, identifiant d'origine jugé à la ligne), 1 reconnaître une notice déjà importée, 2 garder la base de ce que le dernier import a apporté, 3 comparer à trois états, 4 brouillon de mise à jour pour une seule détentrice, 5 notice partagée signalée sans réécriture, 6 exemplaires ajoutés, modifiés, déplacés, 7 retirés, 8 bout en bout sur les fixtures PMB.",
+        "pt": "Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**. **Decidido em 29/09 por Xavier (REGISTRE `IMP-26`)**: retomar um registro à mão é reservado às bibliotecas que o detêm; uma divergência num registro compartilhado é tratada por qualquer detentora, e descartá-la faz avançar a base; «retirado» é uma constatação reversível (não emprestável, oculto no OPAC, fora do export, nunca apagado), proposta só para exemplares vindos da mesma fonte, num arquivo MARC declarado «export completo»; H21 visa só a DIRA; `accept_duplicate` quer dizer «vinculado», nunca uma criação. **Plano em nove lotes** (0 a 8)."
       },
       "y": {
         "fr": "Sans réimport incrémental, la marche en parallèle se réduit à ressaisir deux fois ou à dupliquer. Autrement dit, elle est impraticable. Et PMB ne peut rester un filet que s'il reste la base vivante.",

@@ -1126,7 +1126,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H18** | As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade | `P1` | A verificar |
 | **H19** | Os exemplares de um catálogo importado (995 UNIMARC, 852 MARC21) viram exemplares AnarBib | `P1` | A verificar |
 | **H20** | O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado | `P1` | A verificar |
-| **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | Aberto |
+| **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | Em curso |
 | **H22** | Ler o export XML próprio do PMB, se for preciso | `P3` | A verificar |
 | **H23** | Um export UNIMARC (ISO 2709 e XML), espelho exato da importação | `P1` | A verificar |
 | **H24** | O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores | `P1` | A verificar |
@@ -1352,13 +1352,13 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H21 — Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo
 
-`P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript
+`P2` Corrente · Estado : **Em curso** · Carga : várias semanas · O que exige : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript
 
 **Estado.** A marcha em paralelo supõe continuar catalogando no PMB e reimportar. Hoje, um reimport passa pela detecção de duplicatas: não há noção de «registro já importado, a atualizar». `book_drafts.action` já conhece `update`.
 
 *Verificado : 26/09 — `action` ∈ {create, update}.*
 
-**O que é.** Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**.
+**O que é.** Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**. **Decidido em 29/09 por Xavier (REGISTRE `IMP-26`)**: retomar um registro à mão é reservado às bibliotecas que o detêm; uma divergência num registro compartilhado é tratada por qualquer detentora, e descartá-la faz avançar a base; «retirado» é uma constatação reversível (não emprestável, oculto no OPAC, fora do export, nunca apagado), proposta só para exemplares vindos da mesma fonte, num arquivo MARC declarado «export completo»; H21 visa só a DIRA; `accept_duplicate` quer dizer «vinculado», nunca uma criação. **Plano em nove lotes** (0 a 8).
 
 **Por que importa.** Sem reimport incremental, a marcha em paralelo é impraticável.
 

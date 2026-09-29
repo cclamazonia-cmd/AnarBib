@@ -1126,7 +1126,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H18** | Les responsabilités importées gardent leur rôle, leur nature (personne ou collectivité) et leur lien d'autorité | `P1` | À vérifier |
 | **H19** | Les exemplaires d'un catalogue importé (995 en UNIMARC, 852 en MARC21) deviennent des exemplaires AnarBib | `P1` | À vérifier |
 | **H20** | L'identifiant d'origine d'une notice est gardé par bibliothèque, pas seulement sur la notice partagée | `P1` | À vérifier |
-| **H21** | Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer | `P2` | Ouvert |
+| **H21** | Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer | `P2` | En cours |
 | **H22** | Lire l'export XML propre à PMB, s'il le faut | `P3` | À vérifier |
 | **H23** | Un export UNIMARC (ISO 2709 et XML), miroir exact de l'import | `P1` | À vérifier |
 | **H24** | L'export d'une bibliothèque contient tout ce qu'elle a catalogué : exemplaires, responsabilités, sujets, collection, identifiants | `P1` | À vérifier |
@@ -1352,13 +1352,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### H21 — Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer
 
-`P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript
+`P2` Courant · État : **En cours** · Charge : plusieurs semaines · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript
 
 **État.** La marche en parallèle promise à DIRA suppose qu'elle continue de cataloguer dans PMB et qu'on réimporte. Aujourd'hui, un réimport repasse par la détection de doublons, puis par la révision : il n'existe aucune notion de « notice déjà importée, à mettre à jour ». `book_drafts.action` connaît pourtant `update` (valeur présente en base).
 
 *Vérifié : 26/09 — `book_drafts.action` ∈ {create, update} en base.*
 
-**Ce que c'est.** Rapprocher d'abord par `(bibliothèque, identifiant d'origine)` (**H20**). Produire des brouillons `update` avec la différence montrée en révision de lot. Traiter les exemplaires ajoutés et retirés. Quand une notice a été modifiée dans AnarBib depuis l'import, la signaler en conflit : **jamais d'écrasement silencieux**.
+**Ce que c'est.** Rapprocher d'abord par `(bibliothèque, identifiant d'origine)` (**H20**). Produire des brouillons `update` avec la différence montrée en révision de lot. Traiter les exemplaires ajoutés et retirés. Quand une notice a été modifiée dans AnarBib depuis l'import, la signaler en conflit : **jamais d'écrasement silencieux**. **Décidé le 29/09 par Xavier (REGISTRE `IMP-26`, précise `IMP-23`)** : reprendre une notice à la main est réservé à ses détentrices ; une divergence trouvée sur une notice partagée est traitée par n'importe quelle détentrice, et l'écarter fait avancer la base ; « retiré » est un constat réversible (non prêtable, masqué à l'OPAC, exclu de l'export, jamais supprimé), proposé seulement pour les exemplaires venus de la même source, d'un fichier MARC à exemplaires déclaré « export complet » ; H21 vise DIRA seule (MLEG ne réimportera pas) ; `accept_duplicate` veut dire « rattaché », jamais une création. **Plan en neuf lots**, chacun livrable et prouvé au banc : 0 préalables (porte de révision, promotion de la seule sélection, `accept_duplicate`, identifiant d'origine jugé à la ligne), 1 reconnaître une notice déjà importée, 2 garder la base de ce que le dernier import a apporté, 3 comparer à trois états, 4 brouillon de mise à jour pour une seule détentrice, 5 notice partagée signalée sans réécriture, 6 exemplaires ajoutés, modifiés, déplacés, 7 retirés, 8 bout en bout sur les fixtures PMB.
 
 **Pourquoi ça compte.** Sans réimport incrémental, la marche en parallèle se réduit à ressaisir deux fois ou à dupliquer. Autrement dit, elle est impraticable. Et PMB ne peut rester un filet que s'il reste la base vivante.
 
