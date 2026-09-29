@@ -163,6 +163,10 @@ export default function IllSection({ libraryId, illLoans, illItemsByLoan, allLib
   const ILL_RETURN_PHASES = ['emprestado', 'em_devolucao', 'atrasado', 'parcialmente_devolvido'];
   // Un exemplaire est « réglé » s'il a atteint une issue de retour.
   const ILL_ITEM_SETTLED = ['devolvido', 'perdido', 'danificado', 'cancelado'];
+  // Statuts où un prêt se supprime : ceux de la politique DELETE de
+  // interlibrary_loans_v2 (un prêt jamais sorti). Sorti, il se termine et
+  // s'archive ; la base refuse sa suppression.
+  const ILL_DISCARDABLE = ['preparacao', 'aguardando_saida'];
 
   function toggleIllExpanded(loanId) {
     setIllExpanded(prev => {
@@ -237,7 +241,18 @@ export default function IllSection({ libraryId, illLoans, illItemsByLoan, allLib
       if (error) throw error;
       setMsg({ text: t({id:'biblioteca.ill.discarded'},{id:loanId}), kind: 'ok' });
       await onChanged?.();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+    } catch (err) {
+      // Le prêt est sorti entre l'affichage et le clic (l'autre bibliothèque
+      // l'a fait avancer) : la fonction dit « refusé par RLS ». On dit pourquoi.
+      const raw = String(err?.message || '');
+      const sorti = /refus[ée] par RLS|row-level security/i.test(raw);
+      setMsg({
+        text: sorti
+          ? t({ id: 'biblioteca.ill.discardAfterDeparture' }, { id: loanId })
+          : t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }),
+        kind: 'error',
+      });
+    }
   }
 
   // #ILL-archive (25/05/2026) : archivage manuel d'un PEB terminé. Le PEB
@@ -439,11 +454,11 @@ export default function IllSection({ libraryId, illLoans, illItemsByLoan, allLib
               </button>
             )}
             {/* #ILL-archive — descartar (suppression définitive) n'a de
-                sens que sur un PEB non terminal (créé par erreur, jamais
-                sorti). Sur un PEB terminé, le bon geste est arquivar :
-                on masque descartar pour éviter la suppression accidentelle
-                d'un prêt qui a réellement eu lieu. */}
-            {!isTerminal && (
+                sens que sur un PEB jamais sorti (créé par erreur). Sorti,
+                prêté ou en partie rendu, le bon geste est de pointer les
+                retours puis d'archiver : la base refuse la suppression, et
+                le bouton ne s'offre pas (29/09/2026). */}
+            {ILL_DISCARDABLE.includes(loan.status_global) && (
               <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={()=>deleteIll(loan.id)}>{t({ id: 'common.discard' })}</button>
             )}
             </div>

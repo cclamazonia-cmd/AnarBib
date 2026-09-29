@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "De uitlenende en de lenende bibliotheek moeten verschillend zijn.",
   "biblioteca.ill.discardConfirm": "Interbibliothecaire uitlening #{id} verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
   "biblioteca.ill.discarded": "Uitlening #{id} verworpen.",
+  "biblioteca.ill.discardAfterDeparture": "IBL #{id} is al vertrokken en kan niet meer worden verwijderd. Registreer de teruggave van de exemplaren en archiveer ze zodra ze is afgerond.",
   "biblioteca.ill.dueDate": "Verwachte teruggavedatum",
   "biblioteca.ill.dueDateLabel": "vervalt",
   "biblioteca.ill.emptyItems": "Geen items toegevoegd. Zoek hierboven een document en klik om het toe te voegen.",

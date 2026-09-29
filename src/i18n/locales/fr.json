@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "La bibliothèque prêteuse et la bibliothèque emprunteuse doivent être différentes.",
   "biblioteca.ill.discardConfirm": "Supprimer le prêt interbibliothèques n°{id} ? Cette action est irréversible.",
   "biblioteca.ill.discarded": "Prêt n°{id} supprimé.",
+  "biblioteca.ill.discardAfterDeparture": "Le PEB #{id} est déjà sorti : il ne se supprime plus. Pointe le retour de ses exemplaires, puis archive-le une fois terminé.",
   "biblioteca.ill.dueDate": "Date prévue de retour",
   "biblioteca.ill.dueDateLabel": "retour",
   "biblioteca.ill.emptyItems": "Aucun exemplaire ajouté. Cherche un document ci-dessus et clique pour l'ajouter.",

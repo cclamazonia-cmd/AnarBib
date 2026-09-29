@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "La biblioteca prestadora y la tomadora deben ser diferentes.",
   "biblioteca.ill.discardConfirm": "¿Eliminar el préstamo interbibliotecas n°{id}? Esta acción es irreversible.",
   "biblioteca.ill.discarded": "Préstamo n°{id} descartado.",
+  "biblioteca.ill.discardAfterDeparture": "El PEB #{id} ya salió: ya no se puede eliminar. Registra la devolución de sus ejemplares y archívalo cuando haya terminado.",
   "biblioteca.ill.dueDate": "Fecha prevista de retorno",
   "biblioteca.ill.dueDateLabel": "devolución",
   "biblioteca.ill.emptyItems": "Ningún ejemplar incluido. Buscá un documento arriba y hacé clic para agregarlo.",

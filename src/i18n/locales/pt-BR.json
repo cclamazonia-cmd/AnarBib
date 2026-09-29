@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "As bibliotecas emprestadora e tomadora devem ser diferentes.",
   "biblioteca.ill.discardConfirm": "Excluir o empréstimo interbibliotecas #{id}? Esta ação é irreversível.",
   "biblioteca.ill.discarded": "Empréstimo #{id} descartado.",
+  "biblioteca.ill.discardAfterDeparture": "O EEB #{id} já saiu: não pode mais ser excluído. Registre a devolução dos exemplares e arquive-o quando estiver concluído.",
   "biblioteca.ill.dueDate": "Data prevista de retorno",
   "biblioteca.ill.dueDateLabel": "retorno",
   "biblioteca.ill.emptyItems": "Nenhum exemplar incluído. Busque um documento acima e clique para adicionar.",

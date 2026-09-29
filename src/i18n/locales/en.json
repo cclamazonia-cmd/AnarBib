@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "The lending and borrowing libraries must be different.",
   "biblioteca.ill.discardConfirm": "Delete interlibrary loan #{id}? This action cannot be undone.",
   "biblioteca.ill.discarded": "Loan #{id} discarded.",
+  "biblioteca.ill.discardAfterDeparture": "ILL #{id} has already gone out, so it can no longer be deleted. Record the return of its copies, then archive it once it is finished.",
   "biblioteca.ill.dueDate": "Expected return date",
   "biblioteca.ill.dueDateLabel": "due",
   "biblioteca.ill.emptyItems": "No items added. Search for a document above and click to add it.",

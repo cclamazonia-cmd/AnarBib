@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "Die ausleihende und die entleihende Bibliothek müssen unterschiedlich sein.",
   "biblioteca.ill.discardConfirm": "Fernleihe Nr. {id} löschen? Diese Aktion ist nicht rückgängig zu machen.",
   "biblioteca.ill.discarded": "Leihe Nr. {id} verworfen.",
+  "biblioteca.ill.discardAfterDeparture": "Die Fernleihe #{id} ist bereits ausgegangen und lässt sich nicht mehr löschen. Verbuche die Rückgabe ihrer Exemplare und archiviere sie, sobald sie abgeschlossen ist.",
   "biblioteca.ill.dueDate": "Voraussichtliches Rückgabedatum",
   "biblioteca.ill.dueDateLabel": "Rückgabe",
   "biblioteca.ill.emptyItems": "Kein Exemplar hinzugefügt. Suche oben ein Medium und klicke, um es hinzuzufügen.",

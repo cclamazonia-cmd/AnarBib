@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "La biblioteca prestadora i la biblioteca manllevadora han de ser diferents.",
   "biblioteca.ill.discardConfirm": "Vols suprimir el préstec interbibliotecari núm. {id}? Aquesta acció és irreversible.",
   "biblioteca.ill.discarded": "Préstec núm. {id} suprimit.",
+  "biblioteca.ill.discardAfterDeparture": "El PIB #{id} ja ha sortit: ja no es pot suprimir. Registra el retorn dels seus exemplars i arxiva'l quan hagi acabat.",
   "biblioteca.ill.dueDate": "Data prevista de devolució",
   "biblioteca.ill.dueDateLabel": "devolució",
   "biblioteca.ill.emptyItems": "Cap exemplar afegit. Cerca un document a dalt i fes-hi clic per afegir-lo.",

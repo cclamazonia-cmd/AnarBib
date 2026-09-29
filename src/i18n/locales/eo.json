@@ -1003,6 +1003,7 @@
   "biblioteca.ill.differentLibraries": "La pruntedonanta biblioteko kaj la manlevanta biblioteko devas esti malsamaj.",
   "biblioteca.ill.discardConfirm": "Ĉu forigi la interbibliotekan prunton n-ro {id}? Ĉi tiu ago estas neinversigebla.",
   "biblioteca.ill.discarded": "Prunto n-ro {id} forigita.",
+  "biblioteca.ill.discardAfterDeparture": "La interbiblioteka prunto #{id} jam eliris: ĝi ne plu estas forigebla. Registru la redonon de ĝiaj ekzempleroj, poste arkivu ĝin kiam ĝi finiĝos.",
   "biblioteca.ill.dueDate": "Planita redato",
   "biblioteca.ill.dueDateLabel": "redono",
   "biblioteca.ill.emptyItems": "Neniu ekzemplero aldonita. Serĉu dokumenton supre kaj alklaku por aldoni ĝin.",
