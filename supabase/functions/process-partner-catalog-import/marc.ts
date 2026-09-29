@@ -349,6 +349,9 @@ export function detectDialect(record) {
 
 // ── Mapping vers la forme normalisee ────────────────────────
 
+// La forme d'un ISSN (« 2555-0004 »), pour reconnaître celui qu'un PMB écrit en 010 $a.
+const RE_ISSN = /^\d{4}-?\d{3}[\dXx]$/;
+
 export function mapMarcRecord(record, dialect, itemMapping = null) {
   const def = CHAMPS[dialect === 'unimarc' ? 'unimarc' : 'marc21'];
   // MARC21 : la ponctuation ISBD retirée des zones descriptives (revue du 28/09).
@@ -368,8 +371,8 @@ export function mapMarcRecord(record, dialect, itemMapping = null) {
   const publicationYear = yearText(lire('year'));
   const editionStatement = lire('edition');
   const language = lire('language');
-  const isbn = lire('isbn');
-  const issn = lire('issn');
+  let isbn = lire('isbn');
+  let issn = lire('issn');
   const subjectsArray = sujets(record, dialect === 'unimarc' ? 'unimarc' : 'marc21');
   const keywordsArray = motsCles(record, dialect === 'unimarc' ? 'unimarc' : 'marc21');
   const externalKey = controlValue(record, CONTROLE);
@@ -406,14 +409,31 @@ export function mapMarcRecord(record, dialect, itemMapping = null) {
   const bulletinPmb = dialect === 'unimarc' && fieldsByTag(record, '463').some((f) =>
     (f.subfields || []).some((s) => s.code === '9' && clean(s.value) === 'lnk:bull_expl'));
   if (bulletinPmb) {
-    const perio = issue.title || lire('volumeNumber');
+    // PMB écrit deux 463 $t — le titre du bulletin (ou un blanc), puis celui
+    // du périodique — et le périodique en 200 $h (export.class.php). Le
+    // périodique : 200 $h, sinon le DERNIER $t (revue du 28/09 : un bulletin
+    // titré prenait la place de sa revue) ; le titre du bulletin, gardé à part.
+    const titres463 = fieldsByTag(record, '463').flatMap((f) => toutes(f, 't'));
+    const perio = lire('volumeNumber') || titres463[titres463.length - 1] || issue.title;
+    const titreBulletin = titres463.length > 1 ? titres463[0] : null;
     materialType = 'periodico';
     keyTitle = perio || keyTitle;
     title = perio || title;
     volume = issue.number || lire('volumeName') || null;
-    issue.title = null;
+    issue.title = titreBulletin && titreBulletin !== perio ? titreBulletin : null;
   }
-  const notes = [...lire('summary'), ...lire('notes'), ...lire('contents')];
+  // PMB écrit le « code » de toute notice en 010 $a, l'ISSN d'un périodique
+  // compris, et ne produit jamais de 011 (export.class.php) : sur un
+  // périodique, un 010 $a de forme ISSN est un ISSN (revue du 28/09 : « Le Rat
+  // des bibliothèques » avait le sien en ISBN).
+  if (materialType === 'periodico' && !issn && isbn && RE_ISSN.test(isbn)) { issn = isbn; isbn = null; }
+  // PMB range le titre de série d'une monographie en 461 $t. Sans collection,
+  // il en tient lieu (ingest : l'indice de collection) ; avec une collection,
+  // il n'avait aucun champ (revue du 28/09) : en note, comme l'adresse.
+  const serieNote = materialType !== 'artigo' && materialType !== 'periodico' && seriesTitle && host.title
+      && host.title !== seriesTitle && host.title !== title
+    ? `Série: ${host.title}` : null;
+  const notes = [...lire('summary'), ...lire('notes'), ...lire('contents'), ...(serieNote ? [serieNote] : [])];
 
   return {
     title,

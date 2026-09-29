@@ -362,8 +362,15 @@ function sujets(d: Dialecte, rec: NoticeExport, depuisNotes: string[], motsDesNo
 }
 
 // ── Exemplaires : 995 (UNIMARC, convention PMB) / 852 (MARC21) ──────────────
+// Type et section (995 $r, $q) : « indéterminé » (uu / u), la valeur de
+// remplissage que PMB écrit lui-même pour un type sans code d'import et que sa
+// table typdoc_995 relit (« indéterminé / indéterminé »). Sans $r, PMB rangeait
+// tout exemplaire sous le premier type sans code de sa base (mesuré le 28/09 :
+// « Périodique »). Les codes d'origine d'un exemplaire importé restent dans sa
+// note de provenance (IMP-21).
 function exemplaires(d: Dialecte, rec: NoticeExport, opts: OptionsEcriture): ChampMarc[] {
   const m = DEFAULT_ITEM_MAPPINGS[d];
+  const fixes = new Set([m.owner[0], m.item_type[0], m.public[0]].filter(Boolean));
   const out: ChampMarc[] = [];
   for (const it of rec.items ?? []) {
     const c = champ(m.tag, '  ', [
@@ -371,8 +378,9 @@ function exemplaires(d: Dialecte, rec: NoticeExport, opts: OptionsEcriture): Cha
       sz(m.code[0], txt(it.code) ?? txt(it.tombo)),
       sz(m.call_number[0], it.callNumber),
       sz(m.note[0], it.note),
+      ...(d === 'unimarc' ? [sz(m.item_type[0], 'uu'), sz(m.public[0], 'u')] : []),
     ]);
-    if (c && c.subfields!.some((s) => s.code !== m.owner[0])) out.push(c);
+    if (c && c.subfields!.some((s) => !fixes.has(s.code))) out.push(c);
   }
   return out;
 }

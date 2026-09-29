@@ -85,8 +85,22 @@ export interface OptionsMarc {
   bibliotheque?: { nom?: string | null; pays?: string | null; langue?: string | null } | null;
 }
 
+// PMB lit un fichier dans l'ordre et ne rattache un article à sa revue que par
+// la 464 de la revue, lue AVANT lui (admin/import/import_func.inc.php : la 464
+// met l'article « en attente », consommée quand sa notice arrive ; un article
+// lu avant sa revue, sans rien en attente, redevient une monographie). Revue du
+// 28/09 : l'écran exportait par id, et neuf articles de « Géo » précédaient
+// leur revue. Les périodiques d'abord, les articles en dernier, l'ordre reçu
+// entre eux — en MARC seulement (le CSV et le JSON gardent l'ordre reçu).
+const RANG_MARC: Record<string, number> = { periodico: 0, artigo: 2 };
+export function ordreMarc<T extends { materialType?: string | null }>(records: T[]): T[] {
+  return records.map((r, i) => ({ r, i }))
+    .sort((a, b) => ((RANG_MARC[a.r?.materialType ?? ''] ?? 1) - (RANG_MARC[b.r?.materialType ?? ''] ?? 1)) || (a.i - b.i))
+    .map((x) => x.r);
+}
+
 function notices(records: NoticeExport[], dialecte: 'unimarc' | 'marc21', opts: OptionsMarc = {}) {
-  return records.map((r) => enregistrement(r, { dialecte, date: opts.date, bibliotheque: opts.bibliotheque }));
+  return ordreMarc(records).map((r) => enregistrement(r, { dialecte, date: opts.date, bibliotheque: opts.bibliotheque }));
 }
 
 // MARCXML en MARC21 (espace de noms MARC21 slim).

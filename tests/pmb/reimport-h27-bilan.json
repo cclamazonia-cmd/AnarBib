@@ -1,0 +1,91 @@
+{
+ "mesure": "2026-09-29",
+ "fichiers": {
+  "catalogue": "catalogue-h27.iso",
+  "autorites": null
+ },
+ "reglages": {
+  "onglet": "Administration > Imports > Exemplaires UNIMARC",
+  "fonction_import": "func_cpt_rameau_first_level.inc.php (Catégories RAMEAU)",
+  "proprietaire": "BDP",
+  "statut": "Document en bon état",
+  "localisation": "Bibliothèque principale",
+  "statut_notice": "Sans statut particulier",
+  "liens_46X": true,
+  "autorites_notices": false,
+  "origine": "Catalogue Interne",
+  "dedoublonnage_isbn": true,
+  "isbn_obligatoire": false,
+  "cote_obligatoire": false
+ },
+ "origine": {
+  "notices": 62,
+  "notices_par_niveau": "a2=15 b2=1 m0=44 s1=2",
+  "exemplaires": 46,
+  "exemplaires_sur_bulletins": 2,
+  "exemplaires_par_type": "Livre=23 | indéterminé / indéterminé=13 | Oeuvre d'art=3 | CD audio=2 | Périodique=2 | Cartes et plans=1 | Cédéroms=1 | DVD=1",
+  "exemplaires_par_section": "Documentaires=15 | indéterminé=13 | Romans Jeunes=7 | Bande-dessinée Adultes=2 | Bande-dessinée Enfants=2 | Albums Enfants=1 | Bande-dessinée Jeunes=1 | Documentaires Jeunes=1 | H (Histoire locale)=1 | Romans & Romans étrangers=1 | Romans Enfants=1 | Romans policiers=1",
+  "exemplaires_par_code_statistique": "Adultes=23 | Indéterminé=14 | Jeunes=9",
+  "notices_sans_exemplaire": 21,
+  "bulletins": 3,
+  "depouillements": 15,
+  "responsabilites": 61,
+  "responsabilites_sans_fonction": 10,
+  "auteurs_employes": 57,
+  "liens_categories": 49,
+  "notices_avec_categorie": 42,
+  "langues_par_type": "0=62,1=3",
+  "editeurs_employes": 36,
+  "collections_employees": 6,
+  "notices_avec_collection": 8,
+  "series_employees": 2,
+  "notices_en_serie": 2,
+  "liens_entre_notices": 2,
+  "responsabilites_rattachees_a_une_fiche_AnarBib": 0,
+  "categories_par_notice": "Australie vue par J.-P. Ferrero:1 | Bac en poche:1 | Bagnes à Madagascar:1 | Bruit de cochon:1 | Canne:1 | Carte routière : Ardèche - Haute-Loire, :1 | Catfish blues:1 | Charte du XIIIe siècle, par laquelle Gui:1 | Chateaux de la Loire (1):2 | Chateaux de la Loire (2):1 | Chili:1 | Couverture du magazine rustica:2 | Crise en Argentine:3 | Études archéologiques dans la Loire-Infé:1 | femmes afghanes:1 | Géo:1 | Ghetto 9:1 | Histoire de l'Afghanistan:1 | Islam afghan:2 | La chambre verte:1 | La Chrysalide Diaprée:1 | La Loire Angevine au temps de Joachim du:2 | La métamorphose des fleurs:1 | Le chirurgien hollandais:1 | Le Cochon d'Hollywood:1 | Le dieu devenu homme:1 | Le mille-pattes:2 | Le Porc et les produits de la charcuteri:1 | Le puits:1 | Marigot africain:1 | Monsieur Je-sais-tout:1 | Nimitz:1 | Paroles de bonheur:1 | Paysages afghans:1 | Peuples d'Afghanistan:1 | Rwanda:1 | Sarah de Cordoue:1 | Tatars de Crimée:1 | Tours. N°65. Flle 78:1 | Tribus Pachtounes:1 | Trois fêlés et un pendu:1 | Zaks:1"
+ },
+ "reimport": {
+  "notices": 64,
+  "notices_par_niveau": "a2=15 m0=44 s1=5",
+  "exemplaires": 46,
+  "exemplaires_sur_bulletins": 0,
+  "exemplaires_par_type": "indéterminé / indéterminé=46",
+  "exemplaires_par_section": "indéterminé=46",
+  "exemplaires_par_code_statistique": "Indéterminé=46",
+  "notices_sans_exemplaire": 22,
+  "bulletins": 3,
+  "depouillements": 15,
+  "responsabilites": 61,
+  "responsabilites_sans_fonction": 0,
+  "auteurs_employes": 57,
+  "liens_categories": 48,
+  "notices_avec_categorie": 42,
+  "langues_par_type": "0=59",
+  "editeurs_employes": 36,
+  "collections_employees": 8,
+  "notices_avec_collection": 10,
+  "series_employees": 0,
+  "notices_en_serie": 0,
+  "liens_entre_notices": 0,
+  "responsabilites_rattachees_a_une_fiche_AnarBib": 0,
+  "categories_par_notice": "Australie vue par J.-P. Ferrero:1 | Bac en poche:1 | Bagnes à Madagascar:1 | Bruit de cochon:1 | Canne:1 | Carte routière : Ardèche - Haute-Loire, :1 | Catfish blues:1 | Charte du XIIIe siècle, par laquelle Gui:1 | Chateaux de la Loire (1):2 | Chateaux de la Loire (2):1 | Chili:1 | Couverture du magazine rustica:1 | Crise en Argentine:3 | Études archéologiques dans la Loire-Infé:1 | femmes afghanes:1 | Géo:1 | Ghetto 9:1 | Histoire de l'Afghanistan:1 | Islam afghan:2 | La chambre verte:1 | La Chrysalide Diaprée:1 | La Loire Angevine au temps de Joachim du:2 | La métamorphose des fleurs:1 | Le chirurgien hollandais:1 | Le Cochon d'Hollywood:1 | Le dieu devenu homme:1 | Le mille-pattes:2 | Le Porc et les produits de la charcuteri:1 | Le puits:1 | Marigot africain:1 | Monsieur Je-sais-tout:1 | Nimitz:1 | Paroles de bonheur:1 | Paysages afghans:1 | Peuples d'Afghanistan:1 | Rwanda:1 | Sarah de Cordoue:1 | Tatars de Crimée:1 | Tours. N°65. Flle 78:1 | Tribus Pachtounes:1 | Trois fêlés et un pendu:1 | Zaks:1"
+ },
+ "pmb": {
+  "notices_a_charger": 64,
+  "notices_invalides": 0,
+  "erreurs": [
+   {
+    "origine": "import_6877380966.inc",
+    "erreur": "Notice : créée avec ISBN vide",
+    "nb": 31
+   }
+  ]
+ },
+ "contre_essai_sans_tri": {
+  "mesure": "2026-09-29",
+  "quoi": "le même export, écrit dans l'ordre des id (celui de la RPC de l'écran) sans ranger les périodiques avant les articles",
+  "notices_par_niveau": "a2=7 m0=52 s1=5",
+  "bulletins": 3,
+  "depouillements": 7
+ }
+}

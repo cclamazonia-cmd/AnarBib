@@ -1,8 +1,8 @@
 // Tests du serialiseur d'export (Lot 5). Lancer : deno test --no-check serialize.test.ts
 import { assertEquals, assert, assertThrows } from 'jsr:@std/assert';
-import { toCsv, toMarcXml, toJson, serializeCatalog } from './serialize.ts';
+import { toCsv, toMarcXml, toJson, serializeCatalog, ordreMarc } from './serialize.ts';
 // Validation croisee : on re-parse notre MARCXML avec le parser d'import (Lot 4).
-import { parseMarcXml, mapMarcRecord, detectDialect } from '../process-partner-catalog-import/marc.ts';
+import { parseMarcXml, parseMarcIso2709, mapMarcRecord, detectDialect } from '../process-partner-catalog-import/marc.ts';
 
 const RECORDS = [
   {
@@ -126,4 +126,13 @@ Deno.test('serializeCatalog : dispatch + format inconnu', () => {
 Deno.test('serializeCatalog : robuste a une entree non-tableau', () => {
   const r = serializeCatalog(null, 'csv');
   assertEquals(r.content.split('\r\n')[0].startsWith('external_key,'), true);
+});
+
+Deno.test('Revue H27 : en MARC, les périodiques d\'abord et les articles en dernier (PMB lit la 464 de la revue avant l\'article) ; le CSV garde l\'ordre reçu', () => {
+  const recs = [{ id: 1, title: 'A', materialType: 'artigo' }, { id: 2, title: 'L', materialType: 'livro' },
+    { id: 3, title: 'P', materialType: 'periodico' }, { id: 4, title: 'B', materialType: 'artigo' }, { id: 5, title: 'Q', materialType: 'periodico' }];
+  assertEquals(ordreMarc(recs).map((r) => r.id), [3, 5, 2, 1, 4]);
+  const relus = parseMarcIso2709(serializeCatalog(recs, 'unimarc_iso2709').content).records.map((r) => r.fields.find((f) => f.tag === '001')?.value);
+  assertEquals(relus, ['3', '5', '2', '1', '4']);
+  assertEquals(toCsv(recs).split('\r\n').slice(1, 6).map((l) => l.split(',')[0]), ['1', '2', '3', '4', '5']);
 });

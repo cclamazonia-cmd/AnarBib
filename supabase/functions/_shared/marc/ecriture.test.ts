@@ -370,3 +370,13 @@ Deno.test('Revue H27 : le niveau d\'origine par nom COMPLET et par fonction ; un
     { name: 'Congrès anarchiste (2 ; 1907 ; Amsterdam)', nature: 'congress', role: 'autor', roleCode: '070', primary: false }]),
     ['711 Congrès anarchiste 070', '712 Congrès anarchiste 070']);
 });
+
+Deno.test('Revue H27 : 995 — type et section « indéterminé » (uu / u), la valeur de remplissage que PMB écrit et relit ; un exemplaire vide n\'est pas écrit', () => {
+  const r = enregistrement({ id: 9, title: 'X', materialType: 'livro', items: [{ code: 'C1', callNumber: 'A 1' }, {}] }, OPTS);
+  const z = r.fields.filter((f) => f.tag === '995');
+  assertEquals(z.length, 1);
+  assertEquals(z[0].subfields.map((s) => s.code + s.value), ['aBLMF', 'fC1', 'kA 1', 'ruu', 'qu']);
+  // l'import relit type et public (IMP-21 : en note de provenance)
+  const it = mapMarcRecord(parseMarcIso2709(ecrireIso2709([r]).octets).records[0], 'unimarc').items[0];
+  assertEquals([it.source_item_code, it.item_type, it.public], ['C1', 'uu', 'u']);
+});

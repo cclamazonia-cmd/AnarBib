@@ -180,12 +180,14 @@ BEGIN
     IF current_setting('anarbib.h27_capture', true) = 'on' THEN
       RAISE NOTICE 'H27-CAPTURE %', v_proj::text;
     END IF;
-    -- L'export COMPLET des notices du lot (tel que l'écran le reçoit) et celui
-    -- des autorités : le fichier du réimport dans PMB (tests/pmb/banc/essai-reimport-pmb.sh).
+    -- L'export COMPLET des notices du lot, dans l'ordre où l'écran le reçoit
+    -- (fn_export_catalog_lote pagine par id ; le sérialiseur range ensuite les
+    -- périodiques avant les articles — revue du 28/09), et celui des
+    -- autorités : le fichier du réimport dans PMB (tests/pmb/banc/essai-reimport-pmb.sh).
     IF current_setting('anarbib.h27_export', true) = 'on' THEN
       RAISE NOTICE 'H27-EXPORT %', jsonb_build_object(
         'library', v_exp->'library',
-        'records', (SELECT jsonb_agg(r ORDER BY s.row_no)
+        'records', (SELECT jsonb_agg(r ORDER BY (r->>'id')::bigint)
                       FROM jsonb_array_elements(v_exp->'records') r
                       JOIN public.book_drafts d ON d.published_book_id = (r->>'id')::bigint AND d.batch_id = v_lot
                       JOIN ingest.partner_catalog_row_to_draft m ON m.draft_id = d.id
@@ -292,16 +294,25 @@ describe('H27 — la preuve de l\'aller-retour PMB, par la base', async () => {
     const dec = decodeImportBytes(sortie.content, null);
     const relues = parseMarcFile({ text: dec.text, bytes: sortie.content, filename: 'export.mrc', encoding: dec.encoding }).entries;
     expect(relues).toHaveLength(lignes.length);
+    // L'export range les périodiques avant les articles (revue du 28/09) : une
+    // notice relue se retrouve par son identifiant d'origine, pas par son rang.
+    const parCle = new Map(relues.map((r) => [r.mapped.externalKey, r]));
+    expect(parCle.size, 'identifiant d\'origine répété ou absent dans l\'export').toBe(lignes.length);
+    const relue = (i) => parCle.get(lignes[i].external_key);
+    expect(lignes.filter((l, i) => !relue(i)).map((l) => l.external_key)).toEqual([]);
+    // … et l'ordre lui-même : aucun article avant un périodique.
+    const types = relues.map((r) => r.mapped.materialType);
+    expect(types.lastIndexOf('periodico')).toBeLessThan(types.indexOf('artigo'));
     const pertes = new Map();
     const diag = {};
     lignes.forEach((l, i) => {
-      for (const p of pertesDe(l.raw_payload.fields, relues[i].rawPayload.fields)) {
+      for (const p of pertesDe(l.raw_payload.fields, relue(i).rawPayload.fields)) {
         if (!pertes.has(p.cle)) pertes.set(p.cle, []);
         pertes.get(p.cle).push(`${l.external_key} « ${p.v.slice(0, 50)} »`);
         // H27_DIAG=fichier : chaque perte avec sa zone d'origine et les zones de
         // même étiquette réécrites — de quoi juger une clé avant de l'accepter.
         (diag[p.cle] ??= []).push({ notice: l.external_key, valeur: p.v, origine: p.zone,
-          reecrites: relues[i].rawPayload.fields.filter((g) => g.tag === p.zone.tag) });
+          reecrites: relue(i).rawPayload.fields.filter((g) => g.tag === p.zone.tag) });
       }
     });
     if (process.env.H27_DIAG) writeFileSync(process.env.H27_DIAG, JSON.stringify(diag, null, 1));
@@ -323,19 +334,20 @@ describe('H27 — la preuve de l\'aller-retour PMB, par la base', async () => {
     const nonRevenues = [];
     lignes.forEach((l, i) => {
       if (['periodico', 'artigo'].includes(attendu.records[i].materialType)) return;
-      const ailleurs = relues[i].rawPayload.fields.filter((f) => f.tag === '225' || f.tag === '200').flatMap(valeursDe);
-      for (const p of pertesDe(l.raw_payload.fields, relues[i].rawPayload.fields)) {
+      const ailleurs = relue(i).rawPayload.fields.filter((f) => f.tag === '225' || f.tag === '200').flatMap(valeursDe);
+      for (const p of pertesDe(l.raw_payload.fields, relue(i).rawPayload.fields)) {
         const cible = REVIENT[p.cle];
         if (cible && !ailleurs.some((x) => x.cle === cible && x.v === p.v)) nonRevenues.push(`${l.external_key} ${p.cle} « ${p.v} »`);
       }
     });
     // « Le titre du périodique revient en 200 et 530 » (463 $t d'une notice de
-    // bulletin PMB), et son numéro en 200 $h : vérifié aussi.
-    const REVIENT_BULLETIN = { '463$t': ['200$a', '530$a'], '200$i': ['200$h'] };
+    // bulletin PMB), son numéro en 200 $h, et l'ISSN qu'un PMB écrit en 010 $a
+    // en 011 $a (revue du 28/09) : vérifié aussi.
+    const REVIENT_BULLETIN = { '463$t': ['200$a', '530$a'], '200$i': ['200$h'], '010$a': ['011$a'] };
     lignes.forEach((l, i) => {
       if (attendu.records[i].materialType !== 'periodico') return;
-      const relus = relues[i].rawPayload.fields.flatMap(valeursDe);
-      for (const p of pertesDe(l.raw_payload.fields, relues[i].rawPayload.fields)) {
+      const relus = relue(i).rawPayload.fields.flatMap(valeursDe);
+      for (const p of pertesDe(l.raw_payload.fields, relue(i).rawPayload.fields)) {
         for (const cible of REVIENT_BULLETIN[p.cle] ?? []) {
           if (!relus.some((x) => x.cle === cible && x.v === p.v)) nonRevenues.push(`${l.external_key} ${p.cle} « ${p.v} » → ${cible}`);
         }

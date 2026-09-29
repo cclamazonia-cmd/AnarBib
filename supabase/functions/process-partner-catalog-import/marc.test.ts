@@ -670,3 +670,63 @@ Deno.test('H27 : mots-clés libres (610) à part des vedettes (606), découpés 
   // une notice sans vedette ni mot-clé n'a pas de clé « keywords »
   assertEquals('keywords' in mappedExtras(mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [] }, 'unimarc')), false);
 });
+
+Deno.test('Revue H27 : l\'ISSN qu\'un PMB écrit en 010 $a va dans issn pour un périodique ; un ISBN reste un ISBN', () => {
+  const per = mapMarcRecord({ leader: '00000nas0 22000001i 450 ', fields: [
+    { tag: '010', ind1: ' ', ind2: ' ', subfields: sf([['a', '2555-0004']]) },
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Le Rat des bibliothèques']]) }] }, 'unimarc');
+  assertEquals([per.isbn, per.issn], [null, '2555-0004']);
+  const liv = mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '010', ind1: ' ', ind2: ' ', subfields: sf([['a', '2555-0004']]) }] }, 'unimarc');
+  assertEquals([liv.isbn, liv.issn], ['2555-0004', null]);
+  // un périodique qui a déjà son 011 garde les deux
+  const deux = mapMarcRecord({ leader: '00000nas0 22000001i 450 ', fields: [
+    { tag: '010', ind1: ' ', ind2: ' ', subfields: sf([['a', '978-2-921561-00-0']]) },
+    { tag: '011', ind1: ' ', ind2: ' ', subfields: sf([['a', '1234-5678']]) }] }, 'unimarc');
+  assertEquals([deux.isbn, deux.issn], ['978-2-921561-00-0', '1234-5678']);
+});
+
+Deno.test('Revue H27 : notice de bulletin PMB titrée — le périodique vient de 200 $h (sinon du dernier 463 $t), le titre du bulletin est gardé à part', () => {
+  const b = mapMarcRecord({ leader: '00000naa2 22000001i 450 ', fields: [
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Printemps 2025, 2025-03-01'], ['d', 'Article_expl_bulletin'], ['h', 'Le Rat des bibliothèques'], ['i', '12']]) },
+    { tag: '463', ind1: ' ', ind2: ' ', subfields: sf([['0', '72'], ['d', '2025-03-01'], ['v', '12'], ['t', 'Printemps 2025'], ['t', 'Le Rat des bibliothèques'], ['9', 'id:3'], ['9', 'lnk:bull_expl']]) },
+  ] }, 'unimarc');
+  assertEquals([b.materialType, b.title, b.keyTitle, b.volume], ['periodico', 'Le Rat des bibliothèques', 'Le Rat des bibliothèques', '12']);
+  assertEquals(b.issue, { number: '12', date: '2025-03-01', title: 'Printemps 2025' });
+  const c = mapMarcRecord({ leader: '00000naa2 22000001i 450 ', fields: [
+    { tag: '463', ind1: ' ', ind2: ' ', subfields: sf([['v', '12'], ['t', 'Printemps 2025'], ['t', 'Le Rat des bibliothèques'], ['9', 'lnk:bull_expl']]) },
+  ] }, 'unimarc');
+  assertEquals([c.title, c.issue?.title], ['Le Rat des bibliothèques', 'Printemps 2025']);
+});
+
+Deno.test('Revue H27 : le titre de série PMB (461 $t) d\'une monographie qui a déjà une collection va en note « Série: »', () => {
+  const m = mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Des bourses du travail aux coopératives'], ['h', 'Tome 2']]) },
+    { tag: '225', ind1: '2', ind2: ' ', subfields: sf([['a', 'Petite collection Maspero'], ['v', '58']]) },
+    { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Histoire du mouvement ouvrier'], ['v', '2'], ['9', 'id:6']]) },
+  ] }, 'unimarc');
+  assertEquals([m.series, m.notes, m.volume], ['Petite collection Maspero ; 58', 'Série: Histoire du mouvement ouvrier', 'Tome 2']);
+  // sans collection : rien en note, l'indice de collection (ingest) prend le 461 $t
+  const s = mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Histoire du mouvement ouvrier'], ['v', '2']]) }] }, 'unimarc');
+  assertEquals([s.notes, s.host?.title, s.volume], [null, 'Histoire du mouvement ouvrier', '2']);
+  // même titre en 410 et en 461, ou série égale au titre : pas de note
+  const e = mapMarcRecord({ leader: '00000nam0 22000001i 450 ', fields: [
+    { tag: '200', ind1: '1', ind2: ' ', subfields: sf([['a', 'Chroniques']]) },
+    { tag: '410', ind1: ' ', ind2: '0', subfields: sf([['t', 'Chroniques'], ['v', '1']]) },
+    { tag: '461', ind1: ' ', ind2: '0', subfields: sf([['t', 'Chroniques'], ['v', '1']]) }] }, 'unimarc');
+  assertEquals(e.notes, null);
+});
+
+Deno.test('Revue H27 : 463 $x $e, 225 $i $x, 410 $x et 411 sont laissés exprès, avec leur raison', () => {
+  const rec = { leader: '00000naa2 22000001i 450 ', fields: [
+    { tag: '225', ind1: '2', ind2: ' ', subfields: sf([['a', 'Coll'], ['i', 'Sous-coll'], ['x', '1234-5678']]) },
+    { tag: '410', ind1: ' ', ind2: '0', subfields: sf([['t', 'Coll'], ['x', '1234-5678']]) },
+    { tag: '411', ind1: ' ', ind2: '0', subfields: sf([['t', 'Sous-coll']]) },
+    { tag: '463', ind1: ' ', ind2: ' ', subfields: sf([['x', '2555-0004'], ['e', 'mars 2025'], ['d', '2025-03-01'], ['v', '12']]) },
+  ] };
+  const cov = marcCoverage(buildParsedEntriesFromMarc([rec], [], 'unimarc'));
+  const z = (tag, code) => cov.zones.find((x) => x.tag === tag && x.code === code);
+  for (const [t, c] of [['225', 'i'], ['225', 'x'], ['410', 'x'], ['411', 't'], ['463', 'x'], ['463', 'e']]) assertEquals(z(t, c).status, 'laisse', `${t} $${c}`);
+  assertEquals(cov.zones.filter((x) => x.status === 'brut'), []);
+});
