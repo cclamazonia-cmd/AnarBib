@@ -607,3 +607,5 @@ tests/sql/taches_sept_etats_tests.sql
 tests/sql/import_sans_exemplaire_tests.sql
 # 29/09 (revue de la fin de H27) : le rapprochement par ISSN ne prend pas un article pour sa revue.
 tests/sql/import_rapprochement_issn_tests.sql
+# 29/09 (E6, CAT-E19) : une réattribution ne laisse pas de fonds vide ; un fonds cité par un historique reste.
+tests/sql/reattribution_fonds_vide_tests.sql
