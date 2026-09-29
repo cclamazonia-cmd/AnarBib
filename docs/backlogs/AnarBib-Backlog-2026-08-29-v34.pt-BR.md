@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 28 de setembro de 2026 à noite** (`f36b4638`) — produção consultada em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 24/09 `3d9cf15b`). Quatro dias com duas sessões em paralelo: **60 migrações**, 188 commits, **oito fechamentos em 28/09** e nove em 27/09. O que mudou: +5 tabelas, +26 políticas, +72 funções; 47 registros e 70 obras a menos (fusões de duplicatas); **indexação por assunto: 2 146 de 2 609 registros têm assunto, 463 nenhum** (contra 1 184 e 1 472 em 24/09); 45 índices sem uso a menos e o catálogo público aguenta 100 000 registros (B32); +82 arquivos `src/`, +655 testes JS, +36 suítes SQL. Um aviso de segurança novo e deliberado: `fn_locale_from_idioma` sem `search_path` fixo (B32, alavanca c). Falta fechar: B29/B30 e os lotes de E6 (Xavier, na tela), H17 a H26, A1, A3, F11.
 
-**Frescor dos constatos em 2026-09-29.** **49 itens de 61** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H27, H28, I2, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-29.** **49 itens de 61** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, I24, J9, K2, K7, K10). Os **12** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1132,7 +1132,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H24** | O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores | `P1` | A verificar |
 | **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | A verificar |
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
-| **H27** | A prova do ida-e-volta: um teste de CI, uma reimportação real no PMB e a tabela pública do que passa | `P1` | A verificar |
+| **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1473,27 +1473,27 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
-#### H27 — A prova do ida-e-volta: um teste de CI, uma reimportação real no PMB e a tabela pública do que passa
+#### H29 — De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico
 
-`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, biblioteconomia
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL, biblioteconomia
 
-**Estado.** `serialize.test.ts` faz um ida-e-volta em memória (duas notícias escritas à mão, MARCXML MARC21, título/subtítulo/autores). Nenhum teste passa pela base, pelo UNIMARC, por um arquivo real ou pelos exemplares. E **esses testes Deno não rodam em lugar nenhum**: nenhum `deno test` na CI, Deno presente na máquina em `~/.deno/bin`, fora do PATH (correção de 26/09). As outras edge functions são testadas no vitest (`monter-ef.js`). **Critério 1 cumprido em 28/09** (`2ee5f7a7`): a prova pela base (64 notícias PMB, suíte SQL gerada, perdas aceitas com motivo e congeladas). Corrigidos: idioma bruto recusado na publicação, nomes não latinos descartados, palavras-chave em 606, ISSN de artigo. **Critérios 2 e 3 cumpridos em 29/09** (`7dbd9f11`, revisões `466324aa` e `2348cb86`, migrações `20260929102719` e `20260929103533`): o export tirado da base, reimportado num PMB esvaziado: 62 registros na origem, 64 na volta (as duas pseudo-notícias de exemplares de fascículo e a notícia do fascículo 278 voltam como periódicos); **46 exemplares de 46**, 3 fascículos e 15 artigos, 61 responsabilidades, 57 autores, 36 editoras. Tipo, seção e código estatístico dos exemplares não passam. A tabela de cobertura (`docs/interop/couverture-pmb.md`) é gerada a partir do código e dos balanços. Corrigidos: periódicos antes dos artigos no export (senão 7 de 15), tipo e público do exemplar na 995, ISSN de periódico PMB lido como ISBN, exemplar automático em registro MARC sem exemplar (**IMP-25**), fascículos de uma revista tomados por duplicatas (6 de 64), artigo aproximado da revista pelo ISSN. Dois ajustes do PMB decidem tudo, agora ditos: «Gerar os vínculos» em Sim; «autoridades» em Não no PMB 8.1.1.1 (ver **H25**). **Falta**: o fechamento, decisão de Xavier.
+**Estado.** **Medido no banco PMB 8.1.1.1 em 29/09** (H27): os 46 exemplares voltam todos com tipo, seção e código estatístico «indeterminado»; na origem, 8 tipos, 12 seções, 3 códigos estatísticos. O PMB acha tipo e seção pelo código de importação, ou os cria (o tipo com prazo de empréstimo de 0 dia). Causa: o export escreve `995 $r uu $q u`; na importação `$r`/`$q` vão só para a nota de proveniência, e os rótulos estão na 996 do PMB, nunca retomada nem reemitida. Uma biblioteca que volta ao PMB precisa reclassificar cada exemplar antes de emprestar.
 
-*Verificado : **29/09** — implantado (`2348cb86`), migrações `20260929102719`/`103533` aplicadas pela CI; em produção, as três funções têm o md5 do banco; bateria: vitest 1 518, SQL 149/149. 28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145.*
+*Verificado : 29/09 — aberto por decisão de Xavier, no fechamento de H27.*
 
-**O que é.** (0) Fazer rodar `marc.test.ts` e `serialize.test.ts` na CI (vitest ou `deno test`). (1) Teste de CI: fixture → import → publicação no banco SQL → export UNIMARC → comparação zona a zona, com a **lista de perdas aceitas** no teste. (2) Reimportação real no PMB de banco. (3) Tabela de cobertura publicada. **(0) entregue em 26/09**: ponte vitest que roda os testes Deno como estão. **O retorno ao PMB tem seu script** (`importer-pmb.mjs`) — e a função de importação padrão `func_bdp` perde 200 $f/$g, a segunda 700, funde as 606, trunca a Dewey e ignora o proprietário da 995: a tabela de cobertura deverá dizer qual função usar, ou fornecer uma.
+**O que é.** Pistas, a decidir após a resposta da DIRA: guardar na importação, em colunas do exemplar (nunca numa nota), tipo, seção, código estatístico e localização de origem, e reescrevê-los no export para a biblioteca de origem; para um exemplar nascido no AnarBib, uma correspondência no perfil da biblioteca.
 
-**Por que importa.** É a única peça que permite dizer a uma biblioteca «pode migrar».
+**Por que importa.** A volta ao PMB é a garantia de que o AnarBib não prende uma biblioteca; um catálogo que volta sem tipo nem seção dos exemplares não se empresta no dia seguinte.
 
 **O que conta como terminado.**
 
-- Teste de CI verde, com perdas aceitas escritas.
-- Reimportação PMB feita, números idênticos.
-- Tabela de cobertura publicada.
+- Reimportado no PMB, um exemplar vindo do PMB recupera tipo, seção e código estatístico de origem.
+- Um exemplar nascido no AnarBib sai com o tipo e a seção que a biblioteca fez corresponder.
+- Medido no banco PMB, balanço versado.
 
-**Dependências.** Fecha a série: depois de **H14**-**H24**.
+**Dependências.** Depois de **H27** (fechado em 29/09). Perguntar primeiro à DIRA: para que essas informações lhes servem, e se os códigos de importação de tipos e seções estão configurados no PMB delas.
 
-*Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+*Remissões : `claude/aller-retour-PMB_2026-09-26` · `Tableau de couverture AnarBib ↔ PMB, § 4 (docs/interop/couverture-pmb.md)`*
 
 ---
 
@@ -2030,6 +2030,7 @@ CI verde. |
 | I28 | 2026-09-28 | **Fechado em 28/09: a CI aplica as regras do hook para todas as sessões.** `src/tests/doctrine-migrations-garde.test.js` (em `npm test`, job `app`): 10 testes — nome com 14 dígitos, versão única, sem hora redonda desde 31/08 (fora uma lista fechada de 15), sem data no futuro, e a doutrina SQL do hook. Entregue em 27/09 (`df4dcec1`); já barrou um rascunho do B33. |
 | B32 | 2026-09-28 | **Fechado em 28/09, com provas, a 100 000 registros sintéticos.** Três migrações (`20260928122316`, `…17`, `…18`). *(b)* A visibilidade por biblioteca é calculada uma vez por consulta (`fn_visible_library_ids()` em InitPlan nas 21 policies) : `count(*)` em `books` sob anon 3,0 s → 52 ms, em sessão 29,8 s → 0,79 s ; visibilidade idêntica (13 tabelas, 6 identidades). *(a)* As visões do catálogo leem as visões materializadas por duas visões `private` (sem invólucro DEFINER por linha), e os índices enfim são usados. Diante da visão real, `catalog_works_v1` caía em laços aninhados (1 linha estimada para 77 000) : ela monta seu WHERE a partir dos filtros presentes, lê `volume` pela visão, toma o título de recurso no catálogo que serve, materializa `titres` e proíbe laços aninhados durante a consulta. De passagem, `catalog_search_ids_v1` devolvia `LIMIT 500` sem ordem total : `book_id` desempata. *(c)* `fn_locale_from_idioma` é inserida em linha. Quarenta percursos do OPAC idênticos antes/depois. Medidas finais, anon : página padrão 15,9 s → 1,8 s, ordenação por autor·a 11,3 → 1,7 s, lista plana por título 132 → 0,8 ms ; sessão : página padrão 54,8 → 2,2 s. Índices secundários : todos mantidos ; três sem uso a rever nos contadores de produção em um mês. Verificado em produção em 28/09 (implantado às 14:05 UTC): visibilidade idêntica para as 21 identidades; 39 percursos em 40 idênticos, o quadragésimo idêntico ao que a lógica antiga devolve sobre os mesmos dados; página padrão anônima 383 → 74 ms, busca 335 → 49 ms, `count(*)` 87 → 4 ms, página em sessão 442 → 135 ms; lint 0028 = 27, esperado. Auditoria : `journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md`. |
 | C12 | 2026-09-28 | **Fechado no mesmo dia, 28/09 — a pesquisa de metadados mostra uma candidata por fonte, não uma por ISBN.** Constatação de Xavier na tela: para o ISBN 8432302120, os marcadores diziam BNE 2, BnF 2, ICCU 2, LoC 1, Open Library 2, e a lista mostrava só uma candidata (Siglo XXI 1976, quando o registro traz 1991). Causa em `catalog_metadata_lookup`: `dedupeAndRank` usava o ISBN sozinho como chave, e a lista fundida era truncada em `maximumRecords` (8), que já limita cada fonte. Correção em dois commits (`78685511`, `16a4dcb4`): a chave traz a fonte, o identificador do registro nela, o ISBN, o título, o primeiro contribuidor e o ano — só o mesmo registro devolvido duas vezes se dobra; sem truncamento. Bancada `catalog-metadata-lookup-candidates.test.js` (cinco casos, 3/4 vermelhos no código anterior). Verificado em produção às 16h16 na aba de Xavier: 7 linhas para 7 resultados anunciados. |
+| H27 | 2026-09-29 | **Fechado em 29/09 por decisão de Xavier.** Os três critérios: (1) a suíte SQL `aller_retour_pmb_tests` roda na CI, perdas aceitas escritas e congeladas; (2) o export tirado da base, reimportado num PMB 8.1.1.1 esvaziado: 46 exemplares de 46, 3 fascículos e 15 artigos, 61 responsabilidades, 57 autores, 36 editoras; os registros passam de 62 a 64 (as pseudo-notícias de fascículo do PMB voltam como periódicos); (3) a tabela de cobertura gerada a partir do código e dos balanços (`docs/interop/couverture-pmb.md`). Implantado em 29/09 (`2348cb86`). O que não volta — tipo, seção e código estatístico dos exemplares — passa para **H29**. |
 
 ---
 
