@@ -66,8 +66,9 @@ describe('section PEB de la page Bibliothèque (E6, lot 1) — réellement mont�
     expect((section.match(/await onChanged\?\.\(\);/g) || []).length).toBe(5);
     expect(section.includes('loadAll')).toBe(false);
     expect(section).toMatch(/import \{ fs, ls, bx, lr, lw \} from '\.\/styles';/);
-    // la page n'utilise plus `lr` depuis le lot 2 (les listes alternées vivent dans les sections)
-    expect(page).toMatch(/import \{ fs, ls, bx, (lr, )?lw \} from '\.\/styles';/);
+    // la page n'importe que les styles qu'elle emploie encore : `lr` est parti au lot 2,
+    // `lw` au lot 3 (les listes vivent dans les sections)
+    expect(page).toMatch(/import \{ (fs|ls|bx|lr|lw)(, (fs|ls|bx|lr|lw))* \} from '\.\/styles';/);
     for (const name of ['fs', 'ls', 'bx', 'lr', 'lw']) {
       expect(styles).toMatch(new RegExp(`^export const ${name} = `, 'm'));
     }
