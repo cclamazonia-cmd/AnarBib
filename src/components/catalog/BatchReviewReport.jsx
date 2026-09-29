@@ -124,7 +124,7 @@ export default function BatchReviewReport({ report }) {
             {auth.unlinked.map((it, i) => (
               <li key={i}>
                 {it.name} <span style={muted}>({draftLabel(it)})</span>
-                {it.suggested_sort_name && <span style={{ color: 'var(--brand-accent, #4ade80)' }}> — {t({ id: 'review.report.auth.suggested' }, { name: it.suggested_sort_name })}</span>}
+                {it.suggested_sort_name && <span style={{ color: '#4ade80' }}> — {t({ id: 'review.report.auth.suggested' }, { name: it.suggested_sort_name })}</span>}
               </li>
             ))}
             {more(auth.unlinked_count ?? 0, auth.unlinked.length)}

@@ -68,6 +68,27 @@
 
 .ab-button--loading { opacity: 0.7; }
 
+/* ── .cat-btn — boutons compacts (catalogage, bibliothèque, réseau…) ─────
+   Définis ici une seule fois : ils vivaient en double dans CatalogacaoPage.css
+   et ImportacoesPage.css, et les pages qui ne chargeaient ni l'une ni l'autre
+   les affichaient en blanc carré. Le primary a la teinte et l'ombre de
+   .ab-button, pour qu'un « Enregistrer » ait la même couleur partout. */
+.cat-btn {
+  padding: 9px 18px; border-radius: 8px; font-size: .9rem; font-weight: 700;
+  cursor: pointer; border: 1px solid var(--brand-panel-border, rgba(255,255,255,.15));
+  transition: all .15s;
+}
+.cat-btn:disabled { opacity: .5; cursor: not-allowed; }
+.cat-btn.primary {
+  background: linear-gradient(135deg, rgba(var(--brand-action-rgb), 0.92), var(--brand-color-primary));
+  color: #fff; border-color: transparent; box-shadow: var(--brand-shadow-strong);
+}
+.cat-btn.primary:hover:not(:disabled) { transform: translateY(-1px); }
+.cat-btn.secondary { background: var(--brand-panel-bg-strong, rgba(10,10,10,.94)); color: var(--brand-text, #f5f2ea); border-color: rgba(255,255,255,.18); }
+.cat-btn.secondary:hover { background: rgba(255,255,255,.1); }
+.cat-btn.ghost { background: transparent; color: var(--brand-muted, #d4cec3); border-color: transparent; }
+.cat-btn.ghost:hover { color: var(--brand-text, #f5f2ea); background: rgba(255,255,255,.04); }
+
 @keyframes ab-spin { to { transform: rotate(360deg); } }
 .ab-spinner { animation: ab-spin 1s linear infinite; }
 

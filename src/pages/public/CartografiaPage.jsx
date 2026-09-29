@@ -43,7 +43,7 @@ export default function CartografiaPage() {
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
             <Link to="/cartografia/ajouter"
-              style={{ padding: '8px 16px', borderRadius: 8, background: 'rgb(var(--brand-accent-rgb))', color: '#fff', fontWeight: 700, fontSize: '.85rem', textDecoration: 'none' }}>
+              className="ab-button">
               {t({ id: 'cartografia.add' })}
             </Link>
             {user && (

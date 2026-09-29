@@ -32,11 +32,6 @@ const input = {
   background: 'rgba(0,0,0,.28)', border: '1px solid rgba(255,255,255,.15)',
   color: 'var(--brand-text, #f5f2ea)', fontSize: '.88rem',
 };
-const btnPrimary = {
-  padding: '9px 18px', borderRadius: 8, fontWeight: 700, fontSize: '.88rem',
-  background: 'var(--brand-color-primary, #7a0b14)', color: '#fff',
-  border: 'none', cursor: 'pointer',
-};
 
 export default function ExternalDepositPartnerSection({ libraryId, canEdit }) {
   void libraryId;
@@ -147,7 +142,7 @@ export default function ExternalDepositPartnerSection({ libraryId, canEdit }) {
       </label>
 
       <div style={{ marginTop: 12 }}>
-        <button style={{ ...btnPrimary, opacity: (busy || !name.trim()) ? 0.5 : 1 }}
+        <button className="ab-button"
           onClick={handleRegister} disabled={busy || !name.trim()}>
           {busy ? t({ id: 'biblioteca.extPartner.registering' }) : t({ id: 'biblioteca.extPartner.register' })}
         </button>

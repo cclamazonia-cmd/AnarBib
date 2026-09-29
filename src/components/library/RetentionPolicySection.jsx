@@ -62,12 +62,13 @@ const textareaStyle = {
   resize: 'vertical',
 };
 
-const buttonStyle = (primary = false) => ({
+// Bouton secondaire ; le principal (« Enregistrer ») est un .ab-button.
+const buttonStyle = () => ({
   padding: '9px 18px',
   borderRadius: 6,
-  border: '1px solid ' + (primary ? 'var(--brand-accent, #c44)' : 'rgba(255,255,255,.2)'),
-  background: primary ? 'var(--brand-accent, #c44)' : 'transparent',
-  color: primary ? '#fff' : 'var(--brand-fg, #f4f4f4)',
+  border: '1px solid rgba(255,255,255,.2)',
+  background: 'transparent',
+  color: 'var(--brand-fg, #f4f4f4)',
   fontSize: '.88rem',
   fontWeight: 600,
   cursor: 'pointer',
@@ -318,10 +319,10 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
           </div>
 
           <div style={{ marginTop: 16 }}>
-            <button onClick={handleSave} disabled={saving} style={buttonStyle(true)}>
+            <button className="ab-button" onClick={handleSave} disabled={saving} style={{ marginRight: 8 }}>
               {saving ? t({ id: 'biblioteca.privacy.saving' }) : t({ id: 'biblioteca.privacy.save' })}
             </button>
-            <button onClick={handleResetToDefaults} disabled={saving} style={buttonStyle(false)}>
+            <button onClick={handleResetToDefaults} disabled={saving} style={buttonStyle()}>
               {t({ id: 'biblioteca.privacy.resetToDefaults' })}
             </button>
           </div>

@@ -138,8 +138,8 @@
    Idem options des <select> des composants (sinon dropdown transparent, cf. la langue). */
 .ab-atl-panel-body .cat-btn{ background:rgba(0,0,0,.4); color:var(--brand-text,#f4f1ee); border:1px solid var(--brand-panel-border,rgba(255,255,255,.18)); }
 .ab-atl-panel-body .cat-btn:hover:not(:disabled){ background:rgba(255,255,255,.08); }
-.ab-atl-panel-body .cat-btn.primary{ background:var(--brand-color-primary,#d6453b); border-color:var(--brand-color-primary,#d6453b); color:#fff; }
-.ab-atl-panel-body .cat-btn.primary:hover:not(:disabled){ background:#b91c1c; }
+.ab-atl-panel-body .cat-btn.primary{ background:linear-gradient(135deg, rgba(var(--brand-action-rgb),.92), var(--brand-color-primary)); border-color:transparent; color:#fff; }
+.ab-atl-panel-body .cat-btn.primary:hover:not(:disabled){ background:linear-gradient(135deg, rgba(var(--brand-action-rgb),.92), var(--brand-color-primary)); }
 .ab-atl-panel-body select option{ background:#0d0b12; color:var(--brand-text,#f4f1ee); }
 /* Idem champs de saisie + <select> des composants (TeamPanel, PolicySetManager…) :
    fond clair qui jure -> fond sombre cohérent. On exclut les cases/radios. */

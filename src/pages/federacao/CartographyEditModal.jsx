@@ -262,7 +262,7 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
                 {t({ id: 'federacao.carte.edit.cancel' })}
               </button>
               <button type="button" onClick={save} disabled={saving}
-                style={{ ...input, width: 'auto', cursor: 'pointer', background: 'rgb(var(--brand-accent-rgb))', borderColor: 'transparent', fontWeight: 700 }}>
+                className="ab-button">
                 {t({ id: 'federacao.carte.edit.save' })}
               </button>
               </div>

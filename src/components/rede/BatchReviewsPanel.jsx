@@ -114,7 +114,7 @@ export default function BatchReviewsPanel() {
           </div>
           <div style={muted}>{t({ id: 'rede.reviews.requestedBy' }, { name: r.requester_name || '—', date: fmt(r.requested_at) })}</div>
           {r.coord_message && (
-            <div style={{ margin: '8px 0', padding: '8px 10px', borderLeft: '3px solid var(--brand-accent, #4ade80)', fontSize: '.85rem' }}>
+            <div style={{ margin: '8px 0', padding: '8px 10px', borderLeft: '3px solid #4ade80', fontSize: '.85rem' }}>
               <span style={muted}>{t({ id: 'rede.reviews.message' })} :</span> {r.coord_message}
             </div>
           )}

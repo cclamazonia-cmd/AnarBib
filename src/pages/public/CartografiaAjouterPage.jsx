@@ -194,7 +194,7 @@ export default function CartografiaAjouterPage() {
               {state === 'error' && <p style={{ color: '#fca5a5', fontSize: '.85rem', marginTop: 12 }}>{errMsg}</p>}
 
               <button type="submit" disabled={state === 'sending'}
-                style={{ ...input, width: 'auto', marginTop: 18, cursor: 'pointer', background: 'rgb(var(--brand-accent-rgb))', borderColor: 'transparent', fontWeight: 700, padding: '10px 20px' }}>
+                className="ab-button" style={{ marginTop: 18 }}>
                 {state === 'sending' ? t({ id: 'cartografia.add.sending' }) : t({ id: 'cartografia.add.submit' })}
               </button>
             </form>
