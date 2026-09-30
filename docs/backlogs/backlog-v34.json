@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-29",
+    "maj": "2026-09-30",
     "releve": {
       "date": "2026-09-29",
       "commit": "75ccb035"
@@ -2586,6 +2586,14 @@
           "fr": "**Livré le 29/09, décision du jour** (`75ccb035`, déployé : servi en `text/plain` depuis 18 h 55). Jusque-là, `/robots.txt` répondait 200 avec `index.html` (le repli de l'application monopage) : les robots recevaient du HTML et l'ignoraient. Désormais les robots des entreprises d'IA (entraînement, assistants, moteurs de réponse) sont refusés partout ; les moteurs de recherche parcourent le catalogue public — notices, œuvres, autorités, périodiques, bibliothèques, thésaurus, cartographie — et les espaces de travail, formulaires, liseuse et banc leur sont fermés ; `Crawl-delay: 5` ménage le pool anonyme (plafond de 20 connexions, cf. capacité mesurée). Garde `src/tests/robots-txt.test.js` : toute route de `App.jsx` doit être classée (publique ou `Disallow`), arbitrage de la RFC 9309 (la règle la plus longue l'emporte), pas de jokers ; trois mutants vérifiés.",
           "pt": "**Entregue em 29/09, decisão do dia** (`75ccb035`, implantado: servido em `text/plain` desde 18h55). Até então `/robots.txt` respondia com `index.html`. Agora os robôs das empresas de IA são recusados em toda parte; os buscadores percorrem o catálogo público e ficam fora dos espaços de trabalho, formulários, leitor e bancada; `Crawl-delay: 5` poupa o pool anônimo. Guarda `src/tests/robots-txt.test.js`: toda rota de `App.jsx` precisa estar classificada."
         }
+      ],
+      [
+        "E3",
+        "2026-09-30",
+        {
+          "fr": "**Clos le 30/09, les deux critères tenus.** *(1)* La décision et ses deux raisons sont au REGISTRE (`DOC-ADDR-1`, amendé le 07/09, complété le 27/09) : on tutoie dans toutes les langues qui ont un registre de politesse (en et eo n'en ont pas), pt-BR au « você ». *(2)* Les dix locales appliquent ce registre, chacune sous sa garde au chemin (4) de `src/tests/i18n-ecriture.test.js` : passes du 27/09 (pt-BR `a805951b`, `36c467fa` ; fr `8f0d85a0` ; es et pt-BR `e8caf563` ; ca `f1743c4c`, `53cba900` ; it, de, nl, el `b425dfb1`), refus de l'EF `login` passés en codes traduits (`3cf927e1`). Les quatre dernières valeurs italiennes au « Lei » (« Faccia clic… », « Ricarichi l'elenco »), que la garde ne voyait pas, sont passées au tu le 30/09 (`abb4aa38`) ; `IMPERATIVI_LEI` apprend les deux formes, deux mutants vérifiés rouges. Restes suivis ailleurs : les conventions nl et el à faire relire par une personne de langue maternelle (E2), la passe pt-BR hors de l'app (E25).",
+          "pt": "**Encerrado em 30/09, os dois critérios cumpridos.** A decisão está no REGISTRO (`DOC-ADDR-1`); as dez locales aplicam o mesmo registro, cada uma com sua guarda em `src/tests/i18n-ecriture.test.js`. Os quatro últimos valores italianos no « Lei » passaram ao tu em 30/09 (`abb4aa38`), e a guarda aprendeu as duas formas. Restos acompanhados em E2 (nl, el) e E25 (pt-BR fora do app)."
+        }
       ]
     ]
   },
@@ -3505,55 +3513,6 @@
       "verif": {
         "fr": "31/08 — les dix fichiers `anarbib-charte-langage-inclusif-v2-*.md` existent depuis le 05/06, `nl` et `el` compris ; mais dedans, la convention `nl` est marquée « provisoire » et la `el` « à définir avec une personne locutrice grecque militante ». Les documents existent, les décisions non : le constat tient sur le fond. **27/09** — `b425dfb1` a réécrit 18 valeurs `nl` (« u/uw » → « je/jouw », et deux « jullie » adressés à une seule personne → « je ») et 172 valeurs `el` (2e personne du pluriel → singulier), par substitutions écrites clé par clé (`scripts/i18n-it-de-nl-el-tu.cjs`), sous `DOC-ADDR-1`. Aucune personne de langue maternelle ne les a relues : le commit n'en cite aucune. La relecture du critère 2 doit commencer par ces 190 valeurs ; la table DE → PARA du script sert de feuille de relecture.",
         "pt": "31/08 — os dez arquivos da carta v2 existem desde 05/06, `nl` e `el` incluídos; mas dentro deles a convenção `nl` está marcada « provisória » e a `el` « a definir com uma pessoa falante de grego militante ». Os documentos existem, as decisões não. **27/09** — `b425dfb1` reescreveu 18 valores `nl` («u/uw» → «je/jouw», e dois «jullie» dirigidos a uma só pessoa → «je») e 172 valores `el` (2ª pessoa do plural → singular), por substituições escritas chave por chave (`scripts/i18n-it-de-nl-el-tu.cjs`), sob `DOC-ADDR-1`, sem revisão de falante nativo. A revisão do critério 2 deve começar por esses 190 valores; a tabela DE → PARA do script serve de folha de revisão."
-      }
-    },
-    {
-      "id": "E3",
-      "d": "E",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "langue",
-        "collectif"
-      ],
-      "t": {
-        "fr": "Uniformiser le registre d'adresse entre les dix locales",
-        "pt": "Uniformizar o registro de tratamento entre as dez locales"
-      },
-      "v": {
-        "fr": "`DOC-ADDR-1` fixe le tutoiement comme registre de l'interface. Le 29/08, la fiche disait que **`nl` et `el` tutoyaient et que les huit autres vouvoyaient**. Mesuré depuis, c'était inexact : le registre formel restait par îlots dans sept locales sur dix, et le pt-BR, dont le registre est « você », gardait le « tu » européen. fr et es ont été corrigés en partie le 07/09 (163 et 52 chaînes, `DOC-ADDR-1`), le reste le 27/09 (chiffres dans la verif).",
-        "pt": "`DOC-ADDR-1` fixa o tratamento informal como registro da interface. Em 29/08, a ficha dizia que **`nl` e `el` tratavam por «tu» e as outras oito, por tratamento formal**. Medido depois, era inexato: o registro formal sobrava em ilhas em sete locales de dez, e o pt-BR, cujo registro é «você», guardava o «tu» europeu. fr e es foram corrigidos em parte em 07/09 (163 e 52 cadeias, `DOC-ADDR-1`), o resto em 27/09 (números na verificação)."
-      },
-      "w": {
-        "fr": "Décider une fois pour les dix, en tenant compte du fait que la valeur politique du tutoiement n'est pas la même dans chaque langue, puis passer les locales concernées en une seule opération.",
-        "pt": "Decidir uma vez para as dez, levando em conta que o valor político do tratamento informal não é o mesmo em cada língua, depois passar as locales envolvidas numa única operação."
-      },
-      "y": {
-        "fr": "AnarBib propose à d'autres catalogues des conventions d'interopérabilité, dont l'une dit explicitement que le vocabulaire commun n'impose pas l'écriture inclusive de chacun. **La cohérence interne se règle avant de prêcher la convention.**",
-        "pt": "O AnarBib propõe a outros catálogos convenções de interoperabilidade, uma das quais diz explicitamente que o vocabulário comum não impõe a escrita inclusiva de cada um. **A coerência interna se resolve antes de pregar a convenção.**"
-      },
-      "f": {
-        "fr": [
-          "Une décision au REGISTRE, avec la raison.",
-          "Les dix locales appliquent le même registre, ou l'écart est justifié langue par langue."
-        ],
-        "pt": [
-          "Uma decisão no REGISTRO, com o motivo.",
-          "As dez locales aplicam o mesmo registro, ou a divergência é justificada língua por língua."
-        ]
-      },
-      "dep": {
-        "fr": "Prévu après **E2** ; fait avant. `DOC-ADDR-1` fixait déjà le registre langue par langue depuis le 04/06 (« je » en nl, « εσύ » en el) : il n'attendait pas les conventions inclusives. Les 190 valeurs nl et el réécrites le 27/09 attendent, elles, la relecture native de **E2**.",
-        "pt": "Previsto depois de **E2**; feito antes. `DOC-ADDR-1` já fixava o registro língua por língua desde 04/06 («je» em nl, «εσύ» em el): não dependia das convenções inclusivas. Os 190 valores nl e el reescritos em 27/09 esperam, eles sim, a revisão nativa de **E2**."
-      },
-      "r": [
-        "REGISTRE §0 DOC-ADDR-1",
-        "VERIF_confidentialite_tiers_2026-08-20"
-      ],
-      "verif": {
-        "fr": "**27/09** — les dix locales passent au registre de `DOC-ADDR-1`, chacune sous sa garde (chemin (4) de `src/tests/i18n-ecriture.test.js`), et `DOC-ADDR-1` est complété au REGISTRE à chaque passe. pt-BR : 102 chaînes du « tu » européen passées au « você » (`a805951b`), puis 62 des courriels (`36c467fa`) ; le motif `TU_EUROPEU` est élargi par `28f45047`. fr : 186 impératifs en « -ez » (`8f0d85a0`). es 12 et pt-BR 2 (`e8caf563`). ca 312 (`f1743c4c`), plus une valeur posée entre-temps (`53cba900`). it 65, de 147, nl 18, el 172 (`b425dfb1`). en et eo n'ont pas de registre de politesse. Les refus de l'EF `login` étaient trois phrases françaises, dont deux au vouvoiement, affichées telles quelles dans les dix langues : ils portent désormais un code (`LOGIN_INVALID`, `LOGIN_RATE_LIMITED`, `LOGIN_SERVER_ERROR`) que `LoginPage.jsx` traduit, trois clés dans les dix locales (`3cf927e1`). Critère 1 tenu : la décision et ses deux raisons sont au REGISTRE depuis l'amendement du 07/09. **29/09** — critère 2 tenu à quatre valeurs près. Dans `it.json`, `catalogacao.nameEntry.pickSurname` (`0c3bb62f`), `catalogacao.nameEntry.caseHint` (`8c73b850`) et `catalogacao.titleCase.properHint` (`1782dfcb`) disent « Faccia clic… », et `error.capas.proposition_close` (`7dc13e5c`) dit « Ricarichi l'elenco » : c'est le « Lei ». Les quatre étaient déjà là quand `b425dfb1` a relu l'italien. La garde ne les voit pas, parce que `IMPERATIVI_LEI` ne liste ni « Faccia » ni « Ricarichi ». Reste à les passer au tu (« Clicca sulla parola », comme les 13 autres valeurs, et « Ricarica l'elenco »), à ajouter les deux formes à la liste, puis à clore E3.",
-        "pt": "**27/09** — as dez locales passam ao registro de `DOC-ADDR-1`, cada uma com sua guarda (caminho (4) de `src/tests/i18n-ecriture.test.js`), e `DOC-ADDR-1` é completado no REGISTRO a cada passada. pt-BR: 102 cadeias do «tu» europeu passadas ao «você» (`a805951b`) e 62 dos e-mails (`36c467fa`); o motivo `TU_EUROPEU` é ampliado por `28f45047`. fr: 186 imperativos em «-ez» (`8f0d85a0`). es 12 e pt-BR 2 (`e8caf563`). ca 312 (`f1743c4c`), mais um valor posto nesse meio-tempo (`53cba900`). it 65, de 147, nl 18, el 172 (`b425dfb1`). en e eo não têm registro de cortesia. As recusas da EF `login` eram três frases em francês, duas no «vous», mostradas tal qual nas dez línguas; agora levam um código (`LOGIN_INVALID`, `LOGIN_RATE_LIMITED`, `LOGIN_SERVER_ERROR`) que `LoginPage.jsx` traduz, três chaves nas dez locales (`3cf927e1`). Critério 1 cumprido: a decisão e seus dois motivos estão no REGISTRO desde a emenda de 07/09. **29/09** — critério 2 cumprido, menos quatro valores. Em `it.json`, `catalogacao.nameEntry.pickSurname` (`0c3bb62f`), `catalogacao.nameEntry.caseHint` (`8c73b850`) e `catalogacao.titleCase.properHint` (`1782dfcb`) dizem «Faccia clic…», e `error.capas.proposition_close` (`7dc13e5c`) diz «Ricarichi l'elenco»: é o «Lei». Os quatro já estavam lá quando `b425dfb1` revisou o italiano. A guarda não os vê, porque `IMPERATIVI_LEI` não lista «Faccia» nem «Ricarichi». Falta passá-los ao «tu» («Clicca sulla parola», como os outros 13 valores, e «Ricarica l'elenco»), acrescentar as duas formas à lista e fechar E3."
       }
     },
     {

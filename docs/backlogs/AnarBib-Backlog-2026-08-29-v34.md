@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-29** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-30** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-09-29.** **51 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E3, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-30.** **50 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, I24, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -711,7 +711,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **E1** | Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code | `P1` | Ouvert |
 | **E2** | Trancher les conventions néerlandaise et grecque | `P1` | Ouvert |
-| **E3** | Uniformiser le registre d'adresse entre les dix locales | `P2` | En cours |
 | **E4** | Régler les paires irrégulières de l'italien | `P2` | Ouvert |
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | En cours |
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
@@ -764,27 +763,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune. **Entrée sans compétence technique.**
 
 *Renvois : `docs/CHANTIERS_OUVERTS.md §5` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md`*
-
-#### E3 — Uniformiser le registre d'adresse entre les dix locales
-
-`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : langue maternelle, délibération collective
-
-**État.** `DOC-ADDR-1` fixe le tutoiement comme registre de l'interface. Le 29/08, la fiche disait que **`nl` et `el` tutoyaient et que les huit autres vouvoyaient**. Mesuré depuis, c'était inexact : le registre formel restait par îlots dans sept locales sur dix, et le pt-BR, dont le registre est « você », gardait le « tu » européen. fr et es ont été corrigés en partie le 07/09 (163 et 52 chaînes, `DOC-ADDR-1`), le reste le 27/09 (chiffres dans la verif).
-
-*Vérifié : **27/09** — les dix locales passent au registre de `DOC-ADDR-1`, chacune sous sa garde (chemin (4) de `src/tests/i18n-ecriture.test.js`), et `DOC-ADDR-1` est complété au REGISTRE à chaque passe. pt-BR : 102 chaînes du « tu » européen passées au « você » (`a805951b`), puis 62 des courriels (`36c467fa`) ; le motif `TU_EUROPEU` est élargi par `28f45047`. fr : 186 impératifs en « -ez » (`8f0d85a0`). es 12 et pt-BR 2 (`e8caf563`). ca 312 (`f1743c4c`), plus une valeur posée entre-temps (`53cba900`). it 65, de 147, nl 18, el 172 (`b425dfb1`). en et eo n'ont pas de registre de politesse. Les refus de l'EF `login` étaient trois phrases françaises, dont deux au vouvoiement, affichées telles quelles dans les dix langues : ils portent désormais un code (`LOGIN_INVALID`, `LOGIN_RATE_LIMITED`, `LOGIN_SERVER_ERROR`) que `LoginPage.jsx` traduit, trois clés dans les dix locales (`3cf927e1`). Critère 1 tenu : la décision et ses deux raisons sont au REGISTRE depuis l'amendement du 07/09. **29/09** — critère 2 tenu à quatre valeurs près. Dans `it.json`, `catalogacao.nameEntry.pickSurname` (`0c3bb62f`), `catalogacao.nameEntry.caseHint` (`8c73b850`) et `catalogacao.titleCase.properHint` (`1782dfcb`) disent « Faccia clic… », et `error.capas.proposition_close` (`7dc13e5c`) dit « Ricarichi l'elenco » : c'est le « Lei ». Les quatre étaient déjà là quand `b425dfb1` a relu l'italien. La garde ne les voit pas, parce que `IMPERATIVI_LEI` ne liste ni « Faccia » ni « Ricarichi ». Reste à les passer au tu (« Clicca sulla parola », comme les 13 autres valeurs, et « Ricarica l'elenco »), à ajouter les deux formes à la liste, puis à clore E3.*
-
-**Ce que c'est.** Décider une fois pour les dix, en tenant compte du fait que la valeur politique du tutoiement n'est pas la même dans chaque langue, puis passer les locales concernées en une seule opération.
-
-**Pourquoi ça compte.** AnarBib propose à d'autres catalogues des conventions d'interopérabilité, dont l'une dit explicitement que le vocabulaire commun n'impose pas l'écriture inclusive de chacun. **La cohérence interne se règle avant de prêcher la convention.**
-
-**Ce qui compte comme fini.**
-
-- Une décision au REGISTRE, avec la raison.
-- Les dix locales appliquent le même registre, ou l'écart est justifié langue par langue.
-
-**Dépendances.** Prévu après **E2** ; fait avant. `DOC-ADDR-1` fixait déjà le registre langue par langue depuis le 04/06 (« je » en nl, « εσύ » en el) : il n'attendait pas les conventions inclusives. Les 190 valeurs nl et el réécrites le 27/09 attendent, elles, la relecture native de **E2**.
-
-*Renvois : `REGISTRE §0 DOC-ADDR-1` · `VERIF_confidentialite_tiers_2026-08-20`*
 
 #### E4 — Régler les paires irrégulières de l'italien
 
@@ -2230,6 +2208,7 @@ CI verte : lint et suite unitaire. |
 | « Rattacher à une autre œuvre » s'exécute depuis l'écran (OPAC-OEU7) | 2026-09-28 | **Clos le 28/09** (REGISTRE `OPAC-OEU7`). L'écran répondait 42501 depuis le 04/09 : `assign_book_to_work` avait été fermée à `authenticated` au solde des différées du 02/09 (B20), faute d'écran, puis réécrite le 04/09 pour l'écran sans le GRANT (un `CREATE OR REPLACE` garde l'ACL en place) ; `oeuvres_rattachement_tests` l'appelait en `postgres`, qui exécute tout. Droit rendu par la migration `20260928184700` (`f36b4638`) ; `oeuvres_rattachement_tests` T4 lit désormais le droit, `solde_des_differees_tests` compte 45 fermées — la clôture B20 du 02/09 en annonce 47 : `fn_circle_member_count` en est sortie le soir même (`20260902175631`), `assign_book_to_work` le 28/09. Règle rappelée : une RPC qu'un écran appelle se vérifie sous le rôle de l'écran, pas sous `postgres`. |
 | Le catalogue publié ouvre la page de catalogage | 2026-09-28 | **Livré le 28/09 à la demande de Xavier** (`0d0322c0`) : on part de ce qui existe avant de saisir. L'onglet « Catalogue(s) publié(s) » passe en tête de la barre de catalogage et s'ouvre par défaut. Le dernier onglet visité n'est plus retenu (`catalogacaoActiveTab` n'est plus ni lue ni écrite dans `localStorage` : elle aurait masqué l'onglet de référence à toute personne ayant déjà ouvert la page) ; le lien profond `#tab=` (« Je veux… », cloche, rechargement) garde la main. Garde : `src/tests/catalogacao-onglet-de-reference.test.js` (4 cas). |
 | `robots.txt` : les robots d'IA refusés, le catalogue public ouvert aux moteurs | 2026-09-29 | **Livré le 29/09, décision du jour** (`75ccb035`, déployé : servi en `text/plain` depuis 18 h 55). Jusque-là, `/robots.txt` répondait 200 avec `index.html` (le repli de l'application monopage) : les robots recevaient du HTML et l'ignoraient. Désormais les robots des entreprises d'IA (entraînement, assistants, moteurs de réponse) sont refusés partout ; les moteurs de recherche parcourent le catalogue public — notices, œuvres, autorités, périodiques, bibliothèques, thésaurus, cartographie — et les espaces de travail, formulaires, liseuse et banc leur sont fermés ; `Crawl-delay: 5` ménage le pool anonyme (plafond de 20 connexions, cf. capacité mesurée). Garde `src/tests/robots-txt.test.js` : toute route de `App.jsx` doit être classée (publique ou `Disallow`), arbitrage de la RFC 9309 (la règle la plus longue l'emporte), pas de jokers ; trois mutants vérifiés. |
+| E3 | 2026-09-30 | **Clos le 30/09, les deux critères tenus.** *(1)* La décision et ses deux raisons sont au REGISTRE (`DOC-ADDR-1`, amendé le 07/09, complété le 27/09) : on tutoie dans toutes les langues qui ont un registre de politesse (en et eo n'en ont pas), pt-BR au « você ». *(2)* Les dix locales appliquent ce registre, chacune sous sa garde au chemin (4) de `src/tests/i18n-ecriture.test.js` : passes du 27/09 (pt-BR `a805951b`, `36c467fa` ; fr `8f0d85a0` ; es et pt-BR `e8caf563` ; ca `f1743c4c`, `53cba900` ; it, de, nl, el `b425dfb1`), refus de l'EF `login` passés en codes traduits (`3cf927e1`). Les quatre dernières valeurs italiennes au « Lei » (« Faccia clic… », « Ricarichi l'elenco »), que la garde ne voyait pas, sont passées au tu le 30/09 (`abb4aa38`) ; `IMPERATIVI_LEI` apprend les deux formes, deux mutants vérifiés rouges. Restes suivis ailleurs : les conventions nl et el à faire relire par une personne de langue maternelle (E2), la passe pt-BR hors de l'app (E25). |
 
 ---
 
@@ -2261,4 +2240,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

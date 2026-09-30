@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-29** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-30** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-09-29.** **51 itens de 69** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E3, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-30.** **50 itens de 68** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -711,7 +711,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **E1** | Fazer auditar a acessibilidade por alguém que não escreveu o código | `P1` | Aberto |
 | **E2** | Decidir as convenções neerlandesa e grega | `P1` | Aberto |
-| **E3** | Uniformizar o registro de tratamento entre as dez locales | `P2` | Em curso |
 | **E4** | Resolver os pares irregulares do italiano | `P2` | Aberto |
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Em curso |
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
@@ -764,27 +763,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma. **Entrada sem competência técnica.**
 
 *Remissões : `docs/CHANTIERS_OUVERTS.md §5` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md`*
-
-#### E3 — Uniformizar o registro de tratamento entre as dez locales
-
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : língua materna, deliberação coletiva
-
-**Estado.** `DOC-ADDR-1` fixa o tratamento informal como registro da interface. Em 29/08, a ficha dizia que **`nl` e `el` tratavam por «tu» e as outras oito, por tratamento formal**. Medido depois, era inexato: o registro formal sobrava em ilhas em sete locales de dez, e o pt-BR, cujo registro é «você», guardava o «tu» europeu. fr e es foram corrigidos em parte em 07/09 (163 e 52 cadeias, `DOC-ADDR-1`), o resto em 27/09 (números na verificação).
-
-*Verificado : **27/09** — as dez locales passam ao registro de `DOC-ADDR-1`, cada uma com sua guarda (caminho (4) de `src/tests/i18n-ecriture.test.js`), e `DOC-ADDR-1` é completado no REGISTRO a cada passada. pt-BR: 102 cadeias do «tu» europeu passadas ao «você» (`a805951b`) e 62 dos e-mails (`36c467fa`); o motivo `TU_EUROPEU` é ampliado por `28f45047`. fr: 186 imperativos em «-ez» (`8f0d85a0`). es 12 e pt-BR 2 (`e8caf563`). ca 312 (`f1743c4c`), mais um valor posto nesse meio-tempo (`53cba900`). it 65, de 147, nl 18, el 172 (`b425dfb1`). en e eo não têm registro de cortesia. As recusas da EF `login` eram três frases em francês, duas no «vous», mostradas tal qual nas dez línguas; agora levam um código (`LOGIN_INVALID`, `LOGIN_RATE_LIMITED`, `LOGIN_SERVER_ERROR`) que `LoginPage.jsx` traduz, três chaves nas dez locales (`3cf927e1`). Critério 1 cumprido: a decisão e seus dois motivos estão no REGISTRO desde a emenda de 07/09. **29/09** — critério 2 cumprido, menos quatro valores. Em `it.json`, `catalogacao.nameEntry.pickSurname` (`0c3bb62f`), `catalogacao.nameEntry.caseHint` (`8c73b850`) e `catalogacao.titleCase.properHint` (`1782dfcb`) dizem «Faccia clic…», e `error.capas.proposition_close` (`7dc13e5c`) diz «Ricarichi l'elenco»: é o «Lei». Os quatro já estavam lá quando `b425dfb1` revisou o italiano. A guarda não os vê, porque `IMPERATIVI_LEI` não lista «Faccia» nem «Ricarichi». Falta passá-los ao «tu» («Clicca sulla parola», como os outros 13 valores, e «Ricarica l'elenco»), acrescentar as duas formas à lista e fechar E3.*
-
-**O que é.** Decidir uma vez para as dez, levando em conta que o valor político do tratamento informal não é o mesmo em cada língua, depois passar as locales envolvidas numa única operação.
-
-**Por que importa.** O AnarBib propõe a outros catálogos convenções de interoperabilidade, uma das quais diz explicitamente que o vocabulário comum não impõe a escrita inclusiva de cada um. **A coerência interna se resolve antes de pregar a convenção.**
-
-**O que conta como terminado.**
-
-- Uma decisão no REGISTRO, com o motivo.
-- As dez locales aplicam o mesmo registro, ou a divergência é justificada língua por língua.
-
-**Dependências.** Previsto depois de **E2**; feito antes. `DOC-ADDR-1` já fixava o registro língua por língua desde 04/06 («je» em nl, «εσύ» em el): não dependia das convenções inclusivas. Os 190 valores nl e el reescritos em 27/09 esperam, eles sim, a revisão nativa de **E2**.
-
-*Remissões : `REGISTRE §0 DOC-ADDR-1` · `VERIF_confidentialite_tiers_2026-08-20`*
 
 #### E4 — Resolver os pares irregulares do italiano
 
@@ -2220,6 +2198,7 @@ CI verde. |
 | «Vincular a outra obra» funciona a partir da tela (OPAC-OEU7) | 2026-09-28 | **Encerrado em 28/09** (REGISTRO `OPAC-OEU7`). A tela respondia 42501 desde 04/09: `assign_book_to_work`, fechada a `authenticated` em 02/09 (B20), foi reescrita em 04/09 para a tela sem o GRANT, e a suíte a chamava como `postgres`. Direito devolvido pela migração `20260928184700` (`f36b4638`); T4 lê o direito, `solde_des_differees_tests` conta 45 fechadas — o fechamento B20 de 02/09 anuncia 47: `fn_circle_member_count` saiu na mesma noite (`20260902175631`), `assign_book_to_work` em 28/09. |
 | O catálogo publicado abre a página de catalogação | 2026-09-28 | **Entregue em 28/09 a pedido de Xavier** (`0d0322c0`): parte-se do que existe antes de catalogar. A aba «Catálogo(s) já publicado(s)» abre a barra e a página de catalogação. A última aba visitada não é mais lembrada (`catalogacaoActiveTab` não é mais lida nem escrita), e o link direto `#tab=` continua prevalecendo. Guarda: `catalogacao-onglet-de-reference.test.js` (4 casos). |
 | `robots.txt`: robôs de IA recusados, catálogo público aberto aos buscadores | 2026-09-29 | **Entregue em 29/09, decisão do dia** (`75ccb035`, implantado: servido em `text/plain` desde 18h55). Até então `/robots.txt` respondia com `index.html`. Agora os robôs das empresas de IA são recusados em toda parte; os buscadores percorrem o catálogo público e ficam fora dos espaços de trabalho, formulários, leitor e bancada; `Crawl-delay: 5` poupa o pool anônimo. Guarda `src/tests/robots-txt.test.js`: toda rota de `App.jsx` precisa estar classificada. |
+| E3 | 2026-09-30 | **Encerrado em 30/09, os dois critérios cumpridos.** A decisão está no REGISTRO (`DOC-ADDR-1`); as dez locales aplicam o mesmo registro, cada uma com sua guarda em `src/tests/i18n-ecriture.test.js`. Os quatro últimos valores italianos no « Lei » passaram ao tu em 30/09 (`abb4aa38`), e a guarda aprendeu as duas formas. Restos acompanhados em E2 (nl, el) e E25 (pt-BR fora do app). |
 
 ---
 
@@ -2251,4 +2230,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
