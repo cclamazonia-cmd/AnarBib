@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-30** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-29** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 11
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-09-30.** **49 itens de 67** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-29.** **49 itens de 73** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **24** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -952,19 +952,25 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **F1** | Auditar a cadeia de e-mail de ponta a ponta | `P1` | Aberto |
+| **F1** | Auditar a cadeia de e-mail de ponta a ponta | `P1` | Em curso |
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | A verificar |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
 | **F15** | Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva | `P2` | A verificar |
+| **F16** | O convite para uma tarefa nunca criou convite | `P1` | Aberto |
+| **F17** | Os lembretes de vencimento ignoram a prorrogação | `P1` | Aberto |
+| **F18** | E-mails vão para `fede@anarbib.org`, endereço sem caixa | `P1` | Aberto |
+| **F19** | Os registros das funções contêm os endereços em claro | `P1` | Aberto |
+| **F20** | Sem linha de política, a biblioteca nunca vê reserva expirar nem ausência detectada | `P2` | Aberto |
+| **F21** | Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas | `P2` | Aberto |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
 
 **Estado.** **14 funções `notify-*` implantadas**, cinco filas, seis gatilhos de despacho. Três filas nunca receberam uma única inserção: `authority_proposal_notification_outbox`, `membership_expiry_notifications`, `painel_internal_task_invitation_outbox`. Uma quarta, `painel_internal_task_notification_outbox`, está vazia após 34 inserções cuja última é de 04/06. Ninguém jamais auditou o conjunto.
 
-*Verificado : 31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria.*
+*Verificado : 31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria. **30/09** — **o mapa está escrito** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`), medido em produção: ~96 cadeias (41 vivas, 31 nunca usadas, 12 mortas, 7 dormentes, 4 quebradas). Critérios 1 e 2 cumpridos: `retirada_efetivada` e `retirada_no_show` partem; `retirada_reagendada` é um fóssil; `liberada_para_circulacao` está desligado por configuração. Critério 3: ramos mortos documentados, falta APAGÁ-LOS. Defeitos abertos à parte: F16 a F21.*
 
 **O que é.** Traçar o mapa: para cada evento de negócio, qual gatilho, qual fila, qual função, qual template, quais dez línguas. Depois marcar os ramos mortos e os ramos nunca percorridos.
 
@@ -1086,6 +1092,127 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 **Dependências.** Nenhuma. `HEALTH_ALERT_CC` já está em produção.
 
 *Remissões : `supabase/functions/_shared/context/network-admins.ts` · `src/tests/admins-reseau-destinataires.test.js` · `deploy/functions.env.example` · `mémoire anarbib-alertes-supervision-destinataires`*
+
+#### F16 — O convite para uma tarefa nunca criou convite
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, React / JavaScript
+
+**Estado.** Achado pelo mapa F1 (30/09). `fn_task_invite` põe o endereço CRU nas marcas da tarefa, e `task_invite_emails_from_tags` só aceita `convite:…`: nenhum convite jamais foi criado. A tela anuncia « convite enviado », e o endereço acaba nas « Marcas » dos avisos.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Migração a partir da definição real: `fn_task_invite` grava `convite:` || endereço; `taskTagsLabel` esconde as marcas `convite:`; suíte SQL: uma chamada cria um convite e uma linha na fila.
+
+**Por que importa.** Uma função que diz « enviado » sem enviar: a pessoa convidada espera um e-mail que nunca chega, e seu endereço aparece nos avisos.
+
+**O que conta como terminado.**
+
+- Convidar uma pessoa cria um convite e um e-mail (suíte SQL).
+- Nenhum endereço aparece nas marcas exibidas.
+
+**Dependências.** Nenhuma. Sai de F1.
+
+*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F17 — Os lembretes de vencimento ignoram a prorrogação
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, SQL / PostgreSQL
+
+**Estado.** Achado pelo mapa F1 (30/09). A prorrogação grava `extended_until`; `notify-loan-cycle` só lê `due_at`: lembrete na data antiga, « 7 dias de atraso » indevido, nada antes do vencimento real. Latente.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Usar `coalesce(extended_until, due_at)` nas janelas, no meio do empréstimo e na exibição; acrescentar o caso « exemplar prorrogado » às bancadas.
+
+**Por que importa.** Na primeira prorrogação, a leitora recebe um aviso de atraso injusto e nenhum lembrete útil.
+
+**O que conta como terminado.**
+
+- Um exemplar prorrogado recebe os lembretes no novo vencimento (bancada).
+
+**Dependências.** Nenhuma. Sai de F1; toca F4 (encerrado).
+
+*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F18 — E-mails vão para `fede@anarbib.org`, endereço sem caixa
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva, Deno / TypeScript
+
+**Estado.** Achado pelo mapa F1. Contribuições à Gazeta, cópia federal da abertura OAI e a futura autodeclaração do mapa vão para `fede@anarbib.org`, que não tem caixa. « sent » só quer dizer « aceito pelo Resend ».
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Decidir o endereço (Xavier); tirar `fede@` do código e dos fallbacks.
+
+**Por que importa.** Mensagens importantes não chegam a ninguém, e nada avisa.
+
+**O que conta como terminado.**
+
+- Nenhum envio mira um endereço sem caixa.
+
+**Dependências.** Decisão de Xavier (o endereço).
+
+*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F19 — Os registros das funções contêm os endereços em claro
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
+
+**Estado.** Achado pelo mapa F1. Os registros das Edge Functions trazem « sent to <endereço> » desde pelo menos 04/08.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Mascarar o endereço em todos os registros de envio, na fonte comum; teste de fonte.
+
+**Por que importa.** Vazamento contínuo de dados pessoais.
+
+**O que conta como terminado.**
+
+- Nenhum endereço completo nos registros após a correção.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F20 — Sem linha de política, a biblioteca nunca vê reserva expirar nem ausência detectada
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Achado pela contraverificação do mapa F1. Os três crons de reserva fazem INNER JOIN nas políticas: sem linha, nada expira. Latente.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** LEFT JOIN com prazos padrão, ou criar as linhas que faltam; suíte SQL.
+
+**Por que importa.** Reservas eternas na primeira biblioteca sem configuração.
+
+**O que conta como terminado.**
+
+- Expiração e ausência funcionam sem linha de política (suíte SQL).
+
+**Dependências.** Nenhuma.
+
+*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F21 — Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, língua materna
+
+**Estado.** Achado pelo mapa F1. O rodapé de reserva e a linha « Status » ficam em pt-BR em todas as línguas.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Deixar `tMail` localizar o rodapé; uma chave por etapa em vez de `WF_LABELS`, nas dez línguas; teste de fonte.
+
+**Por que importa.** Um e-mail em francês que termina em português.
+
+**O que conta como terminado.**
+
+- Um e-mail em fr, nl ou el não contém mais português (teste).
+
+**Dependências.** Nenhuma.
+
+*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
 
 ---
 
@@ -2208,4 +2335,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

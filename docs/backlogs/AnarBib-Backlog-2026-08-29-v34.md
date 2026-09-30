@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-30** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-09-29** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 5
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 11
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 3
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-09-30.** **49 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **18** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-09-29.** **49 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **24** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -952,19 +952,25 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **F1** | Auditer la chaîne de courriel de bout en bout | `P1` | Ouvert |
+| **F1** | Auditer la chaîne de courriel de bout en bout | `P1` | En cours |
 | **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | À vérifier |
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 | **F15** | Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective | `P2` | À vérifier |
+| **F16** | L'invitation à une tâche n'a jamais créé d'invitation | `P1` | Ouvert |
+| **F17** | Les rappels d'échéance ignorent la prorogation | `P1` | Ouvert |
+| **F18** | Des courriels partent vers `fede@anarbib.org`, une adresse sans boîte | `P1` | Ouvert |
+| **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | Ouvert |
+| **F20** | Sans ligne de politique, une bibliothèque ne voit jamais une réservation expirer ni une non-venue détectée | `P2` | Ouvert |
+| **F21** | Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues | `P2` | Ouvert |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
 
 **État.** **14 fonctions `notify-*` déployées**, cinq files d'attente, six déclencheurs de dépêche. Trois files n'ont jamais reçu la moindre insertion : `authority_proposal_notification_outbox`, `membership_expiry_notifications`, `painel_internal_task_invitation_outbox`. Une quatrième, `painel_internal_task_notification_outbox`, est vide après 34 insertions dont la dernière date du 04/06. Personne n'a jamais audité l'ensemble.
 
-*Vérifié : 31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit.*
+*Vérifié : 31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit. **30/09** — **la carte est écrite** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`) : cinq lectures parallèles mesurées en production en lecture seule (files par statut, définitions réelles, crons, journaux des fonctions Edge), puis une contre-vérification qui a tenté de réfuter chaque branche morte, cassée ou jamais empruntée. Environ 96 chaînes : 41 vivantes, 31 jamais empruntées (renvoi à G1), 12 mortes, 7 dormantes voulues, 4 cassées. *Critère 1* tenu. *Critère 2* tenu — les quatre courriels ont leur verdict : `retirada_efetivada` PART, sous le nom `res.converted` / `reserva_convertida_em_emprestimo` (le 01/08 et le 04/08, journaux à l'appui) — un envoi sous le nom `retirada_efetivada` est ignoré sans bruit, source probable du signalement ; `retirada_no_show` PART (reçu le 24/06 ; 3 non-venues, aucune depuis), mais sa ligne « Status » reste en pt-BR dans toutes les langues ; `retirada_reagendada` NE PEUT PAS partir — fossile de la v2, son stage est interdit par `fn_check_workflow_transition` ; `liberada_para_circulacao` ne part pas PAR RÉGLAGE (drapeau `false` par défaut, jamais exposé à l'écran, et le courriel lectrice coupé quand la remise a une cause). *Critère 3* ouvert : les branches mortes sont listées et documentées dans la carte, reste à les SUPPRIMER (lot suivant). Défauts trouvés en route, ouverts à part : F16 (invitation à une tâche jamais fonctionnelle), F17 (rappels d'un emprunt prorogé à l'ancienne date), F18 (courriels vers `fede@`, boîte inexistante), F19 (adresses en clair dans les journaux), F20 (crons de réservation muets sans ligne de politique), F21 (pied de page et « Status » en pt-BR dans toutes les langues). Restent dans la carte : `team.inactive_auto` routé sous un autre nom (latent), la plupart des chaînes directes sans trace durable ni rejeu (F12 ne couvre que cinq files) — matière de F3.*
 
 **Ce que c'est.** Dresser la carte : pour chaque événement métier, quel déclencheur, quelle file, quelle fonction, quel gabarit, quelles dix langues. Puis marquer les branches mortes et les branches jamais empruntées.
 
@@ -1086,6 +1092,127 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 **Dépendances.** Aucune. `HEALTH_ALERT_CC` est déjà posée en production.
 
 *Renvois : `supabase/functions/_shared/context/network-admins.ts` · `src/tests/admins-reseau-destinataires.test.js` · `deploy/functions.env.example` · `mémoire anarbib-alertes-supervision-destinataires`*
+
+#### F16 — L'invitation à une tâche n'a jamais créé d'invitation
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+
+**État.** Relevé par la carte F1 (30/09). `fn_task_invite` ajoute l'adresse BRUTE aux marqueurs de la tâche, alors que `task_invite_emails_from_tags` ne retient que les marqueurs `convite:…` : aucune invitation n'a jamais été créée (`painel_internal_task_invites` : 0 ligne ; file d'invitation : 0 insertion). L'écran annonce pourtant « invitation envoyée », et l'adresse invitée finit dans les « Marqueurs » des avis de tâche.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Migration depuis la définition réelle : `fn_task_invite` pose `convite:` || adresse (ou `task_invite_emails_from_tags` accepte les deux formes) ; `taskTagsLabel` n'affiche plus les marqueurs `convite:` ; suite SQL : un appel crée une invitation et une ligne de file.
+
+**Pourquoi ça compte.** Une fonction qui dit « envoyé » sans rien envoyer : la personne invitée attend un courriel qui ne vient jamais, et son adresse se retrouve affichée dans les avis.
+
+**Ce qui compte comme fini.**
+
+- Inviter une personne à une tâche crée une invitation et un courriel (suite SQL qui emprunte le chemin).
+- Aucune adresse n'apparaît dans les marqueurs affichés.
+
+**Dépendances.** Aucune. Sort de F1.
+
+*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F17 — Les rappels d'échéance ignorent la prorogation
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
+
+**État.** Relevé par la carte F1 (30/09). `fn_v2_extend_core` écrit `extended_until` et laisse `due_at` ; `notify-loan-cycle` (F4) ne lit que `due_at`. Pour un exemplaire prorogé : « c'est aujourd'hui » à l'ancienne date, « 7 jours de retard » alors qu'il n'est pas en retard, rien avant la vraie échéance ; et l'unicité (exemplaire, moment) bloquerait ensuite le bon rappel. Latent : les deux prorogations connues (24/06) sont antérieures à F4.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Utiliser `coalesce(extended_until, due_at)` pour les fenêtres, le mi-parcours et l'affichage ; ajouter le cas « exemplaire prorogé » au banc `notify-loan-cycle-banc` et à `rappels_echeance_tests`.
+
+**Pourquoi ça compte.** À la première prorogation, une lectrice reçoit un rappel de retard injuste et aucun rappel utile.
+
+**Ce qui compte comme fini.**
+
+- Un exemplaire prorogé reçoit ses rappels à la nouvelle échéance, et pas à l'ancienne (banc).
+
+**Dépendances.** Aucune. Sort de F1 ; touche F4 (clos).
+
+*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F18 — Des courriels partent vers `fede@anarbib.org`, une adresse sans boîte
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective, Deno / TypeScript
+
+**État.** Relevé par la carte F1 (30/09). Les contributions à la Gazette (4 envois « sent », 27/08-15/09), la copie fédérale des ouvertures OAI (3 envois sur 7 le 02/09, `OAI_ADMIN_EMAIL` non posé) et la future auto-déclaration de la carte vont à `fede@anarbib.org` — écrit en dur ou en repli —, alors que le constat OVH du 28/08 ne connaît de boîte qu'à `admins@` et `anarbib@`. « sent » veut seulement dire « accepté par Resend » : aucun rebond n'est suivi.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Décider l'adresse (Xavier) : une vraie boîte, un alias vers `admins@`, ou les destinataires admins réseau (`destinatairesAdminsReseau`) ; retirer `fede@` du code et des replis ; poser `OAI_ADMIN_EMAIL` ou supprimer ce repli.
+
+**Pourquoi ça compte.** Des messages de fond — une contribution, une demande d'ouverture — n'arrivent chez personne, et rien ne le dit.
+
+**Ce qui compte comme fini.**
+
+- Aucun envoi ne vise une adresse sans boîte ; la liste des adresses de rôle du code est relue contre les boîtes existantes.
+
+**Dépendances.** Décision de Xavier (l'adresse). Lié à la décision du 16/09 contre les adresses en `.org`.
+
+*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F19 — Les journaux des fonctions contiennent les adresses des destinataires en clair
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** Relevé par la carte F1 (30/09). Les journaux des fonctions Edge portent des lignes « [user_mail] sent to <adresse> » et « [admin_copy] sent to <adresse> » depuis au moins le 04/08 : toute personne qui consulte les journaux lit les adresses des lectrices et du staff.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Masquer l'adresse dans tous les journaux d'envoi (domaine seul, ou empreinte courte), à la source commune (`_shared/transport/email.ts` et les gestionnaires qui journalisent eux-mêmes) ; un test de source refuse un `console.log` qui imprime une adresse.
+
+**Pourquoi ça compte.** Une fuite de données personnelles continue, dans un outil que plusieurs personnes peuvent lire.
+
+**Ce qui compte comme fini.**
+
+- Plus aucune adresse complète dans les journaux d'envoi (relevé sur une semaine de journaux après le correctif).
+
+**Dépendances.** Aucune.
+
+*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F20 — Sans ligne de politique, une bibliothèque ne voit jamais une réservation expirer ni une non-venue détectée
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Relevé par la contre-vérification de la carte F1 (30/09). `fn_expire_solicitada_reservations`, `fn_expire_negotiation_timeout` et `fn_detect_no_show_reservations` font un INNER JOIN sur `library_notification_policies` : dans les deux bibliothèques actives sans ligne de politique, rien n'expire et aucune non-venue n'est détectée, alors que les déclencheurs de notification y sont ouverts par défaut. Latent (aucune réservation hors BLMF).
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** LEFT JOIN avec les délais par défaut, ou création des lignes de politique manquantes (et d'une ligne à chaque bibliothèque admise) ; suite SQL qui emprunte l'expiration dans une bibliothèque sans ligne.
+
+**Pourquoi ça compte.** La première bibliothèque qui ouvre les réservations sans passer par ses réglages aura des réservations éternelles.
+
+**Ce qui compte comme fini.**
+
+- Une réservation expire et une non-venue est détectée dans une bibliothèque sans ligne de politique (suite SQL).
+
+**Dépendances.** Aucune.
+
+*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F21 — Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, langue maternelle
+
+**État.** Relevé par la carte F1 (30/09). Sans `footer_local` (aucune des trois bibliothèques n'en a), le contexte de repli pose un pied de page et une signature en portugais que `tMail` ne traduit plus : tout courriel de bibliothèque se termine en pt-BR, quelle que soit la langue. Et la ligne « Status » des courriels de réservation vient d'une table codée en dur en pt-BR (`WF_LABELS`, `shared/events.ts`).
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** `footer_local` et `signature_short` à null dans `fallbackLibraryNotificationContext` pour laisser `tMail` localiser ; une clé par stage à la place de `WF_LABELS`, dans les dix langues ; un test de source qui rend un courriel en fr et y refuse le portugais.
+
+**Pourquoi ça compte.** Une lectrice francophone reçoit un courriel qui finit en portugais : l'app a l'air de ne pas savoir à qui elle parle.
+
+**Ce qui compte comme fini.**
+
+- Un courriel rendu en fr, nl ou el ne contient plus de portugais (test de source sur le rendu).
+
+**Dépendances.** Aucune.
+
+*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
 
 ---
 
@@ -2218,4 +2345,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

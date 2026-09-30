@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-30",
+    "maj": "2026-09-29",
     "releve": {
       "date": "2026-09-29",
       "commit": "75ccb035"
@@ -3721,7 +3721,7 @@
       "id": "F1",
       "d": "F",
       "p": "P1",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "deno",
@@ -3764,8 +3764,8 @@
         "AUDITORIA_NOTIFY_FUNCTIONS_2026-05-06"
       ],
       "verif": {
-        "fr": "31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit.",
-        "pt": "31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria."
+        "fr": "31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit. **30/09** — **la carte est écrite** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`) : cinq lectures parallèles mesurées en production en lecture seule (files par statut, définitions réelles, crons, journaux des fonctions Edge), puis une contre-vérification qui a tenté de réfuter chaque branche morte, cassée ou jamais empruntée. Environ 96 chaînes : 41 vivantes, 31 jamais empruntées (renvoi à G1), 12 mortes, 7 dormantes voulues, 4 cassées. *Critère 1* tenu. *Critère 2* tenu — les quatre courriels ont leur verdict : `retirada_efetivada` PART, sous le nom `res.converted` / `reserva_convertida_em_emprestimo` (le 01/08 et le 04/08, journaux à l'appui) — un envoi sous le nom `retirada_efetivada` est ignoré sans bruit, source probable du signalement ; `retirada_no_show` PART (reçu le 24/06 ; 3 non-venues, aucune depuis), mais sa ligne « Status » reste en pt-BR dans toutes les langues ; `retirada_reagendada` NE PEUT PAS partir — fossile de la v2, son stage est interdit par `fn_check_workflow_transition` ; `liberada_para_circulacao` ne part pas PAR RÉGLAGE (drapeau `false` par défaut, jamais exposé à l'écran, et le courriel lectrice coupé quand la remise a une cause). *Critère 3* ouvert : les branches mortes sont listées et documentées dans la carte, reste à les SUPPRIMER (lot suivant). Défauts trouvés en route, ouverts à part : F16 (invitation à une tâche jamais fonctionnelle), F17 (rappels d'un emprunt prorogé à l'ancienne date), F18 (courriels vers `fede@`, boîte inexistante), F19 (adresses en clair dans les journaux), F20 (crons de réservation muets sans ligne de politique), F21 (pied de page et « Status » en pt-BR dans toutes les langues). Restent dans la carte : `team.inactive_auto` routé sous un autre nom (latent), la plupart des chaînes directes sans trace durable ni rejeu (F12 ne couvre que cinq files) — matière de F3.",
+        "pt": "31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria. **30/09** — **o mapa está escrito** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`), medido em produção: ~96 cadeias (41 vivas, 31 nunca usadas, 12 mortas, 7 dormentes, 4 quebradas). Critérios 1 e 2 cumpridos: `retirada_efetivada` e `retirada_no_show` partem; `retirada_reagendada` é um fóssil; `liberada_para_circulacao` está desligado por configuração. Critério 3: ramos mortos documentados, falta APAGÁ-LOS. Defeitos abertos à parte: F16 a F21."
       }
     },
     {
@@ -4928,6 +4928,258 @@
         "fr": "24/09/2026 — courriel reçu à 21 h 46 lu (PDF) ; `sendToAdmins` lu dans `notify-library-request/index.ts` ; un admin actif compté en base (`network_administrators` × `profiles`) ; `supabase secrets list` : `HEALTH_ALERT_CC` posée, `NETWORK_ADMIN_CC` absente. **Livré le 24/09 au soir** : module + six conversions + modèles d'environnement + garde et bancs (rendu réel de `notify-library-request`, `notify-cross-library-digest`, `membership-restriction`, `notify-network-weekly-report`). Reste le premier critère : un courriel réel lu dans la boîte, à la main de Xavier.",
         "pt": "24/09/2026 — e-mail recebido às 21h46 lido; `sendToAdmins` lido; uma admin ativa contada na base; `HEALTH_ALERT_CC` presente nos segredos, `NETWORK_ADMIN_CC` ausente. **Entregue em 24/09 à noite**: módulo + seis conversões + modelos de ambiente + guarda e bancadas. Falta o primeiro critério: um e-mail real lido na caixa, por Xavier."
       }
+    },
+    {
+      "id": "F16",
+      "d": "F",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql",
+        "front"
+      ],
+      "t": {
+        "fr": "L'invitation à une tâche n'a jamais créé d'invitation",
+        "pt": "O convite para uma tarefa nunca criou convite"
+      },
+      "v": {
+        "fr": "Relevé par la carte F1 (30/09). `fn_task_invite` ajoute l'adresse BRUTE aux marqueurs de la tâche, alors que `task_invite_emails_from_tags` ne retient que les marqueurs `convite:…` : aucune invitation n'a jamais été créée (`painel_internal_task_invites` : 0 ligne ; file d'invitation : 0 insertion). L'écran annonce pourtant « invitation envoyée », et l'adresse invitée finit dans les « Marqueurs » des avis de tâche.",
+        "pt": "Achado pelo mapa F1 (30/09). `fn_task_invite` põe o endereço CRU nas marcas da tarefa, e `task_invite_emails_from_tags` só aceita `convite:…`: nenhum convite jamais foi criado. A tela anuncia « convite enviado », e o endereço acaba nas « Marcas » dos avisos."
+      },
+      "w": {
+        "fr": "Migration depuis la définition réelle : `fn_task_invite` pose `convite:` || adresse (ou `task_invite_emails_from_tags` accepte les deux formes) ; `taskTagsLabel` n'affiche plus les marqueurs `convite:` ; suite SQL : un appel crée une invitation et une ligne de file.",
+        "pt": "Migração a partir da definição real: `fn_task_invite` grava `convite:` || endereço; `taskTagsLabel` esconde as marcas `convite:`; suíte SQL: uma chamada cria um convite e uma linha na fila."
+      },
+      "y": {
+        "fr": "Une fonction qui dit « envoyé » sans rien envoyer : la personne invitée attend un courriel qui ne vient jamais, et son adresse se retrouve affichée dans les avis.",
+        "pt": "Uma função que diz « enviado » sem enviar: a pessoa convidada espera um e-mail que nunca chega, e seu endereço aparece nos avisos."
+      },
+      "f": {
+        "fr": [
+          "Inviter une personne à une tâche crée une invitation et un courriel (suite SQL qui emprunte le chemin).",
+          "Aucune adresse n'apparaît dans les marqueurs affichés."
+        ],
+        "pt": [
+          "Convidar uma pessoa cria um convite e um e-mail (suíte SQL).",
+          "Nenhum endereço aparece nas marcas exibidas."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. Sort de F1.",
+        "pt": "Nenhuma. Sai de F1."
+      },
+      "r": [
+        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
+      ]
+    },
+    {
+      "id": "F17",
+      "d": "F",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno",
+        "sql"
+      ],
+      "t": {
+        "fr": "Les rappels d'échéance ignorent la prorogation",
+        "pt": "Os lembretes de vencimento ignoram a prorrogação"
+      },
+      "v": {
+        "fr": "Relevé par la carte F1 (30/09). `fn_v2_extend_core` écrit `extended_until` et laisse `due_at` ; `notify-loan-cycle` (F4) ne lit que `due_at`. Pour un exemplaire prorogé : « c'est aujourd'hui » à l'ancienne date, « 7 jours de retard » alors qu'il n'est pas en retard, rien avant la vraie échéance ; et l'unicité (exemplaire, moment) bloquerait ensuite le bon rappel. Latent : les deux prorogations connues (24/06) sont antérieures à F4.",
+        "pt": "Achado pelo mapa F1 (30/09). A prorrogação grava `extended_until`; `notify-loan-cycle` só lê `due_at`: lembrete na data antiga, « 7 dias de atraso » indevido, nada antes do vencimento real. Latente."
+      },
+      "w": {
+        "fr": "Utiliser `coalesce(extended_until, due_at)` pour les fenêtres, le mi-parcours et l'affichage ; ajouter le cas « exemplaire prorogé » au banc `notify-loan-cycle-banc` et à `rappels_echeance_tests`.",
+        "pt": "Usar `coalesce(extended_until, due_at)` nas janelas, no meio do empréstimo e na exibição; acrescentar o caso « exemplar prorrogado » às bancadas."
+      },
+      "y": {
+        "fr": "À la première prorogation, une lectrice reçoit un rappel de retard injuste et aucun rappel utile.",
+        "pt": "Na primeira prorrogação, a leitora recebe um aviso de atraso injusto e nenhum lembrete útil."
+      },
+      "f": {
+        "fr": [
+          "Un exemplaire prorogé reçoit ses rappels à la nouvelle échéance, et pas à l'ancienne (banc)."
+        ],
+        "pt": [
+          "Um exemplar prorrogado recebe os lembretes no novo vencimento (bancada)."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. Sort de F1 ; touche F4 (clos).",
+        "pt": "Nenhuma. Sai de F1; toca F4 (encerrado)."
+      },
+      "r": [
+        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
+      ]
+    },
+    {
+      "id": "F18",
+      "d": "F",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "collectif",
+        "deno"
+      ],
+      "t": {
+        "fr": "Des courriels partent vers `fede@anarbib.org`, une adresse sans boîte",
+        "pt": "E-mails vão para `fede@anarbib.org`, endereço sem caixa"
+      },
+      "v": {
+        "fr": "Relevé par la carte F1 (30/09). Les contributions à la Gazette (4 envois « sent », 27/08-15/09), la copie fédérale des ouvertures OAI (3 envois sur 7 le 02/09, `OAI_ADMIN_EMAIL` non posé) et la future auto-déclaration de la carte vont à `fede@anarbib.org` — écrit en dur ou en repli —, alors que le constat OVH du 28/08 ne connaît de boîte qu'à `admins@` et `anarbib@`. « sent » veut seulement dire « accepté par Resend » : aucun rebond n'est suivi.",
+        "pt": "Achado pelo mapa F1. Contribuições à Gazeta, cópia federal da abertura OAI e a futura autodeclaração do mapa vão para `fede@anarbib.org`, que não tem caixa. « sent » só quer dizer « aceito pelo Resend »."
+      },
+      "w": {
+        "fr": "Décider l'adresse (Xavier) : une vraie boîte, un alias vers `admins@`, ou les destinataires admins réseau (`destinatairesAdminsReseau`) ; retirer `fede@` du code et des replis ; poser `OAI_ADMIN_EMAIL` ou supprimer ce repli.",
+        "pt": "Decidir o endereço (Xavier); tirar `fede@` do código e dos fallbacks."
+      },
+      "y": {
+        "fr": "Des messages de fond — une contribution, une demande d'ouverture — n'arrivent chez personne, et rien ne le dit.",
+        "pt": "Mensagens importantes não chegam a ninguém, e nada avisa."
+      },
+      "f": {
+        "fr": [
+          "Aucun envoi ne vise une adresse sans boîte ; la liste des adresses de rôle du code est relue contre les boîtes existantes."
+        ],
+        "pt": [
+          "Nenhum envio mira um endereço sem caixa."
+        ]
+      },
+      "dep": {
+        "fr": "Décision de Xavier (l'adresse). Lié à la décision du 16/09 contre les adresses en `.org`.",
+        "pt": "Decisão de Xavier (o endereço)."
+      },
+      "r": [
+        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
+      ]
+    },
+    {
+      "id": "F19",
+      "d": "F",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Les journaux des fonctions contiennent les adresses des destinataires en clair",
+        "pt": "Os registros das funções contêm os endereços em claro"
+      },
+      "v": {
+        "fr": "Relevé par la carte F1 (30/09). Les journaux des fonctions Edge portent des lignes « [user_mail] sent to <adresse> » et « [admin_copy] sent to <adresse> » depuis au moins le 04/08 : toute personne qui consulte les journaux lit les adresses des lectrices et du staff.",
+        "pt": "Achado pelo mapa F1. Os registros das Edge Functions trazem « sent to <endereço> » desde pelo menos 04/08."
+      },
+      "w": {
+        "fr": "Masquer l'adresse dans tous les journaux d'envoi (domaine seul, ou empreinte courte), à la source commune (`_shared/transport/email.ts` et les gestionnaires qui journalisent eux-mêmes) ; un test de source refuse un `console.log` qui imprime une adresse.",
+        "pt": "Mascarar o endereço em todos os registros de envio, na fonte comum; teste de fonte."
+      },
+      "y": {
+        "fr": "Une fuite de données personnelles continue, dans un outil que plusieurs personnes peuvent lire.",
+        "pt": "Vazamento contínuo de dados pessoais."
+      },
+      "f": {
+        "fr": [
+          "Plus aucune adresse complète dans les journaux d'envoi (relevé sur une semaine de journaux après le correctif)."
+        ],
+        "pt": [
+          "Nenhum endereço completo nos registros após a correção."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
+      ]
+    },
+    {
+      "id": "F20",
+      "d": "F",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Sans ligne de politique, une bibliothèque ne voit jamais une réservation expirer ni une non-venue détectée",
+        "pt": "Sem linha de política, a biblioteca nunca vê reserva expirar nem ausência detectada"
+      },
+      "v": {
+        "fr": "Relevé par la contre-vérification de la carte F1 (30/09). `fn_expire_solicitada_reservations`, `fn_expire_negotiation_timeout` et `fn_detect_no_show_reservations` font un INNER JOIN sur `library_notification_policies` : dans les deux bibliothèques actives sans ligne de politique, rien n'expire et aucune non-venue n'est détectée, alors que les déclencheurs de notification y sont ouverts par défaut. Latent (aucune réservation hors BLMF).",
+        "pt": "Achado pela contraverificação do mapa F1. Os três crons de reserva fazem INNER JOIN nas políticas: sem linha, nada expira. Latente."
+      },
+      "w": {
+        "fr": "LEFT JOIN avec les délais par défaut, ou création des lignes de politique manquantes (et d'une ligne à chaque bibliothèque admise) ; suite SQL qui emprunte l'expiration dans une bibliothèque sans ligne.",
+        "pt": "LEFT JOIN com prazos padrão, ou criar as linhas que faltam; suíte SQL."
+      },
+      "y": {
+        "fr": "La première bibliothèque qui ouvre les réservations sans passer par ses réglages aura des réservations éternelles.",
+        "pt": "Reservas eternas na primeira biblioteca sem configuração."
+      },
+      "f": {
+        "fr": [
+          "Une réservation expire et une non-venue est détectée dans une bibliothèque sans ligne de politique (suite SQL)."
+        ],
+        "pt": [
+          "Expiração e ausência funcionam sem linha de política (suíte SQL)."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
+      ]
+    },
+    {
+      "id": "F21",
+      "d": "F",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno",
+        "langue"
+      ],
+      "t": {
+        "fr": "Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues",
+        "pt": "Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas"
+      },
+      "v": {
+        "fr": "Relevé par la carte F1 (30/09). Sans `footer_local` (aucune des trois bibliothèques n'en a), le contexte de repli pose un pied de page et une signature en portugais que `tMail` ne traduit plus : tout courriel de bibliothèque se termine en pt-BR, quelle que soit la langue. Et la ligne « Status » des courriels de réservation vient d'une table codée en dur en pt-BR (`WF_LABELS`, `shared/events.ts`).",
+        "pt": "Achado pelo mapa F1. O rodapé de reserva e a linha « Status » ficam em pt-BR em todas as línguas."
+      },
+      "w": {
+        "fr": "`footer_local` et `signature_short` à null dans `fallbackLibraryNotificationContext` pour laisser `tMail` localiser ; une clé par stage à la place de `WF_LABELS`, dans les dix langues ; un test de source qui rend un courriel en fr et y refuse le portugais.",
+        "pt": "Deixar `tMail` localizar o rodapé; uma chave por etapa em vez de `WF_LABELS`, nas dez línguas; teste de fonte."
+      },
+      "y": {
+        "fr": "Une lectrice francophone reçoit un courriel qui finit en portugais : l'app a l'air de ne pas savoir à qui elle parle.",
+        "pt": "Um e-mail em francês que termina em português."
+      },
+      "f": {
+        "fr": [
+          "Un courriel rendu en fr, nl ou el ne contient plus de portugais (test de source sur le rendu)."
+        ],
+        "pt": [
+          "Um e-mail em fr, nl ou el não contém mais português (teste)."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
+      ]
     },
     {
       "id": "J9",
