@@ -382,7 +382,9 @@ const VOUVOIEMENT_DE = new RegExp(
 // confidentialité entière y était — 40 valeurs — et c'est le test croisé
 // plus bas (possessifs fr ↔ it) qui les voit : 62/65 à eux deux.
 const IMPERATIVI_LEI = ['Verifichi', 'Inserisca', 'Selezioni', 'Clicchi', 'Scelga', 'Compili', 'Indichi', 'Scriva', 'Legga',
-  'Apra', 'Prema', 'Utilizzi', 'Aggiunga', 'Carichi', 'Confermi', 'Chieda', 'Attenda', 'Riprovi', 'Vada', 'Esporti'];
+  'Apra', 'Prema', 'Utilizzi', 'Aggiunga', 'Carichi', 'Confermi', 'Chieda', 'Attenda', 'Riprovi', 'Vada', 'Esporti',
+  // 30/09 (E3) : deux formes qui avaient échappé à la liste — quatre valeurs y étaient restées.
+  'Faccia', 'Ricarichi'];
 const IMPERATIVI_VOI_ATE_ITE = ['Verificate', 'Spiegate', 'Controllate', 'Riesportate', 'Selezionate', 'Rifate', 'Importate',
   'Cliccate', 'Inserite', 'Contattate', 'Salvate', 'Compilate', 'Indicate', 'Usate', 'Utilizzate', 'Provate', 'Riprovate',
   'Caricate', 'Aprite', 'Seguite', 'Riempite', 'Definite'];
