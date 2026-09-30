@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-29",
+    "maj": "2026-09-30",
     "releve": {
       "date": "2026-09-29",
       "commit": "75ccb035"
@@ -2602,6 +2602,14 @@
           "fr": "**Clos le 30/09 au soir, sur l'essai de Xavier** (« on pourra clore I24 si les résultats confortent l'essai »). Livré par `233bb735`, déployé le jour même sur le poste. *Critère 1, réécrit* — tel qu'écrit (« le service survit à la fermeture du terminal ») il était inatteignable : c'est le gestionnaire systemd lui-même qui sort (constat du 20/09). Ce qui le remplace, et qui a été éprouvé : **un tir tué repart seul**. Xavier a lancé un tir `storage` à 20 h 15, coupé WSL (`wsl --terminate`) à 20 h 16 — le journal redit « Failed to enqueue OnFailure », comme le 15/09 —, rallumé : le contrôle de fraîcheur a vu le tir interrompu et l'a relancé à 20 h 21, sous le nouveau script (verrou `.bg2.lock` né à cette minute) ; instantané `f420f896` à 20 h 39, témoin de vie envoyé, marqueur retiré (18 min 44 s) ; en base, `storage` ni interrompu ni muet, **aucun incident** ouvert par la sonde. *Critère 2* — tenu depuis le 20/09 par `health-probe` (deux alertes reçues par Xavier). *Critère 3* — un dimanche poste éteint : le rattrapage `Persistent=` rejoue les tirs manqués, la relance rejoue un tir tué, le verrou empêche les rattrapages simultanés de se détruire leurs dumps (défaut antérieur trouvé par la relecture), et la sonde écrit sinon dans l'heure. Chemin de la preuve : deux bancs (`fraicheur-relance`, `bg2-un-tir-a-la-fois`), un essai réel. Découvert en route et réparé : `~/anarbib-ops/anarbib-bg2.sh` était une copie depuis le 07/09, pas un lien.",
           "pt": "**Encerrado em 30/09 à noite, pelo ensaio de Xavier.** Um disparo `storage` foi morto (`wsl --terminate`) e relançado sozinho pelo controle de frescor 5 min depois; instantâneo `f420f896`, testemunho enviado, nenhum incidente. Critério 1 reescrito em torno desse ensaio (o texto original era inatingível); critério 2 cumprido desde 20/09 (sonda do servidor); critério 3 coberto pelo rattrapage, pela relança, pela trava entre disparos e pela sonda."
         }
+      ],
+      [
+        "F18",
+        "2026-09-30",
+        {
+          "fr": "**Clos le 30/09 le soir même de son ouverture : le constat était faux.** La carte F1 tenait `fede@anarbib.org` pour une adresse sans boîte, sur la foi d'une note OVH du 28/08. Xavier a montré la boîte, configurée dans son client de courrier : les contributions à la Gazette (4 envois, 27/08-15/09) et la copie fédérale des ouvertures OAI (3 envois le 02/09) y arrivent. Rien à corriger ; la carte porte un correctif en tête.",
+          "pt": "**Encerrado em 30/09, na mesma noite: a constatação era falsa.** `fede@anarbib.org` tem caixa (Xavier a mostrou no seu cliente de e-mail). Nada a corrigir."
+        }
       ]
     ]
   },
@@ -3764,8 +3772,8 @@
         "AUDITORIA_NOTIFY_FUNCTIONS_2026-05-06"
       ],
       "verif": {
-        "fr": "31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit. **30/09** — **la carte est écrite** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`) : cinq lectures parallèles mesurées en production en lecture seule (files par statut, définitions réelles, crons, journaux des fonctions Edge), puis une contre-vérification qui a tenté de réfuter chaque branche morte, cassée ou jamais empruntée. Environ 96 chaînes : 41 vivantes, 31 jamais empruntées (renvoi à G1), 12 mortes, 7 dormantes voulues, 4 cassées. *Critère 1* tenu. *Critère 2* tenu — les quatre courriels ont leur verdict : `retirada_efetivada` PART, sous le nom `res.converted` / `reserva_convertida_em_emprestimo` (le 01/08 et le 04/08, journaux à l'appui) — un envoi sous le nom `retirada_efetivada` est ignoré sans bruit, source probable du signalement ; `retirada_no_show` PART (reçu le 24/06 ; 3 non-venues, aucune depuis), mais sa ligne « Status » reste en pt-BR dans toutes les langues ; `retirada_reagendada` NE PEUT PAS partir — fossile de la v2, son stage est interdit par `fn_check_workflow_transition` ; `liberada_para_circulacao` ne part pas PAR RÉGLAGE (drapeau `false` par défaut, jamais exposé à l'écran, et le courriel lectrice coupé quand la remise a une cause). *Critère 3* ouvert : les branches mortes sont listées et documentées dans la carte, reste à les SUPPRIMER (lot suivant). Défauts trouvés en route, ouverts à part : F16 (invitation à une tâche jamais fonctionnelle), F17 (rappels d'un emprunt prorogé à l'ancienne date), F18 (courriels vers `fede@`, boîte inexistante), F19 (adresses en clair dans les journaux), F20 (crons de réservation muets sans ligne de politique), F21 (pied de page et « Status » en pt-BR dans toutes les langues). Restent dans la carte : `team.inactive_auto` routé sous un autre nom (latent), la plupart des chaînes directes sans trace durable ni rejeu (F12 ne couvre que cinq files) — matière de F3.",
-        "pt": "31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria. **30/09** — **o mapa está escrito** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`), medido em produção: ~96 cadeias (41 vivas, 31 nunca usadas, 12 mortas, 7 dormentes, 4 quebradas). Critérios 1 e 2 cumpridos: `retirada_efetivada` e `retirada_no_show` partem; `retirada_reagendada` é um fóssil; `liberada_para_circulacao` está desligado por configuração. Critério 3: ramos mortos documentados, falta APAGÁ-LOS. Defeitos abertos à parte: F16 a F21."
+        "fr": "31/08 — **15** fonctions `notify-*` déployées désormais, la quinzième (`notify-loan-cycle`) née le matin même avec F4. Les trois files jamais servies sont toujours à zéro insertion, et `painel_internal_task_notification_outbox` toujours vide après 34. Le périmètre grossit plus vite que l'audit. **30/09** — **la carte est écrite** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`) : cinq lectures parallèles mesurées en production en lecture seule (files par statut, définitions réelles, crons, journaux des fonctions Edge), puis une contre-vérification qui a tenté de réfuter chaque branche morte, cassée ou jamais empruntée. Environ 96 chaînes : 41 vivantes, 31 jamais empruntées (renvoi à G1), 12 mortes, 7 dormantes voulues, 4 cassées. *Critère 1* tenu. *Critère 2* tenu — les quatre courriels ont leur verdict : `retirada_efetivada` PART, sous le nom `res.converted` / `reserva_convertida_em_emprestimo` (le 01/08 et le 04/08, journaux à l'appui) — un envoi sous le nom `retirada_efetivada` est ignoré sans bruit, source probable du signalement ; `retirada_no_show` PART (reçu le 24/06 ; 3 non-venues, aucune depuis), mais sa ligne « Status » reste en pt-BR dans toutes les langues ; `retirada_reagendada` NE PEUT PAS partir — fossile de la v2, son stage est interdit par `fn_check_workflow_transition` ; `liberada_para_circulacao` ne part pas PAR RÉGLAGE (drapeau `false` par défaut, jamais exposé à l'écran, et le courriel lectrice coupé quand la remise a une cause). *Critère 3* ouvert : les branches mortes sont listées et documentées dans la carte, reste à les SUPPRIMER (lot suivant). Défauts trouvés en route, ouverts à part : F16 (invitation à une tâche jamais fonctionnelle), F17 (rappels d'un emprunt prorogé à l'ancienne date), F18 (courriels vers `fede@`, boîte inexistante), F19 (adresses en clair dans les journaux), F20 (crons de réservation muets sans ligne de politique), F21 (pied de page et « Status » en pt-BR dans toutes les langues). Restent dans la carte : `team.inactive_auto` routé sous un autre nom (latent), la plupart des chaînes directes sans trace durable ni rejeu (F12 ne couvre que cinq files) — matière de F3. **30/09, le soir** — correction : `fede@anarbib.org` a une boîte (Xavier) ; F18 clos pour constat faux, la carte porte un correctif en tête. Décisions de Xavier : `team.promoted_to_librarian` sera ÉMIS (il n'est plus une branche morte à supprimer) ; la consultation expirée recevra le cron d'expiration prévu par la spec ; pour les courriels « retirada », « fais au mieux ». Ordre fixé : F19, F16, F17, suppression des branches mortes, F20, F21.",
+        "pt": "31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria. **30/09** — **o mapa está escrito** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`), medido em produção: ~96 cadeias (41 vivas, 31 nunca usadas, 12 mortas, 7 dormentes, 4 quebradas). Critérios 1 e 2 cumpridos: `retirada_efetivada` e `retirada_no_show` partem; `retirada_reagendada` é um fóssil; `liberada_para_circulacao` está desligado por configuração. Critério 3: ramos mortos documentados, falta APAGÁ-LOS. Defeitos abertos à parte: F16 a F21. **30/09 à noite** — correção: `fede@` tem caixa; F18 encerrado. Decisões de Xavier: emitir `team.promoted_to_librarian`; criar o cron de expiração da consulta. Ordem: F19, F16, F17, ramos mortos, F20, F21."
       }
     },
     {
@@ -5010,48 +5018,6 @@
       "dep": {
         "fr": "Aucune. Sort de F1 ; touche F4 (clos).",
         "pt": "Nenhuma. Sai de F1; toca F4 (encerrado)."
-      },
-      "r": [
-        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ]
-    },
-    {
-      "id": "F18",
-      "d": "F",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "collectif",
-        "deno"
-      ],
-      "t": {
-        "fr": "Des courriels partent vers `fede@anarbib.org`, une adresse sans boîte",
-        "pt": "E-mails vão para `fede@anarbib.org`, endereço sem caixa"
-      },
-      "v": {
-        "fr": "Relevé par la carte F1 (30/09). Les contributions à la Gazette (4 envois « sent », 27/08-15/09), la copie fédérale des ouvertures OAI (3 envois sur 7 le 02/09, `OAI_ADMIN_EMAIL` non posé) et la future auto-déclaration de la carte vont à `fede@anarbib.org` — écrit en dur ou en repli —, alors que le constat OVH du 28/08 ne connaît de boîte qu'à `admins@` et `anarbib@`. « sent » veut seulement dire « accepté par Resend » : aucun rebond n'est suivi.",
-        "pt": "Achado pelo mapa F1. Contribuições à Gazeta, cópia federal da abertura OAI e a futura autodeclaração do mapa vão para `fede@anarbib.org`, que não tem caixa. « sent » só quer dizer « aceito pelo Resend »."
-      },
-      "w": {
-        "fr": "Décider l'adresse (Xavier) : une vraie boîte, un alias vers `admins@`, ou les destinataires admins réseau (`destinatairesAdminsReseau`) ; retirer `fede@` du code et des replis ; poser `OAI_ADMIN_EMAIL` ou supprimer ce repli.",
-        "pt": "Decidir o endereço (Xavier); tirar `fede@` do código e dos fallbacks."
-      },
-      "y": {
-        "fr": "Des messages de fond — une contribution, une demande d'ouverture — n'arrivent chez personne, et rien ne le dit.",
-        "pt": "Mensagens importantes não chegam a ninguém, e nada avisa."
-      },
-      "f": {
-        "fr": [
-          "Aucun envoi ne vise une adresse sans boîte ; la liste des adresses de rôle du code est relue contre les boîtes existantes."
-        ],
-        "pt": [
-          "Nenhum envio mira um endereço sem caixa."
-        ]
-      },
-      "dep": {
-        "fr": "Décision de Xavier (l'adresse). Lié à la décision du 16/09 contre les adresses en `.org`.",
-        "pt": "Decisão de Xavier (o endereço)."
       },
       "r": [
         "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"

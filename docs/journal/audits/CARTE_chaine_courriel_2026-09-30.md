@@ -2,6 +2,8 @@
 
 > **Ce document répond au premier critère de F1** : une carte écrite, événement par événement. Elle a été dressée le 30/09/2026 par cinq lectures parallèles (circulation ; réservations, consultations et PEB ; comptes et adhésion ; équipe, tâches et exploitation ; couche commune), chacune **mesurée en production en lecture seule** (comptes des files par statut, dates, définitions réelles des fonctions et des déclencheurs, crons, journaux des fonctions Edge), puis par une contre-vérification qui a tenté de réfuter chaque branche déclarée morte, cassée ou jamais empruntée, et cherché ce que les cartes avaient oublié. Aucune donnée personnelle n'y figure : des comptes, des dates, des statuts, des adresses de rôle.
 
+> ⚠️ **Correctif du 30/09 au soir — `fede@anarbib.org` a bien une boîte.** Xavier l'a montrée, configurée dans son client de courrier. La carte l'a crue inexistante sur la foi d'une note OVH du 28/08, sans le vérifier. Tout ce qu'elle dit plus bas d'une « adresse de rôle sans boîte » est donc faux : `gazette.contribution.received` est **vivant** (4 envois, 27/08-15/09), la copie fédérale des ouvertures OAI aussi (3 envois le 02/09), et F18, ouvert sur ce constat, est clos. La leçon reste : « sent » ne veut dire qu'« accepté par Resend » ; seule la boîte d'arrivée fait preuve.
+
 **Comment lire un statut.** *vivant* : branché, emprunté, abouti. *jamais emprunté* : branché mais jamais servi en production — un chemin jamais exécuté n'est pas un chemin qui marche (renvoi à G1). *cassé* : tente et échoue, ou ne peut pas aboutir. *mort* : code sans appelant, ou déclencheur qui ne peut plus se produire. *dormant voulu* : attend un usage documenté (réglage éteint, fonction d'exception).
 
 ## Synthèse
