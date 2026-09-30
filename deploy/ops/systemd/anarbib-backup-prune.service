@@ -10,7 +10,9 @@ Environment=HOME=%h
 # 90 min. Genereux DELIBEREMENT : c'est ici que le temps long a sa place,
 # et ce timeout n'est couple a AUCUN seuil d'alarme — le prune n'ecrit pas de
 # temoin de vie. C'est tout l'interet d'avoir sorti le prune du tir : la borne
-# de 30 min des sauvegardes et le seuil d'une heure de l'alarme restent intacts.
+# des sauvegardes (1 h depuis le 30/09 : un tir peut attendre son tour derriere
+# le verrou d'anarbib-bg2.sh) et le seuil d'une heure de l'alarme restent
+# intacts — le temoin de depart ne part qu'une fois le verrou tenu.
 TimeoutStartSec=5400
 ExecStartPre=-/bin/rm -f %h/anarbib-ops/.last-failure
 ExecStart=%h/anarbib-ops/anarbib-bg2.sh prune

@@ -28,7 +28,7 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 |---|---|
 | `anarbib-bg2.sh` | Les trois flux restic (`court`, `long`, `storage`), le filet de classement des tables, le dump du Vault, l'auto-réparation des verrous |
 | `anarbib-notify-failure.sh` | Appelé par `OnFailure=` quand un flux échoue |
-| `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les dépôts restic et les marqueurs de tir, pose `.fraicheur-alerte` |
+| `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les dépôts restic et les marqueurs de tir, pose `.fraicheur-alerte`, **relance** un tir tué ou un flux en retard (depuis le 30/09) |
 | `RUNNER.md` | **Le runner d'intégration continue** : savoir s'il tourne, le remettre en route, l'installer sur une autre machine (A3) |
 | `forgejo-runner-notify-failure.sh` | Le message d'échec du runner Forgejo (hors chaîne de sauvegarde, même doctrine) |
 | `wait-for-docker.sh` | Attend le socket Docker (pont Docker Desktop ↔ WSL), appelé en `ExecStartPre` du runner |
@@ -124,6 +124,29 @@ Trois issues, et les confondre serait refaire le bug :
 - **aveuglement prolongé** → au-delà de 72 h sans avoir pu lire un dépôt,
   l'impossibilité de vérifier devient elle-même l'alerte, sortie `3`.
 
+**Et il relance (30/09/2026, backlog I24).** Constater ne suffisait pas : le
+15/09, le tir `storage` rattrapé au démarrage a été tué par l'arrêt de la
+session, le drapeau nommait la commande de relance, et personne ne l'a lue —
+neuf jours de trou. Le contrôle, qui passe trois minutes après chaque démarrage
+de la session et chaque midi, relance donc lui-même (`systemctl --user start
+--no-block`) le service d'un flux **interrompu** (marqueur resté, processus
+mort) ou **en retard**, une fois par passage. Jamais :
+
+- par-dessus un tir vivant de ce flux (service `activating`, ou processus du
+  marqueur encore un `anarbib-bg2.sh` de ce flux) ;
+- sur un dépôt illisible — relancer ne réparerait ni l'hôte ni la clé ;
+- quand le minuteur du flux est **arrêté** : c'est la façon de **geler** un flux
+  (`systemctl --user stop anarbib-backup-<flux>.timer`), elle le reste ;
+- quand `RELANCE=0` (constater sans relancer : `Environment=RELANCE=0` dans un
+  drop-in de `anarbib-fraicheur.service`).
+
+Chaque relance, et chaque relance **non** faite avec sa raison, est écrite au
+drapeau. Les tirs, eux, passent **l'un après l'autre** : `anarbib-bg2.sh` prend un
+verrou (`~/anarbib-ops/.bg2.lock`, 45 min d'attente au plus, services bornés à
+1 h). Avant ce verrou, deux tirs simultanés — les rattrapages du démarrage — se
+détruisaient leurs dumps : le filet RGPD de chacun passe au shred **tous** les
+`*.sql` du dossier de travail commun.
+
 Les seuils (36 h · 9 j · 9 j) sont **alignés sur `fn_backup_heartbeat_status()`**.
 Si tu changes ici, change là-bas : deux gardes qui jugeraient différemment
 feraient perdre du temps à se demander laquelle a raison.
@@ -179,8 +202,9 @@ contrôle de fraîcheur les relit et traite le tir interrompu comme une panne
 **distincte du retard**, parce qu'elle frappe des flux frais.
 
 > ⚠️ **Un rattrapage `Persistent=true` tué ne se rejoue pas.** Son jeton est
-> consommé : le flux attend sa prochaine échéance normale. C'est pourquoi le
-> drapeau nomme la commande de relance au lieu de compter sur le minuteur.
+> consommé : le flux attendrait sa prochaine échéance normale. C'est pourquoi le
+> contrôle de fraîcheur le relance lui-même depuis le 30/09 (voir plus haut), et
+> le drapeau garde la commande à la main pour le cas où il ne le peut pas.
 
 ### Poser l'alerte du runner Forgejo (sudo, une fois par machine)
 

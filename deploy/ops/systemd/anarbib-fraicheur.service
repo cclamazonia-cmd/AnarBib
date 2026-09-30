@@ -1,5 +1,5 @@
 [Unit]
-Description=AnarBib #BG2 — controle de fraicheur des trois flux (lecture seule)
+Description=AnarBib #BG2 — controle de fraicheur des trois flux (relance un tir tue ou en retard)
 Documentation=file:%h/anarbib/deploy/ops/README.md
 # PAS de OnFailure= ici, volontairement.
 #

@@ -10,8 +10,9 @@
 #   Ouvre les trois depots restic, lit la date du DERNIER SNAPSHOT de chaque
 #   flux, la compare a l'intervalle attendu, et pose un drapeau lisible a
 #   l'ouverture du terminal si un flux a pris du retard.
-#   Aucune ecriture ailleurs : il ne sauvegarde rien, ne supprime rien, ne
-#   touche ni a la base ni aux depots. Lecture seule.
+#   Il ne sauvegarde rien lui-meme, ne supprime rien, ne touche ni a la base
+#   ni aux depots. Un seul geste depuis le 30/09/2026 (I24) : il RELANCE le
+#   service d'un flux interrompu ou en retard (voir « RELANCE » plus bas).
 #
 # POURQUOI IL EXISTE (21/08/2026)
 #   Le flux storage est reste ONZE JOURS sans sauvegarder — du 09/08 au 20/08 —
@@ -112,7 +113,7 @@ date_dernier_snapshot() {
   local flux="$1" json="" iso="" ts="" best=0 best_iso=""
 
   json="$(RESTIC_REPOSITORY="$RESTIC_BASE/anarbib-$flux" \
-            timeout 120 restic snapshots --tag "flux-$flux" --json 2>/dev/null)" || return 1
+            timeout 120 restic snapshots --no-lock --tag "flux-$flux" --json 2>/dev/null)" || return 1
 
   while IFS= read -r iso; do
     [ -n "$iso" ] || continue
@@ -181,22 +182,122 @@ done
 # Consequence qu'on ne veut plus subir : un rattrapage `Persistent=true` tue ne
 # se represente PAS. Son jeton est consomme. `long` serait reste muet jusqu'au
 # dimanche suivant.
+# --- Qui tourne en ce moment ? (30/09/2026, backlog I24) ----------------------
+# Un tir est VIVANT si son service est en cours — un service oneshot l'est a
+# l'etat `activating` pendant tout le tir, jamais `active` : `is-active` rend 3,
+# d'ou `show -p ActiveState` — ou si le processus note dans son marqueur est
+# encore un anarbib-bg2.sh de CE flux (un numero de processus se recycle a
+# chaque demarrage de la session). Lu sans tube : sous `pipefail`,
+# `tr | grep -q` peut rendre faux quand grep a trouve (tr recoit SIGPIPE).
+SYSTEMCTL="${SYSTEMCTL:-systemctl}"
+PROC="${PROC:-/proc}"
+etat_service() {
+  "$SYSTEMCTL" --user show -p ActiveState --value "anarbib-backup-$1.service" 2>/dev/null || true
+}
+service_en_cours() {
+  case "$(etat_service "$1")" in active|activating|deactivating|reloading) return 0 ;; esac
+  return 1
+}
+processus_du_marqueur_vivant() {   # $1 flux, $2 numero de processus
+  local cmd=""
+  [ -n "$2" ] && [ -r "$PROC/$2/cmdline" ] || return 1
+  cmd="$(tr '\0' ' ' < "$PROC/$2/cmdline" 2>/dev/null || true)"
+  case "$cmd" in *"anarbib-bg2.sh backup $1"*|*"anarbib-bg2.sh backup all"*) return 0 ;; esac
+  return 1
+}
+
 interrompus=()
 for f in "${FLUX[@]}"; do
   m="$OPS_DIR/.en-cours-$f"
   [ -f "$m" ] || continue
-  debut="$(cut -d' ' -f1 "$m" 2>/dev/null || echo 0)"
+  debut=0; pid=""
+  read -r debut pid _ < "$m" 2>/dev/null || true
   case "$debut" in ''|*[!0-9]*) debut=0 ;; esac
+  case "$pid" in *[!0-9]*) pid="" ;; esac
   [ "$debut" -gt 0 ] || continue
   min=$(( (maintenant - debut) / 60 ))
-  if [ "$min" -gt "$SEUIL_INTERROMPU_MIN" ]; then
+  if service_en_cours "$f" || processus_du_marqueur_vivant "$f" "$pid"; then
+    printf '    ..  %-8s tir en cours depuis %s min\n' "$f" "$min"
+  elif [ -n "$pid" ] || [ "$min" -gt "$SEUIL_INTERROMPU_MIN" ]; then
+    # Processus connu et mort : inutile d'attendre une heure — la session
+    # redemarre souvent quelques minutes apres avoir tue le tir. Sans numero de
+    # processus (ancien marqueur), on retombe sur le seuil d'age.
     interrompus+=("$f (parti il y a $((min / 60)) h $((min % 60)) min, jamais revenu)")
     printf '    !!  %-8s TIR INTERROMPU — parti il y a %s min, jamais revenu\n' "$f" "$min"
   else
-    printf '    ..  %-8s tir en cours depuis %s min (sous le seuil de %s min)\n' \
+    printf '    ..  %-8s tir en cours depuis %s min (sans numero de processus : seuil de %s min)\n' \
       "$f" "$min" "$SEUIL_INTERROMPU_MIN"
   fi
 done
+
+# --- RELANCE (30/09/2026, backlog I24) ---------------------------------------
+# Constater ne suffisait pas. Le 15/09, le tir `storage` rattrape au demarrage
+# a ete tue au bout de huit minutes par l'arret de la session WSL ; le drapeau
+# disait « Relancer : systemctl … », mais personne n'ouvre un terminal pour le
+# lire, et le rattrapage `Persistent=` ne rejoue que les tirs MANQUES, pas un
+# tir parti puis tue : neuf jours de trou. Or ce controle tourne trois minutes
+# apres chaque demarrage de la session et chaque midi — exactement quand il
+# faut rejouer. Il relance donc lui-meme le service d'un flux interrompu ou en
+# retard, une fois par flux et par passage, sans attendre sa fin (`--no-block` :
+# un tir `storage` dure vingt minutes, ce controle en a dix). Jamais :
+#   - par-dessus un tir vivant de ce flux (ci-dessus) ; un tir d'un AUTRE flux
+#     ne gene pas : anarbib-bg2.sh fait passer les tirs l'un apres l'autre
+#     (verrou `.bg2.lock`), le relance attend son tour ;
+#   - sur un depot qu'on n'a pas pu lire : relancer ne reparera ni l'hote ni la
+#     cle, et l'on repartirait a chaque passage. (La lecture se fait en
+#     `--no-lock` : un verrou restic orphelin ne rend plus un depot « illisible ».)
+#   - quand le minuteur du flux est arrete : c'est la facon de GELER un flux
+#     (`systemctl --user stop anarbib-backup-<flux>.timer`), elle doit le rester ;
+#   - quand RELANCE=0 (constater sans relancer).
+# Chaque relance, et chaque relance NON faite avec sa raison, est ecrite au
+# drapeau. Un tir relance qui echoue ne boucle pas : le passage suivant
+# (demarrage ou midi) reessaie, et la sonde en base continue d'alerter.
+RELANCE="${RELANCE:-1}"
+relances=()       # flux relances
+non_relances=()   # « flux — raison »
+traites=()        # un flux n'est examine qu'une fois par passage
+relancer() {
+  local flux="$1" unite="anarbib-backup-$1.service" r err=""
+  for r in "${traites[@]}"; do [ "$r" = "$flux" ] && return 0; done
+  traites+=("$flux")
+  if [ "$RELANCE" != 1 ]; then
+    non_relances+=("$flux — relance coupee (RELANCE=$RELANCE)")
+    return 0
+  fi
+  for r in "${aveugle[@]}"; do
+    if [ "$r" = "$flux" ]; then
+      non_relances+=("$flux — depot illisible (hote injoignable, cle SSH ?) : relancer ne le reparerait pas")
+      printf '    ??  %-8s depot illisible — pas de relance\n' "$flux"
+      return 0
+    fi
+  done
+  if ! "$SYSTEMCTL" --user is-active --quiet "anarbib-backup-$flux.timer" 2>/dev/null; then
+    non_relances+=("$flux — minuteur arrete : gel voulu")
+    printf '    ..  %-8s minuteur arrete (gel) — pas de relance\n' "$flux"
+    return 0
+  fi
+  if service_en_cours "$flux"; then
+    printf '    ..  %-8s tir systemd en cours (%s) — pas de relance\n' "$flux" "$(etat_service "$flux")"
+    return 0
+  fi
+  if err="$("$SYSTEMCTL" --user start --no-block "$unite" 2>&1)"; then
+    relances+=("$flux")
+    printf '    >>  %-8s RELANCE (%s)\n' "$flux" "$unite"
+  else
+    non_relances+=("$flux — relance REFUSEE par systemd : ${err:-sans message}")
+    printf '    !!  %-8s relance REFUSEE par systemd : %s\n' "$flux" "${err:-sans message}"
+  fi
+}
+for i in "${interrompus[@]}"; do relancer "${i%% *}"; done
+for i in "${retard[@]}"; do relancer "${i%% *}"; done
+ligne_relance() {
+  local x
+  if [ ${#relances[@]} -gt 0 ]; then
+    echo "RELANCE AUTOMATIQUE a $(date '+%H:%M') : ${relances[*]} — verifier au prochain passage"
+    echo "  Suivre : journalctl --user -u anarbib-backup-${relances[0]}.service -f"
+  fi
+  for x in "${non_relances[@]}"; do echo "PAS DE RELANCE : $x"; done
+}
 
 if [ ${#interrompus[@]} -gt 0 ]; then
   {
@@ -205,9 +306,10 @@ if [ ${#interrompus[@]} -gt 0 ]; then
     echo "Un tir a demarre et n'est jamais revenu : processus tue, session WSL"
     echo "demontee, ou machine eteinte en cours de route. La DONNEE peut etre"
     echo "encore fraiche — ce n'est pas un retard, c'est un tir mort."
-    echo "ATTENTION : un rattrapage tue ne se rejoue pas tout seul."
+    echo "Un rattrapage tue ne se rejoue pas tout seul (Persistent= ne rejoue que les tirs MANQUES)."
+    ligne_relance
     for i in "${interrompus[@]}"; do
-      echo "  Relancer : systemctl --user start anarbib-backup-${i%% *}.service"
+      echo "  Relancer a la main : systemctl --user start anarbib-backup-${i%% *}.service"
     done
   } > "$FLAG"
   info "TIR(S) INTERROMPU(S) : ${interrompus[*]}"
@@ -227,7 +329,8 @@ if [ ${#retard[@]} -gt 0 ]; then
     echo "RETARD $(date -u +%Y-%m-%dT%H:%M:%SZ) : ${retard[*]}"
     echo "--- ce que cela veut dire ---"
     echo "Un flux n'a pas produit de snapshot depuis plus longtemps que prevu."
-    echo "Relancer : systemctl --user start anarbib-backup-<flux>.service"
+    ligne_relance
+    echo "Relancer a la main : systemctl --user start anarbib-backup-<flux>.service"
     echo "Verifier : journalctl --user -u anarbib-backup-<flux>.service -n 40"
   } > "$FLAG"
   info "EN RETARD : ${retard[*]}"

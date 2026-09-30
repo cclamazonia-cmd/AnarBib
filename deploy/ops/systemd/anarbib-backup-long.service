@@ -7,6 +7,6 @@ OnFailure=anarbib-backup-failure@%n.service
 Type=oneshot
 Environment=PATH=/usr/bin:/bin
 Environment=HOME=%h
-TimeoutStartSec=1800
+TimeoutStartSec=3600
 ExecStartPre=-/bin/rm -f %h/anarbib-ops/.last-failure
 ExecStart=%h/anarbib-ops/anarbib-bg2.sh backup long

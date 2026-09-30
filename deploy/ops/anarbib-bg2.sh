@@ -87,7 +87,33 @@ cleanup_work() {
     shred -u "$f" 2>/dev/null || rm -f "$f"
   done
 }
-trap cleanup_work EXIT
+# Le trap n'est arme qu'une fois le verrou tenu (voir prendre_le_verrou) : un
+# tir qui attend ou renonce ne doit pas detruire les dumps de celui qui tourne.
+
+# --- UN TIR A LA FOIS (30/09/2026, backlog I24) --------------------------
+# Les tirs partagent $WORK, et cleanup_work detruit a la sortie TOUS les *.sql
+# qui s'y trouvent. Deux tirs simultanes — ce que font les rattrapages
+# `Persistent=` au demarrage du poste : le 15/09, `court` a fini a 08 h 17
+# pendant que `long` tournait jusqu'a 08 h 20 — se detruisaient donc leurs
+# dumps : le premier sorti effacait celui de l'autre, ou le reecrivait au shred
+# pendant que restic le lisait. Un verrou exclusif les fait passer l'un apres
+# l'autre ; le filet RGPD redevient sur et continue de nettoyer ce qu'un tir
+# TUE a laisse. Il sert aussi la relance du controle de fraicheur : un tir
+# relance pendant un autre attend son tour au lieu de le percuter.
+# L'attente (BG2_ATTENTE_MAX, 45 min) tient sous TimeoutStartSec (1 h) des
+# services : storage dure ~20 min, long ~5, court ~2.
+prendre_le_verrou() {
+  local attente="${BG2_ATTENTE_MAX:-2700}"
+  require flock
+  mkdir -p "$OPS_DIR"
+  exec 9>"$OPS_DIR/.bg2.lock"
+  if ! flock -n 9; then
+    info "Un autre tir anarbib-bg2.sh tourne : attente de son tour (${attente} s au plus)."
+    flock -w "$attente" 9 || die "un autre tir tient le verrou depuis plus de ${attente} s — abandon (rien n'a ete touche)"
+    info "Verrou obtenu, le tir commence."
+  fi
+  trap cleanup_work EXIT
+}
 require() { command -v "$1" >/dev/null 2>&1 || die "outil manquant: $1"; }
 
 # BG2 (30/07): auto-reparation des verrous restic orphelins. Un `restic backup`
@@ -498,6 +524,9 @@ prune_repos() {
 }
 
 # ------------------------------ MAIN -----------------------------------
+case "${1:-}" in
+  backup|prune|restore-test) prendre_le_verrou ;;
+esac
 case "${1:-}" in
   check)        preflight; filet; info "Tout est pret (prerequis + filet)." ;;
   backup)
