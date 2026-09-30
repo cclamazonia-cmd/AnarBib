@@ -23,9 +23,11 @@ function invitationTarget(email) {
 }
 // taskStatusLabel / taskPriorityLabel : desormais importes depuis ../i18n/task-mail-strings.ts
 // signature (locale, value) -> libelle localise, repli pt-BR.
+// F16 (30/09/2026) : les marqueurs `convite:<adresse>` portent les invitations ;
+// ils ne partent pas dans les avis (l'adresse de la personne invitée).
 function taskTagsLabel(tags) {
   if (Array.isArray(tags)) {
-    const clean = tags.map((value)=>String(value || "").trim()).filter(Boolean);
+    const clean = tags.map((value)=>String(value || "").trim()).filter((v)=>v && !/^convite:/i.test(v));
     return clean.join(", ");
   }
   return String(tags || "").trim();

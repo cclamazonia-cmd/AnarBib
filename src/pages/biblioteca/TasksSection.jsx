@@ -13,7 +13,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { fs, ls, bx, lr, lw } from './styles';
-import { TASK_STATES, taskStatusLabel, isTaskClosed } from '@/lib/taskStatus';
+import { TASK_STATES, taskStatusLabel, isTaskClosed, taskVisibleTags } from '@/lib/taskStatus';
 
 export default function TasksSection({ libraryId, tasks, templates, suggestions, taskPrio, setMsg, onChanged }) {
   const { formatMessage: t, locale } = useIntl();
@@ -306,7 +306,7 @@ export default function TasksSection({ libraryId, tasks, templates, suggestions,
           </div>
           <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
             {tk.owner||'—'}{tk.due_date&&` · ${t({ id: 'biblioteca.tasks.deadlineLabel' })}: ${tk.due_date}`}
-            {tk.tags?.length>0&&` · ${tk.tags.join(', ')}`}
+            {taskVisibleTags(tk.tags).length>0&&` · ${taskVisibleTags(tk.tags).join(', ')}`}
           </div>
           {tkDesc && <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>{tkDesc}</div>}
         </div>

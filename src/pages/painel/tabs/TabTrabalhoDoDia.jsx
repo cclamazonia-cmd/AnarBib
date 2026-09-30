@@ -5,7 +5,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { SummaryCard, TaskBucket, TabHeader } from '../_shared';
 import WriteToReaderBox from './WriteToReaderBox';
-import { TASK_STATES, taskStatusLabel } from '@/lib/taskStatus';
+import { TASK_STATES, taskStatusLabel, taskVisibleTags } from '@/lib/taskStatus';
 
 // ═══════════════════════════════════════════════════════════
 // TabTrabalhoDoDia — onglet « Travail du jour » (chantier E.1 / OT-4)
@@ -228,7 +228,7 @@ export default function TabTrabalhoDoDia({
                       {taskStatusLabel(t, tk.status)}
                       {tk.owner && ` · ${tk.owner}`}
                       {tk.due_date && ` · ${t({id:'panel.task.detail.prazo'})}: ${tk.due_date}`}
-                      {tk.tags?.length > 0 && ` · ${tk.tags.join(', ')}`}
+                      {taskVisibleTags(tk.tags).length > 0 && ` · ${taskVisibleTags(tk.tags).join(', ')}`}
                     </div>
                   </div>
                   <div className="ab-painel-itask-actions">

@@ -51,3 +51,10 @@ export function taskStatusLabel(t, status) {
   const id = LABEL_IDS[status];
   return id ? t({ id }) : (status || '—');
 }
+
+// F16 (30/09/2026) : une invitation à une tâche est un marqueur `convite:<adresse>`
+// (c'est la forme que la base lit pour créer l'invitation). Il ne s'affiche pas :
+// l'adresse d'une personne invitée n'a rien à faire sous les yeux de toute l'équipe.
+export function taskVisibleTags(tags) {
+  return (Array.isArray(tags) ? tags : []).filter((tg) => tg && !/^convite:/i.test(String(tg).trim()));
+}

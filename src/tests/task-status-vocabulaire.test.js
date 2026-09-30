@@ -17,7 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { TASK_STATES, TASK_LIVE, TASK_CLOSED, TASK_ADVANCE, TASK_PRIORITIES, isTaskClosed, taskStatusLabel } from '../lib/taskStatus.js';
+import { TASK_STATES, TASK_LIVE, TASK_CLOSED, TASK_ADVANCE, TASK_PRIORITIES, isTaskClosed, taskStatusLabel, taskVisibleTags } from '../lib/taskStatus.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const racine = path.resolve(here, '..', '..');
@@ -136,5 +136,32 @@ describe('la migration de correction', () => {
     const m = sql.match(/v_neuf\s+:= \$v\$\(([^)]*)\)\$v\$;/);
     expect(m).toBeTruthy();
     expect([...m[1].matchAll(/'([a-z_]+)'/g)].map(x => x[1])).toEqual(TASK_LIVE);
+  });
+});
+
+// F16 (30/09/2026) : une invitation est un marqueur `convite:<adresse>` — la forme
+// que la base lit pour créer l'invitation. Il ne s'affiche ni à l'écran ni dans
+// les avis de tâche : l'adresse d'une personne invitée n'est pas à montrer à
+// toute l'équipe. (La suite SQL taches_invitation_tests emprunte le chemin.)
+describe('les invitations ne s’affichent pas parmi les marqueurs', () => {
+  it('taskVisibleTags retire les marqueurs convite:', () => {
+    expect(taskVisibleTags(['atelier', 'convite:a@b.org', ' Convite:C@d.org', 'urgent'])).toEqual(['atelier', 'urgent']);
+    expect(taskVisibleTags(null)).toEqual([]);
+  });
+
+  it('les deux écrans et les avis passent par le filtre', () => {
+    for (const rel of ['pages/biblioteca/TasksSection.jsx', 'pages/painel/tabs/TabTrabalhoDoDia.jsx']) {
+      const code = src(rel);
+      expect(code, rel).toMatch(/taskVisibleTags\(tk\.tags\)\.join/);
+      expect(code.includes('tk.tags.join'), rel).toBe(false);
+    }
+    const avis = readFileSync(path.join(racine, 'supabase', 'functions', '_shared', 'domain', 'internal-tasks.ts'), 'utf8');
+    expect(avis).toMatch(/!\/\^convite:\/i\.test\(v\)/);
+  });
+
+  it('fn_task_invite pose le marqueur que la synchronisation lit (dernière migration qui la touche)', () => {
+    const f = readdirSync(migrations).filter((n) => /^\d{14}_.*\.sql$/.test(n)).sort()
+      .filter((n) => readFileSync(path.join(migrations, n), 'utf8').includes('fn_task_invite')).pop();
+    expect(readFileSync(path.join(migrations, f), 'utf8')).toMatch(/ARRAY\[''convite:'' \|\| v_email_clean\]/);
   });
 });
