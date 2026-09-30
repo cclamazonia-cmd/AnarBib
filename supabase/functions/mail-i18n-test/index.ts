@@ -1,3 +1,4 @@
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { tMail, greeting, label, taskStatusLabel, taskPriorityLabel, formatDateLocale } from "../_shared/i18n/mail-strings.ts";
 serve((req)=>{

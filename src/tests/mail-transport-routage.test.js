@@ -20,6 +20,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { transformSync } from 'esbuild';
+import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
 
 const RACINE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const FONCTIONS = path.join(RACINE, 'supabase', 'functions');
@@ -54,6 +55,8 @@ function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc' }) {
     'core/env': { supabaseAdmin: { from: (table) => ({ insert: async (row) => { ecrits.push({ table, row }); return { error: null }; } }) } },
     // F12 (25/09/2026) : la restriction des rejeux ; hors rejeu, personne n'est « déjà servi ».
     restriction: { dejaServi: () => false },
+    // F19 (30/09/2026) : le vrai masque des adresses dans les journaux.
+    'journal-masque': JOURNAL_MASQUE,
   };
   const requireDetourne = (id) => {
     const cle = Object.keys(stubs).find((k) => id.includes(k));

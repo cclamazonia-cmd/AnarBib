@@ -50,6 +50,7 @@
 //  catalog_metadata_lookup) -> AUCUNE declaration dans config.toml.
 // =============================================================================
 
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import type { Candidate } from '../_shared/capas/sources.ts';
 import { envGet, fetchWithTimeout, normalizeIsbn } from '../_shared/capas/sources.ts';
 import { candidatesUniques, chercherCapas, runSource } from '../_shared/capas/recherche.ts';

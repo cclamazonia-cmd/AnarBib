@@ -6,6 +6,8 @@ import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 import { sendViaSmtp, resolveTimeout } from "../mail/smtp.ts";
 import { supabaseAdmin } from "../core/env.ts";
 import { dejaServi } from "./restriction.ts";
+// F19 (30/09/2026) : jamais une adresse en clair dans un journal (voir core/journal-masque.ts).
+import { masquerAdresse } from "../core/journal-masque.ts";
 
 // ============================================================================
 // Transport mail — Hybride universel : SMTP ou API Resend
@@ -170,7 +172,7 @@ async function aiguillerEtEnvoyer(opts) {
 
   // 1. Simulation explicite demandée
   if (mailTransport === "mock") {
-    console.log(`[transport] [EMAIL SIMULATION] MAIL_TRANSPORT=mock actif (DOC-SILENCE-1) : mail simulé à ${destinataires(opts).join(", ")} (« ${opts.subject} »)`);
+    console.log(`[transport] [EMAIL SIMULATION] MAIL_TRANSPORT=mock actif (DOC-SILENCE-1) : mail simulé à ${masquerAdresse(destinataires(opts).join(", "))} (« ${opts.subject} »)`);
     return JSON.stringify({ ok: true, mocked: true, to: opts.toEmail, subject: opts.subject });
   }
 
@@ -214,7 +216,7 @@ export async function safeSendEmail(target, subject, html, text, label = "email"
   // F12 (25/09/2026) : pendant un rejeu, un destinataire hors de la liste des refusés
   // a déjà reçu ce courriel — on ne le renvoie pas, et il compte comme servi.
   if (dejaServi(em)) {
-    console.log(`[${label}] rejeu : ${em} déjà servi, sauté`);
+    console.log(`[${label}] rejeu : ${masquerAdresse(em)} déjà servi, sauté`);
     return { ok: true, label, email: em, deja_servi: true };
   }
   try {
@@ -232,7 +234,7 @@ export async function safeSendEmail(target, subject, html, text, label = "email"
       context,
       label
     });
-    console.log(`[${label}] sent to ${em}`);
+    console.log(`[${label}] sent to ${masquerAdresse(em)}`);
     return {
       ok: true,
       label,
@@ -240,7 +242,7 @@ export async function safeSendEmail(target, subject, html, text, label = "email"
       response
     };
   } catch (err) {
-    console.error(`[${label}] failed for ${em}:`, err);
+    console.error(`[${label}] failed for ${masquerAdresse(em)}:`, err);
     return {
       ok: false,
       label,

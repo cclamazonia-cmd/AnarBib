@@ -21,6 +21,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
 
 const tsToCjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 const CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/index.ts', import.meta.url));
@@ -131,6 +132,7 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
         if (sp.endsWith('core/env.ts')) return { supabaseAdmin: { from: () => ({ insert: async () => ({ error: null }) }) } };
         // F12 (25/09/2026) : la restriction des rejeux ; hors rejeu, personne n'est « déjà servi ».
         if (sp.endsWith('restriction.ts')) return { dejaServi: () => false };
+        if (sp.endsWith('core/journal-masque.ts')) return JOURNAL_MASQUE; // F19
         throw new Error(`import inattendu (transport) : ${sp}`);
       };
       const m = { exports: {} };

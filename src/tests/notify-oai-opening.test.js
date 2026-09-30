@@ -34,6 +34,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
 
 const SRC = new URL('../../supabase/functions/notify-oai-opening/index.ts', import.meta.url);
 const WEBHOOK = new URL('../../supabase/functions/_shared/core/webhook.ts', import.meta.url);
@@ -102,6 +103,7 @@ function monterEF(monde) {
     if (spec.endsWith('transport/email.ts')) {
       return { safeSendEmail: async (cible, sujet) => { envois.push({ email: cible.email, nom: cible.name, sujet }); } };
     }
+    if (spec.endsWith('core/journal-masque.ts')) return JOURNAL_MASQUE; // F19
     throw new Error(`import inattendu : ${spec}`);
   };
 

@@ -16,6 +16,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
 
 const SRC = new URL('../../supabase/functions/catalog_metadata_lookup/index.ts', import.meta.url);
 const CODE = transformSync(readFileSync(SRC, 'utf8'), {
@@ -62,6 +63,7 @@ function monterEF(parSource) {
   };
   const requireStub = (spec) => {
     if (spec.endsWith('cors.ts')) return { corsHeaders: {} };
+    if (spec.endsWith('core/journal-masque.ts')) return JOURNAL_MASQUE; // F19
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };

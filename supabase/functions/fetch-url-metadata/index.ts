@@ -1,3 +1,4 @@
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',

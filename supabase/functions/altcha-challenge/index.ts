@@ -16,6 +16,7 @@
 // Cf. docs/journal/arbitrages/DECISION_anti_robots_2026-08-20.md
 // ═══════════════════════════════════════════════════════════════════════════
 
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { creerDefi } from '../_shared/altcha.ts';
 
 const corsHeaders = {

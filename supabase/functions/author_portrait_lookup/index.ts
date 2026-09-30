@@ -7,6 +7,7 @@
 // Sortie : { ok, total, candidates: [{ source, filename, full_url, thumb_url,
 //            license, credit, source_url, wikidata_id, label, description }] }
 
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 const TIMEOUT_MS = 9000;
 const USER_AGENT = 'AnarBib portrait-lookup/1.0 (contact: anarbib@riseup.net)';
 const CORS_HEADERS = {

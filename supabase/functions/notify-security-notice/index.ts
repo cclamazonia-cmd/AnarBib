@@ -35,7 +35,8 @@
 // que les e-mails sont partis. Vecu le 17/08. En cas de doute apres un timeout :
 // NE PAS relancer (risque de double envoi), verifier d'abord le format des
 // public_id dans `profiles` et les lignes « [security_notice] sent to » dans
-// les logs de fonction.
+// les logs de fonction — adresses masquées depuis F19 (30/09/2026) :
+// « a…@domaine », de quoi compter les envois partis, pas de quoi les nommer.
 
 import { supabaseAdmin } from '../_shared/core/env.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';

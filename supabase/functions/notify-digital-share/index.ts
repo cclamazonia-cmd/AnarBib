@@ -20,6 +20,7 @@ import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
 import { appUrl } from '../_shared/core/app-url.ts';
 import { verdictEnvois, type VerdictEnvoi } from '../_shared/domain/outbox-verdict.ts';
+import { masquerAdresse } from '../_shared/core/journal-masque.ts';
 
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_DIGITAL_SHARE') || '').trim();
 const SHARE_URL = appUrl('/painel');
@@ -61,7 +62,7 @@ async function sendIll(
     const r = await safeSendEmail(target, subject, html, text, 'ill_share', NETWORK_CTX);
     return verdictEnvois({ recipients_count: 1, result: r });
   } catch (e) {
-    console.error('[notify-digital-share]', target.email, String((e as Error)?.message || e));
+    console.error('[notify-digital-share]', masquerAdresse(target.email), String((e as Error)?.message || e));
     return { status: 'failed', detail: String((e as Error)?.message || e) };
   }
 }

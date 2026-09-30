@@ -1,3 +1,4 @@
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { corsHeaders } from './_shared/cors.ts';
 const DEFAULT_TIMEOUT_MS = clampInt(envGet('CATALOG_METADATA_TIMEOUT_MS'), 1000, 30000, 9000);
 const DEFAULT_MAX_RECORDS = clampInt(envGet('CATALOG_METADATA_MAX_RECORDS'), 1, 12, 8);

@@ -14,6 +14,7 @@
 // Secret requis : ACOUSTID_API_KEY (clé d'application AcoustID, https://acoustid.org/api-key).
 // Session : Fonds sonores
 
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 const TIMEOUT_MS = 8000;
 const USER_AGENT = 'AnarBib audio-fingerprint-lookup/1.0 (contact: anarbib@riseup.net)';
 const ACOUSTID_ENDPOINT = 'https://api.acoustid.org/v2/lookup';

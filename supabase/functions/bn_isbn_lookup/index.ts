@@ -1,3 +1,4 @@
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 function json(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {

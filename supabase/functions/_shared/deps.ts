@@ -16,4 +16,7 @@
 //
 // Version : 2.114.0 — dernière 2.x publiée le 03/09/2026 (registre npm).
 export { createClient } from 'npm:@supabase/supabase-js@2.114.0';
+// F19 (30/09/2026) : le masque des adresses dans les journaux s'installe au chargement
+// de toute fonction qui passe par ici (core/journal-masque.ts).
+import './core/journal-masque.ts';
 export type { SupabaseClient } from 'npm:@supabase/supabase-js@2.114.0';

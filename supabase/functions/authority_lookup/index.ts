@@ -1,3 +1,4 @@
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 const TIMEOUT_MS = 8000;
 const USER_AGENT = 'AnarBib authority-lookup/1.0 (contact: anarbib@riseup.net)';
 const WD_LANGUAGES = 'en|fr|pt|es|de|it|ca|eo|nl|el|ru|ja|zh|ar';

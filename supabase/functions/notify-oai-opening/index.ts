@@ -48,6 +48,7 @@ import { supabaseAdmin, APP_BASE_URL } from '../_shared/core/env.ts';
 import { tMail, formatDateLocale } from '../_shared/i18n/mail-strings.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
+import { masquerAdresse } from '../_shared/core/journal-masque.ts';
 
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_OAI_OPENING') || '').trim();
 const FEDERAL_EMAIL = (Deno.env.get('OAI_ADMIN_EMAIL') || 'fede@anarbib.org').trim();
@@ -102,7 +103,7 @@ async function sendOai(
     await safeSendEmail(target, subject, html, text, 'oai_opening', FEDERAL_CTX);
     return true;
   } catch (e) {
-    console.error('[notify-oai-opening]', target.email, String((e as Error)?.message || e));
+    console.error('[notify-oai-opening]', masquerAdresse(target.email), String((e as Error)?.message || e));
     return false;
   }
 }

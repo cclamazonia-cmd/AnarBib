@@ -22,6 +22,7 @@
 // Mieux vaut une panne franche au déploiement qu'une ouverture silencieuse.
 // =============================================================================
 
+import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { jwtVerify } from 'https://esm.sh/jose@5.9.6';
 
 const FUNCTIONS_ROOT = '/home/deno/functions';
