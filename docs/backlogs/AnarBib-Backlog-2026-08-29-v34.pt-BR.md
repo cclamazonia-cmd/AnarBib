@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-30** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-09-30** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-09-30.** **50 itens de 68** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, I24, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-09-30.** **49 itens de 67** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1665,7 +1665,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
-| **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | A verificar |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1732,28 +1731,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Bloqueia **I2**. O depósito terceiro e o segundo detentor pertencem à mesma conversa que **A1** (Bolonha).
 
 *Remissões : `claude/DECISION_herbesfolles_offre_confirmee_2026-09-07` · `claude/NOTE_sortie_services_etats_uniens_2026-09-05` · `claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)`*
-
-#### I24 — O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte
-
-`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : administração de sistemas
-
-**Estado.** **Constatado em 15/09/2026 ao voltar de Bolonha.** Domingo 13/09 o posto estava desligado ; em 15/09 às 08h15 o systemd recuperou os três fluxos : `court` e `long` terminaram, **`storage` foi morto às 08h23 por `SIGTERM`** — o encerramento da sessão WSL — e a unidade de alerta `OnFailure` **não pôde ser lançada**. Resultado : fluxo `storage` com nove dias, testemunho `started` sem `ok`, nenhum e-mail. Relançado à mão às 20h50.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** **(1)** O serviço `storage` não deve morrer com a sessão (`KillMode=`, `TimeoutStopSec=`, ou `loginctl enable-linger`). **(2)** O alerta não deve depender da sessão : o controlo de frescura do meio-dia deve **enviar** quando um fluxo passa o limiar ou tem um `started` sem `ok`.
-
-**Por que importa.** Um backup que falha em silêncio quando o posto reinicia é a avaria que só se vê na recuperação. O fluxo `storage` é **o único backup dos 16 buckets**.
-
-**O que conta como terminado.**
-
-- O serviço `storage` sobrevive ao fecho do terminal WSL.
-- Um fluxo em atraso ou «interrompido» produz um e-mail em 24 h.
-- Um posto desligado ao domingo dá três fluxos verdes na segunda, ou um e-mail.
-
-**Dependências.** Primo de **I12**. Ligado a **A3**.
-
-*Remissões : `deploy/ops/systemd/` · `anarbib-systemd-etat-non-fiable` · `anarbib-backup-stale-lock-selfheal` · `RUNBOOK_restauration_BG2_2026-07-01`*
 
 ---
 
@@ -2199,6 +2176,7 @@ CI verde. |
 | O catálogo publicado abre a página de catalogação | 2026-09-28 | **Entregue em 28/09 a pedido de Xavier** (`0d0322c0`): parte-se do que existe antes de catalogar. A aba «Catálogo(s) já publicado(s)» abre a barra e a página de catalogação. A última aba visitada não é mais lembrada (`catalogacaoActiveTab` não é mais lida nem escrita), e o link direto `#tab=` continua prevalecendo. Guarda: `catalogacao-onglet-de-reference.test.js` (4 casos). |
 | `robots.txt`: robôs de IA recusados, catálogo público aberto aos buscadores | 2026-09-29 | **Entregue em 29/09, decisão do dia** (`75ccb035`, implantado: servido em `text/plain` desde 18h55). Até então `/robots.txt` respondia com `index.html`. Agora os robôs das empresas de IA são recusados em toda parte; os buscadores percorrem o catálogo público e ficam fora dos espaços de trabalho, formulários, leitor e bancada; `Crawl-delay: 5` poupa o pool anônimo. Guarda `src/tests/robots-txt.test.js`: toda rota de `App.jsx` precisa estar classificada. |
 | E3 | 2026-09-30 | **Encerrado em 30/09, os dois critérios cumpridos.** A decisão está no REGISTRO (`DOC-ADDR-1`); as dez locales aplicam o mesmo registro, cada uma com sua guarda em `src/tests/i18n-ecriture.test.js`. Os quatro últimos valores italianos no « Lei » passaram ao tu em 30/09 (`abb4aa38`), e a guarda aprendeu as duas formas. Restos acompanhados em E2 (nl, el) e E25 (pt-BR fora do app). |
+| I24 | 2026-09-30 | **Encerrado em 30/09 à noite, pelo ensaio de Xavier.** Um disparo `storage` foi morto (`wsl --terminate`) e relançado sozinho pelo controle de frescor 5 min depois; instantâneo `f420f896`, testemunho enviado, nenhum incidente. Critério 1 reescrito em torno desse ensaio (o texto original era inatingível); critério 2 cumprido desde 20/09 (sonda do servidor); critério 3 coberto pelo rattrapage, pela relança, pela trava entre disparos e pela sonda. |
 
 ---
 
@@ -2230,4 +2208,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
