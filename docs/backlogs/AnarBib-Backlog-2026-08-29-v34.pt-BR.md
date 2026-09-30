@@ -1665,7 +1665,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
-| **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | Aberto |
+| **I24** | O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte | `P1` | A verificar |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1735,11 +1735,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### I24 — O fluxo de backup `storage` é morto quando a sessão WSL para, e o seu alerta `OnFailure` não parte
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : administração de sistemas
 
 **Estado.** **Constatado em 15/09/2026 ao voltar de Bolonha.** Domingo 13/09 o posto estava desligado ; em 15/09 às 08h15 o systemd recuperou os três fluxos : `court` e `long` terminaram, **`storage` foi morto às 08h23 por `SIGTERM`** — o encerramento da sessão WSL — e a unidade de alerta `OnFailure` **não pôde ser lançada**. Resultado : fluxo `storage` com nove dias, testemunho `started` sem `ok`, nenhum e-mail. Relançado à mão às 20h50.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** **(1)** O serviço `storage` não deve morrer com a sessão (`KillMode=`, `TimeoutStopSec=`, ou `loginctl enable-linger`). **(2)** O alerta não deve depender da sessão : o controlo de frescura do meio-dia deve **enviar** quando um fluxo passa o limiar ou tem um `started` sem `ok`.
 
