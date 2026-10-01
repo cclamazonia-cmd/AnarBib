@@ -34,7 +34,7 @@ DECLARE
   c_blmf constant uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';
   v_coord uuid; v_lib2 uuid := gen_random_uuid(); v_cible uuid := gen_random_uuid(); v_cible_pub text;
   v_avant bigint; v_x bigint[] := ARRAY[]::bigint[]; v_xid bigint; v_k int;
-  v_cons2 bigint; v_cons3 bigint; v_def text;
+  v_cons2 bigint; v_cons3 bigint; v_def text; v_id19 bigint; v_h19 bigint; v_ps19 bigint;
 BEGIN
   -- ── La capture ─────────────────────────────────────────────────────
   CREATE OR REPLACE FUNCTION public.fn_dispatch_notify_event(p_event text, p_record_id bigint, p_extra jsonb DEFAULT '{}'::jsonb)
@@ -256,6 +256,31 @@ BEGIN
   v_n := public.fn_cron_expire_consultas();
   IF v_n = 0 AND coalesce(current_setting('anarbib.capture', true), '') = '' THEN v_passed := v_passed+1;
   ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n); END IF;
+
+  v_t := 'T19 une demande créée sans échéance expire 60 jours plus tard (20261001204005)';
+  BEGIN
+    -- Un fonds à lui : la lectrice a déjà une demande active sur v_hold (doublon refusé).
+    INSERT INTO public.books (titulo, bib_ref, tipo_material) VALUES ('F1 T19 (essai)', 'F1-T19-' || v_suf, 'livro') RETURNING id INTO v_id19;
+    INSERT INTO public.book_holdings (book_id, library_id) VALUES (v_id19, v_lib) RETURNING id INTO v_h19;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, circulation_policy, visibility)
+    VALUES ('F1-T19-' || v_suf, 'F1-T19-' || v_suf, v_lib, v_h19, 'ambos', 'public');
+    -- La création résout une règle de circulation : un jeu actif, une règle de consultation.
+    INSERT INTO public.library_circulation_policy_sets (library_id, label, status, is_active, activated_at)
+    VALUES (v_lib, 'F1 T19 (essai)', 'active', true, now()) RETURNING id INTO v_ps19;
+    INSERT INTO public.library_circulation_policy_rules (policy_set_id, rule_label, circulation_mode)
+    VALUES (v_ps19, 'consultation (essai)', 'local_consultation');
+    SELECT coalesce(max(id), 0) INTO v_avant FROM public.consultas_locais_v2;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_lecteur, 'role', 'authenticated')::text, true);
+    PERFORM public.fn_v2_create_consulta_local_by_holdings(v_lecteur, ARRAY[v_h19], NULL, NULL);
+    PERFORM set_config('request.jwt.claims', '', true);
+    SELECT count(*) INTO v_n FROM public.consulta_linhas_v2 l JOIN public.consultas_locais_v2 c ON c.id = l.consulta_id
+     WHERE c.id > v_avant AND c.user_id = v_lecteur
+       AND l.expires_at BETWEEN now() + interval '59 days 23 hours' AND now() + interval '60 days 1 hour';
+    IF v_n = 1 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' ligne(s) à 60 jours'); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM);
+  END;
 
   v_t := 'T18 le cron est planifié, et ni anon ni authenticated ne peuvent l''appeler';
   IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'anarbib-consultas-expire-daily' AND schedule = '10 3 * * *'
