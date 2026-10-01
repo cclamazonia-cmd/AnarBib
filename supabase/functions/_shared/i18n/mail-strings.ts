@@ -1569,6 +1569,176 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Μια κράτηση μετατράπηκε σε δανεισμό μετά την επιτόπια παραλαβή του αντιτύπου. Ο δανεισμός είναι πλέον ενεργός. Η προβλεπόμενη ημερομηνία επιστροφής εμφανίζεται παρακάτω."
   },
 
+  // ── Statuts d'étapes de réservation (F21) ──────────────────────────────────
+  "wf.stage.solicitada": {
+    "pt-BR": "Solicitada",
+    fr: "Demandée",
+    es: "Solicitada",
+    en: "Requested",
+    it: "Richiesta",
+    de: "Angefragt",
+    ca: "Sol·licitada",
+    eo: "Petita",
+    nl: "Aangevraagd",
+    el: "Ζητήθηκε"
+  },
+  "wf.stage.em_preparacao": {
+    "pt-BR": "Em preparação",
+    fr: "En préparation",
+    es: "En preparación",
+    en: "Being prepared",
+    it: "In preparazione",
+    de: "In Vorbereitung",
+    ca: "En preparació",
+    eo: "En preparado",
+    nl: "In voorbereiding",
+    el: "Υπό προετοιμασία"
+  },
+  "wf.stage.retirada_a_combinar": {
+    "pt-BR": "Retirada a combinar",
+    fr: "Retrait à convenir",
+    es: "Retiro a convenir",
+    en: "Pickup to arrange",
+    it: "Ritiro da concordare",
+    de: "Abholung zu vereinbaren",
+    ca: "Recollida a convenir",
+    eo: "Elpreno interkonsentenda",
+    nl: "Ophaling af te spreken",
+    el: "Παραλαβή προς συνεννόηση"
+  },
+  "wf.stage.retirada_agendada": {
+    "pt-BR": "Retirada agendada",
+    fr: "Retrait planifié",
+    es: "Retiro programado",
+    en: "Pickup scheduled",
+    it: "Ritiro pianificato",
+    de: "Abholung geplant",
+    ca: "Recollida planificada",
+    eo: "Elpreno planita",
+    nl: "Ophaling ingepland",
+    el: "Παραλαβή προγραμματισμένη"
+  },
+  "wf.stage.re_retirada_agendada": {
+    "pt-BR": "Retirada reagendada",
+    fr: "Retrait replanifié",
+    es: "Retiro reprogramado",
+    en: "Pickup rescheduled",
+    it: "Ritiro ripianificato",
+    de: "Abholung umgeplant",
+    ca: "Recollida replanificada",
+    eo: "Elpreno replanita",
+    nl: "Ophaling opnieuw ingepland",
+    el: "Παραλαβή επαναπρογραμματίστηκε"
+  },
+  "wf.stage.pronta_para_retirada": {
+    "pt-BR": "Pronta para retirada",
+    fr: "Prête pour retrait",
+    es: "Lista para retiro",
+    en: "Ready for pickup",
+    it: "Pronta per il ritiro",
+    de: "Abholbereit",
+    ca: "A punt per recollir",
+    eo: "Preta por elpreno",
+    nl: "Klaar om op te halen",
+    el: "Έτοιμη για παραλαβή"
+  },
+  "wf.stage.retirada_efetivada": {
+    "pt-BR": "Retirada efetivada",
+    fr: "Retrait effectué",
+    es: "Retiro realizado",
+    en: "Pickup completed",
+    it: "Ritiro effettuato",
+    de: "Abholung erfolgt",
+    ca: "Recollida efectuada",
+    eo: "Elpreno efektivigita",
+    nl: "Ophaling voltooid",
+    el: "Παραλαβή ολοκληρώθηκε"
+  },
+  "wf.stage.cancelada_leitor": {
+    "pt-BR": "Cancelada pelo leitor",
+    fr: "Annulée par le·la lecteur·rice",
+    es: "Cancelada por le lectore",
+    en: "Cancelled by reader",
+    it: "Annullata dal lettore",
+    de: "Vom Leser storniert",
+    ca: "Cancel·lada pel-per la-per le lector-a-e",
+    eo: "Nuligita de la legant-in-o",
+    nl: "Geannuleerd door lezer",
+    el: "Ακυρώθηκε από τον/την αναγνώστη/στρια"
+  },
+  "wf.stage.cancelada_biblioteca": {
+    "pt-BR": "Cancelada pela biblioteca",
+    fr: "Annulée par la bibliothèque",
+    es: "Cancelada por la biblioteca",
+    en: "Cancelled by library",
+    it: "Annullata dalla biblioteca",
+    de: "Von der Bibliothek storniert",
+    ca: "Cancel·lada per la biblioteca",
+    eo: "Nuligita de la biblioteko",
+    nl: "Geannuleerd door bibliotheek",
+    el: "Ακυρώθηκε από τη βιβλιοθήκη"
+  },
+  "wf.stage.nao_retirada": {
+    "pt-BR": "Não retirada",
+    fr: "Non retirée",
+    es: "No retirada",
+    en: "Not picked up",
+    it: "Non ritirata",
+    de: "Nicht abgeholt",
+    ca: "No recollida",
+    eo: "Ne elprenita",
+    nl: "Niet opgehaald",
+    el: "Δεν παραλήφθηκε"
+  },
+  "wf.stage.retirada_no_show": {
+    "pt-BR": "Não retirada",
+    fr: "Non retirée",
+    es: "No retirada",
+    en: "Not picked up",
+    it: "Non ritirata",
+    de: "Nicht abgeholt",
+    ca: "No recollida",
+    eo: "Ne elprenita",
+    nl: "Niet opgehaald",
+    el: "Δεν παραλήφθηκε"
+  },
+  "wf.stage.liberada_para_circulacao": {
+    "pt-BR": "Liberada para circulação",
+    fr: "Remise en circulation",
+    es: "Devuelta a circulación",
+    en: "Released to circulation",
+    it: "Rimessa in circolazione",
+    de: "Wieder in Umlauf",
+    ca: "Tornada a posar en circulació",
+    eo: "Remetita en cirkuladon",
+    nl: "Vrijgegeven voor circulatie",
+    el: "Απελευθερώθηκε στην κυκλοφορία"
+  },
+  "wf.stage.expirada": {
+    "pt-BR": "Expirada",
+    fr: "Expirée",
+    es: "Expirada",
+    en: "Expired",
+    it: "Scaduta",
+    de: "Abgelaufen",
+    ca: "Expirada",
+    eo: "Eksvalidiĝinta",
+    nl: "Verlopen",
+    el: "Έληξε"
+  },
+  "wf.stage.convertida_em_emprestimo": {
+    "pt-BR": "Convertida em empréstimo",
+    fr: "Convertie en emprunt",
+    es: "Convertida en préstamo",
+    en: "Converted to loan",
+    it: "Convertita in prestito",
+    de: "In Ausleihe umgewandelt",
+    ca: "Convertida en préstec",
+    eo: "Konvertita en prunton",
+    nl: "Omgezet in uitlening",
+    el: "Μετατράπηκε σε δανεισμό"
+  },
+
   // ===== Workflow events (wf.*) =============================================
   "wf.pickupScheduled": {
     "pt-BR": "Retirada agendada",

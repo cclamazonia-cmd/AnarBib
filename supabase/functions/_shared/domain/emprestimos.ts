@@ -165,39 +165,38 @@ export async function handleEmprestimoV2(recordId, event, payload) {
   // TR-2 (#153.A) : si suppress_user_mail (conversion), on saute l'envoi
   // lecteur·rice avec un motif explicite. Sinon, comportement inchange.
   const ur = suppressUserMail ? skippedEmailResult("user_mail", "suppressed_conversion") : loanLifecycleEnabled(ctx) ? await safeSendEmail(user, sub, html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "loan_lifecycle_disabled");
-  // Admin mail — always PT-BR (locale=null)
-  // Paquet 17 (10/05/2026, fin de session) : titre admin force pt-BR (avant : utilisait tit qui etait en langue lecteur)
-  let ai = `<p>${tMail(null, "admin.loanUpdate")}</p>`, as2 = `[BLMF] ${tit} — ${aun}`, titAdmin = tit;
+  // Admin mail — dans la locale de la bibliothèque (libLocale)
+  let ai = `<p>${tMail(libLocale, "admin.loanUpdate")}</p>`, as2 = `[BLMF] ${tit} — ${aun}`, titAdmin = tit;
   if (event === "emprestimo_v2_criado") {
-    ai = `<p>${tMail(null, "admin.newLoan")}</p>`;
-    titAdmin = tMail(null, "loan.created.sub");
+    ai = `<p>${tMail(libLocale, "admin.newLoan")}</p>`;
+    titAdmin = tMail(libLocale, "loan.created.sub");
     as2 = `[BLMF] ${titAdmin} — ${aun}`;
   } else if (event === "emprestimo_v2_prorrogado") {
-    ai = `<p>${tMail(null, "admin.renewalDone")}</p>`;
-    titAdmin = tMail(null, "loan.renewed.sub");
+    ai = `<p>${tMail(libLocale, "admin.renewalDone")}</p>`;
+    titAdmin = tMail(libLocale, "loan.renewed.sub");
     as2 = `[BLMF] ${titAdmin} — ${aun}`;
   } else if (event === "emprestimo_v2_devolvido") {
-    ai = `<p>${tMail(null, "admin.returnDone")}</p>`;
-    titAdmin = tMail(null, "loan.returned.sub");
+    ai = `<p>${tMail(libLocale, "admin.returnDone")}</p>`;
+    titAdmin = tMail(libLocale, "loan.returned.sub");
     as2 = `[BLMF] ${titAdmin} — ${aun}`;
   } else if (event === "emprestimo_v2_parcialmente_devolvido") {
-    ai = `<p>${tMail(null, "admin.partialReturnDone")}</p>`;
-    titAdmin = tMail(null, "loan.partialReturn.sub");
+    ai = `<p>${tMail(libLocale, "admin.partialReturnDone")}</p>`;
+    titAdmin = tMail(libLocale, "loan.partialReturn.sub");
     as2 = `[BLMF] ${titAdmin} — ${aun}`;
   } else if (event === "emprestimo_v2_devolvido_apos_parcial") {
-    ai = `<p>${tMail(null, "admin.fullyReturnedAfterPartialDone")}</p>`;
-    titAdmin = tMail(null, "loan.fullyReturnedAfterPartial.sub");
+    ai = `<p>${tMail(libLocale, "admin.fullyReturnedAfterPartialDone")}</p>`;
+    titAdmin = tMail(libLocale, "loan.fullyReturnedAfterPartial.sub");
     as2 = `[BLMF] ${titAdmin} — ${aun}`;
   }
   // Paquet 17 (10/05/2026) : adminDet construit depuis detKeys (cles stables)
   // au lieu d'un mapping inverse fragile sur les labels traduits.
   const adminDet = [
     {
-      label: label(null, "reader"),
+      label: label(libLocale, "reader"),
       value: aun
     },
     ...detKeys.map((k)=>({
-        label: k.label ?? label(null, k.key),
+        label: k.label ?? label(libLocale, k.key),
         value: k.value
       }))
   ];
