@@ -5083,7 +5083,7 @@
       "id": "F21",
       "d": "F",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "deno",
@@ -5119,7 +5119,11 @@
       },
       "r": [
         "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ]
+      ],
+      "verif": {
+        "fr": "01/10 — fallbackLibraryNotificationContext initialise footer_local et signature_short à null ; mail-strings.ts enrichi avec les clés wf.stage.* dans les 10 langues ; events.ts traduit workflowStageLabel et pickupReplyLabel via tMail ; domain/reservas.ts et domain/emprestimos.ts passent la locale du destinataire ; banc Vitest mail-status-footer-i18n (6 tests) au vert.",
+        "pt": "01/10 — fallbackLibraryNotificationContext inicializa footer_local e signature_short como null; mail-strings.ts enriquecido com as chaves wf.stage.* nas 10 línguas; events.ts traduz workflowStageLabel e pickupReplyLabel via tMail; bancada Vitest mail-status-footer-i18n (6 testes) no verde."
+      }
     },
     {
       "id": "J9",
