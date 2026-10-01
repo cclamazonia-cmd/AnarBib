@@ -6431,7 +6431,7 @@
   "notif.review.approved.body": "The administration approved the review of your batch: publishing is open.",
   "notif.review.changes.title": "Changes requested on a batch",
   "notif.review.changes.body": "The administration requests changes before publishing. Read its notes in Cataloguing › Batches.",
-  "error.publish.review_required": "This batch comes from an import: it is published after a review approved by the network administration (Cataloguing › Batches › Request review).",
+  "error.publish.review_required": "This batch comes from an import: it is published after a review approved by the network administration (Cataloging › Batches › Request review).",
   "error.review.coordenador_only": "Requesting a review is a coordination gesture.",
   "error.review.batch_not_found": "Batch not found.",
   "error.review.batch_not_open": "This batch is no longer open.",
@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Authorities — ISO 2709",
   "importacoes.export.lote.autoritesHint": "In PMB, import this file first from the « Authorities » menu (« Autorités » in a French PMB), into PMB’s default thesaurus, then the catalogue (« UNIMARC — ISO 2709 » format). PMB then matches authors by name and dates. In PMB 8.1, leave « No » for « Take authority records into account » (« Tenir compte des notices d’autorités » in a French PMB): its form does not pass on the origin you choose.",
   "importacoes.export.lote.pmbHint": "To import it into PMB: « Administration > Imports > UNIMARC Items » (« Exemplaires UNIMARC » in a French PMB; the neighbouring tab, « UNIMARC Records », ignores the items), with the « Catégories RAMEAU » function and « Yes » to « Generate links between records? » — without that « Yes », PMB links no article to its journal. The owner, status and location of the items are chosen in that form.",
-  "catalogacao.publish.copiesNoneImported": "The imported file describes no copy for this record: none will be created when it is published. If one is needed, add it once the record is published."
+  "catalogacao.publish.copiesNoneImported": "The imported file describes no copy for this record: none will be created when it is published. If one is needed, add it once the record is published.",
+  "error.publish.imported_needs_batch": "This draft comes from an import: it is published within a batch, after a review approved by the network administration. Put it in a batch of its library, then request the review (Cataloging › Batches › Request review).",
+  "error.publish.added_after_review": "This draft entered the batch after the review was requested: the approval does not cover it. Request the batch review again (Cataloging › Batches › Request review), then publish it.",
+  "error.import.run_has_linked_drafts": "Drafts created by this import are still waiting outside their original batch. Publish them (after review) or move them to the trash, then delete the import.",
+  "error.import.rattacher_par_rapprocher": "To link a row to a record already in the catalogue, use Create copy: it also adds the copy.",
+  "importacoes.fila.promotedPartial": "{created} draft(s) created for {asked} selected row(s): the others could no longer become drafts (already handled, decided or removed elsewhere in the meantime). The list has been reloaded.",
+  "catalogacao.batch.review.afterReview": "{n} draft(s) added after the request: request the review again before publishing them.",
+  "error.catalog.restore_line_repromoted": "This draft cannot come back: its import row has since produced another draft. Work on that one.",
+  "error.import.run_has_trashed_items": "Copies matched from this import are in the trash: empty the trash, or restore them and publish them after review, then delete the import.",
+  "error.catalog.restore_item_import_gone": "This copy came from an import that has since been deleted: it cannot come back. Create it again by hand if needed.",
+  "error.publish.status_reserved": "Only publishing sets a draft to “published”.",
+  "importacoes.fila.rejectedPartial": "{rejected} of {asked} row(s) rejected: the others had already been handled, rejected or removed elsewhere in the meantime. The list has been reloaded.",
+  "error.import.rows_held_by_items": "Copies matched from this file are not published yet (trash included): their import rows cannot be deleted.",
+  "importacoes.fila.reconciledPartial": "{skipped} of {asked} row(s) skipped: already handled, rejected, discarded or removed elsewhere in the meantime. The list has been reloaded."
 }

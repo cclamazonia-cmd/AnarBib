@@ -6431,7 +6431,7 @@
   "notif.review.approved.body": "Die Verwaltung hat die Prüfung deines Loses genehmigt: die Veröffentlichung ist frei.",
   "notif.review.changes.title": "Nacharbeit an einem Los angefragt",
   "notif.review.changes.body": "Die Verwaltung bittet um Nacharbeit vor der Veröffentlichung. Anmerkungen unter Katalogisierung › Lose.",
-  "error.publish.review_required": "Dieses Los stammt aus einem Import: Veröffentlichung erst nach einer von der Netzwerkverwaltung genehmigten Prüfung (Katalogisierung › Lose › Prüfung anfragen).",
+  "error.publish.review_required": "Dieses Los stammt aus einem Import: Veröffentlichung erst nach einer von der Netzwerkverwaltung genehmigten Prüfung (Katalogisierung › Stapel › Prüfung anfragen).",
   "error.review.coordenador_only": "Die Prüfungsanfrage ist Sache der Koordination.",
   "error.review.batch_not_found": "Los nicht gefunden.",
   "error.review.batch_not_open": "Dieses Los ist nicht mehr offen.",
@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Normdaten — ISO 2709",
   "importacoes.export.lote.autoritesHint": "Importiere diese Datei in PMB zuerst über das Menü « Authorities » (« Autorités » in einem französischen PMB), in den Standard-Thesaurus von PMB, danach den Katalog (Format « UNIMARC — ISO 2709 »). PMB ordnet die Autoren dann nach Name und Lebensdaten zu. Lass in PMB 8.1 bei « Tenir compte des notices d’autorités » « Nein » stehen: Sein Formular gibt die gewählte Herkunft nicht weiter.",
   "importacoes.export.lote.pmbHint": "So importierst du sie in PMB: « Administration > Imports > UNIMARC Items » (« Exemplaires UNIMARC » in einem französischen PMB; der benachbarte Reiter « UNIMARC Records » übergeht die Exemplare), mit der Funktion « Catégories RAMEAU » und « Ja » (PMB zeigt « Ya ») bei « Generate links between records? » — ohne dieses « Ja » verknüpft PMB keinen Artikel mit seiner Zeitschrift. Eigentümer, Status und Standort der Exemplare wählst du in diesem Formular.",
-  "catalogacao.publish.copiesNoneImported": "Die importierte Datei beschreibt kein Exemplar für diesen Datensatz: Bei der Veröffentlichung wird keines angelegt. Wenn eines nötig ist, füge es hinzu, sobald der Datensatz veröffentlicht ist."
+  "catalogacao.publish.copiesNoneImported": "Die importierte Datei beschreibt kein Exemplar für diesen Datensatz: Bei der Veröffentlichung wird keines angelegt. Wenn eines nötig ist, füge es hinzu, sobald der Datensatz veröffentlicht ist.",
+  "error.publish.imported_needs_batch": "Dieser Entwurf stammt aus einem Import: Er wird in einem Stapel veröffentlicht, nach einer von der Netzwerkverwaltung genehmigten Prüfung. Lege ihn in einen Stapel seiner Bibliothek und frage dann die Prüfung an (Katalogisierung › Stapel › Prüfung anfragen).",
+  "error.publish.added_after_review": "Dieser Entwurf kam nach der Prüfungsanfrage in den Stapel: Die Genehmigung deckt ihn nicht ab. Frage die Prüfung des Stapels erneut an (Katalogisierung › Stapel › Prüfung anfragen) und veröffentliche ihn dann.",
+  "error.import.run_has_linked_drafts": "Aus diesem Import entstandene Entwürfe warten noch außerhalb ihres ursprünglichen Loses. Veröffentliche sie (nach der Prüfung) oder verschiebe sie in den Papierkorb und lösche dann den Import.",
+  "error.import.rattacher_par_rapprocher": "Um eine Zeile mit einem bereits vorhandenen Katalogeintrag zu verknüpfen, nutze Exemplar anlegen: Das legt auch das Exemplar an.",
+  "importacoes.fila.promotedPartial": "{created} Entwurf/Entwürfe für {asked} gewählte Zeile(n) erstellt: Die übrigen konnten keine Entwürfe mehr werden (inzwischen anderswo bearbeitet, entschieden oder entfernt). Die Liste wurde neu geladen.",
+  "catalogacao.batch.review.afterReview": "{n} Entwurf/Entwürfe nach der Anfrage hinzugekommen: Frage die Prüfung erneut an, bevor du sie veröffentlichst.",
+  "error.catalog.restore_line_repromoted": "Dieser Entwurf kann nicht zurückkehren: Seine Importzeile hat inzwischen einen anderen Entwurf ergeben. Arbeite an jenem weiter.",
+  "error.import.run_has_trashed_items": "Aus diesem Import zugeordnete Exemplare liegen im Papierkorb: Leere den Papierkorb, oder stelle sie wieder her und veröffentliche sie nach der Prüfung, und lösche dann den Import.",
+  "error.catalog.restore_item_import_gone": "Dieses Exemplar stammte aus einem inzwischen gelöschten Import: Es kann nicht zurückkehren. Lege es bei Bedarf von Hand neu an.",
+  "error.publish.status_reserved": "Nur das Veröffentlichen setzt einen Entwurf auf „veröffentlicht“.",
+  "importacoes.fila.rejectedPartial": "{rejected} von {asked} Zeile(n) abgelehnt: Die übrigen waren inzwischen schon anderswo bearbeitet, abgelehnt oder entfernt worden. Die Liste wurde neu geladen.",
+  "error.import.rows_held_by_items": "Aus dieser Datei zugeordnete Exemplare sind noch nicht veröffentlicht (Papierkorb eingeschlossen): Die zugehörigen Importzeilen können nicht gelöscht werden.",
+  "importacoes.fila.reconciledPartial": "{skipped} von {asked} Zeile(n) übergangen: inzwischen anderswo bearbeitet, abgelehnt, verworfen oder entfernt. Die Liste wurde neu geladen."
 }

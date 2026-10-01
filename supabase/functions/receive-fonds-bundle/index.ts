@@ -95,8 +95,14 @@ Deno.serve(async (req) => {
       run_status: 'processing', started_at: new Date().toISOString(), finished_at: null, parser_version: PARSER_VERSION,
     }).eq('id', runId);
     if ((existingCount ?? 0) > 0 && forceReparse) {
-      await admin.schema('ingest').from('partner_catalog_staging_rows').delete().eq('run_id', runId);
-      await admin.schema('ingest').from('partner_catalog_received_assets').delete().eq('run_id', runId);
+      // H21 lot 0 (30/09/2026) : un effacement refusé (ligne retenue par un
+      // exemplaire rapproché non publié) arrête tout AVANT de toucher aux
+      // fichiers reçus — sinon leur liste partait, et la réinsertion des lignes
+      // butait ensuite sur (run_id, row_no).
+      const { error: delRowsErr } = await admin.schema('ingest').from('partner_catalog_staging_rows').delete().eq('run_id', runId);
+      if (delRowsErr) throw delRowsErr;
+      const { error: delAssetsErr } = await admin.schema('ingest').from('partner_catalog_received_assets').delete().eq('run_id', runId);
+      if (delAssetsErr) throw delAssetsErr;
     }
 
     // ── Déballage du ZIP ──────────────────────────────────────────────────

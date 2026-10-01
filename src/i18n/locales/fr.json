@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Autorités — ISO 2709",
   "importacoes.export.lote.autoritesHint": "Dans PMB, importe d’abord ce fichier (Autorités > Import), dans le thésaurus par défaut de PMB, puis le catalogue (format « UNIMARC — ISO 2709 »). PMB rapproche alors les auteurs par leur nom et leurs dates. Dans PMB 8.1, laisse « Non » à « Tenir compte des notices d’autorités » : son formulaire ne transmet pas l’origine choisie.",
   "importacoes.export.lote.pmbHint": "Pour l’importer dans PMB : « Administration > Imports > Exemplaires UNIMARC » (l’onglet voisin, « Notices UNIMARC », ignore les exemplaires), avec la fonction « Catégories RAMEAU » et « Oui » à « Générer les liens entre notices ? » — sans ce « Oui », PMB ne rattache aucun article à sa revue. Le prêteur, le statut et la localisation des exemplaires se choisissent dans ce formulaire.",
-  "catalogacao.publish.copiesNoneImported": "Le fichier importé ne décrit aucun exemplaire pour cette notice : aucun ne sera créé à la publication. S’il en faut un, ajoute-le une fois la notice publiée."
+  "catalogacao.publish.copiesNoneImported": "Le fichier importé ne décrit aucun exemplaire pour cette notice : aucun ne sera créé à la publication. S’il en faut un, ajoute-le une fois la notice publiée.",
+  "error.publish.imported_needs_batch": "Ce brouillon vient d’un import : il se publie dans un lot, après une révision approuvée par l’administration du réseau. Range-le dans un lot de sa bibliothèque, puis demande la révision (Catalogage › Lots › Demander la révision).",
+  "error.publish.added_after_review": "Ce brouillon est entré dans le lot après la demande de révision : l’approbation ne le couvre pas. Redemande la révision du lot (Catalogage › Lots › Demander la révision), puis publie-le.",
+  "error.import.run_has_linked_drafts": "Des brouillons nés de cet import attendent encore hors de leur lot d’origine. Publie-les (après révision) ou mets-les à la corbeille, puis supprime l’import.",
+  "error.import.rattacher_par_rapprocher": "Pour rattacher une ligne à une notice déjà au catalogue, utilise Rapprocher : il ajoute aussi l’exemplaire.",
+  "importacoes.fila.promotedPartial": "{created} brouillon(s) créé(s) pour {asked} ligne(s) choisie(s) : les autres ne pouvaient plus en devenir (déjà traitées, décidées ou retirées ailleurs entre-temps). La liste est rechargée.",
+  "catalogacao.batch.review.afterReview": "{n} brouillon(s) entré(s) après la demande : redemande la révision avant de les publier.",
+  "error.catalog.restore_line_repromoted": "Ce brouillon ne peut pas revenir : sa ligne d’import a déjà donné un autre brouillon depuis. Travaille sur celui-là.",
+  "error.import.run_has_trashed_items": "Des exemplaires rapprochés depuis cet import sont à la corbeille : vide la corbeille, ou restaure-les et publie-les après révision, puis supprime l’import.",
+  "error.catalog.restore_item_import_gone": "Cet exemplaire venait d’un import supprimé depuis : il ne peut pas revenir. Crée-le de nouveau à la main si besoin.",
+  "error.publish.status_reserved": "Seule la publication met un brouillon à l’état « publié ».",
+  "importacoes.fila.rejectedPartial": "{rejected} ligne(s) rejetée(s) sur {asked} : les autres étaient déjà traitées, rejetées ou retirées ailleurs entre-temps. La liste est rechargée.",
+  "error.import.rows_held_by_items": "Des exemplaires rapprochés depuis ce fichier ne sont pas encore publiés (corbeille comprise) : leurs lignes d’import ne peuvent pas être effacées.",
+  "importacoes.fila.reconciledPartial": "{skipped} ligne(s) sur {asked} ignorée(s) : déjà traitées, rejetées, écartées ou retirées ailleurs entre-temps. La liste est rechargée."
 }

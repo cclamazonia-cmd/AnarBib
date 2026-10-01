@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Autoridades — ISO 2709",
   "importacoes.export.lote.autoritesHint": "En PMB, importa primero este archivo desde el menú « Autoridades » (« Autorités » en un PMB en francés), en el tesauro por defecto de PMB, y después el catálogo (formato « UNIMARC — ISO 2709 »). PMB relaciona entonces los autores por el nombre y las fechas. En PMB 8.1, deja « No » en « Tenir compte des notices d’autorités »: su formulario no transmite el origen elegido.",
   "importacoes.export.lote.pmbHint": "Para importarlo en PMB: « Administración > Importar > Ejemplares UNIMARC » (« Exemplaires UNIMARC » en un PMB en francés; la pestaña vecina, « Registro UNIMARC », ignora los ejemplares), con la función « Catégories RAMEAU » y « Sí » en « ¿Generar enlace entre noticias? » — sin ese « Sí », PMB no enlaza ningún artículo con su revista. El propietario, el estado y la localización de los ejemplares se eligen en ese formulario.",
-  "catalogacao.publish.copiesNoneImported": "El archivo importado no describe ningún ejemplar para esta ficha: no se creará ninguno al publicarla. Si hace falta uno, añádelo una vez publicada la ficha."
+  "catalogacao.publish.copiesNoneImported": "El archivo importado no describe ningún ejemplar para esta ficha: no se creará ninguno al publicarla. Si hace falta uno, añádelo una vez publicada la ficha.",
+  "error.publish.imported_needs_batch": "Este borrador procede de una importación: se publica dentro de un lote, tras una revisión aprobada por la administración de la red. Colócalo en un lote de su biblioteca y luego solicita la revisión (Catalogación › Lotes › Solicitar revisión).",
+  "error.publish.added_after_review": "Este borrador entró en el lote después de la solicitud de revisión: la aprobación no lo cubre. Vuelve a solicitar la revisión del lote (Catalogación › Lotes › Solicitar revisión) y luego publícalo.",
+  "error.import.run_has_linked_drafts": "Hay borradores creados por esta importación que aún esperan fuera de su lote de origen. Publícalos (tras la revisión) o envíalos a la papelera y luego elimina la importación.",
+  "error.import.rattacher_par_rapprocher": "Para vincular una fila a una ficha que ya está en el catálogo, usa Crear ejemplar: también añade el ejemplar.",
+  "importacoes.fila.promotedPartial": "{created} borrador(es) creado(s) para {asked} fila(s) elegida(s): las demás ya no podían convertirse en borradores (ya tratadas, decididas o retiradas en otro lugar mientras tanto). La lista se ha recargado.",
+  "catalogacao.batch.review.afterReview": "{n} borrador(es) añadido(s) después de la solicitud: vuelve a solicitar la revisión antes de publicarlos.",
+  "error.catalog.restore_line_repromoted": "Este borrador no puede volver: su fila de importación ya ha dado otro borrador desde entonces. Trabaja en ese.",
+  "error.import.run_has_trashed_items": "Hay ejemplares vinculados desde esta importación en la papelera: vacía la papelera, o restáuralos y publícalos tras la revisión, y luego elimina la importación.",
+  "error.catalog.restore_item_import_gone": "Este ejemplar venía de una importación eliminada desde entonces: no puede volver. Créalo de nuevo a mano si hace falta.",
+  "error.publish.status_reserved": "Solo la publicación pone un borrador en estado «publicado».",
+  "importacoes.fila.rejectedPartial": "{rejected} fila(s) rechazada(s) de {asked}: las demás ya habían sido tratadas, rechazadas o retiradas en otro lugar mientras tanto. La lista se ha recargado.",
+  "error.import.rows_held_by_items": "Hay ejemplares vinculados desde este archivo que aún no se han publicado (papelera incluida): sus filas de importación no se pueden borrar.",
+  "importacoes.fila.reconciledPartial": "{skipped} fila(s) de {asked} ignorada(s): ya tratadas, rechazadas, descartadas o retiradas en otro lugar mientras tanto. La lista se ha recargado."
 }

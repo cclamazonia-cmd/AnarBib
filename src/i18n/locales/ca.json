@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Autoritats — ISO 2709",
   "importacoes.export.lote.autoritesHint": "A PMB, importa primer aquest fitxer des del menú « Autoritats » (« Autorités » en un PMB en francès), al tesaurus per defecte de PMB, i després el catàleg (format « UNIMARC — ISO 2709 »). PMB relaciona llavors els autors pel nom i les dates. A PMB 8.1, deixa « No » a « Tenir compte des notices d’autorités »: el seu formulari no transmet l’origen triat.",
   "importacoes.export.lote.pmbHint": "Per importar-lo a PMB: « Administració > Importar > Exemplars UNIMARC » (« Exemplaires UNIMARC » en un PMB en francès; la pestanya veïna, « Registres UNIMARC », ignora els exemplars), amb la funció « Catégories RAMEAU » i « Sí » a « Generar els enllaços entre registres ? » — sense aquest « Sí », PMB no enllaça cap article amb la seva revista. El propietari, l’estat i la localització dels exemplars es trien en aquest formulari.",
-  "catalogacao.publish.copiesNoneImported": "El fitxer importat no descriu cap exemplar per a aquesta fitxa: no se’n crearà cap en publicar-la. Si en cal un, afegeix-lo un cop publicada la fitxa."
+  "catalogacao.publish.copiesNoneImported": "El fitxer importat no descriu cap exemplar per a aquesta fitxa: no se’n crearà cap en publicar-la. Si en cal un, afegeix-lo un cop publicada la fitxa.",
+  "error.publish.imported_needs_batch": "Aquest esborrany prové d’una importació: es publica dins d’un lot, després d’una revisió aprovada per l’administració de la xarxa. Posa’l en un lot de la seva biblioteca i després sol·licita la revisió (Catalogació › Lots › Sol·licitar revisió).",
+  "error.publish.added_after_review": "Aquest esborrany ha entrat al lot després de la sol·licitud de revisió: l’aprovació no el cobreix. Torna a sol·licitar la revisió del lot (Catalogació › Lots › Sol·licitar revisió) i després publica’l.",
+  "error.import.run_has_linked_drafts": "Hi ha esborranys creats per aquesta importació que encara esperen fora del seu lot d’origen. Publica’ls (després de la revisió) o envia’ls a la paperera i després elimina la importació.",
+  "error.import.rattacher_par_rapprocher": "Per vincular una fila a una fitxa que ja és al catàleg, fes servir Crear exemplar: també hi afegeix l’exemplar.",
+  "importacoes.fila.promotedPartial": "{created} esborrany(s) creat(s) per a {asked} fila(es) triada(es): les altres ja no podien esdevenir esborranys (ja tractades, decidides o retirades en un altre lloc mentrestant). La llista s’ha recarregat.",
+  "catalogacao.batch.review.afterReview": "{n} esborrany(s) afegit(s) després de la sol·licitud: torna a sol·licitar la revisió abans de publicar-los.",
+  "error.catalog.restore_line_repromoted": "Aquest esborrany no pot tornar: la seva fila d’importació ja ha donat un altre esborrany des de llavors. Treballa en aquell.",
+  "error.import.run_has_trashed_items": "Hi ha exemplars vinculats des d’aquesta importació a la paperera: buida la paperera, o restaura’ls i publica’ls després de la revisió, i després elimina la importació.",
+  "error.catalog.restore_item_import_gone": "Aquest exemplar venia d’una importació eliminada des de llavors: no pot tornar. Torna’l a crear a mà si cal.",
+  "error.publish.status_reserved": "Només la publicació posa un esborrany en estat «publicat».",
+  "importacoes.fila.rejectedPartial": "{rejected} fila(es) rebutjada(es) de {asked}: les altres ja havien estat tractades, rebutjades o retirades en un altre lloc mentrestant. La llista s’ha recarregat.",
+  "error.import.rows_held_by_items": "Hi ha exemplars vinculats des d’aquest fitxer que encara no s’han publicat (paperera inclosa): les seves files d’importació no es poden esborrar.",
+  "importacoes.fila.reconciledPartial": "{skipped} fila(es) de {asked} ignorada(es): ja tractades, rebutjades, descartades o retirades en un altre lloc mentrestant. La llista s’ha recarregat."
 }

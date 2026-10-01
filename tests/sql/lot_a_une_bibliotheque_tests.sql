@@ -37,6 +37,16 @@
 -- T14 supprimer : ce qui l'empêche, compté sur tout le lot.
 -- T15 lot approuvé : l'administration redemande une révision, puis réattribue.
 -- T16 une notice importée sans bibliothèque ne se publie pas (ni chez qui publie).
+--     Supprimée définitivement puis rejouée du journal, elle reprend sa ligne
+--     (H21 lot 0, IMP-27 e, seconde passe : lien rétabli) et reste refusée ; à
+--     la corbeille, run supprimé sous elle, puis sortie de corbeille : sans
+--     lien, la trace marc_json.ingest seule la garde, toujours refusée.
+--     Contre-épreuves (30/09, mutants ciblés de la définition vivante,
+--     scratchpad h21-lot0-agents/E-seconde) : E-restaurer-sans-reprise (le
+--     rejeu ne reprend pas la ligne) : 16/17, T16 (lien repris=false) ;
+--     E-b30-lien-seul (la garde de bibliothèque ne lit plus la trace) : 16/17,
+--     T16 (la notice sans lien se publie, sans bibliothèque) — le rejeu,
+--     relié, reste refusé : les deux temps prouvent des choses distinctes.
 --
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'LOT-A-UNE-BIBLIOTHEQUE OK : N/N'
@@ -52,7 +62,7 @@ DECLARE
   v_bA bigint; v_bB bigint; v_bA2 bigint; v_bC bigint; v_xA bigint; v_x2 bigint; v_aA bigint; v_id bigint;
   v_id2 bigint; v_id3 bigint; v_id4 bigint; v_id5 bigint; v_x3 bigint; v_x4 bigint;
   v_src bigint; v_run bigint; v_row bigint; v_bookB bigint; v_exA bigint; v_audit bigint;
-  v_n int; v_m int; v_k int; v_hint text; v_txt text; v_txt2 text; v_ok boolean; v_uuid uuid;
+  v_n int; v_m int; v_k int; v_hint text; v_txt text; v_txt2 text; v_txt3 text; v_txt4 text; v_ok boolean; v_lien boolean; v_uuid uuid;
   v_res jsonb; v_res2 jsonb; v_nomA text;
 BEGIN
   -- ── Décor (postgres) ────────────────────────────────────────────────
@@ -704,26 +714,47 @@ BEGIN
     v_txt := NULL;
     BEGIN PERFORM public.publish_catalog_batch(v_lot);
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_txt = PG_EXCEPTION_HINT; END;
-    -- supprimée définitivement puis rejouée depuis le journal : le lien d'import
-    -- est parti en cascade, la trace marc_json.ingest reste — toujours refusée.
+    -- (1) supprimée définitivement puis rejouée depuis le journal : depuis H21
+    -- lot 0 (IMP-27 e, seconde passe), la création rejouée reprend la ligne que
+    -- sa suppression avait écartée — lien rétabli (bibliothèque du dépôt et du
+    -- brouillon : inconnues l'une et l'autre) — toujours refusée.
     UPDATE public.book_drafts SET status = 'cancelled' WHERE id = v_id;
     DELETE FROM public.book_drafts WHERE id = v_id;
     SELECT max(l.id) INTO v_audit FROM public.catalog_audit_log l WHERE l.action = 'delete' AND l.entity_type = 'book' AND l.entity_id = v_id;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_adminStaff, 'role', 'authenticated')::text, true);
     v_res2 := public.fn_restore_deleted_draft(v_audit);
     UPDATE public.book_drafts SET status = 'draft' WHERE id = v_id;
+    v_lien := EXISTS (SELECT 1 FROM ingest.partner_catalog_row_to_draft m WHERE m.draft_id = v_id AND m.staging_row_id = v_row);
     v_txt2 := NULL;
     BEGIN PERFORM public.publish_book_draft(v_id);
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_txt2 = PG_EXCEPTION_HINT; END;
+    -- (2) à la corbeille, le run supprimé sous elle (rien de vivant ne le
+    -- retient) : le lien part en cascade avec la ligne ; sortie de corbeille,
+    -- la trace marc_json.ingest seule dit qu'elle est importée — toujours refusée.
+    UPDATE public.book_drafts SET status = 'cancelled' WHERE id = v_id;
+    v_txt3 := NULL;
+    BEGIN PERFORM public.fn_import_delete_run(v_run);
+    EXCEPTION WHEN OTHERS THEN v_txt3 := coalesce(SQLERRM, '?'); END;
+    UPDATE public.book_drafts SET status = 'draft' WHERE id = v_id;
+    v_txt4 := NULL;
+    BEGIN PERFORM public.publish_book_draft(v_id);
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_txt4 = PG_EXCEPTION_HINT; END;
     IF (SELECT library_id FROM public.catalog_batches WHERE id = v_lot) IS NULL
        AND v_hint = 'error.publish.record_without_library' AND v_txt = 'error.publish.record_without_library'
-       AND NOT EXISTS (SELECT 1 FROM ingest.partner_catalog_row_to_draft m WHERE m.draft_id = v_id)
+       AND v_lien
        AND v_txt2 = 'error.publish.record_without_library'
+       AND v_txt3 IS NULL
+       AND NOT EXISTS (SELECT 1 FROM ingest.partner_catalog_import_runs WHERE id = v_run)
+       AND NOT EXISTS (SELECT 1 FROM ingest.partner_catalog_row_to_draft m WHERE m.draft_id = v_id)
+       AND (SELECT marc_json ? 'ingest' FROM public.book_drafts WHERE id = v_id)
+       AND v_txt4 = 'error.publish.record_without_library'
        AND NOT EXISTS (SELECT 1 FROM public.books b WHERE b.bib_ref = 'B30-DEP-1')
        AND (SELECT status FROM public.book_drafts WHERE id = v_id) IN ('draft', 'ready')
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : admin staff='||coalesce(v_hint,'publiee')||' admin='||coalesce(v_txt,'publiee')
-         ||' rejouee='||coalesce(v_txt2,'publiee')||' restauration='||coalesce(v_res2::text,'∅')); END IF;
+         ||' rejouee='||coalesce(v_txt2,'publiee')||' (lien repris='||coalesce(v_lien::text,'∅')||')'
+         ||' suppression du run='||coalesce(v_txt3,'faite')||' trace seule='||coalesce(v_txt4,'publiee')
+         ||' restauration='||coalesce(v_res2::text,'∅')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

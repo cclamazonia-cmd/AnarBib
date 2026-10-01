@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Autorità — ISO 2709",
   "importacoes.export.lote.autoritesHint": "In PMB, importa prima questo file dal menu « Responsabilità » (« Autorités » in un PMB in francese), nel thesaurus predefinito di PMB, poi il catalogo (formato « UNIMARC — ISO 2709 »). PMB abbina allora gli autori in base al nome e alle date. In PMB 8.1, lascia « No » a « Tenir compte des notices d’autorités »: il suo modulo non trasmette l’origine scelta.",
   "importacoes.export.lote.pmbHint": "Per importarlo in PMB: « Amministrazione > Importa > Esemplari UNIMARC » (« Exemplaires UNIMARC » in un PMB in francese; la scheda vicina, « Schede UNIMARC », ignora gli esemplari), con la funzione « Catégories RAMEAU » e « Sì » a « Generare i collegamenti tra le schede ? » — senza quel « Sì », PMB non collega nessun articolo alla sua rivista. Il proprietario, lo stato e la collocazione degli esemplari si scelgono in quel modulo.",
-  "catalogacao.publish.copiesNoneImported": "Il file importato non descrive alcuna copia per questa scheda: non ne verrà creata nessuna alla pubblicazione. Se ne serve una, aggiungila una volta pubblicata la scheda."
+  "catalogacao.publish.copiesNoneImported": "Il file importato non descrive alcuna copia per questa scheda: non ne verrà creata nessuna alla pubblicazione. Se ne serve una, aggiungila una volta pubblicata la scheda.",
+  "error.publish.imported_needs_batch": "Questa bozza proviene da un’importazione: si pubblica all’interno di un lotto, dopo una revisione approvata dall’amministrazione della rete. Mettila in un lotto della sua biblioteca, poi richiedi la revisione (Catalogazione › Lotti › Richiedere la revisione).",
+  "error.publish.added_after_review": "Questa bozza è entrata nel lotto dopo la richiesta di revisione: l’approvazione non la copre. Richiedi di nuovo la revisione del lotto (Catalogazione › Lotti › Richiedere la revisione), poi pubblicala.",
+  "error.import.run_has_linked_drafts": "Ci sono bozze create da questa importazione che attendono ancora fuori dal loro lotto d’origine. Pubblicale (dopo la revisione) o spostale nel cestino, poi elimina l’importazione.",
+  "error.import.rattacher_par_rapprocher": "Per collegare una riga a una scheda già presente a catalogo, usa Crea esemplare: aggiunge anche l’esemplare.",
+  "importacoes.fila.promotedPartial": "{created} bozza/e creata/e per {asked} riga/e scelta/e: le altre non potevano più diventare bozze (già trattate, decise o rimosse altrove nel frattempo). L’elenco è stato ricaricato.",
+  "catalogacao.batch.review.afterReview": "{n} bozza/e aggiunta/e dopo la richiesta: richiedi di nuovo la revisione prima di pubblicarle.",
+  "error.catalog.restore_line_repromoted": "Questa bozza non può tornare: la sua riga d’importazione ha già prodotto un’altra bozza nel frattempo. Lavora su quella.",
+  "error.import.run_has_trashed_items": "Ci sono esemplari collegati da questa importazione nel cestino: svuota il cestino, oppure ripristinali e pubblicali dopo la revisione, poi elimina l’importazione.",
+  "error.catalog.restore_item_import_gone": "Questo esemplare veniva da un’importazione eliminata nel frattempo: non può tornare. Ricrealo a mano se serve.",
+  "error.publish.status_reserved": "Solo la pubblicazione porta una bozza allo stato «pubblicata».",
+  "importacoes.fila.rejectedPartial": "{rejected} riga/e rifiutata/e su {asked}: le altre erano già state trattate, rifiutate o rimosse altrove nel frattempo. L’elenco è stato ricaricato.",
+  "error.import.rows_held_by_items": "Ci sono esemplari collegati da questo file non ancora pubblicati (cestino compreso): le loro righe d’importazione non possono essere cancellate.",
+  "importacoes.fila.reconciledPartial": "{skipped} riga/e su {asked} ignorata/e: già trattate, rifiutate, scartate o rimosse altrove nel frattempo. L’elenco è stato ricaricato."
 }

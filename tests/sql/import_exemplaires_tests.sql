@@ -3,6 +3,8 @@
 -- deviennent des exemplaires (H19, REGISTRE IMP-21)
 -- Date    : 2026-09-26  ·  Session : aller-retour PMB (G15, H14)
 -- Ref     : migration 20260927113000_h19_exemplaires_importes
+--           adaptee au H21 lot 0 (29/09/2026, REGISTRE IMP-26 et IMP-27) :
+--           migration 20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe
 --
 -- Le parcours entier, avec les formes que l'EF ecrit (normalized_payload.items) :
 -- T1  promotion : un brouillon d'exemplaire par exemplaire, rattache a SA
@@ -25,7 +27,8 @@
 -- T9  profil : correspondance des exemplaires posee, relue ; cle inconnue refusee.
 -- T10 unicite du code d'origine PAR bibliotheque (pas globale).
 -- T11 droits : anon n'execute ni la creation de profil ni la publication ;
---     authenticated n'execute pas la fonction ingest.
+--     authenticated n'execute pas la fonction ingest (H21 lot 0 : sa seule
+--     signature est fn_create_item_drafts_for_batch(bigint, uuid, bigint[])).
 -- Revue contradictoire du 26-27/09 : un test par defaut corrige.
 -- T12 republier un exemplaire importe deja publie garde son tombo (aucun
 --     numero brule) ; le tombo pose revient au brouillon.
@@ -39,9 +42,12 @@
 -- T17 rapprochement d'un depot compagnon : administration du reseau seule,
 --     exemplaires verses a la destination de la source.
 -- T18 rapprochement : code deja dans la bibliotheque non recree ; ligne
---     rapprochee non promue, ligne promue non rapprochee.
+--     rapprochee ou rejetee non promue ; ligne rattachee (accept_duplicate)
+--     jamais promue en creation, meme par un filtre explicite (IMP-26 h) :
+--     son chemin est « Rapprocher » ; ligne promue avant non rapprochee.
 -- T19 declencheur : repointage limite au meme rapprochement.
--- T20 le code d'origine n'entre dans aucune note de provenance (IMP-21 b).
+-- T20 le code d'origine n'entre dans aucune note de provenance (IMP-21 b) ;
+--     au moins 60 brouillons codes (64 au 29/09, dont PRO-1 et PRO-2 de T18).
 -- Seconde revue du 27/09 :
 -- T21 fusion de doublons : exemplaires du perdant au survivant ; d'un brouillon absorbe, sur la fiche.
 -- T22 journal : une notice supprimee revient avec ses exemplaires importes.
@@ -54,6 +60,68 @@
 -- T28 exemplaire ecarte seul, restaure apres la publication de sa notice : publie sur la fiche.
 -- T29 journal : pas d'entree a part pour un exemplaire supprime avec sa notice ; rejeu isole refuse proprement.
 -- T30 profil supprime depuis l'import : refuse des l'envoi.
+-- H21 lot 0 (29/09) :
+-- T31 un exemplaire rapproche (lot ne d'un rapprochement, IMP-27 c) ne se
+--     publie qu'apres revision de son lot : refuse avant (HINT reel), seul ou
+--     par le lot ; publie sur la fiche existante apres demande (coordination)
+--     et approbation (administration du reseau). Aucune autre publication de
+--     la suite ne porte sur un exemplaire rapproche (T3, T12, T25, T28 :
+--     exemplaires d'une notice importee ; T13, T27 : faits a la main hors lot).
+-- H21 lot 0, sixieme passe (30/09) :
+-- T32 « Reattribuer a une autre bibliotheque » (ExemplarDraftForm.
+--     handleReassignLibrary, #cross-lib-reassign) d'un exemplaire RAPPROCHE
+--     publie : un run du catalogue propre de BLMF, une ligne rattachee a la
+--     notice existante, quatre exemplaires A B C D ; sous authenticated,
+--     « Rapprocher » (coordination de BLMF), demande de revision, approbation
+--     (administration du reseau), « Publier » de A, B et D (C reste en cours
+--     dans le lot approuve). La bibliotheque cible a son schema de
+--     numerotation et detient la notice (decor : sans detention, la
+--     reattribution bute sur holding_library_mismatch, avant comme apres le
+--     lot 0). Le geste de l'ecran rejoue tel quel, sous authenticated :
+--     UPDATE du brouillon (bibliotheque cible, detention et tombo vides,
+--     updated_by, batch_id NULL — le lot est de BLMF, pas de la cible, B30),
+--     puis publish_exemplar_draft ; (a) par une personne staff de BLMF ET de
+--     la cible (le bouton s'affiche : deux bibliotheques de staff), sur A ;
+--     (b) par l'administration du reseau, sur B. La republication passe : le
+--     MEME exemplaire du catalogue (aucun doublon) passe a la cible, dans sa
+--     detention, avec un tombo de SON schema ; le brouillon est publie, sans
+--     lot, a la cible, au tombo pose ; aucun nouveau tour (aucune revision
+--     creee, celle du lot reste approuvee). Temoins, refuses
+--     (error.publish.imported_needs_batch) : C, rapproche NON publie, sorti
+--     de son lot par l'API (aucun exemplaire au catalogue) ; D, publie, remis
+--     en 'draft' par l'API puis sorti de son lot (l'exemplaire reste a BLMF,
+--     meme tombo).
+--
+-- Contre-epreuve (definitions d'avant le lot 0 rejouees avant la suite) :
+--   ancien-promote-bulk-items + ancien-fn_create_book_drafts_from_import_rows :
+--     T18 tombe (la ligne rattachee 71z devient une notice) ; T11 tombe
+--     (ancienne signature) ; T19, T26, T31 tombent en cascade (T18 annule).
+--     Seul, ancien-promote-bulk-items fait aussi tomber T18 (l'ancien bulk
+--     choisit 71z, la creation du lot 0 la refuse : « Aucune ligne autorisee ») ;
+--     seul, ancien-fn_create_book_drafts_from_import_rows ne fait rien tomber
+--     (le bulk du lot 0 ne choisit deja plus 71z).
+--   ancien-publish_exemplar_draft : T31 tombe (publie sans revision) ; T32
+--     tombe (temoins C et D publies hors lot, a BLMF).
+--   ancien-fn_batch_is_imported : T31 tombe (le lot de rapprochement n'est
+--     pas « importe » : ni garde, ni demande de revision) ; T32 tombe (decor :
+--     « Lote % nao vem de uma importacao » a la demande de revision).
+--   T19 et T26 n'ont pas change : au premier passage du lot 0, ils tombaient
+--   en cascade de T18 (son bloc annule emportait la ligne v_r1 qu'ils visent).
+--   T32 ne tombe avec aucune des definitions de la creation ni du bulk
+--   (son run, sa ligne et son lot sont a lui).
+-- Mutants de la sixieme passe (h21-lot0-agents/P6/E/, definition VIVANTE de
+-- publish_exemplar_draft, ancre comptee ; rejoues le 01/10 par contre.sh,
+-- contre.log avec le detail de T32, contre-final.log sur ce texte) — chacun
+-- ne fait tomber que T32 :
+--   E6-1-publier-cinquieme-passe (la clause status retiree : la garde « sans
+--     lot » de la cinquieme passe) : (a) et (b) refuses
+--     (error.publish.imported_needs_batch), brouillons a moitie reecrits (a la
+--     cible, sans lot), exemplaires restes a BLMF ;
+--   E6-2-publier-sans-garde-hors-lot (plus de garde « sans lot ») : temoins C
+--     et D publies hors lot ;
+--   E6-3-publier-exemption-par-exemplaire-publie (l'exemption jugee sur
+--     published_exemplar_id, que l'API ne fige pas sur un exemplaire
+--     rapproche, au lieu du statut reserve) : temoin D publie hors lot.
 --
 -- Toutes les ecritures sont annulees : la suite se termine par un RAISE.
 --   Bilan OK : 'IMPORT-EXEMPLAIRES OK : N/N'
@@ -73,6 +141,12 @@ DECLARE
   v_other uuid; v_run5 bigint; v_run6 bigint; v_run7 bigint; v_run8 bigint;
   v_lot5 bigint; v_lot6 bigint; v_lot7 bigint; v_d5 bigint; v_d_mis bigint;
   v_r1 bigint; v_r2 bigint; v_txt2 text; v_ok boolean;
+  v_lot_pro bigint;   -- H21 lot 0 : lot de rapprochement de la ligne rattachee 71z (T18, T31)
+  -- H21 lot 0, sixieme passe (T32) : « Reattribuer » un exemplaire rapproche publie
+  v_lib3 uuid; v_multi uuid; v_run9 bigint; v_lot_rat bigint; v_tours int;
+  v_xa bigint; v_xb bigint; v_xc bigint; v_xd bigint; v_ea bigint; v_eb bigint; v_ed bigint; v_ed_tombo text;
+  v_na int; v_nb int; v_nc int; v_nd int; v_nd2 int;
+  v_hint_a text; v_hint_b text; v_hint_c text; v_hint_d text;
   v_items3 jsonb := '[{"source_item_code":"CDF0000000010","call_number":"027.6 GAR","note":null,"owner":"BDP","item_type":"uu","public":"u","status":null},
                       {"source_item_code":"CDF0000000011","call_number":"027.6 GAR","note":"Exemplaire de consultation","owner":"BDP","item_type":"uu","public":"u","status":null},
                       {"source_item_code":"CDF0000000012","call_number":"ARCH GAR 1","note":"Exemplaire dédicacé","owner":"Fonds propre","item_type":"uu","public":"u","status":null}]'::jsonb;
@@ -323,7 +397,10 @@ BEGIN
        AND to_regprocedure('public.fn_import_profile_create(uuid,text,jsonb,jsonb)') IS NULL
        AND NOT has_function_privilege('anon', 'public.publish_book_draft(bigint)', 'EXECUTE')
        AND NOT has_function_privilege('anon', 'public.publish_exemplar_draft(bigint)', 'EXECUTE')
-       AND NOT has_function_privilege('authenticated', 'ingest.fn_create_item_drafts_for_batch(bigint,uuid)', 'EXECUTE')
+       -- H21 lot 0 (IMP-27 d) : les exemplaires de la seule promotion en cours
+       -- (p_staging_row_ids) ; une seule signature, l'ancienne est retiree.
+       AND NOT has_function_privilege('authenticated', 'ingest.fn_create_item_drafts_for_batch(bigint,uuid,bigint[])', 'EXECUTE')
+       AND to_regprocedure('ingest.fn_create_item_drafts_for_batch(bigint,uuid)') IS NULL
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : droits inattendus'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -536,7 +613,7 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T18 ─────────────────────────────────────────────────────────────
-  v_t := 'T18 rapprochement : code deja la non recree ; rapprochee non promue ; promue non rapprochee';
+  v_t := 'T18 rapprochement : code deja la non recree ; rattachee jamais promue mais rapprochee (IMP-26 h) ; promue avant non rapprochee';
   BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
@@ -566,21 +643,49 @@ BEGIN
     IF v_res->>'batch_id' IS NOT NULL OR (v_res->>'rows_already_held')::int <> 1 THEN
       RAISE EXCEPTION 'selection deja detenue : %', v_res;
     END IF;
-    -- Une ligne neuve, non rapprochee, est promue ; les rapprochees ou rejetees non.
+    -- IMP-26 (h) (29/09) : une ligne « Accepte (rattache) » ne devient jamais une
+    -- notice, meme demandee par un filtre explicite ; les rapprochees et les
+    -- rejetees non plus. Avant le lot 0, 71z devenait une notice neuve (doublon
+    -- de v_book_trois, impubliable).
     INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, editorial_decision, proposed_book_id, normalized_payload)
-    VALUES (v_run8, 3, '71z', 'Petite histoire (a promouvoir)', 'matched_book', 'accept_duplicate', v_book_trois,
-            jsonb_build_object('items', '[{"source_item_code":"PRO-1"}]'::jsonb))
+    VALUES (v_run8, 3, '71z', 'Petite histoire (rattachee, pas encore rapprochee)', 'matched_book', 'accept_duplicate', v_book_trois,
+            jsonb_build_object('items', '[{"source_item_code":"PRO-1","call_number":"P 1"},{"source_item_code":"PRO-2"}]'::jsonb))
     RETURNING id INTO v_x2;
-    PERFORM public.fn_import_promote(v_run8, ARRAY['matched_book'], ARRAY['accept_duplicate']);
+    v_res := public.fn_import_promote(v_run8, ARRAY['matched_book'], ARRAY['accept_duplicate']);
     IF (SELECT created_book_draft_id FROM ingest.partner_catalog_staging_rows WHERE id = v_r1) IS NOT NULL
        OR (SELECT created_book_draft_id FROM ingest.partner_catalog_staging_rows WHERE id = v_r2) IS NOT NULL
-       OR (SELECT created_book_draft_id FROM ingest.partner_catalog_staging_rows WHERE id = v_x2) IS NULL THEN
-      RAISE EXCEPTION 'promotion d''une ligne rapprochee ou rejetee, ou ligne neuve oubliee';
+       OR (SELECT created_book_draft_id FROM ingest.partner_catalog_staging_rows WHERE id = v_x2) IS NOT NULL
+       OR EXISTS (SELECT 1 FROM ingest.partner_catalog_row_to_draft m WHERE m.run_id = v_run8)
+       OR v_res->>'batch_id' IS NOT NULL THEN
+      RAISE EXCEPTION 'promotion en creation d''une ligne rattachee, rapprochee ou rejetee : %', left(coalesce(v_res::text, 'NULL'), 200);
     END IF;
-    -- et la ligne promue ne se rapproche plus.
+    -- Son chemin est « Rapprocher » (l'ecran : fn_import_reconcile_duplicates) :
+    -- des exemplaires sur la notice existante, dans un lot de rapprochement.
+    v_res := public.fn_import_reconcile_duplicates(v_run8, ARRAY[v_x2]);
+    v_lot_pro := (v_res->>'batch_id')::bigint;
+    IF (v_res->>'created_items')::int IS DISTINCT FROM 2
+       OR (SELECT count(*) FROM public.exemplar_drafts x
+            WHERE x.import_staging_row_id = v_x2 AND x.batch_id = v_lot_pro AND x.book_draft_id IS NULL
+              AND x.status = 'draft' AND x.target_library_id = v_lib AND x.source_item_code IN ('PRO-1', 'PRO-2')
+              AND x.target_bib_ref = (SELECT bib_ref FROM public.books WHERE id = v_book_trois)) <> 2
+       OR (SELECT created_book_draft_id FROM ingest.partner_catalog_staging_rows WHERE id = v_x2) IS NOT NULL
+       OR NOT EXISTS (SELECT 1 FROM public.exemplar_drafts x WHERE x.id = (SELECT created_exemplar_draft_id FROM ingest.partner_catalog_staging_rows WHERE id = v_x2)
+                        AND x.batch_id = v_lot_pro) THEN
+      RAISE EXCEPTION 'rapprochement de la ligne rattachee : %', left(coalesce(v_res::text, 'NULL'), 200);
+    END IF;
+    -- et une ligne promue AVANT IMP-26 (deux en production) ne se rapproche pas :
+    -- son brouillon de notice existe, le pointeur est pose comme la promotion
+    -- d'alors le posait.
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, editorial_decision, proposed_book_id, normalized_payload)
+    VALUES (v_run8, 5, '71v', 'Petite histoire (promue avant IMP-26)', 'matched_book', 'accept_duplicate', v_book_trois,
+            jsonb_build_object('items', '[{"source_item_code":"PRV-1"}]'::jsonb))
+    RETURNING id INTO v_id;
+    INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status)
+    VALUES ('Petite histoire (promue avant IMP-26)', 'livro', v_lib, v_coord, 'draft') RETURNING id INTO v_x1;
+    UPDATE ingest.partner_catalog_staging_rows SET created_book_draft_id = v_x1 WHERE id = v_id;
     v_txt := NULL;
     BEGIN
-      PERFORM ingest.fn_create_exemplar_drafts_from_import_rows(v_run8, ARRAY[v_x2]);
+      PERFORM ingest.fn_create_exemplar_drafts_from_import_rows(v_run8, ARRAY[v_id]);
     EXCEPTION WHEN OTHERS THEN v_txt := SQLERRM;
     END;
     IF v_txt LIKE 'Aucune ligne eligible%'
@@ -851,6 +956,210 @@ BEGIN
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : hint='||coalesce(v_hint,'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T31 ─────────────────────────────────────────────────────────────
+  v_t := 'T31 un exemplaire rapproche ne se publie qu''apres revision de son lot, puis sur la fiche existante (IMP-27 c)';
+  BEGIN
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    IF v_lot_pro IS NULL OR (SELECT count(*) FROM public.exemplar_drafts WHERE batch_id = v_lot_pro AND status = 'draft') <> 2 THEN
+      RAISE EXCEPTION 'decor : lot de rapprochement de T18 absent';
+    END IF;
+    SELECT x.id INTO v_id FROM public.exemplar_drafts x WHERE x.batch_id = v_lot_pro AND x.source_item_code = 'PRO-1';
+    -- (1) Avant toute revision : ni l'exemplaire seul, ni le lot entier.
+    v_n := 0; v_txt := NULL;
+    BEGIN
+      PERFORM public.publish_exemplar_draft(v_id);
+    EXCEPTION WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
+      IF v_hint = 'error.publish.review_required' THEN v_n := v_n + 1; ELSE v_txt := coalesce(v_hint, SQLERRM); END IF;
+    END;
+    BEGIN
+      PERFORM public.publish_catalog_batch(v_lot_pro);
+    EXCEPTION WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
+      IF v_hint = 'error.publish.review_required' THEN v_n := v_n + 1; ELSE v_txt := coalesce(v_hint, SQLERRM); END IF;
+    END;
+    IF v_n <> 2 OR EXISTS (SELECT 1 FROM public.exemplares e WHERE e.source_item_code IN ('PRO-1', 'PRO-2')) THEN
+      RAISE EXCEPTION 'publie sans revision (refus=%, autre=%)', v_n, coalesce(v_txt, '-');
+    END IF;
+    -- (2) La coordination demande la revision, l'administration l'approuve.
+    v_res := public.fn_batch_review_request(v_lot_pro);
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
+    PERFORM public.fn_batch_review_verdict((v_res->>'review_id')::bigint, 'approved', NULL);
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    v_res := public.publish_catalog_batch(v_lot_pro);
+    -- Sur la fiche EXISTANTE, dans la bibliotheque du run, tombos du schema ;
+    -- aucune notice nee de la ligne rattachee.
+    IF (v_res->>'exemplars_published')::int = 2
+       AND (SELECT count(*) FROM public.exemplares e JOIN public.book_holdings h ON h.id = e.holding_id
+             WHERE h.book_id = v_book_trois AND e.library_id = v_lib
+               AND e.source_item_code IN ('PRO-1', 'PRO-2') AND e.tombo ~ '^ESSAI-H19-[0-9]{4}$') = 2
+       AND (SELECT e.shelf_location FROM public.exemplares e WHERE e.source_item_code = 'PRO-1' AND e.library_id = v_lib) = 'P 1'
+       AND NOT EXISTS (SELECT 1 FROM public.exemplar_drafts x WHERE x.batch_id = v_lot_pro AND x.status <> 'published')
+       AND (SELECT status FROM public.catalog_batches WHERE id = v_lot_pro) = 'published'
+       AND NOT EXISTS (SELECT 1 FROM public.book_drafts d WHERE d.titulo LIKE 'Petite histoire (rattachee%')
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce(v_res::text,'NULL'), 200)); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T32 ─────────────────────────────────────────────────────────────
+  v_t := 'T32 « Reattribuer » un exemplaire rapproche publie : republie hors lot, a la cible, tombo de son schema, sans nouveau tour ; non publie ou remis en draft, sorti du lot : refuse';
+  BEGIN
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    -- Decor (postgres) : la bibliotheque cible, son schema, sa detention de la
+    -- notice ; une personne staff de BLMF et de la cible ; le run et sa ligne.
+    INSERT INTO public.libraries (id, slug, name, is_active, visibility_level, tombo_pattern)
+    VALUES (gen_random_uuid(), 'essai-h21-reattribution', 'Essai — reattribution H21', true, 'private',
+            '{"prefix": "ESSAI-H21-R-", "year": false, "pad": 4}'::jsonb)
+    RETURNING id INTO v_lib3;
+    INSERT INTO public.book_holdings (book_id, library_id) VALUES (v_book_trois, v_lib3);
+    INSERT INTO auth.users (id, instance_id, aud, role, email, created_at, updated_at)
+    VALUES (gen_random_uuid(), '00000000-0000-0000-0000-000000000000',
+            'authenticated', 'authenticated', 'h21-reattrib-' || gen_random_uuid() || '@example.invalid', now(), now())
+    RETURNING id INTO v_multi;
+    INSERT INTO public.profiles (id, first_name, last_name) VALUES (v_multi, 'Essai', 'H21 reattribution') ON CONFLICT (id) DO NOTHING;
+    INSERT INTO public.user_library_memberships (user_id, library_id, role, status, is_primary)
+    VALUES (v_multi, v_lib, 'librarian', 'active', true),
+           (v_multi, v_lib3, 'librarian', 'active', false);
+    INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
+    VALUES (v_src, v_lib, 'essai/reattrib.marc', 'reattrib.marc', 'marc_iso2709', 'ready_for_review') RETURNING id INTO v_run9;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, editorial_decision, proposed_book_id, normalized_payload)
+    VALUES (v_run9, 1, '71q', 'Petite histoire (exemplaires a reattribuer)', 'matched_book', 'pending', v_book_trois,
+            jsonb_build_object('items', '[{"source_item_code":"RAT-A","call_number":"R A"},{"source_item_code":"RAT-B","call_number":"R B"},
+                                          {"source_item_code":"RAT-C","call_number":"R C"},{"source_item_code":"RAT-D","call_number":"R D"}]'::jsonb))
+    RETURNING id INTO v_row;
+    -- « Rapprocher » et demande de revision (coordination de BLMF), approbation
+    -- (administration du reseau), « Publier » de A, B et D : par l'API.
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    v_res := public.fn_import_reconcile_duplicates(v_run9, ARRAY[v_row]);
+    v_lot_rat := (v_res->>'batch_id')::bigint;
+    v_res := public.fn_batch_review_request(v_lot_rat);
+    EXECUTE 'RESET ROLE';
+    SELECT x.id INTO v_xa FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_row AND x.source_item_code = 'RAT-A';
+    SELECT x.id INTO v_xb FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_row AND x.source_item_code = 'RAT-B';
+    SELECT x.id INTO v_xc FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_row AND x.source_item_code = 'RAT-C';
+    SELECT x.id INTO v_xd FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_row AND x.source_item_code = 'RAT-D';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    PERFORM public.fn_batch_review_verdict((v_res->>'review_id')::bigint, 'approved', NULL);
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    v_ea := public.publish_exemplar_draft(v_xa);
+    v_eb := public.publish_exemplar_draft(v_xb);
+    v_ed := public.publish_exemplar_draft(v_xd);
+    EXECUTE 'RESET ROLE';
+    SELECT e.tombo INTO v_ed_tombo FROM public.exemplares e WHERE e.id = v_ed;
+    SELECT count(*) INTO v_tours FROM public.catalog_batch_reviews;
+    IF v_lot_rat IS NULL OR (SELECT b.library_id FROM public.catalog_batches b WHERE b.id = v_lot_rat) IS DISTINCT FROM v_lib
+       OR public.fn_batch_review_status(v_lot_rat) IS DISTINCT FROM 'approved'
+       OR (SELECT count(*) FROM public.catalog_batch_reviews r WHERE r.batch_id = v_lot_rat) <> 1
+       OR (SELECT count(*) FROM public.exemplares e WHERE e.id IN (v_ea, v_eb, v_ed) AND e.library_id = v_lib AND e.tombo ~ '^ESSAI-H19-[0-9]{4}$') <> 3
+       OR (SELECT count(*) FROM public.exemplar_drafts x
+            WHERE x.id IN (v_xa, v_xb, v_xd) AND x.status = 'published' AND x.batch_id = v_lot_rat AND x.book_draft_id IS NULL) <> 3
+       OR (SELECT x.status FROM public.exemplar_drafts x WHERE x.id = v_xc AND x.batch_id = v_lot_rat) IS DISTINCT FROM 'draft' THEN
+      RAISE EXCEPTION 'decor : lot=% revision=% exemplaires=%/%/% brouillons=%', v_lot_rat, public.fn_batch_review_status(v_lot_rat), v_ea, v_eb, v_ed,
+        (SELECT string_agg(x.source_item_code || '=' || x.status || '/' || coalesce(x.batch_id::text, '-'), ',' ORDER BY x.source_item_code)
+           FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_row);
+    END IF;
+
+    -- (a) « Reattribuer » (handleReassignLibrary) par la personne staff de BLMF
+    -- et de la cible : le lot (BLMF) n'est pas de la cible -> sortDuLot ->
+    -- batch_id NULL ; puis la republication.
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_multi, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    UPDATE public.exemplar_drafts
+       SET target_library_id = v_lib3, target_holding_id = NULL, tombo = NULL, updated_by = v_multi, batch_id = NULL
+     WHERE id = v_xa;
+    GET DIAGNOSTICS v_na = ROW_COUNT;
+    v_hint_a := NULL;
+    BEGIN
+      PERFORM public.publish_exemplar_draft(v_xa);
+    EXCEPTION WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS v_hint_a = PG_EXCEPTION_HINT; v_hint_a := coalesce(nullif(v_hint_a, ''), SQLERRM);
+    END;
+    EXECUTE 'RESET ROLE';
+    -- (b) le meme geste par l'administration du reseau, sur B.
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    UPDATE public.exemplar_drafts
+       SET target_library_id = v_lib3, target_holding_id = NULL, tombo = NULL, updated_by = v_admin, batch_id = NULL
+     WHERE id = v_xb;
+    GET DIAGNOSTICS v_nb = ROW_COUNT;
+    v_hint_b := NULL;
+    BEGIN
+      PERFORM public.publish_exemplar_draft(v_xb);
+    EXCEPTION WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS v_hint_b = PG_EXCEPTION_HINT; v_hint_b := coalesce(nullif(v_hint_b, ''), SQLERRM);
+    END;
+    EXECUTE 'RESET ROLE';
+    -- Temoins (coordination de BLMF, par l'API) : C, jamais publie, sorti de
+    -- son lot ; D, publie, remis en 'draft' puis sorti de son lot.
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    UPDATE public.exemplar_drafts SET batch_id = NULL WHERE id = v_xc;
+    GET DIAGNOSTICS v_nc = ROW_COUNT;
+    v_hint_c := NULL;
+    BEGIN
+      PERFORM public.publish_exemplar_draft(v_xc);
+      v_hint_c := 'accepte';
+    EXCEPTION WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS v_hint_c = PG_EXCEPTION_HINT; v_hint_c := coalesce(nullif(v_hint_c, ''), SQLERRM);
+    END;
+    UPDATE public.exemplar_drafts SET status = 'draft' WHERE id = v_xd;
+    GET DIAGNOSTICS v_nd = ROW_COUNT;
+    UPDATE public.exemplar_drafts SET batch_id = NULL WHERE id = v_xd;
+    GET DIAGNOSTICS v_nd2 = ROW_COUNT;
+    v_hint_d := NULL;
+    BEGIN
+      PERFORM public.publish_exemplar_draft(v_xd);
+      v_hint_d := 'accepte';
+    EXCEPTION WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS v_hint_d = PG_EXCEPTION_HINT; v_hint_d := coalesce(nullif(v_hint_d, ''), SQLERRM);
+    END;
+    EXECUTE 'RESET ROLE';
+    IF v_na = 1 AND v_nb = 1 AND v_hint_a IS NULL AND v_hint_b IS NULL
+       -- le MEME exemplaire, deplace : a la cible, dans sa detention, tombo de son schema
+       AND (SELECT x.published_exemplar_id FROM public.exemplar_drafts x WHERE x.id = v_xa) = v_ea
+       AND (SELECT x.published_exemplar_id FROM public.exemplar_drafts x WHERE x.id = v_xb) = v_eb
+       AND (SELECT count(*) FROM public.exemplares e JOIN public.book_holdings h ON h.id = e.holding_id
+             WHERE e.id IN (v_ea, v_eb) AND e.library_id = v_lib3 AND h.library_id = v_lib3 AND h.book_id = v_book_trois
+               AND e.tombo ~ '^ESSAI-H21-R-[0-9]{4}$') = 2
+       AND (SELECT count(*) FROM public.exemplares e WHERE e.source_item_code IN ('RAT-A', 'RAT-B')) = 2
+       -- le brouillon : publie, sans lot, a la cible, au tombo pose
+       AND (SELECT count(*) FROM public.exemplar_drafts x JOIN public.exemplares e ON e.id = x.published_exemplar_id
+             WHERE x.id IN (v_xa, v_xb) AND x.status = 'published' AND x.batch_id IS NULL
+               AND x.target_library_id = v_lib3 AND x.tombo = e.tombo) = 2
+       -- aucun nouveau tour : aucune revision creee, celle du lot reste approuvee
+       AND (SELECT count(*) FROM public.catalog_batch_reviews) = v_tours
+       AND (SELECT count(*) FROM public.catalog_batch_reviews r WHERE r.batch_id = v_lot_rat) = 1
+       AND public.fn_batch_review_status(v_lot_rat) = 'approved'
+       -- temoin C : sorti de son lot par l'API, refuse, rien au catalogue
+       AND v_nc = 1 AND v_hint_c = 'error.publish.imported_needs_batch'
+       AND (SELECT x.status = 'draft' AND x.batch_id IS NULL AND x.published_exemplar_id IS NULL FROM public.exemplar_drafts x WHERE x.id = v_xc)
+       AND NOT EXISTS (SELECT 1 FROM public.exemplares e WHERE e.source_item_code = 'RAT-C')
+       -- temoin D : remis en 'draft', sorti de son lot, refuse ; l'exemplaire reste a BLMF
+       AND v_nd = 1 AND v_nd2 = 1 AND v_hint_d = 'error.publish.imported_needs_batch'
+       AND (SELECT x.status = 'draft' AND x.batch_id IS NULL FROM public.exemplar_drafts x WHERE x.id = v_xd)
+       AND (SELECT e.library_id = v_lib AND e.tombo = v_ed_tombo FROM public.exemplares e WHERE e.id = v_ed)
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : (a) maj='||coalesce(v_na::text,'NULL')||' '||coalesce(v_hint_a,'accepte')
+           ||' ; (b) maj='||coalesce(v_nb::text,'NULL')||' '||coalesce(v_hint_b,'accepte')
+           ||' ; C maj='||coalesce(v_nc::text,'NULL')||' '||coalesce(v_hint_c,'NULL')
+           ||' ; D maj='||coalesce(v_nd::text,'NULL')||'/'||coalesce(v_nd2::text,'NULL')||' '||coalesce(v_hint_d,'NULL')
+           ||' ; tours '||v_tours||'->'||(SELECT count(*) FROM public.catalog_batch_reviews)
+           ||' ; '||coalesce((SELECT string_agg(x.source_item_code || '=' || x.status || '/lot ' || coalesce(x.batch_id::text, '-')
+                                  || '/' || CASE x.target_library_id WHEN v_lib THEN 'BLMF' WHEN v_lib3 THEN 'cible' ELSE coalesce(x.target_library_id::text, '-') END
+                                  || '/ex ' || coalesce(CASE e.library_id WHEN v_lib THEN 'BLMF' WHEN v_lib3 THEN 'cible' ELSE e.library_id::text END || ':' || e.tombo, '-'),
+                                  ', ' ORDER BY x.source_item_code)
+                                FROM public.exemplar_drafts x LEFT JOIN public.exemplares e ON e.id = x.published_exemplar_id
+                               WHERE x.import_staging_row_id = v_row), 'aucun brouillon')); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'IMPORT-EXEMPLAIRES OK : %/% tests passés', v_passed, v_passed;

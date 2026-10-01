@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Autoridades — ISO 2709",
   "importacoes.export.lote.autoritesHint": "No PMB, importe primeiro este arquivo pelo menu « Autoridades » (« Autorités » em um PMB em francês), no tesauro padrão do PMB, e depois o catálogo (formato « UNIMARC — ISO 2709 »). O PMB associa então os autores pelo nome e pelas datas. No PMB 8.1, deixe « Não » em « Tenir compte des notices d’autorités »: o formulário dele não transmite a origem escolhida.",
   "importacoes.export.lote.pmbHint": "Para importá-lo no PMB: « Administração > Importações > Itens UNIMARC » (« Exemplaires UNIMARC » em um PMB em francês; a aba vizinha, « Registros UNIMARC », ignora os exemplares), com a função « Catégories RAMEAU » e « Sim » em « Gerar vínculo entre registros? » — sem esse « Sim », o PMB não liga nenhum artigo à sua revista. O proprietário, a situação e a localização dos exemplares são escolhidos nesse formulário.",
-  "catalogacao.publish.copiesNoneImported": "O arquivo importado não descreve nenhum exemplar para esta ficha: nenhum será criado na publicação. Se precisar de um, adicione-o depois que a ficha for publicada."
+  "catalogacao.publish.copiesNoneImported": "O arquivo importado não descreve nenhum exemplar para esta ficha: nenhum será criado na publicação. Se precisar de um, adicione-o depois que a ficha for publicada.",
+  "error.publish.imported_needs_batch": "Este rascunho vem de uma importação: ele se publica dentro de um lote, após revisão aprovada pela administração da rede. Coloque-o num lote da biblioteca dele e depois peça a revisão (Catalogação › Lotes › Pedir revisão).",
+  "error.publish.added_after_review": "Este rascunho entrou no lote depois do pedido de revisão: a aprovação não o cobre. Peça de novo a revisão do lote (Catalogação › Lotes › Pedir revisão) e depois publique-o.",
+  "error.import.run_has_linked_drafts": "Ainda há rascunhos criados por esta importação fora do lote de origem. Publique-os (após a revisão) ou mande-os para a lixeira e depois exclua a importação.",
+  "error.import.rattacher_par_rapprocher": "Para vincular uma linha a uma ficha que já está no catálogo, use Criar exemplar: ele também registra o exemplar.",
+  "importacoes.fila.promotedPartial": "{created} rascunho(s) criado(s) para {asked} linha(s) escolhida(s): as demais já não podiam virar rascunho (já tratadas, decididas ou removidas em outro lugar nesse meio-tempo). A lista foi recarregada.",
+  "catalogacao.batch.review.afterReview": "{n} rascunho(s) adicionado(s) depois do pedido: peça de novo a revisão antes de publicá-los.",
+  "error.catalog.restore_line_repromoted": "Este rascunho não pode voltar: a linha da importação dele já gerou outro rascunho desde então. Trabalhe nesse outro.",
+  "error.import.run_has_trashed_items": "Há exemplares vinculados por esta importação na lixeira: esvazie a lixeira, ou restaure-os e publique-os após a revisão, e depois exclua a importação.",
+  "error.catalog.restore_item_import_gone": "Este exemplar vinha de uma importação que foi excluída depois: ele não pode voltar. Crie-o de novo à mão, se precisar.",
+  "error.publish.status_reserved": "Só a publicação coloca um rascunho no estado «publicado».",
+  "importacoes.fila.rejectedPartial": "{rejected} linha(s) rejeitada(s) de {asked}: as demais já tinham sido tratadas, rejeitadas ou removidas em outro lugar nesse meio-tempo. A lista foi recarregada.",
+  "error.import.rows_held_by_items": "Há exemplares vinculados a partir deste arquivo que ainda não foram publicados (inclusive na lixeira): as linhas de importação deles não podem ser apagadas.",
+  "importacoes.fila.reconciledPartial": "{skipped} linha(s) de {asked} ignorada(s): já tratadas, rejeitadas, descartadas ou removidas em outro lugar nesse meio-tempo. A lista foi recarregada."
 }

@@ -6431,7 +6431,7 @@
   "notif.review.approved.body": "La administrado aprobis la revizion de via aro: publikigo estas malfermita.",
   "notif.review.changes.title": "Korektoj petitaj pri aro",
   "notif.review.changes.body": "La administrado petas korektojn antaŭ publikigo. Legu ĝiajn notojn en Katalogado › Aroj.",
-  "error.publish.review_required": "Ĉi tiu aro venas el importo: ĝi publikiĝas post revizio aprobita de la administrado de la reto (Katalogado › Aroj › Peti revizion).",
+  "error.publish.review_required": "Ĉi tiu aro venas el importo: ĝi publikiĝas post revizio aprobita de la administrado de la reto (Katalogado › Lotoj › Peti revizion).",
   "error.review.coordenador_only": "La peto de revizio estas gesto de kunordigo.",
   "error.review.batch_not_found": "Aro ne trovita.",
   "error.review.batch_not_open": "Ĉi tiu aro ne plu estas malfermita.",
@@ -6936,5 +6936,18 @@
   "importacoes.export.lote.formatAutorites": "UNIMARC Aŭtoritatoj — ISO 2709",
   "importacoes.export.lote.autoritesHint": "En PMB, unue importu ĉi tiun dosieron per la menuo « Autorités », en la defaŭltan tezaŭron de PMB, kaj poste la katalogon (formato « UNIMARC — ISO 2709 »). PMB tiam kongruigas la aŭtorojn laŭ nomo kaj datoj. En PMB 8.1, lasu « Non » (ne) ĉe « Tenir compte des notices d’autorités »: ĝia formularo ne transdonas la elektitan devenon.",
   "importacoes.export.lote.pmbHint": "Por importi ĝin en PMB: « Administration > Imports > Exemplaires UNIMARC » (la najbara langeto « Notices UNIMARC » ignoras la ekzemplerojn), per la funkcio « Catégories RAMEAU » kaj kun « Oui » (jes) ĉe « Générer les liens entre notices ? » — sen tiu « Oui », PMB ligas neniun artikolon al ĝia revuo. La posedanton, la staton kaj la lokon de la ekzempleroj oni elektas en tiu formularo.",
-  "catalogacao.publish.copiesNoneImported": "La importita dosiero priskribas neniun ekzempleron por ĉi tiu registro: neniu estos kreita ĉe la publikigo. Se necesas unu, aldonu ĝin post la publikigo de la registro."
+  "catalogacao.publish.copiesNoneImported": "La importita dosiero priskribas neniun ekzempleron por ĉi tiu registro: neniu estos kreita ĉe la publikigo. Se necesas unu, aldonu ĝin post la publikigo de la registro.",
+  "error.publish.imported_needs_batch": "Ĉi tiu malneto venas el importo: ĝi publikiĝas en loto, post revizio aprobita de la administrado de la reto. Metu ĝin en loton de ĝia biblioteko, poste petu la revizion (Katalogado › Lotoj › Peti revizion).",
+  "error.publish.added_after_review": "Ĉi tiu malneto eniris la loton post la peto de revizio: la aprobo ne kovras ĝin. Petu denove la revizion de la loto (Katalogado › Lotoj › Peti revizion), poste publikigu ĝin.",
+  "error.import.run_has_linked_drafts": "Malnetoj naskitaj el ĉi tiu importo ankoraŭ atendas ekster sia originala aro. Publikigu ilin (post revizio) aŭ metu ilin en la rubujon, poste forigu la importon.",
+  "error.import.rattacher_par_rapprocher": "Por ligi linion al slipo jam en la katalogo, uzu Krei ekzempleron: ĝi ankaŭ aldonas la ekzempleron.",
+  "importacoes.fila.promotedPartial": "{created} malneto(j) kreita(j) por {asked} elektita(j) linio(j): la aliaj ne plu povis fariĝi malnetoj (jam traktitaj, deciditaj aŭ forigitaj aliloke intertempe). La listo estas reŝargita.",
+  "catalogacao.batch.review.afterReview": "{n} malneto(j) aldonita(j) post la peto: petu denove la revizion antaŭ ol publikigi ilin.",
+  "error.catalog.restore_line_repromoted": "Ĉi tiu malneto ne povas reveni: ĝia importa linio intertempe donis alian malneton. Laboru pri tiu.",
+  "error.import.run_has_trashed_items": "Ekzempleroj ligitaj el ĉi tiu importo estas en la rubujo: malplenigu la rubujon, aŭ restarigu ilin kaj publikigu ilin post revizio, poste forigu la importon.",
+  "error.catalog.restore_item_import_gone": "Ĉi tiu ekzemplero venis el importo intertempe forigita: ĝi ne povas reveni. Kreu ĝin denove permane, se necese.",
+  "error.publish.status_reserved": "Nur la publikigo metas malneton en la staton «publikigita».",
+  "importacoes.fila.rejectedPartial": "{rejected} el {asked} linio(j) malakceptita(j): la aliaj jam estis traktitaj, malakceptitaj aŭ forigitaj aliloke intertempe. La listo estas reŝargita.",
+  "error.import.rows_held_by_items": "Ekzempleroj ligitaj el ĉi tiu dosiero ankoraŭ ne estas publikigitaj (inkluzive de la rubujo): iliaj importaj linioj ne povas esti forigitaj.",
+  "importacoes.fila.reconciledPartial": "{skipped} el {asked} linio(j) preterlasita(j): jam traktitaj, malakceptitaj, forĵetitaj aŭ forigitaj aliloke intertempe. La listo estas reŝargita."
 }
