@@ -1,4 +1,6 @@
 import { getPayloadValue } from "./payload.ts";
+import { tMail } from "../i18n/mail-strings.ts";
+
 const WF_LABELS = {
   solicitada: "Reserva recebida",
   em_preparacao: "Livro em preparação",
@@ -13,14 +15,19 @@ const WF_LABELS = {
   liberada_para_circulacao: "Item devolvido à circulação",
   expirada: "Reserva expirada"
 };
-export function workflowStageLabel(s) {
-  const v = String(s || "").trim();
-  return WF_LABELS[v] || v;
+export function workflowStageLabel(s, locale = null) {
+  const raw = String(s || "").trim();
+  if (!raw) return "";
+  const v = raw.replace(/^re-/, "re_");
+  const cle = `wf.stage.${v}`;
+  const tr = tMail(locale, cle);
+  if (tr && tr !== cle) return tr;
+  return WF_LABELS[raw] || WF_LABELS[v] || raw;
 }
-export function pickupReplyLabel(s) {
+export function pickupReplyLabel(s, locale = null) {
   const v = String(s || "").trim();
-  if (v === "confirmado_leitor") return "Horário confirmado pelo leitor";
-  if (v === "recusado_leitor") return "Leitor não pode nesse horário";
+  if (v === "confirmado_leitor") return tMail(locale, "pr.confirmed");
+  if (v === "recusado_leitor") return tMail(locale, "pr.declined");
   return "";
 }
 // F1 (01/10/2026) : seuls les noms que trg_notify_reserva_workflow_change émet.
@@ -47,6 +54,8 @@ export function normalizeReservaStatusChangeEvent(e) {
   return SC_MAP[String(e || "").trim()] || String(e || "").trim();
 }
 const SF_MAP = {
+  solicitada: "solicitada",
+  em_preparacao: "em_preparacao",
   retirada_a_combinar: "retirada_a_combinar",
   retirada_agendada: "retirada_agendada",
   pronta_para_retirada: "pronta_para_retirada",

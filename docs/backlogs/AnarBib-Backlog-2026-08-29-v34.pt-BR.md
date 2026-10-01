@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-01.** **51 itens de 71** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **20** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-01.** **52 itens de 71** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -960,7 +960,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F16** | O convite para uma tarefa nunca criou convite | `P1` | A verificar |
 | **F19** | Os registros das funções contêm os endereços em claro | `P1` | A verificar |
 | **F20** | Sem linha de política, a biblioteca nunca vê reserva expirar nem ausência detectada | `P2` | Aberto |
-| **F21** | Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas | `P2` | Aberto |
+| **F21** | Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas | `P2` | A verificar |
 
 #### F1 — Auditar a cadeia de e-mail de ponta a ponta
 
@@ -1154,11 +1154,11 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 #### F21 — Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, língua materna
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript, língua materna
 
 **Estado.** Achado pelo mapa F1. O rodapé de reserva e a linha « Status » ficam em pt-BR em todas as línguas.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : 01/10 — fallbackLibraryNotificationContext inicializa footer_local e signature_short como null; mail-strings.ts enriquecido com as chaves wf.stage.* nas 10 línguas; events.ts traduz workflowStageLabel e pickupReplyLabel via tMail; bancada Vitest mail-status-footer-i18n (6 testes) no verde.*
 
 **O que é.** Deixar `tMail` localizar o rodapé; uma chave por etapa em vez de `WF_LABELS`, nas dez línguas; teste de fonte.
 

@@ -274,7 +274,9 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   } : null);
   const aun = adminDisplayName(fullName(profile) || pn, user?.email);
   const tits = joinTitles(items.map((i)=>String(i.titulo || `[linha ${i.line_no || "?"}]`)));
-  const sl = workflowStageLabel(workflowStageFromEvent(event));
+  const stage = workflowStageFromEvent(event);
+  const userSl = workflowStageLabel(stage, locale);
+  const staffSl = workflowStageLabel(stage, libLocale);
   const note = String(getPayloadValue(payload, "workflow_note") || items.find((i)=>i.workflow_note)?.workflow_note || "").trim();
   const psf = String(getPayloadValue(payload, "pickup_scheduled_for") || items.find((i)=>i.pickup_scheduled_for)?.pickup_scheduled_for || "").trim();
   const tz = String(getPayloadValue(payload, "timezone") || DEFAULT_NOTIFICATION_TIMEZONE).trim() || DEFAULT_NOTIFICATION_TIMEZONE;
@@ -403,7 +405,7 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   const userIntro = `<p>${readerBody}</p>${when ? `<p>${label(locale, "pickup")}: <b>${esc(when)}</b></p>` : ""}${showCheckAccount ? `<p>${tMail(locale, "wf.checkAccount")}</p>` : ""}`;
   const prs = String(items.find((i)=>i.pickup_reply_status)?.pickup_reply_status || "").trim();
   const prn = String(items.find((i)=>i.pickup_reply_note)?.pickup_reply_note || "").trim();
-  const prl = pickupReplyLabel(prs);
+  const prl = pickupReplyLabel(prs, locale);
   const det = [
     ...tits ? [
       {
@@ -411,10 +413,10 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
         value: tits
       }
     ] : [],
-    ...sl ? [
+    ...userSl ? [
       {
         label: label(locale, "status"),
-        value: sl
+        value: userSl
       }
     ] : [],
     ...when ? [
@@ -496,10 +498,10 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
           value: tits
         }
       ] : [],
-      ...sl ? [
+      ...staffSl ? [
         {
           label: label(libLocale, "status"),
-          value: sl
+          value: staffSl
         }
       ] : [],
       ...when ? [
@@ -508,10 +510,10 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
           value: `${when} (local)`
         }
       ] : [],
-      ...prl ? [
+      ...prs ? [
         {
           label: label(libLocale, "reply"),
-          value: prl
+          value: pickupReplyLabel(prs, libLocale)
         }
       ] : [],
       ...prn ? [

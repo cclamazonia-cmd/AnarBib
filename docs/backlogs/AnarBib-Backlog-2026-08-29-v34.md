@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-01.** **51 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **20** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-01.** **52 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -960,7 +960,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F16** | L'invitation à une tâche n'a jamais créé d'invitation | `P1` | À vérifier |
 | **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | À vérifier |
 | **F20** | Sans ligne de politique, une bibliothèque ne voit jamais une réservation expirer ni une non-venue détectée | `P2` | Ouvert |
-| **F21** | Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues | `P2` | Ouvert |
+| **F21** | Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues | `P2` | À vérifier |
 
 #### F1 — Auditer la chaîne de courriel de bout en bout
 
@@ -1154,11 +1154,11 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 #### F21 — Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, langue maternelle
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, langue maternelle
 
 **État.** Relevé par la carte F1 (30/09). Sans `footer_local` (aucune des trois bibliothèques n'en a), le contexte de repli pose un pied de page et une signature en portugais que `tMail` ne traduit plus : tout courriel de bibliothèque se termine en pt-BR, quelle que soit la langue. Et la ligne « Status » des courriels de réservation vient d'une table codée en dur en pt-BR (`WF_LABELS`, `shared/events.ts`).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : 01/10 — fallbackLibraryNotificationContext initialise footer_local et signature_short à null ; mail-strings.ts enrichi avec les clés wf.stage.* dans les 10 langues ; events.ts traduit workflowStageLabel et pickupReplyLabel via tMail ; domain/reservas.ts et domain/emprestimos.ts passent la locale du destinataire ; banc Vitest mail-status-footer-i18n (6 tests) au vert.*
 
 **Ce que c'est.** `footer_local` et `signature_short` à null dans `fallbackLibraryNotificationContext` pour laisser `tMail` localiser ; une clé par stage à la place de `WF_LABELS`, dans les dix langues ; un test de source qui rend un courriel en fr et y refuse le portugais.
 

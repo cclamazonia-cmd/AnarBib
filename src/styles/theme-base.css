@@ -8,7 +8,7 @@
 
 :root {
   /* ── Images de fond (page + panneaux) ─────────────────── */
-  --brand-bg-image: none;
+  --brand-bg-image: url("/img/bg-anarbib.webp");
   --brand-bg-position: center center;
   --brand-bg-size: cover;
   --brand-bg-repeat: no-repeat;

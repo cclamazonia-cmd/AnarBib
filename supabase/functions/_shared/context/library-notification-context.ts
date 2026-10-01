@@ -12,7 +12,7 @@ export function fallbackLibraryNotificationContext(libraryId) {
     reply_to_name: ADMIN_NAME || SENDER_NAME,
     reply_to_email: ADMIN_EMAIL || null,
     signature_short: ADMIN_NAME || null,
-    footer_local: FOOTER_TEXT,
+    footer_local: FOOTER_TEXT || null,
     use_library_name_as_sender: true,
     use_library_logo: true,
     logo_url: LOGO_URL || null,
