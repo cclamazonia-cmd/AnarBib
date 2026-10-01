@@ -8,7 +8,10 @@ export function resolvedSubjectTag(ctx) {
 export function replaceBrandTokens(text, ctx) {
   const brand = resolvedBrandName(ctx);
   const tag = resolvedSubjectTag(ctx);
-  const an = String(ctx?.reply_to_name || ctx?.signature_short || ADMIN_NAME || "Equipe da biblioteca").trim() || "Equipe da biblioteca";
+  // F21 (01/10/2026) : plus de repli « Equipe da biblioteca », qui signait en
+  // pt-BR quelle que soit la langue. Sans nom configuré, on signe du nom de la
+  // bibliothèque, qui se lit dans toutes les langues.
+  const an = String(ctx?.reply_to_name || ctx?.signature_short || ADMIN_NAME || "").trim() || brand;
   return String(text || "").replace(/^\[BLMF\]/gm, `[${tag}]`).replace(/\bBLMF\s*\|/g, `${tag} |`).replace(/Biblioteca Libertária Maxwell Ferreira/g, brand).replace(/Equipe da BLMF/g, an).replace(/\bna BLMF\b/g, `na ${brand}`).replace(/\bda BLMF\b/g, `da ${brand}`).replace(/\bde BLMF\b/g, `de ${brand}`).replace(/\bem BLMF\b/g, `em ${brand}`).replace(/\bBLMF\b/g, tag);
 }
 export function adminTaggedSubject(text, ctx) {
