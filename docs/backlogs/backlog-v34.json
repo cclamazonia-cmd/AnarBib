@@ -5568,8 +5568,8 @@
         ]
       },
       "dep": {
-        "fr": "Avant le compte rendu : **H28** (livré le 26/09 — sans lui aucun ISO 2709 ne s'importait), **H14** (clos le 26/09), **H15** et **H16** (livrés le 26/09), **H19** (livré le 27/09) ; **H28**, **H15**, **H16** et **H19** restent à vérifier sur un import réel. Avant toute bascule : **H23** et **H24** (livrés le 28/09), **H27** (clos le 29/09) et **H21** (en cours : décisions `IMP-26` du 29/09, aucun des neuf lots livré). Les archives : **D7** (clos le 27/09 ; réalisation : **D8**).",
-        "pt": "Antes do relatório: **H28** (entregue em 26/09), **H14** (fechado em 26/09), **H15** e **H16** (entregues em 26/09), **H19** (entregue em 27/09); **H28**, **H15**, **H16** e **H19** ainda a verificar numa importação real. Antes de qualquer migração: **H23** e **H24** (entregues em 28/09), **H27** (fechado em 29/09) e **H21** (em curso: `IMP-26` de 29/09, nenhum dos nove lotes entregue). Arquivos: **D7** (fechado em 27/09; realização: **D8**)."
+        "fr": "Avant le compte rendu : **H28** (livré le 26/09 — sans lui aucun ISO 2709 ne s'importait), **H14** (clos le 26/09), **H15** et **H16** (livrés le 26/09), **H19** (livré le 27/09) ; **H28**, **H15**, **H16** et **H19** restent à vérifier sur un import réel. Avant toute bascule : **H23** et **H24** (livrés le 28/09), **H27** (clos le 29/09) et **H21** (en cours : décisions `IMP-26` et `IMP-27` du 29/09, lot 0 livré le 01/10, puis **H30** et **H31**). Les archives : **D7** (clos le 27/09 ; réalisation : **D8**).",
+        "pt": "Antes do relatório: **H28** (entregue em 26/09), **H14** (fechado em 26/09), **H15** e **H16** (entregues em 26/09), **H19** (entregue em 27/09); **H28**, **H15**, **H16** e **H19** ainda a verificar numa importação real. Antes de qualquer migração: **H23** e **H24** (entregues em 28/09), **H27** (fechado em 29/09) e **H21** (em curso: `IMP-26` e `IMP-27` de 29/09, lote 0 entregue em 01/10, depois **H30** e **H31**). Arquivos: **D7** (fechado em 27/09; realização: **D8**)."
       },
       "r": [
         "claude/aller-retour-PMB_2026-09-26",
@@ -5977,8 +5977,8 @@
         "Réponse à DIRA du 26/09/2026"
       ],
       "verif": {
-        "fr": "26/09 — `book_drafts.action` ∈ {create, update} en base. **29/09** — passé en cours par `69dbeec7` ; aucun des neuf lots n'est livré au soir du 29/09. Constat de production qui a demandé la règle (REGISTRE `IMP-26` a, 28/09) : 198 mises à jour publiées, dont 33 sur des notices aujourd'hui partagées et 3 par une bibliothèque qui ne détenait pas la notice. Le tableau de couverture le dit à DIRA : le 001 est gardé et rendu à l'export, mais un réimport ne s'en sert pas encore (`docs/interop/couverture-pmb.md`, `466324aa`).",
-        "pt": "26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`)."
+        "fr": "26/09 — `book_drafts.action` ∈ {create, update} en base. **29/09** — passé en cours par `69dbeec7` ; aucun des neuf lots n'est livré au soir du 29/09. Constat de production qui a demandé la règle (REGISTRE `IMP-26` a, 28/09) : 198 mises à jour publiées, dont 33 sur des notices aujourd'hui partagées et 3 par une bibliothèque qui ne détenait pas la notice. Le tableau de couverture le dit à DIRA : le 001 est gardé et rendu à l'export, mais un réimport ne s'en sert pas encore (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lot 0 livré** (`1385431b` base, `d4f97afc` écran ; migration `20261001200931` appliquée par la CI, `created_by` vide ; REGISTRE `IMP-27`) : une notice ou un exemplaire rapproché né d’un import ne se publie la première fois que dans un lot révisé, même sorti de son lot ; une notice ou un exemplaire déjà publiés (et au catalogue) se republient hors lot ; l’approbation couvre les brouillons figés à la demande, et la coordination redemande un tour pour les ajouts ; un lot de rapprochement passe par la révision ; une sélection rejoint le lot ouvert du run et « Promouvoir la sélection » ne promeut qu’elle ; « rattaché » ne devient jamais une notice ; vider la corbeille d’un brouillon importé écarte sa ligne, que seul le rejeu de ce brouillon reprend ; « Retraiter » refusé tout de suite pour un run qui a une ligne écartée ou un exemplaire rapproché à la corbeille ; l’écran dit les lignes ignorées. Six passes de revue contradictoire ; SQL 158/158, vitest 1 666 ; vérifié en production le 01/10 (définitions, cinq déclencheurs, droits, 0 tour sans liste) et l’écran servi. **Consigné** : la course entre « Retraiter » accepté et l’effacement par l’edge function, et « Retraiter » d’un run sans fichier (**H30**, **H31**) ; les fusions `api.merge_*` qui absorbent un brouillon importé (lot 5) ; la corbeille d’un exemplaire rapproché libère sa ligne, qu’un nouveau « Rapprocher » puis la sortie de corbeille dédoublent (lot 6) ; l’assistant d’import ne lit pas `skipped_rows` ; une ligne dont la notice proposée a été descartée reste « en attente » sans autre geste que « Rejeter » ; un onglet resté sur un run supprimé reçoit « Run N introuvable » en brut. **À trancher par Xavier** : un exemplaire rattaché sorti de la corbeille après la demande doit-il suivre la liste du tour, comme les notices (aujourd’hui non, règle de H19) ? Après une réattribution, la notice garde-t-elle pour la bibliothèque cible l’identifiant d’origine venu du PMB de la première ?",
+        "pt": "26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira?"
       }
     },
     {
@@ -6268,6 +6268,106 @@
       "verif": {
         "fr": "29/09 — ouvert sur décision de Xavier, à la clôture de H27.",
         "pt": "29/09 — aberto por decisão de Xavier, no fechamento de H27."
+      }
+    },
+    {
+      "d": "H",
+      "sk": [
+        "sql",
+        "deno"
+      ],
+      "id": "H30",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "t": {
+        "fr": "« Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes",
+        "pt": "«Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas"
+      },
+      "v": {
+        "fr": "**Prouvé au banc le 01/10** (revue de H21 lot 0, sonde `P5/SK2/sk2p5-sonde-retraiter.sql` de la session 23c4e409) : pour un run dont le chemin de stockage est une convention sans fichier (`oai/…`, `lookup/…`, `direct/…`), l’écran offre « Retraiter » et `fn_import_dispatch` l’accepte ; l’edge function `process-partner-catalog-import` efface toutes les lignes, puis échoue au téléchargement : run « échoué », 0 ligne ; les fichiers reçus d’un dépôt direct perdent leur ligne ; une moisson OAI incrémentale ne ramène pas les notices effacées. Antérieur au lot 0 (H15, EX-4).",
+        "pt": "**Provado na bancada em 01/10** (revisão do lote 0 de H21): para uma importação cujo caminho é uma convenção sem arquivo (`oai/…`, `lookup/…`, `direct/…`), a tela oferece «Reprocessar» e `fn_import_dispatch` aceita; a edge function apaga todas as linhas e depois falha no download: importação «falhou», 0 linha. Anterior ao lote 0 (H15, EX-4)."
+      },
+      "w": {
+        "fr": "Refuser le retraitement dans `fn_import_dispatch` quand `detected_format` vaut `oai_pmh` ou `lookup`, ou que le chemin commence par `direct/` (HINT traduite `error.import.reparse_no_file`, 10 locales), masquer le bouton dans `RunEncodingPanel` pour ces runs ; et, dans l’edge function, lire le fichier AVANT d’effacer les lignes. Correctif candidat prouvé : `sk2p5-mutant-dispatch-chemins-de-convention.sql` (suites voisines vertes).",
+        "pt": "Recusar o reprocessamento em `fn_import_dispatch` para `oai_pmh`, `lookup` ou caminho `direct/` (HINT traduzida, 10 locales), esconder o botão nesses casos, e na edge function ler o arquivo ANTES de apagar as linhas."
+      },
+      "y": {
+        "fr": "C’est une perte de données silencieuse au bout d’un clic offert à l’écran.",
+        "pt": "É uma perda de dados silenciosa a um clique oferecido na tela."
+      },
+      "f": {
+        "fr": [
+          "« Retraiter » n’est ni offert ni accepté pour un run sans fichier ; refus traduit.",
+          "Un échec de lecture du fichier n’efface plus aucune ligne.",
+          "Suite SQL et banc de l’edge function."
+        ],
+        "pt": [
+          "«Reprocessar» não é oferecido nem aceito para importação sem arquivo; recusa traduzida.",
+          "Uma falha de leitura do arquivo não apaga mais nenhuma linha.",
+          "Suíte SQL e bancada da edge function."
+        ]
+      },
+      "dep": {
+        "fr": "Après le lot 0 de **H21** (livré le 01/10).",
+        "pt": "Depois do lote 0 de **H21** (entregue em 01/10)."
+      },
+      "r": [
+        "claude/h21-reimport"
+      ],
+      "verif": {
+        "fr": "01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc).",
+        "pt": "01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada)."
+      }
+    },
+    {
+      "d": "H",
+      "sk": [
+        "sql",
+        "deno"
+      ],
+      "id": "H31",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "t": {
+        "fr": "« Retraiter » juge le run au moment d’effacer, pas seulement à l’envoi",
+        "pt": "«Reprocessar» julga a importação no momento de apagar, não só no envio"
+      },
+      "v": {
+        "fr": "**Prouvé au banc le 01/10** (revue de H21 lot 0, sondes `P5/SCEP1`, `P5/SK1r`, `P5/SK2r` de la session 23c4e409). La garde de « Retraiter » (`fn_import_dispatch`) se juge à l’envoi ; l’edge function efface les lignes quelques secondes plus tard, sans rien relire. Dans cette fenêtre, depuis un second onglet ou par l’API : une promotion donne, après relecture, deux notices pour la même ligne d’un run (antérieur, H15) ; un rapprochement fait refuser l’effacement (déclencheur du lot 0) et le run finit « échoué », sa file cachée. À côté, du même geste : un paquet de fonds retraité efface la trace d’attache de ses fichiers reçus, et un même fichier s’attache deux fois ; `receive-fonds-bundle` passe le run en « processing » avant d’effacer ; un effacement des fichiers reçus en échec double les fichiers au retraitement suivant.",
+        "pt": "**Provado na bancada em 01/10.** A guarda de «Reprocessar» é julgada no envio; a edge function apaga as linhas segundos depois, sem reler. Nessa janela: uma promoção dá dois registros para a mesma linha (anterior, H15); uma vinculação faz recusar o apagamento e a importação termina «falhou», com a fila escondida. Ao lado: um pacote de acervo reprocessado apaga o rastro de anexação dos arquivos recebidos."
+      },
+      "w": {
+        "fr": "Faire passer l’effacement des deux edge functions par une RPC `ingest` qui verrouille le run (FOR UPDATE), rejoue la garde de `fn_import_dispatch`, puis efface ; promotion, rapprochement et décision prennent le même verrou. Un effacement refusé laisse le run dans son état et écrit le refus à son journal (règle du 27/09, comme le profil supprimé), au lieu de « échoué ». Garder les fichiers reçus déjà attachés. Variante écartée pour l’instant : un statut « queued » (réécrit par `fn_refresh_partner_catalog_run_counters`, et perdu si l’envoi pg_net se perd).",
+        "pt": "Passar o apagamento das duas edge functions por uma RPC `ingest` que trava a importação, rejulga a guarda e apaga; promoção, vinculação e decisão usam a mesma trava. Um apagamento recusado deixa a importação no estado anterior e registra a recusa no diário."
+      },
+      "y": {
+        "fr": "Le lot 0 promet « jamais deux notices pour une ligne » ; cette fenêtre est le dernier chemin connu qui la dément.",
+        "pt": "O lote 0 promete «nunca dois registros para uma linha»; essa janela é o último caminho conhecido que a desmente."
+      },
+      "f": {
+        "fr": [
+          "Une promotion ou un rapprochement dans la fenêtre est refusé ou fait refuser le retraitement, sans run en échec ni ligne perdue.",
+          "Un retraitement refusé laisse le run et sa file visibles.",
+          "Tests de suite de la fenêtre (relais remplacé par un témoin) et bancs des deux edge functions."
+        ],
+        "pt": [
+          "Uma promoção ou vinculação na janela é recusada ou faz recusar o reprocessamento, sem importação falhada nem linha perdida.",
+          "Um reprocessamento recusado deixa a importação e a fila visíveis.",
+          "Testes da janela e bancadas das duas edge functions."
+        ]
+      },
+      "dep": {
+        "fr": "Après le lot 0 de **H21** (livré le 01/10) ; avec **H30**.",
+        "pt": "Depois do lote 0 de **H21** (entregue em 01/10); com **H30**."
+      },
+      "r": [
+        "claude/h21-reimport"
+      ],
+      "verif": {
+        "fr": "01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc, non mesuré en production : la largeur de la fenêtre n’est pas connue).",
+        "pt": "01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção)."
       }
     },
     {

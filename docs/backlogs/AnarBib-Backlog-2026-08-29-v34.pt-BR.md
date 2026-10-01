@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-01** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-01** · 75 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 9
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-01.** **54 itens de 73** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-01.** **56 itens de 75** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1388,7 +1388,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Relatório de cobertura enviado à DIRA.
 - Decisão de acesso escrita, com a razão.
 
-**Dependências.** Antes do relatório: **H28** (entregue em 26/09), **H14** (fechado em 26/09), **H15** e **H16** (entregues em 26/09), **H19** (entregue em 27/09); **H28**, **H15**, **H16** e **H19** ainda a verificar numa importação real. Antes de qualquer migração: **H23** e **H24** (entregues em 28/09), **H27** (fechado em 29/09) e **H21** (em curso: `IMP-26` de 29/09, nenhum dos nove lotes entregue). Arquivos: **D7** (fechado em 27/09; realização: **D8**).
+**Dependências.** Antes do relatório: **H28** (entregue em 26/09), **H14** (fechado em 26/09), **H15** e **H16** (entregues em 26/09), **H19** (entregue em 27/09); **H28**, **H15**, **H16** e **H19** ainda a verificar numa importação real. Antes de qualquer migração: **H23** e **H24** (entregues em 28/09), **H27** (fechado em 29/09) e **H21** (em curso: `IMP-26` e `IMP-27` de 29/09, lote 0 entregue em 01/10, depois **H30** e **H31**). Arquivos: **D7** (fechado em 27/09; realização: **D8**).
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1417,6 +1417,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | A verificar |
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
+| **H30** | «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas | `P1` | Aberto |
+| **H31** | «Reprocessar» julga a importação no momento de apagar, não só no envio | `P2` | Aberto |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1640,7 +1642,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A marcha em paralelo supõe continuar catalogando no PMB e reimportar. Hoje, um reimport passa pela detecção de duplicatas: não há noção de «registro já importado, a atualizar». `book_drafts.action` já conhece `update`.
 
-*Verificado : 26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`).*
+*Verificado : 26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira?*
 
 **O que é.** Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**. **Decidido em 29/09 por Xavier (REGISTRE `IMP-26`)**: retomar um registro à mão é reservado às bibliotecas que o detêm; uma divergência num registro compartilhado é tratada por qualquer detentora, e descartá-la faz avançar a base; «retirado» é uma constatação reversível (não emprestável, oculto no OPAC, fora do export, nunca apagado), proposta só para exemplares vindos da mesma fonte, num arquivo MARC declarado «export completo»; H21 visa só a DIRA; `accept_duplicate` quer dizer «vinculado», nunca uma criação. **Plano em nove lotes** (0 a 8).
 
@@ -1778,6 +1780,50 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de **H27** (fechado em 29/09). Perguntar primeiro à DIRA: para que essas informações lhes servem, e se os códigos de importação de tipos e seções estão configurados no PMB delas.
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Tableau de couverture AnarBib ↔ PMB, § 4 (docs/interop/couverture-pmb.md)`*
+
+#### H30 — «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
+
+**Estado.** **Provado na bancada em 01/10** (revisão do lote 0 de H21): para uma importação cujo caminho é uma convenção sem arquivo (`oai/…`, `lookup/…`, `direct/…`), a tela oferece «Reprocessar» e `fn_import_dispatch` aceita; a edge function apaga todas as linhas e depois falha no download: importação «falhou», 0 linha. Anterior ao lote 0 (H15, EX-4).
+
+*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada).*
+
+**O que é.** Recusar o reprocessamento em `fn_import_dispatch` para `oai_pmh`, `lookup` ou caminho `direct/` (HINT traduzida, 10 locales), esconder o botão nesses casos, e na edge function ler o arquivo ANTES de apagar as linhas.
+
+**Por que importa.** É uma perda de dados silenciosa a um clique oferecido na tela.
+
+**O que conta como terminado.**
+
+- «Reprocessar» não é oferecido nem aceito para importação sem arquivo; recusa traduzida.
+- Uma falha de leitura do arquivo não apaga mais nenhuma linha.
+- Suíte SQL e bancada da edge function.
+
+**Dependências.** Depois do lote 0 de **H21** (entregue em 01/10).
+
+*Remissões : `claude/h21-reimport`*
+
+#### H31 — «Reprocessar» julga a importação no momento de apagar, não só no envio
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
+
+**Estado.** **Provado na bancada em 01/10.** A guarda de «Reprocessar» é julgada no envio; a edge function apaga as linhas segundos depois, sem reler. Nessa janela: uma promoção dá dois registros para a mesma linha (anterior, H15); uma vinculação faz recusar o apagamento e a importação termina «falhou», com a fila escondida. Ao lado: um pacote de acervo reprocessado apaga o rastro de anexação dos arquivos recebidos.
+
+*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção).*
+
+**O que é.** Passar o apagamento das duas edge functions por uma RPC `ingest` que trava a importação, rejulga a guarda e apaga; promoção, vinculação e decisão usam a mesma trava. Um apagamento recusado deixa a importação no estado anterior e registra a recusa no diário.
+
+**Por que importa.** O lote 0 promete «nunca dois registros para uma linha»; essa janela é o último caminho conhecido que a desmente.
+
+**O que conta como terminado.**
+
+- Uma promoção ou vinculação na janela é recusada ou faz recusar o reprocessamento, sem importação falhada nem linha perdida.
+- Um reprocessamento recusado deixa a importação e a fila visíveis.
+- Testes da janela e bancadas das duas edge functions.
+
+**Dependências.** Depois do lote 0 de **H21** (entregue em 01/10); com **H30**.
+
+*Remissões : `claude/h21-reimport`*
 
 ---
 
@@ -2336,4 +2382,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 75 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-01** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-01** · 75 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 9
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 3
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-01.** **54 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-01.** **56 items sur 75** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1388,7 +1388,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - Rapport de couverture envoyé à DIRA.
 - Décision d'accès écrite, avec sa raison.
 
-**Dépendances.** Avant le compte rendu : **H28** (livré le 26/09 — sans lui aucun ISO 2709 ne s'importait), **H14** (clos le 26/09), **H15** et **H16** (livrés le 26/09), **H19** (livré le 27/09) ; **H28**, **H15**, **H16** et **H19** restent à vérifier sur un import réel. Avant toute bascule : **H23** et **H24** (livrés le 28/09), **H27** (clos le 29/09) et **H21** (en cours : décisions `IMP-26` du 29/09, aucun des neuf lots livré). Les archives : **D7** (clos le 27/09 ; réalisation : **D8**).
+**Dépendances.** Avant le compte rendu : **H28** (livré le 26/09 — sans lui aucun ISO 2709 ne s'importait), **H14** (clos le 26/09), **H15** et **H16** (livrés le 26/09), **H19** (livré le 27/09) ; **H28**, **H15**, **H16** et **H19** restent à vérifier sur un import réel. Avant toute bascule : **H23** et **H24** (livrés le 28/09), **H27** (clos le 29/09) et **H21** (en cours : décisions `IMP-26` et `IMP-27` du 29/09, lot 0 livré le 01/10, puis **H30** et **H31**). Les archives : **D7** (clos le 27/09 ; réalisation : **D8**).
 
 *Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1417,6 +1417,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H25** | Exporter les autorités (UNIMARC Autorités), pour que les liens $3 de l'export mènent quelque part | `P2` | À vérifier |
 | **H26** | L'export d'un gros catalogue ne dépend plus de la mémoire d'une edge function | `P2` | À vérifier |
 | **H29** | Au retour dans PMB, un exemplaire garde son type, sa section et son code statistique | `P2` | Ouvert |
+| **H30** | « Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes | `P1` | Ouvert |
+| **H31** | « Retraiter » juge le run au moment d’effacer, pas seulement à l’envoi | `P2` | Ouvert |
 
 #### H2 — Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus
 
@@ -1640,7 +1642,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La marche en parallèle promise à DIRA suppose qu'elle continue de cataloguer dans PMB et qu'on réimporte. Aujourd'hui, un réimport repasse par la détection de doublons, puis par la révision : il n'existe aucune notion de « notice déjà importée, à mettre à jour ». `book_drafts.action` connaît pourtant `update` (valeur présente en base).
 
-*Vérifié : 26/09 — `book_drafts.action` ∈ {create, update} en base. **29/09** — passé en cours par `69dbeec7` ; aucun des neuf lots n'est livré au soir du 29/09. Constat de production qui a demandé la règle (REGISTRE `IMP-26` a, 28/09) : 198 mises à jour publiées, dont 33 sur des notices aujourd'hui partagées et 3 par une bibliothèque qui ne détenait pas la notice. Le tableau de couverture le dit à DIRA : le 001 est gardé et rendu à l'export, mais un réimport ne s'en sert pas encore (`docs/interop/couverture-pmb.md`, `466324aa`).*
+*Vérifié : 26/09 — `book_drafts.action` ∈ {create, update} en base. **29/09** — passé en cours par `69dbeec7` ; aucun des neuf lots n'est livré au soir du 29/09. Constat de production qui a demandé la règle (REGISTRE `IMP-26` a, 28/09) : 198 mises à jour publiées, dont 33 sur des notices aujourd'hui partagées et 3 par une bibliothèque qui ne détenait pas la notice. Le tableau de couverture le dit à DIRA : le 001 est gardé et rendu à l'export, mais un réimport ne s'en sert pas encore (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lot 0 livré** (`1385431b` base, `d4f97afc` écran ; migration `20261001200931` appliquée par la CI, `created_by` vide ; REGISTRE `IMP-27`) : une notice ou un exemplaire rapproché né d’un import ne se publie la première fois que dans un lot révisé, même sorti de son lot ; une notice ou un exemplaire déjà publiés (et au catalogue) se republient hors lot ; l’approbation couvre les brouillons figés à la demande, et la coordination redemande un tour pour les ajouts ; un lot de rapprochement passe par la révision ; une sélection rejoint le lot ouvert du run et « Promouvoir la sélection » ne promeut qu’elle ; « rattaché » ne devient jamais une notice ; vider la corbeille d’un brouillon importé écarte sa ligne, que seul le rejeu de ce brouillon reprend ; « Retraiter » refusé tout de suite pour un run qui a une ligne écartée ou un exemplaire rapproché à la corbeille ; l’écran dit les lignes ignorées. Six passes de revue contradictoire ; SQL 158/158, vitest 1 666 ; vérifié en production le 01/10 (définitions, cinq déclencheurs, droits, 0 tour sans liste) et l’écran servi. **Consigné** : la course entre « Retraiter » accepté et l’effacement par l’edge function, et « Retraiter » d’un run sans fichier (**H30**, **H31**) ; les fusions `api.merge_*` qui absorbent un brouillon importé (lot 5) ; la corbeille d’un exemplaire rapproché libère sa ligne, qu’un nouveau « Rapprocher » puis la sortie de corbeille dédoublent (lot 6) ; l’assistant d’import ne lit pas `skipped_rows` ; une ligne dont la notice proposée a été descartée reste « en attente » sans autre geste que « Rejeter » ; un onglet resté sur un run supprimé reçoit « Run N introuvable » en brut. **À trancher par Xavier** : un exemplaire rattaché sorti de la corbeille après la demande doit-il suivre la liste du tour, comme les notices (aujourd’hui non, règle de H19) ? Après une réattribution, la notice garde-t-elle pour la bibliothèque cible l’identifiant d’origine venu du PMB de la première ?*
 
 **Ce que c'est.** Rapprocher d'abord par `(bibliothèque, identifiant d'origine)` (**H20**). Produire des brouillons `update` avec la différence montrée en révision de lot. Traiter les exemplaires ajoutés et retirés. Quand une notice a été modifiée dans AnarBib depuis l'import, la signaler en conflit : **jamais d'écrasement silencieux**. **Décidé le 29/09 par Xavier (REGISTRE `IMP-26`, précise `IMP-23`)** : reprendre une notice à la main est réservé à ses détentrices ; une divergence trouvée sur une notice partagée est traitée par n'importe quelle détentrice, et l'écarter fait avancer la base ; « retiré » est un constat réversible (non prêtable, masqué à l'OPAC, exclu de l'export, jamais supprimé), proposé seulement pour les exemplaires venus de la même source, d'un fichier MARC à exemplaires déclaré « export complet » ; H21 vise DIRA seule (MLEG ne réimportera pas) ; `accept_duplicate` veut dire « rattaché », jamais une création. **Plan en neuf lots**, chacun livrable et prouvé au banc : 0 préalables (porte de révision, promotion de la seule sélection, `accept_duplicate`, identifiant d'origine jugé à la ligne), 1 reconnaître une notice déjà importée, 2 garder la base de ce que le dernier import a apporté, 3 comparer à trois états, 4 brouillon de mise à jour pour une seule détentrice, 5 notice partagée signalée sans réécriture, 6 exemplaires ajoutés, modifiés, déplacés, 7 retirés, 8 bout en bout sur les fixtures PMB.
 
@@ -1778,6 +1780,50 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Après **H27** (clos le 29/09). À demander à DIRA d'abord : ce que ces trois informations leur servent, et si les codes d'import de leurs types et sections sont réglés dans leur PMB.
 
 *Renvois : `claude/aller-retour-PMB_2026-09-26` · `Tableau de couverture AnarBib ↔ PMB, § 4 (docs/interop/couverture-pmb.md)`*
+
+#### H30 — « Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript
+
+**État.** **Prouvé au banc le 01/10** (revue de H21 lot 0, sonde `P5/SK2/sk2p5-sonde-retraiter.sql` de la session 23c4e409) : pour un run dont le chemin de stockage est une convention sans fichier (`oai/…`, `lookup/…`, `direct/…`), l’écran offre « Retraiter » et `fn_import_dispatch` l’accepte ; l’edge function `process-partner-catalog-import` efface toutes les lignes, puis échoue au téléchargement : run « échoué », 0 ligne ; les fichiers reçus d’un dépôt direct perdent leur ligne ; une moisson OAI incrémentale ne ramène pas les notices effacées. Antérieur au lot 0 (H15, EX-4).
+
+*Vérifié : 01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc).*
+
+**Ce que c'est.** Refuser le retraitement dans `fn_import_dispatch` quand `detected_format` vaut `oai_pmh` ou `lookup`, ou que le chemin commence par `direct/` (HINT traduite `error.import.reparse_no_file`, 10 locales), masquer le bouton dans `RunEncodingPanel` pour ces runs ; et, dans l’edge function, lire le fichier AVANT d’effacer les lignes. Correctif candidat prouvé : `sk2p5-mutant-dispatch-chemins-de-convention.sql` (suites voisines vertes).
+
+**Pourquoi ça compte.** C’est une perte de données silencieuse au bout d’un clic offert à l’écran.
+
+**Ce qui compte comme fini.**
+
+- « Retraiter » n’est ni offert ni accepté pour un run sans fichier ; refus traduit.
+- Un échec de lecture du fichier n’efface plus aucune ligne.
+- Suite SQL et banc de l’edge function.
+
+**Dépendances.** Après le lot 0 de **H21** (livré le 01/10).
+
+*Renvois : `claude/h21-reimport`*
+
+#### H31 — « Retraiter » juge le run au moment d’effacer, pas seulement à l’envoi
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript
+
+**État.** **Prouvé au banc le 01/10** (revue de H21 lot 0, sondes `P5/SCEP1`, `P5/SK1r`, `P5/SK2r` de la session 23c4e409). La garde de « Retraiter » (`fn_import_dispatch`) se juge à l’envoi ; l’edge function efface les lignes quelques secondes plus tard, sans rien relire. Dans cette fenêtre, depuis un second onglet ou par l’API : une promotion donne, après relecture, deux notices pour la même ligne d’un run (antérieur, H15) ; un rapprochement fait refuser l’effacement (déclencheur du lot 0) et le run finit « échoué », sa file cachée. À côté, du même geste : un paquet de fonds retraité efface la trace d’attache de ses fichiers reçus, et un même fichier s’attache deux fois ; `receive-fonds-bundle` passe le run en « processing » avant d’effacer ; un effacement des fichiers reçus en échec double les fichiers au retraitement suivant.
+
+*Vérifié : 01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc, non mesuré en production : la largeur de la fenêtre n’est pas connue).*
+
+**Ce que c'est.** Faire passer l’effacement des deux edge functions par une RPC `ingest` qui verrouille le run (FOR UPDATE), rejoue la garde de `fn_import_dispatch`, puis efface ; promotion, rapprochement et décision prennent le même verrou. Un effacement refusé laisse le run dans son état et écrit le refus à son journal (règle du 27/09, comme le profil supprimé), au lieu de « échoué ». Garder les fichiers reçus déjà attachés. Variante écartée pour l’instant : un statut « queued » (réécrit par `fn_refresh_partner_catalog_run_counters`, et perdu si l’envoi pg_net se perd).
+
+**Pourquoi ça compte.** Le lot 0 promet « jamais deux notices pour une ligne » ; cette fenêtre est le dernier chemin connu qui la dément.
+
+**Ce qui compte comme fini.**
+
+- Une promotion ou un rapprochement dans la fenêtre est refusé ou fait refuser le retraitement, sans run en échec ni ligne perdue.
+- Un retraitement refusé laisse le run et sa file visibles.
+- Tests de suite de la fenêtre (relais remplacé par un témoin) et bancs des deux edge functions.
+
+**Dépendances.** Après le lot 0 de **H21** (livré le 01/10) ; avec **H30**.
+
+*Renvois : `claude/h21-reimport`*
 
 ---
 
@@ -2346,4 +2392,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 75 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
