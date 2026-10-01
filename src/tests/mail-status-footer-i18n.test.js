@@ -65,7 +65,7 @@ const ligneReserva = (stage = 'retirada_agendada') => ({
   negotiation_iteration_count: 0,
 });
 
-function monter({ lang = 'fr', ctx = CTX_SANS_FOOTER, stage = 'retirada_agendada' } = {}) {
+function monter({ lang = 'fr', ctx = CTX_SANS_FOOTER, stage = 'retirada_agendada', env = {} } = {}) {
   const lectrice = {
     id: 'u-1',
     email: 'lectrice@exemplo.test',
@@ -75,6 +75,7 @@ function monter({ lang = 'fr', ctx = CTX_SANS_FOOTER, stage = 'retirada_agendada
     preferred_language: lang,
   };
   const ef = monterEF({
+    env,
     repondre: (_s, table) => {
       if (table === 'reservas_v2') return { data: { id: 'r-1', user_id: 'u-1', library_id: ctx.library_id, status_global: 'ativa', notes: null }, error: null };
       if (table === 'profiles') return { data: lectrice, error: null };
@@ -90,11 +91,33 @@ function monter({ lang = 'fr', ctx = CTX_SANS_FOOTER, stage = 'retirada_agendada
 }
 
 describe('F21 — Absence de portugais dans les courriels traduits', () => {
-  it('fallbackLibraryNotificationContext pose signature_short et footer_local à null', () => {
+  it('fallbackLibraryNotificationContext pose footer_local et signature_short à null par défaut', () => {
     const { libContext } = monter();
     const fb = libContext.fallbackLibraryNotificationContext('lib-test');
-    expect(fb.signature_short).toBeNull();
     expect(fb.footer_local).toBeNull();
+    expect(fb.signature_short).toBeNull();
+  });
+
+  it('ADMIN_NAME configuré est conservé dans signature_short', () => {
+    const { ef } = monter({ env: { ADMIN_NAME: 'Coordination BLM' } });
+    const libContext = ef.charger('_shared/context/library-notification-context.ts');
+    const fb = libContext.fallbackLibraryNotificationContext('lib-custom');
+    expect(fb.signature_short).toBe('Coordination BLM');
+  });
+
+  it('FOOTER_TEXT personnalisé est préservé dans footer_local', () => {
+    const { ef } = monter({ env: { FOOTER_TEXT: 'Pied de page militant personnalisé' } });
+    const libContext = ef.charger('_shared/context/library-notification-context.ts');
+    const fb = libContext.fallbackLibraryNotificationContext('lib-custom');
+    expect(fb.footer_local).toBe('Pied de page militant personnalisé');
+  });
+
+  it('wf.stage.cancelada_leitor applique l\'écriture inclusive en de, it et ca', () => {
+    const { ef } = monter();
+    const { tMail } = ef.charger('_shared/i18n/mail-strings.ts');
+    expect(tMail('de', 'wf.stage.cancelada_leitor')).toBe('Von der*dem Leser*in storniert');
+    expect(tMail('it', 'wf.stage.cancelada_leitor')).toBe('Annullata dal/la lettore/trice');
+    expect(tMail('ca', 'wf.stage.cancelada_leitor')).toBe('Cancel·lada per le lector-a-e');
   });
 
   for (const [lang, nomLang, labelStatutAttendu] of [

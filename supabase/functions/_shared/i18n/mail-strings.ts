@@ -1659,9 +1659,9 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     fr: "Annulée par le·la lecteur·rice",
     es: "Cancelada por le lectore",
     en: "Cancelled by reader",
-    it: "Annullata dal lettore",
-    de: "Vom Leser storniert",
-    ca: "Cancel·lada pel-per la-per le lector-a-e",
+    it: "Annullata dal/la lettore/trice",
+    de: "Von der*dem Leser*in storniert",
+    ca: "Cancel·lada per le lector-a-e",
     eo: "Nuligita de la legant-in-o",
     nl: "Geannuleerd door lezer",
     el: "Ακυρώθηκε από τον/την αναγνώστη/στρια"

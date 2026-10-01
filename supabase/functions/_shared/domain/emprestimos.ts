@@ -165,7 +165,7 @@ export async function handleEmprestimoV2(recordId, event, payload) {
   // TR-2 (#153.A) : si suppress_user_mail (conversion), on saute l'envoi
   // lecteur·rice avec un motif explicite. Sinon, comportement inchange.
   const ur = suppressUserMail ? skippedEmailResult("user_mail", "suppressed_conversion") : loanLifecycleEnabled(ctx) ? await safeSendEmail(user, sub, html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "loan_lifecycle_disabled");
-  // Admin mail — dans la locale de la bibliothèque (libLocale)
+  // Admin mail — dans la locale de la bibliothèque (libLocale), aligné sur les réservations (annule le choix historique du Paquet 17 / 96006b81 qui forçait pt-BR)
   let ai = `<p>${tMail(libLocale, "admin.loanUpdate")}</p>`, as2 = `[BLMF] ${tit} — ${aun}`, titAdmin = tit;
   if (event === "emprestimo_v2_criado") {
     ai = `<p>${tMail(libLocale, "admin.newLoan")}</p>`;
