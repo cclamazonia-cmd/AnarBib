@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-01** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-01** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,9 +17,9 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 9
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-01.** **52 itens de 71** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-01.** **54 itens de 73** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -429,6 +429,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C15** | Corrigir oito registros da BTL, com o livro na mão | `P2` | Aberto |
 | **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
 | **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | Decisão coletiva |
+| **C18** | Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas? | `P2` | Aberto |
 
 #### C3 — Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos
 
@@ -578,6 +579,24 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `supabase/migrations/20260815145252_tombo_collision_robustness.sql` · `supabase/migrations/20260928111729_btl_tl_000881_exemplaire_blmf_retire_et_tirages_notes.sql` · `item E6 (verif du 29/09)`*
 
+#### C18 — Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas?
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
+
+**Estado.** Levantado em 01/10 (somente leitura): catorze pares de obras do mesmo autor·a em que um título «auto» de uma é o título real da outra. Em geral, traduções de uma mesma obra em duas fichas (Reclus 133/880/1131, 268/1387/1203; Kropotkin 19/2381, 79/396, 1/1084, 115/386; Tolstói 28/1297; Gori 48/873; Safón 99/2428; Horowitz 74/2484). Casos a decidir: Nettlau 2036/196 e Kropotkin 1366/2064 (coletânea contra texto único).
+
+*Verificado : 01/10 — levantamento em produção: 14 pares; nada modificado.*
+
+**O que é.** Revisar cada par com as edições; reunir as que são a mesma obra; para as outras, fazer como para 1163.
+
+**Por que importa.** Uma obra dividida aparece duas vezes no catálogo por obra; um resumo fundido na íntegra faria reservar um pelo outro.
+
+**O que conta como terminado.**
+
+- Os catorze pares decididos por quem cataloga, não por script; cada par mantido distinto tem sua nota.
+
+**Dependências.** Faz-se no aplicativo.
+
 ---
 
 ### D — Periódicos, efêmeros, recursos digitais
@@ -719,6 +738,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E23** | Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales | `P2` | Aberto |
 | **E24** | As recusas das Edge Functions levam um código que a tela traduz, não uma frase fixa | `P3` | Aberto |
 | **E25** | pt-BR: o que a revisão de 27/09 não alcançou | `P2` | Aberto |
+| **E27** | As sugestões da busca rápida ainda ignoram os títulos da obra | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -944,6 +964,26 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `docs/governance/guide-gouvernance-pt-BR.md` · `docs/governance/guide-gouvernance-pt-BR.docx` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2-pt-BR.md` · `docs/legal/dpa-pt-BR.md` · `src/tests/helpers/ptbr-pt-europeu.js` · `src/tests/helpers/ptbr-frances.js` · `src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)` · `REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e`*
 
+#### E27 — As sugestões da busca rápida ainda ignoram os títulos da obra
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Constatado na tela em 01/10, depois de E26: na barra de busca rápida, «Vivre ma Vie» só sugere o livro de Armand. As sugestões passam por `api.search_catalog_v1`, que não lê os títulos da obra. A grade do catálogo acha a obra.
+
+*Verificado : 01/10 — constatado no navegador em app.anarbib.org (anônimo): sugestão única do livro de Armand.*
+
+**O que é.** Fazer `api.search_catalog_v1` ler `work_titles`, como `catalog_search_ids_v1` desde `20261001190729`, com guarda md5 e suíte SQL.
+
+**Por que importa.** A barra de busca rápida é a primeira coisa que se usa, e contradiz a grade logo abaixo.
+
+**O que conta como terminado.**
+
+- «Vivre ma vie» sugere a obra 2101 na busca rápida, na tela.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `supabase/migrations/20261001190729_la_recherche_trouve_l_auteur_dans_tous_les_sens_et_le_titre_de_l_oeuvre.sql`*
+
 ---
 
 ### F — E-mail e notificações
@@ -1158,7 +1198,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 **Estado.** Achado pelo mapa F1. O rodapé de reserva e a linha « Status » ficam em pt-BR em todas as línguas.
 
-*Verificado : 01/10 — fallbackLibraryNotificationContext inicializa footer_local e signature_short como null; mail-strings.ts enriquecido com as chaves wf.stage.* nas 10 línguas; events.ts traduz workflowStageLabel e pickupReplyLabel via tMail; bancada Vitest mail-status-footer-i18n (6 testes) no verde.*
+*Verificado : 01/10 — fallbackLibraryNotificationContext inicializa footer_local e signature_short como null; mail-strings.ts enriquecido com as chaves wf.stage.* nas 10 línguas; events.ts traduz workflowStageLabel e pickupReplyLabel via tMail; bancada Vitest mail-status-footer-i18n (6 testes) no verde. **01/10, noite** — `9bdce13a` (implantado, CI verde): `ADMIN_NAME` sem padrão «Equipe da biblioteca»; a assinatura cai no nome da biblioteca. Guarda `mail-nom-equipe-repli-garde` (4 testes).*
 
 **O que é.** Deixar `tMail` localizar o rodapé; uma chave por etapa em vez de `WF_LABELS`, nas dez línguas; teste de fonte.
 
@@ -2264,6 +2304,7 @@ CI verde. |
 | I24 | 2026-09-30 | **Encerrado em 30/09 à noite, pelo ensaio de Xavier.** Um disparo `storage` foi morto (`wsl --terminate`) e relançado sozinho pelo controle de frescor 5 min depois; instantâneo `f420f896`, testemunho enviado, nenhum incidente. Critério 1 reescrito em torno desse ensaio (o texto original era inatingível); critério 2 cumprido desde 20/09 (sonda do servidor); critério 3 coberto pelo rattrapage, pela relança, pela trava entre disparos e pela sonda. |
 | F18 | 2026-09-30 | **Encerrado em 30/09, na mesma noite: a constatação era falsa.** `fede@anarbib.org` tem caixa (Xavier a mostrou no seu cliente de e-mail). Nada a corrigir. |
 | F17 | 2026-10-01 | **Encerrado em 01/10.** `88dde5b3`, migração aplicada pela CI; os lembretes seguem `coalesce(extended_until, due_at)`; bancadas 13 e 8/8. |
+| E26 | 2026-10-01 | **Aberto e encerrado em 01/10: a busca do catálogo não achava «Emma Goldman» nem «Vivre ma vie».** O filtro de autor·a buscava a frase inteira em `autor` (forma de autoridade «GOLDMAN, Emma»), e a busca livre não lia os títulos da obra (`work_titles`). Migração `20261001190729` (`697c81d9`): filtro palavra por palavra, sem acentos nem caixa; a busca lê os títulos da obra em todas as línguas. A obra 1163 (resumo francês de *Living My Life*) perdeu os nove títulos «auto» copiados da obra 2101 — as duas ficam distintas (decisão de Xavier). Seguimento `20261001192041` (`52ebebc1`, guarda T7). Verificado em produção e na tela. Restos: E27, C18. |
 
 ---
 
@@ -2295,4 +2336,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

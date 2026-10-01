@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-01** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-01** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,9 +17,9 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 9
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-01.** **52 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-01.** **54 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -429,6 +429,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C15** | Corriger huit notices BTL, livre en main | `P2` | Ouvert |
 | **C16** | Attribuer les couvertures posées avant le 27/09 | `P2` | Ouvert |
 | **C17** | Décider si un numéro d'inventaire supprimé peut être redonné | `P2` | Décision collective |
+| **C18** | Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ? | `P2` | Ouvert |
 
 #### C3 — Mener la revue humaine des autorités : patronymes, casse, titres
 
@@ -578,6 +579,24 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `supabase/migrations/20260815145252_tombo_collision_robustness.sql` · `supabase/migrations/20260928111729_btl_tl_000881_exemplaire_blmf_retire_et_tirages_notes.sql` · `item E6 (verif du 29/09)`*
 
+#### C18 — Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ?
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
+
+**État.** Relevé le 01/10 (lecture seule, production), en cherchant d'autres cas comme l'œuvre 1163 (E26) : un titre « auto » d'une œuvre A qui est le titre réel — d'édition ou saisi — d'une autre œuvre B du même auteur·rice. Quatorze paires, douze œuvres A. La plupart ne sont pas des titres faux mais des **traductions d'une même œuvre rangées sous deux fiches** : Reclus, *L'Homme et la Terre* (133) / *O Homem e a Terra* (880) / *El Hombre y la Tierra* (1131) ; Reclus, *Evolución, Revolución y el Ideal anárquico* (268) / 1387 (fr) / 1203 (pt) ; Kropotkine, *A Conquista do Pão* (19) / 2381, *El Apoyo Mutuo* (79) / *Ajuda Mútua* (396), *A Grande Revolução* (1) / 1084, *Em Tôrno de uma Vida* (115) / 386 ; Tolstoï, *A insubmissão* (28) / 1297 ; Gori (48) / 873 ; Safón (99) / 2428 ; Horowitz (74) / 2484. **À trancher au cas par cas, comme 1163** : Nettlau, *La Anarquía a través de los tiempos* (2036) / *História da Anarquia* (196) — même texte ou non ? — et Kropotkine, *Moral anarquista* (1366) / *La Moral Anarquista y otros escritos* (2064), recueil contre texte seul.
+
+*Vérifié : 01/10 — relevé en production : 14 paires, 12 œuvres A ; aucune modification faite.*
+
+**Ce que c'est.** Relire chaque paire avec les éditions en main ; réunir celles qui sont la même œuvre, depuis l'application ; pour les autres, faire comme pour 1163 : titres « auto » remplacés, note d'œuvre qui dit pourquoi elles restent distinctes.
+
+**Pourquoi ça compte.** Une œuvre scindée s'affiche deux fois au catalogue par œuvre, et chaque fiche ne montre qu'une partie des éditions ; un abrégé fondu dans l'intégrale ferait réserver l'un pour l'autre.
+
+**Ce qui compte comme fini.**
+
+- Les quatorze paires sont tranchées par une personne qui catalogue, pas par script ; la requête de relevé ne renvoie plus que des paires décidées distinctes, chacune avec sa note.
+
+**Dépendances.** Se fait dans l'application. La requête de relevé est dans la session du 01/10 (titres `auto` d'une œuvre = titre d'édition ou `edition`/`manual` d'une autre œuvre de même `primary_author_id`).
+
 ---
 
 ### D — Périodiques, éphémères, ressources numériques
@@ -719,6 +738,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E23** | Chaque HINT `error.*` posé par une fonction de la base a son libellé dans les dix locales | `P2` | Ouvert |
 | **E24** | Les refus des Edge Functions portent un code que l'écran traduit, pas une phrase en dur | `P3` | Ouvert |
 | **E25** | pt-BR : ce que la passe du 27/09 n'a pas touché | `P2` | Ouvert |
+| **E27** | Les suggestions de la recherche rapide ignorent encore les titres d'œuvre | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -944,6 +964,26 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `docs/governance/guide-gouvernance-pt-BR.md` · `docs/governance/guide-gouvernance-pt-BR.docx` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2-pt-BR.md` · `docs/legal/dpa-pt-BR.md` · `src/tests/helpers/ptbr-pt-europeu.js` · `src/tests/helpers/ptbr-frances.js` · `src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)` · `REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e`*
 
+#### E27 — Les suggestions de la recherche rapide ignorent encore les titres d'œuvre
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Constaté à l'écran le 01/10, après E26 : dans la barre « Rechercher un titre ou un·e auteur·rice… », « Vivre ma Vie » ne suggère que le livre d'Armand. Les suggestions passent par `api.search_catalog_v1` (`UnifiedSearchCombobox.jsx`), la recherche unifiée, qui n'a pas reçu les titres de l'œuvre que `catalog_search_ids_v1` lit désormais. La grille du catalogue, elle, trouve l'œuvre.
+
+*Vérifié : 01/10 — constaté dans le navigateur sur app.anarbib.org (anonyme) : suggestion unique « Est-ce cela que vous appelez vivre? … » (Armand).*
+
+**Ce que c'est.** Faire lire `work_titles` (toutes langues) à `api.search_catalog_v1`, comme `catalog_search_ids_v1` depuis `20261001190729` : même meule, même pli des sigles, garde md5 d'entrée, suite SQL qui cherche un titre présent seulement dans `work_titles`.
+
+**Pourquoi ça compte.** La barre de recherche rapide est la première chose qu'on touche : elle contredit la grille juste en dessous.
+
+**Ce qui compte comme fini.**
+
+- « Vivre ma vie » suggère l'œuvre 2101 dans la barre de recherche rapide, à l'écran.
+
+**Dépendances.** Aucune.
+
+*Renvois : `supabase/migrations/20261001190729_la_recherche_trouve_l_auteur_dans_tous_les_sens_et_le_titre_de_l_oeuvre.sql`*
+
 ---
 
 ### F — Courriel et notifications
@@ -1158,7 +1198,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 **État.** Relevé par la carte F1 (30/09). Sans `footer_local` (aucune des trois bibliothèques n'en a), le contexte de repli pose un pied de page et une signature en portugais que `tMail` ne traduit plus : tout courriel de bibliothèque se termine en pt-BR, quelle que soit la langue. Et la ligne « Status » des courriels de réservation vient d'une table codée en dur en pt-BR (`WF_LABELS`, `shared/events.ts`).
 
-*Vérifié : 01/10 — fallbackLibraryNotificationContext initialise footer_local et signature_short à null ; mail-strings.ts enrichi avec les clés wf.stage.* dans les 10 langues ; events.ts traduit workflowStageLabel et pickupReplyLabel via tMail ; domain/reservas.ts et domain/emprestimos.ts passent la locale du destinataire ; banc Vitest mail-status-footer-i18n (6 tests) au vert.*
+*Vérifié : 01/10 — fallbackLibraryNotificationContext initialise footer_local et signature_short à null ; mail-strings.ts enrichi avec les clés wf.stage.* dans les 10 langues ; events.ts traduit workflowStageLabel et pickupReplyLabel via tMail ; domain/reservas.ts et domain/emprestimos.ts passent la locale du destinataire ; banc Vitest mail-status-footer-i18n (6 tests) au vert. **01/10, soir** — `9bdce13a` (déployé, CI verte) : `ADMIN_NAME` n'a plus de défaut « Equipe da biblioteca » (`core/env.ts`) et `replaceBrandTokens` (`shared/branding.ts`) retombe sur le nom de la bibliothèque : sans nom configuré — le cas des trois bibliothèques —, la signature ne ramène plus le portugais par ce chemin. Garde `mail-nom-equipe-repli-garde` (4 tests).*
 
 **Ce que c'est.** `footer_local` et `signature_short` à null dans `fallbackLibraryNotificationContext` pour laisser `tMail` localiser ; une clé par stage à la place de `WF_LABELS`, dans les dix langues ; un test de source qui rend un courriel en fr et y refuse le portugais.
 
@@ -2274,6 +2314,7 @@ CI verte : lint et suite unitaire. |
 | I24 | 2026-09-30 | **Clos le 30/09 au soir, sur l'essai de Xavier** (« on pourra clore I24 si les résultats confortent l'essai »). Livré par `233bb735`, déployé le jour même sur le poste. *Critère 1, réécrit* — tel qu'écrit (« le service survit à la fermeture du terminal ») il était inatteignable : c'est le gestionnaire systemd lui-même qui sort (constat du 20/09). Ce qui le remplace, et qui a été éprouvé : **un tir tué repart seul**. Xavier a lancé un tir `storage` à 20 h 15, coupé WSL (`wsl --terminate`) à 20 h 16 — le journal redit « Failed to enqueue OnFailure », comme le 15/09 —, rallumé : le contrôle de fraîcheur a vu le tir interrompu et l'a relancé à 20 h 21, sous le nouveau script (verrou `.bg2.lock` né à cette minute) ; instantané `f420f896` à 20 h 39, témoin de vie envoyé, marqueur retiré (18 min 44 s) ; en base, `storage` ni interrompu ni muet, **aucun incident** ouvert par la sonde. *Critère 2* — tenu depuis le 20/09 par `health-probe` (deux alertes reçues par Xavier). *Critère 3* — un dimanche poste éteint : le rattrapage `Persistent=` rejoue les tirs manqués, la relance rejoue un tir tué, le verrou empêche les rattrapages simultanés de se détruire leurs dumps (défaut antérieur trouvé par la relecture), et la sonde écrit sinon dans l'heure. Chemin de la preuve : deux bancs (`fraicheur-relance`, `bg2-un-tir-a-la-fois`), un essai réel. Découvert en route et réparé : `~/anarbib-ops/anarbib-bg2.sh` était une copie depuis le 07/09, pas un lien. |
 | F18 | 2026-09-30 | **Clos le 30/09 le soir même de son ouverture : le constat était faux.** La carte F1 tenait `fede@anarbib.org` pour une adresse sans boîte, sur la foi d'une note OVH du 28/08. Xavier a montré la boîte, configurée dans son client de courrier : les contributions à la Gazette (4 envois, 27/08-15/09) et la copie fédérale des ouvertures OAI (3 envois le 02/09) y arrivent. Rien à corriger ; la carte porte un correctif en tête. |
 | F17 | 2026-10-01 | **Clos le 01/10 : livré, déployé, le critère tenu au banc.** `88dde5b3` (migration `20260930200514`, appliquée par la CI le 01/10 à 18 h 55 ; `notify-loan-cycle` version 83 relue en production : échéance courante `coalesce(extended_until, due_at)`). La trace `loan_cycle_notifications` porte l'échéance (unicité exemplaire, moment, échéance ; un déclencheur la remplit quand l'écrivain ne la donne pas, pour qu'aucun ordre de déploiement ne fasse repartir un rappel ; les 3 traces existantes reprises). Banc `notify-loan-cycle-banc` 13 : trois cas de prorogation (le J-3 de la nouvelle date part, pas le « c'est aujourd'hui » de l'ancienne ; un J-3 déjà parti pour l'ancienne échéance n'empêche pas le nouveau ; pas de « 7 jours de retard » à tort, date affichée juste) — mutant « due_at seul » : 3 rouges ; `rappels_echeance_tests` 8/8. Aucune prorogation réelle n'a encore eu lieu depuis F4. |
+| E26 | 2026-10-01 | **Ouvert et clos le 01/10 : la recherche du catalogue ne trouvait ni « Emma Goldman » ni « Vivre ma vie ».** Signalé par Xavier à l'écran. Deux causes : le filtre texte par auteur·rice cherchait la saisie entière comme sous-chaîne de `autor`, qui est à la forme d'autorité (« GOLDMAN, Emma ») — « Emma Goldman » n'y figurait jamais, un accent omis non plus ; et `catalog_search_ids_v1` ne lisait que les champs de l'édition, si bien que le titre d'œuvre affiché (`work_titles`, « Vivre ma vie » pour l'œuvre 2101) n'était pas cherchable — la seule réponse était un faux positif (Armand : « vivre ? », « vie », « ma » dans « ARMAND »). Migration `20261001190729` (`697c81d9`) : filtre auteur·rice mot par mot, sans accents ni casse (`catalog_works_v1`, réécriture d'une seule clause gardée par md5 ; repli PostgREST `catalogFilters.js` mot par mot) ; la meule de la recherche reçoit les titres de l'œuvre dans toutes les langues et le rang prend le meilleur d'entre eux. En chemin, l'œuvre 1163 (*L'Épopée d'une anarchiste*, abrégé français arrêté en 1920) portait neuf titres « auto » copiés de *Living My Life* : remplacés par son titre français (`manual`, l'autofill ne repasse plus) et une note d'œuvre ; **décision de Xavier : les deux œuvres restent distinctes**. Suite `20261001192041` (`52ebebc1`) : le départage écrit `s.book_id` (garde T7 de `catalogue_grande_echelle_tests`, rouge sur le premier push). Vérifié en production et à l'écran : « Emma Goldman » → 13 œuvres, « Vivre ma Vie » → *Vivre ma vie* en tête. Restes : **E27** (les suggestions de la recherche rapide), **C18** (œuvres scindées). |
 
 ---
 
@@ -2305,4 +2346,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

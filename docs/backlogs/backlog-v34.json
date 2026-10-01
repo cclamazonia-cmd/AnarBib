@@ -2618,6 +2618,14 @@
           "fr": "**Clos le 01/10 : livré, déployé, le critère tenu au banc.** `88dde5b3` (migration `20260930200514`, appliquée par la CI le 01/10 à 18 h 55 ; `notify-loan-cycle` version 83 relue en production : échéance courante `coalesce(extended_until, due_at)`). La trace `loan_cycle_notifications` porte l'échéance (unicité exemplaire, moment, échéance ; un déclencheur la remplit quand l'écrivain ne la donne pas, pour qu'aucun ordre de déploiement ne fasse repartir un rappel ; les 3 traces existantes reprises). Banc `notify-loan-cycle-banc` 13 : trois cas de prorogation (le J-3 de la nouvelle date part, pas le « c'est aujourd'hui » de l'ancienne ; un J-3 déjà parti pour l'ancienne échéance n'empêche pas le nouveau ; pas de « 7 jours de retard » à tort, date affichée juste) — mutant « due_at seul » : 3 rouges ; `rappels_echeance_tests` 8/8. Aucune prorogation réelle n'a encore eu lieu depuis F4.",
           "pt": "**Encerrado em 01/10.** `88dde5b3`, migração aplicada pela CI; os lembretes seguem `coalesce(extended_until, due_at)`; bancadas 13 e 8/8."
         }
+      ],
+      [
+        "E26",
+        "2026-10-01",
+        {
+          "fr": "**Ouvert et clos le 01/10 : la recherche du catalogue ne trouvait ni « Emma Goldman » ni « Vivre ma vie ».** Signalé par Xavier à l'écran. Deux causes : le filtre texte par auteur·rice cherchait la saisie entière comme sous-chaîne de `autor`, qui est à la forme d'autorité (« GOLDMAN, Emma ») — « Emma Goldman » n'y figurait jamais, un accent omis non plus ; et `catalog_search_ids_v1` ne lisait que les champs de l'édition, si bien que le titre d'œuvre affiché (`work_titles`, « Vivre ma vie » pour l'œuvre 2101) n'était pas cherchable — la seule réponse était un faux positif (Armand : « vivre ? », « vie », « ma » dans « ARMAND »). Migration `20261001190729` (`697c81d9`) : filtre auteur·rice mot par mot, sans accents ni casse (`catalog_works_v1`, réécriture d'une seule clause gardée par md5 ; repli PostgREST `catalogFilters.js` mot par mot) ; la meule de la recherche reçoit les titres de l'œuvre dans toutes les langues et le rang prend le meilleur d'entre eux. En chemin, l'œuvre 1163 (*L'Épopée d'une anarchiste*, abrégé français arrêté en 1920) portait neuf titres « auto » copiés de *Living My Life* : remplacés par son titre français (`manual`, l'autofill ne repasse plus) et une note d'œuvre ; **décision de Xavier : les deux œuvres restent distinctes**. Suite `20261001192041` (`52ebebc1`) : le départage écrit `s.book_id` (garde T7 de `catalogue_grande_echelle_tests`, rouge sur le premier push). Vérifié en production et à l'écran : « Emma Goldman » → 13 œuvres, « Vivre ma Vie » → *Vivre ma vie* en tête. Restes : **E27** (les suggestions de la recherche rapide), **C18** (œuvres scindées).",
+          "pt": "**Aberto e encerrado em 01/10: a busca do catálogo não achava «Emma Goldman» nem «Vivre ma vie».** O filtro de autor·a buscava a frase inteira em `autor` (forma de autoridade «GOLDMAN, Emma»), e a busca livre não lia os títulos da obra (`work_titles`). Migração `20261001190729` (`697c81d9`): filtro palavra por palavra, sem acentos nem caixa; a busca lê os títulos da obra em todas as línguas. A obra 1163 (resumo francês de *Living My Life*) perdeu os nove títulos «auto» copiados da obra 2101 — as duas ficam distintas (decisão de Xavier). Seguimento `20261001192041` (`52ebebc1`, guarda T7). Verificado em produção e na tela. Restos: E27, C18."
+        }
       ]
     ]
   },
@@ -3239,6 +3247,49 @@
         "supabase/migrations/20260928111729_btl_tl_000881_exemplaire_blmf_retire_et_tirages_notes.sql",
         "item E6 (verif du 29/09)"
       ]
+    },
+    {
+      "id": "C18",
+      "d": "C",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "biblio"
+      ],
+      "t": {
+        "fr": "Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ?",
+        "pt": "Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas?"
+      },
+      "v": {
+        "fr": "Relevé le 01/10 (lecture seule, production), en cherchant d'autres cas comme l'œuvre 1163 (E26) : un titre « auto » d'une œuvre A qui est le titre réel — d'édition ou saisi — d'une autre œuvre B du même auteur·rice. Quatorze paires, douze œuvres A. La plupart ne sont pas des titres faux mais des **traductions d'une même œuvre rangées sous deux fiches** : Reclus, *L'Homme et la Terre* (133) / *O Homem e a Terra* (880) / *El Hombre y la Tierra* (1131) ; Reclus, *Evolución, Revolución y el Ideal anárquico* (268) / 1387 (fr) / 1203 (pt) ; Kropotkine, *A Conquista do Pão* (19) / 2381, *El Apoyo Mutuo* (79) / *Ajuda Mútua* (396), *A Grande Revolução* (1) / 1084, *Em Tôrno de uma Vida* (115) / 386 ; Tolstoï, *A insubmissão* (28) / 1297 ; Gori (48) / 873 ; Safón (99) / 2428 ; Horowitz (74) / 2484. **À trancher au cas par cas, comme 1163** : Nettlau, *La Anarquía a través de los tiempos* (2036) / *História da Anarquia* (196) — même texte ou non ? — et Kropotkine, *Moral anarquista* (1366) / *La Moral Anarquista y otros escritos* (2064), recueil contre texte seul.",
+        "pt": "Levantado em 01/10 (somente leitura): catorze pares de obras do mesmo autor·a em que um título «auto» de uma é o título real da outra. Em geral, traduções de uma mesma obra em duas fichas (Reclus 133/880/1131, 268/1387/1203; Kropotkin 19/2381, 79/396, 1/1084, 115/386; Tolstói 28/1297; Gori 48/873; Safón 99/2428; Horowitz 74/2484). Casos a decidir: Nettlau 2036/196 e Kropotkin 1366/2064 (coletânea contra texto único)."
+      },
+      "w": {
+        "fr": "Relire chaque paire avec les éditions en main ; réunir celles qui sont la même œuvre, depuis l'application ; pour les autres, faire comme pour 1163 : titres « auto » remplacés, note d'œuvre qui dit pourquoi elles restent distinctes.",
+        "pt": "Revisar cada par com as edições; reunir as que são a mesma obra; para as outras, fazer como para 1163."
+      },
+      "y": {
+        "fr": "Une œuvre scindée s'affiche deux fois au catalogue par œuvre, et chaque fiche ne montre qu'une partie des éditions ; un abrégé fondu dans l'intégrale ferait réserver l'un pour l'autre.",
+        "pt": "Uma obra dividida aparece duas vezes no catálogo por obra; um resumo fundido na íntegra faria reservar um pelo outro."
+      },
+      "f": {
+        "fr": [
+          "Les quatorze paires sont tranchées par une personne qui catalogue, pas par script ; la requête de relevé ne renvoie plus que des paires décidées distinctes, chacune avec sa note."
+        ],
+        "pt": [
+          "Os catorze pares decididos por quem cataloga, não por script; cada par mantido distinto tem sua nota."
+        ]
+      },
+      "dep": {
+        "fr": "Se fait dans l'application. La requête de relevé est dans la session du 01/10 (titres `auto` d'une œuvre = titre d'édition ou `edition`/`manual` d'une autre œuvre de même `primary_author_id`).",
+        "pt": "Faz-se no aplicativo."
+      },
+      "r": [],
+      "verif": {
+        "fr": "01/10 — relevé en production : 14 paires, 12 œuvres A ; aucune modification faite.",
+        "pt": "01/10 — levantamento em produção: 14 pares; nada modificado."
+      }
     },
     {
       "id": "D3",
@@ -5121,8 +5172,8 @@
         "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
       ],
       "verif": {
-        "fr": "01/10 — fallbackLibraryNotificationContext initialise footer_local et signature_short à null ; mail-strings.ts enrichi avec les clés wf.stage.* dans les 10 langues ; events.ts traduit workflowStageLabel et pickupReplyLabel via tMail ; domain/reservas.ts et domain/emprestimos.ts passent la locale du destinataire ; banc Vitest mail-status-footer-i18n (6 tests) au vert.",
-        "pt": "01/10 — fallbackLibraryNotificationContext inicializa footer_local e signature_short como null; mail-strings.ts enriquecido com as chaves wf.stage.* nas 10 línguas; events.ts traduz workflowStageLabel e pickupReplyLabel via tMail; bancada Vitest mail-status-footer-i18n (6 testes) no verde."
+        "fr": "01/10 — fallbackLibraryNotificationContext initialise footer_local et signature_short à null ; mail-strings.ts enrichi avec les clés wf.stage.* dans les 10 langues ; events.ts traduit workflowStageLabel et pickupReplyLabel via tMail ; domain/reservas.ts et domain/emprestimos.ts passent la locale du destinataire ; banc Vitest mail-status-footer-i18n (6 tests) au vert. **01/10, soir** — `9bdce13a` (déployé, CI verte) : `ADMIN_NAME` n'a plus de défaut « Equipe da biblioteca » (`core/env.ts`) et `replaceBrandTokens` (`shared/branding.ts`) retombe sur le nom de la bibliothèque : sans nom configuré — le cas des trois bibliothèques —, la signature ne ramène plus le portugais par ce chemin. Garde `mail-nom-equipe-repli-garde` (4 tests).",
+        "pt": "01/10 — fallbackLibraryNotificationContext inicializa footer_local e signature_short como null; mail-strings.ts enriquecido com as chaves wf.stage.* nas 10 línguas; events.ts traduz workflowStageLabel e pickupReplyLabel via tMail; bancada Vitest mail-status-footer-i18n (6 testes) no verde. **01/10, noite** — `9bdce13a` (implantado, CI verde): `ADMIN_NAME` sem padrão «Equipe da biblioteca»; a assinatura cai no nome da biblioteca. Guarda `mail-nom-equipe-repli-garde` (4 testes)."
       }
     },
     {
@@ -5430,6 +5481,51 @@
         "src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)",
         "REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e"
       ]
+    },
+    {
+      "id": "E27",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Les suggestions de la recherche rapide ignorent encore les titres d'œuvre",
+        "pt": "As sugestões da busca rápida ainda ignoram os títulos da obra"
+      },
+      "v": {
+        "fr": "Constaté à l'écran le 01/10, après E26 : dans la barre « Rechercher un titre ou un·e auteur·rice… », « Vivre ma Vie » ne suggère que le livre d'Armand. Les suggestions passent par `api.search_catalog_v1` (`UnifiedSearchCombobox.jsx`), la recherche unifiée, qui n'a pas reçu les titres de l'œuvre que `catalog_search_ids_v1` lit désormais. La grille du catalogue, elle, trouve l'œuvre.",
+        "pt": "Constatado na tela em 01/10, depois de E26: na barra de busca rápida, «Vivre ma Vie» só sugere o livro de Armand. As sugestões passam por `api.search_catalog_v1`, que não lê os títulos da obra. A grade do catálogo acha a obra."
+      },
+      "w": {
+        "fr": "Faire lire `work_titles` (toutes langues) à `api.search_catalog_v1`, comme `catalog_search_ids_v1` depuis `20261001190729` : même meule, même pli des sigles, garde md5 d'entrée, suite SQL qui cherche un titre présent seulement dans `work_titles`.",
+        "pt": "Fazer `api.search_catalog_v1` ler `work_titles`, como `catalog_search_ids_v1` desde `20261001190729`, com guarda md5 e suíte SQL."
+      },
+      "y": {
+        "fr": "La barre de recherche rapide est la première chose qu'on touche : elle contredit la grille juste en dessous.",
+        "pt": "A barra de busca rápida é a primeira coisa que se usa, e contradiz a grade logo abaixo."
+      },
+      "f": {
+        "fr": [
+          "« Vivre ma vie » suggère l'œuvre 2101 dans la barre de recherche rapide, à l'écran."
+        ],
+        "pt": [
+          "«Vivre ma vie» sugere a obra 2101 na busca rápida, na tela."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "supabase/migrations/20261001190729_la_recherche_trouve_l_auteur_dans_tous_les_sens_et_le_titre_de_l_oeuvre.sql"
+      ],
+      "verif": {
+        "fr": "01/10 — constaté dans le navigateur sur app.anarbib.org (anonyme) : suggestion unique « Est-ce cela que vous appelez vivre? … » (Armand).",
+        "pt": "01/10 — constatado no navegador em app.anarbib.org (anônimo): sugestão única do livro de Armand."
+      }
     },
     {
       "id": "G15",
