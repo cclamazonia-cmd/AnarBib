@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-09-30",
+    "maj": "2026-10-01",
     "releve": {
       "date": "2026-09-29",
       "commit": "75ccb035"
@@ -2610,6 +2610,14 @@
           "fr": "**Clos le 30/09 le soir même de son ouverture : le constat était faux.** La carte F1 tenait `fede@anarbib.org` pour une adresse sans boîte, sur la foi d'une note OVH du 28/08. Xavier a montré la boîte, configurée dans son client de courrier : les contributions à la Gazette (4 envois, 27/08-15/09) et la copie fédérale des ouvertures OAI (3 envois le 02/09) y arrivent. Rien à corriger ; la carte porte un correctif en tête.",
           "pt": "**Encerrado em 30/09, na mesma noite: a constatação era falsa.** `fede@anarbib.org` tem caixa (Xavier a mostrou no seu cliente de e-mail). Nada a corrigir."
         }
+      ],
+      [
+        "F17",
+        "2026-10-01",
+        {
+          "fr": "**Clos le 01/10 : livré, déployé, le critère tenu au banc.** `88dde5b3` (migration `20260930200514`, appliquée par la CI le 01/10 à 18 h 55 ; `notify-loan-cycle` version 83 relue en production : échéance courante `coalesce(extended_until, due_at)`). La trace `loan_cycle_notifications` porte l'échéance (unicité exemplaire, moment, échéance ; un déclencheur la remplit quand l'écrivain ne la donne pas, pour qu'aucun ordre de déploiement ne fasse repartir un rappel ; les 3 traces existantes reprises). Banc `notify-loan-cycle-banc` 13 : trois cas de prorogation (le J-3 de la nouvelle date part, pas le « c'est aujourd'hui » de l'ancienne ; un J-3 déjà parti pour l'ancienne échéance n'empêche pas le nouveau ; pas de « 7 jours de retard » à tort, date affichée juste) — mutant « due_at seul » : 3 rouges ; `rappels_echeance_tests` 8/8. Aucune prorogation réelle n'a encore eu lieu depuis F4.",
+          "pt": "**Encerrado em 01/10.** `88dde5b3`, migração aplicada pela CI; os lembretes seguem `coalesce(extended_until, due_at)`; bancadas 13 e 8/8."
+        }
       ]
     ]
   },
@@ -2714,8 +2722,8 @@
         "REPRISE_bascule_autohebergee_2026-08-26"
       ],
       "verif": {
-        "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`.",
-        "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`."
+        "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`. **01/10** — preuve par l'usage : deux runs cassés par l'arrêt du poste. Le 30/09 au soir, le `backend` de F16 a bloqué une heure (Codeberg lent, marqueur non repoussé) — tout était pourtant déployé ; le 01/10 à 7 h 55, le poste s'est arrêté une minute après le départ du `sql-tests` de F17 : Docker injoignable, runner coupé, Codeberg a affiché le job « en cours » pendant 11 heures, jusqu'au retour du poste à 18 h 47 ; deux conteneurs orphelins relancés par Docker au redémarrage, retirés à la main. F17 n'a été déployé qu'à 18 h 55. La CI vit et meurt avec la machine du mainteneur.",
+        "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`. **01/10** — dois runs quebrados pela parada do posto (o de F17 ficou « em curso » 11 horas). A CI vive e morre com a máquina do mantenedor."
       }
     },
     {
@@ -4941,7 +4949,7 @@
       "id": "F16",
       "d": "F",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql",
@@ -4979,55 +4987,17 @@
       },
       "r": [
         "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ]
-    },
-    {
-      "id": "F17",
-      "d": "F",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "deno",
-        "sql"
       ],
-      "t": {
-        "fr": "Les rappels d'échéance ignorent la prorogation",
-        "pt": "Os lembretes de vencimento ignoram a prorrogação"
-      },
-      "v": {
-        "fr": "Relevé par la carte F1 (30/09). `fn_v2_extend_core` écrit `extended_until` et laisse `due_at` ; `notify-loan-cycle` (F4) ne lit que `due_at`. Pour un exemplaire prorogé : « c'est aujourd'hui » à l'ancienne date, « 7 jours de retard » alors qu'il n'est pas en retard, rien avant la vraie échéance ; et l'unicité (exemplaire, moment) bloquerait ensuite le bon rappel. Latent : les deux prorogations connues (24/06) sont antérieures à F4.",
-        "pt": "Achado pelo mapa F1 (30/09). A prorrogação grava `extended_until`; `notify-loan-cycle` só lê `due_at`: lembrete na data antiga, « 7 dias de atraso » indevido, nada antes do vencimento real. Latente."
-      },
-      "w": {
-        "fr": "Utiliser `coalesce(extended_until, due_at)` pour les fenêtres, le mi-parcours et l'affichage ; ajouter le cas « exemplaire prorogé » au banc `notify-loan-cycle-banc` et à `rappels_echeance_tests`.",
-        "pt": "Usar `coalesce(extended_until, due_at)` nas janelas, no meio do empréstimo e na exibição; acrescentar o caso « exemplar prorrogado » às bancadas."
-      },
-      "y": {
-        "fr": "À la première prorogation, une lectrice reçoit un rappel de retard injuste et aucun rappel utile.",
-        "pt": "Na primeira prorrogação, a leitora recebe um aviso de atraso injusto e nenhum lembrete útil."
-      },
-      "f": {
-        "fr": [
-          "Un exemplaire prorogé reçoit ses rappels à la nouvelle échéance, et pas à l'ancienne (banc)."
-        ],
-        "pt": [
-          "Um exemplar prorrogado recebe os lembretes no novo vencimento (bancada)."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Sort de F1 ; touche F4 (clos).",
-        "pt": "Nenhuma. Sai de F1; toca F4 (encerrado)."
-      },
-      "r": [
-        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ]
+      "verif": {
+        "fr": "**30/09** — livré (`32cfea66`, migration `20260930195644`, appliquée par la CI ; fonctions redéployées le 30/09 à 22 h 21-22 h 23). `fn_task_invite` pose `convite:<adresse>` ; suite `taches_invitation_tests` 6/6 (inviter crée une invitation et une ligne d'envoi, réinviter ne double rien, adresse invalide refusée, retirer le marqueur annule ; 1/6 contre l'ancienne fonction) ; les marqueurs `convite:` ne s'affichent plus (écrans et avis). Les deux critères sont tenus au banc. **Reste** : qu'une invitation réelle parte — inviter quelqu'un (soi-même) à une tâche et recevoir le courriel ; le secret d'expédition existe en production.",
+        "pt": "**30/09** — entregue (`32cfea66`); suíte 6/6. Falta um convite real chegar."
+      }
     },
     {
       "id": "F19",
       "d": "F",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "deno"
@@ -5062,7 +5032,11 @@
       },
       "r": [
         "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ]
+      ],
+      "verif": {
+        "fr": "**30/09** — livré et déployé (`4158504a`, CI verte, les 55 fonctions redéployées le 30/09 à 22 h 01 ; puis de nouveau le 01/10 avec F17). `masquerAdresse` à la source (transport, notificateurs) et un filet sur `console.*` installé au chargement sous Deno ; banc `journal-sans-adresse` (les 55 fonctions atteignent le masque) ; éprouvé sous Deno 2.7. **Reste le critère** : une semaine de journaux d'envoi sans adresse complète — à relever le 08/10.",
+        "pt": "**30/09** — entregue e implantado (`4158504a`). Falta o critério: uma semana de registros sem endereço completo (08/10)."
+      }
     },
     {
       "id": "F20",

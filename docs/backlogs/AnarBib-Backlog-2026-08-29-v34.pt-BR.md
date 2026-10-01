@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-09-30** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-01** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 10
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 9
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 17
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-09-30.** **49 itens de 72** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-01.** **51 itens de 71** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Os **20** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -320,7 +320,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa. **28/09 —** medido: em 27/09 às 22h40 o portátil entrou em suspensão durante um job `app`; a tarefa foi dada como falha às 23h45, o `backend` nunca correu, uma migração esperou até ao push do dia seguinte, sem aviso. Os runners hospedados da Codeberg não servem (10 min por job, sem Docker). Três gestos sem máquina: `deploy/ops/RUNNER.md` (procedimento para quem não o instalou, mudança de máquina sem corte), a sonda `ci_en_retard` do `health-probe` (uma leitura por hora das tarefas da forja, e-mail «o que fazer: religar, verificar, relançar»), `deploy/runner/compose.yml` (runner em contêiner). Falta a máquina: Xavier tenta o outro portátil. **Implantado em produção em 28/09 às 12h48** (migração pela CI, nenhum incidente) — depois de dois pushes de código que a Forgejo saltou sem um vermelho porque um commit do lote trazia `[skip ci]`; o hook `.githooks/pre-push` recusa agora esse lote misto para a Codeberg.
 
-*Verificado : 31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`.*
+*Verificado : 31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`. **01/10** — dois runs quebrados pela parada do posto (o de F17 ficou « em curso » 11 horas). A CI vive e morre com a máquina do mantenedor.*
 
 **O que é.** Rodar o runner em outro lugar que não uma estação de trabalho pessoal: máquina do provedor, segunda máquina da rede, ou runner compartilhado. A lógica de implantação já está extraída em `scripts/ci/deployer-backend.sh` e é reexecutável à mão — metade do trabalho está feita.
 
@@ -957,9 +957,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | A verificar |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
 | **F15** | Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva | `P2` | A verificar |
-| **F16** | O convite para uma tarefa nunca criou convite | `P1` | Aberto |
-| **F17** | Os lembretes de vencimento ignoram a prorrogação | `P1` | Aberto |
-| **F19** | Os registros das funções contêm os endereços em claro | `P1` | Aberto |
+| **F16** | O convite para uma tarefa nunca criou convite | `P1` | A verificar |
+| **F19** | Os registros das funções contêm os endereços em claro | `P1` | A verificar |
 | **F20** | Sem linha de política, a biblioteca nunca vê reserva expirar nem ausência detectada | `P2` | Aberto |
 | **F21** | Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas | `P2` | Aberto |
 
@@ -1094,11 +1093,11 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 #### F16 — O convite para uma tarefa nunca criou convite
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, React / JavaScript
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, React / JavaScript
 
 **Estado.** Achado pelo mapa F1 (30/09). `fn_task_invite` põe o endereço CRU nas marcas da tarefa, e `task_invite_emails_from_tags` só aceita `convite:…`: nenhum convite jamais foi criado. A tela anuncia « convite enviado », e o endereço acaba nas « Marcas » dos avisos.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : **30/09** — entregue (`32cfea66`); suíte 6/6. Falta um convite real chegar.*
 
 **O que é.** Migração a partir da definição real: `fn_task_invite` grava `convite:` || endereço; `taskTagsLabel` esconde as marcas `convite:`; suíte SQL: uma chamada cria um convite e uma linha na fila.
 
@@ -1113,33 +1112,13 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 *Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
 
-#### F17 — Os lembretes de vencimento ignoram a prorrogação
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript, SQL / PostgreSQL
-
-**Estado.** Achado pelo mapa F1 (30/09). A prorrogação grava `extended_until`; `notify-loan-cycle` só lê `due_at`: lembrete na data antiga, « 7 dias de atraso » indevido, nada antes do vencimento real. Latente.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Usar `coalesce(extended_until, due_at)` nas janelas, no meio do empréstimo e na exibição; acrescentar o caso « exemplar prorrogado » às bancadas.
-
-**Por que importa.** Na primeira prorrogação, a leitora recebe um aviso de atraso injusto e nenhum lembrete útil.
-
-**O que conta como terminado.**
-
-- Um exemplar prorrogado recebe os lembretes no novo vencimento (bancada).
-
-**Dependências.** Nenhuma. Sai de F1; toca F4 (encerrado).
-
-*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
-
 #### F19 — Os registros das funções contêm os endereços em claro
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
 
 **Estado.** Achado pelo mapa F1. Os registros das Edge Functions trazem « sent to <endereço> » desde pelo menos 04/08.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : **30/09** — entregue e implantado (`4158504a`). Falta o critério: uma semana de registros sem endereço completo (08/10).*
 
 **O que é.** Mascarar o endereço em todos os registros de envio, na fonte comum; teste de fonte.
 
@@ -2284,6 +2263,7 @@ CI verde. |
 | E3 | 2026-09-30 | **Encerrado em 30/09, os dois critérios cumpridos.** A decisão está no REGISTRO (`DOC-ADDR-1`); as dez locales aplicam o mesmo registro, cada uma com sua guarda em `src/tests/i18n-ecriture.test.js`. Os quatro últimos valores italianos no « Lei » passaram ao tu em 30/09 (`abb4aa38`), e a guarda aprendeu as duas formas. Restos acompanhados em E2 (nl, el) e E25 (pt-BR fora do app). |
 | I24 | 2026-09-30 | **Encerrado em 30/09 à noite, pelo ensaio de Xavier.** Um disparo `storage` foi morto (`wsl --terminate`) e relançado sozinho pelo controle de frescor 5 min depois; instantâneo `f420f896`, testemunho enviado, nenhum incidente. Critério 1 reescrito em torno desse ensaio (o texto original era inatingível); critério 2 cumprido desde 20/09 (sonda do servidor); critério 3 coberto pelo rattrapage, pela relança, pela trava entre disparos e pela sonda. |
 | F18 | 2026-09-30 | **Encerrado em 30/09, na mesma noite: a constatação era falsa.** `fede@anarbib.org` tem caixa (Xavier a mostrou no seu cliente de e-mail). Nada a corrigir. |
+| F17 | 2026-10-01 | **Encerrado em 01/10.** `88dde5b3`, migração aplicada pela CI; os lembretes seguem `coalesce(extended_until, due_at)`; bancadas 13 e 8/8. |
 
 ---
 
@@ -2315,4 +2295,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-09-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-01. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

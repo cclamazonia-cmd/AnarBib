@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-09-30** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-01** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 10
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 9
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 17
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 3
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-09-30.** **49 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-01.** **51 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, D3, D6, D8, E1, E2, E4, E6, E9, E20, F1, F3, F6, F10, F15, F16, F19, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, I2, I18, I21, J9, K2, K7, K10). Les **20** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -320,7 +320,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux. **28/09 — ce que l'échec silencieux vaut, mesuré : le 27/09 à 22 h 40 min 30 s le portable s'est mis en veille pendant le job `app` de 911ad1db** (journal WSL : fin du boot à cette seconde ; à 22 h 37 déjà `ReportLog error: deadline_exceeded`). Codeberg a déclaré la tâche en échec à 23 h 45 ; le `backend` n'a jamais tourné ; la migration de ce commit a attendu le push suivant, le lendemain à 11 h 37 — sans qu'un mot ne parte. Les runners hébergés par Codeberg ne conviennent pas (mesuré sur `codeberg.org/actions/meta` : 10 min par job au plus, pas de Docker ; `sql-tests` et `rejeu-image` en ont besoin et durent 6 à 12 min). **Trois gestes faits sans machine, sur décision de Xavier** : (1) `deploy/ops/RUNNER.md` — ce que c'est, où il vit (relu sur la machine : binaire v12.10.2, `~/.runner`, unités = liens vers `deploy/ops/systemd/`), le savoir vivant en deux minutes (`journalctl`, jamais `systemctl`), la remise en route, l'installation sur une autre machine avec **le même label** (deux runners peuvent coexister, la bascule se fait sans coupure) et un drop-in local pour l'utilisateur ; (2) la sonde **`ci_en_retard`** de `health-probe` (`_shared/ci/forgejo-tasks.ts`, migration `20260928095045`) : une fois par heure, la liste des tâches de la forge — une tâche non terminée depuis plus de 2 h, ou le dernier `app`/`backend` en échec depuis plus de 30 min sans run plus récent, ouvre l'incident et envoie « que faire : allumer, vérifier, **relancer** » ; un `[skip ci]` n'est pas une fausse alerte (on ne compare pas au marqueur), un 504 de l'API ne change rien ; banc de 15 cas dont la vraie soirée du 27/09 ; (3) `deploy/runner/compose.yml` — le runner en conteneur (`code.forgejo.org/forgejo/runner:12.10.2`, socket Docker partagée), `compose config` valide et image éprouvée ; l'enregistrement demande le jeton du dépôt. **Reste la machine** : Xavier essaie son autre portable ; la VM des Herbes Folles attend I21. Et le runner reste unique, en série : sortir du poste règle la disponibilité, pas la lenteur (`rejeu-image` la nuit, ou un second runner). **Déployé en prod le 28/09 à 12 h 48** (migration `20260928095045` par la CI, CHECK élargie, aucun incident `ci_en_retard`) — après deux pushes de code que Forgejo a sautés sans un rouge parce qu'un commit du lot portait `[skip ci]` (le backlog par-dessus, puis un commit voisin ramené par le rebase) ; le hook `.githooks/pre-push` refuse désormais ce lot mixte vers Codeberg (le miroir GitHub, sans CI, passe).
 
-*Vérifié : 31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`.*
+*Vérifié : 31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`. **01/10** — preuve par l'usage : deux runs cassés par l'arrêt du poste. Le 30/09 au soir, le `backend` de F16 a bloqué une heure (Codeberg lent, marqueur non repoussé) — tout était pourtant déployé ; le 01/10 à 7 h 55, le poste s'est arrêté une minute après le départ du `sql-tests` de F17 : Docker injoignable, runner coupé, Codeberg a affiché le job « en cours » pendant 11 heures, jusqu'au retour du poste à 18 h 47 ; deux conteneurs orphelins relancés par Docker au redémarrage, retirés à la main. F17 n'a été déployé qu'à 18 h 55. La CI vit et meurt avec la machine du mainteneur.*
 
 **Ce que c'est.** Faire tourner le runner ailleurs que sur un poste de travail personnel : machine de l'hébergeur, seconde machine du réseau, ou runner partagé. La logique de déploiement est déjà extraite dans `scripts/ci/deployer-backend.sh` et rejouable à la main — la moitié du travail est faite.
 
@@ -957,9 +957,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | À vérifier |
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 | **F15** | Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective | `P2` | À vérifier |
-| **F16** | L'invitation à une tâche n'a jamais créé d'invitation | `P1` | Ouvert |
-| **F17** | Les rappels d'échéance ignorent la prorogation | `P1` | Ouvert |
-| **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | Ouvert |
+| **F16** | L'invitation à une tâche n'a jamais créé d'invitation | `P1` | À vérifier |
+| **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | À vérifier |
 | **F20** | Sans ligne de politique, une bibliothèque ne voit jamais une réservation expirer ni une non-venue détectée | `P2` | Ouvert |
 | **F21** | Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues | `P2` | Ouvert |
 
@@ -1094,11 +1093,11 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 #### F16 — L'invitation à une tâche n'a jamais créé d'invitation
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
 
 **État.** Relevé par la carte F1 (30/09). `fn_task_invite` ajoute l'adresse BRUTE aux marqueurs de la tâche, alors que `task_invite_emails_from_tags` ne retient que les marqueurs `convite:…` : aucune invitation n'a jamais été créée (`painel_internal_task_invites` : 0 ligne ; file d'invitation : 0 insertion). L'écran annonce pourtant « invitation envoyée », et l'adresse invitée finit dans les « Marqueurs » des avis de tâche.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : **30/09** — livré (`32cfea66`, migration `20260930195644`, appliquée par la CI ; fonctions redéployées le 30/09 à 22 h 21-22 h 23). `fn_task_invite` pose `convite:<adresse>` ; suite `taches_invitation_tests` 6/6 (inviter crée une invitation et une ligne d'envoi, réinviter ne double rien, adresse invalide refusée, retirer le marqueur annule ; 1/6 contre l'ancienne fonction) ; les marqueurs `convite:` ne s'affichent plus (écrans et avis). Les deux critères sont tenus au banc. **Reste** : qu'une invitation réelle parte — inviter quelqu'un (soi-même) à une tâche et recevoir le courriel ; le secret d'expédition existe en production.*
 
 **Ce que c'est.** Migration depuis la définition réelle : `fn_task_invite` pose `convite:` || adresse (ou `task_invite_emails_from_tags` accepte les deux formes) ; `taskTagsLabel` n'affiche plus les marqueurs `convite:` ; suite SQL : un appel crée une invitation et une ligne de file.
 
@@ -1113,33 +1112,13 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 *Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
 
-#### F17 — Les rappels d'échéance ignorent la prorogation
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
-
-**État.** Relevé par la carte F1 (30/09). `fn_v2_extend_core` écrit `extended_until` et laisse `due_at` ; `notify-loan-cycle` (F4) ne lit que `due_at`. Pour un exemplaire prorogé : « c'est aujourd'hui » à l'ancienne date, « 7 jours de retard » alors qu'il n'est pas en retard, rien avant la vraie échéance ; et l'unicité (exemplaire, moment) bloquerait ensuite le bon rappel. Latent : les deux prorogations connues (24/06) sont antérieures à F4.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Utiliser `coalesce(extended_until, due_at)` pour les fenêtres, le mi-parcours et l'affichage ; ajouter le cas « exemplaire prorogé » au banc `notify-loan-cycle-banc` et à `rappels_echeance_tests`.
-
-**Pourquoi ça compte.** À la première prorogation, une lectrice reçoit un rappel de retard injuste et aucun rappel utile.
-
-**Ce qui compte comme fini.**
-
-- Un exemplaire prorogé reçoit ses rappels à la nouvelle échéance, et pas à l'ancienne (banc).
-
-**Dépendances.** Aucune. Sort de F1 ; touche F4 (clos).
-
-*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
-
 #### F19 — Les journaux des fonctions contiennent les adresses des destinataires en clair
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
 
 **État.** Relevé par la carte F1 (30/09). Les journaux des fonctions Edge portent des lignes « [user_mail] sent to <adresse> » et « [admin_copy] sent to <adresse> » depuis au moins le 04/08 : toute personne qui consulte les journaux lit les adresses des lectrices et du staff.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : **30/09** — livré et déployé (`4158504a`, CI verte, les 55 fonctions redéployées le 30/09 à 22 h 01 ; puis de nouveau le 01/10 avec F17). `masquerAdresse` à la source (transport, notificateurs) et un filet sur `console.*` installé au chargement sous Deno ; banc `journal-sans-adresse` (les 55 fonctions atteignent le masque) ; éprouvé sous Deno 2.7. **Reste le critère** : une semaine de journaux d'envoi sans adresse complète — à relever le 08/10.*
 
 **Ce que c'est.** Masquer l'adresse dans tous les journaux d'envoi (domaine seul, ou empreinte courte), à la source commune (`_shared/transport/email.ts` et les gestionnaires qui journalisent eux-mêmes) ; un test de source refuse un `console.log` qui imprime une adresse.
 
@@ -2294,6 +2273,7 @@ CI verte : lint et suite unitaire. |
 | E3 | 2026-09-30 | **Clos le 30/09, les deux critères tenus.** *(1)* La décision et ses deux raisons sont au REGISTRE (`DOC-ADDR-1`, amendé le 07/09, complété le 27/09) : on tutoie dans toutes les langues qui ont un registre de politesse (en et eo n'en ont pas), pt-BR au « você ». *(2)* Les dix locales appliquent ce registre, chacune sous sa garde au chemin (4) de `src/tests/i18n-ecriture.test.js` : passes du 27/09 (pt-BR `a805951b`, `36c467fa` ; fr `8f0d85a0` ; es et pt-BR `e8caf563` ; ca `f1743c4c`, `53cba900` ; it, de, nl, el `b425dfb1`), refus de l'EF `login` passés en codes traduits (`3cf927e1`). Les quatre dernières valeurs italiennes au « Lei » (« Faccia clic… », « Ricarichi l'elenco »), que la garde ne voyait pas, sont passées au tu le 30/09 (`abb4aa38`) ; `IMPERATIVI_LEI` apprend les deux formes, deux mutants vérifiés rouges. Restes suivis ailleurs : les conventions nl et el à faire relire par une personne de langue maternelle (E2), la passe pt-BR hors de l'app (E25). |
 | I24 | 2026-09-30 | **Clos le 30/09 au soir, sur l'essai de Xavier** (« on pourra clore I24 si les résultats confortent l'essai »). Livré par `233bb735`, déployé le jour même sur le poste. *Critère 1, réécrit* — tel qu'écrit (« le service survit à la fermeture du terminal ») il était inatteignable : c'est le gestionnaire systemd lui-même qui sort (constat du 20/09). Ce qui le remplace, et qui a été éprouvé : **un tir tué repart seul**. Xavier a lancé un tir `storage` à 20 h 15, coupé WSL (`wsl --terminate`) à 20 h 16 — le journal redit « Failed to enqueue OnFailure », comme le 15/09 —, rallumé : le contrôle de fraîcheur a vu le tir interrompu et l'a relancé à 20 h 21, sous le nouveau script (verrou `.bg2.lock` né à cette minute) ; instantané `f420f896` à 20 h 39, témoin de vie envoyé, marqueur retiré (18 min 44 s) ; en base, `storage` ni interrompu ni muet, **aucun incident** ouvert par la sonde. *Critère 2* — tenu depuis le 20/09 par `health-probe` (deux alertes reçues par Xavier). *Critère 3* — un dimanche poste éteint : le rattrapage `Persistent=` rejoue les tirs manqués, la relance rejoue un tir tué, le verrou empêche les rattrapages simultanés de se détruire leurs dumps (défaut antérieur trouvé par la relecture), et la sonde écrit sinon dans l'heure. Chemin de la preuve : deux bancs (`fraicheur-relance`, `bg2-un-tir-a-la-fois`), un essai réel. Découvert en route et réparé : `~/anarbib-ops/anarbib-bg2.sh` était une copie depuis le 07/09, pas un lien. |
 | F18 | 2026-09-30 | **Clos le 30/09 le soir même de son ouverture : le constat était faux.** La carte F1 tenait `fede@anarbib.org` pour une adresse sans boîte, sur la foi d'une note OVH du 28/08. Xavier a montré la boîte, configurée dans son client de courrier : les contributions à la Gazette (4 envois, 27/08-15/09) et la copie fédérale des ouvertures OAI (3 envois le 02/09) y arrivent. Rien à corriger ; la carte porte un correctif en tête. |
+| F17 | 2026-10-01 | **Clos le 01/10 : livré, déployé, le critère tenu au banc.** `88dde5b3` (migration `20260930200514`, appliquée par la CI le 01/10 à 18 h 55 ; `notify-loan-cycle` version 83 relue en production : échéance courante `coalesce(extended_until, due_at)`). La trace `loan_cycle_notifications` porte l'échéance (unicité exemplaire, moment, échéance ; un déclencheur la remplit quand l'écrivain ne la donne pas, pour qu'aucun ordre de déploiement ne fasse repartir un rappel ; les 3 traces existantes reprises). Banc `notify-loan-cycle-banc` 13 : trois cas de prorogation (le J-3 de la nouvelle date part, pas le « c'est aujourd'hui » de l'ancienne ; un J-3 déjà parti pour l'ancienne échéance n'empêche pas le nouveau ; pas de « 7 jours de retard » à tort, date affichée juste) — mutant « due_at seul » : 3 rouges ; `rappels_echeance_tests` 8/8. Aucune prorogation réelle n'a encore eu lieu depuis F4. |
 
 ---
 
@@ -2325,4 +2305,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-09-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-01. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
