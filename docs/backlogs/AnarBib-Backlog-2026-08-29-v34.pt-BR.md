@@ -1175,7 +1175,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 **Estado.** Achado pelo mapa F1. O rodapé de reserva e a linha « Status » ficam em pt-BR em todas as línguas.
 
-*Verificado : 01/10 — fallbackLibraryNotificationContext inicializa footer_local e signature_short como null; mail-strings.ts enriquecido com as chaves wf.stage.* nas 10 línguas; events.ts traduz workflowStageLabel e pickupReplyLabel via tMail; bancada Vitest mail-status-footer-i18n (6 testes) no verde. **01/10, noite** — `9bdce13a` (implantado, CI verde): `ADMIN_NAME` sem padrão «Equipe da biblioteca»; a assinatura cai no nome da biblioteca. Guarda `mail-nom-equipe-repli-garde` (4 testes).*
+*Verificado : 01/10, à noite — **implantado** (PR #31 de ASR2026, merge `da034c83`, CI verde às 22h23; e `9bdce13a`). Os status de reserva passam por uma chave `wf.stage.*` nas dez línguas; os e-mails da equipe sobre empréstimos saem na língua da biblioteca, como os de reserva (o pt-BR forçado do Pacote 17, `96006b81`, é abandonado). `FOOTER_TEXT` não tem mais padrão em português e `tMail` localiza o rodapé quando falta. A revisão da PR achou uma segunda fonte do mesmo defeito: `ADMIN_NAME` valia por padrão « Equipe da biblioteca » e voltava por `signature_short`. Corrigido por `9bdce13a`: padrão vazio, assinatura com o nome da biblioteca. Provas: bancada `mail-status-footer-i18n` (9 testes), guarda `mail-nom-equipe-repli-garde` (4 testes), 1 672 testes vitest. **Falta verificar**: um e-mail real de reserva em francês, em produção, sem nenhuma palavra em português. Fora do F21, ainda em pt-BR por padrão: `SENDER_NAME`.*
 
 **O que é.** Deixar `tMail` localizar o rodapé; uma chave por etapa em vez de `WF_LABELS`, nas dez línguas; teste de fonte.
 
