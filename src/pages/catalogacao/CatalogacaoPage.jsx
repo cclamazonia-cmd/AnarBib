@@ -588,6 +588,17 @@ const BATCH_DRAFT_TABLES = ['book_drafts', 'author_drafts', 'exemplar_drafts'];
 // (library_id nulle, réservée à l'administration du réseau).
 const LOT_RESEAU = '__reseau__';
 
+// H21 lot 0 (REGISTRE IMP-27 b, 29/09/2026) : l'approbation d'un tour couvre
+// les brouillons que ce tour a soumis, figés à la demande. Un brouillon rangé
+// ensuite dans le lot attend un nouveau tour (publish_book_draft et
+// publish_exemplar_draft : HINT error.publish.added_after_review) ;
+// fn_batch_reviews_list les compte (after_review) sur le dernier tour
+// approuvé. Colonne absente (écran publié avant la migration) : 0, rien ne
+// s'affiche et rien ne se verrouille de plus.
+function ajoutsApresRevision(r) {
+  return r?.imported && r.status === 'approved' ? Number(r.after_review) || 0 : 0;
+}
+
 function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   const { formatMessage: t } = useIntl();
   const { libraryId } = useLibrary();
@@ -825,7 +836,9 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
 
   function reviewLocked(b) {
     const r = reviews[b.id];
-    return !!r && r.imported && r.status !== 'approved';
+    // IMP-27 (b) : approuvé, mais des brouillons sont entrés après la demande —
+    // le lot attend un nouveau tour.
+    return !!r && r.imported && (r.status !== 'approved' || ajoutsApresRevision(r) > 0);
   }
 
   async function openReport(b) {
@@ -867,9 +880,15 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     const label = !r.status ? t({ id: 'catalogacao.batch.review.none' })
       : r.status === 'requested' ? t({ id: 'catalogacao.batch.review.requested' }, { date: formatDate(r.requested_at) })
         : t({ id: `catalogacao.batch.review.${r.status}` });
+    const ajouts = ajoutsApresRevision(r);
     return (
       <span style={{ display: 'inline-flex', flexDirection: 'column', gap: 2 }}>
         <span style={{ color }}>{label}</span>
+        {ajouts > 0 && (
+          <span data-after-review={ajouts} style={{ fontSize: '.74rem', color: '#fbbf24' }}>
+            {t({ id: 'catalogacao.batch.review.afterReview' }, { n: ajouts })}
+          </span>
+        )}
         {r.status === 'changes_requested' && r.admin_notes && (
           <span style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }} title={r.admin_notes}>
             {t({ id: 'catalogacao.batch.review.adminNotes' })} : {r.admin_notes}
@@ -1338,7 +1357,13 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                           <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                             onClick={() => openReport(b)}>{t({id:'catalogacao.batch.review.report'})}</button>
                         )}
-                        {coordonne(b) && (!reviews[b.id].status || reviews[b.id].status === 'changes_requested') && (
+                        {/* IMP-27 (b) : sur un lot approuvé où des brouillons sont
+                            entrés après la demande, la coordination redemande
+                            elle-même un tour (fn_batch_review_request l'accepte
+                            tant que fn_batch_ajouts_apres_revision > 0) ;
+                            l'administration garde « Rouvrir ». */}
+                        {coordonne(b) && (!reviews[b.id].status || reviews[b.id].status === 'changes_requested'
+                          || (ajoutsApresRevision(reviews[b.id]) > 0 && !isNetworkAdmin)) && (
                           <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                             onClick={() => requestReview(b)}>{t({id:'catalogacao.batch.review.request'})}</button>
                         )}
@@ -1364,7 +1389,10 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                       <>
                         <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                           disabled={reviewLocked(b)}
-                          title={reviewLocked(b) ? t({id:'catalogacao.batch.review.publishLocked'}) : undefined}
+                          title={!reviewLocked(b) ? undefined
+                            : ajoutsApresRevision(reviews[b.id]) > 0
+                              ? t({id:'catalogacao.batch.review.afterReview'}, { n: ajoutsApresRevision(reviews[b.id]) })
+                              : t({id:'catalogacao.batch.review.publishLocked'})}
                           onClick={() => publishBatch(b.id)}>{t({id:'catalogacao.publishBatch'})}</button>
                         <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
                           onClick={() => closeBatch(b.id)}>{t({id:'catalogacao.closeBatch'})}</button>

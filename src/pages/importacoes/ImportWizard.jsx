@@ -64,6 +64,13 @@ export default function ImportWizard() {
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(false);
   const [promoteResult, setPromoteResult] = useState(null);
+  // H21 lot 0 (29/09/2026) : les lignes que CET assistant a ingérées dans le
+  // run « lookup » du jour. Ce run est PARTAGÉ : fn_import_ingest_candidate le
+  // reprend (même source, même bibliothèque, même jour) tant qu'il n'est pas
+  // promu, et y ajoute une ligne par ingestion. null = pas de restriction : le
+  // run d'un fichier (fn_import_create) est à nous seuls, ou l'id de la ligne
+  // n'est pas connu (repli sur le run le plus récent).
+  const [ingestedRowIds, setIngestedRowIds] = useState(null);
 
   const loadSources = useCallback(async () => {
     try {
@@ -115,6 +122,16 @@ export default function ImportWizard() {
     );
   }
 
+  // Les lignes de CET assistant : tout le run d'un fichier ; dans le run lookup
+  // partagé du jour, les lignes ingérées ici (ingestedRowIds). L'aperçu, le
+  // décompte et la promotion portent sur les mêmes lignes.
+  const lignesDeLAssistant = Array.isArray(ingestedRowIds)
+    ? rows.filter((r) => ingestedRowIds.includes(Number(r.id)))
+    : rows;
+  // Promouvables : les nouveautés sans brouillon. Les doublons potentiels
+  // restent en attente, jamais promus à l'aveugle.
+  const aPromouvoir = (r) => r.match_status === 'new_record' && !r.created_book_draft_id;
+
   // ── Handlers ──────────────────────────────────────────────
   async function handleUpload() {
     if (!sourceId) { setMsg({ text: t({ id: 'importacoes.selectSource' }), kind: 'error' }); return; }
@@ -147,6 +164,7 @@ export default function ImportWizard() {
       if (dispatchErr) throw dispatchErr;
       assertRpcOk(dispatched);
       setRunId(Number(newRunId));
+      setIngestedRowIds(null);
       setMsg({ text: t({ id: 'importacoes.wizard.source.ready' }, { id: newRunId }), kind: 'ok' });
       setStep(3);
     } catch (err) {
@@ -185,6 +203,14 @@ export default function ImportWizard() {
         newRunId = Array.isArray(runs) && runs.length ? runs[0].id : null;
       }
       if (!newRunId) throw new Error(t({ id: 'importacoes.noRunId' }));
+      // La ligne ingérée (row_id rendu par la RPC) : seule elle, et celles que
+      // cet assistant a ingérées avant dans le même run, seront promues.
+      const rowId = data?.run_id != null && data?.row_id != null ? Number(data.row_id) : null;
+      setIngestedRowIds((prev) => {
+        if (rowId == null) return null;
+        const memeRun = Array.isArray(prev) && Number(newRunId) === runId;
+        return memeRun ? [...new Set([...prev, rowId])] : [rowId];
+      });
       setRunId(Number(newRunId));
       setMsg({ text: t({ id: 'importacoes.wizard.source.ingested' }), kind: 'ok' });
       setStep(3);
@@ -195,23 +221,27 @@ export default function ImportWizard() {
 
   async function handlePromote() {
     if (!runId) return;
+    // Sécurité dédup : on n'accepte AUTOMATIQUEMENT que les notices NEUVES
+    // (match_status = 'new_record'). Les doublons potentiels restent en attente
+    // (editorial_decision 'pending') -> jamais promus a l'aveugle. L'usager·ère
+    // les traitera explicitement (rattachement) plus tard.
+    const newRowIds = lignesDeLAssistant.filter(aPromouvoir).map((r) => r.id);
+    if (!newRowIds.length) return;
     setBusy(true);
     setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
     try {
-      // Sécurité dédup : on n'accepte AUTOMATIQUEMENT que les notices NEUVES
-      // (match_status = 'new_record'). Les doublons potentiels restent en attente
-      // (editorial_decision 'pending') -> jamais promus a l'aveugle. L'usager·ère
-      // les traitera explicitement (rattachement) plus tard.
-      const newRowIds = rows.filter((r) => r.match_status === 'new_record').map((r) => r.id);
-      if (newRowIds.length) {
-        await supabase.rpc('fn_import_set_editorial', {
-          p_run_id: Number(runId),
-          p_row_ids: newRowIds,
-          p_editorial_decision: 'accept_new',
-          p_editorial_note: 'wizard: auto-accept nouveautes',
-        });
-      }
-      const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId) });
+      // Un refus de la décision s'arrête ici : on ne promeut pas sans elle.
+      const { error: editorialError } = await supabase.rpc('fn_import_set_editorial', {
+        p_run_id: Number(runId),
+        p_row_ids: newRowIds,
+        p_editorial_decision: 'accept_new',
+        p_editorial_note: 'wizard: auto-accept nouveautes',
+      });
+      if (editorialError) throw editorialError;
+      // H21 lot 0 (29/09/2026) : ces lignes-là, et elles seules (p_row_ids) —
+      // pas ce qu'un autre onglet, ou une collègue dans le run lookup du jour,
+      // aurait accepté entre-temps.
+      const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId), p_row_ids: newRowIds });
       if (error) throw error;
       setPromoteResult(data || {});
       setMsg({ text: '', kind: '' });
@@ -341,7 +371,8 @@ export default function ImportWizard() {
   }
 
   function renderPreview() {
-    const dupCount = rows.filter((r) => DUP_STATUSES.has(r.match_status)).length;
+    const lignes = lignesDeLAssistant;
+    const dupCount = lignes.filter((r) => DUP_STATUSES.has(r.match_status)).length;
     return (
       <div className="imp-sheet">
         <div className="imp-sheet__head">
@@ -349,8 +380,8 @@ export default function ImportWizard() {
         </div>
         <div className="imp-sheet__body">
           {rowsLoading && <p className="imp-note">{t({ id: 'importacoes.wizard.preview.loading' })}</p>}
-          {!rowsLoading && rows.length === 0 && <p className="imp-note">{t({ id: 'importacoes.wizard.preview.empty' })}</p>}
-          {!rowsLoading && rows.length > 0 && (
+          {!rowsLoading && lignes.length === 0 && <p className="imp-note">{t({ id: 'importacoes.wizard.preview.empty' })}</p>}
+          {!rowsLoading && lignes.length > 0 && (
             <>
               {dupCount > 0 && (
                 <div role="alert" style={{
@@ -364,9 +395,9 @@ export default function ImportWizard() {
                   </div>
                 </div>
               )}
-              <p className="imp-note" style={{ marginBottom: 10 }}>{t({ id: 'importacoes.wizard.preview.summary' }, { n: rows.length })}</p>
+              <p className="imp-note" style={{ marginBottom: 10 }}>{t({ id: 'importacoes.wizard.preview.summary' }, { n: lignes.length })}</p>
               <div style={{ display: 'grid', gap: 6, maxHeight: 360, overflow: 'auto' }}>
-                {rows.map((r) => {
+                {lignes.map((r) => {
                   const isDup = DUP_STATUSES.has(r.match_status);
                   return (
                     <div key={r.id} style={{
@@ -404,7 +435,9 @@ export default function ImportWizard() {
 
   function renderPromote() {
     if (promoteResult) {
-      const n = promoteResult.created_drafts ?? promoteResult.created ?? promoteResult.count ?? rows.length;
+      // Ce que la RPC a créé. Rien d'éligible : elle rend { selected_count: 0 }
+      // sans created_drafts — c'est 0, pas le nombre de lignes du run.
+      const n = promoteResult.created_drafts ?? 0;
       return (
         <div className="imp-sheet">
           <div className="imp-sheet__head">
@@ -426,8 +459,8 @@ export default function ImportWizard() {
         </div>
       );
     }
-    const newCount = rows.filter((r) => r.match_status === 'new_record').length;
-    const heldBack = rows.length - newCount;
+    const newCount = lignesDeLAssistant.filter(aPromouvoir).length;
+    const heldBack = lignesDeLAssistant.filter((r) => r.match_status !== 'new_record').length;
     return (
       <div className="imp-sheet">
         <div className="imp-sheet__head">

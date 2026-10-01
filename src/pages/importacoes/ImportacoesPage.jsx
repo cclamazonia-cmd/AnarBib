@@ -41,6 +41,26 @@ function formatDate(iso) {
 //   own_catalog          : le catalogue PROPRE de la biblio (fn_import_own_source)
 const NON_COMPANHEIRA_KINDS = ['institutional_lookup', 'oai_pmh', 'own_catalog'];
 
+// H21 lot 0 (REGISTRE IMP-26 h et IMP-27, 29/09/2026) : une ligne se coche tant
+// qu'elle n'a ni brouillon de notice ni brouillon d'exemplaire, et que sa
+// décision lui laisse un geste :
+//  * en attente (nulle ou 'pending') : nouveautés ET doublons ;
+//  * « Accepté (nouveau) » sur une nouveauté : « Promouvoir la sélection » ne
+//    promeut plus que la sélection (p_row_ids). Une ligne restée acceptée sans
+//    brouillon (promotion échouée après la décision, deux appels) n'aurait
+//    plus aucun chemin à l'écran ;
+//  * « Accepté (rattaché) » : elle ne devient plus jamais une notice (IMP-26 h) ;
+//    il lui reste « Rapprocher » ou « Rejeter ».
+// Un seul prédicat, pour la case « tout cocher » (selectableIds) et pour la
+// case de chaque ligne (reviewable).
+function estSelectionnable(r) {
+  if (!r || r.created_book_draft_id || r.created_exemplar_draft_id) return false;
+  const ed = r.editorial_decision;
+  return ed == null || ed === 'pending'
+    || (ed === 'accept_new' && r.match_status === 'new_record')
+    || ed === 'accept_duplicate';
+}
+
 export default function ImportacoesPage() {
   useAuth();
   const { role, libraryId, isNetworkAdmin } = useLibrary();
@@ -190,8 +210,26 @@ export default function ImportacoesPage() {
     setRunRows([]);
     try {
       const { data, error } = await supabase.rpc('fn_import_list_run_rows', { p_run_id: Number(runId) });
-      if (!error && data) setRunRows(data);
-    } catch { /* guard */ }
+      if (!error && data) {
+        setRunRows(data);
+        // Revue du lot 0 (29/09/2026) : une ligne qui n'est plus cochable
+        // (promue, rapprochée ou rejetée entre-temps, dans un autre onglet) sort
+        // de la sélection — sinon sa case, cachée, ne se décoche plus et
+        // « Rejeter » la renverrait à chaque clic. Ici, une fois les lignes
+        // arrivées : jamais sur la liste vide du rechargement.
+        const encore = new Set(data.filter(estSelectionnable).map(r => r.id));
+        setSelectedRows(prev => {
+          if (!prev.size) return prev;
+          const next = new Set([...prev].filter(id => encore.has(id)));
+          return next.size === prev.size ? prev : next;
+        });
+      } else {
+        // Chargement échoué : aucune ligne n'est affichée, la sélection ne
+        // désigne plus rien de visible (et le filet « doublons » de « Rejeter »
+        // ne verrait rien).
+        setSelectedRows(new Set());
+      }
+    } catch { setSelectedRows(new Set()); }
     finally { setRunRowsLoading(false); }
   }, []);
 
@@ -257,11 +295,11 @@ export default function ImportacoesPage() {
   const runProcessing = !!selectedRun && ['uploaded', 'queued', 'processing', 'parsed', 'matching'].includes(selectedRun.run_status);
   const runFailed = !!selectedRun && selectedRun.run_status === 'failed';
 
-  // Lignes à traiter (sélectionnables) : non promues ET décision encore en
-  // attente — nouveautés ET doublons (pour pouvoir les écarter/rejeter).
+  // Lignes à traiter (sélectionnables) : non promues, et dont la décision
+  // laisse un geste (estSelectionnable, au niveau du module).
   const selectableIds = useMemo(
     () => filteredRunRows
-      .filter(r => !r.created_book_draft_id && !r.created_exemplar_draft_id && (r.editorial_decision == null || r.editorial_decision === 'pending'))
+      .filter(estSelectionnable)
       .map(r => r.id),
     [filteredRunRows]
   );
@@ -564,20 +602,34 @@ export default function ImportacoesPage() {
     setPromotingSel(true);
     setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
     try {
-      await supabase.rpc('fn_import_set_editorial', {
+      // La décision d'abord, et son refus s'arrête ici : on ne promeut pas des
+      // lignes dont la décision n'a pas été posée.
+      const { error: editorialError } = await supabase.rpc('fn_import_set_editorial', {
         p_run_id: Number(selectedRunId),
         p_row_ids: ids,
         p_editorial_decision: 'accept_new',
         p_editorial_note: 'page import: validation individuelle',
       });
-      const { error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(selectedRunId) });
+      if (editorialError) throw editorialError;
+      // H21 lot 0 (29/09/2026) : la sélection, et elle seule (p_row_ids) ;
+      // sans elle, la promotion emportait toutes les lignes acceptées du run.
+      const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(selectedRunId), p_row_ids: ids });
       if (error) throw error;
-      setMsg({ text: t({ id: 'importacoes.draftsCreated' }), kind: 'ok' });
+      // Rien d'éligible (déjà promues, décidées ailleurs entre-temps) : la RPC
+      // rend { selected_count: 0 } sans created_drafts ni erreur — ce n'est pas
+      // un succès, et l'écran le dit.
+      const created = Number(data?.created_drafts || 0);
+      setMsg(created === ids.length
+        ? { text: t({ id: 'importacoes.draftsCreated' }), kind: 'ok' }
+        : { text: t({ id: 'importacoes.fila.promotedPartial' }, { created, asked: ids.length }), kind: created > 0 ? 'info' : 'error' });
       setSelectedRows(new Set());
       await loadRuns();
       await loadRunRows(selectedRunId);
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
+      // Deux appels : la décision a pu être posée avant l'échec de la
+      // promotion. Recharger montre l'état réel (la ligne reste cochable).
+      await loadRunRows(selectedRunId);
     } finally {
       setPromotingSel(false);
     }
@@ -603,17 +655,27 @@ export default function ImportacoesPage() {
       // n'est pas recréé ; une ligne entièrement détenue est marquée rejetée.
       const skipped = Number(data?.items_skipped_code_taken || 0);
       const held = Number(data?.rows_already_held || 0);
-      setMsg({
-        text: skipped || held
-          ? t({ id: 'importacoes.fila.reconciledCounts' }, { created: Number(data?.created_items || 0), skipped, held })
-          : t({ id: 'importacoes.fila.reconciled' }),
-        kind: 'ok',
-      });
+      // H21 lot 0 : une ligne traitée, rejetée ou écartée ailleurs entre-temps
+      // est ignorée par la RPC (skipped_rows) ; l'écran le dit.
+      const ignorees = Number(data?.skipped_rows || 0);
+      // Les lignes ignorées d'abord, puis ce qui a été fait des autres (comptes
+      // H19 compris) : une ligne ignorée ne cache pas une ligne détenue.
+      setMsg(ignorees > 0
+        ? { text: `${t({ id: 'importacoes.fila.reconciledPartial' }, { skipped: ignorees, asked: ids.length })} ${
+              t({ id: 'importacoes.fila.reconciledCounts' }, { created: Number(data?.created_items || 0), skipped, held })}`,
+            kind: ignorees >= ids.length ? 'error' : 'info' }
+        : {
+            text: skipped || held
+              ? t({ id: 'importacoes.fila.reconciledCounts' }, { created: Number(data?.created_items || 0), skipped, held })
+              : t({ id: 'importacoes.fila.reconciled' }),
+            kind: 'ok',
+          });
       setSelectedRows(new Set());
       await loadRuns();
       await loadRunRows(selectedRunId);
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
+      await loadRunRows(selectedRunId);
     } finally {
       setPromotingSel(false);
     }
@@ -622,7 +684,9 @@ export default function ImportacoesPage() {
   // seront jamais promues et apparaissent « Rejeitada » (rouge).
   async function handleRejectSelected() {
     const ids = [...selectedRows];
-    if (!ids.length || !selectedRunId) return;
+    // Pendant un rechargement, les lignes affichées sont vides : le filet
+    // « doublons » ci-dessous ne verrait rien. On attend les lignes.
+    if (!ids.length || !selectedRunId || runRowsLoading) return;
     // ── Filet de sécurité : ne jamais jeter un exemplaire réel par mégarde ──
     // Une ligne en doublon = la biblio déclare détenir un exemplaire de ce
     // document. « Rejeter » NE l'enregistre PAS (≠ « Rapprocher »).
@@ -634,18 +698,28 @@ export default function ImportacoesPage() {
     setPromotingSel(true);
     setMsg({ text: t({ id: 'importacoes.fila.rejecting' }), kind: 'info' });
     try {
-      const { error } = await supabase.rpc('fn_import_set_editorial', {
+      const { data, error } = await supabase.rpc('fn_import_set_editorial', {
         p_run_id: Number(selectedRunId),
         p_row_ids: ids,
         p_editorial_decision: 'reject',
         p_editorial_note: 'page import: écarté (doublon / non pertinent)',
       });
       if (error) throw error;
-      setMsg({ text: t({ id: 'importacoes.fila.rejected' }), kind: 'ok' });
+      // H21 lot 0 : une ligne déjà convertie, rejetée ou écartée ailleurs
+      // entre-temps, ou sortie du run, est ignorée (skipped_rows), pas refusée
+      // — l'écran le dit au lieu d'un succès plein. Le compte des lignes
+      // réellement écrites fait foi, même sans ligne déclarée ignorée.
+      const ignorees = Number(data?.skipped_rows || 0);
+      const rejetees = Number(data?.updated_rows ?? (ids.length - ignorees));
+      setMsg(ignorees > 0 || rejetees < ids.length
+        ? { text: t({ id: 'importacoes.fila.rejectedPartial' }, { rejected: rejetees, asked: ids.length }),
+            kind: rejetees > 0 ? 'info' : 'error' }
+        : { text: t({ id: 'importacoes.fila.rejected' }), kind: 'ok' });
       setSelectedRows(new Set());
       await loadRunRows(selectedRunId);
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
+      await loadRunRows(selectedRunId);
     } finally {
       setPromotingSel(false);
     }
@@ -1786,8 +1860,8 @@ export default function ImportacoesPage() {
                           const isMatched = ms === 'matched_book' || ms === 'matched_draft';
                           const isDup = ms === 'possible_duplicate' || isMatched;
                           const ed = row.editorial_decision || 'pending';
-                          // Sélectionnable : pas encore promue ET décision en attente.
-                          const reviewable = !row.created_book_draft_id && !row.created_exemplar_draft_id && ed === 'pending';
+                          // Sélectionnable : même prédicat que « tout cocher ».
+                          const reviewable = estSelectionnable(row);
                           return (
                             <tr key={row.id} style={ed === 'reject' ? { opacity: 0.55 } : undefined}>
                               <td>
