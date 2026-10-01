@@ -146,6 +146,35 @@ BEGIN
     END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- ─────────────────────────────────────────────────────────────────
+  -- F17 (30/09/2026) : une prorogation ouvre droit au rappel de la NOUVELLE
+  -- echeance. La trace porte l'echeance (remplie par le declencheur quand
+  -- l'ecrivain ne la donne pas : coalesce(extended_until, due_at)), et
+  -- l'unicite est (exemplaire, moment, echeance).
+  v_t := 'T8 prorogation : le rappel de la nouvelle echeance est permis, l''echeance est remplie';
+  BEGIN
+    SELECT id INTO v_item FROM public.emprestimo_itens_v2 ORDER BY id LIMIT 1;
+    IF v_item IS NULL THEN
+      v_failed := v_failed+1; v_failures := v_failures||(v_t||' : aucun item d''emprunt dans le seed');
+    ELSE
+      INSERT INTO public.loan_cycle_notifications (emprestimo_item_id, moment) VALUES (v_item, 'd3');
+      IF NOT EXISTS (SELECT 1 FROM public.loan_cycle_notifications n JOIN public.emprestimo_itens_v2 i ON i.id = n.emprestimo_item_id
+                      WHERE n.emprestimo_item_id = v_item AND n.moment = 'd3'
+                        AND n.echeance = coalesce(i.extended_until, i.due_at)) THEN
+        v_failed := v_failed+1; v_failures := v_failures||(v_t||' : echeance non remplie par le declencheur');
+      ELSE
+        BEGIN
+          INSERT INTO public.loan_cycle_notifications (emprestimo_item_id, moment, echeance)
+          SELECT v_item, 'd3', coalesce(i.extended_until, i.due_at) + 14 FROM public.emprestimo_itens_v2 i WHERE i.id = v_item;
+          v_passed := v_passed+1;
+        EXCEPTION WHEN unique_violation THEN
+          v_failed := v_failed+1; v_failures := v_failures||(v_t||' : le rappel d''une nouvelle echeance est refuse');
+        END;
+      END IF;
+      DELETE FROM public.loan_cycle_notifications WHERE emprestimo_item_id = v_item AND moment = 'd3';
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   -- Le denominateur inclut les ignores : une suite qui retrecit sans que le
   -- chiffre bouge est une suite qui ment (DOC-SILENCE-1 (c)).
   IF v_failed = 0 THEN

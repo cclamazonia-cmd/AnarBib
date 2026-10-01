@@ -86,6 +86,16 @@ function dateVisee(offset: number): string {
  * Un emprunt de moins de six jours n'a pas de mi-parcours utile — on n'écrit
  * pas à quelqu'un le lendemain pour lui parler de « la moitié ».
  */
+/**
+ * L'échéance COURANTE d'un exemplaire : la prorogation écrit `extended_until` et
+ * laisse `due_at` (fn_v2_extend_core). F17 (30/09/2026) : la fonction ne lisait
+ * que `due_at` — rappel à l'ancienne date, « 7 jours de retard » à tort. Même
+ * convention que le reste du dépôt : coalesce(extended_until, due_at).
+ */
+function echeanceCourante(item: any, emprunt: any): string {
+  return String(item?.extended_until || item?.due_at || emprunt?.due_at || '').slice(0, 10);
+}
+
 function estAMiParcours(created: string | null, due: string | null): boolean {
   if (!created || !due) return false;
   const c = new Date(created).getTime();
@@ -116,7 +126,7 @@ Deno.serve((req) =>
 
     const { data: items, error: eItems } = await sb
       .from('emprestimo_itens_v2')
-      .select('id,emprestimo_id,book_id,bib_ref,titulo_cache,autor_cache,due_at,item_status')
+      .select('id,emprestimo_id,book_id,bib_ref,titulo_cache,autor_cache,due_at,extended_until,item_status')
       .eq('item_status', 'aberto')
       .limit(2000);
     if (eItems) throw eItems;
@@ -132,12 +142,19 @@ Deno.serve((req) =>
     if (eEmp) throw eEmp;
     const parEmprunt = new Map((emprunts || []).map((e) => [e.id, e]));
 
-    // ── 2. Ce qui est déjà parti : au plus une fois par item et par moment ──
+    // ── 2. Ce qui est déjà parti : au plus une fois par item, par moment et
+    //       par ÉCHÉANCE (F17) — une prorogation ouvre droit au rappel de la
+    //       nouvelle date. L'invitation à écrire, elle, reste unique par item.
     const { data: deja } = await sb
       .from('loan_cycle_notifications')
-      .select('emprestimo_item_id,moment')
+      .select('emprestimo_item_id,moment,echeance')
       .in('emprestimo_item_id', (items || []).map((i) => i.id));
-    const dejaParti = new Set((deja || []).map((d) => `${d.emprestimo_item_id}::${d.moment}`));
+    const dejaParti = new Set((deja || []).flatMap((d) => [
+      `${d.emprestimo_item_id}::${d.moment}`,
+      `${d.emprestimo_item_id}::${d.moment}::${String(d.echeance || '').slice(0, 10)}`,
+    ]));
+    const cleDeja = (itemId: string, moment: string, echeance: string) =>
+      MOMENTS[moment].offset === null ? `${itemId}::${moment}` : `${itemId}::${moment}::${echeance}`;
 
     // ── 3. Appariement item × moment ────────────────────────────────────────
     type Candidat = { item: any; emprunt: any; moment: string };
@@ -145,12 +162,12 @@ Deno.serve((req) =>
     for (const item of items || []) {
       const emprunt = parEmprunt.get(item.emprestimo_id);
       if (!emprunt) continue;
-      const echeance = String(item.due_at || emprunt.due_at || '').slice(0, 10);
+      const echeance = echeanceCourante(item, emprunt);
       for (const moment of demandes) {
-        if (dejaParti.has(`${item.id}::${moment}`)) continue;
+        if (dejaParti.has(cleDeja(item.id, moment, echeance))) continue;
         const def = MOMENTS[moment];
         const retenu = def.offset === null
-          ? estAMiParcours(emprunt.created_at, item.due_at || emprunt.due_at)
+          ? estAMiParcours(emprunt.created_at, echeance)
           : echeance === datesVisees.get(moment);
         if (retenu) candidats.push({ item, emprunt, moment });
         if (candidats.length >= limite) break;
@@ -192,7 +209,8 @@ Deno.serve((req) =>
       const locale = profil.preferred_language || ctx?.default_locale || 'pt-BR';
       const titre = String(item.titulo_cache || '').trim() || String(item.bib_ref || '').trim() || '—';
       const auteur = String(item.autor_cache || '').trim();
-      const echeance = formatDateLocale(item.due_at || emprunt.due_at, locale);
+      const echeanceIso = echeanceCourante(item, emprunt);
+      const echeance = formatDateLocale(echeanceIso, locale);
       const nomBiblio = String(ctx?.library_short_name || ctx?.library_name || 'AnarBib').trim();
 
       const sujet = tMail(locale, `${def.cle}.sub`, { title: titre, libraryName: nomBiblio });
@@ -228,6 +246,7 @@ Deno.serve((req) =>
         // manqué serait tenu pour fait et jamais rejoué.
         await sb.from('loan_cycle_notifications').insert({
           emprestimo_item_id: item.id, moment, library_id: emprunt.library_id, user_id: emprunt.user_id,
+          echeance: echeanceIso,
         });
       } else {
         sautes++;

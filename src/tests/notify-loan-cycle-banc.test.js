@@ -33,14 +33,14 @@ const pret = (id, cree, echeance) => ({ id: `e-${id}`, user_id: 'u-1', library_i
 const ITEMS = [item('d3', 3), item('d0', 0), item('o7', -7), item('mi', 5, { book_id: 42 })];
 const PRETS = [pret('d3', -1, 3), pret('d0', -2, 0), pret('o7', -20, -7), pret('mi', -5, 5)];
 
-function monter({ env = {}, profil = LECTRICE, ctx = CTX, deja = [], resend } = {}) {
+function monter({ env = {}, profil = LECTRICE, ctx = CTX, deja = [], resend, items = ITEMS, prets = PRETS } = {}) {
   const ef = monterEF({
     entree: 'notify-loan-cycle/index.ts',
     env: { WEBHOOK_SECRET_NOTIFY_MID_LOAN: SECRET, ...env },
     resend,
     repondre: (_s, table, a) => {
-      if (table === 'emprestimo_itens_v2') return { data: ITEMS, error: null };
-      if (table === 'emprestimos_v2') return { data: PRETS, error: null };
+      if (table === 'emprestimo_itens_v2') return { data: items, error: null };
+      if (table === 'emprestimos_v2') return { data: prets, error: null };
       if (table === 'loan_cycle_notifications') return a('insert') ? { data: null, error: null } : { data: deja, error: null };
       if (table === 'profiles') return { data: [profil], error: null };
       if (table === 'v_library_notification_context') return { data: ctx, error: null };
@@ -94,7 +94,7 @@ describe('notify-loan-cycle — qui reçoit quel moment, une fois, et la trace s
   });
 
   it('un rappel déjà parti ne repart pas', async () => {
-    const { lancer } = monter({ deja: [{ emprestimo_item_id: 'i-d3', moment: 'd3' }, { emprestimo_item_id: 'i-o7', moment: 'overdue7' }] });
+    const { lancer } = monter({ deja: [{ emprestimo_item_id: 'i-d3', moment: 'd3', echeance: jour(3) }, { emprestimo_item_id: 'i-o7', moment: 'overdue7', echeance: jour(-7) }] });
     const r = await lancer();
     expect(r.traces.map((t) => t.moment).sort()).toEqual(['d0', 'note_invite']);
   });
@@ -139,6 +139,37 @@ describe('notify-loan-cycle — qui reçoit quel moment, une fois, et la trace s
 // ── Les liens suivent APP_BASE_URL (21/09/2026) ────────────────────────────────
 // ROUGE sur le code du matin (APP_URL écrit en dur dans la fonction), vert depuis
 // que les deux liens passent par _shared/core/app-url.ts.
+// F17 (30/09/2026) : proroger écrit `extended_until` et laisse `due_at`. La
+// fonction ne lisait que `due_at` : rappel à l'ancienne date, « 7 jours de
+// retard » à tort, rien avant la vraie échéance ; et la trace (item, moment)
+// bloquait le rappel de la nouvelle date. Relevé par la carte F1.
+describe('notify-loan-cycle — un exemplaire prorogé suit sa nouvelle échéance (F17)', () => {
+  const pretLong = (id) => pret(id, -20, 0);
+  it('prorogé du jour J au J+3 : le rappel J-3 de la nouvelle date part, pas le « c’est aujourd’hui » de l’ancienne', async () => {
+    const { lancer } = monter({ items: [item('px', 0, { extended_until: jour(3) })], prets: [pretLong('px')] });
+    const r = await lancer({ moments: ['d3', 'd0', 'overdue7'] });
+    expect(r.traces.map((t) => t.moment)).toEqual(['d3']);
+    expect(r.traces[0].echeance).toBe(jour(3).slice(0, 10));
+  });
+
+  it('le J-3 déjà parti pour l’ancienne échéance n’empêche pas celui de la nouvelle', async () => {
+    const { lancer } = monter({
+      items: [item('py', 1, { extended_until: jour(3) })], prets: [pretLong('py')],
+      deja: [{ emprestimo_item_id: 'i-py', moment: 'd3', echeance: jour(1) }],
+    });
+    const r = await lancer({ moments: ['d3'] });
+    expect(r.traces).toEqual([expect.objectContaining({ moment: 'd3', echeance: jour(3).slice(0, 10) })]);
+  });
+
+  it('prorogé loin : pas de « 7 jours de retard » à l’ancienne date, et la date affichée est la nouvelle', async () => {
+    const { lancer } = monter({ items: [item('pz', -7, { extended_until: jour(3) })], prets: [pret('pz', -30, -7)] });
+    const r = await lancer({ moments: ['d3', 'overdue7'] });
+    expect(r.traces.map((t) => t.moment)).toEqual(['d3']);
+    const [annee, mois, j] = jour(3).slice(0, 10).split('-');
+    expect(r.envois[0].html).toContain(`${j}/${mois}/${annee}`);
+  });
+});
+
 describe('notify-loan-cycle — les liens suivent APP_BASE_URL', () => {
   it('compte et livre partent de l\'adresse réglée ; plus aucun lien vers le canonique', async () => {
     const { lancer, tMail } = monter({ env: { APP_BASE_URL: 'https://app.anarbib.is/' } });
