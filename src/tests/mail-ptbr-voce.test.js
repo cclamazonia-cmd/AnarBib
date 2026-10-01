@@ -83,7 +83,7 @@ const demandes = charger('notify-library-request/strings.ts');
 // module → [valeurs pt-BR [clé, texte]], plancher (relevé du 27/09/2026 : 709, 45, 37, 71)
 const MODULES = {
   'mail-strings.ts': [mail._allKeys().map((k) => [k, mail.tMail('pt-BR', k)]), 650],
-  'task-mail-strings.ts': [feuilles(task.__TASK_STRINGS['pt-BR']), 40],
+  'task-mail-strings.ts': [feuilles(task.__TASK_STRINGS['pt-BR']), 37], // 45 → 37 le 01/10/2026 : variantes assigned/reminder retirées (F1)
   'cross-library-strings.ts': [feuilles(cross.STRINGS['pt-BR']), 30],
   'notify-library-request/strings.ts': [feuilles(demandes.STRINGS['pt-BR']), 60],
 };
@@ -232,8 +232,6 @@ const TEXTE_EN_DUR_PT = [
   'notify-weekly-report/index.ts',
   'notify-network-weekly-report/index.ts',
   'notify-document-permission-request/index.ts',
-  'notify-mid-loan-reading/index.ts',
-  '_shared/domain/legacy.ts',
   '_shared/shared/events.ts',
   '_shared/core/env.ts',
   'opds/index.ts',

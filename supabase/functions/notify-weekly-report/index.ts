@@ -7,7 +7,7 @@
 //   - Wrapper local resolveWeeklyMailRouting pour ajouter recipientEmail/Name
 //     spécifiques au weekly report (basés sur weekly_report_email)
 //   - Helpers locaux conservés pour la logique métier weekly (renderTable,
-//     renderReportEmail, group*, tryUpdateRunStatus)
+//     renderReportEmail, group*)
 //
 // Webhook secret : WEBHOOK_SECRET_NOTIFY_WEEKLY_REPORT
 // Mail           : Resend (RESEND_API_KEY) — Brevo retire en R.6 (05/06/2026)
@@ -302,16 +302,6 @@ function groupReturnRows(rows) {
   return map;
 }
 
-async function tryUpdateRunStatus(sb, runId, patch) {
-  if (!runId) return;
-  try {
-    const { error } = await sb.from("weekly_admin_report_runs").update(patch).eq("id", runId);
-    if (error) console.warn("weekly_admin_report_runs update skipped:", error.message);
-  } catch (error) {
-    console.warn("weekly_admin_report_runs update failed:", error);
-  }
-}
-
 // ─── Handler principal ─────────────────────────────────────────────────────
 
 // ============================================================================
@@ -323,9 +313,9 @@ async function tryUpdateRunStatus(sb, runId, patch) {
 // MAIL_PROVIDER a ete retire de Supabase en R.7 (08/06/2026) ; n'est
 // plus lu par le code.
 //
-// CONTRAT : string en succes, throw sur erreur HTTP. Le serve garde sa gestion
-// du run : tryUpdateRunStatus(failed) avant re-throw, tryUpdateRunStatus(sent)
-// apres succes — comportement strictement preserve.
+// CONTRAT : string en succes, throw sur erreur HTTP. Le suivi d'un « run »
+// (weekly_admin_report_runs) est retire le 01/10/2026 (F1) : la table n'existe
+// pas en production et aucun appelant ne passe de run_id.
 // ============================================================================
 // --- Envoi : une seule implementation, celle de _shared (F7, 23/09/2026) ---
 // Cette fonction portait sa propre copie de l'appel Resend. Le routage par
@@ -345,7 +335,6 @@ async function sendEmail(opts) {
 
 serve(async (req) => {
   const body = await req.json().catch(() => null);
-  const runId = body?.run_id ?? null;
   try {
     if (req.method !== "POST") return json(405, { ok: false, error: "Method not allowed" });
     const expected = mustEnv("WEBHOOK_SECRET_NOTIFY_WEEKLY_REPORT");
@@ -367,12 +356,10 @@ serve(async (req) => {
 
     const weeklyLibrarySummaryEnabled = await resolveWeeklyLibrarySummaryEnabled(sb, libraryId);
     if (!weeklyLibrarySummaryEnabled) {
-      await tryUpdateRunStatus(sb, runId, { status: "skipped", error: null });
       return json(200, {
         ok: true,
         skipped: true,
         reason: "weekly_library_summary_disabled",
-        run_id: runId,
         library_id: libraryId,
         week_start: weekStart,
         week_end: weekEnd
@@ -856,19 +843,10 @@ serve(async (req) => {
 
     // ─── Envoi mail ─────────────────────────────────────────────────────────
     // Transport mail : envoi via Resend (chantier #110, Brevo retire en R.6).
-    // Le suivi du run (tryUpdateRunStatus) reste ici car il releve de la
-    // logique de l'EF. En cas d'echec, on ecrit le statut "failed" avant de
-    // re-propager l'exception.
-    try {
-      await sendEmail({ routing, subject, htmlContent, textContent });
-    } catch (sendError) {
-      await tryUpdateRunStatus(sb, runId, { status: "failed", error: String(sendError?.message ?? sendError) });
-      throw sendError;
-    }
-    await tryUpdateRunStatus(sb, runId, { status: "sent", sent_at: new Date().toISOString(), error: null });
+    // Un echec remonte au catch du serve (500).
+    await sendEmail({ routing, subject, htmlContent, textContent });
     return json(200, {
       ok: true,
-      run_id: runId,
       library_id: libraryId,
       week_start: weekStart,
       week_end: weekEnd,
@@ -894,11 +872,6 @@ serve(async (req) => {
       }
     });
   } catch (e) {
-    try {
-      await tryUpdateRunStatus(supabaseAdmin, runId, { status: "failed", error: String(e?.message ?? e) });
-    } catch {
-      // no-op
-    }
-    return json(500, { ok: false, error: String(e?.message ?? e), run_id: runId });
+    return json(500, { ok: false, error: String(e?.message ?? e) });
   }
 });

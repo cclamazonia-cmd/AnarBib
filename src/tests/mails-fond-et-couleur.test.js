@@ -60,7 +60,8 @@ describe('courriels — chaque document se déclare sombre', () => {
   const documents = fichiers.filter((f) => /<body style="[^"]*background/.test(readFileSync(new URL(f, racine), 'utf8')));
   it('les documents de courriel sont trouvés (gabarit commun compris)', () => {
     expect(documents).toContain('supabase/functions/_shared/mail/layout.ts');
-    expect(documents.length).toBeGreaterThanOrEqual(8);
+    // 8 → 7 le 01/10/2026 : notify-mid-loan-reading retirée (F1, branche morte).
+    expect(documents.length).toBeGreaterThanOrEqual(7);
   });
   for (const f of documents) {
     it(f, () => {

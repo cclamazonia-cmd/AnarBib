@@ -28,19 +28,7 @@ const TASK_STRINGS = {
       mudancas: "Mudanças importantes"
     },
     greetingPlain: "Olá!",
-    greetingNamed: "Olá, {name}!",
     untitled: "tarefa sem título",
-    fallbackName: "compa",
-    assigned: {
-      subject: "Nova tarefa interna",
-      title: "Nova tarefa interna",
-      introHtml: `<p style="margin:0 0 10px;">Você recebeu uma <b>nova tarefa interna</b>.</p><p style="margin:0;">Consulte o painel para acompanhar o andamento e registrar qualquer atualização necessária.</p>`
-    },
-    reminder: {
-      subject: "Lembrete de tarefa interna",
-      title: "Lembrete de tarefa interna",
-      introHtml: `<p style="margin:0 0 10px;">Esta tarefa entrou no bloco <b>Trabalho do dia</b>.</p><p style="margin:0;">Se ela já foi resolvida, vale atualizar o status no painel.</p>`
-    },
     orgCreated: {
       subject: "Nova tarefa interna sob sua responsabilidade",
       title: "Nova tarefa interna",
@@ -91,19 +79,7 @@ const TASK_STRINGS = {
       mudancas: "Changements importants"
     },
     greetingPlain: "Salut !",
-    greetingNamed: "Salut {name} !",
     untitled: "tâche sans titre",
-    fallbackName: "camarade",
-    assigned: {
-      subject: "Nouvelle tâche interne",
-      title: "Nouvelle tâche interne",
-      introHtml: `<p style="margin:0 0 10px;">Tu as reçu une <b>nouvelle tâche interne</b>.</p><p style="margin:0;">Consulte le panneau pour suivre son avancement et noter toute mise à jour nécessaire.</p>`
-    },
-    reminder: {
-      subject: "Rappel de tâche interne",
-      title: "Rappel de tâche interne",
-      introHtml: `<p style="margin:0 0 10px;">Cette tâche est entrée dans le bloc <b>Travail du jour</b>.</p><p style="margin:0;">Si elle est déjà réglée, pense à mettre à jour son statut dans le panneau.</p>`
-    },
     orgCreated: {
       subject: "Nouvelle tâche interne sous ta responsabilité",
       title: "Nouvelle tâche interne",
@@ -154,19 +130,7 @@ const TASK_STRINGS = {
       mudancas: "Cambios importantes"
     },
     greetingPlain: "¡Hola!",
-    greetingNamed: "¡Hola, {name}!",
     untitled: "tarea sin título",
-    fallbackName: "compa",
-    assigned: {
-      subject: "Nueva tarea interna",
-      title: "Nueva tarea interna",
-      introHtml: `<p style="margin:0 0 10px;">Recibiste una <b>nueva tarea interna</b>.</p><p style="margin:0;">Mirá el panel para seguir su avance y registrar cualquier actualización necesaria.</p>`
-    },
-    reminder: {
-      subject: "Recordatorio de tarea interna",
-      title: "Recordatorio de tarea interna",
-      introHtml: `<p style="margin:0 0 10px;">Esta tarea entró en el bloque <b>Trabajo del día</b>.</p><p style="margin:0;">Si ya está resuelta, conviene actualizar su estado en el panel.</p>`
-    },
     orgCreated: {
       subject: "Nueva tarea interna a tu cargo",
       title: "Nueva tarea interna",
@@ -217,19 +181,7 @@ const TASK_STRINGS = {
       mudancas: "Key changes"
     },
     greetingPlain: "Hi!",
-    greetingNamed: "Hi {name}!",
     untitled: "untitled task",
-    fallbackName: "comrade",
-    assigned: {
-      subject: "New internal task",
-      title: "New internal task",
-      introHtml: `<p style="margin:0 0 10px;">You've received a <b>new internal task</b>.</p><p style="margin:0;">Check the panel to follow its progress and log any updates needed.</p>`
-    },
-    reminder: {
-      subject: "Internal task reminder",
-      title: "Internal task reminder",
-      introHtml: `<p style="margin:0 0 10px;">This task has entered the <b>Day's work</b> block.</p><p style="margin:0;">If it's already handled, it's worth updating its status in the panel.</p>`
-    },
     orgCreated: {
       subject: "New internal task under your responsibility",
       title: "New internal task",
@@ -280,19 +232,7 @@ const TASK_STRINGS = {
       mudancas: "Cambiamenti importanti"
     },
     greetingPlain: "Ciao!",
-    greetingNamed: "Ciao {name}!",
     untitled: "attività senza titolo",
-    fallbackName: "compagnə",
-    assigned: {
-      subject: "Nuova attività interna",
-      title: "Nuova attività interna",
-      introHtml: `<p style="margin:0 0 10px;">Hai ricevuto una <b>nuova attività interna</b>.</p><p style="margin:0;">Consulta il pannello per seguirne l'andamento e registrare ogni aggiornamento necessario.</p>`
-    },
-    reminder: {
-      subject: "Promemoria di attività interna",
-      title: "Promemoria di attività interna",
-      introHtml: `<p style="margin:0 0 10px;">Questa attività è entrata nel blocco <b>Lavoro del giorno</b>.</p><p style="margin:0;">Se è già stata risolta, conviene aggiornarne lo stato nel pannello.</p>`
-    },
     orgCreated: {
       subject: "Nuova attività interna sotto la tua responsabilità",
       title: "Nuova attività interna",
@@ -343,19 +283,7 @@ const TASK_STRINGS = {
       mudancas: "Wichtige Änderungen"
     },
     greetingPlain: "Hallo!",
-    greetingNamed: "Hallo {name}!",
     untitled: "Aufgabe ohne Titel",
-    fallbackName: "Genoss*in",
-    assigned: {
-      subject: "Neue interne Aufgabe",
-      title: "Neue interne Aufgabe",
-      introHtml: `<p style="margin:0 0 10px;">Du hast eine <b>neue interne Aufgabe</b> erhalten.</p><p style="margin:0;">Schau im Panel nach, um den Fortschritt zu verfolgen und nötige Aktualisierungen einzutragen.</p>`
-    },
-    reminder: {
-      subject: "Erinnerung an interne Aufgabe",
-      title: "Erinnerung an interne Aufgabe",
-      introHtml: `<p style="margin:0 0 10px;">Diese Aufgabe ist in den Block <b>Tagesarbeit</b> gerückt.</p><p style="margin:0;">Falls sie schon erledigt ist, lohnt es sich, den Status im Panel zu aktualisieren.</p>`
-    },
     orgCreated: {
       subject: "Neue interne Aufgabe in deiner Verantwortung",
       title: "Neue interne Aufgabe",
@@ -406,19 +334,7 @@ const TASK_STRINGS = {
       mudancas: "Canvis importants"
     },
     greetingPlain: "Hola!",
-    greetingNamed: "Hola, {name}!",
     untitled: "tasca sense títol",
-    fallbackName: "companya",
-    assigned: {
-      subject: "Nova tasca interna",
-      title: "Nova tasca interna",
-      introHtml: `<p style="margin:0 0 10px;">Has rebut una <b>nova tasca interna</b>.</p><p style="margin:0;">Consulta el plafó per seguir-ne l'evolució i registrar qualsevol actualització necessària.</p>`
-    },
-    reminder: {
-      subject: "Recordatori de tasca interna",
-      title: "Recordatori de tasca interna",
-      introHtml: `<p style="margin:0 0 10px;">Aquesta tasca ha entrat al bloc <b>Feina del dia</b>.</p><p style="margin:0;">Si ja s'ha resolt, val la pena actualitzar-ne l'estat al plafó.</p>`
-    },
     orgCreated: {
       subject: "Nova tasca interna sota la teva responsabilitat",
       title: "Nova tasca interna",
@@ -469,19 +385,7 @@ const TASK_STRINGS = {
       mudancas: "Gravaj ŝanĝoj"
     },
     greetingPlain: "Saluton!",
-    greetingNamed: "Saluton, {name}!",
     untitled: "sentitola tasko",
-    fallbackName: "kamarado",
-    assigned: {
-      subject: "Nova interna tasko",
-      title: "Nova interna tasko",
-      introHtml: `<p style="margin:0 0 10px;">Vi ricevis <b>novan internan taskon</b>.</p><p style="margin:0;">Konsultu la panelon por sekvi ĝian progreson kaj registri ajnan necesan ĝisdatigon.</p>`
-    },
-    reminder: {
-      subject: "Memorigo pri interna tasko",
-      title: "Memorigo pri interna tasko",
-      introHtml: `<p style="margin:0 0 10px;">Ĉi tiu tasko eniris la blokon <b>Tago-laboro</b>.</p><p style="margin:0;">Se ĝi jam estas solvita, indas ĝisdatigi ĝian staton en la panelo.</p>`
-    },
     orgCreated: {
       subject: "Nova interna tasko sub via respondeco",
       title: "Nova interna tasko",
@@ -532,19 +436,7 @@ const TASK_STRINGS = {
       mudancas: "Belangrijke wijzigingen"
     },
     greetingPlain: "Hoi!",
-    greetingNamed: "Hoi {name}!",
     untitled: "taak zonder titel",
-    fallbackName: "kameraad",
-    assigned: {
-      subject: "Nieuwe interne taak",
-      title: "Nieuwe interne taak",
-      introHtml: `<p style="margin:0 0 10px;">Je hebt een <b>nieuwe interne taak</b> gekregen.</p><p style="margin:0;">Bekijk het paneel om de voortgang te volgen en eventuele updates te noteren.</p>`
-    },
-    reminder: {
-      subject: "Herinnering interne taak",
-      title: "Herinnering interne taak",
-      introHtml: `<p style="margin:0 0 10px;">Deze taak is in het blok <b>Werk van de dag</b> terechtgekomen.</p><p style="margin:0;">Als ze al is afgehandeld, is het goed om de status in het paneel bij te werken.</p>`
-    },
     orgCreated: {
       subject: "Nieuwe interne taak onder jouw verantwoordelijkheid",
       title: "Nieuwe interne taak",
@@ -597,19 +489,7 @@ const TASK_STRINGS = {
       mudancas: "Σημαντικές αλλαγές"
     },
     greetingPlain: "Γεια!",
-    greetingNamed: "Γεια σου, {name}!",
     untitled: "εργασία χωρίς τίτλο",
-    fallbackName: "σύντροφε",
-    assigned: {
-      subject: "Νέα εσωτερική εργασία",
-      title: "Νέα εσωτερική εργασία",
-      introHtml: `<p style="margin:0 0 10px;">Έλαβες μια <b>νέα εσωτερική εργασία</b>.</p><p style="margin:0;">Δες τον πίνακα για να παρακολουθήσεις την πρόοδό της και να καταγράψεις κάθε απαραίτητη ενημέρωση.</p>`
-    },
-    reminder: {
-      subject: "Υπενθύμιση εσωτερικής εργασίας",
-      title: "Υπενθύμιση εσωτερικής εργασίας",
-      introHtml: `<p style="margin:0 0 10px;">Αυτή η εργασία μπήκε στο μπλοκ <b>Δουλειά της ημέρας</b>.</p><p style="margin:0;">Αν έχει ήδη διεκπεραιωθεί, αξίζει να ενημερώσεις την κατάστασή της στον πίνακα.</p>`
-    },
     orgCreated: {
       subject: "Νέα εσωτερική εργασία υπό την ευθύνη σου",
       title: "Νέα εσωτερική εργασία",
@@ -655,7 +535,7 @@ export function normalizeTaskLocale(input) {
   return byBase || FALLBACK_LOCALE;
 }
 
-// Chaine simple (greetingPlain, greetingNamed, untitled, fallbackName), avec interpolation {var}.
+// Chaine simple (greetingPlain, untitled), avec interpolation {var}.
 export function tTask(locale, key, vars) {
   const loc = TASK_STRINGS[locale] ? locale : FALLBACK_LOCALE;
   let value = TASK_STRINGS[loc][key];

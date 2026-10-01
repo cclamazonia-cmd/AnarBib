@@ -1,6 +1,5 @@
-import { handleEmprestimoOld, handleReservaCriadaOld } from "../domain/legacy.ts";
-import { handleEmprestimoDevolucaoEvent, handleEmprestimoV2, handleEmprestimoV2Reminder } from "../domain/emprestimos.ts";
-import { handleReservaCriadaV2, handleReservaPickupReplyEvent, handleReservaV2StatusChange, handleReservaV2WorkflowEvent } from "../domain/reservas.ts";
+import { handleEmprestimoV2 } from "../domain/emprestimos.ts";
+import { handleReservaCriadaV2, handleReservaV2StatusChange, handleReservaV2WorkflowEvent } from "../domain/reservas.ts";
 import { handleConsultaCriadaV2, handleConsultaV2LifecycleEvent, handleConsultaV2WorkflowEvent } from "../domain/consultas.ts";
 import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
@@ -90,55 +89,46 @@ async function dispatchInterne(event, recordId, payload) {
     "member_frozen_global",
     "member_unfrozen_global"
   ].includes(event)) return await handleMembershipRestriction(event, payload);
-  if (event === "reserva_criada") return await handleReservaCriadaOld(recordId);
-  // TR-1 (#153.A) : 'emprestimo_prorrogado' retire de la branche legacy.
-  // L'evenement n'est plus emis par la base : le seul emetteur de prorogation,
-  // le trigger trg_notify_emprestimo_prorrogacao, emet 'emprestimo_v2_prorrogado'.
-  // 'emprestimo_prorrogado' etait donc du code mort ici (et dans la branche v2).
-  // Note : la branche legacy handleEmprestimoOld route encore emprestimo_criado,
-  // emprestimo_devolvido, lembrete_devolucao_*, aviso_atraso_* — leur emission
-  // n'a pas ete instruite ; voir la dette notee au dossier-cadre #153.
-  if (event === "emprestimo_criado" || event === "emprestimo_devolvido" || event.startsWith("lembrete_devolucao_") || event.startsWith("aviso_atraso_")) return await handleEmprestimoOld(recordId, event);
+  // F1 (01/10/2026, carte CARTE_chaine_courriel_2026-09-30) : routes sans émetteur
+  // retirées, avec leurs handlers. Ni la base (prosrc, crons) ni une autre fonction
+  // ne les émettait plus :
+  //   - la branche legacy v1 (reserva_criada, emprestimo_criado, emprestimo_devolvido,
+  //     lembrete_devolucao_*, aviso_atraso_* : legacy.ts) ;
+  //   - le créneau replanifié (retirada_reagendada : son stage déclencheur,
+  //     re-retirada_agendada, est interdit depuis la v3) ;
+  //   - la réponse au créneau du modèle v2 (retirada_confirmada_leitor /
+  //     retirada_recusada_leitor : la v3 passe par handleReservaV2WorkflowEvent) ;
+  //   - le retour programmé (emprestimo_devolucao_agendada / _cancelada /
+  //     _nao_realizada : aucun écran, aucune émission) ;
+  //   - les rappels et relances d'avant F4 (lembrete_v2_devolucao_*, aviso_v2_atraso_*) :
+  //     remplacés par notify-loan-cycle (J-3, jour J, J+7) ; J-5, J+1, J+30 et la
+  //     copie admin à J+30 abandonnés exprès (DOC-RAPPEL-1) ;
+  //   - le refus de réservation et les alias des réservations (reserva_v2_recusada,
+  //     reserva_v2_cancelada_*, expirada, convertida_em_emprestimo, reserva_em_preparacao,
+  //     reserva_retirada_*, reserva_pronta_para_retirada, retirada_nao_realizada,
+  //     retirada_no_show, reserva_liberada_para_circulacao) : le déclencheur
+  //     trg_notify_reserva_workflow_change n'émet que les noms canoniques ci-dessous.
+  // Un événement inconnu rend null : notify-event répond « ignored ».
+  // TR-1 (#153.A) : 'emprestimo_prorrogado' n'est plus émis non plus ; la
+  // prorogation passe par 'emprestimo_v2_prorrogado'.
   if (event === "reserva_v2_criada") return await handleReservaCriadaV2(recordId);
   if ([
-    "reserva_v2_recusada",
-    "reserva_v2_cancelada_staff",
-    "reserva_v2_cancelada_reader",
     "reserva_cancelada_biblioteca",
     "reserva_cancelada_leitor",
     "reserva_expirada",
-    "expirada",
-    "reserva_convertida_em_emprestimo",
-    "convertida_em_emprestimo"
+    // Le stage retirada_efetivada émet reserva_convertida_em_emprestimo (clé
+    // res.converted) : c'est le courriel « retrait effectué ». Pas de route
+    // « retirada_efetivada », voulu (F1, carte du 30/09).
+    "reserva_convertida_em_emprestimo"
   ].includes(event)) return await handleReservaV2StatusChange(recordId, event);
   if ([
     "em_preparacao",
-    "reserva_em_preparacao",
-    "reserva_retirada_a_combinar",
     "retirada_a_combinar",
-    "reserva_retirada_agendada",
     "retirada_agendada",
-    "reserva_retirada_reagendada",
-    "retirada_reagendada",
-    "reserva_pronta_para_retirada",
     "pronta_para_retirada",
     "reserva_nao_retirada",
-    "retirada_nao_realizada",
-    "retirada_no_show",
-    "reserva_liberada_para_circulacao",
     "liberada_para_circulacao"
   ].includes(event)) return await handleReservaV2WorkflowEvent(recordId, event, payload);
-  if ([
-    "reserva_leitor_confirma_horario",
-    "retirada_confirmada_leitor",
-    "reserva_leitor_recusa_horario",
-    "retirada_recusada_leitor"
-  ].includes(event)) return await handleReservaPickupReplyEvent(recordId, event, payload);
-  if ([
-    "emprestimo_devolucao_agendada",
-    "emprestimo_devolucao_cancelada",
-    "emprestimo_devolucao_nao_realizada"
-  ].includes(event)) return await handleEmprestimoDevolucaoEvent(recordId, event, payload);
   // TR-2 (#153.A) : payload transmis a handleEmprestimoV2 — la RPC de conversion
   // y place suppress_user_mail pour que le handler saute le mail lecteur·rice
   // (le mail admin, lui, reste emis). Auparavant payload n'etait pas transmis.
@@ -151,14 +141,6 @@ async function dispatchInterne(event, recordId, payload) {
     "emprestimo_v2_parcialmente_devolvido",
     "emprestimo_v2_devolvido_apos_parcial"
   ].includes(event)) return await handleEmprestimoV2(recordId, event, payload);
-  if ([
-    "lembrete_v2_devolucao_5d",
-    "lembrete_v2_devolucao_3d",
-    "lembrete_v2_devolucao_hoje",
-    "aviso_v2_atraso_1d",
-    "aviso_v2_atraso_7d",
-    "aviso_v2_atraso_30d"
-  ].includes(event)) return await handleEmprestimoV2Reminder(recordId, event);
   // ===== Consultas locais - paquet 26 =====================================
   if (event === "consulta_v2_criada") return await handleConsultaCriadaV2(recordId);
   if (["consulta_v2_realizada","consulta_v2_cancelada","consulta_v2_expirada"].includes(event)) return await handleConsultaV2LifecycleEvent(recordId, event, payload);

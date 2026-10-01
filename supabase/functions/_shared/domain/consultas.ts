@@ -351,7 +351,9 @@ export async function handleConsultaV2LifecycleEvent(
           kind: "info" as const,
           title: tMail(locale, readerKey),
           ctaUrl: READER_PAGE,
-          ctaLabel: tMail(locale, "cwf.actionBox.replySlot")
+          // F1 (01/10/2026) : rien à répondre après une annulation ou une
+          // expiration — le bouton mène aux consultations, il le dit.
+          ctaLabel: tMail(locale, "cwf.actionBox.seeConsultas")
         }
       : undefined;
 

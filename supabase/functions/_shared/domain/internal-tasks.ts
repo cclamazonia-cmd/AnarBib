@@ -65,53 +65,6 @@ function payloadTaskToRow(taskId, libraryId, task) {
     library_id: libraryId
   };
 }
-function buildTaskEmail(eventType, task, ownerName, brandTag, locale) {
-  const taskTitle = pickI18nText(task.title_i18n, locale) || String(task.title || "").trim() || tTask(locale, "untitled");
-  const status = taskStatusLabel(locale, String(task.status || "").trim());
-  const priority = taskPriorityLabel(locale, String(task.priority || "").trim());
-  const due = formatDateBR(task.due_date);
-  const tags = taskTagsLabel(task.tags);
-  const description = pickI18nText(task.description_i18n, locale) || String(task.description || "").trim();
-  const variant = taskVariant(locale, eventType === "assigned" ? "assigned" : "reminder");
-  return {
-    subject: `${variant.subject} — ${brandTag}`,
-    title: variant.title,
-    greeting: ownerName ? tTask(locale, "greetingNamed", { name: ownerName }) : tTask(locale, "greetingPlain"),
-    introHtml: variant.introHtml,
-    details: [
-      {
-        label: taskFieldLabel(locale, "tarefa"),
-        value: taskTitle
-      },
-      {
-        label: taskFieldLabel(locale, "prioridade"),
-        value: priority
-      },
-      {
-        label: taskFieldLabel(locale, "situacao"),
-        value: status
-      },
-      ...due ? [
-        {
-          label: taskFieldLabel(locale, "prazo"),
-          value: due
-        }
-      ] : [],
-      ...tags ? [
-        {
-          label: taskFieldLabel(locale, "marcadores"),
-          value: tags
-        }
-      ] : [],
-      ...description ? [
-        {
-          label: taskFieldLabel(locale, "descricao"),
-          value: description
-        }
-      ] : []
-    ]
-  };
-}
 function ensureEmailDelivered(result, contextLabel) {
   if (result.ok || result.skipped) return result;
   const detail = String(result.error || result.reason || "email_send_failed").trim() || "email_send_failed";
@@ -399,76 +352,13 @@ export async function handleInternalTaskNotification(payload) {
   if (kind === "task_library_notice") {
     return await handleTaskLevelNotice(payload, taskId, "library");
   }
-  const requestedEvent = String(payload.event_type || payload.event || "assigned").trim();
-  const eventType = requestedEvent === "due_today" ? "due_today" : "assigned";
-  if (!taskId) throw new Error("task_id_missing");
-  const task = await fetchInternalTask(taskId);
-  if (!task) {
-    return {
-      ok: true,
-      skipped: "task_not_found",
-      task_id: taskId,
-      event_type: eventType
-    };
-  }
-  if ([
-    "concluida",
-    "cancelada"
-  ].includes(String(task.status || "").trim())) {
-    return {
-      ok: true,
-      skipped: "task_not_active",
-      task_id: taskId,
-      event_type: eventType
-    };
-  }
-  const ownerEmail = String(payload.owner_email || "").trim().toLowerCase();
-  if (!isValidEmail(ownerEmail)) {
-    return {
-      ok: true,
-      skipped: "owner_email_invalid",
-      task_id: taskId,
-      event_type: eventType,
-      owner_email: ownerEmail || null
-    };
-  }
-  const ownerProfile = await fetchInternalTaskOwnerProfile(ownerEmail);
-  if (!ownerProfile || ownerProfile.is_librarian !== true) {
-    return {
-      ok: true,
-      skipped: "owner_not_librarian",
-      task_id: taskId,
-      event_type: eventType,
-      owner_email: ownerEmail
-    };
-  }
-  const ctx = await resolveLibraryNotificationContext(String(task.library_id || "").trim() || null);
-  // Locale = langue d'affichage du/de la responsable (owner), repli langue biblio.
-  const locale = normalizeTaskLocale(ownerProfile.preferred_language || ctx.default_locale);
-  const target = ownerTarget(ownerEmail, ownerProfile);
-  const ownerName = firstNameOnly(ownerProfile.first_name || "") || tTask(locale, "fallbackName");
-  const brandTag = subjectTag(ctx);
-  const email = buildTaskEmail(eventType, task, ownerName, brandTag, locale);
-  const { html, text } = renderEmail({
-    preheader: email.title,
-    title: email.title,
-    greeting: email.greeting,
-    introHtml: email.introHtml,
-    details: email.details,
-    footerHtml: footerPadrao(ctx),
-    context: ctx,
-    locale
-  });
-  const brandedSubject = applyBrandingText(email.subject, ctx);
-  const result = taskAlertsEnabled(ctx) ? await safeSendEmail(target, brandedSubject, html, text, "task_owner", ctx) : skippedEmailResult("task_owner", "task_alerts_disabled", ownerEmail);
-  ensureEmailDelivered(result, "task_owner_email_failed");
-  return {
-    ok: result.ok,
-    sent: result.ok,
-    skipped: result.skipped ? result.reason || "skipped" : undefined,
-    task_id: taskId,
-    event_type: eventType,
-    owner_email: ownerEmail,
-    detail: result.error
-  };
+  // F1 (01/10/2026) : la branche historique sans « kind » (variantes assigned /
+  // reminder) est retirée. Les deux files de la base (dispatch_task_invitation_outbox,
+  // dispatch_task_notification_outbox) ne postent que les trois « kind » ci-dessus ;
+  // aucune échéance de tâche ne produit de courriel. Un rappel d'échéance, s'il est
+  // voulu un jour, se câblera par un cron et un « kind » dédiés.
+  // Un « kind » inconnu ou absent LÈVE : le webhook rend 500 et la file passe la
+  // ligne en échec (fn_cron_reconcile_task_dispatch) au lieu de la compter
+  // « confirmée » sans courriel (DOC-SILENCE-1).
+  throw new Error(`unknown_kind:${kind || "(vide)"}`);
 }

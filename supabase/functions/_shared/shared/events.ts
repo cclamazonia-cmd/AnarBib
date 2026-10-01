@@ -23,41 +23,25 @@ export function pickupReplyLabel(s) {
   if (v === "recusado_leitor") return "Leitor não pode nesse horário";
   return "";
 }
+// F1 (01/10/2026) : seuls les noms que trg_notify_reserva_workflow_change émet.
+// 'retirada_no_show' reste le nom INTERNE du stage de non-venue (valeur ici,
+// clé de SF_MAP plus bas), pas un événement.
 const WE_MAP = {
   em_preparacao: "em_preparacao",
-  reserva_em_preparacao: "em_preparacao",
-  reserva_retirada_a_combinar: "retirada_a_combinar",
   retirada_a_combinar: "retirada_a_combinar",
-  reserva_retirada_agendada: "retirada_agendada",
   retirada_agendada: "retirada_agendada",
-  reserva_retirada_reagendada: "retirada_reagendada",
-  retirada_reagendada: "retirada_reagendada",
-  reserva_pronta_para_retirada: "pronta_para_retirada",
   pronta_para_retirada: "pronta_para_retirada",
   reserva_nao_retirada: "retirada_no_show",
-  retirada_nao_realizada: "retirada_no_show",
-  retirada_no_show: "retirada_no_show",
-  reserva_liberada_para_circulacao: "liberada_para_circulacao",
   liberada_para_circulacao: "liberada_para_circulacao"
 };
 export function normalizeReservaWorkflowEvent(e) {
   return WE_MAP[String(e || "").trim()] || "";
 }
-export function normalizeReservaPickupReplyEvent(e) {
-  const s = String(e || "").trim();
-  if (s === "reserva_leitor_confirma_horario" || s === "retirada_confirmada_leitor") return "retirada_confirmada_leitor";
-  if (s === "reserva_leitor_recusa_horario" || s === "retirada_recusada_leitor") return "retirada_recusada_leitor";
-  return "";
-}
 const SC_MAP = {
-  reserva_v2_cancelada_staff: "reserva_cancelada_biblioteca",
   reserva_cancelada_biblioteca: "reserva_cancelada_biblioteca",
-  reserva_v2_cancelada_reader: "reserva_cancelada_leitor",
   reserva_cancelada_leitor: "reserva_cancelada_leitor",
   reserva_expirada: "reserva_expirada",
-  expirada: "reserva_expirada",
-  reserva_convertida_em_emprestimo: "reserva_convertida_em_emprestimo",
-  convertida_em_emprestimo: "reserva_convertida_em_emprestimo"
+  reserva_convertida_em_emprestimo: "reserva_convertida_em_emprestimo"
 };
 export function normalizeReservaStatusChangeEvent(e) {
   return SC_MAP[String(e || "").trim()] || String(e || "").trim();
@@ -65,36 +49,12 @@ export function normalizeReservaStatusChangeEvent(e) {
 const SF_MAP = {
   retirada_a_combinar: "retirada_a_combinar",
   retirada_agendada: "retirada_agendada",
-  retirada_reagendada: "re-retirada_agendada",
   pronta_para_retirada: "pronta_para_retirada",
   retirada_no_show: "nao_retirada",
   liberada_para_circulacao: "liberada_para_circulacao"
 };
 export function workflowStageFromEvent(e) {
   return SF_MAP[normalizeReservaWorkflowEvent(e)] || "";
-}
-export function actorRoleFromPayload(p) {
-  const r = String(getPayloadValue(p, "actor_role") || p?.actor_role || "").trim().toLowerCase();
-  if ([
-    "biblioteca",
-    "staff",
-    "librarian",
-    "admin"
-  ].includes(r)) return "biblioteca";
-  if ([
-    "leitor",
-    "reader",
-    "usuario",
-    "usuário",
-    "user"
-  ].includes(r)) return "leitor";
-  return null;
-}
-export function actionKindFromPayload(p) {
-  const r = String(getPayloadValue(p, "action_kind") || "").trim().toLowerCase();
-  if (r === "reagendamento") return "reagendamento";
-  if (r === "agendamento_inicial") return "agendamento_inicial";
-  return null;
 }
 
 // ===== Consulta stage labels (pt-BR) =========================================

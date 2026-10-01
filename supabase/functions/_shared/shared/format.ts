@@ -54,12 +54,6 @@ export function fullName(p) {
     p.last_name
   ].map((x)=>String(x || "").trim()).filter(Boolean).join(" ");
 }
-export function fullNameFromParts(f, l) {
-  return [
-    f,
-    l
-  ].map((x)=>String(x || "").trim()).filter(Boolean).join(" ");
-}
 export function firstNameOnly(v) {
   const s = String(v || "").trim();
   return s ? s.split(/\s+/)[0] || "" : "";

@@ -24,7 +24,6 @@ const lire = (p) => readFileSync(join(ROOT, p), 'utf8');
 // d'environnement, exactement ce que cette liste surveille.
 const ADMISES = {
   'notify-document-permission-request': 'REPLY_TO_EMAIL / ANARBIB_REPLY_TO_EMAIL, vides en production → aucun en-tête (passé en routage explicite depuis F7 lot 2)',
-  'notify-mid-loan-reading': 'reply-to de la bibliothèque (canal local), pas de la plateforme (passé en routage explicite depuis F7 lot 2)',
   'notify-network-weekly-report': 'resolveEnvReplyToEmail() : résolution d\'environnement qui retombe sur SENDER_EMAIL (routage explicite depuis F7 lot 1)',
   'notify-oai-opening': 'FEDERAL_EMAIL, même domaine que l\'expéditeur',
   'register': 'ANARBIB_REPLY_TO_EMAIL, vide en production → retombe sur SENDER_EMAIL (passé en routage explicite depuis F7 lot 3)',

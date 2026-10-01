@@ -6,7 +6,7 @@ import { getReservaV2Bundle, getReservaWorkflowBundle, getReservaCancelamentoBib
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, skippedEmailResult, userTargetFromProfile } from "../transport/email.ts";
 import { adminDisplayName, esc, firstNameOnly, formatDateBR, formatDateTimeInZone, fullName, isValidEmail, joinTitles, DEFAULT_NOTIFICATION_TIMEZONE } from "../shared/format.ts";
-import { normalizeReservaPickupReplyEvent, normalizeReservaStatusChangeEvent, normalizeReservaWorkflowEvent, pickupReplyLabel, workflowStageFromEvent, workflowStageLabel } from "../shared/events.ts";
+import { normalizeReservaStatusChangeEvent, normalizeReservaWorkflowEvent, pickupReplyLabel, workflowStageFromEvent, workflowStageLabel } from "../shared/events.ts";
 import { getPayloadValue, normalizeLineNos, normalizeWorkflowItems } from "../shared/payload.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { decodeSystemNote } from "../i18n/systemNotes.ts";
@@ -121,8 +121,7 @@ export async function handleReservaV2StatusChange(recordId, event) {
   // proprement), et NON depuis reserva.notes qui contient la note de création
   // de la réservation. Sans cette correction, le mail d'annulation affichait
   // « Motif : Réservation créée depuis le compte lecteur·rice » au lieu du
-  // motif réel. Concerne reserva_cancelada_biblioteca uniquement — l'événement
-  // reserva_v2_recusada (clé res.refused) n'a aucun émetteur (code mort).
+  // motif réel. Concerne reserva_cancelada_biblioteca uniquement.
   let motivo = "";
   if (se === "reserva_cancelada_biblioteca") {
     motivo = await getReservaCancelamentoBibliotecaMotivo(recordId);
@@ -139,24 +138,23 @@ export async function handleReservaV2StatusChange(recordId, event) {
   // PATCH fix-up : déterminer la clé i18n spécifique selon l'événement (utilisée
   // par les 2 mails lecteur ET biblio, chacun dans sa locale).
   let mailKey = "admin.resUpdate";
-  if (se === "reserva_v2_recusada") mailKey = "res.refused";
-  else if (se === "reserva_cancelada_biblioteca") mailKey = "res.cancelStaff";
+  if (se === "reserva_cancelada_biblioteca") mailKey = "res.cancelStaff";
   else if (se === "reserva_cancelada_leitor") mailKey = "res.cancelReader";
   else if (se === "reserva_expirada") mailKey = "res.expired";
   else if (se === "reserva_convertida_em_emprestimo") mailKey = "res.converted";
   // #153.D-2 (TR-3.1 / TR-3.2) : les 4 événements de statut de réservation
   // ouvrent des familles de clés structurées res.X.sub / .intro / .adminIntro
-  // (titre court, intro lecteur·rice, intro staff — différenciées). Les autres
-  // valeurs de mailKey restent des clés plates : admin.resUpdate (fallback
-  // événement non reconnu) et res.refused (clé conservée, événement sans
-  // émetteur — code mort). resKey() renvoie la clé i18n à utiliser : suffixée
-  // pour une famille res.*, telle quelle sinon.
+  // (titre court, intro lecteur·rice, intro staff — différenciées). L'autre
+  // valeur de mailKey reste une clé plate : admin.resUpdate (repli pour un
+  // événement non reconnu ; res.refused, sans émetteur, est retirée le 01/10,
+  // F1). resKey() renvoie la clé i18n à utiliser : suffixée pour une famille
+  // res.*, telle quelle sinon.
   const isResFamily = mailKey === "res.cancelStaff" || mailKey === "res.cancelReader" || mailKey === "res.expired" || mailKey === "res.converted";
   const resKey = (suffix)=>isResFamily ? `${mailKey}.${suffix}` : mailKey;
   const titleKey = resKey("sub");
   // Les intros des familles res.* sont des phrases completes deja ponctuees ;
-  // les cles plates (admin.resUpdate, res.refused) sont des etiquettes courtes
-  // auxquelles on conserve le point final ajoute par l'ancien rendu.
+  // la cle plate admin.resUpdate est une etiquette courte
+  // a laquelle on conserve le point final ajoute par l'ancien rendu.
   const introDot = isResFamily ? "" : ".";
   let sub = `${bt} | ${tMail(locale, titleKey)}`, tit = tMail(locale, titleKey), intro = `<p>${tMail(locale, resKey("intro"))}${introDot}</p>`;
   // #153.D-1 : motivo n'est rempli que pour reserva_cancelada_biblioteca ;
@@ -245,7 +243,6 @@ export async function handleReservaV2StatusChange(recordId, event) {
 //   retirada_a_combinar     | proposed_by=leitor             | wf.reader.youCounterProposed    | wf.staff.readerCounterProposed  | ⚠ ACTION
 //   retirada_agendada       | proposed_by=biblio (lecteur a accepté) | wf.reader.slotLocked        | wf.staff.readerAccepted         | info
 //   retirada_agendada       | proposed_by=leitor (staff a confirmé)  | wf.reader.slotLocked        | wf.staff.staffConfirmed         | info
-//   retirada_reagendada     | DÉPRÉCIÉ v3 (fossile historique)        | wf.pickupRescheduled (v2)   | wf.pickupRescheduled (v2)       | info
 //   pronta_para_retirada    | —                              | wf.ready (v2 conservée)         | wf.staff.ready                  | info
 //   retirada_no_show        | —                              | wf.noShow (v2 conservée)        | wf.staff.noShow                 | info
 //   liberada_para_circulacao| —                              | wf.closed (v2 conservée)        | wf.staff.closed                 | info
@@ -327,12 +324,6 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
     // - 'biblio' : le lecteur a accepté la proposition staff → readerAccepted
     // - 'leitor' : le staff a confirmé la contre-prop lecteur → staffConfirmed
     staffKey = proposedBy === 'leitor' ? 'wf.staff.staffConfirmed' : 'wf.staff.readerAccepted';
-  } else if (we === "retirada_reagendada") {
-    // DÉPRÉCIÉ v3 : conservé pour compatibilité résas historiques (fossile).
-    // Ne devrait plus être déclenché par les nouveaux flux de négociation.
-    readerKey = 'wf.pickupRescheduled';
-    staffKey = null;
-    staffMailEnabled = false;
   } else if (we === "pronta_para_retirada") {
     readerKey = 'wf.ready';
     staffKey = 'wf.staff.ready';
@@ -361,8 +352,8 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   // Solution : les 16 clés v3 (wf.reader.*, wf.staff.*) ont été dédoublées en
   // .subject (texte plat, court) et .body (HTML autorisé, version développée).
   // splitKey() retourne la paire à utiliser. Les clés v2 conservées
-  // (wf.ready, wf.noShow, wf.closed, wf.preparing, wf.toCoordinate,
-  // wf.pickupRescheduled) ne sont PAS dédoublées — elles servent comme
+  // (wf.ready, wf.noShow, wf.closed, wf.preparing, wf.toCoordinate)
+  // ne sont PAS dédoublées — elles servent comme
   // fallback texte court et sont passées telles quelles.
   // tParams porte {iter, max} pour interpolation dans youCounterProposed.
   const V3_DOUBLED = new Set([
@@ -468,8 +459,8 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   // bascules causales vers 'liberada_para_circulacao' (doublon évité).
   const ur = !readerMailEnabled ? skippedEmailResult("user_mail", "liberada_causale_no_reader_mail") : reservationWorkflowEnabled(ctx) ? await safeSendEmail(user, userSub, userHtml, userText, "user_mail", ctx) : skippedEmailResult("user_mail", "reservation_workflow_disabled");
   // ─── Mail biblio ─────────────────────────────────────────
-  // Si staffKey est null (em_preparacao, retirada_reagendada déprécié,
-  // ou pickup_proposed_by absent) : skip le mail biblio.
+  // Si staffKey est null (em_preparacao, ou pickup_proposed_by absent) :
+  // skip le mail biblio.
   // Sinon : construit dans la locale de la biblio (libLocale = ctx.default_locale),
   // avec encadré actionBox kind='action' si une action staff est requise
   // (= readerCounterProposed seulement, cf. Q-A validée).
@@ -553,86 +544,6 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   }
   return {
     user_result: ur,
-    admin_result: ar
-  };
-}
-export async function handleReservaPickupReplyEvent(recordId, event, payload) {
-  const re = normalizeReservaPickupReplyEvent(event) || event;
-  const pln = normalizeLineNos(getPayloadValue(payload, "line_nos"));
-  const { reserva, profile, items } = await getReservaWorkflowBundle(recordId, pln.length ? pln : undefined);
-  const ctx = await resolveLibraryNotificationContext(String(reserva.library_id || "").trim() || null);
-  const bt = subjectTag(ctx);
-  const user = userTargetFromProfile(profile);
-  const aun = adminDisplayName(fullName(profile), user?.email);
-  // PATCH paquet 6 commit comportement : locale biblio + suppression hack BLMF.
-  // Note : ce handler est admin-only (legacy v2 pickup_reply). Avec la
-  // sémantique v3 négociation symétrique, il devient partiellement redondant
-  // avec handleReservaV2WorkflowEvent (qui gère déjà le cas proposed_by='leitor').
-  // À déprécier complètement au paquet 7 cleanup.
-  const libLocale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
-  const tits = joinTitles(items.map((i)=>String(i.titulo || `[linha ${i.line_no || "?"}]`)));
-  const psf = String(items.find((i)=>i.pickup_scheduled_for)?.pickup_scheduled_for || "").trim();
-  const when = psf ? formatDateTimeInZone(psf, DEFAULT_NOTIFICATION_TIMEZONE) : "";
-  const rs = String(items.find((i)=>i.pickup_reply_status)?.pickup_reply_status || "").trim();
-  const rl = pickupReplyLabel(rs);
-  const rn = String(items.find((i)=>i.pickup_reply_note)?.pickup_reply_note || "").trim();
-  let tit = tMail(libLocale, "pr.readerReply"), sub = `[${bt}] ${tMail(libLocale, "pr.readerReply")} — ${aun}`, intro = `<p>${tMail(libLocale, "pr.readerReply")}.</p>`;
-  if (re === "retirada_confirmada_leitor") {
-    tit = tMail(libLocale, "pr.confirmed");
-    sub = `[${bt}] ${tMail(libLocale, "pr.confirmed")} — ${aun}`;
-    intro = `<p>${tMail(libLocale, "pr.confirmed")}.</p>`;
-  } else if (re === "retirada_recusada_leitor") {
-    tit = tMail(libLocale, "pr.declined");
-    sub = `[${bt}] ${tMail(libLocale, "pr.declined")} — ${aun}`;
-    intro = `<p>${tMail(libLocale, "pr.declined")}.</p>`;
-  }
-  const { html: ha, text: ta } = renderEmail({
-    locale: libLocale,
-    preheader: tit,
-    title: tit,
-    introHtml: intro,
-    details: [
-      {
-        label: label(libLocale, "reader"),
-        value: aun
-      },
-      ...tits ? [
-        {
-          label: label(libLocale, "items"),
-          value: tits
-        }
-      ] : [],
-      ...when ? [
-        {
-          label: label(libLocale, "pickup"),
-          value: `${when} (local)`
-        }
-      ] : [],
-      ...rl ? [
-        {
-          label: label(libLocale, "reply"),
-          value: rl
-        }
-      ] : [],
-      ...rn ? [
-        {
-          label: label(libLocale, "note"),
-          value: rn
-        }
-      ] : []
-    ],
-    footerHtml: footerPadrao(ctx, libLocale),
-    context: ctx,
-    libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
-  });
-  sub = applyBrandingText(sub, ctx);
-  const ar = reservationWorkflowEnabled(ctx) && reservationAdminCopyEnabled(ctx) ? await safeSendEmail(adminTarget(ctx), sub, ha, ta, "admin_copy", ctx) : skippedEmailResult("admin_copy", reservationWorkflowEnabled(ctx) ? "reservation_admin_copy_disabled" : "reservation_workflow_disabled");
-  return {
-    user_result: {
-      ok: true,
-      skipped: true,
-      reason: "admin_only"
-    },
     admin_result: ar
   };
 }

@@ -68,6 +68,8 @@ BEGIN
     ('anarbib-catalog-audit-snapshot-purge',        '17 4 * * *',   true),
     ('anarbib-circle-resolve-due-daily',            '30 3 * * *',   true),
     ('anarbib-collective-removal-execute-daily',    '15 3 * * *',   true),
+    -- F1 (01/10/2026) : les consultations expirent (spec flux-consultations v2.2 §5.3), ref. 20261001194818
+    ('anarbib-consultas-expire-daily',              '10 3 * * *',   true),
     -- C6 §7.3 (27/09/2026) : la file de vérification s'alimente seule, ref. 20260927121437
     ('anarbib-conv-file-alimenter',                 '10 5 * * 1',   true),
     ('anarbib-cooptation-reminders-daily',          '25 9 * * *',   true),

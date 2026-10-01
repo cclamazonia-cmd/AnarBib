@@ -13,12 +13,6 @@ export function reservationWorkflowEnabled(ctx) {
 export function loanLifecycleEnabled(ctx) {
   return asBool(ctx?.loan_lifecycle_enabled, true);
 }
-export function loanReminderEnabled(ctx) {
-  return asBool(ctx?.loan_reminders_enabled, true);
-}
-export function loanOverdueEnabled(ctx) {
-  return asBool(ctx?.loan_overdue_enabled, true);
-}
 export function profileRestrictionEnabled(ctx) {
   return asBool(ctx?.profile_restriction_enabled, true);
 }
@@ -27,11 +21,6 @@ export function reservationAdminCopyEnabled(ctx) {
 }
 export function loanAdminCopyEnabled(ctx) {
   return asBool(ctx?.admin_copy_loans_enabled, true);
-}
-export function reminderFamilyEnabled(ctx, event) {
-  const n = String(event || "").trim();
-  if (n.startsWith("aviso_v2_atraso_") || n.startsWith("aviso_atraso_")) return loanOverdueEnabled(ctx);
-  return loanReminderEnabled(ctx);
 }
 export function techAlertsEnabled(ctx) {
   return asBool(ctx?.tech_alerts_enabled, true);

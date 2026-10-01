@@ -4,7 +4,7 @@
 //
 // Vérifie 3 invariants critiques :
 //   1. Toutes les clés appelées via tMail() ou label() dans les handlers
-//      domain (emprestimos.ts, reservas.ts, profiles.ts, legacy.ts)
+//      domain (emprestimos.ts, reservas.ts, membership*.ts, authority.ts, assembleia.ts)
 //      existent dans le dictionnaire S de mail-strings.ts.
 //   2. Toutes les clés du dictionnaire ont une traduction non vide
 //      pour les 6 locales (pt-BR, fr, es, en, it, de).
@@ -26,7 +26,6 @@ import { _allKeys, _supportedLocales, _isComplete } from "./mail-strings.ts";
 const DOMAIN_FILES = [
   "../domain/emprestimos.ts",
   "../domain/reservas.ts",
-  "../domain/legacy.ts",
   "../domain/membership.ts",
   "../domain/membership-restriction.ts",
   "../domain/authority.ts",
@@ -194,8 +193,10 @@ Deno.test("Interpolation des paramètres {date} et {days}", () => {
   if (!a.includes("05/05/2026")) throw new Error(`tMail n'a pas interpolé {date}: ${a}`);
   if (a.includes("{date}")) throw new Error(`tMail a laissé {date} non remplacé: ${a}`);
 
-  // ov.30d contient {days}
-  const b = tMail("fr", "ov.30d", { days: "45" });
+  // wf.staff.negotiationTimedOut.body contient {days} — la SEULE clé qui le porte
+  // depuis le retrait des ov.* (F1, 01/10/2026), et un gabarit sans chemin : le
+  // ménage qui la retirera devra remplacer ce cas d'interpolation.
+  const b = tMail("fr", "wf.staff.negotiationTimedOut.body", { days: "45" });
   if (!b.includes("45")) throw new Error(`tMail n'a pas interpolé {days}: ${b}`);
   if (b.includes("{days}")) throw new Error(`tMail a laissé {days} non remplacé: ${b}`);
 });

@@ -47,7 +47,6 @@ const V2_PRESERVED_KEYS = [
   "wf.preparingShort",
   "wf.toCoordinate",
   "wf.toCoordinateShort",
-  "wf.pickupRescheduled",
   "wf.checkAccount",
 ];
 

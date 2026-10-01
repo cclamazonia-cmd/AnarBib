@@ -50,8 +50,8 @@ import { TASK_STATES, taskStatusLabel } from '@/lib/taskStatus';
 // NOTIFICATION_FLAGS keys — labels resolved via t() inside the component
 const NOTIFICATION_FLAG_KEYS = [
   'reservation_created', 'reservation_status', 'reservation_workflow', 'local_consultation',
-  'loan_lifecycle', 'loan_reminders', 'loan_overdue', 'mid_loan_message',
-  'profile_restriction', 'reading_recommendations', 'cotisation_payment_mail',
+  'loan_lifecycle', 'loan_reminders', 'loan_overdue',
+  'profile_restriction', 'cotisation_payment_mail',
   'admin_copy_reservations', 'admin_copy_loans', 'tech_alerts', 'task_alerts',
 ];
 

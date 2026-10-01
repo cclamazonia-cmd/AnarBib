@@ -38,8 +38,8 @@ project_id = "anarbib"
 #   verify_jwt: false  (déclarées ci-dessous — 36 au 01/09/2026)
 #     - notify-event, notify-internal-task, notify-library-request,
 #       notify-weekly-report, notify-network-weekly-report,
-#       notify-mid-loan-reading, notify-document-permission-request,
-#       notify-interlibrary-loan, notify-oai-opening  (9 mailers via webhook secret)
+#       notify-document-permission-request,
+#       notify-interlibrary-loan, notify-oai-opening  (8 mailers via webhook secret)
 #     - read-pdf, bn_isbn_lookup, process-partner-catalog-import,
 #       read-digital-asset, fetch-url-metadata, oai-pmh-provider
 #       (6 utilitaires publics ou avec auth interne custom ; oai-pmh-provider
@@ -76,13 +76,11 @@ verify_jwt = false
 [functions.notify-rede-digest]
 verify_jwt = false
 
-[functions.notify-mid-loan-reading]
-verify_jwt = false
-
 # Les trois rappels d'echeance et l'invitation a ecrire une note de lecture.
-# Remplace notify-mid-loan-reading (dont le cron est desactive par la migration
-# 20260831111700). Appelee par le cron anarbib-notify-loan-cycle-daily via
-# net.http_post, donc sans JWT ; l'authentification passe par x-webhook-secret.
+# A remplace notify-mid-loan-reading (cron desactive par la migration
+# 20260831111700, fonction retiree le 01/10/2026, F1) ; garde son secret
+# WEBHOOK_SECRET_NOTIFY_MID_LOAN. Appelee par le cron anarbib-notify-loan-cycle-daily
+# via net.http_post, donc sans JWT ; l'authentification passe par x-webhook-secret.
 [functions.notify-loan-cycle]
 verify_jwt = false
 

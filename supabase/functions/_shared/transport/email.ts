@@ -1,5 +1,4 @@
 import { resolveMailRouting, transportDisabledReason } from "../context/library-mail-routing.ts";
-import { renderEmail, footerPadrao } from "../mail/layout.ts";
 import { inlineLogosInHtml } from "../mail/inline-images.ts";
 import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
@@ -269,16 +268,4 @@ export function adminTarget(ctx) {
     email: e,
     name: r.adminName || undefined
   };
-}
-
-export async function sendAdminNotification(opts) {
-  const { html, text } = renderEmail({
-    preheader: opts.title,
-    title: opts.title,
-    introHtml: opts.introHtml,
-    details: opts.details,
-    footerHtml: footerPadrao(opts.context),
-    context: opts.context
-  });
-  return await safeSendEmail(adminTarget(opts.context), opts.subject, html, text, "admin_copy", opts.context);
 }

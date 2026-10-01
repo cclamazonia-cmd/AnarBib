@@ -611,3 +611,7 @@ tests/sql/import_rapprochement_issn_tests.sql
 tests/sql/reattribution_fonds_vide_tests.sql
 # 30/09 (F16) : inviter une personne à une tâche crée une invitation et une ligne d'envoi (le chemin ne créait rien).
 tests/sql/taches_invitation_tests.sql
+# F1 (01/10/2026) : les branches mortes du courriel ne sont plus émises (déclencheur
+# des réservations, cron du mi-parcours, CHECK des PEB) ; team.promoted_to_librarian
+# part ; les consultations expirent. La suite EMPRUNTE les chemins, émissions capturées.
+tests/sql/branches_mortes_courriel_tests.sql

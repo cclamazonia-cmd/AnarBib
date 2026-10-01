@@ -1,10 +1,4 @@
 import { supabaseAdmin } from "../core/env.ts";
-export async function getEmprestimoDetalhes(id) {
-  const { data, error } = await supabaseAdmin.from("v_loans_detalhes").select("*").eq("id", id).maybeSingle();
-  if (error) throw error;
-  if (!data) throw new Error("Empréstimo não encontrado.");
-  return data;
-}
 export async function getEmprestimoV2Bundle(id) {
   const { data: emp, error: e1 } = await supabaseAdmin.from("emprestimos_v2").select("id,user_id,library_id,created_at,updated_at,due_at,status_global,notes,extended_once,extended_at,renewals_used").eq("id", id).maybeSingle();
   if (e1) throw e1;
@@ -21,20 +15,4 @@ export async function getEmprestimoV2Bundle(id) {
     profile: profile,
     items: items || []
   };
-}
-export async function getEmprestimoV2Notificavel(id) {
-  const { data, error } = await supabaseAdmin.from("v_emprestimos_v2_notificaveis").select("*").eq("id", id).maybeSingle();
-  if (error) throw error;
-  if (!data) throw new Error("Empréstimo notificável não encontrado.");
-  return data;
-}
-export async function getEmprestimoDevolucaoBundle(id, lineNos) {
-  let q = supabaseAdmin.from("v_emprestimos_notificacao_detalhes").select("*").eq("emprestimo_id", id).order("line_no", {
-    ascending: true
-  });
-  if (lineNos?.length) q = q.in("line_no", lineNos);
-  const { data, error } = await q;
-  if (error) throw error;
-  if (!data || data.length === 0) throw new Error("Empréstimo não encontrado.");
-  return data;
 }

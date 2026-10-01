@@ -1,10 +1,4 @@
 import { supabaseAdmin } from "../core/env.ts";
-export async function getReservaDetalhes(id) {
-  const { data, error } = await supabaseAdmin.from("v_reservas_detalhes").select("*").eq("reserva_id", id).maybeSingle();
-  if (error) throw error;
-  if (!data) throw new Error("Reserva não encontrada.");
-  return data;
-}
 export async function getReservaV2Bundle(id) {
   const { data: reserva, error: e1 } = await supabaseAdmin.from("reservas_v2").select("id,user_id,library_id,created_at,updated_at,notes,status_global").eq("id", id).maybeSingle();
   if (e1) throw e1;

@@ -76,8 +76,6 @@ export interface LibraryNotificationContext {
   loan_reminders_enabled: boolean;
   loan_overdue_enabled: boolean;
   profile_restriction_enabled: boolean;
-  mid_loan_message_enabled: boolean;
-  reading_recommendations_enabled: boolean;
   admin_copy_reservations_enabled: boolean;
   admin_copy_loans_enabled: boolean;
   tech_alerts_enabled: boolean;

@@ -1410,18 +1410,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Nieuwe reservering geregistreerd",
     el: "Καταχωρίστηκε νέα κράτηση"
   },
-  "res.refused": {
-    "pt-BR": "Reserva recusada pela biblioteca",
-    fr: "Réservation refusée par la bibliothèque",
-    es: "Reserva rechazada por la biblioteca",
-    en: "Reservation declined by the library",
-    it: "Prenotazione rifiutata dalla biblioteca",
-    de: "Vormerkung von der Bibliothek abgelehnt",
-    ca: "Reserva rebutjada per la biblioteca",
-    eo: "Rezervo rifuzita de la biblioteko",
-    nl: "Reservering geweigerd door de bibliotheek",
-    el: "Η κράτηση απορρίφθηκε από τη βιβλιοθήκη"
-  },
   "res.cancelStaff.sub": {
     "pt-BR": "Reserva cancelada pela biblioteca",
     fr: "Réservation annulée par la bibliothèque",
@@ -1593,18 +1581,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Elpreno planita",
     nl: "Afhaling gepland",
     el: "Παραλαβή προγραμματισμένη"
-  },
-  "wf.pickupRescheduled": {
-    "pt-BR": "Retirada reagendada",
-    fr: "Retrait reprogrammé",
-    es: "Retiro reprogramado",
-    en: "Pickup rescheduled",
-    it: "Ritiro riprogrammato",
-    de: "Abholung neu geplant",
-    ca: "Recollida reprogramada",
-    eo: "Elpreno replanita",
-    nl: "Afhaling opnieuw gepland",
-    el: "Παραλαβή επαναπρογραμματίστηκε"
   },
   "wf.ready": {
     "pt-BR": "Sua reserva está pronta para retirada",
@@ -2323,42 +2299,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Blijf de collectie verkennen voor je volgende leesvoer.",
     el: "Συνέχισε να εξερευνείς τη συλλογή για τα επόμενα διαβάσματά σου."
   },
-  "loan.returnScheduled": {
-    "pt-BR": "Devolução agendada",
-    fr: "Retour programmé",
-    es: "Devolución programada",
-    en: "Return scheduled",
-    it: "Restituzione programmata",
-    de: "Rückgabe geplant",
-    ca: "Retorn programat",
-    eo: "Redono planita",
-    nl: "Inlevering gepland",
-    el: "Επιστροφή προγραμματισμένη"
-  },
-  "loan.returnCancelled": {
-    "pt-BR": "Devolução cancelada",
-    fr: "Retour annulé",
-    es: "Devolución cancelada",
-    en: "Return cancelled",
-    it: "Restituzione annullata",
-    de: "Rückgabe storniert",
-    ca: "Retorn cancel·lat",
-    eo: "Redono nuligita",
-    nl: "Inlevering geannuleerd",
-    el: "Επιστροφή ακυρώθηκε"
-  },
-  "loan.returnMissed": {
-    "pt-BR": "Devolução não realizada",
-    fr: "Retour non effectué",
-    es: "Devolución no realizada",
-    en: "Return missed",
-    it: "Restituzione non effettuata",
-    de: "Rückgabe nicht erfolgt",
-    ca: "Retorn no efectuat",
-    eo: "Redono ne efektivigita",
-    nl: "Inlevering gemist",
-    el: "Επιστροφή δεν πραγματοποιήθηκε"
-  },
   "loan.partialReturn.sub": {
     "pt-BR": "Devolução parcial registrada",
     fr: "Retour partiel enregistré",
@@ -2442,190 +2382,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Daŭrigu esplori la fonduson por viaj sekvaj legaĵoj.",
     nl: "Blijf de collectie verkennen voor je volgende leesvoer.",
     el: "Συνέχισε να εξερευνείς τη συλλογή για τα επόμενα διαβάσματά σου."
-  },
-
-  // ===== Reminders (rem.*) ==================================================
-  "rem.title": {
-    "pt-BR": "Lembrete de devolução",
-    fr: "Rappel de retour",
-    es: "Recordatorio de devolución",
-    en: "Return reminder",
-    it: "Promemoria di restituzione",
-    de: "Rückgabeerinnerung",
-    ca: "Recordatori de retorn",
-    eo: "Redonmemorigo",
-    nl: "Inleverherinnering",
-    el: "Υπενθύμιση επιστροφής"
-  },
-  "rem.5d": {
-    "pt-BR": "Devolução em 5 dias",
-    fr: "Retour dans 5 jours",
-    es: "Devolución en 5 días",
-    en: "Due in 5 days",
-    it: "Restituzione tra 5 giorni",
-    de: "Rückgabe in 5 Tagen",
-    ca: "Retorn d'aquí a 5 dies",
-    eo: "Redono post 5 tagoj",
-    nl: "Inleveren over 5 dagen",
-    el: "Επιστροφή σε 5 ημέρες"
-  },
-  "rem.5d.body": {
-    "pt-BR": "Seu empréstimo vence em 5 dias",
-    fr: "Ton emprunt arrive à échéance dans 5 jours",
-    es: "Tu préstamo vence en 5 días",
-    en: "Your loan is due in 5 days",
-    it: "Il tuo prestito scade tra 5 giorni",
-    de: "Deine Ausleihe läuft in 5 Tagen ab",
-    ca: "El teu préstec venç d'aquí a 5 dies",
-    eo: "Via prunto eksvalidiĝas post 5 tagoj",
-    nl: "Je uitlening moet over 5 dagen worden ingeleverd",
-    el: "Ο δανεισμός σου λήγει σε 5 ημέρες"
-  },
-  "rem.3d": {
-    "pt-BR": "Devolução em 3 dias",
-    fr: "Retour dans 3 jours",
-    es: "Devolución en 3 días",
-    en: "Due in 3 days",
-    it: "Restituzione tra 3 giorni",
-    de: "Rückgabe in 3 Tagen",
-    ca: "Retorn d'aquí a 3 dies",
-    eo: "Redono post 3 tagoj",
-    nl: "Inleveren over 3 dagen",
-    el: "Επιστροφή σε 3 ημέρες"
-  },
-  "rem.3d.body": {
-    "pt-BR": "Faltam 3 dias para a devolução do seu empréstimo.",
-    fr: "Plus que 3 jours avant la date de retour de ton emprunt.",
-    es: "Quedan 3 días para la devolución de tu préstamo.",
-    en: "Only 3 days left until the return date of your loan.",
-    it: "Mancano 3 giorni alla data di restituzione del tuo prestito.",
-    de: "Nur noch 3 Tage bis zum Rückgabedatum deiner Ausleihe.",
-    ca: "Falten 3 dies per al retorn del teu préstec.",
-    eo: "Restas 3 tagoj antaŭ la redono de via prunto.",
-    nl: "Nog maar 3 dagen tot de inleverdatum van je uitlening.",
-    el: "Απομένουν μόνο 3 ημέρες μέχρι την ημερομηνία επιστροφής του δανεισμού σου."
-  },
-  "rem.today": {
-    "pt-BR": "Devolução hoje",
-    fr: "Retour aujourd'hui",
-    es: "Devolución hoy",
-    en: "Due today",
-    it: "Restituzione oggi",
-    de: "Rückgabe heute",
-    ca: "Retorn avui",
-    eo: "Redono hodiaŭ",
-    nl: "Vandaag inleveren",
-    el: "Επιστροφή σήμερα"
-  },
-  "rem.today.body": {
-    "pt-BR": "Sua devolução é hoje",
-    fr: "Ton retour est prévu aujourd'hui",
-    es: "Tu devolución es hoy",
-    en: "Your return is due today",
-    it: "La tua restituzione è oggi",
-    de: "Deine Rückgabe ist heute fällig",
-    ca: "El teu retorn és avui",
-    eo: "Via redono estas hodiaŭ",
-    nl: "Je moet vandaag inleveren",
-    el: "Η επιστροφή σου είναι για σήμερα"
-  },
-
-  // ===== Overdue (ov.*) =====================================================
-  "ov.title": {
-    "pt-BR": "Aviso de atraso",
-    fr: "Avis de retard",
-    es: "Aviso de retraso",
-    en: "Overdue notice",
-    it: "Avviso di ritardo",
-    de: "Überfälligkeitshinweis",
-    ca: "Avís de retard",
-    eo: "Malfruavizo",
-    nl: "Aanmaning",
-    el: "Ειδοποίηση καθυστέρησης"
-  },
-  "ov.1d": {
-    "pt-BR": "Empréstimo em atraso",
-    fr: "Emprunt en retard",
-    es: "Préstamo en retraso",
-    en: "Loan overdue",
-    it: "Prestito in ritardo",
-    de: "Ausleihe überfällig",
-    ca: "Préstec endarrerit",
-    eo: "Prunto malfruita",
-    nl: "Uitlening te laat",
-    el: "Δανεισμός σε καθυστέρηση"
-  },
-  "ov.1d.body": {
-    "pt-BR": "Seu empréstimo está em atraso desde {date}. Por favor, providencie a devolução.",
-    fr: "Ton emprunt est en retard depuis le {date}. Merci de prévoir le retour ou la prolongation.",
-    es: "Tu préstamo está en retraso desde el {date}. Por favor, organiza la devolución o la renovación.",
-    en: "Your loan has been overdue since {date}. Please arrange the return or a renewal.",
-    it: "Il tuo prestito è in ritardo dal {date}. Per favore, organizza la restituzione o il rinnovo.",
-    de: "Deine Ausleihe ist seit dem {date} überfällig. Bitte sorge für die Rückgabe oder eine Verlängerung.",
-    ca: "El teu préstec està endarrerit des del {date}. Si us plau, organitza el retorn o la renovació.",
-    eo: "Via prunto estas malfruita ekde la {date}. Bonvolu organizi la redonon aŭ la renovigon.",
-    nl: "Je uitlening is te laat sinds {date}. Regel alsjeblieft de inlevering of een verlenging.",
-    el: "Ο δανεισμός σου είναι σε καθυστέρηση από {date}. Φρόντισε για την επιστροφή ή την ανανέωση."
-  },
-  "ov.7d": {
-    "pt-BR": "Empréstimo com {days} dias de atraso",
-    fr: "Emprunt en retard de {days} jours",
-    es: "Préstamo con {days} días de retraso",
-    en: "Loan {days} days overdue",
-    it: "Prestito in ritardo di {days} giorni",
-    de: "Ausleihe seit {days} Tagen überfällig",
-    ca: "Préstec amb {days} dies de retard",
-    eo: "Prunto kun {days} tagoj da malfruo",
-    nl: "Uitlening {days} dagen te laat",
-    el: "Δανεισμός σε καθυστέρηση {days} ημερών"
-  },
-  "ov.7d.body": {
-    "pt-BR": "Seu empréstimo está com {days} dias de atraso. Entre em contato com a biblioteca.",
-    fr: "Ton emprunt est en retard de {days} jours. Contacte la bibliothèque pour trouver une solution.",
-    es: "Tu préstamo está con {days} días de retraso. Contacta la biblioteca para encontrar una solución.",
-    en: "Your loan is {days} days overdue. Contact the library to find a solution.",
-    it: "Il tuo prestito è in ritardo di {days} giorni. Contatta la biblioteca per trovare una soluzione.",
-    de: "Deine Ausleihe ist seit {days} Tagen überfällig. Kontaktiere die Bibliothek, um eine Lösung zu finden.",
-    ca: "El teu préstec té {days} dies de retard. Contacta la biblioteca per trobar una solució.",
-    eo: "Via prunto havas {days} tagojn da malfruo. Kontaktu la bibliotekon por trovi solvon.",
-    nl: "Je uitlening is {days} dagen te laat. Neem contact op met de bibliotheek om een oplossing te vinden.",
-    el: "Ο δανεισμός σου είναι σε καθυστέρηση {days} ημερών. Επικοινώνησε με τη βιβλιοθήκη για να βρεθεί λύση."
-  },
-  "ov.30d": {
-    "pt-BR": "Empréstimo com {days} dias de atraso — situação grave",
-    fr: "Emprunt en retard de {days} jours — situation à régulariser",
-    es: "Préstamo con {days} días de retraso — situación a regularizar",
-    en: "Loan {days} days overdue — situation to resolve",
-    it: "Prestito in ritardo di {days} giorni — situazione da regolarizzare",
-    de: "Ausleihe seit {days} Tagen überfällig — Situation zu klären",
-    ca: "Préstec amb {days} dies de retard — situació a regularitzar",
-    eo: "Prunto kun {days} tagoj da malfruo — situacio reguligenda",
-    nl: "Uitlening {days} dagen te laat — situatie recht te zetten",
-    el: "Δανεισμός σε καθυστέρηση {days} ημερών — κατάσταση προς τακτοποίηση"
-  },
-  "ov.30d.body": {
-    "pt-BR": "Seu empréstimo está com {days} dias de atraso. Esta situação compromete o funcionamento da biblioteca.",
-    fr: "Ton emprunt est en retard de {days} jours. Cette situation pèse sur le fonctionnement collectif de la bibliothèque. Prends contact avec la biblio pour qu'on trouve ensemble comment régulariser.",
-    es: "Tu préstamo está con {days} días de retraso. Esta situación afecta el funcionamiento colectivo de la biblioteca. Toma contacto con la biblio para que encontremos juntes cómo regularizar.",
-    en: "Your loan is {days} days overdue. This situation affects the collective functioning of the library. Get in touch so we can find a way forward together.",
-    it: "Il tuo prestito è in ritardo di {days} giorni. Questa situazione pesa sul funzionamento collettivo della biblioteca. Mettiti in contatto con la biblio per trovare insieme una soluzione.",
-    de: "Deine Ausleihe ist seit {days} Tagen überfällig. Diese Situation belastet den kollektiven Betrieb der Bibliothek. Nimm Kontakt auf, damit wir gemeinsam eine Lösung finden.",
-    ca: "El teu préstec té {days} dies de retard. Aquesta situació afecta el funcionament col·lectiu de la biblioteca. Posa't en contacte amb la biblioteca perquè trobem juntes com regularitzar-ho.",
-    eo: "Via prunto havas {days} tagojn da malfruo. Ĉi tiu situacio pezas sur la kolektiva funkciado de la biblioteko. Kontaktu la bibliotekon por ke ni kune trovu kiel reguligi ĝin.",
-    nl: "Je uitlening is {days} dagen te laat. Deze situatie weegt op de collectieve werking van de bibliotheek. Neem contact op zodat we samen een oplossing kunnen vinden.",
-    el: "Ο δανεισμός σου είναι σε καθυστέρηση {days} ημερών. Αυτή η κατάσταση επιβαρύνει τη συλλογική λειτουργία της βιβλιοθήκης. Έλα σε επαφή ώστε να βρούμε μαζί τον τρόπο να τακτοποιηθεί."
-  },
-  "ov.30d.admin": {
-    "pt-BR": "Empréstimo com mais de 30 dias de atraso",
-    fr: "Emprunt avec plus de 30 jours de retard",
-    es: "Préstamo con más de 30 días de retraso",
-    en: "Loan over 30 days overdue",
-    it: "Prestito con oltre 30 giorni di ritardo",
-    de: "Ausleihe seit über 30 Tagen überfällig",
-    ca: "Préstec amb més de 30 dies de retard",
-    eo: "Prunto kun pli ol 30 tagoj da malfruo",
-    nl: "Uitlening meer dan 30 dagen te laat",
-    el: "Δανεισμός με καθυστέρηση άνω των 30 ημερών"
   },
 
   // ===== Profile notices (prof.*) ===========================================
@@ -3456,44 +3212,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Αυτό το μήνυμα είναι μια τυπική ειδοποίηση σχετικά με τον περιορισμό του λογαριασμού σου."
   },
 
-  // ===== Pickup reply (pr.*) — admin-only mais traduit pour cohérence ======
-  "pr.readerReply": {
-    "pt-BR": "Resposta d(o/a/e) leitor(a/e) sobre a retirada",
-    fr: "Réponse du·de la lecteur·rice sur le retrait",
-    es: "Respuesta de le lector(a/e) sobre el retiro",
-    en: "Reader reply about pickup",
-    it: "Risposta del/la lettore/trice sul ritiro",
-    de: "Antwort der*des Leser*in zur Abholung",
-    ca: "Resposta de le lector-a-e sobre la recollida",
-    eo: "Respondo de la legant-in-o pri la elpreno",
-    nl: "Reactie van de lezer over de afhaling",
-    el: "Απάντηση αναγνώστη/στριας για την παραλαβή"
-  },
-  "pr.confirmed": {
-    "pt-BR": "Leitor(a/e) confirmou o horário de retirada",
-    fr: "Le·la lecteur·rice a confirmé l'horaire de retrait",
-    es: "Le lector(a/e) confirmó el horario de retiro",
-    en: "Reader confirmed the pickup time",
-    it: "Il/la lettore/trice ha confermato l'orario di ritiro",
-    de: "Leser*in hat den Abholzeitpunkt bestätigt",
-    ca: "Le lector-a-e ha confirmat l'horari de recollida",
-    eo: "La legant-in-o konfirmis la elpren-horon",
-    nl: "De lezer heeft het afhaalmoment bevestigd",
-    el: "Ο/Η αναγνώστης/στρια επιβεβαίωσε τον χρόνο παραλαβής"
-  },
-  "pr.declined": {
-    "pt-BR": "Leitor(a/e) não pode no horário proposto",
-    fr: "Le·la lecteur·rice ne peut pas à l'horaire proposé",
-    es: "Le lector(a/e) no puede en el horario propuesto",
-    en: "Reader can't make the proposed time",
-    it: "Il/la lettore/trice non può all'orario proposto",
-    de: "Leser*in kann zum vorgeschlagenen Zeitpunkt nicht",
-    ca: "Le lector-a-e no pot a l'horari proposat",
-    eo: "La legant-in-o ne povas je la proponita horo",
-    nl: "De lezer kan niet op het voorgestelde moment",
-    el: "Ο/Η αναγνώστης/στρια δεν μπορεί τον προτεινόμενο χρόνο"
-  },
-
   // ===== Admin subjects (admin.*) ===========================================
   "admin.newLoan": {
     "pt-BR": "Novo empréstimo registrado",
@@ -3554,18 +3272,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Prunto finita (post parta redono)",
     nl: "Uitlening afgesloten (na gedeeltelijke inlevering)",
     el: "Ο δανεισμός ολοκληρώθηκε (μετά από μερική επιστροφή)"
-  },
-  "admin.returnUpdate": {
-    "pt-BR": "Atualização sobre devolução",
-    fr: "Mise à jour sur un retour",
-    es: "Actualización sobre devolución",
-    en: "Return update",
-    it: "Aggiornamento su una restituzione",
-    de: "Aktualisierung zu einer Rückgabe",
-    ca: "Actualització sobre un retorn",
-    eo: "Ĝisdatigo pri redono",
-    nl: "Update over een inlevering",
-    el: "Ενημέρωση για μια επιστροφή"
   },
   "admin.loanUpdate": {
     "pt-BR": "Atualização d(o/a/e) empréstimo",
@@ -5820,6 +5526,18 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Reageer op het voorstel",
     el: "Απάντησε στην πρόταση"
   },
+  "cwf.actionBox.seeConsultas": {
+    "pt-BR": "Ver minhas consultas",
+    fr: "Voir mes consultations",
+    es: "Ver mis consultas",
+    en: "See my consultations",
+    it: "Vedi le mie consultazioni",
+    de: "Meine Einsichtnahmen ansehen",
+    ca: "Veure les meves consultes",
+    eo: "Vidi miajn konsultojn",
+    nl: "Mijn raadplegingen bekijken",
+    el: "Δες τις μελέτες μου"
+  },
   "cwf.actionBox.preparePainel": {
     "pt-BR": "Abrir o painel",
     fr: "Ouvrir le painel",
@@ -7967,6 +7685,18 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Nuligo farita de la biblioteko.",
     nl: "Annulering uitgevoerd door de bibliotheek.",
     el: "Ακύρωση που πραγματοποιήθηκε από τη βιβλιοθήκη."
+  },
+  "systemNote.consultaExpiredAuto": {
+    "pt-BR": "Pedido expirado automaticamente: prazo de validade ultrapassado.",
+    fr: "Demande expirée automatiquement : délai de validité dépassé.",
+    es: "Pedido expirado automáticamente: plazo de validez superado.",
+    en: "Request expired automatically: validity deadline passed.",
+    it: "Richiesta scaduta automaticamente: termine di validità superato.",
+    de: "Anfrage automatisch abgelaufen: Gültigkeitsfrist überschritten.",
+    ca: "Sol·licitud expirada automàticament: termini de validesa superat.",
+    eo: "Peto aŭtomate eksvalidiĝis: la limdato de valideco pasis.",
+    nl: "Aanvraag automatisch verlopen: geldigheidstermijn overschreden.",
+    el: "Το αίτημα έληξε αυτόματα: η προθεσμία ισχύος παρήλθε."
   },
   "systemNote.noShowAuto": {
     "pt-BR": "Retirada não realizada no prazo (no-show automático).",
