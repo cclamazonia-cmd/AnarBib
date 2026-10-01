@@ -50,7 +50,14 @@ export function buildServerFilters({ search, authorFilter, authorIdFilter, alpha
   // LIEN d'autorité (author_id, regroupe les graphies) ; sinon texte brut.
   if (alphaFilter && String(alphaFilter).trim()) f['autor'] = `ilike.${String(alphaFilter).trim()}%`;
   else if (authorIdFilter && String(authorIdFilter).trim()) f['author_id'] = `eq.${String(authorIdFilter).trim()}`;
-  else if (authorFilter.trim()) f['autor'] = `ilike.%${authorFilter.trim()}%`;
+  else if (authorFilter.trim()) {
+    // Mot par mot (comme api.catalog_works_v1) : les notices écrivent « GOLDMAN,
+    // Emma », la saisie « Emma Goldman » doit la trouver. Un seul mot → clé
+    // `autor` directe ; plusieurs → une clause par mot dans le `and` consolidé.
+    const words = authorFilter.split(/[\s,;]+/).map(w => w.replace(/[(),"]/g, '')).filter(Boolean).slice(0, 6);
+    if (words.length === 1) f['autor'] = `ilike.%${words[0]}%`;
+    else for (const w of words) andClauses.push(`autor.ilike.%${w}%`);
+  }
   if (publisherFilter.trim()) f['editora'] = `ilike.%${publisherFilter.trim()}%`;
 
   // Année : valeur exacte (clé `ano`) ou intervalle (→ clauses consolidées).

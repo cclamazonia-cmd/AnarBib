@@ -78,6 +78,30 @@ describe('buildServerFilters — recherche multi-mots', () => {
   });
 });
 
+describe('buildServerFilters — filtre texte par auteur·rice', () => {
+  it('un seul mot → clé autor directe', () => {
+    const f = buildServerFilters({ ...base, authorFilter: 'Goldman' });
+    expect(f.autor).toBe('ilike.%Goldman%');
+    expect(f.and).toBeUndefined();
+  });
+
+  it('« Emma Goldman » → un ilike par mot, pour trouver « GOLDMAN, Emma »', () => {
+    const f = buildServerFilters({ ...base, authorFilter: 'Emma Goldman' });
+    expect(f.autor).toBeUndefined();
+    expect(f.and).toBe('(autor.ilike.%Emma%,autor.ilike.%Goldman%)');
+  });
+
+  it('virgule et caractères structurels retirés', () => {
+    const f = buildServerFilters({ ...base, authorFilter: 'Goldman, (Emma)' });
+    expect(f.and).toBe('(autor.ilike.%Goldman%,autor.ilike.%Emma%)');
+  });
+
+  it('cohabite avec la recherche libre dans le même and', () => {
+    const f = buildServerFilters({ ...base, search: 'vida', authorFilter: 'Emma Goldman' });
+    expect(f.and).toBe(`(${orGroup('vida')},autor.ilike.%Emma%,autor.ilike.%Goldman%)`);
+  });
+});
+
 describe('buildServerFilters — filtre de langue (CONV-7)', () => {
   it('un code BCP-47 → égalité stricte, pas ilike', () => {
     expect(buildServerFilters({ ...base, languageFilter: 'fr' }).idioma).toBe('eq.fr');
