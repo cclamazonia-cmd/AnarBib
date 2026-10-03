@@ -90,6 +90,8 @@ BEGIN
     ('anarbib-oai-resolve-expired-votes',           '45 3 * * *',   true),
     ('anarbib-peb-detect-overdue-daily',            '40 3 * * *',   true),
     ('anarbib-purge-invitations-expirees',          '40 3 * * *',   true),
+    -- 03/10/2026 : les reprises jamais enregistrées, ouvertes depuis plus de 24 h (20261003202521).
+    ('anarbib-purge-untouched-retakes',             '23 * * * *',   true),
     ('anarbib-recompute-holdings-availability',     '43 4 * * *',   true),
     ('anarbib-rede-digest-weekly',                  '0 9 * * 1',    true),
     ('anarbib-request-eval-digest',                 '17 8 * * *',   true),
