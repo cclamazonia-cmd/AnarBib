@@ -18,6 +18,8 @@ import InfoCards from './InfoCards';
 import TitleCaseAssist from '@/components/catalog/TitleCaseAssist';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
+import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { writeCoverThumb, removeCoverThumb, cheminCapaNeuf, nomCapaNeuf, extensionCapa } from '@/lib/coverThumbs';
@@ -64,6 +66,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const msgRef = useRef(null);
+  // Un enregistrement se confirme en remontant jusqu'au message, doublé d'un toast.
+  const confirmSaved = useSaveConfirmation(setMsg, msgRef);
+  // Une reprise quittée sans enregistrement s'oublie (migration 20261003202521).
+  const trackRetake = useUntouchedRetake('book', form.id);
 
   // H19 (27/09/2026) : une notice importée porte ses exemplaires du fichier
   // (995/852). Ils sont publiés avec elle, À LA PLACE des exemplaires initiaux,
@@ -689,7 +695,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       set('cover_license', data.license || candidate.license || '');
       setCoverPreviewUrl('');
       setCoverCandidates([]);
-      setMsg({ text: t({ id: 'catalogacao.ui.coverSaved' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.ui.coverSaved' }));
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
@@ -773,7 +779,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       set('cover_source', 'pdf_page1');
       set('cover_license', '');
       setCoverPreviewUrl('');
-      setMsg({ text: t({ id: 'catalogacao.ui.coverSaved' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.ui.coverSaved' }));
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
@@ -1060,7 +1066,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setCoverFile(null);
       setCoverCandidates([]);
       if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
-      setMsg({ text: t({ id: 'catalogacao.ui.coverRemoved' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.ui.coverRemoved' }));
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
     }
@@ -1432,12 +1438,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       }
 
       setDraftState('saved');
-      setMsg({
-        text: warnings.length
+      confirmSaved(
+        warnings.length
           ? t({id:'catalogacao.msg.draftSavedWithWarnings'}, {warnings: warnings.join(' ; ')})
           : t({id:'catalogacao.msg.draftSaved'}),
-        kind: warnings.length ? 'warn' : 'ok',
-      });
+        warnings.length ? 'warn' : 'ok',
+      );
       onSaved?.();
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
@@ -1506,7 +1512,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       // Raccourci post-publication : ajouter un exemplaire au document publié
       // (survit à la fiche vierge ; resetForm() ci-dessus l'a d'abord remis à null).
       setLastPublished(publishedId ? { bookId: publishedId, title: publishedTitle } : null);
-      showMsg(t({ id: 'catalogacao.msg.bookPublishedNext' }, { title: publishedTitle }), 'ok');
+      confirmSaved(t({ id: 'catalogacao.msg.bookPublishedNext' }, { title: publishedTitle }));
     } catch (err) {
       const raw = typeof err?.message === 'string' ? err.message : '';
       const code = raw.split(':', 1)[0].trim();
@@ -1530,6 +1536,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ── Load existing draft ────────────────────────────────
   function fillFromRecord(record) {
     const r = record || {};
+    trackRetake(r);
     setImportedCheck((c) => c + 1);   // H19 : relire les exemplaires importés
     // Les éditions suggérées et l'aperçu de fusion appartiennent à la notice
     // précédente : vu le 28/09, « Aucune édition à regrouper » restait affiché
@@ -2167,7 +2174,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 bookId={Number(f('published_book_id'))}
                 workId={work?.id || null}
                 onChanged={() => setWorkNonce(n => n + 1)}
-                onMsg={(text, kind) => setMsg({ text, kind })}
+                onMsg={(text, kind) => (kind === 'ok' ? confirmSaved(text) : setMsg({ text, kind }))}
               />
               {editionSugg !== null && editionSugg.length === 0 && (
                 <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)', marginTop: 6 }}>{t({ id: 'catalogacao.work.noSuggestions' })}</div>
@@ -2229,7 +2236,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {/* ── Segments sonores (P3b — #AUDIO-fonds) — notice audio/audiovisuelle publiée ─────── */}
           {f('published_book_id') && (isAudio || isAudiovisual) && (
             <div className="ab-span3" style={{ gridColumn: 'span 3' }}>
-              <AudioSegmentsBlock bookId={f('published_book_id')} onMsg={(text, kind) => setMsg({ text, kind })} />
+              <AudioSegmentsBlock bookId={f('published_book_id')} onMsg={(text, kind) => (kind === 'ok' ? confirmSaved(text) : setMsg({ text, kind }))} />
             </div>
           )}
 

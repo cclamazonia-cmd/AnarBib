@@ -1,9 +1,11 @@
 import { useIntl } from 'react-intl';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
+import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { useStaffLibraries, lotsProposables, libelleLot } from '@/lib/useStaffLibraries';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import PortraitCropper from '@/components/catalogacao/PortraitCropper';
@@ -92,6 +94,11 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
+  const msgRef = useRef(null);
+  // Un enregistrement se confirme en remontant jusqu'au message, doublé d'un toast.
+  const confirmSaved = useSaveConfirmation(setMsg, msgRef);
+  // Une reprise quittée sans enregistrement s'oublie (migration 20261003202521).
+  const trackRetake = useUntouchedRetake('author', form.id);
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState('');
   const [photoUploading, setPhotoUploading] = useState(false);
@@ -137,6 +144,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     try {
       const { data } = await supabase.from('author_drafts')
         .select('id, preferred_name, sort_name, status, action, published_author_id, batch_id, updated_at')
+        .eq('retake_untouched', false)   // reprises jamais enregistrées : hors liste (20261003202521)
         .order('updated_at', { ascending: false }).limit(100);
       setDrafts(data || []);
     } catch {} finally { setDraftsLoading(false); }
@@ -194,7 +202,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       if (error) throw error;
       set('photo_object_path', storagePath);
       setPhotoPreviewUrl('');
-      setMsg({ text: t({ id: 'catalogacao.author.photoSaved' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.author.photoSaved' }));
       return storagePath;
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.author.photoError' }, { message: localizeError(err, t) }), kind: 'error' });
@@ -260,7 +268,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       set('photo_object_path', storagePath);
       if (cs?.attribution) setM('portrait', cs.attribution);
       setPhotoPreviewUrl('');
-      setMsg({ text: t({ id: 'catalogacao.author.portraitStored' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.author.portraitStored' }));
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.author.portraitError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
@@ -274,6 +282,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   }
 
   function fillFromRecord(r) {
+    trackRetake(r);
     const sm = r.structured_meta || {};
     setDraftCreator(r.created_by || '');
     setForm({
@@ -437,7 +446,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       setDraftState('saved');
       await loadDrafts();
       onChanged?.();
-      setMsg({ text: isUpdate ? t({ id: 'catalogacao.author.draftUpdated' }) : t({ id: 'catalogacao.author.draftCreated' }), kind: 'ok' });
+      confirmSaved(isUpdate ? t({ id: 'catalogacao.author.draftUpdated' }) : t({ id: 'catalogacao.author.draftCreated' }));
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setSaving(false); }
@@ -465,7 +474,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       setDraftState('published');
       await loadDrafts();
       onChanged?.();
-      setMsg({ text: t({ id: 'catalogacao.author.publishSuccess' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.author.publishSuccess' }));
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.author.publishError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setPublishing(false); }
@@ -675,7 +684,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
       {/* ── Message ──────────────────────────────────── */}
       {msg.text && (
-        <div style={{
+        <div ref={msgRef} style={{
           padding: '8px 12px', borderRadius: 6, fontSize: '.82rem', marginBottom: 12,
           background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : msg.kind === 'info' ? 'rgba(29,78,216,.1)' : 'rgba(220,38,38,.12)',
           color: msg.kind === 'ok' ? '#4ade80' : msg.kind === 'info' ? '#60a5fa' : '#f87171',
@@ -1053,7 +1062,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                       }, { onConflict: 'author_id,lang' });
                     }
                     await reloadBioTranslations();
-                    setMsg({ text: t({id:'common.dataSaved'}), kind: 'ok' });
+                    confirmSaved(t({id:'common.dataSaved'}));
                   } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
                 }}>{t({id:'catalogacao.bio.save'})}</button>
               </details>

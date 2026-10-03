@@ -200,6 +200,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     try {
       const from = page * PAGE_SIZE, to = from + PAGE_SIZE - 1;
       const statuses = statusFilter ? [statusFilter] : ['draft', 'ready'];
+      // Une reprise jamais enregistrée n'est pas en file : elle s'oublie à
+      // l'abandon (retake_untouched, migration 20261003202521). Idem plus bas.
       // Sanitise pour la syntaxe .or() de PostgREST (virgules/parentheses la cassent)
       const s = dSearch.trim().replace(/[,()]/g, ' ').trim();
       const allItems = [];
@@ -213,7 +215,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       if (!typeFilter || typeFilter === 'book') {
         let q = supabase.from('book_drafts')
           .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, owner_library_id, updated_at, last_opened_at', { count: 'exact' })
-          .in('status', statuses);
+          .in('status', statuses).eq('retake_untouched', false);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
@@ -227,7 +229,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       if (!typeFilter || typeFilter === 'author') {
         let q = supabase.from('author_drafts')
           .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, created_by, updated_at, last_opened_at', { count: 'exact' })
-          .in('status', statuses);
+          .in('status', statuses).eq('retake_untouched', false);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
@@ -240,7 +242,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         let siennesCount = count || 0;
         if (!isNetworkAdmin) {
           let q2 = supabase.from('author_drafts').select('id', { count: 'exact', head: true })
-            .in('status', statuses).eq('created_by', user?.id);
+            .in('status', statuses).eq('retake_untouched', false).eq('created_by', user?.id);
           if (actionFilter) q2 = q2.eq('action', actionFilter);
           if (batchFilter === 'none') q2 = q2.is('batch_id', null);
           else if (batchFilter) q2 = q2.eq('batch_id', Number(batchFilter));
@@ -255,7 +257,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       if (!typeFilter || typeFilter === 'exemplar') {
         let q = supabase.from('exemplar_drafts')
           .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, target_library_id, book_draft_id, updated_at, last_opened_at', { count: 'exact' })
-          .in('status', statuses);
+          .in('status', statuses).eq('retake_untouched', false);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
@@ -377,7 +379,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       const allIds = [];
 
       if (!typeFilter || typeFilter === 'book') {
-        let q = supabase.from('book_drafts').select('id').in('status', statuses).limit(5000);
+        let q = supabase.from('book_drafts').select('id').in('status', statuses).eq('retake_untouched', false).limit(5000);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
@@ -386,7 +388,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         (data || []).forEach(d => allIds.push(`book:${d.id}`));
       }
       if (!typeFilter || typeFilter === 'author') {
-        let q = supabase.from('author_drafts').select('id').in('status', statuses).limit(5000);
+        let q = supabase.from('author_drafts').select('id').in('status', statuses).eq('retake_untouched', false).limit(5000);
         if (!isNetworkAdmin) q = q.eq('created_by', user?.id);   // B29 : les siennes
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
@@ -396,7 +398,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         (data || []).forEach(d => allIds.push(`author:${d.id}`));
       }
       if (!typeFilter || typeFilter === 'exemplar') {
-        let q = supabase.from('exemplar_drafts').select('id').in('status', statuses).limit(5000);
+        let q = supabase.from('exemplar_drafts').select('id').in('status', statuses).eq('retake_untouched', false).limit(5000);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));

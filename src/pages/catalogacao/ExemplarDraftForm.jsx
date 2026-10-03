@@ -1,9 +1,11 @@
 import { useIntl } from 'react-intl';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
+import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { useStaffLibraries, bibliothequesProposables, lotsProposables, lotDeLaBibliotheque, libelleLot } from '@/lib/useStaffLibraries';
 import { parseShelfLocation, formatShelfLocation, emptyShelfLocation } from '@/lib/shelfLocation';
 
@@ -139,6 +141,11 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
+  const msgRef = useRef(null);
+  // Un enregistrement se confirme en remontant jusqu'au message, doublé d'un toast.
+  const confirmSaved = useSaveConfirmation(setMsg, msgRef);
+  // Une reprise quittée sans enregistrement s'oublie (migration 20261003202521).
+  const trackRetake = useUntouchedRetake('exemplar', form.id);
   const [acqModes, setAcqModes] = useState([]);
   // #cross-lib-reassign (19/07) — action dediee, separee du champ texte libre
   // « Biblioteca », pour reattribuer explicitement un exemplaire DEJA PUBLIE a
@@ -172,6 +179,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     try {
       const { data } = await supabase.from('exemplar_drafts')
         .select('id, target_bib_ref, tombo, status, label_status, action, published_exemplar_id, batch_id, shelf_location, updated_at')
+        .eq('retake_untouched', false)   // reprises jamais enregistrées : hors liste (20261003202521)
         .order('updated_at', { ascending: false }).limit(100);
       setDrafts(data || []);
     } catch {} finally { setDraftsLoading(false); }
@@ -231,6 +239,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   }
 
   function fillFromRecord(r) {
+    trackRetake(r);
     setForm({
       id: String(r.id || ''), published_exemplar_id: String(r.published_exemplar_id || ''),
       batch_id: String(r.batch_id || ''), action: r.published_exemplar_id ? 'update' : (r.action || 'create'),
@@ -382,9 +391,8 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       await loadDrafts();
       onChanged?.();
       const fait = isUpdate ? t({ id: 'catalogacao.exemplar.draftUpdated' }) : t({ id: 'catalogacao.exemplar.draftCreated' });
-      setMsg(lotRefuse
-        ? { text: `${fait} ${t({ id: 'error.batch.library_mismatch' })}`, kind: 'warn' }
-        : { text: fait, kind: 'ok' });
+      if (lotRefuse) confirmSaved(`${fait} ${t({ id: 'error.batch.library_mismatch' })}`, 'warn');
+      else confirmSaved(fait);
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setSaving(false); }
@@ -408,7 +416,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       setDraftState('published');
       await loadDrafts();
       onChanged?.();
-      setMsg({ text: t({ id: 'catalogacao.exemplar.publishSuccess' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.exemplar.publishSuccess' }));
     } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setPublishing(false); }
   }
@@ -449,7 +457,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       setReassignTarget('');
       await loadDrafts();
       onChanged?.();
-      setMsg({ text: t({ id: 'catalogacao.exemplar.reassignSuccess' }), kind: 'ok' });
+      confirmSaved(t({ id: 'catalogacao.exemplar.reassignSuccess' }));
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally {
@@ -502,7 +510,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       </div>
 
       {/* ── Messages ─────────────────────────────────── */}
-      {msg.text && <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.82rem', marginBottom: 12, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
+      {msg.text && <div ref={msgRef} style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.82rem', marginBottom: 12, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
 
       {/* ── Drafts list ──────────────────────────────── */}
       {drafts.length > 0 && (

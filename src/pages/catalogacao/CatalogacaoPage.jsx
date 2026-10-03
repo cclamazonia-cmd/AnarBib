@@ -116,9 +116,9 @@ export default function CatalogacaoPage() {
     try {
       const [batchRes, bookDraftRes, authorDraftRes, exemplarDraftRes, booksRes, authorsRes, exemplaresRes] = await Promise.allSettled([
         supabase.from('catalog_batches').select('id', { count: 'exact', head: true }).eq('status', 'open'),
-        supabase.from('book_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']),
-        supabase.from('author_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']),
-        supabase.from('exemplar_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']),
+        supabase.from('book_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']).eq('retake_untouched', false),
+        supabase.from('author_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']).eq('retake_untouched', false),
+        supabase.from('exemplar_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']).eq('retake_untouched', false),
         supabase.from('books').select('id', { count: 'exact', head: true }),
         supabase.from('authors').select('id', { count: 'exact', head: true }),
         supabase.from('exemplares').select('id', { count: 'exact', head: true }),
