@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-03** · 75 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-03** · 74 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 9
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 8
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-03.** **56 itens de 75** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F1, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-03.** **55 itens de 74** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -992,7 +992,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **F1** | Auditar a cadeia de e-mail de ponta a ponta | `P1` | A verificar |
 | **F3** | Consolidar as funções de notificação redundantes | `P2` | Aberto |
 | **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | A verificar |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
@@ -1001,28 +1000,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F19** | Os registros das funções contêm os endereços em claro | `P1` | A verificar |
 | **F20** | Sem linha de política, a biblioteca nunca vê reserva expirar nem ausência detectada | `P2` | Aberto |
 | **F21** | Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas | `P2` | A verificar |
-
-#### F1 — Auditar a cadeia de e-mail de ponta a ponta
-
-`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
-
-**Estado.** **14 funções `notify-*` implantadas**, cinco filas, seis gatilhos de despacho. Três filas nunca receberam uma única inserção: `authority_proposal_notification_outbox`, `membership_expiry_notifications`, `painel_internal_task_invitation_outbox`. Uma quarta, `painel_internal_task_notification_outbox`, está vazia após 34 inserções cuja última é de 04/06. Ninguém jamais auditou o conjunto.
-
-*Verificado : 31/08 — **15** funções `notify-*` implantadas, a décima quinta nascida no mesmo dia com F4. As três filas nunca servidas seguem a zero. O perímetro cresce mais rápido que a auditoria. **30/09** — **o mapa está escrito** (`docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`), medido em produção: ~96 cadeias (41 vivas, 31 nunca usadas, 12 mortas, 7 dormentes, 4 quebradas). Critérios 1 e 2 cumpridos: `retirada_efetivada` e `retirada_no_show` partem; `retirada_reagendada` é um fóssil; `liberada_para_circulacao` está desligado por configuração. Critério 3: ramos mortos documentados, falta APAGÁ-LOS. Defeitos abertos à parte: F16 a F21. **30/09 à noite** — correção: `fede@` tem caixa; F18 encerrado. Decisões de Xavier: emitir `team.promoted_to_librarian`; criar o cron de expiração da consulta. Ordem: F19, F16, F17, ramos mortos, F20, F21. **01/10, à noite — critério 3 cumprido** (`57a4aafc`, implantado e verificado às 22h40). Ramos mortos suprimidos (legacy v1, horário reagendado, resposta de horário v2, devolução agendada, lembretes anteriores ao F4, recusa de reserva e doze aliases, `notify-mid-loan-reading`…); `team.promoted_to_librarian` emitido; expiração das consultas construída, com prazo de 60 dias na criação (`e897fb26`); colunas sem leitor documentadas, nenhum dado apagado. `notify-mid-loan-reading` removida da plataforma em 01/10 (Xavier). 03/10: execuções de 02 e 03/10 verificadas (expiração das consultas sem efeito, lembretes de empréstimo em 200). Critérios cumpridos; fechamento com a palavra do Xavier.*
-
-**O que é.** Traçar o mapa: para cada evento de negócio, qual gatilho, qual fila, qual função, qual template, quais dez línguas. Depois marcar os ramos mortos e os ramos nunca percorridos.
-
-**Por que importa.** Uma notificação que não sai não faz barulho nenhum. É o mesmo ponto cego dos backups, e já mordeu duas vezes: os e-mails `retirada_efetivada`, `retirada_reagendada`, `retirada_no_show` e `liberada_para_circulacao` foram apontados como não saindo, sem que o diagnóstico fosse levado a termo.
-
-**O que conta como terminado.**
-
-- Um mapa escrito, evento por evento.
-- Os quatro e-mails apontados como não enviados têm um veredicto: corrigidos, ou explicados.
-- Os ramos mortos são suprimidos ou documentados como dormentes.
-
-**Dependências.** Pré-requisito de **F2** e **F3**.
-
-*Remissões : `Mémoire de projet, reliquats de la chaîne courriel` · `AUDITORIA_NOTIFY_FUNCTIONS_2026-05-06`*
 
 #### F3 — Consolidar as funções de notificação redundantes
 
@@ -2351,6 +2328,7 @@ CI verde. |
 | F18 | 2026-09-30 | **Encerrado em 30/09, na mesma noite: a constatação era falsa.** `fede@anarbib.org` tem caixa (Xavier a mostrou no seu cliente de e-mail). Nada a corrigir. |
 | F17 | 2026-10-01 | **Encerrado em 01/10.** `88dde5b3`, migração aplicada pela CI; os lembretes seguem `coalesce(extended_until, due_at)`; bancadas 13 e 8/8. |
 | E26 | 2026-10-01 | **Aberto e encerrado em 01/10: a busca do catálogo não achava «Emma Goldman» nem «Vivre ma vie».** O filtro de autor·a buscava a frase inteira em `autor` (forma de autoridade «GOLDMAN, Emma»), e a busca livre não lia os títulos da obra (`work_titles`). Migração `20261001190729` (`697c81d9`): filtro palavra por palavra, sem acentos nem caixa; a busca lê os títulos da obra em todas as línguas. A obra 1163 (resumo francês de *Living My Life*) perdeu os nove títulos «auto» copiados da obra 2101 — as duas ficam distintas (decisão de Xavier). Seguimento `20261001192041` (`52ebebc1`, guarda T7). Verificado em produção e na tela. Restos: E27, C18. |
+| F1 | 2026-10-03 | **Encerrado em 03/10 (decisão do Xavier).** Mapa escrito, os quatro e-mails com veredicto, ramos mortos suprimidos ou documentados (`57a4aafc`, `e897fb26`), `notify-mid-loan-reading` removida da plataforma; execuções de 02 e 03/10 verificadas. |
 
 ---
 
@@ -2382,4 +2360,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-03. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 75 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-03. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 74 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
