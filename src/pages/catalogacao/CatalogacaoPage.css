@@ -155,6 +155,39 @@
 .cat-message.error { background: rgba(220,38,38,.12); color: #f87171; border: 1px solid rgba(220,38,38,.25); }
 .cat-message.info { background: rgba(29,78,216,.12); color: #60a5fa; border: 1px solid rgba(29,78,216,.25); }
 
+/* ── Barre d'état collante (CatalogStatusBar, 04/10/2026) ─────
+   Une seule apparence pour tous les panneaux, visible où que l'on soit dans
+   le formulaire. Fond opaque : elle passe par-dessus les champs en défilant. */
+.cat-status {
+  position: sticky; top: 8px; z-index: 30;
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; margin-bottom: 14px; border-radius: 8px;
+  font-size: .92rem; line-height: 1.4;
+  background: var(--brand-panel-bg-strong, #1c1414);
+  border: 1px solid var(--brand-panel-border-strong, rgba(255,255,255,.15));
+  border-left-width: 4px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+.cat-status__icon {
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 800; color: #111;
+}
+.cat-status__text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.cat-status__close {
+  flex-shrink: 0; border: none; background: transparent; cursor: pointer;
+  color: var(--brand-muted, #aaa); font-size: 1.2rem; line-height: 1; padding: 0 2px;
+}
+.cat-status__close:hover { color: var(--brand-text, #fff); }
+.cat-status--ok    { border-left-color: var(--color-ok, #4ade80); }
+.cat-status--ok    .cat-status__icon { background: var(--color-ok, #4ade80); }
+.cat-status--warn  { border-left-color: var(--color-warn, #fbbf24); }
+.cat-status--warn  .cat-status__icon { background: var(--color-warn, #fbbf24); }
+.cat-status--error { border-left-color: var(--color-bad, #f87171); }
+.cat-status--error .cat-status__icon { background: var(--color-bad, #f87171); }
+.cat-status--info  { border-left-color: #60a5fa; }
+.cat-status--info  .cat-status__icon { background: #60a5fa; }
+
 /* ── Button styles : .cat-btn est défini dans components/ui/ui.css ── */
 
 /* ── Placeholder panels ──────────────────────────────────── */

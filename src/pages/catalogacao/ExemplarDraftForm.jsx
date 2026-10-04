@@ -1,10 +1,12 @@
 import { useIntl } from 'react-intl';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useConfirm } from '@/contexts/ConfirmContext';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { useStaffLibraries, bibliothequesProposables, lotsProposables, lotDeLaBibliotheque, libelleLot } from '@/lib/useStaffLibraries';
 import { parseShelfLocation, formatShelfLocation, emptyShelfLocation } from '@/lib/shelfLocation';
@@ -30,6 +32,7 @@ function getTrigram(name) {
 
 export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed, onChanged }) {
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const { user } = useAuth();
   const isComplete = mode === 'complete';
 
@@ -141,9 +144,8 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
-  const msgRef = useRef(null);
-  // Un enregistrement se confirme en remontant jusqu'au message, doublé d'un toast.
-  const confirmSaved = useSaveConfirmation(setMsg, msgRef);
+  // Un enregistrement se confirme dans la barre d'état collante, doublé d'un toast.
+  const confirmSaved = useSaveConfirmation(setMsg);
   // Une reprise quittée sans enregistrement s'oublie (migration 20261003202521).
   const trackRetake = useUntouchedRetake('exemplar', form.id);
   const [acqModes, setAcqModes] = useState([]);
@@ -408,7 +410,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   // ── Publish ─────────────────────────────────────────────
   async function handlePublish() {
     if (!f('id')) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforePublish' }), kind: 'error' }); return; }
-    if (!confirm(t({ id: 'catalogacao.exemplar.publishConfirm' }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.exemplar.publishConfirm' }), confirmLabel: t({ id: 'confirm.action.publish' }) }))) return;
     setPublishing(true); setMsg({ text: '', kind: '' });
     try {
       const { error } = await supabase.rpc('publish_exemplar_draft', { p_draft_id: Number(f('id')) });
@@ -434,7 +436,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     const fromLib = libOptions.find(l => l.id === currentLibId);
     const fromLabel = fromLib ? (fromLib.short_name || fromLib.name) : '—';
     const toLabel = lib.short_name || lib.name;
-    if (!confirm(t({ id: 'catalogacao.exemplar.reassignConfirm' }, { tombo: f('tombo') || '—', from: fromLabel, to: toLabel }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.exemplar.reassignConfirm' }, { tombo: f('tombo') || '—', from: fromLabel, to: toLabel }), confirmLabel: t({ id: 'confirm.action.reassign' }) }))) return;
 
     setReassigning(true); setMsg({ text: '', kind: '' });
     try {
@@ -510,7 +512,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       </div>
 
       {/* ── Messages ─────────────────────────────────── */}
-      {msg.text && <div ref={msgRef} style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.82rem', marginBottom: 12, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
 
       {/* ── Drafts list ──────────────────────────────── */}
       {drafts.length > 0 && (
@@ -904,7 +906,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             {saving ? t({ id: 'catalogacao.saving' }) : t({ id: 'catalogacao.exemplar.saveExemplar' })}
           </button>
           <button type="button" className="ab-button" style={{ background: 'rgba(21,128,61,.7)' }}
-            disabled={publishing || !f('id')} onClick={handlePublish}>
+            disabled={publishing || !f('id') || draftState === 'published'} onClick={handlePublish}>
             {publishing ? t({ id: 'catalogacao.author.publishing' }) : t({ id: 'catalogacao.exemplar.publishExemplar' })}
           </button>
           <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>{t({ id: 'catalogacao.ui.clear' })}</button>

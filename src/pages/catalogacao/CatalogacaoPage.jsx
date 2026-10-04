@@ -4,6 +4,9 @@ import { localizeError } from '@/lib/localizeError';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIntl } from 'react-intl';
+import { useToast } from '@/contexts/ToastContext';
+import { useConfirm } from '@/contexts/ConfirmContext';
+import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useStaffLibraries, useCoordLibraries, bibliothequesProposables, bibliothequeDuLot, brouillonsDAutresBibliotheques, peutRouvrirRevision } from '@/lib/useStaffLibraries';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -24,6 +27,7 @@ import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // ── Storage keys ────────────────────────────────────────────
 const MODE_KEY = 'catalogacaoMode';
@@ -46,6 +50,8 @@ export default function CatalogacaoPage() {
   const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.cataloging' }));
+  const confirmer = useConfirm();
+  const { notifyError } = useToast();
 
   // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css) : meme
   // forme que « Mon compte », le tableau de bord, la bibliotheque, la federation
@@ -302,13 +308,13 @@ export default function CatalogacaoPage() {
   async function editPublishedExemplar(exemplarId) {
     if (exemplarId == null) return;
     const typeLabel = t({ id: 'catalogacao.type.exemplar' }).toLowerCase();
-    if (!confirm(t({ id: 'catalogacao.catalog.retakeConfirm' }, { type: typeLabel }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.catalog.retakeConfirm' }, { type: typeLabel }), confirmLabel: t({ id: 'confirm.action.retake' }) }))) return;
     try {
       const { data, error } = await supabase.rpc('create_exemplar_draft_from_exemplar', { p_exemplar_id: Number(exemplarId) });
       if (error) throw error;
       if (data) openForEdit('exemplar', data);
     } catch (err) {
-      alert(localizeError(err, t));
+      notifyError(localizeError(err, t), err);
     }
   }
 
@@ -601,6 +607,7 @@ function ajoutsApresRevision(r) {
 
 function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const { libraryId } = useLibrary();
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState('');
@@ -609,6 +616,8 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   // seule bibliothèque de staff) s'applique ; '' = à choisir.
   const [newLibraryId, setNewLibraryId] = useState(null);
   const [msg, setMsg] = useState(null);
+  // Un geste réussi se dit dans la barre d'état, doublé d'un toast.
+  const confirmSaved = useSaveConfirmation(setMsg);
 
   // ── B30 (27/09/2026) : le lot a SA bibliothèque ─────────────────────
   // catalog_batches.library_id (nulle = lot de l'administration du réseau)
@@ -856,7 +865,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   // B30 : rouvrir = un nouveau tour sur un lot approuvé (administration seule) —
   // la sortie qu'annonce error.batch.reassign.review_approved.
   async function requestReview(b, rouvrir = false) {
-    if (rouvrir && !window.confirm(t({ id: 'catalogacao.batch.review.reopenConfirm' }, { name: b.name }))) return;
+    if (rouvrir && !(await confirmer({ message: t({ id: 'catalogacao.batch.review.reopenConfirm' }, { name: b.name }), confirmLabel: t({ id: 'confirm.action.reopenReview' }) }))) return;
     const message = window.prompt(t({ id: 'catalogacao.batch.review.requestPrompt' }), '');
     if (message === null) return;
     try {
@@ -948,7 +957,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   }
 
   async function closeBatch(id) {
-    if (!confirm(t({id:'catalogacao.closeBatchConfirm'}))) return;
+    if (!(await confirmer({ message: t({id:'catalogacao.closeBatchConfirm'}), confirmLabel: t({ id: 'confirm.action.closeBatch' }) }))) return;
     try {
       const { data, error } = await supabase.from('catalog_batches')
         .update({ status: 'closed' })
@@ -956,36 +965,38 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
       if (error) throw error;
       // B30 : un lot d'une bibliothèque où l'on n'est pas staff (ou de
       // l'administration du réseau) ne se ferme pas — la base filtre, on le dit.
-      if (!data?.length) alert(t({id:'catalogacao.batchUpdateNothing'}));
+      if (!data?.length) setMsg({ text: t({id:'catalogacao.batchUpdateNothing'}), kind: 'warn' });
+      else confirmSaved(t({ id: 'catalogacao.batch.closedDone' }));
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
+      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
     }
   }
 
   async function publishBatch(id) {
-    if (!confirm(t({id:'catalogacao.publishBatchConfirm'}))) return;
+    if (!(await confirmer({ message: t({id:'catalogacao.publishBatchConfirm'}), confirmLabel: t({ id: 'confirm.action.publishBatch' }), tone: 'danger' }))) return;
     try {
       const { error } = await supabase.rpc('publish_catalog_batch', { p_batch_id: Number(id) });
       if (error) throw error;
-      alert(t({id:'common.dataSaved'}));
+      confirmSaved(t({ id: 'catalogacao.batch.publishedDone' }));
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
+      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
     }
   }
 
   async function archiveBatch(id) {
-    if (!confirm(t({id:'catalogacao.archiveBatchConfirm'}))) return;
+    if (!(await confirmer({ message: t({id:'catalogacao.archiveBatchConfirm'}), confirmLabel: t({ id: 'confirm.action.archive' }) }))) return;
     try {
       const { data, error } = await supabase.from('catalog_batches')
         .update({ status: 'archived' })
         .eq('id', id).select('id');
       if (error) throw error;
-      if (!data?.length) alert(t({id:'catalogacao.batchUpdateNothing'}));   // B29
+      if (!data?.length) setMsg({ text: t({id:'catalogacao.batchUpdateNothing'}), kind: 'warn' });   // B29
+      else confirmSaved(t({ id: 'catalogacao.batch.archivedDone' }));
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
+      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
     }
   }
 
@@ -997,7 +1008,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
   // jetes a la corbeille, 0 actif, et « ce lot contient encore 237 brouillons ».
   // Ils sont donc supprimes AVEC le lot, apres une confirmation qui les compte.
   async function deleteBatch(id) {
-    if (!confirm(t({id:'catalogacao.deleteBatchConfirm'}))) return;
+    if (!(await confirmer({ message: t({id:'catalogacao.deleteBatchConfirm'}), confirmLabel: t({ id: 'confirm.action.deleteForever' }), tone: 'danger' }))) return;
     try {
       // Les comptes viennent de la vue, une seule definition — la meme que celle
       // du trigger qui refusera en base si on passe outre.
@@ -1016,14 +1027,14 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
 
       // Du travail vivant : le traiter ou le jeter, pas l'effacer par la bande.
       if (enCours > 0) {
-        alert(t({id:'catalogacao.batchHasDrafts'},{count: enCours}));
+        setMsg({ text: t({id:'catalogacao.batchHasDrafts'},{count: enCours}), kind: 'warn' });
         return;
       }
       // Des fiches publiees : le lot est la memoire d'une seance. On archive.
       // Sans ce message distinct, on lisait « supprimez les brouillons d'abord »
       // pour des fiches qui sont au catalogue depuis deux semaines.
       if (publies > 0) {
-        alert(t({id:'catalogacao.batchPublishedArchiveInstead'},{count: publies}));
+        setMsg({ text: t({id:'catalogacao.batchPublishedArchiveInstead'},{count: publies}), kind: 'warn' });
         return;
       }
       // B30 : supprimer un lot revient à la coordination de SA bibliothèque
@@ -1038,8 +1049,8 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
       // migration ; la base, alors, n'applique pas encore B29 non plus.)
       if (eOwn && eOwn.code !== 'PGRST202') throw eOwn;
       if (eCoord && eCoord.code !== 'PGRST202') throw eCoord;
-      if (aMoi === false || coord === false) { alert(t({id:'catalogacao.batchDeleteNothing'})); return; }
-      if (jetes > 0 && !confirm(t({id:'catalogacao.batchTrashedWillBeDeleted'},{count: jetes}))) return;
+      if (aMoi === false || coord === false) { setMsg({ text: t({id:'catalogacao.batchDeleteNothing'}), kind: 'warn' }); return; }
+      if (jetes > 0 && !(await confirmer({ message: t({id:'catalogacao.batchTrashedWillBeDeleted'},{count: jetes}), confirmLabel: t({ id: 'confirm.action.deleteForever' }), tone: 'danger' }))) return;
 
       // Une requete par table, pas une par ligne : PostgREST filtre le DELETE
       // cote serveur, sous exactement les memes policies que la suppression a
@@ -1065,11 +1076,12 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
       // B29/B30 : une personne qui ne coordonne pas la bibliothèque du lot, ou
       // un lot qui porte encore des fiches d'autres bibliothèques (comptes
       // ci-dessus : nos brouillons seulement), et la base ne supprime rien — le dire.
-      if (!suppr?.length) alert(t({id:'catalogacao.batchDeleteNothing'}));
-      else if (restants > 0) alert(t({id:'catalogacao.batchTrashedLeft'},{count: restants}));
+      if (!suppr?.length) setMsg({ text: t({id:'catalogacao.batchDeleteNothing'}), kind: 'warn' });
+      else if (restants > 0) setMsg({ text: t({id:'catalogacao.batchTrashedLeft'},{count: restants}), kind: 'warn' });
+      else confirmSaved(t({ id: 'catalogacao.batch.deletedDone' }));
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
+      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
     }
   }
 
@@ -1175,7 +1187,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
             {creating ? t({id:'common.saving'}) : t({id:'catalogacao.createBatch'})}
           </button>
         </div>
-        {msg && <div style={{ marginTop: 8, fontSize: '.82rem', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>{msg.text}</div>}
+        <CatalogStatusBar msg={msg} onClose={() => setMsg(null)} />
       </div>
 
       {/* Rapport de revision d'un lot (lisible avant la demande) */}

@@ -1,10 +1,12 @@
 import { useIntl } from 'react-intl';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useConfirm } from '@/contexts/ConfirmContext';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { useStaffLibraries, lotsProposables, libelleLot } from '@/lib/useStaffLibraries';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
@@ -70,6 +72,7 @@ function buildSortName(preferredName, authorityType) {
 
 export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed, onChanged }) {
   const { formatMessage: t, locale } = useIntl();
+  const confirmer = useConfirm();
   // Paquet DOUBLONS P4 (21/08/2026) : la fusion d'autorités est réservée à la
   // coordination. La liste des doublons probables, elle, reste visible : savoir
   // qu'il y a un doublon n'a jamais rien cassé.
@@ -94,9 +97,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
-  const msgRef = useRef(null);
-  // Un enregistrement se confirme en remontant jusqu'au message, doublé d'un toast.
-  const confirmSaved = useSaveConfirmation(setMsg, msgRef);
+  // Un enregistrement se confirme dans la barre d'état collante, doublé d'un toast.
+  const confirmSaved = useSaveConfirmation(setMsg);
   // Une reprise quittée sans enregistrement s'oublie (migration 20261003202521).
   const trackRetake = useUntouchedRetake('author', form.id);
   const [photoFile, setPhotoFile] = useState(null);
@@ -455,7 +457,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // ── Publish draft ───────────────────────────────────────
   async function handlePublish() {
     if (!f('id')) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforePublish' }), kind: 'error' }); return; }
-    if (!confirm(t({ id: 'catalogacao.author.publishConfirm' }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.author.publishConfirm' }), confirmLabel: t({ id: 'confirm.action.publish' }) }))) return;
 
     setPublishing(true); setMsg({ text: '', kind: '' });
     try {
@@ -563,7 +565,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   async function mergeDuplicateIntoCurrent(dupId, dupName) {
     const canonicalId = f('published_author_id');
     if (!canonicalId) return;
-    if (!confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup: dupName, canonical: f('preferred_name') }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.dedup.confirm' }, { dup: dupName, canonical: f('preferred_name') }), confirmLabel: t({ id: 'confirm.action.merge' }), tone: 'danger' }))) return;
     setDupBusy(dupId);
     try {
       const { error } = await supabase.rpc('merge_author', {
@@ -683,13 +685,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       </div>
 
       {/* ── Message ──────────────────────────────────── */}
-      {msg.text && (
-        <div ref={msgRef} style={{
-          padding: '8px 12px', borderRadius: 6, fontSize: '.82rem', marginBottom: 12,
-          background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : msg.kind === 'info' ? 'rgba(29,78,216,.1)' : 'rgba(220,38,38,.12)',
-          color: msg.kind === 'ok' ? '#4ade80' : msg.kind === 'info' ? '#60a5fa' : '#f87171',
-        }}>{msg.text}</div>
-      )}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
 
       {/* ── Existing drafts list ──────────────────────── */}
       {drafts.length > 0 && (
@@ -1205,7 +1201,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             {saving ? t({ id: 'catalogacao.saving' }) : t({ id: 'catalogacao.ui.saveDraft' })}
           </button>
           <button type="button" className="ab-button" style={{ background: 'rgba(21,128,61,.7)' }}
-            disabled={publishing || !f('id') || lectureSeule} onClick={handlePublish}>
+            disabled={publishing || !f('id') || lectureSeule || draftState === 'published'} onClick={handlePublish}>
             {publishing ? t({ id: 'catalogacao.author.publishing' }) : t({ id: 'catalogacao.author.publishDraft' })}
           </button>
           <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>{t({id:'catalogacao.ui.clear'})}</button>

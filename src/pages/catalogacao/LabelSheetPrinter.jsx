@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { Button, Pill, Spinner } from '@/components/ui';
 import { LABEL_FORMATS, CUSTOM_FORMAT_ID, DEFAULT_FORMAT_ID, BLANK_CUSTOM_FORMAT, PAGE_SIZES, labelsPerPage, pageSizeOf } from './labelFormats';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // ═══════════════════════════════════════════════════════════
 // LabelSheetPrinter — Impression d'étiquettes de cote
@@ -35,6 +37,7 @@ function loadCustomFormat() {
 
 export default function LabelSheetPrinter({ onChanged, isActive = true }) {
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const { libraryId, libraryName } = useLibrary();
   const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -44,7 +47,7 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
   const [loadError, setLoadError] = useState('');
   const [sort, setSort] = useState({ key: 'resolved_bib_ref', dir: 'asc' });
   const [deleting, setDeleting] = useState(false);
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState(null); // { text, kind }
   const [includeQr, setIncludeQr] = useState(true);
   const [printing, setPrinting] = useState(false);
   const [visibleFields, setVisibleFields] = useState(loadFieldPrefs);
@@ -116,7 +119,7 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
       [paramKey]: editing.value,
     });
     if (error) {
-      setMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }), kind: 'error' });
     } else {
       // Optimistic local update (avoid full reload flicker)
       setLabels(prev => prev.map(l =>
@@ -124,7 +127,7 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
           ? { ...l, [editing.field]: editing.value || null }
           : l
       ));
-      setMsg(t({ id: 'labels.editSaved' }));
+      setMsg({ text: t({ id: 'labels.editSaved' }), kind: 'ok' });
     }
     setEditing(null);
     setSaving(false);
@@ -237,8 +240,8 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
   async function deleteSelected() {
     const ids = [...selected];
     if (!ids.length) return;
-    if (!confirm(t({ id: 'labels.deleteConfirm' }, { count: ids.length }))) return;
-    setDeleting(true); setMsg('');
+    if (!(await confirmer({ message: t({ id: 'labels.deleteConfirm' }, { count: ids.length }), confirmLabel: t({ id: 'confirm.action.delete' }), tone: 'danger' }))) return;
+    setDeleting(true); setMsg(null);
     let ok = 0, fail = 0;
     for (const id of ids) {
       const { error } = await supabase.rpc('discard_exemplar', { p_exemplar_id: id });
@@ -246,7 +249,7 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
     }
     setDeleting(false);
     setSelected(new Set());
-    setMsg(t({ id: 'labels.deleteDone' }, { ok, fail }));
+    setMsg({ text: t({ id: 'labels.deleteDone' }, { ok, fail }), kind: fail ? 'warn' : 'ok' });
     await loadLabels();
     onChanged?.();
   }
@@ -429,9 +432,7 @@ ${pages.join('\n')}
           {t({ id: 'labels.deleteSelected' }, { count: selected.size })}
         </button>
       </div>
-      {msg && (
-        <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: '.82rem', marginBottom: 10, background: 'rgba(21,128,61,.12)', color: '#4ade80' }}>{msg}</div>
-      )}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg(null)} />
 
       {/* ── Champs optionnels ── */}
       <div style={{ marginBottom: 10 }}>

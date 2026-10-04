@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import SubjectLabelEditor from './SubjectLabelEditor';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SubjectGovernancePanel — thésaurus v1 étape 2c : coordination matière.
@@ -71,7 +72,7 @@ export default function SubjectGovernancePanel() {
           {t({ id: 'catalogacao.subjectGov.coordOnly' })}
         </div>
       )}
-      {msg && <div style={{ marginBottom: 10, fontSize: '.82rem', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>{msg.text}</div>}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg(null)} />
 
       {loading ? (
         <div className="cat-placeholder">{t({ id: 'common.loading' })}</div>

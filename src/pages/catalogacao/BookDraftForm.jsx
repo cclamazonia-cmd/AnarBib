@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
@@ -19,6 +20,7 @@ import TitleCaseAssist from '@/components/catalog/TitleCaseAssist';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
@@ -38,6 +40,7 @@ import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATE
 
 export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null, panelActive = true }) {
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const { user } = useAuth();
   const { isNetworkAdmin, libraryId, effectiveRole } = useLibrary();
   // B29 (CAT-E18) : un brouillon se range dans une bibliothèque où l'on est staff.
@@ -65,9 +68,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
-  const msgRef = useRef(null);
-  // Un enregistrement se confirme en remontant jusqu'au message, doublé d'un toast.
-  const confirmSaved = useSaveConfirmation(setMsg, msgRef);
+  // Un enregistrement se confirme dans la barre d'état collante, doublé d'un toast.
+  const confirmSaved = useSaveConfirmation(setMsg);
   // Une reprise quittée sans enregistrement s'oublie (migration 20261003202521).
   const trackRetake = useUntouchedRetake('book', form.id);
 
@@ -98,16 +100,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     try { return !!JSON.parse(form.marc_json || '{}')?.ingest?.raw_payload?.item_tag; } catch { return false; }
   }, [form.marc_json]);
 
-  // Scroll vers le message quand il apparaît (chantier E — UX erreurs)
-  const showMsg = useCallback((text, kind) => {
-    setMsg({ text, kind });
-    if (text) {
-      // requestAnimationFrame pour attendre le rendu du message
-      requestAnimationFrame(() => {
-        msgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
-    }
-  }, []);
+  // La barre d'état est collante (04/10/2026) : plus besoin de faire défiler
+  // jusqu'au message, il est toujours visible.
+  const showMsg = useCallback((text, kind) => setMsg({ text, kind }), []);
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
   const [dupModal, setDupModal] = useState(null); // { kind, detail, bookId } | null — modale d'avertissement doublon AVANT sauvegarde du brouillon
   const [lastPublished, setLastPublished] = useState(null); // { bookId, title } | null — raccourci post-publication (ajouter un exemplaire au document publié)
@@ -891,7 +886,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setMsg({ text: t({ id: 'catalogacao.dedup.saveBeforeMerge' }), kind: 'error' });
       return;
     }
-    if (!confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup: dupTitle, canonical: f('titulo') }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.dedup.confirm' }, { dup: dupTitle, canonical: f('titulo') }), confirmLabel: t({ id: 'confirm.action.merge' }), tone: 'danger' }))) return;
     setBookDupBusy(dupId);
     try {
       const { error } = await supabase.rpc('merge_book', {
@@ -1471,7 +1466,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       return;
     }
 
-    if (!confirm(t({id:'catalogacao.msg.publishConfirm'}))) return;
+    if (!(await confirmer({ message: t({id:'catalogacao.msg.publishConfirm'}), confirmLabel: t({ id: 'confirm.action.publish' }) }))) return;
     setDupBanner(null);
 
     try {
@@ -1784,9 +1779,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       )}
 
       {/* Message */}
-      {msg.text && (
-        <div ref={msgRef} className={`cat-message show ${msg.kind}`} style={{ marginBottom: 14 }}>{msg.text}</div>
-      )}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
       {/* ── Raccourci post-publication : ajouter un exemplaire au document publié ──
           Survit à la fiche vierge : la personne peut enchaîner un nouveau brouillon
           OU cliquer pour indexer un exemplaire du document qui vient d'être publié. */}

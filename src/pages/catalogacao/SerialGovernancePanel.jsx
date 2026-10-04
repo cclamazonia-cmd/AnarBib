@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import SerialDetailEditor from './SerialDetailEditor';
 import SerialDuplicatesPanel from './SerialDuplicatesPanel';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SerialGovernancePanel — coordination des titres de périodiques.
@@ -115,11 +116,7 @@ export default function SerialGovernancePanel({ isActive }) {
       {loaded && !isCoord && (
         <div style={notice}>{t({ id: 'catalogacao.serialGov.coordOnly' })}</div>
       )}
-      {msg && (
-        <div style={{ marginBottom: 10, fontSize: '.82rem', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>
-          {msg.text}
-        </div>
-      )}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg(null)} />
 
       {/* Un filtre plutôt qu'une pagination : la centaine de titres d'Anarchief
           tiendra dans une liste, mais pas dans un coup d'œil. */}

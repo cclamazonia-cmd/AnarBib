@@ -7,11 +7,13 @@
 // (la couverture tirée du PDF la lit) ; ce panneau lui dit quand la recharger.
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 
 export default function DigitalResourcesPanel({ draftId, resources, onChanged, setMsg }) {
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const [digitalForm, setDigitalForm] = useState(null); // resource being edited
   const [digitalSaving, setDigitalSaving] = useState(false);
   const [digitalUploading, setDigitalUploading] = useState(false);
@@ -206,7 +208,7 @@ export default function DigitalResourcesPanel({ draftId, resources, onChanged, s
   }
 
   async function deleteDigitalResource(resourceId) {
-    if (!confirm(t({id:'catalogacao.digital.confirmDelete'}))) return;
+    if (!(await confirmer({ message: t({id:'catalogacao.digital.confirmDelete'}), confirmLabel: t({ id: 'confirm.action.delete' }), tone: 'danger' }))) return;
     try {
       const { error } = await supabase.from('book_draft_digital_resources')
         .delete().eq('id', Number(resourceId));

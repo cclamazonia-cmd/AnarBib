@@ -1,4 +1,6 @@
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
+import { useToast } from '@/contexts/ToastContext';
 import { Link } from 'react-router-dom';
 import ConvRevuePanel from '@/components/atelier/ConvRevuePanel';
 import CapasRevuePanel from './CapasRevuePanel';
@@ -10,6 +12,7 @@ import CatalogDuplicatesModal from './CatalogDuplicatesModal';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -23,6 +26,8 @@ const MATERIAL_KEYS = {
 
 export default function CatalogPanel({ onEdit, requestedView, requestNonce, onChanged }) {
   const { formatMessage: t, formatDate } = useIntl();
+  const confirmer = useConfirm();
+  const { notifySuccess } = useToast();
   // Paquet DOUBLONS P4 (21/08/2026) : la fusion d'autorités est réservée à la
   // coordination. La liste des doublons probables, elle, reste visible : savoir
   // qu'il y a un doublon n'a jamais rien cassé.
@@ -146,7 +151,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
 
   // ── Retake: create draft from published ─────────────────
   async function retakeItem(type, id) {
-    if (!confirm(t({ id: 'catalogacao.catalog.retakeConfirm' }, { type: t({ id: TYPE_KEYS[type] }).toLowerCase() }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.catalog.retakeConfirm' }, { type: t({ id: TYPE_KEYS[type] }).toLowerCase() }), confirmLabel: t({ id: 'confirm.action.retake' }) }))) return;
     try {
       const rpc = type === 'book' ? 'create_book_draft_from_book'
         : type === 'author' ? 'create_author_draft_from_author'
@@ -158,8 +163,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       if (error) throw error;
       onChanged?.();
       if (onEdit) {
+        // L'éditeur s'ouvre dans un autre onglet : le message écrit ici, dans
+        // un panneau désormais masqué, n'était vu par personne et réapparaissait
+        // périmé au retour (04/10/2026). Un toast suit l'onglet.
         onEdit(type, data);
-        setMsg({ text: t({ id: 'catalogacao.catalog.retakeCreated' }, { id: data }), kind: 'ok' });
+        notifySuccess(t({ id: 'catalogacao.catalog.retakeCreated' }, { id: data }));
       } else {
         setMsg({ text: t({ id: 'catalogacao.catalog.retakeCreatedNoEdit' }, { id: data }), kind: 'ok' });
       }
@@ -172,7 +180,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
     // Document : descarte EN CASCADE (exemplaires + holdings de MA biblio, puis le
     // document s'il n'est plus détenu ailleurs). Avertissement explicite.
     if (type === 'book') {
-      if (!confirm(t({ id: 'catalogacao.catalog.discardBookCascadeConfirm' }, { label }))) return;
+      if (!(await confirmer({ message: t({ id: 'catalogacao.catalog.discardBookCascadeConfirm' }, { label }), confirmLabel: t({ id: 'confirm.action.delete' }), tone: 'danger' }))) return;
       try {
         const { data, error } = await supabase.rpc('discard_book_cascade', { p_book_id: id });
         if (error) throw error;
@@ -189,7 +197,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       }
       return;
     }
-    if (!confirm(t({ id: 'catalogacao.catalog.discardConfirm' }, { label }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.catalog.discardConfirm' }, { label }), confirmLabel: t({ id: 'confirm.action.discard' }), tone: 'danger' }))) return;
     try {
       const rpc = type === 'author' ? 'discard_author' : 'discard_exemplar';
       const param = type === 'author' ? { p_author_id: id } : { p_exemplar_id: id };
@@ -249,7 +257,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   async function doMerge(target) {
     if (!mergeSrc || !target || target.id === mergeSrc.id) return;
     const dup = mergeSrc.preferred_name, canonical = target.preferred_name;
-    if (!confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup, canonical }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.dedup.confirm' }, { dup, canonical }), confirmLabel: t({ id: 'confirm.action.merge' }), tone: 'danger' }))) return;
     setMergeBusy(true); setMergeErr('');
     try {
       const { error } = await supabase.rpc('merge_author', {
@@ -327,7 +335,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
         </Link>
       </div>
 
-      {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
 
       {/* File de verification des TITRES (CONV-O5, tranche le 21/08). Un titre
           appartient a la bibliotheque qui l'a catalogue ; il n'engage pas le

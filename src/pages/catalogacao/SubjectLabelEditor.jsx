@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { pickLabel } from '@/lib/i18nLabel';
 import { MATCH_TYPES, MATCH_LABEL_KEY } from '@/lib/ficedlMatch';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SubjectLabelEditor — thésaurus v2 étape H-1 : éditeur de libellés multilingue.
@@ -193,7 +194,7 @@ export default function SubjectLabelEditor() {
         </div>
       )}
 
-      {msg && <div style={{ margin: '10px 0', fontSize: '.82rem', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>{msg.text}</div>}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg(null)} />
 
       {subj && (
         <div style={{ marginTop: 12 }}>

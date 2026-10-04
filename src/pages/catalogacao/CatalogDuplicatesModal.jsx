@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { supabase } from '@/lib/supabase';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
@@ -63,6 +64,7 @@ const NIVEAU_CLE = {
 
 export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
   const { formatMessage: t, formatDate } = useIntl();
+  const confirmer = useConfirm();
   const { effectiveRole } = useLibrary();
   const arbitre = canArbitrateDuplicates(effectiveRole);
 
@@ -149,11 +151,11 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
   const memeOeuvre = (r) => agir(r, () =>
     supabase.rpc('group_books_as_editions', { p_book_ids: [r.book_id_a, r.book_id_b] }));
 
-  function fusionner(r, canonicalId) {
+  async function fusionner(r, canonicalId) {
     const garde = canonicalId === r.book_id_a ? r.titulo_a : r.titulo_b;
     const perdu = canonicalId === r.book_id_a ? r.titulo_b : r.titulo_a;
     const duplicateId = canonicalId === r.book_id_a ? r.book_id_b : r.book_id_a;
-    if (!window.confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup: perdu, canonical: garde }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.dedup.confirm' }, { dup: perdu, canonical: garde }), confirmLabel: t({ id: 'confirm.action.merge' }), tone: 'danger' }))) return;
     return agir(r, () =>
       supabase.rpc('merge_book', { p_canonical_id: canonicalId, p_duplicate_id: duplicateId }));
   }

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SerialDuplicatesPanel — doublons parmi les TITRES de périodiques.
@@ -114,7 +115,7 @@ export default function SerialDuplicatesPanel({ isActive, onChanged }) {
       </div>
       <p style={{ ...sub, marginTop: 0 }}>{t({ id: 'catalogacao.serialDup.intro' })}</p>
 
-      {msg && <div style={{ fontSize: '.82rem', margin: '6px 0', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>{msg.text}</div>}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg(null)} />
 
       {loading ? (
         <div className="cat-placeholder">{t({ id: 'common.loading' })}</div>

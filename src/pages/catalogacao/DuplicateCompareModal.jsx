@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -37,6 +38,7 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
   // bibliothécaire. Fusionner des BROUILLONS, en revanche, reste ouvert : le
   // brouillon en double part à la corbeille, c'est réversible.
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const { effectiveRole } = useLibrary();
   const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const [src, setSrc] = useState(null);
@@ -94,7 +96,7 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
     // merge_draft_into_book absorbe le brouillon OUVERT ; merge_book_drafts
     // (survivant = ouvert) tue le CANDIDAT. Un message unique mentirait une
     // fois sur deux.
-    if (!window.confirm(t({ id: isBook ? 'catalogacao.dup.mergeConfirm' : 'catalogacao.dup.absorbConfirm' }))) return;
+    if (!(await confirmer({ message: t({ id: isBook ? 'catalogacao.dup.mergeConfirm' : 'catalogacao.dup.absorbConfirm' }), confirmLabel: t({ id: 'confirm.action.merge' }), tone: 'danger' }))) return;
     setMerging(true); setMergeErr('');
     try {
       const fn = isBook ? 'merge_draft_into_book' : 'merge_book_drafts';

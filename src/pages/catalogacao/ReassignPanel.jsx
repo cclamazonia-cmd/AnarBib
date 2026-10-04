@@ -8,11 +8,13 @@
 // `onSaved` pour recharger la notice après le déplacement.
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 
 export default function ReassignPanel({ bookId, catalogLibraries, setMsg, onSaved }) {
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const [reassignTarget, setReassignTarget] = useState('');
   const [reassignSource, setReassignSource] = useState('');  // biblio source (notice multi-biblios)
   const [reassignBusy, setReassignBusy] = useState(false);
@@ -36,7 +38,7 @@ export default function ReassignPanel({ bookId, catalogLibraries, setMsg, onSave
     if (!bookId) return;
     if (!reassignTarget) return;
     const lib = catalogLibraries.find(l => l.id === reassignTarget);
-    if (!confirm(t({ id: 'catalogacao.reassign.confirm' }, { library: lib?.name || '' }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.reassign.confirm' }, { library: lib?.name || '' }), confirmLabel: t({ id: 'confirm.action.attribute' }) }))) return;
     setReassignBusy(true);
     try {
       const rpc = reassignSource ? 'network_admin_reassign_book_from_to_library' : 'network_admin_reassign_book_to_library';

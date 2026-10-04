@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SerialDetailEditor — tout ce qu'on peut faire sur UN titre de périodique.
@@ -231,7 +232,7 @@ export default function SerialDetailEditor({ serial, myLibraries, onChanged }) {
 
   return (
     <div style={{ paddingLeft: 18 }}>
-      {msg && <div style={{ fontSize: '.82rem', margin: '4px 0 8px', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>{msg.text}</div>}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg(null)} />
 
       {/* ── 1. Description ─────────────────────────────────────────────── */}
       <div style={secTitle}>{t({ id: 'catalogacao.serialDetail.description' })}</div>

@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LibraryProvider } from '@/contexts/LibraryContext';
 import { ToastProvider } from '@/contexts/ToastContext';
+import { ConfirmProvider } from '@/contexts/ConfirmContext';
 import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE, isSupported, applyDocumentLanguage } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
@@ -128,6 +129,7 @@ export default function App() {
           <LibraryProvider>
             <IdleTimerGuard>
             <ToastProvider>
+            <ConfirmProvider>
               <ErrorBoundary>
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
@@ -233,6 +235,7 @@ export default function App() {
               </ErrorBoundary>
               <ScrollButtons />
               <AccessibilityWidget />
+            </ConfirmProvider>
             </ToastProvider>
             </IdleTimerGuard>
           </LibraryProvider>

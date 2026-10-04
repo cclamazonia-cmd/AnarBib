@@ -118,8 +118,9 @@ describe('la file et les listes ne montrent pas les reprises vierges', () => {
       const s = src(f);
       expect(s).toContain(`useUntouchedRetake('${kind}', form.id)`);
       expect(s).toMatch(/function fillFromRecord\([^)]*\) \{[\s\S]{0,80}?trackRetake\(r\);/);
-      expect(s).toContain('useSaveConfirmation(setMsg, msgRef)');
-      expect(s).toMatch(/ref=\{msgRef\}/);
+      // 04/10 : la confirmation vit dans la barre d'état collante.
+      expect(s).toContain('useSaveConfirmation(setMsg)');
+      expect(s).toContain("<CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />");
     }
   });
 });

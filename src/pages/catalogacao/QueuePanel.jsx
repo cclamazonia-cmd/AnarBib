@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -7,6 +8,7 @@ import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useStaffLibraries, libelleLot, partagerPourLeLot } from '@/lib/useStaffLibraries';
+import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 
 // Labels resolved inside component via t()
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
@@ -127,6 +129,7 @@ function makeComparator(sortBy, sortDir) {
 export default function QueuePanel({ batches, onEditItem, onChanged, isActive = false }) {
   // ── Filters ─────────────────────────────────────────────
   const { formatMessage: t, formatDate } = useIntl();
+  const confirmer = useConfirm();
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [actionFilter, setActionFilter] = useState('');
@@ -447,7 +450,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   async function publishSelected() {
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
-    if (!confirm(t({ id: 'catalogacao.queue.publishConfirm' }, { count: sel.length }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.queue.publishConfirm' }, { count: sel.length }), confirmLabel: t({ id: 'confirm.action.publish' }) }))) return;
     setMsg({ text: '', kind: '' });
     let ok = 0, fail = 0; const errs = [];
     for (const { type, id } of sel) {
@@ -474,7 +477,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   async function discardSelected() {
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
-    if (!confirm(t({ id: 'catalogacao.queue.discardConfirm' }, { count: sel.length }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.queue.discardConfirm' }, { count: sel.length }), confirmLabel: t({ id: 'confirm.action.trash' }) }))) return;
     setMsg({ text: '', kind: '' });
     const ok = await bulkByType(sel, (table, ids) =>
       supabase.from(table).update({ status: 'cancelled' }).in('id', ids).select('id'),
@@ -594,7 +597,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   }
 
   async function deleteTrashItem(type, id) {
-    if (!confirm(t({ id: 'catalogacao.queue.deleteConfirm' }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.queue.deleteConfirm' }), confirmLabel: t({ id: 'confirm.action.deleteForever' }), tone: 'danger' }))) return;
     setMsg({ text: '', kind: '' });
     try {
       const { data, error } = await supabase.from(tableFor(type)).delete().eq('id', id).select('id');
@@ -623,7 +626,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     const question = trashBatch
       ? t({ id: 'catalogacao.queue.emptyTrashBatchConfirm' }, { count: total, batch: lot })
       : t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: total });
-    if (!confirm(question)) return;
+    if (!(await confirmer({ message: question, confirmLabel: t({ id: 'confirm.action.emptyTrash' }), tone: 'danger' }))) return;
     setMsg({ text: '', kind: '' });
     let echec = null;
     for (const [type, table] of Object.entries(TABLE_FOR)) {
@@ -644,7 +647,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   }
 
   async function restoreDeleted(auditId) {
-    if (!confirm(t({ id: 'catalogacao.queue.restoreDeletedConfirm' }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.queue.restoreDeletedConfirm' }), confirmLabel: t({ id: 'confirm.action.restore' }) }))) return;
     try {
       const { data, error } = await supabase.rpc('fn_restore_deleted_draft', { p_audit_id: auditId });
       if (error) throw error;
@@ -708,7 +711,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         </button>
       </div>
 
-      {msg.text && <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.82rem', marginBottom: 12, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : msg.kind === 'warn' ? 'rgba(180,83,9,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : msg.kind === 'warn' ? '#fbbf24' : '#f87171' }}>{msg.text}</div>}
+      <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
 
       {/* ── Filters ──────────────────────────────────── */}
       <div className="cat-book-grid" style={{ marginBottom: 14 }}>

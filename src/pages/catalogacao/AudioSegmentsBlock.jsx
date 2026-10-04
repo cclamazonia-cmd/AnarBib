@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { useConfirm } from '@/contexts/ConfirmContext';
 import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import AudioFingerprintTool from './AudioFingerprintTool';
@@ -23,6 +24,7 @@ const EMPTY_DRAFT = {
 
 export default function AudioSegmentsBlock({ bookId, onMsg }) {
   const { formatMessage: t } = useIntl();
+  const confirmer = useConfirm();
   const [tracks, setTracks] = useState([]);
   const [recTypes, setRecTypes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -108,7 +110,7 @@ export default function AudioSegmentsBlock({ bookId, onMsg }) {
   }
 
   async function deleteSegment(trackId) {
-    if (!confirm(t({ id: 'catalogacao.audio.seg.deleteConfirm' }))) return;
+    if (!(await confirmer({ message: t({ id: 'catalogacao.audio.seg.deleteConfirm' }), confirmLabel: t({ id: 'confirm.action.delete' }), tone: 'danger' }))) return;
     setBusy(true);
     try {
       await apiRpc('audio_track_delete', { p_track_id: Number(trackId) });
