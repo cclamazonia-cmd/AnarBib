@@ -45,3 +45,18 @@ describe('le catalogue ne lit plus has_online_reading pour ses badges', () => {
     expect(src).toContain('{badgeNumerique(eds.map((e) => e.book_id))}');
   });
 });
+
+describe('la fiche dit à qui la version numérique est réservée', () => {
+  const src = readFileSync(path.resolve(__dirname, '../pages/public/BookPage.jsx'), 'utf8');
+  it('interroge l’accès réel pour tout le monde, anonyme compris', () => {
+    expect(src).toContain("supabase.rpc('catalog_digital_access_v1', { p_book_ids: [bookId] })");
+    expect(src).toMatch(/if \(!publicAccessFound\) \{\s*try \{\s*const acc = await supabase\.rpc\('catalog_digital_access_v1'/);
+  });
+  it('nomme les détentrices, propose la connexion, et traduit les droits', () => {
+    expect(src).toContain("t({ id: 'book.digital.reserved' })");
+    expect(src).toContain("t({ id: isAuth ? 'book.digital.reservedNotMember' : 'book.digital.reservedLogin' })");
+    expect(src).toContain('/login?next=');
+    expect(src).toContain('catalogacao.digital.rights.${digitalAccess.rights}');
+    expect(src).not.toContain('<span> — {digitalAccess.rights}</span>');
+  });
+});

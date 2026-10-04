@@ -224,6 +224,20 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* Réservé à d'autres lecteur·rices (bibliothèques détentrices), 04/10/2026. */
+.ab-livro-digital-chip--reserved {
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--color-warn);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.ab-livro-digital-note {
+  flex-basis: 100%;
+  font-size: 0.85rem;
+  color: var(--brand-muted);
+  line-height: 1.45;
+}
+
 /* ── Actions ────────────────────────────────────────────── */
 
 .ab-livro-actions {

@@ -225,7 +225,22 @@ export default function BookPage() {
             }
           } catch {}
 
-          if (user && !publicAccessFound) {
+          // 04/10/2026 (20261004215035) : une version réservée se signale à
+          // tout le monde, avec ses bibliothèques détentrices ; seul·es leurs
+          // membres (et l'administration du réseau) la lisent.
+          let reserve = null;
+          if (!publicAccessFound) {
+            try {
+              const acc = await supabase.rpc('catalog_digital_access_v1', { p_book_ids: [bookId] });
+              const a = Array.isArray(acc.data) ? acc.data[0] : null;
+              if (a?.has_restricted) {
+                reserve = { libs: (a.restricted_libraries || []).map((l) => l.name || l.slug), canRead: !!a.can_read_restricted };
+                setDigitalAccess({ hasPublicAccess: false, hasRestrictedAccess: false, reserved: reserve });
+              }
+            } catch {}
+          }
+
+          if (user && !publicAccessFound && (reserve === null || reserve.canRead)) {
             try {
               const rpc2 = await supabase.rpc('fn_book_restricted_pdf_state_for_current_user', { p_bib_ref: bookData.bib_ref });
               const r2 = Array.isArray(rpc2.data) ? rpc2.data?.[0] : rpc2.data;
@@ -247,6 +262,7 @@ export default function BookPage() {
                   hasRestrictedAccess: true,
                   canReadNow: true,
                   assetId: r2.asset_id,
+                  reserved: reserve,
                 });
               }
             } catch {}
@@ -566,11 +582,28 @@ export default function BookPage() {
               {hasDigital ? (
                 <>
                   <span className="ab-livro-digital-chip ab-livro-digital-chip--yes">
-                    {digitalAccess.hasPublicAccess ? t({ id: 'book.digital.yes' }) : t({ id: 'book.digital.activeAccount' })}
+                    {digitalAccess.hasPublicAccess ? t({ id: 'book.digital.yes' }) : t({ id: 'book.digital.reserved' })}
                   </span>
-                  <Link to={buildLerUrl()} className="ab-button">
-                    {digitalAccess.hasPublicAccess ? t({ id: 'book.digital.read' }) : (isAuth ? t({ id: 'book.digital.checkAccess' }) : t({ id: 'book.digital.loginToRead' }))}
-                  </Link>
+                  <Link to={buildLerUrl()} className="ab-button">{t({ id: 'book.digital.read' })}</Link>
+                  {!digitalAccess.hasPublicAccess && digitalAccess.reserved?.libs?.length > 0 && (
+                    <span className="ab-livro-digital-note">
+                      {t({ id: 'catalog.digital.reservedFor' }, { libraries: digitalAccess.reserved.libs.join(', ') })}
+                    </span>
+                  )}
+                </>
+              ) : digitalAccess?.reserved ? (
+                <>
+                  <span className="ab-livro-digital-chip ab-livro-digital-chip--reserved">{t({ id: 'book.digital.reserved' })}</span>
+                  {!isAuth && (
+                    <Link to={`/login?next=${encodeURIComponent(`/livro/${book.book_id || book.id}`)}`} className="ab-button ab-button--secondary">
+                      {t({ id: 'book.digital.loginToRead' })}
+                    </Link>
+                  )}
+                  <span className="ab-livro-digital-note">
+                    {t({ id: 'catalog.digital.reservedFor' }, { libraries: digitalAccess.reserved.libs.join(', ') })}
+                    {' — '}
+                    {t({ id: isAuth ? 'book.digital.reservedNotMember' : 'book.digital.reservedLogin' })}
+                  </span>
                 </>
               ) : (
                 <span className="ab-livro-digital-chip ab-livro-digital-chip--no">{t({ id: 'book.digital.no' })}</span>
@@ -583,7 +616,7 @@ export default function BookPage() {
                 {t({ id: 'book.digital.source' })}: {digitalAccess.sourceUrl
                   ? <a href={digitalAccess.sourceUrl} target="_blank" rel="noopener noreferrer">{digitalAccess.sourceName}</a>
                   : digitalAccess.sourceName}
-                {digitalAccess.rights && <span> — {digitalAccess.rights}</span>}
+                {digitalAccess.rights && <span> — {t({ id: `catalogacao.digital.rights.${digitalAccess.rights}`, defaultMessage: digitalAccess.rights })}</span>}
               </div>
             )}
 
