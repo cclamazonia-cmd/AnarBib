@@ -632,3 +632,6 @@ tests/sql/h21_republier_hors_lot_tests.sql
 # Une reprise jamais enregistrée s'oublie (03/10/2026) : hors file, sans journal,
 # à l'abandon ou par le job horaire ; la première écriture la fait vivre.
 tests/sql/reprises_vierges_tests.sql
+# Le catalogue dit ce qui se lit en ligne (04/10/2026) : usages publics, réservé,
+# lecture par la détentrice et l'administration du réseau.
+tests/sql/acces_numerique_catalogue_tests.sql

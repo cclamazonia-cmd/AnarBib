@@ -241,6 +241,8 @@ BEGIN
       ('api.audio_tracklist_public'),
       ('api.search_catalog_v1'),
       ('api.subject_related_v1'),
+      -- 04/10/2026 (20261004215035) : l'indicateur numérique du catalogue public.
+      ('public.catalog_digital_access_v1'),
       ('public.fn_book_due_dates'),
       ('public.fn_book_restricted_pdf_state'),
       ('public.fn_book_restricted_pdf_state_for_current_user'),
@@ -373,6 +375,7 @@ BEGIN
       ('public.catalog_bridge_date'),
       ('public.catalog_bridge_text'),
       ('public.catalog_bridge_timestamptz'),
+      ('public.catalog_digital_access_v1'),
       ('public.catalog_partner_can_compare'),
       ('public.catalog_partner_can_import'),
       ('public.catalog_partner_can_mutualize'),
