@@ -12,6 +12,7 @@ import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
 import { coverThumbUrl, coverUrl } from '@/lib/coverThumbs';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useDigitalAccess, digitalBadge } from '@/hooks/useDigitalAccess';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, EmptyState, Spinner } from '@/components/ui';
 import UnifiedSearchCombobox from '@/components/UnifiedSearchCombobox';
@@ -1053,6 +1054,33 @@ export default function CatalogPage() {
   }
   const STATUS_RANK = { ok: 0, warn: 1, muted: 2, bad: 3 };
 
+  // Accès numérique des livres affichés (20261004215035) : les éditions des
+  // lignes, et toutes celles des œuvres, même repliées (le badge d'une œuvre
+  // dit si l'une de ses éditions se lit en ligne).
+  const idsAffiches = [];
+  for (const row of tableRows) {
+    if (row.type === 'edition') idsAffiches.push(row.book.book_id);
+    else if (row.type === 'work') for (const e of (row.w.editions || [])) idsAffiches.push(e.book_id);
+  }
+  const accesNumerique = useDigitalAccess(idsAffiches, user?.id);
+
+  function badgeNumerique(bookIds) {
+    const b = digitalBadge(bookIds.map((id) => accesNumerique.get(Number(id))));
+    if (!b) return null;
+    const libs = (b.libs || []).join(', ');
+    if (b.kind === 'public') {
+      const cle = { escuta_online: 'catalog.digital.listenOnline', visualizacao_online: 'catalog.digital.watchOnline',
+                    link_externo: 'catalog.digital.externalLink' }[b.usage] || 'catalog.actions.readOnline';
+      return <span className="ab-online-badge">{t({ id: cle })}</span>;
+    }
+    if (b.kind === 'reserved-open') {
+      return <span className="ab-online-badge" title={t({ id: 'catalog.digital.reservedFor' }, { libraries: libs })}>
+        {t({ id: 'catalog.digital.readReserved' })}</span>;
+    }
+    return <span className="ab-online-badge ab-online-badge--reserved" title={t({ id: 'catalog.digital.reservedHint' })}>
+      {t({ id: 'catalog.digital.reservedFor' }, { libraries: libs })}</span>;
+  }
+
   function copiesExpander(book) {
     const open = expandedCopies.has(book.book_id);
     return (
@@ -1100,6 +1128,7 @@ export default function CatalogPage() {
             </Link>
             <span className="ab-cat-title__text">
               <Link to={href} className="ab-work-title">{w.display_title || rep.titulo}</Link>
+              {badgeNumerique(eds.map((e) => e.book_id))}
               {langs.length > 0 && <div className="ab-work-meta">{langs.join(' · ')}</div>}
             </span>
           </div>
@@ -1723,7 +1752,7 @@ export default function CatalogPage() {
                               {book.titulo}
                               {book.subtitulo && <span className="ab-subtitulo"> — {book.subtitulo}</span>}
                             </Link>
-                            {book.has_online_reading && <span className="ab-online-badge">{t({ id: 'catalog.actions.readOnline' })}</span>}
+                            {badgeNumerique([book.book_id])}
                           </span>
                         </div>
                       </td>
