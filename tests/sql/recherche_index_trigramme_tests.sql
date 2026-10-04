@@ -38,7 +38,10 @@
 --   T5 search_authors_by_name emprunte ses deux index et trouve par la forme de tri ;
 --   T6 elle trouve par proximité (%) même si la session a relevé le seuil ;
 --   T7 search_publishers_by_name emprunte son index et trouve par proximité ;
---   T8 la publication trouve l'éditeur par son index (lower(name)).
+--   T8 la publication trouve l'éditeur par son index (lower(name)) ;
+--   T9 search_catalog_v1 suggère une édition par le seul titre de son œuvre
+--      (work_titles), par l'index de ces titres, libellé « titre (titre
+--      d'œuvre) » (E27, 20261004211159).
 --   Bilan OK : 'RECHERCHE-TRIGRAMME OK : N/N'
 -- =====================================================================
 DO $$
@@ -47,7 +50,7 @@ DECLARE
   c_lib    constant uuid := 'b33b33b3-0000-4000-8000-0000000000b1';
   c_membre constant uuid := 'b33b33b3-0000-4000-8000-000000000001';
   v_author bigint; v_book bigint; v_book2 bigint; v_pub bigint;
-  v_idx text[]; v_avant bigint[]; v_apres bigint[]; v_n int; v_txt text; v_err text;
+  v_idx text[]; v_avant bigint[]; v_apres bigint[]; v_n int; v_txt text; v_err text; v_plan text;
   r record;
 BEGIN
   -- ── Fixtures ──
@@ -197,6 +200,30 @@ BEGIN
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : publisher_id='
       || coalesce((SELECT publisher_id FROM public.books WHERE id = v_book)::text, 'NULL') || ' ; parcours '
       || pg_stat_get_xact_numscans('public.publishers_lower_name_idx'::regclass) || ' (avant ' || v_avant[1] || ')'); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T9 search_catalog_v1 suggère une édition par le seul titre de son œuvre, par son index';
+  BEGIN
+    -- « Quaggafonia » n'est que dans le titre d'œuvre, pas dans celui de l'édition.
+    INSERT INTO public.works (uniform_title) VALUES ('Xylofonia libertária B33') RETURNING id INTO v_n;
+    UPDATE public.books SET work_id = v_n WHERE id = v_book;
+    INSERT INTO public.work_titles (work_id, lang, title, source) VALUES (v_n, 'fr', 'Quaggafonia libertaire b33w', 'manual');
+    PERFORM set_config('request.jwt.claims', '', true);
+    SELECT string_agg(s.label, ' | ') INTO v_txt FROM api.search_catalog_v1('quaggafonia b33w') s WHERE s.kind = 'book' AND s.id = v_book;
+    -- Sur ce jeu minuscule, le planificateur peut atteindre le titre d'œuvre
+    -- par la clé (work_id, lang) depuis l'édition : le compteur de l'index ne
+    -- tranche pas. La preuve est donc celle de B33 — l'expression de la
+    -- fonction, parcours séquentiels coupés, est servie par l'index.
+    v_plan := NULL;
+    FOR r IN EXECUTE $q$EXPLAIN (FORMAT TEXT) SELECT 1 FROM public.work_titles wt
+                        WHERE public.f_normalize_search(wt.title) LIKE 'quaggafonia%'
+                           OR public.f_normalize_search(wt.title) ~ '(^|\s)(quaggafonia|b33w)'$q$ LOOP
+      v_plan := coalesce(v_plan || E'\n', '') || r."QUERY PLAN";
+    END LOOP;
+    IF v_txt = 'Xylofonia libertária B33 (Quaggafonia libertaire b33w)' AND v_plan ~ 'work_titles_title_norm_trgm_idx' THEN
+      v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : libellé ' || coalesce(v_txt, '∅') || ' ; plan ' || left(coalesce(v_plan, '∅'), 300)); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed > 0 THEN
