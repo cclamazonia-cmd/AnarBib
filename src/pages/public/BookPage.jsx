@@ -753,12 +753,14 @@ function BookAuthorLinks({ book, contributors }) {
   // Priorite : liste COMPLETE des contributeurs (lies en <Link>, non lies en
   // texte). Evite le masquage des contributeurs sans autorite
   // (#FICHE-AUTEURS-INCOMPLETE). Fallback : authors_json (autorites liees).
+  // CAT-G4 : un contributeur lie s'affiche sous la forme autorisee de son
+  // autorite (point d'acces) ; la transcription reste dans la vue ISBD.
   if (Array.isArray(contributors) && contributors.length > 0) {
     return contributors.map((c, i) => (
       <span key={c.author_id || `${c.position}-${i}`}>
         {i > 0 && ' ; '}
         {c.author_id ? (
-          <Link to={`/autor/${c.author_id}`} className="ab-livro-author-link">{c.name}</Link>
+          <Link to={`/autor/${c.author_id}`} className="ab-livro-author-link">{c.authority_name || c.name}</Link>
         ) : (
           <span>{c.name}</span>
         )}
