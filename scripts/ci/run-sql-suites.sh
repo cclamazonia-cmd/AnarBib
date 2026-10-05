@@ -116,7 +116,7 @@ echo "${n} migration(s) appliquée(s) (baseline + forward)"
 apply seed "$SEED"; echo "seed appliqué"
 echo "::endgroup::"
 
-# ---- filet BG2 : toute table de `public` doit être classée ----------------
+# ---- filet BG2 : toute table de `public` et d'`ingest` doit être classée ----
 # PLAN_DE_MARCHE règle 6 : une table créée dans `public` BLOQUE la sauvegarde
 # suivante tant qu'elle n'est pas classée — anarbib-bg2.sh y appelle `die`, il
 # ne se contente pas d'avertir. Jusqu'ici la règle n'était qu'une discipline :
@@ -126,13 +126,27 @@ echo "::endgroup::"
 # voie ; seule l'alarme de silence l'aurait dit, ~36 h plus tard.
 # Le fichier est désormais dans le dépôt et ~/anarbib-ops/ pointe dessus par un
 # lien symbolique : une seule copie, et la forge échoue sur LE commit fautif.
+#
+# BG2-13 (05/10/2026) : le flux long prend aussi le schéma `ingest`, et le
+# filet classe donc les tables de `public` (nues) ET d'`ingest` (qualifiées :
+# `ingest.<table>`). bg2_sql_tables et bg2_normaliser existent À L'IDENTIQUE
+# dans deploy/ops/anarbib-bg2.sh : la forge et le poste lisent le même
+# classement de la même façon (src/tests/bg2-ingest-flux-long.test.js compare
+# les deux définitions et les exécute). Toute retouche se fait DES DEUX CÔTÉS.
+bg2_sql_tables() {
+  printf '%s\n' "select case when n.nspname = 'public' then c.relname else n.nspname || '.' || c.relname end
+  from pg_class c join pg_namespace n on n.oid = c.relnamespace
+ where n.nspname in ('public', 'ingest') and c.relkind in ('r', 'p')
+ order by 1;"
+}
+bg2_normaliser() {
+  sed -e 's/#.*$//' -e 's/[[:space:]]//g' | grep -v '^$' | LC_ALL=C sort -u || true
+}
 echo "::group::filet BG2 (classement des tables pour la sauvegarde)"
 [ -f "$KNOWN" ] || fail "classement des tables absent : $KNOWN"
-PT -At -c "select c.relname from pg_class c
-             join pg_namespace n on n.oid = c.relnamespace
-            where n.nspname = 'public' and c.relkind = 'r'" \
-  | grep -v '^$' | LC_ALL=C sort -u > /tmp/bg2-real.txt
-grep -vE '^[[:space:]]*(#|$)' "$KNOWN" | LC_ALL=C sort -u > /tmp/bg2-known.txt
+PT -At -c "$(bg2_sql_tables)" | bg2_normaliser > /tmp/bg2-real.txt
+[ -s /tmp/bg2-real.txt ] || fail "filet BG2 : aucune table lue dans le schéma reconstruit"
+bg2_normaliser < "$KNOWN" > /tmp/bg2-known.txt
 non_classees="$(comm -23 /tmp/bg2-real.txt /tmp/bg2-known.txt)"
 # Sens NON bloquant : une table classée mais absente du schéma reconstruit
 # n'empêche aucune sauvegarde (le filet de anarbib-bg2.sh ne teste pas ce sens
@@ -144,7 +158,8 @@ echo "::endgroup::"
 if [ -n "$non_classees" ]; then
   echo "::error::tables NON CLASSÉES pour la sauvegarde :"
   printf '%s\n' "$non_classees" | sed 's/^/    - /'
-  echo "  → ajoute-les à $KNOWN. Si elles portent des données personnelles,"
+  echo "  → ajoute-les à $KNOWN (table de public : nom nu ; d'ingest : ingest.<table>)."
+  echo "    Si elles portent des données personnelles,"
   echo "    ajoute-les AUSSI à bg2-denylist.txt (côté ~/anarbib-ops/)."
   fail "filet BG2 : classe les nouvelles tables avant de fusionner."
 fi

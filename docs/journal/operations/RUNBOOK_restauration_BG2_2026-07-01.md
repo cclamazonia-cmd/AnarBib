@@ -20,7 +20,7 @@ Trois dépôts restic distincts, chiffrés, chez **Herbes Folles** (CCL Lille, h
 
 | Dépôt | Contenu | Rétention | Sélection |
 |---|---|---|---|
-| `…/anarbib-long`    | base durable : schéma `public` **moins** les PII (≈142 tables : catalogue, gouvernance, config) | 7/4/6 | denylist + filet |
+| `…/anarbib-long`    | base durable : schémas `public` **et `ingest`** (depuis le 05/10/2026, BG2-13) **moins** les PII, dans un seul fichier `anarbib-long.sql` (au 05/10 : 158 tables `public` + 11 `ingest` ; catalogue, gouvernance, config, machinerie d'import) + les secrets du Vault (`anarbib-vault.sql`) | 7/4/6 | denylist + filet |
 | `…/anarbib-court`   | base sensible : 30 tables PII de `public` + `auth.users`/`identities`/`mfa_factors` | 7 jours | allowlist stricte |
 | `…/anarbib-storage` | les 16 buckets Storage (≈430 Mo : numérisations, couvertures, portraits…) | 7/4/6 | miroir complet |
 
@@ -53,7 +53,7 @@ Outils requis : `restic` ≥ 0.16, `psql`/`pg_dump` ≥ 17, et `docker` (pour un
 
 ## 3. Scénario A — Sinistre total (repartir de zéro)
 
-Reconstruire toute la base sur une nouvelle instance. **L'ordre est impératif : `auth` → long → court → storage.** (Découvert à l'usage : le flux long dépend du schéma `auth` ; le flux court dépend de la structure posée par le long.)
+Reconstruire toute la base sur une nouvelle instance. **L'ordre est impératif : `auth` → long → court → storage**, puis les droits et l'exposition d'`ingest` (§3.2-ter), qui s'appliquent sur le long rejoué. (Découvert à l'usage : le flux long dépend du schéma `auth` ; le flux court dépend de la structure posée par le long.)
 
 ### 3.0 — Choisir la cible et préparer `auth`
 
@@ -93,11 +93,13 @@ COURT=$(find /tmp/restauration/court -name 'anarbib-court.sql' | head -1)
 `CIBLE` = la chaîne de connexion de la **nouvelle** base (jamais la prod encore vivante).
 
 ```bash
-psql "$CIBLE" -v ON_ERROR_STOP=0 < "$LONG"    # pose toute la structure de public + le catalogue
+psql "$CIBLE" -v ON_ERROR_STOP=0 < "$LONG"    # pose public + ingest (structure et données) + le catalogue
 psql "$CIBLE" -v ON_ERROR_STOP=0 < "$COURT"   # ajoute les PII + les comptes par-dessus
 ```
 
 `ON_ERROR_STOP=0` est **voulu** : des erreurs de contraintes croisées apparaissent (tables du court pointant entre elles, FK inter-flux). Elles sont **attendues** et n'empêchent pas le chargement des données — cf. §3.4 pour le contrôle.
+
+Un dump **antérieur à la mise en service de BG2-13** (premier tir `long` après le 05/10/2026) ne contient pas `ingest` : la structure du schéma (tables, fonctions, droits) ne peut alors venir que des migrations du dépôt, ses données sont perdues, et seule `ingest.book_import_baselines` se reconstitue, par la fonction de secours (§3.2-ter, point 3).
 
 ### 3.2-bis — Rejouer les effacements (pseudonymisation BG2-14)
 
@@ -194,7 +196,57 @@ SQL
 
 **Vérification.** Aucun `user_id` effacé ne doit subsister en clair. Contrôle :
 si `erasure_log` est non vide mais le rejeu a touché 0 ligne, suspecter un sel
-incorrect. Sinon, le long restauré est conforme et on peut poursuivre (§3.3).
+incorrect. Sinon, le long restauré est conforme et on peut poursuivre (§3.2-ter, puis §3.3).
+
+### 3.2-ter — Schéma `ingest` : droits, exposition, secours
+
+Depuis le 05/10/2026 (BG2-13), le flux long emporte le schéma `ingest` dans le même `anarbib-long.sql` : `CREATE SCHEMA ingest`, ses 11 tables **avec leurs données** (sources, lots, fichiers, lignes de staging, correspondances, bases d'import H21), ses 56 fonctions et ses politiques. Le rejeu §3.2 le recrée ; trois choses restent à faire à la main.
+
+**1. Reposer les droits.** Le dump est pris en `--no-privileges` : aucun `GRANT` ni `REVOKE` n'y figure. Après rejeu, `service_role` n'a **pas** l'usage du schéma (les Edge Functions d'import et de moisson, qui passent par `admin.schema('ingest')`, échouent), et les fonctions recréées ont repris l'`EXECUTE` à `PUBLIC` de Postgres. La repose ci-dessous rend exactement l'état relevé en production le 05/10/2026 (lecture seule) — schéma, 11 tables, 11 séquences, 56 fonctions, privilèges par défaut — d'après le baseline (`GRANT USAGE ON SCHEMA "ingest" TO "service_role"`, les trois `ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "ingest"`), le paquet INGEST-RLS du 29/08 et la migration du lot 2 de H21 (`20261005172708`, `REVOKE ALL … FROM PUBLIC, anon, authenticated` puis `GRANT ALL … TO service_role` sur `ingest.book_import_baselines`) :
+
+```bash
+psql "$CIBLE" -v ON_ERROR_STOP=1 <<'SQL'
+BEGIN;
+REVOKE ALL ON SCHEMA ingest FROM PUBLIC, anon, authenticated;
+GRANT USAGE ON SCHEMA ingest TO service_role;
+REVOKE ALL ON ALL TABLES    IN SCHEMA ingest FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA ingest FROM PUBLIC, anon, authenticated;
+GRANT ALL ON ALL TABLES    IN SCHEMA ingest TO service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA ingest TO service_role;
+REVOKE ALL ON ingest.book_import_baselines FROM PUBLIC, anon, authenticated;
+GRANT ALL ON ingest.book_import_baselines TO service_role;
+REVOKE EXECUTE ON ALL FUNCTIONS IN SCHEMA ingest FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA ingest TO service_role;
+-- cinq fonctions pures gardent EXECUTE pour authenticated (politiques, déclencheurs)
+GRANT EXECUTE ON FUNCTION ingest.fn_is_editorial_decision_compatible(text, text),
+                          ingest.fn_match_normalize_text(text),
+                          ingest.fn_normalize_isxn(text),
+                          ingest.fn_partner_catalog_extract_collection_hint(jsonb, jsonb),
+                          ingest.fn_partner_catalog_extract_local_classification_hint(jsonb, jsonb)
+  TO authenticated;
+-- une seule fonction réservée au propriétaire (H31)
+REVOKE EXECUTE ON FUNCTION ingest.fn_h31_retraitement_refuse(bigint) FROM service_role;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ingest GRANT ALL ON TABLES    TO service_role;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ingest GRANT ALL ON SEQUENCES TO service_role;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ingest GRANT ALL ON FUNCTIONS TO service_role;
+COMMIT;
+SQL
+```
+
+Éprouvé le 05/10/2026 sur un banc privé : après rejeu du dump et cette repose, l'empreinte des ACL d'`ingest` (schéma, tables, séquences, fonctions, privilèges par défaut) est identique à celle de la base reconstruite depuis les migrations, elle-même identique à la production. Si une migration postérieure a changé ces droits, la relire avant d'appliquer — c'est la production d'avant le sinistre qui fait foi, pas ce bloc.
+
+**2. Exposer `ingest` dans l'API.** PostgREST n'expose que les schémas déclarés : en production `public, graphql_public, api, ingest` (relevé du 28/09, B35 ; `private` n'y est pas — PGRST106 — et ne doit pas y entrer). Sur une instance neuve : Dashboard → *Project Settings → Data API → Exposed schemas*, y ajouter `ingest` (et `api`). Sans cela, `harvest-oai-pmh` et l'import répondent PGRST106 même avec les droits reposés. Le schéma reste fermé à `anon` et `authenticated` par l'absence d'`USAGE` (suite `ingest_ferme_tests`) : l'exposer ne l'ouvre pas.
+
+**3. Secours : `ingest.fn_h21_reprendre_les_bases()`.** Si `ingest.book_import_baselines` manque ou est incomplète (dump d'avant le 05/10, table perdue), la fonction pose une base (origine `reprise`) pour chaque identifiant d'origine (`book_external_ids`, `scheme like 'import:%'`) qui n'en a pas, depuis la ligne de staging vivante, sinon depuis `book_drafts.marc_json.ingest` (public, toujours sauvegardé). Idempotente :
+
+```bash
+psql "$CIBLE" -c "select ingest.fn_h21_reprendre_les_bases();"
+# → {"identifiants_sans_base": n, "depuis_la_ligne": …, "depuis_le_brouillon": …, "sans_source": …}
+```
+
+Une base reprise marque ses champs douteux (`reprise_champs_douteux`) : elle ne vaut pas la base d'origine, d'où l'entrée d'`ingest` au flux long.
+
+**Colonnes d'acteur.** Les colonnes d'acteur staff d'`ingest` (`requested_by`, `editorial_decided_by`, `created_by`…, sans clé étrangère) sont sauvegardées et restaurées telles quelles : décision de Xavier du 05/10/2026, REGISTRE BG2-13. Elles ne sont pas couvertes par le rejeu des effacements §3.2-bis.
 
 ### 3.3 — Restaurer le Storage
 
@@ -217,13 +269,17 @@ supabase storage cp --linked --experimental -r \
 ### 3.4 — Vérifier
 
 ```bash
-psql "$CIBLE" -c "select count(*) from pg_tables where schemaname='public';"   -- attendu ~172
+psql "$CIBLE" -c "select count(*) from pg_tables where schemaname='public';"   -- attendu : voir ci-dessous
+psql "$CIBLE" -c "select count(*) from pg_tables where schemaname='ingest';"   -- attendu 11 (au 05/10/2026)
+psql "$CIBLE" -c "select count(*) from ingest.book_import_baselines;"          -- non nul (264 en prod au 05/10)
 psql "$CIBLE" -c "select count(*) from auth.users;"                            -- attendu = nb de comptes
 psql "$CIBLE" -c "select count(*) from books;"                                 -- attendu ~2674
 psql "$CIBLE" -c "select count(*) from emprestimos_v2;"                        -- non nul si emprunts existants
 ```
 
-Repères éprouvés le 01/07 : **172** tables `public`, `auth.users` et `profiles` cohérents avec le nombre de comptes, `books` ≈ 2674.
+**Attendus.** Ils se lisent dans le classement, plus dans un nombre figé : pour chaque schéma, les tables de `deploy/bg2-known-tables.txt` (nues pour `public`, `ingest.<table>` pour `ingest`) moins celles de `bg2-exclude-long.txt`, qui ne sont dans aucun flux. Au 05/10/2026 : **189** tables `public` après long + court (158 par le long, 31 par le court) et **11** `ingest`. `anarbib-bg2.sh restore-test` fait ce calcul et écrit `OK` ou `ECART` par schéma.
+
+Repères éprouvés le 01/07 : **172** tables `public` (avant les tables créées depuis), `auth.users` et `profiles` cohérents avec le nombre de comptes, `books` ≈ 2674. Le 05/10 (banc privé, dump du flux long rejoué dans une base vide) : 158 `public`, 11 `ingest`, les lignes d'`ingest` rejouées à l'identique, aucune erreur citant `ingest`.
 
 ---
 
@@ -276,7 +332,7 @@ La profondeur disponible dépend de la rétention : **long/storage** remontent j
 
 - **`trap RETURN` ≠ `trap EXIT` sous `set -e`.** Un `trap … RETURN` local **ne se déclenche pas** quand `set -e` fait sortir le script sur l'échec d'une commande (ex. `restic` qui n'atteint pas le serveur). Conséquence corrigée le 01/07 : un dump PII en clair pouvait survivre dans `$WORK`. Le nettoyage critique passe désormais par un `trap cleanup_work EXIT` **global** sur `$WORK/*.sql` (cf. REGISTRE BG2-AUTO-5). Ne jamais confier l'effacement d'un dump PII à un `trap RETURN` local.
 
-- **Ordre impératif** : `auth` → long → court. Le long pose la structure `public` dont dépendent les tables PII du court.
+- **Ordre impératif** : `auth` → long → court. Le long pose la structure `public` dont dépendent les tables PII du court ; il pose aussi `ingest` (depuis le 05/10/2026), dont les droits se reposent ensuite (§3.2-ter : le dump est en `--no-privileges`).
 - **Postgres nu** : sans le squelette `auth` (types ENUM) + les 4 rôles, les `CREATE TABLE` échouent. Sur une instance Supabase, ils existent déjà.
 - **Erreurs à la restauration** : les `relation/type does not exist` (dépendances inter-flux) et `role does not exist` (rôles Supabase sur Postgres nu) sont **normales**. Le juge de vérité, ce sont les **comptages** (§3.4), pas le compte d'erreurs.
 - **`ON_ERROR_STOP=0`** obligatoire au rejeu, sinon la première erreur bénigne arrête tout.

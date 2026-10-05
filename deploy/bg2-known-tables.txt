@@ -196,3 +196,14 @@ work_not_same
 works
 loan_cycle_notifications
 deploiement_ecarts_acquittes
+ingest.book_import_baselines
+ingest.import_profiles
+ingest.oai_harvest_state
+ingest.partner_catalog_import_dispatch_log
+ingest.partner_catalog_import_files
+ingest.partner_catalog_import_runs
+ingest.partner_catalog_match_candidates
+ingest.partner_catalog_received_assets
+ingest.partner_catalog_row_to_draft
+ingest.partner_catalog_sources
+ingest.partner_catalog_staging_rows

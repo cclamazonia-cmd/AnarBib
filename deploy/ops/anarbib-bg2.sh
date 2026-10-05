@@ -19,8 +19,10 @@
 #   - les deux listes PII  -> restent dans ~/anarbib-ops/, hors depot (public)
 #
 # Trois flux, chacun son depot restic, sa retention, sa logique de selection :
-#   long     schema public MOINS les PII (denylist + FILET)     retention 7/4/6
+#   long     schemas public + ingest MOINS les PII               retention 7/4/6
+#            (denylist + FILET), dans UN SEUL dump anarbib-long.sql
 #            + les 21 secrets du Vault, dechiffres (BG2-15, 19/08)
+#            (ingest depuis le 05/10/2026 : BG2-13, decision de Xavier)
 #   court    30 tables PII + auth.users/identities/mfa_factors  retention 7 j
 #            (ALLOWLIST stricte)
 #   storage  les 16 buckets Storage (resync systematique)       retention 7/4/6
@@ -37,6 +39,13 @@ OPS_DIR="${OPS_DIR:-$HOME/anarbib-ops}"
 DENYLIST="$OPS_DIR/bg2-denylist.txt"           # 30 tables PII (flux court / exclues du long)
 EXCLUDELONG="$OPS_DIR/bg2-exclude-long.txt"      # tables transitoires : exclues du long ET du court (BG2-14)
 KNOWN="$OPS_DIR/bg2-known-tables.txt"           # TOUTES les tables classees (filet)
+# Les trois listes acceptent des noms QUALIFIES (05/10/2026, BG2-13) : une table
+# de public s'ecrit nue (`books`), une table d'un autre schema s'ecrit avec son
+# schema (`ingest.book_import_baselines`). Cf. bg2_qualifier / bg2_normaliser.
+
+# Schemas du flux long (BG2-13, 05/10/2026). Le filet classe les tables de ces
+# memes schemas (bg2_sql_tables) : les deux listes vont ensemble.
+LONG_SCHEMAS=(public ingest)
 WORK="$OPS_DIR/.work"                           # dumps base temporaires
 STORAGE_WORK="$OPS_DIR/.storage-work"           # miroir local des buckets (resync a chaque fois)
 
@@ -262,30 +271,61 @@ preflight() {
   mkdir -p "$WORK"; chmod 700 "$WORK"
 }
 
+# --- CLASSEMENT CONSCIENT DES SCHEMAS (05/10/2026, BG2-13) ----------------
+# Jusqu'au 05/10 le filet ne regardait que public, et le flux long ne prenait
+# que public : le schema ingest (import catalogue : lots, lignes de staging,
+# bases d'import H21) n'etait sauvegarde par AUCUN flux, alors que BG2-13 le
+# disait « -> flux long » depuis le 30/06. Le classement nomme desormais les
+# tables de public NUES et celles d'ingest QUALIFIEES (`ingest.<table>`).
+#
+# bg2_sql_tables et bg2_normaliser existent A L'IDENTIQUE dans
+# scripts/ci/run-sql-suites.sh (filet de la CI) : la forge et le poste doivent
+# lire le meme classement de la meme facon, sinon l'un laisse passer ce que
+# l'autre refuse. src/tests/bg2-ingest-flux-long.test.js compare les deux
+# definitions et les execute. Toute retouche se fait DES DEUX COTES.
+bg2_sql_tables() {
+  printf '%s\n' "select case when n.nspname = 'public' then c.relname else n.nspname || '.' || c.relname end
+  from pg_class c join pg_namespace n on n.oid = c.relnamespace
+ where n.nspname in ('public', 'ingest') and c.relkind in ('r', 'p')
+ order by 1;"
+}
+bg2_normaliser() {
+  sed -e 's/#.*$//' -e 's/[[:space:]]//g' | grep -v '^$' | LC_ALL=C sort -u || true
+}
+# Nom nu -> public.<nom> ; nom deja qualifie -> tel quel.
+bg2_qualifier() {
+  case "$1" in
+    *.*) printf '%s\n' "$1" ;;
+    *)   printf 'public.%s\n' "$1" ;;
+  esac
+}
+
 real_tables() {
-  psql "$PGCONN" -t -A -c "select tablename from pg_tables where schemaname='public' order by 1;"
+  psql "$PGCONN" -t -A -c "$(bg2_sql_tables)" | bg2_normaliser
 }
 
 # ----------------------------- LE FILET --------------------------------
 filet() {
-  info "Filet : comparaison tables reelles vs classees connues"
+  info "Filet : comparaison tables reelles (${LONG_SCHEMAS[*]}) vs classees connues"
   local real new gone
   real="$(real_tables)"
-  new="$(comm -23 <(printf '%s\n' "$real" | sort -u) <(sort -u "$KNOWN") || true)"
+  [ -n "$real" ] || die "Filet : aucune table lue en base — connexion ou droits ?"
+  new="$(comm -23 <(printf '%s\n' "$real") <(bg2_normaliser < "$KNOWN") || true)"
   if [ -n "$new" ]; then
     { echo "!!! TABLES NON CLASSEES (ni court ni long connu) :"
       printf '%s\n' "$new" | sed 's/^/    - /'
-      echo "    -> si PII : ajoute a $DENYLIST. Dans TOUS les cas : ajoute a $KNOWN, puis relance."; } >&2
+      echo "    -> si PII : ajoute a $DENYLIST. Dans TOUS les cas : ajoute a $KNOWN, puis relance."
+      echo "       (une table de public s'ecrit nue, une table d'ingest s'ecrit ingest.<table>)"; } >&2
     die "Filet declenche : classe les nouvelles tables avant de sauvegarder."
   fi
-  gone="$(comm -23 <(sort -u "$DENYLIST") <(printf '%s\n' "$real" | sort -u) || true)"
+  gone="$(comm -23 <(bg2_normaliser < "$DENYLIST") <(printf '%s\n' "$real") || true)"
   [ -z "$gone" ] || { echo "!!! denylist : tables introuvables en base :" >&2
     printf '%s\n' "$gone" | sed 's/^/    - /' >&2; die "Corrige la denylist."; }
   info "Filet OK : toutes les tables sont classees."
 }
 
 # --------------------------- VAULT (BG2-15) ----------------------------
-# Les 21 secrets du Vault ne sont dans AUCUN dump. pg_dump --schema=public ne
+# Les 21 secrets du Vault ne sont dans AUCUN dump. Le pg_dump du long (public, ingest) ne
 # les voit pas, et dumper le schema vault ne servirait a rien : les valeurs y
 # sont chiffrees par une cle de plateforme qui, elle, ne sort jamais. Il faut
 # donc les exporter DECHIFFRES.
@@ -341,21 +381,40 @@ backup_long() {
   local dump="$WORK/anarbib-long.sql"
   local vault="$WORK/anarbib-vault.sql"
 
-  local EXCLUDES=()
-  while IFS= read -r t; do [ -n "$t" ] && EXCLUDES+=(--exclude-table="public.$t"); done < "$DENYLIST"
+  # Exclusions : noms nus = public, noms qualifies = leur schema (BG2-13).
+  local EXCLUDES=() SCHEMAS=() t s
+  while IFS= read -r t; do
+    EXCLUDES+=(--exclude-table="$(bg2_qualifier "$t")")
+  done < <(bg2_normaliser < "$DENYLIST")
   # BG2-14 : outboxes transitoires — exclues du long SANS aller au court
   if [ -f "$EXCLUDELONG" ]; then
     while IFS= read -r t; do
-      t="${t%%#*}"; t="$(echo "$t" | tr -d "[:space:]")"
-      [ -n "$t" ] && EXCLUDES+=(--exclude-table="public.$t")
-    done < "$EXCLUDELONG"
+      EXCLUDES+=(--exclude-table="$(bg2_qualifier "$t")")
+    done < <(bg2_normaliser < "$EXCLUDELONG")
   fi
-  info "LONG : pg_dump (schema public, ${#EXCLUDES[@]} tables PII exclues)"
-  pg_dump "$PGCONN" --schema=public "${EXCLUDES[@]}" --no-owner --no-privileges --file="$dump"
+  # BG2-13 (05/10/2026) : public ET ingest, dans le MEME fichier. Ne pas ouvrir
+  # un second dump pour ingest : un chemin neuf ouvre une lignee restic neuve
+  # (piege vecu avec anarbib-vault.sql, cf. BG2-15 plus bas).
+  for s in "${LONG_SCHEMAS[@]}"; do SCHEMAS+=(--schema="$s"); done
+  info "LONG : pg_dump (schemas ${LONG_SCHEMAS[*]}, ${#EXCLUDES[@]} tables exclues : PII + transitoires)"
+  pg_dump "$PGCONN" "${SCHEMAS[@]}" "${EXCLUDES[@]}" --no-owner --no-privileges --file="$dump"
 
   info "Controle anti-fuite (aucune PII ne doit sortir)"
   grep -qE "^CREATE TABLE public\.($PII_CANARIES) " "$dump" && die "FUITE PII dans le dump long — ANNULE."
-  info "Dump long OK : $(grep -c '^CREATE TABLE ' "$dump") tables, $(du -h "$dump" | cut -f1)"
+  # Au-dela des temoins : AUCUNE table exclue, quel que soit son schema.
+  local x
+  for x in "${EXCLUDES[@]}"; do
+    x="${x#--exclude-table=}"
+    if grep -qE "^CREATE (UNLOGGED )?TABLE ${x//./\\.} \(" "$dump"; then
+      die "FUITE : table exclue $x presente dans le dump long — ANNULE."
+    fi
+  done
+  # Et chaque schema du flux est bien la : un ingest disparu du dump ne doit
+  # pas passer pour une sauvegarde complete.
+  for s in "${LONG_SCHEMAS[@]}"; do
+    grep -q "^CREATE TABLE $s\." "$dump" || die "schema $s ABSENT du dump long — ANNULE."
+  done
+  info "Dump long OK : $(grep -c '^CREATE TABLE ' "$dump") tables (public $(grep -c '^CREATE TABLE public\.' "$dump"), ingest $(grep -c '^CREATE TABLE ingest\.' "$dump")), $(du -h "$dump" | cut -f1)"
 
   dump_vault "$vault"
 
@@ -384,7 +443,9 @@ backup_court() {
   local dump="$WORK/anarbib-court.sql"
 
   local TABLES=()
-  while IFS= read -r t; do [ -n "$t" ] && TABLES+=(--table="public.$t"); done < "$DENYLIST"
+  while IFS= read -r t; do
+    TABLES+=(--table="$(bg2_qualifier "$t")")
+  done < <(bg2_normaliser < "$DENYLIST")
   local a; for a in "${AUTH_TABLES[@]}"; do TABLES+=(--table="$a"); done
   info "COURT : pg_dump (allowlist stricte, ${#TABLES[@]} tables)"
   pg_dump "$PGCONN" "${TABLES[@]}" --no-owner --no-privileges --file="$dump"
@@ -468,12 +529,39 @@ SQL
   echo; info "VERDICT"
   docker exec "$ctn" psql -U postgres -d postgres -c \
     "select 'tables public' t, count(*)::text v from pg_tables where schemaname='public'
+     union all select 'tables ingest',   count(*)::text from pg_tables where schemaname='ingest'
      union all select 'auth.users',      count(*)::text from auth.users
      union all select 'profiles',        count(*)::text from profiles
      union all select 'books',           count(*)::text from books
      union all select 'emprestimos_v2',  count(*)::text from emprestimos_v2;"
-  echo "    (tables public attendu ~172 ; auth.users et profiles non nuls ; books ~2674)"
+  # A part : si ingest manquait, l'union ci-dessus perdrait tout le verdict.
+  docker exec "$ctn" psql -U postgres -d postgres -tAc \
+    "select 'ingest.book_import_baselines : ' || count(*) || ' lignes' from ingest.book_import_baselines" \
+    || echo "    !!! ingest.book_import_baselines introuvable apres rejeu" >&2
+  # Attendus tires du classement, plus d'un nombre fige (« ~172 » datait du 01/07).
+  local s n att
+  for s in "${LONG_SCHEMAS[@]}"; do
+    att="$(attendu_apres_restauration "$s")"
+    n="$(docker exec "$ctn" psql -U postgres -d postgres -tAc \
+           "select count(*) from pg_tables where schemaname='$s'" 2>/dev/null || echo '?')"
+    if [ "$n" = "$att" ]; then
+      echo "    tables $s : $n, attendu $att (classement - exclues du long) : OK"
+    else
+      echo "    !!! tables $s : $n, attendu $att (classement - exclues du long) : ECART" >&2
+    fi
+  done
+  echo "    (auth.users et profiles non nuls ; books ~2674)"
   info "Nettoyage du bac a sable"
+}
+
+# Nombre de tables d'un schema qu'une restauration long + court doit recreer :
+# le classement, moins les tables exclues du long sans aller au court
+# (bg2-exclude-long.txt). Les PII de la denylist reviennent par le court.
+attendu_apres_restauration() {
+  local s="$1"
+  comm -23 <(bg2_normaliser < "$KNOWN") \
+           <( { [ -f "$EXCLUDELONG" ] && cat "$EXCLUDELONG"; true; } | bg2_normaliser ) \
+    | if [ "$s" = public ]; then grep -vc '\.'; else grep -c "^$s\."; fi || true
 }
 
 # --------------------------- PRUNE MENSUEL -----------------------------
