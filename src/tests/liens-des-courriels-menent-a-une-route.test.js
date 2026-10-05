@@ -12,6 +12,9 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect } from 'vitest';
+import { createElement as h } from 'react';
+import { render } from '@testing-library/react';
+import { MemoryRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
@@ -54,5 +57,33 @@ describe('les liens des courriels', () => {
     const morts = LIENS.filter((l) => !ROUTES.some((re) => re.test(l.chemin)))
       .map((l) => `${l.fichier} : ${l.brut}`);
     expect(morts).toEqual([]);
+  });
+
+  // Un courriel déjà reçu ne se corrige pas : le camarade coopté cliquait encore,
+  // après le correctif, sur le lien de son courriel de 14 h 03 et tombait sur la 404.
+  // Les chemins des courriels d'avant d186da59 restent donc des routes, qui
+  // renvoient vers la page qui les remplace.
+  it('les liens des courriels déjà envoyés mènent encore quelque part', () => {
+    const app = readFileSync(path.join(RACINE, 'src/App.jsx'), 'utf8');
+    const ANCIENS = {
+      '/painel/admin-rede/cooptation/:id': '/rede#tab=admins',
+      '/painel/admin-rede/collective-removal/:id': '/rede#tab=admins',
+      '/painel/biblioteca/:id/profil': '/biblioteca#tab=transicoes',
+    };
+    for (const [ancien, cible] of Object.entries(ANCIENS)) {
+      expect(app).toContain(`<Route path="${ancien}" element={<Navigate to="${cible}" replace />} />`);
+      expect(ROUTES.some((re) => re.test(cible.split('#')[0]))).toBe(true);
+    }
+  });
+
+  // Le renvoi garde l'onglet : RedePage et BibliotecaPage lisent #tab=… au montage.
+  it('le renvoi arrive sur la page ET sur l\'onglet', () => {
+    let vu = null;
+    const Ici = () => { const l = useLocation(); vu = l.pathname + l.hash; return null; };
+    render(h(MemoryRouter, { initialEntries: ['/painel/admin-rede/cooptation/8f1c'] },
+      h(Routes, null,
+        h(Route, { path: '/painel/admin-rede/cooptation/:id', element: h(Navigate, { to: '/rede#tab=admins', replace: true }) }),
+        h(Route, { path: '/rede', element: h(Ici) }))));
+    expect(vu).toBe('/rede#tab=admins');
   });
 });

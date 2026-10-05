@@ -204,6 +204,11 @@ export default function App() {
                     path="/cadastro"
                     element={<Navigate to={`/login${window.location.hash || ''}`} replace />}
                   />
+                  {/* Liens des courriels envoyés avant le 05/10/2026 (d186da59) : ces chemins
+                      n'ont jamais été des routes (404) ; les courriels déjà reçus les portent encore. */}
+                  <Route path="/painel/admin-rede/cooptation/:id" element={<Navigate to="/rede#tab=admins" replace />} />
+                  <Route path="/painel/admin-rede/collective-removal/:id" element={<Navigate to="/rede#tab=admins" replace />} />
+                  <Route path="/painel/biblioteca/:id/profil" element={<Navigate to="/biblioteca#tab=transicoes" replace />} />
                   <Route path="/solicitar-biblioteca" element={<SolicitarBibliotecaPage />} />
                   <Route path="/relatar-problema" element={<RelatarProblemaPage />} />
                   <Route path="/lettre" element={<LettrePage />} />
