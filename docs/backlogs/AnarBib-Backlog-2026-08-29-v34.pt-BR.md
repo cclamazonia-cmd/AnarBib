@@ -585,7 +585,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Levantado em 01/10 (somente leitura): catorze pares de obras do mesmo autor·a em que um título «auto» de uma é o título real da outra. Em geral, traduções de uma mesma obra em duas fichas (Reclus 133/880/1131, 268/1387/1203; Kropotkin 19/2381, 79/396, 1/1084, 115/386; Tolstói 28/1297; Gori 48/873; Safón 99/2428; Horowitz 74/2484). Casos a decidir: Nettlau 2036/196 e Kropotkin 1366/2064 (coletânea contra texto único).
 
-*Verificado : 01/10 — levantamento em produção: 14 pares; nada modificado. **05/10 — arbitrado por Xavier, aplicado** (`c923fdc0`, migração `20261005071913`): oito obras reunidas (Kropotkin ×4, Gori, Safón, Horowitz, Reclus); os seis tomos Maucci juntam-se aos de 1905 (obra 133); FCE 1986 e Imaginário ficam à parte com nota; notícia 143 no recueil 2064. Resta: Tolstói 28/1297, Nettlau 2036/196, notícias duplicadas 2601/1195 e 143/138.*
+*Verificado : 01/10 — levantamento em produção: 14 pares; nada modificado. **05/10 — arbitrado por Xavier, aplicado** (`c923fdc0`, migração `20261005071913`): oito obras reunidas (Kropotkin ×4, Gori, Safón, Horowitz, Reclus); os seis tomos Maucci juntam-se aos de 1905 (obra 133); FCE 1986 e Imaginário ficam à parte com nota; notícia 143 no recueil 2064. Resta: Tolstói 28/1297, Nettlau 2036/196, notícias duplicadas 2601/1195 e 143/138. **05/10 — duas notícias duplicadas fundidas** (`176e6894`): 1195 → 2601 (Nettlau, cota MLEG-0144 mantida), 143 → 138 (Kropotkin, dois exemplares BTL; etiqueta do BTL-TL-EX-000142 a refazer). Resta: Tolstói 28/1297 e Nettlau 2036/196.*
 
 **O que é.** Revisar cada par com as edições; reunir as que são a mesma obra; para as outras, fazer como para 1163.
 
