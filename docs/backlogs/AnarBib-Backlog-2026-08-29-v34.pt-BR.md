@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-05** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-05** · 78 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,14 +17,14 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 6
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 11
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 8
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -38,7 +38,7 @@ Este documento substitui o backlog v33 de 17 de junho de 2026. O v33 trazia uma 
 
 O v34 não é uma atualização do v33: é uma **reescrita sobre estado verificado**. Na sua redação, em 29 de agosto de 2026, cada afirmação de estado foi relida contra duas fontes primárias — o banco de produção consultado em somente-leitura e o repositório Codeberg no commit `1d00ed2c`. Nenhum item foi transportado com base na fé de um documento. Entre o v33 e aquele dia, 216 das 221 migrações então aplicadas haviam sido escritas, além de 655 commits.
 
-**Este parágrafo conta uma gênese, não um estado.** Os números que descrevem o presente vivem em « O estado real », levantado à parte e datado; ele foi refeito em 1º de setembro de 2026, e metade dos valores de 29 de agosto havia mudado em três dias. Confundir os dois é exatamente o erro que tornou o v33 inutilizável.
+**Este parágrafo conta uma gênese, não um estado.** Os números que descrevem o presente vivem em « O estado real », levantado à parte e datado; ele foi refeito já em 1º de setembro de 2026 — metade dos valores de 29 de agosto havia mudado em três dias — e o é desde então a cada levantamento (o último: 5 de outubro de 2026, à noite). Confundir os dois é exatamente o erro que tornou o v33 inutilizável.
 
 Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a documentação erra nos dois sentidos**. Declara abertos canteiros entregues há semanas, e declara entregues coisas que ninguém jamais exerceu. A seção « Desvios levantados » os nomeia um a um.
 
@@ -60,58 +60,58 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 5 de outubro de 2026
 
-**Levantamento de 5 de outubro de 2026, meio-dia** (`16962c55`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 29/09, `75ccb035`). Seis dias com duas sessões e uma contribuição externa (PR #31 do camarada `ASR2026`): **18 migrações** (416 = 416, todas pela CI), 56 commits, 1 871 testes JS e 164 suítes SQL, todos verdes. Quatro notícias fundidas, oito obras reunidas (C18), linhas dos EEB 24 e 25 fechadas (C14), nenhum fundo sem exemplar. **Duas linhas do levantamento de 29/09 estavam erradas** (a biblioteca de formação está ativa; o esquema de descarte tem sete tabelas). Nesta versão, após o inventário dos 56 commits: C23 aberto e entregue, G16 aberto (o voto das transições recusaria todo voto), E23 em curso (210 chaves, 74 sem rótulo). Falta fechar: os itens «a verificar» (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) e as decisões (A1, C4, C17, G16) — Xavier; A1, A3 (sem código).
+**Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16, F21 (H20 e H25: um ponto a verificar antes); *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3.
 
-**Frescor dos constatos em 2026-10-05.** **54 itens de 68** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-05.** **55 itens de 78** trazem uma verificação datada própria (A1, A3, B29, B30, B36, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
 | | | |
 |---|---:|---|
-| Tabelas `public` | **197** | todas com RLS ativado, **359 policies** em todos os esquemas (`public` 310, `storage` 47, `cron` 2). Inalterado desde 29/09: as 18 migrações de 30/09 a 05/10 reescrevem funções ou corrigem dados, nenhuma cria tabela nem policy. |
-| Tabelas `ingest` | **10** | todas com RLS; nenhuma tem policy (aviso 0008, as 10) — o esquema nunca foi exposto. Inalterado desde 29/08 (B1). |
+| Tabelas `public` | **198** | todas com RLS ativado, **361 policies** em todos os esquemas (`public` 311, `storage` 47, `cron` 2, `ingest` 1). +1 tabela e +1 policy desde o meio-dia: `public.networks` (G13), em leitura pública. |
+| Tabelas `ingest` | **11** | todas com RLS; uma só tem policy, `book_import_baselines_select_staff` (H21 lote 2) — as outras 10 não (aviso 0008). O esquema continua fechado a `anon` e `authenticated` (sem `USAGE`). Com backup desde 05/10 (I29). |
 | Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, a única tolerada pela suíte `vues_api_definer_tests`). Inalterado desde 24/09. |
-| Funções aplicativas | **1 016** | `public` 745 · `api` 201 · `ingest` 45 · `private` 25. Das quais **766 SECURITY DEFINER** (755 em 29/09, +11). +18 desde 29/09: busca de autor em todos os sentidos (E26), lote 0 do H21, expiração das consultas (F1), retomadas virgens (C19), acesso digital ao catálogo (C20), regra CAT-E19 no descarte (C14). |
-| Migrações aplicadas | **416** | **416 aplicadas em produção = 416 numeradas no repositório**, todas pela CI (`created_by` NULL). +18 desde 29/09: 2 em 30/09 (F16, F17), 5 em 01/10 (E26 ×2, F1 ×2, H21 lote 0), 1 em 03/10 (C19), 4 em 04/10 (F20, E27, E28, C20), 6 em 05/10 (H30, lote de autores, C18 ×2, C14, C23). |
-| Jobs `pg_cron` | **43** | ativos — +2 desde 29/09: `anarbib-consultas-expire-daily` (F1) e `anarbib-purge-untouched-retakes` (C19). Uma instância restaurada os recupera por `private.fn_crons_replanifier()` (I26). |
-| Avisos de segurança | **503** | 0 ERROR · **447** WARN sobre DEFINER expostas a `authenticated` (0029; 445 em 29/09, +2: `discard_untouched_retake` e `catalog_digital_access_v1`; **todos justificados** — complemento de 05/10 da auditoria, cinco vereditos, nenhuma falha), **28** expostas a `anon` (0028; +1: `catalog_digital_access_v1`, aberta de propósito ao catálogo público), **1** `search_path` não fixado (0011, voluntário, B32), **27** INFO (0008). |
-| Avisos de desempenho | **257** | **231 « índices não usados »** (236 em 29/09, −5), **17** chaves estrangeiras sem índice (guardadas pela suíte de lista fechada), **8** tabelas sem chave primária, **1** aviso sobre as conexões do Auth em número absoluto. |
-| Esquemas de refugo | **1** | `conv_backup` apenas — **sete tabelas**, todas de 20/08 (cópias e três listas de revisão); « seis » nos levantamentos anteriores era uma contagem errada. Não se purgam enquanto as fichas não forem revistas. |
+| Funções aplicativas | **1 034** | `public` 750 · `api` 202 · `ingest` 56 · `private` 26. Das quais **777 SECURITY DEFINER** (766 ao meio-dia, +11). +18 desde o meio-dia: onze em `ingest` (H21 lotes 1 e 2, H31), em `public` as redes (G13), a busca de conta sem biblioteca (G17) e dois gatilhos do depósito digital (C24); `api.fn_catalog_networks_v1`; `private.fn_objet_stocke_existe` (C25). |
+| Migrações aplicadas | **432** | **432 aplicadas em produção = 432 no repositório**, todas pela CI. +16 desde o meio-dia, todas de 05/10: C24, C25, acervo CCLA; G16; E28 (três); C18 (duas); H21 lotes 1 e 2, H31; G17; C10; G13 (duas). |
+| Jobs `pg_cron` | **43** | Inalterado desde o meio-dia. ativos — +2 desde 29/09: `anarbib-consultas-expire-daily` (F1) e `anarbib-purge-untouched-retakes` (C19). Uma instância restaurada os recupera por `private.fn_crons_replanifier()` (I26). |
+| Avisos de segurança | **506** | 0 ERROR · **449** WARN sobre DEFINER expostas a `authenticated` (0029; +2: `fn_catalog_networks_v1`, G13, e `fn_network_admin_find_user_by_email`, G17 — guarda: só a administração da rede; **veredito ainda a escrever** na auditoria), **29** expostas a `anon` (0028; +1: `fn_catalog_networks_v1`, aberta de propósito), **1** `search_path` não fixado (0011, voluntário), **27** INFO (0008). |
+| Avisos de desempenho | **257** | Inalterado desde o meio-dia. **231 « índices não usados »** (236 em 29/09, −5), **17** chaves estrangeiras sem índice (guardadas pela suíte de lista fechada), **8** tabelas sem chave primária, **1** aviso sobre as conexões do Auth em número absoluto. |
+| Esquemas de refugo | **1** | Inalterado desde o meio-dia. `conv_backup` apenas — **sete tabelas**, todas de 20/08 (cópias e três listas de revisão); « seis » nos levantamentos anteriores era uma contagem errada. Não se purgam enquanto as fichas não forem revistas. |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **54** | + `_shared`; **−1 desde 29/09**: `notify-mid-loan-reading` suprimida (F1; retirada da plataforma por Xavier em 01/10). Inclui o roteador `main`, nunca implantado (I3). |
-| Declarações `verify_jwt` | **39** | **todas `false`** — linhas `^verify_jwt = ` em `supabase/config.toml` (−1 com a função suprimida). Cada função verifica quem a chama. |
+| Pastas no repositório | **52** | + `_shared`; **−2 desde o meio-dia**: `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); a CI não suprime uma função — suprimi-las da plataforma cabe a Xavier. Inclui o roteador `main`, nunca implantado (I3). |
+| Declarações `verify_jwt` | **38** | **todas `false`** (−1 com `read-pdf`). Cada função verifica quem a chama. |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 605** | 2 759 exemplares, **2 366 obras** (−14), **1 506 autoridades** (−2), **2 660 fundos, nenhum vazio**. −4 notícias desde 29/09, todas por fusão: duas por Xavier na tela (02/10, 04/10) e os dois duplicados do C18 (05/10). −2 autoridades: duas formas de Jean Grave unidas em 01/10. −14 obras: reuniões do C18 e obras esvaziadas pelas fusões. |
-| Rascunhos de catalogação | **2 362** | `draft` 1 820, `published` 538, `cancelled` 4 (+64 desde 29/09). **Cada rascunho tem sua biblioteca** (B29) e **cada lote a sua** (B30; 3 lotes). O lote Solidaires segue por revisar. Desde 03/10, uma retomada nunca salva sai da fila (C19). |
-| Indexação de assunto | **2 143 / 2 605** | notícias com ao menos um assunto — **462 sem nenhum** (463 em 29/09). C7 indexou 851 notícias em 27/09. |
-| Tesauro FICEDL | **621** | termos, **10 locales completas**, 159 datas; **110 alinhamentos**. Inalterado desde 28/09. |
-| Periódicos | **4** | títulos, **5 fascículos ligados**, inalterado. |
+| Fichas | **2 607** | 2 761 exemplares, **2 368 obras**, **1 506 autoridades**, **2 662 fundos, nenhum vazio**. +2 notícias desde o meio-dia: as duas primeiras do acervo CCLA (2747 e 2748, lote 66, C26). |
+| Rascunhos de catalogação | **2 393** | `draft` 1 842, `published` 550, `cancelled` 1 (2 362 ao meio-dia). +24 com o lote 66 do acervo CCLA (BLMF; 22 a revisar, 2 publicados — C26); o único cancelado é 6393 (C18). **Quatro lotes**, cada um com sua biblioteca (B30): MLEG (8), BLMF (57 fechado, 66), Solidaires (63, a revisar e publicar). |
+| Indexação de assunto | **2 144 / 2 607** | notícias com ao menos um assunto — **463 sem nenhum** (462 ao meio-dia). O que o vocabulário não cobre: item C27. |
+| Tesauro FICEDL | **621** | Inalterado desde o meio-dia. termos, **10 locales completas**, 159 datas; **110 alinhamentos**. Inalterado desde 28/09. |
+| Periódicos | **4** | Inalterado desde o meio-dia. títulos, **5 fascículos ligados**, inalterado. |
 
 ### Rede
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **6** | **ativas, em 6 linhas**: BTL, BLMF, MLEG, Solidaires, anarchief.org e a biblioteca de formação `blmf-teste`. O levantamento de 29/09 a dizia inativa: sua linha não muda desde 26/08, o erro estava no levantamento. |
-| Contas | **22** | **25** filiações ativas; **22 linhas** em `auth.users`, **20 confirmadas**. Inalterado desde 28/09 — a conta do camarada (`ASR2026`) ainda não foi criada. |
-| Administrador(a/e)s da rede | **1** | **é o item A1, e comanda todo o resto** — inalterado desde 29/08. A segunda conta (o camarada, `ASR2026`) aguarda inscrição e cooptação. |
-| Circulação viva | **6 / 20 / 22 / 0** | empréstimos / reservas / consultas / EEB **não arquivados** — **nenhum aberto**. Os três EEB estão devolvidos e arquivados; desde 05/10 (C14), suas linhas também (PEB 24 e 25 reparados). |
+| Bibliotecas | **6** | **ativas, em 6 linhas**: BTL, BLMF, MLEG, Solidaires, anarchief.org e a biblioteca de formação `blmf-teste`. Inalterado. |
+| Contas | **23** | **26** filiações ativas; **23 linhas** em `auth.users`, **21 confirmadas**. +1 conta desde o meio-dia: a do camarada (`ASR2026`), criada em 05/10. |
+| Administrador(a/e)s da rede | **2** | **o camarada (`ASR2026`) foi cooptado em 05/10** — primeiro uso real do circuito de cooptação (seis defeitos achados, G18). A1 segue aberto: uma terceira pessoa. |
+| Circulação viva | **6 / 20 / 22 / 0** | empréstimos / reservas / consultas / EEB **não arquivados** — **nenhum aberto**. As 22 consultas não têm prazo: a regra dos 60 dias só vale para as novas (F23). Inalterado desde o meio-dia. |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **3 099** | +56 desde 29/09 (`75ccb035`), em seis dias e duas sessões, mais a PR #31 do camarada (`ASR2026`): cadeia de e-mail (F1, F16–F21), backups (I24), busca (E26, E27), H21 lote 0 e H30, C19, C20–C22, F20, C14, C18, C23. |
-| Arquivos `src/` | **477** | +24 desde 29/09: `ConfirmContext.jsx`, `CatalogStatusBar.jsx`, `AfterPublishPanel.jsx`, três hooks (C19–C22) e dezoito arquivos de teste. |
-| Chaves i18n | **7 004** | paridade estrita nas dez locales (7 004 cada). +65 desde 29/09: e-mails (F21), catalogação (C19–C22), digital (C20), H21/H30, recusas do C14, biblioteca sem série de tombos (C23). |
-| Testes | **1 871 + 164** | **1 871 testes JS** (vitest, 147 arquivos; relançados por inteiro em 05/10, todos verdes; +340 desde 29/09) e **164 suítes SQL** na CI (+14). |
+| Commits | **3 168** | +70 desde o meio-dia (`16962c55`; contava 3 099, eram 3 098), contados no espelho completo. O dia 05/10: C24, C25, G16, G17, G18, E28, C10, G13, D6, E9, E25, H21, H31, I29, I30, F3, a PR #32 do camarada, o lote 1 da AccountPage. |
+| Arquivos `src/` | **506** | +29 desde o meio-dia, dos quais 20 arquivos de teste; entre os outros: `TabHistorico.jsx`, `ContaTabHeader.jsx` (E6), `CadastroVersLogin.jsx` (G18), `src/lib/reseaux.js` (G13). |
+| Chaves i18n | **7 170** | paridade estrita nas dez locales (7 170 cada). +166 desde o meio-dia, sobretudo o depósito digital (C24); as redes 11 (G13), o estado de revisão 1 (C10). |
+| Testes | **2 056 + 173** | **2 056 testes JS** (vitest, 167 arquivos, 3 pulados; relançados por inteiro em 05/10 às 22h49, todos verdes; +185) e **173 suítes SQL** na CI (+9). |
 | Marcadores de dívida | **18** | dos quais 4 em `src/` — método fixo: 18, como desde 15/09. Nenhum é tarefa aberta. |
 
 ---
@@ -244,14 +244,16 @@ Esses desvios não são negligências: são o rastro normal de um projeto que en
 
 ## O calendário restrito
 
-Três datas governam a janela atual, e duas delas são congelamentos. Não são negociáveis caso a caso: foram postas porque uma demonstração pública roda na produção.
+Os congelamentos de setembro passaram: a cadeia auto-hospedada está descongelada desde 14/09, e as datas de Bolonha (11-13/09) ficaram para trás. A janela atual não tem congelamento; tem encontros, cada um carregado por um item.
 
 | Data | O que se aplica |
 |---|---|
-| **até 14/09/2026** | Congelamento da cadeia de migração auto-hospedada **na produção**. Fora do perímetro, nominalmente: alinhamento da imagem GoTrue, primeira execução de `bootstrap.sh`, desacoplamento da CI, proxy reverso e túnel, qualquer modificação de `deploy/compose.yml` e do `Caddyfile`. O trabalho em ambiente de teste continua inteiramente aberto. |
-| **a partir de 08/09/2026** | Nenhuma modificação de código em produção. |
-| **11-13/09/2026** | FICEDL Bolonha. Oficina AnarBib no dia 12 pela manhã, assembleia aberta no dia 13. |
-| **a partir de 14/09/2026** | Descongelamento. O domínio I volta a ser o canteiro principal. |
+| **06/10/2026** | C14: reler os contadores dos fundos BTL 173 e 2426 após o recálculo noturno (04h43). Às **19:00**, primeiro tiro curto do backup #BG2 desde o I30: o diário deve mostrar os direitos (GRANT) no dump. |
+| **08/10/2026** | F19: uma semana de registros de envio a levantar — nenhum endereço completo. |
+| **10/10/2026** | Noite de formação BLMF (K7). Até a última noite, a barra de navegação não muda (E20). |
+| **11/10/2026, 20:00** | Primeiro tiro longo com `ingest`, `private`, `api` e os direitos (I29, I30): « Dump long OK », depois `restore-test` e a impressão dos direitos comparada à produção. |
+| **por volta de 28/10/2026** | B36: reler nos contadores de produção os índices mantidos sob reserva, e o tempo da chamada medida pelo B33. |
+| **depois da última noite de formação** | E20: a barra se agrupa por natureza — Público, Eu, Trabalho. |
 
 Um item marcado **congelado** não é um item morto: é um item cuja data de retomada está escrita.
 
@@ -298,7 +300,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Verificado no banco em 29/08: a rede conta com **um único administrador**. As tabelas `network_administrators`, `network_administrator_cooptation_proposals` e `network_administrator_cooptation_votes` estão vazias após algumas inserções históricas.
 
-*Verificado : 31/08 — `network_administrators`: 1 linha. Nada mudou. **05/10 — o camarada (`ASR2026`) foi cooptado**: dois administradores ativos. Primeiro uso do circuito de cooptação. **Falta**: uma terceira pessoa.*
+*Verificado : 31/08 — `network_administrators`: 1 linha. Nada mudou. **05/10 — o camarada (`ASR2026`) foi cooptado**: dois administradores ativos. Primeiro uso do circuito de cooptação. **Falta**: uma terceira pessoa. **05/10, à noite — a PR #32 do camarada** (`ad5fb042`, merge `300b1a69`; seguimento `206b7b77`): `AppIcon` e suas regras (REGISTRE `IDENT-5` a `IDENT-8`). Ícones ainda em emoji: item E32.*
 
 **O que é.** Encontrar e cooptar mais duas pessoas, em dois coletivos diferentes, dispostas a carregar as decisões federais: admissão de uma biblioteca, arbitragem entre bibliotecas, abertura da coleta.
 
@@ -320,7 +322,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa. **28/09 —** medido: em 27/09 às 22h40 o portátil entrou em suspensão durante um job `app`; a tarefa foi dada como falha às 23h45, o `backend` nunca correu, uma migração esperou até ao push do dia seguinte, sem aviso. Os runners hospedados da Codeberg não servem (10 min por job, sem Docker). Três gestos sem máquina: `deploy/ops/RUNNER.md` (procedimento para quem não o instalou, mudança de máquina sem corte), a sonda `ci_en_retard` do `health-probe` (uma leitura por hora das tarefas da forja, e-mail «o que fazer: religar, verificar, relançar»), `deploy/runner/compose.yml` (runner em contêiner). Falta a máquina: Xavier tenta o outro portátil. **Implantado em produção em 28/09 às 12h48** (migração pela CI, nenhum incidente) — depois de dois pushes de código que a Forgejo saltou sem um vermelho porque um commit do lote trazia `[skip ci]`; o hook `.githooks/pre-push` recusa agora esse lote misto para a Codeberg.
 
-*Verificado : 31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`. **01/10** — dois runs quebrados pela parada do posto (o de F17 ficou « em curso » 11 horas). A CI vive e morre com a máquina do mantenedor.*
+*Verificado : 31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`. **01/10** — dois runs quebrados pela parada do posto (o de F17 ficou « em curso » 11 horas). A CI vive e morre com a máquina do mantenedor. O commit da sonda `ci_en_retard`, de `RUNNER.md` e de `compose.yml` (28/09) é `afdb81a2`.*
 
 **O que é.** Rodar o runner em outro lugar que não uma estação de trabalho pessoal: máquina do provedor, segunda máquina da rede, ou runner compartilhado. A lógica de implantação já está extraída em `scripts/ci/deployer-backend.sh` e é reexecutável à mão — metade do trabalho está feita.
 
@@ -341,7 +343,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 ### B — Banco de dados, segurança, RLS
 
-*191 tabelas, 694 funções SECURITY DEFINER, 332 policies (06/09). A maior superfície do projeto.*
+*198 tabelas `public`, 777 funções SECURITY DEFINER, 361 policies (05/10). A maior superfície do projeto.*
 
 | | | | |
 |---|---|---|---|
@@ -355,7 +357,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Levantado em 27/09 na revisão de H19: as políticas de `author_drafts`, `book_drafts` e `exemplar_drafts` só exigem `can_access_catalogacao`, **sem nenhum escopo de biblioteca**, em leitura e escrita. **Regra de Xavier (27/09)**: possível para quem cataloga e é admin da rede, não para coordenação nem bibliotecária.
 
-*Verificado : 27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção. **28/09, produção em leitura** : as políticas de `book_drafts` e `exemplar_drafts` exigem `can_access_catalogacao` E (admin da rede OU biblioteca do rascunho entre as bibliotecas de staff); `author_drafts` de leitura comum; `fn_user_staff_library` fechada às contas; 134 de 2 260 rascunhos sem `owner_library_id` (recuo pela biblioteca de quem criou). Conforme. **27-28/09** — medido em produção depois da implantação (`a4b66ad4`): a coordenação de uma biblioteca edita seus 1 673 rascunhos em andamento, e os outros 147 lhe são recusados. Cinco funções auxiliares sem chamador sob `authenticated` foram fechadas às contas por `f1808c85` (migração `20260927200627`, implantada pela CI em 28/09 às 10 h 04 UTC): lint 0029 de 448 para 443 em produção (441 depois do B35). T31 guarda essa escolha; a auditoria complementar `71793cca` não acha nenhuma falha. A suíte `brouillons_par_bibliotheque_tests` tem agora 32 testes (T32 vem do B35).*
+*Verificado : 27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção. **28/09, produção em leitura** : as políticas de `book_drafts` e `exemplar_drafts` exigem `can_access_catalogacao` E (admin da rede OU biblioteca do rascunho entre as bibliotecas de staff); `author_drafts` de leitura comum; `fn_user_staff_library` fechada às contas; 134 de 2 260 rascunhos sem `owner_library_id` (recuo pela biblioteca de quem criou). Conforme. **27-28/09** — medido em produção depois da implantação (`a4b66ad4`): a coordenação de uma biblioteca edita seus 1 673 rascunhos em andamento, e os outros 147 lhe são recusados. Cinco funções auxiliares sem chamador sob `authenticated` foram fechadas às contas por `f1808c85` (migração `20260927200627`, implantada pela CI em 28/09 às 10 h 04 UTC): lint 0029 de 448 para 443 em produção (441 depois do B35). T31 guarda essa escolha; a auditoria complementar `71793cca` não acha nenhuma falha. A suíte `brouillons_par_bibliotheque_tests` tem agora 32 testes (T32 vem do B35). **05/10, inventário — critérios relidos contra os commits**: conforme aos três critérios desde 28/09. **Fechamento a decidir por Xavier.***
 
 **O que é.** Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir. **Decidido em 27/09 por Xavier (REGISTRO `CAT-E18`)**: *(1)* rascunho sem biblioteca = biblioteca da adesão de staff ativa de quem o criou (sem o recurso a quem publica), senão quem o criou e a administração; *(2)* rascunhos de autoridade: leitura comum, escrita por quem criou e pela administração; *(3)* mutirão por adesão temporária na biblioteca anfitriã, dona dos rascunhos. **Entregue em 27/09** (`2c8a9af0`, `faea418c`, migração `20260927160000`), regra e escolhas no REGISTRO (CAT-E18): políticas por biblioteca, autoridades com leitura comum e escrita por quem criou, gardas das funções SECURITY DEFINER alinhadas, lotes segundo os seus rascunhos em curso. Uma revisão contraditória e quatro verificações das correções.
 
@@ -377,7 +379,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** B29 deduz «de quem é um lote» a partir dos seus rascunhos; quatro verificações acharam sempre novos casos-limite. Limites conhecidos no REGISTRO (CAT-E18).
 
-*Verificado : 27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele. **28/09, produção em leitura** : `catalog_batches.library_id` presente; 3 lotes, todos com biblioteca; as quatro políticas de `catalog_batches` comparam `library_id` às bibliotecas de staff ou de coordenação. Conforme.*
+*Verificado : 27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele. **28/09, produção em leitura** : `catalog_batches.library_id` presente; 3 lotes, todos com biblioteca; as quatro políticas de `catalog_batches` comparam `library_id` às bibliotecas de staff ou de coordenação. Conforme. **05/10, inventário — critérios relidos contra os commits**: conforme desde 28/09 (os quatro lotes têm cada um sua biblioteca). **Fechamento a decidir por Xavier.***
 
 **O que é.** Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes. **Entregue em 27/09** (`3a0e036f`, `2ecdaea3`, migração `20260927191059`), regra e escolhas no REGISTRO (CAT-E18): coluna posta na criação e congelada, mudada só pela reatribuição; todas as regras de lote lidas na coluna; um rascunho só entra num lote da sua biblioteca. Retomada em produção: lote 8 → MLEG, 63 → Solidaires, 57 → BLMF. Uma revisão contraditória, duas verificações das correções, contraprova com 17 mutantes.
 
@@ -399,7 +401,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** O B10 (27/09) retirou 22 índices e manteve outros com ressalva. **22 redundantes ainda usados** (até 10,8 milhões de varreduras em `book_holdings_book_id_idx`) estão nomeados com seus contadores em `index_redondants_garde_tests.sql` (`af98dee8`): retirá-los deslocaria planos quentes para o índice que os cobre, a medir antes de decidir. **108 índices estavam a zero varreduras**, fora chaves estrangeiras e redundantes: 12 retirados (`3ac1c910`), os outros mantidos, com veredito, em `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`. O B32 (28/09) tornou usáveis os índices das visões materializadas do catálogo; três continuam sem varredura no seu levantamento (`autor_norm_trgm_idx`, `library_slug_idx`, `titulo_trgm_idx`). Esses encontros só viviam nos fechamentos do B10 e do B32.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Por volta de 28/10, reler `pg_stat_user_indexes` em produção — contadores zerados no reinício de 02/09 (B9): datar o levantamento e anotar qualquer reinício desde então. Para cada índice nomeado acima: mantê-lo, com motivo escrito, ou retirá-lo por migração, com motivo escrito, como no B10 e no B33. Para os 22 redundantes usados, comparar os planos das consultas que os usam com o índice que os cobre antes de qualquer retirada.
 
@@ -430,6 +432,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
 | **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | Decisão coletiva |
 | **C18** | Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas? | `P2` | Bloqueado |
+| **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
+| **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
+| **C28** | Decidir três pares de notícias que o DEDUP-14 fez aparecer | `P2` | Aberto |
 
 #### C3 — Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos
 
@@ -437,7 +442,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** As 19 migrações `conventions_*` estão aplicadas desde 21/08: os referenciais estão normalizados, as mecânicas seguras foram passadas, a fila de verificação existe e o aplicativo permite trabalhar nela. **O que resta é a parte que nenhuma máquina faz.**
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Retomar as três tabelas de revisão do esquema `conv_backup` — `titres_a_revoir_20260820` (211), `autorites_casse_a_revoir_20260820` (1 274), `autorites_patronyme_a_revoir_20260820` (22) — e tratá-las ficha por ficha a partir da Oficina de autoridades.
 
@@ -480,7 +485,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Levantado em 29/09 ao corrigir a reatribuição (`CAT-E19`): três caminhos deixam para trás de um exemplar deslocado coisas que ainda apontam para a biblioteca ou o acervo de origem. Nenhum foi visto na tela; todos se leem no código.
 
-*Verificado : **05/10 — entregue, implantado e verificado em produção (`07ad68af`, migração `20261005074236`, pela CI).** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. EEB declarado devolvido ou cancelado à mão fecha suas linhas; as duas linhas dos EEB 24 e 25 foram reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar (`private.fn_fonds_vides_menage`, fechada a `anon` e `authenticated`). Lixeira sem 23503. Suíte 17/17, sete mutantes mortos, CAT-E19 18/18, vitest 1 865, lint 0 erro. **Falta ver**: os contadores dos fundos BTL 173 e 2426 ainda mostram «0 disponível» — o recálculo noturno (04h43) deve corrigi-los, reler em 06/10; e um olhar do Xavier nas duas recusas na tela. **Visto de passagem, fora de C14**: `publish_exemplar_draft` não cria o fundo da biblioteca de destino; mover um exemplar para uma biblioteca sem fundo da notícia falha em `exemplar_library_holding_mismatch` bruto.*
+*Verificado : **05/10 — entregue, implantado e verificado em produção (`07ad68af`, migração `20261005074236`, pela CI).** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. EEB declarado devolvido ou cancelado à mão fecha suas linhas; as duas linhas dos EEB 24 e 25 foram reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar (`private.fn_fonds_vides_menage`, fechada a `anon` e `authenticated`). Lixeira sem 23503. Suíte 17/17, sete mutantes mortos, CAT-E19 18/18, vitest 1 865, lint 0 erro. **Falta ver**: os contadores dos fundos BTL 173 e 2426 ainda mostram «0 disponível» — o recálculo noturno (04h43) deve corrigi-los, reler em 06/10; e um olhar do Xavier nas duas recusas na tela. **Visto de passagem, fora de C14**: `publish_exemplar_draft` não cria o fundo da biblioteca de destino; mover um exemplar para uma biblioteca sem fundo da notícia falha em `exemplar_library_holding_mismatch` bruto. **05/10, à noite** — o defeito « visto de passagem, fora de C14 » virou **C23**, entregue no mesmo dia (`16962c55`).*
 
 **O que é.** (1) Um rascunho de exemplar ABERTO (`draft`, `ready`) sobre um exemplar reatribuído guarda a biblioteca de origem: publicado, levaria o exemplar de volta, sem avisar — decidir se ele acompanha o exemplar (mudaria de fila, `B29`) ou se é recusado na publicação. (2) Reservas e EEB em curso continuam contados no acervo de origem após o deslocamento (`fn_v2_recompute_holdings_availability` conta por `holding_id`): a disponibilidade do destino fica superestimada. (3) A mudança de biblioteca de um exemplar isolado (`publish_exemplar_draft`) e o descarte (`discard_exemplar`) também deixam acervos vazios, que a ficha pública mostra com «0 exemplar». (4) Restaurar da lixeira um rascunho de exemplar que visava um acervo apagado depois levanta 23503 bruto (`fn_restore_deleted_draft` reinsere seu `target_holding_id`) — consequência direta de `CAT-E19`. (5) O painel de reatribuição não diz que um acervo de origem foi mantido (`holdings_kept`), vazio, porque um histórico o referencia.
 
@@ -585,7 +590,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Levantado em 01/10 (somente leitura): catorze pares de obras do mesmo autor·a em que um título «auto» de uma é o título real da outra. Em geral, traduções de uma mesma obra em duas fichas (Reclus 133/880/1131, 268/1387/1203; Kropotkin 19/2381, 79/396, 1/1084, 115/386; Tolstói 28/1297; Gori 48/873; Safón 99/2428; Horowitz 74/2484). Casos a decidir: Nettlau 2036/196 e Kropotkin 1366/2064 (coletânea contra texto único).
 
-*Verificado : 01/10 — levantamento em produção: 14 pares; nada modificado. **05/10 — arbitrado por Xavier, aplicado** (`c923fdc0`, migração `20261005071913`): oito obras reunidas (Kropotkin ×4, Gori, Safón, Horowitz, Reclus); os seis tomos Maucci juntam-se aos de 1905 (obra 133); FCE 1986 e Imaginário ficam à parte com nota; notícia 143 no recueil 2064. Resta: Tolstói 28/1297, Nettlau 2036/196, notícias duplicadas 2601/1195 e 143/138. **05/10 — duas notícias duplicadas fundidas** (`176e6894`): 1195 → 2601 (Nettlau, cota MLEG-0144 mantida), 143 → 138 (Kropotkin, dois exemplares BTL; etiqueta do BTL-TL-EX-000142 a refazer). Resta: Tolstói 28/1297 e Nettlau 2036/196. **05/10 — bloqueado**: Tolstói 28/1297 aguarda a BTL (sumário de *La Insumisión*, BTL-TL-000156); também FCE 1986 (BTL-TL-001131) e etiqueta do BTL-TL-EX-000142. Nettlau 2036/196 aguarda a página de créditos (« Título original ») do exemplar BLMF 0000083 da Hedra. **05/10 — Nettlau resolvido: obras distintas** (`a6dec157`): a ed. Hedra é uma seleção organizada por Frank Mintz (página de créditos, exemplar BLMF 0000083); notas em 2036 e 196. Resta só Tolstói 28/1297, aguardando a BTL.*
+*Verificado : 01/10 — levantamento em produção: 14 pares; nada modificado. **05/10 — arbitrado por Xavier, aplicado** (`c923fdc0`, migração `20261005071913`): oito obras reunidas (Kropotkin ×4, Gori, Safón, Horowitz, Reclus); os seis tomos Maucci juntam-se aos de 1905 (obra 133); FCE 1986 e Imaginário ficam à parte com nota; notícia 143 no recueil 2064. Resta: Tolstói 28/1297, Nettlau 2036/196, notícias duplicadas 2601/1195 e 143/138. **05/10 — duas notícias duplicadas fundidas** (`176e6894`): 1195 → 2601 (Nettlau, cota MLEG-0144 mantida), 143 → 138 (Kropotkin, dois exemplares BTL; etiqueta do BTL-TL-EX-000142 a refazer). Resta: Tolstói 28/1297 e Nettlau 2036/196. **05/10 — bloqueado**: Tolstói 28/1297 aguarda a BTL (sumário de *La Insumisión*, BTL-TL-000156); também FCE 1986 (BTL-TL-001131) e etiqueta do BTL-TL-EX-000142. Nettlau 2036/196 aguarda a página de créditos (« Título original ») do exemplar BLMF 0000083 da Hedra. **05/10 — Nettlau resolvido: obras distintas** (`a6dec157`): a ed. Hedra é uma seleção organizada por Frank Mintz (página de créditos, exemplar BLMF 0000083); notas em 2036 e 196. Resta só Tolstói 28/1297, aguardando a BTL. **05/10, à noite** — o rascunho obsoleto 6393 da notícia 2287 é descartado (`e60e34a7`, migração `20261005115704`): desfaria a correção de Xavier (rascunho 6398, publicado). Em produção, a 2287 nomeia Max Nettlau, Frank Mintz (organização) e Plínio Augusto Coelho (tradução) — a nota correspondente está resolvida.*
 
 **O que é.** Revisar cada par com as edições; reunir as que são a mesma obra; para as outras, fazer como para 1163.
 
@@ -596,6 +601,68 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 - Os catorze pares decididos por quem cataloga, não por script; cada par mantido distinto tem sua nota.
 
 **Dependências.** Faz-se no aplicativo.
+
+#### C26 — Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF)
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
+
+**Estado.** Em 05/10, C24 vinculou os arquivos sem recurso do espaço público: 24 rascunhos pré-preenchidos formam o lote 66 « Acervo histórico CCLA — PDF a catalogar » da BLMF (25 arquivos, cessão do CCLA; migração `20261005123453`, `66cf8d9b`). A correspondência bibliográfica está por validar. **Medido em 05/10 à noite**: 22 em `draft`, 2 publicados (notícias 2747 e 2748), lote aberto.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Rascunho por rascunho, com o PDF aberto: validar descrição, contribuições e direitos, publicar ou descartar; fechar o lote quando vazio.
+
+**Por que importa.** Esses documentos estão online sem notícia pública: ninguém os acha no catálogo enquanto o rascunho não for publicado.
+
+**O que conta como terminado.**
+
+- Os 24 rascunhos do lote 66 estão publicados ou descartados, cada um com sua razão.
+- O lote 66 está fechado.
+
+**Dependências.** Uma pessoa que cataloga na BLMF.
+
+*Remissões : `clôture C24` · `migration 20261005123453 (66cf8d9b)` · `lot 66 (catalog_batches)`*
+
+#### C27 — Indexar as notícias que o vocabulário de assuntos não cobre
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
+
+**Estado.** C7 (27/09) indexou 851 notícias no vocabulário existente e deixou de lado as de assunto fora dele (literatura geral, filosofia, ciências sociais, esperanto, espiritualidade, história do Brasil): 466 naquele dia. **Medido em 05/10 à noite**: 463 notícias de 2 607 sem nenhum assunto.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Ler as notícias sem assunto por grandes conjuntos; propor termos e atribuições numa ficha validada por Xavier, como a do C7; fora do tesauro FICEDL, sem criar fork.
+
+**Por que importa.** Uma notícia sem assunto não aparece em nenhuma faceta nem navegação por assunto: quase um sexto do catálogo é invisível por esse caminho.
+
+**O que conta como terminado.**
+
+- Uma ficha de propostas é validada por Xavier.
+- O número de notícias sem assunto é remedido e anotado aqui.
+
+**Dependências.** Xavier, para a validação.
+
+*Remissões : `clôture C7` · `docs/journal/arbitrages/C7_propositions_matieres_2026-09-27.md`*
+
+#### C28 — Decidir três pares de notícias que o DEDUP-14 fez aparecer
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia
+
+**Estado.** Em 28/09, o `DEDUP-14` (`8e0fe538`) fez propor quatro pares até então mascarados pela obra. **Medido em 05/10**: 504/727 fundido em 28/09; restam três, sem veredito: BTL-TL-000301 / BLMF 0000054 (291 e 2264), BTL-TL-001525 / BLMF 0000258 (1432 e 2446), BTL-TL-001808 / BLMF 0000060 (1699 e 2267).
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Para cada par, abrir a lista das edições e decidir: « Mesma edição: fundir » (`DEDUP-13`), ou manter as duas e dizer por quê.
+
+**Por que importa.** Duas notícias para uma mesma edição duplicam o catálogo público; duas edições tomadas por uma perderiam uma descrição.
+
+**O que conta como terminado.**
+
+- Cada um dos três pares está fundido ou declarado distinto, com a razão escrita.
+
+**Dependências.** Xavier, na tela; os livros na mão se o ISBN não bastar.
+
+*Remissões : `commit 8e0fe538` · `REGISTRE DEDUP-13, DEDUP-14` · `merge_log`*
 
 ---
 
@@ -609,6 +676,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D8** | Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD | `P3` | Bloqueado |
+| **D9** | Um recurso posto por recepção de fundo desaparece na publicação seguinte do rascunho | `P2` | Aberto |
 
 #### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
 
@@ -698,11 +766,32 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `docs/specs/REGISTRE_decisions.md` · `Réponse à DIRA du 26/09/2026`*
 
+#### D9 — Um recurso posto por recepção de fundo desaparece na publicação seguinte do rascunho
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Visto na entrega do C24 (05/10, `d1d72405`): um recurso posto pela recepção de um fundo, que o rascunho não contém, é retirado pela publicação seguinte desse rascunho, sem aviso. Comportamento anterior, mantido de propósito pelo C24.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Decidir: a publicação mantém um recurso que não conhece, ou o rascunho retoma os recursos da notícia ao ser criado. Depois escrever, com uma suíte SQL.
+
+**Por que importa.** Um fundo recebido de outra biblioteca perde seus arquivos no primeiro retoque da notícia, e ninguém vê.
+
+**O que conta como terminado.**
+
+- Publicar um rascunho não retira mais um recurso de recepção de fundo sem um gesto explícito.
+- Uma suíte SQL o prova.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `clôture C24` · `commit d1d72405` · `migration 20261005092916`*
+
 ---
 
 ### E — Front, OPAC, i18n, acessibilidade
 
-*10 locales em paridade estrita, 6 570 chaves cada (06/09), verificadas na integração contínua.*
+*10 locales em paridade estrita, 7 170 chaves cada (05/10), verificadas na integração contínua.*
 
 | | | | |
 |---|---|---|---|
@@ -712,6 +801,10 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Em curso |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
+| **E29** | As facetas de um membro contam o catálogo público, não o que ele vê | `P2` | Aberto |
+| **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
+| **E31** | O que espera um olhar na tela, com sessão | `P2` | Aberto |
+| **E32** | Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1) | `P3` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -785,7 +878,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 29/08, `BookDraftForm.jsx` tinha **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js` (`486c71a1`); o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela. **Lote 2 em 28/09:** o painel de recursos digitais passa a `DigitalResourcesPanel.jsx` (`305a7922`); o formulário cai para 173 Ko. **Lote 3 em 28/09:** o painel de pesquisa catalográfica passa a `LookupPanel.jsx` (o painel nunca escreve o formulário: três retornos ao pai); o formulário cai para 167 Ko. Lotes 2 e 3 vistos na tela por Xavier em 28/09: ok. **Lote 4 em 28/09:** o bloco de contribuidores passa a `ContributorsPanel.jsx` (a lista fica no pai, o painel avisa por `onDirty`); o formulário cai para 157 Ko. **Lote 5 em 28/09:** o painel de revisão da ficha passa a `ReviewPanel.jsx` (só exibe; ISBD e sua preparação ficam no pai); o formulário cai para 146 Ko. **Lote 6 em 28/09:** a prévia de cota e os exemplares iniciais passam a `ShelfLabelPreview.jsx` e `InitialCopiesBlock.jsx`; o formulário cai para 142 Ko. **Lotes 7 e 8 em 28/09:** a reatribuição de um registro publicado passa a `ReassignPanel.jsx` e os cartões «para informação» da prévia a `InfoCards.jsx`; o formulário cai para 130 Ko. As seções de material já eram renderizadas pelo registro. Falta o cabeçalho (capa), o mais acoplado. **`BibliotecaPage.jsx`, lote 1 em 28/09:** a aba dos empréstimos entre bibliotecas (PEB) passa a `IllSection.jsx` (`3c33b9f6`); a página cai de 184 para 152 Ko. **Lote 2 em 28/09:** a aba das tarefas internas passa a `TasksSection.jsx` (`22083073`); a página cai para 117 Ko. **Lote 3 em 29/09:** a cotização e o depósito de garantia passam a `MembershipSection.jsx` e `DepositSection.jsx` (`2ae132fe`); a página cai para 83 Ko. Faltam relatórios, identidade e comunicações.
 
-*Verificado : **28/09** — `BookDraftForm.jsx`: 214 Ko → 130 Ko em oito lotes; nove módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lotes 4 a 8 publicados, a ver do mesmo modo; `BibliotecaPage` lotes 1 a 3 (PEB, tarefas, cotização e depósito) publicados, a ver também; a página: 184 → 83 Ko. O critério «nenhum arquivo acima de 60 Ko» continua longe: remedidos em 29/09 à noite (`75ccb035`), nove arquivos de código passam disso — `AccountPage.jsx` 156,8 Ko, `BookDraftForm.jsx` 130,9, `ImportacoesPage.jsx` 129,6 (109 em 29/08), `PanelPage.jsx` 118,5, `CatalogPage.jsx` 108,7 (91 em 29/08), `BibliotecaPage.jsx` 83,9, `CatalogacaoPage.jsx` 82,1, `AuthorDraftForm.jsx` 70,9, `QueuePanel.jsx` 60,6; os dez arquivos de locales (486 a 734 Ko) também caem na letra do critério. Onze testes de fonte guardam as montagens, três deles da página Biblioteca. **29/09, visto na tela por Xavier**: o interruptor da cotização e o ciclo de uma tarefa (criar, mudar estado, apagar) funcionam; os dois ensaios revelaram dois defeitos anteriores à divisão, corrigidos no mesmo dia (`0bf96cb8`, `455c7f0b`). O depósito de garantia também: teto posto, regra criada, interruptor acionado. Tarefas completas (instanciar, adotar) e regras de cotização: ok. Aba PEB: buscar, criar, arquivar, apagar — ok. Formulário de registro: um registro de ensaio criado, publicado e retirado — contribuidores e exemplar inicial ok; ligar uma autoridade também verificado; reatribuição também (registro 771, BTL → BLMF → BTL): os dois exemplares voltaram, mas a ida deixou um acervo BLMF VAZIO (2747), que a ficha pública mostra com «0 exemplar» — as duas funções de reatribuição nunca apagam o acervo que esvaziam (defeito anterior à divisão); corrigido em 29/09 com autorização de Xavier (`CAT-E19`, migração `20260929151902`): o acervo esvaziado é apagado salvo referência; o acervo 2747 é apagado sob guarda. Suíte `reattribution_fonds_vide_tests` (`8ee37bde`): **18/18** na bancada, 13 mutantes mortos, cada um pelo teste que o guarda; a revisão contraditória acrescentou três guardas (o acervo recriado volta como era — número de chamada local, emprestabilidade, notas —; cada acervo apagado fica inteiro no diário do catálogo; um rascunho aberto que visa o número de chamada retém o acervo), e o estado de coleção das revistas é recontado. Em produção, no levantamento da noite: nenhum acervo sem exemplar na rede. Defeitos vizinhos em `C14`. Registro da devolução de um EEB: ok — todos os lotes vistos. «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»): o botão só aparece nos dois status aceitos pela base, e a recusa é dita claramente (`b3ac9d13`). **29/09** — mais dois defeitos, achados na revisão das telas, anteriores à divisão. `--brand-accent` não estava definido em lugar nenhum: o botão «Salvar» dos horários (`e4814be1`) e umas quarenta chamadas caíam cada uma no seu próprio vermelho de reserva; `0d8a0a30` o define a partir de `--brand-accent-rgb` (segue o tema da biblioteca) e define `.cat-btn` uma só vez. `0bf96cb8` expõe `patchLibrary` (regra pura em `contexts/libraryPatch.js`), chamado pela cotização, pela carteira de leitor e pelo salto colegiado; de passagem, salvar a identidade não diz mais «salvo» diante de uma recusa do banco (`library-context-patch`, 9 casos).*
+*Verificado : **28/09** — `BookDraftForm.jsx`: 214 Ko → 130 Ko em oito lotes; nove módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lotes 4 a 8 publicados, a ver do mesmo modo; `BibliotecaPage` lotes 1 a 3 (PEB, tarefas, cotização e depósito) publicados, a ver também; a página: 184 → 83 Ko. O critério «nenhum arquivo acima de 60 Ko» continua longe: remedidos em 29/09 à noite (`75ccb035`), nove arquivos de código passam disso — `AccountPage.jsx` 156,8 Ko, `BookDraftForm.jsx` 130,9, `ImportacoesPage.jsx` 129,6 (109 em 29/08), `PanelPage.jsx` 118,5, `CatalogPage.jsx` 108,7 (91 em 29/08), `BibliotecaPage.jsx` 83,9, `CatalogacaoPage.jsx` 82,1, `AuthorDraftForm.jsx` 70,9, `QueuePanel.jsx` 60,6; os dez arquivos de locales (486 a 734 Ko) também caem na letra do critério. Onze testes de fonte guardam as montagens, três deles da página Biblioteca. **29/09, visto na tela por Xavier**: o interruptor da cotização e o ciclo de uma tarefa (criar, mudar estado, apagar) funcionam; os dois ensaios revelaram dois defeitos anteriores à divisão, corrigidos no mesmo dia (`0bf96cb8`, `455c7f0b`). O depósito de garantia também: teto posto, regra criada, interruptor acionado. Tarefas completas (instanciar, adotar) e regras de cotização: ok. Aba PEB: buscar, criar, arquivar, apagar — ok. Formulário de registro: um registro de ensaio criado, publicado e retirado — contribuidores e exemplar inicial ok; ligar uma autoridade também verificado; reatribuição também (registro 771, BTL → BLMF → BTL): os dois exemplares voltaram, mas a ida deixou um acervo BLMF VAZIO (2747), que a ficha pública mostra com «0 exemplar» — as duas funções de reatribuição nunca apagam o acervo que esvaziam (defeito anterior à divisão); corrigido em 29/09 com autorização de Xavier (`CAT-E19`, migração `20260929151902`): o acervo esvaziado é apagado salvo referência; o acervo 2747 é apagado sob guarda. Suíte `reattribution_fonds_vide_tests` (`8ee37bde`): **18/18** na bancada, 13 mutantes mortos, cada um pelo teste que o guarda; a revisão contraditória acrescentou três guardas (o acervo recriado volta como era — número de chamada local, emprestabilidade, notas —; cada acervo apagado fica inteiro no diário do catálogo; um rascunho aberto que visa o número de chamada retém o acervo), e o estado de coleção das revistas é recontado. Em produção, no levantamento da noite: nenhum acervo sem exemplar na rede. Defeitos vizinhos em `C14`. Registro da devolução de um EEB: ok — todos os lotes vistos. «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»): o botão só aparece nos dois status aceitos pela base, e a recusa é dita claramente (`b3ac9d13`). **29/09** — mais dois defeitos, achados na revisão das telas, anteriores à divisão. `--brand-accent` não estava definido em lugar nenhum: o botão «Salvar» dos horários (`e4814be1`) e umas quarenta chamadas caíam cada uma no seu próprio vermelho de reserva; `0d8a0a30` o define a partir de `--brand-accent-rgb` (segue o tema da biblioteca) e define `.cat-btn` uma só vez. `0bf96cb8` expõe `patchLibrary` (regra pura em `contexts/libraryPatch.js`), chamado pela cotização, pela carteira de leitor e pelo salto colegiado; de passagem, salvar a identidade não diz mais «salvo» diante de uma recusa do banco (`library-context-patch`, 9 casos). **05/10 — `AccountPage.jsx`, lote 1** (`fe5a9d84`): a aba Histórico vira `TabHistorico.jsx`, o cabeçalho comum das abas `ContaTabHeader.jsx`. Defeito de origem corrigido: a sequência `\u00b7` estava escrita 13 vezes em texto JSX, onde aparecia tal qual. Bancada `tab-historico-monte`, que guarda todo o `src/` contra uma sequência `\uXXXX` em texto JSX. Falta Xavier ver na tela (E31).*
 
 **O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
 
@@ -847,11 +940,93 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
 
+#### E29 — As facetas de um membro contam o catálogo público, não o que ele vê
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+
+**Estado.** Escrito no fechamento do B32 e repetido por `5f13ec86` (28/09): um membro vê a página sobre o catálogo da rede, mas `api.catalog_facets_v1` conta sobre o catálogo público. Nenhum item o carregava.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Fazer as facetas contarem sobre o conjunto que a página mostra, mantendo em anônimo o mesmo resultado nos 23 conjuntos de filtros.
+
+**Por que importa.** Uma faceta que diz « 9 » quando a página mostra 12 ensina a não acreditar nas facetas.
+
+**O que conta como terminado.**
+
+- Para um membro, cada contador de faceta é igual ao número de linhas exibidas com esse filtro.
+- Em anônimo, nada muda.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `clôture B32` · `commit 5f13ec86` · `REGISTRE OPAC-F2` · `tests/sql/facettes_catalogue_tests.sql`*
+
+#### E30 — Fazer revisar o guia de governança em espanhol
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna
+
+**Estado.** Visto na entrega do E25 (05/10): o guia de governança em espanhol diz « concernida(s) » 22 vezes; não foi revisado.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Revisão por pessoa de língua materna; aplicar as correções e regenerar a coletânea `Guia_de_governanca_AnarBib.pdf`.
+
+**Por que importa.** O guia diz a uma coordenação como cooptar ou tratar um conflito; uma palavra duvidosa em cada página diz que ninguém o revisou.
+
+**O que conta como terminado.**
+
+- O guia em espanhol foi revisado e as correções aplicadas.
+- A coletânea PDF foi regenerada.
+
+**Dependências.** Uma pessoa hispanofalante.
+
+*Remissões : `clôture E25` · `commit 0cc2b6d3`*
+
+#### E31 — O que espera um olhar na tela, com sessão
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
+
+**Estado.** Várias entregas de fim de setembro e início de outubro estão provadas em bancada e no banco, mas só se julgam na tela, com sessão. **Itens fechados, olhar faltando**: barra de estado e janela de confirmação (C21); « Publicado — e agora? » (C22); depósito digital em cinco etapas (C24); leitura reservada para membro da BTL (C20). **Itens abertos que também esperam**: C23, G16, C14, cada lote do E6.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Uma sessão com Xavier conectado, um ponto por vez; anotar « visto, conforme » ou o defeito achado (aberto como item).
+
+**Por que importa.** Foi na tela que as últimas semanas acharam os defeitos que as bancadas não viam (G18, C25, as tarefas internas de 29/09).
+
+**O que conta como terminado.**
+
+- Cada ponto da lista é visto na tela e anotado aqui.
+
+**Dependências.** Xavier, conectado.
+
+*Remissões : `clôtures C20, C21, C22, C24, C25` · `items C14, C23, G16, E6`*
+
+#### E32 — Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1)
+
+`P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript
+
+**Estado.** Em 05/10, a PR #32 do camarada pôs `AppIcon` (REGISTRE `IDENT-5` a `IDENT-8`). Medido no mesmo dia (`IDENT-Q1`): 198 linhas em 52 arquivos com emoji, das quais 111 declarações de ícone traduzidas pela tabela transitória `LEGACY`. Decisão de Xavier: migram ao sabor dos retoques.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Cada tela retocada passa seus ícones a `AppIcon` e tira seus emojis de `LEGACY`; recontar a cada levantamento.
+
+**Por que importa.** Um emoji muda de um sistema a outro e não tem nome acessível confiável; `AppIcon` tem.
+
+**O que conta como terminado.**
+
+- `LEGACY` vazia: nenhuma declaração de ícone em emoji em `src/`.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `REGISTRE IDENT-5 à IDENT-8, IDENT-Q1` · `commits ad5fb042, 300b1a69, 206b7b77, 0b2b0e14`*
+
 ---
 
 ### F — E-mail e notificações
 
-*13 funções notify-*, 5 filas, 6 gatilhos de despacho. Ninguém jamais auditou o conjunto.*
+*14 funções `notify-*`. A cadeia tem seu mapa desde 30/09, medido em produção (F1): cerca de 96 cadeias, 41 vivas, 31 nunca percorridas.*
 
 | | | | |
 |---|---|---|---|
@@ -862,6 +1037,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **F16** | O convite para uma tarefa nunca criou convite | `P1` | A verificar |
 | **F19** | Os registros das funções contêm os endereços em claro | `P1` | A verificar |
 | **F21** | Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas | `P2` | A verificar |
+| **F23** | Vinte e dois pedidos de consulta não têm prazo | `P3` | Aberto |
 
 #### F3 — Consolidar as funções de notificação redundantes
 
@@ -976,7 +1152,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 **Estado.** Achado pelo mapa F1 (30/09). `fn_task_invite` põe o endereço CRU nas marcas da tarefa, e `task_invite_emails_from_tags` só aceita `convite:…`: nenhum convite jamais foi criado. A tela anuncia « convite enviado », e o endereço acaba nas « Marcas » dos avisos.
 
-*Verificado : **30/09** — entregue (`32cfea66`); suíte 6/6. Falta um convite real chegar.*
+*Verificado : **30/09** — entregue (`32cfea66`); suíte 6/6. Falta um convite real chegar. **05/10, inventário — critérios relidos contra os commits**: os dois critérios cumpridos em bancada; falta um convite real, que não é critério. **Fechamento a decidir por Xavier.***
 
 **O que é.** Migração a partir da definição real: `fn_task_invite` grava `convite:` || endereço; `taskTagsLabel` esconde as marcas `convite:`; suíte SQL: uma chamada cria um convite e uma linha na fila.
 
@@ -1017,7 +1193,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 **Estado.** Achado pelo mapa F1. O rodapé de reserva e a linha « Status » ficam em pt-BR em todas as línguas.
 
-*Verificado : 01/10, à noite — **implantado** (PR #31 de ASR2026, merge `da034c83`, CI verde às 22h23; e `9bdce13a`). Os status de reserva passam por uma chave `wf.stage.*` nas dez línguas; os e-mails da equipe sobre empréstimos saem na língua da biblioteca, como os de reserva (o pt-BR forçado do Pacote 17, `96006b81`, é abandonado). `FOOTER_TEXT` não tem mais padrão em português e `tMail` localiza o rodapé quando falta. A revisão da PR achou uma segunda fonte do mesmo defeito: `ADMIN_NAME` valia por padrão « Equipe da biblioteca » e voltava por `signature_short`. Corrigido por `9bdce13a`: padrão vazio, assinatura com o nome da biblioteca. Provas: bancada `mail-status-footer-i18n` (9 testes), guarda `mail-nom-equipe-repli-garde` (4 testes), 1 672 testes vitest. **Falta verificar**: um e-mail real de reserva em francês, em produção, sem nenhuma palavra em português. Fora do F21, ainda em pt-BR por padrão: `SENDER_NAME`.*
+*Verificado : 01/10, à noite — **implantado** (PR #31 de ASR2026, merge `da034c83`, CI verde às 22h23; e `9bdce13a`). Os status de reserva passam por uma chave `wf.stage.*` nas dez línguas; os e-mails da equipe sobre empréstimos saem na língua da biblioteca, como os de reserva (o pt-BR forçado do Pacote 17, `96006b81`, é abandonado). `FOOTER_TEXT` não tem mais padrão em português e `tMail` localiza o rodapé quando falta. A revisão da PR achou uma segunda fonte do mesmo defeito: `ADMIN_NAME` valia por padrão « Equipe da biblioteca » e voltava por `signature_short`. Corrigido por `9bdce13a`: padrão vazio, assinatura com o nome da biblioteca. Provas: bancada `mail-status-footer-i18n` (9 testes), guarda `mail-nom-equipe-repli-garde` (4 testes), 1 672 testes vitest. **Falta verificar**: um e-mail real de reserva em francês, em produção, sem nenhuma palavra em português. Fora do F21, ainda em pt-BR por padrão: `SENDER_NAME`. Commits da PR #31: `9e298ea3`, `70233b98`; e `7dbd0a56` (imagem de fundo estática em `public/img/`). **05/10, inventário** — o critério está cumprido; o e-mail real não é critério. **Fechamento a decidir por Xavier.** Se F21 fechar, `SENDER_NAME` em pt-BR fica para outro item.*
 
 **O que é.** Deixar `tMail` localizar o rodapé; uma chave por etapa em vez de `WF_LABELS`, nas dez línguas; teste de fonte.
 
@@ -1030,6 +1206,26 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 **Dependências.** Nenhuma.
 
 *Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F23 — Vinte e dois pedidos de consulta não têm prazo
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+
+**Estado.** Desde 01/10 (`e897fb26`), um pedido de consulta expira 60 dias após a criação. A regra só vale para os novos: **medido em 05/10**, as 22 linhas de `consulta_linhas_v2` não têm `expires_at`. Nada diz se é voluntário. Estão todas encerradas.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Decidir (Xavier): pôr um prazo às 22 ou nenhum, já que estão encerradas, e escrevê-lo.
+
+**Por que importa.** Uma regra que deixa de lado as linhas antigas tem dois regimes, e ninguém lembrará disso numa purga.
+
+**O que conta como terminado.**
+
+- As 22 linhas têm prazo, ou sua ausência está decidida e escrita aqui.
+
+**Dependências.** Decisão de Xavier.
+
+*Remissões : `commit e897fb26` · `F1 (clos le 03/10)`*
 
 ---
 
@@ -1059,7 +1255,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: assembleias da rede (3), propostas e objeções de autoridade (3), referenciais `catalog_ref_*` (8), governança dos perfis (4, **e os dois crons continuam a rodar sobre elas a cada quinze minutos**), deliberação dos pedidos de adesão (5). Todos a zero inserções.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Escolher um bloco e percorrê-lo de verdade, do primeiro ao último gesto: realizar uma assembleia da rede, depositar uma nota de leitura, propor uma autoridade e deixar alguém objetar, fazer deliberar um pedido de adesão. Registrar o que falta, o que surpreende, o que trava.
 
@@ -1368,7 +1564,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A tabela `UNIMARC` de `marc.ts` (l. 55-74) só aproveita 200 $a$e$f, 205, 210 $a$c$d, a primeira 101, 010, 011, 70x/71x $a$b, 60x $a. Ignora 214, 215, 225/410, 300/327/330, 676/686, 856, 200 $h$i, subdivisões 60x $x$y$z e 461/463. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): tipo de material pelo guia, páginas, volume, coleção, notas (300, 327, 330), classificação, endereço eletrônico (856), periódico e artigo (ISSN da revista); cada zona deixada de propósito tem um motivo codificado, nas 10 línguas. Suíte `import_zones_tests` (13 blocos). **Falta**: uma importação PMB real em produção; ligar os fascículos importados ao seu periódico (`serials`).
 
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; nenhuma importação MARC em produção ainda. **28/09** — corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`, migração `20260928170909`), implantado (`deployed-functions` em `a692a75e`): as palavras-chave 610/653 chegam à parte, sem se fundir nos cabeçalhos de assunto; o idioma é convertido em BCP-47 na criação do rascunho (`ingest.fn_idioma_bcp47`, 36 línguas; em produção, `fn_idioma_bcp47('fre')` = fr) — sem isso, um lote MARC não se publicava; o ISSN de um artigo é primeiro o da sua revista. **29/09** — revisões do fim de H27 (`466324aa`, `2348cb86`, migração `20260929102719`), implantadas (`deployed-functions` em `2348cb86`): num periódico, um 010 $a em forma de ISSN vai para ISSN; um registro de fascículo do PMB toma o título da revista em 200 $h, senão na última 463 $t, e guarda o seu à parte; a 461 $t de uma monografia que já tem coleção vira nota «Série:»; 463 $x $e, 225 $i $x, 410 $x e 411 ficam de fora com motivo. Pela tela, uma revista e seus fascículos, uma obra e seus tomos não são mais «duplicata possível» uns dos outros, e um artigo não é mais aproximado da sua revista pelo ISSN (`import_doublons_intra_lot_tests` 19, `import_rapprochement_issn_tests` 4; em produção, as duas funções com o md5 do banco). `marc.test.ts`: 35 testes pela ponte (28 em `8c80de27`).*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; nenhuma importação MARC em produção ainda. **28/09** — corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`, migração `20260928170909`), implantado (`deployed-functions` em `a692a75e`): as palavras-chave 610/653 chegam à parte, sem se fundir nos cabeçalhos de assunto; o idioma é convertido em BCP-47 na criação do rascunho (`ingest.fn_idioma_bcp47`, 36 línguas; em produção, `fn_idioma_bcp47('fre')` = fr) — sem isso, um lote MARC não se publicava; o ISSN de um artigo é primeiro o da sua revista. **29/09** — revisões do fim de H27 (`466324aa`, `2348cb86`, migração `20260929102719`), implantadas (`deployed-functions` em `2348cb86`): num periódico, um 010 $a em forma de ISSN vai para ISSN; um registro de fascículo do PMB toma o título da revista em 200 $h, senão na última 463 $t, e guarda o seu à parte; a 461 $t de uma monografia que já tem coleção vira nota «Série:»; 463 $x $e, 225 $i $x, 410 $x e 411 ficam de fora com motivo. Pela tela, uma revista e seus fascículos, uma obra e seus tomos não são mais «duplicata possível» uns dos outros, e um artigo não é mais aproximado da sua revista pelo ISSN (`import_doublons_intra_lot_tests` 19, `import_rapprochement_issn_tests` 4; em produção, as duas funções com o md5 do banco). `marc.test.ts`: 35 testes pela ponte (28 em `8c80de27`). **05/10, inventário — critérios relidos contra os commits**: zonas retomadas e testadas, tabela de cobertura gerada e guardada; o resto não é critério. **Fechamento a decidir por Xavier.***
 
 **O que é.** Estender a tabela zona por zona, na ordem dada por **H16** sobre **H14** e a amostra da DIRA; mesmos acréscimos em MARC21. Cada campo novo segue a regra dos três lugares. Um teste por zona.
 
@@ -1389,7 +1585,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** `authorNames()` reduz cada 70x/71x a uma cadeia «$a, $b»: perdem-se o papel ($4), a autoridade ($3) e a natureza (71x vira um nome qualquer). `authors` não tem coluna de tipo (a instruir). A verdade é `book_contributors`. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): `nature` (pessoa, coletividade, congresso) e `role_code` em `book_contributors` e nos rascunhos; todos os $4/$e lidos; natureza e código seguem publicação, retomada, fusão e cisão de autoridade. Aproximações de autoridade **propostas** na revisão, numa só passada (44 ms em produção para o lote 63). **Falta**: uma importação MARC real em produção.
 
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; funções em produção; 0 contribuidor com natureza (nenhuma importação MARC). **28/09** — corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`, migração `20260928170909`), implantado: um nome grego, cirílico, árabe ou chinês não é mais tomado por «Collectif» (`fn_conv_est_non_agent` comparava uma forma normalizada vazia); suas responsabilidades eram descartadas na importação, na recuperação H18, no relatório de revisão e nos candidatos de autoridade. Só um nome sem letra continua não-agente. No export, uma responsabilidade secundária mantém seu nível de origem (701/702, 711/712) quando o papel não mudou. Em produção, um nome grego não é mais não-agente; nenhum registro foi afetado (0 importação MARC publicada, lido em 28/09).*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; funções em produção; 0 contribuidor com natureza (nenhuma importação MARC). **28/09** — corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`, migração `20260928170909`), implantado: um nome grego, cirílico, árabe ou chinês não é mais tomado por «Collectif» (`fn_conv_est_non_agent` comparava uma forma normalizada vazia); suas responsabilidades eram descartadas na importação, na recuperação H18, no relatório de revisão e nos candidatos de autoridade. Só um nome sem letra continua não-agente. No export, uma responsabilidade secundária mantém seu nível de origem (701/702, 711/712) quando o papel não mudou. Em produção, um nome grego não é mais não-agente; nenhum registro foi afetado (0 importação MARC publicada, lido em 28/09). **05/10, inventário — critérios relidos contra os commits**: papéis e natureza mantidos, testes escritos; falta uma importação real, que não é critério. **Fechamento a decidir por Xavier.***
 
 **O que é.** Forma estruturada `{nome, natureza, papel, autoridade}`, tabela $4 → papéis AnarBib; alimentar `book_contributors`; aproximação de autoridades por `fn_conv_autorite_homonyme`, apresentada na revisão de lote, nunca de ofício. Idem MARC21.
 
@@ -1411,7 +1607,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** O parser ignora a 995. Medido em 26/09: `exemplar_drafts`, `publish_exemplar_draft` e `ingest.fn_create_exemplar_drafts_from_import_rows` existem, mas **0** linha de staging tem `created_exemplar_draft_id`. `exemplares.tombo` é **único na base toda**: colisões possíveis (23505). **Levantamento de 26/09**: 995 do PMB = `$a`/`$c` proprietário, `$f` código de barras, `$k` cota, `$u` nota, `$r` tipo, `$q`. Armadilhas: N+1 exemplares (`greatest(1, initial_copies)`), tombo regenerado em silêncio em colisão, gatilho que devolve a linha a « pending » ao cancelar UM exemplar.
 
-*Verificado : 27/09 — suíte SQL 30/30 e as 118 suítes da CI; banco da EF real no export PMB; testes Deno do parser; tela em fr e el. **29/09** — IMP-25 implantado (`2f488790`): migração `20260929103533` aplicada pela CI (`created_by` vazio), `publish_book_draft` com o md5 do banco em produção; suítes `import_sans_exemplaire_tests` (3) e `import_exemplaires_tests` 30/30. A implantação de 27/09 só era dita por `cebde675`: migração `20260927113000` aplicada pela CI, verificada em produção.*
+*Verificado : 27/09 — suíte SQL 30/30 e as 118 suítes da CI; banco da EF real no export PMB; testes Deno do parser; tela em fr e el. **29/09** — IMP-25 implantado (`2f488790`): migração `20260929103533` aplicada pela CI (`created_by` vazio), `publish_book_draft` com o md5 do banco em produção; suítes `import_sans_exemplaire_tests` (3) e `import_exemplaires_tests` 30/30. A implantação de 27/09 só era dita por `cebde675`: migração `20260927113000` aplicada pela CI, verificada em produção. **05/10, inventário — critérios relidos contra os commits**: critérios cumpridos em bancada, 46/46 exemplares na reimportação; falta uma importação real da DIRA. **Fechamento a decidir por Xavier.***
 
 **O que é.** Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; ~~`tombo` prefixado (como `SOL-`)~~ (descartado em 26/09, IMP-21 a: o `tombo` segue o esquema da biblioteca); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB. **Decisões esperadas de Xavier (expostas em 26/09):** numeração (A: código PMB prefixado; **B, recomendada**: esquema AnarBib + código PMB em coluna própria; C: por perfil); código de origem em coluna dedicada (chave de H21 e H24); correspondência 995 no perfil da biblioteca (IMP-19); status PMB → `circulation_policy`. **Decidido em 26/09 (IMP-21), entregue em 27/09** (`3efd89b0`, `a7b2d44d`, `02000b89`, migração `20260927113000`): numeração B, código de origem em coluna própria única por biblioteca, correspondência 995/852 no perfil, status PMB na nota de proveniência até a amostra da DIRA. Três revisões contraditórias antes de qualquer implantação. **Falta**: uma importação PMB real (DIRA) até a publicação; status → `circulation_policy`. **29/09 (IMP-25)**: um registro que um arquivo MARC importa sem exemplar não recebe mais exemplar automático na publicação; CSV e RIS mantêm o seu. Reimportado no PMB (**H27**): 46 exemplares de 46.
 
@@ -1433,7 +1629,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Medido em 26/09: o 001 vai até `books.source_record_id` (254 registros), mas `books` é **compartilhada pela rede**: quando a importação liga a um registro já existente, o identificador PMB não tem lugar da biblioteca que importa (a verificar). `book_holdings.local_bib_ref` carrega a referência local AnarBib. **Entregue em 28/09** (`8c80de27`, migração `20260928111812`): tabela `book_external_ids` (única por biblioteca), gravada na publicação, na aproximação de exemplar e na absorção de rascunho; segue a notícia mantida numa fusão. O que não é identificador (número de linha, número de fascículo de CSV, chave repetida) é apagado na importação. Suíte `identifiant_origine_tests` (11).
 
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; `book_external_ids`: 264 linhas (MLEG); lote 63: 0 identificador falso em 1 673 rascunhos.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; `book_external_ids`: 264 linhas (MLEG); lote 63: 0 identificador falso em 1 673 rascunhos. **05/10, inventário** — critérios cumpridos em bancada, tabela preenchida em produção (264 linhas). Verificar antes de propor o fechamento: que um teste cubra exatamente « uma notícia vinculada a uma notícia existente ».*
 
 **O que é.** Tabela `book_external_ids (book_id, library_id, scheme, value)` com índice único, alimentada na publicação; ou coluna na detenção se bastar. Decidir depois de ler `publish_book_draft` no caso de registro existente.
 
@@ -1454,7 +1650,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A marcha em paralelo supõe continuar catalogando no PMB e reimportar. Hoje, um reimport passa pela detecção de duplicatas: não há noção de «registro já importado, a atualizar». `book_drafts.action` já conhece `update`.
 
-*Verificado : 26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira? **05/10 — lote 1 entregue** (`32afb117`, `ba6ec496`; migração `20261005103427`; REGISTRO `IMP-28`): uma linha reimportada cujo identificador de origem já é conhecido vira «Já importada», sem passes aproximados; vincula-se ou rejeita-se, nunca registro novo nem atualização; «não possui mais» é sinalizado; o identificador fica com a biblioteca cujo PMB o emitiu; um exemplar vinculado tirado da lixeira depois do pedido espera nova rodada. Fixture PMB reimportada: 64 «Já importada» de 64. **Registrado (05/10)**: (1) o aviso de chave ambígua não aparece na tela; (2) enquanto um exemplar vinculado espera, republicar o registro é recusado (`items_on_update`); (3) a view `api.partner_catalog_import_rows_workflow_ui` não conhece `known_record`. **05/10 — lote 2 entregue** (`84c455cd`, migração `20261005172708`; REGISTRO `IMP-29`): `ingest.book_import_baselines` guarda, por identificador de origem, o que o último arquivo aceito trouxe; uma só regra de correspondência; base escrita na publicação, na absorção (que a avança) e na vinculação (que só a cria); 264 bases retomadas em produção. **Registrado**: o esquema ingest não tem backup (decisão de 05/10: incluí-lo no fluxo longo).*
+*Verificado : 26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira? **05/10 — lote 1 entregue** (`32afb117`, `ba6ec496`; migração `20261005103427`; REGISTRO `IMP-28`): uma linha reimportada cujo identificador de origem já é conhecido vira «Já importada», sem passes aproximados; vincula-se ou rejeita-se, nunca registro novo nem atualização; «não possui mais» é sinalizado; o identificador fica com a biblioteca cujo PMB o emitiu; um exemplar vinculado tirado da lixeira depois do pedido espera nova rodada. Fixture PMB reimportada: 64 «Já importada» de 64. **Registrado (05/10)**: (1) o aviso de chave ambígua não aparece na tela; (2) enquanto um exemplar vinculado espera, republicar o registro é recusado (`items_on_update`); (3) a view `api.partner_catalog_import_rows_workflow_ui` não conhece `known_record`. **05/10 — lote 2 entregue** (`84c455cd`, migração `20261005172708`; REGISTRO `IMP-29`): `ingest.book_import_baselines` guarda, por identificador de origem, o que o último arquivo aceito trouxe; uma só regra de correspondência; base escrita na publicação, na absorção (que a avança) e na vinculação (que só a cria); 264 bases retomadas em produção. **Registrado**: o esquema ingest não tem backup (decisão de 05/10: incluí-lo no fluxo longo). **05/10, à noite** — o ponto « o esquema `ingest` não tem backup » está resolvido: **I29**, fechado em 05/10 (`f5e3f5ed`); direitos e esquemas `private`/`api`: **I30**.*
 
 **O que é.** Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**. **Decidido em 29/09 por Xavier (REGISTRE `IMP-26`)**: retomar um registro à mão é reservado às bibliotecas que o detêm; uma divergência num registro compartilhado é tratada por qualquer detentora, e descartá-la faz avançar a base; «retirado» é uma constatação reversível (não emprestável, oculto no OPAC, fora do export, nunca apagado), proposta só para exemplares vindos da mesma fonte, num arquivo MARC declarado «export completo»; H21 visa só a DIRA; `accept_duplicate` quer dizer «vinculado», nunca uma criação. **Plano em nove lotes** (0 a 8).
 
@@ -1475,7 +1671,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** `looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c="200">`), não reconhecido. **Verificado em 26/09 no banco**: o XML próprio do PMB não é reconhecido; o « XML MARC » do PMB já é lido. **Entregue em 28/09** (`8c80de27`): por decisão de Xavier, a importação lê o XML próprio do PMB; formato `pmb_xml` admitido; a fixture dá as mesmas notícias que o ISO 2709.
 
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`.*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`. **05/10, inventário — critérios relidos contra os commits**: o leitor XML do PMB foi entregue e implantado em 28/09; nada falta. **Fechamento a decidir por Xavier.***
 
 **O que é.** Só se uma biblioteca não conseguir sair do ISO 2709 nem do MARCXML: um leitor para o modelo comum de `marc.ts`.
 
@@ -1495,7 +1691,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** `serialize.ts` só escreve CSV, **MARCXML em MARC21** e JSON; o cabeçalho anuncia UNIMARC ISO 2709, DC e BibTeX, que não existem. O PMB trabalha em UNIMARC. A correspondência de zonas está escrita **duas vezes** (import e export), sem garantia de simetria. **Entregue em 28/09** (`8c80de27`): uma tabela única `_shared/marc/correspondance.ts` para importação e exportação; UNIMARC ISO 2709 (comprimentos em bytes UTF-8) e XML; MARC21 ISO 2709 e MARCXML. As 64 notícias PMB das fixtures fazem ida e volta idênticas.
 
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`. **28/09** — escritor corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`), implantado (`deployed-functions` em `a692a75e`): o ISSN de um artigo sai em 461 $x, não mais em 011; as palavras-chave importadas, guardadas à parte (**H17**), saem em 610/653, não mais em 606, que o PMB transforma em categorias. **29/09** — revisões do fim de H27 (`466324aa`, `2348cb86`), implantadas (`deployed-functions` em `2348cb86`): o export põe os periódicos antes dos artigos, porque o PMB só vincula um artigo a uma revista lida antes dele (15 artigos vinculados de 15 no banco, 7 na ordem dos identificadores); a 995 leva `$r uu` e `$q u` («indeterminado»), sem o que o PMB punha todo exemplar no primeiro tipo da sua base (sequência: **H29**); a ajuda da tela nomeia, nas 10 línguas, a aba de importação do PMB («Exemplaires UNIMARC») e os dois ajustes dos quais tudo depende. `ecriture.test.ts`: 19 testes pela ponte (13 em `8c80de27`).*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`. **28/09** — escritor corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`), implantado (`deployed-functions` em `a692a75e`): o ISSN de um artigo sai em 461 $x, não mais em 011; as palavras-chave importadas, guardadas à parte (**H17**), saem em 610/653, não mais em 606, que o PMB transforma em categorias. **29/09** — revisões do fim de H27 (`466324aa`, `2348cb86`), implantadas (`deployed-functions` em `2348cb86`): o export põe os periódicos antes dos artigos, porque o PMB só vincula um artigo a uma revista lida antes dele (15 artigos vinculados de 15 no banco, 7 na ordem dos identificadores); a 995 leva `$r uu` e `$q u` («indeterminado»), sem o que o PMB punha todo exemplar no primeiro tipo da sua base (sequência: **H29**); a ajuda da tela nomeia, nas 10 línguas, a aba de importação do PMB («Exemplaires UNIMARC») e os dois ajustes dos quais tudo depende. `ecriture.test.ts`: 19 testes pela ponte (13 em `8c80de27`). **05/10, inventário — critérios relidos contra os commits**: exportações UNIMARC propostas, uma só tabela de correspondência, ida e volta idêntica das 64 notícias. **Fechamento a decidir por Xavier.***
 
 **O que é.** Uma só tabela de correspondência compartilhada (`_shared/marc/`); escritor ISO 2709 (comprimentos em **bytes UTF-8**); leader e 100 $a/26-29 corretos; MARCXML UNIMARC; testes `parse(serialize(x)) = x`.
 
@@ -1516,7 +1712,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Medido em 26/09 (definição real de `fn_export_catalog_lote`): **nenhum exemplar**; autores de `book_authors` (derivada) só pelo nome, sem papel; assuntos como texto cortado, não autoridade; `100 1_` até para coletividade; nada de obra nem periódico. **Entregue em 28/09** (`8c80de27`, migração `20260928111816`): `fn_export_catalog_lote` reescrita: identificador de origem da biblioteca, responsabilidades com papel e natureza, assuntos do tesauro, exemplares só dessa biblioteca, obra, periódico, artigo; **reemissão prudente** (REGISTRE IMP-22). **Falta**: ligar fascículos ao periódico; importações anteriores a 28/09 sem `item_tag`; mutantes da RPC parciais.
 
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; assinatura em produção com paginação. **28/09** — `fn_export_catalog_lote` recriada a partir da definição real pela revisão de H25 e H27 (`a692a75e`, migração `20260928170908`, aplicada pela CI): uma 71X `$3` não leva mais a uma ficha de pessoa; cada ficha tem um só tipo, o mesmo nos dois exports (`private.fn_nature_autorite`, ver **H25**). **29/09** — critério 1 provado no banco pela prova de **H27** (`tests/pmb/bilans/h27-aller-retour.json`): o export tirado da base, reimportado num PMB vazio, devolve 46 exemplares de 46, 61 responsabilidades de 61 e 42 registros indexados de 42; duas categorias do PMB com o mesmo rótulo viram uma só (48 vínculos para 49); tipo, seção e código estatístico dos exemplares não voltam (**H29**).*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; assinatura em produção com paginação. **28/09** — `fn_export_catalog_lote` recriada a partir da definição real pela revisão de H25 e H27 (`a692a75e`, migração `20260928170908`, aplicada pela CI): uma 71X `$3` não leva mais a uma ficha de pessoa; cada ficha tem um só tipo, o mesmo nos dois exports (`private.fn_nature_autorite`, ver **H25**). **29/09** — critério 1 provado no banco pela prova de **H27** (`tests/pmb/bilans/h27-aller-retour.json`): o export tirado da base, reimportado num PMB vazio, devolve 46 exemplares de 46, 61 responsabilidades de 61 e 42 registros indexados de 42; duas categorias do PMB com o mesmo rótulo viram uma só (48 vínculos para 49); tipo, seção e código estatístico dos exemplares não voltam (**H29**). **05/10, inventário — critérios relidos contra os commits**: critério 1 provado em 29/09 (H27), critério 2 por `export_catalogue_tests`; tipo, seção e código estatístico passaram para H29. **Fechamento a decidir por Xavier.***
 
 **O que é.** Reescrever `fn_export_catalog_lote` **a partir da definição real**: exemplares da biblioteca (só dela), `book_contributors`, assuntos do tesauro, coleção, notas, periódico, obra, 001 de origem (**H20**) ou `bib_ref`, 035. **A decidir**: reemitir as zonas não aproveitadas de `books.marc_json` (fidelidade vs valor defasado).
 
@@ -1537,7 +1733,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Entregue em 28/09** (`d83a7d0c`, revisão `a692a75e`): `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); formato em Importações, com o passo a passo no PMB, em 10 línguas. No banco PMB: 61 responsabilidades de 61 ligadas pelo $3, 47 categorias de 47 pelo rótulo, 0 autor recriado. **Correção de 29/09**: essas 61 ligações supõem que o PMB receba a origem «AnarBib»; o formulário da aba «Exemplares UNIMARC» do PMB 8.1.1.1 não a transmite. Medido como um navegador envia: 61 responsabilidades → 57 autores, nenhum recriado, mas 44 vínculos para uma fonte ausente; com «Não», nenhum vínculo. O passo a passo diz agora «Não» no PMB 8.1.1.1.
 
-*Verificado : 28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145.*
+*Verificado : 28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145. **05/10, inventário** — a decidir antes de fechar: o critério só se cumpre se o PMB receber a origem; com o PMB 8.1.1.1 como um navegador o envia, a resposta é « Não », logo nenhum vínculo (`2348cb86`).*
 
 **O que é.** Serializar as autoridades ligadas aos registros da biblioteca em UNIMARC Autoridades (200/210/250, 4xx, 5xx); o SKOS do tesauro já existe.
 
@@ -1641,14 +1837,14 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 ### I — Auto-hospedagem, operação, backups, CI
 
-*Congelado até 14/09/2026 na produção. O trabalho em ambiente de teste continua aberto.*
+*Descongelado desde 14/09/2026. O runner da CI ainda vive na máquina do mantenedor (A3).*
 
 | | | | |
 |---|---|---|---|
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
-| **I30** | Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api` | `P1` | Em curso |
+| **I30** | Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api` | `P1` | A verificar |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1718,11 +1914,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### I30 — Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api`
 
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : administração de sistemas, SQL / PostgreSQL
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : administração de sistemas, SQL / PostgreSQL
 
 **Estado.** Registrado no fechamento do I29. Os dois fluxos do backup #BG2 são feitos em `--no-privileges`: nenhum `GRANT`/`REVOKE`; o runbook só repõe os direitos de `ingest`. Depois de uma restauração, `public` perde os acessos de `anon`/`authenticated` e toda função recriada volta a ser executável por `PUBLIC`. Os esquemas `private` e `api` não estão em nenhum fluxo.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Medir na produção; levar os direitos nos dumps (ou repô-los por script); incluir `private` e `api` no fluxo longo; provar em banco que uma restauração devolve os mesmos direitos e funções que a produção.
 
@@ -1748,6 +1944,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **J9** | Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px | `P2` | A verificar |
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
+| **J11** | Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5 | `P3` | Aberto |
 
 #### J9 — Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px
 
@@ -1789,6 +1986,26 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de Bolonha. Sem dependência técnica.
 
 *Remissões : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
+
+#### J11 — Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
+
+**Estado.** Cinco restos achados no caminho, sem item: (1) duas guardas iguais (`locales-sans-cle-en-double`, `i18n-cles-uniques`); (2) `scripts/merge-imp-deposit-keys.cjs`, script morto; (3) capas antigas no bucket até rodar `purge-orphelins-covers.py` (classe B); (4) colunas e tabela sem leitor do e-mail (`57a4aafc`); (5) duas views de trabalho do lote C5 (`89a2b508`).
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Para cada um: retirar, ou escrever por que fica. Antes de qualquer `DROP`, procurar em `prosrc`, no front e nas Edge Functions.
+
+**Por que importa.** Cada resto custa uma leitura a quem o cruza, e duas guardas gêmeas se contradizem no dia em que uma muda.
+
+**O que conta como terminado.**
+
+- Cada um dos cinco restos foi retirado, ou mantido com a razão escrita aqui.
+
+**Dependências.** Xavier, para a purga das capas e qualquer migração que apague.
+
+*Remissões : `commits 9fc60a15, a64bd04f, 8f0d85a0, d7f65c54, 57a4aafc, 89a2b508` · `scripts/purge-orphelins-covers.py`*
 
 ---
 
@@ -2158,7 +2375,7 @@ CI verde. |
 | H14 | 2026-09-26 | **Fechado em 26/09 à noite, os dois critérios cumpridos.** *(1)* PMB 8.1.1.1 (arquivo oficial, SHA256 verificado) roda na máquina em dois contêineres, receita **sem cliques** no repositório (`tests/pmb/banc`): instalação, atualização do esquema, **exportação** e **importação** por HTTP. *(2)* Fixtures **exportadas pelo próprio PMB** (`tests/pmb/fixtures`): o jogo de teste do PMB (50 registros, 33 exemplares) em ISO 2709, XML MARC e XML próprio do PMB, e 14 **casos difíceis** passados pelo PMB. Latin-1: não pelo PMB (o 8.1 só instala em UTF-8) — variante transcodificada por `yaz-marcdump`, dito. O que o PMB perde ao reimportar está em `tests/pmb/README.md` (**H24**/**H27**). |
 | C8 | 2026-09-26 | **Fechado em 26/09, os dois critérios cumpridos.** Duas fases por migração de dados via CI: Wikidata (607 fichas) e Library of Congress (288 ligadas, 90 completadas); regras, amostras e planilhas em `docs/journal/operations/enrichissement-autorites-2026-09-26/`; precisão medida numa amostra aleatória: 60/60. Só se preenche o vazio, com rastro por ficha. (1) Cobertura em identificadores externos: 51 % de todas as autoridades, 78 % das com três livros ou mais, 96 % das com dez. (2) Nenhuma forma de nome tocada. A língua de escrita ganhou sua coluna (503 fichas). **29/09** — O que não foi escrito fica para revisão manual, caso a caso, em `decisions.csv` (Wikidata: 96 homônimos ambíguos, 70 contradições, 88 com um só sinal, 39 não corroboradas), `decisions-lc.csv` (LC: 27 contradições) e `decisions-idref.csv` (IdRef, C4: 50 contradições, 173 não corroboradas). Um valor duvidoso está na base: E. M. Cioran, `writing_language = 'ro'` (`20260926193111`; ele escreve em francês depois de 1949), a corrigir à mão. |
 | C11 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 3 cumpridos, o 2 fica como prática contínua (decisão de Xavier).** Ficha validada em bloco; fusões e reuniões de tomos feitas por Xavier no assistente (a migração que agia em seu nome foi recusada, com razão); o resto por duas migrações em nome próprio (`20260927112143` e `ee07f79c`; `20260927114232` e `6f4d7b89`): O Capital, O Homem e a Terra em seis volumes, sete famílias de tomos reunidas, Peirats devolvido à fila, matérias MLEG. Em produção: as três abas vazias; 175 notas MLEG com decisão escrita. Critério 2 não mensurável: 1 676 títulos automáticos, revisão contínua pela fila do Ateliê. |
-| C7 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 2 cumpridos, o 3 dispensado por decisão de Xavier.** 851 registros indexados pelo vocabulário existente (ficha validada A + B, migração `20260927124038` pela CI): cobertura pública medida como anônimo 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` suprimido, `anarcocomunismo` verificado. Levar os oito assuntos à FICEDL deixa de ser pedido (decisão de Xavier, «se não criar fork»): não há fork — a cópia do tesauro tem 621 termos, todos colhidos na fonte em 03/09, nenhum acrescentado localmente, nenhum vínculo `exact` para os oito. 466 registros ficam fora do vocabulário. |
+| C7 | 2026-09-27 | **Fechado em 27/09 — critérios 1 e 2 cumpridos, o 3 dispensado por decisão de Xavier.** 851 registros indexados pelo vocabulário existente (ficha validada A + B, migração `20260927124038` pela CI): cobertura pública medida como anônimo 2 167 / 2 633 = 82,3 %. `pierre-joseph-proudhon` suprimido, `anarcocomunismo` verificado. Levar os oito assuntos à FICEDL deixa de ser pedido (decisão de Xavier, «se não criar fork»): não há fork — a cópia do tesauro tem 621 termos, todos colhidos na fonte em 03/09, nenhum acrescentado localmente, nenhum vínculo `exact` para os oito. 466 registros ficam fora do vocabulário. **05/10, inventário** — as notícias fora do vocabulário têm seu item: C27. |
 | C6 | 2026-09-27 | **Fechado em 27/09 — verificado na tela por Xavier, conectado.** As três assistências da spec das convenções (§7): botão «Normalizar maiúsculas» do título, corrigido por observação de Xavier para aplicar a caixa da língua (§4.1, `1782dfcb`); assistente do ponto de acesso e normalização da caixa do nome de pessoa (`0c3bb62f`, `8c73b850`); cron semanal que alimenta a fila de verificação (`7eb72630`). Limites: o lote «titre_casse» ainda propõe a forma antiga; coletividades sem ferramenta de caixa; `name_lang` fora do formulário. **As três limitações tratadas na mesma noite:** dicionário de nomes próprios atestados + espelho SQL (171 propostas da fila refeitas, 0 divergência); `name_lang` no formulário e na separação do nome; caixa dos nomes de coletividades. |
 | B10 | 2026-09-27 | **Fechado em 27/09 à noite, com provas: os três critérios cumpridos, e três guardas para mantê-los.** (1) Os avisos `multiple_permissive_policies` foram resolvidos (25 → 0): uma permissiva por (papel, comando) nas 25 tabelas, com o OU ordenado — primeiro o que não depende da linha, depois a leitura pública, depois o staff linha a linha. A impressão digital das linhas visíveis para anon e para cada uma das 20 contas reais é idêntica nas 25 tabelas antes e depois; `count(*)` em `books` sob leitor 208 → 90 ms, admin 39 → 1,4 ms. Guarda: `policies_permissives_uniques_tests` (33 testes). (2) 21 chaves estrangeiras indexadas — as de pais realmente excluídos em operação; a lista assumida do B21 passa de 38 a 17, com a regra escrita. (3) 22 índices retirados com o motivo escrito (10 redundantes nunca usados, 12 sem leitor no caminho de escrita); guarda `index_redondants_garde_tests`. Os 108 índices sem leitor restantes estão inventariados na auditoria. Novos itens: B31, B32, B33, B34, I28. Desvio registrado a `DOC-DEPLOY-4` (auditoria §7). |
 | D7 | 2026-09-27 | **Fechado em 27/09: decisão escrita no REGISTRO (seção `ARCH`), com a sua razão.** **Decidido por Xavier**: um modelo arquivístico completo no AnarBib (níveis ISAD(G), produtores em autoridades ISAAR(CPF), exportação EAD desde a primeira versão), nível de descrição variável segundo o fundo, condições de acesso por nível desde a primeira versão; apresentado para parecer a DIRA, CIRA e FICEDL antes de qualquer código. Realização: **D8**. |
@@ -2170,11 +2387,11 @@ CI verde. |
 | B33 | 2026-09-28 | Entregue pela outra sessão em 27/09 (`6bdd4331`). Verificado em produção em 28/09: `search_catalog_v1` traz o padrão único; plano — `BitmapOr` de seis `Bitmap Index Scan` nos dois índices trigram de `authors`; `publishers_lower_name_idx` serve a publicação; cinco índices sem leitor retirados (três não podiam servir consulta alguma atrás de uma policy: LIKE, ILIKE, `~` e `%` não são leakproof). Reserva: a chamada completa sob `anon` fica em 183 ms. Fechado por Xavier. **29/09** — De passagem, `6bdd4331` escapa os termos no padrão de `api.search_catalog_v1`: em produção, «c++ anarquia» ou «[anarquia» davam erro 2201B no autocompletar. Em base sintética, o autocompletar passa de 2 182 a 125 ms por chamada. |
 | B34 | 2026-09-28 | Entregue pela outra sessão em 27/09 (`df4dcec1`): `fn_delete_my_account` repõe o ator de `catalog_audit_log` e as contas dos instantâneos. Verificado em produção em 28/09: 1 750 linhas, um só ator, nenhum uuid órfão. Suíte na CI. Fechado por Xavier. |
 | I28 | 2026-09-28 | **Fechado em 28/09: a CI aplica as regras do hook para todas as sessões.** `src/tests/doctrine-migrations-garde.test.js` (em `npm test`, job `app`): 10 testes — nome com 14 dígitos, versão única, sem hora redonda desde 31/08 (fora uma lista fechada de 15), sem data no futuro, e a doutrina SQL do hook. Entregue em 27/09 por `89a2b508`, logo antes de B31 (`507afb03`) e B34 (`df4dcec1`); já barrou um rascunho do B33. |
-| B32 | 2026-09-28 | **Fechado em 28/09, com provas, a 100 000 registros sintéticos.** Três migrações (`20260928122316`, `…17`, `…18`). *(b)* A visibilidade por biblioteca é calculada uma vez por consulta (`fn_visible_library_ids()` em InitPlan nas 21 policies) : `count(*)` em `books` sob anon 3,0 s → 52 ms, em sessão 29,8 s → 0,79 s ; visibilidade idêntica (13 tabelas, 6 identidades). *(a)* As visões do catálogo leem as visões materializadas por duas visões `private` (sem invólucro DEFINER por linha), e os índices enfim são usados. Diante da visão real, `catalog_works_v1` caía em laços aninhados (1 linha estimada para 77 000) : ela monta seu WHERE a partir dos filtros presentes, lê `volume` pela visão, toma o título de recurso no catálogo que serve, materializa `titres` e proíbe laços aninhados durante a consulta. De passagem, `catalog_search_ids_v1` devolvia `LIMIT 500` sem ordem total : `book_id` desempata. *(c)* `fn_locale_from_idioma` é inserida em linha. Quarenta percursos do OPAC idênticos antes/depois. Medidas finais, anon : página padrão 15,9 s → 1,8 s, ordenação por autor·a 11,3 → 1,7 s, lista plana por título 132 → 0,8 ms ; sessão : página padrão 54,8 → 2,2 s. Índices secundários : todos mantidos ; três sem uso a rever nos contadores de produção em um mês. Verificado em produção em 28/09 (implantado às 14:05 UTC): visibilidade idêntica para as 21 identidades; 39 percursos em 40 idênticos, o quadragésimo idêntico ao que a lógica antiga devolve sobre os mesmos dados; página padrão anônima 383 → 74 ms, busca 335 → 49 ms, `count(*)` 87 → 4 ms, página em sessão 442 → 135 ms; lint 0028 = 27, esperado. Auditoria : `journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md`. **Completado em 29/09.** Commits `46d10ed2` (b), `f4622aab` (a), `48267f27` (c); suíte `catalogue_grande_echelle_tests` (T1-T9); banco em `scripts/loadtest/catalogue-synthetique.sql` e `catalogue-mesure.sql`. Exceção assumida: `private.catalog_public_rows` e `private.catalog_network_rows` sem `security_invoker` (guarda T7 de `grants_herites_tests`). **Na mesma noite**: `api.catalog_facets_v1` monta seus predicados a partir dos filtros presentes (`cddc567b`, `20260928162102`), depois sua busca «q» passa a ser a da página (`5f13ec86`, `20260928164227`, `OPAC-F2`: «memoria» contava 9 edições nas facetas e 52 na página); `facettes_catalogue_tests` 18. Limite: as facetas continuam as do catálogo público. |
+| B32 | 2026-09-28 | **Fechado em 28/09, com provas, a 100 000 registros sintéticos.** Três migrações (`20260928122316`, `…17`, `…18`). *(b)* A visibilidade por biblioteca é calculada uma vez por consulta (`fn_visible_library_ids()` em InitPlan nas 21 policies) : `count(*)` em `books` sob anon 3,0 s → 52 ms, em sessão 29,8 s → 0,79 s ; visibilidade idêntica (13 tabelas, 6 identidades). *(a)* As visões do catálogo leem as visões materializadas por duas visões `private` (sem invólucro DEFINER por linha), e os índices enfim são usados. Diante da visão real, `catalog_works_v1` caía em laços aninhados (1 linha estimada para 77 000) : ela monta seu WHERE a partir dos filtros presentes, lê `volume` pela visão, toma o título de recurso no catálogo que serve, materializa `titres` e proíbe laços aninhados durante a consulta. De passagem, `catalog_search_ids_v1` devolvia `LIMIT 500` sem ordem total : `book_id` desempata. *(c)* `fn_locale_from_idioma` é inserida em linha. Quarenta percursos do OPAC idênticos antes/depois. Medidas finais, anon : página padrão 15,9 s → 1,8 s, ordenação por autor·a 11,3 → 1,7 s, lista plana por título 132 → 0,8 ms ; sessão : página padrão 54,8 → 2,2 s. Índices secundários : todos mantidos ; três sem uso a rever nos contadores de produção em um mês. Verificado em produção em 28/09 (implantado às 14:05 UTC): visibilidade idêntica para as 21 identidades; 39 percursos em 40 idênticos, o quadragésimo idêntico ao que a lógica antiga devolve sobre os mesmos dados; página padrão anônima 383 → 74 ms, busca 335 → 49 ms, `count(*)` 87 → 4 ms, página em sessão 442 → 135 ms; lint 0028 = 27, esperado. Auditoria : `journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md`. **Completado em 29/09.** Commits `46d10ed2` (b), `f4622aab` (a), `48267f27` (c); suíte `catalogue_grande_echelle_tests` (T1-T9); banco em `scripts/loadtest/catalogue-synthetique.sql` e `catalogue-mesure.sql`. Exceção assumida: `private.catalog_public_rows` e `private.catalog_network_rows` sem `security_invoker` (guarda T7 de `grants_herites_tests`). **Na mesma noite**: `api.catalog_facets_v1` monta seus predicados a partir dos filtros presentes (`cddc567b`, `20260928162102`), depois sua busca «q» passa a ser a da página (`5f13ec86`, `20260928164227`, `OPAC-F2`: «memoria» contava 9 edições nas facetas e 52 na página); `facettes_catalogue_tests` 18. Limite: as facetas continuam as do catálogo público. Auditoria §6 completada em 28/09 (`038efa8b`): a diferença das « novidades » vinha da obra 2037 editada entre dois levantamentos. O limite das facetas: item E29. |
 | C12 | 2026-09-28 | **Fechado no mesmo dia, 28/09 — a pesquisa de metadados mostra uma candidata por fonte, não uma por ISBN.** Constatação de Xavier na tela: para o ISBN 8432302120, os marcadores diziam BNE 2, BnF 2, ICCU 2, LoC 1, Open Library 2, e a lista mostrava só uma candidata (Siglo XXI 1976, quando o registro traz 1991). Causa em `catalog_metadata_lookup`: `dedupeAndRank` usava o ISBN sozinho como chave, e a lista fundida era truncada em `maximumRecords` (8), que já limita cada fonte. Correção em dois commits (`78685511`, `16a4dcb4`): a chave traz a fonte, o identificador do registro nela, o ISBN, o título, o primeiro contribuidor e o ano — só o mesmo registro devolvido duas vezes se dobra; sem truncamento. Bancada `catalog-metadata-lookup-candidates.test.js` (cinco casos, 3/4 vermelhos no código anterior). Verificado em produção às 16h16 na aba de Xavier: 7 linhas para 7 resultados anunciados. |
 | H27 | 2026-09-29 | **Fechado em 29/09 por decisão de Xavier.** Os três critérios: (1) a suíte SQL `aller_retour_pmb_tests` roda na CI, perdas aceitas escritas e congeladas; (2) o export tirado da base, reimportado num PMB 8.1.1.1 esvaziado: 46 exemplares de 46, 3 fascículos e 15 artigos, 61 responsabilidades, 57 autores, 36 editoras; os registros passam de 62 a 64 (as pseudo-notícias de fascículo do PMB voltam como periódicos); (3) a tabela de cobertura gerada a partir do código e dos balanços (`docs/interop/couverture-pmb.md`). Implantado em 29/09 (`2348cb86`). O que não volta — tipo, seção e código estatístico dos exemplares — passa para **H29**. **O caminho** (ficha em `66943e5a`). (0) Desde 26/09, uma ponte vitest (`src/tests/deno-tests-pont.test.js`, `66750198`) roda como estão os testes Deno do parser MARC e do export, que a CI não rodava; exige a contagem exata: 16 no início, 75 em 29/09. (1) Cumprido em 28/09 (`2ee5f7a7`, revisão `a692a75e`, migração `20260928170909`): a prova achou cinco defeitos, corrigidos — lote MARC impublicável (língua bruta contra `books_idioma_bcp47_chk`), nomes não latinos tomados por «Collectif», palavras-chave 610/653 devolvidas em 606, ISSN de artigo em 011, nível 701/702 perdido. (2)-(3) Cumpridos por `7dbd9f11` e duas revisões contraditórias: `466324aa` (periódicos antes dos artigos, 7 → 15 de 15; `$r uu`/`$q u` na 995); `2348cb86` (os dois ajustes do PMB que decidem tudo: «Gerar os vínculos» em Sim, «autoridades» em Não no PMB 8.1.1.1; e, por `20260929102719`, fascículos e tomos não são mais duplicatas numa importação MARC, 58 → 64 rascunhos); `2f488790` (`IMP-25`). Verificado em 29/09: as três funções no md5 do banco, as duas da aproximação fechadas a anon e a authenticated, as duas EF a 401 sem token; vitest 1 518, SQL 149/149. |
-| Capas: a cadeia consertada, uma capa por edição, o lote, a foto na estante (CAPAS-1 a 6) | 2026-09-27 | **Entregue em 27/09, continuação em 28/09** (REGISTRO §43 `CAPAS-1` a `CAPAS-6`; nota `LIVRAISON_capas_2026-09-27.md`). A via ISBN de `cover_lookup` respondia 404 na Open Library desde data desconhecida. A cadeia consertada: URL, Inventaire, título na falta de ISBN (`2a80d43b`: 0 → 85 capas nos 267 registros sem capa com ISBN); fonte fora do ar indicada na tela (`fd5d2f0e`); procedência e licença em par (`76c6ae3f`, `20260927130518`); sonda horária `capas_sources` (`0821035a`, `6a76aa23`). Uma capa é a de uma edição (`027e6903`, `63803dea`; volumes: `3e1a3991`, `123f20e6`). O lote `cover-batch` propõe em `cover_proposals`, uma pessoa decide na tela «Capas sugeridas» (`ce2b759d`, `d37111b2`, `c89e1099`, `7dc13e5c`, `capas_lot_tests` 20); a foto na estante pela aba «Capas» do Painel (`e6fd1dc2`, `capas_photo_tests` 14). Em 28/09, uma capa nova tem um endereço novo (`d7f65c54`, `CAPAS-6`). A nota de entrega cita `e046157f` e `c89e1099` por engano: ler `027e6903`/`63803dea` e `ce2b759d`/`7dc13e5c`. **Fica fora da ferramenta**: as versões substituídas ficam no bucket até `purge-orphelins-covers.py` ser executado manualmente; as capas anteriores a 27/09 seguem sem procedência (**C16**); os dados errados levantados se corrigem no formulário, com o livro na mão (**C15**). |
-| O pt-BR fala brasileiro | 2026-09-27 | **Entregue em 27/09.** No app, 78 valores de `pt-BR.json` com vocabulário de Portugal reescritos («ficheiro» → «arquivo», «Guardar» → «Salvar», «gerir» → «gerenciar»; `faae6e0e`, guarda `PT_EUROPEU`), depois 91 valores franceses ou decalcados, por decisão de Xavier: cota → «número de chamada», notícia → ficha, flux → feed, PEB → EEB, import → importação (`dfa622f5`, guarda `FRANCES_EM_PT`; `e046157f`). Nos e-mails, 16 strings (`49047ae3`) e o texto escrito no código do relatório semanal da biblioteca (`6f762f8f`), que cria a lista fechada `TEXTE_EN_DUR_PT` (oito arquivos das Edge Functions escritos só em pt-BR, lidos pelas três guardas). **Falta**: levar essas decisões de vocabulário ao REGISTRO (**E25**). |
+| Capas: a cadeia consertada, uma capa por edição, o lote, a foto na estante (CAPAS-1 a 6) | 2026-09-27 | **Entregue em 27/09, continuação em 28/09** (REGISTRO §43 `CAPAS-1` a `CAPAS-6`; nota `LIVRAISON_capas_2026-09-27.md`). A via ISBN de `cover_lookup` respondia 404 na Open Library desde data desconhecida. A cadeia consertada: URL, Inventaire, título na falta de ISBN (`2a80d43b`: 0 → 85 capas nos 267 registros sem capa com ISBN); fonte fora do ar indicada na tela (`fd5d2f0e`); procedência e licença em par (`76c6ae3f`, `20260927130518`); sonda horária `capas_sources` (`0821035a`, `6a76aa23`). Uma capa é a de uma edição (`027e6903`, `63803dea`; volumes: `3e1a3991`, `123f20e6`). O lote `cover-batch` propõe em `cover_proposals`, uma pessoa decide na tela «Capas sugeridas» (`ce2b759d`, `d37111b2`, `c89e1099`, `7dc13e5c`, `capas_lot_tests` 20); a foto na estante pela aba «Capas» do Painel (`e6fd1dc2`, `capas_photo_tests` 14). Em 28/09, uma capa nova tem um endereço novo (`d7f65c54`, `CAPAS-6`). A nota de entrega cita `e046157f` e `c89e1099` por engano: ler `027e6903`/`63803dea` e `ce2b759d`/`7dc13e5c`. **Fica fora da ferramenta**: as versões substituídas ficam no bucket até `purge-orphelins-covers.py` ser executado manualmente; as capas anteriores a 27/09 seguem sem procedência (**C16**); os dados errados levantados se corrigem no formulário, com o livro na mão (**C15**). `6a76aa23` corrige também um número publicado por `0821035a`: 5 casos de mutação em 6 caem, não 6. Capas antigas não purgadas: item J11. |
+| O pt-BR fala brasileiro | 2026-09-27 | **Entregue em 27/09.** No app, 78 valores de `pt-BR.json` com vocabulário de Portugal reescritos («ficheiro» → «arquivo», «Guardar» → «Salvar», «gerir» → «gerenciar»; `faae6e0e`, guarda `PT_EUROPEU`), depois 91 valores franceses ou decalcados, por decisão de Xavier: cota → «número de chamada», notícia → ficha, flux → feed, PEB → EEB, import → importação (`dfa622f5`, guarda `FRANCES_EM_PT`; `e046157f`). Nos e-mails, 16 strings (`49047ae3`) e o texto escrito no código do relatório semanal da biblioteca (`6f762f8f`), que cria a lista fechada `TEXTE_EN_DUR_PT` (oito arquivos das Edge Functions escritos só em pt-BR, lidos pelas três guardas). **Falta**: levar essas decisões de vocabulário ao REGISTRO (**E25**). Em 27/09 à noite, `28f45047` ampliou o padrão `TU_EUROPEU`: 154 erros vistos em 163 (e-mails 58 em 61), sem falso positivo. |
 | Fusão de registros: nada se perde, a referência de um exemplar segue seu acervo (DEDUP-11 a 14) | 2026-09-28 | **Encerrado em 28/09** (REGISTRO `DEDUP-11` a `DEDUP-14`, nota `LIVRAISON_fusion-notices_2026-09-28.md`). `suggest_editions_for_book` dava erro 42702 a cada chamada desde 20/06; `911ad1db` a conserta e funde BTL-TL-000880 em BTL-TL-000881 sem perda (`merge_log` 149). `11da0df8` (`20260928100501`): uma só `fn_fusion_notices` para as duas fusões, nada se perde, e três gatilhos mantêm `exemplares.bib_ref` igual à referência do acervo — 43 exemplares realinhados; `fusion_notices_complete_tests` 15/15, gatilhos verificados em produção. `40cb978f`: «Mesma edição: fundir nesta ficha» (`DEDUP-13`). BTL-TL-000881 corrigida (`96b4a104`, `bcd36f9d`), e o formulário não guarda mais as edições sugeridas do registro anterior. `8e0fe538` (`DEDUP-14`): um mesmo ISBN, de 10 ou 13 dígitos, é uma mesma edição; quatro pares desmascarados. |
 | Assuntos apagados pela retomada de um registro (THES-5) | 2026-09-28 | **Encerrado em 28/09, achado e consertado no mesmo dia** (REGISTRO `THES-5`). «Editar» um registro publicado criava um rascunho sem seus assuntos, e a publicação apagava os do registro: desde junho, 136 rascunhos de retomada publicados sem assunto, 20 registros desindexados. `6cdd27a0` (`20260928133838`): `trg_seed_draft_subjects` copia os assuntos na criação do rascunho, e um rascunho sem assunto não apaga mais nada; sete registros devolvidos (`sujets_suivent_la_reprise_tests` 7). `bab3f0fa` (`20260928155533`): seis outros recuperados do backup #BG2 (seis snapshots, de 30/06 a 27/09). `e9ded1e8` (`20260928163609`): seis indexados por arbitragem de Xavier, BTL-TL-001242 fica sem assunto. |
 | As siglas se buscam sem os pontos (OPAC-F3) | 2026-09-28 | **Encerrado em 28/09 à noite** (REGISTRO `OPAC-F3`, 0.51 e 0.52). «La C.N.T. y la revolución española» (BTL) e «La CNT en la revolución española» (MLEG) eram duas linhas no catálogo por obra conforme a grafia buscada. `fn_sigle_sans_points` reduz uma sigla às suas letras, primeiro em `api.catalog_search_ids_v1` (`f36b4638`, `20260928174350`), depois em `f_normalize_search`, para a busca do cabeçalho (`8d31716d`, `20260928191324`). O primeiro push parou na verificação da própria migração (530 dos 1 644 `alias_norm` vêm de outras normalizações); `36ae8d5d` ajusta `alias_norm` no próprio lugar, sem recalculá-lo. Guarda: `recherche_sigles_tests` T1-T11. **Em produção**: no levantamento de 29/09, as 398 migrações numeradas do repositório estão todas no ledger, aplicadas pela CI, `20260928191324` inclusive. |
@@ -2188,23 +2405,23 @@ CI verde. |
 | E26 | 2026-10-01 | **Aberto e encerrado em 01/10: a busca do catálogo não achava «Emma Goldman» nem «Vivre ma vie».** O filtro de autor·a buscava a frase inteira em `autor` (forma de autoridade «GOLDMAN, Emma»), e a busca livre não lia os títulos da obra (`work_titles`). Migração `20261001190729` (`697c81d9`): filtro palavra por palavra, sem acentos nem caixa; a busca lê os títulos da obra em todas as línguas. A obra 1163 (resumo francês de *Living My Life*) perdeu os nove títulos «auto» copiados da obra 2101 — as duas ficam distintas (decisão de Xavier). Seguimento `20261001192041` (`52ebebc1`, guarda T7). Verificado em produção e na tela. Restos: E27, C18. |
 | F1 | 2026-10-03 | **Encerrado em 03/10 (decisão do Xavier).** Mapa escrito, os quatro e-mails com veredicto, ramos mortos suprimidos ou documentados (`57a4aafc`, `e897fb26`), `notify-mid-loan-reading` removida da plataforma; execuções de 02 e 03/10 verificadas. |
 | C19 | 2026-10-03 | **Pedido e entregue em 03/10 (Xavier).** Uma retomada de registro, autoridade ou exemplar sem nenhuma gravação depois não fica mais na fila editorial: `retake_untouched` a marca ao nascer, a primeira escrita o retira. O editor a faz esquecer ao sair (`discard_untouched_retake`), sem lixeira nem entrada no diário; o job horário `anarbib-purge-untouched-retakes` cobre as abas fechadas (mais de 24 h). No mesmo lote, toda gravação dos três editores sobe até a mensagem de confirmação, com um toast temporário. Migração `20261003202521` (`8ccfa02f`), tela `9419fda7`. |
-| E28 | 2026-10-04 | **Aberto e entregue em 04/10: uma autoridade corrigida não mudava nenhuma ficha, e a ficha 2736 mostrava o SNI duas vezes.** (1) Duplicatas criadas pelo lote `conv_revue` de 03/09 em 5 livros (2736, 412, 1282, 1541, 2316), corrigidas nos dados em 04/10. (2) `get_book_contributors_public` passa a devolver `authority_name`: um contribuidor vinculado aparece pela forma autorizada da autoridade (doutrina `CAT-G4`), a transcrição continua na menção de responsabilidade (visão ISBD). Migração `20261004212710`. Os 29 vínculos `book_authors` órfãos de outros 22 livros também foram retirados (papel ou posição vencidos; nenhum vínculo real perdido). Em 05/10, a causa foi retirada: o lote `autor_sans_autorite` vincula o contribuidor existente que se parece com a transcrição (chave normalizada igual ou similaridade ≥ 0,6) em vez de inserir uma linha duplicada. Migração `20261005071316` (`caa147be`), suíte `conv_c5` com 10 testes. No mesmo dia, Huxley (livros 359 e 360) e Grosz (livro 1023, nome desmembrado na importação) corrigidos nos dados; depois, os três outros resíduos da mesma importação: 645 (autoridade refeita, pseudônimo « Juan Crusao » como forma variante), 1187 (ilustrador com o papel `ilustrador`), 1218 (a universidade sai dos contribuidores e fica em nota). Enfim, `CAT-G4` estendido às citações e exportações: um contribuidor vinculado é citado pela forma invertida da autoridade (`sort_name`); a lista do catálogo já seguia a doutrina. Migração `20261005101227` (`8fc3c900`). Depois, uma citação só nomeia os responsáveis principais (autoria, senão direção, composição ou organização); tradução, ilustração e prefácio saem da menção de autoria (`3fc8656a`). A lista do catálogo também nomeia os coautores (migração `20261005164328`, `6bb89e0a`). Depois, uma só forma para nomear um contribuidor vinculado: o ponto de acesso em caixa natural (« Russell, Bertrand »), na ficha, na lista, na página da obra e nas citações; `editor` entra no recurso da lista (migração `20261005184801`, `15763f19`). As fichas 11326, 11327 e 11328 são material de formação, erradas de propósito. |
+| E28 | 2026-10-04 | **Aberto e entregue em 04/10: uma autoridade corrigida não mudava nenhuma ficha, e a ficha 2736 mostrava o SNI duas vezes.** (1) Duplicatas criadas pelo lote `conv_revue` de 03/09 em 5 livros (2736, 412, 1282, 1541, 2316), corrigidas nos dados em 04/10. (2) `get_book_contributors_public` passa a devolver `authority_name`: um contribuidor vinculado aparece pela forma autorizada da autoridade (doutrina `CAT-G4`), a transcrição continua na menção de responsabilidade (visão ISBD). Migração `20261004212710`. Os 29 vínculos `book_authors` órfãos de outros 22 livros também foram retirados (papel ou posição vencidos; nenhum vínculo real perdido). Em 05/10, a causa foi retirada: o lote `autor_sans_autorite` vincula o contribuidor existente que se parece com a transcrição (chave normalizada igual ou similaridade ≥ 0,6) em vez de inserir uma linha duplicada. Migração `20261005071316` (`caa147be`), suíte `conv_c5` com 10 testes. No mesmo dia, Huxley (livros 359 e 360) e Grosz (livro 1023, nome desmembrado na importação) corrigidos nos dados; depois, os três outros resíduos da mesma importação: 645 (autoridade refeita, pseudônimo « Juan Crusao » como forma variante), 1187 (ilustrador com o papel `ilustrador`), 1218 (a universidade sai dos contribuidores e fica em nota). Enfim, `CAT-G4` estendido às citações e exportações: um contribuidor vinculado é citado pela forma invertida da autoridade (`sort_name`); a lista do catálogo já seguia a doutrina. Migração `20261005101227` (`8fc3c900`). Depois, uma citação só nomeia os responsáveis principais (autoria, senão direção, composição ou organização); tradução, ilustração e prefácio saem da menção de autoria (`3fc8656a`). A lista do catálogo também nomeia os coautores (migração `20261005164328`, `6bb89e0a`). Depois, uma só forma para nomear um contribuidor vinculado: o ponto de acesso em caixa natural (« Russell, Bertrand »), na ficha, na lista, na página da obra e nas citações; `editor` entra no recurso da lista (migração `20261005184801`, `15763f19`). As fichas 11326, 11327 e 11328 são material de formação, erradas de propósito. Commit da migração `20261004212710`: `af7b7ead`. As quatro transcrições em maiúsculas: C3. |
 | F20 | 2026-10-04 | **Encerrado em 04/10.** `7a00b054`, migração aplicada pela CI, verificada em produção: os três crons de reserva usam LEFT JOIN e os prazos padrão das colunas (14 d, 21 d, 24 h) quando a biblioteca não tem linha de política. Suíte 6/6, mutante morto. |
 | E27 | 2026-10-04 | **Encerrado em 04/10, verificado na tela em 05/10.** `5e97a77b` (migração `20261004211159`, CI verde). As sugestões da busca rápida (`api.search_catalog_v1`) leem os títulos da obra (`work_titles`), rótulo «Living my Life (Vivre ma vie)»; índice trigrama em `f_normalize_search(title)` mantém o custo de antes. Bancada local: 407/407 migrações, 159/159 suítes (T9 nova). |
-| C20 | 2026-10-05 | **Constatado e entregue de 04 a 05/10 (Xavier): o catálogo diz o que se lê online.** 19 livros com PDF público ativo não tinham indicador; `catalog_digital_access_v1` serve o acesso real; selos « Ler / Ouvir / Ver online » e « Reservado a leitor(a/e)s de … »; a ficha diz « RESERVADO » em vez de « NÃO » e traduz os direitos; a administração da rede lê os PDF reservados. Migração `20261004215035` (`6738b02f`), telas `d8a5b5f4`, `14cdd0db`; verificado em produção em 05/10. |
-| C21 | 2026-10-05 | **Entregue em 05/10.** Barra de estado fixa nos onze painéis da catalogação; janela de confirmação do aplicativo no lugar dos 34 `confirm()`/`alert()`, com o botão nomeando a ação; gestos sobre os lotes confirmados. `9da1ad76`. A verificar na tela com sessão staff. |
-| C22 | 2026-10-05 | **Entregue em 05/10.** Um único quadro « Publicado — e agora? » substitui mensagem, toast, faixa e janela obra/edição; sequências propostas para documento, autoridade e exemplar. `b0f60399`. A verificar na tela. |
+| C20 | 2026-10-05 | **Constatado e entregue de 04 a 05/10 (Xavier): o catálogo diz o que se lê online.** 19 livros com PDF público ativo não tinham indicador; `catalog_digital_access_v1` serve o acesso real; selos « Ler / Ouvir / Ver online » e « Reservado a leitor(a/e)s de … »; a ficha diz « RESERVADO » em vez de « NÃO » e traduz os direitos; a administração da rede lê os PDF reservados. Migração `20261004215035` (`6738b02f`), telas `d8a5b5f4`, `14cdd0db`; verificado em produção em 05/10. **05/10, inventário** — no mesmo dia, C25 achou e reparou um defeito de leitura reservada (`/livro/2287`). Que seja o que Xavier apontava aqui não está estabelecido: confirmar na tela (E31). |
+| C21 | 2026-10-05 | **Entregue em 05/10.** Barra de estado fixa nos onze painéis da catalogação; janela de confirmação do aplicativo no lugar dos 34 `confirm()`/`alert()`, com o botão nomeando a ação; gestos sobre os lotes confirmados. `9da1ad76`. A verificar na tela com sessão staff. **05/10, à noite** — o botão do cabeçalho diz « Atualizar o catálogo », e quatro rótulos de erro duplicados em cada locale ficam com uma só entrada; guarda `i18n-cles-uniques` (`a64bd04f`). Olhar na tela: item E31. |
+| C22 | 2026-10-05 | **Entregue em 05/10.** Um único quadro « Publicado — e agora? » substitui mensagem, toast, faixa e janela obra/edição; sequências propostas para documento, autoridade e exemplar. `b0f60399`. A verificar na tela. O olhar na tela fica com E31; « completar as autoridades não ligadas », com C3. |
 | E23 | 2026-10-05 | Cada HINT `error.*` do banco tem seu rótulo nas dez locales: guarda (as mesmas 210 chaves da produção), 780 rótulos, quatro achados pela guarda no mesmo dia (`2414246c`). |
-| C24 | 2026-10-05 | **Entregue em 05/10.** Depósito digital em cinco etapas (o quê, direitos, quem lê, arquivo ou link, descrição); espaço de armazenamento deduzido; leitura pública de obra sob direitos só se a coordenação da biblioteca a abriu, com aviso e justificativa; publicação sem recriação (links estáveis). Migração `20261005092916` (`d1d72405`), tela `6c3ab382`. Em 05/10, os PDF órfãos do acervo histórico do CCLA foram vinculados: 24 rascunhos pré-preenchidos no lote « Acervo histórico CCLA — PDF a catalogar » da BLMF e o cartaz do 1º de Maio de 2002 na notícia 2722 (`20261005123453`, `66cf8d9b`); as 7 duplicatas foram apagadas à mão por Xavier em 05/10 (verificado no banco): nenhum órfão no espaço público. |
+| C24 | 2026-10-05 | **Entregue em 05/10.** Depósito digital em cinco etapas (o quê, direitos, quem lê, arquivo ou link, descrição); espaço de armazenamento deduzido; leitura pública de obra sob direitos só se a coordenação da biblioteca a abriu, com aviso e justificativa; publicação sem recriação (links estáveis). Migração `20261005092916` (`d1d72405`), tela `6c3ab382`. Em 05/10, os PDF órfãos do acervo histórico do CCLA foram vinculados: 24 rascunhos pré-preenchidos no lote « Acervo histórico CCLA — PDF a catalogar » da BLMF e o cartaz do 1º de Maio de 2002 na notícia 2722 (`20261005123453`, `66cf8d9b`); as 7 duplicatas foram apagadas à mão por Xavier em 05/10 (verificado no banco): nenhum órfão no espaço público. **05/10, inventário** — cada resto tem seu item: olhar na tela (E31), os 24 rascunhos do acervo CCLA (C26), o recurso posto por recepção de fundo (D9). |
 | C25 | 2026-10-05 | **Aberto e entregue em 05/10: um PDF restrito não aparecia como legível para membro de uma biblioteca detentora (`/livro/2287`).** O arquivo tinha sido enviado ao balde público e o recurso repassado a « restrito » sem que o arquivo acompanhasse. Corrigido à mão (arquivo movido para `pdf-restrito`, cópia pública removida); a base passa a recusar um recurso cujo arquivo não existe no lugar declarado, e a tela avisa quando a cópia antiga não pôde ser removida. Migração `20261005121942` (`3ee267fa`). |
 | E24 | 2026-10-05 | As recusas das três funções da página Importações têm código traduzido nas dez locales; banco e recenseamento das outras funções (`17eb498b`). |
 | G17 | 2026-10-05 | A cooptação não encontrava uma conta sem biblioteca (RLS de `profiles`). Função reservada à administração da rede, endereço exato; suíte de 5 testes (`4d417f98`). |
 | F22 | 2026-10-05 | O link de confirmação da Carta mostrava código HTML: as Edge Functions são servidas em text/plain. Redirecionam (303) para a página `/lettre` do aplicativo (`9fc60a15`). |
-| E25 | 2026-10-05 | O guia de governança, a carta inclusiva e o DPA falam português do Brasil; 30 valores de `pt-BR.json`; coletânea PDF v1.3 no bucket; decisões de vocabulário no REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). |
-| G18 | 2026-10-05 | Um admin da rede sem biblioteca: cinco páginas carregavam sem fim, o link de um e-mail aberto sem sessão perdia a página, a etiqueta dizia « Leitor·a », faltava « Minha conta ». Corrigido e verificado em linha (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`). |
+| E25 | 2026-10-05 | O guia de governança, a carta inclusiva e o DPA falam português do Brasil; 30 valores de `pt-BR.json`; coletânea PDF v1.3 no bucket; decisões de vocabulário no REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). O guia em espanhol: item E30. |
+| G18 | 2026-10-05 | Um admin da rede sem biblioteca: cinco páginas carregavam sem fim, o link de um e-mail aberto sem sessão perdia a página, a etiqueta dizia « Leitor·a », faltava « Minha conta ». Corrigido e verificado em linha (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`). **05/10, à noite — um sexto defeito do mesmo percurso**: o « Meu espaço de contribuidor(a/e) » de uma conta sem biblioteca não tinha « Minhas bibliotecas »; a página agora monta a aba (`f3694408`). |
 | E9 | 2026-10-05 | As grades encolhem com o contêiner e uma guarda lê toda grade de `src/` (`5865a281`); os cartões são sem objeto. As 25 media queries herdadas voltam à escala **ao sabor dos retoques** (`MOB-3`). Decisão de Xavier, 05/10. |
 | C10 | 2026-10-05 | **Fechado em 05/10** (`61c82d85`): o estado de revisão de `digital_assets` se chama `review_state`; seis funções reescritas a partir da definição real; saídas, aplicativo e Edge Functions acompanham, um pacote antigo continua legível; a armadilha `access_scope` é lembrada no formulário. Visibilidade inalterada (mesma impressão antes e depois). |
-| G13 | 2026-10-05 | **Entregue em 05/10** (`6fca3f3b`): vocabulário `public.networks` e leitura do campo `reseau` da ficha do mapa; função pública do catálogo; o catálogo filtra por rede (verificado em linha: « FICEDL (BLMF, BTL) »). **Para Xavier**: classificar ABABA, FAO, AFI, UK Social Centre Network e Radical Routes. |
+| G13 | 2026-10-05 | **Entregue em 05/10** (`6fca3f3b`): vocabulário `public.networks` e leitura do campo `reseau` da ficha do mapa; função pública do catálogo; o catálogo filtra por rede (verificado em linha: « FICEDL (BLMF, BTL) »). **Para Xavier**: classificar ABABA, FAO, AFI, UK Social Centre Network e Radical Routes. **Os cinco redes que faltavam classificar foram classificadas na mesma noite** (`43eec639`, migração `20261005180958`, decisão de Xavier): ABABA em documentação, FAO e AFI em organização política, UK Social Centre Network e Radical Routes em « outro ». |
 | D6 | 2026-10-05 | **Fechado em 05/10** (`5bbdaaf4`): epub.js mantido e fixado em `0.3.93`, xmldom forçado para 0.8 (nunca usado no navegador); foliate-js designado como substituto; um teste abre um EPUB 3 completo. |
 | I29 | 2026-10-05 | **O esquema `ingest` entra no fluxo longo do backup #BG2 — entregue e em serviço em 05/10, decisão de Xavier** (`f5e3f5ed`). Nenhum fluxo salvava `ingest`; agora um único `pg_dump --schema=public --schema=ingest`, mesmo arquivo, filtro de classificação nos dois esquemas, 11 tabelas classificadas, RUNBOOK e REGISTRO atualizados. Prova em banco privado; `anarbib-bg2.sh check` → «Filet OK». **Falta**: o primeiro backup longo com ingest, domingo 11/10 às 20:00. |
 
@@ -2228,7 +2445,7 @@ O backlog se mantém como os anteriores, com um acréscimo.
 
 1. Mover a versão corrente para `docs/backlogs/archive/` conservando seu nome de origem.
 2. Colocar a nova versão na raiz de `docs/backlogs/`.
-3. Atualizar `docs/backlogs/INDEX.md`: versão corrente e linha de histórico. *(A linha do v32 ainda falta lá — é o item **J2**.)*
+3. Atualizar `docs/backlogs/INDEX.md`: versão corrente e linha de histórico.
 4. Se o incremento traz uma decisão normativa, inscrever o identificador no `REGISTRE_decisions.md`. O backlog carrega o trabalho a fazer; o registro carrega o que faz fé.
 5. **Novidade do v34**: as duas versões linguísticas e a página consultável são **geradas** a partir de `docs/backlogs/backlog-v34.json` por `scripts/build-backlog.cjs`. Nunca modifique os `.md` à mão: serão sobrescritos. Modifique o JSON, rode de novo `node scripts/build-backlog.cjs`, commite os três arquivos juntos.
 
@@ -2238,4 +2455,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 78 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `a387b46c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
