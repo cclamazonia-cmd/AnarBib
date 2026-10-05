@@ -11,7 +11,7 @@
 // (ligne network_contributors active + aucune bibliothèque). Réutilise les
 // styles ab-conta-* de l'AccountPage.
 // ============================================================================
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -23,6 +23,11 @@ import PhoneInput from '@/components/forms/PhoneInput';
 import { localizeError } from '@/lib/localizeError';
 import DataExportButton from '@/components/account/DataExportButton';
 import './AccountPage.css';
+
+// 05/10/2026 : un·e contributeur·rice sans bibliothèque n'avait aucun moyen de
+// demander son inscription ni d'accepter une invitation d'équipe — la rubrique
+// « Mes bibliothèques » n'existait que dans la conta complète (AccountPage).
+const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
 
 // Couleur du statut d'une proposition.
 const STATUS_COLOR = {
@@ -213,6 +218,13 @@ export default function ContributorAccountPage({ nc }) {
               <input type="checkbox" checked={consent} disabled={consentSaving} onChange={toggleConsent} />
               <span>{t({ id: 'contributor.conta.notif.consent', defaultMessage: 'Recevoir les communications par e-mail du réseau AnarBib (facultatif)' })}</span>
             </label>
+
+            <hr className="ab-conta-hr" />
+
+            {/* ═══ 3 bis. Mes bibliothèques : rejoindre une bibliothèque, accepter une invitation d'équipe ═══ */}
+            <Suspense fallback={<p className="ab-conta-hint">{t({ id: 'common.loading' })}</p>}>
+              <TabBiblios />
+            </Suspense>
 
             <hr className="ab-conta-hr" />
 

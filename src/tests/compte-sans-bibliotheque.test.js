@@ -93,6 +93,22 @@ describe('« Mon compte » pour un compte sans bibliothèque', () => {
   });
 });
 
+// Capture du camarade, 05/10 au soir : contributeur·rice du réseau sans
+// bibliothèque, il arrive sur « Mon espace contributeur·rice » (ContaRouter),
+// qui n'avait pas « Mes bibliothèques » — ni demande d'inscription, ni
+// invitation d'équipe à accepter.
+describe('l’espace contributeur·rice permet de rejoindre une bibliothèque', () => {
+  it('la page monte la rubrique « Mes bibliothèques » (TabBiblios)', () => {
+    const page = lire('src/pages/account/ContributorAccountPage.jsx');
+    expect(page).toContain("const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));");
+    expect(page).toMatch(/<TabBiblios \/>\s*<\/Suspense>/);
+    // et TabBiblios porte bien la demande d'inscription et les invitations
+    const tab = lire('src/pages/account/TabBiblios.jsx');
+    expect(tab).toContain("rpc('request_membership'");
+    expect(tab).toContain("rpc('fn_team_my_invitations')");
+  });
+});
+
 describe('le lien d’un courriel ouvert sans session', () => {
   it('passe par la connexion avec la page ET l’onglet demandés', () => {
     etat.auth = { user: null, profile: null, loading: false, recovery: false };
