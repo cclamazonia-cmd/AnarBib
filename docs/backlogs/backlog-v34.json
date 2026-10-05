@@ -3880,7 +3880,7 @@
       "id": "E9",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "front"
@@ -3921,8 +3921,8 @@
         "REGISTRE §36 MOB-Q1..Q3"
       ],
       "verif": {
-        "fr": "31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré. Verdict posé le soir même sur `MOB-Q2` : rien à rapatrier, chaque requête restante est à sa place (voir le critère barré). Reste `MOB-Q3`.",
-        "pt": "31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido. Veredito posto na mesma noite sobre `MOB-Q2`: nada a repatriar. Resta `MOB-Q3`."
+        "fr": "31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré. Verdict posé le soir même sur `MOB-Q2` : rien à rapatrier, chaque requête restante est à sa place (voir le critère barré). Reste `MOB-Q3`. **05/10 — deux des trois passes réglées.** *(1)* Les grilles : les 24 de `MOB-Q1` avaient été gardées le 20/08 (`a0daa480`) sans test, et cinq minimums fixes (`minmax(240px, 1fr)`) étaient revenus avec des écrans neufs ; corrigés, et `grilles-qui-retrecissent.test.js` lit désormais toute valeur de grille de `src/`, JSX et CSS (`5865a281`, REGISTRE 0.62). *(2)* Les cartes : sans objet — ni Validações ni Inventário n'ont de tableau, tous deux mesurés sans débordement le 20/08 et inchangés depuis (REGISTRE 0.63). *(3)* Les requêtes de média : **25**, pas 20 ; les ramener à 640/768/1100 change le comportement entre deux seuils, chaque bascule se mesure sur la vraie page (`MOB-9`), et la plupart sont des écrans d'équipe — il faut une session ouverte par une coordination pour les mesurer. **Reste** : cette troisième passe, ou la décision de la laisser « au fil des retouches » (`MOB-3`) et de clore.",
+        "pt": "31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido. Veredito posto na mesma noite sobre `MOB-Q2`: nada a repatriar. Resta `MOB-Q3`. **05/10 — duas das três passagens resolvidas.** Grades: cinco mínimos fixos voltaram, corrigidos, e uma guarda lê toda grade de `src/` (`5865a281`). Cartões: sem objeto (nenhuma tabela em Validações nem Inventário). Media queries: **25**; cada mudança de limiar se mede na página real, quase todas são telas de equipe. **Falta**: essa terceira passagem, ou decidir deixá-la « ao sabor dos retoques » (`MOB-3`)."
       }
     },
     {

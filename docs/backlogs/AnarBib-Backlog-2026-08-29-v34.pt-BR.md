@@ -754,7 +754,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E2** | Decidir as convenções neerlandesa e grega | `P1` | Aberto |
 | **E4** | Resolver os pares irregulares do italiano | `P2` | Aberto |
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Em curso |
-| **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
+| **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Em curso |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 
@@ -848,11 +848,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E9 — Terminar o layout móvel: três lotes identificados
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript
 
 **Estado.** As fases A, B e C estão entregues e a doutrina graduada está registrada. Três questões continuam abertas no REGISTRO: `MOB-Q1` (24 grades declaradas em linha no JSX com trilhas `fr` nuas), `MOB-Q2` (20 media queries herdadas a repatriar em `src/styles/mobile.css`), `MOB-Q3` (as abas Validações e Inventário a converter em cartões).
 
-*Verificado : 31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido. Veredito posto na mesma noite sobre `MOB-Q2`: nada a repatriar. Resta `MOB-Q3`.*
+*Verificado : 31/08 — `MOB-Q1` está saldada no código: das 49 trilhas `1fr` do JSX, todas em `minmax(0,1fr)` salvo um comentário. `MOB-Q2` derreteu: 8 media queries fora de `mobile.css` em vez de 20. `MOB-Q3` não medido. Veredito posto na mesma noite sobre `MOB-Q2`: nada a repatriar. Resta `MOB-Q3`. **05/10 — duas das três passagens resolvidas.** Grades: cinco mínimos fixos voltaram, corrigidos, e uma guarda lê toda grade de `src/` (`5865a281`). Cartões: sem objeto (nenhuma tabela em Validações nem Inventário). Media queries: **25**; cada mudança de limiar se mede na página real, quase todas são telas de equipe. **Falta**: essa terceira passagem, ou decidir deixá-la « ao sabor dos retoques » (`MOB-3`).*
 
 **O que é.** Três passagens mecânicas, nesta ordem de valor: as 24 grades (`minmax(0, Nfr)` em toda parte, é a regra `MOB-1`), as duas abas em cartões segundo o padrão entregue, depois o repatriamento das media queries.
 

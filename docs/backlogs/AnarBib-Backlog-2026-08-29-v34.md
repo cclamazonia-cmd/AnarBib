@@ -754,7 +754,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E2** | Trancher les conventions néerlandaise et grecque | `P1` | Ouvert |
 | **E4** | Régler les paires irrégulières de l'italien | `P2` | Ouvert |
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | En cours |
-| **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
+| **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | En cours |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 
@@ -848,11 +848,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### E9 — Finir la mise en page mobile : trois lots identifiés
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript
 
 **État.** Les phases A, B et C sont livrées et la doctrine graduée est actée. Trois questions restent ouvertes au REGISTRE : `MOB-Q1` (24 grilles déclarées en ligne dans le JSX avec des pistes `fr` nues), `MOB-Q2` (20 requêtes de média héritées à rapatrier dans `src/styles/mobile.css`), `MOB-Q3` (les onglets Validações et Inventário à convertir en cartes).
 
-*Vérifié : 31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré. Verdict posé le soir même sur `MOB-Q2` : rien à rapatrier, chaque requête restante est à sa place (voir le critère barré). Reste `MOB-Q3`.*
+*Vérifié : 31/08 — `MOB-Q1` est soldée dans le code : sur 49 pistes `1fr` du JSX, toutes sont en `minmax(0,1fr)` sauf un commentaire qui énonce la règle (`AtelierAutoridadesPage.jsx:278`). `MOB-Q2` a fondu : 8 requêtes de média hors `mobile.css` (2 dans `breakpoints.css`, 1 dans `tabbar.css`, 5 dans le JSX) au lieu des 20 citées. `MOB-Q3` non mesuré. Verdict posé le soir même sur `MOB-Q2` : rien à rapatrier, chaque requête restante est à sa place (voir le critère barré). Reste `MOB-Q3`. **05/10 — deux des trois passes réglées.** *(1)* Les grilles : les 24 de `MOB-Q1` avaient été gardées le 20/08 (`a0daa480`) sans test, et cinq minimums fixes (`minmax(240px, 1fr)`) étaient revenus avec des écrans neufs ; corrigés, et `grilles-qui-retrecissent.test.js` lit désormais toute valeur de grille de `src/`, JSX et CSS (`5865a281`, REGISTRE 0.62). *(2)* Les cartes : sans objet — ni Validações ni Inventário n'ont de tableau, tous deux mesurés sans débordement le 20/08 et inchangés depuis (REGISTRE 0.63). *(3)* Les requêtes de média : **25**, pas 20 ; les ramener à 640/768/1100 change le comportement entre deux seuils, chaque bascule se mesure sur la vraie page (`MOB-9`), et la plupart sont des écrans d'équipe — il faut une session ouverte par une coordination pour les mesurer. **Reste** : cette troisième passe, ou la décision de la laisser « au fil des retouches » (`MOB-3`) et de clore.*
 
 **Ce que c'est.** Trois passes mécaniques, dans cet ordre de valeur : les 24 grilles (`minmax(0, Nfr)` partout, c'est la règle `MOB-1`), les deux onglets en cartes selon le patron livré, puis le rapatriement des requêtes de média.
 
