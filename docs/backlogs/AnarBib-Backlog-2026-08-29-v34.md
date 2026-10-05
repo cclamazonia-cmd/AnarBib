@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 70 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,7 +17,7 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 6
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **56 items sur 70** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **55 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -424,7 +424,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants des fiches d'autorité (674 sur 1 505 au 27/09) | `P2` | Décision collective |
-| **C10** | Renommer la colonne de revue `digital_assets.rights_status` | `P2` | Ouvert |
 | **C14** | Un exemplaire qui change de bibliothèque emmène tout avec lui | `P2` | À vérifier |
 | **C23** | Un exemplaire déplacé par sa publication trouve, ou crée, le fonds de sa notice dans la bibliothèque visée | `P2` | À vérifier |
 | **C15** | Corriger huit notices BTL, livre en main | `P2` | Ouvert |
@@ -474,27 +473,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Prérequis de la seconde passe de **C3**.
 
 *Renvois : `AUDIT_conventions_catalographiques_2026-08-20 A5` · `REGISTRE §37 CONV-7`*
-
-#### C10 — Renommer la colonne de revue `digital_assets.rights_status`
-
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
-
-**État.** `digital_assets.rights_status` est un **état de workflow** (`to_review`, `public_domain_confirmed`) qui commande la visibilité. Le vocabulaire des droits d'auteur porte le même nom depuis la migration `20260820235000_vocabulaire_rights_status`. Deux sens, un nom. **Mesuré le 27/09 en production — plus gros que « S ».** Quatre colonnes portent le nom : `digital_assets.rights_status` (l'état de revue : `to_review`, `public_domain_confirmed`, `source_reuse_allowed`, `restricted`, `do_not_publish` — **c'est lui qui commande la visibilité publique**), `book_digital_resources` et `book_draft_digital_resources` (le vocabulaire des droits : `dominio_publico`, `cessao_autoral`, `licenca_livre`, `sob_direitos`), `ingest.partner_catalog_received_assets` (le statut déclaré par la partenaire, en clair). Douze fonctions DEFINER contiennent le nom ; **six** visent la colonne de revue : `fn_attach_received_asset_record`, `fn_confirm_digital_asset_rights`, `fn_export_fonds_eligible_count`, `fn_export_fonds_records`, `fn_list_verified_digital_assets`, `fn_publish_digital_asset_from_resource` ; plus l'index `digital_assets_rights_status_idx`. Deux sorties d'API portent le nom (la colonne rendue par `fn_list_verified_digital_assets` — changer son type de retour impose DROP + CREATE et de reposer les droits —, la clé JSON de `fn_attach_received_asset_record`) et **le format d'échange des fonds** (`fn_export_fonds_records`, relu par `deposit-fonds-direct`) : les paquets déjà exportés garderont `rights_status`. Front : 5 fichiers ; Edge Functions : 4.
-
-*Vérifié : [object Object],[object Object],[object Object]*
-
-**Ce que c'est.** **Plan (27/09, décision de Xavier : chantier à part).** (1) Renommer `digital_assets.rights_status` en `review_state` (colonne, CHECK, index), et les six fonctions par remplacements comptés depuis leur définition RÉELLE ; (2) les sorties : `review_state` dans la liste des vérifiés et la clé JSON de l'attachement, le front et les Edge Functions suivent dans le même commit ; (3) l'export écrit `review_state`, l'import (`deposit-fonds-direct`) lit `review_state` puis, à défaut, `rights_status` — un paquet d'avant reste lisible ; (4) un banc qui prouve que la visibilité publique ne bouge pas (mêmes fichiers servis en anonyme avant et après, par empreinte en production) ; (5) le rappel `access_scope` dans le formulaire de catalogage (critère 2).
-
-**Pourquoi ça compte.** Confusion garantie sinon, et sur un sujet où la confusion se paie : c'est l'état des droits qui décide si un document est visible du public. Un piège documenté s'y ajoute — `access_scope` vaut `conta_ativa` **par défaut**, si bien qu'un document du domaine public reste réservé aux comptes actifs tant que personne n'a posé `publico` explicitement.
-
-**Ce qui compte comme fini.**
-
-- Les deux notions portent deux noms distincts, en base et à l'écran.
-- Le piège `access_scope` est rappelé dans le formulaire de catalogage, pas seulement dans une note.
-
-**Dépendances.** Aucune.
-
-*Renvois : `PLAN_DE_MARCHE §8` · `DECISION_profil_numerisation_2026-08-20`*
 
 #### C14 — Un exemplaire qui change de bibliothèque emmène tout avec lui
 
@@ -2263,6 +2241,7 @@ CI verte : lint et suite unitaire. |
 | E25 | 2026-10-05 | Le guide de gouvernance, la charte inclusive et le DPA pt-BR parlent brésilien (et le guide au « você ») ; 30 valeurs de `pt-BR.json` ; garde `ptbr-documents-e25` ; recueil PDF v1.3 dans le bucket ; décisions de vocabulaire du 27/09 au REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). Vu en passant, hors périmètre : le guide espagnol dit « concernida(s) » 22 fois — à faire relire. |
 | G18 | 2026-10-05 | Un admin réseau rattaché à aucune bibliothèque (le camarade `ASR2026`, coopté le 05/10) : cinq pages chargeaient sans fin, dont la page Réseau — elles attendent désormais la fin de la résolution du contexte (`libraryResolved`) ; un lien de courriel ouvert sans session survit à la connexion (`?next=`, et `/cadastro` lit la location du routeur, pas celle du premier chargement) ; les chemins des courriels déjà reçus renvoient vers la bonne page ; l'étiquette de rôle ne dit plus « Lecteur·rice » à qui ne l'est nulle part (et le dit enfin aux lectrices, rôle `reader`) ; « Mon compte » est dans la barre pour toute personne connectée. Bancs `compte-sans-bibliotheque`, `etiquette-de-role`, `liens-des-courriels-menent-a-une-route`, mutants rouges ; vérifié en ligne (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`). |
 | E9 | 2026-10-05 | Les grilles rétrécissent avec leur conteneur et une garde lit toute grille de `src/`, JSX et CSS (`5865a281`, MOB-Q1 clos) ; les cartes de Validações et Inventário sont sans objet, aucun tableau (MOB-Q3 clos). Les 25 requêtes de média sur des seuils hérités (MOB-Q2) se rapatrient **au fil des retouches**, comme le dit `MOB-3` — chaque bascule change le comportement entre deux seuils et se mesure sur la vraie page. Décision de Xavier, 05/10. |
+| C10 | 2026-10-05 | **Clos le 05/10, les deux critères tenus** (`61c82d85`, déployé à 18 h 37, migration `20261005162356` par la CI). *(1)* Deux sens, deux noms : l'état de revue de `digital_assets` s'appelle `review_state` (colonne, CHECK, index) ; six fonctions réécrites depuis leur définition réelle, occurrences comptées (`fn_list_verified_digital_assets` recréée, droits relus : ni PUBLIC ni anon) ; la liste des vérifiés, l'attachement, la confirmation et l'export des fonds disent `review_state`, l'application et `export-fonds-bundle` suivent, et les deux réceptions lisent encore un paquet d'avant (`rights_status`). Le vocabulaire des droits (`book_digital_resources`, brouillons) et le statut déclaré à la réception gardent leur nom. *(2)* Le piège `access_scope` (`conta_ativa` par défaut) est rappelé dans le formulaire de catalogage : sous une ressource libre restée réservée, dans la liste et à l'étape de l'accès (dix locales ; 0 cas en production au 05/10). Visibilité inchangée, vérifiée : empreinte (id, état, is_public, objet) des `digital_assets` identique avant et après (`f0e4d078…`). Suites `c10_etat_de_revue_tests.sql` (8) et `c10-etat-de-revue.test.jsx` (8), mutants rouges. |
 
 ---
 
@@ -2294,4 +2273,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 70 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

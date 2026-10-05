@@ -2762,6 +2762,14 @@
           "fr": "Les grilles rétrécissent avec leur conteneur et une garde lit toute grille de `src/`, JSX et CSS (`5865a281`, MOB-Q1 clos) ; les cartes de Validações et Inventário sont sans objet, aucun tableau (MOB-Q3 clos). Les 25 requêtes de média sur des seuils hérités (MOB-Q2) se rapatrient **au fil des retouches**, comme le dit `MOB-3` — chaque bascule change le comportement entre deux seuils et se mesure sur la vraie page. Décision de Xavier, 05/10.",
           "pt": "As grades encolhem com o contêiner e uma guarda lê toda grade de `src/` (`5865a281`); os cartões são sem objeto. As 25 media queries herdadas voltam à escala **ao sabor dos retoques** (`MOB-3`). Decisão de Xavier, 05/10."
         }
+      ],
+      [
+        "C10",
+        "2026-10-05",
+        {
+          "fr": "**Clos le 05/10, les deux critères tenus** (`61c82d85`, déployé à 18 h 37, migration `20261005162356` par la CI). *(1)* Deux sens, deux noms : l'état de revue de `digital_assets` s'appelle `review_state` (colonne, CHECK, index) ; six fonctions réécrites depuis leur définition réelle, occurrences comptées (`fn_list_verified_digital_assets` recréée, droits relus : ni PUBLIC ni anon) ; la liste des vérifiés, l'attachement, la confirmation et l'export des fonds disent `review_state`, l'application et `export-fonds-bundle` suivent, et les deux réceptions lisent encore un paquet d'avant (`rights_status`). Le vocabulaire des droits (`book_digital_resources`, brouillons) et le statut déclaré à la réception gardent leur nom. *(2)* Le piège `access_scope` (`conta_ativa` par défaut) est rappelé dans le formulaire de catalogage : sous une ressource libre restée réservée, dans la liste et à l'étape de l'accès (dix locales ; 0 cas en production au 05/10). Visibilité inchangée, vérifiée : empreinte (id, état, is_public, objet) des `digital_assets` identique avant et après (`f0e4d078…`). Suites `c10_etat_de_revue_tests.sql` (8) et `c10-etat-de-revue.test.jsx` (8), mutants rouges.",
+          "pt": "**Fechado em 05/10** (`61c82d85`): o estado de revisão de `digital_assets` se chama `review_state`; seis funções reescritas a partir da definição real; saídas, aplicativo e Edge Functions acompanham, um pacote antigo continua legível; a armadilha `access_scope` é lembrada no formulário. Visibilidade inalterada (mesma impressão antes e depois)."
+        }
       ]
     ]
   },
@@ -3141,64 +3149,6 @@
         {
           "fr": "27/09 — **troisième phase, IdRef** (`20260927091555`, `62553dc6`) : les bibliothèques nationales du Brésil (403 à toute requête) et d'Argentine (X-Services refusés au public) ferment l'accès automatisé — non contourné ; IdRef (ABES) porte la nationalité (102) et couvre beaucoup d'auteurs brésiliens et hispano-américains étudiés en France. 187 fiches liées, **66 pays**, 150 langues, 33 naissances, 9 morts, chacune prouvée par un titre du catalogue ou des dates concordantes (`decisions-idref.csv`). **En production : 674 fiches sur 1 505 sans pays (45 %)**, 683 sans année de naissance, 820 liées à au moins une source (Wikidata, VIAF, ISNI, LC ou IdRef). Le critère « sous 20 % » reste hors de portée des sources d'autorité ; la décision de Xavier reste ouverte (réécrire le critère ou relecture humaine).",
           "pt": "27/09 — terceira fase, IdRef: as bibliotecas nacionais do Brasil (403) e da Argentina (X-Services recusados) fecham o acesso automatizado — não contornado; 187 fichas ligadas, 66 países, 150 línguas. Em produção: 674 de 1 505 fichas sem país (45 %). O critério « abaixo de 20 % » continua fora do alcance; decisão de Xavier em aberto."
-        }
-      ]
-    },
-    {
-      "id": "C10",
-      "d": "C",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Renommer la colonne de revue `digital_assets.rights_status`",
-        "pt": "Renomear a coluna de revisão `digital_assets.rights_status`"
-      },
-      "v": {
-        "fr": "`digital_assets.rights_status` est un **état de workflow** (`to_review`, `public_domain_confirmed`) qui commande la visibilité. Le vocabulaire des droits d'auteur porte le même nom depuis la migration `20260820235000_vocabulaire_rights_status`. Deux sens, un nom. **Mesuré le 27/09 en production — plus gros que « S ».** Quatre colonnes portent le nom : `digital_assets.rights_status` (l'état de revue : `to_review`, `public_domain_confirmed`, `source_reuse_allowed`, `restricted`, `do_not_publish` — **c'est lui qui commande la visibilité publique**), `book_digital_resources` et `book_draft_digital_resources` (le vocabulaire des droits : `dominio_publico`, `cessao_autoral`, `licenca_livre`, `sob_direitos`), `ingest.partner_catalog_received_assets` (le statut déclaré par la partenaire, en clair). Douze fonctions DEFINER contiennent le nom ; **six** visent la colonne de revue : `fn_attach_received_asset_record`, `fn_confirm_digital_asset_rights`, `fn_export_fonds_eligible_count`, `fn_export_fonds_records`, `fn_list_verified_digital_assets`, `fn_publish_digital_asset_from_resource` ; plus l'index `digital_assets_rights_status_idx`. Deux sorties d'API portent le nom (la colonne rendue par `fn_list_verified_digital_assets` — changer son type de retour impose DROP + CREATE et de reposer les droits —, la clé JSON de `fn_attach_received_asset_record`) et **le format d'échange des fonds** (`fn_export_fonds_records`, relu par `deposit-fonds-direct`) : les paquets déjà exportés garderont `rights_status`. Front : 5 fichiers ; Edge Functions : 4.",
-        "pt": "`digital_assets.rights_status` é um **estado de workflow** (`to_review`, `public_domain_confirmed`) que comanda a visibilidade. O vocabulário de direitos autorais leva o mesmo nome desde a migração `20260820235000_vocabulaire_rights_status`. Dois sentidos, um nome."
-      },
-      "w": {
-        "fr": "**Plan (27/09, décision de Xavier : chantier à part).** (1) Renommer `digital_assets.rights_status` en `review_state` (colonne, CHECK, index), et les six fonctions par remplacements comptés depuis leur définition RÉELLE ; (2) les sorties : `review_state` dans la liste des vérifiés et la clé JSON de l'attachement, le front et les Edge Functions suivent dans le même commit ; (3) l'export écrit `review_state`, l'import (`deposit-fonds-direct`) lit `review_state` puis, à défaut, `rights_status` — un paquet d'avant reste lisible ; (4) un banc qui prouve que la visibilité publique ne bouge pas (mêmes fichiers servis en anonyme avant et après, par empreinte en production) ; (5) le rappel `access_scope` dans le formulaire de catalogage (critère 2).",
-        "pt": "**Plano (27/09):** renomear `digital_assets.rights_status` para `review_state` (coluna, CHECK, índice, seis funções derivadas da definição real), saídas de API e front/EF no mesmo commit, exportação em `review_state` com importação que aceita os dois nomes, banco provando que a visibilidade pública não muda, lembrete `access_scope` no formulário."
-      },
-      "y": {
-        "fr": "Confusion garantie sinon, et sur un sujet où la confusion se paie : c'est l'état des droits qui décide si un document est visible du public. Un piège documenté s'y ajoute — `access_scope` vaut `conta_ativa` **par défaut**, si bien qu'un document du domaine public reste réservé aux comptes actifs tant que personne n'a posé `publico` explicitement.",
-        "pt": "Confusão garantida do contrário, e num assunto em que a confusão se paga: é o estado dos direitos que decide se um documento é visível ao público. Uma armadilha documentada se acrescenta — `access_scope` vale `conta_ativa` **por omissão**, de modo que um documento de domínio público continua reservado às contas ativas enquanto ninguém tiver posto `publico` explicitamente."
-      },
-      "f": {
-        "fr": [
-          "Les deux notions portent deux noms distincts, en base et à l'écran.",
-          "Le piège `access_scope` est rappelé dans le formulaire de catalogage, pas seulement dans une note."
-        ],
-        "pt": [
-          "As duas noções levam dois nomes distintos, no banco e na tela.",
-          "A armadilha `access_scope` é lembrada no formulário de catalogação, não só numa nota."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "PLAN_DE_MARCHE §8",
-        "DECISION_profil_numerisation_2026-08-20"
-      ],
-      "verif": [
-        {
-          "fr": "31/08 — le nom vit désormais dans **trois** tables, pas deux : `digital_assets`, `book_digital_resources` et `book_draft_digital_resources` portent chacune une colonne `rights_status`, en plus du vocabulaire homonyme. Le télescopage s'étend au lieu de se résorber.",
-          "pt": "31/08 — o nome vive agora em **três** tabelas: `digital_assets`, `book_digital_resources` e `book_draft_digital_resources`, além do vocabulário homônimo."
-        },
-        {
-          "fr": "16/09 — ce ne sont plus deux colonnes mais **trois** : `digital_assets.rights_status`, `book_digital_resources.rights_status`, `book_draft_digital_resources.rights_status`. Le renommage porte sur la colonne de workflow, à identifier parmi les trois.",
-          "pt": "16/09 — já não são duas colunas mas **três**: `digital_assets.rights_status`, `book_digital_resources.rights_status`, `book_draft_digital_resources.rights_status`."
-        },
-        {
-          "fr": "27/09 — mesuré en production (`39cfd566`) : **quatre** colonnes portent le nom, la quatrième étant `ingest.partner_catalog_received_assets` ; seule `digital_assets.rights_status` commande la visibilité. Détail et plan en cinq temps dans v et w (chantier à part, décision de Xavier). Aucun renommage commencé au 29/09.",
-          "pt": "27/09 — medido em produção (`39cfd566`): **quatro** colunas levam o nome, a quarta sendo `ingest.partner_catalog_received_assets`; só `digital_assets.rights_status` comanda a visibilidade. Detalhe e plano em cinco tempos em v e w (canteiro à parte, decisão de Xavier). Nenhuma renomeação começada em 29/09."
         }
       ]
     },
