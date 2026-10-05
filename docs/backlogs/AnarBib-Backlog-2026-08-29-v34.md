@@ -429,7 +429,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C15** | Corriger huit notices BTL, livre en main | `P2` | Ouvert |
 | **C16** | Attribuer les couvertures posées avant le 27/09 | `P2` | Ouvert |
 | **C17** | Décider si un numéro d'inventaire supprimé peut être redonné | `P2` | Décision collective |
-| **C18** | Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ? | `P2` | Ouvert |
+| **C18** | Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ? | `P2` | En cours |
 
 #### C3 — Mener la revue humaine des autorités : patronymes, casse, titres
 
@@ -581,11 +581,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### C18 — Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ?
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
 
 **État.** Relevé le 01/10 (lecture seule, production), en cherchant d'autres cas comme l'œuvre 1163 (E26) : un titre « auto » d'une œuvre A qui est le titre réel — d'édition ou saisi — d'une autre œuvre B du même auteur·rice. Quatorze paires, douze œuvres A. La plupart ne sont pas des titres faux mais des **traductions d'une même œuvre rangées sous deux fiches** : Reclus, *L'Homme et la Terre* (133) / *O Homem e a Terra* (880) / *El Hombre y la Tierra* (1131) ; Reclus, *Evolución, Revolución y el Ideal anárquico* (268) / 1387 (fr) / 1203 (pt) ; Kropotkine, *A Conquista do Pão* (19) / 2381, *El Apoyo Mutuo* (79) / *Ajuda Mútua* (396), *A Grande Revolução* (1) / 1084, *Em Tôrno de uma Vida* (115) / 386 ; Tolstoï, *A insubmissão* (28) / 1297 ; Gori (48) / 873 ; Safón (99) / 2428 ; Horowitz (74) / 2484. **À trancher au cas par cas, comme 1163** : Nettlau, *La Anarquía a través de los tiempos* (2036) / *História da Anarquia* (196) — même texte ou non ? — et Kropotkine, *Moral anarquista* (1366) / *La Moral Anarquista y otros escritos* (2064), recueil contre texte seul.
 
-*Vérifié : 01/10 — relevé en production : 14 paires, 12 œuvres A ; aucune modification faite.*
+*Vérifié : 01/10 — relevé en production : 14 paires, 12 œuvres A ; aucune modification faite. **05/10 — arbitré par Xavier, appliqué** (`c923fdc0`, migration `20261005071913`, CI verte, joué à blanc en production avant) : huit réunions d'œuvres entières — Kropotkine 1084→1 (la notice italienne 2209 reçoit sa langue), 2381→19, 396→79, 386→115 ; Gori 873→48 ; Safón 2428→99 ; Horowitz 2484→74 ; Reclus 268 et 1203→1387 (œuvre de langue originale). *L'Homme et la Terre* : les six tomes Maucci rejoignent ceux de 1905 (œuvre 133, « 2 éditions · 12 volumes » à l'écran) ; FCE 1986 (1131, sélection — à confirmer sur l'exemplaire) et les volumes Imaginário (880, extraits) restent à part, avec une note et leur titre propre dans toutes les langues, comme 1163. La notice 143 (*La Moral anarquista y otros escritos*) rejoint le recueil 2064. Aucune fusion décidée par script. **Reste** : Tolstoï 28/1297 (recueil ou texte seul ? sommaire de l'édition Madre Tierra 1991) ; Nettlau 2036/196 (proposé « distinctes », puis retenu : les titres de 2036 — *A Short History of Anarchism*, *Histoire de l'anarchie* — sont ceux des traductions de *La Anarquía a través de los tiempos*, et l'éd. Hedra pourrait l'être aussi) ; notices en double, à l'assistant de doublons : 2601/1195 (Júcar 1978), 143/138 (Anarres 2008).*
 
 **Ce que c'est.** Relire chaque paire avec les éditions en main ; réunir celles qui sont la même œuvre, depuis l'application ; pour les autres, faire comme pour 1163 : titres « auto » remplacés, note d'œuvre qui dit pourquoi elles restent distinctes.
 

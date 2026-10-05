@@ -3320,7 +3320,7 @@
       "id": "C18",
       "d": "C",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "biblio"
@@ -3355,8 +3355,8 @@
       },
       "r": [],
       "verif": {
-        "fr": "01/10 — relevé en production : 14 paires, 12 œuvres A ; aucune modification faite.",
-        "pt": "01/10 — levantamento em produção: 14 pares; nada modificado."
+        "fr": "01/10 — relevé en production : 14 paires, 12 œuvres A ; aucune modification faite. **05/10 — arbitré par Xavier, appliqué** (`c923fdc0`, migration `20261005071913`, CI verte, joué à blanc en production avant) : huit réunions d'œuvres entières — Kropotkine 1084→1 (la notice italienne 2209 reçoit sa langue), 2381→19, 396→79, 386→115 ; Gori 873→48 ; Safón 2428→99 ; Horowitz 2484→74 ; Reclus 268 et 1203→1387 (œuvre de langue originale). *L'Homme et la Terre* : les six tomes Maucci rejoignent ceux de 1905 (œuvre 133, « 2 éditions · 12 volumes » à l'écran) ; FCE 1986 (1131, sélection — à confirmer sur l'exemplaire) et les volumes Imaginário (880, extraits) restent à part, avec une note et leur titre propre dans toutes les langues, comme 1163. La notice 143 (*La Moral anarquista y otros escritos*) rejoint le recueil 2064. Aucune fusion décidée par script. **Reste** : Tolstoï 28/1297 (recueil ou texte seul ? sommaire de l'édition Madre Tierra 1991) ; Nettlau 2036/196 (proposé « distinctes », puis retenu : les titres de 2036 — *A Short History of Anarchism*, *Histoire de l'anarchie* — sont ceux des traductions de *La Anarquía a través de los tiempos*, et l'éd. Hedra pourrait l'être aussi) ; notices en double, à l'assistant de doublons : 2601/1195 (Júcar 1978), 143/138 (Anarres 2008).",
+        "pt": "01/10 — levantamento em produção: 14 pares; nada modificado. **05/10 — arbitrado por Xavier, aplicado** (`c923fdc0`, migração `20261005071913`): oito obras reunidas (Kropotkin ×4, Gori, Safón, Horowitz, Reclus); os seis tomos Maucci juntam-se aos de 1905 (obra 133); FCE 1986 e Imaginário ficam à parte com nota; notícia 143 no recueil 2064. Resta: Tolstói 28/1297, Nettlau 2036/196, notícias duplicadas 2601/1195 e 143/138."
       }
     },
     {
