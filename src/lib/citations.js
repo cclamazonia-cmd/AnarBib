@@ -2,9 +2,17 @@
 // BookPage (notice, #OPAC1) et AuthorPage (bibliographie, #AUT3).
 // Texte brut, métadonnées limitées : formats approximatifs mais propres.
 
+// CAT-G4 : un contributeur lie se cite sous la forme INVERSEE de son autorite
+// (sort_name, « Russell, Bertrand » : ce qu'attendent RIS, BibTeX et les
+// styles de citation) ; un contributeur non lie, sous sa transcription.
+export function citeName(c) {
+  if (!c) return '';
+  return (c.author_id && (c.authority_sort_name || c.authority_name)) || c.name || '';
+}
+
 export function citeAuthorString(book, contributors) {
   if (Array.isArray(contributors) && contributors.length) {
-    const names = contributors.map(c => c.name).filter(Boolean);
+    const names = contributors.map(citeName).filter(Boolean);
     if (names.length) return names.join('; ');
   }
   return book.author_display || book.autor || '';
@@ -12,7 +20,7 @@ export function citeAuthorString(book, contributors) {
 
 export function citeAuthorList(book, contributors) {
   if (Array.isArray(contributors) && contributors.length) {
-    const names = contributors.map(c => c.name).filter(Boolean);
+    const names = contributors.map(citeName).filter(Boolean);
     if (names.length) return names;
   }
   const a = book.author_display || book.autor || '';

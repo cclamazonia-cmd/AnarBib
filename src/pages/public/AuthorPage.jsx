@@ -214,11 +214,13 @@ export default function AuthorPage() {
   const exportBiblio = (kind) => {
     if (!books.length) return;
     const origin = window.location.origin;
+    // CAT-G4 : un export se fait sous la forme inversee de l'autorite (sort_name).
+    const citeAs = author.sort_name || displayName;
     if (kind === 'bib') {
-      const text = books.map(b => buildBibtex(b, displayName, `${origin}/livro/${b.book_id}`)).join('\n');
+      const text = books.map(b => buildBibtex(b, citeAs, `${origin}/livro/${b.book_id}`)).join('\n');
       triggerDownload(`${fileBase}.bib`, text, 'application/x-bibtex;charset=utf-8');
     } else {
-      const text = books.map(b => buildRis(b, [displayName], `${origin}/livro/${b.book_id}`)).join('');
+      const text = books.map(b => buildRis(b, [citeAs], `${origin}/livro/${b.book_id}`)).join('');
       triggerDownload(`${fileBase}.ris`, text, 'application/x-research-info-systems;charset=utf-8');
     }
   };
