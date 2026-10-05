@@ -360,7 +360,7 @@ export default function CatalogacaoPage() {
           extraActions={<>
             <button className="ab-button ab-button--secondary" onClick={majTout} disabled={loading}
               title={t({ id: 'catalogacao.header.refreshHint' })}>
-              {loading ? t({ id: 'common.loading' }) : t({ id: 'common.update' })}
+              {loading ? t({ id: 'common.loading' }) : t({ id: 'catalogacao.header.updateCatalog' })}
             </button>
             <button className="ab-button ab-button--secondary" onClick={() => setWizardOpen(true)} style={{ gap: 6 }}>
               <span aria-hidden="true">?</span> {t({ id: 'catalogacao.wizard.helpButton' })}
