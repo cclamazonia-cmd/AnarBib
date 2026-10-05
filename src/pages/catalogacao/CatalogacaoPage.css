@@ -188,6 +188,33 @@
 .cat-status--info  { border-left-color: #60a5fa; }
 .cat-status--info  .cat-status__icon { background: #60a5fa; }
 
+/* ── Dépôt numérique en étapes (DigitalResourcesPanel, 05/10/2026) ── */
+.cat-dep__head { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.cat-dep__list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; }
+.cat-dep__item {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 8px 10px; border-radius: 6px; background: rgba(0,0,0,.15); border: 1px solid rgba(255,255,255,.06);
+}
+.cat-dep__item-title { font-size: .82rem; font-weight: 600; }
+.cat-dep__item-meta { font-size: .74rem; color: var(--brand-muted, #aaa); overflow-wrap: anywhere; }
+.cat-dep__empty { font-size: .82rem; color: var(--brand-muted, #888); padding: 8px 0; }
+.cat-dep__form { padding: 14px; border-radius: 8px; background: rgba(0,0,0,.2); border: 1px solid rgba(255,255,255,.1); }
+.cat-dep__step { border: none; margin: 0 0 14px; padding: 0; min-width: 0; }
+.cat-dep__step legend { font-weight: 700; font-size: .86rem; margin-bottom: 8px; padding: 0; }
+.cat-dep__choices { display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); }
+.cat-dep__choice {
+  display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 8px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.15); font-size: .84rem;
+}
+.cat-dep__choice span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cat-dep__choice small { color: var(--brand-muted, #aaa); font-size: .74rem; line-height: 1.35; }
+.cat-dep__choice.is-on { border-color: var(--color-ok, #4ade80); background: rgba(74,222,128,.08); }
+.cat-dep__choice.is-off { opacity: .55; cursor: not-allowed; }
+.cat-dep__choice input { margin-top: 3px; flex-shrink: 0; }
+.cat-dep__note { font-size: .76rem; color: var(--brand-muted, #9ab); margin-top: 6px; line-height: 1.4; }
+.cat-dep__file { font-size: .76rem; color: #7fd18f; margin-top: 6px; overflow-wrap: anywhere; }
+.cat-dep__check { display: flex; gap: 5px; align-items: center; font-size: .82rem; cursor: pointer; }
+
 /* ── « Publié — et maintenant ? » (AfterPublishPanel, 04/10/2026) ── */
 .cat-next {
   margin-bottom: 16px; padding: 14px 16px; border-radius: 10px;

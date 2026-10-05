@@ -14,6 +14,7 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 import ReadingNotesModeration from '@/components/biblioteca/ReadingNotesModeration';
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
 import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
+import LibraryDigitalPolicySection from '@/components/library/LibraryDigitalPolicySection';
 import PolicySetManager from '@/components/library/PolicySetManager';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
 import WorkspaceInspectorModal from '@/components/library/WorkspaceInspectorModal';
@@ -1062,6 +1063,8 @@ export default function BibliotecaPage() {
               Restaure la fonctionnalite du HTML d'origine. Doctrine :
               gouvernance documentale = attribut local par biblioteca. */}
           <DocumentGovernanceSection libraryId={libraryId} canEdit={isCoord} />
+          {/* 05/10/2026 : lecture publique d'œuvres sous droits — choix de la coordination (20261005092916) */}
+          <LibraryDigitalPolicySection libraryId={libraryId} canEdit={isCoord} />
           {/* Chantier « Partenaires de correspondance » etape 3 (24/05/2026) :
               remplace l'ancienne liste globale en lecture seule de
               catalog_partners par l'editeur LibraryPartnershipsSection.

@@ -244,24 +244,32 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // Rattache le PDF scanné (déposé via le dépôt OCR) à un brouillon fraîchement
   // créé : upload dans le bucket public + insertion de la ressource numérique.
   // Réutilise exactement la convention de uploadDigitalFile (books/<id>/...).
+  // 05/10/2026 : le scan déposé depuis l'OCR allait TOUJOURS dans l'espace
+  // public, quels que soient ses droits — un scan sous droits devenait lisible
+  // par quiconque avait l'URL. Il part désormais en accès réservé (bibliothèques
+  // détentrices), droits à préciser dans le panneau des ressources numériques ;
+  // le passer en public reste un choix explicite.
   async function attachOcrPdf(draftId, file) {
     if (!draftId || !file) return;
-    const bucket = 'anarbib-pdf-public';
+    const bucket = 'pdf-restrito';
     const safe = file.name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9._-]/g, '_');
     const path = `books/${draftId}/${Date.now()}_${safe}`;
     const { error: upErr } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: 'application/pdf' });
     if (upErr) throw upErr;
     const { error: insErr } = await supabase.from('book_draft_digital_resources').insert({
       book_draft_id: Number(draftId),
-      resource_type: 'pdf_publico',
+      resource_type: 'pdf_restrito',
       usage_type: 'leitura_online',
-      access_scope: 'publico',
+      access_scope: 'conta_ativa',
       status: 'draft',
       is_active: true,
       storage_bucket: bucket,
       storage_path: path,
       mime_type: 'application/pdf',
       is_primary: true,
+      // Déposé depuis la notice elle-même : la correspondance est acquise
+      // (avant : jamais posée, et le PDF restait invisible sur la fiche).
+      bibliographic_match_validated: true,
       label: file.name,
     });
     if (insErr) throw insErr;
@@ -2387,7 +2395,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             .map(g => renderMaterialSection(g, ctx))}
 
           {/* ═══ Recursos digitais vinculados (E6 lot 2 : DigitalResourcesPanel) ═══ */}
-          <DigitalResourcesPanel draftId={f('id')} resources={digitalResources}
+          <DigitalResourcesPanel draftId={f('id')} ownerLibraryId={f('owner_library_id')} resources={digitalResources}
             onChanged={() => loadDigitalResources(f('id'))} setMsg={setMsg} />
 
           {/* ═══ MARC JSON (registry-driven, tier 3) ═══ */}
