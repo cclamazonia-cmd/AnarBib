@@ -2,7 +2,7 @@
 title: "Guia de governança do AnarBib"
 subtitle: "Para uso das coordenadoras/es/es de biblioteca e das administradoras/es/es da rede"
 author: "Projeto AnarBib"
-date: "Versão 1.2 — 1º de setembro de 2026"
+date: "Versão 1.3 — 5 de outubro de 2026"
 lang: pt-BR
 ---
 
@@ -25,9 +25,9 @@ O guia está em duas partes:
 
 - **Parte I — O porquê.** Quatro capítulos que estabelecem o quadro político: para que serve um SIGB anarquista, quais são seus princípios fundadores, como se articulam os dois perímetros (biblioteca local e rede), e como as próprias regras podem ser emendadas.
 
-- **Parte II — O como.** Seis capítulos práticos que tratam cada um de uma grande questão operacional: cootar, remover, gerir as situações que desviam, exercer uma função de admin de rede, garantir a transparência, e um último capítulo que comenta casos concretos do início ao fim.
+- **Parte II — O como.** Seis capítulos práticos que tratam cada um de uma grande questão operacional: cootar, remover, gerenciar as situações que desviam, exercer uma função de admin de rede, garantir a transparência, e um último capítulo que comenta casos concretos do início ao fim.
 
-Ao final de cada capítulo prático, uma rubrica **"Se a regra te incomoda"** lembra onde discuti-la e como propor uma emenda. Isso é importante porque essas regras só fazem sentido se forem emendáveis.
+Ao final de cada capítulo prático, uma rubrica **"Se a regra incomoda você"** lembra onde discuti-la e como propor uma emenda. Isso é importante porque essas regras só fazem sentido se forem emendáveis.
 
 Os anexos no final do volume servem de referência rápida: glossário, índice das funções técnicas com sua tradução política, modelo de proposta de emenda e links para as specs fontes.
 
@@ -37,7 +37,7 @@ Pode-se lê-lo de uma vez, mas provavelmente não é o melhor uso. Três formas 
 
 - **Para compreender o espírito do projeto** antes de assumir uma função: ler a Parte I (capítulos 1 a 4).
 - **Diante de uma situação concreta**: pular diretamente ao capítulo prático correspondente (5 a 10).
-- **Para se informar visando uma AG** onde uma questão de governança será colocada: ler o capítulo correspondente mais a rubrica "Se a regra te incomoda" correspondente, e consultar a spec fonte no Anexo D.
+- **Para se informar visando uma AG** onde uma questão de governança será colocada: ler o capítulo correspondente mais a rubrica "Se a regra incomoda você" correspondente, e consultar a spec fonte no Anexo D.
 
 O que está escrito aqui se apoia em quatro documentos de especificação:
 
@@ -80,7 +80,7 @@ AnarBib **assume essa tensão** em vez de mascará-la. O compromisso político e
 
 ## 1.3. Delegação e rotação
 
-A ideia central é a da **delegação com rotação**. Um coletivo delega a certas/certos de suas/seus membras/os a execução de tarefas técnicas (gerir os empréstimos no SIGB, modificar a visibilidade da biblioteca, acolher uma nova membra/um novo membro na equipe). Essa delegação é:
+A ideia central é a da **delegação com rotação**. Um coletivo delega a certas/certos de suas/seus membras/os a execução de tarefas técnicas (gerenciar os empréstimos no SIGB, modificar a visibilidade da biblioteca, acolher uma nova membra/um novo membro na equipe). Essa delegação é:
 
 - **Explícita**: ela se concretiza em um ato de cooptação rastreado no log de auditoria;
 - **Reversível**: a pessoa delegada pode deixar a função quando quiser, e o coletivo pode solicitá-lo segundo modalidades enquadradas;
@@ -146,7 +146,7 @@ A spec `spec-administrateur-reseau.md` (11 de maio de 2026) oficializou a separa
 
 ## 2.2. O que cada perímetro faz
 
-**O staff local** gere o cotidiano de uma biblioteca: empréstimos, devoluções, reservas, validação das inscrições, modificação do regulamento, das políticas de circulação, da identidade pública da biblioteca. Tudo o que diz respeito ao funcionamento de **uma** biblioteca se resolve no nível do staff local.
+**O staff local** gerencia o cotidiano de uma biblioteca: empréstimos, devoluções, reservas, validação das inscrições, modificação do regulamento, das políticas de circulação, da identidade pública da biblioteca. Tudo o que diz respeito ao funcionamento de **uma** biblioteca se resolve no nível do staff local.
 
 **A administração da rede** assegura a coordenação inter-bibliotecas: ativação de novas bibliotecas, moderação do catálogo compartilhado, manutenção técnica da plataforma, acolhimento de novos coletivos, e intervenção excepcional quando uma biblioteca se encontra bloqueada (sem coord ativo/a, conflito maior, etc.). Tudo o que diz respeito à **rede** se resolve no nível da administração de rede.
 
@@ -165,7 +165,7 @@ Se uma pessoa é ao mesmo tempo `coordenador` de uma biblioteca **e** administra
 
 Por que essa regra é politicamente saudável, em quatro pontos:
 
-- **Honestidade**: seu engajamento local é contado na biblioteca onde você atua; seu engajamento na rede é contado no nível da rede. Ninguém te conta "1,5 vez".
+- **Honestidade**: seu engajamento local é contado na biblioteca onde você atua; seu engajamento na rede é contado no nível da rede. Ninguém conta você como "1,5 vez".
 - **Legibilidade**: uma militante/um militante/uma pessoa militante que olha a ficha de uma biblioteca vê imediatamente quantas pessoas estão engajadas **localmente**, sem ter que se perguntar se admins de rede "externas/os/es" incham o contador.
 - **Robustez**: se amanhã forem acrescentados papéis intermediários (auxiliar, estagiária/estagiário, observadora/observador/observadore), a regra "página = perímetro" permanece clara.
 - **Coerência política**: a separação entre admin de rede e staff local é uma **decisão política**, não um detalhe de modelagem. Os contadores devem refleti-la.
@@ -183,7 +183,7 @@ Esse direito existe por duas razões:
 
 Mas esse direito **não** faz da/do admin de rede uma/um superiora/superior hierárquica/hierárquico da coordenação local. A doutrina da rede, estabelecida neste guia:
 
-> **Uma intervenção de admin de rede em uma biblioteca local deve ser precedida de uma informação à coordenação local envolvida**, salvo urgência vital (comprometimento ativo, assédio em curso, ataque contra a plataforma). A informação prévia não é um pedido de autorização: a/o admin de rede tem o direito de agir. Mas ela é uma **marca de respeito** à autonomia da biblioteca, e preserva a possibilidade de outro arranjo (por exemplo: "deixa eu tentar resolver isso primeiro, te mantenho informada/o/e").
+> **Uma intervenção de admin de rede em uma biblioteca local deve ser precedida de uma informação à coordenação local envolvida**, salvo urgência vital (comprometimento ativo, assédio em curso, ataque contra a plataforma). A informação prévia não é um pedido de autorização: a/o admin de rede tem o direito de agir. Mas ela é uma **marca de respeito** à autonomia da biblioteca, e preserva a possibilidade de outro arranjo (por exemplo: "deixa eu tentar resolver isso primeiro, mantenho você informada/o/e").
 
 A rastreabilidade técnica existe por outro lado: todas as ações cross-bibliotecas de uma/um admin de rede são rastreadas na tabela `cross_library_actions_log` com um nível de criticidade, legíveis pela coordenação local a posteriori.
 
@@ -273,8 +273,8 @@ A spec de governança dos papéis formaliza nove transições, listadas aqui de 
 
 | # | Transição | Quem | Mecanismo |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Proposta (integrante da equipe local) → endosso (quórum) → **aceitação** (a pessoa concernida) | Cooptação colegiada, via o circuito de convite |
-| T2 | `librarian` → `coordenador` | Proposta (coord local OU admin de rede) → endosso (outra pessoa da equipe) → **aceitação** (a pessoa concernida) | Cooptação colegiada, via o circuito de convite |
+| T1 | `reader` → `librarian` | Proposta (integrante da equipe local) → endosso (quórum) → **aceitação** (a pessoa em questão) | Cooptação colegiada, via o circuito de convite |
+| T2 | `librarian` → `coordenador` | Proposta (coord local OU admin de rede) → endosso (outra pessoa da equipe) → **aceitação** (a pessoa em questão) | Cooptação colegiada, via o circuito de convite |
 | T2b | `reader` → `coordenador` (**salto colegial**) | Idêntico a T2 — somente se a biblioteca ativou a opção | Cooptação colegiada; opção por biblioteca, desativada por padrão |
 | T3 | `coordenador` → `librarian` | Própria pessoa OU outras/os/es coords | Auto-rebaixamento OU saída coletiva com carência |
 | T4 | `librarian` → `reader` (voluntária/o/e) | Própria pessoa | Auto-rebaixamento |
@@ -286,7 +286,7 @@ A spec de governança dos papéis formaliza nove transições, listadas aqui de 
 
 Três princípios estruturam este quadro:
 
-- **A entrada passa pela cooptação colegiada** (T1, T2) — e T2b onde a biblioteca a escolheu: uma proposta, o endosso da equipe segundo o quórum, e depois a **aceitação da pessoa concernida**. Ninguém se promove sozinhe — e ninguém é promovide sem a sua palavra *(refundições de 26/08 e 01/09/2026)*.
+- **A entrada passa pela cooptação colegiada** (T1, T2) — e T2b onde a biblioteca a escolheu: uma proposta, o endosso da equipe segundo o quórum, e depois a **aceitação da pessoa em questão**. Ninguém se promove sozinhe — e ninguém é promovide sem a sua palavra *(refundições de 26/08 e 01/09/2026)*.
 - **A saída voluntária é sempre possível** (T3 auto, T4). Ninguém fica presa/o/e em uma função que não quer mais exercer.
 - **A saída imposta é retardada pela carência** (T5). Sete dias para permitir um eventual recuo coletivo.
 
@@ -361,11 +361,11 @@ Este capítulo cobre as transições T1 (`reader` → `librarian`) e T2 (`librar
 
 > **P2 — Cooptação para os papéis staff.** A entrada numa equipe se faz por cooptação. É o coletivo político que decide quem é admitide; o SIGB é só a mão que executa a decisão.
 
-Isso significa que **registrar uma proposta** não é uma decisão pessoal de quem clica: é a **execução técnica** de uma decisão que foi tomada — ou deve ser tomada — pelo coletivo da biblioteca. Desde as refundições do inverno de 2026, o próprio SIGB reflete essa colegialidade: **nenhum papel staff se dá mais com um clique**. Toda entrada passa por três tempos — proposta, endosso, **aceitação da pessoa concernida**. A doutrina sobre o «quando exatamente» a decisão deve ser tomada não é deliberadamente resolvida por este guia: cada biblioteca faz a sua (ver §5.4).
+Isso significa que **registrar uma proposta** não é uma decisão pessoal de quem clica: é a **execução técnica** de uma decisão que foi tomada — ou deve ser tomada — pelo coletivo da biblioteca. Desde as refundições do inverno de 2026, o próprio SIGB reflete essa colegialidade: **nenhum papel staff se dá mais com um clique**. Toda entrada passa por três tempos — proposta, endosso, **aceitação da pessoa em questão**. A doutrina sobre o «quando exatamente» a decisão deve ser tomada não é deliberadamente resolvida por este guia: cada biblioteca faz a sua (ver §5.4).
 
 ## 5.2. Para fazer alguém entrar como `librarian` (T1)
 
-Desde 1.º de setembro de 2026, a acolhida é **colegiada de ponta a ponta**: não se «nomeia» mais ninguém com um clique. Registra-se uma **proposta**, a equipe a **endossa** segundo o quórum da biblioteca, e a pessoa concernida **aceita** — ou recusa, ou deixa a proposta expirar (30 dias). Não fazer nada é uma resposta: a proposta se fecha sozinha.
+Desde 1.º de setembro de 2026, a acolhida é **colegiada de ponta a ponta**: não se «nomeia» mais ninguém com um clique. Registra-se uma **proposta**, a equipe a **endossa** segundo o quórum da biblioteca, e a pessoa em questão **aceita** — ou recusa, ou deixa a proposta expirar (30 dias). Não fazer nada é uma resposta: a proposta se fecha sozinha.
 
 ### Precondições
 
@@ -401,18 +401,18 @@ Mesmo circuito, mesma lógica (refundição de 26/08/2026): **proposta → endos
 ### Procedimento no SIGB
 
 1. Aba **Equipe**, linha da pessoa → **«Propor a coordenação»** (ou, para um salto, aba **Leitoras·es** → «Propor à coordenação»).
-2. Outra pessoa da equipe endossa (a pessoa concernida não conta no quórum: ela aceita, não endossa).
+2. Outra pessoa da equipe endossa (a pessoa em questão não conta no quórum: ela aceita, não endossa).
 3. A pessoa recebe um email que nomeia a carga pelo que ela é, e **aceita** — recusar não custa nada, e passar a mão continuará sendo um direito depois.
 4. Na aceitação: linha `coordenador` ativa; a linha ativa inferior (`librarian` ou, num salto, `reader`) se fecha; audit log `promoted_to_coordenador`, com a procedência (`from_role`).
 
 ### O salto colegial: leitora·or → coordenação (opção por biblioteca)
 
-Para as bibliotecas que funcionam em **coletivo horizontal** — onde entrar no coletivo é partilhar a coordenação — a escada `reader` → `librarian` → `coordenador` impunha um grau de passagem sem realidade no grupo. Desde 1.º de setembro de 2026, uma biblioteca pode autorizar que a proposta de coordenação vise diretamente uma·um **leitora·or ativa·o**:
+Para as bibliotecas que funcionam em **coletivo horizontal** — onde entrar no coletivo é compartilhar a coordenação — a escada `reader` → `librarian` → `coordenador` impunha um grau de passagem sem realidade no grupo. Desde 1.º de setembro de 2026, uma biblioteca pode autorizar que a proposta de coordenação vise diretamente uma·um **leitora·or ativa·o**:
 
 - **É uma escolha de cada biblioteca**, desativada por padrão. O ajuste se alterna na aba **Equipe**, bloco «Ajustes de governança» — visível a toda a equipe, alternável pela coordenação. Ative por decisão do seu coletivo, não por comodidade.
 - **O circuito colegiado se aplica integralmente**: proposta, endosso segundo o quórum, aceitação. O salto encurta a escada, nunca os consentimentos.
 - **O preço a conhecer**: a pessoa recebe de uma vez o acesso aos dados pessoais das leitoras e leitores, à configuração e à gestão da equipe — sem o período de exercício que a etapa `librarian` dava. É coerente onde a confiança se constrói em assembleia, fora do software.
-- **Os emails o dizem**: o endosso de um salto é pedido com conhecimento de causa («ainda fora da equipe»), e a pessoa concernida sabe que entraria diretamente pela coordenação.
+- **Os emails o dizem**: o endosso de um salto é pedido com conhecimento de causa («ainda fora da equipe»), e a pessoa em questão sabe que entraria diretamente pela coordenação.
 - **Desativável a qualquer momento**: a escada volta a ser o único caminho, e as propostas de salto abertas falharão na aceitação.
 
 ### Lado técnico
@@ -536,7 +536,7 @@ Este é o **direito mais fundamental** no sistema de governança do AnarBib. Tod
 
 ### Caso especial : você é o(a/e) único(a/e) coordenador(a/e) ativo(a/e)
 
-O SIGB **deixa você sair**, mas te avisa :
+O SIGB **deixa você sair**, mas avisa você:
 
 > ⚠️ ATENÇÃO : você é o(a/e) único(a/e) coordenador(a/e) ativo(a/e) de [biblio]. A biblio ficará sem coordenação. Os(as/es) administradores(as/es) AnarBib serão notificados(as/es). Continuar ?
 
@@ -730,9 +730,9 @@ Politicamente, isso é coerente com o que se faz quando o(a/e) único(a/e) coord
 
 **Tentativa de rebaixar um(a/e) admin da rede.** Recusada sistematicamente. O papel de admin da rede só pode ser modificado via os mecanismos específicos da spec admin-reseau (cf. capítulo 8). Nenhum(a/e) coord local pode destituir um(a/e) admin da rede.
 
-## 6.9. Se a regra te incomoda
+## 6.9. Se a regra incomoda você
 
-**O prazo de carência de 7 dias te parece longo demais ou curto demais.** A levar para `spec-gouvernance-roles.md`, §4.4 e §5.6.
+**O prazo de carência de 7 dias parece longo demais ou curto demais para você.** A levar para `spec-gouvernance-roles.md`, §4.4 e §5.6.
 
 **Você acha que a suspensão sem duração máxima é uma porta aberta para o arbítrio.** É um assunto político sério. Pode-se pensar em adicionar um prazo além do qual uma suspensão deve ser convertida em afastamento ou levantada. A discutir na coordenação da rede, depois a levar para a spec.
 
@@ -878,7 +878,7 @@ Um caso que já aparece no capítulo 2, mas que merece um desenvolvimento práti
 
 ### A doutrina da rede
 
-> **Uma intervenção de pessoa admin da rede numa biblioteca local deve ser precedida de uma informação à coordenação local concernida, salvo urgência vital.**
+> **Uma intervenção de pessoa admin da rede numa biblioteca local deve ser precedida de uma informação à coordenação local envolvida, salvo urgência vital.**
 
 A informação prévia **não é um pedido de autorização**. A pessoa admin da rede tem o direito de agir (é o sentido do direito transversal). Mas é uma marca de respeito pela autonomia local, e preserva a possibilidade de outro arranjo.
 
@@ -904,9 +904,9 @@ Antes da intervenção (ou durante, se a urgência o justificar a posteriori):
 
 - **A intervenção silenciosa**: agir na biblioteca sem informar a coordenação. Mesmo que tecnicamente seja rastreado, politicamente é uma violação da soberania local.
 - **O uso do direito transversal como poder de vigilância**: ir ver "o que está acontecendo" numa biblioteca sem razão operacional. O direito transversal existe para casos de manutenção ou mediação, não por curiosidade.
-- **A imposição de decisões políticas**: uma pessoa admin da rede não pode dizer a uma biblioteca como fazer suas cooptações, como gerir seus conflitos internos, ou qual política de acolhimento escolher. O direito transversal é técnico, não político.
+- **A imposição de decisões políticas**: uma pessoa admin da rede não pode dizer a uma biblioteca como fazer suas cooptações, como gerenciar seus conflitos internos, ou qual política de acolhimento escolher. O direito transversal é técnico, não político.
 
-## 7.7. Se a regra te incomoda
+## 7.7. Se a regra incomoda você
 
 **Você acha que a doutrina de informação prévia é muito frouxa** (uma pessoa admin da rede poderia abusar da "urgência vital"). A discutir: é preciso uma definição mais estrita da urgência? É preciso uma segunda pessoa admin da rede que confirme a urgência?
 
@@ -1105,7 +1105,7 @@ Este capítulo trata do funcionamento concreto da **transparência** no AnarBib:
 ## 9.1. O princípio
 
 > **P5 — Transparência máxima.** O audit log das mudanças de papel é legível por todo o staff ativo da biblio.
-> **P6 — Notificações sistemáticas.** Toda mudança de papel aciona um e-mail à pessoa concernida e a toda a coordenação.
+> **P6 — Notificações sistemáticas.** Toda mudança de papel aciona um e-mail à pessoa em questão e a toda a coordenação.
 
 A ideia política: **tornar as manipulações opacas impossíveis**. Se tudo está rastreado e legível, não se pode em silêncio fazer passar uma pessoa de um status a outro sem que isso seja visto pelas outras pessoas do staff.
 
@@ -1141,7 +1141,7 @@ A ideia política: **tornar as manipulações opacas impossíveis**. Se tudo est
 Cada entrada exibe:
 - Data e hora.
 - Ação (« promovida·o·e a librarian », « auto-rebaixada·o·e », « retirada solicitada », « suspensa·o·e », « reintegrada·o·e após suspensão », « passagem automática para inativa·o·e após 9 meses », etc.).
-- Pessoa concernida (target).
+- Pessoa em questão (target).
 - Autora·or·e da ação (actor) — para as ações humanas. Vazio para as ações automáticas (cron).
 - Razão (se preenchida).
 - Papel e statuses antes/depois.
@@ -1165,7 +1165,7 @@ Cada ação de governança aciona **um ou vários e-mails** automáticos. Não �
 
 ### Quem recebe o quê
 
-| Evento | Pessoa concernida | Coords locais ativas | Admins de rede |
+| Evento | Pessoa em questão | Coords locais ativas | Admins de rede |
 |---|---|---|---|
 | Proposta depositada (acolhida ou coordenação) | — | ✅ a endossar | — |
 | Proposta pronta (quórum atingido) | ✅ a aceitar | — | — |
@@ -1177,7 +1177,7 @@ Cada ação de governança aciona **um ou vários e-mails** automáticos. Não �
 | Suspensão (T6) | ✅ urgente | ✅ | — |
 | Levantamento de suspensão (T7) | ✅ | ✅ | — |
 | Saída auto aos 9 meses (T9) | ✅ lembretes + final | ✅ (final somente) | — |
-| Última pessoa coord parte | ✅ | ✅ (a pessoa concernida) | ✅ alerta |
+| Última pessoa coord parte | ✅ | ✅ (a pessoa em questão) | ✅ alerta |
 | Cooptação admin de rede (proposta) | — | — | ✅ |
 | Cooptação admin de rede (sucesso) | ✅ boas-vindas | — | ✅ resumo |
 | Cooptação admin de rede (rejeição) | ✅ com rationale | — | ✅ |
@@ -1220,7 +1220,7 @@ Esse guarda-chuva é doutrinário: ele prolonga o compromisso de não-rastreamen
 Quando uma admin de rede intervém em uma biblio (cf. §8.6), duas notificações são produzidas:
 
 - **Notificação prévia** (manual): a admin envia um e-mail à coordenação local antes de agir. Formato livre.
-- **Notificação automática** (pelo SIGB): à execução da ação, o sistema escreve em `cross_library_actions_log` com nível de criticidade, e envia um e-mail às coords ativas da biblio concernida.
+- **Notificação automática** (pelo SIGB): à execução da ação, o sistema escreve em `cross_library_actions_log` com nível de criticidade, e envia um e-mail às coords ativas da biblio envolvida.
 
 Essa dupla notificação (manual + automática) garante que a coordenação local seja avisada **antes** politicamente e **depois** tecnicamente. O rastro técnico é legível a posteriori na aba **Equipe** → seção **Intervenções de rede** (a ser implementada no pacote D).
 
@@ -1436,7 +1436,7 @@ A intervenção de Xavier ilustra o uso **adequado** do direito transversal: ele
 **Efeito imediato do voto opposed.**
 
 - Proposta passa a `status='rejected'`.
-- E-mail para Mohammed: « Olá Mohammed, sua proposta de cooptação como admin de rede do AnarBib não foi aprovada. Patricia X. levantou a seguinte objeção: "[justificativa completa]". Você pode conversar com ela ou com Maria, que te havia proposto. A cooptação poderá ser repropostada posteriormente. »
+- E-mail para Mohammed: « Olá Mohammed, sua proposta de cooptação como admin de rede do AnarBib não foi aprovada. Patricia X. levantou a seguinte objeção: "[justificativa completa]". Você pode conversar com ela ou com Maria, que havia proposto você. A cooptação poderá ser repropostada posteriormente. »
 - E-mail para Maria (proponente): resumo com a justificativa de Patricia.
 - E-mail para Xavier e Diego: informação de que a proposta foi rejeitada, com a justificativa.
 - Audit log de rede: `2026-05-25 — cooptação rejeitada: Mohammed (proposed_by: Maria, opposed_by: Patricia, rationale: ...)`.

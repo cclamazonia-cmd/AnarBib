@@ -34,7 +34,7 @@ direito e fiel a nossa cultura política.
 
 **Engajamento mútuo em um quadro federativo.** AnarBib não é uma
 empresa que vende um serviço a clientes. É uma rede federativa de
-bibliotecas autônomas que partilham uma infraestrutura técnica.
+bibliotecas autônomas que compartilham uma infraestrutura técnica.
 Este DPA não é um contrato comercial: é um ato de engajamento mútuo
 entre o coletivo AnarBib (que assume a responsabilidade técnica e a
 proteção dos dados) e cada biblioteca aderente (que mantém o
@@ -170,8 +170,8 @@ o presente acordo poderá ser rescindido por iniciativa da biblioteca.
 
 AnarBib assiste a biblioteca aderente para:
 
-- Responder às solicitações de exercício de direitos das pessoas
-  concernidas (acesso, retificação, exclusão, portabilidade)
+- Responder às solicitações de exercício de direitos dos titulares
+  dos dados (acesso, retificação, exclusão, portabilidade)
 - Cumprir as obrigações de segurança (artigo 32 RGPD)
 - Notificar uma eventual violação de dados (artigos 33 e 34 RGPD)
 
@@ -184,8 +184,8 @@ exclusão de conta direta) que AnarBib mantém à disposição.
 Em caso de violação de dados pessoais, AnarBib notificará a
 biblioteca aderente sem demora indevida e no máximo no prazo de 72
 horas após constatação. A notificação descreverá a natureza da
-violação, as categorias e o número aproximado de pessoas e dados
-concernidos, as medidas tomadas ou propostas, e os pontos de contato.
+violação, as categorias e o número aproximado de titulares e de registros
+afetados, as medidas tomadas ou propostas, e os pontos de contato.
 
 O documento INCIDENT_RESPONSE.md publicado no repositório AnarBib
 detalha o procedimento operacional.
@@ -204,7 +204,7 @@ A biblioteca verifica que cada tratamento que confia ao AnarBib
 repousa sobre uma base legal válida (consentimento, execução
 contratual, interesse legítimo, etc.).
 
-### 6.2 Informar as pessoas concernidas
+### 6.2 Informar os titulares dos dados
 
 A biblioteca se assegura de que as leitor(a/e)s sejam informadas
 sobre o tratamento de seus dados pessoais. A política de
@@ -314,7 +314,7 @@ jurisdição.
 
 Nenhuma cláusula de arbitragem comercial é prevista. O presente
 acordo não constitui uma renúncia aos direitos da biblioteca ou das
-pessoas concernidas previstos pelo direito aplicável.
+titulares dos dados previstos pelo direito aplicável.
 
 ## Artigo 12 — Assinatura
 

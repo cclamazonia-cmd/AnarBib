@@ -426,7 +426,7 @@ RGPD → `ΓΚΠΔ`.
 
 ### Convenções tipográficas burocráticas ou inadequadas
 
-| Forma | Línguas concernidas | Por quê |
+| Forma | Línguas envolvidas | Por quê |
 |---|---|---|
 | `(a)`, `/a`, `/o` | pt-BR, es, it | Forma administrativa, não militante. |
 | `@` (arroba) | pt-BR, es | Obsoleta, problema de acessibilidade (leitores de tela). |
@@ -490,7 +490,7 @@ Esta carta é um documento vivo. Pode ser modificada segundo os seguintes princ�
 - **Adições de termos políticos de referência**: por decisão coletiva
   documentada no repositório (issue ou pull request).
 - **Mudança de convenção de uma língua**: exige a participação de pelo menos
-  uma pessoa militante falante nativa da língua concernida. A
+  uma pessoa militante falante nativa da língua em questão. A
   mudança deve ser motivada política e tecnicamente.
 - **Definição das convenções provisórias (`nl`) ou a definir (`el`)**: segue o mesmo
   protocolo — uma escolha tipográfica militante local, justificada, validada por relais
