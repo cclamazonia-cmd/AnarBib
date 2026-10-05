@@ -158,13 +158,14 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
     charger,
     ecrits, rpcs, envois, telechargements,
     vider() { ecrits.length = 0; rpcs.length = 0; envois.length = 0; telechargements.length = 0; },
-    /** Appelle le gestionnaire de la fonction avec une Request ; rend { statut, corps | texte }. */
+    /** Appelle le gestionnaire de la fonction avec une Request ; rend { statut, entetes, corps | texte }. */
     async appeler(req) {
       const res = await handler(req);
       const type = res.headers.get('content-type') || '';
+      const entetes = Object.fromEntries(res.headers);   // 05/10/2026 : une redirection se lit dans Location
       return type.includes('json')
-        ? { statut: res.status, corps: await res.json() }
-        : { statut: res.status, texte: await res.text() };
+        ? { statut: res.status, entetes, corps: await res.json() }
+        : { statut: res.status, entetes, texte: await res.text() };
     },
   };
 }

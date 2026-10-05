@@ -5,7 +5,6 @@
 // lire la locale (bypass RLS). Idempotent (token usage unique côté RPC).
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
-import { tMail } from "../_shared/i18n/mail-strings.ts";
 import { APP_BASE_URL } from "../_shared/core/app-url.ts";
 
 const sb = createClient(
@@ -14,18 +13,16 @@ const sb = createClient(
   { auth: { persistSession: false } },
 );
 
-function page(locale: string, headingKey: string, status = 200): Response {
-  const heading = tMail(locale, headingKey);
-  const cta = tMail(locale, "lettre.landing.cta");
-  const html = `<!DOCTYPE html><html lang="${locale}"><head><meta charset="utf-8">`
-    + `<meta name="viewport" content="width=device-width,initial-scale=1"><title>${heading}</title>`
-    + `<style>body{font-family:system-ui,-apple-system,sans-serif;max-width:34rem;margin:4rem auto;`
-    + `padding:0 1.2rem;color:#1a1a1a;text-align:center;line-height:1.5}`
-    + `h1{font-size:1.4rem;color:#cf1f27}`
-    + `a{display:inline-block;margin-top:1.6rem;background:#cf1f27;color:#fff;padding:.6rem 1.3rem;`
-    + `border-radius:6px;text-decoration:none}</style></head>`
-    + `<body><h1>${heading}</h1><a href="${APP_BASE_URL}">${cta}</a></body></html>`;
-  return new Response(html, { status, headers: { "content-type": "text/html; charset=utf-8" } });
+// 05/10/2026 : la plateforme sert les Edge Functions en text/plain (CSP
+// « sandbox ») sur son domaine — une page HTML rendue ici s'affichait en code
+// source, accents décodés en Latin-1 (« inscriÃ§Ã£o »). La fonction fait son
+// travail puis renvoie (303) vers la page /lettre de l'application, qui dit le
+// résultat dans la langue de la personne.
+function page(locale: string, etat: string, _status = 200): Response {
+  const cible = new URL("/lettre", APP_BASE_URL);
+  cible.searchParams.set("etat", etat);
+  cible.searchParams.set("lang", locale);
+  return new Response(null, { status: 303, headers: { Location: cible.toString(), "Cache-Control": "no-store" } });
 }
 
 async function localeForToken(token: string): Promise<string> {
@@ -41,13 +38,13 @@ async function localeForToken(token: string): Promise<string> {
 
 Deno.serve(async (req) => {
   const token = new URL(req.url).searchParams.get("token") || "";
-  if (!token) return page("pt-BR", "lettre.landing.invalid", 400);
+  if (!token) return page("pt-BR", "invalid", 400);
   const locale = await localeForToken(token);
   const { data, error } = await sb.schema("api").rpc("fn_lettre_confirm", { p_token: token });
-  if (error) return page(locale, "lettre.landing.error", 500);
+  if (error) return page(locale, "error", 500);
   const status = String(data || "");
-  if (status === "confirmed") return page(locale, "lettre.landing.confirmed");
-  if (status === "already") return page(locale, "lettre.landing.already");
-  if (status === "expired") return page(locale, "lettre.landing.expired", 410);
-  return page(locale, "lettre.landing.invalid", 400);
+  if (status === "confirmed") return page(locale, "confirmed");
+  if (status === "already") return page(locale, "already");
+  if (status === "expired") return page(locale, "expired", 410);
+  return page(locale, "invalid", 400);
 });

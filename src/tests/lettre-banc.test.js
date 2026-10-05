@@ -6,7 +6,7 @@
 // de test qui l'exécute :
 //   - _shared/domain/lettre.ts : les deux mails (confirmation du double opt-in,
 //     envoi d'un numéro), appelés par notify-event via le dispatch ;
-//   - lettre-confirm et lettre-unsubscribe : les deux pages publiques d'un clic.
+//   - lettre-confirm et lettre-unsubscribe : les deux liens d'un clic (renvoi vers /lettre depuis le 05/10).
 // Écrit AVANT de toucher à leurs adresses (dette app-url-dette.test.js), sur les
 // vrais fichiers, par l'aide commune src/tests/helpers/monter-ef.js. Le rendu
 // Markdown (`marked`, esm.sh) est remplacé par l'aide : ce n'est pas lui qu'on
@@ -193,36 +193,44 @@ function monterPage(entree, { env = {}, statutRpc = 'confirmed', erreurRpc = nul
   return { ef, tMail, ouvrir };
 }
 
-describe('lettre-confirm et lettre-unsubscribe — les deux pages d\'un clic', () => {
-  it('confirm : chaque statut de la RPC a sa page, dans la langue de la personne, avec le bouton vers l\'application', async () => {
-    for (const [statutRpc, cle, http] of [['confirmed', 'lettre.landing.confirmed', 200], ['already', 'lettre.landing.already', 200], ['expired', 'lettre.landing.expired', 410], ['nimporte', 'lettre.landing.invalid', 400]]) {
-      const { ef, tMail, ouvrir } = monterPage('lettre-confirm/index.ts', { statutRpc });
+// 05/10/2026 : la plateforme sert les Edge Functions en text/plain (CSP
+// « sandbox ») sur son domaine — Xavier a vu le code source de la page et
+// « inscriÃ§Ã£o ». Les deux fonctions ne rendent plus de page : elles renvoient
+// (303) vers /lettre de l'application, avec l'état et la langue de la personne.
+// Les tests qui suivent remplacent ceux qui épinglaient la page HTML.
+const cible = (r) => new URL(r.entetes.location);
+
+describe('lettre-confirm et lettre-unsubscribe — un clic renvoie vers l\'application', () => {
+  it('confirm : chaque statut de la RPC renvoie vers /lettre avec son état et la langue de la personne', async () => {
+    for (const [statutRpc, etat] of [['confirmed', 'confirmed'], ['already', 'already'], ['expired', 'expired'], ['nimporte', 'invalid']]) {
+      const { ef, ouvrir } = monterPage('lettre-confirm/index.ts', { statutRpc });
       const r = await ouvrir();
-      expect(r.statut, statutRpc).toBe(http);
-      expect(r.texte).toContain(`<h1>${tMail('it', cle)}</h1>`);
-      expect(r.texte).toContain('<html lang="it">');
-      expect(liens(r.texte)).toEqual(['https://app.anarbib.org']);
+      expect(r.statut, statutRpc).toBe(303);
+      expect(r.texte).toBe('');
+      const u = cible(r);
+      expect(u.origin + u.pathname).toBe('https://app.anarbib.org/lettre');
+      expect(Object.fromEntries(u.searchParams)).toEqual({ etat, lang: 'it' });
       expect(ef.rpcs[0]).toMatchObject({ schema: 'api', nom: 'fn_lettre_confirm', args: { p_token: 'abc' } });
     }
   });
 
-  it('confirm : sans jeton 400 sans appeler la RPC ; RPC en erreur 500', async () => {
+  it('confirm : sans jeton, « invalid » sans appeler la RPC ; RPC en erreur, « error »', async () => {
     const a = monterPage('lettre-confirm/index.ts');
-    expect((await a.ouvrir('')).statut).toBe(400);
+    const ra = await a.ouvrir('');
+    expect(cible(ra).searchParams.get('etat')).toBe('invalid');
     expect(a.ef.rpcs).toHaveLength(0);
     const b = monterPage('lettre-confirm/index.ts', { erreurRpc: { message: 'panne' } });
-    expect((await b.ouvrir()).statut).toBe(500);
+    expect(cible(await b.ouvrir()).searchParams.get('etat')).toBe('error');
   });
 
-  it('unsubscribe : désabonné 200, tout autre statut 400, et le même bouton', async () => {
+  it('unsubscribe : désabonné → « unsubscribed », tout autre statut → « invalid »', async () => {
     const ok = monterPage('lettre-unsubscribe/index.ts', { statutRpc: 'unsubscribed' });
     const r = await ok.ouvrir();
-    expect(r.statut).toBe(200);
-    expect(r.texte).toContain(`<h1>${ok.tMail('it', 'lettre.landing.unsubscribed')}</h1>`);
-    expect(liens(r.texte)).toEqual(['https://app.anarbib.org']);
+    expect(r.statut).toBe(303);
+    expect(Object.fromEntries(cible(r).searchParams)).toEqual({ etat: 'unsubscribed', lang: 'it' });
     expect(ok.ef.rpcs[0]).toMatchObject({ schema: 'api', nom: 'fn_lettre_unsubscribe' });
     const ko = monterPage('lettre-unsubscribe/index.ts', { statutRpc: 'inconnu' });
-    expect((await ko.ouvrir()).statut).toBe(400);
+    expect(cible(await ko.ouvrir()).searchParams.get('etat')).toBe('invalid');
   });
 });
 
@@ -242,10 +250,11 @@ describe('la Lettre — les liens vers l\'application suivent APP_BASE_URL', () 
     expect([...liens(a.ef.envois[0].html), ...liens(b.ef.envois[0].html)].filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
   });
 
-  it('les deux pages d\'un clic : le bouton ramène à l\'adresse réglée', async () => {
+  it('les deux fonctions d\'un clic renvoient vers l\'adresse réglée', async () => {
     for (const [entree, statutRpc] of [['lettre-confirm/index.ts', 'confirmed'], ['lettre-unsubscribe/index.ts', 'unsubscribed']]) {
       const { ouvrir } = monterPage(entree, { env: ENV, statutRpc });
-      expect(liens((await ouvrir()).texte), entree).toEqual(['https://app.anarbib.is']);
+      const u = new URL((await ouvrir()).entetes.location);
+      expect(u.origin + u.pathname, entree).toBe('https://app.anarbib.is/lettre');
     }
   });
 });

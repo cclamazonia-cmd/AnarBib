@@ -68,6 +68,7 @@ Disallow: /federacao
 Disallow: /rede
 Disallow: /cartografia/moderacao
 Disallow: /relatar-problema
+Disallow: /lettre
 # Formulaires et connexion : rien à indexer
 Disallow: /login
 Disallow: /entrar

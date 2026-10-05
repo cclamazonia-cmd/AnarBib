@@ -28,6 +28,7 @@ const CriarContaPage = lazy(() => import('@/pages/public/CriarContaPage'));
 const LoginPage = lazy(() => import('@/pages/public/LoginPage'));
 const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibliotecaPage'));
 const RelatarProblemaPage = lazy(() => import('@/pages/public/RelatarProblemaPage')); /* « Signaler un problème », sans compte (E14, 24/09/2026) */
+const LettrePage = lazy(() => import('@/pages/public/LettrePage')); /* page d'arrivée des liens de la Lettre (05/10/2026) */
 const RelatosFilaPage = lazy(() => import('@/pages/federacao/RelatosFilaPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
 const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
@@ -205,6 +206,7 @@ export default function App() {
                   />
                   <Route path="/solicitar-biblioteca" element={<SolicitarBibliotecaPage />} />
                   <Route path="/relatar-problema" element={<RelatarProblemaPage />} />
+                  <Route path="/lettre" element={<LettrePage />} />
 
                   {/* ── Importações ──────────────────────── */}
                   <Route path="/importacoes" element={
