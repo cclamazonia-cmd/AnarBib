@@ -63,10 +63,12 @@ const HEAVY_TABS = ['ill', 'exchanges', 'tasks', 'reports'];
 
 export default function BibliotecaPage() {
   const { user } = useAuth();
-  const { libraryId, libraryName, role, governance_mode, patchLibrary } = useLibrary();
+  const { libraryId, libraryName, role, governance_mode, patchLibrary, libraryResolved } = useLibrary();
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.biblioteca' }));
-  const roleLoaded = role !== null && role !== undefined;
+  // Rôle connu, OU résolution finie sans rôle (compte sans bibliothèque) :
+  // sinon un tel compte chargeait sans fin (05/10/2026).
+  const roleLoaded = (role !== null && role !== undefined) || libraryResolved;
   const isCoord = role === 'coordenador' || role === 'administrador';
   const isLibrarian = role === 'librarian' || isCoord;
 

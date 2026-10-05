@@ -43,12 +43,14 @@ const TabCapas           = lazy(() => import('./tabs/TabCapas'));
 
 function PanelPageInner() {
   const { user } = useAuth();
-  const { libraryId, libraryName, role, circulation_mode, membership_enabled, isNetworkAdmin } = useLibrary();
+  const { libraryId, libraryName, role, circulation_mode, membership_enabled, isNetworkAdmin, libraryResolved } = useLibrary();
   const availability = usePanelAvailability();
   const { formatMessage: t, locale } = useIntl();
   const { notifyError } = useToast();
   useDocumentTitle(t({ id: 'pageTitle.panel' }));
-  const roleLoaded = role !== null && role !== undefined;
+  // Rôle connu, OU résolution finie sans rôle (compte sans bibliothèque) :
+  // sinon un tel compte chargeait sans fin (05/10/2026).
+  const roleLoaded = (role !== null && role !== undefined) || libraryResolved;
   const isLibrarian = role === 'librarian' || role === 'coordenador' || role === 'administrador';
   const isCoordOrAdmin = role === 'coordenador' || role === 'administrador';
   // Récolement (MOBILE P4) : aligné EXACTEMENT sur fn_recolement_is_staff côté

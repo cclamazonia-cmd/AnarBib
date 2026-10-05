@@ -202,7 +202,7 @@ export default function App() {
                   {/* Legacy redirect — preserves recovery email links sent before the rename */}
                   <Route
                     path="/cadastro"
-                    element={<Navigate to={`/login${window.location.hash || ''}`} replace />}
+                    element={<Navigate to={`/login${window.location.search || ''}${window.location.hash || ''}`} replace />}
                   />
                   {/* Liens des courriels envoyés avant le 05/10/2026 (d186da59) : ces chemins
                       n'ont jamais été des routes (404) ; les courriels déjà reçus les portent encore. */}

@@ -53,7 +53,7 @@ export default function FederacaoPage() {
   const { formatMessage: t, locale } = useIntl();
   const { tab: tabParam } = useParams();
   const navigate = useNavigate();
-  const { libraryId, role, hasStaffAccess } = useLibrary();
+  const { libraryId, role, hasStaffAccess, libraryResolved } = useLibrary();
   const { notifySuccess, notifyError } = useToast();
   useDocumentTitle(t({ id: 'federacao.title' }));
 
@@ -64,7 +64,9 @@ export default function FederacaoPage() {
   const setTab = (k) => navigate(k === 'inicio' ? '/federacao' : `/federacao/${k}`);
 
   const canAct = isCoord(role) && !!libraryId;
-  const roleLoaded = role !== null && role !== undefined;
+  // Rôle connu, OU résolution finie sans rôle (compte sans bibliothèque) :
+  // sinon un tel compte chargeait sans fin (05/10/2026).
+  const roleLoaded = (role !== null && role !== undefined) || libraryResolved;
 
   // ── Données Círculos ──────────────────────────────────────────────────
   const [myCircles, setMyCircles] = useState([]);

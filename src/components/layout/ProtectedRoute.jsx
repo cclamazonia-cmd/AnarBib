@@ -11,7 +11,11 @@ const CONSTITUTION_ALLOWED = ['/atelier', '/conta'];
 
 export function ProtectedRoute({ children }) {
   const { user, profile, loading, recovery } = useAuth();
-  const { pathname } = useLocation();
+  const { pathname, search, hash } = useLocation();
+  // 05/10/2026 : le lien d'un courriel ouvert sans session menait à la
+  // connexion, puis à /conta : la page demandée (et son #tab) était perdue.
+  // LoginPage valide `next` (getSafeNextUrl : chemin interne seulement).
+  const next = `?next=${encodeURIComponent(pathname + search + hash)}`;
 
   if (loading) {
     return (
@@ -39,9 +43,9 @@ export function ProtectedRoute({ children }) {
     // la course entre cette redirection et celle du minuteur decidait, au
     // hasard, si l'explication s'affichait ou non.
     if (readSessionEndNotice()) {
-      return <Navigate to="/login" replace />;
+      return <Navigate to={`/login${next}`} replace />;
     }
-    return <Navigate to="/cadastro" replace />;
+    return <Navigate to={`/cadastro${next}`} replace />;
   }
 
   // Redirection constitution : appliquée seulement une fois le profil chargé

@@ -69,7 +69,7 @@ function estSelectionnable(r) {
 
 export default function ImportacoesPage() {
   useAuth();
-  const { role, libraryId, isNetworkAdmin } = useLibrary();
+  const { role, libraryId, isNetworkAdmin, libraryResolved } = useLibrary();
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'importacoes.title' }));
 
@@ -347,7 +347,9 @@ export default function ImportacoesPage() {
   }, [libraryId]);
 
   // ── Role gating ────────────────────────────────────────
-  const roleLoaded = role !== null && role !== undefined;
+  // Rôle connu, OU résolution finie sans rôle (compte sans bibliothèque) :
+  // sinon un tel compte chargeait sans fin (05/10/2026).
+  const roleLoaded = (role !== null && role !== undefined) || libraryResolved;
   // IMP-14 : import/export sous l'autorité des coordinateurs (aligné sur le
   // backend fn_import_* coordenador-only + la nav canSeeImportacoes=isCoord).
   // Les librarians sont volontairement exclus ici.

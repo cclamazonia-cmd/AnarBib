@@ -96,6 +96,11 @@ export function LibraryProvider({ children }) {
   // est en vol (SELECT memberships). LoginPage attend !libraryLoading + themeReady
   // avant de naviguer, pour ne JAMAIS afficher la page connectee sur l'ancien fond.
   const [libraryLoading, setLibraryLoading] = useState(false);
+  // 05/10/2026 : pour QUEL compte la resolution est finie. Un compte sans
+  // bibliotheque (admin reseau qui n'est rattache nulle part) garde role=null :
+  // les pages qui attendaient « role connu » chargeaient sans fin. Elles
+  // attendent desormais libraryResolved.
+  const [resolvedFor, setResolvedFor] = useState(null);
   // #LOGIN-FIX H1 : le theme (manifest) est applique ici (et non plus dans un
   // ThemeGate separe), pour exposer themeReady au flux de login. On derive
   // themeReady du settledSlug (slug reellement applique) compare au themeSlug
@@ -122,6 +127,7 @@ export function LibraryProvider({ children }) {
       setLibraries([]);
       setIsNetworkAdmin(false);
       setLibraryLoading(false);
+      setResolvedFor(null);
       const urlCtx = readFromUrl();
       // #PN-2 : visiteur anonyme -> on demarre TOUJOURS sur le theme par defaut
       // (jamais de sonde themes/<slug>/manifest.json depuis l'URL), puis on resout
@@ -262,6 +268,7 @@ export function LibraryProvider({ children }) {
       } finally {
         setLibraryLoading(false);
         setThemeResolved(true);
+        setResolvedFor(user.id);
       }
     })();
   }, [user?.id, authLoading]);
@@ -324,9 +331,10 @@ export function LibraryProvider({ children }) {
       hasStaffAccess,
       // #LOGIN-FIX H1 : themeReady synchrone au rendu (settled === demandé)
       libraryLoading,
+      libraryResolved: !!user?.id && resolvedFor === user.id,
       themeReady: themeSettledSlug === ctx.themeSlug,
     }),
-    [ctx, setLibrary, patchLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess, libraryLoading, themeSettledSlug]
+    [ctx, setLibrary, patchLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess, libraryLoading, themeSettledSlug, resolvedFor, user?.id]
   );
 
   return (
