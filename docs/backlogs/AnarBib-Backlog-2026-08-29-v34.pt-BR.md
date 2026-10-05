@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-05** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-05** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, meio-dia** (`16962c55`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 29/09, `75ccb035`). Seis dias com duas sessões e uma contribuição externa (PR #31 do camarada `ASR2026`): **18 migrações** (416 = 416, todas pela CI), 56 commits, 1 871 testes JS e 164 suítes SQL, todos verdes. Quatro notícias fundidas, oito obras reunidas (C18), linhas dos EEB 24 e 25 fechadas (C14), nenhum fundo sem exemplar. **Duas linhas do levantamento de 29/09 estavam erradas** (a biblioteca de formação está ativa; o esquema de descarte tem sete tabelas). Nesta versão, após o inventário dos 56 commits: C23 aberto e entregue, G16 aberto (o voto das transições recusaria todo voto), E23 em curso (210 chaves, 74 sem rótulo). Falta fechar: os itens «a verificar» (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) e as decisões (A1, C4, C17, G16) — Xavier; A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-05.** **53 itens de 67** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-05.** **54 itens de 68** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1648,6 +1648,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
+| **I30** | Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api` | `P1` | Em curso |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1714,6 +1715,28 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Bloqueia **I2**. O depósito terceiro e o segundo detentor pertencem à mesma conversa que **A1** (Bolonha).
 
 *Remissões : `claude/DECISION_herbesfolles_offre_confirmee_2026-09-07` · `claude/NOTE_sortie_services_etats_uniens_2026-09-05` · `claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)`*
+
+#### I30 — Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api`
+
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : administração de sistemas, SQL / PostgreSQL
+
+**Estado.** Registrado no fechamento do I29. Os dois fluxos do backup #BG2 são feitos em `--no-privileges`: nenhum `GRANT`/`REVOKE`; o runbook só repõe os direitos de `ingest`. Depois de uma restauração, `public` perde os acessos de `anon`/`authenticated` e toda função recriada volta a ser executável por `PUBLIC`. Os esquemas `private` e `api` não estão em nenhum fluxo.
+
+*Verificado : [object Object]*
+
+**O que é.** Medir na produção; levar os direitos nos dumps (ou repô-los por script); incluir `private` e `api` no fluxo longo; provar em banco que uma restauração devolve os mesmos direitos e funções que a produção.
+
+**Por que importa.** Um backup se julga pela restauração: sem os direitos, o banco volta mudo ou aberto demais.
+
+**O que conta como terminado.**
+
+- Os direitos de `public` voltam idênticos à produção.
+- `private` e `api` estão num fluxo, ou o runbook diz e prova como são reconstruídos.
+- Uma restauração de ensaio em banco devolve os mesmos direitos e funções que a produção, com controle ferramentado.
+
+**Dependências.** Depois do **I29**. Vizinho do **B22**.
+
+*Remissões : `deploy/ops/anarbib-bg2.sh` · `docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md` · `REGISTRE §BG2`*
 
 ---
 
@@ -2215,4 +2238,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

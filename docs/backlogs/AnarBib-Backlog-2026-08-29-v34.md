@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 3
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **53 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **54 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1648,6 +1648,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Ouvert |
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
+| **I30** | Une restauration rend une base qui sert : les droits de `public`, et les schémas `private` et `api` | `P1` | En cours |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1714,6 +1715,28 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Bloque **I2**. Le dépôt tiers et le second détenteur relèvent de la même conversation que **A1** (Bologne).
 
 *Renvois : `claude/DECISION_herbesfolles_offre_confirmee_2026-09-07` · `claude/NOTE_sortie_services_etats_uniens_2026-09-05` · `claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)`*
+
+#### I30 — Une restauration rend une base qui sert : les droits de `public`, et les schémas `private` et `api`
+
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : administration système, SQL / PostgreSQL
+
+**État.** Consigné à la clôture d'I29 (05/10), hors de son périmètre, et porté par aucun item. **Les deux flux de la sauvegarde #BG2 sont pris en `--no-privileges`** (`deploy/ops/anarbib-bg2.sh`) : aucun `GRANT` ni `REVOKE` n'y figure. Le runbook (`RUNBOOK_restauration_BG2_2026-07-01.md`, §3.2-ter) ne repose les droits que d'`ingest`. Après une restauration, les tables de `public` n'ont plus leurs accès pour `anon` et `authenticated` — l'application ne lit plus rien —, et toute fonction recréée reprend l'`EXECUTE` à `PUBLIC` que Postgres donne par défaut : les fonctions `DEFINER` que les listes fermées surveillent (T10, T12) s'ouvriraient à `anon`. **Les schémas `private` et `api` ne sont dans aucun flux** : `api` porte les fonctions de l'OPAC, `private` les aides que des politiques RLS appellent ; une base restaurée depuis BG2 seul ne les a pas, et les reconstruire par le rejeu des migrations ne rend pas la production (B22).
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Mesurer en production (lecture seule) les droits de `public`, `ingest`, `private` et `api` et leur contenu ; faire porter les droits par les dumps (ou, à défaut, par un script de repose au runbook, comme pour `ingest`) ; faire entrer `private` et `api` dans le flux long ; prouver sur banc qu'une restauration rend les mêmes droits et les mêmes fonctions que la production, et outiller ce contrôle.
+
+**Pourquoi ça compte.** Une sauvegarde se juge à la restauration. Une base qui revient sans ses droits est soit muette (l'application ne lit plus), soit ouverte (des fonctions privilégiées exécutables par n'importe qui) — et c'est le jour du sinistre qu'on le découvrirait.
+
+**Ce qui compte comme fini.**
+
+- Les droits de `public` (tables, séquences, fonctions, schéma, privilèges par défaut) reviennent à l'identique de la production après restauration.
+- `private` et `api` sont dans un flux, ou le runbook dit et éprouve comment ils sont reconstruits.
+- Une restauration d'essai sur banc donne les mêmes droits et les mêmes fonctions que la production, et ce contrôle est outillé.
+
+**Dépendances.** Après **I29** (clos le 05/10). Voisin de **B22** (rejeu depuis zéro ≠ production).
+
+*Renvois : `deploy/ops/anarbib-bg2.sh` · `docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md` · `REGISTRE §BG2`*
 
 ---
 
@@ -2225,4 +2248,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

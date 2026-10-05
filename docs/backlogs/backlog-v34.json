@@ -6197,6 +6197,60 @@
         "fr": "27/09 — colonnes `dossier_*` présentes sur `books` et `book_drafts` en production, aucune hiérarchie, 0 ligne renseignée.",
         "pt": "27/09 — colunas `dossier_*` presentes, sem hierarquia, 0 linha preenchida."
       }
+    },
+    {
+      "id": "I30",
+      "d": "I",
+      "p": "P1",
+      "s": "en-cours",
+      "e": "M",
+      "sk": [
+        "sysadmin",
+        "sql"
+      ],
+      "t": {
+        "fr": "Une restauration rend une base qui sert : les droits de `public`, et les schémas `private` et `api`",
+        "pt": "Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api`"
+      },
+      "v": {
+        "fr": "Consigné à la clôture d'I29 (05/10), hors de son périmètre, et porté par aucun item. **Les deux flux de la sauvegarde #BG2 sont pris en `--no-privileges`** (`deploy/ops/anarbib-bg2.sh`) : aucun `GRANT` ni `REVOKE` n'y figure. Le runbook (`RUNBOOK_restauration_BG2_2026-07-01.md`, §3.2-ter) ne repose les droits que d'`ingest`. Après une restauration, les tables de `public` n'ont plus leurs accès pour `anon` et `authenticated` — l'application ne lit plus rien —, et toute fonction recréée reprend l'`EXECUTE` à `PUBLIC` que Postgres donne par défaut : les fonctions `DEFINER` que les listes fermées surveillent (T10, T12) s'ouvriraient à `anon`. **Les schémas `private` et `api` ne sont dans aucun flux** : `api` porte les fonctions de l'OPAC, `private` les aides que des politiques RLS appellent ; une base restaurée depuis BG2 seul ne les a pas, et les reconstruire par le rejeu des migrations ne rend pas la production (B22).",
+        "pt": "Registrado no fechamento do I29. Os dois fluxos do backup #BG2 são feitos em `--no-privileges`: nenhum `GRANT`/`REVOKE`; o runbook só repõe os direitos de `ingest`. Depois de uma restauração, `public` perde os acessos de `anon`/`authenticated` e toda função recriada volta a ser executável por `PUBLIC`. Os esquemas `private` e `api` não estão em nenhum fluxo."
+      },
+      "w": {
+        "fr": "Mesurer en production (lecture seule) les droits de `public`, `ingest`, `private` et `api` et leur contenu ; faire porter les droits par les dumps (ou, à défaut, par un script de repose au runbook, comme pour `ingest`) ; faire entrer `private` et `api` dans le flux long ; prouver sur banc qu'une restauration rend les mêmes droits et les mêmes fonctions que la production, et outiller ce contrôle.",
+        "pt": "Medir na produção; levar os direitos nos dumps (ou repô-los por script); incluir `private` e `api` no fluxo longo; provar em banco que uma restauração devolve os mesmos direitos e funções que a produção."
+      },
+      "y": {
+        "fr": "Une sauvegarde se juge à la restauration. Une base qui revient sans ses droits est soit muette (l'application ne lit plus), soit ouverte (des fonctions privilégiées exécutables par n'importe qui) — et c'est le jour du sinistre qu'on le découvrirait.",
+        "pt": "Um backup se julga pela restauração: sem os direitos, o banco volta mudo ou aberto demais."
+      },
+      "f": {
+        "fr": [
+          "Les droits de `public` (tables, séquences, fonctions, schéma, privilèges par défaut) reviennent à l'identique de la production après restauration.",
+          "`private` et `api` sont dans un flux, ou le runbook dit et éprouve comment ils sont reconstruits.",
+          "Une restauration d'essai sur banc donne les mêmes droits et les mêmes fonctions que la production, et ce contrôle est outillé."
+        ],
+        "pt": [
+          "Os direitos de `public` voltam idênticos à produção.",
+          "`private` e `api` estão num fluxo, ou o runbook diz e prova como são reconstruídos.",
+          "Uma restauração de ensaio em banco devolve os mesmos direitos e funções que a produção, com controle ferramentado."
+        ]
+      },
+      "dep": {
+        "fr": "Après **I29** (clos le 05/10). Voisin de **B22** (rejeu depuis zéro ≠ production).",
+        "pt": "Depois do **I29**. Vizinho do **B22**."
+      },
+      "r": [
+        "deploy/ops/anarbib-bg2.sh",
+        "docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md",
+        "REGISTRE §BG2"
+      ],
+      "verif": [
+        {
+          "fr": "05/10 — ouvert sur décision de Xavier, à partir de la note de clôture d'I29.",
+          "pt": "05/10 — aberto por decisão de Xavier, a partir da nota de fechamento do I29."
+        }
+      ]
     }
   ]
 }
