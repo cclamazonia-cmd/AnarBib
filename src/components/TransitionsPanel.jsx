@@ -12,7 +12,9 @@ import { useAuth } from '@/contexts/AuthContext';
 //
 // Permet aux staff de la biblio (librarian, coordenador, administrador) :
 //   - proposer un changement de profil (un des 4 axes)
-//   - voter pour/contre/abstain sur les propositions ouvertes
+//   - voter pour/contre/abstention sur les propositions ouvertes (la base
+//     reçoit 'for' / 'against' / 'abstain' — G16, 05/10/2026 : l'écran envoyait
+//     ses propres mots et tout vote aurait été refusé)
 //   - annuler une proposition qu'on a soumise
 //   - consulter l'historique des transitions
 //
@@ -25,11 +27,28 @@ import { useAuth } from '@/contexts/AuthContext';
 // Doctrine paquet B/E.5 :
 //   - Type 1 (direct) : execute immediatement, pas de vote
 //   - Type 2 (majority) : majorite simple des staff actifs
-//   - Type 3 (unanimous) : tous les staff actifs doivent voter "pro"
-//   - Type 4 (unanimous_extended) : unanimite + grace period 30 jours
+//   - Type 3 (unanimous) : tout le staff actif vote « pour », carence 7 jours
+//   - Type 4 (unanimous_extended) : unanimite + carence 14 jours + archivage
+//   - Abstention (G16, regle de la cooptation) : ni opposition ni « pour » ;
+//     en unanimite, elle la rend impossible et la proposition est rejetee.
 // =============================================================================
 
 const VALID_AXES = ['catalog_mode', 'circulation_mode', 'network_mode', 'governance_mode'];
+
+// G16 : la valeur que la base attend (library_profile_votes.vote) et la clé du
+// libellé de chaque bouton.
+export const VOTE_CHOICES = [
+  { value: 'for', label: 'pro' },
+  { value: 'against', label: 'contre' },
+  { value: 'abstain', label: 'abstain' },
+];
+const VOTE_LABEL = Object.fromEntries(VOTE_CHOICES.map((c) => [c.value, c.label]));
+// Minimum de la justification d'un vote contre : celui de la base
+// (fn_vote_library_profile_change et la CHECK chk_lpv_rationale_required_against).
+export const RATIONALE_MIN = 20;
+// Ce que l'historique montre : tout ce qui n'est plus ouvert — une proposition
+// acceptée attend sa carence, une rejetée ne disparaît pas.
+export const HISTORY_STATUSES = ['accepted_majority', 'accepted_unanimous', 'completed', 'rejected', 'cancelled', 'expired'];
 
 const AXIS_VALUES = {
   catalog_mode:     ['local_only', 'network_published'],
@@ -97,7 +116,7 @@ export default function TransitionsPanel({ libraryId, role }) {
         .from('library_profile_proposals')
         .select('*, profiles:proposed_by(first_name, last_name)')
         .eq('library_id', libraryId)
-        .in('status', ['completed', 'cancelled', 'expired'])
+        .in('status', HISTORY_STATUSES)
         .order('proposed_at', { ascending: false })
         .limit(10);
       if (histErr) throw histErr;
@@ -177,7 +196,7 @@ export default function TransitionsPanel({ libraryId, role }) {
     if (!draft.vote) {
       setGlobalMsg({ text: t({ id: 'transitions.error.voteRequired' }), kind: 'error' }); return;
     }
-    if (draft.vote === 'contre' && (!draft.rationale || draft.rationale.trim().length < 5)) {
+    if (draft.vote === 'against' && (!draft.rationale || draft.rationale.trim().length < RATIONALE_MIN)) {
       setGlobalMsg({ text: t({ id: 'transitions.error.rationaleRequired' }), kind: 'error' }); return;
     }
     setVoteDraft(proposalId, { submitting: true });
@@ -186,7 +205,7 @@ export default function TransitionsPanel({ libraryId, role }) {
       const { error } = await supabase.rpc('fn_vote_library_profile_change', {
         p_proposal_id: proposalId,
         p_vote: draft.vote,
-        p_rationale_against: draft.vote === 'contre' ? draft.rationale.trim() : null,
+        p_rationale_against: draft.vote === 'against' ? draft.rationale.trim() : null,
       });
       if (error) throw error;
       setGlobalMsg({ text: t({ id: 'transitions.success.voted' }), kind: 'ok' });
@@ -366,24 +385,25 @@ export default function TransitionsPanel({ libraryId, role }) {
               {myVote ? (
                 <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)', marginBottom: 10 }}>
                   ✓ {t({ id: 'transitions.alreadyVoted' }, {
-                    vote: t({ id: `transitions.vote.${myVote.vote}` }),
+                    vote: t({ id: `transitions.vote.${VOTE_LABEL[myVote.vote] || myVote.vote}` }),
                     date: fmtDT(myVote.voted_at),
                   })}
                 </div>
               ) : (
                 <div style={{ marginBottom: 10 }}>
                   <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
-                    {['pro', 'contre', 'abstain'].map(v => (
-                      <button key={v} type="button"
-                              onClick={() => setVoteDraft(p.id, { vote: v })}
+                    {VOTE_CHOICES.map(c => (
+                      <button key={c.value} type="button"
+                              onClick={() => setVoteDraft(p.id, { vote: c.value })}
                               disabled={draft.submitting}
-                              className={`ab-button ab-button--mini ${draft.vote === v ? '' : 'ab-button--ghost'}`}
+                              aria-pressed={draft.vote === c.value}
+                              className={`ab-button ab-button--mini ${draft.vote === c.value ? '' : 'ab-button--ghost'}`}
                               style={{ fontSize: '.82rem' }}>
-                        {t({ id: `transitions.vote.${v}` })}
+                        {t({ id: `transitions.vote.${c.label}` })}
                       </button>
                     ))}
                   </div>
-                  {draft.vote === 'contre' && (
+                  {draft.vote === 'against' && (
                     <div style={{ marginBottom: 8 }}>
                       <textarea value={draft.rationale || ''}
                                 onChange={e => setVoteDraft(p.id, { rationale: e.target.value })}
@@ -440,7 +460,8 @@ export default function TransitionsPanel({ libraryId, role }) {
             ? [h.profiles.first_name, h.profiles.last_name].filter(Boolean).join(' ').trim()
             : '—';
           const statusColor = h.status === 'completed' ? '#86efac'
-                            : h.status === 'cancelled' ? '#fbbf24'
+                            : h.status.startsWith('accepted_') ? '#93c5fd'
+                            : h.status === 'cancelled' || h.status === 'rejected' ? '#fbbf24'
                             : '#94a3b8';
           return (
             <div key={h.id} style={{ ...card, padding: '10px 14px' }}>
@@ -460,6 +481,7 @@ export default function TransitionsPanel({ libraryId, role }) {
                     {t({ id: 'transitions.proposedBy' }, { name: proposerName, date: fmtD(h.proposed_at) })}
                     {h.completed_at && (<> · {t({ id: 'transitions.completedAt' }, { date: fmtD(h.completed_at) })}</>)}
                     {h.cancelled_at && (<> · {t({ id: 'transitions.cancelledAt' }, { date: fmtD(h.cancelled_at) })}</>)}
+                    {h.status.startsWith('accepted_') && h.grace_period_until && (<> · {t({ id: 'transitions.graceUntil' }, { date: fmtDT(h.grace_period_until) })}</>)}
                   </div>
                 </div>
                 <div style={{ fontSize: '.78rem', fontWeight: 600, color: statusColor }}>

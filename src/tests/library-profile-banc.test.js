@@ -26,8 +26,8 @@ const PROFILS = {
 const CTX = { library_id: 'lib-1', library_name: 'Biblioteca Louise Michel', library_short_name: 'BLMF', default_locale: 'fr', admin_notification_email: 'coordination@biblio.test', delivery_mode: 'platform_shared', channel_active: true };
 const PAYLOAD = { library_id: 'lib-1', proposal_id: 'p-1', axis: 'network_mode', old_value: 'autonomous', new_value: 'federated', transition_type: 3, motivation: 'Rejoindre la fédération.', proposed_by: 'u-1', expires_at: '2026-10-05T00:00:00Z' };
 
-function monter({ env = {}, resend, event = 'team.library_profile.proposed', staff = ['u-1', 'u-2', 'u-3'] } = {}) {
-  const ligne = { id: 31, status: 'queued', attempts: 0, event, payload: PAYLOAD };
+function monter({ env = {}, resend, event = 'team.library_profile.proposed', staff = ['u-1', 'u-2', 'u-3'], payload = PAYLOAD } = {}) {
+  const ligne = { id: 31, status: 'queued', attempts: 0, event, payload };
   const ef = monterEF({
     env,
     resend,
@@ -106,5 +106,38 @@ describe('domain/library_profile — une proposition de changement de profil', (
       expect(liens(m.html)).toContain('https://app.anarbib.is/painel/biblioteca/lib-1/profil?proposal=p-1');
       expect(liens(m.html).filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
     }
+  });
+});
+
+// G16 (05/10/2026) : la base écrit le vote en 'for' / 'against' / 'abstain'. Le
+// courriel cherchait le libellé `lp.vote.for`, qui n'existe pas (c'est
+// `lp.vote.favor`) : un « pour » aurait affiché la clé. L'abstention a son mot.
+describe('domain/library_profile — un vote sur une transition', () => {
+  const vote = (v, extra = {}) => ({
+    ...PAYLOAD, governance_required: 'unanimous', voter_id: 'u-2', vote: v, vote_count: 1,
+    active_staff_count: 3, is_first_vote: true, voted_at: '2026-10-05T10:00:00Z', ...extra,
+  });
+  const leMail = async (payload) => {
+    const { ef } = monter({ event: 'team.library_profile.voted', payload });
+    await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
+    return mailA(ef.envois, 'trois@exemplo.test').html;
+  };
+
+  it('un « pour » se dit « pour », jamais la clé', async () => {
+    const html = await leMail(vote('for'));
+    expect(html).not.toContain('lp.vote.');
+    expect(html).toContain('a voté <b>pour</b>');
+  });
+
+  it('une abstention se dit « abstention »', async () => {
+    const html = await leMail(vote('abstain'));
+    expect(html).not.toContain('lp.vote.');
+    expect(html).toContain('a voté <b>abstention</b>');
+  });
+
+  it('un « contre » porte son motif', async () => {
+    const html = await leMail(vote('against', { rationale_against: 'Les prêts en cours doivent être rendus.' }));
+    expect(html).toContain('a voté <b>contre</b>');
+    expect(html).toContain('Les prêts en cours doivent être rendus.');
   });
 });

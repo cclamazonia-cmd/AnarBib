@@ -383,7 +383,9 @@ async function handleVoted(payload, library, ctx, bt) {
     const axisLoc = axisLabel(locale, axis);
     const oldValueLoc = axisValueLabel(locale, axis, oldValue);
     const newValueLoc = axisValueLabel(locale, axis, newValue);
-    const voteLoc = tMail(locale, `lp.vote.${vote}`);
+    // G16 (05/10/2026) : la base écrit 'for' / 'against' / 'abstain' ; le
+    // libellé du « pour » est lp.vote.favor (sinon le courriel affichait la clé).
+    const voteLoc = tMail(locale, `lp.vote.${vote === "for" ? "favor" : vote}`);
 
     const sub = `${tMail(locale, "library_profile.voted.sub", { libraryName, axisLoc })} — ${bt}`;
     const tit = tMail(locale, "library_profile.voted.sub", { libraryName, axisLoc });
