@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **57 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **57 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -298,7 +298,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Vérifié en base le 29/08 : le réseau compte **un seul administrateur**. Les tables `network_administrators`, `network_administrator_cooptation_proposals` et `network_administrator_cooptation_votes` sont vides après quelques insertions historiques.
 
-*Vérifié : 31/08 — `network_administrators` : 1 ligne. Rien n'a bougé.*
+*Vérifié : 31/08 — `network_administrators` : 1 ligne. Rien n'a bougé. **05/10 — le camarade (`ASR2026`) est coopté** par Xavier : deux admins réseau actifs (vérifié en base). Le circuit de cooptation a servi pour la première fois — proposition, vote implicite du proposeur, ratification immédiate puisque Xavier était seul admin (pas de délai). En chemin, un défaut corrigé (G17 : la fenêtre ne trouvait pas un compte sans bibliothèque). Les deux courriels au camarade sont partis (acceptés par Resend à 14 h 03) ; il ne les a pas reçus à 14 h 10 — délivrabilité à regarder dans Resend. **Reste** : une troisième personne, et une décision fédérale prise à trois.*
 
 **Ce que c'est.** Trouver et coopter deux personnes de plus, dans deux collectifs différents, disposées à porter les décisions fédérales : admission d'une bibliothèque, arbitrage entre bibliothèques, ouverture de la moisson.
 
@@ -757,7 +757,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
-| **E24** | Les refus des Edge Functions portent un code que l'écran traduit, pas une phrase en dur | `P3` | Ouvert |
 | **E25** | pt-BR : ce que la passe du 27/09 n'a pas touché | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
@@ -916,28 +915,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
 
-#### E24 — Les refus des Edge Functions portent un code que l'écran traduit, pas une phrase en dur
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript, React / JavaScript
-
-**État.** Le 27/09, `3cf927e1` a réglé ce défaut pour la seule EF `login` : ses trois phrases françaises, affichées telles quelles dans les dix langues, sont devenues des codes (`LOGIN_INVALID`, `LOGIN_RATE_LIMITED`, `LOGIN_SERVER_ERROR`) que `LoginPage.jsx` traduit. Le même défaut vit ailleurs. Mesuré le 29/09 : `attach-received-asset` refuse en français (« Fichier déjà attaché. », « Aucun fichier déposé à attacher. », « Type MIME … non supporté pour un asset. ») ou dans un portugais mêlé de français (« Recurso recebido … introuvável. ») ; `deposit-fonds-direct` dit « Aucune notice éligible (public_domain_confirmed). » ou « Origem e destino identicos. ». `ImportacoesPage.jsx` passe ce texte à `localizeError` sans repli, qui le rend tel quel (cas 3) : une coordination qui travaille en grec lit un refus en français.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Même geste que pour `login`. Chaque refus porte un code stable ; l'écran le traduit, avec une clé dans les dix locales ; le texte reste en repli, au registre de `DOC-ADDR-1`. Commencer par recenser les EF appelées depuis l'écran dont le texte d'erreur est affiché. Un banc compare les codes émis par chaque EF à ceux que l'écran traduit, comme `login-compteurs-haches` le fait pour `login`.
-
-**Pourquoi ça compte.** Le catalogue se veut utilisable dans dix langues. Un refus écrit dans une seule ne dit pas à la personne quoi faire. Ces deux écrans servent peu, d'où la priorité basse ; mais toute EF écrite sur ce modèle refait le même défaut.
-
-**Ce qui compte comme fini.**
-
-- `attach-received-asset` et `deposit-fonds-direct` ne renvoient plus de phrase à afficher : chaque refus porte un code, traduit dans les dix locales.
-- Les autres EF dont l'écran affiche le texte d'erreur sont recensées, et traitées de même ou nommées dans la verif.
-- Un banc échoue si une EF émet un code que l'écran ne traduit pas.
-
-**Dépendances.** Aucune. Modèle : `3cf927e1` (`login`).
-
-*Renvois : `supabase/functions/attach-received-asset/index.ts` · `supabase/functions/deposit-fonds-direct/index.ts` · `src/pages/importacoes/ImportacoesPage.jsx (handleAttach, handleDepositFondsDirect)` · `src/lib/localizeError.js (cas 3)` · `src/tests/login-compteurs-haches.test.js (modèle)`*
-
 #### E25 — pt-BR : ce que la passe du 27/09 n'a pas touché
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle
@@ -970,7 +947,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **F3** | Consolider les fonctions de notification redondantes | `P2` | Ouvert |
+| **F3** | Consolider les fonctions de notification redondantes | `P2` | À vérifier |
 | **F6** | `notify-internal-task` tourne sur une copie gelée de toute la pile courriel | `P2` | À vérifier |
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 | **F15** | Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective | `P2` | À vérifier |
@@ -980,11 +957,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### F3 — Consolider les fonctions de notification redondantes
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
 
 **État.** Quatre fonctions font des récapitulatifs : `notify-weekly-report`, `notify-network-weekly-report`, `notify-cross-library-digest`, `notify-rede-digest`. Trois fonctions servent des documents : `read-pdf`, `read-digital-asset`, `read-ill-shared-asset`. Deux exportent des lots : `export-catalog-lote`, `export-fonds-bundle`. Et `mail-i18n-test`, fonction de test, est déployée en production en version 1553.
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Vérifier ce que chacune fait vraiment avant de conclure à la redondance — elles ont probablement des destinataires et des portées différentes. Puis fusionner ce qui doit l'être, et retirer `mail-i18n-test` de la production.
 
@@ -2327,6 +2304,9 @@ CI verte : lint et suite unitaire. |
 | C22 | 2026-10-05 | **Livré le 05/10 (Xavier : le message après publication « fait double emploi »).** Un seul encadré « Publié — et maintenant ? » remplace le message, le toast, le bandeau « Ajouter un exemplaire ? » et la fenêtre œuvre/édition qui revenait à chaque publication (elle ne s’ouvre plus que sur « Nouveau document »). Document : ajouter un exemplaire, une autre édition de la même œuvre (titre et auteur·rice repris), nouveau document, fiche publique, file éditoriale ; autorité : nouvelle autorité, sa page, nouveau document, file ; exemplaire : un autre exemplaire du même document, étiquettes, nouveau document, file. `b0f60399`. Non fait : « compléter les autorités non liées » (la liaison ne se fait qu’à la publication). À vérifier à l’écran, notamment le numéro d’inventaire après « un autre exemplaire du même document ». |
 | E23 | 2026-10-05 | Chaque HINT `error.*` posé par la base a son libellé dans les dix locales : garde `hints-sql-ont-leur-libelle` (les mêmes 210 clés que la production), 780 libellés écrits dont quatre trouvés par la garde le jour même (`2414246c`). |
 | C24 | 2026-10-05 | **Livré le 05/10 (Xavier : « partir du statut des droits, puis du choix de la bibliothèque ; le seau doit en découler »).** Le dépôt numérique se fait en cinq étapes : quoi (fichier ou lien), droits, qui lit (proposé selon les droits), fichier ou lien, description ; l’espace de stockage et le type sont déduits, changer l’accès déplace le fichier. Une œuvre sous droits ne passe en lecture publique que si la coordination de sa bibliothèque l’a ouverte (Gestion de la bibliothèque), après un avertissement sur la responsabilité légale et avec une justification ; la base garde ces règles (`trg_draft_digital_resource_coherence`). La publication met à jour les ressources au lieu de les recréer : les liens de lecture restent stables, la justification et l’empreinte audio ne se perdent plus. Le dépôt depuis l’OCR part en accès réservé (il allait toujours en public). EPUB, vidéo et image déposables. Migration `20261005092916` (`d1d72405`), écran `6c3ab382` ; suites `depot_numerique_droits_tests` (6) et vitest `depot-numerique` (7). Restent : vérification à l’écran, 33 fichiers orphelins dans l’espace public (non supprimés), et la ressource posée par réception de fonds que retire la publication suivante d’un brouillon qui ne la contient pas (comportement antérieur conservé). |
+| E24 | 2026-10-05 | Les refus des trois fonctions de la page Importations portent un code traduit dans les dix locales ; banc et recensement des autres fonctions (`17eb498b`). |
+| G17 | 2026-10-05 | La cooptation ne trouvait pas un compte sans bibliothèque (« Aucun compte trouvé » : sous la RLS de `profiles`, l'admin ne voit que ses bibliothèques). Fonction `fn_network_admin_find_user_by_email` réservée à l'administration du réseau, adresse exacte ; suite de 5 tests (`4d417f98`). Le camarade est coopté. |
+| F22 | 2026-10-05 | Le lien de confirmation (et de désabonnement) de la Lettre affichait du code HTML aux accents abîmés : la plateforme sert les Edge Functions en text/plain. Les deux fonctions renvoient (303) vers la page `/lettre` de l'application, dans la langue de la personne ; garde contre les clés en double dans les locales (`9fc60a15`). |
 
 ---
 
@@ -2358,4 +2338,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

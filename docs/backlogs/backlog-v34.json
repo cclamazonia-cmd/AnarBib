@@ -2706,6 +2706,30 @@
           "fr": "**Livré le 05/10 (Xavier : « partir du statut des droits, puis du choix de la bibliothèque ; le seau doit en découler »).** Le dépôt numérique se fait en cinq étapes : quoi (fichier ou lien), droits, qui lit (proposé selon les droits), fichier ou lien, description ; l’espace de stockage et le type sont déduits, changer l’accès déplace le fichier. Une œuvre sous droits ne passe en lecture publique que si la coordination de sa bibliothèque l’a ouverte (Gestion de la bibliothèque), après un avertissement sur la responsabilité légale et avec une justification ; la base garde ces règles (`trg_draft_digital_resource_coherence`). La publication met à jour les ressources au lieu de les recréer : les liens de lecture restent stables, la justification et l’empreinte audio ne se perdent plus. Le dépôt depuis l’OCR part en accès réservé (il allait toujours en public). EPUB, vidéo et image déposables. Migration `20261005092916` (`d1d72405`), écran `6c3ab382` ; suites `depot_numerique_droits_tests` (6) et vitest `depot-numerique` (7). Restent : vérification à l’écran, 33 fichiers orphelins dans l’espace public (non supprimés), et la ressource posée par réception de fonds que retire la publication suivante d’un brouillon qui ne la contient pas (comportement antérieur conservé).",
           "pt": "**Entregue em 05/10.** Depósito digital em cinco etapas (o quê, direitos, quem lê, arquivo ou link, descrição); espaço de armazenamento deduzido; leitura pública de obra sob direitos só se a coordenação da biblioteca a abriu, com aviso e justificativa; publicação sem recriação (links estáveis). Migração `20261005092916` (`d1d72405`), tela `6c3ab382`."
         }
+      ],
+      [
+        "E24",
+        "2026-10-05",
+        {
+          "fr": "Les refus des trois fonctions de la page Importations portent un code traduit dans les dix locales ; banc et recensement des autres fonctions (`17eb498b`).",
+          "pt": "As recusas das três funções da página Importações têm código traduzido nas dez locales; banco e recenseamento das outras funções (`17eb498b`)."
+        }
+      ],
+      [
+        "G17",
+        "2026-10-05",
+        {
+          "fr": "La cooptation ne trouvait pas un compte sans bibliothèque (« Aucun compte trouvé » : sous la RLS de `profiles`, l'admin ne voit que ses bibliothèques). Fonction `fn_network_admin_find_user_by_email` réservée à l'administration du réseau, adresse exacte ; suite de 5 tests (`4d417f98`). Le camarade est coopté.",
+          "pt": "A cooptação não encontrava uma conta sem biblioteca (RLS de `profiles`). Função reservada à administração da rede, endereço exato; suíte de 5 testes (`4d417f98`)."
+        }
+      ],
+      [
+        "F22",
+        "2026-10-05",
+        {
+          "fr": "Le lien de confirmation (et de désabonnement) de la Lettre affichait du code HTML aux accents abîmés : la plateforme sert les Edge Functions en text/plain. Les deux fonctions renvoient (303) vers la page `/lettre` de l'application, dans la langue de la personne ; garde contre les clés en double dans les locales (`9fc60a15`).",
+          "pt": "O link de confirmação da Carta mostrava código HTML: as Edge Functions são servidas em text/plain. Redirecionam (303) para a página `/lettre` do aplicativo (`9fc60a15`)."
+        }
       ]
     ]
   },
@@ -2758,8 +2782,8 @@
         "CALENDRIER_bologne_2026-08-27"
       ],
       "verif": {
-        "fr": "31/08 — `network_administrators` : 1 ligne. Rien n'a bougé.",
-        "pt": "31/08 — `network_administrators`: 1 linha. Nada mudou."
+        "fr": "31/08 — `network_administrators` : 1 ligne. Rien n'a bougé. **05/10 — le camarade (`ASR2026`) est coopté** par Xavier : deux admins réseau actifs (vérifié en base). Le circuit de cooptation a servi pour la première fois — proposition, vote implicite du proposeur, ratification immédiate puisque Xavier était seul admin (pas de délai). En chemin, un défaut corrigé (G17 : la fenêtre ne trouvait pas un compte sans bibliothèque). Les deux courriels au camarade sont partis (acceptés par Resend à 14 h 03) ; il ne les a pas reçus à 14 h 10 — délivrabilité à regarder dans Resend. **Reste** : une troisième personne, et une décision fédérale prise à trois.",
+        "pt": "31/08 — `network_administrators`: 1 linha. Nada mudou. **05/10 — o camarada (`ASR2026`) foi cooptado**: dois administradores ativos. Primeiro uso do circuito de cooptação. **Falta**: uma terceira pessoa."
       }
     },
     {
@@ -3924,7 +3948,7 @@
       "id": "F3",
       "d": "F",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno"
@@ -3977,6 +4001,10 @@
         {
           "fr": "29/09 — Depuis `6f762f8f` (27/09), le texte en dur de `notify-weekly-report` et de `notify-network-weekly-report` est relu par `src/tests/mail-ptbr-voce.test.js` (liste fermée `TEXTE_EN_DUR_PT`, gardes `TU_EUROPEU`, `PT_EUROPEU`, `FRANCES_EM_PT`) : une fonction de récapitulatif consolidée devra y entrer.",
           "pt": "29/09 — Desde `6f762f8f`, o texto escrito no código dos dois relatórios semanais é lido por `mail-ptbr-voce.test.js` (lista fechada `TEXTE_EN_DUR_PT`): uma função de resumo consolidada deverá entrar nela."
+        },
+        {
+          "fr": "**05/10 — verdicts écrits, deux fonctions retirées du dépôt** (`82afd616`, `docs/journal/audits/AUDIT_fonctions_redondantes_F3_2026-10-05.md`). Chaque fonction lue, ses appelants cherchés (front, `pg_proc`, `cron.job`, autres fonctions), son trafic relevé (`function_edge_logs`, 28/09 → 05/10). **Récapitulatifs** : quatre publics, quatre consentements — séparés. **Lecteurs** : `read-ill-shared-asset` revalide le partenariat à chaque appel — séparée ; **`read-pdf` retirée** (remplacée par `read-digital-asset`, aucun appelant, aucun lien stocké, zéro appel en huit jours, déployée sans JWT). **Exports** : `export-fonds-bundle` réutilise déjà le sérialiseur d'`export-catalog-lote` — séparés. **`mail-i18n-test` retirée** (sans appelant, zéro appel). 52 dossiers de fonctions, 38 `verify_jwt` ; `CLAUDE.md` mis à jour. **Reste (Xavier)** : supprimer `read-pdf` et `mail-i18n-test` de la plateforme — la CI ne supprime pas une fonction ; le 05/10 à 14 h 05 elles y sont encore (versions 1660 et 1653, figées).",
+          "pt": "**05/10 — vereditos escritos, duas funções retiradas do repositório** (`82afd616`). Recapitulativos, leitores e exportações: separados com razão escrita; `read-pdf` e `mail-i18n-test` retiradas (nenhuma chamada em oito dias). **Falta (Xavier)**: suprimi-las da plataforma."
         }
       ]
     },
@@ -5369,56 +5397,6 @@
         "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.",
         "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote."
       }
-    },
-    {
-      "id": "E24",
-      "d": "E",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "deno",
-        "front"
-      ],
-      "t": {
-        "fr": "Les refus des Edge Functions portent un code que l'écran traduit, pas une phrase en dur",
-        "pt": "As recusas das Edge Functions levam um código que a tela traduz, não uma frase fixa"
-      },
-      "v": {
-        "fr": "Le 27/09, `3cf927e1` a réglé ce défaut pour la seule EF `login` : ses trois phrases françaises, affichées telles quelles dans les dix langues, sont devenues des codes (`LOGIN_INVALID`, `LOGIN_RATE_LIMITED`, `LOGIN_SERVER_ERROR`) que `LoginPage.jsx` traduit. Le même défaut vit ailleurs. Mesuré le 29/09 : `attach-received-asset` refuse en français (« Fichier déjà attaché. », « Aucun fichier déposé à attacher. », « Type MIME … non supporté pour un asset. ») ou dans un portugais mêlé de français (« Recurso recebido … introuvável. ») ; `deposit-fonds-direct` dit « Aucune notice éligible (public_domain_confirmed). » ou « Origem e destino identicos. ». `ImportacoesPage.jsx` passe ce texte à `localizeError` sans repli, qui le rend tel quel (cas 3) : une coordination qui travaille en grec lit un refus en français.",
-        "pt": "Em 27/09, `3cf927e1` resolveu esse defeito só para a EF `login`: suas três frases em francês, mostradas tal qual nas dez línguas, viraram códigos (`LOGIN_INVALID`, `LOGIN_RATE_LIMITED`, `LOGIN_SERVER_ERROR`) que `LoginPage.jsx` traduz. O mesmo defeito existe em outros lugares. Medido em 29/09: `attach-received-asset` recusa em francês («Fichier déjà attaché.», «Aucun fichier déposé à attacher.», «Type MIME … non supporté pour un asset.») ou num português misturado com francês («Recurso recebido … introuvável.»); `deposit-fonds-direct` diz «Aucune notice éligible (public_domain_confirmed).» ou «Origem e destino identicos.». `ImportacoesPage.jsx` passa esse texto a `localizeError` sem chave de reserva, e ele sai tal qual (caso 3): uma coordenação que trabalha em grego lê uma recusa em francês."
-      },
-      "w": {
-        "fr": "Même geste que pour `login`. Chaque refus porte un code stable ; l'écran le traduit, avec une clé dans les dix locales ; le texte reste en repli, au registre de `DOC-ADDR-1`. Commencer par recenser les EF appelées depuis l'écran dont le texte d'erreur est affiché. Un banc compare les codes émis par chaque EF à ceux que l'écran traduit, comme `login-compteurs-haches` le fait pour `login`.",
-        "pt": "O mesmo gesto que para `login`. Cada recusa leva um código estável; a tela o traduz, com uma chave nas dez locales; o texto fica como reserva, no registro de `DOC-ADDR-1`. Começar levantando as EF chamadas pela tela cujo texto de erro é mostrado. Uma bancada compara os códigos emitidos por cada EF com os que a tela traduz, como `login-compteurs-haches` faz para `login`."
-      },
-      "y": {
-        "fr": "Le catalogue se veut utilisable dans dix langues. Un refus écrit dans une seule ne dit pas à la personne quoi faire. Ces deux écrans servent peu, d'où la priorité basse ; mais toute EF écrite sur ce modèle refait le même défaut.",
-        "pt": "O catálogo quer ser usável em dez línguas. Uma recusa escrita numa só não diz à pessoa o que fazer. Essas duas telas são pouco usadas, daí a prioridade baixa; mas toda EF escrita nesse modelo repete o defeito."
-      },
-      "f": {
-        "fr": [
-          "`attach-received-asset` et `deposit-fonds-direct` ne renvoient plus de phrase à afficher : chaque refus porte un code, traduit dans les dix locales.",
-          "Les autres EF dont l'écran affiche le texte d'erreur sont recensées, et traitées de même ou nommées dans la verif.",
-          "Un banc échoue si une EF émet un code que l'écran ne traduit pas."
-        ],
-        "pt": [
-          "`attach-received-asset` e `deposit-fonds-direct` não devolvem mais frase para mostrar: cada recusa leva um código, traduzido nas dez locales.",
-          "As outras EF cuja tela mostra o texto de erro estão levantadas, e tratadas do mesmo jeito ou nomeadas na verificação.",
-          "Uma bancada falha se uma EF emitir um código que a tela não traduz."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Modèle : `3cf927e1` (`login`).",
-        "pt": "Nenhuma. Modelo: `3cf927e1` (`login`)."
-      },
-      "r": [
-        "supabase/functions/attach-received-asset/index.ts",
-        "supabase/functions/deposit-fonds-direct/index.ts",
-        "src/pages/importacoes/ImportacoesPage.jsx (handleAttach, handleDepositFondsDirect)",
-        "src/lib/localizeError.js (cas 3)",
-        "src/tests/login-compteurs-haches.test.js (modèle)"
-      ]
     },
     {
       "id": "E25",
