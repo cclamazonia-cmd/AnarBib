@@ -110,7 +110,7 @@ Deno.serve(async (req) => {
       for (const a of assets) {
         const meta: any = {
           asset_id: a.asset_id, kind: a.kind, title: a.title, mime: a.mime,
-          rights_status: a.rights_status, checksum_sha256: a.checksum_sha256,
+          review_state: a.review_state, checksum_sha256: a.checksum_sha256,
           source_name: a.source_name, source_license_name: a.source_license_name,
           attribution_text: a.attribution_text,
         };

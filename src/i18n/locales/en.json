@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "With a member account of a library that holds the physical copy.",
   "catalogacao.dep.access.publicLocked": "Closed: your library has not opened public reading of works under rights (Library management, coordination only).",
   "catalogacao.dep.access.noDeposit": "Under rights, reserved reading is still possible. If even that does not fit, deposit nothing: the record and the cover are enough.",
+  "catalogacao.dep.access.freeButReserved": "A free work, but readable only with an account: that is the default when nobody has chosen. Choose “Everyone” to open it to all.",
   "catalogacao.dep.justification.licenca_livre": "Which licence?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Free Art License…",
   "catalogacao.dep.justification.cessao_autoral": "The written permission: from whom, when, where it is kept",

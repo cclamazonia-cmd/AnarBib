@@ -3,7 +3,7 @@
 // Attache un fichier de fonds REÇU (EX-3 ZIP / EX-4 direct), parqué dans
 // `ingest.partner_catalog_received_assets` (bucket de réception partner-catalog-deposits),
 // à un LIVRE de la réceptrice : DÉPLACE le fichier vers un bucket final RESTREINT puis crée le
-// `digital_asset` en rights_status=to_review via la RPC gatée fn_attach_received_asset_record
+// `digital_asset` en review_state=to_review via la RPC gatée fn_attach_received_asset_record
 // (point 1 : la confirmation « domaine public » est un acte séparé du coordenador).
 //
 // Déclenché depuis le panneau « Attacher les fichiers reçus » (face Export) par un·e

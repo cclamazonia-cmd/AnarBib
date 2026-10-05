@@ -167,7 +167,7 @@ export default function LibraryDigitalSharesSection({ libraryId, canEdit = true 
     try {
       const { data, error } = await supabase
         .from('digital_assets')
-        .select('id, title, asset_kind, rights_status, is_public')
+        .select('id, title, asset_kind, review_state, is_public')
         .eq('book_id', s.book_id)
         .order('created_at', { ascending: false });
       if (error) throw error;

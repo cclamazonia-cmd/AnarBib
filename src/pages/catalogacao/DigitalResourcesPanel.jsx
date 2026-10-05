@@ -66,6 +66,14 @@ export function accesPossibles(droits, bibliothequeOuverte) {
   ];
   return [{ value: 'publico', enabled: true }, { value: 'conta_ativa', enabled: true }];
 }
+// C10 (05/10/2026) — le piège access_scope : la base met « conta_ativa » par
+// défaut. Une œuvre libre (domaine public, licence libre) née ailleurs que dans
+// ce formulaire — import, attachement d'un fonds reçu — reste ainsi réservée
+// aux comptes tant que personne n'a choisi « Tout le monde ». Rappelé dans la
+// liste et à l'étape 3, jamais corrigé en silence : c'est un choix.
+export function libreMaisReservee(droits, acces) {
+  return (droits === 'dominio_publico' || droits === 'licenca_livre') && acces === 'conta_ativa';
+}
 export function justificationRequise(droits, acces) {
   return droits === 'licenca_livre' || droits === 'cessao_autoral' || (droits === 'sob_direitos' && acces === 'publico');
 }
@@ -289,6 +297,9 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
                   {droitsLabel(r.rights_status)} · {accesLabel(r.access_scope)}
                   {r.source_url && !r.storage_path && ` · ${r.source_url}`}
                 </div>
+                {libreMaisReservee(r.rights_status, r.access_scope) && (
+                  <div className="cat-dep__note" role="note">{t({ id: 'catalogacao.dep.access.freeButReserved' })}</div>
+                )}
               </div>
               <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => editer(r)}>{t({ id: 'common.edit' })}</button>
@@ -360,6 +371,9 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
               </div>
               {df.rights_status === 'sob_direitos' && (
                 <div className="cat-dep__note">{t({ id: 'catalogacao.dep.access.noDeposit' })}</div>
+              )}
+              {libreMaisReservee(df.rights_status, df.access_scope) && (
+                <div className="cat-dep__note" role="note">{t({ id: 'catalogacao.dep.access.freeButReserved' })}</div>
               )}
               {requise && (
                 <div className="cat-field" style={{ marginTop: 10 }}>

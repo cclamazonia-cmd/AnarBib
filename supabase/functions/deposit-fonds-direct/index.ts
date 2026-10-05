@@ -157,7 +157,11 @@ Deno.serve(async (req) => {
         const meta: any = {
           run_id: runId, staging_row_id: stagingRowId,
           source_asset_id: a?.asset_id ?? null, asset_kind: clean(a?.kind), title: clean(a?.title),
-          mime_type: clean(a?.mime), rights_status: clean(a?.rights_status),
+          mime_type: clean(a?.mime),
+          // C10 (05/10/2026) : l'état de revue s'appelle review_state ; un paquet
+          // d'avant dit encore rights_status. La colonne de réception, elle, garde
+          // son nom (statut déclaré par la partenaire).
+          rights_status: clean(a?.review_state ?? a?.rights_status),
           checksum_sha256: clean(a?.checksum_sha256), source_name: clean(a?.source_name),
           source_license_name: clean(a?.source_license_name), attribution_text: clean(a?.attribution_text),
           manifest_file: a?.bucket && a?.path ? `${a.bucket}/${a.path}` : null,

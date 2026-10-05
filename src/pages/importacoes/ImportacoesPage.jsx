@@ -1234,7 +1234,7 @@ export default function ImportacoesPage() {
       const { data: rpcData, error } = await supabase.rpc('fn_confirm_digital_asset_rights', { p_asset_id: asset.asset_id });
       if (error) throw error;
       assertRpcOk(rpcData);
-      setVerifiedAssets((prev) => prev.map((a) => (a.asset_id === asset.asset_id ? { ...a, rights_status: 'public_domain_confirmed' } : a)));
+      setVerifiedAssets((prev) => prev.map((a) => (a.asset_id === asset.asset_id ? { ...a, review_state: 'public_domain_confirmed' } : a)));
       setMsg({ text: t({ id: 'importacoes.export.verified.confirmedDP' }, { title: asset.book_title || '—' }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: t({ id: 'importacoes.export.verified.error' }, { message: localizeError(err, t) }), kind: 'error' });
@@ -2324,12 +2324,12 @@ export default function ImportacoesPage() {
                             {a.source_name ? ` · ${a.source_name}` : ''}
                             {a.from_received ? ` · ${t({ id: 'importacoes.export.verified.fromReceived' })}` : ''}
                             {' · '}
-                            <span style={{ fontWeight: 700, color: a.rights_status === 'to_review' ? 'var(--brand-warning, #b45309)' : 'var(--brand-ok, #15803d)' }}>
-                              {a.rights_status === 'to_review' ? t({ id: 'importacoes.export.verified.statusToReview' }) : t({ id: 'importacoes.export.verified.statusConfirmed' })}
+                            <span style={{ fontWeight: 700, color: a.review_state === 'to_review' ? 'var(--brand-warning, #b45309)' : 'var(--brand-ok, #15803d)' }}>
+                              {a.review_state === 'to_review' ? t({ id: 'importacoes.export.verified.statusToReview' }) : t({ id: 'importacoes.export.verified.statusConfirmed' })}
                             </span>
                           </span>
                           <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-                            {a.rights_status === 'to_review' && (
+                            {a.review_state === 'to_review' && (
                               <button className="cat-btn primary" type="button" onClick={() => handleConfirm(a)} disabled={confirmingId === a.asset_id || revokingId === a.asset_id}>
                                 {confirmingId === a.asset_id ? t({ id: 'importacoes.export.verified.confirming' }) : t({ id: 'importacoes.export.verified.confirmDP' })}
                               </button>

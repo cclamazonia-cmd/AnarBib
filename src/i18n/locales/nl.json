@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "Met een ledenaccount van een bibliotheek die het fysieke exemplaar bezit.",
   "catalogacao.dep.access.publicLocked": "Gesloten: je bibliotheek heeft het openbaar lezen van beschermde werken niet opengesteld (Bibliotheekbeheer, alleen coördinatie).",
   "catalogacao.dep.access.noDeposit": "Bij beschermde werken blijft voorbehouden lezen mogelijk. Past zelfs dat niet, deponeer dan niets: de beschrijving en de omslag volstaan.",
+  "catalogacao.dep.access.freeButReserved": "Een vrij werk, maar alleen leesbaar met een account: dat is de standaard als niemand heeft gekozen. Kies ‘Iedereen’ om het voor iedereen open te stellen.",
   "catalogacao.dep.justification.licenca_livre": "Welke licentie?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Licentie Vrije Kunst…",
   "catalogacao.dep.justification.cessao_autoral": "De schriftelijke toestemming: van wie, wanneer, waar ze bewaard wordt",

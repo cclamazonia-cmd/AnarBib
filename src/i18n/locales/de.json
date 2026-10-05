@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "Mit einem Mitgliedskonto einer Bibliothek, die das physische Exemplar besitzt.",
   "catalogacao.dep.access.publicLocked": "Geschlossen: Deine Bibliothek hat das öffentliche Lesen geschützter Werke nicht geöffnet (Bibliotheksverwaltung, nur Koordination).",
   "catalogacao.dep.access.noDeposit": "Bei geschützten Werken bleibt das reservierte Lesen möglich. Passt auch das nicht, lade nichts hoch: Datensatz und Cover genügen.",
+  "catalogacao.dep.access.freeButReserved": "Ein freies Werk, aber nur mit Konto lesbar: Das ist die Voreinstellung, wenn niemand gewählt hat. Wähle „Alle“, um es allen zu öffnen.",
   "catalogacao.dep.justification.licenca_livre": "Welche Lizenz?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Lizenz Freie Kunst…",
   "catalogacao.dep.justification.cessao_autoral": "Die schriftliche Erlaubnis: von wem, wann, wo sie aufbewahrt wird",

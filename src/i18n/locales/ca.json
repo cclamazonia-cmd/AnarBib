@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "Amb un compte de membre d’una biblioteca que té l’exemplar físic.",
   "catalogacao.dep.access.publicLocked": "Tancat: la teva biblioteca no ha obert la lectura pública d’obres amb drets (Gestió de la biblioteca, reservat a la coordinació).",
   "catalogacao.dep.access.noDeposit": "Amb drets, la lectura reservada continua sent possible. Si tampoc no convé, no dipositis res: el registre i la coberta són suficients.",
+  "catalogacao.dep.access.freeButReserved": "Obra lliure, però llegible només amb un compte: és l’opció per defecte quan ningú no ha triat. Tria « Tothom » per obrir-la a tothom.",
   "catalogacao.dep.justification.licenca_livre": "Quina llicència?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Llicència Art Lliure…",
   "catalogacao.dep.justification.cessao_autoral": "L’autorització escrita: de qui, quan, on es guarda",

@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "Per membra konto de biblioteko, kiu havas la fizikan ekzempleron.",
   "catalogacao.dep.access.publicLocked": "Fermita: via biblioteko ne malfermis la publikan legadon de rajtoprotektitaj verkoj (Administrado de la biblioteko, nur por la kunordigo).",
   "catalogacao.dep.access.noDeposit": "Ĉe rajtoprotektitaj verkoj, la rezervita legado restas ebla. Se eĉ ĝi ne taŭgas, deponu nenion: la registro kaj la kovrilo sufiĉas.",
+  "catalogacao.dep.access.freeButReserved": "Libera verko, sed legebla nur per konto: tio estas la defaŭlto, kiam neniu elektis. Elektu « Ĉiuj » por malfermi ĝin al ĉiuj.",
   "catalogacao.dep.justification.licenca_livre": "Kiu permesilo?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Permesilo Libera Arto…",
   "catalogacao.dep.justification.cessao_autoral": "La skriba permeso: de kiu, kiam, kie ĝi estas konservata",

@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "Con un account di membro di una biblioteca che possiede la copia fisica.",
   "catalogacao.dep.access.publicLocked": "Chiuso: la tua biblioteca non ha aperto la lettura pubblica di opere sotto diritti (Gestione della biblioteca, riservato al coordinamento).",
   "catalogacao.dep.access.noDeposit": "Sotto diritti, la lettura riservata resta possibile. Se neanche quella va bene, non depositare nulla: la scheda e la copertina bastano.",
+  "catalogacao.dep.access.freeButReserved": "Opera libera, ma leggibile solo con un account: è l’impostazione predefinita quando nessuno ha scelto. Scegli « Tutt* » per aprirla a chiunque.",
   "catalogacao.dep.justification.licenca_livre": "Quale licenza?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Licenza Arte Libera…",
   "catalogacao.dep.justification.cessao_autoral": "L’autorizzazione scritta: di chi, quando, dove è conservata",

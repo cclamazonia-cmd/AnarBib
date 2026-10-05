@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "Com uma conta de membro de uma biblioteca que possui o exemplar físico.",
   "catalogacao.dep.access.publicLocked": "Fechado: sua biblioteca não abriu a leitura pública de obras sob direitos (Gestão da biblioteca, reservado à coordenação).",
   "catalogacao.dep.access.noDeposit": "Sob direitos, a leitura reservada continua possível. Se nem ela convém, não deposite nada: o registro e a capa bastam.",
+  "catalogacao.dep.access.freeButReserved": "Obra livre, mas legível só com uma conta: é o padrão quando ninguém escolheu. Escolha « Todo mundo » para abri-la a todas as pessoas.",
   "catalogacao.dep.justification.licenca_livre": "Qual licença?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Licença Arte Livre…",
   "catalogacao.dep.justification.cessao_autoral": "A autorização escrita: de quem, quando, onde está guardada",

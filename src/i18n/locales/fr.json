@@ -2057,6 +2057,7 @@
   "catalogacao.dep.access.reservedHint": "Avec un compte membre d’une bibliothèque qui détient l’exemplaire physique.",
   "catalogacao.dep.access.publicLocked": "Fermé : ta bibliothèque n’a pas ouvert la lecture publique d’œuvres sous droits (Gestion de la bibliothèque, réservé à la coordination).",
   "catalogacao.dep.access.noDeposit": "Sous droits, la lecture réservée reste possible. Si même elle ne convient pas, ne dépose rien : la notice et la couverture suffisent.",
+  "catalogacao.dep.access.freeButReserved": "Œuvre libre, mais lisible seulement avec un compte : c’est le réglage par défaut quand personne n’a choisi. Choisis « Tout le monde » pour l’ouvrir à toutes et tous.",
   "catalogacao.dep.justification.licenca_livre": "Quelle licence ?",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Licence Art Libre…",
   "catalogacao.dep.justification.cessao_autoral": "L’autorisation écrite : de qui, quand, où elle est gardée",

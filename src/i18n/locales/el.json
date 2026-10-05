@@ -2051,6 +2051,7 @@
   "catalogacao.dep.access.reservedHint": "Με λογαριασμό μέλους μιας βιβλιοθήκης που έχει το φυσικό αντίτυπο.",
   "catalogacao.dep.access.publicLocked": "Κλειστό: η βιβλιοθήκη σου δεν άνοιξε τη δημόσια ανάγνωση προστατευμένων έργων (Διαχείριση βιβλιοθήκης, μόνο για τον συντονισμό).",
   "catalogacao.dep.access.noDeposit": "Για προστατευμένα έργα, η περιορισμένη ανάγνωση παραμένει δυνατή. Αν ούτε αυτή ταιριάζει, μην καταθέσεις τίποτα: η εγγραφή και το εξώφυλλο αρκούν.",
+  "catalogacao.dep.access.freeButReserved": "Ελεύθερο έργο, αλλά αναγνώσιμο μόνο με λογαριασμό: αυτή είναι η προεπιλογή όταν κανείς δεν έχει επιλέξει. Διάλεξε «Όλος ο κόσμος» για να το ανοίξεις σε όλους.",
   "catalogacao.dep.justification.licenca_livre": "Ποια άδεια;",
   "catalogacao.dep.justification.licenca_livre.ph": "CC BY-SA 4.0, Άδεια Ελεύθερης Τέχνης…",
   "catalogacao.dep.justification.cessao_autoral": "Η γραπτή άδεια: από ποιον, πότε, πού φυλάσσεται",
