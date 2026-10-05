@@ -6046,6 +6046,7 @@
   "panel.apiError.scission_bad_type": "Unbekannter Normdatentyp bei einem der Teile.",
   "panel.apiError.split_target_changed": "Der Datensatz hat sich seit dem Vorschlag geändert: Es wurde nichts geschrieben, um die Arbeit anderer nicht zu löschen. Bitte den Vorschlag auf dem aktuellen Stand erneuern.",
   "panel.apiError.too_soon": "Zu früh: derselbe Vorgang ist gerade gelaufen. Versuche es in einer Minute erneut.",
+  "panel.apiError.tombo_pattern_not_configured": "Diese Bibliothek hat keine Inventarnummernserie: Das Exemplar kann keine Nummer erhalten. Die Koordination richtet sie unter Bibliothek › Identität und Betrieb › Nummerierung ein; oder trage eine Inventarnummer im Entwurf ein.",
   "atelier.revue.entity.book": "Buch",
   "atelier.revue.entity.author": "Normdatensatz",
   "atelier.revue.filter.label": "Anzeigen",

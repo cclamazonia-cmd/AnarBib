@@ -6046,6 +6046,7 @@
   "panel.apiError.scission_bad_type": "Tipus d’autoritat desconegut en una de les parts.",
   "panel.apiError.split_target_changed": "El registre ha canviat des de la proposta: no s’ha escrit res, per no esborrar la feina d’altri. Refés la proposta sobre l’estat actual.",
   "panel.apiError.too_soon": "Massa aviat: la mateixa operació s'acaba d'executar. Torna-ho a provar d'aquí a un minut.",
+  "panel.apiError.tombo_pattern_not_configured": "Aquesta biblioteca no té sèrie de números d’inventari: l’exemplar no en pot rebre cap. La coordinació la configura a Biblioteca › Identitat i funcionament › Numeració; o escriu un número d’inventari a l’esborrany.",
   "atelier.revue.entity.book": "llibre",
   "atelier.revue.entity.author": "autoritat",
   "atelier.revue.filter.label": "Mostrar",

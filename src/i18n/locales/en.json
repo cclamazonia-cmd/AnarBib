@@ -6046,6 +6046,7 @@
   "panel.apiError.scission_bad_type": "Unknown authority type on one of the parts.",
   "panel.apiError.split_target_changed": "The record changed since the proposal: nothing was written, so as not to erase someone else’s work. Redo the proposal on the current state.",
   "panel.apiError.too_soon": "Too soon: the same operation just ran. Try again in a minute.",
+  "panel.apiError.tombo_pattern_not_configured": "This library has no inventory number series: the item cannot be given one. The coordination sets it up in Library › Identity & operations › Numbering; or enter an inventory number in the draft.",
   "atelier.revue.entity.book": "book",
   "atelier.revue.entity.author": "authority",
   "atelier.revue.filter.label": "Show",

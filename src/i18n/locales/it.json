@@ -6046,6 +6046,7 @@
   "panel.apiError.scission_bad_type": "Tipo di autorità sconosciuto in una delle parti.",
   "panel.apiError.split_target_changed": "La scheda è cambiata dopo la proposta: non è stato scritto nulla, per non cancellare il lavoro di qualcun altro. Rifai la proposta sullo stato attuale.",
   "panel.apiError.too_soon": "Troppo presto: la stessa operazione è appena stata eseguita. Riprova tra un minuto.",
+  "panel.apiError.tombo_pattern_not_configured": "Questa biblioteca non ha una serie di numeri di inventario: l’esemplare non può riceverne uno. Il coordinamento la imposta in Biblioteca › Identità e funzionamento › Numerazione; oppure inserisci un numero di inventario nella bozza.",
   "atelier.revue.entity.book": "libro",
   "atelier.revue.entity.author": "autorità",
   "atelier.revue.filter.label": "Mostrare",

@@ -6046,6 +6046,7 @@
   "panel.apiError.scission_bad_type": "Type d’autorité inconnu pour une des parts.",
   "panel.apiError.split_target_changed": "La fiche a changé depuis la proposition : rien n’a été écrit, pour ne pas effacer le travail de quelqu’un d’autre. Reprends la proposition sur l’état actuel.",
   "panel.apiError.too_soon": "Trop tôt : la même opération vient de tourner. Réessaie dans une minute.",
+  "panel.apiError.tombo_pattern_not_configured": "Cette bibliothèque n’a pas de série de numéros d’inventaire : l’exemplaire ne peut pas en recevoir. La coordination la règle dans Bibliothèque › Identité et fonctionnement › Numérotation ; ou saisis un numéro d’inventaire dans le brouillon.",
   "atelier.revue.entity.book": "livre",
   "atelier.revue.entity.author": "autorité",
   "atelier.revue.filter.label": "Afficher",

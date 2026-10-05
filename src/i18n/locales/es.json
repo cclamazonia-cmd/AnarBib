@@ -6046,6 +6046,7 @@
   "panel.apiError.scission_bad_type": "Tipo de autoridad desconocido en una de las partes.",
   "panel.apiError.split_target_changed": "El registro cambió desde la propuesta: no se escribió nada, para no borrar el trabajo de otra persona. Rehaga la propuesta sobre el estado actual.",
   "panel.apiError.too_soon": "Demasiado pronto: la misma operación acaba de ejecutarse. Vuelve a intentarlo en un minuto.",
+  "panel.apiError.tombo_pattern_not_configured": "Esta biblioteca no tiene serie de números de inventario: el ejemplar no puede recibir uno. La coordinación la configura en Biblioteca › Identidad y funcionamiento › Numeración; o escribe un número de inventario en el borrador.",
   "atelier.revue.entity.book": "libro",
   "atelier.revue.entity.author": "autoridad",
   "atelier.revue.filter.label": "Mostrar",
