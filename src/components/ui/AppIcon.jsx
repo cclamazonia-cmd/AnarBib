@@ -56,5 +56,5 @@ export default function AppIcon({ name, size = 18, strokeWidth = 1.8, className 
     console.warn(`[AppIcon] Unknown icon name: ${name}`);
   }
   const Icon = ICONS[name] || ICONS[LEGACY[name]] || Info;
-  return <Icon className={className} style={style} size={size} strokeWidth={strokeWidth} fill={fill} aria-hidden={title ? undefined : true} aria-label={title} />;
+  return <Icon className={className} style={style} size={size} strokeWidth={strokeWidth} fill={fill} role={title ? 'img' : undefined} aria-hidden={title ? undefined : true} aria-label={title} />;
 }

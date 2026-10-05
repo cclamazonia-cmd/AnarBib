@@ -1864,7 +1864,7 @@ function PanelPageInner() {
               /* Le hint n'est plus affiché sous le libellé : il devient l'infobulle
                  et le nom accessible du bouton. */
               title={t.hint} aria-label={`${t.label} — ${t.hint}`}>
-                <AppIcon className="ab-tabbar__icon" name={t.icon} size="1em" />
+              <AppIcon className="ab-tabbar__icon" name={t.icon} size="1em" />
               {t.label}
               {t.count > 0 && (
                 <span className={`ab-tabbar__badge${t.alert ? ' ab-tabbar__badge--alert' : ''}`}>{t.count}</span>
