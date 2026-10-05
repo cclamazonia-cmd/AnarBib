@@ -644,3 +644,6 @@ tests/sql/reprises_vierges_tests.sql
 # Le catalogue dit ce qui se lit en ligne (04/10/2026) : usages publics, réservé,
 # lecture par la détentrice et l'administration du réseau.
 tests/sql/acces_numerique_catalogue_tests.sql
+# Le dépôt numérique part des droits (05/10/2026) : réglage de bibliothèque,
+# cohérence droits/accès/espace, publication sans recréation.
+tests/sql/depot_numerique_droits_tests.sql
