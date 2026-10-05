@@ -10,19 +10,40 @@ export function citeName(c) {
   return (c.author_id && (c.authority_sort_name || c.authority_name)) || c.name || '';
 }
 
+// CAT-G4 : la mention d'auteur d'une citation ne retient que les responsables
+// principaux, comme la liste du catalogue (v_book_authors_canonical) : les
+// auteur·rices (autor, et coautor, auteur au sens d'une citation) ; à défaut
+// la réalisation (audiovisuel), la composition (son), ou l'organisation, la
+// coordination, l'édition (le reste) ; à défaut encore, tout le monde, pour ne
+// jamais rendre une citation sans nom. Traduction, illustration, préface… ne
+// sont pas des auteur·rices.
+const AUTEURS = ['autor', 'coautor'];
+const A_DEFAUT = {
+  audiovisual: ['realizador'],
+  audio: ['compositor'],
+};
+const A_DEFAUT_ECRIT = ['organizador', 'organizacao', 'coordenador', 'coletivo', 'editor'];
+
+export function citationContributors(contributors, tipoMaterial) {
+  if (!Array.isArray(contributors) || !contributors.length) return [];
+  const auteurs = contributors.filter(c => AUTEURS.includes(c.role || 'autor'));
+  if (auteurs.length) return auteurs;
+  const repli = A_DEFAUT[tipoMaterial] || A_DEFAUT_ECRIT;
+  const responsables = contributors.filter(c => repli.includes(c.role));
+  return responsables.length ? responsables : contributors;
+}
+
 export function citeAuthorString(book, contributors) {
-  if (Array.isArray(contributors) && contributors.length) {
-    const names = contributors.map(citeName).filter(Boolean);
-    if (names.length) return names.join('; ');
-  }
+  const retenus = citationContributors(contributors, book.tipo_material);
+  const names = retenus.map(citeName).filter(Boolean);
+  if (names.length) return names.join('; ');
   return book.author_display || book.autor || '';
 }
 
 export function citeAuthorList(book, contributors) {
-  if (Array.isArray(contributors) && contributors.length) {
-    const names = contributors.map(citeName).filter(Boolean);
-    if (names.length) return names;
-  }
+  const retenus = citationContributors(contributors, book.tipo_material);
+  const names = retenus.map(citeName).filter(Boolean);
+  if (names.length) return names;
   const a = book.author_display || book.autor || '';
   return a ? [a] : [];
 }
