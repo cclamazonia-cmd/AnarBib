@@ -2183,6 +2183,7 @@ CI verde. |
 | C10 | 2026-10-05 | **Fechado em 05/10** (`61c82d85`): o estado de revisão de `digital_assets` se chama `review_state`; seis funções reescritas a partir da definição real; saídas, aplicativo e Edge Functions acompanham, um pacote antigo continua legível; a armadilha `access_scope` é lembrada no formulário. Visibilidade inalterada (mesma impressão antes e depois). |
 | G13 | 2026-10-05 | **Entregue em 05/10** (`6fca3f3b`): vocabulário `public.networks` e leitura do campo `reseau` da ficha do mapa; função pública do catálogo; o catálogo filtra por rede (verificado em linha: « FICEDL (BLMF, BTL) »). **Para Xavier**: classificar ABABA, FAO, AFI, UK Social Centre Network e Radical Routes. |
 | D6 | 2026-10-05 | **Fechado em 05/10** (`5bbdaaf4`): epub.js mantido e fixado em `0.3.93`, xmldom forçado para 0.8 (nunca usado no navegador); foliate-js designado como substituto; um teste abre um EPUB 3 completo. |
+| I29 | 2026-10-05 | **O esquema `ingest` entra no fluxo longo do backup #BG2 — entregue e em serviço em 05/10, decisão de Xavier** (`f5e3f5ed`). Nenhum fluxo salvava `ingest`; agora um único `pg_dump --schema=public --schema=ingest`, mesmo arquivo, filtro de classificação nos dois esquemas, 11 tabelas classificadas, RUNBOOK e REGISTRO atualizados. Prova em banco privado; `anarbib-bg2.sh check` → «Filet OK». **Falta**: o primeiro backup longo com ingest, domingo 11/10 às 20:00. |
 
 ---
 
