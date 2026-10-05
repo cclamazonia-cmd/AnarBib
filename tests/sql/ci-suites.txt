@@ -667,3 +667,6 @@ tests/sql/depot_numerique_droits_tests.sql
 # C10 (05/10/2026) : la colonne de revue de digital_assets s'appelle review_state ;
 # confirmation, liste des vérifiés, compte et export des fonds la lisent.
 tests/sql/c10_etat_de_revue_tests.sql
+# CAT-G4 (05/10/2026) : la liste du catalogue nomme les responsables principaux —
+# auteur et coauteur, sinon l'organisation ; ni traduction, ni illustration.
+tests/sql/liste_coauteurs_tests.sql
