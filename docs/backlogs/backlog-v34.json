@@ -2666,6 +2666,30 @@
           "fr": "**Clos le 04/10 : livré, déployé, vérifié à l'écran le 05/10.** `5e97a77b` (migration `20261004211159`, appliquée par la CI, pipeline vert de bout en bout). `api.search_catalog_v1` reçoit une branche `work_title_candidates` : un titre d'œuvre (`work_titles`, toutes langues) qui répond à la requête — préfixe ou jetons, pas la proximité `%`, qui doublait le coût des mots fréquents — suggère les éditions de l'œuvre, une ligne par édition, libellé « Living my Life (Vivre ma vie) », même score et même filtre « préfixe d'abord » que les livres ; rien pour une édition que son propre titre fait déjà suggérer. Index trigramme `work_titles_title_norm_trgm_idx` sur `f_normalize_search(title)` : sans lui ~470 ms par frappe (mesuré en production, transaction annulée), avec lui le coût d'avant (« anarquia » 112 → ~120 ms). Réécriture chirurgicale gardée par md5, fins de ligne CRLF respectées comme B33. Banc local avant le push : rejeu sur image vierge 407/407, suites SQL 159/159, dont **T9** neuf dans `recherche_index_trigramme_tests` (une édition suggérée par le seul titre de son œuvre ; l'expression servie par l'index — le compteur ne tranche pas sur un jeu minuscule, le planificateur passe par la clé `(work_id, lang)`). À l'écran, sur app.anarbib.org sans compte : « Vivre ma Vie » suggère les trois *Living my Life* et *Viviendo mi vida*, le livre d'Armand ne l'est plus.",
           "pt": "**Encerrado em 04/10, verificado na tela em 05/10.** `5e97a77b` (migração `20261004211159`, CI verde). As sugestões da busca rápida (`api.search_catalog_v1`) leem os títulos da obra (`work_titles`), rótulo «Living my Life (Vivre ma vie)»; índice trigrama em `f_normalize_search(title)` mantém o custo de antes. Bancada local: 407/407 migrações, 159/159 suítes (T9 nova)."
         }
+      ],
+      [
+        "C20",
+        "2026-10-05",
+        {
+          "fr": "**Constaté et livré du 04 au 05/10 (Xavier) : le catalogue dit ce qui se lit en ligne.** Mesuré en production : 19 livres avaient un PDF public actif et aucun ne portait l’indicateur du catalogue — `has_online_reading` des vues matérialisées ne comptait que les PDF réservés. `catalog_digital_access_v1` sert l’accès réel des livres affichés (usages publics, ressource réservée, droit de lecture, bibliothèques détentrices), sans toucher aux vues ; badges « Lire / Écouter / Voir en ligne » et « Réservé aux lecteur·rices de … » sur les lignes d’édition et d’œuvre ; la fiche dit « RÉSERVÉ » et propose de se connecter au lieu de « NON », et traduit les droits. Décision de Xavier : l’administration du réseau lit aussi les PDF réservés aux détentrices. Migration `20261004215035` (`6738b02f`), écrans `d8a5b5f4`, `14cdd0db` ; suite `acces_numerique_catalogue_tests` (6) ; vérifié en production le 05/10 (anonyme : 4 livres publics « Lire en ligne », le 1434 « Réservé aux lecteur·rices de Biblioteca Terra Livre »). Le défaut de lecture réservée signalé par Xavier n’est pas reproduit en base (la règle accorde l’accès à 4 des 5 membres actifs de la BTL ; le 5e doit changer son mot de passe) : piste de la session staff, propre à l’onglet, à confirmer à l’écran. La refonte du formulaire de dépôt (droits, choix de la bibliothèque, seau déduit) reste à faire.",
+          "pt": "**Constatado e entregue de 04 a 05/10 (Xavier): o catálogo diz o que se lê online.** 19 livros com PDF público ativo não tinham indicador; `catalog_digital_access_v1` serve o acesso real; selos « Ler / Ouvir / Ver online » e « Reservado a leitor(a/e)s de … »; a ficha diz « RESERVADO » em vez de « NÃO » e traduz os direitos; a administração da rede lê os PDF reservados. Migração `20261004215035` (`6738b02f`), telas `d8a5b5f4`, `14cdd0db`; verificado em produção em 05/10."
+        }
+      ],
+      [
+        "C21",
+        "2026-10-05",
+        {
+          "fr": "**Livré le 05/10 (Xavier : « barre collante + toast »).** Une barre d’état collante en haut des onze panneaux du catalogage remplace huit boîtes de message recopiées (avertissements sans style ou en rouge, erreurs d’étiquettes en vert) ; une fenêtre de confirmation de l’application remplace les 34 `confirm()`/`alert()` du navigateur, le bouton nommant l’action (« Publier », « Fusionner », « Supprimer définitivement »…), en rouge si elle est irréversible ; fermer, archiver, supprimer ou publier un lot se confirme au lieu de réussir en silence ; « Publier » se désactive après publication d’une autorité ou d’un exemplaire. `9da1ad76`. À vérifier à l’écran avec une session staff.",
+          "pt": "**Entregue em 05/10.** Barra de estado fixa nos onze painéis da catalogação; janela de confirmação do aplicativo no lugar dos 34 `confirm()`/`alert()`, com o botão nomeando a ação; gestos sobre os lotes confirmados. `9da1ad76`. A verificar na tela com sessão staff."
+        }
+      ],
+      [
+        "C22",
+        "2026-10-05",
+        {
+          "fr": "**Livré le 05/10 (Xavier : le message après publication « fait double emploi »).** Un seul encadré « Publié — et maintenant ? » remplace le message, le toast, le bandeau « Ajouter un exemplaire ? » et la fenêtre œuvre/édition qui revenait à chaque publication (elle ne s’ouvre plus que sur « Nouveau document »). Document : ajouter un exemplaire, une autre édition de la même œuvre (titre et auteur·rice repris), nouveau document, fiche publique, file éditoriale ; autorité : nouvelle autorité, sa page, nouveau document, file ; exemplaire : un autre exemplaire du même document, étiquettes, nouveau document, file. `b0f60399`. Non fait : « compléter les autorités non liées » (la liaison ne se fait qu’à la publication). À vérifier à l’écran, notamment le numéro d’inventaire après « un autre exemplaire du même document ».",
+          "pt": "**Entregue em 05/10.** Um único quadro « Publicado — e agora? » substitui mensagem, toast, faixa e janela obra/edição; sequências propostas para documento, autoridade e exemplar. `b0f60399`. A verificar na tela."
+        }
       ]
     ]
   },
