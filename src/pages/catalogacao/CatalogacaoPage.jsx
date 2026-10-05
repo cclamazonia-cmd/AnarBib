@@ -10,6 +10,7 @@ import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useStaffLibraries, useCoordLibraries, bibliothequesProposables, bibliothequeDuLot, brouillonsDAutresBibliotheques, peutRouvrirRevision } from '@/lib/useStaffLibraries';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
+import AppIcon from '@/components/ui/AppIcon';
 import './CatalogacaoPage.css';
 import BookDraftForm from './BookDraftForm';
 import OcrDepositTab from './OcrDepositTab';
@@ -484,7 +485,7 @@ export default function CatalogacaoPage() {
                 role="tab"
                 aria-selected={activeTab === tab.id}
               >
-                <span className="ab-tabbar__icon" aria-hidden="true">{tab.icon}</span>
+                <AppIcon className="ab-tabbar__icon" name={tab.icon} size="1em" />
                 {tab.label}
               </button>
             ))}

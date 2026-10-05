@@ -1,4 +1,5 @@
 import { Button, Pill, EmptyState } from '@/components/ui';
+import AppIcon from '@/components/ui/AppIcon';
 import { fmtD, TabHeader } from '../_shared';
 import { formatPublicId } from '@/lib/publicId';
 
@@ -77,7 +78,7 @@ export default function TabContribuicoes({
                     <div className="ab-painel-memb-name">
                       {m.display_name}
                       {m.public_id && <span className="ab-painel-memb-pubid">· {formatPublicId(m.public_id)}</span>}
-                      {m.is_restricted && <Pill variant="danger" style={{ marginLeft: 6, fontSize: '.65rem' }}>⛔</Pill>}
+                  {m.is_restricted && <Pill variant="danger" style={{ marginLeft: 6, fontSize: '.65rem' }}><AppIcon name="ban" size="1em" /></Pill>}
                     </div>
                     <div className="ab-painel-memb-meta">
                       {m.email}

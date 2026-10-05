@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
+import AppIcon from '@/components/ui/AppIcon';
 import ConvRevuePanel from '@/components/atelier/ConvRevuePanel';
 import WorksWorkshopPanel from '@/components/atelier/WorksWorkshopPanel';
 
@@ -234,7 +235,7 @@ export default function AtelierAutoridadesPage() {
         <nav className="ab-tabbar" role="tablist" style={{ marginBottom: 16 }}>
           {[['autoridades', '✒️'], ['obras', '📚']].map(([k, icon]) => (
             <button key={k} className={`ab-tabbar__tab${tab === k ? ' active' : ''}`} role="tab" aria-selected={tab === k} onClick={() => switchTab(k)}>
-              <span className="ab-tabbar__icon" aria-hidden="true">{icon}</span>
+              <AppIcon className="ab-tabbar__icon" name={icon} size="1em" />
               {t({ id: `atelier.tab.${k}` })}
             </button>
           ))}

@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
+import AppIcon from '@/components/ui/AppIcon';
 import { INTENTIONS, GROUPS, visibleGroups, matchIntentions } from './intentions';
 import './InicioPage.css';
 
@@ -113,7 +114,7 @@ export default function InicioPage() {
               {suggestions.map((it, i) => (
                 <li key={it.id} role="option" aria-selected={i === 0}>
                   <button type="button" className={`ab-inicio__sugg${i === 0 ? ' is-first' : ''}`} onClick={() => go(it)}>
-                    <span className="ab-inicio__icon" aria-hidden="true">{it.icon}</span>
+                    <AppIcon className="ab-inicio__icon" name={it.icon} size={20} />
                     <span className="ab-inicio__sugg-label">{labelOf(it)}</span>
                     {i === 0 && <kbd className="ab-inicio__kbd">↵</kbd>}
                   </button>
@@ -133,7 +134,7 @@ export default function InicioPage() {
               <div className="ab-inicio__chips">
                 {pinned.map(it => (
                   <Link key={it.id} to={it.to} className="ab-inicio__chip">
-                    <span aria-hidden="true">{it.icon}</span> {labelOf(it)}
+                    <AppIcon name={it.icon} size={16} /> {labelOf(it)}
                   </Link>
                 ))}
               </div>
@@ -150,14 +151,15 @@ export default function InicioPage() {
                 return (
                   <li key={it.id} className={`ab-inicio__card${isPinned ? ' is-pinned' : ''}`}>
                     <Link to={it.to} className="ab-inicio__card-link">
-                      <span className="ab-inicio__icon" aria-hidden="true">{it.icon}</span>
+                      <AppIcon className="ab-inicio__icon" name={it.icon} size={22} />
                       <span className="ab-inicio__card-label">{labelOf(it)}</span>
                     </Link>
                     <button type="button" className="ab-inicio__star" onClick={() => togglePin(it.id)}
                       aria-pressed={isPinned}
                       title={t({ id: isPinned ? 'inicio.unpin' : 'inicio.pin' })}
                       aria-label={t({ id: isPinned ? 'inicio.unpin' : 'inicio.pin' })}>
-                      {isPinned ? '★' : '☆'}
+                      <AppIcon name="star" size={15} strokeWidth={isPinned ? 2.4 : 1.6}
+                        fill={isPinned ? 'currentColor' : 'none'} />
                     </button>
                   </li>
                 );

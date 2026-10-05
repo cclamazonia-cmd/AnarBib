@@ -10,6 +10,7 @@ import LibraryContextBanner from '@/components/LibraryContextBanner';
 import LibraryProfileBanner from '@/components/LibraryProfileBanner';
 import TransitionsPanel from '@/components/TransitionsPanel';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
+import AppIcon from '@/components/ui/AppIcon';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 import ReadingNotesModeration from '@/components/biblioteca/ReadingNotesModeration';
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
@@ -107,7 +108,7 @@ export default function BibliotecaPage() {
   const ALL_TABS = [
     { id: 'identity', icon: '🏛️', label: t({ id: 'biblioteca.tab.identity' }), coordOnly: true },
     { id: 'comms', icon: '📣', label: t({ id: 'biblioteca.tab.comms' }), coordOnly: true },
-    { id: 'regulation', icon: '📜', label: t({ id: 'biblioteca.tab.regulation' }), coordOnly: true },
+    { id: 'regulation', icon: 'scrollText', label: t({ id: 'biblioteca.tab.regulation' }), coordOnly: true },
     { id: 'privacy', icon: '🔒', label: t({ id: 'biblioteca.tab.privacy' }) },
     { id: 'documents', icon: '📄', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
     // Paquet E.5 refactor (20/05/2026) : transitions de profil (gouvernance politique)
@@ -741,7 +742,7 @@ export default function BibliotecaPage() {
           {visibleTabs.map(tb => (
             <button key={tb.id} className={`ab-tabbar__tab${tb.separator?' ab-tabbar__tab--group':''}${tab===tb.id?' active':''}`}
               onClick={()=>setTab(tb.id)} aria-current={tab===tb.id ? 'page' : undefined}>
-              <span className="ab-tabbar__icon" aria-hidden="true">{tb.icon}</span>
+              <AppIcon className="ab-tabbar__icon" name={tb.icon} size="1em" />
               {tb.label}
             </button>
           ))}

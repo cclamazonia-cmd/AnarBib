@@ -9,6 +9,7 @@ import { useAccountAvailability } from '@/hooks/useAccountAvailability';
 import { useBookAvailability } from '@/hooks/useBookAvailability';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Skeleton } from '@/components/ui';
+import AppIcon from '@/components/ui/AppIcon';
 import BookAvailability from '@/components/BookAvailability';
 import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
@@ -1130,11 +1131,11 @@ export default function AccountPage() {
   //               juste en dessous) mais conservé en infobulle + nom accessible.
   const ALL_TABS = [
     { key: 'perfil', icon: '👤', label: t({ id: 'account.tab.profile' }), hint: t({ id: 'account.tab.profile.hint' }) },
-    { key: 'reservar', icon: '📌', label: t({ id: 'account.tab.reservations' }), hint: t({ id: 'account.tab.reservations.hint' }) },
+    { key: 'reservar', icon: 'pin', label: t({ id: 'account.tab.reservations' }), hint: t({ id: 'account.tab.reservations.hint' }) },
     { key: 'curso', icon: '📚', label: t({ id: 'account.tab.loans' }), hint: t({ id: 'account.tab.loans.hint' }) },
-    { key: 'historico', icon: '🕘', label: t({ id: 'account.tab.history' }), hint: t({ id: 'account.tab.history.hint' }) },
+    { key: 'historico', icon: 'history', label: t({ id: 'account.tab.history' }), hint: t({ id: 'account.tab.history.hint' }) },
     { key: 'avisos', icon: '🔔', label: t({ id: 'account.tab.notifications' }), hint: t({ id: 'account.tab.notifications.hint' }), count: unreadCount, alert: true },
-    { key: 'desejos', icon: '⭐', label: t({ id: 'account.tab.wishlist' }), hint: t({ id: 'account.tab.wishlist.hint' }), count: wishlist.length },
+    { key: 'desejos', icon: 'star', label: t({ id: 'account.tab.wishlist' }), hint: t({ id: 'account.tab.wishlist.hint' }), count: wishlist.length },
     { key: 'notas', icon: '✍️', label: t({ id: 'account.tab.readingNotes' }), hint: t({ id: 'account.tab.readingNotes.hint' }), count: myReadingNotes.length },
     { key: 'biblios', icon: '🏛️', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
     { key: 'eventos', icon: '🗓️', label: t({ id: 'account.tab.events' }), hint: t({ id: 'account.tab.events.hint' }) },
@@ -1198,7 +1199,7 @@ export default function AccountPage() {
     const lib = libMap[libraryId];
     if (!lib) return null;
     const txt = lib.short_name || lib.name || '';
-    const inner = <span style={{ fontSize: '.72rem', color: 'var(--brand-muted)', whiteSpace: 'nowrap' }}>📍 {txt}</span>;
+    const inner = <span style={{ fontSize: '.72rem', color: 'var(--brand-muted)', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: 4 }}><AppIcon name="map" size={12} />{txt}</span>;
     return lib.slug
       ? <Link to={`/catalogo/${lib.slug}`} title={lib.name || txt} style={{ textDecoration: 'none' }}>{inner}</Link>
       : inner;
@@ -1234,7 +1235,7 @@ export default function AccountPage() {
           const bgColor = s === 'active' ? 'rgba(21,128,61,.08)' : s === 'restricted' ? 'rgba(220,38,38,.1)' : s === 'attention' ? 'rgba(251,191,36,.1)' : 'rgba(29,78,216,.08)';
           const borderColor = s === 'active' ? 'rgba(21,128,61,.2)' : s === 'restricted' ? 'rgba(220,38,38,.2)' : s === 'attention' ? 'rgba(251,191,36,.2)' : 'rgba(29,78,216,.15)';
           const textColor = s === 'active' ? '#4ade80' : s === 'restricted' ? '#f87171' : s === 'attention' ? '#fbbf24' : '#60a5fa';
-          const icon = s === 'active' ? '✓' : s === 'restricted' ? '⛔' : s === 'attention' ? '⚠' : 'ℹ';
+          const icon = s === 'active' ? 'check' : s === 'restricted' ? 'ban' : s === 'attention' ? 'warning' : 'info';
           // Lot 26.1b — Si le bandeau est "incomplete" et que l'usager n'a
           // pas de bibliotheque rattachee (cas typique du parcours
           // signup-sans-biblio interrompu), on ajoute un CTA jaune cliquable
@@ -1242,7 +1243,7 @@ export default function AccountPage() {
           const incompleteDueToNoLib = s === 'incomplete' && !libraryId;
           return (
             <div style={{ marginTop: 10, padding: '10px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12, background: bgColor, border: `1px solid ${borderColor}` }}>
-              <span style={{ fontSize: '1.3rem' }}>{icon}</span>
+              <AppIcon name={icon} size={22} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '.9rem', fontWeight: 700, color: textColor }}>
                   {statusLabel} — {roleLabel}
@@ -1313,7 +1314,7 @@ export default function AccountPage() {
         {/* ── Bouton règlement de la bibliothèque ────── */}
         {regimentoUrl && (
           <div style={{ marginTop: 12, padding: '12px 16px', borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📄</span>
+            <AppIcon name="document" size={24} />
             <div style={{ flex: 1, minWidth: 'min(200px, 100%)' }}>
               <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.4 }}>
                 {t({ id: 'account.regimento.hint' })}
@@ -1341,7 +1342,7 @@ export default function AccountPage() {
                  et le nom accessible du bouton, pour que ni la souris ni un
                  lecteur d'écran ne perdent l'explication. */
               title={tab.hint} aria-label={`${tab.label} — ${tab.hint}`}>
-              <span className="ab-tabbar__icon" aria-hidden="true">{tab.icon}</span>
+              <AppIcon className="ab-tabbar__icon" name={tab.icon} size="1em" />
               {tab.label}
               {tab.count > 0 && (
                 <span className={`ab-tabbar__badge${tab.alert ? ' ab-tabbar__badge--alert' : ''}`}>{tab.count}</span>
@@ -2371,12 +2372,12 @@ export default function AccountPage() {
                           <Button variant="mini" onClick={async () => {
                             const { error } = await supabase.rpc('fn_archive_notification', { p_notification_id: n.id });
                             if (!error) loadData({ silent: true });
-                          }} title={t({ id: 'account.notifications.archive' })}>📥</Button>
+                          }} title={t({ id: 'account.notifications.archive' })}><AppIcon name="archive" size={16} /></Button>
                         ) : (
                           <Button variant="mini" onClick={async () => {
                             const { error } = await supabase.rpc('fn_unarchive_notification', { p_notification_id: n.id });
                             if (!error) loadData({ silent: true });
-                          }} title={t({ id: 'account.notifications.unarchive' })}>↩</Button>
+                          }} title={t({ id: 'account.notifications.unarchive' })}><AppIcon name="archiveRestore" size={16} /></Button>
                         )}
                       </div>
                     </div>
