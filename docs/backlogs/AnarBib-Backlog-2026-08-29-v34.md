@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **57 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **57 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -757,7 +757,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
-| **E25** | pt-BR : ce que la passe du 27/09 n'a pas touché | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -914,30 +913,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Après **E9** (mobile) de préférence, ou avec lui ; même exigence de regard extérieur que **E1**. **Ne pas livrer pendant la formation BLMF** (sept soirées à partir du 08/09) : la barre est sur les diapositives — à dater après la dernière soirée, ou à montrer aux coordinations comme changement annoncé. Gel du code jusqu'au 14/09.
 
 *Renvois : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
-
-#### E25 — pt-BR : ce que la passe du 27/09 n'a pas touché
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle
-
-**État.** Le 27/09, l'app et les courriels pt-BR sont passés au « você » (`a805951b`, `36c467fa`) et au vocabulaire brésilien (`faae6e0e`, `49047ae3`, `6f762f8f`, `dfa622f5`). Mesuré le 29/09, hors de cette passe : `docs/governance/guide-gouvernance-pt-BR.md`, inchangé depuis le 01/09 (`74ee6682`), dit encore « concernida » (×13, dont 11 « pessoa concernida »), « gerir » (×3), « gere » (×1) et « partilhar » (×1) ; il nourrit le recueil PDF du bucket. La charte inclusive pt-BR dit « concernida(s) » (×2), le DPA pt-BR « concernidas/concernidos » (×4) et « partilham » (×1). Dans `pt-BR.json`, 28 valeurs hors zones ISBD gardent l'espace français avant « : » ou « ; » (« Velocidade : {rate}× », « Erro ao enviar {name} : {msg} »), et `catalogacao.queue.crossPage` vaut « (cross-page) », en anglais.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Réécrire ces passages comme l'app l'a été le 27/09 : « pessoa em questão », « gerenciar », « compartilhar ». Ôter l'espace avant « : » et « ; » dans les 28 valeurs ; la ponctuation prescrite de l'ISBD le garde. Traduire `crossPage`. Les gardes n'y suffiront pas : `PT_EUROPEU` voit « partilhar », mais « gerir » et « concernida » sont des angles morts déclarés (`src/tests/helpers/ptbr-pt-europeu.js`, `ptbr-frances.js`), l'espace avant « : » aussi. Il faut relire. Puis régénérer le `.docx` et le recueil `Guia_de_governanca_AnarBib.pdf` du bucket. Écrire enfin au REGISTRE les décisions de vocabulaire du 27/09 (« número de chamada », « ficha », « feed », EEB, « importação ») : `DOC-ADDR-1` ne couvre que le registre d'adresse.
-
-**Pourquoi ça compte.** Le guide de gouvernance dit à une coordination comment coopter, retirer quelqu'un, traiter un conflit. Écrit dans un portugais d'ailleurs, il lui dit aussi que le projet ne lui parle pas tout à fait, alors que l'écran, lui, est corrigé.
-
-**Ce qui compte comme fini.**
-
-- Le guide de gouvernance, la charte inclusive et le DPA pt-BR n'ont plus ni « concernid- », ni « gerir » (« gere »), ni « partilh- » hors « compartilh- ».
-- Aucune valeur de `pt-BR.json` hors zones ISBD n'a d'espace avant « : » ou « ; », et `catalogacao.queue.crossPage` est traduite.
-- `PT_EUROPEU` et `FRANCES_EM_PT` passent aussi sur le guide de gouvernance pt-BR.
-- Le `.docx` et le recueil PDF du bucket sont régénérés.
-- Les décisions de vocabulaire pt-BR du 27/09 sont écrites au REGISTRE.
-
-**Dépendances.** Aucune.
-
-*Renvois : `docs/governance/guide-gouvernance-pt-BR.md` · `docs/governance/guide-gouvernance-pt-BR.docx` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2-pt-BR.md` · `docs/legal/dpa-pt-BR.md` · `src/tests/helpers/ptbr-pt-europeu.js` · `src/tests/helpers/ptbr-frances.js` · `src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)` · `REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e`*
 
 ---
 
@@ -2307,6 +2282,7 @@ CI verte : lint et suite unitaire. |
 | E24 | 2026-10-05 | Les refus des trois fonctions de la page Importations portent un code traduit dans les dix locales ; banc et recensement des autres fonctions (`17eb498b`). |
 | G17 | 2026-10-05 | La cooptation ne trouvait pas un compte sans bibliothèque (« Aucun compte trouvé » : sous la RLS de `profiles`, l'admin ne voit que ses bibliothèques). Fonction `fn_network_admin_find_user_by_email` réservée à l'administration du réseau, adresse exacte ; suite de 5 tests (`4d417f98`). Le camarade est coopté. |
 | F22 | 2026-10-05 | Le lien de confirmation (et de désabonnement) de la Lettre affichait du code HTML aux accents abîmés : la plateforme sert les Edge Functions en text/plain. Les deux fonctions renvoient (303) vers la page `/lettre` de l'application, dans la langue de la personne ; garde contre les clés en double dans les locales (`9fc60a15`). |
+| E25 | 2026-10-05 | Le guide de gouvernance, la charte inclusive et le DPA pt-BR parlent brésilien (et le guide au « você ») ; 30 valeurs de `pt-BR.json` ; garde `ptbr-documents-e25` ; recueil PDF v1.3 dans le bucket ; décisions de vocabulaire du 27/09 au REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). Vu en passant, hors périmètre : le guide espagnol dit « concernida(s) » 22 fois — à faire relire. |
 
 ---
 
@@ -2338,4 +2314,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

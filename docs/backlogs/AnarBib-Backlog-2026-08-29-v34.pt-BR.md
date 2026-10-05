@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-05** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-05** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, meio-dia** (`16962c55`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 29/09, `75ccb035`). Seis dias com duas sessões e uma contribuição externa (PR #31 do camarada `ASR2026`): **18 migrações** (416 = 416, todas pela CI), 56 commits, 1 871 testes JS e 164 suítes SQL, todos verdes. Quatro notícias fundidas, oito obras reunidas (C18), linhas dos EEB 24 e 25 fechadas (C14), nenhum fundo sem exemplar. **Duas linhas do levantamento de 29/09 estavam erradas** (a biblioteca de formação está ativa; o esquema de descarte tem sete tabelas). Nesta versão, após o inventário dos 56 commits: C23 aberto e entregue, G16 aberto (o voto das transições recusaria todo voto), E23 em curso (210 chaves, 74 sem rótulo). Falta fechar: os itens «a verificar» (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) e as decisões (A1, C4, C17, G16) — Xavier; A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-05.** **57 itens de 72** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-05.** **57 itens de 71** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -757,7 +757,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
-| **E25** | pt-BR: o que a revisão de 27/09 não alcançou | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -914,30 +913,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **E9** de preferência ; mesma exigência de olhar externo que **E1**. **Não entregar durante a formação BLMF** (sete noites a partir de 08/09). Congelamento até 14/09.
 
 *Remissões : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
-
-#### E25 — pt-BR: o que a revisão de 27/09 não alcançou
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : língua materna
-
-**Estado.** Em 27/09, o app e os e-mails pt-BR passaram ao «você» (`a805951b`, `36c467fa`) e ao vocabulário brasileiro (`faae6e0e`, `49047ae3`, `6f762f8f`, `dfa622f5`). Medido em 29/09, fora dessa revisão: `docs/governance/guide-gouvernance-pt-BR.md`, sem mudança desde 01/09 (`74ee6682`), ainda diz «concernida» (×13, 11 delas «pessoa concernida»), «gerir» (×3), «gere» (×1) e «partilhar» (×1); ele alimenta a coletânea PDF do bucket. A carta inclusiva pt-BR diz «concernida(s)» (×2), o DPA pt-BR «concernidas/concernidos» (×4) e «partilham» (×1). Em `pt-BR.json`, 28 valores fora das zonas ISBD mantêm o espaço francês antes de «:» ou «;» («Velocidade : {rate}×», «Erro ao enviar {name} : {msg}»), e `catalogacao.queue.crossPage` vale «(cross-page)», em inglês.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Reescrever esses trechos como o app foi reescrito em 27/09: «pessoa em questão», «gerenciar», «compartilhar». Tirar o espaço antes de «:» e «;» nos 28 valores; a pontuação prescrita da ISBD o mantém. Traduzir `crossPage`. As guardas não bastam: `PT_EUROPEU` vê «partilhar», mas «gerir» e «concernida» são pontos cegos declarados (`src/tests/helpers/ptbr-pt-europeu.js`, `ptbr-frances.js`), e o espaço antes de «:» também. É preciso reler. Depois regenerar o `.docx` e a coletânea `Guia_de_governanca_AnarBib.pdf` do bucket. Por fim, escrever no REGISTRO as decisões de vocabulário de 27/09 («número de chamada», «ficha», «feed», EEB, «importação»): `DOC-ADDR-1` só cobre o registro de tratamento.
-
-**Por que importa.** O guia de governança diz a uma coordenação como cooptar, afastar alguém, tratar um conflito. Escrito num português de outro lugar, ele também diz que o projeto não fala bem com ela, enquanto a tela já foi corrigida.
-
-**O que conta como terminado.**
-
-- O guia de governança, a carta inclusiva e o DPA pt-BR não têm mais «concernid-», nem «gerir» («gere»), nem «partilh-» fora de «compartilh-».
-- Nenhum valor de `pt-BR.json` fora das zonas ISBD tem espaço antes de «:» ou «;», e `catalogacao.queue.crossPage` está traduzida.
-- `PT_EUROPEU` e `FRANCES_EM_PT` passam também pelo guia de governança pt-BR.
-- O `.docx` e a coletânea PDF do bucket estão regenerados.
-- As decisões de vocabulário pt-BR de 27/09 estão escritas no REGISTRO.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `docs/governance/guide-gouvernance-pt-BR.md` · `docs/governance/guide-gouvernance-pt-BR.docx` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2-pt-BR.md` · `docs/legal/dpa-pt-BR.md` · `src/tests/helpers/ptbr-pt-europeu.js` · `src/tests/helpers/ptbr-frances.js` · `src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)` · `REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e`*
 
 ---
 
@@ -2297,6 +2272,7 @@ CI verde. |
 | E24 | 2026-10-05 | As recusas das três funções da página Importações têm código traduzido nas dez locales; banco e recenseamento das outras funções (`17eb498b`). |
 | G17 | 2026-10-05 | A cooptação não encontrava uma conta sem biblioteca (RLS de `profiles`). Função reservada à administração da rede, endereço exato; suíte de 5 testes (`4d417f98`). |
 | F22 | 2026-10-05 | O link de confirmação da Carta mostrava código HTML: as Edge Functions são servidas em text/plain. Redirecionam (303) para a página `/lettre` do aplicativo (`9fc60a15`). |
+| E25 | 2026-10-05 | O guia de governança, a carta inclusiva e o DPA falam português do Brasil; 30 valores de `pt-BR.json`; coletânea PDF v1.3 no bucket; decisões de vocabulário no REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). |
 
 ---
 
@@ -2328,4 +2304,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -2730,6 +2730,14 @@
           "fr": "Le lien de confirmation (et de désabonnement) de la Lettre affichait du code HTML aux accents abîmés : la plateforme sert les Edge Functions en text/plain. Les deux fonctions renvoient (303) vers la page `/lettre` de l'application, dans la langue de la personne ; garde contre les clés en double dans les locales (`9fc60a15`).",
           "pt": "O link de confirmação da Carta mostrava código HTML: as Edge Functions são servidas em text/plain. Redirecionam (303) para a página `/lettre` do aplicativo (`9fc60a15`)."
         }
+      ],
+      [
+        "E25",
+        "2026-10-05",
+        {
+          "fr": "Le guide de gouvernance, la charte inclusive et le DPA pt-BR parlent brésilien (et le guide au « você ») ; 30 valeurs de `pt-BR.json` ; garde `ptbr-documents-e25` ; recueil PDF v1.3 dans le bucket ; décisions de vocabulaire du 27/09 au REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). Vu en passant, hors périmètre : le guide espagnol dit « concernida(s) » 22 fois — à faire relire.",
+          "pt": "O guia de governança, a carta inclusiva e o DPA falam português do Brasil; 30 valores de `pt-BR.json`; coletânea PDF v1.3 no bucket; decisões de vocabulário no REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`)."
+        }
       ]
     ]
   },
@@ -5397,62 +5405,6 @@
         "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.",
         "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote."
       }
-    },
-    {
-      "id": "E25",
-      "d": "E",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "langue"
-      ],
-      "t": {
-        "fr": "pt-BR : ce que la passe du 27/09 n'a pas touché",
-        "pt": "pt-BR: o que a revisão de 27/09 não alcançou"
-      },
-      "v": {
-        "fr": "Le 27/09, l'app et les courriels pt-BR sont passés au « você » (`a805951b`, `36c467fa`) et au vocabulaire brésilien (`faae6e0e`, `49047ae3`, `6f762f8f`, `dfa622f5`). Mesuré le 29/09, hors de cette passe : `docs/governance/guide-gouvernance-pt-BR.md`, inchangé depuis le 01/09 (`74ee6682`), dit encore « concernida » (×13, dont 11 « pessoa concernida »), « gerir » (×3), « gere » (×1) et « partilhar » (×1) ; il nourrit le recueil PDF du bucket. La charte inclusive pt-BR dit « concernida(s) » (×2), le DPA pt-BR « concernidas/concernidos » (×4) et « partilham » (×1). Dans `pt-BR.json`, 28 valeurs hors zones ISBD gardent l'espace français avant « : » ou « ; » (« Velocidade : {rate}× », « Erro ao enviar {name} : {msg} »), et `catalogacao.queue.crossPage` vaut « (cross-page) », en anglais.",
-        "pt": "Em 27/09, o app e os e-mails pt-BR passaram ao «você» (`a805951b`, `36c467fa`) e ao vocabulário brasileiro (`faae6e0e`, `49047ae3`, `6f762f8f`, `dfa622f5`). Medido em 29/09, fora dessa revisão: `docs/governance/guide-gouvernance-pt-BR.md`, sem mudança desde 01/09 (`74ee6682`), ainda diz «concernida» (×13, 11 delas «pessoa concernida»), «gerir» (×3), «gere» (×1) e «partilhar» (×1); ele alimenta a coletânea PDF do bucket. A carta inclusiva pt-BR diz «concernida(s)» (×2), o DPA pt-BR «concernidas/concernidos» (×4) e «partilham» (×1). Em `pt-BR.json`, 28 valores fora das zonas ISBD mantêm o espaço francês antes de «:» ou «;» («Velocidade : {rate}×», «Erro ao enviar {name} : {msg}»), e `catalogacao.queue.crossPage` vale «(cross-page)», em inglês."
-      },
-      "w": {
-        "fr": "Réécrire ces passages comme l'app l'a été le 27/09 : « pessoa em questão », « gerenciar », « compartilhar ». Ôter l'espace avant « : » et « ; » dans les 28 valeurs ; la ponctuation prescrite de l'ISBD le garde. Traduire `crossPage`. Les gardes n'y suffiront pas : `PT_EUROPEU` voit « partilhar », mais « gerir » et « concernida » sont des angles morts déclarés (`src/tests/helpers/ptbr-pt-europeu.js`, `ptbr-frances.js`), l'espace avant « : » aussi. Il faut relire. Puis régénérer le `.docx` et le recueil `Guia_de_governanca_AnarBib.pdf` du bucket. Écrire enfin au REGISTRE les décisions de vocabulaire du 27/09 (« número de chamada », « ficha », « feed », EEB, « importação ») : `DOC-ADDR-1` ne couvre que le registre d'adresse.",
-        "pt": "Reescrever esses trechos como o app foi reescrito em 27/09: «pessoa em questão», «gerenciar», «compartilhar». Tirar o espaço antes de «:» e «;» nos 28 valores; a pontuação prescrita da ISBD o mantém. Traduzir `crossPage`. As guardas não bastam: `PT_EUROPEU` vê «partilhar», mas «gerir» e «concernida» são pontos cegos declarados (`src/tests/helpers/ptbr-pt-europeu.js`, `ptbr-frances.js`), e o espaço antes de «:» também. É preciso reler. Depois regenerar o `.docx` e a coletânea `Guia_de_governanca_AnarBib.pdf` do bucket. Por fim, escrever no REGISTRO as decisões de vocabulário de 27/09 («número de chamada», «ficha», «feed», EEB, «importação»): `DOC-ADDR-1` só cobre o registro de tratamento."
-      },
-      "y": {
-        "fr": "Le guide de gouvernance dit à une coordination comment coopter, retirer quelqu'un, traiter un conflit. Écrit dans un portugais d'ailleurs, il lui dit aussi que le projet ne lui parle pas tout à fait, alors que l'écran, lui, est corrigé.",
-        "pt": "O guia de governança diz a uma coordenação como cooptar, afastar alguém, tratar um conflito. Escrito num português de outro lugar, ele também diz que o projeto não fala bem com ela, enquanto a tela já foi corrigida."
-      },
-      "f": {
-        "fr": [
-          "Le guide de gouvernance, la charte inclusive et le DPA pt-BR n'ont plus ni « concernid- », ni « gerir » (« gere »), ni « partilh- » hors « compartilh- ».",
-          "Aucune valeur de `pt-BR.json` hors zones ISBD n'a d'espace avant « : » ou « ; », et `catalogacao.queue.crossPage` est traduite.",
-          "`PT_EUROPEU` et `FRANCES_EM_PT` passent aussi sur le guide de gouvernance pt-BR.",
-          "Le `.docx` et le recueil PDF du bucket sont régénérés.",
-          "Les décisions de vocabulaire pt-BR du 27/09 sont écrites au REGISTRE."
-        ],
-        "pt": [
-          "O guia de governança, a carta inclusiva e o DPA pt-BR não têm mais «concernid-», nem «gerir» («gere»), nem «partilh-» fora de «compartilh-».",
-          "Nenhum valor de `pt-BR.json` fora das zonas ISBD tem espaço antes de «:» ou «;», e `catalogacao.queue.crossPage` está traduzida.",
-          "`PT_EUROPEU` e `FRANCES_EM_PT` passam também pelo guia de governança pt-BR.",
-          "O `.docx` e a coletânea PDF do bucket estão regenerados.",
-          "As decisões de vocabulário pt-BR de 27/09 estão escritas no REGISTRO."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "docs/governance/guide-gouvernance-pt-BR.md",
-        "docs/governance/guide-gouvernance-pt-BR.docx",
-        "docs/notes-audit/anarbib-charte-langage-inclusif-v2-pt-BR.md",
-        "docs/legal/dpa-pt-BR.md",
-        "src/tests/helpers/ptbr-pt-europeu.js",
-        "src/tests/helpers/ptbr-frances.js",
-        "src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)",
-        "REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e"
-      ]
     },
     {
       "id": "G15",
