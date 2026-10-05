@@ -7135,5 +7135,9 @@
   "library.digitalPolicy.confirm": "Das öffentliche Lesen geschützter Werke öffnen?\nDie Bibliothek trägt die rechtliche Verantwortung: Bei einer Beschwerde der Rechteinhaber*innen antwortet sie und entfernt das Dokument.",
   "library.digitalPolicy.confirmLabel": "Öffnen, in unserer Verantwortung",
   "library.digitalPolicy.opened": "Öffentliches Lesen geschützter Werke geöffnet.",
-  "library.digitalPolicy.closed": "Öffentliches Lesen geschützter Werke geschlossen."
+  "library.digitalPolicy.closed": "Öffentliches Lesen geschützter Werke geschlossen.",
+  "importacoes.fila.match.known_record": "Schon importiert",
+  "importacoes.fila.filterKnown": "Schon importiert",
+  "importacoes.fila.knownRecordOf": "Eintrag, den deine Bibliothek schon importiert hat: {title}",
+  "importacoes.fila.knownRecordNotHeld": "Eintrag, den deine Bibliothek nicht mehr besitzt."
 }

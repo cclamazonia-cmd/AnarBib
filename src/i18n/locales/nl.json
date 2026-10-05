@@ -7135,5 +7135,9 @@
   "library.digitalPolicy.confirm": "Het openbaar lezen van beschermde werken openstellen?\nDe bibliotheek draagt de wettelijke verantwoordelijkheid: bij een klacht van de rechthebbenden antwoordt zij en verwijdert zij het document.",
   "library.digitalPolicy.confirmLabel": "Openstellen, op onze verantwoordelijkheid",
   "library.digitalPolicy.opened": "Openbaar lezen van beschermde werken opengesteld.",
-  "library.digitalPolicy.closed": "Openbaar lezen van beschermde werken gesloten."
+  "library.digitalPolicy.closed": "Openbaar lezen van beschermde werken gesloten.",
+  "importacoes.fila.match.known_record": "Al geïmporteerd",
+  "importacoes.fila.filterKnown": "Al geïmporteerd",
+  "importacoes.fila.knownRecordOf": "Record dat jouw bibliotheek al heeft geïmporteerd: {title}",
+  "importacoes.fila.knownRecordNotHeld": "Record dat jouw bibliotheek niet meer bezit."
 }

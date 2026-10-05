@@ -7135,5 +7135,9 @@
   "library.digitalPolicy.confirm": "Open public reading of works under rights?\nThe library bears the legal responsibility: if the rights holders complain, it answers and takes the document down.",
   "library.digitalPolicy.confirmLabel": "Open, under our responsibility",
   "library.digitalPolicy.opened": "Public reading of works under rights opened.",
-  "library.digitalPolicy.closed": "Public reading of works under rights closed."
+  "library.digitalPolicy.closed": "Public reading of works under rights closed.",
+  "importacoes.fila.match.known_record": "Already imported",
+  "importacoes.fila.filterKnown": "Already imported",
+  "importacoes.fila.knownRecordOf": "Record already imported by your library: {title}",
+  "importacoes.fila.knownRecordNotHeld": "Record no longer held by your library."
 }

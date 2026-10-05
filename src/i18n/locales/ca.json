@@ -7135,5 +7135,9 @@
   "library.digitalPolicy.confirm": "Obrir la lectura pública d’obres amb drets?\nLa biblioteca n’assumeix la responsabilitat legal: en cas de reclamació de les persones titulars, respon i retira el document.",
   "library.digitalPolicy.confirmLabel": "Obrir, sota la nostra responsabilitat",
   "library.digitalPolicy.opened": "Lectura pública d’obres amb drets oberta.",
-  "library.digitalPolicy.closed": "Lectura pública d’obres amb drets tancada."
+  "library.digitalPolicy.closed": "Lectura pública d’obres amb drets tancada.",
+  "importacoes.fila.match.known_record": "Ja importada",
+  "importacoes.fila.filterKnown": "Ja importades",
+  "importacoes.fila.knownRecordOf": "Fitxa ja importada per la teva biblioteca: {title}",
+  "importacoes.fila.knownRecordNotHeld": "Fitxa que la teva biblioteca ja no té."
 }

@@ -7135,5 +7135,9 @@
   "library.digitalPolicy.confirm": "Ouvrir la lecture publique d’œuvres sous droits ?\nLa bibliothèque en porte la responsabilité légale : en cas de réclamation des ayants droit, elle répond et retire le document.",
   "library.digitalPolicy.confirmLabel": "Ouvrir, sous notre responsabilité",
   "library.digitalPolicy.opened": "Lecture publique d’œuvres sous droits ouverte.",
-  "library.digitalPolicy.closed": "Lecture publique d’œuvres sous droits fermée."
+  "library.digitalPolicy.closed": "Lecture publique d’œuvres sous droits fermée.",
+  "importacoes.fila.match.known_record": "Déjà importée",
+  "importacoes.fila.filterKnown": "Déjà importées",
+  "importacoes.fila.knownRecordOf": "Notice déjà importée par ta bibliothèque : {title}",
+  "importacoes.fila.knownRecordNotHeld": "Notice plus détenue par ta bibliothèque."
 }

@@ -7135,5 +7135,9 @@
   "library.digitalPolicy.confirm": "Άνοιγμα της δημόσιας ανάγνωσης προστατευμένων έργων;\nΗ βιβλιοθήκη φέρει τη νομική ευθύνη: σε περίπτωση καταγγελίας των δικαιούχων, απαντά και αποσύρει το τεκμήριο.",
   "library.digitalPolicy.confirmLabel": "Άνοιγμα, με δική μας ευθύνη",
   "library.digitalPolicy.opened": "Η δημόσια ανάγνωση προστατευμένων έργων άνοιξε.",
-  "library.digitalPolicy.closed": "Η δημόσια ανάγνωση προστατευμένων έργων έκλεισε."
+  "library.digitalPolicy.closed": "Η δημόσια ανάγνωση προστατευμένων έργων έκλεισε.",
+  "importacoes.fila.match.known_record": "Ήδη εισαγμένη",
+  "importacoes.fila.filterKnown": "Ήδη εισαγμένες",
+  "importacoes.fila.knownRecordOf": "Εγγραφή που η βιβλιοθήκη σου έχει ήδη εισαγάγει: {title}",
+  "importacoes.fila.knownRecordNotHeld": "Εγγραφή που η βιβλιοθήκη σου δεν κατέχει πλέον."
 }

@@ -6,8 +6,13 @@
 --           décor de T9, que le rattrapage doit lister et qui se publie sous le tour rattrapé) ;
 --           quatrième passe le 2026-09-30 (les deux verdicts #17 de la troisième : T9b —
 --           exemplaires RAPPROCHÉS en brouillon, prêt et publié dans le lot rattrapé, republication
---           du publié ; un tour d'avant le 29/09 encore « requested »)
--- Ref     : migration 20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe
+--           du publié ; un tour d'avant le 29/09 encore « requested ») ;
+--           H21 lot 1 le 2026-10-05 (REGISTRE IMP-28 d : un exemplaire RATTACHÉ à une
+--           notice importée passe la porte de révision des rapprochés, et
+--           fn_batch_ajouts_apres_revision le compte — T18, T21 et l'en-tête réécrits ;
+--           le parcours entier : tests/sql/h21_lot1_reconnaitre_tests.sql, T12-T14)
+-- Ref     : migration 20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe ;
+--           migration 20261005103427_h21_lot1_reconnaitre_une_notice_deja_importee
 --
 -- (b) L'approbation d'un tour couvre les brouillons que CE tour a soumis
 --     (catalog_batch_reviews.draft_ids / exemplar_draft_ids, figés à la
@@ -28,12 +33,16 @@
 --     lot en draft, ready, published, rattachés à une notice ou non (l'absorption
 --     de leur notice les détache sans les avoir rangés après la demande).
 --     fn_batch_ajouts_apres_revision ne compte toujours que les vivants
---     (draft/ready) hors liste, et les exemplaires sans notice.
+--     (draft/ready) hors liste — exemplaires rattachés à une notice compris
+--     depuis le H21 lot 1 (IMP-28 d, 05/10) : ils attendent un tour comme les
+--     autres.
 -- (c) Un lot né d'un RAPPROCHEMENT (exemplaires sans notice, venus d'une
 --     ligne d'import) est importé : l'exemplaire rapproché ne se publie que
 --     dans un lot, après une révision approuvée qui le couvre ; un exemplaire
---     fait à la main rangé dans ce lot attend avec lui ; un exemplaire
---     rattaché à une notice (book_draft_id) suit la garde de sa notice.
+--     fait à la main rangé dans ce lot attend avec lui. Un exemplaire
+--     rattaché à une notice (book_draft_id) ne se publie qu'après elle, et,
+--     depuis le H21 lot 1 (IMP-28 d), passe la même porte que le rapproché :
+--     publish_book_draft ne publie avec la notice que ceux que le tour couvre.
 --
 -- T1  (b) demande : la liste figée = brouillons du lot hors corbeille (ici draft/ready ;
 --         les publiés : T6, T19).
@@ -89,9 +98,10 @@
 --         added_after_review ; un exemplaire couvert se publie, lui.
 -- T17 (c) exemplaire fait à la main, lot fait à la main ou sans lot : publié
 --         (non-régression).
--- T18     exemplaire importé RATTACHÉ à une notice : pas avant elle, publié avec
---         elle après révision (non-régression de la transitivité) ; il figure
---         dans la liste d'exemplaires du tour (amendement).
+-- T18     exemplaire importé RATTACHÉ à une notice : pas avant elle ; il figure
+--         dans la liste d'exemplaires du tour (amendement) et c'est elle qui le
+--         rend publiable (IMP-28 d) : publié avec sa notice après révision, puis,
+--         republié seul, il passe la porte (le tour approuvé le couvre).
 -- T19 (b) republication : d19 publié sous le tour 1 ; une notice ajoutée à la
 --         main, la coordination redemande (tour 2), l'administration approuve ;
 --         republier d19 (brouillon au statut published, comme la file) passe :
@@ -103,8 +113,9 @@
 --         (exemplaire détaché, book_draft_id NULL) : pas un ajout, et
 --         publish_exemplar_draft passe — il figurait dans exemplar_draft_ids.
 -- T21 (b) fn_batch_ajouts_apres_revision (et after_review) ne compte que les
---         brouillons vivants (draft/ready) hors liste, exemplaires sans notice :
---         ni corbeille, ni publiés, ni exemplaire rattaché (non-régression).
+--         brouillons vivants (draft/ready) hors liste : ni corbeille, ni publiés ;
+--         l'exemplaire RATTACHÉ rangé après la demande compte (IMP-28 d, 05/10 :
+--         il attendait sans que la coordination puisse redemander un tour).
 -- T22     garde de compatibilité : un tour ÉCRIT sans liste (une fixture ; après
 --         le rattrapage de la migration, plus aucun tour de production) couvre son
 --         lot, même un brouillon rangé après (ajouts = 0, les deux se publient).
@@ -135,7 +146,9 @@
 --   mutant fn_batch_ajouts_apres_revision « tout sauf la corbeille »
 --     (Tb-mutant-ajouts-statuts.sql) : 22/23 — T21 ;
 --   mutant fn_batch_ajouts_apres_revision « exemplaires rattachés comptés »
---     (Tb-mutant-ajouts-rattaches.sql) : 22/23 — T21 ;
+--     (Tb-mutant-ajouts-rattaches.sql) : 22/23 — T21 ; depuis le H21 lot 1 (IMP-28 d),
+--     ce « mutant » est la règle, et c'est la définition du lot 0 (rattachés NON
+--     comptés) qui fait tomber T21 (contre-épreuve du 05/10, h21_lot1_reconnaitre_tests.sql) ;
 --   mutants de private.fn_h21_rattraper_listes_des_tours :
 --     B17-mutant-rattrapage-sans-rattaches.sql  22/23 — T9 seul (exemplaires sans notice
 --                                                seuls : x5 hors liste),
@@ -1007,7 +1020,7 @@ BEGIN
   END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T18 un exemplaire importe rattache a sa notice suit sa garde : pas avant elle, publie avec elle apres revision (non-regression)';
+  v_t := 'T18 un exemplaire importe rattache : pas avant sa notice ; couvert par le tour, publie avec elle puis republie seul (IMP-28 d)';
   BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     IF v_xn IS NULL THEN RAISE EXCEPTION 'la promotion n''a pas cree l''exemplaire du fichier'; END IF;
@@ -1023,16 +1036,27 @@ BEGIN
     PERFORM public.fn_batch_review_verdict(v_rev8, 'approved', NULL);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     PERFORM public.publish_book_draft(v_d11);
+    -- IMP-28 d (05/10) : republié seul, le rattaché passe la porte de révision — le tour
+    -- approuvé le couvre (il était dans sa liste) ; même exemplaire, aucun doublon.
+    v_hint2 := NULL;
+    BEGIN
+      PERFORM public.publish_exemplar_draft(v_xn);
+      v_hint2 := 'republie';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint2 = PG_EXCEPTION_HINT;
+    END;
     IF v_hint = 'error.publish.item_before_record'
        -- rattaché à sa notice, il figure dans la liste d'exemplaires du tour (l'absorption de sa
-       -- notice pourrait le détacher : T20) ; c'est pourtant la notice qui le publie (transitivité).
+       -- notice pourrait le détacher : T20) ; depuis IMP-28 d, c'est cette liste qui le rend
+       -- publiable, avec sa notice comme seul.
        -- coalesce : sous fn_batch_review_request d'avant (contre-épreuve), le tour n'a pas de liste.
        AND (SELECT coalesce(r.exemplar_draft_ids = ARRAY[v_xn], true) AND coalesce(r.draft_ids = ARRAY[v_d11], true)
               FROM public.catalog_batch_reviews r WHERE r.id = v_rev8)
        AND (SELECT status FROM public.exemplar_drafts WHERE id = v_xn) = 'published'
+       AND v_hint2 = 'republie'
        AND (SELECT count(*) FROM public.exemplares e WHERE e.source_item_code = 'H21TC-NOT-1' AND e.library_id = v_lib) = 1
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : avant la notice='||coalesce(v_hint,'NULL')
+         ||' republication='||coalesce(v_hint2,'NULL')
          ||' exemplaire='||coalesce((SELECT status FROM public.exemplar_drafts WHERE id = v_xn),'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
@@ -1160,7 +1184,7 @@ BEGIN
   END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T21 (b) fn_batch_ajouts_apres_revision ne compte que les brouillons vivants hors liste (non-regression)';
+  v_t := 'T21 (b) fn_batch_ajouts_apres_revision ne compte que les brouillons vivants hors liste, rattaches compris (IMP-28 d)';
   BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     IF v_rev9b IS NULL OR public.fn_batch_review_status(v_lot9) IS DISTINCT FROM 'approved' THEN
@@ -1168,7 +1192,8 @@ BEGIN
     END IF;
     -- Avant : d19 (publié) et dh9 (brouillon) sont tous deux dans la liste du tour 2.
     v_n := public.fn_batch_ajouts_apres_revision(v_lot9);
-    -- Rangés après la demande du tour 2 (décor, postgres) : seuls les deux vivants sans notice comptent.
+    -- Rangés après la demande du tour 2 (décor, postgres) : les trois vivants comptent — le
+    -- rattaché aussi depuis IMP-28 d (il ne se publie plus avec sa notice hors de la liste).
     INSERT INTO public.book_drafts (titulo, bib_ref, tipo_material, owner_library_id, created_by, batch_id, status) VALUES
       ('H21TC T21 vivante',   'H21TC-REF-T21-VIF',  'livro', v_lib, v_coord, v_lot9, 'ready'),       -- comptée
       ('H21TC T21 corbeille', 'H21TC-REF-T21-CORB', 'livro', v_lib, v_coord, v_lot9, 'cancelled'),   -- non
@@ -1177,10 +1202,10 @@ BEGIN
       ('create', 'draft',     'pending', v_lib, 'H21TC-B20', v_coord, v_lot9, NULL,  'H21TC-T21 vivant'),     -- compté
       ('create', 'cancelled', 'pending', v_lib, 'H21TC-B20', v_coord, v_lot9, NULL,  'H21TC-T21 corbeille'),  -- non
       ('create', 'published', 'ready',   v_lib, 'H21TC-B20', v_coord, v_lot9, NULL,  'H21TC-T21 publie'),     -- non
-      ('create', 'draft',     'pending', v_lib, NULL,        v_coord, v_lot9, v_dh9, 'H21TC-T21 rattache');   -- non : sa notice le porte
+      ('create', 'draft',     'pending', v_lib, NULL,        v_coord, v_lot9, v_dh9, 'H21TC-T21 rattache');   -- compté (IMP-28 d)
     v_m := public.fn_batch_ajouts_apres_revision(v_lot9);
     SELECT l.after_review INTO v_k FROM public.fn_batch_reviews_list() l WHERE l.batch_id = v_lot9;
-    IF v_n = 0 AND v_m = 2 AND v_k = 2
+    IF v_n = 0 AND v_m = 3 AND v_k = 3
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : avant='||coalesce(v_n::text,'NULL')||' apres='||coalesce(v_m::text,'NULL')
          ||' after_review='||coalesce(v_k::text,'NULL')); END IF;

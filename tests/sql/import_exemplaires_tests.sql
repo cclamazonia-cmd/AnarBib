@@ -5,6 +5,8 @@
 -- Ref     : migration 20260927113000_h19_exemplaires_importes
 --           adaptee au H21 lot 0 (29/09/2026, REGISTRE IMP-26 et IMP-27) :
 --           migration 20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe
+--           et au H21 lot 1 (05/10/2026, REGISTRE IMP-28 d, T28 reecrit) :
+--           migration 20261005103427_h21_lot1_reconnaitre_une_notice_deja_importee
 --
 -- Le parcours entier, avec les formes que l'EF ecrit (normalized_payload.items) :
 -- T1  promotion : un brouillon d'exemplaire par exemplaire, rattache a SA
@@ -57,7 +59,10 @@
 -- T26 rapport : « sans numerotation » seulement sans tombo.
 -- T27 repli sans bibliotheque cible : adhesion de staff.
 -- Troisieme passe du 27/09 :
--- T28 exemplaire ecarte seul, restaure apres la publication de sa notice : publie sur la fiche.
+-- T28 exemplaire ecarte seul, restaure apres la publication de sa notice : depuis le H21
+--     lot 1 (05/10/2026, IMP-28 d), refuse (added_after_review) tant qu'un nouveau tour ne
+--     l'a pas couvert ; la coordination redemande, l'administration approuve, et il se
+--     publie sur la fiche (avant le lot 1 : publie tout de suite, sans revision).
 -- T29 journal : pas d'entree a part pour un exemplaire supprime avec sa notice ; rejeu isole refuse proprement.
 -- T30 profil supprime depuis l'import : refuse des l'envoi.
 -- H21 lot 0 (29/09) :
@@ -884,7 +889,11 @@ BEGIN
     v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T28 ─────────────────────────────────────────────────────────────
-  v_t := 'T28 un exemplaire ecarte seul, restaure APRES la publication de sa notice, se publie sur la fiche';
+  -- H21 lot 1 (05/10/2026, IMP-28 d) : restauré APRÈS la demande de révision, il n'est pas dans
+  -- la liste du tour : refusé (added_after_review), compté dans les ajouts ; la coordination
+  -- redemande un tour, l'administration approuve, ALORS il se publie sur la fiche. Avant le
+  -- lot 1, il se publiait tout de suite (il suivait sa notice publiée).
+  v_t := 'T28 un exemplaire ecarte seul, restaure APRES la publication de sa notice : attend un nouveau tour, puis se publie sur la fiche';
   BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
@@ -902,13 +911,27 @@ BEGIN
     PERFORM public.publish_book_draft(v_id);
     SELECT x.id INTO v_x1 FROM public.exemplar_drafts x WHERE x.book_draft_id = v_id AND x.source_item_code = 'TARD-2';
     UPDATE public.exemplar_drafts SET status = 'draft' WHERE id = v_x1;
+    v_hint := NULL;
+    BEGIN
+      PERFORM public.publish_exemplar_draft(v_x1);
+      v_hint := 'publie';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
+    END;
+    v_n := public.fn_batch_ajouts_apres_revision(v_lot5);
+    -- La coordination redemande un tour (le lot approuvé a un ajout), l'administration approuve.
+    v_res := public.fn_batch_review_request(v_lot5);
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
+    PERFORM public.fn_batch_review_verdict((v_res->>'review_id')::bigint, 'approved', NULL);
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     PERFORM public.publish_exemplar_draft(v_x1);
-    IF (SELECT e.bib_ref FROM public.exemplares e WHERE e.source_item_code = 'TARD-2' AND e.library_id = v_lib) = 'ESSAI-H19-TARD-' || v_id
+    IF v_hint = 'error.publish.added_after_review' AND v_n = 1
+       AND (SELECT e.bib_ref FROM public.exemplares e WHERE e.source_item_code = 'TARD-2' AND e.library_id = v_lib) = 'ESSAI-H19-TARD-' || v_id
        AND (SELECT count(*) FROM public.exemplares e JOIN public.book_holdings h ON h.id = e.holding_id
              JOIN public.book_drafts bd ON bd.published_book_id = h.book_id
             WHERE bd.id = v_id AND e.library_id = v_lib) = 2
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : exemplaire absent ou hors de la fiche'); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : premier essai='||coalesce(v_hint,'NULL')
+         ||' ajouts='||coalesce(v_n::text,'NULL')||' (exemplaire absent ou hors de la fiche ?)'); END IF;
   EXCEPTION WHEN OTHERS THEN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;

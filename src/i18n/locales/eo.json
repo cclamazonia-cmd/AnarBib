@@ -7135,5 +7135,9 @@
   "library.digitalPolicy.confirm": "Ĉu malfermi la publikan legadon de rajtoprotektitaj verkoj?\nLa biblioteko portas la juran respondecon: okaze de plendo de la rajtoposedant-in-oj, ĝi respondas kaj forigas la dokumenton.",
   "library.digitalPolicy.confirmLabel": "Malfermi, je nia respondeco",
   "library.digitalPolicy.opened": "Publika legado de rajtoprotektitaj verkoj malfermita.",
-  "library.digitalPolicy.closed": "Publika legado de rajtoprotektitaj verkoj fermita."
+  "library.digitalPolicy.closed": "Publika legado de rajtoprotektitaj verkoj fermita.",
+  "importacoes.fila.match.known_record": "Jam importita",
+  "importacoes.fila.filterKnown": "Jam importitaj",
+  "importacoes.fila.knownRecordOf": "Slipo jam importita de via biblioteko: {title}",
+  "importacoes.fila.knownRecordNotHeld": "Slipo ne plu posedata de via biblioteko."
 }

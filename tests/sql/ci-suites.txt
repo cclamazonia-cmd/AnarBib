@@ -636,6 +636,13 @@ tests/sql/import_promotion_selection_tests.sql
 tests/sql/import_rattachee_ne_cree_pas_tests.sql
 tests/sql/h21_lot0_parcours_tests.sql
 tests/sql/h21_republier_hors_lot_tests.sql
+# 05/10/2026 — H21 lot 1 (REGISTRE IMP-28) : une notice déjà importée est reconnue par
+# toute source de sa bibliothèque (known_record, avant toute passe floue ; la fixture PMB
+# réimportée à l'identique : 64/64) ; « plus détenue » dite à l'écran
+# (proposed_book_held) ; « Rapprocher » ou rejeter, jamais « Créer » ; l'identifiant
+# d'origine reste à la bibliothèque qui a importé (c) ; un exemplaire rattaché sorti de la
+# corbeille après la demande attend un nouveau tour (d).
+tests/sql/h21_lot1_reconnaitre_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.
