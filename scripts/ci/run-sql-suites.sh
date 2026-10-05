@@ -136,7 +136,7 @@ echo "::endgroup::"
 bg2_sql_tables() {
   printf '%s\n' "select case when n.nspname = 'public' then c.relname else n.nspname || '.' || c.relname end
   from pg_class c join pg_namespace n on n.oid = c.relnamespace
- where n.nspname in ('public', 'ingest') and c.relkind in ('r', 'p')
+ where n.nspname in ('public', 'ingest', 'private', 'api') and c.relkind in ('r', 'p')
  order by 1;"
 }
 bg2_normaliser() {

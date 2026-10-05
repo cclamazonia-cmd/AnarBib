@@ -60,7 +60,8 @@ function ligneConfig(source, nom) {
 
 describe('BG2-13 — ingest au flux long (source)', () => {
   it('le flux long déclare public ET ingest, et le pg_dump les prend dans le même fichier anarbib-long.sql', () => {
-    expect(ligneConfig(SCRIPT, 'LONG_SCHEMAS')).toBe('LONG_SCHEMAS=(public ingest)');
+    // I30 (05/10/2026) : private et api entrent au flux long.
+    expect(ligneConfig(SCRIPT, 'LONG_SCHEMAS')).toBe('LONG_SCHEMAS=(public ingest private api)');
     const corps = fonction(SCRIPT, 'backup_long');
     expect(corps).toContain('local dump="$WORK/anarbib-long.sql"');
     expect(corps).toMatch(/for s in "\$\{LONG_SCHEMAS\[@\]\}"; do SCHEMAS\+=\(--schema="\$s"\); done/);
@@ -86,7 +87,7 @@ describe('BG2-13 — ingest au flux long (source)', () => {
       expect(fonction(CI, f), f).toBe(fonction(SCRIPT, f));
     }
     const sql = fonction(SCRIPT, 'bg2_sql_tables');
-    expect(sql).toContain("n.nspname in ('public', 'ingest')");
+    expect(sql).toContain("n.nspname in ('public', 'ingest', 'private', 'api')");
     expect(sql).toContain("when n.nspname = 'public' then c.relname else n.nspname || '.' || c.relname");
     expect(fonction(SCRIPT, 'real_tables')).toContain('"$(bg2_sql_tables)" | bg2_normaliser');
     expect(CI).toContain('PT -At -c "$(bg2_sql_tables)" | bg2_normaliser > /tmp/bg2-real.txt');
@@ -207,6 +208,10 @@ function poste(cas, { reelles = REELLES, known = REELLES, denylist, dump } = {})
     'CREATE TABLE public.books (', '    id bigint', ');',
     'CREATE TABLE ingest.book_import_baselines (', '    id bigint', ');',
     'COPY ingest.book_import_baselines (id) FROM stdin;', '1', '\\.', '',
+    // I30 : private et api n'ont que des vues et des fonctions ; et les droits sont là.
+    'CREATE VIEW private.catalog_public_rows AS', ' SELECT 1;',
+    'CREATE FUNCTION api.catalog_works_v1() RETURNS integer', '    LANGUAGE sql', '    AS $$ select 1 $$;',
+    'GRANT SELECT ON TABLE public.books TO anon;', '',
   ].join('\n'));
   return ops;
 }
@@ -217,10 +222,11 @@ describe.skipIf(!outilsPresents)('BG2-13 — fonctions réelles du script, doubl
     const r = lancer(harnaisPoste, [ops, 'backup_long']);
     expect(r.code, r.sortie).toBe(0);
     const args = readFileSync(path.join(ops, 'pg_dump.args'), 'utf8').split('\n').filter(Boolean);
-    expect(args.filter((a) => a.startsWith('--schema='))).toEqual(['--schema=public', '--schema=ingest']);
+    expect(args.filter((a) => a.startsWith('--schema='))).toEqual(['--schema=public', '--schema=ingest', '--schema=private', '--schema=api']);
     expect(args.filter((a) => a.startsWith('--file='))).toEqual([`--file=${ops}/.work/anarbib-long.sql`]);
     expect(args).toContain('--no-owner');
-    expect(args).toContain('--no-privileges');
+    // I30 : les droits voyagent avec le dump.
+    expect(args).not.toContain('--no-privileges');
     expect(r.sortie).toMatch(/Dump long OK : 2 tables \(public 1, ingest 1\)/);
     const restic = readFileSync(path.join(ops, 'restic.log'), 'utf8').split('\n').filter(Boolean);
     expect(restic[0]).toBe(`backup ${ops}/.work/anarbib-long.sql ${ops}/.work/anarbib-vault.sql --tag flux-long --tag bg2`);
@@ -265,6 +271,25 @@ describe.skipIf(!outilsPresents)('BG2-13 — fonctions réelles du script, doubl
     const r = lancer(harnaisPoste, [ops, 'backup_long']);
     expect(r.code).not.toBe(0);
     expect(r.sortie).toMatch(/schema ingest ABSENT du dump long — ANNULE\./);
+  });
+
+  it('I30 : un schéma sans table (api) se reconnaît à ses vues ou fonctions ; absent, l’envoi est annulé', () => {
+    const sansApi = poste('long-sans-api', {
+      dump: 'CREATE TABLE public.books (\n);\nCREATE TABLE ingest.book_import_baselines (\n);\nCREATE VIEW private.v AS\n SELECT 1;\nGRANT SELECT ON TABLE public.books TO anon;\n',
+    });
+    const r = lancer(harnaisPoste, [sansApi, 'backup_long']);
+    expect(r.code).not.toBe(0);
+    expect(r.sortie).toMatch(/schema api ABSENT du dump long — ANNULE\./);
+  });
+
+  it('I30 : un dump sans aucun GRANT (un --no-privileges revenu) annule l’envoi', () => {
+    const ops = poste('long-sans-droits', {
+      dump: 'CREATE TABLE public.books (\n);\nCREATE TABLE ingest.book_import_baselines (\n);\nCREATE VIEW private.v AS\n SELECT 1;\nCREATE FUNCTION api.f() RETURNS integer\n    AS $$ select 1 $$;\n',
+    });
+    const r = lancer(harnaisPoste, [ops, 'backup_long']);
+    expect(r.code).not.toBe(0);
+    expect(r.sortie).toMatch(/aucun GRANT dans le dump long \(--no-privileges \?\) — ANNULE\./);
+    expect(() => readFileSync(path.join(ops, 'restic.log'))).toThrow();
   });
 
   it('filet : une table d’ingest non classée bloque, nommée qualifiée ; classée, le filet passe', () => {

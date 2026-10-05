@@ -43,9 +43,11 @@ KNOWN="$OPS_DIR/bg2-known-tables.txt"           # TOUTES les tables classees (fi
 # de public s'ecrit nue (`books`), une table d'un autre schema s'ecrit avec son
 # schema (`ingest.book_import_baselines`). Cf. bg2_qualifier / bg2_normaliser.
 
-# Schemas du flux long (BG2-13, 05/10/2026). Le filet classe les tables de ces
-# memes schemas (bg2_sql_tables) : les deux listes vont ensemble.
-LONG_SCHEMAS=(public ingest)
+# Schemas du flux long (BG2-13, 05/10/2026 ; I30, 05/10/2026 : private et api,
+# qui ne portent que des vues et des fonctions — l'API de l'OPAC, les aides des
+# politiques RLS — et n'etaient dans AUCUN flux). Le filet classe les tables de
+# ces memes schemas (bg2_sql_tables) : les deux listes vont ensemble.
+LONG_SCHEMAS=(public ingest private api)
 WORK="$OPS_DIR/.work"                           # dumps base temporaires
 STORAGE_WORK="$OPS_DIR/.storage-work"           # miroir local des buckets (resync a chaque fois)
 
@@ -286,7 +288,7 @@ preflight() {
 bg2_sql_tables() {
   printf '%s\n' "select case when n.nspname = 'public' then c.relname else n.nspname || '.' || c.relname end
   from pg_class c join pg_namespace n on n.oid = c.relnamespace
- where n.nspname in ('public', 'ingest') and c.relkind in ('r', 'p')
+ where n.nspname in ('public', 'ingest', 'private', 'api') and c.relkind in ('r', 'p')
  order by 1;"
 }
 bg2_normaliser() {
@@ -397,7 +399,11 @@ backup_long() {
   # (piege vecu avec anarbib-vault.sql, cf. BG2-15 plus bas).
   for s in "${LONG_SCHEMAS[@]}"; do SCHEMAS+=(--schema="$s"); done
   info "LONG : pg_dump (schemas ${LONG_SCHEMAS[*]}, ${#EXCLUDES[@]} tables exclues : PII + transitoires)"
-  pg_dump "$PGCONN" "${SCHEMAS[@]}" "${EXCLUDES[@]}" --no-owner --no-privileges --file="$dump"
+  # I30 (05/10/2026) : PLUS de --no-privileges. Sans GRANT ni REVOKE dans le
+  # dump, une base restauree perdait les droits de public (l'application ne
+  # lit plus rien) et toute fonction recreee reprenait l'EXECUTE a PUBLIC.
+  # Apres rejeu, bg2-repose-droits.sh rend les droits exacts (runbook §3.2-quater).
+  pg_dump "$PGCONN" "${SCHEMAS[@]}" "${EXCLUDES[@]}" --no-owner --file="$dump"
 
   info "Controle anti-fuite (aucune PII ne doit sortir)"
   grep -qE "^CREATE TABLE public\.($PII_CANARIES) " "$dump" && die "FUITE PII dans le dump long — ANNULE."
@@ -412,9 +418,12 @@ backup_long() {
   # Et chaque schema du flux est bien la : un ingest disparu du dump ne doit
   # pas passer pour une sauvegarde complete.
   for s in "${LONG_SCHEMAS[@]}"; do
-    grep -q "^CREATE TABLE $s\." "$dump" || die "schema $s ABSENT du dump long — ANNULE."
+    grep -qE "^CREATE (TABLE|VIEW|MATERIALIZED VIEW|FUNCTION) $s\." "$dump" \
+      || die "schema $s ABSENT du dump long — ANNULE."
   done
-  info "Dump long OK : $(grep -c '^CREATE TABLE ' "$dump") tables (public $(grep -c '^CREATE TABLE public\.' "$dump"), ingest $(grep -c '^CREATE TABLE ingest\.' "$dump")), $(du -h "$dump" | cut -f1)"
+  # Et les droits sont dans le dump : un --no-privileges revenu se voit ici.
+  grep -qE '^GRANT ' "$dump" || die "aucun GRANT dans le dump long (--no-privileges ?) — ANNULE."
+  info "Dump long OK : $(grep -c '^CREATE TABLE ' "$dump") tables (public $(grep -c '^CREATE TABLE public\.' "$dump"), ingest $(grep -c '^CREATE TABLE ingest\.' "$dump")), $(grep -cE '^CREATE (OR REPLACE )?FUNCTION ' "$dump") fonctions, $(grep -cE '^(GRANT|REVOKE) ' "$dump") droits, $(du -h "$dump" | cut -f1)"
 
   dump_vault "$vault"
 
@@ -448,11 +457,13 @@ backup_court() {
   done < <(bg2_normaliser < "$DENYLIST")
   local a; for a in "${AUTH_TABLES[@]}"; do TABLES+=(--table="$a"); done
   info "COURT : pg_dump (allowlist stricte, ${#TABLES[@]} tables)"
-  pg_dump "$PGCONN" "${TABLES[@]}" --no-owner --no-privileges --file="$dump"
+  # I30 : droits gardes, comme le long (les tables PII de public y ont les leurs).
+  pg_dump "$PGCONN" "${TABLES[@]}" --no-owner --file="$dump"
 
   info "Controle anti-fuite inverse (aucune table du long ne doit entrer)"
   grep -qE "^CREATE TABLE public\.($LONG_CANARIES) " "$dump" && die "FUITE : une table du long dans le court — ANNULE."
   grep -qE '^CREATE TABLE auth\.users ' "$dump" || die "auth.users absent du dump court — ANNULE."
+  grep -qE '^GRANT ' "$dump" || die "aucun GRANT dans le dump court (--no-privileges ?) — ANNULE."
   info "Dump court OK : $(grep -c '^CREATE TABLE ' "$dump") tables, $(du -h "$dump" | cut -f1)"
 
   unlock_stale
@@ -520,11 +531,31 @@ DO $$ BEGIN CREATE ROLE anon;          EXCEPTION WHEN duplicate_object THEN NULL
 DO $$ BEGIN CREATE ROLE authenticated; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE ROLE service_role;  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE ROLE authenticator; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+-- I30 : ce qu'une instance Supabase neuve porte deja et qu'aucun dump n'emporte —
+-- les extensions du projet (index trigramme, unaccent…) et les fonctions auth.*
+-- que les politiques et les vues appellent (definitions reelles de Supabase).
+CREATE SCHEMA IF NOT EXISTS extensions;
+CREATE EXTENSION IF NOT EXISTS pg_trgm     WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS unaccent    WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS pgcrypto    WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA extensions;
+CREATE OR REPLACE FUNCTION auth.role() RETURNS text LANGUAGE sql STABLE AS $f$
+  select coalesce(current_setting('request.jwt.claim.role', true), (current_setting('request.jwt.claims', true)::jsonb ->> 'role'))::text $f$;
+CREATE OR REPLACE FUNCTION auth.email() RETURNS text LANGUAGE sql STABLE AS $f$
+  select coalesce(current_setting('request.jwt.claim.email', true), (current_setting('request.jwt.claims', true)::jsonb ->> 'email'))::text $f$;
+CREATE OR REPLACE FUNCTION auth.jwt() RETURNS jsonb LANGUAGE sql STABLE AS $f$
+  select coalesce(nullif(current_setting('request.jwt.claim', true), ''), nullif(current_setting('request.jwt.claims', true), ''))::jsonb $f$;
 SQL
 
   info "Rejeu LONG puis COURT"
   docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 < "$long"  > "$dir/long.log"  2>&1 || true
   docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 < "$court" > "$dir/court.log" 2>&1 || true
+
+  # I30 : les droits exacts de la production (runbook §3.2-quater).
+  info "Repose des droits (bg2-repose-droits.sh)"
+  bash "$OPS_DIR/bg2-repose-droits.sh" "$long" "$court" \
+    | docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=1 > "$dir/repose.log" 2>&1 \
+    || echo "    !!! repose des droits en echec (voir $dir/repose.log)" >&2
 
   echo; info "VERDICT"
   docker exec "$ctn" psql -U postgres -d postgres -c \
@@ -551,6 +582,22 @@ SQL
     fi
   done
   echo "    (auth.users et profiles non nuls ; books ~2674)"
+
+  # I30 : memes droits, memes fonctions, vues, tables et sequences que la
+  # production, schema par schema (bg2-empreinte-droits.sql, lu des deux
+  # cotes). Seuls ecarts admis : les privileges par defaut de supabase_admin,
+  # role de la plateforme absent d'un Postgres nu, qu'une instance neuve pose
+  # elle-meme.
+  local prod_e rest_e ecarts
+  prod_e="$(psql "$PGCONN" -X -q -A -F ' ' -t -f "$OPS_DIR/bg2-empreinte-droits.sql" | grep -v '/defaut:supabase_admin ' | sort)"
+  rest_e="$(docker exec -i "$ctn" psql -U postgres -d postgres -X -q -A -F ' ' -t < "$OPS_DIR/bg2-empreinte-droits.sql" | grep -v '/defaut:supabase_admin ' | sort)"
+  ecarts="$(diff <(printf '%s\n' "$prod_e") <(printf '%s\n' "$rest_e") | grep '^[<>]' || true)"
+  if [ -n "$prod_e" ] && [ -z "$ecarts" ]; then
+    echo "    droits et objets : $(printf '%s\n' "$prod_e" | wc -l) empreintes identiques a la production : OK"
+  else
+    { echo "    !!! droits et objets : ECART avec la production (< production, > restauration) :"
+      printf '%s\n' "$ecarts" | sed 's/^/        /'; } >&2
+  fi
   info "Nettoyage du bac a sable"
 }
 
