@@ -47,7 +47,11 @@ export function isCoord(role) {
 // ── Permissions par page de navigation ──────────────────────────
 
 export function canSeeCatalog(_role) { return true; }
-export function canSeeAccount(role) { return Boolean(role); }
+// « Mon compte » : toute personne connectée en a un, rattachée ou non à une
+// bibliothèque (05/10/2026 : le camarade coopté admin réseau, rattaché nulle
+// part, n'avait pas le lien — et ne pouvait donc pas demander son inscription).
+// Le paramètre reste pour la forme des autres règles ; l'appelant vérifie `user`.
+export function canSeeAccount(_role) { return true; }
 export function canSeePainel(role) { return isLibrarian(role); }
 export function canSeeCatalogacao(role) { return isLibrarian(role); }
 export function canSeeImportacoes(role) { return isCoord(role); }

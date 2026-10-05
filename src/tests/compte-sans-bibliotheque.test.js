@@ -82,6 +82,17 @@ describe('un admin réseau sans bibliothèque', () => {
   });
 });
 
+// Capture du camarade, 05/10 : barre du haut sans « Mon compte » — le lien
+// exigeait un rôle local. Sans lui, impossible de demander son inscription.
+describe('« Mon compte » pour un compte sans bibliothèque', () => {
+  it('le lien est dû à toute personne connectée, rôle local ou pas', async () => {
+    const { canSeeAccount } = await import('@/lib/roles');
+    expect(canSeeAccount(null)).toBe(true);
+    expect(canSeeAccount(undefined)).toBe(true);
+    expect(lire('src/components/layout/index.jsx')).toContain('{user && canSeeAccount(role) && (');
+  });
+});
+
 describe('le lien d’un courriel ouvert sans session', () => {
   it('passe par la connexion avec la page ET l’onglet demandés', () => {
     etat.auth = { user: null, profile: null, loading: false, recovery: false };
