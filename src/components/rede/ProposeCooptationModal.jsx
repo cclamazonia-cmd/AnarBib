@@ -7,7 +7,7 @@
 // p_user_id (uuid de la cible) et p_motivation (texte >= 20 chars).
 //
 // Workflow utilisateur :
-//   1. Saisir l'email de la personne (auto-completion via SELECT profiles)
+//   1. Saisir l'email de la personne (resolu par fn_network_admin_find_user_by_email)
 //   2. Saisir la motivation politique (textarea, min 20 chars)
 //   3. Soumettre -> RPC, refresh listing, fermeture modal
 //
@@ -45,16 +45,17 @@ export default function ProposeCooptationModal({ isOpen, onClose, onSuccess }) {
     setError(null);
     setSubmitting(true);
     try {
-      // 1. Resoudre l'email en user_id via SELECT profiles
-      const emailLc = targetEmail.trim().toLowerCase();
-      const { data: targetProfile, error: profErr } = await supabase
-        .from('profiles')
-        .select('id, email')
-        .ilike('email', emailLc)
-        .maybeSingle();
+      // 1. Resoudre l'email en user_id. Pas par SELECT profiles : sous la RLS,
+      // un compte sans bibliotheque y est invisible a l'admin (05/10/2026,
+      // cooptation du camarade) — une fonction reservee a l'administration du
+      // reseau resout l'adresse exacte.
+      const { data: targetUserId, error: profErr } = await supabase.rpc(
+        'fn_network_admin_find_user_by_email',
+        { p_email: targetEmail.trim() }
+      );
 
       if (profErr) throw profErr;
-      if (!targetProfile) {
+      if (!targetUserId) {
         setError(t({ id: 'rede.cooptation.propose.errors.targetNotFound' }));
         return;
       }
@@ -63,7 +64,7 @@ export default function ProposeCooptationModal({ isOpen, onClose, onSuccess }) {
       const { error: rpcErr } = await supabase.rpc(
         'fn_network_admin_propose_cooptation',
         {
-          p_user_id: targetProfile.id,
+          p_user_id: targetUserId,
           p_motivation: motivation.trim(),
         }
       );
