@@ -1,7 +1,8 @@
 -- ============================================================
 -- Tests d'acceptation C5/B — le lot « autor_sans_autorite »
 -- ============================================================
--- Migration couverte : 20260903150117_le_lot_des_auteurs_sans_autorite.sql
+-- Migrations couvertes : 20260903150117_le_lot_des_auteurs_sans_autorite.sql,
+--                        20261005071316_le_lot_des_auteurs_sans_autorite_rattache_sans_doublon.sql (tests 9-10)
 --
 -- CE QUE CES TESTS PROTÈGENT. Ce lot ne réécrit pas un texte, il POSE UN LIEN
 -- entre un livre et une autorité — et crée l'autorité au besoin. Les deux
@@ -10,7 +11,7 @@
 -- qui a reçu une autorité entre-temps). Et un piège : proposer une autorité
 -- pour « Anônimo ».
 --
--- 8 tests :
+-- 10 tests :
 --   1. Le semis n'entre que les livres SANS AUCUNE autorité liée — un livre dont
 --      un contributeur porte déjà `author_id` n'y est pas ; un livre à contributeurs
 --      nommés mais non liés y est.
@@ -26,6 +27,11 @@
 --      et la ligne n'est pas marquée appliquée.
 --   8. « écarter » n'écrit rien ; `conv_revue_list` rend `actuel` = la
 --      transcription pour ce lot.
+--   9. (E28) Une graphie voisine (« d » pour « de ») et une parenthèse finale
+--      (« (org.) ») rattachent le contributeur existant, avec son rôle — sans
+--      ligne en double.
+--  10. (E28) Une personne différente (un traducteur non lié) n'est pas
+--      rattachée à tort : la transcription reçoit sa propre ligne.
 --
 -- Fixtures fabriquées ici, tout est annulé par le ROLLBACK final.
 -- ============================================================
@@ -75,8 +81,31 @@ WITH usr AS (
   INSERT INTO public.books (titulo, autor) VALUES ('Livre anonyme', 'Anônimo') RETURNING id
 ), b_bouge AS (
   INSERT INTO public.books (titulo, autor) VALUES ('Livre qui bouge', 'OITICICA, José') RETURNING id
+-- E28 : graphie voisine, parenthèse finale, personne différente.
+), b_voisin AS (
+  INSERT INTO public.books (titulo, autor) VALUES ('Livre graphie voisine', 'Comitê Nacional d Estudos – CNE') RETURNING id
+), c_voisin AS (
+  INSERT INTO public.book_contributors (book_id, author_id, position, name, role, is_primary)
+  SELECT b_voisin.id, NULL::bigint, 1, 'Comitê Nacional de Estudos – CNE', 'organizacao', true FROM b_voisin
+  RETURNING book_id
+), b_org AS (
+  INSERT INTO public.books (titulo, autor) VALUES ('Livre organisé', 'Vargaz, Ricardina (org.)') RETURNING id
+), c_org AS (
+  INSERT INTO public.book_contributors (book_id, author_id, position, name, role, is_primary)
+  SELECT b_org.id, NULL::bigint, 1, 'Vargaz, Ricardina', 'organizador', true FROM b_org
+  RETURNING book_id
+), b_autre AS (
+  INSERT INTO public.books (titulo, autor) VALUES ('Livre traduit', 'Lemoine, Arsène') RETURNING id
+), c_autre AS (
+  INSERT INTO public.book_contributors (book_id, author_id, position, name, role, is_primary)
+  SELECT b_autre.id, NULL::bigint, 1, 'Quintal, Berta', 'tradutor', false FROM b_autre
+  RETURNING book_id
 )
 SELECT (SELECT id FROM prof)        AS uid,
+       (SELECT id FROM b_voisin)    AS b_voisin,
+       (SELECT id FROM b_org)       AS b_org,
+       (SELECT id FROM b_autre)     AS b_autre,
+       (SELECT count(*) FROM c_voisin) + (SELECT count(*) FROM c_org) + (SELECT count(*) FROM c_autre) AS contribs_e28,
        (SELECT id FROM a_existante) AS id_reclus,
        (SELECT id FROM b_lie)       AS b_lie,
        (SELECT id FROM b_nomme)     AS b_nomme,
@@ -102,10 +131,13 @@ DECLARE
   v_ref      bigint;
   v_author   bigint;
   v_authors_avant bigint;
+  v_voisin   bigint;
+  v_org      bigint;
+  v_autre    bigint;
 BEGIN
-  SELECT uid, id_reclus, b_lie, b_nomme, b_vide, b_corrige, b_anonyme, b_bouge
-    INTO v_uid, v_reclus, v_lie, v_nomme, v_vide, v_corrige, v_anonyme, v_bouge FROM t_fix;
-  IF v_uid IS NULL OR v_reclus IS NULL OR v_bouge IS NULL THEN
+  SELECT uid, id_reclus, b_lie, b_nomme, b_vide, b_corrige, b_anonyme, b_bouge, b_voisin, b_org, b_autre
+    INTO v_uid, v_reclus, v_lie, v_nomme, v_vide, v_corrige, v_anonyme, v_bouge, v_voisin, v_org, v_autre FROM t_fix;
+  IF v_uid IS NULL OR v_reclus IS NULL OR v_bouge IS NULL OR v_autre IS NULL THEN
     RAISE EXCEPTION 'SETUP FAILED : fixture incomplète.';
   END IF;
 
@@ -163,6 +195,10 @@ BEGIN
   PERFORM api.conv_revue_decide((SELECT id FROM public.catalog_review_queue WHERE lot = 'autor_sans_autorite' AND entity_id = v_corrige), 'corrige', 'reclus, élisée', NULL);
   PERFORM api.conv_revue_decide((SELECT id FROM public.catalog_review_queue WHERE lot = 'autor_sans_autorite' AND entity_id = v_anonyme), 'ecarte', NULL, NULL);
   PERFORM api.conv_revue_decide((SELECT id FROM public.catalog_review_queue WHERE lot = 'autor_sans_autorite' AND entity_id = v_bouge), 'valide', NULL, NULL);
+  -- E28 : « corriger » fixe la cible à la transcription telle quelle.
+  PERFORM api.conv_revue_decide((SELECT id FROM public.catalog_review_queue WHERE lot = 'autor_sans_autorite' AND entity_id = v_voisin), 'corrige', 'Comitê Nacional d Estudos – CNE', NULL);
+  PERFORM api.conv_revue_decide((SELECT id FROM public.catalog_review_queue WHERE lot = 'autor_sans_autorite' AND entity_id = v_org), 'corrige', 'Vargaz, Ricardina (org.)', NULL);
+  PERFORM api.conv_revue_decide((SELECT id FROM public.catalog_review_queue WHERE lot = 'autor_sans_autorite' AND entity_id = v_autre), 'corrige', 'Lemoine, Arsène', NULL);
   -- Le livre « bouge » a été recatalogué entre-temps : sa transcription a changé.
   UPDATE public.books SET autor = 'Oiticica, José' WHERE id = v_bouge;
 
@@ -230,12 +266,46 @@ BEGIN
     RAISE EXCEPTION 'TEST 8 ÉCHOUÉ : « actuel » devait être la transcription courante (obtenu « % »).', v_txt;
   END IF;
   SELECT (SELECT count(*) FROM public.authors) - v_authors_avant INTO v_n;
-  IF v_n <> 2 THEN
-    RAISE EXCEPTION 'TEST 8 ÉCHOUÉ : 2 autorités neuves attendues (Moissonnier, Besnard), obtenu %.', v_n;
+  IF v_n <> 5 THEN
+    RAISE EXCEPTION 'TEST 8 ÉCHOUÉ : 5 autorités neuves attendues (Moissonnier, Besnard, et les trois des tests 9-10), obtenu %.', v_n;
   END IF;
   RAISE NOTICE 'TEST 8 OK — écarter n''écrit rien ; « actuel » est la transcription.';
 
-  RAISE NOTICE 'CONV-C5 OK : 8/8 tests passés (appliquées=%, refusées=%).', v_app, v_ref;
+  -- 9 ----------------------------------------------------------------
+  SELECT count(*) INTO v_n FROM public.book_contributors WHERE book_id = v_voisin;
+  IF v_n <> 1 THEN
+    RAISE EXCEPTION 'TEST 9 ÉCHOUÉ : graphie voisine — ligne en double (attendu 1, obtenu %).', v_n;
+  END IF;
+  SELECT count(*) INTO v_n FROM public.book_contributors
+   WHERE book_id = v_voisin AND author_id IS NOT NULL AND role = 'organizacao'
+     AND name = 'Comitê Nacional de Estudos – CNE';
+  IF v_n <> 1 THEN
+    RAISE EXCEPTION 'TEST 9 ÉCHOUÉ : graphie voisine — la ligne existante (nom et rôle gardés) devait recevoir l''autorité.';
+  END IF;
+  SELECT count(*) INTO v_n FROM public.book_contributors WHERE book_id = v_org;
+  IF v_n <> 1 THEN
+    RAISE EXCEPTION 'TEST 9 ÉCHOUÉ : parenthèse finale — ligne en double (attendu 1, obtenu %).', v_n;
+  END IF;
+  SELECT count(*) INTO v_n FROM public.book_contributors
+   WHERE book_id = v_org AND author_id IS NOT NULL AND role = 'organizador';
+  IF v_n <> 1 THEN
+    RAISE EXCEPTION 'TEST 9 ÉCHOUÉ : parenthèse finale — la ligne existante devait recevoir l''autorité.';
+  END IF;
+  RAISE NOTICE 'TEST 9 OK — graphie voisine et « (org.) » rattachent la ligne existante, sans doublon.';
+
+  -- 10 ---------------------------------------------------------------
+  SELECT count(*) INTO v_n FROM public.book_contributors WHERE book_id = v_autre;
+  IF v_n <> 2 THEN
+    RAISE EXCEPTION 'TEST 10 ÉCHOUÉ : la transcription devait recevoir sa propre ligne (attendu 2, obtenu %).', v_n;
+  END IF;
+  SELECT count(*) INTO v_n FROM public.book_contributors
+   WHERE book_id = v_autre AND name = 'Quintal, Berta' AND author_id IS NULL;
+  IF v_n <> 1 THEN
+    RAISE EXCEPTION 'TEST 10 ÉCHOUÉ : le traducteur a été rattaché à tort à l''autorité de l''auteur.';
+  END IF;
+  RAISE NOTICE 'TEST 10 OK — une personne différente n''est pas rattachée à tort.';
+
+  RAISE NOTICE 'CONV-C5 OK : 10/10 tests passés (appliquées=%, refusées=%).', v_app, v_ref;
 END $$;
 
 ROLLBACK;
