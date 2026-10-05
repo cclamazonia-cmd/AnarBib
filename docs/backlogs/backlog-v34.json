@@ -6260,7 +6260,7 @@
       ],
       "id": "H31",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "t": {
         "fr": "« Retraiter » juge le run au moment d’effacer, pas seulement à l’envoi",
@@ -6298,8 +6298,8 @@
         "claude/h21-reimport"
       ],
       "verif": {
-        "fr": "01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc, non mesuré en production : la largeur de la fenêtre n’est pas connue).",
-        "pt": "01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção)."
+        "fr": "01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc, non mesuré en production : la largeur de la fenêtre n’est pas connue). **05/10 — livré** (`9942be20`, parti par erreur sous le message provisoire « wip(h31) … (NON poussé) » ; migration `20261005124652` appliquée par la CI, `created_by` vide ; edge functions déployées, `deployed-functions` = `9942be20`). Ce que fait le commit : l’effacement des lignes au retraitement passe par `ingest.fn_h31_effacer_lignes_pour_retraitement` (service_role seul), qui verrouille le run (FOR UPDATE), rejoue la garde — une seule fonction, `ingest.fn_h31_retraitement_refuse`, partagée avec `fn_import_dispatch` — et efface lignes et fichiers reçus d’un seul tenant ; promotion, rapprochement et décision prennent le verrou du run (FOR NO KEY UPDATE : sous FOR SHARE, deux conversions du même run s’interbloquaient, prouvé) et refusent un run supprimé pendant l’attente ; l’attache d’un fichier reçu (FOR SHARE + relecture, HINT `error.edge.received_asset_not_found`) et la suppression d’un run (FOR UPDATE avant ses gardes — démontré par le sceptique : une promotion pendant la suppression laissait des brouillons sans preuve d’import) aussi ; un paquet dont un fichier reçu est déjà attaché ne se retraite plus. Prouvé à deux sessions dans les deux ordres (promotion, rapprochement, décision, attache, suppression), contre-épreuves sous mutants ; SQL 169/169, vitest 1 976. **Consigné** : (1) une grosse promotion fait attendre les autres gestes du même run, au plus 8 s (lock_timeout et statement_timeout d’authenticated), puis le geste échoue proprement (55P03/57014) avec un message obscur ; (2) deux « Retraiter » simultanés sur le même run ne sont pas refusés (ni l’envoi ni l’edge function ne refusent un run déjà « processing ») : collision possible sur (run_id, row_no) ; (3) service_role peut appeler directement `ingest.fn_create_*_from_import_rows` sans verrou — aucun appelant, clés étrangères protectrices ; (4) un run supprimé pendant l’attente répond « Run N introuvable » sans HINT (clé `error.import.run_not_found` à créer) ; (5) un fichier attaché fait dire « déjà promu » à l’écran (HINT `reparse_after_promotion` réutilisée) ; (6) deux onglets qui attachent le même fichier : la réponse idempotente rend le `book_id` demandé par le second (antérieur).",
+        "pt": "01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção). **05/10 — entregue** (`9942be20`, enviado por engano com a mensagem provisória «wip(h31)»; migração `20261005124652` aplicada pela CI): o apagamento das linhas no reprocessamento passa por uma função que trava a importação e rejulga a guarda; promoção, vinculação, decisão, anexação de arquivo recebido e exclusão da importação usam a mesma trava; um pacote com arquivo já anexado não se reprocessa mais. Provado com duas sessões. **Registrado**: uma promoção grande faz os outros gestos esperarem até 8 s; dois «Reprocessar» simultâneos não são recusados; «Run N introuvable» sem HINT."
       }
     },
     {

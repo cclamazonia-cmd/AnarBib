@@ -1326,7 +1326,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
 | **H30** | «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas | `P1` | A verificar |
-| **H31** | «Reprocessar» julga a importação no momento de apagar, não só no envio | `P2` | Aberto |
+| **H31** | «Reprocessar» julga a importação no momento de apagar, não só no envio | `P2` | A verificar |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1713,11 +1713,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H31 — «Reprocessar» julga a importação no momento de apagar, não só no envio
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
 
 **Estado.** **Provado na bancada em 01/10.** A guarda de «Reprocessar» é julgada no envio; a edge function apaga as linhas segundos depois, sem reler. Nessa janela: uma promoção dá dois registros para a mesma linha (anterior, H15); uma vinculação faz recusar o apagamento e a importação termina «falhou», com a fila escondida. Ao lado: um pacote de acervo reprocessado apaga o rastro de anexação dos arquivos recebidos.
 
-*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção).*
+*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção). **05/10 — entregue** (`9942be20`, enviado por engano com a mensagem provisória «wip(h31)»; migração `20261005124652` aplicada pela CI): o apagamento das linhas no reprocessamento passa por uma função que trava a importação e rejulga a guarda; promoção, vinculação, decisão, anexação de arquivo recebido e exclusão da importação usam a mesma trava; um pacote com arquivo já anexado não se reprocessa mais. Provado com duas sessões. **Registrado**: uma promoção grande faz os outros gestos esperarem até 8 s; dois «Reprocessar» simultâneos não são recusados; «Run N introuvable» sem HINT.*
 
 **O que é.** Passar o apagamento das duas edge functions por uma RPC `ingest` que trava a importação, rejulga a guarda e apaga; promoção, vinculação e decisão usam a mesma trava. Um apagamento recusado deixa a importação no estado anterior e registra a recusa no diário.
 
