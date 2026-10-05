@@ -96,9 +96,12 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
   };
   const appelRpc = (schema) => async (nom, args) => { rpcs.push({ schema, nom, args }); return rpc(schema, nom, args) || VIDE; };
   const telechargements = [];
-  const client = {
-    from: (t) => requete('public', t),
-    rpc: appelRpc('public'),
+  // Le schéma par défaut suit l'option `db.schema` de createClient, comme
+  // supabase-js (H31, 05/10/2026 : un client « ingest » appelle ses RPC dans
+  // ingest — le banc doit le voir, pas « public »).
+  const clientPour = (defaut) => ({
+    from: (t) => requete(defaut, t),
+    rpc: appelRpc(defaut),
     schema: (s) => ({ from: (t) => requete(s, t), rpc: appelRpc(s) }),
     auth,
     storage: {
@@ -109,7 +112,8 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
         },
       }),
     },
-  };
+  });
+  const client = clientPour('public');
 
   const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
   const fetchStub = async (url, opts) => {
@@ -123,7 +127,7 @@ export function monterEF({ entree, env = {}, repondre = () => VIDE, rpc = () => 
   };
 
   const defauts = {
-    'deps.ts': { createClient: () => client },
+    'deps.ts': { createClient: (_url, _cle, options) => (options?.db?.schema ? clientPour(options.db.schema) : client) },
     'inline-images.ts': { inlineLogosInHtml: async (h) => h },
   };
   const substituts = { ...defauts, ...remplacements };

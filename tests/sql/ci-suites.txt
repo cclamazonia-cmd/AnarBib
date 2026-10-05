@@ -649,6 +649,12 @@ tests/sql/h21_lot1_reconnaitre_tests.sql
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.
 tests/sql/h30_retraiter_exige_le_fichier_tests.sql
+# 05/10/2026 (H31) : « Retraiter » juge le run au moment d'effacer — l'effacement des
+# edge functions (ingest.fn_h31_effacer_lignes_pour_retraitement) verrouille le run et
+# rejoue la garde (liens, rapprochés, écartées, fichiers reçus attachés) ; promotion,
+# rapprochement, décision, attache d'un fichier reçu et suppression du run verrouillent
+# le run après leurs contrôles d'accès.
+tests/sql/h31_retraiter_juge_au_moment_d_effacer_tests.sql
 # Une reprise jamais enregistrée s'oublie (03/10/2026) : hors file, sans journal,
 # à l'abandon ou par le job horaire ; la première écriture la fait vivre.
 tests/sql/reprises_vierges_tests.sql

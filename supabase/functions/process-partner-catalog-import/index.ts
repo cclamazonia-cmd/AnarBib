@@ -805,7 +805,15 @@ Deno.serve(async (req)=>{
       // L'effacement d'abord : refusé (ligne retenue par un exemplaire
       // rapproché, délai…), il laisse le run tel quel ; réussi, le run passe
       // « en cours ».
-      const { error: deleteError } = await supabaseAdmin.schema('ingest').from('partner_catalog_staging_rows').delete().eq('run_id', runId);
+      // H31 (05/10/2026) : par la RPC qui verrouille le run et REJUGE la garde
+      // de fn_import_dispatch au moment d'effacer (une promotion, un
+      // rapprochement, une ligne écartée depuis l'envoi refusent le
+      // retraitement : HINT error.import.reparse_after_promotion, rien n'est
+      // effacé) — plus de DELETE direct.
+      const { error: deleteError } = await supabaseIngestRpc.rpc('fn_h31_effacer_lignes_pour_retraitement', {
+        p_run_id: runId,
+        p_fichiers_recus: false
+      });
       if (deleteError) throw deleteError;
       lignesGardees = false;
       await marquerEnCours();

@@ -137,11 +137,17 @@ Deno.serve(async (req) => {
       // exemplaire rapproché non publié) arrête tout AVANT de toucher aux
       // fichiers reçus — sinon leur liste partait, et la réinsertion des lignes
       // butait ensuite sur (run_id, row_no).
-      const { error: delRowsErr } = await admin.schema('ingest').from('partner_catalog_staging_rows').delete().eq('run_id', runId);
-      if (delRowsErr) throw delRowsErr;
+      // H31 (05/10/2026) : lignes ET fichiers reçus partent ensemble, par la
+      // RPC qui verrouille le run et REJUGE la garde de fn_import_dispatch au
+      // moment d'effacer (promotion, rapprochement, ligne écartée, fichier
+      // reçu attaché depuis l'envoi : refus, HINT
+      // error.import.reparse_after_promotion, rien n'est effacé) — d'un seul
+      // tenant : plus de fichiers reçus doublés quand le second DELETE échouait.
+      const { error: effacementErr } = await ingestRpc.rpc('fn_h31_effacer_lignes_pour_retraitement', {
+        p_run_id: runId, p_fichiers_recus: true,
+      });
+      if (effacementErr) throw effacementErr;
       lignesGardees = false;
-      const { error: delAssetsErr } = await admin.schema('ingest').from('partner_catalog_received_assets').delete().eq('run_id', runId);
-      if (delAssetsErr) throw delAssetsErr;
     }
     // H30 : « en cours » seulement une fois les lignes effacées (un effacement
     // refusé laisse le run tel quel).

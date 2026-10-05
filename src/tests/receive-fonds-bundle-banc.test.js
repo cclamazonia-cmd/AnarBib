@@ -18,17 +18,23 @@
 //     Le paquet lu par la fonction est donc un vrai ZIP, construit ici par JSZip.
 //
 // Ce qu'il fige :
-//   1. run qui a déjà des lignes, force_reparse, le DELETE des lignes rend l'erreur
-//      de trg_staging_rows_retenue_par_rapproche (message et HINT LUS dans la
-//      migration H21, P0001) : aucun DELETE de partner_catalog_received_assets,
-//      aucune insertion ; les fichiers reçus restent (depuis H30, le paquet est
-//      téléchargé une fois, avant tout effacement, et n'est pas relu). Depuis
-//      H30 aussi, les lignes sont gardées : aucun statut écrit, le message ET
-//      sa HINT au journal, 409 { ok: false, rows_kept: true } ;
-//   2. rien ne part non plus quand c'est le DELETE des fichiers reçus qui échoue ;
-//      les lignes, elles, sont déjà effacées : 'failed', 500, comme avant ;
-//   3. TÉMOIN : DELETE accepté → lecture du paquet, les deux effacements (filtrés
-//      sur le run), 'processing', puis les lignes, relecture de leurs ids,
+//   1. run qui a déjà des lignes, force_reparse : l'effacement passe par la RPC
+//      ingest.fn_h31_effacer_lignes_pour_retraitement (H31, 05/10/2026 : verrou
+//      du run, garde de fn_import_dispatch REJOUÉE, lignes et fichiers reçus
+//      effacés ensemble — p_fichiers_recus vrai), jamais par un DELETE direct.
+//      La RPC refuse (garde H31, HINT error.import.reparse_after_promotion, ou
+//      déclencheur trg_staging_rows_retenue_par_rapproche traversant la RPC —
+//      messages et HINT LUS dans les migrations H31 et H21, P0001) : aucune
+//      insertion, lignes et fichiers reçus intacts (depuis H30, le paquet est
+//      téléchargé une fois, avant tout effacement, et n'est pas relu) ; les
+//      lignes sont gardées : aucun statut écrit, le message ET sa HINT au
+//      journal, 409 { ok: false, rows_kept: true } ;
+//   2. la RPC en échec (délai) : l'effacement est d'un seul tenant, rien n'est
+//      parti — 409 rows_kept comme un refus (avant H31, le second DELETE en
+//      échec laissait les fichiers reçus sans leurs lignes, run 'failed') ;
+//      un échec APRÈS l'effacement (insertion des lignes) : 'failed', 500 ;
+//   3. TÉMOIN : RPC acceptée → lecture du paquet, l'effacement (RPC, run et
+//      fichiers reçus), 'processing', puis les lignes, relecture de leurs ids,
 //      fichiers reçus rattachés aux NOUVELLES lignes, run 'ready_for_review' ;
 //   4. H30 (04/10/2026) : paquet illisible (Storage, pas un ZIP, sans manifeste,
 //      JSON invalide, autre schéma) pendant un « Retraiter » → rien n'est touché,
@@ -45,6 +51,12 @@
 // passer le témoin. Mutants ciblés : erreur des lignes ignorée → 1 seul tombe ;
 // erreur des fichiers reçus ignorée → 2 seul ; fichiers reçus effacés AVANT les
 // lignes → 1, 2 et le témoin.
+// H31 (05/10/2026) : les tests 1 à 3 et le journal de la troisième série sont
+// réécrits pour la RPC. Contre-épreuves (mutants de index.ts, remis après
+// chacun) : les deux DELETE d'avant H31 → 7 tombent (les cinq de la série 1,
+// deux de la troisième) ; erreur de la RPC ignorée → 4 ; p_fichiers_recus faux
+// → 4 (dont le témoin) ; lignes « lâchées » (lignesGardees faux) avant la RPC
+// → 4. Les séries H30 passent sous chacun.
 
 import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -63,6 +75,9 @@ vi.mock('esbuild', async (importOriginal) => {
 const here = path.dirname(fileURLToPath(import.meta.url));
 const MIGRATION_H21 = path.resolve(here, '..', '..', 'supabase', 'migrations',
   '20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe.sql');
+const MIGRATION_H31 = path.resolve(here, '..', '..', 'supabase', 'migrations',
+  '20261005124652_h31_retraiter_juge_au_moment_d_effacer.sql');
+const EFFACEMENT = 'fn_h31_effacer_lignes_pour_retraitement';
 const SECRET = 'banc-secret';
 const RUN = 42;
 const RUNS = 'ingest.partner_catalog_import_runs';
@@ -79,6 +94,15 @@ function refusDeLaGarde(idLigne) {
   const m = corps.match(/RAISE EXCEPTION '([^']*)', OLD\.id\s+USING HINT = '([^']*)'/);
   if (!m) throw new Error('garde fn_h21_ligne_retenue_par_exemplaire_rapproche introuvable dans la migration H21');
   return { code: 'P0001', details: null, hint: m[2], message: m[1].replace('%', String(idLigne)) };
+}
+// Le refus de la garde H31 rejouée par la RPC d'effacement (RAISE sans
+// ERRCODE → P0001) : message et HINT lus dans la définition de la RPC.
+function refusDeLaRpc() {
+  const sql = readFileSync(MIGRATION_H31, 'utf8');
+  const corps = sql.split(`FUNCTION ingest.${EFFACEMENT}(`)[1]?.split('$function$;')[0] ?? '';
+  const m = corps.match(/RAISE EXCEPTION '([^']*)', p_run_id\s+USING HINT = '([^']*)'/);
+  if (!m) throw new Error(`refus de ${EFFACEMENT} introuvable dans la migration H31`);
+  return { code: 'P0001', details: null, hint: m[2], message: m[1].replace('%', String(RUN)) };
 }
 const DOUBLON = {
   code: '23505', details: `Key (run_id, row_no)=(${RUN}, 1) already exists.`, hint: null,
@@ -107,7 +131,11 @@ const zipDuPaquet = (() => {
 // sans force_reparse).
 // `refusLecture` : erreur de la relecture du journal (select('error_log')) ;
 // `refusComptage` : erreur du comptage des lignes du run.
-async function retraiter({ refusLignes = false, refusRecus = null, paquet = null, premier = false, refusLecture = null, refusComptage = null } = {}) {
+// H31 : `refusEffacement` — 'garde' (la garde rejouée par la RPC), 'declencheur'
+// (trg_staging_rows_retenue_par_rapproche à travers la RPC) ou un objet erreur
+// (délai…) : ce que rend la RPC d'effacement ; `refusInsertion` : l'erreur de
+// l'insertion des nouvelles lignes (échec APRÈS l'effacement).
+async function retraiter({ refusEffacement = null, refusInsertion = null, paquet = null, premier = false, refusLecture = null, refusComptage = null } = {}) {
   const zip = await zipDuPaquet;
   const base = premier ? {
     run: {
@@ -128,7 +156,9 @@ async function retraiter({ refusLignes = false, refusRecus = null, paquet = null
     recus: [{ id: 51, run_id: RUN, staging_row_id: 901, source_asset_id: 71, deposit_status: 'metadata_only' }],
   };
   const avant = structuredClone(base);
-  const refus = refusLignes ? refusDeLaGarde(base.lignes[0].id) : null;
+  const refus = refusEffacement === 'garde' ? refusDeLaRpc()
+    : refusEffacement === 'declencheur' ? refusDeLaGarde(base.lignes[0].id)
+      : refusEffacement;
   let prochainId = 1001;
   const journal = [];
   const ef = monterEF({
@@ -139,8 +169,18 @@ async function retraiter({ refusLignes = false, refusRecus = null, paquet = null
       journal.push(`download ${bucket}/${chemin}`);
       return paquet ? paquet() : { data: new Blob([zip]), error: null };
     },
-    rpc: (_schema, nom) => {
+    rpc: (schema, nom, args) => {
       journal.push(`rpc ${nom}`);
+      if (nom === EFFACEMENT) {
+        // La RPC : une transaction — refusée, rien ne part ; acceptée, les lignes
+        // du run et (si demandé) ses fichiers reçus partent ensemble.
+        if (schema !== 'ingest' || args?.p_run_id !== RUN) throw new Error(`RPC ${nom} inattendue : ${schema} ${JSON.stringify(args)}`);
+        if (refus) return { data: null, error: refus, status: 400 };
+        const n = base.lignes.length;
+        base.lignes = [];
+        if (args.p_fichiers_recus === true) base.recus = [];
+        return { data: n, error: null };
+      }
       return { data: nom === 'fn_match_partner_catalog_run' ? { matched: 0 } : null, error: null };
     },
     repondre: (schema, table, a) => {
@@ -160,21 +200,12 @@ async function retraiter({ refusLignes = false, refusRecus = null, paquet = null
           ? { data: null, count: base.lignes.length, error: null }
           : { data: base.lignes.map(({ id, row_no }) => ({ id, row_no })), error: null };
       }
-      if (cible === LIGNES && geste === 'delete') {
-        if (refus) return { data: null, error: refus, status: 400 };
-        base.lignes = [];
-        return { data: null, error: null, status: 204 };
-      }
       if (cible === LIGNES && geste === 'insert') {
+        if (refusInsertion) return { data: null, error: refusInsertion, status: 500 };
         const neuves = a('insert').args[0];
         if (neuves.some((n) => base.lignes.some((l) => l.row_no === n.row_no))) return { data: null, error: DOUBLON, status: 409 };
         for (const n of neuves) base.lignes.push({ id: prochainId++, ...n });
         return { data: null, error: null, status: 201 };
-      }
-      if (cible === RECUS && geste === 'delete') {
-        if (refusRecus) return { data: null, error: refusRecus, status: 500 };
-        base.recus = [];
-        return { data: null, error: null, status: 204 };
       }
       if (cible === RECUS && geste === 'insert') { base.recus.push(...a('insert').args[0]); return { data: null, error: null, status: 201 }; }
       throw new Error(`appel inattendu : ${geste} ${cible}`);
@@ -190,32 +221,36 @@ async function retraiter({ refusLignes = false, refusRecus = null, paquet = null
   return { ...r, base, avant, refus, journal, ecrits, statuts, ef };
 }
 
-describe('receive-fonds-bundle — « Retraiter » face à une ligne retenue (H21 lot 0, cinquième passe)', () => {
-  it('le DELETE des lignes refusé par la garde : aucun statut écrit, fichiers reçus intacts, la HINT au journal, 409 rows_kept', async () => {
-    const r = await retraiter({ refusLignes: true });
-    // L'erreur est bien celle de la garde (lue dans la migration).
-    expect(r.refus.hint).toBe('error.import.rows_held_by_items');
-    expect(r.refus.message).toContain('901');
+describe('receive-fonds-bundle — « Retraiter » face à une ligne retenue (H21 lot 0, cinquième passe ; H31)', () => {
+  it.each([
+    ['la garde H31 rejouée au moment d\'effacer', 'garde', 'error.import.reparse_after_promotion', 'ja promovido'],
+    ['le déclencheur du lot 0, à travers la RPC', 'declencheur', 'error.import.rows_held_by_items', '901'],
+  ])('l\'effacement (RPC) refusé par %s : aucun statut écrit, lignes et fichiers reçus intacts, la HINT au journal, 409 rows_kept', async (_cas, refusEffacement, hint, motif) => {
+    const r = await retraiter({ refusEffacement });
+    // L'erreur est bien celle de la migration (lue, pas recopiée).
+    expect(r.refus.hint).toBe(hint);
+    expect(r.refus.message).toContain(motif);
 
-    // Le paquet est lu AVANT (H30) ; rien après le refus, sinon la trace au journal.
+    // Le paquet est lu AVANT (H30) ; l'effacement passe par la RPC (H31) ; rien
+    // après le refus, sinon la trace au journal.
     expect(r.journal).toEqual([
       `select ${RUNS}`,
       `select ${LIGNES}`,
       `download ${PAQUET}`,
-      `delete ${LIGNES}`,
+      `rpc ${EFFACEMENT}`,
       `select ${RUNS}`,
       `update ${RUNS}`,
     ]);
-    expect(r.ecrits(RECUS, 'delete')).toHaveLength(0);
+    expect(r.ef.rpcs).toEqual([{ schema: 'ingest', nom: EFFACEMENT, args: { p_run_id: RUN, p_fichiers_recus: true } }]);
+    expect(r.ef.ecrits.filter((e) => e.op === 'delete')).toHaveLength(0);
     expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
     expect(r.ef.telechargements).toHaveLength(1);
-    expect(r.ef.rpcs).toHaveLength(0);
-    // Les fichiers reçus (et les lignes, refusées) sont restés.
+    // Les fichiers reçus et les lignes sont restés.
     expect(r.base.recus).toEqual(r.avant.recus);
     expect(r.base.lignes).toEqual(r.avant.lignes);
 
     // Lignes gardées : le run tel quel, sa HINT au journal, 409 rows_kept.
-    const attendu = `${r.refus.message} [error.import.rows_held_by_items] (lignes gardées, rien n'est retraité)`;
+    const attendu = `${r.refus.message} [${hint}] (lignes gardées, rien n'est retraité)`;
     expect(r.statut).toBe(409);
     expect(r.corps).toEqual({ ok: false, run_id: RUN, error: attendu, rows_kept: true });
     expect(r.statuts).toEqual([]);
@@ -225,33 +260,51 @@ describe('receive-fonds-bundle — « Retraiter » face à une ligne retenue (H2
     });
   });
 
-  it('le DELETE des fichiers reçus en échec (lignes déjà effacées) : comme avant, le run passe en échec, 500', async () => {
-    const r = await retraiter({ refusRecus: DELAI });
+  it('la RPC d\'effacement en échec (délai) : d\'un seul tenant, rien n\'est parti — 409 rows_kept, aucun statut, lignes et fichiers reçus intacts', async () => {
+    const r = await retraiter({ refusEffacement: DELAI });
     expect(r.journal).toEqual([
       `select ${RUNS}`,
       `select ${LIGNES}`,
       `download ${PAQUET}`,
-      `delete ${LIGNES}`,
-      `delete ${RECUS}`,
+      `rpc ${EFFACEMENT}`,
+      `select ${RUNS}`,
+      `update ${RUNS}`,
+    ]);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert' || e.op === 'delete')).toHaveLength(0);
+    expect(r.base.recus).toEqual(r.avant.recus);
+    expect(r.base.lignes).toEqual(r.avant.lignes);
+    expect(r.statut).toBe(409);
+    expect(r.corps).toEqual({ ok: false, run_id: RUN, rows_kept: true, error: `${DELAI.message} (lignes gardées, rien n'est retraité)` });
+    expect(r.statuts).toEqual([]);
+    expect(r.ecrits(RUNS, 'update').map((e) => Object.keys(e.donnees))).toEqual([['error_log']]);
+  });
+
+  it('échec APRÈS l\'effacement (insertion des lignes) : comme avant, le run passe en échec, 500', async () => {
+    const r = await retraiter({ refusInsertion: DELAI });
+    expect(r.journal).toEqual([
+      `select ${RUNS}`,
+      `select ${LIGNES}`,
+      `download ${PAQUET}`,
+      `rpc ${EFFACEMENT}`,
+      `update ${RUNS}`,
+      `insert ${LIGNES}`,
       `select ${RUNS}`,
       `update ${RUNS}`,
       `update ${RUNS}`,
     ]);
-    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
-    expect(r.ef.telechargements).toHaveLength(1);
-    expect(r.base.recus).toEqual(r.avant.recus);
     expect(r.base.lignes).toEqual([]);
+    expect(r.base.recus).toEqual([]);
     expect(r.statut).toBe(500);
     expect(r.corps.rows_kept).toBeUndefined();
-    expect(r.statuts).toEqual(['failed']);
+    expect(r.statuts).toEqual(['processing', 'failed']);
     // Le journal (journaliser) puis le statut, séparément : l'UPDATE du statut
     // ne porte jamais error_log.
     const majs = r.ecrits(RUNS, 'update').map((e) => e.donnees);
-    expect(majs.map((d) => Object.keys(d).sort())).toEqual([['error_log'], ['run_status']]);
+    expect(majs.slice(1).map((d) => Object.keys(d).sort())).toEqual([['error_log'], ['run_status']]);
     expect(r.base.run.error_log).toEqual([...r.avant.run.error_log, { at: expect.any(String), error: DELAI.message }]);
   });
 
-  it('TÉMOIN — DELETE accepté : lecture du paquet (H30), les deux effacements du run, processing, puis les nouvelles lignes, les fichiers les suivent', async () => {
+  it('TÉMOIN — RPC acceptée : lecture du paquet (H30), l\'effacement du run par la RPC (lignes et fichiers reçus), processing, puis les nouvelles lignes, les fichiers les suivent', async () => {
     const r = await retraiter();
     expect(r.statut).toBe(200);
     expect(r.corps).toMatchObject({ ok: true, run_id: RUN, inserted_rows: 2, received_metadata_only: 1, received_failed: 0 });
@@ -259,8 +312,7 @@ describe('receive-fonds-bundle — « Retraiter » face à une ligne retenue (H2
       `select ${RUNS}`,
       `select ${LIGNES}`,
       `download ${PAQUET}`,
-      `delete ${LIGNES}`,
-      `delete ${RECUS}`,
+      `rpc ${EFFACEMENT}`,
       `update ${RUNS}`,
       `insert ${LIGNES}`,
       `select ${LIGNES}`,
@@ -269,11 +321,9 @@ describe('receive-fonds-bundle — « Retraiter » face à une ligne retenue (H2
       'rpc fn_refresh_partner_catalog_run_counters',
       `update ${RUNS}`,
     ]);
-    // Les deux effacements visent le run, et lui seul.
-    for (const t of [LIGNES, RECUS]) {
-      const [d] = r.ecrits(t, 'delete');
-      expect(d.chaine.filter((c) => c.op === 'eq').map((c) => c.args)).toEqual([['run_id', RUN]]);
-    }
+    // L'effacement vise le run, et lui seul, fichiers reçus compris ; aucun DELETE direct.
+    expect(r.ef.rpcs[0]).toEqual({ schema: 'ingest', nom: EFFACEMENT, args: { p_run_id: RUN, p_fichiers_recus: true } });
+    expect(r.ef.ecrits.filter((e) => e.op === 'delete')).toHaveLength(0);
     expect(r.base.lignes.map(({ id, row_no, title }) => ({ id, row_no, title }))).toEqual([
       { id: 1001, row_no: 1, title: 'O Estado' },
       { id: 1002, row_no: 2, title: 'A Anarquia' },
@@ -377,39 +427,41 @@ describe('receive-fonds-bundle — journal et comptage en échec (H30)', () => {
     expect(r.corps.error).toBe(`${DELAI.message} (lignes gardées, rien n'est retraité)`);
   });
 
-  it('DELETE des lignes refusé, relecture du journal en échec : rien n\'est écrit, 409 rows_kept avec la HINT', async () => {
-    const r = await retraiter({ refusLignes: true, refusLecture: DELAI });
+  it('effacement (RPC) refusé par la garde, relecture du journal en échec : rien n\'est écrit, 409 rows_kept avec la HINT', async () => {
+    const r = await retraiter({ refusEffacement: 'garde', refusLecture: DELAI });
     expect(r.journal).toEqual([
       `select ${RUNS}`,
       `select ${LIGNES}`,
       `download ${PAQUET}`,
-      `delete ${LIGNES}`,
+      `rpc ${EFFACEMENT}`,
       `select ${RUNS}`,
     ]);
-    expect(r.ef.ecrits.filter((e) => e.op !== 'delete')).toEqual([]);
+    expect(r.ef.ecrits).toEqual([]);
     expect(r.base.run).toEqual(r.avant.run);
+    expect(r.base.lignes).toEqual(r.avant.lignes);
     expect(r.base.recus).toEqual(r.avant.recus);
     expect(r.statut).toBe(409);
     expect(r.corps).toEqual({
       ok: false, run_id: RUN, rows_kept: true,
-      error: `${r.refus.message} [error.import.rows_held_by_items] (lignes gardées, rien n'est retraité)`,
+      error: `${r.refus.message} [error.import.reparse_after_promotion] (lignes gardées, rien n'est retraité)`,
     });
   });
 
-  it('DELETE des fichiers reçus en échec (lignes effacées), relecture du journal en échec : error_log non écrasé, le run passe en failed, 500', async () => {
-    const r = await retraiter({ refusRecus: DELAI, refusLecture: DELAI });
+  it('échec après l\'effacement (insertion des lignes), relecture du journal en échec : error_log non écrasé, le run passe en failed, 500', async () => {
+    const r = await retraiter({ refusInsertion: DELAI, refusLecture: DELAI });
     expect(r.journal).toEqual([
       `select ${RUNS}`,
       `select ${LIGNES}`,
       `download ${PAQUET}`,
-      `delete ${LIGNES}`,
-      `delete ${RECUS}`,
+      `rpc ${EFFACEMENT}`,
+      `update ${RUNS}`,
+      `insert ${LIGNES}`,
       `select ${RUNS}`,
       `update ${RUNS}`,
     ]);
     expect(r.statut).toBe(500);
-    expect(r.statuts).toEqual(['failed']);
-    expect(r.ecrits(RUNS, 'update').map((e) => e.donnees)).toEqual([{ run_status: 'failed' }]);
+    expect(r.statuts).toEqual(['processing', 'failed']);
+    expect(r.ecrits(RUNS, 'update').map((e) => e.donnees).slice(1)).toEqual([{ run_status: 'failed' }]);
     // L'entrée d'avant (« essai précédent ») est toujours là, seule.
     expect(r.base.run.error_log).toEqual(r.avant.run.error_log);
     expect(r.base.run.run_status).toBe('failed');

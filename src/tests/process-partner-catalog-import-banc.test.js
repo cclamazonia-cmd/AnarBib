@@ -21,7 +21,14 @@
 //     bibliothèque décide des sous-zones ; un profil illisible arrête l'import ;
 //   * H30 : le fichier est lu avant 'processing', l'effacement vient après
 //     l'analyse ; illisible ou sans contenu pendant un « Retraiter », les lignes
-//     restent et le refus va au journal.
+//     restent et le refus va au journal ;
+//   * H31 : l'effacement passe par la RPC ingest.fn_h31_effacer_lignes_pour_retraitement
+//     (verrou du run, garde rejouée au moment d'effacer), jamais par un DELETE
+//     direct ; refusée, les lignes restent, 409 rows_kept, la HINT au journal.
+//     Contre-épreuves (05/10/2026, mutants de index.ts remis après chacun) :
+//     DELETE direct d'avant H31 → les deux refus et le témoin tombent ; erreur
+//     de la RPC ignorée → les deux refus ; 'processing' avant la RPC → les deux
+//     refus et le témoin.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -33,13 +40,16 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const FIX = path.resolve(here, '..', '..', 'tests', 'pmb', 'fixtures');
 const octets = (nom) => new Uint8Array(readFileSync(path.join(FIX, nom)));
 const SECRET = 'banc-secret';
+const EFFACEMENT = 'fn_h31_effacer_lignes_pour_retraitement';
 
 // `telechargement` (H30) : remplace la réponse du Storage (défaut : la fixture).
 // `gestes` : lectures, écritures et téléchargements dans l'ordre où la fonction
 // les fait ; un UPDATE du run porte son run_status (« update runs:processing »).
-// `refusDelete` : l'erreur PostgREST que rend le DELETE des lignes du run ;
+// `refusEffacement` (H31) : l'erreur PostgREST que rend la RPC d'effacement des
+// lignes du run (ingest.fn_h31_effacer_lignes_pour_retraitement) ;
 // `refusComptage` : celle du comptage des lignes.
-function banc({ fichier, nom = 'export.marc', adapter_overrides = {}, profil = null, existantes = 0, retraiter = false, telechargement = null, refusDelete = null, refusComptage = null }) {
+// Les RPC entrent aussi dans `gestes` (« rpc <nom> »).
+function banc({ fichier, nom = 'export.marc', adapter_overrides = {}, profil = null, existantes = 0, retraiter = false, telechargement = null, refusEffacement = null, refusComptage = null }) {
   const run = {
     id: 42, source_id: 7, library_id: 'lib-1', bucket_id: 'catalogos_parceiros_raw',
     storage_path: `lib-1/${nom}`, original_filename: nom, detected_format: 'marc_iso2709',
@@ -62,11 +72,15 @@ function banc({ fichier, nom = 'export.marc', adapter_overrides = {}, profil = n
       if (table === 'partner_catalog_import_files' && a('select')) return { data: { id: 5, file_role: 'uploaded' }, error: null };
       if (table === 'partner_catalog_staging_rows' && a('select') && refusComptage) return { data: null, count: null, error: refusComptage, status: 500 };
       if (table === 'partner_catalog_staging_rows' && a('select')) return { data: null, count: existantes, error: null };
-      if (table === 'partner_catalog_staging_rows' && a('delete') && refusDelete) return { data: null, error: refusDelete, status: 400 };
       if (table === 'import_profiles' && profil) return profil(a);
       return { data: null, error: null };
     },
-    rpc: (_s, nom) => ({ data: nom === 'fn_match_partner_catalog_run' ? { matched: 0 } : { ok: true }, error: null }),
+    rpc: (_s, nom) => {
+      gestes.push(`rpc ${nom}`);
+      if (nom === EFFACEMENT && refusEffacement) return { data: null, error: refusEffacement, status: 400 };
+      if (nom === EFFACEMENT) return { data: existantes, error: null };
+      return { data: nom === 'fn_match_partner_catalog_run' ? { matched: 0 } : { ok: true }, error: null };
+    },
   });
   return async () => {
     const r = await ef.appeler(new Request('http://ef.local/', {
@@ -79,13 +93,15 @@ function banc({ fichier, nom = 'export.marc', adapter_overrides = {}, profil = n
       .find((d) => d.run_status === 'ready_for_review');
     const fichierMaj = ef.ecrits.find((e) => e.table === 'partner_catalog_import_files' && e.op === 'update')?.donnees;
     const echec = ef.ecrits.some((e) => e.table === 'partner_catalog_import_runs' && e.op === 'update' && e.donnees.run_status === 'failed');
-    const efface = ef.ecrits.some((e) => e.table === 'partner_catalog_staging_rows' && e.op === 'delete');
+    // H31 : effacer = appeler la RPC ; un DELETE direct des lignes ne doit plus exister.
+    const efface = ef.rpcs.some((x) => x.nom === EFFACEMENT);
+    const deleteDirect = ef.ecrits.some((e) => e.op === 'delete');
     const touche = ef.ecrits.some((e) => e.table === 'partner_catalog_import_runs' && e.op === 'update' && 'run_status' in e.donnees);
     const journal = ef.ecrits.filter((e) => e.table === 'partner_catalog_import_runs' && e.op === 'update' && e.donnees.error_log)
       .flatMap((e) => e.donnees.error_log);
     const statuts = ef.ecrits.filter((e) => e.table === 'partner_catalog_import_runs' && e.op === 'update' && e.donnees.run_status)
       .map((e) => e.donnees.run_status);
-    return { ...r, lignes, finale, fichierMaj, echec, efface, touche, journal, statuts, gestes, ef };
+    return { ...r, lignes, finale, fichierMaj, echec, efface, deleteDirect, touche, journal, statuts, gestes, ef };
   };
 }
 
@@ -97,6 +113,9 @@ describe('process-partner-catalog-import sur un export PMB réel (H15, H28)', ()
   it('UNIMARC en UTF-8 : 50 lignes marc_iso2709, encodage utf-8 déclaré 50, aucun avertissement', async () => {
     const r = await banc({ fichier: octets(`${V}.unimarc.iso`) })();
     expect(r.statut).toBe(200);
+    // Premier import : rien à effacer (ni RPC d'effacement, ni DELETE).
+    expect(r.efface).toBe(false);
+    expect(r.deleteDirect).toBe(false);
     expect(r.corps.ok).toBe(true);
     expect(r.corps.detected_format).toBe('marc_iso2709');
     expect(r.lignes).toHaveLength(50);
@@ -296,24 +315,33 @@ describe('process-partner-catalog-import — « Retraiter » sans fichier lisibl
     expect(r.journal[0].message).toBe(`${motif.endsWith('force') ? r.corps.error : motif} (rows kept, nothing reprocessed)`);
   });
 
-  it('force_reparse, run avec lignes, DELETE refusé par le déclencheur (rows_held_by_items) : 409 rows_kept, la HINT au journal, aucun failed', async () => {
-    const refus = {
+  // H31 (05/10/2026) : l'effacement est la RPC qui verrouille le run et rejoue
+  // la garde de fn_import_dispatch ; son refus (garde, ou déclencheur du lot 0
+  // à travers elle) suit le chemin H30 : lignes gardées, 409 rows_kept.
+  it.each([
+    ['la garde rejouée au moment d\'effacer (reparse_after_promotion)', {
+      code: 'P0001', details: null, hint: 'error.import.reparse_after_promotion',
+      message: 'Import 42 ja promovido em rascunhos : nao pode ser reprocessado.',
+    }],
+    ['le déclencheur du lot 0 à travers la RPC (rows_held_by_items)', {
       code: 'P0001', details: null, hint: 'error.import.rows_held_by_items',
       message: 'Ligne d\'import 901 retenue par un exemplaire rapproche non publie.',
-    };
-    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 50, retraiter: true, refusDelete: refus })();
+    }],
+  ])('force_reparse, run avec lignes, effacement (RPC) refusé par %s : 409 rows_kept, la HINT au journal, aucun failed', async (_cas, refus) => {
+    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 50, retraiter: true, refusEffacement: refus })();
     expect(r.statut).toBe(409);
     expect(r.corps).toMatchObject({ ok: false, run_id: 42, rows_kept: true, error: refus.message });
-    expect(r.gestes).toEqual(['select runs', 'select fichiers', 'select lignes', 'download', 'delete lignes', 'select runs', 'update runs']);
+    expect(r.gestes).toEqual(['select runs', 'select fichiers', 'select lignes', 'download', `rpc ${EFFACEMENT}`, 'select runs', 'update runs']);
+    expect(r.ef.rpcs).toEqual([{ schema: 'ingest', nom: EFFACEMENT, args: { p_run_id: 42, p_fichiers_recus: false } }]);
+    expect(r.deleteDirect).toBe(false);
     expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
-    expect(r.ef.rpcs).toHaveLength(0);
     expect(r.fichierMaj).toBeUndefined();
     expect(r.echec).toBe(false);
-    // 'processing' ne vient qu'après un DELETE réussi : refusé, le run est intact.
+    // 'processing' ne vient qu'après un effacement réussi : refusé, le run est intact.
     expect(r.touche).toBe(false);
     expect(r.statuts).toEqual([]);
     expect(r.journal).toHaveLength(1);
-    expect(r.journal[0].message).toBe(`${refus.message} [error.import.rows_held_by_items] (rows kept, nothing reprocessed)`);
+    expect(r.journal[0].message).toBe(`${refus.message} [${refus.hint}] (rows kept, nothing reprocessed)`);
   });
 
   it('comptage des lignes en échec : rien n\'a bougé — 409 rows_kept, l\'erreur au journal, ni run_status ni téléchargement ni DELETE', async () => {
@@ -361,20 +389,21 @@ describe('process-partner-catalog-import — « Retraiter » sans fichier lisibl
     expect(r.journal[0].message).toBe('CSV contains a header row but no data rows.');
   });
 
-  it('TÉMOIN — fichier lisible : lecture, (analyse), effacement des lignes du run, processing, réinsertion, d\'un seul tenant', async () => {
+  it('TÉMOIN — fichier lisible : lecture, (analyse), effacement des lignes du run (RPC H31), processing, réinsertion, d\'un seul tenant', async () => {
     const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 50, retraiter: true })();
     expect(r.statut).toBe(200);
     expect(r.lignes).toHaveLength(50);
     const i = (g) => r.gestes.indexOf(g);
     expect(r.gestes.filter((g) => g === 'download')).toHaveLength(1);
-    expect(r.gestes.filter((g) => g === 'delete lignes')).toHaveLength(1);
+    expect(r.gestes.filter((g) => g === `rpc ${EFFACEMENT}`)).toHaveLength(1);
+    expect(r.deleteDirect).toBe(false);
     expect(r.gestes.filter((g) => g === 'update runs:processing')).toHaveLength(1);
     expect(r.gestes.slice(0, i('download') + 1)).toEqual(['select runs', 'select fichiers', 'select lignes', 'download']);
     // L'analyse (invisible ici) se fait entre la lecture et l'effacement : les cas
     // « analyse en échec » plus haut le prouvent (ni DELETE ni 'processing').
-    expect(r.gestes.slice(i('download'), i('download') + 4)).toEqual(['download', 'delete lignes', 'update runs:processing', 'insert lignes']);
-    const [d] = r.ef.ecrits.filter((e) => e.table === 'partner_catalog_staging_rows' && e.op === 'delete');
-    expect(d.chaine.filter((c) => c.op === 'eq').map((c) => c.args)).toEqual([['run_id', 42]]);
+    expect(r.gestes.slice(i('download'), i('download') + 4)).toEqual(['download', `rpc ${EFFACEMENT}`, 'update runs:processing', 'insert lignes']);
+    // La RPC vise le run, et lui seul, sans fichiers reçus (un import de fichier n'en a pas).
+    expect(r.ef.rpcs.filter((x) => x.nom === EFFACEMENT)).toEqual([{ schema: 'ingest', nom: EFFACEMENT, args: { p_run_id: 42, p_fichiers_recus: false } }]);
     expect(r.statuts).toEqual(['processing', 'ready_for_review']);
   });
 });
